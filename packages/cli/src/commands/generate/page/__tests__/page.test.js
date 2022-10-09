@@ -118,6 +118,13 @@ beforeAll(() => {
       pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
     ),
   })
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+
+afterAll(() => {
+  console.info.mockRestore()
+  console.log.mockRestore()
 })
 
 test('returns exactly 3 files', () => {

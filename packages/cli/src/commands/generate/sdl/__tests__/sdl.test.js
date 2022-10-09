@@ -37,8 +37,15 @@ import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
 
+beforeEach(() => {
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+
 afterEach(() => {
   jest.clearAllMocks()
+  console.info.mockRestore()
+  console.log.mockRestore()
 })
 
 const extensionForBaseArgs = (baseArgs) =>
