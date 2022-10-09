@@ -48,6 +48,13 @@ interface SignupFlowOptions {
    * from `useAuth()`
    */
   handler: (signupHandlerOptions: SignupHandlerOptions) => any
+
+  /**
+   * Validate the user-supplied password with whatever logic you want. Return
+   * `true` if valid, throw `PasswordValidationError` if not.
+   */
+  passwordValidation?: (password: string) => boolean
+
   /**
    * Object containing error strings
    */
@@ -629,6 +636,13 @@ export class DbAuthHandler<
           `Signup flow is not enabled`
       )
     }
+
+    // check if password is valid
+    const { password } = this.params
+    ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
+      password as string
+    )
+
     const userOrMessage = await this._createUser()
 
     // at this point `user` is either an actual user, in which case log the

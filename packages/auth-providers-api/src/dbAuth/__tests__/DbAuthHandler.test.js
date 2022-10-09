@@ -170,6 +170,9 @@ describe('dbAuth', () => {
             },
           })
         },
+        passwordValidation: (_password) => {
+          return true
+        },
         errors: {
           fieldMissing: '${field} is required',
           usernameTaken: 'Username `${username}` already in use',
@@ -1361,6 +1364,55 @@ describe('dbAuth', () => {
         expect(e.message).toEqual('Custom flow not enabled error')
       }
       expect.assertions(1)
+    })
+
+    it('throws password validation error if password invalid', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'pass',
+        name: 'Rob',
+      })
+      options.signup.passwordValidation = (password) => {
+        if (password.length < 8) {
+          throw new dbAuthError.PasswordValidationError('Password too short')
+        }
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.signup()
+      } catch (e) {
+        expect(e.message).toEqual('Password too short')
+      }
+      expect.assertions(1)
+    })
+
+    it('throws no error if password valid', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      options.signup.passwordValidation = (password) => {
+        if (password.length < 8) {
+          throw new dbAuthError.PasswordValidationError('Password too short')
+        }
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(() => dbAuth.signup()).not.toThrow()
+    })
+
+    it('throws no error if passwordValidation function is undefined', async () => {
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+        name: 'Rob',
+      })
+      delete options.signup.passwordValidation
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      expect(() => dbAuth.signup()).not.toThrow()
     })
 
     it('creates a new user and logs them in', async () => {
