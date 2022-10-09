@@ -212,7 +212,7 @@ export function shouldShowUpgradeAvailableMessage() {
 }
 
 function getUpgradeFilePath() {
-  return path.join(getPaths().base || '/tmp', '.redwood', 'update-data.json')
+  return path.join(getPaths().base, '.redwood', 'update-data.json')
 }
 
 function writeUpgradeFile(updateData) {
@@ -269,12 +269,7 @@ export function showUpgradeAvailableMessage() {
 // TODO: Move the generic lock functions some where more general, they could be used by other features needing a lock?
 
 function setLock(name) {
-  const lockPath = path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'locks',
-    `${name}`
-  )
+  const lockPath = path.join(getPaths().base, '.redwood', 'locks', `${name}`)
   if (!fs.existsSync(path.dirname(lockPath))) {
     try {
       fs.mkdirSync(path.dirname(lockPath))
@@ -290,12 +285,7 @@ function setLock(name) {
 }
 
 function unsetLock(name) {
-  const lockPath = path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'locks',
-    `${name}`
-  )
+  const lockPath = path.join(getPaths().base, '.redwood', 'locks', `${name}`)
   try {
     fs.unlinkSync(lockPath)
   } catch (error) {
@@ -306,11 +296,6 @@ function unsetLock(name) {
 }
 
 function isLocked(name) {
-  const lockPath = path.join(
-    getPaths().base || '/tmp',
-    '.redwood',
-    'locks',
-    `${name}`
-  )
+  const lockPath = path.join(getPaths().base, '.redwood', 'locks', `${name}`)
   return fs.existsSync(lockPath)
 }
