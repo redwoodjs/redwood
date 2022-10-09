@@ -318,14 +318,14 @@ jobs:
 
   cherry-pick:
     needs: [build-lint-test, tutorial-e2e, smoke-test]
-    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'release' && !contains(join(needs.*.result, ','), 'failure')
+    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'next' && !contains(join(needs.*.result, ','), 'failure')
     name: cherry-pick
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: release
+          ref: next
           fetch-depth: 0
           token: ${{ secrets.JTOAR_TOKEN }}
 
@@ -353,14 +353,14 @@ jobs:
 
   cherry-pick-docs:
     needs: [build-lint-test-docs, tutorial-e2e-docs, smoke-test-docs]
-    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'release' && !contains(join(needs.*.result, ','), 'failure')
+    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'next' && !contains(join(needs.*.result, ','), 'failure')
     name: cherry-pick-docs
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: release
+          ref: next
           fetch-depth: 0
           token: ${{ secrets.JTOAR_TOKEN }}
 
