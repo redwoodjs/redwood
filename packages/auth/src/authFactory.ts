@@ -49,6 +49,5 @@ export function createAuthentication<
     customProviderHooks
   )
 
-  // TODO: Do we really need to return AuthContext here?
-  return { AuthContext, AuthProvider, useAuth }
+  return { AuthProvider, useAuth }
 }

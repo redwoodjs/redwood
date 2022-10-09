@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "allowJs": false,
     "baseUrl": ".",
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",

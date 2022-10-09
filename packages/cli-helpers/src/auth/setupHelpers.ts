@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import Listr from 'listr'
+import { Listr, ListrTask } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 import yargs from 'yargs'
@@ -76,7 +76,7 @@ interface Args {
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTask?: Listr.ListrTask
+  extraTask?: ListrTask<never>
   notes?: string[]
 }
 
@@ -101,7 +101,7 @@ export const standardAuthHandler = async ({
 }: Args) => {
   const force = await shouldForce(forceArg, basedir, webAuthn)
 
-  const tasks = new Listr(
+  const tasks = new Listr<never>(
     [
       generateAuthApiFiles(basedir, provider, force, webAuthn),
       addAuthConfigToWeb(basedir, provider),
@@ -112,8 +112,7 @@ export const standardAuthHandler = async ({
       extraTask,
       notes ? printNotes(notes) : null,
     ].filter(truthy),
-    // @ts-expect-error: This option is widely used, so I guess it works...
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

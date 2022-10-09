@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
-import Listr from 'listr'
+import { ListrTask, ListrTaskWrapper, ListrRenderer } from 'listr2'
 
 import { writeFilesTask, transformTSToJS } from '../lib'
 import { colors } from '../lib/colors'
@@ -276,54 +276,56 @@ export const addConfigToRoutes = () => {
   fs.writeFileSync(webRoutesPath, content)
 }
 
-export const generateAuthApiFiles = (
+export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
   basedir: string,
   provider: string,
   force: boolean,
   webAuthn: boolean
-): Listr.ListrTask => ({
-  title: 'Generating auth api side files...',
-  task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
-    if (!apiSrcDoesExist()) {
-      return task.skip?.('api/src not found, skipping')
-    }
-
-    // The keys in `filesRecord` are the full paths to where the file contents,
-    // which is the values in `filesRecord`, will be written.
-    let filesRecord = apiSideFiles({ basedir, webAuthn })
-
-    if (!force) {
-      const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
-
-      if (
-        Object.keys(filesRecord).join(',') !==
-        Object.keys(uniqueFilesRecord).join(',')
-      ) {
-        console.warn(
-          colors.warning(
-            "To avoid overwriting existing files we've generated new file " +
-              'names for the newly generated files. This probably means ' +
-              `${provider} auth doesn't work out of the box. You'll most ` +
-              'likely have to manually merge some of the generated files ' +
-              'with your existing auth files'
-          )
-        )
+): ListrTask<never, Renderer> => {
+  return {
+    title: 'Generating auth api side files...',
+    task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
+      if (!apiSrcDoesExist()) {
+        return task.skip?.('api/src not found, skipping')
       }
 
-      filesRecord = uniqueFilesRecord
-    }
+      // The keys in `filesRecord` are the full paths to where the file contents,
+      // which is the values in `filesRecord`, will be written.
+      let filesRecord = apiSideFiles({ basedir, webAuthn })
 
-    return writeFilesTask(filesRecord, { overwriteExisting: force })
-  },
-})
+      if (!force) {
+        const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
 
-export const addAuthConfigToWeb = (
+        if (
+          Object.keys(filesRecord).join(',') !==
+          Object.keys(uniqueFilesRecord).join(',')
+        ) {
+          console.warn(
+            colors.warning(
+              "To avoid overwriting existing files we've generated new file " +
+                'names for the newly generated files. This probably means ' +
+                `${provider} auth doesn't work out of the box. You'll most ` +
+                'likely have to manually merge some of the generated files ' +
+                'with your existing auth files'
+            )
+          )
+        }
+
+        filesRecord = uniqueFilesRecord
+      }
+
+      return writeFilesTask(filesRecord, { overwriteExisting: force })
+    },
+  }
+}
+
+export const addAuthConfigToWeb = <Renderer extends typeof ListrRenderer>(
   basedir: string,
   provider: string,
   webAuthn = false
 ) => ({
   title: 'Adding auth config to web...',
-  task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
+  task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
     if (webIndexDoesExist()) {
       addConfigToApp()
       createWebAuth(basedir, provider, webAuthn)
@@ -338,9 +340,11 @@ export const addAuthConfigToWeb = (
   },
 })
 
-export const addAuthConfigToGqlApi = (authDecoderImport?: string) => ({
+export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
+  authDecoderImport?: string
+) => ({
   title: 'Adding auth config to GraphQL API...',
-  task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
+  task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
     if (graphFunctionDoesExist()) {
       addApiConfig(authDecoderImport)
     } else {
@@ -378,9 +382,11 @@ export const installPackages = {
   },
 }
 
-export const printNotes = (notes: string[]) => ({
+export const printNotes = <Renderer extends typeof ListrRenderer>(
+  notes: string[]
+) => ({
   title: 'One more thing...',
-  task: (_ctx: Listr.ListrContext, task: Listr.ListrTaskWrapper) => {
+  task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
     task.title = `One more thing...\n\n   ${notes.join('\n   ')}\n`
   },
 })

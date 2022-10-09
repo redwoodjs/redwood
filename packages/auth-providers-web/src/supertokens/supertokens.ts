@@ -41,7 +41,6 @@ export interface SuperTokensAuth {
 function createSuperTokensAuthImplementation(superTokens: SuperTokensAuth) {
   return {
     type: 'supertokens',
-    client: undefined,
     login: async () => superTokens.authRecipe.redirectToAuth('signin'),
 
     signup: async () => superTokens.authRecipe.redirectToAuth('signup'),

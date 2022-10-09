@@ -242,8 +242,7 @@ export const builder = (yargs) => {
     .option('tests', {
       description: 'Generate test files',
       type: 'boolean',
-      // don't give it a default value, it gets overwritten in the first few
-      // lines of the handler
+      // don't give it a default value, it gets overwritten in  the first few lines of the handler
     })
     .option('docs', {
       description: 'Generate SDL and GraphQL comments to use in documentation',

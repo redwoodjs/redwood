@@ -10,7 +10,7 @@ export interface AuthImplementation<
   TClient = unknown
 > {
   type: string
-  client: TClient
+  client?: TClient
 
   restoreAuthState?(): Promise<TRestoreAuth>
   login(options?: unknown): Promise<TLogIn>

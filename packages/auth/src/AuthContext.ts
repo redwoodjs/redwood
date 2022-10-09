@@ -72,7 +72,7 @@ export interface AuthContextInterface<
    * A reference to auth service provider sdk "client", which is useful if we
    * do not support some specific functionality.
    */
-  client: TClient
+  client?: TClient
   type: string
   hasError: boolean
   error?: Error
