@@ -758,11 +758,13 @@ And there you have it.
       <td align="center"><a href="https://github.com/arimendelow"><img src="https://avatars.githubusercontent.com/u/16390116?v=4" width="100px;" alt=""/><br /><sub><b>Ari Mendelow</b></sub></a></td>
       <td align="center"><a href="https://github.com/jakeinater"><img src="https://avatars.githubusercontent.com/u/53323525?v=4" width="100px;" alt=""/><br /><sub><b>Jake Zhao</b></sub></a></td>
       <td align="center"><a href="https://github.com/psirus0588"><img src="https://avatars.githubusercontent.com/u/3896426?v=4" width="100px;" alt=""/><br /><sub><b>psirus0588</b></sub></a></td>
+      <td align="center"><a href="http://ericrabinowitz.com/"><img src="https://avatars.githubusercontent.com/u/3066943?v=4" width="100px;" alt=""/><br /><sub><b>Eric Rabinowitz</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center"><a href="https://github.com/m-raschle"><img src="https://avatars.githubusercontent.com/u/107191588?v=4" width="100px;" alt=""/><br /><sub><b>Maximilian Raschle</b></sub></a></td>
+      <td align="center"><a href="https://github.com/nikolaxhristov"><img src="https://avatars.githubusercontent.com/u/90222871?v=4" width="100px;" alt=""/><br /><sub><b>nikolaxhristov</b></sub></a></td>
     </tr>
   </tbody>
-  <tfoot>
-    
-  </tfoot>
 </table>
 
 <!-- markdownlint-restore -->
