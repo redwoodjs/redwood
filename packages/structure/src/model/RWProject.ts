@@ -1,5 +1,6 @@
 import { join } from 'path'
 
+import type { DMMF } from '@prisma/generator-helper'
 import { getDMMF } from '@prisma/internals'
 
 import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
@@ -84,9 +85,7 @@ export class RWProject extends BaseNode {
   }
 
   // TODO: do we move this to a separate node? (ex: RWDatabase)
-  @memo() async prismaDMMF(): Promise<
-    Awaited<ReturnType<typeof getDMMF>> | undefined
-  > {
+  @memo() async prismaDMMF(): Promise<DMMF.Document | undefined> {
     try {
       // consider case where dmmf doesn't exist (or fails to parse)
       return await getDMMF({
