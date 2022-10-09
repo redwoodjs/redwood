@@ -32,7 +32,7 @@ interface SensitiveArgPositions {
   }
 }
 
-// Tracks any commands that could contain sensative info and their position in
+// Tracks any commands that could contain sensitive info and their position in
 // the argv array, as well as the text to replace them with
 const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   exec: {
@@ -92,30 +92,30 @@ const getInfo = async (presets = {}) => {
   }
 }
 
-// removes potentially sensative information from an array of argv strings
+// removes potentially sensitive information from an array of argv strings
 export const sanitizeArgv = (argv: Array<string>) => {
   const args = argv.slice(2)
   const name = args[0]
-  const sensativeCommand =
+  const sensitiveCommand =
     SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
-  if (sensativeCommand) {
+  if (sensitiveCommand) {
     // redact positional arguments
-    if (sensativeCommand.positions) {
-      sensativeCommand.positions.forEach((pos: number, index: number) => {
+    if (sensitiveCommand.positions) {
+      sensitiveCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
         if (args[pos] && !args[pos].match(/--/)) {
-          args[pos] = sensativeCommand.redactWith[index]
+          args[pos] = sensitiveCommand.redactWith[index]
         }
       })
     }
 
     // redact --option arguments
-    if (sensativeCommand.options) {
-      sensativeCommand.options.forEach((option: string, index: number) => {
+    if (sensitiveCommand.options) {
+      sensitiveCommand.options.forEach((option: string, index: number) => {
         const argIndex = args.indexOf(option)
         if (argIndex !== -1) {
-          args[argIndex + 1] = sensativeCommand.redactWith[index]
+          args[argIndex + 1] = sensitiveCommand.redactWith[index]
         }
       })
     }
