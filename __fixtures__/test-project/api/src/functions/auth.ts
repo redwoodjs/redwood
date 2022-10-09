@@ -3,7 +3,7 @@ import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 import {
   DbAuthHandler,
   DbAuthHandlerOptions,
-} from '@redwoodjs/auth-providers-api/dist/dbAuth'
+} from '@redwoodjs/auth-providers-api'
 
 import { db } from 'src/lib/db'
 
@@ -30,6 +30,13 @@ export const handler = async (
 
     // How long the resetToken is valid for, in seconds (default is 24 hours)
     expires: 60 * 60 * 24,
+
+    // Include any format checks for password here. Return `true` if the
+    // password is valid, otherwise throw a `PasswordValidationError`.
+    // Import the error along with `DbAuthHandler` from `@redwoodjs/api` above.
+    passwordValidation: (_password) => {
+      return true
+    },
 
     errors: {
       // for security reasons you may want to be vague here rather than expose
@@ -119,13 +126,6 @@ export const handler = async (
           fullName: userAttributes['full-name'],
         },
       })
-    },
-
-    // Include any format checks for password here. Return `true` if the
-    // password is valid, otherwise throw a `PasswordValidationError`.
-    // Import the error along with `DbAuthHandler` from `@redwoodjs/api` above.
-    passwordValidation: (_password) => {
-      return true
     },
 
     errors: {

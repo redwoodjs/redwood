@@ -12,3 +12,5 @@ export { authDecoder as nhostAuthDecoder } from './nhost/decoder'
 export { authDecoder as oktaAuthDecoder } from './okta/decoder'
 export { authDecoder as supabaseAuthDecoder } from './supabase/decoder'
 export { authDecoder as supertokensAuthDecoder } from './supertokens/decoder'
+
+export { hashPassword, DbAuthHandler, DbAuthHandlerOptions } from './dbAuth'
