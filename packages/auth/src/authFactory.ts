@@ -49,5 +49,5 @@ export function createAuthentication<
     customProviderHooks
   )
 
-  return { AuthProvider, useAuth }
+  return { AuthContext, AuthProvider, useAuth }
 }
