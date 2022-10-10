@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import Enquirer from 'enquirer'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
@@ -231,6 +232,7 @@ export const files = ({
 }
 
 const tasks = ({
+  enquirer,
   force,
   tests,
   typescript,
@@ -240,14 +242,14 @@ const tasks = ({
   skipSignup,
   webauthn,
   usernameLabel,
-  passwordlabel,
+  passwordLabel,
 }) => {
   return new Listr(
     [
       {
         title: 'Determining UI labels...',
         skip: () => {
-          return usernameLabel && passwordlabel
+          return usernameLabel && passwordLabel
         },
         task: async (ctx, task) => {
           return task.newListr([
@@ -272,19 +274,19 @@ const tasks = ({
             {
               title: 'Password label',
               task: async (subctx, subtask) => {
-                if (passwordlabel) {
+                if (passwordLabel) {
                   subtask.skip(
-                    `Argument password-label passed, using: "${passwordlabel}"`
+                    `Argument password-label passed, using: "${passwordLabel}"`
                   )
                   return
                 }
-                passwordlabel = await subtask.prompt({
+                passwordLabel = await subtask.prompt({
                   type: 'input',
                   name: 'password',
                   message: 'What would you like the password label to be:',
                   default: 'Password',
                 })
-                subtask.title = `Password label: "${passwordlabel}"`
+                subtask.title = `Password label: "${passwordLabel}"`
               },
             },
           ])
@@ -293,7 +295,7 @@ const tasks = ({
       {
         title: 'Querying WebAuthn addition...',
         task: async (ctx, task) => {
-          if (webauthn !== null) {
+          if (webauthn != null) {
             task.skip(
               `Querying WebAuthn addition: argument webauthn passed, WebAuthn ${
                 webauthn ? '' : 'not'
@@ -326,7 +328,7 @@ const tasks = ({
               skipSignup,
               webauthn,
               usernameLabel,
-              passwordlabel,
+              passwordLabel,
             }),
             {
               overwriteExisting: force,
@@ -351,7 +353,11 @@ const tasks = ({
         },
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    {
+      rendererOptions: { collapse: false },
+      injectWrapper: { enquirer: enquirer || new Enquirer() },
+      exitOnError: true,
+    }
   )
 }
 
