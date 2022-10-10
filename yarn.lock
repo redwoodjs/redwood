@@ -277,14 +277,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:7.19.4, @babel/generator@npm:^7.12.11, @babel/generator@npm:^7.12.5, @babel/generator@npm:^7.14.0, @babel/generator@npm:^7.18.13, @babel/generator@npm:^7.19.3, @babel/generator@npm:^7.19.4, @babel/generator@npm:^7.7.2":
-  version: 7.19.4
-  resolution: "@babel/generator@npm:7.19.4"
+"@babel/generator@npm:7.19.5, @babel/generator@npm:^7.12.11, @babel/generator@npm:^7.12.5, @babel/generator@npm:^7.14.0, @babel/generator@npm:^7.18.13, @babel/generator@npm:^7.19.3, @babel/generator@npm:^7.19.4, @babel/generator@npm:^7.7.2":
+  version: 7.19.5
+  resolution: "@babel/generator@npm:7.19.5"
   dependencies:
     "@babel/types": ^7.19.4
     "@jridgewell/gen-mapping": ^0.3.2
     jsesc: ^2.5.1
-  checksum: d04917ae6c1fe47b3b2ae8ab575208375d75eb7f96ccf1fadade723ce33ed60aff0f96f5b58f37b7438fa45309b0627447cdd42cbbc3b2ae8973166831c00232
+  checksum: e0308398b212bbe09648ede3838b9004362586195c5a476bd73adf16f5786253676345c80920aaf8491f1733214189e8b33e0de4969e3ee5b53a8cb2232107d6
   languageName: node
   linkType: hard
 
@@ -27459,7 +27459,7 @@ __metadata:
     "@actions/exec": 1.1.1
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
-    "@babel/generator": 7.19.4
+    "@babel/generator": 7.19.5
     "@babel/node": 7.19.1
     "@babel/plugin-proposal-class-properties": 7.18.6
     "@babel/plugin-proposal-decorators": 7.19.3
