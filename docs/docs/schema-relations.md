@@ -39,7 +39,7 @@ model Tag {
 }
 ```
 
-These relationships can be [implicit](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#implicit-many-to-many-relations) (as this diagram shows) or [explicit](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#explicit-many-to-many-relations) (explained below). Redwood's SDL generator (which is also used by the scaffold generator) only supports an **explicit** many-to-many relationship when generating with the `--crud` flag. What's up with that?
+These relationships can be [implicit](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#implicit-many-to-many-relations) (as this diagram shows) or [explicit](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#explicit-many-to-many-relations) (explained below). Redwood's SDL generator (which is also used by the scaffold generator) only supports an **explicit** many-to-many relationship when generating without the `--no-crud` flag. What's up with that?
 
 ## CRUD Requires an `@id`
 
@@ -47,7 +47,7 @@ CRUD (Create, Retrieve, Update, Delete) actions in Redwood currently require a s
 
 Prisma's implicit many-to-many relationships create a table _without_ a single field marked with the `@id` attribute. Instead, it uses a similar attribute: [`@@id`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#id-1) to define a *multi-field ID*. This multi-field ID will become the tables's primary key. The diagram above shows the result of letting Prisma create an implicit relationship.
 
-Since there's no single `@id` field in implicit many-to-many relationships, you can't use the SDL generator with the `--crud` flag. Likewise, you can't use the scaffold generator, which uses the SDL generator (with `--crud`) behind the scenes.
+Since there's no single `@id` field in implicit many-to-many relationships, you can't use the SDL generator without the `--no-crud` flag. Likewise, you can't use the scaffold generator, which uses the SDL generator (with CRUD) behind the scenes.
 
 ## Supported Table Structure
 
