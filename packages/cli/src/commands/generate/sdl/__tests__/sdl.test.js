@@ -37,15 +37,18 @@ import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
 
-beforeEach(() => {
+const silenceConsoleOutput = () => {
   jest.spyOn(console, 'info').mockImplementation(() => {})
   jest.spyOn(console, 'log').mockImplementation(() => {})
-})
+}
+
+const restoreConsoleOutput = () => {
+  console.info.mockRestore()
+  console.log.mockRestore()
+}
 
 afterEach(() => {
   jest.clearAllMocks()
-  console.info.mockRestore()
-  console.log.mockRestore()
 })
 
 const extensionForBaseArgs = (baseArgs) =>
@@ -286,6 +289,7 @@ describe('handler', () => {
 
       global.mockFs = true
 
+      silenceConsoleOutput()
       await sdl.handler({
         model,
         crud: true,
@@ -293,6 +297,7 @@ describe('handler', () => {
         tests: true,
         typescript: false,
       })
+      restoreConsoleOutput()
 
       expect(spy).toHaveBeenCalled()
 

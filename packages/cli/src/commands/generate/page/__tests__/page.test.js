@@ -48,6 +48,16 @@ import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
 import * as page from '../page'
 
+const silenceConsoleOutput = () => {
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+}
+
+const restoreConsoleOutput = () => {
+  console.info.mockRestore()
+  console.log.mockRestore()
+}
+
 let singleWordFiles,
   multiWordFiles,
   pluralWordFiles,
@@ -118,13 +128,6 @@ beforeAll(() => {
       pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
     ),
   })
-  jest.spyOn(console, 'info').mockImplementation(() => {})
-  jest.spyOn(console, 'log').mockImplementation(() => {})
-})
-
-afterAll(() => {
-  console.info.mockRestore()
-  console.log.mockRestore()
 })
 
 test('returns exactly 3 files', () => {
@@ -377,6 +380,7 @@ test('file generation', async () => {
 
   global.mockFs = true
 
+  silenceConsoleOutput()
   await page.handler({
     name: 'HomePage', // 'Page' should be trimmed from name
     path: '',
@@ -384,6 +388,7 @@ test('file generation', async () => {
     tests: true,
     stories: true,
   })
+  restoreConsoleOutput()
 
   expect(spy).toHaveBeenCalled()
 
@@ -421,6 +426,7 @@ test('file generation with route params', async () => {
   const spy = jest.spyOn(fs, 'writeFileSync')
   global.mockFs = true
 
+  silenceConsoleOutput()
   await page.handler({
     name: 'post',
     path: '{id}',
@@ -428,6 +434,7 @@ test('file generation with route params', async () => {
     tests: true,
     stories: true,
   })
+  restoreConsoleOutput()
 
   expect(spy).toHaveBeenCalled()
 
