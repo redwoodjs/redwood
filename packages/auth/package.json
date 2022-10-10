@@ -32,7 +32,7 @@
     "@babel/cli": "7.19.3",
     "@babel/core": "7.19.3",
     "@clerk/clerk-js": "3.17.0",
-    "@clerk/clerk-react": "3.5.1",
+    "@clerk/clerk-react": "4.2.6",
     "@clerk/clerk-sdk-node": "3.9.2",
     "@clerk/types": "2.21.0",
     "@nhost/hasura-auth-js": "1.4.1",
