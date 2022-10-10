@@ -5936,13 +5936,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.7, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.3":
-  version: 0.5.7
-  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.7"
+"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.8, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.3":
+  version: 0.5.8
+  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.8"
   dependencies:
     ansi-html-community: ^0.0.8
     common-path-prefix: ^3.0.0
-    core-js-pure: ^3.8.1
+    core-js-pure: ^3.23.3
     error-stack-parser: ^2.0.6
     find-up: ^5.0.0
     html-entities: ^2.1.0
@@ -5953,7 +5953,7 @@ __metadata:
     "@types/webpack": 4.x || 5.x
     react-refresh: ">=0.10.0 <1.0.0"
     sockjs-client: ^1.4.0
-    type-fest: ">=0.17.0 <3.0.0"
+    type-fest: ">=0.17.0 <4.0.0"
     webpack: ">=4.43.0 <6.0.0"
     webpack-dev-server: 3.x || 4.x
     webpack-hot-middleware: 2.x
@@ -5971,7 +5971,7 @@ __metadata:
       optional: true
     webpack-plugin-serve:
       optional: true
-  checksum: 11bc7e2223eda628ee90164b2dbdc8e3c7a83c4d43871c3ed217e3cae6f70df76e7e2270da9377c77ca7ef14e3886654e8497cce3792011f34dd07730fc59706
+  checksum: dc304daf9fc7e0d5729fd790434112b5331541b4531f80ed4767ef78b24614cac8efeb51c3047cd4b15ee598fc93ee58b197801019aa1067fd084193877826ea
   languageName: node
   linkType: hard
 
@@ -6277,7 +6277,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.25.5
     fast-json-parse: 1.0.3
-    fastify: 4.7.0
+    fastify: 4.8.1
     fastify-raw-body: 4.1.0
     jest: 29.1.2
     lodash.escape: 4.0.1
@@ -6503,7 +6503,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.19.1
-    "@pmmmwh/react-refresh-webpack-plugin": 0.5.7
+    "@pmmmwh/react-refresh-webpack-plugin": 0.5.8
     "@redwoodjs/cli": 3.1.1
     "@redwoodjs/eslint-config": 3.1.1
     "@redwoodjs/internal": 3.1.1
@@ -6823,7 +6823,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 8.3.4
     "@types/yargs": 17.0.13
-    ci-info: 3.4.0
+    ci-info: 3.5.0
     core-js: 3.25.5
     cross-undici-fetch: 0.4.14
     envinfo: 7.8.1
@@ -12786,10 +12786,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:3.4.0, ci-info@npm:^3.2.0":
-  version: 3.4.0
-  resolution: "ci-info@npm:3.4.0"
-  checksum: 725cabad267e601ec4be269e1af744bedede3bdd42f25bc269d97c05be31bc2edfa8511d8b0eedf27c42ffb87c1dc21af49b20fae1d9ac0345963b13499e8a99
+"ci-info@npm:3.5.0, ci-info@npm:^3.2.0":
+  version: 3.5.0
+  resolution: "ci-info@npm:3.5.0"
+  checksum: 96491dffabccce7dfcad83569eb306669bf9a25af978e823042ec87d4821d20663e17f18b6da7f42f85a8f7f8c0ae7f41673f3a649c94a260f9ac1d6349690be
   languageName: node
   linkType: hard
 
@@ -13603,10 +13603,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.25.1, core-js-pure@npm:^3.8.1":
-  version: 3.25.1
-  resolution: "core-js-pure@npm:3.25.1"
-  checksum: 8bf25eaa52045a9e8cf7602ba2b4e8af5ccbb920e36df0c479bcbf2b8c9b1048d996f1474077d82b03e8d1ede0078b9984d031af165b7aec873f9957b2cfac8f
+"core-js-pure@npm:^3.23.3, core-js-pure@npm:^3.25.1":
+  version: 3.25.5
+  resolution: "core-js-pure@npm:3.25.5"
+  checksum: 47c84be3d06c4e1d49e7e9f191368dda4d2d4cb4cb94929e6e8caf2230b87b1a944a0d64d767ea9e7c540853082ad7e68f9310800d79809a4cd9feb3a0c00269
   languageName: node
   linkType: hard
 
@@ -16702,16 +16702,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.7.0":
-  version: 4.7.0
-  resolution: "fastify@npm:4.7.0"
+"fastify@npm:4.8.1":
+  version: 4.8.1
+  resolution: "fastify@npm:4.8.1"
   dependencies:
     "@fastify/ajv-compiler": ^3.3.1
     "@fastify/error": ^3.0.0
     "@fastify/fast-json-stringify-compiler": ^4.1.0
     abstract-logging: ^2.0.1
     avvio: ^8.2.0
-    find-my-way: ^7.2.0
+    find-my-way: ^7.3.0
     light-my-request: ^5.6.1
     pino: ^8.5.0
     process-warning: ^2.0.0
@@ -16720,7 +16720,7 @@ __metadata:
     secure-json-parse: ^2.5.0
     semver: ^7.3.7
     tiny-lru: ^9.0.2
-  checksum: cfe76bccb5e0c553ca078c717a0eabbf3c3848713bcd5d4385e8191a088ab9b34190cd23e95b31f0202f617fc4be26f035a0d5ce322a60d627c8f2dc9db0a6de
+  checksum: 72cdfcd6d4650112469008d9638a36ccf06e2d40d3ebc75ecf59028db3e4d37a4004c795d32640f2ce401142a4be5331cc2539681f12100731c56f0774a747d3
   languageName: node
   linkType: hard
 
@@ -16948,14 +16948,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-my-way@npm:^7.2.0":
-  version: 7.2.0
-  resolution: "find-my-way@npm:7.2.0"
+"find-my-way@npm:^7.3.0":
+  version: 7.3.1
+  resolution: "find-my-way@npm:7.3.1"
   dependencies:
     fast-deep-equal: ^3.1.3
     fast-querystring: ^1.0.0
     safe-regex2: ^2.0.0
-  checksum: f0c205e7cfa92641500bbcfd2c3375640b4bbe469e2f379d3fe2d3d756b2a2ef68d0ed552517d4afd45bf415e063b1ea8d7267f9af437142c10f8a35bcb78916
+  checksum: 8042821816b5dcbd45e8d8a41ac04015ed24a99add382968ba9ae20cc6c7ce5b1c0596828db21959056ad976dd1ca11ba447f70a122403971cebd5bdb88e4340
   languageName: node
   linkType: hard
 

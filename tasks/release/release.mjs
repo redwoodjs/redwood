@@ -299,7 +299,7 @@ async function releaseMajorOrMinor(semver, nextVersion) {
         ? () => $`git push`
         : () => $`git push -u origin ${releaseBranch}`,
       () => $`git push --tags`,
-      () => $`yarn lerna publish from-package`,
+      () => $`yarn lerna publish from-package --ignore @redwoodjs/cli-helpers`,
       () => console.log(rocketBoxen(`Released ${c.green(nextVersion)}`)),
     ],
     { exitIfNo: true }
@@ -381,7 +381,7 @@ async function releasePatch(currentVersion, nextVersion) {
     [
       () => $`git push`,
       () => $`git push --tags`,
-      () => $`yarn lerna publish from-package`,
+      () => $`yarn lerna publish from-package --ignore @redwoodjs/cli-helpers`,
       () => console.log(rocketBoxen(`Released ${c.green(nextVersion)}`)),
     ],
     { exitIfNo: true }
