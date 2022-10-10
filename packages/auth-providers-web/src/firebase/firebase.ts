@@ -19,11 +19,16 @@ export type oAuthProvider =
   | 'microsoft.com'
   | 'apple.com'
 
-export type emailLinkProvider = 'emailLink'
+export type anonymousProvider = 'anonymous'
 export type customTokenProvider = 'customToken'
+export type emailLinkProvider = 'emailLink'
 
 interface Options {
-  providerId?: oAuthProvider | emailLinkProvider | customTokenProvider
+  providerId?:
+    | anonymousProvider
+    | customTokenProvider
+    | emailLinkProvider
+    | oAuthProvider
   email?: string
   emailLink?: string
   customToken?: string
@@ -142,6 +147,10 @@ function createFirebaseAuthImplementation({
         return loginWithEmailLink(options)
       }
 
+      if (options.providerId === 'anonymous') {
+        return firebaseAuth.signInAnonymously(auth)
+      }
+
       if (options.providerId === 'customToken' && options.customToken) {
         return firebaseAuth.signInWithCustomToken(auth, options.customToken)
       }
@@ -169,6 +178,10 @@ function createFirebaseAuthImplementation({
 
       if (isEmailLinkOptions(options)) {
         return loginWithEmailLink(options)
+      }
+
+      if (options.providerId === 'anonymous') {
+        return firebaseAuth.signInAnonymously(auth)
       }
 
       if (options.providerId === 'customToken' && options.customToken) {
