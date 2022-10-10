@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
@@ -252,7 +252,7 @@ const tasks = ({
         },
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 }
 

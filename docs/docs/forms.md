@@ -383,6 +383,65 @@ const RequiredField = ({ label, name, validation }) => {
 }
 ```
 
+### Controlled Component Fields
+
+If you're working with a fully-featured component library, or have your own production-ready components, you may want to integrate them with Redwood's forms seamlessly.
+You can via Redwood forms' `useErrorStyles` hook and React Hook Form's `Controller` component.
+The following example shows how you could go about integrating a component from [`primereact`](https://www.primefaces.org/primereact/) for use in in Redwood's forms like any of the named-input fields listed above:
+
+```tsx title="web/src/components/ToggleButtonField/ToggleButtonField.tsx"
+import { ToggleButton } from 'primereact/togglebutton'
+import type { ToggleButtonProps } from 'primereact/togglebutton'
+
+import { Controller, RegisterOptions, useErrorStyles } from '@redwoodjs/forms'
+
+interface Props extends ToggleButtonProps {
+  validation?: RegisterOptions
+  errorClassName?: string
+}
+
+const ToggleButtonField = (props: Props) => {
+  const {
+    name,
+    className,
+    errorClassName,
+    defaultValue,
+    validation,
+    style,
+    ...propsRest
+  } = props
+
+  const { className: componentClassName, style: componentStyle } =
+    useErrorStyles({
+      className: className,
+      errorClassName: errorClassName,
+      name: name,
+    })
+
+  return (
+    <Controller
+      name={name}
+      defaultValue={defaultValue}
+      rules={validation}
+      render={({ field: { onChange, onBlur, value, name, ref } }) => (
+        <ToggleButton
+          {...propsRest}
+          checked={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          ref={ref}
+          name={name}
+          className={componentClassName}
+          style={{ ...componentStyle, ...style }}
+        />
+      )}
+    />
+  )
+}
+
+export default ToggleButtonField
+```
+
 ## `<SelectField>`
 
 Renders an HTML `<select>` tag.

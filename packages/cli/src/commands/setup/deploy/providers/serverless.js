@@ -2,7 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -131,6 +131,7 @@ export const handler = async ({ force }) => {
     ],
     {
       exitOnError: true,
+      rendererOptions: { collapse: false },
     }
   )
   try {
