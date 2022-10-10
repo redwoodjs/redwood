@@ -1,0 +1,55 @@
+import * as Session from 'supertokens-node/recipe/session'
+import ThirdPartyEmailPassword, {
+  Google,
+  Github,
+  Apple,
+} from 'supertokens-node/recipe/thirdpartyemailpassword'
+
+const websiteDomain =
+  process.env.SUPERTOKENS_WEBSITE_DOMAIN || 'http://localhost:8910'
+const apiDomain =
+  process.env.SUPERTOKENS_API_DOMAIN ||
+  `${websiteDomain}${process.env.RWJS_API_URL}`
+const apiBasePath = '/auth'
+
+const jwksIssuerUrl = { issuer: `${apiDomain}${apiBasePath}` }
+
+export const config = {
+  framework: 'awsLambda',
+  isInServerlessEnv: true,
+  appInfo: {
+    apiDomain,
+    websiteDomain,
+    appName: 'SuperTokens RedwoodJS',
+    websiteBasePath: '/auth',
+    apiBasePath,
+  },
+  supertokens: {
+    connectionURI: process.env.SUPERTOKENS_CONNECTION_URI,
+  },
+  recipeList: [
+    ThirdPartyEmailPassword.init({
+      providers: [
+        Google({
+          clientId: process.env.SUPERTOKENS_GOOGLE_CLIENT_ID,
+          clientSecret: process.env.SUPERTOKENS_GOOGLE_CLIENT_SECRET,
+        }),
+        Github({
+          clientId: process.env.SUPERTOKENS_GITHUB_CLIENT_ID,
+          clientSecret: process.env.SUPERTOKENS_GITHUB_CLIENT_SECRET,
+        }),
+        Apple({
+          clientId: process.env.SUPERTOKENS_APPLE_CLIENT_ID,
+          clientSecret: {
+            keyId: process.env.SUPERTOKENS_APPLE_SECRET_KEY_ID,
+            privateKey: process.env.SUPERTOKENS_APPLE_SECRET_PRIVATE_KEY,
+            teamId: process.env.SUPERTOKENS_APPLE_SECRET_TEAM_ID,
+          },
+        }),
+      ],
+    }),
+    Session.init({
+      jwt: { enable: true, ...jwksIssuerUrl },
+    }),
+  ],
+}

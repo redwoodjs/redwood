@@ -6320,6 +6320,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/cli-helpers@workspace:packages/cli-helpers":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
+  dependencies:
+    "@babel/cli": 7.19.3
+    "@babel/core": 7.19.3
+    "@babel/runtime-corejs3": 7.19.1
+    "@redwoodjs/telemetry": 3.1.1
+    "@types/react": 17.0.50
+    core-js: 3.25.5
+    jest: 29.1.2
+    listr2: 5.0.5
+    react: 17.0.2
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/cli@3.1.1, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
@@ -6333,7 +6350,6 @@ __metadata:
     "@redwoodjs/prerender": 3.1.1
     "@redwoodjs/structure": 3.1.1
     "@redwoodjs/telemetry": 3.1.1
-    "@types/listr": 0.14.4
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -8898,16 +8914,6 @@ __metadata:
   version: 1.0.0
   resolution: "@types/line-column@npm:1.0.0"
   checksum: 70503f45d4e0953b470067df22911e0a9e877f5d8459dcbc2bbebc7dd8534114ef99fd0f0926e657fb9711e45e3ffaa7fb04469b605252f4309dbe66cb1c9489
-  languageName: node
-  linkType: hard
-
-"@types/listr@npm:0.14.4":
-  version: 0.14.4
-  resolution: "@types/listr@npm:0.14.4"
-  dependencies:
-    "@types/node": "*"
-    rxjs: ^6.5.1
-  checksum: 4ab81b0bd6f79b22b9dcd88a3dd72a8cc9aae9e8d316daa93a32b3a0048c18720a183ffc087b02935175910c178aa27bc0152aa8801c3f7d8315f5391f96ec97
   languageName: node
   linkType: hard
 
@@ -27226,7 +27232,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.5.1, rxjs@npm:^6.6.0":
+"rxjs@npm:^6.6.0":
   version: 6.6.7
   resolution: "rxjs@npm:6.6.7"
   dependencies:
