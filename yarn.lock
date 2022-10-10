@@ -1819,15 +1819,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend-core@npm:^1.14.2":
-  version: 1.14.2
-  resolution: "@clerk/backend-core@npm:1.14.2"
+"@clerk/backend-core@npm:^2.8.1":
+  version: 2.8.1
+  resolution: "@clerk/backend-core@npm:2.8.1"
   dependencies:
-    "@clerk/types": ^2.21.0
+    "@clerk/types": ^3.10.1
+    "@peculiar/webcrypto": ^1.4.0
+    "@types/node": ^16.11.55
+    "@types/node-fetch": ^2
+    node-fetch: ^2.6.0
     query-string: ^7.0.1
     snakecase-keys: ^5.1.2
     tslib: ^2.3.1
-  checksum: b4cca88439adc1a3bf2a266122bc09968012b799cda9d5b4e86b0d7bda6f2d8a889092e17b6ae232f744932b1c4ceee71d9d66a39c08b8e9043f0a0ead265180
+  checksum: 9e31d3492abda518e5170f9b0ff5171b0c186383490881f4ea03320a81b05c9d555a0e6639dfecf79dce104cfdb0dd341bd2c209aa020e8b87898733d94a9ee1
   languageName: node
   linkType: hard
 
@@ -1866,13 +1870,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:3.9.2":
-  version: 3.9.2
-  resolution: "@clerk/clerk-sdk-node@npm:3.9.2"
+"@clerk/clerk-sdk-node@npm:4.4.2":
+  version: 4.4.2
+  resolution: "@clerk/clerk-sdk-node@npm:4.4.2"
   dependencies:
-    "@clerk/backend-core": ^1.14.2
-    "@clerk/types": ^2.21.0
-    "@peculiar/webcrypto": ^1.2.3
+    "@clerk/backend-core": ^2.8.1
+    "@clerk/types": ^3.10.1
+    "@peculiar/webcrypto": ^1.4.0
+    "@types/cookies": ^0.7.7
+    "@types/express": ^4.17.11
+    "@types/jsonwebtoken": ^8.5.6
+    "@types/node-fetch": ^2
     camelcase-keys: ^6.2.2
     cookies: ^0.8.0
     deepmerge: ^4.2.2
@@ -1881,7 +1889,7 @@ __metadata:
     node-fetch: ^2.6.0
     snakecase-keys: ^3.2.1
     tslib: ^2.3.1
-  checksum: 2b476a606f5ef407907eeb7ee23b98274f470659d4f87c0e5d8c3dcc2aabe8c4b631ee75e9dbf72aa86ca0af33b70c1be67b22f20fa2530f1b1201dd1c27e8bb
+  checksum: bb1443dcee2ebc276295b7865cfd00f9e4c68aceef1b76b57ff53c817fd08320ad2bf1ea22119df4318c389514f219b2805e7c11399232b56fa050e04d0c2b6c
   languageName: node
   linkType: hard
 
@@ -1889,6 +1897,15 @@ __metadata:
   version: 2.21.0
   resolution: "@clerk/types@npm:2.21.0"
   checksum: 91c0a07459d6a11e8b79f8ebc31fa81c37a947313d67deb3a3d31519bf8b360ce8ac902d534fbd2f764cf382aa9e5a016398488da81dc72589e34daa04d3f48f
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^3.10.1":
+  version: 3.10.1
+  resolution: "@clerk/types@npm:3.10.1"
+  dependencies:
+    csstype: ^3.1.0
+  checksum: 783ea8061ef7c9f49d7842cf64b810cbec4f64519b6f0e8763421a04481c33c691a93fd10484c44614effd88d7e1bfd0d7aae4cfd6f0ce17cdcc8f005896cbf5
   languageName: node
   linkType: hard
 
@@ -5900,7 +5917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peculiar/webcrypto@npm:^1.2.3, @peculiar/webcrypto@npm:^1.4.0":
+"@peculiar/webcrypto@npm:^1.4.0":
   version: 1.4.0
   resolution: "@peculiar/webcrypto@npm:1.4.0"
   dependencies:
@@ -6301,7 +6318,7 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.1
-    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/clerk-sdk-node": 4.4.2
     "@prisma/client": 4.3.1
     "@redwoodjs/auth": 3.1.1
     "@simplewebauthn/server": 6.2.1
@@ -6329,7 +6346,7 @@ __metadata:
     typescript: 4.7.4
     uuid: 9.0.0
   peerDependencies:
-    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/clerk-sdk-node": 4.4.2
     "@magic-sdk/admin": 1.4.1
     "@okta/jwt-verifier": 2.6.0
     firebase-admin: 10.3.0
@@ -6361,7 +6378,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.1
     "@clerk/clerk-js": 3.17.0
     "@clerk/clerk-react": 3.5.1
-    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/clerk-sdk-node": 4.4.2
     "@clerk/types": 2.21.0
     "@nhost/hasura-auth-js": 1.4.1
     "@nhost/nhost-js": 1.5.0
@@ -8681,6 +8698,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cookies@npm:^0.7.7":
+  version: 0.7.7
+  resolution: "@types/cookies@npm:0.7.7"
+  dependencies:
+    "@types/connect": "*"
+    "@types/express": "*"
+    "@types/keygrip": "*"
+    "@types/node": "*"
+  checksum: 259883abcd884da8ca9c58b91c402aa04e78ea7a0fa6772d4951c44e0868a3722a6fff54c0ac796002affc0e5b18f374213b2d4904b4e5c7f0d78a7368c14242
+  languageName: node
+  linkType: hard
+
 "@types/cross-spawn@npm:6.0.2":
   version: 6.0.2
   resolution: "@types/cross-spawn@npm:6.0.2"
@@ -8770,15 +8799,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*, @types/express@npm:^4.17.13":
-  version: 4.17.13
-  resolution: "@types/express@npm:4.17.13"
+"@types/express@npm:*, @types/express@npm:^4.17.11, @types/express@npm:^4.17.13":
+  version: 4.17.14
+  resolution: "@types/express@npm:4.17.14"
   dependencies:
     "@types/body-parser": "*"
     "@types/express-serve-static-core": ^4.17.18
     "@types/qs": "*"
     "@types/serve-static": "*"
-  checksum: 2387977093ac8b8e5f837b3ff27e8e28bb389058e6a2d8f66ce6818a0c486a07491aae5def3926d730c30b623d10d758b5bb3909816442e9a5bd1b058cfc3bd5
+  checksum: 616e3618dfcbafe387bf2213e1e40f77f101685f3e9efff47c66fd2da611b7578ed5f4e61e1cdb1f2a32c8f01eff4ee74f93c52ad56d45e69b7154da66b3443a
   languageName: node
   linkType: hard
 
@@ -8956,12 +8985,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:8.5.9, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0":
+"@types/jsonwebtoken@npm:8.5.9, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0, @types/jsonwebtoken@npm:^8.5.6":
   version: 8.5.9
   resolution: "@types/jsonwebtoken@npm:8.5.9"
   dependencies:
     "@types/node": "*"
   checksum: 4374b0f1b5641d1dd8847fa6f50bd34ec215f3244ea045556d2caa74ed559b2571502db73526bb8fbff038a60ff7e6bf56ffa79679c0b03539b55fda32617a23
+  languageName: node
+  linkType: hard
+
+"@types/keygrip@npm:*":
+  version: 1.0.2
+  resolution: "@types/keygrip@npm:1.0.2"
+  checksum: 95c9cc9824754baecb73c42051477c9f9dfb1a4dcaf6f51d025398e379b146adc0da2c476ed0129fe4ea157413910e5e2acb10c6dad308ef5ea8a95080229fd5
   languageName: node
   linkType: hard
 
@@ -9123,13 +9159,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:^2.5.7":
-  version: 2.6.1
-  resolution: "@types/node-fetch@npm:2.6.1"
+"@types/node-fetch@npm:^2, @types/node-fetch@npm:^2.5.7":
+  version: 2.6.2
+  resolution: "@types/node-fetch@npm:2.6.2"
   dependencies:
     "@types/node": "*"
     form-data: ^3.0.0
-  checksum: 033945215fa6b36d5597b21bbdd7d946a751dcd066f8fa71e5f5ab5698390bc2e76e38932ec6ac709def39b6371dfd61844e6804409c7ba812e24d1c820fbff8
+  checksum: bd2ce7621905f9d80cd2fbe003d32a8d304f4aa53c12eb01a498255a1fc570d82216cff9a7ed38ff32570c78e46c924a8e23187a011ecfcfec4c530c7bdecdbb
   languageName: node
   linkType: hard
 
@@ -9140,7 +9176,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.64, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
+"@types/node@npm:16.11.64, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0, @types/node@npm:^16.11.55":
   version: 16.11.64
   resolution: "@types/node@npm:16.11.64"
   checksum: 4b5ee37e3d2dc3364abbffee7e9f4c27fc22b44305ff5920fcc1b7fe08343bf113fface6a565c2406f77f8818d5ddcfb31652df6a43e4ab971976256d176bf37
@@ -14226,10 +14262,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^3.0.2, csstype@npm:^3.0.6":
-  version: 3.0.10
-  resolution: "csstype@npm:3.0.10"
-  checksum: f0fff671ab368a863946859ad96be0be66afeb83566215d6494be840ffedfaef4945b48d1b0ce1a19f9983af772e0ce38c7be91a1ad46fe7ecd641937c5a99f7
+"csstype@npm:^3.0.2, csstype@npm:^3.0.6, csstype@npm:^3.1.0":
+  version: 3.1.1
+  resolution: "csstype@npm:3.1.1"
+  checksum: 7c8b8c5923049d84132581c13bae6e1faf999746fe3998ba5f3819a8e1cdc7512ace87b7d0a4a69f0f4b8ba11daf835d4f1390af23e09fc4f0baad52c084753a
   languageName: node
   linkType: hard
 
