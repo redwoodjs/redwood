@@ -4,7 +4,7 @@ import path from 'path'
 
 import boxen from 'boxen'
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import {
   getInstalledRedwoodVersion,

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "3.0.3",
+  "version": "3.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,11 +24,11 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.1",
-    "core-js": "3.25.3"
+    "core-js": "3.25.5"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.4",
-    "@azure/msal-browser": "2.28.3",
+    "@azure/msal-browser": "2.29.0",
     "@babel/cli": "7.19.3",
     "@babel/core": "7.19.3",
     "@clerk/clerk-js": "3.17.0",
@@ -36,21 +36,21 @@
     "@clerk/clerk-sdk-node": "3.9.2",
     "@clerk/types": "2.21.0",
     "@nhost/hasura-auth-js": "1.4.1",
-    "@nhost/nhost-js": "1.4.10",
-    "@okta/okta-auth-js": "6.7.6",
-    "@simplewebauthn/browser": "6.0.0",
-    "@simplewebauthn/typescript-types": "6.0.0",
+    "@nhost/nhost-js": "1.5.0",
+    "@okta/okta-auth-js": "6.9.0",
+    "@simplewebauthn/browser": "6.2.1",
+    "@simplewebauthn/typescript-types": "6.2.1",
     "@supabase/supabase-js": "1.35.7",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.50",
-    "firebase": "9.9.3",
+    "firebase": "9.11.0",
     "firebase-admin": "10.3.0",
     "gotrue-js": "0.9.29",
     "jest": "29.1.2",
-    "magic-sdk": "9.0.0",
+    "magic-sdk": "9.1.1",
     "netlify-identity-widget": "1.9.2",
     "react": "17.0.2",
-    "supertokens-auth-react": "0.24.4",
+    "supertokens-auth-react": "0.26.4",
     "typescript": "4.7.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

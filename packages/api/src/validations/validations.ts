@@ -636,7 +636,7 @@ export async function validateUniqueness(
   model: string,
   fields: Record<string, unknown>,
   optionsOrCallback: UniquenessValidatorOptions,
-  callback: (tx: PrismaClient) => Promise<any>
+  callback?: (tx: PrismaClient) => Promise<any>
 ): Promise<any>
 export async function validateUniqueness(
   model: string,
