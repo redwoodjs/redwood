@@ -15,14 +15,17 @@ const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
 interface SensitiveArgPositions {
   exec: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   g: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   generate: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   prisma: {
@@ -53,8 +56,12 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   },
 }
 
-// gets diagnostic info and sanitizes by removing references to paths
-const getInfo = async (presets = {}) => {
+interface Args {
+  redwoodVersion?: string
+}
+
+/** Gets diagnostic info and sanitizes by removing references to paths */
+const getInfo = async (presets: Args = {}) => {
   const info = JSON.parse(
     await envinfo.run(
       {
@@ -93,18 +100,19 @@ const getInfo = async (presets = {}) => {
 }
 
 // removes potentially sensitive information from an array of argv strings
-export const sanitizeArgv = (argv: Array<string>) => {
+export const sanitizeArgv = (
+  argv: [string, string, keyof SensitiveArgPositions, ...string[]]
+) => {
+  const name = argv[2]
+  const sensitiveCommand = SENSITIVE_ARG_POSITIONS[name]
   const args = argv.slice(2)
-  const name = args[0]
-  const sensitiveCommand =
-    SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
   if (sensitiveCommand) {
     // redact positional arguments
     if (sensitiveCommand.positions) {
       sensitiveCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
-        if (args[pos] && !args[pos].match(/--/)) {
+        if (args[pos] && !/--/.test(args[pos])) {
           args[pos] = sensitiveCommand.redactWith[index]
         }
       })
