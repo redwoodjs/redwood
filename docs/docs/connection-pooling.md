@@ -72,7 +72,8 @@ Error: Migration engine error:
 db error: ERROR: prepared statement "s0" already exists
 ```
 
-To resolve this use the following structure of you database url: 
+To resolve this, use the following structure in your `DATABASE_URL`:
+
 ```
 <YOUR_CONNECTION_POOL_URL>:25061/defaultdb?connection_limit=3&sslmode=require&pgbouncer=true&connect_timeout=10&pool_timeout=30
 ```
