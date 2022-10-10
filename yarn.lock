@@ -4900,6 +4900,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@magic-sdk/admin@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@magic-sdk/admin@npm:1.4.1"
+  dependencies:
+    "@types/atob": ^2.1.2
+    atob: ^2.1.2
+    ethereum-cryptography: ^1.0.1
+    node-fetch: ^2.6.0
+  checksum: d4153c15d2b7fcf2c1a9f163f3029fd3a78a1134a0374bd6af7af71b9a98c5fbebf6ccc3e461011fd3b75b14da8d1df0b07454dfc788201f65be2b29c041fdf7
+  languageName: node
+  linkType: hard
+
 "@magic-sdk/commons@npm:^5.0.0":
   version: 5.0.0
   resolution: "@magic-sdk/commons@npm:5.0.0"
@@ -5111,6 +5123,27 @@ __metadata:
   version: 1.7.0
   resolution: "@noble/ed25519@npm:1.7.0"
   checksum: 9ffe60a629ab59fcf96f471e1579e3c1b542b1103f0edf101a5fbb8ff59f0bd50115fc7f38e1da6ad539cb02933a9875b0c87ee74f6c4ebcb816af0209a4ee8a
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:1.1.2":
+  version: 1.1.2
+  resolution: "@noble/hashes@npm:1.1.2"
+  checksum: 452a197522dabd163cf5297fe7b768fabba73072a198752074da6fce7c1438c7f614b27891391e9f6b118842656a4da4c0fc04e464ba1e15f306291d05dd106a
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:~1.1.1":
+  version: 1.1.3
+  resolution: "@noble/hashes@npm:1.1.3"
+  checksum: 362719c36ba26d295ec20bc640c71ec56cf3cfaf3bd4708c2b9e7cff43703f94f74f20f852fee67dbe072ee159f81a8ac7adc86979cd813d8f5c0634ec769ec9
+  languageName: node
+  linkType: hard
+
+"@noble/secp256k1@npm:1.6.3, @noble/secp256k1@npm:~1.6.0":
+  version: 1.6.3
+  resolution: "@noble/secp256k1@npm:1.6.3"
+  checksum: da324e4a721dbf75bdcb7455ef82a015e743f195fc16bcdae86cb87229578050e34ff89f36dfd05798937cce211761d767ea2933cc7fd391027a5cc36aa5df91
   languageName: node
   linkType: hard
 
@@ -5756,6 +5789,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@okta/jwt-verifier@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@okta/jwt-verifier@npm:2.6.0"
+  dependencies:
+    jwks-rsa: 1.12.3
+    njwt: ^1.2.0
+  checksum: 9d9aea7ade3ec4968ad6c63749154789a62faed7400a1ec46511477b86a0c53bed91d720d8c3ebdac4af99c3bc8897d6b2cb56487aaa98911549125708fd96ca
+  languageName: node
+  linkType: hard
+
 "@okta/okta-auth-js@npm:6.9.0":
   version: 6.9.0
   resolution: "@okta/okta-auth-js@npm:6.9.0"
@@ -6350,6 +6393,83 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/auth-providers-api@workspace:packages/auth-providers-api":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-providers-api@workspace:packages/auth-providers-api"
+  dependencies:
+    "@auth0/auth0-spa-js": 1.22.4
+    "@azure/msal-browser": 2.29.0
+    "@babel/cli": 7.19.3
+    "@babel/core": 7.19.3
+    "@babel/runtime-corejs3": 7.19.1
+    "@clerk/clerk-js": 3.17.0
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/types": 2.21.0
+    "@magic-sdk/admin": 1.4.1
+    "@nhost/hasura-auth-js": 1.4.1
+    "@nhost/nhost-js": 1.5.0
+    "@okta/jwt-verifier": 2.6.0
+    "@okta/okta-auth-js": 6.9.0
+    "@redwoodjs/auth": 3.1.1
+    "@redwoodjs/cli-helpers": 3.1.1
+    "@simplewebauthn/browser": 6.2.1
+    "@simplewebauthn/typescript-types": 6.2.1
+    "@supabase/supabase-js": 1.35.7
+    "@types/jsonwebtoken": 8.5.9
+    "@types/netlify-identity-widget": 1.9.3
+    "@types/react": 17.0.50
+    "@types/uuid": 8.3.4
+    core-js: 3.25.5
+    firebase: 9.10.0
+    firebase-admin: 10.3.0
+    gotrue-js: 0.9.29
+    jest: 29.1.2
+    jsonwebtoken: 8.5.1
+    magic-sdk: 9.1.1
+    netlify-identity-widget: 1.9.2
+    react: 17.0.2
+    supertokens-auth-react: 0.26.4
+    typescript: 4.7.4
+    uuid: 9.0.0
+  peerDependencies:
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@magic-sdk/admin": 1.4.1
+    "@okta/jwt-verifier": 2.6.0
+    firebase-admin: 10.3.0
+  peerDependenciesMeta:
+    "@clerk/clerk-react":
+      optional: true
+    "@clerk/clerk-sdk-node":
+      optional: true
+    "@magic-sdk/admin":
+      optional: true
+    "@okta/jwt-verifier":
+      optional: true
+    firebase-admin:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup"
+  dependencies:
+    "@babel/cli": 7.19.3
+    "@babel/core": 7.19.3
+    "@babel/runtime-corejs3": 7.19.1
+    "@redwoodjs/auth": 3.1.1
+    "@redwoodjs/cli-helpers": 3.1.1
+    "@types/react": 17.0.50
+    "@types/secure-random-password": ^0.2.1
+    core-js: 3.25.5
+    jest: 29.1.2
+    secure-random-password: 0.2.3
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/auth@3.1.1, @redwoodjs/auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
@@ -6384,7 +6504,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cli-helpers@workspace:packages/cli-helpers":
+"@redwoodjs/cli-helpers@3.1.1, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
   dependencies:
@@ -6983,6 +7103,34 @@ __metadata:
     node-fetch: ^2.6.7
     uuid: ^8.3.2
   checksum: 45d6f30aad0ee8616468a02b44fef13684667d1896b47fdc843a99b9443002dec01d4218d505cb90f4ebb133df186c1bc141396eefa989f7ec7dd5ac8f24519a
+  languageName: node
+  linkType: hard
+
+"@scure/base@npm:~1.1.0":
+  version: 1.1.1
+  resolution: "@scure/base@npm:1.1.1"
+  checksum: 97d200da8915ca18a4eceb73c23dda7fc3a4b8509f620c9b7756ee451d7c9ebbc828c6662f9ffa047806fbe41f37bf236c6ef75692690688b7659196cb2dc804
+  languageName: node
+  linkType: hard
+
+"@scure/bip32@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@scure/bip32@npm:1.1.0"
+  dependencies:
+    "@noble/hashes": ~1.1.1
+    "@noble/secp256k1": ~1.6.0
+    "@scure/base": ~1.1.0
+  checksum: 2eee4940db66b926cd0f7961bbd1d5201da1ad718aaca75e4651feb846f94bf89d71d64fb3dab6a88aef40514e57bb98779494cc4a3b3f1b7bdf41e36a1d4118
+  languageName: node
+  linkType: hard
+
+"@scure/bip39@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@scure/bip39@npm:1.1.0"
+  dependencies:
+    "@noble/hashes": ~1.1.1
+    "@scure/base": ~1.1.0
+  checksum: f6fc291b03155742daf9861482a13d9108ee6e9a32cb4cec34f7e424b8bf2a21cee73e4e4ef464911c4c0fa3906fefcf1bf0208127a878b5f02b6e50647fbbe8
   languageName: node
   linkType: hard
 
@@ -8489,6 +8637,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/atob@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "@types/atob@npm:2.1.2"
+  checksum: 304c7b6faf1a0d8f3a98c61768bdabdeceef8844116cda022e63418462d2d3c51a53bbdee805ad5a2c3264c0bf4b77f7f72fbce5b19ab963320ca9ccda3896e0
+  languageName: node
+  linkType: hard
+
 "@types/aws-lambda@npm:8.10.106, @types/aws-lambda@npm:^8.10.83":
   version: 8.10.106
   resolution: "@types/aws-lambda@npm:8.10.106"
@@ -9161,6 +9316,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^15.0.1":
+  version: 15.14.9
+  resolution: "@types/node@npm:15.14.9"
+  checksum: fe5b69cffd20f97c814d568c1d791b3c367f9efa6567a18d2c15cd73c5437f47bcff73a2e10bdfe59f90ce7df47e6cc3c6d431c76d2213bf6099e8ab5d16d355
+  languageName: node
+  linkType: hard
+
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.1
   resolution: "@types/normalize-package-data@npm:2.4.1"
@@ -9331,6 +9493,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 56822201fad7677a30f732cd3eb94651bb2797bd4e876ff5ec6a3d5c419a11b97ec18ff38ae86bbb945f578ed3d29856221375e1dcbc4ba640020049fcf9535c
+  languageName: node
+  linkType: hard
+
+"@types/secure-random-password@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@types/secure-random-password@npm:0.2.1"
+  checksum: 87f0528b7ccb907706b0cc77160c6771279508de3852213f2c4f28a83af482b016cf3e0b414f62d2e8b3713f1733ad787e3bd40c201463ac822c117856a7886a
   languageName: node
   linkType: hard
 
@@ -15135,7 +15304,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ecdsa-sig-formatter@npm:1.0.11, ecdsa-sig-formatter@npm:^1.0.11":
+"ecdsa-sig-formatter@npm:1.0.11, ecdsa-sig-formatter@npm:^1.0.11, ecdsa-sig-formatter@npm:^1.0.5":
   version: 1.0.11
   resolution: "ecdsa-sig-formatter@npm:1.0.11"
   dependencies:
@@ -16162,6 +16331,18 @@ __metadata:
     secp256k1: ^4.0.1
     setimmediate: ^1.0.5
   checksum: aa36e11fca9d67d67c96e02a98b33bae2e1add20bd11af43feb7f28cdafe0cd3bdbae3bfecc7f2d9ec8f504b10a1c8f7590f5f7fe236560fd8083dd321ad7144
+  languageName: node
+  linkType: hard
+
+"ethereum-cryptography@npm:^1.0.1":
+  version: 1.1.2
+  resolution: "ethereum-cryptography@npm:1.1.2"
+  dependencies:
+    "@noble/hashes": 1.1.2
+    "@noble/secp256k1": 1.6.3
+    "@scure/bip32": 1.1.0
+    "@scure/bip39": 1.1.0
+  checksum: e4f1d862f8020965026a08349d929387cbca121bc1e029380eb70c535a3825d486119da57144a68f67c1901d17334f98f7c12cac28a6420abeac863a34ee3fa5
   languageName: node
   linkType: hard
 
@@ -21137,6 +21318,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jwks-rsa@npm:1.12.3":
+  version: 1.12.3
+  resolution: "jwks-rsa@npm:1.12.3"
+  dependencies:
+    "@types/express-jwt": 0.0.42
+    axios: ^0.21.1
+    debug: ^4.1.0
+    http-proxy-agent: ^4.0.1
+    https-proxy-agent: ^5.0.0
+    jsonwebtoken: ^8.5.1
+    limiter: ^1.1.5
+    lru-memoizer: ^2.1.2
+    ms: ^2.1.2
+    proxy-from-env: ^1.1.0
+  checksum: 04d00bc297bae613951bf960add2f60b7e7429fb9e0cc19dc773e8862aa63ad40d3b432063541d7b3caf8c48d200decdddfd3b1ee6ebd25cc896dbe8f8bade2d
+  languageName: node
+  linkType: hard
+
 "jwks-rsa@npm:2.0.5, jwks-rsa@npm:^2.0.2, jwks-rsa@npm:^2.0.4":
   version: 2.0.5
   resolution: "jwks-rsa@npm:2.0.5"
@@ -22027,7 +22226,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-memoizer@npm:^2.1.4":
+"lru-memoizer@npm:^2.1.2, lru-memoizer@npm:^2.1.4":
   version: 2.1.4
   resolution: "lru-memoizer@npm:2.1.4"
   dependencies:
@@ -22891,7 +23090,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ms@npm:2.1.3, ms@npm:^2.0.0, ms@npm:^2.1.1":
+"ms@npm:2.1.3, ms@npm:^2.0.0, ms@npm:^2.1.1, ms@npm:^2.1.2":
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: d924b57e7312b3b63ad21fc5b3dc0af5e78d61a1fc7cfb5457edaf26326bf62be5307cc87ffb6862ef1c2b33b0233cdb5d4f01c4c958cc0d660948b65a287a48
@@ -23096,6 +23295,17 @@ __metadata:
   version: 1.0.5
   resolution: "nice-try@npm:1.0.5"
   checksum: 95568c1b73e1d0d4069a3e3061a2102d854513d37bcfda73300015b7ba4868d3b27c198d1dbbd8ebdef4112fc2ed9e895d4a0f2e1cce0bd334f2a1346dc9205f
+  languageName: node
+  linkType: hard
+
+"njwt@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "njwt@npm:1.2.0"
+  dependencies:
+    "@types/node": ^15.0.1
+    ecdsa-sig-formatter: ^1.0.5
+    uuid: ^8.3.2
+  checksum: 52f31fdbcabed123e30223df92d5a2376aeb9399cbf0e33a6dd71d1c02e211753cf412c3cf0a93b818fc957d9547f7ed6ac5c038b6280b96f5aa56ec0d8853c1
   languageName: node
   linkType: hard
 
