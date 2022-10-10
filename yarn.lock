@@ -4900,33 +4900,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@magic-sdk/commons@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@magic-sdk/commons@npm:5.0.0"
+"@magic-sdk/commons@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@magic-sdk/commons@npm:6.0.0"
   peerDependencies:
     "@magic-sdk/provider": ">=4.3.0"
     "@magic-sdk/types": ">=3.1.1"
-  checksum: 568dd902fa7c8f59c73a5a1a9e72d27be5bfec75b453932f78b7303772344b56c4b96a25171414e0f96b4988f1df6c2327aad0d0b4c41d5a68177169d3fb647a
+  checksum: 8f06a40ed60adb32670348e1d86669bcc9b0ccf83fc9bb196c003aa44ef95a4efd5379892318e07aecc3b5053ed488d0f17b36e6b32585a3d9e4cf09018c7188
   languageName: node
   linkType: hard
 
-"@magic-sdk/provider@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "@magic-sdk/provider@npm:9.1.0"
+"@magic-sdk/provider@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@magic-sdk/provider@npm:10.0.0"
   dependencies:
-    "@magic-sdk/types": ^8.1.0
+    "@magic-sdk/types": ^9.0.0
     eventemitter3: ^4.0.4
     web3-core: 1.5.2
   peerDependencies:
     localforage: ^1.7.4
-  checksum: ea072033c1a27c4ff974a0b7f318b4ed1bc9803f4bae0fc2e03b200512b153d8788700ec137dca21ef8936808158922eb8c508c85e47f74ba3490cc8f89776bd
+  checksum: 2509c61ba7c428a97b8f3a2711bb92500c42df6118221bc554d4a4766c16920991049da13487ddeb00643fb5c016578754ee3902be1b0fc18f693076af11c073
   languageName: node
   linkType: hard
 
-"@magic-sdk/types@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "@magic-sdk/types@npm:8.1.0"
-  checksum: 00f9be46b76506a8ba28847e64030cf0446815cf5b08aa0509125a4b4c17674d496f57328fbdb23d79168106cb6edd93b8899f22a12289e96b2be8de6514c3f7
+"@magic-sdk/types@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@magic-sdk/types@npm:9.0.0"
+  checksum: ebfcdaf1a511f3ffe30a341cf6a858806cd709e9043d3d019a744493d8a7b9f3fb82811fa9b7a5c800fa994d71e288f2cc42ed1e698fb2b47beba1cc0a07b3b3
   languageName: node
   linkType: hard
 
@@ -6376,7 +6376,7 @@ __metadata:
     firebase-admin: 10.3.0
     gotrue-js: 0.9.29
     jest: 29.1.2
-    magic-sdk: 9.1.1
+    magic-sdk: 10.0.0
     netlify-identity-widget: 1.9.2
     react: 17.0.2
     supertokens-auth-react: 0.26.4
@@ -22046,15 +22046,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-sdk@npm:9.1.1":
-  version: 9.1.1
-  resolution: "magic-sdk@npm:9.1.1"
+"magic-sdk@npm:10.0.0":
+  version: 10.0.0
+  resolution: "magic-sdk@npm:10.0.0"
   dependencies:
-    "@magic-sdk/commons": ^5.0.0
-    "@magic-sdk/provider": ^9.1.0
-    "@magic-sdk/types": ^8.1.0
+    "@magic-sdk/commons": ^6.0.0
+    "@magic-sdk/provider": ^10.0.0
+    "@magic-sdk/types": ^9.0.0
     localforage: ^1.7.4
-  checksum: 8559a0df25991c45e3b63bd5a77f0a1f3b433bd9f25f414e1bc3961fcb38f0104c601e02a63b61e45b7c29f0951d24f952daa48d871b0f2958d133f8104b4f96
+  checksum: bc38d524275eccb9febd1e0ab34af9c273e979a4930afaaa165e568721e83822a6757156f18774ae5135750a38ad786363dc207de6e8ae1b767e0cab703342db
   languageName: node
   linkType: hard
 
