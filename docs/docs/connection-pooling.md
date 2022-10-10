@@ -79,7 +79,7 @@ To resolve this, use the following structure in your `DATABASE_URL`:
 ```
 Here's a couple more things to be aware of:
 - When using a Digital Ocean connection pool, you'll have multiple ports available. Typically the direct connection (without connection pooling) is on port `25060` and the connection through pgbouncer is served through port `25061`. Make sure you connect to your connection pool on port `25061`
-- Adjust the connection_limit: Clusters provide 25 connections per 1 GB of RAM. 3 connections per cluster are reserved for maintenance, and all remaining connections can be allocated to connection pools.
+- Adjust the `connection_limit`. Clusters provide 25 connections per 1 GB of RAM. Three connections per cluster are reserved for maintenance, and all remaining connections can be allocated to connection pools
 - Both `pgbouncer=true` and `pool_timeout=30` are required to deploy successfully through your connection pool
 
 Connection Pooling for MySQL is not yet supported.
