@@ -6462,7 +6462,7 @@ __metadata:
     "@redwoodjs/auth": 3.1.1
     "@redwoodjs/cli-helpers": 3.1.1
     "@types/react": 17.0.50
-    "@types/secure-random-password": ^0.2.1
+    "@types/secure-random-password": 0.2.1
     core-js: 3.25.5
     jest: 29.1.2
     secure-random-password: 0.2.3
@@ -9496,7 +9496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/secure-random-password@npm:^0.2.1":
+"@types/secure-random-password@npm:0.2.1":
   version: 0.2.1
   resolution: "@types/secure-random-password@npm:0.2.1"
   checksum: 87f0528b7ccb907706b0cc77160c6771279508de3852213f2c4f28a83af482b016cf3e0b414f62d2e8b3713f1733ad787e3bd40c201463ac822c117856a7886a
