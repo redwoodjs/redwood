@@ -48,16 +48,6 @@ import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
 import * as page from '../page'
 
-// const silenceConsoleOutput = () => {
-//   jest.spyOn(console, 'info').mockImplementation(() => {})
-//   jest.spyOn(console, 'log').mockImplementation(() => {})
-// }
-
-// const restoreConsoleOutput = () => {
-//   console.info.mockRestore()
-//   console.log.mockRestore()
-// }
-
 let singleWordFiles,
   multiWordFiles,
   pluralWordFiles,
