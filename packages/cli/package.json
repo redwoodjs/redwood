@@ -28,7 +28,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.19.1",
+    "@babel/runtime-corejs3": "7.19.4",
     "@prisma/internals": "4.3.1",
     "@redwoodjs/api-server": "3.1.2",
     "@redwoodjs/internal": "3.1.2",

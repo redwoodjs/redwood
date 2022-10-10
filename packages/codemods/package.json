@@ -25,7 +25,7 @@
     "@babel/cli": "7.19.3",
     "@babel/core": "7.19.3",
     "@babel/plugin-transform-typescript": "7.19.3",
-    "@babel/runtime-corejs3": "7.19.1",
+    "@babel/runtime-corejs3": "7.19.4",
     "@vscode/ripgrep": "1.14.2",
     "core-js": "3.25.5",
     "cross-undici-fetch": "0.4.14",
