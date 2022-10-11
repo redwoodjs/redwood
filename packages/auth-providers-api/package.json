@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/auth-providers-api",
   "private": true,
-  "version": "3.1.1",
+  "version": "3.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -43,7 +43,7 @@
     "@nhost/nhost-js": "1.4.10",
     "@okta/jwt-verifier": "2.6.0",
     "@okta/okta-auth-js": "6.9.0",
-    "@redwoodjs/auth": "3.1.1",
+    "@redwoodjs/auth": "3.1.2",
     "@redwoodjs/cli-helpers": "3.1.1",
     "@simplewebauthn/browser": "6.2.1",
     "@simplewebauthn/typescript-types": "6.2.1",
