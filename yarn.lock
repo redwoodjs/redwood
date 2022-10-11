@@ -5029,18 +5029,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/core@npm:0.8.0":
-  version: 0.8.0
-  resolution: "@nhost/core@npm:0.8.0"
-  dependencies:
-    "@simplewebauthn/browser": ^6.0.0
-    axios: ^0.27.2
-    js-cookie: ^3.0.1
-    xstate: ^4.32.1
-  checksum: 0d25b5323a6ad0757b09499c84f331c86403ff52e57b0320ae783fa9b86607937410ff54b13688d82ac841f47674702fa1094f6bdcaee71bad072ad7e5386ad7
-  languageName: node
-  linkType: hard
-
 "@nhost/hasura-auth-js@npm:1.4.1":
   version: 1.4.1
   resolution: "@nhost/hasura-auth-js@npm:1.4.1"
@@ -5052,42 +5040,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@nhost/hasura-auth-js@npm:1.5.0"
-  dependencies:
-    "@nhost/core": 0.8.0
-    jwt-decode: ^3.1.2
-    xstate: ^4.32.1
-  checksum: 830d1756bb0c15dd3962da65522108ff4d656dc869256544dd20e581116f1ae8fa0cdaca5d2a3d7118d47084fba73366e046b49f1a41d009156201f85ee60c2d
-  languageName: node
-  linkType: hard
-
-"@nhost/hasura-storage-js@npm:0.6.2":
-  version: 0.6.2
-  resolution: "@nhost/hasura-storage-js@npm:0.6.2"
+"@nhost/hasura-storage-js@npm:0.6.0":
+  version: 0.6.0
+  resolution: "@nhost/hasura-storage-js@npm:0.6.0"
   dependencies:
     axios: ^0.27.2
     form-data: ^4.0.0
     xstate: ^4.32.1
   peerDependencies:
-    "@nhost/core": 0.8.0
-  checksum: 73fe86356106de0849b83ca78e7b4712a2ce67e0f9e5aa72ce702dd77b9c2666ed33fcba66e1cf03ac9ad212ffbb497b44f35c52036bbc720d184b5f17bda1c0
+    "@nhost/core": 0.7.6
+  checksum: 2a4e4e3d64f1e03dcdf0c36dd37569e571a36ab5917522dd55f8502fff30633d3dd7994644ab0ef26c84546eb01ef4d2aa45a5d3dae4d0a8ea6536cca92d1ade
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@nhost/nhost-js@npm:1.5.0"
+"@nhost/nhost-js@npm:1.4.10":
+  version: 1.4.10
+  resolution: "@nhost/nhost-js@npm:1.4.10"
   dependencies:
-    "@nhost/hasura-auth-js": 1.5.0
-    "@nhost/hasura-storage-js": 0.6.2
+    "@nhost/hasura-auth-js": 1.4.1
+    "@nhost/hasura-storage-js": 0.6.0
     axios: ^0.27.2
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 49cb342329898c5bc1e0fd1a77c802d0f0194363fe48b611bb471d20691440617a05a6c89fb19089b39bb4914782cdbc7e964fed87c82043e17fb61b30f2719f
+  checksum: 1b467a274f70ac16b1aa6611f220131136743a9d5659e8a8f0818fa9a183c9abf376484ba67cff34915cc5e255ccbda7a3a4de8d528599b7b733f4d784624fc1
   languageName: node
   linkType: hard
 
@@ -6350,7 +6327,61 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth2@workspace:packages/auth2":
+"@redwoodjs/auth-providers-web@workspace:packages/auth-providers-web":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth-providers-web@workspace:packages/auth-providers-web"
+  dependencies:
+    "@auth0/auth0-spa-js": 1.22.4
+    "@azure/msal-browser": 2.29.0
+    "@babel/cli": 7.19.3
+    "@babel/core": 7.19.3
+    "@babel/runtime-corejs3": 7.19.1
+    "@clerk/clerk-js": 3.17.0
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/types": 2.21.0
+    "@nhost/hasura-auth-js": 1.4.1
+    "@nhost/nhost-js": 1.4.10
+    "@okta/okta-auth-js": 6.9.0
+    "@redwoodjs/auth2": 3.1.1
+    "@simplewebauthn/browser": 6.2.1
+    "@simplewebauthn/typescript-types": 6.2.1
+    "@supabase/supabase-js": 1.35.7
+    "@types/netlify-identity-widget": 1.9.3
+    "@types/react": 17.0.50
+    "@types/uuid": 8.3.4
+    core-js: 3.25.5
+    firebase: 9.10.0
+    firebase-admin: 10.3.0
+    gotrue-js: 0.9.29
+    jest: 29.1.2
+    magic-sdk: 9.1.1
+    netlify-identity-widget: 1.9.2
+    react: 17.0.2
+    supertokens-auth-react: 0.26.4
+    typescript: 4.7.4
+    uuid: 9.0.0
+  peerDependencies:
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@magic-sdk/admin": 1.4.1
+    "@okta/jwt-verifier": 2.6.0
+    firebase-admin: 10.3.0
+  peerDependenciesMeta:
+    "@clerk/clerk-react":
+      optional: true
+    "@clerk/clerk-sdk-node":
+      optional: true
+    "@magic-sdk/admin":
+      optional: true
+    "@okta/jwt-verifier":
+      optional: true
+    firebase-admin:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/auth2@3.1.1, @redwoodjs/auth2@workspace:packages/auth2":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth2@workspace:packages/auth2"
   dependencies:
@@ -6364,7 +6395,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@clerk/types": 2.21.0
     "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/nhost-js": 1.5.0
+    "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
     "@simplewebauthn/browser": 6.2.1
     "@simplewebauthn/typescript-types": 6.2.1
@@ -6398,7 +6429,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@clerk/types": 2.21.0
     "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/nhost-js": 1.5.0
+    "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
     "@simplewebauthn/browser": 6.2.1
     "@simplewebauthn/typescript-types": 6.2.1
@@ -7020,7 +7051,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/browser@npm:6.2.1, @simplewebauthn/browser@npm:^6.0.0":
+"@simplewebauthn/browser@npm:6.2.1":
   version: 6.2.1
   resolution: "@simplewebauthn/browser@npm:6.2.1"
   checksum: fc7857b1b85ea156e49bbe23290f5ffe40cd46abee11f5c4a6d663fd2d70178e792042e4558bc9607312c290d493812a678a1bf33bfdca7af3bdc0f369e23abf
