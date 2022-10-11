@@ -39,7 +39,7 @@
     "@clerk/types": "2.21.0",
     "@magic-sdk/admin": "1.4.1",
     "@nhost/hasura-auth-js": "1.4.1",
-    "@nhost/nhost-js": "1.5.0",
+    "@nhost/nhost-js": "1.4.10",
     "@okta/jwt-verifier": "2.6.0",
     "@okta/okta-auth-js": "6.9.0",
     "@redwoodjs/auth": "3.1.1",
