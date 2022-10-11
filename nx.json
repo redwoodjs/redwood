@@ -20,7 +20,7 @@
       "!{projectRoot}/**/*.test.{js,jsx,ts,tsx}",
       "{workspaceRoot}/babel.config.js",
       { "runtime": "node -v" },
-      { "runtime": "node -e \"process.platform\""}
+      { "runtime": "node -e \"console.log(process.platform)\""}
     ]
   },
   "targetDefaults": {
