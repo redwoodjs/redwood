@@ -515,6 +515,7 @@ export const Success = ({ article, id, rand }) => {
 
 ```tsx
 interface Props extends CellSuccessProps<ArticleQuery> {
+  id: number
   rand: number
 }
 

@@ -1,6 +1,7 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { AuthenticationError } from '../../errors'
+import type { UseRequireAuth } from '../useRequireAuth'
 
 import { getCurrentUser } from './fixtures/auth'
 
@@ -8,10 +9,12 @@ type RedwoodUser = Record<string, unknown> & { roles?: string[] }
 
 export const mockedAuthenticationEvent = ({
   headers = {},
+}: {
+  headers: Record<string, any> | null | undefined
 }): APIGatewayEvent => {
   return {
     body: 'MOCKED_BODY',
-    headers,
+    headers: headers || {},
     multiValueHeaders: {},
     httpMethod: 'POST',
     isBase64Encoded: false,
@@ -136,7 +139,7 @@ const handlerWithError = async (
 
 const getCurrentUserWithError = async (
   _decoded,
-  { _token }
+  { token: _token }
 ): Promise<RedwoodUser> => {
   throw Error('Something went wrong getting the user info')
 }
@@ -160,7 +163,9 @@ describe('useRequireAuth', () => {
     // @MARK
     // Because we use context inside useRequireAuth, we only want to import this function
     // once we disable context isolation for our test
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -174,7 +179,7 @@ describe('useRequireAuth', () => {
 
     const output = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers }),
-      {}
+      {} as Context
     )
 
     const response = JSON.parse(output.body)
@@ -185,7 +190,9 @@ describe('useRequireAuth', () => {
     // @MARK
     // Because we use context inside useRequireAuth, we only want to import this function
     // once we disable context isolation for our test
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -209,8 +216,8 @@ describe('useRequireAuth', () => {
 
     const output = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: headersWithRoles }),
-      {}
-    ) // ?
+      {} as Context
+    )
 
     const response = JSON.parse(output.body)
     expect(response.currentUser.name).toEqual('John Editor')
@@ -218,7 +225,9 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status if an error occurs when getting current user info', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -232,7 +241,7 @@ describe('useRequireAuth', () => {
 
     const output = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: customHeaders }),
-      {}
+      {} as Context
     )
 
     expect(output.statusCode).toEqual(200)
@@ -241,7 +250,9 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status if no auth headers present', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -252,7 +263,7 @@ describe('useRequireAuth', () => {
 
     const output = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: missingHeaders }),
-      {}
+      {} as Context
     )
 
     expect(output.statusCode).toEqual(200)
@@ -261,7 +272,9 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status with token if the auth provider is unsupported', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -275,7 +288,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: unsupportedProviderHeaders }),
-      {}
+      {} as Context
     )
 
     const body = JSON.parse(response.body)
@@ -285,7 +298,9 @@ describe('useRequireAuth', () => {
   })
 
   it('returns 200 if decoding JWT succeeds for netlify', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -307,7 +322,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: netlifyJWTHeaders }),
-      {}
+      {} as Context
     )
 
     const body = JSON.parse(response.body)
@@ -318,7 +333,9 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status if decoding JWT fails for netlify', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -332,7 +349,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: invalidJWTHeaders }),
-      {}
+      {} as Context
     )
 
     const body = JSON.parse(response.body)
@@ -342,7 +359,9 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status if decoding JWT fails for supabase', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -356,7 +375,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: invalidJWTHeaders }),
-      {}
+      {} as Context
     )
 
     const body = JSON.parse(response.body)
@@ -366,7 +385,9 @@ describe('useRequireAuth', () => {
   })
 
   it('is 500 Server Error status if handler errors', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const customHeaders = {
       'auth-provider': 'custom',
@@ -380,7 +401,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: customHeaders }),
-      {}
+      {} as Context
     )
 
     const message = JSON.parse(response.body).error
@@ -390,7 +411,9 @@ describe('useRequireAuth', () => {
   })
 
   it('enables the use of auth functions inside the handler to check that isAuthenticated blocks unauthenticated users', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     const netlifyJWTHeaders = {
       'auth-provider': 'netlify',
@@ -404,7 +427,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: netlifyJWTHeaders }),
-      {}
+      {} as Context
     )
 
     const body = JSON.parse(response.body)
@@ -414,7 +437,9 @@ describe('useRequireAuth', () => {
   })
 
   it("enables the use of auth functions inside the handler to check that requireAuth throws if the user doesn't have the required role", async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     // Note: The Bearer token JWT contains:
     // {
@@ -437,13 +462,15 @@ describe('useRequireAuth', () => {
     await expect(
       handlerEnrichedWithAuthentication(
         mockedAuthenticationEvent({ headers: netlifyJWTHeaders }),
-        {}
+        {} as Context
       )
     ).rejects.toThrow("You don't have access to do that.")
   })
 
   it('enables the use of auth functions inside the handler to check editor role', async () => {
-    const { useRequireAuth } = require('../useRequireAuth')
+    const {
+      useRequireAuth,
+    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
 
     // The authorization JWT is valid and has roles in app metadata
     // {
@@ -467,7 +494,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: headersWithRoles }),
-      {}
+      {} as Context
     )
 
     const body = JSON.parse(response.body)

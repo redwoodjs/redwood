@@ -1,0 +1,12 @@
+import { OktaAuth } from '@okta/okta-auth-js'
+
+import { createOktaAuth } from '@redwoodjs/auth-providers-web'
+
+const okta = new OktaAuth({
+  issuer: process.env.OKTA_ISSUER,
+  clientId: process.env.OKTA_CLIENT_ID,
+  redirectUri: process.env.OKTA_REDIRECT_URI,
+  pkce: true,
+})
+
+export const { AuthProvider, useAuth } = createOktaAuth(okta)

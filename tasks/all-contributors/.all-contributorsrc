@@ -3592,6 +3592,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ericrav",
+      "name": "Eric Rabinowitz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3066943?v=4",
+      "profile": "http://ericrabinowitz.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "m-raschle",
+      "name": "Maximilian Raschle",
+      "avatar_url": "https://avatars.githubusercontent.com/u/107191588?v=4",
+      "profile": "https://github.com/m-raschle",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nikolaxhristov",
+      "name": "nikolaxhristov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/90222871?v=4",
+      "profile": "https://github.com/nikolaxhristov",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }

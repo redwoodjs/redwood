@@ -19,11 +19,15 @@ beforeEach(() => {
   fs.__setMockFiles(
     files({ name: 'require-admin', type: 'validator', tests: true })
   )
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
 })
 
 afterEach(() => {
   fs.__setMockFiles({})
   jest.spyOn(fs, 'unlinkSync').mockClear()
+  console.info.mockRestore()
+  console.log.mockRestore()
 })
 
 test('destroys directive files', async () => {
