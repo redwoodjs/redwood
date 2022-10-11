@@ -13,5 +13,5 @@ export default abstract class BaseClient {
     key: string,
     value: unknown,
     options: { expires?: number }
-  ): Promise<any> | undefined
+  ): Promise<void> | void
 }
