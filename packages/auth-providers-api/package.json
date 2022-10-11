@@ -1,5 +1,6 @@
 {
   "name": "@redwoodjs/auth-providers-api",
+  "private": true,
   "version": "3.1.1",
   "repository": {
     "type": "git",
