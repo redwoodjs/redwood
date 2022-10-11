@@ -23,9 +23,16 @@ import '../../../../lib/test'
 import { files } from '../../../generate/cell/cell'
 import { tasks } from '../cell'
 
+beforeEach(() => {
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+
 afterEach(() => {
   fs.__setMockFiles({})
   jest.spyOn(fs, 'unlinkSync').mockClear()
+  console.info.mockRestore()
+  console.log.mockRestore()
 })
 
 test('destroys cell files', async () => {
