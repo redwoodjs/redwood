@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api-server",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Redwood's HTTP server for Serverless Functions",
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "7.19.1",
-    "@babel/runtime-corejs3": "7.19.1",
+    "@babel/runtime-corejs3": "7.19.4",
     "@fastify/http-proxy": "8.2.3",
     "@fastify/static": "6.5.0",
     "@fastify/url-data": "5.1.0",
