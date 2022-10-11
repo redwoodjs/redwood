@@ -6970,7 +6970,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.186
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.11.64
+    "@types/node": 16.11.65
     "@types/vscode": 1.72.0
     camelcase: 6.3.0
     core-js: 3.25.5
@@ -7044,7 +7044,7 @@ __metadata:
     "@types/aws-lambda": 8.10.106
     "@types/babel-core": 6.25.7
     "@types/jest": 29.1.2
-    "@types/node": 16.11.64
+    "@types/node": 16.11.65
     "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
     "@types/webpack": 5.28.0
@@ -9360,10 +9360,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.64, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
-  version: 16.11.64
-  resolution: "@types/node@npm:16.11.64"
-  checksum: 4b5ee37e3d2dc3364abbffee7e9f4c27fc22b44305ff5920fcc1b7fe08343bf113fface6a565c2406f77f8818d5ddcfb31652df6a43e4ab971976256d176bf37
+"@types/node@npm:16.11.65, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
+  version: 16.11.65
+  resolution: "@types/node@npm:16.11.65"
+  checksum: 5d66c2e0119ff194b2e196b0016d5d083fd332a114cea04822fbc22a7733b2feba0db9de380a289f457312a24b2f313396084b682d670038f5b2ced2d14fc659
   languageName: node
   linkType: hard
 
@@ -10691,9 +10691,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"all-contributors-cli@npm:6.23.1":
-  version: 6.23.1
-  resolution: "all-contributors-cli@npm:6.23.1"
+"all-contributors-cli@npm:6.24.0":
+  version: 6.24.0
+  resolution: "all-contributors-cli@npm:6.24.0"
   dependencies:
     "@babel/runtime": ^7.7.6
     async: ^3.1.0
@@ -10707,7 +10707,7 @@ __metadata:
     yargs: ^15.0.1
   bin:
     all-contributors: dist/cli.js
-  checksum: 4aa5a44f1f56d9e35de18eece6436a9ae5f96511995c8f4a4bc653fa23929006bfac60b69c5014a6148f28736e25bc0357e7f82666d2f4fa578e5e2a937584f9
+  checksum: 95ca05aa51f0419025e7759c9b9ffd490a30acbab89854b31a5cf571798682308cc00bd699c4ec39fafe392b654c545a7b76841c12f1b4f309f10ea04bd0b4d3
   languageName: node
   linkType: hard
 
@@ -27486,7 +27486,7 @@ __metadata:
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.1
-    all-contributors-cli: 6.23.1
+    all-contributors-cli: 6.24.0
     ansi-colors: 4.1.3
     babel-jest: 29.1.2
     babel-plugin-auto-import: 1.1.0

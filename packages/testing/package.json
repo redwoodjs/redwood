@@ -45,7 +45,7 @@
     "@types/aws-lambda": "8.10.106",
     "@types/babel-core": "6.25.7",
     "@types/jest": "29.1.2",
-    "@types/node": "16.11.64",
+    "@types/node": "16.11.65",
     "@types/react": "17.0.50",
     "@types/react-dom": "17.0.17",
     "@types/webpack": "5.28.0",
