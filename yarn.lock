@@ -6829,7 +6829,7 @@ __metadata:
     core-js: 3.25.5
     cross-undici-fetch: 0.4.14
     graphql: 16.6.0
-    graphql-scalars: 1.18.0
+    graphql-scalars: 1.19.0
     graphql-tag: 2.12.6
     jest: 29.1.2
     lodash.merge: 4.6.2
@@ -18360,14 +18360,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-scalars@npm:1.18.0":
-  version: 1.18.0
-  resolution: "graphql-scalars@npm:1.18.0"
+"graphql-scalars@npm:1.19.0":
+  version: 1.19.0
+  resolution: "graphql-scalars@npm:1.19.0"
   dependencies:
     tslib: ~2.4.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: a07f7fca1d05a057ac5cd7775912489506cc87be9b05e74e444c193dca598524c4cc3b427f015ca414200ebbf1af7d0d20c453c8edda558e0d71ca5ba0a1e600
+  checksum: e79a1a4a34a3138f28aa7163dcd8e21ac6c1f1efc0aa5da193cb5f0b276194a892744e58d4d43328ff3f1788122923852137f03b317b9497735d394ae0c2beb6
   languageName: node
   linkType: hard
 
