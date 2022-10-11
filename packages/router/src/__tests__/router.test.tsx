@@ -263,11 +263,12 @@ describe('slow imports', () => {
     </Router>
   )
 
-  beforeAll(() => {
+  beforeEach(() => {
+    // One of the tests modifies this, so we need to reset it before each test
     mockDelay = 400
   })
 
-  afterAll(() => {
+  afterEach(() => {
     mockDelay = 0
   })
 
