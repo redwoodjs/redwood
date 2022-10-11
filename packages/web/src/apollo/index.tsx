@@ -6,7 +6,6 @@ import type {
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { print } from 'graphql/language/printer'
-import type { F } from 'ts-toolbelt'
 
 // Note: Importing directly from `apollo/client` does not work properly in Storybook.
 const {
@@ -89,15 +88,15 @@ export type GraphQLClientConfigProp = Omit<
       ) => apolloClient.ApolloLink)
 }
 
-export type UseAuthProp = () => AuthContextInterface
+type UseAuth = () => AuthContextInterface
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
     cache: ApolloCache<unknown>
   }
-  useAuth: UseAuthProp
-  logLevel: F.Return<typeof setLogVerbosity>
-  children?: React.ReactNode
+  useAuth: UseAuth
+  logLevel: ReturnType<typeof setLogVerbosity>
+  children: React.ReactNode
 }> = ({ config, children, useAuth, logLevel }) => {
   /**
    * Should they run into it,
@@ -256,7 +255,7 @@ type ComponentDidCatch = React.ComponentLifecycle<any, any>['componentDidCatch']
 interface ErrorBoundaryProps {
   error?: unknown
   onError: NonNullable<ComponentDidCatch>
-  children?: React.ReactNode
+  children: React.ReactNode
 }
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
@@ -272,9 +271,9 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
-  useAuth?: UseAuthProp
-  logLevel?: F.Return<typeof setLogVerbosity>
-  children?: React.ReactNode
+  useAuth?: UseAuth
+  logLevel?: ReturnType<typeof setLogVerbosity>
+  children: React.ReactNode
 }> = ({
   graphQLClientConfig,
   useAuth = useRWAuth,
@@ -293,9 +292,8 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
-        /**
-         * This order so that the user can still completely overwrite the cache.
-         */
+        // </FetchConfigProvider> This order so that the user can still
+        // completely overwrite the cache.
         config={{ cache, ...config }}
         useAuth={useAuth}
         logLevel={logLevel}
