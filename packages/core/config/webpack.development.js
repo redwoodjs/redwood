@@ -1,6 +1,8 @@
 const escapeRegExp = require('lodash.escaperegexp')
 const { merge } = require('webpack-merge')
 
+// temp test change for nx
+
 const { getConfig } = require('@redwoodjs/internal')
 
 const webpackConfig = require('./webpack.common')
