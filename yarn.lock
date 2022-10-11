@@ -5041,18 +5041,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/core@npm:0.8.0":
-  version: 0.8.0
-  resolution: "@nhost/core@npm:0.8.0"
-  dependencies:
-    "@simplewebauthn/browser": ^6.0.0
-    axios: ^0.27.2
-    js-cookie: ^3.0.1
-    xstate: ^4.32.1
-  checksum: 0d25b5323a6ad0757b09499c84f331c86403ff52e57b0320ae783fa9b86607937410ff54b13688d82ac841f47674702fa1094f6bdcaee71bad072ad7e5386ad7
-  languageName: node
-  linkType: hard
-
 "@nhost/hasura-auth-js@npm:1.4.1":
   version: 1.4.1
   resolution: "@nhost/hasura-auth-js@npm:1.4.1"
@@ -5064,42 +5052,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nhost/hasura-auth-js@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@nhost/hasura-auth-js@npm:1.5.0"
-  dependencies:
-    "@nhost/core": 0.8.0
-    jwt-decode: ^3.1.2
-    xstate: ^4.32.1
-  checksum: 830d1756bb0c15dd3962da65522108ff4d656dc869256544dd20e581116f1ae8fa0cdaca5d2a3d7118d47084fba73366e046b49f1a41d009156201f85ee60c2d
-  languageName: node
-  linkType: hard
-
-"@nhost/hasura-storage-js@npm:0.6.2":
-  version: 0.6.2
-  resolution: "@nhost/hasura-storage-js@npm:0.6.2"
+"@nhost/hasura-storage-js@npm:0.6.0":
+  version: 0.6.0
+  resolution: "@nhost/hasura-storage-js@npm:0.6.0"
   dependencies:
     axios: ^0.27.2
     form-data: ^4.0.0
     xstate: ^4.32.1
   peerDependencies:
-    "@nhost/core": 0.8.0
-  checksum: 73fe86356106de0849b83ca78e7b4712a2ce67e0f9e5aa72ce702dd77b9c2666ed33fcba66e1cf03ac9ad212ffbb497b44f35c52036bbc720d184b5f17bda1c0
+    "@nhost/core": 0.7.6
+  checksum: 2a4e4e3d64f1e03dcdf0c36dd37569e571a36ab5917522dd55f8502fff30633d3dd7994644ab0ef26c84546eb01ef4d2aa45a5d3dae4d0a8ea6536cca92d1ade
   languageName: node
   linkType: hard
 
-"@nhost/nhost-js@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@nhost/nhost-js@npm:1.5.0"
+"@nhost/nhost-js@npm:1.4.10":
+  version: 1.4.10
+  resolution: "@nhost/nhost-js@npm:1.4.10"
   dependencies:
-    "@nhost/hasura-auth-js": 1.5.0
-    "@nhost/hasura-storage-js": 0.6.2
+    "@nhost/hasura-auth-js": 1.4.1
+    "@nhost/hasura-storage-js": 0.6.0
     axios: ^0.27.2
     jwt-decode: ^3.1.2
     query-string: ^7.0.1
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 49cb342329898c5bc1e0fd1a77c802d0f0194363fe48b611bb471d20691440617a05a6c89fb19089b39bb4914782cdbc7e964fed87c82043e17fb61b30f2719f
+  checksum: 1b467a274f70ac16b1aa6611f220131136743a9d5659e8a8f0818fa9a183c9abf376484ba67cff34915cc5e255ccbda7a3a4de8d528599b7b733f4d784624fc1
   languageName: node
   linkType: hard
 
@@ -5979,13 +5956,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.7, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.3":
-  version: 0.5.7
-  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.7"
+"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.8, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.3":
+  version: 0.5.8
+  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.8"
   dependencies:
     ansi-html-community: ^0.0.8
     common-path-prefix: ^3.0.0
-    core-js-pure: ^3.8.1
+    core-js-pure: ^3.23.3
     error-stack-parser: ^2.0.6
     find-up: ^5.0.0
     html-entities: ^2.1.0
@@ -5996,7 +5973,7 @@ __metadata:
     "@types/webpack": 4.x || 5.x
     react-refresh: ">=0.10.0 <1.0.0"
     sockjs-client: ^1.4.0
-    type-fest: ">=0.17.0 <3.0.0"
+    type-fest: ">=0.17.0 <4.0.0"
     webpack: ">=4.43.0 <6.0.0"
     webpack-dev-server: 3.x || 4.x
     webpack-hot-middleware: 2.x
@@ -6014,7 +5991,7 @@ __metadata:
       optional: true
     webpack-plugin-serve:
       optional: true
-  checksum: 11bc7e2223eda628ee90164b2dbdc8e3c7a83c4d43871c3ed217e3cae6f70df76e7e2270da9377c77ca7ef14e3886654e8497cce3792011f34dd07730fc59706
+  checksum: dc304daf9fc7e0d5729fd790434112b5331541b4531f80ed4767ef78b24614cac8efeb51c3047cd4b15ee598fc93ee58b197801019aa1067fd084193877826ea
   languageName: node
   linkType: hard
 
@@ -6484,7 +6461,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@clerk/types": 2.21.0
     "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/nhost-js": 1.5.0
+    "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
     "@simplewebauthn/browser": 6.2.1
     "@simplewebauthn/typescript-types": 6.2.1
@@ -6623,7 +6600,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.19.1
-    "@pmmmwh/react-refresh-webpack-plugin": 0.5.7
+    "@pmmmwh/react-refresh-webpack-plugin": 0.5.8
     "@redwoodjs/cli": 3.1.1
     "@redwoodjs/eslint-config": 3.1.1
     "@redwoodjs/internal": 3.1.1
@@ -13772,10 +13749,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.25.1, core-js-pure@npm:^3.8.1":
-  version: 3.25.1
-  resolution: "core-js-pure@npm:3.25.1"
-  checksum: 8bf25eaa52045a9e8cf7602ba2b4e8af5ccbb920e36df0c479bcbf2b8c9b1048d996f1474077d82b03e8d1ede0078b9984d031af165b7aec873f9957b2cfac8f
+"core-js-pure@npm:^3.23.3, core-js-pure@npm:^3.25.1":
+  version: 3.25.5
+  resolution: "core-js-pure@npm:3.25.5"
+  checksum: 47c84be3d06c4e1d49e7e9f191368dda4d2d4cb4cb94929e6e8caf2230b87b1a944a0d64d767ea9e7c540853082ad7e68f9310800d79809a4cd9feb3a0c00269
   languageName: node
   linkType: hard
 
