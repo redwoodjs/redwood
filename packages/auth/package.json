@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.19.1",
+    "@babel/runtime-corejs3": "7.19.4",
     "core-js": "3.25.5"
   },
   "devDependencies": {
@@ -36,7 +36,7 @@
     "@clerk/clerk-sdk-node": "3.9.2",
     "@clerk/types": "2.21.0",
     "@nhost/hasura-auth-js": "1.4.1",
-    "@nhost/nhost-js": "1.5.0",
+    "@nhost/nhost-js": "1.4.10",
     "@okta/okta-auth-js": "6.9.0",
     "@simplewebauthn/browser": "6.2.1",
     "@simplewebauthn/typescript-types": "6.2.1",

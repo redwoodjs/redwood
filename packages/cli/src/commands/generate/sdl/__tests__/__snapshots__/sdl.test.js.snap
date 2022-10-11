@@ -235,7 +235,6 @@ describe('customDatums', () => {
     const original = await customData({
       id: scenario.customData.one.id,
     })
-
     const result = await updateCustomData({
       id: original.id,
       input: { data: 'String2' },
@@ -248,7 +247,6 @@ describe('customDatums', () => {
     const original = await deleteCustomData({
       id: scenario.customData.one.id,
     })
-
     const result = await customData({ id: original.id })
 
     expect(result).toEqual(null)
@@ -531,7 +529,6 @@ describe('customDatums', () => {
     const original = await customData({
       id: scenario.customData.one.id,
     })
-
     const result = await updateCustomData({
       id: original.id,
       input: { data: 'String2' },
@@ -544,7 +541,6 @@ describe('customDatums', () => {
     const original = await deleteCustomData({
       id: scenario.customData.one.id,
     })
-
     const result = await customData({ id: original.id })
 
     expect(result).toEqual(null)
