@@ -5,7 +5,6 @@ import { useRedwoodAuthContext } from '../useRedwoodAuthContext'
 
 jest.mock('@redwoodjs/api', () => {
   return {
-    //@ts-expect-error jest types being silly
     ...jest.requireActual('@redwoodjs/api'),
     getAuthenticationContext: jest.fn().mockResolvedValue([
       { sub: '1', email: 'ba@zin.ga' },
