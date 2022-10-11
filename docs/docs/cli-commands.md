@@ -1707,7 +1707,7 @@ yarn redwood setup graphiql <provider>
 
 ### setup cache
 
-This command creates a setup file in `api/src/lib/cache.{ts|js}` for connecting to a Memcached or Redis server and enables caching in services. See the [**Caching** section of the Services docs](/docs/services#caching) for usage.
+This command creates a setup file in `api/src/lib/cache.{ts|js}` for connecting to a Memcached or Redis server and allows caching in services. See the [**Caching** section of the Services docs](/docs/services#caching) for usage.
 
 ```
 yarn redwood setup cache <client>
