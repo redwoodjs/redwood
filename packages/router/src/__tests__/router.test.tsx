@@ -1432,7 +1432,7 @@ test('redirect replacing route', async () => {
 
 describe('trailing slashes', () => {
   const TSNeverRouter = () => (
-    <Router trailingSlashes={'never'}>
+    <Router trailingSlashes="never">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route notfound page={NotFoundPage} />
@@ -1452,7 +1452,7 @@ describe('trailing slashes', () => {
   })
 
   const TSAlwaysRouter = () => (
-    <Router trailingSlashes={'always'}>
+    <Router trailingSlashes="always">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about/" page={AboutPage} name="about" />
       <Route notfound page={NotFoundPage} />
@@ -1472,7 +1472,7 @@ describe('trailing slashes', () => {
   })
 
   const TSPreserveRouter = () => (
-    <Router trailingSlashes={'preserve'}>
+    <Router trailingSlashes="preserve">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/contact/" page={() => <h1>Contact Page</h1>} name="about" />
