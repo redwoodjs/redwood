@@ -28,11 +28,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/parser": "7.19.3",
+    "@babel/parser": "7.19.4",
     "@babel/plugin-transform-typescript": "7.19.3",
     "@babel/register": "7.18.9",
-    "@babel/runtime-corejs3": "7.19.1",
-    "@babel/traverse": "7.19.3",
+    "@babel/runtime-corejs3": "7.19.4",
+    "@babel/traverse": "7.19.4",
     "@graphql-codegen/add": "3.2.1",
     "@graphql-codegen/cli": "2.13.5",
     "@graphql-codegen/core": "2.6.2",
