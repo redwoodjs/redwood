@@ -38,7 +38,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ client, force }) => {
-  console.info(client, force)
 
   const extension = isTypeScriptProject ? 'ts' : 'js'
 
