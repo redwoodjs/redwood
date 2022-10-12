@@ -1,5 +1,8 @@
-> **Warning** 
-> This doc has been deprecated in favor of the [Baremetal](../deploy/baremetal.md) docs.
+:::caution This doc has been deprecated
+
+This doc has been deprecated in favor of the [Baremetal](../deploy/baremetal.md) docs.
+
+:::
 
 # Self-hosting Redwood (Serverful)
 
