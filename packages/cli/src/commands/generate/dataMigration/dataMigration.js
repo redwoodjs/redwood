@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
 
@@ -71,7 +71,7 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

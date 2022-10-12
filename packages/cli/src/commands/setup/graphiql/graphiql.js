@@ -3,7 +3,7 @@ import path from 'path'
 
 import CryptoJS from 'crypto-js'
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -265,7 +265,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

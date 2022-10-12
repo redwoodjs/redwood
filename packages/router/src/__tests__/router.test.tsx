@@ -16,7 +16,13 @@ jest.mock('../util', () => {
 
 import React, { useEffect, useState } from 'react'
 
-import { render, waitFor, act, fireEvent } from '@testing-library/react'
+import {
+  render,
+  waitFor,
+  act,
+  fireEvent,
+  configure,
+} from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
 import { AuthContextInterface } from '@redwoodjs/auth'
@@ -87,11 +93,17 @@ const mockUseAuth =
       useState(isAuthenticated)
 
     useEffect(() => {
+      let timer: NodeJS.Timeout | undefined
       if (loadingTimeMs) {
-        setTimeout(() => {
+        timer = setTimeout(() => {
           setAuthLoading(false)
           setAuthIsAuthenticated(true)
         }, loadingTimeMs)
+      }
+      return () => {
+        if (timer) {
+          clearTimeout(timer)
+        }
       }
     }, [])
 
@@ -119,6 +131,10 @@ const ParamPage = ({ value, q }: { value: string; q: string }) => {
     </div>
   )
 }
+
+configure({
+  asyncUtilTimeout: 5_000,
+})
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
@@ -178,7 +194,7 @@ describe('slow imports', () => {
   }) => (
     <Router
       useAuth={mockUseAuth({ isAuthenticated: authenticated, hasRole })}
-      pageLoadingDelay={100}
+      pageLoadingDelay={200}
     >
       <Route
         path="/"
@@ -247,11 +263,12 @@ describe('slow imports', () => {
     </Router>
   )
 
-  beforeAll(() => {
-    mockDelay = 200
+  beforeEach(() => {
+    // One of the tests modifies this, so we need to reset it before each test
+    mockDelay = 400
   })
 
-  afterAll(() => {
+  afterEach(() => {
     mockDelay = 0
   })
 
@@ -420,15 +437,35 @@ describe('slow imports', () => {
   })
 
   test('usePageLoadingContext', async () => {
-    // Had to increase this to make the test pass on Windows
-    mockDelay = 500
+    // We want to show a loading indicator if loading pages is taking a long
+    // time. But at the same time we don't want to show it right away, because
+    // then there'll be a flash of the loading indicator on every page load.
+    // So we have a `pageLoadingDelay` delay to control how long it waits
+    // before showing the loading state (default is 1000 ms).
+    //
+    // RW lazy loads pages by default, that's why it could potentially take a
+    // while to load a page. But during tests we don't do that. So we have to
+    // fake a delay. That's what `mockDelay` is for. `mockDelay` has to be
+    // longer than `pageLoadingDelay`, but not too long so the test takes
+    // longer than it has to, and also not too long so the entire test times
+    // out.
 
+    // Had to increase this to make the test pass on Windows
+    mockDelay = 700
+
+    // <TestRouter> sets pageLoadingDelay={200}. (Default is 1000.)
     const screen = render(<TestRouter />)
 
     act(() => navigate('/page-loading-context'))
 
+    // 'Page Loading Context Layout' should always be shown
     await waitFor(() => screen.getByText('Page Loading Context Layout'))
+
+    // 'loading in layout...' should only be shown while the page is loading.
+    // So in this case, for the first 700ms
     await waitFor(() => screen.getByText('loading in layout...'))
+
+    // After 700ms 'Page Loading Context Page' should be rendered
     await waitFor(() => screen.getByText('Page Loading Context Page'))
 
     // This shouldn't show up, because the page shouldn't render before it's
@@ -763,7 +800,8 @@ test('can display a loading screen with a hook', async () => {
     const [showStill, setShowStill] = useState(false)
 
     useEffect(() => {
-      setTimeout(() => setShowStill(true), 100)
+      const timer = setTimeout(() => setShowStill(true), 100)
+      return () => clearTimeout(timer)
     }, [])
 
     return <>{showStill ? 'Still authenticating...' : 'Authenticating...'}</>
@@ -1394,7 +1432,7 @@ test('redirect replacing route', async () => {
 
 describe('trailing slashes', () => {
   const TSNeverRouter = () => (
-    <Router trailingSlashes={'never'}>
+    <Router trailingSlashes="never">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route notfound page={NotFoundPage} />
@@ -1414,7 +1452,7 @@ describe('trailing slashes', () => {
   })
 
   const TSAlwaysRouter = () => (
-    <Router trailingSlashes={'always'}>
+    <Router trailingSlashes="always">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about/" page={AboutPage} name="about" />
       <Route notfound page={NotFoundPage} />
@@ -1434,7 +1472,7 @@ describe('trailing slashes', () => {
   })
 
   const TSPreserveRouter = () => (
-    <Router trailingSlashes={'preserve'}>
+    <Router trailingSlashes="preserve">
       <Route path="/" page={HomePage} name="home" />
       <Route path="/about" page={AboutPage} name="about" />
       <Route path="/contact/" page={() => <h1>Contact Page</h1>} name="about" />

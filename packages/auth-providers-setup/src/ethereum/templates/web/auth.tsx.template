@@ -1,0 +1,66 @@
+import React from 'react'
+
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import EthereumAuthClient from '@oneclickdapp/ethereum-auth'
+
+import { createEthereumAuth } from '@redwoodjs/auth-providers-web'
+import { useFetchConfig } from '@redwoodjs/web'
+
+let ethereum: EthereumAuthClient
+
+interface Props {
+  children: React.ReactNode
+}
+
+const ApolloInjector = () => {
+  const { uri, headers } = useFetchConfig()
+  try {
+    const graphQLClient = new ApolloClient({
+      cache: new InMemoryCache(),
+      uri,
+      headers,
+    })
+
+    // Default option using Apollo Client
+    const makeRequest = (mutation: any, variables: any) =>
+      graphQLClient.mutate({
+        mutation,
+        variables,
+      })
+
+    // Alternative option using graphql-hooks
+    // You'll also need to modify graphQLClient
+    // const makeRequest = (query, variables) =>
+    //   graphQLClient.request({
+    //     query,
+    //     variables,
+    //   })
+
+    ethereum = new EthereumAuthClient({
+      makeRequest,
+      debug: process.env.NODE_ENV === 'development',
+    })
+
+    // This will have to do for now. This client is waiting for a rewrite.
+    // @see https://github.com/redwoodjs/redwood/pull/3337#discussion_r730106804
+    ;(window as any).ethereumRwClient = ethereum
+  } catch (e) {
+    console.log(e)
+  }
+
+  return null
+}
+
+const { AuthProvider: EthereumAuthProvider, useAuth: useEthereumAuth } =
+  createEthereumAuth(ethereum)
+
+export const useAuth = useEthereumAuth
+
+export const AuthProvider = ({ children }: Props) => {
+  return (
+    <EthereumAuthProvider>
+      <ApolloInjector />
+      {children}
+    </EthereumAuthProvider>
+  )
+}

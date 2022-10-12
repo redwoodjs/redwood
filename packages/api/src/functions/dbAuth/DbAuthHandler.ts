@@ -48,6 +48,12 @@ interface SignupFlowOptions {
    * from `useAuth()`
    */
   handler: (signupHandlerOptions: SignupHandlerOptions) => any
+
+  /**
+   * Validate the user-supplied password with whatever logic you want. Return
+   * `true` if valid, throw `PasswordValidationError` if not.
+   */
+  passwordValidation?: (password: string) => boolean
   /**
    * Object containing error strings
    */
@@ -108,7 +114,7 @@ interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: TUser) => boolean
+  handler: (user: TUser) => boolean | Promise<boolean>
   allowReusedPassword: boolean
   errors?: {
     resetTokenExpired?: string
@@ -636,6 +642,13 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
           `Signup flow is not enabled`
       )
     }
+
+    // check if password is valid
+    const { password } = this.params
+    ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
+      password as string
+    )
+
     const userOrMessage = await this._createUser()
 
     // at this point `user` is either an actual user, in which case log the

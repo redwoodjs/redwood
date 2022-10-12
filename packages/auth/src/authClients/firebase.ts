@@ -21,10 +21,15 @@ export type oAuthProvider =
   | 'apple.com'
 
 export type emailLinkProvider = 'emailLink'
+export type anonymousProvider = 'anonymous'
 export type customTokenProvider = 'customToken'
 
 export type Options = {
-  providerId?: oAuthProvider | emailLinkProvider | customTokenProvider
+  providerId?:
+    | oAuthProvider
+    | emailLinkProvider
+    | anonymousProvider
+    | customTokenProvider
   email?: string
   emailLink?: string
   customToken?: string
@@ -110,6 +115,10 @@ export const firebase = ({
         return loginWithEmailLink(options)
       }
 
+      if (options.providerId === 'anonymous') {
+        return firebaseAuth.signInAnonymously(auth)
+      }
+
       if (options.providerId === 'customToken' && options.customToken) {
         return firebaseAuth.signInWithCustomToken(auth, options.customToken)
       }
@@ -137,6 +146,10 @@ export const firebase = ({
 
       if (options.providerId === 'emailLink') {
         return loginWithEmailLink(options)
+      }
+
+      if (options.providerId === 'anonymous') {
+        return firebaseAuth.signInAnonymously(auth)
       }
 
       if (options.providerId === 'customToken' && options.customToken) {
