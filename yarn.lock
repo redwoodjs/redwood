@@ -145,19 +145,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/msal-browser@npm:2.29.0":
-  version: 2.29.0
-  resolution: "@azure/msal-browser@npm:2.29.0"
+"@azure/msal-browser@npm:2.30.0":
+  version: 2.30.0
+  resolution: "@azure/msal-browser@npm:2.30.0"
   dependencies:
-    "@azure/msal-common": ^7.5.0
-  checksum: 71df8a376af246b2fc10831a62214742df8a7a330af08f7ea113553fe425753d0987dc397c9926f207faf8edd076b0c73a38b22c96f4010887e51fa128771676
+    "@azure/msal-common": ^7.6.0
+  checksum: 0251c0629b929de24e299fe622d228b8b43a4d40c12943561350645a9d6d1a5da03a25fda13cb3b6756d8154b4be0a9875ed17af66e0316dc5554618f427a48d
   languageName: node
   linkType: hard
 
-"@azure/msal-common@npm:^7.5.0":
-  version: 7.5.0
-  resolution: "@azure/msal-common@npm:7.5.0"
-  checksum: 55cc6f8a58ff0d5361b2ba34bd1ae075090dc776dfbd59cf695bb50336ebbc459a4fd150602f8c7c1e9e1e66a7f240e0a4753aab920f57368773c403cf49de35
+"@azure/msal-common@npm:^7.6.0":
+  version: 7.6.0
+  resolution: "@azure/msal-common@npm:7.6.0"
+  checksum: 9625c5d0a497c47dac5fceccb01529a621e39216883a94f7295cdcf9751c5e5ada0a34de308dfb3bc772dc006fbaa71d5cc17b5a2f658733b227680e2c758835
   languageName: node
   linkType: hard
 
@@ -6375,7 +6375,7 @@ __metadata:
   resolution: "@redwoodjs/auth-providers-api@workspace:packages/auth-providers-api"
   dependencies:
     "@auth0/auth0-spa-js": 1.22.5
-    "@azure/msal-browser": 2.29.0
+    "@azure/msal-browser": 2.30.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
@@ -6452,7 +6452,7 @@ __metadata:
   resolution: "@redwoodjs/auth-providers-web@workspace:packages/auth-providers-web"
   dependencies:
     "@auth0/auth0-spa-js": 1.22.5
-    "@azure/msal-browser": 2.29.0
+    "@azure/msal-browser": 2.30.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
@@ -6506,7 +6506,7 @@ __metadata:
   resolution: "@redwoodjs/auth2@workspace:packages/auth2"
   dependencies:
     "@auth0/auth0-spa-js": 1.22.5
-    "@azure/msal-browser": 2.29.0
+    "@azure/msal-browser": 2.30.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
@@ -6540,7 +6540,7 @@ __metadata:
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
     "@auth0/auth0-spa-js": 1.22.5
-    "@azure/msal-browser": 2.29.0
+    "@azure/msal-browser": 2.30.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
