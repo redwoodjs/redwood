@@ -70,8 +70,11 @@ describe('yarn rw dev', () => {
 
   it('Should run api and web dev servers, and  by default', async () => {
     getConfig.mockReturnValue({
-      web: {},
+      web: {
+        port: 8910,
+      },
       api: {
+        port: 8911,
         debugPort: 18911,
       },
     })
@@ -92,7 +95,7 @@ describe('yarn rw dev', () => {
     )
 
     expect(apiCommand.command).toMatchInlineSnapshot(
-      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --debug-port 18911 | rw-log-formatter""`
+      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port=8911 --debug-port 18911 | rw-log-formatter""`
     )
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
@@ -100,8 +103,11 @@ describe('yarn rw dev', () => {
 
   it('Debug port passed in command line overrides TOML', async () => {
     getConfig.mockReturnValue({
-      web: {},
+      web: {
+        port: 8910,
+      },
       api: {
+        port: 8911,
         debugPort: 505050,
       },
     })
@@ -121,8 +127,11 @@ describe('yarn rw dev', () => {
 
   it('Can disable debugger by setting toml to false', async () => {
     getConfig.mockReturnValue({
-      web: {},
+      web: {
+        port: 8910,
+      },
       api: {
+        port: 8911,
         debugPort: false,
       },
     })
