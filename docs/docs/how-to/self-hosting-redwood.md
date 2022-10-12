@@ -1,10 +1,9 @@
-:::caution This doc has been deprecated
+# Self-hosting Redwood (Serverful)
+:::caution
 
 This doc has been deprecated in favor of the [Baremetal](../deploy/baremetal.md) docs.
 
 :::
-
-# Self-hosting Redwood (Serverful)
 
 Do you prefer hosting Redwood on your own server, the traditional serverful way, instead of all this serverless magic? Well, you can! In this recipe we configure a Redwood app with PM2 and Nginx on a Linux server.
 
