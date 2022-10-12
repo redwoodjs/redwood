@@ -16,11 +16,15 @@ import { tasks } from '../function'
 
 beforeEach(async () => {
   fs.__setMockFiles(files({ name: 'sendMail' }))
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
 })
 
 afterEach(() => {
   fs.__setMockFiles({})
   jest.spyOn(fs, 'unlinkSync').mockClear()
+  console.info.mockRestore()
+  console.log.mockRestore()
 })
 
 test('destroys service files', async () => {

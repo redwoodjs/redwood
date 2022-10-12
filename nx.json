@@ -18,7 +18,9 @@
     ],
     "prod": [
       "!{projectRoot}/**/*.test.{js,jsx,ts,tsx}",
-      "{workspaceRoot}/babel.config.js"
+      "{workspaceRoot}/babel.config.js",
+      { "runtime": "node -v" },
+      { "runtime": "node -e \"console.log(process.platform)\""}
     ]
   },
   "targetDefaults": {
