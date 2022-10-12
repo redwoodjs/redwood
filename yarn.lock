@@ -130,18 +130,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.22.4":
-  version: 1.22.4
-  resolution: "@auth0/auth0-spa-js@npm:1.22.4"
+"@auth0/auth0-spa-js@npm:1.22.5":
+  version: 1.22.5
+  resolution: "@auth0/auth0-spa-js@npm:1.22.5"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.24.0
+    core-js: ^3.25.1
     es-cookie: ~1.3.2
-    fast-text-encoding: ^1.0.4
+    fast-text-encoding: ^1.0.6
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: e8e1f06d3096ca281e4f82da1f2393cb20c0a379b322af3ebda030f557a1cced0b203bee3e3def8c61a4f2d96184ae4f983047c9ec130bf401a87d6cbe272ae8
+  checksum: 4456ae0704a9f0dd1206a22902d8a3985f508881d7c33109660531422908b9e58c86250d8d2e899f6b0cdb99a0edd6fd1216db2d5d278d484a1aeadcfc7f9b2c
   languageName: node
   linkType: hard
 
@@ -6374,7 +6374,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-providers-api@workspace:packages/auth-providers-api"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.4
+    "@auth0/auth0-spa-js": 1.22.5
     "@azure/msal-browser": 2.29.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
@@ -6451,7 +6451,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-providers-web@workspace:packages/auth-providers-web"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.4
+    "@auth0/auth0-spa-js": 1.22.5
     "@azure/msal-browser": 2.29.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
@@ -6505,7 +6505,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth2@workspace:packages/auth2"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.4
+    "@auth0/auth0-spa-js": 1.22.5
     "@azure/msal-browser": 2.29.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
@@ -6539,7 +6539,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.4
+    "@auth0/auth0-spa-js": 1.22.5
     "@azure/msal-browser": 2.29.0
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
@@ -13847,7 +13847,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.25.5, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.24.0, core-js@npm:^3.25.1, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.25.5, core-js@npm:^3.0.4, core-js@npm:^3.18.3, core-js@npm:^3.25.1, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.25.5
   resolution: "core-js@npm:3.25.5"
   checksum: 4b94b271f924cecf98fa5b1031c0109c9da2ff97a3d4df83465be9e90c3bf0b32a0bed98bb6a3c3aaa8951109c6fb9b3111fbe77a7036e075619c5a40a79dfbf
@@ -16891,10 +16891,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-text-encoding@npm:^1.0.0, fast-text-encoding@npm:^1.0.3, fast-text-encoding@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "fast-text-encoding@npm:1.0.4"
-  checksum: 7358726685a2378562c929e4be5acba4597e3677d1f2d30be5804da5863ae0926e1725b1af6270698752aad3c3647f5b97278c2f9e73751f3d3184cd4f931d9c
+"fast-text-encoding@npm:^1.0.0, fast-text-encoding@npm:^1.0.3, fast-text-encoding@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "fast-text-encoding@npm:1.0.6"
+  checksum: e1d0381bda229c92c7906f63308f3b9caca8c78b732768b1ee16f560089ed21bc159bbe1434138ccd3815931ec8d4785bdade1ad1c45accfdf27ac6606ac67d2
   languageName: node
   linkType: hard
 
