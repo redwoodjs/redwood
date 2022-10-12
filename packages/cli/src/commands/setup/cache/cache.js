@@ -7,9 +7,14 @@ import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFile } from '../../../lib'
+import { addPackagesTask, getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
+
+const CLIENT_PACKAGE_MAP = {
+  memcached: 'memjs',
+  redis: 'redis',
+}
 
 export const command = 'cache <client>'
 
@@ -38,10 +43,13 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ client, force }) => {
-
   const extension = isTypeScriptProject ? 'ts' : 'js'
 
   const tasks = new Listr([
+    addPackagesTask({
+      packages: [CLIENT_PACKAGE_MAP[client]],
+      side: 'api',
+    }),
     {
       title: `Writing api/src/lib/cache.js`,
       task: () => {
