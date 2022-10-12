@@ -12,7 +12,6 @@ on:
 jobs:
   cherry-pick-fast-forward:
     # Don't cherry pick commits with breaking changes.
-    # The quotes prevent yaml from interpreting the `!` as a "non-specific tag".
     if: ${{ github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'release:feature-breaking') }}
     name: ⏩ Cherry pick fast forward
     runs-on: ubuntu-latest
@@ -28,17 +27,27 @@ jobs:
 
       - name: ⏩ Cherry pick fast forward
         run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
           # Here, $GITHUB_SHA is the last merge commit on the $GITHUB_REF branch.
           # That merge commit is already in the main branch at this point (this action runs on "pull_request closed" events).
           # See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request.
 
-          git cherry-pick --ff $GITHUB_SHA
+          echo "Trying to cherry pick $GITHUB_SHA"
+          git cherry-pick --ff $GITHUB_SHA || echo "Couldn't cherry pick $GITHUB_SHA"
 
           # If the HEAD of main and next point to the same commit, then the fast forward worked and we can go ahead and push.
 
+          echo "Comparing SHAs"
+          echo "main $(git rev-parse origin/main)"
+          echo "next $(git rev-parse next)"
+
           if [[ "$(git rev-parse origin/main)" = "$(git rev-parse next)" ]]; then
+            echo "SHAs are the same, pushing"
             git push
           else
+            echo "SHAs are different, exiting"
             exit 1
           fi
 
@@ -68,3 +77,36 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           branch: next
           labels: cherry-pick
+
+  comment-on-pr:
+    needs: cherry-pick-into-next-pr
+    if: failure() && needs.cherry-pick-into-next-pr.result == 'failure'
+    name: 💬 Comment on PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔑 Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: '${{ github.event.number }}',
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🔔 @jtoar, @Tobbe—I couldn't cherry pick this one. If you want it in the next release, you'll have to cherry pick it manually.`,
+            });
+
+            await github.rest.issues.addLabels({
+              issue_number: '${{ github.event.number }}',
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['needs-cherry-pick']
+            })
+

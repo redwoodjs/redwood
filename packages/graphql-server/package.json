@@ -37,7 +37,7 @@
     "core-js": "3.25.5",
     "cross-undici-fetch": "0.4.14",
     "graphql": "16.6.0",
-    "graphql-scalars": "1.18.0",
+    "graphql-scalars": "1.19.0",
     "graphql-tag": "2.12.6",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
