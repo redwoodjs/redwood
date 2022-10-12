@@ -273,6 +273,16 @@ describe('with graphql documentations', () => {
 })
 
 describe('handler', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'info').mockImplementation(() => {})
+    jest.spyOn(console, 'log').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    console.info.mockRestore()
+    console.log.mockRestore()
+  })
+
   const canBeCalledWithGivenModelName = (letterCase, model) => {
     test(`can be called with ${letterCase} model name`, async () => {
       const spy = jest.spyOn(fs, 'writeFileSync')

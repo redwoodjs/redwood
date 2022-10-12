@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import i18n from 'web/src/i18n'
-
 /** @type { import("@storybook/csf").GlobalTypes } */
 export const globalTypes = {
   locale: {
@@ -25,7 +24,6 @@ export const globalTypes = {
     },
   },
 }
-
 /**
  * An example, no-op storybook decorator. Use a function like this to create decorators.
  * @param { import("@storybook/addons").StoryFn} StoryFn
@@ -35,7 +33,6 @@ export const globalTypes = {
 const _exampleDecorator = (StoryFn, _context) => {
   return <StoryFn />
 }
-
 /**
  * We're following Storybook's naming convention here. See for example
  * https://github.com/storybookjs/addon-kit/blob/main/src/withGlobals.ts
@@ -57,5 +54,4 @@ const withI18n = (StoryFn, context) => {
     </I18nextProvider>
   )
 }
-
 export const decorators = [withI18n]

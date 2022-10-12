@@ -46,6 +46,12 @@ export type AuthContextPayload = [
   { event: APIGatewayProxyEvent; context: LambdaContext }
 ]
 
+export type Decoder = (
+  token: string,
+  type: string,
+  req: { event: APIGatewayProxyEvent; context: LambdaContext }
+) => Promise<Decoded>
+
 /**
  * Get the authorization information from the request headers and request context.
  * @returns [decoded, { type, schema, token }, { event, context }]
