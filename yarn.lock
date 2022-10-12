@@ -6406,7 +6406,7 @@ __metadata:
     magic-sdk: 9.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
-    supertokens-auth-react: 0.26.4
+    supertokens-auth-react: 0.26.5
     typescript: 4.7.4
     uuid: 9.0.0
   peerDependencies:
@@ -6478,7 +6478,7 @@ __metadata:
     magic-sdk: 9.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
-    supertokens-auth-react: 0.26.4
+    supertokens-auth-react: 0.26.5
     typescript: 4.7.4
     uuid: 9.0.0
   peerDependencies:
@@ -6530,7 +6530,7 @@ __metadata:
     magic-sdk: 9.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
-    supertokens-auth-react: 0.26.4
+    supertokens-auth-react: 0.26.5
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -6564,7 +6564,7 @@ __metadata:
     magic-sdk: 9.1.1
     netlify-identity-widget: 1.9.2
     react: 17.0.2
-    supertokens-auth-react: 0.26.4
+    supertokens-auth-react: 0.26.5
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -29198,9 +29198,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.26.4":
-  version: 0.26.4
-  resolution: "supertokens-auth-react@npm:0.26.4"
+"supertokens-auth-react@npm:0.26.5":
+  version: 0.26.5
+  resolution: "supertokens-auth-react@npm:0.26.5"
   dependencies:
     "@emotion/react": ^11.4.1
     chroma-js: 2.1.2
@@ -29213,7 +29213,7 @@ __metadata:
     supertokens-web-js: ^0.2.0
   peerDependencies:
     react: ">=16.8.0"
-  checksum: abc537a77855d1b9ff4804e8a5a38545c9d8c20deaf27983ace453ff0a6273999495b4341a2557015f14df8866608bb66af715db7785fd7aa27d0a666d93dcba
+  checksum: 54ba49866c6fbee8edc31d7f58be7c57b4a23e79d83293fbe3b4f692e0e41405a2a563c91cba6dc6e32addfc6afb31ba92e21c0a48a5600e30d4b17b287641e8
   languageName: node
   linkType: hard
 
