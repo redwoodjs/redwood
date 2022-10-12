@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api-server",
-  "version": "3.1.2",
+  "version": "3.2.0",
   "description": "Redwood's HTTP server for Serverless Functions",
   "repository": {
     "type": "git",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@babel/cli": "7.19.3",
     "@babel/core": "7.19.3",
-    "@types/aws-lambda": "8.10.106",
+    "@types/aws-lambda": "8.10.107",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",
     "@types/split2": "3.2.1",

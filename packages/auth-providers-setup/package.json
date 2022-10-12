@@ -1,7 +1,7 @@
 {
   "name": "@redwoodjs/auth-providers-setup",
   "private": true,
-  "version": "3.1.2",
+  "version": "3.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.4",
-    "@redwoodjs/auth": "3.1.2",
-    "@redwoodjs/cli-helpers": "3.1.1",
+    "@redwoodjs/auth": "3.2.0",
+    "@redwoodjs/cli-helpers": "3.2.0",
     "core-js": "3.25.5",
     "secure-random-password": "0.2.3"
   },
