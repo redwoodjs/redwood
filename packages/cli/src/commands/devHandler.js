@@ -50,8 +50,7 @@ export const handler = async ({
 
   // Check api port
   if (side.includes('api')) {
-    const freePort = (await getFreePort(apiPort)).toString()
-    console.log(apiPort, freePort)
+    const freePort = await getFreePort(apiPort)
     if (freePort === -1) {
       console.error(
         c.error(
@@ -63,7 +62,7 @@ export const handler = async ({
     if (freePort !== apiPort) {
       console.log(
         c.warning(
-          `Requested API port of ${apiPort} is already in use and however ${freePort} is available.`
+          `Requested API port of ${apiPort} is already in use however ${freePort} is available.`
         )
       )
       const useAvailablePort = await prompts({
@@ -99,9 +98,7 @@ export const handler = async ({
         .trim()
     }
 
-    const freePort = (
-      await getFreePort(webPort, [parseInt(apiPort)])
-    ).toString()
+    const freePort = await getFreePort(webPort, [apiPort])
     if (freePort === -1) {
       console.error(
         c.error(
@@ -113,7 +110,7 @@ export const handler = async ({
     if (freePort !== webPort) {
       console.log(
         c.warning(
-          `Requested web port of ${webPort} is already in use and however ${freePort} is available.`
+          `Requested web port of ${webPort} is already in use however ${freePort} is available.`
         )
       )
       const useAvailablePort = await prompts({
