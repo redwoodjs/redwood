@@ -6286,7 +6286,7 @@ __metadata:
     "@fastify/http-proxy": 8.2.3
     "@fastify/static": 6.5.0
     "@fastify/url-data": 5.1.0
-    "@types/aws-lambda": 8.10.106
+    "@types/aws-lambda": 8.10.107
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
@@ -6325,7 +6325,7 @@ __metadata:
     "@prisma/client": 4.3.1
     "@redwoodjs/auth": 3.1.2
     "@simplewebauthn/server": 6.2.1
-    "@types/aws-lambda": 8.10.106
+    "@types/aws-lambda": 8.10.107
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.9
     "@types/md5": 2.3.2
@@ -7041,7 +7041,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
     "@testing-library/user-event": 14.4.3
-    "@types/aws-lambda": 8.10.106
+    "@types/aws-lambda": 8.10.107
     "@types/babel-core": 6.25.7
     "@types/jest": 29.1.2
     "@types/node": 16.11.65
@@ -8709,10 +8709,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.106, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.106
-  resolution: "@types/aws-lambda@npm:8.10.106"
-  checksum: 70586b22f4b8b800bf47258b563127c12f6ec6d844f916ad95d1ac9e21fe16ccb4dcc8d7bf965841f90f73a7ef1fa592c5b52660c97d99e9e35d5f4c60fa6606
+"@types/aws-lambda@npm:8.10.107, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.107
+  resolution: "@types/aws-lambda@npm:8.10.107"
+  checksum: 52e33a5dafe393d63658858078dea04f0a95e85eacfb9f197611385c43a4249492e18958bac480bca674cfbea2b5776e78eab93ff08275c5524e2820e00b05a5
   languageName: node
   linkType: hard
 
