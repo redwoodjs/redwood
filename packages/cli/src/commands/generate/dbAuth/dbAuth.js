@@ -126,18 +126,18 @@ export const files = ({
   skipSignup,
   webauthn,
   usernameLabel,
-  passwordlabel,
+  passwordLabel,
 }) => {
   const files = []
 
   usernameLabel = usernameLabel || 'username'
-  passwordlabel = passwordlabel || 'password'
+  passwordLabel = passwordLabel || 'password'
 
   const templateVars = {
     usernameLowercase: usernameLabel.toLowerCase(),
     usernameTitlecase: titleCase(usernameLabel),
-    passwordLowercase: passwordlabel.toLowerCase(),
-    passwordTitlecase: titleCase(passwordlabel),
+    passwordLowercase: passwordLabel.toLowerCase(),
+    passwordTitlecase: titleCase(passwordLabel),
   }
 
   if (!skipForgot) {
@@ -233,6 +233,7 @@ export const files = ({
 
 const tasks = ({
   enquirer,
+  listr2,
   force,
   tests,
   typescript,
@@ -354,6 +355,7 @@ const tasks = ({
       },
     ],
     {
+      rendererSilent: () => listr2?.rendererSilent,
       rendererOptions: { collapse: false },
       injectWrapper: { enquirer: enquirer || new Enquirer() },
       exitOnError: true,
