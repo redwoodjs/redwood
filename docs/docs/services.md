@@ -736,7 +736,9 @@ Why use a cache? If you have an expensive or time-consuming process in your serv
 
 :::info What about GraphQL caching?
 
-You could also cache data at the [GraphQL layer](https://community.redwoodjs.com/t/guide-power-of-graphql-caching/2624) which has some of the same benefits. However, by placing the cache one level "lower," at the service level, you get the benefit of caching even when one service calls another internally, or when a service is called via another serverless function.
+You could also cache data at the [GraphQL layer](https://community.redwoodjs.com/t/guide-power-of-graphql-caching/2624) which has some of the same benefits. Using Envelop plugins you can add a response cache _after_ your services (resolver functions in the context of GraphQL) run - with a global configuration.
+
+However, by placing the cache one level "lower," at the service level, you get the benefit of caching even when one service calls another internally, or when a service is called via another serverless function, and finer grained control of what you're caching.
 
 In our example above you could cache the GraphQL query for the most popular products. But if you had an internal admin function which was a different query, augmenting the popular products with additional information, you now need to cache that query as well. With service caching, that admin service function can call the same popular product function that's already cached and get the speed benefit automatically.
 
