@@ -340,9 +340,16 @@ jobs:
           git cherry-pick ${{ github.event.pull_request.head.sha }}
           git push
 
+      - name: 🔑 Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Close PR
         env:
-          GH_TOKEN: ${{ secrets.JTOAR_TOKEN }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           gh api graphql -F id=${{ github.event.pull_request.node_id }} -f query='
             mutation($id: ID!) {
@@ -375,9 +382,16 @@ jobs:
           git cherry-pick ${{ github.event.pull_request.head.sha }}
           git push
 
+      - name: 🔑 Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Close PR
         env:
-          GH_TOKEN: ${{ secrets.JTOAR_TOKEN }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           gh api graphql -F id=${{ github.event.pull_request.node_id }} -f query='
             mutation($id: ID!) {
