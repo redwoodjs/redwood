@@ -79,66 +79,6 @@ export const preRequisiteCheckTask = (preRequisites) => {
 
 /**
  *
- * Use this util to install dependencies on a user's Redwood app
- *
- * @example addPackagesTask({
- * packages: ['fs-extra', 'somePackage@2.1.0'],
- * side: 'api', // <-- leave empty for project root
- * devDependency: true
- * })
- */
-export const addPackagesTask = ({
-  packages,
-  side = 'project',
-  devDependency = false,
-}) => {
-  const packagesWithSameRWVersion = packages.map((pkg) => {
-    if (pkg.includes('@redwoodjs')) {
-      return `${pkg}@${getInstalledRedwoodVersion()}`
-    } else {
-      return pkg
-    }
-  })
-
-  let installCommand
-  // if web,api
-  if (side !== 'project') {
-    installCommand = [
-      'yarn',
-      [
-        'workspace',
-        side,
-        'add',
-        devDependency && '--dev',
-        ...packagesWithSameRWVersion,
-      ].filter(Boolean),
-    ]
-  } else {
-    const stdout = execSync('yarn --version')
-
-    const yarnVersion = stdout.toString().trim()
-
-    installCommand = [
-      'yarn',
-      [
-        yarnVersion.startsWith('1') && '-W',
-        'add',
-        devDependency && '--dev',
-        ...packagesWithSameRWVersion,
-      ].filter(Boolean),
-    ]
-  }
-
-  return {
-    title: `Adding dependencies to ${side}`,
-    task: async () => {
-      await execa(...installCommand)
-    },
-  }
-}
-
-/**
- *
  * Use this to add files to a users project
  *
  * @example
