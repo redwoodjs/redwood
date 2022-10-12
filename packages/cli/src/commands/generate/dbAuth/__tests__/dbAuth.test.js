@@ -572,5 +572,117 @@ describe('dbAuth', () => {
         .toString()
       expect(signupPage).toMatchSnapshot()
     })
+
+    it('produces the correct files with custom username and password set via prompt and with webauthn enabled via flag', async () => {
+      const customEnquirer = new Enquirer()
+      customEnquirer.on('prompt', (prompt) => {
+        if (prompt.state.message.includes('username label')) {
+          prompt.value = 'Email'
+        }
+        if (prompt.state.message.includes('password label')) {
+          prompt.value = 'Secret'
+        }
+        prompt.submit()
+      })
+
+      await dbAuth.handler({
+        enquirer: customEnquirer,
+        listr2: { rendererSilent: true },
+        webauthn: true,
+      })
+
+      const forgotPasswordPage = fs
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
+        )
+        .toString()
+      expect(forgotPasswordPage).toMatchSnapshot()
+
+      const loginPage = fs
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
+        .toString()
+      expect(loginPage).toMatchSnapshot()
+
+      const resetPasswordPage = fs
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
+        )
+        .toString()
+      expect(resetPasswordPage).toMatchSnapshot()
+
+      const signupPage = fs
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
+        .toString()
+      expect(signupPage).toMatchSnapshot()
+    })
+
+    it('produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt', async () => {
+      const customEnquirer = new Enquirer()
+      customEnquirer.on('prompt', (prompt) => {
+        if (prompt.state.message.includes('username label')) {
+          prompt.value = 'Email'
+        }
+        if (prompt.state.message.includes('password label')) {
+          prompt.value = 'Secret'
+        }
+        if (prompt.state.message.includes('Enable WebAuthn')) {
+          prompt.value = true
+        }
+        prompt.submit()
+      })
+
+      await dbAuth.handler({
+        enquirer: customEnquirer,
+        listr2: { rendererSilent: true },
+      })
+
+      const forgotPasswordPage = fs
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
+        )
+        .toString()
+      expect(forgotPasswordPage).toMatchSnapshot()
+
+      const loginPage = fs
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
+        .toString()
+      expect(loginPage).toMatchSnapshot()
+
+      const resetPasswordPage = fs
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
+        )
+        .toString()
+      expect(resetPasswordPage).toMatchSnapshot()
+
+      const signupPage = fs
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
+        .toString()
+      expect(signupPage).toMatchSnapshot()
+    })
   })
 })
