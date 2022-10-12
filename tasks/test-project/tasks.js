@@ -408,7 +408,11 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       await execa('yarn rwfw project:copy', [], execaOptions)
     }
 
-    await execa('yarn rw g dbAuth --no-webauthn', [], execaOptions)
+    await execa(
+      'yarn rw g dbAuth --no-webauthn --username-label=username --password-label=password',
+      [],
+      execaOptions
+    )
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
