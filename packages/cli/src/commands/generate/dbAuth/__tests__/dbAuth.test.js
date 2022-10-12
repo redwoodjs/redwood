@@ -110,16 +110,6 @@ describe('dbAuth', () => {
   })
 
   describe('handler', () => {
-    beforeEach(() => {
-      // jest.spyOn(console, 'info').mockImplementation(() => {})
-      // jest.spyOn(console, 'log').mockImplementation(() => {})
-    })
-    afterEach(() => {
-      // console.info.mockRestore()
-      // console.log.mockRestore()
-      // jest.restoreAllMocks()
-    })
-
     it('prompt for username label', async () => {
       let correctPrompt = false
 
@@ -244,25 +234,37 @@ describe('dbAuth', () => {
 
       const forgotPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
         )
         .toString()
       expect(forgotPasswordPage).toMatchSnapshot()
 
       const loginPage = fs
-        .readFileSync('/path/to/project/web/src/pages/LoginPage/LoginPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
         .toString()
       expect(loginPage).toMatchSnapshot()
 
       const resetPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
         )
         .toString()
       expect(resetPasswordPage).toMatchSnapshot()
 
       const signupPage = fs
-        .readFileSync('/path/to/project/web/src/pages/SignupPage/SignupPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
         .toString()
       expect(signupPage).toMatchSnapshot()
     })
@@ -281,25 +283,37 @@ describe('dbAuth', () => {
 
       const forgotPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
         )
         .toString()
       expect(forgotPasswordPage).toMatchSnapshot()
 
       const loginPage = fs
-        .readFileSync('/path/to/project/web/src/pages/LoginPage/LoginPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
         .toString()
       expect(loginPage).toMatchSnapshot()
 
       const resetPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
         )
         .toString()
       expect(resetPasswordPage).toMatchSnapshot()
 
       const signupPage = fs
-        .readFileSync('/path/to/project/web/src/pages/SignupPage/SignupPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
         .toString()
       expect(signupPage).toMatchSnapshot()
     })
@@ -320,25 +334,37 @@ describe('dbAuth', () => {
 
       const forgotPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
         )
         .toString()
       expect(forgotPasswordPage).toMatchSnapshot()
 
       const loginPage = fs
-        .readFileSync('/path/to/project/web/src/pages/LoginPage/LoginPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
         .toString()
       expect(loginPage).toMatchSnapshot()
 
       const resetPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
         )
         .toString()
       expect(resetPasswordPage).toMatchSnapshot()
 
       const signupPage = fs
-        .readFileSync('/path/to/project/web/src/pages/SignupPage/SignupPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
         .toString()
       expect(signupPage).toMatchSnapshot()
     })
@@ -357,25 +383,37 @@ describe('dbAuth', () => {
 
       const forgotPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
         )
         .toString()
       expect(forgotPasswordPage).toMatchSnapshot()
 
       const loginPage = fs
-        .readFileSync('/path/to/project/web/src/pages/LoginPage/LoginPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
         .toString()
       expect(loginPage).toMatchSnapshot()
 
       const resetPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
         )
         .toString()
       expect(resetPasswordPage).toMatchSnapshot()
 
       const signupPage = fs
-        .readFileSync('/path/to/project/web/src/pages/SignupPage/SignupPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
         .toString()
       expect(signupPage).toMatchSnapshot()
     })
@@ -396,25 +434,37 @@ describe('dbAuth', () => {
 
       const forgotPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
         )
         .toString()
       expect(forgotPasswordPage).toMatchSnapshot()
 
       const loginPage = fs
-        .readFileSync('/path/to/project/web/src/pages/LoginPage/LoginPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
         .toString()
       expect(loginPage).toMatchSnapshot()
 
       const resetPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
         )
         .toString()
       expect(resetPasswordPage).toMatchSnapshot()
 
       const signupPage = fs
-        .readFileSync('/path/to/project/web/src/pages/SignupPage/SignupPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
         .toString()
       expect(signupPage).toMatchSnapshot()
     })
@@ -434,25 +484,37 @@ describe('dbAuth', () => {
 
       const forgotPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
         )
         .toString()
       expect(forgotPasswordPage).toMatchSnapshot()
 
       const loginPage = fs
-        .readFileSync('/path/to/project/web/src/pages/LoginPage/LoginPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
         .toString()
       expect(loginPage).toMatchSnapshot()
 
       const resetPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
         )
         .toString()
       expect(resetPasswordPage).toMatchSnapshot()
 
       const signupPage = fs
-        .readFileSync('/path/to/project/web/src/pages/SignupPage/SignupPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
         .toString()
       expect(signupPage).toMatchSnapshot()
     })
@@ -476,25 +538,37 @@ describe('dbAuth', () => {
 
       const forgotPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.js'
+          )
         )
         .toString()
       expect(forgotPasswordPage).toMatchSnapshot()
 
       const loginPage = fs
-        .readFileSync('/path/to/project/web/src/pages/LoginPage/LoginPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/LoginPage/LoginPage.js'
+          )
+        )
         .toString()
       expect(loginPage).toMatchSnapshot()
 
       const resetPasswordPage = fs
         .readFileSync(
-          '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          path.normalize(
+            '/path/to/project/web/src/pages/ResetPasswordPage/ResetPasswordPage.js'
+          )
         )
         .toString()
       expect(resetPasswordPage).toMatchSnapshot()
 
       const signupPage = fs
-        .readFileSync('/path/to/project/web/src/pages/SignupPage/SignupPage.js')
+        .readFileSync(
+          path.normalize(
+            '/path/to/project/web/src/pages/SignupPage/SignupPage.js'
+          )
+        )
         .toString()
       expect(signupPage).toMatchSnapshot()
     })
