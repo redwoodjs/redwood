@@ -1,8 +1,4 @@
-import { getConfig } from '../../../../lib'
-
-const config = getConfig()
-
-export const NETLIFY_TOML = `[build]
+[build]
   command = "yarn rw deploy netlify"
   publish = "web/dist"
   functions = "api/dist/functions"
@@ -15,7 +11,7 @@ export const NETLIFY_TOML = `[build]
   # then run netlify dev and our app will be accessible on the port specified below
   framework = "redwoodjs"
   # Set targetPort to the [web] side port as defined in redwood.toml
-  targetPort = ${config.web.port}
+  targetPort = 8910
   # Point your browser to this port to access your RedwoodJS app
   port = 8888
 
@@ -23,4 +19,3 @@ export const NETLIFY_TOML = `[build]
   from = "/*"
   to = "/200.html"
   status = 200
-`
