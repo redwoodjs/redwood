@@ -23,7 +23,6 @@ const CHECK_PERIOD = 24 * 60 * 60_000 // 24 hours
 
 export const builder = (yargs) => {
   yargs
-    .example('rw update')
     .option('silent', {
       description: 'Do not render any console text or prompt the user',
       type: 'boolean',
@@ -43,11 +42,9 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#update' //TODO: Create documentation for update command
+        'https://redwoodjs.com/docs/cli-commands#update'
       )}`
     )
-    // Just to make an empty line
-    .epilogue('')
 }
 
 export const handler = async ({ enquirer, listr2, silent, skip, unskip }) => {
@@ -214,7 +211,7 @@ function getUpgradeFilePath() {
 
 function writeUpgradeFile(updateData) {
   try {
-    fs.writeFileSync(getUpgradeFilePath(), JSON.stringify(updateData))
+    fs.writeFileSync(getUpgradeFilePath(), JSON.stringify(updateData, null, 2))
   } catch (error) {
     throw new Error('\nCould not create update-data file\n')
   }
@@ -240,12 +237,12 @@ function readUpgradeFile() {
 }
 
 function getUpgradeAvailableMessage(updateData) {
-  let message = `  Checklist:\n   1. Read the release notes at: https://github.com/redwoodjs/redwood/releases  \n   2. Run "yarn rw upgrade" to upgrade  `
+  let message = `  Checklist:\n   1. Read the release notes at: https://github.com/redwoodjs/redwood/releases  \n   2. Run "yarn rw upgrade" to upgrade`
   return boxen(message, {
     padding: 0,
     margin: 1,
     title: `Redwood Upgrade Available: ${updateData.localVersion} -> ${updateData.remoteVersion}`,
-    borderColor: `#ff845e`, // The RedwoodJS colour
+    borderColor: `#0b8379`, // The RedwoodJS colour
     borderStyle: 'round',
   })
 }
