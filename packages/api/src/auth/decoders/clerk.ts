@@ -1,10 +1,6 @@
-import type IClerk from '@clerk/clerk-sdk-node/instance'
-
 export const clerk = async (token: string) => {
   // Use require here, to prevent needing clerk sdk in api deps
-  const Clerk = require('@clerk/clerk-sdk-node/instance').default
-
-  const { users, base }: IClerk = new Clerk()
+  const { users, base } = require('@clerk/clerk-sdk-node').default
 
   if (!process.env.CLERK_JWT_KEY) {
     console.error('CLERK_JWT_KEY env var is not set.')
