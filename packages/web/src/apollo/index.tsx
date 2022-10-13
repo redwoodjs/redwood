@@ -19,8 +19,7 @@ const {
   setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
-import { useAuth as useRWAuth } from '@redwoodjs/auth'
+import { UseAuth, useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
@@ -88,16 +87,14 @@ export type GraphQLClientConfigProp = Omit<
       ) => apolloClient.ApolloLink)
 }
 
-type UseAuth = () => AuthContextInterface
-
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
     cache: ApolloCache<unknown>
   }
-  useAuth: UseAuth
+  useAuth?: UseAuth
   logLevel: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
-}> = ({ config, children, useAuth, logLevel }) => {
+}> = ({ config, children, useAuth = useNoAuth, logLevel }) => {
   /**
    * Should they run into it,
    * this helps users with the "Cannot render cell; GraphQL success but data is null" error.
@@ -276,7 +273,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   children: React.ReactNode
 }> = ({
   graphQLClientConfig,
-  useAuth = useRWAuth,
+  useAuth = useNoAuth,
   logLevel = 'debug',
   children,
 }) => {

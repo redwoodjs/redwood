@@ -6445,7 +6445,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup":
+"@redwoodjs/auth-providers-setup@3.2.0, @redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup"
   dependencies:
@@ -6479,7 +6479,7 @@ __metadata:
     "@nhost/hasura-auth-js": 1.4.1
     "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
-    "@redwoodjs/auth2": 3.2.0
+    "@redwoodjs/auth": 3.2.0
     "@simplewebauthn/browser": 6.2.1
     "@simplewebauthn/typescript-types": 6.2.1
     "@supabase/supabase-js": 1.35.7
@@ -6514,40 +6514,6 @@ __metadata:
       optional: true
     firebase-admin:
       optional: true
-  languageName: unknown
-  linkType: soft
-
-"@redwoodjs/auth2@3.2.0, @redwoodjs/auth2@workspace:packages/auth2":
-  version: 0.0.0-use.local
-  resolution: "@redwoodjs/auth2@workspace:packages/auth2"
-  dependencies:
-    "@auth0/auth0-spa-js": 1.22.5
-    "@azure/msal-browser": 2.30.0
-    "@babel/cli": 7.19.3
-    "@babel/core": 7.19.3
-    "@babel/runtime-corejs3": 7.19.4
-    "@clerk/clerk-js": 3.17.0
-    "@clerk/clerk-react": 3.5.1
-    "@clerk/clerk-sdk-node": 3.9.2
-    "@clerk/types": 2.21.0
-    "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/nhost-js": 1.4.10
-    "@okta/okta-auth-js": 6.9.0
-    "@simplewebauthn/browser": 6.2.1
-    "@simplewebauthn/typescript-types": 6.2.1
-    "@supabase/supabase-js": 1.35.7
-    "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.50
-    core-js: 3.25.5
-    firebase: 9.10.0
-    firebase-admin: 10.3.0
-    gotrue-js: 0.9.29
-    jest: 29.1.2
-    magic-sdk: 9.1.1
-    netlify-identity-widget: 1.9.2
-    react: 17.0.2
-    supertokens-auth-react: 0.26.5
-    typescript: 4.7.4
   languageName: unknown
   linkType: soft
 
@@ -6611,10 +6577,12 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.4
     "@prisma/internals": 4.3.1
     "@redwoodjs/api-server": 3.2.0
+    "@redwoodjs/auth-providers-setup": 3.2.0
     "@redwoodjs/internal": 3.2.0
     "@redwoodjs/prerender": 3.2.0
     "@redwoodjs/structure": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
+    "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -6839,6 +6807,7 @@ __metadata:
     "@prisma/client": 4.3.1
     "@redwoodjs/api": 3.2.0
     "@redwoodjs/auth": 3.2.0
+    "@types/jsonwebtoken": 8.5.9
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
@@ -6849,6 +6818,7 @@ __metadata:
     graphql-scalars: 1.19.0
     graphql-tag: 2.12.6
     jest: 29.1.2
+    jsonwebtoken: 8.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     typescript: 4.7.4

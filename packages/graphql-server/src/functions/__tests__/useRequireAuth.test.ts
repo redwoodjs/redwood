@@ -1,4 +1,5 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda'
+import jwt from 'jsonwebtoken'
 
 import { AuthenticationError } from '../../errors'
 import type { UseRequireAuth } from '../useRequireAuth'
@@ -170,6 +171,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
+      authDecoder: (
+        _token: string,
+        _req: { event: APIGatewayEvent; context: Context }
+      ) => {
+        return null
+      },
     })
 
     const headers = {
@@ -197,6 +204,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
+      authDecoder: (
+        token: string,
+        _req: { event: APIGatewayEvent; context: Context }
+      ) => {
+        return jwt.decode(token) as Record<string, any>
+      },
     })
 
     // The authorization JWT is valid and has roles in app metadata
@@ -257,6 +270,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
+      authDecoder: (
+        _token: string,
+        _req: { event: APIGatewayEvent; context: Context }
+      ) => {
+        return null
+      },
     })
 
     const missingHeaders = null
@@ -279,6 +298,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
+      authDecoder: (
+        _token: string,
+        _req: { event: APIGatewayEvent; context: Context }
+      ) => {
+        return null
+      },
     })
 
     const unsupportedProviderHeaders = {
@@ -305,6 +330,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
+      authDecoder: (
+        token: string,
+        _req: { event: APIGatewayEvent; context: Context }
+      ) => {
+        return jwt.decode(token) as Record<string, any>
+      },
     })
 
     // Note: The Bearer token JWT contains:
@@ -457,6 +488,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handlerWithAuthChecks,
       getCurrentUser,
+      authDecoder: (
+        token: string,
+        _req: { event: APIGatewayEvent; context: Context }
+      ) => {
+        return jwt.decode(token) as Record<string, any>
+      },
     })
 
     await expect(
@@ -490,6 +527,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handlerWithAuthChecks,
       getCurrentUser,
+      authDecoder: (
+        token: string,
+        _req: { event: APIGatewayEvent; context: Context }
+      ) => {
+        return jwt.decode(token) as Record<string, any>
+      },
     })
 
     const response = await handlerEnrichedWithAuthentication(

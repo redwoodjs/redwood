@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 
-import { CurrentUser } from '@redwoodjs/auth2'
+import { CurrentUser } from '@redwoodjs/auth'
 
 import { createEthereumAuth, Ethereum } from '../ethereum'
 
