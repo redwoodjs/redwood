@@ -9,13 +9,13 @@ export { extraTask } from './setupData'
 
 // required packages to install on the web side
 export const webPackages = [
-  // '@redwoodjs/auth-providers-web',
+  '@redwoodjs/auth-providers-web',
   '@simplewebauthn/browser',
 ]
 
 // required packages to install on the api side
 export const apiPackages = [
-  // '@redwoodjs/auth-providers-api',
+  '@redwoodjs/auth-providers-api',
   '@simplewebauthn/server',
 ]
 
