@@ -144,7 +144,7 @@ export function generateUniqueFileNames(
         newFullPath = path.join(path.dirname(fullPath), newFileName)
       } else {
         // api/lib/auth.ts -> api/lib/supertokensAuth.ts
-        // (potentially) -> api/lib/supertokensAuth2.ts depending on what
+        // (potentially) -> api/lib/supertokensauth.ts depending on what
         // files already exists
         const count = i > 1 ? i : ''
 

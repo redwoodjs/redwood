@@ -1,6 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react'
 
-import { AuthContextInterface, useNoAuth } from '@redwoodjs/auth2'
+import { AuthContextInterface, useNoAuth } from '@redwoodjs/auth'
 
 import type { ParamType } from './util'
 

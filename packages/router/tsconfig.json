@@ -11,6 +11,6 @@
   },
   "include": ["src", "./ambient.d.ts"],
   "references": [
-    { "path": "../auth2" },
+    { "path": "../auth" },
   ]
 }

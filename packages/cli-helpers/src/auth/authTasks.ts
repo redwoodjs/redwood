@@ -233,7 +233,7 @@ export const createWebAuth = (
   // Find an unused filename
   // Start with web/src/auth.{ts,tsx}
   // Then web/src/providerAuth.{ts,tsx}
-  // Then web/src/providerAuth2.{ts,tsx}
+  // Then web/src/providerauth.{ts,tsx}
   // Then web/src/providerAuth3.{ts,tsx}
   // etc
   let authFileName = path.join(getPaths().web.src, 'auth')

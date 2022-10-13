@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 import * as NetlifyIdentityNS from 'netlify-identity-widget'
 
-import { CurrentUser } from '@redwoodjs/auth2'
+import { CurrentUser } from '@redwoodjs/auth'
 
 import { createNetlifyAuth } from '../netlify'
 

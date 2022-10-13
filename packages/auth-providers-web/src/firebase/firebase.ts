@@ -2,7 +2,7 @@ import type { FirebaseApp } from 'firebase/app'
 import type { CustomParameters, OAuthProvider, User } from 'firebase/auth'
 import type FirebaseAuthNamespace from 'firebase/auth'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth2'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type FirebaseAuth = typeof FirebaseAuthNamespace
 
@@ -33,7 +33,7 @@ interface Options {
   emailLink?: string
   customToken?: string
   password?: string
-  scopes?: string[] // scopes available at https://developers.google.com/identity/protocols/oauth2/scopes
+  scopes?: string[] // scopes available at https://developers.google.com/identity/protocols/oauth/scopes
   customParameters?: CustomParameters // parameters available at https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
 }
 

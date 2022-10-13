@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import type { default as GoTrue } from 'gotrue-js'
 import type { User } from 'gotrue-js'
 
-import { CurrentUser } from '@redwoodjs/auth2'
+import { CurrentUser } from '@redwoodjs/auth'
 
 import { createGoTrueAuth } from '../goTrue'
 

@@ -1,5 +1,6 @@
 {
   "name": "@redwoodjs/auth",
+  "private": true,
   "version": "3.2.0",
   "repository": {
     "type": "git",
@@ -10,8 +11,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "webAuthn"
+    "dist"
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
