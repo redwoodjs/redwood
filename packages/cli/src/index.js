@@ -97,22 +97,12 @@ const updateCheckerMiddleware = (argv) => {
     })
   }
   if (updateCommand.isUpdateCheckDue()) {
-    const backgroundUpdateBaseLogPath = path.join(
-      getPaths().base || '/tmp',
-      '.redwood'
-    )
     const out = fs.openSync(
-      path.join(
-        backgroundUpdateBaseLogPath,
-        'background-update-checker.out.log'
-      ),
+      path.join(getPaths().generated.base, 'background-update-checker.out.log'),
       'a'
     )
     const err = fs.openSync(
-      path.join(
-        backgroundUpdateBaseLogPath,
-        'background-update-checker.err.log'
-      ),
+      path.join(getPaths().generated.base, 'background-update-checker.err.log'),
       'a'
     )
     const child = spawn('yarn', ['rw', 'update', '--silent'], {

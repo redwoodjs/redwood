@@ -20,17 +20,10 @@ export const description = 'Check for updates to RedwoodJS'
 
 const SHOW_PERIOD = 60 * 60_000 // 1 hour
 const CHECK_PERIOD = 24 * 60 * 60_000 // 24 hours
-const UPDATE_LOCK = 'update-command'
 
 export const builder = (yargs) => {
   yargs
     .example('rw update')
-    .option('force', {
-      alias: 'f',
-      default: false,
-      description: 'Ignore asynchronous locks',
-      type: 'boolean',
-    })
     .option('silent', {
       description: 'Do not render any console text or prompt the user',
       type: 'boolean',
@@ -57,23 +50,7 @@ export const builder = (yargs) => {
     .epilogue('')
 }
 
-export const handler = async ({
-  enquirer,
-  listr2,
-  force,
-  silent,
-  skip,
-  unskip,
-}) => {
-  if (isLocked(UPDATE_LOCK) && !force) {
-    if (!silent) {
-      console.log(
-        'An update command is already running, please try again in a few seconds.'
-      )
-    }
-    return
-  }
-
+export const handler = async ({ enquirer, listr2, silent, skip, unskip }) => {
   let upgradePostUpdate = false
   let upgradePostUpdateTag
 
@@ -147,15 +124,11 @@ export const handler = async ({
   )
 
   try {
-    setLock(UPDATE_LOCK)
     await updateTasks.run()
-    unsetLock(UPDATE_LOCK)
-
     if (upgradePostUpdate) {
       upgrade.handler({ tag: upgradePostUpdateTag })
     }
   } catch (e) {
-    unsetLock(UPDATE_LOCK)
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
@@ -236,7 +209,7 @@ export function shouldShowUpgradeAvailableMessage() {
 }
 
 function getUpgradeFilePath() {
-  return path.join(getPaths().base, '.redwood', 'update-data.json')
+  return path.join(getPaths().generated.base, 'update-data.json')
 }
 
 function writeUpgradeFile(updateData) {
@@ -287,39 +260,4 @@ export function showUpgradeAvailableMessage() {
     console.error('Could not show an available update message!')
     console.error(error)
   }
-}
-
-// Locks
-// TODO: Move the generic lock functions some where more general, they could be used by other features needing a lock?
-
-function setLock(name) {
-  const lockPath = path.join(getPaths().base, '.redwood', 'locks', `${name}`)
-  if (!fs.existsSync(path.dirname(lockPath))) {
-    try {
-      fs.mkdirSync(path.dirname(lockPath))
-    } catch (error) {
-      throw new Error(`\nCould not create lock directory for lock ${name}!\n`)
-    }
-  }
-  try {
-    fs.writeFileSync(lockPath, '')
-  } catch (error) {
-    throw new Error(`\nCould not create lock ${name}!\n`)
-  }
-}
-
-function unsetLock(name) {
-  const lockPath = path.join(getPaths().base, '.redwood', 'locks', `${name}`)
-  try {
-    fs.unlinkSync(lockPath)
-  } catch (error) {
-    if (error.code !== 'ENOENT') {
-      throw new Error(`\nCould not delete lock ${name}!\n`)
-    }
-  }
-}
-
-function isLocked(name) {
-  const lockPath = path.join(getPaths().base, '.redwood', 'locks', `${name}`)
-  return fs.existsSync(lockPath)
 }
