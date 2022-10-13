@@ -78,7 +78,10 @@ export const handler = async ({ enquirer, listr2, silent, skip, unskip }) => {
 
           if (updateData.upgradeAvailable) {
             // reset skip if newer non-skip version is available
-            if (updateData.skipVersion !== updateData.remoteVersion) {
+            if (
+              updateData.skipVersion !== '0.0.0' &&
+              updateData.skipVersion !== updateData.remoteVersion
+            ) {
               updateData.skipVersion = '0.0.0'
               updateData.lastShown = Date.now() - 2 * SHOW_PERIOD
             }
