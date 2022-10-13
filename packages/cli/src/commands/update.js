@@ -18,8 +18,8 @@ import * as upgrade from './upgrade'
 export const command = 'update'
 export const description = 'Check for updates to RedwoodJS'
 
-const SHOW_PERIOD = 60 * 60000 // 1 hour
-const CHECK_PERIOD = 24 * 60 * 60000 // 24 hours
+const SHOW_PERIOD = 60 * 60_000 // 1 hour
+const CHECK_PERIOD = 24 * 60 * 60_000 // 24 hours
 const UPDATE_LOCK = 'update-command'
 
 export const builder = (yargs) => {
@@ -230,7 +230,7 @@ export function shouldShowUpgradeAvailableMessage() {
   const updateData = readUpgradeFile()
   return (
     updateData.upgradeAvailable &&
-    !(updateData.skipVersion == updateData.remoteVersion) &&
+    updateData.skipVersion !== updateData.remoteVersion &&
     updateData.lastShown < Date.now() - SHOW_PERIOD
   )
 }

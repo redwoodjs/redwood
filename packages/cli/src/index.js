@@ -119,7 +119,6 @@ const updateCheckerMiddleware = (argv) => {
       detached: true,
       stdio: ['ignore', out, err],
       cwd: getPaths().base,
-      env: { ...process.env },
       shell: process.platform === 'win32',
     })
     child.unref()
