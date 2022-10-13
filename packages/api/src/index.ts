@@ -1,6 +1,5 @@
 export * from './auth'
 export * from './errors'
-export { PasswordValidationError } from './functions/dbAuth/errors'
 export * from './validations/validations'
 export * from './validations/errors'
 

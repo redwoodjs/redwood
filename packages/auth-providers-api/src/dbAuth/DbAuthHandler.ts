@@ -54,10 +54,7 @@ interface SignupFlowOptions {
    * `true` if valid, throw `PasswordValidationError` if not.
    */
   passwordValidation?: (password: string) => boolean
-<<<<<<<< HEAD:packages/auth-providers-api/src/dbAuth/DbAuthHandler.ts
 
-========
->>>>>>>> 6b7fe0c30656ce6fb28d75ccffb21e38a9d45774:packages/api/src/functions/dbAuth/DbAuthHandler.ts
   /**
    * Object containing error strings
    */

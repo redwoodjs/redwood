@@ -6429,7 +6429,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup":
+"@redwoodjs/auth-providers-setup@3.2.0, @redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup"
   dependencies:
@@ -6595,10 +6595,12 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.4
     "@prisma/internals": 4.3.1
     "@redwoodjs/api-server": 3.2.0
+    "@redwoodjs/auth-providers-setup": 3.2.0
     "@redwoodjs/internal": 3.2.0
     "@redwoodjs/prerender": 3.2.0
     "@redwoodjs/structure": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
+    "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -6823,6 +6825,7 @@ __metadata:
     "@prisma/client": 4.3.1
     "@redwoodjs/api": 3.2.0
     "@redwoodjs/auth": 3.2.0
+    "@types/jsonwebtoken": 8.5.9
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
@@ -6833,6 +6836,7 @@ __metadata:
     graphql-scalars: 1.19.0
     graphql-tag: 2.12.6
     jest: 29.1.2
+    jsonwebtoken: 8.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     typescript: 4.7.4
@@ -6943,7 +6947,7 @@ __metadata:
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
     "@reach/skip-nav": 0.16.0
-    "@redwoodjs/auth": 3.2.0
+    "@redwoodjs/auth2": 3.2.0
     "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
@@ -7070,7 +7074,7 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
-    "@redwoodjs/auth": 3.2.0
+    "@redwoodjs/auth2": 3.2.0
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
