@@ -82,18 +82,21 @@ type AuthProviderProps =
       type: Omit<SupportedAuthTypes, 'dbAuth' | 'clerk'>
       config?: never
       skipFetchCurrentUser?: boolean
+      children?: React.ReactNode
     }
   | {
       client?: never
       type: 'clerk'
       config?: never
       skipFetchCurrentUser?: boolean
+      children?: React.ReactNode
     }
   | {
       client?: WebAuthnClientType
       type: 'dbAuth'
       config?: SupportedAuthConfig
       skipFetchCurrentUser?: boolean
+      children?: React.ReactNode
     }
 
 type AuthProviderState = {
@@ -261,12 +264,14 @@ export class AuthProvider extends React.Component<
           ? null
           : await this.getCurrentUser()
 
-        this.setState({
-          ...this.state,
-          userMetadata,
-          currentUser,
-          isAuthenticated: true,
-          loading: false,
+        this.setState((prevState) => {
+          return {
+            ...prevState,
+            userMetadata,
+            currentUser,
+            isAuthenticated: true,
+            loading: false,
+          }
         })
       }
     } catch (e: any) {
