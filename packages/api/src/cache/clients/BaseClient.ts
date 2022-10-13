@@ -13,5 +13,5 @@ export default abstract class BaseClient {
     key: string,
     value: unknown,
     options: { expires?: number }
-  ): Promise<void> | void
+  ): Promise<any> | any // types are tightened in the child classes
 }
