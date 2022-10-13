@@ -106,7 +106,7 @@ it('generates new filenames to avoid overwriting existing files', () => {
   const filePaths = Object.keys(filesRecord).sort()
 
   expect(filePaths).toEqual([
-    path.join(getPaths().api.functions, 'supertokensauth.ts'),
+    path.join(getPaths().api.functions, 'supertokensAuth2.ts'),
     path.join(getPaths().api.lib, 'supertokens2.ts'),
     path.join(getPaths().api.lib, 'supertokensAuth.ts'),
   ])
