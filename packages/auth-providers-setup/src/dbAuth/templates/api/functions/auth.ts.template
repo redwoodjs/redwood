@@ -28,13 +28,6 @@ export const handler = async (
     // How long the resetToken is valid for, in seconds (default is 24 hours)
     expires: 60 * 60 * 24,
 
-    // Include any format checks for password here. Return `true` if the
-    // password is valid, otherwise throw a `PasswordValidationError`.
-    // Import the error along with `DbAuthHandler` from `@redwoodjs/api` above.
-    passwordValidation: (_password) => {
-      return true
-    },
-
     errors: {
       // for security reasons you may want to be vague here rather than expose
       // the fact that the email address wasn't found (prevents fishing for
@@ -123,6 +116,13 @@ export const handler = async (
           // name: userAttributes.name
         },
       })
+    },
+
+    // Include any format checks for password here. Return `true` if the
+    // password is valid, otherwise throw a `PasswordValidationError`.
+    // Import the error along with `DbAuthHandler` from `@redwoodjs/api` above.
+    passwordValidation: (_password) => {
+      return true
     },
 
     errors: {
