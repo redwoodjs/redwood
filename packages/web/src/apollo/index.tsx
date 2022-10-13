@@ -292,8 +292,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
-        // </FetchConfigProvider> This order so that the user can still
-        // completely overwrite the cache.
+        // This order so that the user can still completely overwrite the cache
         config={{ cache, ...config }}
         useAuth={useAuth}
         logLevel={logLevel}
