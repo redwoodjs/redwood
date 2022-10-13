@@ -493,6 +493,23 @@ export const addPackagesTask = ({
   }
 }
 
+export const addEnvVarTask = (name, value, comment) => {
+  return {
+    title: `Adding ${name} var to .env...`,
+    task: () => {
+      const envPath = path.join(getPaths().base, '.env')
+      const content = [comment && `# ${comment}`, `${name}=${value}`, ''].flat()
+      let envFile = ''
+
+      if (fs.existsSync(envPath)) {
+        envFile = fs.readFileSync(envPath).toString() + '\n'
+      }
+
+      fs.writeFileSync(envPath, envFile + content.join('\n'))
+    },
+  }
+}
+
 export const runCommandTask = async (commands, { verbose }) => {
   const tasks = new Listr(
     commands.map(({ title, cmd, args, opts = {}, cwd = getPaths().base }) => ({
