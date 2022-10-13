@@ -5,7 +5,7 @@
 import React from 'react'
 
 // @ts-expect-error - We inject useAuth when testing, so it will be available
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from '@redwoodjs/auth2'
 import { LocationProvider } from '@redwoodjs/router'
 import { RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'

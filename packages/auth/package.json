@@ -10,7 +10,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "webAuthn"
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
@@ -22,14 +23,14 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.19.1",
-    "core-js": "3.25.3"
+    "@babel/runtime-corejs3": "7.19.0",
+    "core-js": "3.25.1"
   },
   "devDependencies": {
-    "@auth0/auth0-spa-js": "1.22.4",
-    "@azure/msal-browser": "2.28.3",
+    "@auth0/auth0-spa-js": "1.22.3",
+    "@azure/msal-browser": "2.28.1",
     "@babel/cli": "7.18.10",
-    "@babel/core": "7.19.1",
+    "@babel/core": "7.19.0",
     "@clerk/clerk-js": "3.17.0",
     "@clerk/clerk-react": "3.5.1",
     "@clerk/clerk-sdk-node": "3.9.2",
@@ -41,7 +42,7 @@
     "@simplewebauthn/typescript-types": "6.0.0",
     "@supabase/supabase-js": "1.35.6",
     "@types/netlify-identity-widget": "1.9.3",
-    "@types/react": "17.0.50",
+    "@types/react": "17.0.48",
     "firebase": "9.9.3",
     "firebase-admin": "10.3.0",
     "gotrue-js": "0.9.29",

@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 import { Magic, MagicUserMetadata } from 'magic-sdk'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import { CurrentUser } from '@redwoodjs/auth2'
 
 import { createMagicLinkAuth } from '../magicLink'
 

@@ -127,6 +127,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@auth0/auth0-spa-js@npm:1.22.3":
+  version: 1.22.3
+  resolution: "@auth0/auth0-spa-js@npm:1.22.3"
+  dependencies:
+    abortcontroller-polyfill: ^1.7.3
+    browser-tabs-lock: ^1.2.15
+    core-js: ^3.24.0
+    es-cookie: ~1.3.2
+    fast-text-encoding: ^1.0.4
+    promise-polyfill: ^8.2.3
+    unfetch: ^4.2.0
+  checksum: 18d6cf1eebc91af96facd13b440e55ff7c129bedc98181eb5fbbb2fed55301f43841c29a8865a31333048bd0f35f80185fb7276dd593822f022e71693eebd5ee
+  languageName: node
+  linkType: hard
+
 "@auth0/auth0-spa-js@npm:1.22.4":
   version: 1.22.4
   resolution: "@auth0/auth0-spa-js@npm:1.22.4"
@@ -142,12 +157,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure/msal-browser@npm:2.28.1":
+  version: 2.28.1
+  resolution: "@azure/msal-browser@npm:2.28.1"
+  dependencies:
+    "@azure/msal-common": ^7.3.0
+  checksum: b453b5b9a9ae2146a71b32ee2fcd9cf4e9c93e23860fbcc836bd10d9769dc25f02267db0300c28b124e361f5193d9fc74dea5d1142aeb6821cbc95345f57c795
+  languageName: node
+  linkType: hard
+
 "@azure/msal-browser@npm:2.28.3":
   version: 2.28.3
   resolution: "@azure/msal-browser@npm:2.28.3"
   dependencies:
     "@azure/msal-common": ^7.4.1
   checksum: b1ba0d8f4a77d7f71623b4684bc2bc35c6d52db7e883f48bc886eeea4278f090845a703db02212f67ff27cc29b74d89a0a2f0ea9116a6a66e27c71478f41db5b
+  languageName: node
+  linkType: hard
+
+"@azure/msal-common@npm:^7.3.0":
+  version: 7.6.0
+  resolution: "@azure/msal-common@npm:7.6.0"
+  checksum: 9625c5d0a497c47dac5fceccb01529a621e39216883a94f7295cdcf9751c5e5ada0a34de308dfb3bc772dc006fbaa71d5cc17b5a2f658733b227680e2c758835
   languageName: node
   linkType: hard
 
@@ -222,6 +253,29 @@ __metadata:
     semver: ^5.4.1
     source-map: ^0.5.0
   checksum: c11d26f5a33a29c94fdd1c492dfd723f48926c51e975448dda57c081c0d74c7b03298642b2651559e0d330ec868b5757b60f9648c71cf7f89fddf79a17cf006f
+  languageName: node
+  linkType: hard
+
+"@babel/core@npm:7.19.0":
+  version: 7.19.0
+  resolution: "@babel/core@npm:7.19.0"
+  dependencies:
+    "@ampproject/remapping": ^2.1.0
+    "@babel/code-frame": ^7.18.6
+    "@babel/generator": ^7.19.0
+    "@babel/helper-compilation-targets": ^7.19.0
+    "@babel/helper-module-transforms": ^7.19.0
+    "@babel/helpers": ^7.19.0
+    "@babel/parser": ^7.19.0
+    "@babel/template": ^7.18.10
+    "@babel/traverse": ^7.19.0
+    "@babel/types": ^7.19.0
+    convert-source-map: ^1.7.0
+    debug: ^4.1.0
+    gensync: ^1.0.0-beta.2
+    json5: ^2.2.1
+    semver: ^6.3.0
+  checksum: 0200e66829fbb36a831c0ed39907b791b830a474b23207a169bd3cb871d01a8e8bfa8a4507315ea2a260e492b6a58d5cd5f38ced9868b5a96ecc1308f6541126
   languageName: node
   linkType: hard
 
@@ -649,6 +703,15 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: 38f5869733576c55364eb926d81d5efd9cc604d9464f32beada4229af33f1a48e53bb167ad978f7565a9eed31a622c2ff85da891fe0083203d793a1d414f1e3b
+  languageName: node
+  linkType: hard
+
+"@babel/parser@npm:^7.19.0":
+  version: 7.19.4
+  resolution: "@babel/parser@npm:7.19.4"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: 51a69ca46dcd4d303df3466bc0ac3da421fdbf3cc62c1cd59d4776561334fe048e2b2445356074fdba54905cad6389feea650c6cc69131c77e93faeae141bb78
   languageName: node
   linkType: hard
 
@@ -1896,6 +1959,16 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: b19c1445adf202732a2e0d554749257da22e56f0fc159709200d962413fbd4e7bd1d684222e60c08a2b8ad8fe511d8699fbc978d92816953fc9cbb6cbcc40d63
+  languageName: node
+  linkType: hard
+
+"@babel/runtime-corejs3@npm:7.19.0":
+  version: 7.19.0
+  resolution: "@babel/runtime-corejs3@npm:7.19.0"
+  dependencies:
+    core-js-pure: ^3.20.2
+    regenerator-runtime: ^0.13.4
+  checksum: cd852856cf78025c57579d1067831dcfec9e6d144a8f51078076af9792cfd24a9a866d28cd04c5ab7d3173d9db5afbdba3351639fd75979ef9f5da315522ffad
   languageName: node
   linkType: hard
 
@@ -6517,7 +6590,6 @@ __metadata:
     "@nhost/nhost-js": 1.4.10
     "@okta/jwt-verifier": 2.6.0
     "@okta/okta-auth-js": 6.7.6
-    "@redwoodjs/auth": 3.0.3
     "@redwoodjs/cli-helpers": 3.0.3
     "@simplewebauthn/browser": 6.0.0
     "@simplewebauthn/typescript-types": 6.0.0
@@ -6565,7 +6637,6 @@ __metadata:
     "@babel/cli": 7.18.10
     "@babel/core": 7.19.1
     "@babel/runtime-corejs3": 7.19.1
-    "@redwoodjs/auth": 3.0.3
     "@redwoodjs/cli-helpers": 3.0.3
     "@types/react": 17.0.50
     core-js: 3.25.3
@@ -6590,7 +6661,7 @@ __metadata:
     "@nhost/hasura-auth-js": 1.4.1
     "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.7.6
-    "@redwoodjs/auth": 3.0.3
+    "@redwoodjs/auth2": 3.0.3
     "@simplewebauthn/browser": 6.0.0
     "@simplewebauthn/typescript-types": 6.0.0
     "@supabase/supabase-js": 1.35.6
@@ -6628,9 +6699,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth@3.0.3, @redwoodjs/auth@workspace:packages/auth":
+"@redwoodjs/auth2@3.0.3, @redwoodjs/auth2@workspace:packages/auth2":
   version: 0.0.0-use.local
-  resolution: "@redwoodjs/auth@workspace:packages/auth"
+  resolution: "@redwoodjs/auth2@workspace:packages/auth2"
   dependencies:
     "@auth0/auth0-spa-js": 1.22.4
     "@azure/msal-browser": 2.28.3
@@ -6662,6 +6733,40 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/auth@3.0.3, @redwoodjs/auth@workspace:packages/auth":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth@workspace:packages/auth"
+  dependencies:
+    "@auth0/auth0-spa-js": 1.22.3
+    "@azure/msal-browser": 2.28.1
+    "@babel/cli": 7.18.10
+    "@babel/core": 7.19.0
+    "@babel/runtime-corejs3": 7.19.0
+    "@clerk/clerk-js": 3.17.0
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/clerk-sdk-node": 3.9.2
+    "@clerk/types": 2.21.0
+    "@nhost/hasura-auth-js": 1.4.1
+    "@nhost/nhost-js": 1.4.10
+    "@okta/okta-auth-js": 6.7.6
+    "@simplewebauthn/browser": 6.0.0
+    "@simplewebauthn/typescript-types": 6.0.0
+    "@supabase/supabase-js": 1.35.6
+    "@types/netlify-identity-widget": 1.9.3
+    "@types/react": 17.0.48
+    core-js: 3.25.1
+    firebase: 9.9.3
+    firebase-admin: 10.3.0
+    gotrue-js: 0.9.29
+    jest: 29.0.3
+    magic-sdk: 9.0.0
+    netlify-identity-widget: 1.9.2
+    react: 17.0.2
+    supertokens-auth-react: 0.24.4
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/cli-helpers@3.0.3, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
@@ -6673,7 +6778,7 @@ __metadata:
     "@types/react": 17.0.50
     core-js: 3.25.3
     jest: 29.0.3
-    listr2: ^5.0.5
+    listr2: 5.0.5
     react: 17.0.2
     typescript: 4.7.4
   languageName: unknown
@@ -7042,7 +7147,7 @@ __metadata:
     "@babel/core": 7.19.1
     "@babel/runtime-corejs3": 7.19.1
     "@reach/skip-nav": 0.16.0
-    "@redwoodjs/auth": 3.0.3
+    "@redwoodjs/auth2": 3.0.3
     "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.50
     "@types/react-dom": 17.0.17
@@ -7169,7 +7274,7 @@ __metadata:
     "@babel/cli": 7.18.10
     "@babel/core": 7.19.1
     "@babel/runtime-corejs3": 7.19.1
-    "@redwoodjs/auth": 3.0.3
+    "@redwoodjs/auth2": 3.0.3
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
@@ -14130,10 +14235,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js-pure@npm:^3.20.2":
+  version: 3.25.5
+  resolution: "core-js-pure@npm:3.25.5"
+  checksum: 47c84be3d06c4e1d49e7e9f191368dda4d2d4cb4cb94929e6e8caf2230b87b1a944a0d64d767ea9e7c540853082ad7e68f9310800d79809a4cd9feb3a0c00269
+  languageName: node
+  linkType: hard
+
 "core-js-pure@npm:^3.25.1, core-js-pure@npm:^3.8.1":
   version: 3.25.3
   resolution: "core-js-pure@npm:3.25.3"
   checksum: 08dc4a47208820e5285ea4be9c28f5bfc92d2c1adc0a0a8d81eb0230604f6e243b910ab241c5c8b02d166c2546412236f9a0e93b8e3558ee263ab21631078c68
+  languageName: node
+  linkType: hard
+
+"core-js@npm:3.25.1":
+  version: 3.25.1
+  resolution: "core-js@npm:3.25.1"
+  checksum: 02a81cfb63726eca66ee5f8588c11b2ac55713f5956158ed57e07982296c8bb4fc0bf32394dea5b6496d2965377aade3a7f9c78aaadde907e6aa3ee2b7f58dc0
   languageName: node
   linkType: hard
 
@@ -22083,6 +22202,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"listr2@npm:5.0.5":
+  version: 5.0.5
+  resolution: "listr2@npm:5.0.5"
+  dependencies:
+    cli-truncate: ^2.1.0
+    colorette: ^2.0.19
+    log-update: ^4.0.0
+    p-map: ^4.0.0
+    rfdc: ^1.3.0
+    rxjs: ^7.5.6
+    through: ^2.3.8
+    wrap-ansi: ^7.0.0
+  peerDependencies:
+    enquirer: ">= 2.3.0 < 3"
+  peerDependenciesMeta:
+    enquirer:
+      optional: true
+  checksum: 293eea149301ca95822359af647ef8238cbb0a052287a4bf3bb6811802b66afd21117b6c5a391a4c0356b9dff41ad9324b159f49bd3c78562b6bc8b1fd8d988a
+  languageName: node
+  linkType: hard
+
 "listr2@npm:^3.8.3":
   version: 3.14.0
   resolution: "listr2@npm:3.14.0"
@@ -22122,27 +22262,6 @@ __metadata:
     enquirer:
       optional: true
   checksum: 0e64dc5e66fbd4361f6b35c49489ed842a1d7de30cf2b5c06bf4569669449288698b8ea93f7842aaf3c510963a1e554bca31376b9054d1521445d1ce4c917ea1
-  languageName: node
-  linkType: hard
-
-"listr2@npm:^5.0.5":
-  version: 5.0.5
-  resolution: "listr2@npm:5.0.5"
-  dependencies:
-    cli-truncate: ^2.1.0
-    colorette: ^2.0.19
-    log-update: ^4.0.0
-    p-map: ^4.0.0
-    rfdc: ^1.3.0
-    rxjs: ^7.5.6
-    through: ^2.3.8
-    wrap-ansi: ^7.0.0
-  peerDependencies:
-    enquirer: ">= 2.3.0 < 3"
-  peerDependenciesMeta:
-    enquirer:
-      optional: true
-  checksum: 293eea149301ca95822359af647ef8238cbb0a052287a4bf3bb6811802b66afd21117b6c5a391a4c0356b9dff41ad9324b159f49bd3c78562b6bc8b1fd8d988a
   languageName: node
   linkType: hard
 

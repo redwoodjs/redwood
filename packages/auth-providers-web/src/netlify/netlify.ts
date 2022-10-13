@@ -1,6 +1,6 @@
 import * as NetlifyIdentityNS from 'netlify-identity-widget'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth2'
 
 // TODO:
 // In the future, when this is a separate package, we can import the full thing

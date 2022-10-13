@@ -2,7 +2,7 @@ import type { FirebaseApp } from 'firebase/app'
 import type { CustomParameters, OAuthProvider, User } from 'firebase/auth'
 import type FirebaseAuthNamespace from 'firebase/auth'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth2'
 
 type FirebaseAuth = typeof FirebaseAuthNamespace
 

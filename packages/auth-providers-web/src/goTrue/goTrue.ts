@@ -1,7 +1,7 @@
 import type { default as GoTrue } from 'gotrue-js'
 import type { User } from 'gotrue-js'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth2'
 
 export type GoTrueUser = User
 

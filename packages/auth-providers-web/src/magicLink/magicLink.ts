@@ -1,6 +1,6 @@
 import type { Magic } from 'magic-sdk'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth2'
 
 const TEN_MINUTES = 10 * 60 * 1000
 

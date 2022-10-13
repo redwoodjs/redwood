@@ -1,5 +1,5 @@
-import type { CurrentUser } from '@redwoodjs/auth'
-import { createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth2'
+import { createAuthentication } from '@redwoodjs/auth2'
 
 export interface EthereumUser {
   address: string | null

@@ -2,26 +2,71 @@
 
 ## Contributing
 
-If you want to contribute a new auth provider integration we recommend you
-start by implementing it as a custom auth provider in a Redwood App first. When
-that works you can package it up as an npm package and publish it on your own.
-You can then create a PR on this repo with support for your new auth provider
-in our `yarn rw setup auth` cli command. The easiest option is probably to just
-look at one of the existing auth providers in
-`packages/cli/src/commands/setup/auth/providers` and the corresponding
-templates in `../templates`.
+Adding a new auth provider is easier than you may expect. The main objective is to map the methods of an instance of your target auth library to a shape that Redwood understands.
 
-If you need help setting up a custom auth provider you can read the auth docs
-on the web.
+Here is the implementation for Auth0:
 
-### Contributing to the base auth implementation
+```ts
+// authClients/auth0.ts
+const mapAuthClientAuth0 = (client: Auth0): AuthClientAuth0 => {
+  return {
+    type: 'auth0',
+    client,
+    restoreAuthState: async () => {
+      if (window.location.search.includes('code=')) {
+        const { appState } = await client.handleRedirectCallback()
+        window.history.replaceState(
+          {},
+          document.title,
+          appState && appState.targetUrl
+            ? appState.targetUrl
+            : window.location.pathname
+        )
+      }
+    },
+    logIn: async (options?) => client.loginWithRedirect(options),
+    logOut: (options?) => client.logout(options),
+    signUp: (options?) => client.signup(options),
+    getToken: async () => client.getTokenSilently(),
+    currentUser: async () => {
+      const user = await client.getUser()
+      return user || null
+    },
+    getUserMetadata: async () => {
+      const user = await client.getUser()
+      return user || null
+    },
+  }
+}
+```
 
-If you want to contribute to our auth implementation, the interface towards
-both auth service providers and RW apps we recommend you start looking in
-`authFactory.ts` and then continue to `AuthProvider.tsx`. `AuthProvider.tsx`
-has most of our implementation together with all the custom hooks it uses.
-Another file to be accustomed with is `AuthContext.ts`. The interface in there
-has pretty god code comments, and is what will be exposed to RW apps.
+You'll need to import the type definition for you client and add it to the supported auth types:
+
+## Sign Up
+
+Note: Not all AuthProviders support a separate `signUp` authentication flow -- such as for passwordless authentication or authentication with social providers (GitHub, Google, etc). In these cases, `signUp` will perform the same flow as `login()`.
+
+### Auth0 Sign Up
+
+If you want to use the useAuth hook `Sign Up` with Auth0 to default the UI to the sign up "tab", you need to be using the ["New Universal Login Experience"](https://auth0.com/docs/universal-login/new-experience). The "Classic Universal Experience" does not support the `screen_hint` to set the tab.
+
+```ts
+// authClients/index.ts
+export type SupportedAuthClients =
+  | Auth0
+  | AzureActiveDirectory
+  | DbAuth
+  | GoTrue
+  | NetlifyIdentity
+  | MagicLink
+  | FirebaseClient
+  | Supabase
+  | Clerk
+  | Ethereum
+  | Nhost
+  | SuperTokens
+  | Custom
+```
 
 ## getCurrentUser
 

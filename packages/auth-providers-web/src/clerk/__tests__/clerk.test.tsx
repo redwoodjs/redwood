@@ -6,7 +6,7 @@ import {
 } from '@clerk/types'
 import { renderHook, act } from '@testing-library/react-hooks'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import { CurrentUser } from '@redwoodjs/auth2'
 
 import { createClerkAuth } from '../clerk'
 

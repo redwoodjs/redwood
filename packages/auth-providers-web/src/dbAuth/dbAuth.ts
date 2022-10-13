@@ -1,4 +1,4 @@
-import { createAuthentication, CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication, CurrentUser } from '@redwoodjs/auth2'
 
 import { WebAuthnClientType } from './webAuthn'
 

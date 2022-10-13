@@ -42,7 +42,6 @@
     "@nhost/nhost-js": "1.4.10",
     "@okta/jwt-verifier": "2.6.0",
     "@okta/okta-auth-js": "6.7.6",
-    "@redwoodjs/auth": "3.0.3",
     "@redwoodjs/cli-helpers": "3.0.3",
     "@simplewebauthn/browser": "6.0.0",
     "@simplewebauthn/typescript-types": "6.0.0",

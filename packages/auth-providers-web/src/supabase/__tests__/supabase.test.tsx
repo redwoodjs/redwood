@@ -1,7 +1,7 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react-hooks'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import { CurrentUser } from '@redwoodjs/auth2'
 
 import { createSupabaseAuth } from '../supabase'
 

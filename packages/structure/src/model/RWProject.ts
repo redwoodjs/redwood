@@ -83,7 +83,6 @@ export class RWProject extends BaseNode {
       this.host.existsSync(join(this.pathHelper.api.base, 'tsconfig.json'))
     )
   }
-
   // TODO: do we move this to a separate node? (ex: RWDatabase)
   @memo() async prismaDMMF(): Promise<DMMF.Document | undefined> {
     try {
