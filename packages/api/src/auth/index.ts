@@ -2,7 +2,7 @@ export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { Decoded } from './decoded'
+import type { Decoded } from './parseJWT'
 export type { Decoded }
 
 // This is shared by `@redwoodjs/web`
