@@ -104,7 +104,7 @@ export const standardAuthHandler = async ({
   const tasks = new Listr<never>(
     [
       generateAuthApiFiles(basedir, provider, force, webAuthn),
-      addAuthConfigToWeb(basedir, provider),
+      addAuthConfigToWeb(basedir, provider, webAuthn),
       addAuthConfigToGqlApi(authDecoderImport),
       addWebPackages(webPackages, rwVersion),
       addApiPackages(apiPackages),
