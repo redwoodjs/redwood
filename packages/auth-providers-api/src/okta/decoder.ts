@@ -14,7 +14,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   const OktaJwtVerifier = require('@okta/jwt-verifier')
 
   const client = new OktaJwtVerifier({
-    issuer: `https://${OKTA_DOMAIN}/oauth/default`,
+    issuer: `https://${OKTA_DOMAIN}/oauth2/default`,
   })
 
   return new Promise((resolve) => {

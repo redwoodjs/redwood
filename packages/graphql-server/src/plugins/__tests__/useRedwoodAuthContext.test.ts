@@ -3,7 +3,6 @@ import { createSpiedPlugin, createTestkit } from '@envelop/testing'
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodAuthContext } from '../useRedwoodAuthContext'
 
-// TODO: Figure out what's needed here to make the tests pass
 const authDecoder = (token: string) => ({ token })
 
 jest.mock('@redwoodjs/api', () => {

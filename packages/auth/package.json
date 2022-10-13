@@ -1,6 +1,5 @@
 {
   "name": "@redwoodjs/auth",
-  "private": true,
   "version": "3.2.0",
   "repository": {
     "type": "git",

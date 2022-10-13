@@ -33,7 +33,7 @@ interface Options {
   emailLink?: string
   customToken?: string
   password?: string
-  scopes?: string[] // scopes available at https://developers.google.com/identity/protocols/oauth/scopes
+  scopes?: string[] // scopes available at https://developers.google.com/identity/protocols/oauth2/scopes
   customParameters?: CustomParameters // parameters available at https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
 }
 
