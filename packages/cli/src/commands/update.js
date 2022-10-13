@@ -170,7 +170,9 @@ async function getUpdateVersionStatus() {
       tag ? { version: tag } : {}
     )
   } catch (e) {
-    throw new Error('Could not find the latest version')
+    throw new Error(
+      `Could not find the latest version${tag ? ` with tag: ${tag}` : ''}`
+    )
   }
 
   // Is remote version higher than local?
@@ -210,11 +212,7 @@ function getUpgradeFilePath() {
 }
 
 function writeUpgradeFile(updateData) {
-  try {
-    fs.writeFileSync(getUpgradeFilePath(), JSON.stringify(updateData, null, 2))
-  } catch (error) {
-    throw new Error('\nCould not create update-data file\n')
-  }
+  fs.writeFileSync(getUpgradeFilePath(), JSON.stringify(updateData, null, 2))
 }
 
 function readUpgradeFile() {
@@ -232,7 +230,7 @@ function readUpgradeFile() {
         lastShown: 946684800000, // 2000-01-01T00:00:00.000Z
       }
     }
-    throw new Error('Could not read update-data.json file!')
+    throw error
   }
 }
 
@@ -248,13 +246,8 @@ function getUpgradeAvailableMessage(updateData) {
 }
 
 export function showUpgradeAvailableMessage() {
-  try {
-    const updateData = readUpgradeFile()
-    console.log(getUpgradeAvailableMessage(updateData))
-    updateData.lastShown = Date.now()
-    writeUpgradeFile(updateData)
-  } catch (error) {
-    console.error('Could not show an available update message!')
-    console.error(error)
-  }
+  const updateData = readUpgradeFile()
+  console.log(getUpgradeAvailableMessage(updateData))
+  updateData.lastShown = Date.now()
+  writeUpgradeFile(updateData)
 }
