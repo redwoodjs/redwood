@@ -1,8 +1,3 @@
-import fs from 'fs'
-import path from 'path'
-
-import execa from 'execa'
-import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
