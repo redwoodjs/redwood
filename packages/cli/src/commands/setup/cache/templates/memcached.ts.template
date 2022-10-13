@@ -10,7 +10,7 @@ const memJsFormattedLogger = {
   log: (msg: string) => logger.error(msg),
 }
 
-let client: InMemoryClient | MemcachedClient
+export let client: InMemoryClient | MemcachedClient
 
 if (process.env.NODE_ENV === 'test') {
   client = new InMemoryClient()
