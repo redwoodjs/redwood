@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
+import Enquirer from 'enquirer'
 import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import semver from 'semver'
@@ -12,11 +13,13 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 
-import { validateTag } from './upgrade'
+import * as upgrade from './upgrade'
 
 export const command = 'update'
 export const description = 'Check for updates to RedwoodJS'
 
+const SHOW_PERIOD = 60 * 60000 // 1 hour
+const CHECK_PERIOD = 24 * 60 * 60000 // 24 hours
 const UPDATE_LOCK = 'update-command'
 
 export const builder = (yargs) => {
@@ -54,7 +57,14 @@ export const builder = (yargs) => {
     .epilogue('')
 }
 
-export const handler = async ({ force, silent, skip, unskip }) => {
+export const handler = async ({
+  enquirer,
+  listr2,
+  force,
+  silent,
+  skip,
+  unskip,
+}) => {
   if (isLocked(UPDATE_LOCK) && !force) {
     if (!silent) {
       console.log(
@@ -64,76 +74,100 @@ export const handler = async ({ force, silent, skip, unskip }) => {
     return
   }
 
-  const updateTasks = new Listr([], {
-    rendererOptions: { collapse: false },
-    renderer: silent ? 'silent' : 'default',
-  })
+  let upgradePostUpdate = false
+  let upgradePostUpdateTag
 
-  // This is only here because we need to display to the user after listr tasks have run
-  // TODO: When listr2 is available handle all output within in the listr2 task then this bool can be removed
-  let upgradeAvailable = false
+  const updateTasks = new Listr(
+    [
+      {
+        enabled: () => skip || unskip,
+        title: 'Handling skip flag',
+        task: async (ctx, task) => {
+          const updateData = readUpgradeFile()
+          if (skip) {
+            task.title = `Setting skip version: ${updateData.remoteVersion}`
+            updateData.skipVersion = updateData.remoteVersion
+          } else {
+            task.title = 'Clearing the skip version'
+            updateData.skipVersion = '0.0.0'
+            updateData.lastShown = Date.now() - 2 * SHOW_PERIOD
+          }
+          writeUpgradeFile(updateData)
+        },
+      },
+      {
+        enabled: () => !(skip || unskip),
+        title: 'Checking for RedwoodJS upgrades',
+        task: async (ctx, task) => {
+          const updateData = await getUpdateVersionStatus()
+          updateData.lastShown = Date.now()
 
-  updateTasks.add({
-    enabled: () => skip || unskip,
-    title: 'Handling skip flag',
-    task: async (ctx, task) => {
-      const updateData = readUpgradeFile()
-      if (skip) {
-        task.title = `Setting skip version: ${updateData.remoteVersion}`
-        updateData.skipVersion = updateData.remoteVersion
-      } else {
-        task.title = 'Clearing the skip version'
-        updateData.skipVersion = '0.0.0'
-        updateData.lastShown = Date.now() - 2 * getShowPeriod()
-      }
-      writeUpgradeFile(updateData)
-    },
-  })
+          if (updateData.upgradeAvailable) {
+            // reset skip if newer non-skip version is available
+            if (updateData.skipVersion !== updateData.remoteVersion) {
+              updateData.skipVersion = '0.0.0'
+              updateData.lastShown = Date.now() - 2 * SHOW_PERIOD
+            }
 
-  updateTasks.add({
-    enabled: () => !(skip || unskip),
-    title: 'Checking for RedwoodJS upgrades',
-    task: async (ctx, task) => {
-      const updateData = await getUpdateVersionStatus()
-      upgradeAvailable = updateData.upgradeAvailable
-      updateData.lastShown = Date.now()
+            if (!silent) {
+              if (updateData.skipVersion === updateData.remoteVersion) {
+                task.title = `Upgrade available: ${updateData.localVersion} -> ${updateData.remoteVersion} (you are currently skipping this upgrade)`
+                return
+              }
 
-      if (upgradeAvailable) {
-        // reset skip if newer non-skip version is available
-        if (updateData.skipVersion !== updateData.remoteVersion) {
-          updateData.skipVersion = '0.0.0'
-          updateData.lastShown = Date.now() - 2 * getShowPeriod()
-        }
+              // Must remove some whitespace since we put the message into the listr2 output rather than just console.log it ourselves
+              task.title = getUpgradeAvailableMessage(updateData)
+                .replace('   ╭', '╭')
+                .replace('   ╰', '╰')
 
-        if (!silent) {
-          // TODO: When listr2: prompt if they want to upgrade now? Can add on exit hook to run `yarn rw upgrade`
-        }
+              upgradePostUpdateTag = extractTagFromVersion(
+                updateData.localVersion
+              )
+              upgradePostUpdate = await task.prompt({
+                type: 'confirm',
+                name: 'answer',
+                message: `Do you want to run "yarn rw upgrade" now?`,
+                default: false,
+              })
+            }
+          } else {
+            task.title = 'No upgrade is available'
+          }
 
-        task.title =
-          updateData.skipVersion !== updateData.remoteVersion
-            ? `New upgrade is available: ${updateData.remoteVersion}`
-            : `New upgrade is available: ${updateData.remoteVersion} (you are currently skipping this upgrade)`
-      } else {
-        task.title = 'No upgrade is available'
-      }
-
-      writeUpgradeFile(updateData)
-    },
-  })
+          writeUpgradeFile(updateData)
+        },
+        options: { persistentOutput: true },
+      },
+    ],
+    {
+      rendererSilent: () => listr2?.rendererSilent || silent,
+      injectWrapper: { enquirer: enquirer || new Enquirer() },
+      rendererOptions: { collapse: false },
+    }
+  )
 
   try {
     setLock(UPDATE_LOCK)
     await updateTasks.run()
-    if (upgradeAvailable && !silent) {
-      showUpgradeAvailableMessage()
-    }
     unsetLock(UPDATE_LOCK)
+
+    if (upgradePostUpdate) {
+      upgrade.handler({ tag: upgradePostUpdateTag })
+    }
   } catch (e) {
     unsetLock(UPDATE_LOCK)
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
+}
+
+function extractTagFromVersion(version) {
+  let tag = version.substring(version.indexOf('-') + 1).trim()
+  if (tag.includes('.')) {
+    tag = tag.split('.')[0]
+  }
+  return tag
 }
 
 async function getUpdateVersionStatus() {
@@ -144,18 +178,18 @@ async function getUpdateVersionStatus() {
   let localVersion = packageJson.devDependencies['@redwoodjs/core']
 
   // Remove any leading non-digits, i.e. ^ or ~
-  while (!(localVersion.charAt(0) >= '0' && localVersion.charAt(0) <= '9')) {
+  while (!/\d/.test(localVersion.charAt(0))) {
     localVersion = localVersion.substring(1)
   }
 
   // Determine if the user has a tag (e.g. -rc, -canary), if so extract the tag from the version
   let tag = ''
   if (localVersion.includes('-')) {
-    tag = localVersion.substring(localVersion.indexOf('-') + 1).trim()
+    tag = extractTagFromVersion(localVersion)
 
     // Validate the local version, just incase the user has manually fiddled with it
     // no if needed to check as it throws an error if not successful, will be caught by listr
-    validateTag(tag)
+    upgrade.validateTag(tag)
   }
 
   // Fetch the latest version from npm registry
@@ -187,19 +221,9 @@ async function getUpdateVersionStatus() {
   return versionsStatus
 }
 
-function getCheckPeriod() {
-  return (
-    (process.env.REDWOOD_BACKGROUND_UPDATES_CHECK_PERIOD || 24 * 60) * 60000
-  )
-}
-
-function getShowPeriod() {
-  return (process.env.REDWOOD_BACKGROUND_UPDATES_SHOW_PERIOD || 60) * 60000
-}
-
 export function isUpdateCheckDue() {
   const updateData = readUpgradeFile()
-  return updateData.lastChecked < Date.now() - getCheckPeriod()
+  return updateData.lastChecked < Date.now() - CHECK_PERIOD
 }
 
 export function shouldShowUpgradeAvailableMessage() {
@@ -207,7 +231,7 @@ export function shouldShowUpgradeAvailableMessage() {
   return (
     updateData.upgradeAvailable &&
     !(updateData.skipVersion == updateData.remoteVersion) &&
-    updateData.lastShown < Date.now() - getShowPeriod()
+    updateData.lastShown < Date.now() - SHOW_PERIOD
   )
 }
 
