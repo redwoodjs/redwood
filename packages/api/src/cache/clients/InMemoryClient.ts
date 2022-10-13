@@ -39,4 +39,20 @@ export default class InMemoryClient extends BaseClient {
 
     return true
   }
+
+  // Testing helpers
+
+  cacheKeyForValue(value: any) {
+    for (const [cacheKey, cacheObj] of Object.entries(this.storage)) {
+      if (cacheObj.value === JSON.stringify(value)) {
+        return cacheKey
+      }
+    }
+
+    return null
+  }
+
+  isCached(value: any) {
+    return !!this.cacheKeyForValue(value)
+  }
 }
