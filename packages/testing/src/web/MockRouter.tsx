@@ -16,7 +16,7 @@ export const routes: { [routeName: string]: () => string } = {}
  * We overwrite the default `Router` export.
  * It populates the `routes.<pagename>()` utility object.
  */
-export const Router: React.FunctionComponent<RouterProps> = ({ children }) => {
+export const Router: React.FC<RouterProps> = ({ children }) => {
   const flatChildArray = flattenAll(children)
 
   flatChildArray.forEach((child) => {

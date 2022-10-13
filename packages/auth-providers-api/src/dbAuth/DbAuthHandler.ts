@@ -54,7 +54,10 @@ interface SignupFlowOptions {
    * `true` if valid, throw `PasswordValidationError` if not.
    */
   passwordValidation?: (password: string) => boolean
+<<<<<<<< HEAD:packages/auth-providers-api/src/dbAuth/DbAuthHandler.ts
 
+========
+>>>>>>>> 6b7fe0c30656ce6fb28d75ccffb21e38a9d45774:packages/api/src/functions/dbAuth/DbAuthHandler.ts
   /**
    * Object containing error strings
    */
@@ -115,7 +118,7 @@ interface ResetPasswordFlowOptions<TUser = Record<string | number, any>> {
    * Needs to be explicitly set to false to disable the flow
    */
   enabled?: boolean
-  handler: (user: TUser) => boolean
+  handler: (user: TUser) => boolean | Promise<boolean>
   allowReusedPassword: boolean
   errors?: {
     resetTokenExpired?: string

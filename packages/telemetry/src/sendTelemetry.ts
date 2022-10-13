@@ -103,9 +103,9 @@ const getInfo = async (presets: Args = {}) => {
 export const sanitizeArgv = (
   argv: [string, string, keyof SensitiveArgPositions, ...string[]]
 ) => {
-  const args = argv.slice(2)
   const name = argv[2]
   const sensitiveCommand = SENSITIVE_ARG_POSITIONS[name]
+  const args = argv.slice(2)
 
   if (sensitiveCommand) {
     // redact positional arguments

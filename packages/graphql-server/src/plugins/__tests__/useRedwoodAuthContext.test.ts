@@ -8,9 +8,6 @@ const authDecoder = (token: string) => ({ token })
 
 jest.mock('@redwoodjs/api', () => {
   return {
-    // TODO: This used to be @ts-expect-error. Figure out if that's still
-    // needed or not
-    // ts-expect-error jest types being silly
     ...jest.requireActual('@redwoodjs/api'),
     getAuthenticationContext: jest.fn().mockResolvedValue([
       { sub: '1', email: 'ba@zin.ga' },

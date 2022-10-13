@@ -2,7 +2,7 @@ import path from 'path'
 
 import concurrently from 'concurrently'
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -58,16 +58,19 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
       })
     }
     if (generate) {
-      await new Listr([
-        {
-          title: 'Generating types',
-          task: () =>
-            execa('yarn rw-gen', {
-              shell: true,
-              stdio: verbose ? 'inherit' : 'ignore',
-            }),
-        },
-      ]).run()
+      await new Listr(
+        [
+          {
+            title: 'Generating types',
+            task: () =>
+              execa('yarn rw-gen', {
+                shell: true,
+                stdio: verbose ? 'inherit' : 'ignore',
+              }),
+          },
+        ],
+        { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
+      ).run()
     }
 
     const exitCode = await typeCheck()

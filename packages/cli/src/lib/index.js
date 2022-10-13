@@ -6,8 +6,7 @@ import * as babel from '@babel/core'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import { memoize } from 'lodash'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
@@ -470,8 +469,8 @@ export const runCommandTask = async (commands, { verbose }) => {
       },
     })),
     {
-      renderer: verbose && VerboseRenderer,
-      dateFormat: false,
+      renderer: verbose && 'verbose',
+      rendererOptions: { collapse: false, dateFormat: false },
     }
   )
 
