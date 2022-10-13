@@ -24,7 +24,8 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.1",
     "@redwoodjs/telemetry": "3.0.3",
-    "core-js": "3.25.3"
+    "core-js": "3.25.3",
+    "listr2": "5.0.5"
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
