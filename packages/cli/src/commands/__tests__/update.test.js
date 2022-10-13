@@ -8,6 +8,9 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
     getConfigPath: () => '/mocked/project/redwood.toml',
     getPaths: () => {
       return {
+        generated: {
+          base: '.redwood',
+        },
         base: '',
       }
     },
@@ -23,19 +26,21 @@ import { handler } from '../update'
 
 import '../../lib/mockTelemetry'
 
-const DEFAULT_UPDATE_DATA_JSON = {
+const CURRENT_DATETIME = Date.parse('2022-01-02T12:00:00.000Z')
+const DEFAULT_DATETIME = Date.parse('2000-01-02T12:00:00.000Z')
+const DEFAULT_UPDATE_DATA = {
   localVersion: '0.0.0',
   remoteVersion: '0.0.0',
   skipVersion: '0.0.0',
   upgradeAvailable: false,
-  lastChecked: 946684800000, // 2000-01-01T00:00:00.000Z
-  lastShown: 946684800000, // 2000-01-01T00:00:00.000Z
+  lastChecked: DEFAULT_DATETIME,
+  lastShown: DEFAULT_DATETIME,
 }
 
 describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
   beforeEach(() => {
     jest.useFakeTimers()
-    jest.setSystemTime(Date.parse('2022-01-02T12:00:00.000Z'))
+    jest.setSystemTime(CURRENT_DATETIME)
     latestVersion.mockImplementation(() => {
       return '1.0.0'
     })
@@ -45,24 +50,27 @@ describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
           '@redwoodjs/core': '^1.0.0',
         },
       }),
-      '.redwood/update-data.json': JSON.stringify(DEFAULT_UPDATE_DATA_JSON),
+      '.redwood/update-data.json': JSON.stringify(DEFAULT_UPDATE_DATA),
     })
+    jest.spyOn(process.stdout, 'write').mockImplementation(() => true)
   })
+
   afterEach(() => {
     jest.useRealTimers()
     fs.__setMockFiles({})
+    jest.restoreAllMocks()
   })
 
   test('Unskip produces correct file - no previous update', async () => {
     await handler({ listr2: { rendererSilent: true }, unskip: true })
     const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
     expect(updateData).toEqual({
-      localVersion: DEFAULT_UPDATE_DATA_JSON.localVersion,
-      remoteVersion: DEFAULT_UPDATE_DATA_JSON.remoteVersion,
+      localVersion: DEFAULT_UPDATE_DATA.localVersion,
+      remoteVersion: DEFAULT_UPDATE_DATA.remoteVersion,
       skipVersion: '0.0.0',
-      upgradeAvailable: DEFAULT_UPDATE_DATA_JSON.upgradeAvailable,
-      lastChecked: DEFAULT_UPDATE_DATA_JSON.lastChecked,
-      lastShown: Date.parse('2022-01-02T10:00:00.000Z'),
+      upgradeAvailable: DEFAULT_UPDATE_DATA.upgradeAvailable,
+      lastChecked: DEFAULT_UPDATE_DATA.lastChecked,
+      lastShown: CURRENT_DATETIME - 2 * 60 * 60_000, // current - minus 2 hours
     })
   })
 
@@ -75,15 +83,15 @@ describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
       remoteVersion: '1.0.0',
       skipVersion: '0.0.0',
       upgradeAvailable: false,
-      lastChecked: Date.parse('2022-01-02T12:00:00.000Z'),
-      lastShown: Date.parse('2022-01-02T10:00:00.000Z'),
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME - 2 * 60 * 60_000, // current - minus 2 hours
     })
   })
 
   test('Skip produces correct file - no previous update', async () => {
     await handler({ listr2: { rendererSilent: true }, skip: true })
     const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
-    expect(updateData).toEqual(DEFAULT_UPDATE_DATA_JSON)
+    expect(updateData).toEqual(DEFAULT_UPDATE_DATA)
   })
 
   test('Skip produces correct file', async () => {
@@ -95,22 +103,39 @@ describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
       remoteVersion: '1.0.0',
       skipVersion: '1.0.0',
       upgradeAvailable: false,
-      lastChecked: Date.parse('2022-01-02T12:00:00.000Z'),
-      lastShown: Date.parse('2022-01-02T12:00:00.000Z'),
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME,
     })
   })
 
-  // test('Silent has no output', async () => {
-  //   await handler({ silent: true })
-  //   expect(console.log).not.toHaveBeenCalled()
-  // })
+  test('Shows correct final message', async () => {
+    await handler({})
+    const lastListr2Output =
+      process.stdout.write.mock.calls[
+        process.stdout.write.mock.calls.length - 1
+      ][0]
+    expect(lastListr2Output).toMatchSnapshot()
+  })
 
-  // test('No update message', async () => {
-  //   await handler({})
-  //   expect(
-  //     console.log.mock.calls[console.log.mock.calls.length - 1][0]
-  //   ).toEqual(expect.stringContaining('No upgrade is available'))
-  // })
+  test('No output when silent flag is set', async () => {
+    await handler({ silent: true })
+    expect(process.stdout.write.mock.calls.length).toBe(0)
+  })
+
+  test('Does not prompt for upgrade', async () => {
+    let didPrompt = false
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      didPrompt = true
+      prompt.value = false
+      prompt.submit()
+    })
+    await handler({
+      listr2: { rendererSilent: true },
+      enquirer: customEnquirer,
+    })
+    expect(didPrompt).toBe(false)
+  })
 
   test('Creates correct update-data.json file', async () => {
     await handler({ listr2: { rendererSilent: true } })
@@ -120,28 +145,18 @@ describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
       remoteVersion: '1.0.0',
       skipVersion: '0.0.0',
       upgradeAvailable: false,
-      lastChecked: Date.parse('2022-01-02T12:00:00.000Z'),
-      lastShown: Date.parse('2022-01-02T12:00:00.000Z'),
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME,
     })
   })
-
-  // test('Lock is created', async () => {
-  //   await handler({ listr2: { rendererSilent: true } })
-  //   expect(fs.writeFileSync.mock.calls[0][0]).toBe(
-  //     '.redwood/locks/update-command'
-  //   )
-  // })
-
-  // test('Lock is removed', async () => {
-  //   await handler({ listr2: { rendererSilent: true } })
-  //   expect(fs.unlinkSync.mock.calls[0][0]).toBe('.redwood/locks/update-command')
-  // })
 })
+
+// ----------------------------------------------------------------------------------------
 
 describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
   beforeEach(() => {
     jest.useFakeTimers()
-    jest.setSystemTime(Date.parse('2022-01-02T12:00:00.000Z'))
+    jest.setSystemTime(CURRENT_DATETIME)
     latestVersion.mockImplementation(() => {
       return '2.0.0'
     })
@@ -151,24 +166,27 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
           '@redwoodjs/core': '^1.0.0',
         },
       }),
-      '.redwood/update-data.json': JSON.stringify(DEFAULT_UPDATE_DATA_JSON),
+      '.redwood/update-data.json': JSON.stringify(DEFAULT_UPDATE_DATA),
     })
+    jest.spyOn(process.stdout, 'write')
   })
+
   afterEach(() => {
     jest.useRealTimers()
     fs.__setMockFiles({})
+    jest.restoreAllMocks()
   })
 
   test('Unskip produces correct file - no previous update', async () => {
     await handler({ listr2: { rendererSilent: true }, unskip: true })
     const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
     expect(updateData).toEqual({
-      localVersion: DEFAULT_UPDATE_DATA_JSON.localVersion,
-      remoteVersion: DEFAULT_UPDATE_DATA_JSON.remoteVersion,
+      localVersion: DEFAULT_UPDATE_DATA.localVersion,
+      remoteVersion: DEFAULT_UPDATE_DATA.remoteVersion,
       skipVersion: '0.0.0',
-      upgradeAvailable: DEFAULT_UPDATE_DATA_JSON.upgradeAvailable,
-      lastChecked: DEFAULT_UPDATE_DATA_JSON.lastChecked,
-      lastShown: Date.parse('2022-01-02T10:00:00.000Z'),
+      upgradeAvailable: DEFAULT_UPDATE_DATA.upgradeAvailable,
+      lastChecked: DEFAULT_UPDATE_DATA.lastChecked,
+      lastShown: CURRENT_DATETIME - 2 * 60 * 60_000, // current - minus 2 hours
     })
   })
 
@@ -182,7 +200,6 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
       listr2: { rendererSilent: true },
       enquirer: customEnquirer,
     })
-
     await handler({ listr2: { rendererSilent: true }, unskip: true })
     const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
     expect(updateData).toEqual({
@@ -190,15 +207,15 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
       remoteVersion: '2.0.0',
       skipVersion: '0.0.0',
       upgradeAvailable: true,
-      lastChecked: Date.parse('2022-01-02T12:00:00.000Z'),
-      lastShown: Date.parse('2022-01-02T10:00:00.000Z'),
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME - 2 * 60 * 60_000, // current - minus 2 hours
     })
   })
 
   test('Skip produces correct file - no previous update', async () => {
     await handler({ listr2: { rendererSilent: true }, skip: true })
     const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
-    expect(updateData).toEqual(DEFAULT_UPDATE_DATA_JSON)
+    expect(updateData).toEqual(DEFAULT_UPDATE_DATA)
   })
 
   test('Skip produces correct file', async () => {
@@ -211,7 +228,6 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
       listr2: { rendererSilent: true },
       enquirer: customEnquirer,
     })
-
     await handler({ listr2: { rendererSilent: true }, skip: true })
     const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
     expect(updateData).toEqual({
@@ -219,45 +235,44 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
       remoteVersion: '2.0.0',
       skipVersion: '2.0.0',
       upgradeAvailable: true,
-      lastChecked: Date.parse('2022-01-02T12:00:00.000Z'),
-      lastShown: Date.parse('2022-01-02T12:00:00.000Z'),
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME, // current - minus 2 hours
     })
   })
 
-  // test('Silent has no output', async () => {
-  //   await handler({ silent: true })
-  //   expect(console.log).not.toHaveBeenCalled()
-  // })
+  test('Shows correct final message', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      prompt.value = false
+      prompt.submit()
+    })
+    await handler({ enquirer: customEnquirer })
+    const lastListr2Output =
+      process.stdout.write.mock.calls[
+        process.stdout.write.mock.calls.length - 1
+      ][0]
+    expect(lastListr2Output).toMatchSnapshot()
+  })
 
-  // test('Shows update message', async () => {
-  //   await handler({})
-  //   expect(
-  //     console.log.mock.calls[console.log.mock.calls.length - 1][0]
-  //   ).toEqual(expect.stringContaining('Redwood Upgrade Available'))
-  // })
+  test('No output when silent flag is set', async () => {
+    await handler({ silent: true })
+    expect(process.stdout.write.mock.calls.length).toBe(0)
+  })
 
-  // test('Update message shows correct versions', async () => {
-  //   await handler({})
-  //   expect(
-  //     console.log.mock.calls[console.log.mock.calls.length - 1][0]
-  //   ).toEqual(expect.stringContaining('1.0.0 -> 2.0.0'))
-  // })
-
-  // test('Update message shows release notes link', async () => {
-  //   await handler({})
-  //   expect(
-  //     console.log.mock.calls[console.log.mock.calls.length - 1][0]
-  //   ).toEqual(
-  //     expect.stringContaining('https://github.com/redwoodjs/redwood/releases')
-  //   )
-  // })
-
-  // test('Update message shows upgrade command', async () => {
-  //   await handler({})
-  //   expect(
-  //     console.log.mock.calls[console.log.mock.calls.length - 1][0]
-  //   ).toEqual(expect.stringContaining('yarn rw upgrade'))
-  // })
+  test('Does prompt for upgrade', async () => {
+    let didPrompt = false
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      didPrompt = true
+      prompt.value = false
+      prompt.submit()
+    })
+    await handler({
+      listr2: { rendererSilent: true },
+      enquirer: customEnquirer,
+    })
+    expect(didPrompt).toBe(true)
+  })
 
   test('Creates correct update-data.json file', async () => {
     const customEnquirer = new Enquirer({ show: false })
@@ -265,7 +280,6 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
       prompt.value = false
       prompt.submit()
     })
-
     await handler({
       listr2: { rendererSilent: true },
       enquirer: customEnquirer,
@@ -276,60 +290,153 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
       remoteVersion: '2.0.0',
       skipVersion: '0.0.0',
       upgradeAvailable: true,
-      lastChecked: Date.parse('2022-01-02T12:00:00.000Z'),
-      lastShown: Date.parse('2022-01-02T12:00:00.000Z'),
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME,
+    })
+  })
+})
+
+// ----------------------------------------------------------------------------------------
+
+describe('Upgrade is available (1.0.0-canary.100 -> 1.0.0-canary.200)', () => {
+  beforeEach(() => {
+    jest.useFakeTimers()
+    jest.setSystemTime(CURRENT_DATETIME)
+    latestVersion.mockImplementation(() => {
+      return '1.0.0-canary.200'
+    })
+    fs.__setMockFiles({
+      'package.json': JSON.stringify({
+        devDependencies: {
+          '@redwoodjs/core': '^1.0.0-canary.100',
+        },
+      }),
+      '.redwood/update-data.json': JSON.stringify(DEFAULT_UPDATE_DATA),
+    })
+    jest.spyOn(process.stdout, 'write')
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+    fs.__setMockFiles({})
+    jest.restoreAllMocks()
+  })
+
+  test('Unskip produces correct file - no previous update', async () => {
+    await handler({ listr2: { rendererSilent: true }, unskip: true })
+    const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
+    expect(updateData).toEqual({
+      localVersion: DEFAULT_UPDATE_DATA.localVersion,
+      remoteVersion: DEFAULT_UPDATE_DATA.remoteVersion,
+      skipVersion: '0.0.0',
+      upgradeAvailable: DEFAULT_UPDATE_DATA.upgradeAvailable,
+      lastChecked: DEFAULT_UPDATE_DATA.lastChecked,
+      lastShown: CURRENT_DATETIME - 2 * 60 * 60_000, // current - minus 2 hours
     })
   })
 
-  // test('Lock is created', async () => {
-  //   fs.writeFileSync = jest.fn()
-  //   await handler({})
-  //   expect(fs.writeFileSync.mock.calls[0][0]).toBe(
-  //     '/tmp/.redwood/locks/update-command'
-  //   )
-  // })
+  test('Unskip produces correct file', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      prompt.value = false
+      prompt.submit()
+    })
+    await handler({
+      listr2: { rendererSilent: true },
+      enquirer: customEnquirer,
+    })
+    await handler({ listr2: { rendererSilent: true }, unskip: true })
+    const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
+    expect(updateData).toEqual({
+      localVersion: '1.0.0-canary.100',
+      remoteVersion: '1.0.0-canary.200',
+      skipVersion: '0.0.0',
+      upgradeAvailable: true,
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME - 2 * 60 * 60_000, // current - minus 2 hours
+    })
+  })
 
-  // test('Lock is removed', async () => {
-  //   fs.unlinkSync = jest.fn()
-  //   await handler({})
-  //   expect(fs.unlinkSync.mock.calls[0][0]).toBe(
-  //     '/tmp/.redwood/locks/update-command'
-  //   )
-  // })
+  test('Skip produces correct file - no previous update', async () => {
+    await handler({ listr2: { rendererSilent: true }, skip: true })
+    const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
+    expect(updateData).toEqual(DEFAULT_UPDATE_DATA)
+  })
+
+  test('Skip produces correct file', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      prompt.value = false
+      prompt.submit()
+    })
+    await handler({
+      listr2: { rendererSilent: true },
+      enquirer: customEnquirer,
+    })
+    await handler({ listr2: { rendererSilent: true }, skip: true })
+    const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
+    expect(updateData).toEqual({
+      localVersion: '1.0.0-canary.100',
+      remoteVersion: '1.0.0-canary.200',
+      skipVersion: '1.0.0-canary.200',
+      upgradeAvailable: true,
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME,
+    })
+  })
+
+  test('Shows correct final message', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      prompt.value = false
+      prompt.submit()
+    })
+    await handler({ enquirer: customEnquirer })
+    const lastListr2Output =
+      process.stdout.write.mock.calls[
+        process.stdout.write.mock.calls.length - 1
+      ][0]
+    expect(lastListr2Output).toMatchSnapshot()
+  })
+
+  test('No output when silent flag is set', async () => {
+    await handler({ silent: true })
+    expect(process.stdout.write.mock.calls.length).toBe(0)
+  })
+
+  test('Does prompt for upgrade', async () => {
+    let didPrompt = false
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      didPrompt = true
+      prompt.value = false
+      prompt.submit()
+    })
+    await handler({
+      listr2: { rendererSilent: true },
+      enquirer: customEnquirer,
+    })
+    expect(didPrompt).toBe(true)
+  })
+
+  test('Creates correct update-data.json file', async () => {
+    const customEnquirer = new Enquirer({ show: false })
+    customEnquirer.on('prompt', (prompt) => {
+      prompt.value = false
+      prompt.submit()
+    })
+    await handler({
+      listr2: { rendererSilent: true },
+      enquirer: customEnquirer,
+    })
+    const updateData = JSON.parse(fs.readFileSync('.redwood/update-data.json'))
+    expect(updateData).toEqual({
+      localVersion: '1.0.0-canary.100',
+      remoteVersion: '1.0.0-canary.200',
+      skipVersion: '0.0.0',
+      upgradeAvailable: true,
+      lastChecked: CURRENT_DATETIME,
+      lastShown: CURRENT_DATETIME,
+    })
+  })
 })
-
-// describe('Lock already set', () => {
-//   beforeEach(() => {
-//     latestVersion.mockImplementation(() => {
-//       return '1.0.0'
-//     })
-//     fs.__setMockFiles({
-//       'package.json': JSON.stringify({
-//         devDependencies: {
-//           '@redwoodjs/core': '^1.0.0',
-//         },
-//       }),
-//       '/tmp/.redwood/update-data.json': JSON.stringify({
-//         skipVersion: '0.0.0',
-//       }),
-//       '/tmp/.redwood/locks/update-command': '',
-//     })
-//     jest.spyOn(console, 'log').mockImplementation(() => {})
-//   })
-
-//   afterEach(() => {
-//     jest.clearAllMocks()
-//   })
-
-//   test('Locked message', async () => {
-//     await handler({})
-//     expect(console.log.mock.calls[console.log.mock.calls.length - 1][0]).toBe(
-//       'An update command is already running, please try again in a few seconds.'
-//     )
-//   })
-
-//   test('Silent has no output', async () => {
-//     await handler({ silent: true })
-//     expect(console.log.mock.calls.length).toBe(0)
-//   })
-// })
