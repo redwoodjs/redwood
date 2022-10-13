@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.5",
-    "@azure/msal-browser": "2.29.0",
+    "@azure/msal-browser": "2.30.0",
     "@babel/cli": "7.19.3",
     "@babel/core": "7.19.3",
     "@clerk/clerk-js": "3.17.0",
