@@ -3,7 +3,9 @@ export default abstract class BaseClient {
 
   // if your client won't automatically reconnect, implement this function
   // to do it manually
-  reconnect?(): void
+  disconnect?(): void | Promise<void>
+
+  abstract connect(): void | Promise<void>
 
   // Gets a value from the cache
   abstract get(key: string): any

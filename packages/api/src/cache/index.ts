@@ -5,6 +5,7 @@ import { CacheTimeoutError } from './errors'
 
 export { default as MemcachedClient } from './clients/MemcachedClient'
 export { default as RedisClient } from './clients/RedisClient'
+export { default as InMemoryClient } from './clients/InMemoryClient'
 
 export interface CreateCacheOptions {
   logger?: Logger
@@ -101,9 +102,10 @@ export const createCache = (
       logger?.error(`[Cache] Error GET '${cacheKey}': ${e.message}`)
 
       // If client implements a reconnect() function, try it now
-      if (e instanceof CacheTimeoutError && client.reconnect) {
-        logger?.error(`[Cache] Attempting to reconnect...`)
-        client.reconnect()
+      if (e instanceof CacheTimeoutError && client.disconnect) {
+        logger?.error(`[Cache] Disconnecting current instance...`)
+
+        await client.disconnect()
       }
       // stringify and parse to match what happens inside cache clients
       return serialize(await input())
@@ -162,7 +164,7 @@ export const createCache = (
         logger?.error(`[Cache] cacheFindMany error: ${e.message}`)
       }
 
-      return serialize(model.findMany(conditions))
+      return serialize(await model.findMany(conditions))
     }
 
     // there may not have been any records returned, in which case we can't
@@ -176,7 +178,7 @@ export const createCache = (
         `[Cache] cacheFindMany: No data to cache for key \`${key}\`, skipping`
       )
 
-      return serialize(model.findMany(conditions))
+      return serialize(await model.findMany(conditions))
     }
 
     // everything looks good, cache() this with the computed key

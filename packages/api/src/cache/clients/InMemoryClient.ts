@@ -15,9 +15,9 @@ export default class InMemoryClient extends BaseClient {
     this.storage = data
   }
 
-  reconnect() {
-    return true
-  }
+  // Not needed for InMemoryClient
+  async disconnect() {}
+  async connect() {}
 
   async get(key: string) {
     const now = new Date()
