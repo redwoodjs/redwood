@@ -5588,6 +5588,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/openapi-types@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@octokit/openapi-types@npm:14.0.0"
+  checksum: d122bbfd4997ea7e056c7fcf5b3240982b5b090b816671eca01829ac5ce19d2a19f6da35d126ae19a956a4203c68302d8fb33d5c00c77996b4e4a746878ea589
+  languageName: node
+  linkType: hard
+
 "@octokit/plugin-enterprise-rest@npm:^6.0.1":
   version: 6.0.1
   resolution: "@octokit/plugin-enterprise-rest@npm:6.0.1"
@@ -5731,12 +5738,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^7.0.0, @octokit/types@npm:^7.1.1":
+"@octokit/types@npm:^7.1.1":
   version: 7.1.1
   resolution: "@octokit/types@npm:7.1.1"
   dependencies:
     "@octokit/openapi-types": ^13.4.0
   checksum: 6055376170dcb99eee64ddfb4f5bf4e587e758d8fe72453f149900225cf9b82515c261b627e06347b2b801c59be7d6d78a2d936015c728147ae06f199bb4d03e
+  languageName: node
+  linkType: hard
+
+"@octokit/types@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@octokit/types@npm:8.0.0"
+  dependencies:
+    "@octokit/openapi-types": ^14.0.0
+  checksum: 2c51b30f7f48c8a51e8aa9c932bd0fb7c6746b4e5b154299e3d462180f5642d4ce1cc19d92a64a7bd1b1b3df09a0c3af416940c81b269ddcad51c834464af731
   languageName: node
   linkType: hard
 
@@ -24123,9 +24139,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.7":
-  version: 2.0.7
-  resolution: "octokit@npm:2.0.7"
+"octokit@npm:2.0.8":
+  version: 2.0.8
+  resolution: "octokit@npm:2.0.8"
   dependencies:
     "@octokit/app": ^13.0.5
     "@octokit/core": ^4.0.4
@@ -24134,8 +24150,8 @@ __metadata:
     "@octokit/plugin-rest-endpoint-methods": ^6.0.0
     "@octokit/plugin-retry": ^3.0.9
     "@octokit/plugin-throttling": ^4.0.1
-    "@octokit/types": ^7.0.0
-  checksum: e4356eb6d730fdb5f5cad25a192564171acd6c2cbda74b1c06fa69f108567b680040b611dd36a43e4eae5114d60d833fffaf526c01595b5b46097730f8c908c5
+    "@octokit/types": ^8.0.0
+  checksum: 03b11cf6fa58691bba6647e4c1318c560cc575f14de5294160eb6e04662bc412e22ef5aed109c3488d2fc1611a704a89efc0050289b25f4b40afa26a1e43ba9a
   languageName: node
   linkType: hard
 
@@ -27515,7 +27531,7 @@ __metadata:
     nodemon: 2.0.20
     npm-packlist: 5.1.3
     nx: 14.8.4
-    octokit: 2.0.7
+    octokit: 2.0.8
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2
