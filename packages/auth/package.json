@@ -10,8 +10,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "webAuthn"
+    "dist"
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",

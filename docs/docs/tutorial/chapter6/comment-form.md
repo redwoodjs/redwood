@@ -93,7 +93,7 @@ const CommentForm = () => {
         </Label>
         <TextField
           name="name"
-          className="block w-full p-1 border rounded text-xs "
+          className="block w-full p-1 border rounded text-xs"
           validation={{ required: true }}
         />
 

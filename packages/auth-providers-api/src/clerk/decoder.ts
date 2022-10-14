@@ -1,5 +1,3 @@
-import type IClerk from '@clerk/clerk-sdk-node/instance'
-
 import { Decoder } from '@redwoodjs/api'
 
 export const authDecoder: Decoder = async (token: string, type: string) => {
@@ -8,9 +6,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   }
 
   // Use require here, to prevent needing clerk sdk in api deps
-  const Clerk = require('@clerk/clerk-sdk-node/instance').default
-
-  const { users, base }: IClerk = new Clerk()
+  const { users, base } = require('@clerk/clerk-sdk-node/instance').default
 
   if (!process.env.CLERK_JWT_KEY) {
     console.error('CLERK_JWT_KEY env var is not set.')

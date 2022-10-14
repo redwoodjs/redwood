@@ -3091,9 +3091,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.13.6":
-  version: 2.13.6
-  resolution: "@graphql-codegen/cli@npm:2.13.6"
+"@graphql-codegen/cli@npm:2.13.7":
+  version: 2.13.7
+  resolution: "@graphql-codegen/cli@npm:2.13.7"
   dependencies:
     "@babel/generator": ^7.18.13
     "@babel/template": ^7.18.10
@@ -3138,7 +3138,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 72cef043ff5bb0ee4807d9b1b7e37027a84e47762dc08b210700f0ad38faa496054d69d76ac1b98dd395abf59f02a42ee49dcc80ed56ec04d563c6f5a9a82b7b
+  checksum: f54c7a8e172476475d336544c7c821d3bd548b71f89ba5102b02bdf54e71ce080d799f23c00773b20426ae0e566cc0bd7b368cadb0a652394732ad3e4e0f9582
   languageName: node
   linkType: hard
 
@@ -5588,6 +5588,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/openapi-types@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@octokit/openapi-types@npm:14.0.0"
+  checksum: d122bbfd4997ea7e056c7fcf5b3240982b5b090b816671eca01829ac5ce19d2a19f6da35d126ae19a956a4203c68302d8fb33d5c00c77996b4e4a746878ea589
+  languageName: node
+  linkType: hard
+
 "@octokit/plugin-enterprise-rest@npm:^6.0.1":
   version: 6.0.1
   resolution: "@octokit/plugin-enterprise-rest@npm:6.0.1"
@@ -5731,12 +5738,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^7.0.0, @octokit/types@npm:^7.1.1":
+"@octokit/types@npm:^7.1.1":
   version: 7.1.1
   resolution: "@octokit/types@npm:7.1.1"
   dependencies:
     "@octokit/openapi-types": ^13.4.0
   checksum: 6055376170dcb99eee64ddfb4f5bf4e587e758d8fe72453f149900225cf9b82515c261b627e06347b2b801c59be7d6d78a2d936015c728147ae06f199bb4d03e
+  languageName: node
+  linkType: hard
+
+"@octokit/types@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@octokit/types@npm:8.0.0"
+  dependencies:
+    "@octokit/openapi-types": ^14.0.0
+  checksum: 2c51b30f7f48c8a51e8aa9c932bd0fb7c6746b4e5b154299e3d462180f5642d4ce1cc19d92a64a7bd1b1b3df09a0c3af416940c81b269ddcad51c834464af731
   languageName: node
   linkType: hard
 
@@ -6429,7 +6445,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup":
+"@redwoodjs/auth-providers-setup@3.2.0, @redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-providers-setup@workspace:packages/auth-providers-setup"
   dependencies:
@@ -6463,7 +6479,7 @@ __metadata:
     "@nhost/hasura-auth-js": 1.4.1
     "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
-    "@redwoodjs/auth2": 3.2.0
+    "@redwoodjs/auth": 3.2.0
     "@simplewebauthn/browser": 6.2.1
     "@simplewebauthn/typescript-types": 6.2.1
     "@supabase/supabase-js": 1.35.7
@@ -6498,40 +6514,6 @@ __metadata:
       optional: true
     firebase-admin:
       optional: true
-  languageName: unknown
-  linkType: soft
-
-"@redwoodjs/auth2@3.2.0, @redwoodjs/auth2@workspace:packages/auth2":
-  version: 0.0.0-use.local
-  resolution: "@redwoodjs/auth2@workspace:packages/auth2"
-  dependencies:
-    "@auth0/auth0-spa-js": 1.22.5
-    "@azure/msal-browser": 2.30.0
-    "@babel/cli": 7.19.3
-    "@babel/core": 7.19.3
-    "@babel/runtime-corejs3": 7.19.4
-    "@clerk/clerk-js": 3.17.0
-    "@clerk/clerk-react": 3.5.1
-    "@clerk/clerk-sdk-node": 3.9.2
-    "@clerk/types": 2.21.0
-    "@nhost/hasura-auth-js": 1.4.1
-    "@nhost/nhost-js": 1.4.10
-    "@okta/okta-auth-js": 6.9.0
-    "@simplewebauthn/browser": 6.2.1
-    "@simplewebauthn/typescript-types": 6.2.1
-    "@supabase/supabase-js": 1.35.7
-    "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.50
-    core-js: 3.25.5
-    firebase: 9.10.0
-    firebase-admin: 10.3.0
-    gotrue-js: 0.9.29
-    jest: 29.1.2
-    magic-sdk: 9.1.1
-    netlify-identity-widget: 1.9.2
-    react: 17.0.2
-    supertokens-auth-react: 0.26.5
-    typescript: 4.7.4
   languageName: unknown
   linkType: soft
 
@@ -6595,10 +6577,12 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.4
     "@prisma/internals": 4.3.1
     "@redwoodjs/api-server": 3.2.0
+    "@redwoodjs/auth-providers-setup": 3.2.0
     "@redwoodjs/internal": 3.2.0
     "@redwoodjs/prerender": 3.2.0
     "@redwoodjs/structure": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
+    "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -6703,7 +6687,7 @@ __metadata:
     copy-webpack-plugin: 11.0.0
     core-js: 3.25.5
     css-loader: 6.7.1
-    css-minimizer-webpack-plugin: 4.2.1
+    css-minimizer-webpack-plugin: 4.2.2
     dotenv-webpack: 8.0.1
     esbuild: 0.15.10
     fast-glob: 3.2.12
@@ -6823,6 +6807,7 @@ __metadata:
     "@prisma/client": 4.3.1
     "@redwoodjs/api": 3.2.0
     "@redwoodjs/auth": 3.2.0
+    "@types/jsonwebtoken": 8.5.9
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 8.3.4
@@ -6833,6 +6818,7 @@ __metadata:
     graphql-scalars: 1.19.0
     graphql-tag: 2.12.6
     jest: 29.1.2
+    jsonwebtoken: 8.5.1
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
     typescript: 4.7.4
@@ -6852,7 +6838,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.4
     "@babel/traverse": 7.19.4
     "@graphql-codegen/add": 3.2.1
-    "@graphql-codegen/cli": 2.13.6
+    "@graphql-codegen/cli": 2.13.7
     "@graphql-codegen/core": 2.6.2
     "@graphql-codegen/schema-ast": 2.5.1
     "@graphql-codegen/typescript": 2.7.4
@@ -14263,9 +14249,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-minimizer-webpack-plugin@npm:4.2.1":
-  version: 4.2.1
-  resolution: "css-minimizer-webpack-plugin@npm:4.2.1"
+"css-minimizer-webpack-plugin@npm:4.2.2":
+  version: 4.2.2
+  resolution: "css-minimizer-webpack-plugin@npm:4.2.2"
   dependencies:
     cssnano: ^5.1.8
     jest-worker: ^29.1.2
@@ -14288,7 +14274,7 @@ __metadata:
       optional: true
     lightningcss:
       optional: true
-  checksum: 593671931418793f8b11dd083d2ca464706c73139b66de0e7422e7c87396e4012e5af19c3b891af24d1ba081aeea006926064dbbbff51ca8fb71ad1770fae130
+  checksum: 05cd1460b83d9a5f8878fd63d3a80fd100cbb10f48e295a6ad52519761f3390e1e1bc0e269ff28d15b062a1b11379e04608d50ee30424e177c281bd845fef9fb
   languageName: node
   linkType: hard
 
@@ -24123,9 +24109,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.7":
-  version: 2.0.7
-  resolution: "octokit@npm:2.0.7"
+"octokit@npm:2.0.8":
+  version: 2.0.8
+  resolution: "octokit@npm:2.0.8"
   dependencies:
     "@octokit/app": ^13.0.5
     "@octokit/core": ^4.0.4
@@ -24134,8 +24120,8 @@ __metadata:
     "@octokit/plugin-rest-endpoint-methods": ^6.0.0
     "@octokit/plugin-retry": ^3.0.9
     "@octokit/plugin-throttling": ^4.0.1
-    "@octokit/types": ^7.0.0
-  checksum: e4356eb6d730fdb5f5cad25a192564171acd6c2cbda74b1c06fa69f108567b680040b611dd36a43e4eae5114d60d833fffaf526c01595b5b46097730f8c908c5
+    "@octokit/types": ^8.0.0
+  checksum: 03b11cf6fa58691bba6647e4c1318c560cc575f14de5294160eb6e04662bc412e22ef5aed109c3488d2fc1611a704a89efc0050289b25f4b40afa26a1e43ba9a
   languageName: node
   linkType: hard
 
@@ -27515,7 +27501,7 @@ __metadata:
     nodemon: 2.0.20
     npm-packlist: 5.1.3
     nx: 14.8.4
-    octokit: 2.0.7
+    octokit: 2.0.8
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2

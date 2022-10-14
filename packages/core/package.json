@@ -61,7 +61,7 @@
     "copy-webpack-plugin": "11.0.0",
     "core-js": "3.25.5",
     "css-loader": "6.7.1",
-    "css-minimizer-webpack-plugin": "4.2.1",
+    "css-minimizer-webpack-plugin": "4.2.2",
     "dotenv-webpack": "8.0.1",
     "esbuild": "0.15.10",
     "fast-glob": "3.2.12",
