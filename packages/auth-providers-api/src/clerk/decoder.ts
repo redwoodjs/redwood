@@ -1,4 +1,4 @@
-import type IClerk from '@clerk/clerk-sdk-node/instance'
+import type IClerk from '@clerk/clerk-sdk-node/esm/instance'
 
 import { Decoder } from '@redwoodjs/api'
 
@@ -8,7 +8,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   }
 
   // Use require here, to prevent needing clerk sdk in api deps
-  const Clerk = require('@clerk/clerk-sdk-node/instance').default
+  const Clerk = require('@clerk/clerk-sdk-node/cjs/instance').default
 
   const { users, base }: IClerk = new Clerk()
 
