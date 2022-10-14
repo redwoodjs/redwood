@@ -1,0 +1,41 @@
+{
+  "name": "@redwoodjs/auth-providers-setup",
+  "version": "3.2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/auth-providers-setup"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.19.4",
+    "@redwoodjs/auth": "3.2.0",
+    "@redwoodjs/cli-helpers": "3.2.0",
+    "core-js": "3.25.5",
+    "secure-random-password": "0.2.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.19.3",
+    "@babel/core": "7.19.3",
+    "@types/react": "17.0.50",
+    "@types/secure-random-password": "0.2.1",
+    "jest": "29.1.2",
+    "typescript": "4.7.4"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

@@ -24,7 +24,15 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: false,
-          } as AuthContextInterface)
+          } as AuthContextInterface<
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown
+          >)
         }
       >
         <FetchConfigToString />
@@ -44,7 +52,15 @@ describe('FetchConfigProvider', () => {
             loading: false,
             isAuthenticated: true,
             type: 'custom',
-          } as AuthContextInterface)
+          } as AuthContextInterface<
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown
+          >)
         }
       >
         <FetchConfigToString />

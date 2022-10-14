@@ -26,9 +26,16 @@ jest.mock('../../../../lib/schemaHelpers', () => {
 })
 
 describe('rw destory service', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'info').mockImplementation(() => {})
+    jest.spyOn(console, 'log').mockImplementation(() => {})
+  })
+
   afterEach(() => {
     fs.__setMockFiles({})
     jest.spyOn(fs, 'unlinkSync').mockClear()
+    console.info.mockRestore()
+    console.log.mockRestore()
   })
 
   describe('for javascript files', () => {
