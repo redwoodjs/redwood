@@ -22,11 +22,13 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'firebase',
-    webPackages: ['firebase'],
-    apiPackages: ['firebase-admin'],
+    authDecoderImport:
+      "import { firebaseAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    webPackages: ['firebase', '@redwoodjs/auth-providers-web'],
+    apiPackages: ['firebase-admin', '@redwoodjs/auth-providers-api'],
     notes: [
       'You will need to create several environment variables with your Firebase config options.',
-      'Check out web/src/App.{js,tsx} for the variables you need to add.',
+      'Check out web/src/auth.{js,ts} for the variables you need to add.',
       'See: https://firebase.google.com/docs/web/setup#config-object',
     ],
   })
