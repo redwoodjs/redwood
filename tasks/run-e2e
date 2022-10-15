@@ -141,20 +141,15 @@ const convertProjectToJavaScript = () => {
 
 const runDevServerInBackground = () => {
   console.log('Starting RedwoodJS dev server...')
-  const devServerProcess = execa(
-    'yarn rw dev --no-generate --fwd="--no-open"',
-    {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-      stdio: 'inherit',
-      env: {
-        RWJS_DELAY_RESTART: '500',
-        REDWOOD_CI: '1',
-      },
-    }
-  )
-
-  return devServerProcess
+  execa('yarn rw dev --no-generate --fwd="--no-open"', {
+    cwd: REDWOOD_PROJECT_DIRECTORY,
+    shell: true,
+    stdio: 'inherit',
+    env: {
+      RWJS_DELAY_RESTART: '500',
+      REDWOOD_CI: '1',
+    },
+  })
 }
 
 const runCypress = () => {
@@ -241,36 +236,13 @@ const tasks = [
   autoStart && runCypress,
 ].filter(Boolean)
 
-const subprocesses = []
-
 const cleanup = () => {
   console.log('')
   console.log('-'.repeat(80))
   console.log('Cleaning up e2e resources...')
-  console.log(' - Killing any subprocesses...')
-  for (const subprocess of subprocesses) {
-    subprocess.kill('SIGTERM', {
-      forceKillAfterTimeout: 2000,
-    })
-  }
   console.log(' - Cleaning up files...')
   fs.rmSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true, force: true })
   console.log('Clean up complete')
-}
-
-try {
-  for (const task of tasks) {
-    console.log()
-    const taskSubprocess = task()
-    if (taskSubprocess) {
-      // TODO: Should really check the type of taskSubprocess to make sure its a subprocess
-      subprocesses.push(taskSubprocess)
-    }
-    console.log()
-    console.log('-'.repeat(80))
-  }
-} catch (error) {
-  console.error(error)
 }
 
 process.on('SIGINT', () => {
@@ -280,5 +252,18 @@ process.on('SIGINT', () => {
 process.on('exit', () => {
   if (args.cleanup) {
     cleanup()
+  } else {
+    console.log('')
+    console.log('-'.repeat(80))
+    console.log(
+      `E2E files within "${REDWOOD_PROJECT_DIRECTORY}" have not been automatically cleaned up.`
+    )
   }
 })
+
+for (const task of tasks) {
+  console.log()
+  task()
+  console.log()
+  console.log('-'.repeat(80))
+}
