@@ -1885,6 +1885,8 @@ yarn redwood storybook
 
 RedwoodJS supports Storybook by creating stories when generating cells, components, layouts and pages. You can then use these to describe how to render that UI component with representative data.
 
+This command opens a browser to Storybook.  You can pass the argument `--no-open` to stop that.
+
 | Arguments & Options | Description                                       |
 | :------------------ | :------------------------------------------------ |
 | `--open`            | Open Storybook in your browser on start           |
