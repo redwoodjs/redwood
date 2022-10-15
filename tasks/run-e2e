@@ -141,15 +141,20 @@ const convertProjectToJavaScript = () => {
 
 const runDevServerInBackground = () => {
   console.log('Starting RedwoodJS dev server...')
-  execa.sync('yarn rw dev --no-generate --fwd="--no-open" &', {
-    cwd: REDWOOD_PROJECT_DIRECTORY,
-    shell: true,
-    stdio: 'inherit',
-    env: {
-      RWJS_DELAY_RESTART: '500',
-      REDWOOD_CI: '1',
-    },
-  })
+  const devServerProcess = execa(
+    'yarn rw dev --no-generate --fwd="--no-open"',
+    {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+      env: {
+        RWJS_DELAY_RESTART: '500',
+        REDWOOD_CI: '1',
+      },
+    }
+  )
+
+  return devServerProcess
 }
 
 const runCypress = () => {
@@ -192,6 +197,7 @@ const args = yargs(hideBin(process.argv))
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
   .option('yarn1', { default: false, type: 'boolean' })
+  .option('cleanup', { default: true, type: 'boolean' })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -235,16 +241,44 @@ const tasks = [
   autoStart && runCypress,
 ].filter(Boolean)
 
-for (const task of tasks) {
-  console.log()
-  task()
-  console.log()
+const subprocesses = []
+
+const cleanup = () => {
+  console.log('')
   console.log('-'.repeat(80))
+  console.log('Cleaning up e2e resources...')
+  console.log(' - Killing any subprocesses...')
+  for (const subprocess of subprocesses) {
+    subprocess.kill('SIGTERM', {
+      forceKillAfterTimeout: 2000,
+    })
+  }
+  console.log(' - Cleaning up files...')
+  fs.rmSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true, force: true })
+  console.log('Clean up complete')
+}
+
+try {
+  for (const task of tasks) {
+    console.log()
+    const taskSubprocess = task()
+    if (taskSubprocess) {
+      // TODO: Should really check the type of taskSubprocess to make sure its a subprocess
+      subprocesses.push(taskSubprocess)
+    }
+    console.log()
+    console.log('-'.repeat(80))
+  }
+} catch (error) {
+  console.error(error)
 }
 
 process.on('SIGINT', () => {
-  console.log()
-  console.log(REDWOOD_PROJECT_DIRECTORY)
-  console.log('-'.repeat(80))
   process.exit(0)
+})
+
+process.on('exit', () => {
+  if (args.cleanup) {
+    cleanup()
+  }
 })
