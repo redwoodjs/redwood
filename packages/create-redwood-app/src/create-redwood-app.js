@@ -11,6 +11,7 @@ import path from 'path'
 
 import chalk from 'chalk'
 import checkNodeVersion from 'check-node-version'
+import { prompt } from 'enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
@@ -61,10 +62,6 @@ import { name, version } from '../package'
     )}`
   )
 
-  // Template dir for Redwood files
-  // Needed higher up for engine checks
-  const templateDir = path.resolve(__dirname, '../template')
-
   // Extract the args as provided by the user in the command line
   const {
     _: args,
@@ -108,117 +105,6 @@ import { name, version } from '../package'
     .version(version)
     .parse()
 
-  // // Variable to hold the user args as an object that can be used for prompt overides
-  // // This gets more useful as there are more prompts to override
-  // let userArgs = {}
-
-  // // Handle if typescript is selected via --ts
-  // if (typescript === true) {
-  //   Object.assign(userArgs, { typescript: true })
-  // }
-  // // Handle if typescript is skipped via --no-ts
-  // if (typescript === false) {
-  //   Object.assign(userArgs, { typescript: false })
-  // }
-
-  // Check Node/Yarn/Engines Compatability
-  // This checks all engine requirements, including Node.js and Yarn
-  const engineErrorDocsLink = terminalLink(
-    'Tutorial - Chapter 1 - Prerequisites',
-    'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
-  )
-  // let hasPassedEngineCheck = null
-  // let engineErrorLog = []
-
-  // await new Listr(
-  //   [
-  //     {
-  //       title: 'Checking node and yarn compatibility',
-  //       skip: () => {
-  //         if (yarnInstall === false) {
-  //           return 'Warning: skipping check on request'
-  //         }
-  //       },
-  //       task: () => {
-  //         return new Promise((resolve) => {
-  //           const { engines } = require(path.join(templateDir, 'package.json'))
-
-  //           // this checks all engine requirements, including Node.js and Yarn
-  //           checkNodeVersion(engines, (_error, result) => {
-  //             if (result.isSatisfied) {
-  //               hasPassedEngineCheck = true
-  //               return resolve()
-  //             }
-
-  //             const logStatements = Object.keys(result.versions)
-  //               .filter((name) => !result.versions[name].isSatisfied)
-  //               .map((name) => {
-  //                 const { version, wanted } = result.versions[name]
-  //                 return style.error(
-  //                   `${name} ${wanted} required, but you have ${version}`
-  //                 )
-  //               })
-  //             engineErrorLog = [...logStatements]
-  //             hasPassedEngineCheck = false
-  //             return resolve()
-  //           })
-  //         })
-  //       },
-  //     },
-  //   ],
-  //   { rendererOptions: { clearOutput: true } }
-  // ).run()
-
-  // // Show a success message if required engines are present
-  // if (hasPassedEngineCheck === true) {
-  //   console.log(style.success(`✔️ Compatability checks passed.`))
-  // }
-
-  // // Show an error and prompt if failed engines
-  // if (hasPassedEngineCheck === false) {
-  //   console.log(style.error(`✖️ Compatability checks failed.`))
-  //   console.log(`${engineErrorLog.join('\n')}`)
-  //   console.log(
-  //     style.error(
-  //       `\nThis might make your RedwoodJS project incompatible with some deploy targets.`
-  //     )
-  //   )
-  //   console.log(style.header(`\nRelated documentation:`))
-  //   console.log(style.warning(`${engineErrorDocsLink}\n`))
-  //   const response = await prompts({
-  //     type: 'select',
-  //     name: 'override-engine-error',
-  //     message: 'How would you like to proceed?',
-  //     choices: [
-  //       { title: 'Override error and continue install', value: true },
-  //       { title: 'Quit install', value: false },
-  //     ],
-  //     initial: 0,
-  //   })
-  //   if (response['override-engine-error'] === false) {
-  //     process.exit(1)
-  //   }
-  // }
-
-  // // User prompts
-  // // See https://github.com/terkelg/prompts
-  // const questions = [
-  //   {
-  //     type: 'confirm',
-  //     name: 'typescript',
-  //     message: 'Use TypeScript?',
-  //     initial: true,
-  //     active: 'Yes',
-  //     inactive: 'No',
-  //   },
-  // ]
-
-  // // Override prompts based on initial args from user
-  // prompts.override(userArgs)
-
-  // // Get the answers from the user
-  // const answers = await prompts(questions)
-
   // Get the directory for installation from the args
   const targetDir = String(args).replace(/,/g, '-')
 
@@ -242,6 +128,7 @@ import { name, version } from '../package'
 
   const newAppDir = path.resolve(process.cwd(), targetDir)
   const appDirExists = fs.existsSync(newAppDir)
+  const templateDir = path.resolve(__dirname, '../template')
 
   const createProjectTasks = ({ newAppDir, overwrite }) => {
     return [
@@ -359,7 +246,18 @@ import { name, version } from '../package'
 
   const startTime = Date.now()
 
-  new Listr(
+  // Engine check Listr. Seperate Listr to avoid https://github.com/cenk1cenk2/listr2/issues/296
+  // Boolean flag
+  let hasPassedEngineCheck = null
+  // Array of strings
+  let engineErrorLog = []
+  // Docs link for engine errors
+  const engineErrorDocsLink = terminalLink(
+    'Tutorial - Prerequisites',
+    'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+  )
+
+  await new Listr(
     [
       {
         title: 'Checking node and yarn compatibility',
@@ -375,35 +273,80 @@ import { name, version } from '../package'
             // this checks all engine requirements, including Node.js and Yarn
             checkNodeVersion(engines, (_error, result) => {
               if (result.isSatisfied) {
+                hasPassedEngineCheck = true
                 return resolve()
               }
-              if (!result.isSatisfied) {
-                console.log('Failed')
-                return resolve()
-              }
+              const logStatements = Object.keys(result.versions)
+                .filter((name) => !result.versions[name].isSatisfied)
+                .map((name) => {
+                  const { version, wanted } = result.versions[name]
+                  return style.error(
+                    `${name} ${wanted} required, but you have ${version}`
+                  )
+                })
+              engineErrorLog = logStatements
+              hasPassedEngineCheck = false
+              return resolve()
             })
           })
         },
       },
+    ],
+    { rendererOptions: { clearOutput: true } }
+  ).run()
+
+  // Show a success message if required engines are present
+  if (hasPassedEngineCheck === true) {
+    console.log(style.success(`✔️ Compatability checks passed.`))
+  }
+
+  // Show an error and prompt if failed engines check
+  if (hasPassedEngineCheck === false) {
+    console.log(style.error(`✖️ Compatability checks failed.`))
+    console.log(`${engineErrorLog.join('\n')}`)
+    console.log(
+      style.error(
+        `\nThis might make your RedwoodJS project incompatible with some deploy targets.`
+      )
+    )
+    console.log(style.header(`\nRelated documentation:`))
+    console.log(style.warning(`${engineErrorDocsLink}\n`))
+    const response = await prompt({
+      type: 'select',
+      name: 'override-engine-error',
+      message: 'How would you like to proceed?',
+      choices: [
+        { title: 'Override error and continue install', value: true },
+        { title: 'Quit install', value: false },
+      ],
+      initial: 0,
+    })
+    if (response['override-engine-error'] === false) {
+      process.exit(1)
+    }
+  }
+
+  // Main install Listr
+  new Listr(
+    [
       {
-        title: 'Checking installation preferences',
+        title: 'Configuring installation preferences',
         task: async (ctx, task) =>
           task.newListr([
             {
               title: 'Language preference',
               skip: () => typescript !== null,
               task: async (ctx, task) => {
-                ctx.useTs = await task.prompt({
+                ctx.language = await task.prompt({
                   type: 'Select',
-                  name: 'language',
                   choices: ['TypeScript', 'JavaScript'],
                   message: 'Select your preferred coding language',
                   initial: 'TypeScript',
                 })
-                if (ctx.useTs === 'TypeScript') {
+                if (ctx.language === 'TypeScript') {
                   task.output = 'TypeScript selected'
                 }
-                if (ctx.useTs === 'JavaScript') {
+                if (ctx.language === 'JavaScript') {
                   task.output = 'JavaScript selected'
                 }
               },
@@ -424,7 +367,8 @@ import { name, version } from '../package'
         // Enabled if user selects no to typescript prompt
         // Enabled if user specified --no-ts via command line
         enabled: (ctx) =>
-          yarnInstall === true && (typescript === false || ctx.useTs === false),
+          yarnInstall === true &&
+          (typescript === false || ctx.language === 'JavaScript'),
         task: () => {
           return execa('yarn rw ts-to-js', {
             shell: true,
