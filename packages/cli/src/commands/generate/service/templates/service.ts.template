@@ -1,45 +1,38 @@
-<% if (crud || relations.length > 0) { %>import type { Prisma } from '@prisma/client'<% } %>
-<% if (relations.length) { %>import type { ResolverArgs } from '@redwoodjs/graphql-server'<% } %>
+import type { QueryResolvers<% if (crud) { %>, MutationResolvers<% } %><% if (relations.length) { %>, ${singularPascalName}RelationResolvers<% } %> } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
-export const ${pluralCamelName} = () => {
+export const ${pluralCamelName}: QueryResolvers['${pluralCamelName}'] = () => {
   return db.${singularCamelName}.findMany()
 }<% if (crud || relations.length) { %>
 
-export const ${singularCamelName} = ({ id }: Prisma.${singularPascalName}WhereUniqueInput) => {
+export const ${singularCamelName}: QueryResolvers['${singularCamelName}'] = ({ id }) => {
   return db.${singularCamelName}.findUnique({
     where: { id },
   })
 }<% } %><% if (crud) { %>
 
-interface Create${singularPascalName}Args {
-  input: Prisma.${singularPascalName}CreateInput
-}
-
-export const create${singularPascalName} = ({ input }: Create${singularPascalName}Args) => {
+export const create${singularPascalName}: MutationResolvers['create${singularPascalName}'] = ({ input }) => {
   return db.${singularCamelName}.create({
     data: input,
   })
 }
 
-interface Update${singularPascalName}Args extends Prisma.${singularPascalName}WhereUniqueInput {
-  input: Prisma.${singularPascalName}UpdateInput
-}
-
-export const update${singularPascalName} = ({ id, input }: Update${singularPascalName}Args) => {
+export const update${singularPascalName}: MutationResolvers['update${singularPascalName}'] = ({ id, input }) => {
   return db.${singularCamelName}.update({
     data: input,
     where: { id },
   })
 }
 
-export const delete${singularPascalName} = ({ id }: Prisma.${singularPascalName}WhereUniqueInput) => {
+export const delete${singularPascalName}: MutationResolvers['delete${singularPascalName}'] = ({ id }) => {
   return db.${singularCamelName}.delete({
     where: { id },
   })
 }<% } %><% if (relations.length) { %>
 
-export const ${singularPascalName} = {<% relations.forEach(relation => { %>
-  ${relation}: (_obj, { root }: ResolverArgs<ReturnType<typeof ${singularCamelName}>>) => db.${singularCamelName}.findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
+export const ${singularPascalName}: ${singularPascalName}RelationResolvers = {<% relations.forEach(relation => { %>
+  ${relation}: (_obj, { root }) => {
+    return db.${singularCamelName}.findUnique({ where: { id: root?.id } }).${relation}()
+  },<% }) %>
 }<% } %>

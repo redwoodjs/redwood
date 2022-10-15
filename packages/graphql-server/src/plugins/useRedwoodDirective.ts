@@ -1,23 +1,41 @@
 import { Plugin } from '@envelop/types'
+import { mapSchema, MapperKind } from '@graphql-tools/utils'
 import {
+  defaultFieldResolver,
   DirectiveNode,
   DocumentNode,
   getDirectiveValues,
+  GraphQLFieldConfig,
   GraphQLObjectType,
   GraphQLResolveInfo,
+  GraphQLSchema,
 } from 'graphql'
 
 import { GlobalContext } from '../index'
 
-export interface DirectiveParams<FieldType = any> {
+export interface DirectiveParams<
+  FieldType = any,
+  DirectiveArgs = Record<string, any>
+> {
   root: unknown
   args: Record<string, unknown>
   context: GlobalContext
   info: GraphQLResolveInfo
   directiveNode?: DirectiveNode
-  directiveArgs: Record<string, any>
+  directiveArgs: DirectiveArgs
   resolvedValue: FieldType
 }
+
+/**
+ * Generic Type for the arguments/parameters passed to the validate function for validator directives
+ *
+ * You have to pass in the type of directiveArgs
+ * @example ValidateArgs<{ roles?: string[] }>
+ */
+export declare type ValidateArgs<DirectiveArgs = Record<string, any>> = Omit<
+  DirectiveParams<never, DirectiveArgs>, // we remove resolvedValue anyway in this type
+  'resolvedValue'
+>
 
 /**
  * Write your validation logic inside this function.
@@ -26,10 +44,25 @@ export interface DirectiveParams<FieldType = any> {
  * - Throw an error, if you want to stop executing e.g. not sufficient permissions
  * - Validator directives can be async or sync
  * - Returned value will be ignored
+ *
+ * You have to pass in the type of directiveArgs
+ * @example ValidatorDirectiveFunc<{ roles?: string[] }>
+ *
  */
-export type ValidatorDirectiveFunc<FieldType = any> = (
-  args: Omit<DirectiveParams<FieldType>, 'resolvedValue'>
+export type ValidatorDirectiveFunc<TDirectiveArgs = Record<string, any>> = (
+  args: ValidateArgs<TDirectiveArgs>
 ) => Promise<void> | void
+
+/**
+ * Generic Type for the arguments/parameters passed to the transform function for transformer directives
+ *
+ * You have to pass in the type of directiveArgs, and the resolverValue (i.e. the type of the field you are transforming)
+ * @example TransformArgs<Post, { allowedRoles: string[] }>
+ */
+export declare type TransformArgs<
+  TField = any,
+  TDirectiveArgs = Record<string, any>
+> = DirectiveParams<TField, TDirectiveArgs>
 
 /**
  * Write your transformation logic inside this function.
@@ -38,10 +71,14 @@ export type ValidatorDirectiveFunc<FieldType = any> = (
  * - You can also throw an error, if you want to stop executing, but note that the value has already been resolved
  * - Transformer directives **must** be synchonous, and return a value
  *
+ * You have to pass in the type of directiveArgs, and the resolverValue (i.e. the type of the field you are transforming)
+ * @example TransformerDirectiveFunc<Post, { allowedRoles: string[] }>
+ *
  */
-export type TransformerDirectiveFunc<FieldType = any> = (
-  args: DirectiveParams<FieldType>
-) => FieldType
+export type TransformerDirectiveFunc<
+  TField = any,
+  TDirectiveArgs = Record<string, any>
+> = (args: TransformArgs<TField, TDirectiveArgs>) => TField
 
 // @NOTE don't use unspecified enums, because !type would === true
 export enum DirectiveType {
@@ -60,13 +97,13 @@ export interface TransformerDirective extends TransformerDirectiveOptions {
 }
 
 interface ValidatorDirectiveOptions {
-  onResolverCalled: ValidatorDirectiveFunc
+  onResolvedValue: ValidatorDirectiveFunc
   type: DirectiveType.VALIDATOR
   name: string
 }
 
 interface TransformerDirectiveOptions {
-  onResolverCalled: TransformerDirectiveFunc
+  onResolvedValue: TransformerDirectiveFunc
   type: DirectiveType.TRANSFORMER
   name: string
 }
@@ -91,79 +128,129 @@ export function hasDirective(info: GraphQLResolveInfo): boolean {
 }
 
 export function getDirectiveByName(
-  info: GraphQLResolveInfo,
-  name: string
+  fieldConfig: GraphQLFieldConfig<any, any, any>,
+  directiveName: string
 ): null | DirectiveNode {
-  try {
-    const { parentType, fieldName, schema } = info
-    const schemaType = schema.getType(parentType.name) as GraphQLObjectType
-    const field = schemaType.getFields()[fieldName]
-    const astNode = field.astNode
-    const associatedDirective = astNode?.directives?.find(
-      (directive) => directive.name.value === name
-    )
-
-    return associatedDirective || null
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+  const associatedDirective = fieldConfig.astNode?.directives?.find(
+    (directive) => directive.name.value === directiveName
+  )
+  return associatedDirective ?? null
 }
 
-export const useRedwoodDirective = (
-  options: DirectivePluginOptions
-): Plugin<{
-  onResolverCalled: ValidatorDirectiveFunc | TransformerDirectiveFunc
-}> => {
-  return {
-    async onResolverCalled({ args, root, context, info }) {
-      const directiveNode = getDirectiveByName(info, options.name)
-      const directive = directiveNode
-        ? info.schema.getDirective(directiveNode.name.value)
-        : null
+export function isPromise(value: any): value is Promise<unknown> {
+  return typeof value?.then === 'function'
+}
 
+function wrapAffectedResolvers(
+  schema: GraphQLSchema,
+  options: DirectivePluginOptions
+): GraphQLSchema {
+  return mapSchema(schema, {
+    [MapperKind.OBJECT_FIELD](fieldConfig, _, __, schema) {
+      const directiveNode = getDirectiveByName(fieldConfig, options.name)
+      const directive = directiveNode
+        ? schema.getDirective(directiveNode.name.value)
+        : null
       if (directiveNode && directive) {
         const directiveArgs =
-          getDirectiveValues(
-            directive,
-            { directives: [directiveNode] },
-            info.variableValues
-          ) || {}
-
+          getDirectiveValues(directive, { directives: [directiveNode] }) || {}
+        const originalResolve = fieldConfig.resolve ?? defaultFieldResolver
         if (_isValidator(options)) {
-          await options.onResolverCalled({
-            root,
-            args,
-            context,
-            info,
-            directiveNode,
-            directiveArgs,
-          })
-        }
-
-        // In order to change the value of the field, we have to return a function in this form
-        // ({result, setResult}) => { setResult(newValue)}
-        // Not super clear but mentioned here: https://www.envelop.dev/docs/plugins/lifecycle#onexecuteapi
-
-        if (_isTransformer(options)) {
-          return ({ result, setResult }) => {
-            // @NOTE! A transformer cannot be async
-            const transformedValue = options.onResolverCalled({
+          return {
+            ...fieldConfig,
+            resolve: function useRedwoodDirectiveValidatorResolver(
               root,
               args,
               context,
-              info,
-              directiveNode,
-              directiveArgs,
-              resolvedValue: result,
-            })
+              info
+            ) {
+              const result = options.onResolvedValue({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+              })
 
-            setResult(transformedValue)
+              if (isPromise(result)) {
+                return result.then(() =>
+                  originalResolve(root, args, context, info)
+                )
+              }
+              return originalResolve(root, args, context, info)
+            },
+          }
+        }
+        if (_isTransformer(options)) {
+          return {
+            ...fieldConfig,
+            resolve: function useRedwoodDirectiveTransformerResolver(
+              root,
+              args,
+              context,
+              info
+            ) {
+              const resolvedValue = originalResolve(root, args, context, info)
+              if (isPromise(resolvedValue)) {
+                return resolvedValue.then((resolvedValue) =>
+                  options.onResolvedValue({
+                    root,
+                    args,
+                    context,
+                    info,
+                    directiveNode,
+                    directiveArgs,
+                    resolvedValue,
+                  })
+                )
+              }
+              return options.onResolvedValue({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+                resolvedValue,
+              })
+            },
           }
         }
       }
+      return fieldConfig
+    },
+  })
+}
 
-      return
+export type useRedwoodDirectiveReturn = Plugin<{
+  onResolvedValue: ValidatorDirectiveFunc | TransformerDirectiveFunc
+}>
+
+export const useRedwoodDirective = (
+  options: DirectivePluginOptions
+): useRedwoodDirectiveReturn => {
+  /**
+   * This symbol is added to the schema extensions for checking whether the transform got already applied.
+   */
+  const didMapSchemaSymbol = Symbol('useRedwoodDirective.didMapSchemaSymbol')
+  return {
+    onSchemaChange({ schema, replaceSchema }) {
+      /**
+       * Currently graphql-js extensions typings are limited to string keys.
+       * We are using symbols as each useRedwoodDirective plugin instance should use its own unique symbol.
+       */
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error See https://github.com/graphql/graphql-js/pull/3511 - remove this comments once merged
+      if (schema.extensions?.[didMapSchemaSymbol] === true) {
+        return
+      }
+      const transformedSchema = wrapAffectedResolvers(schema, options)
+      transformedSchema.extensions = {
+        ...schema.extensions,
+        [didMapSchemaSymbol]: true,
+      }
+      replaceSchema(transformedSchema)
     },
   }
 }

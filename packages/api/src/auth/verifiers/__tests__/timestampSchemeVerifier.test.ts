@@ -34,7 +34,7 @@ describe('timestampScheme verifier', () => {
   describe('signs a payload with varying timestamps and tolerances', () => {
     test('it denies a signature when verifying with a short tolerance', () => {
       const { sign } = createVerifier('timestampSchemeVerifier', {
-        timestamp: Date.now() - 600_000, // 10 minutes in msec
+        currentTimestampOverride: Date.now() - 600_000, // 10 minutes in msec
       })
 
       const { verify } = createVerifier('timestampSchemeVerifier', {
@@ -57,7 +57,7 @@ describe('timestampScheme verifier', () => {
 
     test('it denies a signature when verifying when outside the default tolerance', () => {
       const { sign } = createVerifier('timestampSchemeVerifier', {
-        timestamp: Date.now() - 600_000, // 10 minutes in msec
+        currentTimestampOverride: Date.now() - 600_000, // 10 minutes in msec
       })
 
       // uses default 5 minute tolerance

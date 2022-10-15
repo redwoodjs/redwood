@@ -47,7 +47,7 @@ export function getOutline(project: RWProject): TreeItem2 {
         menu: {
           kind: 'withDoc',
           doc: Command_open(
-            'https://redwoodjs.com/cookbook/mocking-graph-ql-in-storybook'
+            'https://redwoodjs.com/how-to/mocking-graph-ql-in-storybook'
           ),
         },
       } as TreeItem2,
@@ -103,7 +103,9 @@ function _pages(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate page ...'),
-      doc: Command_open('https://redwoodjs.com/tutorial/our-first-page'),
+      doc: Command_open(
+        'https://redwoodjs.com/docs/tutorial/chapter1/first-page'
+      ),
     },
   }
 }
@@ -146,7 +148,7 @@ function _layouts(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate layout ...'),
-      doc: Command_open('https://redwoodjs.com/tutorial/layouts'),
+      doc: Command_open('https://redwoodjs.com/docs/tutorial/chapter1/layouts'),
     },
   }
 }
@@ -159,7 +161,7 @@ function _cells(project: RWProject): TreeItem2 {
     menu: {
       kind: 'group',
       add: Command_cli('rw generate cell ...'),
-      doc: Command_open('https://redwoodjs.com/tutorial/cells'),
+      doc: Command_open('https://redwoodjs.com/docs/tutorial/chapter2/cells'),
     },
   }
 }

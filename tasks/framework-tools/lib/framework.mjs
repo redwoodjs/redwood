@@ -1,11 +1,12 @@
 /* eslint-env node */
 
-import c from 'ansi-colors'
-import execa from 'execa'
-import fg from 'fast-glob'
 import fs from 'node:fs'
 import path from 'node:path'
 import url from 'node:url'
+
+import c from 'ansi-colors'
+import execa from 'execa'
+import fg from 'fast-glob'
 import packlist from 'npm-packlist'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
@@ -74,7 +75,9 @@ export function frameworkDependencies(packages = frameworkPkgJsonFiles()) {
  * The files included in `@redwoodjs` packages.
  * Note: The packages must be built.
  */
-export function frameworkPackagesFiles(packages = frameworkPkgJsonFiles()) {
+export async function frameworkPackagesFiles(
+  packages = frameworkPkgJsonFiles()
+) {
   const fileList = {}
   for (const packageFile of packages) {
     let packageJson
@@ -89,7 +92,7 @@ export function frameworkPackagesFiles(packages = frameworkPkgJsonFiles()) {
       continue
     }
 
-    fileList[packageJson.name] = packlist.sync({
+    fileList[packageJson.name] = await packlist({
       path: path.dirname(packageFile),
     })
   }
@@ -161,10 +164,8 @@ export function cleanPackages(packages = frameworkPkgJsonFiles()) {
  */
 export function buildPackages(packages = frameworkPkgJsonFiles()) {
   const packageNames = packages.map(packageJsonName)
-
-  // Build JavaScript.
   execa.sync(
-    'yarn lerna run build:js',
+    'yarn lerna run build',
     ['--parallel', `--scope={${packageNames.join(',') + ','}}`],
     {
       shell: true,
@@ -172,13 +173,6 @@ export function buildPackages(packages = frameworkPkgJsonFiles()) {
       cwd: path.resolve(__dirname, '../../../'),
     }
   )
-
-  // Build all TypeScript.
-  execa.sync('yarn build:types', undefined, {
-    shell: true,
-    stdio: 'inherit',
-    cwd: path.resolve(__dirname, '../../../'),
-  })
 }
 
 function sortObjectKeys(obj) {

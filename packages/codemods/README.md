@@ -35,7 +35,7 @@ npx @redwood/codemods add-directives
 > **Note** that this is a CLI—that is, it's meant to be executed with `npx`. This means the normal contribution flow (using `rwfw`) doesn't apply.
 
 You should be familiar with [jscodeshift](https://github.com/facebook/jscodeshift).
-It's API isn't documented too well so we'll try to explain some of it here.
+Its API isn't documented too well so we'll try to explain some of it here.
 
 Like Babel and ESLint, jscodeshift is all about ASTs.
 The difference is that it's overwriting files.
@@ -49,7 +49,7 @@ cd packages/codemods
 yarn generate:codemod
 ```
 
-Follow the interactive guide to specify the Redwood framework version for the codemod and type odf codemod.
+Follow the interactive guide to specify the Redwood framework version for the codemod and type of codemod.
 
 ### Structure of this package
 
@@ -105,7 +105,7 @@ export default function transform(file: FileInfo, api: API) {
 You can then run this transform on files via the CLI:
 
 ```
-yarn run jscodeshift -t fooToBar.js foo.js
+yarn run jscodeshift -t fooToBar.ts foo.js
 ```
 
 In this way, jscodeshift is similar to Jest in that it's a runner.
@@ -126,7 +126,7 @@ const j = api.jscodeshift
 ```
 
 `j` exposes the whole api, but it's also a function—it parses its argument into a `Collection`, jscodeshift's major type. It's similar to a javascript array and has many of the same methods (`forEach`, `map`, etc.).
-The best way to familiarze yourself with its methods is to either 1) look at a bunch of examples or 2) [skim the source](https://github.com/facebook/jscodeshift/blob/main/src/Collection.js).
+The best way to familiarize yourself with its methods is to either 1) look at a bunch of examples or 2) [skim the source](https://github.com/facebook/jscodeshift/blob/main/src/Collection.js).
 
 ### Writing a transform
 
@@ -166,18 +166,18 @@ They're in the extensions:
 
 After you find what you're looking for, you usually want to replace it with something else.
 Again, use AST Explorer to find out what the AST of that something else is.
-Then, instead of using a type (like `j.ImportDeclaration`) to find it, use a builder (like `js.importDeclaration`—it's just the type lowercased) to make it.
+Then, instead of using a type (like `j.ImportDeclaration`) to find it, use a builder (like `j.importDeclaration`—it's just the type camelcased) to make it.
 
 Again, sometimes jscodeshift has a method that makes this trivial, especially for simple operations, like renaming or removing something (just use `renameTo` or `remove`).
-But sometimes you'll just have to use one of the more generic methods: `replaceWith`, `inserterBefore`, `insertAfter`, etc.
+But sometimes you'll just have to use one of the more generic methods: `replaceWith`, `insertBefore`, `insertAfter`, etc.
 
 ## Testing
 
-Although JSCodeshift has a built-in way of doing testing, we have a slightly different way of testing.
+Although jscodeshift has a built-in way of doing testing, we have a slightly different way of testing.
 
 There's 3 key test utils you need to be aware of (located in [packages/codemods/testUtils/index.ts](https://github.com/redwoodjs/redwood/blob/main/packages/codemods/testUtils/index.ts)).
 
-1. `matchTransformSnapshot`—this lets you give it a transformName (i.e. the transform you're writing), and a fixtureName. The fixtures should be located in `__testfixtures__`, and have a `{fixtureName}.input.{js,ts}` and a `{fixtureName}.output.{js,ts}.
+1. `matchTransformSnapshot`—this lets you give it a transformName (i.e. the transform you're writing), and a fixtureName. The fixtures should be located in `__testfixtures__`, and have `{fixtureName}.input.{js,ts}` and `{fixtureName}.output.{js,ts} files.
 
 Note that the fixtureName can be anything you want, and you can have multiple fixtures.
 

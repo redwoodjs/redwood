@@ -1,12 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { ensurePosixPath, getConfig } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
+import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
@@ -15,7 +16,7 @@ import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
 import { yargsDefaults } from '../generate'
 
 /**
- * Returns the path to a custom generator template, if found in the app.
+ * Returns the full path to a custom generator template, if found in the app.
  * Otherwise the default Redwood template.
  */
 export const customOrDefaultTemplatePath = ({
@@ -149,7 +150,7 @@ export const createYargsForComponentGeneration = ({
         .epilogue(
           `Also see the ${terminalLink(
             'Redwood CLI Reference',
-            `https://redwoodjs.com/reference/command-line-interface#generate-${componentName}`
+            `https://redwoodjs.com/docs/cli-commands#generate-${componentName}`
           )}`
         )
         .option('tests', {
@@ -159,6 +160,11 @@ export const createYargsForComponentGeneration = ({
         .option('stories', {
           description: 'Generate storybook files',
           type: 'boolean',
+        })
+        .option('verbose', {
+          description: 'Print all logs',
+          type: 'boolean',
+          default: false,
         })
 
       // Add in passed in positionals
@@ -192,7 +198,11 @@ export const createYargsForComponentGeneration = ({
             },
             ...includeAdditionalTasks(options),
           ],
-          { collapse: false, exitOnError: true }
+          {
+            rendererOptions: { collapse: false },
+            exitOnError: true,
+            renderer: options.verbose && 'verbose',
+          }
         )
 
         await tasks.run()

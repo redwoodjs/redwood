@@ -1,6 +1,8 @@
 export class RedwoodError extends Error {
-  constructor(message: string) {
+  extensions: Record<string, any> | undefined
+  constructor(message: string, extensions?: Record<string, any>) {
     super(message)
     this.name = 'RedwoodError'
+    this.extensions = extensions
   }
 }

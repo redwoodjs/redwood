@@ -8,6 +8,8 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 describe('in javascript (default) mode', () => {
   let files
 
@@ -20,8 +22,8 @@ describe('in javascript (default) mode', () => {
     })
   })
 
-  test('returns exactly 17 files', async () => {
-    expect(Object.keys(files).length).toEqual(17)
+  test('returns exactly 19 files', async () => {
+    expect(Object.keys(files).length).toEqual(19)
   })
   // SDL
 
@@ -59,7 +61,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         )
       ]
     ).toMatchSnapshot()
@@ -392,6 +394,20 @@ describe('in javascript (default) mode', () => {
       ]
     ).toMatchSnapshot()
   })
+
+  // Formatters
+
+  test('creates a formatters function file', () => {
+    expect(
+      files[path.normalize('/path/to/project/web/src/lib/formatters.js')]
+    ).toMatchSnapshot()
+  })
+
+  test('creates a formatters function test file', () => {
+    expect(
+      files[path.normalize('/path/to/project/web/src/lib/formatters.test.js')]
+    ).toMatchSnapshot()
+  })
 })
 
 describe('in typescript mode', () => {
@@ -407,8 +423,8 @@ describe('in typescript mode', () => {
     })
   })
 
-  test('returns exactly 17 files', () => {
-    expect(Object.keys(tsFiles).length).toEqual(17)
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(19)
   })
 
   // SDL
@@ -447,7 +463,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.tsx'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx'
         )
       ]
     ).toMatchSnapshot()
@@ -677,6 +693,22 @@ describe('in typescript mode', () => {
         path.normalize(
           '/path/to/project/web/src/components/UserProfile/EditUserProfileCell/EditUserProfileCell.tsx'
         )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  // Formatters
+
+  test('creates a formatters function file', () => {
+    expect(
+      tsFiles[path.normalize('/path/to/project/web/src/lib/formatters.tsx')]
+    ).toMatchSnapshot()
+  })
+
+  test('creates a formatters function test file', () => {
+    expect(
+      tsFiles[
+        path.normalize('/path/to/project/web/src/lib/formatters.test.tsx')
       ]
     ).toMatchSnapshot()
   })

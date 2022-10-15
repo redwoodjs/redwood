@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { envelop, Plugin } from '@envelop/core'
+import { envelop, Plugin } from '@graphql-yoga/common'
 
 import { context, getAsyncStoreInstance } from '../../index'
 import { useRedwoodGlobalContextSetter } from '../../plugins/useRedwoodGlobalContextSetter'

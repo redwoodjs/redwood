@@ -1,13 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
-import fetch from 'node-fetch'
+import { fetch } from 'cross-undici-fetch'
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
-import { getConfig, getPaths } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const INDEX_FILE = path.join(getPaths().web.dist, 'index.html')
-const DEFAULT_INDEX = path.join(getPaths().web.dist, 'defaultIndex.html')
+const DEFAULT_INDEX = path.join(getPaths().web.dist, '200.html')
 
 export const getRootHtmlPath = () => {
   if (fs.existsSync(DEFAULT_INDEX)) {
@@ -22,12 +22,6 @@ export const registerShims = (routerPath: string) => {
   global.RWJS_API_GRAPHQL_URL =
     rwjsConfig.web.apiGraphQLUrl ?? `${rwjsConfig.web.apiUrl}graphql`
   global.__REDWOOD__APP_TITLE = rwjsConfig.web.title
-
-  global.__REDWOOD__USE_AUTH = () =>
-    ({
-      loading: true, // this should play nicely if the app waits for auth stuff to comeback first before render
-      isAuthenticated: false,
-    } as AuthContextInterface) // we only need a partial AuthContextInterface for prerender
 
   global.__REDWOOD__PRERENDERING = true
 

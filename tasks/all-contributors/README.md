@@ -1,10 +1,13 @@
 # All-Contributors
 <!-- toc -->
-- [Purpose and Vision](#Purpose-and-Vision)
-- [Package Lead](#Package-Lead)
-- [Managing All-Contributors Data](#step-2-merge-contributors-into-main-file)
-- [Roadmap](#Roadmap)
-- [Contributing](#Contributing)
+- [All-Contributors](#all-contributors)
+  - [Purpose and Vision](#purpose-and-vision)
+  - [Lead](#lead)
+  - [Managing All-Contributors Data](#managing-all-contributors-data)
+    - [Step 1: Check for new contributors and add to `*rc` files](#step-1-check-for-new-contributors-and-add-to-rc-files)
+    - [Step 2: Update the content in README.md#Contributors](#step-2-update-the-content-in-readmemdcontributors)
+  - [Roadmap](#roadmap)
+  - [Contributing](#contributing)
 
 ## Purpose and Vision
 Redwood has a vibrant community that we want to highlight as much as possible. Using the [All-contributors](https://allcontributors.org/) specifications and CLI, this project allows us to:
@@ -16,38 +19,16 @@ Redwood has a vibrant community that we want to highlight as much as possible. U
 
 ## Managing All-Contributors Data
 In general, this is a three-part process:
-1. Update the three `*.all-contributorsrc` files with new contributors
-2. Merge changes into the main `.all-contributorsrc` file
-3. Update README.md#Contributors with changes
+1. Update the three `.all-contributorsrc` file with new contributors
+2. Update README.md#Contributors with changes
 
-**FILES**
-
-**Framework** `redwoodjs/redwood` project:
-
-_note: this file is also used for all aggregated contributors_
-- `.all-contributorsrc`
-
-**Website** `redwoodjs/redwoodjs.com` project:
-- `.rwjs.com.all-contributorsrc`
-
-**Learn** `redwoodjs/learn.redwoodjs.com` project:
-- `.learn.all-contributorsrc`
-
-// Archived
-**CRWA** `redwoodjs/create-redwood-app` project:
-- `.crwa.all-contributorsrc`
 
 >When adding contributors, use this "type" key for specific repos:
 >- 💻 (code) == Framework
->- 📖 (doc) == Redwoodjs.com
->- 🔧 (tool) == Create-Redwood-App
->- ✅ (tutorial) == Learn.Redwoodjs.com
 >
->The "type" is required.
+>The "type" is required and we used to differentiate for various repos. But we don't display it.
 
 ### Step 1: Check for new contributors and add to `*rc` files
-
-`cd tasks/all-contributors`
 
 > **NOTE:**
 > Do not add [bot] accounts to the files.
@@ -72,13 +53,19 @@ _note: this file is also used for all aggregated contributors_
 > - keithtelliott
 > - callingmedic911
 > - agiannelli
+> - alicelovescake
+> - chrisvdm
+> - realStandal
+> - virtuoushub
 > ==BOTS==
 > - dependabot[bot]
 > - renovate[bot]
 > - codesee-architecture-diagrams[bot]
 
-#### Framework
+
 ```js
+cd tasks/all-contributors
+
 yarn all-contributors check --config .all-contributorsrc
 
 // For each contributor listed in output, repeat the following:
@@ -86,32 +73,7 @@ yarn all-contributors check --config .all-contributorsrc
 yarn all-contributors add --config .all-contributorsrc <contributor> code
 ```
 
-#### Redwoodjs.com
-```js
-yarn all-contributors check --config .rwjs.com.all-contributorsrc
-
-// For each contributor listed in output, repeat the following:
-
-yarn all-contributors add --config .rwjs.com.all-contributorsrc <contributor> doc
-```
-
-#### Learn.Redwoodjs.com
-```js
-yarn all-contributors check --config .learn.all-contributorsrc
-
-// For each contributor listed in output, repeat the following:
-
-yarn all-contributors add --config .learn.all-contributorsrc <contributor> tutorial
-```
-
-### Step 2: Merge contributors into main file
-This script will add contributors from Redwoodjs.com and CRWA repos into the Framework file (if they don't already exist). It will also update the "type" of contribution for existing contributors.
-
-```bash
-node mergeContributors.js
-```
-
-### Step 3: Update the content in README.md#Contributors
+### Step 2: Update the content in README.md#Contributors
 ```bash
 yarn all-contributors generate --contributorsPerLine 5 --config .all-contributorsrc
 ```
@@ -120,7 +82,7 @@ Don't forget to commit and PR changes.
 
 ## Roadmap
 - [ ] Create a script to handle Step 1 (check and add new contributors for each repo)
-- [ ] Convert these scripts into a GH Action that runs daily
+- [ ] Add the script to the end of the `yarn release` script to update with releases
 
 ## Contributing
 Help with this project is welcome and needed! No specific experience required. You'll want to be familiar with:

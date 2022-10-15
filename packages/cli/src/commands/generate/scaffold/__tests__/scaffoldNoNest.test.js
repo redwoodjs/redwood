@@ -8,6 +8,8 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 describe('in javascript (default) mode', () => {
   let files
 
@@ -20,8 +22,8 @@ describe('in javascript (default) mode', () => {
     })
   })
 
-  test('returns exactly 17 files', () => {
-    expect(Object.keys(files).length).toEqual(17)
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(files).length).toEqual(19)
   })
   // SDL
 
@@ -59,7 +61,7 @@ describe('in javascript (default) mode', () => {
     expect(
       files[
         path.normalize(
-          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         )
       ]
     ).toMatchSnapshot()
@@ -297,8 +299,8 @@ describe('in typescript mode', () => {
     })
   })
 
-  test('returns exactly 17 files', () => {
-    expect(Object.keys(tsFiles).length).toEqual(17)
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(19)
   })
 
   // SDL
@@ -337,7 +339,7 @@ describe('in typescript mode', () => {
     expect(
       tsFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/PostsLayout/PostsLayout.tsx'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx'
         )
       ]
     ).toMatchSnapshot()

@@ -11,8 +11,8 @@ import {
   webServerHandler,
   bothServerHandler,
 } from '@redwoodjs/api-server'
-import { getPaths } from '@redwoodjs/internal'
 
+import { getPaths } from '../lib'
 import c from '../lib/colors'
 
 export const command = 'serve [side]'
@@ -89,7 +89,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#serve'
+        'https://redwoodjs.com/docs/cli-commands#serve'
       )}`
     )
 }

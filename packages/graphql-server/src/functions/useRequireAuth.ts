@@ -1,38 +1,49 @@
 import type { APIGatewayEvent, Context as LambdaContext } from 'aws-lambda'
 
-import { getAuthenticationContext } from '@redwoodjs/api'
+import { getAuthenticationContext, Decoder } from '@redwoodjs/api'
 
 import {
   getAsyncStoreInstance,
-  setContext,
   context as globalContext,
 } from '../globalContext'
 
 import type { GetCurrentUser } from './types'
 
-export const useRequireAuth = ({
-  handlerFn,
-  getCurrentUser,
-}: {
+interface Args {
+  authDecoder: Decoder
   handlerFn: (
     event: APIGatewayEvent,
     context: LambdaContext,
     ...others: any
   ) => any
-  getCurrentUser: GetCurrentUser
+  getCurrentUser?: GetCurrentUser
+}
+
+// Used for type safety in our tests
+export type UseRequireAuth = (
+  args: Args
+) => (
+  event: APIGatewayEvent,
+  context: LambdaContext,
+  ...rest: any
+) => Promise<ReturnType<Args['handlerFn']>>
+
+export const useRequireAuth: UseRequireAuth = ({
+  authDecoder,
+  handlerFn,
+  getCurrentUser,
 }) => {
   return async (
     event: APIGatewayEvent,
     context: LambdaContext,
     ...rest: any
-  ): Promise<any> => {
+  ) => {
     const authEnrichedFunction = async () => {
       try {
-        let authContext = undefined
-
-        authContext = await getAuthenticationContext({
-          event: event,
-          context: context,
+        const authContext = await getAuthenticationContext({
+          authDecoder,
+          event,
+          context,
         })
 
         if (authContext) {
@@ -45,11 +56,17 @@ export const useRequireAuth = ({
             : null
 
           globalContext.currentUser = currentUser
-          setContext(globalContext)
         }
       } catch (e) {
-        return {
-          statusCode: 401,
+        globalContext.currentUser = null
+
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('This warning is only printed in development mode.')
+          console.warn(
+            "Always make sure to have `requireAuth('role')` inside your own handler function."
+          )
+          console.warn('')
+          console.warn(e)
         }
       }
 

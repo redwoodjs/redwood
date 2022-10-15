@@ -14,6 +14,10 @@ import {
 import { getPaths } from '../paths'
 
 import { generate } from './generate'
+import {
+  generateTypeDefGraphQLApi,
+  generateTypeDefGraphQLWeb,
+} from './graphqlCodeGen'
 import { generateGraphQLSchema } from './graphqlSchema'
 import {
   generateMirrorCell,
@@ -22,8 +26,6 @@ import {
   generateTypeDefRouterPages,
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
-  generateTypeDefGraphQLWeb,
-  generateTypeDefGraphQLApi,
 } from './typeDefinitions'
 
 const rwjsPaths = getPaths()

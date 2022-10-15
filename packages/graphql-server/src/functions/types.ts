@@ -1,15 +1,14 @@
-import type { PluginOrDisabledPlugin } from '@envelop/core'
 import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { AuthContextPayload } from '@redwoodjs/api'
+import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
+import { CorsConfig } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
-import { CorsConfig } from '../cors'
-import { OnHealthcheckFn } from '../healthcheck'
 import { LoggerConfig } from '../plugins/useRedwoodLogger'
 import { SdlGlobImports, ServicesGlobImports } from '../types'
 
@@ -21,18 +20,32 @@ export type GetCurrentUser = (
   req?: AuthContextPayload[2]
 ) => Promise<null | Record<string, unknown> | string>
 
+export type GenerateGraphiQLHeader = () => string
+
 export type Context = Record<string, unknown>
 export type ContextFunction = (...args: any[]) => Context | Promise<Context>
-export type RedwoodGraphQLContext = {
+
+/** This is an interface so you can extend it inside your application when needed */
+export interface RedwoodGraphQLContext {
   event: APIGatewayProxyEvent
   requestContext: LambdaContext
   currentUser?: ThenArg<ReturnType<GetCurrentUser>> | AuthContextPayload | null
+
+  [index: string]: unknown
 }
 
 /**
  * GraphQLHandlerOptions
  */
 export interface GraphQLHandlerOptions {
+  /**
+   * @description The identifier used in the GraphQL health check response.
+   * It verifies readiness when sent as a header in the readiness check request.
+   *
+   * By default, the identifier is `yoga` as seen in the HTTP response header `x-yoga-id: yoga`
+   */
+  healthCheckId?: string
+
   /**
    * @description Customize GraphQL Logger
    *
@@ -42,18 +55,20 @@ export interface GraphQLHandlerOptions {
   loggerConfig: LoggerConfig
 
   /**
-   * @description  Modify the resolver and global context.
+   * @description Modify the resolver and global context.
    */
   context?: Context | ContextFunction
 
   /**
-   * A @description n async function that maps the auth token retrieved from the request headers to an object.
-   * Is it executed when the `auth-provider` contains one of the supported providers.
+   * @description An async function that maps the auth token retrieved from the
+   * request headers to an object.
+   * Is it executed when the `auth-provider` contains one of the supported
+   * providers.
    */
   getCurrentUser?: GetCurrentUser
 
   /**
-   *  @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
+   * @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
    */
   onException?: () => void
 
@@ -82,14 +97,9 @@ export interface GraphQLHandlerOptions {
   schemaOptions?: Partial<IExecutableSchemaDefinition>
 
   /**
-   *  @description CORS configuration
+   * @description CORS configuration
    */
   cors?: CorsConfig
-
-  /**
-   *  @description Healthcheck
-   */
-  onHealthCheck?: OnHealthcheckFn
 
   /**
    *  @description Limit the complexity of the queries solely by their depth.
@@ -122,15 +132,25 @@ export interface GraphQLHandlerOptions {
   allowedOperations?: AllowedOperations
 
   /**
-   * @description  Custom Envelop plugins
+   * @description Custom Envelop plugins
    */
   extraPlugins?: PluginOrDisabledPlugin[]
 
   /**
-   * @description  Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
+   * @description Auth-provider specific token decoder
+   */
+  authDecoder?: Decoder
+
+  /**
+   * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
    *
    * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
-   *
    */
   graphiQLEndpoint?: string
+  /**
+   * @description Function that returns custom headers (as string) for GraphiQL.
+   *
+   * Headers must set auth-provider, Authorization and (if using dbAuth) the encrypted cookie.
+   */
+  generateGraphiQLHeader?: GenerateGraphiQLHeader
 }

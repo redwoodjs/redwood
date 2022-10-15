@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
 
@@ -45,7 +45,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-auth'
+        'https://redwoodjs.com/docs/cli-commands#generate-datamigration'
       )}`
     )
 
@@ -71,7 +71,7 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

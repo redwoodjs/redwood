@@ -24,7 +24,8 @@ type SetProps<P> = P & {
   private?: boolean
   /** The page name where a user will be redirected when not authenticated */
   unauthenticated?: string
-  role?: string | string[]
+  /** Route is permitted when authenticated and use has any of the provided roles such as "admin" or ["admin", "editor"] */
+  roles?: string | string[]
   /** Prerender all pages in the set */
   prerender?: boolean
   children: ReactNode
@@ -42,38 +43,57 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
     children,
     private: privateSet,
     unauthenticated,
-    role,
+    roles,
     whileLoadingAuth,
     ...rest
   } = props
   const routerState = useRouterState()
   const { loading, isAuthenticated, hasRole } = routerState.useAuth()
 
-  if (privateSet && !unauthenticated) {
-    throw new Error(
-      'Private Sets need to specify what route to redirect unauthorized users to by setting the `unauthenticated` prop'
-    )
-  }
-
   const unauthorized = useCallback(() => {
-    return !(isAuthenticated && (!role || hasRole(role)))
-  }, [isAuthenticated, role, hasRole])
+    return !(isAuthenticated && (!roles || hasRole(roles)))
+  }, [isAuthenticated, roles, hasRole])
 
   // Make sure `wrappers` is always an array with at least one wrapper component
   const wrappers = Array.isArray(wrap) ? wrap : [wrap ? wrap : IdentityWrapper]
 
   if (privateSet && unauthorized()) {
+    if (!unauthenticated) {
+      throw new Error(
+        'Private Sets need to specify what route to redirect unauthorized ' +
+          'users to by setting the `unauthenticated` prop'
+      )
+    }
+
     if (loading) {
       return whileLoadingAuth?.() || null
     } else {
       const currentLocation =
         global.location.pathname + encodeURIComponent(global.location.search)
 
-      // We already have a check for !unauthenticated further up
-      const unauthenticatedPath = namedRoutes[unauthenticated || '']()
-
-      if (!unauthenticatedPath) {
+      if (!namedRoutes[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
+      }
+
+      let unauthenticatedPath
+
+      try {
+        unauthenticatedPath = namedRoutes[unauthenticated]()
+      } catch (e) {
+        if (
+          e instanceof Error &&
+          /Missing parameter .* for route/.test(e.message)
+        ) {
+          throw new Error(
+            `Redirecting to route "${unauthenticated}" would require route ` +
+              'parameters, which currently is not supported. Please choose ' +
+              'a different route'
+          )
+        }
+
+        throw new Error(
+          `Could not redirect to the route named ${unauthenticated}`
+        )
       }
 
       return (
@@ -103,7 +123,7 @@ type PrivateProps<P> = Omit<
 }
 
 export function Private<WrapperProps>(props: PrivateProps<WrapperProps>) {
-  const { children, unauthenticated, role, wrap, ...rest } = props
+  const { children, unauthenticated, roles, wrap, ...rest } = props
 
   return (
     // @MARK Doesn't matter that we pass `any` here
@@ -114,7 +134,7 @@ export function Private<WrapperProps>(props: PrivateProps<WrapperProps>) {
     <Set<any>
       private
       unauthenticated={unauthenticated}
-      role={role}
+      roles={roles}
       wrap={wrap}
       {...rest}
     >

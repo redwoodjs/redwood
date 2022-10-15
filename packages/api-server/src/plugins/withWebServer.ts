@@ -1,10 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
+import fastifyStatic from '@fastify/static'
 import { FastifyInstance, FastifyReply } from 'fastify'
-import fastifyStatic from 'fastify-static'
 
-import { findPrerenderedHtml, getPaths } from '@redwoodjs/internal'
+import { findPrerenderedHtml } from '@redwoodjs/internal/dist/files'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
+
+import { loadFastifyConfig } from '../fastify'
+import { WebServerArgs } from '../types'
 
 export const getFallbackIndexPath = () => {
   const prerenderIndexPath = path.join(getPaths().web.dist, '/200.html')
@@ -18,7 +22,10 @@ export const getFallbackIndexPath = () => {
   }
 }
 
-const withWebServer = (app: FastifyInstance) => {
+const withWebServer = async (
+  fastify: FastifyInstance,
+  options: WebServerArgs
+) => {
   const prerenderedFiles = findPrerenderedHtml()
   const indexPath = getFallbackIndexPath()
 
@@ -27,25 +34,31 @@ const withWebServer = (app: FastifyInstance) => {
     .filter((filePath) => filePath !== 'index.html') // remove index.html
     .forEach((filePath) => {
       const pathName = filePath.split('.html')[0]
-      app.get(`/${pathName}`, (_, reply: FastifyReply) => {
+      fastify.get(`/${pathName}`, (_, reply: FastifyReply) => {
         reply.header('Content-Type', 'text/html; charset=UTF-8')
         reply.sendFile(filePath)
       })
     })
 
+  const { configureFastify } = loadFastifyConfig()
+
+  if (configureFastify) {
+    await configureFastify(fastify, { side: 'web', ...options })
+  }
+
   // Serve other non-html assets
-  app.register(fastifyStatic, {
+  fastify.register(fastifyStatic, {
     root: getPaths().web.dist,
   })
 
   // For SPA routing fallback on unmatched routes
   // And let JS routing take over
-  app.setNotFoundHandler({}, function (_, reply: FastifyReply) {
+  fastify.setNotFoundHandler({}, function (_, reply: FastifyReply) {
     reply.header('Content-Type', 'text/html; charset=UTF-8')
     reply.sendFile(indexPath)
   })
 
-  return app
+  return fastify
 }
 
 export default withWebServer

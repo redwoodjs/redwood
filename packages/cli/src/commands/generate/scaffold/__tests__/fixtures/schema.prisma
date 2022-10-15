@@ -43,7 +43,7 @@ model UserProfile {
 }
 
 model NoEditableField {
-  id      Int     @id @default(autoincrement())
+  id          Int      @id
 }
 
 model Favorite {
@@ -51,4 +51,16 @@ model Favorite {
   postId  Int
   post    Post    @relation(fields: [postId], references: [id])
   likes   BigInt
+}
+
+model ExcludeDefault {
+  id          Int      @id @default(autoincrement())
+  auto        Int      @default(autoincrement())
+  number      Int      @default(99)
+  foobar      String   @default("foobar")
+  cuid        String   @default(cuid())
+  uuid        String   @default(uuid())
+  updatedTime DateTime @updatedAt
+  nowTime     DateTime @default(now())
+  otherTime   DateTime
 }

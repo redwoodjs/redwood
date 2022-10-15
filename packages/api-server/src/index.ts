@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-import yargs from 'yargs'
-
-import { ensurePosixPath } from '@redwoodjs/internal'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
 
 import {
   apiCliOptions,
@@ -12,32 +11,31 @@ import {
   bothServerHandler,
 } from './cliHandlers'
 
-const commandPath = yargs.argv.$0
+export * from './types'
 
-const positionalArgs = yargs.argv._
+const positionalArgs = yargs(hideBin(process.argv)).parseSync()._
 
 // "bin": {
-//   "rw-api-server": "./dist/index.js",
 //   "rw-api-server-watch": "./dist/watch.js",
 //   "rw-log-formatter": "./dist/logFormatter/bin.js",
 //   "rw-server": "./dist/index.js"
 // },
 
-// DEPRECATION Warning: the bin rw-api-server will be deprecated with 1.0.0
-
 if (require.main === module) {
-  if (
-    ensurePosixPath(commandPath).includes('.bin/rw-api-server') ||
-    ensurePosixPath(commandPath).includes('dist/index.js') ||
-    (positionalArgs.includes('api') && !positionalArgs.includes('web'))
-  ) {
-    apiServerHandler(yargs.options(apiCliOptions).argv)
+  if (positionalArgs.includes('api') && !positionalArgs.includes('web')) {
+    apiServerHandler(
+      yargs(hideBin(process.argv)).options(apiCliOptions).parseSync()
+    )
   } else if (
     positionalArgs.includes('web') &&
     !positionalArgs.includes('api')
   ) {
-    webServerHandler(yargs.options(webCliOptions).argv)
+    webServerHandler(
+      yargs(hideBin(process.argv)).options(webCliOptions).parseSync()
+    )
   } else {
-    bothServerHandler(yargs.options(commonOptions).argv)
+    bothServerHandler(
+      yargs(hideBin(process.argv)).options(commonOptions).parseSync()
+    )
   }
 }

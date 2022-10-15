@@ -4,6 +4,7 @@ import { useLocation, ParamsContext, parseSearch } from '@redwoodjs/router'
 
 interface Props {
   path?: string
+  children?: React.ReactNode
 }
 
 export const MockParamsProvider: React.FC<Props> = ({ children }) => {

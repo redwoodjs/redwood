@@ -1,8 +1,9 @@
 /* eslint-env node */
 
-import execa from 'execa'
 import fs from 'node:fs'
 import path from 'node:path'
+
+import execa from 'execa'
 import ora from 'ora'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
@@ -31,6 +32,7 @@ export function fixProjectBinaries(projectPath) {
       fs.symlinkSync(binPath, binSymlink)
     }
     console.log('chmod +x', terminalLink(binName, binPath))
+    fs.chmodSync(binSymlink, '755')
     fs.chmodSync(binPath, '755')
   }
 }
@@ -91,13 +93,13 @@ export function installProjectPackages(projectPath) {
   }
 }
 
-export function copyFrameworkFilesToProject(
+export async function copyFrameworkFilesToProject(
   projectPath,
   packages = frameworkPkgJsonFiles()
 ) {
   // Loop over every package, delete all existing files, copy over the new files,
   // and fix binaries.
-  packages = frameworkPackagesFiles(packages)
+  packages = await frameworkPackagesFiles(packages)
   for (const [packageName, files] of Object.entries(packages)) {
     const packageDstPath = path.join(projectPath, 'node_modules', packageName)
     console.log(

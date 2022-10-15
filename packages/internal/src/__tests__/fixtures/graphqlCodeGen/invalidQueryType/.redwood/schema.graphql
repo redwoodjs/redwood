@@ -1,0 +1,21 @@
+scalar BigInt
+
+scalar Date
+
+scalar DateTime
+
+scalar JSON
+
+scalar JSONObject
+
+scalar Time
+
+type Query {
+  redwood: Redwood
+}
+
+type Redwood {
+  currentUser: JSON
+  prismaVersion: String
+  version: String
+}

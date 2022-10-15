@@ -23,7 +23,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#lint'
+        'https://redwoodjs.com/docs/cli-commands#lint'
       )}`
     )
 }
@@ -36,6 +36,8 @@ export const handler = async ({ path, fix }) => {
       [
         fix && '--fix',
         !pathString && fs.existsSync(getPaths().web.src) && 'web/src',
+        !pathString && fs.existsSync(getPaths().web.config) && 'web/config',
+        !pathString && fs.existsSync(getPaths().scripts) && 'scripts',
         !pathString && fs.existsSync(getPaths().api.src) && 'api/src',
         pathString,
       ].filter(Boolean),

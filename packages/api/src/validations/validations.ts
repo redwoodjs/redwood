@@ -143,7 +143,9 @@ interface PresenceValidatorOptions extends WithOptionalMessage {
   allowEmptyString?: boolean
 }
 
-interface UniquenessValidatorOptions extends WithRequiredMessage {}
+interface UniquenessValidatorOptions extends WithOptionalMessage {
+  db?: PrismaClient
+}
 type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
 
 interface ValidationRecipe {
@@ -407,38 +409,41 @@ const VALIDATORS = {
       if (options.integer && !Number.isInteger(value)) {
         validationError('integerNumericality', name, options)
       }
-      if (options.lessThan && (value as number) >= options.lessThan) {
+      if (options.lessThan != null && (value as number) >= options.lessThan) {
         validationError('lessThanNumericality', name, options, {
           lessThan: options.lessThan,
         })
       }
       if (
-        options.lessThanOrEqual &&
+        options.lessThanOrEqual != null &&
         (value as number) > options.lessThanOrEqual
       ) {
         validationError('lessThanOrEqualNumericality', name, options, {
           lessThanOrEqual: options.lessThanOrEqual,
         })
       }
-      if (options.greaterThan && (value as number) <= options.greaterThan) {
+      if (
+        options.greaterThan != null &&
+        (value as number) <= options.greaterThan
+      ) {
         validationError('greaterThanNumericality', name, options, {
           greaterThan: options.greaterThan,
         })
       }
       if (
-        options.greaterThanOrEqual &&
+        options.greaterThanOrEqual != null &&
         (value as number) < options.greaterThanOrEqual
       ) {
         validationError('greaterThanOrEqualNumericality', name, options, {
           greaterThanOrEqual: options.greaterThanOrEqual,
         })
       }
-      if (options.equal && value !== options.equal) {
+      if (options.equal != null && value !== options.equal) {
         validationError('equalNumericality', name, options, {
           equal: options.equal,
         })
       }
-      if (options.otherThan && value === options.otherThan) {
+      if (options.otherThan != null && value === options.otherThan) {
         validationError('otherThanNumericality', name, options, {
           otherThan: options.otherThan,
         })
@@ -584,7 +589,7 @@ export const validateWith = (func: () => void) => {
 // There is an optional `$scope` key which contains additional the `where`
 // clauses to include when checking whether the field is unique. So rather than
 // a product name having to be unique across the entire database, you could
-// check that it is only unique amoung a subset of records with the same
+// check that it is only unique among a subset of records with the same
 // `companyId`.
 //
 // As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be
@@ -609,6 +614,18 @@ export const validateWith = (func: () => void) => {
 // }, (db) => {
 //   return db.create(data: { email })
 // })
+//
+// const myCustomDb = new PrismaClient({
+//   log: emitLogLevels(['info', 'warn', 'error']),
+//   datasources: {
+//     db: {
+//       url: process.env.DATABASE_URL,
+//     },
+//   },
+// })
+// return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, { prismaClient: myCustomDb}, (db) => {
+//   return db.create(data: { email })
+// })
 export async function validateUniqueness(
   model: string,
   fields: Record<string, unknown>,
@@ -619,7 +636,7 @@ export async function validateUniqueness(
   model: string,
   fields: Record<string, unknown>,
   optionsOrCallback: UniquenessValidatorOptions,
-  callback: (tx: PrismaClient) => Promise<any>
+  callback?: (tx: PrismaClient) => Promise<any>
 ): Promise<any>
 export async function validateUniqueness(
   model: string,
@@ -629,16 +646,24 @@ export async function validateUniqueness(
     | ((tx: PrismaClient) => Promise<any>),
   callback?: (tx: PrismaClient) => Promise<any>
 ): Promise<any> {
-  const db = new PrismaClient()
   const { $self, $scope, ...rest } = fields
-  let options = {}
+  let options: UniquenessValidatorOptions = {}
   let validCallback: (tx: PrismaClient) => Promise<any>
+  let db = null
 
   if (typeof optionsOrCallback === 'function') {
     validCallback = optionsOrCallback
   } else {
     options = optionsOrCallback
     validCallback = callback as (tx: PrismaClient) => Promise<any>
+  }
+
+  if (options.db) {
+    const { db: customDb, ...restOptions } = options
+    options = restOptions
+    db = customDb
+  } else {
+    db = new PrismaClient()
   }
 
   const where: UniquenessWhere = {

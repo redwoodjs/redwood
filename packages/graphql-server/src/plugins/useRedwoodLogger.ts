@@ -1,5 +1,7 @@
-import { Plugin } from '@envelop/core'
-import { handleStreamOrSingleExecutionResult } from '@envelop/core'
+import {
+  Plugin,
+  handleStreamOrSingleExecutionResult,
+} from '@graphql-yoga/common'
 import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -25,7 +27,7 @@ import { RedwoodGraphQLContext } from '../functions/types'
 type GraphQLLoggerOptions = {
   /**
    * Sets log level for GraphQL logging.
-   * This level setting can be different than the one used in api side logging.
+   * This level setting can be different from the one used in api side logging.
    * Defaults to the same level as the logger unless set here.
    *
    * Available log levels:
@@ -133,19 +135,19 @@ const logResult =
             error.originalError instanceof ForbiddenError)
         ) {
           envelopLogger.warn(
-            {
-              error,
-            },
+            error,
+
             `'${error?.extensions?.code || 'authentication'}' error '${
               error.message
             }' occurred in ${operationName}`
           )
         } else {
           envelopLogger.error(
-            {
-              error,
-            },
-            error.message || `Error in GraphQL execution: ${operationName}`
+            error,
+
+            error?.originalError?.message ||
+              error.message ||
+              `Error in GraphQL execution: ${operationName}`
           )
         }
       })

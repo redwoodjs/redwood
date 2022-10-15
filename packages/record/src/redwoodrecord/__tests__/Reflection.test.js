@@ -18,10 +18,9 @@
 //   title  String
 // }
 
+import datamodel from '../__fixtures__/datamodel.js'
 import RedwoodRecord from '../RedwoodRecord'
 import Reflection from '../Reflection'
-
-import datamodel from './datamodel.json'
 
 class User extends RedwoodRecord {}
 class Post extends RedwoodRecord {}

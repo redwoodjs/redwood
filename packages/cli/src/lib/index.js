@@ -6,17 +6,18 @@ import * as babel from '@babel/core'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
+import { memoize } from 'lodash'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
 
+import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
   getPaths as getRedwoodPaths,
-  getConfig as getRedwoodConfig,
-} from '@redwoodjs/internal'
+  resolveFile as internalResolveFile,
+} from '@redwoodjs/internal/dist/paths'
 
 import c from './colors'
 import { pluralize, singularize } from './rwPluralize'
@@ -112,7 +113,7 @@ export const deleteFile = (file) => {
 
 const getBaseFile = (file) => file.replace(/\.\w*$/, '')
 
-const existsAnyExtensionSync = (file) => {
+export const existsAnyExtensionSync = (file) => {
   const extension = path.extname(file)
   if (SUPPORTED_EXTENSIONS.includes(extension)) {
     const baseFile = getBaseFile(file)
@@ -182,13 +183,22 @@ export const bytes = (contents) => Buffer.byteLength(contents, 'utf8')
  * This wraps the core version of getPaths into something that catches the exception
  * and displays a helpful error message.
  */
-export const getPaths = () => {
+export const _getPaths = () => {
   try {
     return getRedwoodPaths()
   } catch (e) {
     console.error(c.error(e.message))
     process.exit(1)
   }
+}
+export const getPaths = memoize(_getPaths)
+export const resolveFile = internalResolveFile
+
+export const getGraphqlPath = () =>
+  resolveFile(path.join(getPaths().api.functions, 'graphql'))
+
+export const graphFunctionDoesExist = () => {
+  return fs.existsSync(getGraphqlPath())
 }
 
 export const getConfig = () => {
@@ -234,7 +244,7 @@ export const transformTSToJS = (filename, content) => {
     retainLines: true,
   })
 
-  return prettify(filename.replace(/\.ts$/, '.js'), code)
+  return prettify(filename.replace(/\.tsx?$/, '.js'), code)
 }
 
 /**
@@ -320,21 +330,35 @@ export const cleanupEmptyDirsTask = (files) => {
   )
 }
 
-const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
+const wrapWithSet = (
+  routesContent,
+  layout,
+  routes,
+  newLineAndIndent,
+  props = {}
+) => {
   const [_, indentOne, indentTwo] = routesContent.match(
     /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/
   ) || ['', 0, 2]
   const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
   const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
-  return [`<Set wrap={${layout}}>`, ...newRoutesWithExtraIndent, `</Set>`].join(
-    newLineAndIndent
-  )
+
+  // converts { foo: 'bar' } to `foo="bar"`
+  const propsString = Object.entries(props)
+    .map((values) => `${values[0]}="${values[1]}"`)
+    .join(' ')
+
+  return [
+    `<Set wrap={${layout}}${propsString && ' ' + propsString}>`,
+    ...newRoutesWithExtraIndent,
+    `</Set>`,
+  ].join(newLineAndIndent)
 }
 
 /**
  * Update the project's routes file.
  */
-export const addRoutesToRouterTask = (routes, layout) => {
+export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
   let newRoutes = routes.filter((route) => !routesContent.match(route))
@@ -354,7 +378,13 @@ export const addRoutesToRouterTask = (routes, layout) => {
     }
 
     const routesBatch = layout
-      ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
+      ? wrapWithSet(
+          routesContent,
+          layout,
+          newRoutes,
+          newLineAndIndent,
+          setProps
+        )
       : newRoutes.join(newLineAndIndent)
 
     const newRoutesContent = routesContent.replace(
@@ -425,12 +455,12 @@ export const removeRoutesFromRouterTask = (routes, layout) => {
 
 export const runCommandTask = async (commands, { verbose }) => {
   const tasks = new Listr(
-    commands.map(({ title, cmd, args, opts = {} }) => ({
+    commands.map(({ title, cmd, args, opts = {}, cwd = getPaths().base }) => ({
       title,
       task: async () => {
         return execa(cmd, args, {
           shell: true,
-          cwd: `${getPaths().base}/api`,
+          cwd,
           stdio: verbose ? 'inherit' : 'pipe',
           extendEnv: true,
           cleanup: true,
@@ -439,8 +469,8 @@ export const runCommandTask = async (commands, { verbose }) => {
       },
     })),
     {
-      renderer: verbose && VerboseRenderer,
-      dateFormat: false,
+      renderer: verbose && 'verbose',
+      rendererOptions: { collapse: false, dateFormat: false },
     }
   )
 
@@ -465,4 +495,15 @@ export const getDefaultArgs = (builder) => {
     },
     {}
   )
+}
+
+/**
+ * Check if user is using VS Code
+ *
+ * i.e. check for the existance of .vscode folder in root project directory
+ */
+export const usingVSCode = () => {
+  const redwoodPaths = getPaths()
+  const VS_CODE_PATH = path.join(redwoodPaths.base, '.vscode')
+  return fs.existsSync(VS_CODE_PATH)
 }

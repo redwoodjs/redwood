@@ -1,9 +1,10 @@
+import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import {
   getInstalledRedwoodVersion,
@@ -66,8 +67,7 @@ export const preRequisiteCheckTask = (preRequisites) => {
               try {
                 await execa(...preReq.command)
               } catch (error) {
-                error.message =
-                  error.message + '\n' + preReq.errorMessage.join(' ')
+                error.message = error.message + '\n' + preReq.errorMessage
                 throw error
               }
             },
@@ -114,10 +114,14 @@ export const addPackagesTask = ({
       ].filter(Boolean),
     ]
   } else {
+    const stdout = execSync('yarn --version')
+
+    const yarnVersion = stdout.toString().trim()
+
     installCommand = [
       'yarn',
       [
-        '-W',
+        yarnVersion.startsWith('1') && '-W',
         'add',
         devDependency && '--dev',
         ...packagesWithSameRWVersion,

@@ -8,10 +8,10 @@ const path = require('path')
 const chalk = require('chalk')
 const execa = require('execa')
 const fse = require('fs-extra')
-const Listr = require('listr')
-const VerboseRenderer = require('listr-verbose-renderer')
+const Listr = require('listr2').Listr
 const rimraf = require('rimraf')
-const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
+const yargs = require('yargs/yargs')
 
 const {
   addFrameworkDepsToProject,
@@ -24,7 +24,7 @@ const {
   confirmNoFixtureNoLink,
 } = require('./util')
 
-const args = yargs
+const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
   .option('typescript', {
     alias: 'ts',
@@ -64,8 +64,13 @@ const args = yargs
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
+  .option('yarn1', {
+    default: false,
+    type: 'boolean',
+    describe: 'Use yarn 1 instead of yarn 3',
+  })
   .help()
-  .strict().argv
+  .parseSync()
 
 const {
   typescript,
@@ -75,16 +80,17 @@ const {
   clean,
   copyFromFixture,
   rebuildFixture,
+  yarn1,
 } = args
 
-// Do not use demandCommand becuase rebuildFixture doesn't require <project directory>
+// Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
 if (!rebuildFixture && args._.length > 1) {
   console.log(
-    chalk.red.bold(
+    chalk.default.red.bold(
       `
       Multiple <project directory> arguments
-      Secify ONE project directory outside the framework directory (no spaces allowed)
+      Specify ONE project directory outside the framework directory (no spaces allowed)
       EXAMPLE: 'yarn build:test-project ../test-project'
       `
     )
@@ -92,7 +98,7 @@ if (!rebuildFixture && args._.length > 1) {
   process.exit(1)
 } else if (!rebuildFixture && args._.length < 1) {
   console.log(
-    chalk.red.bold(
+    chalk.default.red.bold(
       `
       Missing <project directory> argument
       Specify a project directory outside the framework directory
@@ -122,7 +128,7 @@ if (
   !path.isAbsolute(relativePathCheck)
 ) {
   console.log(
-    chalk.red.bold(
+    chalk.default.red.bold(
       `
       Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'
       Specify a project directory outside the framework directory
@@ -213,36 +219,26 @@ const globalTasks = () =>
         title: '[link] Adding framework dependencies to project',
         task: () =>
           addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link && !rebuildFixture,
+        enabled: () => link || rebuildFixture,
       },
       {
-        title: 'Set yarn v1 version in test-project directory',
+        title: 'Setting yarn version to 1',
         task: async () => {
           await execa(
             'yarn set version classic',
             [],
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
-
-          // remove "packageManager": "yarn@3.2.0" from package.json
-          const packageJsonPath = path.join(OUTPUT_PROJECT_PATH, 'package.json')
-          const packageJson = JSON.parse(
-            fs.readFileSync(packageJsonPath, 'utf-8')
-          )
-          delete packageJson.packageManager
-          fs.writeFileSync(
-            packageJsonPath,
-            JSON.stringify(packageJson, undefined, 2)
-          )
         },
-        skip: () => copyFromFixture && !rebuildFixture, // already configured in fixture, but copyFromFixture is default
+        enabled: () => yarn1,
       },
       {
         title: 'Installing node_modules',
         task: async () => {
           return execa(
             'yarn install',
-            ['--non-interactive', !verbose && '--silent'].filter(Boolean),
+            yarn1 &&
+              ['--non-interactive', !verbose && '--silent'].filter(Boolean), // pass flags if using Yarn v1
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
@@ -325,10 +321,18 @@ const globalTasks = () =>
       {
         title: 'Generate dbAuth Secret',
         task: async () => {
-          return execa(
-            'echo "SESSION_SECRET=$(yarn --silent rw g secret --raw)" >> .env',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
+          const { stdout: dbAuthSecret } = await execa(
+            'yarn',
+            [yarn1 && '--silent', 'rw', 'g', 'secret', '--raw'].filter(Boolean),
+            {
+              ...getExecaOptions(OUTPUT_PROJECT_PATH),
+              stdio: 'pipe',
+            }
+          )
+
+          fs.appendFileSync(
+            path.join(OUTPUT_PROJECT_PATH, '.env'),
+            `SESSION_SECRET=${dbAuthSecret}`
           )
         },
         enabled: () => !rebuildFixture,
@@ -380,6 +384,7 @@ const globalTasks = () =>
       {
         title: '[Rebuild Fixture] Replace and Cleanup Fixture',
         task: async () => {
+          // @TODO: This only works on UNIX, we should use path.join everywhere
           // remove all .gitignore
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/.redwood`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
@@ -390,13 +395,16 @@ const globalTasks = () =>
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/.env`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
 
-          // Remove project:copy from the fixture
-          updatePkgJsonScripts({
-            projectPath: OUTPUT_PROJECT_PATH,
-            scripts: {
-              postinstall: '', // We do this so we don't have project:copy in the fixture
-            },
-          })
+          // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
+          // that we added in "Adding framework dependencies to project"
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/package.json`)
+          fs.copyFileSync(
+            path.join(
+              __dirname,
+              '../../packages/create-redwood-app/template/package.json'
+            ),
+            path.join(OUTPUT_PROJECT_PATH, 'package.json')
+          )
 
           // removes existing Fixture and replaces with newly built project,
           // then removes new Project temp directory
@@ -424,7 +432,8 @@ const globalTasks = () =>
     ],
     {
       exitOnError: true,
-      renderer: verbose && VerboseRenderer,
+      renderer: verbose && 'verbose',
+      renderOptions: { collapse: false },
     }
   )
 

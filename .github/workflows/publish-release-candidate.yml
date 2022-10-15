@@ -1,0 +1,109 @@
+name: 🏎 Publish Release Candidate
+
+on:
+  push:
+    branches: ['release/**']
+    # We don't want this to run on release
+    tags-ignore: ['v**']
+    # No need to run on docs-only changes
+    paths-ignore: ['docs/**']
+
+jobs:
+  check-git-tags:
+    name: 🏷 Check git tags
+    if: github.repository == 'redwoodjs/redwood'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        # Required because lerna uses tags to determine the version.
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: 🏷 Check git tags
+        run: |
+          CURRENT_TAG=$(git describe --abbrev=0)
+
+          # `github.ref_name` is something like `release/minor/v1.1.0`.
+          # `basename` gets us `v1.1.0`, then parameter expansion strips the `v`.
+          # See https://stackoverflow.com/questions/6594085/remove-first-character-of-a-string-in-bash.
+          BRANCH_TAG=$(basename ${{ github.ref_name }})
+
+          echo
+          echo "Current tag is $CURRENT_TAG"
+          echo "Branch tag is $BRANCH_TAG"
+          echo "Comparing tags with \"yarn dlx semver-compare-cli $CURRENT_TAG lt $BRANCH_TAG\""
+          echo
+
+          # See if the current tag is less than the branch's tag.
+          # If it is, we're good to keep going.
+          yarn dlx semver-compare-cli $CURRENT_TAG lt $BRANCH_TAG
+
+  publish-release-candidate:
+    name: 🚢 Publish Release Candidate
+    needs: check-git-tags
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.value }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
+          #  This is required because lerna uses tags to determine the version.
+          fetch-depth: 0
+
+      - name: 🧶 Setup job
+        uses: ./.github/actions/setup_job
+
+      - name: ✅ Check constraints, dependencies, and package.json's
+        uses: ./tasks/check
+
+      - name: 🏗 Build
+        run: yarn build
+
+      - name: 🔎 Lint
+        run: yarn lint
+
+      - name: 🧪 Test
+        run: yarn test
+
+      - name: 🚢 Publish
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
+          SEMVER=$(basename $(dirname ${{ github.ref_name }}))
+          yarn lerna publish pre$SEMVER --include-merged-tags \
+                                        --canary \
+                                        --preid rc \
+                                        --dist-tag rc \
+                                        --force-publish \
+                                        --loglevel verbose \
+                                        --no-git-reset \
+                                        --yes
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: 🏷 Get version
+        id: get-version
+        uses: sergeysova/jq-action@v2.2.1
+        with:
+          cmd: 'jq .version packages/core/package.json -r'
+
+  message-slack:
+    name: 💬 Message Slack
+    needs: publish-release-candidate
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: 💬 Message Slack
+        uses: ./.github/actions/message_slack_publishing
+        with:
+          title: "🏎 RC Packages"
+          status: ${{ needs.publish-release-candidate.result }}
+          version: ${{ needs.publish-release-candidate.outputs.version }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}

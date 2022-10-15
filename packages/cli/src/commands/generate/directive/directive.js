@@ -2,10 +2,10 @@ import path from 'path'
 
 import camelcase from 'camelcase'
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import prompts from 'prompts'
 
-import { getConfig } from '@redwoodjs/internal'
+import { getConfig } from '@redwoodjs/internal/dist/config'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
@@ -155,7 +155,6 @@ export const handler = async (args) => {
           return execa('yarn rw-gen', [], {
             stdio: 'pipe',
             shell: true,
-            cwd: getPaths().web.base,
           })
         },
       },
@@ -166,7 +165,7 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

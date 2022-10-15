@@ -22,10 +22,8 @@
     "ora",
     "tempy",
     "terminal-link",
-    "@types/node-fetch",
     "chalk",
     "pascalcase",
-    "node-fetch",
     "@redwoodjs/api",
     "@redwoodjs/api-server",
     "@redwoodjs/auth",
@@ -45,7 +43,11 @@
     "@redwoodjs/testing",
     "@redwoodjs/web",
     "lru-cache",
+    "@types/lru-cache",
     "pretty-bytes",
-    "is-port-reachable"
+    "is-port-reachable",
+    "pretty-ms",
+    "camelcase",
+    "sort-package-json"
   ]
 }

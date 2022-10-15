@@ -8,7 +8,7 @@ import * as cell from '../cell'
 jest.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
-      cells: [{ queryOperationName: undefined }],
+      cells: [{ queryOperationName: 'AlreadyDefinedQueryName' }],
     }),
   }
 })
@@ -24,7 +24,11 @@ let singleWordFiles,
   listFlagPassedIn,
   listInferredFromName,
   modelPluralMatchesSingularWithList,
-  modelPluralMatchesSingularWithoutList
+  modelPluralMatchesSingularWithoutList,
+  modelWithStringId,
+  modelWithStringIdList,
+  findDataByIdTypeScript,
+  listInferredFromNameTypeScript
 
 beforeAll(async () => {
   singleWordFiles = await cell.files({
@@ -101,6 +105,34 @@ beforeAll(async () => {
     tests: true,
     stories: true,
     list: false,
+  })
+
+  modelWithStringId = await cell.files({
+    name: 'address',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+
+  modelWithStringIdList = await cell.files({
+    name: 'address',
+    tests: true,
+    stories: true,
+    list: true,
+  })
+
+  findDataByIdTypeScript = await cell.files({
+    name: 'Bazinga',
+    tests: true,
+    stories: true,
+    typescript: true,
+  })
+
+  listInferredFromNameTypeScript = await cell.files({
+    name: 'Members',
+    tests: true,
+    stories: true,
+    typescript: true,
   })
 })
 
@@ -388,6 +420,9 @@ test('generates list cells if list flag passed in', () => {
 
   // Check the contents
   expect(listFlagPassedIn[CELL_PATH]).toMatchSnapshot()
+  expect(listFlagPassedIn[TEST_PATH]).toMatchSnapshot()
+  expect(listFlagPassedIn[STORY_PATH]).toMatchSnapshot()
+  expect(listFlagPassedIn[MOCK_PATH]).toMatchSnapshot()
 })
 
 test('generates list cells if name is plural', () => {
@@ -417,6 +452,67 @@ test('generates list cells if name is plural', () => {
 
   // Check the contents
   expect(listInferredFromName[CELL_PATH]).toMatchSnapshot()
+})
+
+test('TypeScript: generates list cells if list flag passed in', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.tsx'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.test.tsx'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.stories.tsx'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.mock.ts'
+  )
+
+  // Check the file names
+  expect(Object.keys(findDataByIdTypeScript)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(findDataByIdTypeScript[CELL_PATH]).toMatchSnapshot()
+  expect(findDataByIdTypeScript[TEST_PATH]).toMatchSnapshot()
+  expect(findDataByIdTypeScript[STORY_PATH]).toMatchSnapshot()
+  expect(findDataByIdTypeScript[MOCK_PATH]).toMatchSnapshot()
+})
+
+test('TypeScript: generates list cells if name is plural', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.tsx'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.tsx'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.tsx'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.ts'
+  )
+
+  // Check the file names
+  expect(Object.keys(listInferredFromNameTypeScript)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(listInferredFromNameTypeScript[CELL_PATH]).toMatchSnapshot()
 })
 
 test('"equipment" with list flag', () => {
@@ -475,4 +571,98 @@ test('"equipment" withOUT list flag should find equipment by id', () => {
 
   // Check the contents
   expect(modelPluralMatchesSingularWithoutList[CELL_PATH]).toMatchSnapshot()
+})
+
+test('generates a cell with a string primary id key', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressCell/AddressCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressCell/AddressCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressCell/AddressCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressCell/AddressCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(modelWithStringId)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(modelWithStringId[CELL_PATH]).toMatchSnapshot()
+  expect(modelWithStringId[TEST_PATH]).toMatchSnapshot()
+  expect(modelWithStringId[STORY_PATH]).toMatchSnapshot()
+  expect(modelWithStringId[MOCK_PATH]).toMatchSnapshot()
+})
+
+test('generates list a cell with a string primary id keys', () => {
+  const CELL_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.js'
+  )
+
+  const TEST_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.test.js'
+  )
+
+  const STORY_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.stories.js'
+  )
+
+  const MOCK_PATH = path.normalize(
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.mock.js'
+  )
+
+  // Check the file names
+  expect(Object.keys(modelWithStringIdList)).toEqual([
+    MOCK_PATH,
+    TEST_PATH,
+    STORY_PATH,
+    CELL_PATH,
+  ])
+
+  // Check the contents
+  expect(modelWithStringIdList[CELL_PATH]).toMatchSnapshot()
+  expect(modelWithStringIdList[TEST_PATH]).toMatchSnapshot()
+  expect(modelWithStringIdList[STORY_PATH]).toMatchSnapshot()
+  expect(modelWithStringIdList[MOCK_PATH]).toMatchSnapshot()
+})
+
+describe('Custom query names', () => {
+  test('Accepts custom query names', async () => {
+    const generatedFiles = await cell.files({
+      name: 'Clues',
+      tests: false,
+      stories: false,
+      query: 'FindBluesClues',
+    })
+
+    const CELL_PATH = path.normalize(
+      '/path/to/project/web/src/components/CluesCell/CluesCell.js'
+    )
+
+    expect(generatedFiles[CELL_PATH]).toContain('query FindBluesClues {')
+  })
+
+  test('Throws if a duplicated query name is used', async () => {
+    await expect(
+      cell.files({
+        name: 'Clues',
+        tests: false,
+        stories: false,
+        query: 'AlreadyDefinedQueryName',
+      })
+    ).rejects.toThrow(
+      'Specified query name: "AlreadyDefinedQueryName" is not unique'
+    )
+  })
 })

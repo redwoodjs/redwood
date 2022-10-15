@@ -1,4 +1,7 @@
-import { getEnvVars } from '../webpack.common'
+// @NOTE
+// No babel in the package, so use standard node syntax
+
+const { getEnvVars } = require('../webpack.common')
 
 jest.mock('@redwoodjs/internal', () => {
   return {

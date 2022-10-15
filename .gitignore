@@ -20,3 +20,4 @@ blog-test-project/*
 !.yarn/versions
 .pnp.*
 *.code-workspace
+.nova
