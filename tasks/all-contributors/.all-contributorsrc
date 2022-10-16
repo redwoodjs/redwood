@@ -3619,6 +3619,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Alonski",
+      "name": "Alon Bukai",
+      "avatar_url": "https://avatars.githubusercontent.com/u/452199?v=4",
+      "profile": "http://www.alonbukai.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hankedori",
+      "name": "Han Ke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10578033?v=4",
+      "profile": "https://github.com/hankedori",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "chapmanm3",
+      "name": "Matt Chapman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27476801?v=4",
+      "profile": "https://github.com/chapmanm3",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rowin1125",
+      "name": "Rowin Mol",
+      "avatar_url": "https://avatars.githubusercontent.com/u/39522856?v=4",
+      "profile": "https://derow.nl/",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
