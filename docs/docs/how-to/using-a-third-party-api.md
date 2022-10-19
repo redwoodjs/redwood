@@ -335,16 +335,16 @@ We'll enter our query at the top left and the variables (zip) at the lower left.
 
 ![image](https://user-images.githubusercontent.com/300/79395014-9cd9d980-7f2d-11ea-83b1-45aaa8506706.png)
 
-Okay lets pull the real data from OpenWeather now. We'll use a package `cross-undici-fetch` that mimics the Fetch API in the browser:
+Okay lets pull the real data from OpenWeather now. We'll use a package `@whatwg-node/fetch` that mimics the Fetch API in the browser:
 
 ```bash
-yarn workspace api add cross-undici-fetch
+yarn workspace api add @whatwg-node/fetch
 ```
 
 And import that into the service and make the fetch. Note that `fetch` returns a Promise so we're going to convert our service to `async`/`await` to simplify things:
 
 ```javascript title="api/src/services/weather/weather.js"
-import { fetch } from 'cross-undici-fetch'
+import { fetch } from '@whatwg-node/fetch'
 
 export const getWeather = async ({ zip }) => {
   const response = await fetch(
@@ -491,7 +491,7 @@ Gross. This happens when our service tries to parse the response from OpenWeathe
 Okay, let's look for that `cod` and if it's `404` then we know the zip isn't found and can return a more helpful error from our service. Open up the service and let's add a check:
 
 ```javascript {2, 10-12} title="api/src/services/weather/weather.js"
-import { fetch } from 'cross-undici-fetch'
+import { fetch } from '@whatwg-node/fetch'
 import { UserInputError } from '@redwoodjs/graphql-server'
 
 export const getWeather = async ({ zip }) => {

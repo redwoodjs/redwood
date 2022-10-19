@@ -30,10 +30,10 @@
     "@redwoodjs/router": "3.2.0",
     "@redwoodjs/structure": "3.2.0",
     "@redwoodjs/web": "3.2.0",
+    "@whatwg-node/fetch": "0.5.3",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.26.1",
-    "cross-undici-fetch": "0.4.14",
     "graphql": "16.6.0",
     "mime-types": "2.1.35"
   },

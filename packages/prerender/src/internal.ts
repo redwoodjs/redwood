@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { fetch } from 'cross-undici-fetch'
+import { fetch } from '@whatwg-node/fetch'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths } from '@redwoodjs/internal/dist/paths'

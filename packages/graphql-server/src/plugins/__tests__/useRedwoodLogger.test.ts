@@ -2,7 +2,9 @@ import { existsSync, readFileSync, statSync } from 'fs'
 import os from 'os'
 import { join } from 'path'
 
+import { useEngine } from '@envelop/core'
 import { createTestkit } from '@envelop/testing'
+import * as GraphQLJS from 'graphql'
 
 import type { Logger, LoggerOptions } from '@redwoodjs/api/logger'
 import { createLogger } from '@redwoodjs/api/logger'
@@ -81,7 +83,10 @@ describe('Populates context', () => {
       options: { data: true, query: true, operationName: true },
     } as LoggerConfig
 
-    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+    const testkit = createTestkit(
+      [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
+      testSchema
+    )
 
     await testkit.execute(testQuery, {}, {})
 
@@ -122,7 +127,10 @@ describe('Populates context', () => {
       options: { data: true, query: true, operationName: true },
     } as LoggerConfig
 
-    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+    const testkit = createTestkit(
+      [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
+      testSchema
+    )
 
     await testkit.execute(testParseErrorQuery, {}, {})
 
@@ -150,7 +158,10 @@ describe('Populates context', () => {
       options: { data: true, query: true, operationName: true },
     } as LoggerConfig
 
-    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+    const testkit = createTestkit(
+      [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
+      testSchema
+    )
 
     await testkit.execute(testValidationErrorQuery, {}, {})
 
@@ -185,7 +196,10 @@ describe('Populates context', () => {
       options: {},
     } as LoggerConfig
 
-    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+    const testkit = createTestkit(
+      [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
+      testSchema
+    )
 
     await testkit.execute(testErrorQuery, {}, {})
 
@@ -211,7 +225,10 @@ describe('Populates context', () => {
       options: {},
     } as LoggerConfig
 
-    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+    const testkit = createTestkit(
+      [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
+      testSchema
+    )
 
     await testkit.execute(testErrorQuery, {}, {})
 
@@ -235,7 +252,10 @@ describe('Populates context', () => {
         excludeOperations: ['FilteredQuery'],
       },
     } as LoggerConfig
-    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+    const testkit = createTestkit(
+      [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
+      testSchema
+    )
     await testkit.execute(testFilteredQuery, {}, {})
     await watchFileCreated(logFile)
 

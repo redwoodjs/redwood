@@ -72,7 +72,7 @@ const mockLambdaEvent = ({
     multiValueQueryStringParameters: null,
     isBase64Encoded: false,
     multiValueHeaders: {}, // this is silly - the types require a value. It definitely can be undefined, e.g. on Vercel.
-    path: '',
+    path: '/graphql',
     pathParameters: null,
     stageVariables: null,
     queryStringParameters: null,
@@ -107,9 +107,6 @@ describe('CORS', () => {
     const response = await handler(mockedEvent, {} as Context)
 
     expect(response.statusCode).toBe(200)
-    expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
-      'https://web.redwoodjs.com',
-    ])
 
     expect(response.headers['access-control-allow-origin']).toEqual(
       'https://web.redwoodjs.com'
@@ -140,9 +137,6 @@ describe('CORS', () => {
     const response = await handler(mockedEvent, {} as Context)
 
     expect(response.statusCode).toBe(200)
-    expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
-      'https://someothersite.newjsframework.com',
-    ])
 
     expect(response.headers['access-control-allow-origin']).toEqual(
       'https://someothersite.newjsframework.com'
@@ -172,9 +166,6 @@ describe('CORS', () => {
     const response = await handler(mockedEvent, {} as Context)
 
     expect(response.statusCode).toBe(204)
-    expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
-      'https://mycrossdomainsite.co.uk',
-    ])
 
     expect(response.headers['access-control-allow-origin']).toEqual(
       'https://mycrossdomainsite.co.uk'
@@ -205,11 +196,6 @@ describe('CORS', () => {
 
     expect(resHeaderKeys).not.toContain('access-control-allow-origin')
     expect(resHeaderKeys).not.toContain('access-control-allow-credentials')
-
-    // Also check the multiValueHeaders
-    expect(Object.keys(response.multiValueHeaders)).not.toContain(
-      'access-control-allow-origin'
-    )
   })
 
   it('Returns the requestOrigin when more than one origin supplied in config', async () => {
@@ -272,13 +258,8 @@ describe('CORS', () => {
 
     expect(response.statusCode).toBe(200)
 
-    // Because original request has multiValueHeaders, we don't add it to headers
-    // to prevent unnecessary duplication in the response... This contradicts what AWS says in their docs,
-    // but it is actually how Vercel behaves
-    expect(response.headers).not.toContain('access-control-allow-origin')
-
-    expect(response.multiValueHeaders['access-control-allow-origin']).toEqual([
-      'https://site2.two',
-    ])
+    expect(response.headers['access-control-allow-origin']).toEqual(
+      'https://site2.two'
+    )
   })
 })

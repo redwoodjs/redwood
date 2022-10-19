@@ -1,4 +1,6 @@
+import { useEngine } from '@envelop/core'
 import { createTestkit } from '@envelop/testing'
+import * as GraphQLJS from 'graphql'
 
 import { context, getAsyncStoreInstance } from '../../index'
 import { testSchema, testQuery } from '../__fixtures__/common'
@@ -13,6 +15,7 @@ test('Safe Context OFF: Updates global context with extended context', async () 
   process.env.DISABLE_CONTEXT_ISOLATION = '0' // default: use async local storage
   const testkit = createTestkit(
     [
+      useEngine(GraphQLJS),
       useRedwoodPopulateContext(() => ({ hello: 'world' })),
       useRedwoodPopulateContext({ foo: 'bar' }),
       useRedwoodGlobalContextSetter(),
@@ -34,6 +37,7 @@ test('Safe Context ON: Updates global context with extended context', async () =
 
   const testkit = createTestkit(
     [
+      useEngine(GraphQLJS),
       useRedwoodGlobalContextSetter(),
       useRedwoodPopulateContext(() => ({ hello: 'world' })),
       useRedwoodPopulateContext({ foo: 'bar' }),
