@@ -1,5 +1,5 @@
-import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
+import { GraphQLArmorConfig } from '@escape.tech/graphql-armor/dist/declarations/src/config'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
@@ -102,11 +102,11 @@ export interface GraphQLHandlerOptions {
   cors?: CorsConfig
 
   /**
-   *  @description Limit the complexity of the queries solely by their depth.
+   *  @description Customize GraphQL Armor plugin configuration
    *
    * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
    */
-  depthLimitOptions?: DepthLimitConfig
+  graphQLArmorConfig?: GraphQLArmorConfig
 
   /**
    * @description Customize the default error message used to mask errors.

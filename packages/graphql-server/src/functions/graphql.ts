@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
+import { EnvelopArmor } from '@escape.tech/graphql-armor'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import {
   EnvelopError,
@@ -16,6 +16,7 @@ import type {
 } from 'aws-lambda'
 import { Headers, Request } from 'cross-undici-fetch'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
+import omitBy from 'lodash.omitby'
 
 import { RedwoodError } from '@redwoodjs/api'
 
@@ -100,7 +101,7 @@ export const createGraphQLHandler = ({
   services,
   sdls,
   directives = [],
-  depthLimitOptions,
+  graphQLArmorConfig,
   allowedOperations,
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
@@ -156,13 +157,17 @@ export const createGraphQLHandler = ({
   // Custom Redwood plugins
   plugins.push(...redwoodDirectivePlugins)
 
-  // Limits the depth of your GraphQL selection sets.
-  plugins.push(
-    useDepthLimit({
-      maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
-      ignore: (depthLimitOptions && depthLimitOptions.ignore) || [],
-    })
-  )
+  // Add GraphQL Armor security plugins
+  const armor = new EnvelopArmor({
+    maxDepth: {
+      n: 8,
+      ...graphQLArmorConfig?.maxDepth,
+    },
+    ...omitBy(graphQLArmorConfig, (_value, key) => key === 'maxDepth'),
+  })
+  const protection = armor.protect()
+
+  plugins.push(...protection.plugins)
   // Only allow execution of specific operation types
   plugins.push(
     useFilterAllowedOperations(
