@@ -43,12 +43,17 @@ For a demonstration, check out the [Auth Playground](https://redwood-playground-
 
 GraphQL is a fundamental part of Redwood. For details on how Redwood uses GraphQL and handles important security considerations, please see the [GraphQL Security](graphql.md#security) section and the [Secure Services](services.md#secure-services) section.
 
-### Depth Limits
+### GraphQL Armor
 
-The RedwoodJS GraphQL handler sets [reasonable defaults](graphql.md#query-depth-limit) to prevent deep, cyclical nested queries that attackers often use to exploit systems.
+The RedwoodJS GraphQL handler uses the highly customizable [GraphQL Armor](https://escape-technologies.github.io/graphql-armor/) middleware to add a security layer in order to limit the impact of malicious GraphQL operations.
+
+By default GraphQL Armor is set with [reasonable defaults](graphql.md#graphql-armor) to prevent malicious operation that can easily be configured, please see the [GraphQL Armor](graphql.md#graphql-armor) for configuration options.
+
+
 ### Disable Introspection and Playground
 
 Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to [disable these in production](graphql.md#introspection-and-playground-disabled-in-production), RedwoodJS **only enables introspection and the playground when running in development**.
+
 ## Functions
 
 When deployed, a [serverless function](serverless-functions.md) is an open API endpoint. That means anyone can access it and perform any tasks it's asked to do. In many cases, this is completely appropriate and desired behavior. But there are often times you need to restrict access to a function, and Redwood can help you do that using a [variety of methods and approaches](serverless-functions.md#security-considerations).
