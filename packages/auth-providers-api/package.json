@@ -1,0 +1,89 @@
+{
+  "name": "@redwoodjs/auth-providers-api",
+  "version": "3.2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/auth-providers-api"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "yarn test --watch"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.19.4",
+    "core-js": "3.25.5",
+    "jsonwebtoken": "8.5.1",
+    "uuid": "9.0.0"
+  },
+  "devDependencies": {
+    "@auth0/auth0-spa-js": "1.22.5",
+    "@azure/msal-browser": "2.30.0",
+    "@babel/cli": "7.19.3",
+    "@babel/core": "7.19.3",
+    "@clerk/clerk-js": "3.17.0",
+    "@clerk/clerk-react": "3.5.1",
+    "@clerk/clerk-sdk-node": "3.9.2",
+    "@clerk/types": "2.21.0",
+    "@magic-sdk/admin": "1.4.1",
+    "@nhost/hasura-auth-js": "1.4.1",
+    "@nhost/nhost-js": "1.4.10",
+    "@okta/jwt-verifier": "2.6.0",
+    "@okta/okta-auth-js": "6.9.0",
+    "@redwoodjs/auth": "3.2.0",
+    "@redwoodjs/cli-helpers": "3.2.0",
+    "@simplewebauthn/browser": "6.2.1",
+    "@simplewebauthn/typescript-types": "6.2.1",
+    "@supabase/supabase-js": "1.35.7",
+    "@types/jsonwebtoken": "8.5.9",
+    "@types/netlify-identity-widget": "1.9.3",
+    "@types/react": "17.0.50",
+    "@types/uuid": "8.3.4",
+    "firebase": "9.10.0",
+    "firebase-admin": "10.3.0",
+    "gotrue-js": "0.9.29",
+    "jest": "29.1.2",
+    "magic-sdk": "9.1.1",
+    "netlify-identity-widget": "1.9.2",
+    "react": "17.0.2",
+    "supertokens-auth-react": "0.26.5",
+    "typescript": "4.7.4"
+  },
+  "peerDependencies": {
+    "@clerk/clerk-react": "3.5.1",
+    "@clerk/clerk-sdk-node": "3.9.2",
+    "@magic-sdk/admin": "1.4.1",
+    "@okta/jwt-verifier": "2.6.0",
+    "firebase-admin": "10.3.0"
+  },
+  "peerDependenciesMeta": {
+    "@clerk/clerk-react": {
+      "optional": true
+    },
+    "@clerk/clerk-sdk-node": {
+      "optional": true
+    },
+    "@magic-sdk/admin": {
+      "optional": true
+    },
+    "@okta/jwt-verifier": {
+      "optional": true
+    },
+    "firebase-admin": {
+      "optional": true
+    }
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}
