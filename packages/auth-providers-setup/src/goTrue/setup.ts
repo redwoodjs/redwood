@@ -22,11 +22,14 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'goTrue',
-    webPackages: ['gotrue-js'],
+    authDecoderImport:
+      "import { goTrueAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    apiPackages: ['@redwoodjs/auth-providers-api'],
+    webPackages: ['gotrue-js', '@redwoodjs/auth-providers-web'],
     notes: [
       'You will need to enable Identity on your Netlify site and set APIUrl',
       'to your API endpoint in your GoTrue client config.',
-      'See: https://github.com/redwoodjs/redwood/blob/main/packages/auth/README.md#for-gotrue-js',
+      'See: https://redwoodjs.com/docs/auth/gotrue',
     ],
   })
 }
