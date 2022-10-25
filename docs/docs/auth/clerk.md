@@ -16,25 +16,7 @@ yarn rw setup auth clerk
 
 To get started with Clerk, sign up on [their website](https://clerk.dev/) and create an application, or follow their [RedwoodJS Blog Tutorial with Clerk](https://clerk.dev/tutorials/redwoodjs-blog-tutorial-with-clerk) that has an [example repo](https://github.com/redwoodjs/redwood-tutorial) already setup.
 
-It's important that the `ClerkAuthProvider` added to your `App.{js|ts}` file during setup is within the `RedwoodProvider` and around Redwood's `AuthProvider`:
-
-```tsx {4,10} title="web/src/App.{js|ts}"
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <ClerkAuthProvider>
-        <AuthProvider type="clerk">
-          <RedwoodApolloProvider>
-            <Routes />
-          </RedwoodApolloProvider>
-        </AuthProvider>
-      </ClerkAuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
-```
-
-The [RedwoodJS Blog Tutorial with Clerk](https://clerk.dev/tutorials/redwoodjs-blog-tutorial-with-clerk) also explains how to use `@clerk/clerk-react` components with Redwood's `useAuth()` hook:
+The [RedwoodJS Blog Tutorial with Clerk](https://clerk.dev/tutorials/redwoodjs-blog-tutorial-with-clerk) also explains how to use `@clerk/clerk-react` components with Redwood's `useAuth()` hook in more detail, but the gist of it is like this:
 
 ```tsx
 import { UserButton, SignInButton } from '@clerk/clerk-react'
