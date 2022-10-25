@@ -246,7 +246,7 @@ import { name, version } from '../package'
 
   const startTime = Date.now()
 
-  // Engine check Listr. Seperate Listr to avoid https://github.com/cenk1cenk2/listr2/issues/296
+  // Engine check Listr. Separate Listr to avoid https://github.com/cenk1cenk2/listr2/issues/296
   // Boolean flag
   let hasPassedEngineCheck = null
   // Array of strings
@@ -343,12 +343,7 @@ import { name, version } from '../package'
                   message: 'Select your preferred coding language',
                   initial: 'TypeScript',
                 })
-                if (ctx.language === 'TypeScript') {
-                  task.output = 'TypeScript selected'
-                }
-                if (ctx.language === 'JavaScript') {
-                  task.output = 'JavaScript selected'
-                }
+                task.output = ctx.language
               },
               options: { persistentOutput: true },
             },
@@ -390,7 +385,6 @@ import { name, version } from '../package'
     {
       rendererOptions: { collapse: false },
       exitOnError: true,
-      concurrent: false,
     }
   )
     .run()
