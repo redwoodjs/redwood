@@ -12,7 +12,7 @@ export const config = {
 }
 
 // required packages to install
-export const webPackages = ['@supabase/supabase-js']
+export const webPackages = ['@supabase/supabase-js@1.35.7']
 export const apiPackages = []
 
 // any notes to print out when the job is done
