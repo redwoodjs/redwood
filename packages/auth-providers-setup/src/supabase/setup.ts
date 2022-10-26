@@ -24,7 +24,7 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     provider: 'supabase',
     authDecoderImport:
       "import { supabaseAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
-    webPackages: ['@supabase/supabase-js'],
+    webPackages: ['@supabase/supabase-js@1.35.7'],
     notes: [
       'You will need to add your Supabase URL (SUPABASE_URL), public API KEY,',
       'and JWT SECRET (SUPABASE_KEY, and SUPABASE_JWT_SECRET) to your .env file.',
