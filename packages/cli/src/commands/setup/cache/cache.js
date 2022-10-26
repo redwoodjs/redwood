@@ -5,14 +5,10 @@ import chalk from 'chalk'
 import Listr from 'listr'
 import terminalLink from 'terminal-link'
 
+import { addEnvVarTask } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import {
-  addEnvVarTask,
-  addPackagesTask,
-  getPaths,
-  writeFile,
-} from '../../../lib'
+import { addPackagesTask, getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
