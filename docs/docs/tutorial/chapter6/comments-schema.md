@@ -918,13 +918,15 @@ Okay, our comments service is feeling pretty solid now that we have our tests in
 
 :::info Mocks vs. Scenarios
 
-Mocks are used on the web site and scenarios are used on the api side. It might be helpful to remember that "mock" is a synonym for "fake", as in this-is-fake-data-not-really-in-the-database (so that we can create stories and tests in isolation without the api side getting involved). Whereas a scenario is real data in the database, it's just pre-set to some known state that we can rely on.
+Mocks are used on the web site and scenarios are used on the api side. It might be helpful to remember that **mock** is a synonym for "fake", as in "this is fake data not really in the database" (so that we can create stories and tests in isolation without the api side getting involved). Whereas a **scenario** is real data in the database, it's just pre-set to some known state that we can rely on.
 
-Maybe a [mnemonic](https://www.mnemonicgenerator.com/?words=M%20W%20S%20A) would help? **M**ocks > **W**eb, **S**cenarios > **A**PI:
+Maybe a [mnemonic](https://www.mnemonicgenerator.com/?words=M%20W%20S%20A) would help?
 
-* Mothers Worshipped Slimy Aprons
+**M**ocks : **W**eb :: **S**cenarios : **A**PI:
+
+* Mysterious Weasels Scratched Armor
 * Minesweepers Wrecked Subliminal Attorneys
-* Masked Widows Squeezed Apricots
+* Martian Warriors Squeezed Apricots
 
 Maybe not...
 
