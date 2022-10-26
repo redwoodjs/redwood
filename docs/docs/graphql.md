@@ -1178,11 +1178,11 @@ query cyclical {
 }
 ```
 
-> To mitigate the risk of attacking your application via deeply nested queries, RedwoodJS by default sets the [Query Depth Limit](https://www.npmjs.com/package/graphql-depth-limit#documentation) to 11.
+> To mitigate the risk of attacking your application via deeply nested queries, RedwoodJS by default sets the [Max Depth](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-depth) to 8.
 
-You can change the default value via the `depthLimitOptions` setting when creating your GraphQL handler.
+You can change the default settings via the `graphQLArmorConfig` setting when creating your GraphQL handler.
 
-You `depthLimitOptions` are `maxDepth` or `ignore` stops recursive depth checking based on a field name. Ignore can be [either a string or regexp](https://www.npmjs.com/package/graphql-depth-limit#documentation) to match the name, or a function that returns a boolean.
+Under `graphQLArmorConfig` configure your max depth using `maxDepth` property and setting `n` to desired depth. For additional configuration options, please see [GraphQL Armor maxDept configuration options](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-depth#configuring-for-graphql-armor).
 
 For example:
 
@@ -1190,10 +1190,46 @@ For example:
 // ...
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: { query: true } },
-  depthLimitOptions: { maxDepth: 6 },
+  graphQLArmorConfig: { maxDepth: { n: 10 } },
   // ...
 })
 ```
+
+### Block field suggestions
+
+Prevent returning field suggestions and leaking your schema to unauthorized actors.
+
+In production, this can lead to Schema leak even if the introspection is disabled.
+
+### Character Limit
+
+Limit number of characters in a GraphQL document.
+
+This help preventing DoS attacks by limiting the size of the document.
+
+### Cost limit
+
+Limit the complexity of a GraphQL document.
+
+### Max Aliases
+
+Limit the number of aliases in a GraphQL document.
+
+It is used to prevent DOS attack or heap overflow.
+
+### Max Directives
+
+Limit the number of directives in a GraphQL document.
+
+It is used to prevent DOS attack, heap overflow or server overloading.
+
+### Max Tokens
+
+Limit the number of tokens in a GraphQL document.
+
+It is used to prevent DOS attack, heap overflow or server overloading.
+
+The token limit is often limited by the graphql parser, but this is not always the case and would lead to a fatal heap overflow.
 
 ### Error Masking
 
