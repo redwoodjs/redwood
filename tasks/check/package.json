@@ -2,7 +2,7 @@
   "name": "check",
   "private": true,
   "dependencies": {
-    "@actions/core": "1.9.1",
+    "@actions/core": "1.10.0",
     "@actions/exec": "1.1.1",
     "sort-package-json": "1.57.0"
   }

@@ -1,4 +1,4 @@
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 jest.mock('@redwoodjs/internal/dist/paths', () => {
   return {
@@ -131,6 +131,7 @@ describe('serverConfigWithDefaults', () => {
 
   it('overrides defaults with custom', () => {
     const serverConfig = {
+      port: 12345,
       branch: 'venus',
       packageManagerCommand: 'npm',
       monitorCommand: 'god',
@@ -139,6 +140,11 @@ describe('serverConfigWithDefaults', () => {
     }
     const config = baremetal.serverConfigWithDefaults(serverConfig, {})
     expect(config).toEqual(serverConfig)
+  })
+
+  it('provides default port as 22', () => {
+    const config = baremetal.serverConfigWithDefaults({}, {})
+    expect(config.port).toEqual(22)
   })
 
   it('provides default branch name', () => {
@@ -732,7 +738,7 @@ describe('commands', () => {
       { environment: 'staging', releaseDir: '2022051120000' },
       {}
     )
-    const tasks = servers[0].task()._tasks
+    const tasks = servers[0].task().tasks
 
     expect(tasks[0].title).toMatch('Connecting')
     expect(tasks[9].title).toMatch('Disconnecting')
@@ -743,7 +749,7 @@ describe('commands', () => {
       { environment: 'staging', releaseDir: '2022051120000' },
       {}
     )
-    const tasks = servers[0].task()._tasks
+    const tasks = servers[0].task().tasks
 
     expect(tasks[1].title).toMatch('Cloning')
   })
@@ -757,7 +763,7 @@ describe('commands', () => {
       },
       {}
     )
-    const tasks = servers[0].task()._tasks
+    const tasks = servers[0].task().tasks
 
     expect(tasks.length).toEqual(3)
     expect(tasks[1].title).toMatch('Enabling maintenance')
@@ -772,7 +778,7 @@ describe('commands', () => {
       },
       {}
     )
-    const tasks = servers[0].task()._tasks
+    const tasks = servers[0].task().tasks
 
     expect(tasks.length).toEqual(3)
     expect(tasks[1].title).toMatch('Rolling back 2 release(s)')
@@ -786,7 +792,7 @@ describe('commands', () => {
       },
       {}
     )
-    const tasks = servers[0].task()._tasks
+    const tasks = servers[0].task().tasks
 
     expect(tasks[1].title).toEqual('Before update: `touch update`')
     expect(tasks[5].title).toEqual('After install: `touch install`')

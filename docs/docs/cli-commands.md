@@ -413,6 +413,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 | `cell <name>`          | Generate a cell component                                                                             |
 | `component <name>`     | Generate a component component                                                                        |
 | `dataMigration <name>` | Generate a data migration component                                                                   |
+| `dbAuth`               | Generate sign in, sign up and password reset pages for dbAuth                                         |
 | `deploy <provider>`    | Generate a deployment configuration                                                                   |
 | `function <name>`      | Generate a Function                                                                                   |
 | `layout <name>`        | Generate a layout component                                                                           |
@@ -447,6 +448,7 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 | `name`               | Name of the cell                                                                                                                                                 |
 | `--force, -f`        | Overwrite existing files                                                                                                                                         |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                             |
+| `--query`            | Use this flag to specify a specific name for the GraphQL query. The query name must be unique                                                                    |
 | `--list`             | Use this flag to generate a list cell. This flag is needed when dealing with irregular words whose plural and singular is identical such as equipment or pokemon |
 | `--tests`            | Generate test files [default: true]                                                                                                                              |
 | `--stories`          | Generate Storybook files [default: true]                                                                                                                         |
@@ -573,6 +575,28 @@ See the [Data Migration](data-migrations.md) docs.
 **Usage**
 
 See the [Deploy](/docs/deploy/introduction) docs.
+
+### generate dbAuth
+
+Generate log in, sign up, forgot password and password reset pages for dbAuth
+
+```
+yarn redwood generate dbAuth
+```
+
+| Arguments & Options  | Description                                                                                      |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| `--webAuthn`         | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted |
+
+If you don't want to create your own log in, sign up, forgot password and
+password reset pages from scratch you can use this generator. The pages will be
+available at /login, /signup, /forgot-password, and /reset-password. Check the
+post-install instructions for one change you need to make to those pages: where
+to redirect the user to once their log in/sign up is successful.
+
+If you'd rather create your own, you might want to start from the generated
+pages anyway as they'll contain the other code you need to actually submit the
+log in credentials or sign up fields to the server for processing.
 
 ### generate directive
 

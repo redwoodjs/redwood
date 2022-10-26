@@ -62,16 +62,29 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     expect(mockedReply.status).toHaveBeenCalledWith(200)
   })
 
-  test('requestHandler returns an error status if handler throws an error', async () => {
-    jest.spyOn(mockedReply, 'status')
+  describe('error handling', () => {
+    let consoleError
 
-    const handler = async () => {
-      throw new Error('error')
-    }
+    beforeEach(() => {
+      consoleError = console.error
+      console.error = () => {}
+    })
 
-    await requestHandler(request, mockedReply, handler)
+    afterEach(() => {
+      console.error = consoleError
+    })
 
-    expect(mockedReply.status).toHaveBeenCalledWith(500)
+    test('requestHandler returns an error status if handler throws an error', async () => {
+      jest.spyOn(mockedReply, 'status')
+
+      const handler = async () => {
+        throw new Error('error')
+      }
+
+      await requestHandler(request, mockedReply, handler)
+
+      expect(mockedReply.status).toHaveBeenCalledWith(500)
+    })
   })
 
   test('requestHandler replies with headers', async () => {

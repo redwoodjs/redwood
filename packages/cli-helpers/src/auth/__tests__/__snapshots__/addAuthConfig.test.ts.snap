@@ -1,0 +1,317 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Components with props Should add useAuth on the same line for single line components, and separate line for multiline components 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import { AuthProvider, useAuth } from './auth'
+
+import './index.css'
+
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth} graphQLClientConfig={{ cache }}>
+          <Routes />
+        </RedwoodApolloProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;
+
+exports[`Components with props Should add useAuth on the same line for single line components, and separate line for multiline components 2`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  return (
+    <Router useAuth={useAuth}
+      pageLoadingDelay={400}
+      trailingSlashes="always"
+      paramTypes={{
+        foo: {
+          match: /foo/,
+          parse: (value: string) => value.split('').reverse().join(''),
+        },
+      }}
+    >
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+"
+`;
+
+exports[`Components with props Should not add useAuth if one already exists 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import { AuthProvider, useAuth } from './auth'
+
+import './index.css'
+
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth} graphQLClientConfig={{ cache }}>
+          <Routes />
+        </RedwoodApolloProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;
+
+exports[`Components with props Should not add useAuth if one already exists 2`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  return (
+    <Router
+      pageLoadingDelay={400}
+      trailingSlashes="always"
+      paramTypes={{
+        foo: {
+          match: /foo/,
+          parse: (value: string) => value.split('').reverse().join(''),
+        },
+      }}
+      useAuth={() => ({
+        loading: false,
+        isAuthenticated: false
+      })}
+    >
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+"
+`;
+
+exports[`Customized App.js Should add auth config when using explicit return 1`] = `
+"import { useEffect } from 'react'
+import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import { AuthProvider, useAuth } from './auth'
+
+import './index.css'
+
+const App = (props) => {
+  const { cache } = props
+
+  useEffect(() => {
+    console.log('Running my custom useEffect hook on each render.')
+  })
+
+  return (
+    <FatalErrorBoundary page={FatalErrorPage}>
+      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+        <AuthProvider>
+          <RedwoodApolloProvider useAuth={useAuth}>
+            <AnotherProvider>
+              <Routes />
+            </AnotherProvider>
+          </RedwoodApolloProvider>
+        </AuthProvider>
+      </RedwoodProvider>
+    </FatalErrorBoundary>
+  )
+}
+
+export default App
+"
+`;
+
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import { AuthProvider, useAuth } from './auth'
+
+import './index.css'
+
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth}>
+          <Routes />
+        </RedwoodApolloProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;
+
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 2`] = `
+"import { createDbAuth } from '@redwoodjs/auth-providers-web'
+
+export const { AuthProvider, useAuth } = createDbAuth()
+"
+`;
+
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 3`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  return (
+    <Router useAuth={useAuth}>
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+"
+`;
+
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import { AuthProvider, useAuth } from './auth'
+
+import './index.css'
+
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth}>
+          <Routes />
+        </RedwoodApolloProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;
+
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 2`] = `
+"import { createDbAuth } from '@redwoodjs/auth-providers-web'
+
+export const { AuthProvider, useAuth } = createDbAuth()
+"
+`;
+
+exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 3`] = `
+"// In this file, all Page components from 'src/pages\` are auto-imported. Nested
+// directories are supported, and should be uppercase. Each subdirectory will be
+// prepended onto the component name.
+//
+// Examples:
+//
+// 'src/pages/HomePage/HomePage.js'         -> HomePage
+// 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  return (
+    <Router useAuth={useAuth}>
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+"
+`;
+
+exports[`Swapped out GraphQL client Should add auth config when app is missing RedwoodApolloProvider 1`] = `
+"import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
+
+import { AuthProvider, useAuth } from './auth'
+
+import './index.css'
+
+const queryClient = {}
+
+const App = () => (
+  <FatalErrorBoundary page={FatalErrorPage}>
+    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <RedwoodReactQueryProvider>
+            <Routes />
+          </RedwoodReactQueryProvider>
+        </QueryClientProvider>
+      </AuthProvider>
+    </RedwoodProvider>
+  </FatalErrorBoundary>
+)
+
+export default App
+"
+`;

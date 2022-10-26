@@ -3,6 +3,9 @@ name: ⚙️ CI
 on:
   pull_request
 
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
 jobs:
   only-doc-changes:
     if: github.repository == 'redwoodjs/redwood'
@@ -136,9 +139,8 @@ jobs:
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: 🌲 Run cypress
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
         with:
@@ -150,8 +152,8 @@ jobs:
           wait-on: 'http://localhost:8910'
           working-directory: ./tasks/e2e
           spec: |
-             cypress/integration/01-tutorial/*.spec.js
-             cypress/integration/04-logger/*.spec.js
+             cypress/e2e/01-tutorial/*.cy.js
+             cypress/e2e/04-logger/*.cy.js
 
   tutorial-e2e-docs:
     needs: only-doc-changes
@@ -208,10 +210,12 @@ jobs:
 
       - name: Run smoke tests on 'rw dev', 'rw serve', 'rw storybook'
         working-directory: ./tasks/smoke-test
-        run: npx playwright test
+        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }} --reporter @replayio/playwright/reporter,line
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
+          RECORD_REPLAY_METADATA_TEST_RUN_TITLE: Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+          RECORD_REPLAY_TEST_METRICS: 1
 
       - name: Run `rw info`
         run: |
@@ -297,6 +301,12 @@ jobs:
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
         continue-on-error: true
 
+      - name: Upload Replays
+        if: always()
+        uses: replayio/action-upload@v0.4.5
+        with:
+          api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
+
   smoke-test-docs:
     needs: only-doc-changes
     if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
@@ -308,3 +318,87 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Only doc changes"
+
+  cherry-pick:
+    needs: [build-lint-test, tutorial-e2e, smoke-test]
+    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'next' && !contains(join(needs.*.result, ','), 'failure')
+    name: cherry-pick
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: next
+          fetch-depth: 0
+          token: ${{ secrets.JTOAR_TOKEN }}
+
+      - name: 🍒 Cherry pick
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git cherry-pick ${{ github.event.pull_request.head.sha }}
+          git push
+
+      - name: 🔑 Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Close PR
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          gh api graphql -F id=${{ github.event.pull_request.node_id }} -f query='
+            mutation($id: ID!) {
+              closePullRequest(input: {
+                pullRequestId: $id
+              }) {
+                clientMutationId
+              }
+            }
+          '
+
+  cherry-pick-docs:
+    needs: [build-lint-test-docs, tutorial-e2e-docs, smoke-test-docs]
+    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'next' && !contains(join(needs.*.result, ','), 'failure')
+    name: cherry-pick-docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: next
+          fetch-depth: 0
+          token: ${{ secrets.JTOAR_TOKEN }}
+
+      - name: 🍒 Cherry pick
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git cherry-pick ${{ github.event.pull_request.head.sha }}
+          git push
+
+      - name: 🔑 Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Close PR
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          gh api graphql -F id=${{ github.event.pull_request.node_id }} -f query='
+            mutation($id: ID!) {
+              closePullRequest(input: {
+                pullRequestId: $id
+              }) {
+                clientMutationId
+              }
+            }
+          '

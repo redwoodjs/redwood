@@ -1,0 +1,7 @@
+import { Magic } from 'magic-sdk'
+
+import { createMagicLinkAuth } from '@redwoodjs/auth-providers-web'
+
+const m = new Magic(process.env.MAGICLINK_PUBLIC || '')
+
+export const { AuthProvider, useAuth } = createMagicLinkAuth(m)

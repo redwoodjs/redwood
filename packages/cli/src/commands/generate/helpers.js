@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
@@ -17,7 +16,7 @@ import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
 import { yargsDefaults } from '../generate'
 
 /**
- * Returns the path to a custom generator template, if found in the app.
+ * Returns the full path to a custom generator template, if found in the app.
  * Otherwise the default Redwood template.
  */
 export const customOrDefaultTemplatePath = ({
@@ -200,9 +199,9 @@ export const createYargsForComponentGeneration = ({
             ...includeAdditionalTasks(options),
           ],
           {
-            collapse: false,
+            rendererOptions: { collapse: false },
             exitOnError: true,
-            renderer: options.verbose && VerboseRenderer,
+            renderer: options.verbose && 'verbose',
           }
         )
 
