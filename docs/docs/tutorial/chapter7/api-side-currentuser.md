@@ -430,7 +430,7 @@ Note that we switched from `findUnique()` to `findFirst()` here. Prisma's `findU
 
 These changes make sure that a user can only see a list of their own posts, or the detail for a single post that they own.
 
-What about `updatePost` and `deletePost`? They aren't limited to just the `currentUser`, which would let anyone update or delete a post if they made a manual GraphQL call! That's not good. We'll deal with those a little later.
+What about `updatePost` and `deletePost`? They aren't limited to just the `currentUser`, which would let anyone update or delete a post if they made a manual GraphQL call! That's not good. We'll deal with those [a little later](#update-and-delete).
 
 But there's a problem with the updates we just made: doesn't the homepage also use the `posts` service to display all the articles for the homepage? This code update would limit the homepage to only showing a logged in user's own posts and no one else! And what happens if someone who is *not* logged in goes to the homepage? ERROR.
 
@@ -535,7 +535,7 @@ export const deletePost = ({ id }) => {
 }
 ```
 
-(Again, don't forget the change from `findUnique()` to `findFirst()`.)
+(Again, don't forget the change from `findUnique()` to `findFirst()`.) And update `posts` to remove some of the functions that live in `adminPosts` now:
 
 ```javascript title=api/src/services/posts/posts.js
 import { db } from 'src/lib/db'
@@ -556,7 +556,7 @@ export const Post = {
 
 We've removed the `userId` lookup in the `posts` service so we're back to returning every post (for `posts`) or a single post (regardless of who owns it, in `post`).
 
-Note that we kept the relation resolver here, and there's none in `adminPosts`: since the queries and mutations from both SDLs still return a `Post`, we'll want to keep that relation resolver with the service that matches that original SDL by name: `graphql/posts.sdl.js` => `services/posts/posts.js`.
+Note that we kept the relation resolver here `Post.user`, and there's none in `adminPosts`: since the queries and mutations from both SDLs still return a `Post`, we'll want to keep that relation resolver with the service that matches that original SDL by name: `graphql/posts.sdl.js` => `services/posts/posts.js`.
 
 ### Update the GraphQL Queries
 
@@ -646,7 +646,7 @@ export const updatePost = async ({ id, input }) => {
 }
 ```
 
-We're using the `adminPost()` service function, rather than making another call to the database (note that we had to async/await it to make sure we have the post before continuing). Composing services like this is something Redwood was designed to encourage: services functions act as resolvers for GraphQL, but they're also just plain JS functions and can be called wherever you need. And the reasons why you'd want to do this are clearly demonstrated here: `adminPost()` already limits the found record to be only one owned by the logged in user, so that logic is already encapsulated here, and we can be sure that any time an admin wants to do something with a single post, it runs through this code and uses the same logic every time.
+We're using the `adminPost()` service function, rather than making another call to the database (note that we had to async/await it to make sure we have the post before continuing). Composing services like this is something Redwood was designed to encourage: services' functions act as resolvers for GraphQL, but they're also just plain JS functions and can be called wherever you need. And the reasons why you'd want to do this are clearly demonstrated here: `adminPost()` already limits the found record to be only one owned by the logged in user, so that logic is already encapsulated here, and we can be sure that any time an admin wants to do something with a single post, it runs through this code and uses the same logic every time.
 
 This works, but we'll need to do the same thing in `deletePost`. Let's extract that check for the post existence into a function:
 
@@ -738,6 +738,6 @@ Whew! Let's try several different scenarios (this is the kind of thing that the 
 * A logged in moderator user *should* see moderation controls next to comments
 * A logged in moderator user *should not* be able to access /admin/posts
 
-In fact, you could write some new tests to make sure this functionality doesn't mistakenly change in the future. The quickest would probably be to create `adminPosts.scenarios.js` and `adminPosts.test.js` files to go with the new service and verify that you are only returned the posts owned by a given user. You can [mock currentUser](/docs/testing#mockcurrentuser-on-the-api-side) to simulate someone being logged in or not, with different roles. You could add tests for the Cells we modified above, but the data they get is dependant on what's returned from the service, so as long as you have the service itself covered you should be okay. The 100% coverage folks would argue otherwise, but while they're still busy writing tests we're out cruising in our new yacht thanks to all the revenue from our newly launched (with *reasonable* test coverage) features!
+In fact, you could write some new tests to make sure this functionality doesn't mistakenly change in the future. The quickest would probably be to create `adminPosts.scenarios.js` and `adminPosts.test.js` files to go with the new service and verify that you are only returned the posts owned by a given user. You can [mock currentUser](/docs/testing#mockcurrentuser-on-the-api-side) to simulate someone being logged in or not, with different roles. You could add tests for the Cells we modified above, but the data they get is dependent on what's returned from the service, so as long as you have the service itself covered you should be okay. The 100% coverage folks would argue otherwise, but while they're still busy writing tests we're out cruising in our new yacht thanks to all the revenue from our newly launched (with *reasonable* test coverage) features!
 
 Did it work? Great! Did something go wrong? Can someone see too much, or too little? Double check that all of your GraphQL queries are updated and you've saved changes in all the opened files.
