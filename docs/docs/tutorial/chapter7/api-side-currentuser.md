@@ -69,11 +69,11 @@ Whoops!
 
 <img width="584" alt="image" src="https://user-images.githubusercontent.com/300/192899337-9cc1167b-e6da-42d4-83dc-d2a6c0cd1179.png" />
 
-We made `userId` a required field, but we already have several posts in our development database! Since we don't have a default value for `userId` defined, it's impossible to add this column to the database.
+Similar to what happened when we added `roles` to `User`, We made `userId` a required field, but we already have several posts in our development database. Since we don't have a default value for `userId` defined, it's impossible to add this column to the database.
 
 :::caution Why don't we just set `@default(1)` in the schema?
 
-This would get us past this problem, but could cause hard-to-track-down bugs in the future: if you ever forget to assign a `post` to a `user`, rather than fail it'll happily just set `userId` to `1`, which may or may not even exist at some day! It's best to take the extra time to do things The Right Way and avoid the quick hacks to get past an annoyance like this. Your future self will thank you!
+This would get us past this problem, but could cause hard-to-track-down bugs in the future: if you ever forget to assign a `post` to a `user`, rather than fail it'll happily just set `userId` to `1`, which may or may not even exist some day! It's best to take the extra time to do things The Right Way and avoid the quick hacks to get past an annoyance like this. Your future self will thank you!
 
 :::
 
@@ -90,6 +90,7 @@ If you started the second half the tutorial from the [Redwood Tutorial repo](htt
 ```javascript title=scripts/seed.js
 {
   id: 1,
+  name: 'John Doe',
   title: 'Welcome to the blog!',
   body:
     "I'm baby single- origin coffee kickstarter lo - fi paleo skateboard.Tumblr hashtag austin whatever DIY plaid knausgaard fanny pack messenger bag blog next level woke.Ethical bitters fixie freegan,helvetica pitchfork 90's tbh chillwave mustache godard subway tile ramps art party. Hammock sustainable twee yr bushwick disrupt unicorn, before they sold out direct trade chicharrones etsy polaroid hoodie. Gentrify offal hoodie fingerstache.",
@@ -98,17 +99,29 @@ If you started the second half the tutorial from the [Redwood Tutorial repo](htt
 },
 ```
 
-Now run `yarn rw prisma migrate reset` again and you should be good.
+Now run `yarn rw prisma migrate reset` and and...you'll get a different error. But that's okay, read on...
 
 :::
 
-The migration never actually completed, so we'll need to run that again:
+We've got an error here because running a database `reset` doesn't also apply pending migrations. So we're trying to set a `userId` where one doesn't exist in the database (it does exist in Prisma generated client libs though, so it thinks that there *should* be one, even if it doesn't exist in the database yet).
+
+It may feel like we're stuck, but note that the database did reset successfully, it's just the seed that failed. So now let's migrate the database to add the new `userId` to `Post`, and then re-run the seed to populate the database, naming it something like "add userId to post":
 
 ```
 yarn rw prisma migrate dev
 ```
 
-If you didn't start your codebase from the Redwood Tutorial repo then you'll now have no users or posts in the database. Go ahead and create a user by going to [http://localhost:8910/signup](http://localhost:8910/signup) but don't create any posts yet! Change their role to be "admin", either by using the console introduced in the [previous page](/docs/canary/tutorial/chapter7/rbac#changing-roles-on-a-user) or by [opening Prisma Studio](/docs/canary/tutorial/chapter2/getting-dynamic#prisma-studio) and changing it directly in the database.
+And then the seed:
+
+```
+yarn rw prisma db seed
+```
+
+:::info
+
+If you didn't start your codebase from the [Redwood Tutorial repo](https://github.com/redwoodjs/redwood-tutorial) then you'll now have no users or posts in the database. Go ahead and create a user by going to [http://localhost:8910/signup](http://localhost:8910/signup) but don't create any posts yet! Change the user's role to be "admin", either by using the console introduced in the [previous page](/docs/canary/tutorial/chapter7/rbac#changing-roles-on-a-user) or by [opening Prisma Studio](/docs/canary/tutorial/chapter2/getting-dynamic#prisma-studio) and changing it directly in the database.
+
+:::
 
 ### Add Fields to the SDL and Service
 
@@ -154,7 +167,7 @@ Here we're using `User!` with an exclamation point because we know that every `P
 
 #### Add User Relation Resolver
 
-This one is a little tricker: we need to add a "lookup" in the `posts` service, so that it knows how to get the associated user. When we generated the `comments` SDL and service we got this relation resolver created for us. We could re-run the service generator for `Post` but that could blow away changes we made to this file. Our only option would be to include the `--force` flag since the file already exists, which will write over every thing. In this case we'll just add the resolver manually:
+This one is a little tricker: we need to add a "lookup" in the `posts` service, so that it knows how to get the associated user. When we generated the `comments` SDL and service we got this **relation resolver** created for us. We could re-run the service generator for `Post` but that could blow away changes we made to this file. Our only option would be to include the `--force` flag since the file already exists, which will write over everything. In this case we'll just add the resolver manually:
 
 ```javascript title=api/src/services/posts/posts.js
 import { db } from 'src/lib/db'
@@ -191,7 +204,7 @@ export const deletePost = ({ id }) => {
 // highlight-start
 export const Post = {
   user: (_obj, { root }) =>
-    db.post.findOne({ where: { id: root.id } }).user(),
+    db.post.findFirst({ where: { id: root.id } }).user(),
 }
 // highlight-end
 ```
@@ -210,14 +223,14 @@ post {   <- root
 }
 ```
 
-That post will already be retreived from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Now we know everything we need to to make a `findOne()` query in Prisma, giving it the `id` of the record we already found, but returning the `user` associated to that record, rather than the `post` itself.
+That post will already be retreived from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Now we know everything we need to to make a `findFirst()` query in Prisma, giving it the `id` of the record we already found, but returning the `user` associated to that record, rather than the `post` itself.
 
 We could also write this resolver as follows:
 
 ```javascript
 export const Post = {
   user: (_obj, { root }) =>
-    db.user.findOne({ where: { id: root.userId } }),
+    db.user.findFirst({ where: { id: root.userId } }),
 }
 ```
 
@@ -377,10 +390,11 @@ export const posts = () => {
 }
 
 export const post = ({ id }) => {
-  return db.post.findUnique({
-    // highlight-next-line
+  // highlight-start
+  return db.post.findFirst({
     where: { id, userId: context.currentUser.id },
   })
+  // highlight-end
 }
 
 export const createPost = ({ input }) => {
@@ -392,15 +406,13 @@ export const createPost = ({ input }) => {
 export const updatePost = ({ id, input }) => {
   return db.post.update({
     data: input,
-    // highlight-next-line
-    where: { id, userId: context.currentUser.id },
+    where: { id },
   })
 }
 
 export const deletePost = ({ id }) => {
   return db.post.delete({
-    // highlight-next-line
-    where: { id, userId: context.currentUser.id },
+    where: { id },
   })
 }
 
@@ -410,9 +422,17 @@ export const Post = {
 }
 ```
 
-These changes make sure that a user can only see a list of their own posts, edit their own post, or delete their own post.
+:::info Prisma's `findUnique()` vs. `findFirst()`
 
-But there's a problem. Doesn't the homepage also use the `posts` service to display all the articles for the homepage? This code update would limit the homepage to only showing a logged in user's own posts and no one else! And what happens if someone who is *not* logged in goes to the homepage? ERROR.
+Note that we switched from `findUnique()` to `findFirst()` here. Prisma's `findUnique()` requires that any attributes in the `where` clause have unique indexes, which `id` does, but `userId` does not. So we need to switch to the `findFirst()` function which allows you to put whatever you want in the `where`, which may return more than one record, but Prisma will only return the first of that set. In this case we know there'll always only be one, because we're selecting by `id` *in addition* to `userId`.
+
+:::
+
+These changes make sure that a user can only see a list of their own posts, or the detail for a single post that they own.
+
+What about `updatePost` and `deletePost`? They aren't limited to just the `currentUser`, which would let anyone update or delete a post if they made a manual GraphQL call! That's not good. We'll deal with those a little later.
+
+But there's a problem with the updates we just made: doesn't the homepage also use the `posts` service to display all the articles for the homepage? This code update would limit the homepage to only showing a logged in user's own posts and no one else! And what happens if someone who is *not* logged in goes to the homepage? ERROR.
 
 How can we return one list of posts in the admin, and a different list of posts for the homepage?
 
@@ -490,7 +510,7 @@ export const adminPosts = () => {
 }
 
 export const adminPost = ({ id }) => {
-  return db.post.findUnique({
+  return db.post.findFirst({
     where: { id, userId: context.currentUser.id },
   })
 }
@@ -504,16 +524,18 @@ export const createPost = ({ input }) => {
 export const updatePost = ({ id, input }) => {
   return db.post.update({
     data: input,
-    where: { id, userId: context.currentUser.id },
+    where: { id },
   })
 }
 
 export const deletePost = ({ id }) => {
   return db.post.delete({
-    where: { id, userId: context.currentUser.id },
+    where: { id },
   })
 }
 ```
+
+(Again, don't forget the change from `findUnique()` to `findFirst()`.)
 
 ```javascript title=api/src/services/posts/posts.js
 import { db } from 'src/lib/db'
@@ -586,6 +608,122 @@ If we didn't use the `posts: adminPosts` syntax, we would need to rename the arg
 
 We don't need to make any changes to the "public" views (like `ArticleCell` and `ArticlesCell`) since those will continue to use the original `posts` and `post` queries, and their respective resolvers.
 
+## Update and Delete
+
+Okay, let's take care of `updatePost` and `deletePost` now. Why couldn't we just do this?
+
+```javascript
+export const updatePost = ({ id, input }) => {
+  return db.post.update({
+    data: input,
+    // highlight-next-line
+    where: { id, userId: context.currentUser.id },
+  })
+}
+```
+
+Because like `findUnique()`, Prisma only wants to update records based on fields with unique indexes, in this case that's just `id`. So we need to keep this to just an `id`. But how do we verify that the user is only updating/deleting a record that they own?
+
+We could select the record first, make sure the user owns it, and only then let the `update()` commence:
+
+```javascript
+// highlight-next-line
+import { ForbiddenError } from '@redwoodjs/graphql-server'
+
+// highlight-start
+export const updatePost = async ({ id, input }) => {
+  if (await adminPost({ id })) {
+    return true
+  } else {
+    throw new ForbiddenError("You don't have access to this post")
+  }
+  // highlight-end
+
+  return db.post.update({
+    data: input,
+    where: { id },
+  })
+}
+```
+
+We're using the `adminPost()` service function, rather than making another call to the database (note that we had to async/await it to make sure we have the post before continuing). Composing services like this is something Redwood was designed to encourage: services functions act as resolvers for GraphQL, but they're also just plain JS functions and can be called wherever you need. And the reasons why you'd want to do this are clearly demonstrated here: `adminPost()` already limits the found record to be only one owned by the logged in user, so that logic is already encapsulated here, and we can be sure that any time an admin wants to do something with a single post, it runs through this code and uses the same logic every time.
+
+This works, but we'll need to do the same thing in `deletePost`. Let's extract that check for the post existence into a function:
+
+```javascript
+// highlight-start
+const verifyOwnership = async (id) {
+  if (await adminPost({ id })) {
+    return true
+  } else {
+    throw new ForbiddenError("You don't have access to this post")
+  }
+}
+// highlight-end
+
+export const updatePost = async ({ id, input }) => {
+  // highlight-next-line
+  await verifyOwnership(id)
+
+  return db.post.update({
+    data: input,
+    where: { id },
+  })
+}
+```
+
+Simple! Our final `adminPosts` service ends up looking like:
+
+```javascript
+import { ForbiddenError } from '@redwoodjs/graphql-server'
+
+import { db } from 'src/lib/db'
+
+const validateOwnership = async ({ id }) => {
+  if (await adminPost({ id })) {
+    return true
+  } else {
+    throw new ForbiddenError("You don't have access to this post")
+  }
+}
+
+export const adminPosts = () => {
+  return db.post.findMany({ where: { userId: context.currentUser.id } })
+}
+
+export const adminPost = ({ id }) => {
+  return db.post.findFirst({
+    where: { id, userId: context.currentUser.id },
+  })
+}
+
+export const createPost = ({ input }) => {
+  return db.post.create({
+    data: { ...input, userId: context.currentUser.id },
+  })
+}
+
+export const updatePost = async ({ id, input }) => {
+  await validateOwnership({ id })
+
+  return db.post.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deletePost = async ({ id }) => {
+  await validateOwnership({ id })
+
+  return db.post.delete({
+    where: { id },
+  })
+}
+
+```
+
+## Wrapping Up
+
 Whew! Let's try several different scenarios (this is the kind of thing that the QA team lives for), making sure everything is working as expected:
 
 * A logged out user *should* see all posts on the homepage
@@ -600,6 +738,6 @@ Whew! Let's try several different scenarios (this is the kind of thing that the 
 * A logged in moderator user *should* see moderation controls next to comments
 * A logged in moderator user *should not* be able to access /admin/posts
 
-In fact, you could write some new tests to make sure this functionality doesn't mistakenly change in the future. The quickest would probably be to create an `adminPosts.scenarios.js` and `adminPosts.test.js` file to go with the new service and verify that you are only returned the posts owned by a given user. You can [mock currentUser](http://localhost:3000/docs/canary/testing#mockcurrentuser-on-the-api-side) to simulate someone being logged in or not, with different roles. You could add tests for the Cells we modified above, but the data they get is dependant on what's returned from the service, so as long as you have the service itself covered you should be okay. The 100% coverage folks would argue otherwise, but while they're still busy writing tests we're out cruising in our new yacht thanks to all the revenue from our newly launched (with *reasonable* test coverage) features!
+In fact, you could write some new tests to make sure this functionality doesn't mistakenly change in the future. The quickest would probably be to create `adminPosts.scenarios.js` and `adminPosts.test.js` files to go with the new service and verify that you are only returned the posts owned by a given user. You can [mock currentUser](/docs/testing#mockcurrentuser-on-the-api-side) to simulate someone being logged in or not, with different roles. You could add tests for the Cells we modified above, but the data they get is dependant on what's returned from the service, so as long as you have the service itself covered you should be okay. The 100% coverage folks would argue otherwise, but while they're still busy writing tests we're out cruising in our new yacht thanks to all the revenue from our newly launched (with *reasonable* test coverage) features!
 
 Did it work? Great! Did something go wrong? Can someone see too much, or too little? Double check that all of your GraphQL queries are updated and you've saved changes in all the opened files.
