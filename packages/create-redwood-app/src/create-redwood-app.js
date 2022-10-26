@@ -316,12 +316,20 @@ import { name, version } from '../package'
       name: 'override-engine-error',
       message: 'How would you like to proceed?',
       choices: [
-        { title: 'Override error and continue install', value: true },
-        { title: 'Quit install', value: false },
+        // See https://github.com/enquirer/enquirer#defining-choices
+        // Does not seem to be working properly with the values as strings or booleans
+        // Possibly an upstream problem in Listr2
+        // { name: 'Override error and continue install', value: 'true' },
+        // { name: 'Quit install', value: 'false' },
+        'Override error and continue install',
+        'Quit install',
       ],
       initial: 0,
     })
-    if (response['override-engine-error'] === false) {
+    // TODO improve this logic if bug above can be fixed
+    // if (response['override-engine-error'] === false)
+    if (response['override-engine-error'] === 'Quit install') {
+      console.log(style.warning(`\nInstallation process ended.\n`))
       process.exit(1)
     }
   }
