@@ -3,8 +3,7 @@ import path from 'path'
 
 import toml from '@iarna/toml'
 import boxen from 'boxen'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
 
@@ -684,7 +683,7 @@ export const handler = async (yargs) => {
     const tasks = new Listr(commands(yargs, ssh), {
       concurrent: true,
       exitOnError: true,
-      renderer: yargs.verbose && VerboseRenderer,
+      renderer: yargs.verbose && 'verbose',
     })
     await tasks.run()
   } catch (e) {

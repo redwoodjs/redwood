@@ -23,9 +23,16 @@ import '../../../../lib/test'
 import { files } from '../../../generate/cell/cell'
 import { tasks } from '../cell'
 
+beforeEach(() => {
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+
 afterEach(() => {
   fs.__setMockFiles({})
   jest.spyOn(fs, 'unlinkSync').mockClear()
+  console.info.mockRestore()
+  console.log.mockRestore()
 })
 
 test('destroys cell files', async () => {
@@ -36,7 +43,7 @@ test('destroys cell files', async () => {
     filesFn: files,
     name: 'User',
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   await t.run()
 
@@ -55,7 +62,7 @@ test('destroys cell files with stories and tests', async () => {
     stories: true,
     tests: true,
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   await t.run()
 
