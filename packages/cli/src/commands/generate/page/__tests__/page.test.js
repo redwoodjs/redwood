@@ -42,7 +42,7 @@ import path from 'path'
 // Load mocks
 import '../../../../lib/test'
 
-import { ensurePosixPath } from '@redwoodjs/internal'
+import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 
 import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
@@ -318,7 +318,7 @@ test('paramVariants returns empty strings for no params', () => {
 test('paramVariants finds the param and type in the middle of the path', () => {
   expect(page.paramVariants('/post/{id:Int}/edit')).toEqual({
     propParam: '{ id }',
-    propValueParam: 'id={42} ',
+    propValueParam: 'id={42}',
     argumentParam: '{ id: 42 }',
     paramName: 'id',
     paramValue: 42,
@@ -329,7 +329,7 @@ test('paramVariants finds the param and type in the middle of the path', () => {
 test('paramVariants handles boolean type', () => {
   expect(page.paramVariants('/post/edit/{debug:Boolean}')).toEqual({
     propParam: '{ debug }',
-    propValueParam: 'debug={true} ',
+    propValueParam: 'debug={true}',
     argumentParam: '{ debug: true }',
     paramName: 'debug',
     paramValue: true,
@@ -340,7 +340,7 @@ test('paramVariants handles boolean type', () => {
 test('paramVariants paramType defaults to string', () => {
   expect(page.paramVariants('/posts/{id}')).toEqual({
     propParam: '{ id }',
-    propValueParam: "id={'42'} ",
+    propValueParam: "id={'42'}",
     argumentParam: "{ id: '42' }",
     paramName: 'id',
     paramValue: '42',
@@ -348,92 +348,104 @@ test('paramVariants paramType defaults to string', () => {
   })
 })
 
-test('file generation', async () => {
-  mockFiles = {
-    [getPaths().web.routes]: [
-      "import { Router, Route } from '@redwoodjs/router'",
-      '',
-      'const Routes = () => {',
-      '  return (',
-      '    <Router>',
-      '      <Route path="/about" page={AboutPage} name="about" />',
-      '      <Route notfound page={NotFoundPage} />',
-      '    </Router>',
-      '  )',
-      '}',
-      '',
-      'export default Routes',
-    ].join('\n'),
-  }
-
-  const spy = jest.spyOn(fs, 'writeFileSync')
-
-  global.mockFs = true
-
-  await page.handler({
-    name: 'HomePage', // 'Page' should be trimmed from name
-    path: '',
-    force: false,
-    tests: true,
-    stories: true,
+describe('handler', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'info').mockImplementation(() => {})
+    jest.spyOn(console, 'log').mockImplementation(() => {})
   })
 
-  expect(spy).toHaveBeenCalled()
+  afterEach(() => {
+    console.info.mockRestore()
+    console.log.mockRestore()
+  })
 
-  spy.mock.calls.forEach((calls) => {
-    const testOutput = {
-      // Because windows paths are different, we need to normalise before snapshotting
-      filePath: ensurePosixPath(calls[0]),
-      fileContent: calls[1],
+  test('file generation', async () => {
+    mockFiles = {
+      [getPaths().web.routes]: [
+        "import { Router, Route } from '@redwoodjs/router'",
+        '',
+        'const Routes = () => {',
+        '  return (',
+        '    <Router>',
+        '      <Route path="/about" page={AboutPage} name="about" />',
+        '      <Route notfound page={NotFoundPage} />',
+        '    </Router>',
+        '  )',
+        '}',
+        '',
+        'export default Routes',
+      ].join('\n'),
     }
-    expect(testOutput).toMatchSnapshot()
+
+    const spy = jest.spyOn(fs, 'writeFileSync')
+
+    global.mockFs = true
+
+    await page.handler({
+      name: 'HomePage', // 'Page' should be trimmed from name
+      path: '',
+      force: false,
+      tests: true,
+      stories: true,
+    })
+
+    expect(spy).toHaveBeenCalled()
+
+    spy.mock.calls.forEach((calls) => {
+      const testOutput = {
+        // Because windows paths are different, we need to normalise before snapshotting
+        filePath: ensurePosixPath(calls[0]),
+        fileContent: calls[1],
+      }
+      expect(testOutput).toMatchSnapshot()
+    })
+
+    global.mockFs = false
+    spy.mockRestore()
   })
 
-  global.mockFs = false
-  spy.mockRestore()
-})
-
-test('file generation with route params', async () => {
-  mockFiles = {
-    [getPaths().web.routes]: [
-      "import { Router, Route } from '@redwoodjs/router'",
-      '',
-      'const Routes = () => {',
-      '  return (',
-      '    <Router>',
-      '      <Route path="/about" page={AboutPage} name="about" />',
-      '      <Route notfound page={NotFoundPage} />',
-      '    </Router>',
-      '  )',
-      '}',
-      '',
-      'export default Routes',
-    ].join('\n'),
-  }
-
-  const spy = jest.spyOn(fs, 'writeFileSync')
-  global.mockFs = true
-
-  await page.handler({
-    name: 'post',
-    path: '{id}',
-    force: false,
-    tests: true,
-    stories: true,
-  })
-
-  expect(spy).toHaveBeenCalled()
-
-  spy.mock.calls.forEach((calls) => {
-    const testOutput = {
-      filePath: ensurePosixPath(calls[0]),
-      fileContent: calls[1],
+  test('file generation with route params', async () => {
+    mockFiles = {
+      [getPaths().web.routes]: [
+        "import { Router, Route } from '@redwoodjs/router'",
+        '',
+        'const Routes = () => {',
+        '  return (',
+        '    <Router>',
+        '      <Route path="/about" page={AboutPage} name="about" />',
+        '      <Route notfound page={NotFoundPage} />',
+        '    </Router>',
+        '  )',
+        '}',
+        '',
+        'export default Routes',
+      ].join('\n'),
     }
-    expect(testOutput).toMatchSnapshot()
-  })
 
-  global.mockFs = false
-  spy.mockRestore()
+    const spy = jest.spyOn(fs, 'writeFileSync')
+    global.mockFs = true
+
+    await page.handler({
+      name: 'post',
+      path: '{id}',
+      force: false,
+      tests: true,
+      stories: true,
+    })
+
+    expect(spy).toHaveBeenCalled()
+
+    spy.mock.calls.forEach((calls) => {
+      const testOutput = {
+        filePath: ensurePosixPath(calls[0]),
+        fileContent: calls[1],
+      }
+      expect(testOutput).toMatchSnapshot()
+    })
+
+    global.mockFs = false
+    spy.mockRestore()
+  })
 })
 
 test('generates typescript pages', () => {

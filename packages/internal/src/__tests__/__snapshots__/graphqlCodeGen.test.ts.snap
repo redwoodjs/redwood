@@ -1,7 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Generate gql typedefs api 1`] = `
-"import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+"import { Prisma } from "@prisma/client"
+import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'
+import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/functions/types';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -11,8 +14,17 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Mayb
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
-    ) => Promise<Partial<TResult>> | Partial<TResult>;
+    ) => TResult | Promise<TResult>
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
+export type OptArgsResolverFn<TResult, TParent = {}, TContext = {}, TArgs = {}> = (
+      args?: TArgs,
+      obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+    ) => TResult | Promise<TResult>
+
+    export type RequiredResolverFn<TResult, TParent = {}, TContext = {}, TArgs = {}> = (
+      args: TArgs,
+      obj: { root: TParent; context: TContext; info: GraphQLResolveInfo }
+    ) => TResult | Promise<TResult>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -21,11 +33,11 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigInt: number;
-  Date: string;
-  DateTime: string;
+  Date: Date | string;
+  DateTime: Date | string;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
-  Time: string;
+  Time: Date | string;
 };
 
 export type Mutation = {
@@ -52,18 +64,28 @@ export type MutationupdateTodoStatusArgs = {
   status: Scalars['String'];
 };
 
+/** About the Redwood queries. */
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<Scalars['JSON']>;
+  /** Fetches the Redwood root schema. */
   redwood?: Maybe<Redwood>;
   todos?: Maybe<Array<Maybe<Todo>>>;
   todosCount: Scalars['Int'];
 };
 
+/**
+ * The RedwoodJS Root Schema
+ *
+ * Defines details about RedwoodJS such as the current user and version information.
+ */
 export type Redwood = {
   __typename?: 'Redwood';
+  /** The current user. */
   currentUser?: Maybe<Scalars['JSON']>;
+  /** The version of Prisma. */
   prismaVersion?: Maybe<Scalars['String']>;
+  /** The version of Redwood. */
   version?: Maybe<Scalars['String']>;
 };
 
@@ -74,6 +96,8 @@ export type Todo = {
   status: Scalars['String'];
 };
 
+type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];
+type AllMappedModels = MaybeOrArrayOfMaybe<Todo>
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -144,7 +168,7 @@ export type ResolversTypes = {
   Redwood: ResolverTypeWrapper<Redwood>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Time: ResolverTypeWrapper<Scalars['Time']>;
-  Todo: ResolverTypeWrapper<Todo>;
+  Todo: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaTodo, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -161,7 +185,7 @@ export type ResolversParentTypes = {
   Redwood: Redwood;
   String: Scalars['String'];
   Time: Scalars['Time'];
-  Todo: Todo;
+  Todo: MergePrismaWithSdlTypes<PrismaTodo, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>;
 };
 
 export type requireAuthDirectiveArgs = {
@@ -195,22 +219,42 @@ export interface JSONObjectScalarConfig extends GraphQLScalarTypeConfig<Resolver
 }
 
 export type MutationResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationcreateTodoArgs, 'body'>>;
-  renameTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationrenameTodoArgs, 'body' | 'id'>>;
-  updateTodoStatus?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationupdateTodoStatusArgs, 'id' | 'status'>>;
+  createTodo: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationcreateTodoArgs, 'body'>>;
+  renameTodo: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationrenameTodoArgs, 'body' | 'id'>>;
+  updateTodoStatus: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationupdateTodoStatusArgs, 'id' | 'status'>>;
+};
+
+export type MutationRelationResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createTodo?: RequiredResolverFn<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationcreateTodoArgs, 'body'>>;
+  renameTodo?: RequiredResolverFn<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationrenameTodoArgs, 'body' | 'id'>>;
+  updateTodoStatus?: RequiredResolverFn<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationupdateTodoStatusArgs, 'id' | 'status'>>;
 };
 
 export type QueryResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  currentUser?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
-  redwood?: Resolver<Maybe<ResolversTypes['Redwood']>, ParentType, ContextType>;
-  todos?: Resolver<Maybe<Array<Maybe<ResolversTypes['Todo']>>>, ParentType, ContextType>;
-  todosCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  currentUser: OptArgsResolverFn<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  redwood: OptArgsResolverFn<Maybe<ResolversTypes['Redwood']>, ParentType, ContextType>;
+  todos: OptArgsResolverFn<Maybe<Array<Maybe<ResolversTypes['Todo']>>>, ParentType, ContextType>;
+  todosCount: OptArgsResolverFn<ResolversTypes['Int'], ParentType, ContextType>;
+};
+
+export type QueryRelationResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  currentUser?: RequiredResolverFn<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  redwood?: RequiredResolverFn<Maybe<ResolversTypes['Redwood']>, ParentType, ContextType>;
+  todos?: RequiredResolverFn<Maybe<Array<Maybe<ResolversTypes['Todo']>>>, ParentType, ContextType>;
+  todosCount?: RequiredResolverFn<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export type RedwoodResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Redwood'] = ResolversParentTypes['Redwood']> = {
-  currentUser?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
-  prismaVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  version?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  currentUser: OptArgsResolverFn<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  prismaVersion: OptArgsResolverFn<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  version: OptArgsResolverFn<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RedwoodRelationResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Redwood'] = ResolversParentTypes['Redwood']> = {
+  currentUser?: RequiredResolverFn<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  prismaVersion?: RequiredResolverFn<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  version?: RequiredResolverFn<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -219,34 +263,42 @@ export interface TimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type TodoResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Todo'] = ResolversParentTypes['Todo']> = {
-  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  body: OptArgsResolverFn<ResolversTypes['String'], ParentType, ContextType>;
+  id: OptArgsResolverFn<ResolversTypes['Int'], ParentType, ContextType>;
+  status: OptArgsResolverFn<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TodoRelationResolvers<ContextType = RedwoodGraphQLContext, ParentType extends ResolversParentTypes['Todo'] = ResolversParentTypes['Todo']> = {
+  body?: RequiredResolverFn<ResolversTypes['String'], ParentType, ContextType>;
+  id?: RequiredResolverFn<ResolversTypes['Int'], ParentType, ContextType>;
+  status?: RequiredResolverFn<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = RedwoodGraphQLContext> = {
-  BigInt?: GraphQLScalarType;
-  Date?: GraphQLScalarType;
-  DateTime?: GraphQLScalarType;
-  JSON?: GraphQLScalarType;
-  JSONObject?: GraphQLScalarType;
-  Mutation?: MutationResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
-  Redwood?: RedwoodResolvers<ContextType>;
-  Time?: GraphQLScalarType;
-  Todo?: TodoResolvers<ContextType>;
+  BigInt: GraphQLScalarType;
+  Date: GraphQLScalarType;
+  DateTime: GraphQLScalarType;
+  JSON: GraphQLScalarType;
+  JSONObject: GraphQLScalarType;
+  Mutation: MutationResolvers<ContextType>;
+  Query: QueryResolvers<ContextType>;
+  Redwood: RedwoodResolvers<ContextType>;
+  Time: GraphQLScalarType;
+  Todo: TodoResolvers<ContextType>;
 };
 
 export type DirectiveResolvers<ContextType = RedwoodGraphQLContext> = {
-  requireAuth?: requireAuthDirectiveResolver<any, any, ContextType>;
-  skipAuth?: skipAuthDirectiveResolver<any, any, ContextType>;
+  requireAuth: requireAuthDirectiveResolver<any, any, ContextType>;
+  skipAuth: skipAuthDirectiveResolver<any, any, ContextType>;
 };
 "
 `;
 
 exports[`Generate gql typedefs web 1`] = `
-"export type Maybe<T> = T | null;
+"import { Prisma } from "@prisma/client"
+export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -290,18 +342,28 @@ export type MutationupdateTodoStatusArgs = {
   status: Scalars['String'];
 };
 
+/** About the Redwood queries. */
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<Scalars['JSON']>;
+  /** Fetches the Redwood root schema. */
   redwood?: Maybe<Redwood>;
   todos?: Maybe<Array<Maybe<Todo>>>;
   todosCount: Scalars['Int'];
 };
 
+/**
+ * The RedwoodJS Root Schema
+ *
+ * Defines details about RedwoodJS such as the current user and version information.
+ */
 export type Redwood = {
   __typename?: 'Redwood';
+  /** The current user. */
   currentUser?: Maybe<Scalars['JSON']>;
+  /** The version of Prisma. */
   prismaVersion?: Maybe<Scalars['String']>;
+  /** The version of Redwood. */
   version?: Maybe<Scalars['String']>;
 };
 

@@ -37,7 +37,7 @@ test('wraps components in other components', async () => {
       <Set wrap={[CustomWrapper, GlobalLayout]}>
         <ChildA />
         <Set wrap={BLayout}>
-          <Route path="/" page={ChildB} name="childb" />
+          <Route path="/" page={ChildB} name="childB" />
         </Set>
       </Set>
       <ChildC />
@@ -102,7 +102,7 @@ test('passes props to wrappers', async () => {
   const TestSet = () => (
     <Router>
       <Set wrap={[PropWrapper, GlobalLayout]} propOne="une" propTwo="deux">
-        <Route path="/" page={ChildA} name="childa" />
+        <Route path="/" page={ChildA} name="childA" />
       </Set>
     </Router>
   )

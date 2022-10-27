@@ -5,6 +5,8 @@ import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 let filesNestedLower, filesNestedUpper
 
 beforeAll(async () => {
@@ -24,8 +26,8 @@ beforeAll(async () => {
 
 describe('admin/pages/post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesNestedLower).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesNestedLower).length).toEqual(19)
     })
 
     // Layout
@@ -33,7 +35,7 @@ describe('admin/pages/post', () => {
     test('creates a layout', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/Admin/Pages/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })
@@ -354,8 +356,8 @@ describe('admin/pages/post', () => {
 
 describe('Admin/Pages/Post/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesNestedUpper).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesNestedUpper).length).toEqual(19)
     })
 
     // Layout
@@ -363,7 +365,7 @@ describe('Admin/Pages/Post/Post', () => {
     test('creates a layout', async () => {
       expect(filesNestedLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/Admin/Pages/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })

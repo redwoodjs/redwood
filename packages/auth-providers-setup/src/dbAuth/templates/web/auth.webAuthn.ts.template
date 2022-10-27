@@ -1,0 +1,4 @@
+import { createDbAuth } from '@redwoodjs/auth-providers-web'
+import WebAuthnClient from '@redwoodjs/auth-providers-web/webAuthn'
+
+export const { AuthProvider, useAuth } = createDbAuth(WebAuthnClient)

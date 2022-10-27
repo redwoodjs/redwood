@@ -1,4 +1,4 @@
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import {
   existsAnyExtensionSync,
@@ -46,7 +46,7 @@ export const handler = () => {
         task: removeGraphiqlFromGraphqlHandler,
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
   try {
     tasks.run()

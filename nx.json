@@ -1,13 +1,14 @@
 {
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": [
           "test",
           "build"
         ],
-        "parallel": 5
+        "parallel": 5,
+        "accessToken": "ODMxYWQ1ZjgtMTJhNi00M2Q1LTg1YTAtNTk3NjFkNzNmZjk0fHJlYWQ="
       }
     }
   },
@@ -16,7 +17,14 @@
       "{projectRoot}/**/*"
     ],
     "prod": [
-      "!{projectRoot}/**/*.test.{js,jsx,ts,tsx}"
+      "!{projectRoot}/**/*.test.{js,jsx,ts,tsx}",
+      "{workspaceRoot}/babel.config.js",
+      {
+        "runtime": "node -v"
+      },
+      {
+        "runtime": "node -e \"console.log(process.platform)\""
+      }
     ]
   },
   "targetDefaults": {
@@ -35,5 +43,6 @@
         "^prod"
       ]
     }
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }

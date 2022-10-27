@@ -8,6 +8,8 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../../generate'
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 describe('editable columns', () => {
   let files
   let form

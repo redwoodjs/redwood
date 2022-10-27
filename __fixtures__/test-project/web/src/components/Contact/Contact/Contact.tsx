@@ -1,8 +1,13 @@
-import humanize from 'humanize-string'
+import type {
+  DeleteContactMutationVariables,
+  FindContactById,
+} from 'types/graphql'
 
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
+
+import { timeTag } from 'src/lib/formatters'
 
 const DELETE_CONTACT_MUTATION = gql`
   mutation DeleteContactMutation($id: Int!) {
@@ -12,40 +17,11 @@ const DELETE_CONTACT_MUTATION = gql`
   }
 `
 
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
+interface Props {
+  contact: NonNullable<FindContactById['contact']>
 }
 
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-
-const Contact = ({ contact }) => {
+const Contact = ({ contact }: Props) => {
   const [deleteContact] = useMutation(DELETE_CONTACT_MUTATION, {
     onCompleted: () => {
       toast.success('Contact deleted')
@@ -56,7 +32,7 @@ const Contact = ({ contact }) => {
     },
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: DeleteContactMutationVariables['id']) => {
     if (confirm('Are you sure you want to delete contact ' + id + '?')) {
       deleteContact({ variables: { id } })
     }
@@ -66,23 +42,29 @@ const Contact = ({ contact }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Contact {contact.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Contact {contact.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{contact.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Name</th>
               <td>{contact.name}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Email</th>
               <td>{contact.email}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Message</th>
               <td>{contact.message}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Created at</th>
               <td>{timeTag(contact.createdAt)}</td>
             </tr>

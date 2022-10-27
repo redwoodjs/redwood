@@ -5,6 +5,8 @@ import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
+jest.mock('execa')
+
 let filesLower, filesUpper
 
 beforeAll(async () => {
@@ -24,15 +26,15 @@ beforeAll(async () => {
 
 describe('admin/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesLower).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesLower).length).toEqual(19)
     })
 
     // Layout
     test('creates a layout', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/Admin/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })
@@ -342,8 +344,8 @@ describe('admin/Post', () => {
 
 describe('Admin/Post', () => {
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesUpper).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesUpper).length).toEqual(19)
     })
 
     // Layout
@@ -351,7 +353,7 @@ describe('Admin/Post', () => {
     test('creates a layout', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/Admin/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })

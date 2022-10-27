@@ -8,8 +8,7 @@ const path = require('path')
 const chalk = require('chalk')
 const execa = require('execa')
 const fse = require('fs-extra')
-const Listr = require('listr')
-const VerboseRenderer = require('listr-verbose-renderer')
+const Listr = require('listr2').Listr
 const rimraf = require('rimraf')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
@@ -220,7 +219,7 @@ const globalTasks = () =>
         title: '[link] Adding framework dependencies to project',
         task: () =>
           addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link && !rebuildFixture,
+        enabled: () => link || rebuildFixture,
       },
       {
         title: 'Setting yarn version to 1',
@@ -385,6 +384,7 @@ const globalTasks = () =>
       {
         title: '[Rebuild Fixture] Replace and Cleanup Fixture',
         task: async () => {
+          // @TODO: This only works on UNIX, we should use path.join everywhere
           // remove all .gitignore
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/.redwood`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
@@ -395,13 +395,16 @@ const globalTasks = () =>
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/.env`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
 
-          // Remove project:copy from the fixture
-          updatePkgJsonScripts({
-            projectPath: OUTPUT_PROJECT_PATH,
-            scripts: {
-              postinstall: '', // We do this so we don't have project:copy in the fixture
-            },
-          })
+          // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
+          // that we added in "Adding framework dependencies to project"
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/package.json`)
+          fs.copyFileSync(
+            path.join(
+              __dirname,
+              '../../packages/create-redwood-app/template/package.json'
+            ),
+            path.join(OUTPUT_PROJECT_PATH, 'package.json')
+          )
 
           // removes existing Fixture and replaces with newly built project,
           // then removes new Project temp directory
@@ -429,7 +432,8 @@ const globalTasks = () =>
     ],
     {
       exitOnError: true,
-      renderer: verbose && VerboseRenderer,
+      renderer: verbose && 'verbose',
+      renderOptions: { collapse: false },
     }
   )
 

@@ -58,7 +58,7 @@ import {
   UseFormProps,
 } from 'react-hook-form'
 
-import FormError, { RWGqlError } from './FormError'
+import FormError from './FormError'
 
 /**
  * We slightly extend `react-hook-form`'s `RegisterOptions` to make working with GraphQL easier.
@@ -550,7 +550,7 @@ function FormInner<TFieldValues>(
     >
       <ServerErrorsContext.Provider
         value={
-          errorProps?.graphQLErrors[0]?.extensions?.properties?.messages || {}
+          errorProps?.graphQLErrors?.[0]?.extensions?.properties?.messages || {}
         }
       >
         <FormProvider {...formMethods}>{children}</FormProvider>
@@ -1012,7 +1012,6 @@ export {
   Form,
   ServerErrorsContext,
   FormError,
-  RWGqlError,
   FieldError,
   InputField,
   Label,
@@ -1022,5 +1021,7 @@ export {
   useErrorStyles,
   useRegister,
 }
+
+export type { ServerError, RWGqlError, ServerParseError } from './FormError'
 
 export * from 'react-hook-form'

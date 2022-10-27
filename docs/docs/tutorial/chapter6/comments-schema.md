@@ -293,15 +293,16 @@ export const comments = () => {
   return db.comment.findMany()
 }
 
-export const comment = ({ id }: Prisma.CommentWhereUniqueInput) => {
+export const comment = ({ id }: QueryResolvers['comment'] => {
   return db.comment.findUnique({
     where: { id },
   })
 }
 
-export const Comment = {
-  post: (_obj, { root }: ResolverArgs<ReturnType<typeof comment>>) =>
-    db.comment.findUnique({ where: { id: root.id } }).post(),
+export const Comment: CommentRelationResolvers = {
+  post: (_obj, { root }) => {
+    return db.comment.findUnique({ where: { id: root?.id } }).post()
+  },
 }
 ```
 
@@ -550,7 +551,7 @@ describe('comments', () => {
 </TabItem>
 </Tabs>
 
-What is this `scenario()` function? That's made available by Redwood that mostly acts like Jest's built-in `it()` and `test()` functions, but with one important difference: it pre-seeds a test database with data that is then passed to you in the `scenario` argument. You can count on this data existing in the database and being reset between tests in case you make changes to it.
+What is this `scenario()` function? That's made available by Redwood that mostly acts like Jest's built-in `it()` and `test()` functions, but with one important difference: it pre-seeds a test database with data that is then passed to you in the `scenario` argument. You can count on this data existing in the database and being reset between tests in case you make changes to it. You can create the data structure for any and all models defined in `schema.prisma`, not just comments (the file happens to be named that because it's the ones that will load when running `comments.test.js`).
 
 :::info In the section on mocks you said relying on data in the database for testing was dumb?
 
@@ -650,8 +651,8 @@ Let's replace that scenario data with something more like the real data our app 
 
 ```javascript title="api/src/services/comments/comments.scenarios.js"
 export const standard = defineScenario({
-  // highlight-start
   comment: {
+    // highlight-start
     jane: {
       data: {
         name: 'Jane Doe',
@@ -676,8 +677,8 @@ export const standard = defineScenario({
         }
       }
     }
+    // highlight-end
   }
-  // highlight-end
 })
 ```
 
@@ -688,8 +689,8 @@ export const standard = defineScenario({
 import type { Prisma } from '@prisma/client'
 
 export const standard = defineScenario<Prisma.CommentCreateArgs>({
-  // highlight-start
   comment: {
+    // highlight-start
     jane: {
       data: {
         name: 'Jane Doe',
@@ -714,8 +715,8 @@ export const standard = defineScenario<Prisma.CommentCreateArgs>({
         }
       }
     }
+    // highlight-end
   }
-  // highlight-end
 })
 ```
 
@@ -728,7 +729,7 @@ The test created by the service generator simply checks to make sure the same nu
 
 #### Testing createComment()
 
-Let's add our first service test by making sure that `createComment()` actually stores a new comment in the database. When creating a comment we're not as worried about existing data in the database so let's create a new scenario which only contains a post—the post we'll be linking the new comment to through the comment's `postId` field:
+Let's add our first service test by making sure that `createComment()` actually stores a new comment in the database. When creating a comment we're not as worried about existing data in the database so let's create a new scenario which only contains a post—the post we'll be linking the new comment to through the comment's `postId` field. You can create multiple scenarios and then say which one you want pre-loaded into the database at the time the test is run. We'll let the `standard` scenario stay as-is and make a new one with a new set of data:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -805,7 +806,9 @@ describe('comments', () => {
       input: {
         name: 'Billy Bob',
         body: 'What is your favorite tree bark?',
-        postId: scenario.post.bark.id,
+        post: {
+          connect: { id: scenario.post.bark.id },
+        },
       },
     })
 
@@ -844,7 +847,9 @@ describe('comments', () => {
         input: {
           name: 'Billy Bob',
           body: 'What is your favorite tree bark?',
-          postId: scenario.post.bark.id,
+          post: {
+            connect: { id: scenario.post.bark.id },
+          },
         },
       })
 
@@ -865,9 +870,37 @@ We pass an optional first argument to `scenario()` which is the named scenario t
 
 We were able to use the `id` of the post that we created in our scenario because the scenarios contain the actual database data after being inserted, not just the few fields we defined in the scenario itself. In addition to `id` we could access `createdAt` which is defaulted to `now()` in the database.
 
+:::info What's that `post: { connect: { id } }` nested structure? Can't we simply pass the Post's ID directly here?
+
+What you're looking at is the [connect syntax](https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#connect-an-existing-record), which is a Prisma
+core concept. And yes, we could simply pass `postId: scenario.post.bark.id` instead – as a so-called "unchecked" input. But as the name implies, the connect syntax is king
+in Prisma-land.
+
+<ShowForTs>
+Note that if you try to use `postId` that would give you red squiggles, because that input would violate the `CreateCommentArgs` interface definition in
+`api/src/services/comments/comments.ts`. In order to use the `postId` input, that'd need to be changed to
+
+```ts
+interface CreateCommentArgs {
+  input: Prisma.CommentUncheckedCreateInput
+}
+```
+
+or
+
+```ts
+interface CreateCommentArgs {
+  input: Prisma.CommentCreateInput | Prisma.CommentUncheckedCreateInput
+}
+```
+in case we wanted to allow both ways – which Prisma generally allows, however [it doesn't allow to pick and mix](https://stackoverflow.com/a/69169106/1246547) within the same input.
+</ShowForTs>
+
+:::
+
 We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the Javascript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right *now*, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
 
-:::info What's up with the names for scenario data? posts.bark? Really?
+:::info What's up with the names for scenario data? `posts.bark`? Really?
 
 This makes reasoning about your tests much nicer! Which of these would you rather work with:
 
@@ -885,13 +918,15 @@ Okay, our comments service is feeling pretty solid now that we have our tests in
 
 :::info Mocks vs. Scenarios
 
-Mocks are used on the web site and scenarios are used on the api side. It might be helpful to remember that "mock" is a synonym for "fake", as in this-is-fake-data-not-really-in-the-database (so that we can create stories and tests in isolation without the api side getting involved). Whereas a scenario is real data in the database, it's just pre-set to some known state that we can rely on.
+Mocks are used on the web site and scenarios are used on the api side. It might be helpful to remember that **mock** is a synonym for "fake", as in "this is fake data not really in the database" (so that we can create stories and tests in isolation without the api side getting involved). Whereas a **scenario** is real data in the database, it's just pre-set to some known state that we can rely on.
 
-Maybe a [mnemonic](https://www.mnemonicgenerator.com/?words=M%20W%20S%20A) would help? **M**ocks **W**eb **S**cenarios **A**PI:
+Maybe a [mnemonic](https://www.mnemonicgenerator.com/?words=M%20W%20S%20A) would help?
 
-* Mothers Worshipped Slimy Aprons
+**M**ocks : **W**eb :: **S**cenarios : **A**PI:
+
+* Mysterious Weasels Scratched Armor
 * Minesweepers Wrecked Subliminal Attorneys
-* Masked Widows Squeezed Apricots
+* Martian Warriors Squeezed Apricots
 
 Maybe not...
 

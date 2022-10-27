@@ -47,7 +47,7 @@ You'll almost always want to test the functionality of your changes to the Redwo
 - run `yarn create redwood-app ./redwood-project`
 - `git clone` the [RedwoodJS Tutorial Blog](https://github.com/redwoodjs/redwood-tutorial)
 - use a project you've already created
-- create a functional test project using `yarn run build:test-project <project directory>`  👀
+- create a functional test project: go to the location of your local copy of the Redwood Framework and use `yarn run build:test-project <project directory>` 👀
 
 **Using the functional test project might be the fastest and easiest way to test your changes.**
 
@@ -81,7 +81,7 @@ Run `yarn run build:test-project <project path>` from the root of your local cop
 > yarn run build:test-project ~/my-repos/redwood-project --typescript --link
 > ```
 
-Unless you've already got a project with a lot of functionality, it'd take quite some to add all of this yourself. Moreover, testing your changes in a project that has a lot of functionality will increase your confidence in the changes you're making.
+Unless you've already got a project with a lot of functionality, it'd take quite some effort to add all of this yourself. Moreover, testing your changes in a project that has a lot of functionality will increase your confidence in the changes you're making.
 
 But how do you actually test your changes in the Redwood Framework in your Redwood Project? With another command, this time in the root of your Redwood Project: `yarn rwfw`.
 
@@ -102,7 +102,7 @@ cd redwood-project
 RWFW_PATH=~/redwood yarn rwfw project:sync
 ```
 
-Where <framework directory> is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
+Where `~/redwood` is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
 
 As `project:sync` starts up, it'll start logging to the console. In order, it:
 

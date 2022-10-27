@@ -21,6 +21,18 @@
       "remoteRoot": "${workspaceFolder}/node_modules/@redwoodjs/api-server/dist",
       "sourceMaps": true,
       "restart": true
-    }
+    },
+    {
+      "command": "yarn redwood test api",
+      "name": "Test api",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "yarn redwood test web",
+      "name": "Test web",
+      "request": "launch",
+      "type": "node-terminal"
+    },
   ]
 }

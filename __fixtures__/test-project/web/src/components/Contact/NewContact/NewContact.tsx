@@ -1,6 +1,9 @@
+import type { CreateContactInput } from 'types/graphql'
+
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import ContactForm from 'src/components/Contact/ContactForm'
 
 const CREATE_CONTACT_MUTATION = gql`
@@ -12,17 +15,20 @@ const CREATE_CONTACT_MUTATION = gql`
 `
 
 const NewContact = () => {
-  const [createContact, { loading, error }] = useMutation(CREATE_CONTACT_MUTATION, {
-    onCompleted: () => {
-      toast.success('Contact created')
-      navigate(routes.contacts())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createContact, { loading, error }] = useMutation(
+    CREATE_CONTACT_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Contact created')
+        navigate(routes.contacts())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input) => {
+  const onSave = (input: CreateContactInput) => {
     createContact({ variables: { input } })
   }
 

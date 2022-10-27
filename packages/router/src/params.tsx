@@ -13,6 +13,7 @@ export const ParamsContext = createNamedContext<ParamsContextProps>('Params')
 interface Props {
   path?: string
   location?: LocationContextType
+  children?: React.ReactNode
 }
 
 export const ParamsProvider: React.FC<Props> = ({
