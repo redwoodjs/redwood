@@ -22,7 +22,9 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'okta',
-    webPackages: ['@okta/okta-auth-js'],
-    apiPackages: ['@okta/jwt-verifier'],
+    authDecoderImport:
+      "import { oktaAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    webPackages: ['@okta/okta-auth-js', '@redwoodjs/auth-providers-web'],
+    apiPackages: ['@okta/jwt-verifier', '@redwoodjs/auth-providers-api'],
   })
 }
