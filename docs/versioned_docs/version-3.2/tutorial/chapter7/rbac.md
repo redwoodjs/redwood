@@ -1,10 +1,10 @@
 # Role-Based Access Control (RBAC)
 
-Imagine a few weeks in the future of our blog when every post hits the front page of the New York Times and we're getting hundreds of comments a day. We can't be expected to come up with quality content each day *and* moderate the endless stream of (mostly well-meaning) comments! We're going to need help. Let's hire a comment moderator to remove obvious spam and bad intentioned posts and help make the internet a better place.
+Imagine a few weeks in the future of our blog when every post hits the front page of the New York Times and we're getting hundreds of comments a day. We can't be expected to come up with quality content each day *and* moderate the endless stream of (mostly well-meaning) comments! We're going to need help. Let's hire a comment moderator to remove obvious spam and any comments that don't heap praise on our writing ability. You know, to help make the internet a better place.
 
 We already have a login system for our blog, but right now it's all-or-nothing: you either get access to create blog posts, or you don't. In this case our comment moderator(s) will need logins so that we know who they are, but we're not going to let them create new blog posts. We need some kind of role that we can give to our two kinds of users so we can distinguish them from one another.
 
-Enter role-based access control, thankfully shortened to the common phrase **RBAC**. Authentication says who the person is, authorization says what they can do. "Access control" is another way to say authorization. Currently the blog has the lowest common denominator of authorization: if they are logged in, they can do everything. Let's add a "less than everything, but more than nothing" level.
+Enter **role-based access control**, thankfully shortened to the common phrase **RBAC**. Authentication says who the person is, authorization says what they can do. "Access control" is another way to say authorization. Currently the blog has the lowest common denominator of authorization: if they are logged in, they can do everything. Let's add a "less than everything, but more than nothing" level.
 
 ### Defining Roles
 
@@ -65,7 +65,7 @@ And you can name it something like "add roles to user".
 
 If we log in and try to go the posts admin page at [http://localhost:8910/admin/posts](http://localhost:8910/admin/posts) everything works the same as it used to: we're not actually checking for the existence of any roles yet so that makes sense. In reality we'd only want users with the `admin` role to have access to the admin pages, but our existing user just became a `moderator` because of our default role. This is a great opportunity to actually setup a role check and see if we lose access to the admin!
 
-Before we do that, we'll need to make sure that the web side has access to the roles on `currentUser`. Take a look at `api/src/lib/auth.js`. Remember when we had to add `email` to the list of fields being included in Part 1? We need to add `roles` as well:
+Before we do that, we'll need to make sure that the web side has access to the roles on `currentUser`. Take a look at `api/src/lib/auth.js`. Remember when we had to add `email` to the list of fields being included? We need to add `roles` as well:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -191,7 +191,7 @@ The easiest way to prevent access to an entire URL is via the Router. The `<Priv
 </TabItem>
 </Tabs>
 
-Now if you reload the posts admin you should get redirected to the homepage.
+Now if you browse to [http://localhost:8910/admin/posts](http://localhost:8910/admin/posts) you should get redirected to the homepage. So far so good.
 
 ### Changing Roles on a User
 
@@ -230,7 +230,7 @@ Which should return the new content of the user:
 
 :::caution
 
-If that doesn't work for you maybe your user doesn't have an `id` of `1`! Run `db.user.findMany()` first and then get the `id` of the user you want to update.
+If you re-used the same console session from the previous section, you'll need to quit it and start it again for it to know about the new Prisma data structure. If you still can't get the update to work, maybe your user doesn't have an `id` of `1`! Run `db.user.findMany()` first and then get the `id` of the user you want to update.
 
 :::
 
@@ -404,6 +404,7 @@ And due to the nice encapsulation of our **Comment** component we can make all t
 import { useAuth } from '@redwoodjs/auth'
 // highlight-start
 import { useMutation } from '@redwoodjs/web'
+
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
 // highlight-end
 
@@ -478,6 +479,7 @@ export default Comment
 import { useAuth } from '@redwoodjs/auth'
 // highlight-start
 import { useMutation } from '@redwoodjs/web'
+
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
 // highlight-end
 
@@ -620,34 +622,31 @@ import Comment from './Comment'
 // highlight-next-line
 export const defaultView = () => {
   return (
-    <div className="m-4">
-      <Comment
-        comment={{
-          id: 1,
-          name: 'Rob Cameron',
-          body: 'This is the first comment!',
-          createdAt: '2020-01-01T12:34:56Z',
-          postId: 1
-        }}
-      />
-    </div>
+    <Comment
+      comment={{
+        id: 1,
+        name: 'Rob Cameron',
+        body: 'This is the first comment!',
+        createdAt: '2020-01-01T12:34:56Z',
+        // highlight-next-line
+        postId: 1
+      }}
+    />
   )
 }
 
 // highlight-start
 export const moderatorView = () => {
   return (
-    <div className="m-4">
-      <Comment
-        comment={{
-          id: 1,
-          name: 'Rob Cameron',
-          body: 'This is the first comment!',
-          createdAt: '2020-01-01T12:34:56Z',
-          postId: 1,
-        }}
-      />
-    </div>
+    <Comment
+      comment={{
+        id: 1,
+        name: 'Rob Cameron',
+        body: 'This is the first comment!',
+        createdAt: '2020-01-01T12:34:56Z',
+        postId: 1,
+      }}
+    />
   )
 }
 // highlight-end
@@ -664,34 +663,31 @@ import Comment from './Comment'
 // highlight-next-line
 export const defaultView = () => {
   return (
-    <div className="m-4">
-      <Comment
-        comment={{
-          id: 1,
-          name: 'Rob Cameron',
-          body: 'This is the first comment!',
-          createdAt: '2020-01-01T12:34:56Z',
-          postId: 1,
-        }}
-      />
-    </div>
+    <Comment
+      comment={{
+        id: 1,
+        name: 'Rob Cameron',
+        body: 'This is the first comment!',
+        createdAt: '2020-01-01T12:34:56Z',
+        // highlight-next-line
+        postId: 1,
+      }}
+    />
   )
 }
 
 // highlight-start
 export const moderatorView = () => {
   return (
-    <div className="m-4">
-      <Comment
-        comment={{
-          id: 1,
-          name: 'Rob Cameron',
-          body: 'This is the first comment!',
-          createdAt: '2020-01-01T12:34:56Z',
-          postId: 1,
-        }}
-      />
-    </div>
+    <Comment
+      comment={{
+        id: 1,
+        name: 'Rob Cameron',
+        body: 'This is the first comment!',
+        createdAt: '2020-01-01T12:34:56Z',
+        postId: 1,
+      }}
+    />
   )
 }
 // highlight-end
@@ -711,22 +707,22 @@ The **moderatorView** story needs to have a user available that has the moderato
 export const moderatorView = () => {
   // highlight-start
   mockCurrentUser({
+    id: 1,
+    email: 'moderator@moderator.com',
     roles: 'moderator',
   })
   // highlight-end
 
   return (
-    <div className="m-4">
-      <Comment
-        comment={{
-          id: 1,
-          name: 'Rob Cameron',
-          body: 'This is the first comment!',
-          createdAt: '2020-01-01T12:34:56Z',
-          postId: 1,
-        }}
-      />
-    </div>
+    <Comment
+      comment={{
+        id: 1,
+        name: 'Rob Cameron',
+        body: 'This is the first comment!',
+        createdAt: '2020-01-01T12:34:56Z',
+        postId: 1,
+      }}
+    />
   )
 }
 ```
@@ -738,24 +734,22 @@ export const moderatorView = () => {
 export const moderatorView = () => {
   // highlight-start
   mockCurrentUser({
-    roles: 'moderator',
     id: 1,
     email: 'moderator@moderator.com',
+    roles: 'moderator',
   })
   // highlight-end
 
   return (
-    <div className="m-4">
-      <Comment
-        comment={{
-          id: 1,
-          name: 'Rob Cameron',
-          body: 'This is the first comment!',
-          createdAt: '2020-01-01T12:34:56Z',
-          postId: 1,
-        }}
-      />
-    </div>
+    <Comment
+      comment={{
+        id: 1,
+        name: 'Rob Cameron',
+        body: 'This is the first comment!',
+        createdAt: '2020-01-01T12:34:56Z',
+        postId: 1,
+      }}
+    />
   )
 }
 ```
@@ -785,6 +779,7 @@ We can use the same `mockCurrentUser()` function in our Jest tests as well. Let'
 ```jsx title="web/src/components/Comment/Comment.test.js"
 // highlight-next-line
 import { render, screen, waitFor } from '@redwoodjs/testing'
+
 import Comment from './Comment'
 
 // highlight-start
@@ -821,7 +816,11 @@ describe('Comment', () => {
   })
 
   it('renders a delete button if the user is a moderator', async () => {
-    mockCurrentUser({ roles: 'moderator' })
+    mockCurrentUser({
+      id: 1,
+      email: 'moderator@moderator.com',
+      roles: 'moderator',
+    })
     render(<Comment comment={COMMENT} />)
 
     await waitFor(() => expect(screen.getByText('Delete')).toBeInTheDocument())
@@ -876,9 +875,9 @@ describe('Comment', () => {
 
   it('renders a delete button if the user is a moderator', async () => {
     mockCurrentUser({
-      roles: 'moderator',
       id: 1,
       email: 'moderator@moderator.com',
+      roles: 'moderator',
     })
 
     render(<Comment comment={COMMENT} />)
@@ -894,7 +893,9 @@ describe('Comment', () => {
 
 We moved the default `comment` object to a constant `COMMENT` and then used that in all tests. We also needed to add `waitFor()` since the `hasRole()` check in the Comment itself actually executes some GraphQL calls behind the scenes to figure out who the user is. The test suite makes mocked GraphQL calls, but they're still asynchronous and need to be waited for. If you don't wait, then `currentUser` will be `null` when the test starts, and Jest will be happy with that result. But we won't—we need to wait for the actual value from the GraphQL call.
 
-Before the test suite will work we'll need to stop and re-start the test server: when adding a field to the database (`roles` on `User` in this case) we need to restart the test runner so that it can apply the schema changes to our test database. So press `q` or `Ctrl-C` in your test runner if it's still running, then:
+:::caution Seeing errors in your test suite?
+
+We added fields to the database and sometimes the test runner doesn't realize this. You may need to restart it to get the test database migrated to match what's in `schema.prisma`. Press `q` or `Ctrl-C` in your test runner if it's still running, then:
 
 ```bash
 yarn rw test
@@ -902,11 +903,13 @@ yarn rw test
 
 The suite should automatically run the tests for `Comment` and `CommentCell` at the very least, and maybe a few more if you haven't committed your code to git in a while.
 
+:::
+
 :::info
 
 This isn't the most robust test that's ever been written: what if the sample text of the comment itself had the word "Delete" in it? Whoops! But you get the idea—find some meaningful difference in each possible render state of a component and write a test that verifies its presence (or lack of presence).
 
-Think of each conditional in your component as another branch you need to have a test for. In the worst case, each conditional adds ^2 possible render states. If you have three conditionals that's eight possible combinations of output and to be safe you'll want to test them all. When you get yourself into this scenario it's a good sign that it's time to refactor and simplify your component. Maybe into subcomponents where each is responsible for just one of those conditional outputs? You'll still need the same number of total tests, but each component and its test is now operating in isolation and making sure it does one thing, and does it well. This has benefits for your mental model of the codebase as well.
+Think of each conditional in your component as another branch you need to have a test for. In the worst case, each conditional adds 2<sup>n</sup> possible render states. If you have three conditionals that's 2<sup>3</sup> (eight) possible combinations of output and to be safe you'll want to test them all. When you get yourself into this scenario it's a good sign that it's time to refactor and simplify your component. Maybe into subcomponents where each is responsible for just one of those conditional outputs? You'll still need the same number of total tests, but each component and its test is now operating in isolation and making sure it does one thing, and does it well. This has benefits for your mental model of the codebase as well.
 
 It's like finally organizing that junk drawer in the kitchen—you still have the same number of things when you're done, but each thing is in its own space and therefore easier to remember where it lives and makes it easier to find next time.
 
@@ -1076,9 +1079,9 @@ This check only prevents access to `deleteComment` via GraphQL. What if you're c
 <TabItem value="js" label="JavaScript">
 
 ```javascript title="api/src/services/comments/comments.js"
-import { db } from 'src/lib/db'
 // highlight-next-line
 import { requireAuth } from 'src/lib/auth'
+import { db } from 'src/lib/db'
 
 // ...
 
@@ -1095,9 +1098,9 @@ export const deleteComment = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```ts title="api/src/services/comments/comments.ts"
-import { db } from 'src/lib/db'
 // highlight-next-line
 import { requireAuth } from 'src/lib/auth'
+import { db } from 'src/lib/db'
 
 // ...
 
@@ -1120,10 +1123,12 @@ We'll need a test to go along with that functionality. How do we test `requireAu
 
 ```javascript title="api/src/services/comments/comments.test.js"
 // highlight-next-line
-import { comments, createComment, deleteComment } from './comments'
-import { db } from 'src/lib/db'
-// highlight-next-line
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
+
+import { db } from 'src/lib/db'
+
+// highlight-next-line
+import { comments, createComment, deleteComment } from './comments'
 
 describe('comments', () => {
   scenario(
@@ -1200,10 +1205,12 @@ describe('comments', () => {
 
 ```ts title="api/src/services/comments/comments.test.ts"
 // highlight-next-line
-import { comments, createComment, deleteComment } from './comments'
-import { db } from 'src/lib/db'
-// highlight-next-line
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
+
+import { db } from 'src/lib/db'
+
+// highlight-next-line
+import { comments, createComment, deleteComment } from './comments'
 
 import type { PostOnlyScenario, StandardScenario } from './comments.scenarios'
 

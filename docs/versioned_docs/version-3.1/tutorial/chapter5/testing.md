@@ -1,6 +1,6 @@
 # Introduction to Testing
 
-Let's run the test suite to make sure everything is working as expected (you can keep the dev server running and start this in a second terminal window):
+Let's run the test suite to make sure everything is working as expected (you can keep the dev server running and start this in a new terminal window):
 
 ```bash
 yarn rw test
