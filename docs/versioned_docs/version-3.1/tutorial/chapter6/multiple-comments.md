@@ -30,14 +30,6 @@ Let's generate a **CommentsCell**:
 yarn rw g cell Comments
 ```
 
-:::caution What's with these errors and warnings after generating this cell?
-
-Redwood will try to generate types to go along with your cell. However, we haven't generated an SDL file for the Comment model yet, so types can't be created. This is safe to ignore for now as we're building out our UI in Storybook. 
-
-You may also see some red squiggles in your IDE: same thing, types couldn't be generated.
-
-:::
-
 Storybook updates with a new **CommentsCell** under the **Cells** folder, and it's actually showing something:
 
 ![image](https://user-images.githubusercontent.com/300/153477642-0d5a15a5-f96f-485a-b8b0-dbc1c4515279.png)
@@ -189,9 +181,9 @@ export const standard = () => ({
 </TabItem>
 </Tabs>
 
-:::info
+:::info What's this `standard` thing?
 
-What's this `standard` thing? Think of it as the standard, default mock if you don't do anything else. We would have loved to use the name "default" but that's already a reserved word in Javascript!
+Think of it as the standard, default mock if you don't do anything else. We would have loved to use the name "default" but that's already a reserved word in Javascript!
 
 :::
 
@@ -322,7 +314,7 @@ export default Article
 
 If we are *not* showing the summary, then we'll show the comments. Take a look at the **Full** and **Summary** stories in Storybook and you should see comments on one and not on the other.
 
-:::info Shouldn't the CommentsCell cause an actual GraphQL request? How does this work?
+:::info Shouldn't the `CommentsCell` cause an actual GraphQL request? How does this work?
 
 Redwood has added some functionality around Storybook so that if you're testing a component that itself isn't a Cell (like the `Article` component) but that renders a cell (like `CommentsCell`), then it will mock the GraphQL and use the `standard` mock that goes along with that Cell. Pretty cool, huh?
 
@@ -419,6 +411,7 @@ The default `CommentsCell.test.{js,tsx}` actually tests every state for us, albe
 
 ```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
 import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
 
@@ -454,6 +447,7 @@ describe('CommentsCell', () => {
 
 ```tsx title="web/src/components/CommentsCell/CommentsCell.test.tsx"
 import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
 
@@ -497,6 +491,7 @@ But in this case we can do a little more to make sure `CommentsCell` is doing wh
 ```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
 // highlight-next-line
 import { render, screen } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
 
@@ -539,6 +534,7 @@ describe('CommentsCell', () => {
 ```tsx title="web/src/components/CommentsCell/CommentsCell.test.tsx"
 // highlight-next-line
 import { render, screen } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './CommentsCell'
 import { standard } from './CommentsCell.mock'
 
@@ -578,22 +574,25 @@ describe('CommentsCell', () => {
 </TabItem>
 </Tabs>
 
-We're looping through each `comment` from the mock, the same mock used by Storybook, so that even if we add more later, we're covered. You may find yourself writing a test and saying "just test that there are 3 comments," which will work today, but months from now when you add more comments to the mock to try some different iterations in Storybook, that test will start failing. Avoid hardcoding data like this into your test when you can derive it from your mocked data!
+We're looping through each `comment` from the mock, the same mock used by Storybook, so that even if we add more later, we're covered. You may find yourself writing a test and saying "just test that there are two total comments," which will work today, but months from now when you add more comments to the mock to try some different iterations in Storybook, that test will start failing. Avoid hardcoding data like this, especially [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)), into your test when you can derive it from your mocked data!
 
 #### Testing Article
 
-The functionality we added to `Article` says to show the comments for the post if we are *not* showing the summary. We've got a test for both the "full" and "summary" renders already. Generally you want your tests to be testing "one thing" so let's add two additional tests for our new functionality:
+The functionality we added to `Article` says to show the comments for the post if we are *not* showing the summary. We've got a test for both the "full" and "summary" renders already. Generally you want a test to be testing "one thing," like whether the body of the article is present, and another test for whether the comments are displaying. If you find that you're using "and" in your test description (like "renders a blog post and its comments") that's a good sign that it should probably be split into two separate tests.
+
+Let's add two additional tests for our new functionality:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/Article/Article.test.js"
-// highlight-next-line
+// highlight-start
 import { render, screen, waitFor } from '@redwoodjs/testing'
 
-import Article from './Article'
-// highlight-next-line
 import { standard } from 'src/components/CommentsCell/CommentsCell.mock'
+// highlight-end
+
+import Article from './Article'
 
 const ARTICLE = {
   id: 1,
@@ -649,12 +648,13 @@ describe('Article', () => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/Article/Article.test.tsx"
-// highlight-next-line
+// highlight-start
 import { render, screen, waitFor } from '@redwoodjs/testing'
 
-import Article from './Article'
-// highlight-next-line
 import { standard } from 'src/components/CommentsCell/CommentsCell.mock'
+// highlight-end
+
+import Article from './Article'
 
 const ARTICLE = {
   id: 1,
