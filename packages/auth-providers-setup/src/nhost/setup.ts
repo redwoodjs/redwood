@@ -22,7 +22,10 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'nhost',
-    webPackages: ['@nhost/nhost-js'],
+    authDecoderImport:
+      "import { nhostAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    apiPackages: ['@redwoodjs/auth-providers-api'],
+    webPackages: ['@redwoodjs/auth-providers-web', '@nhost/nhost-js'],
     notes: [
       "You will need to add your project's backend URL (NHOST_BACKEND_URL) and",
       'JWT Key Secret (NHOST_JWT_SECRET) to your .env file.',
