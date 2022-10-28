@@ -311,23 +311,15 @@ import { name, version } from '../package'
     )
     console.log(style.header(`\nRelated documentation:`))
     console.log(style.warning(`${engineErrorDocsLink}\n`))
+    // Prompt user for how to proceed
     const response = await prompt({
       type: 'select',
       name: 'override-engine-error',
       message: 'How would you like to proceed?',
-      choices: [
-        // See https://github.com/enquirer/enquirer#defining-choices
-        // Does not seem to be working properly with the values as strings or booleans
-        // Possibly an upstream problem in Listr2
-        // { name: 'Override error and continue install', value: 'true' },
-        // { name: 'Quit install', value: 'false' },
-        'Override error and continue install',
-        'Quit install',
-      ],
+      choices: ['Override error and continue install', 'Quit install'],
       initial: 0,
     })
-    // TODO improve this logic if bug above can be fixed
-    // if (response['override-engine-error'] === false)
+    // Quit the install if user selects this option, otherwise it will proceed
     if (response['override-engine-error'] === 'Quit install') {
       console.log(style.warning(`\nInstallation process ended.\n`))
       process.exit(1)
