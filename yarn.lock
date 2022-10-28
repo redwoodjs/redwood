@@ -6905,18 +6905,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.0":
-  version: 0.3.0
-  resolution: "@replayio/playwright@npm:0.3.0"
+"@replayio/playwright@npm:0.3.1":
+  version: 0.3.1
+  resolution: "@replayio/playwright@npm:0.3.1"
   dependencies:
     "@replayio/replay": ^0.10.0
-    "@replayio/test-utils": ^0.2.0
+    "@replayio/test-utils": ^0.2.1
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: 6c112d55dae931c2f7ee0d5f8d1e584b8637079459be27b9f5e7cef81c3ad417837557dbb3dbe5e80c5dce73157ab75aee868a4ee4428875a52d6c52fccc7b52
+  checksum: 3f0ca88e99fb18dbe65f0f1ddde79a4f3000b357de2c5f839965da037147dcdda50f619d6094b0802943eb98c825c3d15a7e69d63746ac56738e12d6ec8458e4
   languageName: node
   linkType: hard
 
@@ -6951,14 +6951,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@replayio/test-utils@npm:0.2.0"
+"@replayio/test-utils@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@replayio/test-utils@npm:0.2.1"
   dependencies:
     "@replayio/replay": ^0.10.0
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: 2b4d30ce2b1b0e0f91a1186b417e3db1484e332758e5ca9301ddfccaad62fbc5dd9869f6991f8910950f39cfd655bcf307a9f34731836341699078d14d38aa93
+  checksum: 371fcee7994e5ef89a605f10b202f81b6939f5b147331facbd383501ea902fd7cdb76e163b680d8f8695345dc259721bdcee1449b691a2e73a9a96260dcbccdf
   languageName: node
   linkType: hard
 
@@ -27177,7 +27177,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.19.4
     "@nrwl/nx-cloud": 14.7.0
     "@playwright/test": 1.27.1
-    "@replayio/playwright": 0.3.0
+    "@replayio/playwright": 0.3.1
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
