@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.4",
-    "@prisma/internals": "4.3.1",
+    "@prisma/internals": "4.5.0",
     "@redwoodjs/internal": "3.2.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
