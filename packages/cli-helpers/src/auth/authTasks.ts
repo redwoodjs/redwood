@@ -20,7 +20,11 @@ const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
 
 export const getWebAppPath = () => getPaths().web.app
 
-const addApiConfig = (authDecoderImport?: string) => {
+// exported for testing
+export const addApiConfig = (authDecoder?: {
+  export: string
+  package: string
+}) => {
   const graphqlPath = getGraphqlPath()
 
   if (!graphqlPath) {
@@ -30,8 +34,45 @@ const addApiConfig = (authDecoderImport?: string) => {
   let content = fs.readFileSync(graphqlPath).toString()
   let contentUpdated = false
 
-  if (authDecoderImport && !content.includes(authDecoderImport)) {
-    content = authDecoderImport + '\n' + content
+  let importStatement: string[] = []
+
+  const imports = content.split('\n').reduce<string[]>((acc, line) => {
+    if (/^import /.test(line)) {
+      if (/ from '.*?'$/.test(line)) {
+        acc = [...acc, line]
+      } else {
+        importStatement = [...importStatement, line]
+      }
+    } else if (importStatement.length > 0) {
+      importStatement = [...importStatement, line]
+
+      if (/ from '.*?'$/.test(line)) {
+        acc = [...acc, importStatement.join('')]
+        importStatement = []
+      }
+    }
+
+    return acc
+  }, [])
+
+  if (authDecoder) {
+    const authDecoderExportRegExp = new RegExp(`\\b${authDecoder.export}\\b`)
+
+    // Check to make sure this authDecoder hasn't already been imported
+    if (imports.some((row) => authDecoderExportRegExp.test(row))) {
+      return
+    }
+
+    const hasAuthDecoderImport = imports.some((row) =>
+      /\bauthDecoder\b/.test(row)
+    )
+
+    const asAuthDecoder = hasAuthDecoderImport ? '' : ' as authDecoder'
+
+    content =
+      `import { ${authDecoder.export}${asAuthDecoder} } from '${authDecoder.package}'` +
+      '\n' +
+      content
 
     // If we have multiple auth providers setup we probably already have an
     // auth decoder configured. In that case we don't want to add another one
@@ -46,6 +87,7 @@ const addApiConfig = (authDecoderImport?: string) => {
         's'
       ).test(content)
     ) {
+      // Add authDecoder param right before the loggerConfig param
       content = content.replace(
         /^(\s*)(loggerConfig:)(.*)$/m,
         `$1authDecoder,\n$1$2$3`
@@ -55,12 +97,12 @@ const addApiConfig = (authDecoderImport?: string) => {
     contentUpdated = true
   }
 
-  const hasAuthImport =
+  const hasGetCurrentUserImport =
     /(^import {.*?getCurrentUser(?!getCurrentUser).*?} from 'src\/lib\/auth')/s.test(
       content
     )
 
-  if (!hasAuthImport) {
+  if (!hasGetCurrentUserImport) {
     // add import statement
     content = content.replace(
       /^(import { db } from 'src\/lib\/db')$/m,
@@ -300,6 +342,9 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
           Object.keys(filesRecord).join(',') !==
           Object.keys(uniqueFilesRecord).join(',')
         ) {
+          // TODO: Print this warning also if we do this on the web side. But
+          // only print it once. So keep track on both web and api side, and
+          // then print after
           console.warn(
             colors.warning(
               "To avoid overwriting existing files we've generated new file " +
@@ -340,13 +385,16 @@ export const addAuthConfigToWeb = <Renderer extends typeof ListrRenderer>(
   },
 })
 
-export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
-  authDecoderImport?: string
-) => ({
+export const addAuthConfigToGqlApi = <
+  Renderer extends typeof ListrRenderer
+>(authDecoder?: {
+  export: string
+  package: string
+}) => ({
   title: 'Adding auth config to GraphQL API...',
   task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
     if (graphFunctionDoesExist()) {
-      addApiConfig(authDecoderImport)
+      addApiConfig(authDecoder)
     } else {
       task.skip?.('GraphQL function not found, skipping')
     }

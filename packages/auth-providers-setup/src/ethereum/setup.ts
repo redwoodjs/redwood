@@ -22,8 +22,10 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'ethereum',
-    authDecoderImport:
-      "import { ethereumAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    authDecoder: {
+      export: 'ethereumAuthDecoder',
+      package: '@redwoodjs/auth-providers-api',
+    },
     apiPackages: [
       '@redwoodjs/auth-providers-api',
       'ethereumjs-util',

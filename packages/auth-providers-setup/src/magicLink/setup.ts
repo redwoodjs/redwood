@@ -22,8 +22,10 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'magicLink',
-    authDecoderImport:
-      "import { magicLinkAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    authDecoder: {
+      export: 'magicLinkAuthDecoder',
+      package: '@redwoodjs/auth-providers-api',
+    },
     apiPackages: ['@redwoodjs/auth-providers-api', '@magic-sdk/admin'],
     webPackages: ['@redwoodjs/auth-providers-web', 'magic-sdk'],
     notes: [

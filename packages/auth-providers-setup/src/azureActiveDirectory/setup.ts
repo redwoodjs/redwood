@@ -23,8 +23,10 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'azureActiveDirectory',
-    authDecoderImport:
-      "import { azureActiveDirectoryAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    authDecoder: {
+      export: 'azureActiveDirectoryAuthDecoder',
+      package: '@redwoodjs/auth-providers-api',
+    },
     apiPackages: ['@redwoodjs/auth-providers-api'],
     webPackages: ['@redwoodjs/auth-providers-web', '@azure/msal-browser'],
     notes: [

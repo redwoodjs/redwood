@@ -78,8 +78,10 @@ export const handler = async ({
     rwVersion,
     forceArg,
     provider: 'dbAuth',
-    authDecoderImport:
-      "import { dbAuthAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    authDecoder: {
+      export: 'dbAuthAuthDecoder',
+      package: '@redwoodjs/auth-providers-api',
+    },
     webAuthn,
     webPackages: webAuthn
       ? webAuthnWebPackages

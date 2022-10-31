@@ -22,8 +22,10 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'nhost',
-    authDecoderImport:
-      "import { nhostAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    authDecoder: {
+      export: 'nhostAuthDecoder',
+      package: '@redwoodjs/auth-providers-api',
+    },
     apiPackages: ['@redwoodjs/auth-providers-api'],
     webPackages: ['@redwoodjs/auth-providers-web', '@nhost/nhost-js'],
     notes: [

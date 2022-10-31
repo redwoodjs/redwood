@@ -3,6 +3,8 @@
 var mockWebAppPath = ''
 // eslint-disable-next-line
 var mockWebRoutesPath = ''
+// eslint-disable-next-line
+var mockGraphQLFunctionPath = ''
 
 import fs from 'fs'
 import path from 'path'
@@ -15,7 +17,12 @@ jest.mock('@redwoodjs/telemetry', () => {
   }
 })
 
-import { addConfigToApp, addConfigToRoutes, createWebAuth } from '../authTasks'
+import {
+  addConfigToApp,
+  addConfigToRoutes,
+  createWebAuth,
+  addApiConfig,
+} from '../authTasks'
 
 jest.mock('../../lib/paths', () => {
   const path = require('path')
@@ -43,9 +50,12 @@ jest.mock('../../lib/paths', () => {
   }
 })
 
-jest.mock('../../lib/project', () => ({
-  isTypeScriptProject: () => false,
-}))
+jest.mock('../../lib/project', () => {
+  return {
+    isTypeScriptProject: () => false,
+    getGraphqlPath: () => mockGraphQLFunctionPath,
+  }
+})
 
 // This function checks output matches
 const writeFileSyncSpy = jest.fn((_, content) => {
@@ -124,3 +134,34 @@ describe('Swapped out GraphQL client', () => {
     )
   })
 })
+  })
+})
+
+it('Should not touch createGraphQLHandler if authDecoder is already present', () => {
+  mockGraphQLFunctionPath =
+    'src/auth/__tests__/fixtures/graphqlWithAuthDecoder.js'
+
+  addApiConfig({
+    export: 'netlifyAuthDecoder',
+    package: '@redwoodjs/auth-providers-api',
+  })
+
+  expect(writeFileSyncSpy).not.toHaveBeenCalled()
+})
+
+it('Should not touch createGraphQLHandler if authDecoder is already present (no authDecoder import)', () => {
+  mockGraphQLFunctionPath =
+    'src/auth/__tests__/fixtures/graphqlWithAuthDecoder.js'
+
+  addApiConfig()
+
+  expect(writeFileSyncSpy).not.toHaveBeenCalled()
+})
+
+it('Should not import "as authDecoder" more than once', () => {
+  mockGraphQLFunctionPath =
+    'src/auth/__tests__/fixtures/graphqlWithMultipleAuthDecoders.js'
+
+  addApiConfig({
+    export: 'supabaseAuthDecoder',
+    package: '@redwoodjs/auth-providers-api',

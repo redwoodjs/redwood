@@ -72,7 +72,10 @@ interface Args {
   rwVersion: string
   forceArg: boolean
   provider: string
-  authDecoderImport?: string
+  authDecoder?: {
+    export: string
+    package: string
+  }
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
@@ -92,7 +95,7 @@ export const standardAuthHandler = async ({
   rwVersion,
   forceArg,
   provider,
-  authDecoderImport,
+  authDecoder,
   webAuthn = false,
   webPackages = [],
   apiPackages = [],
@@ -105,7 +108,7 @@ export const standardAuthHandler = async ({
     [
       generateAuthApiFiles(basedir, provider, force, webAuthn),
       addAuthConfigToWeb(basedir, provider, webAuthn),
-      addAuthConfigToGqlApi(authDecoderImport),
+      addAuthConfigToGqlApi(authDecoder),
       addWebPackages(webPackages, rwVersion),
       addApiPackages(apiPackages),
       installPackages,
