@@ -1,4 +1,3 @@
-import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -6,11 +5,7 @@ import boxen from 'boxen'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
-import {
-  getInstalledRedwoodVersion,
-  getPaths,
-  writeFilesTask,
-} from '../../../../lib'
+import { getPaths, writeFilesTask } from '../../../../lib'
 
 const REDWOOD_TOML_PATH = path.join(getPaths().base, 'redwood.toml')
 
