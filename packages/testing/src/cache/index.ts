@@ -39,3 +39,26 @@ declare global {
     }
   }
 }
+
+/**
+ * This is just syntactic sugar, to help with testing cache contents.
+ *
+ * If you pass an array, it will check arrays for a partial match of the object.
+ *
+ * If you pass an object, it will check for a partial match
+ *
+ * @example
+ * expect(testCacheClient.contents).toContainEqual(partialMatch({ title: 'Only look for this title'}))
+ *
+ * @example
+ * expect(testCacheClient.contents).toContainEqual(partialMatch([{id: 1}]))
+ *
+ * @param value Object or Array of object to match
+ */
+export const partialMatch = (
+  value: Record<any, any> | Array<Record<any, any>>
+) => {
+  return Array.isArray(value)
+    ? expect.arrayContaining([expect.objectContaining(value[0])])
+    : expect.objectContaining(value)
+}
