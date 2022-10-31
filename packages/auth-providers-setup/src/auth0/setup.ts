@@ -23,7 +23,7 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     forceArg,
     provider: 'auth0',
     authDecoderImport:
-      "import { goTrueAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+      "import { auth0AuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
     apiPackages: ['@redwoodjs/auth-providers-api'],
     webPackages: ['@auth0/auth0-spa-js', '@redwoodjs/auth-providers-web'],
     notes: [
