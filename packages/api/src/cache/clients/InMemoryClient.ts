@@ -15,6 +15,18 @@ export default class InMemoryClient extends BaseClient {
     this.storage = data
   }
 
+  /**
+   * Special function for testing, only available in InMemoryClient
+   *
+   * Returns parsed content of cache as an array of values (no cache keys)
+   *
+   */
+  get contents() {
+    return Object.values(this.storage).map((cacheObj) =>
+      JSON.parse(cacheObj.value)
+    )
+  }
+
   // Not needed for InMemoryClient
   async disconnect() {}
   async connect() {}
@@ -40,7 +52,10 @@ export default class InMemoryClient extends BaseClient {
     return true
   }
 
-  // Special function for in-memory cache
+  /**
+   * Special clear function for testing
+   * only available in InMemoryClient
+   */
   async clear() {
     this.storage = {}
   }

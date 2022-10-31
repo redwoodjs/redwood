@@ -4,30 +4,26 @@ import type { InMemoryClient } from '@redwoodjs/api/cache'
 // Just needs a global import like import '@redwoodjs/testing/cache'
 
 expect.extend({
-  // TODO: add support for expect(cacheClient).not.toHaveCached(x)
   toHaveCached(cacheClient: InMemoryClient, value: unknown) {
-    const cacheValues = Object.values(cacheClient.storage).map((cacheObj) =>
-      JSON.parse(cacheObj.value)
-    )
+    const serializedValue = JSON.stringify(value)
 
-    // TODO: Is this assumption correct?
-    // If an array is passed, we know they're trying to check a nested value in an array
-    const checkType = Array.isArray(value)
-      ? expect.arrayContaining([expect.objectContaining(value[0])])
-      : expect.objectContaining(value)
+    const found = Object.values(cacheClient.storage)
+      .map((cacheObj) => cacheObj.value)
+      .some((cachedValue) => {
+        return cachedValue === serializedValue
+      })
 
-    try {
-      expect(cacheValues).toContainEqual(checkType)
+    if (found) {
       return {
         pass: true,
         message: () => 'Found cached value',
       }
-    } catch (e) {
+    } else {
       return {
         pass: false,
         message: () =>
           `Expected Cached Value: ${this.utils.printExpected(
-            JSON.stringify(value) // print the serialized value
+            serializedValue
           )}\n` +
           `Cache Contents: ${this.utils.printReceived(cacheClient.storage)}`,
       }
