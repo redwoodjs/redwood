@@ -769,6 +769,7 @@ And there you have it.
     </tr>
     <tr>
       <td align="center" valign="top" width="20%"><a href="https://derow.nl/"><img src="https://avatars.githubusercontent.com/u/39522856?v=4" width="100px;" alt=""/><br /><sub><b>Rowin Mol</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="http://everfund.io/"><img src="https://avatars.githubusercontent.com/u/15834048?v=4" width="100px;" alt=""/><br /><sub><b>Christopher Burns</b></sub></a></td>
     </tr>
   </tbody>
 </table>
