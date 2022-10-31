@@ -98,7 +98,7 @@ export const addApiConfig = (authDecoder?: {
   }
 
   const hasGetCurrentUserImport =
-    /(^import {.*?getCurrentUser(?!getCurrentUser).*?} from 'src\/lib\/auth')/s.test(
+    /^import {.*?getCurrentUser(?!getCurrentUser).*?} from 'src\/lib\/auth'/s.test(
       content
     )
 
