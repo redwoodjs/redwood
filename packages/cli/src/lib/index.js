@@ -1,3 +1,4 @@
+import { execSync } from 'child_process'
 import fs from 'fs'
 import https from 'https'
 import path from 'path'
@@ -169,6 +170,7 @@ export const saveRemoteFileToDisk = (
 
 export const getInstalledRedwoodVersion = () => {
   try {
+    // @ts-ignore TS Config issue, due to src being the rootDir
     const packageJson = require('../../package.json')
     return packageJson.version
   } catch (e) {
