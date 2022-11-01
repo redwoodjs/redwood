@@ -53,16 +53,12 @@ export default class InMemoryClient extends BaseClient {
   }
 
   /**
-   * Special clear function for testing
-   * only available in InMemoryClient
+   * Special functions for testing, only available in InMemoryClient
    */
   async clear() {
     this.storage = {}
   }
 
-  // Testing helpers
-  // @TODO: Rob you added this, but maybe forgot to use?
-  // Do we still need this?
   cacheKeyForValue(value: any) {
     for (const [cacheKey, cacheObj] of Object.entries(this.storage)) {
       if (cacheObj.value === JSON.stringify(value)) {

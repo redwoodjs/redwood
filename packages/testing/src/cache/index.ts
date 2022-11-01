@@ -4,28 +4,93 @@ import type { InMemoryClient } from '@redwoodjs/api/cache'
 // Just needs a global import like import '@redwoodjs/testing/cache'
 
 expect.extend({
-  toHaveCached(cacheClient: InMemoryClient, value: unknown) {
+  toHaveCached(
+    cacheClient: InMemoryClient,
+    keyOrCachedValue: unknown,
+    cachedValue: unknown
+  ) {
+    let value: unknown
+    let regexKey: RegExp | undefined
+    let stringKey: string | undefined
+    let found = false
+
+    // Figures out which form of this function we're calling:
+    //
+    // One argument, the value that's cached:
+    //
+    //   toHaveCached({ foo: 'bar' })
+    //
+    // Two arguments, the key that is caching it and the value that is cached:
+    //
+    //   toHaveCached('cache-key', { foo: 'bar' })
+
+    if (keyOrCachedValue && cachedValue) {
+      if (keyOrCachedValue instanceof RegExp) {
+        regexKey = keyOrCachedValue
+      } else {
+        stringKey = keyOrCachedValue.toString()
+      }
+      value = cachedValue
+    } else {
+      value = keyOrCachedValue
+    }
+
     const serializedValue = JSON.stringify(value)
 
-    const found = Object.values(cacheClient.storage)
-      .map((cacheObj) => cacheObj.value)
-      .some((cachedValue) => {
-        return cachedValue === serializedValue
-      })
+    for (const [cachedKey, cachedValue] of Object.entries(
+      cacheClient.storage
+    )) {
+      found =
+        // key matches regular expression
+        (regexKey &&
+          regexKey.test(cachedKey) &&
+          cachedValue.value === serializedValue) ||
+        // key is exactly a string
+        (stringKey &&
+          cachedKey === stringKey &&
+          cachedValue.value === serializedValue) ||
+        // no key was passed, just match on value
+        cachedValue.value === serializedValue
+
+      if (found) {
+        break
+      }
+    }
 
     if (found) {
-      return {
-        pass: true,
-        message: () => 'Found cached value',
+      if (regexKey || stringKey) {
+        return {
+          pass: true,
+          message: () =>
+            `Found cached value with key \`${regexKey || stringKey}\``,
+        }
+      } else {
+        return {
+          pass: true,
+          message: () => 'Found cached value',
+        }
       }
     } else {
-      return {
-        pass: false,
-        message: () =>
-          `Expected Cached Value: ${this.utils.printExpected(
-            serializedValue
-          )}\n` +
-          `Cache Contents: ${this.utils.printReceived(cacheClient.storage)}`,
+      if (regexKey || stringKey) {
+        return {
+          pass: false,
+          message: () =>
+            `Expected Cache Key \`${
+              regexKey || stringKey
+            }\` to match Value: ${this.utils.printExpected(
+              serializedValue
+            )}\n` +
+            `Cache Contents: ${this.utils.printReceived(cacheClient.storage)}`,
+        }
+      } else {
+        return {
+          pass: false,
+          message: () =>
+            `Expected Cached Value: ${this.utils.printExpected(
+              serializedValue
+            )}\n` +
+            `Cache Contents: ${this.utils.printReceived(cacheClient.storage)}`,
+        }
       }
     }
   },
