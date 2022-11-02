@@ -18,7 +18,7 @@ export default class InMemoryClient extends BaseClient {
   /**
    * Special function for testing, only available in InMemoryClient
    *
-   * Returns parsed content of cache as an array of values (no cache keys)
+   * Returns deserialized content of cache as an array of values (without cache keys)
    *
    */
   get contents() {
