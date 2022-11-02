@@ -22,7 +22,7 @@ return (
           return (
             <tr key={key}>
               <td>{key.toUpperCase()}</td>
-              <td>{JSON.stringify(currentUser[key])}</td>
+              <td>{currentUser[key]}</td>
             </tr>
           )
         })}
