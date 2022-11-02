@@ -501,8 +501,18 @@ export class DbAuthHandler<
         this.options.forgotPassword as ForgotPasswordFlowOptions
       ).handler(this._sanitizeUser(user))
 
+      // remove resetToken and resetTokenExpiresAt if in the body of the
+      // forgotPassword handler response
+      let responseObj = response
+      if (typeof response === 'object') {
+        responseObj = Object.assign(response, {
+          [this.options.authFields.resetToken]: undefined,
+          [this.options.authFields.resetTokenExpiresAt]: undefined,
+        })
+      }
+
       return [
-        response ? JSON.stringify(response) : '',
+        response ? JSON.stringify(responseObj) : '',
         {
           ...this._deleteSessionHeader,
         },

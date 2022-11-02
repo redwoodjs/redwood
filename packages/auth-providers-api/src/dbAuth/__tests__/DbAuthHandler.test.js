@@ -802,6 +802,22 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
+    it.only('removes the token from the forgotPassword response', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      options.forgotPassword.handler = (handlerUser) => {
+        return handlerUser
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.forgotPassword()
+      const jsonResponse = JSON.parse(response[0])
+
+      expect(jsonResponse.resetToken).toBeUndefined()
+      expect(jsonResponse.resetTokenExpiresAt).toBeUndefined()
+    })
+
     it('throws a generic error for an invalid client', async () => {
       const user = await createDbUser()
       event.body = JSON.stringify({
