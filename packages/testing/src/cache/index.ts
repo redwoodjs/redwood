@@ -102,31 +102,33 @@ const _checkValueForKey = (
     const cachedStringValue = cacheClient.storage[cacheKey]?.value
 
     // Check if its a jest asymmetric matcher i.e. objectContaining, arrayContaining
-    const expectedValueOrMatcher =
-      expectedValue?.$$typeof === Symbol.for('jest.asymmetricMatcher')
-        ? expectedValue
-        : // Because e.g. dates get converted to string, when cached
-          /**  @MARK, @TODO: Should we be doing this?
-           * It makes testing with scenarios much easier:
-           * expect(testCacheClient).toHaveCached(scenario.post.three)
 
-          *  BUT..... is it a bit too much magic?
-           *
-           *  If we don't do this, the user would need to do this:
-           * expect(testCacheClient).toHaveCached(JSON.parse(JSON.stringify(scenario.post.three)))
-           *
-           * It also introduces in consistency with the other matchers e.g.
-           *
-           *
-           *     expect(testCacheClient).toHaveCached(
-                    /posts-findMany.*\/,
-                  partialMatch([scenario.post.two])
-                  ) 🛑 won't work, because the createdAt and updatedAt fields are not strings
+    /**  @MARK, @TODO: Should we be doing this?
+       * It makes testing with scenarios much easier:
+       * expect(testCacheClient).toHaveCached(scenario.post.three)
 
-           * Maybe its a bit of pain we actually want... so it's obvious that the cache only contains
-                  serialized values?
-           */
-          JSON.parse(JSON.stringify(expectedValue))
+      *  BUT..... is it a bit too much magic?
+       *
+       *  If we don't do this, the user would need to do this:
+       * expect(testCacheClient).toHaveCached(JSON.parse(JSON.stringify(scenario.post.three)))
+       *
+       * It also introduces in consistency with the other matchers e.g.
+       *
+       *
+       *     expect(testCacheClient).toHaveCached(
+                /posts-findMany.*\/,
+              partialMatch([scenario.post.two])
+              ) 🛑 won't work, because the createdAt and updatedAt fields are not strings
+
+       * Maybe its a bit of pain we actually want... so it's obvious that the cache only contains
+              serialized values?
+       */
+    // const expectedValueOrMatcher =
+    //   expectedValue?.$$typeof === Symbol.for('jest.asymmetricMatcher')
+    //     ? expectedValue
+    //     : JSON.parse(JSON.stringify(expectedValue)) // Because e.g. dates get converted to string, when cached
+
+    const expectedValueOrMatcher = expectedValue
 
     expect(cachedStringValue && JSON.parse(cachedStringValue)).toEqual(
       expectedValueOrMatcher
@@ -177,13 +179,15 @@ declare global {
  *
  * If you pass an array, it will check arrays for a partial match of the object.
  *
- * If you pass an object, it will check for a partial match
+ * If you pass an object, it will check for a partial match of the object.
+ *
+ * Useful when you don't want to compare dates/auto-generated ids etc.
  *
  * @example
  * expect(testCacheClient.contents).toContainEqual(partialMatch({ title: 'Only look for this title'}))
  *
  * @example
- * expect(testCacheClient.contents).toContainEqual(partialMatch([{id: 1}]))
+ * expect(testCacheClient.contents).toContainEqual(partialMatch([{id: 1}, {id: 2}]))
  *
  * @param value Object or Array of object to match
  */
@@ -191,6 +195,6 @@ export const partialMatch = (
   value: Record<any, any> | Array<Record<any, any>>
 ) => {
   return Array.isArray(value)
-    ? expect.arrayContaining([expect.objectContaining(value[0])])
+    ? expect.arrayContaining(value.map((v) => expect.objectContaining(v)))
     : expect.objectContaining(value)
 }
