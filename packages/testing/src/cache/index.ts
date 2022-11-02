@@ -4,6 +4,10 @@ type AsymmetricMatcher = {
   $$typeof: symbol
 }
 
+type Options = {
+  strict?: boolean
+}
+
 type ExpectedValue = Array<any> | any | AsymmetricMatcher
 type ExpectedKey = string | RegExp
 // Custom Jest matchers to be used with Redwood's server caching
@@ -13,16 +17,18 @@ expect.extend({
   toHaveCached(
     cacheClient: InMemoryClient,
     keyOrExpectedValue: ExpectedKey | ExpectedValue,
-    expectedValue?: ExpectedValue
+    expectedValueOrOptions?: ExpectedValue | Options,
+    matchOptions?: Options | undefined
   ) {
     let value: ExpectedValue
+    let options: Options
     let regexKey: RegExp | undefined
     let stringKey: string | undefined
 
     // Figures out which form of this function we're calling:
     // with one or two arguments
 
-    if (_isKVPair(keyOrExpectedValue, expectedValue)) {
+    if (_isKVPair(keyOrExpectedValue, expectedValueOrOptions)) {
       // Two argument form, the key that is caching it and the value that is cached:
       // toHaveCached('cache-key', { foo: 'bar' })
       if (keyOrExpectedValue instanceof RegExp) {
@@ -30,34 +36,38 @@ expect.extend({
       } else {
         stringKey = keyOrExpectedValue
       }
-      value = expectedValue
+      value = expectedValueOrOptions
+      options = matchOptions || {}
     } else {
       // One argument form, only check the value that's cached:
       //  toHaveCached({ foo: 'bar' })
       value = keyOrExpectedValue
+      options = expectedValueOrOptions || {}
     }
-
-    const serializedValue = JSON.stringify(value)
 
     let foundKVPair: { key: string; value: any } | undefined
     let found = false
 
     // If its a stringKey we can do direct lookup
     if (stringKey) {
-      return _checkValueForKey(cacheClient, stringKey, value)
+      return _checkValueForKey(cacheClient, stringKey, value, options)
     } else {
       // For RegEx expectedKey or just a value check, we need to iterate
       for (const [cachedKey, cachedValue] of Object.entries(
         cacheClient.storage
       )) {
+        if (found) {
+          break
+        }
+
         if (regexKey?.test(cachedKey)) {
           found = true
           foundKVPair = { key: cachedKey, value: cachedValue.value }
-          break
         } else {
           // no key was passed, just match on value
-          found = cachedValue.value === serializedValue
-          break
+          found =
+            JSON.parse(cachedValue.value) ===
+            (options.strict ? value : JSON.parse(JSON.stringify(value)))
         }
       }
     }
@@ -65,7 +75,7 @@ expect.extend({
     // Key was supplied as a regex
     // So we check if the value is cached, and return early
     if (foundKVPair) {
-      return _checkValueForKey(cacheClient, foundKVPair.key, value)
+      return _checkValueForKey(cacheClient, foundKVPair.key, value, options)
     }
 
     if (found) {
@@ -78,7 +88,7 @@ expect.extend({
         pass: false,
         message: () =>
           `Expected Cached Value: ${this.utils.printExpected(
-            serializedValue
+            options?.strict ? value : JSON.stringify(value)
           )}\n` +
           `Cache Contents: ${this.utils.printReceived(cacheClient.storage)}`,
       }
@@ -96,39 +106,19 @@ const _isKVPair = (
 const _checkValueForKey = (
   cacheClient: InMemoryClient,
   cacheKey: string,
-  expectedValue: ExpectedValue
+  expectedValue: ExpectedValue,
+  options: Options
 ) => {
   try {
     const cachedStringValue = cacheClient.storage[cacheKey]?.value
 
     // Check if its a jest asymmetric matcher i.e. objectContaining, arrayContaining
 
-    /**  @MARK, @TODO: Should we be doing this?
-       * It makes testing with scenarios much easier:
-       * expect(testCacheClient).toHaveCached(scenario.post.three)
-
-      *  BUT..... is it a bit too much magic?
-       *
-       *  If we don't do this, the user would need to do this:
-       * expect(testCacheClient).toHaveCached(JSON.parse(JSON.stringify(scenario.post.three)))
-       *
-       * It also introduces in consistency with the other matchers e.g.
-       *
-       *
-       *     expect(testCacheClient).toHaveCached(
-                /posts-findMany.*\/,
-              partialMatch([scenario.post.two])
-              ) 🛑 won't work, because the createdAt and updatedAt fields are not strings
-
-       * Maybe its a bit of pain we actually want... so it's obvious that the cache only contains
-              serialized values?
-       */
-    // const expectedValueOrMatcher =
-    //   expectedValue?.$$typeof === Symbol.for('jest.asymmetricMatcher')
-    //     ? expectedValue
-    //     : JSON.parse(JSON.stringify(expectedValue)) // Because e.g. dates get converted to string, when cached
-
-    const expectedValueOrMatcher = expectedValue
+    const expectedValueOrMatcher =
+      expectedValue?.$$typeof === Symbol.for('jest.asymmetricMatcher') ||
+      options.strict
+        ? expectedValue
+        : JSON.parse(JSON.stringify(expectedValue)) // Because e.g. dates get converted to string, when cached
 
     expect(cachedStringValue && JSON.parse(cachedStringValue)).toEqual(
       expectedValueOrMatcher
