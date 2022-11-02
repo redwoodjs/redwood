@@ -77,6 +77,7 @@ const createRedwoodJSApp = ({ yarn1 }) => {
     }
 
     packageJSON.resolutions = {
+      ...packageJSON.resolutions,
       prisma: getVersionFrmRwPkg('prisma', 'cli'),
       '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
       '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
