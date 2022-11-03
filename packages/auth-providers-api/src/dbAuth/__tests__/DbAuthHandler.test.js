@@ -767,15 +767,16 @@ describe('dbAuth', () => {
       // base64 characters only, except =
       expect(resetUser.resetToken).toMatch(/^\w{16}$/)
       expect(resetUser.resetTokenExpiresAt instanceof Date).toEqual(true)
-      // response contains the user data, minus `hashedPassword` and `salt`
+
+      // response contains data returned from the handler
       expect(responseBody.id).toEqual(resetUser.id)
       expect(responseBody.email).toEqual(resetUser.email)
-      expect(responseBody.resetToken).toEqual(resetUser.resetToken)
-      expect(responseBody.resetTokenExpiresAt).toEqual(
-        resetUser.resetTokenExpiresAt.toISOString()
-      )
-      expect(responseBody.hashedPassword).toEqual(undefined)
-      expect(responseBody.salt).toEqual(undefined)
+
+      // response data should not include sensitive info
+      expect(responseBody.resetToken).toBeUndefined()
+      expect(responseBody.resetTokenExpiresAt).toBeUndefined()
+      expect(responseBody.hashedPassword).toBeUndefined()
+      expect(responseBody.salt).toBeUndefined()
     })
 
     it('returns a logout session cookie', async () => {
@@ -800,6 +801,22 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.forgotPassword()
       expect.assertions(1)
+    })
+
+    it('removes the token from the forgotPassword response', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      options.forgotPassword.handler = (handlerUser) => {
+        return handlerUser
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.forgotPassword()
+      const jsonResponse = JSON.parse(response[0])
+
+      expect(jsonResponse.resetToken).toBeUndefined()
+      expect(jsonResponse.resetTokenExpiresAt).toBeUndefined()
     })
 
     it('throws a generic error for an invalid client', async () => {
