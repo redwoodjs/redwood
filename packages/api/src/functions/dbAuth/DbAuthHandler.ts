@@ -7,6 +7,10 @@ import type {
   VerifiedRegistrationResponse,
   VerifiedAuthenticationResponse,
 } from '@simplewebauthn/server'
+import type {
+  AuthenticationCredentialJSON,
+  RegistrationCredentialJSON,
+} from '@simplewebauthn/typescript-types'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import base64url from 'base64url'
 import CryptoJS from 'crypto-js'
@@ -229,12 +233,13 @@ export type AuthMethodNames =
   | 'webAuthnAuthOptions'
   | 'webAuthnAuthenticate'
 
-type Params = {
-  username?: string
-  password?: string
-  method: AuthMethodNames
-  [key: string]: any
-}
+type Params = AuthenticationCredentialJSON &
+  RegistrationCredentialJSON & {
+    username?: string
+    password?: string
+    method: AuthMethodNames
+    [key: string]: any
+  }
 
 /**
  * To use in src/lib/auth#getCurrentUser
@@ -705,9 +710,8 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
-    const jsonBody = JSON.parse(this.event.body as string)
     const credential = await this.dbCredentialAccessor.findFirst({
-      where: { id: jsonBody.rawId },
+      where: { id: this.params.rawId },
     })
 
     if (!credential) {
@@ -724,7 +728,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     let verification: VerifiedAuthenticationResponse
     try {
       const opts: VerifyAuthenticationResponseOpts = {
-        credential: jsonBody,
+        credential: this.params,
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: webAuthnOptions.origin,
         expectedRPID: webAuthnOptions.domain,
@@ -772,7 +776,7 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     // get the regular `login` cookies
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
-      this._webAuthnCookie(jsonBody.rawId, this.webAuthnExpiresDate),
+      this._webAuthnCookie(this.params.rawId, this.webAuthnExpiresDate),
       loginHeaders['set-cookie'],
     ].flat()
 
@@ -897,12 +901,11 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
     }
 
     const user = await this._getCurrentUser()
-    const jsonBody = JSON.parse(this.event.body as string)
 
     let verification: VerifiedRegistrationResponse
     try {
       const options: VerifyRegistrationResponseOpts = {
-        credential: jsonBody,
+        credential: this.params,
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: this.options.webAuthn.origin,
         expectedRPID: this.options.webAuthn.domain,
@@ -935,8 +938,10 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
               user[this.options.authFields.id],
             [this.options.webAuthn.credentialFields.publicKey]:
               credentialPublicKey,
-            [this.options.webAuthn.credentialFields.transports]:
-              jsonBody.transports ? JSON.stringify(jsonBody.transports) : null,
+            [this.options.webAuthn.credentialFields.transports]: this.params
+              .transports
+              ? JSON.stringify(this.params.transports)
+              : null,
             [this.options.webAuthn.credentialFields.counter]: counter,
           },
         })
