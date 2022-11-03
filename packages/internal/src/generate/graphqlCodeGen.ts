@@ -274,8 +274,8 @@ interface CombinedPluginConfig {
 }
 
 /**
- * Codgen plugin that just lists all the SDL models that are also mapped Prisma models
- * We use a plugin, because its possible to have Prisma models that do not have an SDL model
+ * Codgen plugin that just lists all the SDL models and interfaces that are also mapped Prisma models
+ * We use a plugin, because its possible to have Prisma models that do not have an SDL model or interface
  * so we can't just list all the Prisma models, even if they're included in the mappers object.
  *
  * Example:
@@ -289,7 +289,10 @@ const printMappedModelsPlugin: CodegenPlugin = {
     // this way we can make sure relation types are not required
     const sdlTypesWhichAreMapped = Object.values(schema.getTypeMap())
       .filter((type) => {
-        return type.astNode?.kind === 'ObjectTypeDefinition'
+        const kind = type.astNode?.kind
+        return (
+          kind === 'ObjectTypeDefinition' || kind === 'InterfaceTypeDefinition'
+        )
       })
       .filter((objectDefType) => {
         const modelName = objectDefType.astNode?.name.value
