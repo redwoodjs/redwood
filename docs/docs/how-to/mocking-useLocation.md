@@ -1,6 +1,6 @@
 # Mocking useLocation
 
-To mock useLocation for your component tests, wrap the component with ``LocationProvider``.
+To mock ``useLocation`` for your component tests, wrap the component with ``LocationProvider``.
 
 ```jsx
 import { LocationProvider } from '@redwoodjs/router'
