@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.19.4",
+    "@babel/runtime-corejs3": "7.20.1",
     "@redwoodjs/internal": "3.2.0",
     "@redwoodjs/structure": "3.2.0",
     "ci-info": "3.5.0",
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
-    "@babel/core": "7.19.3",
+    "@babel/core": "7.19.6",
     "@types/envinfo": "7.8.1",
     "@types/uuid": "8.3.4",
     "@types/yargs": "17.0.13",
