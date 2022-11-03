@@ -56,9 +56,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.0":
-  version: 3.7.0
-  resolution: "@apollo/client@npm:3.7.0"
+"@apollo/client@npm:3.7.1":
+  version: 3.7.1
+  resolution: "@apollo/client@npm:3.7.1"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
@@ -88,7 +88,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: d2b3e2e135d6bdd314d3879206a63f6e56fa1621da6a35bdf4907e71c21a8a3595ae7728bec816b276329eec1ce7aee8f0893e10d51ed9a4eee1852cabf028a4
+  checksum: 2f0ac97f59555481bcc297c8c441b6ef71e9faac5d025f476baceab09173a615c6584fb486fac7c9c7361f6b543dc8fb648c6ea0160ccfd31a86f7866717d35e
   languageName: node
   linkType: hard
 
@@ -6312,7 +6312,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.25.5
     fast-json-parse: 1.0.3
-    fastify: 4.8.1
+    fastify: 4.9.2
     fastify-raw-body: 4.1.0
     jest: 29.1.2
     lodash.escape: 4.0.1
@@ -6777,7 +6777,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 17.0.2
     react-dom: 17.0.2
-    react-hook-form: 7.37.0
+    react-hook-form: 7.39.1
     typescript: 4.7.4
   peerDependencies:
     graphql: 16.6.0
@@ -7051,7 +7051,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.7.0
+    "@apollo/client": 3.7.1
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
@@ -16936,9 +16936,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.8.1":
-  version: 4.8.1
-  resolution: "fastify@npm:4.8.1"
+"fastify@npm:4.9.2":
+  version: 4.9.2
+  resolution: "fastify@npm:4.9.2"
   dependencies:
     "@fastify/ajv-compiler": ^3.3.1
     "@fastify/error": ^3.0.0
@@ -16954,7 +16954,7 @@ __metadata:
     secure-json-parse: ^2.5.0
     semver: ^7.3.7
     tiny-lru: ^9.0.2
-  checksum: 72cdfcd6d4650112469008d9638a36ccf06e2d40d3ebc75ecf59028db3e4d37a4004c795d32640f2ce401142a4be5331cc2539681f12100731c56f0774a747d3
+  checksum: 6be84b9182f03c219bf9ff6eb96812779010526d24b98844c99f5d47af454a21af8de2d2854e07dfdee983a41113b42cda2f92c25d4b712da3eba4c8f4668215
   languageName: node
   linkType: hard
 
@@ -26389,12 +26389,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.37.0":
-  version: 7.37.0
-  resolution: "react-hook-form@npm:7.37.0"
+"react-hook-form@npm:7.39.1":
+  version: 7.39.1
+  resolution: "react-hook-form@npm:7.39.1"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: f879bb8618388be60b2bd9b06f9b55097ab9a7f3b248a7a9de7d754ac0ed8a2c7a50c1701a9cf5796dd67de9c156ff9db8b1138a45e278ab968d08d6a7ff2608
+  checksum: e089e4781cbe6b9ee5645abf5ebe453ad70a2cfd7cf406f4d666a6785d3436177f1a320d490efb0ae95b9f10272ae6ec40f31e0c7ac720abbafd348e44a0a38a
   languageName: node
   linkType: hard
 
