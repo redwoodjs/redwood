@@ -310,7 +310,7 @@ export async function sendEmail({ to, subject, text, html }: Options) {
 }
 ```
 
-In the code above you should replace "your@email.com" in two places with the email you used when signing up for SendInBlue. You can also change the name used for "From:".
+In the code above you should replace "your@email.com" in two places with the email you used when signing up for SendInBlue. You can also change the name used for "From:". Note: Remember to use the email address as it is shown in the SendInBlue website, it is case sensitive. 
 
 Now let's go back to the users service and add the missing pieces there. At the top, after the db import, add the `sendEmail` import
 
