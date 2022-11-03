@@ -66,8 +66,8 @@ expect.extend({
         } else {
           // no key was passed, just match on value
           found =
-            JSON.parse(cachedValue.value) ===
-            (options.strict ? value : JSON.parse(JSON.stringify(value)))
+            cachedValue.value ===
+            (options.strict ? value : JSON.stringify(value))
         }
       }
     }
@@ -144,12 +144,15 @@ declare global {
     interface Matchers<R> {
       /**
        *
+       * Use this helper to simplify testing your InMemoryCache client.
+       *
        * The expected value you provide will be serialized and deseriliazed for you.
        *
        * NOTE: Does not support partialMatch - use cacheClient.contents or test with a key!
        * @param expectedValue The value that is cached, must be serializable
+       * @param matchOptions Options to do a strict equal check (e.g. datestrings vs dates)
        */
-      toHaveCached(expectedValue: unknown): R
+      toHaveCached(expectedValue: unknown, matchOptions?: Options): R
 
       /**
        *
@@ -158,8 +161,13 @@ declare global {
        *
        * @param cacheKey They key that your value is cached under
        * @param expectedValue The expected value. Can be a jest asymmetric matcher (using `partialMatch`)
+       * @param matchOptions Options to do a strict equal check (e.g. datestrings vs dates)
        */
-      toHaveCached(cacheKey: ExpectedKey, expectedValue: ExpectedValue): R
+      toHaveCached(
+        cacheKey: ExpectedKey,
+        expectedValue: ExpectedValue,
+        matchOptions?: Options
+      ): R
     }
   }
 }
