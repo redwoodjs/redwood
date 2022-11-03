@@ -507,8 +507,18 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
         this.options.forgotPassword as ForgotPasswordFlowOptions
       ).handler(this._sanitizeUser(user))
 
+      // remove resetToken and resetTokenExpiresAt if in the body of the
+      // forgotPassword handler response
+      let responseObj = response
+      if (typeof response === 'object') {
+        responseObj = Object.assign(response, {
+          [this.options.authFields.resetToken]: undefined,
+          [this.options.authFields.resetTokenExpiresAt]: undefined,
+        })
+      }
+
       return [
-        response ? JSON.stringify(response) : '',
+        response ? JSON.stringify(responseObj) : '',
         {
           ...this._deleteSessionHeader,
         },
@@ -613,13 +623,13 @@ export class DbAuthHandler<TUser extends Record<string | number, any>> {
         },
         data: {
           [this.options.authFields.hashedPassword]: hashedPassword,
-          [this.options.authFields.resetToken]: null,
-          [this.options.authFields.resetTokenExpiresAt]: null,
         },
       })
     } catch (e) {
       throw new DbAuthError.GenericError()
     }
+
+    await this._clearResetToken(user)
 
     // call the user-defined handler so they can decide what to do with this user
     const response = await (
