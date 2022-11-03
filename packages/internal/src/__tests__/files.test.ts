@@ -50,6 +50,8 @@ test('finds directory named modules', () => {
       "api/src/directives/skipAuth/skipAuth.js",
       "api/src/functions/healthz/healthz.js",
       "api/src/functions/nested/nested.ts",
+      "api/src/services/comments/comments.js",
+      "api/src/services/textComments/textComments.js",
       "api/src/services/todos/todos.js",
       "web/src/components/AddTodo/AddTodo.js",
       "web/src/components/AddTodoControl/AddTodoControl.js",
@@ -91,8 +93,8 @@ test('find the graphql schema files', () => {
   const paths = findGraphQLSchemas()
   const p = paths.map(cleanPaths)
 
-  expect(p[0]).toMatchInlineSnapshot(`"api/src/graphql/currentUser.sdl.ts"`)
-  expect(p[1]).toMatchInlineSnapshot(`"api/src/graphql/todos.sdl.js"`)
+  expect(p[0]).toMatchInlineSnapshot(`"api/src/graphql/comments.sdl.js"`)
+  expect(p[1]).toMatchInlineSnapshot(`"api/src/graphql/currentUser.sdl.ts"`)
 })
 
 test('find api functions', () => {

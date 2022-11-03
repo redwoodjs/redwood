@@ -31,6 +31,9 @@ jest.mock('@prisma/client', () => {
       PrismaModelTwo: 'PrismaModelTwo',
       Post: 'Post',
       Todo: 'Todo',
+      Comment: 'Comment',
+      TextComment: 'TextComment',
+      PrismaOnlyComment: 'PrismaOnlyComment',
     },
   }
 })
@@ -86,7 +89,7 @@ test('Generate gql typedefs api', async () => {
 
   // Check that prisma model imports are added to the top of the file
   expect(data).toContain(
-    "import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'"
+    "import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo, Comment as PrismaComment, TextComment as PrismaTextComment, PrismaOnlyComment as PrismaPrismaOnlyComment } from '@prisma/client'"
   )
 
   // Check printMappedModelsPlugin works correctly
@@ -95,7 +98,9 @@ test('Generate gql typedefs api', async () => {
   )
 
   // Should only contain the SDL models that are also in Prisma
-  expect(data).toContain(`type AllMappedModels = MaybeOrArrayOfMaybe<Todo>`)
+  expect(data).toContain(
+    `type AllMappedModels = MaybeOrArrayOfMaybe<Comment | TextComment | Todo>`
+  )
 })
 
 test('respects user provided codegen config', async () => {

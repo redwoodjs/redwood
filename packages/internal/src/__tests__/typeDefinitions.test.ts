@@ -71,6 +71,8 @@ test('generate the correct mirror types for directory named modules', () => {
       ".redwood/types/mirror/api/src/directives/skipAuth/index.d.ts",
       ".redwood/types/mirror/api/src/functions/healthz/index.d.ts",
       ".redwood/types/mirror/api/src/functions/nested/index.d.ts",
+      ".redwood/types/mirror/api/src/services/comments/index.d.ts",
+      ".redwood/types/mirror/api/src/services/textComments/index.d.ts",
       ".redwood/types/mirror/api/src/services/todos/index.d.ts",
       ".redwood/types/mirror/web/src/components/AddTodo/index.d.ts",
       ".redwood/types/mirror/web/src/components/AddTodoControl/index.d.ts",

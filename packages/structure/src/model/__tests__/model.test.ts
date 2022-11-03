@@ -26,7 +26,12 @@ describe('Redwood Project Model', () => {
       page.basenameNoExt
       page.route?.id
     }
-    expect(project.sdls.map((s) => s.name)).toEqual(['currentUser', 'todos'])
+    expect(project.sdls.map((s) => s.name)).toEqual([
+      'comments',
+      'currentUser',
+      'textComments',
+      'todos',
+    ])
 
     for (const c of project.components) {
       c.basenameNoExt

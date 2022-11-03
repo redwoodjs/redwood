@@ -7,6 +7,20 @@ directive @skipAuth on FIELD_DEFINITION
 
 scalar BigInt
 
+interface Comment {
+  author: String
+  id: Int!
+}
+
+input CreateCommentInput {
+  author: String
+}
+
+input CreateTextCommentInput {
+  author: String
+  body: String!
+}
+
 scalar Date
 
 scalar DateTime
@@ -23,10 +37,12 @@ type Mutation {
 
 """About the Redwood queries."""
 type Query {
+  comments: [Comment!]!
   currentUser: JSON
 
   """Fetches the Redwood root schema."""
   redwood: Redwood
+  textComments: [TextComment!]!
   todos: [Todo]
   todosCount: Int!
 }
@@ -47,11 +63,26 @@ type Redwood {
   version: String
 }
 
+type TextComment implements Comment {
+  author: String
+  body: String!
+  id: Int!
+}
+
 scalar Time
 
 type Todo {
   body: String!
   id: Int!
   status: String!
+}
+
+input UpdateCommentInput {
+  author: String
+}
+
+input UpdateTextCommentInput {
+  author: String
+  body: String
 }"
 `;
