@@ -298,8 +298,9 @@ export const deleteContact = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```js title="api/src/services/contacts/contacts.ts"
-import { db } from 'src/lib/db'
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const contacts: QueryResolvers['contacts'] = () => {
   return db.contact.findMany()
@@ -1280,7 +1281,7 @@ export const createContact = ({ input }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```ts title="api/src/services/contacts/contacts.ts"
-import type { Prisma } from '@prisma/client'
+import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
