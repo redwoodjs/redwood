@@ -21,7 +21,7 @@ services:
   - key: NODE_VERSION
     value: 16
   - key: SKIP_INSTALL_DEPS
-    value: TRUE
+    value: true
   routes:
   - type: rewrite
     source: /.redwood/functions/*
