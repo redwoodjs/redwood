@@ -282,9 +282,9 @@ To mock `useLocation` in your component tests, wrap the component with `Location
 import { LocationProvider } from '@redwoodjs/router'
 
 render(
-<LocationProvider location={{ pathname: '', search: '?cancelled=true' }}>
-   <Component />
-</LocationProvider>
+  <LocationProvider location={{ pathname: '', search: '?cancelled=true' }}>
+    <Component />
+  </LocationProvider>
 )
 ```
 
