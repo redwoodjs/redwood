@@ -767,15 +767,16 @@ describe('dbAuth', () => {
       // base64 characters only, except =
       expect(resetUser.resetToken).toMatch(/^\w{16}$/)
       expect(resetUser.resetTokenExpiresAt instanceof Date).toEqual(true)
-      // response contains the user data, minus `hashedPassword` and `salt`
+
+      // response contains data returned from the handler
       expect(responseBody.id).toEqual(resetUser.id)
       expect(responseBody.email).toEqual(resetUser.email)
-      expect(responseBody.resetToken).toEqual(resetUser.resetToken)
-      expect(responseBody.resetTokenExpiresAt).toEqual(
-        resetUser.resetTokenExpiresAt.toISOString()
-      )
-      expect(responseBody.hashedPassword).toEqual(undefined)
-      expect(responseBody.salt).toEqual(undefined)
+
+      // response data should not include sensitive info
+      expect(responseBody.resetToken).toBeUndefined()
+      expect(responseBody.resetTokenExpiresAt).toBeUndefined()
+      expect(responseBody.hashedPassword).toBeUndefined()
+      expect(responseBody.salt).toBeUndefined()
     })
 
     it('returns a logout session cookie', async () => {
@@ -800,6 +801,22 @@ describe('dbAuth', () => {
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.forgotPassword()
       expect.assertions(1)
+    })
+
+    it('removes the token from the forgotPassword response', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      options.forgotPassword.handler = (handlerUser) => {
+        return handlerUser
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const response = await dbAuth.forgotPassword()
+      const jsonResponse = JSON.parse(response[0])
+
+      expect(jsonResponse.resetToken).toBeUndefined()
+      expect(jsonResponse.resetTokenExpiresAt).toBeUndefined()
     })
 
     it('throws a generic error for an invalid client', async () => {
@@ -1820,6 +1837,35 @@ describe('dbAuth', () => {
       )
       expect(credential.transports).toEqual('["internal"]')
       expect(credential.counter).toEqual(0)
+    })
+
+    it('works if event body is base64 encoded', async () => {
+      const user = await createDbUser({
+        webAuthnChallenge: 'HuGPrQqK7f53NLwMZMst_DL9Dig2BBivDYWWpawIPVM',
+      })
+      event = {
+        headers: {
+          'Content-Type': 'application/json',
+          cookie: encryptToCookie(
+            JSON.stringify({ id: user.id }) + ';' + 'token'
+          ),
+        },
+        body: Buffer.from(
+          `{"method":"webAuthnRegister","id":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","rawId":"GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg","response":{"attestationObject":"o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVisSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NFAAAAAK3OAAI1vMYKZIsLJfHwVQMAKBqo2TrmGKaTmwQ3lZJ263AS5GmvYpkuRCScLQle-NGrFM9uLHQJhhalAQIDJiABIVggGIipTQt-gcoDPOpW6Zje_Av9C0-jWb2R2PBmXJJL-c8iWCC76wxo3uzG8cPqb0A8Vij-dqMbrEytEHjuFOtiQ2dt8A","clientDataJSON":"eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiSHVHUHJRcUs3ZjUzTkx3TVpNc3RfREw5RGlnMkJCaXZEWVdXcGF3SVBWTSIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODkxMCIsImNyb3NzT3JpZ2luIjpmYWxzZSwib3RoZXJfa2V5c19jYW5fYmVfYWRkZWRfaGVyZSI6ImRvIG5vdCBjb21wYXJlIGNsaWVudERhdGFKU09OIGFnYWluc3QgYSB0ZW1wbGF0ZS4gU2VlIGh0dHBzOi8vZ29vLmdsL3lhYlBleCJ9"},"type":"public-key","clientExtensionResults":{},"transports":["internal"]}`,
+          'utf8'
+        ),
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      await dbAuth.webAuthnRegister()
+
+      const credential = db.userCredential.findFirst({
+        where: { userId: user.id },
+      })
+
+      expect(credential.id).toEqual(
+        'GqjZOuYYppObBDeVknbrcBLkaa9imS5EJJwtCV740asUz24sdAmGFg'
+      )
     })
   })
 
