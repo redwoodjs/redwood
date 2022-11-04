@@ -1908,6 +1908,8 @@ Note that you cannot use `partialMatch` with toHaveCached without supplying a ke
 // 🛑 Will never pass!
 expect(testCacheClient).toHaveCached(partialMatch({name: 'LS50'}))
 ```
+
+For partial matches, you either have to supply a key to `toHaveCached` or using the `cacheClient.contents` helper.
 :::
 
 
