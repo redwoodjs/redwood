@@ -7,6 +7,10 @@ import type {
   VerifiedRegistrationResponse,
   VerifiedAuthenticationResponse,
 } from '@simplewebauthn/server'
+import type {
+  AuthenticationCredentialJSON,
+  RegistrationCredentialJSON,
+} from '@simplewebauthn/typescript-types'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import base64url from 'base64url'
 import CryptoJS from 'crypto-js'
@@ -230,12 +234,13 @@ export type AuthMethodNames =
   | 'webAuthnAuthOptions'
   | 'webAuthnAuthenticate'
 
-type Params = {
-  username?: string
-  password?: string
-  method: AuthMethodNames
-  [key: string]: any
-}
+type Params = AuthenticationCredentialJSON &
+  RegistrationCredentialJSON & {
+    username?: string
+    password?: string
+    method: AuthMethodNames
+    [key: string]: any
+  }
 
 interface DbAuthSession<TIdType> {
   id: TIdType
@@ -501,8 +506,18 @@ export class DbAuthHandler<
         this.options.forgotPassword as ForgotPasswordFlowOptions
       ).handler(this._sanitizeUser(user))
 
+      // remove resetToken and resetTokenExpiresAt if in the body of the
+      // forgotPassword handler response
+      let responseObj = response
+      if (typeof response === 'object') {
+        responseObj = Object.assign(response, {
+          [this.options.authFields.resetToken]: undefined,
+          [this.options.authFields.resetTokenExpiresAt]: undefined,
+        })
+      }
+
       return [
-        response ? JSON.stringify(response) : '',
+        response ? JSON.stringify(responseObj) : '',
         {
           ...this._deleteSessionHeader,
         },
@@ -607,13 +622,13 @@ export class DbAuthHandler<
         },
         data: {
           [this.options.authFields.hashedPassword]: hashedPassword,
-          [this.options.authFields.resetToken]: null,
-          [this.options.authFields.resetTokenExpiresAt]: null,
         },
       })
     } catch (e) {
       throw new DbAuthError.GenericError()
     }
+
+    await this._clearResetToken(user)
 
     // call the user-defined handler so they can decide what to do with this user
     const response = await (
@@ -689,9 +704,8 @@ export class DbAuthHandler<
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
-    const jsonBody = JSON.parse(this.event.body as string)
     const credential = await this.dbCredentialAccessor.findFirst({
-      where: { id: jsonBody.rawId },
+      where: { id: this.params.rawId },
     })
 
     if (!credential) {
@@ -708,7 +722,7 @@ export class DbAuthHandler<
     let verification: VerifiedAuthenticationResponse
     try {
       const opts: VerifyAuthenticationResponseOpts = {
-        credential: jsonBody,
+        credential: this.params,
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: webAuthnOptions.origin,
         expectedRPID: webAuthnOptions.domain,
@@ -756,7 +770,7 @@ export class DbAuthHandler<
     // get the regular `login` cookies
     const [, loginHeaders] = this._loginResponse(user)
     const cookies = [
-      this._webAuthnCookie(jsonBody.rawId, this.webAuthnExpiresDate),
+      this._webAuthnCookie(this.params.rawId, this.webAuthnExpiresDate),
       loginHeaders['set-cookie'],
     ].flat()
 
@@ -881,12 +895,11 @@ export class DbAuthHandler<
     }
 
     const user = await this._getCurrentUser()
-    const jsonBody = JSON.parse(this.event.body as string)
 
     let verification: VerifiedRegistrationResponse
     try {
       const options: VerifyRegistrationResponseOpts = {
-        credential: jsonBody,
+        credential: this.params,
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: this.options.webAuthn.origin,
         expectedRPID: this.options.webAuthn.domain,
@@ -919,8 +932,10 @@ export class DbAuthHandler<
               user[this.options.authFields.id],
             [this.options.webAuthn.credentialFields.publicKey]:
               credentialPublicKey,
-            [this.options.webAuthn.credentialFields.transports]:
-              jsonBody.transports ? JSON.stringify(jsonBody.transports) : null,
+            [this.options.webAuthn.credentialFields.transports]: this.params
+              .transports
+              ? JSON.stringify(this.params.transports)
+              : null,
             [this.options.webAuthn.credentialFields.counter]: counter,
           },
         })

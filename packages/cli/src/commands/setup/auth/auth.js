@@ -35,10 +35,13 @@ export async function builder(yargs) {
       c.warning(
         [
           '',
-          'This version of auth is experimental. After running this command',
-          'you will not be able to downgrade to a stable version of Redwood',
-          'without breaking your auth setup. Please only use this version of',
-          'auth in throwaway projects',
+          "You're running the experimental @canary version of auth. It might",
+          'be broken, and after running this command you will not be able to',
+          'downgrade to a stable version of Redwood without breaking your',
+          'auth setup. Please only use this version of auth in throwaway',
+          'projects. For a more stable experience, but still updated with the',
+          "latest patches, try switching to Redwood's @next version by",
+          'running `yarn rw upgrade -t next`',
           '',
         ].join('\n')
       )

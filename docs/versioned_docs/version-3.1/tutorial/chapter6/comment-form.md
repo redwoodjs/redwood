@@ -93,7 +93,7 @@ const CommentForm = () => {
         </Label>
         <TextField
           name="name"
-          className="block w-full p-1 border rounded text-xs "
+          className="block w-full p-1 border rounded text-xs"
           validation={{ required: true }}
         />
 
@@ -368,7 +368,7 @@ import type {
   CreateCommentMutationVariables,
 } from 'types/graphql'
 // highlight-end
-  
+
 export const generated = () => {
   // highlight-start
   mockGraphQLMutation<CreateCommentMutation, CreateCommentMutationVariables>(
@@ -398,6 +398,12 @@ export default { title: 'Components/CommentForm' }
 </TabItem>
 </Tabs>
 
+:::info
+
+If you still get an error, try reloading the Storybook tab in the browser.
+
+:::
+
 To use `mockGraphQLMutation` you call it with the name of the mutation you want to intercept and then the function that will handle the interception and return a response. The arguments passed to that function give us some flexibility in how we handle the response.
 
 In our case we want the `variables` that were passed to the mutation (the `name` and `body`) as well as the context object (abbreviated as `ctx`) so that we can add a delay to simulate a round trip to the server. This will let us test that the **Submit** button is disabled for that one second and you can't submit a second comment while the first one is still being saved.
@@ -421,9 +427,10 @@ So let's use `Article` as the cleaning house for where all these disparate parts
 
 ```jsx title="web/src/components/Article/Article.js"
 import { Link, routes } from '@redwoodjs/router'
-import CommentsCell from 'src/components/CommentsCell'
+
 // highlight-next-line
 import CommentForm from 'src/components/CommentForm'
+import CommentsCell from 'src/components/CommentsCell'
 
 const truncate = (text, length) => {
   return text.substring(0, length) + '...'
@@ -463,9 +470,10 @@ export default Article
 
 ```tsx title="web/src/components/Article/Article.tsx"
 import { Link, routes } from '@redwoodjs/router'
-import CommentsCell from 'src/components/CommentsCell'
+
 // highlight-next-line
 import CommentForm from 'src/components/CommentForm'
+import CommentsCell from 'src/components/CommentsCell'
 
 import type { Post } from 'types/graphql'
 
@@ -663,7 +671,7 @@ Now fill out the comment form and submit! And...nothing happened! Believe it or 
 
 ![image](https://user-images.githubusercontent.com/300/153930645-c5233fb5-ad7f-4a03-8707-3cd6164bb277.png)
 
-Yay! It would have been nicer if that comment appeared as soon as we submitted the comment, so maybe that's a half-yay? Also, the text boxes stayed filled with our name/messages which isn't ideal. But, we can fix both of those! One involves telling the GraphQL client (Apollo) that we created a new record and, if it would be so kind, to try the query again that gets the comments for this page, and we'll fix the other by just removing the form from the page completely when a new comment is submitted.
+Yay! It would have been nicer if that comment appeared as soon as we submitted the comment, so maybe that's a half-yay? Also, the text boxes stayed filled with our name/messages (before we reloaded the page) which isn't ideal. But, we can fix both of those. One involves telling the GraphQL client (Apollo) that we created a new record and, if it would be so kind, to try the query again that gets the comments for this page, and we'll fix the other by just removing the form from the page completely when a new comment is submitted.
 
 ### GraphQL Query Caching
 
@@ -684,6 +692,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
+
 // highlight-next-line
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
 
@@ -713,6 +722,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
+
 // highlight-next-line
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
 
@@ -740,6 +750,9 @@ We'll make use of good old fashioned React state to keep track of whether a comm
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/CommentForm/CommentForm.js"
+// highlight-next-line
+import { useState } from 'react'
+
 import {
   Form,
   FormError,
@@ -751,9 +764,8 @@ import {
 import { useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast } from '@redwoodjs/web/toast'
+
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
-// highlight-next-line
-import { useState } from 'react'
 
 const CREATE = gql`
   mutation CreateCommentMutation($input: CreateCommentInput!) {
@@ -835,6 +847,9 @@ export default CommentForm
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/CommentForm/CommentForm.tsx"
+// highlight-next-line
+import { useState } from 'react'
+
 import {
   Form,
   FormError,
@@ -842,14 +857,12 @@ import {
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler,
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast } from '@redwoodjs/web/toast'
+
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
-// highlight-next-line
-import { useState } from 'react'
 
 const CREATE = gql`
   mutation CreateCommentMutation($input: CreateCommentInput!) {
@@ -948,8 +961,8 @@ We used `hidden` to just hide the form and "Leave a comment" title completely fr
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
-import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
+import { Link, routes } from '@redwoodjs/router'
 // highlight-next-line
 import { Toaster } from '@redwoodjs/web/toast'
 
@@ -1111,7 +1124,7 @@ So it looks like we're just about done here! Try going back to the homepage and 
 
 All posts have the same comments! **WHAT HAVE WE DONE??**
 
-Remember our foreshadowing callout a few pages back, wondering if our `comments()` service which only returns *all* comments could come back to bite us? It finally has: when we get the comments for a post we're not actually getting them for only that post. We're ignoring the `postId` completely and just returning *all* comments in the database! Turns out the old axiom is true: computers only do exactly what you tell them to do. :(
+Remember our foreshadowing callout a few pages back, wondering if our `comments()` service which only returns *all* comments could come back to bite us? It finally has: when we get the comments for a post we're not actually getting them for only that post. We're ignoring the `postId` completely and just returning *all* comments in the database! Turns out the old axiom is true: computers only do exactly what you tell them to do.
 
 Let's fix it!
 
@@ -1476,7 +1489,7 @@ scenario(
 </TabItem>
 </Tabs>
 
-Okay, open up the actual `comments.js` service and we'll update it to accept the `postId` argument and use it as an option to `findMany()`:
+Okay, open up the actual `comments.js` service and we'll update it to accept the `postId` argument and use it as an option to `findMany()` (be sure to update the `comments()` function [with an "s"] and not the unused `comment()` function):
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -1532,7 +1545,13 @@ type Query {
 
 Now if you try refreshing the real site in dev mode you'll see an error where the comments should be displayed:
 
-![image](https://user-images.githubusercontent.com/300/153936065-159eb06e-4c9e-43db-a07e-a4d17332276c.png)
+![image](https://user-images.githubusercontent.com/300/198095941-bbd07ede-2006-422a-8635-ea8fe57dd403.png)
+
+For security reasons we don't show the internal error message here, but if you check the terminal window where `yarn rw dev` is running you'll see the real message:
+
+```text
+Field "comments" argument "postId" of type "Int!" is required, but it was not provided.
+```
 
 And yep, it's complaining about `postId` not being present—exactly what we want!
 
@@ -1648,7 +1667,7 @@ export const QUERY = gql`
 
 Where does this magical `$postId` come from? Redwood is nice enough to automatically provide it to you since you passed it in as a prop when you called the component!
 
-Try going to a couple of different blog posts and you should see only comments associated to the proper posts (including the one we created in the console!). You can add a comment to each blog post individually and they'll stick to their proper owners:
+Try going to a couple of different blog posts and you should see only comments associated to the proper posts (including the one we created in the console). You can add a comment to each blog post individually and they'll stick to their proper owners:
 
 ![image](https://user-images.githubusercontent.com/300/100954162-de24f680-34c8-11eb-817b-0a7ad802f28b.png)
 

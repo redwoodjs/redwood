@@ -22,8 +22,19 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     rwVersion,
     forceArg,
     provider: 'ethereum',
-    webPackages: ['@oneclickdapp/ethereum-auth', '@apollo/client'],
-    apiPackages: ['ethereumjs-util', 'eth-sig-util', 'jsonwebtoken'],
+    authDecoderImport:
+      "import { ethereumAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
+    apiPackages: [
+      '@redwoodjs/auth-providers-api',
+      'ethereumjs-util',
+      'eth-sig-util',
+      'jsonwebtoken',
+    ],
+    webPackages: [
+      '@redwoodjs/auth-providers-web',
+      '@oneclickdapp/ethereum-auth',
+      '@apollo/client',
+    ],
     notes: [
       'There are a couple more things you need to do!',
       'Please see the readme for instructions:',
