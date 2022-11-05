@@ -329,24 +329,21 @@ import { name, version } from '../package'
   new Listr(
     [
       {
-        title: 'Configuring installation preferences',
-        task: async (ctx, task) =>
-          task.newListr([
-            {
-              title: 'Language preference',
-              skip: () => typescript !== null,
-              task: async (ctx, task) => {
-                ctx.language = await task.prompt({
-                  type: 'Select',
-                  choices: ['TypeScript', 'JavaScript'],
-                  message: 'Select your preferred coding language',
-                  initial: 'TypeScript',
-                })
-                task.output = ctx.language
-              },
-              options: { persistentOutput: true },
-            },
-          ]),
+        title: 'Language preference',
+        skip: () => typescript !== null,
+        task: async (ctx, task) => {
+          ctx.language = await task.prompt({
+            type: 'Select',
+            choices: ['TypeScript', 'JavaScript'],
+            message: 'Select your preferred coding language',
+            initial: 'TypeScript',
+          })
+
+          task.output = ctx.language
+        },
+        options: {
+          persistentOutput: true,
+        },
       },
       {
         title: 'Creating Redwood app',
