@@ -70,6 +70,7 @@ import { name, version } from '../package'
     overwrite,
     telemetry: telemetry,
     yarn1,
+    'git-init': gitInit,
   } = yargs(hideBin(process.argv))
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
@@ -101,6 +102,12 @@ import { name, version } from '../package'
       default: false,
       type: 'boolean',
       describe: 'Use yarn 1. yarn 3 by default',
+    })
+    .option('git-init', {
+      alias: 'git',
+      default: null,
+      type: 'boolean',
+      describe: 'Initialize a new git repository.',
     })
     .version(version)
     .parse()
@@ -338,8 +345,28 @@ import { name, version } from '../package'
             message: 'Select your preferred coding language',
             initial: 'TypeScript',
           })
-
           task.output = ctx.language
+        },
+        options: {
+          persistentOutput: true,
+        },
+      },
+      {
+        title: 'Git preference',
+        skip: () => gitInit !== null,
+        task: async (ctx, task) => {
+          ctx.gitInit = await task.prompt({
+            type: 'Select',
+            message: 'Initialize a new git repo?',
+            choices: ['Yes', 'No'],
+            initial: 'Yes',
+          })
+          if (ctx.gitInit === 'Yes') {
+            task.output = 'Setup new git repo'
+          }
+          if (ctx.gitInit === 'No') {
+            task.output = 'Skip git setup'
+          }
         },
         options: {
           persistentOutput: true,
@@ -375,6 +402,19 @@ import { name, version } from '../package'
             shell: true,
             cwd: newAppDir,
           })
+        },
+      },
+      {
+        title: 'Initializing a new git repo',
+        enabled: (ctx) => gitInit === true || ctx.gitInit === true,
+        task: () => {
+          return execa(
+            'git init && git add . && git commit -m "Initial commit" && git branch -M main',
+            {
+              shell: true,
+              cwd: newAppDir,
+            }
+          )
         },
       },
     ],
