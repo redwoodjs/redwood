@@ -53,7 +53,7 @@ yarn create redwood-app <project directory> [option]
 | `--overwrite`          | Create the project even if the specified project directory isn't empty                                                  |
 | `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: https://telemetry.redwoodjs.com  |
 | `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                            |
-| `--git-init`, `--git`  | Initialize a new git repo, disabled by default                                                   |
+| `--git-init`, `--git`  | Initialize a new git repo during the install process, disabled by default                                                   |
 
 If you run into trouble during the yarn install step, which may happen if you're developing on an external drive and in other miscellaneous scenarios, try the `--yarn1` flag:
 
