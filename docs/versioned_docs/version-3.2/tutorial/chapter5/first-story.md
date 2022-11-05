@@ -146,7 +146,7 @@ export default { title: 'Components/Article' }
 </TabItem>
 </Tabs>
 
-As soon as you save the change the stories Storybook should refresh and show the updates:
+As soon as you save the change the stories Storybook should refresh and may show an error: there's no longer a "Generated" story to show! In the tree on the left, expand "Article" and the "Full" version should show right away. Click on "Summary" to see the difference:
 
 ![image](https://user-images.githubusercontent.com/300/153311838-595b8b38-d899-4d7b-891b-a492f0c8f2e2.png)
 
@@ -231,6 +231,8 @@ export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
 
 </TabItem>
 </Tabs>
+
+Check out the story to see the new summary view:
 
 ![image](https://user-images.githubusercontent.com/300/153312022-1cfbf696-b2cb-4fca-b640-4111643fb396.png)
 

@@ -514,7 +514,8 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       {
         title: 'Scaffolding post',
         task: async () => {
-          return generateScaffold('post')
+          await generateScaffold('post')
+          await execa(`yarn rwfw project:copy`, [], execaOptions)
         },
       },
       {

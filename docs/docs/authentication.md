@@ -142,10 +142,9 @@ const Routes = () => {
 ## Authentication on the API Side
 
 GraphQL requests automatically receive an `Authorization` header when a user is authenticated and Redwood will decode and verify the header, making the user available (if they are logged in) in `context.currentUser`.
+`context` is a global so it's always available on your api side, like in your services.
 
 ```jsx
-import { context } from '@redwoodjs/api'
-
 console.log(context.currentUser)
 // {
 //    sub: '<netlify-id>

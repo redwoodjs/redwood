@@ -143,7 +143,14 @@ const mergeUserStorybookConfig = (baseConfig) => {
 
   const userStorybookConfig = require(redwoodPaths.web.storybookConfig)
 
-  return mergeWithCustomize({
+  const { webpackFinal: baseWebpackFinal, ...baseConfigRest } = baseConfig
+
+  const {
+    webpackFinal: userStorybookConfigWebpackFinal,
+    ...userStorybookConfigRest
+  } = userStorybookConfig
+
+  const mergedConfig = mergeWithCustomize({
     // https://github.com/survivejs/webpack-merge#mergewithcustomize-customizearray-customizeobject-configuration--configuration
     customizeArray(baseConfig, userStorybookConfig, key) {
       if (key === 'addons' || key === 'stories') {
@@ -165,7 +172,19 @@ const mergeUserStorybookConfig = (baseConfig) => {
       // Fall back to default merging
       return undefined
     },
-  })(baseConfig, userStorybookConfig)
+  })(baseConfigRest, userStorybookConfigRest)
+
+  mergedConfig.webpackFinal = async (config, options) => {
+    let configFinal = await baseWebpackFinal(config, options)
+
+    if (userStorybookConfigWebpackFinal) {
+      configFinal = await userStorybookConfigWebpackFinal(configFinal, options)
+    }
+
+    return configFinal
+  }
+
+  return mergedConfig
 }
 
 /**
