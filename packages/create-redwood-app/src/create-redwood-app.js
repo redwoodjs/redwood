@@ -14,7 +14,7 @@ import checkNodeVersion from 'check-node-version'
 import { prompt } from 'enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
-import { Listr } from 'listr2'
+import { Listr, figures } from 'listr2'
 import terminalLink from 'terminal-link'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -280,9 +280,7 @@ import { name, version } from '../package'
                 .filter((name) => !result.versions[name].isSatisfied)
                 .map((name) => {
                   const { version, wanted } = result.versions[name]
-                  return style.error(
-                    `${name} ${wanted} required, but you have ${version}`
-                  )
+                  return `${name} ${wanted} required, but you have ${version}`
                 })
               engineErrorLog = logStatements
               hasPassedEngineCheck = false
@@ -297,20 +295,21 @@ import { name, version } from '../package'
 
   // Show a success message if required engines are present
   if (hasPassedEngineCheck === true) {
-    console.log(style.success(`✔️ Compatability checks passed.`))
+    console.log(`${style.success(figures.tick)} Compatibility checks passed`)
   }
 
   // Show an error and prompt if failed engines check
   if (hasPassedEngineCheck === false) {
-    console.log(style.error(`✖️ Compatability checks failed.`))
-    console.log(`${engineErrorLog.join('\n')}`)
+    console.log(`${style.error(figures.cross)} Compatibility checks failed`)
     console.log(
-      style.error(
-        `\nThis might make your RedwoodJS project incompatible with some deploy targets.`
-      )
+      [
+        `  ${style.warning(figures.warning)} ${engineErrorLog.join('\n')}`,
+        '',
+        `    This may make your project incompatible with some deploy targets.`,
+        `    See: ${engineErrorDocsLink}`,
+        '',
+      ].join('\n')
     )
-    console.log(style.header(`\nRelated documentation:`))
-    console.log(style.warning(`${engineErrorDocsLink}\n`))
     // Prompt user for how to proceed
     const response = await prompt({
       type: 'select',
@@ -318,10 +317,10 @@ import { name, version } from '../package'
       message: 'How would you like to proceed?',
       choices: ['Override error and continue install', 'Quit install'],
       initial: 0,
+      onCancel: () => process.exit(1),
     })
     // Quit the install if user selects this option, otherwise it will proceed
     if (response['override-engine-error'] === 'Quit install') {
-      console.log(style.warning(`\nInstallation process ended.\n`))
       process.exit(1)
     }
   }
