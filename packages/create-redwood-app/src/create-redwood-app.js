@@ -344,6 +344,7 @@ import { name, version } from '../package'
             choices: ['TypeScript', 'JavaScript'],
             message: 'Select your preferred coding language',
             initial: 'TypeScript',
+            onCancel: () => process.exit(1),
           })
           task.output = ctx.language
         },
@@ -357,12 +358,13 @@ import { name, version } from '../package'
         task: async (ctx, task) => {
           ctx.gitInit = await task.prompt({
             type: 'Select',
-            message: 'Initialize a new git repo?',
+            message: 'Do you want to initialize a new git repo?',
             choices: ['Yes', 'No'],
             initial: 'Yes',
+            onCancel: () => process.exit(1),
           })
           if (ctx.gitInit === 'Yes') {
-            task.output = 'Setup new git repo'
+            task.output = 'Initialize a new git repo'
           }
           if (ctx.gitInit === 'No') {
             task.output = 'Skip git setup'
@@ -406,7 +408,7 @@ import { name, version } from '../package'
       },
       {
         title: 'Initializing a new git repo',
-        enabled: (ctx) => gitInit === true || ctx.gitInit === true,
+        enabled: (ctx) => gitInit === true || ctx.gitInit === 'Yes',
         task: () => {
           return execa(
             'git init && git add . && git commit -m "Initial commit" && git branch -M main',
