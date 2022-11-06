@@ -770,6 +770,8 @@ And there you have it.
     <tr>
       <td align="center" valign="top" width="20%"><a href="https://derow.nl/"><img src="https://avatars.githubusercontent.com/u/39522856?v=4" width="100px;" alt=""/><br /><sub><b>Rowin Mol</b></sub></a></td>
       <td align="center" valign="top" width="20%"><a href="http://everfund.io/"><img src="https://avatars.githubusercontent.com/u/15834048?v=4" width="100px;" alt=""/><br /><sub><b>Christopher Burns</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/bigbuckalex"><img src="https://avatars.githubusercontent.com/u/13971705?v=4" width="100px;" alt=""/><br /><sub><b>Alex Lilly</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/dphuang2"><img src="https://avatars.githubusercontent.com/u/14287381?v=4" width="100px;" alt=""/><br /><sub><b>dphuang2</b></sub></a></td>
     </tr>
   </tbody>
 </table>
