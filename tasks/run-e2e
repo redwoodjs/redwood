@@ -192,7 +192,7 @@ const args = yargs(hideBin(process.argv))
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
   .option('yarn1', { default: false, type: 'boolean' })
-  .option('cleanup', { default: true, type: 'boolean' })
+  .option('clean-files', { default: true, type: 'boolean' })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -223,6 +223,7 @@ let {
   typescript,
   autoStart,
   yarn1,
+  cleanFiles,
 } = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
@@ -236,25 +237,22 @@ const tasks = [
   autoStart && runCypress,
 ].filter(Boolean)
 
-const cleanup = () => {
-  console.log('')
-  console.log('-'.repeat(80))
-  console.log('Cleaning up e2e resources...')
-  console.log(' - Cleaning up files...')
-  fs.rmSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true, force: true })
-  console.log('Clean up complete')
-}
-
 process.on('SIGINT', () => {
   process.exit(0)
 })
 
 process.on('exit', () => {
-  if (args.cleanup) {
-    cleanup()
+  console.log('')
+  console.log('-'.repeat(80))
+  console.log('cleanFiles', cleanFiles)
+  console.log('autoStart', autoStart)
+  console.log('cleanFiles && !autoStart', cleanFiles && !autoStart)
+  if (cleanFiles && autoStart) {
+    console.log('Cleaning up e2e resources...')
+    console.log(' - Cleaning up files...')
+    fs.rmSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true, force: true })
+    console.log('Clean up complete')
   } else {
-    console.log('')
-    console.log('-'.repeat(80))
     console.log(
       `E2E files within "${REDWOOD_PROJECT_DIRECTORY}" have not been automatically cleaned up.`
     )

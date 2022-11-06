@@ -122,7 +122,7 @@ jobs:
           echo "::set-output name=framework_path::$framework_path"
 
       - name: 🌲 Create a Redwood App
-        run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start --no-cleanup
+        run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
         env:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
