@@ -80,10 +80,7 @@ const rebuildApiServer = () => {
       forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])
     }
 
-    let port = argv['port']
-    if (!port) {
-      port = getConfig().api.port
-    }
+    const port = argv.port ?? getConfig().api.port
 
     // Start API server
     httpServerProcess = fork(

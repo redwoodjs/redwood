@@ -18,9 +18,9 @@ const defaultApiDebugPort = 18911
 
 /**
  * Finds a free port
- * @param  {[Number]}   requestedPort Port to start searching from
- * @param  {[Number[]]} excludePorts  Array of port numbers to exclude
- * @return {[Number]}                 A free port equal or higher than requestedPort but not within excludePorts. If no port can be found then returns -1
+ * @param  {[number]}   requestedPort Port to start searching from
+ * @param  {[number[]]} excludePorts  Array of port numbers to exclude
+ * @return {[number]}                 A free port equal or higher than requestedPort but not within excludePorts. If no port can be found then returns -1
  */
 async function getFreePort(requestedPort, excludePorts = []) {
   try {
@@ -54,7 +54,7 @@ export const handler = async ({
     if (freePort === -1) {
       console.error(
         c.error(
-          `Requested API port of ${apiPort} is already in use and no neighbouring port is available! Cannot start development server.`
+          `Can't start dev server: port ${apiPort} for the api server is already in use and no neighboring port is available`
         )
       )
       process.exit(1)
@@ -62,20 +62,20 @@ export const handler = async ({
     if (freePort !== apiPort) {
       console.log(
         c.warning(
-          `Requested API port of ${apiPort} is already in use however ${freePort} is available.`
+          `Port ${apiPort} for the api server is already in use but ${freePort} is available`
         )
       )
       const useAvailablePort = await prompts({
         type: 'confirm',
         name: 'port',
-        message: `Do you wish to use port ${freePort} instead?`,
+        message: `Ok to use ${freePort} instead?`,
         initial: true,
         active: 'Yes',
         inactive: 'No',
       })
       if (!useAvailablePort.port) {
-        console.log(c.info(`The API port can be updated in 'redwood.toml'.`))
-        process.exit(0)
+        console.log(c.info('The api port can be set in redwood.toml'))
+        process.exit(1)
       }
     }
     apiPort = freePort
@@ -102,7 +102,7 @@ export const handler = async ({
     if (freePort === -1) {
       console.error(
         c.error(
-          `Requested web port of ${webPort} is already in use and no neighbouring port is available! Cannot start development server.`
+          `Can't start dev server: web port ${webPort} is already in use and no neighboring port is available`
         )
       )
       process.exit(1)
@@ -110,13 +110,13 @@ export const handler = async ({
     if (freePort !== webPort) {
       console.log(
         c.warning(
-          `Requested web port of ${webPort} is already in use however ${freePort} is available.`
+          `Port ${webPort} for the web server is already in use but ${freePort} is available`
         )
       )
       const useAvailablePort = await prompts({
         type: 'confirm',
         name: 'port',
-        message: `Do you wish to use port ${freePort} instead?`,
+        message: `Ok to use ${freePort} instead?`,
         initial: true,
         active: 'Yes',
         inactive: 'No',
@@ -124,10 +124,10 @@ export const handler = async ({
       if (!useAvailablePort.port) {
         console.log(
           c.info(
-            `The web port can be updated in 'redwood.toml' or can be forwarded via the command line parameter like so 'yarn rw dev --fwd="--port=12345"'.`
+            `The web port can be set in redwood.toml or can be forwarded to webpack dev server via the '--fwd' flag: 'yarn rw dev --fwd="--port=1234"'`
           )
         )
-        process.exit(0)
+        process.exit(1)
       }
     }
     webPort = freePort
