@@ -45,12 +45,15 @@ export const handler = async ({
 }) => {
   const rwjsPaths = getPaths()
 
-  let apiPort = getConfig().api.port
-  let webPort = getConfig().web.port
+  // Starting values of ports from config (redwood.toml)
+  let apiPort = parseInt(getConfig().api.port)
+  let webPort = parseInt(getConfig().web.port)
 
   // Check api port
   if (side.includes('api')) {
     const freePort = await getFreePort(apiPort)
+
+    // No free port
     if (freePort === -1) {
       console.error(
         c.error(
@@ -59,6 +62,8 @@ export const handler = async ({
       )
       process.exit(1)
     }
+
+    // Configured is in use but found a different one to potentially use
     if (freePort !== apiPort) {
       console.log(
         c.warning(
@@ -77,28 +82,29 @@ export const handler = async ({
         console.log(c.info('The api port can be set in redwood.toml'))
         process.exit(1)
       }
+      apiPort = freePort
     }
-    apiPort = freePort
 
     // TODO: Check the apiDebugPort too?
   }
 
   // Check web port
   if (side.includes('web')) {
-    // Check for specific forwarded web port
+    // Extract any ports the user forwarded to the webpack server
+    const forwardedPortMatches = [
+      ...forward.matchAll(/\-\-port(\=|\s)(?<port>[^\s]*)/g),
+    ]
 
-    const forwardedPortMatches = forward.match(
-      /--port=[0-9][0-9]?[0-9]?[0-9]?[0-9]? ?/
-    )
-    const forwardedPortSet =
-      forwardedPortMatches && forwardedPortMatches.length == 1
+    const forwardedPortSet = Boolean(forwardedPortMatches.length)
+
+    // Override the port found in redwood.toml with the webpack forwarded port
     if (forwardedPortSet) {
-      webPort = forwardedPortMatches[0]
-        .substring(forwardedPortMatches[0].indexOf('=') + 1)
-        .trim()
+      webPort = forwardedPortMatches.pop().groups.port
     }
 
     const freePort = await getFreePort(webPort, [apiPort])
+
+    // No free port
     if (freePort === -1) {
       console.error(
         c.error(
@@ -107,6 +113,8 @@ export const handler = async ({
       )
       process.exit(1)
     }
+
+    // Configured is in use but found a different one to potentially use
     if (freePort !== webPort) {
       console.log(
         c.warning(
@@ -129,11 +137,13 @@ export const handler = async ({
         )
         process.exit(1)
       }
+
+      // If needed add the newly chosen port to the webpack forward string. Note: webpack will use the final --port option if more than one are supplied
+      if (webPort !== freePort) {
+        forward = forward.concat(` --port=${freePort}`)
+      }
+      webPort = freePort
     }
-    webPort = freePort
-    forward = forwardedPortSet
-      ? forward.replace(forwardedPortMatches[0], ` --port=${freePort}`)
-      : forward.concat(` --port=${freePort}`)
   }
 
   if (side.includes('api')) {
