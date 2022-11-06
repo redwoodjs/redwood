@@ -244,9 +244,6 @@ process.on('SIGINT', () => {
 process.on('exit', () => {
   console.log('')
   console.log('-'.repeat(80))
-  console.log('cleanFiles', cleanFiles)
-  console.log('autoStart', autoStart)
-  console.log('cleanFiles && !autoStart', cleanFiles && !autoStart)
   if (cleanFiles && autoStart) {
     console.log('Cleaning up e2e resources...')
     console.log(' - Cleaning up files...')
