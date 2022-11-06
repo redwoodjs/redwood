@@ -1288,7 +1288,7 @@ import { validate } from '@redwoodjs/api'
 
 // ...
 
-export const createContact = ({ input }: CreateContactArgs) => {
+export const createContact = ({ input }: MutationResolvers['createContact']) => {
   // highlight-next-line
   validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })
