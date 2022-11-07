@@ -30,9 +30,9 @@ import * as storybookCommand from './commands/storybook'
 import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
-import * as updateCommand from './commands/update'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths } from './lib'
+import update from './lib/update'
 
 /**
  * The current working directory can be set via:
@@ -91,27 +91,26 @@ const updateCheckerMiddleware = (argv) => {
   if (excludedCommands.includes(argv._[0])) {
     return
   }
-  if (updateCommand.shouldShowUpgradeAvailableMessage()) {
+
+  if (update.shouldShow()) {
     process.on('exit', () => {
-      updateCommand.showUpgradeAvailableMessage()
+      update.showUpgradeMessage()
     })
   }
-  if (updateCommand.isUpdateCheckDue()) {
-    const out = fs.openSync(
-      path.join(getPaths().generated.base, 'background-update-checker.out.log'),
-      'a'
-    )
-    const err = fs.openSync(
-      path.join(getPaths().generated.base, 'background-update-checker.err.log'),
-      'a'
-    )
-    const child = spawn('yarn', ['rw', 'update', '--silent'], {
-      detached: true,
-      stdio: ['ignore', out, err],
-      cwd: getPaths().base,
-      shell: process.platform === 'win32',
-    })
-    child.unref()
+
+  if (update.shouldCheck()) {
+    // TODO: Decide how best to call this now it's no longer a command
+    // const logFile = fs.openSync(
+    //   path.join(getPaths().generated.base, 'update-checker.log'),
+    //   'a'
+    // )
+    // const child = spawn('yarn', ['./lib/updateRunner.js'], {
+    //   detached: true,
+    //   stdio: ['ignore', logFile, logFile],
+    //   cwd: getPaths().base,
+    //   shell: process.platform === 'win32',
+    // })
+    // child.unref()
   }
 }
 
@@ -150,7 +149,6 @@ yargs
   .command(testCommand)
   .command(tstojsCommand)
   .command(typeCheckCommand)
-  .command(updateCommand)
   .command(upgradeCommand)
   .example(
     'yarn rw g page home /',

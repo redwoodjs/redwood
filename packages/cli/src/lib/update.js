@@ -26,6 +26,9 @@ const SHOW_PERIOD = 60 * 60_000 // 1 hour
  */
 export const LOCK_IDENTIFIER = 'UPDATE-CHECK'
 
+/**
+ * Performs an update check to detect if a newer version of redwood is available and records the result to a file within .redwood for persistence
+ */
 export async function check() {
   try {
     setLock(LOCK_IDENTIFIER)
@@ -75,11 +78,21 @@ export async function check() {
   }
 }
 
+/**
+ * Determines if an update check is due based on if enough time has elapsed since the last check
+ * @return {boolean} True if an update check is overdue
+ * @see {@link CHECK_PERIOD} for the time between notifications
+ */
 export function shouldCheck() {
   const data = readUpdateFile()
   return data.checkedAt < Date.now() - CHECK_PERIOD
 }
 
+/**
+ * Determines if the user should see an update notification based on if a new version is available and enough time has elapsed since the last notification
+ * @return {boolean} True if the user should see an update notification
+ * @see {@link SHOW_PERIOD} for the time between notifications
+ */
 export function shouldShow() {
   const data = readUpdateFile()
   return (
@@ -88,11 +101,19 @@ export function shouldShow() {
   )
 }
 
+/**
+ * Prints the update notification message to the console and updates the stored shownAt property
+ * @see {@link getUpgradeMessage} for the definition of the string which is printed
+ */
 export function showUpgradeMessage() {
   console.log(getUpgradeMessage())
   updateUpdateFile({ shownAt: Date.now() })
 }
 
+/**
+ * Returns a nicely formatted string containing an update notification
+ * @return {string} A specifically formatted update notification message
+ */
 export function getUpgradeMessage() {
   const data = readUpdateFile()
   let message = `  Checklist:\n   1. Read the release notes at: https://github.com/redwoodjs/redwood/releases  \n   2. Run "yarn rw upgrade" to upgrade`
@@ -105,6 +126,10 @@ export function getUpgradeMessage() {
   })
 }
 
+/**
+ * Reads update data from a file within .redwood
+ * @return {Object} The update data object containing the localVersion, remoteVersion, checkedAt and shownAt properties
+ */
 function readUpdateFile() {
   const updateFilePath = path.join(
     getPaths().generated.base,
@@ -126,6 +151,14 @@ function readUpdateFile() {
   }
 }
 
+/**
+ * Writes update data to a file within .redwood for persistence
+ * @param {Object} updateData The data to persist.
+ * @param {string} updateData.localVersion The version of the users current redwood project
+ * @param {string} updateData.remoteVersion The latest released version of redwood
+ * @param {number} updateData.checkedAt The last time an update check was performed, in milliseconds
+ * @param {number} updateData.shownAt The last time an update notification was shown to the user, in milliseconds
+ */
 function updateUpdateFile({
   localVersion,
   remoteVersion,
