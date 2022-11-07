@@ -29,11 +29,30 @@ fs.readFileSync = (path) => {
   return mockFiles[path]
 }
 
+fs.readdirSync = (path) => {
+  const mockedFiles = []
+  Object.keys(mockFiles).forEach((mockedPath) => {
+    // Is a child of the desired path
+    if (mockedPath.startsWith(path)) {
+      const childPath = mockedPath.substring(path.length + 1)
+      // Is the child a direct child of the desired path
+      if (!childPath.includes('/')) {
+        mockedFiles.push(childPath)
+      }
+    }
+  })
+  return mockedFiles
+}
+
 fs.writeFileSync = (path, contents) => {
   mockFiles[path] = contents
 }
 
 fs.unlinkSync = (path) => {
+  delete mockFiles[path]
+}
+
+fs.rmSync = (path) => {
   delete mockFiles[path]
 }
 
