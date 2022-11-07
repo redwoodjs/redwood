@@ -347,6 +347,12 @@ import { name, version } from '../package'
             onCancel: () => process.exit(1),
           })
           task.output = ctx.language
+          // Error code and exit if someone has disabled yarn install but selected JavaScript
+          if (yarnInstall === false && ctx.language === 'JavaScript') {
+            throw new Error(
+              'JavaScript transpilation requires running yarn install. Please rerun Create-Redwood-App without disabling yarn install.'
+            )
+          }
         },
         options: {
           persistentOutput: true,
