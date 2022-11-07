@@ -274,6 +274,19 @@ render(<Article article={ title: 'Foobar' } />, {
 })
 ```
 :::
+### Mocking useLocation
+
+To mock `useLocation` in your component tests, wrap the component with `LocationProvider`:
+
+```jsx
+import { LocationProvider } from '@redwoodjs/router'
+
+render(
+  <LocationProvider location={{ pathname: '', search: '?cancelled=true' }}>
+    <Component />
+  </LocationProvider>
+)
+```
 
 ### Queries
 
