@@ -18,33 +18,30 @@ We're using [Firebase Google Sign-In](https://firebase.google.com/docs/auth/web/
 
 > **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables) to "Whitelist them in your `redwood.toml`".
 
-```jsx title="web/src/App.js"
-import { AuthProvider } from '@redwoodjs/auth'
-import { initializeApp, getApps, getApp } from '@firebase/app'
+```jsx title="web/src/auth.js"
 import * as firebaseAuth from '@firebase/auth'
-import { FatalErrorBoundary } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+import { initializeApp, getApp, getApps } from 'firebase/app'
 
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
+import { createFirebaseAuth } from '@redwoodjs/auth-providers-web'
 
-import './index.css'
-
-const firebaseClientConfig = {
+const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
+
+  // Optional config, may be needed, depending on how you use firebase
+  // projectId: process.env.FIREBASE_PROJECT_ID,
+  // storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  // messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  // appId: process.env.FIREBASE_APP_ID,
 }
 
 const firebaseApp = ((config) => {
   const apps = getApps()
+
   if (!apps.length) {
     initializeApp(config)
   }
+
   return getApp()
 })(firebaseConfig)
 
@@ -53,23 +50,13 @@ export const firebaseClient = {
   firebaseApp,
 }
 
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <AuthProvider client={firebaseClient} type="firebase">
-      <RedwoodApolloProvider>
-        <Routes />
-      </RedwoodApolloProvider>
-    </AuthProvider>
-  </FatalErrorBoundary>
-)
-
-export default App
+export const { AuthProvider, useAuth } = createFirebaseAuth(firebaseClient)
 ```
 
 ## Usage
 
 ```jsx
-const UserAuthTools = () => {
+const UserAuth = () => {
   const { loading, isAuthenticated, logIn, logOut } = useAuth()
 
   if (loading) {
@@ -99,7 +86,7 @@ See the Firebase information within this doc's [Auth Provider Specific Integrati
 
 You must follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin) part of the "Authenticate Using Google Sign-In with JavaScript" guide.
 
-### Role-Based Access Control (RBAC) 
+### Role-Based Access Control (RBAC)
 
 Requires a custom implementation.
 

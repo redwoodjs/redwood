@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import type FirebaseAuthNamespace from 'firebase/auth'
 import { User, OperationType, OAuthProvider, Auth } from 'firebase/auth'
 
-import { CurrentUser } from '@redwoodjs/auth2'
+import { CurrentUser } from '@redwoodjs/auth'
 
 import { createFirebaseAuth, FirebaseClient } from '../firebase'
 

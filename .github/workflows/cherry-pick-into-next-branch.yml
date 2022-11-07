@@ -12,9 +12,11 @@ on:
 jobs:
   cherry-pick-fast-forward:
     # Don't cherry pick commits with breaking changes.
-    if: ${{ github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'release:feature-breaking') }}
+    if: ${{ github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'release:feature-breaking') && !contains(github.event.pull_request.labels.*.name, 'skip-cherry-pick') }}
     name: ⏩ Cherry pick fast forward
     runs-on: ubuntu-latest
+    outputs:
+      pr: ${{ steps.cherry-pick-fast-forward.outputs.value }}
 
     steps:
       - uses: actions/checkout@v3
@@ -26,6 +28,7 @@ jobs:
           token: ${{ secrets.JTOAR_TOKEN }}
 
       - name: ⏩ Cherry pick fast forward
+        id: cherry-pick-fast-forward
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -35,7 +38,7 @@ jobs:
           # See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request.
 
           echo "Trying to cherry pick $GITHUB_SHA"
-          git cherry-pick --ff $GITHUB_SHA || echo "Couldn't cherry pick $GITHUB_SHA"
+          git cherry-pick --ff $GITHUB_SHA || exit 1
 
           # If the HEAD of main and next point to the same commit, then the fast forward worked and we can go ahead and push.
 
@@ -47,13 +50,13 @@ jobs:
             echo "SHAs are the same, pushing"
             git push
           else
-            echo "SHAs are different, exiting"
-            exit 1
+            echo "SHAs are different"
+            echo "value=true" >> $GITHUB_OUTPUT
           fi
 
   cherry-pick-into-next-pr:
     needs: cherry-pick-fast-forward
-    if: failure()
+    if: ${{ needs.cherry-pick-fast-forward.outputs.pr == 'true' }}
     name: Cherry pick into next PR
     runs-on: ubuntu-latest
 
@@ -80,7 +83,7 @@ jobs:
 
   comment-on-pr:
     needs: cherry-pick-into-next-pr
-    if: failure() && needs.cherry-pick-into-next-pr.result == 'failure'
+    if: failure()
     name: 💬 Comment on PR
     runs-on: ubuntu-latest
 

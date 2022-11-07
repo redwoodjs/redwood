@@ -4,7 +4,7 @@ import {
   SigninWithRedirectOptions,
 } from '@okta/okta-auth-js'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth2'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 export function createOktaAuth(
   oktaAuth: OktaAuth,

@@ -34,7 +34,7 @@
     "@babel/runtime-corejs3": "7.19.4",
     "@babel/traverse": "7.19.4",
     "@graphql-codegen/add": "3.2.1",
-    "@graphql-codegen/cli": "2.13.6",
+    "@graphql-codegen/cli": "2.13.7",
     "@graphql-codegen/core": "2.6.2",
     "@graphql-codegen/schema-ast": "2.5.1",
     "@graphql-codegen/typescript": "2.7.4",
@@ -71,7 +71,7 @@
     "@types/rimraf": "3.0.2",
     "babel-plugin-tester": "10.1.0",
     "graphql-tag": "2.12.6",
-    "jest": "29.1.2"
+    "jest": "29.2.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

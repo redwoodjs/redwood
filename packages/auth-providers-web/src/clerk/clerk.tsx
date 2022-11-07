@@ -8,8 +8,7 @@ import {
   SignOutOptions,
 } from '@clerk/types'
 
-import type { CurrentUser } from '@redwoodjs/auth2'
-import { createAuthentication } from '@redwoodjs/auth2'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type Clerk = ClerkClient | undefined | null
 
@@ -21,12 +20,7 @@ export function createClerkAuth(customProviderHooks?: {
 }) {
   const authImplementation = createClerkAuthImplementation()
 
-  const { AuthContext, AuthProvider, useAuth } = createAuthentication(
-    authImplementation,
-    customProviderHooks
-  )
-
-  return { AuthContext, AuthProvider, useAuth }
+  return createAuthentication(authImplementation, customProviderHooks)
 }
 
 function createClerkAuthImplementation() {

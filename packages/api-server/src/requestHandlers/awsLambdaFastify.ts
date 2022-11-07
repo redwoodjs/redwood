@@ -43,9 +43,9 @@ const fastifyResponseForLambdaResult = (
   if (lambdaResult.isBase64Encoded) {
     // Correctly handle base 64 encoded binary data. See
     // https://aws.amazon.com/blogs/compute/handling-binary-data-using-amazon-api-gateway-http-apis
-    reply.send(Buffer.from(body, 'base64'))
+    return reply.send(Buffer.from(body, 'base64'))
   } else {
-    reply.send(body)
+    return reply.send(body)
   }
 }
 
