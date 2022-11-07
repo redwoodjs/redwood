@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
-import Listr from 'listr2'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { addEnvVarTask } from '@redwoodjs/cli-helpers'
