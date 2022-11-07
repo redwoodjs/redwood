@@ -1858,7 +1858,7 @@ Remember that the cache only ever contains serialized objects. So if you passed 
 
 ```
 
-The published key will be serialized and stored as a string. To make testing easier for you, we serialize the object you are passing when you use the `toHaveCached` matcher
+The published key will be serialized and stored as a string. To make testing easier for you, we serialize the object you are passing when you use the `toHaveCached` matcher, before we compare it against the value in the cache
 :::
 
 ### Partial Matching
@@ -1911,7 +1911,7 @@ Partial match is just syntactic sugar - underneath it just uses Jest's `expect.o
 The `partialMatch` helper takes two forms of arguments:
 
 - If you supply an object, you are expecting a partial match of that object
-- If you supply an array of objects, you are expecting an array containing a partial match of the objects
+- If you supply an array of objects, you are expecting an array containing a partial match of each of the objects
 
 
 :::tip
@@ -1927,6 +1927,38 @@ For partial matches, you either have to supply a key to `toHaveCached` or using 
 
 
 ### Strict Matching
+
+If you'd like more strict checking i.e. you do not want helpers to automatically serialize/deserialize your _expected_ value, you can use the `.contents` getter in test cache client. Note that the `.contents` helper will still de-serialize the values in your cache (to make it easier to compare), just not the expected value.
+
+For example:
+
+```ts
+
+const expectedValue = {
+  // Note that this is a date 👇
+  publishDate: new Date('12/10/1988'),
+  title: 'A book from the eighties',
+  id: 1988
+}
+
+// ✅ will pass, because we will serialize the publishedDate for you
+expect(testCacheClient).toHaveCached(expectedValue)
+
+
+// 🛑 won't pass, because publishDate in cache is a string, but you supplied a Date object
+expect(testCacheClient.contents).toContainEqual(expectedValue)
+
+// ✅ will pass, because you serialized the date
+expect(testCacheClient.contents).toContainEqual({
+  ...expectedValue,
+  publishDate: expectedValue.publishDate.toISOString()
+})
+
+// And if you wanted to view the raw contents of the cache
+console.log(testCacheClient.storage)
+```
+
+This is mainly helpful when you are testing for a very specific value, or have edgecases in how the serialization/deserialization works in the cache.
 
 
 
