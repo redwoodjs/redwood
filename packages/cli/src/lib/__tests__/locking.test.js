@@ -66,6 +66,34 @@ it('Detect if lock is set when it is already unset', () => {
   expect(isSet).toBe(false)
 })
 
+it('Using withLock when the lock is already unset', () => {
+  const exampleFunc = () => {
+    fs.writeFileSync('.example-func', 'example-func')
+  }
+
+  withLock('TEST', exampleFunc)
+
+  const lockExists = fs.existsSync('.redwood/locks/TEST')
+  expect(lockExists).toBe(false)
+
+  const funcOutputExists = fs.existsSync('.example-func')
+  expect(funcOutputExists).toBe(true)
+})
+
+it('Using withLock when the lock is already set', () => {
+  const exampleFunc = () => {
+    fs.writeFileSync('.example-func', 'example-func')
+  }
+
+  setLock('TEST')
+  const withLockAttempt = () => withLock('TEST', exampleFunc)
+
+  expect(withLockAttempt).toThrow('Lock "TEST" is already set')
+
+  const funcOutputExists = fs.existsSync('.example-func')
+  expect(funcOutputExists).toBe(false)
+})
+
 it('Clear a list of locks', () => {
   setLock('TEST-1')
   setLock('TEST-2')
