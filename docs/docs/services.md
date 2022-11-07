@@ -985,7 +985,7 @@ const post = ({ id }) => {
 
 This is functionally equivalent to the following:
 
-```
+```js
 const latest = db.user.findFirst({
   where: { roles: 'admin' } },
   orderBy: { updatedAt: 'desc' },
