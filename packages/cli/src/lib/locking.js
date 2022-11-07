@@ -59,17 +59,6 @@ export function isLockSet(identifier) {
 }
 
 /**
- * Calls the function provided with the lock set and then unsets the lock when the function completes
- * @param {string} identifier ID of the lock
- * @param {function} func Function to call with the lock set
- */
-export function withLock(identifier, func) {
-  setLock(identifier)
-  func()
-  unsetLock(identifier)
-}
-
-/**
  * Unsets a list of locks, when no identifiers are specified all existing locks are unset
  * @param {string[]} identifiers List of lock identifiers
  */
