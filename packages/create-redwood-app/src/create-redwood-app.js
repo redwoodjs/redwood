@@ -357,16 +357,17 @@ import { name, version } from '../package'
         skip: () => gitInit !== null,
         task: async (ctx, task) => {
           ctx.gitInit = await task.prompt({
-            type: 'Select',
+            type: 'Toggle',
             message: 'Do you want to initialize a new git repo?',
-            choices: ['Yes', 'No'],
+            enabled: 'Yes',
+            disabled: 'No',
             initial: 'Yes',
             onCancel: () => process.exit(1),
           })
-          if (ctx.gitInit === 'Yes') {
+          if (ctx.gitInit === true) {
             task.output = 'Initialize a new git repo'
           }
-          if (ctx.gitInit === 'No') {
+          if (ctx.gitInit === false) {
             task.output = 'Skip git setup'
           }
         },
@@ -408,7 +409,7 @@ import { name, version } from '../package'
       },
       {
         title: 'Initializing a new git repo',
-        enabled: (ctx) => gitInit === true || ctx.gitInit === 'Yes',
+        enabled: (ctx) => gitInit === true || ctx.gitInit === true,
         task: () => {
           return execa(
             'git init && git add . && git commit -m "Initial commit" && git branch -M main',
