@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@redwoodjs/api": "3.3.0",
-    "@redwoodjs/graphql-server": "3.3.0"
+    "@redwoodjs/api": "3.3.1",
+    "@redwoodjs/graphql-server": "3.3.1"
   }
 }
