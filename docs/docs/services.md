@@ -941,7 +941,7 @@ Note that a key can be a string or an array:
 
 ```js
 const post = ({ id }) => {
-  return cache(`posts-${id}-${updatedAt}`, () => {
+  return cache(`posts-${id}-${updatedAt.getTime()}`, () => {
     db.post.findMany()
   })
 }
@@ -949,7 +949,7 @@ const post = ({ id }) => {
 // or
 
 const post = ({ id }) => {
-  return cache(['posts', id,  updatedAt], () => {
+  return cache(['posts', id,  updatedAt.getTime()], () => {
     db.post.findMany()
   })
 }
@@ -986,13 +986,13 @@ const post = ({ id }) => {
 This is functionally equivalent to the following:
 
 ```js
-const latest = db.user.findFirst({
+const latest = await db.user.findFirst({
   where: { roles: 'admin' } },
   orderBy: { updatedAt: 'desc' },
   select: { id: true, updatedAt: true
 })
 
-return cache(`posts-${latest.id}-${latest.updatedAt}`, () => {
+return cache(`posts-${latest.id}-${latest.updatedAt.getTime()}`, () => {
   db.post.findMany({ where: { roles: 'admin' } })
 })
 ```
