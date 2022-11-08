@@ -1018,7 +1018,7 @@ const post = ({ id }) => {
 
 
 ### Testing what you cache
-We wouldn't just give you all of these caching APIs and not show you how to test it right? You'll find all the details in the [Caching section in the testing doc](testing.md#testing-caching)
+We wouldn't just give you all of these caching APIs and not show you how to test it right? You'll find all the details in the [Caching section in the testing doc](testing.md#testing-caching).
 
 ### Creating Your Own Client
 
