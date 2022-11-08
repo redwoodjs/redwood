@@ -1747,7 +1747,7 @@ Please refer to the [Directives documentation](./directives.md) for details on h
 
 
 ## Testing Caching
-If you're using Redwood's [caching](services#caching) - we provide a handful of utilities, and patterns, to help you test this too!
+If you're using Redwood's [caching](services#caching), we provide a handful of utilities and patterns to help you test this too!
 
 Let's say you have a service where you cache the result of products, and individual products:
 

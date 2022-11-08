@@ -957,7 +957,7 @@ const post = ({ id }) => {
 
 :::info
 
-`cache()` returns a Promise so you'll want to `await` it if you need the data for further processing in your service. If you're only using your service as a GraphQL resolver than you can just return `cache()` directly.
+`cache()` returns a Promise so you'll want to `await` it if you need the data for further processing in your service. If you're only using your service as a GraphQL resolver then you can just return `cache()` directly.
 
 :::
 
@@ -1027,4 +1027,4 @@ If Memcached or Redis don't serve your needs, you can create your own client ada
 * Extend from the `BaseClient` class.
 * A constructor that takes whatever arguments you want, passing them through to the client's initialization code.
 * A `get()` function that accepts a `key` argument and returns the data from the cache if found, otherwise `null`. Note that in the Memcached and Redis clients the value returned is first run through `JSON.parse()` but if your cache client supports native JS objects then you wouldn't need to do this.
-* A `set()` function that accepts a string `key`, the `value` to be cached, and an optional `options` object containing at least an `expires` key. Note that `value` can be a real Javascript objects at this point, but in Memcached and Redis the value is run through `JSON.stringify()` before being sent to the client library. You may or may not need to do the same thing, depending on what your cache client supports.
+* A `set()` function that accepts a string `key`, the `value` to be cached, and an optional `options` object containing at least an `expires` key. Note that `value` can be a real JavaScript objects at this point, but in Memcached and Redis the value is run through `JSON.stringify()` before being sent to the client library. You may or may not need to do the same thing, depending on what your cache client supports.
