@@ -2,7 +2,10 @@ import { useCallback } from 'react'
 
 import type { AuthImplementation } from '../AuthImplementation'
 
-import { AuthProviderState } from './AuthProviderState'
+import {
+  AuthProviderState,
+  defaultAuthProviderState,
+} from './AuthProviderState'
 import { useCurrentUser } from './useCurrentUser'
 import { useReauthenticate } from './useReauthenticate'
 
@@ -41,10 +44,11 @@ export const useSignUp = <
 
   return useCallback(
     async (options?: unknown) => {
+      setAuthProviderState(defaultAuthProviderState)
       const signupOutput = await authImplementation.signup(options)
       await reauthenticate()
       return signupOutput
     },
-    [authImplementation, reauthenticate]
+    [setAuthProviderState, authImplementation, reauthenticate]
   )
 }
