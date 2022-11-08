@@ -70,6 +70,7 @@ import { name, version } from '../package'
     overwrite,
     telemetry: telemetry,
     yarn1,
+    'git-init': gitInit,
   } = yargs(hideBin(process.argv))
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
@@ -101,6 +102,12 @@ import { name, version } from '../package'
       default: false,
       type: 'boolean',
       describe: 'Use yarn 1. yarn 3 by default',
+    })
+    .option('git-init', {
+      alias: 'git',
+      default: null,
+      type: 'boolean',
+      describe: 'Initialize a git repository.',
     })
     .version(version)
     .parse()
@@ -338,8 +345,30 @@ import { name, version } from '../package'
             message: 'Select your preferred coding language',
             initial: 'TypeScript',
           })
-
           task.output = ctx.language
+          // Error code and exit if someone has disabled yarn install but selected JavaScript
+          if (!yarnInstall && ctx.language === 'JavaScript') {
+            throw new Error(
+              'JavaScript transpilation requires running yarn install. Please rerun create-redwood-app without disabling yarn install.'
+            )
+          }
+        },
+        options: {
+          persistentOutput: true,
+        },
+      },
+      {
+        title: 'Git preference',
+        skip: () => gitInit !== null,
+        task: async (ctx, task) => {
+          ctx.gitInit = await task.prompt({
+            type: 'Toggle',
+            message: 'Do you want to initialize a git repo?',
+            enabled: 'Yes',
+            disabled: 'no',
+            initial: 'Yes',
+          })
+          task.output = ctx.gitInit ? 'Initialize a git repo' : 'Skip'
         },
         options: {
           persistentOutput: true,
@@ -375,6 +404,19 @@ import { name, version } from '../package'
             shell: true,
             cwd: newAppDir,
           })
+        },
+      },
+      {
+        title: 'Initializing a git repo',
+        enabled: (ctx) => gitInit || ctx.gitInit,
+        task: () => {
+          return execa(
+            'git init && git add . && git commit -m "Initial commit"',
+            {
+              shell: true,
+              cwd: newAppDir,
+            }
+          )
         },
       },
     ],
