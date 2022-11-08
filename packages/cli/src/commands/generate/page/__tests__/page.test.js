@@ -443,13 +443,13 @@ describe('TS Files', () => {
     tests: true,
     stories: true,
     ...page.paramVariants(pathName(undefined, 'typescript')),
-  })
+  }) //?
 
   it('generates typescript pages', () => {
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.tsx'
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.tsx'
         )
       ]
     ).toMatchSnapshot()

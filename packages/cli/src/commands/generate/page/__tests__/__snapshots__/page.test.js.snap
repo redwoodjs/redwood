@@ -142,7 +142,30 @@ export default TsParamTypeFilesPage
 "
 `;
 
-exports[`TS Files generates typescript pages 1`] = `undefined`;
+exports[`TS Files generates typescript pages 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const TsFilesPage = () => {
+  return (
+    <>
+      <MetaTags title="TsFiles" description="TsFiles page" />
+
+      <h1>TsFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TSFilesPage/TSFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsFiles</code>, link to me with \`
+        <Link to={routes.tsFiles()}>TsFiles</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default TsFilesPage
+"
+`;
 
 exports[`TS Files generates typescript pages 2`] = `
 "import type { ComponentMeta } from '@storybook/react'
