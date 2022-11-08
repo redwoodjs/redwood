@@ -107,7 +107,7 @@ import { name, version } from '../package'
       alias: 'git',
       default: null,
       type: 'boolean',
-      describe: 'Initialize a new git repository.',
+      describe: 'Initialize a git repository.',
     })
     .version(version)
     .parse()
@@ -344,13 +344,12 @@ import { name, version } from '../package'
             choices: ['TypeScript', 'JavaScript'],
             message: 'Select your preferred coding language',
             initial: 'TypeScript',
-            onCancel: () => process.exit(1),
           })
           task.output = ctx.language
           // Error code and exit if someone has disabled yarn install but selected JavaScript
-          if (yarnInstall === false && ctx.language === 'JavaScript') {
+          if (!yarnInstall && ctx.language === 'JavaScript') {
             throw new Error(
-              'JavaScript transpilation requires running yarn install. Please rerun Create-Redwood-App without disabling yarn install.'
+              'JavaScript transpilation requires running yarn install. Please rerun create-redwood-app without disabling yarn install.'
             )
           }
         },
@@ -364,18 +363,12 @@ import { name, version } from '../package'
         task: async (ctx, task) => {
           ctx.gitInit = await task.prompt({
             type: 'Toggle',
-            message: 'Do you want to initialize a new git repo?',
+            message: 'Do you want to initialize a git repo?',
             enabled: 'Yes',
-            disabled: 'No',
+            disabled: 'no',
             initial: 'Yes',
-            onCancel: () => process.exit(1),
           })
-          if (ctx.gitInit === true) {
-            task.output = 'Initialize a new git repo'
-          }
-          if (ctx.gitInit === false) {
-            task.output = 'Skip git setup'
-          }
+          task.output = ctx.gitInit ? 'Initialize a git repo' : 'Skip'
         },
         options: {
           persistentOutput: true,
@@ -414,11 +407,11 @@ import { name, version } from '../package'
         },
       },
       {
-        title: 'Initializing a new git repo',
-        enabled: (ctx) => gitInit === true || ctx.gitInit === true,
+        title: 'Initializing a git repo',
+        enabled: (ctx) => gitInit || ctx.gitInit,
         task: () => {
           return execa(
-            'git init && git add . && git commit -m "Initial commit" && git branch -M main',
+            'git init && git add . && git commit -m "Initial commit"',
             {
               shell: true,
               cwd: newAppDir,
