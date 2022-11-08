@@ -360,7 +360,7 @@ describe('admin-pages/Post', () => {
     // Layout
 
     test('creates a layout', async () => {
-      expect(filesMultiwordUpper).toHaveProperty([
+      expect(filesMultiwordDash).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
