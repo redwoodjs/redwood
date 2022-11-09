@@ -403,7 +403,6 @@ describe('jsonTruncate', () => {
           foobar: 'I have no imagination',
           two: 'Second nested item',
         },
-
         five: 5,
         bool: false,
       })

@@ -83,7 +83,7 @@ export default (file, api) => {
 
   const authImport = j.importDeclaration(
     [j.importSpecifier(j.identifier('useAuth'), j.identifier('useAuth'))],
-    j.stringLiteral('@redwoodjs/auth')
+    j.stringLiteral('src/auth')
   )
 
   root.find(j.VariableDeclaration).insertBefore(routerImport)

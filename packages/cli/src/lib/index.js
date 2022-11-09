@@ -6,8 +6,7 @@ import * as babel from '@babel/core'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import { memoize } from 'lodash'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
@@ -17,7 +16,7 @@ import { format } from 'prettier'
 import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
   getPaths as getRedwoodPaths,
-  resolveFile,
+  resolveFile as internalResolveFile,
 } from '@redwoodjs/internal/dist/paths'
 
 import c from './colors'
@@ -193,6 +192,7 @@ export const _getPaths = () => {
   }
 }
 export const getPaths = memoize(_getPaths)
+export const resolveFile = internalResolveFile
 
 export const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
@@ -469,8 +469,8 @@ export const runCommandTask = async (commands, { verbose }) => {
       },
     })),
     {
-      renderer: verbose && VerboseRenderer,
-      dateFormat: false,
+      renderer: verbose && 'verbose',
+      rendererOptions: { collapse: false, dateFormat: false },
     }
   )
 

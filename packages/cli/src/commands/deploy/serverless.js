@@ -5,8 +5,7 @@ import boxen from 'boxen'
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import execa from 'execa'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
@@ -142,7 +141,7 @@ export const handler = async (yargs) => {
     ],
     {
       exitOnError: true,
-      renderer: yargs.verbose && VerboseRenderer,
+      renderer: yargs.verbose && 'verbose',
     }
   )
   try {
@@ -205,7 +204,7 @@ export const handler = async (yargs) => {
           ],
           {
             exitOnError: true,
-            renderer: yargs.verbose && VerboseRenderer,
+            renderer: yargs.verbose && 'verbose',
           }
         )
 

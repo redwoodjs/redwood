@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
@@ -200,9 +199,9 @@ export const createYargsForComponentGeneration = ({
             ...includeAdditionalTasks(options),
           ],
           {
-            collapse: false,
+            rendererOptions: { collapse: false },
             exitOnError: true,
-            renderer: options.verbose && VerboseRenderer,
+            renderer: options.verbose && 'verbose',
           }
         )
 

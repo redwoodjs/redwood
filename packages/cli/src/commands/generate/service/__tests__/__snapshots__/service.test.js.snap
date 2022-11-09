@@ -68,7 +68,6 @@ describe('transactions', () => {
     const original = await transaction({
       id: scenario.transaction.one.id,
     })
-
     const result = await updateTransaction({
       id: original.id,
       input: { userId: scenario.transaction.two.userId },
@@ -81,7 +80,6 @@ describe('transactions', () => {
     const original = await deleteTransaction({
       id: scenario.transaction.one.id,
     })
-
     const result = await transaction({ id: original.id })
 
     expect(result).toEqual(null)
@@ -140,7 +138,6 @@ describe('scalarTypes', () => {
     const original = await scalarType({
       id: scenario.scalarType.one.id,
     })
-
     const result = await updateScalarType({
       id: original.id,
       input: { email: 'String2' },
@@ -153,7 +150,6 @@ describe('scalarTypes', () => {
     const original = await deleteScalarType({
       id: scenario.scalarType.one.id,
     })
-
     const result = await scalarType({ id: original.id })
 
     expect(result).toEqual(null)

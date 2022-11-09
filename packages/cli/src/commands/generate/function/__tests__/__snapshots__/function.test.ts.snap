@@ -27,7 +27,6 @@ export const handler = async (event, context) => {
     headers: {
       'Content-Type': 'application/json',
     },
-
     body: JSON.stringify({
       data: 'javascriptFunction function',
     }),
@@ -99,7 +98,6 @@ export const handler = async (event, context) => {
     headers: {
       'Content-Type': 'application/json',
     },
-
     body: JSON.stringify({
       data: 'sendMail function',
     }),
@@ -135,7 +133,6 @@ export const handler = async (event, context) => {
     headers: {
       'Content-Type': 'application/json',
     },
-
     body: JSON.stringify({
       data: 'foo function',
     }),
