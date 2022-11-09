@@ -4,7 +4,7 @@ import path from 'path'
 import camelcase from 'camelcase'
 import execa from 'execa'
 import humanize from 'humanize-string'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
@@ -694,11 +694,12 @@ const addSetImport = (task) => {
 }
 
 const addScaffoldSetToRouter = async (model, path) => {
+  const templateNames = getTemplateStrings(model, path)
   const nameVars = nameVariants(model)
   const title = nameVars.pluralPascalName
-  const titleTo = nameVars.pluralCamelName
+  const titleTo = templateNames.pluralRouteName
   const buttonLabel = `New ${nameVars.singularPascalName}`
-  const buttonTo = `new${nameVars.singularPascalName}`
+  const buttonTo = templateNames.newRouteName
 
   return addRoutesToRouterTask(
     await routes({ model, path }),
@@ -796,7 +797,7 @@ export const tasks = ({
         task: generateTypes,
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 }
 

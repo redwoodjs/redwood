@@ -32,6 +32,7 @@ if (hasFixtureOkLabel) {
       (file) =>
         file.startsWith('packages/cli/src/commands/generate') ||
         file.startsWith('packages/cli/src/commands/setup') ||
+        file.startsWith('packages/cli-helpers/src/') ||
         file.startsWith('packages/create-redwood-app/template')
     )
 
