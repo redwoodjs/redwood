@@ -119,6 +119,4 @@ Error:
 No auth.zip file found in the package path you provided.
 ```
 
-And when you `run yarn rw deploy serverless --first-run`, these files get created, but then dissapear and that error gets thrown, please make sure that you are not running your dev instance when you attempt to deploy.
-
-Please stop your dev server and then retry your deploy.
+Make sure that the dev server isn't running, then retry your deploy.
