@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - run: yarn install
         working-directory: ./.github/actions/only_doc_changes
@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - run: yarn install
         working-directory: ./tasks/check
 
@@ -56,13 +56,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        node-version: [14, 16, 18]
       fail-fast: true
     name: 🏗 Build, lint, test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Remove the tsc problem matcher if not ubuntu-latest, node 16
-        if: (matrix.os == 'ubuntu-latest' && matrix.node-version == '16') == false
+      - name: Remove the tsc problem matcher if not ubuntu-latest, node 18
+        if: (matrix.os == 'ubuntu-latest' && matrix.node-version == '18') == false
         run: echo "echo "::remove-matcher owner=tsc::""
 
       - uses: actions/checkout@v3
@@ -91,7 +91,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        node-version: [14, 16, 18]
     name: 🏗 Build, lint, test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
@@ -102,7 +102,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [14, 16]
+        node-version: [14, 16, 18]
       fail-fast: true
     name: 🌲 Tutorial E2E / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -161,7 +161,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [14, 16]
+        node-version: [14, 16, 18]
     name: 🌲 Tutorial E2E / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
@@ -172,7 +172,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        node-version: [14, 16, 18]
       fail-fast: true
     name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -313,7 +313,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        node-version: [14, 16, 18]
     name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
