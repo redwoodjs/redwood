@@ -199,7 +199,7 @@ export const runPrerender = async ({
     queryCache
   )
 
-  const { helmet } = global.__REDWOOD__HELMET_CONTEXT
+  const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
 
   const indexHtmlTree = cheerio.load(indexContent)
 
