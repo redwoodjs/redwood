@@ -74,7 +74,7 @@ describe('Routes within the example todo with errors', () => {
     ])
   })
 
-  it('Detects dupliocate root routes', () => {
+  it('Detects duplicate root routes', () => {
     expect(getDuplicateRoutes()).toStrictEqual([
       { name: 'home', page: 'HomePage', path: '/' },
       { name: 'home', page: 'HomePage', path: '/' },
