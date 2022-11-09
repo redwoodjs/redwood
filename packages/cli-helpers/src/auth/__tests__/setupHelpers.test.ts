@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 // mock Telemetry for CLI commands so they don't try to spawn a process
 jest.mock('@redwoodjs/telemetry', () => {
