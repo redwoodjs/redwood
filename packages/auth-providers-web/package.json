@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.4",
-    "core-js": "3.25.5",
+    "core-js": "3.26.0",
     "uuid": "9.0.0"
   },
   "devDependencies": {
