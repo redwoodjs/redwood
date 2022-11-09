@@ -112,7 +112,7 @@ If you get tired of typing `serverless` each time, you can use the much shorter 
 
 ## Troubleshooting
 
-If you happend to see the following error wehn deploying:
+If you happen to see the following error when deploying:
 
 ```terminal
 Error:
