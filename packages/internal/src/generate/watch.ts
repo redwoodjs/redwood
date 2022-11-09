@@ -12,6 +12,7 @@ import {
   isGraphQLSchemaFile,
 } from '../files'
 import { getPaths } from '../paths'
+import { warnOfDuplicateRoutes } from '../routes'
 
 import { generate } from './generate'
 import {
@@ -49,6 +50,7 @@ watcher
     console.log('Generating TypeScript definitions and GraphQL schemas...')
     const files = await generate()
     console.log(files.length, 'files generated')
+    warnOfDuplicateRoutes()
   })
   .on('all', async (eventName, p) => {
     if (!['add', 'change', 'unlink'].includes(eventName)) {
@@ -70,6 +72,7 @@ watcher
     } else if (absPath === rwjsPaths.web.routes) {
       generateTypeDefRouterRoutes()
       console.log(action[eventName], 'Routes:', '\x1b[2m', p, '\x1b[0m')
+      warnOfDuplicateRoutes()
     } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
       generateTypeDefRouterPages()
       console.log(action[eventName], 'Page:', '\x1b[2m', p, '\x1b[0m')

@@ -1,5 +1,3 @@
-//
-
 import fs from 'fs'
 
 import { getPaths } from './paths'
@@ -61,4 +59,22 @@ export function getDuplicateRoutes() {
     }
   })
   return duplicateRoutes
+}
+
+/**
+ * Detects any potential duplicate routes and prints warning messages to the console in response
+ * @see {@link getDuplicateRoutes} for how duplicate routes are detected
+ */
+export function warnOfDuplicateRoutes() {
+  const duplicatedRoutes = getDuplicateRoutes()
+  if (duplicatedRoutes) {
+    console.error(
+      `Warning Routes: ${duplicatedRoutes.length} duplicate routes have been detected`
+    )
+    duplicatedRoutes.forEach((route) => {
+      console.error(
+        `  Name: "${route.name}", Path: "${route.path}", Page: "${route.page}"`
+      )
+    })
+  }
 }
