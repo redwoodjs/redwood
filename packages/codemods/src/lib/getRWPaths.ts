@@ -1,9 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
+import toml from '@iarna/toml'
 import merge from 'deepmerge'
 import findUp from 'findup-sync'
-import toml from 'toml'
 
 enum TargetEnum {
   NODE = 'node',
