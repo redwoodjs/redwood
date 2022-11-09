@@ -23,6 +23,7 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
       return { code, send: jest.fn() }
     },
     headers: (h) => jest.fn(h),
+    header: (h) => jest.fn(h),
     send: (body) => jest.fn(body),
     log: console as unknown,
   } as unknown as FastifyReply
@@ -100,6 +101,7 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     } as unknown as FastifyRequest
 
     jest.spyOn(mockedReply, 'headers')
+    jest.spyOn(mockedReply, 'header')
 
     const handler = async (req, mockedReply) => {
       mockedReply = {
@@ -114,10 +116,15 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
 
     await requestHandler(headersRequest, mockedReply, handler)
 
-    expect(mockedReply.headers).toHaveBeenCalledWith({
-      'content-type': 'application/json',
-      authorization: 'Bearer token 123',
-    })
+    expect(mockedReply.headers).not.toHaveBeenCalled()
+    expect(mockedReply.header).toHaveBeenCalledWith(
+      'content-type',
+      'application/json'
+    )
+    expect(mockedReply.header).toHaveBeenCalledWith(
+      'authorization',
+      'Bearer token 123'
+    )
   })
 
   test('requestHandler replies with multi-value headers', async () => {
@@ -133,8 +140,9 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     } as unknown as FastifyRequest
 
     jest.spyOn(mockedReply, 'headers')
+    jest.spyOn(mockedReply, 'header')
 
-    const handler = async (req, mockedReply) => {
+    const handler = async (_req, mockedReply) => {
       mockedReply = {
         body: {},
         headers: {},
@@ -147,8 +155,10 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
 
     await requestHandler(headersRequest, mockedReply, handler)
 
-    expect(mockedReply.headers).toHaveBeenCalledWith({
-      'content-type': 'application/json; text/html',
-    })
+    expect(mockedReply.headers).not.toHaveBeenCalled()
+    expect(mockedReply.header).toHaveBeenCalledWith(
+      'content-type',
+      'application/json; text/html'
+    )
   })
 })
