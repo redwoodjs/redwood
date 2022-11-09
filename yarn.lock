@@ -6314,7 +6314,7 @@ __metadata:
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
-    pino: 8.6.1
+    pino: 8.7.0
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.7.4
@@ -24753,9 +24753,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:8.6.1, pino@npm:^8.5.0":
-  version: 8.6.1
-  resolution: "pino@npm:8.6.1"
+"pino@npm:8.7.0, pino@npm:^8.5.0":
+  version: 8.7.0
+  resolution: "pino@npm:8.7.0"
   dependencies:
     atomic-sleep: ^1.0.0
     fast-redact: ^3.1.1
@@ -24770,7 +24770,7 @@ __metadata:
     thread-stream: ^2.0.0
   bin:
     pino: bin.js
-  checksum: 4cf2f6871c40965fa6e4c3cc5be458aa449fbdfd866b3de3c3214d859a0d84d1193a1ed01d3b9549138fd0bdcc7c651f1e1a5be3c8c43c093b528ef44d0c478b
+  checksum: a1bf199b1b542eb6ff8c4dcd961db2ae97f85e7a3a913c7a79ad7dda624c725abf063c43cefb441b00af77855bac9b4ae7933983cf01549793ff0ffb40a92fb3
   languageName: node
   linkType: hard
 
