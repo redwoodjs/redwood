@@ -70,7 +70,7 @@ fetchMock.mockImplementation(async (url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
+  globalThis.fetch = fetchMock
 })
 
 beforeEach(() => {
@@ -103,7 +103,7 @@ describe('dbAuth', () => {
       await authRef.current.getToken()
     })
 
-    expect(global.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toBeCalledWith(
       `${process.env.RWJS_API_DBAUTH_URL}?method=getToken`,
       {
         credentials: 'same-origin',
@@ -149,14 +149,14 @@ describe('dbAuth', () => {
         await auth.logIn({ username: 'username', password: 'password' })
     )
 
-    expect(global.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toBeCalledWith(
       process.env.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
       })
     )
 
-    expect(global.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toBeCalledWith(
       process.env.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -170,7 +170,7 @@ describe('dbAuth', () => {
       await auth.logOut()
     })
 
-    expect(global.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toBeCalledWith(
       process.env.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -182,7 +182,7 @@ describe('dbAuth', () => {
     const auth = getDbAuth().current
     await act(async () => await auth.resetPassword({}))
 
-    expect(global.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toBeCalledWith(
       process.env.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -194,7 +194,7 @@ describe('dbAuth', () => {
     const auth = getDbAuth().current
     await act(async () => await auth.signUp({}))
 
-    expect(global.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toBeCalledWith(
       process.env.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',
@@ -206,7 +206,7 @@ describe('dbAuth', () => {
     const auth = getDbAuth().current
     await act(async () => await auth.validateResetToken('token'))
 
-    expect(global.fetch).toBeCalledWith(
+    expect(globalThis.fetch).toBeCalledWith(
       process.env.RWJS_API_DBAUTH_URL,
       expect.objectContaining({
         credentials: 'include',

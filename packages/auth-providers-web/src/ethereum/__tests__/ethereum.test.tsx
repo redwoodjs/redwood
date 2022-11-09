@@ -81,7 +81,7 @@ fetchMock.mockImplementation(async (_url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
+  globalThis.fetch = fetchMock
 })
 
 beforeEach(() => {
