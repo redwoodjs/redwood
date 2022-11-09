@@ -1,11 +1,11 @@
 const fs = require('fs')
 const path = require('path')
 
-global.matchTransformSnapshot =
+globalThis.matchTransformSnapshot =
   require('./src/testUtils/matchTransformSnapshot').matchTransformSnapshot
-global.matchInlineTransformSnapshot =
+globalThis.matchInlineTransformSnapshot =
   require('./src/testUtils/matchInlineTransformSnapshot').matchInlineTransformSnapshot
-global.matchFolderTransform =
+globalThis.matchFolderTransform =
   require('./src/testUtils/matchFolderTransform').matchFolderTransform
 
 // Custom matcher for checking fixtures using paths
