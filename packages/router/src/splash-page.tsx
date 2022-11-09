@@ -561,15 +561,18 @@ const useVersion = () => {
   useEffect(() => {
     async function fetchVersion() {
       try {
-        const response = await global.fetch(global.RWJS_API_GRAPHQL_URL, {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify({
-            query: 'query RedwoodVersion { redwood { version } }',
-          }),
-        })
+        const response = await globalThis.fetch(
+          globalThis.RWJS_API_GRAPHQL_URL,
+          {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              query: 'query RedwoodVersion { redwood { version } }',
+            }),
+          }
+        )
 
         const versionData = await response.json()
         setVersion(versionData?.data?.redwood?.version || null)
@@ -578,7 +581,7 @@ const useVersion = () => {
       }
     }
 
-    if (!global.fetch) {
+    if (!globalThis.fetch) {
       return
     }
 

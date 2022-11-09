@@ -9,27 +9,27 @@
  * 4. location.pathname
  */
 export const getAnnouncement = () => {
-  const routeAnnouncement = global?.document.querySelectorAll(
+  const routeAnnouncement = globalThis?.document.querySelectorAll(
     '[data-redwood-route-announcement]'
   )?.[0]
   if (routeAnnouncement?.textContent) {
     return routeAnnouncement.textContent
   }
 
-  const pageHeading = global?.document.querySelector(`h1`)
+  const pageHeading = globalThis?.document.querySelector(`h1`)
   if (pageHeading?.textContent) {
     return pageHeading.textContent
   }
 
-  if (global?.document.title) {
+  if (globalThis?.document.title) {
     return document.title
   }
 
-  return `new page at ${global?.location.pathname}`
+  return `new page at ${globalThis?.location.pathname}`
 }
 
 export const getFocus = () => {
-  const routeFocus = global?.document.querySelectorAll(
+  const routeFocus = globalThis?.document.querySelectorAll(
     '[data-redwood-route-focus]'
   )?.[0]
 
@@ -46,7 +46,7 @@ export const getFocus = () => {
 
 // note: tried document.activeElement.blur(), but that didn't reset the focus flow
 export const resetFocus = () => {
-  global?.document.body.setAttribute('tabindex', '-1')
-  global?.document.body.focus()
-  global?.document.body.removeAttribute('tabindex')
+  globalThis?.document.body.setAttribute('tabindex', '-1')
+  globalThis?.document.body.focus()
+  globalThis?.document.body.removeAttribute('tabindex')
 }

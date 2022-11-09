@@ -1,1 +1,1 @@
-global.scrollTo = jest.fn()
+globalThis.scrollTo = jest.fn()
