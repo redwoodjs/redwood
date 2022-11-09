@@ -5,7 +5,7 @@ import getRootPackageJSON from '../../../lib/getRootPackageJSON'
 export const updateNodeEngine = () => {
   const [rootPackageJSON, rootPackageJSONPath] = getRootPackageJSON()
 
-  rootPackageJSON.engines.node = '>=14.17 <=16.x'
+  rootPackageJSON.engines.node = '>=14.17 <=18.x'
 
   fs.writeFileSync(
     rootPackageJSONPath,
