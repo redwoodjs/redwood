@@ -9,7 +9,7 @@ export const RedwoodProvider = ({
   children,
   titleTemplate,
 }: RedwoodProviderProps) => {
-  const appTitle = global.__REDWOOD__APP_TITLE
+  const appTitle = globalThis.__REDWOOD__APP_TITLE
   const template = () => {
     if (titleTemplate) {
       let template = titleTemplate.replace(/%AppTitle/g, appTitle)
@@ -19,7 +19,7 @@ export const RedwoodProvider = ({
     return ''
   }
   return (
-    <HelmetProvider context={global.__REDWOOD__HELMET_CONTEXT}>
+    <HelmetProvider context={globalThis.__REDWOOD__HELMET_CONTEXT}>
       <Helmet titleTemplate={template()} defaultTitle={appTitle}>
         <title>{appTitle}</title>
       </Helmet>

@@ -6,6 +6,8 @@ declare global {
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
   var __REDWOOD__APP_TITLE: string
 
+  var HEY_KRIS: boolean
+
   /** URL or absolute path to the DbAuth serverless function */
   var RWJS_API_DBAUTH_URL: string
   /** URL or absolute path to the GraphQL serverless function */
