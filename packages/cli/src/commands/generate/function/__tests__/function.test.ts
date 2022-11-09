@@ -11,42 +11,50 @@ import * as functionGenerator from '../function'
 // Should be refactored as it's repeated
 type WordFilesType = { [key: string]: string }
 
-let singleWordDefaultFiles: WordFilesType
-let multiWordDefaultFiles: WordFilesType
-let javascriptFiles: WordFilesType
-let typescriptFiles: WordFilesType
-
-beforeAll(() => {
-  singleWordDefaultFiles = functionGenerator.files({
+describe('Single word default files', () => {
+  const singleWordDefaultFiles: WordFilesType = functionGenerator.files({
     name: 'foo',
     tests: true,
   })
-  multiWordDefaultFiles = functionGenerator.files({
-    name: 'send-mail',
-  })
-  javascriptFiles = functionGenerator.files({
-    name: 'javascript-function',
-  })
-  typescriptFiles = functionGenerator.files({
-    name: 'typescript-function',
-    typescript: true,
-  })
-})
 
-test('returns tests, scenario and function file', () => {
-  const fileNames = Object.keys(singleWordDefaultFiles)
-  expect(fileNames.length).toEqual(3)
+  it('returns tests, scenario and function file', () => {
+    const fileNames = Object.keys(singleWordDefaultFiles)
+    expect(fileNames.length).toEqual(3)
 
-  expect(fileNames).toEqual(
-    expect.arrayContaining([
-      expect.stringContaining('foo.js'),
-      expect.stringContaining('foo.test.js'),
-      expect.stringContaining('foo.scenarios.js'),
-    ])
-  )
+    expect(fileNames).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('foo.js'),
+        expect.stringContaining('foo.test.js'),
+        expect.stringContaining('foo.scenarios.js'),
+      ])
+    )
+  })
+
+  it('creates a single word function file', () => {
+    expect(
+      singleWordDefaultFiles[
+        path.normalize('/path/to/project/api/src/functions/foo/foo.js')
+      ]
+    ).toMatchSnapshot()
+
+    expect(
+      singleWordDefaultFiles[
+        path.normalize('/path/to/project/api/src/functions/foo/foo.test.js')
+      ]
+    ).toMatchSnapshot('Test snapshot')
+
+    expect(
+      singleWordDefaultFiles[
+        path.normalize(
+          '/path/to/project/api/src/functions/foo/foo.scenarios.js'
+        )
+      ]
+    ).toMatchSnapshot('Scenario snapshot')
+  })
 })
 
 test('Keeps Function in name', () => {
+  // @ts-expect-error Not sure how to pass generic to yargs here
   const { name } = yargs
     .command('function <name>', false, functionGenerator.builder)
     .parse('function BazingaFunction')
@@ -54,27 +62,11 @@ test('Keeps Function in name', () => {
   expect(name).toEqual('BazingaFunction')
 })
 
-test('creates a single word function file', () => {
-  expect(
-    singleWordDefaultFiles[
-      path.normalize('/path/to/project/api/src/functions/foo/foo.js')
-    ]
-  ).toMatchSnapshot()
-
-  expect(
-    singleWordDefaultFiles[
-      path.normalize('/path/to/project/api/src/functions/foo/foo.test.js')
-    ]
-  ).toMatchSnapshot('Test snapshot')
-
-  expect(
-    singleWordDefaultFiles[
-      path.normalize('/path/to/project/api/src/functions/foo/foo.scenarios.js')
-    ]
-  ).toMatchSnapshot('Scenario snapshot')
-})
-
 test('creates a multi word function file', () => {
+  const multiWordDefaultFiles = functionGenerator.files({
+    name: 'send-mail',
+  })
+
   expect(
     multiWordDefaultFiles[
       path.normalize('/path/to/project/api/src/functions/sendMail/sendMail.js')
@@ -83,6 +75,10 @@ test('creates a multi word function file', () => {
 })
 
 test('creates a .js file if --javascript=true', () => {
+  const javascriptFiles = functionGenerator.files({
+    name: 'javascript-function',
+  })
+
   expect(
     javascriptFiles[
       path.normalize(
@@ -95,6 +91,11 @@ test('creates a .js file if --javascript=true', () => {
 })
 
 test('creates a .ts file if --typescript=true', () => {
+  const typescriptFiles = functionGenerator.files({
+    name: 'typescript-function',
+    typescript: true,
+  })
+
   const fileNames = Object.keys(typescriptFiles)
   expect(fileNames.length).toEqual(3)
 
