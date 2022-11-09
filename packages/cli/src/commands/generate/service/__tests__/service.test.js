@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import path from 'path'
 
 import yargs from 'yargs'
