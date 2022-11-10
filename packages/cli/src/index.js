@@ -99,18 +99,27 @@ const updateCheckerMiddleware = (argv) => {
   }
 
   if (update.shouldCheck()) {
-    // TODO: Decide how best to call this now it's no longer a command
-    // const logFile = fs.openSync(
-    //   path.join(getPaths().generated.base, 'update-checker.log'),
-    //   'a'
-    // )
-    // const child = spawn('yarn', ['./lib/updateRunner.js'], {
-    //   detached: true,
-    //   stdio: ['ignore', logFile, logFile],
-    //   cwd: getPaths().base,
-    //   shell: process.platform === 'win32',
-    // })
-    // child.unref()
+    const stdout = fs.openSync(
+      path.join(getPaths().generated.base, 'updateCheckStdout.log'),
+      'a'
+    )
+
+    const stderr = fs.openSync(
+      path.join(getPaths().generated.base, 'updateCheckStderr.log'),
+      'a'
+    )
+
+    const child = spawn(
+      'yarn',
+      ['node', path.join(__dirname, 'lib', 'updateCheck.js')],
+      {
+        detached: true,
+        stdio: ['ignore', stdout, stderr],
+        shell: process.platform === 'win32',
+      }
+    )
+
+    child.unref()
   }
 }
 

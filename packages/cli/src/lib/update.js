@@ -71,7 +71,7 @@ export async function check() {
     updateUpdateFile({
       localVersion,
       remoteVersion,
-      lastChecked: Date.now(),
+      checkedAt: Date.now(),
     })
   } finally {
     unsetLock(LOCK_IDENTIFIER)
@@ -170,11 +170,15 @@ function updateUpdateFile({
     'update-data.json'
   )
   const existingData = readUpdateFile()
+  const isNewerUpgrade = semver.gt(
+    remoteVersion ?? '0.0.0',
+    existingData.remoteVersion
+  )
   const updatedData = {
     localVersion: localVersion ?? existingData.localVersion,
     remoteVersion: remoteVersion ?? existingData.remoteVersion,
     checkedAt: checkedAt ?? existingData.checkedAt,
-    shownAt: shownAt ?? existingData.shownAt,
+    shownAt: shownAt ?? (isNewerUpgrade ? 946684800000 : existingData.shownAt), // We reset the shownAt if a newer version becomes available
   }
   fs.writeFileSync(updateFilePath, JSON.stringify(updatedData, null, 2))
 }
