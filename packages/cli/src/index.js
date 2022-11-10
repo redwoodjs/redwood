@@ -32,7 +32,7 @@ import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths } from './lib'
-import update from './lib/update'
+import * as update from './lib/update'
 
 /**
  * The current working directory can be set via:
@@ -87,7 +87,7 @@ const loadDotEnvDefaultsMiddleware = () => {
 }
 
 const updateCheckerMiddleware = (argv) => {
-  const excludedCommands = ['update', 'upgrade', 'ts-to-js']
+  const excludedCommands = ['upgrade', 'ts-to-js']
   if (excludedCommands.includes(argv._[0])) {
     return
   }

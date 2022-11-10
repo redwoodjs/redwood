@@ -5,7 +5,7 @@ import boxen from 'boxen'
 import latestVersion from 'latest-version'
 import semver from 'semver'
 
-import { validateTag } from 'src/commands/upgrade'
+import { validateTag } from '../commands/upgrade'
 
 import { setLock, unsetLock } from './locking'
 
@@ -14,12 +14,12 @@ import { getPaths } from './index'
 /**
  * @const {number} The number of milliseconds between update checks (24 hours)
  */
-const CHECK_PERIOD = 24 * 60 * 60_000 // 24 hours
+const CHECK_PERIOD = 24 * 60 * 60_000
 
 /**
  * @const {number} The number of milliseconds between showing a user an update notification (1 hour)
  */
-const SHOW_PERIOD = 60 * 60_000 // 1 hour
+const SHOW_PERIOD = 60 * 60_000
 
 /**
  * @const {string} The identifier used for the lock within the check function
