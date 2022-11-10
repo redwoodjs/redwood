@@ -22,6 +22,11 @@ const CHECK_PERIOD = 24 * 60 * 60_000
 const SHOW_PERIOD = 60 * 60_000
 
 /**
+ * @const {number} The default datetime for shownAt and checkedAt in milliseconds, corresponds to 2000-01-01T00:00:00.000Z
+ */
+export const DEFAULT_DATETIME_MS = 946684800000
+
+/**
  * @const {string} The identifier used for the lock within the check function
  */
 export const LOCK_IDENTIFIER = 'UPDATE-CHECK'
@@ -130,7 +135,7 @@ export function getUpgradeMessage() {
  * Reads update data from a file within .redwood
  * @return {Object} The update data object containing the localVersion, remoteVersion, checkedAt and shownAt properties
  */
-function readUpdateFile() {
+export function readUpdateFile() {
   const updateFilePath = path.join(
     getPaths().generated.base,
     'update-data.json'
@@ -143,8 +148,8 @@ function readUpdateFile() {
       return {
         localVersion: '0.0.0',
         remoteVersion: '0.0.0',
-        checkedAt: 946684800000, // 2000-01-01T00:00:00.000Z
-        shownAt: 946684800000, // 2000-01-01T00:00:00.000Z
+        checkedAt: DEFAULT_DATETIME_MS,
+        shownAt: DEFAULT_DATETIME_MS,
       }
     }
     throw error
@@ -178,7 +183,8 @@ function updateUpdateFile({
     localVersion: localVersion ?? existingData.localVersion,
     remoteVersion: remoteVersion ?? existingData.remoteVersion,
     checkedAt: checkedAt ?? existingData.checkedAt,
-    shownAt: shownAt ?? (isNewerUpgrade ? 946684800000 : existingData.shownAt), // We reset the shownAt if a newer version becomes available
+    shownAt:
+      shownAt ?? (isNewerUpgrade ? DEFAULT_DATETIME_MS : existingData.shownAt), // We reset the shownAt if a newer version becomes available
   }
   fs.writeFileSync(updateFilePath, JSON.stringify(updatedData, null, 2))
 }
