@@ -2,6 +2,8 @@
  * @jest-environment jsdom
  */
 
+import React from 'react'
+
 import { render, screen, waitFor } from '@testing-library/react'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
@@ -24,7 +26,16 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: false,
-          } as AuthContextInterface)
+          } as AuthContextInterface<
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown
+          >)
         }
       >
         <FetchConfigToString />
@@ -44,7 +55,16 @@ describe('FetchConfigProvider', () => {
             loading: false,
             isAuthenticated: true,
             type: 'custom',
-          } as AuthContextInterface)
+          } as AuthContextInterface<
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown
+          >)
         }
       >
         <FetchConfigToString />

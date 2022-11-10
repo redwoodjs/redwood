@@ -58,8 +58,15 @@ import execa from 'execa'
 import { runCommandTask } from '../../lib'
 import { handler } from '../type-check'
 
+beforeEach(() => {
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+
 afterEach(() => {
   jest.clearAllMocks()
+  console.info.mockRestore()
+  console.log.mockRestore()
 })
 
 test('Should run tsc commands correctly, in order', async () => {

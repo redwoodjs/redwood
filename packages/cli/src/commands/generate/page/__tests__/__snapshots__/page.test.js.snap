@@ -1,56 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creates a page component 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-const HomePage = () => {
-  return (
-    <>
-      <MetaTags title="Home" description="Home page" />
-
-      <h1>HomePage</h1>
-      <p>
-        Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
-      </p>
-      <p>
-        My default route is named <code>home</code>, link to me with \`
-        <Link to={routes.home()}>Home</Link>\`
-      </p>
-    </>
-  )
-}
-
-export default HomePage
-"
-`;
-
-exports[`creates a page component 2`] = `
-"import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-const ContactUsPage = () => {
-  return (
-    <>
-      <MetaTags title="ContactUs" description="ContactUs page" />
-
-      <h1>ContactUsPage</h1>
-      <p>
-        Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.js</code>
-      </p>
-      <p>
-        My default route is named <code>contactUs</code>, link to me with \`
-        <Link to={routes.contactUs()}>ContactUs</Link>\`
-      </p>
-    </>
-  )
-}
-
-export default ContactUsPage
-"
-`;
-
-exports[`creates a page component with a plural word for name 1`] = `
+exports[`Plural word files creates a page component with a plural word for name 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -75,155 +25,8 @@ export default CatsPage
 "
 `;
 
-exports[`creates a page component with params 1`] = `
+exports[`Single world files creates a page component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-const PostPage = ({ id }) => {
-  return (
-    <>
-      <MetaTags title="Post" description="Post page" />
-
-      <h1>PostPage</h1>
-      <p>
-        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
-      </p>
-      <p>
-        My default route is named <code>post</code>, link to me with \`
-        <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
-      </p>
-      <p>The parameter passed to me is {id}</p>
-    </>
-  )
-}
-
-export default PostPage
-"
-`;
-
-exports[`creates a page story 1`] = `
-"import HomePage from './HomePage'
-
-export const generated = () => {
-  return <HomePage />
-}
-
-export default {
-  title: 'Pages/HomePage',
-  component: HomePage,
-}
-"
-`;
-
-exports[`creates a page story 2`] = `
-"import ContactUsPage from './ContactUsPage'
-
-export const generated = () => {
-  return <ContactUsPage />
-}
-
-export default {
-  title: 'Pages/ContactUsPage',
-  component: ContactUsPage,
-}
-"
-`;
-
-exports[`creates a page test 1`] = `
-"import { render } from '@redwoodjs/testing/web'
-
-import HomePage from './HomePage'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-describe('HomePage', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<HomePage />)
-    }).not.toThrow()
-  })
-})
-"
-`;
-
-exports[`creates a test for a component with multiple words for a name 1`] = `
-"import { render } from '@redwoodjs/testing/web'
-
-import ContactUsPage from './ContactUsPage'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-describe('ContactUsPage', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<ContactUsPage />)
-    }).not.toThrow()
-  })
-})
-"
-`;
-
-exports[`creates a test for page component with params 1`] = `
-"import { render } from '@redwoodjs/testing/web'
-
-import PostPage from './PostPage'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-describe('PostPage', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<PostPage id={'42'} />)
-    }).not.toThrow()
-  })
-})
-"
-`;
-
-exports[`file generation 1`] = `
-{
-  "fileContent": "import HomePage from './HomePage'
-
-export const generated = () => {
-  return <HomePage />
-}
-
-export default {
-  title: 'Pages/HomePage',
-  component: HomePage,
-}
-",
-  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.stories.js",
-}
-`;
-
-exports[`file generation 2`] = `
-{
-  "fileContent": "import { render } from '@redwoodjs/testing/web'
-
-import HomePage from './HomePage'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-describe('HomePage', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<HomePage />)
-    }).not.toThrow()
-  })
-})
-",
-  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.test.js",
-}
-`;
-
-exports[`file generation 3`] = `
-{
-  "fileContent": "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
 const HomePage = () => {
@@ -244,153 +47,42 @@ const HomePage = () => {
 }
 
 export default HomePage
-",
-  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.js",
-}
+"
 `;
 
-exports[`file generation 4`] = `
-{
-  "fileContent": "import { Router, Route } from '@redwoodjs/router'
-
-const Routes = () => {
-  return (
-    <Router>
-      <Route path="/home" page={HomePage} name="home" />
-      <Route path="/about" page={AboutPage} name="about" />
-      <Route notfound page={NotFoundPage} />
-    </Router>
-  )
-}
-
-export default Routes",
-  "filePath": "/path/to/project/web/src/Routes.js",
-}
-`;
-
-exports[`file generation with route params 1`] = `
-{
-  "fileContent": "import PostPage from './PostPage'
-
-export const generated = (args) => {
-  return <PostPage id={'42'} {...args} />
-}
-
-export default {
-  title: 'Pages/PostPage',
-  component: PostPage,
-}
-",
-  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.stories.js",
-}
-`;
-
-exports[`file generation with route params 2`] = `
-{
-  "fileContent": "import { render } from '@redwoodjs/testing/web'
-
-import PostPage from './PostPage'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-describe('PostPage', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<PostPage id={'42'} />)
-    }).not.toThrow()
-  })
-})
-",
-  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.test.js",
-}
-`;
-
-exports[`file generation with route params 3`] = `
-{
-  "fileContent": "import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-const PostPage = ({ id }) => {
-  return (
-    <>
-      <MetaTags title="Post" description="Post page" />
-
-      <h1>PostPage</h1>
-      <p>
-        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
-      </p>
-      <p>
-        My default route is named <code>post</code>, link to me with \`
-        <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
-      </p>
-      <p>The parameter passed to me is {id}</p>
-    </>
-  )
-}
-
-export default PostPage
-",
-  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.js",
-}
-`;
-
-exports[`file generation with route params 4`] = `
-{
-  "fileContent": "import { Router, Route } from '@redwoodjs/router'
-
-const Routes = () => {
-  return (
-    <Router>
-      <Route path="/post/{id}" page={PostPage} name="post" />
-      <Route path="/about" page={AboutPage} name="about" />
-      <Route notfound page={NotFoundPage} />
-    </Router>
-  )
-}
-
-export default Routes",
-  "filePath": "/path/to/project/web/src/Routes.js",
-}
-`;
-
-exports[`generates typescript pages 1`] = `undefined`;
-
-exports[`generates typescript pages 2`] = `
-"import type { ComponentMeta } from '@storybook/react'
-
-import TsFilesPage from './TsFilesPage'
+exports[`Single world files creates a page story 1`] = `
+"import HomePage from './HomePage'
 
 export const generated = () => {
-  return <TsFilesPage />
+  return <HomePage />
 }
 
 export default {
-  title: 'Pages/TsFilesPage',
-  component: TsFilesPage,
-} as ComponentMeta<typeof TsFilesPage>
+  title: 'Pages/HomePage',
+  component: HomePage,
+}
 "
 `;
 
-exports[`generates typescript pages 3`] = `
+exports[`Single world files creates a page test 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
-import TsFilesPage from './TsFilesPage'
+import HomePage from './HomePage'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
-describe('TsFilesPage', () => {
+describe('HomePage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TsFilesPage />)
+      render(<HomePage />)
     }).not.toThrow()
   })
 })
 "
 `;
 
-exports[`generates typescript pages 4`] = `
+exports[`TS Files TS Params 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -420,7 +112,7 @@ export default TsParamFilesPage
 "
 `;
 
-exports[`generates typescript pages 5`] = `
+exports[`TS Files TS Params with type 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -447,5 +139,336 @@ const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
 }
 
 export default TsParamTypeFilesPage
+"
+`;
+
+exports[`TS Files generates typescript pages 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const TsFilesPage = () => {
+  return (
+    <>
+      <MetaTags title="TsFiles" description="TsFiles page" />
+
+      <h1>TsFilesPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/TSFilesPage/TSFilesPage.tsx</code>
+      </p>
+      <p>
+        My default route is named <code>tsFiles</code>, link to me with \`
+        <Link to={routes.tsFiles()}>TsFiles</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default TsFilesPage
+"
+`;
+
+exports[`TS Files generates typescript pages 2`] = `
+"import type { ComponentMeta } from '@storybook/react'
+
+import TsFilesPage from './TsFilesPage'
+
+export const generated = () => {
+  return <TsFilesPage />
+}
+
+export default {
+  title: 'Pages/TsFilesPage',
+  component: TsFilesPage,
+} as ComponentMeta<typeof TsFilesPage>
+"
+`;
+
+exports[`TS Files generates typescript pages 3`] = `
+"import { render } from '@redwoodjs/testing/web'
+
+import TsFilesPage from './TsFilesPage'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+describe('TsFilesPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<TsFilesPage />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`handler file generation 1`] = `
+{
+  "fileContent": "import HomePage from './HomePage'
+
+export const generated = () => {
+  return <HomePage />
+}
+
+export default {
+  title: 'Pages/HomePage',
+  component: HomePage,
+}
+",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.stories.js",
+}
+`;
+
+exports[`handler file generation 2`] = `
+{
+  "fileContent": "import { render } from '@redwoodjs/testing/web'
+
+import HomePage from './HomePage'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+describe('HomePage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<HomePage />)
+    }).not.toThrow()
+  })
+})
+",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.test.js",
+}
+`;
+
+exports[`handler file generation 3`] = `
+{
+  "fileContent": "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const HomePage = () => {
+  return (
+    <>
+      <MetaTags title="Home" description="Home page" />
+
+      <h1>HomePage</h1>
+      <p>
+        Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
+      </p>
+      <p>
+        My default route is named <code>home</code>, link to me with \`
+        <Link to={routes.home()}>Home</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default HomePage
+",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.js",
+}
+`;
+
+exports[`handler file generation 4`] = `
+{
+  "fileContent": "import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path="/home" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes",
+  "filePath": "/path/to/project/web/src/Routes.js",
+}
+`;
+
+exports[`handler file generation with route params 1`] = `
+{
+  "fileContent": "import PostPage from './PostPage'
+
+export const generated = (args) => {
+  return <PostPage id={'42'} {...args} />
+}
+
+export default {
+  title: 'Pages/PostPage',
+  component: PostPage,
+}
+",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.stories.js",
+}
+`;
+
+exports[`handler file generation with route params 2`] = `
+{
+  "fileContent": "import { render } from '@redwoodjs/testing/web'
+
+import PostPage from './PostPage'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+describe('PostPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<PostPage id={'42'} />)
+    }).not.toThrow()
+  })
+})
+",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.test.js",
+}
+`;
+
+exports[`handler file generation with route params 3`] = `
+{
+  "fileContent": "import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const PostPage = ({ id }) => {
+  return (
+    <>
+      <MetaTags title="Post" description="Post page" />
+
+      <h1>PostPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
+      </p>
+      <p>
+        My default route is named <code>post</code>, link to me with \`
+        <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default PostPage
+",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.js",
+}
+`;
+
+exports[`handler file generation with route params 4`] = `
+{
+  "fileContent": "import { Router, Route } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path="/post/{id}" page={PostPage} name="post" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes",
+  "filePath": "/path/to/project/web/src/Routes.js",
+}
+`;
+
+exports[`multiWorldFiles creates a page component 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const ContactUsPage = () => {
+  return (
+    <>
+      <MetaTags title="ContactUs" description="ContactUs page" />
+
+      <h1>ContactUsPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.js</code>
+      </p>
+      <p>
+        My default route is named <code>contactUs</code>, link to me with \`
+        <Link to={routes.contactUs()}>ContactUs</Link>\`
+      </p>
+    </>
+  )
+}
+
+export default ContactUsPage
+"
+`;
+
+exports[`multiWorldFiles creates a page story 1`] = `
+"import ContactUsPage from './ContactUsPage'
+
+export const generated = () => {
+  return <ContactUsPage />
+}
+
+export default {
+  title: 'Pages/ContactUsPage',
+  component: ContactUsPage,
+}
+"
+`;
+
+exports[`multiWorldFiles creates a test for a component with multiple words for a name 1`] = `
+"import { render } from '@redwoodjs/testing/web'
+
+import ContactUsPage from './ContactUsPage'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+describe('ContactUsPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<ContactUsPage />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`paramFiles creates a page component with params 1`] = `
+"import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+const PostPage = ({ id }) => {
+  return (
+    <>
+      <MetaTags title="Post" description="Post page" />
+
+      <h1>PostPage</h1>
+      <p>
+        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
+      </p>
+      <p>
+        My default route is named <code>post</code>, link to me with \`
+        <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
+      </p>
+      <p>The parameter passed to me is {id}</p>
+    </>
+  )
+}
+
+export default PostPage
+"
+`;
+
+exports[`paramFiles creates a test for page component with params 1`] = `
+"import { render } from '@redwoodjs/testing/web'
+
+import PostPage from './PostPage'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+describe('PostPage', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<PostPage id={'42'} />)
+    }).not.toThrow()
+  })
+})
 "
 `;

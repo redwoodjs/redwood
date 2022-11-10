@@ -1,6 +1,6 @@
 import type { APIGatewayEvent, Context as LambdaContext } from 'aws-lambda'
 
-import { getAuthenticationContext } from '@redwoodjs/api'
+import { getAuthenticationContext, Decoder } from '@redwoodjs/api'
 
 import {
   getAsyncStoreInstance,
@@ -10,15 +10,29 @@ import {
 import type { GetCurrentUser } from './types'
 
 interface Args {
+  authDecoder: Decoder
   handlerFn: (
     event: APIGatewayEvent,
     context: LambdaContext,
     ...others: any
   ) => any
-  getCurrentUser: GetCurrentUser
+  getCurrentUser?: GetCurrentUser
 }
 
-export const useRequireAuth = ({ handlerFn, getCurrentUser }: Args) => {
+// Used for type safety in our tests
+export type UseRequireAuth = (
+  args: Args
+) => (
+  event: APIGatewayEvent,
+  context: LambdaContext,
+  ...rest: any
+) => Promise<ReturnType<Args['handlerFn']>>
+
+export const useRequireAuth: UseRequireAuth = ({
+  authDecoder,
+  handlerFn,
+  getCurrentUser,
+}) => {
   return async (
     event: APIGatewayEvent,
     context: LambdaContext,
@@ -26,7 +40,11 @@ export const useRequireAuth = ({ handlerFn, getCurrentUser }: Args) => {
   ) => {
     const authEnrichedFunction = async () => {
       try {
-        const authContext = await getAuthenticationContext({ event, context })
+        const authContext = await getAuthenticationContext({
+          authDecoder,
+          event,
+          context,
+        })
 
         if (authContext) {
           const currentUser = getCurrentUser

@@ -134,7 +134,7 @@ function isRoute(
 export interface RouterProps extends RouterContextProviderProps {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
-  children?: React.ReactNode
+  children: React.ReactNode
 }
 
 const Router: React.FC<RouterProps> = ({
