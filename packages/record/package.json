@@ -28,15 +28,15 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.19.4",
-    "@prisma/client": "4.5.0",
-    "core-js": "3.25.5"
+    "@prisma/client": "4.6.0",
+    "core-js": "3.26.0"
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
     "@babel/core": "7.19.3",
-    "@prisma/internals": "4.5.0",
+    "@prisma/internals": "4.6.0",
     "esbuild": "0.15.10",
-    "jest": "29.2.2"
+    "jest": "29.3.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

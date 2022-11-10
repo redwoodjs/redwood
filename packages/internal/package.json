@@ -41,11 +41,12 @@
     "@graphql-codegen/typescript-operations": "2.5.4",
     "@graphql-codegen/typescript-react-apollo": "3.3.4",
     "@graphql-codegen/typescript-resolvers": "2.7.4",
+    "@iarna/toml": "2.2.5",
     "@redwoodjs/graphql-server": "3.2.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.6.0",
     "chalk": "4.1.2",
-    "core-js": "3.25.5",
+    "core-js": "3.26.0",
     "deepmerge": "4.2.2",
     "esbuild": "0.15.10",
     "fast-glob": "3.2.12",
@@ -58,7 +59,6 @@
     "string-env-interpolation": "1.0.1",
     "systeminformation": "5.12.6",
     "terminal-link": "2.1.1",
-    "toml": "3.0.0",
     "typescript": "4.7.4"
   },
   "devDependencies": {
@@ -71,7 +71,7 @@
     "@types/rimraf": "3.0.2",
     "babel-plugin-tester": "10.1.0",
     "graphql-tag": "2.12.6",
-    "jest": "29.2.2"
+    "jest": "29.3.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
