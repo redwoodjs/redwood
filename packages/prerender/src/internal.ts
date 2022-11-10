@@ -33,9 +33,8 @@ export const registerShims = (routerPath: string) => {
     RWJS_SRC_ROOT: getPaths().web.src,
   }
 
-  globalThis.RWJS_API_GRAPHQL_URL =
-    rwjsConfig.web.apiGraphQLUrl ?? `${rwjsConfig.web.apiUrl}graphql`
-  globalThis.__REDWOOD__APP_TITLE = rwjsConfig.web.title
+  // For now set bundler to webpack for prerendering
+  globalThis.RWJS_WEB_BUNDLER = 'webpack'
 
   globalThis.__REDWOOD__PRERENDERING = true
 
