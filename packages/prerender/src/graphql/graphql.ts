@@ -3,7 +3,8 @@ import path from 'path'
 import { DocumentNode, print } from 'graphql'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
-import { getOperationName } from '@redwoodjs/web'
+// @MARK: have to do this, otherwise rwjs/web is loaded before shims
+import { getOperationName } from '@redwoodjs/web/dist/graphql'
 
 import { GqlHandlerImportError } from '../errors'
 

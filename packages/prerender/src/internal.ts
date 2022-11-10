@@ -19,6 +19,20 @@ export const getRootHtmlPath = () => {
 
 export const registerShims = (routerPath: string) => {
   const rwjsConfig = getConfig()
+
+  globalThis.RWJS_ENV = {
+    RWJS_API_GRAPHQL_URL:
+      rwjsConfig.web.apiGraphQLUrl ?? rwjsConfig.web.apiUrl + '/graphql',
+    RWJS_API_DBAUTH_URL:
+      rwjsConfig.web.apiDbAuthUrl ?? `${rwjsConfig.web.apiUrl}/auth`,
+    RWJS_API_URL: rwjsConfig.web.apiUrl,
+    __REDWOOD__APP_TITLE: rwjsConfig.web.title,
+  }
+
+  globalThis.RWJS_DEBUG_ENV = {
+    RWJS_SRC_ROOT: getPaths().web.src,
+  }
+
   globalThis.RWJS_API_GRAPHQL_URL =
     rwjsConfig.web.apiGraphQLUrl ?? `${rwjsConfig.web.apiUrl}graphql`
   globalThis.__REDWOOD__APP_TITLE = rwjsConfig.web.title
