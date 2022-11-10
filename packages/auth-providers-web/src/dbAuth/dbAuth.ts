@@ -60,11 +60,11 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const forgotPassword = async (username: string) => {
-    if (!process.env.RWJS_API_DBAUTH_URL) {
+    if (!globalThis.RWJS_API_DBAUTH_URL) {
       throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
     }
 
-    const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -83,7 +83,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
 
     if (isTokenCacheExpired()) {
       getTokenPromise = fetch(
-        `${process.env.RWJS_API_DBAUTH_URL}?method=getToken`,
+        `${globalThis.RWJS_API_DBAUTH_URL}?method=getToken`,
         {
           credentials,
         }
@@ -104,11 +104,11 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const login = async ({ username, password }: LoginAttributes) => {
-    if (!process.env.RWJS_API_DBAUTH_URL) {
+    if (!globalThis.RWJS_API_DBAUTH_URL) {
       throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
     }
 
-    const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -119,11 +119,11 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const logout = async () => {
-    if (!process.env.RWJS_API_DBAUTH_URL) {
+    if (!globalThis.RWJS_API_DBAUTH_URL) {
       throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
     }
 
-    await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
+    await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       body: JSON.stringify({ method: 'logout' }),
@@ -133,11 +133,11 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const resetPassword = async (attributes: ResetPasswordAttributes) => {
-    if (!process.env.RWJS_API_DBAUTH_URL) {
+    if (!globalThis.RWJS_API_DBAUTH_URL) {
       throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
     }
 
-    const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -148,11 +148,11 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const signup = async (attributes: SignupAttributes) => {
-    if (!process.env.RWJS_API_DBAUTH_URL) {
+    if (!globalThis.RWJS_API_DBAUTH_URL) {
       throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
     }
 
-    const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -163,11 +163,11 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const validateResetToken = async (resetToken: string | null) => {
-    if (!process.env.RWJS_API_DBAUTH_URL) {
+    if (!globalThis.RWJS_API_DBAUTH_URL) {
       throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
     }
 
-    const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

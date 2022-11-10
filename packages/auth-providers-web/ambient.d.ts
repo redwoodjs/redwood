@@ -2,13 +2,12 @@
 import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {
+  var bazinga: boolean
   var __REDWOOD__PRERENDERING: boolean
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
   var __REDWOOD__APP_TITLE: string
 
-  var RWJS_WEB_BUNDLER: 'vite' | 'webpack'
-
-  // Provided by Vite.config, or Webpack in the user's project
+  // Provided by Vite.config in the user's project
   var RWJS_ENV: {
     RWJS_API_GRAPHQL_URL: string
     /** URL or absolute path to the DbAuth serverless function */

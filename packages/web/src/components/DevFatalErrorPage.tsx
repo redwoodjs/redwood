@@ -7,7 +7,9 @@ import { useState } from 'react'
 import StackTracey from 'stacktracey'
 
 // RWJS_SRC_ROOT is defined and defaulted in webpack to the base path
-const srcRoot = process.env.RWJS_SRC_ROOT || ''
+
+// @MARK error boundary not working in Vite
+const srcRoot = RWJS_DEBUG_ENV?.RWJS_SRC_ROOT || ''
 
 let appRoot: string
 
