@@ -79,7 +79,7 @@ export function getDuplicateRoutes() {
  */
 export function warnOfDuplicateRoutes() {
   const duplicatedRoutes = getDuplicateRoutes()
-  if (duplicatedRoutes) {
+  if (duplicatedRoutes.length > 0) {
     console.error(
       `Warning Routes: ${duplicatedRoutes.length} duplicate routes have been detected`
     )
