@@ -2027,38 +2027,3 @@ Upgrade to a specific version:
 ```bash
 yarn redwood upgrade -t 0.19.3
 ```
-
-## update
-
-Determines if an upgrade from your current `@redwoodjs` version is available.
-
-```bash
-yarn redwood update
-```
-
-This command
-
-| Option          | Description                                                                                                                                     |
-| :-------------- | :------------------------------------------------------------------------------- |
-| `--force, -f`   | Force an upgrade check even if one is already running                            |
-| `--silent`      | Prevents any text rendering to the console or prompts to the user                |
-| `--skip`        | Prevents update notifications until a second, even newer, version is available   |
-| `--unskip`      | Undos the `--skip` and allows update notifications for the current new version   |
-
-**Example**
-
-Check for an update:
-
-```bash
-yarn redwood update
-```
-
-**Automatic checks**
-
-This update command will occasionally automatically be run in the background when you run other CLI commands. This allows us to inform you of potential upgrades to RedwoodJS.
-
-By default, the time between background update checks is at least 24 hours however you may change this to any value by providing the number of minutes to wait in the `REDWOOD_BACKGROUND_UPDATES_CHECK_PERIOD` environment variable. Similarly we wait at least 1 hour between automatic update notifications but you can override this time by setting the `REDWOOD_BACKGROUND_UPDATES_SHOW_PERIOD` environment variable, again in minutes.
-
-In the event you do not wish for these automatic checks to run you can set the `REDWOOD_DISABLE_BACKGROUND_UPDATES` environment variable.
-
-
