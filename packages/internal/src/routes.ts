@@ -19,12 +19,24 @@ export function getRoutes() {
     flag: 'r',
   })
 
+  // Strip out commented code
+  let routesWithoutComments = routesFile
+  let startPosition = routesWithoutComments.indexOf('{/*')
+  let endPosition = -1
+  while (startPosition !== -1) {
+    endPosition = routesWithoutComments.indexOf('*/}')
+    routesWithoutComments =
+      routesWithoutComments.substring(0, startPosition) +
+      routesWithoutComments.substring(endPosition + 3)
+    startPosition = routesWithoutComments.indexOf('{/*')
+  }
+
   const routeRE = /<Route (.*?)\/>/g
   const nameRE = /(name)=\s*(?:"([^"]*)"|(\S+))/g
   const pathRE = /(path)=\s*(?:"([^"]*)"|(\S+))/g
   const pageRE = /(page)=\s*(?:{([^}]*)}|(\S+))/g
 
-  const routesInFile = routesFile.match(routeRE)
+  const routesInFile = routesWithoutComments.match(routeRE)
   if (routesInFile) {
     for (const route of routesInFile) {
       const name = route.match(nameRE)?.at(0)?.split('=')[1].slice(1, -1)
