@@ -6511,7 +6511,7 @@ __metadata:
     svg-react-loader: 0.4.6
     typescript: 4.7.4
     url-loader: 4.1.1
-    webpack: 5.74.0
+    webpack: 5.75.0
     webpack-bundle-analyzer: 4.6.1
     webpack-cli: 4.10.0
     webpack-dev-server: 4.11.1
@@ -31405,9 +31405,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.74.0, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
-  version: 5.74.0
-  resolution: "webpack@npm:5.74.0"
+"webpack@npm:5.75.0, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
+  version: 5.75.0
+  resolution: "webpack@npm:5.75.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
@@ -31438,7 +31438,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: a5f9eeb36edfa3fe1fc31950706080521fe2ada9706ce8205b817164ab3f6b207cc42023fb61e09687e7f0f252871c6c1a8b0f1a638a4a065c30f6bc460c68f9
+  checksum: 0160331d6255bdb8027f2589458514709a4a6555e2868adb6356a309d3f7b2212cb129a00f343fe0f94f54a31b4677507a3adf9ae73badc1216105ac548681ea
   languageName: node
   linkType: hard
 
