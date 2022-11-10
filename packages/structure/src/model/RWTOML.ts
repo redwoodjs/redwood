@@ -1,4 +1,4 @@
-import { parse as parseTOML } from 'toml'
+import { JsonMap, parse as parseTOML } from '@iarna/toml'
 import { Range } from 'vscode-languageserver-types'
 
 import { FileNode } from '../ide'
@@ -19,7 +19,10 @@ export class RWTOML extends FileNode {
     return parseTOML(this.text)
   }
   @lazy() get web_includeEnvironmentVariables(): string[] | undefined {
-    return this.parsedTOML?.web?.includeEnvironmentVariables ?? []
+    return (
+      ((this.parsedTOML?.web as JsonMap)
+        ?.includeEnvironmentVariables as string[]) ?? []
+    )
   }
   *diagnostics() {
     try {

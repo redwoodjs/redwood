@@ -3736,7 +3736,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iarna/toml@npm:^2.2.5":
+"@iarna/toml@npm:2.2.5, @iarna/toml@npm:^2.2.5":
   version: 2.2.5
   resolution: "@iarna/toml@npm:2.2.5"
   checksum: d095381ad4554aca233b7cf5a91f243ef619e5e15efd3157bc640feac320545450d14b394aebbf6f02a2047437ced778ae598d5879a995441ab7b6c0b2c2f201
@@ -6432,6 +6432,7 @@ __metadata:
     "@babel/core": 7.19.3
     "@babel/plugin-transform-typescript": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
+    "@iarna/toml": 2.2.5
     "@types/babel__core": 7.1.19
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
@@ -6452,7 +6453,6 @@ __metadata:
     prettier: 2.7.1
     tasuku: 2.0.0
     tempy: 1.0.1
-    toml: 3.0.0
     typescript: 4.7.4
     yargs: 17.6.0
   bin:
@@ -6648,6 +6648,7 @@ __metadata:
     "@graphql-codegen/typescript-operations": 2.5.4
     "@graphql-codegen/typescript-react-apollo": 3.3.4
     "@graphql-codegen/typescript-resolvers": 2.7.4
+    "@iarna/toml": 2.2.5
     "@redwoodjs/graphql-server": 3.4.0
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.1.19
@@ -6673,7 +6674,6 @@ __metadata:
     string-env-interpolation: 1.0.1
     systeminformation: 5.12.6
     terminal-link: 2.1.1
-    toml: 3.0.0
     typescript: 4.7.4
   bin:
     rw-gen: ./dist/generate/generate.js
@@ -6753,6 +6753,7 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.19.3
     "@babel/runtime-corejs3": 7.19.4
+    "@iarna/toml": 2.2.5
     "@prisma/internals": 4.5.0
     "@redwoodjs/internal": 3.4.0
     "@types/fs-extra": 9.0.13
@@ -6775,7 +6776,6 @@ __metadata:
     lodash-decorators: 6.0.1
     lru-cache: 6.0.0
     proxyquire: 2.1.3
-    toml: 3.0.0
     ts-morph: 15.1.0
     typescript: 4.7.4
     vscode-languageserver: 6.1.1
@@ -29606,13 +29606,6 @@ __metadata:
   version: 1.0.1
   resolution: "toidentifier@npm:1.0.1"
   checksum: 93937279934bd66cc3270016dd8d0afec14fb7c94a05c72dc57321f8bd1fa97e5bea6d1f7c89e728d077ca31ea125b78320a616a6c6cd0e6b9cb94cb864381c1
-  languageName: node
-  linkType: hard
-
-"toml@npm:3.0.0":
-  version: 3.0.0
-  resolution: "toml@npm:3.0.0"
-  checksum: 8d7ed3e700ca602e5419fca343e1c595eb7aa177745141f0761a5b20874b58ee5c878cd045c408da9d130cb2b611c639912210ba96ce2f78e443569aa8060c18
   languageName: node
   linkType: hard
 
