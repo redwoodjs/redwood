@@ -2377,13 +2377,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:8.2.3":
-  version: 8.2.3
-  resolution: "@fastify/http-proxy@npm:8.2.3"
+"@fastify/http-proxy@npm:8.3.0":
+  version: 8.3.0
+  resolution: "@fastify/http-proxy@npm:8.3.0"
   dependencies:
     "@fastify/reply-from": ^8.0.0
     ws: ^8.4.2
-  checksum: 704947f3a264580079980f177eab7c0fb06b374d61ce1f445ce8609ff0b24cd5db33caec34b6af5cb7f65ac8329f73216e40c348c27e6091acdd295bd77ee607
+  checksum: fd3c97178c02131ffde900a599f0e11b51c11f7b7912acb3d4ac701a03ff7bb26b7ea4303367c490a7d553b9e3fac626d83a916a85a2fae8bc6fb7152678bb0e
   languageName: node
   linkType: hard
 
@@ -6254,7 +6254,7 @@ __metadata:
     "@babel/core": 7.19.3
     "@babel/plugin-transform-runtime": 7.19.1
     "@babel/runtime-corejs3": 7.19.4
-    "@fastify/http-proxy": 8.2.3
+    "@fastify/http-proxy": 8.3.0
     "@fastify/static": 6.5.0
     "@fastify/url-data": 5.1.0
     "@types/aws-lambda": 8.10.107
@@ -6314,7 +6314,7 @@ __metadata:
     jwks-rsa: 2.0.5
     md5: 2.3.0
     pascalcase: 1.0.0
-    pino: 8.6.1
+    pino: 8.7.0
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.7.4
@@ -6511,7 +6511,7 @@ __metadata:
     svg-react-loader: 0.4.6
     typescript: 4.7.4
     url-loader: 4.1.1
-    webpack: 5.74.0
+    webpack: 5.75.0
     webpack-bundle-analyzer: 4.6.1
     webpack-cli: 4.10.0
     webpack-dev-server: 4.11.1
@@ -24753,9 +24753,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:8.6.1, pino@npm:^8.5.0":
-  version: 8.6.1
-  resolution: "pino@npm:8.6.1"
+"pino@npm:8.7.0, pino@npm:^8.5.0":
+  version: 8.7.0
+  resolution: "pino@npm:8.7.0"
   dependencies:
     atomic-sleep: ^1.0.0
     fast-redact: ^3.1.1
@@ -24770,7 +24770,7 @@ __metadata:
     thread-stream: ^2.0.0
   bin:
     pino: bin.js
-  checksum: 4cf2f6871c40965fa6e4c3cc5be458aa449fbdfd866b3de3c3214d859a0d84d1193a1ed01d3b9549138fd0bdcc7c651f1e1a5be3c8c43c093b528ef44d0c478b
+  checksum: a1bf199b1b542eb6ff8c4dcd961db2ae97f85e7a3a913c7a79ad7dda624c725abf063c43cefb441b00af77855bac9b4ae7933983cf01549793ff0ffb40a92fb3
   languageName: node
   linkType: hard
 
@@ -31405,9 +31405,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.74.0, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
-  version: 5.74.0
-  resolution: "webpack@npm:5.74.0"
+"webpack@npm:5.75.0, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
+  version: 5.75.0
+  resolution: "webpack@npm:5.75.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
@@ -31438,7 +31438,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: a5f9eeb36edfa3fe1fc31950706080521fe2ada9706ce8205b817164ab3f6b207cc42023fb61e09687e7f0f252871c6c1a8b0f1a638a4a065c30f6bc460c68f9
+  checksum: 0160331d6255bdb8027f2589458514709a4a6555e2868adb6356a309d3f7b2212cb129a00f343fe0f94f54a31b4677507a3adf9ae73badc1216105ac548681ea
   languageName: node
   linkType: hard
 
