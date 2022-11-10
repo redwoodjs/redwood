@@ -12,7 +12,7 @@ import {
   isGraphQLSchemaFile,
 } from '../files'
 import { getPaths } from '../paths'
-import { warnOfDuplicateRoutes } from '../routes'
+import { warningForDuplicateRoutes } from '../routes'
 
 import { generate } from './generate'
 import {
@@ -45,12 +45,17 @@ const action = {
   change: 'Modified',
 }
 
+let routesWarningMessage = ''
+
 watcher
   .on('ready', async () => {
     console.log('Generating TypeScript definitions and GraphQL schemas...')
     const files = await generate()
     console.log(files.length, 'files generated')
-    warnOfDuplicateRoutes()
+    routesWarningMessage = warningForDuplicateRoutes()
+    if (routesWarningMessage) {
+      console.warn(routesWarningMessage)
+    }
   })
   .on('all', async (eventName, p) => {
     if (!['add', 'change', 'unlink'].includes(eventName)) {
@@ -72,10 +77,10 @@ watcher
     } else if (absPath === rwjsPaths.web.routes) {
       generateTypeDefRouterRoutes()
       console.log(action[eventName], 'Routes:', '\x1b[2m', p, '\x1b[0m')
-      warnOfDuplicateRoutes()
     } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
       generateTypeDefRouterPages()
       console.log(action[eventName], 'Page:', '\x1b[2m', p, '\x1b[0m')
+      routesWarningMessage = warningForDuplicateRoutes()
     } else if (isDirectoryNamedModuleFile(absPath)) {
       if (eventName === 'unlink') {
         fs.unlinkSync(mirrorPathForDirectoryNamedModules(absPath, rwjsPaths)[0])
@@ -93,5 +98,9 @@ watcher
       await generateGraphQLSchema()
       await generateTypeDefGraphQLApi()
       console.log(action[eventName], 'GraphQL Schema:', '\x1b[2m', p, '\x1b[0m')
+    }
+
+    if (routesWarningMessage) {
+      console.warn(routesWarningMessage)
     }
   })

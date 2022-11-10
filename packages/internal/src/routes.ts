@@ -1,5 +1,7 @@
 import fs from 'fs'
 
+import chalk from 'chalk'
+
 import { getPaths } from './paths'
 
 export interface Route {
@@ -50,43 +52,46 @@ export function getRoutes() {
 }
 
 /**
- * Returns an array of routes which conflict on their defined paths
+ * Returns an array of routes which conflict on their defined names
  */
 export function getDuplicateRoutes() {
   const duplicateRoutes: Route[] = []
   const routes = getRoutes()
-  const uniquePaths = routes
+  const uniqueNames = routes
     .map((route) => {
-      return route.path
+      return route.name
     })
     .filter((value, index, self) => {
       return self.indexOf(value) === index
     })
-  uniquePaths.forEach((path) => {
-    const routesWithPath = routes.filter((route) => {
-      return route.path === path
+  uniqueNames.forEach((name) => {
+    const routesWithName = routes.filter((route) => {
+      return route.name === name
     })
-    if (routesWithPath.length > 1) {
-      duplicateRoutes.push(...routesWithPath)
+    if (routesWithName.length > 1) {
+      duplicateRoutes.push(...routesWithName)
     }
   })
   return duplicateRoutes
 }
 
 /**
- * Detects any potential duplicate routes and prints warning messages to the console in response
+ * Detects any potential duplicate routes and returns a formatted warning message
  * @see {@link getDuplicateRoutes} for how duplicate routes are detected
+ * @return {string} Warning message when duplicate routes found, empty string if not
  */
-export function warnOfDuplicateRoutes() {
+export function warningForDuplicateRoutes() {
   const duplicatedRoutes = getDuplicateRoutes()
+  let message = ''
   if (duplicatedRoutes.length > 0) {
-    console.error(
-      `Warning Routes: ${duplicatedRoutes.length} duplicate routes have been detected`
+    message += chalk.keyword('orange')(
+      `Warning: ${duplicatedRoutes.length} duplicate routes have been detected, only the route(s) closest to the top of the file will be used.\n`
     )
     duplicatedRoutes.forEach((route) => {
-      console.error(
-        `  Name: "${route.name}", Path: "${route.path}", Page: "${route.page}"`
-      )
+      message += ` ${chalk.keyword('orange')('->')} Name: "${
+        route.name
+      }", Path: "${route.path}", Page: "${route.page}"\n`
     })
   }
+  return message.trimEnd()
 }
