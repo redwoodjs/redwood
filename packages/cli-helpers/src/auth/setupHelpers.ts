@@ -18,7 +18,6 @@ import {
   addWebPackages,
   generateAuthApiFiles,
   installPackages,
-  printNotes,
 } from './authTasks'
 
 /**
@@ -110,13 +109,17 @@ export const standardAuthHandler = async ({
       addApiPackages(apiPackages),
       installPackages,
       extraTask,
-      notes ? printNotes(notes) : null,
+      notes && {
+        title: 'One more thing...',
+        task: () => {},
+      },
     ].filter(truthy),
     { rendererOptions: { collapse: false } }
   )
 
   try {
     await tasks.run()
+    notes && console.log(`\n   ${notes.join('\n   ')}\n`)
   } catch (e) {
     if (isErrorWithMessage(e)) {
       errorTelemetry(process.argv, e.message)
