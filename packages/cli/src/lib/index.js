@@ -1,3 +1,4 @@
+import { execSync } from 'child_process'
 import fs from 'fs'
 import https from 'https'
 import path from 'path'
@@ -169,6 +170,7 @@ export const saveRemoteFileToDisk = (
 
 export const getInstalledRedwoodVersion = () => {
   try {
+    // @ts-ignore TS Config issue, due to src being the rootDir
     const packageJson = require('../../package.json')
     return packageJson.version
   } catch (e) {
@@ -452,6 +454,66 @@ export const removeRoutesFromRouterTask = (routes, layout) => {
   })
 }
 
+/**
+ *
+ * Use this util to install dependencies on a user's Redwood app
+ *
+ * @example addPackagesTask({
+ * packages: ['fs-extra', 'somePackage@2.1.0'],
+ * side: 'api', // <-- leave empty for project root
+ * devDependency: true
+ * })
+ */
+export const addPackagesTask = ({
+  packages,
+  side = 'project',
+  devDependency = false,
+}) => {
+  const packagesWithSameRWVersion = packages.map((pkg) => {
+    if (pkg.includes('@redwoodjs')) {
+      return `${pkg}@${getInstalledRedwoodVersion()}`
+    } else {
+      return pkg
+    }
+  })
+
+  let installCommand
+  // if web,api
+  if (side !== 'project') {
+    installCommand = [
+      'yarn',
+      [
+        'workspace',
+        side,
+        'add',
+        devDependency && '--dev',
+        ...packagesWithSameRWVersion,
+      ].filter(Boolean),
+    ]
+  } else {
+    const stdout = execSync('yarn --version')
+
+    const yarnVersion = stdout.toString().trim()
+
+    installCommand = [
+      'yarn',
+      [
+        yarnVersion.startsWith('1') && '-W',
+        'add',
+        devDependency && '--dev',
+        ...packagesWithSameRWVersion,
+      ].filter(Boolean),
+    ]
+  }
+
+  return {
+    title: `Adding dependencies to ${side}`,
+    task: async () => {
+      await execa(...installCommand)
+    },
+  }
+}
+
 export const runCommandTask = async (commands, { verbose }) => {
   const tasks = new Listr(
     commands.map(({ title, cmd, args, opts = {}, cwd = getPaths().base }) => ({
@@ -505,4 +567,21 @@ export const usingVSCode = () => {
   const redwoodPaths = getPaths()
   const VS_CODE_PATH = path.join(redwoodPaths.base, '.vscode')
   return fs.existsSync(VS_CODE_PATH)
+}
+
+export const addEnvVarTask = (name, value, comment) => {
+  return {
+    title: `Adding ${name} var to .env...`,
+    task: () => {
+      const envPath = path.join(getPaths().base, '.env')
+      const content = [comment && `# ${comment}`, `${name}=${value}`, ''].flat()
+      let envFile = ''
+
+      if (fs.existsSync(envPath)) {
+        envFile = fs.readFileSync(envPath).toString() + '\n'
+      }
+
+      fs.writeFileSync(envPath, envFile + content.join('\n'))
+    },
+  }
 }
