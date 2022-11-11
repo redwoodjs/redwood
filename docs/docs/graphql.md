@@ -1197,39 +1197,132 @@ export const handler = createGraphQLHandler({
 
 ### Block field suggestions
 
-Prevent returning field suggestions and leaking your schema to unauthorized actors.
+By default, GraphQL suggests field names to be used when wrongs ones are provided in a request. By leveraging this in production, an attacker can use a bruteforce attack to discover your schema and gain access to unauthorized endpoints.
 
-In production, this can lead to Schema leak even if the introspection is disabled.
+> To mitigate the risk of this attack, RedwoodJS by default has [Block Field Suggestions](https://escape-technologies.github.io/graphql-armor/docs/plugins/block-field-suggestions) enabled. This will prevent returning field suggestions and leaking your schema to unauthorized actors or attackers.
 
-### Character Limit
+You can change the default settings via the `graphQLArmorConfig` setting when creating your GraphQL handler.
 
-Limit number of characters in a GraphQL document.
+Under `graphQLArmorConfig` configure `blockFieldSuggestions` property using the following [configuration options](https://escape-technologies.github.io/graphql-armor/docs/plugins/block-field-suggestions#configuring-for-graphql-armor).
 
-This help preventing DoS attacks by limiting the size of the document.
+```jsx
+// ...
+export const handler = createGraphQLHandler({
+  loggerConfig: { logger, options: { query: true } },
+  graphQLArmorConfig: { blockFieldSuggestions: { enabled: false} },
+  // ...
+})
+```
 
 ### Cost limit
 
-Limit the complexity of a GraphQL document.
+To ensure stability for your GraphQL server it is prudent to limit the amount of complex data an actor can request from your API. An attacker can attempt to degrade performance or crash your GraphQL server by requesting many fields that require more resources to retrieve.
+
+> To reduce the likelihood of this attack, RedwoodJS by default has [Cost Limit](https://escape-technologies.github.io/graphql-armor/docs/plugins/cost-limit/) configured for all requests with modest values set.
+
+You can change the default settings via the `graphQLArmorConfig` setting when creating your GraphQL handler.
+
+Under `graphQLArmorConfig` configure `costLimit` property and setting the cost for retrieving objects, scalars, etc. For additional configuration options, please see [GraphQL Armor costLimit configuration options](https://escape-technologies.github.io/graphql-armor/docs/plugins/cost-limit#configuring-for-graphql-armor).
+
+```jsx
+// ...
+export const handler = createGraphQLHandler({
+  loggerConfig: { logger, options: { query: true } },
+  graphQLArmorConfig: { costLimit: { maxCost: 4000, objectCost: 4 } },
+  // ...
+})
+```
 
 ### Max Aliases
 
-Limit the number of aliases in a GraphQL document.
+GraphQL offers the ability alias fields names in the situation when an actor would like to query for the same field multiple times in the same request.
 
-It is used to prevent DOS attack or heap overflow.
+For example:
+```jsx
+query aliasUsers{
+  bob: user(id: 1) {
+    name
+  }
+  alice: user(id: 2) {
+    name
+  }
+}
+```
+
+But this feature can be abused by an attacker to perform a batch attack. Allowing them to perform as many queries as they would like in a single request bypassing any rate limit rules. An attacker can then perform a denial of service attack or attempt to brute force login attempts like in the example below. Please read [Addressing the Security concerns of GraphQL Aliases](https://escape.tech/blog/graphql-batch-attacks-cause-dos/) for a deeper dive on the topic.
+
+```
+mutation {
+	login(username: "Tom", password: "password")
+    second: login(username: "Tom", password: "password123")
+    third: login(username: "Tom", password: "TomTheBest")
+}
+```
+> To mitigate this sort of attack, RedwoodJS by default sets the [Max Aliases](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-aliases) to 15.
+
+You can change the default settings via the `graphQLArmorConfig` setting when creating your GraphQL handler.
+
+Under `graphQLArmorConfig` you can configure the maximum number of aliases using the `maxAliases` property and setting `n` . For additional configuration options, please see [GraphQL Armor maxAliases configuration options](https://escape-technologies.github.io/graphql-armor/docs/plugins/cost-limit#configuring-for-graphql-armor).
+
+```jsx
+// ...
+export const handler = createGraphQLHandler({
+  loggerConfig: { logger, options: { query: true } },
+  graphQLArmorConfig: { maxAliases: { n: 10 } },
+  // ...
+})
+```
 
 ### Max Directives
 
-Limit the number of directives in a GraphQL document.
+A directive is a function that decorates a portion of GraphQL schema to extend its functionality. As an example, `@skip(if: $boolean)` will ignore the field in a resolved query if the boolean value is true.
 
-It is used to prevent DOS attack, heap overflow or server overloading.
+For example:
+```jsx
+query student($needMajor: Boolean!) {
+  name
+  age
+  major @skip(if: $needMajor)
+}
+```
+
+But if an attacker specifies to many directives in a single query then they can overload the query parser resulting in a DOS attack.
+
+> To mitigate this sort of attack, RedwoodJS by default sets a [Max Directive](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-directives) count of 50.
+
+You can change the default settings via the `graphQLArmorConfig` setting when creating your GraphQL handler.
+
+Under `graphQLArmorConfig` you can configure the maximum number of directives using the `maxDirectives` property and setting `n` . For additional configuration options, please see [GraphQL Armor maxDirectives configuration options](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-directives#configuring-for-graphql-armor).
+
+```jsx
+// ...
+export const handler = createGraphQLHandler({
+  loggerConfig: { logger, options: { query: true } },
+  graphQLArmorConfig: { maxDirectives: { n: 40 } },
+  // ...
+})
+```
 
 ### Max Tokens
 
-Limit the number of tokens in a GraphQL document.
+Limit the number of tokens aka fields in a GraphQL document.
 
-It is used to prevent DOS attack, heap overflow or server overloading.
+The GQL server parser is limited on the amount of fields that can be fetched. An attacker can use this limitation to request enough fields such that it causes a DOS attack, heap overflow, or server overloading.
 
-The token limit is often limited by the graphql parser, but this is not always the case and would lead to a fatal heap overflow.
+> To mitigate this sort of attack, RedwoodJS by default sets the [Max Tokens](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-tokens) count of 1,000.
+
+You can change the default settings via the `graphQLArmorConfig` setting when creating your GraphQL handler.
+
+Under `graphQLArmorConfig` you can configure the maximum number of directives using the `maxTokens` property and setting `n` . For additional configuration options, please see [GraphQL Armor maxTokens configuration options](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-tokens#configuring-for-graphql-armor).
+
+```jsx
+// ...
+export const handler = createGraphQLHandler({
+  loggerConfig: { logger, options: { query: true } },
+  graphQLArmorConfig: { maxTokens: { n: 900 } },
+  // ...
+})
+```
 
 ### Error Masking
 
