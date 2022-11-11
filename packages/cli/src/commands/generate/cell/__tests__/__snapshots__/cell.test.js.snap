@@ -313,7 +313,7 @@ export const Success = ({ userProfile }) => {
 
 exports[`creates a cell mock with a camelCase word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => ({
+export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
     id: 42,
   },
@@ -323,7 +323,7 @@ export const standard = () => ({
 
 exports[`creates a cell mock with a kebabCase word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => ({
+export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
     id: 42,
   },
@@ -333,7 +333,7 @@ export const standard = () => ({
 
 exports[`creates a cell mock with a multi word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => ({
+export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
     id: 42,
   },
@@ -343,7 +343,7 @@ export const standard = () => ({
 
 exports[`creates a cell mock with a single word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => ({
+export const standard = (/* vars, { ctx, req } */) => ({
   user: {
     id: 42,
   },
@@ -353,7 +353,7 @@ export const standard = () => ({
 
 exports[`creates a cell mock with a snakeCase word name 1`] = `
 "// Define your own mock data here:
-export const standard = () => ({
+export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
     id: 42,
   },
@@ -800,7 +800,7 @@ export default { title: 'Cells/AddressCell' }
 
 exports[`generates a cell with a string primary id key 4`] = `
 "// Define your own mock data here:
-export const standard = () => ({
+export const standard = (/* vars, { ctx, req } */) => ({
   address: {
     id: '42',
   },
@@ -908,7 +908,7 @@ export default { title: 'Cells/AddressesCell' }
 
 exports[`generates list a cell with a string primary id keys 4`] = `
 "// Define your own mock data here:
-export const standard = () => ({
+export const standard = (/* vars, { ctx, req } */) => ({
   addresses: [{ id: '42' }, { id: '43' }, { id: '44' }],
 })
 "
@@ -1014,7 +1014,7 @@ export default { title: 'Cells/MembersCell' }
 
 exports[`generates list cells if list flag passed in 4`] = `
 "// Define your own mock data here:
-export const standard = () => ({
+export const standard = (/* vars, { ctx, req } */) => ({
   members: [{ id: 42 }, { id: 43 }, { id: 44 }],
 })
 "
