@@ -1249,13 +1249,13 @@ query aliasUsers{
 }
 ```
 
-But this feature can be abused by an attacker to perform a batch attack. Allowing them to perform as many queries as they would like in a single request bypassing any rate limit rules. An attacker can then perform a denial of service attack or attempt to brute force login attempts like in the example below. Please read [Addressing the Security concerns of GraphQL Aliases](https://escape.tech/blog/graphql-batch-attacks-cause-dos/) for a deeper dive on the topic.
+But this feature can be abused by an attacker to perform a batch attack. Allowing them to perform as many queries as they would like in a single request bypassing any rate limit rules. An attacker can then perform a DOS attack or attempt to brute force login attempts like in the example below. Please read [Addressing the Security concerns of GraphQL Aliases](https://escape.tech/blog/graphql-batch-attacks-cause-dos/) for a deeper dive on the topic.
 
 ```
 mutation {
-	login(username: "Tom", password: "password")
-    second: login(username: "Tom", password: "password123")
-    third: login(username: "Tom", password: "TomTheBest")
+  login(username: "Tom", password: "password")
+  second: login(username: "Tom", password: "password123")
+  third: login(username: "Tom", password: "TomTheBest")
 }
 ```
 > To mitigate this sort of attack, RedwoodJS by default sets the [Max Aliases](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-aliases) to 15.
@@ -1305,9 +1305,7 @@ export const handler = createGraphQLHandler({
 
 ### Max Tokens
 
-Limit the number of tokens aka fields in a GraphQL document.
-
-The GQL server parser is limited on the amount of fields that can be fetched. An attacker can use this limitation to request enough fields such that it causes a DOS attack, heap overflow, or server overloading.
+The GQL server parser is limited on the amount of fields (aka tokens) that can be fetched in a GraphQL document. An attacker can use this limitation to request enough fields such that it causes a DOS attack, heap overflow, or server overloading.
 
 > To mitigate this sort of attack, RedwoodJS by default sets the [Max Tokens](https://escape-technologies.github.io/graphql-armor/docs/plugins/max-tokens) count of 1,000.
 
