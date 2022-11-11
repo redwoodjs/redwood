@@ -30,3 +30,20 @@ export const getInstalledRedwoodVersion = () => {
     process.exit(1)
   }
 }
+
+export const addEnvVarTask = (name: string, value: string, comment: string) => {
+  return {
+    title: `Adding ${name} var to .env...`,
+    task: () => {
+      const envPath = path.join(getPaths().base, '.env')
+      const content = [comment && `# ${comment}`, `${name}=${value}`, ''].flat()
+      let envFile = ''
+
+      if (fs.existsSync(envPath)) {
+        envFile = fs.readFileSync(envPath).toString() + '\n'
+      }
+
+      fs.writeFileSync(envPath, envFile + content.join('\n'))
+    },
+  }
+}
