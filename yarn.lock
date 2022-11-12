@@ -5303,15 +5303,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:14.8.6":
-  version: 14.8.6
-  resolution: "@nrwl/cli@npm:14.8.6"
-  dependencies:
-    nx: 14.8.6
-  checksum: b5bafb16f4070d7143051fd98c224e450e66d9f9d577017897b448de8077eb339f2b4ed1ee3b0a0217834545d580bf5e000dc0e3839b9a08c17f7175e087652b
-  languageName: node
-  linkType: hard
-
 "@nrwl/cli@npm:15.0.13":
   version: 15.0.13
   resolution: "@nrwl/cli@npm:15.0.13"
@@ -5351,17 +5342,6 @@ __metadata:
   bin:
     nx-cloud: bin/nx-cloud.js
   checksum: 1669c7e654e0adb765935f6297ed12154a76ff88d92398fbfddb31e5587f9945d3b94cffd1f64633cc265f44018e24cee8515080e2593889cec7389c670f94dd
-  languageName: node
-  linkType: hard
-
-"@nrwl/tao@npm:14.8.6":
-  version: 14.8.6
-  resolution: "@nrwl/tao@npm:14.8.6"
-  dependencies:
-    nx: 14.8.6
-  bin:
-    tao: index.js
-  checksum: 7cb7950dd7a6cb98f591d31e6771cca9b014ec53075a07af94f1fd2abd24a7404844ffd03d10a1e4035ad29fee293e34da6933a64ad6bcbb5db7a10217866cba
   languageName: node
   linkType: hard
 
@@ -23750,59 +23730,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:14.8.6":
-  version: 14.8.6
-  resolution: "nx@npm:14.8.6"
-  dependencies:
-    "@nrwl/cli": 14.8.6
-    "@nrwl/tao": 14.8.6
-    "@parcel/watcher": 2.0.4
-    "@yarnpkg/lockfile": ^1.1.0
-    "@yarnpkg/parsers": ^3.0.0-rc.18
-    "@zkochan/js-yaml": 0.0.6
-    axios: ^1.0.0
-    chalk: 4.1.0
-    chokidar: ^3.5.1
-    cli-cursor: 3.1.0
-    cli-spinners: 2.6.1
-    cliui: ^7.0.2
-    dotenv: ~10.0.0
-    enquirer: ~2.3.6
-    fast-glob: 3.2.7
-    figures: 3.2.0
-    flat: ^5.0.2
-    fs-extra: ^10.1.0
-    glob: 7.1.4
-    ignore: ^5.0.4
-    js-yaml: 4.1.0
-    jsonc-parser: 3.2.0
-    minimatch: 3.0.5
-    npm-run-path: ^4.0.1
-    open: ^8.4.0
-    semver: 7.3.4
-    string-width: ^4.2.3
-    strong-log-transformer: ^2.1.0
-    tar-stream: ~2.2.0
-    tmp: ~0.2.1
-    tsconfig-paths: ^3.9.0
-    tslib: ^2.3.0
-    v8-compile-cache: 2.3.0
-    yargs: ^17.4.0
-    yargs-parser: 21.0.1
-  peerDependencies:
-    "@swc-node/register": ^1.4.2
-    "@swc/core": ^1.2.173
-  peerDependenciesMeta:
-    "@swc-node/register":
-      optional: true
-    "@swc/core":
-      optional: true
-  bin:
-    nx: bin/nx.js
-  checksum: 9266ee5b9a6d1fa9212c42959cf6ced8fbd8cfd1c4e26e9851ff9333f2b50f12a491f90d87decf2c633f33094991913cab3442658d45a2eae85e7dea94e6b0f2
-  languageName: node
-  linkType: hard
-
 "nx@npm:15.0.13, nx@npm:>=14.8.6 < 16":
   version: 15.0.13
   resolution: "nx@npm:15.0.13"
@@ -27421,7 +27348,7 @@ __metadata:
     node-notifier: 10.0.1
     nodemon: 2.0.20
     npm-packlist: 5.1.3
-    nx: 14.8.6
+    nx: 15.0.13
     octokit: 2.0.8
     ora: 5.4.1
     prompts: 2.4.2
@@ -32178,13 +32105,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:21.0.1":
-  version: 21.0.1
-  resolution: "yargs-parser@npm:21.0.1"
-  checksum: 384ca19e113a053bb7858cf47f891e630c10ea6ad91f9ad7cae84ea1cdfb09b155a2d0fa97b51116ee6f01e038faaa6c46964953afecd453fa64a761bb87475f
-  languageName: node
-  linkType: hard
-
 "yargs-parser@npm:21.1.1, yargs-parser@npm:>=21.0.1, yargs-parser@npm:^21.1.1":
   version: 21.1.1
   resolution: "yargs-parser@npm:21.1.1"
@@ -32209,7 +32129,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.6.2, yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.4.0, yargs@npm:^17.6.2":
+"yargs@npm:17.6.2, yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.6.2":
   version: 17.6.2
   resolution: "yargs@npm:17.6.2"
   dependencies:
