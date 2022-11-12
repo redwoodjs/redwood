@@ -54,7 +54,7 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "@babel/runtime-corejs3": "7.20.1",
-    "@nrwl/nx-cloud": "14.7.0",
+    "@nrwl/nx-cloud": "15.0.2",
     "@playwright/test": "1.27.1",
     "@replayio/playwright": "0.3.2",
     "@testing-library/jest-dom": "5.16.5",
