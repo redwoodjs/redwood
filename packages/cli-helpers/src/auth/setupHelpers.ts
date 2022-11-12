@@ -111,7 +111,11 @@ export const standardAuthHandler = async ({
       extraTask,
       notes && {
         title: 'One more thing...',
-        task: () => {},
+        task: () => {
+          // Can't console.log the notes here because of
+          // https://github.com/cenk1cenk2/listr2/issues/296
+          // So we do it after the tasks have all finished instead
+        },
       },
     ].filter(truthy),
     { rendererOptions: { collapse: false } }
