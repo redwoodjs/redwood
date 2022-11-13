@@ -591,7 +591,7 @@ The api-side is now ready to go.
 
 ### App.js Updates
 
-If you generated your login/signup pages with `yarn rw g dbAuth --webAuthn` then all of these changes are in place and you can start using WebAuthn right away! Otherwise, read on.
+If you generated your login/signup pages with `yarn rw g dbAuth --webauthn` then all of these changes are in place and you can start using WebAuthn right away! Otherwise, read on.
 
 First you'll need to import the `WebAuthnClient` and give it to the `<AuthProvider>` component:
 
@@ -626,7 +626,7 @@ const App = () => (
 export default App
 ```
 
-Now you're ready to access the functionality added by the WebAuthn client. The easiest way to do this would be to generate a new `LoginPage` with `yarn rw g dbAuth --webAuthn`, even if it's in a brand new, throwaway app, and copy the pieces you need (or just replace your existing login page with it).
+Now you're ready to access the functionality added by the WebAuthn client. The easiest way to do this would be to generate a new `LoginPage` with `yarn rw g dbAuth --webauthn`, even if it's in a brand new, throwaway app, and copy the pieces you need (or just replace your existing login page with it).
 
 The gist of building a login flow is that you now need to stop after username/password authentication and, if the browser supports WebAuthn, give the user the chance to register their device. If they come to the login page and already have the `webAuthn` cookie then you can show the prompt to authenticate, skipping the username/password form completely. This is all handled in the LoginPage template that Redwood generates for you.
 
