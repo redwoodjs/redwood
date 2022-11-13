@@ -47,7 +47,7 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "@babel/runtime-corejs3": "7.20.1",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.8",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.9",
     "@redwoodjs/cli": "3.2.0",
     "@redwoodjs/eslint-config": "3.2.0",
     "@redwoodjs/internal": "3.2.0",
