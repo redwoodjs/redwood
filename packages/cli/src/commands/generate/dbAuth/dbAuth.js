@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import { camelCase } from 'camel-case'
 import Enquirer from 'enquirer'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
@@ -134,10 +135,12 @@ export const files = ({
   passwordLabel = passwordLabel || 'password'
 
   const templateVars = {
-    usernameLowercase: usernameLabel.toLowerCase(),
-    usernameTitlecase: titleCase(usernameLabel),
-    passwordLowercase: passwordLabel.toLowerCase(),
-    passwordTitlecase: titleCase(passwordLabel),
+    usernameLowerCase: usernameLabel.toLowerCase(),
+    usernameCamelCase: camelCase(usernameLabel),
+    usernameTitleCase: titleCase(usernameLabel),
+    passwordLowerCase: passwordLabel.toLowerCase(),
+    passwordCamelCase: camelCase(passwordLabel),
+    passwordTitleCase: titleCase(passwordLabel),
   }
 
   if (!skipForgot) {

@@ -24,10 +24,10 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on ${usernameLowercase} box on page load
-  const usernameRef = useRef<HTMLInputElement>(null)
+  // focus on ${usernameLowerCase} box on page load
+  const ${usernameCamelCase}Ref = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    ${usernameCamelCase}Ref.current?.focus()
   }, [])
 
   const onSubmit = async (data: Record<string, string>) => {
@@ -63,17 +63,17 @@ const SignupPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    ${usernameTitlecase}
+                    ${usernameTitleCase}
                   </Label>
                   <TextField
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={${usernameCamelCase}Ref}
                     validation={{
                       required: {
                         value: true,
-                        message: '${usernameTitlecase} is required',
+                        message: '${usernameTitleCase} is required',
                       },
                     }}
                   />
@@ -84,7 +84,7 @@ const SignupPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    ${passwordTitlecase}
+                    ${passwordTitleCase}
                   </Label>
                   <PasswordField
                     name="password"
@@ -94,7 +94,7 @@ const SignupPage = () => {
                     validation={{
                       required: {
                         value: true,
-                        message: '${passwordTitlecase} is required',
+                        message: '${passwordTitleCase} is required',
                       },
                     }}
                   />

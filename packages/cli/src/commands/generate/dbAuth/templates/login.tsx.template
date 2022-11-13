@@ -24,9 +24,9 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef<HTMLInputElement>(null)
+  const ${usernameCamelCase}Ref = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    ${usernameCamelCase}Ref.current?.focus()
   }, [])
 
   const onSubmit = async (data: Record<string, string>) => {
@@ -61,17 +61,17 @@ const LoginPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    ${usernameTitlecase}
+                    ${usernameTitleCase}
                   </Label>
                   <TextField
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={${usernameCamelCase}Ref}
                     validation={{
                       required: {
                         value: true,
-                        message: '${usernameTitlecase} is required',
+                        message: '${usernameTitleCase} is required',
                       },
                     }}
                   />
@@ -83,7 +83,7 @@ const LoginPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    ${passwordTitlecase}
+                    ${passwordTitleCase}
                   </Label>
                   <PasswordField
                     name="password"
@@ -93,7 +93,7 @@ const LoginPage = () => {
                     validation={{
                       required: {
                         value: true,
-                        message: '${passwordTitlecase} is required',
+                        message: '${passwordTitleCase} is required',
                       },
                     }}
                   />
@@ -103,7 +103,7 @@ const LoginPage = () => {
                       to={routes.forgotPassword()}
                       className="rw-forgot-link"
                     >
-                      Forgot ${passwordTitlecase}?
+                      Forgot ${passwordTitleCase}?
                     </Link>
                   </div>
 
