@@ -43,6 +43,10 @@ Now you have both Node and npm installed! Redwood also uses yarn, which you can 
 
 ![4-install_yarn.png](https://user-images.githubusercontent.com/18013532/146685297-b361ebea-7229-4d8c-bc90-472773d06816.png)
 
+### Microsoft Visual C++ Redistributable
+
+If your machine does not have Microsoft Visual C++ Redistributable, then you need to install it from [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022)
+
 ## Congrats!
 
 You now have everything ready to build your Redwood app.
@@ -50,7 +54,6 @@ You now have everything ready to build your Redwood app.
 Next, you should start the amazing [**Redwood Tutorial**](tutorial/chapter1/installation.md) to learn how to use the framework.
 
 Or run `yarn create redwood-app myApp` to get started with a new project.
-
 
 >⚠️ Heads Up
 On Windows Git Bash, `cd myapp` and `cd myApp` will select the same directory because Windows is case-insensitive. But make sure you type the original capitalization to avoid strange errors in your Redwood project.
