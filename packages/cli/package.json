@@ -40,7 +40,7 @@
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",
-    "concurrently": "7.4.0",
+    "concurrently": "7.5.0",
     "configstore": "3.1.5",
     "core-js": "3.26.0",
     "cross-env": "7.0.3",
@@ -63,11 +63,11 @@
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
-    "yargs": "17.6.0"
+    "yargs": "17.6.2"
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
-    "@babel/core": "7.19.6",
+    "@babel/core": "7.20.2",
     "jest": "29.3.1",
     "typescript": "4.7.4"
   },

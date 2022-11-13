@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@babel/cli": "7.19.3",
-    "@babel/core": "7.19.6",
-    "@babel/plugin-transform-typescript": "7.20.0",
+    "@babel/core": "7.20.2",
+    "@babel/plugin-transform-typescript": "7.20.2",
     "@babel/runtime-corejs3": "7.20.1",
     "@iarna/toml": "2.2.5",
     "@vscode/ripgrep": "1.14.2",
@@ -39,7 +39,7 @@
     "prettier": "2.7.1",
     "tasuku": "2.0.0",
     "typescript": "4.7.4",
-    "yargs": "17.6.0"
+    "yargs": "17.6.2"
   },
   "devDependencies": {
     "@types/babel__core": "7.1.19",
