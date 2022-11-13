@@ -14,80 +14,53 @@ import Enquirer from 'enquirer'
 import { getPaths } from '../../../../lib'
 import * as dbAuth from '../dbAuth'
 
+// Mock files needed for each test
+const mockFiles = {}
+
+const dbAuthTemplateFiles = [
+  'forgotPassword.tsx.template',
+  'login.tsx.template',
+  'login.webAuthn.tsx.template',
+  'resetPassword.tsx.template',
+  'signup.tsx.template',
+]
+dbAuthTemplateFiles.forEach((templateFilename) => {
+  mockFiles[path.join(__dirname, `../templates/${templateFilename}`)] = realfs
+    .readFileSync(path.join(__dirname, `../templates/${templateFilename}`))
+    .toString()
+})
+
+mockFiles[
+  path.join(__dirname, `../../scaffold/templates/assets/scaffold.css.template`)
+] = realfs
+  .readFileSync(
+    path.join(
+      __dirname,
+      `../../scaffold/templates/assets/scaffold.css.template`
+    )
+  )
+  .toString()
+
+mockFiles[getPaths().web.routes] = realfs
+  .readFileSync(
+    path.join(
+      __dirname,
+      `../../../../../../../__fixtures__/example-todo-main/web/src/Routes.js`
+    )
+  )
+  .toString()
+
+mockFiles[getPaths().web.app] = realfs
+  .readFileSync(
+    path.join(
+      __dirname,
+      `../../../../../../../__fixtures__/example-todo-main/web/src/App.js`
+    )
+  )
+  .toString()
+
 describe('dbAuth', () => {
   beforeEach(() => {
-    // dbAuth template files
-    const templateFilenames = [
-      'forgotPassword.tsx.template',
-      'login.tsx.template',
-      'login.webAuthn.tsx.template',
-      'resetPassword.tsx.template',
-      'signup.tsx.template',
-    ]
-    let mockFiles = {}
-    templateFilenames.forEach((templateFilename) => {
-      mockFiles[path.join(__dirname, `../templates/${templateFilename}`)] =
-        realfs
-          .readFileSync(
-            path.join(__dirname, `../templates/${templateFilename}`)
-          )
-          .toString()
-    })
-
-    // css scaffold files
-    mockFiles[
-      path.join(
-        __dirname,
-        `../../scaffold/templates/assets/scaffold.css.template`
-      )
-    ] = realfs
-      .readFileSync(
-        path.join(
-          __dirname,
-          `../../scaffold/templates/assets/scaffold.css.template`
-        )
-      )
-      .toString()
-
-    // routes file
-    mockFiles[getPaths().web.routes] = [
-      "import { Router, Route } from '@redwoodjs/router'",
-      '',
-      'const Routes = () => {',
-      '  return (',
-      '    <Router>',
-      '      <Route path="/about" page={AboutPage} name="about" />',
-      '      <Route notfound page={NotFoundPage} />',
-      '    </Router>',
-      '  )',
-      '}',
-      '',
-      'export default Routes',
-    ].join('\n')
-
-    // appjs file
-    mockFiles[
-      getPaths().web.app
-    ] = `import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-    import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-
-    import FatalErrorPage from 'src/pages/FatalErrorPage'
-    import Routes from 'src/Routes'
-
-    import './index.css'
-
-    const App = () => (
-      <FatalErrorBoundary page={FatalErrorPage}>
-        <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-          <RedwoodApolloProvider>
-            <Routes />
-          </RedwoodApolloProvider>
-        </RedwoodProvider>
-      </FatalErrorBoundary>
-    )
-
-    export default App`
-
     fs.__setMockFiles(mockFiles)
   })
 

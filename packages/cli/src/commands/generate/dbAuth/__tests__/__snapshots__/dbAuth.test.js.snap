@@ -3,11 +3,12 @@
 exports[`dbAuth handler produces the correct files with custom password set via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -98,7 +99,6 @@ exports[`dbAuth handler produces the correct files with custom password set via 
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -110,6 +110,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -231,7 +233,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with custom password set via flag 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -242,6 +243,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -354,7 +357,6 @@ exports[`dbAuth handler produces the correct files with custom password set via 
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -366,6 +368,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -482,11 +486,12 @@ export default SignupPage
 exports[`dbAuth handler produces the correct files with custom password set via prompt 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -577,7 +582,6 @@ exports[`dbAuth handler produces the correct files with custom password set via 
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -589,6 +593,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -710,7 +716,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with custom password set via prompt 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -721,6 +726,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -833,7 +840,6 @@ exports[`dbAuth handler produces the correct files with custom password set via 
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -845,6 +851,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -961,11 +969,12 @@ export default SignupPage
 exports[`dbAuth handler produces the correct files with custom username and password set via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -1056,7 +1065,6 @@ exports[`dbAuth handler produces the correct files with custom username and pass
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -1068,6 +1076,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -1189,7 +1199,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with custom username and password set via flag 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -1200,6 +1209,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -1312,7 +1323,6 @@ exports[`dbAuth handler produces the correct files with custom username and pass
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -1324,6 +1334,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -1440,11 +1452,12 @@ export default SignupPage
 exports[`dbAuth handler produces the correct files with custom username and password set via prompt 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -1535,7 +1548,6 @@ exports[`dbAuth handler produces the correct files with custom username and pass
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -1547,6 +1559,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -1668,7 +1682,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with custom username and password set via prompt 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -1679,6 +1692,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -1791,7 +1806,6 @@ exports[`dbAuth handler produces the correct files with custom username and pass
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -1803,6 +1817,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -1919,11 +1935,12 @@ export default SignupPage
 exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -2014,7 +2031,6 @@ exports[`dbAuth handler produces the correct files with custom username and pass
 "import { useRef, useState } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -2026,6 +2042,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const WELCOME_MESSAGE = 'Welcome back!'
 const REDIRECT = routes.home()
@@ -2282,7 +2300,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via flag 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -2293,6 +2310,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -2405,7 +2424,6 @@ exports[`dbAuth handler produces the correct files with custom username and pass
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -2417,6 +2435,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -2533,11 +2553,12 @@ export default SignupPage
 exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -2628,7 +2649,6 @@ exports[`dbAuth handler produces the correct files with custom username and pass
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -2640,6 +2660,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -2761,7 +2783,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with custom username and password set via prompt and with webauthn enabled via prompt 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -2772,6 +2793,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -2884,7 +2907,6 @@ exports[`dbAuth handler produces the correct files with custom username and pass
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -2896,6 +2918,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -3012,11 +3036,12 @@ export default SignupPage
 exports[`dbAuth handler produces the correct files with custom username set via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -3111,7 +3136,6 @@ exports[`dbAuth handler produces the correct files with custom username set via 
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -3123,6 +3147,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -3244,7 +3270,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with custom username set via flag 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -3255,6 +3280,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -3369,7 +3396,6 @@ exports[`dbAuth handler produces the correct files with custom username set via 
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -3381,6 +3407,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -3497,11 +3525,12 @@ export default SignupPage
 exports[`dbAuth handler produces the correct files with custom username set via prompt 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -3596,7 +3625,6 @@ exports[`dbAuth handler produces the correct files with custom username set via 
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -3608,6 +3636,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -3729,7 +3759,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with custom username set via prompt 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -3740,6 +3769,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -3854,7 +3885,6 @@ exports[`dbAuth handler produces the correct files with custom username set via 
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -3866,6 +3896,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -3982,11 +4014,12 @@ export default SignupPage
 exports[`dbAuth handler produces the correct files with default labels 1`] = `
 "import { useEffect, useRef } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()
@@ -4081,7 +4114,6 @@ exports[`dbAuth handler produces the correct files with default labels 2`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -4093,6 +4125,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -4214,7 +4248,6 @@ export default LoginPage
 exports[`dbAuth handler produces the correct files with default labels 3`] = `
 "import { useEffect, useRef, useState } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -4225,6 +4258,8 @@ import {
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
@@ -4339,7 +4374,6 @@ exports[`dbAuth handler produces the correct files with default labels 4`] = `
 "import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -4351,6 +4385,8 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
