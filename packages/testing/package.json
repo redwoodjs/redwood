@@ -57,7 +57,7 @@
     "jest": "29.3.1",
     "jest-environment-jsdom": "29.3.1",
     "jest-watch-typeahead": "2.2.0",
-    "msw": "0.47.4",
+    "msw": "0.48.2",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },
