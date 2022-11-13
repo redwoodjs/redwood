@@ -270,9 +270,9 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -284,7 +284,7 @@ const ResetPasswordPage = ({ resetToken }) => {
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -319,7 +319,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
@@ -753,9 +753,9 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -767,7 +767,7 @@ const ResetPasswordPage = ({ resetToken }) => {
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -802,7 +802,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
@@ -985,9 +985,9 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1032,7 +1032,7 @@ const ForgotPasswordPage = () => {
                       name="username"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
@@ -1088,9 +1088,9 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1131,7 +1131,7 @@ const LoginPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -1236,9 +1236,9 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1250,7 +1250,7 @@ const ResetPasswordPage = ({ resetToken }) => {
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -1285,7 +1285,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
@@ -1347,9 +1347,9 @@ const SignupPage = () => {
   }, [isAuthenticated])
 
   // focus on email box on page load
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1391,7 +1391,7 @@ const SignupPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -1468,9 +1468,9 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1515,7 +1515,7 @@ const ForgotPasswordPage = () => {
                       name="username"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
@@ -1571,9 +1571,9 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1614,7 +1614,7 @@ const LoginPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -1719,9 +1719,9 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1733,7 +1733,7 @@ const ResetPasswordPage = ({ resetToken }) => {
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -1768,7 +1768,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
@@ -1830,9 +1830,9 @@ const SignupPage = () => {
   }, [isAuthenticated])
 
   // focus on email box on page load
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1874,7 +1874,7 @@ const SignupPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -1951,9 +1951,9 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -1998,7 +1998,7 @@ const ForgotPasswordPage = () => {
                       name="username"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
@@ -2076,9 +2076,9 @@ const LoginPage = ({ type }) => {
   }, [loading, isAuthenticated])
 
   // focus on the email field as soon as the page loads
-  const usernameRef = useRef()
+  const emailRef = useRef()
   useEffect(() => {
-    usernameRef.current && usernameRef.current.focus()
+    emailRef.current && emailRef.current.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -2113,9 +2113,7 @@ const LoginPage = ({ type }) => {
       navigate(REDIRECT)
     } catch (e) {
       if (e.name === 'WebAuthnDeviceNotFoundError') {
-        toast.error(
-          'Device not found, log in with username/password to continue'
-        )
+        toast.error('Device not found, log in with Email/Secret to continue')
 
         setShowWebAuthn(false)
       } else {
@@ -2155,7 +2153,7 @@ const LoginPage = ({ type }) => {
 
   const RegisterWebAuthnPrompt = () => (
     <div className="rw-webauthn-wrapper">
-      <h2>No more passwords!</h2>
+      <h2>No more Secrets!</h2>
       <p>
         Depending on your device you can log in with your fingerprint, face or
         PIN next time.
@@ -2184,7 +2182,7 @@ const LoginPage = ({ type }) => {
         name="username"
         className="rw-input"
         errorClassName="rw-input rw-input-error"
-        ref={usernameRef}
+        ref={emailRef}
         autoFocus
         validation={{
           required: {
@@ -2337,9 +2335,9 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -2351,7 +2349,7 @@ const ResetPasswordPage = ({ resetToken }) => {
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -2386,7 +2384,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
@@ -2448,9 +2446,9 @@ const SignupPage = () => {
   }, [isAuthenticated])
 
   // focus on email box on page load
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -2492,7 +2490,7 @@ const SignupPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -2569,9 +2567,9 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -2616,7 +2614,7 @@ const ForgotPasswordPage = () => {
                       name="username"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
@@ -2672,9 +2670,9 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -2715,7 +2713,7 @@ const LoginPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -2820,9 +2818,9 @@ const ResetPasswordPage = ({ resetToken }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef(null)
+  const secretRef = useRef(null)
   useEffect(() => {
-    passwordRef.current?.focus()
+    secretRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -2834,7 +2832,7 @@ const ResetPasswordPage = ({ resetToken }) => {
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Password changed!')
+      toast.success('Secret changed!')
       await reauthenticate()
       navigate(routes.login())
     }
@@ -2869,7 +2867,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       disabled={!enabled}
-                      ref={passwordRef}
+                      ref={secretRef}
                       validation={{
                         required: {
                           value: true,
@@ -2931,9 +2929,9 @@ const SignupPage = () => {
   }, [isAuthenticated])
 
   // focus on email box on page load
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -2975,7 +2973,7 @@ const SignupPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -3052,9 +3050,9 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -3103,7 +3101,7 @@ const ForgotPasswordPage = () => {
                       name="username"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
@@ -3159,9 +3157,9 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -3202,7 +3200,7 @@ const LoginPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -3420,9 +3418,9 @@ const SignupPage = () => {
   }, [isAuthenticated])
 
   // focus on email box on page load
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -3464,7 +3462,7 @@ const SignupPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -3541,9 +3539,9 @@ const ForgotPasswordPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef?.current?.focus()
+    emailRef?.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -3592,7 +3590,7 @@ const ForgotPasswordPage = () => {
                       name="username"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
-                      ref={usernameRef}
+                      ref={emailRef}
                       validation={{
                         required: {
                           value: true,
@@ -3648,9 +3646,9 @@ const LoginPage = () => {
     }
   }, [isAuthenticated])
 
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -3691,7 +3689,7 @@ const LoginPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
@@ -3909,9 +3907,9 @@ const SignupPage = () => {
   }, [isAuthenticated])
 
   // focus on email box on page load
-  const usernameRef = useRef(null)
+  const emailRef = useRef(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    emailRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -3953,7 +3951,7 @@ const SignupPage = () => {
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={emailRef}
                     validation={{
                       required: {
                         value: true,
