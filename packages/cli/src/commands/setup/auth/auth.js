@@ -448,10 +448,10 @@ export const handler = async (yargs) => {
       providerData.task,
       {
         title: 'One more thing...',
-        task: (_ctx, task) => {
-          task.title = `One more thing...\n\n   ${providerData.notes.join(
-            '\n   '
-          )}\n`
+        task: () => {
+          // Can't console.log the notes here because of
+          // https://github.com/cenk1cenk2/listr2/issues/296
+          // So we do it after the tasks have all finished instead
         },
       },
     ].filter(Boolean),
@@ -465,6 +465,8 @@ export const handler = async (yargs) => {
     }
 
     await tasks.run()
+    providerData.notes &&
+      console.log(`\n   ${providerData.notes.join('\n   ')}\n`)
   } catch (e) {
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
