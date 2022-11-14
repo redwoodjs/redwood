@@ -1,6 +1,7 @@
 import { CurrentUser } from '../AuthContext'
 
 export type AuthProviderState<TUser> = {
+  client?: any
   loading: boolean
   isAuthenticated: boolean
   userMetadata: null | TUser
