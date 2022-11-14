@@ -7,7 +7,7 @@ import { getPaths } from './paths'
 export interface Route {
   name?: string
   path?: string
-  page?: string // All valid routes should have a page but it's optional here for convenience
+  page?: string
 }
 
 /**
