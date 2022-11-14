@@ -71,15 +71,15 @@ try {
     // `cwd` wasn't set. Odds are they're in a Redwood project,
     // but they could be in ./api or ./web, so we have to find up to be sure.
 
-    const redwoodTomlPath = findup('redwood.toml', { cwd: process.cwd() })
+    const redwoodTOMLPath = findup('redwood.toml', { cwd: process.cwd() })
 
-    if (!redwoodTomlPath) {
+    if (!redwoodTOMLPath) {
       throw new Error(
         `Couldn't find up a "redwood.toml" file from ${process.cwd()}.`
       )
     }
 
-    cwd = path.dirname(redwoodTomlPath)
+    cwd = path.dirname(redwoodTOMLPath)
   }
 } catch (error) {
   console.error(
