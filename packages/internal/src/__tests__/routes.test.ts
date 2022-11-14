@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { getDuplicateRoutes } from '../routes'
+import { getDuplicateRoutes, warningForDuplicateRoutes } from '../routes'
 
 const FIXTURE_PATH_EMPTY_PROJECT = path.resolve(
   __dirname,
@@ -33,6 +33,10 @@ describe('Routes within the empty project', () => {
   it('Detects no duplicate routes', () => {
     expect(getDuplicateRoutes()).toStrictEqual([])
   })
+
+  it('Produces the correct warning message', () => {
+    expect(warningForDuplicateRoutes()).toMatchSnapshot()
+  })
 })
 
 describe('Routes within the example todo project', () => {
@@ -45,6 +49,10 @@ describe('Routes within the example todo project', () => {
 
   it('Detects no duplicate routes', () => {
     expect(getDuplicateRoutes()).toStrictEqual([])
+  })
+
+  it('Produces the correct warning message', () => {
+    expect(warningForDuplicateRoutes()).toMatchSnapshot()
   })
 })
 
@@ -62,6 +70,10 @@ describe('Routes within the example todo with errors project', () => {
       { name: 'home', page: 'HomePage', path: '/' },
     ])
   })
+
+  it('Produces the correct warning message', () => {
+    expect(warningForDuplicateRoutes()).toMatchSnapshot()
+  })
 })
 
 describe('Routes within the test project', () => {
@@ -74,5 +86,9 @@ describe('Routes within the test project', () => {
 
   it('Detects no duplicate routes', () => {
     expect(getDuplicateRoutes()).toStrictEqual([])
+  })
+
+  it('Produces the correct warning message', () => {
+    expect(warningForDuplicateRoutes()).toMatchSnapshot()
   })
 })
