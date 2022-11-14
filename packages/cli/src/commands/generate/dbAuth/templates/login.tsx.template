@@ -30,7 +30,7 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data: Record<string, string>) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({ username: data.${usernameCamelCase}, password: data.${passwordCamelCase} })
 
     if (response.message) {
       toast(response.message)
@@ -57,14 +57,14 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="${usernameCamelCase}"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     ${usernameTitleCase}
                   </Label>
                   <TextField
-                    name="username"
+                    name="${usernameCamelCase}"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={${usernameCamelCase}Ref}
@@ -76,17 +76,17 @@ const LoginPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="${usernameCamelCase}" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="${passwordCamelCase}"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     ${passwordTitleCase}
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="${passwordCamelCase}"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -107,7 +107,7 @@ const LoginPage = () => {
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="${passwordCamelCase}" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>

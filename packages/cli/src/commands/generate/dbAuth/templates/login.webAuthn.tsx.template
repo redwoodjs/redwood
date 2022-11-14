@@ -57,7 +57,7 @@ const LoginPage = ({ type }) => {
     if (webAuthnSupported) {
       setShouldShowWebAuthn(true)
     }
-    const response = await logIn({ ...data })
+    const response = await logIn({ username: data.${usernameCamelCase}, password: data.${passwordCamelCase} })
 
     if (response.message) {
       // auth details good, but user not logged in
@@ -143,14 +143,14 @@ const LoginPage = ({ type }) => {
   const PasswordForm = () => (
     <Form onSubmit={onSubmit} className="rw-form-wrapper">
       <Label
-        name="username"
+        name="${usernameCamelCase}"
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
         ${usernameTitleCase}
       </Label>
       <TextField
-        name="username"
+        name="${usernameCamelCase}"
         className="rw-input"
         errorClassName="rw-input rw-input-error"
         ref={${usernameCamelCase}Ref}
@@ -163,17 +163,17 @@ const LoginPage = ({ type }) => {
         }}
       />
 
-      <FieldError name="username" className="rw-field-error" />
+      <FieldError name="${usernameCamelCase}" className="rw-field-error" />
 
       <Label
-        name="password"
+        name="${passwordCamelCase}"
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
         ${passwordTitleCase}
       </Label>
       <PasswordField
-        name="password"
+        name="${passwordCamelCase}"
         className="rw-input"
         errorClassName="rw-input rw-input-error"
         autoComplete="current-password"
@@ -191,7 +191,7 @@ const LoginPage = ({ type }) => {
         </Link>
       </div>
 
-      <FieldError name="password" className="rw-field-error" />
+      <FieldError name="${passwordCamelCase}" className="rw-field-error" />
 
       <div className="rw-button-group">
         <Submit className="rw-button rw-button-blue">Login</Submit>
