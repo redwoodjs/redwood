@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 
-import { getProject } from '@redwoodjs/structure/dist/index'
+import { getProject } from '@redwoodjs/structure'
 
 import { getPaths } from './paths'
 
