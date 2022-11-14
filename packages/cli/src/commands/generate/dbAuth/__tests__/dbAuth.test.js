@@ -83,6 +83,28 @@ describe('dbAuth', () => {
   })
 
   describe('handler', () => {
+    it('exits when all files are skipped', async () => {
+      const mockExit = jest.spyOn(process, 'exit').mockImplementation()
+      const mockConsoleInfo = jest.spyOn(console, 'info').mockImplementation()
+
+      await dbAuth.handler({
+        listr2: { rendererSilent: true },
+        usernameLabel: 'email',
+        passwordLabel: 'password',
+        webauthn: false,
+        skipForgot: true,
+        skipLogin: true,
+        skipReset: true,
+        skipSignup: true,
+      })
+
+      expect(mockConsoleInfo.mock.calls[0]).toMatchSnapshot()
+      expect(mockExit).toHaveBeenCalledWith(0)
+
+      mockExit.mockRestore()
+      mockConsoleInfo.mockRestore()
+    })
+
     it('prompt for username label', async () => {
       let correctPrompt = false
 

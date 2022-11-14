@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`dbAuth handler exits when all files are skipped 1`] = `
+[
+  "[1m[31m[39m[22m
+[1m[31mNo files to generate.[39m[22m
+[1m[31m[39m[22m",
+]
+`;
+
 exports[`dbAuth handler produces the correct files with custom password set via flag 1`] = `
 "import { useEffect, useRef } from 'react'
 
@@ -128,7 +136,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.username,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -177,14 +188,14 @@ const LoginPage = () => {
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -205,7 +216,7 @@ const LoginPage = () => {
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -278,7 +289,7 @@ const ResetPasswordPage = ({ resetToken }) => {
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
@@ -307,14 +318,14 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
@@ -328,7 +339,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -387,7 +398,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.username,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -437,14 +451,14 @@ const SignupPage = () => {
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -456,7 +470,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -611,7 +625,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.username,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -660,14 +677,14 @@ const LoginPage = () => {
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -688,7 +705,7 @@ const LoginPage = () => {
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -761,7 +778,7 @@ const ResetPasswordPage = ({ resetToken }) => {
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
@@ -790,14 +807,14 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
@@ -811,7 +828,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -870,7 +887,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.username,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -920,14 +940,14 @@ const SignupPage = () => {
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -939,7 +959,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -991,7 +1011,7 @@ const ForgotPasswordPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -1022,14 +1042,14 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       ref={emailRef}
@@ -1041,7 +1061,7 @@ const ForgotPasswordPage = () => {
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -1094,7 +1114,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.email,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -1121,14 +1144,14 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -1140,17 +1163,17 @@ const LoginPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -1171,7 +1194,7 @@ const LoginPage = () => {
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -1244,7 +1267,7 @@ const ResetPasswordPage = ({ resetToken }) => {
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
@@ -1273,14 +1296,14 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
@@ -1294,7 +1317,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -1353,7 +1376,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.email,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -1381,14 +1407,14 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -1400,17 +1426,17 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -1422,7 +1448,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -1474,7 +1500,7 @@ const ForgotPasswordPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -1505,14 +1531,14 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       ref={emailRef}
@@ -1524,7 +1550,7 @@ const ForgotPasswordPage = () => {
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -1577,7 +1603,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.email,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -1604,14 +1633,14 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -1623,17 +1652,17 @@ const LoginPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -1654,7 +1683,7 @@ const LoginPage = () => {
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -1727,7 +1756,7 @@ const ResetPasswordPage = ({ resetToken }) => {
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
@@ -1756,14 +1785,14 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
@@ -1777,7 +1806,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -1836,7 +1865,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.email,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -1864,14 +1896,14 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -1883,17 +1915,17 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -1905,7 +1937,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -1957,7 +1989,7 @@ const ForgotPasswordPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -1988,14 +2020,14 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       ref={emailRef}
@@ -2007,7 +2039,7 @@ const ForgotPasswordPage = () => {
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -2087,7 +2119,10 @@ const LoginPage = ({ type }) => {
     if (webAuthnSupported) {
       setShouldShowWebAuthn(true)
     }
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.email,
+      password: data.secret,
+    })
 
     if (response.message) {
       // auth details good, but user not logged in
@@ -2172,14 +2207,14 @@ const LoginPage = ({ type }) => {
   const PasswordForm = () => (
     <Form onSubmit={onSubmit} className="rw-form-wrapper">
       <Label
-        name="username"
+        name="email"
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
         Email
       </Label>
       <TextField
-        name="username"
+        name="email"
         className="rw-input"
         errorClassName="rw-input rw-input-error"
         ref={emailRef}
@@ -2192,17 +2227,17 @@ const LoginPage = ({ type }) => {
         }}
       />
 
-      <FieldError name="username" className="rw-field-error" />
+      <FieldError name="email" className="rw-field-error" />
 
       <Label
-        name="password"
+        name="secret"
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
         Secret
       </Label>
       <PasswordField
-        name="password"
+        name="secret"
         className="rw-input"
         errorClassName="rw-input rw-input-error"
         autoComplete="current-password"
@@ -2220,7 +2255,7 @@ const LoginPage = ({ type }) => {
         </Link>
       </div>
 
-      <FieldError name="password" className="rw-field-error" />
+      <FieldError name="secret" className="rw-field-error" />
 
       <div className="rw-button-group">
         <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -2343,7 +2378,7 @@ const ResetPasswordPage = ({ resetToken }) => {
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
@@ -2372,14 +2407,14 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
@@ -2393,7 +2428,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -2452,7 +2487,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.email,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -2480,14 +2518,14 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -2499,17 +2537,17 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -2521,7 +2559,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -2573,7 +2611,7 @@ const ForgotPasswordPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -2604,14 +2642,14 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       ref={emailRef}
@@ -2623,7 +2661,7 @@ const ForgotPasswordPage = () => {
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -2676,7 +2714,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.email,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -2703,14 +2744,14 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -2722,17 +2763,17 @@ const LoginPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -2753,7 +2794,7 @@ const LoginPage = () => {
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -2826,7 +2867,7 @@ const ResetPasswordPage = ({ resetToken }) => {
   const onSubmit = async (data) => {
     const response = await resetPassword({
       resetToken,
-      password: data.password,
+      password: data.secret,
     })
 
     if (response.error) {
@@ -2855,14 +2896,14 @@ const ResetPasswordPage = ({ resetToken }) => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="password"
+                      name="secret"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       New Secret
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="secret"
                       autoComplete="new-password"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
@@ -2876,7 +2917,7 @@ const ResetPasswordPage = ({ resetToken }) => {
                       }}
                     />
 
-                    <FieldError name="password" className="rw-field-error" />
+                    <FieldError name="secret" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -2935,7 +2976,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.email,
+      password: data.secret,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -2963,14 +3007,14 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -2982,17 +3026,17 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="secret"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Secret
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="secret"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
@@ -3004,7 +3048,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="secret" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
@@ -3056,7 +3100,7 @@ const ForgotPasswordPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -3091,14 +3135,14 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       ref={emailRef}
@@ -3110,7 +3154,7 @@ const ForgotPasswordPage = () => {
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -3163,7 +3207,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.email,
+      password: data.password,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -3190,14 +3237,14 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -3209,7 +3256,7 @@ const LoginPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
                     name="password"
@@ -3424,7 +3471,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.email,
+      password: data.password,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -3452,14 +3502,14 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -3471,7 +3521,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
                     name="password"
@@ -3545,7 +3595,7 @@ const ForgotPasswordPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await forgotPassword(data.username)
+    const response = await forgotPassword(data.email)
 
     if (response.error) {
       toast.error(response.error)
@@ -3580,14 +3630,14 @@ const ForgotPasswordPage = () => {
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <div className="text-left">
                     <Label
-                      name="username"
+                      name="email"
                       className="rw-label"
                       errorClassName="rw-label rw-label-error"
                     >
                       Email
                     </Label>
                     <TextField
-                      name="username"
+                      name="email"
                       className="rw-input"
                       errorClassName="rw-input rw-input-error"
                       ref={emailRef}
@@ -3599,7 +3649,7 @@ const ForgotPasswordPage = () => {
                       }}
                     />
 
-                    <FieldError name="username" className="rw-field-error" />
+                    <FieldError name="email" className="rw-field-error" />
                   </div>
 
                   <div className="rw-button-group">
@@ -3652,7 +3702,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.email,
+      password: data.password,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -3679,14 +3732,14 @@ const LoginPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -3698,7 +3751,7 @@ const LoginPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
                     name="password"
@@ -3913,7 +3966,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.email,
+      password: data.password,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -3941,14 +3997,14 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="email"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
                     Email
                   </Label>
                   <TextField
-                    name="username"
+                    name="email"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={emailRef}
@@ -3960,7 +4016,7 @@ const SignupPage = () => {
                     }}
                   />
 
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="email" className="rw-field-error" />
 
                   <Label
                     name="password"
@@ -4141,7 +4197,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.username,
+      password: data.password,
+    })
 
     if (response.message) {
       toast(response.message)
@@ -4402,7 +4461,10 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.username,
+      password: data.password,
+    })
 
     if (response.message) {
       toast(response.message)
