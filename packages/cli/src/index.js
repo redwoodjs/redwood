@@ -54,7 +54,7 @@ import { getPaths } from './lib'
 // yarn rw info
 // ```
 
-let { cwd, testEnv } = Parser(hideBin(process.argv))
+let { cwd } = Parser(hideBin(process.argv))
 cwd ??= process.env.RWJS_CWD
 
 try {
@@ -94,30 +94,11 @@ process.env.RWJS_CWD = cwd
 //
 // This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
 
-if (testEnv) {
-  console.log(
-    JSON.stringify({
-      name: 'process.env before dotenv-defaults',
-      value: process.env,
-    })
-  )
-}
-
 config({
   path: path.join(getPaths().base, '.env'),
   defaults: path.join(getPaths().base, '.env.defaults'),
   multiline: true,
 })
-
-if (testEnv) {
-  console.log(
-    JSON.stringify({
-      name: 'process.env after dotenv-defaults',
-      value: process.env,
-    })
-  )
-  process.exit()
-}
 
 // # Build the CLI and run it
 
