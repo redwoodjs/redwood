@@ -104,7 +104,7 @@ export interface GraphQLHandlerOptions {
   /**
    *  @description Customize GraphQL Armor plugin configuration
    *
-   * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
+   * @see https://escape-technologies.github.io/graphql-armor/docs/configuration/examples
    */
   graphQLArmorConfig?: GraphQLArmorConfig
 
