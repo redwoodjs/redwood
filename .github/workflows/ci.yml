@@ -85,9 +85,6 @@ jobs:
       - name: 🧪 Test
         run: yarn test-ci ${{ steps.cpu-cores.outputs.count }}
 
-      - name: ⌨️ CLI Test (cwd, env)
-        uses: ./tasks/cli-test
-
   build-lint-test-docs:
     needs: only-doc-changes
     if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
