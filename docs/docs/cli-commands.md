@@ -50,6 +50,8 @@ yarn create redwood-app <project directory> [option]
 | `project directory`    | Specify the project directory [Required]                                                                                |
 | `--yarn-install`       | Enables the yarn install step and version-requirement checks. You can pass `--no-yarn-install` to disable this behavior |
 | `--typescript`, `--ts` | Generate a TypeScript project. JavaScript by default                                                                    |
+| `--tailwind`, `--tw` | Automatic setup of Tailwind CSS. a TypeScript
+project.                                               |
 | `--overwrite`          | Create the project even if the specified project directory isn't empty                                                  |
 | `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: https://telemetry.redwoodjs.com  |
 | `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                            |
