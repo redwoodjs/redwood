@@ -24,10 +24,9 @@ describe('The CLI sets `cwd` correctly', () => {
 
       expect(status).toBe(1)
       expect(stdout).toBe('')
-      expect(stderr).toMatchInlineSnapshot(`
-        "Couldn't find a "redwood.toml" file in __fixtures__.
-        Are you sure you're in a Redwood project?"
-      `)
+      expect(stderr).toMatchInlineSnapshot(
+        `"Couldn't find a "redwood.toml" file in __fixtures__"`
+      )
     })
   })
 
@@ -45,7 +44,7 @@ describe('The CLI sets `cwd` correctly', () => {
       expect(stderr).toBe('')
     })
 
-    it(`Throws if set via RWJS_CWD and there's no "redwood.toml"`, () => {
+    it(`throws if set via RWJS_CWD and there's no "redwood.toml"`, () => {
       const { status, stdout, stderr } = rw(['--version'], {
         env: {
           ...process.env,
@@ -55,15 +54,14 @@ describe('The CLI sets `cwd` correctly', () => {
 
       expect(status).toBe(1)
       expect(stdout).toBe('')
-      expect(stderr).toMatchInlineSnapshot(`
-        "Couldn't find a "redwood.toml" file in __fixtures__.
-        Are you sure you're in a Redwood project?"
-      `)
+      expect(stderr).toMatchInlineSnapshot(
+        `"Couldn't find a "redwood.toml" file in __fixtures__"`
+      )
     })
   })
 
-  describe('--cwd and RWJS_CWD', () => {
-    it('prefers --cwd to RWJS_CWD', () => {
+  describe('Prefers --cwd to RWJS_CWD', () => {
+    it('Succeeds when --cwd is a rw project', () => {
       const { status, stdout, stderr } = rw(
         ['--cwd', path.join('__fixtures__', 'test-project'), '--version'],
         {
@@ -78,19 +76,46 @@ describe('The CLI sets `cwd` correctly', () => {
       expect(stdout).toMatch(VERSION)
       expect(stderr).toBe('')
     })
+
+    it("Fails when --cwd isn't a rw project", () => {
+      const { status, stdout, stderr } = rw(
+        ['--cwd', path.join('__fixtures__'), '--version'],
+        {
+          env: {
+            ...process.env,
+            RWJS_CWD: path.join('__fixtures__', 'test-project'),
+          },
+        }
+      )
+
+      expect(status).toBe(1)
+      expect(stdout).toBe('')
+      expect(stderr).toMatchInlineSnapshot(
+        `"Couldn't find a "redwood.toml" file in __fixtures__"`
+      )
+    })
   })
 
   describe('find up', () => {
-    it("Finds up for a redwood.toml if --cwd and RWJS_CWD aren't set", () => {
+    it("finds up for a redwood.toml if --cwd and RWJS_CWD aren't set", () => {
       const { status, stdout, stderr } = rw(['--version'], {
         cwd: path.join(BASE_DIR, '__fixtures__', 'test-project', 'api'),
       })
 
-      console.log({
-        status,
-        stdout,
-        stderr,
+      expect(status).toBe(0)
+      expect(stdout).toMatch(VERSION)
+      expect(stderr).toBe('')
+    })
+
+    it("fails if it can't find up a redwood.toml", () => {
+      const { status, stdout, stderr } = rw(['--version'], {
+        cwd: path.join(BASE_DIR, '__fixtures__'),
       })
+
+      expect(status).toBe(1)
+      expect(stdout).toBe('')
+      // We don't want to match on the entire error message since it includes an absolute path.
+      expect(stderr).toMatch(`Couldn't find up a "redwood.toml" file from`)
     })
   })
 })

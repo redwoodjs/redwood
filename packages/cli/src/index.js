@@ -62,7 +62,7 @@ try {
     // `cwd` was set by the `--cwd` option or the `RWJS_CWD` env var. In this case,
     // we don't want to find up for a `redwood.toml` file. The `redwood.toml` should just be in that directory.
     if (!fs.existsSync(path.join(cwd, 'redwood.toml'))) {
-      throw new Error(`Couldn't find a "redwood.toml" file in ${cwd}.`)
+      throw new Error(`Couldn't find a "redwood.toml" file in ${cwd}`)
     }
   } else {
     // `cwd` wasn't set. Odds are they're in a Redwood project,
@@ -72,10 +72,7 @@ try {
 
     if (!redwoodTOMLPath) {
       throw new Error(
-        [
-          `Couldn't find up a "redwood.toml" file from ${process.cwd()}.`,
-          "Are you sure you're in a Redwood project?",
-        ].join('\n')
+        `Couldn't find up a "redwood.toml" file from ${process.cwd()}`
       )
     }
 
