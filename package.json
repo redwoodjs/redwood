@@ -12,7 +12,6 @@
     "build:watch": "lerna run build:watch --parallel; tsc --build",
     "check": "yarn node ./tasks/check/check.mjs",
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
-    "cli-test": "yarn node ./tasks/cli-test/cli-test.mjs",
     "e2e": "node ./tasks/run-e2e",
     "lint": "RWJS_CWD=packages/create-redwood-app/template eslint --config .eslintrc.js packages",
     "lint:fix": "yarn lint --fix",
