@@ -71,6 +71,7 @@ import { name, version } from '../package'
     telemetry: telemetry,
     yarn1,
     'git-init': gitInit,
+    tailwind,
   } = yargs(hideBin(process.argv))
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
@@ -108,6 +109,13 @@ import { name, version } from '../package'
       default: null,
       type: 'boolean',
       describe: 'Initialize a git repository.',
+    })
+    .option('tailwind', {
+      alias: 'tw',
+      default: null,
+      type: 'boolean',
+      describe:
+        'Add TailwindCSS to your project.',
     })
     .version(version)
     .parse()
@@ -375,6 +383,24 @@ import { name, version } from '../package'
         },
       },
       {
+        title: 'Tailwind',
+        skip: () => tailwind !== null,
+        task: async (ctx, task) => {
+          ctx.tailwind = await task.prompt({
+            type: 'Toggle',
+            name: 'Do you want to include TailwindCSS?',
+            message: 'Would you like to install Tailwind?',
+            enabled: 'Yes',
+            disabled: 'no',
+            initial: 'Yes',
+          })
+          task.output = ctx.tailwind
+        },
+        options: {
+          persistentOutput: true,
+        }
+      },
+      {
         title: 'Creating Redwood app',
         task: () => new Listr(createProjectTasks({ newAppDir, overwrite })),
       },
@@ -419,6 +445,20 @@ import { name, version } from '../package'
           )
         },
       },
+      {
+        title: 'Adding Tailwind',
+        // Enabled if user selects yes to tailwind prompt
+        // Enabled if user specified --tailwind via command line
+        enabled: (ctx) =>
+          yarnInstall === true &&
+          (tailwind === true || ctx.tailwind === true),
+        task: () => {
+          return execa('yarn rw setup ui tailwindcss', {
+            shell: true,
+            cwd: newAppDir,
+          })
+        }
+      }
     ],
     {
       rendererOptions: { collapse: false },
