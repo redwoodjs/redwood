@@ -92,6 +92,82 @@ describe('timeTag', () => {
   })
 })
 
+describe('jsonDisplay', () => {
+  it('produces the correct output', () => {
+    expect(
+      jsonDisplay({
+        title: 'TOML Example (but in JSON)',
+        database: {
+          data: [['delta', 'phi'], [3.14]],
+          enabled: true,
+          ports: [8000, 8001, 8002],
+          temp_targets: {
+            case: 72.0,
+            cpu: 79.5,
+          },
+        },
+        owner: {
+          dob: '1979-05-27T07:32:00-08:00',
+          name: 'Tom Preston-Werner',
+        },
+        servers: {
+          alpha: {
+            ip: '10.0.0.1',
+            role: 'frontend',
+          },
+          beta: {
+            ip: '10.0.0.2',
+            role: 'backend',
+          },
+        },
+      })
+    ).toMatchInlineSnapshot(`
+      <pre>
+        <code>
+          {
+        "title": "TOML Example (but in JSON)",
+        "database": {
+          "data": [
+            [
+              "delta",
+              "phi"
+            ],
+            [
+              3.14
+            ]
+          ],
+          "enabled": true,
+          "ports": [
+            8000,
+            8001,
+            8002
+          ],
+          "temp_targets": {
+            "case": 72,
+            "cpu": 79.5
+          }
+        },
+        "owner": {
+          "dob": "1979-05-27T07:32:00-08:00",
+          "name": "Tom Preston-Werner"
+        },
+        "servers": {
+          "alpha": {
+            "ip": "10.0.0.1",
+            "role": "frontend"
+          },
+          "beta": {
+            "ip": "10.0.0.2",
+            "role": "backend"
+          }
+        }
+      }
+        </code>
+      </pre>
+    `)
+  })
+})
+
 describe('checkboxInputTag', () => {
   it('can be checked', () => {
     render(checkboxInputTag(true))
