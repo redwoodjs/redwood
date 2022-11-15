@@ -293,6 +293,14 @@ export const formatEnum = (values) => {
   return output
 }
 
+export const jsonDisplay = (obj) => {
+  return (
+    <pre>
+      <code>{JSON.stringify(obj, null, 2)}</code>
+    </pre>
+  )
+}
+
 export const truncate = (value) => {
   let output = value?.toString() ?? ''
 
@@ -1769,6 +1777,14 @@ export const formatEnum = (values: string | string[] | null | undefined) => {
   }
 
   return output
+}
+
+export const jsonDisplay = (obj: unknown) => {
+  return (
+    <pre>
+      <code>{JSON.stringify(obj, null, 2)}</code>
+    </pre>
+  )
 }
 
 export const truncate = (value: string | number) => {
