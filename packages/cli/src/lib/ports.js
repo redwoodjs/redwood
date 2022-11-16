@@ -19,12 +19,3 @@ export async function getFreePort(requestedPort, excludePorts = []) {
     return -1
   }
 }
-
-/**
- * Determines if a port is available or in use
- * @param {number} port The port number to check
- * @return {boolean} True if the port is available, false otherwise
- */
-export async function isPortFree(port) {
-  return (await portfinder.getPortPromise({ port })) === port
-}
