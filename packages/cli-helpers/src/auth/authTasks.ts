@@ -246,12 +246,12 @@ export const createWebAuth = (
     i++
   }
 
-  authFileName = authFileName + '.' + templateExtension
+  const authFileExtension = isTypeScriptProject() ? templateExtension : 'js'
+  authFileName = authFileName + '.' + authFileExtension
 
-  let template: string | undefined = fs.readFileSync(
-    path.join(templatesBaseDir, templateFileName),
-    'utf-8'
-  )
+  const templatePath = path.join(templatesBaseDir, templateFileName)
+
+  let template = fs.readFileSync(templatePath, 'utf-8')
 
   template = isTypeScriptProject()
     ? template

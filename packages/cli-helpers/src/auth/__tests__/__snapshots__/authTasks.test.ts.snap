@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`writes an auth.js file for JS projects 1`] = `"// web auth template"`;
+
+exports[`writes an auth.ts file for TS projects 1`] = `"// web auth template"`;
