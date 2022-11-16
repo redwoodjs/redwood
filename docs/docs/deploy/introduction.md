@@ -14,7 +14,7 @@ Redwood is designed for both serverless and traditional infrastructure deploymen
 Currently, these are the officially supported deploy targets:
 - Baremetal (physical server that you have SSH access to)
 - [Flightcontrol.dev](https://www.flightcontrol.dev?ref=redwood)
-- [Layer0.co](https://layer0.co)
+- [Edg.io](https://edg.io)
 - [Netlify.com](https://www.netlify.com/)
 - [Render.com](https://render.com)
 - [Serverless.com](https://serverless.com)
@@ -64,8 +64,8 @@ yarn rw deploy serverless --side api
 ```
 
 ```shell
-# Build command for Layer0 deploy target
-yarn rw deploy layer0
+# Build command for Edgio deploy target
+yarn rw deploy edgio
 ```
 
 ```shell
