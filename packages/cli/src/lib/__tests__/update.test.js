@@ -1,7 +1,5 @@
 global.__dirname = __dirname
 
-import { rw } from '../../__tests__/cwd.test'
-
 jest.mock('fs')
 jest.mock('latest-version')
 
@@ -20,10 +18,11 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
 })
 
 import fs from 'fs'
+import path from 'path'
 
-import execa from 'execa'
 import latestVersion from 'latest-version'
 
+import { rw } from '../../__tests__/cwd.test'
 import { setLock } from '../locking'
 import * as update from '../update'
 
@@ -87,15 +86,25 @@ describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
   })
 
   it.only('A command does not show an upgrade message', async () => {
-    const { stdout } = rw(['info'])
-    console.log({ stdout })
+    const { stdout, stderr } = rw([
+      '--cwd',
+      path.join('__fixtures__', 'test-project'),
+      'info',
+    ])
+    console.log({ stdout, stderr })
     expect(stdout).toBe('') // TODO: Need to ensure it does not contain an upgrade message
   })
 
   it.only('A command after a check does not show an upgrade message', async () => {
     await update.check()
-    const { stdout } = rw(['info'])
-    console.log({ stdout })
+
+    const { stdout, stderr } = rw([
+      '--cwd',
+      path.join('__fixtures__', 'test-project'),
+      'info',
+    ])
+
+    console.log({ stdout, stderr })
     expect(stdout).toBe('') // TODO: Need to ensure it does not contain an upgrade message
   })
 })
