@@ -38,12 +38,8 @@ export const handler = async ({
   if (side.includes('api')) {
     apiAvailablePort = await getFreePort(apiPreferredPort)
     if (apiAvailablePort === -1) {
-      errorTelemetry(
-        process.argv,
-        `Error could not determine a free port for the api server`
-      )
       console.error(`Error could not determine a free port for the api server`)
-      process.exit(-1)
+      process.exit(1)
     }
     apiPortChangeNeeded = apiAvailablePort !== apiPreferredPort
   }
@@ -63,12 +59,8 @@ export const handler = async ({
       apiAvailablePort,
     ])
     if (webAvailablePort === -1) {
-      errorTelemetry(
-        process.argv,
-        `Error could not determine a free port for the web server`
-      )
       console.error(`Error could not determine a free port for the web server`)
-      process.exit(-1)
+      process.exit(1)
     }
     webPortChangeNeeded = webAvailablePort !== webPreferredPort
   }
@@ -86,7 +78,7 @@ export const handler = async ({
     console.error(
       `Cannot run the development server until your configured ports are changed or become available.`
     )
-    process.exit(-1)
+    process.exit(1)
   }
 
   if (side.includes('api')) {
