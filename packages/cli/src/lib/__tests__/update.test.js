@@ -1,5 +1,7 @@
 global.__dirname = __dirname
 
+import { rw } from '../../__tests__/cwd.test'
+
 jest.mock('fs')
 jest.mock('latest-version')
 
@@ -84,14 +86,16 @@ describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
     )
   })
 
-  it('A command does not show an upgrade message', async () => {
-    const { stdout } = await execa('yarn', ['rw', 'info'])
+  it.only('A command does not show an upgrade message', async () => {
+    const { stdout } = rw(['info'])
+    console.log({ stdout })
     expect(stdout).toBe('') // TODO: Need to ensure it does not contain an upgrade message
   })
 
-  it('A command after a check does not show an upgrade message', async () => {
+  it.only('A command after a check does not show an upgrade message', async () => {
     await update.check()
-    const { stdout } = await execa('yarn', ['rw', 'info'])
+    const { stdout } = rw(['info'])
+    console.log({ stdout })
     expect(stdout).toBe('') // TODO: Need to ensure it does not contain an upgrade message
   })
 })

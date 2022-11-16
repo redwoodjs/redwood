@@ -123,7 +123,7 @@ describe('The CLI sets `cwd` correctly', () => {
 const BASE_DIR = path.resolve(__dirname, '..', '..', '..', '..')
 const CLI = path.join(BASE_DIR, 'packages', 'cli', 'dist', 'index.js')
 
-function rw(args, options) {
+export function rw(args, options) {
   const { status, stdout, stderr } = spawnSync('node', [CLI, ...args], {
     cwd: BASE_DIR,
     ...options,
