@@ -32,7 +32,7 @@
     "@graphql-tools/schema": "8.5.1",
     "@graphql-tools/utils": "8.12.0",
     "@graphql-yoga/common": "2.12.12",
-    "@prisma/client": "4.6.0",
+    "@prisma/client": "4.6.1",
     "@redwoodjs/api": "3.4.0",
     "core-js": "3.26.0",
     "cross-undici-fetch": "0.4.14",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
-    "@babel/core": "7.19.6",
+    "@babel/core": "7.20.2",
     "@envelop/testing": "4.6.0",
     "@envelop/types": "2.4.0",
     "@redwoodjs/auth": "3.4.0",
