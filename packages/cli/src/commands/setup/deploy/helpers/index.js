@@ -1,4 +1,3 @@
-import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -6,11 +5,7 @@ import boxen from 'boxen'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
-import {
-  getInstalledRedwoodVersion,
-  getPaths,
-  writeFilesTask,
-} from '../../../../lib'
+import { getPaths, writeFilesTask } from '../../../../lib'
 
 const REDWOOD_TOML_PATH = path.join(getPaths().base, 'redwood.toml')
 
@@ -74,66 +69,6 @@ export const preRequisiteCheckTask = (preRequisites) => {
           }
         })
       ),
-  }
-}
-
-/**
- *
- * Use this util to install dependencies on a user's Redwood app
- *
- * @example addPackagesTask({
- * packages: ['fs-extra', 'somePackage@2.1.0'],
- * side: 'api', // <-- leave empty for project root
- * devDependency: true
- * })
- */
-export const addPackagesTask = ({
-  packages,
-  side = 'project',
-  devDependency = false,
-}) => {
-  const packagesWithSameRWVersion = packages.map((pkg) => {
-    if (pkg.includes('@redwoodjs')) {
-      return `${pkg}@${getInstalledRedwoodVersion()}`
-    } else {
-      return pkg
-    }
-  })
-
-  let installCommand
-  // if web,api
-  if (side !== 'project') {
-    installCommand = [
-      'yarn',
-      [
-        'workspace',
-        side,
-        'add',
-        devDependency && '--dev',
-        ...packagesWithSameRWVersion,
-      ].filter(Boolean),
-    ]
-  } else {
-    const stdout = execSync('yarn --version')
-
-    const yarnVersion = stdout.toString().trim()
-
-    installCommand = [
-      'yarn',
-      [
-        yarnVersion.startsWith('1') && '-W',
-        'add',
-        devDependency && '--dev',
-        ...packagesWithSameRWVersion,
-      ].filter(Boolean),
-    ]
-  }
-
-  return {
-    title: `Adding dependencies to ${side}`,
-    task: async () => {
-      await execa(...installCommand)
-    },
   }
 }
 
