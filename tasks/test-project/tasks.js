@@ -515,6 +515,13 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
         title: 'Scaffolding post',
         task: async () => {
           await generateScaffold('post')
+
+          // Replace the random numbers in the scenario with consistent values
+          await applyCodemod(
+            'scenarioValueSuffix.js',
+            fullPath('api/src/services/posts/posts.scenarios')
+          )
+
           await execa(`yarn rwfw project:copy`, [], execaOptions)
         },
       },
@@ -562,6 +569,12 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           await applyCodemod(
             'usersService.js',
             fullPath('api/src/services/users/users')
+          )
+
+          // Replace the random numbers in the scenario with consistent values
+          await applyCodemod(
+            'scenarioValueSuffix.js',
+            fullPath('api/src/services/users/users.scenarios')
           )
 
           const test = `import { user } from './users'
