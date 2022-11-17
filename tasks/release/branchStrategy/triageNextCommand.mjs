@@ -19,7 +19,7 @@ import {
 } from './branchStrategyLib.mjs'
 
 export const command = 'triage-next'
-export const description = 'Triage commits from next to release'
+export const description = 'Triage commits from next to the release branch'
 
 export async function handler() {
   await updateRemotes()
