@@ -22,7 +22,7 @@ import path from 'path'
 
 import latestVersion from 'latest-version'
 
-import { rw } from '../../__tests__/cwd.test'
+import { rw, BASE_DIR } from '../cwd'
 import { setLock } from '../locking'
 import * as update from '../update'
 
@@ -30,12 +30,7 @@ const realfs = jest.requireActual('fs')
 
 const TESTING_CURRENT_DATETIME = 1640995200000
 const TEST_PROJECT_UPDATE_DATA_PATH = path.join(
-  __dirname,
-  '..',
-  '..',
-  '..',
-  '..',
-  '..',
+  BASE_DIR,
   '__fixtures__',
   'test-project',
   '.redwood',
@@ -90,6 +85,41 @@ describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
       checkedAt: TESTING_CURRENT_DATETIME,
       shownAt: update.DEFAULT_DATETIME_MS,
     })
+  })
+
+  it('Should want to check before any check has run', () => {
+    expect(update.shouldCheck()).toBe(true)
+  })
+
+  it('Should not want to check after a check has run', async () => {
+    await update.check()
+    expect(update.shouldCheck()).toBe(false)
+  })
+
+  it('Should not want to show before any check has run', () => {
+    expect(update.shouldShow()).toBe(false)
+  })
+
+  it('Should not want to show after a check has run', async () => {
+    await update.check()
+    expect(update.shouldShow()).toBe(false)
+  })
+
+  it('Produces the correct upgrade message', async () => {
+    await update.check()
+    expect(update.getUpgradeMessage()).toMatch(
+      /You are currently using version 1.0.0 which is the latest redwood version./
+    )
+  })
+
+  it('Outputs the correct upgrade message', async () => {
+    const consoleMock = jest.spyOn(console, 'log').mockImplementation()
+    await update.check()
+    update.showUpgradeMessage()
+    expect(console.log.mock.calls[0][0]).toMatch(
+      /You are currently using version 1.0.0 which is the latest redwood version./
+    )
+    consoleMock.mockRestore()
   })
 
   it('Respects the lock', async () => {
@@ -168,6 +198,41 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
     })
   })
 
+  it('Should want to check before any check has run', () => {
+    expect(update.shouldCheck()).toBe(true)
+  })
+
+  it('Should not want to check after a check has run', async () => {
+    await update.check()
+    expect(update.shouldCheck()).toBe(false)
+  })
+
+  it('Should not want to show before any check has run', () => {
+    expect(update.shouldShow()).toBe(false)
+  })
+
+  it('Should want to show after a check has run', async () => {
+    await update.check()
+    expect(update.shouldShow()).toBe(true)
+  })
+
+  it('Produces the correct upgrade message', async () => {
+    await update.check()
+    expect(update.getUpgradeMessage()).toMatch(
+      /Redwood Upgrade Available: 1.0.0 -> 2.0.0/
+    )
+  })
+
+  it('Outputs the correct upgrade message', async () => {
+    const consoleMock = jest.spyOn(console, 'log').mockImplementation()
+    await update.check()
+    update.showUpgradeMessage()
+    expect(console.log.mock.calls[0][0]).toMatch(
+      /Redwood Upgrade Available: 1.0.0 -> 2.0.0/
+    )
+    consoleMock.mockRestore()
+  })
+
   it('Respects the lock', async () => {
     setLock(update.LOCK_IDENTIFIER)
     await expect(update.check()).rejects.toThrow(
@@ -242,6 +307,41 @@ describe('Upgrade is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
       checkedAt: TESTING_CURRENT_DATETIME,
       shownAt: update.DEFAULT_DATETIME_MS,
     })
+  })
+
+  it('Should want to check before any check has run', () => {
+    expect(update.shouldCheck()).toBe(true)
+  })
+
+  it('Should not want to check after a check has run', async () => {
+    await update.check()
+    expect(update.shouldCheck()).toBe(false)
+  })
+
+  it('Should not want to show before any check has run', () => {
+    expect(update.shouldShow()).toBe(false)
+  })
+
+  it('Should want to show after a check has run', async () => {
+    await update.check()
+    expect(update.shouldShow()).toBe(true)
+  })
+
+  it('Produces the correct upgrade message', async () => {
+    await update.check()
+    expect(update.getUpgradeMessage()).toMatch(
+      /Redwood Upgrade Available: 1.0.0-rc.1 -> 1.0.1-rc.58/
+    )
+  })
+
+  it('Outputs the correct upgrade message', async () => {
+    const consoleMock = jest.spyOn(console, 'log').mockImplementation()
+    await update.check()
+    update.showUpgradeMessage()
+    expect(console.log.mock.calls[0][0]).toMatch(
+      /Redwood Upgrade Available: 1.0.0-rc.1 -> 1.0.1-rc.58/
+    )
+    consoleMock.mockRestore()
   })
 
   it('Respects the lock', async () => {

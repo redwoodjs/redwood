@@ -67,6 +67,7 @@ export async function check() {
         tag ? { version: tag } : {}
       )
     } catch (e) {
+      console.error(e)
       throw new Error(
         `Could not find the latest version${tag ? ` with tag: ${tag}` : ''}`
       )
@@ -76,7 +77,7 @@ export async function check() {
     updateUpdateFile({
       localVersion,
       remoteVersion,
-      checkedAt: Date.now(),
+      checkedAt: new Date().getTime(),
     })
   } finally {
     unsetLock(LOCK_IDENTIFIER)
@@ -90,7 +91,7 @@ export async function check() {
  */
 export function shouldCheck() {
   const data = readUpdateFile()
-  return data.checkedAt < Date.now() - CHECK_PERIOD
+  return data.checkedAt < new Date().getTime() - CHECK_PERIOD
 }
 
 /**
@@ -101,7 +102,7 @@ export function shouldCheck() {
 export function shouldShow() {
   const data = readUpdateFile()
   return (
-    data.shownAt < Date.now() - SHOW_PERIOD &&
+    data.shownAt < new Date().getTime() - SHOW_PERIOD &&
     semver.gt(data.remoteVersion, data.localVersion)
   )
 }
@@ -112,7 +113,7 @@ export function shouldShow() {
  */
 export function showUpgradeMessage() {
   console.log(getUpgradeMessage())
-  updateUpdateFile({ shownAt: Date.now() })
+  updateUpdateFile({ shownAt: new Date().getTime() })
 }
 
 /**
@@ -121,14 +122,26 @@ export function showUpgradeMessage() {
  */
 export function getUpgradeMessage() {
   const data = readUpdateFile()
-  let message = `  Checklist:\n   1. Read the release notes at: https://github.com/redwoodjs/redwood/releases  \n   2. Run "yarn rw upgrade" to upgrade`
-  return boxen(message, {
-    padding: 0,
-    margin: 1,
-    title: `Redwood Upgrade Available: ${data.localVersion} -> ${data.remoteVersion}`,
-    borderColor: `#0b8379`, // The RedwoodJS colour
-    borderStyle: 'round',
-  })
+  if (semver.gt(data.remoteVersion, data.localVersion)) {
+    let message = `  Checklist:\n   1. Read the release notes at: https://github.com/redwoodjs/redwood/releases  \n   2. Run "yarn rw upgrade" to upgrade`
+    return boxen(message, {
+      padding: 0,
+      margin: 1,
+      title: `Redwood Upgrade Available: ${data.localVersion} -> ${data.remoteVersion}`,
+      borderColor: `#0b8379`, // The RedwoodJS colour
+      borderStyle: 'round',
+    })
+  }
+  return boxen(
+    `  You are currently using version ${data.localVersion} which is the latest redwood version.  `,
+    {
+      padding: 0,
+      margin: 1,
+      title: `No upgrade is available`,
+      borderColor: `#0b8379`, // The RedwoodJS colour
+      borderStyle: 'round',
+    }
+  )
 }
 
 /**
