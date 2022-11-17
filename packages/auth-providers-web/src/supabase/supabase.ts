@@ -1,6 +1,6 @@
 import type { SupabaseClient, Provider } from '@supabase/supabase-js'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth2'
+import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type SignInOptions = {
   email?: string | undefined

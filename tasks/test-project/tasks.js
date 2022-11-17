@@ -399,7 +399,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
 
   const addDbAuth = async () => {
     await execa(
-      'yarn rw setup auth dbAuth --force --no-webauthn',
+      'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
       [],
       execaOptions
     )
@@ -514,7 +514,8 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       {
         title: 'Scaffolding post',
         task: async () => {
-          return generateScaffold('post')
+          await generateScaffold('post')
+          await execa(`yarn rwfw project:copy`, [], execaOptions)
         },
       },
       {

@@ -83,16 +83,10 @@ export const handler = async ({
     webAuthn,
     webPackages: webAuthn
       ? webAuthnWebPackages
-      : [
-          // TODO: Add this when packages are published
-          // '@redwoodjs/auth-providers-web'
-        ],
+      : ['@redwoodjs/auth-providers-web'],
     apiPackages: webAuthn
       ? webAuthnApiPackages
-      : [
-          // TODO: Add this when packages are published
-          // '@redwoodjs/auth-providers-api'
-        ],
+      : ['@redwoodjs/auth-providers-api'],
     extraTask: webAuthn ? webAuthnExtraTask : extraTask,
     notes: webAuthn ? webAuthnNotes : notes,
   })

@@ -18,7 +18,6 @@ import {
   addWebPackages,
   generateAuthApiFiles,
   installPackages,
-  printNotes,
 } from './authTasks'
 
 /**
@@ -104,19 +103,27 @@ export const standardAuthHandler = async ({
   const tasks = new Listr<never>(
     [
       generateAuthApiFiles(basedir, provider, force, webAuthn),
-      addAuthConfigToWeb(basedir, provider),
+      addAuthConfigToWeb(basedir, provider, webAuthn),
       addAuthConfigToGqlApi(authDecoderImport),
       addWebPackages(webPackages, rwVersion),
       addApiPackages(apiPackages),
       installPackages,
       extraTask,
-      notes ? printNotes(notes) : null,
+      notes && {
+        title: 'One more thing...',
+        task: () => {
+          // Can't console.log the notes here because of
+          // https://github.com/cenk1cenk2/listr2/issues/296
+          // So we do it after the tasks have all finished instead
+        },
+      },
     ].filter(truthy),
     { rendererOptions: { collapse: false } }
   )
 
   try {
     await tasks.run()
+    notes && console.log(`\n   ${notes.join('\n   ')}\n`)
   } catch (e) {
     if (isErrorWithMessage(e)) {
       errorTelemetry(process.argv, e.message)

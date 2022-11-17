@@ -28,7 +28,7 @@ import {
 import c from '../../../lib/colors'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   customOrDefaultTemplatePath,
   relationsForModel,
@@ -694,11 +694,12 @@ const addSetImport = (task) => {
 }
 
 const addScaffoldSetToRouter = async (model, path) => {
+  const templateNames = getTemplateStrings(model, path)
   const nameVars = nameVariants(model)
   const title = nameVars.pluralPascalName
-  const titleTo = nameVars.pluralCamelName
+  const titleTo = templateNames.pluralRouteName
   const buttonLabel = `New ${nameVars.singularPascalName}`
-  const buttonTo = `new${nameVars.singularPascalName}`
+  const buttonTo = templateNames.newRouteName
 
   return addRoutesToRouterTask(
     await routes({ model, path }),

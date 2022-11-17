@@ -3619,6 +3619,87 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Alonski",
+      "name": "Alon Bukai",
+      "avatar_url": "https://avatars.githubusercontent.com/u/452199?v=4",
+      "profile": "http://www.alonbukai.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hankedori",
+      "name": "Han Ke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10578033?v=4",
+      "profile": "https://github.com/hankedori",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "chapmanm3",
+      "name": "Matt Chapman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27476801?v=4",
+      "profile": "https://github.com/chapmanm3",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rowin1125",
+      "name": "Rowin Mol",
+      "avatar_url": "https://avatars.githubusercontent.com/u/39522856?v=4",
+      "profile": "https://derow.nl/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "BurnedChris",
+      "name": "Christopher Burns",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15834048?v=4",
+      "profile": "http://everfund.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bigbuckalex",
+      "name": "Alex Lilly",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13971705?v=4",
+      "profile": "https://github.com/bigbuckalex",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dphuang2",
+      "name": "dphuang2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14287381?v=4",
+      "profile": "https://github.com/dphuang2",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "daniel-escoto",
+      "name": "Daniel Escoto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20568385?v=4",
+      "profile": "https://danielescoto.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "james-interfold",
+      "name": "James Hester",
+      "avatar_url": "https://avatars.githubusercontent.com/u/115298833?v=4",
+      "profile": "https://github.com/james-interfold",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
