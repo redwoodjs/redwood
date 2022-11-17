@@ -5,9 +5,9 @@ import chalk from 'chalk'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
-import { addEnvVarTask } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import { addEnvVarTask } from '../../../lib'
 import { addPackagesTask, getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
