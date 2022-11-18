@@ -6637,6 +6637,7 @@ __metadata:
     "@redwoodjs/prerender": 3.2.0
     "@redwoodjs/structure": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
+    "@types/aws-lambda": 8.10.107
     "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
     camelcase: 6.3.0
@@ -6656,6 +6657,7 @@ __metadata:
     latest-version: 5.1.0
     listr2: 5.0.5
     lodash: 4.17.21
+    nodemon: 2.0.20
     param-case: 3.0.4
     pascalcase: 1.0.0
     pluralize: 8.0.0
