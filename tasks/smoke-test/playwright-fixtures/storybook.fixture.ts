@@ -70,6 +70,14 @@ const test = base.extend<any, StorybookFixture>({
             serverReadyPromiseHandle.resolve()
           }
         })
+        serverHandler.stderr.on('data', (data) => {
+          const outputAsString = Buffer.from(data, 'utf-8').toString()
+          console.log(chalk.bgRed('[rw-storybook-fixture]'), outputAsString)
+
+          if (outputAsString.includes(`http://localhost:${port}/`)) {
+            serverReadyPromiseHandle.resolve()
+          }
+        })
 
         // @NOTE: For some reason we need to do this
         // Because otherwise the server doesn't launch correctly

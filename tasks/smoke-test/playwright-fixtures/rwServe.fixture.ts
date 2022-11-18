@@ -58,8 +58,11 @@ const test = base.extend<any, ServeFixture>({
 
       // Pipe out logs so we can debug, when required
       serverHandler.stdout?.on('data', (data) => {
+        console.log('[rw-serve-fixture]', Buffer.from(data, 'utf-8').toString())
+      })
+      devServerHandler.stderr?.on('data', (data) => {
         console.log(
-          '[rw-serve-fixture] ',
+          chalk.bgRed('[rw-serve-fixture]'),
           Buffer.from(data, 'utf-8').toString()
         )
       })
