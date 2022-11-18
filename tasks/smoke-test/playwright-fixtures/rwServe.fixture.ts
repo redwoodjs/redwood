@@ -61,7 +61,7 @@ const test = base.extend<any, ServeFixture>({
       serverHandler.stdout?.on('data', (data) => {
         console.log('[rw-serve-fixture]', Buffer.from(data, 'utf-8').toString())
       })
-      devServerHandler.stderr?.on('data', (data) => {
+      serverHandler.stderr?.on('data', (data) => {
         console.log(
           chalk.bgRed('[rw-serve-fixture]'),
           Buffer.from(data, 'utf-8').toString()

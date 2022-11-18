@@ -1,6 +1,5 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
-import chalk from 'chalk'
 import execa from 'execa'
 import isPortReachable from 'is-port-reachable'
 
@@ -66,14 +65,6 @@ const test = base.extend<any, StorybookFixture>({
         serverHandler.stdout.on('data', (data) => {
           const outputAsString = Buffer.from(data, 'utf-8').toString()
           console.log('[rw-storybook-fixture]', outputAsString)
-
-          if (outputAsString.includes(`http://localhost:${port}/`)) {
-            serverReadyPromiseHandle.resolve()
-          }
-        })
-        serverHandler.stderr.on('data', (data) => {
-          const outputAsString = Buffer.from(data, 'utf-8').toString()
-          console.log(chalk.bgRed('[rw-storybook-fixture]'), outputAsString)
 
           if (outputAsString.includes(`http://localhost:${port}/`)) {
             serverReadyPromiseHandle.resolve()
