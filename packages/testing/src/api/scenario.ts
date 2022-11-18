@@ -25,20 +25,57 @@ export const defineScenario: DefineScenario = (data) => {
   return data
 }
 
+/**
+ * @example {
+ *  dannyUser: {data :{
+ *   id: 1,
+ *  name: 'Danny',}
+ * }}
+ *
+ * @example
+ *  krisUser: (scenario) => {
+ *  return {
+ *    data: {
+ *      id: 2,
+ *      name: 'Kris',
+ *    }
+ *  }
+ * }
+ */
+type ScenarioDefinitionMap<
+  PrismaCreateType extends { data: any },
+  ModelName extends string | number | symbol = string | number | symbol,
+  TKeys extends string | number | symbol = string | number | symbol
+> = Record<
+  TKeys,
+  | A.Compute<PrismaCreateType>
+  | ((
+      scenario: Record<ModelName, Record<TKeys, any>>
+    ) => A.Compute<PrismaCreateType>)
+>
+
 // -----
 // The types below are used to provide global types for scenario and defineScenario, used in testing
 // ---
 
 // Note that the generic is **inside** the interface
 // This is so we can assign it to a const when we generate scenarios.d.ts
+
+// defineScenario({
+//   modelName: ScenarioDefinitionMap
+// })
+
 export interface DefineScenario {
   <
     PrismaCreateType extends { data: any },
     ModelName extends string | number | symbol = string | number | symbol,
     TKeys extends string | number | symbol = string | number | symbol
   >(
-    scenario: Record<ModelName, Record<TKeys, A.Compute<PrismaCreateType>>>
-  ): Record<ModelName, Record<TKeys, A.Compute<PrismaCreateType['data']>>>
+    scenarioMap: Record<
+      ModelName,
+      ScenarioDefinitionMap<PrismaCreateType, ModelName, TKeys>
+    >
+  ): Record<ModelName, Record<TKeys, unknown>>
 }
 
 /**
