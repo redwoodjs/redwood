@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.1",
+    "@redwoodjs/internal-paths": "3.2.0",
     "@redwoodjs/telemetry": "3.2.0",
     "core-js": "3.26.0",
     "listr2": "5.0.5"

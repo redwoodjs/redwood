@@ -5,7 +5,7 @@ import * as esbuild from 'esbuild'
 import { removeSync } from 'fs-extra'
 
 import { findApiFiles } from '../files'
-import { getPaths } from '../paths'
+import { getPaths } from '@redwoodjs/internal-paths'
 
 import { getApiSideBabelPlugins, prebuildApiFile } from './babel/api'
 

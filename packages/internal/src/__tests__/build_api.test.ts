@@ -13,7 +13,7 @@ import {
   TARGETS_NODE,
 } from '../build/babel/api'
 import { findApiFiles } from '../files'
-import { ensurePosixPath, getPaths } from '../paths'
+import { ensurePosixPath, getPaths } from '@redwoodjs/internal-paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,

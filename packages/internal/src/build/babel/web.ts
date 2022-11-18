@@ -4,7 +4,7 @@ import path from 'path'
 import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
-import { getPaths } from '../../paths'
+import { getPaths } from '@redwoodjs/internal-paths'
 
 import {
   CORE_JS_VERSION,

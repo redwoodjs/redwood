@@ -6,9 +6,9 @@ import React from 'react'
 import cheerio from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
+import { getPaths } from '@redwoodjs/internal-paths'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { LocationProvider } from '@redwoodjs/router'
 import {
   CellCacheContextProvider,

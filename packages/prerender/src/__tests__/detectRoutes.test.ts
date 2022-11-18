@@ -2,7 +2,7 @@ import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 import { detectPrerenderRoutes } from '../detection'
 
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/internal-paths', () => {
   return {
     getPaths: jest.fn(() => {
       return {

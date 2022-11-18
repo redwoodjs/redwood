@@ -1,4 +1,4 @@
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getPaths } from '@redwoodjs/internal-paths'
 import { getProject } from '@redwoodjs/structure'
 
 export const detectPrerenderRoutes = () => {

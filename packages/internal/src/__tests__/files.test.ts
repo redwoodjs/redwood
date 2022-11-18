@@ -21,7 +21,7 @@ import {
   isCellFile,
   isFileInsideFolder,
 } from '../files'
-import { ensurePosixPath, getPaths } from '../paths'
+import { ensurePosixPath, getPaths } from '@redwoodjs/internal-paths'
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))

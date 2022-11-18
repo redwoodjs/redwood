@@ -2,7 +2,7 @@ import { spawn } from 'child_process'
 import os from 'os'
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getPaths } from '@redwoodjs/internal-paths'
 
 const spawnProcess = (...args: Array<string>) => {
   spawn(

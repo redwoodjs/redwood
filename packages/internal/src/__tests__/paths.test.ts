@@ -5,7 +5,7 @@ import {
   resolveFile,
   ensurePosixPath,
   importStatementPath,
-} from '../paths'
+} from '@redwoodjs/internal-paths'
 
 describe('paths', () => {
   describe('processPagesDir', () => {
