@@ -1,5 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
+import chalk from 'chalk'
 import execa from 'execa'
 import isPortReachable from 'is-port-reachable'
 
