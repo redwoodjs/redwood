@@ -5,35 +5,23 @@ import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
-let filesMultiwordUpper
-let filesMultiwordDash
-let filesMultiwordUnderscore
-
-beforeAll(async () => {
-  filesMultiwordUpper = await scaffold.files({
-    model: 'Post',
-    path: 'AdminPages',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-  filesMultiwordDash = await scaffold.files({
-    model: 'Post',
-    path: 'admin-pages',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-  filesMultiwordUnderscore = await scaffold.files({
-    model: 'Post',
-    path: 'admin_pages',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-})
+jest.mock('execa')
 
 describe('AdminPages/Post', () => {
+  let filesMultiwordUpper
+
+  beforeAll(async () => {
+    filesMultiwordUpper = await scaffold.files({
+      model: 'Post',
+      path: 'AdminPages',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesMultiwordUpper).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesMultiwordUpper).length).toEqual(19)
     })
 
     // Layout
@@ -41,7 +29,7 @@ describe('AdminPages/Post', () => {
     test('creates a layout', async () => {
       expect(filesMultiwordUpper).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })
@@ -353,17 +341,28 @@ describe('AdminPages/Post', () => {
 })
 
 describe('admin-pages/Post', () => {
+  let filesMultiwordDash
+
+  beforeAll(async () => {
+    filesMultiwordDash = await scaffold.files({
+      model: 'Post',
+      path: 'admin-pages',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesMultiwordDash).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesMultiwordDash).length).toEqual(19)
     })
 
     // Layout
 
     test('creates a layout', async () => {
-      expect(filesMultiwordUpper).toHaveProperty([
+      expect(filesMultiwordDash).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })
@@ -675,17 +674,28 @@ describe('admin-pages/Post', () => {
 })
 
 describe('admin_pages/Post', () => {
+  let filesMultiwordUnderscore
+
+  beforeAll(async () => {
+    filesMultiwordUnderscore = await scaffold.files({
+      model: 'Post',
+      path: 'admin_pages',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesMultiwordUnderscore).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesMultiwordUnderscore).length).toEqual(19)
     })
 
     // Layout
 
     test('creates a layout', async () => {
-      expect(filesMultiwordUpper).toHaveProperty([
+      expect(filesMultiwordUnderscore).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/AdminPages/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })

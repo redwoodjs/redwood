@@ -1,10 +1,11 @@
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/internal')
+const { getPaths } = require('@redwoodjs/internal/dist/paths')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 
+/** @type {import('jest').Config} */
 module.exports = {
   // To make sure other config option which depends on rootDir always
   // use correct path, for example, coverageDirectory
@@ -19,6 +20,7 @@ module.exports = {
     __REDWOOD_API_URL: '',
     __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
     __REDWOOD__APP_TITLE: 'Redwood App',
+    __RWJS_TESTROOT_DIR: path.join(rwjsPaths.web.src), // used in jest setup to load mocks
   },
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
@@ -49,6 +51,13 @@ module.exports = {
     ),
     '^@redwoodjs/web$': path.join(NODE_MODULES_PATH, '@redwoodjs/web'),
 
+    // This allows us to mock `createAuthentication` which is used by auth
+    // clients, which in turn lets us mock `useAuth` in tests
+    '^@redwoodjs/auth$': path.join(
+      NODE_MODULES_PATH,
+      '@redwoodjs/testing/dist/web/mockAuth.js'
+    ),
+
     // @NOTE: Import @redwoodjs/testing in web tests, and it automatically remaps to the web side only
     // This is to prevent web stuff leaking into api, and vice versa
     '^@redwoodjs/testing$': path.join(
@@ -56,6 +65,7 @@ module.exports = {
       '@redwoodjs/testing/web'
     ),
     '~__REDWOOD__USER_ROUTES_FOR_MOCK': rwjsPaths.web.routes,
+    '~__REDWOOD__USER_AUTH_FOR_MOCK': path.join(rwjsPaths.web.src, 'auth'),
     /**
      * Mock out files that aren't particularly useful in tests. See fileMock.js for more info.
      */
@@ -73,11 +83,4 @@ module.exports = {
     ],
   },
   resolver: path.resolve(__dirname, './resolver.js'),
-  // Jest plans to only have one breaking change in v29, and that's making this the default.
-  // See https://jestjs.io/blog/2022/04/25/jest-28#future.
-  // So we may as well do it now so that upgrading to v29 won't be breaking.
-  snapshotFormat: {
-    escapeString: false,
-    printBasicPrototype: false,
-  },
 }

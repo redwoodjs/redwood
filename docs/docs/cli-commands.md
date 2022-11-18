@@ -53,6 +53,7 @@ yarn create redwood-app <project directory> [option]
 | `--overwrite`          | Create the project even if the specified project directory isn't empty                                                  |
 | `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: https://telemetry.redwoodjs.com  |
 | `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                            |
+| `--git-init`, `--git`  | Initialize a git repo during the install process, disabled by default                                                   |
 
 If you run into trouble during the yarn install step, which may happen if you're developing on an external drive and in other miscellaneous scenarios, try the `--yarn1` flag:
 
@@ -192,9 +193,9 @@ yarn redwood dev [side..]
 
 `yarn redwood dev api` starts the Redwood dev server and `yarn redwood dev web` starts the Webpack dev server with Redwood's config.
 
-| Argument           | Description                                                                                                                                                                                                         |
-| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                                              |
+| Argument           | Description                                                                                                                                                                                 |
+| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                      |
 | `--forward, --fwd` | String of one or more Webpack Dev Server config options. See example usage below. See the [Redwood Webpack Doc](webpack-configuration.md#webpack-dev-server) for more details and examples. |
 
 **Usage**
@@ -247,7 +248,7 @@ yarn redwood deploy <target>
 ```
 
 | Commands                      | Description                              |
-|:------------------------------|:-----------------------------------------|
+| :---------------------------- | :--------------------------------------- |
 | `serverless `                 | Deploy to AWS using Serverless framework |
 | `netlify [...commands]`       | Build command for Netlify deploy         |
 | `render <side> [...commands]` | Build command for Render deploy          |
@@ -262,7 +263,7 @@ yarn redwood deploy serverless
 ```
 
 | Options & Arguments | Description                                                                                                                                 |
-|:--------------------|:--------------------------------------------------------------------------------------------------------------------------------------------|
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------ |
 | `--side`            | which Side(s)to deploy [choices: "api", "web"] [default: "web","api"]                                                                       |
 | `--stage`           | serverless stage, see [serverless stage docs](https://www.serverless.com/blog/stages-and-environments) [default: "production"]              |
 | `--pack-only`       | Only package the build for deployment                                                                                                       |
@@ -289,6 +290,16 @@ The following command will build, apply Prisma DB migrations, and skip data migr
 ```
 yarn redwood deploy netlify --no-data-migrate
 ```
+
+:::caution
+While you may be tempted to use the [Netlify CLI](https://cli.netlify.com) commands to [build](https://cli.netlify.com/commands/build) and [deploy](https://cli.netlify.com/commands/deploy) your project directly from you local project directory, doing so **will lead to errors when deploying and/or when running functions**. I.e. errors in the function needed for the GraphQL server, but also other serverless functions.
+
+The main reason for this is that these Netlify CLI commands simply build and deploy -- they build your project locally and then push the dist folder. That means that when building a RedwoodJS project, the [Prisma client is generated with binaries matching the operating system at build time](https://cli.netlify.com/commands/link) -- and not the [OS compatible](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#binarytargets-options) with running functions on Netlify. Your Prisma client engine may be `darwin` for OSX or `windows` for Windows, but it needs to be `debian-openssl-1.1.x` or `rhel-openssl-1.1.x`. If the client is incompatible, your functions will fail.
+
+Therefore, please follow the [instructions in the Tutorial](tutorial/chapter4/deployment.md#netlify) to sync your GitHub (or other compatible source control service) repository with Netlify and allow their build and deploy system to manage deployments.
+
+The [Netlify CLI](https://cli.netlify.com) still works well for [linking your project to your site](https://cli.netlify.com/commands/link), testing local builds and also using their [dev](https://cli.netlify.com/commands/dev) or [dev --live](https://cli.netlify.com/commands/dev) to share your local dev server via a tunnel.
+:::
 
 ### deploy render
 
@@ -358,7 +369,7 @@ yarn redwood destroy <type>
 | `sdl <model>`        | Destroy a GraphQL schema and service component based on a given DB schema Model |
 | `service <name>`     | Destroy a service component                                                     |
 | `directive <name>`   | Destroy a directive                                                             |
-| `graphiql`   | Destroy a generated graphiql file                                                             |
+| `graphiql`           | Destroy a generated graphiql file                                               |
 
 ## exec
 
@@ -403,6 +414,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 | `cell <name>`          | Generate a cell component                                                                             |
 | `component <name>`     | Generate a component component                                                                        |
 | `dataMigration <name>` | Generate a data migration component                                                                   |
+| `dbAuth`               | Generate sign in, sign up and password reset pages for dbAuth                                         |
 | `deploy <provider>`    | Generate a deployment configuration                                                                   |
 | `function <name>`      | Generate a Function                                                                                   |
 | `layout <name>`        | Generate a layout component                                                                           |
@@ -437,6 +449,7 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 | `name`               | Name of the cell                                                                                                                                                 |
 | `--force, -f`        | Overwrite existing files                                                                                                                                         |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                             |
+| `--query`            | Use this flag to specify a specific name for the GraphQL query. The query name must be unique                                                                    |
 | `--list`             | Use this flag to generate a list cell. This flag is needed when dealing with irregular words whose plural and singular is identical such as equipment or pokemon |
 | `--tests`            | Generate test files [default: true]                                                                                                                              |
 | `--stories`          | Generate Storybook files [default: true]                                                                                                                         |
@@ -563,6 +576,28 @@ See the [Data Migration](data-migrations.md) docs.
 **Usage**
 
 See the [Deploy](/docs/deploy/introduction) docs.
+
+### generate dbAuth
+
+Generate log in, sign up, forgot password and password reset pages for dbAuth
+
+```
+yarn redwood generate dbAuth
+```
+
+| Arguments & Options | Description                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------ |
+| `--webAuthn`        | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted |
+
+If you don't want to create your own log in, sign up, forgot password and
+password reset pages from scratch you can use this generator. The pages will be
+available at /login, /signup, /forgot-password, and /reset-password. Check the
+post-install instructions for one change you need to make to those pages: where
+to redirect the user to once their log in/sign up is successful.
+
+If you'd rather create your own, you might want to start from the generated
+pages anyway as they'll contain the other code you need to actually submit the
+log in credentials or sign up fields to the server for processing.
 
 ### generate directive
 
@@ -1650,6 +1685,7 @@ yarn redwood setup <category>
 | Commands           | Description                                                                                |
 | ------------------ | ------------------------------------------------------------------------------------------ |
 | `auth`             | Set up auth configuration for a provider                                                   |
+| `cache`            | Set up cache configuration for memcached or redis                                          |
 | `custom-web-index` | Set up an `index.js` file, so you can customize how Redwood web is mounted in your browser |
 | `deploy`           | Set up a deployment configuration for a provider                                           |
 | `generator`        | Copy default Redwood generator templates locally for customization                         |
@@ -1685,13 +1721,27 @@ A `generateGraphiQLHeader` file will be created in your `api/lib` folder and inc
 yarn redwood setup graphiql <provider>
 ```
 
-| Arguments & Options | Description                                                                                                                                                                   |
-| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase` |
-| `--id, -i`          | Unique id to identify current user (required only for DBAuth)                                                                                                                                     |
-| `--token, -t`   | Generated JWT token. If not provided, a mock JWT payload is returned in `api/lib/generateGraphiQLHeader` that can be modified and turned into a token                                                                                                                                       |
-| `--expiry, -e`   | Token expiry in minutes. Default is 60                                              |
-| `--view, -v`   | Print out generated headers to console                                                                                                                                        |
+| Arguments & Options | Description                                                                                                                                           |
+| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase`                                                                           |
+| `--id, -i`          | Unique id to identify current user (required only for DBAuth)                                                                                         |
+| `--token, -t`       | Generated JWT token. If not provided, a mock JWT payload is returned in `api/lib/generateGraphiQLHeader` that can be modified and turned into a token |
+| `--expiry, -e`      | Token expiry in minutes. Default is 60                                                                                                                |
+| `--view, -v`        | Print out generated headers to console                                                                                                                |
+
+
+### setup cache
+
+This command creates a setup file in `api/src/lib/cache.{ts|js}` for connecting to a Memcached or Redis server and allows caching in services. See the [**Caching** section of the Services docs](/docs/services#caching) for usage.
+
+```
+yarn redwood setup cache <client>
+```
+
+| Arguments & Options | Description              |
+| :------------------ | :----------------------- |
+| `client`            | Name of the client to configure, `memcached` or `redis` |
+| `--force, -f`       | Overwrite existing files |
 
 ### setup custom-web-index
 
@@ -1736,18 +1786,18 @@ Your template will receive the provided `name` in a number of different variatio
 
 For example, given the name `fooBar` your template will receive the following _variables_ with the given _values_
 
-| Variable                  | Value         |
-| :------------------------ | :------------ |
-| `pascalName`              | `FooBar`      |
-| `camelName`               | `fooBar`      |
-| `singularPascalName`      | `FooBar`      |
-| `pluralPascalName`        | `FooBars`     |
-| `singularCamelName`       | `fooBar`      |
-| `pluralCamelName`         | `fooBars`     |
-| `singularParamName`       | `foo-bar`     |
-| `pluralParamName`         | `foo-bars`    |
-| `singularConstantName`    | `FOO_BAR`     |
-| `pluralConstantName`      | `FOO_BARS`    |
+| Variable               | Value      |
+| :--------------------- | :--------- |
+| `pascalName`           | `FooBar`   |
+| `camelName`            | `fooBar`   |
+| `singularPascalName`   | `FooBar`   |
+| `pluralPascalName`     | `FooBars`  |
+| `singularCamelName`    | `fooBar`   |
+| `pluralCamelName`      | `fooBars`  |
+| `singularParamName`    | `foo-bar`  |
+| `pluralParamName`      | `foo-bars` |
+| `singularConstantName` | `FOO_BAR`  |
+| `pluralConstantName`   | `FOO_BARS` |
 
 **Example**
 
@@ -1832,10 +1882,10 @@ Set up a UI design or style library. Right now the choices are [TailwindCSS](htt
 yarn rw setup ui <library>
 ```
 
-| Arguments & Options | Description                                                                 |
-| :------------------ | :-------------------------------------------------------------------------- |
+| Arguments & Options | Description                                                                             |
+| :------------------ | :-------------------------------------------------------------------------------------- |
 | `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, `mantine`, and `windicss` |
-| `--force, -f`       | Overwrite existing configuration                                            |
+| `--force, -f`       | Overwrite existing configuration                                                        |
 
 ## storybook
 
@@ -1851,11 +1901,11 @@ yarn redwood storybook
 
 RedwoodJS supports Storybook by creating stories when generating cells, components, layouts and pages. You can then use these to describe how to render that UI component with representative data.
 
-| Arguments & Options | Description                                       |
-| :------------------ | :------------------------------------------------ |
-| `--open`            | Open Storybook in your browser on start           |
-| `--build`           | Build Storybook                                   |
-| `--port`            | Which port to run Storybook on (defaults to 7910) |
+| Arguments & Options | Description                                                                                        |
+| :------------------ | :------------------------------------------------------------------------------------------------- |
+| `--open`            | Open Storybook in your browser on start [default: true]. Pass `--no-open` to disable this behavior |
+| `--build`           | Build Storybook                                                                                    |
+| `--port`            | Which port to run Storybook on [default: 7910]                                                     |
 
 ## test
 
@@ -1865,15 +1915,15 @@ Run Jest tests for api and web.
 yarn redwood test [side..]
 ```
 
-| Arguments & Options | Description                                                                                                                                                                                                                                                                                        |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sides or filter`   | Which side(s) to test, and/or a regular expression to match against your test files to filter by                                                                                                                                                                                                   |
-| `--help`            | Show help                                                                                                                                                                                                                                                                                          |
-| `--version`         | Show version number                                                                                                                                                                                                                                                                                |
-| `--watch`           | Run tests related to changed files based on hg/git (uncommitted files). Specify the name or path to a file to focus on a specific set of tests [default: true]                                                                                                                                     |
-| `--watchAll`        | Run all tests                                                                                                                                                                                                                                                                                      |
-| `--collectCoverage` | Show test coverage summary and output info to `coverage` directory in project root. See this directory for an .html coverage report                                                                                                                                                                |
-| `--clearCache`      | Delete the Jest cache directory and exit without running tests                                                                                                                                                                                                                                     |
+| Arguments & Options | Description                                                                                                                                                                                                                                                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sides or filter`   | Which side(s) to test, and/or a regular expression to match against your test files to filter by                                                                                                                                                           |
+| `--help`            | Show help                                                                                                                                                                                                                                                  |
+| `--version`         | Show version number                                                                                                                                                                                                                                        |
+| `--watch`           | Run tests related to changed files based on hg/git (uncommitted files). Specify the name or path to a file to focus on a specific set of tests [default: true]                                                                                             |
+| `--watchAll`        | Run all tests                                                                                                                                                                                                                                              |
+| `--collectCoverage` | Show test coverage summary and output info to `coverage` directory in project root. See this directory for an .html coverage report                                                                                                                        |
+| `--clearCache`      | Delete the Jest cache directory and exit without running tests                                                                                                                                                                                             |
 | `--db-push`         | Syncs the test database with your Prisma schema without requiring a migration. It creates a test database if it doesn't already exist [default: true]. This flag is ignored if your project doesn't have an `api` side. [👉 More details](#prisma-db-push). |
 
 > **Note** all other flags are passed onto the jest cli. So for example if you wanted to update your snapshots you can pass the `-u` flag

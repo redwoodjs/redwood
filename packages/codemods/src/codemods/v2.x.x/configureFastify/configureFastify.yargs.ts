@@ -1,23 +1,60 @@
+import fs from 'fs'
 import path from 'path'
 
+import { fetch } from 'cross-undici-fetch'
+import fg from 'fast-glob'
 import task from 'tasuku'
 
 import getRWPaths from '../../../lib/getRWPaths'
+import prettify from '../../../lib/prettify'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'configure-fastify'
-export const description = '(v2.x.x->v2.x.x) Converts world to bazinga'
+export const description =
+  '(v2.x.x->v2.x.x) Updates api side’s server.config.js to configure Fastify'
 
 export const handler = () => {
-  task('Configure Fastify', async ({ setOutput }: task.TaskInnerApi) => {
-    await runTransform({
-      transformPath: path.join(__dirname, 'configureFastify.js'),
-      // Here we know exactly which file we need to transform, but often times you won't.
-      // If you need to transform files based on their name, location, etc, use `fast-glob`.
-      // If you need to transform files based on their contents, use `getFilesWithPattern`.
-      targetPaths: [path.join(getRWPaths().base, 'redwood.toml')],
+  task('Configure Fastify', async ({ setOutput }) => {
+    const [API_SERVER_CONFIG_PATH] = fg.sync('server.config.{js,ts}', {
+      cwd: getRWPaths().api.base,
+      absolute: true,
     })
 
-    setOutput('All done! Run `yarn rw lint --fix` to prettify your code')
+    if (fs.existsSync(API_SERVER_CONFIG_PATH)) {
+      await runTransform({
+        transformPath: path.join(__dirname, 'configureFastify.js'),
+        targetPaths: [API_SERVER_CONFIG_PATH],
+      })
+
+      // The transform generates two extra semicolons for some reason:
+      //
+      // ```js
+      // module.exports = { config };;
+      // ```
+      //
+      // They don't show up in tests cause we run prettier. Let's do the same here.
+      fs.writeFileSync(
+        API_SERVER_CONFIG_PATH,
+        prettify(fs.readFileSync(API_SERVER_CONFIG_PATH, 'utf-8'))
+      )
+
+      setOutput('All done!')
+    } else {
+      const res = await fetch(
+        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/api/server.config.js'
+      )
+      const text = await res.text()
+
+      const NEW_API_SERVER_CONFIG_PATH = path.join(
+        getRWPaths().api.base,
+        'server.config.js'
+      )
+
+      fs.writeFileSync(NEW_API_SERVER_CONFIG_PATH, prettify(text))
+
+      setOutput(
+        'Done! No server.config.js found, so we updated your project to use the latest version.'
+      )
+    }
   })
 }

@@ -1,43 +1,16 @@
+// @ts-check
 const path = require('path')
 
 const {
-  getPaths,
   getApiSideDefaultBabelConfig,
-} = require('@redwoodjs/internal')
+} = require('@redwoodjs/internal/dist/build/babel/api')
+const { getPaths } = require('@redwoodjs/internal/dist/paths')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
 const { babelrc } = getApiSideDefaultBabelConfig()
 
-// @NOTE: is there a better way we could implement this?
-if (process.env.SKIP_DB_PUSH !== '1') {
-  const process = require('process')
-  const path = require('path')
-  // Load dotenvs
-  require('dotenv-defaults/config')
-
-  const cacheDirDb = `file:${path.join(__dirname, '.redwood', 'test.db')}`
-  process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
-
-  const command =
-    process.env.TEST_DATABASE_STRATEGY === 'reset'
-      ? ['prisma', 'migrate', 'reset', '--force', '--skip-seed']
-      : ['prisma', 'db', 'push', '--force-reset', '--accept-data-loss']
-
-  const execa = require('execa')
-  execa.sync(`yarn rw`, command, {
-    cwd: rwjsPaths.api.base,
-    stdio: 'inherit',
-    shell: true,
-    env: {
-      DATABASE_URL: process.env.DATABASE_URL,
-    },
-  })
-
-  // If its been reset once, we don't need to re-run it for every test
-  process.env.SKIP_DB_PUSH = '1'
-}
-
+/** @type {import('jest').Config} */
 module.exports = {
   // To make sure other config option which depends on rootDir use
   // correct path, for example, coverageDirectory
@@ -45,6 +18,17 @@ module.exports = {
   roots: [path.join(rwjsPaths.api.src)],
   runner: path.join(__dirname, '../jest-serial-runner.js'),
   testEnvironment: path.join(__dirname, './RedwoodApiJestEnv.js'),
+  globals: {
+    __RWJS__TEST_IMPORTS: {
+      apiSrcPath: rwjsPaths.api.src,
+      tearDownCachePath: path.join(
+        rwjsPaths.generated.base,
+        'scenarioTeardown.json'
+      ),
+      dbSchemaPath: rwjsPaths.api.dbSchema,
+    },
+  },
+  sandboxInjectedGlobals: ['__RWJS__TEST_IMPORTS'],
   displayName: {
     color: 'redBright',
     name: 'api',
@@ -59,6 +43,9 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
+  // This runs once before all tests
+  globalSetup: path.join(__dirname, './globalSetup.js'),
+  // Note this setup runs for each test file!
   setupFilesAfterEnv: [path.join(__dirname, './jest.setup.js')],
   moduleNameMapper: {
     // @NOTE: Import @redwoodjs/testing in api tests, and it automatically remaps to the api side only
@@ -80,12 +67,5 @@ module.exports = {
         configFile: path.resolve(__dirname, './apiBabelConfig.js'),
       },
     ],
-  },
-  // Jest plans to only have one breaking change in v29, and that's making this the default.
-  // See https://jestjs.io/blog/2022/04/25/jest-28#future.
-  // So we may as well do it now so that upgrading to v29 won't be breaking.
-  snapshotFormat: {
-    escapeString: false,
-    printBasicPrototype: false,
   },
 }

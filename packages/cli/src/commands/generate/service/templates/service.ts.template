@@ -1,4 +1,4 @@
-import type { QueryResolvers<% if (crud) { %>, MutationResolvers<% } %><% if (relations.length) { %>, ${singularPascalName}Resolvers<% } %> } from 'types/graphql'
+import type { QueryResolvers<% if (crud) { %>, MutationResolvers<% } %><% if (relations.length) { %>, ${singularPascalName}RelationResolvers<% } %> } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -31,6 +31,8 @@ export const delete${singularPascalName}: MutationResolvers['delete${singularPas
   })
 }<% } %><% if (relations.length) { %>
 
-export const ${singularPascalName}: Partial<${singularPascalName}Resolvers>  = {<% relations.forEach(relation => { %>
-  ${relation}: (_obj, gqlArgs) => db.${singularCamelName}.findUnique({ where: { id: gqlArgs?.root?.id } }).${relation}(),<% }) %>
+export const ${singularPascalName}: ${singularPascalName}RelationResolvers = {<% relations.forEach(relation => { %>
+  ${relation}: (_obj, { root }) => {
+    return db.${singularCamelName}.findUnique({ where: { id: root?.id } }).${relation}()
+  },<% }) %>
 }<% } %>

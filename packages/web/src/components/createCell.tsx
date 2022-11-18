@@ -319,11 +319,12 @@ export function createCell<
           // so using `any` here
           queryRest = { variables } as any
         } else {
-          queryCache[cacheKey] ||= {
-            query,
-            variables: options.variables,
-            hasProcessed: false,
-          }
+          queryCache[cacheKey] ||
+            (queryCache[cacheKey] = {
+              query,
+              variables: options.variables,
+              hasProcessed: false,
+            })
         }
       }
     }

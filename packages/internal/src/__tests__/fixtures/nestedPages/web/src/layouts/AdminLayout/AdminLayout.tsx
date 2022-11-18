@@ -1,6 +1,7 @@
-import {useAuth} from '@redwoodjs/auth'
-import {Link, routes} from '@redwoodjs/router'
-import {Toaster} from '@redwoodjs/web/toast'
+import { Link, routes } from '@redwoodjs/router'
+import { Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from '../../auth'
 
 type AdminLayoutProps = {
   children?: React.ReactNode

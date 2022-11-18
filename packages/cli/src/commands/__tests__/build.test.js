@@ -20,12 +20,8 @@ jest.mock('@redwoodjs/internal/dist/config', () => {
   }
 })
 
-import Listr from 'listr'
-jest.mock('listr', () => {
-  return jest.fn().mockImplementation(function FakeListr() {
-    return { run: jest.fn() }
-  })
-})
+import { Listr } from 'listr2'
+jest.mock('listr2')
 
 // Make sure prerender doesn't get triggered
 jest.mock('execa', () =>
@@ -42,7 +38,7 @@ afterEach(() => jest.clearAllMocks())
 test('the build tasks are in the correct sequence', async () => {
   await handler({})
   expect(Listr.mock.calls[0][0].map((x) => x.title)).toMatchInlineSnapshot(`
-    Array [
+    [
       "Generating Prisma Client...",
       "Verifying graphql schema...",
       "Building API...",
@@ -61,7 +57,7 @@ test('Should run prerender for web', async () => {
 
   await handler({ side: ['web'], prerender: true })
   expect(Listr.mock.calls[0][0].map((x) => x.title)).toMatchInlineSnapshot(`
-    Array [
+    [
       "Cleaning Web...",
       "Building Web...",
     ]

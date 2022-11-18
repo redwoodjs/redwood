@@ -4,6 +4,20 @@ description: How to get started connecting to and deploying to a real server
 
 # Introduction to Servers
 
+If you're looking at deploying to a real, physical server using something like the [Baremetal](/docs/deploy/baremetal) deploy option, you're going to need to get familiar with connecting to remote servers. On *nix-based systems (but also Windows after installing something like Powershell) this is handled by the [SSH](https://en.wikipedia.org/wiki/Secure_Shell) utility. In this doc we'll learn about the various strategies that SSH can use to connect:
+
+* Username & password
+* Private key
+* Public key
+
+## Terminology
+
+Let's define a few terms so we're on the same page going forward:
+
+* SSH - Secure Shell Protocol (where'd the P go in the acronym?) is the protocol used by the `ssh` command line utility we'll be using throughout this doc
+* `ssh` - when shown in code font like this it's referring to the actual command line utility, rather than the all-encompassing "SSH" concept
+* `ssh-agent` - another utility that keeps track of public and private keys and makes them available for use by the `ssh` utility
+
 ## First Connect
 
 Before we can do anything else, we want to make sure that we can remotely connect to our server via SSH manually, as *nix folks have been doing for hundreds of years using SSH. Depending on how the server is configured, you'll connect with either a username and password, a private key known to the server, or a public key known to the server. We'll look at each one below.
@@ -77,11 +91,11 @@ root@192.168.0.122's password:
 
 You'll get three tries to get the password correct.
 
-Skip ahead to the [Connected](#connected) section.
+Whether or not you connected successfully, skip ahead to the [Connected](#connected) section.
 
 ### Private Key
 
-Some providers, like AWS, will give you a private key at the time the server is created, rather than a password. This file usually ends in `.pem`. Make sure you know where you put this file on your computer because, for now, it's the only way you'll be able to connect to your server via SSH. If you lose it, you'll need to terminate that instance and start a new one. I generally put them in the `~/.ssh` folder to keep all SSH-related stuff together, usually in a subdirectory. (I also move this folder to iCloud and then create a symlink back to `~/.ssh` so that it's synchronized across all of my systems.)
+Some providers, like AWS, will give you a private key at the time the server is created, rather than a password. This file usually ends in `.pem`. Make sure you know where you put this file on your computer because, for now, it's the only way you'll be able to connect to your server. If you lose it, you'll need to terminate that instance and start a new one. I generally put them in the `~/.ssh` folder to keep all SSH-related stuff together, usually in a subdirectory. (I also move this directory to iCloud and then create a symlink back to `~/.ssh` so that it's synchronized across all of my systems.)
 
 :::info More About Public/Private Keypairs
 
@@ -284,13 +298,23 @@ Our key exists but does SSH know to use it yet? Let's ask `ssh-agent` (the tool 
 ssh-add -L
 ```
 
-Do you see your new public key listed? If not, we just have to let `ssh-agent` know where it is and to start using it:
+Do you see your new public key listed? If not, we just have to let `ssh-agent` know where it is and to start using it (note that you give the path to the private key):
 
 ```
-ssh-add -T ~/.ssh/id_rsa.pub
+ssh-add ~/.ssh/id_rsa
 ```
 
 Now running `ssh-add -L` should list our key.
+
+:::info Missing key after computer restart
+
+I've had cases where my key was unknown to `ssh-agent` after a computer restart. I added the following to the `~/.zshrc` file on my computer (not the server) so that the key is added every time I start a new terminal session:
+
+```
+ssh-add ~/.ssh/id_rsa
+```
+
+:::
 
 ### Adding Your SSH Public Key to the Server
 
@@ -360,6 +384,14 @@ git@github.com: Permission denied (publickey).
 
 Then agent forwarding is not enabled. In this case we recommend this excellent guide from GitHub which walks you through enabling it: https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding
 
+## Deploy Keys
+
+You may not want to use your own personal SSH keys during deploy time. One con to Agent Forwarding is that it requires that you personally (or a deploy system acting on your behalf) SSH into a machine to perform deploys, rather than letting a CI/CD system do them. Another is security: presumably your SSH keys allow full access to your repos, which is more than the read-only access needed for a deploy.
+
+For these reasons you may want to consider using **deploy keys**. The idea is that you generate a public/private keypair that's unique to the server(s), and then let GitHub know about the public key. Now the server(s) can connect to GitHub and clone your codebase without you being involved. And you can lock down access to that key to a single repo with read-only access.
+
+GitHub has a great guide for adding deploy keys to your account: https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys
+
 ## Customizing the Prompt
 
 When deploying an app to production it can be very helpful to get a reminder of what server you're connected to, rather that seeing an IP address or random hostname at the prompt:
@@ -395,9 +427,9 @@ else
 fi
 ```
 
-Within all of that gobledy gook you should see a few special escape characters: `\u`, `\h` and `\w`. These are the **user**, **hostname** and **working directory**. You may have all or only some of these present. The rest of the characters, like `[\033[00m\]` are color codes, which we can ignore for now.
-
 In the config snippet above, the first `PS1` is used for color prompts and the second is for black and white. You'll want to change them both.
+
+Within all of that gobledy gook you should see a few special escape characters: `\u`, `\h` and `\w`. These are the **user**, **hostname** and **working directory**. You may have all or only some of these present. The rest of the characters, like `[\033[00m\]` are color codes, which we can ignore for now.
 
 For our simple case, just replace the `\h` with the string we want to show for the hostname:
 
@@ -415,7 +447,7 @@ Now save the file, and run `source` to load up the variables into the current se
 source ~/.bashrc
 ```
 
-You should see your prompt change to show you new custom hostname! Now whenever you connect to your server you'll be sure not to run `rm -rf *` in the wrong environment.
+You should see your prompt change to and you new custom hostname! Now whenever you connect to your server you'll be sure not to run `rm -rf *` in the wrong environment.
 
 If you want to get real fancy with your prompt, there are some [PS1 generators](hhttps://ezprompt.net) out there that let you create the string containing all kinds of fancy stuff, and easily customize the colors.
 
@@ -423,17 +455,18 @@ If you want to get real fancy with your prompt, there are some [PS1 generators](
 
 Seeing `ruby-prod1` helps keep track of which server we're on, but wouldn't it be great if you could just type that as a command and connect automatically? You can!
 
-Back in your `.bashrc`/`.bash_profile` whichever file, add a line like the following:
+On your local computer's `.zshrc`, `.bash_profile` whichever file, add a line like the following:
 
 ```
 alias ruby-prod1='ssh root@192.168.0.122'
 ```
 
-Then run `source ~/.bashrc` to execute it. Now you should be able to connect by just using the name of the server, and skip the SSH command altogether:
+Then run `source ~/.zshrc` to execute it. Now you should be able to connect by just using the name of the server, and skip the SSH command altogether:
 
 ```
 ruby-prod1
 ```
+
 It doesn't get much easier than that!
 
 ## What's Next?

@@ -2,25 +2,21 @@ export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { SupportedAuthTypes } from '@redwoodjs/auth'
-
-import type { DbAuthSession } from '../functions/dbAuth/DbAuthHandler'
-
-import { decodeToken } from './decoders'
+import type { Decoded } from './parseJWT'
+export type { Decoded }
 
 // This is shared by `@redwoodjs/web`
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
-export const getAuthProviderHeader = (
-  event: APIGatewayProxyEvent
-): SupportedAuthTypes => {
-  return event?.headers[AUTH_PROVIDER_HEADER] as SupportedAuthTypes
+export const getAuthProviderHeader = (event: APIGatewayProxyEvent) => {
+  return event?.headers[AUTH_PROVIDER_HEADER]
 }
 
 export interface AuthorizationHeader {
   schema: 'Bearer' | 'Basic' | string
   token: string
 }
+
 /**
  * Split the `Authorization` header into a schema and token part.
  */
@@ -41,31 +37,39 @@ export const parseAuthorizationHeader = (
 }
 
 export type AuthContextPayload = [
-  string | Record<string, unknown> | null | DbAuthSession,
-  { type: SupportedAuthTypes } & AuthorizationHeader,
+  Decoded,
+  { type: string } & AuthorizationHeader,
   { event: APIGatewayProxyEvent; context: LambdaContext }
 ]
+
+export type Decoder = (
+  token: string,
+  type: string,
+  req: { event: APIGatewayProxyEvent; context: LambdaContext }
+) => Promise<Decoded>
 
 /**
  * Get the authorization information from the request headers and request context.
  * @returns [decoded, { type, schema, token }, { event, context }]
  **/
 export const getAuthenticationContext = async ({
+  authDecoder,
   event,
   context,
 }: {
+  authDecoder?: Decoder
   event: APIGatewayProxyEvent
   context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
   const type = getAuthProviderHeader(event)
+
   // No `auth-provider` header means that the user is logged out,
   // and none of this auth malarky is required.
-  if (!type) {
+  if (!type || !authDecoder) {
     return undefined
   }
 
-  let decoded = null
   const { schema, token } = parseAuthorizationHeader(event)
-  decoded = await decodeToken(type, token, { event, context })
+  const decoded = await authDecoder(token, type, { event, context })
   return [decoded, { type, schema, token }, { event, context }]
 }

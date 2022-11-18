@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 
 import camelcase from 'camelcase'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
@@ -71,7 +71,7 @@ export const paramVariants = (path) => {
 
   return {
     propParam: `{ ${paramName} }`,
-    propValueParam: `${paramName}={${defaultValueAsProp}} `, // used in story
+    propValueParam: `${paramName}={${defaultValueAsProp}}`, // used in story
     argumentParam: `{ ${paramName}: ${defaultValueAsProp} }`,
     paramName,
     paramValue: defaultValue,
@@ -106,7 +106,10 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     extension: typescript ? '.stories.tsx' : '.stories.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
-    templatePath: 'stories.tsx.template',
+    templatePath:
+      rest.paramName !== ''
+        ? 'stories.tsx.parametersTemplate'
+        : 'stories.tsx.template',
     templateVars: rest,
   })
 
@@ -240,7 +243,7 @@ export const handler = async ({
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

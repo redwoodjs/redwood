@@ -3,7 +3,7 @@ import path from 'path'
 import boxen from 'boxen'
 import camelcase from 'camelcase'
 import chalk from 'chalk'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
@@ -19,7 +19,7 @@ import {
 import c from '../../../lib/colors'
 import { pluralize } from '../../../lib/rwPluralize'
 import { getSchema, getEnum, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
@@ -242,7 +242,8 @@ export const builder = (yargs) => {
     .option('tests', {
       description: 'Generate test files',
       type: 'boolean',
-      // don't give it a default value, it gets overwritten in  first few lines of the handler
+      // don't give it a default value, it gets overwritten in first few lines
+      // of the handler
     })
     .option('docs', {
       description: 'Generate SDL and GraphQL comments to use in documentation',
@@ -290,7 +291,7 @@ export const handler = async ({
           task: generateTypes,
         },
       ].filter(Boolean),
-      { collapse: false, exitOnError: true }
+      { rendererOptions: { collapse: false }, exitOnError: true }
     )
 
     await tasks.run()

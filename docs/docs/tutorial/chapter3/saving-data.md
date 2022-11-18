@@ -298,8 +298,9 @@ export const deleteContact = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```js title="api/src/services/contacts/contacts.ts"
-import { db } from 'src/lib/db'
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const contacts: QueryResolvers['contacts'] = () => {
   return db.contact.findMany()
@@ -348,7 +349,7 @@ When you started development with `yarn redwood dev` (or `yarn rw dev`) you actu
 
 <img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488164-37663b8a-0bfa-4d52-8312-8cfaac7c2915.png" />
 
-Not very exciting yet, but check out that "Docs" tab on the far right:
+Not very exciting yet, but select the "Docs" tab on the far right and click on `query: Query`.
 
 <img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161487889-8525abd6-1b44-4ba6-b637-8a3426f53197.png" />
 
@@ -1280,14 +1281,14 @@ export const createContact = ({ input }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```ts title="api/src/services/contacts/contacts.ts"
-import type { Prisma } from '@prisma/client'
+import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
 // ...
 
-export const createContact = ({ input }: CreateContactArgs) => {
+export const createContact: MutationResolvers['createContact'] = ({ input }) => {
   // highlight-next-line
   validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })

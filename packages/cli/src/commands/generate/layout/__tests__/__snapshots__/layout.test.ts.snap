@@ -14,21 +14,98 @@ const A11yLayout = ({ children }) => {
   return (
     <>
       {/* renders a link that remains hidden till focused; put it at the top of your layout */}
-
       <SkipNavLink />
-
       <nav></nav>
-
       {/* renders a div as the target for the link; put it next to your main content */}
-
       <SkipNavContent />
-
       <main>{children}</main>
     </>
   )
 }
 
 export default A11yLayout
+"
+`;
+
+exports[`Multi word default files creates a multi word layout component 1`] = `
+"const SinglePageLayout = ({ children }) => {
+  return <>{children}</>
+}
+
+export default SinglePageLayout
+"
+`;
+
+exports[`Multi word default files creates a multi word layout test 1`] = `
+"import { render } from '@redwoodjs/testing/web'
+
+import SinglePageLayout from './SinglePageLayout'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+describe('SinglePageLayout', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<SinglePageLayout />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`Multi word default files creates a multi word layout test 2`] = `
+"import SinglePageLayout from './SinglePageLayout'
+
+export const generated = (args) => {
+  return <SinglePageLayout {...args} />
+}
+
+export default {
+  title: 'Layouts/SinglePageLayout',
+  component: SinglePageLayout,
+}
+"
+`;
+
+exports[`Single Word default files creates a single word layout component 1`] = `
+"const AppLayout = ({ children }) => {
+  return <>{children}</>
+}
+
+export default AppLayout
+"
+`;
+
+exports[`Single Word default files creates a single word layout stories 1`] = `
+"import AppLayout from './AppLayout'
+
+export const generated = (args) => {
+  return <AppLayout {...args} />
+}
+
+export default {
+  title: 'Layouts/AppLayout',
+  component: AppLayout,
+}
+"
+`;
+
+exports[`Single Word default files creates a single word layout test 1`] = `
+"import { render } from '@redwoodjs/testing/web'
+
+import AppLayout from './AppLayout'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+describe('AppLayout', () => {
+  it('renders successfully', () => {
+    expect(() => {
+      render(<AppLayout />)
+    }).not.toThrow()
+  })
+})
 "
 `;
 
@@ -60,81 +137,5 @@ const A11yLayout = ({ children }: A11yLayoutProps) => {
 }
 
 export default A11yLayout
-"
-`;
-
-exports[`creates a multi word layout component 1`] = `
-"const SinglePageLayout = ({ children }) => {
-  return <>{children}</>
-}
-
-export default SinglePageLayout
-"
-`;
-
-exports[`creates a multi word layout test 1`] = `
-"import { render } from '@redwoodjs/testing/web'
-
-import SinglePageLayout from './SinglePageLayout'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-describe('SinglePageLayout', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<SinglePageLayout />)
-    }).not.toThrow()
-  })
-})
-"
-`;
-
-exports[`creates a multi word layout test 2`] = `
-"import SinglePageLayout from './SinglePageLayout'
-
-export const generated = (args) => {
-  return <SinglePageLayout {...args} />
-}
-
-export default { title: 'Layouts/SinglePageLayout' }
-"
-`;
-
-exports[`creates a single word layout component 1`] = `
-"const AppLayout = ({ children }) => {
-  return <>{children}</>
-}
-
-export default AppLayout
-"
-`;
-
-exports[`creates a single word layout stories 1`] = `
-"import AppLayout from './AppLayout'
-
-export const generated = (args) => {
-  return <AppLayout {...args} />
-}
-
-export default { title: 'Layouts/AppLayout' }
-"
-`;
-
-exports[`creates a single word layout test 1`] = `
-"import { render } from '@redwoodjs/testing/web'
-
-import AppLayout from './AppLayout'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-describe('AppLayout', () => {
-  it('renders successfully', () => {
-    expect(() => {
-      render(<AppLayout />)
-    }).not.toThrow()
-  })
-})
 "
 `;

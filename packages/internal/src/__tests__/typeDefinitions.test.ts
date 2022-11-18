@@ -37,7 +37,7 @@ test('generate the correct mirror types for cells', () => {
   const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
-    Array [
+    [
       ".redwood/types/mirror/web/src/components/NumTodosCell/index.d.ts",
       ".redwood/types/mirror/web/src/components/NumTodosTwoCell/index.d.ts",
       ".redwood/types/mirror/web/src/components/TodoListCell/index.d.ts",
@@ -66,7 +66,7 @@ test('generate the correct mirror types for directory named modules', () => {
   const p = paths.map(cleanPaths)
 
   expect(p).toMatchInlineSnapshot(`
-    Array [
+    [
       ".redwood/types/mirror/api/src/directives/requireAuth/index.d.ts",
       ".redwood/types/mirror/api/src/directives/skipAuth/index.d.ts",
       ".redwood/types/mirror/api/src/functions/healthz/index.d.ts",

@@ -1,29 +1,31 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import type { useRedwoodDirectiveReturn } from '../plugins/useRedwoodDirective'
-
+import { useDepthLimit } from '@envelop/depth-limit'
+import { useDisableIntrospection } from '@envelop/disable-introspection'
+import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
+import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import {
   EnvelopError,
   FormatErrorHandler,
   GraphQLYogaError,
 } from '@graphql-yoga/common'
-import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
-
-import { useDepthLimit } from '@envelop/depth-limit'
-import { useDisableIntrospection } from '@envelop/disable-introspection'
-import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
-import { RedwoodError } from '@redwoodjs/api'
+import { createServer } from '@graphql-yoga/common'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
+import { Headers, Request } from 'cross-undici-fetch'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import { createServer } from '@graphql-yoga/common'
 
+import { RedwoodError } from '@redwoodjs/api'
+
+import { mapRwCorsOptionsToYoga } from '../cors'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
+import { ValidationError } from '../errors'
 import { getAsyncStoreInstance } from '../globalContext'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
+import type { useRedwoodDirectiveReturn } from '../plugins/useRedwoodDirective'
 import {
   DirectivePluginOptions,
   useRedwoodDirective,
@@ -32,11 +34,7 @@ import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContex
 import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
 import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
-import { ValidationError } from '../errors'
-
 import type { GraphQLHandlerOptions } from './types'
-import { Headers, Request } from 'cross-undici-fetch'
-import { mapRwCorsOptionsToYoga } from '../cors'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
@@ -97,6 +95,7 @@ export const createGraphQLHandler = ({
   onException,
   generateGraphiQLHeader,
   extraPlugins,
+  authDecoder,
   cors,
   services,
   sdls,
@@ -147,7 +146,7 @@ export const createGraphQLHandler = ({
   }
 
   // Custom Redwood plugins
-  plugins.push(useRedwoodAuthContext(getCurrentUser))
+  plugins.push(useRedwoodAuthContext(getCurrentUser, authDecoder))
   plugins.push(useRedwoodGlobalContextSetter())
 
   if (context) {

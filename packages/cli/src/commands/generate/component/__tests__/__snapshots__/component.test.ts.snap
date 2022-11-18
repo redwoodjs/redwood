@@ -37,7 +37,6 @@ exports[`creates a multi word component 1`] = `
   return (
     <div>
       <h2>{'UserProfile'}</h2>
-
       <p>{'Find me in ./web/src/components/UserProfile/UserProfile.js'}</p>
     </div>
   )
@@ -48,13 +47,27 @@ export default UserProfile
 `;
 
 exports[`creates a multi word component story 1`] = `
-"import UserProfile from './UserProfile'
+"// When you've added props to your component,
+// pass Storybook's \`args\` through this story to control it from the addons panel:
+//
+// \`\`\`jsx
+// export const generated = (args) => {
+//   return <UserProfile {...args} />
+// }
+// \`\`\`
+//
+// See https://storybook.js.org/docs/react/writing-stories/args.
 
-export const generated = (args) => {
-  return <UserProfile {...args} />
+import UserProfile from './UserProfile'
+
+export const generated = () => {
+  return <UserProfile />
 }
 
-export default { title: 'Components/UserProfile' }
+export default {
+  title: 'Components/UserProfile',
+  component: UserProfile,
+}
 "
 `;
 
@@ -81,7 +94,6 @@ exports[`creates a single word component 1`] = `
   return (
     <div>
       <h2>{'User'}</h2>
-
       <p>{'Find me in ./web/src/components/User/User.js'}</p>
     </div>
   )
@@ -92,13 +104,27 @@ export default User
 `;
 
 exports[`creates a single word component story 1`] = `
-"import User from './User'
+"// When you've added props to your component,
+// pass Storybook's \`args\` through this story to control it from the addons panel:
+//
+// \`\`\`jsx
+// export const generated = (args) => {
+//   return <User {...args} />
+// }
+// \`\`\`
+//
+// See https://storybook.js.org/docs/react/writing-stories/args.
 
-export const generated = (args) => {
-  return <User {...args} />
+import User from './User'
+
+export const generated = () => {
+  return <User />
 }
 
-export default { title: 'Components/User' }
+export default {
+  title: 'Components/User',
+  component: User,
+}
 "
 `;
 

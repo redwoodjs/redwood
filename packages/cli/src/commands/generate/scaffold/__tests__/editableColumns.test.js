@@ -5,8 +5,10 @@ import path from 'path'
 import '../../../../lib/test'
 
 import { getDefaultArgs } from '../../../../lib'
-import { yargsDefaults as defaults } from '../../../generate'
+import { yargsDefaults as defaults } from '../../helpers'
 import * as scaffold from '../scaffold'
+
+jest.mock('execa')
 
 describe('editable columns', () => {
   let files
