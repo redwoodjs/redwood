@@ -5969,9 +5969,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.8, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.3":
-  version: 0.5.8
-  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.8"
+"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.9, @pmmmwh/react-refresh-webpack-plugin@npm:^0.5.3":
+  version: 0.5.9
+  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.9"
   dependencies:
     ansi-html-community: ^0.0.8
     common-path-prefix: ^3.0.0
@@ -5979,7 +5979,7 @@ __metadata:
     error-stack-parser: ^2.0.6
     find-up: ^5.0.0
     html-entities: ^2.1.0
-    loader-utils: ^2.0.0
+    loader-utils: ^2.0.3
     schema-utils: ^3.0.0
     source-map: ^0.7.3
   peerDependencies:
@@ -6004,7 +6004,7 @@ __metadata:
       optional: true
     webpack-plugin-serve:
       optional: true
-  checksum: dc304daf9fc7e0d5729fd790434112b5331541b4531f80ed4767ef78b24614cac8efeb51c3047cd4b15ee598fc93ee58b197801019aa1067fd084193877826ea
+  checksum: 387594d4e5b6f1dd6d8c82da2ce9e878d667c5d6de2bf3659a3b4cd2bb5a0567fb5ddae55372d7cca4c6cb70b546ab386662e0dfbe84b6431589ad3d206137a6
   languageName: node
   linkType: hard
 
@@ -6650,6 +6650,7 @@ __metadata:
     envinfo: 7.8.1
     execa: 5.1.1
     fast-glob: 3.2.12
+    findup-sync: 5.0.0
     fs-extra: 10.1.0
     jest: 29.3.1
     latest-version: 5.1.0
@@ -6727,7 +6728,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.20.1
-    "@pmmmwh/react-refresh-webpack-plugin": 0.5.8
+    "@pmmmwh/react-refresh-webpack-plugin": 0.5.9
     "@redwoodjs/cli": 3.2.0
     "@redwoodjs/eslint-config": 3.2.0
     "@redwoodjs/internal": 3.2.0
@@ -6800,7 +6801,7 @@ __metadata:
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
     eslint-plugin-import: 2.26.0
-    eslint-plugin-jest-dom: 4.0.2
+    eslint-plugin-jest-dom: 4.0.3
     eslint-plugin-jsx-a11y: 6.6.1
     eslint-plugin-prettier: 4.2.1
     eslint-plugin-react: 7.31.10
@@ -6870,7 +6871,7 @@ __metadata:
     core-js: 3.26.0
     cross-undici-fetch: 0.4.14
     graphql: 16.6.0
-    graphql-scalars: 1.19.0
+    graphql-scalars: 1.20.1
     graphql-tag: 2.12.6
     jest: 29.3.1
     jsonwebtoken: 8.5.1
@@ -6924,7 +6925,7 @@ __metadata:
     prettier: 2.7.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.12.6
+    systeminformation: 5.12.14
     terminal-link: 2.1.1
     typescript: 4.7.4
   bin:
@@ -7054,7 +7055,7 @@ __metadata:
     cross-undici-fetch: 0.4.14
     envinfo: 7.8.1
     jest: 29.3.1
-    systeminformation: 5.12.6
+    systeminformation: 5.12.14
     uuid: 9.0.0
     yargs: 17.6.2
   languageName: unknown
@@ -7096,7 +7097,7 @@ __metadata:
     jest: 29.3.1
     jest-environment-jsdom: 29.3.1
     jest-watch-typeahead: 2.2.0
-    msw: 0.47.4
+    msw: 0.48.2
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
     whatwg-fetch: 3.6.2
@@ -16166,16 +16167,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest-dom@npm:4.0.2":
-  version: 4.0.2
-  resolution: "eslint-plugin-jest-dom@npm:4.0.2"
+"eslint-plugin-jest-dom@npm:4.0.3":
+  version: 4.0.3
+  resolution: "eslint-plugin-jest-dom@npm:4.0.3"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@testing-library/dom": ^8.11.1
     requireindex: ^1.2.0
   peerDependencies:
     eslint: ^6.8.0 || ^7.0.0 || ^8.0.0
-  checksum: b7e7588199f1fa7430b522fc26dcb24ef2269ac1deef17b7d6ec430af4c7660ec39a5918351033d21c8ce29193891cfcdd5ebc1773cbd01c46b86229721f0c86
+  checksum: 4a9f17a1c3e537df6093cf82207121536a48565907d8173194339758f39d759db5f65fa6d632815eec36b4de2644fa2d721eae395c43943e2d4a76ecba9ebeb5
   languageName: node
   linkType: hard
 
@@ -18449,14 +18450,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-scalars@npm:1.19.0":
-  version: 1.19.0
-  resolution: "graphql-scalars@npm:1.19.0"
+"graphql-scalars@npm:1.20.1":
+  version: 1.20.1
+  resolution: "graphql-scalars@npm:1.20.1"
   dependencies:
     tslib: ~2.4.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: e79a1a4a34a3138f28aa7163dcd8e21ac6c1f1efc0aa5da193cb5f0b276194a892744e58d4d43328ff3f1788122923852137f03b317b9497735d394ae0c2beb6
+  checksum: 06f525f9343d997ea35412e094970b6db61ac05cd48d93376db57a3126ad906db5c27f7df5f13d01b26e89d26f90e316f652a908e790adef084751999ed48ce3
   languageName: node
   linkType: hard
 
@@ -21991,14 +21992,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "loader-utils@npm:2.0.2"
+"loader-utils@npm:^2.0.0, loader-utils@npm:^2.0.3":
+  version: 2.0.4
+  resolution: "loader-utils@npm:2.0.4"
   dependencies:
     big.js: ^5.2.2
     emojis-list: ^3.0.0
     json5: ^2.1.2
-  checksum: 332ae8db3d4d3fac7e5bbed82da9230857d3f85b3ccf6d3f2e286fa2431887aa9e46965928b2c77a93f5f721cec037539c0cfc718164f0287c5c90f5dce07ad9
+  checksum: d5654a77f9d339ec2a03d88221a5a695f337bf71eb8dea031b3223420bb818964ba8ed0069145c19b095f6c8b8fd386e602a3fc7ca987042bd8bb1dcc90d7100
   languageName: node
   linkType: hard
 
@@ -23263,9 +23264,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.47.4":
-  version: 0.47.4
-  resolution: "msw@npm:0.47.4"
+"msw@npm:0.48.2":
+  version: 0.48.2
+  resolution: "msw@npm:0.48.2"
   dependencies:
     "@mswjs/cookies": ^0.2.2
     "@mswjs/interceptors": ^0.17.5
@@ -23294,7 +23295,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: cfd839112aa32f7cc0c27fa38b548b7557e2208cad6766440420b54bea971456bc79022973d22567b9b9f6cf26b8f094f3e482e20bbcc41f4db0cc18bb6526ad
+  checksum: 4fc222fa9b30a785a450f2a6b9eb5b57e06b72244a55c4c4ece4fe3c77293d44794280730282ce4f70bc8f3ea0436c0107195ef2997356ebc8d2b9af73770289
   languageName: node
   linkType: hard
 
@@ -27628,7 +27629,7 @@ __metadata:
     listr2: 5.0.5
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.47.4
+    msw: 0.48.2
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.20
@@ -29489,12 +29490,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.12.6":
-  version: 5.12.6
-  resolution: "systeminformation@npm:5.12.6"
+"systeminformation@npm:5.12.14":
+  version: 5.12.14
+  resolution: "systeminformation@npm:5.12.14"
   bin:
     systeminformation: lib/cli.js
-  checksum: a96f0b7c2edd16deb5ccb85a4075e51e6e2f94afb1e65fdf4ac46e6e598ae4b9d2598a944e8ba7ac81d66a1b4a55647967904b8249122416209e69be31181c1d
+  checksum: 4b24c36498d37811b1b0992116f1ecfb86114e022e0fe18e3bc1c2d84505148d9fb1536093854391c31e467625c206aa4fb9fd8c6447750a93e39a228e807d97
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
