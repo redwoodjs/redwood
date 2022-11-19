@@ -1,4 +1,6 @@
 /* eslint-disable no-empty-pattern */
+import { Transform } from 'stream'
+
 import { test as base } from '@playwright/test'
 import execa from 'execa'
 import isPortReachable from 'is-port-reachable'
@@ -71,10 +73,26 @@ const test = base.extend<any, StorybookFixture>({
           }
         })
 
+        // TODO: Improve this...
+        // Quick transform stream to prevent "<s> [webpack.Progress] ..% ..." output
+        const removeWebpackProgress = new Transform({
+          transform(chunk, encoding, callback) {
+            const lines = chunk.toString().split('\n')
+            let response = ''
+            for (let i = 0; i < lines.length; i++) {
+              const line = lines[i]
+              if (!line.startsWith('<s> [webpack.Progress]') && line.trim()) {
+                response += line + '\n'
+              }
+            }
+            callback(null, response || '')
+          },
+        })
+
         // @NOTE: For some reason we need to do this
         // Because otherwise the server doesn't launch correctly
-        serverHandler.stdout.pipe(process.stdout)
-        serverHandler.stderr.pipe(process.stderr)
+        serverHandler.stdout.pipe(removeWebpackProgress).pipe(process.stdout)
+        serverHandler.stderr.pipe(removeWebpackProgress).pipe(process.stderr)
 
         console.log('Waiting for server.....')
         await waitForSbServer
