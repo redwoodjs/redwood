@@ -1,0 +1,115 @@
+# When a PR is merged into the main branch, this workflow tries to cherry pick the squashed commit into the next branch
+# by fast forwarding the next branch via the `--ff` option.
+# If that doesn't work (i.e. main and next have diverged), it'll open a PR against the next branch with the squashed commit.
+
+name: 🍒 Cherry pick into next branch
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [closed]
+
+jobs:
+  cherry-pick-fast-forward:
+    # Don't cherry pick commits with breaking changes.
+    if: ${{ github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'release:feature-breaking') && !contains(github.event.pull_request.labels.*.name, 'skip-cherry-pick') }}
+    name: ⏩ Cherry pick fast forward
+    runs-on: ubuntu-latest
+    outputs:
+      pr: ${{ steps.cherry-pick-fast-forward.outputs.value }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: next
+          # git isn't able to work with $GITHUB_SHA if we don't checkout everything.
+          fetch-depth: 0
+          # Since next is a protected branch, we need a token to run `git push` later.
+          token: ${{ secrets.JTOAR_TOKEN }}
+
+      - name: ⏩ Cherry pick fast forward
+        id: cherry-pick-fast-forward
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          # Here, $GITHUB_SHA is the last merge commit on the $GITHUB_REF branch.
+          # That merge commit is already in the main branch at this point (this action runs on "pull_request closed" events).
+          # See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request.
+
+          echo "Trying to cherry pick $GITHUB_SHA"
+          git cherry-pick --ff $GITHUB_SHA || exit 1
+
+          # If the HEAD of main and next point to the same commit, then the fast forward worked and we can go ahead and push.
+
+          echo "Comparing SHAs"
+          echo "main $(git rev-parse origin/main)"
+          echo "next $(git rev-parse next)"
+
+          if [[ "$(git rev-parse origin/main)" = "$(git rev-parse next)" ]]; then
+            echo "SHAs are the same, pushing"
+            git push
+          else
+            echo "SHAs are different"
+            echo "value=true" >> $GITHUB_OUTPUT
+          fi
+
+  cherry-pick-into-next-pr:
+    needs: cherry-pick-fast-forward
+    if: ${{ needs.cherry-pick-fast-forward.outputs.pr == 'true' }}
+    name: Cherry pick into next PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔑 Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cherry pick into next PR
+        uses: carloscastrojumo/github-cherry-pick-action@v1.0.3
+        with:
+          # We specify a token because we want other workflows (like CI) to run on this PR.
+          # If we omit this, it uses the default token (GITHUB_TOKEN) which doesn't trigger other workflows.
+          token: ${{ steps.generate_token.outputs.token }}
+          branch: next
+          labels: cherry-pick
+
+  comment-on-pr:
+    needs: cherry-pick-into-next-pr
+    if: failure()
+    name: 💬 Comment on PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔑 Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: '${{ github.event.number }}',
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🔔 @jtoar, @Tobbe—I couldn't cherry pick this one. If you want it in the next release, you'll have to cherry pick it manually.`,
+            });
+
+            await github.rest.issues.addLabels({
+              issue_number: '${{ github.event.number }}',
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['needs-cherry-pick']
+            })
+

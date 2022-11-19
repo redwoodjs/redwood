@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -24,44 +24,47 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force }) => {
-  const tasks = new Listr([
-    {
-      title: 'Creating new entry point in `web/src/index.js`.',
-      task: () => {
-        // @TODO figure out how we're handling typescript
-        // In this file, we're setting everything to js
-        // @Note, getPaths.web.index is null, when it doesn't exist
-        const entryPointFile =
-          getPaths().web.index ?? path.join(getPaths().web.src, 'index.js')
+  const tasks = new Listr(
+    [
+      {
+        title: 'Creating new entry point in `web/src/index.js`.',
+        task: () => {
+          // @TODO figure out how we're handling typescript
+          // In this file, we're setting everything to js
+          // @Note, getPaths.web.index is null, when it doesn't exist
+          const entryPointFile =
+            getPaths().web.index ?? path.join(getPaths().web.src, 'index.js')
 
-        return writeFile(
-          entryPointFile,
-          fs
-            .readFileSync(
-              path.join(
-                getPaths().base,
-                // NOTE we're copying over the index.js before babel transform
-                'node_modules/@redwoodjs/web/src/entry/index.js'
+          return writeFile(
+            entryPointFile,
+            fs
+              .readFileSync(
+                path.join(
+                  getPaths().base,
+                  // NOTE we're copying over the index.js before babel transform
+                  'node_modules/@redwoodjs/web/src/entry/index.js'
+                )
               )
-            )
-            .toString()
-            .replace('~redwood-app-root', './App'),
-          { overwriteExisting: force }
-        )
+              .toString()
+              .replace('~redwood-app-root', './App'),
+            { overwriteExisting: force }
+          )
+        },
       },
-    },
-    {
-      title: 'One more thing...',
-      task: (_ctx, task) => {
-        task.title = `One more thing...\n
+      {
+        title: 'One more thing...',
+        task: (_ctx, task) => {
+          task.title = `One more thing...\n
           ${c.green(
             'Quick link to the docs on configuring a custom entry point for your RW app'
           )}
           ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/custom-web-index')}
         `
+        },
       },
-    },
-  ])
+    ],
+    { rendererOptions: { collapse: false } }
+  )
 
   try {
     await tasks.run()

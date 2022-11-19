@@ -1,7 +1,7 @@
 import path from 'path'
 
 import chalk from 'chalk'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -33,41 +33,44 @@ export const handler = async ({ force }) => {
 
   const CRWA_TEMPLATE_URL = `https://raw.githubusercontent.com/redwoodjs/redwood/${GITHUB_VERSION_TAG}/packages/create-redwood-app/template`
 
-  const tasks = new Listr([
-    {
-      title: 'Creating tsconfig in web',
-      task: () => {
-        const webConfigPath = path.join(getPaths().web.base, 'tsconfig.json')
+  const tasks = new Listr(
+    [
+      {
+        title: 'Creating tsconfig in web',
+        task: () => {
+          const webConfigPath = path.join(getPaths().web.base, 'tsconfig.json')
 
-        const templateUrl = `${CRWA_TEMPLATE_URL}/web/tsconfig.json`
+          const templateUrl = `${CRWA_TEMPLATE_URL}/web/tsconfig.json`
 
-        return saveRemoteFileToDisk(templateUrl, webConfigPath, {
-          overwriteExisting: force,
-        })
+          return saveRemoteFileToDisk(templateUrl, webConfigPath, {
+            overwriteExisting: force,
+          })
+        },
       },
-    },
-    {
-      title: 'Creating tsconfig in api',
-      task: () => {
-        const webConfigPath = path.join(getPaths().api.base, 'tsconfig.json')
+      {
+        title: 'Creating tsconfig in api',
+        task: () => {
+          const webConfigPath = path.join(getPaths().api.base, 'tsconfig.json')
 
-        const templateUrl = `${CRWA_TEMPLATE_URL}/api/tsconfig.json`
+          const templateUrl = `${CRWA_TEMPLATE_URL}/api/tsconfig.json`
 
-        return saveRemoteFileToDisk(templateUrl, webConfigPath, {
-          overwriteExisting: force,
-        })
+          return saveRemoteFileToDisk(templateUrl, webConfigPath, {
+            overwriteExisting: force,
+          })
+        },
       },
-    },
-    {
-      title: 'One more thing...',
-      task: (_ctx, task) => {
-        task.title = `One more thing...\n
+      {
+        title: 'One more thing...',
+        task: (_ctx, task) => {
+          task.title = `One more thing...\n
           ${c.green('Quick link to the docs on configuring TypeScript')}
           ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/typescript')}
         `
+        },
       },
-    },
-  ])
+    ],
+    { rendererOptions: { collapse: false } }
+  )
 
   try {
     await tasks.run()

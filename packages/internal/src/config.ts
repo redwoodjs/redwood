@@ -1,8 +1,8 @@
 import fs from 'fs'
 
+import toml from '@iarna/toml'
 import merge from 'deepmerge'
 import { env as envInterpolation } from 'string-env-interpolation'
-import toml from 'toml'
 
 import { getConfigPath } from './paths'
 

@@ -3,8 +3,7 @@ const fs = require('fs')
 const path = require('path')
 
 const execa = require('execa')
-const Listr = require('listr')
-const VerboseRenderer = require('listr-verbose-renderer')
+const Listr = require('listr2').Listr
 
 const { getExecaOptions, applyCodemod } = require('./util')
 
@@ -370,7 +369,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     ],
     {
       exitOnError: true,
-      renderer: verbose && VerboseRenderer,
+      renderer: verbose && 'verbose',
     }
   )
 }
@@ -400,7 +399,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
 
   const addDbAuth = async () => {
     await execa(
-      'yarn rw setup auth dbAuth --force --no-webauthn',
+      'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
       [],
       execaOptions
     )
@@ -515,7 +514,8 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       {
         title: 'Scaffolding post',
         task: async () => {
-          return generateScaffold('post')
+          await generateScaffold('post')
+          await execa(`yarn rwfw project:copy`, [], execaOptions)
         },
       },
       {
@@ -583,7 +583,8 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     ],
     {
       exitOnError: true,
-      renderer: verbose && VerboseRenderer,
+      renderer: verbose && 'verbose',
+      renderOptions: { collapse: false },
     }
   )
 }

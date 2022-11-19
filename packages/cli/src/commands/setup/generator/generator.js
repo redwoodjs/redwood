@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import fse from 'fs-extra'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { getPaths } from '../../../lib'
@@ -89,7 +89,7 @@ const tasks = ({ name, force }) => {
         },
       },
     ],
-    { collapse: false, errorOnExist: true }
+    { rendererOptions: { collapse: false }, errorOnExist: true }
   )
 }
 

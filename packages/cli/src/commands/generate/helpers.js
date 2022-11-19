@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
@@ -13,11 +12,11 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
+import { isTypeScriptProject } from '../../lib/project'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
-import { yargsDefaults } from '../generate'
 
 /**
- * Returns the path to a custom generator template, if found in the app.
+ * Returns the full path to a custom generator template, if found in the app.
  * Otherwise the default Redwood template.
  */
 export const customOrDefaultTemplatePath = ({
@@ -125,6 +124,22 @@ export function removeGeneratorName(name, generatorName) {
   return coercedName
 }
 
+/** @type {Record<string, import('yargs').Options>} */
+export const yargsDefaults = {
+  force: {
+    alias: 'f',
+    default: false,
+    description: 'Overwrite existing files',
+    type: 'boolean',
+  },
+  typescript: {
+    alias: 'ts',
+    default: isTypeScriptProject(),
+    description: 'Generate TypeScript files',
+    type: 'boolean',
+  },
+}
+
 /**
  * Reduces boilerplate for creating a yargs handler that writes a
  * component/page/layout/etc to a location.
@@ -200,9 +215,9 @@ export const createYargsForComponentGeneration = ({
             ...includeAdditionalTasks(options),
           ],
           {
-            collapse: false,
+            rendererOptions: { collapse: false },
             exitOnError: true,
-            renderer: options.verbose && VerboseRenderer,
+            renderer: options.verbose && 'verbose',
           }
         )
 

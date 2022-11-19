@@ -402,7 +402,7 @@ you should get the response:
 
 For production or your deploy, make a request wherever your `/graphql` function exists.
 
-> Note: These examples use `curl` but you can performa a health check via any HTTP GET request.
+> Note: These examples use `curl` but you can perform a health check via any HTTP GET request.
 
 ## Verifying GraphQL Schema
 

@@ -15,6 +15,7 @@ const findBabelConfig = (cwd = process.cwd()) => {
 module.exports = {
   extends: path.join(__dirname, 'packages/eslint-config/shared.js'),
   parserOptions: {
+    ecmaVersion: 'latest',
     babelOptions: {
       configFile: findBabelConfig(),
     },
@@ -22,7 +23,6 @@ module.exports = {
   ignorePatterns: [
     'dist',
     'fixtures',
-    'packages/structure/**',
     'packages/internal/src/build/babelPlugins/__tests__/__fixtures__/**/*',
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
@@ -32,9 +32,14 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
   },
+  env: {
+    // We use the most modern environment available. Then we rely on Babel to
+    // transpile it to something that can run on all node versions we support
+    es2022: true,
+  },
   overrides: [
     {
-      files: ['packages/structure/**'],
+      files: ['packages/structure/src/**'],
       rules: {
         '@typescript-eslint/no-this-alias': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
@@ -57,7 +62,6 @@ module.exports = {
         'packages/web/src/**',
       ],
       env: {
-        es6: true,
         browser: true,
       },
       globals: {
@@ -101,7 +105,6 @@ module.exports = {
     {
       files: ['packages/web/src/entry/index.js'],
       env: {
-        es6: true,
         browser: true,
       },
       globals: {
@@ -126,7 +129,6 @@ module.exports = {
         'packages/telemetry/src/**',
       ],
       env: {
-        es6: true,
         node: true,
       },
     },
