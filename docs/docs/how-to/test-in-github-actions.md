@@ -1,7 +1,3 @@
----
-slug: test-in-github-actions
----
-
 # Testing Redwood in Github actions
 
 Having a good testing strategy is important for any project. Redwood has a few different types of tests that you can write to make your app more robust and be able to ship with confidence. In this guide we'll focus on how to run your Redwood tests in Github Actions, so you can test your app on every push or pull request.
