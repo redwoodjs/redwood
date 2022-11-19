@@ -255,7 +255,8 @@ jobs:
 
 If you push your changes to the `main` branch on Github the CI action will breaks down like this:
 
-![CI results](readme_images/ci-results-1.png)
+<img width="1140" alt="ci-results-1" src="https://user-images.githubusercontent.com/14810250/202825732-c7d77929-58ff-4ad5-9072-48e4403471c9.png">
+
 
 1. Set up job
 2. Initializes the containers and creates our postgres instance
@@ -285,12 +286,11 @@ on:
 
 Now, if you push to a pull request, the CI action will run and you will see something like this:
 
-![CI on a PR](readme_images/ci-pr-1.png)
+<img width="1460" alt="ci-pr-1" src="https://user-images.githubusercontent.com/14810250/202825767-c7f23b24-e311-4a70-bf50-fbad40a6abee.png">
 
 Once the Github Action is done, you can see the results in the "Conversation" tab:
 
-![CI passing on a PR](readme_images/ci-pr-2.png)
-
+<img width="1385" alt="ci-pr-2" src="https://user-images.githubusercontent.com/14810250/202825772-93c8fe50-6b91-4048-882b-21497d47e211.png">
 
 ### 6. Deploy the database changes to an actual database
 
