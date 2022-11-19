@@ -42,12 +42,17 @@ import path from 'path'
 import { getPaths } from '../../lib/paths'
 import { createWebAuth } from '../authTasks'
 
+function platformPath(filePath: string) {
+  return filePath.split('/').join(path.sep)
+}
+
 beforeEach(() => {
   mockIsTypeScriptProject = true
 
   // @ts-expect-error - This method is added by packages/cli-helpers/__mocks__/fs.js
   fs.__setMockFiles({
-    '/mock/setup/path/templates/web/auth.ts.template': '// web auth template',
+    [platformPath('/mock/setup/path/templates/web/auth.ts.template')]:
+      '// web auth template',
   })
 })
 
