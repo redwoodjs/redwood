@@ -27,7 +27,7 @@
     "@babel/runtime-corejs3": "7.20.1",
     "@redwoodjs/auth": "3.2.0",
     "@redwoodjs/internal": "3.2.0",
-    "@redwoodjs/internal-paths": "3.2.0",
+    "@redwoodjs/paths": "3.2.0",
     "@redwoodjs/router": "3.2.0",
     "@redwoodjs/structure": "3.2.0",
     "@redwoodjs/web": "3.2.0",

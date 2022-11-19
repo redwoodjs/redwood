@@ -3,7 +3,7 @@ import path from 'path'
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import type { PluginObj, types } from '@babel/core'
 
-import { getBaseDirFromFile } from '@redwoodjs/internal-paths'
+import { getBaseDirFromFile } from '@redwoodjs/paths'
 
 const { getProject, URL_file } = require('@redwoodjs/structure')
 

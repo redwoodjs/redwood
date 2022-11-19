@@ -3,7 +3,7 @@ import { memoize } from 'lodash'
 import {
   getPaths as getRedwoodPaths,
   resolveFile as internalResolveFile,
-} from '@redwoodjs/internal-paths'
+} from '@redwoodjs/paths'
 
 import { colors } from './colors'
 

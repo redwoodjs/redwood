@@ -1,7 +1,7 @@
 global.__dirname = __dirname
 
 // We mock these to skip the check for web/dist and api/dist
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/paths', () => {
   return {
     getPaths: () => {
       return {
@@ -16,7 +16,7 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
   }
 })
 
-jest.mock('@redwoodjs/internal/dist/config', () => {
+jest.mock('@redwoodjs/paths', () => {
   return {
     getConfig: () => {
       return {

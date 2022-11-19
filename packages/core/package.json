@@ -51,6 +51,7 @@
     "@redwoodjs/cli": "3.2.0",
     "@redwoodjs/eslint-config": "3.2.0",
     "@redwoodjs/internal": "3.2.0",
+    "@redwoodjs/paths": "3.2.0",
     "@redwoodjs/testing": "3.2.0",
     "babel-loader": "9.1.0",
     "babel-plugin-auto-import": "1.1.0",

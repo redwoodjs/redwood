@@ -1,9 +1,10 @@
 import path from 'path'
 
+import { ensurePosixPath, getPaths } from '@redwoodjs/paths'
+
 import { prebuildWebFile } from '../build/babel/web'
 import { prebuildWebFiles, cleanWebBuild } from '../build/web'
 import { findWebFiles } from '../files'
-import { ensurePosixPath, getPaths } from '@redwoodjs/internal-paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,

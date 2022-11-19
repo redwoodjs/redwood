@@ -12,7 +12,7 @@ import {
 } from 'graphql'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
-import { getPaths } from '@redwoodjs/internal-paths'
+import { getPaths } from '@redwoodjs/paths'
 
 interface Operation {
   operation: OperationTypeNode

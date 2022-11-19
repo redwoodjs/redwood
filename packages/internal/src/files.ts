@@ -2,7 +2,7 @@ import path from 'path'
 
 import fg from 'fast-glob'
 
-import { getPaths } from '@redwoodjs/internal-paths'
+import { getPaths } from '@redwoodjs/paths'
 
 import { getNamedExports, hasDefaultExport, fileToAst } from './ast'
 

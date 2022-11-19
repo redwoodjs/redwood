@@ -4,7 +4,7 @@ import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { apiServerHandler } from '@redwoodjs/api-server'
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/paths'
 
 import { getPaths } from '../../lib'
 

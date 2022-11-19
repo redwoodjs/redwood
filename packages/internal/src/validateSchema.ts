@@ -4,7 +4,7 @@ import { mergeTypeDefs } from '@graphql-tools/merge'
 import { DocumentNode, Kind, ObjectTypeDefinitionNode, visit } from 'graphql'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
-import { getPaths } from '@redwoodjs/internal-paths'
+import { getPaths } from '@redwoodjs/paths'
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'

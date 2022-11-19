@@ -2,7 +2,7 @@ import path from 'path'
 
 import { DocumentNode, print } from 'graphql'
 
-import { getPaths } from '@redwoodjs/internal-paths'
+import { getPaths } from '@redwoodjs/paths'
 import { getOperationName } from '@redwoodjs/web'
 
 import { GqlHandlerImportError } from '../errors'

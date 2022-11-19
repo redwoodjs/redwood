@@ -1,6 +1,6 @@
 import { Listr } from 'listr2'
 
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/paths', () => {
   return {
     getPaths: () => ({
       base: `${__dirname}/fixtures`,

@@ -5,7 +5,7 @@ import path from 'path'
 
 import chokidar from 'chokidar'
 
-import { getPaths } from '@redwoodjs/internal-paths'
+import { getPaths } from '@redwoodjs/paths'
 
 import {
   isCellFile,

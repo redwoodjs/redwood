@@ -10,6 +10,6 @@
   "include": ["src"],
   "references": [
     { "path": "../telemetry" },
-    { "path": "../internal-paths" }
+    { "path": "../paths" }
   ]
 }

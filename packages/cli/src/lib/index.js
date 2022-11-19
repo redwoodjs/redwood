@@ -14,11 +14,11 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
 
-import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
+  getConfig as getRedwoodConfig,
   getPaths as getRedwoodPaths,
   resolveFile as internalResolveFile,
-} from '@redwoodjs/internal/dist/paths'
+} from '@redwoodjs/paths'
 
 import c from './colors'
 import { pluralize, singularize } from './rwPluralize'

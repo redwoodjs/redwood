@@ -8,7 +8,7 @@ import {
   getPaths,
   PagesDependency,
   ensurePosixPath,
-} from '@redwoodjs/internal-paths'
+} from '@redwoodjs/paths'
 
 interface PluginOptions {
   useStaticImports?: boolean

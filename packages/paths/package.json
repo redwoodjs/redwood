@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/internal-paths",
+  "name": "@redwoodjs/paths",
   "version": "3.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/internal-paths"
+    "directory": "packages/paths"
   },
   "license": "MIT",
   "main": "dist/index.js",

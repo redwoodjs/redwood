@@ -6613,6 +6613,7 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.20.2
     "@babel/runtime-corejs3": 7.20.1
+    "@redwoodjs/paths": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
     "@types/react": 17.0.50
     core-js: 3.26.0
@@ -6634,6 +6635,7 @@ __metadata:
     "@redwoodjs/api-server": 3.2.0
     "@redwoodjs/auth-providers-setup": 3.2.0
     "@redwoodjs/internal": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@redwoodjs/prerender": 3.2.0
     "@redwoodjs/structure": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
@@ -6732,6 +6734,7 @@ __metadata:
     "@redwoodjs/cli": 3.2.0
     "@redwoodjs/eslint-config": 3.2.0
     "@redwoodjs/internal": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@redwoodjs/testing": 3.2.0
     "@types/rimraf": 3.0.2
     babel-loader: 9.1.0
@@ -6794,6 +6797,7 @@ __metadata:
     "@babel/eslint-parser": 7.19.1
     "@babel/eslint-plugin": 7.19.1
     "@redwoodjs/internal": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@typescript-eslint/eslint-plugin": 5.42.1
     "@typescript-eslint/parser": 5.42.1
     eslint: 8.27.0
@@ -6882,55 +6886,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/internal-paths@3.2.0, @redwoodjs/internal-paths@workspace:packages/internal-paths":
-  version: 0.0.0-use.local
-  resolution: "@redwoodjs/internal-paths@workspace:packages/internal-paths"
-  dependencies:
-    "@babel/cli": 7.19.3
-    "@babel/core": 7.20.2
-    "@babel/parser": 7.20.3
-    "@babel/plugin-transform-typescript": 7.20.2
-    "@babel/register": 7.18.9
-    "@babel/runtime-corejs3": 7.20.1
-    "@babel/traverse": 7.20.1
-    "@graphql-codegen/add": 3.2.1
-    "@graphql-codegen/cli": 2.13.7
-    "@graphql-codegen/core": 2.6.2
-    "@graphql-codegen/schema-ast": 2.5.1
-    "@graphql-codegen/typescript": 2.7.4
-    "@graphql-codegen/typescript-operations": 2.5.4
-    "@graphql-codegen/typescript-react-apollo": 3.3.4
-    "@graphql-codegen/typescript-resolvers": 2.7.4
-    "@iarna/toml": 2.2.5
-    "@redwoodjs/graphql-server": 3.2.0
-    "@types/babel-plugin-tester": 9.0.5
-    "@types/babel__core": 7.1.19
-    "@types/findup-sync": 4.0.2
-    "@types/fs-extra": 9.0.13
-    "@types/rimraf": 3.0.2
-    babel-plugin-graphql-tag: 3.3.0
-    babel-plugin-polyfill-corejs3: 0.6.0
-    babel-plugin-tester: 10.1.0
-    chalk: 4.1.2
-    core-js: 3.26.0
-    deepmerge: 4.2.2
-    esbuild: 0.15.13
-    fast-glob: 3.2.12
-    findup-sync: 5.0.0
-    fs-extra: 10.1.0
-    graphql: 16.6.0
-    graphql-tag: 2.12.6
-    jest: 29.3.1
-    kill-port: 1.6.1
-    prettier: 2.7.1
-    rimraf: 3.0.2
-    string-env-interpolation: 1.0.1
-    systeminformation: 5.12.14
-    terminal-link: 2.1.1
-    typescript: 4.7.4
-  languageName: unknown
-  linkType: soft
-
 "@redwoodjs/internal@3.2.0, @redwoodjs/internal@workspace:packages/internal":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/internal@workspace:packages/internal"
@@ -6952,7 +6907,7 @@ __metadata:
     "@graphql-codegen/typescript-resolvers": 2.7.4
     "@iarna/toml": 2.2.5
     "@redwoodjs/graphql-server": 3.2.0
-    "@redwoodjs/internal-paths": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.1.19
     "@types/findup-sync": 4.0.2
@@ -6984,6 +6939,55 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/paths@3.2.0, @redwoodjs/paths@workspace:packages/paths":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/paths@workspace:packages/paths"
+  dependencies:
+    "@babel/cli": 7.19.3
+    "@babel/core": 7.20.2
+    "@babel/parser": 7.20.3
+    "@babel/plugin-transform-typescript": 7.20.2
+    "@babel/register": 7.18.9
+    "@babel/runtime-corejs3": 7.20.1
+    "@babel/traverse": 7.20.1
+    "@graphql-codegen/add": 3.2.1
+    "@graphql-codegen/cli": 2.13.7
+    "@graphql-codegen/core": 2.6.2
+    "@graphql-codegen/schema-ast": 2.5.1
+    "@graphql-codegen/typescript": 2.7.4
+    "@graphql-codegen/typescript-operations": 2.5.4
+    "@graphql-codegen/typescript-react-apollo": 3.3.4
+    "@graphql-codegen/typescript-resolvers": 2.7.4
+    "@iarna/toml": 2.2.5
+    "@redwoodjs/graphql-server": 3.2.0
+    "@types/babel-plugin-tester": 9.0.5
+    "@types/babel__core": 7.1.19
+    "@types/findup-sync": 4.0.2
+    "@types/fs-extra": 9.0.13
+    "@types/rimraf": 3.0.2
+    babel-plugin-graphql-tag: 3.3.0
+    babel-plugin-polyfill-corejs3: 0.6.0
+    babel-plugin-tester: 10.1.0
+    chalk: 4.1.2
+    core-js: 3.26.0
+    deepmerge: 4.2.2
+    esbuild: 0.15.13
+    fast-glob: 3.2.12
+    findup-sync: 5.0.0
+    fs-extra: 10.1.0
+    graphql: 16.6.0
+    graphql-tag: 2.12.6
+    jest: 29.3.1
+    kill-port: 1.6.1
+    prettier: 2.7.1
+    rimraf: 3.0.2
+    string-env-interpolation: 1.0.1
+    systeminformation: 5.12.14
+    terminal-link: 2.1.1
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/prerender@3.2.0, @redwoodjs/prerender@workspace:packages/prerender":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
@@ -6993,6 +6997,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.1
     "@redwoodjs/auth": 3.2.0
     "@redwoodjs/internal": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@redwoodjs/router": 3.2.0
     "@redwoodjs/structure": 3.2.0
     "@redwoodjs/web": 3.2.0
@@ -7021,6 +7026,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.1
     "@prisma/client": 4.6.1
     "@prisma/internals": 4.6.1
+    "@redwoodjs/paths": 3.2.0
     core-js: 3.26.0
     esbuild: 0.15.13
     jest: 29.3.1
@@ -7058,7 +7064,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.1
     "@iarna/toml": 2.2.5
     "@prisma/internals": 4.6.1
-    "@redwoodjs/internal-paths": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@types/fs-extra": 9.0.13
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.186
@@ -7095,7 +7101,7 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.20.2
     "@babel/runtime-corejs3": 7.20.1
-    "@redwoodjs/internal": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@redwoodjs/structure": 3.2.0
     "@types/envinfo": 7.8.1
     "@types/uuid": 8.3.4
@@ -7121,6 +7127,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@redwoodjs/graphql-server": 3.2.0
     "@redwoodjs/internal": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@redwoodjs/router": 3.2.0
     "@redwoodjs/web": 3.2.0
     "@storybook/addon-a11y": 6.5.13
@@ -14168,7 +14175,7 @@ __metadata:
     "@babel/core": 7.20.2
     "@babel/node": 7.20.2
     "@babel/runtime-corejs3": 7.20.1
-    "@redwoodjs/internal": 3.2.0
+    "@redwoodjs/paths": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
     "@types/prompts": 2.4.1
     chalk: 4.1.2

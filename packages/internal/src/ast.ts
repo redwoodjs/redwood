@@ -6,7 +6,7 @@ import { parse as babelParse, ParserPlugin } from '@babel/parser'
 import traverse from '@babel/traverse'
 import chalk from 'chalk'
 
-import { getPaths } from '@redwoodjs/internal-paths'
+import { getPaths } from '@redwoodjs/paths'
 
 import { isFileInsideFolder } from './files'
 
