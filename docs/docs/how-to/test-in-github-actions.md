@@ -395,4 +395,4 @@ env:
 ...
 ```
 
- Now you can merge the PR and the database changes will be tested and then deployed to the actual database. ✨
+ Now you can merge the PR and the database changes will be tested and then deployed to the actual database.
