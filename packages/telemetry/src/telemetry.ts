@@ -2,14 +2,17 @@ import { spawn } from 'child_process'
 import os from 'os'
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/internal'
-
-const APP_ROOT = getPaths().base
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const spawnProcess = (...args: Array<string>) => {
   spawn(
     process.execPath,
-    [path.join(__dirname, 'scripts', 'invoke.js'), ...args, '--root', APP_ROOT],
+    [
+      path.join(__dirname, 'scripts', 'invoke.js'),
+      ...args,
+      '--root',
+      getPaths().base,
+    ],
     {
       detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
       stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',

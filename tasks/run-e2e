@@ -56,6 +56,7 @@ const createRedwoodJSApp = ({ yarn1 }) => {
         '--no-yarn-install',
         '--typescript',
         '--no-telemetry',
+        '--no-git',
         yarn1 && '--yarn1',
       ].filter(Boolean),
       {
@@ -65,6 +66,24 @@ const createRedwoodJSApp = ({ yarn1 }) => {
         stdio: 'inherit',
       }
     )
+
+    // Add prisma resolutions
+    const packageJSONPath = path.join(REDWOOD_PROJECT_DIRECTORY, 'package.json')
+    const packageJSON = fs.readJSONSync(packageJSONPath)
+
+    const getVersionFrmRwPkg = (dep, pkg) => {
+      return fs.readJSONSync(
+        path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json')
+      ).dependencies[dep]
+    }
+
+    packageJSON.resolutions = {
+      prisma: getVersionFrmRwPkg('prisma', 'cli'),
+      '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
+      '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
+    }
+
+    fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
   } catch (e) {
     console.error('Error: Could not create Redwood Project')
     console.error(e)
@@ -157,7 +176,12 @@ const runCypress = () => {
   execa.sync(
     // do not use Yarn to run Cypress; this avoids missing binary errors
     '../../node_modules/.bin/cypress',
-    ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
+    [
+      'open',
+      `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`,
+      '--e2e',
+      '--browser chrome',
+    ],
     {
       cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
       shell: true,

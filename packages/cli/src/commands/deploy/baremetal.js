@@ -3,8 +3,7 @@ import path from 'path'
 
 import toml from '@iarna/toml'
 import boxen from 'boxen'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
 
@@ -16,6 +15,7 @@ const SYMLINK_FLAGS = '-nsf'
 const CURRENT_RELEASE_SYMLINK_NAME = 'current'
 const LIFECYCLE_HOOKS = ['before', 'after']
 export const DEFAULT_SERVER_CONFIG = {
+  port: 22,
   branch: 'main',
   packageManagerCommand: 'yarn',
   monitorCommand: 'pm2',
@@ -26,8 +26,12 @@ export const DEFAULT_SERVER_CONFIG = {
 export const command = 'baremetal [environment]'
 export const description = 'Deploy to baremetal server(s)'
 
+// force all paths to have forward slashes so that you can deploy to *nix
+// systems from a Windows system
+const pathJoin = path.posix.join
+
 export const execaOptions = {
-  cwd: path.join(getPaths().base),
+  cwd: pathJoin(getPaths().base),
   stdio: 'inherit',
   shell: true,
   cleanup: true,
@@ -209,7 +213,7 @@ export const serverConfigWithDefaults = (serverConfig, yargs) => {
 }
 
 export const maintenanceTasks = (status, ssh, serverConfig) => {
-  const deployPath = path.join(serverConfig.path, CURRENT_RELEASE_SYMLINK_NAME)
+  const deployPath = pathJoin(serverConfig.path, CURRENT_RELEASE_SYMLINK_NAME)
   const tasks = []
 
   if (status === 'up') {
@@ -217,13 +221,13 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
       title: `Enabling maintenance page...`,
       task: async () => {
         await sshExec(ssh, deployPath, 'cp', [
-          path.join('web', 'dist', '200.html'),
-          path.join('web', 'dist', '200.html.orig'),
+          pathJoin('web', 'dist', '200.html'),
+          pathJoin('web', 'dist', '200.html.orig'),
         ])
         await sshExec(ssh, deployPath, 'ln', [
           SYMLINK_FLAGS,
-          path.join('..', 'src', 'maintenance.html'),
-          path.join('web', 'dist', '200.html'),
+          pathJoin('..', 'src', 'maintenance.html'),
+          pathJoin('web', 'dist', '200.html'),
         ])
       },
     })
@@ -255,11 +259,11 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
         title: `Disabling maintenance page...`,
         task: async () => {
           await sshExec(ssh, deployPath, 'rm', [
-            path.join('web', 'dist', '200.html'),
+            pathJoin('web', 'dist', '200.html'),
           ])
           await sshExec(ssh, deployPath, 'cp', [
-            path.join('web', 'dist', '200.html.orig'),
-            path.join('web', 'dist', '200.html'),
+            pathJoin('web', 'dist', '200.html.orig'),
+            pathJoin('web', 'dist', '200.html'),
           ])
         },
       })
@@ -366,7 +370,7 @@ export const commandWithLifecycleEvents = ({ name, config, skip, command }) => {
 }
 
 export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
-  const cmdPath = path.join(serverConfig.path, yargs.releaseDir)
+  const cmdPath = pathJoin(serverConfig.path, yargs.releaseDir)
   const config = { yargs, ssh, serverConfig, serverLifecycle, cmdPath }
   const tasks = []
 
@@ -501,7 +505,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
                   serverConfig.monitorCommand,
                   [
                     'start',
-                    path.join(
+                    pathJoin(
                       CURRENT_RELEASE_SYMLINK_NAME,
                       'ecosystem.config.js'
                     ),
@@ -608,7 +612,7 @@ export const parseConfig = (yargs, configToml) => {
 
 export const commands = (yargs, ssh) => {
   const deployConfig = fs
-    .readFileSync(path.join(getPaths().base, CONFIG_FILENAME))
+    .readFileSync(pathJoin(getPaths().base, CONFIG_FILENAME))
     .toString()
 
   let { envConfig, envLifecycle } = parseConfig(yargs, deployConfig)
@@ -630,9 +634,11 @@ export const commands = (yargs, ssh) => {
       task: () =>
         ssh.connect({
           host: serverConfig.host,
+          port: serverConfig.port,
           username: serverConfig.username,
           password: serverConfig.password,
           privateKey: serverConfig.privateKey,
+          privateKeyPath: serverConfig.privateKeyPath,
           passphrase: serverConfig.passphrase,
           agent: serverConfig.agentForward && process.env.SSH_AUTH_SOCK,
           agentForward: serverConfig.agentForward,
@@ -677,7 +683,7 @@ export const handler = async (yargs) => {
     const tasks = new Listr(commands(yargs, ssh), {
       concurrent: true,
       exitOnError: true,
-      renderer: yargs.verbose && VerboseRenderer,
+      renderer: yargs.verbose && 'verbose',
     })
     await tasks.run()
   } catch (e) {

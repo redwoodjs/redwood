@@ -1,9 +1,9 @@
 export * from './auth'
 export * from './errors'
-export * from './functions/dbAuth/DbAuthHandler'
-export { dbAuthSession } from './functions/dbAuth/shared'
 export * from './validations/validations'
 export * from './validations/errors'
+
+export * from './types'
 
 export * from './transforms'
 export * from './cors'

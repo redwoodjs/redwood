@@ -1,6 +1,8 @@
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
+
 import { detectPrerenderRoutes } from '../detection'
 
-jest.mock('@redwoodjs/internal', () => {
+jest.mock('@redwoodjs/internal/dist/paths', () => {
   return {
     getPaths: jest.fn(() => {
       return {
@@ -14,7 +16,7 @@ jest.mock('@redwoodjs/internal', () => {
 
 // Mock route detection, tested in @redwoodjs/structure separately
 
-let mockedRoutes = []
+let mockedRoutes: Partial<RWRoute>[] = []
 jest.mock('@redwoodjs/structure', () => {
   return {
     getProject: jest.fn(() => {
@@ -66,7 +68,7 @@ describe('Detecting routes', () => {
     expect(output[0].path).toBe('/404')
   })
 
-  it('Should ignore routes with params', () => {
+  it('Should also allow routes with params', () => {
     mockedRoutes = [
       {
         name: 'taskDetail',
@@ -77,7 +79,7 @@ describe('Detecting routes', () => {
     ]
 
     const output = detectPrerenderRoutes()
-    expect(output.length).toBe(0)
+    expect(output.length).toBe(1)
   })
 
   it('Should return required keys', () => {

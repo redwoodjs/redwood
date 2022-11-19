@@ -21,7 +21,8 @@ export const DEPLOY = `# This file contains config for a baremetal deployment
 # * port - defaults to 22
 # * username - required, the user you're connecting as
 # * password - only set if you're not using key-based authentication
-# * privateKey - local file path to a private key that will be sent with the connection request
+# * privateKey - a Buffer containing the private key (use this _or_ \'privateKeyPath\', not both)
+# * privateKeyPath - local file path to a private key that will be sent with the connection request
 # * passphrase - used if your private key has a passphrase
 # * agentForward - set to \`true\` to forward the client machine's ssh credentials
 #
@@ -44,7 +45,7 @@ keepReleases = 5
 #
 # [[production.servers]]
 # host = "api.server.com"
-# user = "user"
+# username = "user"
 # agentForward = true
 # sides = ["api"]
 # path = "/var/www/app"
@@ -54,7 +55,7 @@ keepReleases = 5
 #
 # [[production.servers]]
 # host = "web.server.com"
-# user = "user"
+# username = "user"
 # agentForward = true
 # sides = ["web"]
 # path = "/var/www/app"

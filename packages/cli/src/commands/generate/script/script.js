@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 const TSCONFIG_TEMPLATE = path.resolve(
@@ -79,7 +79,7 @@ export const handler = async ({ force, ...args }) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {

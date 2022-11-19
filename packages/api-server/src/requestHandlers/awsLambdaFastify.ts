@@ -6,20 +6,7 @@ import type {
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import qs from 'qs'
 
-type ParseBodyResult = {
-  body: string
-  isBase64Encoded: boolean
-}
-
-export const parseBody = (rawBody: string | Buffer): ParseBodyResult => {
-  if (typeof rawBody === 'string') {
-    return { body: rawBody, isBase64Encoded: false }
-  }
-  if (rawBody instanceof Buffer) {
-    return { body: rawBody.toString('base64'), isBase64Encoded: true }
-  }
-  return { body: '', isBase64Encoded: false }
-}
+import { mergeMultiValueHeaders, parseBody } from './utils'
 
 const lambdaEventForFastifyRequest = (
   request: FastifyRequest
@@ -49,29 +36,18 @@ const fastifyResponseForLambdaResult = (
     body = '',
     multiValueHeaders,
   } = lambdaResult
-
-  if (headers) {
-    Object.keys(headers).forEach((headerName) => {
-      const headerValue: any = headers[headerName]
-      reply.header(headerName, headerValue)
-    })
-  }
-
-  if (multiValueHeaders) {
-    Object.keys(multiValueHeaders).forEach((headerName) => {
-      const headerValue: Array<any> = multiValueHeaders[headerName]
-      reply.header(headerName, headerValue)
-    })
-  }
-
+  const mergedHeaders = mergeMultiValueHeaders(headers, multiValueHeaders)
+  Object.entries(mergedHeaders).forEach(([name, values]) =>
+    values.forEach((value) => reply.header(name, value))
+  )
   reply.status(statusCode)
 
   if (lambdaResult.isBase64Encoded) {
     // Correctly handle base 64 encoded binary data. See
     // https://aws.amazon.com/blogs/compute/handling-binary-data-using-amazon-api-gateway-http-apis
-    reply.send(Buffer.from(body, 'base64'))
+    return reply.send(Buffer.from(body, 'base64'))
   } else {
-    reply.send(body)
+    return reply.send(body)
   }
 }
 
@@ -116,6 +92,7 @@ export const requestHandler = async (
   if (handlerPromise && typeof handlerPromise.then === 'function') {
     try {
       const lambdaResponse = await handlerPromise
+
       return fastifyResponseForLambdaResult(reply, lambdaResponse)
     } catch (error: any) {
       return fastifyResponseForLambdaError(req, reply, error)

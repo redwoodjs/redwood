@@ -20,6 +20,12 @@ fs.existsSync = (path) => {
 fs.mkdirSync = () => {}
 
 fs.readFileSync = (path) => {
+  // In prisma v4.3.0, prisma format uses a Wasm module. See https://github.com/prisma/prisma/releases/tag/4.3.0.
+  // We shouldn't mock this, so we'll use the real fs.readFileSync.
+  if (path.includes('prisma_fmt_build_bg.wasm')) {
+    return jest.requireActual('fs').readFileSync(path)
+  }
+
   return mockFiles[path]
 }
 

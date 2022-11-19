@@ -4,7 +4,7 @@ import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import type { AuthContextPayload } from '@redwoodjs/api'
+import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import { CorsConfig } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
@@ -38,6 +38,14 @@ export interface RedwoodGraphQLContext {
  * GraphQLHandlerOptions
  */
 export interface GraphQLHandlerOptions {
+  /**
+   * @description The identifier used in the GraphQL health check response.
+   * It verifies readiness when sent as a header in the readiness check request.
+   *
+   * By default, the identifier is `yoga` as seen in the HTTP response header `x-yoga-id: yoga`
+   */
+  healthCheckId?: string
+
   /**
    * @description Customize GraphQL Logger
    *
@@ -127,6 +135,11 @@ export interface GraphQLHandlerOptions {
    * @description Custom Envelop plugins
    */
   extraPlugins?: PluginOrDisabledPlugin[]
+
+  /**
+   * @description Auth-provider specific token decoder
+   */
+  authDecoder?: Decoder
 
   /**
    * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground

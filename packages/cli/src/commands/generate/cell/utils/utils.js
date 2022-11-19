@@ -1,6 +1,6 @@
 import pascalcase from 'pascalcase'
 
-import { listQueryTypeFieldsInProject } from '@redwoodjs/internal'
+import { listQueryTypeFieldsInProject } from '@redwoodjs/internal/dist/gql'
 
 export const getCellOperationNames = async () => {
   const { getProject } = await import('@redwoodjs/structure')
@@ -32,6 +32,11 @@ export const uniqueOperationName = async (
     return operationName
   }
   return uniqueOperationName(name, { index: index + 1 })
+}
+
+export const operationNameIsUnique = async (operationName) => {
+  const cellOperationNames = await getCellOperationNames()
+  return !cellOperationNames.includes(operationName)
 }
 
 export const getIdType = (model) => {

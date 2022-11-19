@@ -97,7 +97,7 @@ const InternalRoute = ({
   )
 
   const searchParams = parseSearch(location.search)
-  const allParams = { ...searchParams, ...pathParams }
+  const allParams: Record<string, string> = { ...searchParams, ...pathParams }
 
   if (redirect) {
     const newPath = replaceParams(redirect, allParams)
@@ -113,6 +113,14 @@ const InternalRoute = ({
 
   const Page = activePageContext.loadingState[path]?.page || (() => null)
 
+  // There are two special props in React: `ref` and `key`. (See https://reactjs.org/warnings/special-props.html.)
+  // It's very possible that the URL has `ref` as a search param (e.g. https://redwoodjs.com/?ref=producthunt).
+  // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`, otherwise the page will break.
+  // (The page won't actually break if `key` is passed, but it feels unclean.)
+  // If users want to access them, they can use `useParams`.
+  delete allParams['ref']
+  delete allParams['key']
+
   // Level 3/3 (InternalRoute)
   return <Page {...allParams} />
 }
@@ -123,9 +131,10 @@ function isRoute(
   return isReactElement(node) && node.type === Route
 }
 
-interface RouterProps extends RouterContextProviderProps {
+export interface RouterProps extends RouterContextProviderProps {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
+  children: React.ReactNode
 }
 
 const Router: React.FC<RouterProps> = ({

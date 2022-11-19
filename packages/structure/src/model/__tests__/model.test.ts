@@ -23,29 +23,29 @@ describe('Redwood Project Model', () => {
       ])
     )
     for (const page of project.pages) {
-      page.basenameNoExt //?
-      page.route?.id //?
+      page.basenameNoExt
+      page.route?.id
     }
-    expect(project.sdls.map((s) => s.name)).toEqual(['currentUser', 'todos']) //?
+    expect(project.sdls.map((s) => s.name)).toEqual(['currentUser', 'todos'])
 
     for (const c of project.components) {
-      c.basenameNoExt //?
+      c.basenameNoExt
     }
-    project.components.length //?
-    project.components.map((c) => c.basenameNoExt) //?
-    project.functions.length //?
-    project.services.length //?
-    project.sdls.length //?
+    project.components.length
+    project.components.map((c) => c.basenameNoExt)
+    project.functions.length
+    project.services.length
+    project.sdls.length
     const ds = await project.collectDiagnostics()
-    ds.length //?
-    const uri = URL_file(projectRoot, 'api/src/graphql/todos.sdl.js') //?
+    ds.length
+    const uri = URL_file(projectRoot, 'api/src/graphql/todos.sdl.js')
     const node = await project.findNode(uri)
     expect(node).toBeDefined()
     expect(node.id).toEqual(uri)
     if (node) {
       const info = await node.collectIDEInfo()
-      info.length //?
-      info //?
+      info.length
+      info
     }
   })
 
@@ -97,12 +97,12 @@ describe.skip('env vars', () => {
   it('Warns if env vars are not ok', async () => {
     const projectRoot = getFixtureDir('example-todo-main-with-errors')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
-    project.envHelper.process_env_expressions.length //?
+    project.envHelper.process_env_expressions.length
     const env = project.envHelper
-    env.env //?
-    env.env_defaults //?
-    project.redwoodTOML.web_includeEnvironmentVariables //?
-    env.process_env_expressions //?
+    env.env
+    env.env_defaults
+    project.redwoodTOML.web_includeEnvironmentVariables
+    env.process_env_expressions
   })
 })
 
@@ -130,12 +130,19 @@ describe('Redwood Route detection', () => {
     })
     expect(prerenderRoutes).toContainEqual({ name: 'fooPage', path: '/foo' })
     expect(prerenderRoutes).toContainEqual({ name: 'barPage', path: '/bar' })
-    expect(prerenderRoutes).toContainEqual({ name: 'privatePage', path: '/private-page' })
+    expect(prerenderRoutes).toContainEqual({
+      name: 'privatePage',
+      path: '/private-page',
+    })
   })
 })
 
 function getFixtureDir(
-  name: 'example-todo-main-with-errors' | 'example-todo-main'
+  name:
+    | 'example-todo-main-with-errors'
+    | 'example-todo-main'
+    | 'empty-project'
+    | 'test-project'
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }

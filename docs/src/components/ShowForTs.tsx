@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useTabGroupChoice } from '@docusaurus/theme-common'
+import { useTabGroupChoice } from '@docusaurus/theme-common/internal'
 import MDXContent from '@theme/MDXContent'
 
 interface Props {

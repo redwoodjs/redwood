@@ -50,12 +50,6 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   const routerState = useRouterState()
   const { loading, isAuthenticated, hasRole } = routerState.useAuth()
 
-  if (privateSet && !unauthenticated) {
-    throw new Error(
-      'Private Sets need to specify what route to redirect unauthorized users to by setting the `unauthenticated` prop'
-    )
-  }
-
   const unauthorized = useCallback(() => {
     return !(isAuthenticated && (!roles || hasRole(roles)))
   }, [isAuthenticated, roles, hasRole])
@@ -64,17 +58,42 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   const wrappers = Array.isArray(wrap) ? wrap : [wrap ? wrap : IdentityWrapper]
 
   if (privateSet && unauthorized()) {
+    if (!unauthenticated) {
+      throw new Error(
+        'Private Sets need to specify what route to redirect unauthorized ' +
+          'users to by setting the `unauthenticated` prop'
+      )
+    }
+
     if (loading) {
       return whileLoadingAuth?.() || null
     } else {
       const currentLocation =
         global.location.pathname + encodeURIComponent(global.location.search)
 
-      // We already have a check for !unauthenticated further up
-      const unauthenticatedPath = namedRoutes[unauthenticated || '']()
-
-      if (!unauthenticatedPath) {
+      if (!namedRoutes[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
+      }
+
+      let unauthenticatedPath
+
+      try {
+        unauthenticatedPath = namedRoutes[unauthenticated]()
+      } catch (e) {
+        if (
+          e instanceof Error &&
+          /Missing parameter .* for route/.test(e.message)
+        ) {
+          throw new Error(
+            `Redirecting to route "${unauthenticated}" would require route ` +
+              'parameters, which currently is not supported. Please choose ' +
+              'a different route'
+          )
+        }
+
+        throw new Error(
+          `Could not redirect to the route named ${unauthenticated}`
+        )
       }
 
       return (

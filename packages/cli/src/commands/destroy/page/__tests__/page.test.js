@@ -36,9 +36,9 @@ afterEach(() => {
 test('destroys page files', async () => {
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks({ name: 'About' })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
-  return t._tasks[0].run().then(() => {
+  return t.tasks[0].run().then(() => {
     const generatedFiles = Object.keys(files({ name: 'About' }))
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
@@ -60,9 +60,9 @@ test('destroys page files with stories and tests', async () => {
 
   const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
   const t = tasks(fileOptions)
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
-  return t._tasks[0].run().then(() => {
+  return t.tasks[0].run().then(() => {
     const generatedFiles = Object.keys(files(fileOptions))
     expect(generatedFiles.length).toEqual(unlinkSpy.mock.calls.length)
     generatedFiles.forEach((f) => expect(unlinkSpy).toHaveBeenCalledWith(f))
@@ -71,9 +71,9 @@ test('destroys page files with stories and tests', async () => {
 
 test('cleans up route from Routes.js', async () => {
   const t = tasks({ name: 'About' })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
-  return t._tasks[1].run().then(() => {
+  return t.tasks[1].run().then(() => {
     const routes = fs.readFileSync(getPaths().web.routes)
     expect(routes).toEqual(
       [
@@ -88,9 +88,9 @@ test('cleans up route from Routes.js', async () => {
 
 test('cleans up route with a custom path from Routes.js', async () => {
   const t = tasks({ name: 'About', path: '/about-us' })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
-  return t._tasks[1].run().then(() => {
+  return t.tasks[1].run().then(() => {
     const routes = fs.readFileSync(getPaths().web.routes)
     expect(routes).toEqual(
       [

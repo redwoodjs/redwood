@@ -24,6 +24,17 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
+jest.mock('@prisma/client', () => {
+  return {
+    ModelName: {
+      PrismaModelOne: 'PrismaModelOne',
+      PrismaModelTwo: 'PrismaModelTwo',
+      Post: 'Post',
+      Todo: 'Todo',
+    },
+  }
+})
+
 test('Generate gql typedefs web', async () => {
   await generateGraphQLSchema()
 
@@ -45,16 +56,16 @@ test('Generate gql typedefs web', async () => {
 test('Generate gql typedefs api', async () => {
   await generateGraphQLSchema()
 
+  let codegenOutput: {
+    file: fs.PathOrFileDescriptor
+    data: string | ArrayBufferView
+  } = { file: '', data: '' }
+
   jest
     .spyOn(fs, 'writeFileSync')
     .mockImplementation(
       (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-        expect(file).toMatch(path.join('api', 'types', 'graphql.d.ts'))
-        expect(data).toMatchSnapshot()
-
-        // Check that JSON types are imported from prisma
-        expect(data).toContain('JSON: Prisma.JsonValue;')
-        expect(data).toContain('JSONObject: Prisma.JsonObject;')
+        codegenOutput = { file, data }
       }
     )
 
@@ -62,6 +73,29 @@ test('Generate gql typedefs api', async () => {
 
   expect(apiPaths).toHaveLength(1)
   expect(apiPaths[0]).toMatch(path.join('api', 'types', 'graphql.d.ts'))
+
+  const { file, data } = codegenOutput
+
+  expect(file).toMatch(path.join('api', 'types', 'graphql.d.ts'))
+  // Catchall to prevent unexpected changes to the generated file
+  expect(data).toMatchSnapshot()
+
+  // Check that JSON types are imported from prisma
+  expect(data).toContain('JSON: Prisma.JsonValue;')
+  expect(data).toContain('JSONObject: Prisma.JsonObject;')
+
+  // Check that prisma model imports are added to the top of the file
+  expect(data).toContain(
+    "import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'"
+  )
+
+  // Check printMappedModelsPlugin works correctly
+  expect(data).toContain(
+    `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[]`
+  )
+
+  // Should only contain the SDL models that are also in Prisma
+  expect(data).toContain(`type AllMappedModels = MaybeOrArrayOfMaybe<Todo>`)
 })
 
 test('respects user provided codegen config', async () => {
