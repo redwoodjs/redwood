@@ -31,8 +31,12 @@ jest.mock('../../lib', () => ({
 // This will load packages/cli-helpers/__mocks__/fs.js
 jest.mock('fs')
 
-// @ts-expect-error - this is good enough for our mock
-fs.readdirSync = () => {
+const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
+  __setMockFiles: (files: Record<string, string>) => void
+  readdirSync: () => string[]
+}
+
+mockFS.readdirSync = () => {
   return ['auth.ts.template']
 }
 
@@ -49,8 +53,7 @@ function platformPath(filePath: string) {
 beforeEach(() => {
   mockIsTypeScriptProject = true
 
-  // @ts-expect-error - This method is added by packages/cli-helpers/__mocks__/fs.js
-  fs.__setMockFiles({
+  mockFS.__setMockFiles({
     [platformPath('/mock/setup/path/templates/web/auth.ts.template')]:
       '// web auth template',
   })
