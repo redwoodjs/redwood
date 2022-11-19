@@ -13,11 +13,6 @@ jest.mock('@redwoodjs/paths', () => {
         },
       }
     },
-  }
-})
-
-jest.mock('@redwoodjs/paths', () => {
-  return {
     getConfig: () => {
       return {
         api: {},
