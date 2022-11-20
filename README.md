@@ -776,6 +776,7 @@ And there you have it.
     </tr>
     <tr>
       <td align="center" valign="top" width="20%"><a href="https://github.com/james-interfold"><img src="https://avatars.githubusercontent.com/u/115298833?v=4" width="100px;" alt=""/><br /><sub><b>James Hester</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/mrjahz"><img src="https://avatars.githubusercontent.com/u/3082385?v=4" width="100px;" alt=""/><br /><sub><b>Guillaume Mantopoulos</b></sub></a></td>
     </tr>
   </tbody>
 </table>
