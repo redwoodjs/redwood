@@ -67,7 +67,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       {
         title: 'Creating contact page',
         task: async () => {
-          await createPage('contact')
+          await createPage('contactUs /contact')
 
           return applyCodemod(
             'contactPage.js',
