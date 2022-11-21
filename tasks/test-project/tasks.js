@@ -70,8 +70,8 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           await createPage('contactUs /contact')
 
           return applyCodemod(
-            'contactPage.js',
-            fullPath('web/src/pages/ContactPage/ContactPage')
+            'contactUsPage.js',
+            fullPath('web/src/pages/ContactUsPage/ContactUsPage')
           )
         },
       },
