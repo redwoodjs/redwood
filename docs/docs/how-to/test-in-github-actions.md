@@ -1,12 +1,12 @@
 # Testing Redwood in Github actions
 
-Having a good testing strategy is important for any project. Redwood has a few different types of tests that you can write to make your app more robust and be able to ship with confidence. In this guide we'll focus on how to run your Redwood tests in Github Actions, so you can test your app on every push or pull request.
+A good testing strategy is important for any project. Redwood offers a few different types of tests that you can write to make your app more robust - to ship with confidence. In this guide we'll focus on how to run your Redwood tests in Github Actions, so you can test your app on every push or pull request.
 
-We will setup a tiny project with very few tests but we'll include a `postgres` database that's created and used in every test run on Github. If you need to set up test for an existing project, or want to write better tests, check out the (amazing) [Testing](https://redwoodjs.com/docs/testing) section of the docs.
+We will setup a tiny project with very few tests and we'll include a `postgres` database that's created and used in every test run on Github. If you need to set up tests for an existing project, or if you want to write better tests, check out the (amazing) [Testing](https://redwoodjs.com/docs/testing) docs.
 
 ## Background
 
-Lets start with some concepts and products that we will use in this guide, then we'll get to the code.
+Let's start with some concepts and products that we will use in this guide, then we'll get to the code.
 
 ### Continuous Integration
 
@@ -14,21 +14,21 @@ Continuous Integration (CI) is the practice of automatically running your tests 
 
 ### Continuous Deployment
 
-Continuous Deployment (CD) is the practice of automatically deploying your app (or database in this case) to a server after every successful test run. This is a great way to make sure your app/database is always up to date and ready to be used.
+Continuous Deployment (CD) is the practice of automatically deploying your app (and database in this case) to a server after every successful test run. This is a great way to make sure your app/database is always up to date and ready to be used.
 
 ### Github Actions and Github Secrets
 
-Github Actions is a service that allows you to run a series of commands on a virtual machine. You can use it to run tests, deploy your app, or do anything else you can think of. It's free for public repositories and has a free tier for private repositories.
+Github Actions is a service that allows you to run a series of commands on a virtual machine. You can use it to run tests, deploy your app, or do anything else you may think of. It's free for public repositories and has a free tier for private repositories.
 
-For more information on Github Actions, check out the [Github Actions docs](https://docs.github.com/en/actions).
+For more information, check out the [Github Actions docs](https://docs.github.com/en/actions).
 
 Github Secrets are a way to store sensitive information like API keys or passwords. They are encrypted and only exposed to the Github Actions service. You can use them to pass information to your tests or deploy script.
 
-For more information specifically on Github secrets, check out the [Github Secrets docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+For more information, check out the [Github Secrets docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 ## How to run tests in Github Actions
 
-We will focus on how to have Github Actions run your tests, but not how to write tests. For more information on writing tests, check out the [Testing](https://redwoodjs.com/docs/testing) section of the docs.
+We will focus on running your tests via Github Actions, but not *how* to write tests (see the [Testing](https://redwoodjs.com/docs/testing) doc for test creation instructions).
 
 If you already have an existing project, you can skip to section [4. Setup Github Actions](#4-setup-github-actions) section.
 
