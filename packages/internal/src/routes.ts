@@ -1,8 +1,10 @@
 import chalk from 'chalk'
 
-import { getProject } from '@redwoodjs/structure/dist/index'
-
 import { getPaths } from './paths'
+
+// Circular dependency when trying to use the standard import
+const { getProject } = require('@redwoodjs/structure/dist/index')
+const { RWRoute } = require('@redwoodjs/structure/dist/model/RWRoute')
 
 export interface RouteInformation {
   name?: string
@@ -15,7 +17,7 @@ export interface RouteInformation {
  */
 export function getDuplicateRoutes() {
   const duplicateRoutes: RouteInformation[] = []
-  const allRoutes = getProject(getPaths().base).router.routes
+  const allRoutes: typeof RWRoute[] = getProject(getPaths().base).router.routes
   const uniquePathNames = new Set(allRoutes.map((route) => route.name))
   uniquePathNames.forEach((name) => {
     const routesWithName = allRoutes.filter((route) => {

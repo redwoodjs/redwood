@@ -76,11 +76,11 @@ watcher
       console.log(action[eventName], 'Cell:', '\x1b[2m', p, '\x1b[0m')
     } else if (absPath === rwjsPaths.web.routes) {
       generateTypeDefRouterRoutes()
+      routesWarningMessage = warningForDuplicateRoutes()
       console.log(action[eventName], 'Routes:', '\x1b[2m', p, '\x1b[0m')
     } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
       generateTypeDefRouterPages()
       console.log(action[eventName], 'Page:', '\x1b[2m', p, '\x1b[0m')
-      routesWarningMessage = warningForDuplicateRoutes()
     } else if (isDirectoryNamedModuleFile(absPath)) {
       if (eventName === 'unlink') {
         fs.unlinkSync(mirrorPathForDirectoryNamedModules(absPath, rwjsPaths)[0])
