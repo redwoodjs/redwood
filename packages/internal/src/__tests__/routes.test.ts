@@ -35,7 +35,7 @@ describe('Routes within the empty project', () => {
   })
 
   it('Produces the correct warning message', () => {
-    expect(warningForDuplicateRoutes()).toMatchSnapshot()
+    expect(warningForDuplicateRoutes()).toMatch('')
   })
 })
 
@@ -52,7 +52,7 @@ describe('Routes within the example todo project', () => {
   })
 
   it('Produces the correct warning message', () => {
-    expect(warningForDuplicateRoutes()).toMatchSnapshot()
+    expect(warningForDuplicateRoutes()).toMatch('')
   })
 })
 
@@ -72,7 +72,9 @@ describe('Routes within the example todo with errors project', () => {
   })
 
   it('Produces the correct warning message', () => {
-    expect(warningForDuplicateRoutes()).toMatchSnapshot()
+    expect(warningForDuplicateRoutes()).toMatch(
+      /Warning: 2 duplicate routes have been detected, only the route\(s\) closest to the top of the file will be used.+\n.+Name: \"home\", Path: \"\/\", Page: \"HomePage\"\n.+Name: \"home\", Path: \"\/\", Page: \"HomePage\"/
+    )
   })
 })
 
@@ -89,6 +91,6 @@ describe('Routes within the test project', () => {
   })
 
   it('Produces the correct warning message', () => {
-    expect(warningForDuplicateRoutes()).toMatchSnapshot()
+    expect(warningForDuplicateRoutes()).toMatch('')
   })
 })
