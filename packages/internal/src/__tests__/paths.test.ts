@@ -911,20 +911,17 @@ describe('paths', () => {
           'WaterfallPage',
         ]
 
-        for (let i = 0; i < pageNames.length; i++) {
-          const pageName = pageNames[i]
+        pageNames.forEach((pageName) => {
           const thisPage = pages.find((page) => page.importName === pageName)
           expect(thisPage).not.toBeUndefined()
           expect(thisPage.importPath).toEqual(
             importStatementPath(path.join(pagesDir, `${pageName}/${pageName}`))
           )
-        }
+        })
 
         const scaffoldPageNames = ['Contact', 'Post']
 
-        for (let i = 0; i < scaffoldPageNames.length; i++) {
-          const pageName = scaffoldPageNames[i]
-
+        scaffoldPageNames.forEach((pageName) => {
           let page = pages.find(
             (page) => page.importName === `${pageName}Edit${pageName}Page`
           )
@@ -937,6 +934,7 @@ describe('paths', () => {
               )
             )
           )
+
           page = pages.find(
             (page) => page.importName === `${pageName}New${pageName}Page`
           )
@@ -949,6 +947,7 @@ describe('paths', () => {
               )
             )
           )
+
           page = pages.find(
             (page) => page.importName === `${pageName}${pageName}Page`
           )
@@ -958,6 +957,7 @@ describe('paths', () => {
               path.join(pagesDir, `${pageName}/${pageName}Page/${pageName}Page`)
             )
           )
+
           page = pages.find(
             (page) => page.importName === `${pageName}${pageName}sPage`
           )
@@ -970,7 +970,7 @@ describe('paths', () => {
               )
             )
           )
-        }
+        })
       })
     })
 
