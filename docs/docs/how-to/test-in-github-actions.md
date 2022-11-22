@@ -1,12 +1,12 @@
 # Testing Redwood in Github actions
 
-Having a good testing strategy is important for any project. Redwood has a few different types of tests that you can write to make your app more robust and be able to ship with confidence. In this guide we'll focus on how to run your Redwood tests in Github Actions, so you can test your app on every push or pull request.
+A good testing strategy is important for any project. Redwood offers a few different types of tests that you can write to make your app more robust - to ship with confidence. In this guide we'll focus on how to run your Redwood tests in Github Actions, so you can test your app on every push or pull request.
 
-We will setup a tiny project with very few tests but we'll include a `postgres` database that's created and used in every test run on Github. If you need to set up test for an existing project, or want to write better tests, check out the (amazing) [Testing](https://redwoodjs.com/docs/testing) section of the docs.
+We will setup a tiny project with very few tests and we'll include a `postgres` database that's created and used in every test run on Github. If you need to set up tests for an existing project, or if you want to write better tests, check out the (amazing) [Testing](https://redwoodjs.com/docs/testing) docs.
 
 ## Background
 
-Lets start with some concepts and products that we will use in this guide, then we'll get to the code.
+Let's start with some concepts and products that we will use in this guide, then we'll get to the code.
 
 ### Continuous Integration
 
@@ -14,25 +14,25 @@ Continuous Integration (CI) is the practice of automatically running your tests 
 
 ### Continuous Deployment
 
-Continuous Deployment (CD) is the practice of automatically deploying your app (or database in this case) to a server after every successful test run. This is a great way to make sure your app/database is always up to date and ready to be used.
+Continuous Deployment (CD) is the practice of automatically deploying your app (and database in this case) to a server after every successful test run. This is a great way to make sure your app/database is always up to date and ready to be used.
 
 ### Github Actions and Github Secrets
 
-Github Actions is a service that allows you to run a series of commands on a virtual machine. You can use it to run tests, deploy your app, or do anything else you can think of. It's free for public repositories and has a free tier for private repositories.
+Github Actions is a service that allows you to run a series of commands on a virtual machine. You can use it to run tests, deploy your app, or do anything else you may think of. It's free for public repositories and has a free tier for private repositories.
 
-For more information on Github Actions, check out the [Github Actions docs](https://docs.github.com/en/actions).
+For more information, check out the [Github Actions docs](https://docs.github.com/en/actions).
 
 Github Secrets are a way to store sensitive information like API keys or passwords. They are encrypted and only exposed to the Github Actions service. You can use them to pass information to your tests or deploy script.
 
-For more information specifically on Github secrets, check out the [Github Secrets docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+For more information, check out the [Github Secrets docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
 ## How to run tests in Github Actions
 
-We will focus on how to have Github Actions run your tests, but not how to write tests. For more information on writing tests, check out the [Testing](https://redwoodjs.com/docs/testing) section of the docs.
+We will focus on running your tests via Github Actions, but not *how* to write tests (see the [Testing](https://redwoodjs.com/docs/testing) doc for test creation instructions).
 
 If you already have an existing project, you can skip to section [4. Setup Github Actions](#4-setup-github-actions) section.
 
-### 1. Create a redwood app
+### 1. Create a Redwood app
 
 ```sh
 yarn create redwood-app rw-testing-ghactions
@@ -67,13 +67,13 @@ Ran all test suites.
 Watch Usage: Press w to show more.
 ```
 
-### 2. Modify the prisma schema
+### 2. Modify the Prisma schema
 
-For the purpose of this guide we will use the `User` model that comes with the redwood app.
+For the purpose of this guide we will use the `User` model that comes with the Redwood app.
 
 We will also change the db to `postgresql`, since that's what we'll be using in our Github Actions.
 
-> At this point make sure you have a postgres instance ready to use. Here's a handy guide to [set it up locally](https://redwoodjs.com/docs/local-postgres-setup). we will need the connection string so our Redwood app knows where to store the data.
+> At this point make sure you have a Postgres instance ready to use. Here's a handy guide to [set it up locally](https://redwoodjs.com/docs/local-postgres-setup).  We will need the connection string so our Redwood app knows where to store the data.
 
 On to the changes, modify your `schema.prisma` file to look like this:
 
@@ -109,9 +109,9 @@ DATABASE_URL=postgres://postgres:postgres@localhost:54322/postgres
 TEST_DATABASE_URL=postgres://postgres:postgres@localhost:54322/postgres
 ```
 
-You need one connection string for your development database and one for your test database. you can read more info about it [here](https://redwoodjs.com/docs/testing#the-test-database).
+You need one connection string for your development database and one for your test database. You can read more info about it [here](https://redwoodjs.com/docs/testing#the-test-database).
 
-Edit the `scripts/seed.ts` file, uncomment the contents of the array that contain the "fake" users. We will also use the `createMany` method for inserting records in the data base so we can skip the duplicates [more info](<https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany>). It should look like this:
+Edit the `scripts/seed.ts` file and uncomment the contents of the array that contain the "fake" users. We will also use the `createMany` method for inserting records in the data base so we can skip the duplicates [more info](<https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany>). It should look like this:
 
 ```ts
     ...
@@ -164,13 +164,13 @@ yarn rw g scaffold UserExample
 
 This will give you everything you need to create "users" in your app, including some of the tests.
 
-Make sure everything is still working
+Make sure everything is still working:
 
 ```sh
 yarn rw test
 ```
 
-redwood has generated the basic tests for our services, they interact with your test database.
+Redwood has generated the basic tests for our services, which interact with your test database.
 
 You should see something like this:
 
@@ -356,7 +356,7 @@ jobs:
 The main changes are:
 
 - We only run the action on push events to the `main` branch
-- We run the migrations and seed scripts after the tests.
+- We run the migrations and seed scripts after the tests
 
   ```yml
   # run migrations on the actual database
@@ -379,7 +379,7 @@ The value field is the actual secret so it should be something like this: `postg
 
 Now click on `Add secret`.
 
-This will create a new secret that you can use in your Github actions. in this case he connection string for the database where we will deploy the changes.
+This will create a new secret that you can use in your Github actions. In this case, specify the connection string for the database where we will deploy the changes.
 
 Now you can use the secret in your Github action by using the `${{ secrets.DATABASE_URL }}` syntax.
 
