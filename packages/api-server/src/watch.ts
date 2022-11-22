@@ -22,6 +22,11 @@ const argv = yargs(hideBin(process.argv))
     description: 'Debugging port',
     type: 'number',
   })
+  .option('port', {
+    alias: 'p',
+    description: 'Port',
+    type: 'number',
+  })
   .help()
   .alias('help', 'h')
   .parseSync()
@@ -75,10 +80,12 @@ const rebuildApiServer = () => {
       forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])
     }
 
+    const port = argv.port ?? getConfig().api.port
+
     // Start API server
     httpServerProcess = fork(
       path.join(__dirname, 'index.js'),
-      ['api', '--port', getConfig().api.port.toString()],
+      ['api', '--port', port.toString()],
       forkOpts
     )
   } catch (e) {
