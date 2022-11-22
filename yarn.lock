@@ -6365,7 +6365,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.26.1
     fast-json-parse: 1.0.3
-    fastify: 4.9.2
+    fastify: 4.10.2
     fastify-raw-body: 4.1.1
     jest: 29.3.1
     lodash.escape: 4.0.1
@@ -13711,7 +13711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"content-type@npm:~1.0.4":
+"content-type@npm:^1.0.4, content-type@npm:~1.0.4":
   version: 1.0.4
   resolution: "content-type@npm:1.0.4"
   checksum: 19e08f406f9ae3f80fb4607c75fbde1f22546647877e8047c9fa0b1c61e38f3ede853f51e915c95fd499c2e1c7478cb23c35cfb804d0e8e0495e8db88cfaed75
@@ -17042,15 +17042,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.9.2":
-  version: 4.9.2
-  resolution: "fastify@npm:4.9.2"
+"fastify@npm:4.10.2":
+  version: 4.10.2
+  resolution: "fastify@npm:4.10.2"
   dependencies:
     "@fastify/ajv-compiler": ^3.3.1
     "@fastify/error": ^3.0.0
     "@fastify/fast-json-stringify-compiler": ^4.1.0
     abstract-logging: ^2.0.1
     avvio: ^8.2.0
+    content-type: ^1.0.4
     find-my-way: ^7.3.0
     light-my-request: ^5.6.1
     pino: ^8.5.0
@@ -17059,8 +17060,8 @@ __metadata:
     rfdc: ^1.3.0
     secure-json-parse: ^2.5.0
     semver: ^7.3.7
-    tiny-lru: ^9.0.2
-  checksum: 6be84b9182f03c219bf9ff6eb96812779010526d24b98844c99f5d47af454a21af8de2d2854e07dfdee983a41113b42cda2f92c25d4b712da3eba4c8f4668215
+    tiny-lru: ^10.0.0
+  checksum: ace25d52843c8a8e5c896c56c08a4434c327cb85823509edfdcc9a1f6a3e90a1a36b0d7468a638c6aa4b9ff8522e47c55ef560b49b7fd8a73c97c9ece341ea7a
   languageName: node
   linkType: hard
 
@@ -29882,17 +29883,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tiny-lru@npm:^10.0.0":
+  version: 10.0.1
+  resolution: "tiny-lru@npm:10.0.1"
+  checksum: 37cbb0419044026cf3d701734bd03e360315aba338f346736a46d8aaaafec8b4f1054c2e4e614a34ab19a5ad04673ee95fdd2d7b97e2b5e7cf9db2426f00d114
+  languageName: node
+  linkType: hard
+
 "tiny-lru@npm:^8.0.2":
   version: 8.0.2
   resolution: "tiny-lru@npm:8.0.2"
   checksum: 32dc73db748ae50bf43498f81150ed23922c924d7a3665ea240c7041abbbd5e8667c05328fd520ca923b4d10b89e69a4ba671365eaac221c6f7eb8b898530506
-  languageName: node
-  linkType: hard
-
-"tiny-lru@npm:^9.0.2":
-  version: 9.0.2
-  resolution: "tiny-lru@npm:9.0.2"
-  checksum: 48aa41c07070dab66069b91e1811f75953233daa31880ec33d545a685c1acac1f5640559eac4e0ccb6c0fe3c84f8b25ef5a1b768d698f90d9f291fce556ca672
   languageName: node
   linkType: hard
 
