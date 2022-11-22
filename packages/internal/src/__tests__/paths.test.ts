@@ -894,8 +894,6 @@ describe('paths', () => {
 
         const pages = processPagesDir(pagesDir)
 
-        console.log(pages)
-
         expect(pages.length).toEqual(20)
 
         const pageNames = [
