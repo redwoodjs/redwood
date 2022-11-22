@@ -55,6 +55,14 @@ jest.mock('../../lib/generatePrismaClient', () => {
   }
 })
 
+jest.mock('../../lib/ports', () => {
+  return {
+    getFreePort: jest.fn().mockImplementation((port) => {
+      return port
+    }),
+  }
+})
+
 import concurrently from 'concurrently'
 import { find } from 'lodash'
 
