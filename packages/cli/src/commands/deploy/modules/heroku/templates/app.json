@@ -1,0 +1,40 @@
+{
+  "_template": "template[tags(heroku)]",
+  "scripts": {},
+  "env": {
+    "SESSION_SECRET": {
+      "description": "generated session secret per deploy",
+      "generator": "secret"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "14"
+      }
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nginx"
+    }
+  ],
+  "environments": {
+    "review": {
+      "addons": ["heroku-postgresql:hobby-dev"],
+      "scripts": {
+        "postdeploy": "yarn db:seed"
+      },
+      "env": {
+        "SESSION_SECRET": {
+          "description": "generated session secret per deploy",
+          "generator": "secret"
+        }
+      }
+    }
+  }
+}

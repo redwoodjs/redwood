@@ -1,15 +1,26 @@
 import execa, { ExecaReturnValue } from 'execa'
 
-export async function executeCommand(
+export async function spawnInteractive(
   command: string,
-  opts = {}
+  options?: execa.Options
 ): Promise<ExecaReturnValue> {
-  return execa.command(command, opts)
+  return spawnShell(command, {
+    stdio: 'inherit',
+    cleanup: true,
+    shell: true,
+    ...options,
+  })
+}
+
+export async function spawnShell(command: string, opts?: execa.Options) {
+  return execa.command(command, {
+    ...opts,
+  })
 }
 
 export async function binDoesExist(bin: string): Promise<boolean> {
   try {
-    const { stdout, stderr } = await executeCommand(`which ${bin}`)
+    const { stdout, stderr } = await spawnShell(`which ${bin}`)
     if (stderr || /not found/.test(stdout)) {
       return false
     }

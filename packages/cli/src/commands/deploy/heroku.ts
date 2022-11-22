@@ -1,11 +1,18 @@
-import { Listr, ListrContext, ListrRenderer, ListrTaskWrapper } from 'listr2'
+import { Listr, ListrContext } from 'listr2'
+import yargs from 'yargs'
 
-import { setupHeroku, checkSystemRequirements } from './modules/heroku'
-import { Logger } from './modules/heroku/logger'
+import {
+  Logger,
+  setupHeroku,
+  checkSystemRequirements,
+  type IYargs,
+  type IYargsOptions,
+  type IListrContext,
+} from './modules/heroku'
 
-// chck for windows
-// check if heroku is installed, if not, install
-// login to heroku
+// chck for windows ✅
+// check if heroku is installed  ✅
+// login to heroku ✅
 // create project with desired opts
 // configure config files in project
 // deploy to heroku
@@ -14,10 +21,10 @@ import { Logger } from './modules/heroku/logger'
 export const command = 'heroku'
 export const description = 'Setup Heroku deployment'
 
-export const HEROKU_OPTIONS = {
+export const HEROKU_OPTIONS: IYargsOptions = {
   init: {
     describe: 'Initialize heroku deploy',
-    type: 'init',
+    type: 'string',
     default: false,
   },
   cmd: {
@@ -32,8 +39,6 @@ export const HEROKU_OPTIONS = {
   },
 }
 
-export type TaskWrapper = ListrTaskWrapper<ListrContext, typeof ListrRenderer>
-
 export const HEROKU_TASKS = [
   {
     title: 'Checking prerequisites',
@@ -45,20 +50,31 @@ export const HEROKU_TASKS = [
   },
 ]
 
-export const builder = (yargs: any) => {
-  Object.entries(HEROKU_OPTIONS).forEach(([arg, opts]) =>
-    yargs.option(arg, opts)
+export const builder = (yargs: yargs.Argv) => {
+  Object.entries(HEROKU_OPTIONS).forEach(
+    ([arg, opts]: [arg: string, opts: yargs.Options]) => yargs.option(arg, opts)
   )
 }
 
-export const handler = async (yargs: any) => {
+export const handler = async (yargs: IYargs) => {
   const logger = new Logger(yargs.debug)
   try {
-    const tasks = new Listr(HEROKU_TASKS, {
+    const tasks = new Listr<ListrContext>(HEROKU_TASKS, {
       concurrent: false,
       exitOnError: true,
+      renderer: 'default',
+      rendererOptions: {
+        collapse: false,
+        clearOutput: false,
+        showSubtasks: true,
+        collapseErrors: false,
+        showTimer: true,
+        showErrorMessage: true,
+        showSkipMessage: true,
+      },
     })
-    await tasks.run({ logger, ...yargs })
+    const runArgs: IListrContext = { logger, ...yargs }
+    await tasks.run(runArgs)
   } catch (err) {
     console.log('Exited with errors. use --debug to see more info')
     logger.error(err)

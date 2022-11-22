@@ -1,4 +1,7 @@
+import yargs from 'yargs'
+
 import { builder, HEROKU_OPTIONS, handler } from '../heroku'
+import { IYargs } from '../modules/heroku'
 import { Logger } from '../modules/heroku/logger'
 
 const mockListrRun = jest.fn()
@@ -20,15 +23,15 @@ describe('heroku deploy handlers', () => {
     }))
   })
   it('sets all of the options on the builder', async () => {
-    const mockYargs = {
+    const mockYargs: yargs.Argv = {
       option: jest.fn(),
-    }
+    } as any
     await builder(mockYargs)
     expect(mockYargs.option).toHaveBeenCalledTimes(optionLength)
   })
 
   it('creates a listr task runner', async () => {
-    const mockYargs = { foo: 'ass', handle: 'baz' }
+    const mockYargs: IYargs = {} as any
     await handler(mockYargs)
     expect(mockListrRun).toHaveBeenCalledWith({
       ...mockYargs,

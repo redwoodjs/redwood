@@ -1,36 +1,26 @@
-import { binDoesExist, executeCommand } from './command'
+import { spawnShell } from './command'
+import { IListrContext, IListrTask } from './interfaces'
 
 export const HEROKU_ERRORS = {
   NOT_OSX: 'Only OSX is supported',
   NO_HOMEBREW: 'Homebrew is required to install Heroku',
 }
 
-export async function checkSystemRequirements(): Promise<void> {
-  await doesHaveDarwin()
+export async function checkSystemRequirements(
+  ctx: IListrContext,
+  task: IListrTask
+): Promise<void> {
+  await doesHaveDarwin(ctx, task)
 }
 
-export async function doesHaveHeroku(): Promise<boolean> {
-  try {
-    if (await binDoesExist('heroku')) {
-      return true
-    }
-    return false
-  } catch (err) {
-    return false
-  }
-}
-
-export async function doesHaveDarwin(): Promise<boolean> {
-  const { stdout } = await executeCommand('uname')
+export async function doesHaveDarwin(
+  _ctx: IListrContext,
+  task: IListrTask
+): Promise<boolean> {
+  const { stdout } = await spawnShell('uname')
   if (stdout === 'Darwin') {
+    task.output = 'OSX detected'
     return true
   }
   throw new Error(HEROKU_ERRORS.NOT_OSX)
-}
-
-export async function doesHaveHomebrew(): Promise<boolean> {
-  if (!(await binDoesExist('brew'))) {
-    throw new Error(HEROKU_ERRORS.NO_HOMEBREW)
-  }
-  return true
 }

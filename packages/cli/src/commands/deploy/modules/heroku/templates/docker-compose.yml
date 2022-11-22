@@ -1,0 +1,29 @@
+# template[tags(prisma,db), replace_all(redwood:${app_name})]
+version: '3.8'
+services:
+  db:
+    image: postgres:14.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=development
+      - POSTGRES_DB=redwood_dev
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+    volumes:
+      - redwood_dev:/var/lib/postgresql/data/pgdata
+  testdb:
+    image: postgres:14.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=redwood_test
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5433:5432
+    volumes:
+      - redwood_test:/var/lib/postgresql/data/pgdata
+
+volumes:
+  redwood_dev:
+  redwood_test:
