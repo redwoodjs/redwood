@@ -35,7 +35,7 @@ describe('Routes within the empty project', () => {
   })
 
   it('Produces the correct warning message', () => {
-    expect(warningForDuplicateRoutes()).toMatch('')
+    expect(warningForDuplicateRoutes()).toBe('')
   })
 })
 
@@ -52,7 +52,7 @@ describe('Routes within the example todo project', () => {
   })
 
   it('Produces the correct warning message', () => {
-    expect(warningForDuplicateRoutes()).toMatch('')
+    expect(warningForDuplicateRoutes()).toBe('')
   })
 })
 
@@ -91,6 +91,6 @@ describe('Routes within the test project', () => {
   })
 
   it('Produces the correct warning message', () => {
-    expect(warningForDuplicateRoutes()).toMatch('')
+    expect(warningForDuplicateRoutes()).toBe('')
   })
 })
