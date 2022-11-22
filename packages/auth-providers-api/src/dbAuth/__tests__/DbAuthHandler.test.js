@@ -1512,6 +1512,83 @@ describe('dbAuth', () => {
     })
   })
 
+  describe('graphiqlHeader', () => {
+    it('returns the ID of the logged in user without event.headers', async () => {
+      // graphiQLHeader only called in dev
+      const curNodeEnv = process.env.NODE_ENV
+      process.env.NODE_ENV = 'development'
+
+      // setup graphiQL header
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        extensions: {
+          headers: {
+            'auth-provider': 'dbAuth',
+            cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
+            authorization: 'Bearer ' + dbUser.id,
+          },
+        },
+      })
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const user = await dbAuth._getCurrentUser()
+      expect(user.id).toEqual(dbUser.id)
+
+      process.env.NODE_ENV = curNodeEnv
+      expect(process.env.NODE_ENV).toBe('test')
+    })
+
+    it("graphiqlHeader doesn't not working if not in dev environment", async () => {
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        extensions: {
+          headers: {
+            'auth-provider': 'dbAuth',
+            cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
+            authorization: 'Bearer ' + dbUser.id,
+          },
+        },
+      })
+
+      try {
+        const dbAuth = new DbAuthHandler(event, context, options)
+        await dbAuth._getCurrentUser()
+      } catch (e) {
+        expect(e.message).toEqual(
+          'Cannot retrieve user details without being logged in'
+        )
+      }
+    })
+
+    it('graphiqlHeader overwrites event headers', async () => {
+      // graphiQL header only called in dev
+      const curNodeEnv = process.env.NODE_ENV
+      process.env.NODE_ENV = 'development'
+
+      // setup graphiQL header
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        extensions: {
+          headers: {
+            'auth-provider': 'dbAuth',
+            cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
+            authorization: 'Bearer ' + dbUser.id,
+          },
+        },
+      })
+      // create header in usual way
+      event.headers.cookie = encryptToCookie(JSON.stringify({ id: 9999999999 }))
+
+      // should read session from graphiQL header, not from cookie
+      const dbAuth = new DbAuthHandler(event, context, options)
+      const user = await dbAuth._getCurrentUser()
+      expect(user.id).toEqual(dbUser.id)
+
+      process.env.NODE_ENV = curNodeEnv
+      expect(process.env.NODE_ENV).toBe('test')
+    })
+  })
+
   describe('webAuthnAuthenticate', () => {
     it('throws an error if WebAuthn options are not defined', async () => {
       event = {

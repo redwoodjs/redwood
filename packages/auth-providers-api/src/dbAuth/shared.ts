@@ -10,14 +10,16 @@ export const extractCookie = (event: APIGatewayProxyEvent) => {
   let cookieFromGraphiqlHeader
   if (process.env.NODE_ENV === 'development') {
     try {
-      cookieFromGraphiqlHeader = JSON.parse(event.body ?? '{}').extensions
-        ?.headers?.cookie
+      const jsonBody = JSON.parse(event.body ?? '{}')
+      cookieFromGraphiqlHeader =
+        jsonBody.extensions?.headers?.cookie ||
+        jsonBody.extensions?.headers?.Cookie
     } catch (e) {
       return event.headers.cookie || event.headers.Cookie
     }
   }
   return (
-    event.headers.cookie || event.headers.Cookie || cookieFromGraphiqlHeader
+    cookieFromGraphiqlHeader || event.headers.cookie || event.headers.Cookie
   )
 }
 
