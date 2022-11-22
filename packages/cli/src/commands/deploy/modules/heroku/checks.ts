@@ -1,11 +1,36 @@
-import execa from 'execa'
+import { binDoesExist, executeCommand } from './command'
 
-export async function checkHerokuInstalled(ctx: any, task: any): Promise<void> {
-  await execute('printenv')
+export const HEROKU_ERRORS = {
+  NOT_OSX: 'Only OSX is supported',
+  NO_HOMEBREW: 'Homebrew is required to install Heroku',
 }
 
-export async function execute(command: string): Promise<string> {
-  const { stdout, stderr } = await execa.sync(command)
-  console.debug({ stderr, stdout })
-  return 'foo'
+export async function checkSystemRequirements(): Promise<void> {
+  await doesHaveDarwin()
+}
+
+export async function doesHaveHeroku(): Promise<boolean> {
+  try {
+    if (await binDoesExist('heroku')) {
+      return true
+    }
+    return false
+  } catch (err) {
+    return false
+  }
+}
+
+export async function doesHaveDarwin(): Promise<boolean> {
+  const { stdout } = await executeCommand('uname')
+  if (stdout === 'Darwin') {
+    return true
+  }
+  throw new Error(HEROKU_ERRORS.NOT_OSX)
+}
+
+export async function doesHaveHomebrew(): Promise<boolean> {
+  if (!(await binDoesExist('brew'))) {
+    throw new Error(HEROKU_ERRORS.NO_HOMEBREW)
+  }
+  return true
 }

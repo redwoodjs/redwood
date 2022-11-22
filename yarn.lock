@@ -6648,6 +6648,7 @@ __metadata:
     cross-env: 7.0.3
     decamelize: 5.0.0
     dotenv-defaults: 5.0.2
+    enquirer: 2.3.6
     envinfo: 7.8.1
     execa: 5.1.1
     fast-glob: 3.2.12

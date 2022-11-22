@@ -1,6 +1,7 @@
 import { Listr, ListrContext, ListrRenderer, ListrTaskWrapper } from 'listr2'
 
-import { checkHerokuInstalled } from './modules'
+import { setupHeroku, checkSystemRequirements } from './modules/heroku'
+import { Logger } from './modules/heroku/logger'
 
 // chck for windows
 // check if heroku is installed, if not, install
@@ -10,10 +11,8 @@ import { checkHerokuInstalled } from './modules'
 // deploy to heroku
 // add commands to passthrough heroku cli
 
-export type TaskWrapper = ListrTaskWrapper<ListrContext, typeof ListrRenderer>
-
 export const command = 'heroku'
-export const description = 'Setup and deploy heroku'
+export const description = 'Setup Heroku deployment'
 
 export const HEROKU_OPTIONS = {
   init: {
@@ -21,18 +20,28 @@ export const HEROKU_OPTIONS = {
     type: 'init',
     default: false,
   },
+  cmd: {
+    describe: 'Pass through command to heroku cli',
+    type: 'string',
+    default: '',
+  },
+  debug: {
+    describe: 'Show errors and debug logs',
+    type: 'boolean',
+    default: false,
+  },
 }
+
+export type TaskWrapper = ListrTaskWrapper<ListrContext, typeof ListrRenderer>
 
 export const HEROKU_TASKS = [
   {
-    title: 'Initializing heroku deploy',
-    task: (_: any, task: TaskWrapper): Listr =>
-      task.newListr([
-        {
-          title: 'Checking for heroku',
-          task: checkHerokuInstalled,
-        },
-      ]),
+    title: 'Checking prerequisites',
+    task: checkSystemRequirements,
+  },
+  {
+    title: 'Setting up Heroku',
+    task: setupHeroku,
   },
 ]
 
@@ -43,7 +52,15 @@ export const builder = (yargs: any) => {
 }
 
 export const handler = async (yargs: any) => {
-  const taskOpts = {}
-  const tasks = new Listr(HEROKU_TASKS, taskOpts)
-  await tasks.run({ ...yargs })
+  const logger = new Logger(yargs.debug)
+  try {
+    const tasks = new Listr(HEROKU_TASKS, {
+      concurrent: false,
+      exitOnError: true,
+    })
+    await tasks.run({ logger, ...yargs })
+  } catch (err) {
+    console.log('Exited with errors. use --debug to see more info')
+    logger.error(err)
+  }
 }
