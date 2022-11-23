@@ -7166,8 +7166,8 @@ __metadata:
     vite: 3.2.4
     vite-plugin-html: 3.2.0
   bin:
-    vite: ./dist/bins/vite.js
-    vite-2: ./dist/bins/vite.js
+    __vite-dist: ./dist/bins/vite.mjs
+    vite: ./bins/vite.mjs
   languageName: unknown
   linkType: soft
 
