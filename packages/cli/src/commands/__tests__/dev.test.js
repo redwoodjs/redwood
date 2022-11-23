@@ -57,9 +57,10 @@ jest.mock('../../lib/generatePrismaClient', () => {
 
 jest.mock('../../lib/ports', () => {
   return {
-    getFreePort: jest.fn().mockImplementation((port) => {
-      return port
-    }),
+    // We're not actually going to use the port, so it's fine to just say it's
+    // free. It prevents the tests from failing if the ports are already in use
+    // (probably by some external `yarn rw dev` process)
+    getFreePort: (port) => port,
   }
 })
 
@@ -76,7 +77,7 @@ describe('yarn rw dev', () => {
     jest.clearAllMocks()
   })
 
-  it('Should run api and web dev servers, and  by default', async () => {
+  it('Should run api and web dev servers, and generator watcher by default', async () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
@@ -86,6 +87,7 @@ describe('yarn rw dev', () => {
         debugPort: 18911,
       },
     })
+
     await handler({
       side: ['api', 'web'],
     })
@@ -119,6 +121,7 @@ describe('yarn rw dev', () => {
         debugPort: 505050,
       },
     })
+
     await handler({
       side: ['api'],
       apiDebugPort: 90909090,
@@ -143,6 +146,7 @@ describe('yarn rw dev', () => {
         debugPort: false,
       },
     })
+
     await handler({
       side: ['api'],
     })
