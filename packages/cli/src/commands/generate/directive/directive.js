@@ -175,12 +175,6 @@ export const handler = async (args) => {
           task.title = POST_RUN_INSTRUCTIONS
         },
       },
-      {
-        title: 'Err...',
-        task: () => {
-          throw new Error('test')
-        },
-      },
     ].filter(Boolean),
     { rendererOptions: { collapse: false } }
   )
