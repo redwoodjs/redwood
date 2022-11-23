@@ -660,9 +660,9 @@ const addHelperPackages = async (task) => {
   // support yet (2022-09-20)
   // TODO: Update to latest version when RW supports ESMs
   await execa('yarn', ['workspace', 'web', 'add', 'humanize-string@2.1.0'])
-  addFunctionToRollback(
-    execa('yarn', ['workspace', 'web', 'remove', 'humanize-string@2.1.0'])
-  )
+  addFunctionToRollback(async () => {
+    await execa('yarn', ['workspace', 'web', 'remove', 'humanize-string@2.1.0'])
+  })
 }
 
 const addSetImport = (task) => {
