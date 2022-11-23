@@ -18,7 +18,8 @@
     "rwfw": "./dist/bins/rwfw.js",
     "start-storybook": "./dist/bins/start-storybook.js",
     "tsc": "./dist/bins/tsc.js",
-    "webpack": "./dist/bins/webpack.js"
+    "webpack": "./dist/bins/webpack.js",
+    "vite": "./dist/bins/vite.js"
   },
   "files": [
     "dist",
