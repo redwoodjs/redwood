@@ -74,7 +74,7 @@ export const handler = async ({
   const webAuthn = await shouldIncludeWebAuthn(webauthn)
 
   standardAuthHandler({
-    basedir: __dirname,
+    setupTemplateDir: __dirname,
     rwVersion,
     forceArg,
     provider: 'dbAuth',

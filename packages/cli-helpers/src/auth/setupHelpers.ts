@@ -67,7 +67,7 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
 }
 
 interface Args {
-  basedir: string
+  setupTemplateDir: string
   rwVersion: string
   forceArg: boolean
   provider: string
@@ -86,8 +86,14 @@ function truthy<T>(value: T): value is Truthy<T> {
   return !!value
 }
 
+/**
+ *  setupTemplateDir assumes that you must have a templates folder in that directory.
+ *
+ *  See folder structure of auth providers in packages/auth-providers-setup/src/<provider>
+ *
+ */
 export const standardAuthHandler = async ({
-  basedir,
+  setupTemplateDir,
   rwVersion,
   forceArg,
   provider,
@@ -98,12 +104,14 @@ export const standardAuthHandler = async ({
   extraTask,
   notes,
 }: Args) => {
-  const force = await shouldForce(forceArg, basedir, webAuthn)
+  // @MARK this is our problem. Should force only checks for api side files,
+  // not for web side files
+  const force = await shouldForce(forceArg, setupTemplateDir, webAuthn)
 
   const tasks = new Listr<never>(
     [
-      generateAuthApiFiles(basedir, provider, force, webAuthn),
-      addAuthConfigToWeb(basedir, provider, webAuthn),
+      generateAuthApiFiles(setupTemplateDir, provider, force, webAuthn),
+      addAuthConfigToWeb(setupTemplateDir, provider, webAuthn),
       addAuthConfigToGqlApi(authDecoderImport),
       addWebPackages(webPackages, rwVersion),
       addApiPackages(apiPackages),

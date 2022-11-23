@@ -21,7 +21,7 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
   const authFilename = isTypeScriptProject() ? 'auth.ts' : 'auth.js'
 
   standardAuthHandler({
-    basedir: __dirname,
+    setupTemplateDir: __dirname,
     rwVersion,
     forceArg,
     provider: 'custom',

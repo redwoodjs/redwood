@@ -276,6 +276,12 @@ export const addConfigToRoutes = () => {
   fs.writeFileSync(webRoutesPath, content)
 }
 
+/**
+ * Will find the templates inside `${basedir}/templates`,
+ * and write these files to disk with unique names if they are clashing.
+ *
+ * @returns Listr task
+ */
 export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
   basedir: string,
   provider: string,

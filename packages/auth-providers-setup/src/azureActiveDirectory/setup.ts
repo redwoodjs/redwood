@@ -19,7 +19,7 @@ interface Args {
 
 export const handler = async ({ rwVersion, force: forceArg }: Args) => {
   standardAuthHandler({
-    basedir: __dirname,
+    setupTemplateDir: __dirname,
     rwVersion,
     forceArg,
     provider: 'azureActiveDirectory',
