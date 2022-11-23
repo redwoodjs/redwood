@@ -290,7 +290,7 @@ Once the Github Action is done, you can see the results in the "Conversation" ta
 
 ### 6. Deploy the database changes to an actual database
 
-Now we want to use another action to deploy the database changes to an actual database, so we can test the app in a real environment. In this action we will run the tests one more time against the local database, and then deploy the database migrations to the external database.
+Now we want to use another action to deploy the database changes to an actual database, so we can run the app in a real environment. In this action we will run the tests one more time against the local database, and then deploy the database migrations to the external database.
 
 Create a new file in the `.github/workflows` folder called `cd.yml` and add the following content:
 
