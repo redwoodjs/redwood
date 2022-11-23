@@ -14,6 +14,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareRollbackForTasks } from '../../../lib/rollback'
 import {
   createYargsForComponentGeneration,
   pathName,
@@ -247,6 +248,7 @@ export const handler = async ({
   )
 
   try {
+    prepareRollbackForTasks(tasks)
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

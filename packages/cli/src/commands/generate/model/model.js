@@ -5,9 +5,9 @@ import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareRollbackForTasks } from '../../../lib/rollback'
 import { verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../helpers'
-
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'model.js.template')
 
 export const files = ({ name, typescript = false }) => {
@@ -61,6 +61,7 @@ export const handler = async ({ force, ...args }) => {
 
   try {
     await verifyModelName({ name: args.name })
+    prepareRollbackForTasks(tasks)
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

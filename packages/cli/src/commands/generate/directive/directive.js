@@ -9,6 +9,10 @@ import { getConfig } from '@redwoodjs/internal/dist/config'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
+import {
+  prepareRollbackForTasks,
+  addFunctionToRollback,
+} from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import {
   createYargsForComponentGeneration,
@@ -152,6 +156,13 @@ export const handler = async (args) => {
       {
         title: 'Generating TypeScript definitions and GraphQL schemas ...',
         task: () => {
+          // Regenerate again at the end if we rollback changes
+          addFunctionToRollback(async () => {
+            await execa('yarn rw-gen', [], {
+              stdio: 'pipe',
+              shell: true,
+            })
+          }, true)
           return execa('yarn rw-gen', [], {
             stdio: 'pipe',
             shell: true,
@@ -164,11 +175,18 @@ export const handler = async (args) => {
           task.title = POST_RUN_INSTRUCTIONS
         },
       },
+      {
+        title: 'Err...',
+        task: () => {
+          throw new Error('test')
+        },
+      },
     ].filter(Boolean),
     { rendererOptions: { collapse: false } }
   )
 
   try {
+    prepareRollbackForTasks(tasks)
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

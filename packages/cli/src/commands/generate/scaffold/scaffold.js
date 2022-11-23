@@ -26,6 +26,10 @@ import {
   nameVariants,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import {
+  prepareRollbackForTasks,
+  addFunctionToRollback,
+} from '../../../lib/rollback'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../helpers'
@@ -656,6 +660,9 @@ const addHelperPackages = async (task) => {
   // support yet (2022-09-20)
   // TODO: Update to latest version when RW supports ESMs
   await execa('yarn', ['workspace', 'web', 'add', 'humanize-string@2.1.0'])
+  addFunctionToRollback(
+    execa('yarn', ['workspace', 'web', 'remove', 'humanize-string@2.1.0'])
+  )
 }
 
 const addSetImport = (task) => {
@@ -827,6 +834,7 @@ export const handler = async ({
       typescript,
       tailwind,
     })
+    prepareRollbackForTasks(t)
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

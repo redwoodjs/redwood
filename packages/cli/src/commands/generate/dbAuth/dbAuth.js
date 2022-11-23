@@ -14,6 +14,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareRollbackForTasks } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import { templateForComponentFile } from '../helpers'
 
@@ -272,6 +273,7 @@ export const handler = async (yargs) => {
   const t = tasks({ ...yargs, webAuthn: includeWebAuthn })
 
   try {
+    prepareRollbackForTasks(t)
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

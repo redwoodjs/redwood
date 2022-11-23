@@ -17,6 +17,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareRollbackForTasks } from '../../../lib/rollback'
 import { pluralize } from '../../../lib/rwPluralize'
 import { getSchema, getEnum, verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../helpers'
@@ -294,6 +295,7 @@ export const handler = async ({
       { rendererOptions: { collapse: false }, exitOnError: true }
     )
 
+    prepareRollbackForTasks(tasks)
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
