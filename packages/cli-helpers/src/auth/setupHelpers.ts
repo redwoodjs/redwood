@@ -24,7 +24,11 @@ import {
  * Check if one of the api side auth files already exists and if so, ask the
  * user to overwrite
  */
-async function shouldForce(force: boolean, basedir: string, webAuthn: boolean) {
+async function shouldOverwriteApiSideFiles(
+  force: boolean,
+  basedir: string,
+  webAuthn: boolean
+) {
   if (force) {
     return true
   }
@@ -106,12 +110,28 @@ export const standardAuthHandler = async ({
 }: Args) => {
   // @MARK this is our problem. Should force only checks for api side files,
   // not for web side files
-  const force = await shouldForce(forceArg, setupTemplateDir, webAuthn)
+  const forceApiSide = await shouldOverwriteApiSideFiles(
+    forceArg,
+    setupTemplateDir,
+    webAuthn
+  )
+
+  // @TODO detect if auth already setup. If it is, ask how to proceed:
+  // How would you like to proceed?
+  // 1. Replace existing auth provider with <provider>
+  // 2. Combine providers ~~ NOT SUPPORTED YET ~~
 
   const tasks = new Listr<never>(
     [
-      generateAuthApiFiles(setupTemplateDir, provider, force, webAuthn),
+      generateAuthApiFiles(setupTemplateDir, provider, forceApiSide, webAuthn),
+
+      // @MARK remove this function below
       addAuthConfigToWeb(setupTemplateDir, provider, webAuthn),
+      /**  @MARK replace it with these smalelr steps
+      addConfigToApp() // Add the config to the app
+      createWebAuth(basedir, provider, webAuthn) // Add the web/src/auth.ts file
+      addConfigToRoutes()
+      */
       addAuthConfigToGqlApi(authDecoderImport),
       addWebPackages(webPackages, rwVersion),
       addApiPackages(apiPackages),

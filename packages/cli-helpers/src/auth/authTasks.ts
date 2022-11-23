@@ -85,7 +85,7 @@ const apiSrcDoesExist = () => {
   return fs.existsSync(path.join(getPaths().api.src))
 }
 
-const webIndexDoesExist = () => {
+const webAppDoesExist = () => {
   return fs.existsSync(getWebAppPath())
 }
 
@@ -230,6 +230,9 @@ export const createWebAuth = (
 
   const templateExtension = templateFileName.split('.').at(-2)
 
+  // @MARK - finding unused file name here,
+  // We should only use an unused filename, if the user is CHOOSING not to replace the existing provider
+
   // Find an unused filename
   // Start with web/src/auth.{ts,tsx}
   // Then web/src/providerAuth.{ts,tsx}
@@ -277,7 +280,7 @@ export const addConfigToRoutes = () => {
 }
 
 /**
- * Will find the templates inside `${basedir}/templates`,
+ * Will find the templates inside `${basedir}/templates/api`,
  * and write these files to disk with unique names if they are clashing.
  *
  * @returns Listr task
@@ -300,6 +303,7 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
       let filesRecord = apiSideFiles({ basedir, webAuthn })
 
       if (!force) {
+        // @MARK should we automatically generate unique names? I don't think so
         const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
 
         if (
@@ -325,6 +329,10 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
   }
 }
 
+/**
+ *
+ *
+ */
 export const addAuthConfigToWeb = <Renderer extends typeof ListrRenderer>(
   basedir: string,
   provider: string,
@@ -332,11 +340,15 @@ export const addAuthConfigToWeb = <Renderer extends typeof ListrRenderer>(
 ) => ({
   title: 'Adding auth config to web...',
   task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
-    if (webIndexDoesExist()) {
-      addConfigToApp()
-      createWebAuth(basedir, provider, webAuthn)
-      addConfigToRoutes()
+    // @TODO move these smaller steps up one level so its visible, rather than hidden inside a task
+    if (webAppDoesExist()) {
+      // check if web/App.tsx/js exists
+      addConfigToApp() // Add the config to the app
+      createWebAuth(basedir, provider, webAuthn) // Add the web/src/auth.ts file
+      addConfigToRoutes() // Add useAuth import and hook to Routes
     } else {
+      // @MARK unnecessary.... without web/src/App.tsx Redwood does not work
+      // so why bother skipping? Just fail.
       task.skip?.(
         `web/src/App.${
           isTypeScriptProject() ? 'tsx' : 'js'
