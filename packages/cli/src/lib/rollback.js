@@ -25,8 +25,10 @@ export function addFileToRollback(path, atEnd = false) {
   }
 }
 
-export async function executeRollback(ctx, task) {
-  task.title = 'Reverting generator actions...'
+export async function executeRollback(_, task) {
+  if (task) {
+    task.title = 'Reverting generator actions...'
+  }
   while (rollback.length > 0) {
     const step = rollback.pop()
     switch (step.type) {
@@ -49,7 +51,9 @@ export async function executeRollback(ctx, task) {
         break
     }
   }
-  task.title = `Reverted because: ${task.task.message.error}`
+  if (task) {
+    task.title = `Reverted because: ${task.task.message.error}`
+  }
 }
 
 export function resetRollback() {
