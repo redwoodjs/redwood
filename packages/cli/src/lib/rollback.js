@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 let rollback = []
 
@@ -35,6 +36,10 @@ export async function executeRollback(ctx, task) {
       case 'file':
         if (step.content === null) {
           fs.unlinkSync(step.path)
+          // Remove any empty parent directories
+          if (fs.readdirSync(path.dirname(step.path)).length === 0) {
+            fs.rmdirSync(path.dirname(step.path))
+          }
         } else {
           fs.writeFileSync(step.path, step.content)
         }
