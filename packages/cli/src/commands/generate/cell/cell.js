@@ -186,7 +186,7 @@ export const { command, description, builder, handler } =
 
             if (projectHasSdl) {
               await generateTypes()
-              addFunctionToRollback(generateTypes)
+              addFunctionToRollback(generateTypes, true)
             } else {
               task.skip(
                 `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`
