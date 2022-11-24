@@ -33,9 +33,9 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
             <li>
               <Link
                 className="rounded py-2 px-4 transition duration-100 hover:bg-blue-600"
-                to={routes.contact()}
+                to={routes.contactUs()}
               >
-                Contact
+                Contact Us
               </Link>
             </li>
             <li>
