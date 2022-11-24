@@ -661,8 +661,7 @@ const addHelperPackages = async (task) => {
   // TODO: Update to latest version when RW supports ESMs
   await execa('yarn', ['workspace', 'web', 'add', 'humanize-string@2.1.0'])
   addFunctionToRollback(async () => {
-    // TODO: Causes an error on next cli invocation: "Unable to resolve path to query-engine binary, Prisma CLI 4.5.0"
-    // await execa('yarn', ['workspace', 'web', 'remove', 'humanize-string'])
+    await execa('yarn', ['workspace', 'web', 'remove', 'humanize-string'])
   })
 }
 
