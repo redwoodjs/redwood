@@ -1,5 +1,7 @@
 import fs from 'fs'
 
+import { Listr } from 'listr2'
+
 jest.mock('fs')
 
 import * as rollback from '../rollback'
@@ -137,4 +139,46 @@ it('prepare clears the stack', async () => {
   expect(fs.readFileSync('fake-file')).toBe(undefined)
 })
 
-it.todo('prepare sets listr2 rollback functions')
+it('prepare sets listr2 rollback functions and rollback executes correctly', async () => {
+  const fakeTaskFunction = jest.fn()
+  const fakeRollbackFunction = jest.fn()
+  const tasks = new Listr(
+    [
+      {
+        title: 'First example task',
+        task: () => {
+          fakeTaskFunction()
+          rollback.addFunctionToRollback(fakeRollbackFunction)
+        },
+      },
+      {
+        title: 'Second example task',
+        task: () => {
+          fakeTaskFunction()
+        },
+      },
+      {
+        title: 'Third example task',
+        task: () => {
+          throw new Error('fake error')
+        },
+      },
+    ],
+    { rendererSilent: true }
+  )
+
+  rollback.prepareRollbackForTasks(tasks)
+
+  tasks.tasks.forEach((task) => {
+    expect(task.tasks.rollback).toBe(rollback.executeRollback)
+  })
+
+  try {
+    await tasks.run()
+  } catch (error) {
+    // we expect the error
+  }
+
+  expect(fakeTaskFunction.mock.calls.length).toBe(2)
+  expect(fakeRollbackFunction.mock.calls.length).toBe(1)
+})
