@@ -104,10 +104,15 @@ export const standardAuthHandler = async ({
       extraTask,
       notes && {
         title: 'One more thing...',
-        task: () => {
+        task: (ctx: AuthGeneratorCtx) => {
           // Can't console.log the notes here because of
           // https://github.com/cenk1cenk2/listr2/issues/296
           // So we do it after the tasks have all finished instead
+          if (ctx.shouldReplaceExistingProvider) {
+            notes.push(
+              `\n Your existing auth provider has been replaced, but please remember to remove any old packages, config and functions that are not used by ${ctx.provider} auth`
+            )
+          }
         },
       },
     ].filter(truthy),

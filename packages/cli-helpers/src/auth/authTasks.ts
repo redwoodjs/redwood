@@ -20,7 +20,13 @@ const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
 
 export const getWebAppPath = () => getPaths().web.app
 
-const addApiConfig = (authDecoderImport?: string) => {
+const addApiConfig = ({
+  replaceExistingImport,
+  authDecoderImport,
+}: {
+  replaceExistingImport: boolean
+  authDecoderImport?: string
+}) => {
   const graphqlPath = getGraphqlPath()
 
   if (!graphqlPath) {
@@ -30,6 +36,17 @@ const addApiConfig = (authDecoderImport?: string) => {
   let content = fs.readFileSync(graphqlPath).toString()
   let contentUpdated = false
 
+  // Replace the existing import { x as authDecoder} with the new one
+  if (authDecoderImport && replaceExistingImport) {
+    content = content.replace(
+      /import { .+ as authDecoder .+/,
+      authDecoderImport
+    )
+
+    contentUpdated = true
+  }
+
+  // Won't go into this block, if replaceExistingImport ran
   if (authDecoderImport && !content.includes(authDecoderImport)) {
     content = authDecoderImport + '\n' + content
 
@@ -322,15 +339,23 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
       // The keys in `filesRecord` are the full paths to where the file contents,
       // which is the values in `filesRecord`, will be written.
       const filesRecord = apiSideFiles({ basedir, webAuthn })
+      console.log(
+        `👉 \n ~ file: authTasks.ts ~ line 342 ~ filesRecord`,
+        filesRecord
+      )
 
-      // Confirm that we're about to overwrite some files
-      const filesToOverwrite = findExistingFiles(filesRecord)
+      let overwriteAllFiles = false
 
-      const overwriteAllFiles = await task.prompt({
-        type: 'confirm',
-        message: `Overwrite existing ${filesToOverwrite.join(', ')}?`,
-        initial: false,
-      })
+      if (!ctx.shouldReplaceExistingProvider) {
+        // Confirm that we're about to overwrite some files
+        const filesToOverwrite = findExistingFiles(filesRecord)
+
+        overwriteAllFiles = await task.prompt({
+          type: 'confirm',
+          message: `Overwrite existing ${filesToOverwrite.join(', ')}?`,
+          initial: false,
+        })
+      }
 
       /** Skip this, until we enable support for multiple providers
       if (!ctx.shouldReplaceExistingProvider) {
@@ -377,13 +402,18 @@ export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
 ) => ({
   title: 'Adding auth config to GraphQL API...',
   task: (
-    _ctx: AuthGeneratorCtx,
-    task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
+    ctx: AuthGeneratorCtx,
+    _task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
   ) => {
     if (graphFunctionDoesExist()) {
-      addApiConfig(authDecoderImport)
+      addApiConfig({
+        authDecoderImport,
+        replaceExistingImport: ctx.shouldReplaceExistingProvider,
+      })
     } else {
-      task.skip?.('GraphQL function not found, skipping')
+      throw new Error(
+        'GraphQL function not found. You will need to pass the decoder to the createGraphQLHandler function.'
+      )
     }
   },
 })
