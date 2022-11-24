@@ -88,11 +88,11 @@ export const standardAuthHandler = async ({
 
   const tasks = new Listr<AuthGeneratorCtx, 'verbose' | 'default'>(
     [
-      checkIfAuthSetupAlready(),
+      !forceArg && checkIfAuthSetupAlready(),
       generateAuthApiFiles(setupTemplateDir, webAuthn),
 
       // Setup the web side
-      addConfigToWebApp(), // Add the config to the app
+      addConfigToWebApp(),
       createWebAuth(setupTemplateDir, webAuthn),
       addConfigToRoutes(),
       // ----=----

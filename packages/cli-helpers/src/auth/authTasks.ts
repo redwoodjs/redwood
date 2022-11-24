@@ -339,10 +339,6 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
       // The keys in `filesRecord` are the full paths to where the file contents,
       // which is the values in `filesRecord`, will be written.
       const filesRecord = apiSideFiles({ basedir, webAuthn })
-      console.log(
-        `👉 \n ~ file: authTasks.ts ~ line 342 ~ filesRecord`,
-        filesRecord
-      )
 
       let overwriteAllFiles = false
 
@@ -357,7 +353,7 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
         })
       }
 
-      /** Skip this, until we enable support for multiple providers
+      /** @TODO Skip this, until we enable support for multiple providers
       if (!ctx.shouldReplaceExistingProvider) {
         const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
 
