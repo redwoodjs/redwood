@@ -55,8 +55,8 @@
     "@babel/preset-typescript": "7.18.6",
     "@babel/runtime-corejs3": "7.20.1",
     "@nrwl/nx-cloud": "15.0.2",
-    "@playwright/test": "1.27.1",
-    "@replayio/playwright": "0.3.2",
+    "@playwright/test": "1.28.1",
+    "@replayio/playwright": "0.3.9",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@testing-library/react-hooks": "8.0.1",
@@ -104,6 +104,6 @@
     "typescript-transform-paths": "3.3.1",
     "zx": "7.1.1"
   },
-  "packageManager": "yarn@3.2.4",
+  "packageManager": "yarn@3.3.0",
   "npmClient": "yarn"
 }
