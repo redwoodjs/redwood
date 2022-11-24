@@ -14,7 +14,10 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { prepareRollbackForTasks } from '../../../lib/rollback'
+import {
+  prepareRollbackForTasks,
+  addFunctionToRollback,
+} from '../../../lib/rollback'
 import {
   createYargsForComponentGeneration,
   pathName,
@@ -230,7 +233,10 @@ export const handler = async ({
       },
       {
         title: `Generating types...`,
-        task: generateTypes,
+        task: async () => {
+          await generateTypes()
+          addFunctionToRollback(generateTypes, true)
+        },
       },
       {
         title: 'One more thing...',
