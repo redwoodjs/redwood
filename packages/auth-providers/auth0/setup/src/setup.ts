@@ -25,7 +25,10 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     authDecoderImport:
       "import { auth0AuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
     apiPackages: ['@redwoodjs/auth-providers-api'],
-    webPackages: ['@auth0/auth0-spa-js', '@redwoodjs/auth-providers-web'],
+    webPackages: [
+      '@auth0/auth0-spa-js@1.22.5',
+      '@redwoodjs/auth-providers-web',
+    ],
     notes: [
       'You will need to create several environment variables with your Auth0 config options.',
       'Check out web/src/App.{js,tsx} for the variables you need to add.',
