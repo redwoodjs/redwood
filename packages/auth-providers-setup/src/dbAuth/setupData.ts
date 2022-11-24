@@ -1,9 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import password from 'secure-random-password'
 
-import { getPaths, colors } from '@redwoodjs/cli-helpers'
+import { getPaths, colors, addEnvVarTask } from '@redwoodjs/cli-helpers'
 
 export const libPath = getPaths().api.lib.replace(getPaths().base, '')
 export const functionsPath = getPaths().api.functions.replace(
@@ -11,28 +10,16 @@ export const functionsPath = getPaths().api.functions.replace(
   ''
 )
 
-export const extraTask = {
-  title: 'Adding SESSION_SECRET...',
-  task: () => {
-    const envPath = path.join(getPaths().base, '.env')
-    const secret = password.randomPassword({
-      length: 64,
-      characters: [password.lower, password.upper, password.digits],
-    })
-    const content = [
-      '# Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.',
-      `SESSION_SECRET=${secret}`,
-      '',
-    ]
-    let envFile = ''
+const secret = password.randomPassword({
+  length: 64,
+  characters: [password.lower, password.upper, password.digits],
+})
 
-    if (fs.existsSync(envPath)) {
-      envFile = fs.readFileSync(envPath).toString() + '\n'
-    }
-
-    fs.writeFileSync(envPath, envFile + content.join('\n'))
-  },
-}
+export const extraTask = addEnvVarTask(
+  'SESSION_SECRET',
+  secret,
+  'Used to encrypt/decrypt session cookies. Change this value and re-deploy to log out all users of your app at once.'
+)
 
 // any notes to print out when the job is done
 export const notes = [

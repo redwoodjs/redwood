@@ -47,6 +47,15 @@ describe('getConfig', () => {
     expect(config.web.port).toEqual(8888)
   })
 
+  it('throws an error when given a bad config path', () => {
+    const runGetConfig = () => {
+      getConfig(path.join(__dirname, './fixtures/fake_redwood.toml'))
+    }
+    expect(runGetConfig).toThrow(
+      /Could not parse .+fake_redwood.toml.+ Error: ENOENT: no such file or directory, open .+fake_redwood.toml./
+    )
+  })
+
   it('interpolates environment variables correctly', () => {
     process.env.API_URL = '/bazinga'
     process.env.APP_ENV = 'staging'

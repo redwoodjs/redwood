@@ -45,17 +45,17 @@ let milestone
 
 export default async function release() {
   /**
-   * Make sure that we're on main.
+   * Make sure that we're on next.
    */
   const gitBranchPO = await $`git branch --show-current`
 
-  if (gitBranchPO.stdout.trim() !== 'main') {
-    console.log(fix`Start from main`)
+  if (gitBranchPO.stdout.trim() !== 'next') {
+    console.log(fix`Start from next`)
     process.exitCode = 1
     return
   }
 
-  console.log(ok`On main`)
+  console.log(ok`On next`)
 
   /**
    * - ask for the desired semver
@@ -502,7 +502,7 @@ async function cleanUpTasks(semver, nextVersion) {
       closeMilestone(milestone.number)
     )
   }
-  await confirm(check`Did you merge the release branch into main?`)
+  await confirm(check`Did you merge the release branch into next?`)
   await confirm(check`Did you update yarn.lock?`)
   if (semver === 'major' || semver === 'minor') {
     await confirmRuns(ask`Ok to version the docs?`, () =>

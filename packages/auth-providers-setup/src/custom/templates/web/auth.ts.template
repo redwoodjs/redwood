@@ -31,7 +31,7 @@ export interface ValidateResetTokenResponse {
   [key: string]: string | undefined
 }
 
-// Replace this with with the auth service provider client sdk
+// Replace this with the auth service provider client sdk
 const customClient = {
   login: () => ({
     id: 'unique-user-id',
