@@ -57,16 +57,21 @@ export async function executeRollback(_ = null, task = null) {
       case 'file':
         if (step.content === null) {
           fs.unlinkSync(step.path)
-          // Remove any empty parent directories
-          if (fs.readdirSync(path.dirname(step.path)).length === 0) {
-            fs.rmdirSync(path.dirname(step.path))
+          // Remove any empty parent/grandparent directories, only need 2 levels so just do it manually
+          let parent = path.dirname(step.path)
+          if (fs.readdirSync(parent).length === 0) {
+            fs.rmdirSync(parent)
+          }
+          parent = path.dirname(parent)
+          if (fs.readdirSync(parent).length === 0) {
+            fs.rmdirSync(parent)
           }
         } else {
           fs.writeFileSync(step.path, step.content)
         }
         break
       default:
-        // TODO: Telemetry error.
+        // This should be unreachable.
         break
     }
   }
