@@ -101,6 +101,11 @@ export const builder = (yargs) => {
       description: 'Name of the Function',
       type: 'string',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -132,7 +137,9 @@ export const handler = async ({ name, force, ...rest }) => {
   )
 
   try {
-    prepareRollbackForTasks(tasks)
+    if (rest.rollback) {
+      prepareRollbackForTasks(tasks)
+    }
     await tasks.run()
 
     console.info('')

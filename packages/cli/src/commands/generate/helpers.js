@@ -183,6 +183,11 @@ export const createYargsForComponentGeneration = ({
           type: 'boolean',
           default: false,
         })
+        .option('rollback', {
+          description: 'Revert all generator actions if an error occurs',
+          type: 'boolean',
+          default: true,
+        })
 
       // Add in passed in positionals
       Object.entries(positionalsObj).forEach(([option, config]) => {
@@ -222,7 +227,9 @@ export const createYargsForComponentGeneration = ({
           }
         )
 
-        prepareRollbackForTasks(tasks)
+        if (options.rollback) {
+          prepareRollbackForTasks(tasks)
+        }
         await tasks.run()
       } catch (e) {
         errorTelemetry(process.argv, e.message)

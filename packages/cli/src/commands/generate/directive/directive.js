@@ -180,7 +180,9 @@ export const handler = async (args) => {
   )
 
   try {
-    prepareRollbackForTasks(tasks)
+    if (args.rollback) {
+      prepareRollbackForTasks(tasks)
+    }
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

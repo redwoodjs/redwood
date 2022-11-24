@@ -661,7 +661,8 @@ const addHelperPackages = async (task) => {
   // TODO: Update to latest version when RW supports ESMs
   await execa('yarn', ['workspace', 'web', 'add', 'humanize-string@2.1.0'])
   addFunctionToRollback(async () => {
-    await execa('yarn', ['workspace', 'web', 'remove', 'humanize-string@2.1.0'])
+    // TODO: Causes an error on next cli invocation: "Unable to resolve path to query-engine binary, Prisma CLI 4.5.0"
+    // await execa('yarn', ['workspace', 'web', 'remove', 'humanize-string'])
   })
 }
 
@@ -737,6 +738,11 @@ export const builder = (yargs) => {
       description:
         'Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)',
       type: 'boolean',
+    })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -815,6 +821,7 @@ export const handler = async ({
   typescript,
   tailwind,
   docs = false,
+  rollback,
 }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
@@ -834,7 +841,9 @@ export const handler = async ({
       typescript,
       tailwind,
     })
-    prepareRollbackForTasks(t)
+    if (rollback) {
+      prepareRollbackForTasks(t)
+    }
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

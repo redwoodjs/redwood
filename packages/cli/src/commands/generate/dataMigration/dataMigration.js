@@ -43,6 +43,11 @@ export const builder = (yargs) => {
       description: 'A descriptor of what this data migration does',
       type: 'string',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -76,7 +81,9 @@ export const handler = async (args) => {
   )
 
   try {
-    prepareRollbackForTasks(tasks)
+    if (args.rollback) {
+      prepareRollbackForTasks(tasks)
+    }
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

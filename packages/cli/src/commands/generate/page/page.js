@@ -166,6 +166,7 @@ export const handler = async ({
   tests,
   stories,
   typescript = false,
+  rollback,
 }) => {
   const pageName = removeGeneratorName(name, 'page')
 
@@ -248,7 +249,9 @@ export const handler = async ({
   )
 
   try {
-    prepareRollbackForTasks(tasks)
+    if (rollback) {
+      prepareRollbackForTasks(tasks)
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

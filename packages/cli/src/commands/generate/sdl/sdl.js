@@ -250,6 +250,11 @@ export const builder = (yargs) => {
       description: 'Generate SDL and GraphQL comments to use in documentation',
       type: 'boolean',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -270,6 +275,7 @@ export const handler = async ({
   tests,
   typescript,
   docs,
+  rollback,
 }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
@@ -295,7 +301,9 @@ export const handler = async ({
       { rendererOptions: { collapse: false }, exitOnError: true }
     )
 
-    prepareRollbackForTasks(tasks)
+    if (rollback) {
+      prepareRollbackForTasks(tasks)
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

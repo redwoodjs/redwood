@@ -93,6 +93,11 @@ export const builder = (yargs) => {
       description: 'Include WebAuthn support (TouchID/FaceID)',
       type: 'boolean',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
 
     .epilogue(
       `Also see the ${terminalLink(
@@ -273,7 +278,9 @@ export const handler = async (yargs) => {
   const t = tasks({ ...yargs, webAuthn: includeWebAuthn })
 
   try {
-    prepareRollbackForTasks(t)
+    if (yargs.rollback) {
+      prepareRollbackForTasks(t)
+    }
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))
