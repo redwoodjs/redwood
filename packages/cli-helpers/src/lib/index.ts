@@ -89,10 +89,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
   contents: string,
   { overwriteExisting = false } = {},
   // TODO: Remove type cast
-  task: ListrTaskWrapper<never, Renderer> = {} as ListrTaskWrapper<
-    never,
-    Renderer
-  >
+  task: ListrTaskWrapper<any, Renderer> = {} as ListrTaskWrapper<any, Renderer>
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
@@ -125,11 +122,8 @@ export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
       return {
         title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
         task: (
-          _ctx: never,
-          task: ListrTaskWrapper<
-            never,
-            ListrGetRendererClassFromValue<Renderer>
-          >
+          _ctx: any,
+          task: ListrTaskWrapper<any, ListrGetRendererClassFromValue<Renderer>>
         ) => {
           return writeFile(file, contents, options, task)
         },

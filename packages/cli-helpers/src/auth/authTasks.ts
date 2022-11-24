@@ -2,18 +2,18 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
-import { ListrTask, ListrTaskWrapper, ListrRenderer } from 'listr2'
+import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { writeFilesTask, transformTSToJS } from '../lib'
+import { transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
 import { getPaths, resolveFile } from '../lib/paths'
 import {
-  isTypeScriptProject,
   getGraphqlPath,
   graphFunctionDoesExist,
+  isTypeScriptProject,
 } from '../lib/project'
 
-import { apiSideFiles, generateUniqueFileNames } from './authFiles'
+import { apiSideFiles } from './authFiles'
 
 const AUTH_PROVIDER_HOOK_IMPORT = `import { AuthProvider, useAuth } from './auth'`
 const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
@@ -182,101 +182,124 @@ const addUseAuthHook = (componentName: string, content: string) => {
  * Actually inserts the required config lines into App.{js,tsx}
  * Exported for testing
  */
-export const addConfigToApp = async () => {
-  const webAppPath = getWebAppPath()
+export const addConfigToWebApp = <
+  Renderer extends typeof ListrRenderer
+>(): ListrTask<AuthGeneratorCtx, Renderer> => {
+  return {
+    title: 'Updating web/src/App.{js,tsx}',
+    task: (_ctx, task) => {
+      if (!webAppDoesExist()) {
+        throw new Error('Could not find root App.{js,tsx}')
+      }
 
-  let content = fs.readFileSync(webAppPath).toString()
+      const webAppPath = getWebAppPath()
 
-  if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
-    content = addAuthImportToApp(content)
+      let content = fs.readFileSync(webAppPath).toString()
+
+      if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
+        content = addAuthImportToApp(content)
+      }
+
+      if (!hasAuthProvider(content)) {
+        content = addAuthProviderToApp(content)
+      }
+
+      if (/\s*<RedwoodApolloProvider/.test(content)) {
+        if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
+          content = addUseAuthHook('RedwoodApolloProvider', content)
+        }
+      } else {
+        task.output = colors.warning(
+          'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
+            'GraphQL Client you will have to make sure it gets access to your ' +
+            '`useAuth`, if it needs it.'
+        )
+      }
+
+      fs.writeFileSync(webAppPath, content)
+    },
   }
-
-  if (!hasAuthProvider(content)) {
-    content = addAuthProviderToApp(content)
-  }
-
-  if (/\s*<RedwoodApolloProvider/.test(content)) {
-    if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
-      content = addUseAuthHook('RedwoodApolloProvider', content)
-    }
-  } else {
-    console.warn(
-      colors.warning(
-        'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
-          'GraphQL Client you will have to make sure it gets access to your ' +
-          '`useAuth`, if it needs it.'
-      )
-    )
-  }
-
-  fs.writeFileSync(webAppPath, content)
 }
 
-export const createWebAuth = (
-  basedir: string,
-  provider: string,
-  webAuthn: boolean
-) => {
-  const templatesBaseDir = path.join(basedir, 'templates', 'web')
-  const templates = fs.readdirSync(templatesBaseDir)
+export const createWebAuth = (templateDir: string, webAuthn: boolean) => {
+  return {
+    title: 'Creating web/src/auth.{js,ts}',
+    task: (ctx: AuthGeneratorCtx) => {
+      const templatesBaseDir = path.join(templateDir, 'templates', 'web')
+      const templates = fs.readdirSync(templatesBaseDir)
 
-  const templateFileName = templates.find((template) => {
-    return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
-  })
+      const templateFileName = templates.find((template) => {
+        return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
+      })
 
-  if (!templateFileName) {
-    throw new Error('Could not find the auth.ts template')
+      if (!templateFileName) {
+        throw new Error('Could not find the auth.ts template')
+      }
+
+      const templateExtension = templateFileName.split('.').at(-2)
+
+      // @MARK - finding unused file name here,
+      // We should only use an unused filename, if the user is CHOOSING not to replace the existing provider
+
+      // Find an unused filename
+      // Start with web/src/auth.{ts,tsx}
+      // Then web/src/providerAuth.{ts,tsx}
+      // Then web/src/providerAuth2.{ts,tsx}
+      // Then web/src/providerAuth3.{ts,tsx}
+      // etc
+
+      let authFileName = path.join(getPaths().web.src, 'auth')
+
+      // Generate a unique name, when you are trying to combine providers
+      if (!ctx.shouldReplaceExistingProvider) {
+        let i = 1
+        while (resolveFile(authFileName)) {
+          const count = i > 1 ? i : ''
+
+          authFileName = path.join(
+            getPaths().web.src,
+            ctx.provider + 'Auth' + count
+          )
+
+          i++
+        }
+      }
+
+      authFileName = authFileName + '.' + templateExtension
+
+      let template: string | undefined = fs.readFileSync(
+        path.join(templatesBaseDir, templateFileName),
+        'utf-8'
+      )
+
+      template = isTypeScriptProject()
+        ? template
+        : transformTSToJS(authFileName, template)
+
+      fs.writeFileSync(authFileName, template)
+    },
   }
-
-  const templateExtension = templateFileName.split('.').at(-2)
-
-  // @MARK - finding unused file name here,
-  // We should only use an unused filename, if the user is CHOOSING not to replace the existing provider
-
-  // Find an unused filename
-  // Start with web/src/auth.{ts,tsx}
-  // Then web/src/providerAuth.{ts,tsx}
-  // Then web/src/providerAuth2.{ts,tsx}
-  // Then web/src/providerAuth3.{ts,tsx}
-  // etc
-  let authFileName = path.join(getPaths().web.src, 'auth')
-  let i = 1
-  while (resolveFile(authFileName)) {
-    const count = i > 1 ? i : ''
-
-    authFileName = path.join(getPaths().web.src, provider + 'Auth' + count)
-
-    i++
-  }
-
-  authFileName = authFileName + '.' + templateExtension
-
-  let template: string | undefined = fs.readFileSync(
-    path.join(templatesBaseDir, templateFileName),
-    'utf-8'
-  )
-
-  template = isTypeScriptProject()
-    ? template
-    : transformTSToJS(authFileName, template)
-
-  fs.writeFileSync(authFileName, template)
 }
 
 export const addConfigToRoutes = () => {
-  const webRoutesPath = getPaths().web.routes
+  return {
+    title: 'Updating Routes file...',
+    task: () => {
+      const webRoutesPath = getPaths().web.routes
 
-  let content = fs.readFileSync(webRoutesPath).toString()
+      let content = fs.readFileSync(webRoutesPath).toString()
 
-  if (!content.includes(AUTH_HOOK_IMPORT)) {
-    content = addAuthImportToRoutes(content)
+      if (!content.includes(AUTH_HOOK_IMPORT)) {
+        content = addAuthImportToRoutes(content)
+      }
+
+      if (!hasUseAuthHook('Router', content)) {
+        content = addUseAuthHook('Router', content)
+      }
+
+      fs.writeFileSync(webRoutesPath, content)
+    },
   }
-
-  if (!hasUseAuthHook('Router', content)) {
-    content = addUseAuthHook('Router', content)
-  }
-
-  fs.writeFileSync(webRoutesPath, content)
 }
 
 /**
@@ -287,23 +310,30 @@ export const addConfigToRoutes = () => {
  */
 export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
   basedir: string,
-  provider: string,
-  force: boolean,
   webAuthn: boolean
-): ListrTask<never, Renderer> => {
+): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
     title: 'Generating auth api side files...',
-    task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
+    task: async (ctx, task) => {
       if (!apiSrcDoesExist()) {
         return task.skip?.('api/src not found, skipping')
       }
 
       // The keys in `filesRecord` are the full paths to where the file contents,
       // which is the values in `filesRecord`, will be written.
-      let filesRecord = apiSideFiles({ basedir, webAuthn })
+      const filesRecord = apiSideFiles({ basedir, webAuthn })
 
-      if (!force) {
-        // @MARK should we automatically generate unique names? I don't think so
+      // Confirm that we're about to overwrite some files
+      const filesToOverwrite = findExistingFiles(filesRecord)
+
+      const overwriteAllFiles = await task.prompt({
+        type: 'confirm',
+        message: `Overwrite existing ${filesToOverwrite.join(', ')}?`,
+        initial: false,
+      })
+
+      /** Skip this, until we enable support for multiple providers
+      if (!ctx.shouldReplaceExistingProvider) {
         const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
 
         if (
@@ -323,46 +353,33 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
 
         filesRecord = uniqueFilesRecord
       }
+       */
 
-      return writeFilesTask(filesRecord, { overwriteExisting: force })
+      return writeFilesTask(filesRecord, {
+        overwriteExisting:
+          ctx.shouldReplaceExistingProvider || overwriteAllFiles,
+      })
     },
   }
 }
 
 /**
- *
- *
+ * Returns a map of file names (not full paths) that already exist
  */
-export const addAuthConfigToWeb = <Renderer extends typeof ListrRenderer>(
-  basedir: string,
-  provider: string,
-  webAuthn = false
-) => ({
-  title: 'Adding auth config to web...',
-  task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
-    // @TODO move these smaller steps up one level so its visible, rather than hidden inside a task
-    if (webAppDoesExist()) {
-      // check if web/App.tsx/js exists
-      addConfigToApp() // Add the config to the app
-      createWebAuth(basedir, provider, webAuthn) // Add the web/src/auth.ts file
-      addConfigToRoutes() // Add useAuth import and hook to Routes
-    } else {
-      // @MARK unnecessary.... without web/src/App.tsx Redwood does not work
-      // so why bother skipping? Just fail.
-      task.skip?.(
-        `web/src/App.${
-          isTypeScriptProject() ? 'tsx' : 'js'
-        } not found, skipping`
-      )
-    }
-  },
-})
+export function findExistingFiles(filesMap: Record<string, string>) {
+  return Object.keys(filesMap)
+    .filter((filePath) => fs.existsSync(filePath))
+    .map((filePath) => filePath.replace(getPaths().base, ''))
+}
 
 export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
   authDecoderImport?: string
 ) => ({
   title: 'Adding auth config to GraphQL API...',
-  task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
+  task: (
+    _ctx: AuthGeneratorCtx,
+    task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
+  ) => {
     if (graphFunctionDoesExist()) {
       addApiConfig(authDecoderImport)
     } else {
@@ -398,4 +415,52 @@ export const installPackages = {
   task: async () => {
     await execa('yarn', ['install'])
   },
+}
+
+export interface AuthGeneratorCtx {
+  shouldReplaceExistingProvider: boolean
+  provider: string
+}
+
+export const checkIfAuthSetupAlready = <
+  Renderer extends typeof ListrRenderer
+>() => {
+  return {
+    title: 'Checking project for existing auth...',
+    task: async (
+      ctx: AuthGeneratorCtx,
+      task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
+    ) => {
+      const webAppContents = fs.readFileSync(getWebAppPath(), 'utf-8')
+
+      if (hasAuthProvider(webAppContents)) {
+        const setupMode = await task.prompt({
+          type: 'select',
+          message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
+          choices: [
+            {
+              message: `Replace existing auth with ${ctx.provider}`,
+              value: 'REPLACE', // this is the value
+            },
+            {
+              message: `Combine existing auth with ${ctx.provider}`,
+              name: 'COMBINE', // this is the value
+            },
+          ],
+        })
+
+        const shouldReplace = setupMode === 'REPLACE'
+
+        if (!shouldReplace) {
+          throw new Error('Not supported yet')
+        }
+        // This context value will then be used in the tasks below
+        // To decide whether to overwrite existing files or not
+        ctx.shouldReplaceExistingProvider = shouldReplace
+        return
+      } else {
+        task.skip('Setting up Auth from scratch')
+      }
+    },
+  }
 }

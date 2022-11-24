@@ -14,13 +14,19 @@ export const builder = (yargs: yargs.Argv) => {
 interface Args {
   rwVersion: string
   force: boolean
+  verbose: boolean
 }
 
-export const handler = async ({ rwVersion, force: forceArg }: Args) => {
+export const handler = async ({
+  rwVersion,
+  force: forceArg,
+  verbose: verboseArg,
+}: Args) => {
   standardAuthHandler({
     setupTemplateDir: __dirname,
     rwVersion,
     forceArg,
+    verboseArg,
     provider: 'supabase',
     authDecoderImport:
       "import { supabaseAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",

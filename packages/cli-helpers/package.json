@@ -25,7 +25,9 @@
     "@babel/runtime-corejs3": "7.20.1",
     "@redwoodjs/telemetry": "3.2.0",
     "core-js": "3.26.1",
-    "listr2": "5.0.5"
+    "listr2": "5.0.5",
+    "prompts": "2.4.2",
+    "rimraf": "3.0.2"
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",

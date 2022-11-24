@@ -1,58 +1,23 @@
-import fs from 'fs'
-
 import { Listr, ListrTask } from 'listr2'
-import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 import yargs from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { colors } from '../lib/colors'
-import { getPaths } from '../lib/paths'
 
-import { apiSideFiles } from './authFiles'
 import {
   addApiPackages,
   addAuthConfigToGqlApi,
-  addAuthConfigToWeb,
+  addConfigToRoutes,
+  addConfigToWebApp,
   addWebPackages,
+  AuthGeneratorCtx,
+  checkIfAuthSetupAlready,
+  createWebAuth,
   generateAuthApiFiles,
   installPackages,
 } from './authTasks'
-
-/**
- * Check if one of the api side auth files already exists and if so, ask the
- * user to overwrite
- */
-async function shouldOverwriteApiSideFiles(
-  force: boolean,
-  basedir: string,
-  webAuthn: boolean
-) {
-  if (force) {
-    return true
-  }
-
-  const existingFiles = Object.keys(apiSideFiles({ basedir, webAuthn })).filter(
-    (filePath) => fs.existsSync(filePath)
-  )
-
-  if (existingFiles.length > 0) {
-    const shortPaths = existingFiles.map((filePath) =>
-      filePath.replace(getPaths().base, '')
-    )
-    const forceResponse = await prompts({
-      type: 'confirm',
-      name: 'answer',
-      message: `Overwrite existing ${shortPaths.join(', ')}?`,
-      initial: false,
-    })
-
-    return forceResponse.answer
-  }
-
-  return false
-}
 
 export const standardAuthBuilder = (yargs: yargs.Argv) => {
   yargs
@@ -60,6 +25,12 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
       alias: 'f',
       default: false,
       description: 'Overwrite existing configuration',
+      type: 'boolean',
+    })
+    .option('verbose', {
+      alias: 'v',
+      default: false,
+      description: 'Log setup output',
       type: 'boolean',
     })
     .epilogue(
@@ -79,8 +50,9 @@ interface Args {
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTask?: ListrTask<never>
+  extraTask?: ListrTask<AuthGeneratorCtx>
   notes?: string[]
+  verboseArg?: boolean
 }
 
 // from lodash
@@ -107,32 +79,25 @@ export const standardAuthHandler = async ({
   apiPackages = [],
   extraTask,
   notes,
+  verboseArg,
 }: Args) => {
-  // @MARK this is our problem. Should force only checks for api side files,
-  // not for web side files
-  const forceApiSide = await shouldOverwriteApiSideFiles(
-    forceArg,
-    setupTemplateDir,
-    webAuthn
-  )
-
   // @TODO detect if auth already setup. If it is, ask how to proceed:
   // How would you like to proceed?
   // 1. Replace existing auth provider with <provider>
   // 2. Combine providers ~~ NOT SUPPORTED YET ~~
 
-  const tasks = new Listr<never>(
+  const tasks = new Listr<AuthGeneratorCtx, 'verbose' | 'default'>(
     [
-      generateAuthApiFiles(setupTemplateDir, provider, forceApiSide, webAuthn),
+      checkIfAuthSetupAlready(),
+      generateAuthApiFiles(setupTemplateDir, webAuthn),
 
-      // @MARK remove this function below
-      addAuthConfigToWeb(setupTemplateDir, provider, webAuthn),
-      /**  @MARK replace it with these smalelr steps
-      addConfigToApp() // Add the config to the app
-      createWebAuth(basedir, provider, webAuthn) // Add the web/src/auth.ts file
-      addConfigToRoutes()
-      */
-      addAuthConfigToGqlApi(authDecoderImport),
+      // Setup the web side
+      addConfigToWebApp(), // Add the config to the app
+      createWebAuth(setupTemplateDir, webAuthn),
+      addConfigToRoutes(),
+      // ----=----
+
+      addAuthConfigToGqlApi(authDecoderImport), // Update api/src/functions/gql function
       addWebPackages(webPackages, rwVersion),
       addApiPackages(apiPackages),
       installPackages,
@@ -146,7 +111,14 @@ export const standardAuthHandler = async ({
         },
       },
     ].filter(truthy),
-    { rendererOptions: { collapse: false } }
+    {
+      rendererOptions: { collapse: false },
+      ctx: {
+        shouldReplaceExistingProvider: forceArg,
+        provider, // provider name passed from CLI
+      },
+      renderer: verboseArg ? 'verbose' : 'default',
+    }
   )
 
   try {
