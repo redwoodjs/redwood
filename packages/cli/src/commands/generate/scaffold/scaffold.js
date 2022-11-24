@@ -807,7 +807,10 @@ export const tasks = ({
       },
       {
         title: `Generating types ...`,
-        task: generateTypes,
+        task: async () => {
+          await generateTypes()
+          addFunctionToRollback(generateTypes, true)
+        },
       },
     ],
     { rendererOptions: { collapse: false }, exitOnError: true }
