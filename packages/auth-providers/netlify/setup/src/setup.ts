@@ -27,7 +27,7 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     apiPackages: ['@redwoodjs/auth-providers-api'],
     webPackages: [
       '@redwoodjs/auth-providers-web',
-      'netlify-identity-widget',
+      'netlify-identity-widget@1.9.2',
       '@types/netlify-identity-widget',
     ],
     notes: [
