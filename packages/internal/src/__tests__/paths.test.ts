@@ -899,7 +899,7 @@ describe('paths', () => {
         const pageNames = [
           'AboutPage',
           'BlogPostPage',
-          'ContactPage',
+          'ContactUsPage',
           'FatalErrorPage',
           'ForgotPasswordPage',
           'HomePage',

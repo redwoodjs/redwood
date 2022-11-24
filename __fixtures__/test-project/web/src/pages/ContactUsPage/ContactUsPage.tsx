@@ -21,7 +21,7 @@ const CREATE_CONTACT = gql`
   }
 `
 
-const ContactPage = () => {
+const ContactUsPage = () => {
   const formMethods = useForm()
 
   const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
@@ -105,4 +105,4 @@ const ContactPage = () => {
   )
 }
 
-export default ContactPage
+export default ContactUsPage
