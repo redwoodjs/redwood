@@ -24,10 +24,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.1",
-    "@redwoodjs/auth": "3.2.0",
     "@redwoodjs/cli-helpers": "3.2.0",
-    "core-js": "3.26.0",
-    "secure-random-password": "0.2.3"
+    "core-js": "3.26.0"
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
