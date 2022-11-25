@@ -26,7 +26,7 @@ export const config = {
 }
 
 // required packages to install
-export const webPackages = ['@auth0/auth0-spa-js']
+export const webPackages = ['@auth0/auth0-spa-js@1.22.5']
 export const apiPackages = []
 
 // any notes to print out when the job is done
