@@ -1,6 +1,10 @@
+import { readFile as fsReadFile } from 'fs'
 import path from 'path'
+import { promisify } from 'util'
 
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import react from '@vitejs/plugin-react'
+import { transform } from 'esbuild'
 import { UserConfig } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
@@ -11,6 +15,14 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+const readFile = promisify(fsReadFile)
+
+/**
+ * Preconfigured vite config for RedwoodJS
+ * You can extend, override, or use this config directly
+ *
+ * @returns {UserConfig}
+ */
 export default function redwoodVite(): UserConfig {
   return {
     root: redwoodPaths.web.src,
@@ -30,6 +42,17 @@ export default function redwoodVite(): UserConfig {
           }),
         },
       }),
+      {
+        name: 'load-js-files-as-jsx',
+        async load(id) {
+          if (!id.match(/src\/.*\.js$/)) {
+            return
+          }
+
+          const file = await readFile(id, 'utf-8')
+          return transform(file, { loader: 'jsx' })
+        },
+      },
       createHtmlPlugin({
         template: './index.html',
         inject: {
@@ -37,7 +60,7 @@ export default function redwoodVite(): UserConfig {
             prerenderPlaceholder: '<server-markup></server-markup>', // remove the placeholder
           },
           ejsOptions: {
-            escape: (str) => str, // skip escaping
+            escape: (str: string) => str, // skip escaping
           },
         },
       }),
@@ -80,6 +103,24 @@ export default function redwoodVite(): UserConfig {
       outDir: redwoodPaths.web.dist,
       emptyOutDir: true,
       manifest: 'build-manifest.json',
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        // Node.js global to browser globalThis
+        // @MARK unsure why we need this,
+        // but as soon as we added the buffer polyfill, this seems to be required
+        define: {
+          global: 'globalThis',
+        },
+
+        // Enable esbuild polyfill plugins
+        // This is needed for DevFatalErrorPage (and stacktracey)
+        plugins: [
+          NodeGlobalsPolyfillPlugin({
+            buffer: true,
+          }),
+        ],
+      },
     },
   }
 }

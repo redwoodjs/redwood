@@ -120,6 +120,9 @@ export function frameworkPackagesBins(packages = frameworkPkgJsonFiles()) {
     if (!packageJson.bin) {
       continue
     }
+
+    // @TODO @MARK this interferes with having a single bin file
+    // yarn will automatically switch from using an a Map to a string Array
     for (const [binName, binPath] of Object.entries(packageJson.bin)) {
       bins[binName] = path.join(packageJson.name, binPath)
     }

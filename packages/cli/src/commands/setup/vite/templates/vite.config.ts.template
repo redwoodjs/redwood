@@ -1,0 +1,13 @@
+import { defineConfig, UserConfig } from 'vite'
+
+import redwoodPreset from '@redwoodjs/vite'
+
+/**
+ * https://vitejs.dev/config/
+ * @type {import('vite').UserConfig}
+ */
+const viteConfig: UserConfig = {
+  ...redwoodPreset(),
+}
+
+export default defineConfig(viteConfig)

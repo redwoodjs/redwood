@@ -2211,6 +2211,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@esbuild-plugins/node-globals-polyfill@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@esbuild-plugins/node-globals-polyfill@npm:0.1.1"
+  peerDependencies:
+    esbuild: "*"
+  checksum: 49ec2162dc06eeb5bd1d5bf04cfae947ff2dbedad59e8ae7c02649573d66b1ca09526705b24597689689ec1a4430b13d40b5a94d9ee0531dcc83943ee7b1b7dd
+  languageName: node
+  linkType: hard
+
 "@esbuild/android-arm@npm:0.15.13":
   version: 0.15.13
   resolution: "@esbuild/android-arm@npm:0.15.13"
@@ -7161,13 +7170,14 @@ __metadata:
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
     "@babel/cli": 7.19.3
+    "@esbuild-plugins/node-globals-polyfill": ^0.1.1
     "@redwoodjs/internal": 3.2.0
     "@vitejs/plugin-react": 2.2.0
     vite: 3.2.4
     vite-plugin-html: 3.2.0
   bin:
-    __vite-dist: ./dist/bins/vite.mjs
     vite: ./bins/vite.mjs
+    vite__: ./bins/vite.mjs
   languageName: unknown
   linkType: soft
 
