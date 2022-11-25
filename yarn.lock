@@ -6450,12 +6450,10 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.1
     "@redwoodjs/api": 3.2.0
     "@types/jsonwebtoken": 8.5.9
-    "@types/react": 17.0.50
     core-js: 3.26.1
     jest: 29.3.1
     jsonwebtoken: 8.5.1
     jwks-rsa: 2.0.5
-    react: 17.0.2
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -6468,7 +6466,6 @@ __metadata:
     "@babel/core": 7.20.2
     "@babel/runtime-corejs3": 7.20.1
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/react": 17.0.50
     core-js: 3.26.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -6501,11 +6498,9 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.1
     "@redwoodjs/api": 3.2.0
     "@types/jsonwebtoken": 8.5.9
-    "@types/react": 17.0.50
     core-js: 3.26.1
     jest: 29.3.1
     jsonwebtoken: 8.5.1
-    react: 17.0.2
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -6518,7 +6513,6 @@ __metadata:
     "@babel/core": 7.20.2
     "@babel/runtime-corejs3": 7.20.1
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/react": 17.0.50
     core-js: 3.26.1
     jest: 29.3.1
     typescript: 4.7.4
