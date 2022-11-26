@@ -1505,6 +1505,7 @@ describe('dbAuth', () => {
           ),
         },
       }
+
       const dbAuth = new DbAuthHandler(event, context, options)
       const response = await dbAuth.getToken()
 
@@ -1512,80 +1513,89 @@ describe('dbAuth', () => {
     })
   })
 
-  describe('graphiqlHeader', () => {
-    it('returns the ID of the logged in user without event.headers', async () => {
-      // graphiQLHeader only called in dev
+  describe('When a developer has set GraphiQL headers to mock a session cookie', () => {
+    describe('when in development environment', () => {
       const curNodeEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
 
-      // setup graphiQL header
-      const dbUser = await createDbUser()
-      event.body = JSON.stringify({
-        extensions: {
-          headers: {
-            'auth-provider': 'dbAuth',
-            cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
-            authorization: 'Bearer ' + dbUser.id,
-          },
-        },
+      beforeAll(() => {
+        // Session cookie from graphiQLHeaders only extracted in dev
+        process.env.NODE_ENV = 'development'
       })
 
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const user = await dbAuth._getCurrentUser()
-      expect(user.id).toEqual(dbUser.id)
-
-      process.env.NODE_ENV = curNodeEnv
-      expect(process.env.NODE_ENV).toBe('test')
-    })
-
-    it("graphiqlHeader doesn't not working if not in dev environment", async () => {
-      const dbUser = await createDbUser()
-      event.body = JSON.stringify({
-        extensions: {
-          headers: {
-            'auth-provider': 'dbAuth',
-            cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
-            authorization: 'Bearer ' + dbUser.id,
-          },
-        },
+      afterAll(() => {
+        process.env.NODE_ENV = curNodeEnv
+        expect(process.env.NODE_ENV).toBe('test')
       })
 
-      try {
+      it('authenticates the user based on GraphiQL headers when no event.headers present', async () => {
+        // setup graphiQL header cookie in extensions
+        const dbUser = await createDbUser()
+        event.body = JSON.stringify({
+          extensions: {
+            headers: {
+              'auth-provider': 'dbAuth',
+              cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
+              authorization: 'Bearer ' + dbUser.id,
+            },
+          },
+        })
+
         const dbAuth = new DbAuthHandler(event, context, options)
-        await dbAuth._getCurrentUser()
-      } catch (e) {
-        expect(e.message).toEqual(
-          'Cannot retrieve user details without being logged in'
+        const user = await dbAuth._getCurrentUser()
+        expect(user.id).toEqual(dbUser.id)
+      })
+
+      it('Cookie from GraphiQLHeaders takes precedence over event headers when authenticating user', async () => {
+        // setup session cookie in GraphiQL header
+        const dbUser = await createDbUser()
+        const dbUserId = dbUser.id
+
+        event.body = JSON.stringify({
+          extensions: {
+            headers: {
+              'auth-provider': 'dbAuth',
+              cookie: encryptToCookie(JSON.stringify({ id: dbUserId })),
+              authorization: 'Bearer ' + dbUserId,
+            },
+          },
+        })
+
+        // create session cookie in event header
+        event.headers.cookie = encryptToCookie(
+          JSON.stringify({ id: 9999999999 })
         )
-      }
+
+        // should read session from graphiQL header, not from cookie
+        const dbAuth = new DbAuthHandler(event, context, options)
+        const user = await dbAuth._getCurrentUser()
+        expect(user.id).toEqual(dbUserId)
+      })
     })
 
-    it('graphiqlHeader overwrites event headers', async () => {
-      // graphiQL header only called in dev
-      const curNodeEnv = process.env.NODE_ENV
-      process.env.NODE_ENV = 'development'
+    describe('when in test/production environment and  graphiqlHeader sets a session cookie', () => {
+      it("isn't used to authenticate a user", async () => {
+        const dbUser = await createDbUser()
+        const dbUserId = dbUser.id
 
-      // setup graphiQL header
-      const dbUser = await createDbUser()
-      event.body = JSON.stringify({
-        extensions: {
-          headers: {
-            'auth-provider': 'dbAuth',
-            cookie: encryptToCookie(JSON.stringify({ id: dbUser.id })),
-            authorization: 'Bearer ' + dbUser.id,
+        event.body = JSON.stringify({
+          extensions: {
+            headers: {
+              'auth-provider': 'dbAuth',
+              cookie: encryptToCookie(JSON.stringify({ id: dbUserId })),
+              authorization: 'Bearer ' + dbUserId,
+            },
           },
-        },
+        })
+
+        try {
+          const dbAuth = new DbAuthHandler(event, context, options)
+          await dbAuth._getCurrentUser()
+        } catch (e) {
+          expect(e.message).toEqual(
+            'Cannot retrieve user details without being logged in'
+          )
+        }
       })
-      // create header in usual way
-      event.headers.cookie = encryptToCookie(JSON.stringify({ id: 9999999999 }))
-
-      // should read session from graphiQL header, not from cookie
-      const dbAuth = new DbAuthHandler(event, context, options)
-      const user = await dbAuth._getCurrentUser()
-      expect(user.id).toEqual(dbUser.id)
-
-      process.env.NODE_ENV = curNodeEnv
-      expect(process.env.NODE_ENV).toBe('test')
     })
   })
 

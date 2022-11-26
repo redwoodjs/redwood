@@ -2,6 +2,7 @@ import CryptoJS from 'crypto-js'
 
 import * as error from '../errors'
 import {
+  extractCookie,
   getSession,
   hashPassword,
   decryptSession,
@@ -119,5 +120,94 @@ describe('hashPassword', () => {
     expect(hash.length).toEqual(64)
     expect(salt).toMatch(/^[a-f0-9]+$/)
     expect(salt.length).toEqual(32)
+  })
+
+  describe('session cookie extraction', () => {
+    let event
+
+    const encryptToCookie = (data) => {
+      return `session=${CryptoJS.AES.encrypt(data, process.env.SESSION_SECRET)}`
+    }
+
+    beforeEach(() => {
+      event = {
+        queryStringParameters: {},
+        path: '/.redwood/functions/auth',
+        headers: {},
+      }
+    })
+
+    it('extracts from the event', () => {
+      const cookie = encryptToCookie(
+        JSON.stringify({ id: 9999999999 }) + ';' + 'token'
+      )
+
+      event = {
+        headers: {
+          cookie,
+        },
+      }
+
+      expect(extractCookie(event)).toEqual(cookie)
+    })
+
+    describe('when in development', () => {
+      const curNodeEnv = process.env.NODE_ENV
+
+      beforeAll(() => {
+        // Session cookie from graphiQLHeaders only extracted in dev
+        process.env.NODE_ENV = 'development'
+      })
+
+      afterAll(() => {
+        process.env.NODE_ENV = curNodeEnv
+        event = {}
+        expect(process.env.NODE_ENV).toBe('test')
+      })
+
+      it('extracts GraphiQL cookie from the header extensions', () => {
+        const dbUserId = 42
+
+        const cookie = encryptToCookie(JSON.stringify({ id: dbUserId }))
+        event.body = JSON.stringify({
+          extensions: {
+            headers: {
+              'auth-provider': 'dbAuth',
+              cookie,
+              authorization: 'Bearer ' + dbUserId,
+            },
+          },
+        })
+
+        expect(extractCookie(event)).toEqual(cookie)
+      })
+
+      it('overwrites cookie with event header GraphiQL  when in dev', () => {
+        const sessionCookie = encryptToCookie(
+          JSON.stringify({ id: 9999999999 }) + ';' + 'token'
+        )
+
+        event = {
+          headers: {
+            cookie: sessionCookie,
+          },
+        }
+
+        const dbUserId = 42
+
+        const cookie = encryptToCookie(JSON.stringify({ id: dbUserId }))
+        event.body = JSON.stringify({
+          extensions: {
+            headers: {
+              'auth-provider': 'dbAuth',
+              cookie,
+              authorization: 'Bearer ' + dbUserId,
+            },
+          },
+        })
+
+        expect(extractCookie(event)).toEqual(cookie)
+      })
+    })
   })
 })

@@ -3,24 +3,29 @@ import CryptoJS from 'crypto-js'
 
 import * as DbAuthError from './errors'
 
-// Extracts the cookie from an event, handling lower and upper case header
-// names.
-// Checks for cookie in headers in dev when user has generated graphiql headers
-export const extractCookie = (event: APIGatewayProxyEvent) => {
-  let cookieFromGraphiqlHeader
+// Extracts the cookie from an event, handling lower and upper case header names.
+const eventHeadersCookie = (event: APIGatewayProxyEvent) => {
+  return event.headers.cookie || event.headers.Cookie
+}
+
+// When in development environment, check for cookie in the request extension headers
+// if user has generated graphiql headers
+const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
   if (process.env.NODE_ENV === 'development') {
-    try {
-      const jsonBody = JSON.parse(event.body ?? '{}')
-      cookieFromGraphiqlHeader =
-        jsonBody.extensions?.headers?.cookie ||
-        jsonBody.extensions?.headers?.Cookie
-    } catch (e) {
-      return event.headers.cookie || event.headers.Cookie
-    }
+    const jsonBody = JSON.parse(event.body ?? '{}')
+    return (
+      jsonBody?.extensions?.headers?.cookie ||
+      jsonBody?.extensions?.headers?.Cookie
+    )
   }
-  return (
-    cookieFromGraphiqlHeader || event.headers.cookie || event.headers.Cookie
-  )
+
+  return
+}
+
+// Extracts the session cookie from an event, handling both
+// development environment GraphiQL headers and production environment headers.
+export const extractCookie = (event: APIGatewayProxyEvent) => {
+  return eventGraphiQLHeadersCookie(event) || eventHeadersCookie(event)
 }
 
 // decrypts the session cookie and returns an array: [data, csrf]
