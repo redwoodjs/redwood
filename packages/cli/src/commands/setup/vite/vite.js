@@ -5,10 +5,11 @@ import toml from '@iarna/toml'
 import chalk from 'chalk'
 import { Listr } from 'listr2'
 
+import { addWebPackages } from '@redwoodjs/cli-helpers'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getConfig, getPaths, transformTSToJS, writeFile } from '../../../lib'
+import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
@@ -28,9 +29,15 @@ export const builder = (yargs) => {
     description: 'Print more logs',
     type: 'boolean',
   })
+  yargs.option('add-package', {
+    default: true,
+    description:
+      'Allows you to skip adding the @redwoodjs/vite package. Useful for testing',
+    type: 'boolean',
+  })
 }
 
-export const handler = async ({ force, verbose }) => {
+export const handler = async ({ force, verbose, addPackage }) => {
   const ts = isTypeScriptProject()
   const tasks = new Listr(
     [
@@ -65,6 +72,31 @@ export const handler = async ({ force, verbose }) => {
 
           return writeFile(viteConfigPath, viteConfigContent, {
             overwriteExisting: force,
+          })
+        },
+      },
+      {
+        title: 'Updating DevFatalError Page import...',
+        task: (_ctx, task) => {
+          const fatalErrorPagePath = `${
+            getPaths().web.pages
+          }/FatalErrorPage/FatalErrorPage.${ts ? 'tsx' : 'js'}`
+
+          if (!fs.existsSync(fatalErrorPagePath)) {
+            task.skip('No DevFatalError page found')
+          }
+
+          const content = fs.readFileSync(fatalErrorPagePath, 'utf-8')
+
+          const updatedContent = content.replace(
+            `require('@redwoodjs/web/dist/components/DevFatalErrorPage').DevFatalErrorPage`,
+            `(await import(
+            '@redwoodjs/web/dist/components/DevFatalErrorPage'
+          )).DevFatalErrorPage`
+          )
+
+          return writeFile(fatalErrorPagePath, updatedContent, {
+            overwriteExisting: true,
           })
         },
       },
@@ -129,6 +161,13 @@ export const handler = async ({ force, verbose }) => {
             task.skip('Already configured')
           }
         },
+      },
+      {
+        title: 'Adding @redwoodjs/vite dependency...',
+        task: () => {
+          return addWebPackages('@redwoodjs/vite')
+        },
+        skip: () => !addPackage,
       },
       {
         title: 'One more thing...',

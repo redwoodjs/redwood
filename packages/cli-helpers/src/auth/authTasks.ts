@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import execa from 'execa'
 import { ListrTask, ListrTaskWrapper, ListrRenderer } from 'listr2'
 
 import { writeFilesTask, transformTSToJS } from '../lib'
@@ -352,32 +351,3 @@ export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
     }
   },
 })
-
-export const addWebPackages = (webPackages: string[], rwVersion: string) => ({
-  title: 'Adding required web packages...',
-  task: async () => {
-    const args = [
-      'workspace',
-      'web',
-      'add',
-      ...webPackages,
-      `@redwoodjs/auth@${rwVersion}`,
-    ]
-    await execa('yarn', args)
-  },
-})
-
-export const addApiPackages = (apiPackages: string[]) =>
-  apiPackages.length > 0 && {
-    title: 'Adding required api packages...',
-    task: async () => {
-      await execa('yarn', ['workspace', 'api', 'add', ...apiPackages])
-    },
-  }
-
-export const installPackages = {
-  title: 'Installing packages...',
-  task: async () => {
-    await execa('yarn', ['install'])
-  },
-}

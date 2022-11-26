@@ -8,16 +8,18 @@ import yargs from 'yargs'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { colors } from '../lib/colors'
+import {
+  addApiPackages,
+  addWebPackages,
+  installPackages,
+} from '../lib/installHelpers'
 import { getPaths } from '../lib/paths'
 
 import { apiSideFiles } from './authFiles'
 import {
-  addApiPackages,
   addAuthConfigToGqlApi,
   addAuthConfigToWeb,
-  addWebPackages,
   generateAuthApiFiles,
-  installPackages,
 } from './authTasks'
 
 /**
