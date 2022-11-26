@@ -61,7 +61,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
 
   const forgotPassword = async (username: string) => {
     if (!process.env.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
+      throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
     }
 
     const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
@@ -105,7 +105,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
 
   const login = async ({ username, password }: LoginAttributes) => {
     if (!process.env.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
+      throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
     }
 
     const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
@@ -120,7 +120,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
 
   const logout = async () => {
     if (!process.env.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
+      throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
     }
 
     await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
@@ -134,7 +134,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
 
   const resetPassword = async (attributes: ResetPasswordAttributes) => {
     if (!process.env.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
+      throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
     }
 
     const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
@@ -149,7 +149,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
 
   const signup = async (attributes: SignupAttributes) => {
     if (!process.env.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
+      throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
     }
 
     const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {
@@ -164,7 +164,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
 
   const validateResetToken = async (resetToken: string | null) => {
     if (!process.env.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
+      throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
     }
 
     const response = await resetAndFetch(process.env.RWJS_API_DBAUTH_URL, {

@@ -48,6 +48,10 @@ const isSupported = async () => {
 const isEnabled = () => !!document.cookie.match(/webAuthn/)
 
 const authenticationOptions = async () => {
+  if (!process.env.RWJS_API_DBAUTH_URL) {
+    throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
+  }
+
   let options
 
   try {
@@ -86,7 +90,7 @@ const authenticationOptions = async () => {
 
 const authenticate = async () => {
   if (!process.env.RWJS_API_DBAUTH_URL) {
-    throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
+    throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
   }
 
   const authOptions = await authenticationOptions()
@@ -130,6 +134,10 @@ const authenticate = async () => {
 }
 
 const registrationOptions = () => {
+  if (!process.env.RWJS_API_DBAUTH_URL) {
+    throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
+  }
+
   let options
 
   try {
@@ -162,7 +170,7 @@ const registrationOptions = () => {
 
 const register = async () => {
   if (!process.env.RWJS_API_DBAUTH_URL) {
-    throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
+    throw new Error('You need to set the RWJS_API_DBAUTH_URL env variable')
   }
 
   const options = await registrationOptions()
