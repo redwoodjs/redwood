@@ -264,6 +264,12 @@ If you push your changes to the `main` branch on Github the CI action will break
 8. Runs the web tests
 9. Cleans up the environment
 
+> At this point, if all is well, you may start feeling the joy of automated tests!
+> You push a commit, the Action runs, your tests pass, and you observe a green
+> checkmark.  To savor this moment, consider updating one of your unit tests, making
+> it fail.  Push again.  Watch it fail.  Fix it.  Push again.  Watch it pass.
+> Repeat and enjoy.
+
 ### 5. Setup CI on a pull requests only
 
 We want to make sure that the tests are run on every pull request, so we can make sure that the code is working as expected.
@@ -392,3 +398,9 @@ env:
 ```
 
  Now you can merge the PR and the database changes will be tested and then deployed to the actual database.
+
+What's next?  It is up to you - refine and streamline!
+
+As you consider automating your project workflows, keep the following wise philisophical observation in mind...
+
+ > Civilazation advances by extending the number of important operations we can perform without thinking.  - Alfred North Whitehead
