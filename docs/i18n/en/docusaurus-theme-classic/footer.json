@@ -1,0 +1,42 @@
+{
+  "link.title.Docs": {
+    "message": "Docs",
+    "description": "The title of the footer links column with title=Docs in the footer"
+  },
+  "link.title.Community": {
+    "message": "Community",
+    "description": "The title of the footer links column with title=Community in the footer"
+  },
+  "link.title.More": {
+    "message": "More",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.Tutorial": {
+    "message": "Tutorial",
+    "description": "The label of footer link with label=Tutorial linking to docs/tutorial/foreword"
+  },
+  "link.item.label.Discord": {
+    "message": "Discord",
+    "description": "The label of footer link with label=Discord linking to https://discord.com/invite/redwoodjs"
+  },
+  "link.item.label.Discourse": {
+    "message": "Discourse",
+    "description": "The label of footer link with label=Discourse linking to https://community.redwoodjs.com/"
+  },
+  "link.item.label.Twitter": {
+    "message": "Twitter",
+    "description": "The label of footer link with label=Twitter linking to https://twitter.com/redwoodjs"
+  },
+  "link.item.label.redwoodjs.com": {
+    "message": "redwoodjs.com",
+    "description": "The label of footer link with label=redwoodjs.com linking to https://redwoodjs.com/"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/redwoodjs/redwood"
+  },
+  "copyright": {
+    "message": "Copyright © 2022 RedwoodJS. Built with Docusaurus.",
+    "description": "The footer copyright"
+  }
+}
