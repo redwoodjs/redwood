@@ -401,6 +401,6 @@ env:
 
 What's next?  It is up to you - refine and streamline!
 
-As you consider automating your project workflows, keep the following wise philisophical observation in mind...
+As you consider automating your project workflows, keep the following wise philosophical observation in mind...
 
  > Civilazation advances by extending the number of important operations we can perform without thinking.  - Alfred North Whitehead
