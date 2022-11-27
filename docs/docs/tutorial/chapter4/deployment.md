@@ -123,7 +123,7 @@ yarn rw g secret
 
 Copy that over to Netlify along with `DATABASE_URL`:
 
-![Adding ENV var](https://user-images.githubusercontent.com/300/154520225-76dfa960-1d09-4544-92a4-2c7e58dc4e3f.png)
+![Adding ENV var](https://user-images.githubusercontent.com/2931245/204148740-f8aaa276-e9b1-4ffc-a842-7602a1e0111a.png)
 
 #### IT'S ALIVE
 
