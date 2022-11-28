@@ -7,7 +7,7 @@ import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { prepareRollbackForTasks } from '../../../lib/rollback'
+import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
@@ -82,7 +82,7 @@ export const handler = async (args) => {
 
   try {
     if (args.rollback) {
-      prepareRollbackForTasks(tasks)
+      prepareForRollback(tasks)
     }
     await tasks.run()
   } catch (e) {

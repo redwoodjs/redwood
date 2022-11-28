@@ -8,7 +8,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { prepareRollbackForTasks } from '../../../lib/rollback'
+import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import { templateForComponentFile } from '../helpers'
 
@@ -138,7 +138,7 @@ export const handler = async ({ name, force, ...rest }) => {
 
   try {
     if (rest.rollback) {
-      prepareRollbackForTasks(tasks)
+      prepareForRollback(tasks)
     }
     await tasks.run()
 

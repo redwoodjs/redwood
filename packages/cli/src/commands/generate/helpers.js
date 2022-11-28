@@ -13,7 +13,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
-import { prepareRollbackForTasks } from '../../lib/rollback'
+import { prepareForRollback } from '../../lib/rollback'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
 
 /**
@@ -228,7 +228,7 @@ export const createYargsForComponentGeneration = ({
         )
 
         if (options.rollback) {
-          prepareRollbackForTasks(tasks)
+          prepareForRollback(tasks)
         }
         await tasks.run()
       } catch (e) {

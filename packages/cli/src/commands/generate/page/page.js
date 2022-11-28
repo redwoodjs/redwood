@@ -15,7 +15,7 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import {
-  prepareRollbackForTasks,
+  prepareForRollback,
   addFunctionToRollback,
 } from '../../../lib/rollback'
 import {
@@ -256,7 +256,7 @@ export const handler = async ({
 
   try {
     if (rollback) {
-      prepareRollbackForTasks(tasks)
+      prepareForRollback(tasks)
     }
     await tasks.run()
   } catch (e) {

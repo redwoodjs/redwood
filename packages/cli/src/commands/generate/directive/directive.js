@@ -10,7 +10,7 @@ import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
 import {
-  prepareRollbackForTasks,
+  prepareForRollback,
   addFunctionToRollback,
 } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
@@ -181,7 +181,7 @@ export const handler = async (args) => {
 
   try {
     if (args.rollback) {
-      prepareRollbackForTasks(tasks)
+      prepareForRollback(tasks)
     }
     await tasks.run()
   } catch (e) {

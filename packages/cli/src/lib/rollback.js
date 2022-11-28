@@ -90,7 +90,7 @@ export function resetRollback() {
 /**
  * Resets the current rollback stack and assigns all of the tasks to have a listr2 rollback function which call {@link executeRollback}
  */
-export function prepareRollbackForTasks(tasks) {
+export function prepareForRollback(tasks) {
   resetRollback()
   tasks.tasks?.forEach((task) => {
     task.tasks.rollback = executeRollback

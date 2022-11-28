@@ -27,7 +27,7 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import {
-  prepareRollbackForTasks,
+  prepareForRollback,
   addFunctionToRollback,
 } from '../../../lib/rollback'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
@@ -844,7 +844,7 @@ export const handler = async ({
       tailwind,
     })
     if (rollback) {
-      prepareRollbackForTasks(t)
+      prepareForRollback(t)
     }
     await t.run()
   } catch (e) {
