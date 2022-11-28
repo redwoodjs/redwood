@@ -2,7 +2,6 @@
 import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {
-  var bazinga: boolean
   var __REDWOOD__PRERENDERING: boolean
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
   var __REDWOOD__APP_TITLE: string
