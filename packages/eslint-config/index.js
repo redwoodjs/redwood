@@ -87,6 +87,7 @@ module.exports = {
       env: {
         browser: true,
         es6: true,
+        'shared-node-browser': true,
       },
       globals: {
         React: 'readonly',

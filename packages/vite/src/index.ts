@@ -69,7 +69,7 @@ export default function redwoodVite(): UserConfig {
       }),
     ],
     define: {
-      RWJS_WEB_BUNDLER: JSON.stringify('vite'),
+      RWJS_WEB_BUNDLER: 'vite',
       RWJS_ENV: {
         // @MARK instead of using process.env, we directly assign these variables
         RWJS_API_GRAPHQL_URL:
