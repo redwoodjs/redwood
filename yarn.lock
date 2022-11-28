@@ -2114,7 +2114,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/parser-cache@npm:4.7.0, @envelop/parser-cache@npm:^4.6.0":
+"@envelop/parser-cache@npm:5.0.4":
+  version: 5.0.4
+  resolution: "@envelop/parser-cache@npm:5.0.4"
+  dependencies:
+    lru-cache: ^6.0.0
+    tslib: ^2.4.0
+  peerDependencies:
+    "@envelop/core": ^3.0.4
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 506b2fca78c1ee3622e5b2844d69e0f9b8ea5fa0d496adfbc70f92307eb34f85a0ceee18d5e0a40525ab45a93a2533cc9c715a80a41542c143748caf302d5740
+  languageName: node
+  linkType: hard
+
+"@envelop/parser-cache@npm:^4.6.0":
   version: 4.7.0
   resolution: "@envelop/parser-cache@npm:4.7.0"
   dependencies:
@@ -6853,7 +6866,7 @@ __metadata:
     "@envelop/depth-limit": 1.8.0
     "@envelop/disable-introspection": 3.6.0
     "@envelop/filter-operation-type": 3.6.0
-    "@envelop/parser-cache": 4.7.0
+    "@envelop/parser-cache": 5.0.4
     "@envelop/testing": 4.6.0
     "@envelop/types": 2.4.0
     "@envelop/validation-cache": 4.7.0
