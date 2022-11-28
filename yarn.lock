@@ -6323,7 +6323,7 @@ __metadata:
     core-js: 3.26.1
     fast-json-parse: 1.0.3
     fastify: 4.10.2
-    fastify-raw-body: 4.1.2
+    fastify-raw-body: 4.1.3
     jest: 29.3.1
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
@@ -16775,14 +16775,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-raw-body@npm:4.1.2":
-  version: 4.1.2
-  resolution: "fastify-raw-body@npm:4.1.2"
+"fastify-raw-body@npm:4.1.3":
+  version: 4.1.3
+  resolution: "fastify-raw-body@npm:4.1.3"
   dependencies:
     fastify-plugin: ^4.0.0
     raw-body: ^2.5.1
     secure-json-parse: ^2.4.0
-  checksum: 4ad3f006877cad167ccfd8a3c918c7e2f0cf23ce836cbf70d897767c0987370e3ef2b331c20517ee5824ab2e00ddf88c10f63585d3264f19c1733dd585ac6263
+  checksum: c1f6783b039d15b1c2dce4af6fb7b8214b1669b1a3f4e07447900bb5cdb88d307e7b8c7fb6714defa3243632d5904c763bd200374539c8ed486edbc2aa98875a
   languageName: node
   linkType: hard
 
