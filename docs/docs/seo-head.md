@@ -112,10 +112,8 @@ This is great not just for link unfurling on say Facebook or Slack, but also for
 ## Dynamic tags
 Great - so far we can see the changes, and bots will pick up our tags if we've prerendered the page, but what if I want to set the header based on the output of the Cell?
 
-_Just keep in mind, that Cells are currently not prerendered_ - so it'll be visible to your users, but not to link scrapers and bots.
-
-> **<Head\>s up**<br/>
-> For dynamic tags to appear to bots and link scrapers you have to setup an external prerendering service. If you're on Netlify you can use their [built-in one](https://docs.netlify.com/site-deploys/post-processing/prerendering/). Otherwise you can follow [this great how to](https://community.redwoodjs.com/t/cookbook-getting-og-and-meta-tags-working-with-nginx-pre-render-io-and-docker/2014) from the Redwood community
+> **Prerendering cells**<br/>
+> As of v3.x, Redwood supports prerendering your [Cells](https://redwoodjs.com/docs/cells) with the data you were querying. For more information please refer [to this section](https://redwoodjs.com/docs/prerender#cell-prerendering).
 
 
 Let's say in our PostCell, we want to set the title to match the Post.
