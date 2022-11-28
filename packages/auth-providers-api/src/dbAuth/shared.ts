@@ -12,11 +12,16 @@ const eventHeadersCookie = (event: APIGatewayProxyEvent) => {
 // if user has generated graphiql headers
 const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent) => {
   if (process.env.NODE_ENV === 'development') {
-    const jsonBody = JSON.parse(event.body ?? '{}')
-    return (
-      jsonBody?.extensions?.headers?.cookie ||
-      jsonBody?.extensions?.headers?.Cookie
-    )
+    try {
+      const jsonBody = JSON.parse(event.body ?? '{}')
+      return (
+        jsonBody?.extensions?.headers?.cookie ||
+        jsonBody?.extensions?.headers?.Cookie
+      )
+    } catch {
+      // sometimes the event body isn't json
+      return
+    }
   }
 
   return

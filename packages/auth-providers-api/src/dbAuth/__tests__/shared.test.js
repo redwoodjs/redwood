@@ -151,6 +151,12 @@ describe('hashPassword', () => {
       expect(extractCookie(event)).toEqual(cookie)
     })
 
+    it('extract cookie handles non-JSON event body', () => {
+      event.body = ''
+
+      expect(extractCookie(event)).toBeUndefined()
+    })
+
     describe('when in development', () => {
       const curNodeEnv = process.env.NODE_ENV
 
@@ -163,6 +169,12 @@ describe('hashPassword', () => {
         process.env.NODE_ENV = curNodeEnv
         event = {}
         expect(process.env.NODE_ENV).toBe('test')
+      })
+
+      it('extract cookie handles non-JSON event body', () => {
+        event.body = ''
+
+        expect(extractCookie(event)).toBeUndefined()
       })
 
       it('extracts GraphiQL cookie from the header extensions', () => {
@@ -182,7 +194,7 @@ describe('hashPassword', () => {
         expect(extractCookie(event)).toEqual(cookie)
       })
 
-      it('overwrites cookie with event header GraphiQL  when in dev', () => {
+      it('overwrites cookie with event header GraphiQL when in dev', () => {
         const sessionCookie = encryptToCookie(
           JSON.stringify({ id: 9999999999 }) + ';' + 'token'
         )
