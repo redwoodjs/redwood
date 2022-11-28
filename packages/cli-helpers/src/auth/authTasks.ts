@@ -381,12 +381,3 @@ export const installPackages = {
     await execa('yarn', ['install'])
   },
 }
-
-export const printNotes = <Renderer extends typeof ListrRenderer>(
-  notes: string[]
-) => ({
-  title: 'One more thing...',
-  task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
-    task.title = `One more thing...\n\n   ${notes.join('\n   ')}\n`
-  },
-})

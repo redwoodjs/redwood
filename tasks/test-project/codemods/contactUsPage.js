@@ -154,7 +154,7 @@ export default (file, api) => {
     .find(j.VariableDeclarator, {
       id: {
         type: 'Identifier',
-        name: 'ContactPage',
+        name: 'ContactUsPage',
       },
     })
     .replaceWith((nodePath) => {
