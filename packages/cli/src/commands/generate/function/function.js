@@ -8,7 +8,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import { templateForComponentFile } from '../helpers'
 
 export const files = ({
