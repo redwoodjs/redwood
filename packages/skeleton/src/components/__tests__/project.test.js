@@ -92,28 +92,33 @@ describe('From inside the test-project fixture', () => {
   })
 
   describe('project', () => {
-    it('has the correct root path without a path provided', () => {
+    it('is correct without a path provided', () => {
       const project = new RedwoodProject()
-      expect(project.path).toBe(FIXTURE_PATH)
+      expect(project).toMatchSnapshot()
     })
-    it('has the correct root path with a path provided', () => {
+    it('is correct with a path provided', () => {
       const project = new RedwoodProject({
         pathWithinProject: path.join(FIXTURE_PATH, 'redwood.toml'),
       })
-      expect(project.path).toBe(FIXTURE_PATH)
+      expect(project).toMatchSnapshot()
     })
+    it.todo('prints the correct warning messages')
+    it.todo('prints the correct error messages')
   })
 
   describe('full project', () => {
-    it('has the correct root path without a path provided', () => {
-      const project = new RedwoodProject()
-      expect(project.path).toBe(FIXTURE_PATH)
+    it('is correct without a path provided', () => {
+      const project = new RedwoodProject({ full: true })
+      expect(project).toMatchSnapshot()
     })
-    it('has the correct root path with a path provided', () => {
+    it('is correct with a path provided', () => {
       const project = new RedwoodProject({
         pathWithinProject: path.join(FIXTURE_PATH, 'redwood.toml'),
+        full: true,
       })
-      expect(project.path).toBe(FIXTURE_PATH)
+      expect(project).toMatchSnapshot()
     })
+    it.todo('prints the correct warning messages')
+    it.todo('prints the correct error messages')
   })
 })

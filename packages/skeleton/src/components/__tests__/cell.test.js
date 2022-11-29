@@ -27,7 +27,7 @@ describe('From inside the test-project fixture', () => {
     const cells = getCells()
     cells.forEach((cell) => {
       // Remove the leading section of the path because it'll be dependant on the host machine
-      cell.path = cell.path.substring(FIXTURE_PATH.length)
+      cell.filepath = cell.filepath.substring(FIXTURE_PATH.length)
     })
     expect(cells).toMatchSnapshot()
   })
@@ -44,7 +44,7 @@ describe('From inside the test-project fixture', () => {
     const cells = getCells(project)
     cells.forEach((cell) => {
       // Remove the leading section of the path because it'll be dependant on the host machine
-      cell.path = cell.path.substring(FIXTURE_PATH.length)
+      cell.filepath = cell.filepath.substring(FIXTURE_PATH.length)
     })
     expect(cells).toMatchSnapshot()
   })

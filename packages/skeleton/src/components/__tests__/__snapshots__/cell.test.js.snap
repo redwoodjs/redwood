@@ -4,6 +4,7 @@ exports[`From inside the test-project fixture returns the correct cells with a p
 [
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/AuthorCell/AuthorCell.tsx",
     "gqlQuery": "
   query FindAuthorQuery($id: Int!) {
     author: user(id: $id) {
@@ -19,11 +20,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/AuthorCell/AuthorCell.tsx",
+    "name": "AuthorCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
     "gqlQuery": "
   query FindBlogPostQuery($id: Int!) {
     blogPost: post(id: $id) {
@@ -45,11 +47,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
+    "name": "BlogPostCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
     "gqlQuery": "
   query BlogPostsQuery {
     blogPosts: posts {
@@ -71,11 +74,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
+    "name": "BlogPostsCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
     "gqlQuery": "
   query FindContactById($id: Int!) {
     contact: contact(id: $id) {
@@ -94,11 +98,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
+    "name": "ContactCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
     "gqlQuery": "
   query FindContacts {
     contacts {
@@ -117,11 +122,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
+    "name": "ContactsCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
     "gqlQuery": "
   query EditContactById($id: Int!) {
     contact: contact(id: $id) {
@@ -140,11 +146,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
+    "name": "EditContactCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
     "gqlQuery": "
   query EditPostById($id: Int!) {
     post: post(id: $id) {
@@ -163,11 +170,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
+    "name": "EditPostCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Post/PostCell/PostCell.tsx",
     "gqlQuery": "
   query FindPostById($id: Int!) {
     post: post(id: $id) {
@@ -186,11 +194,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Post/PostCell/PostCell.tsx",
+    "name": "PostCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Post/PostsCell/PostsCell.tsx",
     "gqlQuery": "
   query FindPosts {
     posts {
@@ -209,11 +218,12 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Post/PostsCell/PostsCell.tsx",
+    "name": "PostsCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
     "gqlQuery": "
   query FindWaterfallBlogPostQuery($id: Int!) {
     waterfallBlogPost: post(id: $id) {
@@ -232,7 +242,7 @@ exports[`From inside the test-project fixture returns the correct cells with a p
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
+    "name": "WaterfallBlogPostCell",
     "warnings": [],
   },
 ]
@@ -242,6 +252,7 @@ exports[`From inside the test-project fixture returns the correct cells without 
 [
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/AuthorCell/AuthorCell.tsx",
     "gqlQuery": "
   query FindAuthorQuery($id: Int!) {
     author: user(id: $id) {
@@ -257,11 +268,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/AuthorCell/AuthorCell.tsx",
+    "name": "AuthorCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
     "gqlQuery": "
   query FindBlogPostQuery($id: Int!) {
     blogPost: post(id: $id) {
@@ -283,11 +295,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
+    "name": "BlogPostCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
     "gqlQuery": "
   query BlogPostsQuery {
     blogPosts: posts {
@@ -309,11 +322,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
+    "name": "BlogPostsCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
     "gqlQuery": "
   query FindContactById($id: Int!) {
     contact: contact(id: $id) {
@@ -332,11 +346,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
+    "name": "ContactCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
     "gqlQuery": "
   query FindContacts {
     contacts {
@@ -355,11 +370,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
+    "name": "ContactsCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
     "gqlQuery": "
   query EditContactById($id: Int!) {
     contact: contact(id: $id) {
@@ -378,11 +394,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
+    "name": "EditContactCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
     "gqlQuery": "
   query EditPostById($id: Int!) {
     post: post(id: $id) {
@@ -401,11 +418,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
+    "name": "EditPostCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Post/PostCell/PostCell.tsx",
     "gqlQuery": "
   query FindPostById($id: Int!) {
     post: post(id: $id) {
@@ -424,11 +442,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Post/PostCell/PostCell.tsx",
+    "name": "PostCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/Post/PostsCell/PostsCell.tsx",
     "gqlQuery": "
   query FindPosts {
     posts {
@@ -447,11 +466,12 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/Post/PostsCell/PostsCell.tsx",
+    "name": "PostsCell",
     "warnings": [],
   },
   RedwoodCell {
     "errors": [],
+    "filepath": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
     "gqlQuery": "
   query FindWaterfallBlogPostQuery($id: Int!) {
     waterfallBlogPost: post(id: $id) {
@@ -470,7 +490,7 @@ exports[`From inside the test-project fixture returns the correct cells without 
     "hasQueryExport": true,
     "hasSuccessExport": true,
     "isValid": true,
-    "path": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
+    "name": "WaterfallBlogPostCell",
     "warnings": [],
   },
 ]

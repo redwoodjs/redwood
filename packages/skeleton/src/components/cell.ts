@@ -9,7 +9,8 @@ import { getGraphQLQueryName } from '../lib/gql'
 import { RedwoodProject } from './project'
 
 export class RedwoodCell {
-  readonly path: string
+  readonly filepath: string
+  readonly name: string
 
   readonly hasQueryExport: boolean
 
@@ -26,10 +27,11 @@ export class RedwoodCell {
   readonly warnings: string[] = []
   readonly errors: string[] = []
 
-  constructor(path: string) {
-    this.path = path
+  constructor(filepath: string) {
+    this.filepath = filepath
+    this.name = path.parse(this.filepath).name
 
-    const code = fs.readFileSync(this.path, { encoding: 'utf8', flag: 'r' })
+    const code = fs.readFileSync(this.filepath, { encoding: 'utf8', flag: 'r' })
     const ast = getProgramFromCode(code)
 
     const namedExports = getNamedExports(ast)
@@ -122,7 +124,7 @@ export function getCells(project: RedwoodProject | null = null): RedwoodCell[] {
   const cells: RedwoodCell[] = []
 
   const componentsPath = project
-    ? getPaths(project.path).web.components
+    ? getPaths(project.filepath).web.components
     : getPaths().web.components
 
   // Cells must be defined within a file which ends with `Cell.{js, jsx, tsx}`
