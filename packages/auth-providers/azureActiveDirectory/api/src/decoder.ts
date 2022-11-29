@@ -20,15 +20,11 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   }
 
   return new Promise((resolve, reject) => {
-    /**
-     *
-     * Microsoft identity platform and OpenID Connect protocol
-     * @see https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc
-     *
-     * OpenID Provider Metadata
-     * @see https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
-     *
-     */
+    // Microsoft identity platform and OpenID Connect protocol
+    // https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc
+    //
+    // OpenID Provider Metadata
+    // https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
 
     const client = jwksClient({
       jwksUri: `${AZURE_ACTIVE_DIRECTORY_AUTHORITY}/discovery/v2.0/keys`,

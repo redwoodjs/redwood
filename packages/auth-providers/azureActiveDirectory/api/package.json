@@ -27,7 +27,6 @@
     "jsonwebtoken": "8.5.1"
   },
   "devDependencies": {
-    "@azure/msal-browser": "2.30.0",
     "@babel/cli": "7.19.3",
     "@babel/core": "7.20.5",
     "@types/jsonwebtoken": "8.5.9",
