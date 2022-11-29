@@ -3,7 +3,7 @@ import { argv } from 'process'
 
 import concurrently from 'concurrently'
 
-import { BundlerEnum, getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/internal/dist/config'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -141,7 +141,7 @@ export const handler = async ({
   const redwoodConfigPath = getConfigPath()
 
   const webCommand =
-    getConfig().web.bundler === BundlerEnum.VITE
+    getConfig().web.bundler === 'vite' // @NOTE: can't use enums, not TS
       ? `yarn cross-env NODE_ENV=development vite`
       : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
           watchNodeModules ? '1' : ''
