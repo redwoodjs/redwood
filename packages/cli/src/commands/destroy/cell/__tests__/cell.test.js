@@ -8,11 +8,9 @@ jest.mock('../../../../lib', () => {
   }
 })
 
-jest.mock('@redwoodjs/structure', () => {
+jest.mock('@redwoodjs/skeleton', () => {
   return {
-    getProject: () => ({
-      cells: [{ queryOperationName: undefined }],
-    }),
+    getCells: () => [{ graphqlQueryName: 'AlreadyDefinedQueryName' }],
   }
 })
 

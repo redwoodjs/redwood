@@ -3,11 +3,11 @@ import pascalcase from 'pascalcase'
 import { listQueryTypeFieldsInProject } from '@redwoodjs/internal/dist/gql'
 
 export const getCellOperationNames = async () => {
-  const { getProject } = await import('@redwoodjs/structure')
+  const { getCells } = await import('@redwoodjs/skeleton')
 
-  return getProject()
-    .cells.map((x) => {
-      return x.queryOperationName
+  return getCells()
+    .map((cell) => {
+      return cell.graphqlQueryName
     })
     .filter(Boolean)
 }

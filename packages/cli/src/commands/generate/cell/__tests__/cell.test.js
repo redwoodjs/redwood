@@ -5,11 +5,9 @@ import path from 'path'
 import '../../../../lib/test'
 import * as cell from '../cell'
 
-jest.mock('@redwoodjs/structure', () => {
+jest.mock('@redwoodjs/skeleton', () => {
   return {
-    getProject: () => ({
-      cells: [{ queryOperationName: 'AlreadyDefinedQueryName' }],
-    }),
+    getCells: () => [{ graphqlQueryName: 'AlreadyDefinedQueryName' }],
   }
 })
 
