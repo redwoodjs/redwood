@@ -35,13 +35,6 @@ export default function redwoodVite(): UserConfig {
       ],
     },
     plugins: [
-      react({
-        babel: {
-          ...getWebSideDefaultBabelConfig({
-            forVite: true,
-          }),
-        },
-      }),
       {
         // @MARK Adding this custom plugin to support jsx files with .js extensions
         // This is the default in Redwood JS projects. We can remove this once Vite is stable,
@@ -56,6 +49,13 @@ export default function redwoodVite(): UserConfig {
           return transform(file, { loader: 'jsx' })
         },
       },
+      react({
+        babel: {
+          ...getWebSideDefaultBabelConfig({
+            forVite: true,
+          }),
+        },
+      }),
       createHtmlPlugin({
         template: './index.html',
         inject: {
@@ -69,7 +69,7 @@ export default function redwoodVite(): UserConfig {
       }),
     ],
     define: {
-      RWJS_WEB_BUNDLER: 'vite',
+      RWJS_WEB_BUNDLER: JSON.stringify('vite'),
       RWJS_ENV: {
         // @MARK instead of using process.env, we directly assign these variables
         RWJS_API_GRAPHQL_URL:
@@ -92,10 +92,11 @@ export default function redwoodVite(): UserConfig {
       postcss: redwoodPaths.web.config,
     },
     server: {
+      port: getConfig().web.port,
       proxy: {
         //@MARK we need to do a check for absolute urls here
         [getConfig().web.apiUrl]: {
-          target: 'http://localhost:8911',
+          target: `http://localhost:${getConfig().api.port}`,
           changeOrigin: true,
           // @MARK might be better to use a regex maybe
           rewrite: (path) => path.replace(getConfig().web.apiUrl, ''),
@@ -109,6 +110,10 @@ export default function redwoodVite(): UserConfig {
     },
     optimizeDeps: {
       esbuildOptions: {
+        // @MARK this is because JS projects in Redwood don't have .jsx extensions
+        loader: {
+          '.js': 'jsx',
+        },
         // Node.js global to browser globalThis
         // @MARK unsure why we need this,
         // but as soon as we added the buffer polyfill, this seems to be required
