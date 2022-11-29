@@ -3,7 +3,7 @@ import { argv } from 'process'
 
 import concurrently from 'concurrently'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { BundlerEnum, getConfig } from '@redwoodjs/internal/dist/config'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -140,6 +140,13 @@ export const handler = async ({
 
   const redwoodConfigPath = getConfigPath()
 
+  const webCommand =
+    getConfig().web.bundler === BundlerEnum.VITE
+      ? `yarn cross-env NODE_ENV=development vite`
+      : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
+          watchNodeModules ? '1' : ''
+        } webpack serve --config "${webpackDevConfig}" ${forward}`
+
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
@@ -150,12 +157,9 @@ export const handler = async ({
     },
     web: {
       name: 'web',
-      command: `cd "${
-        rwjsPaths.web.base
-      }" && yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
-        watchNodeModules ? '1' : ''
-      } webpack serve --config "${webpackDevConfig}" ${forward}`,
+      command: webCommand,
       prefixColor: 'blue',
+      cwd: rwjsPaths.web.base,
       runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
     gen: {
