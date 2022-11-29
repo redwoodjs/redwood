@@ -249,6 +249,7 @@ RedwoodProject {
   ],
   "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project",
   "name": "test-project",
+  "type": "typescript",
 }
 `;
 
@@ -501,6 +502,7 @@ RedwoodProject {
   ],
   "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project",
   "name": "test-project",
+  "type": "typescript",
 }
 `;
 
@@ -509,6 +511,7 @@ RedwoodProject {
   "cells": undefined,
   "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project",
   "name": "test-project",
+  "type": "typescript",
 }
 `;
 
@@ -517,5 +520,6 @@ RedwoodProject {
   "cells": undefined,
   "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project",
   "name": "test-project",
+  "type": "typescript",
 }
 `;

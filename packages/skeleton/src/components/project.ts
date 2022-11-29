@@ -1,12 +1,24 @@
+import fs from 'fs'
 import path from 'path'
 
-import { getBaseDir, getBaseDirFromFile } from '@redwoodjs/internal/dist/index'
+import {
+  getBaseDir,
+  getBaseDirFromFile,
+  getPaths,
+} from '@redwoodjs/internal/dist/index'
 
 import { getCells, RedwoodCell } from './cell'
+
+enum RedwoodProjectType {
+  TYPESCRIPT = 'typescript',
+  JAVASCRIPT = 'javascript',
+}
 
 export class RedwoodProject {
   readonly filepath: string
   readonly name: string
+
+  readonly type: RedwoodProjectType
 
   cells?: RedwoodCell[]
 
@@ -15,9 +27,15 @@ export class RedwoodProject {
       ? getBaseDirFromFile(pathWithinProject)
       : getBaseDir()
 
-    // TODO: Consider reading the toml config to get the web.title from it?
     this.filepath = rootPath
-    this.name = path.parse(this.filepath).name
+    this.name = path.parse(this.filepath).name // TODO: Consider reading the toml config to get the web.title from it?
+
+    // A project is typescript if we detect a tsconfig.json
+    this.type =
+      fs.existsSync(getPaths(this.filepath).web.base) ||
+      fs.existsSync(getPaths(this.filepath).api.base)
+        ? RedwoodProjectType.TYPESCRIPT
+        : RedwoodProjectType.JAVASCRIPT
 
     if (full) {
       this.cells = getCells(this)
