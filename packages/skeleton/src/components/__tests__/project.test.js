@@ -24,7 +24,8 @@ describe('From outside a project', () => {
   describe('project', () => {
     it('fails without a path', () => {
       const callGetProject = () => {
-        const project = new RedwoodProject()
+        // eslint-disable-next-line no-new
+        new RedwoodProject()
       }
       expect(callGetProject).toThrowError(
         `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
@@ -33,7 +34,8 @@ describe('From outside a project', () => {
 
     it('fails with a path', () => {
       const callGetProject = () => {
-        const project = new RedwoodProject({
+        // eslint-disable-next-line no-new
+        new RedwoodProject({
           pathWithinProject: path.join(FIXTURE_PATH, 'redwood.toml'),
         })
       }
@@ -46,7 +48,8 @@ describe('From outside a project', () => {
   describe('full project', () => {
     it('fails without a path', () => {
       const callGetFullProject = () => {
-        const project = new RedwoodProject({ full: true })
+        // eslint-disable-next-line no-new
+        new RedwoodProject({ full: true })
       }
       expect(callGetFullProject).toThrowError(
         `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
@@ -55,7 +58,8 @@ describe('From outside a project', () => {
 
     it('fails with a path', () => {
       const callGetFullProject = () => {
-        const project = new RedwoodProject({
+        // eslint-disable-next-line no-new
+        new RedwoodProject({
           pathWithinProject: path.join(FIXTURE_PATH, 'redwood.toml'),
           full: true,
         })
