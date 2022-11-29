@@ -13,6 +13,7 @@ import {
   addConfigToWebApp,
   addWebPackages,
   AuthGeneratorCtx,
+  AuthSetupMode,
   checkIfAuthSetupAlready,
   createWebAuth,
   generateAuthApiFiles,
@@ -24,7 +25,7 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
     .option('force', {
       alias: 'f',
       default: false,
-      description: 'Overwrite existing configuration',
+      description: 'Overwrite existing auth configuration',
       type: 'boolean',
     })
     .option('verbose', {
@@ -108,9 +109,21 @@ export const standardAuthHandler = async ({
           // Can't console.log the notes here because of
           // https://github.com/cenk1cenk2/listr2/issues/296
           // So we do it after the tasks have all finished instead
-          if (ctx.shouldReplaceExistingProvider) {
+          if (ctx.setupMode === AuthSetupMode.REPLACE) {
             notes.push(
               `\n Your existing auth provider has been replaced, but please remember to remove any old packages, config and functions that are not used by ${ctx.provider} auth`
+            )
+          }
+
+          if (ctx.setupMode === AuthSetupMode.COMBINE) {
+            notes.push(
+              colors.warning(
+                "To avoid overwriting existing files we've generated new file " +
+                  'names for the newly generated files. This probably means ' +
+                  `${ctx.provider} auth doesn't work out of the box. You'll most ` +
+                  'likely have to manually merge some of the generated files ' +
+                  'with your existing auth files'
+              )
             )
           }
         },
@@ -119,7 +132,8 @@ export const standardAuthHandler = async ({
     {
       rendererOptions: { collapse: false },
       ctx: {
-        shouldReplaceExistingProvider: forceArg,
+        // When you set the force flag, you are saying you want to replace the existing auth provider
+        setupMode: forceArg ? AuthSetupMode.FORCE : AuthSetupMode.UNKNOWN,
         provider, // provider name passed from CLI
       },
       renderer: verboseArg ? 'verbose' : 'default',

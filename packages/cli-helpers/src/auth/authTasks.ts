@@ -13,7 +13,7 @@ import {
   isTypeScriptProject,
 } from '../lib/project'
 
-import { apiSideFiles } from './authFiles'
+import { apiSideFiles, generateUniqueFileNames } from './authFiles'
 
 const AUTH_PROVIDER_HOOK_IMPORT = `import { AuthProvider, useAuth } from './auth'`
 const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
@@ -268,7 +268,7 @@ export const createWebAuth = (templateDir: string, webAuthn: boolean) => {
       let authFileName = path.join(getPaths().web.src, 'auth')
 
       // Generate a unique name, when you are trying to combine providers
-      if (!ctx.shouldReplaceExistingProvider) {
+      if (ctx.setupMode === AuthSetupMode.COMBINE) {
         let i = 1
         while (resolveFile(authFileName)) {
           const count = i > 1 ? i : ''
@@ -333,16 +333,19 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
     title: 'Generating auth api side files...',
     task: async (ctx, task) => {
       if (!apiSrcDoesExist()) {
-        return task.skip?.('api/src not found, skipping')
+        return new Error(
+          'Could not find api/src directory. Cannot continue setup!'
+        )
       }
 
       // The keys in `filesRecord` are the full paths to where the file contents,
       // which is the values in `filesRecord`, will be written.
-      const filesRecord = apiSideFiles({ basedir, webAuthn })
+      let filesRecord = apiSideFiles({ basedir, webAuthn })
 
-      let overwriteAllFiles = false
+      // Always overwrite files in force mode, no need to prompt
+      let overwriteAllFiles = ctx.setupMode === AuthSetupMode.FORCE
 
-      if (!ctx.shouldReplaceExistingProvider) {
+      if (ctx.setupMode === AuthSetupMode.REPLACE) {
         // Confirm that we're about to overwrite some files
         const filesToOverwrite = findExistingFiles(filesRecord)
 
@@ -353,32 +356,17 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
         })
       }
 
-      /** @TODO Skip this, until we enable support for multiple providers
-      if (!ctx.shouldReplaceExistingProvider) {
-        const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
-
-        if (
-          Object.keys(filesRecord).join(',') !==
-          Object.keys(uniqueFilesRecord).join(',')
-        ) {
-          console.warn(
-            colors.warning(
-              "To avoid overwriting existing files we've generated new file " +
-                'names for the newly generated files. This probably means ' +
-                `${provider} auth doesn't work out of the box. You'll most ` +
-                'likely have to manually merge some of the generated files ' +
-                'with your existing auth files'
-            )
-          )
-        }
+      if (ctx.setupMode === AuthSetupMode.COMBINE) {
+        const uniqueFilesRecord = generateUniqueFileNames(
+          filesRecord,
+          ctx.provider
+        )
 
         filesRecord = uniqueFilesRecord
       }
-       */
 
       return writeFilesTask(filesRecord, {
-        overwriteExisting:
-          ctx.shouldReplaceExistingProvider || overwriteAllFiles,
+        overwriteExisting: overwriteAllFiles,
       })
     },
   }
@@ -404,7 +392,9 @@ export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
     if (graphFunctionDoesExist()) {
       addApiConfig({
         authDecoderImport,
-        replaceExistingImport: ctx.shouldReplaceExistingProvider,
+        replaceExistingImport:
+          ctx.setupMode === AuthSetupMode.REPLACE ||
+          ctx.setupMode === AuthSetupMode.FORCE,
       })
     } else {
       throw new Error(
@@ -443,8 +433,14 @@ export const installPackages = {
   },
 }
 
+export enum AuthSetupMode {
+  FORCE = 'force', // user passed the --force flag, this is essentially replace without prompts
+  REPLACE = 'replace', // replace existing auth provider, with the one being setup
+  COMBINE = 'combine', // add the new auth provider along side the existing one(s)
+  UNKNOWN = 'unknown', // we will prompt the user to select a mode
+}
 export interface AuthGeneratorCtx {
-  shouldReplaceExistingProvider: boolean
+  setupMode: AuthSetupMode
   provider: string
 }
 
@@ -459,30 +455,31 @@ export const checkIfAuthSetupAlready = <
     ) => {
       const webAppContents = fs.readFileSync(getWebAppPath(), 'utf-8')
 
-      if (hasAuthProvider(webAppContents)) {
+      // If we don't know whether the user wants to replace or combine,
+      // we prompt them to select a mode.
+      if (
+        hasAuthProvider(webAppContents) &&
+        ctx.setupMode === AuthSetupMode.UNKNOWN
+      ) {
         const setupMode = await task.prompt({
           type: 'select',
           message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
           choices: [
             {
               message: `Replace existing auth with ${ctx.provider}`,
-              value: 'REPLACE', // this is the value
+              value: AuthSetupMode.REPLACE, // this is the value
             },
             {
               message: `Combine existing auth with ${ctx.provider}`,
-              name: 'COMBINE', // this is the value
+              value: AuthSetupMode.COMBINE, // this is the value
             },
           ],
         })
 
-        const shouldReplace = setupMode === 'REPLACE'
+        // User has selected the setup mode, so we set it on the context
+        // This is used in the tasks downstream
+        ctx.setupMode = setupMode
 
-        if (!shouldReplace) {
-          throw new Error('Not supported yet')
-        }
-        // This context value will then be used in the tasks below
-        // To decide whether to overwrite existing files or not
-        ctx.shouldReplaceExistingProvider = shouldReplace
         return
       } else {
         task.skip('Setting up Auth from scratch')

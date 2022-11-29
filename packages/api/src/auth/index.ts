@@ -70,6 +70,8 @@ export const getAuthenticationContext = async ({
   }
 
   const { schema, token } = parseAuthorizationHeader(event)
+
+  //@MARK loop through the array of auth decoders here?
   const decoded = await authDecoder(token, type, { event, context })
   return [decoded, { type, schema, token }, { event, context }]
 }
