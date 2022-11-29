@@ -23,8 +23,8 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.1",
-    "core-js": "3.26.0",
+    "@babel/runtime-corejs3": "7.20.6",
+    "core-js": "3.26.1",
     "jsonwebtoken": "8.5.1",
     "uuid": "9.0.0"
   },
@@ -32,7 +32,7 @@
     "@auth0/auth0-spa-js": "1.22.5",
     "@azure/msal-browser": "2.30.0",
     "@babel/cli": "7.19.3",
-    "@babel/core": "7.20.2",
+    "@babel/core": "7.20.5",
     "@clerk/clerk-js": "3.17.0",
     "@clerk/clerk-react": "3.5.1",
     "@clerk/clerk-sdk-node": "3.9.2",
