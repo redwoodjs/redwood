@@ -2,7 +2,8 @@
   "private": true,
   "license": "MIT",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/auth-providers/**/*"
   ],
   "scripts": {
     "build": "lerna run build",
