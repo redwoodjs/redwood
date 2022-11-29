@@ -1,5 +1,4 @@
 {
-  "_template": "template[tags(heroku)]",
   "scripts": {},
   "env": {
     "SESSION_SECRET": {
@@ -27,7 +26,7 @@
     "review": {
       "addons": ["heroku-postgresql:hobby-dev"],
       "scripts": {
-        "postdeploy": "yarn db:seed"
+        "postdeploy": "yarn rw prisma migrate dev && yarn rw prisma db seed"
       },
       "env": {
         "SESSION_SECRET": {

@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "RWJS_CWD=../../../dev-redwood-app node dist/index.js",
     "build": "yarn build:js",
     "clean": "rimraf dist",
     "build:clean": "yarn clean && yarn build",
@@ -26,9 +26,9 @@
     "build:js": "yarn babel && yarn clean:tests",
     "build:watch": "yarn nodemon \"yarn build:clean && yarn fix:permissions\"",
     "nodemon": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec",
-    "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
-    "dev:build": "yarn clean && yarn babel --source-maps inline --retain-lines",
-    "dev:build:watch": "yarn nodemon 'yarn dev:build'",
+    "dev": "RWJS_CWD=../../../dev-redwood-app node dist/index.js",
+    "debug:build": "yarn clean && yarn babel --source-maps inline --retain-lines",
+    "debug:build:watch": "yarn nodemon 'yarn debug:build'",
     "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",
     "prepublishOnly": "yarn build",
     "test": "jest",

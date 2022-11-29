@@ -8,7 +8,15 @@ export class Logger {
     this.enabled && console.error(err)
   }
 
-  log(msg: any, rest?: any) {
-    this.enabled && console.log(msg, ...rest)
+  log(msg: any) {
+    this.enabled && console.log(msg)
+  }
+
+  errorUnless(err: any) {
+    !this.enabled && console.error(err)
+  }
+
+  logUnless(msg: any) {
+    !this.enabled && console.log(msg)
   }
 }
