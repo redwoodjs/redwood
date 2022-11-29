@@ -23,7 +23,7 @@ const experiments =
     ? {
         topLevelAwait: true,
       }
-    : false
+    : {}
 
 const baseConfig = {
   core: {
