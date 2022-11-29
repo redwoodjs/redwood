@@ -1,7 +1,7 @@
 import path from 'path'
 
 import { getCells } from '../cell'
-import { getProject } from '../project'
+import { RedwoodProject } from '../project'
 
 describe('From inside the test-project fixture', () => {
   const FIXTURE_PATH = path.join(
@@ -33,9 +33,14 @@ describe('From inside the test-project fixture', () => {
   })
 
   it('returns the correct cells with a project', () => {
-    const project = getProject(
-      path.join(FIXTURE_PATH, '..', 'test-project', 'redwood.toml')
-    )
+    const project = new RedwoodProject({
+      pathWithinProject: path.join(
+        FIXTURE_PATH,
+        '..',
+        'test-project',
+        'redwood.toml'
+      ),
+    })
     const cells = getCells(project)
     cells.forEach((cell) => {
       // Remove the leading section of the path because it'll be dependant on the host machine

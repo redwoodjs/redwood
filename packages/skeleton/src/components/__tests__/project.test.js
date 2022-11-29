@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { getProject, getFullProject } from '../project'
+import { RedwoodProject } from '../project'
 
 describe('From outside a project', () => {
   const FIXTURE_PATH = path.join(
@@ -24,7 +24,7 @@ describe('From outside a project', () => {
   describe('project', () => {
     it('fails without a path', () => {
       const callGetProject = () => {
-        getProject()
+        const project = new RedwoodProject()
       }
       expect(callGetProject).toThrowError(
         `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
@@ -33,7 +33,9 @@ describe('From outside a project', () => {
 
     it('fails with a path', () => {
       const callGetProject = () => {
-        getProject(path.join(FIXTURE_PATH, 'redwood.toml'))
+        const project = new RedwoodProject({
+          pathWithinProject: path.join(FIXTURE_PATH, 'redwood.toml'),
+        })
       }
       expect(callGetProject).toThrowError(
         `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
@@ -44,7 +46,7 @@ describe('From outside a project', () => {
   describe('full project', () => {
     it('fails without a path', () => {
       const callGetFullProject = () => {
-        getFullProject()
+        const project = new RedwoodProject({ full: true })
       }
       expect(callGetFullProject).toThrowError(
         `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
@@ -53,7 +55,10 @@ describe('From outside a project', () => {
 
     it('fails with a path', () => {
       const callGetFullProject = () => {
-        getFullProject(path.join(FIXTURE_PATH, 'redwood.toml'))
+        const project = new RedwoodProject({
+          pathWithinProject: path.join(FIXTURE_PATH, 'redwood.toml'),
+          full: true,
+        })
       }
       expect(callGetFullProject).toThrowError(
         `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
@@ -84,22 +89,26 @@ describe('From inside the test-project fixture', () => {
 
   describe('project', () => {
     it('has the correct root path without a path provided', () => {
-      const project = getProject()
+      const project = new RedwoodProject()
       expect(project.path).toBe(FIXTURE_PATH)
     })
     it('has the correct root path with a path provided', () => {
-      const project = getProject(path.join(FIXTURE_PATH, 'redwood.toml'))
+      const project = new RedwoodProject({
+        pathWithinProject: path.join(FIXTURE_PATH, 'redwood.toml'),
+      })
       expect(project.path).toBe(FIXTURE_PATH)
     })
   })
 
   describe('full project', () => {
     it('has the correct root path without a path provided', () => {
-      const project = getProject()
+      const project = new RedwoodProject()
       expect(project.path).toBe(FIXTURE_PATH)
     })
     it('has the correct root path with a path provided', () => {
-      const project = getProject(path.join(FIXTURE_PATH, 'redwood.toml'))
+      const project = new RedwoodProject({
+        pathWithinProject: path.join(FIXTURE_PATH, 'redwood.toml'),
+      })
       expect(project.path).toBe(FIXTURE_PATH)
     })
   })
