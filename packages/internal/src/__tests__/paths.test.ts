@@ -890,78 +890,87 @@ describe('paths', () => {
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.resolve(
-          __dirname,
-          '../../../../__fixtures__/example-todo-main/web/src/pages'
-        )
+        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
 
         const pages = processPagesDir(pagesDir)
 
-        expect(pages.length).toEqual(8)
+        expect(pages.length).toEqual(20)
 
-        const adminEditUserPage = pages.find(
-          (page) => page.importName === 'adminEditUserPage'
-        )
-        expect(adminEditUserPage).not.toBeUndefined()
-        expect(adminEditUserPage.importPath).toEqual(
-          importStatementPath(
-            path.join(pagesDir, 'admin/EditUserPage/EditUserPage')
+        const pageNames = [
+          'AboutPage',
+          'BlogPostPage',
+          'ContactUsPage',
+          'FatalErrorPage',
+          'ForgotPasswordPage',
+          'HomePage',
+          'LoginPage',
+          'NotFoundPage',
+          'ProfilePage',
+          'ResetPasswordPage',
+          'SignupPage',
+          'WaterfallPage',
+        ]
+
+        pageNames.forEach((pageName) => {
+          const thisPage = pages.find((page) => page.importName === pageName)
+          expect(thisPage).not.toBeUndefined()
+          expect(thisPage.importPath).toEqual(
+            importStatementPath(path.join(pagesDir, `${pageName}/${pageName}`))
           )
-        )
+        })
 
-        const barPage = pages.find((page) => page.importName === 'BarPage')
-        expect(barPage).not.toBeUndefined()
-        expect(barPage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'BarPage/BarPage'))
-        )
+        const scaffoldPageNames = ['Contact', 'Post']
 
-        const fatalErrorPage = pages.find(
-          (page) => page.importName === 'FatalErrorPage'
-        )
-        expect(fatalErrorPage).not.toBeUndefined()
-        expect(fatalErrorPage.importPath).toEqual(
-          importStatementPath(
-            path.join(pagesDir, 'FatalErrorPage/FatalErrorPage')
+        scaffoldPageNames.forEach((pageName) => {
+          let page = pages.find(
+            (page) => page.importName === `${pageName}Edit${pageName}Page`
           )
-        )
-
-        const fooPage = pages.find((page) => page.importName === 'FooPage')
-        expect(fooPage).not.toBeUndefined()
-        expect(fooPage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'FooPage/FooPage'))
-        )
-
-        const homePage = pages.find((page) => page.importName === 'HomePage')
-        expect(homePage).not.toBeUndefined()
-        expect(homePage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'HomePage/HomePage'))
-        )
-
-        const notFoundPage = pages.find(
-          (page) => page.importName === 'NotFoundPage'
-        )
-        expect(notFoundPage).not.toBeUndefined()
-        expect(notFoundPage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage'))
-        )
-
-        const typeScriptPage = pages.find(
-          (page) => page.importName === 'TypeScriptPage'
-        )
-        expect(typeScriptPage).not.toBeUndefined()
-        expect(typeScriptPage.importPath).toEqual(
-          importStatementPath(
-            path.join(pagesDir, 'TypeScriptPage/TypeScriptPage')
+          expect(page).not.toBeUndefined()
+          expect(page.importPath).toEqual(
+            importStatementPath(
+              path.join(
+                pagesDir,
+                `${pageName}/Edit${pageName}Page/Edit${pageName}Page`
+              )
+            )
           )
-        )
 
-        const privatePage = pages.find(
-          (page) => page.importName === 'PrivatePage'
-        )
-        expect(privatePage).not.toBeUndefined()
-        expect(privatePage.importPath).toEqual(
-          importStatementPath(path.join(pagesDir, 'PrivatePage/PrivatePage'))
-        )
+          page = pages.find(
+            (page) => page.importName === `${pageName}New${pageName}Page`
+          )
+          expect(page).not.toBeUndefined()
+          expect(page.importPath).toEqual(
+            importStatementPath(
+              path.join(
+                pagesDir,
+                `${pageName}/New${pageName}Page/New${pageName}Page`
+              )
+            )
+          )
+
+          page = pages.find(
+            (page) => page.importName === `${pageName}${pageName}Page`
+          )
+          expect(page).not.toBeUndefined()
+          expect(page.importPath).toEqual(
+            importStatementPath(
+              path.join(pagesDir, `${pageName}/${pageName}Page/${pageName}Page`)
+            )
+          )
+
+          page = pages.find(
+            (page) => page.importName === `${pageName}${pageName}sPage`
+          )
+          expect(page).not.toBeUndefined()
+          expect(page.importPath).toEqual(
+            importStatementPath(
+              path.join(
+                pagesDir,
+                `${pageName}/${pageName}sPage/${pageName}sPage`
+              )
+            )
+          )
+        })
       })
     })
 
