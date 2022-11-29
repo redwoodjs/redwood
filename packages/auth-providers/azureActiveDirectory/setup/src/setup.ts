@@ -24,9 +24,12 @@ export const handler = async ({ rwVersion, force: forceArg }: Args) => {
     forceArg,
     provider: 'azureActiveDirectory',
     authDecoderImport:
-      "import { azureActiveDirectoryAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
-    apiPackages: ['@redwoodjs/auth-providers-api'],
-    webPackages: ['@redwoodjs/auth-providers-web', '@azure/msal-browser'],
+      "import { authDecoder } from '@redwoodjs/auth-azure-active-directory-api'",
+    apiPackages: ['@redwoodjs/auth-azure-active-directory-api'],
+    webPackages: [
+      '@redwoodjs/auth-azure-active-directory-web',
+      '@azure/msal-browser',
+    ],
     notes: [
       'You will need to create several environment variables with your Azure',
       'AD config options. Check out web/src/App.{js,tsx} for the variables',
