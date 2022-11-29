@@ -9,8 +9,8 @@ jest.mock('@redwoodjs/telemetry', () => {
 })
 
 test('standard exports', () => {
-  expect(command).toEqual('auth0')
-  expect(description).toMatch(/Auth0/)
+  expect(command).toEqual('azureActiveDirectory')
+  expect(description).toMatch(/Azure Active Directory/)
   expect(typeof builder).toEqual('function')
   expect(typeof handler).toEqual('function')
 })
