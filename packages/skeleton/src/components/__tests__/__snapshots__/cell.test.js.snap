@@ -1,0 +1,477 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From inside the test-project fixture returns the correct cells with a project 1`] = `
+[
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindAuthorQuery($id: Int!) {
+    author: user(id: $id) {
+      email
+      fullName
+    }
+  }
+",
+    "gqlQueryName": "FindAuthorQuery",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/AuthorCell/AuthorCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindBlogPostQuery($id: Int!) {
+    blogPost: post(id: $id) {
+      id
+      title
+      body
+      author {
+        email
+        fullName
+      }
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindBlogPostQuery",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query BlogPostsQuery {
+    blogPosts: posts {
+      id
+      title
+      body
+      author {
+        email
+        fullName
+      }
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "BlogPostsQuery",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindContactById($id: Int!) {
+    contact: contact(id: $id) {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindContactById",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindContacts {
+    contacts {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindContacts",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query EditContactById($id: Int!) {
+    contact: contact(id: $id) {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "EditContactById",
+    "hasEmptyExport": false,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query EditPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "EditPostById",
+    "hasEmptyExport": false,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindPostById",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Post/PostCell/PostCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindPosts {
+    posts {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindPosts",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Post/PostsCell/PostsCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindWaterfallBlogPostQuery($id: Int!) {
+    waterfallBlogPost: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindWaterfallBlogPostQuery",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
+    "warnings": [],
+  },
+]
+`;
+
+exports[`From inside the test-project fixture returns the correct cells without a project 1`] = `
+[
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindAuthorQuery($id: Int!) {
+    author: user(id: $id) {
+      email
+      fullName
+    }
+  }
+",
+    "gqlQueryName": "FindAuthorQuery",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/AuthorCell/AuthorCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindBlogPostQuery($id: Int!) {
+    blogPost: post(id: $id) {
+      id
+      title
+      body
+      author {
+        email
+        fullName
+      }
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindBlogPostQuery",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query BlogPostsQuery {
+    blogPosts: posts {
+      id
+      title
+      body
+      author {
+        email
+        fullName
+      }
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "BlogPostsQuery",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindContactById($id: Int!) {
+    contact: contact(id: $id) {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindContactById",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindContacts {
+    contacts {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindContacts",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query EditContactById($id: Int!) {
+    contact: contact(id: $id) {
+      id
+      name
+      email
+      message
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "EditContactById",
+    "hasEmptyExport": false,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query EditPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "EditPostById",
+    "hasEmptyExport": false,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindPostById",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Post/PostCell/PostCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindPosts {
+    posts {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindPosts",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/Post/PostsCell/PostsCell.tsx",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "gqlQuery": "
+  query FindWaterfallBlogPostQuery($id: Int!) {
+    waterfallBlogPost: post(id: $id) {
+      id
+      title
+      body
+      authorId
+      createdAt
+    }
+  }
+",
+    "gqlQueryName": "FindWaterfallBlogPostQuery",
+    "hasEmptyExport": true,
+    "hasFailureExport": true,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "path": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
+    "warnings": [],
+  },
+]
+`;
