@@ -1766,16 +1766,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:7.20.1":
-  version: 7.20.1
-  resolution: "@babel/runtime-corejs3@npm:7.20.1"
-  dependencies:
-    core-js-pure: ^3.25.1
-    regenerator-runtime: ^0.13.10
-  checksum: 95859391570f788875e4c2d10e56998cff165c81b3366508f7c224cf9358b7cd52cf5c62eebcfb9e1c32f8bb6d6bf2e7658620c4c56d6ab0612aa152e2f0469a
-  languageName: node
-  linkType: hard
-
 "@babel/runtime-corejs3@npm:7.20.6, @babel/runtime-corejs3@npm:^7.10.2, @babel/runtime-corejs3@npm:^7.17.0":
   version: 7.20.6
   resolution: "@babel/runtime-corejs3@npm:7.20.6"
@@ -7411,7 +7401,7 @@ __metadata:
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
     "@babel/cli": 7.19.3
-    "@babel/runtime-corejs3": 7.20.1
+    "@babel/runtime-corejs3": 7.20.6
     "@esbuild-plugins/node-globals-polyfill": 0.1.1
     "@redwoodjs/internal": 3.2.0
     "@vitejs/plugin-react": 2.2.0
@@ -27550,7 +27540,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.10, regenerator-runtime@npm:^0.13.11, regenerator-runtime@npm:^0.13.7":
+"regenerator-runtime@npm:^0.13.11, regenerator-runtime@npm:^0.13.7":
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: 12b069dc774001fbb0014f6a28f11c09ebfe3c0d984d88c9bced77fdb6fedbacbca434d24da9ae9371bfbf23f754869307fb51a4c98a8b8b18e5ef748677ca24
