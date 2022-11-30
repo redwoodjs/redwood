@@ -15,7 +15,6 @@ export async function builder(yargs) {
     setupAuthCustomCommand,
     setupAuthDbAuthCommand,
     setupAuthEthereumCommand,
-    setupAuthFirebaseCommand,
     setupAuthGoTrueCommand,
     setupAuthMagicLinkCommand,
     setupAuthNetlifyCommand,
@@ -24,6 +23,9 @@ export async function builder(yargs) {
     setupAuthSupabaseCommand,
     setupAuthSupertokensCommand,
   } = await import('@redwoodjs/auth-providers-setup')
+  const { setupAuthFirebaseCommand } = await import(
+    '@redwoodjs/auth-firebase-setup'
+  )
 
   // Don't forget to update test-project setup if you change something here
   const printExperimentalWarning = async (argv, yargs) => {
