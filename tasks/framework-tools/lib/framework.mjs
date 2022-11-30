@@ -99,33 +99,6 @@ export async function frameworkPackagesFiles(
   return fileList
 }
 
-export function frameworkPackagesNamesToPaths(
-  packages = frameworkPkgJsonFiles()
-) {
-  const packageNamesToPaths = packages.reduce(
-    (packageNamesToPaths, packageFile) => {
-      let packageJson
-
-      try {
-        packageJson = JSON.parse(fs.readFileSync(packageFile))
-      } catch (e) {
-        throw new Error(packageFile + ' is not a valid package.json file.')
-      }
-
-      if (!packageJson.name) {
-        return packageNamesToPaths
-      }
-
-      packageNamesToPaths[packageJson.name] = path.dirname(packageFile)
-
-      return packageNamesToPaths
-    },
-    {}
-  )
-
-  return packageNamesToPaths
-}
-
 /**
  * Returns execute files for `@redwoodjs` packages.
  **/
