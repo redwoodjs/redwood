@@ -99,7 +99,7 @@ export async function builder(yargs) {
     ],
     ['@redwoodjs/auth-custom-setup', 'setupAuthCustomCommand'],
     ['@redwoodjs/auth-netlify-setup', 'setupAuthNetlifyCommand'],
-    ['@redwoodjs/auth-firebase-setup', 'setupAuthFirebaseCommand']
+    ['@redwoodjs/auth-firebase-setup', 'setupAuthFirebaseCommand'],
   ]) {
     await addSetupCommand(module, namedExport)
   }
