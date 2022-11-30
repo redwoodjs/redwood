@@ -9,22 +9,28 @@ export const description = 'Generate an auth configuration'
 
 export async function builder(yargs) {
   const {
-    setupAuthAuth0Command,
-    setupAuthAzureActiveDirectoryCommand,
     setupAuthClerkCommand,
-    setupAuthCustomCommand,
     setupAuthDbAuthCommand,
     setupAuthEthereumCommand,
     setupAuthGoTrueCommand,
     setupAuthMagicLinkCommand,
-    setupAuthNetlifyCommand,
     setupAuthNhostCommand,
     setupAuthOktaCommand,
     setupAuthSupabaseCommand,
     setupAuthSupertokensCommand,
   } = await import('@redwoodjs/auth-providers-setup')
+  const { setupAuthAuth0Command } = await import('@redwoodjs/auth-auth0-setup')
+  const { setupAuthAzureActiveDirectoryCommand } = await import(
+    '@redwoodjs/auth-azure-active-directory-setup'
+  )
+  const { setupAuthCustomCommand } = await import(
+    '@redwoodjs/auth-custom-setup'
+  )
   const { setupAuthFirebaseCommand } = await import(
     '@redwoodjs/auth-firebase-setup'
+  )
+  const { setupAuthNetlifyCommand } = await import(
+    '@redwoodjs/auth-netlify-setup'
   )
 
   // Don't forget to update test-project setup if you change something here
