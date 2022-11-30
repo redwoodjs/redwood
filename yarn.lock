@@ -6577,22 +6577,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth-custom-api@workspace:packages/auth-providers/custom/api":
-  version: 0.0.0-use.local
-  resolution: "@redwoodjs/auth-custom-api@workspace:packages/auth-providers/custom/api"
-  dependencies:
-    "@babel/cli": 7.19.3
-    "@babel/core": 7.20.5
-    "@babel/runtime-corejs3": 7.20.6
-    "@types/aws-lambda": 8.10.107
-    core-js: 3.26.1
-    jest: 29.3.1
-    typescript: 4.7.4
-  peerDependencies:
-    "@redwoodjs/api": 3.2.0
-  languageName: unknown
-  linkType: soft
-
 "@redwoodjs/auth-custom-setup@workspace:packages/auth-providers/custom/setup":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-custom-setup@workspace:packages/auth-providers/custom/setup"
