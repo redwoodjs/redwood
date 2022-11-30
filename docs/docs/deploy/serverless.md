@@ -109,3 +109,14 @@ This will take several minutes, so grab your favorite beverage and enjoy your ne
 :::tip Pro tip
 If you get tired of typing `serverless` each time, you can use the much shorter `sls` alias: `yarn rw deploy sls`
 :::
+
+## Troubleshooting
+
+If you happen to see the following error when deploying:
+
+```terminal
+Error:
+No auth.zip file found in the package path you provided.
+```
+
+Make sure that the dev server isn't running, then retry your deploy.
