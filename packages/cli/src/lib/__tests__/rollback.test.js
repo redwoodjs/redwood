@@ -134,7 +134,7 @@ it('prepare clears the stack', async () => {
   rollback.addFunctionToRollback(() => {
     fs.writeFileSync('fake-file', 'fake-content')
   })
-  rollback.prepareRollbackForTasks({})
+  rollback.prepareForRollback({})
   await rollback.executeRollback()
   expect(fs.readFileSync('fake-file')).toBe(undefined)
 })
@@ -167,7 +167,7 @@ it('prepare sets listr2 rollback functions and rollback executes correctly', asy
     { rendererSilent: true }
   )
 
-  rollback.prepareRollbackForTasks(tasks)
+  rollback.prepareForRollback(tasks)
 
   tasks.tasks.forEach((task) => {
     expect(task.tasks.rollback).toBe(rollback.executeRollback)
