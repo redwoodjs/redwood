@@ -6,6 +6,7 @@ import { Program, ExportNamedDeclaration } from '@babel/types'
 export function getProgramFromCode(code: string): Program {
   return parse(code, {
     sourceType: 'unambiguous',
+    // TODO: Check these plugin options are optimal, I doubt they are
     plugins: [
       'jsx',
       'typescript',

@@ -1,6 +1,262 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`From inside the test-project fixture returns the correct cells with a project 1`] = `
+exports[`From within the empty-project fixture returns the correct cells with a project 1`] = `[]`;
+
+exports[`From within the empty-project fixture returns the correct cells without a project 1`] = `[]`;
+
+exports[`From within the example-todo-main fixture returns the correct cells with a project 1`] = `
+[
+  RedwoodCell {
+    "errors": [],
+    "filepath": "/web/src/components/NumTodosCell/NumTodosCell.js",
+    "gqlQuery": "
+  query NumTodosCell_GetCount {
+    todosCount
+  }
+",
+    "gqlQueryName": "NumTodosCell_GetCount",
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "NumTodosCell",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "filepath": "/web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
+    "gqlQuery": "
+  query NumTodosCell_GetCount {
+    todosCount
+  }
+",
+    "gqlQueryName": "NumTodosCell_GetCount",
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "NumTodosTwoCell",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [
+      "No "Success" export found but one is required",
+      "No "QUERY" export found but one is required",
+    ],
+    "filepath": "/web/src/components/TableCell/TableCell.js",
+    "gqlQuery": undefined,
+    "gqlQueryName": undefined,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": false,
+    "hasQueryExport": false,
+    "hasSuccessExport": false,
+    "isValid": false,
+    "name": "TableCell",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "filepath": "/web/src/components/TodoListCell/TodoListCell.tsx",
+    "gqlQuery": "
+  query TodoListCell_GetTodos {
+    todos {
+      id
+      body
+      status
+    }
+  }
+",
+    "gqlQueryName": "TodoListCell_GetTodos",
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "TodoListCell",
+    "warnings": [],
+  },
+]
+`;
+
+exports[`From within the example-todo-main fixture returns the correct cells without a project 1`] = `
+[
+  RedwoodCell {
+    "errors": [],
+    "filepath": "/web/src/components/NumTodosCell/NumTodosCell.js",
+    "gqlQuery": "
+  query NumTodosCell_GetCount {
+    todosCount
+  }
+",
+    "gqlQueryName": "NumTodosCell_GetCount",
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "NumTodosCell",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "filepath": "/web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
+    "gqlQuery": "
+  query NumTodosCell_GetCount {
+    todosCount
+  }
+",
+    "gqlQueryName": "NumTodosCell_GetCount",
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "NumTodosTwoCell",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [
+      "No "Success" export found but one is required",
+      "No "QUERY" export found but one is required",
+    ],
+    "filepath": "/web/src/components/TableCell/TableCell.js",
+    "gqlQuery": undefined,
+    "gqlQueryName": undefined,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": false,
+    "hasQueryExport": false,
+    "hasSuccessExport": false,
+    "isValid": false,
+    "name": "TableCell",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [],
+    "filepath": "/web/src/components/TodoListCell/TodoListCell.tsx",
+    "gqlQuery": "
+  query TodoListCell_GetTodos {
+    todos {
+      id
+      body
+      status
+    }
+  }
+",
+    "gqlQueryName": "TodoListCell_GetTodos",
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "TodoListCell",
+    "warnings": [],
+  },
+]
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct cells with a project 1`] = `
+[
+  RedwoodCell {
+    "errors": [
+      "No "Success" export found but one is required",
+      "No "QUERY" export found but one is required",
+    ],
+    "filepath": "/web/src/components/TableCell/TableCell.js",
+    "gqlQuery": undefined,
+    "gqlQueryName": undefined,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": false,
+    "hasQueryExport": false,
+    "hasSuccessExport": false,
+    "isValid": false,
+    "name": "TableCell",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [
+      "Could not determine the GraphQL query name",
+    ],
+    "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
+    "gqlQuery": "
+  {
+    todos {
+      id
+      body
+      status
+    }
+  }
+",
+    "gqlQueryName": undefined,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "TodoListCell",
+    "warnings": [],
+  },
+]
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct cells without a project 1`] = `
+[
+  RedwoodCell {
+    "errors": [
+      "No "Success" export found but one is required",
+      "No "QUERY" export found but one is required",
+    ],
+    "filepath": "/web/src/components/TableCell/TableCell.js",
+    "gqlQuery": undefined,
+    "gqlQueryName": undefined,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": false,
+    "hasQueryExport": false,
+    "hasSuccessExport": false,
+    "isValid": false,
+    "name": "TableCell",
+    "warnings": [],
+  },
+  RedwoodCell {
+    "errors": [
+      "Could not determine the GraphQL query name",
+    ],
+    "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
+    "gqlQuery": "
+  {
+    todos {
+      id
+      body
+      status
+    }
+  }
+",
+    "gqlQueryName": undefined,
+    "hasEmptyExport": false,
+    "hasFailureExport": false,
+    "hasLoadingExport": true,
+    "hasQueryExport": true,
+    "hasSuccessExport": true,
+    "isValid": true,
+    "name": "TodoListCell",
+    "warnings": [],
+  },
+]
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project 1`] = `
 [
   RedwoodCell {
     "errors": [],
@@ -248,7 +504,7 @@ exports[`From inside the test-project fixture returns the correct cells with a p
 ]
 `;
 
-exports[`From inside the test-project fixture returns the correct cells without a project 1`] = `
+exports[`From within the test-project fixture returns the correct cells without a project 1`] = `
 [
   RedwoodCell {
     "errors": [],

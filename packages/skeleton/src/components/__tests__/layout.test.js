@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { extractCells } from '../cell'
+import { extractLayouts } from '../layout'
 import { RedwoodProject } from '../project'
 
 const FIXTURE_PATH = path.join(
@@ -29,24 +29,24 @@ describe.each([
     process.env.RWJS_CWD = RWJS_CWD
   })
 
-  it('returns the correct cells without a project', () => {
-    const cells = extractCells(undefined)
-    cells.forEach((cell) => {
-      cell.filepath = cell.filepath.substring(PROJECT_PATH.length)
+  it('returns the correct layouts without a project', () => {
+    const layouts = extractLayouts(undefined)
+    layouts.forEach((layout) => {
+      layout.filepath = layout.filepath.substring(PROJECT_PATH.length)
     })
-    expect(cells).toMatchSnapshot()
+    expect(layouts).toMatchSnapshot()
   })
 
-  it('returns the correct cells with a project', () => {
+  it('returns the correct layouts with a project', () => {
     const project = RedwoodProject.getProject({
       pathWithinProject: PROJECT_PATH,
       readFromCache: false,
       insertIntoCache: false,
     })
-    const cells = extractCells(project)
-    cells.forEach((cell) => {
-      cell.filepath = cell.filepath.substring(PROJECT_PATH.length)
+    const layouts = extractLayouts(project)
+    layouts.forEach((layout) => {
+      layout.filepath = layout.filepath.substring(PROJECT_PATH.length)
     })
-    expect(cells).toMatchSnapshot()
+    expect(layouts).toMatchSnapshot()
   })
 })

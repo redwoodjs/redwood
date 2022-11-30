@@ -10,7 +10,7 @@ jest.mock('../../../../lib', () => {
 
 jest.mock('@redwoodjs/skeleton', () => {
   return {
-    getCells: () => [{ graphqlQueryName: 'AlreadyDefinedQueryName' }],
+    extractCells: () => [{ graphqlQueryName: 'AlreadyDefinedQueryName' }],
   }
 })
 

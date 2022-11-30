@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From within the empty-project fixture returns the correct routers without a project 1`] = `
+[
+  RedwoodRouter {
+    "errors": [],
+    "filepath": "/web/src/Routes.tsx",
+    "name": "Routes",
+    "routes": [],
+    "warnings": [],
+  },
+]
+`;
+
+exports[`From within the example-todo-main fixture returns the correct routers without a project 1`] = `
+[
+  RedwoodRouter {
+    "errors": [],
+    "filepath": "/web/src/Routes.js",
+    "name": "Routes",
+    "routes": [],
+    "warnings": [],
+  },
+]
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct routers without a project 1`] = `
+[
+  RedwoodRouter {
+    "errors": [],
+    "filepath": "/web/src/Routes.js",
+    "name": "Routes",
+    "routes": [],
+    "warnings": [],
+  },
+]
+`;
+
+exports[`From within the test-project fixture returns the correct routers without a project 1`] = `
+[
+  RedwoodRouter {
+    "errors": [],
+    "filepath": "/web/src/Routes.tsx",
+    "name": "Routes",
+    "routes": [],
+    "warnings": [],
+  },
+]
+`;

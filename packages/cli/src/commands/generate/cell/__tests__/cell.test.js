@@ -7,7 +7,7 @@ import * as cell from '../cell'
 
 jest.mock('@redwoodjs/skeleton', () => {
   return {
-    getCells: () => [{ graphqlQueryName: 'AlreadyDefinedQueryName' }],
+    extractCells: () => [{ graphqlQueryName: 'AlreadyDefinedQueryName' }],
   }
 })
 

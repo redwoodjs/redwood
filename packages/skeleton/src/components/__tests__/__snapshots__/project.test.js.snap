@@ -1,525 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`From inside the test-project fixture full project is correct with a path provided 1`] = `
-RedwoodProject {
-  "cells": [
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/AuthorCell/AuthorCell.tsx",
-      "gqlQuery": "
-  query FindAuthorQuery($id: Int!) {
-    author: user(id: $id) {
-      email
-      fullName
-    }
-  }
-",
-      "gqlQueryName": "FindAuthorQuery",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "AuthorCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/BlogPostCell/BlogPostCell.tsx",
-      "gqlQuery": "
-  query FindBlogPostQuery($id: Int!) {
-    blogPost: post(id: $id) {
-      id
-      title
-      body
-      author {
-        email
-        fullName
-      }
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindBlogPostQuery",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "BlogPostCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
-      "gqlQuery": "
-  query BlogPostsQuery {
-    blogPosts: posts {
-      id
-      title
-      body
-      author {
-        email
-        fullName
-      }
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "BlogPostsQuery",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "BlogPostsCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Contact/ContactCell/ContactCell.tsx",
-      "gqlQuery": "
-  query FindContactById($id: Int!) {
-    contact: contact(id: $id) {
-      id
-      name
-      email
-      message
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindContactById",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "ContactCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
-      "gqlQuery": "
-  query FindContacts {
-    contacts {
-      id
-      name
-      email
-      message
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindContacts",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "ContactsCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
-      "gqlQuery": "
-  query EditContactById($id: Int!) {
-    contact: contact(id: $id) {
-      id
-      name
-      email
-      message
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "EditContactById",
-      "hasEmptyExport": false,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "EditContactCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Post/EditPostCell/EditPostCell.tsx",
-      "gqlQuery": "
-  query EditPostById($id: Int!) {
-    post: post(id: $id) {
-      id
-      title
-      body
-      authorId
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "EditPostById",
-      "hasEmptyExport": false,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "EditPostCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Post/PostCell/PostCell.tsx",
-      "gqlQuery": "
-  query FindPostById($id: Int!) {
-    post: post(id: $id) {
-      id
-      title
-      body
-      authorId
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindPostById",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "PostCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Post/PostsCell/PostsCell.tsx",
-      "gqlQuery": "
-  query FindPosts {
-    posts {
-      id
-      title
-      body
-      authorId
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindPosts",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "PostsCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
-      "gqlQuery": "
-  query FindWaterfallBlogPostQuery($id: Int!) {
-    waterfallBlogPost: post(id: $id) {
-      id
-      title
-      body
-      authorId
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindWaterfallBlogPostQuery",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "WaterfallBlogPostCell",
-      "warnings": [],
-    },
-  ],
-  "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project",
-  "name": "test-project",
-  "type": "typescript",
-}
-`;
-
-exports[`From inside the test-project fixture full project is correct without a path provided 1`] = `
-RedwoodProject {
-  "cells": [
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/AuthorCell/AuthorCell.tsx",
-      "gqlQuery": "
-  query FindAuthorQuery($id: Int!) {
-    author: user(id: $id) {
-      email
-      fullName
-    }
-  }
-",
-      "gqlQueryName": "FindAuthorQuery",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "AuthorCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/BlogPostCell/BlogPostCell.tsx",
-      "gqlQuery": "
-  query FindBlogPostQuery($id: Int!) {
-    blogPost: post(id: $id) {
-      id
-      title
-      body
-      author {
-        email
-        fullName
-      }
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindBlogPostQuery",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "BlogPostCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
-      "gqlQuery": "
-  query BlogPostsQuery {
-    blogPosts: posts {
-      id
-      title
-      body
-      author {
-        email
-        fullName
-      }
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "BlogPostsQuery",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "BlogPostsCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Contact/ContactCell/ContactCell.tsx",
-      "gqlQuery": "
-  query FindContactById($id: Int!) {
-    contact: contact(id: $id) {
-      id
-      name
-      email
-      message
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindContactById",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "ContactCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
-      "gqlQuery": "
-  query FindContacts {
-    contacts {
-      id
-      name
-      email
-      message
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindContacts",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "ContactsCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
-      "gqlQuery": "
-  query EditContactById($id: Int!) {
-    contact: contact(id: $id) {
-      id
-      name
-      email
-      message
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "EditContactById",
-      "hasEmptyExport": false,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "EditContactCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Post/EditPostCell/EditPostCell.tsx",
-      "gqlQuery": "
-  query EditPostById($id: Int!) {
-    post: post(id: $id) {
-      id
-      title
-      body
-      authorId
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "EditPostById",
-      "hasEmptyExport": false,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "EditPostCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Post/PostCell/PostCell.tsx",
-      "gqlQuery": "
-  query FindPostById($id: Int!) {
-    post: post(id: $id) {
-      id
-      title
-      body
-      authorId
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindPostById",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "PostCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/Post/PostsCell/PostsCell.tsx",
-      "gqlQuery": "
-  query FindPosts {
-    posts {
-      id
-      title
-      body
-      authorId
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindPosts",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "PostsCell",
-      "warnings": [],
-    },
-    RedwoodCell {
-      "errors": [],
-      "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
-      "gqlQuery": "
-  query FindWaterfallBlogPostQuery($id: Int!) {
-    waterfallBlogPost: post(id: $id) {
-      id
-      title
-      body
-      authorId
-      createdAt
-    }
-  }
-",
-      "gqlQueryName": "FindWaterfallBlogPostQuery",
-      "hasEmptyExport": true,
-      "hasFailureExport": true,
-      "hasLoadingExport": true,
-      "hasQueryExport": true,
-      "hasSuccessExport": true,
-      "isValid": true,
-      "name": "WaterfallBlogPostCell",
-      "warnings": [],
-    },
-  ],
-  "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project",
-  "name": "test-project",
-  "type": "typescript",
-}
-`;
-
-exports[`From inside the test-project fixture project is correct with a path provided 1`] = `
+exports[`From within the empty-project fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
   "cells": undefined,
-  "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project",
-  "name": "test-project",
+  "errors": [],
+  "filepath": "",
+  "layouts": undefined,
+  "name": "empty-project",
+  "pages": undefined,
+  "routers": undefined,
+  "sides": undefined,
   "type": "typescript",
+  "warnings": [],
 }
 `;
 
-exports[`From inside the test-project fixture project is correct without a path provided 1`] = `
+exports[`From within the example-todo-main fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
   "cells": undefined,
-  "filepath": "/home/josh/Documents/Development/redwood/redwood/__fixtures__/test-project",
-  "name": "test-project",
+  "errors": [],
+  "filepath": "",
+  "layouts": undefined,
+  "name": "example-todo-main",
+  "pages": undefined,
+  "routers": undefined,
+  "sides": undefined,
   "type": "typescript",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture Minimal project matches expectation 1`] = `
+RedwoodProject {
+  "cells": undefined,
+  "errors": [],
+  "filepath": "",
+  "layouts": undefined,
+  "name": "example-todo-main-with-errors",
+  "pages": undefined,
+  "routers": undefined,
+  "sides": undefined,
+  "type": "javascript",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture Minimal project matches expectation 1`] = `
+RedwoodProject {
+  "cells": undefined,
+  "errors": [],
+  "filepath": "",
+  "layouts": undefined,
+  "name": "test-project",
+  "pages": undefined,
+  "routers": undefined,
+  "sides": undefined,
+  "type": "typescript",
+  "warnings": [],
 }
 `;

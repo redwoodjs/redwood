@@ -1,2 +1,2 @@
-export * from './components/project'
-export { getCells } from './components/cell'
+export { RedwoodProject } from './components/project'
+export { extractCells } from './components/cell'

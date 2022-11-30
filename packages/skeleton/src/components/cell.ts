@@ -6,11 +6,12 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getNamedExports, getProgramFromCode } from '../lib/ast'
 import { getGraphQLQueryName } from '../lib/gql'
 
-import { RedwoodProject } from './project'
+import { RedwoodSkeleton } from './base'
+import type { RedwoodProject } from './project'
 
-export class RedwoodCell {
-  readonly filepath: string
-  readonly name: string
+export class RedwoodCell extends RedwoodSkeleton {
+  warnings: string[] = []
+  errors: string[] = []
 
   readonly hasQueryExport: boolean
 
@@ -24,12 +25,8 @@ export class RedwoodCell {
 
   readonly isValid: boolean
 
-  readonly warnings: string[] = []
-  readonly errors: string[] = []
-
   constructor(filepath: string) {
-    this.filepath = filepath
-    this.name = path.parse(this.filepath).name
+    super(filepath)
 
     const code = fs.readFileSync(this.filepath, { encoding: 'utf8', flag: 'r' })
     const ast = getProgramFromCode(code)
@@ -78,6 +75,7 @@ export class RedwoodCell {
         }
         return false
       })[0]
+      // Note: [0] should exist since this.hasQueryExport
 
       if (
         graphqlExport.declaration &&
@@ -108,25 +106,40 @@ export class RedwoodCell {
             )
             break
         }
+      } else {
+        this.errors.push('Could not process the GraphQL variable')
       }
     }
 
     // Determine if the cell is valid
     this.isValid = this.hasQueryExport && this.hasSuccessExport
   }
+
+  // Diagnostics
+
+  getStatistics(): string {
+    throw new Error('Method not implemented.')
+  }
 }
 
-export function getCell(cellPath: string): RedwoodCell {
-  return new RedwoodCell(cellPath)
+export function extractCell(filepath: string): RedwoodCell {
+  return new RedwoodCell(filepath)
 }
 
-export function getCells(project: RedwoodProject | null = null): RedwoodCell[] {
+export function extractCells(
+  project: RedwoodProject | undefined = undefined
+): RedwoodCell[] {
   const cells: RedwoodCell[] = []
 
   const componentsPath = project
     ? getPaths(project.filepath).web.components
     : getPaths().web.components
 
+  if (!fs.existsSync(componentsPath)) {
+    return cells
+  }
+
+  // TODO: Confirm this the condition to detect a cell
   // Cells must be defined within a file which ends with `Cell.{js, jsx, tsx}`
   const getCellFiles = (directory: string) => {
     const cellFiles: string[] = []
@@ -148,7 +161,7 @@ export function getCells(project: RedwoodProject | null = null): RedwoodCell[] {
 
   const cellFiles = getCellFiles(componentsPath)
   cellFiles.forEach((cellPath) => {
-    cells.push(getCell(cellPath))
+    cells.push(extractCell(cellPath))
   })
 
   return cells
