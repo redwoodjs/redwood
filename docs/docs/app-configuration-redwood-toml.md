@@ -200,6 +200,89 @@ const configureFastify = async (fastify, options) => {
 }
 ```
 
+##### How to Configure Fastify to Accept File Uploads
+
+If you try to POST file content to the api-server such as images to pdfs, you may see the following error from Fastify:
+
+```json
+{
+    "statusCode": 400,
+    "code": "FST_ERR_CTP_INVALID_CONTENT_LENGTH",
+    "error": "Bad Request",
+    "message": "Request body size did not match Content-Length"
+}
+```
+
+Natively, [Fastify only supports](https://www.fastify.io/docs/latest/Reference/ContentTypeParser/) 'application/json' and 'text/plain' content types.
+
+RedwoodJS automatically configures `application/x-www-form-urlencoded` and  `multipart/form-data` as part of the api-server setup.
+
+If you want to support other content types, you'll need to to configure Fastify for each of your desired content types.
+
+You can do this using Fastify's `addContentTypeParser` in the api side server configuration.
+
+For example, to support image file uploads you'd tell fastify to allow `/^image\/.*/` content types.
+
+```js
+fastify.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
+  payload.on('end', () => {
+    done()
+  })
+})
+```
+
+The above `/^image\/.*/` allows all image MIME or content types.
+
+If you want to allow just png and jpeg, then your regular expression `image/png` or `image/jpeg` content types (see a list of [image MIME types](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types)).
+
+You can support multiple content types:
+
+```js
+fastify.addContentTypeParser(['image/png', 'image/jpeg'], (req, payload, done) => {
+  payload.on('end', () => {
+    done()
+  })
+})
+```
+
+Now, Fastify and the api-server will support POSTs with those content types from being handled by a function and the file content can be accessed on the `event.body`.
+
+for example, if you had a function called `upload` then you could POST an image to the api-server:
+
+```terminal
+curl --location --request POST 'http://localhost:8911/upload' \
+--form 'image=@"/path/to/my/image/web/public/favicon.png"' \
+--header 'Content-Type: image/png'
+```
+
+And log the `event.body` output:
+
+```terminal
+api | 17:38:49 🌲 request completed 0ms
+api | 17:38:49 🐛 body
+api | 🗒 Custom
+api | "--------------------------e66d9a27b7c2b271\r\nContent-Disposition: attachment; name=\"image\"; filename=\"favicon.png\"\r\nContent-Type: image/png\r\n\r\n�PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR\u0000\u0000\u0000 \u0000\u0000\u0000<data trimmed for docs...>`�\r\n--------------------------e66d9a27b7c2b271--\r\n"
+
+and even see the header info
+
+```
+api |   "httpMethod": "POST",
+api |   "headers": {
+api |     "host": "localhost:8911",
+api |     "user-agent": "curl/7.79.1",
+api |     "accept": "*/*",
+api |     "content-length": "1931",
+api |     "content-type": "image/png; boundary=------------------------9587576b8d5c247b"
+```
+
+which you could use the only permit uploads smaller than a certain size by checking the `content-length` or the `content-type` to permit certain image types.
+
+:::important
+Note that Fastify file uploads only work in a serverful deploy where your application serves the api-server.
+
+Serverless functions with Netlify or Vercel do not use this Fastify configuration. In addition, serverless functions have limitations on memory and execution time that do not lend themselves to handling file uploads of any practical size.
+:::
+
 #### How to Configure a Fastify plugin for the web side
 
 If you're running the web side using `yarn rw serve`, you can configure plugins like [@fastify/etag](https://github.com/fastify/fastify-etag) to register HTTP Etags.
