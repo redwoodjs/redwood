@@ -277,6 +277,8 @@ api |     "content-type": "image/png; boundary=------------------------9587576b8
 
 which you could use the only permit uploads smaller than a certain size by checking the `content-length` or the `content-type` to permit certain image types.
 
+Please refer to this list of [Common MIME types](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) you may want to support.
+
 :::important
 Note that Fastify file uploads only work in a serverful deploy where your application serves the api-server.
 
