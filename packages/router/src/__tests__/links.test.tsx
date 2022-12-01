@@ -60,12 +60,12 @@ describe('<NavLink />', () => {
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
   })
 
-  it('receives active class on the a pathname when we are on a sub page', () => {
+  it('receives active class on the pathname when we are on a sub page', () => {
     const mockLocation = createDummyLocation('/users/1')
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" to={`/users`}>
+        <NavLink activeClassName="activeTest" matchChildren to={`/users`}>
           Dunder Mifflin
         </NavLink>
       </LocationProvider>
