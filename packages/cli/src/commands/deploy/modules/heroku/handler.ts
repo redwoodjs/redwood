@@ -1,92 +1,44 @@
+/* eslint-disable */
+import fs from 'fs'
+import path from 'path'
 import process from 'process'
-import rdl from 'readline'
 
-import { colors, getPaths } from '../../../../lib'
+import { getPaths } from '../../../../lib'
 
-import { checkSystemRequirements } from './checks'
-import { IHerokuContext, IYargs } from './interfaces'
-import { Logger } from './logger'
-import {
-  authHerokuTask,
-  copyHerokuTemplatesTask,
-  configureDeploymentTask,
-  createHerokuAppTask,
-  nukeHerokuAppTask,
-} from './setup'
-
-import { SPINNER_ANIMATIONS } from './spinners'
+import { authHerokuTask } from './auth'
+import { systemRequirementsTask } from './checks'
+import { createHerokuAppTask } from './configure'
+import { IYargs, IHerokuContext } from './interfaces'
+import { Logger } from './stdio'
 
 export async function herokuHandler(yargs: IYargs) {
   try {
-    const s = spinner('Setting up heroku deployment')
-    const context = _createContext(yargs)
-    // s.setPrompt('Checking system requirements...')
-    // s.prompt()
-    // await checkSystemRequirements()
-    // s.setPrompt('Authenticating with Heroku...')
-    // s.prompt()
-    // await authHerokuTask()
-    // s.setPrompt('Copying templates...')
-    // s.prompt()
-    // await copyHerokuTemplatesTask(context)
-    // s.setPrompt('Configuring deployment...')
-    // const configuredContext = await configureDeploymentTask(context)
-    // s.setPrompt('Creating Heroku app...')
-    // s.prompt()
-    // await createHerokuAppTask(configuredContext)
-    // s.setPrompt('Deploying to Heroku...')
-    // s.prompt()
-    // await nukeHerokuAppTask(configuredContext)
-    // s.close()
+    const ctx = _createHerokuContext(yargs)
+    await systemRequirementsTask()
+    await copyHerokuTemplatesTask(ctx)
+    await authHerokuTask(ctx)
+    await createHerokuAppTask(ctx)
   } catch (err: any) {
-    console.error(colors.error(err.message))
+    Logger.error(err.message)
     process.exit(1)
   }
 }
 
-function _createContext(yargs: IYargs): IHerokuContext {
+async function copyHerokuTemplatesTask({
+  paths,
+}: IHerokuContext): Promise<void> {
+  fs.copyFileSync(
+    path.join(__dirname, 'templates', 'app.json.template'),
+    path.join(paths.base, 'app.json')
+  )
+}
+
+function _createHerokuContext(yargs: IYargs): IHerokuContext {
+  const paths = getPaths()
+  const app = path.basename(paths.base)
   return {
-    paths: getPaths(),
-    logger: new Logger(yargs.debug),
-    defaults: yargs.defaults,
-    nuke: yargs.nuke,
+    ...yargs,
+    appName: yargs.app || app,
+    paths,
   }
-}
-
-class Spinner {
-  _spinner: rdl.Interface
-  constructor() {
-    this._spinner = rdl.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    })
-  }
-
-  private spin() {
-    
-  }
-}
-
-
-// creates a simple spinner with changing text
-function spinner(message: string) {
-  const s = rdl.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  })
-  ;(async () => {
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      for (const animation of SPINNER_ANIMATIONS['growVertical'].frames) {
-        s.setPrompt(`${animation} ${message}`)
-        s.prompt()
-        await sleep(100)
-      }
-    }
-  })()
-  return s
-}
-
-function sleep(time: number) {
-  return new Promise((resolve) => setTimeout(resolve, time))
 }

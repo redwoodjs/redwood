@@ -1,26 +1,24 @@
-import { binDoesExist, hasRosetta, systemInfo } from './command'
+import { HEROKU_ERRORS } from './interfaces'
+import { Logger, spawn } from './stdio'
 
-export const HEROKU_ERRORS = {
-  NOT_OSX: 'Only OSX is supported',
-  IS_WINDOWS: 'Windows is not supported at this time',
-  NO_HOMEBREW: 'Homebrew is required to install Heroku',
-  NO_ROSETTA: 'Rosetta is required to run Heroku on Apple Silicon',
-  NOT_LOGGED_IN: 'Heroku authentication failed',
-}
-
-export async function checkSystemRequirements(): Promise<void> {
+export async function systemRequirementsTask(): Promise<void> {
+  Logger.out('Checking system requirements...')
   if (process.platform === 'win32') {
     throw new Error(HEROKU_ERRORS.IS_WINDOWS)
   }
 
-  const [os, arch] = await systemInfo()
-  if (os !== 'Darwin') {
-    throw new Error(HEROKU_ERRORS.NOT_OSX)
+  const { stdout: uname = '' } = await spawn('uname -m -s')
+  const [os, processor] = uname.split(' ')
+  if (os !== 'Darwin' || processor !== 'x86_64') {
+    throw new Error(HEROKU_ERRORS.NO_SUPPORT)
   }
 
-  if (arch !== 'x86_64' && !(await hasRosetta())) {
-    throw new Error(HEROKU_ERRORS.NO_ROSETTA)
-  }
+  await _checkForHeroku()
+}
 
-  await binDoesExist('heroku')
+async function _checkForHeroku(): Promise<void> {
+  const { stdout: hasDefaultBin } = await spawn(`command -v heroku`)
+  if (!hasDefaultBin) {
+    throw new Error(HEROKU_ERRORS.NO_HEROKU)
+  }
 }
