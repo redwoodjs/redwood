@@ -213,15 +213,13 @@ If you try to POST file content to the api-server such as images to pdfs, you ma
 }
 ```
 
-Natively, [Fastify only supports](https://www.fastify.io/docs/latest/Reference/ContentTypeParser/) 'application/json' and 'text/plain' content types.
+That's because [Fastify only supports](https://www.fastify.io/docs/latest/Reference/ContentTypeParser/) `application/json` and `text/plain` content types natively.
 
-RedwoodJS automatically configures `application/x-www-form-urlencoded` and  `multipart/form-data` as part of the api-server setup.
+While RedwoodJS automatically configures `application/x-www-form-urlencoded` and  `multipart/form-data` as part of the api-server setup, if you want to support other content types (likes images or pdfs), you'll need to configure Fastify to support each of your desired content types.
 
-If you want to support other content types, you'll need to to configure Fastify for each of your desired content types.
+You can use Fastify's `addContentTypeParser` in the api side server configure Fastify function to permit uploads of the content/MIME types your application needs.
 
-You can do this using Fastify's `addContentTypeParser` in the api side server configuration.
-
-For example, to support image file uploads you'd tell fastify to allow `/^image\/.*/` content types.
+For example, to support image file uploads you'd tell Fastify to allow `/^image\/.*/` content types.
 
 ```js
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
@@ -240,11 +238,11 @@ const configureFastify = async (fastify, options) => {
 }
 ```
 
-The above `/^image\/.*/` allows all image MIME or content types.
+The above `/^image\/.*/` regular expression allows all image MIME or content types because [they start with "image"](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
 
 If you want to allow just png and jpeg, then your regular expression `image/png` or `image/jpeg` content types (see a list of [image MIME types](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types)).
 
-You can support multiple content types:
+You can support multiple content types in an array:
 
 ```js
 fastify.addContentTypeParser(['image/png', 'image/jpeg'], (req, payload, done) => {
@@ -256,7 +254,7 @@ fastify.addContentTypeParser(['image/png', 'image/jpeg'], (req, payload, done) =
 
 Now, Fastify and the api-server will support POSTs with those content types from being handled by a function and the file content can be accessed on the `event.body`.
 
-for example, if you had a function called `upload` then you could POST an image to the api-server:
+For example, if you had a function called `upload` then you could POST an image to the api-server:
 
 ```terminal
 curl --location --request POST 'http://localhost:8911/upload' \
