@@ -269,6 +269,7 @@ api | 17:38:49 🌲 request completed 0ms
 api | 17:38:49 🐛 body
 api | 🗒 Custom
 api | "--------------------------e66d9a27b7c2b271\r\nContent-Disposition: attachment; name=\"image\"; filename=\"favicon.png\"\r\nContent-Type: image/png\r\n\r\n�PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR\u0000\u0000\u0000 \u0000\u0000\u0000<data trimmed for docs...>`�\r\n--------------------------e66d9a27b7c2b271--\r\n"
+```
 
 and even see the header info
 
