@@ -1,7 +1,6 @@
 export { authDecoder as clerkAuthDecoder } from './clerk/decoder'
 export { authDecoder as dbAuthAuthDecoder } from './dbAuth/decoder'
 export { authDecoder as ethereumAuthDecoder } from './ethereum/decoder'
-export { authDecoder as firebaseAuthDecoder } from './firebase/decoder'
 export { authDecoder as goTrueAuthDecoder } from './goTrue/decoder'
 export { authDecoder as magicLinkAuthDecoder } from './magicLink/decoder'
 export { authDecoder as nhostAuthDecoder } from './nhost/decoder'

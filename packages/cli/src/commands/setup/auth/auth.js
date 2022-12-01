@@ -12,7 +12,6 @@ export async function builder(yargs) {
     setupAuthClerkCommand,
     setupAuthDbAuthCommand,
     setupAuthEthereumCommand,
-    setupAuthFirebaseCommand,
     setupAuthGoTrueCommand,
     setupAuthMagicLinkCommand,
     setupAuthNhostCommand,
@@ -66,7 +65,6 @@ export async function builder(yargs) {
     .command(setupAuthClerkCommand)
     .command(setupAuthDbAuthCommand)
     .command(setupAuthEthereumCommand)
-    .command(setupAuthFirebaseCommand)
     .command(setupAuthGoTrueCommand)
     .command(setupAuthMagicLinkCommand)
     .command(setupAuthNhostCommand)
@@ -100,6 +98,7 @@ export async function builder(yargs) {
     ],
     ['@redwoodjs/auth-custom-setup', 'setupAuthCustomCommand'],
     ['@redwoodjs/auth-netlify-setup', 'setupAuthNetlifyCommand'],
+    ['@redwoodjs/auth-firebase-setup', 'setupAuthFirebaseCommand'],
   ]) {
     await addSetupCommand(module, namedExport)
   }

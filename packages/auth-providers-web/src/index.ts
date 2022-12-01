@@ -1,7 +1,6 @@
 export { createClerkAuth } from './clerk/clerk'
 export { createDbAuth } from './dbAuth/dbAuth'
 export { createEthereumAuth } from './ethereum/ethereum'
-export { createFirebaseAuth } from './firebase/firebase'
 export { createGoTrueAuth } from './goTrue/goTrue'
 export { createMagicLinkAuth } from './magicLink/magicLink'
 export { createNhostAuth } from './nhost/nhost'
