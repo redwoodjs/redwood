@@ -1,11 +1,2 @@
 [web]
   apiUrl = "/.netlify/functions"
-  port = 8910
-  apiProxyPath = "/api/functions"
-
-[api]
-  port = 8911
-  [api.paths]
-  functions = './api/src/functions'
-  graphql = './api/src/graphql'
-  generated = './api/generated'
