@@ -65,7 +65,6 @@ export async function builder(yargs) {
     .command(setupAuthClerkCommand)
     .command(setupAuthDbAuthCommand)
     .command(setupAuthEthereumCommand)
-    .command(setupAuthFirebaseCommand)
     .command(setupAuthGoTrueCommand)
     .command(setupAuthMagicLinkCommand)
     .command(setupAuthNhostCommand)
