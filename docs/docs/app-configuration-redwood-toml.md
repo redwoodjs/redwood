@@ -200,7 +200,7 @@ const configureFastify = async (fastify, options) => {
 }
 ```
 
-##### How to Configure Fastify to Accept File Uploads
+### How to Configure Fastify to Accept File Uploads
 
 If you try to POST file content to the api-server such as images to pdfs, you may see the following error from Fastify:
 
@@ -224,11 +224,20 @@ You can do this using Fastify's `addContentTypeParser` in the api side server co
 For example, to support image file uploads you'd tell fastify to allow `/^image\/.*/` content types.
 
 ```js
-fastify.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
-  payload.on('end', () => {
-    done()
-  })
-})
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastify = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
+
+    fastify.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
+      payload.on('end', () => {
+        done()
+      })
+    })
+  }
+
+  return fastify
+}
 ```
 
 The above `/^image\/.*/` allows all image MIME or content types.
