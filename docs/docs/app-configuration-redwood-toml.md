@@ -287,8 +287,7 @@ which you could use the only permit uploads smaller than a certain size by check
 
 Please refer to this list of [Common MIME types](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) you may want to support.
 
-:::important
-Note that Fastify file uploads only work in a serverful deploy where your application serves the api-server.
+:::important Note that Fastify file uploads only work in a serverful deploy where your application serves the api-server.
 
 Serverless functions with Netlify or Vercel do not use this Fastify configuration. In addition, serverless functions have limitations on memory and execution time that do not lend themselves to handling file uploads of any practical size.
 :::
