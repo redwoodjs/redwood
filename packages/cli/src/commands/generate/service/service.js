@@ -64,6 +64,10 @@ export const scenarioFieldValue = (field) => {
     default: {
       if (field.kind === 'enum' && field.enumValues[0]) {
         return field.enumValues[0].dbName || field.enumValues[0].name
+      } else {
+        throw new Error(
+          `The field '${field.name}' uses an unsupported scalar type: ${field.type}`
+        )
       }
     }
   }
@@ -268,6 +272,10 @@ export const fieldsToUpdate = async (model) => {
         ) {
           const enumVal = field.enumValues[field.enumValues.length - 1]
           newValue = enumVal.dbName || enumVal.name
+        } else {
+          throw new Error(
+            `The field '${field.name}' of model '${modelName}' uses an unsupported scalar type: ${field.type}`
+          )
         }
         break
       }
