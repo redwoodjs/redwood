@@ -66,4 +66,18 @@ export default class RedisClient extends BaseClient {
 
     return this.client?.set(key, JSON.stringify(value), setOptions)
   }
+
+  async del(key: string) {
+    if (!this.client) {
+      await this.connect()
+    }
+
+    // Redis client returns 0 or 1, so convert to true/false
+    const result = await this.client?.del([key])
+    if (result === 1) {
+      return true
+    } else {
+      return false
+    }
+  }
 }
