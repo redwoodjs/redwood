@@ -124,10 +124,12 @@ export const matchPath = (
     typeMatchingRoute = typeMatchingRoute.replace(match, `(${typeRegexp})`)
   }
 
+  const matchRegex = matchChildRoutes
+    ? new RegExp(`^${typeMatchingRoute}/.+$`, 'g')
+    : new RegExp(`^${typeMatchingRoute}$`, 'g')
+
   // Does the `pathname` match the route?
-  const matches = [
-    ...pathname.matchAll(new RegExp(`^${typeMatchingRoute}$`, 'g')),
-  ]
+  const matches = [...pathname.matchAll(matchRegex)]
 
   if (matchChildRoutes) {
     const matchesWithRoutes = [
