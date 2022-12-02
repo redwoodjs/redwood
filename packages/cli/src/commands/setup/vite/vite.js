@@ -164,11 +164,13 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
+        ...addWebPackages(['@redwoodjs/vite']),
         title: 'Adding @redwoodjs/vite dependency...',
-        task: () => {
-          return addWebPackages('@redwoodjs/vite')
+        skip: () => {
+          if (!addPackage) {
+            return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dependency on the web workspace'
+          }
         },
-        skip: () => !addPackage,
       },
       {
         title: 'One more thing...',

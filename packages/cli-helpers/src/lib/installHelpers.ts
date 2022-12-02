@@ -1,15 +1,9 @@
 import execa from 'execa'
 
-export const addWebPackages = (webPackages: string[], rwVersion: string) => ({
+export const addWebPackages = (webPackages: string[]) => ({
   title: 'Adding required web packages...',
   task: async () => {
-    const args = [
-      'workspace',
-      'web',
-      'add',
-      ...webPackages,
-      `@redwoodjs/auth@${rwVersion}`,
-    ]
+    const args = ['workspace', 'web', 'add', ...webPackages]
     await execa('yarn', args)
   },
 })

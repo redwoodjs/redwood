@@ -107,7 +107,7 @@ export const standardAuthHandler = async ({
       generateAuthApiFiles(basedir, provider, force, webAuthn),
       addAuthConfigToWeb(basedir, provider, webAuthn),
       addAuthConfigToGqlApi(authDecoderImport),
-      addWebPackages(webPackages, rwVersion),
+      addWebPackages([...webPackages, `@redwoodjs/auth@${rwVersion}`]),
       addApiPackages(apiPackages),
       installPackages,
       extraTask,
