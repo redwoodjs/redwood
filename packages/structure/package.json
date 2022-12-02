@@ -30,9 +30,9 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.1",
+    "@babel/runtime-corejs3": "7.20.6",
     "@iarna/toml": "2.2.5",
-    "@prisma/internals": "4.6.1",
+    "@prisma/internals": "4.7.0",
     "@redwoodjs/internal": "3.2.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
-    "@babel/core": "7.20.2",
+    "@babel/core": "7.20.5",
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.186",
     "@types/lru-cache": "5.1.1",

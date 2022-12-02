@@ -9,22 +9,16 @@ export const description = 'Generate an auth configuration'
 
 export async function builder(yargs) {
   const {
-    setupAuthAuth0Command,
-    setupAuthAzureActiveDirectoryCommand,
     setupAuthClerkCommand,
-    setupAuthCustomCommand,
     setupAuthDbAuthCommand,
     setupAuthEthereumCommand,
-    setupAuthFirebaseCommand,
     setupAuthGoTrueCommand,
     setupAuthMagicLinkCommand,
-    setupAuthNetlifyCommand,
     setupAuthNhostCommand,
     setupAuthOktaCommand,
     setupAuthSupabaseCommand,
     setupAuthSupertokensCommand,
   } = await import('@redwoodjs/auth-providers-setup')
-
   // Don't forget to update test-project setup if you change something here
   const printExperimentalWarning = async (argv, yargs) => {
     if (!argv.warn) {
@@ -58,7 +52,7 @@ export async function builder(yargs) {
     }
   }
 
-  yargs
+  const setupAuthCommand = yargs
     .middleware([printExperimentalWarning])
     .demandCommand()
     .epilogue(
@@ -67,18 +61,45 @@ export async function builder(yargs) {
         'https://redwoodjs.com/docs/cli-commands#setup-auth'
       )}`
     )
-    .command(setupAuthAuth0Command)
-    .command(setupAuthAzureActiveDirectoryCommand)
+
     .command(setupAuthClerkCommand)
-    .command(setupAuthCustomCommand)
     .command(setupAuthDbAuthCommand)
     .command(setupAuthEthereumCommand)
-    .command(setupAuthFirebaseCommand)
     .command(setupAuthGoTrueCommand)
     .command(setupAuthMagicLinkCommand)
-    .command(setupAuthNetlifyCommand)
     .command(setupAuthNhostCommand)
     .command(setupAuthOktaCommand)
     .command(setupAuthSupabaseCommand)
     .command(setupAuthSupertokensCommand)
+
+  async function addSetupCommand(module, namedExport) {
+    let commandModule
+
+    try {
+      commandModule = await import(module)
+    } catch (e) {
+      // Since these are plugins, it's ok if they can't be imported because they're not installed.
+      if (e.code === 'MODULE_NOT_FOUND') {
+        return
+      }
+      throw e
+    }
+
+    if (commandModule) {
+      setupAuthCommand.command(commandModule[namedExport])
+    }
+  }
+
+  for (const [module, namedExport] of [
+    ['@redwoodjs/auth-auth0-setup', 'setupAuthAuth0Command'],
+    [
+      '@redwoodjs/auth-azure-active-directory-setup',
+      'setupAuthAzureActiveDirectoryCommand ',
+    ],
+    ['@redwoodjs/auth-custom-setup', 'setupAuthCustomCommand'],
+    ['@redwoodjs/auth-netlify-setup', 'setupAuthNetlifyCommand'],
+    ['@redwoodjs/auth-firebase-setup', 'setupAuthFirebaseCommand'],
+  ]) {
+    await addSetupCommand(module, namedExport)
+  }
 }
