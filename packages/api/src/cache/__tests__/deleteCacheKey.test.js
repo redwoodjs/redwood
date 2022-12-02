@@ -10,7 +10,6 @@ describe('deleteCacheKey', () => {
 
     await deleteCacheKey('test')
 
-    // returns existing cached value, not the one that was just set
     expect(client.storage['test']).toEqual(undefined)
   })
 
@@ -22,7 +21,6 @@ describe('deleteCacheKey', () => {
 
     const result = await deleteCacheKey('test')
 
-    // returns existing cached value, not the one that was just set
     expect(result).toEqual(true)
   })
 
@@ -34,7 +32,6 @@ describe('deleteCacheKey', () => {
 
     const result = await deleteCacheKey('foobar')
 
-    // returns existing cached value, not the one that was just set
     expect(result).toEqual(false)
   })
 })
