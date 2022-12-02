@@ -6592,7 +6592,7 @@ __metadata:
     html-webpack-plugin: 5.5.0
     jest: 29.3.1
     lodash.escaperegexp: 4.1.2
-    mini-css-extract-plugin: 2.6.1
+    mini-css-extract-plugin: 2.7.1
     nodemon: 2.0.20
     null-loader: 4.0.1
     react-refresh: 0.14.0
@@ -22767,14 +22767,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.6.1":
-  version: 2.6.1
-  resolution: "mini-css-extract-plugin@npm:2.6.1"
+"mini-css-extract-plugin@npm:2.7.1":
+  version: 2.7.1
+  resolution: "mini-css-extract-plugin@npm:2.7.1"
   dependencies:
     schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 4de5c1163fcb4ea9a7cb96c97141c41a8d46940677931db5a60c2bafc5389ada56fa29533d79ea7d4aec8462e9d39db0cb43c31d9d1d5402bdfa3acb9dea896b
+  checksum: 75480b044c529a52b350780437a0d754b581f779fa530c2b2833cf9d977a3cfbf9359fd8e00abde48ca0ef34aaefe5edd9239b7b34f69e295e0d4263382370ec
   languageName: node
   linkType: hard
 
