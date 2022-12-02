@@ -73,6 +73,6 @@ export default class RedisClient extends BaseClient {
     }
 
     // Redis client returns 0 or 1, so convert to true/false manually
-    return !!this.client?.del([key])
+    return !!(await this.client?.del([key]))
   }
 }
