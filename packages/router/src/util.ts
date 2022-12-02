@@ -110,7 +110,7 @@ export const matchPath = (
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
   const allParamTypes = { ...coreParamTypes, ...paramTypes }
-  let typeMatchingRoute = route
+  let typeMatchingRoute = route.replace(/\/$/, '')
 
   // Map all params from the route to their type `match` regexp to create a
   // "type-matching route" regexp
@@ -125,45 +125,40 @@ export const matchPath = (
   }
 
   const matchRegex = matchChildRoutes
-    ? new RegExp(`^${typeMatchingRoute}/.+$`, 'g')
+    ? new RegExp(`^${typeMatchingRoute}(\/.*)?$`, 'g')
     : new RegExp(`^${typeMatchingRoute}$`, 'g')
 
   // Does the `pathname` match the route?
   const matches = [...pathname.matchAll(matchRegex)]
 
-  if (matchChildRoutes) {
-    const matchesWithRoutes = [
-      ...pathname.matchAll(new RegExp(`^${typeMatchingRoute}/.+$`, 'g')),
-    ]
-
-    return { match: matchesWithRoutes.length > 0, params: {} }
-  }
-
   if (matches.length === 0) {
     return { match: false }
   }
-
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
-  const params = providedParams.reduce<Record<string, unknown>>(
-    (acc, value, index) => {
-      const [name, transformName] = routeParams[index]
-      const typeInfo = allParamTypes[transformName as SupportedRouterParamTypes]
+  if (routeParams.length > 0) {
+    const params = providedParams.reduce<Record<string, unknown>>(
+      (acc, value, index) => {
+        const [name, transformName] = routeParams[index]
+        const typeInfo =
+          allParamTypes[transformName as SupportedRouterParamTypes]
 
-      let transformedValue: string | unknown = value
-      if (typeof typeInfo?.parse === 'function') {
-        transformedValue = typeInfo.parse(value)
-      }
+        let transformedValue: string | unknown = value
+        if (typeof typeInfo?.parse === 'function') {
+          transformedValue = typeInfo.parse(value)
+        }
 
-      return {
-        ...acc,
-        [name]: transformedValue,
-      }
-    },
-    {}
-  )
+        return {
+          ...acc,
+          [name]: transformedValue,
+        }
+      },
+      {}
+    )
+    return { match: true, params }
+  }
 
-  return { match: true, params }
+  return { match: true }
 }
 
 /**

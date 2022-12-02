@@ -225,6 +225,20 @@ describe('<NavLink />', () => {
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
   })
 
+  it('does NOT receive active class on a different path that starts with the same word', () => {
+    const mockLocation = createDummyLocation('/users-settings')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink activeClassName="activeTest" matchChildren to={`/users`}>
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
+  })
+
   it('does NOT receive active class on different path', () => {
     const mockLocation = createDummyLocation('/staples')
 
