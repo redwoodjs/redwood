@@ -78,9 +78,10 @@ export const handler = async ({ force, verbose, addPackage }) => {
       {
         title: 'Updating DevFatalError Page import...',
         task: (_ctx, task) => {
-          const fatalErrorPagePath = `${
-            getPaths().web.pages
-          }/FatalErrorPage/FatalErrorPage.${ts ? 'tsx' : 'js'}`
+          const fatalErrorPagePath = path.join(
+            getPaths().web.pages,
+            `FatalErrorPage/FatalErrorPage.${ts ? 'tsx' : 'js'}`
+          )
 
           if (!fs.existsSync(fatalErrorPagePath)) {
             task.skip('No DevFatalError page found')

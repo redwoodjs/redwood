@@ -7,7 +7,7 @@ import redwoodPreset from '@redwoodjs/vite'
  * @type {import('vite').UserConfig}
  */
 const viteConfig: UserConfig = {
-  ...redwoodPreset(),
+  plugins: [redwoodPreset()],
 }
 
 export default defineConfig(viteConfig)
