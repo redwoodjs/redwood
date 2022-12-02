@@ -119,12 +119,12 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: 'Creating new entry point in `web/src/index.{jsx,tsx}`...',
+        title: 'Creating new entry point in `web/src/entry-client.jsx`...',
         task: () => {
-          // @NOTE: needs to be JSX/TSX!
+          // Keep it as JSX for now
           const entryPointFile = path.join(
             getPaths().web.src,
-            `index.${ts ? 'tsx' : 'jsx'}`
+            `entry-client.jsx`
           )
           const content = fs
             .readFileSync(
@@ -140,27 +140,6 @@ export const handler = async ({ force, verbose, addPackage }) => {
           return writeFile(entryPointFile, content, {
             overwriteExisting: force,
           })
-        },
-      },
-      {
-        title: 'Adding script tag to `web/src/index.html`...',
-        task: (_ctx, task) => {
-          const indexHtmlPath = path.join(getPaths().web.src, 'index.html')
-
-          const content = fs.readFileSync(indexHtmlPath, 'utf-8')
-
-          if (!content.includes('<script type="module" src="index.jsx">')) {
-            const withScriptInsert = content.replace(
-              '</head>',
-              '<script type="module" src="index.jsx"></script>\n</head>'
-            )
-
-            return writeFile(indexHtmlPath, withScriptInsert, {
-              overwriteExisting: true,
-            })
-          } else {
-            task.skip('Already configured')
-          }
         },
       },
       {

@@ -1,4 +1,4 @@
-import { readFile as fsReadFile } from 'fs'
+import { readFile as fsReadFile, existsSync } from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 
@@ -26,6 +26,17 @@ export default function redwoodPluginVite() {
   return [
     {
       name: 'redwood-plugin-vite',
+      transformIndexHtml: (html: string) => {
+        if (existsSync(path.join(redwoodPaths.web.src, 'entry-client.jsx'))) {
+          return html.replace(
+            '</head>',
+            `<script type="module" src="entry-client.jsx"></script>
+        </head>`
+          )
+        } else {
+          return html
+        }
+      },
       config: (): UserConfig => {
         return {
           root: redwoodPaths.web.src,
