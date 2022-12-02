@@ -11,7 +11,7 @@ import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../lib'
+import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
@@ -93,16 +93,24 @@ export const handler = async ({
     side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
-        await execa(
-          `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-            '@redwoodjs/core/config/webpack.production.js'
-          )}`,
-          {
+        if (getConfig().web.bundler === 'vite') {
+          await execa(`yarn cross-env NODE_ENV=production vite build`, {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
             cwd: rwjsPaths.web.base,
-          }
-        )
+          })
+        } else {
+          await execa(
+            `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
+              '@redwoodjs/core/config/webpack.production.js'
+            )}`,
+            {
+              stdio: verbose ? 'inherit' : 'pipe',
+              shell: true,
+              cwd: rwjsPaths.web.base,
+            }
+          )
+        }
 
         console.log('Creating 200.html...')
 
