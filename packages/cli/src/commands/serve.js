@@ -3,22 +3,22 @@ import path from 'path'
 
 import terminalLink from 'terminal-link'
 
-import {
-  apiCliOptions,
-  webCliOptions,
-  commonOptions,
-  apiServerHandler,
-  webServerHandler,
-  bothServerHandler,
-} from '@redwoodjs/api-server'
-
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
-export const builder = (yargs) => {
+export const builder = async (yargs) => {
+  const {
+    apiCliOptions,
+    webCliOptions,
+    commonOptions,
+    apiServerHandler,
+    webServerHandler,
+    bothServerHandler,
+  } = await import('@redwoodjs/api-server')
+
   yargs
     .usage('usage: $0 <side>')
     .command({
