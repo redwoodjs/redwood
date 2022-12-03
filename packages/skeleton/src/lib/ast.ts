@@ -1,9 +1,8 @@
 import fs from 'fs'
 
 import { parse } from '@babel/parser'
-import { Program, ExportNamedDeclaration } from '@babel/types'
 
-export function getProgramFromCode(code: string): Program {
+export function getASTFromCode(code: string) {
   return parse(code, {
     sourceType: 'unambiguous',
     // TODO: Check these plugin options are optimal, I doubt they are
@@ -13,16 +12,10 @@ export function getProgramFromCode(code: string): Program {
       'nullishCoalescingOperator',
       'objectRestSpread',
     ],
-  }).program
+  })
 }
 
-export function getProgramFromFile(filePath: string): Program {
+export function getASTFromFile(filePath: string) {
   const code = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' })
-  return getProgramFromCode(code)
-}
-
-export function getNamedExports(program: Program): ExportNamedDeclaration[] {
-  return program.body.filter((node) => {
-    return node.type === 'ExportNamedDeclaration'
-  }) as ExportNamedDeclaration[]
+  return getASTFromCode(code)
 }

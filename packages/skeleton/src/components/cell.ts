@@ -1,9 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
+import type { ExportNamedDeclaration } from '@babel/types'
+
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { getNamedExports, getProgramFromCode } from '../lib/ast'
+import { getASTFromCode } from '../lib/ast'
 import { getGraphQLQueryName } from '../lib/gql'
 
 import { RedwoodSkeleton } from './base'
@@ -29,9 +31,12 @@ export class RedwoodCell extends RedwoodSkeleton {
     super(filepath)
 
     const code = fs.readFileSync(this.filepath, { encoding: 'utf8', flag: 'r' })
-    const ast = getProgramFromCode(code)
+    const program = getASTFromCode(code).program
 
-    const namedExports = getNamedExports(ast)
+    const namedExports = program.body.filter((node) => {
+      return node.type === 'ExportNamedDeclaration'
+    }) as ExportNamedDeclaration[]
+
     const namedExportsNames = namedExports
       .map((node) => {
         if (

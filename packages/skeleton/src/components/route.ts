@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import { ExportDefaultDeclaration, Node } from '@babel/types'
 
-import { getProgramFromCode } from '../lib/ast'
+import { getASTFromCode } from '../lib/ast'
 
 import { RedwoodSkeleton } from './base'
 import type { RedwoodRouter } from './router'
@@ -40,17 +40,15 @@ function extractWebRouterRoutes(router: RedwoodRouter): RedwoodRoute[] {
   const routes: RedwoodRoute[] = []
 
   const code = fs.readFileSync(router.filepath, { encoding: 'utf8', flag: 'r' })
-  const ast = getProgramFromCode(code)
+  const ast = getASTFromCode(code)
 
-  // get the default export
+  // get the default export - hmm tricky since it could be an identifier (as it should be) or maybe it'll be the arrow function directly
 
-  const defaultExport = ast.body.find((node: Node) => {
+  const defaultExport = ast.program.body.find((node: Node) => {
     return node.type === 'ExportDefaultDeclaration'
   }) as ExportDefaultDeclaration | undefined
   if (defaultExport === undefined) {
-    router.errors.push(
-      `Could not find the default export from ${router.filepath}`
-    )
+    router.errors.push('Could not find the default export')
     return []
   }
 
