@@ -15,8 +15,8 @@ export abstract class RedwoodSkeleton implements RedwoodDiagnostics {
 
   public readonly name: string
 
-  constructor(public readonly filepath: string) {
-    this.name = path.parse(this.filepath).name
+  constructor(public readonly filepath: string, name?: string) {
+    this.name = name ?? path.parse(this.filepath).name
   }
 
   abstract getStatistics(): string

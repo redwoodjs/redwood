@@ -1,6 +1,6 @@
 import path from 'path'
 
-// import { RedwoodProject } from '../project'
+import { RedwoodProject } from '../project'
 import { extractRouters } from '../router'
 
 const FIXTURE_PATH = path.join(
@@ -33,20 +33,26 @@ describe.each([
     const routers = extractRouters(undefined)
     routers.forEach((router) => {
       router.filepath = router.filepath.substring(PROJECT_PATH.length)
+      router.routes.forEach((route) => {
+        route.filepath = route.filepath.substring(PROJECT_PATH.length)
+      })
     })
     expect(routers).toMatchSnapshot()
   })
 
-  it.todo('returns the correct routers with a project') //, () => {
-  // const project = RedwoodProject.getProject({
-  //   pathWithinProject: PROJECT_PATH,
-  //   readFromCache: false,
-  //   insertIntoCache: false,
-  // })
-  // const routers = extractRouters(project)
-  // routers.forEach((router) => {
-  //   router.filepath = router.filepath.substring(PROJECT_PATH.length)
-  // })
-  // expect(routers).toMatchSnapshot()
-  // })
+  it('returns the correct routers with a project', () => {
+    const project = RedwoodProject.getProject({
+      pathWithinProject: PROJECT_PATH,
+      readFromCache: false,
+      insertIntoCache: false,
+    })
+    const routers = extractRouters(project)
+    routers.forEach((router) => {
+      router.filepath = router.filepath.substring(PROJECT_PATH.length)
+      router.routes.forEach((route) => {
+        route.filepath = route.filepath.substring(PROJECT_PATH.length)
+      })
+    })
+    expect(routers).toMatchSnapshot()
+  })
 })
