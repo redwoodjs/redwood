@@ -28,6 +28,8 @@ export class RedwoodRoute extends RedwoodSkeleton {
   readonly isNotFound: boolean
   readonly hasParameters: boolean
 
+  readonly isPrivate: boolean
+
   // TODO: Consider a "readonly parameters: something[]" maybe? I guess redwood/router should really be responsible for transforming path into a parameters[]
 
   // TODO: Fix this overly repetitive code...
@@ -104,6 +106,12 @@ export class RedwoodRoute extends RedwoodSkeleton {
 
     // TODO: Improve this detection
     this.hasParameters = this.path?.match(/(.*\{.+\}.*)+/) != null
+
+    // TODO: Implement this
+    this.isPrivate = false
+
+    // TODO: Implement checks
+    // not found page cannot be private, cannot have a path
   }
 
   getPage(): RedwoodPage {
@@ -112,8 +120,8 @@ export class RedwoodRoute extends RedwoodSkeleton {
 
   // Diagnostics
 
-  getStatistics(): string {
-    throw new Error('Method not implemented.')
+  getInformation(): string {
+    return '' // TODO: Implement
   }
 }
 

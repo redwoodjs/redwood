@@ -7,6 +7,7 @@ import { getRootPath } from '../lib/path'
 
 import { RedwoodSkeleton } from './base'
 import { extractCells, RedwoodCell } from './cell'
+import { extractFunctions, RedwoodFunction } from './function'
 import { extractLayouts, RedwoodLayout } from './layout'
 import { extractPages, RedwoodPage } from './page'
 import { extractRouters, RedwoodRouter } from './router'
@@ -31,6 +32,7 @@ export class RedwoodProject extends RedwoodSkeleton {
   private routers?: RedwoodRouter[] | undefined
   private layouts?: RedwoodLayout[] | undefined
   private pages?: RedwoodPage[] | undefined
+  private functions?: RedwoodFunction[] | undefined
 
   public static getProject({
     pathWithinProject = '',
@@ -80,6 +82,7 @@ export class RedwoodProject extends RedwoodSkeleton {
       this.routers = extractRouters(this)
       this.layouts = extractLayouts(this)
       this.pages = extractPages(this)
+      this.functions = extractFunctions(this)
     }
   }
 
@@ -118,13 +121,22 @@ export class RedwoodProject extends RedwoodSkeleton {
     return this.pages === undefined ? extractPages(this) : this.pages
   }
 
-  // Diagnostics
-
-  getStatistics(): string {
-    throw new Error('Method not implemented.')
+  getFunctions(forceExtract = false): RedwoodFunction[] {
+    if (forceExtract) {
+      return extractFunctions(this)
+    }
+    return this.functions === undefined
+      ? extractFunctions(this)
+      : this.functions
   }
 
-  printStatistics(): void {
+  // Diagnostics
+
+  getInformation(): string {
+    return '' // TODO: Implement
+  }
+
+  printInformation(): void {
     throw new Error('Method not implemented.')
   }
 

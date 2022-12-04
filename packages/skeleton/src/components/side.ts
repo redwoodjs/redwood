@@ -23,8 +23,8 @@ export class RedwoodSide extends RedwoodSkeleton {
 
   // Diagnostics
 
-  getStatistics(): string {
-    throw new Error('Method not implemented.')
+  getInformation(): string {
+    return '' // TODO: Implement
   }
 }
 

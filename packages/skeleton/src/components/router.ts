@@ -17,6 +17,11 @@ export class RedwoodRouter extends RedwoodSkeleton {
 
     // TODO: Consider if immediately processing the routes should be optional
     this.routes = extractRoutes(this)
+
+    // TODO: Implement checks
+    // duplicate routes
+    // only one not found page
+    // check a not found page exists
   }
 
   getSide(): RedwoodSide {
@@ -35,8 +40,8 @@ export class RedwoodRouter extends RedwoodSkeleton {
 
   // Diagnostics
 
-  getStatistics(): string {
-    throw new Error('Method not implemented.')
+  getInformation(): string {
+    return '' // TODO: Implement
   }
 }
 

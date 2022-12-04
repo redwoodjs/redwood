@@ -104,7 +104,7 @@ export class RedwoodCell extends RedwoodSkeleton {
               this.gqlQuery = graphQLSource
               this.gqlQueryName = getGraphQLQueryName(this.gqlQuery)
               if (this.gqlQueryName === undefined) {
-                this.errors.push('Could not determine the GraphQL query name')
+                this.warnings.push('Could not determine the GraphQL query name')
               }
             } else {
               this.errors.push(
@@ -123,14 +123,16 @@ export class RedwoodCell extends RedwoodSkeleton {
       }
     }
 
+    // TODO: Idea: Validate the GraphQL query?
+
     // Determine if the cell is valid
     this.isValid = this.hasQueryExport && this.hasSuccessExport
   }
 
   // Diagnostics
 
-  getStatistics(): string {
-    throw new Error('Method not implemented.')
+  getInformation(): string {
+    return '' // TODO: Implement
   }
 }
 

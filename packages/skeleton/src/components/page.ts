@@ -4,7 +4,9 @@ import path from 'path'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { RedwoodSkeleton } from './base'
+import { RedwoodLayout } from './layout'
 import type { RedwoodProject } from './project'
+import { RedwoodRoute } from './route'
 
 export class RedwoodPage extends RedwoodSkeleton {
   warnings: string[] = []
@@ -14,10 +16,16 @@ export class RedwoodPage extends RedwoodSkeleton {
     super(filepath)
   }
 
-  // Diagnostics
-
-  getStatistics(): string {
+  getRoutes(): RedwoodRoute[] {
     throw new Error('Method not implemented.')
+  }
+
+  getLayouts(): RedwoodLayout[] {
+    throw new Error('Method not implemented.')
+  }
+
+  getInformation(): string {
+    return '' // TODO: Implement
   }
 }
 
