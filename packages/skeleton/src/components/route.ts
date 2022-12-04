@@ -2,12 +2,13 @@ import fs from 'fs'
 
 import type { NodePath } from '@babel/core'
 import traverse from '@babel/traverse'
-import type {
-  JSXElement,
-  JSXAttribute,
-  StringLiteral,
-  JSXExpressionContainer,
-  Identifier,
+import type { JSXElement, JSXAttribute } from '@babel/types'
+import {
+  isJSXIdentifier,
+  isJSXAttribute,
+  isStringLiteral,
+  isJSXExpressionContainer,
+  isIdentifier,
 } from '@babel/types'
 
 import { getASTFromCode } from '../lib/ast'
@@ -77,11 +78,12 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
   const ast = getASTFromCode(code)
 
   // Find the <Router>
+  // TODO: Detect multiple <Router> and error about it?
   let routerJSXElementNodePath: NodePath<JSXElement> | undefined
   traverse(ast, {
     JSXElement: (path) => {
       if (
-        path.node.openingElement.name.type === 'JSXIdentifier' &&
+        isJSXIdentifier(path.node.openingElement.name) &&
         path.node.openingElement.name.name === 'Router'
       ) {
         routerJSXElementNodePath = path
@@ -101,7 +103,7 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     {
       JSXElement: (path) => {
         if (
-          path.node.openingElement.name.type === 'JSXIdentifier' &&
+          isJSXIdentifier(path.node.openingElement.name) &&
           path.node.openingElement.name.name === 'Route'
         ) {
           routeJSXElements.push(path.node)
@@ -110,7 +112,6 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     },
     routerJSXElementNodePath.scope
   )
-
   if (routeJSXElements.length === 0) {
     router.warnings.push('No routes were found')
     return []
@@ -126,93 +127,66 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     // name property
     const nameAttribute = routeJSXElement.openingElement.attributes.find(
       (node) => {
-        if (node.type === 'JSXSpreadAttribute') {
-          throw new Error('JSXSpreadAttribute is not handled')
-        }
-        return node.name.name === 'name'
+        return isJSXAttribute(node) && node.name.name === 'name'
       }
-    ) as JSXAttribute
+    ) as JSXAttribute | undefined
     if (nameAttribute) {
-      // TODO: Maybe there is a better way to assert like this?
       // TODO: Must it be a string value?
-      if (
-        nameAttribute.value == null ||
-        nameAttribute.value.type !== 'StringLiteral'
-      ) {
-        errors.push('The name property must have a string value')
+      if (nameAttribute != null && isStringLiteral(nameAttribute.value)) {
+        name = nameAttribute.value.value
       } else {
-        name = (nameAttribute.value as StringLiteral).value
+        errors.push('The name property must have a string value')
       }
     }
 
     // path property
     const pathAttribute = routeJSXElement.openingElement.attributes.find(
       (node) => {
-        if (node.type === 'JSXSpreadAttribute') {
-          throw new Error('JSXSpreadAttribute is not handled')
-        }
-        return node.name.name === 'path'
+        return isJSXAttribute(node) && node.name.name === 'path'
       }
-    ) as JSXAttribute
+    ) as JSXAttribute | undefined
     if (pathAttribute) {
-      // TODO: Maybe there is a better way to assert like this?
       // TODO: Must it be a string value?
-      if (
-        pathAttribute.value == null ||
-        pathAttribute.value.type !== 'StringLiteral'
-      ) {
-        errors.push('The path property must have a string value')
+      if (pathAttribute != null && isStringLiteral(pathAttribute.value)) {
+        path = pathAttribute.value.value
       } else {
-        path = (pathAttribute.value as StringLiteral).value
+        errors.push('The path property must have a string value')
       }
     }
 
     // page property
     const pageAttribute = routeJSXElement.openingElement.attributes.find(
       (node) => {
-        if (node.type === 'JSXSpreadAttribute') {
-          throw new Error('JSXSpreadAttribute is not handled')
-        }
-        return node.name.name === 'page'
+        return isJSXAttribute(node) && node.name.name === 'page'
       }
-    ) as JSXAttribute
+    ) as JSXAttribute | undefined
     if (pageAttribute) {
-      // TODO: Maybe there is a better way to assert like this?
-      // TODO: Must it be a string value?
+      // TODO: What other ways can a Page be pased into the route?
       if (
-        pageAttribute.value == null ||
-        pageAttribute.value.type !== 'JSXExpressionContainer' ||
-        pageAttribute.value.expression.type !== 'Identifier'
+        pageAttribute != null &&
+        isJSXExpressionContainer(pageAttribute.value) &&
+        isIdentifier(pageAttribute.value.expression)
       ) {
-        errors.push('The page property could not be processed')
+        pageName = pageAttribute.value.expression.name
       } else {
-        pageName = (
-          (pageAttribute.value as JSXExpressionContainer)
-            .expression as Identifier
-        ).name
+        errors.push('The page property could not be processed')
       }
     }
 
     // prerender property
     const prerenderAttribute = routeJSXElement.openingElement.attributes.find(
       (node) => {
-        if (node.type === 'JSXSpreadAttribute') {
-          throw new Error('JSXSpreadAttribute is not handled')
-        }
-        return node.name.name === 'prerender'
+        return isJSXAttribute(node) && node.name.name === 'prerender'
       }
-    ) as JSXAttribute
+    ) as JSXAttribute | undefined
     const prerender = prerenderAttribute !== undefined
 
     // notfound property
     const notfoundAttribute = routeJSXElement.openingElement.attributes.find(
       (node) => {
-        if (node.type === 'JSXSpreadAttribute') {
-          throw new Error('JSXSpreadAttribute is not handled')
-        }
-        return node.name.name === 'notfound'
+        return isJSXAttribute(node) && node.name.name === 'notfound'
       }
-    ) as JSXAttribute
+    ) as JSXAttribute | undefined
     const isNotFound = notfoundAttribute !== undefined
 
     const route = new RedwoodRoute(router.filepath, {
