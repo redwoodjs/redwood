@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import chalk from 'chalk'
+
 import { getPaths } from '@redwoodjs/internal/dist/index'
 
 import { getRootPath } from '../lib/path'
@@ -133,19 +135,83 @@ export class RedwoodProject extends RedwoodSkeleton {
   // Diagnostics
 
   getInformation(): string {
-    return '' // TODO: Implement
+    return '' // TODO: Implement, gets the info of all other components too
   }
 
   printInformation(): void {
-    throw new Error('Method not implemented.')
+    console.log(
+      `${chalk.bgCyan('[Info]')}\t${this.name}\t${chalk.dim(this.filepath)}`
+    )
   }
 
-  printWarnings(): void {
-    throw new Error('Method not implemented.')
+  printWarnings(cascade = false): void {
+    if (this.warnings.length > 0) {
+      const titleLine = `${chalk.bgYellow('[Warn]')}\t${this.name} ${chalk.dim(
+        this.filepath
+      )}`
+      const warningLines = this.warnings.map((warning, index) => {
+        return ` (${index + 1}) ${warning}\n`
+      })
+      console.log(titleLine.concat('\n', ...warningLines).trimEnd())
+    }
+    if (cascade) {
+      this.cells?.forEach((cell) => {
+        cell.printWarnings()
+      })
+      this.functions?.forEach((func) => {
+        func.printWarnings()
+      })
+      this.layouts?.forEach((layout) => {
+        layout.printWarnings()
+      })
+      this.pages?.forEach((page) => {
+        page.printWarnings()
+      })
+      this.routers?.forEach((router) => {
+        router.printWarnings()
+        router.routes.forEach((route) => {
+          route.printWarnings()
+        })
+      })
+      this.sides?.forEach((side) => {
+        side.printWarnings()
+      })
+    }
   }
 
-  printErrors(): void {
-    throw new Error('Method not implemented.')
+  printErrors(cascade = false): void {
+    if (this.errors.length > 0) {
+      const titleLine = `${chalk.bgRed('[Error]')}\t${this.name} ${chalk.dim(
+        this.filepath
+      )}`
+      const errorLines = this.errors.map((error, index) => {
+        return ` (${index + 1}) ${error}\n`
+      })
+      console.log(titleLine.concat('\n', ...errorLines).trimEnd())
+    }
+    if (cascade) {
+      this.cells?.forEach((cell) => {
+        cell.printErrors()
+      })
+      this.functions?.forEach((func) => {
+        func.printErrors()
+      })
+      this.layouts?.forEach((layout) => {
+        layout.printErrors()
+      })
+      this.pages?.forEach((page) => {
+        page.printErrors()
+      })
+      this.routers?.forEach((router) => {
+        router.printErrors()
+        router.routes.forEach((route) => {
+          route.printErrors()
+        })
+      })
+      this.sides?.forEach((side) => {
+        side.printErrors()
+      })
+    }
   }
 }
 

@@ -25,20 +25,20 @@ export abstract class RedwoodSkeleton implements RedwoodDiagnostics {
   printInformation(): void {
     const info = this.getInformation()
     if (info) {
-      const titleLine = chalk
-        .bgCyan('[Info]')
-        .concat(' ', this.name, ' ', `${this.filepath}`)
+      const titleLine = `${chalk.bgCyan('[Info]')}\t${this.name}\t${chalk.dim(
+        this.filepath
+      )}`
       console.log(titleLine.concat('\n', info).trimEnd())
     }
   }
 
   printWarnings(): void {
     if (this.warnings.length > 0) {
-      const titleLine = chalk
-        .bgYellow('[Warning]')
-        .concat(' ', this.name, ' ', `${this.filepath}`)
+      const titleLine = `${chalk.bgYellow('[Warn]')}\t${this.name} ${chalk.dim(
+        this.filepath
+      )}`
       const warningLines = this.warnings.map((warning, index) => {
-        return `  (${index + 1}) ${warning}\n`
+        return ` (${index + 1}) ${warning}\n`
       })
       console.log(titleLine.concat('\n', ...warningLines).trimEnd())
     }
@@ -46,11 +46,11 @@ export abstract class RedwoodSkeleton implements RedwoodDiagnostics {
 
   printErrors(): void {
     if (this.errors.length > 0) {
-      const titleLine = chalk
-        .bgRed('[Error]')
-        .concat(' ', this.name, ' ', `${this.filepath}`)
+      const titleLine = `${chalk.bgRed('[Error]')}\t${this.name} ${chalk.dim(
+        this.filepath
+      )}`
       const errorLines = this.errors.map((error, index) => {
-        return `  (${index + 1}) ${error}\n`
+        return ` (${index + 1}) ${error}\n`
       })
       console.log(titleLine.concat('\n', ...errorLines).trimEnd())
     }
