@@ -87,35 +87,35 @@ export class RedwoodProject extends RedwoodSkeleton {
     if (forceExtract) {
       return extractSides(this)
     }
-    return this.sides ?? extractSides(this)
+    return this.sides === undefined ? extractSides(this) : this.sides
   }
 
   getCells(forceExtract = false): RedwoodCell[] {
     if (forceExtract) {
       return extractCells(this)
     }
-    return this.cells ?? extractCells(this)
+    return this.cells === undefined ? extractCells(this) : this.cells
   }
 
   getRouters(forceExtract = false): RedwoodRouter[] {
     if (forceExtract) {
       return extractRouters(this)
     }
-    return this.routers ?? extractRouters(this)
+    return this.routers === undefined ? extractRouters(this) : this.routers
   }
 
   getLayouts(forceExtract = false): RedwoodLayout[] {
     if (forceExtract) {
       return extractLayouts(this)
     }
-    return this.layouts ?? extractLayouts(this)
+    return this.layouts === undefined ? extractLayouts(this) : this.layouts
   }
 
   getPages(forceExtract = false): RedwoodPage[] {
     if (forceExtract) {
       return extractPages(this)
     }
-    return this.pages ?? extractPages(this)
+    return this.pages === undefined ? extractPages(this) : this.pages
   }
 
   // Diagnostics
