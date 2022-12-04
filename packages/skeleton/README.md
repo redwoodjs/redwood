@@ -14,11 +14,11 @@ This package, including the README, is under development at this time.
 ## Structure package deprecation
 This skeleton package will replace the introspection features of the existing structure package which is to be deprecated. Progress of replacing of structure to skeleton is documented below.
 
-### CLI Package (50%)
+### CLI Package (100%)
 1. The check command
     * Structure: Uses the diagnostics functionality to list out redwood errors/warnings.
     * Skeleton: Contains `printWarnings` and `printErrors` functions for each component and for the project as a whole. Using `printWarnings` and `printErrors` from a `RedwoodProject` (which can cascade down all project components) should be able to provide equivalent or greater diagnostic messages to the user.
-    * Complete: No, the `printWarnings` and `printErrors` functions have not been implemented yet as we await a fuller skeleton implementation.
+    * Complete: Yes.
 2. Generator/Destroy commands for obtaining GraphQL query names
     * Structure: Extracts all cells to get a list of current GraphQL query names.
     * Skeleton: Supports extracting all cells and thier GraphQL query names.

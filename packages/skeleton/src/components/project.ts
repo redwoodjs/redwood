@@ -81,10 +81,10 @@ export class RedwoodProject extends RedwoodSkeleton {
     if (full) {
       this.sides = extractSides(this)
       this.cells = extractCells(this)
-      this.routers = extractRouters(this)
       this.layouts = extractLayouts(this)
       this.pages = extractPages(this)
       this.functions = extractFunctions(this)
+      this.routers = extractRouters(this)
     }
   }
 

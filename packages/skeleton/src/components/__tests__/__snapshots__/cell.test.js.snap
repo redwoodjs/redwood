@@ -184,9 +184,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
     "warnings": [],
   },
   RedwoodCell {
-    "errors": [
-      "Could not determine the GraphQL query name",
-    ],
+    "errors": [],
     "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
     "gqlQuery": "
   {
@@ -205,7 +203,9 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
     "hasSuccessExport": true,
     "isValid": true,
     "name": "TodoListCell",
-    "warnings": [],
+    "warnings": [
+      "Could not determine the GraphQL query name",
+    ],
   },
 ]
 `;
@@ -230,9 +230,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
     "warnings": [],
   },
   RedwoodCell {
-    "errors": [
-      "Could not determine the GraphQL query name",
-    ],
+    "errors": [],
     "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
     "gqlQuery": "
   {
@@ -251,7 +249,9 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
     "hasSuccessExport": true,
     "isValid": true,
     "name": "TodoListCell",
-    "warnings": [],
+    "warnings": [
+      "Could not determine the GraphQL query name",
+    ],
   },
 ]
 `;

@@ -9,6 +9,7 @@ import {
   isStringLiteral,
   isJSXExpressionContainer,
   isIdentifier,
+  isJSXElement,
 } from '@babel/types'
 
 import { getASTFromCode } from '../lib/ast'
@@ -30,18 +31,17 @@ export class RedwoodRoute extends RedwoodSkeleton {
 
   readonly isPrivate: boolean
 
-  // TODO: Consider a "readonly parameters: something[]" maybe? I guess redwood/router should really be responsible for transforming path into a parameters[]
-
   // TODO: Fix this overly repetitive code...
-  constructor(filepath: string, routeJSXElement: JSXElement) {
+  constructor(filepath: string, routeJSXElementNodePath: NodePath<JSXElement>) {
     // name property, must be pre-super because we want to pass name to the superclass
     let name
     const nameErrors: string[] = []
-    const nameAttribute = routeJSXElement.openingElement.attributes.find(
-      (node): node is JSXAttribute => {
-        return isJSXAttribute(node) && node.name.name === 'name'
-      }
-    )
+    const nameAttribute =
+      routeJSXElementNodePath.node.openingElement.attributes.find(
+        (node): node is JSXAttribute => {
+          return isJSXAttribute(node) && node.name.name === 'name'
+        }
+      )
     if (nameAttribute) {
       // TODO: Must it be a string value?
       if (nameAttribute != null && isStringLiteral(nameAttribute.value)) {
@@ -55,11 +55,12 @@ export class RedwoodRoute extends RedwoodSkeleton {
     this.errors.push(...nameErrors)
 
     // path property
-    const pathAttribute = routeJSXElement.openingElement.attributes.find(
-      (node) => {
-        return isJSXAttribute(node) && node.name.name === 'path'
-      }
-    ) as JSXAttribute | undefined
+    const pathAttribute =
+      routeJSXElementNodePath.node.openingElement.attributes.find(
+        (node): node is JSXAttribute => {
+          return isJSXAttribute(node) && node.name.name === 'path'
+        }
+      )
     if (pathAttribute) {
       // TODO: Must it be a string value?
       if (pathAttribute != null && isStringLiteral(pathAttribute.value)) {
@@ -70,13 +71,14 @@ export class RedwoodRoute extends RedwoodSkeleton {
     }
 
     // page property
-    const pageAttribute = routeJSXElement.openingElement.attributes.find(
-      (node) => {
-        return isJSXAttribute(node) && node.name.name === 'page'
-      }
-    ) as JSXAttribute | undefined
+    const pageAttribute =
+      routeJSXElementNodePath.node.openingElement.attributes.find(
+        (node): node is JSXAttribute => {
+          return isJSXAttribute(node) && node.name.name === 'page'
+        }
+      )
     if (pageAttribute) {
-      // TODO: What other ways can a Page be pased into the route?
+      // TODO: What other ways can a Page be passed into the route?
       if (
         pageAttribute != null &&
         isJSXExpressionContainer(pageAttribute.value) &&
@@ -89,36 +91,69 @@ export class RedwoodRoute extends RedwoodSkeleton {
     }
 
     // prerender property
-    const prerenderAttribute = routeJSXElement.openingElement.attributes.find(
-      (node): node is JSXAttribute => {
-        return isJSXAttribute(node) && node.name.name === 'prerender'
-      }
-    )
+    const prerenderAttribute =
+      routeJSXElementNodePath.node.openingElement.attributes.find(
+        (node): node is JSXAttribute => {
+          return isJSXAttribute(node) && node.name.name === 'prerender'
+        }
+      )
     this.prerender = prerenderAttribute !== undefined
 
     // notfound property
-    const notfoundAttribute = routeJSXElement.openingElement.attributes.find(
-      (node): node is JSXAttribute => {
-        return isJSXAttribute(node) && node.name.name === 'notfound'
-      }
-    )
+    const notfoundAttribute =
+      routeJSXElementNodePath.node.openingElement.attributes.find(
+        (node): node is JSXAttribute => {
+          return isJSXAttribute(node) && node.name.name === 'notfound'
+        }
+      )
     this.isNotFound = notfoundAttribute !== undefined
 
     // TODO: Improve this detection
     this.hasParameters = this.path?.match(/(.*\{.+\}.*)+/) != null
 
-    // TODO: Implement this
-    this.isPrivate = false
+    let parent = routeJSXElementNodePath.parentPath
+    while (parent.parentPath != null) {
+      if (
+        isJSXElement(parent.node) &&
+        isJSXIdentifier(parent.node.openingElement.name)
+      ) {
+        const wrapperElementName = parent.node.openingElement.name.name
+        if (wrapperElementName === 'Set') {
+          const privateProperty = parent.node.openingElement.attributes.find(
+            (attribute): attribute is JSXAttribute => {
+              return (
+                isJSXAttribute(attribute) && attribute.name.name === 'private'
+              )
+            }
+          )
+          this.isPrivate ||= privateProperty !== undefined
+        } else if (wrapperElementName === 'Private') {
+          this.isPrivate = true
+        } else if (wrapperElementName === 'Router') {
+          break // We're at the top level of the <Router>
+        }
+      }
+      parent = parent.parentPath
+    }
 
-    // TODO: Implement checks
-    // not found page cannot be private, cannot have a path
+    // Assume public if not found to be within a <Private> or <Set private>
+    this.isPrivate ||= false
+
+    // Checks
+
+    if (this.isNotFound) {
+      if (this.isPrivate) {
+        this.errors.push('The notfound page cannot be private')
+      }
+      if (this.path !== undefined) {
+        this.errors.push('The notfound page cannot have a path property')
+      }
+    }
   }
 
   getPage(): RedwoodPage {
     throw new Error(`Method not implemented. PageName: ${this.pageName}`)
   }
-
-  // Diagnostics
 
   getInformation(): string {
     return '' // TODO: Implement
@@ -145,7 +180,6 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
   const ast = getASTFromCode(code)
 
   // Find the <Router>
-  // TODO: Detect multiple <Router> and error about it?
   let routerJSXElementNodePath: NodePath<JSXElement> | undefined
   traverse(ast, {
     JSXElement: (path) => {
@@ -161,10 +195,10 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     router.errors.push('Could not find the Router JSX element')
     return []
   }
+  // TODO: Detect multiple <Router> and error about it?
 
   // Parse the children of <Router>
-
-  const routeJSXElements: JSXElement[] = []
+  const routeJSXElements: NodePath<JSXElement>[] = []
   traverse(
     routerJSXElementNodePath.node,
     {
@@ -173,7 +207,7 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
           isJSXIdentifier(path.node.openingElement.name) &&
           path.node.openingElement.name.name === 'Route'
         ) {
-          routeJSXElements.push(path.node)
+          routeJSXElements.push(path)
         }
       },
     },
@@ -188,7 +222,7 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     routes.push(new RedwoodRoute(router.filepath, routeJSXElement))
   })
 
-  // Check to make sure that the router is exported
+  // TODO: Check to make sure that the router is actually exported
 
   return routes
 }
