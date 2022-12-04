@@ -1,7 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
+import traverse from '@babel/traverse'
 import type { ExportNamedDeclaration } from '@babel/types'
+import {
+  isVariableDeclaration,
+  isVariableDeclarator,
+  isIdentifier,
+} from '@babel/types'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
@@ -31,21 +37,22 @@ export class RedwoodCell extends RedwoodSkeleton {
     super(filepath)
 
     const code = fs.readFileSync(this.filepath, { encoding: 'utf8', flag: 'r' })
-    const program = getASTFromCode(code).program
+    const ast = getASTFromCode(code)
 
-    const namedExports = program.body.filter((node) => {
-      return node.type === 'ExportNamedDeclaration'
-    }) as ExportNamedDeclaration[]
+    const namedExports: ExportNamedDeclaration[] = []
+    traverse(ast, {
+      ExportNamedDeclaration: (path) => {
+        namedExports.push(path.node)
+      },
+    })
 
     const namedExportsNames = namedExports
       .map((node) => {
         if (
-          node.declaration == null ||
-          node.declaration.type !== 'VariableDeclaration'
+          isVariableDeclaration(node.declaration) &&
+          isVariableDeclarator(node.declaration.declarations[0]) &&
+          isIdentifier(node.declaration.declarations[0].id)
         ) {
-          return false
-        }
-        if (node.declaration.declarations[0].id.type === 'Identifier') {
           return node.declaration.declarations[0].id.name
         }
         return false
@@ -68,26 +75,26 @@ export class RedwoodCell extends RedwoodSkeleton {
     if (!this.hasQueryExport) {
       this.errors.push('No "QUERY" export found but one is required')
     } else {
-      const graphqlExport = namedExports.filter((node) => {
+      const graphqlExport = namedExports.find((node) => {
         if (
-          node.declaration == null ||
-          node.declaration.type !== 'VariableDeclaration'
+          node.declaration != null &&
+          isVariableDeclaration(node.declaration) &&
+          isVariableDeclarator(node.declaration.declarations[0]) &&
+          isIdentifier(node.declaration.declarations[0].id)
         ) {
-          return false
-        }
-        if (node.declaration.declarations[0].id.type === 'Identifier') {
           return node.declaration.declarations[0].id.name === 'QUERY'
         }
         return false
-      })[0]
-      // Note: [0] should exist since this.hasQueryExport
+      }) as ExportNamedDeclaration // Note: This should not be undefined given this.hasQueryExport == true
 
       if (
-        graphqlExport.declaration &&
-        graphqlExport.declaration.type === 'VariableDeclaration'
+        graphqlExport.declaration != null &&
+        isVariableDeclaration(graphqlExport.declaration) &&
+        isVariableDeclarator(graphqlExport.declaration.declarations[0]) &&
+        graphqlExport.declaration.declarations[0].init != null
       ) {
         const gqlVariable = graphqlExport.declaration.declarations[0].init
-        switch (gqlVariable?.type) {
+        switch (gqlVariable.type) {
           case 'TaggedTemplateExpression':
             if (gqlVariable.quasi.start && gqlVariable.quasi.end) {
               const graphQLSource = code.substring(
@@ -101,13 +108,13 @@ export class RedwoodCell extends RedwoodSkeleton {
               }
             } else {
               this.errors.push(
-                `Could not extract the GraphQL query from "${gqlVariable?.type}"`
+                `Could not extract the GraphQL query from "${gqlVariable.type}"`
               )
             }
             break
           default:
             this.errors.push(
-              `Could not process the GraphQL query from "${gqlVariable?.type}"`
+              `Could not process the GraphQL query from "${gqlVariable.type}"`
             )
             break
         }
