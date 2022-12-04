@@ -23,8 +23,11 @@ export class RedwoodRoute extends RedwoodSkeleton {
 
   readonly path: string | undefined
   private readonly pageName: string | undefined
-  private readonly prerender: boolean
-  private readonly notfound: boolean
+  readonly prerender: boolean
+  readonly isNotFound: boolean
+
+  // TODO: readonly hasParameters: boolean
+  // TODO: Consider a "readonly parameters: something[]" maybe? I guess redwood/router should really be responsible for transforming path into a parameters[]
 
   constructor(
     filepath: string,
@@ -33,14 +36,14 @@ export class RedwoodRoute extends RedwoodSkeleton {
       name?: string
       pageName?: string
       prerender?: boolean
-      notfound?: boolean
-    } = {}
+      isNotFound?: boolean
+    }
   ) {
     super(filepath, options.name)
     this.path = options.path
     this.pageName = options.pageName
     this.prerender = options.prerender ?? false
-    this.notfound = options.notfound ?? false
+    this.isNotFound = options.isNotFound ?? false
   }
 
   getPage(): RedwoodPage {
@@ -74,7 +77,6 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
   const ast = getASTFromCode(code)
 
   // Find the <Router>
-
   let routerJSXElementNodePath: NodePath<JSXElement> | undefined
   traverse(ast, {
     JSXElement: (path) => {
@@ -211,14 +213,14 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
         return node.name.name === 'notfound'
       }
     ) as JSXAttribute
-    const notfound = notfoundAttribute !== undefined
+    const isNotFound = notfoundAttribute !== undefined
 
     const route = new RedwoodRoute(router.filepath, {
       name,
       path,
       pageName,
       prerender,
-      notfound,
+      isNotFound,
     })
     route.warnings = warnings
     route.errors = errors
