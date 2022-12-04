@@ -10,6 +10,7 @@ exports[`From within the empty-project fixture returns the correct routers with 
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": true,
         "name": "Routes",
         "pageName": "NotFoundPage",
@@ -33,6 +34,7 @@ exports[`From within the empty-project fixture returns the correct routers witho
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": true,
         "name": "Routes",
         "pageName": "NotFoundPage",
@@ -56,6 +58,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "home",
         "pageName": "HomePage",
@@ -66,6 +69,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "typescriptPage",
         "pageName": "TypeScriptPage",
@@ -76,6 +80,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "someOtherPage",
         "pageName": "EditUserPage",
@@ -86,6 +91,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "fooPage",
         "pageName": "FooPage",
@@ -96,6 +102,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "barPage",
         "pageName": "BarPage",
@@ -106,6 +113,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "privatePage",
         "pageName": "PrivatePage",
@@ -116,6 +124,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": true,
         "name": "Routes",
         "pageName": "NotFoundPage",
@@ -139,6 +148,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "home",
         "pageName": "HomePage",
@@ -149,6 +159,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "typescriptPage",
         "pageName": "TypeScriptPage",
@@ -159,6 +170,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "someOtherPage",
         "pageName": "EditUserPage",
@@ -169,6 +181,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "fooPage",
         "pageName": "FooPage",
@@ -179,6 +192,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "barPage",
         "pageName": "BarPage",
@@ -189,6 +203,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "privatePage",
         "pageName": "PrivatePage",
@@ -199,6 +214,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": true,
         "name": "Routes",
         "pageName": "NotFoundPage",
@@ -222,6 +238,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "home",
         "pageName": "HomePage",
@@ -232,6 +249,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "home",
         "pageName": "HomePage",
@@ -242,6 +260,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "something-else",
         "pageName": "DoesNotExist",
@@ -252,6 +271,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "Routes",
         "pageName": "NotFoundPage",
@@ -275,6 +295,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "home",
         "pageName": "HomePage",
@@ -285,6 +306,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "home",
         "pageName": "HomePage",
@@ -295,6 +317,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "something-else",
         "pageName": "DoesNotExist",
@@ -305,6 +328,7 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.js",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "Routes",
         "pageName": "NotFoundPage",
@@ -328,6 +352,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "login",
         "pageName": "LoginPage",
@@ -338,6 +363,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "signup",
         "pageName": "SignupPage",
@@ -348,6 +374,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "forgotPassword",
         "pageName": "ForgotPasswordPage",
@@ -358,6 +385,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "resetPassword",
         "pageName": "ResetPasswordPage",
@@ -368,6 +396,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "newContact",
         "pageName": "ContactNewContactPage",
@@ -378,6 +407,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "editContact",
         "pageName": "ContactEditContactPage",
@@ -388,6 +418,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "contact",
         "pageName": "ContactContactPage",
@@ -398,6 +429,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "contacts",
         "pageName": "ContactContactsPage",
@@ -408,6 +440,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "newPost",
         "pageName": "PostNewPostPage",
@@ -418,6 +451,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "editPost",
         "pageName": "PostEditPostPage",
@@ -428,6 +462,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "post",
         "pageName": "PostPostPage",
@@ -438,6 +473,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "posts",
         "pageName": "PostPostsPage",
@@ -448,6 +484,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "waterfall",
         "pageName": "WaterfallPage",
@@ -458,6 +495,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "profile",
         "pageName": "ProfilePage",
@@ -468,6 +506,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "blogPost",
         "pageName": "BlogPostPage",
@@ -478,6 +517,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "contactUs",
         "pageName": "ContactUsPage",
@@ -488,6 +528,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "about",
         "pageName": "AboutPage",
@@ -498,6 +539,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "home",
         "pageName": "HomePage",
@@ -508,6 +550,7 @@ exports[`From within the test-project fixture returns the correct routers with a
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": true,
         "name": "Routes",
         "pageName": "NotFoundPage",
@@ -531,6 +574,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "login",
         "pageName": "LoginPage",
@@ -541,6 +585,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "signup",
         "pageName": "SignupPage",
@@ -551,6 +596,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "forgotPassword",
         "pageName": "ForgotPasswordPage",
@@ -561,6 +607,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "resetPassword",
         "pageName": "ResetPasswordPage",
@@ -571,6 +618,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "newContact",
         "pageName": "ContactNewContactPage",
@@ -581,6 +629,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "editContact",
         "pageName": "ContactEditContactPage",
@@ -591,6 +640,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "contact",
         "pageName": "ContactContactPage",
@@ -601,6 +651,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "contacts",
         "pageName": "ContactContactsPage",
@@ -611,6 +662,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "newPost",
         "pageName": "PostNewPostPage",
@@ -621,6 +673,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "editPost",
         "pageName": "PostEditPostPage",
@@ -631,6 +684,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "post",
         "pageName": "PostPostPage",
@@ -641,6 +695,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "posts",
         "pageName": "PostPostsPage",
@@ -651,6 +706,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "waterfall",
         "pageName": "WaterfallPage",
@@ -661,6 +717,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "profile",
         "pageName": "ProfilePage",
@@ -671,6 +728,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": true,
         "isNotFound": false,
         "name": "blogPost",
         "pageName": "BlogPostPage",
@@ -681,6 +739,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "contactUs",
         "pageName": "ContactUsPage",
@@ -691,6 +750,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "about",
         "pageName": "AboutPage",
@@ -701,6 +761,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": false,
         "name": "home",
         "pageName": "HomePage",
@@ -711,6 +772,7 @@ exports[`From within the test-project fixture returns the correct routers withou
       RedwoodRoute {
         "errors": [],
         "filepath": "/web/src/Routes.tsx",
+        "hasParameters": false,
         "isNotFound": true,
         "name": "Routes",
         "pageName": "NotFoundPage",

@@ -66,6 +66,7 @@ export function extractRouters(
             .filter((path) => {
               return path.match(/Routes\.(js|jsx|tsx)$/)
             })[0]
+          // TODO: fix: Assumes the router file exists
           routerFiles.push(path.join(side.filepath, 'src', routerFileName))
           break
         default:

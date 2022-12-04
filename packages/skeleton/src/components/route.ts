@@ -26,8 +26,8 @@ export class RedwoodRoute extends RedwoodSkeleton {
   private readonly pageName: string | undefined
   readonly prerender: boolean
   readonly isNotFound: boolean
+  readonly hasParameters: boolean
 
-  // TODO: readonly hasParameters: boolean
   // TODO: Consider a "readonly parameters: something[]" maybe? I guess redwood/router should really be responsible for transforming path into a parameters[]
 
   constructor(
@@ -38,6 +38,7 @@ export class RedwoodRoute extends RedwoodSkeleton {
       pageName?: string
       prerender?: boolean
       isNotFound?: boolean
+      hasParameters?: boolean
     }
   ) {
     super(filepath, options.name)
@@ -45,6 +46,7 @@ export class RedwoodRoute extends RedwoodSkeleton {
     this.pageName = options.pageName
     this.prerender = options.prerender ?? false
     this.isNotFound = options.isNotFound ?? false
+    this.hasParameters = options.hasParameters ?? false
   }
 
   getPage(): RedwoodPage {
@@ -195,6 +197,7 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
       pageName,
       prerender,
       isNotFound,
+      hasParameters: path?.match(/(.*\{.+\}.*)+/) != null, // TODO: Improve this determination
     })
     route.warnings = warnings
     route.errors = errors
