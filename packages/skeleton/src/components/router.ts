@@ -18,10 +18,26 @@ export class RedwoodRouter extends RedwoodSkeleton {
     // TODO: Consider if immediately processing the routes should be optional
     this.routes = extractRoutes(this)
 
-    // TODO: Implement checks
-    // duplicate routes
-    // only one not found page
-    // check a not found page exists
+    // Checks
+
+    const notFoundRoutes = this.routes.filter((route) => {
+      return route.isNotFound
+    })
+    if (notFoundRoutes.length === 0) {
+      this.errors.push('No notfound route detected')
+    } else if (notFoundRoutes.length > 1) {
+      this.errors.push('No more than one notfound route should be present')
+    }
+
+    // Duplicate routes checking
+    const nameOccurences: Record<string, number> = {}
+    this.routes.forEach((route) => {
+      if (route.name in nameOccurences) {
+        this.errors.push(`Multiple routes named ${route.name} are present`)
+      } else {
+        nameOccurences[route.name] = 1
+      }
+    })
   }
 
   getSide(): RedwoodSide {

@@ -51,6 +51,17 @@ export class RedwoodRoute extends RedwoodSkeleton {
       }
     }
 
+    // notfound property, must be pre-super because we want to set the name to notfound
+    const notfoundAttribute =
+      routeJSXElementNodePath.node.openingElement.attributes.find(
+        (node): node is JSXAttribute => {
+          return isJSXAttribute(node) && node.name.name === 'notfound'
+        }
+      )
+    if (notfoundAttribute !== undefined) {
+      name = 'notfound'
+    }
+
     super(filepath, name)
     this.errors.push(...nameErrors)
 
@@ -90,6 +101,9 @@ export class RedwoodRoute extends RedwoodSkeleton {
       }
     }
 
+    // notfound property
+    this.isNotFound = notfoundAttribute !== undefined
+
     // prerender property
     const prerenderAttribute =
       routeJSXElementNodePath.node.openingElement.attributes.find(
@@ -98,15 +112,6 @@ export class RedwoodRoute extends RedwoodSkeleton {
         }
       )
     this.prerender = prerenderAttribute !== undefined
-
-    // notfound property
-    const notfoundAttribute =
-      routeJSXElementNodePath.node.openingElement.attributes.find(
-        (node): node is JSXAttribute => {
-          return isJSXAttribute(node) && node.name.name === 'notfound'
-        }
-      )
-    this.isNotFound = notfoundAttribute !== undefined
 
     // TODO: Improve this detection
     this.hasParameters = this.path?.match(/(.*\{.+\}.*)+/) != null

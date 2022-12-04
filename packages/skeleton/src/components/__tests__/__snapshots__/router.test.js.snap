@@ -13,7 +13,7 @@ exports[`From within the empty-project fixture returns the correct routers with 
         "hasParameters": false,
         "isNotFound": true,
         "isPrivate": false,
-        "name": "Routes",
+        "name": "notfound",
         "pageName": "NotFoundPage",
         "path": undefined,
         "prerender": false,
@@ -38,7 +38,7 @@ exports[`From within the empty-project fixture returns the correct routers witho
         "hasParameters": false,
         "isNotFound": true,
         "isPrivate": false,
-        "name": "Routes",
+        "name": "notfound",
         "pageName": "NotFoundPage",
         "path": undefined,
         "prerender": false,
@@ -135,7 +135,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
         "hasParameters": false,
         "isNotFound": true,
         "isPrivate": false,
-        "name": "Routes",
+        "name": "notfound",
         "pageName": "NotFoundPage",
         "path": undefined,
         "prerender": false,
@@ -232,7 +232,7 @@ exports[`From within the example-todo-main fixture returns the correct routers w
         "hasParameters": false,
         "isNotFound": true,
         "isPrivate": false,
-        "name": "Routes",
+        "name": "notfound",
         "pageName": "NotFoundPage",
         "path": undefined,
         "prerender": false,
@@ -247,7 +247,10 @@ exports[`From within the example-todo-main fixture returns the correct routers w
 exports[`From within the example-todo-main-with-errors fixture returns the correct routers with a project 1`] = `
 [
   RedwoodRouter {
-    "errors": [],
+    "errors": [
+      "No notfound route detected",
+      "Multiple routes named home are present",
+    ],
     "filepath": "/web/src/Routes.js",
     "name": "Routes",
     "routes": [
@@ -308,7 +311,10 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
 exports[`From within the example-todo-main-with-errors fixture returns the correct routers without a project 1`] = `
 [
   RedwoodRouter {
-    "errors": [],
+    "errors": [
+      "No notfound route detected",
+      "Multiple routes named home are present",
+    ],
     "filepath": "/web/src/Routes.js",
     "name": "Routes",
     "routes": [
@@ -595,7 +601,7 @@ exports[`From within the test-project fixture returns the correct routers with a
         "hasParameters": false,
         "isNotFound": true,
         "isPrivate": false,
-        "name": "Routes",
+        "name": "notfound",
         "pageName": "NotFoundPage",
         "path": undefined,
         "prerender": true,
@@ -836,7 +842,7 @@ exports[`From within the test-project fixture returns the correct routers withou
         "hasParameters": false,
         "isNotFound": true,
         "isPrivate": false,
-        "name": "Routes",
+        "name": "notfound",
         "pageName": "NotFoundPage",
         "path": undefined,
         "prerender": true,
