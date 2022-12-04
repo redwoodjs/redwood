@@ -30,23 +30,80 @@ export class RedwoodRoute extends RedwoodSkeleton {
 
   // TODO: Consider a "readonly parameters: something[]" maybe? I guess redwood/router should really be responsible for transforming path into a parameters[]
 
-  constructor(
-    filepath: string,
-    options: {
-      path?: string
-      name?: string
-      pageName?: string
-      prerender?: boolean
-      isNotFound?: boolean
-      hasParameters?: boolean
+  // TODO: Fix this overly repetitive code...
+  constructor(filepath: string, routeJSXElement: JSXElement) {
+    // name property, must be pre-super because we want to pass name to the superclass
+    let name
+    const nameErrors: string[] = []
+    const nameAttribute = routeJSXElement.openingElement.attributes.find(
+      (node): node is JSXAttribute => {
+        return isJSXAttribute(node) && node.name.name === 'name'
+      }
+    )
+    if (nameAttribute) {
+      // TODO: Must it be a string value?
+      if (nameAttribute != null && isStringLiteral(nameAttribute.value)) {
+        name = nameAttribute.value.value
+      } else {
+        nameErrors.push('The name property must have a string value')
+      }
     }
-  ) {
-    super(filepath, options.name)
-    this.path = options.path
-    this.pageName = options.pageName
-    this.prerender = options.prerender ?? false
-    this.isNotFound = options.isNotFound ?? false
-    this.hasParameters = options.hasParameters ?? false
+
+    super(filepath, name)
+    this.errors.push(...nameErrors)
+
+    // path property
+    const pathAttribute = routeJSXElement.openingElement.attributes.find(
+      (node) => {
+        return isJSXAttribute(node) && node.name.name === 'path'
+      }
+    ) as JSXAttribute | undefined
+    if (pathAttribute) {
+      // TODO: Must it be a string value?
+      if (pathAttribute != null && isStringLiteral(pathAttribute.value)) {
+        this.path = pathAttribute.value.value
+      } else {
+        this.errors.push('The path property must have a string value')
+      }
+    }
+
+    // page property
+    const pageAttribute = routeJSXElement.openingElement.attributes.find(
+      (node) => {
+        return isJSXAttribute(node) && node.name.name === 'page'
+      }
+    ) as JSXAttribute | undefined
+    if (pageAttribute) {
+      // TODO: What other ways can a Page be pased into the route?
+      if (
+        pageAttribute != null &&
+        isJSXExpressionContainer(pageAttribute.value) &&
+        isIdentifier(pageAttribute.value.expression)
+      ) {
+        this.pageName = pageAttribute.value.expression.name
+      } else {
+        this.errors.push('The page property could not be processed')
+      }
+    }
+
+    // prerender property
+    const prerenderAttribute = routeJSXElement.openingElement.attributes.find(
+      (node): node is JSXAttribute => {
+        return isJSXAttribute(node) && node.name.name === 'prerender'
+      }
+    )
+    this.prerender = prerenderAttribute !== undefined
+
+    // notfound property
+    const notfoundAttribute = routeJSXElement.openingElement.attributes.find(
+      (node): node is JSXAttribute => {
+        return isJSXAttribute(node) && node.name.name === 'notfound'
+      }
+    )
+    this.isNotFound = notfoundAttribute !== undefined
+
+    // TODO: Improve this detection
+    this.hasParameters = this.path?.match(/(.*\{.+\}.*)+/) != null
   }
 
   getPage(): RedwoodPage {
@@ -120,88 +177,7 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
   }
 
   routeJSXElements.forEach((routeJSXElement) => {
-    let name, path, pageName
-    const warnings: string[] = []
-    const errors: string[] = []
-
-    // TODO: Fix this overly repetitive code...
-
-    // name property
-    const nameAttribute = routeJSXElement.openingElement.attributes.find(
-      (node) => {
-        return isJSXAttribute(node) && node.name.name === 'name'
-      }
-    ) as JSXAttribute | undefined
-    if (nameAttribute) {
-      // TODO: Must it be a string value?
-      if (nameAttribute != null && isStringLiteral(nameAttribute.value)) {
-        name = nameAttribute.value.value
-      } else {
-        errors.push('The name property must have a string value')
-      }
-    }
-
-    // path property
-    const pathAttribute = routeJSXElement.openingElement.attributes.find(
-      (node) => {
-        return isJSXAttribute(node) && node.name.name === 'path'
-      }
-    ) as JSXAttribute | undefined
-    if (pathAttribute) {
-      // TODO: Must it be a string value?
-      if (pathAttribute != null && isStringLiteral(pathAttribute.value)) {
-        path = pathAttribute.value.value
-      } else {
-        errors.push('The path property must have a string value')
-      }
-    }
-
-    // page property
-    const pageAttribute = routeJSXElement.openingElement.attributes.find(
-      (node) => {
-        return isJSXAttribute(node) && node.name.name === 'page'
-      }
-    ) as JSXAttribute | undefined
-    if (pageAttribute) {
-      // TODO: What other ways can a Page be pased into the route?
-      if (
-        pageAttribute != null &&
-        isJSXExpressionContainer(pageAttribute.value) &&
-        isIdentifier(pageAttribute.value.expression)
-      ) {
-        pageName = pageAttribute.value.expression.name
-      } else {
-        errors.push('The page property could not be processed')
-      }
-    }
-
-    // prerender property
-    const prerenderAttribute = routeJSXElement.openingElement.attributes.find(
-      (node) => {
-        return isJSXAttribute(node) && node.name.name === 'prerender'
-      }
-    ) as JSXAttribute | undefined
-    const prerender = prerenderAttribute !== undefined
-
-    // notfound property
-    const notfoundAttribute = routeJSXElement.openingElement.attributes.find(
-      (node) => {
-        return isJSXAttribute(node) && node.name.name === 'notfound'
-      }
-    ) as JSXAttribute | undefined
-    const isNotFound = notfoundAttribute !== undefined
-
-    const route = new RedwoodRoute(router.filepath, {
-      name,
-      path,
-      pageName,
-      prerender,
-      isNotFound,
-      hasParameters: path?.match(/(.*\{.+\}.*)+/) != null, // TODO: Improve this determination
-    })
-    route.warnings = warnings
-    route.errors = errors
-    routes.push(route)
+    routes.push(new RedwoodRoute(router.filepath, routeJSXElement))
   })
 
   // Check to make sure that the router is exported
