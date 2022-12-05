@@ -279,12 +279,13 @@ export function createCell<
 
     // queryRest includes `variables: { ... }`, with any variables returned
     // from beforeQuery
-    // eslint-disable-next-line prefer-const
     let {
+      // eslint-disable-next-line prefer-const
       error,
       loading,
       data,
       // importing client with an alias to avoid naming conflict with `client` prop
+      // eslint-disable-next-line prefer-const
       client: gqlClient,
       ...queryRest
     } = useQuery(query, options)
