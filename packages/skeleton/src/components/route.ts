@@ -16,6 +16,7 @@ import { getASTFromCode } from '../lib/ast'
 
 import { RedwoodSkeleton } from './base'
 import { RedwoodPage } from './page'
+import { RedwoodProject } from './project'
 import type { RedwoodRouter } from './router'
 import { RedwoodSideType } from './side'
 
@@ -157,7 +158,13 @@ export class RedwoodRoute extends RedwoodSkeleton {
   }
 
   getPage(): RedwoodPage | undefined {
-    throw new Error(`Method not implemented. PageName: ${this.pageName}`)
+    return RedwoodProject.getProject({
+      pathWithinProject: this.filepath,
+    })
+      .getPages()
+      .find((page) => {
+        return page.name === this.pageName
+      })
   }
 
   getInformation(): string {
