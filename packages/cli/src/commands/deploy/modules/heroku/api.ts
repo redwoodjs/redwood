@@ -1,38 +1,43 @@
 import type { HerokuApps } from './interfaces'
-import { ISpawnResult } from './interfaces'
 import { spawn, Logger } from './stdio'
 
 export class Heroku {
   static async allApps(): Promise<HerokuApps> {
-    const { stdout } = await spawn('heroku apps --json')
-    return JSON.parse(stdout as string)
+    const output = await spawn('heroku apps --json')
+    return JSON.parse(output)
   }
 
   static async appByName(appName: string): Promise<string> {
-    const { stdout } = await spawn(`heroku apps:info ${appName}`)
-    return stdout || ''
+    return spawn(`heroku apps:info ${appName}`)
   }
 
-  static async createApp(appName: string, opts = {}): Promise<ISpawnResult> {
-    return spawn(`heroku apps:create ${appName}`, opts)
+  static async createApp(appName: string): Promise<string> {
+    const buildpacks =
+      '-b heroku/nodejs -b https://github.com/heroku/heroku-buildpack-nginx'
+    const addons = '--addons heroku-postgresql'
+    const output = await spawn(
+      `heroku apps:create ${addons} ${buildpacks} ${appName}`
+    )
+
+    if (output.includes('already taken')) {
+      return 'already taken'
+    }
+    Logger.out('Heroku app created.')
+    return output?.split(' | ')[0]
   }
 
-  static async deleteApp(appName: string, opts = {}): Promise<void> {
-    await spawn(`heroku apps:destroy ${appName} --confirm ${appName}`, opts)
+  static async deleteApp(appName: string): Promise<void> {
+    await spawn(`heroku apps:destroy ${appName} --confirm ${appName}`)
   }
 
-  static async currentUser(): Promise<string> {
-    const { stdout = '' } = await spawn('heroku auth:whoami')
-    return stdout
+  static async currentUser() {
+    return spawn('heroku auth:whoami')
   }
 
   static async login(): Promise<string> {
-    const { stdout = '' } = await spawn('heroku auth:login', {
-      stdio: 'inherit',
-      reject: true,
-    })
+    const output = await spawn('heroku auth:login')
     const email =
-      stdout.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi) || []
+      output.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi) || []
     return email[0] || ''
   }
 
@@ -44,5 +49,10 @@ export class Heroku {
     Logger.out('Re-authenticating with Heroku...')
     await Heroku.logout()
     return Heroku.login()
+  }
+
+  static async push() {
+    Logger.out('Pushing to Heroku...')
+    await spawn('git push heroku master')
   }
 }

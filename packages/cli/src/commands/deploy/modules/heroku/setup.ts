@@ -10,7 +10,7 @@ export async function copyTemplatesStep(
 ): Promise<IHerokuContext> {
   fs.copyFileSync(
     path.join(__dirname, 'templates', 'app.json.template'),
-    path.join(ctx.appPath?.base || './', 'app.json')
+    path.join(ctx.appPath || './', 'app.json')
   )
   return ctx
 }
@@ -24,7 +24,7 @@ export async function createContextStep(
   return {
     ...ctx,
     appName: _getInitialAppName(ctx.appName, app),
-    appPath: paths,
+    appPath: paths.base,
   }
 }
 

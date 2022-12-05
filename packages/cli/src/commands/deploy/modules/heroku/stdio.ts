@@ -1,39 +1,30 @@
 import rdl from 'readline'
 
+import chalk from 'chalk'
 import execa from 'execa'
 
 import { getPaths } from '../../../../lib'
 
 import type { ISpinnerAnimation } from './interfaces'
-import { ISpawnResult } from './interfaces'
 
-export async function spawn(
-  command: string,
-  opts?: execa.Options
-): Promise<ISpawnResult> {
+export async function spawn(command: string): Promise<string> {
   const [bin, ...args] = command.split(' ')
-  const { stdout, stderr, exitCode }: execa.ExecaReturnValue = await execa(
-    bin,
-    args,
-    {
-      cwd: getPaths().base,
-      reject: false,
-      // if reject is true, stdio needs to inherit to catch the throw
-      cleanup: true,
-      stripFinalNewline: true,
-      ...opts,
-    }
-  )
-  return { stdout, stderr, exitCode }
+  const res = execa.sync(bin, args, {
+    cwd: getPaths().base,
+    cleanup: true,
+    reject: false,
+    stripFinalNewline: true,
+  })
+  return res.stdout || res.stderr
 }
 
 export class Logger {
   static out(msg: string) {
-    process.stdout.write(`🚀 ${msg}\x1b[0G`)
+    process.stdout.write(`🚀 ${chalk.green.bold(msg)}\x1b[0G`)
   }
 
   static error(msg: string) {
-    console.error(`❌ ${msg}`)
+    console.error(`❌ ${chalk.red.bold(msg)}`)
   }
 
   static log(...args: any) {

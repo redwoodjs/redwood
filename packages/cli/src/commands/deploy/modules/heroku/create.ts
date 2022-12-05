@@ -6,19 +6,18 @@ import { Logger } from './stdio'
 export async function createStep(ctx: IHerokuContext): Promise<IHerokuContext> {
   Logger.out('Creating Heroku app...')
   const appName = await Questions.chooseAppName(ctx)
-  return createApp({ ...ctx, appName }, Attempt.FIRST)
+  return tryCreateApp({ ...ctx, appName }, Attempt.FIRST)
 }
 
-async function createApp(
+async function tryCreateApp(
   ctx: IHerokuContext,
   attempt: Attempt
 ): Promise<IHerokuContext> {
   if (attempt === Attempt.FIRST) {
-    const { stderr, stdout } = await Heroku.createApp(ctx.appName)
-    if (stderr?.includes('already taken')) {
-      return createApp(ctx, Attempt.SECOND)
+    const createdApp = await Heroku.createApp(ctx.appName)
+    if (createdApp?.includes('already taken')) {
+      return tryCreateApp(ctx, Attempt.SECOND)
     }
-    const createdApp = stdout?.split(' | ')[0]
     if (!createdApp) {
       throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
     }
@@ -28,29 +27,25 @@ async function createApp(
   const choice = await Questions.nameExistsChooseOption(ctx)
 
   if (choice === 'delete') {
-    await Heroku.deleteApp(ctx.appName, { reject: true })
+    await Heroku.deleteApp(ctx.appName)
+    return _lastTryCreate(ctx, ctx.appName)
   }
 
-  if (choice === 'new' || choice === 'delete') {
+  if (choice === 'new') {
     const newAppName = await Questions.chooseAppName(ctx)
-    const { stdout } = await Heroku.createApp(newAppName, {
-      reject: true,
-      stdout: 'pipe',
-    })
-    const createdApp = stdout?.split(' | ')[0]
-    if (!createdApp) {
-      throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
-    }
-    return {
-      ...ctx,
-      appName: createdApp,
-    }
-  }
-
-  if (choice === 'exit') {
-    Logger.out('Exiting...')
-    process.exit(0)
+    return _lastTryCreate(ctx, newAppName)
   }
 
   throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
+}
+
+async function _lastTryCreate(ctx: IHerokuContext, name: string) {
+  const createdApp = await Heroku.createApp(name)
+  if (!createdApp) {
+    throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
+  }
+  return {
+    ...ctx,
+    appName: createdApp,
+  }
 }

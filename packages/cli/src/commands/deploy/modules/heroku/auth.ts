@@ -6,6 +6,8 @@ import { Logger } from './stdio'
 export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
   Logger.out('Authenticating with Heroku...')
   const currentUser = await Heroku.currentUser()
+  // heroku whoami error message
+  // Error: Invalid credentials provided
   if (currentUser) {
     const email = await _handleAlreadyLoggedIn(ctx, currentUser)
     return {
@@ -13,6 +15,7 @@ export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
       email,
     }
   } else {
+    Logger.out('No Heroku account found... loggin in')
     const email = await Heroku.login()
     if (!email) {
       throw new Error(HEROKU_ERRORS.NOT_LOGGED_IN)
@@ -22,6 +25,7 @@ export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
       email,
     }
   }
+  return ctx
 }
 
 async function _handleAlreadyLoggedIn(

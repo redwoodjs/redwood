@@ -69,12 +69,6 @@ export interface IHerokuApp {
   updated_at: string
   web_url: string
 }
-export interface ISpawnResult {
-  stdout?: string
-  stderr?: string
-  exitCode: number
-  message?: string
-}
 
 export interface ISpinnerAnimation {
   interval: number

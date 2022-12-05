@@ -13,7 +13,7 @@ export async function systemCheckStep(
     throw new Error(HEROKU_ERRORS.IS_WINDOWS)
   }
 
-  const { stdout: uname = '' } = await spawn('uname -m -s')
+  const uname = await spawn('uname -m -s')
   const [os, processor] = uname.split(' ')
   if (os !== 'Darwin' || processor !== 'x86_64') {
     throw new Error(HEROKU_ERRORS.NO_SUPPORT)
@@ -24,7 +24,7 @@ export async function systemCheckStep(
 }
 
 async function _checkForHeroku(): Promise<void> {
-  const { stdout: hasDefaultBin } = await spawn(`command -v heroku`)
+  const hasDefaultBin = await spawn(`command -v heroku`)
   if (!hasDefaultBin) {
     throw new Error(HEROKU_ERRORS.NO_HEROKU)
   }

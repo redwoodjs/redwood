@@ -8,6 +8,7 @@ import {
   copyTemplatesStep,
   createContextStep,
 } from './modules/heroku'
+import { pushStep } from './modules/heroku/push'
 import { Logger } from './modules/heroku/stdio'
 
 export const command = 'heroku'
@@ -45,6 +46,7 @@ const HEROKU_SETUP_STEPS: IHerokuStep[] = [
   authStep,
   copyTemplatesStep,
   createStep,
+  pushStep,
 ]
 
 async function _runSteps(arr: IHerokuStep[], input: IHerokuContext) {
