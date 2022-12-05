@@ -280,7 +280,14 @@ export function createCell<
     // queryRest includes `variables: { ... }`, with any variables returned
     // from beforeQuery
     // eslint-disable-next-line prefer-const
-    let { error, loading, data, ...queryRest } = useQuery(query, options)
+    let {
+      error,
+      loading,
+      data,
+      // importing client with an alias to avoid naming conflict with `client` prop
+      client: gqlClient,
+      ...queryRest
+    } = useQuery(query, options)
 
     if (global.__REDWOOD__PRERENDERING) {
       // __REDWOOD__PRERENDERING will always either be set, or not set. So
@@ -337,6 +344,7 @@ export function createCell<
             errorCode={error.graphQLErrors?.[0]?.extensions?.['code'] as string}
             {...props}
             updating={loading}
+            gqlClient={gqlClient}
             {...queryRest}
           />
         )
@@ -352,6 +360,7 @@ export function createCell<
             {...props}
             {...afterQueryData}
             updating={loading}
+            gqlClient={gqlClient}
             {...queryRest}
           />
         )
@@ -361,12 +370,21 @@ export function createCell<
             {...props}
             {...afterQueryData}
             updating={loading}
+            gqlClient={gqlClient}
             {...queryRest}
           />
         )
       }
     } else if (loading) {
-      return <Loading {...{ ...queryRest, ...props }} />
+      return (
+        <Loading
+          {...{
+            gqlClient: { gqlClient },
+            ...queryRest,
+            ...props,
+          }}
+        />
+      )
     } else {
       /**
        * There really shouldn't be an `else` here, but like any piece of software, GraphQL clients have bugs.
