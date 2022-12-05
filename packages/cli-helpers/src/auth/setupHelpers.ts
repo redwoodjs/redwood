@@ -68,7 +68,6 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
 
 interface Args {
   basedir: string
-  rwVersion: string
   forceArg: boolean
   provider: string
   authDecoderImport?: string
@@ -88,7 +87,6 @@ function truthy<T>(value: T): value is Truthy<T> {
 
 export const standardAuthHandler = async ({
   basedir,
-  rwVersion,
   forceArg,
   provider,
   authDecoderImport,
@@ -105,7 +103,7 @@ export const standardAuthHandler = async ({
       generateAuthApiFiles(basedir, provider, force, webAuthn),
       addAuthConfigToWeb(basedir, provider, webAuthn),
       addAuthConfigToGqlApi(authDecoderImport),
-      addWebPackages(webPackages, rwVersion),
+      addWebPackages(webPackages),
       addApiPackages(apiPackages),
       installPackages,
       extraTask,
@@ -113,8 +111,8 @@ export const standardAuthHandler = async ({
         title: 'One more thing...',
         task: () => {
           // Can't console.log the notes here because of
-          // https://github.com/cenk1cenk2/listr2/issues/296
-          // So we do it after the tasks have all finished instead
+          // https://github.com/cenk1cenk2/listr2/issues/296.
+          // So we do it after the tasks have all finished instead.
         },
       },
     ].filter(truthy),

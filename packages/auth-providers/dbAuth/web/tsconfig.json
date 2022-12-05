@@ -1,0 +1,12 @@
+{
+  "extends": "../../../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "rootDir": "src",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "outDir": "dist"
+  },
+  "include": ["src"],
+  "references": [{ "path": "../../../auth" }]
+}
