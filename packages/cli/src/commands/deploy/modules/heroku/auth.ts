@@ -1,48 +1,43 @@
-import prompts from 'prompts'
-
+import { Heroku } from './api'
 import { HEROKU_ERRORS, IHerokuContext } from './interfaces'
-import { Logger, spawn } from './stdio'
+import { Questions } from './questions'
+import { Logger } from './stdio'
 
-export async function authHerokuTask(ctx: IHerokuContext): Promise<void> {
+export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
   Logger.out('Authenticating with Heroku...')
-  const currentUser = await _currentHerokuUser()
+  const currentUser = await Heroku.currentUser()
   if (currentUser) {
-    await _handleAlreadyLoggedIn(ctx, currentUser)
+    const email = await _handleAlreadyLoggedIn(ctx, currentUser)
+    return {
+      ...ctx,
+      email,
+    }
   } else {
-    await spawn('heroku login', { stdio: 'inherit', reject: true })
-  }
-  const lastAuthCheck = await _currentHerokuUser()
-  if (!lastAuthCheck) {
-    throw new Error(HEROKU_ERRORS.NOT_LOGGED_IN)
+    const email = await Heroku.login()
+    if (!email) {
+      throw new Error(HEROKU_ERRORS.NOT_LOGGED_IN)
+    }
+    return {
+      ...ctx,
+      email,
+    }
   }
 }
 
 async function _handleAlreadyLoggedIn(
   { defaults }: IHerokuContext,
-  loggedInUser: string
-): Promise<void> {
+  currentUser: string
+): Promise<string> {
   if (defaults) {
-    Logger.out(`Using default Heroku account: ${loggedInUser}`)
-    return
+    Logger.out(`Using default Heroku account: ${currentUser}`)
+    return currentUser
   }
-  const { useUser } = await prompts({
-    type: 'confirm',
-    name: 'useUser',
-    message: `You are currently logged in as ${loggedInUser}. Do you want to use this user? (If not, you will be logged out and prompted to login again)`,
-    initial: true,
-  })
 
-  if (!useUser) {
-    Logger.out('Retry logging in...')
-    await spawn('heroku logout')
-    await spawn('heroku login', {
-      stdio: 'inherit',
-      reject: true,
-    })
+  const shouldReauth = await Questions.shouldReAuthenticate(currentUser)
+
+  if (shouldReauth) {
+    return Heroku.reauth()
   }
-}
 
-async function _currentHerokuUser(): Promise<string> {
-  const { stdout } = await spawn('heroku auth:whoami')
-  return stdout || ''
+  return currentUser
 }

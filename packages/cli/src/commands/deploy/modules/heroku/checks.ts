@@ -1,7 +1,13 @@
-import { HEROKU_ERRORS } from './interfaces'
+import { HEROKU_ERRORS, IHerokuContext } from './interfaces'
 import { Logger, spawn } from './stdio'
 
-export async function systemRequirementsTask(): Promise<void> {
+export async function systemCheckStep(
+  ctx: IHerokuContext
+): Promise<IHerokuContext> {
+  if (ctx.skipChecks) {
+    Logger.out('Skipping system checks...')
+    return ctx
+  }
   Logger.out('Checking system requirements...')
   if (process.platform === 'win32') {
     throw new Error(HEROKU_ERRORS.IS_WINDOWS)
@@ -14,6 +20,7 @@ export async function systemRequirementsTask(): Promise<void> {
   }
 
   await _checkForHeroku()
+  return ctx
 }
 
 async function _checkForHeroku(): Promise<void> {

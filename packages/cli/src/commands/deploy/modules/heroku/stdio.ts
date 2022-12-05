@@ -12,19 +12,19 @@ export async function spawn(
   opts?: execa.Options
 ): Promise<ISpawnResult> {
   const [bin, ...args] = command.split(' ')
-  const {
-    stdout = '',
-    stderr = '',
-    exitCode,
-  }: execa.ExecaReturnValue = await execa(bin, args, {
-    cwd: getPaths().base,
-    reject: false,
-    // if reject is true, stdio needs to inherit to catch the throw
-    stdio: opts?.reject ? 'inherit' : 'pipe',
-    cleanup: true,
-    stripFinalNewline: true,
-    ...opts,
-  })
+  const { stdout, stderr, exitCode }: execa.ExecaReturnValue = await execa(
+    bin,
+    args,
+    {
+      cwd: getPaths().base,
+      reject: false,
+      // if reject is true, stdio needs to inherit to catch the throw
+      stdio: opts?.reject ? 'inherit' : 'pipe',
+      cleanup: true,
+      stripFinalNewline: true,
+      ...opts,
+    }
+  )
   return { stdout, stderr, exitCode }
 }
 

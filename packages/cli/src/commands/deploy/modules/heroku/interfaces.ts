@@ -1,5 +1,3 @@
-import yargs from 'yargs'
-
 import { Paths } from '@redwoodjs/internal/dist/index'
 
 export const HEROKU_ERRORS = {
@@ -14,20 +12,13 @@ export const HEROKU_ERRORS = {
   APP_CREATE_FAIL: 'Could not create app. Correct any errors and try again',
   UNKNOWN_ERROR: 'An unknown error occurred',
 }
-
-export interface IYargs extends yargs.Argv {
-  defaults: boolean
-  app: string
-}
-
-export interface IYargsOptions {
-  [key: string]: yargs.Options
-}
-
 export interface IHerokuContext {
-  paths: Paths
-  appName: string
+  paths?: Paths
   defaults: boolean
+  appName: string
+  createdApp?: string
+  skipChecks?: boolean
+  email?: string
 }
 
 export type Regions = IHerokuRegion[]
@@ -46,6 +37,41 @@ export interface IHerokuRegion {
   updated_at: string
 }
 
+export type HerokuApps = IHerokuApp[]
+export interface IHerokuApp {
+  acm: boolean
+  archived_at: unknown
+  buildpack_provided_description: string
+  build_stack: {
+    id: string
+    name: string
+  }
+  created_at: string
+  id: string
+  git_url: string
+  maintenance: boolean
+  name: string
+  owner: {
+    email: string
+    id: string
+  }
+  region: {
+    id: string
+    name: string
+  }
+  organization: unknown
+  team: unknown
+  space: unknown
+  released_at: string
+  repo_size: number
+  slug_size: number
+  stack: {
+    id: string
+    name: string
+  }
+  updated_at: string
+  web_url: string
+}
 export interface ISpawnResult {
   stdout?: string
   stderr?: string
@@ -56,4 +82,9 @@ export interface ISpawnResult {
 export interface ISpinnerAnimation {
   interval: number
   frames: string[]
+}
+
+export enum Attempt {
+  SECOND,
+  FIRST,
 }
