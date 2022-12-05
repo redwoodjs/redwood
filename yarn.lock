@@ -6330,42 +6330,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth-auth0-setup@workspace:packages/auth-providers/auth0/setup":
-  version: 0.0.0-use.local
-  resolution: "@redwoodjs/auth-auth0-setup@workspace:packages/auth-providers/auth0/setup"
-  dependencies:
-    "@babel/cli": 7.19.3
-    "@babel/core": 7.20.5
-    "@babel/runtime-corejs3": 7.20.6
-    "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.13
-    core-js: 3.26.1
-    jest: 29.3.1
-    typescript: 4.7.4
-  languageName: unknown
-  linkType: soft
-
-"@redwoodjs/auth-clerk-web@workspace:packages/auth-providers/clerk/web":
-  version: 0.0.0-use.local
-  resolution: "@redwoodjs/auth-clerk-web@workspace:packages/auth-providers/clerk/web"
-  dependencies:
-    "@babel/cli": 7.19.3
-    "@babel/core": 7.20.5
-    "@babel/runtime-corejs3": 7.20.6
-    "@clerk/clerk-react": 3.5.1
-    "@clerk/types": 2.21.0
-    "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
-    core-js: 3.26.1
-    jest: 29.3.1
-    react: 17.0.2
-    typescript: 4.7.4
-  peerDependencies:
-    "@clerk/clerk-react": 3.5.1
-  languageName: unknown
-  linkType: soft
-
 "@redwoodjs/auth-custom-setup@workspace:packages/auth-providers/custom/setup":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-custom-setup@workspace:packages/auth-providers/custom/setup"
@@ -6629,6 +6593,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/auth0-setup@workspace:packages/auth-providers/auth0/setup":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/auth0-setup@workspace:packages/auth-providers/auth0/setup"
+  dependencies:
+    "@babel/cli": 7.19.3
+    "@babel/core": 7.20.5
+    "@babel/runtime-corejs3": 7.20.6
+    "@redwoodjs/cli-helpers": 3.2.0
+    "@types/yargs": 17.0.13
+    core-js: 3.26.1
+    jest: 29.3.1
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/auth0-web@workspace:packages/auth-providers/auth0/web":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth0-web@workspace:packages/auth-providers/auth0/web"
@@ -6749,6 +6728,27 @@ __metadata:
     core-js: 3.26.1
     jest: 29.3.1
     typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/clerk-web@workspace:packages/auth-providers/clerk/web":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/clerk-web@workspace:packages/auth-providers/clerk/web"
+  dependencies:
+    "@babel/cli": 7.19.3
+    "@babel/core": 7.20.5
+    "@babel/runtime-corejs3": 7.20.6
+    "@clerk/clerk-react": 3.5.1
+    "@clerk/types": 2.21.0
+    "@redwoodjs/auth": 3.2.0
+    "@testing-library/react-hooks": 8.0.1
+    "@types/react": 17.0.50
+    core-js: 3.26.1
+    jest: 29.3.1
+    react: 17.0.2
+    typescript: 4.7.4
+  peerDependencies:
+    "@clerk/clerk-react": 3.5.1
   languageName: unknown
   linkType: soft
 
