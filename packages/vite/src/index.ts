@@ -3,6 +3,7 @@ import path from 'path'
 import { promisify } from 'util'
 
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import { transform } from 'esbuild'
 import { UserConfig } from 'vite'
@@ -51,7 +52,7 @@ export default function redwoodPluginVite() {
           define: {
             RWJS_WEB_BUNDLER: JSON.stringify('vite'),
             RWJS_ENV: {
-              // @MARK we're avoiding process.env here, unlike webpack
+              // @NOTE we're avoiding process.env here, unlike webpack
               RWJS_API_GRAPHQL_URL:
                 redwoodConfig.web.apiGraphQLUrl ??
                 redwoodConfig.web.apiUrl + '/graphql',
@@ -67,7 +68,7 @@ export default function redwoodPluginVite() {
             },
           },
           css: {
-            // @MARK config path is relative to where vite.config.js is if you use relative path
+            // @NOTE config path is relative to where vite.config.js is if you use relative path
             // postcss: './config/',
             postcss: redwoodPaths.web.config,
           },
@@ -145,5 +146,9 @@ export default function redwoodPluginVite() {
         },
       },
     }),
+    // @MARK We add this as a temporary workaround for DevFatalErrorPage being required
+    // Note that it only transforms commonjs in dev, which is exactly what we want!
+    // Maybe we could have a custom plugin to only transform the DevFatalErrorPage?
+    viteCommonjs(),
   ]
 }

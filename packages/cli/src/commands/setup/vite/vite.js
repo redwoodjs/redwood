@@ -76,32 +76,6 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: 'Updating DevFatalError Page import...',
-        task: (_ctx, task) => {
-          const fatalErrorPagePath = path.join(
-            getPaths().web.pages,
-            `FatalErrorPage/FatalErrorPage.${ts ? 'tsx' : 'js'}`
-          )
-
-          if (!fs.existsSync(fatalErrorPagePath)) {
-            task.skip('No DevFatalError page found')
-          }
-
-          const content = fs.readFileSync(fatalErrorPagePath, 'utf-8')
-
-          const updatedContent = content.replace(
-            `require('@redwoodjs/web/dist/components/DevFatalErrorPage').DevFatalErrorPage`,
-            `(await import(
-            '@redwoodjs/web/dist/components/DevFatalErrorPage'
-          )).DevFatalErrorPage`
-          )
-
-          return writeFile(fatalErrorPagePath, updatedContent, {
-            overwriteExisting: true,
-          })
-        },
-      },
-      {
         title: 'Adding Vite bundler flag to redwood.toml...',
         task: (_ctx, task) => {
           const redwoodTomlPath = getConfigPath()
