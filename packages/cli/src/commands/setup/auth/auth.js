@@ -9,16 +9,13 @@ export const description = 'Generate an auth configuration'
 
 export async function builder(yargs) {
   const {
-    setupAuthClerkCommand,
-    setupAuthDbAuthCommand,
     setupAuthEthereumCommand,
     setupAuthGoTrueCommand,
     setupAuthMagicLinkCommand,
     setupAuthNhostCommand,
     setupAuthOktaCommand,
-    setupAuthSupabaseCommand,
-    setupAuthSupertokensCommand,
   } = await import('@redwoodjs/auth-providers-setup')
+
   // Don't forget to update test-project setup if you change something here
   const printExperimentalWarning = async (argv, yargs) => {
     if (!argv.warn) {
@@ -61,18 +58,13 @@ export async function builder(yargs) {
         'https://redwoodjs.com/docs/cli-commands#setup-auth'
       )}`
     )
-
-    .command(setupAuthClerkCommand)
-    .command(setupAuthDbAuthCommand)
     .command(setupAuthEthereumCommand)
     .command(setupAuthGoTrueCommand)
     .command(setupAuthMagicLinkCommand)
     .command(setupAuthNhostCommand)
     .command(setupAuthOktaCommand)
-    .command(setupAuthSupabaseCommand)
-    .command(setupAuthSupertokensCommand)
 
-  async function addSetupCommand(module, namedExport) {
+  async function addSetupCommand(module) {
     let commandModule
 
     try {
@@ -86,20 +78,21 @@ export async function builder(yargs) {
     }
 
     if (commandModule) {
-      setupAuthCommand.command(commandModule[namedExport])
+      setupAuthCommand.command(commandModule)
     }
   }
 
-  for (const [module, namedExport] of [
-    ['@redwoodjs/auth-auth0-setup', 'setupAuthAuth0Command'],
-    [
-      '@redwoodjs/auth-azure-active-directory-setup',
-      'setupAuthAzureActiveDirectoryCommand ',
-    ],
-    ['@redwoodjs/auth-custom-setup', 'setupAuthCustomCommand'],
-    ['@redwoodjs/auth-netlify-setup', 'setupAuthNetlifyCommand'],
-    ['@redwoodjs/auth-firebase-setup', 'setupAuthFirebaseCommand'],
+  for (const module of [
+    '@redwoodjs/auth0-setup',
+    '@redwoodjs/auth-custom-setup',
+    '@redwoodjs/auth-netlify-setup',
+    '@redwoodjs/auth-firebase-setup',
+    '@redwoodjs/azure-active-directory-setup',
+    '@redwoodjs/clerk-setup',
+    '@redwoodjs/dbauth-setup',
+    '@redwoodjs/auth-supabase-setup',
+    '@redwoodjs/supertokens-setup',
   ]) {
-    await addSetupCommand(module, namedExport)
+    await addSetupCommand(module)
   }
 }

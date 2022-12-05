@@ -6779,6 +6779,7 @@ __metadata:
     "@prisma/internals": 4.7.0
     "@redwoodjs/api-server": 3.2.0
     "@redwoodjs/auth-providers-setup": 3.2.0
+    "@redwoodjs/dbauth-setup": 3.2.0
     "@redwoodjs/internal": 3.2.0
     "@redwoodjs/prerender": 3.2.0
     "@redwoodjs/structure": 3.2.0
@@ -6953,7 +6954,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/dbauth-setup@workspace:packages/auth-providers/dbAuth/setup":
+"@redwoodjs/dbauth-setup@3.2.0, @redwoodjs/dbauth-setup@workspace:packages/auth-providers/dbAuth/setup":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/dbauth-setup@workspace:packages/auth-providers/dbAuth/setup"
   dependencies:
