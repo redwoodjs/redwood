@@ -4,7 +4,7 @@ const path = require('path')
 const { mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
-const { getConfig, BundlerEnum } = require('@redwoodjs/internal/dist/config')
+const { getConfig } = require('@redwoodjs/internal/dist/config')
 const {
   getPaths,
   importStatementPath,
@@ -15,15 +15,6 @@ const config = getConfig()
 const rwjsPaths = getPaths()
 
 const staticAssetsFolder = path.join(getPaths().web.base, 'public')
-
-// @MARK do this so that storybook continues to work with webpack,
-// with the top-level await in FatalErrorPage when you opt-in to Vite
-const experiments =
-  config.web.bundler === BundlerEnum.VITE
-    ? {
-        topLevelAwait: true,
-      }
-    : {}
 
 const baseConfig = {
   core: {
@@ -133,8 +124,6 @@ const baseConfig = {
     }
     // https://webpack.js.org/guides/build-performance/#output-without-path-info
     sbConfig.output.pathinfo = false
-
-    sbConfig.experiments = experiments
 
     return sbConfig
   },
