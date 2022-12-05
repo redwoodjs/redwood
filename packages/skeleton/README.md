@@ -23,12 +23,16 @@ This skeleton package will replace the introspection features of the existing st
     * Structure: Extracts all cells to get a list of current GraphQL query names.
     * Skeleton: Supports extracting all cells and thier GraphQL query names.
     * Complete: Yes.
+2. Prerender command
+    * Structure: Is used within prerender to determine all the routes.
+    * Skeleton: Supports the same functionality.
+    * Complete: Yes.
 
-### Prerender Package (0%)
+### Prerender Package (100%)
 1. Getting all prerendered routes
     * Structure: Lists all routes with appropriate properties to filter out only prerender routes.
     * Skeleton: Has an initial route parsing implementation which could provide the necessary functionality.
-    * Complete: No, can implement when skeleton is more mature.
+    * Complete: Yes.
 
 ### Internal Package (0%)
 1. babel_plugin_redwood_mock_cell_data
