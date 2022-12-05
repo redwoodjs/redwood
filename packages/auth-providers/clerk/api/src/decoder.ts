@@ -1,5 +1,3 @@
-import clerk, { users } from '@clerk/clerk-sdk-node'
-
 import { Decoder } from '@redwoodjs/api'
 
 export const authDecoder: Decoder = async (token: string, type: string) => {
@@ -11,6 +9,8 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
     console.error('CLERK_JWT_KEY env var is not set.')
     throw new Error('CLERK_JWT_KEY env var is not set.')
   }
+
+  const { users, default: clerk } = await import('@clerk/clerk-sdk-node')
 
   try {
     const jwtPayload = await clerk.base.verifySessionToken(token)
