@@ -1,4 +1,4 @@
-import base, { users } from '@clerk/clerk-sdk-node'
+import clerk, { users } from '@clerk/clerk-sdk-node'
 
 import { Decoder } from '@redwoodjs/api'
 
@@ -13,7 +13,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   }
 
   try {
-    const jwtPayload = await base.verifySessionToken(token)
+    const jwtPayload = await clerk.base.verifySessionToken(token)
 
     if (!jwtPayload.sub) {
       return Promise.reject(new Error('Session invalid'))
