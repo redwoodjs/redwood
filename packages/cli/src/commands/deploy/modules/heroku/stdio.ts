@@ -19,7 +19,6 @@ export async function spawn(
       cwd: getPaths().base,
       reject: false,
       // if reject is true, stdio needs to inherit to catch the throw
-      stdio: opts?.reject ? 'inherit' : 'pipe',
       cleanup: true,
       stripFinalNewline: true,
       ...opts,

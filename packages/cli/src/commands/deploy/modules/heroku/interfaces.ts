@@ -1,5 +1,3 @@
-import { Paths } from '@redwoodjs/internal/dist/index'
-
 export const HEROKU_ERRORS = {
   NO_SUPPORT: 'Only OSX is supported at this time',
   NO_HEROKU: 'Heroku CLI not found',
@@ -13,10 +11,9 @@ export const HEROKU_ERRORS = {
   UNKNOWN_ERROR: 'An unknown error occurred',
 }
 export interface IHerokuContext {
-  paths?: Paths
+  appPath?: string
   defaults: boolean
   appName: string
-  createdApp?: string
   skipChecks?: boolean
   email?: string
 }

@@ -1,4 +1,5 @@
 import type { HerokuApps } from './interfaces'
+import { ISpawnResult } from './interfaces'
 import { spawn, Logger } from './stdio'
 
 export class Heroku {
@@ -12,12 +13,12 @@ export class Heroku {
     return stdout || ''
   }
 
-  static async createApp(appName: string, opts = {}) {
+  static async createApp(appName: string, opts = {}): Promise<ISpawnResult> {
     return spawn(`heroku apps:create ${appName}`, opts)
   }
 
-  static async deleteApp(appName: string): Promise<void> {
-    await spawn(`heroku apps:destroy ${appName} --confirm ${appName}`)
+  static async deleteApp(appName: string, opts = {}): Promise<void> {
+    await spawn(`heroku apps:destroy ${appName} --confirm ${appName}`, opts)
   }
 
   static async currentUser(): Promise<string> {

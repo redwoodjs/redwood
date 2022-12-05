@@ -16,17 +16,41 @@ async function createApp(
   if (attempt === Attempt.FIRST) {
     const { stderr, stdout } = await Heroku.createApp(ctx.appName)
     if (stderr?.includes('already taken')) {
-      await createApp(ctx, Attempt.SECOND)
+      return createApp(ctx, Attempt.SECOND)
     }
-    if (stderr) {
+    const createdApp = stdout?.split(' | ')[0]
+    if (!createdApp) {
       throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
     }
-    return { ...ctx, createdApp: stdout }
+    return { ...ctx, appName: createdApp }
   }
-  const newAppName = await Questions.nameExistsChooseOption(ctx)
-  const { stdout } = await Heroku.createApp(newAppName, { reject: true })
-  return {
-    ...ctx,
-    createdApp: stdout,
+
+  const choice = await Questions.nameExistsChooseOption(ctx)
+
+  if (choice === 'delete') {
+    await Heroku.deleteApp(ctx.appName, { reject: true })
   }
+
+  if (choice === 'new' || choice === 'delete') {
+    const newAppName = await Questions.chooseAppName(ctx)
+    const { stdout } = await Heroku.createApp(newAppName, {
+      reject: true,
+      stdout: 'pipe',
+    })
+    const createdApp = stdout?.split(' | ')[0]
+    if (!createdApp) {
+      throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
+    }
+    return {
+      ...ctx,
+      appName: createdApp,
+    }
+  }
+
+  if (choice === 'exit') {
+    Logger.out('Exiting...')
+    process.exit(0)
+  }
+
+  throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
 }

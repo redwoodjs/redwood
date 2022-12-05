@@ -1,13 +1,11 @@
-import prompts from 'prompts'
-
 import { MOCK_HEROKU_CTX } from '../__fixtures__'
-import { createHerokuAppTask } from '../configure'
-import { spawn } from '../stdio'
+import { Heroku } from '../api'
+import { createStep } from '../create'
+import { Questions } from '../questions'
 
 jest.mock('../stdio')
-jest.mock('prompts')
-jest.mock('../../../../../lib')
-jest.mock('fs')
+jest.mock('../api')
+jest.mock('../questions')
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -15,47 +13,53 @@ afterEach(() => {
 
 describe('Creating a heroku deployment', () => {
   it('creates a deployment with default config', async () => {
-    await createHerokuAppTask({
+    jest.mocked(Questions.chooseAppName).mockResolvedValueOnce('myapp')
+    jest
+      .mocked(Heroku.createApp)
+      .mockResolvedValueOnce({ stdout: 'myapp', exitCode: 0 })
+    const actual = await createStep(MOCK_HEROKU_CTX)
+    expect(actual).toEqual({
       ...MOCK_HEROKU_CTX,
-      defaults: true,
+      appName: 'myapp',
     })
-
-    expect(spawn).toHaveBeenCalledWith(
-      'heroku apps:create captain-crunch --manifest',
-      {
-        reject: true,
-        stdio: 'inherit',
-      }
-    )
   })
 
-  it('creates a deployment with selected app name', async () => {
-    jest.mocked(prompts).mockResolvedValueOnce({
-      selectedAppName: 'new-app-name',
+  it('attempts to create twice', async () => {
+    jest.mocked(Questions.chooseAppName).mockResolvedValueOnce('first-try-bad')
+    jest
+      .mocked(Heroku.createApp)
+      .mockResolvedValueOnce({ stderr: 'already taken', exitCode: 1 })
+      .mockResolvedValueOnce({
+        stdout: 'second-try-good | git-url',
+        exitCode: 0,
+      })
+
+    jest.mocked(Questions.nameExistsChooseOption).mockResolvedValueOnce('new')
+
+    const actual = await createStep(MOCK_HEROKU_CTX)
+
+    expect(actual).toEqual({
+      ...MOCK_HEROKU_CTX,
+      appName: 'second-try-good',
     })
-
-    await createHerokuAppTask(MOCK_HEROKU_CTX)
-
-    expect(spawn).toHaveBeenCalledWith(
-      'heroku apps:create new-app-name --manifest',
-      {
-        reject: true,
-        stdio: 'inherit',
-      }
-    )
   })
-})
 
-describe('Heroku app already exists', () => {
-  it('creates with new name', async () => {
-    jest.mocked(prompts).mockResolvedValueOnce({ selectedAppName: 'foobar' })
-    jest.mocked(spawn).mockResolvedValueOnce({ exitCode: 0 })
+  it('deletes then creates when selected', async () => {
+    jest.mocked(Questions.chooseAppName).mockResolvedValueOnce('first-try-bad')
+    jest
+      .mocked(Heroku.createApp)
+      .mockResolvedValueOnce({ stderr: 'already taken', exitCode: 1 })
+      .mockResolvedValueOnce({
+        stdout: 'second-try-good | git-url',
+        exitCode: 0,
+      })
 
-    await createHerokuAppTask(MOCK_HEROKU_CTX)
+    jest
+      .mocked(Questions.nameExistsChooseOption)
+      .mockResolvedValueOnce('delete')
 
-    expect(spawn).toHaveBeenCalledWith('heroku apps:create foobar --manifest', {
-      reject: true,
-      stdio: 'inherit',
-    })
+    await createStep(MOCK_HEROKU_CTX)
+
+    expect(Heroku.deleteApp).toHaveBeenCalled()
   })
 })

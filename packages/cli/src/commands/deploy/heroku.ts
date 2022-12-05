@@ -8,6 +8,7 @@ import {
   copyTemplatesStep,
   createContextStep,
 } from './modules/heroku'
+import { Logger } from './modules/heroku/stdio'
 
 export const command = 'heroku'
 export const description = 'Setup and deploy to Heroku'
@@ -54,5 +55,9 @@ async function _runSteps(arr: IHerokuStep[], input: IHerokuContext) {
 }
 
 export const handler = async (initCtx: IHerokuContext) => {
-  await _runSteps(HEROKU_SETUP_STEPS, initCtx)
+  try {
+    await _runSteps(HEROKU_SETUP_STEPS, initCtx)
+  } catch (err: any) {
+    Logger.error(err.message)
+  }
 }
