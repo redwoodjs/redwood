@@ -32,8 +32,9 @@ export class RedwoodRouter extends RedwoodSkeleton {
     // Duplicate routes checking
     const nameOccurences: Record<string, number> = {}
     this.routes.forEach((route) => {
-      if (route.name in nameOccurences) {
+      if (route.name in nameOccurences && nameOccurences[route.name] < 2) {
         this.errors.push(`Multiple routes named ${route.name} are present`)
+        nameOccurences[route.name] += 1
       } else {
         nameOccurences[route.name] = 1
       }
