@@ -156,7 +156,7 @@ export class RedwoodRoute extends RedwoodSkeleton {
     }
   }
 
-  getPage(): RedwoodPage {
+  getPage(): RedwoodPage | undefined {
     throw new Error(`Method not implemented. PageName: ${this.pageName}`)
   }
 

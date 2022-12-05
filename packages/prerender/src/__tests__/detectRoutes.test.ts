@@ -1,4 +1,4 @@
-import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
+import type { RedwoodRoute, RedwoodPage } from '@redwoodjs/skeleton'
 
 import { detectPrerenderRoutes } from '../detection'
 
@@ -16,18 +16,22 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
 
 // Mock route detection, tested in @redwoodjs/structure separately
 
-let mockedRoutes: Partial<RWRoute>[] = []
-jest.mock('@redwoodjs/structure', () => {
+let mockedRoutes: Partial<RedwoodRoute>[] = []
+jest.mock('@redwoodjs/skeleton', () => {
   return {
-    getProject: jest.fn(() => {
-      return {
-        getRouter: jest.fn(() => {
-          return {
-            routes: mockedRoutes,
-          }
-        }),
-      }
-    }),
+    RedwoodProject: {
+      getProject: jest.fn(() => {
+        return {
+          getRouters: jest.fn(() => {
+            return [
+              {
+                routes: mockedRoutes,
+              },
+            ]
+          }),
+        }
+      }),
+    },
   }
 })
 
@@ -38,9 +42,19 @@ const expectPresence = (output, expectedOutput) => {
 describe('Detecting routes', () => {
   it('Should correctly detect routes with prerender prop', () => {
     mockedRoutes = [
-      { name: 'home', path: '/', prerender: true },
-      { name: 'private', path: '/private', prerender: false },
-      { name: 'about', path: '/about', prerender: true },
+      { name: 'home', path: '/', prerender: true, getPage: () => undefined },
+      {
+        name: 'private',
+        path: '/private',
+        prerender: false,
+        getPage: () => undefined,
+      },
+      {
+        name: 'about',
+        path: '/about',
+        prerender: true,
+        getPage: () => undefined,
+      },
     ]
     const output = detectPrerenderRoutes()
     expect(output.length).toBe(2)
@@ -59,6 +73,7 @@ describe('Detecting routes', () => {
         path: undefined,
         prerender: true,
         isNotFound: true,
+        getPage: () => undefined,
       },
     ]
 
@@ -75,6 +90,7 @@ describe('Detecting routes', () => {
         path: '/task/${id}',
         hasParameters: true,
         prerender: true,
+        getPage: () => undefined,
       },
     ]
 
@@ -89,8 +105,10 @@ describe('Detecting routes', () => {
         path: '/tasks',
         hasParameters: false,
         prerender: true,
-        page: {
-          filePath: '/mocked_path/tasks',
+        getPage: () => {
+          return {
+            filepath: '/mocked_path/tasks',
+          } as RedwoodPage
         },
       },
       {
@@ -98,8 +116,10 @@ describe('Detecting routes', () => {
         path: '/kittens',
         hasParameters: false,
         prerender: true,
-        page: {
-          filePath: '/mocked_path/Kittens.tsx',
+        getPage: () => {
+          return {
+            filepath: '/mocked_path/Kittens.tsx',
+          } as RedwoodPage
         },
       },
     ]
