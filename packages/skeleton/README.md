@@ -8,6 +8,10 @@ The core feature of this package is an AST based extraction of the properties of
 
 Currently the package uses caching of redwood projects to increase efficiency and avoid unneeded reprocessing of the AST if possible. Options to not use any cached results or force a reprocessing are provided to flexibility.
 
+## Improvements
+
+Consider supporting https://github.com/fastify/fastify-dx/blob/main/URMA.md
+
 ## Note
 This package, including the README, is under development at this time.
 
