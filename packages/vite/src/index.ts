@@ -56,9 +56,6 @@ export default function redwoodPluginVite() {
               RWJS_API_GRAPHQL_URL:
                 redwoodConfig.web.apiGraphQLUrl ??
                 redwoodConfig.web.apiUrl + '/graphql',
-              RWJS_API_DBAUTH_URL:
-                redwoodConfig.web.apiDbAuthUrl ??
-                `${redwoodConfig.web.apiUrl}/auth`,
               RWJS_API_URL: redwoodConfig.web.apiUrl,
               __REDWOOD__APP_TITLE:
                 redwoodConfig.web.title || path.basename(redwoodPaths.base),
@@ -105,6 +102,7 @@ export default function redwoodPluginVite() {
               // Enable esbuild polyfill plugins
               // This is needed for DevFatalErrorPage (and stacktracey)
               plugins: [
+                // @ts-expect-error -- esbuild types seem off here, after vite upgrade
                 NodeGlobalsPolyfillPlugin({
                   buffer: true,
                 }),
@@ -119,8 +117,9 @@ export default function redwoodPluginVite() {
       // This is the default in Redwood JS projects. We can remove this once Vite is stable,
       // and have a codemod to convert all JSX files to .jsx extensions
       name: 'load-js-files-as-jsx',
+      apply: 'serve', // only do this for vite, Rollup should handle .js files just fine
       async load(id: string) {
-        if (!id.match(/.*\.js$/)) {
+        if (!id.match(/src\/.*\.js$/)) {
           return
         }
 

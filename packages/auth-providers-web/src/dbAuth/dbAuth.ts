@@ -45,11 +45,11 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   let cachedToken: string | null
 
   const getApiDbAuthUrl = () => {
-    if (process.env.RWJS_API_DBAUTH_URL) {
-      return process.env.RWJS_API_DBAUTH_URL
+    if (RWJS_API_DBAUTH_URL) {
+      return RWJS_API_DBAUTH_URL
     }
 
-    return `${process.env.RWJS_API_URL}/auth`
+    return `${RWJS_API_URL}/auth`
   }
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {

@@ -23,8 +23,6 @@ export const registerShims = (routerPath: string) => {
   globalThis.RWJS_ENV = {
     RWJS_API_GRAPHQL_URL:
       rwjsConfig.web.apiGraphQLUrl ?? rwjsConfig.web.apiUrl + '/graphql',
-    RWJS_API_DBAUTH_URL:
-      rwjsConfig.web.apiDbAuthUrl ?? `${rwjsConfig.web.apiUrl}/auth`,
     RWJS_API_URL: rwjsConfig.web.apiUrl,
     __REDWOOD__APP_TITLE: rwjsConfig.web.title,
   }

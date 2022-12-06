@@ -9,8 +9,6 @@ declare global {
   // Provided by Vite.config in the user's project
   var RWJS_ENV: {
     RWJS_API_GRAPHQL_URL: string
-    /** URL or absolute path to the DbAuth serverless function */
-    RWJS_API_DBAUTH_URL: string
     /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
 
