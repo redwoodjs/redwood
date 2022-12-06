@@ -27,6 +27,7 @@ export default function redwoodPluginVite() {
   return [
     {
       name: 'redwood-plugin-vite',
+      // Used by Vite during dev!
       transformIndexHtml: (html: string) => {
         if (existsSync(path.join(redwoodPaths.web.src, 'entry-client.jsx'))) {
           return html.replace(
@@ -36,6 +37,21 @@ export default function redwoodPluginVite() {
           )
         } else {
           return html
+        }
+      },
+      // Used by rollup during build!
+      transform: (code: string, id: string) => {
+        if (
+          id.endsWith('index.html') &&
+          existsSync(path.join(redwoodPaths.web.src, 'entry-client.jsx'))
+        ) {
+          return code.replace(
+            '</head>',
+            `<script type="module" src="entry-client.jsx"></script>
+        </head>`
+          )
+        } else {
+          return code
         }
       },
       config: (): UserConfig => {
