@@ -28,7 +28,7 @@
     "@redwoodjs/auth": "3.2.0",
     "@redwoodjs/internal": "3.2.0",
     "@redwoodjs/router": "3.2.0",
-    "@redwoodjs/structure": "3.2.0",
+    "@redwoodjs/skeleton": "3.2.0",
     "@redwoodjs/web": "3.2.0",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",

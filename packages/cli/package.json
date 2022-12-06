@@ -33,6 +33,7 @@
     "@redwoodjs/api-server": "3.2.0",
     "@redwoodjs/auth-providers-setup": "3.2.0",
     "@redwoodjs/internal": "3.2.0",
+    "@redwoodjs/skeleton": "3.2.0",
     "@redwoodjs/prerender": "3.2.0",
     "@redwoodjs/telemetry": "3.2.0",
     "@types/secure-random-password": "0.2.1",
