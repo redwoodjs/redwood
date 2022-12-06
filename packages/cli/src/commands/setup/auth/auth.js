@@ -65,15 +65,15 @@ export async function builder(yargs) {
     .command(setupAuthOktaCommand)
 
   for (const module of [
-    '@redwoodjs/auth0-setup',
+    '@redwoodjs/auth-auth0-setup',
     '@redwoodjs/auth-custom-setup',
     '@redwoodjs/auth-netlify-setup',
     '@redwoodjs/auth-firebase-setup',
-    '@redwoodjs/azure-active-directory-setup',
-    '@redwoodjs/clerk-setup',
-    '@redwoodjs/dbauth-setup',
+    '@redwoodjs/auth-azure-active-directory-setup',
+    '@redwoodjs/auth-clerk-setup',
+    '@redwoodjs/auth=dbauth-setup',
     '@redwoodjs/auth-supabase-setup',
-    '@redwoodjs/supertokens-setup',
+    '@redwoodjs/auth-supertokens-setup',
   ]) {
     let commandModule
 
