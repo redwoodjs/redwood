@@ -5,7 +5,7 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { RedwoodSkeleton } from './base'
 import { RedwoodLayout } from './layout'
-import type { RedwoodProject } from './project'
+import { RedwoodProject } from './project'
 import { RedwoodRoute } from './route'
 
 export class RedwoodPage extends RedwoodSkeleton {
@@ -13,7 +13,17 @@ export class RedwoodPage extends RedwoodSkeleton {
   errors: string[] = []
 
   constructor(filepath: string) {
-    super(filepath)
+    // We want the name to be the same name that would be used within the Router.tsx
+    const pagesPath = getPaths(
+      RedwoodProject.getProject({ pathWithinProject: filepath }).filepath
+    ).web.pages
+    const pageDiffPath = filepath.substring(pagesPath.length)
+    const name = pageDiffPath
+      .substring(0, pageDiffPath.lastIndexOf(path.sep)) // TODO: Do we need the path.sep here?
+      .split(path.sep) // TODO: Do we need the path.sep here?
+      .join('')
+
+    super(filepath, name)
   }
 
   getRoutes(): RedwoodRoute[] {
