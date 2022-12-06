@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import type { NodePath } from '@babel/core'
+import type { NodePath } from '@babel/traverse'
 import traverse from '@babel/traverse'
 import {
   isJSXIdentifier,
