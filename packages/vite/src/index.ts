@@ -6,7 +6,8 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import { transform } from 'esbuild'
-import { UserConfig } from 'vite'
+import type { RollupOptions } from 'rollup'
+import type { UserConfig } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -18,6 +19,8 @@ const redwoodPaths = getPaths()
 
 const readFile = promisify(fsReadFile)
 
+let indexEntries: string[]
+
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
  *
@@ -27,7 +30,7 @@ export default function redwoodPluginVite() {
   return [
     {
       name: 'redwood-plugin-vite',
-      // Used by Vite during dev!
+      // Used by Vite during dev, to inject the entrypoint.
       transformIndexHtml: (html: string) => {
         if (existsSync(path.join(redwoodPaths.web.src, 'entry-client.jsx'))) {
           return html.replace(
@@ -39,11 +42,15 @@ export default function redwoodPluginVite() {
           return html
         }
       },
-      // Used by rollup during build!
+      buildStart: (options: RollupOptions) => {
+        // Inputs are always supplied by Vite, I think
+        indexEntries = options.input as string[]
+      },
+      // Used by rollup during build to inject the entrypoint
       transform: (code: string, id: string) => {
         if (
-          id.endsWith('index.html') &&
-          existsSync(path.join(redwoodPaths.web.src, 'entry-client.jsx'))
+          existsSync(path.join(redwoodPaths.web.src, 'entry-client.jsx')) &&
+          indexEntries.some((entry) => entry === id)
         ) {
           return code.replace(
             '</head>',
