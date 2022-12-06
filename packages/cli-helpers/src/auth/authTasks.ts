@@ -353,27 +353,19 @@ export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
   },
 })
 
-export const addWebPackages = (webPackages: string[], rwVersion: string) => ({
+export const addWebPackages = (webPackages: string[]) => ({
   title: 'Adding required web packages...',
   task: async () => {
-    const args = [
-      'workspace',
-      'web',
-      'add',
-      ...webPackages,
-      `@redwoodjs/auth@${rwVersion}`,
-    ]
-    await execa('yarn', args)
+    await execa('yarn', ['workspace', 'web', 'add', ...webPackages])
   },
 })
 
-export const addApiPackages = (apiPackages: string[]) =>
-  apiPackages.length > 0 && {
-    title: 'Adding required api packages...',
-    task: async () => {
-      await execa('yarn', ['workspace', 'api', 'add', ...apiPackages])
-    },
-  }
+export const addApiPackages = (apiPackages: string[]) => ({
+  title: 'Adding required api packages...',
+  task: async () => {
+    await execa('yarn', ['workspace', 'api', 'add', ...apiPackages])
+  },
+})
 
 export const installPackages = {
   title: 'Installing packages...',
