@@ -1,12 +1,13 @@
 import fs from 'fs'
 
 import { parse } from '@babel/parser'
-import { JSXElement, assertIdentifier } from '@babel/types'
 import {
   assertJSXOpeningElement,
   assertJSXIdentifier,
+  assertIdentifier,
   isJSXAttribute,
   isJSXSpreadAttribute,
+  JSXElement,
 } from '@babel/types'
 
 export function getASTFromCode(code: string) {
@@ -48,7 +49,6 @@ export function getJSXElementAttributes(
             throw new Error(
               `Uknown value type found while trying to process the ${key} property when extracting all attributes`
             )
-            break
         }
         attributes.set(key, value)
       } else if (isJSXSpreadAttribute(attribute)) {

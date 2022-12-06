@@ -2,11 +2,9 @@ import path from 'path'
 
 import chalk from 'chalk'
 
-export interface RedwoodDiagnostics {
+interface RedwoodDiagnostics {
   warnings: string[]
   errors: string[]
-  getInformation(): string
-  printInformation(): void
   printWarnings(): void
   printErrors(): void
 }
@@ -18,18 +16,7 @@ export abstract class RedwoodSkeleton implements RedwoodDiagnostics {
   public readonly name: string
 
   constructor(public readonly filepath: string, name?: string) {
-    this.name = name ?? path.parse(this.filepath).name
-  }
-
-  abstract getInformation(): string
-  printInformation(): void {
-    const info = this.getInformation()
-    if (info) {
-      const titleLine = `${chalk.bgCyan('[Info]')}\t${this.name}\t${chalk.dim(
-        this.filepath
-      )}`
-      console.log(titleLine.concat('\n', info).trimEnd())
-    }
+    this.name = name ?? path.parse(this.filepath).name // default to the file name if not given a specific name
   }
 
   printWarnings(): void {

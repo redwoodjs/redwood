@@ -2,11 +2,11 @@ import fs from 'fs'
 import path from 'path'
 
 import traverse from '@babel/traverse'
-import type { ExportNamedDeclaration } from '@babel/types'
 import {
   isVariableDeclaration,
   isVariableDeclarator,
   isIdentifier,
+  ExportNamedDeclaration,
 } from '@babel/types'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
@@ -21,11 +21,10 @@ export class RedwoodCell extends RedwoodSkeleton {
   warnings: string[] = []
   errors: string[] = []
 
-  readonly hasQueryExport: boolean
-
   readonly gqlQuery: string | undefined
   readonly gqlQueryName: string | undefined
 
+  readonly hasQueryExport: boolean
   readonly hasLoadingExport: boolean
   readonly hasEmptyExport: boolean
   readonly hasFailureExport: boolean
@@ -123,16 +122,8 @@ export class RedwoodCell extends RedwoodSkeleton {
       }
     }
 
-    // TODO: Idea: Validate the GraphQL query?
-
     // Determine if the cell is valid
     this.isValid = this.hasQueryExport && this.hasSuccessExport
-  }
-
-  // Diagnostics
-
-  getInformation(): string {
-    return '' // TODO: Implement
   }
 }
 

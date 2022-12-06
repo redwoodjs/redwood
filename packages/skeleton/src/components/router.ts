@@ -3,8 +3,10 @@ import path from 'path'
 
 import { RedwoodSkeleton } from './base'
 import { RedwoodProject } from './project'
-import { extractRoutes, RedwoodRoute } from './route'
-import { extractSides, RedwoodSide, RedwoodSideType } from './side'
+import { extractRoutes } from './route'
+import type { RedwoodRoute } from './route'
+import { extractSides, RedwoodSideType } from './side'
+import type { RedwoodSide } from './side'
 
 export class RedwoodRouter extends RedwoodSkeleton {
   warnings: string[] = []
@@ -15,11 +17,11 @@ export class RedwoodRouter extends RedwoodSkeleton {
   constructor(filepath: string) {
     super(filepath)
 
-    // TODO: Consider if immediately processing the routes should be optional
     this.routes = extractRoutes(this)
 
     // Checks
 
+    // Not found route checks
     const notFoundRoutes = this.routes.filter((route) => {
       return route.isNotFound
     })
@@ -42,10 +44,9 @@ export class RedwoodRouter extends RedwoodSkeleton {
   }
 
   getSide(): RedwoodSide {
-    const project = RedwoodProject.getProject({
+    const sides = RedwoodProject.getProject({
       pathWithinProject: this.filepath,
-    })
-    const sides = project.getSides()
+    }).getSides(true)
     const side = sides.find((side) => {
       return this.filepath.startsWith(side.filepath)
     })
@@ -53,12 +54,6 @@ export class RedwoodRouter extends RedwoodSkeleton {
       return side
     }
     throw new Error('Could not determine which side the router belongs to.')
-  }
-
-  // Diagnostics
-
-  getInformation(): string {
-    return '' // TODO: Implement
   }
 }
 
@@ -72,7 +67,7 @@ export function extractRouters(
   const routers: RedwoodRouter[] = []
 
   const routerFiles: string[] = []
-  const sides = project ? project.getSides() : extractSides(undefined)
+  const sides = project ? project.getSides(true) : extractSides(undefined)
   sides
     ?.filter((side) => {
       // Extract only sides which support a router

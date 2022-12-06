@@ -8,12 +8,18 @@ import { getPaths } from '@redwoodjs/internal/dist/index'
 import { getRootPath } from '../lib/path'
 
 import { RedwoodSkeleton } from './base'
-import { extractCells, RedwoodCell } from './cell'
-import { extractFunctions, RedwoodFunction } from './function'
-import { extractLayouts, RedwoodLayout } from './layout'
-import { extractPages, RedwoodPage } from './page'
-import { extractRouters, RedwoodRouter } from './router'
-import { extractSides, RedwoodSide } from './side'
+import { extractCells } from './cell'
+import type { RedwoodCell } from './cell'
+import { extractFunctions } from './function'
+import type { RedwoodFunction } from './function'
+import { extractLayouts } from './layout'
+import type { RedwoodLayout } from './layout'
+import { extractPages } from './page'
+import type { RedwoodPage } from './page'
+import { extractRouters } from './router'
+import type { RedwoodRouter } from './router'
+import { extractSides } from './side'
+import type { RedwoodSide } from './side'
 
 /**
  * Used to enumerate either JS or TS project types
@@ -29,12 +35,12 @@ export class RedwoodProject extends RedwoodSkeleton {
 
   readonly type: RedwoodProjectType
 
-  private sides?: RedwoodSide[] | undefined
   private cells?: RedwoodCell[] | undefined
-  private routers?: RedwoodRouter[] | undefined
+  private functions?: RedwoodFunction[] | undefined
   private layouts?: RedwoodLayout[] | undefined
   private pages?: RedwoodPage[] | undefined
-  private functions?: RedwoodFunction[] | undefined
+  private routers?: RedwoodRouter[] | undefined
+  private sides?: RedwoodSide[] | undefined
 
   public static getProject({
     pathWithinProject = '',
@@ -49,14 +55,12 @@ export class RedwoodProject extends RedwoodSkeleton {
   } = {}) {
     const projectCache = RedwoodProjectsCache.getInstance().projects
     const rootPath = getRootPath(pathWithinProject)
-
     if (readFromCache) {
       const cachedProject = projectCache.get(rootPath)
       if (cachedProject) {
         return cachedProject
       }
     }
-
     const project = new RedwoodProject(rootPath, full)
     if (insertIntoCache) {
       projectCache.set(project.filepath, project)
@@ -79,12 +83,12 @@ export class RedwoodProject extends RedwoodSkeleton {
         : RedwoodProjectType.JAVASCRIPT
 
     if (full) {
-      this.sides = extractSides(this)
       this.cells = extractCells(this)
+      this.functions = extractFunctions(this)
       this.layouts = extractLayouts(this)
       this.pages = extractPages(this)
-      this.functions = extractFunctions(this)
       this.routers = extractRouters(this)
+      this.sides = extractSides(this)
     }
   }
 
@@ -128,18 +132,6 @@ export class RedwoodProject extends RedwoodSkeleton {
       this.functions = extractFunctions(this)
     }
     return this.functions
-  }
-
-  // Diagnostics
-
-  getInformation(): string {
-    return '' // TODO: Implement, gets the info of all other components too
-  }
-
-  printInformation(): void {
-    console.log(
-      `${chalk.bgCyan('[Info]')}\t${this.name}\t${chalk.dim(this.filepath)}`
-    )
   }
 
   printWarnings(cascade = false): void {

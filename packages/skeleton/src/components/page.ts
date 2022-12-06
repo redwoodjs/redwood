@@ -3,29 +3,39 @@ import path from 'path'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
+import { getRootPath } from '../lib/path'
+
 import { RedwoodSkeleton } from './base'
-import { RedwoodLayout } from './layout'
-import type { RedwoodProject } from './project'
-import { RedwoodRoute } from './route'
+import { RedwoodProject } from './project'
+import type { RedwoodRoute } from './route'
 
 export class RedwoodPage extends RedwoodSkeleton {
   warnings: string[] = []
   errors: string[] = []
 
   constructor(filepath: string) {
-    super(filepath)
+    const pagesPath = getPaths(getRootPath(filepath)).web.pages
+    const name = filepath
+      .substring(pagesPath.length, filepath.lastIndexOf(path.sep))
+      .replaceAll(path.sep, '')
+    super(filepath, name)
   }
 
   getRoutes(): RedwoodRoute[] {
-    throw new Error('Method not implemented.')
-  }
-
-  getLayouts(): RedwoodLayout[] {
-    throw new Error('Method not implemented.')
-  }
-
-  getInformation(): string {
-    return '' // TODO: Implement
+    const routes: RedwoodRoute[] = []
+    RedwoodProject.getProject({
+      pathWithinProject: this.filepath,
+      readFromCache: true,
+    })
+      .getRouters(true)
+      .forEach((router) => {
+        routes.push(
+          ...router.routes.filter((route) => {
+            return route.pageIdentifier === this.name
+          })
+        )
+      })
+    return routes
   }
 }
 

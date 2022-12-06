@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { RedwoodSkeleton } from './base'
@@ -17,14 +19,12 @@ export class RedwoodSide extends RedwoodSkeleton {
   constructor(filepath: string) {
     super(filepath)
 
+    if (!fs.existsSync(this.filepath)) {
+      this.errors.push('Side does not exist')
+    }
+
     // TODO: Decide how best to determine sides from the folder
     this.type = this.name === 'web' ? RedwoodSideType.WEB : RedwoodSideType.API
-  }
-
-  // Diagnostics
-
-  getInformation(): string {
-    return '' // TODO: Implement
   }
 }
 

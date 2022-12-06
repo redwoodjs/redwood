@@ -2,13 +2,18 @@ import fs from 'fs'
 
 import type { NodePath } from '@babel/core'
 import traverse from '@babel/traverse'
-import type { JSXElement, JSXAttribute } from '@babel/types'
-import { isJSXIdentifier, isJSXAttribute, isJSXElement } from '@babel/types'
+import {
+  isJSXIdentifier,
+  isJSXAttribute,
+  isJSXElement,
+  JSXElement,
+  JSXAttribute,
+} from '@babel/types'
 
 import { getASTFromCode, getJSXElementAttributes } from '../lib/ast'
 
 import { RedwoodSkeleton } from './base'
-import { RedwoodPage } from './page'
+import type { RedwoodPage } from './page'
 import { RedwoodProject } from './project'
 import type { RedwoodRouter } from './router'
 import { RedwoodSideType } from './side'
@@ -18,7 +23,7 @@ export class RedwoodRoute extends RedwoodSkeleton {
   errors: string[] = []
 
   readonly path: string | undefined
-  private readonly pageIdentifier: string | undefined
+  readonly pageIdentifier: string | undefined
   readonly prerender: boolean
   readonly isNotFound: boolean
   readonly hasParameters: boolean
@@ -87,14 +92,10 @@ export class RedwoodRoute extends RedwoodSkeleton {
     return RedwoodProject.getProject({
       pathWithinProject: this.filepath,
     })
-      .getPages()
+      .getPages(true)
       .find((page) => {
         return page.name === this.pageIdentifier
       })
-  }
-
-  getInformation(): string {
-    return '' // TODO: Implement
   }
 }
 
@@ -133,7 +134,7 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     router.errors.push('Could not find the Router JSX element')
     return []
   }
-  // TODO: Detect multiple <Router> and error about it?
+  // TODO: (check) Detect multiple <Router> and error about it?
 
   // Parse the children of <Router>
   const routeJSXElements: NodePath<JSXElement>[] = []
@@ -160,7 +161,7 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     routes.push(new RedwoodRoute(router.filepath, routeJSXElement))
   })
 
-  // TODO: Check to make sure that the router is actually exported
+  // TODO: (Check) Make sure that the router is actually exported
 
   return routes
 }

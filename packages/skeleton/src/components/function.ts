@@ -2,11 +2,11 @@ import fs from 'fs'
 import path from 'path'
 
 import traverse from '@babel/traverse'
-import type { ExportNamedDeclaration } from '@babel/types'
 import {
   isVariableDeclaration,
   isVariableDeclarator,
   isIdentifier,
+  ExportNamedDeclaration,
 } from '@babel/types'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
@@ -41,10 +41,6 @@ export class RedwoodFunction extends RedwoodSkeleton {
     if (handlerExport === undefined) {
       this.errors.push('No "handler" export found')
     }
-  }
-
-  getInformation(): string {
-    return '' // I don't think there is any useful information about the function, so return an empty string
   }
 }
 
