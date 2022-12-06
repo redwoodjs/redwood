@@ -103,9 +103,9 @@ export const standardAuthHandler = async ({
       generateAuthApiFiles(basedir, provider, force, webAuthn),
       addAuthConfigToWeb(basedir, provider, webAuthn),
       addAuthConfigToGqlApi(authDecoderImport),
-      addWebPackages(webPackages),
-      addApiPackages(apiPackages),
-      installPackages,
+      webPackages.length && addWebPackages(webPackages),
+      apiPackages.length && addApiPackages(apiPackages),
+      (webPackages.length || apiPackages.length) && installPackages,
       extraTask,
       notes && {
         title: 'One more thing...',

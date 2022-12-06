@@ -1,5 +1,5 @@
 {
-  "name": "@redwoodjs/clerk-setup",
+  "name": "@redwoodjs/auth-clerk-setup",
   "version": "3.2.0",
   "repository": {
     "type": "git",

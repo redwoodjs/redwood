@@ -1,3 +1,3 @@
-import { createDbAuth } from '@redwoodjs/dbauth-web'
+import { createDbAuth } from '@redwoodjs/auth-dbauth-web'
 
 export const { AuthProvider, useAuth } = createDbAuth()

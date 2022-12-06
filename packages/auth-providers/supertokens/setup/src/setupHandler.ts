@@ -15,10 +15,13 @@ export async function handler({ force: forceArg }: Args) {
     forceArg,
     provider: 'supertokens',
     authDecoderImport:
-      "import { authDecoder } from '@redwoodjs/supertokens-api'",
-    apiPackages: [`@redwoodjs/supertokens-api@${version}`, 'supertokens-node'],
+      "import { authDecoder } from '@redwoodjs/auth-supertokens-api'",
+    apiPackages: [
+      `@redwoodjs/auth-supertokens-api@${version}`,
+      'supertokens-node',
+    ],
     webPackages: [
-      `@redwoodjs/supertokens-web@${version}`,
+      `@redwoodjs/auth-supertokens-web@${version}`,
       'supertokens-auth-react',
     ],
     notes: [

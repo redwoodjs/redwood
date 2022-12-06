@@ -25,14 +25,15 @@ export async function handler({ webauthn, force: forceArg }: Args) {
     basedir: __dirname,
     forceArg,
     provider: 'dbAuth',
-    authDecoderImport: "import { authDecoder } from '@redwoodjs/dbauth-api'",
+    authDecoderImport:
+      "import { authDecoder } from '@redwoodjs/auth-dbauth-api'",
     webAuthn,
     webPackages: webAuthn
       ? webAuthnWebPackages
-      : [`@redwoodjs/dbauth-web@${version}`],
+      : [`@redwoodjs/auth-dbauth-web@${version}`],
     apiPackages: webAuthn
       ? webAuthnApiPackages
-      : [`@redwoodjs/dbauth-api@${version}`],
+      : [`@redwoodjs/auth-dbauth-api@${version}`],
     extraTask: webAuthn ? webAuthnExtraTask : extraTask,
     notes: webAuthn ? webAuthnNotes : notes,
   })

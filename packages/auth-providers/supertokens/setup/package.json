@@ -1,5 +1,5 @@
 {
-  "name": "@redwoodjs/supertokens-setup",
+  "name": "@redwoodjs/auth-supertokens-setup",
   "version": "3.2.0",
   "repository": {
     "type": "git",

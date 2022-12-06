@@ -15,10 +15,10 @@ export async function handler({ force: forceArg }: Args) {
     forceArg,
     provider: 'azureActiveDirectory',
     authDecoderImport:
-      "import { authDecoder } from '@redwoodjs/azure-active-directory-api'",
-    apiPackages: [`@redwoodjs/azure-active-directory-api@${version}`],
+      "import { authDecoder } from '@redwoodjs/auth-azure-active-directory-api'",
+    apiPackages: [`@redwoodjs/auth-azure-active-directory-api@${version}`],
     webPackages: [
-      `@redwoodjs/azure-active-directory-web@${version}`,
+      `@redwoodjs/auth-azure-active-directory-web@${version}`,
       '@azure/msal-browser',
     ],
     notes: [

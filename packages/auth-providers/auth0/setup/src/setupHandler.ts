@@ -14,11 +14,12 @@ export async function handler({ force: forceArg }: Args) {
     basedir: __dirname,
     forceArg,
     provider: 'auth0',
-    authDecoderImport: "import { authDecoder } from '@redwoodjs/auth0-api'",
-    apiPackages: [`@redwoodjs/auth0-api@${version}`],
+    authDecoderImport:
+      "import { authDecoder } from '@redwoodjs/auth-auth0-api'",
+    apiPackages: [`@redwoodjs/auth-auth0-api@${version}`],
     webPackages: [
       '@auth0/auth0-spa-js@1.22.5',
-      `@redwoodjs/auth0-web@${version}`,
+      `@redwoodjs/auth-auth0-web@${version}`,
     ],
     notes: [
       'You will need to create several environment variables with your Auth0 config options.',

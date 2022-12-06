@@ -1,4 +1,4 @@
-import { createSuperTokensAuth } from '@redwoodjs/supertokens-web'
+import { createSuperTokensAuth } from '@redwoodjs/auth-supertokens-web'
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
 
 import SuperTokens from 'supertokens-auth-react'
