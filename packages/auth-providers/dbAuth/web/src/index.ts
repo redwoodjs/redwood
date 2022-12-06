@@ -1,1 +1,1 @@
-export * from './dbAuth'
+export { createDbAuth } from './dbAuth'
