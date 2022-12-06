@@ -6058,7 +6058,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@originjs/vite-plugin-commonjs@npm:^1.0.3":
+"@originjs/vite-plugin-commonjs@npm:1.0.3":
   version: 1.0.3
   resolution: "@originjs/vite-plugin-commonjs@npm:1.0.3"
   dependencies:
@@ -7533,7 +7533,7 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/runtime-corejs3": 7.20.6
     "@esbuild-plugins/node-globals-polyfill": 0.1.1
-    "@originjs/vite-plugin-commonjs": ^1.0.3
+    "@originjs/vite-plugin-commonjs": 1.0.3
     "@redwoodjs/internal": 3.2.0
     "@vitejs/plugin-react": 2.2.0
     core-js: 3.26.1
