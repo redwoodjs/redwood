@@ -1,1 +1,1 @@
-export * as setupAuthSupabaseCommand from './setup'
+export * from './setup'

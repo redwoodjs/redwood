@@ -1,1 +1,1 @@
-export * as setupAuthDbAuthCommand from './setup'
+export * from './setup'

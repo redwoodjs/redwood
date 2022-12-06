@@ -1,1 +1,1 @@
-export * as setupAuthAuth0Command from './setup'
+export * from './setup'

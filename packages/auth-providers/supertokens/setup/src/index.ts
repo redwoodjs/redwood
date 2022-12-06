@@ -1,1 +1,1 @@
-export * as setupAuthSupertokensCommand from './setup'
+export * from './setup'

@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import prompts from 'prompts'
 
@@ -13,7 +14,9 @@ import {
   apiPackages as webAuthnApiPackages,
 } from './webAuthn.setupData'
 
-const { version } = JSON.parse(fs.readFileSync('../package.json', 'utf-8'))
+const { version } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+)
 
 export async function handler({ webauthn, force: forceArg }: Args) {
   const webAuthn = await shouldIncludeWebAuthn(webauthn)

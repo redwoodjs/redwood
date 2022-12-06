@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import {
   isTypeScriptProject,
@@ -7,7 +8,9 @@ import {
 
 import { Args } from './setup'
 
-const { version } = JSON.parse(fs.readFileSync('../package.json', 'utf-8'))
+const { version } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+)
 
 export async function handler({ force: forceArg }: Args) {
   const authFilename = isTypeScriptProject() ? 'auth.ts' : 'auth.js'

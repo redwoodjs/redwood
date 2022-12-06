@@ -1,1 +1,1 @@
-export * as setupAuthClerkCommand from './setup'
+export * from './setup'
