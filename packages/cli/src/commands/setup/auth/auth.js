@@ -64,24 +64,6 @@ export async function builder(yargs) {
     .command(setupAuthNhostCommand)
     .command(setupAuthOktaCommand)
 
-  async function addSetupCommand(module) {
-    let commandModule
-
-    try {
-      commandModule = await import(module)
-    } catch (e) {
-      // Since these are plugins, it's ok if they can't be imported because they're not installed.
-      if (e.code === 'MODULE_NOT_FOUND') {
-        return
-      }
-      throw e
-    }
-
-    if (commandModule) {
-      setupAuthCommand.command(commandModule)
-    }
-  }
-
   for (const module of [
     '@redwoodjs/auth0-setup',
     '@redwoodjs/auth-custom-setup',
@@ -93,6 +75,21 @@ export async function builder(yargs) {
     '@redwoodjs/auth-supabase-setup',
     '@redwoodjs/supertokens-setup',
   ]) {
-    await addSetupCommand(module)
+    let commandModule
+
+    try {
+      commandModule = await import(module)
+    } catch (e) {
+      // Since these are plugins, it's ok if they can't be imported because they're not installed.
+      if (e.code === 'MODULE_NOT_FOUND') {
+        return
+      }
+
+      throw e
+    }
+
+    if (commandModule) {
+      setupAuthCommand.command(commandModule)
+    }
   }
 }
