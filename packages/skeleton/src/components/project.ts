@@ -89,47 +89,45 @@ export class RedwoodProject extends RedwoodSkeleton {
   }
 
   getSides(forceExtract = false): RedwoodSide[] {
-    if (forceExtract) {
-      return extractSides(this)
+    if (forceExtract || this.sides === undefined) {
+      this.sides = extractSides(this)
     }
-    return this.sides === undefined ? extractSides(this) : this.sides
+    return this.sides
   }
 
   getCells(forceExtract = false): RedwoodCell[] {
-    if (forceExtract) {
-      return extractCells(this)
+    if (forceExtract || this.cells === undefined) {
+      this.cells = extractCells(this)
     }
-    return this.cells === undefined ? extractCells(this) : this.cells
+    return this.cells
   }
 
   getRouters(forceExtract = false): RedwoodRouter[] {
-    if (forceExtract) {
-      return extractRouters(this)
+    if (forceExtract || this.routers === undefined) {
+      this.routers = extractRouters(this)
     }
-    return this.routers === undefined ? extractRouters(this) : this.routers
+    return this.routers
   }
 
   getLayouts(forceExtract = false): RedwoodLayout[] {
-    if (forceExtract) {
-      return extractLayouts(this)
+    if (forceExtract || this.layouts === undefined) {
+      this.layouts = extractLayouts(this)
     }
-    return this.layouts === undefined ? extractLayouts(this) : this.layouts
+    return this.layouts
   }
 
   getPages(forceExtract = false): RedwoodPage[] {
-    if (forceExtract) {
-      return extractPages(this)
+    if (forceExtract || this.pages === undefined) {
+      this.pages = extractPages(this)
     }
-    return this.pages === undefined ? extractPages(this) : this.pages
+    return this.pages
   }
 
   getFunctions(forceExtract = false): RedwoodFunction[] {
-    if (forceExtract) {
-      return extractFunctions(this)
+    if (forceExtract || this.functions === undefined) {
+      this.functions = extractFunctions(this)
     }
-    return this.functions === undefined
-      ? extractFunctions(this)
-      : this.functions
+    return this.functions
   }
 
   // Diagnostics
