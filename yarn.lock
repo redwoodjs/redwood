@@ -31369,12 +31369,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webAuthn-0dbb62@workspace:packages/auth-providers/dbAuth/web/webAuthn":
-  version: 0.0.0-use.local
-  resolution: "webAuthn-0dbb62@workspace:packages/auth-providers/dbAuth/web/webAuthn"
-  languageName: unknown
-  linkType: soft
-
 "webcrypto-core@npm:^1.7.4":
   version: 1.7.5
   resolution: "webcrypto-core@npm:1.7.5"
