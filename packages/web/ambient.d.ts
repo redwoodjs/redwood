@@ -11,8 +11,6 @@ declare global {
   // Provided by Vite.config, or Webpack in the user's project
   var RWJS_ENV: {
     RWJS_API_GRAPHQL_URL: string
-    /** URL or absolute path to the DbAuth serverless function */
-    RWJS_API_DBAUTH_URL: string
     /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
 
@@ -43,8 +41,6 @@ declare global {
 
       /** URL or absolute path to the GraphQL serverless function */
       RWJS_API_GRAPHQL_URL: string
-      /** URL or absolute path to the DbAuth serverless function */
-      RWJS_API_DBAUTH_URL: string
       /** URL or absolute path to serverless functions */
       RWJS_API_URL: string
     }

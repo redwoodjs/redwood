@@ -44,6 +44,14 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
   let cachedToken: string | null
 
+  const getApiDbAuthUrl = () => {
+    if (process.env.RWJS_API_DBAUTH_URL) {
+      return process.env.RWJS_API_DBAUTH_URL
+    }
+
+    return `${process.env.RWJS_API_URL}/auth`
+  }
+
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {
     resetTokenCache()
     return fetch(...params)
@@ -60,11 +68,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const forgotPassword = async (username: string) => {
-    if (!globalThis.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
-    }
-
-    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(getApiDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -82,12 +86,9 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
     }
 
     if (isTokenCacheExpired()) {
-      getTokenPromise = fetch(
-        `${globalThis.RWJS_API_DBAUTH_URL}?method=getToken`,
-        {
-          credentials,
-        }
-      )
+      getTokenPromise = fetch(`${getApiDbAuthUrl()}?method=getToken`, {
+        credentials,
+      })
         .then((response) => response.text())
         .then((tokenText) => {
           lastTokenCheckAt = new Date()
@@ -104,11 +105,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const login = async ({ username, password }: LoginAttributes) => {
-    if (!globalThis.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
-    }
-
-    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(getApiDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -119,11 +116,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const logout = async () => {
-    if (!globalThis.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
-    }
-
-    await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
+    await resetAndFetch(getApiDbAuthUrl(), {
       credentials,
       method: 'POST',
       body: JSON.stringify({ method: 'logout' }),
@@ -133,11 +126,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const resetPassword = async (attributes: ResetPasswordAttributes) => {
-    if (!globalThis.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
-    }
-
-    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(getApiDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -148,11 +137,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const signup = async (attributes: SignupAttributes) => {
-    if (!globalThis.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
-    }
-
-    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(getApiDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -163,11 +148,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   }
 
   const validateResetToken = async (resetToken: string | null) => {
-    if (!globalThis.RWJS_API_DBAUTH_URL) {
-      throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
-    }
-
-    const response = await resetAndFetch(globalThis.RWJS_API_DBAUTH_URL, {
+    const response = await resetAndFetch(getApiDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -3,6 +3,5 @@
 
 // @NOTE: do not use globalThis on the right side, because webpack cannot access these vars then
 globalThis.RWJS_API_GRAPHQL_URL = RWJS_ENV.RWJS_API_GRAPHQL_URL as string
-globalThis.RWJS_API_DBAUTH_URL = RWJS_ENV.RWJS_API_DBAUTH_URL as string
 globalThis.RWJS_API_URL = RWJS_ENV.RWJS_API_URL as string
 globalThis.__REDWOOD__APP_TITLE = RWJS_ENV.__REDWOOD__APP_TITLE as string

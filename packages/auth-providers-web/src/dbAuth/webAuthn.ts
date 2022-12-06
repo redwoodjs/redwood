@@ -41,6 +41,14 @@ class WebAuthnNoAuthenticatorError extends WebAuthnAuthenticationError {
   }
 }
 
+const getApiDbAuthUrl = () => {
+  if (process.env.RWJS_API_DBAUTH_URL) {
+    return process.env.RWJS_API_DBAUTH_URL
+  }
+
+  return `${process.env.RWJS_API_URL}/auth`
+}
+
 const isSupported = async () => {
   return await platformAuthenticatorIsAvailable()
 }
@@ -53,11 +61,7 @@ const authenticationOptions = async () => {
   try {
     const xhr = new XMLHttpRequest()
     xhr.withCredentials = true
-    xhr.open(
-      'GET',
-      `${process.env.RWJS_API_DBAUTH_URL}?method=webAuthnAuthOptions`,
-      false
-    )
+    xhr.open('GET', `${getApiDbAuthUrl()}?method=webAuthnAuthOptions`, false)
     xhr.setRequestHeader('content-type', 'application/json')
     xhr.send(null)
 
@@ -85,10 +89,6 @@ const authenticationOptions = async () => {
 }
 
 const authenticate = async () => {
-  if (!process.env.RWJS_API_DBAUTH_URL) {
-    throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
-  }
-
   const authOptions = await authenticationOptions()
 
   try {
@@ -96,7 +96,7 @@ const authenticate = async () => {
 
     const xhr = new XMLHttpRequest()
     xhr.withCredentials = true
-    xhr.open('POST', process.env.RWJS_API_DBAUTH_URL, false)
+    xhr.open('POST', getApiDbAuthUrl(), false)
     xhr.setRequestHeader('content-type', 'application/json')
     xhr.send(
       JSON.stringify({
@@ -135,11 +135,7 @@ const registrationOptions = () => {
   try {
     const xhr = new XMLHttpRequest()
     xhr.withCredentials = true
-    xhr.open(
-      'GET',
-      `${process.env.RWJS_API_DBAUTH_URL}?method=webAuthnRegOptions`,
-      false
-    )
+    xhr.open('GET', `${getApiDbAuthUrl()}?method=webAuthnRegOptions`, false)
     xhr.setRequestHeader('content-type', 'application/json')
     xhr.send(null)
 
@@ -161,10 +157,6 @@ const registrationOptions = () => {
 }
 
 const register = async () => {
-  if (!process.env.RWJS_API_DBAUTH_URL) {
-    throw new Error('You need to set teh RWJS_API_DBAUTH_URL env variable')
-  }
-
   const options = await registrationOptions()
   let regResponse
 
@@ -183,7 +175,7 @@ const register = async () => {
   try {
     const xhr = new XMLHttpRequest()
     xhr.withCredentials = true
-    xhr.open('POST', process.env.RWJS_API_DBAUTH_URL, false)
+    xhr.open('POST', getApiDbAuthUrl(), false)
     xhr.setRequestHeader('content-type', 'application/json')
     xhr.send(JSON.stringify({ method: 'webAuthnRegister', ...regResponse }))
 
