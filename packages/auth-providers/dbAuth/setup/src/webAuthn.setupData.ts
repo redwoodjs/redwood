@@ -8,16 +8,10 @@ import { functionsPath, libPath } from './setupData'
 export { extraTask } from './setupData'
 
 // required packages to install on the web side
-export const webPackages = [
-  '@redwoodjs/auth-providers-web',
-  '@simplewebauthn/browser',
-]
+export const webPackages = ['@redwoodjs/dbauth-web', '@simplewebauthn/browser']
 
 // required packages to install on the api side
-export const apiPackages = [
-  '@redwoodjs/auth-providers-api',
-  '@simplewebauthn/server',
-]
+export const apiPackages = ['@redwoodjs/dbauth-api', '@simplewebauthn/server']
 
 // any notes to print out when the job is done
 export const notes = [
