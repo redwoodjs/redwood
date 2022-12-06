@@ -69,12 +69,7 @@ Map {
     "path": "/somewhereElse",
     "prerender": true,
     "warnings": [],
-  } => RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
-    "name": "EditUserPage",
-    "warnings": [],
-  },
+  } => undefined,
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.js",
@@ -161,7 +156,7 @@ Map {
     "warnings": [],
   } => RedwoodPage {
     "errors": [],
-    "filepath": "",
+    "filepath": "/web/src/pages/HomePage/HomePage.js",
     "name": "HomePage",
     "warnings": [],
   },
@@ -178,7 +173,7 @@ Map {
     "warnings": [],
   } => RedwoodPage {
     "errors": [],
-    "filepath": "",
+    "filepath": "/web/src/pages/HomePage/HomePage.js",
     "name": "HomePage",
     "warnings": [],
   },
@@ -295,7 +290,12 @@ Map {
     "path": "/contacts/new",
     "prerender": false,
     "warnings": [],
-  } => undefined,
+  } => RedwoodPage {
+    "errors": [],
+    "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
+    "name": "ContactNewContactPage",
+    "warnings": [],
+  },
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.tsx",
@@ -307,7 +307,12 @@ Map {
     "path": "/contacts/{id:Int}/edit",
     "prerender": false,
     "warnings": [],
-  } => undefined,
+  } => RedwoodPage {
+    "errors": [],
+    "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
+    "name": "ContactEditContactPage",
+    "warnings": [],
+  },
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.tsx",
@@ -319,7 +324,12 @@ Map {
     "path": "/contacts/{id:Int}",
     "prerender": false,
     "warnings": [],
-  } => undefined,
+  } => RedwoodPage {
+    "errors": [],
+    "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
+    "name": "ContactContactPage",
+    "warnings": [],
+  },
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.tsx",
@@ -331,7 +341,12 @@ Map {
     "path": "/contacts",
     "prerender": false,
     "warnings": [],
-  } => undefined,
+  } => RedwoodPage {
+    "errors": [],
+    "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
+    "name": "ContactContactsPage",
+    "warnings": [],
+  },
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.tsx",
@@ -343,7 +358,12 @@ Map {
     "path": "/posts/new",
     "prerender": false,
     "warnings": [],
-  } => undefined,
+  } => RedwoodPage {
+    "errors": [],
+    "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
+    "name": "PostNewPostPage",
+    "warnings": [],
+  },
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.tsx",
@@ -355,7 +375,12 @@ Map {
     "path": "/posts/{id:Int}/edit",
     "prerender": false,
     "warnings": [],
-  } => undefined,
+  } => RedwoodPage {
+    "errors": [],
+    "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
+    "name": "PostEditPostPage",
+    "warnings": [],
+  },
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.tsx",
@@ -367,7 +392,12 @@ Map {
     "path": "/posts/{id:Int}",
     "prerender": false,
     "warnings": [],
-  } => undefined,
+  } => RedwoodPage {
+    "errors": [],
+    "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
+    "name": "PostPostPage",
+    "warnings": [],
+  },
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.tsx",
@@ -379,7 +409,12 @@ Map {
     "path": "/posts",
     "prerender": false,
     "warnings": [],
-  } => undefined,
+  } => RedwoodPage {
+    "errors": [],
+    "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
+    "name": "PostPostsPage",
+    "warnings": [],
+  },
   RedwoodRoute {
     "errors": [],
     "filepath": "/web/src/Routes.tsx",

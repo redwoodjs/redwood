@@ -81,7 +81,7 @@ exports[`From within the example-todo-main fixture returns the correct pages wit
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
-    "name": "EditUserPage",
+    "name": "adminEditUserPage",
     "warnings": [],
   },
 ]
@@ -134,7 +134,7 @@ exports[`From within the example-todo-main fixture returns the correct pages wit
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
-    "name": "EditUserPage",
+    "name": "adminEditUserPage",
     "warnings": [],
   },
 ]
@@ -203,25 +203,25 @@ exports[`From within the test-project fixture returns the correct pages with a p
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
-    "name": "ContactPage",
+    "name": "ContactContactPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
-    "name": "ContactsPage",
+    "name": "ContactContactsPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
-    "name": "EditContactPage",
+    "name": "ContactEditContactPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
-    "name": "NewContactPage",
+    "name": "ContactNewContactPage",
     "warnings": [],
   },
   RedwoodPage {
@@ -263,25 +263,25 @@ exports[`From within the test-project fixture returns the correct pages with a p
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
-    "name": "EditPostPage",
+    "name": "PostEditPostPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
-    "name": "NewPostPage",
+    "name": "PostNewPostPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
-    "name": "PostPage",
+    "name": "PostPostPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
-    "name": "PostsPage",
+    "name": "PostPostsPage",
     "warnings": [],
   },
   RedwoodPage {
@@ -328,25 +328,25 @@ exports[`From within the test-project fixture returns the correct pages without 
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
-    "name": "ContactPage",
+    "name": "ContactContactPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
-    "name": "ContactsPage",
+    "name": "ContactContactsPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
-    "name": "EditContactPage",
+    "name": "ContactEditContactPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
-    "name": "NewContactPage",
+    "name": "ContactNewContactPage",
     "warnings": [],
   },
   RedwoodPage {
@@ -388,25 +388,25 @@ exports[`From within the test-project fixture returns the correct pages without 
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
-    "name": "EditPostPage",
+    "name": "PostEditPostPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
-    "name": "NewPostPage",
+    "name": "PostNewPostPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
-    "name": "PostPage",
+    "name": "PostPostPage",
     "warnings": [],
   },
   RedwoodPage {
     "errors": [],
     "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
-    "name": "PostsPage",
+    "name": "PostPostsPage",
     "warnings": [],
   },
   RedwoodPage {
