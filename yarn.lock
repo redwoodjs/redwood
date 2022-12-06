@@ -2279,13 +2279,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/url-data@npm:5.1.0":
-  version: 5.1.0
-  resolution: "@fastify/url-data@npm:5.1.0"
+"@fastify/url-data@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@fastify/url-data@npm:5.2.0"
   dependencies:
     fastify-plugin: ^4.0.0
     uri-js: ^4.2.1
-  checksum: 2f2bcfd27ba6ac3d21947c2730130462582341f193d9ff846856b7f0a04299b761faa384883c1c080bb9debcbd4350197cd6053cdef6e84b814d4cd51a3e7134
+  checksum: d086989546e0451aa76e34bf42e0f5ae33d49f7ccf677340b42b82a120ecaa5a259b2f834e650bb0c15dccdac810d39aad5c977ffc0ac7fe62e5e5b5e5d66d97
   languageName: node
   linkType: hard
 
@@ -6242,7 +6242,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@fastify/http-proxy": 8.4.0
     "@fastify/static": 6.5.1
-    "@fastify/url-data": 5.1.0
+    "@fastify/url-data": 5.2.0
     "@types/aws-lambda": 8.10.107
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
