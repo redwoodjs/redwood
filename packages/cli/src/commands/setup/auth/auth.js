@@ -71,7 +71,7 @@ export async function builder(yargs) {
     '@redwoodjs/auth-firebase-setup',
     '@redwoodjs/auth-azure-active-directory-setup',
     '@redwoodjs/auth-clerk-setup',
-    '@redwoodjs/auth=dbauth-setup',
+    '@redwoodjs/auth-dbauth-setup',
     '@redwoodjs/auth-supabase-setup',
     '@redwoodjs/auth-supertokens-setup',
   ]) {
