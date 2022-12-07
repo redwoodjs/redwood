@@ -59,7 +59,9 @@ Map {
     "warnings": [],
   },
   RedwoodRoute {
-    "errors": [],
+    "errors": [
+      "Could not find page EditUserPage",
+    ],
     "filepath": "/web/src/Routes.js",
     "hasParameters": false,
     "isNotFound": false,
@@ -178,7 +180,9 @@ Map {
     "warnings": [],
   },
   RedwoodRoute {
-    "errors": [],
+    "errors": [
+      "Could not find page DoesNotExist",
+    ],
     "filepath": "/web/src/Routes.js",
     "hasParameters": true,
     "isNotFound": false,

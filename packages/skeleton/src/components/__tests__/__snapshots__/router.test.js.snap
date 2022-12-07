@@ -82,7 +82,9 @@ exports[`From within the example-todo-main fixture returns the correct routers w
         "warnings": [],
       },
       RedwoodRoute {
-        "errors": [],
+        "errors": [
+          "Could not find page EditUserPage",
+        ],
         "filepath": "/web/src/Routes.js",
         "hasParameters": false,
         "isNotFound": false,
@@ -179,7 +181,9 @@ exports[`From within the example-todo-main fixture returns the correct routers w
         "warnings": [],
       },
       RedwoodRoute {
-        "errors": [],
+        "errors": [
+          "Could not find page EditUserPage",
+        ],
         "filepath": "/web/src/Routes.js",
         "hasParameters": false,
         "isNotFound": false,
@@ -279,7 +283,9 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
         "warnings": [],
       },
       RedwoodRoute {
-        "errors": [],
+        "errors": [
+          "Could not find page DoesNotExist",
+        ],
         "filepath": "/web/src/Routes.js",
         "hasParameters": true,
         "isNotFound": false,
@@ -343,7 +349,9 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
         "warnings": [],
       },
       RedwoodRoute {
-        "errors": [],
+        "errors": [
+          "Could not find page DoesNotExist",
+        ],
         "filepath": "/web/src/Routes.js",
         "hasParameters": true,
         "isNotFound": false,

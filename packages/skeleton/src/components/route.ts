@@ -85,6 +85,13 @@ export class RedwoodRoute extends RedwoodSkeleton {
         this.errors.push('The notfound page cannot have a path property')
       }
     }
+
+    if (this.pageIdentifier !== undefined) {
+      if (this.getPage() === undefined) {
+        this.errors.push(`Could not find page ${this.pageIdentifier}`)
+      }
+    }
+
     // TODO: (Check) Routes should contain a name if they aren't the notfound page?
   }
 
