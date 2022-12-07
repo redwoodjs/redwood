@@ -134,6 +134,35 @@ export class RedwoodProject extends RedwoodSkeleton {
     return this.functions
   }
 
+  hasWarnings(cascade = false): boolean {
+    let warningsFound = this.warnings.length > 0
+    // if project has warnings then we can skip checking children and just return
+    if (cascade && !warningsFound) {
+      this.cells?.forEach((cell) => {
+        warningsFound ||= cell.hasWarnings()
+      })
+      this.functions?.forEach((func) => {
+        warningsFound ||= func.hasWarnings()
+      })
+      this.layouts?.forEach((layout) => {
+        warningsFound ||= layout.hasWarnings()
+      })
+      this.pages?.forEach((page) => {
+        warningsFound ||= page.hasWarnings()
+      })
+      this.routers?.forEach((router) => {
+        warningsFound ||= router.hasWarnings()
+        router.routes.forEach((route) => {
+          warningsFound ||= route.hasWarnings()
+        })
+      })
+      this.sides?.forEach((side) => {
+        warningsFound ||= side.hasWarnings()
+      })
+    }
+    return warningsFound
+  }
+
   printWarnings(cascade = false): void {
     if (this.warnings.length > 0) {
       const titleLine = `${chalk.bgYellow('[Warn]')}\t${this.name} ${chalk.dim(
@@ -167,6 +196,35 @@ export class RedwoodProject extends RedwoodSkeleton {
         side.printWarnings()
       })
     }
+  }
+
+  hasErrors(cascade = false): boolean {
+    let errorsFound = this.errors.length > 0
+    // if project has errors then we can skip checking children and just return
+    if (cascade && !errorsFound) {
+      this.cells?.forEach((cell) => {
+        errorsFound ||= cell.hasErrors()
+      })
+      this.functions?.forEach((func) => {
+        errorsFound ||= func.hasErrors()
+      })
+      this.layouts?.forEach((layout) => {
+        errorsFound ||= layout.hasErrors()
+      })
+      this.pages?.forEach((page) => {
+        errorsFound ||= page.hasErrors()
+      })
+      this.routers?.forEach((router) => {
+        errorsFound ||= router.hasErrors()
+        router.routes.forEach((route) => {
+          errorsFound ||= route.hasErrors()
+        })
+      })
+      this.sides?.forEach((side) => {
+        errorsFound ||= side.hasErrors()
+      })
+    }
+    return errorsFound
   }
 
   printErrors(cascade = false): void {

@@ -15,4 +15,7 @@ export const handler = async () => {
   })
   project.printErrors(true)
   project.printWarnings(true)
+  if (project.hasErrors(true)) {
+    process.exit(1)
+  }
 }

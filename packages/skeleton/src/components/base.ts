@@ -5,6 +5,8 @@ import chalk from 'chalk'
 interface RedwoodDiagnostics {
   warnings: string[]
   errors: string[]
+  hasErrors(): boolean
+  hasWarnings(): boolean
   printWarnings(): void
   printErrors(): void
 }
@@ -19,6 +21,10 @@ export abstract class RedwoodSkeleton implements RedwoodDiagnostics {
     this.name = name ?? path.parse(this.filepath).name // default to the file name if not given a specific name
   }
 
+  hasWarnings(): boolean {
+    return this.warnings.length > 0
+  }
+
   printWarnings(): void {
     if (this.warnings.length > 0) {
       const titleLine = `${chalk.bgYellow('[Warn]')}\t${this.name} ${chalk.dim(
@@ -29,6 +35,10 @@ export abstract class RedwoodSkeleton implements RedwoodDiagnostics {
       })
       console.log(titleLine.concat('\n', ...warningLines).trimEnd())
     }
+  }
+
+  hasErrors(): boolean {
+    return this.errors.length > 0
   }
 
   printErrors(): void {
