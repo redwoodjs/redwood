@@ -9075,16 +9075,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7.0.6":
-  version: 7.14.2
-  resolution: "@types/babel__traverse@npm:7.14.2"
-  dependencies:
-    "@babel/types": ^7.3.0
-  checksum: 39abd9c0f8858efe3fa955f52d24ec8d953582080702cea29fd5592e697ac624e04e81da3c2b2be8f4f1387350e651802b4f1c481a9f64b002d144bd2152142b
-  languageName: node
-  linkType: hard
-
-"@types/babel__traverse@npm:^7":
+"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7, @types/babel__traverse@npm:^7.0.6":
   version: 7.18.3
   resolution: "@types/babel__traverse@npm:7.18.3"
   dependencies:
