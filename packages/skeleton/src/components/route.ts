@@ -44,7 +44,7 @@ export class RedwoodRoute extends RedwoodSkeleton {
     this.pageIdentifier = routeAttributes.get('page')
     this.isNotFound = routeAttributes.has('notfound')
     this.prerender = routeAttributes.has('prerender')
-    this.hasParameters = this.path?.match(/(.*\{.+\}.*)+/) != null // TODO: Should use a proper route parameter check here
+    this.hasParameters = this.path?.includes('{') || false // TODO: Should use a proper route parameter check here
 
     // TODO: Extract layouts from wrapping elements
     let parent = routeJSXElementNodePath.parentPath

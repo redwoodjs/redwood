@@ -42,9 +42,13 @@ describe.each([
         routePageMap.set(route, route.getPage())
       })
       routePageMap.forEach((value, key) => {
-        key.filepath = key.filepath.substring(PROJECT_PATH.length)
+        if (key.filepath.startsWith(PROJECT_PATH)) {
+          key.filepath = key.filepath.substring(PROJECT_PATH.length)
+        }
         if (value !== undefined) {
-          value.filepath = value.filepath.substring(PROJECT_PATH.length)
+          if (value.filepath.startsWith(PROJECT_PATH)) {
+            value.filepath = value.filepath.substring(PROJECT_PATH.length)
+          }
         }
       })
       expect(routePageMap).toMatchSnapshot()

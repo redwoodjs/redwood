@@ -7215,7 +7215,6 @@ __metadata:
     "@babel/traverse": 7.20.5
     "@babel/types": 7.20.5
     "@redwoodjs/internal": 3.2.0
-    "@types/babel__traverse": ^7
     "@types/node": 16.11.65
     chalk: 4.1.2
     core-js: 3.26.1
@@ -9075,7 +9074,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7, @types/babel__traverse@npm:^7.0.6":
+"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7.0.6":
   version: 7.18.3
   resolution: "@types/babel__traverse@npm:7.18.3"
   dependencies:
