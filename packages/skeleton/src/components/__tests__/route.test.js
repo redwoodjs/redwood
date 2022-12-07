@@ -34,8 +34,13 @@ describe.each([
     insertIntoCache: false,
     readFromCache: false,
   })
+  const routers = project
+    .getRouters()
+    .sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
 
-  describe.each(project.getRouters())('router $#', (router) => {
+  describe.each(routers)('router $#', (router) => {
     const routes = router.routes
     test('routes return the correct pages', () => {
       const routePageMap = new Map()

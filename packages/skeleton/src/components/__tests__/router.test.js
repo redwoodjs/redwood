@@ -31,7 +31,9 @@ describe.each([
   })
 
   it('returns the correct routers without a project', () => {
-    const routers = extractRouters(undefined)
+    const routers = extractRouters(undefined).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     routers.forEach((router) => {
       router.filepath = stripAndFormatPathForTesting(
         router.filepath,
@@ -53,7 +55,9 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const routers = extractRouters(project)
+    const routers = extractRouters(project).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     routers.forEach((router) => {
       router.filepath = stripAndFormatPathForTesting(
         router.filepath,

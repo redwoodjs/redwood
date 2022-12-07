@@ -4,16 +4,16 @@ exports[`From within the empty-project fixture returns the correct sides with a 
 [
   RedwoodSide {
     "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
+    "filepath": "/api",
+    "name": "api",
+    "type": "api",
     "warnings": [],
   },
   RedwoodSide {
     "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
+    "filepath": "/web",
+    "name": "web",
+    "type": "web",
     "warnings": [],
   },
 ]
@@ -23,16 +23,16 @@ exports[`From within the empty-project fixture returns the correct sides without
 [
   RedwoodSide {
     "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
+    "filepath": "/api",
+    "name": "api",
+    "type": "api",
     "warnings": [],
   },
   RedwoodSide {
     "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
+    "filepath": "/web",
+    "name": "web",
+    "type": "web",
     "warnings": [],
   },
 ]
@@ -42,16 +42,16 @@ exports[`From within the example-todo-main fixture returns the correct sides wit
 [
   RedwoodSide {
     "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
+    "filepath": "/api",
+    "name": "api",
+    "type": "api",
     "warnings": [],
   },
   RedwoodSide {
     "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
+    "filepath": "/web",
+    "name": "web",
+    "type": "web",
     "warnings": [],
   },
 ]
@@ -61,16 +61,16 @@ exports[`From within the example-todo-main fixture returns the correct sides wit
 [
   RedwoodSide {
     "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
+    "filepath": "/api",
+    "name": "api",
+    "type": "api",
     "warnings": [],
   },
   RedwoodSide {
     "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
+    "filepath": "/web",
+    "name": "web",
+    "type": "web",
     "warnings": [],
   },
 ]
@@ -80,16 +80,16 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
 [
   RedwoodSide {
     "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
+    "filepath": "/api",
+    "name": "api",
+    "type": "api",
     "warnings": [],
   },
   RedwoodSide {
     "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
+    "filepath": "/web",
+    "name": "web",
+    "type": "web",
     "warnings": [],
   },
 ]
@@ -99,16 +99,16 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
 [
   RedwoodSide {
     "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
+    "filepath": "/api",
+    "name": "api",
+    "type": "api",
     "warnings": [],
   },
   RedwoodSide {
     "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
+    "filepath": "/web",
+    "name": "web",
+    "type": "web",
     "warnings": [],
   },
 ]
@@ -118,16 +118,16 @@ exports[`From within the test-project fixture returns the correct sides with a p
 [
   RedwoodSide {
     "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
+    "filepath": "/api",
+    "name": "api",
+    "type": "api",
     "warnings": [],
   },
   RedwoodSide {
     "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
+    "filepath": "/web",
+    "name": "web",
+    "type": "web",
     "warnings": [],
   },
 ]
@@ -137,16 +137,16 @@ exports[`From within the test-project fixture returns the correct sides without 
 [
   RedwoodSide {
     "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
+    "filepath": "/api",
+    "name": "api",
+    "type": "api",
     "warnings": [],
   },
   RedwoodSide {
     "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
+    "filepath": "/web",
+    "name": "web",
+    "type": "web",
     "warnings": [],
   },
 ]

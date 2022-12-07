@@ -31,7 +31,9 @@ describe.each([
   })
 
   it('returns the correct sides without a project', () => {
-    const sides = extractSides(undefined)
+    const sides = extractSides(undefined).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     sides.forEach((side) => {
       side.filepath = stripAndFormatPathForTesting(side.filepath, PROJECT_PATH)
     })
@@ -44,7 +46,9 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const sides = extractSides(project)
+    const sides = extractSides(project).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     sides.forEach((side) => {
       side.filepath = stripAndFormatPathForTesting(side.filepath, PROJECT_PATH)
     })

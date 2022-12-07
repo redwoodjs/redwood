@@ -31,7 +31,9 @@ describe.each([
   })
 
   it('returns the correct layouts without a project', () => {
-    const layouts = extractLayouts(undefined)
+    const layouts = extractLayouts(undefined).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     layouts.forEach((layout) => {
       layout.filepath = stripAndFormatPathForTesting(
         layout.filepath,
@@ -47,7 +49,9 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const layouts = extractLayouts(project)
+    const layouts = extractLayouts(project).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     layouts.forEach((layout) => {
       layout.filepath = stripAndFormatPathForTesting(
         layout.filepath,

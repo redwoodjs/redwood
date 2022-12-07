@@ -31,7 +31,9 @@ describe.each([
   })
 
   it('returns the correct cells without a project', () => {
-    const cells = extractCells(undefined)
+    const cells = extractCells(undefined).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     cells.forEach((cell) => {
       cell.filepath = stripAndFormatPathForTesting(cell.filepath, PROJECT_PATH)
     })
@@ -44,7 +46,9 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const cells = extractCells(project)
+    const cells = extractCells(project).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     cells.forEach((cell) => {
       cell.filepath = stripAndFormatPathForTesting(cell.filepath, PROJECT_PATH)
     })

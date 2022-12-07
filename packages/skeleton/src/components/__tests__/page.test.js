@@ -31,7 +31,9 @@ describe.each([
   })
 
   it('returns the correct pages without a project', () => {
-    const pages = extractPages(undefined)
+    const pages = extractPages(undefined).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     pages.forEach((page) => {
       page.filepath = stripAndFormatPathForTesting(page.filepath, PROJECT_PATH)
     })
@@ -44,7 +46,9 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const pages = extractPages(project)
+    const pages = extractPages(project).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     pages.forEach((page) => {
       page.filepath = stripAndFormatPathForTesting(page.filepath, PROJECT_PATH)
     })

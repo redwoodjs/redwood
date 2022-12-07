@@ -31,7 +31,9 @@ describe.each([
   })
 
   it('returns the correct functions without a project', () => {
-    const functions = extractFunctions(undefined)
+    const functions = extractFunctions(undefined).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     functions.forEach((aFunction) => {
       aFunction.filepath = stripAndFormatPathForTesting(
         aFunction.filepath,
@@ -47,7 +49,9 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const functions = extractFunctions(project)
+    const functions = extractFunctions(project).sort((a, b) =>
+      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+    )
     functions.forEach((aFunction) => {
       aFunction.filepath = stripAndFormatPathForTesting(
         aFunction.filepath,
