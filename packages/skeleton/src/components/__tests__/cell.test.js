@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { stripAndFormatPathForTesting } from '../../lib/testing'
 import { extractCells } from '../cell'
 import { RedwoodProject } from '../project'
 
@@ -32,7 +33,7 @@ describe.each([
   it('returns the correct cells without a project', () => {
     const cells = extractCells(undefined)
     cells.forEach((cell) => {
-      cell.filepath = cell.filepath.substring(PROJECT_PATH.length)
+      cell.filepath = stripAndFormatPathForTesting(cell.filepath, PROJECT_PATH)
     })
     expect(cells).toMatchSnapshot()
   })
@@ -45,7 +46,7 @@ describe.each([
     })
     const cells = extractCells(project)
     cells.forEach((cell) => {
-      cell.filepath = cell.filepath.substring(PROJECT_PATH.length)
+      cell.filepath = stripAndFormatPathForTesting(cell.filepath, PROJECT_PATH)
     })
     expect(cells).toMatchSnapshot()
   })

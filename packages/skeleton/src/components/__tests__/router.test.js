@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { stripAndFormatPathForTesting } from '../../lib/testing'
 import { RedwoodProject } from '../project'
 import { extractRouters } from '../router'
 
@@ -32,9 +33,15 @@ describe.each([
   it('returns the correct routers without a project', () => {
     const routers = extractRouters(undefined)
     routers.forEach((router) => {
-      router.filepath = router.filepath.substring(PROJECT_PATH.length)
+      router.filepath = stripAndFormatPathForTesting(
+        router.filepath,
+        PROJECT_PATH
+      )
       router.routes.forEach((route) => {
-        route.filepath = route.filepath.substring(PROJECT_PATH.length)
+        route.filepath = stripAndFormatPathForTesting(
+          route.filepath,
+          PROJECT_PATH
+        )
       })
     })
     expect(routers).toMatchSnapshot()
@@ -48,9 +55,15 @@ describe.each([
     })
     const routers = extractRouters(project)
     routers.forEach((router) => {
-      router.filepath = router.filepath.substring(PROJECT_PATH.length)
+      router.filepath = stripAndFormatPathForTesting(
+        router.filepath,
+        PROJECT_PATH
+      )
       router.routes.forEach((route) => {
-        route.filepath = route.filepath.substring(PROJECT_PATH.length)
+        route.filepath = stripAndFormatPathForTesting(
+          route.filepath,
+          PROJECT_PATH
+        )
       })
     })
     expect(routers).toMatchSnapshot()

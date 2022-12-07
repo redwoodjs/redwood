@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { stripAndFormatPathForTesting } from '../../lib/testing'
 import * as cell from '../cell'
 import * as func from '../function'
 import * as layout from '../layout'
@@ -38,7 +39,10 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    project.filepath = project.filepath.substring(PROJECT_PATH.length)
+    project.filepath = stripAndFormatPathForTesting(
+      project.filepath,
+      PROJECT_PATH
+    )
     expect(project).toMatchSnapshot()
   })
 

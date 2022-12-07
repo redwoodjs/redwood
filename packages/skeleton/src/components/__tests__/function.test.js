@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { stripAndFormatPathForTesting } from '../../lib/testing'
 import { extractFunctions } from '../function'
 import { RedwoodProject } from '../project'
 
@@ -32,7 +33,10 @@ describe.each([
   it('returns the correct functions without a project', () => {
     const functions = extractFunctions(undefined)
     functions.forEach((aFunction) => {
-      aFunction.filepath = aFunction.filepath.substring(PROJECT_PATH.length)
+      aFunction.filepath = stripAndFormatPathForTesting(
+        aFunction.filepath,
+        PROJECT_PATH
+      )
     })
     expect(functions).toMatchSnapshot()
   })
@@ -45,7 +49,10 @@ describe.each([
     })
     const functions = extractFunctions(project)
     functions.forEach((aFunction) => {
-      aFunction.filepath = aFunction.filepath.substring(PROJECT_PATH.length)
+      aFunction.filepath = stripAndFormatPathForTesting(
+        aFunction.filepath,
+        PROJECT_PATH
+      )
     })
     expect(functions).toMatchSnapshot()
   })

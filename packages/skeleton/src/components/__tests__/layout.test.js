@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { stripAndFormatPathForTesting } from '../../lib/testing'
 import { extractLayouts } from '../layout'
 import { RedwoodProject } from '../project'
 
@@ -32,7 +33,10 @@ describe.each([
   it('returns the correct layouts without a project', () => {
     const layouts = extractLayouts(undefined)
     layouts.forEach((layout) => {
-      layout.filepath = layout.filepath.substring(PROJECT_PATH.length)
+      layout.filepath = stripAndFormatPathForTesting(
+        layout.filepath,
+        PROJECT_PATH
+      )
     })
     expect(layouts).toMatchSnapshot()
   })
@@ -45,7 +49,10 @@ describe.each([
     })
     const layouts = extractLayouts(project)
     layouts.forEach((layout) => {
-      layout.filepath = layout.filepath.substring(PROJECT_PATH.length)
+      layout.filepath = stripAndFormatPathForTesting(
+        layout.filepath,
+        PROJECT_PATH
+      )
     })
     expect(layouts).toMatchSnapshot()
   })

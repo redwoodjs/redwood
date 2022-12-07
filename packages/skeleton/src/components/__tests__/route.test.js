@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { stripAndFormatPathForTesting } from '../../lib/testing'
 import { RedwoodProject } from '../project'
 
 const FIXTURE_PATH = path.join(
@@ -42,13 +43,12 @@ describe.each([
         routePageMap.set(route, route.getPage())
       })
       routePageMap.forEach((value, key) => {
-        if (key.filepath.startsWith(PROJECT_PATH)) {
-          key.filepath = key.filepath.substring(PROJECT_PATH.length)
-        }
+        key.filepath = stripAndFormatPathForTesting(key.filepath, PROJECT_PATH)
         if (value !== undefined) {
-          if (value.filepath.startsWith(PROJECT_PATH)) {
-            value.filepath = value.filepath.substring(PROJECT_PATH.length)
-          }
+          value.filepath = stripAndFormatPathForTesting(
+            value.filepath,
+            PROJECT_PATH
+          )
         }
       })
       expect(routePageMap).toMatchSnapshot()

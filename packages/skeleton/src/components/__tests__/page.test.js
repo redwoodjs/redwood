@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { stripAndFormatPathForTesting } from '../../lib/testing'
 import { extractPages } from '../page'
 import { RedwoodProject } from '../project'
 
@@ -32,7 +33,7 @@ describe.each([
   it('returns the correct pages without a project', () => {
     const pages = extractPages(undefined)
     pages.forEach((page) => {
-      page.filepath = page.filepath.substring(PROJECT_PATH.length)
+      page.filepath = stripAndFormatPathForTesting(page.filepath, PROJECT_PATH)
     })
     expect(pages).toMatchSnapshot()
   })
@@ -45,7 +46,7 @@ describe.each([
     })
     const pages = extractPages(project)
     pages.forEach((page) => {
-      page.filepath = page.filepath.substring(PROJECT_PATH.length)
+      page.filepath = stripAndFormatPathForTesting(page.filepath, PROJECT_PATH)
     })
     expect(pages).toMatchSnapshot()
   })

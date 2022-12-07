@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { stripAndFormatPathForTesting } from '../../lib/testing'
 import { RedwoodProject } from '../project'
 import { extractSides } from '../side'
 
@@ -32,7 +33,7 @@ describe.each([
   it('returns the correct sides without a project', () => {
     const sides = extractSides(undefined)
     sides.forEach((side) => {
-      side.filepath = side.filepath.substring(PROJECT_PATH.length)
+      side.filepath = stripAndFormatPathForTesting(side.filepath, PROJECT_PATH)
     })
     expect(sides).toMatchSnapshot()
   })
@@ -45,7 +46,7 @@ describe.each([
     })
     const sides = extractSides(project)
     sides.forEach((side) => {
-      side.filepath = side.filepath.substring(PROJECT_PATH.length)
+      side.filepath = stripAndFormatPathForTesting(side.filepath, PROJECT_PATH)
     })
     expect(sides).toMatchSnapshot()
   })
