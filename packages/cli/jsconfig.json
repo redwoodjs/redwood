@@ -9,6 +9,7 @@
   "include": ["src"],
   "references": [
     { "path": "../internal" },
+    { "path": "../skeleton" },
     { "path": "../prerender" },
     { "path": "../api-server" },
     { "path": "../auth-providers-setup" },
