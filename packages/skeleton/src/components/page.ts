@@ -27,7 +27,7 @@ export class RedwoodPage extends RedwoodSkeleton {
       pathWithinProject: this.filepath,
       readFromCache: true,
     })
-      .getRouters(true)
+      .getRouters()
       .forEach((router) => {
         routes.push(
           ...router.routes.filter((route) => {

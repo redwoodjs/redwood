@@ -46,7 +46,7 @@ export class RedwoodRouter extends RedwoodSkeleton {
   getSide(): RedwoodSide {
     const sides = RedwoodProject.getProject({
       pathWithinProject: this.filepath,
-    }).getSides(true)
+    }).getSides()
     const side = sides.find((side) => {
       return this.filepath.startsWith(side.filepath)
     })

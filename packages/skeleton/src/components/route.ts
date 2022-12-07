@@ -92,7 +92,7 @@ export class RedwoodRoute extends RedwoodSkeleton {
     return RedwoodProject.getProject({
       pathWithinProject: this.filepath,
     })
-      .getPages(true)
+      .getPages()
       .find((page) => {
         return page.name === this.pageIdentifier
       })
