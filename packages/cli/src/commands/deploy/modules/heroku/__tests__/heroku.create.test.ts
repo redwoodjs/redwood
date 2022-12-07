@@ -14,35 +14,40 @@ afterEach(() => {
 describe('Creating a heroku deployment', () => {
   it('creates a deployment with default config', async () => {
     jest.mocked(Questions.chooseAppName).mockResolvedValueOnce('myapp')
-    jest.mocked(Heroku.createApp).mockResolvedValueOnce('myapp')
+    jest.mocked(Heroku.create).mockResolvedValueOnce('myapp')
     const actual = await createStep(MOCK_HEROKU_CTX)
     expect(actual).toEqual({
       ...MOCK_HEROKU_CTX,
       appName: 'myapp',
+      appUrl: 'myapp',
     })
   })
 
   it('attempts to create twice', async () => {
-    jest.mocked(Questions.chooseAppName).mockResolvedValueOnce('first-try-bad')
     jest
-      .mocked(Heroku.createApp)
+      .mocked(Questions.chooseAppName)
+      .mockResolvedValueOnce('first-choice-name')
+    jest
+      .mocked(Heroku.create)
       .mockResolvedValueOnce('already taken')
-      .mockResolvedValueOnce('second-try-good')
+      .mockResolvedValueOnce('second-try-good-url')
 
     jest.mocked(Questions.nameExistsChooseOption).mockResolvedValueOnce('new')
 
+    jest.mocked(Questions.chooseAppName).mockResolvedValueOnce('new-app-name')
     const actual = await createStep(MOCK_HEROKU_CTX)
 
     expect(actual).toEqual({
       ...MOCK_HEROKU_CTX,
-      appName: 'second-try-good',
+      appName: 'new-app-name',
+      appUrl: 'second-try-good-url',
     })
   })
 
   it('deletes then creates when selected', async () => {
     jest.mocked(Questions.chooseAppName).mockResolvedValueOnce('first-try-bad')
     jest
-      .mocked(Heroku.createApp)
+      .mocked(Heroku.create)
       .mockResolvedValueOnce('already taken')
       .mockResolvedValueOnce('second-try-good')
 
@@ -52,6 +57,6 @@ describe('Creating a heroku deployment', () => {
 
     await createStep(MOCK_HEROKU_CTX)
 
-    expect(Heroku.deleteApp).toHaveBeenCalled()
+    expect(Heroku.destroy).toHaveBeenCalled()
   })
 })

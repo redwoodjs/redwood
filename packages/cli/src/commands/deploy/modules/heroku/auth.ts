@@ -1,13 +1,11 @@
 import { Heroku } from './api'
 import { HEROKU_ERRORS, IHerokuContext } from './interfaces'
 import { Questions } from './questions'
-import { Logger } from './stdio'
 
 export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
-  Logger.out('Authenticating with Heroku...')
-  const currentUser = await Heroku.currentUser()
-  // heroku whoami error message
-  // Error: Invalid credentials provided
+  ctx.logger.debug('Authenticating with Heroku...')
+  const currentUser = await Heroku.whoami()
+
   if (currentUser) {
     const email = await _handleAlreadyLoggedIn(ctx, currentUser)
     return {
@@ -15,7 +13,7 @@ export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
       email,
     }
   } else {
-    Logger.out('No Heroku account found... loggin in')
+    ctx.logger.debug('No Heroku account found... loggin in')
     const email = await Heroku.login()
     if (!email) {
       throw new Error(HEROKU_ERRORS.NOT_LOGGED_IN)
@@ -25,22 +23,23 @@ export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
       email,
     }
   }
-  return ctx
 }
 
 async function _handleAlreadyLoggedIn(
-  { defaults }: IHerokuContext,
+  { defaults, logger }: IHerokuContext,
   currentUser: string
 ): Promise<string> {
   if (defaults) {
-    Logger.out(`Using default Heroku account: ${currentUser}`)
+    logger.debug(`Using default Heroku account: ${currentUser}`)
     return currentUser
   }
 
   const shouldReauth = await Questions.shouldReAuthenticate(currentUser)
 
   if (shouldReauth) {
-    return Heroku.reauth()
+    logger.debug('Reauthenticating with Heroku...')
+    const userEmail = await Heroku.reauth()
+    return userEmail
   }
 
   return currentUser

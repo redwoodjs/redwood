@@ -26,7 +26,7 @@
     "build:js": "yarn babel && yarn clean:tests",
     "build:watch": "yarn nodemon \"yarn build:clean && yarn fix:permissions\"",
     "nodemon": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec",
-    "dev": "RWJS_CWD=../../../dev-redwood-app node dist/index.js",
+    "dev": "RWJS_CWD=../../../dev-redwood-app node dist/index.js deploy heroku",
     "dev:build": "yarn clean && yarn babel --source-maps inline --retain-lines",
     "dev:build:watch": "yarn nodemon 'yarn dev:build'",
     "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",

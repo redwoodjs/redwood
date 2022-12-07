@@ -17,7 +17,7 @@ afterEach(() => {
 
 describe('Unhappy heroku authentication paths', () => {
   it('trys to login when user isnt already', async () => {
-    jest.mocked(Heroku.currentUser).mockResolvedValueOnce('')
+    jest.mocked(Heroku.whoami).mockResolvedValueOnce('')
     jest.mocked(Heroku.login).mockResolvedValueOnce('email@emaily.com')
 
     const actual = await authStep(MOCK_HEROKU_CTX)
@@ -29,7 +29,7 @@ describe('Unhappy heroku authentication paths', () => {
   })
 
   it('throws when both login attempts fail', async () => {
-    jest.mocked(Heroku.currentUser).mockResolvedValueOnce('')
+    jest.mocked(Heroku.whoami).mockResolvedValueOnce('')
     jest.mocked(Heroku.login).mockResolvedValueOnce('')
 
     await expect(authStep(MOCK_HEROKU_CTX)).rejects.toThrow()
@@ -38,7 +38,7 @@ describe('Unhappy heroku authentication paths', () => {
 
 describe('happy heroku authentication paths', () => {
   it('uses current user when asked', async () => {
-    jest.mocked(Heroku.currentUser).mockResolvedValueOnce('already@logged.com')
+    jest.mocked(Heroku.whoami).mockResolvedValueOnce('already@logged.com')
 
     jest.mocked(Questions.shouldReAuthenticate).mockResolvedValueOnce(false)
 
@@ -48,12 +48,11 @@ describe('happy heroku authentication paths', () => {
   })
 
   it('already logged in wants to reauth', async () => {
-    jest.mocked(Heroku.currentUser).mockResolvedValueOnce('already@logged.com')
+    jest.mocked(Heroku.whoami).mockResolvedValueOnce('already@logged.com')
 
     jest.mocked(Questions.shouldReAuthenticate).mockResolvedValueOnce(true)
 
     jest.mocked(Heroku.reauth).mockResolvedValueOnce('new@auth.com')
-
     const actual = await authStep(MOCK_HEROKU_CTX)
 
     expect(actual).toEqual({ ...MOCK_HEROKU_CTX, email: 'new@auth.com' })

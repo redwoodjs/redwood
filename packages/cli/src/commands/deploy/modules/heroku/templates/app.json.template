@@ -24,7 +24,7 @@
   ],
   "environments": {
     "review": {
-      "addons": ["heroku-postgresql:hobby-dev"],
+      "addons": ["heroku-postgresql:mini"],
       "scripts": {
         "postdeploy": "yarn rw prisma migrate dev && yarn rw prisma db seed"
       },

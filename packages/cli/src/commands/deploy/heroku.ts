@@ -1,15 +1,19 @@
+import path from 'path'
+
+import chalk from 'chalk'
 import yargs from 'yargs'
+
+import { getPaths } from '../../lib'
 
 import {
   authStep,
-  systemCheckStep,
   createStep,
+  pushStep,
+  validateSystemStep,
+  prepareStep,
+  createLogger,
   type IHerokuContext,
-  copyTemplatesStep,
-  createContextStep,
 } from './modules/heroku'
-import { pushStep } from './modules/heroku/push'
-import { Logger } from './modules/heroku/stdio'
 
 export const command = 'heroku'
 export const description = 'Setup and deploy to Heroku'
@@ -18,33 +22,43 @@ export const HEROKU_OPTIONS: { [keyof: string]: yargs.Options } = {
   'app-name': {
     describe: 'Use a custom name for your Heroku app',
     type: 'string',
+    alias: 'a',
     default: '',
   },
   defaults: {
     describe: 'Use default values for all prompts',
     type: 'boolean',
+    alias: 'd',
     default: false,
   },
   'skip-checks': {
     describe: 'Skip system checks',
+    type: 'boolean',
+    alias: 's',
+    default: false,
+  },
+  delete: {
+    describe: 'Manually delete an app by name',
+    type: 'string',
+    alias: 'D',
+  },
+  debug: {
+    describe: 'Enable debug logging',
     type: 'boolean',
     default: false,
   },
 }
 
 export const builder = function (yargs: yargs.Argv) {
-  Object.entries(HEROKU_OPTIONS).forEach(
-    ([arg, opts]: [arg: string, opts: yargs.Options]) => yargs.option(arg, opts)
-  )
+  yargs.options(HEROKU_OPTIONS)
 }
 
 type IHerokuStep = (ctx: IHerokuContext) => Promise<IHerokuContext>
 
 const HEROKU_SETUP_STEPS: IHerokuStep[] = [
-  systemCheckStep,
-  createContextStep,
+  validateSystemStep,
+  prepareStep,
   authStep,
-  copyTemplatesStep,
   createStep,
   pushStep,
 ]
@@ -58,8 +72,17 @@ async function _runSteps(arr: IHerokuStep[], input: IHerokuContext) {
 
 export const handler = async (initCtx: IHerokuContext) => {
   try {
-    await _runSteps(HEROKU_SETUP_STEPS, initCtx)
+    const paths = getPaths()
+    const app = path.basename(paths.base)
+    const ctx = {
+      ...initCtx,
+      appName: initCtx.appName || app,
+      projectPath: paths.base,
+      logger: createLogger(initCtx.debug),
+    }
+    await _runSteps(HEROKU_SETUP_STEPS, ctx)
   } catch (err: any) {
-    Logger.error(err.message)
+    console.error(chalk.redBright(err.message))
+    process.exit(1)
   }
 }
