@@ -29,65 +29,79 @@ describe('matchPath', () => {
     ['/blog/{year}/{month}/{day}', '/blog/2019/07'],
     ['/posts/{id}/edit', '/posts//edit'],
     ['/about', '/'],
-  ])('does not match route "%s" with path "%s"', (route, pathname) => {
-    expect(matchPath(route, pathname)).toEqual({ match: false })
+  ])('does not match route "%s" with path "%s"', (path, pathname) => {
+    expect(matchPath({ path, pathname })).toEqual({ match: false })
   })
 
   it('matches valid paths and extracts params correctly', () => {
-    expect(matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')).toEqual(
-      { match: true, params: { day: '07', month: '12', year: '2019' } }
-    )
+    expect(
+      matchPath({
+        path: '/blog/{year}/{month}/{day}',
+        pathname: '/blog/2019/12/07',
+      })
+    ).toEqual({ match: true, params: { day: '07', month: '12', year: '2019' } })
   })
 
   it('transforms a param for Int', () => {
-    expect(matchPath('/post/{id}', '/post/1337')).toEqual({
+    expect(matchPath({ path: '/post/{id}', pathname: '/post/1337' })).toEqual({
       match: true,
       params: { id: '1337' },
     })
 
-    expect(matchPath('/post/{id:Int}', '/post/1337')).toEqual({
+    expect(
+      matchPath({ path: '/post/{id:Int}', pathname: '/post/1337' })
+    ).toEqual({
       match: true,
       params: { id: 1337 },
     })
 
-    expect(matchPath('/post/id-{id:Int}', '/post/id-37')).toEqual({
+    expect(
+      matchPath({ path: '/post/id-{id:Int}', pathname: '/post/id-37' })
+    ).toEqual({
       match: true,
       params: { id: 37 },
     })
 
-    expect(matchPath('/post/{id:Int}-id', '/post/78-id')).toEqual({
+    expect(
+      matchPath({ path: '/post/{id:Int}-id', pathname: '/post/78-id' })
+    ).toEqual({
       match: true,
       params: { id: 78 },
     })
 
-    expect(matchPath('/post/id-{id:Int}-id', '/post/id-789-id')).toEqual({
+    expect(
+      matchPath({ path: '/post/id-{id:Int}-id', pathname: '/post/id-789-id' })
+    ).toEqual({
       match: true,
       params: { id: 789 },
     })
 
-    expect(matchPath('/{id:Int}/bazinga', '/89/bazinga')).toEqual({
+    expect(
+      matchPath({ path: '/{id:Int}/bazinga', pathname: '/89/bazinga' })
+    ).toEqual({
       match: true,
       params: { id: 89 },
     })
   })
 
   it('transforms a param for Boolean', () => {
-    expect(matchPath('/signedUp/{status:Boolean}', '/signedUp/true')).toEqual({
+    expect(
+      matchPath({
+        path: '/signedUp/{status:Boolean}',
+        pathname: '/signedUp/true',
+      })
+    ).toEqual({
       match: true,
       params: {
         status: true,
       },
     })
 
-    expect(matchPath('/signedUp/{status:Boolean}', '/signedUp/false')).toEqual({
-      match: true,
-      params: {
-        status: false,
-      },
-    })
-
     expect(
-      matchPath('/signedUp/x-{status:Boolean}', '/signedUp/x-false')
+      matchPath({
+        path: '/signedUp/{status:Boolean}',
+        pathname: '/signedUp/false',
+      })
     ).toEqual({
       match: true,
       params: {
@@ -96,7 +110,10 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/signedUp/{status:Boolean}y', '/signedUp/falsey')
+      matchPath({
+        path: '/signedUp/x-{status:Boolean}',
+        pathname: '/signedUp/x-false',
+      })
     ).toEqual({
       match: true,
       params: {
@@ -105,7 +122,10 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/signedUp/e{status:Boolean}y', '/signedUp/efalsey')
+      matchPath({
+        path: '/signedUp/{status:Boolean}y',
+        pathname: '/signedUp/falsey',
+      })
     ).toEqual({
       match: true,
       params: {
@@ -114,7 +134,22 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/signedUp/{status:Boolean}', '/signedUp/somethingElse')
+      matchPath({
+        path: '/signedUp/e{status:Boolean}y',
+        pathname: '/signedUp/efalsey',
+      })
+    ).toEqual({
+      match: true,
+      params: {
+        status: false,
+      },
+    })
+
+    expect(
+      matchPath({
+        path: '/signedUp/{status:Boolean}',
+        pathname: '/signedUp/somethingElse',
+      })
     ).toEqual({
       match: false,
     })
@@ -122,7 +157,10 @@ describe('matchPath', () => {
 
   it('transforms a param for Floats', () => {
     expect(
-      matchPath('/version/{floatyMcFloat:Float}', '/version/1.58')
+      matchPath({
+        path: '/version/{floatyMcFloat:Float}',
+        pathname: '/version/1.58',
+      })
     ).toEqual({
       match: true,
       params: {
@@ -130,17 +168,23 @@ describe('matchPath', () => {
       },
     })
 
-    expect(matchPath('/version/{floatyMcFloat:Float}', '/version/626')).toEqual(
-      {
-        match: true,
-        params: {
-          floatyMcFloat: 626,
-        },
-      }
-    )
+    expect(
+      matchPath({
+        path: '/version/{floatyMcFloat:Float}',
+        pathname: '/version/626',
+      })
+    ).toEqual({
+      match: true,
+      params: {
+        floatyMcFloat: 626,
+      },
+    })
 
     expect(
-      matchPath('/version/{floatyMcFloat:Float}', '/version/+0.92')
+      matchPath({
+        path: '/version/{floatyMcFloat:Float}',
+        pathname: '/version/+0.92',
+      })
     ).toEqual({
       match: true,
       params: {
@@ -149,7 +193,10 @@ describe('matchPath', () => {
     })
 
     expect(
-      matchPath('/version/{floatyMcFloat:Float}', '/version/-5.5')
+      matchPath({
+        path: '/version/{floatyMcFloat:Float}',
+        pathname: '/version/-5.5',
+      })
     ).toEqual({
       match: true,
       params: {
@@ -157,17 +204,23 @@ describe('matchPath', () => {
       },
     })
 
-    expect(matchPath('/version/{floatyMcFloat:Float}', '/version/4e8')).toEqual(
-      {
-        match: true,
-        params: {
-          floatyMcFloat: 4e8,
-        },
-      }
-    )
+    expect(
+      matchPath({
+        path: '/version/{floatyMcFloat:Float}',
+        pathname: '/version/4e8',
+      })
+    ).toEqual({
+      match: true,
+      params: {
+        floatyMcFloat: 4e8,
+      },
+    })
 
     expect(
-      matchPath('/version/{floatyMcFloat:Float}', '/version/noMatchMe')
+      matchPath({
+        path: '/version/{floatyMcFloat:Float}',
+        pathname: '/version/noMatchMe',
+      })
     ).toEqual({
       match: false,
     })
@@ -175,7 +228,12 @@ describe('matchPath', () => {
 
   it('transforms a param for Globs', () => {
     //single
-    expect(matchPath('/version/{path...}', '/version/path/to/file')).toEqual({
+    expect(
+      matchPath({
+        path: '/version/{path...}',
+        pathname: '/version/path/to/file',
+      })
+    ).toEqual({
       match: true,
       params: {
         path: 'path/to/file',
@@ -183,7 +241,9 @@ describe('matchPath', () => {
     })
 
     //  multiple
-    expect(matchPath('/a/{a...}/b/{b...}/c', '/a/1/2/b/3/4/c')).toEqual({
+    expect(
+      matchPath({ path: '/a/{a...}/b/{b...}/c', pathname: '/a/1/2/b/3/4/c' })
+    ).toEqual({
       match: true,
       params: {
         a: '1/2',
@@ -192,7 +252,9 @@ describe('matchPath', () => {
     })
 
     // adjacent
-    expect(matchPath('/a/{a...}{b...}/c', '/a/1/2/3/4/c')).toEqual({
+    expect(
+      matchPath({ path: '/a/{a...}{b...}/c', pathname: '/a/1/2/3/4/c' })
+    ).toEqual({
       match: true,
       params: {
         a: '1/2/3/4',
@@ -201,7 +263,9 @@ describe('matchPath', () => {
     })
 
     // adjacent with a slash
-    expect(matchPath('/a/{a...}/{b...}/c', '/a/1/2/3/4/c')).toEqual({
+    expect(
+      matchPath({ path: '/a/{a...}/{b...}/c', pathname: '/a/1/2/3/4/c' })
+    ).toEqual({
       match: true,
       params: {
         a: '1/2/3',
@@ -210,7 +274,7 @@ describe('matchPath', () => {
     })
 
     // prefixed
-    expect(matchPath('/a-{a...}', '/a-1/2')).toEqual({
+    expect(matchPath({ path: '/a-{a...}', pathname: '/a-1/2' })).toEqual({
       match: true,
       params: {
         a: '1/2',
@@ -218,7 +282,9 @@ describe('matchPath', () => {
     })
 
     // suffixed
-    expect(matchPath('/{a...}-a/kittens', '/1/2-a/kittens')).toEqual({
+    expect(
+      matchPath({ path: '/{a...}-a/kittens', pathname: '/1/2-a/kittens' })
+    ).toEqual({
       match: true,
       params: {
         a: '1/2',
@@ -228,10 +294,11 @@ describe('matchPath', () => {
 
   it('handles multiple typed params', () => {
     expect(
-      matchPath(
-        '/dashboard/document/{id:Int}/{version:Float}/edit/{edit:Boolean}/{path...}/terminate',
-        '/dashboard/document/44/1.8/edit/false/path/to/file/terminate'
-      )
+      matchPath({
+        path: '/dashboard/document/{id:Int}/{version:Float}/edit/{edit:Boolean}/{path...}/terminate',
+        pathname:
+          '/dashboard/document/44/1.8/edit/false/path/to/file/terminate',
+      })
     ).toEqual({
       match: true,
       params: { id: 44, version: 1.8, edit: false, path: 'path/to/file' },

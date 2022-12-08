@@ -77,7 +77,24 @@ const coreParamTypes: Record<string, ParamType> = {
 }
 
 type SupportedRouterParamTypes = keyof typeof coreParamTypes
+export interface PathMatch {
+  match: boolean
+  params?: Record<string, unknown>
+}
 
+interface MatchPathArgs {
+  path: string
+  pathname: string
+  paramTypes?: Record<string, ParamType>
+  matchChildRoutes?: boolean
+}
+
+/** @deprecated Call this function with an options object instead */
+export function matchPath(
+  path: string,
+  pathname: string,
+  paramTypes?: Record<string, ParamType>
+): PathMatch
 /**
  * Determine if the given route is a match for the given pathname. If so,
  * extract any named params and return them in an object.
@@ -89,28 +106,65 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *
  * Examples:
  *
- *  matchPath('/blog/{year}/{month}/{day}', '/blog/2019/12/07')
+ *  matchPath({
+ *    path: '/blog/{year}/{month}/{day}',
+ *    pathname: '/blog/2019/12/07'
+ *  })
  *  => { match: true, params: { year: '2019', month: '12', day: '07' }}
  *
- *  matchPath('/about', '/')
+ *  matchPath({ path: '/about', pathname: '/' })
  *  => { match: false }
  *
- *  matchPath('/post/{id:Int}', '/post/7')
+ *  matchPath({ path: '/post/{id:Int}', pathname: '/post/7' })
  *  => { match: true, params: { id: 7 }}
  *
- *  matchPath('/post/1', '/post/', undefined, true)
+ *  matchPath({
+ *    path: '/post/1',
+ *    pathname: '/post/',
+ *    matchChildRoutes: true
+ *  })
  *  => { match: true, params: { }}
  */
-export const matchPath = (
-  route: string,
-  pathname: string,
-  paramTypes?: Record<string, ParamType>,
-  matchChildRoutes = false
-) => {
+export function matchPath(args: MatchPathArgs): PathMatch
+export function matchPath(
+  pathOrArgs: string | MatchPathArgs,
+  pathname?: string,
+  paramTypes?: Record<string, ParamType>
+) {
+  function isMatchPathArgs(
+    pathOrArgs: string | MatchPathArgs
+  ): pathOrArgs is MatchPathArgs {
+    return typeof (pathOrArgs as MatchPathArgs).path !== 'undefined'
+  }
+
+  if (isMatchPathArgs(pathOrArgs)) {
+    return internalMatchPath(pathOrArgs)
+  }
+
+  if (typeof pathname === 'undefined') {
+    throw new Error('pathname is undefined')
+  }
+
+  console.warn('Calling matchPath with separate arguments is deprecated')
+
+  return internalMatchPath({
+    path: pathOrArgs,
+    pathname: pathname,
+    paramTypes,
+    matchChildRoutes: false,
+  })
+}
+
+function internalMatchPath({
+  path,
+  pathname,
+  paramTypes,
+  matchChildRoutes,
+}: MatchPathArgs) {
   // Get the names and the transform types for the given route.
-  const routeParams = paramsForRoute(route)
+  const routeParams = paramsForRoute(path)
   const allParamTypes = { ...coreParamTypes, ...paramTypes }
-  let typeMatchingRoute = route.replace(/\/$/, '')
+  let typeMatchingRoute = path.replace(/\/$/, '')
 
   // Map all params from the route to their type `match` regexp to create a
   // "type-matching route" regexp

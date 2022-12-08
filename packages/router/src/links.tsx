@@ -58,12 +58,11 @@ const useMatch = (pathname: string, options?: UseMatchOptions) => {
     }
   }
 
-  return matchPath(
-    pathname,
-    location.pathname,
-    undefined,
-    options?.matchChildRoutes
-  )
+  return matchPath({
+    path: pathname,
+    pathname: location.pathname,
+    matchChildRoutes: options?.matchChildRoutes,
+  })
 }
 
 interface LinkProps {

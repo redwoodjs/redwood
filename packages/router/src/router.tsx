@@ -90,11 +90,11 @@ const InternalRoute = ({
     throw new Error(`No location for route "${name}"`)
   }
 
-  const { params: pathParams } = matchPath(
+  const { params: pathParams } = matchPath({
     path,
-    location.pathname,
-    routerState.paramTypes
-  )
+    pathname: location.pathname,
+    paramTypes: routerState.paramTypes,
+  })
 
   const searchParams = parseSearch(location.search)
   const allParams: Record<string, string> = { ...searchParams, ...pathParams }
@@ -242,7 +242,11 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   // Check for issues with the path.
   validatePath(path)
 
-  const { params: pathParams } = matchPath(path, location.pathname, paramTypes)
+  const { params: pathParams } = matchPath({
+    path,
+    pathname: location.pathname,
+    paramTypes,
+  })
 
   const searchParams = parseSearch(location.search)
   const allParams = { ...searchParams, ...pathParams }
@@ -291,7 +295,11 @@ function analyzeRouterTree(
 
   function isActiveRoute(route: React.ReactElement<InternalRouteProps>) {
     if (route.props.path) {
-      const { match } = matchPath(route.props.path, pathname, paramTypes)
+      const { match } = matchPath({
+        path: route.props.path,
+        pathname,
+        paramTypes,
+      })
 
       if (match) {
         return true
