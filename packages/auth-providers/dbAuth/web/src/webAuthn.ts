@@ -80,10 +80,8 @@ export default class WebAuthnClient {
 
       if (xhr.status !== 200) {
         if (options.error?.match(/username and password/)) {
-          console.info('regex match')
           throw new WebAuthnDeviceNotFoundError()
         } else {
-          console.info('no match')
           throw new WebAuthnAuthenticationError(
             `Could not start authentication: ${options.error}`
           )
