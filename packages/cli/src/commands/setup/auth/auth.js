@@ -71,7 +71,7 @@ export async function builder(yargs) {
     '@redwoodjs/auth-firebase-setup',
     '@redwoodjs/auth-azure-active-directory-setup',
     '@redwoodjs/auth-clerk-setup',
-    '@redwoodjs/auth=dbauth-setup',
+    '@redwoodjs/auth-dbauth-setup',
     '@redwoodjs/auth-supabase-setup',
     '@redwoodjs/auth-supertokens-setup',
   ]) {
@@ -81,11 +81,9 @@ export async function builder(yargs) {
       commandModule = await import(module)
     } catch (e) {
       // Since these are plugins, it's ok if they can't be imported because they're not installed.
-      if (e.code === 'MODULE_NOT_FOUND') {
-        return
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e
       }
-
-      throw e
     }
 
     if (commandModule) {
