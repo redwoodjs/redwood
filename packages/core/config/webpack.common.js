@@ -161,9 +161,6 @@ const getSharedPlugins = (isEnvProduction) => {
       ['process.env.RWJS_API_GRAPHQL_URL']: JSON.stringify(
         redwoodConfig.web.apiGraphQLUrl ?? `${redwoodConfig.web.apiUrl}/graphql`
       ),
-      ['process.env.RWJS_API_DBAUTH_URL']: JSON.stringify(
-        redwoodConfig.web.apiDbAuthUrl ?? `${redwoodConfig.web.apiUrl}/auth`
-      ),
       ['process.env.RWJS_API_URL']: JSON.stringify(redwoodConfig.web.apiUrl),
       ['process.env.__REDWOOD__APP_TITLE']: JSON.stringify(
         redwoodConfig.web.title || path.basename(redwoodPaths.base)
