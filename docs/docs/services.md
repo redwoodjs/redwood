@@ -753,10 +753,6 @@ As of this writing, Redwood ships with clients for the two most popular cache ba
 If you need to access functionality in your cache client that the `cache()` and `cacheFindMany()` functions do not handle, you can always get access to the underlying raw client library and use it however you want:
 
 ```javascript
-// api/src/lib/cache.js
-export const { cache, cacheFindMany, cacheClient } = createCache(client)
-
-// api/src/services/posts/posts.js
 import { cacheClient } from 'src/lib/cache'
 
 export const updatePost = async ({ id, input }) => {
