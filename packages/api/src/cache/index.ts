@@ -188,5 +188,6 @@ export const createCache = (
   return {
     cache,
     cacheFindMany,
+    cacheClient: client,
   }
 }
