@@ -8,5 +8,5 @@
     "outDir": "dist"
   },
   "include": ["src"],
-  "references": [{ "path": "../../../auth" }]
+  "references": [{ "path": "../../../api" }]
 }
