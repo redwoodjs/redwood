@@ -1,13 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useDepthLimit } from '@envelop/depth-limit'
-import { useDisableIntrospection } from '@envelop/disable-introspection'
-import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
+// import { useDepthLimit } from '@envelop/depth-limit'
+// import { useDisableIntrospection } from '@envelop/disable-introspection'
+// import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
-import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
+import {
+  GraphQLError,
+  GraphQLSchema,
+  // OperationTypeNode
+} from 'graphql'
 import { Plugin, YogaMaskedErrorOpts, useReadinessCheck } from 'graphql-yoga'
 import { createYoga } from 'graphql-yoga'
 
@@ -88,8 +92,8 @@ export const createGraphQLHandler = ({
   services,
   sdls,
   directives = [],
-  depthLimitOptions,
-  allowedOperations,
+  // depthLimitOptions,
+  // allowedOperations,
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
@@ -129,9 +133,9 @@ export const createGraphQLHandler = ({
 
   const plugins: Array<Plugin<any>> = []
 
-  if (!isDevEnv) {
-    plugins.push(useDisableIntrospection())
-  }
+  // if (!isDevEnv) {
+  //   plugins.push(useDisableIntrospection())
+  // }
 
   // Custom Redwood plugins
   plugins.push(useRedwoodAuthContext(getCurrentUser, authDecoder))
@@ -145,18 +149,18 @@ export const createGraphQLHandler = ({
   plugins.push(...redwoodDirectivePlugins)
 
   // Limits the depth of your GraphQL selection sets.
-  plugins.push(
-    useDepthLimit({
-      maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
-      ignore: (depthLimitOptions && depthLimitOptions.ignore) || [],
-    })
-  )
+  // plugins.push(
+  //   useDepthLimit({
+  //     maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
+  //     ignore: (depthLimitOptions && depthLimitOptions.ignore) || [],
+  //   })
+  // )
   // Only allow execution of specific operation types
-  plugins.push(
-    useFilterAllowedOperations(
-      allowedOperations || [OperationTypeNode.QUERY, OperationTypeNode.MUTATION]
-    )
-  )
+  // plugins.push(
+  //   useFilterAllowedOperations(
+  //     allowedOperations || [OperationTypeNode.QUERY, OperationTypeNode.MUTATION]
+  //   )
+  // )
 
   // App-defined plugins
   if (extraPlugins && extraPlugins.length > 0) {
