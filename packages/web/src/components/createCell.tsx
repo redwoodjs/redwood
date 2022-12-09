@@ -11,12 +11,22 @@ import { useCellCacheContext } from './CellCacheContext'
  */
 import { useQuery } from './GraphQLHooksProvider'
 
+/**
+ * GraphQL Variables required to be included in the Cell props.
+ */
+type CellPropsVariables<Cell, GQLVariables> = Cell extends {
+  beforeQuery: (...args: any[]) => { variables: any }
+}
+  ? unknown
+  : GQLVariables
+
 declare type CustomCellProps<Cell, GQLVariables> = Cell extends {
   beforeQuery: (...args: any[]) => unknown
 }
   ? Parameters<Cell['beforeQuery']> extends [unknown, ...any]
-    ? Parameters<Cell['beforeQuery']>[0]
-    : Record<string, never>
+    ? Parameters<Cell['beforeQuery']>[0] &
+        CellPropsVariables<Cell, GQLVariables>
+    : CellPropsVariables<Cell, GQLVariables>
   : GQLVariables
 
 /**
@@ -30,7 +40,10 @@ export type CellProps<
 > = A.Compute<
   Omit<
     ComponentProps<CellSuccess>,
-    keyof QueryOperationResult | keyof GQLResult | 'updating'
+    | keyof CellPropsVariables<CellType, GQLVariables>
+    | keyof QueryOperationResult
+    | keyof GQLResult
+    | 'updating'
   > &
     CustomCellProps<CellType, GQLVariables>
 >
