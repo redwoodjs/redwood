@@ -1,1 +1,1 @@
-export * as setupAuthAzureActiveDirectoryCommand from './setup'
+export * from './setup'
