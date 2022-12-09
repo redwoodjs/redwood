@@ -101,7 +101,7 @@ const DEFAULT_CONFIG: Config = {
     nestScaffoldByModel: true,
   },
   background: {
-    updateChecks: true,
+    updateChecks: false,
   },
 }
 
