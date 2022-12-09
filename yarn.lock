@@ -9840,6 +9840,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:16.11.65":
+  version: 16.11.65
+  resolution: "@types/node@npm:16.11.65"
+  checksum: 5d66c2e0119ff194b2e196b0016d5d083fd332a114cea04822fbc22a7733b2feba0db9de380a289f457312a24b2f313396084b682d670038f5b2ced2d14fc659
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:16.18.6, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
   version: 16.18.6
   resolution: "@types/node@npm:16.18.6"
