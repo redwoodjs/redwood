@@ -7425,7 +7425,7 @@ __metadata:
     "@babel/traverse": 7.20.5
     "@babel/types": 7.20.5
     "@redwoodjs/internal": 3.2.0
-    "@types/node": 16.11.65
+    "@types/node": 16.18.6
     chalk: 4.1.2
     core-js: 3.26.1
     graphql: 16.6.0
@@ -9837,13 +9837,6 @@ __metadata:
   version: 18.8.3
   resolution: "@types/node@npm:18.8.3"
   checksum: 67d837c55ae33b290ec01d8adb75d695ac7e7beddda5b7646eb53382c9f29f98c3e5307b9a4ba122cbebbef4b84d18a12cff4e4312eb9d12e7acd747cc75239a
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:16.11.65":
-  version: 16.11.65
-  resolution: "@types/node@npm:16.11.65"
-  checksum: 5d66c2e0119ff194b2e196b0016d5d083fd332a114cea04822fbc22a7733b2feba0db9de380a289f457312a24b2f313396084b682d670038f5b2ced2d14fc659
   languageName: node
   linkType: hard
 
