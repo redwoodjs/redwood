@@ -5,7 +5,11 @@ import type { PluginObj, types } from '@babel/core'
 
 import { getBaseDirFromFile } from '../../paths'
 
-const { getProject, URL_file } = require('@redwoodjs/structure')
+// const { getProject, URL_file } = require('@redwoodjs/structure')
+const { RedwoodCell } = require('@redwoodjs/skeleton/dist/components/cell')
+const {
+  RedwoodProject,
+} = require('@redwoodjs/skeleton/dist/components/project')
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []
@@ -108,24 +112,26 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
 
         // Find the model of the Cell that is in the same directory.
-        const dir = URL_file(path.dirname(state.file.opts.filename))
-        const project = getProject(getBaseDirFromFile(filename))
-        const cell = project.cells.find((path: { uri: string }) => {
-          return path.uri.startsWith(dir)
+        const dir = path.dirname(state.file.opts.filename)
+        const project = RedwoodProject.getProject({
+          pathWithinProject: getBaseDirFromFile(filename),
+        })
+        const cell = project.getCells().find((cell: typeof RedwoodCell) => {
+          return cell.filepath.startsWith(dir)
         })
 
-        if (!cell || !cell?.filePath) {
+        if (!cell || !cell?.filepath) {
           return
         }
 
-        if (!cell.queryOperationName) {
+        if (!cell.gqlQueryName) {
           return
         }
 
         // mockGraphQLQuery(<operationName>, <mockFunction>)
         const mockGraphQLCall = t.callExpression(
           t.identifier('mockGraphQLQuery'),
-          [t.stringLiteral(cell.queryOperationName), mockFunction]
+          [t.stringLiteral(cell.gqlQueryName), mockFunction]
         )
 
         // Delete original "export const standard"
@@ -133,7 +139,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         // + import { afterQuery } from './${cellFileName}'
         // + export const standard = () => afterQuery(...)
-        if (cell.exportedSymbols.has('afterQuery')) {
+        if (cell.hasAfterQueryExport) {
           const importAfterQuery = t.importDeclaration(
             [
               t.importSpecifier(
@@ -141,7 +147,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 t.identifier('afterQuery')
               ),
             ],
-            t.stringLiteral(`./${path.basename(cell.filePath)}`)
+            t.stringLiteral(`./${path.basename(cell.filepath)}`)
           )
 
           nodesToInsert = [

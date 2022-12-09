@@ -38,15 +38,16 @@ This skeleton package will replace the introspection features of the existing st
     * Skeleton: Has an initial route parsing implementation which could provide the necessary functionality.
     * Complete: Yes.
 
-### Internal Package (0%)
+### Internal Package (100%)
 1. babel_plugin_redwood_mock_cell_data
     * Structure: Can list all cells and their details
     * Skeleton: Supports the same functionality
-    * Complete: No, can implement when skeleton is more mature.
+    * Complete: Yes.
 2. Duplicate route detection
     * Structure: Can list all routes
     * Skeleton: Supports the same functionality
-    * Complete: No, can implement when skeleton is more mature.
+    * Complete: Yes.
+
 ### Telemetry Package (0%)
 1. Telemetry
     * Structure: Can list all: routes, services, cells, pages and sides
