@@ -31,13 +31,12 @@ describe.each([
   })
 
   it('returns the correct sides without a project', () => {
-    const sides = extractSides(undefined).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const sides = extractSides(undefined)
     sides.forEach((side) => {
       side.filepath = stripAndFormatPathForTesting(side.filepath, PROJECT_PATH)
+      expect(side).toMatchSnapshot(side.filepath)
     })
-    expect(sides).toMatchSnapshot()
+    expect(sides.length).toMatchSnapshot('side count')
   })
 
   it('returns the correct sides with a project', () => {
@@ -46,12 +45,11 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const sides = extractSides(project).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const sides = extractSides(project)
     sides.forEach((side) => {
       side.filepath = stripAndFormatPathForTesting(side.filepath, PROJECT_PATH)
+      expect(side).toMatchSnapshot(side.filepath)
     })
-    expect(sides).toMatchSnapshot()
+    expect(sides.length).toMatchSnapshot('side count')
   })
 })

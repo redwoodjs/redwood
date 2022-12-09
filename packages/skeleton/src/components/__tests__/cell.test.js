@@ -31,13 +31,12 @@ describe.each([
   })
 
   it('returns the correct cells without a project', () => {
-    const cells = extractCells(undefined).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const cells = extractCells(undefined)
     cells.forEach((cell) => {
       cell.filepath = stripAndFormatPathForTesting(cell.filepath, PROJECT_PATH)
+      expect(cell).toMatchSnapshot(cell.filepath)
     })
-    expect(cells).toMatchSnapshot()
+    expect(cells.length).toMatchSnapshot('cell count')
   })
 
   it('returns the correct cells with a project', () => {
@@ -46,12 +45,11 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const cells = extractCells(project).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const cells = extractCells(project)
     cells.forEach((cell) => {
       cell.filepath = stripAndFormatPathForTesting(cell.filepath, PROJECT_PATH)
+      expect(cell).toMatchSnapshot(cell.filepath)
     })
-    expect(cells).toMatchSnapshot()
+    expect(cells.length).toMatchSnapshot('cell count')
   })
 })

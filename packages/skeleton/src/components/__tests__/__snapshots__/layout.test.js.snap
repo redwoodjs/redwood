@@ -1,65 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`From within the empty-project fixture returns the correct layouts with a project 1`] = `[]`;
+exports[`From within the empty-project fixture returns the correct layouts with a project: layout count 1`] = `0`;
 
-exports[`From within the empty-project fixture returns the correct layouts without a project 1`] = `[]`;
+exports[`From within the empty-project fixture returns the correct layouts without a project: layout count 1`] = `0`;
 
-exports[`From within the example-todo-main fixture returns the correct layouts with a project 1`] = `
-[
-  RedwoodLayout {
-    "errors": [],
-    "filepath": "/web/src/layouts/SetLayout/SetLayout.js",
-    "name": "SetLayout",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct layouts with a project: /web/src/layouts/SetLayout/SetLayout.js 1`] = `
+RedwoodLayout {
+  "errors": [],
+  "filepath": "/web/src/layouts/SetLayout/SetLayout.js",
+  "name": "SetLayout",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main fixture returns the correct layouts without a project 1`] = `
-[
-  RedwoodLayout {
-    "errors": [],
-    "filepath": "/web/src/layouts/SetLayout/SetLayout.js",
-    "name": "SetLayout",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct layouts with a project: layout count 1`] = `1`;
+
+exports[`From within the example-todo-main fixture returns the correct layouts without a project: /web/src/layouts/SetLayout/SetLayout.js 1`] = `
+RedwoodLayout {
+  "errors": [],
+  "filepath": "/web/src/layouts/SetLayout/SetLayout.js",
+  "name": "SetLayout",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct layouts with a project 1`] = `[]`;
+exports[`From within the example-todo-main fixture returns the correct layouts without a project: layout count 1`] = `1`;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct layouts without a project 1`] = `[]`;
+exports[`From within the example-todo-main-with-errors fixture returns the correct layouts with a project: layout count 1`] = `0`;
 
-exports[`From within the test-project fixture returns the correct layouts with a project 1`] = `
-[
-  RedwoodLayout {
-    "errors": [],
-    "filepath": "/web/src/layouts/BlogLayout/BlogLayout.tsx",
-    "name": "BlogLayout",
-    "warnings": [],
-  },
-  RedwoodLayout {
-    "errors": [],
-    "filepath": "/web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx",
-    "name": "ScaffoldLayout",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main-with-errors fixture returns the correct layouts without a project: layout count 1`] = `0`;
+
+exports[`From within the test-project fixture returns the correct layouts with a project: /web/src/layouts/BlogLayout/BlogLayout.tsx 1`] = `
+RedwoodLayout {
+  "errors": [],
+  "filepath": "/web/src/layouts/BlogLayout/BlogLayout.tsx",
+  "name": "BlogLayout",
+  "warnings": [],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct layouts without a project 1`] = `
-[
-  RedwoodLayout {
-    "errors": [],
-    "filepath": "/web/src/layouts/BlogLayout/BlogLayout.tsx",
-    "name": "BlogLayout",
-    "warnings": [],
-  },
-  RedwoodLayout {
-    "errors": [],
-    "filepath": "/web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx",
-    "name": "ScaffoldLayout",
-    "warnings": [],
-  },
-]
+exports[`From within the test-project fixture returns the correct layouts with a project: /web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx 1`] = `
+RedwoodLayout {
+  "errors": [],
+  "filepath": "/web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx",
+  "name": "ScaffoldLayout",
+  "warnings": [],
+}
 `;
+
+exports[`From within the test-project fixture returns the correct layouts with a project: layout count 1`] = `2`;
+
+exports[`From within the test-project fixture returns the correct layouts without a project: /web/src/layouts/BlogLayout/BlogLayout.tsx 1`] = `
+RedwoodLayout {
+  "errors": [],
+  "filepath": "/web/src/layouts/BlogLayout/BlogLayout.tsx",
+  "name": "BlogLayout",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct layouts without a project: /web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx 1`] = `
+RedwoodLayout {
+  "errors": [],
+  "filepath": "/web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx",
+  "name": "ScaffoldLayout",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct layouts without a project: layout count 1`] = `2`;

@@ -31,13 +31,12 @@ describe.each([
   })
 
   it('returns the correct pages without a project', () => {
-    const pages = extractPages(undefined).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const pages = extractPages(undefined)
     pages.forEach((page) => {
       page.filepath = stripAndFormatPathForTesting(page.filepath, PROJECT_PATH)
+      expect(page).toMatchSnapshot(page.filepath)
     })
-    expect(pages).toMatchSnapshot()
+    expect(pages.length).toMatchSnapshot('page count')
   })
 
   it('returns the correct pages with a project', () => {
@@ -46,12 +45,11 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const pages = extractPages(project).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const pages = extractPages(project)
     pages.forEach((page) => {
       page.filepath = stripAndFormatPathForTesting(page.filepath, PROJECT_PATH)
+      expect(page).toMatchSnapshot(page.filepath)
     })
-    expect(pages).toMatchSnapshot()
+    expect(pages.length).toMatchSnapshot('page count')
   })
 })

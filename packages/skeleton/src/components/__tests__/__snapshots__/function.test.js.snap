@@ -1,101 +1,107 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`From within the empty-project fixture returns the correct functions with a project 1`] = `
-[
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/graphql.ts",
-    "name": "graphql",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct functions with a project: /api/src/functions/graphql.ts 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/graphql.ts",
+  "name": "graphql",
+  "warnings": [],
+}
 `;
 
-exports[`From within the empty-project fixture returns the correct functions without a project 1`] = `
-[
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/graphql.ts",
-    "name": "graphql",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct functions with a project: function count 1`] = `1`;
+
+exports[`From within the empty-project fixture returns the correct functions without a project: /api/src/functions/graphql.ts 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/graphql.ts",
+  "name": "graphql",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main fixture returns the correct functions with a project 1`] = `
-[
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/graphql.js",
-    "name": "graphql",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct functions without a project: function count 1`] = `1`;
+
+exports[`From within the example-todo-main fixture returns the correct functions with a project: /api/src/functions/graphql.js 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/graphql.js",
+  "name": "graphql",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main fixture returns the correct functions without a project 1`] = `
-[
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/graphql.js",
-    "name": "graphql",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct functions with a project: function count 1`] = `1`;
+
+exports[`From within the example-todo-main fixture returns the correct functions without a project: /api/src/functions/graphql.js 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/graphql.js",
+  "name": "graphql",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct functions with a project 1`] = `
-[
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/graphql.js",
-    "name": "graphql",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct functions without a project: function count 1`] = `1`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct functions with a project: /api/src/functions/graphql.js 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/graphql.js",
+  "name": "graphql",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct functions without a project 1`] = `
-[
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/graphql.js",
-    "name": "graphql",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main-with-errors fixture returns the correct functions with a project: function count 1`] = `1`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct functions without a project: /api/src/functions/graphql.js 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/graphql.js",
+  "name": "graphql",
+  "warnings": [],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct functions with a project 1`] = `
-[
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/auth.ts",
-    "name": "auth",
-    "warnings": [],
-  },
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/graphql.ts",
-    "name": "graphql",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main-with-errors fixture returns the correct functions without a project: function count 1`] = `1`;
+
+exports[`From within the test-project fixture returns the correct functions with a project: /api/src/functions/auth.ts 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/auth.ts",
+  "name": "auth",
+  "warnings": [],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct functions without a project 1`] = `
-[
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/auth.ts",
-    "name": "auth",
-    "warnings": [],
-  },
-  RedwoodFunction {
-    "errors": [],
-    "filepath": "/api/src/functions/graphql.ts",
-    "name": "graphql",
-    "warnings": [],
-  },
-]
+exports[`From within the test-project fixture returns the correct functions with a project: /api/src/functions/graphql.ts 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/graphql.ts",
+  "name": "graphql",
+  "warnings": [],
+}
 `;
+
+exports[`From within the test-project fixture returns the correct functions with a project: function count 1`] = `2`;
+
+exports[`From within the test-project fixture returns the correct functions without a project: /api/src/functions/auth.ts 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/auth.ts",
+  "name": "auth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct functions without a project: /api/src/functions/graphql.ts 1`] = `
+RedwoodFunction {
+  "errors": [],
+  "filepath": "/api/src/functions/graphql.ts",
+  "name": "graphql",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct functions without a project: function count 1`] = `2`;

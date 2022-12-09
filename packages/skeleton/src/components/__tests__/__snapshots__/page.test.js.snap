@@ -1,437 +1,611 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`From within the empty-project fixture returns the correct pages with a project 1`] = `
-[
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
-    "name": "FatalErrorPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
-    "name": "NotFoundPage",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct pages with a project: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
+  "name": "FatalErrorPage",
+  "warnings": [],
+}
 `;
 
-exports[`From within the empty-project fixture returns the correct pages without a project 1`] = `
-[
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
-    "name": "FatalErrorPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
-    "name": "NotFoundPage",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct pages with a project: /web/src/pages/NotFoundPage/NotFoundPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
+  "name": "NotFoundPage",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main fixture returns the correct pages with a project 1`] = `
-[
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/BarPage/BarPage.tsx",
-    "name": "BarPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
-    "name": "FatalErrorPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FooPage/FooPage.tsx",
-    "name": "FooPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/HomePage/HomePage.tsx",
-    "name": "HomePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
-    "name": "NotFoundPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/PrivatePage/PrivatePage.tsx",
-    "name": "PrivatePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
-    "name": "TypeScriptPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
-    "name": "adminEditUserPage",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct pages with a project: page count 1`] = `2`;
+
+exports[`From within the empty-project fixture returns the correct pages without a project: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
+  "name": "FatalErrorPage",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main fixture returns the correct pages without a project 1`] = `
-[
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/BarPage/BarPage.tsx",
-    "name": "BarPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
-    "name": "FatalErrorPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FooPage/FooPage.tsx",
-    "name": "FooPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/HomePage/HomePage.tsx",
-    "name": "HomePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
-    "name": "NotFoundPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/PrivatePage/PrivatePage.tsx",
-    "name": "PrivatePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
-    "name": "TypeScriptPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
-    "name": "adminEditUserPage",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct pages without a project: /web/src/pages/NotFoundPage/NotFoundPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
+  "name": "NotFoundPage",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct pages with a project 1`] = `
-[
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
-    "name": "FatalErrorPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/HomePage/HomePage.js",
-    "name": "HomePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
-    "name": "NotFoundPage",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct pages without a project: page count 1`] = `2`;
+
+exports[`From within the example-todo-main fixture returns the correct pages with a project: /web/src/pages/BarPage/BarPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/BarPage/BarPage.tsx",
+  "name": "BarPage",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct pages without a project 1`] = `
-[
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
-    "name": "FatalErrorPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/HomePage/HomePage.js",
-    "name": "HomePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
-    "name": "NotFoundPage",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct pages with a project: /web/src/pages/FatalErrorPage/FatalErrorPage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+  "name": "FatalErrorPage",
+  "warnings": [],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct pages with a project 1`] = `
-[
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/AboutPage/AboutPage.tsx",
-    "name": "AboutPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/BlogPostPage/BlogPostPage.tsx",
-    "name": "BlogPostPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
-    "name": "ContactContactPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
-    "name": "ContactContactsPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
-    "name": "ContactEditContactPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
-    "name": "ContactNewContactPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/ContactUsPage/ContactUsPage.tsx",
-    "name": "ContactUsPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
-    "name": "FatalErrorPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
-    "name": "ForgotPasswordPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/HomePage/HomePage.tsx",
-    "name": "HomePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/LoginPage/LoginPage.tsx",
-    "name": "LoginPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
-    "name": "NotFoundPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
-    "name": "PostEditPostPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
-    "name": "PostNewPostPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
-    "name": "PostPostPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
-    "name": "PostPostsPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/ProfilePage/ProfilePage.tsx",
-    "name": "ProfilePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx",
-    "name": "ResetPasswordPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/SignupPage/SignupPage.tsx",
-    "name": "SignupPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/WaterfallPage/WaterfallPage.tsx",
-    "name": "WaterfallPage",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct pages with a project: /web/src/pages/FooPage/FooPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FooPage/FooPage.tsx",
+  "name": "FooPage",
+  "warnings": [],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct pages without a project 1`] = `
-[
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/AboutPage/AboutPage.tsx",
-    "name": "AboutPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/BlogPostPage/BlogPostPage.tsx",
-    "name": "BlogPostPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
-    "name": "ContactContactPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
-    "name": "ContactContactsPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
-    "name": "ContactEditContactPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
-    "name": "ContactNewContactPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/ContactUsPage/ContactUsPage.tsx",
-    "name": "ContactUsPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
-    "name": "FatalErrorPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
-    "name": "ForgotPasswordPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/HomePage/HomePage.tsx",
-    "name": "HomePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/LoginPage/LoginPage.tsx",
-    "name": "LoginPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
-    "name": "NotFoundPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
-    "name": "PostEditPostPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
-    "name": "PostNewPostPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
-    "name": "PostPostPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
-    "name": "PostPostsPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/ProfilePage/ProfilePage.tsx",
-    "name": "ProfilePage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx",
-    "name": "ResetPasswordPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/SignupPage/SignupPage.tsx",
-    "name": "SignupPage",
-    "warnings": [],
-  },
-  RedwoodPage {
-    "errors": [],
-    "filepath": "/web/src/pages/WaterfallPage/WaterfallPage.tsx",
-    "name": "WaterfallPage",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct pages with a project: /web/src/pages/HomePage/HomePage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/HomePage/HomePage.tsx",
+  "name": "HomePage",
+  "warnings": [],
+}
 `;
+
+exports[`From within the example-todo-main fixture returns the correct pages with a project: /web/src/pages/NotFoundPage/NotFoundPage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
+  "name": "NotFoundPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages with a project: /web/src/pages/PrivatePage/PrivatePage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/PrivatePage/PrivatePage.tsx",
+  "name": "PrivatePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages with a project: /web/src/pages/TypeScriptPage/TypeScriptPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+  "name": "TypeScriptPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages with a project: /web/src/pages/admin/EditUserPage/EditUserPage.jsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
+  "name": "adminEditUserPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages with a project: page count 1`] = `8`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: /web/src/pages/BarPage/BarPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/BarPage/BarPage.tsx",
+  "name": "BarPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: /web/src/pages/FatalErrorPage/FatalErrorPage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+  "name": "FatalErrorPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: /web/src/pages/FooPage/FooPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FooPage/FooPage.tsx",
+  "name": "FooPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: /web/src/pages/HomePage/HomePage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/HomePage/HomePage.tsx",
+  "name": "HomePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: /web/src/pages/NotFoundPage/NotFoundPage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
+  "name": "NotFoundPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: /web/src/pages/PrivatePage/PrivatePage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/PrivatePage/PrivatePage.tsx",
+  "name": "PrivatePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: /web/src/pages/TypeScriptPage/TypeScriptPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/TypeScriptPage/TypeScriptPage.tsx",
+  "name": "TypeScriptPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: /web/src/pages/admin/EditUserPage/EditUserPage.jsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/admin/EditUserPage/EditUserPage.jsx",
+  "name": "adminEditUserPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct pages without a project: page count 1`] = `8`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct pages with a project: /web/src/pages/FatalErrorPage/FatalErrorPage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+  "name": "FatalErrorPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct pages with a project: /web/src/pages/HomePage/HomePage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/HomePage/HomePage.js",
+  "name": "HomePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct pages with a project: /web/src/pages/NotFoundPage/NotFoundPage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
+  "name": "NotFoundPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct pages with a project: page count 1`] = `3`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct pages without a project: /web/src/pages/FatalErrorPage/FatalErrorPage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+  "name": "FatalErrorPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct pages without a project: /web/src/pages/HomePage/HomePage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/HomePage/HomePage.js",
+  "name": "HomePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct pages without a project: /web/src/pages/NotFoundPage/NotFoundPage.js 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.js",
+  "name": "NotFoundPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct pages without a project: page count 1`] = `3`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/AboutPage/AboutPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/AboutPage/AboutPage.tsx",
+  "name": "AboutPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/BlogPostPage/BlogPostPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/BlogPostPage/BlogPostPage.tsx",
+  "name": "BlogPostPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/Contact/ContactPage/ContactPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
+  "name": "ContactContactPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/Contact/ContactsPage/ContactsPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
+  "name": "ContactContactsPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/Contact/EditContactPage/EditContactPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
+  "name": "ContactEditContactPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/Contact/NewContactPage/NewContactPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
+  "name": "ContactNewContactPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/ContactUsPage/ContactUsPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/ContactUsPage/ContactUsPage.tsx",
+  "name": "ContactUsPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
+  "name": "FatalErrorPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
+  "name": "ForgotPasswordPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/HomePage/HomePage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/HomePage/HomePage.tsx",
+  "name": "HomePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/LoginPage/LoginPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/LoginPage/LoginPage.tsx",
+  "name": "LoginPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/NotFoundPage/NotFoundPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
+  "name": "NotFoundPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/Post/EditPostPage/EditPostPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
+  "name": "PostEditPostPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/Post/NewPostPage/NewPostPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
+  "name": "PostNewPostPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/Post/PostPage/PostPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
+  "name": "PostPostPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/Post/PostsPage/PostsPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
+  "name": "PostPostsPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/ProfilePage/ProfilePage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/ProfilePage/ProfilePage.tsx",
+  "name": "ProfilePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx",
+  "name": "ResetPasswordPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/SignupPage/SignupPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/SignupPage/SignupPage.tsx",
+  "name": "SignupPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: /web/src/pages/WaterfallPage/WaterfallPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/WaterfallPage/WaterfallPage.tsx",
+  "name": "WaterfallPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages with a project: page count 1`] = `20`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/AboutPage/AboutPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/AboutPage/AboutPage.tsx",
+  "name": "AboutPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/BlogPostPage/BlogPostPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/BlogPostPage/BlogPostPage.tsx",
+  "name": "BlogPostPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/Contact/ContactPage/ContactPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Contact/ContactPage/ContactPage.tsx",
+  "name": "ContactContactPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/Contact/ContactsPage/ContactsPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Contact/ContactsPage/ContactsPage.tsx",
+  "name": "ContactContactsPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/Contact/EditContactPage/EditContactPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Contact/EditContactPage/EditContactPage.tsx",
+  "name": "ContactEditContactPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/Contact/NewContactPage/NewContactPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Contact/NewContactPage/NewContactPage.tsx",
+  "name": "ContactNewContactPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/ContactUsPage/ContactUsPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/ContactUsPage/ContactUsPage.tsx",
+  "name": "ContactUsPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/FatalErrorPage/FatalErrorPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/FatalErrorPage/FatalErrorPage.tsx",
+  "name": "FatalErrorPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
+  "name": "ForgotPasswordPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/HomePage/HomePage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/HomePage/HomePage.tsx",
+  "name": "HomePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/LoginPage/LoginPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/LoginPage/LoginPage.tsx",
+  "name": "LoginPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/NotFoundPage/NotFoundPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
+  "name": "NotFoundPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/Post/EditPostPage/EditPostPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Post/EditPostPage/EditPostPage.tsx",
+  "name": "PostEditPostPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/Post/NewPostPage/NewPostPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Post/NewPostPage/NewPostPage.tsx",
+  "name": "PostNewPostPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/Post/PostPage/PostPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Post/PostPage/PostPage.tsx",
+  "name": "PostPostPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/Post/PostsPage/PostsPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/Post/PostsPage/PostsPage.tsx",
+  "name": "PostPostsPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/ProfilePage/ProfilePage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/ProfilePage/ProfilePage.tsx",
+  "name": "ProfilePage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/ResetPasswordPage/ResetPasswordPage.tsx",
+  "name": "ResetPasswordPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/SignupPage/SignupPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/SignupPage/SignupPage.tsx",
+  "name": "SignupPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: /web/src/pages/WaterfallPage/WaterfallPage.tsx 1`] = `
+RedwoodPage {
+  "errors": [],
+  "filepath": "/web/src/pages/WaterfallPage/WaterfallPage.tsx",
+  "name": "WaterfallPage",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct pages without a project: page count 1`] = `20`;

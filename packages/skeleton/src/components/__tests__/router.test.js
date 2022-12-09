@@ -31,9 +31,7 @@ describe.each([
   })
 
   it('returns the correct routers without a project', () => {
-    const routers = extractRouters(undefined).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const routers = extractRouters(undefined)
     routers.forEach((router) => {
       router.filepath = stripAndFormatPathForTesting(
         router.filepath,
@@ -45,8 +43,12 @@ describe.each([
           PROJECT_PATH
         )
       })
+      router.routes.sort((a, b) =>
+        a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+      )
+      expect(router).toMatchSnapshot(router.filepath)
     })
-    expect(routers).toMatchSnapshot()
+    expect(routers.length).toMatchSnapshot('router count')
   })
 
   it('returns the correct routers with a project', () => {
@@ -55,9 +57,7 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const routers = extractRouters(project).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const routers = extractRouters(project)
     routers.forEach((router) => {
       router.filepath = stripAndFormatPathForTesting(
         router.filepath,
@@ -69,7 +69,11 @@ describe.each([
           PROJECT_PATH
         )
       })
+      router.routes.sort((a, b) =>
+        a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
+      )
+      expect(router).toMatchSnapshot(router.filepath)
     })
-    expect(routers).toMatchSnapshot()
+    expect(routers.length).toMatchSnapshot('router count')
   })
 })

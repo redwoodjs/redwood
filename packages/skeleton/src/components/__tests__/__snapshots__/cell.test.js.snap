@@ -1,68 +1,76 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`From within the empty-project fixture returns the correct cells with a project 1`] = `[]`;
+exports[`From within the empty-project fixture returns the correct cells with a project: cell count 1`] = `0`;
 
-exports[`From within the empty-project fixture returns the correct cells without a project 1`] = `[]`;
+exports[`From within the empty-project fixture returns the correct cells without a project: cell count 1`] = `0`;
 
-exports[`From within the example-todo-main fixture returns the correct cells with a project 1`] = `
-[
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/NumTodosCell/NumTodosCell.js",
-    "gqlQuery": "
+exports[`From within the example-todo-main fixture returns the correct cells with a project: /web/src/components/NumTodosCell/NumTodosCell.js 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/NumTodosCell/NumTodosCell.js",
+  "gqlQuery": "
   query NumTodosCell_GetCount {
     todosCount
   }
 ",
-    "gqlQueryName": "NumTodosCell_GetCount",
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "NumTodosCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
-    "gqlQuery": "
+  "gqlQueryName": "NumTodosCell_GetCount",
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "NumTodosCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct cells with a project: /web/src/components/NumTodosTwoCell/NumTodosTwoCell.js 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
+  "gqlQuery": "
   query NumTodosCell_GetCount {
     todosCount
   }
 ",
-    "gqlQueryName": "NumTodosCell_GetCount",
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "NumTodosTwoCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [
-      "No "Success" export found but one is required",
-      "No "QUERY" export found but one is required",
-    ],
-    "filepath": "/web/src/components/TableCell/TableCell.js",
-    "gqlQuery": undefined,
-    "gqlQueryName": undefined,
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": false,
-    "hasQueryExport": false,
-    "hasSuccessExport": false,
-    "isValid": false,
-    "name": "TableCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/TodoListCell/TodoListCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "NumTodosCell_GetCount",
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "NumTodosTwoCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct cells with a project: /web/src/components/TableCell/TableCell.js 1`] = `
+RedwoodCell {
+  "errors": [
+    "No "Success" export found but one is required",
+    "No "QUERY" export found but one is required",
+  ],
+  "filepath": "/web/src/components/TableCell/TableCell.js",
+  "gqlQuery": undefined,
+  "gqlQueryName": undefined,
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": false,
+  "hasQueryExport": false,
+  "hasSuccessExport": false,
+  "isValid": false,
+  "name": "TableCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct cells with a project: /web/src/components/TodoListCell/TodoListCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/TodoListCell/TodoListCell.tsx",
+  "gqlQuery": "
   query TodoListCell_GetTodos {
     todos {
       id
@@ -71,78 +79,87 @@ exports[`From within the example-todo-main fixture returns the correct cells wit
     }
   }
 ",
-    "gqlQueryName": "TodoListCell_GetTodos",
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "TodoListCell",
-    "warnings": [],
-  },
-]
+  "gqlQueryName": "TodoListCell_GetTodos",
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "TodoListCell",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main fixture returns the correct cells without a project 1`] = `
-[
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/NumTodosCell/NumTodosCell.js",
-    "gqlQuery": "
+exports[`From within the example-todo-main fixture returns the correct cells with a project: cell count 1`] = `4`;
+
+exports[`From within the example-todo-main fixture returns the correct cells without a project: /web/src/components/NumTodosCell/NumTodosCell.js 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/NumTodosCell/NumTodosCell.js",
+  "gqlQuery": "
   query NumTodosCell_GetCount {
     todosCount
   }
 ",
-    "gqlQueryName": "NumTodosCell_GetCount",
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "NumTodosCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
-    "gqlQuery": "
+  "gqlQueryName": "NumTodosCell_GetCount",
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "NumTodosCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct cells without a project: /web/src/components/NumTodosTwoCell/NumTodosTwoCell.js 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/NumTodosTwoCell/NumTodosTwoCell.js",
+  "gqlQuery": "
   query NumTodosCell_GetCount {
     todosCount
   }
 ",
-    "gqlQueryName": "NumTodosCell_GetCount",
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "NumTodosTwoCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [
-      "No "Success" export found but one is required",
-      "No "QUERY" export found but one is required",
-    ],
-    "filepath": "/web/src/components/TableCell/TableCell.js",
-    "gqlQuery": undefined,
-    "gqlQueryName": undefined,
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": false,
-    "hasQueryExport": false,
-    "hasSuccessExport": false,
-    "isValid": false,
-    "name": "TableCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/TodoListCell/TodoListCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "NumTodosCell_GetCount",
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "NumTodosTwoCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct cells without a project: /web/src/components/TableCell/TableCell.js 1`] = `
+RedwoodCell {
+  "errors": [
+    "No "Success" export found but one is required",
+    "No "QUERY" export found but one is required",
+  ],
+  "filepath": "/web/src/components/TableCell/TableCell.js",
+  "gqlQuery": undefined,
+  "gqlQueryName": undefined,
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": false,
+  "hasQueryExport": false,
+  "hasSuccessExport": false,
+  "isValid": false,
+  "name": "TableCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct cells without a project: /web/src/components/TodoListCell/TodoListCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/TodoListCell/TodoListCell.tsx",
+  "gqlQuery": "
   query TodoListCell_GetTodos {
     todos {
       id
@@ -151,42 +168,45 @@ exports[`From within the example-todo-main fixture returns the correct cells wit
     }
   }
 ",
-    "gqlQueryName": "TodoListCell_GetTodos",
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "TodoListCell",
-    "warnings": [],
-  },
-]
+  "gqlQueryName": "TodoListCell_GetTodos",
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "TodoListCell",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct cells with a project 1`] = `
-[
-  RedwoodCell {
-    "errors": [
-      "No "Success" export found but one is required",
-      "No "QUERY" export found but one is required",
-    ],
-    "filepath": "/web/src/components/TableCell/TableCell.js",
-    "gqlQuery": undefined,
-    "gqlQueryName": undefined,
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": false,
-    "hasQueryExport": false,
-    "hasSuccessExport": false,
-    "isValid": false,
-    "name": "TableCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
-    "gqlQuery": "
+exports[`From within the example-todo-main fixture returns the correct cells without a project: cell count 1`] = `4`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct cells with a project: /web/src/components/TableCell/TableCell.js 1`] = `
+RedwoodCell {
+  "errors": [
+    "No "Success" export found but one is required",
+    "No "QUERY" export found but one is required",
+  ],
+  "filepath": "/web/src/components/TableCell/TableCell.js",
+  "gqlQuery": undefined,
+  "gqlQueryName": undefined,
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": false,
+  "hasQueryExport": false,
+  "hasSuccessExport": false,
+  "isValid": false,
+  "name": "TableCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct cells with a project: /web/src/components/TodoListCell/TodoListCell.js 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
+  "gqlQuery": "
   {
     todos {
       id
@@ -195,44 +215,47 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
     }
   }
 ",
-    "gqlQueryName": undefined,
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "TodoListCell",
-    "warnings": [
-      "Could not determine the GraphQL query name",
-    ],
-  },
-]
+  "gqlQueryName": undefined,
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "TodoListCell",
+  "warnings": [
+    "Could not determine the GraphQL query name",
+  ],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct cells without a project 1`] = `
-[
-  RedwoodCell {
-    "errors": [
-      "No "Success" export found but one is required",
-      "No "QUERY" export found but one is required",
-    ],
-    "filepath": "/web/src/components/TableCell/TableCell.js",
-    "gqlQuery": undefined,
-    "gqlQueryName": undefined,
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": false,
-    "hasQueryExport": false,
-    "hasSuccessExport": false,
-    "isValid": false,
-    "name": "TableCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
-    "gqlQuery": "
+exports[`From within the example-todo-main-with-errors fixture returns the correct cells with a project: cell count 1`] = `2`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct cells without a project: /web/src/components/TableCell/TableCell.js 1`] = `
+RedwoodCell {
+  "errors": [
+    "No "Success" export found but one is required",
+    "No "QUERY" export found but one is required",
+  ],
+  "filepath": "/web/src/components/TableCell/TableCell.js",
+  "gqlQuery": undefined,
+  "gqlQueryName": undefined,
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": false,
+  "hasQueryExport": false,
+  "hasSuccessExport": false,
+  "isValid": false,
+  "name": "TableCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct cells without a project: /web/src/components/TodoListCell/TodoListCell.js 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/TodoListCell/TodoListCell.js",
+  "gqlQuery": "
   {
     todos {
       id
@@ -241,27 +264,27 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
     }
   }
 ",
-    "gqlQueryName": undefined,
-    "hasEmptyExport": false,
-    "hasFailureExport": false,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "TodoListCell",
-    "warnings": [
-      "Could not determine the GraphQL query name",
-    ],
-  },
-]
+  "gqlQueryName": undefined,
+  "hasEmptyExport": false,
+  "hasFailureExport": false,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "TodoListCell",
+  "warnings": [
+    "Could not determine the GraphQL query name",
+  ],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct cells with a project 1`] = `
-[
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/AuthorCell/AuthorCell.tsx",
-    "gqlQuery": "
+exports[`From within the example-todo-main-with-errors fixture returns the correct cells without a project: cell count 1`] = `2`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/AuthorCell/AuthorCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/AuthorCell/AuthorCell.tsx",
+  "gqlQuery": "
   query FindAuthorQuery($id: Int!) {
     author: user(id: $id) {
       email
@@ -269,20 +292,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "FindAuthorQuery",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "AuthorCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindAuthorQuery",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "AuthorCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/BlogPostCell/BlogPostCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
+  "gqlQuery": "
   query FindBlogPostQuery($id: Int!) {
     blogPost: post(id: $id) {
       id
@@ -296,20 +322,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "FindBlogPostQuery",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "BlogPostCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindBlogPostQuery",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "BlogPostCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/BlogPostsCell/BlogPostsCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
+  "gqlQuery": "
   query BlogPostsQuery {
     blogPosts: posts {
       id
@@ -323,20 +352,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "BlogPostsQuery",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "BlogPostsCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "BlogPostsQuery",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "BlogPostsCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/Contact/ContactCell/ContactCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
+  "gqlQuery": "
   query FindContactById($id: Int!) {
     contact: contact(id: $id) {
       id
@@ -347,20 +379,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "FindContactById",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "ContactCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindContactById",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "ContactCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/Contact/ContactsCell/ContactsCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
+  "gqlQuery": "
   query FindContacts {
     contacts {
       id
@@ -371,20 +406,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "FindContacts",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "ContactsCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindContacts",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "ContactsCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/Contact/EditContactCell/EditContactCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
+  "gqlQuery": "
   query EditContactById($id: Int!) {
     contact: contact(id: $id) {
       id
@@ -395,20 +433,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "EditContactById",
-    "hasEmptyExport": false,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "EditContactCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "EditContactById",
+  "hasEmptyExport": false,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "EditContactCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/Post/EditPostCell/EditPostCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
+  "gqlQuery": "
   query EditPostById($id: Int!) {
     post: post(id: $id) {
       id
@@ -419,20 +460,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "EditPostById",
-    "hasEmptyExport": false,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "EditPostCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Post/PostCell/PostCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "EditPostById",
+  "hasEmptyExport": false,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "EditPostCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/Post/PostCell/PostCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Post/PostCell/PostCell.tsx",
+  "gqlQuery": "
   query FindPostById($id: Int!) {
     post: post(id: $id) {
       id
@@ -443,20 +487,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "FindPostById",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "PostCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Post/PostsCell/PostsCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindPostById",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "PostCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/Post/PostsCell/PostsCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Post/PostsCell/PostsCell.tsx",
+  "gqlQuery": "
   query FindPosts {
     posts {
       id
@@ -467,20 +514,23 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "FindPosts",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "PostsCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindPosts",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "PostsCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells with a project: /web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
+  "gqlQuery": "
   query FindWaterfallBlogPostQuery($id: Int!) {
     waterfallBlogPost: post(id: $id) {
       id
@@ -491,25 +541,25 @@ exports[`From within the test-project fixture returns the correct cells with a p
     }
   }
 ",
-    "gqlQueryName": "FindWaterfallBlogPostQuery",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "WaterfallBlogPostCell",
-    "warnings": [],
-  },
-]
+  "gqlQueryName": "FindWaterfallBlogPostQuery",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "WaterfallBlogPostCell",
+  "warnings": [],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct cells without a project 1`] = `
-[
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/AuthorCell/AuthorCell.tsx",
-    "gqlQuery": "
+exports[`From within the test-project fixture returns the correct cells with a project: cell count 1`] = `10`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/AuthorCell/AuthorCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/AuthorCell/AuthorCell.tsx",
+  "gqlQuery": "
   query FindAuthorQuery($id: Int!) {
     author: user(id: $id) {
       email
@@ -517,20 +567,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "FindAuthorQuery",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "AuthorCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindAuthorQuery",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "AuthorCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/BlogPostCell/BlogPostCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/BlogPostCell/BlogPostCell.tsx",
+  "gqlQuery": "
   query FindBlogPostQuery($id: Int!) {
     blogPost: post(id: $id) {
       id
@@ -544,20 +597,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "FindBlogPostQuery",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "BlogPostCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindBlogPostQuery",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "BlogPostCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/BlogPostsCell/BlogPostsCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/BlogPostsCell/BlogPostsCell.tsx",
+  "gqlQuery": "
   query BlogPostsQuery {
     blogPosts: posts {
       id
@@ -571,20 +627,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "BlogPostsQuery",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "BlogPostsCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "BlogPostsQuery",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "BlogPostsCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/Contact/ContactCell/ContactCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Contact/ContactCell/ContactCell.tsx",
+  "gqlQuery": "
   query FindContactById($id: Int!) {
     contact: contact(id: $id) {
       id
@@ -595,20 +654,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "FindContactById",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "ContactCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindContactById",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "ContactCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/Contact/ContactsCell/ContactsCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Contact/ContactsCell/ContactsCell.tsx",
+  "gqlQuery": "
   query FindContacts {
     contacts {
       id
@@ -619,20 +681,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "FindContacts",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "ContactsCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindContacts",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "ContactsCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/Contact/EditContactCell/EditContactCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Contact/EditContactCell/EditContactCell.tsx",
+  "gqlQuery": "
   query EditContactById($id: Int!) {
     contact: contact(id: $id) {
       id
@@ -643,20 +708,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "EditContactById",
-    "hasEmptyExport": false,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "EditContactCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "EditContactById",
+  "hasEmptyExport": false,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "EditContactCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/Post/EditPostCell/EditPostCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Post/EditPostCell/EditPostCell.tsx",
+  "gqlQuery": "
   query EditPostById($id: Int!) {
     post: post(id: $id) {
       id
@@ -667,20 +735,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "EditPostById",
-    "hasEmptyExport": false,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "EditPostCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Post/PostCell/PostCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "EditPostById",
+  "hasEmptyExport": false,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "EditPostCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/Post/PostCell/PostCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Post/PostCell/PostCell.tsx",
+  "gqlQuery": "
   query FindPostById($id: Int!) {
     post: post(id: $id) {
       id
@@ -691,20 +762,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "FindPostById",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "PostCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/Post/PostsCell/PostsCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindPostById",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "PostCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/Post/PostsCell/PostsCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/Post/PostsCell/PostsCell.tsx",
+  "gqlQuery": "
   query FindPosts {
     posts {
       id
@@ -715,20 +789,23 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "FindPosts",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "PostsCell",
-    "warnings": [],
-  },
-  RedwoodCell {
-    "errors": [],
-    "filepath": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
-    "gqlQuery": "
+  "gqlQueryName": "FindPosts",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "PostsCell",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct cells without a project: /web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx 1`] = `
+RedwoodCell {
+  "errors": [],
+  "filepath": "/web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.tsx",
+  "gqlQuery": "
   query FindWaterfallBlogPostQuery($id: Int!) {
     waterfallBlogPost: post(id: $id) {
       id
@@ -739,15 +816,16 @@ exports[`From within the test-project fixture returns the correct cells without 
     }
   }
 ",
-    "gqlQueryName": "FindWaterfallBlogPostQuery",
-    "hasEmptyExport": true,
-    "hasFailureExport": true,
-    "hasLoadingExport": true,
-    "hasQueryExport": true,
-    "hasSuccessExport": true,
-    "isValid": true,
-    "name": "WaterfallBlogPostCell",
-    "warnings": [],
-  },
-]
+  "gqlQueryName": "FindWaterfallBlogPostQuery",
+  "hasEmptyExport": true,
+  "hasFailureExport": true,
+  "hasLoadingExport": true,
+  "hasQueryExport": true,
+  "hasSuccessExport": true,
+  "isValid": true,
+  "name": "WaterfallBlogPostCell",
+  "warnings": [],
+}
 `;
+
+exports[`From within the test-project fixture returns the correct cells without a project: cell count 1`] = `10`;

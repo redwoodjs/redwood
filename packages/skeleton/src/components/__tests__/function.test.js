@@ -31,16 +31,12 @@ describe.each([
   })
 
   it('returns the correct functions without a project', () => {
-    const functions = extractFunctions(undefined).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
-    functions.forEach((aFunction) => {
-      aFunction.filepath = stripAndFormatPathForTesting(
-        aFunction.filepath,
-        PROJECT_PATH
-      )
+    const functions = extractFunctions(undefined)
+    functions.forEach((func) => {
+      func.filepath = stripAndFormatPathForTesting(func.filepath, PROJECT_PATH)
+      expect(func).toMatchSnapshot(func.filepath)
     })
-    expect(functions).toMatchSnapshot()
+    expect(functions.length).toMatchSnapshot('function count')
   })
 
   it('returns the correct functions with a project', () => {
@@ -49,15 +45,11 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const functions = extractFunctions(project).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
-    functions.forEach((aFunction) => {
-      aFunction.filepath = stripAndFormatPathForTesting(
-        aFunction.filepath,
-        PROJECT_PATH
-      )
+    const functions = extractFunctions(project)
+    functions.forEach((func) => {
+      func.filepath = stripAndFormatPathForTesting(func.filepath, PROJECT_PATH)
+      expect(func).toMatchSnapshot(func.filepath)
     })
-    expect(functions).toMatchSnapshot()
+    expect(functions.length).toMatchSnapshot('function count')
   })
 })

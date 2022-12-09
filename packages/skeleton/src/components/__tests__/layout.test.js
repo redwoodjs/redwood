@@ -31,16 +31,15 @@ describe.each([
   })
 
   it('returns the correct layouts without a project', () => {
-    const layouts = extractLayouts(undefined).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const layouts = extractLayouts(undefined)
     layouts.forEach((layout) => {
       layout.filepath = stripAndFormatPathForTesting(
         layout.filepath,
         PROJECT_PATH
       )
+      expect(layout).toMatchSnapshot(layout.filepath)
     })
-    expect(layouts).toMatchSnapshot()
+    expect(layouts.length).toMatchSnapshot('layout count')
   })
 
   it('returns the correct layouts with a project', () => {
@@ -49,15 +48,14 @@ describe.each([
       readFromCache: false,
       insertIntoCache: false,
     })
-    const layouts = extractLayouts(project).sort((a, b) =>
-      a.filepath > b.filepath ? 1 : b.filepath > a.filepath ? -1 : 0
-    )
+    const layouts = extractLayouts(project)
     layouts.forEach((layout) => {
       layout.filepath = stripAndFormatPathForTesting(
         layout.filepath,
         PROJECT_PATH
       )
+      expect(layout).toMatchSnapshot(layout.filepath)
     })
-    expect(layouts).toMatchSnapshot()
+    expect(layouts.length).toMatchSnapshot('layout count')
   })
 })

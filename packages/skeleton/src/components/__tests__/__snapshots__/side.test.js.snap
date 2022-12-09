@@ -1,153 +1,177 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`From within the empty-project fixture returns the correct sides with a project 1`] = `
-[
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
-    "warnings": [],
-  },
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct sides with a project: /api 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/api",
+  "name": "api",
+  "type": "api",
+  "warnings": [],
+}
 `;
 
-exports[`From within the empty-project fixture returns the correct sides without a project 1`] = `
-[
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
-    "warnings": [],
-  },
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct sides with a project: /web 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/web",
+  "name": "web",
+  "type": "web",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main fixture returns the correct sides with a project 1`] = `
-[
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
-    "warnings": [],
-  },
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct sides with a project: side count 1`] = `2`;
+
+exports[`From within the empty-project fixture returns the correct sides without a project: /api 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/api",
+  "name": "api",
+  "type": "api",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main fixture returns the correct sides without a project 1`] = `
-[
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
-    "warnings": [],
-  },
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct sides without a project: /web 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/web",
+  "name": "web",
+  "type": "web",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct sides with a project 1`] = `
-[
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
-    "warnings": [],
-  },
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
-    "warnings": [],
-  },
-]
+exports[`From within the empty-project fixture returns the correct sides without a project: side count 1`] = `2`;
+
+exports[`From within the example-todo-main fixture returns the correct sides with a project: /api 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/api",
+  "name": "api",
+  "type": "api",
+  "warnings": [],
+}
 `;
 
-exports[`From within the example-todo-main-with-errors fixture returns the correct sides without a project 1`] = `
-[
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
-    "warnings": [],
-  },
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct sides with a project: /web 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/web",
+  "name": "web",
+  "type": "web",
+  "warnings": [],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct sides with a project 1`] = `
-[
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
-    "warnings": [],
-  },
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct sides with a project: side count 1`] = `2`;
+
+exports[`From within the example-todo-main fixture returns the correct sides without a project: /api 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/api",
+  "name": "api",
+  "type": "api",
+  "warnings": [],
+}
 `;
 
-exports[`From within the test-project fixture returns the correct sides without a project 1`] = `
-[
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/api",
-    "name": "api",
-    "type": "api",
-    "warnings": [],
-  },
-  RedwoodSide {
-    "errors": [],
-    "filepath": "/web",
-    "name": "web",
-    "type": "web",
-    "warnings": [],
-  },
-]
+exports[`From within the example-todo-main fixture returns the correct sides without a project: /web 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/web",
+  "name": "web",
+  "type": "web",
+  "warnings": [],
+}
 `;
+
+exports[`From within the example-todo-main fixture returns the correct sides without a project: side count 1`] = `2`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct sides with a project: /api 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/api",
+  "name": "api",
+  "type": "api",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct sides with a project: /web 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/web",
+  "name": "web",
+  "type": "web",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct sides with a project: side count 1`] = `2`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct sides without a project: /api 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/api",
+  "name": "api",
+  "type": "api",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct sides without a project: /web 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/web",
+  "name": "web",
+  "type": "web",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct sides without a project: side count 1`] = `2`;
+
+exports[`From within the test-project fixture returns the correct sides with a project: /api 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/api",
+  "name": "api",
+  "type": "api",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct sides with a project: /web 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/web",
+  "name": "web",
+  "type": "web",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct sides with a project: side count 1`] = `2`;
+
+exports[`From within the test-project fixture returns the correct sides without a project: /api 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/api",
+  "name": "api",
+  "type": "api",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct sides without a project: /web 1`] = `
+RedwoodSide {
+  "errors": [],
+  "filepath": "/web",
+  "name": "web",
+  "type": "web",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct sides without a project: side count 1`] = `2`;
