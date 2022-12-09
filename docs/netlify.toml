@@ -213,3 +213,35 @@
   from = "/dbauth"
   to = "/docs/authentication#self-hosted-auth-installation-and-setup"
   status = 301
+
+# v1.0-v1.5 redirects (to v1.x)
+
+[[redirects]]
+  from = "/docs/1.0/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.1/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.2/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.3/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.4/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.5/*"
+  to = "/docs/1.x/:splat"
+  status = 301
