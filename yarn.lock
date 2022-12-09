@@ -1992,17 +1992,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/testing@npm:4.6.0":
-  version: 4.6.0
-  resolution: "@envelop/testing@npm:4.6.0"
+"@envelop/testing@npm:5.0.4":
+  version: 5.0.4
+  resolution: "@envelop/testing@npm:5.0.4"
   dependencies:
     "@graphql-tools/utils": ^8.8.0
     tslib: ^2.4.0
   peerDependencies:
-    "@envelop/core": ^2.6.0
-    "@envelop/types": ^2.4.0
+    "@envelop/core": ^3.0.4
+    "@envelop/types": ^3.0.1
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: a1ebc30dba1297ffd746deef23973e9bb6bf5cf6490875a854b9533f0dcb1dcdc0f4e70d1a800ce0b56e97183c611b7a95ada0b8c21db033da85403662a1cae5
+  checksum: 49c83d671578796206236ced79c95613b2e072b6bb243a71ea3a804b65f93c2aee7f68d21fe71533a6e31741f6e81573007f0eb33c5bff8827815b35e8ca8e2a
   languageName: node
   linkType: hard
 
@@ -7268,7 +7268,7 @@ __metadata:
     "@envelop/disable-introspection": 3.6.0
     "@envelop/filter-operation-type": 3.6.0
     "@envelop/parser-cache": 4.7.0
-    "@envelop/testing": 4.6.0
+    "@envelop/testing": 5.0.4
     "@envelop/types": 2.4.0
     "@envelop/validation-cache": 4.7.0
     "@graphql-tools/merge": 8.3.12
