@@ -25,9 +25,9 @@ return (
           <li>
             <Link
               className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
-              to={routes.contact()}
+              to={routes.contactUs()}
             >
-              Contact
+              Contact Us
             </Link>
           </li>
           <li>

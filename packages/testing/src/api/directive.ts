@@ -39,6 +39,7 @@ interface DirectiveMocker {
  *
  * - Transformer directives can be passed mockedResolvedValue
  * - Validator directives should check for errors thrown in certain situations
+ * - Can provide args, directiveArgs and context to mock directive execution
  *
  * @example
  *
@@ -72,7 +73,7 @@ export const mockRedwoodDirective: DirectiveMocker = (
   directive,
   executionMock
 ) => {
-  const { directiveArgs = {}, context, ...others } = executionMock
+  const { directiveArgs, context, ...others } = executionMock
 
   if (context) {
     setContext(context || {})
@@ -85,12 +86,13 @@ export const mockRedwoodDirective: DirectiveMocker = (
         return directive.onResolvedValue({
           resolvedValue: mockedResolvedValue,
           context: globalContext,
+          directiveArgs: directiveArgs || {},
           ...others,
         } as DirectiveParams)
       } else {
         await directive.onResolvedValue({
           context: globalContext,
-          directiveArgs,
+          directiveArgs: directiveArgs || {},
           ...others,
         } as DirectiveParams)
       }
@@ -103,13 +105,13 @@ export const mockRedwoodDirective: DirectiveMocker = (
       return directive.onResolvedValue({
         resolvedValue: mockedResolvedValue,
         context: globalContext,
-        directiveArgs,
+        directiveArgs: directiveArgs || {},
         ...others,
       } as DirectiveParams)
     } else {
       directive.onResolvedValue({
         context: globalContext,
-        directiveArgs,
+        directiveArgs: directiveArgs || {},
         ...others,
       } as DirectiveParams)
     }

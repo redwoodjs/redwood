@@ -9,20 +9,11 @@ export const description = 'Generate an auth configuration'
 
 export async function builder(yargs) {
   const {
-    setupAuthAuth0Command,
-    setupAuthAzureActiveDirectoryCommand,
-    setupAuthClerkCommand,
-    setupAuthCustomCommand,
-    setupAuthDbAuthCommand,
     setupAuthEthereumCommand,
-    setupAuthFirebaseCommand,
     setupAuthGoTrueCommand,
     setupAuthMagicLinkCommand,
-    setupAuthNetlifyCommand,
     setupAuthNhostCommand,
     setupAuthOktaCommand,
-    setupAuthSupabaseCommand,
-    setupAuthSupertokensCommand,
   } = await import('@redwoodjs/auth-providers-setup')
 
   // Don't forget to update test-project setup if you change something here
@@ -58,7 +49,7 @@ export async function builder(yargs) {
     }
   }
 
-  yargs
+  const setupAuthCommand = yargs
     .middleware([printExperimentalWarning])
     .demandCommand()
     .epilogue(
@@ -67,18 +58,36 @@ export async function builder(yargs) {
         'https://redwoodjs.com/docs/cli-commands#setup-auth'
       )}`
     )
-    .command(setupAuthAuth0Command)
-    .command(setupAuthAzureActiveDirectoryCommand)
-    .command(setupAuthClerkCommand)
-    .command(setupAuthCustomCommand)
-    .command(setupAuthDbAuthCommand)
     .command(setupAuthEthereumCommand)
-    .command(setupAuthFirebaseCommand)
     .command(setupAuthGoTrueCommand)
     .command(setupAuthMagicLinkCommand)
-    .command(setupAuthNetlifyCommand)
     .command(setupAuthNhostCommand)
     .command(setupAuthOktaCommand)
-    .command(setupAuthSupabaseCommand)
-    .command(setupAuthSupertokensCommand)
+
+  for (const module of [
+    '@redwoodjs/auth-auth0-setup',
+    '@redwoodjs/auth-custom-setup',
+    '@redwoodjs/auth-netlify-setup',
+    '@redwoodjs/auth-firebase-setup',
+    '@redwoodjs/auth-azure-active-directory-setup',
+    '@redwoodjs/auth-clerk-setup',
+    '@redwoodjs/auth-dbauth-setup',
+    '@redwoodjs/auth-supabase-setup',
+    '@redwoodjs/auth-supertokens-setup',
+  ]) {
+    let commandModule
+
+    try {
+      commandModule = await import(module)
+    } catch (e) {
+      // Since these are plugins, it's ok if they can't be imported because they're not installed.
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e
+      }
+    }
+
+    if (commandModule) {
+      setupAuthCommand.command(commandModule)
+    }
+  }
 }

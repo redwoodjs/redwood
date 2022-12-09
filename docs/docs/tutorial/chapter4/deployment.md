@@ -104,11 +104,11 @@ Therefore, **please follow the instructions below** to sync your GitHub (or othe
 
 Now just authorize Netlify to connect to your git hosting provider and find your repo. When the deploy settings come up you can leave everything as the defaults and click **Deploy site**.
 
-Netlify will start building your app and it will eventually say "Site is live", but nothing will work. Why? We haven't told it where to find our database yet!
+Netlify will start building your app and it will eventually say the deployment failed. Why? We haven't told it where to find our database yet!
 
 #### Environment Variables
 
-Go back to the main site page and then to **Site settings** at the top, and then **Build & Deploy** > **Environment**. Click **Edit Variables** and this is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`.
+Go back to the main site page and then to **Site settings** at the top, and then **Environment variables**. Click **Add a Variable** and this is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`. The default values for Scopes and Values can be left as is. Click **Create variable** to proceed.
 
 :::tip
 
@@ -123,9 +123,7 @@ yarn rw g secret
 
 Copy that over to Netlify along with `DATABASE_URL`:
 
-![Adding ENV var](https://user-images.githubusercontent.com/300/154520225-76dfa960-1d09-4544-92a4-2c7e58dc4e3f.png)
-
-Make sure to click the **Save** button.
+![Adding ENV var](https://user-images.githubusercontent.com/2931245/204148740-f8aaa276-e9b1-4ffc-a842-7602a1e0111a.png)
 
 #### IT'S ALIVE
 

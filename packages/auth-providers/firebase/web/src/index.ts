@@ -1,0 +1,1 @@
+export { createFirebaseAuth } from './firebase'
