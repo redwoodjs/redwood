@@ -7099,7 +7099,7 @@ __metadata:
     "@babel/plugin-transform-typescript": 7.20.2
     "@babel/runtime-corejs3": 7.20.6
     "@iarna/toml": 2.2.5
-    "@types/babel__core": 7.1.19
+    "@types/babel__core": 7.1.20
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.2
@@ -7319,7 +7319,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     "@redwoodjs/graphql-server": 3.2.0
     "@types/babel-plugin-tester": 9.0.5
-    "@types/babel__core": 7.1.19
+    "@types/babel__core": 7.1.20
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
     "@types/rimraf": 3.0.2
@@ -9232,16 +9232,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:7.1.19, @types/babel__core@npm:^7.1.14":
-  version: 7.1.19
-  resolution: "@types/babel__core@npm:7.1.19"
+"@types/babel__core@npm:*, @types/babel__core@npm:7.1.20, @types/babel__core@npm:^7.1.14":
+  version: 7.1.20
+  resolution: "@types/babel__core@npm:7.1.20"
   dependencies:
     "@babel/parser": ^7.1.0
     "@babel/types": ^7.0.0
     "@types/babel__generator": "*"
     "@types/babel__template": "*"
     "@types/babel__traverse": "*"
-  checksum: d07442fee0a1331405c80efc06dd74fe815fc9ac1351de54c4eaf06fea9e516992a6f6a139361d78df5828b0a94977f33c977d9391b09949b959fd20d80f48d8
+  checksum: f88025726047188c9ee96790294d5bb56bf452f6b65f80389788e8b11c16aab77fd709e2d1c07117ddee4e8a267615a88434b0570318301554daf304e20d7ad3
   languageName: node
   linkType: hard
 
