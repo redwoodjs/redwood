@@ -7065,7 +7065,7 @@ __metadata:
     execa: 5.1.1
     fast-glob: 3.2.12
     findup-sync: 5.0.0
-    fs-extra: 10.1.0
+    fs-extra: 11.1.0
     jest: 29.3.1
     latest-version: 5.1.0
     listr2: 5.0.6
@@ -7113,7 +7113,7 @@ __metadata:
     execa: 5.1.1
     fast-glob: 3.2.12
     findup-sync: 5.0.0
-    fs-extra: 10.1.0
+    fs-extra: 11.1.0
     jest: 29.3.1
     jscodeshift: 0.14.0
     prettier: 2.8.1
@@ -7332,7 +7332,7 @@ __metadata:
     esbuild: 0.16.2
     fast-glob: 3.2.12
     findup-sync: 5.0.0
-    fs-extra: 10.1.0
+    fs-extra: 11.1.0
     graphql: 16.6.0
     graphql-tag: 2.12.6
     jest: 29.3.1
@@ -14531,7 +14531,7 @@ __metadata:
     core-js: 3.26.1
     enquirer: 2.3.6
     execa: 5.1.1
-    fs-extra: 10.1.0
+    fs-extra: 11.1.0
     jest: 29.3.1
     listr2: 5.0.6
     terminal-link: 2.1.1
@@ -17886,6 +17886,17 @@ __metadata:
     jsonfile: ^6.0.1
     universalify: ^2.0.0
   checksum: 5f579466e7109719d162a9249abbeffe7f426eb133ea486e020b89bc6d67a741134076bf439983f2eb79276ceaf6bd7b7c1e43c3fd67fe889863e69072fb0a5e
+  languageName: node
+  linkType: hard
+
+"fs-extra@npm:11.1.0":
+  version: 11.1.0
+  resolution: "fs-extra@npm:11.1.0"
+  dependencies:
+    graceful-fs: ^4.2.0
+    jsonfile: ^6.0.1
+    universalify: ^2.0.0
+  checksum: 8085a078ead6a95711cc3cb689f9a64ad7393a1cdf7ed1bdab9dbef384f4a8fac941d20b1eb3067c427c82730a1078f9cfe93d86b98e848ee5445024ad0a3fa4
   languageName: node
   linkType: hard
 
@@ -27641,7 +27652,7 @@ __metadata:
     cypress-wait-until: 1.7.2
     eslint: 8.29.0
     fast-glob: 3.2.12
-    fs-extra: 10.1.0
+    fs-extra: 11.1.0
     is-port-reachable: 3.1.0
     jest: 29.3.1
     jest-runner-tsd: 4.0.0
