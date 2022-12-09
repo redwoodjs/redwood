@@ -2043,3 +2043,20 @@ Upgrade to a specific version:
 ```bash
 yarn redwood upgrade -t 0.19.3
 ```
+
+## Background Checks
+
+When you execute some of Redwood's CLI commands we can perform checks in the background to improve your developer experience. A list of these background checks are given below with details on how to enable or disable them as you wish.
+
+### updates
+
+We check if your current Redwood version is outdated and provide you with a small message which lets you know an update is available. We only check once per day and we'll only show you the update message once a day too.
+
+This feature is enabled by default in your `redwood.toml` file by:
+```toml
+[background]
+  updateChecks = true
+```
+It is also enabled if you set the `REDWOOD_BACKGROUND_UPDATE_CHECKS_ENABLED` environment variable.
+
+If you don't set the environment variable or disable the `redwood.toml` option we won't perform this check.
