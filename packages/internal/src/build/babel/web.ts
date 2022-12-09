@@ -160,7 +160,6 @@ export const getWebSideBabelPresets = () => {
   }
   return [
     ['@babel/preset-react', reactPresetConfig],
-    ['@babel/preset-typescript', undefined, 'rwjs-babel-preset-typescript'],
     [
       '@babel/preset-env',
       {
@@ -179,6 +178,7 @@ export const getWebSideBabelPresets = () => {
       },
       'rwjs-babel-preset-env',
     ],
+    ['@babel/preset-typescript', undefined, 'rwjs-babel-preset-typescript'],
   ]
 }
 
