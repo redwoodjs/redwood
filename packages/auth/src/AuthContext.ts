@@ -1,9 +1,8 @@
 import React from 'react'
 
-export interface CurrentUser {
-  roles?: Array<string> | string
-  [key: string]: unknown
-}
+// Using a package import (instead of just a relative file import) here for
+// TypeScript declaration merging to work
+import type { CurrentUser } from '@redwoodjs/auth'
 
 export interface AuthContextInterface<
   TUser,

@@ -1,4 +1,8 @@
-import { createAuthContext, CurrentUser } from './AuthContext'
+// Using a package import (instead of just a relative file import) here for
+// TypeScript declaration merging to work
+import type { CurrentUser } from '@redwoodjs/auth'
+
+import { createAuthContext } from './AuthContext'
 import { AuthImplementation } from './AuthImplementation'
 import { createAuthProvider } from './AuthProvider/AuthProvider'
 import { createUseAuth } from './useAuth'
