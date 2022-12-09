@@ -4,7 +4,7 @@ import { CurrentUser } from '@redwoodjs/auth'
 
 import { createDbAuth, DbAuthConfig } from '../dbAuth'
 
-process.env.RWJS_API_DBAUTH_URL = '/.redwood/functions'
+process.env.RWJS_API_URL = '/.redwood/functions'
 process.env.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
 
 jest.mock('cross-undici-fetch', () => {
@@ -104,7 +104,7 @@ describe('dbAuth', () => {
     })
 
     expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_DBAUTH_URL}?method=getToken`,
+      `${process.env.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'same-origin',
       }
@@ -117,7 +117,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.forgotPassword('username'))
 
     expect(fetchMock).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -134,7 +134,7 @@ describe('dbAuth', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1)
 
     expect(fetchMock).toBeCalledWith(
-      `${process.env.RWJS_API_DBAUTH_URL}?method=getToken`,
+      `${process.env.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'include',
       }
@@ -150,14 +150,14 @@ describe('dbAuth', () => {
     )
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
     )
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -171,7 +171,7 @@ describe('dbAuth', () => {
     })
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -183,7 +183,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.resetPassword({}))
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -195,7 +195,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.signUp({}))
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -207,9 +207,22 @@ describe('dbAuth', () => {
     await act(async () => await auth.validateResetToken('token'))
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
+      })
+    )
+  })
+
+  it('allows you to configure the api side url', async () => {
+    const auth = getDbAuth({ dbAuthUrl: '/.redwood/functions/dbauth' }).current
+
+    await act(async () => await auth.forgotPassword('username'))
+
+    expect(fetchMock).toBeCalledWith(
+      '/.redwood/functions/dbauth',
+      expect.objectContaining({
+        credentials: 'same-origin',
       })
     )
   })
