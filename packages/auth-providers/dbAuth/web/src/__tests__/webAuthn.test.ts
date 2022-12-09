@@ -2,7 +2,7 @@ import WebAuthnClient from '../webAuthn'
 
 process.env.RWJS_API_URL = '/.redwood/functions'
 
-jest.mock('cross-undici-fetch', () => {
+jest.mock('@whatwg-node/fetch', () => {
   return
 })
 
