@@ -17,10 +17,6 @@ declare type CustomCellProps<Cell, GQLVariables> = Cell extends {
   ? Parameters<Cell['beforeQuery']> extends [unknown, ...any]
     ? Parameters<Cell['beforeQuery']>[0]
     : Record<string, never>
-  : GQLVariables extends {
-      [key: string]: never
-    }
-  ? unknown
   : GQLVariables
 
 /**
