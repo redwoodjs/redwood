@@ -17,6 +17,8 @@ You can configure your Redwood app in `redwood.toml`. By default, `redwood.toml`
   port = 8911
 [browser]
   open = true
+[background]
+  updateChecks = true
 ```
 
 These are listed by default because they're the ones that you're most likely to configure, but there are plenty more available.
@@ -244,6 +246,15 @@ If you want your browser to stop opening when you `yarn rw dev`, set this to fal
 (Or just remove it entirely.)
 
 There's actually a lot more you can do here. For more, see webpack's docs on [devServer.open](https://webpack.js.org/configuration/dev-server/#devserveropen).
+
+## [background]
+
+```toml title="redwood.toml"
+[background]
+  updateChecks = true
+```
+
+Setting `updateChecks` to `false` will disable daily background update checks and notifications.
 
 ## [generate]
 

@@ -2053,7 +2053,7 @@ When you execute some of Redwood's CLI commands we can perform checks in the bac
 We check if your current Redwood version is outdated and provide you with a small message which lets you know an update is available. We only check once per day and we'll only show you the update message once a day too.
 
 This feature is enabled by default in your `redwood.toml` file by:
-```toml
+```toml title="redwood.toml"
 [background]
   updateChecks = true
 ```
