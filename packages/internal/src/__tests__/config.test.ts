@@ -19,6 +19,9 @@ describe('getConfig', () => {
           "target": "node",
           "title": "Redwood App",
         },
+        "background": {
+          "updateChecks": true,
+        },
         "browser": {
           "open": false,
         },

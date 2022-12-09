@@ -148,8 +148,7 @@ yargs(hideBin(process.argv))
         delete argv.cwd
       },
       telemetryMiddleware,
-      !process.env.REDWOOD_BACKGROUND_UPDATES_DISABLED &&
-        updateCheckerMiddleware,
+      update.isBackgroundCheckEnabled() && updateCheckerMiddleware,
     ].filter(Boolean)
   )
   .option('cwd', {

@@ -5,6 +5,8 @@ import boxen from 'boxen'
 import latestVersion from 'latest-version'
 import semver from 'semver'
 
+import { getConfig } from '@redwoodjs/internal/dist/config'
+
 import { validateTag } from '../commands/upgrade'
 
 import { setLock, unsetLock } from './locking'
@@ -17,9 +19,9 @@ import { getPaths } from './index'
 const CHECK_PERIOD = 24 * 60 * 60_000
 
 /**
- * @const {number} The number of milliseconds between showing a user an update notification (1 hour)
+ * @const {number} The number of milliseconds between showing a user an update notification (24 hours)
  */
-const SHOW_PERIOD = 60 * 60_000
+const SHOW_PERIOD = 24 * 60 * 60_000
 
 /**
  * @const {number} The default datetime for shownAt and checkedAt in milliseconds, corresponds to 2000-01-01T00:00:00.000Z
@@ -82,6 +84,17 @@ export async function check() {
   } finally {
     unsetLock(LOCK_IDENTIFIER)
   }
+}
+
+/**
+ * Determines if background checks are enabled. Checks are enabled within the redwood.toml config or by the `REDWOOD_BACKGROUND_UPDATE_CHECKS_ENABLED` env var.
+ * @return {boolean} True if background update checks are enabled
+ */
+export function isBackgroundCheckEnabled() {
+  return (
+    getConfig().background.updateChecks ||
+    process.env.REDWOOD_BACKGROUND_UPDATE_CHECKS_ENABLED
+  )
 }
 
 /**
