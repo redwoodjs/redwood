@@ -9,8 +9,13 @@ import { v4 as uuidv4 } from 'uuid'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
-const { DefaultHost } = require('@redwoodjs/structure/dist/hosts')
-const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
+// const { DefaultHost } = require('@redwoodjs/structure/dist/hosts')
+// const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
+const {
+  RedwoodProject,
+} = require('@redwoodjs/skeleton/dist/components/project')
+const { RedwoodRouter } = require('@redwoodjs/skeleton/dist/components/router')
+const { RedwoodSide } = require('@redwoodjs/skeleton/dist/components/side')
 
 interface SensitiveArgPositions {
   exec: {
@@ -134,7 +139,6 @@ export const sanitizeArgv = (
 
 const buildPayload = async () => {
   let payload: Record<string, unknown> = {}
-  let project
 
   const argv = require('yargs/yargs')(process.argv.slice(2)).argv
   const rootDir = argv.root
@@ -159,19 +163,34 @@ const buildPayload = async () => {
   // if a root directory was specified, use that to look up framework stats
   // with the `structure` package
   if (rootDir) {
-    project = new RWProject({
-      projectRoot: rootDir,
-      host: new DefaultHost(),
+    const project = RedwoodProject.getProject({
+      pathWithinProject: rootDir,
+      readFromCache: false,
     })
-  }
+    const totalRoutes = project
+      .getRouters()
+      .reduce((_: number, val: typeof RedwoodRouter) => {
+        return val.routes.length
+      }, 0)
 
-  // add in app stats
-  payload = {
-    ...payload,
-    complexity: `${project.getRouter().routes.length}.${
-      project.services.length
-    }.${project.cells.length}.${project.pages.length}`,
-    sides: project.sides.join(','),
+    const totalServices = project.getServices()
+      ? project.getServices().length
+      : 0
+    const totalCells = project.getCells() ? project.getCells().length : 0
+    const totalPages = project.getPages() ? project.getPages().length : 0
+    const allSides = project.getSides()
+      ? project
+          .getSides()
+          .map((side: typeof RedwoodSide) => side.name)
+          .join(',')
+      : ''
+
+    // add in app stats
+    payload = {
+      ...payload,
+      complexity: `${totalRoutes}.${totalServices}.${totalCells}.${totalPages}`,
+      sides: allSides,
+    }
   }
 
   return payload

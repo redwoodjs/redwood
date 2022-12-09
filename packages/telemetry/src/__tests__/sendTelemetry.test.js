@@ -39,3 +39,7 @@ describe('sanitizeArgv', () => {
     expect(output).toEqual('prisma migrate dev --name [name]')
   })
 })
+
+describe('buildPayload', () => {
+  it.todo('produces the correct project stats')
+})

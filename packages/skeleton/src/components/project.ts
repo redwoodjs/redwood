@@ -40,6 +40,7 @@ export class RedwoodProject extends RedwoodSkeleton {
   private layouts?: RedwoodLayout[] | undefined
   private pages?: RedwoodPage[] | undefined
   private routers?: RedwoodRouter[] | undefined
+  private services?: any[] | undefined
   private sides?: RedwoodSide[] | undefined
 
   public static getProject({
@@ -90,6 +91,13 @@ export class RedwoodProject extends RedwoodSkeleton {
       this.routers = extractRouters(this)
       this.sides = extractSides(this)
     }
+  }
+
+  getServices(forceExtract = false): any[] {
+    if (forceExtract || this.services === undefined) {
+      this.services = []
+    }
+    return this.services
   }
 
   getSides(forceExtract = false): RedwoodSide[] {
