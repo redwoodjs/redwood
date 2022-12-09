@@ -25,6 +25,9 @@ export class RedwoodCell extends RedwoodSkeleton {
   readonly gqlQueryName: string | undefined
 
   readonly hasQueryExport: boolean
+  readonly hasBeforeQueryExport: boolean
+  readonly hasIsEmptyExport: boolean
+  readonly hasAfterQueryExport: boolean
   readonly hasLoadingExport: boolean
   readonly hasEmptyExport: boolean
   readonly hasFailureExport: boolean
@@ -60,6 +63,9 @@ export class RedwoodCell extends RedwoodSkeleton {
 
     // Check for a cells expected export fields
     this.hasQueryExport = namedExportsNames.includes('QUERY')
+    this.hasBeforeQueryExport = namedExportsNames.includes('beforeQuery')
+    this.hasIsEmptyExport = namedExportsNames.includes('isEmpty')
+    this.hasAfterQueryExport = namedExportsNames.includes('afterQuery')
     this.hasLoadingExport = namedExportsNames.includes('Loading')
     this.hasEmptyExport = namedExportsNames.includes('Empty')
     this.hasFailureExport = namedExportsNames.includes('Failure')
