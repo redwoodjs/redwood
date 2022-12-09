@@ -32,10 +32,9 @@ import type { GraphQLHandlerOptions } from './types'
 
 /*
  * Prevent unexpected error messages from leaking to the GraphQL clients.
- *
  * Unexpected errors are those that are not Envelop, GraphQL, or Redwood errors
  **/
-export const formatError: YogaMaskedErrorOpts['maskError'] = (
+const maskError: YogaMaskedErrorOpts['maskError'] = (
   err: any,
   message: string
 ) => {
@@ -180,7 +179,7 @@ export const createGraphQLHandler = ({
     schema,
     plugins,
     maskedErrors: {
-      maskError: formatError,
+      maskError,
       errorMessage: defaultError,
     },
     logging: logger,
