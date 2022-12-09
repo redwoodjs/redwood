@@ -6455,7 +6455,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 3.2.1
-    "@types/uuid": 8.3.4
+    "@types/uuid": 9.0.0
     aws-lambda: 1.0.7
     base64url: 3.0.1
     core-js: 3.26.1
@@ -6679,7 +6679,7 @@ __metadata:
     "@redwoodjs/api": 3.2.0
     "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
-    "@types/uuid": 8.3.4
+    "@types/uuid": 9.0.0
     base64url: 3.0.1
     core-js: 3.26.1
     crypto-js: 4.1.1
@@ -7292,7 +7292,7 @@ __metadata:
     "@types/jsonwebtoken": 8.5.9
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
-    "@types/uuid": 8.3.4
+    "@types/uuid": 9.0.0
     aws-lambda: 1.0.7
     core-js: 3.26.1
     cross-undici-fetch: 0.4.14
@@ -7474,7 +7474,7 @@ __metadata:
     "@redwoodjs/internal": 3.2.0
     "@redwoodjs/structure": 3.2.0
     "@types/envinfo": 7.8.1
-    "@types/uuid": 8.3.4
+    "@types/uuid": 9.0.0
     "@types/yargs": 17.0.17
     ci-info: 3.7.0
     core-js: 3.26.1
@@ -10150,10 +10150,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:8.3.4":
-  version: 8.3.4
-  resolution: "@types/uuid@npm:8.3.4"
-  checksum: b9ac98f82fcf35962317ef7dc44d9ac9e0f6fdb68121d384c88fe12ea318487d5585d3480fa003cf28be86a3bbe213ca688ba786601dce4a97724765eb5b1cf2
+"@types/uuid@npm:9.0.0":
+  version: 9.0.0
+  resolution: "@types/uuid@npm:9.0.0"
+  checksum: b0dc4582249b4efdbb6a9ebcd6acbcb864da14d558acfd5b17648972f8756e1a8e1de216a5e49a52b51d3804d56e60314467d9ac9450c8b90de138130021ed87
   languageName: node
   linkType: hard
 
