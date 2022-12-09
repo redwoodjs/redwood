@@ -164,7 +164,7 @@ function internalMatchPath({
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(path)
   const allParamTypes = { ...coreParamTypes, ...paramTypes }
-  let typeMatchingRoute = path.replace(/\/$/, '')
+  let typeMatchingRoute = path
 
   // Map all params from the route to their type `match` regexp to create a
   // "type-matching route" regexp
@@ -179,7 +179,7 @@ function internalMatchPath({
   }
 
   const matchRegex = matchChildRoutes
-    ? new RegExp(`^${typeMatchingRoute}(\/.*)?$`, 'g')
+    ? new RegExp(`^${typeMatchingRoute}(?:/.*)?$`, 'g')
     : new RegExp(`^${typeMatchingRoute}$`, 'g')
 
   // Does the `pathname` match the route?

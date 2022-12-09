@@ -74,20 +74,6 @@ describe('<NavLink />', () => {
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
   })
 
-  it('receives active class on the pathname when we are on a sub page with trailing slash', () => {
-    const mockLocation = createDummyLocation('/users/1')
-
-    const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchChildren to="/users/">
-          Dunder Mifflin
-        </NavLink>
-      </LocationProvider>
-    )
-
-    expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
-  })
-
   it('receives active class on the pathname when we are on the exact page, but also matching child paths', () => {
     const mockLocation = createDummyLocation('/users/1')
 
