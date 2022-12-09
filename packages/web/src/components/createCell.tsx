@@ -12,7 +12,7 @@ import { useCellCacheContext } from './CellCacheContext'
 import { useQuery } from './GraphQLHooksProvider'
 
 declare type CustomCellProps<Cell, GQLVariables> = Cell extends {
-  beforeQuery: (...args: unknown[]) => unknown
+  beforeQuery: (...args: any[]) => unknown
 }
   ? Parameters<Cell['beforeQuery']> extends [unknown, ...any]
     ? Parameters<Cell['beforeQuery']>[0]
