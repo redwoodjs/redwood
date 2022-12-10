@@ -31,7 +31,7 @@ const FooBarPage = () => {
 export default FooBarPage
 `
 
-test.only('customOrDefaultTemplatePath returns the default path if no custom templates exist', () => {
+test('customOrDefaultTemplatePath returns the default path if no custom templates exist', () => {
   const output = helpers.customOrDefaultTemplatePath({
     side: 'web',
     generator: 'page',
