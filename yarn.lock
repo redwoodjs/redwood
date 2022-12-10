@@ -8720,10 +8720,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.107, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.107
-  resolution: "@types/aws-lambda@npm:8.10.107"
-  checksum: 52e33a5dafe393d63658858078dea04f0a95e85eacfb9f197611385c43a4249492e18958bac480bca674cfbea2b5776e78eab93ff08275c5524e2820e00b05a5
+"@types/aws-lambda@npm:8.10.109, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.109
+  resolution: "@types/aws-lambda@npm:8.10.109"
+  checksum: 3ffb8d4ddcfc11849cf2234c063a68043e8193d2e12926938fc9b0745f45ae544222f114b8fb978aec5ce2a00e69dbdf8136f11ffbbeec7c024e692df2b454a3
   languageName: node
   linkType: hard
 
