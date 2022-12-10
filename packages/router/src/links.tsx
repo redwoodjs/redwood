@@ -7,7 +7,7 @@ import { flattenSearchParams, matchPath, matchSubPath } from './util'
 type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
 type UseMatchOptions = {
   searchParams?: FlattenSearchParams
-  matchSubRoutes?: boolean
+  matchChildRoutes?: boolean
 }
 
 /**
@@ -58,7 +58,7 @@ const useMatch = (pathname: string, options?: UseMatchOptions) => {
     }
   }
 
-  return options?.matchSubRoutes
+  return options?.matchChildRoutes
     ? matchSubPath(pathname, location.pathname)
     : matchPath(pathname, location.pathname)
 }
@@ -105,7 +105,7 @@ interface NavLinkProps {
   to: string
   activeClassName: string
   activeMatchParams?: FlattenSearchParams
-  matchSubRoutes?: boolean
+  matchChildRoutes?: boolean
   onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }
 
@@ -118,7 +118,7 @@ const NavLink = forwardRef<
       to,
       activeClassName,
       activeMatchParams,
-      matchSubRoutes,
+      matchChildRoutes,
       className,
       onClick,
       ...rest
@@ -130,7 +130,7 @@ const NavLink = forwardRef<
     const searchParams = activeMatchParams || flattenSearchParams(queryString)
     const matchInfo = useMatch(pathname, {
       searchParams,
-      matchSubRoutes,
+      matchChildRoutes,
     })
     const theClassName = [className, matchInfo.match && activeClassName]
       .filter(Boolean)

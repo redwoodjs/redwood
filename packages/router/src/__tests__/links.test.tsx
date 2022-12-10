@@ -67,7 +67,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchSubRoutes to={`/users`}>
+        <NavLink activeClassName="activeTest" matchChildRoutes to={`/users`}>
           Dunder Mifflin
         </NavLink>
       </LocationProvider>
@@ -81,7 +81,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchSubRoutes to="/users/1">
+        <NavLink activeClassName="activeTest" matchChildRoutes to="/users/1">
           Dunder Mifflin
         </NavLink>
       </LocationProvider>
@@ -218,7 +218,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchSubRoutes to={`/users`}>
+        <NavLink activeClassName="activeTest" matchChildRoutes to={`/users`}>
           Dunder Mifflin
         </NavLink>
       </LocationProvider>
