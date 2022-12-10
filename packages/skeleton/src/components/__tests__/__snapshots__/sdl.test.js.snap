@@ -1,0 +1,611 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From within the empty-project fixture returns the correct SDLs with a project: SDL count 1`] = `0`;
+
+exports[`From within the empty-project fixture returns the correct SDLs without a project: SDL count 1`] = `0`;
+
+exports[`From within the example-todo-main fixture returns the correct SDLs with a project: /api/src/graphql/currentUser.sdl.ts 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/currentUser.sdl.ts",
+  "gql": "
+  type Query {
+    currentUser: JSON
+  }
+",
+  "name": "currentUser.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct SDLs with a project: /api/src/graphql/todos.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todos.sdl.js",
+  "gql": "
+  type Todo {
+    id: Int!
+    body: String!
+    status: String!
+  }
+
+  type Query {
+    todos: [Todo] @skipAuth
+    todosCount: Int! @skipAuth
+  }
+
+  type Mutation {
+    createTodo(body: String!): Todo @skipAuth
+    updateTodoStatus(id: Int!, status: String!): Todo @skipAuth
+    renameTodo(id: Int!, body: String!): Todo @skipAuth
+  }
+",
+  "name": "todos.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct SDLs with a project: SDL count 1`] = `2`;
+
+exports[`From within the example-todo-main fixture returns the correct SDLs without a project: /api/src/graphql/currentUser.sdl.ts 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/currentUser.sdl.ts",
+  "gql": "
+  type Query {
+    currentUser: JSON
+  }
+",
+  "name": "currentUser.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct SDLs without a project: /api/src/graphql/todos.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todos.sdl.js",
+  "gql": "
+  type Todo {
+    id: Int!
+    body: String!
+    status: String!
+  }
+
+  type Query {
+    todos: [Todo] @skipAuth
+    todosCount: Int! @skipAuth
+  }
+
+  type Mutation {
+    createTodo(body: String!): Todo @skipAuth
+    updateTodoStatus(id: Int!, status: String!): Todo @skipAuth
+    renameTodo(id: Int!, body: String!): Todo @skipAuth
+  }
+",
+  "name": "todos.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct SDLs without a project: SDL count 1`] = `2`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todos.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todos.sdl.js",
+  "gql": "
+  type Todo {
+    id: Int!
+    body: String!
+    status: String!
+  }
+
+  type Query {
+    todos: [Todo]
+  }
+
+  type Mutation {
+    createTodo(body: String!): Todo
+    updateTodoStatus(id: Int!, status: String!): Todo
+    renameTodo(id: Int!, body: String!): Todo
+  }
+",
+  "name": "todos.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosMutations.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosMutations.sdl.js",
+  "gql": "
+  type Query {
+    deleteTodo(id: Int!): Todo! @requireAuth(roles: ["ADMIN"])
+  }
+",
+  "name": "todosMutations.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js",
+  "gql": "
+  type Query {
+    todosWithInvalidRoles: [Todo] @requireAuth(roles: ["admin", 12])
+  }
+",
+  "name": "todosWithAuthInvalidRolesErrors.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithAuthMissingRoleError.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithAuthMissingRoleError.sdl.js",
+  "gql": "
+  type Query {
+    todosWithMissingRoles: [Todo] @requireAuth(roles: [null, 12])
+  }
+",
+  "name": "todosWithAuthMissingRoleError.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithAuthRoles.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
+  "gql": "
+  type Query {
+    todosWithStringRole: [Todo] @requireAuth(roles: "admin")
+    todosWithMultipleRoles: [Todo] @requireAuth(roles: ["admin", "editor"])
+  }
+",
+  "name": "todosWithAuthRoles.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithBuiltInDirectives.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithBuiltInDirectives.sdl.js",
+  "gql": "
+  type Query {
+    todosWithBuiltInDeprecatedDirective(id: Int!): Todo! @deprecated(reason: "Don't use this query anymore")
+  }
+",
+  "name": "todosWithBuiltInDirectives.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js",
+  "gql": "
+  type Query {
+    todosWithMissingRolesAttribute: [Todo] @requireAuth("ADMIN")
+  }
+",
+  "name": "todosWithMissingAuthRolesAttributeError.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js",
+  "gql": "
+  type Query {
+    todosWithMissingRolesAttributeNumeric: [Todo] @requireAuth(42)
+  }
+",
+  "name": "todosWithMissingAuthRolesAttributeNumericError.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithNumericRoleAuthError.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithNumericRoleAuthError.sdl.js",
+  "gql": "
+  type Query {
+    todosWithInvalidRole: [Todo] @requireAuth(roles: 12)
+  }
+",
+  "name": "todosWithNumericRoleAuthError.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: SDL count 1`] = `9`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todos.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todos.sdl.js",
+  "gql": "
+  type Todo {
+    id: Int!
+    body: String!
+    status: String!
+  }
+
+  type Query {
+    todos: [Todo]
+  }
+
+  type Mutation {
+    createTodo(body: String!): Todo
+    updateTodoStatus(id: Int!, status: String!): Todo
+    renameTodo(id: Int!, body: String!): Todo
+  }
+",
+  "name": "todos.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosMutations.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosMutations.sdl.js",
+  "gql": "
+  type Query {
+    deleteTodo(id: Int!): Todo! @requireAuth(roles: ["ADMIN"])
+  }
+",
+  "name": "todosMutations.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js",
+  "gql": "
+  type Query {
+    todosWithInvalidRoles: [Todo] @requireAuth(roles: ["admin", 12])
+  }
+",
+  "name": "todosWithAuthInvalidRolesErrors.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithAuthMissingRoleError.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithAuthMissingRoleError.sdl.js",
+  "gql": "
+  type Query {
+    todosWithMissingRoles: [Todo] @requireAuth(roles: [null, 12])
+  }
+",
+  "name": "todosWithAuthMissingRoleError.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithAuthRoles.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
+  "gql": "
+  type Query {
+    todosWithStringRole: [Todo] @requireAuth(roles: "admin")
+    todosWithMultipleRoles: [Todo] @requireAuth(roles: ["admin", "editor"])
+  }
+",
+  "name": "todosWithAuthRoles.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithBuiltInDirectives.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithBuiltInDirectives.sdl.js",
+  "gql": "
+  type Query {
+    todosWithBuiltInDeprecatedDirective(id: Int!): Todo! @deprecated(reason: "Don't use this query anymore")
+  }
+",
+  "name": "todosWithBuiltInDirectives.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js",
+  "gql": "
+  type Query {
+    todosWithMissingRolesAttribute: [Todo] @requireAuth("ADMIN")
+  }
+",
+  "name": "todosWithMissingAuthRolesAttributeError.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js",
+  "gql": "
+  type Query {
+    todosWithMissingRolesAttributeNumeric: [Todo] @requireAuth(42)
+  }
+",
+  "name": "todosWithMissingAuthRolesAttributeNumericError.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithNumericRoleAuthError.sdl.js 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/todosWithNumericRoleAuthError.sdl.js",
+  "gql": "
+  type Query {
+    todosWithInvalidRole: [Todo] @requireAuth(roles: 12)
+  }
+",
+  "name": "todosWithNumericRoleAuthError.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: SDL count 1`] = `9`;
+
+exports[`From within the test-project fixture returns the correct SDLs with a project: /api/src/graphql/contacts.sdl.ts 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/contacts.sdl.ts",
+  "gql": "
+  type Contact {
+    id: Int!
+    name: String!
+    email: String!
+    message: String!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    contacts: [Contact!]! @requireAuth
+    contact(id: Int!): Contact @requireAuth
+  }
+
+  input CreateContactInput {
+    name: String!
+    email: String!
+    message: String!
+  }
+
+  input UpdateContactInput {
+    name: String
+    email: String
+    message: String
+  }
+
+  type Mutation {
+    createContact(input: CreateContactInput!): Contact @skipAuth
+    updateContact(id: Int!, input: UpdateContactInput!): Contact! @requireAuth
+    deleteContact(id: Int!): Contact! @requireAuth(roles: ["ADMIN"])
+  }
+",
+  "name": "contacts.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct SDLs with a project: /api/src/graphql/posts.sdl.ts 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/posts.sdl.ts",
+  "gql": "
+  type Post {
+    id: Int!
+    title: String!
+    body: String!
+    authorId: Int!
+    author: User!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    posts: [Post!]! @skipAuth
+    post(id: Int!): Post @skipAuth
+  }
+
+  input CreatePostInput {
+    title: String!
+    body: String!
+    authorId: Int!
+  }
+
+  input UpdatePostInput {
+    title: String
+    body: String
+    authorId: Int
+  }
+
+  type Mutation {
+    createPost(input: CreatePostInput!): Post! @requireAuth
+    updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
+    deletePost(id: Int!): Post! @requireAuth
+  }
+",
+  "name": "posts.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct SDLs with a project: /api/src/graphql/users.sdl.ts 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/users.sdl.ts",
+  "gql": "
+  type User {
+    id: Int!
+    email: String!
+    fullName: String!
+    roles: String
+    posts: [Post]!
+  }
+
+  type Query {
+    user(id: Int!): User @skipAuth
+  }
+
+  input CreateUserInput {
+    email: String!
+    fullName: String!
+    roles: String
+  }
+
+  input UpdateUserInput {
+    email: String
+    fullName: String
+    roles: String
+  }
+",
+  "name": "users.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct SDLs with a project: SDL count 1`] = `3`;
+
+exports[`From within the test-project fixture returns the correct SDLs without a project: /api/src/graphql/contacts.sdl.ts 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/contacts.sdl.ts",
+  "gql": "
+  type Contact {
+    id: Int!
+    name: String!
+    email: String!
+    message: String!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    contacts: [Contact!]! @requireAuth
+    contact(id: Int!): Contact @requireAuth
+  }
+
+  input CreateContactInput {
+    name: String!
+    email: String!
+    message: String!
+  }
+
+  input UpdateContactInput {
+    name: String
+    email: String
+    message: String
+  }
+
+  type Mutation {
+    createContact(input: CreateContactInput!): Contact @skipAuth
+    updateContact(id: Int!, input: UpdateContactInput!): Contact! @requireAuth
+    deleteContact(id: Int!): Contact! @requireAuth(roles: ["ADMIN"])
+  }
+",
+  "name": "contacts.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct SDLs without a project: /api/src/graphql/posts.sdl.ts 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/posts.sdl.ts",
+  "gql": "
+  type Post {
+    id: Int!
+    title: String!
+    body: String!
+    authorId: Int!
+    author: User!
+    createdAt: DateTime!
+  }
+
+  type Query {
+    posts: [Post!]! @skipAuth
+    post(id: Int!): Post @skipAuth
+  }
+
+  input CreatePostInput {
+    title: String!
+    body: String!
+    authorId: Int!
+  }
+
+  input UpdatePostInput {
+    title: String
+    body: String
+    authorId: Int
+  }
+
+  type Mutation {
+    createPost(input: CreatePostInput!): Post! @requireAuth
+    updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
+    deletePost(id: Int!): Post! @requireAuth
+  }
+",
+  "name": "posts.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct SDLs without a project: /api/src/graphql/users.sdl.ts 1`] = `
+RedwoodSDL {
+  "errors": [],
+  "filepath": "/api/src/graphql/users.sdl.ts",
+  "gql": "
+  type User {
+    id: Int!
+    email: String!
+    fullName: String!
+    roles: String
+    posts: [Post]!
+  }
+
+  type Query {
+    user(id: Int!): User @skipAuth
+  }
+
+  input CreateUserInput {
+    email: String!
+    fullName: String!
+    roles: String
+  }
+
+  input UpdateUserInput {
+    email: String
+    fullName: String
+    roles: String
+  }
+",
+  "name": "users.sdl",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct SDLs without a project: SDL count 1`] = `3`;
