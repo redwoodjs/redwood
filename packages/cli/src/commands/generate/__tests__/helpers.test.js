@@ -39,11 +39,9 @@ test.only('customOrDefaultTemplatePath returns the default path if no custom tem
   })
 
   expect(output).toMatch(
-    path
-      .normalize(
-        '/packages/cli/src/commands/generate/page/templates/page.tsx.template'
-      )
-      .replace('red', '')
+    path.normalize(
+      '/packages/cli/src/commands/generate/page/templates/page.tsx.template'
+    )
   )
 })
 
