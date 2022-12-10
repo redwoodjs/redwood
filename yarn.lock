@@ -6538,7 +6538,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6592,7 +6592,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6644,7 +6644,7 @@ __metadata:
     "@clerk/types": 2.21.0
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6722,7 +6722,7 @@ __metadata:
     "@simplewebauthn/browser": 6.2.1
     "@simplewebauthn/typescript-types": 6.2.1
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6770,7 +6770,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     firebase: 9.10.0
     jest: 29.3.1
@@ -6823,7 +6823,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6891,7 +6891,7 @@ __metadata:
     "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
     "@redwoodjs/auth": 3.2.0
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     gotrue-js: 0.9.29
     jest: 29.3.1
@@ -6950,7 +6950,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@supabase/supabase-js": 1.35.7
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -7003,7 +7003,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -7039,7 +7039,7 @@ __metadata:
     "@babel/core": 7.20.5
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/telemetry": 3.2.0
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     listr2: 5.0.6
@@ -7250,7 +7250,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.26.1
@@ -7413,7 +7413,7 @@ __metadata:
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 3.2.0
     "@types/lodash.isequal": 4.5.6
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     core-js: 3.26.1
     jest: 29.3.1
@@ -7513,7 +7513,7 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 29.2.4
     "@types/node": 16.18.7
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     "@types/webpack": 5.28.0
     babel-jest: 29.3.1
@@ -7542,7 +7542,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.26.1
@@ -9970,14 +9970,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.50":
-  version: 17.0.50
-  resolution: "@types/react@npm:17.0.50"
+"@types/react@npm:17.0.52":
+  version: 17.0.52
+  resolution: "@types/react@npm:17.0.52"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 2e7cf61b7319b6398c62a29922255ce335c98bfbb55bda7c3aa386f4c2693d894d26eba9f7111f3ae86be79491d471a2ee89bf54f0445177ff70d1c30ab39382
+  checksum: df8662375c71eab90f9832bf388e210b337514ff0cfd260547c498b5a010a8bba980fa704b0e828070e83363c8d20a0a03e3e2fcd27d50649c3811b1279ea9ed
   languageName: node
   linkType: hard
 
