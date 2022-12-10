@@ -31,7 +31,7 @@ const FooBarPage = () => {
 export default FooBarPage
 `
 
-test('customOrDefaultTemplatePath returns the default path if no custom templates exist', () => {
+test.only('customOrDefaultTemplatePath returns the default path if no custom templates exist', () => {
   const output = helpers.customOrDefaultTemplatePath({
     side: 'web',
     generator: 'page',
@@ -39,9 +39,11 @@ test('customOrDefaultTemplatePath returns the default path if no custom template
   })
 
   expect(output).toMatch(
-    path.normalize(
-      'redwood/packages/cli/src/commands/generate/page/templates/page.tsx.template'
-    )
+    path
+      .normalize(
+        '/packages/cli/src/commands/generate/page/templates/page.tsx.template'
+      )
+      .replace('red', '')
   )
 })
 
