@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render } from '@testing-library/react'
 // TODO: Remove when jest configs are in place
@@ -65,7 +67,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchChildren to={`/users`}>
+        <NavLink activeClassName="activeTest" matchSubRoutes to={`/users`}>
           Dunder Mifflin
         </NavLink>
       </LocationProvider>
@@ -79,7 +81,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchChildren to="/users/1">
+        <NavLink activeClassName="activeTest" matchSubRoutes to="/users/1">
           Dunder Mifflin
         </NavLink>
       </LocationProvider>
@@ -216,7 +218,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchChildren to={`/users`}>
+        <NavLink activeClassName="activeTest" matchSubRoutes to={`/users`}>
           Dunder Mifflin
         </NavLink>
       </LocationProvider>

@@ -85,7 +85,6 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  * route            - The route path as specified in the <Route path={...} />
  * pathname         - The pathname from the window.location.
  * paramTypes       - The object containing all param type definitions.
- * matchChildRoutes - Whether or not to match child routes.
  *
  * Examples:
  *
@@ -104,8 +103,34 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
 export const matchPath = (
   route: string,
   pathname: string,
-  paramTypes?: Record<string, ParamType>,
-  matchChildRoutes = false
+  paramTypes?: Record<string, ParamType>
+) => internalMatchPath(route, pathname, { paramTypes })
+
+/**
+ * Determine if the given route is a match for the given pathname, also
+ * matching sub-routes. If so, extract any named params and return them in an
+ * object.
+ *
+ * route            - The route path as specified in the <Route path={...} />
+ * pathname         - The pathname from the window.location.
+ * paramTypes       - The object containing all param type definitions.
+ */
+export const matchSubPath = (
+  route: string,
+  pathname: string,
+  paramTypes?: Record<string, ParamType>
+) => internalMatchPath(route, pathname, { paramTypes, matchChildRoutes: true })
+
+const internalMatchPath = (
+  route: string,
+  pathname: string,
+  {
+    paramTypes,
+    matchChildRoutes,
+  }: {
+    paramTypes?: Record<string, ParamType>
+    matchChildRoutes?: boolean
+  }
 ) => {
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
