@@ -29,11 +29,11 @@ export const ParamsProvider: React.FC<Props> = ({
   const searchParams = parseSearch(internalLocation.search)
 
   if (path) {
-    const { match, params } = matchPath({
+    const { match, params } = matchPath(
       path,
-      pathname: internalLocation.pathname,
-      paramTypes,
-    })
+      internalLocation.pathname,
+      paramTypes
+    )
 
     if (match && typeof params !== 'undefined') {
       pathParams = params
