@@ -7114,7 +7114,7 @@ __metadata:
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
-    "@types/jscodeshift": 0.11.5
+    "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.1
     "@types/yargs": 17.0.17
     "@vscode/ripgrep": 1.14.2
@@ -9595,13 +9595,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jscodeshift@npm:0.11.5":
-  version: 0.11.5
-  resolution: "@types/jscodeshift@npm:0.11.5"
+"@types/jscodeshift@npm:0.11.6":
+  version: 0.11.6
+  resolution: "@types/jscodeshift@npm:0.11.6"
   dependencies:
     ast-types: ^0.14.1
     recast: ^0.20.3
-  checksum: 9cb9d1fea1b8f2716836c9075dbe0a401fb3528d4ac00848a92f1289136149b98a25579de495377dcd1ee110f24f82e8ffbe222059d5bd30f488798a8ddc73c4
+  checksum: 1d204a4c3d9f52669e315dfbc1e65434ec55ee884574306d35048b89ef83b625c64d510228b6aabbd4248af566e02e0ce9de0aa8ccdfff696c69fbaced7007e7
   languageName: node
   linkType: hard
 
@@ -27661,7 +27661,7 @@ __metadata:
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
-    "@types/jscodeshift": 0.11.5
+    "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.1
