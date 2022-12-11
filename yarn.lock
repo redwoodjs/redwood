@@ -5640,13 +5640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/openapi-types@npm:^13.4.0":
-  version: 13.4.0
-  resolution: "@octokit/openapi-types@npm:13.4.0"
-  checksum: 6489e6c1ca028160b74ac21e74ce3a61c79f187c57e3909d2448b4a9c5c299cee8fd84ec039d09290004349df53cbaa6d4394013e1545903356e80e5b46c8ffc
-  languageName: node
-  linkType: hard
-
 "@octokit/openapi-types@npm:^14.0.0":
   version: 14.0.0
   resolution: "@octokit/openapi-types@npm:14.0.0"
@@ -5672,14 +5665,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-paginate-rest@npm:^4.0.0":
-  version: 4.1.0
-  resolution: "@octokit/plugin-paginate-rest@npm:4.1.0"
+"@octokit/plugin-paginate-rest@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "@octokit/plugin-paginate-rest@npm:5.0.1"
   dependencies:
-    "@octokit/types": ^7.1.1
+    "@octokit/types": ^8.0.0
   peerDependencies:
     "@octokit/core": ">=4"
-  checksum: 6606b07bd4a52f9be5850ad094152638e07d1e8b00f4aaefee87eefb87516a98431f0baa1b1d7f1d185a24675014f4c714d5cea898f5c32d89060223010f8dde
+  checksum: a6754bfa3c6e3b917f1b03266e90e96ba97957e3ca15b1cc5a306cebc8ef96f1757fe85d8fade41b4c0e7e3805c753e94d360375f2ec9fa96b1fec79b239a662
   languageName: node
   linkType: hard
 
@@ -5704,13 +5697,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-retry@npm:^3.0.9":
-  version: 3.0.9
-  resolution: "@octokit/plugin-retry@npm:3.0.9"
+"@octokit/plugin-retry@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "@octokit/plugin-retry@npm:4.0.3"
   dependencies:
-    "@octokit/types": ^6.0.3
+    "@octokit/types": ^8.0.0
     bottleneck: ^2.15.3
-  checksum: ea097c3b6fe507f45c71237463b4a4e0397b4175b5422528184d7d8a1ed9bf1dcb34f58ce10ec1f7ba8dfd173a221324206af7fa5bf5d2c322566412dfbe289d
+  peerDependencies:
+    "@octokit/core": ">=3"
+  checksum: d6d98079d433442e37fd3c1b1309102c2e45e165e4fa23de336470b271113c55359df7d8c4d09d41dbb44d0f6cdc1455e95dc3f5391c1dd875bb023a2629c0c2
   languageName: node
   linkType: hard
 
@@ -5794,15 +5789,6 @@ __metadata:
   dependencies:
     "@octokit/openapi-types": ^12.10.0
   checksum: 88a227dbf7f42a3e408ef433d8e0160dc2e72ee29faa1de4e10d61d249bd712ff1b535003887ed953d9675655e4eea0177a6a20a58fbed8cdd2c29915843ab15
-  languageName: node
-  linkType: hard
-
-"@octokit/types@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@octokit/types@npm:7.1.1"
-  dependencies:
-    "@octokit/openapi-types": ^13.4.0
-  checksum: 6055376170dcb99eee64ddfb4f5bf4e587e758d8fe72453f149900225cf9b82515c261b627e06347b2b801c59be7d6d78a2d936015c728147ae06f199bb4d03e
   languageName: node
   linkType: hard
 
@@ -6447,7 +6433,7 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@prisma/client": 4.7.1
     "@redwoodjs/auth": 3.2.0
-    "@simplewebauthn/server": 6.2.1
+    "@simplewebauthn/server": 6.2.2
     "@types/aws-lambda": 8.10.109
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.9
@@ -6538,7 +6524,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6592,7 +6578,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6644,7 +6630,7 @@ __metadata:
     "@clerk/types": 2.21.0
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6722,7 +6708,7 @@ __metadata:
     "@simplewebauthn/browser": 6.2.1
     "@simplewebauthn/typescript-types": 6.2.1
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6770,7 +6756,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     firebase: 9.10.0
     jest: 29.3.1
@@ -6823,7 +6809,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6891,7 +6877,7 @@ __metadata:
     "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
     "@redwoodjs/auth": 3.2.0
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     gotrue-js: 0.9.29
     jest: 29.3.1
@@ -6950,7 +6936,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@supabase/supabase-js": 1.35.7
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -7003,7 +6989,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -7039,7 +7025,7 @@ __metadata:
     "@babel/core": 7.20.5
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/telemetry": 3.2.0
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     listr2: 5.0.6
@@ -7114,7 +7100,7 @@ __metadata:
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
-    "@types/jscodeshift": 0.11.5
+    "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.1
     "@types/yargs": 17.0.17
     "@vscode/ripgrep": 1.14.2
@@ -7250,8 +7236,8 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 17.0.50
-    "@types/react-dom": 17.0.17
+    "@types/react": 17.0.52
+    "@types/react-dom": 17.0.18
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.26.1
     graphql: 16.6.0
@@ -7413,8 +7399,8 @@ __metadata:
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 3.2.0
     "@types/lodash.isequal": 4.5.6
-    "@types/react": 17.0.50
-    "@types/react-dom": 17.0.17
+    "@types/react": 17.0.52
+    "@types/react-dom": 17.0.18
     core-js: 3.26.1
     jest: 29.3.1
     lodash.isequal: 4.5.0
@@ -7513,8 +7499,8 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 29.2.4
     "@types/node": 16.18.7
-    "@types/react": 17.0.50
-    "@types/react-dom": 17.0.17
+    "@types/react": 17.0.52
+    "@types/react-dom": 17.0.18
     "@types/webpack": 5.28.0
     babel-jest: 29.3.1
     babel-plugin-inline-react-svg: 2.0.1
@@ -7542,8 +7528,8 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
-    "@types/react": 17.0.50
-    "@types/react-dom": 17.0.17
+    "@types/react": 17.0.52
+    "@types/react-dom": 17.0.18
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.26.1
     graphql: 16.6.0
@@ -7675,26 +7661,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/server@npm:6.2.1":
-  version: 6.2.1
-  resolution: "@simplewebauthn/server@npm:6.2.1"
+"@simplewebauthn/server@npm:6.2.2":
+  version: 6.2.2
+  resolution: "@simplewebauthn/server@npm:6.2.2"
   dependencies:
     "@noble/ed25519": ^1.6.1
     "@peculiar/asn1-android": ^2.1.7
     "@peculiar/asn1-schema": ^2.1.7
     "@peculiar/asn1-x509": ^2.1.7
-    "@simplewebauthn/typescript-types": ^6.2.1
     base64url: ^3.0.1
     cbor: ^5.1.0
     debug: ^4.3.2
     jsrsasign: ^10.4.0
     jwk-to-pem: ^2.0.4
     node-fetch: ^2.6.0
-  checksum: 3d07fc7592683c4364a1f346bc457af5a06a43169859a0832a97e4f784c672430a0b4aeacc5648579f946372c4725263a485570b67fc82b1c88682e477ac322a
+  checksum: 3eae8260e0774ab47708d112710a31e59d801eebd83d646e9737efe0535494d973f254d644f049dde0a670b0cd6cceca7c22007dbeb320e3db858e6990542521
   languageName: node
   linkType: hard
 
-"@simplewebauthn/typescript-types@npm:6.2.1, @simplewebauthn/typescript-types@npm:^6.2.1":
+"@simplewebauthn/typescript-types@npm:6.2.1":
   version: 6.2.1
   resolution: "@simplewebauthn/typescript-types@npm:6.2.1"
   checksum: fda36ec34391a696586a89ef0efea3cfd49b42d606285b4db3e8d3dce3b36c5f831ec7682dd87784a26fa713ad8fdac91ea2a2fe62c2773dddffaa5cf24945ce
@@ -9596,13 +9581,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jscodeshift@npm:0.11.5":
-  version: 0.11.5
-  resolution: "@types/jscodeshift@npm:0.11.5"
+"@types/jscodeshift@npm:0.11.6":
+  version: 0.11.6
+  resolution: "@types/jscodeshift@npm:0.11.6"
   dependencies:
     ast-types: ^0.14.1
     recast: ^0.20.3
-  checksum: 9cb9d1fea1b8f2716836c9075dbe0a401fb3528d4ac00848a92f1289136149b98a25579de495377dcd1ee110f24f82e8ffbe222059d5bd30f488798a8ddc73c4
+  checksum: 1d204a4c3d9f52669e315dfbc1e65434ec55ee884574306d35048b89ef83b625c64d510228b6aabbd4248af566e02e0ce9de0aa8ccdfff696c69fbaced7007e7
   languageName: node
   linkType: hard
 
@@ -9924,12 +9909,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prompts@npm:2.4.1":
-  version: 2.4.1
-  resolution: "@types/prompts@npm:2.4.1"
+"@types/prompts@npm:2.4.2":
+  version: 2.4.2
+  resolution: "@types/prompts@npm:2.4.2"
   dependencies:
     "@types/node": "*"
-  checksum: e00281339b716d7635ab0dc5f52f9a012daca9ed21346887fa1def85febfd16e937908d62602a34158eb613f6738ac15b85f3012f9993c0664a8f368385f6109
+    kleur: ^3.0.3
+  checksum: f6fbd91a6a23017ee9a8da870f1354aaa5052a7907d17c41a2364ca4c546f4bad952c7bb6dfe824f0a7385aad4d9f2faf284cc7239e99c2f7675dea3bc2cdcc4
   languageName: node
   linkType: hard
 
@@ -9961,23 +9947,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:17.0.17, @types/react-dom@npm:<18.0.0":
-  version: 17.0.17
-  resolution: "@types/react-dom@npm:17.0.17"
+"@types/react-dom@npm:17.0.18, @types/react-dom@npm:<18.0.0":
+  version: 17.0.18
+  resolution: "@types/react-dom@npm:17.0.18"
   dependencies:
     "@types/react": ^17
-  checksum: 1e330f6e1c0794562a8d3459357b5b401b6f23185991bdaf9e5025cad7ccace502662b071db765b07b0d79f313be1a7584c5ef775b1062d76585b6b9aec0693c
+  checksum: a787471157d66e834ee2afa57d81171c8cae26d3b0def23709da8256433d0b3c5c9f35c03913c9c4137f79acf78af9e2483ee1578197f77298344f33b7186791
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.50":
-  version: 17.0.50
-  resolution: "@types/react@npm:17.0.50"
+"@types/react@npm:17.0.52":
+  version: 17.0.52
+  resolution: "@types/react@npm:17.0.52"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 2e7cf61b7319b6398c62a29922255ce335c98bfbb55bda7c3aa386f4c2693d894d26eba9f7111f3ae86be79491d471a2ee89bf54f0445177ff70d1c30ab39382
+  checksum: df8662375c71eab90f9832bf388e210b337514ff0cfd260547c498b5a010a8bba980fa704b0e828070e83363c8d20a0a03e3e2fcd27d50649c3811b1279ea9ed
   languageName: node
   linkType: hard
 
@@ -14543,7 +14529,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/internal": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
-    "@types/prompts": 2.4.1
+    "@types/prompts": 2.4.2
     chalk: 4.1.2
     check-node-version: 4.2.1
     core-js: 3.26.1
@@ -24393,19 +24379,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.8":
-  version: 2.0.8
-  resolution: "octokit@npm:2.0.8"
+"octokit@npm:2.0.10":
+  version: 2.0.10
+  resolution: "octokit@npm:2.0.10"
   dependencies:
     "@octokit/app": ^13.0.5
     "@octokit/core": ^4.0.4
     "@octokit/oauth-app": ^4.0.6
-    "@octokit/plugin-paginate-rest": ^4.0.0
+    "@octokit/plugin-paginate-rest": ^5.0.0
     "@octokit/plugin-rest-endpoint-methods": ^6.0.0
-    "@octokit/plugin-retry": ^3.0.9
+    "@octokit/plugin-retry": ^4.0.3
     "@octokit/plugin-throttling": ^4.0.1
     "@octokit/types": ^8.0.0
-  checksum: 03b11cf6fa58691bba6647e4c1318c560cc575f14de5294160eb6e04662bc412e22ef5aed109c3488d2fc1611a704a89efc0050289b25f4b40afa26a1e43ba9a
+  checksum: b20210d853d61b627fe1324969942e753666379d271e24b876a11012f3f392d836cf40959bbfe4388619b989fe816f0d17a38052a5865d76fbb45f58cc5dd7bf
   languageName: node
   linkType: hard
 
@@ -27662,10 +27648,10 @@ __metadata:
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 9.0.13
     "@types/jest": 29.2.4
-    "@types/jscodeshift": 0.11.5
+    "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
-    "@types/prompts": 2.4.1
+    "@types/prompts": 2.4.2
     all-contributors-cli: 6.24.0
     ansi-colors: 4.1.3
     babel-jest: 29.3.1
@@ -27692,7 +27678,7 @@ __metadata:
     nodemon: 2.0.20
     npm-packlist: 5.1.3
     nx: 15.3.0
-    octokit: 2.0.8
+    octokit: 2.0.10
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2
