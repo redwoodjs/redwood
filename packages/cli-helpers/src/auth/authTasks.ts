@@ -462,8 +462,9 @@ export const checkIfAuthSetupAlready = <
               value: AuthSetupMode.REPLACE, // this is the value
             },
             {
-              message: `Combine existing auth with ${ctx.provider}`,
+              message: `Generate files, setup manually. [ADVANCED]`,
               value: AuthSetupMode.COMBINE, // this is the value
+              disabled: true,
             },
           ],
         })
