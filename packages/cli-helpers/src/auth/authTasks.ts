@@ -36,10 +36,10 @@ const addApiConfig = ({
   let content = fs.readFileSync(graphqlPath).toString()
   let contentUpdated = false
 
-  // Replace the existing import { x as authDecoder} with the new one
+  // Replace the existing import { authDecoder } from 'x' with the new one
   if (authDecoderImport && replaceExistingImport) {
     content = content.replace(
-      /import { .+ as authDecoder .+/,
+      /import { authDecoder } from .+/,
       authDecoderImport
     )
 
