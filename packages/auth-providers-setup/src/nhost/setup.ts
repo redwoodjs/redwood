@@ -1,34 +1,19 @@
 import yargs from 'yargs'
 
-import {
-  standardAuthBuilder,
-  standardAuthHandler,
-} from '@redwoodjs/cli-helpers'
+import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 export const command = 'nhost'
 export const description = 'Generate an auth configuration for nhost'
-export const builder = (yargs: yargs.Argv) => {
+
+export function builder(yargs: yargs.Argv) {
   return standardAuthBuilder(yargs)
 }
 
-interface Args {
-  rwVersion: string
+export interface Args {
   force: boolean
 }
 
-export const handler = async ({ rwVersion, force: forceArg }: Args) => {
-  standardAuthHandler({
-    setupTemplateDir: __dirname,
-    rwVersion,
-    forceArg,
-    provider: 'nhost',
-    authDecoderImport:
-      "import { nhostAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
-    apiPackages: ['@redwoodjs/auth-providers-api'],
-    webPackages: ['@redwoodjs/auth-providers-web', '@nhost/nhost-js'],
-    notes: [
-      "You will need to add your project's backend URL (NHOST_BACKEND_URL) and",
-      'JWT Key Secret (NHOST_JWT_SECRET) to your .env file.',
-    ],
-  })
+export async function handler(options: Args) {
+  const { handler } = await import('./setupHandler')
+  return handler(options)
 }

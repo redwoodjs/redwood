@@ -43,8 +43,7 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
 }
 
 interface Args {
-  setupTemplateDir: string
-  rwVersion: string
+  basedir: string
   forceArg: boolean
   provider: string
   authDecoderImport?: string
@@ -64,14 +63,13 @@ function truthy<T>(value: T): value is Truthy<T> {
 }
 
 /**
- *  setupTemplateDir assumes that you must have a templates folder in that directory.
+ *  basedir assumes that you must have a templates folder in that directory.
  *
  *  See folder structure of auth providers in packages/auth-providers-setup/src/<provider>
  *
  */
 export const standardAuthHandler = async ({
-  setupTemplateDir,
-  rwVersion,
+  basedir,
   forceArg,
   provider,
   authDecoderImport,
@@ -90,18 +88,17 @@ export const standardAuthHandler = async ({
   const tasks = new Listr<AuthGeneratorCtx, 'verbose' | 'default'>(
     [
       !forceArg && checkIfAuthSetupAlready(),
-      generateAuthApiFiles(setupTemplateDir, webAuthn),
+      generateAuthApiFiles(basedir, webAuthn),
 
       // Setup the web side
       addConfigToWebApp(),
-      createWebAuth(setupTemplateDir, webAuthn),
+      createWebAuth(basedir, webAuthn),
       addConfigToRoutes(),
-      // ----=----
-
-      addAuthConfigToGqlApi(authDecoderImport), // Update api/src/functions/gql function
-      addWebPackages(webPackages, rwVersion),
-      addApiPackages(apiPackages),
-      installPackages,
+      // ----
+      addAuthConfigToGqlApi(authDecoderImport),
+      webPackages.length && addWebPackages(webPackages),
+      apiPackages.length && addApiPackages(apiPackages),
+      (webPackages.length || apiPackages.length) && installPackages,
       extraTask,
       notes && {
         title: 'One more thing...',

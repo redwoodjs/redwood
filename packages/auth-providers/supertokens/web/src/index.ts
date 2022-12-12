@@ -1,0 +1,1 @@
+export { createSuperTokensAuth } from './supertokens'

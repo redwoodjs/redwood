@@ -1,30 +1,19 @@
 import yargs from 'yargs'
 
-import {
-  standardAuthBuilder,
-  standardAuthHandler,
-} from '@redwoodjs/cli-helpers'
+import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 export const command = 'okta'
 export const description = 'Generate an auth configuration for Okta'
-export const builder = (yargs: yargs.Argv) => {
+
+export function builder(yargs: yargs.Argv) {
   return standardAuthBuilder(yargs)
 }
 
-interface Args {
-  rwVersion: string
+export interface Args {
   force: boolean
 }
 
-export const handler = async ({ rwVersion, force: forceArg }: Args) => {
-  standardAuthHandler({
-    setupTemplateDir: __dirname,
-    rwVersion,
-    forceArg,
-    provider: 'okta',
-    authDecoderImport:
-      "import { oktaAuthDecoder as authDecoder } from '@redwoodjs/auth-providers-api'",
-    webPackages: ['@okta/okta-auth-js', '@redwoodjs/auth-providers-web'],
-    apiPackages: ['@okta/jwt-verifier', '@redwoodjs/auth-providers-api'],
-  })
+export async function handler(options: Args) {
+  const { handler } = await import('./setupHandler')
+  return handler(options)
 }
