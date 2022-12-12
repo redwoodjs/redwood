@@ -575,6 +575,40 @@ validate(input.lastName, {
 })
 ```
 
+#### Custom
+
+Run a custom validation function passed as `with` which should either throw or return nothing.
+If the function throws an error, the error message will be used as the message of the validation error associated with the field.
+
+```jsx
+validate(input.value, 'Value', {
+  custom: {
+    with: () => {
+      if (isInvalid) {
+        throw new Error('Value is invalid')
+      }
+    }
+  }
+})
+```
+
+##### Options
+
+* `message`: a custom error message if validation fails
+
+```jsx
+validate(input.value, 'Value', {
+  custom: {
+    with: () => {
+      if (isInvalid) {
+        throw new Error('Value is invalid')
+      }
+    },
+    message: 'Please specify a different value'
+  }
+})
+```
+
 ### validateWith()
 
 `validateWith()` is simply given a function to execute. This function should throw with a message if there is a problem, otherwise do nothing.
