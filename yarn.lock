@@ -5398,12 +5398,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:15.3.0":
-  version: 15.3.0
-  resolution: "@nrwl/cli@npm:15.3.0"
+"@nrwl/cli@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@nrwl/cli@npm:15.3.2"
   dependencies:
-    nx: 15.3.0
-  checksum: 421ed49ca15b5f8bfc57e7459dcc64d4f69d28341416082519f7ac7412bef97c3ba6dc27d38ec9710d2e1a2e63c693ed0005f45bb19259b5fffc60272a05f4e0
+    nx: 15.3.2
+  checksum: cbdd26b23fd9e49d2ba20ab039d6db978752791fa3ca5db6cd8ce24d07de48c624f18aba2e3b871aa39274dc3d9d91ca4deafad3943b182153c7a95ed3c737ce
   languageName: node
   linkType: hard
 
@@ -5440,14 +5440,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:15.3.0":
-  version: 15.3.0
-  resolution: "@nrwl/tao@npm:15.3.0"
+"@nrwl/tao@npm:15.3.2":
+  version: 15.3.2
+  resolution: "@nrwl/tao@npm:15.3.2"
   dependencies:
-    nx: 15.3.0
+    nx: 15.3.2
   bin:
     tao: index.js
-  checksum: 262eb486fd8eda6747e1ad0860693ba65d6338523026f0b869eb949da1f9e3deda4ab12436222152625f8aa6167f474acba6f40f4c7844548b15d158236a1941
+  checksum: 61edd17304dda91253e37cdc4ae33fadc6dc45b3f47433cfaad67af064a82ff6e774c65864233aecaf764c196d0123dc48bc753f01ebd2cc83556b5dd00de64f
   languageName: node
   linkType: hard
 
@@ -6328,59 +6328,59 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/bloom@npm:1.0.2":
-  version: 1.0.2
-  resolution: "@redis/bloom@npm:1.0.2"
+"@redis/bloom@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@redis/bloom@npm:1.1.0"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: 1ec820145f58b5b86628b90e284a736c94ebe7747bbcf7fae968c268d1aab4f13c488808c8c1c75ad8b5fcf0a4e9b3ef5ba4d7d68585abe324461b119e72c5bb
+  checksum: 4d9a2eb060aa2a64afbf2bd055d5b75d2388d70244f749c13a25d8744dd89d434e6d0ebe1df710b4e2cbb6dc8b47cfcc43d8aa2715556b1ed2f9ba3082bcfb97
   languageName: node
   linkType: hard
 
-"@redis/client@npm:1.2.0":
-  version: 1.2.0
-  resolution: "@redis/client@npm:1.2.0"
+"@redis/client@npm:1.4.2":
+  version: 1.4.2
+  resolution: "@redis/client@npm:1.4.2"
   dependencies:
-    cluster-key-slot: 1.1.0
-    generic-pool: 3.8.2
+    cluster-key-slot: 1.1.1
+    generic-pool: 3.9.0
     yallist: 4.0.0
-  checksum: 89d084fb9fc4695857e875a3c55bef23b6f078f51df5e485004068a1790a80b71394d749ac86ea889bdf544b61d91c1601d96fa94ed7269ca9a1899edc228985
+  checksum: 99552f2e1c95a0a9e642e31852174c679525665f401bbd373d5e4c904feca59139381250cea8b6108f1d19fc6efcfe0022925e8a71fc9e6756df75c7077d2933
   languageName: node
   linkType: hard
 
-"@redis/graph@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@redis/graph@npm:1.0.1"
+"@redis/graph@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@redis/graph@npm:1.1.0"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: 32821fd98641727946011e836e32a33123083f3b00410d590681282ed162b70125e796e5ba92e9e503ce708647625a4c024779d2866cfb38475ae9b6d5dccd21
+  checksum: 2b30ea2a67a07b312f42b5fe1dce770c0559c153faaca64d53ef8a479438108b32260e9701d12addb50ccc4ea1df8a949ea5e802c13ead689c635d65bad1bc3a
   languageName: node
   linkType: hard
 
-"@redis/json@npm:1.0.3":
-  version: 1.0.3
-  resolution: "@redis/json@npm:1.0.3"
+"@redis/json@npm:1.0.4":
+  version: 1.0.4
+  resolution: "@redis/json@npm:1.0.4"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: dfec3fbd1225e023effcb2e1bf14ed1756384df3df9fa038969ea117ec19ee200df0496391778729a4473dfe974e38a0673822e4b66fbe5691f4dc9e2b4d4977
+  checksum: 6c1585c046909125170c2d3c970e1b11680279df2ae58af1017b638c1c118a285cd83d1fc96d9826860071772ebe978d71dfc46a784862ac1e9c952633e757d0
   languageName: node
   linkType: hard
 
-"@redis/search@npm:1.0.6":
-  version: 1.0.6
-  resolution: "@redis/search@npm:1.0.6"
+"@redis/search@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@redis/search@npm:1.1.0"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: fdec49cd36a3fde6add844e7f6417f1abdc04fa4de9aa58878fefca0e48b64c2d9c1d9683956aa671182788bb443c153dbc5ca7b9991e4495152764a0b5b6a8e
+  checksum: ba577f335a9235f5e3a4663fc240a44ea6ce52d80c4018a05cbc290b3f042ebaba7874146400b5bf7e5c98724d28f6c555867fd292b9fa28542609ba67d6a734
   languageName: node
   linkType: hard
 
-"@redis/time-series@npm:1.0.3":
-  version: 1.0.3
-  resolution: "@redis/time-series@npm:1.0.3"
+"@redis/time-series@npm:1.0.4":
+  version: 1.0.4
+  resolution: "@redis/time-series@npm:1.0.4"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: ce79b8cb123e4b79ef73daaf44ec69ef85fbba5f8791c51db3952db19440699929d30b7ea4d7b9483f6afb9c1fc2a7d3b793d3c5a0c981443fc129a26f43168a
+  checksum: ec637500f1544384724ed57542274b70f9f0c2f2a5253fcdb63c809322167996740f4effd3666e4984600684fb37eb79efe6ab09309e36b68c964cbd8789641c
   languageName: node
   linkType: hard
 
@@ -6455,7 +6455,7 @@ __metadata:
     memjs: 1.3.0
     pascalcase: 1.0.0
     pino: 8.7.0
-    redis: 4.2.0
+    redis: 4.5.1
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.7.4
@@ -6961,7 +6961,7 @@ __metadata:
     jwks-rsa: 2.0.5
     typescript: 4.7.4
   peerDependencies:
-    supertokens-node: 12.1.1
+    supertokens-node: 12.1.3
   languageName: unknown
   linkType: soft
 
@@ -7024,14 +7024,22 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.20.5
     "@babel/runtime-corejs3": 7.20.6
+    "@redwoodjs/internal": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
-    "@types/react": 17.0.52
+    "@types/lodash.memoize": 4.1.7
+    "@types/pascalcase": 1.0.1
+    "@types/yargs": 17.0.17
+    chalk: 4.1.2
     core-js: 3.26.1
+    execa: 5.1.1
     jest: 29.3.1
     listr2: 5.0.6
+    lodash.memoize: 4.1.2
+    pascalcase: 1.0.0
+    prettier: 2.8.1
     prompts: 2.4.2
-    react: 17.0.2
     rimraf: 3.0.2
+    terminal-link: 2.1.1
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -7339,7 +7347,7 @@ __metadata:
     prettier: 2.8.1
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
-    systeminformation: 5.16.5
+    systeminformation: 5.16.6
     terminal-link: 2.1.1
     typescript: 4.7.4
   bin:
@@ -7427,7 +7435,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.191
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.18.7
+    "@types/node": 16.18.8
     "@types/vscode": 1.72.0
     camelcase: 6.3.0
     core-js: 3.26.1
@@ -7469,7 +7477,7 @@ __metadata:
     cross-undici-fetch: 0.4.14
     envinfo: 7.8.1
     jest: 29.3.1
-    systeminformation: 5.16.5
+    systeminformation: 5.16.6
     uuid: 9.0.0
     yargs: 17.6.2
   languageName: unknown
@@ -7500,7 +7508,7 @@ __metadata:
     "@types/aws-lambda": 8.10.109
     "@types/babel-core": 6.25.7
     "@types/jest": 29.2.4
-    "@types/node": 16.18.7
+    "@types/node": 16.18.8
     "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     "@types/webpack": 5.28.0
@@ -9668,6 +9676,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.memoize@npm:4.1.7":
+  version: 4.1.7
+  resolution: "@types/lodash.memoize@npm:4.1.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 979a59dbbae968a03834fdb544dc5ddd34620a2912d5030c997a1aa919326425a900c93bc69554b2a873cf54f09b4dd2752b3a1c29ab4bffac5983113c58b1b5
+  languageName: node
+  linkType: hard
+
 "@types/lodash.merge@npm:4.6.7":
   version: 4.6.7
   resolution: "@types/lodash.merge@npm:4.6.7"
@@ -9818,10 +9835,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.18.7, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
-  version: 16.18.7
-  resolution: "@types/node@npm:16.18.7"
-  checksum: ca9fb8e223e545b6e2f711bf77f0d6b800b897a1cf6e7d18157b1b4fd804454c71d515e5731ab6865aec266521ea06513d39c9c47b61b4b58d5603b8b30bcecd
+"@types/node@npm:16.18.8, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
+  version: 16.18.8
+  resolution: "@types/node@npm:16.18.8"
+  checksum: f49e5f065b027f92714eca165ac97966629c51bb6f5f5c828c38240c32f6c49df190d5497a2dbe59bf2455c97b9bec95b125a48c2ce88160bbc9b211d9ead1df
   languageName: node
   linkType: hard
 
@@ -13703,10 +13720,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cluster-key-slot@npm:1.1.0":
-  version: 1.1.0
-  resolution: "cluster-key-slot@npm:1.1.0"
-  checksum: e72a437ba57f79f8435bf8ea689d0a13aed7e9628738c545af09a77199bc50986ecff05840c34303f41cf1837e8e9aa49709455a7313b7ed200090cca4aae57a
+"cluster-key-slot@npm:1.1.1":
+  version: 1.1.1
+  resolution: "cluster-key-slot@npm:1.1.1"
+  checksum: 079b1ae86b20e2d53308a877b08de5e830722a45c07810569d0dab4955bed569da33ac9f79998289d014adf02cca7223a0647cb0ee6548a12ab3c4f9beac1377
   languageName: node
   linkType: hard
 
@@ -18111,10 +18128,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"generic-pool@npm:3.8.2":
-  version: 3.8.2
-  resolution: "generic-pool@npm:3.8.2"
-  checksum: 8bff2b77da4c082015f0feeb6300557654b842dc302585b6cdb10afb0dc4db717e6ebce838b334773719289235fb4959aa4adf7527d4da79c007b0b94fb63172
+"generic-pool@npm:3.9.0":
+  version: 3.9.0
+  resolution: "generic-pool@npm:3.9.0"
+  checksum: 6b314d0d71170d5cbaf7162c423f53f8d6556b2135626a65bcdc03c089840b0a2f59eeb2d907939b8200e945eaf71ceb6630426f22d2128a1d242aec4b232aa7
   languageName: node
   linkType: hard
 
@@ -22373,7 +22390,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:^4.1.2":
+"lodash.memoize@npm:4.1.2, lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
   checksum: c8713e51eccc650422716a14cece1809cfe34bc5ab5e242b7f8b4e2241c2483697b971a604252807689b9dd69bfe3a98852e19a5b89d506b000b4187a1285df8
@@ -24168,12 +24185,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:15.3.0, nx@npm:>=14.8.6 < 16":
-  version: 15.3.0
-  resolution: "nx@npm:15.3.0"
+"nx@npm:15.3.2, nx@npm:>=14.8.6 < 16":
+  version: 15.3.2
+  resolution: "nx@npm:15.3.2"
   dependencies:
-    "@nrwl/cli": 15.3.0
-    "@nrwl/tao": 15.3.0
+    "@nrwl/cli": 15.3.2
+    "@nrwl/tao": 15.3.2
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24217,7 +24234,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: b2fdf1a2e453a9a91f1a177d9daaf47126ed42449009b88c2cdab65bcc332e7eb6c601147af8329f02a4e4a0a5e7d40e63bd60263f0383d712cd494d7ad0b45f
+  checksum: 988dd8e7d84cebc9daaf06d8a7ea492f616b1b6af99906cee9794f17c51e35f9ece9faace1d450217f95d386447fe7d43f18e061de42d3f6d23d37d26d2931a1
   languageName: node
   linkType: hard
 
@@ -27044,17 +27061,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redis@npm:4.2.0":
-  version: 4.2.0
-  resolution: "redis@npm:4.2.0"
+"redis@npm:4.5.1":
+  version: 4.5.1
+  resolution: "redis@npm:4.5.1"
   dependencies:
-    "@redis/bloom": 1.0.2
-    "@redis/client": 1.2.0
-    "@redis/graph": 1.0.1
-    "@redis/json": 1.0.3
-    "@redis/search": 1.0.6
-    "@redis/time-series": 1.0.3
-  checksum: d3232638e4dada24283d2e388d36e9874af2d01e89a2f4a07dd19992065c0ba75628ac40a95419cb5b44b6dac0287a71f753b7b62086225af41cee7fca536ea4
+    "@redis/bloom": 1.1.0
+    "@redis/client": 1.4.2
+    "@redis/graph": 1.1.0
+    "@redis/json": 1.0.4
+    "@redis/search": 1.1.0
+    "@redis/time-series": 1.0.4
+  checksum: ef840ab183e00b9632960797ed90da57551120eb43e41ee2a18e2ebb3e59c222f7f9bc4e1e16d8e3f646a176a4ad13a19f41f03746cdacdd83e31c14609c6b37
   languageName: node
   linkType: hard
 
@@ -27679,7 +27696,7 @@ __metadata:
     node-notifier: 10.0.1
     nodemon: 2.0.20
     npm-packlist: 5.1.3
-    nx: 15.3.0
+    nx: 15.3.2
     octokit: 2.0.10
     ora: 5.4.1
     prompts: 2.4.2
@@ -29433,12 +29450,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.16.5":
-  version: 5.16.5
-  resolution: "systeminformation@npm:5.16.5"
+"systeminformation@npm:5.16.6":
+  version: 5.16.6
+  resolution: "systeminformation@npm:5.16.6"
   bin:
     systeminformation: lib/cli.js
-  checksum: 8b263f902a2025f75a7b4a209723f7598762798bc811a1baab9cf58080a5536fb0594255c6dcdab21f84bb3aaf4058bdd60c8de46c634b5f05f1c192c9226294
+  checksum: 2ed3ceec9d965b4c9421a5b981ae82122c8dd23ca0f5751d263c4c510d65af6710958a266c6da35d5c14079655b26ad4e6cb568d00e6659592a7a9492ffb0d9e
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard

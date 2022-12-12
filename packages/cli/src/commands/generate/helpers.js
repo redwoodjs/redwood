@@ -13,6 +13,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
+import { prepareForRollback } from '../../lib/rollback'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
 
 /**
@@ -182,6 +183,11 @@ export const createYargsForComponentGeneration = ({
           type: 'boolean',
           default: false,
         })
+        .option('rollback', {
+          description: 'Revert all generator actions if an error occurs',
+          type: 'boolean',
+          default: true,
+        })
 
       // Add in passed in positionals
       Object.entries(positionalsObj).forEach(([option, config]) => {
@@ -221,6 +227,9 @@ export const createYargsForComponentGeneration = ({
           }
         )
 
+        if (options.rollback) {
+          prepareForRollback(tasks)
+        }
         await tasks.run()
       } catch (e) {
         errorTelemetry(process.argv, e.message)
