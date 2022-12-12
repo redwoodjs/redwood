@@ -5640,13 +5640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/openapi-types@npm:^13.4.0":
-  version: 13.4.0
-  resolution: "@octokit/openapi-types@npm:13.4.0"
-  checksum: 6489e6c1ca028160b74ac21e74ce3a61c79f187c57e3909d2448b4a9c5c299cee8fd84ec039d09290004349df53cbaa6d4394013e1545903356e80e5b46c8ffc
-  languageName: node
-  linkType: hard
-
 "@octokit/openapi-types@npm:^14.0.0":
   version: 14.0.0
   resolution: "@octokit/openapi-types@npm:14.0.0"
@@ -5672,14 +5665,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-paginate-rest@npm:^4.0.0":
-  version: 4.1.0
-  resolution: "@octokit/plugin-paginate-rest@npm:4.1.0"
+"@octokit/plugin-paginate-rest@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "@octokit/plugin-paginate-rest@npm:5.0.1"
   dependencies:
-    "@octokit/types": ^7.1.1
+    "@octokit/types": ^8.0.0
   peerDependencies:
     "@octokit/core": ">=4"
-  checksum: 6606b07bd4a52f9be5850ad094152638e07d1e8b00f4aaefee87eefb87516a98431f0baa1b1d7f1d185a24675014f4c714d5cea898f5c32d89060223010f8dde
+  checksum: a6754bfa3c6e3b917f1b03266e90e96ba97957e3ca15b1cc5a306cebc8ef96f1757fe85d8fade41b4c0e7e3805c753e94d360375f2ec9fa96b1fec79b239a662
   languageName: node
   linkType: hard
 
@@ -5704,13 +5697,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-retry@npm:^3.0.9":
-  version: 3.0.9
-  resolution: "@octokit/plugin-retry@npm:3.0.9"
+"@octokit/plugin-retry@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "@octokit/plugin-retry@npm:4.0.3"
   dependencies:
-    "@octokit/types": ^6.0.3
+    "@octokit/types": ^8.0.0
     bottleneck: ^2.15.3
-  checksum: ea097c3b6fe507f45c71237463b4a4e0397b4175b5422528184d7d8a1ed9bf1dcb34f58ce10ec1f7ba8dfd173a221324206af7fa5bf5d2c322566412dfbe289d
+  peerDependencies:
+    "@octokit/core": ">=3"
+  checksum: d6d98079d433442e37fd3c1b1309102c2e45e165e4fa23de336470b271113c55359df7d8c4d09d41dbb44d0f6cdc1455e95dc3f5391c1dd875bb023a2629c0c2
   languageName: node
   linkType: hard
 
@@ -5794,15 +5789,6 @@ __metadata:
   dependencies:
     "@octokit/openapi-types": ^12.10.0
   checksum: 88a227dbf7f42a3e408ef433d8e0160dc2e72ee29faa1de4e10d61d249bd712ff1b535003887ed953d9675655e4eea0177a6a20a58fbed8cdd2c29915843ab15
-  languageName: node
-  linkType: hard
-
-"@octokit/types@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@octokit/types@npm:7.1.1"
-  dependencies:
-    "@octokit/openapi-types": ^13.4.0
-  checksum: 6055376170dcb99eee64ddfb4f5bf4e587e758d8fe72453f149900225cf9b82515c261b627e06347b2b801c59be7d6d78a2d936015c728147ae06f199bb4d03e
   languageName: node
   linkType: hard
 
@@ -6538,7 +6524,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6592,7 +6578,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6644,7 +6630,7 @@ __metadata:
     "@clerk/types": 2.21.0
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6722,7 +6708,7 @@ __metadata:
     "@simplewebauthn/browser": 6.2.1
     "@simplewebauthn/typescript-types": 6.2.1
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6770,7 +6756,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     firebase: 9.10.0
     jest: 29.3.1
@@ -6823,7 +6809,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6891,7 +6877,7 @@ __metadata:
     "@nhost/nhost-js": 1.4.10
     "@okta/okta-auth-js": 6.9.0
     "@redwoodjs/auth": 3.2.0
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     gotrue-js: 0.9.29
     jest: 29.3.1
@@ -6950,7 +6936,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@supabase/supabase-js": 1.35.7
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -6975,7 +6961,7 @@ __metadata:
     jwks-rsa: 2.0.5
     typescript: 4.7.4
   peerDependencies:
-    supertokens-node: 12.1.1
+    supertokens-node: 12.1.3
   languageName: unknown
   linkType: soft
 
@@ -7003,7 +6989,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     react: 17.0.2
@@ -7039,7 +7025,7 @@ __metadata:
     "@babel/core": 7.20.5
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/telemetry": 3.2.0
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     core-js: 3.26.1
     jest: 29.3.1
     listr2: 5.0.6
@@ -7250,7 +7236,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.26.1
@@ -7413,7 +7399,7 @@ __metadata:
     "@reach/skip-nav": 0.16.0
     "@redwoodjs/auth": 3.2.0
     "@types/lodash.isequal": 4.5.6
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     core-js: 3.26.1
     jest: 29.3.1
@@ -7439,7 +7425,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.191
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.18.7
+    "@types/node": 16.18.8
     "@types/vscode": 1.72.0
     camelcase: 6.3.0
     core-js: 3.26.1
@@ -7512,8 +7498,8 @@ __metadata:
     "@types/aws-lambda": 8.10.109
     "@types/babel-core": 6.25.7
     "@types/jest": 29.2.4
-    "@types/node": 16.18.7
-    "@types/react": 17.0.50
+    "@types/node": 16.18.8
+    "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     "@types/webpack": 5.28.0
     babel-jest: 29.3.1
@@ -7542,7 +7528,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
-    "@types/react": 17.0.50
+    "@types/react": 17.0.52
     "@types/react-dom": 17.0.18
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.26.1
@@ -9830,10 +9816,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.18.7, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
-  version: 16.18.7
-  resolution: "@types/node@npm:16.18.7"
-  checksum: ca9fb8e223e545b6e2f711bf77f0d6b800b897a1cf6e7d18157b1b4fd804454c71d515e5731ab6865aec266521ea06513d39c9c47b61b4b58d5603b8b30bcecd
+"@types/node@npm:16.18.8, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
+  version: 16.18.8
+  resolution: "@types/node@npm:16.18.8"
+  checksum: f49e5f065b027f92714eca165ac97966629c51bb6f5f5c828c38240c32f6c49df190d5497a2dbe59bf2455c97b9bec95b125a48c2ce88160bbc9b211d9ead1df
   languageName: node
   linkType: hard
 
@@ -9970,14 +9956,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.50":
-  version: 17.0.50
-  resolution: "@types/react@npm:17.0.50"
+"@types/react@npm:17.0.52":
+  version: 17.0.52
+  resolution: "@types/react@npm:17.0.52"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 2e7cf61b7319b6398c62a29922255ce335c98bfbb55bda7c3aa386f4c2693d894d26eba9f7111f3ae86be79491d471a2ee89bf54f0445177ff70d1c30ab39382
+  checksum: df8662375c71eab90f9832bf388e210b337514ff0cfd260547c498b5a010a8bba980fa704b0e828070e83363c8d20a0a03e3e2fcd27d50649c3811b1279ea9ed
   languageName: node
   linkType: hard
 
@@ -24393,19 +24379,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.8":
-  version: 2.0.8
-  resolution: "octokit@npm:2.0.8"
+"octokit@npm:2.0.10":
+  version: 2.0.10
+  resolution: "octokit@npm:2.0.10"
   dependencies:
     "@octokit/app": ^13.0.5
     "@octokit/core": ^4.0.4
     "@octokit/oauth-app": ^4.0.6
-    "@octokit/plugin-paginate-rest": ^4.0.0
+    "@octokit/plugin-paginate-rest": ^5.0.0
     "@octokit/plugin-rest-endpoint-methods": ^6.0.0
-    "@octokit/plugin-retry": ^3.0.9
+    "@octokit/plugin-retry": ^4.0.3
     "@octokit/plugin-throttling": ^4.0.1
     "@octokit/types": ^8.0.0
-  checksum: 03b11cf6fa58691bba6647e4c1318c560cc575f14de5294160eb6e04662bc412e22ef5aed109c3488d2fc1611a704a89efc0050289b25f4b40afa26a1e43ba9a
+  checksum: b20210d853d61b627fe1324969942e753666379d271e24b876a11012f3f392d836cf40959bbfe4388619b989fe816f0d17a38052a5865d76fbb45f58cc5dd7bf
   languageName: node
   linkType: hard
 
@@ -27692,7 +27678,7 @@ __metadata:
     nodemon: 2.0.20
     npm-packlist: 5.1.3
     nx: 15.3.0
-    octokit: 2.0.8
+    octokit: 2.0.10
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2
