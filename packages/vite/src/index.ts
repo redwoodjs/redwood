@@ -6,8 +6,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import { transform } from 'esbuild'
-import type { RollupOptions } from 'rollup'
-import type { UserConfig } from 'vite'
+import { normalizePath, UserConfig } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -19,7 +18,7 @@ const redwoodPaths = getPaths()
 
 const readFile = promisify(fsReadFile)
 
-let indexEntries: string[] = []
+const clientEntryPath = path.join(redwoodPaths.web.src, 'entry-client.jsx')
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
@@ -32,25 +31,22 @@ export default function redwoodPluginVite() {
       name: 'redwood-plugin-vite',
       // Used by Vite during dev, to inject the entrypoint.
       transformIndexHtml: (html: string) => {
-        if (existsSync(path.join(redwoodPaths.web.src, 'entry-client.jsx'))) {
+        if (existsSync(clientEntryPath)) {
           return html.replace(
             '</head>',
-            `<script type="module" src="entry-client.jsx"></script>
+            `<script type="module" src="${clientEntryPath}"></script>
         </head>`
           )
         } else {
           return html
         }
       },
-      buildStart: (options: RollupOptions) => {
-        // Inputs are always supplied by Vite, I think
-        indexEntries = options.input as string[]
-      },
       // Used by rollup during build to inject the entrypoint
+      // but note index.html does not come through as an id during dev
       transform: (code: string, id: string) => {
         if (
-          existsSync(path.join(redwoodPaths.web.src, 'entry-client.jsx')) &&
-          indexEntries.some((entry) => entry === id)
+          existsSync(clientEntryPath) &&
+          normalizePath(id) === normalizePath(redwoodPaths.web.html)
         ) {
           return code.replace(
             '</head>',
@@ -125,7 +121,6 @@ export default function redwoodPluginVite() {
               // Enable esbuild polyfill plugins
               // This is needed for DevFatalErrorPage (and stacktracey)
               plugins: [
-                // @ts-expect-error -- esbuild types seem off here, after vite upgrade
                 NodeGlobalsPolyfillPlugin({
                   buffer: true,
                 }),
@@ -140,7 +135,6 @@ export default function redwoodPluginVite() {
       // This is the default in Redwood JS projects. We can remove this once Vite is stable,
       // and have a codemod to convert all JSX files to .jsx extensions
       name: 'load-js-files-as-jsx',
-      apply: 'serve', // only do this for vite, Rollup should handle .js files just fine
       async load(id: string) {
         if (!id.match(/src\/.*\.js$/)) {
           return
