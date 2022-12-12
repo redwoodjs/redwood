@@ -16,6 +16,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import { templateForComponentFile } from '../helpers'
 
@@ -104,7 +105,11 @@ export const builder = (yargs) => {
       description: 'Override default form label for password field',
       type: 'string',
     })
-
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -370,6 +375,9 @@ export const handler = async (yargs) => {
   const t = tasks({ ...yargs })
 
   try {
+    if (yargs.rollback) {
+      prepareForRollback(t)
+    }
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

@@ -5,7 +5,11 @@ const path = require('path')
 const execa = require('execa')
 const Listr = require('listr2').Listr
 
-const { getExecaOptions, applyCodemod } = require('./util')
+const {
+  getExecaOptions,
+  applyCodemod,
+  updatePkgJsonScripts,
+} = require('./util')
 
 // This variable gets used in other functions
 // and is set when webTasks or apiTasks are called
@@ -398,11 +402,48 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   }
 
   const addDbAuth = async () => {
+    // Temporarily disable postinstall script
+    updatePkgJsonScripts({
+      projectPath: outputPath,
+      scripts: {
+        postinstall: '',
+      },
+    })
+
+    const dbAuthSetupPath = path.join(
+      outputPath,
+      'node_modules',
+      '@redwoodjs',
+      'auth-dbauth-setup'
+    )
+
+    // At an earlier step we run `yarn rwfw project:copy` which gives us
+    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
+    // version for auth-dbauth-api and auth-dbauth-web package installations
+    // to work. So we remove the current version and add a canary version
+    // instead.
+
+    fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
+
+    await execa(
+      'yarn add -D @redwoodjs/auth-dbauth-setup@canary',
+      [],
+      execaOptions
+    )
+
     await execa(
       'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
       [],
       execaOptions
     )
+
+    // Restore postinstall script
+    updatePkgJsonScripts({
+      projectPath: outputPath,
+      scripts: {
+        postinstall: 'yarn rwfw project:copy',
+      },
+    })
 
     if (linkWithLatestFwBuild) {
       await execa('yarn rwfw project:copy', [], execaOptions)
