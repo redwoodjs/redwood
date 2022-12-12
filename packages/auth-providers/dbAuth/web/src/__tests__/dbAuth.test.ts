@@ -2,9 +2,9 @@ import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createDbAuth, DbAuthConfig } from '../dbAuth'
+import { createDbAuthClient, DbAuthClientArgs, createDbAuth } from '../dbAuth'
 
-process.env.RWJS_API_DBAUTH_URL = '/.redwood/functions'
+process.env.RWJS_API_URL = '/.redwood/functions'
 process.env.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
 
 jest.mock('cross-undici-fetch', () => {
@@ -78,12 +78,21 @@ beforeEach(() => {
   loggedInUser = undefined
 })
 
-const defaultOptions: DbAuthConfig = {
+const defaultArgs: DbAuthClientArgs & {
+  useCurrentUser?: () => Promise<Record<string, unknown>>
+  useHasRole?: (
+    currentUser: CurrentUser | null
+  ) => (rolesToCheck: string | string[]) => boolean
+} = {
   fetchConfig: { credentials: 'include' },
 }
 
-function getDbAuth(options = defaultOptions) {
-  const { useAuth, AuthProvider } = createDbAuth(undefined, options)
+function getDbAuth(args = defaultArgs) {
+  const dbAuthClient = createDbAuthClient(args)
+  const { useAuth, AuthProvider } = createDbAuth(dbAuthClient, {
+    useHasRole: args.useHasRole,
+    useCurrentUser: args.useCurrentUser,
+  })
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
   })
@@ -104,7 +113,7 @@ describe('dbAuth', () => {
     })
 
     expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_DBAUTH_URL}?method=getToken`,
+      `${process.env.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'same-origin',
       }
@@ -117,7 +126,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.forgotPassword('username'))
 
     expect(fetchMock).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -134,7 +143,7 @@ describe('dbAuth', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1)
 
     expect(fetchMock).toBeCalledWith(
-      `${process.env.RWJS_API_DBAUTH_URL}?method=getToken`,
+      `${process.env.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'include',
       }
@@ -150,14 +159,14 @@ describe('dbAuth', () => {
     )
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
     )
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -171,7 +180,7 @@ describe('dbAuth', () => {
     })
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -183,7 +192,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.resetPassword({}))
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -195,7 +204,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.signUp({}))
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -207,9 +216,22 @@ describe('dbAuth', () => {
     await act(async () => await auth.validateResetToken('token'))
 
     expect(global.fetch).toBeCalledWith(
-      process.env.RWJS_API_DBAUTH_URL,
+      `${process.env.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
+      })
+    )
+  })
+
+  it('allows you to configure the api side url', async () => {
+    const auth = getDbAuth({ dbAuthUrl: '/.redwood/functions/dbauth' }).current
+
+    await act(async () => await auth.forgotPassword('username'))
+
+    expect(fetchMock).toBeCalledWith(
+      '/.redwood/functions/dbauth',
+      expect.objectContaining({
+        credentials: 'same-origin',
       })
     )
   })

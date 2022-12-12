@@ -34,7 +34,7 @@
     "@nhost/nhost-js": "1.4.10",
     "@okta/okta-auth-js": "6.9.0",
     "@redwoodjs/auth": "3.2.0",
-    "@types/react": "17.0.50",
+    "@types/react": "17.0.52",
     "gotrue-js": "0.9.29",
     "jest": "29.3.1",
     "magic-sdk": "9.1.1",
