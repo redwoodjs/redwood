@@ -4,6 +4,8 @@ import { CurrentUser } from '@redwoodjs/auth'
 
 import { createDbAuth, DbAuthConfig } from '../dbAuth'
 
+// @NOTE there are TS errors assigning these, because there's no ambient declarations
+// But because this is going to be moved as part of decoupling, ignoring for now
 globalThis.RWJS_API_URL = '/.redwood/functions'
 globalThis.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
 
@@ -117,7 +119,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.forgotPassword('username'))
 
     expect(fetchMock).toBeCalledWith(
-      `${globalThis.RWJS_API_DBAUTH_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -150,14 +152,14 @@ describe('dbAuth', () => {
     )
 
     expect(globalThis.fetch).toBeCalledWith(
-      `${globalThis.RWJS_API_DBAUTH_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
     )
 
     expect(globalThis.fetch).toBeCalledWith(
-      `${globalThis.RWJS_API_DBAUTH_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -171,7 +173,7 @@ describe('dbAuth', () => {
     })
 
     expect(globalThis.fetch).toBeCalledWith(
-      `${globalThis.RWJS_API_DBAUTH_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -183,7 +185,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.resetPassword({}))
 
     expect(globalThis.fetch).toBeCalledWith(
-      `${globalThis.RWJS_API_DBAUTH_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -195,7 +197,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.signUp({}))
 
     expect(globalThis.fetch).toBeCalledWith(
-      `${globalThis.RWJS_API_DBAUTH_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -207,7 +209,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.validateResetToken('token'))
 
     expect(globalThis.fetch).toBeCalledWith(
-      `${globalThis.RWJS_API_DBAUTH_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })

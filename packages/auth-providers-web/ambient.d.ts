@@ -19,8 +19,6 @@ declare global {
     RWJS_SRC_ROOT: string
   }
 
-  /** URL or absolute path to the DbAuth serverless function */
-  var RWJS_API_DBAUTH_URL: string
   /** URL or absolute path to the GraphQL serverless function */
   var RWJS_API_GRAPHQL_URL: string
   /** URL or absolute path to serverless functions */
