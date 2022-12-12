@@ -40,7 +40,7 @@ test('customOrDefaultTemplatePath returns the default path if no custom template
 
   expect(output).toMatch(
     path.normalize(
-      'redwood/packages/cli/src/commands/generate/page/templates/page.tsx.template'
+      '/packages/cli/src/commands/generate/page/templates/page.tsx.template'
     )
   )
 })

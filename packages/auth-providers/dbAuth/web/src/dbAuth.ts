@@ -14,12 +14,13 @@ export interface ResetPasswordAttributes {
 
 export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
-export type DbAuth = undefined | WebAuthnClientType
+export type DbAuth = undefined | InstanceType<WebAuthnClientType>
 
 export type DbAuthConfig = {
   fetchConfig?: {
     credentials?: 'include' | 'same-origin'
   }
+  dbAuthUrl?: string
   useCurrentUser?: () => Promise<Record<string, unknown>>
   useHasRole?: (
     currentUser: CurrentUser | null
@@ -27,7 +28,12 @@ export type DbAuthConfig = {
 }
 const TOKEN_CACHE_TIME = 5000
 
+declare global {
+  let RWJS_API_URL: string
+}
+
 export function createDbAuth(dbAuthClient?: DbAuth, config?: DbAuthConfig) {
+  dbAuthClient?.setAuthApiUrl(config?.dbAuthUrl)
   const authImplementation = createDbAuthImplementation(dbAuthClient, config)
 
   return createAuthentication(authImplementation, {
@@ -45,13 +51,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
   let cachedToken: string | null
 
   const getApiDbAuthUrl = () => {
-    // @TODO this will break in Vite
-    // Waiting for resolution in separate PR
-    if (process.env.RWJS_API_DBAUTH_URL) {
-      return process.env.RWJS_API_DBAUTH_URL
-    }
-
-    return `${process.env.RWJS_API_URL}/auth`
+    return config?.dbAuthUrl || `${globalThis.RWJS_API_URL}/auth`
   }
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {
