@@ -19,7 +19,7 @@ const redwoodPaths = getPaths()
 
 const readFile = promisify(fsReadFile)
 
-let indexEntries: string[]
+let indexEntries: string[] = []
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
