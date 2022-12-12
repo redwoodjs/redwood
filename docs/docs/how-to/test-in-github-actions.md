@@ -1,8 +1,8 @@
-# Testing Redwood in Github actions
+# Testing Redwood in GitHub actions
 
-A good testing strategy is important for any project. Redwood offers a few different types of tests that you can write to make your app more robust - to ship with confidence. In this guide we'll focus on how to run your Redwood tests in Github Actions, so you can test your app on every push or pull request.
+A good testing strategy is important for any project. Redwood offers a few different types of tests that you can write to make your app more robust - to ship with confidence. In this guide we'll focus on how to run your Redwood tests in GitHub Actions, so you can test your app on every push or pull request.
 
-We will setup a tiny project with very few tests and we'll include a `postgres` database that's created and used in every test run on Github. If you need to set up tests for an existing project, or if you want to write better tests, check out the (amazing) [Testing](https://redwoodjs.com/docs/testing) docs.
+We will setup a tiny project with very few tests and we'll include a `postgres` database that's created and used in every test run on GitHub. If you need to set up tests for an existing project, or if you want to write better tests, check out the (amazing) [Testing](https://redwoodjs.com/docs/testing) docs.
 
 ## Background
 
@@ -16,21 +16,21 @@ Continuous Integration (CI) is the practice of automatically running your tests 
 
 Continuous Deployment (CD) is the practice of automatically deploying your app (and database in this case) to a server after every successful test run. This is a great way to make sure your app/database is always up to date and ready to be used.
 
-### Github Actions and Github Secrets
+### GitHub Actions and GitHub Secrets
 
-Github Actions is a service that allows you to run a series of commands on a virtual machine. You can use it to run tests, deploy your app, or do anything else you may think of. It's free for public repositories and has a free tier for private repositories.
+GitHub Actions is a service that allows you to run a series of commands on a virtual machine. You can use it to run tests, deploy your app, or do anything else you may think of. It's free for public repositories and has a free tier for private repositories.
 
-For more information, check out the [Github Actions docs](https://docs.github.com/en/actions).
+For more information, check out the [GitHub Actions docs](https://docs.GitHub.com/en/actions).
 
-Github Secrets are a way to store sensitive information like API keys or passwords. They are encrypted and only exposed to the Github Actions service. You can use them to pass information to your tests or deploy script.
+GitHub Secrets are a way to store sensitive information like API keys or passwords. They are encrypted and only exposed to the GitHub Actions service. You can use them to pass information to your tests or deploy script.
 
-For more information, check out the [Github Secrets docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+For more information, check out the [GitHub Secrets docs](https://docs.GitHub.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 
-## How to run tests in Github Actions
+## How to run tests in GitHub Actions
 
-We will focus on running your tests via Github Actions, but not *how* to write tests (see the [Testing](https://redwoodjs.com/docs/testing) doc for test creation instructions).
+We will focus on running your tests via GitHub Actions, but not *how* to write tests (see the [Testing](https://redwoodjs.com/docs/testing) doc for test creation instructions).
 
-If you already have an existing project, you can skip to section [4. Setup Github Actions](#4-setup-github-actions) section.
+If you already have an existing project, you can skip to section [4. Setup GitHub Actions](#4-setup-GitHub-actions) section.
 
 ### 1. Create a Redwood app
 
@@ -71,7 +71,7 @@ Watch Usage: Press w to show more.
 
 For the purpose of this guide we will use the `User` model that comes with the Redwood app.
 
-We will also change the db to `postgresql`, since that's what we'll be using in our Github Actions.
+We will also change the db to `postgresql`, since that's what we'll be using in our GitHub Actions.
 
 > At this point make sure you have a Postgres instance ready to use. Here's a handy guide to [set it up locally](https://redwoodjs.com/docs/local-postgres-setup).  We will need the connection string so our Redwood app knows where to store the data.
 
@@ -185,14 +185,14 @@ Time:        3.587 s
 Ran all test suites related to changed files in 2 projects.
 ```
 
-### 4. Setup Github Actions
+### 4. Setup GitHub Actions
 
 This action will run only when the `main` branch is updated, but you can configure it to run on any other branch.
 
-Create a new file in the `.github/workflows` folder called `ci.yml` and add the following content:
+Create a new file in the `.GitHub/workflows` folder called `ci.yml` and add the following content:
 
 ```yml
-# .github/workflows/ci.yml
+# .GitHub/workflows/ci.yml
 
 name: Redwood CI
 
@@ -249,9 +249,9 @@ jobs:
       - run: yarn rw test web --no-watch
 ```
 
-If you push your changes to the `main` branch on Github the CI action will breaks down like this:
+If you push your changes to the `main` branch on GitHub the CI action will breaks down like this:
 
-<img width="1140" alt="ci-results-1" src="https://user-images.githubusercontent.com/14810250/202825732-c7d77929-58ff-4ad5-9072-48e4403471c9.png" />
+<img width="1140" alt="ci-results-1" src="https://user-images.GitHubusercontent.com/14810250/202825732-c7d77929-58ff-4ad5-9072-48e4403471c9.png" />
 
 
 1. Set up job
@@ -288,20 +288,20 @@ on:
 
 Now, if you push to a pull request, the CI action will run and you will see something like this:
 
-<img width="1460" alt="ci-pr-1" src="https://user-images.githubusercontent.com/14810250/202825767-c7f23b24-e311-4a70-bf50-fbad40a6abee.png" />
+<img width="1460" alt="ci-pr-1" src="https://user-images.GitHubusercontent.com/14810250/202825767-c7f23b24-e311-4a70-bf50-fbad40a6abee.png" />
 
-Once the Github Action is done, you can see the results in the "Conversation" tab:
+Once the GitHub Action is done, you can see the results in the "Conversation" tab:
 
-<img width="1385" alt="ci-pr-2" src="https://user-images.githubusercontent.com/14810250/202825772-93c8fe50-6b91-4048-882b-21497d47e211.png" />
+<img width="1385" alt="ci-pr-2" src="https://user-images.GitHubusercontent.com/14810250/202825772-93c8fe50-6b91-4048-882b-21497d47e211.png" />
 
 ### 6. Deploy the database changes to an actual database
 
 Now we want to use another action to deploy the database changes to an actual database, so we can run the app in a real environment. In this action we will run the tests one more time against the local database, and then deploy the database migrations to the external database.
 
-Create a new file in the `.github/workflows` folder called `cd.yml` and add the following content:
+Create a new file in the `.GitHub/workflows` folder called `cd.yml` and add the following content:
 
 ```yml
-# .github/workflows/cd.yml
+# .GitHub/workflows/cd.yml
 
 name: Redwood CD for database deployment
 on:
@@ -373,11 +373,11 @@ The main changes are:
 
 When you push to a PR, you get validation that the tests are passing so you are sure that the code is working as expected.
 
-### 6. Set up Github Secrets
+### 6. Set up GitHub Secrets
 
-Because you are using an actual postgres instance in your Github Action, you need to set up the secrets for the database connection, so that the user and password stay secret.
+Because you are using an actual postgres instance in your GitHub Action, you need to set up the secrets for the database connection, so that the user and password stay secret.
 
-Go to the "Settings" tab in your Github repo and click on "Secrets" then "Actions", then click on "New repository secret".
+Go to the "Settings" tab in your GitHub repo and click on "Secrets" then "Actions", then click on "New repository secret".
 
 In the name field, type `DATABASE_URL`
 
@@ -385,9 +385,9 @@ The value field is the actual secret so it should be something like this: `postg
 
 Now click on `Add secret`.
 
-This will create a new secret that you can use in your Github actions. In this case, specify the connection string for the database where we will deploy the changes.
+This will create a new secret that you can use in your GitHub actions. In this case, specify the connection string for the database where we will deploy the changes.
 
-Now you can use the secret in your Github action by using the `${{ secrets.DATABASE_URL }}` syntax.
+Now you can use the secret in your GitHub action by using the `${{ secrets.DATABASE_URL }}` syntax.
 
 ```yml
 ...
