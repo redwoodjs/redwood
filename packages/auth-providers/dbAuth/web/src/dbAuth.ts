@@ -25,10 +25,7 @@ export function createDbAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  return createAuthentication(dbAuthClient, {
-    useCurrentUser: customProviderHooks?.useCurrentUser,
-    useHasRole: customProviderHooks?.useHasRole,
-  })
+  return createAuthentication(dbAuthClient, customProviderHooks)
 }
 
 export interface DbAuthClientArgs {
