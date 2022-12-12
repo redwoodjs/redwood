@@ -36,7 +36,7 @@ rwServeTest(
     const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
     expect(navLinks.split('\n')).toEqual([
       'About',
-      'Contact',
+      'Contact Us',
       'Admin',
       'Log In',
     ])
@@ -73,7 +73,7 @@ rwServeTest(
     const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
     expect(navLinks.split('\n')).toEqual([
       'About',
-      'Contact',
+      'Contact Us',
       'Admin',
       'Log In',
     ])

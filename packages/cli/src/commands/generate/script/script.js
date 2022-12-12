@@ -8,6 +8,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
@@ -41,6 +42,11 @@ export const builder = (yargs) => {
     .positional('name', {
       description: 'A descriptor of what this script does',
       type: 'string',
+    })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -83,6 +89,9 @@ export const handler = async ({ force, ...args }) => {
   )
 
   try {
+    if (args.rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

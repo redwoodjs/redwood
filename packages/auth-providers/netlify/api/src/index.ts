@@ -1,0 +1,1 @@
+export { authDecoder } from './decoder'
