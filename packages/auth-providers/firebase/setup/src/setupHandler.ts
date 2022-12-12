@@ -9,11 +9,6 @@ const { version } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
 )
 
-const apiPackageJson = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../api/package.json'), 'utf-8')
-)
-const firebaseAdminVersion = apiPackageJson.devDependencies['firebase-admin']
-
 export async function handler({ force: forceArg }: Args) {
   standardAuthHandler({
     basedir: __dirname,
@@ -23,7 +18,7 @@ export async function handler({ force: forceArg }: Args) {
       "import { authDecoder } from '@redwoodjs/auth-firebase-api'",
     webPackages: ['firebase', `@redwoodjs/auth-firebase-web@${version}`],
     apiPackages: [
-      `firebase-admin@${firebaseAdminVersion}`,
+      'firebase-admin@10.3.0',
       `@redwoodjs/auth-firebase-api@${version}`,
     ],
     notes: [
