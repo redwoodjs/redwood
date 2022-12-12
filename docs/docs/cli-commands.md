@@ -588,10 +588,12 @@ Generate log in, sign up, forgot password and password reset pages for dbAuth
 yarn redwood generate dbAuth
 ```
 
-| Arguments & Options | Description                                                                                      |
-| ------------------- | ------------------------------------------------------------------------------------------------ |
-| `--webAuthn`        | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted |
-| `--rollback`        | Rollback changes if an error occurs [default: true]                                              |
+| Arguments & Options  | Description                                                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `--username-label`   | The label to give the username field on the auth forms, e.g. "Email". Defaults to "Username". If not specified you will be prompted   |
+| `--password-label`   | The label to give the password field on the auth forms, e.g. "Secret". Defaults to "Password". If not specified you will be prompted  |
+| `--webAuthn`         | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted                                      |
+| `--rollback`        | Rollback changes if an error occurs [default: true] 
 
 If you don't want to create your own log in, sign up, forgot password and
 password reset pages from scratch you can use this generator. The pages will be
