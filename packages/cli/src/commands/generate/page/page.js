@@ -15,6 +15,10 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import {
+  prepareForRollback,
+  addFunctionToRollback,
+} from '../../../lib/rollback'
+import {
   createYargsForComponentGeneration,
   pathName,
   templateForComponentFile,
@@ -165,6 +169,7 @@ export const handler = async ({
   tests,
   stories,
   typescript = false,
+  rollback,
 }) => {
   const pageName = removeGeneratorName(name, 'page')
 
@@ -228,7 +233,10 @@ export const handler = async ({
       },
       {
         title: `Generating types...`,
-        task: generateTypes,
+        task: async () => {
+          await generateTypes()
+          addFunctionToRollback(generateTypes, true)
+        },
       },
       {
         title: 'One more thing...',
@@ -247,6 +255,9 @@ export const handler = async ({
   )
 
   try {
+    if (rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
