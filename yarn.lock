@@ -6328,59 +6328,59 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/bloom@npm:1.0.2":
-  version: 1.0.2
-  resolution: "@redis/bloom@npm:1.0.2"
+"@redis/bloom@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@redis/bloom@npm:1.1.0"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: 1ec820145f58b5b86628b90e284a736c94ebe7747bbcf7fae968c268d1aab4f13c488808c8c1c75ad8b5fcf0a4e9b3ef5ba4d7d68585abe324461b119e72c5bb
+  checksum: 4d9a2eb060aa2a64afbf2bd055d5b75d2388d70244f749c13a25d8744dd89d434e6d0ebe1df710b4e2cbb6dc8b47cfcc43d8aa2715556b1ed2f9ba3082bcfb97
   languageName: node
   linkType: hard
 
-"@redis/client@npm:1.2.0":
-  version: 1.2.0
-  resolution: "@redis/client@npm:1.2.0"
+"@redis/client@npm:1.4.2":
+  version: 1.4.2
+  resolution: "@redis/client@npm:1.4.2"
   dependencies:
-    cluster-key-slot: 1.1.0
-    generic-pool: 3.8.2
+    cluster-key-slot: 1.1.1
+    generic-pool: 3.9.0
     yallist: 4.0.0
-  checksum: 89d084fb9fc4695857e875a3c55bef23b6f078f51df5e485004068a1790a80b71394d749ac86ea889bdf544b61d91c1601d96fa94ed7269ca9a1899edc228985
+  checksum: 99552f2e1c95a0a9e642e31852174c679525665f401bbd373d5e4c904feca59139381250cea8b6108f1d19fc6efcfe0022925e8a71fc9e6756df75c7077d2933
   languageName: node
   linkType: hard
 
-"@redis/graph@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@redis/graph@npm:1.0.1"
+"@redis/graph@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@redis/graph@npm:1.1.0"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: 32821fd98641727946011e836e32a33123083f3b00410d590681282ed162b70125e796e5ba92e9e503ce708647625a4c024779d2866cfb38475ae9b6d5dccd21
+  checksum: 2b30ea2a67a07b312f42b5fe1dce770c0559c153faaca64d53ef8a479438108b32260e9701d12addb50ccc4ea1df8a949ea5e802c13ead689c635d65bad1bc3a
   languageName: node
   linkType: hard
 
-"@redis/json@npm:1.0.3":
-  version: 1.0.3
-  resolution: "@redis/json@npm:1.0.3"
+"@redis/json@npm:1.0.4":
+  version: 1.0.4
+  resolution: "@redis/json@npm:1.0.4"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: dfec3fbd1225e023effcb2e1bf14ed1756384df3df9fa038969ea117ec19ee200df0496391778729a4473dfe974e38a0673822e4b66fbe5691f4dc9e2b4d4977
+  checksum: 6c1585c046909125170c2d3c970e1b11680279df2ae58af1017b638c1c118a285cd83d1fc96d9826860071772ebe978d71dfc46a784862ac1e9c952633e757d0
   languageName: node
   linkType: hard
 
-"@redis/search@npm:1.0.6":
-  version: 1.0.6
-  resolution: "@redis/search@npm:1.0.6"
+"@redis/search@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@redis/search@npm:1.1.0"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: fdec49cd36a3fde6add844e7f6417f1abdc04fa4de9aa58878fefca0e48b64c2d9c1d9683956aa671182788bb443c153dbc5ca7b9991e4495152764a0b5b6a8e
+  checksum: ba577f335a9235f5e3a4663fc240a44ea6ce52d80c4018a05cbc290b3f042ebaba7874146400b5bf7e5c98724d28f6c555867fd292b9fa28542609ba67d6a734
   languageName: node
   linkType: hard
 
-"@redis/time-series@npm:1.0.3":
-  version: 1.0.3
-  resolution: "@redis/time-series@npm:1.0.3"
+"@redis/time-series@npm:1.0.4":
+  version: 1.0.4
+  resolution: "@redis/time-series@npm:1.0.4"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: ce79b8cb123e4b79ef73daaf44ec69ef85fbba5f8791c51db3952db19440699929d30b7ea4d7b9483f6afb9c1fc2a7d3b793d3c5a0c981443fc129a26f43168a
+  checksum: ec637500f1544384724ed57542274b70f9f0c2f2a5253fcdb63c809322167996740f4effd3666e4984600684fb37eb79efe6ab09309e36b68c964cbd8789641c
   languageName: node
   linkType: hard
 
@@ -6455,7 +6455,7 @@ __metadata:
     memjs: 1.3.0
     pascalcase: 1.0.0
     pino: 8.7.0
-    redis: 4.2.0
+    redis: 4.5.1
     split2: 4.1.0
     title-case: 3.0.3
     typescript: 4.7.4
@@ -7024,12 +7024,21 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.20.5
     "@babel/runtime-corejs3": 7.20.6
+    "@redwoodjs/internal": 3.2.0
     "@redwoodjs/telemetry": 3.2.0
-    "@types/react": 17.0.52
+    "@types/lodash.memoize": 4.1.7
+    "@types/pascalcase": 1.0.1
+    "@types/yargs": 17.0.17
+    chalk: 4.1.2
     core-js: 3.26.1
+    execa: 5.1.1
     jest: 29.3.1
     listr2: 5.0.6
-    react: 17.0.2
+    lodash.memoize: 4.1.2
+    pascalcase: 1.0.0
+    prettier: 2.8.1
+    prompts: 2.4.2
+    terminal-link: 2.1.1
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -9663,6 +9672,15 @@ __metadata:
   dependencies:
     "@types/lodash": "*"
   checksum: d14cb561e3db36b80bde1d6eea5b012c46c8bb7a7dadb2844bd80b209d7c324eb54ad5ca7b6e57c253593662d8fc676da430f2216aaca1c04b087d38030151ae
+  languageName: node
+  linkType: hard
+
+"@types/lodash.memoize@npm:4.1.7":
+  version: 4.1.7
+  resolution: "@types/lodash.memoize@npm:4.1.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 979a59dbbae968a03834fdb544dc5ddd34620a2912d5030c997a1aa919326425a900c93bc69554b2a873cf54f09b4dd2752b3a1c29ab4bffac5983113c58b1b5
   languageName: node
   linkType: hard
 
@@ -13701,10 +13719,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cluster-key-slot@npm:1.1.0":
-  version: 1.1.0
-  resolution: "cluster-key-slot@npm:1.1.0"
-  checksum: e72a437ba57f79f8435bf8ea689d0a13aed7e9628738c545af09a77199bc50986ecff05840c34303f41cf1837e8e9aa49709455a7313b7ed200090cca4aae57a
+"cluster-key-slot@npm:1.1.1":
+  version: 1.1.1
+  resolution: "cluster-key-slot@npm:1.1.1"
+  checksum: 079b1ae86b20e2d53308a877b08de5e830722a45c07810569d0dab4955bed569da33ac9f79998289d014adf02cca7223a0647cb0ee6548a12ab3c4f9beac1377
   languageName: node
   linkType: hard
 
@@ -18109,10 +18127,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"generic-pool@npm:3.8.2":
-  version: 3.8.2
-  resolution: "generic-pool@npm:3.8.2"
-  checksum: 8bff2b77da4c082015f0feeb6300557654b842dc302585b6cdb10afb0dc4db717e6ebce838b334773719289235fb4959aa4adf7527d4da79c007b0b94fb63172
+"generic-pool@npm:3.9.0":
+  version: 3.9.0
+  resolution: "generic-pool@npm:3.9.0"
+  checksum: 6b314d0d71170d5cbaf7162c423f53f8d6556b2135626a65bcdc03c089840b0a2f59eeb2d907939b8200e945eaf71ceb6630426f22d2128a1d242aec4b232aa7
   languageName: node
   linkType: hard
 
@@ -22371,7 +22389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:^4.1.2":
+"lodash.memoize@npm:4.1.2, lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
   checksum: c8713e51eccc650422716a14cece1809cfe34bc5ab5e242b7f8b4e2241c2483697b971a604252807689b9dd69bfe3a98852e19a5b89d506b000b4187a1285df8
@@ -27042,17 +27060,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redis@npm:4.2.0":
-  version: 4.2.0
-  resolution: "redis@npm:4.2.0"
+"redis@npm:4.5.1":
+  version: 4.5.1
+  resolution: "redis@npm:4.5.1"
   dependencies:
-    "@redis/bloom": 1.0.2
-    "@redis/client": 1.2.0
-    "@redis/graph": 1.0.1
-    "@redis/json": 1.0.3
-    "@redis/search": 1.0.6
-    "@redis/time-series": 1.0.3
-  checksum: d3232638e4dada24283d2e388d36e9874af2d01e89a2f4a07dd19992065c0ba75628ac40a95419cb5b44b6dac0287a71f753b7b62086225af41cee7fca536ea4
+    "@redis/bloom": 1.1.0
+    "@redis/client": 1.4.2
+    "@redis/graph": 1.1.0
+    "@redis/json": 1.0.4
+    "@redis/search": 1.1.0
+    "@redis/time-series": 1.0.4
+  checksum: ef840ab183e00b9632960797ed90da57551120eb43e41ee2a18e2ebb3e59c222f7f9bc4e1e16d8e3f646a176a4ad13a19f41f03746cdacdd83e31c14609c6b37
   languageName: node
   linkType: hard
 

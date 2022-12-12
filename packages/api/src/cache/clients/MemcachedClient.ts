@@ -44,4 +44,13 @@ export default class MemcachedClient extends BaseClient {
 
     return this.client?.set(key, JSON.stringify(value), options)
   }
+
+  async del(key: string) {
+    if (!this.client) {
+      await this.connect()
+    }
+
+    // memcached returns true/false natively
+    return this.client?.delete(key)
+  }
 }
