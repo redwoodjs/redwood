@@ -1,12 +1,12 @@
 # Testing Redwood in GitHub actions
 
-A good testing strategy is important for any project. Redwood offers a few different types of tests that you can write to make your app more robust - to ship with confidence. In this guide we'll focus on how to run your Redwood tests in GitHub Actions, so you can test your app on every push or pull request.
+A good testing strategy is important for any project. Redwood offers a few different types of tests that you can write to make your app more robust—to ship with confidence. In this guide we'll focus on how to run your Redwood tests in GitHub Actions, so you can test your app on every push or pull request.
 
-We will setup a tiny project with very few tests and we'll include a `postgres` database that's created and used in every test run on GitHub. If you need to set up tests for an existing project, or if you want to write better tests, check out the (amazing) [Testing](https://redwoodjs.com/docs/testing) docs.
+We'll set up a tiny project with a few tests and a Postgres database that'll be created and used in every test run on GitHub. If you need to set up tests for an existing project, or if you want to write better tests, check out the (amazing) [Testing](../testing) docs.
 
 ## Background
 
-Let's start with some concepts and products that we will use in this guide, then we'll get to the code.
+Let's start by introducing some concepts and products that we'll use in this guide. Then we'll get to the code.
 
 ### Continuous Integration
 
@@ -14,43 +14,36 @@ Continuous Integration (CI) is the practice of automatically running your tests 
 
 ### Continuous Deployment
 
-Continuous Deployment (CD) is the practice of automatically deploying your app (and database in this case) to a server after every successful test run. This is a great way to make sure your app/database is always up to date and ready to be used.
+Continuous Deployment (CD) is the practice of automatically deploying your app (and database in this case) to a server after every successful test run. This is a great way to make sure your app or database is always up to date.
 
 ### GitHub Actions and GitHub Secrets
 
-GitHub Actions is a service that allows you to run a series of commands on a virtual machine. You can use it to run tests, deploy your app, or do anything else you may think of. It's free for public repositories and has a free tier for private repositories.
+GitHub Actions is a service that allows you to run a series of commands on a virtual machine. You can use it to run tests, deploy your app, or do anything else you may think of. It's free for public repositories and has a free tier for private ones. For more information, check out [GitHub Actions' docs](https://docs.GitHub.com/en/actions).
 
-For more information, check out the [GitHub Actions docs](https://docs.GitHub.com/en/actions).
-
-GitHub Secrets are a way to store sensitive information like API keys or passwords. They are encrypted and only exposed to the GitHub Actions service. You can use them to pass information to your tests or deploy script.
-
-For more information, check out the [GitHub Secrets docs](https://docs.GitHub.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+GitHub Secrets is a way to store sensitive information like API keys or passwords needed by GitHub Actions. They are encrypted and only exposed to the GitHub Actions service. You can use them to pass sensitive information to your tests or deploy script. For more information, check out [GitHub Secrets' docs](https://docs.GitHub.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository).
 
 ## How to run tests in GitHub Actions
 
-We will focus on running your tests via GitHub Actions, but not *how* to write tests (see the [Testing](https://redwoodjs.com/docs/testing) doc for test creation instructions).
+All right, let's get to the code. In this how to, we'll focus on how to run your tests in GitHub Actions, but not how to write your tests (see the [Testing](../testing.md) doc for that).
 
-If you already have an existing project, you can skip to section [4. Setup GitHub Actions](#4-setup-GitHub-actions) section.
+If you already have a project, you can skip to [4. Set up GitHub Actions](#4-set-up-GitHub-actions).
 
 ### 1. Create a Redwood app
 
-```sh
-yarn create redwood-app rw-testing-ghactions
-```
-
-Go into the app
+Start by creating a Redwood app and `cd`ing into it:
 
 ```sh
-cd rw-testing-ghactions
+yarn create redwood-app rw-testing-gh-actions
+cd rw-testing-gh-actions
 ```
 
-Make sure everything is working
+Then make sure everything is working:
 
 ```sh
 yarn rw test
 ```
 
-You should see something like this:
+If it is, you should see something like this:
 
 ```sh
 ...
@@ -69,15 +62,18 @@ Watch Usage: Press w to show more.
 
 ### 2. Modify the Prisma schema
 
-For the purpose of this guide we will use the `User` model that comes with the Redwood app.
+For the purpose of this how to, we'll use the `UserExample` model that comes with the Redwood app.
+We'll also change the database to Postgres since that's what we'll be using in our GitHub Actions.
 
-We will also change the db to `postgresql`, since that's what we'll be using in our GitHub Actions.
+:::note Make sure you have a Postgres instance ready to use
 
-> At this point make sure you have a Postgres instance ready to use. Here's a handy guide to [set it up locally](https://redwoodjs.com/docs/local-postgres-setup).  We will need the connection string so our Redwood app knows where to store the data.
+Here's a handy guide for how to [set it up locally](../local-postgres-setup). We'll need the connection string so our Redwood app knows where to store the data
 
-On to the changes, modify your `schema.prisma` file to look like this:
+:::
 
-```prisma
+On to the changes. Modify your `schema.prisma` file to look like this:
+
+```graphql title="api/db/prisma.schema"
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -88,32 +84,31 @@ generator client {
   binaryTargets = "native"
 }
 
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
 model UserExample {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
 }
-
-
 ```
 
-Add your connection strings to your `.env` file:
+Then add your connection strings to your `.env` file:
 
-> Make sure you don't commit this file to your repo, since it contains sensitive information.
+:::caution
 
-```env
+Make sure you don't commit this file to your repo since it contains sensitive information.
+
+:::
+
+```bash
 DATABASE_URL=postgres://postgres:postgres@localhost:54322/postgres
 TEST_DATABASE_URL=postgres://postgres:postgres@localhost:54322/postgres
 ```
 
-You need one connection string for your development database and one for your test database. You can read more info about it [here](https://redwoodjs.com/docs/testing#the-test-database).
+You need one connection string for your development database and one for your test database. Read more about it in the testing doc's [The Test Database](../testing#the-test-database) section.
 
-Edit the `scripts/seed.ts` file and uncomment the contents of the array that contain the "fake" users. We will also use the `createMany` method for inserting records in the data base so we can skip the duplicates [more info](<https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany>). It should look like this:
+Next, navigate to the `scripts/seed.ts` file. Uncomment the contents of the array that contains the "fake" users. We'll also use the `createMany` method for inserting records in the database so we can skip the duplicates (see the [Prisma docs](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany) for more info). When you're all done, it should look like this:
 
-```ts
+```ts title="scripts/seed.ts"
     ...
 
     const data: Prisma.UserExampleCreateArgs['data'][] = [
@@ -147,7 +142,7 @@ Edit the `scripts/seed.ts` file and uncomment the contents of the array that con
     ...
 ```
 
-Create the migration and migrate your database:
+Finally, migrate your database:
 
 ```sh
 yarn rw prisma migrate dev --name init
@@ -155,22 +150,17 @@ yarn rw prisma migrate dev --name init
 
 ### 3. Generate the UserExample scaffold
 
-Generate the scaffold for the `UserExample` model:
+We need some real tests to work with. Scaffolding out the `UserExample` model gives us everything we need to create "users" in our app, including some of the services tests which interact with our test database:
 
 ```sh
 yarn rw g scaffold UserExample
-
 ```
-
-This will give you everything you need to create "users" in your app, including some of the tests.
 
 Make sure everything is still working:
 
 ```sh
 yarn rw test
 ```
-
-Redwood has generated the basic tests for our services, which interact with your test database.
 
 You should see something like this:
 
@@ -185,15 +175,17 @@ Time:        3.587 s
 Ran all test suites related to changed files in 2 projects.
 ```
 
-### 4. Setup GitHub Actions
+### 4. Set up GitHub Actions
 
-This action will run only when the `main` branch is updated, but you can configure it to run on any other branch.
+Create a new file in the `.github/workflows` directory (create those directories if they don't exist) called `ci.yml` and add the following:
 
-Create a new file in the `.GitHub/workflows` folder called `ci.yml` and add the following content:
+:::note
 
-```yml
-# .GitHub/workflows/ci.yml
+This action only runs when the `main` branch is updated, but you can configure it to run on any other branch.
 
+:::
+
+```yml title=".github/workflows/ci.yml"
 name: Redwood CI
 
 on:
@@ -249,34 +241,28 @@ jobs:
       - run: yarn rw test web --no-watch
 ```
 
-If you push your changes to the `main` branch on GitHub the CI action will breaks down like this:
+Now push your changes to the `main` branch on GitHub; the "Redwood CI" action we just made will run like this:
 
 <img width="1140" alt="ci-results-1" src="https://user-images.GitHubusercontent.com/14810250/202825732-c7d77929-58ff-4ad5-9072-48e4403471c9.png" />
 
-
-1. Set up job
-2. Initializes the containers and creates our postgres instance
+1. Set up the job ("build")
+2. Initialize the containers and create the postgres instance
 3. Checkout the code
-4. Sets up Node.js
-5. Installs the redwood dependencies
-6. Builds the redwood app
-7. Runs the api tests
-8. Runs the web tests
-9. Cleans up the environment
+4. Set up Node.js
+5. Install the Redwood app's dependencies
+6. Build the Redwood app
+7. Run the api tests
+8. Run the web tests
+9. Clean up the environment
 
-> At this point, if all is well, you may start feeling the joy of automated tests!
-> You push a commit, the Action runs, your tests pass, and you observe a green
-> checkmark.  To savor this moment, consider updating one of your unit tests, making
-> it fail.  Push again.  Watch it fail.  Fix it.  Push again.  Watch it pass.
-> Repeat and enjoy.
+At this point, if all is well, you may start feeling the joy of automated tests! You push a commit, the Action runs, your tests pass, and you get a green checkmark. To savor this moment, consider updating one of your unit tests, making it fail. Push again. Watch it fail. Fix it. Push again. Watch it pass. Repeat and enjoy.
 
-### 5. Setup CI on a pull requests only
+### 5. Set up CI on pull requests only
 
-We want to make sure that the tests are run on every pull request, so we can make sure that the code is working as expected.
+We want tests to run on every pull request so we can make sure that our code is working as expected.
+Update the `ci.yml` file by removing the `push` event. The first lines should look like this:
 
-Update the `ci.yml` file by removing the `push` event, the first lines should look like this:
-
-```yml
+```yml title=".github/workflows/ci.yml"
 name: Redwood CI for Pull Requests
 
 on:
@@ -286,24 +272,23 @@ on:
 ...
 ```
 
-Now, if you push to a pull request, the CI action will run and you will see something like this:
+Now, if you open or push to a pull request, this action will run and you'll see something like this:
 
 <img width="1460" alt="ci-pr-1" src="https://user-images.GitHubusercontent.com/14810250/202825767-c7f23b24-e311-4a70-bf50-fbad40a6abee.png" />
 
-Once the GitHub Action is done, you can see the results in the "Conversation" tab:
+Once the action is done running, you can see the results in the "Conversation" tab:
 
 <img width="1385" alt="ci-pr-2" src="https://user-images.GitHubusercontent.com/14810250/202825772-93c8fe50-6b91-4048-882b-21497d47e211.png" />
 
 ### 6. Deploy the database changes to an actual database
 
-Now we want to use another action to deploy the database changes to an actual database, so we can run the app in a real environment. In this action we will run the tests one more time against the local database, and then deploy the database migrations to the external database.
+Now for the CD—we want to use another action to deploy the database changes to an actual database, so we can automatically deploy the latest and greatest to a real environment. In this action we'll run the tests one more time against the local database, then deploy the database migrations to the external database.
 
-Create a new file in the `.GitHub/workflows` folder called `cd.yml` and add the following content:
+Create a new file in the `.github/workflows` directory called `cd.yml` and add the following:
 
-```yml
-# .GitHub/workflows/cd.yml
-
+```yml title=".github/workflows/cd.yml"
 name: Redwood CD for database deployment
+
 on:
   push:
     branches: ['main']
@@ -364,43 +349,37 @@ The main changes are:
 - We only run the action on push events to the `main` branch
 - We run the migrations and seed scripts after the tests
 
-  ```yml
-  # run migrations on the actual database
-      - run: yarn rw prisma migrate deploy
-      # run seed script in the actual db
-      - run: yarn rw prisma db seed
-  ```
+### 7. Set up GitHub Secrets
 
-When you push to a PR, you get validation that the tests are passing so you are sure that the code is working as expected.
+Because you're using an actual Postgres instance in your action, you need to set up the secrets for the database connection so that the username and password stay secret.
 
-### 6. Set up GitHub Secrets
+Go to the "Settings" tab in your GitHub repo and click "Secrets", then "Actions", then "New repository secret".
+In the name field, type `DATABASE_URL`. In the value field, put the actual secret—something like this:
 
-Because you are using an actual postgres instance in your GitHub Action, you need to set up the secrets for the database connection, so that the user and password stay secret.
-
-Go to the "Settings" tab in your GitHub repo and click on "Secrets" then "Actions", then click on "New repository secret".
-
-In the name field, type `DATABASE_URL`
-
-The value field is the actual secret so it should be something like this: `postgres://[USER_NAME]:[PASSWORD]@[HOST]:[PORT]/postgres`
-
-Now click on `Add secret`.
-
-This will create a new secret that you can use in your GitHub actions. In this case, specify the connection string for the database where we will deploy the changes.
-
-Now you can use the secret in your GitHub action by using the `${{ secrets.DATABASE_URL }}` syntax.
-
-```yml
-...
-
-env:
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-...
+```
+postgres://[USER_NAME]:[PASSWORD]@[HOST]:[PORT]/postgres
 ```
 
- Now you can merge the PR and the database changes will be tested and then deployed to the actual database.
+When you're done, click "Add secret". This creates a new secret that you can use in your GitHub Actions. In this case, it species the connection string for the database we'll deploy changes to.
 
-What's next?  It is up to you - refine and streamline!
+You can use the secret in your GitHub Actions by using the `${{ secrets.DATABASE_URL }}` syntax:
+
+```yml
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+```
+
+Now you can merge the PR and the database changes will be tested, then deployed to the actual database.
+
+What's next? It is up to you—refine and streamline!
 
 As you consider automating your project workflows, keep the following wise philosophical observation in mind...
 
- > Civilization advances by extending the number of important operations we can perform without thinking.  - Alfred North Whitehead
+<blockquote>
+  <p>
+    Civilization advances by extending the number of important operations we can perform without thinking.
+  </p>
+  <cite>
+    —Alfred North Whitehead
+  </cite>
+</blockquote>
