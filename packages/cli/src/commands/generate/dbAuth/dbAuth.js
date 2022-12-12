@@ -14,6 +14,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import { templateForComponentFile } from '../helpers'
 
@@ -91,6 +92,11 @@ export const builder = (yargs) => {
       default: null,
       description: 'Include WebAuthn support (TouchID/FaceID)',
       type: 'boolean',
+    })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
     })
 
     .epilogue(
@@ -272,6 +278,9 @@ export const handler = async (yargs) => {
   const t = tasks({ ...yargs, webAuthn: includeWebAuthn })
 
   try {
+    if (yargs.rollback) {
+      prepareForRollback(t)
+    }
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))
