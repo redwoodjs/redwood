@@ -6709,6 +6709,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.6
     "@prisma/internals": 4.7.1
     "@redwoodjs/api-server": 3.2.0
+    "@redwoodjs/cli-helpers": 3.2.0
     "@redwoodjs/internal": 3.2.0
     "@redwoodjs/prerender": 3.2.0
     "@redwoodjs/structure": 3.2.0
