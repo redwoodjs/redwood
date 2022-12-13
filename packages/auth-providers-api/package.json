@@ -31,7 +31,7 @@
     "@babel/cli": "7.19.3",
     "@babel/core": "7.20.5",
     "@magic-sdk/admin": "1.4.1",
-    "@nhost/hasura-auth-js": "1.4.1",
+    "@nhost/hasura-auth-js": "1.7.0",
     "@nhost/nhost-js": "1.4.10",
     "@okta/jwt-verifier": "2.6.0",
     "@okta/okta-auth-js": "6.9.0",

@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/cli": "7.19.3",
     "@babel/core": "7.20.5",
-    "@nhost/hasura-auth-js": "1.4.1",
+    "@nhost/hasura-auth-js": "1.7.0",
     "@nhost/nhost-js": "1.4.10",
     "@okta/okta-auth-js": "6.9.0",
     "@redwoodjs/auth": "3.2.0",
