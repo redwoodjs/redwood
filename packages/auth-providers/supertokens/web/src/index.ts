@@ -1,1 +1,1 @@
-export { createSuperTokensAuth } from './supertokens'
+export { createAuth } from './supertokens'
