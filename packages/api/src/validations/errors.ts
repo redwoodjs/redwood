@@ -287,6 +287,19 @@ export class NegativeNumericalityValidationError extends ServiceValidationError 
   }
 }
 
+export class CustomValidationError extends ServiceValidationError {
+  constructor(
+    name: string,
+    // Since CustomValidationError is derived from either a raised error or a string, the message is always passed.
+    // but for the sake of consistency, we'll keep the message optional.
+    message = '',
+    substitutions = {}
+  ) {
+    super(message, Object.assign(substitutions, { name }))
+    this.name = 'CustomValidationError'
+  }
+}
+
 export class UniquenessValidationError extends ServiceValidationError {
   constructor(name: string, message: string | undefined, _substitutions = {}) {
     const errorMessage = message ? message : `${name} must be unique`
