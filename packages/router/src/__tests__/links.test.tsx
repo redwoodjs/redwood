@@ -67,7 +67,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchChildRoutes to={`/users`}>
+        <NavLink activeClassName="activeTest" matchSubPaths to="/users">
           Dunder Mifflin
         </NavLink>
       </LocationProvider>
@@ -81,7 +81,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchChildRoutes to="/users/1">
+        <NavLink activeClassName="activeTest" matchSubPaths to="/users/1">
           Dunder Mifflin
         </NavLink>
       </LocationProvider>
@@ -97,7 +97,7 @@ describe('<NavLink />', () => {
       <LocationProvider location={mockLocation}>
         <NavLink
           activeClassName="activeTest"
-          to={`/pathname?tab=second&page=2`}
+          to="/pathname?tab=second&page=2"
           activeMatchParams={[]}
         >
           Dunder Mifflin
@@ -218,7 +218,7 @@ describe('<NavLink />', () => {
 
     const { getByText } = render(
       <LocationProvider location={mockLocation}>
-        <NavLink activeClassName="activeTest" matchChildRoutes to={`/users`}>
+        <NavLink activeClassName="activeTest" matchSubPaths to="/users">
           Dunder Mifflin
         </NavLink>
       </LocationProvider>

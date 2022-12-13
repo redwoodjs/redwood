@@ -82,9 +82,10 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  * Determine if the given route is a match for the given pathname. If so,
  * extract any named params and return them in an object.
  *
- * route            - The route path as specified in the <Route path={...} />
- * pathname         - The pathname from the window.location.
- * paramTypes       - The object containing all param type definitions.
+ * route         - The route path as specified in the <Route path={...} />
+ * pathname      - The pathname from the window.location.
+ * paramTypes    - The object containing all param type definitions.
+ * matchSubPaths - Also match sub routes
  *
  * Examples:
  *
@@ -97,40 +98,19 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
  *
- *  matchPath('/post/1', '/post/', undefined, true)
- *  => { match: true, params: { }}
+ *  matchPath('/post/1', '/post/', { matchSubPaths: true })
+ *  => { match: true, params: {} }
  */
 export const matchPath = (
   route: string,
   pathname: string,
-  paramTypes?: Record<string, ParamType>
-) => internalMatchPath(route, pathname, { paramTypes })
-
-/**
- * Determine if the given route is a match for the given pathname, also
- * matching sub-routes. If so, extract any named params and return them in an
- * object.
- *
- * route            - The route path as specified in the <Route path={...} />
- * pathname         - The pathname from the window.location.
- * paramTypes       - The object containing all param type definitions.
- */
-export const matchSubPath = (
-  route: string,
-  pathname: string,
-  paramTypes?: Record<string, ParamType>
-) => internalMatchPath(route, pathname, { paramTypes, matchChildRoutes: true })
-
-const internalMatchPath = (
-  route: string,
-  pathname: string,
   {
     paramTypes,
-    matchChildRoutes,
+    matchSubPaths,
   }: {
     paramTypes?: Record<string, ParamType>
-    matchChildRoutes?: boolean
-  }
+    matchSubPaths?: boolean
+  } = {}
 ) => {
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
@@ -149,7 +129,7 @@ const internalMatchPath = (
     typeMatchingRoute = typeMatchingRoute.replace(match, `(${typeRegexp})`)
   }
 
-  const matchRegex = matchChildRoutes
+  const matchRegex = matchSubPaths
     ? new RegExp(`^${typeMatchingRoute}(?:/.*)?$`, 'g')
     : new RegExp(`^${typeMatchingRoute}$`, 'g')
 
