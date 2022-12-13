@@ -12,18 +12,18 @@ import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type Clerk = ClerkClient | undefined | null
 
-export function createClerkAuth(customProviderHooks?: {
+export function createAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<Record<string, unknown>>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const authImplementation = createClerkAuthImplementation()
+  const authImplementation = createAuthImplementation()
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createClerkAuthImplementation() {
+function createAuthImplementation() {
   return {
     type: 'clerk',
     client: (window as any).Clerk as Clerk,
