@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createDbAuthClient, DbAuthClientArgs, createDbAuth } from '../dbAuth'
+import { createDbAuthClient, DbAuthClientArgs, createAuth } from '../dbAuth'
 
 process.env.RWJS_API_URL = '/.redwood/functions'
 process.env.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
@@ -89,7 +89,7 @@ const defaultArgs: DbAuthClientArgs & {
 
 function getDbAuth(args = defaultArgs) {
   const dbAuthClient = createDbAuthClient(args)
-  const { useAuth, AuthProvider } = createDbAuth(dbAuthClient, {
+  const { useAuth, AuthProvider } = createAuth(dbAuthClient, {
     useHasRole: args.useHasRole,
     useCurrentUser: args.useCurrentUser,
   })
