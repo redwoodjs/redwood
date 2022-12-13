@@ -593,7 +593,7 @@ yarn redwood generate dbAuth
 | `--username-label`   | The label to give the username field on the auth forms, e.g. "Email". Defaults to "Username". If not specified you will be prompted   |
 | `--password-label`   | The label to give the password field on the auth forms, e.g. "Secret". Defaults to "Password". If not specified you will be prompted  |
 | `--webAuthn`         | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted                                      |
-| `--rollback`        | Rollback changes if an error occurs [default: true] 
+| `--rollback`        | Rollback changes if an error occurs [default: true]
 
 If you don't want to create your own log in, sign up, forgot password and
 password reset pages from scratch you can use this generator. The pages will be
@@ -2063,15 +2063,12 @@ yarn redwood upgrade -t 0.19.3
 
 When you execute some of Redwood's CLI commands we can perform checks in the background to improve your developer experience. A list of these background checks are given below with details on how to enable or disable them as you wish.
 
-### updates
+### upgrades
 
-We check if your current Redwood version is outdated and provide you with a small message which lets you know an update is available. We only check once per day and we'll only show you the update message once a day too.
+We check if your current Redwood version is outdated and provide you with a small message which lets you know an upgrade is available. We only check once per day and we'll only show you the update message once a day too.
 
-This feature is enabled by default in your `redwood.toml` file by:
-```toml title="redwood.toml"
-[background]
-  updateChecks = true
+You can opt into this behavior by setting `REDWOOD_ENABLE_UPGRADE_CHECKS` to a truthy value:
+
+```shell title=".env.defaults"
+REDWOOD_ENABLE_UPGRADE_CHECKS=true
 ```
-It is also enabled if you set the `REDWOOD_BACKGROUND_UPDATE_CHECKS_ENABLED` environment variable.
-
-If you don't set the environment variable or disable the `redwood.toml` option we won't perform this check.

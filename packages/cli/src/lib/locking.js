@@ -8,6 +8,7 @@ import { getPaths } from './index'
  */
 function ensureLockDirectoryExists() {
   const locksPath = path.join(getPaths().generated.base, 'locks')
+
   if (!fs.existsSync(locksPath)) {
     fs.mkdirSync(locksPath, { recursive: true })
   }
@@ -24,6 +25,7 @@ export function setLock(identifier) {
   if (isLockSet(identifier)) {
     throw new Error(`Lock "${identifier}" is already set`)
   }
+
   fs.writeFileSync(
     path.join(getPaths().generated.base, 'locks', identifier),
     ''
@@ -35,8 +37,6 @@ export function setLock(identifier) {
  * @param {string} identifier ID of the lock
  */
 export function unsetLock(identifier) {
-  ensureLockDirectoryExists()
-
   try {
     fs.rmSync(path.join(getPaths().generated.base, 'locks', identifier))
   } catch (error) {
@@ -50,7 +50,7 @@ export function unsetLock(identifier) {
 /**
  * Determines if a lock with the specified identifier is currently set
  * @param {string} identifier ID of the lock
- * @returns {boolean} true if the lock is set otherwise false
+ * @returns {boolean} `true` if the lock is set, otherwise `false`
  */
 export function isLockSet(identifier) {
   return fs.existsSync(

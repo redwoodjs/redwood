@@ -14,5 +14,3 @@
   port = "${API_DEV_PORT:8911}"
 [browser]
   open = true
-[background]
-  updateChecks = true

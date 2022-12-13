@@ -33,7 +33,7 @@ import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths } from './lib'
-import * as update from './lib/update'
+import * as upgradeCheck from './lib/upgradeCheck'
 
 // # Setting the CWD
 //
@@ -100,32 +100,31 @@ config({
 
 // # Build the CLI and run it
 
-const updateCheckerMiddleware = (argv) => {
-  const excludedCommands = ['upgrade', 'ts-to-js']
-  if (excludedCommands.includes(argv._[0])) {
+function upgradeCheckMiddleware(argv) {
+  if (upgradeCheck.EXCLUDED_COMMANDS.includes(argv._[0])) {
     return
   }
 
-  if (update.shouldShow()) {
+  if (upgradeCheck.shouldShow()) {
     process.on('exit', () => {
-      update.showUpgradeMessage()
+      upgradeCheck.showUpgradeMessage()
     })
   }
 
-  if (update.shouldCheck()) {
+  if (upgradeCheck.shouldCheck()) {
     const stdout = fs.openSync(
-      path.join(getPaths().generated.base, 'updateCheckStdout.log'),
-      'a'
+      path.join(getPaths().generated.base, 'upgradeCheckStdout.log'),
+      'w'
     )
 
     const stderr = fs.openSync(
-      path.join(getPaths().generated.base, 'updateCheckStderr.log'),
-      'a'
+      path.join(getPaths().generated.base, 'upgradeCheckStderr.log'),
+      'w'
     )
 
     const child = spawn(
       'yarn',
-      ['node', path.join(__dirname, 'lib', 'updateCheck.js')],
+      ['node', path.join(__dirname, 'lib', 'runUpgradeCheck.js')],
       {
         detached: true,
         stdio: ['ignore', stdout, stderr],
@@ -148,7 +147,7 @@ yargs(hideBin(process.argv))
         delete argv.cwd
       },
       telemetryMiddleware,
-      update.isBackgroundCheckEnabled() && updateCheckerMiddleware,
+      upgradeCheck.isEnabled() && upgradeCheckMiddleware,
     ].filter(Boolean)
   )
   .option('cwd', {
