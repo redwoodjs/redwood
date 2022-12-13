@@ -34,6 +34,7 @@ const SignupPage = () => {
     const response = await signUp({
       username: data.username,
       password: data.password,
+      'full-name': data['full-name'],
     })
 
     if (response.message) {
