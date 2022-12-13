@@ -5398,12 +5398,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:15.3.2":
-  version: 15.3.2
-  resolution: "@nrwl/cli@npm:15.3.2"
+"@nrwl/cli@npm:15.3.3":
+  version: 15.3.3
+  resolution: "@nrwl/cli@npm:15.3.3"
   dependencies:
-    nx: 15.3.2
-  checksum: cbdd26b23fd9e49d2ba20ab039d6db978752791fa3ca5db6cd8ce24d07de48c624f18aba2e3b871aa39274dc3d9d91ca4deafad3943b182153c7a95ed3c737ce
+    nx: 15.3.3
+  checksum: 5d684ce38ed3ed30007bcfbae8d5243491e3f1f0ebbd8838c8a88117713bb8c67745dcb6e32310ab03fe94de530c5e700c90f3ac18dd0737bd79408049cec310
   languageName: node
   linkType: hard
 
@@ -5440,14 +5440,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:15.3.2":
-  version: 15.3.2
-  resolution: "@nrwl/tao@npm:15.3.2"
+"@nrwl/tao@npm:15.3.3":
+  version: 15.3.3
+  resolution: "@nrwl/tao@npm:15.3.3"
   dependencies:
-    nx: 15.3.2
+    nx: 15.3.3
   bin:
     tao: index.js
-  checksum: 61edd17304dda91253e37cdc4ae33fadc6dc45b3f47433cfaad67af064a82ff6e774c65864233aecaf764c196d0123dc48bc753f01ebd2cc83556b5dd00de64f
+  checksum: 3dff6a23a3710d03cb1d82a24a35cc2c508193295bd69dc9d3b7baf9dbffcbc4c017f3f9a4c6d0b1e6f04a381b7ba810e5cde2ec0e61b2bfd2106b24f871b157
   languageName: node
   linkType: hard
 
@@ -7011,7 +7011,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     core-js: 3.26.1
     jest: 29.3.1
-    msw: 0.49.1
+    msw: 0.49.2
     react: 17.0.2
     typescript: 4.7.4
   languageName: unknown
@@ -7518,7 +7518,7 @@ __metadata:
     jest: 29.3.1
     jest-environment-jsdom: 29.3.1
     jest-watch-typeahead: 2.2.1
-    msw: 0.49.1
+    msw: 0.49.2
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
     whatwg-fetch: 3.6.2
@@ -23459,9 +23459,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.49.1":
-  version: 0.49.1
-  resolution: "msw@npm:0.49.1"
+"msw@npm:0.49.2":
+  version: 0.49.2
+  resolution: "msw@npm:0.49.2"
   dependencies:
     "@mswjs/cookies": ^0.2.2
     "@mswjs/interceptors": ^0.17.5
@@ -23489,7 +23489,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 35e088ab31657132a7f060cb969e28c43b0cc3d7f3b34ef1412c2d2017d66aa283e0400c733b790104d52239e7c89de3dd980f9afd20cb3af9ea3b81c3c89916
+  checksum: f39f4fd6a30bddb9c87c158781c0fbe057b71fe80a6cbdc157fec155fcf61edcba90fff230363e702b07c3f1119bdf151b878205fa4b480b2e8bf2f07f15422e
   languageName: node
   linkType: hard
 
@@ -24184,12 +24184,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:15.3.2, nx@npm:>=14.8.6 < 16":
-  version: 15.3.2
-  resolution: "nx@npm:15.3.2"
+"nx@npm:15.3.3, nx@npm:>=14.8.6 < 16":
+  version: 15.3.3
+  resolution: "nx@npm:15.3.3"
   dependencies:
-    "@nrwl/cli": 15.3.2
-    "@nrwl/tao": 15.3.2
+    "@nrwl/cli": 15.3.3
+    "@nrwl/tao": 15.3.3
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24233,7 +24233,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 988dd8e7d84cebc9daaf06d8a7ea492f616b1b6af99906cee9794f17c51e35f9ece9faace1d450217f95d386447fe7d43f18e061de42d3f6d23d37d26d2931a1
+  checksum: 0614cba481c5b0475fdf97c86760128f1e3df12a05e21b0c80b08f20afd9bc6c34443cd5112f75678fe49d086fe84212a4a2118e8b1f5dff4f7761eab2237040
   languageName: node
   linkType: hard
 
@@ -27690,12 +27690,12 @@ __metadata:
     listr2: 5.0.6
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.49.1
+    msw: 0.49.2
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.20
     npm-packlist: 5.1.3
-    nx: 15.3.2
+    nx: 15.3.3
     octokit: 2.0.10
     ora: 5.4.1
     prompts: 2.4.2
