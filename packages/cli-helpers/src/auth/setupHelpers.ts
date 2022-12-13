@@ -108,7 +108,14 @@ export const standardAuthHandler = async ({
           // So we do it after the tasks have all finished instead
           if (ctx.setupMode === AuthSetupMode.REPLACE) {
             notes.push(
-              `\n Your existing auth provider has been replaced, but please remember to remove any old packages, config and functions that are not used by ${ctx.provider} auth`
+              ...[
+                '',
+                `${colors.warning(
+                  'Your existing auth provider has been replaced!'
+                )}`,
+                'You will still need to manually remove the old auth provider config',
+                'functions and dependencies (in your web and api package.jsons)',
+              ]
             )
           }
 
