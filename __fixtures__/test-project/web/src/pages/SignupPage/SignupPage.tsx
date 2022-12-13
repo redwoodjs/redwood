@@ -31,7 +31,11 @@ const SignupPage = () => {
   }, [])
 
   const onSubmit = async (data: Record<string, string>) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.username,
+      password: data.password,
+      'full-name': data['full-name'],
+    })
 
     if (response.message) {
       toast(response.message)
