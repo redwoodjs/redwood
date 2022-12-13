@@ -1,4 +1,4 @@
-import { memoize } from 'lodash'
+import memoize from 'lodash.memoize'
 
 import {
   getPaths as getRedwoodPaths,

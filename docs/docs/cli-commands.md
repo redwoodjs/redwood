@@ -453,6 +453,7 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 | `--list`             | Use this flag to generate a list cell. This flag is needed when dealing with irregular words whose plural and singular is identical such as equipment or pokemon |
 | `--tests`            | Generate test files [default: true]                                                                                                                              |
 | `--stories`          | Generate Storybook files [default: true]                                                                                                                         |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                              |
 
 **Usage**
 
@@ -519,6 +520,7 @@ Redwood loves function components and makes extensive use of React Hooks, which 
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 | `--tests`            | Generate test files [default: true]                                                  |
 | `--stories`          | Generate Storybook files [default: true]                                             |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Destroying**
 
@@ -568,6 +570,7 @@ Creates a data migration script in `api/db/dataMigrations`.
 | Arguments & Options | Description                                                              |
 | :------------------ | :----------------------------------------------------------------------- |
 | `name`              | Name of the data migration, prefixed with a timestamp at generation time |
+| `--rollback`        | Rollback changes if an error occurs [default: true]                      |
 
 **Usage**
 
@@ -585,9 +588,12 @@ Generate log in, sign up, forgot password and password reset pages for dbAuth
 yarn redwood generate dbAuth
 ```
 
-| Arguments & Options | Description                                                                                      |
-| ------------------- | ------------------------------------------------------------------------------------------------ |
-| `--webAuthn`        | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted |
+| Arguments & Options  | Description                                                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `--username-label`   | The label to give the username field on the auth forms, e.g. "Email". Defaults to "Username". If not specified you will be prompted   |
+| `--password-label`   | The label to give the password field on the auth forms, e.g. "Secret". Defaults to "Password". If not specified you will be prompted  |
+| `--webAuthn`         | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted                                      |
+| `--rollback`        | Rollback changes if an error occurs [default: true] 
 
 If you don't want to create your own log in, sign up, forgot password and
 password reset pages from scratch you can use this generator. The pages will be
@@ -613,6 +619,7 @@ yarn redwood generate directive <name>
 | `--force, -f`        | Overwrite existing files                                              |
 | `--typescript, --ts` | Generate TypeScript files (defaults to your projects language target) |
 | `--type`             | Directive type [Choices: "validator", "transformer"]                  |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                   |
 
 **Usage**
 
@@ -651,6 +658,7 @@ Not to be confused with Javascript functions, Capital-F Functions are meant to b
 | `name`               | Name of the function                                                                 |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Usage**
 
@@ -720,6 +728,7 @@ Layouts wrap pages and help you stay DRY.
 | `--tests`            | Generate test files [default: true]                                                  |
 | `--stories`          | Generate Storybook files [default: true]                                             |
 | `--skipLink`         | Generate a layout with a skip link [default: false]                                  |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Usage**
 
@@ -763,10 +772,11 @@ Generate a RedwoodRecord model.
 yarn redwood generate model <name>
 ```
 
-| Arguments & Options | Description                          |
-| ------------------- | ------------------------------------ |
-| `name`              | Name of the model (in schema.prisma) |
-| `--force, -f`       | Overwrite existing files             |
+| Arguments & Options | Description                                           |
+| ------------------- | ----------------------------------------------------- |
+| `name`              | Name of the model (in schema.prisma)                  |
+| `--force, -f`       | Overwrite existing files                              |
+| `--rollback`        | Rollback changes if an error occurs [default: true]   |
 
 **Usage**
 
@@ -814,6 +824,7 @@ This also updates `Routes.js` in `./web/src`.
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 | `--tests`            | Generate test files [default: true]                                                  |
 | `--stories`          | Generate Storybook files [default: true]                                             |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Destroying**
 
@@ -939,6 +950,7 @@ The content of the generated components is different from what you'd get by runn
 | `--force, -f`        | Overwrite existing files                                                                                                                                                                              |
 | `--tailwind`         | Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)                                                                                               |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                  |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                              |
 
 **Usage**
 
@@ -1075,6 +1087,7 @@ Generates an arbitrary Node.js script in `./scripts/<name>` that can be used wit
 | -------------------- | ------------------------------------------------------------------------------------ |
 | `name`               | Name of the service                                                                  |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 Scripts have access to services and libraries used in your project. Some examples of how this can be useful:
 
@@ -1120,6 +1133,7 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | `--force, -f`        | Overwrite existing files                                                                                                                                                                               |
 | `--tests`            | Generate service test and scenario [default: true]                                                                                                                                                     |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                   |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                              |
 
 > **Note:** The generated sdl will include the `@requireAuth` directive by default to ensure queries and mutations are secure. If your app's queries and mutations are all public, you can set up a custom SDL generator template to apply `@skipAuth` (or a custom validator directive) to suit you application's needs.
 
@@ -1303,6 +1317,7 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 | `--tests`            | Generate test and scenario files [default: true]                                     |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 
 **Destroying**
