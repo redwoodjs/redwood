@@ -30,7 +30,10 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data: Record<string, string>) => {
-    const response = await logIn({ ...data })
+    const response = await logIn({
+      username: data.username,
+      password: data.password,
+    })
 
     if (response.message) {
       toast(response.message)
