@@ -2058,17 +2058,3 @@ Upgrade to a specific version:
 ```bash
 yarn redwood upgrade -t 0.19.3
 ```
-
-## Background Checks
-
-When you execute some of Redwood's CLI commands we can perform checks in the background to improve your developer experience. A list of these background checks are given below with details on how to enable or disable them as you wish.
-
-### upgrades
-
-We check if your current Redwood version is outdated and provide you with a small message which lets you know an upgrade is available. We only check once per day and we'll only show you the update message once a day too.
-
-You can opt into this behavior by setting `REDWOOD_ENABLE_UPGRADE_CHECKS` to a truthy value:
-
-```shell title=".env.defaults"
-REDWOOD_ENABLE_UPGRADE_CHECKS=true
-```
