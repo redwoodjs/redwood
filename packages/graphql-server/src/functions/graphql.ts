@@ -180,6 +180,7 @@ export const createGraphQLHandler = ({
 
   const yoga = createYoga({
     id: healthCheckId,
+    landingPage: isDevEnv,
     schema,
     plugins,
     maskedErrors: {
