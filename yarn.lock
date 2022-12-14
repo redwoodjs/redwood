@@ -6197,15 +6197,12 @@ __metadata:
     "@clerk/clerk-sdk-node": 3.9.2
     "@magic-sdk/admin": 1.4.1
     "@okta/jwt-verifier": 2.6.0
-    firebase-admin: 10.3.0
   peerDependenciesMeta:
     "@clerk/clerk-sdk-node":
       optional: true
     "@magic-sdk/admin":
       optional: true
     "@okta/jwt-verifier":
-      optional: true
-    firebase-admin:
       optional: true
   bin:
     redwood: ./dist/bins/redwood.js
