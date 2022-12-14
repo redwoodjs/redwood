@@ -51,11 +51,16 @@ async function shouldForce(force: boolean, basedir: string, webAuthn: boolean) {
 }
 
 export const standardAuthBuilder = (yargs: yargs.Argv) => {
-  yargs
+  return yargs
     .option('force', {
       alias: 'f',
       default: false,
       description: 'Overwrite existing configuration',
+      type: 'boolean',
+    })
+    .option('warn', {
+      default: true,
+      description: 'Show experimental auth warning',
       type: 'boolean',
     })
     .epilogue(
