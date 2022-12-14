@@ -4944,9 +4944,9 @@ __metadata:
   linkType: hard
 
 "@noble/ed25519@npm:^1.6.1":
-  version: 1.7.0
-  resolution: "@noble/ed25519@npm:1.7.0"
-  checksum: 9ffe60a629ab59fcf96f471e1579e3c1b542b1103f0edf101a5fbb8ff59f0bd50115fc7f38e1da6ad539cb02933a9875b0c87ee74f6c4ebcb816af0209a4ee8a
+  version: 1.7.1
+  resolution: "@noble/ed25519@npm:1.7.1"
+  checksum: a53b576b1253e00bb1cc0248c978cc9ce32ed8dd677df7f9ff37a3508206bfb7f0d7e982809a1ddf038ec6054053d2334b3e6c5b5b2758b1d3282800846c7d20
   languageName: node
   linkType: hard
 
@@ -5671,37 +5671,37 @@ __metadata:
   linkType: hard
 
 "@peculiar/asn1-android@npm:^2.1.7":
-  version: 2.1.9
-  resolution: "@peculiar/asn1-android@npm:2.1.9"
+  version: 2.3.3
+  resolution: "@peculiar/asn1-android@npm:2.3.3"
   dependencies:
-    "@peculiar/asn1-schema": ^2.1.9
-    asn1js: ^3.0.4
+    "@peculiar/asn1-schema": ^2.3.3
+    asn1js: ^3.0.5
     tslib: ^2.4.0
-  checksum: ace36645b8647e7d00fc203413a32411dd33e921bf6b24f3b1c4b0ffa3535f2c661018fc16f67b5d0c99e672d7daceb09c97f7deec8bc49228dcb5b486cd430f
+  checksum: b9bc650227a357c246a474fd1abe20de4b2b216c47dde16b846c2428c3bbf5ab311b0d98ec1f2bf2b0265b34080c51852b5f75a431f65b8c80998ec32c8dae33
   languageName: node
   linkType: hard
 
-"@peculiar/asn1-schema@npm:^2.1.6, @peculiar/asn1-schema@npm:^2.1.7, @peculiar/asn1-schema@npm:^2.1.9":
-  version: 2.2.0
-  resolution: "@peculiar/asn1-schema@npm:2.2.0"
+"@peculiar/asn1-schema@npm:^2.1.6, @peculiar/asn1-schema@npm:^2.1.7, @peculiar/asn1-schema@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "@peculiar/asn1-schema@npm:2.3.3"
   dependencies:
     asn1js: ^3.0.5
     pvtsutils: ^1.3.2
     tslib: ^2.4.0
-  checksum: 9d31e4f9d015a2ee394fba6ddc8106ced29178d8a7f32a0f79adeec0a5770965759b29259652e4e57a0a9677a46984b8048659f275f3fcaf7dd59d7b87d1cc45
+  checksum: 530102368af402ea4b69b106657e2627a7f1808865bd61ddfdcd938338dddcda7104561ebba6fbefa1d9c9717c0ceb571d7326840f61cd0c9d53933f660d4ae4
   languageName: node
   linkType: hard
 
 "@peculiar/asn1-x509@npm:^2.1.7":
-  version: 2.1.9
-  resolution: "@peculiar/asn1-x509@npm:2.1.9"
+  version: 2.3.4
+  resolution: "@peculiar/asn1-x509@npm:2.3.4"
   dependencies:
-    "@peculiar/asn1-schema": ^2.1.9
-    asn1js: ^3.0.4
+    "@peculiar/asn1-schema": ^2.3.3
+    asn1js: ^3.0.5
     ipaddr.js: ^2.0.1
     pvtsutils: ^1.3.2
     tslib: ^2.4.0
-  checksum: 7d0d804ead82686b5fc2826951649f02299cc3a9516901c014d815a253fa7b97400a07355b6e17b3a0e9a94d60c39609a3bd49ed64f2a6b6b1d1d27054fbe91c
+  checksum: e38da319aad6501961f2a8fb0c8d6102ae61a58a29c167f4c750272c80f2da2b8d67c63a6cad5b2f0c05cf0be4ad0970f8e2cfa75e3c4f4540a9e978549f6a15
   languageName: node
   linkType: hard
 
@@ -6163,46 +6163,32 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.20.5
     "@babel/runtime-corejs3": 7.20.6
-    "@clerk/clerk-sdk-node": 3.9.2
     "@prisma/client": 4.7.1
-    "@redwoodjs/auth": 3.2.0
-    "@simplewebauthn/server": 6.2.2
     "@types/aws-lambda": 8.10.109
-    "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 8.5.9
-    "@types/md5": 2.3.2
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 3.2.1
-    "@types/uuid": 9.0.0
-    aws-lambda: 1.0.7
-    base64url: 3.0.1
     core-js: 3.26.1
     cross-undici-fetch: 0.4.14
-    crypto-js: 4.1.1
     humanize-string: 2.1.0
     jest: 29.3.1
     jsonwebtoken: 8.5.1
-    jwks-rsa: 2.0.5
-    md5: 2.3.0
     memjs: 1.3.0
     pascalcase: 1.0.0
     pino: 8.7.0
     redis: 4.5.1
     split2: 4.1.0
     title-case: 3.0.3
+    ts-toolbelt: 9.6.0
     typescript: 4.7.4
-    uuid: 9.0.0
   peerDependencies:
-    "@clerk/clerk-sdk-node": 3.9.2
-    "@magic-sdk/admin": 1.4.1
-    "@okta/jwt-verifier": 2.6.0
+    memjs: 1.3.0
+    redis: 4.5.1
   peerDependenciesMeta:
-    "@clerk/clerk-sdk-node":
+    memjs:
       optional: true
-    "@magic-sdk/admin":
-      optional: true
-    "@okta/jwt-verifier":
+    redis:
       optional: true
   bin:
     redwood: ./dist/bins/redwood.js
@@ -6393,6 +6379,7 @@ __metadata:
     "@babel/core": 7.20.5
     "@babel/runtime-corejs3": 7.20.6
     "@redwoodjs/api": 3.2.0
+    "@simplewebauthn/server": 6.2.2
     "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
     "@types/uuid": 9.0.0
@@ -11232,7 +11219,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1js@npm:^3.0.1, asn1js@npm:^3.0.4, asn1js@npm:^3.0.5":
+"asn1js@npm:^3.0.1, asn1js@npm:^3.0.5":
   version: 3.0.5
   resolution: "asn1js@npm:3.0.5"
   dependencies:
@@ -11968,9 +11955,9 @@ __metadata:
   linkType: hard
 
 "bignumber.js@npm:^9.0.0, bignumber.js@npm:^9.0.1":
-  version: 9.0.2
-  resolution: "bignumber.js@npm:9.0.2"
-  checksum: b5c598ede49c3e391e53de6f992ee53960c45c96bb26e3933bd252890e77e3c703b88897a2148703f90f693d538396f8bed7c118a84a32fd54e24932bd16c04f
+  version: 9.1.1
+  resolution: "bignumber.js@npm:9.1.1"
+  checksum: 950312b15d038ae06028c8a6901fb4efd57fa889ada8c887cebd856e79f2fc9667641bebfb2e2ea4cc694e663fd55c1fe6e62a7e8fe40bbdebdf92269537b802
   languageName: node
   linkType: hard
 
@@ -20949,9 +20936,9 @@ __metadata:
   linkType: hard
 
 "jsrsasign@npm:^10.4.0":
-  version: 10.5.24
-  resolution: "jsrsasign@npm:10.5.24"
-  checksum: c4fa9bcae111e12895a6d6af188448ee825fb265dde3a26c607136aac72c6fc0c8d034dcc2e03695e9711eee778a3c2fc4b0a5d8af019b54b2c088bc55330b7d
+  version: 10.6.1
+  resolution: "jsrsasign@npm:10.6.1"
+  checksum: 6e499c42df6368c1329919ec5e10f122273d868bfb5f32a836d226743a0ce498b27a37c27586196525c8abf15aa4a9cec1fab9542435806954e389e06a312e93
   languageName: node
   linkType: hard
 
