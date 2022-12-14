@@ -11,7 +11,6 @@ import {
   generateTemplate,
   writeFilesTask,
   readFile,
-  getPaths,
   transformTSToJS,
   existsAnyExtensionSync,
   getGraphqlPath,
@@ -20,18 +19,8 @@ import {
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
-import { supportedProviders } from './graphiql'
-
-const generatePayload = (provider, id, token, expiry) => {
-  if (token) {
-    return {
-      'auth-provider': provider,
-      authorization: `Bearer ${token}`,
-    }
-  }
-
-  return supportedProviders[provider].getPayload(id, expiry)
-}
+import { getOutputPath, generatePayload } from './graphiqlHelpers'
+import { supportedProviders } from './supportedProviders'
 
 const addHeaderOption = () => {
   const graphqlPath = getGraphqlPath()
@@ -55,15 +44,6 @@ const addHeaderOption = () => {
 
     fs.writeFileSync(graphqlPath, content)
   }
-}
-
-const getOutputPath = () => {
-  return path.join(
-    getPaths().api.lib,
-    isTypeScriptProject()
-      ? 'generateGraphiQLHeader.ts'
-      : 'generateGraphiQLHeader.js'
-  )
 }
 
 const printHeaders = async () => {
