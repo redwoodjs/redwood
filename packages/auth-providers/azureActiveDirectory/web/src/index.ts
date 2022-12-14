@@ -1,1 +1,1 @@
-export { createAzureActiveDirectoryAuth } from './azureActiveDirectory'
+export { createAuth } from './azureActiveDirectory'
