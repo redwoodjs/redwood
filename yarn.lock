@@ -6195,7 +6195,7 @@ __metadata:
     uuid: 9.0.0
   peerDependencies:
     "@clerk/clerk-sdk-node": 3.9.2
-    "@magic-sdk/admin": 1.4.1
+    "@magic-sdk/admin": 1.8.0
     "@okta/jwt-verifier": 2.6.0
     firebase-admin: 10.3.0
   peerDependenciesMeta:
