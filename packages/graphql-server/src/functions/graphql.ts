@@ -8,14 +8,16 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import { Plugin, YogaMaskedErrorOpts, useReadinessCheck } from 'graphql-yoga'
-import { createYoga } from 'graphql-yoga'
-
-import { RedwoodError } from '@redwoodjs/api'
+import {
+  Plugin,
+  YogaMaskedErrorOpts,
+  useReadinessCheck,
+  createYoga,
+  createGraphQLError,
+} from 'graphql-yoga'
 
 import { mapRwCorsOptionsToYoga } from '../cors'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
-import { RedwoodGraphQLError, ValidationError } from '../errors'
 import { getAsyncStoreInstance } from '../globalContext'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
 import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
@@ -38,29 +40,31 @@ const maskError: YogaMaskedErrorOpts['maskError'] = (
   err: any,
   message: string
 ) => {
-  const allowErrors = [RedwoodGraphQLError, RedwoodError]
+  const error = err.error
+  const code = error?.extensions && err.error.extensions?.code
 
   // If using graphql-scalars, when validating input
   // the original TypeError is wrapped in an GraphQLError object.
   // We extract out and present the portion of the original error's
   // validation message that is friendly to send to the end user
   // @see https://github.com/Urigo/graphql-scalars and their validate method
-  if (err && err instanceof GraphQLError) {
-    if (err.originalError && err.originalError instanceof TypeError) {
-      return new ValidationError(err.originalError.message)
-    }
+  // if (err && err instanceof GraphQLError) {
+  //   if (err && err instanceof TypeError) {
+  //     return new ValidationError(err.message)
+  //   }
+  // }
+
+  if (error instanceof GraphQLError && code) {
+    return createGraphQLError(error.message, {
+      extensions: error.extensions,
+      originalError: error.originalError,
+    })
   }
 
-  if (
-    err.originalError &&
-    !allowErrors.find(
-      (allowedError) => err.originalError instanceof allowedError
-    )
-  ) {
-    return new GraphQLError(message)
-  }
-
-  return err
+  return createGraphQLError(message, {
+    extensions: error.extensions,
+    originalError: err,
+  })
 }
 
 /**
@@ -181,6 +185,7 @@ export const createGraphQLHandler = ({
     maskedErrors: {
       maskError,
       errorMessage: defaultError,
+      isDev: isDevEnv,
     },
     logging: logger,
     graphqlEndpoint: graphiQLEndpoint,
