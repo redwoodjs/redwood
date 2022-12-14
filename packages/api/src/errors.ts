@@ -4,7 +4,5 @@ export class RedwoodError extends Error {
     super(message)
     this.name = 'RedwoodError'
     this.extensions = extensions
-
-    Object.setPrototypeOf(this, RedwoodError.prototype)
   }
 }
