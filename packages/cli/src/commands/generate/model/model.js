@@ -5,9 +5,9 @@ import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareForRollback } from '../../../lib/rollback'
 import { verifyModelName } from '../../../lib/schemaHelpers'
 import { yargsDefaults } from '../helpers'
-
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'model.js.template')
 
 export const files = ({ name, typescript = false }) => {
@@ -26,6 +26,11 @@ export const builder = (yargs) => {
     .positional('name', {
       description: 'Name of the model to create',
       type: 'string',
+    })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
     })
     .epilogue(
       `Also see the ${terminalLink(
@@ -61,6 +66,9 @@ export const handler = async ({ force, ...args }) => {
 
   try {
     await verifyModelName({ name: args.name })
+    if (args.rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

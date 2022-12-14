@@ -575,6 +575,40 @@ validate(input.lastName, {
 })
 ```
 
+#### Custom
+
+Run a custom validation function passed as `with` which should either throw or return nothing.
+If the function throws an error, the error message will be used as the message of the validation error associated with the field.
+
+```jsx
+validate(input.value, 'Value', {
+  custom: {
+    with: () => {
+      if (isInvalid) {
+        throw new Error('Value is invalid')
+      }
+    }
+  }
+})
+```
+
+##### Options
+
+* `message`: a custom error message if validation fails
+
+```jsx
+validate(input.value, 'Value', {
+  custom: {
+    with: () => {
+      if (isInvalid) {
+        throw new Error('Value is invalid')
+      }
+    },
+    message: 'Please specify a different value'
+  }
+})
+```
+
 ### validateWith()
 
 `validateWith()` is simply given a function to execute. This function should throw with a message if there is a problem, otherwise do nothing.
@@ -748,6 +782,27 @@ In our example above you could cache the GraphQL query for the most popular prod
 
 As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it! Instructions for getting started with the code are [below](#creating-your-own-client).
 
+::: info
+
+If you need to access functionality in your cache client that the `cache()` and `cacheFindMany()` functions do not handle, you can always get access to the underlying raw client library and use it however you want:
+
+```javascript
+import { cacheClient } from 'src/lib/cache'
+
+export const updatePost = async ({ id, input }) => {
+  const post = await db.post.update({
+    data: input,
+    where: { id },
+  })
+  // highlight-next-line
+  await cacheClient.MSET(`post-${id}`, JSON.stringify(post), `blogpost-${id}`, JSON.stringify(post))
+
+  return post
+}
+```
+
+:::
+
 ### What Can Be Cached
 
 The service cache mechanism can only store strings, so whatever data you want to cache needs to be able to survive a round trip through `JSON.stringify()` and `JSON.parse()`. That means that if you have a real `Date` instance, you'd need to re-initialize it as a `Date`, because it's going to return from the cache as a string like `"2022-08-24T17:50:05.679Z"`.
@@ -805,6 +860,30 @@ An easier solution to this problem would be to add some kind of version number t
 
 And this key is our final form: a unique, but flexible key that allows us to expire the cache on demand (change the version) or automatically expire it when the record itself changes.
 
+:::info
+
+One more case: what if the underlying `Product` model itself changes, adding a new field, for example? Each product will now have new data, but no changes will occur to `updatedAt` as a result of adding this column. There are a couple things you could do here:
+
+* Increment the version on the key, if you have one: `v1` => `v2`
+* "Touch" all of the Product records in a script, forcing them to have their `updatedAt` timestamp changed
+* Incorporate a hash of all the keys of a `product` into the cache key
+
+How does that last one work? We get a list of all the keys and then apply a hashing algorithm like MD5 to get a string that's unique based on that list of database columns. Then if one is ever added or removed, the hash will change, which will change the key, which will bust the cache:
+
+```javascript
+const product = db.product.findUnique({ where: { id } })
+const columns = Object.keys(product) // ['id', 'name', 'sku', ...]
+const hash = md5(columns.join(','))  // "e4d7f1b4ed2e42d15898f4b27b019da4"
+
+cache(`v1-product-${hash}-${id}-${updatedAt}`, () => {
+  // ...
+})
+```
+
+Note that this has the side effect of having to select at least one record from the database so that you know what the column names are, but presumably this is much less overhead that whatever computation you're trying to avoid by caching: the slow work that happens inside of the function passed to `cache()` will still be avoided on subsequent calls (and selecting a single record from the database by an indexed column like `id` should be very fast).
+
+:::
+
 #### Expiration-based Keys
 
 You can skirt these issues about what data is changing and what to include or not include in the key by just setting an expiration time on this cache entry. You may decide that if a change is made to a product, it's okay if users don't see the change for, say, an hour. In this case just set the expiration time to 3600 seconds and it will automatically be re-built, whether something changed in the record or not:
@@ -844,7 +923,7 @@ cache(`recommended-${context.currentUser.id}`, () => {
 })
 ```
 
-If every page the user visits has a different list of recommended products then creating this cache may not be worth it: how often does the user revisit the same product page more than once? Conversely, if you show the *same* recommended products on every page then this cache would definitely improve the user's experience.
+If every page the user visits has a different list of recommended products for every page (meaning that the full computation will need to run at least once, before it's cached) then creating this cache may not be worth it: how often does the user revisit the same product page more than once? Conversely, if you show the *same* recommended products on every page then this cache would definitely improve the user's experience.
 
 The *key* to writing a good key (!) is to think carefully about the circumstances in which the key needs to expire, and include those bits of information into the key string/array. Adding caching can lead to weird bugs you don't expect, but in these cases the root cause will usually be the cache key not containing enough bits of information to expire it correctly. When in doubt, restart the app with the cache server (memcached or redis) disabled and see if the same behavior is still present. If not, the cache key is the culprit!
 
@@ -1013,6 +1092,33 @@ const post = ({ id }) => {
 :::info
 
 `cacheFindMany()` returns a Promise so you'll want to `await` it if you need the data for further processing in your service. If you're only using your service as a GraphQL resolver than you can just return the Promise.
+
+:::
+
+### `deleteCacheKey()`
+
+There may be instances where you want to explictly remove something from the cache so that it gets re-created with the same cache key. A good example is caching a single user, using only their `id` as the cache key. By default, the cache would never bust because a user's `id` is not going to change, no matter how many other fields on user are updated. With `deleteCacheKey()` you can choose to delete the key, for example, when the `updateUser()` service is called. The next time `user()` is called, it will be re-cached with the same key, but it will now contain whatever data was updated.
+
+```javascript
+import { cache, deleteCacheKey } from 'src/lib/cache'
+
+const user = ({ id }) => {
+  return cache(`user-${id}`, () => {
+    return db.user.findUnique({ where: { id } })
+  })
+})
+
+const updateUser = async ({ id, input }) => {
+  await deleteCacheKey(`user-${id}`)
+  return db.user.update({ where: { id }, data: { input } })
+})
+```
+
+:::caution
+
+When explictly deleting cache keys like this you could find yourself going down a rabbit hole. What if there is another service somewhere that also updates user? Or another service that updates an organization, as well as all of its underlying child users at the same time? You'll need to be sure to call `deleteCacheKey()` in these places as well. As a general guideline, it's better to come up with a cache key that encapsulates any triggers for when the data has changed (like the `updatedAt` timestamp, which will change no matter who updates the user, anywhere in your codebase).
+
+Scenarios like this are what people are talking about when they say that caching is hard!
 
 :::
 

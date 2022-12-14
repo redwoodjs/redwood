@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createDbAuth, DbAuthConfig } from '../dbAuth'
+import { createDbAuthClient, DbAuthClientArgs, createAuth } from '../dbAuth'
 
 // @NOTE there are TS errors assigning these, because there's no ambient declarations
 // But because this is going to be moved as part of decoupling, ignoring for now
@@ -80,12 +80,21 @@ beforeEach(() => {
   loggedInUser = undefined
 })
 
-const defaultOptions: DbAuthConfig = {
+const defaultArgs: DbAuthClientArgs & {
+  useCurrentUser?: () => Promise<Record<string, unknown>>
+  useHasRole?: (
+    currentUser: CurrentUser | null
+  ) => (rolesToCheck: string | string[]) => boolean
+} = {
   fetchConfig: { credentials: 'include' },
 }
 
-function getDbAuth(options = defaultOptions) {
-  const { useAuth, AuthProvider } = createDbAuth(undefined, options)
+function getDbAuth(args = defaultArgs) {
+  const dbAuthClient = createDbAuthClient(args)
+  const { useAuth, AuthProvider } = createAuth(dbAuthClient, {
+    useHasRole: args.useHasRole,
+    useCurrentUser: args.useCurrentUser,
+  })
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
   })
