@@ -453,7 +453,7 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 | `--list`             | Use this flag to generate a list cell. This flag is needed when dealing with irregular words whose plural and singular is identical such as equipment or pokemon |
 | `--tests`            | Generate test files [default: true]                                                                                                                              |
 | `--stories`          | Generate Storybook files [default: true]                                                                                                                         |
-| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                              |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                               |
 
 **Usage**
 
