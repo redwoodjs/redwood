@@ -7,7 +7,7 @@ import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
 import { prepareForRollback } from '../../../lib/rollback'
 import { verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../helpers'
+import { validateName, yargsDefaults } from '../helpers'
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'model.js.template')
 
 export const files = ({ name, typescript = false }) => {
@@ -45,6 +45,8 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force, ...args }) => {
+  validateName(args.name)
+
   const tasks = new Listr(
     [
       {

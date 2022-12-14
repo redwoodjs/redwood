@@ -17,6 +17,7 @@ import { yargsDefaults } from '../helpers'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,
+  validateName,
 } from '../helpers'
 
 export const files = ({ name, typescript = false, type, tests }) => {
@@ -116,6 +117,8 @@ export const handler = async (args) => {
       todos: [Todo] ${c.green(`@${args.name}`)}
     }
 `
+
+  validateName(args.name)
 
   let directiveType = args.type
 

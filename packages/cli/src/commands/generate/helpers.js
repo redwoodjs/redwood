@@ -141,6 +141,12 @@ export const yargsDefaults = {
   },
 }
 
+export const validateName = (name) => {
+  if (name.match(/^\//)) {
+    throw new Error('The <name> argument cannot start with `/`')
+  }
+}
+
 /**
  * Reduces boilerplate for creating a yargs handler that writes a
  * component/page/layout/etc to a location.
@@ -205,6 +211,7 @@ export const createYargsForComponentGeneration = ({
       if (options.stories === undefined) {
         options.stories = getConfig().generate.stories
       }
+      validateName(options.name)
 
       try {
         options = await preTasksFn(options)
