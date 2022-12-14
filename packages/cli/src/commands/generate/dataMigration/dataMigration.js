@@ -8,7 +8,7 @@ import terminalLink from 'terminal-link'
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
 import { prepareForRollback } from '../../../lib/rollback'
-import { yargsDefaults } from '../helpers'
+import { validateName, yargsDefaults } from '../helpers'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
   'After writing your migration, you can run it with:'
@@ -62,6 +62,8 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (args) => {
+  validateName(args.name)
+
   const tasks = new Listr(
     [
       {
