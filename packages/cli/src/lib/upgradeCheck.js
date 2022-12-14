@@ -224,4 +224,4 @@ function extractTagFromVersion(version) {
   return tag
 }
 
-export const excludedCommands = ['upgrade', 'ts-to-js']
+export const EXCLUDED_COMMANDS = ['upgrade', 'ts-to-js']
