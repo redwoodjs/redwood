@@ -6590,7 +6590,7 @@ __metadata:
     md5: 2.3.0
     memjs: 1.3.0
     pascalcase: 1.0.0
-    pino: 8.7.0
+    pino: 8.8.0
     redis: 4.5.1
     split2: 4.1.0
     title-case: 3.0.3
@@ -25004,9 +25004,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:8.7.0, pino@npm:^8.5.0":
-  version: 8.7.0
-  resolution: "pino@npm:8.7.0"
+"pino@npm:8.8.0, pino@npm:^8.5.0":
+  version: 8.8.0
+  resolution: "pino@npm:8.8.0"
   dependencies:
     atomic-sleep: ^1.0.0
     fast-redact: ^3.1.1
@@ -25021,7 +25021,7 @@ __metadata:
     thread-stream: ^2.0.0
   bin:
     pino: bin.js
-  checksum: a1bf199b1b542eb6ff8c4dcd961db2ae97f85e7a3a913c7a79ad7dda624c725abf063c43cefb441b00af77855bac9b4ae7933983cf01549793ff0ffb40a92fb3
+  checksum: b7d9e62b068ef28a5850fdb990ff0a229012bf312f423ea279bc8beaac43c0a333209b4e2b1b54d78e97e88457cac87efb6fa1b5b9ebe9bb670d6a3e1d706289
   languageName: node
   linkType: hard
 
