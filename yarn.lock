@@ -6846,7 +6846,7 @@ __metadata:
     babel-timing: 0.9.1
     copy-webpack-plugin: 11.0.0
     core-js: 3.26.1
-    css-loader: 6.7.2
+    css-loader: 6.7.3
     css-minimizer-webpack-plugin: 4.2.2
     dotenv-webpack: 8.0.1
     esbuild: 0.16.3
@@ -14182,12 +14182,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:6.7.2":
-  version: 6.7.2
-  resolution: "css-loader@npm:6.7.2"
+"css-loader@npm:6.7.3":
+  version: 6.7.3
+  resolution: "css-loader@npm:6.7.3"
   dependencies:
     icss-utils: ^5.1.0
-    postcss: ^8.4.18
+    postcss: ^8.4.19
     postcss-modules-extract-imports: ^3.0.0
     postcss-modules-local-by-default: ^4.0.0
     postcss-modules-scope: ^3.0.0
@@ -14196,7 +14196,7 @@ __metadata:
     semver: ^7.3.8
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 41e8246c7ccc9507ace5bdfed902c4d0b6db59038b933f70d477d2b010827da3e78ec58a44444d8ad22c46470f188194c7aeaf9fb9afb21e881bd704ce8f605a
+  checksum: 20f435f73d6d776ade4b8dd6c83e7eee65a139f510b2c7575e45d7500ce1b72618b408f4841afc7f34e1aaeef25603ddd10fd4920461907483e1e1e4472bff1f
   languageName: node
   linkType: hard
 
@@ -25081,14 +25081,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.15, postcss@npm:^8.4.17, postcss@npm:^8.4.18":
-  version: 8.4.19
-  resolution: "postcss@npm:8.4.19"
+"postcss@npm:^8.2.15, postcss@npm:^8.4.17, postcss@npm:^8.4.19":
+  version: 8.4.20
+  resolution: "postcss@npm:8.4.20"
   dependencies:
     nanoid: ^3.3.4
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: f33594fa0a2b629043deada34171744891054255baa49150d77f08f68edec1fa7eb9740e64c3a32e6f476c16e9e592af942fcf55f93051673dd208c0aee1d60b
+  checksum: 12b0b65d51a69673c4c5a5270c45a1c8b303601b17b7f373ce4319e900248e9c8923367616c5c5f6df39411e5af5a7df772bdf889959a52b58c53fc715d624dd
   languageName: node
   linkType: hard
 
@@ -26902,7 +26902,7 @@ __metadata:
     rimraf: 3.0.2
     terminal-link: 2.1.1
     typescript: 4.7.4
-    typescript-transform-paths: 3.3.1
+    typescript-transform-paths: 3.4.4
     zx: 7.1.1
   languageName: unknown
   linkType: soft
@@ -29509,14 +29509,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-transform-paths@npm:3.3.1":
-  version: 3.3.1
-  resolution: "typescript-transform-paths@npm:3.3.1"
+"typescript-transform-paths@npm:3.4.4":
+  version: 3.4.4
+  resolution: "typescript-transform-paths@npm:3.4.4"
   dependencies:
     minimatch: ^3.0.4
   peerDependencies:
     typescript: ">=3.6.5"
-  checksum: e1d0a372f68714401f1e91a1417d948186706ee7f914a9c35911e43f51d3a93e3771135152e005e23805cacd99057e9de9892dece739fd08b671a35b0e176e7c
+  checksum: 5c1d564eed54948e01b99e6fcbc4c52ebd35aae137cc1895c823ff3383aa5313cf4675ef62792f8fa9684a034270d44d2f1e1936ccfce8b053ad82073ae26e60
   languageName: node
   linkType: hard
 
