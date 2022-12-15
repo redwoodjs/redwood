@@ -9,7 +9,7 @@ jest.mock('@redwoodjs/telemetry', () => {
 })
 
 test('standard exports', () => {
-  expect(command).toEqual('azureActiveDirectory')
+  expect(command).toEqual('azure-active-directory')
   expect(description).toMatch(/Azure Active Directory/)
   expect(typeof builder).toEqual('function')
   expect(typeof handler).toEqual('function')
