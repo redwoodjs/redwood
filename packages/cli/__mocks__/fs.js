@@ -56,4 +56,9 @@ fs.rmSync = (path) => {
   delete mockFiles[path]
 }
 
+// @MARK this works for now but should probably be a little more full-featured
+fs.rmdirSync = (path) => {
+  delete mockFiles[path]
+}
+
 module.exports = fs
