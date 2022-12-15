@@ -14,6 +14,7 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
 jest.mock('fs')
 
 import fs from 'fs'
+import path from 'path'
 
 import { setLock, unsetLock, isLockSet, clearLocks } from '../locking'
 
@@ -25,7 +26,7 @@ beforeEach(() => {
 it('Set a lock', () => {
   setLock('TEST')
 
-  const lockExists = fs.existsSync('.redwood/locks/TEST')
+  const lockExists = fs.existsSync(path.join('.redwood', 'locks', 'TEST'))
   expect(lockExists).toBe(true)
 })
 
@@ -40,14 +41,14 @@ it('Unset a lock', () => {
   setLock('TEST')
   unsetLock('TEST')
 
-  const lockExists = fs.existsSync('.redwood/locks/TEST')
+  const lockExists = fs.existsSync(path.join('.redwood', 'locks', 'TEST'))
   expect(lockExists).toBe(false)
 })
 
 it('Unset a lock which is not already set', () => {
   unsetLock('TEST')
 
-  const lockExists = fs.existsSync('.redwood/locks/TEST')
+  const lockExists = fs.existsSync(path.join('.redwood', 'locks', 'TEST'))
   expect(lockExists).toBe(false)
 })
 

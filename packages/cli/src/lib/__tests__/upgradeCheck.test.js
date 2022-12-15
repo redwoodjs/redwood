@@ -18,6 +18,7 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
 })
 
 import fs from 'fs'
+import path from 'path'
 
 import latestVersion from 'latest-version'
 
@@ -52,7 +53,7 @@ describe('Upgrade is not available (1.0.0 -> 1.0.0)', () => {
       }),
 
       // We add in the default upgradeData.json file otherwise we get "undefined" as the file contents when it doesn't exist - even though we do handle this case
-      '.redwood/upgradeData.json': JSON.stringify({
+      [path.join('.redwood', 'upgradeData.json')]: JSON.stringify({
         localVersion: '0.0.0',
         remoteVersion: '0.0.0',
         checkedAt: upgradeCheck.DEFAULT_DATETIME_MS,
@@ -128,7 +129,7 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
       }),
 
       // We add in the default upgradeData.json file otherwise we get "undefined" as the file contents when it doesn't exist - even though we do handle this case
-      '.redwood/upgradeData.json': JSON.stringify({
+      [path.join('.redwood', 'upgradeData.json')]: JSON.stringify({
         localVersion: '0.0.0',
         remoteVersion: '0.0.0',
         checkedAt: upgradeCheck.DEFAULT_DATETIME_MS,
@@ -221,7 +222,7 @@ describe('Upgrade is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
       }),
 
       // We add in the default upgradeData.json file otherwise we get "undefined" as the file contents when it doesn't exist - even though we do handle this case
-      '.redwood/upgradeData.json': JSON.stringify({
+      [path.join('.redwood', 'upgradeData.json')]: JSON.stringify({
         localVersion: '0.0.0',
         remoteVersion: '0.0.0',
         checkedAt: upgradeCheck.DEFAULT_DATETIME_MS,
