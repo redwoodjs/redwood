@@ -58,6 +58,7 @@ export const ActiveRouteLoader = ({
   }
 
   useEffect(() => {
+    // Check if we're rendering in an iframe. If we are, make this hook a no-op.
     if (global?.self !== global?.top) {
       return
     }
