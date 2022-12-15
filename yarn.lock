@@ -6846,7 +6846,7 @@ __metadata:
     babel-timing: 0.9.1
     copy-webpack-plugin: 11.0.0
     core-js: 3.26.1
-    css-loader: 6.7.2
+    css-loader: 6.7.3
     css-minimizer-webpack-plugin: 4.2.2
     dotenv-webpack: 8.0.1
     esbuild: 0.16.3
@@ -14182,12 +14182,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:6.7.2":
-  version: 6.7.2
-  resolution: "css-loader@npm:6.7.2"
+"css-loader@npm:6.7.3":
+  version: 6.7.3
+  resolution: "css-loader@npm:6.7.3"
   dependencies:
     icss-utils: ^5.1.0
-    postcss: ^8.4.18
+    postcss: ^8.4.19
     postcss-modules-extract-imports: ^3.0.0
     postcss-modules-local-by-default: ^4.0.0
     postcss-modules-scope: ^3.0.0
@@ -14196,7 +14196,7 @@ __metadata:
     semver: ^7.3.8
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 41e8246c7ccc9507ace5bdfed902c4d0b6db59038b933f70d477d2b010827da3e78ec58a44444d8ad22c46470f188194c7aeaf9fb9afb21e881bd704ce8f605a
+  checksum: 20f435f73d6d776ade4b8dd6c83e7eee65a139f510b2c7575e45d7500ce1b72618b408f4841afc7f34e1aaeef25603ddd10fd4920461907483e1e1e4472bff1f
   languageName: node
   linkType: hard
 
@@ -25081,14 +25081,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.15, postcss@npm:^8.4.17, postcss@npm:^8.4.18":
-  version: 8.4.19
-  resolution: "postcss@npm:8.4.19"
+"postcss@npm:^8.2.15, postcss@npm:^8.4.17, postcss@npm:^8.4.19":
+  version: 8.4.20
+  resolution: "postcss@npm:8.4.20"
   dependencies:
     nanoid: ^3.3.4
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: f33594fa0a2b629043deada34171744891054255baa49150d77f08f68edec1fa7eb9740e64c3a32e6f476c16e9e592af942fcf55f93051673dd208c0aee1d60b
+  checksum: 12b0b65d51a69673c4c5a5270c45a1c8b303601b17b7f373ce4319e900248e9c8923367616c5c5f6df39411e5af5a7df772bdf889959a52b58c53fc715d624dd
   languageName: node
   linkType: hard
 
