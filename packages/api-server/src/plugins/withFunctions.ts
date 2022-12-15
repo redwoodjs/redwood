@@ -18,6 +18,13 @@ const withFunctions = async (
   // Fastify v4 must await the fastifyRawBody plugin
   // registration to ensure the plugin is ready
   await fastify.register(fastifyRawBody)
+
+  fastify.addContentTypeParser(
+    ['application/x-www-form-urlencoded', 'multipart/form-data'],
+    { parseAs: 'string' },
+    fastify.defaultTextParser
+  )
+
   const { configureFastify } = loadFastifyConfig()
 
   if (configureFastify) {
@@ -26,12 +33,6 @@ const withFunctions = async (
 
   fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
-
-  fastify.addContentTypeParser(
-    ['application/x-www-form-urlencoded', 'multipart/form-data'],
-    { parseAs: 'string' },
-    fastify.defaultTextParser
-  )
 
   await loadFunctionsFromDist()
 
