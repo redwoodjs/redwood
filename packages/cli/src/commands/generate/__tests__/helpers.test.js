@@ -544,3 +544,23 @@ describe('mapPrismaScalarToPagePropTsType', () => {
     expect(helpers.mapPrismaScalarToPagePropTsType('Json')).toBe('unknown')
   })
 })
+
+describe('validateName', () => {
+  it('throws an error if name starts with an invalid character', () => {
+    expect(() => helpers.validateName('/')).toThrow()
+    expect(() => helpers.validateName('/foo')).toThrow()
+    expect(() => helpers.validateName('.foo')).toThrow()
+    expect(() => helpers.validateName(',foo')).toThrow()
+    expect(() => helpers.validateName('-foo')).toThrow()
+  })
+  it('does nothing if name is valid', () => {
+    expect(() => helpers.validateName('foo')).not.toThrow()
+    expect(() => helpers.validateName('foo/')).not.toThrow()
+    expect(() => helpers.validateName('_foo')).not.toThrow()
+    expect(() => helpers.validateName('1foo')).not.toThrow()
+    expect(() => helpers.validateName('foo/bar')).not.toThrow()
+    expect(() => helpers.validateName('foo.bar')).not.toThrow()
+    expect(() => helpers.validateName('foo,bar')).not.toThrow()
+    expect(() => helpers.validateName('foo-bar')).not.toThrow()
+  })
+})

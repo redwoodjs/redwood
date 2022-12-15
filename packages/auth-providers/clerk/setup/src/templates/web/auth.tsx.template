@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import { ClerkLoaded, ClerkProvider, useUser } from '@clerk/clerk-react'
 
-import { createClerkAuth } from '@redwoodjs/auth-clerk-web'
+import { createAuth } from '@redwoodjs/auth-clerk-web'
 import { navigate } from '@redwoodjs/router'
 
 // You can set user roles in a "roles" array on the public metadata in Clerk.
@@ -14,7 +14,7 @@ import { navigate } from '@redwoodjs/router'
 // Lastly, be sure to add the key "CLERK_FRONTEND_API_URL" in your app's redwood.toml
 // [web] config "includeEnvironmentVariables" setting.
 
-export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createClerkAuth()
+export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createAuth()
 
 interface Props {
   children: React.ReactNode

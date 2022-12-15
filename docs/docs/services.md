@@ -782,6 +782,27 @@ In our example above you could cache the GraphQL query for the most popular prod
 
 As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it! Instructions for getting started with the code are [below](#creating-your-own-client).
 
+::: info
+
+If you need to access functionality in your cache client that the `cache()` and `cacheFindMany()` functions do not handle, you can always get access to the underlying raw client library and use it however you want:
+
+```javascript
+import { cacheClient } from 'src/lib/cache'
+
+export const updatePost = async ({ id, input }) => {
+  const post = await db.post.update({
+    data: input,
+    where: { id },
+  })
+  // highlight-next-line
+  await cacheClient.MSET(`post-${id}`, JSON.stringify(post), `blogpost-${id}`, JSON.stringify(post))
+
+  return post
+}
+```
+
+:::
+
 ### What Can Be Cached
 
 The service cache mechanism can only store strings, so whatever data you want to cache needs to be able to survive a round trip through `JSON.stringify()` and `JSON.parse()`. That means that if you have a real `Date` instance, you'd need to re-initialize it as a `Date`, because it's going to return from the cache as a string like `"2022-08-24T17:50:05.679Z"`.

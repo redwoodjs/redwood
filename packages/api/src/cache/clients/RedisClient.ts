@@ -1,5 +1,4 @@
-import type { RedisClientType } from '@redis/client'
-import type { RedisClientOptions } from 'redis'
+import type { RedisClientType, RedisClientOptions } from 'redis'
 
 import type { Logger } from '../../logger'
 
