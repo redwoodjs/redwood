@@ -8,5 +8,8 @@
     "outDir": "dist"
   },
   "include": ["src"],
-  "references": [{ "path": "../telemetry" }]
+  "references": [
+    { "path": "../internal" },
+    { "path": "../telemetry" }
+  ]
 }

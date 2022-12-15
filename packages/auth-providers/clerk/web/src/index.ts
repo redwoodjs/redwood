@@ -1,1 +1,1 @@
-export { createClerkAuth } from './clerk'
+export { createAuth } from './clerk'

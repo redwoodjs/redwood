@@ -10,7 +10,7 @@ import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type NetlifyIdentity = typeof NetlifyIdentityNS
 
-export function createNetlifyAuth(
+export function createAuth(
   netlifyIdentity: NetlifyIdentity,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
@@ -19,7 +19,7 @@ export function createNetlifyAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  const authImplementation = createNetlifyAuthImplementation(netlifyIdentity)
+  const authImplementation = createAuthImplementation(netlifyIdentity)
 
   // TODO: Add this when this is a separate package. For now it'll have to be
   // done in the user's app
@@ -28,7 +28,7 @@ export function createNetlifyAuth(
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createNetlifyAuthImplementation(netlifyIdentity: NetlifyIdentity) {
+function createAuthImplementation(netlifyIdentity: NetlifyIdentity) {
   return {
     type: 'netlify',
     client: netlifyIdentity,
