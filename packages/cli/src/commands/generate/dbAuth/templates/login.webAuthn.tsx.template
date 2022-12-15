@@ -45,10 +45,10 @@ const LoginPage = ({ type }) => {
     }
   }, [loading, isAuthenticated])
 
-  // focus on the username field as soon as the page loads
-  const usernameRef = useRef()
+  // focus on the ${usernameLowerCase} field as soon as the page loads
+  const ${usernameCamelCase}Ref = useRef()
   useEffect(() => {
-    usernameRef.current && usernameRef.current.focus()
+    ${usernameCamelCase}Ref.current && ${usernameCamelCase}Ref.current.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -57,7 +57,7 @@ const LoginPage = ({ type }) => {
     if (webAuthnSupported) {
       setShouldShowWebAuthn(true)
     }
-    const response = await logIn({ ...data })
+    const response = await logIn({ username: data.${usernameCamelCase}, password: data.${passwordCamelCase} })
 
     if (response.message) {
       // auth details good, but user not logged in
@@ -84,7 +84,7 @@ const LoginPage = ({ type }) => {
     } catch (e) {
       if (e.name === 'WebAuthnDeviceNotFoundError') {
         toast.error(
-          'Device not found, log in with username/password to continue'
+          'Device not found, log in with ${usernameTitleCase}/${passwordTitleCase} to continue'
         )
         setShowWebAuthn(false)
       } else {
@@ -124,7 +124,7 @@ const LoginPage = ({ type }) => {
 
   const RegisterWebAuthnPrompt = () => (
     <div className="rw-webauthn-wrapper">
-      <h2>No more passwords!</h2>
+      <h2>No more ${passwordTitleCase}s!</h2>
       <p>
         Depending on your device you can log in with your fingerprint, face or
         PIN next time.
@@ -143,55 +143,55 @@ const LoginPage = ({ type }) => {
   const PasswordForm = () => (
     <Form onSubmit={onSubmit} className="rw-form-wrapper">
       <Label
-        name="username"
+        name="${usernameCamelCase}"
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
-        Username
+        ${usernameTitleCase}
       </Label>
       <TextField
-        name="username"
+        name="${usernameCamelCase}"
         className="rw-input"
         errorClassName="rw-input rw-input-error"
-        ref={usernameRef}
+        ref={${usernameCamelCase}Ref}
         autoFocus
         validation={{
           required: {
             value: true,
-            message: 'Username is required',
+            message: '${usernameTitleCase} is required',
           },
         }}
       />
 
-      <FieldError name="username" className="rw-field-error" />
+      <FieldError name="${usernameCamelCase}" className="rw-field-error" />
 
       <Label
-        name="password"
+        name="${passwordCamelCase}"
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
-        Password
+        ${passwordTitleCase}
       </Label>
       <PasswordField
-        name="password"
+        name="${passwordCamelCase}"
         className="rw-input"
         errorClassName="rw-input rw-input-error"
         autoComplete="current-password"
         validation={{
           required: {
             value: true,
-            message: 'Password is required',
+            message: '${passwordTitleCase} is required',
           },
         }}
       />
 
       <div className="rw-forgot-link">
         <Link to={routes.forgotPassword()} className="rw-forgot-link">
-          Forgot Password?
+          Forgot ${passwordTitleCase}?
         </Link>
       </div>
 
-      <FieldError name="password" className="rw-field-error" />
+      <FieldError name="${passwordCamelCase}" className="rw-field-error" />
 
       <div className="rw-button-group">
         <Submit className="rw-button rw-button-blue">Login</Submit>
@@ -218,7 +218,7 @@ const LoginPage = ({ type }) => {
           <div className="rw-login-link">
             <span>or login with </span>{' '}
             <a href="?type=password" className="rw-link">
-              username and password
+              ${usernameLowerCase} and ${passwordLowerCase}
             </a>
           </div>
         )

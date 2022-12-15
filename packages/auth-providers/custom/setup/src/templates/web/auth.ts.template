@@ -1,9 +1,8 @@
 import { createAuthentication } from '@redwoodjs/auth'
 
-// If you're integrating with an auth service provider you should delete this
-// interface
-// Instead you should import the type from their auth client sdk
-export interface CustomAuthClient {
+// If you're integrating with an auth service provider you should delete this interface.
+// Instead you should import the type from their auth client sdk.
+export interface AuthClient {
   login: () => User
   logout: () => void
   signup: () => User
@@ -11,9 +10,8 @@ export interface CustomAuthClient {
   getUserMetadata: () => User | null
 }
 
-// If you're integrating with an auth service provider you should delete this
-// interface
-// This type should be inferred from the general interface above
+// If you're integrating with an auth service provider you should delete this interface.
+// This type should be inferred from the general interface above.
 interface User {
   // The name of the id variable will vary depending on what auth service
   // provider you're integrating with. Another common name is `sub`
@@ -23,8 +21,7 @@ interface User {
   roles: string[]
 }
 
-// If you're integrating with an auth service provider you should delete this
-// interface
+// If you're integrating with an auth service provider you should delete this interface
 // This type should be inferred from the general interface above
 export interface ValidateResetTokenResponse {
   error?: string
@@ -32,7 +29,7 @@ export interface ValidateResetTokenResponse {
 }
 
 // Replace this with the auth service provider client sdk
-const customClient = {
+const client = {
   login: () => ({
     id: 'unique-user-id',
     email: 'email@example.com',
@@ -52,8 +49,8 @@ const customClient = {
   }),
 }
 
-function createCustomAuth() {
-  const authImplementation = createCustomAuthImplementation(customClient)
+function createAuth() {
+  const authImplementation = createAuthImplementation(client)
 
   // You can pass custom provider hooks here if you need to as a second
   // argument. See the Redwood framework source code for how that's used
@@ -64,14 +61,14 @@ function createCustomAuth() {
 // the shape of this object (i.e. keep all the key names) but change all the
 // values/functions to use methods from the auth service provider client sdk
 // you're integrating with
-function createCustomAuthImplementation(customClient: CustomAuthClient) {
+function createAuthImplementation(client: AuthClient) {
   return {
     type: 'custom-auth',
-    client: customClient,
-    login: async () => customClient.login(),
-    logout: async () => customClient.logout(),
-    signup: async () => customClient.signup(),
-    getToken: async () => customClient.getToken(),
+    client,
+    login: async () => client.login(),
+    logout: async () => client.logout(),
+    signup: async () => client.signup(),
+    getToken: async () => client.getToken(),
     /**
      * Actual user metadata might look something like this
      * {
@@ -88,8 +85,8 @@ function createCustomAuthImplementation(customClient: CustomAuthClient) {
      *   "updated_at": "2016-05-15T19:53:12.368652374-07:00"
      * }
      */
-    getUserMetadata: async () => customClient.getUserMetadata(),
+    getUserMetadata: async () => client.getUserMetadata(),
   }
 }
 
-export const { AuthProvider, useAuth } = createCustomAuth()
+export const { AuthProvider, useAuth } = createAuth()

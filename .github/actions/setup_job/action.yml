@@ -3,6 +3,8 @@ inputs:
   node-version:
     required: false
     default: 16
+  github-token:
+    required: false
 runs:
   using: 'composite'
   steps:
@@ -26,3 +28,5 @@ runs:
 
     - run: yarn install
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}

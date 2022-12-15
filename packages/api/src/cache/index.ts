@@ -185,8 +185,29 @@ export const createCache = (
     return cache(latestCacheKey, () => model.findMany(conditions), rest)
   }
 
+  const deleteCacheKey = async (key: CacheKey) => {
+    let result
+
+    try {
+      await Promise.race([
+        (result = client.del(key as string)),
+        wait(timeout).then(() => {
+          throw new CacheTimeoutError()
+        }),
+      ])
+
+      logger?.debug(`[Cache] DEL '${key}'`)
+      return result
+    } catch (e: any) {
+      logger?.error(`[Cache] Error DEL '${key}': ${e.message}`)
+      return false
+    }
+  }
+
   return {
     cache,
     cacheFindMany,
+    cacheClient: client,
+    deleteCacheKey,
   }
 }
