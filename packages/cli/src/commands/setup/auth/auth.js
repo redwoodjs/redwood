@@ -8,14 +8,6 @@ export const command = 'auth <provider>'
 export const description = 'Generate an auth configuration'
 
 export async function builder(yargs) {
-  const {
-    setupAuthEthereumCommand,
-    setupAuthGoTrueCommand,
-    setupAuthMagicLinkCommand,
-    setupAuthNhostCommand,
-    setupAuthOktaCommand,
-  } = await import('@redwoodjs/auth-providers-setup')
-
   // Don't forget to update test-project setup if you change something here
   const printExperimentalWarning = async (argv, yargs) => {
     if (!argv.warn) {
@@ -58,11 +50,57 @@ export async function builder(yargs) {
         'https://redwoodjs.com/docs/cli-commands#setup-auth'
       )}`
     )
-    .command(setupAuthEthereumCommand)
-    .command(setupAuthGoTrueCommand)
-    .command(setupAuthMagicLinkCommand)
-    .command(setupAuthNhostCommand)
-    .command(setupAuthOktaCommand)
+    // Command "redirects" for auth providers we used to support
+    .command(
+      'ethereum',
+      false,
+      () => {},
+      () => {
+        console.log(
+          'ethereum is no longer supported out of the box. But you can still integrate it yourself with custom auth'
+        )
+      }
+    )
+    .command(
+      'goTrue',
+      false,
+      () => {},
+      () => {
+        console.log(
+          'goTrue is no longer supported out of the box. But you can still integrate it yourself with custom auth'
+        )
+      }
+    )
+    .command(
+      'magicLink',
+      false,
+      () => {},
+      () => {
+        console.log(
+          'magicLink is no longer supported out of the box. But you can still integrate it yourself with custom auth'
+        )
+      }
+    )
+    .command(
+      'nhost',
+      false,
+      () => {},
+      () => {
+        console.log(
+          'nhost is no longer supported out of the box. But you can still integrate it yourself with custom auth'
+        )
+      }
+    )
+    .command(
+      'okta',
+      false,
+      () => {},
+      () => {
+        console.log(
+          'okta is no longer supported out of the box. But you can still integrate it yourself with custom auth'
+        )
+      }
+    )
 
   for (const module of [
     '@redwoodjs/auth-auth0-setup',

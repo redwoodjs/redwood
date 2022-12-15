@@ -16,7 +16,7 @@ export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
 const TOKEN_CACHE_TIME = 5000
 
-export function createDbAuth(
+export function createAuth(
   dbAuthClient: ReturnType<typeof createDbAuthClient>,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>

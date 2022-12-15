@@ -74,7 +74,7 @@ const applyProviderOptions = (
   return provider
 }
 
-export function createFirebaseAuth(
+export function createAuth(
   firebaseClient: FirebaseClient,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
@@ -83,7 +83,7 @@ export function createFirebaseAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  const authImplementation = createFirebaseAuthImplementation(firebaseClient)
+  const authImplementation = createAuthImplementation(firebaseClient)
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
@@ -93,7 +93,7 @@ export interface FirebaseClient {
   firebaseApp?: FirebaseApp
 }
 
-function createFirebaseAuthImplementation({
+function createAuthImplementation({
   firebaseAuth,
   firebaseApp,
 }: FirebaseClient) {

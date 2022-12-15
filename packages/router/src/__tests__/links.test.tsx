@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
 import { render } from '@testing-library/react'
 // TODO: Remove when jest configs are in place
@@ -60,6 +62,34 @@ describe('<NavLink />', () => {
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
   })
 
+  it('receives active class on the pathname when we are on a sub page', () => {
+    const mockLocation = createDummyLocation('/users/1')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink activeClassName="activeTest" matchSubPaths to="/users">
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
+  })
+
+  it('receives active class on the pathname when we are on the exact page, but also matching child paths', () => {
+    const mockLocation = createDummyLocation('/users/1')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink activeClassName="activeTest" matchSubPaths to="/users/1">
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
+  })
+
   it('receives active class on the same pathname only', () => {
     const mockLocation = createDummyLocation('/pathname', '?tab=main&page=1')
 
@@ -67,7 +97,7 @@ describe('<NavLink />', () => {
       <LocationProvider location={mockLocation}>
         <NavLink
           activeClassName="activeTest"
-          to={`/pathname?tab=second&page=2`}
+          to="/pathname?tab=second&page=2"
           activeMatchParams={[]}
         >
           Dunder Mifflin
@@ -181,6 +211,20 @@ describe('<NavLink />', () => {
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
+  })
+
+  it('does NOT receive active class on a different path that starts with the same word', () => {
+    const mockLocation = createDummyLocation('/users-settings')
+
+    const { getByText } = render(
+      <LocationProvider location={mockLocation}>
+        <NavLink activeClassName="activeTest" matchSubPaths to="/users">
+          Dunder Mifflin
+        </NavLink>
+      </LocationProvider>
+    )
+
+    expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
   })
 
   it('does NOT receive active class on different path', () => {
