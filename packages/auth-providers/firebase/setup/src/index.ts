@@ -1,1 +1,1 @@
-export * as setupAuthFirebaseCommand from './setup'
+export * from './setup'

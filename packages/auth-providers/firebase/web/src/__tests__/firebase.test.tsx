@@ -4,7 +4,7 @@ import { User, OperationType, OAuthProvider, Auth } from 'firebase/auth'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createFirebaseAuth, FirebaseClient } from '../firebase'
+import { createAuth, FirebaseClient } from '../firebase'
 
 const user: User = {
   uid: 'unique_user_id',
@@ -148,7 +148,7 @@ function getFirebaseAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createFirebaseAuth(
+  const { useAuth, AuthProvider } = createAuth(
     firebaseMockClient as FirebaseClient,
     customProviderHooks
   )

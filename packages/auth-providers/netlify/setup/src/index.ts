@@ -1,1 +1,1 @@
-export * as setupAuthNetlifyCommand from './setup'
+export * from './setup'

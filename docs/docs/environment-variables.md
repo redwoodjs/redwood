@@ -65,7 +65,6 @@ The toml values are mapped as follows:
 | ------------------ | ----------------------------- | ---------------------------------------- |
 | `apiUrl`           | `global.RWJS_API_URL`         | URL or absolute path to your api-server  |
 | `apiGraphQLUrl`    | `global.RWJS_API_GRAPHQL_URL` | URL or absolute path to GraphQL function |
-| `apiDbAuthUrl`     | `global.RWJS_API_DBAUTH_URL`  | URL or absolute path to DbAuth function  |
 
 See the [redwood.toml reference](app-configuration-redwood-toml.md#api-paths) for more details.
 

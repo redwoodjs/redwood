@@ -7,7 +7,8 @@ import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../helpers'
+import { prepareForRollback } from '../../../lib/rollback'
+import { validateName, yargsDefaults } from '../helpers'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
   'After writing your migration, you can run it with:'
@@ -42,6 +43,11 @@ export const builder = (yargs) => {
       description: 'A descriptor of what this data migration does',
       type: 'string',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -56,6 +62,8 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (args) => {
+  validateName(args.name)
+
   const tasks = new Listr(
     [
       {
@@ -75,6 +83,9 @@ export const handler = async (args) => {
   )
 
   try {
+    if (args.rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))
