@@ -9,7 +9,7 @@ import {
 } from './ActivePageContext'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { useIsMounted } from './useIsMounted'
-import { Spec } from './util'
+import { inIframe, Spec } from './util'
 
 import { ParamsProvider, useLocation } from '.'
 
@@ -58,8 +58,8 @@ export const ActiveRouteLoader = ({
   }
 
   useEffect(() => {
-    // Check if we're rendering in an iframe. If we are, make this hook a no-op.
-    if (global?.self !== global?.top) {
+    // Make this hook a no-op if we're rendering in an iframe.
+    if (inIframe()) {
       return
     }
 
