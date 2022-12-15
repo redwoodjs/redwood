@@ -1,3 +1,5 @@
+import { sep } from 'path'
+
 import { isString } from 'lodash'
 
 const fs = {
@@ -36,7 +38,7 @@ fs.readdirSync = (path) => {
     if (mockedPath.startsWith(path)) {
       const childPath = mockedPath.substring(path.length + 1)
       // Is the child a direct child of the desired path
-      if (!childPath.includes('/')) {
+      if (!childPath.includes(sep)) {
         mockedFiles.push(childPath)
       }
     }
