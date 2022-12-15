@@ -1,5 +1,4 @@
-import type { RedisClientType } from '@redis/client'
-import type { RedisClientOptions } from 'redis'
+import type { RedisClientType, RedisClientOptions } from 'redis'
 
 import type { Logger } from '../../logger'
 
@@ -65,5 +64,14 @@ export default class RedisClient extends BaseClient {
     }
 
     return this.client?.set(key, JSON.stringify(value), setOptions)
+  }
+
+  async del(key: string) {
+    if (!this.client) {
+      await this.connect()
+    }
+
+    // Redis client returns 0 or 1, so convert to true/false manually
+    return !!(await this.client?.del([key]))
   }
 }
