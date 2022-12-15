@@ -70,6 +70,7 @@ jobs:
         uses: ./.github/actions/setup_job
         with:
           node-version: ${{ matrix.node-version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔨 Build
         run: yarn build
@@ -112,6 +113,7 @@ jobs:
         uses: ./.github/actions/setup_job
         with:
           node-version: ${{ matrix.node-version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📁 Create a temporary directory
         id: createpath
@@ -187,6 +189,7 @@ jobs:
         uses: ./.github/actions/setup_job
         with:
           node-version: ${{ matrix.node-version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🌲 Setup test project
         id: setup_test_project

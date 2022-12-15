@@ -16,4 +16,7 @@ export default abstract class BaseClient {
     value: unknown,
     options: { expires?: number }
   ): Promise<any> | any // types are tightened in the child classes
+
+  // Removes a value by its key
+  abstract del(key: string): Promise<boolean> | any
 }

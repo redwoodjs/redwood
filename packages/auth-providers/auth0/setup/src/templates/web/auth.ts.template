@@ -1,6 +1,6 @@
 import { Auth0Client } from '@auth0/auth0-spa-js'
 
-import { createAuth0Auth } from '@redwoodjs/auth-providers-web'
+import { createAuth } from '@redwoodjs/auth-auth0-web'
 
 const auth0 = new Auth0Client({
   domain: process.env.AUTH0_DOMAIN || '',
@@ -21,4 +21,4 @@ const auth0 = new Auth0Client({
   // useRefreshTokens: true,
 })
 
-export const { AuthProvider, useAuth } = createAuth0Auth(auth0)
+export const { AuthProvider, useAuth } = createAuth(auth0)
