@@ -22,6 +22,9 @@ describe('getConfig', () => {
         "browser": {
           "open": false,
         },
+        "cli": {
+          "checkForUpgrades": false,
+        },
         "generate": {
           "nestScaffoldByModel": true,
           "stories": true,

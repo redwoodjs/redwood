@@ -5,6 +5,8 @@ import boxen from 'boxen'
 import latestVersion from 'latest-version'
 import semver from 'semver'
 
+import { getConfig } from '@redwoodjs/internal/dist/config'
+
 import { validateTag } from '../commands/upgrade'
 
 import { setLock, unsetLock } from './locking'
@@ -99,8 +101,7 @@ export async function check() {
  */
 export function isEnabled() {
   return (
-    // @MARK we plan to let users toggle this in redwood.toml, but can't decide on the name
-    // getConfig().background.updateChecks ||
+    getConfig().cli.checkForUpgrades ||
     process.env.REDWOOD_ENABLE_UPGRADE_CHECKS
   )
 }
