@@ -6443,29 +6443,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reach/skip-nav@npm:0.16.0":
-  version: 0.16.0
-  resolution: "@reach/skip-nav@npm:0.16.0"
-  dependencies:
-    "@reach/utils": 0.16.0
-    tslib: ^2.3.0
+"@reach/polymorphic@npm:0.18.0":
+  version: 0.18.0
+  resolution: "@reach/polymorphic@npm:0.18.0"
   peerDependencies:
     react: ^16.8.0 || 17.x
-    react-dom: ^16.8.0 || 17.x
-  checksum: 7b4d7ba9f77b7310fb8e70169cb9a5d36c2b9dd62de2c18753b53a09cdd89d14097822c24ae446c0e51d12943ee95718ad9cfe6cf1ec54477671689273852e91
+  checksum: dfde6dc901005f92e16f0e3601f0c659b70ee14d91e612cd68c9a918744fd94de30e8065d73663b72964225d3476f377c650daf2ac1e256de61df9ee386aabdc
   languageName: node
   linkType: hard
 
-"@reach/utils@npm:0.16.0":
-  version: 0.16.0
-  resolution: "@reach/utils@npm:0.16.0"
+"@reach/skip-nav@npm:0.18.0":
+  version: 0.18.0
+  resolution: "@reach/skip-nav@npm:0.18.0"
   dependencies:
-    tiny-warning: ^1.0.3
-    tslib: ^2.3.0
+    "@reach/polymorphic": 0.18.0
   peerDependencies:
     react: ^16.8.0 || 17.x
     react-dom: ^16.8.0 || 17.x
-  checksum: c12305c63097370871f5faf34916e50a3b8047a31381d6a46caac0399007de024eaecf268c400fd97bba70d207221c5fd15c1e996625ac18c3602ccce39f88c0
+  checksum: 30e3d4c568093e170b9e80ee42764a080c0a15ab3f9c7edf78dcc6ebd92f156799dba0f544757b84401806765f60fe527c869ef86d5323c0a7a3bdccf1a68f85
   languageName: node
   linkType: hard
 
@@ -7015,7 +7010,7 @@ __metadata:
     "@babel/cli": 7.19.3
     "@babel/core": 7.20.5
     "@babel/runtime-corejs3": 7.20.6
-    "@reach/skip-nav": 0.16.0
+    "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 3.7.0
     "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.52
@@ -29759,13 +29754,6 @@ __metadata:
   version: 8.0.2
   resolution: "tiny-lru@npm:8.0.2"
   checksum: 32dc73db748ae50bf43498f81150ed23922c924d7a3665ea240c7041abbbd5e8667c05328fd520ca923b4d10b89e69a4ba671365eaac221c6f7eb8b898530506
-  languageName: node
-  linkType: hard
-
-"tiny-warning@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "tiny-warning@npm:1.0.3"
-  checksum: ef8531f581b30342f29670cb41ca248001c6fd7975ce22122bd59b8d62b4fc84ad4207ee7faa95cde982fa3357cd8f4be650142abc22805538c3b1392d7084fa
   languageName: node
   linkType: hard
 
