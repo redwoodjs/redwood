@@ -58,6 +58,10 @@ export const ActiveRouteLoader = ({
   }
 
   useEffect(() => {
+    if (global?.self !== global?.top) {
+      return
+    }
+
     global?.scrollTo(0, 0)
 
     if (announcementRef.current) {
