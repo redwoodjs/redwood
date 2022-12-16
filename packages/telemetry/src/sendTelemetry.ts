@@ -14,7 +14,6 @@ import { v4 as uuidv4 } from 'uuid'
 const {
   RedwoodProject,
 } = require('@redwoodjs/skeleton/dist/components/project')
-const { RedwoodRouter } = require('@redwoodjs/skeleton/dist/components/router')
 const { RedwoodSide } = require('@redwoodjs/skeleton/dist/components/side')
 
 interface SensitiveArgPositions {
@@ -167,29 +166,19 @@ const buildPayload = async () => {
       pathWithinProject: rootDir,
       readFromCache: false,
     })
-    const totalRoutes = project
-      .getRouters()
-      .reduce((_: number, val: typeof RedwoodRouter) => {
-        return val.routes.length
-      }, 0)
 
-    const totalServices = project.getServices()
-      ? project.getServices().length
-      : 0
-    const totalCells = project.getCells() ? project.getCells().length : 0
-    const totalPages = project.getPages() ? project.getPages().length : 0
-    const allSides = project.getSides()
-      ? project
-          .getSides()
-          .map((side: typeof RedwoodSide) => side.name)
-          .join(',')
-      : ''
+    const complexity = project.getComplexity()
+    const sides =
+      project
+        .getSides()
+        ?.map((side: typeof RedwoodSide) => side.name)
+        .join(',') || ''
 
     // add in app stats
     payload = {
       ...payload,
-      complexity: `${totalRoutes}.${totalServices}.${totalCells}.${totalPages}`,
-      sides: allSides,
+      complexity,
+      sides,
     }
   }
 
