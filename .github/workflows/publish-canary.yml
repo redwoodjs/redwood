@@ -53,6 +53,7 @@ jobs:
           args+=(
             --include-merged-tags
             --canary
+            --exact
             --preid "$TAG"
             --dist-tag "$TAG"
             --force-publish
