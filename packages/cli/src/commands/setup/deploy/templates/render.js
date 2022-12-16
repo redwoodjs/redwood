@@ -14,7 +14,6 @@ export const RENDER_YAML = (database) => {
 services:
 - name: ${PROJECT_NAME}-web
   type: web
-  plan: free
   env: static
   buildCommand: yarn install && yarn rw deploy render web
   staticPublishPath: ./web/dist
