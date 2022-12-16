@@ -545,7 +545,7 @@ In each test scenario we will:
 
 In our first scenario, we'll use the shipped order to test that we can update the order given a valid tracking number and change its status to delivered:
 
-```tsx title="api/src/functions/updateOrderStatus/updateOrderStatus.scenarios.ts"
+```tsx title="api/src/functions/updateOrderStatus/updateOrderStatus.test.ts"
 import { mockSignedWebhook } from '@redwoodjs/testing/api'
 import { handler } from './updateOrderStatus'
 
