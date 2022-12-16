@@ -1,6 +1,7 @@
 import fs from 'fs'
 
 import { parse } from '@babel/parser'
+import traverse from '@babel/traverse'
 import {
   assertJSXOpeningElement,
   assertJSXIdentifier,
@@ -8,6 +9,13 @@ import {
   isJSXAttribute,
   isJSXSpreadAttribute,
   JSXElement,
+  ExportNamedDeclaration,
+  isVariableDeclaration,
+  isVariableDeclarator,
+  isIdentifier,
+  File,
+  VariableDeclarator,
+  ExportDefaultDeclaration,
 } from '@babel/types'
 
 export function getASTFromCode(code: string) {
@@ -21,6 +29,58 @@ export function getASTFromCode(code: string) {
       'objectRestSpread',
     ],
   })
+}
+
+export function getASTFromFile(filePath: string) {
+  const code = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' })
+  return getASTFromCode(code)
+}
+
+export function getSpecificNamedExportDeclarations(ast: File, names: string[]) {
+  const desiredNamedExports: Map<string, VariableDeclarator> = new Map()
+  const allNamedExports: ExportNamedDeclaration[] = []
+  traverse(ast, {
+    ExportNamedDeclaration: (path) => {
+      allNamedExports.push(path.node)
+    },
+  })
+  allNamedExports.forEach((namedExport) => {
+    if (
+      namedExport.declaration != null &&
+      isVariableDeclaration(namedExport.declaration) &&
+      isVariableDeclarator(namedExport.declaration.declarations[0]) &&
+      isIdentifier(namedExport.declaration.declarations[0].id) &&
+      names.includes(namedExport.declaration.declarations[0].id.name)
+    ) {
+      desiredNamedExports.set(
+        namedExport.declaration.declarations[0].id.name,
+        namedExport.declaration.declarations[0]
+      )
+    }
+  })
+  return desiredNamedExports
+}
+
+export function getExportDefaultDeclaration(ast: File) {
+  let defaultExport: ExportDefaultDeclaration | undefined
+  traverse(ast, {
+    ExportDefaultDeclaration: (path) => {
+      defaultExport = path.node
+    },
+  })
+  return defaultExport
+}
+
+export function getVariableDeclarator(ast: File, name: string) {
+  let variableDeclarator: VariableDeclarator | undefined
+  traverse(ast, {
+    VariableDeclarator: (path) => {
+      if (isIdentifier(path.node.id) && path.node.id.name === name) {
+        variableDeclarator = path.node
+      }
+    },
+  })
+  return variableDeclarator
 }
 
 export function getJSXElementAttributes(
@@ -63,9 +123,4 @@ export function getJSXElementAttributes(
     })
   }
   return attributes
-}
-
-export function getASTFromFile(filePath: string) {
-  const code = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' })
-  return getASTFromCode(code)
 }

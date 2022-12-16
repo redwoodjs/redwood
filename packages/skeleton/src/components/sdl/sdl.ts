@@ -13,16 +13,22 @@ import {
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { getASTFromFile } from '../lib/ast'
+import { getASTFromFile } from '../../lib/ast'
+import type { RedwoodProject } from '../project'
+import { RedwoodSkeleton } from '../skeleton'
 
-import { RedwoodSkeleton } from './base'
-import type { RedwoodProject } from './project'
+import { extractMutations, RedwoodSDLMutation } from './mutations'
+import { extractQueries, RedwoodSDLQuery } from './query'
 
 export class RedwoodSDL extends RedwoodSkeleton {
   warnings: string[] = []
   errors: string[] = []
 
+  // TODO: Maybe we don't need the full gql
   readonly gql: string | undefined
+
+  readonly queries: RedwoodSDLQuery[] | undefined
+  readonly mutations: RedwoodSDLMutation[] | undefined
 
   constructor(filepath: string) {
     super(filepath)
@@ -71,10 +77,11 @@ export class RedwoodSDL extends RedwoodSkeleton {
       }
     }
     if (this.gql === undefined) {
-      this.warnings.push('Could not extract the gql')
+      this.errors.push('Could not extract the gql')
     }
 
-    // TODO: Process the gql
+    this.queries = extractQueries(this)
+    this.mutations = extractMutations(this)
   }
 }
 
@@ -90,6 +97,10 @@ export function extractSDLs(
   const sdlPath = project
     ? getPaths(project.filepath).api.graphql
     : getPaths().api.graphql
+
+  if (!fs.existsSync(sdlPath)) {
+    return sdls
+  }
 
   // TODO: Confirm this the condition to detect a sdl
   // SDLs must be defined within the graphql directory (at the top level?)

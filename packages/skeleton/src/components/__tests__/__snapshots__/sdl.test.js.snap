@@ -13,7 +13,18 @@ RedwoodSDL {
     currentUser: JSON
   }
 ",
+  "mutations": [],
   "name": "currentUser.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/currentUser.sdl.ts",
+      "name": "currentUser",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -40,7 +51,69 @@ RedwoodSDL {
     renameTodo(id: Int!, body: String!): Todo @skipAuth
   }
 ",
+  "mutations": [
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "createTodo",
+      "parameters": [
+        "body",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "updateTodoStatus",
+      "parameters": [
+        "id",
+        "status",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "renameTodo",
+      "parameters": [
+        "id",
+        "body",
+      ],
+      "warnings": [],
+    },
+  ],
   "name": "todos.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "todos",
+      "parameters": [],
+      "warnings": [],
+    },
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "todosCount",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -56,7 +129,18 @@ RedwoodSDL {
     currentUser: JSON
   }
 ",
+  "mutations": [],
   "name": "currentUser.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/currentUser.sdl.ts",
+      "name": "currentUser",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -83,7 +167,69 @@ RedwoodSDL {
     renameTodo(id: Int!, body: String!): Todo @skipAuth
   }
 ",
+  "mutations": [
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "createTodo",
+      "parameters": [
+        "body",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "updateTodoStatus",
+      "parameters": [
+        "id",
+        "status",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "renameTodo",
+      "parameters": [
+        "id",
+        "body",
+      ],
+      "warnings": [],
+    },
+  ],
   "name": "todos.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "todos",
+      "parameters": [],
+      "warnings": [],
+    },
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "todosCount",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -111,7 +257,51 @@ RedwoodSDL {
     renameTodo(id: Int!, body: String!): Todo
   }
 ",
+  "mutations": [
+    RedwoodSDLMutation {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "createTodo",
+      "parameters": [
+        "body",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "updateTodoStatus",
+      "parameters": [
+        "id",
+        "status",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "renameTodo",
+      "parameters": [
+        "id",
+        "body",
+      ],
+      "warnings": [],
+    },
+  ],
   "name": "todos.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "todos",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -125,7 +315,24 @@ RedwoodSDL {
     deleteTodo(id: Int!): Todo! @requireAuth(roles: ["ADMIN"])
   }
 ",
+  "mutations": [],
   "name": "todosMutations.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosMutations.sdl.js",
+      "name": "deleteTodo",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -139,7 +346,22 @@ RedwoodSDL {
     todosWithInvalidRoles: [Todo] @requireAuth(roles: ["admin", 12])
   }
 ",
+  "mutations": [],
   "name": "todosWithAuthInvalidRolesErrors.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js",
+      "name": "todosWithInvalidRoles",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -153,7 +375,22 @@ RedwoodSDL {
     todosWithMissingRoles: [Todo] @requireAuth(roles: [null, 12])
   }
 ",
+  "mutations": [],
   "name": "todosWithAuthMissingRoleError.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithAuthMissingRoleError.sdl.js",
+      "name": "todosWithMissingRoles",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -168,7 +405,34 @@ RedwoodSDL {
     todosWithMultipleRoles: [Todo] @requireAuth(roles: ["admin", "editor"])
   }
 ",
+  "mutations": [],
   "name": "todosWithAuthRoles.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
+      "name": "todosWithStringRole",
+      "parameters": [],
+      "warnings": [],
+    },
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
+      "name": "todosWithMultipleRoles",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -182,35 +446,62 @@ RedwoodSDL {
     todosWithBuiltInDeprecatedDirective(id: Int!): Todo! @deprecated(reason: "Don't use this query anymore")
   }
 ",
+  "mutations": [],
   "name": "todosWithBuiltInDirectives.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "deprecated",
+      ],
+      "errors": [
+        "Directive "deprecated" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithBuiltInDirectives.sdl.js",
+      "name": "todosWithBuiltInDeprecatedDirective",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
 
 exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js 1`] = `
 RedwoodSDL {
-  "errors": [],
+  "errors": [
+    "Unabled to extract queries because the gql is invalid",
+    "Unabled to extract mutations because the gql is invalid",
+  ],
   "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js",
   "gql": "
   type Query {
     todosWithMissingRolesAttribute: [Todo] @requireAuth("ADMIN")
   }
 ",
+  "mutations": [],
   "name": "todosWithMissingAuthRolesAttributeError.sdl",
+  "queries": [],
   "warnings": [],
 }
 `;
 
 exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js 1`] = `
 RedwoodSDL {
-  "errors": [],
+  "errors": [
+    "Unabled to extract queries because the gql is invalid",
+    "Unabled to extract mutations because the gql is invalid",
+  ],
   "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js",
   "gql": "
   type Query {
     todosWithMissingRolesAttributeNumeric: [Todo] @requireAuth(42)
   }
 ",
+  "mutations": [],
   "name": "todosWithMissingAuthRolesAttributeNumericError.sdl",
+  "queries": [],
   "warnings": [],
 }
 `;
@@ -224,7 +515,22 @@ RedwoodSDL {
     todosWithInvalidRole: [Todo] @requireAuth(roles: 12)
   }
 ",
+  "mutations": [],
   "name": "todosWithNumericRoleAuthError.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithNumericRoleAuthError.sdl.js",
+      "name": "todosWithInvalidRole",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -252,7 +558,51 @@ RedwoodSDL {
     renameTodo(id: Int!, body: String!): Todo
   }
 ",
+  "mutations": [
+    RedwoodSDLMutation {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "createTodo",
+      "parameters": [
+        "body",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "updateTodoStatus",
+      "parameters": [
+        "id",
+        "status",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "renameTodo",
+      "parameters": [
+        "id",
+        "body",
+      ],
+      "warnings": [],
+    },
+  ],
   "name": "todos.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [],
+      "errors": [],
+      "filepath": "/api/src/graphql/todos.sdl.js",
+      "name": "todos",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -266,7 +616,24 @@ RedwoodSDL {
     deleteTodo(id: Int!): Todo! @requireAuth(roles: ["ADMIN"])
   }
 ",
+  "mutations": [],
   "name": "todosMutations.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosMutations.sdl.js",
+      "name": "deleteTodo",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -280,7 +647,22 @@ RedwoodSDL {
     todosWithInvalidRoles: [Todo] @requireAuth(roles: ["admin", 12])
   }
 ",
+  "mutations": [],
   "name": "todosWithAuthInvalidRolesErrors.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js",
+      "name": "todosWithInvalidRoles",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -294,7 +676,22 @@ RedwoodSDL {
     todosWithMissingRoles: [Todo] @requireAuth(roles: [null, 12])
   }
 ",
+  "mutations": [],
   "name": "todosWithAuthMissingRoleError.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithAuthMissingRoleError.sdl.js",
+      "name": "todosWithMissingRoles",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -309,7 +706,34 @@ RedwoodSDL {
     todosWithMultipleRoles: [Todo] @requireAuth(roles: ["admin", "editor"])
   }
 ",
+  "mutations": [],
   "name": "todosWithAuthRoles.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
+      "name": "todosWithStringRole",
+      "parameters": [],
+      "warnings": [],
+    },
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
+      "name": "todosWithMultipleRoles",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -323,35 +747,62 @@ RedwoodSDL {
     todosWithBuiltInDeprecatedDirective(id: Int!): Todo! @deprecated(reason: "Don't use this query anymore")
   }
 ",
+  "mutations": [],
   "name": "todosWithBuiltInDirectives.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "deprecated",
+      ],
+      "errors": [
+        "Directive "deprecated" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithBuiltInDirectives.sdl.js",
+      "name": "todosWithBuiltInDeprecatedDirective",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
 
 exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js 1`] = `
 RedwoodSDL {
-  "errors": [],
+  "errors": [
+    "Unabled to extract queries because the gql is invalid",
+    "Unabled to extract mutations because the gql is invalid",
+  ],
   "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js",
   "gql": "
   type Query {
     todosWithMissingRolesAttribute: [Todo] @requireAuth("ADMIN")
   }
 ",
+  "mutations": [],
   "name": "todosWithMissingAuthRolesAttributeError.sdl",
+  "queries": [],
   "warnings": [],
 }
 `;
 
 exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js 1`] = `
 RedwoodSDL {
-  "errors": [],
+  "errors": [
+    "Unabled to extract queries because the gql is invalid",
+    "Unabled to extract mutations because the gql is invalid",
+  ],
   "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js",
   "gql": "
   type Query {
     todosWithMissingRolesAttributeNumeric: [Todo] @requireAuth(42)
   }
 ",
+  "mutations": [],
   "name": "todosWithMissingAuthRolesAttributeNumericError.sdl",
+  "queries": [],
   "warnings": [],
 }
 `;
@@ -365,7 +816,22 @@ RedwoodSDL {
     todosWithInvalidRole: [Todo] @requireAuth(roles: 12)
   }
 ",
+  "mutations": [],
   "name": "todosWithNumericRoleAuthError.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [
+        "Directive "requireAuth" is not known",
+      ],
+      "filepath": "/api/src/graphql/todosWithNumericRoleAuthError.sdl.js",
+      "name": "todosWithInvalidRole",
+      "parameters": [],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -408,7 +874,70 @@ RedwoodSDL {
     deleteContact(id: Int!): Contact! @requireAuth(roles: ["ADMIN"])
   }
 ",
+  "mutations": [
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "createContact",
+      "parameters": [
+        "input",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "updateContact",
+      "parameters": [
+        "id",
+        "input",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "deleteContact",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "name": "contacts.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "contacts",
+      "parameters": [],
+      "warnings": [],
+    },
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "contact",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -450,7 +979,70 @@ RedwoodSDL {
     deletePost(id: Int!): Post! @requireAuth
   }
 ",
+  "mutations": [
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "createPost",
+      "parameters": [
+        "input",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "updatePost",
+      "parameters": [
+        "id",
+        "input",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "deletePost",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "name": "posts.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "posts",
+      "parameters": [],
+      "warnings": [],
+    },
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "post",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -484,7 +1076,22 @@ RedwoodSDL {
     roles: String
   }
 ",
+  "mutations": [],
   "name": "users.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/users.sdl.ts",
+      "name": "user",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -527,7 +1134,70 @@ RedwoodSDL {
     deleteContact(id: Int!): Contact! @requireAuth(roles: ["ADMIN"])
   }
 ",
+  "mutations": [
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "createContact",
+      "parameters": [
+        "input",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "updateContact",
+      "parameters": [
+        "id",
+        "input",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "deleteContact",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "name": "contacts.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "contacts",
+      "parameters": [],
+      "warnings": [],
+    },
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/contacts.sdl.ts",
+      "name": "contact",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -569,7 +1239,70 @@ RedwoodSDL {
     deletePost(id: Int!): Post! @requireAuth
   }
 ",
+  "mutations": [
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "createPost",
+      "parameters": [
+        "input",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "updatePost",
+      "parameters": [
+        "id",
+        "input",
+      ],
+      "warnings": [],
+    },
+    RedwoodSDLMutation {
+      "directiveNames": [
+        "requireAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "deletePost",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "name": "posts.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "posts",
+      "parameters": [],
+      "warnings": [],
+    },
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/posts.sdl.ts",
+      "name": "post",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;
@@ -603,7 +1336,22 @@ RedwoodSDL {
     roles: String
   }
 ",
+  "mutations": [],
   "name": "users.sdl",
+  "queries": [
+    RedwoodSDLQuery {
+      "directiveNames": [
+        "skipAuth",
+      ],
+      "errors": [],
+      "filepath": "/api/src/graphql/users.sdl.ts",
+      "name": "user",
+      "parameters": [
+        "id",
+      ],
+      "warnings": [],
+    },
+  ],
   "warnings": [],
 }
 `;

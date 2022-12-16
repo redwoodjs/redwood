@@ -2,14 +2,7 @@ import path from 'path'
 
 import chalk from 'chalk'
 
-interface RedwoodDiagnostics {
-  warnings: string[]
-  errors: string[]
-  hasErrors(): boolean
-  hasWarnings(): boolean
-  printWarnings(): void
-  printErrors(): void
-}
+import { RedwoodDiagnostics } from './diagnostic/diagnostic'
 
 export abstract class RedwoodSkeleton implements RedwoodDiagnostics {
   warnings: string[] = []

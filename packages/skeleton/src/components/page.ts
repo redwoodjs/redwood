@@ -5,7 +5,7 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { getRootPath } from '../lib/path'
 
-import { RedwoodSkeleton } from './base'
+import { RedwoodSkeleton } from './skeleton'
 import { RedwoodProject } from './project'
 import type { RedwoodRoute } from './route'
 

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { RedwoodSkeleton } from './base'
+import { RedwoodSkeleton } from './skeleton'
 import { RedwoodProject } from './project'
 import { extractRoutes } from './route'
 import type { RedwoodRoute } from './route'

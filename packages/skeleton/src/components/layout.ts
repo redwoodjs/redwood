@@ -3,7 +3,7 @@ import path from 'path'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { RedwoodSkeleton } from './base'
+import { RedwoodSkeleton } from './skeleton'
 import type { RedwoodProject } from './project'
 
 export class RedwoodLayout extends RedwoodSkeleton {

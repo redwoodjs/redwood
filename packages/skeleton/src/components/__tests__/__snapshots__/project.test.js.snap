@@ -1,8 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`From within the empty-project fixture Complexity is measured correctly: complexity metric 1`] = `"1.0.0.2"`;
+
 exports[`From within the empty-project fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
   "cells": undefined,
+  "directives": undefined,
   "errors": [],
   "filepath": "",
   "functions": undefined,
@@ -10,6 +13,7 @@ RedwoodProject {
   "name": "empty-project",
   "pages": undefined,
   "routers": undefined,
+  "sdls": undefined,
   "services": undefined,
   "sides": undefined,
   "type": "typescript",
@@ -17,9 +21,12 @@ RedwoodProject {
 }
 `;
 
+exports[`From within the example-todo-main fixture Complexity is measured correctly: complexity metric 1`] = `"7.1.4.8"`;
+
 exports[`From within the example-todo-main fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
   "cells": undefined,
+  "directives": undefined,
   "errors": [],
   "filepath": "",
   "functions": undefined,
@@ -27,6 +34,7 @@ RedwoodProject {
   "name": "example-todo-main",
   "pages": undefined,
   "routers": undefined,
+  "sdls": undefined,
   "services": undefined,
   "sides": undefined,
   "type": "typescript",
@@ -34,9 +42,12 @@ RedwoodProject {
 }
 `;
 
+exports[`From within the example-todo-main-with-errors fixture Complexity is measured correctly: complexity metric 1`] = `"4.1.2.3"`;
+
 exports[`From within the example-todo-main-with-errors fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
   "cells": undefined,
+  "directives": undefined,
   "errors": [],
   "filepath": "",
   "functions": undefined,
@@ -44,6 +55,7 @@ RedwoodProject {
   "name": "example-todo-main-with-errors",
   "pages": undefined,
   "routers": undefined,
+  "sdls": undefined,
   "services": undefined,
   "sides": undefined,
   "type": "javascript",
@@ -51,9 +63,12 @@ RedwoodProject {
 }
 `;
 
+exports[`From within the test-project fixture Complexity is measured correctly: complexity metric 1`] = `"19.3.10.20"`;
+
 exports[`From within the test-project fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
   "cells": undefined,
+  "directives": undefined,
   "errors": [],
   "filepath": "",
   "functions": undefined,
@@ -61,6 +76,7 @@ RedwoodProject {
   "name": "test-project",
   "pages": undefined,
   "routers": undefined,
+  "sdls": undefined,
   "services": undefined,
   "sides": undefined,
   "type": "typescript",

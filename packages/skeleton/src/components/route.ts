@@ -12,7 +12,7 @@ import {
 
 import { getASTFromCode, getJSXElementAttributes } from '../lib/ast'
 
-import { RedwoodSkeleton } from './base'
+import { RedwoodSkeleton } from './skeleton'
 import type { RedwoodPage } from './page'
 import { RedwoodProject } from './project'
 import type { RedwoodRouter } from './router'

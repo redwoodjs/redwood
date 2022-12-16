@@ -1,0 +1,201 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From within the empty-project fixture returns the correct directives with a project: /api/src/directives/requireAuth/requireAuth.ts 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/requireAuth/requireAuth.ts",
+  "gql": "
+  """
+  Use to check whether or not a user is authenticated and is associated
+  with an optional set of roles.
+  """
+  directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "requireAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the empty-project fixture returns the correct directives with a project: /api/src/directives/skipAuth/skipAuth.ts 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/skipAuth/skipAuth.ts",
+  "gql": "
+  """
+  Use to skip authentication checks and allow public access.
+  """
+  directive @skipAuth on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "skipAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the empty-project fixture returns the correct directives with a project: directive count 1`] = `2`;
+
+exports[`From within the empty-project fixture returns the correct directives without a project: /api/src/directives/requireAuth/requireAuth.ts 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/requireAuth/requireAuth.ts",
+  "gql": "
+  """
+  Use to check whether or not a user is authenticated and is associated
+  with an optional set of roles.
+  """
+  directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "requireAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the empty-project fixture returns the correct directives without a project: /api/src/directives/skipAuth/skipAuth.ts 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/skipAuth/skipAuth.ts",
+  "gql": "
+  """
+  Use to skip authentication checks and allow public access.
+  """
+  directive @skipAuth on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "skipAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the empty-project fixture returns the correct directives without a project: directive count 1`] = `2`;
+
+exports[`From within the example-todo-main fixture returns the correct directives with a project: /api/src/directives/requireAuth/requireAuth.js 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/requireAuth/requireAuth.js",
+  "gql": "
+  directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "requireAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct directives with a project: /api/src/directives/skipAuth/skipAuth.js 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/skipAuth/skipAuth.js",
+  "gql": "
+  directive @skipAuth on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "skipAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct directives with a project: directive count 1`] = `2`;
+
+exports[`From within the example-todo-main fixture returns the correct directives without a project: /api/src/directives/requireAuth/requireAuth.js 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/requireAuth/requireAuth.js",
+  "gql": "
+  directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "requireAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct directives without a project: /api/src/directives/skipAuth/skipAuth.js 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/skipAuth/skipAuth.js",
+  "gql": "
+  directive @skipAuth on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "skipAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct directives without a project: directive count 1`] = `2`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct directives with a project: directive count 1`] = `0`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct directives without a project: directive count 1`] = `0`;
+
+exports[`From within the test-project fixture returns the correct directives with a project: /api/src/directives/requireAuth/requireAuth.ts 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/requireAuth/requireAuth.ts",
+  "gql": "
+  """
+  Use to check whether or not a user is authenticated and is associated
+  with an optional set of roles.
+  """
+  directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "requireAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct directives with a project: /api/src/directives/skipAuth/skipAuth.ts 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/skipAuth/skipAuth.ts",
+  "gql": "
+  """
+  Use to skip authentication checks and allow public access.
+  """
+  directive @skipAuth on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "skipAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct directives with a project: directive count 1`] = `2`;
+
+exports[`From within the test-project fixture returns the correct directives without a project: /api/src/directives/requireAuth/requireAuth.ts 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/requireAuth/requireAuth.ts",
+  "gql": "
+  """
+  Use to check whether or not a user is authenticated and is associated
+  with an optional set of roles.
+  """
+  directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "requireAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct directives without a project: /api/src/directives/skipAuth/skipAuth.ts 1`] = `
+RedwoodDirective {
+  "errors": [],
+  "filepath": "/api/src/directives/skipAuth/skipAuth.ts",
+  "gql": "
+  """
+  Use to skip authentication checks and allow public access.
+  """
+  directive @skipAuth on FIELD_DEFINITION
+",
+  "kind": "validate",
+  "name": "skipAuth",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct directives without a project: directive count 1`] = `2`;

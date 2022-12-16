@@ -14,8 +14,8 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getASTFromCode } from '../lib/ast'
 import { getGraphQLQueryName } from '../lib/gql'
 
-import { RedwoodSkeleton } from './base'
 import type { RedwoodProject } from './project'
+import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodCell extends RedwoodSkeleton {
   warnings: string[] = []

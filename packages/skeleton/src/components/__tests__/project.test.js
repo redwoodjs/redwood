@@ -2,11 +2,14 @@ import path from 'path'
 
 import { stripAndFormatPathForTesting } from '../../lib/testing'
 import * as cell from '../cell'
+import * as directive from '../directive'
 import * as func from '../function'
 import * as layout from '../layout'
 import * as page from '../page'
 import { RedwoodProject } from '../project'
 import * as router from '../router'
+import * as sdl from '../sdl/sdl'
+import * as service from '../service'
 import * as side from '../side'
 
 const FIXTURE_PATH = path.join(
@@ -32,6 +35,14 @@ describe.each([
   })
   afterAll(() => {
     process.env.RWJS_CWD = RWJS_CWD
+  })
+
+  test('Complexity is measured correctly', () => {
+    const project = RedwoodProject.getProject({
+      readFromCache: false,
+      insertIntoCache: false,
+    })
+    expect(project.getComplexity()).toMatchSnapshot('complexity metric')
   })
 
   test('Minimal project matches expectation', () => {
@@ -196,6 +207,81 @@ describe.each([
         expect(data).not.toBe(undefined)
         expect(extractSpy).toHaveBeenCalledTimes(1)
         data = cachedProject.getSides(true)
+        expect(extractSpy).toHaveBeenCalledTimes(2)
+        extractSpy.mockReset()
+        extractSpy.mockRestore()
+      })
+      test('directives', () => {
+        const extractSpy = jest.spyOn(directive, 'extractDirectives')
+        const project = RedwoodProject.getProject({
+          readFromCache: false,
+          insertIntoCache: true,
+        })
+        expect(extractSpy).toHaveBeenCalledTimes(0)
+        let data = project.getDirectives()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        data = project.getDirectives()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        const cachedProject = RedwoodProject.getProject({
+          readFromCache: true,
+          insertIntoCache: true,
+        })
+        data = cachedProject.getDirectives()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        data = cachedProject.getDirectives(true)
+        expect(extractSpy).toHaveBeenCalledTimes(2)
+        extractSpy.mockReset()
+        extractSpy.mockRestore()
+      })
+      test('services', () => {
+        const extractSpy = jest.spyOn(service, 'extractServices')
+        const project = RedwoodProject.getProject({
+          readFromCache: false,
+          insertIntoCache: true,
+        })
+        expect(extractSpy).toHaveBeenCalledTimes(0)
+        let data = project.getServices()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        data = project.getServices()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        const cachedProject = RedwoodProject.getProject({
+          readFromCache: true,
+          insertIntoCache: true,
+        })
+        data = cachedProject.getServices()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        data = cachedProject.getServices(true)
+        expect(extractSpy).toHaveBeenCalledTimes(2)
+        extractSpy.mockReset()
+        extractSpy.mockRestore()
+      })
+      test('SDLs', () => {
+        const extractSpy = jest.spyOn(sdl, 'extractSDLs')
+        const project = RedwoodProject.getProject({
+          readFromCache: false,
+          insertIntoCache: true,
+        })
+        expect(extractSpy).toHaveBeenCalledTimes(0)
+        let data = project.getSDLs()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        data = project.getSDLs()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        const cachedProject = RedwoodProject.getProject({
+          readFromCache: true,
+          insertIntoCache: true,
+        })
+        data = cachedProject.getSDLs()
+        expect(data).not.toBe(undefined)
+        expect(extractSpy).toHaveBeenCalledTimes(1)
+        data = cachedProject.getSDLs(true)
         expect(extractSpy).toHaveBeenCalledTimes(2)
         extractSpy.mockReset()
         extractSpy.mockRestore()

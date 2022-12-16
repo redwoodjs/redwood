@@ -13,7 +13,7 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { getASTFromFile } from '../lib/ast'
 
-import { RedwoodSkeleton } from './base'
+import { RedwoodSkeleton } from './skeleton'
 import type { RedwoodProject } from './project'
 
 export class RedwoodFunction extends RedwoodSkeleton {

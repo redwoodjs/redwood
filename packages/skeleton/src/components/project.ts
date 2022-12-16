@@ -7,9 +7,10 @@ import { getPaths } from '@redwoodjs/internal/dist/index'
 
 import { getRootPath } from '../lib/path'
 
-import { RedwoodSkeleton } from './base'
 import { extractCells } from './cell'
 import type { RedwoodCell } from './cell'
+import { extractDirectives } from './directive'
+import type { RedwoodDirective } from './directive'
 import { extractFunctions } from './function'
 import type { RedwoodFunction } from './function'
 import { extractLayouts } from './layout'
@@ -18,8 +19,11 @@ import { extractPages } from './page'
 import type { RedwoodPage } from './page'
 import { extractRouters } from './router'
 import type { RedwoodRouter } from './router'
+import { extractSDLs, RedwoodSDL } from './sdl/sdl'
+import { extractServices, RedwoodService } from './service'
 import { extractSides } from './side'
 import type { RedwoodSide } from './side'
+import { RedwoodSkeleton } from './skeleton'
 
 /**
  * Used to enumerate either JS or TS project types
@@ -36,11 +40,13 @@ export class RedwoodProject extends RedwoodSkeleton {
   readonly type: RedwoodProjectType
 
   private cells?: RedwoodCell[] | undefined
+  private directives?: RedwoodDirective[] | undefined
   private functions?: RedwoodFunction[] | undefined
   private layouts?: RedwoodLayout[] | undefined
   private pages?: RedwoodPage[] | undefined
   private routers?: RedwoodRouter[] | undefined
-  private services?: any[] | undefined
+  private sdls?: RedwoodSDL[] | undefined
+  private services?: RedwoodService[] | undefined
   private sides?: RedwoodSide[] | undefined
 
   public static getProject({
@@ -85,17 +91,27 @@ export class RedwoodProject extends RedwoodSkeleton {
 
     if (full) {
       this.cells = extractCells(this)
+      this.directives = extractDirectives(this)
       this.functions = extractFunctions(this)
       this.layouts = extractLayouts(this)
       this.pages = extractPages(this)
       this.routers = extractRouters(this)
+      this.sdls = extractSDLs(this)
+      this.services = extractServices(this)
       this.sides = extractSides(this)
     }
   }
 
+  getSDLs(forceExtract = false): any[] {
+    if (forceExtract || this.sdls === undefined) {
+      this.sdls = extractSDLs(this)
+    }
+    return this.sdls
+  }
+
   getServices(forceExtract = false): any[] {
     if (forceExtract || this.services === undefined) {
-      this.services = []
+      this.services = extractServices(this)
     }
     return this.services
   }
@@ -142,12 +158,22 @@ export class RedwoodProject extends RedwoodSkeleton {
     return this.functions
   }
 
+  getDirectives(forceExtract = false): RedwoodDirective[] {
+    if (forceExtract || this.directives === undefined) {
+      this.directives = extractDirectives(this)
+    }
+    return this.directives
+  }
+
   hasWarnings(cascade = false): boolean {
     let warningsFound = this.warnings.length > 0
     // if project has warnings then we can skip checking children and just return
     if (cascade && !warningsFound) {
       this.cells?.forEach((cell) => {
         warningsFound ||= cell.hasWarnings()
+      })
+      this.directives?.forEach((directive) => {
+        warningsFound ||= directive.hasWarnings()
       })
       this.functions?.forEach((func) => {
         warningsFound ||= func.hasWarnings()
@@ -163,6 +189,18 @@ export class RedwoodProject extends RedwoodSkeleton {
         router.routes.forEach((route) => {
           warningsFound ||= route.hasWarnings()
         })
+      })
+      this.sdls?.forEach((sdl) => {
+        warningsFound ||= sdl.hasWarnings()
+        sdl.queries?.forEach((query) => {
+          warningsFound ||= query.hasWarnings()
+        })
+        sdl.mutations?.forEach((mutation) => {
+          warningsFound ||= mutation.hasWarnings()
+        })
+      })
+      this.services?.forEach((service) => {
+        warningsFound ||= service.hasWarnings()
       })
       this.sides?.forEach((side) => {
         warningsFound ||= side.hasWarnings()
@@ -185,6 +223,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       this.cells?.forEach((cell) => {
         cell.printWarnings()
       })
+      this.directives?.forEach((directive) => {
+        directive.printWarnings()
+      })
       this.functions?.forEach((func) => {
         func.printWarnings()
       })
@@ -200,6 +241,18 @@ export class RedwoodProject extends RedwoodSkeleton {
           route.printWarnings()
         })
       })
+      this.sdls?.forEach((sdl) => {
+        sdl.printWarnings()
+        sdl.queries?.forEach((query) => {
+          query.printWarnings()
+        })
+        sdl.mutations?.forEach((mutation) => {
+          mutation.printWarnings()
+        })
+      })
+      this.services?.forEach((service) => {
+        service.printWarnings()
+      })
       this.sides?.forEach((side) => {
         side.printWarnings()
       })
@@ -212,6 +265,9 @@ export class RedwoodProject extends RedwoodSkeleton {
     if (cascade && !errorsFound) {
       this.cells?.forEach((cell) => {
         errorsFound ||= cell.hasErrors()
+      })
+      this.directives?.forEach((directive) => {
+        errorsFound ||= directive.hasErrors()
       })
       this.functions?.forEach((func) => {
         errorsFound ||= func.hasErrors()
@@ -227,6 +283,18 @@ export class RedwoodProject extends RedwoodSkeleton {
         router.routes.forEach((route) => {
           errorsFound ||= route.hasErrors()
         })
+      })
+      this.sdls?.forEach((sdl) => {
+        errorsFound ||= sdl.hasErrors()
+        sdl.queries?.forEach((query) => {
+          errorsFound ||= query.hasErrors()
+        })
+        sdl.mutations?.forEach((mutation) => {
+          errorsFound ||= mutation.hasErrors()
+        })
+      })
+      this.services?.forEach((service) => {
+        errorsFound ||= service.hasErrors()
       })
       this.sides?.forEach((side) => {
         errorsFound ||= side.hasErrors()
@@ -249,6 +317,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       this.cells?.forEach((cell) => {
         cell.printErrors()
       })
+      this.directives?.forEach((directive) => {
+        directive.printErrors()
+      })
       this.functions?.forEach((func) => {
         func.printErrors()
       })
@@ -264,10 +335,33 @@ export class RedwoodProject extends RedwoodSkeleton {
           route.printErrors()
         })
       })
+      this.sdls?.forEach((sdl) => {
+        sdl.printErrors()
+        sdl.queries?.forEach((query) => {
+          query.printErrors()
+        })
+        sdl.mutations?.forEach((mutation) => {
+          mutation.printErrors()
+        })
+      })
+      this.services?.forEach((service) => {
+        service.printErrors()
+      })
       this.sides?.forEach((side) => {
         side.printErrors()
       })
     }
+  }
+
+  getComplexity() {
+    const totalRoutes =
+      this.getRouters()?.reduce((_: number, val: RedwoodRouter) => {
+        return val.routes.length
+      }, 0) || 0
+    const totalServices = this.getServices()?.length || 0
+    const totalCells = this.getCells()?.length || 0
+    const totalPages = this.getPages()?.length || 0
+    return `${totalRoutes}.${totalServices}.${totalCells}.${totalPages}`
   }
 }
 

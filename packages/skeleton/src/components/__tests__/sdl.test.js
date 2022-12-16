@@ -2,7 +2,7 @@ import path from 'path'
 
 import { stripAndFormatPathForTesting } from '../../lib/testing'
 import { RedwoodProject } from '../project'
-import { extractSDLs } from '../sdl'
+import { extractSDLs } from '../sdl/sdl'
 
 const FIXTURE_PATH = path.join(
   __dirname,
@@ -34,6 +34,18 @@ describe.each([
     const sdls = extractSDLs(undefined)
     sdls.forEach((sdl) => {
       sdl.filepath = stripAndFormatPathForTesting(sdl.filepath, PROJECT_PATH)
+      sdl.queries.forEach((query) => {
+        query.filepath = stripAndFormatPathForTesting(
+          query.filepath,
+          PROJECT_PATH
+        )
+      })
+      sdl.mutations.forEach((mutation) => {
+        mutation.filepath = stripAndFormatPathForTesting(
+          mutation.filepath,
+          PROJECT_PATH
+        )
+      })
       expect(sdl).toMatchSnapshot(sdl.filepath)
     })
     expect(sdls.length).toMatchSnapshot('SDL count')
@@ -48,6 +60,18 @@ describe.each([
     const sdls = extractSDLs(project)
     sdls.forEach((sdl) => {
       sdl.filepath = stripAndFormatPathForTesting(sdl.filepath, PROJECT_PATH)
+      sdl.queries.forEach((query) => {
+        query.filepath = stripAndFormatPathForTesting(
+          query.filepath,
+          PROJECT_PATH
+        )
+      })
+      sdl.mutations.forEach((mutation) => {
+        mutation.filepath = stripAndFormatPathForTesting(
+          mutation.filepath,
+          PROJECT_PATH
+        )
+      })
       expect(sdl).toMatchSnapshot(sdl.filepath)
     })
     expect(sdls.length).toMatchSnapshot('SDL count')
