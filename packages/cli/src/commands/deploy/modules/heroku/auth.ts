@@ -1,10 +1,10 @@
-import { Heroku } from './api'
+import { HerokuApi } from './api'
 import { HEROKU_ERRORS, IHerokuContext } from './interfaces'
-import { Questions } from './questions'
+import { Questions } from '../../../../../tmp/questions'
 
 export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
   ctx.logger.debug('Authenticating with Heroku...')
-  const currentUser = await Heroku.whoami()
+  const currentUser = await HerokuApi.whoami()
 
   if (currentUser) {
     const email = await _handleAlreadyLoggedIn(ctx, currentUser)
@@ -14,7 +14,7 @@ export async function authStep(ctx: IHerokuContext): Promise<IHerokuContext> {
     }
   } else {
     ctx.logger.debug('No Heroku account found... loggin in')
-    const email = await Heroku.login()
+    const email = await HerokuApi.login()
     if (!email) {
       throw new Error(HEROKU_ERRORS.NOT_LOGGED_IN)
     }
@@ -38,7 +38,7 @@ async function _handleAlreadyLoggedIn(
 
   if (shouldReauth) {
     logger.debug('Reauthenticating with Heroku...')
-    const userEmail = await Heroku.reauth()
+    const userEmail = await HerokuApi.reauth()
     return userEmail
   }
 

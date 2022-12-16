@@ -1,4 +1,4 @@
-export const Heroku = {
+export const HerokuApi = {
   create: jest.fn(),
   destroy: jest.fn(),
   whoami: jest.fn(),
@@ -7,4 +7,5 @@ export const Heroku = {
   push: jest.fn(),
   addRemote: jest.fn(),
   reauth: jest.fn(),
+  init: jest.fn(),
 }

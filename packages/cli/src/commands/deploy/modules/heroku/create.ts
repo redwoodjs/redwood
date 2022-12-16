@@ -1,11 +1,9 @@
-import { Heroku } from './api'
+import { HerokuApi } from './api'
 import { IHerokuContext, HEROKU_ERRORS, Attempt } from './interfaces'
-import { Questions } from './questions'
 
 export async function createStep(ctx: IHerokuContext): Promise<IHerokuContext> {
   ctx.logger.debug('Creating Heroku app...')
-  const appName = await Questions.chooseAppName(ctx)
-  return _tryCreateApp({ ...ctx, appName }, Attempt.FIRST)
+  return _tryCreateApp(ctx, Attempt.FIRST)
 }
 
 async function _tryCreateApp(
@@ -13,7 +11,7 @@ async function _tryCreateApp(
   attempt: Attempt
 ): Promise<IHerokuContext> {
   if (attempt === Attempt.FIRST) {
-    const appUrl = await Heroku.create(ctx.appName)
+    const appUrl = await HerokuApi.create(ctx)
     if (appUrl?.includes('already taken')) {
       return _tryCreateApp(ctx, Attempt.SECOND)
     }
@@ -22,24 +20,12 @@ async function _tryCreateApp(
     }
     return { ...ctx, appUrl }
   }
-
-  const choice = await Questions.nameExistsChooseOption(ctx)
-
-  if (choice === 'delete') {
-    await Heroku.destroy(ctx.appName)
-    return _lastTryCreate(ctx)
-  }
-
-  if (choice === 'new') {
-    const newAppName = await Questions.chooseAppName(ctx)
-    return _lastTryCreate({ ...ctx, appName: newAppName })
-  }
-
-  throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
+  await HerokuApi.destroy(ctx)
+  return _createOrFail(ctx)
 }
 
-async function _lastTryCreate(ctx: IHerokuContext) {
-  const appUrl = await Heroku.create(ctx.appName)
+async function _createOrFail(ctx: IHerokuContext) {
+  const appUrl = await HerokuApi.create(ctx)
   if (!appUrl) {
     throw new Error(HEROKU_ERRORS.APP_CREATE_FAIL)
   }
@@ -47,4 +33,11 @@ async function _lastTryCreate(ctx: IHerokuContext) {
     ...ctx,
     appUrl,
   }
+}
+
+export async function pushStep(ctx: IHerokuContext): Promise<IHerokuContext> {
+  await HerokuApi.addRemote(ctx)
+  await HerokuApi.push()
+  await HerokuApi.followLogs(ctx)
+  return ctx
 }

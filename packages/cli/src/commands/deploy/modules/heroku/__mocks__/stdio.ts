@@ -1,7 +1,6 @@
-export const spawn = jest.fn().mockResolvedValue({
-  exitCode: 0,
-})
+export const buildSpawner = () => spawn
 
+export const spawn = jest.fn()
 export const spawnFollow = jest.fn()
 
 export const createLogger = () => ({
@@ -10,3 +9,6 @@ export const createLogger = () => ({
   info: jest.fn(),
   log: jest.fn(),
 })
+
+export const green = jest.fn()
+export const grey = jest.fn()

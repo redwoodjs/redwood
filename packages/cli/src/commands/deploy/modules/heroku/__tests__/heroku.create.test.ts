@@ -1,4 +1,4 @@
-import { MOCK_HEROKU_CTX } from '../__fixtures__'
+import { MOCK_HEROKU_CTX } from '../__mocks__/mock_ctx'
 import { Heroku } from '../api'
 import { createStep } from '../create'
 import { Questions } from '../questions'

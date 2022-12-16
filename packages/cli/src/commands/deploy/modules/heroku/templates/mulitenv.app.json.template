@@ -1,0 +1,41 @@
+{
+  "scripts": {
+    "postdeploy": "yarn install --immutable && yarn rw build"
+  },
+  "env": {
+    "SESSION_SECRET": {
+      "description": "generated session secret per deploy",
+      "generator": "secret"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "14"
+      }
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nginx"
+    }
+  ],
+  "environments": {
+    "review": {
+      "addons": ["heroku-postgresql:mini"],
+      "scripts": {
+        "postdeploy": "yarn rw prisma migrate dev && yarn rw prisma db seed"
+      },
+      "env": {
+        "SESSION_SECRET": {
+          "description": "generated session secret per deploy",
+          "generator": "secret"
+        }
+      }
+    }
+  }
+}

@@ -1,11 +1,88 @@
 import path from 'path'
 
+import boxen from 'boxen'
 import fs from 'fs-extra'
+import prompts from 'prompts'
 
-import { Heroku } from './api'
-import type { IHerokuContext } from './interfaces'
-import { HEROKU_ERRORS } from './interfaces'
-import { spawn } from './stdio'
+import { HerokuApi } from './api'
+import { HEROKU_ERRORS, type IHerokuContext } from './interfaces'
+import { createReadyMessage, createActionsMessages } from './messages'
+import { blue } from './stdio'
+
+export async function confirmReadyStep(
+  ctx: IHerokuContext
+): Promise<IHerokuContext> {
+  if (ctx.defaults || ctx.skipChecks) {
+    ctx.logger.debug('Skipping feedback. Using defaults')
+    return ctx
+  }
+  const isFatalState = !ctx.prereqs?.isDarwin
+  const readyMessage = createReadyMessage(ctx)
+  const listOfActions = createActionsMessages(ctx)
+  const ready = await _readyDialog(readyMessage, listOfActions, isFatalState)
+  if (!ready) {
+    process.stdout.write(
+      _createBoxen('No prob. Come back when you are ready!', 'Goodbye!')
+    )
+    process.exit(0)
+  }
+  return ctx
+}
+
+async function _readyDialog(
+  message: string,
+  listOfActions: string,
+  isFatalState: boolean
+): Promise<boolean> {
+  if (isFatalState) {
+    process.stdout.write(
+      boxen('Must exit due to unmet conditions', {
+        padding: 1,
+        margin: 1,
+        borderStyle: 'round',
+      })
+    )
+    process.exit(0)
+  }
+  process.stdout.write(_createBoxen(message, 'Status'))
+  process.stdout.write(_createBoxen(listOfActions, 'Changes to make'))
+
+  const { ready } = await prompts({
+    type: 'confirm',
+    name: 'ready',
+    initial: true,
+    message: blue('Configure and deploy?'),
+  })
+  return ready
+}
+
+function _createBoxen(message: string, title: string) {
+  return boxen(message, {
+    title,
+    margin: { top: 1, right: 0, bottom: 1, left: 0 },
+    padding: { top: 0, right: 1, bottom: 0, left: 1 },
+    borderStyle: 'round',
+    backgroundColor: '#333',
+    float: 'left',
+  })
+}
+
+export async function prepareStep(
+  ctx: IHerokuContext
+): Promise<IHerokuContext> {
+  ctx.logger.log('Preparing for deployment...')
+
+  if (ctx.delete !== undefined) {
+    await _handleDelete(ctx)
+  }
+  await _copyTemplates(ctx)
+  await _replacePm2Vars(ctx)
+  // Core needs to be a dependency for remote commands to work
+  await _installModules(ctx, ['pm2'])
+  await _addBuildScript(ctx)
+  await _updatePrismaSchema(ctx)
+  return ctx
+}
 
 export const TEMPLATES = [
   'config/nginx.conf.erb.template',
@@ -13,18 +90,6 @@ export const TEMPLATES = [
   'pm2.js.template',
   'app.json.template',
 ]
-
-export async function prepareStep(
-  ctx: IHerokuContext
-): Promise<IHerokuContext> {
-  if (ctx.delete !== undefined) {
-    await _handleDelete(ctx)
-  }
-  await _copyTemplates(ctx)
-  await _replacePm2Vars(ctx)
-  await _installModules()
-  return ctx
-}
 
 async function _copyTemplates(ctx: IHerokuContext): Promise<IHerokuContext> {
   if (!ctx.projectPath) {
@@ -57,7 +122,7 @@ async function _handleDelete(ctx: IHerokuContext) {
   if (!nameToDelete) {
     throw new Error(HEROKU_ERRORS.HANDLE_DELETE)
   }
-  const output = await Heroku.destroy(nameToDelete)
+  const output = await HerokuApi.destroy(ctx)
   if (output.includes("Couldn't find that app")) {
     throw new Error(`Couldn't find app ${nameToDelete} to delete.`)
   }
@@ -65,9 +130,10 @@ async function _handleDelete(ctx: IHerokuContext) {
   process.exit(0)
 }
 
-async function _installModules() {
+async function _installModules({ spawn }: IHerokuContext, modules: string[]) {
   try {
-    return await spawn('yarn install pm2')
+    const command = `yarn workspace web add ${modules.join(' ')}`
+    return await spawn(command, { shell: true, stdio: 'inherit' })
   } catch (err) {
     throw new Error(`Error installing required modules: ${err}`)
   }
@@ -78,4 +144,31 @@ async function _replacePm2Vars({ appName, projectPath }: IHerokuContext) {
   const pm2File = fs.readFileSync(pm2Path, 'utf8')
   const pm2Updated = pm2File.replace(/APP_NAME/g, appName)
   fs.writeFileSync(pm2Path, pm2Updated)
+}
+
+async function _addBuildScript({ projectPath }: IHerokuContext) {
+  try {
+    const packageJsonPath = path.join(projectPath, 'package.json')
+    const json = fs.readJsonSync(packageJsonPath, 'utf8')
+    json.scripts ??= {}
+    json.scripts.build = 'yarn rw build'
+  } catch (err) {
+    throw new Error(`Error adding build script: ${err}`)
+  }
+}
+
+async function _updatePrismaSchema({ projectPath, prereqs }: IHerokuContext) {
+  try {
+    if (!prereqs?.isPrismaConfigured) {
+      const schemaPath = path.join(projectPath, 'api/db/schema.prisma')
+      const schemaPrisma = fs.readFileSync(schemaPath, 'utf8')
+      const replaced = schemaPrisma.replace(
+        /provider = ".*"/,
+        'provider = "postgresql"'
+      )
+      fs.writeFileSync(schemaPath, replaced)
+    }
+  } catch (err) {
+    throw new Error(`Error updating Prisma schema: ${err}`)
+  }
 }

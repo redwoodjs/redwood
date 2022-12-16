@@ -6,7 +6,7 @@
     "outDir": "dist",
     "emitDeclarationOnly": false,
   },
-  "include": ["src"],
+  "include": ["src", "tmp/questions.ts"],
   "references": [
     { "path": "../internal" },
     { "path": "../structure" },

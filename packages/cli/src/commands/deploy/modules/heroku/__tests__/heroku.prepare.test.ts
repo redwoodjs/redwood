@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 
-import { MOCK_HEROKU_CTX } from '../__fixtures__/mock_ctx'
+import { MOCK_HEROKU_CTX } from '../__mocks__/mock_ctx'
 import { Heroku } from '../api'
 import { HEROKU_ERRORS } from '../interfaces'
 import { prepareStep, TEMPLATES } from '../prepare'

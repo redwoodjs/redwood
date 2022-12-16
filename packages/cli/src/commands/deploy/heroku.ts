@@ -1,17 +1,13 @@
-import path from 'path'
-
 import chalk from 'chalk'
 import yargs from 'yargs'
 
-import { getPaths } from '../../lib'
-
 import {
-  authStep,
+  createContext,
+  confirmReadyStep,
   createStep,
-  pushStep,
-  validateSystemStep,
   prepareStep,
-  createLogger,
+  pushStep,
+  type IYargs,
   type IHerokuContext,
 } from './modules/heroku'
 
@@ -56,9 +52,8 @@ export const builder = function (yargs: yargs.Argv) {
 type IHerokuStep = (ctx: IHerokuContext) => Promise<IHerokuContext>
 
 const HEROKU_SETUP_STEPS: IHerokuStep[] = [
-  validateSystemStep,
+  confirmReadyStep,
   prepareStep,
-  authStep,
   createStep,
   pushStep,
 ]
@@ -70,16 +65,9 @@ async function _runSteps(arr: IHerokuStep[], input: IHerokuContext) {
   )
 }
 
-export const handler = async (initCtx: IHerokuContext) => {
+export const handler = async (yargs: IYargs) => {
   try {
-    const paths = getPaths()
-    const app = path.basename(paths.base)
-    const ctx = {
-      ...initCtx,
-      appName: initCtx.appName || app,
-      projectPath: paths.base,
-      logger: createLogger(initCtx.debug),
-    }
+    const ctx = await createContext(yargs)
     await _runSteps(HEROKU_SETUP_STEPS, ctx)
   } catch (err: any) {
     console.error(chalk.redBright(err.message))
