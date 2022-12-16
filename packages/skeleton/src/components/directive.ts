@@ -19,19 +19,25 @@ import {
 } from '../lib/ast'
 import { parseGraphQL } from '../lib/gql'
 
-import { RedwoodSkeleton } from './skeleton'
+import {
+  RedwoodError,
+  RedwoodErrorCode,
+  RedwoodWarning,
+  RedwoodWarningCode,
+} from './diagnostic'
 import type { RedwoodProject } from './project'
+import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodDirective extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   readonly gql: string | undefined
   readonly kind: 'transform' | 'validate' | 'unknown' = 'unknown'
 
   constructor(filepath: string) {
-    const warnings: string[] = []
-    const errors: string[] = []
+    const warnings: RedwoodWarning[] = []
+    const errors: RedwoodError[] = []
     let name: string | undefined
     let gql: string | undefined
 
@@ -59,13 +65,17 @@ export class RedwoodDirective extends RedwoodSkeleton {
           break
 
         default:
-          warnings.push(
-            `Unable to extract the gql (${schemaExportVariableDeclarator.init?.type})`
-          )
+          warnings.push({
+            code: RedwoodWarningCode.GENERIC_PARSER_WARNING_JSTS,
+            message: `Unable to extract the gql (${schemaExportVariableDeclarator.init?.type})`,
+          })
           break
       }
       if (gql === undefined) {
-        warnings.push('Could not extract the gql')
+        warnings.push({
+          code: RedwoodWarningCode.GENERIC_PARSER_WARNING_JSTS,
+          message: 'Could not extract the gql',
+        })
       } else {
         const gqlAST = parseGraphQL(gql)
         const directiveDefinitions = gqlAST.definitions.filter(
@@ -74,13 +84,19 @@ export class RedwoodDirective extends RedwoodSkeleton {
           }
         )
         if (directiveDefinitions.length !== 1) {
-          errors.push('Must define one directive')
+          errors.push({
+            code: RedwoodErrorCode.DIRECTIVE_DEFINE_ONE_DIRECTIVE,
+            message: 'Must define one directive',
+          })
         } else {
           name = directiveDefinitions[0].name.value
         }
       }
     } else {
-      errors.push("No 'schema' export could be found")
+      errors.push({
+        code: RedwoodErrorCode.DIRECTIVE_MISSING_SCHEMA_EXPORT,
+        message: 'No "schema" export could be found',
+      })
     }
 
     super(filepath, name)
@@ -111,7 +127,10 @@ export class RedwoodDirective extends RedwoodSkeleton {
       ) {
         directiveHelperFunctionName = defaultExport.declaration.callee.name
       } else {
-        this.warnings.push('The default export could not be understood')
+        this.warnings.push({
+          code: RedwoodWarningCode.GENERIC_PARSER_WARNING_JSTS,
+          message: 'The default export could not be understood',
+        })
       }
 
       switch (directiveHelperFunctionName) {
@@ -122,18 +141,23 @@ export class RedwoodDirective extends RedwoodSkeleton {
           this.kind = 'transform'
           break
         case undefined:
-          this.warnings.push(`Could not understand the directive function`)
+          this.warnings.push({
+            code: RedwoodWarningCode.GENERIC_PARSER_WARNING_JSTS,
+            message: `Could not understand the directive function`,
+          })
           break
         default:
-          this.warnings.push(
-            `Could not understand the directive function "${directiveHelperFunctionName}"`
-          )
+          this.warnings.push({
+            code: RedwoodWarningCode.GENERIC_PARSER_WARNING_JSTS,
+            message: `Could not understand the directive function "${directiveHelperFunctionName}"`,
+          })
           break
       }
     } else {
-      this.errors.push(
-        'Must have a default export which is the directive function'
-      )
+      this.errors.push({
+        code: RedwoodErrorCode.DIRECTIVE_MISSING_DEFAULT_EXPORT,
+        message: 'Must have a default export which is the directive function',
+      })
     }
   }
 }

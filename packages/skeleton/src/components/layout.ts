@@ -3,12 +3,13 @@ import path from 'path'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { RedwoodSkeleton } from './skeleton'
+import { RedwoodError, RedwoodWarning } from './diagnostic'
 import type { RedwoodProject } from './project'
+import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodLayout extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   constructor(filepath: string) {
     super(filepath)

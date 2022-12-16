@@ -1,16 +1,17 @@
 import fs from 'fs'
 import path from 'path'
 
-import { RedwoodSkeleton } from './skeleton'
+import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from './diagnostic'
 import { RedwoodProject } from './project'
 import { extractRoutes } from './route'
 import type { RedwoodRoute } from './route'
 import { extractSides, RedwoodSideType } from './side'
 import type { RedwoodSide } from './side'
+import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodRouter extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   readonly routes: RedwoodRoute[]
 
@@ -26,16 +27,25 @@ export class RedwoodRouter extends RedwoodSkeleton {
       return route.isNotFound
     })
     if (notFoundRoutes.length === 0) {
-      this.errors.push('No notfound route detected')
+      this.errors.push({
+        code: RedwoodErrorCode.ROUTER_NO_NOTFOUND_ROUTE,
+        message: 'No "notfound" route detected',
+      })
     } else if (notFoundRoutes.length > 1) {
-      this.errors.push('No more than one notfound route should be present')
+      this.errors.push({
+        code: RedwoodErrorCode.ROUTER_MULTIPLE_NOTFOUND_ROUTES,
+        message: 'No more than one "notfound" route should be present',
+      })
     }
 
     // Duplicate routes checking
     const nameOccurences: Record<string, number> = {}
     this.routes.forEach((route) => {
       if (route.name in nameOccurences && nameOccurences[route.name] < 2) {
-        this.errors.push(`Multiple routes named ${route.name} are present`)
+        this.errors.push({
+          code: RedwoodErrorCode.ROUTER_DUPLICATE_NAMED_ROUTES,
+          message: `Multiple routes named "${route.name}" are present`,
+        })
         nameOccurences[route.name] += 1
       } else {
         nameOccurences[route.name] = 1

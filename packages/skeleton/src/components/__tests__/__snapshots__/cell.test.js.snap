@@ -55,8 +55,14 @@ RedwoodCell {
 exports[`From within the example-todo-main fixture returns the correct cells with a project: /web/src/components/TableCell/TableCell.js 1`] = `
 RedwoodCell {
   "errors": [
-    "No "Success" export found but one is required",
-    "No "QUERY" export found but one is required",
+    {
+      "code": "01.002",
+      "message": "No "Success" export found but one is required",
+    },
+    {
+      "code": "01.001",
+      "message": "No "QUERY" export found but one is required",
+    },
   ],
   "filepath": "/web/src/components/TableCell/TableCell.js",
   "gqlQuery": undefined,
@@ -156,8 +162,14 @@ RedwoodCell {
 exports[`From within the example-todo-main fixture returns the correct cells without a project: /web/src/components/TableCell/TableCell.js 1`] = `
 RedwoodCell {
   "errors": [
-    "No "Success" export found but one is required",
-    "No "QUERY" export found but one is required",
+    {
+      "code": "01.002",
+      "message": "No "Success" export found but one is required",
+    },
+    {
+      "code": "01.001",
+      "message": "No "QUERY" export found but one is required",
+    },
   ],
   "filepath": "/web/src/components/TableCell/TableCell.js",
   "gqlQuery": undefined,
@@ -209,8 +221,14 @@ exports[`From within the example-todo-main fixture returns the correct cells wit
 exports[`From within the example-todo-main-with-errors fixture returns the correct cells with a project: /web/src/components/TableCell/TableCell.js 1`] = `
 RedwoodCell {
   "errors": [
-    "No "Success" export found but one is required",
-    "No "QUERY" export found but one is required",
+    {
+      "code": "01.002",
+      "message": "No "Success" export found but one is required",
+    },
+    {
+      "code": "01.001",
+      "message": "No "QUERY" export found but one is required",
+    },
   ],
   "filepath": "/web/src/components/TableCell/TableCell.js",
   "gqlQuery": undefined,
@@ -254,7 +272,10 @@ RedwoodCell {
   "isValid": true,
   "name": "TodoListCell",
   "warnings": [
-    "Could not determine the GraphQL query name",
+    {
+      "code": "01.001",
+      "message": "We recommend that you name your query operation",
+    },
   ],
 }
 `;
@@ -264,8 +285,14 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
 exports[`From within the example-todo-main-with-errors fixture returns the correct cells without a project: /web/src/components/TableCell/TableCell.js 1`] = `
 RedwoodCell {
   "errors": [
-    "No "Success" export found but one is required",
-    "No "QUERY" export found but one is required",
+    {
+      "code": "01.002",
+      "message": "No "Success" export found but one is required",
+    },
+    {
+      "code": "01.001",
+      "message": "No "QUERY" export found but one is required",
+    },
   ],
   "filepath": "/web/src/components/TableCell/TableCell.js",
   "gqlQuery": undefined,
@@ -309,7 +336,10 @@ RedwoodCell {
   "isValid": true,
   "name": "TodoListCell",
   "warnings": [
-    "Could not determine the GraphQL query name",
+    {
+      "code": "01.001",
+      "message": "We recommend that you name your query operation",
+    },
   ],
 }
 `;

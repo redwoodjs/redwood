@@ -82,7 +82,10 @@ RedwoodRouter {
     },
     RedwoodRoute {
       "errors": [
-        "Could not find page EditUserPage",
+        {
+          "code": "02.003",
+          "message": "Could not find page EditUserPage",
+        },
       ],
       "filepath": "/web/src/Routes.js",
       "hasParameters": false,
@@ -181,7 +184,10 @@ RedwoodRouter {
     },
     RedwoodRoute {
       "errors": [
-        "Could not find page EditUserPage",
+        {
+          "code": "02.003",
+          "message": "Could not find page EditUserPage",
+        },
       ],
       "filepath": "/web/src/Routes.js",
       "hasParameters": false,
@@ -251,8 +257,14 @@ exports[`From within the example-todo-main fixture returns the correct routers w
 exports[`From within the example-todo-main-with-errors fixture returns the correct routers with a project: /web/src/Routes.js 1`] = `
 RedwoodRouter {
   "errors": [
-    "No notfound route detected",
-    "Multiple routes named home are present",
+    {
+      "code": "03.001",
+      "message": "No "notfound" route detected",
+    },
+    {
+      "code": "03.003",
+      "message": "Multiple routes named "home" are present",
+    },
   ],
   "filepath": "/web/src/Routes.js",
   "name": "Routes",
@@ -283,7 +295,10 @@ RedwoodRouter {
     },
     RedwoodRoute {
       "errors": [
-        "Could not find page DoesNotExist",
+        {
+          "code": "02.003",
+          "message": "Could not find page DoesNotExist",
+        },
       ],
       "filepath": "/web/src/Routes.js",
       "hasParameters": true,
@@ -317,8 +332,14 @@ exports[`From within the example-todo-main-with-errors fixture returns the corre
 exports[`From within the example-todo-main-with-errors fixture returns the correct routers without a project: /web/src/Routes.js 1`] = `
 RedwoodRouter {
   "errors": [
-    "No notfound route detected",
-    "Multiple routes named home are present",
+    {
+      "code": "03.001",
+      "message": "No "notfound" route detected",
+    },
+    {
+      "code": "03.003",
+      "message": "Multiple routes named "home" are present",
+    },
   ],
   "filepath": "/web/src/Routes.js",
   "name": "Routes",
@@ -349,7 +370,10 @@ RedwoodRouter {
     },
     RedwoodRoute {
       "errors": [
-        "Could not find page DoesNotExist",
+        {
+          "code": "02.003",
+          "message": "Could not find page DoesNotExist",
+        },
       ],
       "filepath": "/web/src/Routes.js",
       "hasParameters": true,

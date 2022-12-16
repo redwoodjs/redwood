@@ -60,7 +60,10 @@ Map {
   },
   RedwoodRoute {
     "errors": [
-      "Could not find page EditUserPage",
+      {
+        "code": "02.003",
+        "message": "Could not find page EditUserPage",
+      },
     ],
     "filepath": "/web/src/Routes.js",
     "hasParameters": false,
@@ -181,7 +184,10 @@ Map {
   },
   RedwoodRoute {
     "errors": [
-      "Could not find page DoesNotExist",
+      {
+        "code": "02.003",
+        "message": "Could not find page DoesNotExist",
+      },
     ],
     "filepath": "/web/src/Routes.js",
     "hasParameters": true,

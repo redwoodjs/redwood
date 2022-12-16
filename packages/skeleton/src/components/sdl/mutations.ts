@@ -1,14 +1,15 @@
 import { FieldDefinitionNode } from 'graphql'
 
 import { parseGraphQL } from '../../lib/gql'
-import { RedwoodSkeleton } from '../skeleton'
+import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from '../diagnostic'
 import { RedwoodProject } from '../project'
+import { RedwoodSkeleton } from '../skeleton'
 
 import { RedwoodSDL } from './sdl'
 
 export class RedwoodSDLMutation extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   readonly parameters: string[] = []
   readonly directiveNames: string[] = []
@@ -38,7 +39,10 @@ export class RedwoodSDLMutation extends RedwoodSkeleton {
         return knownDirective.name === directiveName
       })
       if (!directiveExists) {
-        this.errors.push(`Directive "${directiveName}" is not known`)
+        this.errors.push({
+          code: RedwoodErrorCode.SDL_DIRECTIVE_NOT_FOUND,
+          message: `Directive "${directiveName}" is not known`,
+        })
       }
     })
   }
@@ -55,7 +59,10 @@ export function extractMutations(sdl: RedwoodSDL): RedwoodSDLMutation[] {
   try {
     gqlAST = parseGraphQL(sdl.gql)
   } catch (_) {
-    sdl.errors.push(`Unabled to extract mutations because the gql is invalid`)
+    sdl.errors.push({
+      code: RedwoodErrorCode.GENERIC_PARSER_ERROR_GQL,
+      message: `Unabled to extract mutations because the gql is invalid`,
+    })
     return mutations
   }
 

@@ -13,12 +13,13 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { getASTFromFile } from '../lib/ast'
 
-import { RedwoodSkeleton } from './skeleton'
+import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from './diagnostic'
 import type { RedwoodProject } from './project'
+import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodFunction extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   constructor(filepath: string) {
     super(filepath)
@@ -39,7 +40,10 @@ export class RedwoodFunction extends RedwoodSkeleton {
       )
     })
     if (handlerExport === undefined) {
-      this.errors.push('No "handler" export found')
+      this.errors.push({
+        code: RedwoodErrorCode.FUNCTION_NO_HANDLER,
+        message: 'No "handler" export found',
+      })
     }
   }
 }

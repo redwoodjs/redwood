@@ -2,8 +2,9 @@ import fs from 'fs'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { RedwoodSkeleton } from './skeleton'
+import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from './diagnostic'
 import type { RedwoodProject } from './project'
+import { RedwoodSkeleton } from './skeleton'
 
 export enum RedwoodSideType {
   WEB = 'web',
@@ -11,20 +12,23 @@ export enum RedwoodSideType {
 }
 
 export class RedwoodSide extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   readonly type: RedwoodSideType
 
   constructor(filepath: string) {
     super(filepath)
 
-    if (!fs.existsSync(this.filepath)) {
-      this.errors.push('Side does not exist')
-    }
-
     // TODO: Decide how best to determine sides from the folder
     this.type = this.name === 'web' ? RedwoodSideType.WEB : RedwoodSideType.API
+
+    if (!fs.existsSync(this.filepath)) {
+      this.errors.push({
+        code: RedwoodErrorCode.SIDE_NOT_FOUND,
+        message: `Side ${this.name} does not exist`,
+      })
+    }
   }
 }
 

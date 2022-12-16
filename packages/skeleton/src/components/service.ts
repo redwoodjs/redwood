@@ -5,12 +5,13 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 // import { getASTFromFile } from '../lib/ast'
 
+import { RedwoodError, RedwoodWarning } from './diagnostic'
 import type { RedwoodProject } from './project'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodService extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   constructor(filepath: string) {
     super(filepath)

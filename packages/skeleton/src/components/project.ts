@@ -9,6 +9,7 @@ import { getRootPath } from '../lib/path'
 
 import { extractCells } from './cell'
 import type { RedwoodCell } from './cell'
+import { RedwoodError, RedwoodWarning } from './diagnostic'
 import { extractDirectives } from './directive'
 import type { RedwoodDirective } from './directive'
 import { extractFunctions } from './function'
@@ -34,8 +35,8 @@ export enum RedwoodProjectType {
 }
 
 export class RedwoodProject extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   readonly type: RedwoodProjectType
 

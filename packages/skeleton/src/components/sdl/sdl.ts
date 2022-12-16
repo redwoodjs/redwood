@@ -14,6 +14,12 @@ import {
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { getASTFromFile } from '../../lib/ast'
+import {
+  RedwoodError,
+  RedwoodErrorCode,
+  RedwoodWarning,
+  RedwoodWarningCode,
+} from '../diagnostic'
 import type { RedwoodProject } from '../project'
 import { RedwoodSkeleton } from '../skeleton'
 
@@ -21,8 +27,8 @@ import { extractMutations, RedwoodSDLMutation } from './mutations'
 import { extractQueries, RedwoodSDLQuery } from './query'
 
 export class RedwoodSDL extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   // TODO: Maybe we don't need the full gql
   readonly gql: string | undefined
@@ -54,7 +60,10 @@ export class RedwoodSDL extends RedwoodSkeleton {
       }
     })
     if (schemaExportVariableDeclarator === undefined) {
-      this.errors.push("No 'schema' export could be found")
+      this.errors.push({
+        code: RedwoodErrorCode.SDL_MISSING_SCHEMA_EXPORT,
+        message: 'No "schema" export could be found',
+      })
     } else {
       switch (schemaExportVariableDeclarator.init?.type) {
         case 'TaggedTemplateExpression':
@@ -70,14 +79,18 @@ export class RedwoodSDL extends RedwoodSkeleton {
           break
 
         default:
-          this.warnings.push(
-            `Unable to extract the gql (${schemaExportVariableDeclarator.init?.type})`
-          )
+          this.warnings.push({
+            code: RedwoodWarningCode.GENERIC_PARSER_WARNING_JSTS,
+            message: `Unable to extract the gql (${schemaExportVariableDeclarator.init?.type})`,
+          })
           break
       }
     }
     if (this.gql === undefined) {
-      this.errors.push('Could not extract the gql')
+      this.errors.push({
+        code: RedwoodErrorCode.GENERIC_PARSER_ERROR_JSTS,
+        message: 'Could not extract the gql',
+      })
     }
 
     this.queries = extractQueries(this)

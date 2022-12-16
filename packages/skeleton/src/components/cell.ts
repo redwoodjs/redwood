@@ -14,12 +14,18 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getASTFromCode } from '../lib/ast'
 import { getGraphQLQueryName } from '../lib/gql'
 
+import {
+  RedwoodError,
+  RedwoodErrorCode,
+  RedwoodWarning,
+  RedwoodWarningCode,
+} from './diagnostic'
 import type { RedwoodProject } from './project'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodCell extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   readonly gqlQuery: string | undefined
   readonly gqlQueryName: string | undefined
@@ -73,12 +79,18 @@ export class RedwoodCell extends RedwoodSkeleton {
 
     // Check if the mandatory success export is present
     if (!this.hasSuccessExport) {
-      this.errors.push('No "Success" export found but one is required')
+      this.errors.push({
+        code: RedwoodErrorCode.CELL_NO_SUCCESS_EXPORT,
+        message: 'No "Success" export found but one is required',
+      })
     }
 
     // Check if the mandatory query export is present
     if (!this.hasQueryExport) {
-      this.errors.push('No "QUERY" export found but one is required')
+      this.errors.push({
+        code: RedwoodErrorCode.CELL_NO_QUERY_EXPORT,
+        message: 'No "QUERY" export found but one is required',
+      })
     } else {
       const graphqlExport = namedExports.find((node) => {
         if (
@@ -109,22 +121,30 @@ export class RedwoodCell extends RedwoodSkeleton {
               this.gqlQuery = graphQLSource
               this.gqlQueryName = getGraphQLQueryName(this.gqlQuery)
               if (this.gqlQueryName === undefined) {
-                this.warnings.push('Could not determine the GraphQL query name')
+                this.warnings.push({
+                  code: RedwoodWarningCode.CELL_NO_QUERY_OPERATION_NAME,
+                  message: 'We recommend that you name your query operation',
+                })
               }
             } else {
-              this.errors.push(
-                `Could not extract the GraphQL query from "${gqlVariable.type}"`
-              )
+              this.errors.push({
+                code: RedwoodErrorCode.GENERIC_PARSER_ERROR_JSTS,
+                message: `Could not extract the GraphQL query from "${gqlVariable.type}"`,
+              })
             }
             break
           default:
-            this.errors.push(
-              `Could not process the GraphQL query from "${gqlVariable.type}"`
-            )
+            this.errors.push({
+              code: RedwoodErrorCode.GENERIC_PARSER_ERROR_JSTS,
+              message: `Could not process the GraphQL query from "${gqlVariable.type}"`,
+            })
             break
         }
       } else {
-        this.errors.push('Could not process the GraphQL variable')
+        this.errors.push({
+          code: RedwoodErrorCode.GENERIC_PARSER_ERROR_JSTS,
+          message: 'Could not process the GraphQL variable',
+        })
       }
     }
 

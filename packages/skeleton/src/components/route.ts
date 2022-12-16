@@ -12,15 +12,21 @@ import {
 
 import { getASTFromCode, getJSXElementAttributes } from '../lib/ast'
 
-import { RedwoodSkeleton } from './skeleton'
+import {
+  RedwoodError,
+  RedwoodErrorCode,
+  RedwoodWarning,
+  RedwoodWarningCode,
+} from './diagnostic'
 import type { RedwoodPage } from './page'
 import { RedwoodProject } from './project'
 import type { RedwoodRouter } from './router'
 import { RedwoodSideType } from './side'
+import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodRoute extends RedwoodSkeleton {
-  warnings: string[] = []
-  errors: string[] = []
+  warnings: RedwoodWarning[] = []
+  errors: RedwoodError[] = []
 
   readonly path: string | undefined
   readonly pageIdentifier: string | undefined
@@ -79,16 +85,25 @@ export class RedwoodRoute extends RedwoodSkeleton {
 
     if (this.isNotFound) {
       if (this.isPrivate) {
-        this.errors.push('The notfound page cannot be private')
+        this.errors.push({
+          code: RedwoodErrorCode.ROUTE_NOTFOUND_IS_PRIVATE,
+          message: 'The notfound route cannot be private',
+        })
       }
       if (this.path !== undefined) {
-        this.errors.push('The notfound page cannot have a path property')
+        this.errors.push({
+          code: RedwoodErrorCode.ROUTE_NOTFOUND_HAS_PATH,
+          message: 'The notfound route cannot have a path property',
+        })
       }
     }
 
     if (this.pageIdentifier !== undefined) {
       if (this.getPage() === undefined) {
-        this.errors.push(`Could not find page ${this.pageIdentifier}`)
+        this.errors.push({
+          code: RedwoodErrorCode.ROUTE_NO_CORRESPONDING_PAGE,
+          message: `Could not find page ${this.pageIdentifier}`,
+        })
       }
     }
 
@@ -138,7 +153,10 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     },
   })
   if (routerJSXElementNodePath === undefined) {
-    router.errors.push('Could not find the Router JSX element')
+    router.errors.push({
+      code: RedwoodErrorCode.ROUTER_NO_ROUTER_FOUND,
+      message: 'Could not find the Router JSX element',
+    })
     return []
   }
   // TODO: (check) Detect multiple <Router> and error about it?
@@ -160,7 +178,10 @@ function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
     routerJSXElementNodePath.scope
   )
   if (routeJSXElements.length === 0) {
-    router.warnings.push('No routes were found')
+    router.warnings.push({
+      code: RedwoodWarningCode.ROUTER_NO_ROUTES,
+      message: 'No routes were found',
+    })
     return []
   }
 

@@ -323,7 +323,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosMutations.sdl.js",
       "name": "deleteTodo",
@@ -354,7 +357,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js",
       "name": "todosWithInvalidRoles",
@@ -383,7 +389,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthMissingRoleError.sdl.js",
       "name": "todosWithMissingRoles",
@@ -413,7 +422,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
       "name": "todosWithStringRole",
@@ -425,7 +437,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
       "name": "todosWithMultipleRoles",
@@ -454,7 +469,10 @@ RedwoodSDL {
         "deprecated",
       ],
       "errors": [
-        "Directive "deprecated" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "deprecated" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithBuiltInDirectives.sdl.js",
       "name": "todosWithBuiltInDeprecatedDirective",
@@ -471,8 +489,14 @@ RedwoodSDL {
 exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js 1`] = `
 RedwoodSDL {
   "errors": [
-    "Unabled to extract queries because the gql is invalid",
-    "Unabled to extract mutations because the gql is invalid",
+    {
+      "code": "00.003",
+      "message": "Unabled to extract queries because the gql is invalid",
+    },
+    {
+      "code": "00.003",
+      "message": "Unabled to extract mutations because the gql is invalid",
+    },
   ],
   "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js",
   "gql": "
@@ -490,8 +514,14 @@ RedwoodSDL {
 exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs with a project: /api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js 1`] = `
 RedwoodSDL {
   "errors": [
-    "Unabled to extract queries because the gql is invalid",
-    "Unabled to extract mutations because the gql is invalid",
+    {
+      "code": "00.003",
+      "message": "Unabled to extract queries because the gql is invalid",
+    },
+    {
+      "code": "00.003",
+      "message": "Unabled to extract mutations because the gql is invalid",
+    },
   ],
   "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js",
   "gql": "
@@ -523,7 +553,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithNumericRoleAuthError.sdl.js",
       "name": "todosWithInvalidRole",
@@ -624,7 +657,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosMutations.sdl.js",
       "name": "deleteTodo",
@@ -655,7 +691,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js",
       "name": "todosWithInvalidRoles",
@@ -684,7 +723,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthMissingRoleError.sdl.js",
       "name": "todosWithMissingRoles",
@@ -714,7 +756,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
       "name": "todosWithStringRole",
@@ -726,7 +771,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
       "name": "todosWithMultipleRoles",
@@ -755,7 +803,10 @@ RedwoodSDL {
         "deprecated",
       ],
       "errors": [
-        "Directive "deprecated" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "deprecated" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithBuiltInDirectives.sdl.js",
       "name": "todosWithBuiltInDeprecatedDirective",
@@ -772,8 +823,14 @@ RedwoodSDL {
 exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js 1`] = `
 RedwoodSDL {
   "errors": [
-    "Unabled to extract queries because the gql is invalid",
-    "Unabled to extract mutations because the gql is invalid",
+    {
+      "code": "00.003",
+      "message": "Unabled to extract queries because the gql is invalid",
+    },
+    {
+      "code": "00.003",
+      "message": "Unabled to extract mutations because the gql is invalid",
+    },
   ],
   "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeError.sdl.js",
   "gql": "
@@ -791,8 +848,14 @@ RedwoodSDL {
 exports[`From within the example-todo-main-with-errors fixture returns the correct SDLs without a project: /api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js 1`] = `
 RedwoodSDL {
   "errors": [
-    "Unabled to extract queries because the gql is invalid",
-    "Unabled to extract mutations because the gql is invalid",
+    {
+      "code": "00.003",
+      "message": "Unabled to extract queries because the gql is invalid",
+    },
+    {
+      "code": "00.003",
+      "message": "Unabled to extract mutations because the gql is invalid",
+    },
   ],
   "filepath": "/api/src/graphql/todosWithMissingAuthRolesAttributeNumericError.sdl.js",
   "gql": "
@@ -824,7 +887,10 @@ RedwoodSDL {
         "requireAuth",
       ],
       "errors": [
-        "Directive "requireAuth" is not known",
+        {
+          "code": "04.001",
+          "message": "Directive "requireAuth" is not known",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithNumericRoleAuthError.sdl.js",
       "name": "todosWithInvalidRole",
