@@ -79,7 +79,7 @@
     "core-js": "3.26.1",
     "cypress": "11.2.0",
     "cypress-wait-until": "1.7.2",
-    "eslint": "8.29.0",
+    "eslint": "8.30.0",
     "fast-glob": "3.2.12",
     "fs-extra": "11.1.0",
     "is-port-reachable": "3.1.0",
