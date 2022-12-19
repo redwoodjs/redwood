@@ -205,8 +205,15 @@ export async function builder(yargs) {
 }
 
 async function getAuthHandler(module) {
+  const { version } = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, '../../../../package.json'),
+      'utf-8'
+    )
+  )
+
   if (!isInstalled(module)) {
-    await execa.command(`yarn add -D ${module}@canary`, {
+    await execa.command(`yarn add -D ${module}@${version}`, {
       stdio: 'inherit',
       cwd: getPaths().base,
     })
