@@ -4,54 +4,98 @@ sidebar_label: Clerk
 
 # Clerk Authentication
 
-## Installation
+To get started, run the setup command:
 
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
-
-```bash
+```text
 yarn rw setup auth clerk
 ```
 
-## Setup
+This installs all the packages, writes all the files, and makes all the code modifications you need.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Clerk, see the top-level [Authentication](../authentication.md) doc. There is one Clerk-specific thing we'll get to, but for now, let's focus on Clerk's side of things.
 
-To get started with Clerk, sign up on [their website](https://clerk.dev/) and create an application, or follow their [RedwoodJS Blog Tutorial with Clerk](https://clerk.dev/tutorials/redwoodjs-blog-tutorial-with-clerk) that has an [example repo](https://github.com/redwoodjs/redwood-tutorial) already setup.
+If you don't have a Clerk account yet, now's the time to make one: navigate to https://clerk.dev and sign up, then create an application.
+The defaults are good enough to get us going, but feel free to configure things as you wish.
+Next we'll get the application's API keys from its dashboard.
 
-The [RedwoodJS Blog Tutorial with Clerk](https://clerk.dev/tutorials/redwoodjs-blog-tutorial-with-clerk) also explains how to use `@clerk/clerk-react` components with Redwood's `useAuth()` hook in more detail, but the gist of it is like this:
+:::note we'll only focus on the development instance
 
-```tsx
-import { UserButton, SignInButton } from '@clerk/clerk-react'
+By default, Clerk applications have two instances, "Development" and "Production".
+We'll only focus on the Development instance here. When you're ready to deploy to production, switch the instance the dashboard is displaying by clicking "Development" in the header at the top.
+How you get your API keys to production depends on your deploy provider.
 
-// ...
+:::
 
-{
-  isAuthenticated ? (
-    <UserButton afterSignOutAll={window.location.href} />
-  ) : (
-    <SignInButton mode="modal">
-      <button>Log in</button>
-    </SignInButton>
-  )
-}
+We're looking for three API keys. Head over to the "Developers" section in the nav on the left and click "API Keys". You'll need all three of the ones on this page: the Frontend API key, the default Backend API key, and the JWT verification key. Copy them into your project's `.env` file:
+
+```bash title=".env"
+CLERK_FRONTEND_API_URL="..."
+# This one is the default Backend API Key.
+CLERK_API_KEY="..."
+CLERK_JWT_KEY="..."
 ```
 
-Applications in Clerk have different instances. By default, there's one for development, one for staging, and one for production. You'll need to pull three values from one of these instances. We recommend storing the development values in your local `.env` file and using the staging and production values in the appropriate env setups for your hosting platform when you deploy.
+Lastly, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be available to the web side:
 
-The three values you'll need from Clerk are your instance's "Frontend API Key" url, a "Backend API key" and a "JWT verification key", all from your instance's settings under "API Keys". The Frontend API url should be stored in an env variable named `CLERK_FRONTEND_API_URL`. The Backend API key should be named `CLERK_API_KEY`. Finally, the JWT key should be named `CLERK_JWT_KEY`
+```toml title="redwood.toml"
+[web]
+  # ...
+  includeEnvironmentVariables = ["CLERK_FRONTEND_API_URL"]
+```
 
-Otherwise, feel free to configure your instances however you wish with regards to their appearance and functionality.
+That should be enough; now, things should just work. Let's make sure: if this is a brand new project, create a home page. There we'll destructure `signUp` from the `useAuth` hook (import that from `'src/auth'`):
 
-> **Including Environment Variables in Serverless Deploys**
->
-> In addition to adding these env vars to your local `.env` file or deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given above, follow the instructions in [this document](environment-variables.md). You need to expose the `CLERK_FRONTEND_API_URL` variable to the `web` side.
+```
+yarn rw g page home /
+```
 
-## Login and Logout Options
+```tsx title="web/src/pages/HomePage.tsx"
+import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
-When using the Clerk client, `login` and `signUp` take an `options` object that can be used to override the client config.
+// highlight-next-line
+import { useAuth } from 'src/auth'
 
-For `login` the `options` may contain all the options listed at the Clerk [props documentation for login](https://docs.clerk.dev/reference/clerkjs/clerk#signinprops).
+const HomePage = () => {
+  // highlight-next-line
+  const { signUp } = useAuth()
 
-For `signUp` the `options` may contain all the options listed at the Clerk [props documentation for signup](https://docs.clerk.dev/reference/clerkjs/clerk#signupprops).
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
 
-## Avoiding Feature Duplication Confusion
+      // highlight-next-line
+      <button onClick={signUp}>sign up</button>
+    </>
+  )
+}
 
-Redwood's integration of Clerk is based on [Clerk's React SDK](https://docs.clerk.dev/reference/clerk-react). This means there is some duplication between the features available through that SDK and the ones available in the `@redwoodjs/auth` package - such as the alternatives of using Clerk's `SignedOut` component to redirect users away from a private page vs. using Redwood's `Private` route wrapper. In general, we would recommend you use the **Redwood** way of doing things when possible, as that is more likely to function harmoniously with the rest of Redwood. That being said, though, there are some great features in Clerk's SDK that you will be able to now use in your app, such as the `UserButton` and `UserProfile` components.
+export default HomePage
+```
+
+Clicking sign up should open a sign-up box:
+
+<img width="1522" alt="image" src="https://user-images.githubusercontent.com/32992335/208342825-b380f8f8-7b76-4be9-a0a5-e64740a03bd3.png" />
+
+## Deep dive: the `ClerkStatusUpdater` component
+
+At the start of this doc, we said that there's one Clerk-specific thing worth noting.
+We'll discuss it here, but feel free to skip this section if you'd like—this is all extracurricular.
+
+Clerk is a bit unlike the other auth providers Redwood integrates with in that it puts its instance on the browser's `window` object.
+
+## Avoiding feature duplication
+
+Redwood's Clerk integration is based on [Clerk's React SDK](https://clerk.dev/docs/reference/clerk-react/installation).
+This means that there's some duplication between the features in the SDK and the ones in `@redwoodjs/auth-clerk-web`. For example, the SDK ha a `SignedOut` component that redirects a user away from a private page—very much like wrapping a route with Redwood's `Private` component.
+We recommend you use Redwood's way of doing things as much as possible since it's much more likely to get along with the rest of the framework.
+
+<!-- ## `useAuth` reference
+
+| name     | description                                                                                                 |
+| :------- | :---------------------------------------------------------------------------------------------------------- |
+| client   | The clerk instance. See https://clerk.dev/docs/reference/clerkjs/clerk |
+| logIn    | Logs a user in. Takes Clerk's [`SignInProps`](https://clerk.dev/docs/reference/clerkjs/clerk#sign-in-props) |
+| logOut   | Logs a user out. Takes Clerk's SignOutOptions                                                                  |
+| signUp   | Signs up a user. Takes Clerk's [`SignUpProps`](https://docs.clerk.dev/reference/clerkjs/clerk#signupprops)  |
+
+ -->
