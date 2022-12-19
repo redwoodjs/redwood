@@ -717,7 +717,7 @@ Well, it's almost right! Where's our email address? By default, the function tha
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 
-export const getCurrentUser = async (session) => {
+export const getCurrentUser = async (session): Promise<{ email: string; id: number }> => {
   return await db.user.findUnique({
     where: { id: session.id },
     select: { id: true },
