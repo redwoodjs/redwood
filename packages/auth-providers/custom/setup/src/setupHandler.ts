@@ -19,6 +19,7 @@ export async function handler({ force: forceArg }: Args) {
     basedir: __dirname,
     forceArg,
     provider: 'custom',
+    authDecoderImport: "import { authDecoder } from 'src/lib/auth'",
     webPackages: [`@redwoodjs/auth@${version}`],
     notes: [
       'Done! But you have a little more work to do:\n',

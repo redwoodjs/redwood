@@ -124,3 +124,16 @@ export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
+
+/**
+ * The function the GraphQL handler uses the deocde the JWT.
+ */
+export const authDecoder = (token: string, type: string) => {
+  // If you change the type on the web side in the `createAuthImplementation` function,
+  // be sure to change it here too.
+  if (type !== 'custom-auth') {
+    return null
+  }
+
+  // decode token...
+}
