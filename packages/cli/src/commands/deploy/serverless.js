@@ -5,8 +5,7 @@ import boxen from 'boxen'
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import execa from 'execa'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
@@ -82,8 +81,8 @@ export const buildCommands = ({ sides }) => {
       enabled: () => sides.includes('api'),
       task: async () => {
         // Dynamically import this function
-        // becuase its dependencies are only installed when `rw setup deploy serverless` is run
-        const { default: nftPack } = await import('./packing/nft')
+        // because its dependencies are only installed when `rw setup deploy serverless` is run
+        const { nftPack } = (await import('./packing/nft')).default
 
         await nftPack()
       },
@@ -142,7 +141,7 @@ export const handler = async (yargs) => {
     ],
     {
       exitOnError: true,
-      renderer: yargs.verbose && VerboseRenderer,
+      renderer: yargs.verbose && 'verbose',
     }
   )
   try {
@@ -171,7 +170,7 @@ export const handler = async (yargs) => {
       const { addDotEnv } = await prompts({
         type: 'confirm',
         name: 'addDotEnv',
-        message: `Add API_URL to your .env.production? This will be used if you deploy the web side from your machine`,
+        message: `Add API_URL to your .env.${yargs.stage}? This will be used if you deploy the web side from your machine`,
       })
 
       if (addDotEnv) {
@@ -205,7 +204,7 @@ export const handler = async (yargs) => {
           ],
           {
             exitOnError: true,
-            renderer: yargs.verbose && VerboseRenderer,
+            renderer: yargs.verbose && 'verbose',
           }
         )
 

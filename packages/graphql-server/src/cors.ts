@@ -1,98 +1,59 @@
-import { Request } from 'graphql-helix'
-import { Headers } from 'node-fetch'
+import { CORSOptions } from '@graphql-yoga/common'
 
-export type CorsConfig = {
-  origin?: boolean | string | string[]
-  methods?: string | string[]
-  allowedHeaders?: string | string[]
-  exposedHeaders?: string | string[]
-  credentials?: boolean
-  maxAge?: number
-}
+import { CorsConfig } from '@redwoodjs/api'
 
-export type CorsHeaders = Record<string, string>
-export type CorsContext = ReturnType<typeof createCorsContext>
+export const mapRwCorsOptionsToYoga = (
+  rwCorsConfig?: CorsConfig,
+  requestOrigin?: string | null
+) => {
+  const yogaCORSOptions: CORSOptions = {}
 
-export function createCorsContext(cors: CorsConfig | undefined) {
-  // Taken from apollo-server-env
-  // @see: https://github.com/apollographql/apollo-server/blob/9267a79b974e397e87ad9ee408b65c46751e4565/packages/apollo-server-env/src/polyfills/fetch.js#L1
-  const corsHeaders = new Headers()
+  if (!rwCorsConfig) {
+    // Disable all CORS headers on Yoga
+    return false
+  }
 
-  if (cors) {
-    if (cors.methods) {
-      if (typeof cors.methods === 'string') {
-        corsHeaders.set('access-control-allow-methods', cors.methods)
-      } else if (Array.isArray(cors.methods)) {
-        corsHeaders.set('access-control-allow-methods', cors.methods.join(','))
-      }
+  if (rwCorsConfig?.methods) {
+    if (typeof rwCorsConfig.methods === 'string') {
+      yogaCORSOptions.methods = [rwCorsConfig.methods]
+    } else if (Array.isArray(rwCorsConfig.methods)) {
+      yogaCORSOptions.methods = rwCorsConfig.methods
     }
-
-    if (cors.allowedHeaders) {
-      if (typeof cors.allowedHeaders === 'string') {
-        corsHeaders.set('access-control-allow-headers', cors.allowedHeaders)
-      } else if (Array.isArray(cors.allowedHeaders)) {
-        corsHeaders.set(
-          'access-control-allow-headers',
-          cors.allowedHeaders.join(',')
-        )
-      }
-    }
-
-    if (cors.exposedHeaders) {
-      if (typeof cors.exposedHeaders === 'string') {
-        corsHeaders.set('access-control-expose-headers', cors.exposedHeaders)
-      } else if (Array.isArray(cors.exposedHeaders)) {
-        corsHeaders.set(
-          'access-control-expose-headers',
-          cors.exposedHeaders.join(',')
-        )
-      }
-    }
-
-    if (cors.credentials) {
-      corsHeaders.set('access-control-allow-credentials', 'true')
-    }
-    if (typeof cors.maxAge === 'number') {
-      corsHeaders.set('access-control-max-age', cors.maxAge.toString())
+  }
+  if (rwCorsConfig?.allowedHeaders) {
+    if (typeof rwCorsConfig.allowedHeaders === 'string') {
+      yogaCORSOptions.allowedHeaders = [rwCorsConfig.allowedHeaders]
+    } else if (Array.isArray(rwCorsConfig.allowedHeaders)) {
+      yogaCORSOptions.allowedHeaders = rwCorsConfig.allowedHeaders
     }
   }
 
-  return {
-    shouldHandleCors(request: Request) {
-      return request.method === 'OPTIONS'
-    },
-    getRequestHeaders(request: Request): CorsHeaders {
-      const eventHeaders = new Headers(
-        request.headers as Record<string, string>
-      )
-      const requestCorsHeaders = new Headers(corsHeaders)
-
-      if (cors && cors.origin) {
-        const requestOrigin = eventHeaders.get('origin')
-        if (typeof cors.origin === 'string') {
-          requestCorsHeaders.set('access-control-allow-origin', cors.origin)
-        } else if (
-          requestOrigin &&
-          (typeof cors.origin === 'boolean' ||
-            (Array.isArray(cors.origin) &&
-              requestOrigin &&
-              cors.origin.includes(requestOrigin)))
-        ) {
-          requestCorsHeaders.set('access-control-allow-origin', requestOrigin)
-        }
-
-        const requestAccessControlRequestHeaders = eventHeaders.get(
-          'access-control-request-headers'
-        )
-        if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
-          requestCorsHeaders.set(
-            'access-control-allow-headers',
-            requestAccessControlRequestHeaders
-          )
-        }
-      }
-
-      return Object.fromEntries(requestCorsHeaders.entries())
-    },
+  if (rwCorsConfig?.exposedHeaders) {
+    if (typeof rwCorsConfig.exposedHeaders === 'string') {
+      yogaCORSOptions.exposedHeaders = [rwCorsConfig.exposedHeaders]
+    } else if (Array.isArray(rwCorsConfig.exposedHeaders)) {
+      yogaCORSOptions.exposedHeaders = rwCorsConfig.exposedHeaders
+    }
   }
+
+  if (rwCorsConfig?.credentials) {
+    yogaCORSOptions.credentials = rwCorsConfig.credentials
+  }
+
+  if (rwCorsConfig?.maxAge) {
+    yogaCORSOptions.maxAge = rwCorsConfig.maxAge
+  }
+
+  if (rwCorsConfig?.origin) {
+    if (typeof rwCorsConfig.origin === 'string') {
+      yogaCORSOptions.origin = [rwCorsConfig.origin]
+    } else if (rwCorsConfig.origin === true) {
+      yogaCORSOptions.origin = [requestOrigin || '*']
+    } else {
+      // Array of origins
+      yogaCORSOptions.origin = rwCorsConfig.origin
+    }
+  }
+
+  return yogaCORSOptions
 }

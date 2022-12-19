@@ -1,13 +1,13 @@
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareForRollback } from '../../../lib/rollback'
 import { verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
-
+import { validateName, yargsDefaults } from '../helpers'
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'model.js.template')
 
 export const files = ({ name, typescript = false }) => {
@@ -27,6 +27,11 @@ export const builder = (yargs) => {
       description: 'Name of the model to create',
       type: 'string',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'RedwoodRecord Reference',
@@ -40,6 +45,8 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force, ...args }) => {
+  validateName(args.name)
+
   const tasks = new Listr(
     [
       {
@@ -56,11 +63,14 @@ export const handler = async ({ force, ...args }) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {
     await verifyModelName({ name: args.name })
+    if (args.rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

@@ -1,0 +1,26 @@
+name: Update all contributors
+
+on:
+  schedule:
+    # This runs once a week: https://crontab.guru/once-a-week.
+    # * is a special character in YAML so you have to quote this string.
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  update-all-contributors:
+    name: Update all contributors
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.JTOAR_TOKEN }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: yarn install
+
+      - name: Update all contributors
+        uses: ./.github/actions/update_all_contributors

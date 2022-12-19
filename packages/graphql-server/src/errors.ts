@@ -1,7 +1,7 @@
 // based on ApolloError https://github.com/apollographql/apollo-server/blob/main/packages/apollo-server-errors/src/index.ts
-import { EnvelopError } from '@envelop/core'
+import { GraphQLYogaError } from '@graphql-yoga/common'
 
-export class RedwoodGraphQLError extends EnvelopError {
+export class RedwoodGraphQLError extends GraphQLYogaError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)
   }

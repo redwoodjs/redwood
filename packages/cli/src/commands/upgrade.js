@@ -3,8 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 import latestVersion from 'latest-version'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -49,7 +48,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#upgrade'
+        'https://redwoodjs.com/docs/cli-commands#upgrade'
       )}`
     )
     // Just to make an empty line
@@ -64,8 +63,8 @@ export const builder = (yargs) => {
 
 // Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
-  /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi
-const validateTag = (tag) => {
+  /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
+export const validateTag = (tag) => {
   const isTagValid =
     tag === 'rc' ||
     tag === 'canary' ||
@@ -131,7 +130,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         },
       },
     ],
-    { collapse: false, renderer: verbose && VerboseRenderer }
+    { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
   )
 
   try {
@@ -143,13 +142,19 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
   }
 }
 async function yarnInstall({ verbose }) {
-  try {
-    await execa('yarn install', ['--force', '--non-interactive'], {
-      shell: true,
-      stdio: verbose ? 'inherit' : 'pipe',
+  const yarnVersion = await getCmdMajorVersion('yarn')
 
-      cwd: getPaths().base,
-    })
+  try {
+    await execa(
+      'yarn install',
+      yarnVersion > 1 ? [] : ['--force', '--non-interactive'],
+      {
+        shell: true,
+        stdio: verbose ? 'inherit' : 'pipe',
+
+        cwd: getPaths().base,
+      }
+    )
   } catch (e) {
     throw new Error(
       'Could not finish installation. Please run `yarn install --force`, before continuing'
@@ -253,11 +258,12 @@ async function refreshPrismaClient(task, { verbose }) {
   }
 }
 
-const getCmdMajorVersion = async (command) => {
+export const getCmdMajorVersion = async (command) => {
   // Get current version
   const { stdout } = await execa(command, ['--version'], {
     cwd: getPaths().base,
   })
+
   if (!SEMVER_REGEX.test(stdout)) {
     throw new Error(`Unable to verify ${command} version.`)
   }
@@ -271,24 +277,29 @@ const dedupeDeps = async (task, { verbose }) => {
   try {
     const yarnVersion = await getCmdMajorVersion('yarn')
     const npxVersion = await getCmdMajorVersion('npx')
-    if (yarnVersion > 1) {
-      task.skip('Deduplication is only required for <=1.x')
-      return
-    }
     let npxArgs = []
     if (npxVersion > 6) {
       npxArgs = ['--yes']
     }
 
-    await execa('npx', [...npxArgs, 'yarn-deduplicate'], {
+    const baseExecaArgsForDedupe = {
       shell: true,
       stdio: verbose ? 'inherit' : 'pipe',
       cwd: getPaths().base,
-    })
+    }
+    if (yarnVersion > 1) {
+      await execa('yarn', ['dedupe'], baseExecaArgsForDedupe)
+    } else {
+      await execa(
+        'npx',
+        [...npxArgs, 'yarn-deduplicate'],
+        baseExecaArgsForDedupe
+      )
+    }
   } catch (e) {
     console.log(c.error(e.message))
     throw new Error(
-      'Could not finish deduplication. If the project is using yarn 1.x, please run `npx yarn-deduplicate`, before continuing'
+      'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn 3 run `yarn dedupe` before continuing'
     )
   }
   await yarnInstall({ verbose })

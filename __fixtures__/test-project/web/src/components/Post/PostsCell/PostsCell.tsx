@@ -1,7 +1,7 @@
 import type { FindPosts } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { Link, routes } from '@redwoodjs/router'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Posts from 'src/components/Post/Posts'
 
@@ -11,6 +11,7 @@ export const QUERY = gql`
       id
       title
       body
+      authorId
       createdAt
     }
   }
@@ -30,7 +31,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {

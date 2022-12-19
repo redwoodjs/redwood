@@ -12,8 +12,13 @@ import {
   isGraphQLSchemaFile,
 } from '../files'
 import { getPaths } from '../paths'
+import { warningForDuplicateRoutes } from '../routes'
 
 import { generate } from './generate'
+import {
+  generateTypeDefGraphQLApi,
+  generateTypeDefGraphQLWeb,
+} from './graphqlCodeGen'
 import { generateGraphQLSchema } from './graphqlSchema'
 import {
   generateMirrorCell,
@@ -22,8 +27,6 @@ import {
   generateTypeDefRouterPages,
   mirrorPathForDirectoryNamedModules,
   mirrorPathForCell,
-  generateTypeDefGraphQLWeb,
-  generateTypeDefGraphQLApi,
 } from './typeDefinitions'
 
 const rwjsPaths = getPaths()
@@ -42,11 +45,17 @@ const action = {
   change: 'Modified',
 }
 
+let routesWarningMessage = ''
+
 watcher
   .on('ready', async () => {
     console.log('Generating TypeScript definitions and GraphQL schemas...')
     const files = await generate()
     console.log(files.length, 'files generated')
+    routesWarningMessage = warningForDuplicateRoutes()
+    if (routesWarningMessage) {
+      console.warn(routesWarningMessage)
+    }
   })
   .on('all', async (eventName, p) => {
     if (!['add', 'change', 'unlink'].includes(eventName)) {
@@ -67,6 +76,7 @@ watcher
       console.log(action[eventName], 'Cell:', '\x1b[2m', p, '\x1b[0m')
     } else if (absPath === rwjsPaths.web.routes) {
       generateTypeDefRouterRoutes()
+      routesWarningMessage = warningForDuplicateRoutes()
       console.log(action[eventName], 'Routes:', '\x1b[2m', p, '\x1b[0m')
     } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
       generateTypeDefRouterPages()
@@ -88,5 +98,9 @@ watcher
       await generateGraphQLSchema()
       await generateTypeDefGraphQLApi()
       console.log(action[eventName], 'GraphQL Schema:', '\x1b[2m', p, '\x1b[0m')
+    }
+
+    if (routesWarningMessage) {
+      console.warn(routesWarningMessage)
     }
   })

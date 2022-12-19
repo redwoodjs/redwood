@@ -1,28 +1,67 @@
-const appMetadata = (token: {
-  decoded: { [index: string]: Record<string, any> }
+export type Decoded = Record<string, unknown> | null
+
+interface DecodedWithRoles extends Record<string, unknown> {
+  roles: string | string[]
+}
+
+interface DecodedWithMetadata extends Record<string, unknown> {
+  [key: string]: Record<string, unknown>
+}
+
+interface TokenWithRoles {
+  decoded: DecodedWithRoles
+}
+
+interface TokenWithMetadata {
+  decoded: DecodedWithMetadata
   namespace?: string
-}): any => {
+}
+
+function isTokenWithRoles(token: {
+  decoded: Decoded
+}): token is TokenWithRoles {
+  return !!(token.decoded as DecodedWithRoles)?.roles
+}
+
+function isTokenWithMetadata(token: {
+  decoded: Decoded
+  namespace?: string
+}): token is TokenWithMetadata {
   const claim = token.namespace
     ? `${token.namespace}/app_metadata`
     : 'app_metadata'
-  return token.decoded?.[claim] || {}
+  return !!(token.decoded as DecodedWithMetadata)?.[claim]
+}
+
+const appMetadata = (token: { decoded: Decoded; namespace?: string }): any => {
+  if (typeof token.decoded === 'string') {
+    return {}
+  }
+
+  if (isTokenWithMetadata(token)) {
+    const claim = token.namespace
+      ? `${token.namespace}/app_metadata`
+      : 'app_metadata'
+    return token.decoded?.[claim]
+  }
+
+  return {}
 }
 
 const roles = (token: {
-  decoded: { [index: string]: Record<string, any> }
+  decoded: Decoded
   namespace?: string
-}): any => {
+}): string | string[] => {
+  if (isTokenWithRoles(token)) {
+    return token.decoded.roles
+  }
+
   const metadata = appMetadata(token)
-  return (
-    token.decoded?.roles ||
-    metadata?.roles ||
-    metadata.authorization?.roles ||
-    []
-  )
+  return metadata?.roles || metadata.authorization?.roles || []
 }
 
 export const parseJWT = (token: {
-  decoded: { [index: string]: Record<string, any> }
+  decoded: Decoded
   namespace?: string
 }): any => {
   return {

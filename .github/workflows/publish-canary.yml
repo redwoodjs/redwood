@@ -1,0 +1,90 @@
+name: 🦜 Publish Canary
+
+on:
+  push:
+    branches: [main, next]
+    # We don't want this to run when we publish a release.
+    tags-ignore: ['v**']
+    # No need to run on docs-only changes
+    paths-ignore: ['docs/**']
+
+jobs:
+  publish-canary:
+    name: 🦜 Publish Canary
+    if: github.repository == 'redwoodjs/redwood'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.value }}
+    steps:
+      - uses: actions/checkout@v3
+        # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
+        #  This is required because lerna uses tags to determine the version.
+        with:
+          fetch-depth: 0
+
+      - name: 🧶 Setup job
+        uses: ./.github/actions/setup_job
+
+      - name: ✅ Check constraints, dependencies, and package.json's
+        uses: ./tasks/check
+
+      - name: 🏗 Build
+        run: yarn build
+
+      - name: 🔎 Lint
+        run: yarn lint
+
+      - name: 🧪 Test
+        run: yarn test
+
+      - name: 🚢 Publish
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
+
+          TAG='canary' && [[ "$GITHUB_REF_NAME" = 'next' ]] && TAG='next'
+          echo "Publishing $TAG"
+
+          args=()
+
+          if [[ "$GITHUB_REF_NAME" = 'main' ]]; then
+            args+=(premajor)
+          fi
+
+          args+=(
+            --include-merged-tags
+            --canary
+            --exact
+            --preid "$TAG"
+            --dist-tag "$TAG"
+            --force-publish
+            --loglevel verbose
+            --no-git-reset
+            --yes
+          )
+
+          yarn lerna publish "${args[@]}"
+
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: 🏷 Get version
+        id: get-version
+        uses: sergeysova/jq-action@v2.2.1
+        with:
+          cmd: 'jq .version packages/core/package.json -r'
+
+  message-slack:
+    name: 💬 Message Slack
+    needs: publish-canary
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: 💬 Message Slack
+        uses: ./.github/actions/message_slack_publishing
+        with:
+          title: "🦜 Canary Packages"
+          status: ${{ needs.publish-canary.result }}
+          version: ${{ needs.publish-canary.outputs.version }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}

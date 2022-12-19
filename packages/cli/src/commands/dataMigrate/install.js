@@ -2,7 +2,7 @@ import path from 'path'
 
 import execa from 'execa'
 import fs from 'fs-extra'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -86,7 +86,7 @@ export const handler = async () => {
         },
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 
   try {

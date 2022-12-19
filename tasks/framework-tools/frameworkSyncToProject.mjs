@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /* eslint-env node */
 
-import c from 'ansi-colors'
-import chokidar from 'chokidar'
 import fs from 'node:fs'
 import path from 'node:path'
+
+import c from 'ansi-colors'
+import chokidar from 'chokidar'
 
 import {
   REDWOOD_PACKAGES_PATH,
@@ -76,13 +77,13 @@ chokidar
 
     console.log()
     logStatus('Copying files...')
-    copyFrameworkFilesToProject(projectPath)
+    await copyFrameworkFilesToProject(projectPath)
 
     console.log()
     logStatus('Done, and waiting for changes...')
     console.log('-'.repeat(80))
   })
-  .on('all', (_event, filePath) => {
+  .on('all', async (_event, filePath) => {
     logStatus(filePath)
 
     if (filePath.endsWith('package.json')) {
@@ -112,7 +113,7 @@ chokidar
 
       console.log()
       logStatus(`Copying ${packageName}...`)
-      copyFrameworkFilesToProject(projectPath, [packageJsonPath])
+      await copyFrameworkFilesToProject(projectPath, [packageJsonPath])
     } catch (error) {
       hasHadError = true
       console.log(error)

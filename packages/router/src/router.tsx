@@ -4,7 +4,6 @@ import { ActiveRouteLoader } from './active-route-loader'
 import { useActivePageContext } from './ActivePageContext'
 import { Redirect } from './links'
 import { useLocation, LocationProvider } from './location'
-import { PageLoader } from './page-loader'
 import { ParamsProvider } from './params'
 import {
   RouterContextProvider,
@@ -63,13 +62,13 @@ function Route(props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
   return <InternalRoute {...props} />
 }
 
-const InternalRoute: React.VFC<InternalRouteProps> = ({
+const InternalRoute = ({
   path,
   page,
   name,
   redirect,
   notfound,
-}) => {
+}: InternalRouteProps) => {
   const routerState = useRouterState()
   const activePageContext = useActivePageContext()
 
@@ -91,14 +90,12 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
     throw new Error(`No location for route "${name}"`)
   }
 
-  const { params: pathParams } = matchPath(
-    path,
-    location.pathname,
-    routerState.paramTypes
-  )
+  const { params: pathParams } = matchPath(path, location.pathname, {
+    paramTypes: routerState.paramTypes,
+  })
 
   const searchParams = parseSearch(location.search)
-  const allParams = { ...searchParams, ...pathParams }
+  const allParams: Record<string, string> = { ...searchParams, ...pathParams }
 
   if (redirect) {
     const newPath = replaceParams(redirect, allParams)
@@ -114,6 +111,14 @@ const InternalRoute: React.VFC<InternalRouteProps> = ({
 
   const Page = activePageContext.loadingState[path]?.page || (() => null)
 
+  // There are two special props in React: `ref` and `key`. (See https://reactjs.org/warnings/special-props.html.)
+  // It's very possible that the URL has `ref` as a search param (e.g. https://redwoodjs.com/?ref=producthunt).
+  // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`, otherwise the page will break.
+  // (The page won't actually break if `key` is passed, but it feels unclean.)
+  // If users want to access them, they can use `useParams`.
+  delete allParams['ref']
+  delete allParams['key']
+
   // Level 3/3 (InternalRoute)
   return <Page {...allParams} />
 }
@@ -124,9 +129,10 @@ function isRoute(
   return isReactElement(node) && node.type === Route
 }
 
-interface RouterProps extends RouterContextProviderProps {
+export interface RouterProps extends RouterContextProviderProps {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
+  children: React.ReactNode
 }
 
 const Router: React.FC<RouterProps> = ({
@@ -212,9 +218,10 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       return (
         <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
           <ParamsProvider>
-            <PageLoader
+            <ActiveRouteLoader
               spec={normalizePage(NotFoundPage)}
               delay={pageLoadingDelay}
+              path={location.pathname}
             />
           </ParamsProvider>
         </RouterContextProvider>
@@ -233,7 +240,9 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   // Check for issues with the path.
   validatePath(path)
 
-  const { params: pathParams } = matchPath(path, location.pathname, paramTypes)
+  const { params: pathParams } = matchPath(path, location.pathname, {
+    paramTypes,
+  })
 
   const searchParams = parseSearch(location.search)
   const allParams = { ...searchParams, ...pathParams }
@@ -282,7 +291,7 @@ function analyzeRouterTree(
 
   function isActiveRoute(route: React.ReactElement<InternalRouteProps>) {
     if (route.props.path) {
-      const { match } = matchPath(route.props.path, pathname, paramTypes)
+      const { match } = matchPath(route.props.path, pathname, { paramTypes })
 
       if (match) {
         return true

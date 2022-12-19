@@ -26,9 +26,16 @@ jest.mock('../../../../lib/schemaHelpers', () => {
 })
 
 describe('rw destory service', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'info').mockImplementation(() => {})
+    jest.spyOn(console, 'log').mockImplementation(() => {})
+  })
+
   afterEach(() => {
     fs.__setMockFiles({})
     jest.spyOn(fs, 'unlinkSync').mockClear()
+    console.info.mockRestore()
+    console.log.mockRestore()
   })
 
   describe('for javascript files', () => {
@@ -44,7 +51,7 @@ describe('rw destory service', () => {
         filesFn: files,
         name: 'User',
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
       return t.run().then(async () => {
         const generatedFiles = Object.keys(
@@ -74,7 +81,7 @@ describe('rw destory service', () => {
         filesFn: files,
         name: 'User',
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
       return t.run().then(async () => {
         const generatedFiles = Object.keys(

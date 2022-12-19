@@ -14,8 +14,18 @@ interface PluginOptions {
   useStaticImports?: boolean
 }
 
-const getPathRelativeToSrc = (absolutePath: string) => {
-  return `./${path.relative(getPaths().web.src, absolutePath)}`
+/**
+ * When running from the CLI: Babel-plugin-module-resolver will convert
+ * For dev/build/prerender (forJest == false): 'src/pages/ExamplePage' -> './pages/ExamplePage'
+ * For test (forJest == true): 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
+ */
+const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
+  // If the path is already relative
+  if (!path.isAbsolute(maybeAbsolutePath)) {
+    return maybeAbsolutePath
+  }
+
+  return `./${path.relative(getPaths().web.src, maybeAbsolutePath)}`
 }
 
 const withRelativeImports = (page: PagesDependency) => {
@@ -29,6 +39,7 @@ export default function (
   { types: t }: { types: typeof types },
   { useStaticImports = false }: PluginOptions
 ): PluginObj {
+  // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
 
   return {
@@ -42,33 +53,49 @@ export default function (
           return
         }
 
+        const userImportRelativePath = getPathRelativeToSrc(
+          importStatementPath(p.node.source?.value)
+        )
+
+        const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
+          t.isImportDefaultSpecifier(specifiers)
+        )[0]
+
         // Remove Page imports in prerender mode (see babel-preset)
         // This is to make sure that all the imported "Page modules" are normal imports
         // and not asynchronous ones.
+        // But note that jest in a user's project does not enter this block, but our tests do
         if (useStaticImports) {
           // Match import paths, const name could be different
-          const userImportPath = importStatementPath(p.node.source?.value)
-          const relativePageImportPaths = pages.map((page) => {
-            return page.relativeImport
+
+          const pageThatUserImported = pages.find((page) => {
+            return (
+              page.relativeImport === ensurePosixPath(userImportRelativePath)
+            )
           })
 
-          // When running from the CLI: Babel-plugin-module-resolver will convert
-          // For dev/build/prerender: 'src/pages/ExamplePage' -> './pages/ExamplePage'
-          // For test: 'src/pages/ExamplePage' -> '/Users/blah/pathToProject/web/src/pages/ExamplePage'
+          if (pageThatUserImported) {
+            // Update the import name, with the user's import name
+            // So that the JSX name stays consistent
+            pageThatUserImported.importName = defaultSpecifier.local.name
 
-          // Check only relative (dev/build/prerender)  - jest doesn't enter this block
-          if (relativePageImportPaths.includes(userImportPath)) {
-            p.remove()
+            // Remove the default import for the page and leave all the others
+            p.node.specifiers = p.node.specifiers.filter(
+              (specifier) => !t.isImportDefaultSpecifier(specifier)
+            )
           }
 
           return
         }
 
-        const declaredImports = p.node.specifiers.map(
-          (specifier) => specifier.local.name
-        )
-
-        pages = pages.filter((dep) => !declaredImports.includes(dep.const))
+        if (userImportRelativePath && defaultSpecifier) {
+          // Remove the page from pages list, if it is already explicitly imported, so that we don't add loaders for these pages.
+          // We use the path & defaultSpecifier because the const name could be anything
+          pages = pages.filter(
+            (page) =>
+              !(page.relativeImport === ensurePosixPath(userImportRelativePath))
+          )
+        }
       },
       Program: {
         enter() {

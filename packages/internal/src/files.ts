@@ -88,8 +88,9 @@ export const findApiServerFunctions = (
 }
 
 export const findApiDistFunctions = (cwd: string = getPaths().api.base) => {
-  return fg.sync('dist/functions/*.{ts,js}', {
+  return fg.sync('dist/functions/**/*.{ts,js}', {
     cwd,
+    deep: 2, // We don't support deeply nested api functions, to maximise compatibility with deployment providers
     absolute: true,
   })
 }

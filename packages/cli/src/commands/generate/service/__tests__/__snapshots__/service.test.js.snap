@@ -13,7 +13,7 @@ exports[`in javascript mode creates a multi word service test file 1`] = `
 "import { userProfiles } from './userProfiles'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -38,7 +38,7 @@ exports[`in javascript mode creates a multi word service test file with crud act
 } from './transactions'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -65,7 +65,9 @@ describe('transactions', () => {
   })
 
   scenario('updates a transaction', async (scenario) => {
-    const original = await transaction({ id: scenario.transaction.one.id })
+    const original = await transaction({
+      id: scenario.transaction.one.id,
+    })
     const result = await updateTransaction({
       id: original.id,
       input: { userId: scenario.transaction.two.userId },
@@ -78,8 +80,77 @@ describe('transactions', () => {
     const original = await deleteTransaction({
       id: scenario.transaction.one.id,
     })
-
     const result = await transaction({ id: original.id })
+
+    expect(result).toEqual(null)
+  })
+})
+"
+`;
+
+exports[`in javascript mode creates a multi word service test file with multiple scalar types 1`] = `
+"import {
+  scalarTypes,
+  scalarType,
+  createScalarType,
+  updateScalarType,
+  deleteScalarType,
+} from './scalarTypes'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('scalarTypes', () => {
+  scenario('returns all scalarTypes', async (scenario) => {
+    const result = await scalarTypes()
+
+    expect(result.length).toEqual(Object.keys(scenario.scalarType).length)
+  })
+
+  scenario('returns a single scalarType', async (scenario) => {
+    const result = await scalarType({ id: scenario.scalarType.one.id })
+
+    expect(result).toEqual(scenario.scalarType.one)
+  })
+
+  scenario('creates a scalarType', async () => {
+    const result = await createScalarType({
+      input: {
+        email: 'String',
+        date: '2022-09-30T09:50:00.000Z',
+        bigInt: 1234567n,
+        integer: 1234567,
+        boolean: true,
+      },
+    })
+
+    expect(result.email).toEqual('String')
+    expect(result.date).toEqual(new Date('2022-09-30T09:50:00.000Z'))
+    expect(result.bigInt).toEqual(1234567n)
+    expect(result.integer).toEqual(1234567)
+    expect(result.boolean).toEqual(true)
+  })
+
+  scenario('updates a scalarType', async (scenario) => {
+    const original = await scalarType({
+      id: scenario.scalarType.one.id,
+    })
+    const result = await updateScalarType({
+      id: original.id,
+      input: { email: 'String2' },
+    })
+
+    expect(result.email).toEqual('String2')
+  })
+
+  scenario('deletes a scalarType', async (scenario) => {
+    const original = await deleteScalarType({
+      id: scenario.scalarType.one.id,
+    })
+    const result = await scalarType({ id: original.id })
 
     expect(result).toEqual(null)
   })
@@ -92,6 +163,31 @@ exports[`in javascript mode creates a single word service file 1`] = `
 
 export const users = () => {
   return db.user.findMany()
+}
+
+export const user = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
+
+export const createUser = ({ input }) => {
+  return db.user.create({
+    data: input,
+  })
+}
+
+export const updateUser = ({ id, input }) => {
+  return db.user.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteUser = ({ id }) => {
+  return db.user.delete({
+    where: { id },
+  })
 }
 "
 `;
@@ -144,8 +240,9 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  identity: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).identity(),
+  identity: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).identity()
+  },
 }
 "
 `;
@@ -164,8 +261,9 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+  userProfiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+  },
 }
 "
 `;
@@ -184,10 +282,12 @@ export const user = ({ id }) => {
 }
 
 export const User = {
-  userProfiles: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
-  identity: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).identity(),
+  userProfiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+  },
+  identity: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).identity()
+  },
 }
 "
 `;
@@ -203,10 +303,10 @@ exports[`in javascript mode creates a single word service scenario file 1`] = `
 `;
 
 exports[`in javascript mode creates a single word service test file 1`] = `
-"import { users } from './users'
+"import { users, user, createUser, updateUser, deleteUser } from './users'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -217,25 +317,60 @@ describe('users', () => {
 
     expect(result.length).toEqual(Object.keys(scenario.user).length)
   })
+
+  scenario('returns a single user', async (scenario) => {
+    const result = await user({ id: scenario.user.one.id })
+
+    expect(result).toEqual(scenario.user.one)
+  })
+
+  scenario('creates a user', async () => {
+    const result = await createUser({
+      input: { email: 'String1234567' },
+    })
+
+    expect(result.email).toEqual('String1234567')
+  })
+
+  scenario('updates a user', async (scenario) => {
+    const original = await user({ id: scenario.user.one.id })
+    const result = await updateUser({
+      id: original.id,
+      input: { email: 'String12345672' },
+    })
+
+    expect(result.email).toEqual('String12345672')
+  })
+
+  scenario('deletes a user', async (scenario) => {
+    const original = await deleteUser({ id: scenario.user.one.id })
+    const result = await user({ id: original.id })
+
+    expect(result).toEqual(null)
+  })
 })
 "
 `;
 
 exports[`in typescript mode creates a multi word service file 1`] = `
-"import { db } from 'src/lib/db'
+"import type { QueryResolvers } from 'types/graphql'
 
-export const userProfiles = () => {
+import { db } from 'src/lib/db'
+
+export const userProfiles: QueryResolvers['userProfiles'] = () => {
   return db.userProfile.findMany()
 }
 "
 `;
 
 exports[`in typescript mode creates a multi word service test file 1`] = `
-"import { userProfiles } from './userProfiles'
+"import type { UserProfile } from '@prisma/client'
+
+import { userProfiles } from './userProfiles'
 import type { StandardScenario } from './userProfiles.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -251,7 +386,9 @@ describe('userProfiles', () => {
 `;
 
 exports[`in typescript mode creates a multi word service test file with crud actions and only foreign as mandatory field 1`] = `
-"import {
+"import type { Transaction } from '@prisma/client'
+
+import {
   transactions,
   transaction,
   createTransaction,
@@ -261,7 +398,7 @@ exports[`in typescript mode creates a multi word service test file with crud act
 import type { StandardScenario } from './transactions.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -291,7 +428,9 @@ describe('transactions', () => {
   })
 
   scenario('updates a transaction', async (scenario: StandardScenario) => {
-    const original = await transaction({ id: scenario.transaction.one.id })
+    const original = (await transaction({
+      id: scenario.transaction.one.id,
+    })) as Transaction
     const result = await updateTransaction({
       id: original.id,
       input: { userId: scenario.transaction.two.userId },
@@ -301,9 +440,9 @@ describe('transactions', () => {
   })
 
   scenario('deletes a transaction', async (scenario: StandardScenario) => {
-    const original = await deleteTransaction({
+    const original = (await deleteTransaction({
       id: scenario.transaction.one.id,
-    })
+    })) as Transaction
     const result = await transaction({ id: original.id })
 
     expect(result).toEqual(null)
@@ -312,52 +451,147 @@ describe('transactions', () => {
 "
 `;
 
-exports[`in typescript mode creates a single word service file 1`] = `
-"import { db } from 'src/lib/db'
+exports[`in typescript mode creates a multi word service test file with multiple scalar types 1`] = `
+"import type { ScalarType } from '@prisma/client'
 
-export const users = () => {
+import {
+  scalarTypes,
+  scalarType,
+  createScalarType,
+  updateScalarType,
+  deleteScalarType,
+} from './scalarTypes'
+import type { StandardScenario } from './scalarTypes.scenarios'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float.
+//           Please refer to the RedwoodJS Testing Docs:
+//       https://redwoodjs.com/docs/testing#testing-services
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('scalarTypes', () => {
+  scenario('returns all scalarTypes', async (scenario: StandardScenario) => {
+    const result = await scalarTypes()
+
+    expect(result.length).toEqual(Object.keys(scenario.scalarType).length)
+  })
+
+  scenario(
+    'returns a single scalarType',
+    async (scenario: StandardScenario) => {
+      const result = await scalarType({ id: scenario.scalarType.one.id })
+
+      expect(result).toEqual(scenario.scalarType.one)
+    }
+  )
+
+  scenario('creates a scalarType', async () => {
+    const result = await createScalarType({
+      input: {
+        email: 'String',
+        date: '2022-09-30T09:50:00.000Z',
+        bigInt: 1234567n,
+        integer: 1234567,
+        boolean: true,
+      },
+    })
+
+    expect(result.email).toEqual('String')
+    expect(result.date).toEqual(new Date('2022-09-30T09:50:00.000Z'))
+    expect(result.bigInt).toEqual(1234567n)
+    expect(result.integer).toEqual(1234567)
+    expect(result.boolean).toEqual(true)
+  })
+
+  scenario('updates a scalarType', async (scenario: StandardScenario) => {
+    const original = (await scalarType({
+      id: scenario.scalarType.one.id,
+    })) as ScalarType
+    const result = await updateScalarType({
+      id: original.id,
+      input: { email: 'String2' },
+    })
+
+    expect(result.email).toEqual('String2')
+  })
+
+  scenario('deletes a scalarType', async (scenario: StandardScenario) => {
+    const original = (await deleteScalarType({
+      id: scenario.scalarType.one.id,
+    })) as ScalarType
+    const result = await scalarType({ id: original.id })
+
+    expect(result).toEqual(null)
+  })
+})
+"
+`;
+
+exports[`in typescript mode creates a single word service file 1`] = `
+"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
+
+export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
+}
+
+export const user: QueryResolvers['user'] = ({ id }) => {
+  return db.user.findUnique({
+    where: { id },
+  })
+}
+
+export const createUser: MutationResolvers['createUser'] = ({ input }) => {
+  return db.user.create({
+    data: input,
+  })
+}
+
+export const updateUser: MutationResolvers['updateUser'] = ({ id, input }) => {
+  return db.user.update({
+    data: input,
+    where: { id },
+  })
+}
+
+export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
+  return db.user.delete({
+    where: { id },
+  })
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with CRUD actions 1`] = `
-"import type { Prisma } from '@prisma/client'
+"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
-export const posts = () => {
+export const posts: QueryResolvers['posts'] = () => {
   return db.post.findMany()
 }
 
-export const post = ({ id }: Prisma.PostWhereUniqueInput) => {
+export const post: QueryResolvers['post'] = ({ id }) => {
   return db.post.findUnique({
     where: { id },
   })
 }
 
-interface CreatePostArgs {
-  input: Prisma.PostCreateInput
-}
-
-export const createPost = ({ input }: CreatePostArgs) => {
+export const createPost: MutationResolvers['createPost'] = ({ input }) => {
   return db.post.create({
     data: input,
   })
 }
 
-interface UpdatePostArgs extends Prisma.PostWhereUniqueInput {
-  input: Prisma.PostUpdateInput
-}
-
-export const updatePost = ({ id, input }: UpdatePostArgs) => {
+export const updatePost: MutationResolvers['updatePost'] = ({ id, input }) => {
   return db.post.update({
     data: input,
     where: { id },
   })
 }
 
-export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
+export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
   return db.post.delete({
     where: { id },
   })
@@ -366,78 +600,80 @@ export const deletePost = ({ id }: Prisma.PostWhereUniqueInput) => {
 `;
 
 exports[`in typescript mode creates a single word service file with a belongsTo relation 1`] = `
-"import type { Prisma } from '@prisma/client'
-import type { ResolverArgs } from '@redwoodjs/graphql-server'
+"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
-export const users = () => {
+export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
 }
 
-export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+export const user: QueryResolvers['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
   })
 }
 
-export const User = {
-  identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
-    db.user.findUnique({ where: { id: root.id } }).identity(),
+export const User: UserRelationResolvers = {
+  identity: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).identity()
+  },
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with a hasMany relation 1`] = `
-"import type { Prisma } from '@prisma/client'
-import type { ResolverArgs } from '@redwoodjs/graphql-server'
+"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
-export const users = () => {
+export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
 }
 
-export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+export const user: QueryResolvers['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
   })
 }
 
-export const User = {
-  userProfiles: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
+export const User: UserRelationResolvers = {
+  userProfiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+  },
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service file with multiple relations 1`] = `
-"import type { Prisma } from '@prisma/client'
-import type { ResolverArgs } from '@redwoodjs/graphql-server'
+"import type { QueryResolvers, UserRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
-export const users = () => {
+export const users: QueryResolvers['users'] = () => {
   return db.user.findMany()
 }
 
-export const user = ({ id }: Prisma.UserWhereUniqueInput) => {
+export const user: QueryResolvers['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
   })
 }
 
-export const User = {
-  userProfiles: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
-    db.user.findUnique({ where: { id: root.id } }).userProfiles(),
-  identity: (_obj, { root }: ResolverArgs<ReturnType<typeof user>>) =>
-    db.user.findUnique({ where: { id: root.id } }).identity(),
+export const User: UserRelationResolvers = {
+  userProfiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).userProfiles()
+  },
+  identity: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).identity()
+  },
 }
 "
 `;
 
 exports[`in typescript mode creates a single word service scenario file 1`] = `
-"import type { Prisma } from '@prisma/client'
+"import type { Prisma, User } from '@prisma/client'
+import type { ScenarioData } from '@redwoodjs/testing/api'
 
 export const standard = defineScenario<Prisma.UserCreateArgs>({
   user: {
@@ -446,16 +682,18 @@ export const standard = defineScenario<Prisma.UserCreateArgs>({
   },
 })
 
-export type StandardScenario = typeof standard
+export type StandardScenario = ScenarioData<User, 'user'>
 "
 `;
 
 exports[`in typescript mode creates a single word service test file 1`] = `
-"import { users } from './users'
+"import type { User } from '@prisma/client'
+
+import { users, user, createUser, updateUser, deleteUser } from './users'
 import type { StandardScenario } from './users.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -465,6 +703,37 @@ describe('users', () => {
     const result = await users()
 
     expect(result.length).toEqual(Object.keys(scenario.user).length)
+  })
+
+  scenario('returns a single user', async (scenario: StandardScenario) => {
+    const result = await user({ id: scenario.user.one.id })
+
+    expect(result).toEqual(scenario.user.one)
+  })
+
+  scenario('creates a user', async () => {
+    const result = await createUser({
+      input: { email: 'String1234567' },
+    })
+
+    expect(result.email).toEqual('String1234567')
+  })
+
+  scenario('updates a user', async (scenario: StandardScenario) => {
+    const original = (await user({ id: scenario.user.one.id })) as User
+    const result = await updateUser({
+      id: original.id,
+      input: { email: 'String12345672' },
+    })
+
+    expect(result.email).toEqual('String12345672')
+  })
+
+  scenario('deletes a user', async (scenario: StandardScenario) => {
+    const original = (await deleteUser({ id: scenario.user.one.id })) as User
+    const result = await user({ id: original.id })
+
+    expect(result).toEqual(null)
   })
 })
 "

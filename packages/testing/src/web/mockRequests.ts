@@ -10,8 +10,8 @@ import {
   SetupWorkerApi,
   ResponseComposition,
 } from 'msw'
-import type { StartOptions as StartMSWWorkerOptions } from 'msw/lib/types/setupWorker/glossary'
-import type { SharedOptions as SharedMSWOptions } from 'msw/lib/types/sharedOptions'
+import type { StartOptions as StartMSWWorkerOptions } from 'msw'
+import type { SharedOptions as SharedMSWOptions } from 'msw'
 
 // Allow users to call "mockGraphQLQuery" and "mockGraphQLMutation"
 // before the server has started. We store the request handlers in
@@ -57,6 +57,10 @@ export const setupRequestHandlers = () => {
   }
 }
 
+export const closeServer = () => {
+  SERVER_INSTANCE.close()
+}
+
 export const registerHandler = (handler: RequestHandler) => {
   if (!SERVER_INSTANCE) {
     // The server hasn't started yet, so add the request handler to the queue.
@@ -67,8 +71,11 @@ export const registerHandler = (handler: RequestHandler) => {
   }
 }
 
-export type DataFunction = (
-  variables: Record<string, any>,
+export type DataFunction<
+  Query extends Record<string, unknown> = Record<string, unknown>,
+  QueryVariables = Record<string, any>
+> = (
+  variables: QueryVariables,
   {
     req,
     ctx,
@@ -76,7 +83,7 @@ export type DataFunction = (
     req: GraphQLRequest<any>
     ctx: GraphQLContext<Record<string, any>>
   }
-) => Record<string, unknown> | void
+) => Query | void
 
 // These should get exported from MSW
 type ResponseFunction<BodyType = any> = (
@@ -125,6 +132,7 @@ const mockGraphQL = (
         data: captureTransform(ctx.data),
         extensions: captureTransform(ctx.extensions),
         cookie: captureTransform(ctx.cookie),
+        field: captureTransform(ctx.field),
       }
 
       d = data(req.variables, {
@@ -144,17 +152,23 @@ const mockGraphQL = (
   return data
 }
 
-export const mockGraphQLQuery = (
+export const mockGraphQLQuery = <
+  Query extends Record<string, unknown> = Record<string, unknown>,
+  QueryVariables = Record<string, any>
+>(
   operation: string,
-  data: DataFunction | Record<string, unknown>,
+  data: DataFunction<Query, QueryVariables> | Query,
   responseEnhancer?: ResponseEnhancer
 ) => {
   return mockGraphQL('query', operation, data, responseEnhancer)
 }
 
-export const mockGraphQLMutation = (
+export const mockGraphQLMutation = <
+  Query extends Record<string, unknown> = Record<string, unknown>,
+  QueryVariables = Record<string, any>
+>(
   operation: string,
-  data: DataFunction | Record<string, unknown>,
+  data: DataFunction<Query, QueryVariables> | Query,
   responseEnhancer?: ResponseEnhancer
 ) => {
   return mockGraphQL('mutation', operation, data, responseEnhancer)

@@ -12,12 +12,13 @@ const getPrettierConfig = () => {
   }
 }
 
-const prettify = (code: string) =>
+const prettify = (code: string, options: Record<string, any> = {}) =>
   format(code, {
     singleQuote: true,
     semi: false,
     ...getPrettierConfig(),
     parser: 'babel',
+    ...options,
   })
 
 export default prettify

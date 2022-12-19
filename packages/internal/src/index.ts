@@ -2,6 +2,7 @@ export * from './paths'
 export * from './config'
 export * from './ts2js'
 export * from './dev'
+export * from './routes'
 
 export * from './files'
 export { generate } from './generate/generate'
@@ -13,3 +14,5 @@ export * from './validateSchema'
 export * from './build/babel/api'
 export * from './build/babel/web'
 export * from './build/babel/common'
+
+export { listQueryTypeFieldsInProject } from './gql'

@@ -11,7 +11,7 @@ import type {
  */
 export const createVerifier = (
   type: SupportedVerifierTypes,
-  options?: VerifyOptions | undefined
+  options?: VerifyOptions
 ): WebhookVerifier => {
   if (options) {
     return verifierLookup[type](options)

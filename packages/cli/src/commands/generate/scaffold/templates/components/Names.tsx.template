@@ -1,10 +1,11 @@
-import humanize from 'humanize-string'
-
+import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from '${importComponentNamesCell}'
+import { ${listFormattersImports} } from 'src/lib/formatters'
+
+import type { Delete${singularPascalName}MutationVariables, Find${pluralPascalName} } from 'types/graphql'
 
 const DELETE_${singularConstantName}_MUTATION = gql`
   mutation Delete${singularPascalName}Mutation($id: ${idType}!) {
@@ -14,46 +15,7 @@ const DELETE_${singularConstantName}_MUTATION = gql`
   }
 `
 
-const MAX_STRING_LENGTH = 150
-
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output
-}
-
-const jsonTruncate = (obj) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-
-const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
+const ${pluralPascalName}List = ({ ${pluralCamelName} }: Find${pluralPascalName}) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} deleted')
@@ -68,7 +30,7 @@ const ${pluralPascalName}List = ({ ${pluralCamelName} }) => {
     awaitRefetchQueries: true,
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: Delete${singularPascalName}MutationVariables['id']) => {
     if (confirm('Are you sure you want to delete ${singularCamelName} ' + id + '?')) {
       delete${singularPascalName}({ variables: { id } })
     }

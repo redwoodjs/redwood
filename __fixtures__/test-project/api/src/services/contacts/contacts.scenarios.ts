@@ -1,4 +1,6 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma, Contact } from '@prisma/client'
+
+import type { ScenarioData } from '@redwoodjs/testing/api'
 
 export const standard = defineScenario<Prisma.ContactCreateArgs>({
   contact: {
@@ -7,4 +9,4 @@ export const standard = defineScenario<Prisma.ContactCreateArgs>({
   },
 })
 
-export type StandardScenario = typeof standard
+export type StandardScenario = ScenarioData<Contact, 'contact'>

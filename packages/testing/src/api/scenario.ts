@@ -35,11 +35,39 @@ export interface DefineScenario {
   <
     PrismaCreateType extends { data: any },
     ModelName extends string | number | symbol = string | number | symbol,
-    KeyName extends string | number | symbol = string | number | symbol
+    TKeys extends string | number | symbol = string | number | symbol
   >(
-    scenario: Record<ModelName, Record<KeyName, A.Compute<PrismaCreateType>>>
-  ): Record<ModelName, Record<KeyName, A.Compute<PrismaCreateType['data']>>>
+    scenario: Record<ModelName, Record<TKeys, A.Compute<PrismaCreateType>>>
+  ): Record<ModelName, Record<TKeys, A.Compute<PrismaCreateType['data']>>>
 }
+
+/**
+ * Type of data seeded by the scenario. Use this type to get the 'strict' return type of defineScenario
+ *
+ * @example
+ * import { Product } from '@prisma/client'
+ *
+ * // If you scenario looks like this:
+ * * export const standard = defineScenario({
+ *    product: {
+ *    shirt: {
+ *      id: 55,
+ *      price: 10
+ *    }
+ * })
+ *
+ * // Export the StandardScenario type as
+ * export StandardScenario = ScenarioSeed<Product, 'product'>
+ *
+ * // You can also define each of the keys in your scenario, so you get stricter type checking
+ * export StandardScenario = ScenarioSeed<Product, 'product', 'shirt'>
+ *
+ */
+export declare type ScenarioData<
+  TModel, // the prisma model, imported from @prisma/client e.g. "Product"
+  TName extends string | number = string | number, // (optional) name of the prisma model e.g. "product"
+  TKeys extends string | number = string | number // (optional) name of each of the seeded scenarios e.g. "shirt"
+> = Record<TName, Record<TKeys, TModel>>
 
 interface TestFunctionWithScenario<TData> {
   (scenario?: TData): Promise<void>

@@ -27,7 +27,7 @@ exports[`in javascript (default) mode creates a form component 1`] = `
 
 const formatDatetime = (value) => {
   if (value) {
-    return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
+    return value.replace(/:\\d{2}\\.\\d{3}\\w/, '')
   }
 }
 
@@ -37,230 +37,230 @@ const PostForm = (props) => {
   }
 
   return (
-    <div className=\\"rw-form-wrapper\\">
+    <div className="rw-form-wrapper">
       <Form onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
-          wrapperClassName=\\"rw-form-error-wrapper\\"
-          titleClassName=\\"rw-form-error-title\\"
-          listClassName=\\"rw-form-error-list\\"
+          wrapperClassName="rw-form-error-wrapper"
+          titleClassName="rw-form-error-title"
+          listClassName="rw-form-error-list"
         />
 
         <Label
-          name=\\"title\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="title"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Title
         </Label>
 
         <TextField
-          name=\\"title\\"
+          name="title"
           defaultValue={props.post?.title}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name=\\"title\\" className=\\"rw-field-error\\" />
+        <FieldError name="title" className="rw-field-error" />
 
         <Label
-          name=\\"slug\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="slug"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Slug
         </Label>
 
         <TextField
-          name=\\"slug\\"
+          name="slug"
           defaultValue={props.post?.slug}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name=\\"slug\\" className=\\"rw-field-error\\" />
+        <FieldError name="slug" className="rw-field-error" />
 
         <Label
-          name=\\"author\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="author"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Author
         </Label>
 
         <TextField
-          name=\\"author\\"
+          name="author"
           defaultValue={props.post?.author}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name=\\"author\\" className=\\"rw-field-error\\" />
+        <FieldError name="author" className="rw-field-error" />
 
         <Label
-          name=\\"body\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="body"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Body
         </Label>
 
         <TextField
-          name=\\"body\\"
+          name="body"
           defaultValue={props.post?.body}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name=\\"body\\" className=\\"rw-field-error\\" />
+        <FieldError name="body" className="rw-field-error" />
 
         <Label
-          name=\\"image\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="image"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Image
         </Label>
 
         <TextField
-          name=\\"image\\"
+          name="image"
           defaultValue={props.post?.image}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
         />
 
-        <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
+        <FieldError name="image" className="rw-field-error" />
 
         <Label
-          name=\\"postedAt\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="postedAt"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Posted at
         </Label>
 
         <DatetimeLocalField
-          name=\\"postedAt\\"
+          name="postedAt"
           defaultValue={formatDatetime(props.post?.postedAt)}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
         />
 
-        <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
+        <FieldError name="postedAt" className="rw-field-error" />
 
         <Label
-          name=\\"isPinned\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="isPinned"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Is pinned
         </Label>
 
         <CheckboxField
-          name=\\"isPinned\\"
+          name="isPinned"
           defaultChecked={props.post?.isPinned}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
         />
 
-        <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
+        <FieldError name="isPinned" className="rw-field-error" />
 
         <Label
-          name=\\"readTime\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="readTime"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Read time
         </Label>
 
         <TextField
-          name=\\"readTime\\"
+          name="readTime"
           defaultValue={props.post?.readTime}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ valueAsNumber: true, required: true }}
         />
 
-        <FieldError name=\\"readTime\\" className=\\"rw-field-error\\" />
+        <FieldError name="readTime" className="rw-field-error" />
 
         <Label
-          name=\\"rating\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="rating"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Rating
         </Label>
 
         <TextField
-          name=\\"rating\\"
+          name="rating"
           defaultValue={props.post?.rating}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ valueAsNumber: true }}
         />
 
-        <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
+        <FieldError name="rating" className="rw-field-error" />
 
         <Label
-          name=\\"upvotes\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="upvotes"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Upvotes
         </Label>
 
         <NumberField
-          name=\\"upvotes\\"
+          name="upvotes"
           defaultValue={props.post?.upvotes}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name=\\"upvotes\\" className=\\"rw-field-error\\" />
+        <FieldError name="upvotes" className="rw-field-error" />
 
         <Label
-          name=\\"metadata\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="metadata"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Metadata
         </Label>
 
         <TextAreaField
-          name=\\"metadata\\"
+          name="metadata"
           defaultValue={JSON.stringify(props.post?.metadata)}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ valueAsJSON: true, required: true }}
         />
 
-        <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
+        <FieldError name="metadata" className="rw-field-error" />
 
         <Label
-          name=\\"hugeNumber\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="hugeNumber"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Huge number
         </Label>
 
         <TextField
-          name=\\"hugeNumber\\"
+          name="hugeNumber"
           defaultValue={props.post?.hugeNumber}
-          className=\\"rw-input\\"
-          errorClassName=\\"rw-input rw-input-error\\"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name=\\"hugeNumber\\" className=\\"rw-field-error\\" />
+        <FieldError name="hugeNumber" className="rw-field-error" />
 
-        <div className=\\"rw-button-group\\">
-          <Submit disabled={props.loading} className=\\"rw-button rw-button-blue\\">
+        <div className="rw-button-group">
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>
@@ -270,6 +270,264 @@ const PostForm = (props) => {
 }
 
 export default PostForm
+"
+`;
+
+exports[`in javascript (default) mode creates a formatters function file 1`] = `
+"import React from 'react'
+
+import humanize from 'humanize-string'
+
+const MAX_STRING_LENGTH = 150
+
+export const formatEnum = (values) => {
+  let output = ''
+
+  if (Array.isArray(values)) {
+    const humanizedValues = values.map((value) => humanize(value))
+    output = humanizedValues.join(', ')
+  } else if (typeof values === 'string') {
+    output = humanize(values)
+  }
+
+  return output
+}
+
+export const jsonDisplay = (obj) => {
+  return (
+    <pre>
+      <code>{JSON.stringify(obj, null, 2)}</code>
+    </pre>
+  )
+}
+
+export const truncate = (value) => {
+  let output = value?.toString() ?? ''
+
+  if (output.length > MAX_STRING_LENGTH) {
+    output = output.substring(0, MAX_STRING_LENGTH) + '...'
+  }
+
+  return output
+}
+
+export const jsonTruncate = (obj) => {
+  return truncate(JSON.stringify(obj, null, 2))
+}
+
+export const timeTag = (dateTime) => {
+  let output = ''
+
+  if (dateTime) {
+    output = (
+      <time dateTime={dateTime} title={dateTime}>
+        {new Date(dateTime).toUTCString()}
+      </time>
+    )
+  }
+
+  return output
+}
+
+export const checkboxInputTag = (checked) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+"
+`;
+
+exports[`in javascript (default) mode creates a formatters function test file 1`] = `
+"import { render, waitFor, screen } from '@redwoodjs/testing/web'
+
+import {
+  formatEnum,
+  jsonTruncate,
+  truncate,
+  timeTag,
+  jsonDisplay,
+  checkboxInputTag,
+} from './formatters'
+
+describe('formatEnum', () => {
+  it('handles nullish values', () => {
+    expect(formatEnum(null)).toEqual('')
+    expect(formatEnum('')).toEqual('')
+    expect(formatEnum(undefined)).toEqual('')
+  })
+
+  it('formats a list of values', () => {
+    expect(
+      formatEnum(['RED', 'ORANGE', 'YELLOW', 'GREEN', 'BLUE', 'VIOLET'])
+    ).toEqual('Red, Orange, Yellow, Green, Blue, Violet')
+  })
+
+  it('formats a single value', () => {
+    expect(formatEnum('DARK_BLUE')).toEqual('Dark blue')
+  })
+
+  it('returns an empty string for values of the wrong type (for JS projects)', () => {
+    // @ts-expect-error - Testing JS scenario
+    expect(formatEnum(5)).toEqual('')
+  })
+})
+
+describe('truncate', () => {
+  it('truncates really long strings', () => {
+    expect(truncate('na '.repeat(1000) + 'batman').length).toBeLessThan(1000)
+    expect(truncate('na '.repeat(1000) + 'batman')).not.toMatch(/batman/)
+  })
+
+  it('does not modify short strings', () => {
+    expect(truncate('Short strinG')).toEqual('Short strinG')
+  })
+
+  it('adds ... to the end of truncated strings', () => {
+    expect(truncate('repeat'.repeat(1000))).toMatch(/\\w\\.\\.\\.$/)
+  })
+
+  it('accepts numbers', () => {
+    expect(truncate(123)).toEqual('123')
+    expect(truncate(0)).toEqual('0')
+    expect(truncate(0o000)).toEqual('0')
+  })
+
+  it('handles arguments of invalid type', () => {
+    // @ts-expect-error - Testing JS scenario
+    expect(truncate(false)).toEqual('false')
+
+    expect(truncate(undefined)).toEqual('')
+    expect(truncate(null)).toEqual('')
+  })
+})
+
+describe('jsonTruncate', () => {
+  it('truncates large json structures', () => {
+    expect(
+      jsonTruncate({
+        foo: 'foo',
+        bar: 'bar',
+        baz: 'baz',
+        kittens: 'kittens meow',
+        bazinga: 'Sheldon',
+        nested: {
+          foobar: 'I have no imagination',
+          two: 'Second nested item',
+        },
+        five: 5,
+        bool: false,
+      })
+    ).toMatch(/.+\\n.+\\w\\.\\.\\.$/s)
+  })
+})
+
+describe('timeTag', () => {
+  it('renders a date', async () => {
+    render(<div>{timeTag(new Date('1970-08-20').toUTCString())}</div>)
+
+    await waitFor(() => screen.getByText(/1970.*00:00:00/))
+  })
+
+  it('can take an empty input string', async () => {
+    expect(timeTag('')).toEqual('')
+  })
+})
+
+describe('jsonDisplay', () => {
+  it('produces the correct output', () => {
+    expect(
+      jsonDisplay({
+        title: 'TOML Example (but in JSON)',
+        database: {
+          data: [['delta', 'phi'], [3.14]],
+          enabled: true,
+          ports: [8000, 8001, 8002],
+          temp_targets: {
+            case: 72.0,
+            cpu: 79.5,
+          },
+        },
+        owner: {
+          dob: '1979-05-27T07:32:00-08:00',
+          name: 'Tom Preston-Werner',
+        },
+        servers: {
+          alpha: {
+            ip: '10.0.0.1',
+            role: 'frontend',
+          },
+          beta: {
+            ip: '10.0.0.2',
+            role: 'backend',
+          },
+        },
+      })
+    ).toMatchInlineSnapshot(\`
+      <pre>
+        <code>
+          {
+        "title": "TOML Example (but in JSON)",
+        "database": {
+          "data": [
+            [
+              "delta",
+              "phi"
+            ],
+            [
+              3.14
+            ]
+          ],
+          "enabled": true,
+          "ports": [
+            8000,
+            8001,
+            8002
+          ],
+          "temp_targets": {
+            "case": 72,
+            "cpu": 79.5
+          }
+        },
+        "owner": {
+          "dob": "1979-05-27T07:32:00-08:00",
+          "name": "Tom Preston-Werner"
+        },
+        "servers": {
+          "alpha": {
+            "ip": "10.0.0.1",
+            "role": "frontend"
+          },
+          "beta": {
+            "ip": "10.0.0.2",
+            "role": "backend"
+          }
+        }
+      }
+        </code>
+      </pre>
+    \`)
+  })
+})
+
+describe('checkboxInputTag', () => {
+  it('can be checked', () => {
+    render(checkboxInputTag(true))
+    expect(screen.getByRole('checkbox')).toBeChecked()
+  })
+
+  it('can be unchecked', () => {
+    render(checkboxInputTag(false))
+    expect(screen.getByRole('checkbox')).not.toBeChecked()
+  })
+
+  it('is disabled when checked', () => {
+    render(checkboxInputTag(true))
+    expect(screen.getByRole('checkbox')).toBeDisabled()
+  })
+
+  it('is disabled when unchecked', () => {
+    render(checkboxInputTag(false))
+    expect(screen.getByRole('checkbox')).toBeDisabled()
+  })
+})
 "
 `;
 
@@ -288,33 +546,40 @@ exports[`in javascript (default) mode creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
-const PostsLayout = ({ children }) => {
+const ScaffoldLayout = ({
+  title,
+  titleTo,
+  buttonLabel,
+  buttonTo,
+  children,
+}) => {
   return (
-    <div className=\\"rw-scaffold\\">
+    <div className="rw-scaffold">
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-      <header className=\\"rw-header\\">
-        <h1 className=\\"rw-heading rw-heading-primary\\">
-          <Link to={routes.posts()} className=\\"rw-link\\">
-            Posts
+      <header className="rw-header">
+        <h1 className="rw-heading rw-heading-primary">
+          <Link to={routes[titleTo]()} className="rw-link">
+            {title}
           </Link>
         </h1>
-        <Link to={routes.newPost()} className=\\"rw-button rw-button-green\\">
-          <div className=\\"rw-button-icon\\">+</div> New Post
+        <Link to={routes[buttonTo]()} className="rw-button rw-button-green">
+          <div className="rw-button-icon">+</div> {buttonLabel}
         </Link>
       </header>
-      <main className=\\"rw-main\\">{children}</main>
+      <main className="rw-main">{children}</main>
     </div>
   )
 }
 
-export default PostsLayout
+export default ScaffoldLayout
 "
 `;
 
 exports[`in javascript (default) mode creates a new component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import PostForm from 'src/components/Post/PostForm'
 
 const CREATE_POST_MUTATION = gql\`
@@ -341,11 +606,11 @@ const NewPost = () => {
   }
 
   return (
-    <div className=\\"rw-segment\\">
-      <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">New Post</h2>
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">New Post</h2>
       </header>
-      <div className=\\"rw-segment-main\\">
+      <div className="rw-segment-main">
         <PostForm onSave={onSave} loading={loading} error={error} />
       </div>
     </div>
@@ -357,9 +622,10 @@ export default NewPost
 `;
 
 exports[`in javascript (default) mode creates a new component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
 
 const CREATE_USER_PROFILE_MUTATION = gql\`
@@ -385,16 +651,15 @@ const NewUserProfile = () => {
   )
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
-    createUserProfile({ variables: { input: castInput } })
+    createUserProfile({ variables: { input } })
   }
 
   return (
-    <div className=\\"rw-segment\\">
-      <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">New UserProfile</h2>
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">New UserProfile</h2>
       </header>
-      <div className=\\"rw-segment-main\\">
+      <div className="rw-segment-main">
         <UserProfileForm onSave={onSave} loading={loading} error={error} />
       </div>
     </div>
@@ -444,7 +709,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ post }) => {
@@ -454,11 +719,11 @@ export const Success = ({ post }) => {
 `;
 
 exports[`in javascript (default) mode creates a show component 1`] = `
-"import humanize from 'humanize-string'
-
+"import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
+
+import { checkboxInputTag, jsonDisplay, timeTag } from 'src/lib/formatters'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -467,39 +732,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-
-const formatEnum = (values) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values)
-    }
-  }
-}
-
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type=\\"checkbox\\" checked={checked} disabled />
-}
 
 const Post = ({ post }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -520,13 +752,13 @@ const Post = ({ post }) => {
 
   return (
     <>
-      <div className=\\"rw-segment\\">
-        <header className=\\"rw-segment-header\\">
-          <h2 className=\\"rw-heading rw-heading-secondary\\">
+      <div className="rw-segment">
+        <header className="rw-segment-header">
+          <h2 className="rw-heading rw-heading-secondary">
             Post {post.id} Detail
           </h2>
         </header>
-        <table className=\\"rw-table\\">
+        <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
@@ -583,16 +815,16 @@ const Post = ({ post }) => {
           </tbody>
         </table>
       </div>
-      <nav className=\\"rw-button-group\\">
+      <nav className="rw-button-group">
         <Link
           to={routes.editPost({ id: post.id })}
-          className=\\"rw-button rw-button-blue\\"
+          className="rw-button rw-button-blue"
         >
           Edit
         </Link>
         <button
-          type=\\"button\\"
-          className=\\"rw-button rw-button-red\\"
+          type="button"
+          className="rw-button rw-button-red"
           onClick={() => onDeleteClick(post.id)}
         >
           Delete
@@ -683,8 +915,28 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -828,6 +1080,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   margin-top: 1.5rem;
   color: #4a5568;
   font-weight: 600;
+  text-align: left;
 }
 .rw-label.rw-label-error {
   color: #c53030;
@@ -888,7 +1141,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -906,8 +1159,11 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -915,6 +1171,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -926,11 +1183,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -976,6 +1229,7 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 }
 .rw-login-container .rw-form-wrapper {
   width: 100%;
+  text-align: center;
 }
 .rw-login-link {
   margin-top: 1rem;
@@ -984,15 +1238,25 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
   text-align: center;
   flex-basis: 100%;
 }
+.rw-webauthn-wrapper {
+  margin: 1.5rem 1rem 1rem;
+  line-height: 1.4;
+}
+.rw-webauthn-wrapper h2 {
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
 "
 `;
 
 exports[`in javascript (default) mode creates an edit cell 1`] = `undefined`;
 
 exports[`in javascript (default) mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
 
@@ -1021,7 +1285,7 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ userProfile }) => {
@@ -1039,18 +1303,17 @@ export const Success = ({ userProfile }) => {
   )
 
   const onSave = (input, id) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
-    updateUserProfile({ variables: { id, input: castInput } })
+    updateUserProfile({ variables: { id, input } })
   }
 
   return (
-    <div className=\\"rw-segment\\">
-      <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">
-          Edit UserProfile {userProfile.id}
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit UserProfile {userProfile?.id}
         </h2>
       </header>
-      <div className=\\"rw-segment-main\\">
+      <div className="rw-segment-main">
         <UserProfileForm
           userProfile={userProfile}
           onSave={onSave}
@@ -1093,9 +1356,9 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
   return (
-    <div className=\\"rw-text-center\\">
+    <div className="rw-text-center">
       {'No posts yet. '}
-      <Link to={routes.newPost()} className=\\"rw-link\\">
+      <Link to={routes.newPost()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>
@@ -1103,7 +1366,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ posts }) => {
@@ -1113,13 +1376,17 @@ export const Success = ({ posts }) => {
 `;
 
 exports[`in javascript (default) mode creates an index component 1`] = `
-"import humanize from 'humanize-string'
-
+"import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/Post/PostsCell'
+import {
+  checkboxInputTag,
+  jsonTruncate,
+  timeTag,
+  truncate,
+} from 'src/lib/formatters'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -1128,45 +1395,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-
-const MAX_STRING_LENGTH = 150
-
-const formatEnum = (values) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values)
-    }
-  }
-}
-
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output
-}
-
-const jsonTruncate = (obj) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type=\\"checkbox\\" checked={checked} disabled />
-}
 
 const PostsList = ({ posts }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -1190,8 +1418,8 @@ const PostsList = ({ posts }) => {
   }
 
   return (
-    <div className=\\"rw-segment rw-table-wrapper-responsive\\">
-      <table className=\\"rw-table\\">
+    <div className="rw-segment rw-table-wrapper-responsive">
+      <table className="rw-table">
         <thead>
           <tr>
             <th>Id</th>
@@ -1227,25 +1455,25 @@ const PostsList = ({ posts }) => {
               <td>{jsonTruncate(post.metadata)}</td>
               <td>{truncate(post.hugeNumber)}</td>
               <td>
-                <nav className=\\"rw-table-actions\\">
+                <nav className="rw-table-actions">
                   <Link
                     to={routes.post({ id: post.id })}
                     title={'Show post ' + post.id + ' detail'}
-                    className=\\"rw-button rw-button-small\\"
+                    className="rw-button rw-button-small"
                   >
                     Show
                   </Link>
                   <Link
                     to={routes.editPost({ id: post.id })}
                     title={'Edit post ' + post.id}
-                    className=\\"rw-button rw-button-small rw-button-blue\\"
+                    className="rw-button rw-button-small rw-button-blue"
                   >
                     Edit
                   </Link>
                   <button
-                    type=\\"button\\"
+                    type="button"
                     title={'Delete post ' + post.id}
-                    className=\\"rw-button rw-button-small rw-button-red\\"
+                    className="rw-button rw-button-small rw-button-red"
                     onClick={() => onDeleteClick(post.id)}
                   >
                     Delete
@@ -1293,17 +1521,29 @@ exports[`in typescript mode creates a form component 1`] = `
   Submit,
 } from '@redwoodjs/forms'
 
+import type { EditPostById, UpdatePostInput } from 'types/graphql'
+import type { RWGqlError } from '@redwoodjs/forms'
+
+
 
 const formatDatetime = (value) => {
   if (value) {
-    return value.replace(/:\\\\d{2}\\\\.\\\\d{3}\\\\w/, '')
+    return value.replace(/:\\d{2}\\.\\d{3}\\w/, '')
   }
 }
 
 
-const PostForm = (props) => {
-  const onSubmit = (data) => {
+type FormPost = NonNullable<EditPostById['post']>
 
+interface PostFormProps {
+  post?: EditPostById['post']
+  onSave: (data: UpdatePostInput, id?: FormPost['id']) => void
+  error: RWGqlError
+  loading: boolean
+}
+
+const PostForm = (props: PostFormProps) => {
+  const onSubmit = (data: FormPost) => {
   
     
     
@@ -1345,244 +1585,244 @@ const PostForm = (props) => {
   }
 
   return (
-    <div className=\\"rw-form-wrapper\\">
-      <Form onSubmit={onSubmit} error={props.error}>
+    <div className="rw-form-wrapper">
+      <Form<FormPost> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
-          wrapperClassName=\\"rw-form-error-wrapper\\"
-          titleClassName=\\"rw-form-error-title\\"
-          listClassName=\\"rw-form-error-list\\"
+          wrapperClassName="rw-form-error-wrapper"
+          titleClassName="rw-form-error-title"
+          listClassName="rw-form-error-list"
         />
       
         <Label
-          name=\\"title\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="title"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Title
         </Label>
         
           <TextField
-            name=\\"title\\"
+            name="title"
             defaultValue={props.post?.title}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
         
 
-        <FieldError name=\\"title\\" className=\\"rw-field-error\\" />
+        <FieldError name="title" className="rw-field-error" />
 
         <Label
-          name=\\"slug\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="slug"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Slug
         </Label>
         
           <TextField
-            name=\\"slug\\"
+            name="slug"
             defaultValue={props.post?.slug}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
         
 
-        <FieldError name=\\"slug\\" className=\\"rw-field-error\\" />
+        <FieldError name="slug" className="rw-field-error" />
 
         <Label
-          name=\\"author\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="author"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Author
         </Label>
         
           <TextField
-            name=\\"author\\"
+            name="author"
             defaultValue={props.post?.author}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
         
 
-        <FieldError name=\\"author\\" className=\\"rw-field-error\\" />
+        <FieldError name="author" className="rw-field-error" />
 
         <Label
-          name=\\"body\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="body"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Body
         </Label>
         
           <TextField
-            name=\\"body\\"
+            name="body"
             defaultValue={props.post?.body}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
         
 
-        <FieldError name=\\"body\\" className=\\"rw-field-error\\" />
+        <FieldError name="body" className="rw-field-error" />
 
         <Label
-          name=\\"image\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="image"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Image
         </Label>
         
           <TextField
-            name=\\"image\\"
+            name="image"
             defaultValue={props.post?.image}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
           />
         
 
-        <FieldError name=\\"image\\" className=\\"rw-field-error\\" />
+        <FieldError name="image" className="rw-field-error" />
 
         <Label
-          name=\\"postedAt\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="postedAt"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Posted at
         </Label>
         
           <DatetimeLocalField
-            name=\\"postedAt\\"
+            name="postedAt"
             defaultValue={formatDatetime(props.post?.postedAt)}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
           />
         
 
-        <FieldError name=\\"postedAt\\" className=\\"rw-field-error\\" />
+        <FieldError name="postedAt" className="rw-field-error" />
 
         <Label
-          name=\\"isPinned\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="isPinned"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Is pinned
         </Label>
         
           <CheckboxField
-            name=\\"isPinned\\"
+            name="isPinned"
             defaultChecked={props.post?.isPinned}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
           />
         
 
-        <FieldError name=\\"isPinned\\" className=\\"rw-field-error\\" />
+        <FieldError name="isPinned" className="rw-field-error" />
 
         <Label
-          name=\\"readTime\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="readTime"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Read time
         </Label>
         
           <TextField
-            name=\\"readTime\\"
+            name="readTime"
             defaultValue={props.post?.readTime}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ valueAsNumber: true, required: true }}
           />
         
 
-        <FieldError name=\\"readTime\\" className=\\"rw-field-error\\" />
+        <FieldError name="readTime" className="rw-field-error" />
 
         <Label
-          name=\\"rating\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="rating"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Rating
         </Label>
         
           <TextField
-            name=\\"rating\\"
+            name="rating"
             defaultValue={props.post?.rating}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ valueAsNumber: true }}
           />
         
 
-        <FieldError name=\\"rating\\" className=\\"rw-field-error\\" />
+        <FieldError name="rating" className="rw-field-error" />
 
         <Label
-          name=\\"upvotes\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="upvotes"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Upvotes
         </Label>
         
           <NumberField
-            name=\\"upvotes\\"
+            name="upvotes"
             defaultValue={props.post?.upvotes}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
         
 
-        <FieldError name=\\"upvotes\\" className=\\"rw-field-error\\" />
+        <FieldError name="upvotes" className="rw-field-error" />
 
         <Label
-          name=\\"metadata\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="metadata"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Metadata
         </Label>
         
           <TextAreaField
-            name=\\"metadata\\"
+            name="metadata"
             defaultValue={JSON.stringify(props.post?.metadata)}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ valueAsJSON: true, required: true }}
           />
         
 
-        <FieldError name=\\"metadata\\" className=\\"rw-field-error\\" />
+        <FieldError name="metadata" className="rw-field-error" />
 
         <Label
-          name=\\"hugeNumber\\"
-          className=\\"rw-label\\"
-          errorClassName=\\"rw-label rw-label-error\\"
+          name="hugeNumber"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
         >
           Huge number
         </Label>
         
           <TextField
-            name=\\"hugeNumber\\"
+            name="hugeNumber"
             defaultValue={props.post?.hugeNumber}
-            className=\\"rw-input\\"
-            errorClassName=\\"rw-input rw-input-error\\"
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
         
 
-        <FieldError name=\\"hugeNumber\\" className=\\"rw-field-error\\" />
+        <FieldError name="hugeNumber" className="rw-field-error" />
 
-        <div className=\\"rw-button-group\\">
+        <div className="rw-button-group">
           <Submit
             disabled={props.loading}
-            className=\\"rw-button rw-button-blue\\"
+            className="rw-button rw-button-blue"
           >
             Save
           </Submit>
@@ -1593,6 +1833,264 @@ const PostForm = (props) => {
 }
 
 export default PostForm
+"
+`;
+
+exports[`in typescript mode creates a formatters function file 1`] = `
+"import React from 'react'
+
+import humanize from 'humanize-string'
+
+const MAX_STRING_LENGTH = 150
+
+export const formatEnum = (values: string | string[] | null | undefined) => {
+  let output = ''
+
+  if (Array.isArray(values)) {
+    const humanizedValues = values.map((value) => humanize(value))
+    output = humanizedValues.join(', ')
+  } else if (typeof values === 'string') {
+    output = humanize(values)
+  }
+
+  return output
+}
+
+export const jsonDisplay = (obj: unknown) => {
+  return (
+    <pre>
+      <code>{JSON.stringify(obj, null, 2)}</code>
+    </pre>
+  )
+}
+
+export const truncate = (value: string | number) => {
+  let output = value?.toString() ?? ''
+
+  if (output.length > MAX_STRING_LENGTH) {
+    output = output.substring(0, MAX_STRING_LENGTH) + '...'
+  }
+
+  return output
+}
+
+export const jsonTruncate = (obj: unknown) => {
+  return truncate(JSON.stringify(obj, null, 2))
+}
+
+export const timeTag = (dateTime?: string) => {
+  let output: string | JSX.Element = ''
+
+  if (dateTime) {
+    output = (
+      <time dateTime={dateTime} title={dateTime}>
+        {new Date(dateTime).toUTCString()}
+      </time>
+    )
+  }
+
+  return output
+}
+
+export const checkboxInputTag = (checked: boolean) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+"
+`;
+
+exports[`in typescript mode creates a formatters function test file 1`] = `
+"import { render, waitFor, screen } from '@redwoodjs/testing/web'
+
+import {
+  formatEnum,
+  jsonTruncate,
+  truncate,
+  timeTag,
+  jsonDisplay,
+  checkboxInputTag,
+} from './formatters'
+
+describe('formatEnum', () => {
+  it('handles nullish values', () => {
+    expect(formatEnum(null)).toEqual('')
+    expect(formatEnum('')).toEqual('')
+    expect(formatEnum(undefined)).toEqual('')
+  })
+
+  it('formats a list of values', () => {
+    expect(
+      formatEnum(['RED', 'ORANGE', 'YELLOW', 'GREEN', 'BLUE', 'VIOLET'])
+    ).toEqual('Red, Orange, Yellow, Green, Blue, Violet')
+  })
+
+  it('formats a single value', () => {
+    expect(formatEnum('DARK_BLUE')).toEqual('Dark blue')
+  })
+
+  it('returns an empty string for values of the wrong type (for JS projects)', () => {
+    // @ts-expect-error - Testing JS scenario
+    expect(formatEnum(5)).toEqual('')
+  })
+})
+
+describe('truncate', () => {
+  it('truncates really long strings', () => {
+    expect(truncate('na '.repeat(1000) + 'batman').length).toBeLessThan(1000)
+    expect(truncate('na '.repeat(1000) + 'batman')).not.toMatch(/batman/)
+  })
+
+  it('does not modify short strings', () => {
+    expect(truncate('Short strinG')).toEqual('Short strinG')
+  })
+
+  it('adds ... to the end of truncated strings', () => {
+    expect(truncate('repeat'.repeat(1000))).toMatch(/\\w\\.\\.\\.$/)
+  })
+
+  it('accepts numbers', () => {
+    expect(truncate(123)).toEqual('123')
+    expect(truncate(0)).toEqual('0')
+    expect(truncate(0o000)).toEqual('0')
+  })
+
+  it('handles arguments of invalid type', () => {
+    // @ts-expect-error - Testing JS scenario
+    expect(truncate(false)).toEqual('false')
+
+    expect(truncate(undefined)).toEqual('')
+    expect(truncate(null)).toEqual('')
+  })
+})
+
+describe('jsonTruncate', () => {
+  it('truncates large json structures', () => {
+    expect(
+      jsonTruncate({
+        foo: 'foo',
+        bar: 'bar',
+        baz: 'baz',
+        kittens: 'kittens meow',
+        bazinga: 'Sheldon',
+        nested: {
+          foobar: 'I have no imagination',
+          two: 'Second nested item',
+        },
+        five: 5,
+        bool: false,
+      })
+    ).toMatch(/.+\\n.+\\w\\.\\.\\.$/s)
+  })
+})
+
+describe('timeTag', () => {
+  it('renders a date', async () => {
+    render(<div>{timeTag(new Date('1970-08-20').toUTCString())}</div>)
+
+    await waitFor(() => screen.getByText(/1970.*00:00:00/))
+  })
+
+  it('can take an empty input string', async () => {
+    expect(timeTag('')).toEqual('')
+  })
+})
+
+describe('jsonDisplay', () => {
+  it('produces the correct output', () => {
+    expect(
+      jsonDisplay({
+        title: 'TOML Example (but in JSON)',
+        database: {
+          data: [['delta', 'phi'], [3.14]],
+          enabled: true,
+          ports: [8000, 8001, 8002],
+          temp_targets: {
+            case: 72.0,
+            cpu: 79.5,
+          },
+        },
+        owner: {
+          dob: '1979-05-27T07:32:00-08:00',
+          name: 'Tom Preston-Werner',
+        },
+        servers: {
+          alpha: {
+            ip: '10.0.0.1',
+            role: 'frontend',
+          },
+          beta: {
+            ip: '10.0.0.2',
+            role: 'backend',
+          },
+        },
+      })
+    ).toMatchInlineSnapshot(\`
+      <pre>
+        <code>
+          {
+        "title": "TOML Example (but in JSON)",
+        "database": {
+          "data": [
+            [
+              "delta",
+              "phi"
+            ],
+            [
+              3.14
+            ]
+          ],
+          "enabled": true,
+          "ports": [
+            8000,
+            8001,
+            8002
+          ],
+          "temp_targets": {
+            "case": 72,
+            "cpu": 79.5
+          }
+        },
+        "owner": {
+          "dob": "1979-05-27T07:32:00-08:00",
+          "name": "Tom Preston-Werner"
+        },
+        "servers": {
+          "alpha": {
+            "ip": "10.0.0.1",
+            "role": "frontend"
+          },
+          "beta": {
+            "ip": "10.0.0.2",
+            "role": "backend"
+          }
+        }
+      }
+        </code>
+      </pre>
+    \`)
+  })
+})
+
+describe('checkboxInputTag', () => {
+  it('can be checked', () => {
+    render(checkboxInputTag(true))
+    expect(screen.getByRole('checkbox')).toBeChecked()
+  })
+
+  it('can be unchecked', () => {
+    render(checkboxInputTag(false))
+    expect(screen.getByRole('checkbox')).not.toBeChecked()
+  })
+
+  it('is disabled when checked', () => {
+    render(checkboxInputTag(true))
+    expect(screen.getByRole('checkbox')).toBeDisabled()
+  })
+
+  it('is disabled when unchecked', () => {
+    render(checkboxInputTag(false))
+    expect(screen.getByRole('checkbox')).toBeDisabled()
+  })
+})
 "
 `;
 
@@ -1611,44 +2109,51 @@ exports[`in typescript mode creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
-type PostLayoutProps = {
+type LayoutProps = {
+  title: string
+  titleTo: string
+  buttonLabel: string
+  buttonTo: string
   children: React.ReactNode
 }
 
-const PostsLayout = ({ children }: PostLayoutProps) => {
+const ScaffoldLayout = ({
+  title,
+  titleTo,
+  buttonLabel,
+  buttonTo,
+  children,
+}: LayoutProps) => {
   return (
-    <div className=\\"rw-scaffold\\">
+    <div className="rw-scaffold">
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-      <header className=\\"rw-header\\">
-        <h1 className=\\"rw-heading rw-heading-primary\\">
-          <Link
-            to={routes.posts()}
-            className=\\"rw-link\\"
-          >
-            Posts
+      <header className="rw-header">
+        <h1 className="rw-heading rw-heading-primary">
+          <Link to={routes[titleTo]()} className="rw-link">
+            {title}
           </Link>
         </h1>
-        <Link
-          to={routes.newPost()}
-          className=\\"rw-button rw-button-green\\"
-        >
-          <div className=\\"rw-button-icon\\">+</div> New Post
+        <Link to={routes[buttonTo]()} className="rw-button rw-button-green">
+          <div className="rw-button-icon">+</div> {buttonLabel}
         </Link>
       </header>
-      <main className=\\"rw-main\\">{children}</main>
+      <main className="rw-main">{children}</main>
     </div>
   )
 }
 
-export default PostsLayout
+export default ScaffoldLayout
 "
 `;
 
 exports[`in typescript mode creates a new component 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import PostForm from 'src/components/Post/PostForm'
+
+import type { CreatePostInput } from 'types/graphql'
 
 const CREATE_POST_MUTATION = gql\`
   mutation CreatePostMutation($input: CreatePostInput!) {
@@ -1659,26 +2164,29 @@ const CREATE_POST_MUTATION = gql\`
 \`
 
 const NewPost = () => {
-  const [createPost, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
-    onCompleted: () => {
-      toast.success('Post created')
-      navigate(routes.posts())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createPost, { loading, error }] = useMutation(
+    CREATE_POST_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Post created')
+        navigate(routes.posts())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input) => {
+  const onSave = (input: CreatePostInput) => {
     createPost({ variables: { input } })
   }
 
   return (
-    <div className=\\"rw-segment\\">
-      <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">New Post</h2>
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">New Post</h2>
       </header>
-      <div className=\\"rw-segment-main\\">
+      <div className="rw-segment-main">
         <PostForm onSave={onSave} loading={loading} error={error} />
       </div>
     </div>
@@ -1690,10 +2198,13 @@ export default NewPost
 `;
 
 exports[`in typescript mode creates a new component with int foreign keys converted in onSave 1`] = `
-"import { useMutation } from '@redwoodjs/web'
+"import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
+
+import type { CreateUserProfileInput } from 'types/graphql'
 
 const CREATE_USER_PROFILE_MUTATION = gql\`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
@@ -1704,27 +2215,29 @@ const CREATE_USER_PROFILE_MUTATION = gql\`
 \`
 
 const NewUserProfile = () => {
-  const [createUserProfile, { loading, error }] = useMutation(CREATE_USER_PROFILE_MUTATION, {
-    onCompleted: () => {
-      toast.success('UserProfile created')
-      navigate(routes.userProfiles())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [createUserProfile, { loading, error }] = useMutation(
+    CREATE_USER_PROFILE_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('UserProfile created')
+        navigate(routes.userProfiles())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
-    createUserProfile({ variables: { input: castInput } })
+  const onSave = (input: CreateUserProfileInput) => {
+    createUserProfile({ variables: { input } })
   }
 
   return (
-    <div className=\\"rw-segment\\">
-      <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">New UserProfile</h2>
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">New UserProfile</h2>
       </header>
-      <div className=\\"rw-segment-main\\">
+      <div className="rw-segment-main">
         <UserProfileForm onSave={onSave} loading={loading} error={error} />
       </div>
     </div>
@@ -1748,6 +2261,7 @@ export default NewPostPage
 
 exports[`in typescript mode creates a show cell 1`] = `
 "import type { FindPostById } from 'types/graphql'
+
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Post from 'src/components/Post/Post'
@@ -1777,7 +2291,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>Post not found</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
@@ -1787,11 +2301,14 @@ export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
 `;
 
 exports[`in typescript mode creates a show component 1`] = `
-"import humanize from 'humanize-string'
-
+"
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
+
+import { checkboxInputTag, jsonDisplay, timeTag,  } from 'src/lib/formatters'
+
+import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -1801,40 +2318,11 @@ const DELETE_POST_MUTATION = gql\`
   }
 \`
 
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
+interface Props {
+  post: NonNullable<FindPostById['post']>
 }
 
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type=\\"checkbox\\" checked={checked} disabled />
-}
-
-const Post = ({ post }) => {
+const Post = ({ post }: Props) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -1845,7 +2333,7 @@ const Post = ({ post }) => {
     },
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: DeletePostMutationVariables['id']) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
       deletePost({ variables: { id } })
     }
@@ -1853,11 +2341,13 @@ const Post = ({ post }) => {
 
   return (
     <>
-      <div className=\\"rw-segment\\">
-        <header className=\\"rw-segment-header\\">
-          <h2 className=\\"rw-heading rw-heading-secondary\\">Post {post.id} Detail</h2>
+      <div className="rw-segment">
+        <header className="rw-segment-header">
+          <h2 className="rw-heading rw-heading-secondary">
+            Post {post.id} Detail
+          </h2>
         </header>
-        <table className=\\"rw-table\\">
+        <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
@@ -1902,16 +2392,16 @@ const Post = ({ post }) => {
           </tbody>
         </table>
       </div>
-      <nav className=\\"rw-button-group\\">
+      <nav className="rw-button-group">
         <Link
           to={routes.editPost({ id: post.id })}
-          className=\\"rw-button rw-button-blue\\"
+          className="rw-button rw-button-blue"
         >
           Edit
         </Link>
         <button
-          type=\\"button\\"
-          className=\\"rw-button rw-button-red\\"
+          type="button"
+          className="rw-button rw-button-red"
           onClick={() => onDeleteClick(post.id)}
         >
           Delete
@@ -2006,8 +2496,28 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2151,6 +2661,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   margin-top: 1.5rem;
   color: #4a5568;
   font-weight: 600;
+  text-align: left;
 }
 .rw-label.rw-label-error {
   color: #c53030;
@@ -2211,7 +2722,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -2229,8 +2740,11 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -2238,6 +2752,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -2249,11 +2764,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -2299,6 +2810,7 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 }
 .rw-login-container .rw-form-wrapper {
   width: 100%;
+  text-align: center;
 }
 .rw-login-link {
   margin-top: 1rem;
@@ -2307,16 +2819,25 @@ exports[`in typescript mode creates a stylesheet 1`] = `
   text-align: center;
   flex-basis: 100%;
 }
+.rw-webauthn-wrapper {
+  margin: 1.5rem 1rem 1rem;
+  line-height: 1.4;
+}
+.rw-webauthn-wrapper h2 {
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
 "
 `;
 
 exports[`in typescript mode creates an edit cell 1`] = `
-"import type { EditPostById } from 'types/graphql'
+"import type { EditPostById, UpdatePostInput } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import PostForm from 'src/components/Post/PostForm'
 
@@ -2362,30 +2883,36 @@ const UPDATE_POST_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
-  const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
-    onCompleted: () => {
-      toast.success('Post updated')
-      navigate(routes.posts())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updatePost, { loading, error }] = useMutation(
+    UPDATE_POST_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Post updated')
+        navigate(routes.posts())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input, id) => {
+  const onSave = (
+    input: UpdatePostInput,
+    id: EditPostById['post']['id']
+  ) => {
     updatePost({ variables: { id, input } })
   }
 
   return (
-    <div className=\\"rw-segment\\">
-      <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">Edit Post {post.id}</h2>
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">Edit Post {post?.id}</h2>
       </header>
-      <div className=\\"rw-segment-main\\">
+      <div className="rw-segment-main">
         <PostForm post={post} onSave={onSave} error={error} loading={loading} />
       </div>
     </div>
@@ -2395,12 +2922,12 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 `;
 
 exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import type { EditUserProfileById } from 'types/graphql'
+"import type { EditUserProfileById, UpdateUserProfileInput } from 'types/graphql'
 
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
 
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
 
@@ -2426,31 +2953,36 @@ const UPDATE_USER_PROFILE_MUTATION = gql\`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) => {
-  const [updateUserProfile, { loading, error }] = useMutation(UPDATE_USER_PROFILE_MUTATION, {
-    onCompleted: () => {
-      toast.success('UserProfile updated')
-      navigate(routes.userProfiles())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [updateUserProfile, { loading, error }] = useMutation(
+    UPDATE_USER_PROFILE_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('UserProfile updated')
+        navigate(routes.userProfiles())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input, id) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
-    updateUserProfile({ variables: { id, input: castInput } })
+  const onSave = (
+    input: UpdateUserProfileInput,
+    id: EditUserProfileById['userProfile']['id']
+  ) => {
+    updateUserProfile({ variables: { id, input } })
   }
 
   return (
-    <div className=\\"rw-segment\\">
-      <header className=\\"rw-segment-header\\">
-        <h2 className=\\"rw-heading rw-heading-secondary\\">Edit UserProfile {userProfile.id}</h2>
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">Edit UserProfile {userProfile?.id}</h2>
       </header>
-      <div className=\\"rw-segment-main\\">
+      <div className="rw-segment-main">
         <UserProfileForm userProfile={userProfile} onSave={onSave} error={error} loading={loading} />
       </div>
     </div>
@@ -2461,9 +2993,9 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
 
 exports[`in typescript mode creates an index cell 1`] = `
 "import type { FindPosts } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { Link, routes } from '@redwoodjs/router'
+import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Posts from 'src/components/Post/Posts'
 
@@ -2491,11 +3023,11 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
   return (
-    <div className=\\"rw-text-center\\">
+    <div className="rw-text-center">
       {'No posts yet. '}
       <Link
         to={routes.newPost()}
-        className=\\"rw-link\\"
+        className="rw-link"
       >
         {'Create one?'}
       </Link>
@@ -2504,7 +3036,7 @@ export const Empty = () => {
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className=\\"rw-cell-error\\">{error.message}</div>
+  <div className="rw-cell-error">{error?.message}</div>
 )
 
 export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
@@ -2514,13 +3046,14 @@ export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
 `;
 
 exports[`in typescript mode creates an index component 1`] = `
-"import humanize from 'humanize-string'
-
+"import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/Post/PostsCell'
+import { checkboxInputTag, jsonTruncate, timeTag, truncate } from 'src/lib/formatters'
+
+import type { DeletePostMutationVariables, FindPosts } from 'types/graphql'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -2530,46 +3063,7 @@ const DELETE_POST_MUTATION = gql\`
   }
 \`
 
-const MAX_STRING_LENGTH = 150
-
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output
-}
-
-const jsonTruncate = (obj) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type=\\"checkbox\\" checked={checked} disabled />
-}
-
-const PostsList = ({ posts }) => {
+const PostsList = ({ posts }: FindPosts) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     onCompleted: () => {
       toast.success('Post deleted')
@@ -2584,15 +3078,15 @@ const PostsList = ({ posts }) => {
     awaitRefetchQueries: true,
   })
 
-  const onDeleteClick = (id) => {
+  const onDeleteClick = (id: DeletePostMutationVariables['id']) => {
     if (confirm('Are you sure you want to delete post ' + id + '?')) {
       deletePost({ variables: { id } })
     }
   }
 
   return (
-    <div className=\\"rw-segment rw-table-wrapper-responsive\\">
-      <table className=\\"rw-table\\">
+    <div className="rw-segment rw-table-wrapper-responsive">
+      <table className="rw-table">
         <thead>
           <tr>
             <th>Id</th>
@@ -2628,25 +3122,25 @@ const PostsList = ({ posts }) => {
               <td>{jsonTruncate(post.metadata)}</td>
               <td>{truncate(post.hugeNumber)}</td>
               <td>
-                <nav className=\\"rw-table-actions\\">
+                <nav className="rw-table-actions">
                   <Link
                     to={routes.post({ id: post.id })}
                     title={'Show post ' + post.id + ' detail'}
-                    className=\\"rw-button rw-button-small\\"
+                    className="rw-button rw-button-small"
                   >
                     Show
                   </Link>
                   <Link
                     to={routes.editPost({ id: post.id })}
                     title={'Edit post ' + post.id}
-                    className=\\"rw-button rw-button-small rw-button-blue\\"
+                    className="rw-button rw-button-small rw-button-blue"
                   >
                     Edit
                   </Link>
                   <button
-                    type=\\"button\\"
+                    type="button"
                     title={'Delete post ' + post.id}
-                    className=\\"rw-button rw-button-small rw-button-red\\"
+                    className="rw-button rw-button-small rw-button-red"
                     onClick={() => onDeleteClick(post.id)}
                   >
                     Delete
@@ -2731,8 +3225,28 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
 }
 .rw-segment {
   border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #e5e7eb;
   overflow: hidden;
   width: 100%;
+  scrollbar-color: #a1a1aa transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-color: #e2e8f0;
+  border-style: solid;
+  border-radius: 0 0 10px 10px;
+  border-width: 1px 0 0 0;
+  padding: 2px;
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa;
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 10px;
 }
 .rw-segment-header {
   background-color: #e2e8f0;
@@ -2876,6 +3390,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   margin-top: 1.5rem;
   color: #4a5568;
   font-weight: 600;
+  text-align: left;
 }
 .rw-label.rw-label-error {
   color: #c53030;
@@ -2936,7 +3451,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   color: #c53030;
 }
 .rw-table-wrapper-responsive {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -2954,8 +3469,11 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   background-color: #ffffff;
   color: #1a202c;
 }
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  background-color: #f7fafc;
+}
 .rw-table thead tr {
-  background-color: #e2e8f0;
   color: #4a5568;
 }
 .rw-table th {
@@ -2963,6 +3481,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   text-align: left;
 }
 .rw-table thead th {
+  background-color: #e2e8f0;
   text-align: left;
 }
 .rw-table tbody th {
@@ -2974,11 +3493,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   }
 }
 .rw-table tbody tr {
-  background-color: #f7fafc;
   border-top-width: 1px;
-}
-.rw-table tbody tr:nth-child(even) {
-  background-color: #fff;
 }
 .rw-table input {
   margin-left: 0;
@@ -3024,6 +3539,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
 }
 .rw-login-container .rw-form-wrapper {
   width: 100%;
+  text-align: center;
 }
 .rw-login-link {
   margin-top: 1rem;
@@ -3031,6 +3547,15 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
   font-size: 90%;
   text-align: center;
   flex-basis: 100%;
+}
+.rw-webauthn-wrapper {
+  margin: 1.5rem 1rem 1rem;
+  line-height: 1.4;
+}
+.rw-webauthn-wrapper h2 {
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 "
 `;
@@ -3065,7 +3590,17 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply mx-4 pb-4;
 }
 .rw-segment {
-  @apply rounded-lg overflow-hidden w-full;
+  @apply rounded-lg overflow-hidden w-full border border-gray-200;
+  scrollbar-color: theme('colors.zinc.400') transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  @apply border-gray-200 bg-transparent border-solid rounded-t-none rounded-b-[10px] border-0 border-t p-[2px];
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400 bg-clip-content border-[3px] border-solid border-transparent rounded-full;
 }
 .rw-segment-header {
   @apply bg-gray-200 text-gray-700 py-3 px-4;
@@ -3156,7 +3691,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply mt-8;
 }
 .rw-label {
-  @apply block mt-6 text-gray-600 font-semibold;
+  @apply block mt-6 text-gray-600 font-semibold text-left;
 }
 .rw-label.rw-label-error {
   @apply text-red-600;
@@ -3188,7 +3723,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply block mt-1 font-semibold text-xs text-red-600 uppercase;
 }
 .rw-table-wrapper-responsive {
-  @apply overflow-x-scroll;
+  @apply overflow-x-auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -3202,6 +3737,10 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
 }
 .rw-table td {
   @apply bg-white text-gray-900;
+}
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  @apply bg-gray-50;
 }
 .rw-table thead tr {
   @apply bg-gray-200 text-gray-600;
@@ -3221,7 +3760,7 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   }
 }
 .rw-table tbody tr {
-  @apply bg-gray-50 border-t border-gray-200;
+  @apply border-t border-gray-200;
 }
 .rw-table input {
   @apply ml-0;
@@ -3254,10 +3793,16 @@ exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind co
   @apply flex items-center justify-center flex-wrap mx-auto w-96 my-16;
 }
 .rw-login-container .rw-form-wrapper {
-  @apply w-full;
+  @apply w-full text-center;
 }
 .rw-login-link {
   @apply mt-4 text-gray-600 text-sm text-center w-full;
+}
+.rw-webauthn-wrapper {
+  @apply mt-6 mx-4 leading-6;
+}
+.rw-webauthn-wrapper h2 {
+  @apply mb-4 text-xl font-bold;
 }
 "
 `;

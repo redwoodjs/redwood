@@ -1,5 +1,6 @@
-import { Link, navigate, routes } from '@redwoodjs/router'
 import { useRef } from 'react'
+import { useEffect } from 'react'
+
 import {
   Form,
   Label,
@@ -8,10 +9,11 @@ import {
   FieldError,
   Submit,
 } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
-import { useEffect } from 'react'
+
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
@@ -22,14 +24,18 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on email box on page load
-  const usernameRef = useRef<HTMLInputElement>()
+  // focus on username box on page load
+  const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    usernameRef.current.focus()
+    usernameRef.current?.focus()
   }, [])
 
-  const onSubmit = async (data) => {
-    const response = await signUp({ ...data })
+  const onSubmit = async (data: Record<string, string>) => {
+    const response = await signUp({
+      username: data.username,
+      password: data.password,
+      'full-name': data['full-name'],
+    })
 
     if (response.message) {
       toast(response.message)
@@ -97,6 +103,26 @@ const SignupPage = () => {
                     }}
                   />
                   <FieldError name="password" className="rw-field-error" />
+
+                  <Label
+                    name="full-name"
+                    className="rw-label"
+                    errorClassName="rw-label rw-label-error"
+                  >
+                    Full Name
+                  </Label>
+                  <TextField
+                    name="full-name"
+                    className="rw-input"
+                    errorClassName="rw-input rw-input-error"
+                    validation={{
+                      required: {
+                        value: true,
+                        message: 'Full Name is required',
+                      },
+                    }}
+                  />
+                  <FieldError name="full-name" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">

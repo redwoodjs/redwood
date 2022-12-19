@@ -27,7 +27,17 @@
   @apply mx-4 pb-4;
 }
 .rw-segment {
-  @apply rounded-lg overflow-hidden w-full;
+  @apply rounded-lg overflow-hidden w-full border border-gray-200;
+  scrollbar-color: theme('colors.zinc.400') transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  @apply border-gray-200 bg-transparent border-solid rounded-t-none rounded-b-[10px] border-0 border-t p-[2px];
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400 bg-clip-content border-[3px] border-solid border-transparent rounded-full;
 }
 .rw-segment-header {
   @apply bg-gray-200 text-gray-700 py-3 px-4;
@@ -118,7 +128,7 @@
   @apply mt-8;
 }
 .rw-label {
-  @apply block mt-6 text-gray-600 font-semibold;
+  @apply block mt-6 text-gray-600 font-semibold text-left;
 }
 .rw-label.rw-label-error {
   @apply text-red-600;
@@ -150,7 +160,7 @@
   @apply block mt-1 font-semibold text-xs text-red-600 uppercase;
 }
 .rw-table-wrapper-responsive {
-  @apply overflow-x-scroll;
+  @apply overflow-x-auto;
 }
 .rw-table-wrapper-responsive .rw-table {
   min-width: 48rem;
@@ -163,7 +173,11 @@
   @apply p-3;
 }
 .rw-table td {
-  @apply bg-white text-gray-900
+  @apply bg-white text-gray-900;
+}
+.rw-table tr:nth-child(odd) td,
+.rw-table tr:nth-child(odd) th {
+  @apply bg-gray-50;
 }
 .rw-table thead tr {
   @apply bg-gray-200 text-gray-600;
@@ -183,7 +197,7 @@
   }
 }
 .rw-table tbody tr {
-  @apply bg-gray-50 border-t border-gray-200;
+  @apply border-t border-gray-200;
 }
 .rw-table input {
   @apply ml-0;
@@ -216,8 +230,14 @@
   @apply flex items-center justify-center flex-wrap mx-auto w-96 my-16;
 }
 .rw-login-container .rw-form-wrapper {
-  @apply w-full;
+  @apply w-full text-center;
 }
 .rw-login-link {
   @apply mt-4 text-gray-600 text-sm text-center w-full;
+}
+.rw-webauthn-wrapper {
+  @apply mt-6 mx-4 leading-6;
+}
+.rw-webauthn-wrapper h2 {
+  @apply mb-4 text-xl font-bold;
 }

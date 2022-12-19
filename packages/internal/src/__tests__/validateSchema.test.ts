@@ -15,14 +15,5 @@ afterAll(() => {
 })
 
 test('Validates correctly on all platforms', async () => {
-  let isSdlValid
-
-  try {
-    await loadAndValidateSdls()
-    isSdlValid = true
-  } catch (e) {
-    isSdlValid = false
-  }
-
-  expect(isSdlValid).toBe(true)
+  await expect(loadAndValidateSdls()).resolves.not.toThrowError()
 })

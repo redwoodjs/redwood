@@ -2,9 +2,9 @@ const path = require('path')
 
 const packageJSON = require(path.join(__dirname, 'package.json'))
 
-// RedwoodJS targets Node.js 12.x because this is the default version
+// RedwoodJS targets Node.js 14.x because this is the default version
 // for Netlify's functions.
-const TARGETS_NODE = '12.16'
+const TARGETS_NODE = '14.20'
 
 // Run `npx browserslist "defaults, not IE 11, not IE_Mob 11"` to see a list
 // of target browsers.
@@ -36,6 +36,7 @@ module.exports = {
           // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
           proposals: true,
         },
+        exclude: ['es.error.cause'],
       },
     ],
     '@babel/preset-react',

@@ -1,6 +1,7 @@
+import fs from 'node:fs'
+
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
-import fs from 'node:fs'
 
 import generateReleaseNotes, {
   GET_MILESTONE_IDS,

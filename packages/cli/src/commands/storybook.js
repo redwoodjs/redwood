@@ -3,7 +3,7 @@ import path from 'path'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '@redwoodjs/internal'
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
@@ -22,6 +22,11 @@ export const builder = (yargs) => {
     })
     .option('build', {
       describe: 'Build Storybook',
+      type: 'boolean',
+      default: false,
+    })
+    .option('ci', {
+      describe: 'Start server in CI mode, with no interactive prompts',
       type: 'boolean',
       default: false,
     })
@@ -63,7 +68,7 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#storybook'
+        'https://redwoodjs.com/docs/cli-commands#storybook'
       )}`
     )
 }
@@ -72,6 +77,7 @@ export const handler = ({
   open,
   port,
   build,
+  ci,
   buildDirectory,
   managerCache,
   smokeTest,
@@ -130,6 +136,7 @@ export const handler = ({
           `--port ${port}`,
           !managerCache && `--no-manager-cache`,
           `--no-version-updates`,
+          ci && '--ci',
           !open && `--no-open`,
         ].filter(Boolean),
         {

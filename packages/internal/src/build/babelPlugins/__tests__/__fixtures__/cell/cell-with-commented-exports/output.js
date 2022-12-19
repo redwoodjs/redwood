@@ -7,12 +7,15 @@ export const QUERY = gql`
       body
     }
   }
-` // export const beforeQuery = () => ({})
+`
 
+// export const beforeQuery = () => ({})
 export const afterQuery = () => ({})
 export function Loading() {
   return 'Loading'
-} // export function Empty() {
+}
+
+// export function Empty() {
 //   return 'Empty'
 // }
 

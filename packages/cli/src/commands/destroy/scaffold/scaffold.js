@@ -1,4 +1,4 @@
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
 import {
@@ -106,7 +106,7 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
         task: () => removeLayoutImport({ model, path }),
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 
 export const handler = async ({ model: modelArg }) => {

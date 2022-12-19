@@ -1,0 +1,1 @@
+merges i18next storybook configuration into base storybook configuration

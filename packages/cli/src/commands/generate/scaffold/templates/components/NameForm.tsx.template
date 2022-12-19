@@ -7,6 +7,10 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
+import type { Edit${singularPascalName}ById, Update${singularPascalName}Input } from 'types/graphql'
+import type { RWGqlError } from '@redwoodjs/forms'
+
+
 <% if (fieldsToImport.includes('DatetimeLocalField')) { %>
 const formatDatetime = (value) => {
   if (value) {
@@ -15,9 +19,17 @@ const formatDatetime = (value) => {
 }
 <% } %>
 
-const ${singularPascalName}Form = (props) => {
-  const onSubmit = (data) => {
+type Form${singularPascalName} = NonNullable<Edit${singularPascalName}ById['${singularCamelName}']>
 
+interface ${singularPascalName}FormProps {
+  ${singularCamelName}?: Edit${singularPascalName}ById['${singularCamelName}']
+  onSave: (data: Update${singularPascalName}Input, id?: Form${singularPascalName}['id']) => void
+  error: RWGqlError
+  loading: boolean
+}
+
+const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
+  const onSubmit = (data: Form${singularPascalName}) => {
   <% editableColumns.forEach(column => { %>
     <% if (column.isEnum && !column.isList && !column.isRequired) { %>
       if (data.${column.name} === '') {
@@ -35,7 +47,7 @@ const ${singularPascalName}Form = (props) => {
 
   return (
     <div className="rw-form-wrapper">
-      <Form onSubmit={onSubmit} error={props.error}>
+      <Form<Form${singularPascalName}> onSubmit={onSubmit} error={props.error}>
         <FormError
           error={props.error}
           wrapperClassName="rw-form-error-wrapper"

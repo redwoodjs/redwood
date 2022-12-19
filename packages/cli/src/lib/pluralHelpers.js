@@ -27,7 +27,7 @@ export const validatePlural = (plural, singular) => {
 // example: Pokemon
 export const ensureUniquePlural = async ({
   model,
-  inDestroyer = false,
+  isDestroyer = false,
   forcePrompt = false,
 }) => {
   if (!forcePrompt && isWordPluralizable(model)) {
@@ -42,7 +42,7 @@ export const ensureUniquePlural = async ({
     'the files. \n' +
     'To continue, the destroy command requires the plural form:'
 
-  const promptMessage = inDestroyer ? destroyMessage : generateMessage
+  const promptMessage = isDestroyer ? destroyMessage : generateMessage
 
   // News => Newses; Equipment => Equipments
   const initialPlural = model.slice(-1) === 's' ? `${model}es` : `${model}s`

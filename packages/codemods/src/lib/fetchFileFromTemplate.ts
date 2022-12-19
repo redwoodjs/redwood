@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import { fetch } from 'cross-undici-fetch'
 
 /**
  * @param tag should be something like 'v0.42.1'

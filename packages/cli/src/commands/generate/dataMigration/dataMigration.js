@@ -1,13 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import terminalLink from 'terminal-link'
 
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { prepareForRollback } from '../../../lib/rollback'
+import { validateName, yargsDefaults } from '../helpers'
 
 const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
   'After writing your migration, you can run it with:'
@@ -42,10 +43,15 @@ export const builder = (yargs) => {
       description: 'A descriptor of what this data migration does',
       type: 'string',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-auth'
+        'https://redwoodjs.com/docs/cli-commands#generate-datamigration'
       )}`
     )
 
@@ -56,6 +62,8 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (args) => {
+  validateName(args.name)
+
   const tasks = new Listr(
     [
       {
@@ -71,10 +79,13 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {
+    if (args.rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

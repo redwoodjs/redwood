@@ -1,5 +1,5 @@
 // import terminalLink from 'terminal-link'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -15,7 +15,9 @@ const notes = [
 ]
 
 export const handler = async () => {
-  const tasks = new Listr([updateApiURLTask('/api'), printSetupNotes(notes)])
+  const tasks = new Listr([updateApiURLTask('/api'), printSetupNotes(notes)], {
+    rendererOptions: { collapse: false },
+  })
   try {
     await tasks.run()
   } catch (e) {

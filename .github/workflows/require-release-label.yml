@@ -1,0 +1,16 @@
+name: 🏷 Require release label
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+jobs:
+  require-release-label:
+    name: 🏷 Require release label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mheap/github-action-required-labels@v2
+        with:
+          mode: exactly
+          count: 1
+          labels: "release:docs, release:chore, release:fix, release:feature, release:feature-breaking"

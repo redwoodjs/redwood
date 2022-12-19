@@ -7,7 +7,8 @@ const path = require('path')
 const execa = require('execa')
 const fg = require('fast-glob')
 const fs = require('fs-extra')
-const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
+const yargs = require('yargs/yargs')
 
 // This script sets up a blank RedwoodJS app into a directory.
 // It uses the packages from the RedwoodJS framework (../packages).
@@ -30,7 +31,7 @@ const buildRedwoodFramework = () => {
     })
 
     execa.sync(
-      [files.length && 'yarn build:clean', 'yarn build:js']
+      [files.length && 'yarn build:clean', 'yarn build']
         .filter(Boolean)
         .join('&&'),
       {
@@ -46,7 +47,7 @@ const buildRedwoodFramework = () => {
   }
 }
 
-const createRedwoodJSApp = () => {
+const createRedwoodJSApp = ({ yarn1 }) => {
   try {
     execa.sync(
       'yarn babel-node src/create-redwood-app.js',
@@ -55,7 +56,9 @@ const createRedwoodJSApp = () => {
         '--no-yarn-install',
         '--typescript',
         '--no-telemetry',
-      ],
+        '--no-git',
+        yarn1 && '--yarn1',
+      ].filter(Boolean),
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
         env: { REDWOOD_CI: '1' },
@@ -63,6 +66,24 @@ const createRedwoodJSApp = () => {
         stdio: 'inherit',
       }
     )
+
+    // Add prisma resolutions
+    const packageJSONPath = path.join(REDWOOD_PROJECT_DIRECTORY, 'package.json')
+    const packageJSON = fs.readJSONSync(packageJSONPath)
+
+    const getVersionFrmRwPkg = (dep, pkg) => {
+      return fs.readJSONSync(
+        path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json')
+      ).dependencies[dep]
+    }
+
+    packageJSON.resolutions = {
+      prisma: getVersionFrmRwPkg('prisma', 'cli'),
+      '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
+      '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
+    }
+
+    fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
   } catch (e) {
     console.error('Error: Could not create Redwood Project')
     console.error(e)
@@ -107,35 +128,7 @@ const copyFrameworkPackages = () => {
     process.exit(1)
   }
 }
-const checkYarnVersion = () => {
-  try {
-    const { stdout } = execa.sync('yarn --version', {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-    })
-    console.log('Yarn version is', stdout)
-    if (!stdout.startsWith('1')) {
-      setYarnClassic()
-    }
-  } catch (e) {
-    console.error(e)
-    console.error('Error: We could not find yarn')
-    process.exit(1)
-  }
-}
-const setYarnClassic = () => {
-  try {
-    execa.sync('yarn set version classic', {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-      stdio: 'inherit',
-    })
-  } catch (e) {
-    console.error(e)
-    console.error('Error: We could not set yarn classic')
-    process.exit(1)
-  }
-}
+
 const runYarnInstall = () => {
   try {
     execa.sync('yarn install', {
@@ -183,7 +176,12 @@ const runCypress = () => {
   execa.sync(
     // do not use Yarn to run Cypress; this avoids missing binary errors
     '../../node_modules/.bin/cypress',
-    ['open', `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`],
+    [
+      'open',
+      `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`,
+      '--e2e',
+      '--browser chrome',
+    ],
     {
       cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
       shell: true,
@@ -206,17 +204,18 @@ const initGit = () => {
   })
 }
 
-const args = yargs
+const args = yargs(hideBin(process.argv))
   .option('create-project', { default: true, type: 'boolean', alias: 'create' })
   .option('build-framework', { default: true, type: 'boolean', alias: 'build' })
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
+  .option('yarn1', { default: false, type: 'boolean' })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
   .help()
-  .strict().argv
+  .parse()
 
 const REDWOODJS_FRAMEWORK_PATH = path.resolve(__dirname, '..')
 let REDWOOD_PROJECT_DIRECTORY =
@@ -235,13 +234,18 @@ makeDirectory(REDWOOD_PROJECT_DIRECTORY)
 console.log()
 console.log('-'.repeat(80))
 
-let { buildFramework, copyFramework, createProject, typescript, autoStart } =
-  args
+let {
+  buildFramework,
+  copyFramework,
+  createProject,
+  typescript,
+  autoStart,
+  yarn1,
+} = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
-  createProject && createRedwoodJSApp,
+  createProject && (() => createRedwoodJSApp({ yarn1 })),
   copyFramework && addFrameworkDepsToProject,
-  copyFramework && checkYarnVersion,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
   !typescript && convertProjectToJavaScript,

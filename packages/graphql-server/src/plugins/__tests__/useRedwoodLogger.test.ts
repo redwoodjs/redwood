@@ -198,11 +198,34 @@ describe('Populates context', () => {
     expect(errorLogStatement).toHaveProperty('level')
     expect(errorLogStatement).toHaveProperty('time')
     expect(errorLogStatement).toHaveProperty('msg')
-    expect(errorLogStatement).toHaveProperty('error')
+    expect(errorLogStatement).toHaveProperty('err')
 
     expect(errorLogStatement.name).toEqual('graphql-server')
     expect(errorLogStatement.level).toEqual(50)
     expect(errorLogStatement.msg).toEqual('You are forbidden')
+  })
+
+  it('Should log an error with type and stack trace info when the resolver raises an exception', async () => {
+    const loggerConfig = {
+      logger,
+      options: {},
+    } as LoggerConfig
+
+    const testkit = createTestkit([useRedwoodLogger(loggerConfig)], testSchema)
+
+    await testkit.execute(testErrorQuery, {}, {})
+
+    await watchFileCreated(logFile)
+
+    const logStatements = parseLogFile(logFile)
+
+    const errorLogStatement = logStatements.pop()
+
+    expect(errorLogStatement).toHaveProperty('err')
+    expect(errorLogStatement.err).toHaveProperty('stack')
+    expect(errorLogStatement.err.type).toEqual('GraphQLError')
+    expect(errorLogStatement.err.path).toContain('forbiddenUser')
+    expect(errorLogStatement.err.message).toEqual('You are forbidden')
   })
 
   it('Should not log filtered graphql operations', async () => {

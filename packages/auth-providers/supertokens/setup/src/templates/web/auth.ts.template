@@ -1,0 +1,42 @@
+import { createAuth } from '@redwoodjs/auth-supertokens-web'
+import { isBrowser } from '@redwoodjs/prerender/browserUtils'
+
+import SuperTokens from 'supertokens-auth-react'
+import Session from 'supertokens-auth-react/recipe/session'
+import ThirdPartyEmailPassword, {
+  Github,
+  Google,
+  Apple,
+} from 'supertokens-auth-react/recipe/thirdpartyemailpassword'
+
+const websiteDomain =
+  process.env.SUPERTOKENS_WEBSITE_DOMAIN || 'http://localhost:8910'
+const apiDomain =
+  process.env.SUPERTOKENS_API_DOMAIN ||
+  `${websiteDomain}${process.env.RWJS_API_URL}`
+
+const superTokensClient = {
+  authRecipe: ThirdPartyEmailPassword,
+  sessionRecipe: Session,
+}
+
+isBrowser &&
+  SuperTokens.init({
+    appInfo: {
+      apiDomain,
+      websiteDomain,
+      appName: 'SuperTokens RedwoodJS',
+      websiteBasePath: '/auth',
+      apiBasePath: '/auth',
+    },
+    recipeList: [
+      Session.init(),
+      ThirdPartyEmailPassword.init({
+        signInAndUpFeature: {
+          providers: [Github.init(), Google.init(), Apple.init()],
+        },
+      }),
+    ],
+  })
+
+export const { AuthProvider, useAuth } = createAuth(superTokensClient)

@@ -1,7 +1,10 @@
 /* eslint-env node, es2021 */
-import template from 'lodash.template'
+
+import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import url from 'node:url'
+
+import template from 'lodash.template'
 
 import octokit from './octokit.mjs'
 
@@ -13,10 +16,19 @@ import octokit from './octokit.mjs'
  * If no milestone's given, just fetch the latest version milestone (e.g. `v0.42.0`).
  *
  * @param {string} [milestone]
+ * @param {{ releaseCandidate: boolean }} [options]
  */
-export default async function generateReleaseNotes(milestone) {
-  // Get the milestone's title, id, and PRs.
+export default async function generateReleaseNotes(
+  milestone,
+  { releaseCandidate = false } = {}
+) {
   const { title, id } = await getMilestoneId(milestone)
+
+  if (releaseCandidate) {
+    await generateReleaseCandidateReleaseNotes(title)
+    return
+  }
+
   const prs = await getPRsWithMilestone({ milestoneId: id })
 
   const filename = new URL(`${title}ReleaseNotes.md`, import.meta.url)
@@ -29,7 +41,52 @@ export default async function generateReleaseNotes(milestone) {
   console.log(`Written to ${url.fileURLToPath(filename)}`)
 }
 
-// Helpers
+/**
+ * @param {string} milestone
+ */
+async function generateReleaseCandidateReleaseNotes(milestone) {
+  const stdout = execSync(
+    'yarn npm info @redwoodjs/core@latest --fields version --json',
+    {
+      shell: true,
+    }
+  )
+
+  const latestVersion = 'v' + JSON.parse(stdout.toString().trim()).version
+
+  const {
+    repository: {
+      refs: { nodes },
+    },
+  } = await octokit.graphql(
+    `
+        query GetReleaseBranch($milestone: String!) {
+          repository(owner: "redwoodjs", name: "redwood") {
+            refs(first: 1, refPrefix:"refs/heads/", query: $milestone) {
+              nodes {
+                name
+              }
+            }
+          }
+        }
+      `,
+    {
+      milestone,
+    }
+  )
+
+  if (nodes.length === 0) {
+    console.log(`No release branch found for ${latestVersion}`)
+    return
+  }
+
+  const [{ name: releaseBranch }] = nodes
+
+  console.log({
+    compare: `https://github.com/redwoodjs/redwood/compare/${latestVersion}...${releaseBranch}`,
+    mergedPrs: `https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Amerged+milestone%3A${milestone}`,
+  })
+}
 
 /**
  * @typedef {{
@@ -175,16 +232,16 @@ function getNoOfUniqueContributors(prs) {
 }
 
 /**
- * @remarks
- *
- * This could be a little better.
+ * @todo this could be a little better.
  *
  * @param {Array<PR>} prs
  */
 function sortPRs(prs) {
+  const breaking = []
   const features = []
   const fixed = []
   const chore = []
+  const docs = []
   const packageDependencies = []
   const manual = []
 
@@ -202,6 +259,11 @@ function sortPRs(prs) {
      */
     const labels = pr.labels.nodes.map((label) => label.name)
 
+    if (labels.includes('release:feature-breaking')) {
+      breaking.push(`- ${formatPR(pr)}`)
+      continue
+    }
+
     if (labels.includes('release:feature')) {
       features.push(`- ${formatPR(pr)}`)
       continue
@@ -217,6 +279,11 @@ function sortPRs(prs) {
       continue
     }
 
+    if (labels.includes('release:docs')) {
+      docs.push(`- ${formatPR(pr)}`)
+      continue
+    }
+
     /**
      * Those that can't be sorted.
      */
@@ -224,9 +291,11 @@ function sortPRs(prs) {
   }
 
   return {
+    breaking: breaking.join('\n'),
     features: features.join('\n'),
     fixed: fixed.join('\n'),
     chore: chore.join('\n'),
+    docs: docs.join('\n'),
     packageDependencies: packageDependencies.join('\n'),
     manual: manual.join('\n'),
   }
@@ -252,6 +321,10 @@ const interpolate = template(
     '',
     'PRs merged: ${prsMerged}',
     '',
+    '## Breaking',
+    '',
+    '${breaking}',
+    '',
     '## Features',
     '',
     '${features}',
@@ -263,6 +336,10 @@ const interpolate = template(
     '## Chore',
     '',
     '${chore}',
+    '',
+    '## Docs',
+    '',
+    '${docs}',
     '',
     '### Package Dependencies',
     '',

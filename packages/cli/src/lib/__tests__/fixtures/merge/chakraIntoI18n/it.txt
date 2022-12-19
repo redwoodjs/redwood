@@ -1,0 +1,1 @@
+merges chakra storybook configuration into base + i18n storybook configuration

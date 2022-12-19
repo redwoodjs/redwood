@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { fetch } from 'cross-undici-fetch'
 import fg from 'fast-glob'
-import fetch from 'node-fetch'
 
 import getRWPaths from '../../../lib/getRWPaths'
 

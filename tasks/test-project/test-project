@@ -8,19 +8,23 @@ const path = require('path')
 const chalk = require('chalk')
 const execa = require('execa')
 const fse = require('fs-extra')
-const Listr = require('listr')
-const VerboseRenderer = require('listr-verbose-renderer')
+const Listr = require('listr2').Listr
 const rimraf = require('rimraf')
-const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
+const yargs = require('yargs/yargs')
 
 const {
   addFrameworkDepsToProject,
   copyFrameworkPackages,
 } = require('./frameworkLinking')
 const { webTasks, apiTasks } = require('./tasks')
-const { getExecaOptions } = require('./util')
+const {
+  getExecaOptions,
+  updatePkgJsonScripts,
+  confirmNoFixtureNoLink,
+} = require('./util')
 
-const args = yargs
+const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
   .option('typescript', {
     alias: 'ts',
@@ -60,8 +64,13 @@ const args = yargs
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
+  .option('yarn1', {
+    default: false,
+    type: 'boolean',
+    describe: 'Use yarn 1 instead of yarn 3',
+  })
   .help()
-  .strict().argv
+  .parseSync()
 
 const {
   typescript,
@@ -71,16 +80,17 @@ const {
   clean,
   copyFromFixture,
   rebuildFixture,
+  yarn1,
 } = args
 
-// Do not use demandCommand becuase rebuildFixture doesn't require <project directory>
+// Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
 if (!rebuildFixture && args._.length > 1) {
   console.log(
     chalk.red.bold(
       `
       Multiple <project directory> arguments
-      Secify ONE project directory outside the framework directory (no spaces allowed)
+      Specify ONE project directory outside the framework directory (no spaces allowed)
       EXAMPLE: 'yarn build:test-project ../test-project'
       `
     )
@@ -139,7 +149,7 @@ const createProject = async () => {
   // We create a ts project and convert using ts-to-js at the end if typescript flag is false
   return execa(
     cmd,
-    ['--no-yarn-install', '--typescript', '--overwrite'],
+    ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
     getExecaOptions(RW_FRAMEWORKPATH)
   )
 }
@@ -203,31 +213,32 @@ const globalTasks = () =>
             throw new Error('Failed to build framework')
           }
         },
-        enabled: () => link && !rebuildFixture,
+        enabled: () => link || rebuildFixture,
       },
       {
         title: '[link] Adding framework dependencies to project',
         task: () =>
           addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link && !rebuildFixture,
+        enabled: () => link || rebuildFixture,
       },
       {
-        title: 'Set yarn v1 version in test-project directory',
+        title: 'Setting yarn version to 1',
         task: async () => {
-          return execa(
+          await execa(
             'yarn set version classic',
             [],
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-        skip: () => copyFromFixture && !rebuildFixture, // already configured in fixture
+        enabled: () => yarn1,
       },
       {
         title: 'Installing node_modules',
         task: async () => {
           return execa(
             'yarn install',
-            ['--non-interactive', !verbose && '--silent'].filter(Boolean),
+            yarn1 &&
+              ['--non-interactive', !verbose && '--silent'].filter(Boolean), // pass flags if using Yarn v1
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
@@ -264,28 +275,19 @@ const globalTasks = () =>
         title: '[link] Copying framework packages to project',
         task: () =>
           copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link && !rebuildFixture,
+        enabled: () => link || rebuildFixture,
       },
       {
         title: '[link] Add rwfw project:copy postinstall',
         task: () => {
-          const projectPackageJsonPath = path.join(
-            OUTPUT_PROJECT_PATH,
-            'package.json'
-          )
-          const projectPackageJson = JSON.parse(
-            fs.readFileSync(projectPackageJsonPath, 'utf-8')
-          )
-          projectPackageJson.scripts = {
-            ...projectPackageJson.scripts,
-            postinstall: 'yarn rwfw project:copy',
-          }
-          fs.writeFileSync(
-            projectPackageJsonPath,
-            JSON.stringify(projectPackageJson, undefined, 2)
-          )
+          updatePkgJsonScripts({
+            projectPath: OUTPUT_PROJECT_PATH,
+            scripts: {
+              postinstall: 'yarn rwfw project:copy',
+            },
+          })
         },
-        enabled: () => link && !rebuildFixture,
+        enabled: () => link || rebuildFixture, // Note that we undo this when we rebuildFixture at the end
       },
       {
         title: 'Upgrading to latest canary version',
@@ -300,21 +302,37 @@ const globalTasks = () =>
       },
       {
         title: 'Apply web codemods',
-        task: () => webTasks(OUTPUT_PROJECT_PATH, { verbose, link }),
-        enabled: () => !copyFrameworkPackages || rebuildFixture,
+        task: () =>
+          webTasks(OUTPUT_PROJECT_PATH, {
+            verbose,
+            linkWithLatestFwBuild: link || rebuildFixture,
+          }),
+        enabled: () => !copyFromFixture || rebuildFixture,
       },
       {
         title: 'Apply api codemods',
-        task: () => apiTasks(OUTPUT_PROJECT_PATH, { verbose }),
-        enabled: () => !copyFrameworkPackages || rebuildFixture,
+        task: () =>
+          apiTasks(OUTPUT_PROJECT_PATH, {
+            verbose,
+            linkWithLatestFwBuild: link || rebuildFixture,
+          }),
+        enabled: () => !copyFromFixture || rebuildFixture,
       },
       {
         title: 'Generate dbAuth Secret',
         task: async () => {
-          return execa(
-            'echo "SESSION_SECRET=$(yarn --silent rw g secret --raw)" >> .env',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
+          const { stdout: dbAuthSecret } = await execa(
+            'yarn',
+            [yarn1 && '--silent', 'rw', 'g', 'secret', '--raw'].filter(Boolean),
+            {
+              ...getExecaOptions(OUTPUT_PROJECT_PATH),
+              stdio: 'pipe',
+            }
+          )
+
+          fs.appendFileSync(
+            path.join(OUTPUT_PROJECT_PATH, '.env'),
+            `SESSION_SECRET=${dbAuthSecret}`
           )
         },
         enabled: () => !rebuildFixture,
@@ -348,29 +366,25 @@ const globalTasks = () =>
         title: 'Lint --fix all the things',
         task: async () => {
           try {
-            await execa(
-              'yarn rw lint --fix',
-              [],
-              // getExecaOptions(OUTPUT_PROJECT_PATH)
-              {
-                shell: true,
-                stdio: 'ignore',
-                cleanup: true,
-                cwd: OUTPUT_PROJECT_PATH,
-                env: {
-                  RW_PATH: path.join(__dirname, '../../'),
-                },
-              }
-            )
+            await execa('yarn rw lint --fix', [], {
+              shell: true,
+              stdio: 'ignore',
+              cleanup: true,
+              cwd: OUTPUT_PROJECT_PATH,
+              env: {
+                RW_PATH: path.join(__dirname, '../../'),
+              },
+            })
           } catch (e) {
             // nothing to see here
           }
         },
-        enabled: () => rebuildFixture,
+        enabled: () => rebuildFixture || !copyFromFixture,
       },
       {
-        title: 'Replace Fixture',
+        title: '[Rebuild Fixture] Replace and Cleanup Fixture',
         task: async () => {
+          // @TODO: This only works on UNIX, we should use path.join everywhere
           // remove all .gitignore
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/.redwood`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
@@ -381,6 +395,17 @@ const globalTasks = () =>
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/.env`)
           rimraf.sync(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
 
+          // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
+          // that we added in "Adding framework dependencies to project"
+          rimraf.sync(`${OUTPUT_PROJECT_PATH}/package.json`)
+          fs.copyFileSync(
+            path.join(
+              __dirname,
+              '../../packages/create-redwood-app/template/package.json'
+            ),
+            path.join(OUTPUT_PROJECT_PATH, 'package.json')
+          )
+
           // removes existing Fixture and replaces with newly built project,
           // then removes new Project temp directory
           copyProject()
@@ -389,26 +414,42 @@ const globalTasks = () =>
       },
       {
         title: 'All done!',
-        task: async () => {
-          console.log()
-          console.log('-'.repeat(30))
-          console.log()
-          console.log('✅ Success your project has been generated at:')
-          console.log(OUTPUT_PROJECT_PATH)
-          console.log()
-          console.log('-'.repeat(30))
+        task: async (_ctx, task) => {
+          if (verbose) {
+            // Without verbose these logs aren't visible anyway
+            console.log()
+            console.log('-'.repeat(30))
+            console.log()
+            console.log('✅ Success your project has been generated at:')
+            console.log(OUTPUT_PROJECT_PATH)
+            console.log()
+            console.log('-'.repeat(30))
+          } else {
+            task.output = `Generated project at ${OUTPUT_PROJECT_PATH}`
+          }
         },
       },
     ],
     {
       exitOnError: true,
-      renderer: verbose && VerboseRenderer,
+      renderer: verbose && 'verbose',
+      renderOptions: { collapse: false },
     }
   )
 
-globalTasks()
-  .run()
-  .catch((err) => {
-    console.error(err)
-    process.exit(1)
-  })
+async function runCommand() {
+  // confirm usage for case raw build without Link
+  if (!copyFromFixture && !link) {
+    // if prompt returns 'no', exit
+    ;(await confirmNoFixtureNoLink(copyFromFixture, link)) || process.exit(1)
+  }
+
+  await globalTasks()
+    .run()
+    .catch((err) => {
+      console.error(err)
+      process.exit(1)
+    })
+}
+
+runCommand()

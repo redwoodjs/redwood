@@ -1,6 +1,6 @@
-const NodeEnvironment = require('jest-environment-node')
+const { TestEnvironment } = require('jest-environment-node')
 
-class RedwoodApiJestEnvironment extends NodeEnvironment {
+class RedwoodApiJestEnvironment extends TestEnvironment {
   constructor(config, context) {
     super(config, context)
     this.testPath = context.testPath

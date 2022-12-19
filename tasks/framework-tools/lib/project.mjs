@@ -1,8 +1,9 @@
 /* eslint-env node */
 
-import execa from 'execa'
 import fs from 'node:fs'
 import path from 'node:path'
+
+import execa from 'execa'
 import ora from 'ora'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
@@ -12,7 +13,7 @@ import {
   frameworkPkgJsonFiles,
   frameworkPackagesFiles,
   frameworkPackagesBins,
-  REDWOOD_PACKAGES_PATH,
+  packageJsonName,
 } from './framework.mjs'
 
 /**
@@ -31,6 +32,7 @@ export function fixProjectBinaries(projectPath) {
       fs.symlinkSync(binPath, binSymlink)
     }
     console.log('chmod +x', terminalLink(binName, binPath))
+    fs.chmodSync(binSymlink, '755')
     fs.chmodSync(binPath, '755')
   }
 }
@@ -91,14 +93,24 @@ export function installProjectPackages(projectPath) {
   }
 }
 
-export function copyFrameworkFilesToProject(
+export async function copyFrameworkFilesToProject(
   projectPath,
   packages = frameworkPkgJsonFiles()
 ) {
   // Loop over every package, delete all existing files, copy over the new files,
   // and fix binaries.
-  packages = frameworkPackagesFiles(packages)
-  for (const [packageName, files] of Object.entries(packages)) {
+  const packagesFiles = await frameworkPackagesFiles(packages)
+
+  const packageNamesToPaths = packages.reduce(
+    (packageNamesToPaths, packagePath) => {
+      packageNamesToPaths[packageJsonName(packagePath)] =
+        path.dirname(packagePath)
+      return packageNamesToPaths
+    },
+    {}
+  )
+
+  for (const [packageName, files] of Object.entries(packagesFiles)) {
     const packageDstPath = path.join(projectPath, 'node_modules', packageName)
     console.log(
       terminalLink(packageName, 'file://' + packageDstPath),
@@ -108,11 +120,7 @@ export function copyFrameworkFilesToProject(
     rimraf.sync(packageDstPath)
 
     for (const file of files) {
-      const src = path.join(
-        REDWOOD_PACKAGES_PATH,
-        packageName.replace('@redwoodjs', ''),
-        file
-      )
+      const src = path.join(packageNamesToPaths[packageName], file)
       const dst = path.join(packageDstPath, file)
       fs.mkdirSync(path.dirname(dst), { recursive: true })
       fs.copyFileSync(src, dst)

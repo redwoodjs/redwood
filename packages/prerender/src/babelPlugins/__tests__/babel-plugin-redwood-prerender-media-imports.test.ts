@@ -6,10 +6,9 @@ import plugin from '../babel-plugin-redwood-prerender-media-imports'
 
 const mockDistDir = path.resolve(__dirname, './__fixtures__/distDir')
 
-jest.mock('@redwoodjs/internal', () => {
+jest.mock('@redwoodjs/internal/dist/paths', () => {
   return {
-    // @ts-expect-error Definitely can be spread..
-    ...jest.requireActual('@redwoodjs/internal'),
+    ...jest.requireActual('@redwoodjs/internal/dist/paths'),
     getPaths: () => {
       return {
         web: {

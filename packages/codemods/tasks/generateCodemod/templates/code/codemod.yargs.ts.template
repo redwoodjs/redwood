@@ -1,6 +1,6 @@
 import path from 'path'
 
-import task from 'tasuku'
+import task, { TaskInnerAPI } from 'tasuku'
 
 import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
@@ -11,7 +11,7 @@ export const description = '(${version}->${version}) Converts world to bazinga'
 export const handler = () => {
   task(
     '${titleName}',
-    async ({ setOutput }: task.TaskInnerApi) => {
+    async ({ setOutput }: TaskInnerApi) => {
       await runTransform({
         transformPath: path.join(__dirname, '${name}.js'),
         // Here we know exactly which file we need to transform, but often times you won't.

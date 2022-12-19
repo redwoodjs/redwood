@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`prettify formats tsx content 1`] = `
+"import React from 'react'
+
+interface Props {
+  foo: number
+  bar: number
+}
+
+const FooBarComponent: React.FC<Props> = ({ foo, bar }) => {
+  if (foo % 3 === 0 && bar % 5 === 0) {
+    return <>FooBar</>
+  }
+
+  if (foo % 3 === 0 || bar % 3 === 0) {
+    return <>Foo</>
+  }
+
+  if (foo % 5 === 0 || bar % 5 === 0) {
+    return <>Bar</>
+  }
+
+  return (
+    <>
+      {foo}, {bar}
+    </>
+  )
+}
+"
+`;

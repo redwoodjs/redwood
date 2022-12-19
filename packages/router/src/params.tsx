@@ -13,6 +13,7 @@ export const ParamsContext = createNamedContext<ParamsContextProps>('Params')
 interface Props {
   path?: string
   location?: LocationContextType
+  children?: React.ReactNode
 }
 
 export const ParamsProvider: React.FC<Props> = ({
@@ -28,11 +29,9 @@ export const ParamsProvider: React.FC<Props> = ({
   const searchParams = parseSearch(internalLocation.search)
 
   if (path) {
-    const { match, params } = matchPath(
-      path,
-      internalLocation.pathname,
-      paramTypes
-    )
+    const { match, params } = matchPath(path, internalLocation.pathname, {
+      paramTypes,
+    })
 
     if (match && typeof params !== 'undefined') {
       pathParams = params

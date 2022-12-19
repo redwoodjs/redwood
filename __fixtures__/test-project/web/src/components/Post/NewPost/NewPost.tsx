@@ -1,6 +1,9 @@
+import type { CreatePostInput } from 'types/graphql'
+
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import PostForm from 'src/components/Post/PostForm'
 
 const CREATE_POST_MUTATION = gql`
@@ -22,7 +25,7 @@ const NewPost = () => {
     },
   })
 
-  const onSave = (input) => {
+  const onSave = (input: CreatePostInput) => {
     createPost({ variables: { input } })
   }
 

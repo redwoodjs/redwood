@@ -5,9 +5,9 @@
  * to inject Tailwind's styles into your CSS.
  * For more information, see: https://tailwindcss.com/docs/installation#include-tailwind-in-your-css
  */
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 /**
  * END --- SETUP TAILWINDCSS EDIT
  */

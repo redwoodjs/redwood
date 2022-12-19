@@ -1,3 +1,7 @@
+import base64Sha1Verifier from './base64Sha1Verifier'
+import type { Base64Sha1Verifier } from './base64Sha1Verifier'
+import base64Sha256Verifier from './base64Sha256Verifier'
+import type { Base64Sha256Verifier } from './base64Sha256Verifier'
 import jwtVerifier from './jwtVerifier'
 import type { JwtVerifier } from './jwtVerifier'
 import secretKeyVerifier from './secretKeyVerifier'
@@ -16,6 +20,8 @@ export const verifierLookup = {
   secretKeyVerifier,
   sha1Verifier,
   sha256Verifier,
+  base64Sha1Verifier,
+  base64Sha256Verifier,
   timestampSchemeVerifier,
   jwtVerifier,
 }
@@ -25,6 +31,8 @@ export type SupportedVerifiers =
   | SecretKeyVerifier
   | Sha1Verifier
   | Sha256Verifier
+  | Base64Sha1Verifier
+  | Base64Sha256Verifier
   | Sha1Verifier
   | TimestampSchemeVerifier
   | JwtVerifier
@@ -37,6 +45,13 @@ export const VERIFICATION_ERROR_MESSAGE =
   "You don't have access to invoke this function."
 
 export const VERIFICATION_SIGN_MESSAGE = 'Unable to sign payload'
+
+const FIVE_MINUTES = 5 * 60_000
+
+/**
+ * @const {number} DEFAULT_TOLERANCE - Five minutes
+ */
+export const DEFAULT_TOLERANCE = FIVE_MINUTES
 
 /**
  * Class representing a WebhookError
@@ -85,15 +100,25 @@ export class WebhookSignError extends WebhookError {
  *
  * Used when verifying a signature based on the verifier's requirements
  *
- * @param {string} signatureHeader - Optional Header that contains the signature to verify
- * will default to DEFAULT_WEBHOOK_SIGNATURE_HEADER
- * @param {number} timestamp - Optional timestamp in msec
+ * @param {string} signatureHeader - Optional Header that contains the signature
+ * to verify. Will default to DEFAULT_WEBHOOK_SIGNATURE_HEADER
+ * @param {(signature: string) => string} signatureTransformer - Optional
+ * function that receives the signature from the headers and returns a new
+ * signature to use in the Verifier
+ * @param {number} currentTimestampOverride - Optional timestamp to use as the
+ * "current" timestamp, in msec
+ * @param {number} eventTimestamp - Optional timestamp to use as the event
+ * timestamp, in msec. If this is provided the webhook verification will fail
+ * if the eventTimestamp is too far from the current time (or the time passed
+ * as the `currentTimestampOverride` option)
  * @param {number} tolerance - Optional tolerance in msec
  * @param {string} issuer - Options JWT issuer for JWTVerifier
  */
 export interface VerifyOptions {
   signatureHeader?: string
-  timestamp?: number
+  signatureTransformer?: (signature: string) => string
+  currentTimestampOverride?: number
+  eventTimestamp?: number
   tolerance?: number
   issuer?: string
 }

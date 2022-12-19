@@ -1,4 +1,5 @@
 import password from 'secure-random-password'
+import terminalLink from 'terminal-link'
 
 const DEFAULT_LENGTH = 64
 
@@ -27,6 +28,12 @@ export const builder = (yargs) =>
       required: false,
       default: false,
     })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/docs/cli-commands#generate-secret'
+      )}`
+    )
 
 export const handler = ({ length, raw }) => {
   if (raw) {

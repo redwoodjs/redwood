@@ -1,8 +1,14 @@
-import { db } from 'src/lib/db'
-import { DbAuthHandler } from '@redwoodjs/api'
+import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
-export const handler = async (event, context) => {
-  const forgotPasswordOptions = {
+import { DbAuthHandler, DbAuthHandlerOptions } from '@redwoodjs/auth-dbauth-api'
+
+import { db } from 'src/lib/db'
+
+export const handler = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+) => {
+  const forgotPasswordOptions: DbAuthHandlerOptions['forgotPassword'] = {
     // handler() is invoked after verifying that a user was found with the given
     // username. This is where you can send the user an email with a link to
     // reset their password. With the default dbAuth routes and field names, the
@@ -32,7 +38,7 @@ export const handler = async (event, context) => {
     },
   }
 
-  const loginOptions = {
+  const loginOptions: DbAuthHandlerOptions['login'] = {
     // handler() is called after finding the user that matches the
     // username/password provided at login, but before actually considering them
     // logged in. The `user` argument will be the user in the database that
@@ -61,16 +67,16 @@ export const handler = async (event, context) => {
     expires: 60 * 60 * 24 * 365 * 10,
   }
 
-  const resetPasswordOptions = {
+  const resetPasswordOptions: DbAuthHandlerOptions['resetPassword'] = {
     // handler() is invoked after the password has been successfully updated in
-    // the database. Returning anything truthy will automatically logs the user
+    // the database. Returning anything truthy will automatically log the user
     // in. Return `false` otherwise, and in the Reset Password page redirect the
     // user to the login page.
-    handler: (user) => {
-      return user
+    handler: (_user) => {
+      return true
     },
 
-    // If `false` then the new password MUST be different than the current one
+    // If `false` then the new password MUST be different from the current one
     allowReusedPassword: true,
 
     errors: {
@@ -85,7 +91,7 @@ export const handler = async (event, context) => {
     },
   }
 
-  const signupOptions = {
+  const signupOptions: DbAuthHandlerOptions['signup'] = {
     // Whatever you want to happen to your data on new user signup. Redwood will
     // check for duplicate usernames before calling this handler. At a minimum
     // you need to save the `username`, `hashedPassword` and `salt` to your
@@ -101,15 +107,22 @@ export const handler = async (event, context) => {
     //
     // If this returns anything else, it will be returned by the
     // `signUp()` function in the form of: `{ message: 'String here' }`.
-    handler: ({ username, hashedPassword, salt }) => {
+    handler: ({ username, hashedPassword, salt, userAttributes }) => {
       return db.user.create({
         data: {
           email: username,
           hashedPassword: hashedPassword,
           salt: salt,
-          // name: userAttributes.name
+          fullName: userAttributes['full-name'],
         },
       })
+    },
+
+    // Include any format checks for password here. Return `true` if the
+    // password is valid, otherwise throw a `PasswordValidationError`.
+    // Import the error along with `DbAuthHandler` from `@redwoodjs/api` above.
+    passwordValidation: (_password) => {
+      return true
     },
 
     errors: {
@@ -124,7 +137,7 @@ export const handler = async (event, context) => {
     db: db,
 
     // The name of the property you'd call on `db` to access your user table.
-    // ie. if your Prisma model is named `User` this value would be `user`, as in `db.user`
+    // i.e. if your Prisma model is named `User` this value would be `user`, as in `db.user`
     authModelAccessor: 'user',
 
     // A map of what dbAuth calls a field to what your database calls it.
@@ -137,6 +150,19 @@ export const handler = async (event, context) => {
       salt: 'salt',
       resetToken: 'resetToken',
       resetTokenExpiresAt: 'resetTokenExpiresAt',
+    },
+
+    // Specifies attributes on the cookie that dbAuth sets in order to remember
+    // who is logged in. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies
+    cookie: {
+      HttpOnly: true,
+      Path: '/',
+      SameSite: 'Strict',
+      Secure: process.env.NODE_ENV !== 'development',
+
+      // If you need to allow other domains (besides the api side) access to
+      // the dbAuth session cookie:
+      // Domain: 'example.com',
     },
 
     forgotPassword: forgotPasswordOptions,

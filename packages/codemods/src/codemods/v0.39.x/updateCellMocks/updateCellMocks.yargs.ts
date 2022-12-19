@@ -2,6 +2,7 @@ import path from 'path'
 
 import fg from 'fast-glob'
 import task from 'tasuku'
+import type { TaskInnerAPI } from 'tasuku'
 
 import getRWPaths from '../../../lib/getRWPaths'
 import runTransform from '../../../lib/runTransform'
@@ -20,7 +21,7 @@ export const handler = () => {
 
   task(
     'Updating Cell mocks',
-    async ({ setWarning, setOutput }: task.TaskInnerApi) => {
+    async ({ setWarning, setOutput }: TaskInnerAPI) => {
       if (cellMocks.length < 1) {
         setWarning('No cell mocks found')
       } else {

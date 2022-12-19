@@ -27,7 +27,7 @@ tasks:
       yarn run build:test-project ../rw-test-app --typescript --link --verbose
     command: |
       cd /workspace/rw-test-app
-      yarn rw dev
+      yarn rw dev --fwd="--client-web-socket-url=ws$(gp url 8910 | cut -c 5-)/ws"
 
 
 ports:

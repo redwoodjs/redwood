@@ -2,17 +2,16 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   addToGitIgnoreTask,
   addToDotEnvTask,
   addFilesTask,
-  addPackagesTask,
   printSetupNotes,
 } from '../helpers'
 import { SERVERLESS_API_YML } from '../templates/serverless/api'
@@ -91,10 +90,22 @@ const updateRedwoodTomlTask = () => {
 }
 
 export const handler = async ({ force }) => {
+  const [serverless, serverlessLift, ...rest] = projectDevPackages
+
   const tasks = new Listr(
     [
       addPackagesTask({
-        packages: projectDevPackages,
+        packages: [serverless, ...rest],
+        devDependency: true,
+      }),
+      addPackagesTask({
+        packages: [serverless, serverlessLift],
+        side: 'web',
+        devDependency: true,
+      }),
+      addPackagesTask({
+        packages: [serverless],
+        side: 'api',
         devDependency: true,
       }),
       addFilesTask({
@@ -119,6 +130,7 @@ export const handler = async ({ force }) => {
     ],
     {
       exitOnError: true,
+      rendererOptions: { collapse: false },
     }
   )
   try {

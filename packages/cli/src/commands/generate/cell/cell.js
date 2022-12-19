@@ -1,12 +1,13 @@
 import pascalcase from 'pascalcase'
 
-import { generate as generateTypes } from '@redwoodjs/internal'
+import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 
-import { transformTSToJS } from '../../../lib'
+import { nameVariants, transformTSToJS } from '../../../lib'
 import { isWordPluralizable } from '../../../lib/pluralHelpers'
+import { addFunctionToRollback } from '../../../lib/rollback'
 import { isPlural, singularize } from '../../../lib/rwPluralize'
 import { getSchema } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -14,41 +15,15 @@ import {
   removeGeneratorName,
 } from '../helpers'
 
+import {
+  checkProjectForQueryField,
+  getIdType,
+  operationNameIsUnique,
+  uniqueOperationName,
+} from './utils/utils'
+
 const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'
-
-const getCellOperationNames = async () => {
-  const { getProject } = await import('@redwoodjs/structure')
-
-  return getProject()
-    .cells.map((x) => {
-      return x.queryOperationName
-    })
-    .filter(Boolean)
-}
-
-const uniqueOperationName = async (name, { index = 1, list = false }) => {
-  let operationName = pascalcase(
-    index <= 1 ? `find_${name}_query` : `find_${name}_query_${index}`
-  )
-
-  if (list) {
-    operationName =
-      index <= 1
-        ? `${pascalcase(name)}Query`
-        : `${pascalcase(name)}Query_${index}`
-  }
-
-  const cellOperationNames = await getCellOperationNames()
-  if (!cellOperationNames.includes(operationName)) {
-    return operationName
-  }
-  return uniqueOperationName(name, { index: index + 1 })
-}
-
-const getIdType = (model) => {
-  return model.fields.find((field) => field.isId)?.type
-}
 
 export const files = async ({
   name,
@@ -57,6 +32,7 @@ export const files = async ({
 }) => {
   let cellName = removeGeneratorName(name, 'cell')
   let idType,
+    mockIdValues = [42, 43, 44],
     model = null
   let templateNameSuffix = ''
 
@@ -66,25 +42,41 @@ export const files = async ({
     (isWordPluralizable(cellName) ? isPlural(cellName) : options.list) ||
     options.list
 
+  // needed for the singular cell GQL query find by id case
+  try {
+    model = await getSchema(pascalcase(singularize(cellName)))
+    idType = getIdType(model)
+    mockIdValues =
+      idType === 'String'
+        ? mockIdValues.map((value) => `'${value}'`)
+        : mockIdValues
+  } catch {
+    // Eat error so that the destroy cell generator doesn't raise an error
+    // when trying to find prisma query engine in test runs.
+
+    // Assume id will be Int, otherwise generated cell will keep throwing
+    idType = 'Int'
+  }
+
   if (shouldGenerateList) {
     cellName = forcePluralizeWord(cellName)
     templateNameSuffix = 'List'
     // override operationName so that its find_operationName
-  } else {
-    // needed for the singular cell GQL query find by id case
-    try {
-      model = await getSchema(pascalcase(singularize(cellName)))
-      idType = getIdType(model)
-    } catch {
-      // eat error so that the destroy cell generator doesn't raise when try to find prisma query engine in test runs
-      // assume id will be Int, otherwise generated will keep throwing
-      idType = 'Int'
-    }
   }
 
-  const operationName = await uniqueOperationName(cellName, {
-    list: shouldGenerateList,
-  })
+  let operationName = options.query
+  if (operationName) {
+    const userSpecifiedOperationNameIsUnique = await operationNameIsUnique(
+      operationName
+    )
+    if (!userSpecifiedOperationNameIsUnique) {
+      throw new Error(`Specified query name: "${operationName}" is not unique!`)
+    }
+  } else {
+    operationName = await uniqueOperationName(cellName, {
+      list: shouldGenerateList,
+    })
+  }
 
   const cellFile = templateForComponentFile({
     name: cellName,
@@ -124,6 +116,9 @@ export const files = async ({
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: `mock${templateNameSuffix}.js.template`,
+    templateVars: {
+      mockIdValues,
+    },
   })
 
   const files = [cellFile]
@@ -170,12 +165,34 @@ export const { command, description, builder, handler } =
           'Use when you want to generate a cell for a list of the model name.',
         type: 'boolean',
       },
+      query: {
+        default: '',
+        description:
+          'Use to enforce a specific query name within the generated cell - must be unique.',
+        type: 'string',
+      },
     },
-    includeAdditionalTasks: () => {
+    includeAdditionalTasks: ({ name: cellName }) => {
       return [
         {
           title: `Generating types ...`,
-          task: generateTypes,
+          task: async (_ctx, task) => {
+            const queryFieldName = nameVariants(
+              removeGeneratorName(cellName, 'cell')
+            ).camelName
+            const projectHasSdl = await checkProjectForQueryField(
+              queryFieldName
+            )
+
+            if (projectHasSdl) {
+              await generateTypes()
+              addFunctionToRollback(generateTypes, true)
+            } else {
+              task.skip(
+                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`
+              )
+            }
+          },
         },
       ]
     },

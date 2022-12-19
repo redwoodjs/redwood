@@ -5,10 +5,7 @@ interface SplashPageProps {
   routes: any[]
 }
 
-const SplashPage: React.VFC<SplashPageProps> = ({
-  hasGeneratedRoutes,
-  routes,
-}) => {
+const SplashPage = ({ hasGeneratedRoutes, routes }: SplashPageProps) => {
   const version = useVersion()
   return (
     <>
@@ -365,7 +362,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                   <div className="resource">
                     <a
                       className="resource-link"
-                      href="https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/"
+                      href="https://redwoodjs.com/tutorial"
                       target="_blank"
                       rel="noreferrer"
                     ></a>
@@ -391,7 +388,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                   <div className="resource">
                     <a
                       className="resource-link"
-                      href="https://redwoodjs.com/docs/introduction"
+                      href="https://redwoodjs.com/docs"
                       target="_blank"
                       rel="noreferrer"
                     ></a>
@@ -408,7 +405,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                         ></path>
                         <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"></path>
                       </svg>
-                      <h2 className="resource-title">Docs and Cookbook</h2>
+                      <h2 className="resource-title">Docs and How To&apos;s</h2>
                     </div>
 
                     <p className="resource-description">
@@ -526,7 +523,7 @@ const SplashPage: React.VFC<SplashPageProps> = ({
                 </a>
                 <a
                   className="social-link"
-                  href="https://discord.gg/jjSYEQd"
+                  href="https://discord.gg/redwoodjs"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Go to RedwoodJS Discord server"

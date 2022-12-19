@@ -25,6 +25,7 @@ const isEmptyObject = (object: any) => {
 const isPinoLog = (log: any) => {
   return log && Object.prototype.hasOwnProperty.call(log, 'level')
 }
+
 const isWideEmoji = (character: any) => {
   return character !== '🚦'
 }
@@ -108,6 +109,7 @@ export const LogFormatter = () => {
     const statusCode = res ? res.statusCode : logData.statusCode
     const responseTime = logData.responseTime || logData.elapsed
     const method = req ? req.method : logData.method
+    const custom = logData.custom
     const contentLength = logData.contentLength
     const operationName = logData.operationName
     const query = logData.query
@@ -142,6 +144,10 @@ export const LogFormatter = () => {
       output.push(formatBundleSize(contentLength))
     }
 
+    if (custom) {
+      output.push(formatCustom(custom))
+    }
+
     if (responseTime != null) {
       output.push(formatLoadTime(responseTime))
     }
@@ -170,12 +176,12 @@ export const LogFormatter = () => {
       output.push(formatTracing(tracing))
     }
 
-    if (stack != null) {
-      output.push(formatStack(stack))
-    }
-
     if (err != null) {
       output.push(formatErrorProp(err))
+    }
+
+    if (stack != null) {
+      output.push(formatStack(stack))
     }
 
     return output.filter(noEmpty).join(' ')
@@ -185,6 +191,16 @@ export const LogFormatter = () => {
     const bytes = parseInt(bundle, 10)
     const size = prettyBytes(bytes).replace(/ /, '')
     return chalk.gray(size)
+  }
+
+  const formatCustom = (query: any) => {
+    if (!isEmptyObject(query)) {
+      return chalk.white(
+        newline + '🗒 Custom' + newline + JSON.stringify(query, null, 2)
+      )
+    }
+
+    return
   }
 
   const formatData = (data: any) => {
@@ -207,7 +223,20 @@ export const LogFormatter = () => {
   }
 
   const formatErrorProp = (errorPropValue: any) => {
-    return newline + JSON.stringify({ err: errorPropValue }, null, 2)
+    const errorType = errorPropValue['type'] || 'Error'
+    delete errorPropValue['message']
+    delete errorPropValue['stack']
+    delete errorPropValue['type']
+
+    return chalk.redBright(
+      newline +
+        newline +
+        `🚨 ${errorType} Info` +
+        newline +
+        newline +
+        JSON.stringify(errorPropValue, null, 2) +
+        newline
+    )
   }
 
   const formatLevel = (level: any) => {
@@ -305,7 +334,11 @@ export const LogFormatter = () => {
   }
 
   const formatStack = (stack: any) => {
-    return stack ? newline + stack : ''
+    return chalk.redBright(
+      stack
+        ? newline + '🥞 Error Stack' + newline + newline + stack + newline
+        : ''
+    )
   }
 
   const formatTracing = (data: any) => {

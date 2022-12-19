@@ -5,7 +5,10 @@
 export { navigate, back } from './history'
 export { Link, NavLink, useMatch, Redirect } from './links'
 export { useLocation, LocationProvider } from './location'
-export { usePageLoadingContext, PageLoadingContext } from './page-loader'
+export {
+  usePageLoadingContext,
+  PageLoadingContextProvider,
+} from './PageLoadingContext'
 export { useParams, ParamsProvider, ParamsContext } from './params'
 export { Router, Route, routes } from './router'
 
@@ -36,3 +39,6 @@ export interface AvailableRoutes {
 }
 
 export { SkipNavLink, SkipNavContent } from '@reach/skip-nav'
+
+// Used by packages/internal/src/generate/templates/web-routerRoutes.d.ts.template
+export * from './routeParamsTypes'

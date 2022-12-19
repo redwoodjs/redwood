@@ -1,9 +1,9 @@
 import { join } from 'path'
 
-import { getDMMF } from '@prisma/sdk'
-import { DMMF } from '@prisma/generator-helper'
+import type { DMMF } from '@prisma/generator-helper'
+import { getDMMF } from '@prisma/internals'
 
-import { getPaths, processPagesDir } from '@redwoodjs/internal'
+import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
 
 import { Host } from '../hosts'
 import { BaseNode } from '../ide'

@@ -1,7 +1,10 @@
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import ${singularPascalName}Form from '${importComponentNameForm}'
+
+import type { Create${singularPascalName}Input } from 'types/graphql'
 
 const CREATE_${singularConstantName}_MUTATION = gql`
   mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
@@ -12,19 +15,21 @@ const CREATE_${singularConstantName}_MUTATION = gql`
 `
 
 const New${singularPascalName} = () => {
-  const [create${singularPascalName}, { loading, error }] = useMutation(CREATE_${singularConstantName}_MUTATION, {
-    onCompleted: () => {
-      toast.success('${singularPascalName} created')
-      navigate(routes.${pluralRouteName}())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const [create${singularPascalName}, { loading, error }] = useMutation(
+    CREATE_${singularConstantName}_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('${singularPascalName} created')
+        navigate(routes.${pluralRouteName}())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
 
-  const onSave = (input) => {<% if (intForeignKeys.length) { %>
-    const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), <% }) %>})<% } %>
-    create${singularPascalName}({ variables: { <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
+  const onSave = (input: Create${singularPascalName}Input) => {
+    create${singularPascalName}({ variables: { input } })
   }
 
   return (

@@ -1,0 +1,9 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@redwoodjs/api": "0.49.1",
+    "@redwoodjs/graphql-server": "0.49.1"
+  }
+}

@@ -7,7 +7,7 @@ import Configstore from 'configstore/index'
 import execa from 'execa'
 import TerminalLink from 'terminal-link'
 
-import { getConfigPath } from '@redwoodjs/internal'
+import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 
 const config = new Configstore('@redwoodjs/cli')
 
@@ -47,9 +47,10 @@ if (!command.length || command.some((cmd) => helpCommands.includes(cmd))) {
 }
 
 try {
-  execa.sync('yarn', ['--cwd', absRwFwPath, ...command], {
+  execa.sync('yarn', [...command], {
     stdio: 'inherit',
     shell: true,
+    cwd: absRwFwPath,
     env: {
       RWJS_CWD: projectPath,
     },

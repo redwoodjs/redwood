@@ -8,6 +8,12 @@ export default (file, api) => {
     if (name === 'body') {
       return
     }
+
+    const author = j.objectPattern([
+      j.property('init', j.identifier('email'), j.literal('five@5.com')),
+      j.property('init', j.identifier('fullName'), j.literal('Five Lastname')),
+    ])
+
     node.properties.push(
       j.property('init', j.identifier('title'), j.literal('Mocked title'))
     )
@@ -20,6 +26,12 @@ export default (file, api) => {
         j.identifier('createdAt'),
         j.literal('2022-01-17T13:57:51.607Z')
       )
+    )
+    node.properties.push(
+      j.property('init', j.identifier('authorId'), j.literal(5))
+    )
+    node.properties.push(
+      j.property('init', j.identifier('author'), author)
     )
   })
 

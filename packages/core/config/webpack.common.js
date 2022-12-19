@@ -161,9 +161,6 @@ const getSharedPlugins = (isEnvProduction) => {
       ['process.env.RWJS_API_GRAPHQL_URL']: JSON.stringify(
         redwoodConfig.web.apiGraphQLUrl ?? `${redwoodConfig.web.apiUrl}/graphql`
       ),
-      ['process.env.RWJS_API_DBAUTH_URL']: JSON.stringify(
-        redwoodConfig.web.apiDbAuthUrl ?? `${redwoodConfig.web.apiUrl}/auth`
-      ),
       ['process.env.RWJS_API_URL']: JSON.stringify(redwoodConfig.web.apiUrl),
       ['process.env.__REDWOOD__APP_TITLE']: JSON.stringify(
         redwoodConfig.web.title || path.basename(redwoodPaths.base)
@@ -245,7 +242,12 @@ module.exports = (webpackEnv) => {
           {
             from: path.join(redwoodPaths.web.base, 'public'),
             to: '',
-            globOptions: { ignore: ['README.md'] },
+            globOptions: {
+              ignore: [
+                path.join(redwoodPaths.web.base, 'public/README.md'),
+                path.join(redwoodPaths.web.base, 'public/mockServiceWorker.js'),
+              ],
+            },
           },
         ],
       }),
@@ -280,7 +282,7 @@ module.exports = (webpackEnv) => {
                 },
               },
               generator: {
-                filename: 'static/media/[name].[contenthash:8].[ext]',
+                filename: 'static/media/[name].[contenthash:8][ext]',
               },
             },
             // (1)
@@ -315,7 +317,7 @@ module.exports = (webpackEnv) => {
               test: /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
               type: 'asset/resource',
               generator: {
-                filename: 'static/media/[name].[contenthash:8].[ext]',
+                filename: 'static/media/[name].[contenthash:8][ext]',
               },
             },
           ].filter(Boolean),

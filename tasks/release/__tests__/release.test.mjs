@@ -1,4 +1,3 @@
-/* eslint-env jest, es2021 */
 import {
   MERGED_PRS_NO_MILESTONE,
   MERGED_PRS_NEXT_RELEASE_PATCH_MILESTONE,

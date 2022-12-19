@@ -6,6 +6,7 @@ const { merge } = require('webpack-merge')
 // booting up the mock server workers, and mocking the router.
 const {
   StorybookProvider,
+  MockingLoader,
 } = require('@redwoodjs/testing/dist/web/StorybookProvider')
 
 // Import the user's default CSS file
@@ -18,6 +19,7 @@ const baseConfig = {
     (storyFn, { id }) =>
       React.createElement(StorybookProvider, { storyFn, id }),
   ],
+  loaders: [MockingLoader],
 }
 
 const userConfig = require('~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG')

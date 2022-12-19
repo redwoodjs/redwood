@@ -16,7 +16,6 @@ Run the Redwood Fastify Server programmatically.
 From package.json
 ```
   "bin": {
-    "rw-api-server": "./dist/index.js",
     "rw-api-server-watch": "./dist/watch.js",
     "rw-log-formatter": "./dist/logFormatter/bin.js",
     "rw-server": "./dist/index.js"

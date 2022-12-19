@@ -24,7 +24,23 @@ describe('validate absence', () => {
     try {
       validate('rob@redwoodjs.com', 'email', { absence: true })
     } catch (e) {
-      expect(e.message).toEqual('email is not absent')
+      expect(e.message).toEqual('Email is not absent')
+    }
+  })
+
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate('rob@redwoodjs.com', 'my_email', { absence: true })
+    } catch (e) {
+      expect(e.message).toEqual('My Email is not absent')
+    }
+  })
+
+  it('throws with a default message when input form field name is camel case', () => {
+    try {
+      validate('rob@redwoodjs.com', 'myEmail', { absence: true })
+    } catch (e) {
+      expect(e.message).toEqual('My Email is not absent')
     }
   })
 
@@ -68,13 +84,29 @@ describe('validate acceptance', () => {
 
   it('throws with a default message', () => {
     try {
-      validate(false, 'Terms', { acceptance: true })
+      validate(false, 'terms', { acceptance: true })
     } catch (e) {
       expect(e.message).toEqual('Terms must be accepted')
     }
   })
 
-  it('throws with a custom message', () => {
+  it('throws with a default message', () => {
+    try {
+      validate(false, 'terms_of_purchase', { acceptance: true })
+    } catch (e) {
+      expect(e.message).toEqual('Terms of Purchase must be accepted')
+    }
+  })
+
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate(false, 'termsOfPurchase', { acceptance: true })
+    } catch (e) {
+      expect(e.message).toEqual('Terms of Purchase must be accepted')
+    }
+  })
+
+  it('throws with a custom message when input form field name is camel case', () => {
     try {
       validate(false, { acceptance: { message: 'gotta accept' } })
     } catch (e) {
@@ -158,7 +190,31 @@ describe('validate exclusion', () => {
     try {
       validate('foo', 'selection', { exclusion: ['foo', 'bar'] })
     } catch (e) {
-      expect(e.message).toEqual('selection is reserved')
+      expect(e.message).toEqual('Selection is reserved')
+    }
+  })
+
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate('foo', 'selection_of_widgets', { exclusion: ['foo', 'bar'] })
+    } catch (e) {
+      expect(e.message).toEqual('Selection of Widgets is reserved')
+    }
+  })
+
+  it('throws with a default message when input form field name is camel case', () => {
+    try {
+      validate('foo', 'selectionOfWidgets', { exclusion: ['foo', 'bar'] })
+    } catch (e) {
+      expect(e.message).toEqual('Selection of Widgets is reserved')
+    }
+  })
+
+  it('throws with a default message', () => {
+    try {
+      validate('foo', 'selection', { exclusion: ['foo', 'bar'] })
+    } catch (e) {
+      expect(e.message).toEqual('Selection is reserved')
     }
   })
 
@@ -222,7 +278,25 @@ describe('validate format', () => {
     try {
       validate('foobar', 'text', { format: /baz/ })
     } catch (e) {
-      expect(e.message).toEqual('text is not formatted correctly')
+      expect(e.message).toEqual('Text is not formatted correctly')
+    }
+    expect.assertions(1)
+  })
+
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate('foobar', 'the_text', { format: /baz/ })
+    } catch (e) {
+      expect(e.message).toEqual('The Text is not formatted correctly')
+    }
+    expect.assertions(1)
+  })
+
+  it('throws with a default message when input form field name is camel case', () => {
+    try {
+      validate('foobar', 'theText', { format: /baz/ })
+    } catch (e) {
+      expect(e.message).toEqual('The Text is not formatted correctly')
     }
     expect.assertions(1)
   })
@@ -264,7 +338,7 @@ describe('validate inclusion', () => {
     try {
       validate('foo', 'selection', { inclusion: ['foo', 'bar'] })
     } catch (e) {
-      expect(e.message).toEqual('selection is not valid')
+      expect(e.message).toEqual('Selection is not valid')
     }
   })
 
@@ -293,7 +367,7 @@ describe('validate length', () => {
     try {
       validate('a', 'username', { length: { min: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('username must have at least 2 characters')
+      expect(e.message).toEqual('Username must have at least 2 characters')
     }
 
     // custom error
@@ -354,7 +428,7 @@ describe('validate length', () => {
     try {
       validate('foobar', 'username', { length: { equal: 5 } })
     } catch (e) {
-      expect(e.message).toEqual('username must have exactly 5 characters')
+      expect(e.message).toEqual('Username must have exactly 5 characters')
     }
 
     // custom error
@@ -387,7 +461,7 @@ describe('validate length', () => {
     try {
       validate('foobar', 'username', { length: { between: [2, 4] } })
     } catch (e) {
-      expect(e.message).toEqual('username must be between 2 and 4 characters')
+      expect(e.message).toEqual('Username must be between 2 and 4 characters')
     }
 
     // custom error
@@ -439,7 +513,7 @@ describe('validate numericality', () => {
     try {
       validate(1.2, 'number', { numericality: { integer: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be an integer')
+      expect(e.message).toEqual('Number must be an integer')
     }
   })
 
@@ -456,6 +530,9 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.2, 'number', { numericality: { lessThan: 2.1 } })
     ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
+    expect(() =>
+      validate(2, 'number', { numericality: { lessThan: 0 } })
+    ).toThrow(ValidationErrors.LessThanNumericalityValidationError)
 
     expect(() =>
       validate(2, 'number', { numericality: { lessThan: 3 } })
@@ -468,9 +545,9 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { lessThan: 1 } })
     } catch (e) {
-      expect(e.message).toEqual('number must be less than 1')
+      expect(e.message).toEqual('Number must be less than 1')
     }
-    expect.assertions(7)
+    expect.assertions(8)
   })
 
   it('checks if value is less than or equal to required number', () => {
@@ -486,6 +563,9 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.2, 'number', { numericality: { lessThanOrEqual: 2 } })
     ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate(2, 'number', { numericality: { lessThanOrEqual: 0 } })
+    ).toThrow(ValidationErrors.LessThanOrEqualNumericalityValidationError)
 
     expect(() =>
       validate(2.2, 'number', { numericality: { lessThanOrEqual: 2.3 } })
@@ -498,9 +578,9 @@ describe('validate numericality', () => {
     try {
       validate(3, 'number', { numericality: { lessThanOrEqual: 2 } })
     } catch (e) {
-      expect(e.message).toEqual('number must be less than or equal to 2')
+      expect(e.message).toEqual('Number must be less than or equal to 2')
     }
-    expect.assertions(7)
+    expect.assertions(8)
   })
 
   it('checks if value is greater than required number', () => {
@@ -519,6 +599,9 @@ describe('validate numericality', () => {
     expect(() =>
       validate(3.0, 'number', { numericality: { greaterThan: 3 } })
     ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
+    expect(() =>
+      validate(-1, 'number', { numericality: { greaterThan: 0 } })
+    ).toThrow(ValidationErrors.GreaterThanNumericalityValidationError)
 
     expect(() =>
       validate(3, 'number', { numericality: { greaterThan: 2 } })
@@ -531,9 +614,9 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { greaterThan: 3 } })
     } catch (e) {
-      expect(e.message).toEqual('number must be greater than 3')
+      expect(e.message).toEqual('Number must be greater than 3')
     }
-    expect.assertions(8)
+    expect.assertions(9)
   })
 
   it('checks if value is greater than or equal to required number', () => {
@@ -542,6 +625,9 @@ describe('validate numericality', () => {
     ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
     expect(() =>
       validate(3.0, 'number', { numericality: { greaterThanOrEqual: 3.1 } })
+    ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
+    expect(() =>
+      validate(-1, 'number', { numericality: { greaterThanOrEqual: 0 } })
     ).toThrow(ValidationErrors.GreaterThanOrEqualNumericalityValidationError)
 
     expect(() =>
@@ -565,9 +651,9 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { greaterThanOrEqual: 3 } })
     } catch (e) {
-      expect(e.message).toEqual('number must be greater than or equal to 3')
+      expect(e.message).toEqual('Number must be greater than or equal to 3')
     }
-    expect.assertions(7)
+    expect.assertions(8)
   })
 
   it('checks if value is not equal to required number', () => {
@@ -583,6 +669,9 @@ describe('validate numericality', () => {
     expect(() =>
       validate(2.9, 'number', { numericality: { equal: 3 } })
     ).toThrow(ValidationErrors.EqualNumericalityValidationError)
+    expect(() => validate(2, 'number', { numericality: { equal: 0 } })).toThrow(
+      ValidationErrors.EqualNumericalityValidationError
+    )
 
     expect(() =>
       validate(2, 'number', { numericality: { equal: 2 } })
@@ -601,9 +690,9 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { equal: 3 } })
     } catch (e) {
-      expect(e.message).toEqual('number must equal 3')
+      expect(e.message).toEqual('Number must equal 3')
     }
-    expect.assertions(9)
+    expect.assertions(10)
   })
 
   it('checks if not equal to required number', () => {
@@ -615,6 +704,9 @@ describe('validate numericality', () => {
     ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
     expect(() =>
       validate(3.0, 'number', { numericality: { otherThan: 3 } })
+    ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
+    expect(() =>
+      validate(0, 'number', { numericality: { otherThan: 0 } })
     ).toThrow(ValidationErrors.OtherThanNumericalityValidationError)
 
     expect(() =>
@@ -631,9 +723,9 @@ describe('validate numericality', () => {
     try {
       validate(3, 'number', { numericality: { otherThan: 3 } })
     } catch (e) {
-      expect(e.message).toEqual('number must not equal 3')
+      expect(e.message).toEqual('Number must not equal 3')
     }
-    expect.assertions(7)
+    expect.assertions(8)
   })
 
   it('checks for a value being even', () => {
@@ -655,7 +747,7 @@ describe('validate numericality', () => {
     try {
       validate(3, 'number', { numericality: { even: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be even')
+      expect(e.message).toEqual('Number must be even')
     }
     expect.assertions(5)
   })
@@ -679,7 +771,7 @@ describe('validate numericality', () => {
     try {
       validate(2, 'number', { numericality: { odd: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be odd')
+      expect(e.message).toEqual('Number must be odd')
     }
     expect.assertions(5)
   })
@@ -706,7 +798,7 @@ describe('validate numericality', () => {
     try {
       validate(-1, 'number', { numericality: { positive: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be positive')
+      expect(e.message).toEqual('Number must be positive')
     }
     expect.assertions(6)
   })
@@ -733,7 +825,7 @@ describe('validate numericality', () => {
     try {
       validate(1, 'number', { numericality: { negative: true } })
     } catch (e) {
-      expect(e.message).toEqual('number must be negative')
+      expect(e.message).toEqual('Number must be negative')
     }
     expect.assertions(6)
   })
@@ -794,7 +886,23 @@ describe('validate presence', () => {
     try {
       validate(undefined, 'email', { presence: true })
     } catch (e) {
-      expect(e.message).toEqual('email must be present')
+      expect(e.message).toEqual('Email must be present')
+    }
+  })
+
+  it('throws with a default message when input form field name is snake case', () => {
+    try {
+      validate(undefined, 'primary_email', { presence: true })
+    } catch (e) {
+      expect(e.message).toEqual('Primary Email must be present')
+    }
+  })
+
+  it('throws with a default message when input form field name is camel case', () => {
+    try {
+      validate(undefined, 'workEmail', { presence: true })
+    } catch (e) {
+      expect(e.message).toEqual('Work Email must be present')
     }
   })
 
@@ -808,6 +916,75 @@ describe('validate presence', () => {
 
   it('will not throw when option is undefined', () => {
     expect(() => validate('foo', { presence: undefined })).not.toThrow()
+  })
+})
+
+describe('validate custom', () => {
+  it('checks if errors are not thrown', () => {
+    expect(() =>
+      validate(null, 'email', {
+        custom: {
+          with: () => {
+            throw new Error('foo')
+          },
+        },
+      })
+    ).toThrow(ValidationErrors.CustomValidationError)
+
+    expect(() =>
+      validate(null, 'email', {
+        custom: {
+          with: () => {},
+        },
+      })
+    ).not.toThrow(ValidationErrors.CustomValidationError)
+  })
+
+  it('throws with a custom message', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw new Error('foo')
+          },
+          message: 'Gimmie an email',
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('throws with a custom message via the message of the thrown error', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw new Error('Gimmie an email')
+          },
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('throws with a custom message via the thrown message', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw 'Gimmie an email'
+          },
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { custom: undefined })).not.toThrow()
   })
 })
 
@@ -837,6 +1014,28 @@ describe('validate', () => {
   it('accepts the three argument version', () => {
     try {
       validate(null, 'Email Address', {
+        presence: true,
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Email Address must be present')
+    }
+    expect.assertions(1)
+  })
+
+  it('accepts the three argument version when input form field name is snake case', () => {
+    try {
+      validate(null, 'email_address', {
+        presence: true,
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Email Address must be present')
+    }
+    expect.assertions(1)
+  })
+
+  it('accepts the three argument version when input form field name is camel case', () => {
+    try {
+      validate(null, 'emailAddress', {
         presence: true,
       })
     } catch (e) {
@@ -1013,5 +1212,35 @@ describe('validateUniqueness', () => {
       expect(e.message).toEqual('Email already taken')
     }
     expect.assertions(1)
+  })
+
+  it('uses the given prisma client', async () => {
+    const mockFindFirstOther = jest.fn()
+    mockFindFirstOther.mockImplementation(() => ({
+      id: 2,
+      email: 'rob@redwoodjs.com',
+    }))
+    const mockPrismaClient = {
+      $transaction: async (func) =>
+        func({
+          user: {
+            findFirst: mockFindFirstOther,
+          },
+        }),
+    }
+
+    expect(mockFindFirstOther).not.toBeCalled()
+
+    await expect(
+      validateUniqueness(
+        'user',
+        { email: 'rob@redwoodjs.com' },
+        { db: mockPrismaClient },
+        () => {}
+      )
+    ).rejects.toThrowError('email must be unique')
+
+    expect(mockFindFirstOther).toBeCalled()
+    expect(mockFindFirst).not.toBeCalled()
   })
 })

@@ -40,6 +40,13 @@ export const createContextProxy = () => {
         const ctx = store?.get('context') || {}
         return ctx[property]
       },
+      set: (_target, property: string, newVal) => {
+        const store = getAsyncStoreInstance().getStore()
+        const ctx = store?.get('context') || {}
+        ctx[property] = newVal
+        store?.set('context', ctx)
+        return true
+      },
     })
   } else {
     return GLOBAL_CONTEXT

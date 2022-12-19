@@ -97,9 +97,7 @@ export const verifySignature = ({
  * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
  *
  */
-const sha256Verifier = (
-  _options?: VerifyOptions | undefined
-): Sha256Verifier => {
+const sha256Verifier = (_options?: VerifyOptions): Sha256Verifier => {
   return {
     sign: ({ payload, secret }) => {
       return createSignature({ payload, secret })

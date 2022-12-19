@@ -2,6 +2,7 @@ import {
   createValidatorDirective,
   ValidatorDirectiveFunc,
 } from '@redwoodjs/graphql-server'
+
 import { logger } from 'src/lib/logger'
 
 export const schema = gql`

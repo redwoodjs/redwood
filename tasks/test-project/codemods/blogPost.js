@@ -8,7 +8,8 @@ const body = `
           year: 'numeric',
           month: 'long',
           day: 'numeric',
-        }).format(new Date(blogPost.createdAt))}
+        }).format(new Date(blogPost.createdAt))} - By:{' '}
+        <Author author={blogPost.author} />
       </p>
       <h2 className="text-xl mt-2 font-semibold">
         <Link
@@ -32,6 +33,7 @@ interface Props extends FindBlogPostQuery {}
 `
 
 const typeImport = `import { FindBlogPostQuery } from 'types/graphql'`
+const authorCellImport = `import Author from 'src/components/Author'`
 
 export default (file, api) => {
   const j = api.jscodeshift
@@ -49,10 +51,11 @@ export default (file, api) => {
 
   if (file.path.endsWith('.tsx')) {
     root.find(j.VariableDeclaration).insertBefore(propsInterface)
+    root.find(j.ImportDeclaration).insertAfter(authorCellImport)
     root.find(j.ImportDeclaration).insertAfter(typeImport)
 
     // Convert "const BlogPost = () "
-    // to "const BlogPost = ({ posts }: Props) "
+    // to "const BlogPost = ({ blogPost }: Props) "
     root
       .find(j.ArrowFunctionExpression)
       .at(0)

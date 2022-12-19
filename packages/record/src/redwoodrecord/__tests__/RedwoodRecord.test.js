@@ -1,10 +1,9 @@
 import * as ValidationErrors from '@redwoodjs/api'
 
+import datamodel from '../__fixtures__/datamodel.js'
 import RedwoodRecord from '../RedwoodRecord'
 import Reflection from '../Reflection'
 import RelationProxy from '../RelationProxy'
-
-import datamodel from './datamodel.json'
 
 const db = { user: jest.fn() }
 
@@ -65,7 +64,7 @@ describe('save()', () => {
     const user = new User()
     await user.save()
 
-    expect(user.errors.email).toEqual(['email must be present'])
+    expect(user.errors.email).toEqual(['Email must be present'])
   })
 })
 

@@ -8,8 +8,9 @@ describe('getConfig', () => {
       path.join(__dirname, './fixtures/redwood.empty.toml')
     )
     expect(config).toMatchInlineSnapshot(`
-      Object {
-        "api": Object {
+      {
+        "api": {
+          "debugPort": 18911,
           "host": "localhost",
           "path": "./api",
           "port": 8911,
@@ -18,15 +19,15 @@ describe('getConfig', () => {
           "target": "node",
           "title": "Redwood App",
         },
-        "browser": Object {
+        "browser": {
           "open": false,
         },
-        "generate": Object {
+        "generate": {
           "nestScaffoldByModel": true,
           "stories": true,
           "tests": true,
         },
-        "web": Object {
+        "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
           "fastRefresh": true,
@@ -44,6 +45,15 @@ describe('getConfig', () => {
   it('merges configs', () => {
     const config = getConfig(path.join(__dirname, './fixtures/redwood.toml'))
     expect(config.web.port).toEqual(8888)
+  })
+
+  it('throws an error when given a bad config path', () => {
+    const runGetConfig = () => {
+      getConfig(path.join(__dirname, './fixtures/fake_redwood.toml'))
+    }
+    expect(runGetConfig).toThrow(
+      /Could not parse .+fake_redwood.toml.+ Error: ENOENT: no such file or directory, open .+fake_redwood.toml./
+    )
   })
 
   it('interpolates environment variables correctly', () => {

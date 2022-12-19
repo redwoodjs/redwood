@@ -1,15 +1,36 @@
+import humanize from 'humanize-string'
+import { titleCase } from 'title-case'
+
 import { RedwoodError } from '../errors'
 
 export class ServiceValidationError extends RedwoodError {
   constructor(message: string, substitutions = {}) {
     let errorMessage = message
+    let extensions = {}
 
-    // replace instances of a string like `{max}` with any substituted values
+    // in the main error message, replace instances of a string like
+    // `{max}` with any substituted values that are titlecased and humanized
     for (const [key, value] of Object.entries(substitutions)) {
-      errorMessage = errorMessage.replaceAll(`\${${key}}`, String(value))
+      errorMessage = errorMessage.replaceAll(
+        `\${${key}}`,
+        titleCase(humanize(String(value)))
+      )
+
+      // this mimics the Apollo Server use of error codes and extensions needed
+      // for the web side FormError handlings to show the message at the field level
+      // with an UserInputError (aka 'BAD_USER_INPUT" code) style error
+      // @see: https://www.apollographql.com/docs/apollo-server/data/errors/#including-custom-error-details
+      extensions = {
+        code: 'BAD_USER_INPUT',
+        properties: {
+          messages: {
+            [String(value)]: [errorMessage],
+          },
+        },
+      }
     }
 
-    super(errorMessage)
+    super(errorMessage, extensions)
     this.name = 'ServiceValidationError'
   }
 }
@@ -46,7 +67,6 @@ export class EmailValidationError extends ServiceValidationError {
     this.name = 'EmailValidationError'
   }
 }
-
 export class ExclusionValidationError extends ServiceValidationError {
   constructor(
     name: string,
@@ -264,6 +284,19 @@ export class NegativeNumericalityValidationError extends ServiceValidationError 
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'NegativeNumericalityValidationError'
+  }
+}
+
+export class CustomValidationError extends ServiceValidationError {
+  constructor(
+    name: string,
+    // Since CustomValidationError is derived from either a raised error or a string, the message is always passed.
+    // but for the sake of consistency, we'll keep the message optional.
+    message = '',
+    substitutions = {}
+  ) {
+    super(message, Object.assign(substitutions, { name }))
+    this.name = 'CustomValidationError'
   }
 }
 

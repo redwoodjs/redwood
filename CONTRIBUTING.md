@@ -16,34 +16,6 @@ Love Redwood and want to get involved? You’re in the right place!
 
 _Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md)._
 
-**Table of Contents**
-
-- [Contributing to the Framework Packages (Reference Doc)](#contributing-to-the-framework-packages-reference-doc)
-  - [Code Organization: Project and Framework](#code-organization-project-and-framework)
-  - [Local Development Setup](#local-development-setup)
-    - [Redwood Framework](#redwood-framework)
-    - [Redwood Project: Setup Options](#redwood-project-setup-options)
-      - [Redwood Functional Test Project](#redwood-functional-test-project)
-    - [Testing the Framework in Your Project](#testing-the-framework-in-your-project)
-    - [Testing the CLI in Your Project](#testing-the-cli-in-your-project)
-  - [Cloud Developer Environment](#cloud-developer-environment)
-  - [Local QA and Integration Tests](#local-qa-and-integration-tests)
-    - [Build, Lint, Test, and Check](#build-lint-test-and-check)
-    - [E2E Integration Tests](#e2e-integration-tests)
-  - [Troubleshooting Dependencies](#troubleshooting-dependencies)
-  - [Yarn v3: Tips and Troubleshooting](#yarn-v3-tips-and-troubleshooting)
-    - [Migrating from yarn v1 to yarn v3](#migrating-from-yarn-v1-to-yarn-v3)
-    - [New Yarn Commands and Utilities](#new-yarn-commands-and-utilities)
-    - [Added to CI: dedupe and constraints](#added-to-ci-dedupe-and-constraints)
-    - [About Yarn v3](#about-yarn-v3)
-      - [Benefits](#benefits)
-      - [New Files](#new-files)
-      - [Advanced Cases](#advanced-cases)
-- [Release Publishing](#release-publishing)
-  - [Canary publishing](#canary-publishing)
-  - [Release Candidate publishing](#release-candidate-publishing)
-  - [Publishing New Versions: `@latest`](#publishing-new-versions-latest)
-
 ## Code Organization: Project and Framework
 
 As a Redwood developer, you're already familiar with the codebase created by `yarn create redwood-app`. In this document, we'll refer to that codebase as a **Redwood Project**.
@@ -75,7 +47,7 @@ You'll almost always want to test the functionality of your changes to the Redwo
 - run `yarn create redwood-app ./redwood-project`
 - `git clone` the [RedwoodJS Tutorial Blog](https://github.com/redwoodjs/redwood-tutorial)
 - use a project you've already created
-- create a functional test project using `yarn run build:test-project <project directory>`  👀
+- create a functional test project: go to the location of your local copy of the Redwood Framework and use `yarn run build:test-project <project directory>` 👀
 
 **Using the functional test project might be the fastest and easiest way to test your changes.**
 
@@ -86,7 +58,7 @@ You can create a Redwood Project that contains a lot of functionality in just a 
 1. installs using the `create-redwood-app` template in the current branch of your Redwood Framework
 2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
 3. with a JavaScript language target (with the option for TypeScript)
-4. then applies code mods from the [Redwood tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/) to add functionality and styling
+4. then applies code mods from the [Redwood tutorial](https://redwoodjs.com/tutorial) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
 
 Run `yarn run build:test-project <project path>` from the root of your local copy of the Redwood Framework to create a functional test project.
@@ -109,7 +81,7 @@ Run `yarn run build:test-project <project path>` from the root of your local cop
 > yarn run build:test-project ~/my-repos/redwood-project --typescript --link
 > ```
 
-Unless you've already got a project with a lot of functionality, it'd take quite some to add all of this yourself. Moreover, testing your changes in a project that has a lot of functionality will increase your confidence in the changes you're making.
+Unless you've already got a project with a lot of functionality, it'd take quite some effort to add all of this yourself. Moreover, testing your changes in a project that has a lot of functionality will increase your confidence in the changes you're making.
 
 But how do you actually test your changes in the Redwood Framework in your Redwood Project? With another command, this time in the root of your Redwood Project: `yarn rwfw`.
 
@@ -119,14 +91,18 @@ As you make changes to the Redwood Framework, you'll want to see your changes re
 
 > `rwfw` is short for Redwood Framework.
 
-Navigate to your Redwood Project and run `RWFW_PATH=<framework directory> yarn rwfw project:sync`:
+The command requires an env var `RWFW_PATH`. Unless you add the env var and value to your shell, the command structure will be `RWFW_PATH=<framework directory> yarn rwfw [option]`.
+
+> Note: On Windows, use `yarn cross-env RWFW_PATH=<framework directory> rwfw [option]`
+
+Navigate to your Redwood Project and run the following, replacing `~/redwood` to match your local path:
 
 ```terminal
 cd redwood-project
 RWFW_PATH=~/redwood yarn rwfw project:sync
 ```
 
-Where <framework directory> is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
+Where `~/redwood` is the path to your local copy of the Redwood Framework. Once provided to `rwfw`, it'll remember it and you shouldn't have to provide it again unless you move it.
 
 As `project:sync` starts up, it'll start logging to the console. In order, it:
 
@@ -207,7 +183,7 @@ Within your Framework directory, use the following tools and commands to test yo
 
 ### E2E Integration Tests
 
-We use Cypress to test the steps in the [tutorial](https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
+We use Cypress to test the steps in the [tutorial](https://redwoodjs.com/tutorial). You can run this end-to-end (e2e) test locally by running the following in your local copy of the Redwood Framework:
 
 ```terminal
 yarn e2e
@@ -326,6 +302,21 @@ If needed, there's more information in [this PR #3154 comment](https://github.co
 - `yarn dlx`
 - Set `YARN_IGNORE_PATH=1` to ignore local yarn version settings.
 - how "postinstall" script works
+
+# Creating a Reproduction to Include with Issues
+
+Are you about to open an issue? Including a reproduction, either as a series of steps, as a public GitHub repo, or as a Gitpod snapshot, will definitely let us help you faster!
+
+## Option 1: Create a Gitpod Snapshot
+
+This is a great option when the issue you're reporting is cross-platform. I.e., it isn't a Windows-specific issue. Here's a video walkthrough on how to create a snapshot of the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter):
+
+https://user-images.githubusercontent.com/1521877/176033049-d3c57b92-3ee6-4c60-918b-fdbcfa83fd0f.mp4
+
+## Option 2: Fork the Starter Repo
+
+You can always fork the [Redwood-Gitpod starter repo](https://github.com/redwoodjs/gitpod-starter) which is a brand new project with the latest stable version of Redwood.
+Once you make your changes in your fork, include the link to your repo in your issue. This'll make it much easier for us to understand what's going on.
 
 # Release Publishing
 

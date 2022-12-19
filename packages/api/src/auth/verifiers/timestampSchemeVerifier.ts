@@ -1,21 +1,15 @@
 import { createHmac } from 'crypto'
 
-import { WebhookVerificationError, DEFAULT_WEBHOOK_SECRET } from './common'
+import {
+  WebhookVerificationError,
+  DEFAULT_WEBHOOK_SECRET,
+  DEFAULT_TOLERANCE,
+} from './common'
 import type { WebhookVerifier, VerifyOptions } from './common'
 
 export interface TimestampSchemeVerifier extends WebhookVerifier {
   type: 'timestampSchemeVerifier'
 }
-
-/**
- * @const {number}
- */
-const FIVE_MINUTES = 5 * 60_000
-
-/**
- * @const {number}
- */
-const DEFAULT_TOLERANCE = FIVE_MINUTES
 
 /**
  * Generates a hash-based message authentication code from a secret.
@@ -76,8 +70,8 @@ const createSignature = ({
  * The value for the prefix t corresponds to the timestamp, and v1 corresponds to the signature (or signatures).
  *
  * Compare the signature (or signatures) in the header to the expected signature.
- * For an equality match, we compute the tolerance between the current timestamp and the received timestamp,
- * then decide if the tolerance is within your tolerance -- in our case this is 5 minutes.
+ * For an equality match, we compute the difference between the current timestamp and the received timestamp,
+ * then decide if the difference is within your tolerance -- in our case this is 5 minutes.
  *
  * Because this timestamp is part of the signed payload, it is also verified by the signature,
  * so an attacker cannot change the timestamp without invalidating the signature.
@@ -116,7 +110,7 @@ const verifySignature = ({
   const signedStamp = Number(match[1])
   const signedPayload = match[2]
 
-  const timestamp = options?.timestamp ?? Date.now()
+  const timestamp = options?.currentTimestampOverride ?? Date.now()
   const tolerance = options?.tolerance ?? DEFAULT_TOLERANCE
 
   const difference = Math.abs(timestamp - signedStamp)
@@ -145,11 +139,15 @@ const verifySignature = ({
  *
  */
 const timestampSchemeVerifier = (
-  options?: VerifyOptions | undefined
+  options?: VerifyOptions
 ): TimestampSchemeVerifier => {
   return {
     sign: ({ payload, secret }) => {
-      return createSignature({ payload, secret, timestamp: options?.timestamp })
+      return createSignature({
+        payload,
+        secret,
+        timestamp: options?.currentTimestampOverride,
+      })
     },
     verify: ({ payload, secret, signature }) => {
       return verifySignature({ payload, secret, signature, options })

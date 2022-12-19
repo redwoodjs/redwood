@@ -1,15 +1,16 @@
 import path from 'path'
 
 import camelcase from 'camelcase'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
-import { templateForComponentFile } from '../helpers'
+import { prepareForRollback } from '../../../lib/rollback'
+import { yargsDefaults } from '../helpers'
+import { validateName, templateForComponentFile } from '../helpers'
 
 export const files = ({
   name,
@@ -100,10 +101,15 @@ export const builder = (yargs) => {
       description: 'Name of the Function',
       type: 'string',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/reference/command-line-interface#generate-function'
+        'https://redwoodjs.com/docs/cli-commands#generate-function'
       )}`
     )
 
@@ -116,6 +122,8 @@ export const builder = (yargs) => {
 // This could be built using createYargsForComponentGeneration;
 // however, we need to add a message after generating the function files
 export const handler = async ({ name, force, ...rest }) => {
+  validateName(name)
+
   const tasks = new Listr(
     [
       {
@@ -127,10 +135,13 @@ export const handler = async ({ name, force, ...rest }) => {
         },
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
 
   try {
+    if (rest.rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
 
     console.info('')

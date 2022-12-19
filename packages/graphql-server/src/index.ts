@@ -24,6 +24,8 @@ export {
   ValidatorDirectiveFunc,
   TransformerDirective,
   TransformerDirectiveFunc,
+  ValidateArgs,
+  TransformArgs,
 } from './plugins/useRedwoodDirective'
 
 export * as rootSchema from './rootSchema'

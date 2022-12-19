@@ -21,6 +21,6 @@ functions = "api/dist/functions"
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/200.html"
   status = 200
 `

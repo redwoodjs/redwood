@@ -1,7 +1,7 @@
 import React, { Children, ReactElement, ReactNode } from 'react'
 
 /** Create a React Context with the given name. */
-const createNamedContext = <T>(name: string, defaultValue?: T) => {
+export const createNamedContext = <T>(name: string, defaultValue?: T) => {
   const Ctx = React.createContext<T | undefined>(defaultValue)
   Ctx.displayName = name
   return Ctx
@@ -17,6 +17,8 @@ const createNamedContext = <T>(name: string, defaultValue?: T) => {
  *        ['day',      'Int',    '{day:Int}'],
  *        ['filePath', 'Glob',   '{filePath...}']
  *      ]
+ *
+ * Only exported to be able to test it
  */
 export const paramsForRoute = (route: string) => {
   // Match the strings between `{` and `}`.
@@ -82,7 +84,8 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *
  * route         - The route path as specified in the <Route path={...} />
  * pathname      - The pathname from the window.location.
- * allParamTypes - The object containing all param type definitions.
+ * paramTypes    - The object containing all param type definitions.
+ * matchSubPaths - Also match sub routes
  *
  * Examples:
  *
@@ -94,11 +97,20 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
+ *
+ *  matchPath('/post/1', '/post/', { matchSubPaths: true })
+ *  => { match: true, params: {} }
  */
-const matchPath = (
+export const matchPath = (
   route: string,
   pathname: string,
-  paramTypes?: Record<string, ParamType>
+  {
+    paramTypes,
+    matchSubPaths,
+  }: {
+    paramTypes?: Record<string, ParamType>
+    matchSubPaths?: boolean
+  } = {}
 ) => {
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
@@ -117,36 +129,41 @@ const matchPath = (
     typeMatchingRoute = typeMatchingRoute.replace(match, `(${typeRegexp})`)
   }
 
+  const matchRegex = matchSubPaths
+    ? new RegExp(`^${typeMatchingRoute}(?:/.*)?$`, 'g')
+    : new RegExp(`^${typeMatchingRoute}$`, 'g')
+
   // Does the `pathname` match the route?
-  const matches = [
-    ...pathname.matchAll(new RegExp(`^${typeMatchingRoute}$`, 'g')),
-  ]
+  const matches = [...pathname.matchAll(matchRegex)]
 
   if (matches.length === 0) {
     return { match: false }
   }
-
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
-  const params = providedParams.reduce<Record<string, unknown>>(
-    (acc, value, index) => {
-      const [name, transformName] = routeParams[index]
-      const typeInfo = allParamTypes[transformName as SupportedRouterParamTypes]
+  if (routeParams.length > 0) {
+    const params = providedParams.reduce<Record<string, unknown>>(
+      (acc, value, index) => {
+        const [name, transformName] = routeParams[index]
+        const typeInfo =
+          allParamTypes[transformName as SupportedRouterParamTypes]
 
-      let transformedValue: string | unknown = value
-      if (typeof typeInfo?.parse === 'function') {
-        transformedValue = typeInfo.parse(value)
-      }
+        let transformedValue: string | unknown = value
+        if (typeof typeInfo?.parse === 'function') {
+          transformedValue = typeInfo.parse(value)
+        }
 
-      return {
-        ...acc,
-        [name]: transformedValue,
-      }
-    },
-    {}
-  )
+        return {
+          ...acc,
+          [name]: transformedValue,
+        }
+      },
+      {}
+    )
+    return { match: true, params }
+  }
 
-  return { match: true, params }
+  return { match: true }
 }
 
 /**
@@ -161,7 +178,7 @@ const matchPath = (
  * @fixme
  * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
  */
-const parseSearch = (
+export const parseSearch = (
   search:
     | string
     | string[][]
@@ -185,7 +202,7 @@ const parseSearch = (
  * are found, a descriptive Error will be thrown, as problems with routes are
  * critical enough to be considered fatal.
  */
-const validatePath = (path: string) => {
+export const validatePath = (path: string) => {
   // Check that path begins with a slash.
   if (!path.startsWith('/')) {
     throw new Error(`Route path does not begin with a slash: "${path}"`)
@@ -193,6 +210,16 @@ const validatePath = (path: string) => {
 
   if (path.indexOf(' ') >= 0) {
     throw new Error(`Route path contains spaces: "${path}"`)
+  }
+
+  if (/{(?:ref|key)(?::|})/.test(path)) {
+    throw new Error(
+      [
+        `Route contains ref or key as a path parameter: "${path}"`,
+        "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
+        'You can fix this by renaming the path parameter.',
+      ].join('\n')
+    )
   }
 
   // Check for duplicate named params.
@@ -219,7 +246,10 @@ const validatePath = (path: string) => {
  *   replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
  *   => '/tags/code?extra=foo
  */
-const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
+export const replaceParams = (
+  route: string,
+  args: Record<string, unknown> = {}
+) => {
   const params = paramsForRoute(route)
   let path = route
 
@@ -230,7 +260,9 @@ const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
     if (value !== undefined) {
       path = path.replace(match, value as string)
     } else {
-      throw new Error(`Missing parameter '${name}' for route '${route}'.`)
+      throw new Error(
+        `Missing parameter '${name}' for route '${route}' when generating a navigation URL.`
+      )
     }
   })
 
@@ -251,7 +283,7 @@ const replaceParams = (route: string, args: Record<string, unknown> = {}) => {
   return path
 }
 
-function isReactElement(node: ReactNode): node is ReactElement {
+export function isReactElement(node: ReactNode): node is ReactElement {
   return (
     node !== undefined &&
     node !== null &&
@@ -259,7 +291,7 @@ function isReactElement(node: ReactNode): node is ReactElement {
   )
 }
 
-function flattenAll(children: ReactNode): ReactNode[] {
+export function flattenAll(children: ReactNode): ReactNode[] {
   const childrenArray = Children.toArray(children)
 
   return childrenArray.flatMap((child) => {
@@ -287,7 +319,7 @@ function flattenAll(children: ReactNode): ReactNode[] {
  * => [ { key1: 'val1' }, { key2: 'val2' } ]
  *
  */
-function flattenSearchParams(
+export function flattenSearchParams(
   queryString: string
 ): Array<string | Record<string, any>> {
   const searchParams = []
@@ -297,70 +329,6 @@ function flattenSearchParams(
   }
 
   return searchParams
-}
-
-export {
-  createNamedContext,
-  matchPath,
-  parseSearch,
-  validatePath,
-  replaceParams,
-  isReactElement,
-  flattenAll,
-  flattenSearchParams,
-}
-
-/**
- * gets the announcement for the new page.
- * called in page-loader's `componentDidUpdate`.
- *
- * the order of priority is:
- * 1. RouteAnnouncement (the most specific one)
- * 2. h1
- * 3. document.title
- * 4. location.pathname
- */
-export const getAnnouncement = () => {
-  const routeAnnouncement = global?.document.querySelectorAll(
-    '[data-redwood-route-announcement]'
-  )?.[0]
-  if (routeAnnouncement?.textContent) {
-    return routeAnnouncement.textContent
-  }
-
-  const pageHeading = global?.document.querySelector(`h1`)
-  if (pageHeading?.textContent) {
-    return pageHeading.textContent
-  }
-
-  if (global?.document.title) {
-    return document.title
-  }
-
-  return `new page at ${global?.location.pathname}`
-}
-
-export const getFocus = () => {
-  const routeFocus = global?.document.querySelectorAll(
-    '[data-redwood-route-focus]'
-  )?.[0]
-
-  if (
-    !routeFocus ||
-    !routeFocus.children.length ||
-    (routeFocus.children[0] as HTMLElement).tabIndex < 0
-  ) {
-    return null
-  }
-
-  return routeFocus.children[0] as HTMLElement
-}
-
-// note: tried document.activeElement.blur(), but that didn't reset the focus flow
-export const resetFocus = () => {
-  global?.document.body.setAttribute('tabindex', '-1')
-  global?.document.body.focus()
-  global?.document.body.removeAttribute('tabindex')
 }
 
 export interface Spec {
@@ -403,5 +371,18 @@ export function normalizePage(
   return {
     name: specOrPage.name,
     loader: async () => ({ default: specOrPage }),
+  }
+}
+
+/**
+ * Detect if we're in an iframe.
+ *
+ * From https://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
+ */
+export function inIframe() {
+  try {
+    return global?.self !== global?.top
+  } catch (e) {
+    return true
   }
 }

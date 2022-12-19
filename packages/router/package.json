@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/router",
-  "version": "0.47.0",
+  "version": "3.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -18,24 +18,27 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest src",
+    "test": "jest",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@reach/skip-nav": "0.16.0",
-    "@redwoodjs/auth": "0.47.0",
-    "core-js": "3.21.1",
+    "@babel/runtime-corejs3": "7.20.6",
+    "@reach/skip-nav": "0.18.0",
+    "@redwoodjs/auth": "3.2.0",
+    "core-js": "3.26.1",
     "lodash.isequal": "4.5.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.16.7",
-    "@babel/core": "7.16.7",
-    "@types/lodash.isequal": "4.5.5",
-    "jest": "27.5.1",
+    "@babel/cli": "7.19.3",
+    "@babel/core": "7.20.5",
+    "@types/lodash.isequal": "4.5.6",
+    "@types/react": "17.0.52",
+    "@types/react-dom": "17.0.18",
+    "jest": "29.3.1",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "typescript": "4.5.5"
+    "typescript": "4.7.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

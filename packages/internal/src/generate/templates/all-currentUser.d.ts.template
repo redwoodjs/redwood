@@ -6,9 +6,21 @@ import { getCurrentUser } from '../../../api/src/lib/auth'
 type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
 export type InferredCurrentUser = ThenArg<ReturnType<typeof getCurrentUser>>
 
+type UndefinedRoles = {
+  /**
+   * ⚠️ Heads-Up: This is undefined unless roles key is returned from {@link getCurrentUser()}
+   *
+   * You may take a look at https://redwoodjs.com/docs/tutorial/chapter7/rbac for a tutorial on
+   * how to add fully-fledged RBAC (Role-based Access Control) to your database model.
+   */
+  roles?: unknown | unknown[]
+}
+
+type Overwrite<T, U> = Omit<T, keyof U> & U
+
 declare module '@redwoodjs/graphql-server' {
   interface GlobalContext {
-    currentUser?: InferredCurrentUser
+    currentUser?: Overwrite<UndefinedRoles, InferredCurrentUser>
   }
 }
 

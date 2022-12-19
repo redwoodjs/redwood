@@ -1,24 +1,24 @@
 import { GraphQLError } from 'graphql'
 
-interface ServerParseError extends Error {
+export interface ServerParseError extends Error {
   response: Response
   statusCode: number
   bodyText: string
 }
 
-interface ServerError extends Error {
+export interface ServerError extends Error {
   response: Response
   statusCode: number
   result: Record<string, any>
 }
 
-interface RWGqlError {
+export interface RWGqlError {
   message: string
   graphQLErrors: ReadonlyArray<GraphQLError>
   networkError: Error | ServerParseError | ServerError | null
 }
 
-type RWGqlErrorProperties = Record<string, Record<string, string[]>>
+export type RwGqlErrorProperties = Record<string, Record<string, string[]>>
 
 interface FormErrorProps {
   error?: RWGqlError
@@ -58,18 +58,23 @@ const FormError = ({
     !!error.networkError && Object.keys(error.networkError).length > 0
 
   if (hasGraphQLError) {
-    rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong.'
+    rootMessage = error.graphQLErrors[0].message ?? 'Something went wrong'
+
+    // override top-level message for ServiceValidation errorrs
+    if (error.graphQLErrors[0]?.extensions?.code === 'BAD_USER_INPUT') {
+      rootMessage = 'Errors prevented this form from being saved'
+    }
 
     const properties = error.graphQLErrors[0].extensions?.[
       'properties'
-    ] as RWGqlErrorProperties
+    ] as RwGqlErrorProperties
 
     const propertyMessages = properties && properties['messages']
 
     if (propertyMessages) {
       for (const e in propertyMessages) {
         propertyMessages[e].forEach((fieldError: any) => {
-          messages.push(`${e} ${fieldError}`)
+          messages.push(fieldError)
         })
       }
     }

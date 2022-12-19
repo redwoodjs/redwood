@@ -1,17 +1,22 @@
 import { spawn } from 'child_process'
+import os from 'os'
 import path from 'path'
 
-import { getPaths } from '@redwoodjs/internal'
-
-const APP_ROOT = getPaths().base
+import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const spawnProcess = (...args: Array<string>) => {
   spawn(
     process.execPath,
-    [path.join(__dirname, 'scripts', 'invoke.js'), ...args, '--root', APP_ROOT],
+    [
+      path.join(__dirname, 'scripts', 'invoke.js'),
+      ...args,
+      '--root',
+      getPaths().base,
+    ],
     {
       detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
       stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',
+      windowsHide: true,
     }
   ).unref()
 }
@@ -42,8 +47,14 @@ export const timedTelemetry = async (
   return result
 }
 
+// Returns 'Windows_NT' on Windows.
+// See https://nodejs.org/docs/latest-v12.x/api/os.html#os_os_type.
+const isWindows = os.type() === 'Windows_NT'
+
 export const errorTelemetry = async (argv: Array<string>, error: any) => {
-  if (process.env.REDWOOD_DISABLE_TELEMETRY) {
+  // FIXME: on Windows, cmd opens and closes a few times.
+  // See https://github.com/redwoodjs/redwood/issues/5728.
+  if (isWindows || process.env.REDWOOD_DISABLE_TELEMETRY) {
     return
   }
 
@@ -52,7 +63,9 @@ export const errorTelemetry = async (argv: Array<string>, error: any) => {
 
 // used as yargs middleware when any command is invoked
 export const telemetryMiddleware = async () => {
-  if (process.env.REDWOOD_DISABLE_TELEMETRY) {
+  // FIXME: on Windows, cmd opens and closes a few times.
+  // See https://github.com/redwoodjs/redwood/issues/5728.
+  if (isWindows || process.env.REDWOOD_DISABLE_TELEMETRY) {
     return
   }
 

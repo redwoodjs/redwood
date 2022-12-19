@@ -22,12 +22,9 @@ const indexOfRulesTest = (regex) => {
   })
 }
 
-const jsBabel = indexOfRulesTest(/\.(js|mjs|jsx)$/)
-config.module.rules[0].oneOf[jsBabel].use[0].options.customize =
-  require.resolve('babel-timing/webpack/babel-loader-customize')
-
-const tsBabel = indexOfRulesTest(/\.(ts|tsx)$/)
-config.module.rules[0].oneOf[tsBabel].use[0].options.customize =
-  require.resolve('babel-timing/webpack/babel-loader-customize')
+const babel = indexOfRulesTest(/\.(js|mjs|jsx|ts|tsx)$/)
+config.module.rules[0].oneOf[babel].use[0].options.customize = require.resolve(
+  'babel-timing/webpack/babel-loader-customize'
+)
 
 module.exports = config
