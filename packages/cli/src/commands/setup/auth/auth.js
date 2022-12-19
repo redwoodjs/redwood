@@ -205,11 +205,8 @@ export async function builder(yargs) {
 }
 
 async function getAuthHandler(module) {
-  const { version } = JSON.parse(
-    fs.readFileSync(
-      path.resolve(__dirname, '../../../../package.json'),
-      'utf-8'
-    )
+  const { version } = fs.readJSONSync(
+    path.resolve(__dirname, '../../../../package.json')
   )
 
   if (!isInstalled(module)) {
