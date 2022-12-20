@@ -41,8 +41,19 @@ export async function builder(yargs) {
     }
   }
 
+  const npx = async (argv, yargs) => {
+    console.log('"npx" middleware')
+    console.log('argv', argv)
+    console.log('')
+
+    if (argv.provider === 'dbAuth') {
+      console.log('npx @redwoodjs/auth-dbauth-setup')
+      yargs.exit(1)
+    }
+  }
+
   const setupAuthCommand = yargs
-    .middleware([printExperimentalWarning])
+    .middleware([printExperimentalWarning, npx], true)
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
@@ -109,7 +120,7 @@ export async function builder(yargs) {
     '@redwoodjs/auth-firebase-setup',
     '@redwoodjs/auth-azure-active-directory-setup',
     '@redwoodjs/auth-clerk-setup',
-    '@redwoodjs/auth-dbauth-setup',
+    // '@redwoodjs/auth-dbauth-setup',
     '@redwoodjs/auth-supabase-setup',
     '@redwoodjs/auth-supertokens-setup',
   ]) {

@@ -6448,6 +6448,8 @@ __metadata:
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
     typescript: 4.7.4
+  bin:
+    auth-dbauth-setup: ./dist/bin.js
   languageName: unknown
   linkType: soft
 

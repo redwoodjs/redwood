@@ -100,10 +100,11 @@ export async function frameworkPackagesFiles(
 }
 
 /**
- * Returns execute files for `@redwoodjs` packages.
- **/
+ * Returns executable files for `@redwoodjs` packages.
+ */
 export function frameworkPackagesBins(packages = frameworkPkgJsonFiles()) {
   let bins = {}
+
   for (const packageFile of packages) {
     let packageJson
 
@@ -120,10 +121,26 @@ export function frameworkPackagesBins(packages = frameworkPkgJsonFiles()) {
     if (!packageJson.bin) {
       continue
     }
-    for (const [binName, binPath] of Object.entries(packageJson.bin)) {
-      bins[binName] = path.join(packageJson.name, binPath)
+
+    // Handle both
+    // "bin": "./path/to/bin"
+    // and
+    // "bin": {
+    //   "binName1": "./path/to/bin1",
+    //   "binName2": "./path/to/bin2"
+    // }
+    if (typeof packageJson.bin === 'string') {
+      bins[packageJson.name.replace('@redwoodjs/', '')] = path.join(
+        packageJson.name,
+        packageJson.bin
+      )
+    } else {
+      for (const [binName, binPath] of Object.entries(packageJson.bin)) {
+        bins[binName] = path.join(packageJson.name, binPath)
+      }
     }
   }
+
   return bins
 }
 
