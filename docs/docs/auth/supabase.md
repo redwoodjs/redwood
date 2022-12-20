@@ -4,57 +4,73 @@ sidebar_label: Supabase
 
 # Supabase Authentication
 
-## Installation
-
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+To get started, run the setup command:
 
 ```bash
 yarn rw setup auth supabase
 ```
 
-## Setup
+<!-- vA47SZpaCR7BinC9 -->
 
-Update your .env file with the following settings supplied when you created your new Supabase project:
+This installs all the packages, writes all the files, and makes all the code modifications you need.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Supabase, see the top-level [Authentication](../authentication.md) doc. For now, let's focus on Supabase's side of things.
 
-- `SUPABASE_URL` with the unique Supabase URL for your project
-- `SUPABASE_KEY` with the unique Supabase Key that identifies which API KEY to use
-- `SUPABASE_JWT_SECRET` with the secret used to sign and verify the JSON Web Token (JWT)
+If you don't have a Supabase account yet, now's the time to make one: navigate to https://supabase.com and click "Start your project" in the top right. Then sign in or sign up, and create an organization and a project.
 
-You can find these values in your project's dashboard under Settings -> API.
+While Supabase creates your project, it thoughtfully shows you your project's API keys.
+(If the page refreshes while you're copying them over, just scroll down a bit and look for "Connecting to your new project".)
+We're looking for are "Project URL" and "API key".
+Copy them into your project's `.env` file.
 
-For full Supabase documentation, see: <https://supabase.io/docs>
+There's one more we need, the "JWT Secret", that's not here.
+To get that one, click the cog icon ("Project settings") near the bottom of the nav on the left.
+Then click "API", scroll down a bit, and you should see it—"JWT Secret" under "JWT Settings".
+All together now:
 
-## Usage
+```bash title=".env"
+SUPABASE_URL="..."
+SUPABASE_KEY="..."
+SUPABASE_JWT_SECRET="..."
+```
 
-Supabase supports several sign in methods:
+Lastly, include `SUPABASE_URL` and `SUPABASE_KEY` in the list of env vars that should be available to the web side:
 
-- email/password
-- passwordless via emailed magiclink
-- authenticate via phone with SMS based OTP (One-Time Password) tokens. See: [SMS OTP with Twilio](https://supabase.io/docs/guides/auth/auth-twilio)
-- Sign in with redirect. You can control where the user is redirected to after they are logged in via a `redirectTo` option.
-- Sign in with a valid refresh token that was returned on login.
-- Sign in using third-party providers/OAuth via
-  - [Apple](https://supabase.io/docs/guides/auth/auth-apple)
-  - Azure Active Directory
-  - [Bitbucket](https://supabase.io/docs/guides/auth/auth-bitbucket)
-  - [Discord](https://supabase.io/docs/guides/auth/auth-discord)
-  - [Facebook](https://supabase.io/docs/guides/auth/auth-facebook)
-  - [GitHub](https://supabase.io/docs/guides/auth/auth-github)
-  - [GitLab](https://supabase.io/docs/guides/auth/auth-gitlab)
-  - [Google](https://supabase.io/docs/guides/auth/auth-google)
-  - [Twitch](https://supabase.io/docs/guides/auth/auth-twitch)
-  - [Twitter](https://supabase.io/docs/guides/auth/auth-twitter)
-- Sign in with a [valid refresh token](https://supabase.io/docs/reference/javascript/auth-signin#sign-in-using-a-refresh-token-eg-in-react-native) that was returned on login. Used e.g. in React Native.
-- Sign in with scopes. If you need additional data from an OAuth provider, you can include a space-separated list of `scopes` in your request options to get back an OAuth `provider_token`.
+```toml title="redwood.toml"
+[web]
+  # ...
+  includeEnvironmentVariables = ["SUPABASE_URL", "SUPABASE_KEY"]
+```
 
-Depending on the credentials provided:
+That should be enough; now, things should just work.
+Let's make sure: if this is a brand new project, create a home page.
+There we'll destructure `signUp` from the `useAuth` hook (import that from `'src/auth'`):
 
-- A user can sign up either via email or sign in with supported OAuth provider: `'apple' | 'azure' | 'bitbucket' | 'discord' | 'facebook' | 'github' | 'gitlab' | 'google' | 'twitch' | 'twitter'`
-- If you sign in with a valid refreshToken, the current user will be updated
-- If you provide email without a password, the user will be sent a magic link.
-- The magic link's destination URL is determined by the SITE_URL config variable. To change this, you can go to Authentication -> Settings on `app.supabase.io` for your project.
-- Specifying an OAuth provider will open the browser to the relevant login page
-- Note: You must enable and configure the OAuth provider appropriately. To configure these providers, you can go to Authentication -> Settings on `app.supabase.io` for your project.
-- Note: To authenticate using SMS based OTP (One-Time Password) you will need a [Twilio](https://www.twilio.com/try-twilio) account
+```
+yarn rw g page home /
+```
 
-For Supabase Authentication documentation, see: <https://supabase.io/docs/guides/auth>
+```tsx title="web/src/pages/HomePage.tsx"
+import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+
+const HomePage = () => {
+  const { signUp } = useAuth()
+
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
+
+      <button onClick={() => signUp({
+        // email: 'test@email.com',
+        // password: 'test password',
+      })}>sign up</button>
+    </>
+  )
+}
+
+export default HomePage
+```
+
+Head back to your project's dashboard, click "Authentication" in the nav on the left, and you should see a new user.
