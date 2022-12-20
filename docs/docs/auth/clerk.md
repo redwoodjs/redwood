@@ -11,7 +11,8 @@ yarn rw setup auth clerk
 ```
 
 This installs all the packages, writes all the files, and makes all the code modifications you need.
-For a detailed explanation of all the api- and web-side changes that aren't exclusive to Clerk, see the top-level [Authentication](../authentication.md) doc. There is one Clerk-specific thing we'll get to, but for now, let's focus on Clerk's side of things.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Clerk, see the top-level [Authentication](../authentication.md) doc.
+There is one Clerk-specific thing we'll get to, but for now, let's focus on Clerk's side of things.
 
 If you don't have a Clerk account yet, now's the time to make one: navigate to https://clerk.dev and sign up, then create an application.
 The defaults are good enough to get us going, but feel free to configure things as you wish.
@@ -20,12 +21,16 @@ Next we'll get the application's API keys from its dashboard.
 :::note we'll only focus on the development instance
 
 By default, Clerk applications have two instances, "Development" and "Production".
-We'll only focus on the Development instance here. When you're ready to deploy to production, switch the instance the dashboard is displaying by clicking "Development" in the header at the top.
+We'll only focus on the Development instance here.
+When you're ready to deploy to production, switch the instance the dashboard is displaying by clicking "Development" in the header at the top.
 How you get your API keys to production depends on your deploy provider.
 
 :::
 
-We're looking for three API keys. Head over to the "Developers" section in the nav on the left and click "API Keys". You'll need all three of the ones on this page: the Frontend API key, the default Backend API key, and the JWT verification key. Copy them into your project's `.env` file:
+We're looking for three API keys.
+Head over to the "Developers" section in the nav on the left and click "API Keys".
+You'll need all three of the ones on this page: the Frontend API key, the default Backend API key, and the JWT verification key.
+Copy them into your project's `.env` file:
 
 ```bash title=".env"
 CLERK_FRONTEND_API_URL="..."
@@ -42,7 +47,9 @@ Lastly, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be 
   includeEnvironmentVariables = ["CLERK_FRONTEND_API_URL"]
 ```
 
-That should be enough; now, things should just work. Let's make sure: if this is a brand new project, create a home page. There we'll destructure `signUp` from the `useAuth` hook (import that from `'src/auth'`):
+That should be enough; now, things should just work.
+Let's make sure: if this is a brand new project, create a home page.
+There we'll destructure `signUp` from the `useAuth` hook (import that from `'src/auth'`):
 
 ```
 yarn rw g page home /
@@ -86,16 +93,6 @@ Clerk is a bit unlike the other auth providers Redwood integrates with in that i
 ## Avoiding feature duplication
 
 Redwood's Clerk integration is based on [Clerk's React SDK](https://clerk.dev/docs/reference/clerk-react/installation).
-This means that there's some duplication between the features in the SDK and the ones in `@redwoodjs/auth-clerk-web`. For example, the SDK ha a `SignedOut` component that redirects a user away from a private page—very much like wrapping a route with Redwood's `Private` component.
+This means that there's some duplication between the features in the SDK and the ones in `@redwoodjs/auth-clerk-web`.
+For example, the SDK ha a `SignedOut` component that redirects a user away from a private page—very much like wrapping a route with Redwood's `Private` component.
 We recommend you use Redwood's way of doing things as much as possible since it's much more likely to get along with the rest of the framework.
-
-<!-- ## `useAuth` reference
-
-| name     | description                                                                                                 |
-| :------- | :---------------------------------------------------------------------------------------------------------- |
-| client   | The clerk instance. See https://clerk.dev/docs/reference/clerkjs/clerk |
-| logIn    | Logs a user in. Takes Clerk's [`SignInProps`](https://clerk.dev/docs/reference/clerkjs/clerk#sign-in-props) |
-| logOut   | Logs a user out. Takes Clerk's SignOutOptions                                                                  |
-| signUp   | Signs up a user. Takes Clerk's [`SignUpProps`](https://docs.clerk.dev/reference/clerkjs/clerk#signupprops)  |
-
- -->
