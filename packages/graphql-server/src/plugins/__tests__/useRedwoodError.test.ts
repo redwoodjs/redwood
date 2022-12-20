@@ -145,105 +145,8 @@ const mockLambdaEvent = ({
 }
 
 describe('useRedwoodError', () => {
-  it('returns data when there is no error', async () => {
-    const handler = createGraphQLHandler({
-      loggerConfig: { logger: createLogger({}), options: {} },
-      sdls: {},
-      directives: {},
-      services: {},
-      onException: () => {},
-    })
-
-    const mockedEvent = mockLambdaEvent({
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query: '{ me { id, name } }' }),
-      httpMethod: 'POST',
-    })
-
-    const response = await handler(mockedEvent, {} as Context)
-    const { data } = JSON.parse(response.body)
-
-    expect(response.statusCode).toBe(200)
-    expect(data).toEqual({ me: { id: '1', name: 'Ba Zinga' } })
-  })
-
-  it('returns an error when the request is forbidden', async () => {
-    const handler = createGraphQLHandler({
-      loggerConfig: { logger: createLogger({}), options: {} },
-      sdls: {},
-      directives: {},
-      services: {},
-      onException: () => {},
-    })
-
-    const mockedEvent = mockLambdaEvent({
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query: '{ forbiddenUser { id, name } }' }),
-      httpMethod: 'POST',
-    })
-
-    const response = await handler(mockedEvent, {} as Context)
-    const { data, errors } = JSON.parse(response.body)
-
-    expect(data).toBeNull()
-    expect(errors[0].message).toEqual('You are forbidden')
-  })
-
-  it('masks the error message when the request has an unexpected error', async () => {
-    const handler = createGraphQLHandler({
-      loggerConfig: { logger: createLogger({}), options: {} },
-      sdls: {},
-      directives: {},
-      services: {},
-      onException: () => {},
-    })
-
-    const mockedEvent = mockLambdaEvent({
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query: '{ unexpectedUser { id, name } }' }),
-      httpMethod: 'POST',
-    })
-
-    const response = await handler(mockedEvent, {} as Context)
-    const { data, errors } = JSON.parse(response.body)
-
-    expect(data).toBeNull()
-    expect(errors[0].message).toEqual('Something went wrong.')
-  })
-
-  it('masks the error message when the request has an unexpected error with a custom message', async () => {
-    const handler = createGraphQLHandler({
-      loggerConfig: { logger: createLogger({}), options: {} },
-      sdls: {},
-      directives: {},
-      services: {},
-      defaultError: 'Please try again.',
-      onException: () => {},
-    })
-
-    const mockedEvent = mockLambdaEvent({
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query: '{ unexpectedUser { id, name } }' }),
-      httpMethod: 'POST',
-    })
-
-    const response = await handler(mockedEvent, {} as Context)
-    const { data, errors } = JSON.parse(response.body)
-
-    expect(data).toBeNull()
-    expect(errors[0].message).toEqual('Please try again.')
-  })
-
-  describe('with Service Validation errors', () => {
-    it('Service', async () => {
+  describe('when masking errors', () => {
+    it('returns data when there is no error', async () => {
       const handler = createGraphQLHandler({
         loggerConfig: { logger: createLogger({}), options: {} },
         sdls: {},
@@ -256,26 +159,23 @@ describe('useRedwoodError', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: '{ invalidUser { id, name } }' }),
+        body: JSON.stringify({ query: '{ me { id, name } }' }),
         httpMethod: 'POST',
       })
 
       const response = await handler(mockedEvent, {} as Context)
+      const { data } = JSON.parse(response.body)
+
       expect(response.statusCode).toBe(200)
+      expect(data).toEqual({ me: { id: '1', name: 'Ba Zinga' } })
     })
-  })
 
-  describe('with Custom Scalar type errors', () => {
-    it('returns data when there is a valid scalar currency', async () => {
+    it('returns an unmasked error message when the request is forbidden', async () => {
       const handler = createGraphQLHandler({
         loggerConfig: { logger: createLogger({}), options: {} },
         sdls: {},
         directives: {},
         services: {},
-        schemaOptions: {
-          typeDefs: [CurrencyDefinition],
-          resolvers: { Currency: CurrencyResolver },
-        },
         onException: () => {},
       })
 
@@ -283,39 +183,7 @@ describe('useRedwoodError', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          query: '{ products { id, name, currency_iso_4217 } }',
-        }),
-        httpMethod: 'POST',
-      })
-
-      const response = await handler(mockedEvent, {} as Context)
-      const { data, errors } = JSON.parse(response.body)
-
-      expect(errors).toBeUndefined()
-      expect(data.products[0].currency_iso_4217).toEqual('USD')
-    })
-
-    it('shows the custom scalar currency type validation error message', async () => {
-      const handler = createGraphQLHandler({
-        loggerConfig: { logger: createLogger({}), options: {} },
-        sdls: {},
-        directives: {},
-        services: {},
-        schemaOptions: {
-          typeDefs: [CurrencyDefinition],
-          resolvers: { Currency: CurrencyResolver },
-        },
-        onException: () => {},
-      })
-
-      const mockedEvent = mockLambdaEvent({
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: '{ invalidProducts { id, name, currency_iso_4217 } }',
-        }),
+        body: JSON.stringify({ query: '{ forbiddenUser { id, name } }' }),
         httpMethod: 'POST',
       })
 
@@ -323,13 +191,10 @@ describe('useRedwoodError', () => {
       const { data, errors } = JSON.parse(response.body)
 
       expect(data).toBeNull()
-      expect(errors[0].message).toEqual(
-        'Value is not a valid currency value: Calamari flan'
-      )
+      expect(errors[0].message).toEqual('You are forbidden')
     })
-  })
-  describe('with Custom Redwood Error', () => {
-    it('shows the custom error message', async () => {
+
+    it('masks the error message when the request has an unexpected error', async () => {
       const handler = createGraphQLHandler({
         loggerConfig: { logger: createLogger({}), options: {} },
         sdls: {},
@@ -342,9 +207,7 @@ describe('useRedwoodError', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          query: '{ weather { temperature } }',
-        }),
+        body: JSON.stringify({ query: '{ unexpectedUser { id, name } }' }),
         httpMethod: 'POST',
       })
 
@@ -352,7 +215,147 @@ describe('useRedwoodError', () => {
       const { data, errors } = JSON.parse(response.body)
 
       expect(data).toBeNull()
-      expect(errors[0].message).toEqual('Check outside instead')
+      expect(errors[0].message).toEqual('Something went wrong.')
+    })
+
+    it('masks the error message when the request has an unexpected error with a custom message', async () => {
+      const handler = createGraphQLHandler({
+        loggerConfig: { logger: createLogger({}), options: {} },
+        sdls: {},
+        directives: {},
+        services: {},
+        defaultError: 'Please try again.',
+        onException: () => {},
+      })
+
+      const mockedEvent = mockLambdaEvent({
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: '{ unexpectedUser { id, name } }' }),
+        httpMethod: 'POST',
+      })
+
+      const response = await handler(mockedEvent, {} as Context)
+      const { data, errors } = JSON.parse(response.body)
+
+      expect(data).toBeNull()
+      expect(errors[0].message).toEqual('Please try again.')
+    })
+
+    describe('with Service Validation errors', () => {
+      it('Service', async () => {
+        const handler = createGraphQLHandler({
+          loggerConfig: { logger: createLogger({}), options: {} },
+          sdls: {},
+          directives: {},
+          services: {},
+          onException: () => {},
+        })
+
+        const mockedEvent = mockLambdaEvent({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query: '{ invalidUser { id, name } }' }),
+          httpMethod: 'POST',
+        })
+
+        const response = await handler(mockedEvent, {} as Context)
+        expect(response.statusCode).toBe(200)
+      })
+    })
+
+    describe('with Custom Scalar type errors', () => {
+      it('returns data when there is a valid scalar currency', async () => {
+        const handler = createGraphQLHandler({
+          loggerConfig: { logger: createLogger({}), options: {} },
+          sdls: {},
+          directives: {},
+          services: {},
+          schemaOptions: {
+            typeDefs: [CurrencyDefinition],
+            resolvers: { Currency: CurrencyResolver },
+          },
+          onException: () => {},
+        })
+
+        const mockedEvent = mockLambdaEvent({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: '{ products { id, name, currency_iso_4217 } }',
+          }),
+          httpMethod: 'POST',
+        })
+
+        const response = await handler(mockedEvent, {} as Context)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(errors).toBeUndefined()
+        expect(data.products[0].currency_iso_4217).toEqual('USD')
+      })
+
+      it('shows the custom scalar currency type validation error message', async () => {
+        const handler = createGraphQLHandler({
+          loggerConfig: { logger: createLogger({}), options: {} },
+          sdls: {},
+          directives: {},
+          services: {},
+          schemaOptions: {
+            typeDefs: [CurrencyDefinition],
+            resolvers: { Currency: CurrencyResolver },
+          },
+          onException: () => {},
+        })
+
+        const mockedEvent = mockLambdaEvent({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: '{ invalidProducts { id, name, currency_iso_4217 } }',
+          }),
+          httpMethod: 'POST',
+        })
+
+        const response = await handler(mockedEvent, {} as Context)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(data).toBeNull()
+        expect(errors[0].message).toEqual(
+          'Value is not a valid currency value: Calamari flan'
+        )
+      })
+    })
+
+    describe('with Custom Redwood Error', () => {
+      it('shows the custom error message', async () => {
+        const handler = createGraphQLHandler({
+          loggerConfig: { logger: createLogger({}), options: {} },
+          sdls: {},
+          directives: {},
+          services: {},
+          onException: () => {},
+        })
+
+        const mockedEvent = mockLambdaEvent({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: '{ weather { temperature } }',
+          }),
+          httpMethod: 'POST',
+        })
+
+        const response = await handler(mockedEvent, {} as Context)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(data).toBeNull()
+        expect(errors[0].message).toEqual('Check outside instead')
+      })
     })
   })
 })
