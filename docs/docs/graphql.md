@@ -599,13 +599,7 @@ curl "http://localhost:8911/graphql/readiness" \
      -i
 ```
 
-Either way, you should get the following response:
-
-```json
-{
-  "message": "alive"
-}
-```
+Either way, you should get a `200 OK` HTTP status if ready, or a `503 Service Unavailable` if not.
 
 For production, make a request wherever your `/graphql` function exists.
 
