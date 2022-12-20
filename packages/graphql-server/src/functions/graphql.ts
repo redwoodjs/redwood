@@ -14,7 +14,6 @@ import { mapRwCorsOptionsToYoga } from '../cors'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
-// import { maskError } from '../maskError'
 import {
   useRedwoodAuthContext,
   useRedwoodDirective,
