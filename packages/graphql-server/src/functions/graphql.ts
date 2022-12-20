@@ -130,17 +130,30 @@ export const createGraphQLHandler = ({
 
   plugins.push(useRedwoodError(logger))
 
-  // Must be "last" in plugin chain, but before error masking
-  // so can process any data added to results and extensions
-  plugins.push(useRedwoodLogger(loggerConfig))
-
   plugins.push(
     useReadinessCheck({
       endpoint: '/graphql/readiness',
-      check: ({ request }) =>
-        request.headers.get('x-yoga-id') === healthCheckId,
+      check: async ({ request }) => {
+        try {
+          const protocol = isDevEnv ? 'http' : 'https'
+          const { host } = new URL(request.url)
+
+          const requestUrl = new URL('/graphql/health', protocol + '://' + host)
+
+          // if we can reach the health check endpoint, we're ready
+          const response = await await yoga.fetch(requestUrl)
+          return response.headers.get('x-yoga-id') === (healthCheckId || 'yoga')
+        } catch (err) {
+          logger.error(err)
+          return false
+        }
+      },
     })
   )
+
+  // Must be "last" in plugin chain, but before error masking
+  // so can process any data added to results and extensions
+  plugins.push(useRedwoodLogger(loggerConfig))
 
   const yoga = createYoga({
     id: healthCheckId,
@@ -148,11 +161,11 @@ export const createGraphQLHandler = ({
     schema,
     plugins,
     maskedErrors: {
-      // maskError,
       errorMessage: defaultError,
       isDev: isDevEnv,
     },
     logging: logger,
+    healthCheckEndpoint: '/graphql/health',
     graphqlEndpoint: graphiQLEndpoint,
     graphiql: isDevEnv
       ? {
@@ -190,6 +203,7 @@ export const createGraphQLHandler = ({
         event.path,
         protocol + '://' + (event.requestContext?.domainName || 'localhost')
       )
+
       if (event.queryStringParameters != null) {
         for (const name in event.queryStringParameters) {
           const value = event.queryStringParameters[name]
@@ -256,7 +270,6 @@ export const createGraphQLHandler = ({
     // Comment out for now since GraphiQL doesn't work with this header anymore
     // because it loads its UI from a CDN and needs text/html to be the response type
     // lambdaResponse.headers['content-type'] = 'application/json'
-
     return lambdaResponse
   }
 
