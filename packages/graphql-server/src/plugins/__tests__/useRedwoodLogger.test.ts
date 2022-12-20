@@ -72,10 +72,7 @@ describe('Populates context', () => {
     '_' + Math.random().toString(36).substr(2, 9)
   )
 
-  const { logger } = setupLogger(
-    { level: 'trace', prettyPrint: false },
-    logFile
-  )
+  const { logger } = setupLogger({ level: 'trace' }, logFile)
 
   it('Should log debug statements around GraphQL the execution phase', async () => {
     const loggerConfig = {

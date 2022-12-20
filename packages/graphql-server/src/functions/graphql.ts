@@ -7,66 +7,28 @@ import type {
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
-import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import {
-  Plugin,
-  YogaMaskedErrorOpts,
-  useReadinessCheck,
-  createYoga,
-  createGraphQLError,
-} from 'graphql-yoga'
+import { GraphQLSchema, OperationTypeNode } from 'graphql'
+import { Plugin, useReadinessCheck, createYoga } from 'graphql-yoga'
 
 import { mapRwCorsOptionsToYoga } from '../cors'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
-import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
-import type { useRedwoodDirectiveReturn } from '../plugins/useRedwoodDirective'
+// import { maskError } from '../maskError'
 import {
-  DirectivePluginOptions,
+  useRedwoodAuthContext,
   useRedwoodDirective,
+  useRedwoodError,
+  useRedwoodGlobalContextSetter,
+  useRedwoodLogger,
+  useRedwoodPopulateContext,
+} from '../plugins'
+import type {
+  useRedwoodDirectiveReturn,
+  DirectivePluginOptions,
 } from '../plugins/useRedwoodDirective'
-import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
-import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
-import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
 
 import type { GraphQLHandlerOptions } from './types'
-
-/*
- * Prevent unexpected error messages from leaking to the GraphQL clients.
- * Unexpected errors are those that are not Envelop, GraphQL, or Redwood errors
- **/
-const maskError: YogaMaskedErrorOpts['maskError'] = (
-  err: any,
-  message: string
-) => {
-  const error = err.error
-  const code = error?.extensions && err.error.extensions?.code
-
-  // If using graphql-scalars, when validating input
-  // the original TypeError is wrapped in an GraphQLError object.
-  // We extract out and present the portion of the original error's
-  // validation message that is friendly to send to the end user
-  // @see https://github.com/Urigo/graphql-scalars and their validate method
-  // if (err && err instanceof GraphQLError) {
-  //   if (err && err instanceof TypeError) {
-  //     return new ValidationError(err.message)
-  //   }
-  // }
-
-  if (error instanceof GraphQLError && code) {
-    return createGraphQLError(error.message, {
-      extensions: error.extensions,
-      originalError: error.originalError,
-    })
-  }
-
-  return createGraphQLError(message, {
-    extensions: error.extensions,
-    originalError: err,
-  })
-}
-
 /**
  * Creates an Enveloped GraphQL Server, configured with default Redwood plugins
  *
@@ -166,6 +128,8 @@ export const createGraphQLHandler = ({
     plugins.push(...extraPlugins)
   }
 
+  plugins.push(useRedwoodError(logger))
+
   // Must be "last" in plugin chain, but before error masking
   // so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
@@ -184,7 +148,7 @@ export const createGraphQLHandler = ({
     schema,
     plugins,
     maskedErrors: {
-      maskError,
+      // maskError,
       errorMessage: defaultError,
       isDev: isDevEnv,
     },

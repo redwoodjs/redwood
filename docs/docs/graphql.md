@@ -1258,10 +1258,10 @@ Need you own custom error and message?
 
 Maybe you're integrating with a third-party api and want to handle errors from that service and also want control of how that error is shared with your user client-side.
 
-Simply extend from `RedwoodGraphQLError` and you're all set!
+Simply extend from `RedwoodError` and you're all set!
 
 ```tsx
-export class MyCustomError extends RedwoodGraphQLError {
+export class MyCustomError extends RedwoodError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)
   }
@@ -1271,7 +1271,7 @@ export class MyCustomError extends RedwoodGraphQLError {
 For example, in your service, you can create and use it to handle the error and return a friendly message:
 
 ```tsx
-export class WeatherError extends RedwoodGraphQLError {
+export class WeatherError extends RedwoodError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)
   }
