@@ -81,6 +81,7 @@ describe('GraphQL Readiness Check', () => {
 
       const mockedEvent = mockLambdaEvent({
         headers: {
+          'x-yoga-id': 'yoga',
           'Content-Type': 'application/json',
         },
         path: '/graphql/readiness',
@@ -91,7 +92,31 @@ describe('GraphQL Readiness Check', () => {
 
       expect(response.statusCode).toBe(200)
     })
+
+    it('returns 503 if the default health check id does not match', async () => {
+      const handler = createGraphQLHandler({
+        loggerConfig: { logger: createLogger({}), options: {} },
+        sdls: {},
+        directives: {},
+        services: {},
+        onException: () => {},
+      })
+
+      const mockedEvent = mockLambdaEvent({
+        headers: {
+          'x-yoga-id': 'wrong-custom-health-check-id',
+          'Content-Type': 'application/json',
+        },
+        path: '/graphql/readiness',
+        httpMethod: 'GET',
+      })
+
+      const response = await handler(mockedEvent, {} as Context)
+
+      expect(response.statusCode).toBe(503)
+    })
   })
+
   describe('when making a check with a custom health check id to determine readiness', () => {
     it('returns ok', async () => {
       const handler = createGraphQLHandler({
@@ -105,6 +130,7 @@ describe('GraphQL Readiness Check', () => {
 
       const mockedEvent = mockLambdaEvent({
         headers: {
+          'x-yoga-id': 'custom-health-check-id',
           'Content-Type': 'application/json',
         },
         path: '/graphql/readiness',
@@ -114,6 +140,30 @@ describe('GraphQL Readiness Check', () => {
       const response = await handler(mockedEvent, {} as Context)
 
       expect(response.statusCode).toBe(200)
+    })
+
+    it('returns 503 if the health check id does not match', async () => {
+      const handler = createGraphQLHandler({
+        healthCheckId: 'custom-health-check-id',
+        loggerConfig: { logger: createLogger({}), options: {} },
+        sdls: {},
+        directives: {},
+        services: {},
+        onException: () => {},
+      })
+
+      const mockedEvent = mockLambdaEvent({
+        headers: {
+          'x-yoga-id': 'wrong-custom-health-check-id',
+          'Content-Type': 'application/json',
+        },
+        path: '/graphql/readiness',
+        httpMethod: 'GET',
+      })
+
+      const response = await handler(mockedEvent, {} as Context)
+
+      expect(response.statusCode).toBe(503)
     })
   })
 })

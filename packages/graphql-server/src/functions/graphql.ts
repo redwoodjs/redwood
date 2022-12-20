@@ -139,9 +139,18 @@ export const createGraphQLHandler = ({
 
           const requestUrl = new URL('/graphql/health', protocol + '://' + host)
 
-          // if we can reach the health check endpoint, we're ready
+          // if we can reach the health check endpoint ...
           const response = await await yoga.fetch(requestUrl)
-          return response.headers.get('x-yoga-id') === (healthCheckId || 'yoga')
+
+          const expectedHealthCheckId = healthCheckId || 'yoga'
+
+          // ... and the health check id's match the request and response's
+          const status =
+            response.headers.get('x-yoga-id') === expectedHealthCheckId &&
+            request.headers.get('x-yoga-id') === expectedHealthCheckId
+
+          // then we're good to go (or not)
+          return status
         } catch (err) {
           logger.error(err)
           return false

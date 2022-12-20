@@ -554,13 +554,13 @@ For local development,
 with the proxy using `curl` from the command line:
 
 ```bash
-curl "http://localhost:8910/.redwood/functions/graphql/health"
+curl "http://localhost:8910/.redwood/functions/graphql/health" -i
 ```
 
 or by directly invoking the graphql function:
 
 ```bash
-curl "http://localhost:8911/graphql/health"
+curl "http://localhost:8911/graphql/health" -i
 ```
 
 you should get the response:
@@ -587,15 +587,16 @@ For local development, you can make a request to the proxy:
 
 ```bash
 curl "http://localhost:8910/.redwood/functions/graphql/readiness" \
-     -H 'x-yoga-id: yoga'
+     -H 'x-yoga-id: yoga' \
+     -i
 ```
 
 or directly invoke the graphql function:
 
 ```bash
 curl "http://localhost:8911/graphql/readiness" \
-     -H 'x-yoga-id: yoga'
-
+     -H 'x-yoga-id: yoga' \
+     -i
 ```
 
 Either way, you should get the following response:
