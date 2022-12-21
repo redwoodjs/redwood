@@ -12,11 +12,11 @@ yarn rw setup auth clerk
 
 This installs all the packages, writes all the files, and makes all the code modifications you need.
 For a detailed explanation of all the api- and web-side changes that aren't exclusive to Clerk, see the top-level [Authentication](../authentication.md) doc.
-There is one Clerk-specific thing we'll get to, but for now, let's focus on Clerk's side of things.
+There's one Clerk-specific thing we'll get to, but for now, let's focus on Clerk's side of things.
 
 If you don't have a Clerk account yet, now's the time to make one: navigate to https://clerk.dev and sign up, then create an application.
 The defaults are good enough to get us going, but feel free to configure things as you wish.
-Next we'll get the application's API keys from its dashboard.
+we'll get the application's API keys from its dashboard next.
 
 :::note we'll only focus on the development instance
 
@@ -39,7 +39,7 @@ CLERK_API_KEY="..."
 CLERK_JWT_KEY="..."
 ```
 
-Lastly, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be available to the web side:
+Lastly, in `redwood.toml`, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be available to the web side:
 
 ```toml title="redwood.toml"
 [web]
@@ -49,7 +49,7 @@ Lastly, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be 
 
 That should be enough; now, things should just work.
 Let's make sure: if this is a brand new project, create a home page.
-There we'll destructure `signUp` from the `useAuth` hook (import that from `'src/auth'`):
+There we'll destructure `isAuthenticated` and `signUp` from the `useAuth` hook (import that from `'src/auth'`):
 
 ```
 yarn rw g page home /
@@ -64,14 +64,16 @@ import { useAuth } from 'src/auth'
 
 const HomePage = () => {
   // highlight-next-line
-  const { signUp } = useAuth()
+  const { isAuthenticated, signUp } = useAuth()
 
   return (
     <>
       {/* MetaTags, h1, paragraphs, etc. */}
 
-      // highlight-next-line
+      // highlight-start
+      <p>{JSON.stringify({ isAuthenticated })}</p>
       <button onClick={signUp}>sign up</button>
+      // highlight-end
     </>
   )
 }
@@ -82,6 +84,8 @@ export default HomePage
 Clicking sign up should open a sign-up box:
 
 <img width="1522" alt="image" src="https://user-images.githubusercontent.com/32992335/208342825-b380f8f8-7b76-4be9-a0a5-e64740a03bd3.png" />
+
+After you sign up, you should see `{"isAuthenticated":true}` on the page.
 
 ## Deep dive: the `ClerkStatusUpdater` component
 
