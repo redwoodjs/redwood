@@ -6740,6 +6740,7 @@ __metadata:
     prettier: 2.8.1
     prisma: 4.7.1
     prompts: 2.4.2
+    query-registry: ^2.6.0
     rimraf: 3.0.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
@@ -21932,7 +21933,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-error@npm:^1.1.1":
+"make-error@npm:^1.1.1, make-error@npm:^1.3.6":
   version: 1.3.6
   resolution: "make-error@npm:1.3.6"
   checksum: 171e458d86854c6b3fc46610cfacf0b45149ba043782558c6875d9f42f222124384ad0b468c92e996d815a8a2003817a710c0a160e49c1c394626f76fa45396f
@@ -25639,6 +25640,19 @@ __metadata:
   version: 6.5.3
   resolution: "qs@npm:6.5.3"
   checksum: 6631d4f2fa9d315e480662646745a4aa3a708817fbffe2cbdacec8ab9be130f92740c66191770fe9b704bc5fa9c1cc1f6596f55ad132fef7bd3ad1582f199eb0
+  languageName: node
+  linkType: hard
+
+"query-registry@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "query-registry@npm:2.6.0"
+  dependencies:
+    isomorphic-unfetch: ^3.1.0
+    make-error: ^1.3.6
+    tiny-lru: ^8.0.2
+    url-join: 4.0.1
+    validate-npm-package-name: ^4.0.0
+  checksum: 52321452b4be383c26162a0c268f32708dbdf25d6001f8180d1fdbe7f551b512734fcaddb54ea6fa3ec3cf2acb9ffe62656e8ddaa12027e59aac636f04760fc9
   languageName: node
   linkType: hard
 
@@ -29918,6 +29932,13 @@ __metadata:
   version: 0.1.0
   resolution: "urix@npm:0.1.0"
   checksum: 264f1b29360c33c0aec5fb9819d7e28f15d1a3b83175d2bcc9131efe8583f459f07364957ae3527f1478659ec5b2d0f1ad401dfb625f73e4d424b3ae35fc5fc0
+  languageName: node
+  linkType: hard
+
+"url-join@npm:4.0.1":
+  version: 4.0.1
+  resolution: "url-join@npm:4.0.1"
+  checksum: ac65e2c7c562d7b49b68edddcf55385d3e922bc1dd5d90419ea40b53b6de1607d1e45ceb71efb9d60da02c681d13c6cb3a1aa8b13fc0c989dfc219df97ee992d
   languageName: node
   linkType: hard
 

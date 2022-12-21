@@ -3,6 +3,7 @@ import path from 'path'
 import execa from 'execa'
 import fs from 'fs-extra'
 import prompts from 'prompts'
+import { getPackument } from 'query-registry'
 import terminalLink from 'terminal-link'
 
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
@@ -205,11 +206,20 @@ export async function builder(yargs) {
 }
 
 async function getAuthHandler(module) {
-  const { version } = fs.readJSONSync(
-    path.resolve(__dirname, '../../../../package.json')
-  )
+  // packageJsonPath will be something like
+  // /Users/bob/tmp/rw-app/node_modules/@redwoodjs/cli/package.json
+  const packageJsonPath = path.resolve(__dirname, '../../../../package.json')
+  let { version } = fs.readJSONSync(packageJsonPath)
 
   if (!isInstalled(module)) {
+    const packument = await getPackument({ name: module })
+    if (!packument.versionsToTimestamps[version]) {
+      // Fallback to canary. This is most likely because it's a new package
+      version = 'canary'
+    }
+
+    // We use `version` to make sure we install the same version of the auth
+    // setup package as the rest of the RW packages
     await execa.command(`yarn add -D ${module}@${version}`, {
       stdio: 'inherit',
       cwd: getPaths().base,
@@ -222,9 +232,9 @@ async function getAuthHandler(module) {
 }
 
 function isInstalled(module) {
-  const { dependencies, devDependencies } = fs.readJSONSync(
-    path.join(getPaths().base, 'package.json')
-  )
+  // packageJsonPath will be something like /Users/bob/tmp/rw-app/package.json
+  const packageJsonPath = path.join(getPaths().base, 'package.json')
+  const { dependencies, devDependencies } = fs.readJSONSync(packageJsonPath)
 
   return Object.hasOwn(
     {
