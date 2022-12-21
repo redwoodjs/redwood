@@ -13,7 +13,7 @@ export const handler = async ({ force: forceArg }: Args) => {
   standardAuthHandler({
     basedir: __dirname,
     forceArg,
-    authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-clerk-api`,
+    authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-clerk-api'`,
     provider: 'clerk',
     webPackages: ['@clerk/clerk-react', `@redwoodjs/auth-clerk-web@${version}`],
     apiPackages: [`@redwoodjs/auth-clerk-api@${version}`],

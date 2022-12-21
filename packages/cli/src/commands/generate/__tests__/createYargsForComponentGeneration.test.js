@@ -27,6 +27,7 @@ test('createYargsForComponentGeneration generates a yargs handler as expected', 
 
   // Now lets check that the tasks are being called correctly
   await result.handler({
+    name: 'foo',
     tests: false,
     stories: false,
   })
