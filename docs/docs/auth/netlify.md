@@ -4,51 +4,57 @@ sidebar_label: Netlify
 
 # Netlify Identity Authentication
 
-## Installation
-
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+To get started, run the setup command:
 
 ```bash
 yarn rw setup auth netlify
 ```
 
-## Setup
+This installs all the packages, writes all the files, and makes all the code modifications you need.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Netlify Identity, see the top-level [Authentication](../authentication.md) doc.
+For now let's focus on Netlify's side of things.
 
-You will need to enable Identity on your Netlify site.
+There's a catch with Netlify Identity: your app has to be be deployed to Netlify to use it.
+If this's a deal breaker for you, there's other great auth providers to choose from.
+But here we'll assume it's not and that your app is already deployed.
+(If it isn't, do that first, then come back. And yes, there's a setup command for that: `yarn rw setup deploy netlify`.)
 
-## Netlify Identity Auth Provider Specific Setup
+Once you've deployed your app, go to it's overview, click "Identity", "Enable Identity", and copy the API endpoint in the Identity card.
+(It should look something like `https://my-redwood-app.netlify.app/.netlify/identity`.)
 
-See the Netlify Identity information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
+Netlify Identity works a little differently than the other auth providers in that you don't have to copy API keys to your project's `.env` and `redwood.toml` files.
+Instead, the first time you use it (by, say, calling `signUp` from `useAuth`), it'll ask you for your app's API endpoint.
+So let's go ahead and use it: if this is a brand new project, create a home page.
+There we'll destructure `signUp` from the `useAuth` hook (import that from `'src/auth'`):
 
-
-## Integration
-
-[Netlify Identity](https://docs.netlify.com/visitor-access/identity) offers [Role-based access control (RBAC)](https://docs.netlify.com/visitor-access/identity/manage-existing-users/#user-account-metadata).
-
-### Role-based access control (RBAC)
-
-Role-based access control (RBAC) refers to the idea of assigning permissions to users based on their role within an organization. It provides fine-grained control and offers a simple, manageable approach to access management that is less prone to error than assigning permissions to users individually.
-
-Essentially, a role is a collection of permissions that you can apply to users. A role might be "admin", "editor" or "publisher". This differs from permissions an example of which might be "publish:blog".
-
-### App Metadata
-
-Netlify Identity stores information (such as, support plan subscriptions, security roles, or access control groups) in `app_metadata`. Data stored in `app_metadata` cannot be edited by users.
-
-Create and manage roles for your application in Netlify's "Identity" management views. You can then assign these roles to users.
-
-### Add Application `hasRole` Support
-
-If you intend to support, RBAC then in your `api/src/lib/auth.js` you need to extract `roles` using the `parseJWT` utility and set these roles on `currentUser`.
-
-Netlify will store the user's roles on the `app_metadata` claim and the `parseJWT` function provides an option to extract the roles so they can be assigned to the `currentUser`.
-
-For example:
-
-```jsx title="api/src/lib/auth.js"
-export const getCurrentUser = async (decoded) => {
-  return context.currentUser || { ...decoded, roles: parseJWT({ decoded }).roles }
-}
+```
+yarn rw g page home /
 ```
 
-Now your `currentUser.roles` info will be available to both `requireAuth()` on the api side and `hasRole()` on the web side.
+```tsx title="web/src/pages/HomePage.tsx"
+import { Link, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+
+// highlight-next-line
+import { useAuth } from 'src/auth'
+
+const HomePage = () => {
+  // highlight-next-line
+  const { signUp } = useAuth()
+
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
+
+      // highlight-next-line
+      <button onClick={signUp}>sign up</button>
+    </>
+  )
+}
+
+export default HomePage
+```
+
+Clicking sign up should open a sign-up box; paste the API endpoint you copied earlier there:
+
+<img width="1522" alt="image" src="https://user-images.githubusercontent.com/32992335/208788120-7dc7e544-8e83-42db-8110-a195f6e5ab41.png" />
