@@ -6740,7 +6740,7 @@ __metadata:
     prettier: 2.8.1
     prisma: 4.7.1
     prompts: 2.4.2
-    query-registry: ^2.6.0
+    query-registry: 2.6.0
     rimraf: 3.0.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
@@ -25643,7 +25643,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"query-registry@npm:^2.6.0":
+"query-registry@npm:2.6.0":
   version: 2.6.0
   resolution: "query-registry@npm:2.6.0"
   dependencies:
