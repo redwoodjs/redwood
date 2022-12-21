@@ -783,6 +783,9 @@ And there you have it.
     </tr>
     <tr>
       <td align="center" valign="top" width="20%"><a href="https://github.com/MrOnosa"><img src="https://avatars.githubusercontent.com/u/2931245?v=4" width="100px;" alt=""/><br /><sub><b>Tyler</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://bloeckchengrafik.github.io/"><img src="https://avatars.githubusercontent.com/u/37768199?v=4" width="100px;" alt=""/><br /><sub><b>Christian Bergschneider</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="http://emreerdogan.net/"><img src="https://avatars.githubusercontent.com/u/2360385?v=4" width="100px;" alt=""/><br /><sub><b>Emre Erdoğan</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://tsugitta.com/"><img src="https://avatars.githubusercontent.com/u/8144911?v=4" width="100px;" alt=""/><br /><sub><b>Toshinori Tsugita</b></sub></a></td>
     </tr>
   </tbody>
 </table>
