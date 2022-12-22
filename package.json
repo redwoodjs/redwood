@@ -56,7 +56,7 @@
     "@babel/preset-typescript": "7.18.6",
     "@babel/runtime-corejs3": "7.20.6",
     "@nrwl/nx-cloud": "15.0.2",
-    "@playwright/test": "1.28.1",
+    "@playwright/test": "1.29.1",
     "@replayio/playwright": "0.3.11",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
@@ -79,7 +79,7 @@
     "core-js": "3.26.1",
     "cypress": "11.2.0",
     "cypress-wait-until": "1.7.2",
-    "eslint": "8.29.0",
+    "eslint": "8.30.0",
     "fast-glob": "3.2.12",
     "fs-extra": "11.1.0",
     "is-port-reachable": "3.1.0",
@@ -105,6 +105,6 @@
     "typescript-transform-paths": "3.4.4",
     "zx": "7.1.1"
   },
-  "packageManager": "yarn@3.3.0",
+  "packageManager": "yarn@3.3.1",
   "npmClient": "yarn"
 }
