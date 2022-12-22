@@ -37,6 +37,7 @@ services:
 
 - name: ${PROJECT_NAME}-api
   type: web
+  plan: free
   env: node
   region: oregon
   buildCommand: yarn && yarn rw build api

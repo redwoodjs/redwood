@@ -7,11 +7,15 @@ import { flattenSearchParams, matchPath } from './util'
 type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
 type UseMatchOptions = {
   searchParams?: FlattenSearchParams
+  matchSubPaths?: boolean
 }
 
 /**
- * Returns true if the given pathname matches the current location.pathname,
- * provide searchParams options to match the current location.search
+ * Returns an object of { match: boolean; params: Record<string, unknown>; }
+ * if the path matches the current location match will be true.
+ * Params will be an object of the matched params, if there are any.
+ *
+ * Provide searchParams options to match the current location.search
  *
  * This is useful for components that need to know "active" state, e.g.
  * <NavLink>.
@@ -19,13 +23,16 @@ type UseMatchOptions = {
  * Examples:
  *
  * Match search params key existence
- * const match = useMatch('/about', ['category', 'page'])
+ * const match = useMatch('/about', { searchParams: ['category', 'page'] })
  *
  * Match search params key and value
- * const match = useMatch('/items', [{page: 2}, {category: 'book'}])
+ * const match = useMatch('/items', { searchParams: [{page: 2}, {category: 'book'}] })
  *
  * Mix match
- * const match = useMatch('/list', [{page: 2}, 'gtm'])
+ * const match = useMatch('/list', { searchParams: [{page: 2}, 'gtm'] })
+ *
+ * Match sub paths
+ * const match = useMatch('/product', { matchSubPaths: true })
  *
  */
 const useMatch = (pathname: string, options?: UseMatchOptions) => {
@@ -51,7 +58,9 @@ const useMatch = (pathname: string, options?: UseMatchOptions) => {
     }
   }
 
-  return matchPath(pathname, location.pathname)
+  return matchPath(pathname, location.pathname, {
+    matchSubPaths: options?.matchSubPaths,
+  })
 }
 
 interface LinkProps {
@@ -96,6 +105,7 @@ interface NavLinkProps {
   to: string
   activeClassName: string
   activeMatchParams?: FlattenSearchParams
+  matchSubPaths?: boolean
   onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }
 
@@ -104,13 +114,24 @@ const NavLink = forwardRef<
   NavLinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
 >(
   (
-    { to, activeClassName, activeMatchParams, className, onClick, ...rest },
+    {
+      to,
+      activeClassName,
+      activeMatchParams,
+      matchSubPaths,
+      className,
+      onClick,
+      ...rest
+    },
     ref
   ) => {
     // Separate pathname and search parameters, USVString expected
     const [pathname, queryString] = to.split('?')
     const searchParams = activeMatchParams || flattenSearchParams(queryString)
-    const matchInfo = useMatch(pathname, { searchParams })
+    const matchInfo = useMatch(pathname, {
+      searchParams,
+      matchSubPaths,
+    })
     const theClassName = [className, matchInfo.match && activeClassName]
       .filter(Boolean)
       .join(' ')

@@ -6,6 +6,8 @@ description: Set up an authentication provider
 
 `@redwoodjs/auth` contains both a built-in database-backed authentication system (dbAuth), as well as lightweight wrappers around popular SPA authentication libraries.
 
+- dbAuth _([Redwood Docs](https://redwoodjs.com/docs/auth/dbauth))_
+
 We currently support the following third-party authentication providers:
 
 - Auth0 _([Repo on GitHub](https://github.com/auth0/auth0-spa-js))_

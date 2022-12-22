@@ -11,6 +11,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
+import { getFreePort } from '../lib/ports'
 
 const defaultApiDebugPort = 18911
 
@@ -22,6 +23,63 @@ export const handler = async ({
   apiDebugPort,
 }) => {
   const rwjsPaths = getPaths()
+
+  // Starting values of ports from config (redwood.toml)
+  let apiPreferredPort = parseInt(getConfig().api.port)
+  let webPreferredPort = parseInt(getConfig().web.port)
+
+  // Assume we can have the ports we want
+  let apiAvailablePort = apiPreferredPort
+  let apiPortChangeNeeded = false
+  let webAvailablePort = webPreferredPort
+  let webPortChangeNeeded = false
+
+  // Check api port
+  if (side.includes('api')) {
+    apiAvailablePort = await getFreePort(apiPreferredPort)
+    if (apiAvailablePort === -1) {
+      console.error(`Error could not determine a free port for the api server`)
+      process.exit(1)
+    }
+    apiPortChangeNeeded = apiAvailablePort !== apiPreferredPort
+  }
+
+  // Check web port
+  if (side.includes('web')) {
+    // Extract any ports the user forwarded to the webpack server and prefer that instead
+    const forwardedPortMatches = [
+      ...forward.matchAll(/\-\-port(\=|\s)(?<port>[^\s]*)/g),
+    ]
+    if (forwardedPortMatches.length) {
+      webPreferredPort = forwardedPortMatches.pop().groups.port
+    }
+
+    webAvailablePort = await getFreePort(webPreferredPort, [
+      apiPreferredPort,
+      apiAvailablePort,
+    ])
+    if (webAvailablePort === -1) {
+      console.error(`Error could not determine a free port for the web server`)
+      process.exit(1)
+    }
+    webPortChangeNeeded = webAvailablePort !== webPreferredPort
+  }
+
+  // Check for port conflict and exit with message if found
+  if (apiPortChangeNeeded || webPortChangeNeeded) {
+    let message = `The currently configured ports for the development server are unavailable. Suggested changes to your ports, which can be changed in redwood.toml, are:\n`
+    message += apiPortChangeNeeded
+      ? `  - API to use port ${apiAvailablePort} instead of your currently configured ${apiPreferredPort}\n`
+      : ``
+    message += webPortChangeNeeded
+      ? `  - Web to use port ${webAvailablePort} instead of your currently configured ${webPreferredPort}\n`
+      : ``
+    console.error(message)
+    console.error(
+      `Cannot run the development server until your configured ports are changed or become available.`
+    )
+    process.exit(1)
+  }
 
   if (side.includes('api')) {
     try {
@@ -39,7 +97,7 @@ export const handler = async ({
     }
 
     try {
-      await shutdownPort(getConfig().api.port)
+      await shutdownPort(apiAvailablePort)
     } catch (e) {
       errorTelemetry(process.argv, `Error shutting down "api": ${e.message}`)
       console.error(
@@ -50,7 +108,7 @@ export const handler = async ({
 
   if (side.includes('web')) {
     try {
-      await shutdownPort(getConfig().web.port)
+      await shutdownPort(webAvailablePort)
     } catch (e) {
       errorTelemetry(process.argv, `Error shutting down "web": ${e.message}`)
       console.error(
@@ -86,7 +144,7 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch ${getApiDebugFlag()} | rw-log-formatter"`,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} ${getApiDebugFlag()} | rw-log-formatter"`,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
