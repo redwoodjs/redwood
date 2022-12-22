@@ -22,7 +22,7 @@ We're using [Firebase Google Sign-In](https://firebase.google.com/docs/auth/web/
 import * as firebaseAuth from '@firebase/auth'
 import { initializeApp, getApp, getApps } from 'firebase/app'
 
-import { createFirebaseAuth } from '@redwoodjs/auth-providers-web'
+import { createAuth } from '@redwoodjs/auth-providers-web'
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -50,7 +50,7 @@ export const firebaseClient = {
   firebaseApp,
 }
 
-export const { AuthProvider, useAuth } = createFirebaseAuth(firebaseClient)
+export const { AuthProvider, useAuth } = createAuth(firebaseClient)
 ```
 
 ## Usage

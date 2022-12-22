@@ -14,10 +14,10 @@ export const handler = async ({ force: forceArg }: Args) => {
     basedir: __dirname,
     forceArg,
     provider: 'supabase',
-    authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-supabase-api@${version}'`,
-    apiPackages: [`@redwoodjs/auth-providers-api@${version}`],
+    authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-supabase-api'`,
+    apiPackages: [`@redwoodjs/auth-supabase-api@${version}`],
     webPackages: [
-      `@redwoodjs/auth-providers-web@${version}`,
+      `@redwoodjs/auth-supabase-web@${version}`,
       '@supabase/supabase-js@1.35.7',
     ],
     notes: [

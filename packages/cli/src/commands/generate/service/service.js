@@ -383,6 +383,11 @@ export const builder = (yargs) => {
       description: 'Name of the service',
       type: 'string',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',

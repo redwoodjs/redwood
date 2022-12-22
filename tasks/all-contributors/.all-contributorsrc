@@ -3709,6 +3709,69 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "linus1703",
+      "name": "Linus Timm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6771965?v=4",
+      "profile": "https://github.com/linus1703",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mabadir",
+      "name": "Mina Abadir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3389914?v=4",
+      "profile": "https://github.com/mabadir",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tomjdickson",
+      "name": "Tom Dickson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44155439?v=4",
+      "profile": "https://github.com/tomjdickson",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MrOnosa",
+      "name": "Tyler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2931245?v=4",
+      "profile": "https://github.com/MrOnosa",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Bloeckchengrafik",
+      "name": "Christian Bergschneider",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37768199?v=4",
+      "profile": "https://bloeckchengrafik.github.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "EmreErdogan",
+      "name": "Emre Erdoğan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2360385?v=4",
+      "profile": "http://emreerdogan.net/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tsugitta",
+      "name": "Toshinori Tsugita",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8144911?v=4",
+      "profile": "https://tsugitta.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }

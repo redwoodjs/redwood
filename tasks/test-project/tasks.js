@@ -449,7 +449,11 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       await execa('yarn rwfw project:copy', [], execaOptions)
     }
 
-    await execa('yarn rw g dbAuth --no-webauthn', [], execaOptions)
+    await execa(
+      'yarn rw g dbAuth --no-webauthn --username-label=username --password-label=password',
+      [],
+      execaOptions
+    )
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
@@ -513,11 +517,17 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       .replaceAll('username', 'full-name')
       .replaceAll('Username', 'Full Name')
 
-    const newContentSignupPageTs = contentSignupPageTs.replace(
-      '<FieldError name="password" className="rw-field-error" />',
-      '<FieldError name="password" className="rw-field-error" />\n' +
-        fullNameFields
-    )
+    const newContentSignupPageTs = contentSignupPageTs
+      .replace(
+        '<FieldError name="password" className="rw-field-error" />',
+        '<FieldError name="password" className="rw-field-error" />\n' +
+          fullNameFields
+      )
+      // include full-name in the data we pass to `signUp()`
+      .replace(
+        'password: data.password',
+        "password: data.password, 'full-name': data['full-name']"
+      )
 
     fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
 

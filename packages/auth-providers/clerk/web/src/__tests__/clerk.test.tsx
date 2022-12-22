@@ -8,7 +8,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createClerkAuth } from '../clerk'
+import { createAuth } from '../clerk'
 
 const user: Partial<UserResource> = {
   id: 'unique_user_id',
@@ -106,7 +106,7 @@ function getClerkAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createClerkAuth(customProviderHooks)
+  const { useAuth, AuthProvider } = createAuth(customProviderHooks)
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
   })
