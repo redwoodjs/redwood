@@ -30,7 +30,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.6",
+    "@babel/runtime-corejs3": "7.20.7",
     "@iarna/toml": "2.2.5",
     "@prisma/internals": "4.8.0",
     "@redwoodjs/internal": "3.8.0",
@@ -55,8 +55,8 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.19.3",
-    "@babel/core": "7.20.5",
+    "@babel/cli": "7.20.7",
+    "@babel/core": "7.20.7",
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.191",
     "@types/lru-cache": "5.1.1",

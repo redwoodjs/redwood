@@ -31,7 +31,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.6",
+    "@babel/runtime-corejs3": "7.20.7",
     "@prisma/client": "4.8.0",
     "base64url": "3.0.1",
     "core-js": "3.26.1",
@@ -47,8 +47,8 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.19.3",
-    "@babel/core": "7.20.5",
+    "@babel/cli": "7.20.7",
+    "@babel/core": "7.20.7",
     "@clerk/clerk-sdk-node": "3.9.2",
     "@redwoodjs/auth": "3.8.0",
     "@simplewebauthn/server": "6.2.2",
