@@ -59,7 +59,6 @@ module.exports = {
         'packages/forms/src/**',
         'packages/prerender/src/browserUtils/**',
         'packages/router/src/**',
-        'packages/auth-providers-web/src/**',
         'packages/web/src/**',
       ],
       env: {

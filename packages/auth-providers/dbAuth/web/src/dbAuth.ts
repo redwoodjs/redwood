@@ -36,10 +36,6 @@ export interface DbAuthClientArgs {
   }
 }
 
-declare global {
-  let RWJS_API_URL: string
-}
-
 export function createDbAuthClient({
   webAuthn,
   dbAuthUrl,

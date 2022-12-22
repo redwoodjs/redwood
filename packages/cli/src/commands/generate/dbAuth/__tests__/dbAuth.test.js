@@ -1,10 +1,13 @@
 globalThis.__dirname = __dirname
-import path from 'path'
 
 // Load mocks
 import '../../../../lib/test'
 
 const realfs = jest.requireActual('fs')
+
+import fs from 'fs'
+import path from 'path'
+
 import Enquirer from 'enquirer'
 
 import { getPaths } from '../../../../lib'

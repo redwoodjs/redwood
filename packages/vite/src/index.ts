@@ -13,9 +13,6 @@ import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/bab
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-const redwoodConfig = getConfig()
-const redwoodPaths = getPaths()
-
 const readFile = promisify(fsReadFile)
 
 const clientEntryPath = path.join(redwoodPaths.web.src, 'entry-client.jsx')
@@ -26,6 +23,9 @@ const clientEntryPath = path.join(redwoodPaths.web.src, 'entry-client.jsx')
  * @returns {VitePlugin}
  */
 export default function redwoodPluginVite() {
+  const redwoodConfig = getConfig()
+  const redwoodPaths = getPaths()
+
   return [
     {
       name: 'redwood-plugin-vite',
@@ -121,6 +121,7 @@ export default function redwoodPluginVite() {
               // Enable esbuild polyfill plugins
               // This is needed for DevFatalErrorPage (and stacktracey)
               plugins: [
+                // @ts-expect-error type error in plugin
                 NodeGlobalsPolyfillPlugin({
                   buffer: true,
                 }),
