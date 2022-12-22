@@ -205,10 +205,11 @@ export async function builder(yargs) {
 }
 
 async function getAuthHandler(module) {
-  // Here we're reading this package's (@redwoodjs/cli) package.json
-  let { version } = fs.readJSONSync(
-    path.resolve(__dirname, '../../../../package.json')
-  )
+  // Here we're reading this package's (@redwoodjs/cli) package.json.
+  // So, in a user's project, `packageJsonPath` will be something like...
+  // /Users/bob/tmp/rw-app/node_modules/@redwoodjs/cli/package.json
+  const packageJsonPath = path.resolve(__dirname, '../../../../package.json')
+  let { version } = fs.readJSONSync(packageJsonPath)
 
   if (!isInstalled(module)) {
     const { stdout } = await execa.command(
