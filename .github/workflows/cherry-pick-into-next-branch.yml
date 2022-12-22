@@ -73,7 +73,7 @@ jobs:
           fetch-depth: 0
 
       - name: Cherry pick into next PR
-        uses: carloscastrojumo/github-cherry-pick-action@v1.0.3
+        uses: carloscastrojumo/github-cherry-pick-action@v1.0.6
         with:
           # We specify a token because we want other workflows (like CI) to run on this PR.
           # If we omit this, it uses the default token (GITHUB_TOKEN) which doesn't trigger other workflows.

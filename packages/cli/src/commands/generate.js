@@ -1,8 +1,6 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { isTypeScriptProject } from '../lib/project'
-
 export const command = 'generate <type>'
 export const aliases = ['g']
 export const description = 'Generate boilerplate code and type definitions'
@@ -30,19 +28,3 @@ export const builder = (yargs) =>
         'https://redwoodjs.com/docs/cli-commands#generate-alias-g'
       )}`
     )
-
-/** @type {Record<string, import('yargs').Options>} */
-export const yargsDefaults = {
-  force: {
-    alias: 'f',
-    default: false,
-    description: 'Overwrite existing files',
-    type: 'boolean',
-  },
-  typescript: {
-    alias: 'ts',
-    default: isTypeScriptProject(),
-    description: 'Generate TypeScript files',
-    type: 'boolean',
-  },
-}

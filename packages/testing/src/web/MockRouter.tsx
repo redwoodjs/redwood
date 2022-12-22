@@ -13,8 +13,10 @@ export * from '@redwoodjs/router/dist/index'
 export const routes: { [routeName: string]: () => string } = {}
 
 /**
- * We overwrite the default `Router` export.
- * It populates the `routes.<pagename>()` utility object.
+ * We overwrite the default `Router` export (see jest-preset). So every import
+ * of @redwoodjs/router will import this Router instead
+ *
+ * This router populates the `routes.<pageName>()` utility object.
  */
 export const Router: React.FC<RouterProps> = ({ children }) => {
   const flatChildArray = flattenAll(children)
