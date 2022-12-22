@@ -3,7 +3,6 @@ import path from 'path'
 import execa from 'execa'
 import fs from 'fs-extra'
 import prompts from 'prompts'
-import { getPackument } from 'query-registry'
 import terminalLink from 'terminal-link'
 
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
@@ -206,14 +205,19 @@ export async function builder(yargs) {
 }
 
 async function getAuthHandler(module) {
-  // packageJsonPath will be something like
-  // /Users/bob/tmp/rw-app/node_modules/@redwoodjs/cli/package.json
-  const packageJsonPath = path.resolve(__dirname, '../../../../package.json')
-  let { version } = fs.readJSONSync(packageJsonPath)
+  // Here we're reading this package's (@redwoodjs/cli) package.json
+  let { version } = fs.readJSONSync(
+    path.resolve(__dirname, '../../../../package.json')
+  )
 
   if (!isInstalled(module)) {
-    const packument = await getPackument({ name: module })
-    if (!packument.versionsToTimestamps[version]) {
+    const { stdout } = await execa.command(
+      `yarn npm info ${module} --fields versions --json`
+    )
+
+    const versionIsPublished = JSON.parse(stdout).versions.includes(version)
+
+    if (!versionIsPublished) {
       // Fallback to canary. This is most likely because it's a new package
       version = 'canary'
     }
@@ -231,10 +235,16 @@ async function getAuthHandler(module) {
   return handler
 }
 
+/**
+ * Check if a user's project's has a module listed as a dependency or devDependency.
+ *
+ * @param {string} module
+ * @returns {boolean}
+ */
 function isInstalled(module) {
-  // packageJsonPath will be something like /Users/bob/tmp/rw-app/package.json
-  const packageJsonPath = path.join(getPaths().base, 'package.json')
-  const { dependencies, devDependencies } = fs.readJSONSync(packageJsonPath)
+  const { dependencies, devDependencies } = fs.readJSONSync(
+    path.join(getPaths().base, 'package.json')
+  )
 
   return Object.hasOwn(
     {
