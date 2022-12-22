@@ -32,7 +32,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.6",
     "@iarna/toml": "2.2.5",
-    "@prisma/internals": "4.7.1",
+    "@prisma/internals": "4.8.0",
     "@redwoodjs/internal": "3.2.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
