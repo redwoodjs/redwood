@@ -10,7 +10,7 @@ import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
 import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
-import { templateForComponentFile } from '../helpers'
+import { validateName, templateForComponentFile } from '../helpers'
 
 export const files = ({
   name,
@@ -122,6 +122,8 @@ export const builder = (yargs) => {
 // This could be built using createYargsForComponentGeneration;
 // however, we need to add a message after generating the function files
 export const handler = async ({ name, force, ...rest }) => {
+  validateName(name)
+
   const tasks = new Listr(
     [
       {

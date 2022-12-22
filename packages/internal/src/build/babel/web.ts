@@ -166,7 +166,6 @@ export const getWebSideBabelPresets = (options: Flags) => {
   }
   return [
     ['@babel/preset-react', reactPresetConfig],
-    ['@babel/preset-typescript', undefined, 'rwjs-babel-preset-typescript'],
     [
       '@babel/preset-env',
       {
@@ -185,6 +184,7 @@ export const getWebSideBabelPresets = (options: Flags) => {
       },
       'rwjs-babel-preset-env',
     ],
+    ['@babel/preset-typescript', undefined, 'rwjs-babel-preset-typescript'],
   ]
 }
 

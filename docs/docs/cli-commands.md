@@ -588,12 +588,12 @@ Generate log in, sign up, forgot password and password reset pages for dbAuth
 yarn redwood generate dbAuth
 ```
 
-| Arguments & Options  | Description                                                                                                                           |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `--username-label`   | The label to give the username field on the auth forms, e.g. "Email". Defaults to "Username". If not specified you will be prompted   |
-| `--password-label`   | The label to give the password field on the auth forms, e.g. "Secret". Defaults to "Password". If not specified you will be prompted  |
-| `--webAuthn`         | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted                                      |
-| `--rollback`        | Rollback changes if an error occurs [default: true] 
+| Arguments & Options | Description                                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `--username-label`  | The label to give the username field on the auth forms, e.g. "Email". Defaults to "Username". If not specified you will be prompted  |
+| `--password-label`  | The label to give the password field on the auth forms, e.g. "Secret". Defaults to "Password". If not specified you will be prompted |
+| `--webAuthn`        | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted                                     |
+| `--rollback`        | Rollback changes if an error occurs [default: true]                                                                                  |
 
 If you don't want to create your own log in, sign up, forgot password and
 password reset pages from scratch you can use this generator. The pages will be
@@ -772,11 +772,11 @@ Generate a RedwoodRecord model.
 yarn redwood generate model <name>
 ```
 
-| Arguments & Options | Description                                           |
-| ------------------- | ----------------------------------------------------- |
-| `name`              | Name of the model (in schema.prisma)                  |
-| `--force, -f`       | Overwrite existing files                              |
-| `--rollback`        | Rollback changes if an error occurs [default: true]   |
+| Arguments & Options | Description                                         |
+| ------------------- | --------------------------------------------------- |
+| `name`              | Name of the model (in schema.prisma)                |
+| `--force, -f`       | Overwrite existing files                            |
+| `--rollback`        | Rollback changes if an error occurs [default: true] |
 
 **Usage**
 
@@ -950,7 +950,7 @@ The content of the generated components is different from what you'd get by runn
 | `--force, -f`        | Overwrite existing files                                                                                                                                                                              |
 | `--tailwind`         | Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)                                                                                               |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                  |
-| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                              |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                                                                   |
 
 **Usage**
 
@@ -1133,7 +1133,7 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | `--force, -f`        | Overwrite existing files                                                                                                                                                                               |
 | `--tests`            | Generate service test and scenario [default: true]                                                                                                                                                     |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                   |
-| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                              |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                                                                    |
 
 > **Note:** The generated sdl will include the `@requireAuth` directive by default to ensure queries and mutations are secure. If your app's queries and mutations are all public, you can set up a custom SDL generator template to apply `@skipAuth` (or a custom validator directive) to suit you application's needs.
 
@@ -1753,10 +1753,10 @@ This command creates a setup file in `api/src/lib/cache.{ts|js}` for connecting 
 yarn redwood setup cache <client>
 ```
 
-| Arguments & Options | Description              |
-| :------------------ | :----------------------- |
+| Arguments & Options | Description                                             |
+| :------------------ | :------------------------------------------------------ |
 | `client`            | Name of the client to configure, `memcached` or `redis` |
-| `--force, -f`       | Overwrite existing files |
+| `--force, -f`       | Overwrite existing files                                |
 
 ### setup custom-web-index
 

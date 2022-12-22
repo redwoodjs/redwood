@@ -9,7 +9,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
 import { prepareForRollback } from '../../../lib/rollback'
-import { yargsDefaults } from '../helpers'
+import { validateName, yargsDefaults } from '../helpers'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 const TSCONFIG_TEMPLATE = path.resolve(
@@ -69,6 +69,8 @@ export const handler = async ({ force, ...args }) => {
 
      yarn rw exec ${args.name} --param1 true
 `
+
+  validateName(args.name)
 
   const tasks = new Listr(
     [

@@ -9,7 +9,7 @@ import {
 } from './ActivePageContext'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { useIsMounted } from './useIsMounted'
-import { Spec } from './util'
+import { inIframe, Spec } from './util'
 
 import { ParamsProvider, useLocation } from '.'
 
@@ -58,6 +58,11 @@ export const ActiveRouteLoader = ({
   }
 
   useEffect(() => {
+    // Make this hook a no-op if we're rendering in an iframe.
+    if (inIframe()) {
+      return
+    }
+
     globalThis?.scrollTo(0, 0)
 
     if (announcementRef.current) {
