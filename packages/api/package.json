@@ -36,7 +36,7 @@
     "core-js": "3.26.1",
     "cross-undici-fetch": "0.4.14",
     "humanize-string": "2.1.0",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "9.0.0",
     "pascalcase": "1.0.0",
     "pino": "8.8.0",
     "title-case": "3.0.3"
