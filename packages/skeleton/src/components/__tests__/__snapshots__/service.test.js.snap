@@ -1,0 +1,725 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From within the empty-project fixture returns the correct services with a project: service count 1`] = `0`;
+
+exports[`From within the empty-project fixture returns the correct services without a project: service count 1`] = `0`;
+
+exports[`From within the example-todo-main fixture returns the correct services with a project: /api/src/services/todos/todos.js 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/todos/todos.js",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todos",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "createTodo",
+      "parameters": [
+        "body",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "numTodos",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "updateTodoStatus",
+      "parameters": [
+        "id",
+        "status",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "renameTodo",
+      "parameters": [
+        "id",
+        "body",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+  ],
+  "name": "todos",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct services with a project: service count 1`] = `1`;
+
+exports[`From within the example-todo-main fixture returns the correct services without a project: /api/src/services/todos/todos.js 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/todos/todos.js",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todos",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "createTodo",
+      "parameters": [
+        "body",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "numTodos",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "updateTodoStatus",
+      "parameters": [
+        "id",
+        "status",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "renameTodo",
+      "parameters": [
+        "id",
+        "body",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+  ],
+  "name": "todos",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct services without a project: service count 1`] = `1`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct services with a project: /api/src/services/todos/todos.js 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/todos/todos.js",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todos",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithStringRole",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithMultipleRoles",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithInvalidRole",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithInvalidRoles",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithMissingRoles",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithBuiltInDeprecatedDirective",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithMissingRolesAttribute",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithMissingRolesAttributeNumeric",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "createTodo",
+      "parameters": [
+        "body",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "updateTodoStatus",
+      "parameters": [
+        "id",
+        "status",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "renameTodo",
+      "parameters": [
+        "id",
+        "body",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "deleteTodo",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+  ],
+  "name": "todos",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct services with a project: service count 1`] = `1`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct services without a project: /api/src/services/todos/todos.js 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/todos/todos.js",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todos",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithStringRole",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithMultipleRoles",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithInvalidRole",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithInvalidRoles",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithMissingRoles",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithBuiltInDeprecatedDirective",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithMissingRolesAttribute",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "todosWithMissingRolesAttributeNumeric",
+      "parameters": [],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "createTodo",
+      "parameters": [
+        "body",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "updateTodoStatus",
+      "parameters": [
+        "id",
+        "status",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "renameTodo",
+      "parameters": [
+        "id",
+        "body",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/todos/todos.js",
+      "name": "deleteTodo",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "todos",
+      "warnings": [],
+    },
+  ],
+  "name": "todos",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct services without a project: service count 1`] = `1`;
+
+exports[`From within the test-project fixture returns the correct services with a project: /api/src/services/contacts/contacts.ts 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/contacts/contacts.ts",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "contacts",
+      "parameters": [],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "contact",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "createContact",
+      "parameters": [
+        "input",
+      ],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "updateContact",
+      "parameters": [
+        "id",
+        "input",
+      ],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "deleteContact",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+  ],
+  "name": "contacts",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct services with a project: /api/src/services/posts/posts.ts 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/posts/posts.ts",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "posts",
+      "parameters": [],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "post",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "createPost",
+      "parameters": [
+        "input",
+      ],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "updatePost",
+      "parameters": [
+        "id",
+        "input",
+      ],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "deletePost",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "Post",
+      "parameters": [],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+  ],
+  "name": "posts",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct services with a project: /api/src/services/users/users.ts 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/users/users.ts",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [
+        {
+          "code": "00.001",
+          "message": "Could not determine the name of a named export",
+        },
+      ],
+      "filepath": "/api/src/services/users/users.ts",
+      "name": "users",
+      "parameters": [],
+      "serviceName": "users",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/users/users.ts",
+      "name": "user",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "users",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/users/users.ts",
+      "name": "User",
+      "parameters": [],
+      "serviceName": "users",
+      "warnings": [],
+    },
+  ],
+  "name": "users",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct services with a project: service count 1`] = `3`;
+
+exports[`From within the test-project fixture returns the correct services without a project: /api/src/services/contacts/contacts.ts 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/contacts/contacts.ts",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "contacts",
+      "parameters": [],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "contact",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "createContact",
+      "parameters": [
+        "input",
+      ],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "updateContact",
+      "parameters": [
+        "id",
+        "input",
+      ],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/contacts/contacts.ts",
+      "name": "deleteContact",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "contacts",
+      "warnings": [],
+    },
+  ],
+  "name": "contacts",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct services without a project: /api/src/services/posts/posts.ts 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/posts/posts.ts",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "posts",
+      "parameters": [],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "post",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "createPost",
+      "parameters": [
+        "input",
+      ],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "updatePost",
+      "parameters": [
+        "id",
+        "input",
+      ],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "deletePost",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/posts/posts.ts",
+      "name": "Post",
+      "parameters": [],
+      "serviceName": "posts",
+      "warnings": [],
+    },
+  ],
+  "name": "posts",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct services without a project: /api/src/services/users/users.ts 1`] = `
+RedwoodService {
+  "errors": [],
+  "filepath": "/api/src/services/users/users.ts",
+  "functions": [
+    RedwoodServiceFunction {
+      "errors": [
+        {
+          "code": "00.001",
+          "message": "Could not determine the name of a named export",
+        },
+      ],
+      "filepath": "/api/src/services/users/users.ts",
+      "name": "users",
+      "parameters": [],
+      "serviceName": "users",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/users/users.ts",
+      "name": "user",
+      "parameters": [
+        "id",
+      ],
+      "serviceName": "users",
+      "warnings": [],
+    },
+    RedwoodServiceFunction {
+      "errors": [],
+      "filepath": "/api/src/services/users/users.ts",
+      "name": "User",
+      "parameters": [],
+      "serviceName": "users",
+      "warnings": [],
+    },
+  ],
+  "name": "users",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct services without a project: service count 1`] = `3`;

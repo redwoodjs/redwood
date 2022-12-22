@@ -14,7 +14,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "currentUser.sdl",
+  "name": "currentUser",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [],
@@ -91,7 +91,7 @@ RedwoodSDL {
       "warnings": [],
     },
   ],
-  "name": "todos.sdl",
+  "name": "todos",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -130,7 +130,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "currentUser.sdl",
+  "name": "currentUser",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [],
@@ -207,7 +207,7 @@ RedwoodSDL {
       "warnings": [],
     },
   ],
-  "name": "todos.sdl",
+  "name": "todos",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -291,7 +291,7 @@ RedwoodSDL {
       "warnings": [],
     },
   ],
-  "name": "todos.sdl",
+  "name": "todos",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [],
@@ -316,7 +316,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosMutations.sdl",
+  "name": "todosMutations",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -350,7 +350,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithAuthInvalidRolesErrors.sdl",
+  "name": "todosWithAuthInvalidRolesErrors",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -382,7 +382,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithAuthMissingRoleError.sdl",
+  "name": "todosWithAuthMissingRoleError",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -415,7 +415,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithAuthRoles.sdl",
+  "name": "todosWithAuthRoles",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -462,7 +462,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithBuiltInDirectives.sdl",
+  "name": "todosWithBuiltInDirectives",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -505,7 +505,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithMissingAuthRolesAttributeError.sdl",
+  "name": "todosWithMissingAuthRolesAttributeError",
   "queries": [],
   "warnings": [],
 }
@@ -530,7 +530,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithMissingAuthRolesAttributeNumericError.sdl",
+  "name": "todosWithMissingAuthRolesAttributeNumericError",
   "queries": [],
   "warnings": [],
 }
@@ -546,7 +546,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithNumericRoleAuthError.sdl",
+  "name": "todosWithNumericRoleAuthError",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -625,7 +625,7 @@ RedwoodSDL {
       "warnings": [],
     },
   ],
-  "name": "todos.sdl",
+  "name": "todos",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [],
@@ -650,7 +650,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosMutations.sdl",
+  "name": "todosMutations",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -684,7 +684,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithAuthInvalidRolesErrors.sdl",
+  "name": "todosWithAuthInvalidRolesErrors",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -716,7 +716,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithAuthMissingRoleError.sdl",
+  "name": "todosWithAuthMissingRoleError",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -749,7 +749,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithAuthRoles.sdl",
+  "name": "todosWithAuthRoles",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -796,7 +796,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithBuiltInDirectives.sdl",
+  "name": "todosWithBuiltInDirectives",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -839,7 +839,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithMissingAuthRolesAttributeError.sdl",
+  "name": "todosWithMissingAuthRolesAttributeError",
   "queries": [],
   "warnings": [],
 }
@@ -864,7 +864,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithMissingAuthRolesAttributeNumericError.sdl",
+  "name": "todosWithMissingAuthRolesAttributeNumericError",
   "queries": [],
   "warnings": [],
 }
@@ -880,7 +880,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "todosWithNumericRoleAuthError.sdl",
+  "name": "todosWithNumericRoleAuthError",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -979,7 +979,7 @@ RedwoodSDL {
       "warnings": [],
     },
   ],
-  "name": "contacts.sdl",
+  "name": "contacts",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -1084,7 +1084,7 @@ RedwoodSDL {
       "warnings": [],
     },
   ],
-  "name": "posts.sdl",
+  "name": "posts",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -1143,7 +1143,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "users.sdl",
+  "name": "users",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -1239,7 +1239,7 @@ RedwoodSDL {
       "warnings": [],
     },
   ],
-  "name": "contacts.sdl",
+  "name": "contacts",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -1344,7 +1344,7 @@ RedwoodSDL {
       "warnings": [],
     },
   ],
-  "name": "posts.sdl",
+  "name": "posts",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [
@@ -1403,7 +1403,7 @@ RedwoodSDL {
   }
 ",
   "mutations": [],
-  "name": "users.sdl",
+  "name": "users",
   "queries": [
     RedwoodSDLQuery {
       "directiveNames": [

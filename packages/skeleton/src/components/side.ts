@@ -43,7 +43,7 @@ export function extractSides(
 
   const basePath = project ? getPaths(project.filepath).base : getPaths().base
 
-  // TODO: Decide how to automatically find all sides, this assumes the sides exist - BAD!
+  // TODO: Decide how to automatically find all sides, this assumes the sides exist (which they really should)
   sides.push(new RedwoodSide(getPaths(basePath).web.base))
   sides.push(new RedwoodSide(getPaths(basePath).api.base))
 

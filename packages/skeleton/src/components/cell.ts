@@ -44,6 +44,7 @@ export class RedwoodCell extends RedwoodSkeleton {
   constructor(filepath: string) {
     super(filepath)
 
+    // TODO: Just get the gql from the ast not from the source code string
     const code = fs.readFileSync(this.filepath, { encoding: 'utf8', flag: 'r' })
     const ast = getASTFromCode(code)
 

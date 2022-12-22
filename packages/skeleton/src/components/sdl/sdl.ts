@@ -37,7 +37,12 @@ export class RedwoodSDL extends RedwoodSkeleton {
   readonly mutations: RedwoodSDLMutation[] | undefined
 
   constructor(filepath: string) {
-    super(filepath)
+    let nameWithoutSDLExtension = path.parse(filepath).name
+    nameWithoutSDLExtension = nameWithoutSDLExtension.substring(
+      0,
+      nameWithoutSDLExtension.length - 4
+    )
+    super(filepath, nameWithoutSDLExtension)
 
     const ast = getASTFromFile(this.filepath)
     const namedExports: ExportNamedDeclaration[] = []

@@ -9,7 +9,7 @@ import * as page from '../page'
 import { RedwoodProject } from '../project'
 import * as router from '../router'
 import * as sdl from '../sdl/sdl'
-import * as service from '../service'
+import * as service from '../service/service'
 import * as side from '../side'
 
 const FIXTURE_PATH = path.join(

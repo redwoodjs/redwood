@@ -7112,7 +7112,7 @@ __metadata:
     "@babel/traverse": 7.20.5
     "@babel/types": 7.20.5
     "@redwoodjs/internal": 3.2.0
-    "@types/node": 16.18.9
+    "@types/node": 16.18.10
     chalk: 4.1.2
     core-js: 3.26.1
     graphql: 16.6.0

@@ -1,30 +1,33 @@
 import fs from 'fs'
 import path from 'path'
 
+import traverse from '@babel/traverse'
+
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-// import { getASTFromFile } from '../lib/ast'
+import { getASTFromFile } from '../../lib/ast'
+import { RedwoodError, RedwoodWarning } from '../diagnostic'
+import type { RedwoodProject } from '../project'
+import { RedwoodSkeleton } from '../skeleton'
 
-import { RedwoodError, RedwoodWarning } from './diagnostic'
-import type { RedwoodProject } from './project'
-import { RedwoodSkeleton } from './skeleton'
+import { RedwoodServiceFunction } from './function'
 
 export class RedwoodService extends RedwoodSkeleton {
   warnings: RedwoodWarning[] = []
   errors: RedwoodError[] = []
 
+  readonly functions: RedwoodServiceFunction[] = []
+
   constructor(filepath: string) {
     super(filepath)
-
-    // const _ = getASTFromFile(filepath)
-
-    // TODO: Extract all functions
-    // TODO: Extract all function parameters
-
-    // Checks
-
-    // TODO: Check service has corresponding SDL
-    // TODO: Check function parameters match corresponding query or mutation parameters
+    const ast = getASTFromFile(filepath)
+    traverse(ast, {
+      ExportNamedDeclaration: (path) => {
+        this.functions.push(
+          new RedwoodServiceFunction(this.filepath, path.node)
+        )
+      },
+    })
   }
 }
 

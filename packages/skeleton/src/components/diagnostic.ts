@@ -56,6 +56,9 @@ export enum RedwoodErrorCode {
 
   // 0a.xxx - Function
   FUNCTION_NO_HANDLER = '0a.001',
+
+  // 0b.xxx - ServiceFunction
+  SERVICE_FUNCTION_PARAMETERS_DO_NOT_MATCH_SDL_OPERATION = '0b.001',
 }
 
 export interface RedwoodWarning {
@@ -98,4 +101,7 @@ export enum RedwoodWarningCode {
 
   // 0a.xxx - Function
   FUNCTION_ = '0a.001',
+
+  // 0b.xxx - ServiceFunction
+  SERVICE_FUNCTION_ = '0b.001',
 }

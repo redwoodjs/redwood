@@ -21,7 +21,7 @@ import type { RedwoodPage } from './page'
 import { extractRouters } from './router'
 import type { RedwoodRouter } from './router'
 import { extractSDLs, RedwoodSDL } from './sdl/sdl'
-import { extractServices, RedwoodService } from './service'
+import { extractServices, RedwoodService } from './service/service'
 import { extractSides } from './side'
 import type { RedwoodSide } from './side'
 import { RedwoodSkeleton } from './skeleton'
@@ -103,14 +103,14 @@ export class RedwoodProject extends RedwoodSkeleton {
     }
   }
 
-  getSDLs(forceExtract = false): any[] {
+  getSDLs(forceExtract = false): RedwoodSDL[] {
     if (forceExtract || this.sdls === undefined) {
       this.sdls = extractSDLs(this)
     }
     return this.sdls
   }
 
-  getServices(forceExtract = false): any[] {
+  getServices(forceExtract = false): RedwoodService[] {
     if (forceExtract || this.services === undefined) {
       this.services = extractServices(this)
     }
