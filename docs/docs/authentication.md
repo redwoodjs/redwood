@@ -4,23 +4,21 @@ description: Set up an authentication provider
 
 # Authentication
 
-Redwood apps come ready for auth. When you're ready to add auth to your application, there's a great list of providers to choose from, and if you don't see the one you like, you can integrate it via a simple API.
-
 Redwood has integrated auth end to end, from the web side to the api side.
-The router can protect pages via the `Private` component, and even restrict access at the role-level.
+On the web side, the router can protect pages via the `Private` component, and even restrict access at the role-level.
 And if you'd prefer to work with the primitives, the `useAuth` hook exposes all the pieces to build the experience you want.
 
 Likewise, the api side is locked down by default: all SDLs are generated with the `@requireAuth` directive, making sure that making something publicly available is something that you opt into rather than out of.
 You can also require auth anywhere in your Services, and even in your server-ful or -less functions.
 
-Last but not least, Redwood provides it's own auth provider: dbAuth.
+Last but not least, Redwood provides it's own auth provider: [dbAuth](./auth/dbauth.md).
 
 In this doc, we'll cover auth in Redwood at a high level.
 All auth providers share the same interface so the information here will be useful no matter which auth provider you use.
 
 ## Official integrations
 
-Redwood provides official integrations with the following providers:
+When you're ready to add auth to your app, there's a great list of providers to choose from, and if you don't see the one you like, you can integrate it via a simple API:
 
 - [Auth0](./auth/auth0.md)
 - [Azure Active Directory](./auth/azure.md)
@@ -32,13 +30,13 @@ Redwood provides official integrations with the following providers:
 
 :::tip how to tell if an integration is official
 
-You can tell if an integration is official if it's prefixed by the `@redwoodjs` namespace.
+Look for the `@redwoodjs` scope to tell if an integration is official.
 For example, Redwood's Auth0 integration comprises two npm packages: `@redwoodjs/auth-auth0-web` and `@redwoodjs/auth-auth0-api`.
 
 :::
 
-Other than bearing the `@redwoodjs` namespace, the reason these providers are official is that we're committed to keeping them up to date.
-You can set any of them up via the CLI's auth setup command:
+Other than bearing the `@redwoodjs` scope, the reason these providers are official is that we're committed to keeping them up to date.
+You can set up any of them via the corresponding auth setup command:
 
 ```
 yarn rw setup auth auth0
@@ -58,7 +56,12 @@ When you set up an auth provider, the setup command makes a new file, `web/src/a
 
 Once auth is setup on the web side, every GraphQL request includes a JWT.
 The api side needs a way of verifying and decoding this token if it's to do anything with it.
-Cue the `authDecoder` the `createGraphQLHandler` in `api/src/functions/graphql.ts`:
+There's two steps to this process:
+
+- decoding the token
+- mapping it into a user object
+
+The `createGraphQLHandler` in `api/src/functions/graphql.ts` takes two props, `authDecoder` and `getCurrentUser`, for each of these steps (respectively):
 
 ```ts title="api/src/functions/graphql.ts"
 // highlight-next-line
@@ -69,14 +72,16 @@ import directives from 'src/directives/**/*.{js,ts}'
 import sdls from 'src/graphql/**/*.sdl.{js,ts}'
 import services from 'src/services/**/*.{js,ts}'
 
+// highlight-next-line
 import { getCurrentUser } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
 export const handler = createGraphQLHandler({
-  // highlight-next-line
+  // highlight-start
   authDecoder,
   getCurrentUser,
+  // highlight-end
   loggerConfig: { logger, options: {} },
   directives,
   sdls,
@@ -90,9 +95,8 @@ export const handler = createGraphQLHandler({
 
 ### Destructuring the `useAuth` hook
 
-The useAuth hook provides a unified interface. It's important to understand it's basic properties.
-
-Many are self explanatory, but the options they take depend on the auth provider.
+The `useAuth` hook provides a streamlined interface to your auth provider's client SDK.
+Much of what the functions it returns does is self explanatory, but the options they take depend on the auth provider:
 
 | Name              | Description                                                                                                                                                                 |
 | :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -169,7 +173,6 @@ The api side verifies and decodes the token in this header via the `authDecoder`
 While information about the user is technically available at this point, it's still pretty raw.
 You can map it into a real user object via the `getCurrentUser` function.
 Both these functions are passed to the `createGraphQLHandler` function.
-The setup auth command stubs all this out for you in `api/src/lib/auth`:
 
 `getCurrentUser`'s return is made globally available in the api's context via `context.currentUser` for convenience.
 
