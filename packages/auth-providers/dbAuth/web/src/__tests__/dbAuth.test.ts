@@ -4,8 +4,6 @@ import { CurrentUser } from '@redwoodjs/auth'
 
 import { createDbAuthClient, DbAuthClientArgs, createAuth } from '../dbAuth'
 
-// @NOTE there are TS errors assigning these, because there's no ambient declarations
-// But because this is going to be moved as part of decoupling, ignoring for now
 globalThis.RWJS_API_URL = '/.redwood/functions'
 globalThis.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
 
