@@ -15,16 +15,16 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const readFile = promisify(fsReadFile)
 
-const clientEntryPath = path.join(redwoodPaths.web.src, 'entry-client.jsx')
-
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
  *
  * @returns {VitePlugin}
  */
 export default function redwoodPluginVite() {
-  const redwoodConfig = getConfig()
   const redwoodPaths = getPaths()
+  const redwoodConfig = getConfig()
+
+  const clientEntryPath = path.join(redwoodPaths.web.src, 'entry-client.jsx')
 
   return [
     {
@@ -68,6 +68,8 @@ export default function redwoodPluginVite() {
               },
             ],
           },
+          envPrefix: 'REDWOOD_ENV_',
+          publicDir: path.join(redwoodPaths.web.base, 'public'),
           define: {
             RWJS_WEB_BUNDLER: JSON.stringify('vite'),
             RWJS_ENV: {
@@ -89,14 +91,17 @@ export default function redwoodPluginVite() {
             postcss: redwoodPaths.web.config,
           },
           server: {
-            port: getConfig().web.port,
+            // @MARK intentionally commenting this out, on my machine it pops up with "where is undefined"
+            // under the hood it's using https://github.com/sindresorhus/open#app which needs an app specified
+            // open: redwoodConfig.browser.open,
+            port: redwoodConfig.web.port,
             proxy: {
               //@TODO we need to do a check for absolute urls here
-              [getConfig().web.apiUrl]: {
-                target: `http://localhost:${getConfig().api.port}`,
+              [redwoodConfig.web.apiUrl]: {
+                target: `http://localhost:${redwoodConfig.api.port}`,
                 changeOrigin: true,
                 // @MARK might be better to use a regex maybe
-                rewrite: (path) => path.replace(getConfig().web.apiUrl, ''),
+                rewrite: (path) => path.replace(redwoodConfig.web.apiUrl, ''),
               },
             },
           },
