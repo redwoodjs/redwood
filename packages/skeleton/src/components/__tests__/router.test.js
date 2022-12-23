@@ -39,7 +39,6 @@ describe.each([
         PROJECT_PATH
       )
       router.routes.forEach((route) => {
-        route.executeAdditionalChecks()
         route.filepath = stripAndFormatPathForTesting(
           route.filepath,
           PROJECT_PATH
@@ -67,7 +66,6 @@ describe.each([
         PROJECT_PATH
       )
       router.routes.forEach((route) => {
-        route.executeAdditionalChecks()
         route.filepath = stripAndFormatPathForTesting(
           route.filepath,
           PROJECT_PATH

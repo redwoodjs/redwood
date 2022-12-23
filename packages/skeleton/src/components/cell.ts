@@ -11,7 +11,7 @@ import {
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { getASTFromCode } from '../lib/ast'
+import { getASTFromFile } from '../lib/ast'
 import { getGraphQLQueryName } from '../lib/gql'
 
 import {
@@ -44,9 +44,7 @@ export class RedwoodCell extends RedwoodSkeleton {
   constructor(filepath: string) {
     super(filepath)
 
-    // TODO: Just get the gql from the ast not from the source code string
-    const code = fs.readFileSync(this.filepath, { encoding: 'utf8', flag: 'r' })
-    const ast = getASTFromCode(code)
+    const ast = getASTFromFile(this.filepath)
 
     const namedExports: ExportNamedDeclaration[] = []
     traverse(ast, {
@@ -115,11 +113,9 @@ export class RedwoodCell extends RedwoodSkeleton {
         switch (gqlVariable.type) {
           case 'TaggedTemplateExpression':
             if (gqlVariable.quasi.start && gqlVariable.quasi.end) {
-              const graphQLSource = code.substring(
-                gqlVariable.quasi.start + 1,
-                gqlVariable.quasi.end - 1
-              )
-              this.gqlQuery = graphQLSource
+              this.gqlQuery =
+                gqlVariable.quasi.quasis[0].value.cooked ||
+                gqlVariable.quasi.quasis[0].value.raw
               this.gqlQueryName = getGraphQLQueryName(this.gqlQuery)
               if (this.gqlQueryName === undefined) {
                 this.warnings.push({

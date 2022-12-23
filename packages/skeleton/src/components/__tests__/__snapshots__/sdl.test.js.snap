@@ -59,6 +59,7 @@ RedwoodSDL {
 ",
   "mutations": [
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
@@ -71,6 +72,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
@@ -84,6 +86,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
@@ -188,6 +191,7 @@ RedwoodSDL {
 ",
   "mutations": [
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
@@ -200,6 +204,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
@@ -213,6 +218,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
@@ -285,6 +291,7 @@ RedwoodSDL {
 ",
   "mutations": [
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [],
       "errors": [],
       "filepath": "/api/src/graphql/todos.sdl.js",
@@ -295,6 +302,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [],
       "errors": [],
       "filepath": "/api/src/graphql/todos.sdl.js",
@@ -306,6 +314,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [],
       "errors": [],
       "filepath": "/api/src/graphql/todos.sdl.js",
@@ -655,6 +664,7 @@ RedwoodSDL {
 ",
   "mutations": [
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [],
       "errors": [],
       "filepath": "/api/src/graphql/todos.sdl.js",
@@ -665,6 +675,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [],
       "errors": [],
       "filepath": "/api/src/graphql/todos.sdl.js",
@@ -676,6 +687,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "todos",
       "directiveNames": [],
       "errors": [],
       "filepath": "/api/src/graphql/todos.sdl.js",
@@ -1040,6 +1052,7 @@ RedwoodSDL {
 ",
   "mutations": [
     RedwoodSDLMutation {
+      "SDLName": "contacts",
       "directiveNames": [
         "skipAuth",
       ],
@@ -1052,6 +1065,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "contacts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1065,6 +1079,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "contacts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1147,6 +1162,7 @@ RedwoodSDL {
 ",
   "mutations": [
     RedwoodSDLMutation {
+      "SDLName": "posts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1159,6 +1175,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "posts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1172,6 +1189,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "posts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1305,6 +1323,7 @@ RedwoodSDL {
 ",
   "mutations": [
     RedwoodSDLMutation {
+      "SDLName": "contacts",
       "directiveNames": [
         "skipAuth",
       ],
@@ -1317,6 +1336,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "contacts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1330,6 +1350,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "contacts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1412,6 +1433,7 @@ RedwoodSDL {
 ",
   "mutations": [
     RedwoodSDLMutation {
+      "SDLName": "posts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1424,6 +1446,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "posts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1437,6 +1460,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLMutation {
+      "SDLName": "posts",
       "directiveNames": [
         "requireAuth",
       ],
