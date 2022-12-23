@@ -56,7 +56,7 @@ When you set up an auth provider, the setup command makes a new file, `web/src/a
 
 Once auth is setup on the web side, every GraphQL request includes a JWT.
 The api side needs a way of verifying and decoding this token if it's to do anything with it.
-There's two steps to this process:
+There are two steps to this process:
 
 - decoding the token
 - mapping it into a user object
