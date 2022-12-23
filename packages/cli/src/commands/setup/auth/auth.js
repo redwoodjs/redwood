@@ -139,7 +139,7 @@ export async function builder(yargs) {
       }
     )
     .command(
-      'dbauth',
+      'dbAuth',
       'Generate an auth configuration for dbAuth',
       (yargs) => {
         return standardAuthBuilder(yargs).option('webauthn', {
