@@ -107,7 +107,7 @@ export function getJSXElementAttributes(
             break
           default:
             throw new Error(
-              `Uknown value type found while trying to process the ${key} property when extracting all attributes`
+              `Unknown value type found while trying to process the ${key} property when extracting all attributes`
             )
         }
         attributes.set(key, value)
