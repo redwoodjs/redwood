@@ -58,11 +58,6 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
       description: 'Overwrite existing configuration',
       type: 'boolean',
     })
-    .option('warn', {
-      default: true,
-      description: 'Show experimental auth warning',
-      type: 'boolean',
-    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
