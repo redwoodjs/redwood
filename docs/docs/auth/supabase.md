@@ -19,12 +19,13 @@ If you don't have a Supabase account yet, now's the time to make one: navigate t
 
 While Supabase creates your project, it thoughtfully shows your project's API keys.
 (If the page refreshes while you're copying them over, just scroll down a bit and look for "Connecting to your new project".)
-We're looking for "Project URL" and "API key".
-Copy them into your project's `.env` file.
+We're looking for "Project URL" and "API key" (the `anon`, `public` one).
+Copy them into your project's `.env` file as `SUPABASE_URL` and `SUPABASE_KEY` respectively.
 
 There's one more we need, the "JWT Secret", that's not here.
-To get that one, click the cog icon ("Project settings") near the bottom of the nav on the left.
+To get that one, click the cog icon ("Project Settings") near the bottom of the nav on the left.
 Then click "API", scroll down a bit, and you should see it—"JWT Secret" under "JWT Settings".
+Copy it into your project's `.env` file as `SUPABASE_JWT_SECRET`.
 All together now:
 
 ```bash title=".env"
@@ -42,40 +43,29 @@ Lastly, in `redwood.toml`, include `SUPABASE_URL` and `SUPABASE_KEY` in the list
 ```
 
 That should be enough; now, things should just work.
-Let's make sure: if this is a brand new project, create a home page.
-There we'll destructure `isAuthenticated` and `signUp` from the `useAuth` hook (import that from `'src/auth'`):
-
-```
-yarn rw g page home /
-```
+Let's make sure: if this is a brand new project, generate a home page.
+There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
 
 ```tsx title="web/src/pages/HomePage.tsx"
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-// highlight-next-line
 import { useAuth } from 'src/auth'
 
 const HomePage = () => {
-  // highlight-next-line
   const { isAuthenticated, signUp } = useAuth()
 
   return (
     <>
       {/* MetaTags, h1, paragraphs, etc. */}
 
-      // highlight-start
       <p>{JSON.stringify({ isAuthenticated })}</p>
       <button onClick={() => signUp({
-        // email: 'test@email.com',
-        // password: 'test password',
+        // email: 'your.email@email.com'
+        // password: 'super secret password'
       })}>sign up</button>
-      // highlight-end
     </>
   )
 }
-
-export default HomePage
 ```
 
-After you sign up, you should see `{"isAuthenticated":true}` on the page, and back in your project's dashboard, if you click "Authentication" in the nav on the left, you should see a new user.
+Supabase doesn't redirect to a hosted sign-up page or open a sign-up modal.
+In a real app, you'd build a form here, but we're going to hardcode an email and password.
+After you sign up, you should see `{"isAuthenticated":true}` on the page.
