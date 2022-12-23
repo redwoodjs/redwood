@@ -219,6 +219,12 @@ async function getAuthHandler(module) {
       `yarn npm info ${module} --fields versions --json`
     )
 
+    // If the version includes a plus, like '4.0.0-rc.428+dd79f1726'
+    // (all @canary, @next, and @rc packages do), get rid of everything after the plus.
+    if (version.includes('+')) {
+      version = version.split('+')[0]
+    }
+
     const versionIsPublished = JSON.parse(stdout).versions.includes(version)
 
     if (!versionIsPublished) {
