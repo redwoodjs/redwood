@@ -8,7 +8,7 @@ Redwood has integrated auth end to end, from the web side to the api side.
 On the web side, the router can protect pages via the `Private` component (or the `Set` component via the `private` prop), and even restrict access at the role-level.
 And if you'd prefer to work with the primitives, the `useAuth` hook exposes all the pieces to build the experience you want.
 
-Likewise, the api side is locked down by default: all SDLs are generated with the `@requireAuth` directive, making sure that making something publicly available is something that you opt into rather than out of.
+Likewise, the api side is locked down by default: all SDLs are generated with the `@requireAuth` directive, ensuring that making things publicly available is something that you opt into rather than out of.
 You can also require auth anywhere in your Services, and even in your server-ful or -less functions.
 
 Last but not least, Redwood provides it's own auth provider: [dbAuth](./auth/dbauth.md).
