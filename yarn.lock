@@ -1775,9 +1775,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:7.20.8, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.12.11, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.13.0, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.18.11, @babel/traverse@npm:^7.20.7, @babel/traverse@npm:^7.7.2":
-  version: 7.20.8
-  resolution: "@babel/traverse@npm:7.20.8"
+"@babel/traverse@npm:7.20.10, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.12.11, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.13.0, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.18.11, @babel/traverse@npm:^7.20.7, @babel/traverse@npm:^7.7.2":
+  version: 7.20.10
+  resolution: "@babel/traverse@npm:7.20.10"
   dependencies:
     "@babel/code-frame": ^7.18.6
     "@babel/generator": ^7.20.7
@@ -1789,7 +1789,7 @@ __metadata:
     "@babel/types": ^7.20.7
     debug: ^4.1.0
     globals: ^11.1.0
-  checksum: aef74e2b334b5c92a224dbe68357ba2383d43804fb7a5c6e76ca477d6640ddd3f428280687fdd413d6729a00d3f61f6ba86acd91a18d75126e107d9db91f008c
+  checksum: a712402374c2e1cdd7e7880deda0f0051123c09abc9a110e4594bf90c858211e678185b927dffe8780de981ff87ac98bcffdc3fbf46c262bd21b6d64cd1d3b58
   languageName: node
   linkType: hard
 
@@ -6995,7 +6995,7 @@ __metadata:
     "@babel/plugin-transform-typescript": 7.20.7
     "@babel/register": 7.18.9
     "@babel/runtime-corejs3": 7.20.7
-    "@babel/traverse": 7.20.8
+    "@babel/traverse": 7.20.10
     "@graphql-codegen/add": 3.2.3
     "@graphql-codegen/cli": 2.16.1
     "@graphql-codegen/core": 2.6.8
