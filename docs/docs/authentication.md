@@ -96,7 +96,7 @@ export const handler = createGraphQLHandler({
 ### Destructuring the `useAuth` hook
 
 The `useAuth` hook provides a streamlined interface to your auth provider's client SDK.
-Much of what the functions it returns does is self explanatory, but the options they take depend on the auth provider:
+Much of what the functions it returns do is self explanatory, but the options they take depend on the auth provider:
 
 | Name              | Description                                                                                                                                                                 |
 | :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
