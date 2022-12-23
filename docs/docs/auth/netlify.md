@@ -15,7 +15,7 @@ For a detailed explanation of all the api- and web-side changes that aren't excl
 For now let's focus on Netlify's side of things.
 
 There's a catch with Netlify Identity: your app has to be be deployed to Netlify to use it.
-If this's a deal breaker for you, there's other great auth providers to choose from.
+If this's a deal breaker for you, there are [other great auth providers to choose from](../authentication.md#official-integrations).
 But here we'll assume it's not and that your app is already deployed.
 (If it isn't, do that first, then come back. And yes, there's a setup command for that: `yarn rw setup deploy netlify`.)
 
