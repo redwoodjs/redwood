@@ -7,7 +7,7 @@ sidebar_label: Custom
 If Redwood doesn't officially integrate with the auth provider you want to use, you're not out of luck just yet: Redwood has an API you can use to integrate your auth provider of choice.
 There's a little more work to do, but we'll walk you through all that here, using [Nhost](https://nhost.io/) as an example.
 
-To get started, run the custom auth setup command:
+To get started, run the setup command:
 
 ```bash
 yarn rw setup auth custom
@@ -47,7 +47,7 @@ const client = {
 }
 ```
 
-As the comment says, we need to replace this placeholder client object with our auth provider's SDK.
+As the comment says, we need to replace this placeholder client object with an instance of our auth provider's client SDK.
 Since we're using Nhost, it's time to navigate to [their docs](https://docs.nhost.io/reference/javascript) for a bit of reading.
 We'll take all the work you have to do reading docs for granted here and cut to the chase—setting up Nhost's client looks like this:
 
@@ -66,8 +66,8 @@ yarn workspace web add @nhost/nhost-js
 ```
 
 Then we'll have to make an account, an application, and get it's `backendUrl`.
-On your application's dashboard, click "Settings" at the bottom of the the nav on the left and look for "NHOST_BACKEND_URL".
-Copy its value into your project's `.env` file and include it in the list of env vars the web side has access to (via `redwood.toml`):
+On your application's dashboard, click "Settings" at the bottom of the the nav on the left, then "Environment Variables", and look for "NHOST_BACKEND_URL".
+Copy its value into your project's `.env` file and include it in the list of env vars the web side has access to in your project's `redwood.toml` file:
 
 ```bash title=".env"
 NHOST_BACKEND_URL="..."
@@ -95,8 +95,8 @@ const client = new NhostClient({
 
 Ok, that's it for the client.
 At this point, you could update some of the TS interfaces, but we'll leave that to you and press on with the integration.
-Now we have to tell the `useAuth` hook about the client we just made so that the rest of Redwood, like the router, works.
-Scroll down a little more to `createAuthImplementation`:
+Now we have create the `useAuth` hook using the client we just made so that the rest of Redwood, like the router, works.
+Scroll down a little more to the `createAuthImplementation` function:
 
 ```ts title="web/src/auth.ts"
 // This is where most of the integration work will take place. You should keep
@@ -132,7 +132,7 @@ function createAuthImplementation(client: AuthClient) {
 }
 ```
 
-This may seem like a lot, but it's actually not so bad: it's just about mapping the client's functions to these properties, many of which are self explanatory.
+This may seem like a lot, but it's actually not so bad: it's just about mapping the client's functions to these properties, many of which are pretty straightforward.
 The fact that this is eventually the `useAuth` hook is hidden a bit—`createAuthImplementation` gets passed to `createAuthentication`, which returns the `AuthProvider` component and `useAuth` hook—but you don't have to concern yourself with that here.
 
 Again, let's take all the reading and trial and error you'll have to do for granted, though it may be long and tedious:
@@ -147,8 +147,8 @@ function createAuthImplementation(client: AuthClient) {
       return await client.auth.signIn(options)
     },
     // See sign out options at https://docs.nhost.io/reference/javascript/auth/sign-out
-    logout: async () => {
-      return await client.auth.signOut()
+    logout: async (options) => {
+      return await client.auth.signOut(options)
     },
     // See sign up options at https://docs.nhost.io/reference/javascript/auth/sign-up
     signup: async (options) => {
@@ -169,17 +169,19 @@ function createAuthImplementation(client: AuthClient) {
 ```
 
 That's it for the web side.
-Let's head over to the api.
+Let's head over to the api side.
 
 ## api side
 
 Now that we've set up the web side, every GraphQL request includes a token.
 But without a way to verify and decode that token, the api side doesn't know what to do with it, so let's start there.
 
-In `api/src/lib/auth.ts`, make an empty function, `authDecoder`. Eventually we'll pass this to `createGraphQLHandler` in `api/src/graphql.ts`. The GraphQL server calls it with two parameters, the token and the type. Both are strings:
+In `api/src/lib/auth.ts`, make an empty function, `authDecoder`.
+Eventually we'll pass this to the `createGraphQLHandler` function in `api/src/graphql.ts`.
+The GraphQL server calls it with two arguments, the token and the type. Both are strings:
 
 ```ts title="api/src/lib/auth.ts"
-export const authDecoder = (token: string, type: string) => {
+export const authDecoder = async (token: string, type: string) => {
   // decode token...
 }
 ```
@@ -187,10 +189,12 @@ export const authDecoder = (token: string, type: string) => {
 First, let's make sure that the type is the same as the type in `createAuthImplementation`, `'custom-auth'`. If it's not, we can call it quits:
 
 ```ts title="api/src/lib/auth.ts"
-export const authDecoder = (token: string, type: string) => {
+export const authDecoder = async (token: string, type: string) => {
   if (type !== 'custom-auth') {
     return null
   }
+
+  // decode token...
 }
 ```
 
@@ -206,7 +210,8 @@ For `jwtVerify` to do it's job, it needs the secret.
 Time for another trip to your Nhost application's dashboard.
 This time you're looking for "NHOST_JWT_SECRET".
 Just like "NHOST_BACKEND_URL", it should be in "Settings", "Environment Variables".
-Add that one to your project's `.env` (no need to put it in `redwood.toml` though):
+(This one is a JSON object, with two properties, `type` and `key`. We just need `key`.)
+Add that one to your project's `.env` file (no need to put it in `redwood.toml` though):
 
 ```shell title=".env"
 NHOST_JWT_SECRET="..."
@@ -217,7 +222,7 @@ Now we can use it in the `authDecoder`:
 ```ts title="api/src/lib/auth.ts"
 import { jwtVerify } from 'jose'
 
-export const authDecoder = (token: string, type: string) => {
+export const authDecoder = async (token: string, type: string) => {
   if (type !== 'custom-auth') {
     return null
   }
@@ -230,11 +235,34 @@ export const authDecoder = (token: string, type: string) => {
 }
 ```
 
-## Wrapping up
+That should be enough; now, things should just work.
+Let's make sure: if this is a brand new project, generate a home page.
+There we'll try sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
 
-That's it! If you end up making something you're proud of, please consider sharing with the community!
+```tsx title="web/src/pages/HomePage.tsx"
+import { useAuth } from 'src/auth'
 
-The easiest way to get started writing your own custom auth provider is
-probably to look at one of the existing implementations. The simplest might
-be GoTrue or Netlify (they're basically the same). The most advanced example
-is by far dbAuth.
+const HomePage = () => {
+  const { isAuthenticated, signUp } = useAuth()
+
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
+
+      <p>{JSON.stringify({ isAuthenticated })}</p>
+      <button onClick={() => signUp({
+        // email: 'your.email@email.com'
+        // password: 'super secret password'
+      })}>sign up</button>
+    </>
+  )
+}
+```
+
+Nhost doesn't redirect to a hosted sign-up page or open a sign-up modal.
+In a real app, you'd build a form here, but we're going to hardcode an email and password.
+One thing you may want to do before signing up: disable email verification, else you'll actually have to verify your email.
+Go to back to "Settings" in your Nhost application, but this time click "Sign in methods".
+There should be a checkbox there, "Require Verified Emails".
+Toggle it off.
+Now try signing up and you should see `{"isAuthenticated":true}` on the page.
