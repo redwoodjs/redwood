@@ -16,13 +16,13 @@ There's one Clerk-specific thing we'll get to, but for now, let's focus on Clerk
 
 If you don't have a Clerk account yet, now's the time to make one: navigate to https://clerk.dev and sign up, then create an application.
 The defaults are good enough to get us going, but feel free to configure things as you wish.
-we'll get the application's API keys from its dashboard next.
+We'll get the application's API keys from its dashboard next.
 
 :::note we'll only focus on the development instance
 
 By default, Clerk applications have two instances, "Development" and "Production".
-We'll only focus on the Development instance here.
-When you're ready to deploy to production, switch the instance the dashboard is displaying by clicking "Development" in the header at the top.
+We'll only focus on the "Development" instance here.
+When you're ready to deploy, switch the instance the dashboard is displaying by clicking "Development" in the header at the top.
 How you get your API keys to production depends on your deploy provider.
 
 :::
@@ -39,7 +39,7 @@ CLERK_API_KEY="..."
 CLERK_JWT_KEY="..."
 ```
 
-Lastly, in `redwood.toml`, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be available to the web side:
+Lastly, in your project's `redwood.toml` file, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be available to the web side:
 
 ```toml title="redwood.toml"
 [web]
@@ -48,37 +48,24 @@ Lastly, in `redwood.toml`, include `CLERK_FRONTEND_API_URL` in the list of env v
 ```
 
 That should be enough; now, things should just work.
-Let's make sure: if this is a brand new project, create a home page.
-There we'll destructure `isAuthenticated` and `signUp` from the `useAuth` hook (import that from `'src/auth'`):
-
-```
-yarn rw g page home /
-```
+Let's make sure: if this is a brand new project, generate a home page.
+There we'll try sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
 
 ```tsx title="web/src/pages/HomePage.tsx"
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-// highlight-next-line
 import { useAuth } from 'src/auth'
 
 const HomePage = () => {
-  // highlight-next-line
   const { isAuthenticated, signUp } = useAuth()
 
   return (
     <>
       {/* MetaTags, h1, paragraphs, etc. */}
 
-      // highlight-start
       <p>{JSON.stringify({ isAuthenticated })}</p>
       <button onClick={signUp}>sign up</button>
-      // highlight-end
     </>
   )
 }
-
-export default HomePage
 ```
 
 Clicking sign up should open a sign-up box:
@@ -92,7 +79,10 @@ After you sign up, you should see `{"isAuthenticated":true}` on the page.
 At the start of this doc, we said that there's one Clerk-specific thing worth noting.
 We'll discuss it here, but feel free to skip this section if you'd like—this is all extracurricular.
 
-Clerk is a bit unlike the other auth providers Redwood integrates with in that it puts its instance on the browser's `window` object.
+Clerk is a bit unlike the other auth providers Redwood integrates with in that it puts an instance of its client SDK on the browser's `window` object.
+That means we have to wait for it to be ready.
+With other providers, we instantiate their client SDK in `web/src/auth.ts`, then pass it to `createAuth`.
+Not so with Clerk—instead we use special Clerk components and hooks, like `ClerkLoaded` and `useUser`, to update Redwood's auth context with the client when it's ready.
 
 ## Avoiding feature duplication
 
