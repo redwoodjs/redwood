@@ -48,7 +48,7 @@ We mentioned that Redwood has a simple API you can use to integrate any provider
 Let's dive into it here.
 
 On the web side, there are two components that can be auth enabled: the `RedwoodApolloProvider` in `web/src/App.tsx` and the `Router` in `web/src/Routes.tsx`.
-Both take a `useAuth` prop. If provided, they'll use this hook to get information about the app's auth state. The `RedwoodApolloProvider` will use it to get a token to include in every GraphQL request, and the Router will use it to determine if a user has access a route.
+Both take a `useAuth` prop. If provided, they'll use this hook to get information about the app's auth state. The `RedwoodApolloProvider` will use it to get a token to include in every GraphQL request, and the Router will use it to determine if a user has access to private or role-restricted routes
 
 When you set up an auth provider, the setup command makes a new file, `web/src/auth.ts`. This file's job is to make the `AuthProvider` and `useAuth` hook by integrating with the auth provider of your choice. Whenever you need access to the auth context, you'll import the `useAuth` hook from this file. The `RedwoodApolloProvider` and `Router` are no exception:
 
