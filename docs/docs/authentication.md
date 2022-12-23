@@ -114,7 +114,7 @@ Much of what the functions it returns do is self explanatory, but the options th
 
 ### Protecting routes
 
-You can require that a user be authenticated to navigate to a route by wrapping it in the `Private` component.
+You can require that a user be authenticated to navigate to a route by wrapping it in the `Private` component or the `Set` component with the `private` prop set to `true`.
 An unauthenticated user will be redirected to the route specified in the `Private` component's `unauthenticated` prop:
 
 ```tsx
@@ -126,8 +126,10 @@ const Routes = () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
 
-      // highlight-next-line
+      // highlight-start
       <Private unauthenticated="login">
+      {/* Or... <Set private unauthenticated="login"> */}
+      // highlight-end
         <Route path="/admin" page={AdminPage} name="admin" />
         <Route path="/secret-page" page={SecretPage} name="secret" />
       </Private>
