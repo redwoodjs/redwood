@@ -1,3 +1,5 @@
+import path from 'path'
+
 import { FieldDefinitionNode } from 'graphql'
 
 import { parseGraphQL } from '../../lib/gql'
@@ -11,11 +13,15 @@ export class RedwoodSDLMutation extends RedwoodSkeleton {
   warnings: RedwoodWarning[] = []
   errors: RedwoodError[] = []
 
+  readonly SDLName: string
   readonly parameters: string[] = []
   readonly directiveNames: string[] = []
 
   constructor(filepath: string, field: FieldDefinitionNode) {
     super(filepath, field.name.value)
+
+    this.SDLName = path.parse(this.filepath).name
+    this.SDLName = this.SDLName.substring(0, this.SDLName.length - 4)
 
     field.directives?.forEach((directive) => {
       this.directiveNames.push(directive.name.value)
@@ -46,7 +52,31 @@ export class RedwoodSDLMutation extends RedwoodSkeleton {
       }
     })
 
-    // TODO: Make sure a service function of this name is implemented
+    const correspondingService = RedwoodProject.getProject({
+      pathWithinProject: this.filepath,
+    })
+      .getServices()
+      .find((service) => {
+        return service.name === this.SDLName
+      })
+    if (correspondingService) {
+      const correspondingServiceFunction = correspondingService.functions.find(
+        (func) => {
+          return func.name === this.name
+        }
+      )
+      if (!correspondingServiceFunction) {
+        this.errors.push({
+          code: RedwoodErrorCode.SDL_NO_CORRESPONDING_SERVICE_FUNCTION,
+          message: `There is no corresponding service function named "${this.name}"`,
+        })
+      }
+    } else {
+      this.errors.push({
+        code: RedwoodErrorCode.SDL_NO_CORRESPONDING_SERVICE_FILE,
+        message: `There is no corresponding service file named "${this.SDLName}"`,
+      })
+    }
   }
 }
 

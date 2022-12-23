@@ -53,6 +53,12 @@ export class RedwoodRouter extends RedwoodSkeleton {
     })
   }
 
+  executeAdditionalChecks(): void {
+    this.routes.forEach((route) => {
+      route.executeAdditionalChecks()
+    })
+  }
+
   getSide(): RedwoodSide {
     const sides = RedwoodProject.getProject({
       pathWithinProject: this.filepath,

@@ -130,18 +130,9 @@ export class RedwoodProject extends RedwoodSkeleton {
     })
     this.routers?.forEach((router) => {
       router.executeAdditionalChecks()
-      router.routes.forEach((route) => {
-        route.executeAdditionalChecks()
-      })
     })
     this.sdls?.forEach((sdl) => {
       sdl.executeAdditionalChecks()
-      sdl.queries?.forEach((query) => {
-        query.executeAdditionalChecks()
-      })
-      sdl.mutations?.forEach((mutation) => {
-        mutation.executeAdditionalChecks()
-      })
     })
     this.services?.forEach((service) => {
       service.executeAdditionalChecks()
@@ -260,6 +251,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       })
       this.services?.forEach((service) => {
         warningsFound ||= service.hasWarnings()
+        service.functions.forEach((func) => {
+          warningsFound ||= func.hasWarnings()
+        })
       })
       this.sides?.forEach((side) => {
         warningsFound ||= side.hasWarnings()
@@ -314,6 +308,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       })
       this.services?.forEach((service) => {
         service.printWarnings()
+        service.functions.forEach((func) => {
+          func.printWarnings()
+        })
       })
       this.sides?.forEach((side) => {
         side.printWarnings()
@@ -360,6 +357,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       })
       this.services?.forEach((service) => {
         errorsFound ||= service.hasErrors()
+        service.functions.forEach((func) => {
+          errorsFound ||= func.hasErrors()
+        })
       })
       this.sides?.forEach((side) => {
         errorsFound ||= side.hasErrors()
@@ -414,6 +414,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       })
       this.services?.forEach((service) => {
         service.printErrors()
+        service.functions.forEach((func) => {
+          func.printErrors()
+        })
       })
       this.sides?.forEach((side) => {
         side.printErrors()
