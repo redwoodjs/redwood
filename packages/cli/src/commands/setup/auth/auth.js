@@ -64,9 +64,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'ethereum is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('ethereum'))
       }
     )
     .command(
@@ -74,9 +72,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'goTrue is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('goTrue'))
       }
     )
     .command(
@@ -84,9 +80,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'magicLink is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('magicLink'))
       }
     )
     .command(
@@ -94,9 +88,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'nhost is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('nhost'))
       }
     )
     .command(
@@ -104,9 +96,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'okta is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('okta'))
       }
     )
     // Providers we support
@@ -202,6 +192,19 @@ export async function builder(yargs) {
         handler(args)
       }
     )
+}
+
+/**
+ * Get a stock message for one of our removed auth providers
+ * directing the user to the Custom Auth docs.
+ *
+ * @param {string} provider
+ */
+function getRedirectMessage(provider) {
+  return `${provider} is no longer supported out of the box. But you can still integrate it yourself with ${terminalLink(
+    'Custom Auth',
+    'https://redwoodjs.com/docs/auth/custom'
+  )}`
 }
 
 async function getAuthHandler(module) {
