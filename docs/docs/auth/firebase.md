@@ -14,12 +14,12 @@ This installs all the packages, writes all the files, and makes all the code mod
 For a detailed explanation of all the api- and web-side changes that aren't exclusive to Firebase, see the top-level [Authentication](../authentication.md) doc.
 For now, let's focus on Firebase's side of things.
 
-If you don't have a Firebase account yet, now's the time to make one: navigate to https://firebase.google.com and click "Go to console"—it'll have you sign in or sign up if you haven't already—then create a project.
+If you don't have a Firebase account yet, now's the time to make one: navigate to https://firebase.google.com and click "Go to console", sign up, and create a project.
 After it's ready, we'll get the API keys.
 
 To get the API keys, we need to add a web app to our project.
-Go ahead and do that (it's the main call to action on the dashboard—"Get started by adding Firebase to your app").
-Give it a nickname, then you should see the API keys.
+Click the `</>` icon in main call to action on the dashboard—"Get started by adding Firebase to your app".
+Give your app a nickname, then you should see the API keys.
 Since we're only using Firebase for auth, we only need `apiKey`, `authDomain`, and `projectId`.
 Copy them into your project's `.env` file:
 
@@ -40,43 +40,34 @@ Lastly, include `FIREBASE_API_KEY` and `FIREBASE_AUTH_DOMAIN` in the list of env
 We've hooked up our Firebase app to our Redwood app, but if you try it now, it won't work.
 That's because we haven't actually enabled auth in our Firebase app yet.
 
-Back to the dashboard one more time: in the nav on the left, click "Build", "Authentication", "Get started", and "Set up sign-in method".
+Back to the dashboard one more time: in the nav on the left, click "Build", "Authentication", and "Get started".
 We're going to go with "Email/Password" here, but feel free to configure things as you wish.
-After clicking "Email/Password", enable it, and click "Save".
+Click "Email/Password", enable it, and click "Save".
 
 That should be enough; now, things should just work.
-Let's make sure: if this is a brand new project, create a home page.
-There we'll destructure `signUp` from the `useAuth` hook (import that from `'src/auth'`):
-
-```
-yarn rw g page home /
-```
+Let's make sure: if this is a brand new project, generate a home page.
+There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
 
 ```tsx title="web/src/pages/HomePage.tsx"
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-// highlight-next-line
 import { useAuth } from 'src/auth'
 
 const HomePage = () => {
-  // highlight-next-line
-  const { signUp } = useAuth()
+  const { isAuthenticated, signUp } = useAuth()
 
   return (
     <>
       {/* MetaTags, h1, paragraphs, etc. */}
 
-      // highlight-next-line
+      <p>{JSON.stringify({ isAuthenticated })}</p>
       <button onClick={() => signUp({
-        // email: 'test@email.com'
-        // password: 'test password
+        // email: 'your.email@email.com'
+        // password: 'super secret password'
       })}>sign up</button>
     </>
   )
 }
-
-export default HomePage
 ```
 
-If you click sign up, it'll seem like nothing happened. But if you go back to your Firebase app's dashboard, you should see a new user.
+"Email/Password" says what it means: Firebase doesn't redirect to a hosted sign-up page or open a sign-up modal.
+In a real app, you'd build a form here, but we're going to hardcode an email and password.
+After you sign up, you should see `{"isAuthenticated":true}` on the page.
