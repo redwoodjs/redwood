@@ -22,10 +22,10 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/cli": "7.19.3",
-    "@babel/core": "7.20.5",
-    "@babel/plugin-transform-typescript": "7.20.2",
-    "@babel/runtime-corejs3": "7.20.6",
+    "@babel/cli": "7.20.7",
+    "@babel/core": "7.20.7",
+    "@babel/plugin-transform-typescript": "7.20.7",
+    "@babel/runtime-corejs3": "7.20.7",
     "@iarna/toml": "2.2.5",
     "@vscode/ripgrep": "1.14.2",
     "core-js": "3.26.1",
@@ -47,7 +47,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.2.4",
     "@types/jscodeshift": "0.11.6",
-    "@types/prettier": "2.7.1",
+    "@types/prettier": "2.7.2",
     "@types/yargs": "17.0.17",
     "fs-extra": "11.1.0",
     "tempy": "1.0.1"
