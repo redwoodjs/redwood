@@ -75,9 +75,9 @@ export class RedwoodServiceFunction extends RedwoodSkeleton {
         })
       }
     }
+  }
 
-    // Checks
-
+  executeAdditionalChecks(): void {
     const associatedSDLOperation = this.getAssociatedSDLOperation()
     if (associatedSDLOperation) {
       let parametersMatch =

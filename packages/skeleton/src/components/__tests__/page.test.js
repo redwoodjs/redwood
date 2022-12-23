@@ -33,6 +33,7 @@ describe.each([
   it('returns the correct pages without a project', () => {
     const pages = extractPages(undefined)
     pages.forEach((page) => {
+      page.executeAdditionalChecks()
       page.filepath = stripAndFormatPathForTesting(page.filepath, PROJECT_PATH)
       expect(page).toMatchSnapshot(page.filepath)
     })
@@ -47,6 +48,7 @@ describe.each([
     })
     const pages = extractPages(project)
     pages.forEach((page) => {
+      page.executeAdditionalChecks()
       page.filepath = stripAndFormatPathForTesting(page.filepath, PROJECT_PATH)
       expect(page).toMatchSnapshot(page.filepath)
     })

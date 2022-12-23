@@ -1,8 +1,8 @@
 import path from 'path'
 
 import { stripAndFormatPathForTesting } from '../../lib/testing'
-import { extractCells } from '../cell'
 import { RedwoodProject } from '../project'
+import { extractTOMLs } from '../toml'
 
 const FIXTURE_PATH = path.join(
   __dirname,
@@ -30,28 +30,28 @@ describe.each([
     process.env.RWJS_CWD = RWJS_CWD
   })
 
-  it('returns the correct cells without a project', () => {
-    const cells = extractCells(undefined)
-    cells.forEach((cell) => {
-      cell.executeAdditionalChecks()
-      cell.filepath = stripAndFormatPathForTesting(cell.filepath, PROJECT_PATH)
-      expect(cell).toMatchSnapshot(cell.filepath)
+  it('returns the correct TOMLs without a project', () => {
+    const tomls = extractTOMLs(undefined)
+    tomls.forEach((toml) => {
+      toml.executeAdditionalChecks()
+      toml.filepath = stripAndFormatPathForTesting(toml.filepath, PROJECT_PATH)
+      expect(toml).toMatchSnapshot(toml.filepath)
     })
-    expect(cells.length).toMatchSnapshot('cell count')
+    expect(tomls.length).toMatchSnapshot('toml count')
   })
 
-  it('returns the correct cells with a project', () => {
+  it('returns the correct TOMLs with a project', () => {
     const project = RedwoodProject.getProject({
       pathWithinProject: PROJECT_PATH,
       readFromCache: false,
       insertIntoCache: false,
     })
-    const cells = extractCells(project)
-    cells.forEach((cell) => {
-      cell.executeAdditionalChecks()
-      cell.filepath = stripAndFormatPathForTesting(cell.filepath, PROJECT_PATH)
-      expect(cell).toMatchSnapshot(cell.filepath)
+    const tomls = extractTOMLs(project)
+    tomls.forEach((toml) => {
+      toml.executeAdditionalChecks()
+      toml.filepath = stripAndFormatPathForTesting(toml.filepath, PROJECT_PATH)
+      expect(toml).toMatchSnapshot(toml.filepath)
     })
-    expect(cells.length).toMatchSnapshot('cell count')
+    expect(tomls.length).toMatchSnapshot('toml count')
   })
 })

@@ -33,6 +33,7 @@ describe.each([
   it('returns the correct services without a project', () => {
     const services = extractServices(undefined)
     services.forEach((service) => {
+      service.executeAdditionalChecks()
       service.filepath = stripAndFormatPathForTesting(
         service.filepath,
         PROJECT_PATH
@@ -56,6 +57,7 @@ describe.each([
     })
     const services = extractServices(project)
     services.forEach((service) => {
+      service.executeAdditionalChecks()
       service.filepath = stripAndFormatPathForTesting(
         service.filepath,
         PROJECT_PATH

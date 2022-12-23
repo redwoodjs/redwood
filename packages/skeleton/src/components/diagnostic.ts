@@ -5,6 +5,8 @@ export interface RedwoodDiagnostics {
   hasWarnings(): boolean
   printWarnings(): void
   printErrors(): void
+
+  executeAdditionalChecks(): void
 }
 
 export interface RedwoodError {
@@ -36,6 +38,8 @@ export enum RedwoodErrorCode {
   // 04.xxx - SDL
   SDL_DIRECTIVE_NOT_FOUND = '04.001',
   SDL_MISSING_SCHEMA_EXPORT = '04.002',
+  SDL_NO_CORRESPONDING_SERVICE_FUNCTION = '04.003',
+  SDL_NO_CORRESPONDING_SERVICE_FILE = '04.004',
 
   // 05.xxx - Service
   SERVICE_ = '05.001',
@@ -44,7 +48,7 @@ export enum RedwoodErrorCode {
   ENV_ = '06.001',
 
   // 07.xxx - TOML
-  TOML_ = '07.001',
+  TOML_PARSE_ERROR = '07.001',
 
   // 08.xxx - Side
   SIDE_NOT_FOUND = '08.001',

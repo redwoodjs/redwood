@@ -33,6 +33,7 @@ describe.each([
   it('returns the correct directives without a project', () => {
     const directives = extractDirectives(undefined)
     directives.forEach((directive) => {
+      directive.executeAdditionalChecks()
       directive.filepath = stripAndFormatPathForTesting(
         directive.filepath,
         PROJECT_PATH
@@ -50,6 +51,7 @@ describe.each([
     })
     const directives = extractDirectives(project)
     directives.forEach((directive) => {
+      directive.executeAdditionalChecks()
       directive.filepath = stripAndFormatPathForTesting(
         directive.filepath,
         PROJECT_PATH

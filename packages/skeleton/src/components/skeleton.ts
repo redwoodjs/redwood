@@ -45,4 +45,8 @@ export abstract class RedwoodSkeleton implements RedwoodDiagnostics {
       console.log(titleLine.concat('\n', ...errorLines).trimEnd())
     }
   }
+
+  executeAdditionalChecks(): void {
+    // Default implemention should do nothing
+  }
 }

@@ -101,6 +101,15 @@ export class RedwoodSDL extends RedwoodSkeleton {
     this.queries = extractQueries(this)
     this.mutations = extractMutations(this)
   }
+
+  executeAdditionalChecks(): void {
+    this.queries?.forEach((query) => {
+      query.executeAdditionalChecks()
+    })
+    this.mutations?.forEach((mutation) => {
+      mutation.executeAdditionalChecks()
+    })
+  }
 }
 
 export function extractSDL(filepath: string): RedwoodSDL {

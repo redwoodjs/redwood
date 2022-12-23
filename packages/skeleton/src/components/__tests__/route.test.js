@@ -42,6 +42,9 @@ describe.each([
 
   describe.each(routers)('router $#', (router) => {
     const routes = router.routes
+    routes.forEach((route) => {
+      route.executeAdditionalChecks()
+    })
     test('routes return the correct pages', () => {
       const routePageMap = new Map()
       routes.forEach((route) => {

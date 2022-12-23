@@ -97,7 +97,9 @@ export class RedwoodRoute extends RedwoodSkeleton {
         })
       }
     }
+  }
 
+  executeAdditionalChecks(): void {
     if (this.pageIdentifier !== undefined) {
       if (this.getPage() === undefined) {
         this.errors.push({
@@ -106,8 +108,6 @@ export class RedwoodRoute extends RedwoodSkeleton {
         })
       }
     }
-
-    // TODO: (Check) Routes should contain a name if they aren't the notfound page?
   }
 
   getPage(): RedwoodPage | undefined {

@@ -16,6 +16,7 @@ RedwoodProject {
   "sdls": undefined,
   "services": undefined,
   "sides": undefined,
+  "tomls": undefined,
   "type": "typescript",
   "warnings": [],
 }
@@ -37,6 +38,7 @@ RedwoodProject {
   "sdls": undefined,
   "services": undefined,
   "sides": undefined,
+  "tomls": undefined,
   "type": "typescript",
   "warnings": [],
 }
@@ -58,6 +60,7 @@ RedwoodProject {
   "sdls": undefined,
   "services": undefined,
   "sides": undefined,
+  "tomls": undefined,
   "type": "javascript",
   "warnings": [],
 }
@@ -79,6 +82,7 @@ RedwoodProject {
   "sdls": undefined,
   "services": undefined,
   "sides": undefined,
+  "tomls": undefined,
   "type": "typescript",
   "warnings": [],
 }

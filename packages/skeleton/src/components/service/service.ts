@@ -29,6 +29,12 @@ export class RedwoodService extends RedwoodSkeleton {
       },
     })
   }
+
+  executeAdditionalChecks(): void {
+    this.functions.forEach((func) => {
+      func.executeAdditionalChecks()
+    })
+  }
 }
 
 export function extractService(filepath: string): RedwoodService {

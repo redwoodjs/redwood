@@ -33,6 +33,7 @@ describe.each([
   it('returns the correct functions without a project', () => {
     const functions = extractFunctions(undefined)
     functions.forEach((func) => {
+      func.executeAdditionalChecks()
       func.filepath = stripAndFormatPathForTesting(func.filepath, PROJECT_PATH)
       expect(func).toMatchSnapshot(func.filepath)
     })
@@ -47,6 +48,7 @@ describe.each([
     })
     const functions = extractFunctions(project)
     functions.forEach((func) => {
+      func.executeAdditionalChecks()
       func.filepath = stripAndFormatPathForTesting(func.filepath, PROJECT_PATH)
       expect(func).toMatchSnapshot(func.filepath)
     })

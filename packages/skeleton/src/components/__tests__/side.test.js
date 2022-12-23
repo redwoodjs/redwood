@@ -33,6 +33,7 @@ describe.each([
   it('returns the correct sides without a project', () => {
     const sides = extractSides(undefined)
     sides.forEach((side) => {
+      side.executeAdditionalChecks()
       side.filepath = stripAndFormatPathForTesting(side.filepath, PROJECT_PATH)
       expect(side).toMatchSnapshot(side.filepath)
     })
@@ -47,6 +48,7 @@ describe.each([
     })
     const sides = extractSides(project)
     sides.forEach((side) => {
+      side.executeAdditionalChecks()
       side.filepath = stripAndFormatPathForTesting(side.filepath, PROJECT_PATH)
       expect(side).toMatchSnapshot(side.filepath)
     })

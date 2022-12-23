@@ -33,6 +33,7 @@ describe.each([
   it('returns the correct SDLs without a project', () => {
     const sdls = extractSDLs(undefined)
     sdls.forEach((sdl) => {
+      sdl.executeAdditionalChecks()
       sdl.filepath = stripAndFormatPathForTesting(sdl.filepath, PROJECT_PATH)
       sdl.queries.forEach((query) => {
         query.filepath = stripAndFormatPathForTesting(
@@ -59,6 +60,7 @@ describe.each([
     })
     const sdls = extractSDLs(project)
     sdls.forEach((sdl) => {
+      sdl.executeAdditionalChecks()
       sdl.filepath = stripAndFormatPathForTesting(sdl.filepath, PROJECT_PATH)
       sdl.queries.forEach((query) => {
         query.filepath = stripAndFormatPathForTesting(

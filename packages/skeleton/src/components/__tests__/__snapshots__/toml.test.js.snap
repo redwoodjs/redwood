@@ -1,0 +1,201 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`From within the empty-project fixture returns the correct TOMLs with a project: /redwood.toml 1`] = `
+RedwoodTOML {
+  "contents": {
+    "api": {
+      "port": 8911,
+    },
+    "browser": {
+      "open": true,
+    },
+    "web": {
+      "apiUrl": "/.redwood/functions",
+      "includeEnvironmentVariables": [],
+      "port": 8910,
+      "title": "Redwood App",
+    },
+  },
+  "errors": [],
+  "filepath": "/redwood.toml",
+  "name": "redwood",
+  "warnings": [],
+}
+`;
+
+exports[`From within the empty-project fixture returns the correct TOMLs with a project: toml count 1`] = `1`;
+
+exports[`From within the empty-project fixture returns the correct TOMLs without a project: /redwood.toml 1`] = `
+RedwoodTOML {
+  "contents": {
+    "api": {
+      "port": 8911,
+    },
+    "browser": {
+      "open": true,
+    },
+    "web": {
+      "apiUrl": "/.redwood/functions",
+      "includeEnvironmentVariables": [],
+      "port": 8910,
+      "title": "Redwood App",
+    },
+  },
+  "errors": [],
+  "filepath": "/redwood.toml",
+  "name": "redwood",
+  "warnings": [],
+}
+`;
+
+exports[`From within the empty-project fixture returns the correct TOMLs without a project: toml count 1`] = `1`;
+
+exports[`From within the example-todo-main fixture returns the correct TOMLs with a project: /redwood.toml 1`] = `
+RedwoodTOML {
+  "contents": {
+    "api": {
+      "paths": {
+        "functions": "./api/src/functions",
+        "generated": "./api/generated",
+        "graphql": "./api/src/graphql",
+      },
+      "port": 8911,
+    },
+    "web": {
+      "apiProxyPath": "/api/functions",
+      "port": 8910,
+    },
+  },
+  "errors": [],
+  "filepath": "/redwood.toml",
+  "name": "redwood",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct TOMLs with a project: toml count 1`] = `1`;
+
+exports[`From within the example-todo-main fixture returns the correct TOMLs without a project: /redwood.toml 1`] = `
+RedwoodTOML {
+  "contents": {
+    "api": {
+      "paths": {
+        "functions": "./api/src/functions",
+        "generated": "./api/generated",
+        "graphql": "./api/src/graphql",
+      },
+      "port": 8911,
+    },
+    "web": {
+      "apiProxyPath": "/api/functions",
+      "port": 8910,
+    },
+  },
+  "errors": [],
+  "filepath": "/redwood.toml",
+  "name": "redwood",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main fixture returns the correct TOMLs without a project: toml count 1`] = `1`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct TOMLs with a project: /redwood.toml 1`] = `
+RedwoodTOML {
+  "contents": {
+    "api": {
+      "paths": {
+        "functions": "./api/src/functions",
+        "generated": "./api/generated",
+        "graphql": "./api/src/graphql",
+      },
+      "port": 8911,
+    },
+    "web": {
+      "apiProxyPath": "/api/functions",
+      "port": 8910,
+    },
+  },
+  "errors": [],
+  "filepath": "/redwood.toml",
+  "name": "redwood",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct TOMLs with a project: toml count 1`] = `1`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct TOMLs without a project: /redwood.toml 1`] = `
+RedwoodTOML {
+  "contents": {
+    "api": {
+      "paths": {
+        "functions": "./api/src/functions",
+        "generated": "./api/generated",
+        "graphql": "./api/src/graphql",
+      },
+      "port": 8911,
+    },
+    "web": {
+      "apiProxyPath": "/api/functions",
+      "port": 8910,
+    },
+  },
+  "errors": [],
+  "filepath": "/redwood.toml",
+  "name": "redwood",
+  "warnings": [],
+}
+`;
+
+exports[`From within the example-todo-main-with-errors fixture returns the correct TOMLs without a project: toml count 1`] = `1`;
+
+exports[`From within the test-project fixture returns the correct TOMLs with a project: /redwood.toml 1`] = `
+RedwoodTOML {
+  "contents": {
+    "api": {
+      "port": "\${API_DEV_PORT:8911}",
+    },
+    "browser": {
+      "open": true,
+    },
+    "web": {
+      "apiUrl": "/.redwood/functions",
+      "includeEnvironmentVariables": [],
+      "port": "\${WEB_DEV_PORT:8910}",
+      "title": "Redwood App",
+    },
+  },
+  "errors": [],
+  "filepath": "/redwood.toml",
+  "name": "redwood",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct TOMLs with a project: toml count 1`] = `1`;
+
+exports[`From within the test-project fixture returns the correct TOMLs without a project: /redwood.toml 1`] = `
+RedwoodTOML {
+  "contents": {
+    "api": {
+      "port": "\${API_DEV_PORT:8911}",
+    },
+    "browser": {
+      "open": true,
+    },
+    "web": {
+      "apiUrl": "/.redwood/functions",
+      "includeEnvironmentVariables": [],
+      "port": "\${WEB_DEV_PORT:8910}",
+      "title": "Redwood App",
+    },
+  },
+  "errors": [],
+  "filepath": "/redwood.toml",
+  "name": "redwood",
+  "warnings": [],
+}
+`;
+
+exports[`From within the test-project fixture returns the correct TOMLs without a project: toml count 1`] = `1`;

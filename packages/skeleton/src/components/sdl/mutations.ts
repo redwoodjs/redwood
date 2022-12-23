@@ -27,9 +27,9 @@ export class RedwoodSDLMutation extends RedwoodSkeleton {
     if (parameterNames !== undefined) {
       this.parameters.push(...parameterNames)
     }
+  }
 
-    // Checks
-
+  executeAdditionalChecks(): void {
     const knownDirectives = RedwoodProject.getProject({
       pathWithinProject: this.filepath,
     }).getDirectives()
@@ -45,6 +45,8 @@ export class RedwoodSDLMutation extends RedwoodSkeleton {
         })
       }
     })
+
+    // TODO: Make sure a service function of this name is implemented
   }
 }
 

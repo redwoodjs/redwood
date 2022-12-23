@@ -33,11 +33,13 @@ describe.each([
   it('returns the correct routers without a project', () => {
     const routers = extractRouters(undefined)
     routers.forEach((router) => {
+      router.executeAdditionalChecks()
       router.filepath = stripAndFormatPathForTesting(
         router.filepath,
         PROJECT_PATH
       )
       router.routes.forEach((route) => {
+        route.executeAdditionalChecks()
         route.filepath = stripAndFormatPathForTesting(
           route.filepath,
           PROJECT_PATH
@@ -59,11 +61,13 @@ describe.each([
     })
     const routers = extractRouters(project)
     routers.forEach((router) => {
+      router.executeAdditionalChecks()
       router.filepath = stripAndFormatPathForTesting(
         router.filepath,
         PROJECT_PATH
       )
       router.routes.forEach((route) => {
+        route.executeAdditionalChecks()
         route.filepath = stripAndFormatPathForTesting(
           route.filepath,
           PROJECT_PATH

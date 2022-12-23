@@ -33,6 +33,7 @@ describe.each([
   it('returns the correct layouts without a project', () => {
     const layouts = extractLayouts(undefined)
     layouts.forEach((layout) => {
+      layout.executeAdditionalChecks()
       layout.filepath = stripAndFormatPathForTesting(
         layout.filepath,
         PROJECT_PATH
@@ -50,6 +51,7 @@ describe.each([
     })
     const layouts = extractLayouts(project)
     layouts.forEach((layout) => {
+      layout.executeAdditionalChecks()
       layout.filepath = stripAndFormatPathForTesting(
         layout.filepath,
         PROJECT_PATH

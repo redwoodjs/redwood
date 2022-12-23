@@ -17,8 +17,14 @@ RedwoodSDL {
   "name": "currentUser",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "currentUser",
       "directiveNames": [],
-      "errors": [],
+      "errors": [
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "currentUser"",
+        },
+      ],
       "filepath": "/api/src/graphql/currentUser.sdl.ts",
       "name": "currentUser",
       "parameters": [],
@@ -94,6 +100,7 @@ RedwoodSDL {
   "name": "todos",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
@@ -104,10 +111,16 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLQuery {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
-      "errors": [],
+      "errors": [
+        {
+          "code": "04.003",
+          "message": "There is no corresponding service function named "todosCount"",
+        },
+      ],
       "filepath": "/api/src/graphql/todos.sdl.js",
       "name": "todosCount",
       "parameters": [],
@@ -133,8 +146,14 @@ RedwoodSDL {
   "name": "currentUser",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "currentUser",
       "directiveNames": [],
-      "errors": [],
+      "errors": [
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "currentUser"",
+        },
+      ],
       "filepath": "/api/src/graphql/currentUser.sdl.ts",
       "name": "currentUser",
       "parameters": [],
@@ -210,6 +229,7 @@ RedwoodSDL {
   "name": "todos",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
@@ -220,10 +240,16 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLQuery {
+      "SDLName": "todos",
       "directiveNames": [
         "skipAuth",
       ],
-      "errors": [],
+      "errors": [
+        {
+          "code": "04.003",
+          "message": "There is no corresponding service function named "todosCount"",
+        },
+      ],
       "filepath": "/api/src/graphql/todos.sdl.js",
       "name": "todosCount",
       "parameters": [],
@@ -294,6 +320,7 @@ RedwoodSDL {
   "name": "todos",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todos",
       "directiveNames": [],
       "errors": [],
       "filepath": "/api/src/graphql/todos.sdl.js",
@@ -319,6 +346,7 @@ RedwoodSDL {
   "name": "todosMutations",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosMutations",
       "directiveNames": [
         "requireAuth",
       ],
@@ -326,6 +354,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosMutations"",
         },
       ],
       "filepath": "/api/src/graphql/todosMutations.sdl.js",
@@ -353,6 +385,7 @@ RedwoodSDL {
   "name": "todosWithAuthInvalidRolesErrors",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithAuthInvalidRolesErrors",
       "directiveNames": [
         "requireAuth",
       ],
@@ -360,6 +393,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithAuthInvalidRolesErrors"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js",
@@ -385,6 +422,7 @@ RedwoodSDL {
   "name": "todosWithAuthMissingRoleError",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithAuthMissingRoleError",
       "directiveNames": [
         "requireAuth",
       ],
@@ -392,6 +430,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithAuthMissingRoleError"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithAuthMissingRoleError.sdl.js",
@@ -418,6 +460,7 @@ RedwoodSDL {
   "name": "todosWithAuthRoles",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithAuthRoles",
       "directiveNames": [
         "requireAuth",
       ],
@@ -426,6 +469,10 @@ RedwoodSDL {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
         },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithAuthRoles"",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
       "name": "todosWithStringRole",
@@ -433,6 +480,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLQuery {
+      "SDLName": "todosWithAuthRoles",
       "directiveNames": [
         "requireAuth",
       ],
@@ -440,6 +488,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithAuthRoles"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
@@ -465,6 +517,7 @@ RedwoodSDL {
   "name": "todosWithBuiltInDirectives",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithBuiltInDirectives",
       "directiveNames": [
         "deprecated",
       ],
@@ -472,6 +525,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "deprecated" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithBuiltInDirectives"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithBuiltInDirectives.sdl.js",
@@ -549,6 +606,7 @@ RedwoodSDL {
   "name": "todosWithNumericRoleAuthError",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithNumericRoleAuthError",
       "directiveNames": [
         "requireAuth",
       ],
@@ -556,6 +614,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithNumericRoleAuthError"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithNumericRoleAuthError.sdl.js",
@@ -628,6 +690,7 @@ RedwoodSDL {
   "name": "todos",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todos",
       "directiveNames": [],
       "errors": [],
       "filepath": "/api/src/graphql/todos.sdl.js",
@@ -653,6 +716,7 @@ RedwoodSDL {
   "name": "todosMutations",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosMutations",
       "directiveNames": [
         "requireAuth",
       ],
@@ -660,6 +724,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosMutations"",
         },
       ],
       "filepath": "/api/src/graphql/todosMutations.sdl.js",
@@ -687,6 +755,7 @@ RedwoodSDL {
   "name": "todosWithAuthInvalidRolesErrors",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithAuthInvalidRolesErrors",
       "directiveNames": [
         "requireAuth",
       ],
@@ -694,6 +763,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithAuthInvalidRolesErrors"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithAuthInvalidRolesErrors.sdl.js",
@@ -719,6 +792,7 @@ RedwoodSDL {
   "name": "todosWithAuthMissingRoleError",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithAuthMissingRoleError",
       "directiveNames": [
         "requireAuth",
       ],
@@ -726,6 +800,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithAuthMissingRoleError"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithAuthMissingRoleError.sdl.js",
@@ -752,6 +830,7 @@ RedwoodSDL {
   "name": "todosWithAuthRoles",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithAuthRoles",
       "directiveNames": [
         "requireAuth",
       ],
@@ -760,6 +839,10 @@ RedwoodSDL {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
         },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithAuthRoles"",
+        },
       ],
       "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
       "name": "todosWithStringRole",
@@ -767,6 +850,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLQuery {
+      "SDLName": "todosWithAuthRoles",
       "directiveNames": [
         "requireAuth",
       ],
@@ -774,6 +858,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithAuthRoles"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithAuthRoles.sdl.js",
@@ -799,6 +887,7 @@ RedwoodSDL {
   "name": "todosWithBuiltInDirectives",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithBuiltInDirectives",
       "directiveNames": [
         "deprecated",
       ],
@@ -806,6 +895,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "deprecated" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithBuiltInDirectives"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithBuiltInDirectives.sdl.js",
@@ -883,6 +976,7 @@ RedwoodSDL {
   "name": "todosWithNumericRoleAuthError",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "todosWithNumericRoleAuthError",
       "directiveNames": [
         "requireAuth",
       ],
@@ -890,6 +984,10 @@ RedwoodSDL {
         {
           "code": "04.001",
           "message": "Directive "requireAuth" is not known",
+        },
+        {
+          "code": "04.004",
+          "message": "There is no corresponding service file named "todosWithNumericRoleAuthError"",
         },
       ],
       "filepath": "/api/src/graphql/todosWithNumericRoleAuthError.sdl.js",
@@ -982,6 +1080,7 @@ RedwoodSDL {
   "name": "contacts",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "contacts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -992,6 +1091,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLQuery {
+      "SDLName": "contacts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1087,6 +1187,7 @@ RedwoodSDL {
   "name": "posts",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "posts",
       "directiveNames": [
         "skipAuth",
       ],
@@ -1097,6 +1198,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLQuery {
+      "SDLName": "posts",
       "directiveNames": [
         "skipAuth",
       ],
@@ -1146,6 +1248,7 @@ RedwoodSDL {
   "name": "users",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "users",
       "directiveNames": [
         "skipAuth",
       ],
@@ -1242,6 +1345,7 @@ RedwoodSDL {
   "name": "contacts",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "contacts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1252,6 +1356,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLQuery {
+      "SDLName": "contacts",
       "directiveNames": [
         "requireAuth",
       ],
@@ -1347,6 +1452,7 @@ RedwoodSDL {
   "name": "posts",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "posts",
       "directiveNames": [
         "skipAuth",
       ],
@@ -1357,6 +1463,7 @@ RedwoodSDL {
       "warnings": [],
     },
     RedwoodSDLQuery {
+      "SDLName": "posts",
       "directiveNames": [
         "skipAuth",
       ],
@@ -1406,6 +1513,7 @@ RedwoodSDL {
   "name": "users",
   "queries": [
     RedwoodSDLQuery {
+      "SDLName": "users",
       "directiveNames": [
         "skipAuth",
       ],

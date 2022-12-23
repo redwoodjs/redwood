@@ -20,11 +20,15 @@ import { extractPages } from './page'
 import type { RedwoodPage } from './page'
 import { extractRouters } from './router'
 import type { RedwoodRouter } from './router'
-import { extractSDLs, RedwoodSDL } from './sdl/sdl'
-import { extractServices, RedwoodService } from './service/service'
+import { extractSDLs } from './sdl/sdl'
+import type { RedwoodSDL } from './sdl/sdl'
+import { extractServices } from './service/service'
+import type { RedwoodService } from './service/service'
 import { extractSides } from './side'
 import type { RedwoodSide } from './side'
 import { RedwoodSkeleton } from './skeleton'
+import { extractTOMLs } from './toml'
+import type { RedwoodTOML } from './toml'
 
 /**
  * Used to enumerate either JS or TS project types
@@ -49,6 +53,7 @@ export class RedwoodProject extends RedwoodSkeleton {
   private sdls?: RedwoodSDL[] | undefined
   private services?: RedwoodService[] | undefined
   private sides?: RedwoodSide[] | undefined
+  private tomls?: RedwoodTOML[] | undefined
 
   public static getProject({
     pathWithinProject = '',
@@ -100,7 +105,60 @@ export class RedwoodProject extends RedwoodSkeleton {
       this.sdls = extractSDLs(this)
       this.services = extractServices(this)
       this.sides = extractSides(this)
+      this.tomls = extractTOMLs(this)
+
+      // Execute the additional checks since we've already extracted all components
+      this.executeAdditionalChecks()
     }
+  }
+
+  executeAdditionalChecks(): void {
+    this.cells?.forEach((cell) => {
+      cell.executeAdditionalChecks()
+    })
+    this.directives?.forEach((directive) => {
+      directive.executeAdditionalChecks()
+    })
+    this.functions?.forEach((func) => {
+      func.executeAdditionalChecks()
+    })
+    this.layouts?.forEach((layout) => {
+      layout.executeAdditionalChecks()
+    })
+    this.pages?.forEach((page) => {
+      page.executeAdditionalChecks()
+    })
+    this.routers?.forEach((router) => {
+      router.executeAdditionalChecks()
+      router.routes.forEach((route) => {
+        route.executeAdditionalChecks()
+      })
+    })
+    this.sdls?.forEach((sdl) => {
+      sdl.executeAdditionalChecks()
+      sdl.queries?.forEach((query) => {
+        query.executeAdditionalChecks()
+      })
+      sdl.mutations?.forEach((mutation) => {
+        mutation.executeAdditionalChecks()
+      })
+    })
+    this.services?.forEach((service) => {
+      service.executeAdditionalChecks()
+    })
+    this.sides?.forEach((side) => {
+      side.executeAdditionalChecks()
+    })
+    this.tomls?.forEach((toml) => {
+      toml.executeAdditionalChecks()
+    })
+  }
+
+  getTOMLs(forceExtract = false): RedwoodTOML[] {
+    if (forceExtract || this.tomls === undefined) {
+      this.tomls = extractTOMLs(this)
+    }
+    return this.tomls
   }
 
   getSDLs(forceExtract = false): RedwoodSDL[] {
@@ -206,6 +264,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       this.sides?.forEach((side) => {
         warningsFound ||= side.hasWarnings()
       })
+      this.tomls?.forEach((toml) => {
+        warningsFound ||= toml.hasWarnings()
+      })
     }
     return warningsFound
   }
@@ -257,6 +318,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       this.sides?.forEach((side) => {
         side.printWarnings()
       })
+      this.tomls?.forEach((toml) => {
+        toml.printWarnings()
+      })
     }
   }
 
@@ -299,6 +363,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       })
       this.sides?.forEach((side) => {
         errorsFound ||= side.hasErrors()
+      })
+      this.tomls?.forEach((toml) => {
+        errorsFound ||= toml.hasErrors()
       })
     }
     return errorsFound
@@ -350,6 +417,9 @@ export class RedwoodProject extends RedwoodSkeleton {
       })
       this.sides?.forEach((side) => {
         side.printErrors()
+      })
+      this.tomls?.forEach((toml) => {
+        toml.printErrors()
       })
     }
   }
