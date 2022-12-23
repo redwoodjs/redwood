@@ -68,4 +68,6 @@ const HomePage = () => {
 
 Supabase doesn't redirect to a hosted sign-up page or open a sign-up modal.
 In a real app, you'd build a form here, but we're going to hardcode an email and password.
-After you sign up, you should see `{"isAuthenticated":true}` on the page.
+After you sign up, head to your inbox: there should be a confirmation email from Supabase waiting for you.
+Click the link, then head back to your app.
+Once you refresh the page, you should see `{"isAuthenticated":true}` on the page.
