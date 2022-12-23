@@ -26,14 +26,15 @@ There's one more on this page; scroll down to "Application URIs" and look for "A
 With Auth0, when you log in or sign up, it'll redirect you to Auth0's hosted log-in or sign-up page, then back to your Redwood app.
 But where in your Redwood app exactly?
 Auth0 needs to know, and this setting tells it.
+
 We'll keep things simple for now and make it "http://localhost:8910", but feel free to configure it as you wish.
-Paste "http://localhost:8910" in the text area below "Allowed Callback URLs", then click "Save" at the bottom of the page.
-We'll also need to paste this in `.env` as `AUTH0_REDIRECT_URI`.
+Paste "http://localhost:8910" in the text area below "Allowed Callback URLs", then click "Save Changes" at the bottom of the page.
+Copy this one over to your project's `.env` file too, as `AUTH0_REDIRECT_URI`.
 
 Ok, just one more to go: under "Applications" in the nav on the left, click "APIs".
 There should be one there already.
-We don't need to click into it; next to it's name ("Auth0 Management API" maybe) Auth0 thoughtfully shows what we need, the API Audience.
-Copy it into `.env` as `AUTH0_AUDIENCE`.
+We don't need to click into it; next to it's name ("Auth0 Management API" maybe) Auth0 thoughtfully shows what we need, the "API Audience".
+Copy it into your project's `.env` file as `AUTH0_AUDIENCE`.
 All together now:
 
 ```bash title=".env"
@@ -57,37 +58,32 @@ Lastly, include all these env vars in the list of env vars that should be availa
 ```
 
 That should be enough; now, things should just work.
-Let's make sure: if this is a brand new project, create a home page.
-There we'll destructure `signUp` from the `useAuth` hook (import that from `'src/auth'`):
+Let's make sure: if this is a brand new project, generate a home page.
+There we'll try sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
 
 ```
 yarn rw g page home /
 ```
 
 ```tsx title="web/src/pages/HomePage.tsx"
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-
-// highlight-next-line
 import { useAuth } from 'src/auth'
 
 const HomePage = () => {
-  // highlight-next-line
-  const { signUp } = useAuth()
+  const { isAuthenticated, signUp } = useAuth()
 
   return (
     <>
       {/* MetaTags, h1, paragraphs, etc. */}
 
-      // highlight-next-line
+      <p>{JSON.stringify({ isAuthenticated })}</p>
       <button onClick={signUp}>sign up</button>
     </>
   )
 }
-
-export default HomePage
 ```
 
 Clicking sign up should redirect you to Auth0:
 
 <img width="1522" alt="image" src="https://user-images.githubusercontent.com/32992335/209001246-244db949-31f8-42ff-804e-18f3e423ce89.png" />
+
+After you sign up, you should be redirected back to your Redwood app, and you should see `{"isAuthenticated":true}` on the page.
