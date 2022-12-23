@@ -139,7 +139,7 @@ export async function builder(yargs) {
       }
     )
     .command(
-      'dbauth',
+      'dbAuth',
       'Generate an auth configuration for dbAuth',
       (yargs) => {
         return standardAuthBuilder(yargs).option('webauthn', {
@@ -203,7 +203,7 @@ export async function builder(yargs) {
 function getRedirectMessage(provider) {
   return `${provider} is no longer supported out of the box. But you can still integrate it yourself with ${terminalLink(
     'Custom Auth',
-    'https://redwoodjs.com/docs/auth/custom'
+    'https://redwoodjs.com/docs/canary/auth/custom'
   )}`
 }
 
