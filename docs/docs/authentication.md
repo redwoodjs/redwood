@@ -18,7 +18,7 @@ All auth providers share the same interface so the information here will be usef
 
 ## Official integrations
 
-When you're ready to add auth to your app, there's a great list of providers to choose from, and if you don't see the one you like, you can integrate it via a simple API:
+Redwood has a simple API to integrate any auth provider you can think of. But to make it easier for you official integrations for some of the most popular auth providers are provided out of the box:
 
 - [Auth0](./auth/auth0.md)
 - [Azure Active Directory](./auth/azure.md)
