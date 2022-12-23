@@ -59,7 +59,7 @@ Lastly, include all these env vars in the list of env vars that should be availa
 
 That should be enough; now, things should just work.
 Let's make sure: if this is a brand new project, generate a home page.
-There we'll try sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
+There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
 
 ```
 yarn rw g page home /
