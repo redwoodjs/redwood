@@ -6849,7 +6849,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.7
     "@babel/runtime-corejs3": 7.20.7
-    "@testing-library/dom": 8.19.0
+    "@testing-library/dom": 8.19.1
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.4.3
@@ -8591,19 +8591,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.19.0, @testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.11.1":
-  version: 8.19.0
-  resolution: "@testing-library/dom@npm:8.19.0"
+"@testing-library/dom@npm:8.19.1, @testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.11.1":
+  version: 8.19.1
+  resolution: "@testing-library/dom@npm:8.19.1"
   dependencies:
     "@babel/code-frame": ^7.10.4
     "@babel/runtime": ^7.12.5
-    "@types/aria-query": ^4.2.0
+    "@types/aria-query": ^5.0.1
     aria-query: ^5.0.0
     chalk: ^4.1.0
     dom-accessibility-api: ^0.5.9
     lz-string: ^1.4.4
     pretty-format: ^27.0.2
-  checksum: 347b7a932c54e7d4a1ba605941cb09d191e910d9cb7c8184c074ccd5d1bbb0a8816a51758b3104e42d68e8a45795aa83ea54cc75a26d992b5ef915da7bf428d8
+  checksum: ec249e38a251de16028323841d33b7bae2db659e8219d92136ea231f474896f4bfaff9094c364fd9e49f458f15f8a4fcef61895e44b8eb1342af6c9319ce4327
   languageName: node
   linkType: hard
 
@@ -8737,10 +8737,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aria-query@npm:^4.2.0":
-  version: 4.2.2
-  resolution: "@types/aria-query@npm:4.2.2"
-  checksum: 6dc0d94890c2c7c2e347148ea32215b73bf480e0f0888a9bbfb7b531285a3daf0b95e600db5be1c03d6e5f825d63cf8c2aabc5db93d8d1fd47ce3211f73e8d66
+"@types/aria-query@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "@types/aria-query@npm:5.0.1"
+  checksum: bc9e40ce37bd3a1654948778c7829bd55aea1bc5f2cd06fcf6cd650b07bb388995799e9aab6e2d93a6cf55dcba3b85c155f7ba93adefcc7c2e152fc6057061b5
   languageName: node
   linkType: hard
 
