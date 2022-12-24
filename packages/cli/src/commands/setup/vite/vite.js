@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import toml from '@iarna/toml'
 import chalk from 'chalk'
 import { Listr } from 'listr2'
 
@@ -79,14 +78,17 @@ export const handler = async ({ force, verbose, addPackage }) => {
         title: 'Adding Vite bundler flag to redwood.toml...',
         task: (_ctx, task) => {
           const redwoodTomlPath = getConfigPath()
-          const config = toml.parse(fs.readFileSync(redwoodTomlPath, 'utf-8'))
+          const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-          if (config.web.bundler !== 'vite') {
-            config.web.bundler = 'vite'
-
-            writeFile(redwoodTomlPath, toml.stringify(config), {
-              overwriteExisting: true, // redwood.toml always exists
-            })
+          if (!configContent.includes('bundler = vite')) {
+            // Use string replace to preserve comments and formatting
+            writeFile(
+              redwoodTomlPath,
+              configContent.replace('[web]', '[web]\n  bundler = "vite"'),
+              {
+                overwriteExisting: true, // redwood.toml always exists
+              }
+            )
           } else {
             task.skip('Vite bundler flag already set in redwood.toml')
           }

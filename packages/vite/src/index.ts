@@ -137,6 +137,20 @@ export default function redwoodPluginVite() {
       },
     },
     {
+      // Adds the variables defined in "includeEnvironmentVariables" in redwood.toml to import.meta.env
+      name: 'include-env-variables',
+      config: (): UserConfig => {
+        return {
+          define: Object.fromEntries(
+            redwoodConfig.web.includeEnvironmentVariables.map((envName) => [
+              `import.meta.env.${envName}`,
+              JSON.stringify(process.env[envName]),
+            ])
+          ),
+        }
+      },
+    },
+    {
       // @MARK Adding this custom plugin to support jsx files with .js extensions
       // This is the default in Redwood JS projects. We can remove this once Vite is stable,
       // and have a codemod to convert all JSX files to .jsx extensions

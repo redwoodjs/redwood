@@ -38,6 +38,7 @@ interface BrowserTargetConfig {
   path: string
   target: TargetEnum.BROWSER
   bundler: BundlerEnum
+  includeEnvironmentVariables: string[]
   /**
    * Specify the URL to your api-server.
    * This can be an absolute path proxied on the current domain (`/.netlify/functions`),
@@ -80,11 +81,12 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
+    bundler: BundlerEnum.WEBPACK,
+    includeEnvironmentVariables: [],
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
     a11y: true,
     sourceMap: false,
-    bundler: BundlerEnum.WEBPACK,
   },
   api: {
     title: 'Redwood App',
