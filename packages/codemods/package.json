@@ -25,7 +25,7 @@
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.7",
     "@babel/plugin-transform-typescript": "7.20.7",
-    "@babel/runtime-corejs3": "7.20.7",
+    "@babel/runtime-corejs3": "7.20.6",
     "@iarna/toml": "2.2.5",
     "@vscode/ripgrep": "1.14.2",
     "core-js": "3.26.1",
