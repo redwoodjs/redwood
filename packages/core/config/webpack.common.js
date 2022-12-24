@@ -168,8 +168,8 @@ const getSharedPlugins = (isEnvProduction) => {
       }),
       ['RWJS_DEBUG_ENV']: JSON.stringify({
         RWJS_SRC_ROOT: redwoodPaths.base,
+        REDWOOD_ENV_EDITOR: process.env.REDWOOD_ENV_EDITOR,
       }),
-      ['REDWOOD_ENV_EDITOR']: JSON.stringify(process.env.REDWOOD_ENV_EDITOR),
       ...getEnvVars(),
     }),
     new Dotenv({
