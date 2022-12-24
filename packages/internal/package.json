@@ -57,7 +57,7 @@
     "prettier": "2.8.1",
     "rimraf": "3.0.2",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.16.8",
+    "systeminformation": "5.16.9",
     "terminal-link": "2.1.1",
     "typescript": "4.7.4"
   },
