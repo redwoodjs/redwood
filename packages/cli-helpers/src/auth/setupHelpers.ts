@@ -53,7 +53,7 @@ async function shouldForce(force: boolean, basedir: string, webAuthn: boolean) {
 }
 
 export const standardAuthBuilder = (yargs: yargs.Argv) => {
-  yargs
+  return yargs
     .option('force', {
       alias: 'f',
       default: false,

@@ -1,6 +1,3 @@
-import { createAuth } from '@redwoodjs/auth-supertokens-web'
-import { isBrowser } from '@redwoodjs/prerender/browserUtils'
-
 import SuperTokens from 'supertokens-auth-react'
 import Session from 'supertokens-auth-react/recipe/session'
 import ThirdPartyEmailPassword, {
@@ -8,6 +5,9 @@ import ThirdPartyEmailPassword, {
   Google,
   Apple,
 } from 'supertokens-auth-react/recipe/thirdpartyemailpassword'
+
+import { createAuth } from '@redwoodjs/auth-supertokens-web'
+import { isBrowser } from '@redwoodjs/prerender/browserUtils'
 
 const websiteDomain =
   process.env.SUPERTOKENS_WEBSITE_DOMAIN || 'http://localhost:8910'
