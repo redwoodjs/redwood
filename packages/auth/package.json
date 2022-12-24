@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.6",
+    "@babel/runtime-corejs3": "7.20.7",
     "core-js": "3.26.1",
     "react": "17.0.2"
   },
