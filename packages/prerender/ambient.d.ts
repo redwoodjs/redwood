@@ -14,6 +14,7 @@ declare global {
 
   var RWJS_DEBUG_ENV: {
     RWJS_SRC_ROOT: string
+    REDWOOD_ENV_EDITOR: string
   }
 
   var __REDWOOD__PRERENDERING: boolean
