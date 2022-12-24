@@ -22,12 +22,12 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.6",
-    "@esbuild-plugins/node-globals-polyfill": "0.1.1",
     "@originjs/vite-plugin-commonjs": "1.0.3",
     "@redwoodjs/internal": "3.2.0",
-    "@vitejs/plugin-react": "2.2.0",
+    "@vitejs/plugin-react": "3.0.0",
+    "buffer": "6.0.3",
     "core-js": "3.26.1",
-    "vite": "3.2.5",
+    "vite": "4.0.3",
     "vite-plugin-html": "3.2.0"
   },
   "devDependencies": {

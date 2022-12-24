@@ -2,6 +2,9 @@
 // is licensed under The Unlicense - https://github.com/xpl/panic-overlay/blob/master/LICENSE
 // making it fine for embedding inside this project.
 
+// Stacktracey requires buffer, which Vite does not polyfill by default
+window.Buffer = window.Buffer || require('buffer').Buffer
+
 import { useState } from 'react'
 
 import StackTracey from 'stacktracey'
@@ -203,7 +206,8 @@ function StackEntry({
 
 function toVSCodeURL(entry: StackTracey.Entry) {
   // To account for folks using vscode-insiders etc
-  const scheme = process.env.REDWOOD_ENV_EDITOR || 'vscode'
+  // This is defined by webpack and vite from .env
+  const scheme = RWJS_DEBUG_ENV.REDWOOD_ENV_EDITOR || 'vscode'
   return `${scheme}://file/${entry.fileShort}:${entry.line}:${entry.column}`
 }
 

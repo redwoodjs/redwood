@@ -19,6 +19,7 @@ declare global {
 
   var RWJS_DEBUG_ENV: {
     RWJS_SRC_ROOT: string
+    REDWOOD_ENV_EDITOR: string
   }
 
   /** URL or absolute path to the DbAuth serverless function */

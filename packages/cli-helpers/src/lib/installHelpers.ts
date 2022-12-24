@@ -8,13 +8,12 @@ export const addWebPackages = (webPackages: string[]) => ({
   },
 })
 
-export const addApiPackages = (apiPackages: string[]) =>
-  apiPackages.length > 0 && {
-    title: 'Adding required api packages...',
-    task: async () => {
-      await execa('yarn', ['workspace', 'api', 'add', ...apiPackages])
-    },
-  }
+export const addApiPackages = (apiPackages: string[]) => ({
+  title: 'Adding required api packages...',
+  task: async () => {
+    await execa('yarn', ['workspace', 'api', 'add', ...apiPackages])
+  },
+})
 
 export const installPackages = {
   title: 'Installing packages...',

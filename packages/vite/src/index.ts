@@ -2,7 +2,6 @@ import { readFile as fsReadFile, existsSync } from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import { transform } from 'esbuild'
@@ -18,7 +17,6 @@ const readFile = promisify(fsReadFile)
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
  *
- * @returns {VitePlugin}
  */
 export default function redwoodPluginVite() {
   const redwoodPaths = getPaths()
@@ -83,6 +81,9 @@ export default function redwoodPluginVite() {
             },
             RWJS_DEBUG_ENV: {
               RWJS_SRC_ROOT: redwoodPaths.web.src,
+              REDWOOD_ENV_EDITOR: JSON.stringify(
+                process.env.REDWOOD_ENV_EDITOR
+              ),
             },
           },
           css: {
@@ -122,15 +123,6 @@ export default function redwoodPluginVite() {
               define: {
                 global: 'globalThis',
               },
-
-              // Enable esbuild polyfill plugins
-              // This is needed for DevFatalErrorPage (and stacktracey)
-              plugins: [
-                // @ts-expect-error type error in plugin
-                NodeGlobalsPolyfillPlugin({
-                  buffer: true,
-                }),
-              ],
             },
           },
         }
