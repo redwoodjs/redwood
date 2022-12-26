@@ -154,5 +154,11 @@ describe('authTasks', () => {
         'src/auth/__tests__/fixtures/app/api/src/functions/graphql.ts'
       addApiConfig("import { authDecoder } from 'test-auth-api'")
     })
+
+    it("Doesn't add authDecoder arg if one already exists, even with a non-standard import name and arg placement", () => {
+      mockApiGraphqlPath =
+        'src/auth/__tests__/fixtures/app/api/src/functions/graphqlNonStandardAuthDecoder.ts'
+      addApiConfig("import { authDecoder } from 'test-auth-api'")
+    })
   })
 })
