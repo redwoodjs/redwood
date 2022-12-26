@@ -20,7 +20,38 @@ const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
 
 export const getWebAppPath = () => getPaths().web.app
 
-const addApiConfig = (authDecoderImport?: string) => {
+/**
+ * This function looks for the createGraphQLHandler function call and adds
+ * `authDecoder` to its arguments if it's not already there. Almost always it
+ * will not be there, but if the user already has an auth provider set up and
+ * wants to add another one it's probably there, and in that case we don't
+ * want to add another one
+ *
+ * @param content - The contents of api/src/functions/graphql.ts
+ * @returns content with `authDecoder` added unless it was already there
+ */
+function addAuthDecoderToCreateGraphQLHandler(content: string) {
+  // Have to use a funky looking Regex here to prevent a "Polynomial regular
+  // expression used on uncontrolled data" warning/error. A.k.a "Catastrophic
+  // Backtracking". The usual fix is to use an atomic group, but the JS
+  // regex engine doesn't support that, so we use a lookaround group to
+  // emulate an atomic group.
+  if (
+    !new RegExp('(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder', 's').test(
+      content
+    )
+  ) {
+    return content.replace(
+      /^(?<indentation>\s*)(loggerConfig:)(.*)$/m,
+      `$<indentation>authDecoder,\n$<indentation>$2$3`
+    )
+  }
+
+  return content
+}
+
+// Exporting this to make it easier to test
+export const addApiConfig = (authDecoderImport?: string) => {
   const graphqlPath = getGraphqlPath()
 
   if (!graphqlPath) {
@@ -32,25 +63,7 @@ const addApiConfig = (authDecoderImport?: string) => {
 
   if (authDecoderImport && !content.includes(authDecoderImport)) {
     content = authDecoderImport + '\n' + content
-
-    // If we have multiple auth providers setup we probably already have an
-    // auth decoder configured. In that case we don't want to add another one
-    // Have to use a funky looking Regex here to prevent a "Polynomial regular
-    // expression used on uncontrolled data" warning/error. A.k.a "Catastrophic
-    // Backtracking". The usual fix is to use an atomic group, but the JS
-    // regex engine doesn't support that, so we use a lookaround group to
-    // emulate an atomic group.
-    if (
-      !new RegExp(
-        '(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder',
-        's'
-      ).test(content)
-    ) {
-      content = content.replace(
-        /^(\s*)(loggerConfig:)(.*)$/m,
-        `$1authDecoder,\n$1$2$3`
-      )
-    }
+    content = addAuthDecoderToCreateGraphQLHandler(content)
 
     contentUpdated = true
   }
