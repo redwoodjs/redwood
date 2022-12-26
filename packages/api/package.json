@@ -45,7 +45,7 @@
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.7",
     "@types/aws-lambda": "8.10.109",
-    "@types/jsonwebtoken": "8.5.9",
+    "@types/jsonwebtoken": "9.0.0",
     "@types/memjs": "1",
     "@types/pascalcase": "1.0.1",
     "@types/split2": "3.2.1",
