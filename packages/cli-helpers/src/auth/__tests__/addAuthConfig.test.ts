@@ -15,7 +15,12 @@ jest.mock('@redwoodjs/telemetry', () => {
   }
 })
 
-import { addConfigToApp, addConfigToRoutes, createWebAuth } from '../authTasks'
+import {
+  addConfigToWebApp,
+  addConfigToRoutes,
+  createWebAuth,
+  AuthSetupMode,
+} from '../authTasks'
 
 jest.mock('../../lib/paths', () => {
   const path = require('path')
@@ -60,14 +65,20 @@ beforeEach(() => {
 
 describe('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts', () => {
   it('Matches Auth0 Snapshot', () => {
-    addConfigToApp()
-    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), 'auth0', false)
+    addConfigToWebApp()
+    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), false).task({
+      provider: 'auth0',
+      setupMode: AuthSetupMode.REPLACE,
+    })
     addConfigToRoutes()
   })
 
   it('Matches Clerk Snapshot', () => {
-    addConfigToApp()
-    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), 'clerk', false)
+    addConfigToWebApp()
+    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), false).task({
+      provider: 'clerk',
+      setupMode: AuthSetupMode.REPLACE,
+    })
     addConfigToRoutes()
   })
 })
@@ -79,7 +90,7 @@ describe('Components with props', () => {
     mockWebRoutesPath =
       'src/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
 
-    addConfigToApp()
+    addConfigToWebApp()
     addConfigToRoutes()
   })
 
@@ -88,7 +99,7 @@ describe('Components with props', () => {
       'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
     mockWebRoutesPath = 'src/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
 
-    addConfigToApp()
+    addConfigToWebApp()
     addConfigToRoutes()
   })
 })
@@ -97,7 +108,7 @@ describe('Customized App.js', () => {
   it('Should add auth config when using explicit return', () => {
     mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
 
-    addConfigToApp()
+    addConfigToWebApp()
   })
 })
 
@@ -117,7 +128,7 @@ describe('Swapped out GraphQL client', () => {
     mockWebAppPath =
       'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
-    addConfigToApp()
+    addConfigToWebApp()
 
     expect(console.warn).toHaveBeenCalledWith(
       expect.stringMatching(/GraphQL.*useAuth/)

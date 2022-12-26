@@ -20,6 +20,48 @@ const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
 
 export const getWebAppPath = () => getPaths().web.app
 
+/**
+ * This function looks for the createGraphQLHandler function call and adds
+ * `authDecoder` to its arguments if it's not already there. Almost always it
+ * will not be there, but if the user already has an auth provider set up and
+ * wants to add another one it's probably there, and in that case we don't
+ * want to add another one
+ *
+ * @param content - The contents of api/src/functions/graphql.ts
+ * @returns content with `authDecoder` added unless it was already there
+ */
+function addAuthDecoderToCreateGraphQLHandler(content: string) {
+  // Have to use a funky looking Regex here to prevent a "Polynomial regular
+  // expression used on uncontrolled data" warning/error. A.k.a "Catastrophic
+  // Backtracking". The usual fix is to use an atomic group, but the JS
+  // regex engine doesn't support that, so we use a lookaround group to
+  // emulate an atomic group.
+  if (
+    !new RegExp('(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder', 's').test(
+      content
+    )
+  ) {
+    return content.replace(
+      /^(?<indentation>\s*)(loggerConfig:)(.*)$/m,
+      `$<indentation>authDecoder,\n$<indentation>$2$3`
+    )
+  }
+
+  return content
+}
+
+/**
+ * Replace the existing `import { authDecoder } from 'x'` with a new one
+ *
+ * @param content - The contents of api/src/functions/graphql.ts
+ * @param decoderImport - Something like
+ *   `import { authDecoder } from '@redwoodjs/auth-clerk-api'`
+ * @returns content with the authDecoder import replaced with the new import
+ */
+function replaceAuthDecoderImport(content: string, decoderImport: string) {
+  return content.replace(/import { authDecoder } from .+/, decoderImport)
+}
+
 const addApiConfig = ({
   replaceExistingImport,
   authDecoderImport,
@@ -33,43 +75,16 @@ const addApiConfig = ({
     throw new Error('Could not find your graphql file path')
   }
 
-  let content = fs.readFileSync(graphqlPath).toString()
-  let contentUpdated = false
+  const content = fs.readFileSync(graphqlPath, 'utf-8')
+  let newContent = content
 
-  // Replace the existing import { authDecoder } from 'x' with the new one
-  if (authDecoderImport && replaceExistingImport) {
-    content = content.replace(
-      /import { authDecoder } from .+/,
-      authDecoderImport
-    )
-
-    contentUpdated = true
-  }
-
-  // Won't go into this block, if replaceExistingImport ran
-  if (authDecoderImport && !content.includes(authDecoderImport)) {
-    content = authDecoderImport + '\n' + content
-
-    // If we have multiple auth providers setup we probably already have an
-    // auth decoder configured. In that case we don't want to add another one
-    // Have to use a funky looking Regex here to prevent a "Polynomial regular
-    // expression used on uncontrolled data" warning/error. A.k.a "Catastrophic
-    // Backtracking". The usual fix is to use an atomic group, but the JS
-    // regex engine doesn't support that, so we use a lookaround group to
-    // emulate an atomic group.
-    if (
-      !new RegExp(
-        '(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder',
-        's'
-      ).test(content)
-    ) {
-      content = content.replace(
-        /^(\s*)(loggerConfig:)(.*)$/m,
-        `$1authDecoder,\n$1$2$3`
-      )
+  if (authDecoderImport) {
+    if (replaceExistingImport) {
+      newContent = replaceAuthDecoderImport(newContent, authDecoderImport)
+    } else {
+      newContent = authDecoderImport + '\n' + newContent
+      newContent = addAuthDecoderToCreateGraphQLHandler(newContent)
     }
-
-    contentUpdated = true
   }
 
   const hasAuthImport =
@@ -79,22 +94,20 @@ const addApiConfig = ({
 
   if (!hasAuthImport) {
     // add import statement
-    content = content.replace(
+    newContent = newContent.replace(
       /^(import { db } from 'src\/lib\/db')$/m,
       `import { getCurrentUser } from 'src/lib/auth'\n$1`
     )
 
     // add object to handler
-    content = content.replace(
+    newContent = newContent.replace(
       /^(\s*)(loggerConfig:)(.*)$/m,
       `$1getCurrentUser,\n$1$2$3`
     )
-
-    contentUpdated = true
   }
 
-  if (contentUpdated) {
-    fs.writeFileSync(graphqlPath, content)
+  if (newContent !== content) {
+    fs.writeFileSync(graphqlPath, newContent)
   }
 }
 
@@ -239,8 +252,9 @@ export const addConfigToWebApp = <
 }
 
 export const createWebAuth = (templateDir: string, webAuthn: boolean) => {
+  const isTSProject = isTypeScriptProject()
   return {
-    title: 'Creating web/src/auth.{js,ts}',
+    title: `Creating web/src/auth.${isTSProject ? 'ts' : 'js'}`,
     task: (ctx: AuthGeneratorCtx) => {
       const templatesBaseDir = path.join(templateDir, 'templates', 'web')
       const templates = fs.readdirSync(templatesBaseDir)
@@ -289,7 +303,7 @@ export const createWebAuth = (templateDir: string, webAuthn: boolean) => {
         'utf-8'
       )
 
-      template = isTypeScriptProject()
+      template = isTSProject
         ? template
         : transformTSToJS(authFileName, template)
 
