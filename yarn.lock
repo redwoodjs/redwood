@@ -6205,7 +6205,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@prisma/client": 4.8.0
     "@types/aws-lambda": 8.10.109
-    "@types/jsonwebtoken": 8.5.9
+    "@types/jsonwebtoken": 9.0.0
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 3.2.1
@@ -6246,7 +6246,7 @@ __metadata:
     "@babel/core": 7.20.7
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
-    "@types/jsonwebtoken": 8.5.9
+    "@types/jsonwebtoken": 9.0.0
     core-js: 3.26.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -6299,7 +6299,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
     "@types/aws-lambda": 8.10.109
-    "@types/jsonwebtoken": 8.5.9
+    "@types/jsonwebtoken": 9.0.0
     core-js: 3.26.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -6533,7 +6533,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
     "@types/aws-lambda": 8.10.109
-    "@types/jsonwebtoken": 8.5.9
+    "@types/jsonwebtoken": 9.0.0
     core-js: 3.26.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -6585,7 +6585,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
     "@types/aws-lambda": 8.10.109
-    "@types/jsonwebtoken": 8.5.9
+    "@types/jsonwebtoken": 9.0.0
     core-js: 3.26.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -6635,7 +6635,7 @@ __metadata:
     "@babel/core": 7.20.7
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
-    "@types/jsonwebtoken": 8.5.9
+    "@types/jsonwebtoken": 9.0.0
     core-js: 3.26.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -6966,7 +6966,7 @@ __metadata:
     "@prisma/client": 4.8.0
     "@redwoodjs/api": 3.2.0
     "@redwoodjs/auth": 3.2.0
-    "@types/jsonwebtoken": 8.5.9
+    "@types/jsonwebtoken": 9.0.0
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 9.0.0
@@ -9261,7 +9261,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:8.5.9, @types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0":
+"@types/jsonwebtoken@npm:9.0.0":
+  version: 9.0.0
+  resolution: "@types/jsonwebtoken@npm:9.0.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: 168636cad4dc02b7e42ffa7ac71ca93911f783e8478c854194f3adf6ab518a57a19f620f8c3a9ec2a8a8016f7c613d34c9ee004e516c648471c7fb3c98804672
+  languageName: node
+  linkType: hard
+
+"@types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0":
   version: 8.5.9
   resolution: "@types/jsonwebtoken@npm:8.5.9"
   dependencies:
