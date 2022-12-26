@@ -1,4 +1,4 @@
-import { authDecoder } from '@redwoodjs/auth-dbauth-api'
+import { authDecoder as dbAuthAuthDecoder } from '@redwoodjs/auth-dbauth-api'
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
 import directives from 'src/directives/**/*.{js,ts}'
@@ -10,7 +10,6 @@ import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
 export const handler = createGraphQLHandler({
-  authDecoder,
   getCurrentUser,
   loggerConfig: { logger, options: {} },
   directives,
@@ -20,4 +19,5 @@ export const handler = createGraphQLHandler({
     // Disconnect from your database with an unhandled exception.
     db.$disconnect()
   },
+  authDecoder: dbAuthAuthDecoder,
 })
