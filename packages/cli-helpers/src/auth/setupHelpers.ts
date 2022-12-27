@@ -14,8 +14,10 @@ import { apiSideFiles } from './authFiles'
 import {
   addApiPackages,
   addAuthConfigToGqlApi,
-  addAuthConfigToWeb,
+  addConfigToRoutes,
+  addConfigToWebApp,
   addWebPackages,
+  createWebAuth,
   generateAuthApiFiles,
   installPackages,
 } from './authTasks'
@@ -101,7 +103,9 @@ export const standardAuthHandler = async ({
   const tasks = new Listr<never>(
     [
       generateAuthApiFiles(basedir, provider, force, webAuthn),
-      addAuthConfigToWeb(basedir, provider, webAuthn),
+      addConfigToWebApp(),
+      createWebAuth(basedir, provider, webAuthn),
+      addConfigToRoutes(),
       addAuthConfigToGqlApi(authDecoderImport),
       webPackages.length && addWebPackages(webPackages),
       apiPackages.length && addApiPackages(apiPackages),
