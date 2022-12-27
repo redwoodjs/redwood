@@ -1,4 +1,3 @@
-
 import { Listr, ListrTask } from 'listr2'
 import terminalLink from 'terminal-link'
 import yargs from 'yargs'
@@ -65,9 +64,7 @@ function truthy<T>(value: T): value is Truthy<T> {
 
 /**
  *  basedir assumes that you must have a templates folder in that directory.
- *
- *  See folder structure of auth providers in packages/auth-providers-setup/src/<provider>
- *
+ *  See folder structure of auth providers in packages/auth-providers/<provider>/setup/src
  */
 export const standardAuthHandler = async ({
   basedir,
@@ -91,11 +88,10 @@ export const standardAuthHandler = async ({
       !forceArg && checkIfAuthSetupAlready(),
       generateAuthApiFiles(basedir, webAuthn),
 
-      // Setup the web side
       addConfigToWebApp(),
       createWebAuth(basedir, webAuthn),
       addConfigToRoutes(),
-      // ----
+
       addAuthConfigToGqlApi(authDecoderImport),
       webPackages.length && addWebPackages(webPackages),
       apiPackages.length && addApiPackages(apiPackages),

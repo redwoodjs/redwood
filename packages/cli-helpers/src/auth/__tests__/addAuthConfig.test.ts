@@ -106,30 +106,45 @@ describe('authTasks', () => {
 
   describe('Components with props', () => {
     it('Should add useAuth on the same line for single line components, and separate line for multiline components', () => {
+      const ctx = {
+        provider: 'clerk',
+        setupMode: AuthSetupMode.FORCE,
+      }
+
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
       mockWebRoutesPath =
         'src/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
 
-      addConfigToWebApp().task()
+      addConfigToWebApp().task(ctx, {} as any)
       addConfigToRoutes().task()
     })
 
     it('Should not add useAuth if one already exists', () => {
+      const ctx = {
+        provider: 'clerk',
+        setupMode: AuthSetupMode.FORCE,
+      }
+
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
       mockWebRoutesPath = 'src/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
 
-      addConfigToWebApp().task()
+      addConfigToWebApp().task(ctx, {} as any)
       addConfigToRoutes().task()
     })
   })
 
   describe('Customized App.js', () => {
     it('Should add auth config when using explicit return', () => {
+      const ctx = {
+        provider: 'clerk',
+        setupMode: AuthSetupMode.FORCE,
+      }
+
       mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
 
-      addConfigToWebApp().task()
+      addConfigToWebApp().task(ctx, {} as any)
     })
   })
 
@@ -146,10 +161,15 @@ describe('authTasks', () => {
     })
 
     it('Should add auth config when app is missing RedwoodApolloProvider', () => {
+      const ctx = {
+        provider: 'clerk',
+        setupMode: AuthSetupMode.FORCE,
+      }
+
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
-      addConfigToWebApp().task()
+      addConfigToWebApp().task(ctx, {} as any)
 
       expect(console.warn).toHaveBeenCalledWith(
         expect.stringMatching(/GraphQL.*useAuth/)
