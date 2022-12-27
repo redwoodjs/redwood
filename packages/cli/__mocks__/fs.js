@@ -1,20 +1,44 @@
+import path from 'path'
+
 const fs = {
   ...jest.requireActual('fs'),
+}
+
+let mockFiles = {}
+
+const pathSeparator = path.sep
+const getParentDir = (path) => {
+  return path.substring(0, path.lastIndexOf(pathSeparator))
+}
+const makeParentDirs = (path) => {
+  const parentDir = getParentDir(path)
+  if (parentDir && !(parentDir in mockFiles)) {
+    mockFiles[parentDir] = undefined
+    makeParentDirs(parentDir)
+  }
 }
 
 /**
  * This is a custom function that our tests can use during setup to specify
  * what the files on the "mock" filesystem should look like when any of the
  * `fs` APIs are used.
- */
-let mockFiles = {}
-
-/**
+ *
  * Sets the state of the mocked file system
  * @param newMockFiles - {[filepath]: contents}
  */
 fs.__setMockFiles = (newMockFiles) => {
   mockFiles = { ...newMockFiles }
+
+  // Generate all the directories which implicitly exist
+  Object.keys(mockFiles).forEach((mockPath) => {
+    if (mockPath.includes(pathSeparator)) {
+      makeParentDirs(mockPath)
+    }
+  })
+}
+
+fs.__getMockFiles = () => {
+  return mockFiles
 }
 
 fs.readFileSync = (path) => {
@@ -39,6 +63,17 @@ fs.readFileSync = (path) => {
 }
 
 fs.writeFileSync = (path, contents) => {
+  const parentDir = getParentDir(path)
+  if (parentDir && !fs.existsSync(parentDir)) {
+    const fakeError = new Error(
+      `Error: ENOENT: no such file or directory, open '${path}'`
+    )
+    fakeError.errno = -2
+    fakeError.syscall = 'open'
+    fakeError.code = 'ENOENT'
+    fakeError.path = path
+    throw fakeError
+  }
   mockFiles[path] = contents
 }
 
@@ -46,13 +81,34 @@ fs.appendFileSync = (path, contents) => {
   if (path in mockFiles) {
     mockFiles[path] = mockFiles[path] + contents
   } else {
-    mockFiles[path] = contents
+    fs.writeFileSync(path, contents)
   }
 }
 
-fs.rmSync = (path) => {
-  if (path in mockFiles) {
-    delete mockFiles[path]
+fs.rmSync = (path, options = {}) => {
+  if (fs.existsSync(path)) {
+    if (options.recursive) {
+      Object.keys(mockFiles).forEach((mockedPath) => {
+        if (mockedPath.startsWith(path)) {
+          delete mockFiles[mockedPath]
+        }
+      })
+    } else {
+      if (mockFiles[path] === undefined) {
+        const children = fs.readdirSync(path)
+        if (children.length !== 0) {
+          const fakeError = new Error(
+            `NodeError [SystemError]: Path is a directory: rm returned EISDIR (is a directory) ${path}`
+          )
+          fakeError.errno = 21
+          fakeError.syscall = 'rm'
+          fakeError.code = 'ERR_FS_EISDIR'
+          fakeError.path = path
+          throw fakeError
+        }
+      }
+      delete mockFiles[path]
+    }
   } else {
     const fakeError = new Error(
       `Error: ENOENT: no such file or directory, stat '${path}'`
@@ -81,33 +137,83 @@ fs.unlinkSync = (path) => {
 }
 
 fs.existsSync = (path) => {
-  return path in mockFiles
+  return Object.keys(mockFiles).some((existingPath) => {
+    return existingPath.startsWith(path)
+  })
 }
 
 fs.copyFileSync = (src, dist) => {
   fs.writeFileSync(dist, fs.readFileSync(src))
 }
 
-// fs.readdirSync = (path) => {
-//   const mockedFiles = []
-//   Object.keys(mockFiles).forEach((mockedPath) => {
-//     // Is a child of the desired path
-//     if (mockedPath.startsWith(path)) {
-//       const childPath = mockedPath.substring(path.length + 1)
-//       // Is the child a direct child of the desired path
-//       if (!childPath.includes(sep)) {
-//         mockedFiles.push(childPath)
-//       }
-//     }
-//   })
-//   return mockedFiles
-// }
+fs.readdirSync = (path) => {
+  // Check it exists
+  if (!fs.existsSync(path)) {
+    const fakeError = new Error(
+      `Error: ENOENT: no such file or directory, scandir '${path}'`
+    )
+    fakeError.errno = -2
+    fakeError.syscall = 'scandir'
+    fakeError.code = 'ENOENT'
+    fakeError.path = path
+    throw fakeError
+  }
 
-// fs.mkdirSync = () => {}
+  // If it has contents it's a file, so throw
+  if (mockFiles[path] !== undefined) {
+    const fakeError = new Error(
+      `Error: ENOTDIR: not a directory, scandir '${path}'`
+    )
+    fakeError.errno = -20
+    fakeError.syscall = 'scandir'
+    fakeError.code = 'ENOTDIR'
+    fakeError.path = path
+    throw fakeError
+  }
 
-// // @MARK this works for now but should probably be a little more full-featured
-// fs.rmdirSync = (path) => {
-//   delete mockFiles[path]
-// }
+  const content = []
+  Object.keys(mockFiles).forEach((mockedPath) => {
+    const childPath = mockedPath.substring(path.length + 1)
+    if (
+      mockedPath.startsWith(path) &&
+      !childPath.includes(pathSeparator) &&
+      childPath
+    ) {
+      content.push(childPath)
+    }
+  })
+  return content
+}
+
+fs.mkdirSync = (path, options = {}) => {
+  if (options.recursive) {
+    makeParentDirs(path)
+  }
+  // Directories are represented as paths with an "undefined" value
+  fs.writeFileSync(path, undefined)
+}
+
+fs.rmdirSync = (path, options = {}) => {
+  if (!fs.existsSync(path)) {
+    const fakeError = new Error(
+      `Error: ENOENT: no such file or directory, rmdir '${path}'`
+    )
+    fakeError.errno = -2
+    fakeError.syscall = 'rmdir'
+    fakeError.code = 'ENOENT'
+    fakeError.path = path
+    throw fakeError
+  } else if (mockFiles[path] !== undefined) {
+    const fakeError = new Error(
+      `Error: ENOTDIR: not a directory, rmdir '${path}'`
+    )
+    fakeError.errno = -20
+    fakeError.syscall = 'rmdir'
+    fakeError.code = 'ENOTDIR'
+    fakeError.path = path
+    throw fakeError
+  }
+  fs.rmSync(path, options)
+}
 
 module.exports = fs
