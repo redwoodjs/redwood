@@ -222,7 +222,7 @@ const addUseAuthHook = (componentName: string, content: string) => {
  * Actually inserts the required config lines into App.{js,tsx}
  * Exported for testing
  */
-export const addConfigToApp = async () => {
+export const addConfigToWebApp = async () => {
   const webAppPath = getWebAppPath()
 
   let content = fs.readFileSync(webAppPath).toString()
@@ -367,7 +367,7 @@ export const addAuthConfigToWeb = <Renderer extends typeof ListrRenderer>(
   title: 'Adding auth config to web...',
   task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
     if (webIndexDoesExist()) {
-      addConfigToApp()
+      addConfigToWebApp()
       createWebAuth(basedir, provider, webAuthn)
       addConfigToRoutes()
     } else {
