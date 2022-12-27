@@ -123,7 +123,6 @@ fs.rmSync = (path, options = {}) => {
   }
 }
 
-// TODO: Check options
 fs.unlinkSync = (path) => {
   if (path in mockFiles) {
     delete mockFiles[path]
@@ -140,7 +139,6 @@ fs.unlinkSync = (path) => {
 }
 
 fs.existsSync = (path) => {
-  // console.log('exists?', path)
   return path in mockFiles
 }
 
