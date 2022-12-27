@@ -31,7 +31,7 @@ it('removes new files', async () => {
 
   await rollback.executeRollback()
   expect(fs.readFileSync('fake-file-1')).toBe('fake-content-1')
-  expect(fs.readFileSync('fake-file-2')).toBe(undefined)
+  expect(fs.existsSync('fake-file-2')).toBe(false)
 })
 
 // TODO: Handle this when the fs mock implements the additional functions nessecary to inspect dirs
@@ -126,7 +126,7 @@ it('reset clears the stack', async () => {
   })
   rollback.resetRollback()
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe(undefined)
+  expect(fs.existsSync('fake-file')).toBe(false)
 })
 
 it('prepare clears the stack', async () => {
@@ -136,7 +136,7 @@ it('prepare clears the stack', async () => {
   })
   rollback.prepareForRollback({})
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe(undefined)
+  expect(fs.existsSync('fake-file')).toBe(false)
 })
 
 it('prepare sets listr2 rollback functions and rollback executes correctly', async () => {
