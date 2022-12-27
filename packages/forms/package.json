@@ -25,12 +25,12 @@
     "@babel/runtime-corejs3": "7.20.7",
     "core-js": "3.26.1",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.41.0"
+    "react-hook-form": "7.41.1"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.7",
-    "@testing-library/dom": "8.19.0",
+    "@testing-library/dom": "8.19.1",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "14.4.3",

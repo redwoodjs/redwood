@@ -14,8 +14,10 @@ import { apiSideFiles } from './authFiles'
 import {
   addApiPackages,
   addAuthConfigToGqlApi,
-  addAuthConfigToWeb,
+  addConfigToRoutes,
+  addConfigToWebApp,
   addWebPackages,
+  createWebAuth,
   generateAuthApiFiles,
   installPackages,
 } from './authTasks'
@@ -56,11 +58,6 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
       alias: 'f',
       default: false,
       description: 'Overwrite existing configuration',
-      type: 'boolean',
-    })
-    .option('warn', {
-      default: true,
-      description: 'Show experimental auth warning',
       type: 'boolean',
     })
     .epilogue(
@@ -106,7 +103,9 @@ export const standardAuthHandler = async ({
   const tasks = new Listr<never>(
     [
       generateAuthApiFiles(basedir, provider, force, webAuthn),
-      addAuthConfigToWeb(basedir, provider, webAuthn),
+      addConfigToWebApp(),
+      createWebAuth(basedir, provider, webAuthn),
+      addConfigToRoutes(),
       addAuthConfigToGqlApi(authDecoderImport),
       webPackages.length && addWebPackages(webPackages),
       apiPackages.length && addApiPackages(apiPackages),

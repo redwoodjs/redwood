@@ -2,13 +2,11 @@ import path from 'path'
 
 import execa from 'execa'
 import fs from 'fs-extra'
-import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../../lib/'
-import c from '../../../lib/colors'
 
 export const command = 'auth <provider>'
 
@@ -16,41 +14,7 @@ export const description = 'Generate an auth configuration'
 
 // Don't forget to update test-project setup if you change something here
 export async function builder(yargs) {
-  async function printExperimentalWarning(argv, yargs) {
-    if (!argv.warn) {
-      return
-    }
-
-    console.log(
-      c.warning(
-        [
-          '',
-          "You're running the experimental @canary version of auth. It might",
-          'be broken, and after running this command you will not be able to',
-          'downgrade to a stable version of Redwood without breaking your',
-          'auth setup. Please only use this version of auth in throwaway',
-          'projects. For a more stable experience, but still updated with the',
-          "latest patches, try switching to Redwood's @next version by",
-          'running `yarn rw upgrade -t next`',
-          '',
-        ].join('\n')
-      )
-    )
-
-    const response = await prompts({
-      type: 'confirm',
-      name: 'answer',
-      message: 'Do you want to continue?',
-      initial: false,
-    })
-
-    if (!response.answer) {
-      yargs.exit(1)
-    }
-  }
-
   yargs
-    .middleware([printExperimentalWarning])
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
@@ -64,9 +28,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'ethereum is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('ethereum'))
       }
     )
     .command(
@@ -74,9 +36,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'goTrue is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('goTrue'))
       }
     )
     .command(
@@ -84,9 +44,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'magicLink is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('magicLink'))
       }
     )
     .command(
@@ -94,9 +52,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'nhost is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('nhost'))
       }
     )
     .command(
@@ -104,9 +60,7 @@ export async function builder(yargs) {
       false,
       () => {},
       () => {
-        console.log(
-          'okta is no longer supported out of the box. But you can still integrate it yourself with custom auth'
-        )
+        console.log(getRedirectMessage('okta'))
       }
     )
     // Providers we support
@@ -149,7 +103,7 @@ export async function builder(yargs) {
       }
     )
     .command(
-      'dbauth',
+      'dbAuth',
       'Generate an auth configuration for dbAuth',
       (yargs) => {
         return standardAuthBuilder(yargs).option('webauthn', {
@@ -204,6 +158,19 @@ export async function builder(yargs) {
     )
 }
 
+/**
+ * Get a stock message for one of our removed auth providers
+ * directing the user to the Custom Auth docs.
+ *
+ * @param {string} provider
+ */
+function getRedirectMessage(provider) {
+  return `${provider} is no longer supported out of the box. But you can still integrate it yourself with ${terminalLink(
+    'Custom Auth',
+    'https://redwoodjs.com/docs/canary/auth/custom'
+  )}`
+}
+
 async function getAuthHandler(module) {
   // Here we're reading this package's (@redwoodjs/cli) package.json.
   // So, in a user's project, `packageJsonPath` will be something like...
@@ -215,6 +182,12 @@ async function getAuthHandler(module) {
     const { stdout } = await execa.command(
       `yarn npm info ${module} --fields versions --json`
     )
+
+    // If the version includes a plus, like '4.0.0-rc.428+dd79f1726'
+    // (all @canary, @next, and @rc packages do), get rid of everything after the plus.
+    if (version.includes('+')) {
+      version = version.split('+')[0]
+    }
 
     const versionIsPublished = JSON.parse(stdout).versions.includes(version)
 

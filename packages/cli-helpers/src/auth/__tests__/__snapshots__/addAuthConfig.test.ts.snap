@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Components with props Should add useAuth on the same line for single line components, and separate line for multiline components 1`] = `
+exports[`authTasks Components with props Should add useAuth on the same line for single line components, and separate line for multiline components 1`] = `
 "import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -27,7 +27,7 @@ export default App
 "
 `;
 
-exports[`Components with props Should add useAuth on the same line for single line components, and separate line for multiline components 2`] = `
+exports[`authTasks Components with props Should add useAuth on the same line for single line components, and separate line for multiline components 2`] = `
 "// In this file, all Page components from 'src/pages\` are auto-imported. Nested
 // directories are supported, and should be uppercase. Each subdirectory will be
 // prepended onto the component name.
@@ -62,7 +62,7 @@ export default Routes
 "
 `;
 
-exports[`Components with props Should not add useAuth if one already exists 1`] = `
+exports[`authTasks Components with props Should not add useAuth if one already exists 1`] = `
 "import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -89,7 +89,7 @@ export default App
 "
 `;
 
-exports[`Components with props Should not add useAuth if one already exists 2`] = `
+exports[`authTasks Components with props Should not add useAuth if one already exists 2`] = `
 "// In this file, all Page components from 'src/pages\` are auto-imported. Nested
 // directories are supported, and should be uppercase. Each subdirectory will be
 // prepended onto the component name.
@@ -128,7 +128,7 @@ export default Routes
 "
 `;
 
-exports[`Customized App.js Should add auth config when using explicit return 1`] = `
+exports[`authTasks Customized App.js Should add auth config when using explicit return 1`] = `
 "import { useEffect } from 'react'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
@@ -166,7 +166,7 @@ export default App
 "
 `;
 
-exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 1`] = `
+exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0) 1`] = `
 "import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -193,14 +193,14 @@ export default App
 "
 `;
 
-exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 2`] = `
+exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0) 2`] = `
 "import { createAuth } from '@redwoodjs/auth-dbauth-web'
 
 export const { AuthProvider, useAuth } = createAuth()
 "
 `;
 
-exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Auth0 Snapshot 3`] = `
+exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0) 3`] = `
 "// In this file, all Page components from 'src/pages\` are auto-imported. Nested
 // directories are supported, and should be uppercase. Each subdirectory will be
 // prepended onto the component name.
@@ -226,7 +226,7 @@ export default Routes
 "
 `;
 
-exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 1`] = `
+exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk) 1`] = `
 "import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -253,14 +253,14 @@ export default App
 "
 `;
 
-exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 2`] = `
+exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk) 2`] = `
 "import { createAuth } from '@redwoodjs/auth-dbauth-web'
 
 export const { AuthProvider, useAuth } = createAuth()
 "
 `;
 
-exports[`Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts Matches Clerk Snapshot 3`] = `
+exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk) 3`] = `
 "// In this file, all Page components from 'src/pages\` are auto-imported. Nested
 // directories are supported, and should be uppercase. Each subdirectory will be
 // prepended onto the component name.
@@ -286,7 +286,7 @@ export default Routes
 "
 `;
 
-exports[`Swapped out GraphQL client Should add auth config when app is missing RedwoodApolloProvider 1`] = `
+exports[`authTasks Swapped out GraphQL client Should add auth config when app is missing RedwoodApolloProvider 1`] = `
 "import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
@@ -313,5 +313,86 @@ const App = () => (
 )
 
 export default App
+"
+`;
+
+exports[`authTasks addApiConfig Adds authDecoder arg to default graphql.ts file 1`] = `
+"import { authDecoder } from 'test-auth-api'
+import { createGraphQLHandler } from '@redwoodjs/graphql-server'
+
+import directives from 'src/directives/**/*.{js,ts}'
+import sdls from 'src/graphql/**/*.sdl.{js,ts}'
+import services from 'src/services/**/*.{js,ts}'
+
+import { getCurrentUser } from 'src/lib/auth'
+import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
+
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+"
+`;
+
+exports[`authTasks addApiConfig Doesn't add authDecoder arg if one already exists 1`] = `
+"import { authDecoder } from 'test-auth-api'
+import { createGraphQLHandler } from '@redwoodjs/graphql-server'
+
+import directives from 'src/directives/**/*.{js,ts}'
+import sdls from 'src/graphql/**/*.sdl.{js,ts}'
+import services from 'src/services/**/*.{js,ts}'
+
+import { getCurrentUser } from 'src/lib/auth'
+import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
+
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+"
+`;
+
+exports[`authTasks addApiConfig Doesn't add authDecoder arg if one already exists, even with a non-standard import name and arg placement 1`] = `
+"import { authDecoder } from 'test-auth-api'
+import { createGraphQLHandler } from '@redwoodjs/graphql-server'
+
+import directives from 'src/directives/**/*.{js,ts}'
+import sdls from 'src/graphql/**/*.sdl.{js,ts}'
+import services from 'src/services/**/*.{js,ts}'
+
+import { getCurrentUser } from 'src/lib/auth'
+import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
+
+export const handler = createGraphQLHandler({
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+  authDecoder,
+})
 "
 `;

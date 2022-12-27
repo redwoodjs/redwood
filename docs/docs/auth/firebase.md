@@ -4,200 +4,70 @@ sidebar_label: Firebase
 
 # Firebase Authentication
 
-## Installation
-
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+To get started, run the setup command:
 
 ```bash
 yarn rw setup auth firebase
 ```
 
-## Setup
+This installs all the packages, writes all the files, and makes all the code modifications you need.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Firebase, see the top-level [Authentication](../authentication.md) doc.
+For now, let's focus on Firebase's side of things.
 
-We're using [Firebase Google Sign-In](https://firebase.google.com/docs/auth/web/google-signin), so you'll have to follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin#before_you_begin) steps in this guide. **Only** follow the "Before you begin" parts.
+If you don't have a Firebase account yet, now's the time to make one: navigate to https://firebase.google.com and click "Go to console", sign up, and create a project.
+After it's ready, we'll get the API keys.
 
-> **Including Environment Variables in Serverless Deployment:** in addition to adding the following env vars to your deployment hosting provider, you _must_ take an additional step to include them in your deployment build process. Using the names exactly as given below, follow the instructions in [this document](https://redwoodjs.com/docs/environment-variables) to "Whitelist them in your `redwood.toml`".
+To get the API keys, we need to add a web app to our project.
+Click the `</>` icon in main call to action on the dashboard—"Get started by adding Firebase to your app".
+Give your app a nickname, then you should see the API keys.
+Since we're only using Firebase for auth, we only need `apiKey`, `authDomain`, and `projectId`.
+Copy them into your project's `.env` file:
 
-```jsx title="web/src/auth.js"
-import * as firebaseAuth from '@firebase/auth'
-import { initializeApp, getApp, getApps } from 'firebase/app'
-
-import { createAuth } from '@redwoodjs/auth-providers-web'
-
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-
-  // Optional config, may be needed, depending on how you use firebase
-  // projectId: process.env.FIREBASE_PROJECT_ID,
-  // storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  // messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  // appId: process.env.FIREBASE_APP_ID,
-}
-
-const firebaseApp = ((config) => {
-  const apps = getApps()
-
-  if (!apps.length) {
-    initializeApp(config)
-  }
-
-  return getApp()
-})(firebaseConfig)
-
-export const firebaseClient = {
-  firebaseAuth,
-  firebaseApp,
-}
-
-export const { AuthProvider, useAuth } = createAuth(firebaseClient)
+```bash title=".env"
+FIREBASE_API_KEY="..."
+FIREBASE_AUTH_DOMAIN="..."
+FIREBASE_PROJECT_ID="..."
 ```
 
-## Usage
+Lastly, include `FIREBASE_API_KEY` and `FIREBASE_AUTH_DOMAIN` in the list of env vars that should be available to the web side (`FIREBASE_PROJECT_ID` is for the api side):
 
-```jsx
-const UserAuth = () => {
-  const { loading, isAuthenticated, logIn, logOut } = useAuth()
+```toml title="redwood.toml"
+[web]
+  # ...
+  includeEnvironmentVariables = ["FIREBASE_API_KEY", "FIREBASE_AUTH_DOMAIN"]
+```
 
-  if (loading) {
-    return null
-  }
+We've hooked up our Firebase app to our Redwood app, but if you try it now, it won't work.
+That's because we haven't actually enabled auth in our Firebase app yet.
+
+Back to the dashboard one more time: in the nav on the left, click "Build", "Authentication", and "Get started".
+We're going to go with "Email/Password" here, but feel free to configure things as you wish.
+Click "Email/Password", enable it, and click "Save".
+
+That should be enough; now, things should just work.
+Let's make sure: if this is a brand new project, generate a home page.
+There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
+
+```tsx title="web/src/pages/HomePage.tsx"
+import { useAuth } from 'src/auth'
+
+const HomePage = () => {
+  const { isAuthenticated, signUp } = useAuth()
 
   return (
-    <Button
-      onClick={async () => {
-        if (isAuthenticated) {
-          await logOut()
-          navigate('/')
-        } else {
-          await logIn()
-        }
-      }}
-    >
-      {isAuthenticated ? 'Log out' : 'Log in'}
-    </Button>
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
+
+      <p>{JSON.stringify({ isAuthenticated })}</p>
+      <button onClick={() => signUp({
+        // email: 'your.email@email.com'
+        // password: 'super secret password'
+      })}>sign up</button>
+    </>
   )
 }
 ```
 
-## Integration
-
-See the Firebase information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
-
-You must follow the ["Before you begin"](https://firebase.google.com/docs/auth/web/google-signin) part of the "Authenticate Using Google Sign-In with JavaScript" guide.
-
-### Role-Based Access Control (RBAC)
-
-Requires a custom implementation.
-
-### App Metadata
-
-None.
-
-### Add Application `hasRole` Support
-
-Requires a custom implementation.
-
-### Auth Providers
-
-Providers can be configured by specifying `logIn(provider)` and `signUp(provider)`, where `provider` is a **string** of one of the supported providers.
-
-Supported providers:
-
-- google.com (Default)
-- facebook.com
-- github.com
-- twitter.com
-- microsoft.com
-- apple.com
-
-### Email & Password Auth
-
-Email/password authentication is supported by calling `login({ email, password })` and `signUp({ email, password })`.
-
-### Email Link (Password-less Sign-in)
-
-In Firebase Console, you must enable "Email link (passwordless sign-in)" with the configuration toggle for the email provider. The authentication sequence for passwordless email links has two steps:
-
-1. First, an email with the link must be generated and sent to the user. Either using using firebase client sdk (web side) [sendSignInLinkToEmail()](https://firebase.google.com/docs/reference/js/auth.emailauthprovider#example_2_2), which generates the link and sends the email to the user on behalf of your application or alternatively, generate the link using backend admin sdk (api side), see ["Generate email link for sign-in](https://firebase.google.com/docs/auth/admin/email-action-links#generate_email_link_for_sign-in) but it is then your responsibility to send an email to the user containing the link.
-2. Second, authentication is completed when the user is redirected back to the application and the AuthProvider's logIn({emailLink, email, providerId: 'emailLink'}) method is called.
-
-For example, users could be redirected to a dedicated route/page to complete authentication:
-
-```jsx
-import { useEffect } from 'react'
-import { Redirect, routes } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
-
-const EmailSigninPage = () => {
-  const { loading, hasError, error, logIn } = useAuth()
-
-  const email = window.localStorage.getItem('emailForSignIn')
-  // TODO: Prompt the user for email if not found in local storage, for example
-  // if the user opened the email link on a different device.
-
-  const emailLink = window.location.href
-
-  useEffect(() => {
-    logIn({
-      providerId: 'emailLink',
-      email,
-      emailLink,
-    })
-  }, [])
-
-  if (loading) {
-    return <div>Auth Loading...</div>
-  }
-
-  if (hasError) {
-    console.error(error)
-    return <div>Auth Error... check console</div>
-  }
-
-  return <Redirect to={routes.home()} />
-}
-
-export default EmailSigninPage
-```
-
-### Custom Token
-
-If you want to [integrate firebase auth with another authentication system](https://firebase.google.com/docs/auth/web/custom-auth), you can use a custom token provider:
-
-```jsx
-logIn({
-  providerId: 'customToken',
-  customToken,
-})
-```
-
-Some caveats about using custom tokens:
-
-- make sure it's actually what you want to use
-- remember that the client's firebase authentication state has an independent lifetime than the custom token
-
-If you want to read more, check out [Demystifying Firebase Auth Tokens](https://medium.com/@jwngr/demystifying-firebase-auth-tokens-e0c533ed330c).
-
-### Custom Parameters & Scopes for Google OAuth Provider
-
-Both `logIn()` and `signUp()` can accept a single argument of either a **string** or **object**. If a string is provided, it should be any of the supported providers (see above), which will configure the defaults for that provider.
-
-`logIn()` and `signUp()` also accept a single a configuration object. This object accepts `providerId`, `email`, `password`, and `scope` and `customParameters`. (In fact, passing in any arguments ultimately results in this object). You can use this configuration object to pass in values for the optional Google OAuth Provider methods _setCustomParameters_ and _addScope_.
-
-Below are the parameters that `logIn()` and `signUp()` accept:
-
-- `providerId`: Accepts one of the supported auth providers as a **string**. If no arguments are passed to `login() / signUp()` this will default to 'google.com'. Provider strings passed as a single argument to `login() / signUp()` will be cast to this value in the object.
-- `email`: Accepts a **string** of a users email address. Used in conjunction with `password` and requires that Firebase has email authentication enabled as an option.
-- `password`: Accepts a **string** of a users password. Used in conjunction with `email` and requires that Firebase has email authentication enabled as an option.
-- `scope`: Accepts an **array** of strings ([Google OAuth Scopes](https://developers.google.com/identity/protocols/oauth2/scopes)), which can be added to the requested Google OAuth Provider. These will be added using the Google OAuth _addScope_ method.
-- `customParameters`: accepts an **object** with the [optional parameters](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters) for the Google OAuth Provider _setCustomParameters_ method. [Valid parameters](https://developers.google.com/identity/protocols/oauth2/openid-connect#authenticationuriparameters) include 'hd', 'include_granted_scopes', 'login_hint' and 'prompt'.
-
-### Firebase Auth Examples
-
-- `logIn()/signUp()`: Defaults to Google provider.
-- `logIn({providerId: 'github.com'})`: Log in using GitHub as auth provider.
-- `signUp({email: "someone@email.com", password: 'some_good_password'})`: Creates a firebase user with email/password.
-- `logIn({email: "someone@email.com", password: 'some_good_password'})`: Logs in existing firebase user with email/password.
-- `logIn({scopes: ['https://www.googleapis.com/auth/calendar']})`: Adds a scope using the [addScope](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#addscope) method.
-- `logIn({ customParameters: { prompt: "consent" } })`: Sets the OAuth custom parameters using [setCustomParameters](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#addscope) method.
+"Email/Password" says what it means: Firebase doesn't redirect to a hosted sign-up page or open a sign-up modal.
+In a real app, you'd build a form here, but we're going to hardcode an email and password.
+After you sign up, you should see `{"isAuthenticated":true}` on the page.

@@ -21,8 +21,5 @@
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.3.0",
-  "resolutions": {
-    "@babel/plugin-transform-block-scoping": "7.18.9"
-  }
+  "packageManager": "yarn@3.3.1"
 }
