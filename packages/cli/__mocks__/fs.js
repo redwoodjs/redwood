@@ -7,9 +7,11 @@ const fs = {
 let mockFiles = {}
 
 const pathSeparator = path.sep
+
 const getParentDir = (path) => {
   return path.substring(0, path.lastIndexOf(pathSeparator))
 }
+
 const makeParentDirs = (path) => {
   const parentDir = getParentDir(path)
   if (parentDir && !(parentDir in mockFiles)) {
@@ -121,6 +123,7 @@ fs.rmSync = (path, options = {}) => {
   }
 }
 
+// TODO: Check options
 fs.unlinkSync = (path) => {
   if (path in mockFiles) {
     delete mockFiles[path]
@@ -137,9 +140,8 @@ fs.unlinkSync = (path) => {
 }
 
 fs.existsSync = (path) => {
-  return Object.keys(mockFiles).some((existingPath) => {
-    return existingPath.startsWith(path)
-  })
+  // console.log('exists?', path)
+  return path in mockFiles
 }
 
 fs.copyFileSync = (src, dist) => {
@@ -147,7 +149,6 @@ fs.copyFileSync = (src, dist) => {
 }
 
 fs.readdirSync = (path) => {
-  // Check it exists
   if (!fs.existsSync(path)) {
     const fakeError = new Error(
       `Error: ENOENT: no such file or directory, scandir '${path}'`
@@ -159,7 +160,6 @@ fs.readdirSync = (path) => {
     throw fakeError
   }
 
-  // If it has contents it's a file, so throw
   if (mockFiles[path] !== undefined) {
     const fakeError = new Error(
       `Error: ENOTDIR: not a directory, scandir '${path}'`
@@ -203,7 +203,9 @@ fs.rmdirSync = (path, options = {}) => {
     fakeError.code = 'ENOENT'
     fakeError.path = path
     throw fakeError
-  } else if (mockFiles[path] !== undefined) {
+  }
+
+  if (mockFiles[path] !== undefined) {
     const fakeError = new Error(
       `Error: ENOTDIR: not a directory, rmdir '${path}'`
     )
@@ -213,6 +215,7 @@ fs.rmdirSync = (path, options = {}) => {
     fakeError.path = path
     throw fakeError
   }
+
   fs.rmSync(path, options)
 }
 
