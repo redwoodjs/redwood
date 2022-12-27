@@ -1,4 +1,13 @@
-import { formatCacheKey } from '../index'
+import { createCache, formatCacheKey, InMemoryClient } from '../index'
+
+describe('exports', () => {
+  it('exports the client that was passed in', () => {
+    const client = new InMemoryClient()
+    const { cacheClient } = createCache(client)
+
+    expect(cacheClient).toEqual(client)
+  })
+})
 
 describe('formatCacheKey', () => {
   it('creates a key from a string', () => {

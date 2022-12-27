@@ -141,6 +141,14 @@ export const yargsDefaults = {
   },
 }
 
+export const validateName = (name) => {
+  if (name.match(/^\W/)) {
+    throw new Error(
+      'The <name> argument must start with a letter, number or underscore.'
+    )
+  }
+}
+
 /**
  * Reduces boilerplate for creating a yargs handler that writes a
  * component/page/layout/etc to a location.
@@ -205,6 +213,7 @@ export const createYargsForComponentGeneration = ({
       if (options.stories === undefined) {
         options.stories = getConfig().generate.stories
       }
+      validateName(options.name)
 
       try {
         options = await preTasksFn(options)

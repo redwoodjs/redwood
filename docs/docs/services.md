@@ -575,6 +575,40 @@ validate(input.lastName, {
 })
 ```
 
+#### Custom
+
+Run a custom validation function passed as `with` which should either throw or return nothing.
+If the function throws an error, the error message will be used as the message of the validation error associated with the field.
+
+```jsx
+validate(input.value, 'Value', {
+  custom: {
+    with: () => {
+      if (isInvalid) {
+        throw new Error('Value is invalid')
+      }
+    }
+  }
+})
+```
+
+##### Options
+
+* `message`: a custom error message if validation fails
+
+```jsx
+validate(input.value, 'Value', {
+  custom: {
+    with: () => {
+      if (isInvalid) {
+        throw new Error('Value is invalid')
+      }
+    },
+    message: 'Please specify a different value'
+  }
+})
+```
+
 ### validateWith()
 
 `validateWith()` is simply given a function to execute. This function should throw with a message if there is a problem, otherwise do nothing.
@@ -747,6 +781,27 @@ In our example above you could cache the GraphQL query for the most popular prod
 ### Clients
 
 As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it! Instructions for getting started with the code are [below](#creating-your-own-client).
+
+::: info
+
+If you need to access functionality in your cache client that the `cache()` and `cacheFindMany()` functions do not handle, you can always get access to the underlying raw client library and use it however you want:
+
+```javascript
+import { cacheClient } from 'src/lib/cache'
+
+export const updatePost = async ({ id, input }) => {
+  const post = await db.post.update({
+    data: input,
+    where: { id },
+  })
+  // highlight-next-line
+  await cacheClient.MSET(`post-${id}`, JSON.stringify(post), `blogpost-${id}`, JSON.stringify(post))
+
+  return post
+}
+```
+
+:::
 
 ### What Can Be Cached
 

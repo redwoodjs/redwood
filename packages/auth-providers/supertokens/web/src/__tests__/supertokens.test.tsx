@@ -3,7 +3,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import { CurrentUser } from '@redwoodjs/auth'
 
 import {
-  createSuperTokensAuth,
+  createAuth,
   SuperTokensUser,
   AuthRecipe,
   SessionRecipe,
@@ -87,7 +87,7 @@ function getSuperTokensAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createSuperTokensAuth(
+  const { useAuth, AuthProvider } = createAuth(
     superTokensMockClient as SuperTokensAuth,
     customProviderHooks
   )

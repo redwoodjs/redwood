@@ -143,6 +143,13 @@ interface PresenceValidatorOptions extends WithOptionalMessage {
   allowEmptyString?: boolean
 }
 
+interface CustomValidatorOptions extends WithOptionalMessage {
+  /**
+   * A function which should either throw or return nothing
+   */
+  with: () => void
+}
+
 interface UniquenessValidatorOptions extends WithOptionalMessage {
   db?: PrismaClient
 }
@@ -205,6 +212,12 @@ interface ValidationRecipe {
    * Opposite of the [absence](https://redwoodjs.com/docs/services.html#absence) validator.
    */
   presence?: boolean | PresenceValidatorOptions
+
+  /**
+   * Run a custom validation function which should either throw or return nothing.
+   * If the function throws an error, the error message will be used as the validation error associated with the field.
+   */
+  custom?: CustomValidatorOptions
 }
 // We extend ValidationRecipe to get its method's documentation.
 // Adding docs below will completely overwrite ValidationRecipe's.
@@ -218,6 +231,7 @@ interface ValidationWithMessagesRecipe extends ValidationRecipe {
   length?: WithRequiredMessage<LengthValidatorOptions>
   numericality?: WithRequiredMessage<NumericalityValidatorOptions>
   presence?: WithRequiredMessage<PresenceValidatorOptions>
+  custom?: WithRequiredMessage<CustomValidatorOptions>
 }
 
 const VALIDATORS = {
@@ -493,6 +507,16 @@ const VALIDATORS = {
       (!presenceOptions.allowEmptyString && value === '')
     ) {
       validationError('presence', name, options)
+    }
+  },
+
+  custom: (_value: unknown, name: string, options: CustomValidatorOptions) => {
+    try {
+      options.with()
+    } catch (e) {
+      const message = options.message || (e as Error).message || (e as string)
+
+      validationError('custom', name, { message })
     }
   },
 }

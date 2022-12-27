@@ -21,7 +21,7 @@ import {
 } from './authTasks'
 
 export const standardAuthBuilder = (yargs: yargs.Argv) => {
-  yargs
+  return yargs
     .option('force', {
       alias: 'f',
       default: false,

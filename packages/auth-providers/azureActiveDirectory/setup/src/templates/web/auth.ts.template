@@ -1,6 +1,6 @@
 import { PublicClientApplication } from '@azure/msal-browser'
 
-import { createAzureActiveDirectoryAuth } from '@redwoodjs/azure-active-directory-web'
+import { createAuth } from '@redwoodjs/auth-azure-active-directory-web'
 
 const azureActiveDirectoryClient = new PublicClientApplication({
   auth: {
@@ -12,6 +12,4 @@ const azureActiveDirectoryClient = new PublicClientApplication({
   },
 })
 
-export const { AuthProvider, useAuth } = createAzureActiveDirectoryAuth(
-  azureActiveDirectoryClient
-)
+export const { AuthProvider, useAuth } = createAuth(azureActiveDirectoryClient)

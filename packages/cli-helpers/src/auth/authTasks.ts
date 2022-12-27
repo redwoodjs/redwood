@@ -59,10 +59,22 @@ function addAuthDecoderToCreateGraphQLHandler(content: string) {
  * @returns content with the authDecoder import replaced with the new import
  */
 function replaceAuthDecoderImport(content: string, decoderImport: string) {
-  return content.replace(/import { authDecoder } from .+/, decoderImport)
+  return content.replace(/^import { authDecoder .*} from .+/, decoderImport)
 }
 
-const addApiConfig = ({
+/**
+ * Replace the existing `  authDecoder: myAuthDecoder,` with a standard
+ * `  authDecoder,`
+ *
+ * @param content - The contents of api/src/functions/graphql.ts
+ * @returns content with standard authDecoder arg to createGraphQLHandler
+ */
+function replaceAuthDecoderArg(content: string) {
+  return content.replace(/^(\s+)authDecoder\b.+/m, '$1authDecoder,')
+}
+
+// Exporting this to make it easier to test
+export const addApiConfig = ({
   replaceExistingImport,
   authDecoderImport,
 }: {
@@ -75,24 +87,25 @@ const addApiConfig = ({
     throw new Error('Could not find your graphql file path')
   }
 
-  const content = fs.readFileSync(graphqlPath, 'utf-8')
+  const content = fs.readFileSync(graphqlPath).toString()
   let newContent = content
 
   if (authDecoderImport) {
     if (replaceExistingImport) {
       newContent = replaceAuthDecoderImport(newContent, authDecoderImport)
+      newContent = replaceAuthDecoderArg(newContent)
     } else {
       newContent = authDecoderImport + '\n' + newContent
       newContent = addAuthDecoderToCreateGraphQLHandler(newContent)
     }
   }
 
-  const hasAuthImport =
+  const hasCurrentUserImport =
     /(^import {.*?getCurrentUser(?!getCurrentUser).*?} from 'src\/lib\/auth')/s.test(
-      content
+      newContent
     )
 
-  if (!hasAuthImport) {
+  if (!hasCurrentUserImport) {
     // add import statement
     newContent = newContent.replace(
       /^(import { db } from 'src\/lib\/db')$/m,
@@ -113,10 +126,6 @@ const addApiConfig = ({
 
 const apiSrcDoesExist = () => {
   return fs.existsSync(path.join(getPaths().api.src))
-}
-
-const webAppDoesExist = () => {
-  return fs.existsSync(getWebAppPath())
 }
 
 const addAuthImportToApp = (content: string) => {
@@ -218,11 +227,11 @@ export const addConfigToWebApp = <
   return {
     title: 'Updating web/src/App.{js,tsx}',
     task: (_ctx, task) => {
-      if (!webAppDoesExist()) {
+      const webAppPath = getWebAppPath()
+
+      if (!fs.existsSync(webAppPath)) {
         throw new Error('Could not find root App.{js,tsx}')
       }
-
-      const webAppPath = getWebAppPath()
 
       let content = fs.readFileSync(webAppPath).toString()
 
@@ -253,6 +262,7 @@ export const addConfigToWebApp = <
 
 export const createWebAuth = (templateDir: string, webAuthn: boolean) => {
   const isTSProject = isTypeScriptProject()
+
   return {
     title: `Creating web/src/auth.${isTSProject ? 'ts' : 'js'}`,
     task: (ctx: AuthGeneratorCtx) => {

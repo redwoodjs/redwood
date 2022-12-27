@@ -9,7 +9,7 @@ import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 // TODO: Map out this user properly.
 export interface Auth0User {}
 
-export function createAuth0Auth(
+export function createAuth(
   auth0Client: Auth0Client,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
@@ -18,12 +18,12 @@ export function createAuth0Auth(
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  const authImplementation = createAuth0AuthImplementation(auth0Client)
+  const authImplementation = createAuthImplementation(auth0Client)
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createAuth0AuthImplementation(auth0Client: Auth0Client) {
+function createAuthImplementation(auth0Client: Auth0Client) {
   return {
     type: 'auth0',
     client: auth0Client,

@@ -1,5 +1,0 @@
-export { authDecoder as ethereumAuthDecoder } from './ethereum/decoder'
-export { authDecoder as goTrueAuthDecoder } from './goTrue/decoder'
-export { authDecoder as magicLinkAuthDecoder } from './magicLink/decoder'
-export { authDecoder as nhostAuthDecoder } from './nhost/decoder'
-export { authDecoder as oktaAuthDecoder } from './okta/decoder'

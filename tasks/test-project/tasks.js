@@ -426,12 +426,6 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
 
     await execa(
-      'yarn add -D @redwoodjs/auth-dbauth-setup@canary',
-      [],
-      execaOptions
-    )
-
-    await execa(
       'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
       [],
       execaOptions
@@ -517,11 +511,17 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       .replaceAll('username', 'full-name')
       .replaceAll('Username', 'Full Name')
 
-    const newContentSignupPageTs = contentSignupPageTs.replace(
-      '<FieldError name="password" className="rw-field-error" />',
-      '<FieldError name="password" className="rw-field-error" />\n' +
-        fullNameFields
-    )
+    const newContentSignupPageTs = contentSignupPageTs
+      .replace(
+        '<FieldError name="password" className="rw-field-error" />',
+        '<FieldError name="password" className="rw-field-error" />\n' +
+          fullNameFields
+      )
+      // include full-name in the data we pass to `signUp()`
+      .replace(
+        'password: data.password',
+        "password: data.password, 'full-name': data['full-name']"
+      )
 
     fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
 

@@ -3,6 +3,8 @@
 var mockWebAppPath = ''
 // eslint-disable-next-line
 var mockWebRoutesPath = ''
+// eslint-disable-next-line
+var mockApiGraphqlPath = ''
 
 import fs from 'fs'
 import path from 'path'
@@ -16,6 +18,7 @@ jest.mock('@redwoodjs/telemetry', () => {
 })
 
 import {
+  addApiConfig,
   addConfigToWebApp,
   addConfigToRoutes,
   createWebAuth,
@@ -48,9 +51,22 @@ jest.mock('../../lib/paths', () => {
   }
 })
 
-jest.mock('../../lib/project', () => ({
-  isTypeScriptProject: () => false,
-}))
+jest.mock('../../lib/project', () => {
+  const path = require('path')
+  const __dirname = path.resolve()
+
+  return {
+    isTypeScriptProject: () => false,
+    getGraphqlPath: () => {
+      const graphqlPath = path.join(
+        __dirname,
+        mockApiGraphqlPath ||
+          '../create-redwood-app/template/api/src/functions/graphql.ts'
+      )
+      return graphqlPath
+    },
+  }
+})
 
 // This function checks output matches
 const writeFileSyncSpy = jest.fn((_, content) => {
@@ -63,75 +79,106 @@ beforeEach(() => {
   jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
 })
 
-describe('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts', () => {
-  it('Matches Auth0 Snapshot', () => {
-    addConfigToWebApp()
-    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), false).task({
+describe('authTasks', () => {
+  it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0)', () => {
+    const ctx = {
       provider: 'auth0',
-      setupMode: AuthSetupMode.REPLACE,
-    })
-    addConfigToRoutes()
+      setupMode: AuthSetupMode.FORCE,
+    }
+
+    addConfigToWebApp().task(ctx, {} as any)
+    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), false).task(ctx)
+    addConfigToRoutes().task()
   })
 
-  it('Matches Clerk Snapshot', () => {
-    addConfigToWebApp()
-    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), false).task({
+  it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk)', () => {
+    const ctx = {
       provider: 'clerk',
-      setupMode: AuthSetupMode.REPLACE,
+      setupMode: AuthSetupMode.FORCE,
+    }
+
+    addConfigToWebApp().task(ctx, {} as any)
+    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), false).task(ctx)
+    addConfigToRoutes().task()
+  })
+
+  describe('Components with props', () => {
+    it('Should add useAuth on the same line for single line components, and separate line for multiline components', () => {
+      mockWebAppPath =
+        'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
+      mockWebRoutesPath =
+        'src/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
+
+      addConfigToWebApp()
+      addConfigToRoutes()
     })
-    addConfigToRoutes()
-  })
-})
 
-describe('Components with props', () => {
-  it('Should add useAuth on the same line for single line components, and separate line for multiline components', () => {
-    mockWebAppPath =
-      'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
-    mockWebRoutesPath =
-      'src/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
+    it('Should not add useAuth if one already exists', () => {
+      mockWebAppPath =
+        'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
+      mockWebRoutesPath = 'src/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
 
-    addConfigToWebApp()
-    addConfigToRoutes()
+      addConfigToWebApp()
+      addConfigToRoutes()
+    })
   })
 
-  it('Should not add useAuth if one already exists', () => {
-    mockWebAppPath =
-      'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
-    mockWebRoutesPath = 'src/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
+  describe('Customized App.js', () => {
+    it('Should add auth config when using explicit return', () => {
+      mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
 
-    addConfigToWebApp()
-    addConfigToRoutes()
-  })
-})
-
-describe('Customized App.js', () => {
-  it('Should add auth config when using explicit return', () => {
-    mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
-
-    addConfigToWebApp()
-  })
-})
-
-describe('Swapped out GraphQL client', () => {
-  let consoleWarn
-
-  beforeAll(() => {
-    consoleWarn = console.warn
-    console.warn = jest.fn()
+      addConfigToWebApp()
+    })
   })
 
-  afterAll(() => {
-    console.warn = consoleWarn
+  describe('Swapped out GraphQL client', () => {
+    let consoleWarn
+
+    beforeAll(() => {
+      consoleWarn = console.warn
+      console.warn = jest.fn()
+    })
+
+    afterAll(() => {
+      console.warn = consoleWarn
+    })
+
+    it('Should add auth config when app is missing RedwoodApolloProvider', () => {
+      mockWebAppPath =
+        'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
+
+      addConfigToWebApp()
+
+      expect(console.warn).toHaveBeenCalledWith(
+        expect.stringMatching(/GraphQL.*useAuth/)
+      )
+    })
   })
 
-  it('Should add auth config when app is missing RedwoodApolloProvider', () => {
-    mockWebAppPath =
-      'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
+  describe('addApiConfig', () => {
+    it('Adds authDecoder arg to default graphql.ts file', () => {
+      addApiConfig({
+        replaceExistingImport: true,
+        authDecoderImport: "import { authDecoder } from 'test-auth-api'",
+      })
+    })
 
-    addConfigToWebApp()
+    it("Doesn't add authDecoder arg if one already exists", () => {
+      mockApiGraphqlPath =
+        'src/auth/__tests__/fixtures/app/api/src/functions/graphql.ts'
+      addApiConfig({
+        replaceExistingImport: true,
+        authDecoderImport: "import { authDecoder } from 'test-auth-api'",
+      })
+    })
 
-    expect(console.warn).toHaveBeenCalledWith(
-      expect.stringMatching(/GraphQL.*useAuth/)
-    )
+    it("Doesn't add authDecoder arg if one already exists, even with a non-standard import name and arg placement", () => {
+      mockApiGraphqlPath =
+        'src/auth/__tests__/fixtures/app/api/src/functions/graphqlNonStandardAuthDecoder.ts'
+      addApiConfig({
+        replaceExistingImport: true,
+        authDecoderImport: "import { authDecoder } from 'test-auth-api'",
+      })
+    })
   })
 })
