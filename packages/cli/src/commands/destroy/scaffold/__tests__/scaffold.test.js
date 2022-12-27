@@ -1,11 +1,15 @@
 global.__dirname = __dirname
 
 import fs from 'fs'
+import path from 'path'
 
 import '../../../../lib/test'
 
 import { getPaths, getDefaultArgs } from '../../../../lib'
-import { yargsDefaults as defaults } from '../../../generate/helpers'
+import {
+  yargsDefaults as defaults,
+  customOrDefaultTemplatePath,
+} from '../../../generate/helpers'
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
@@ -28,10 +32,41 @@ jest.mock('../../../../lib/schemaHelpers', () => {
   }
 })
 
+const templateDirectoryNames = [
+  'assets',
+  'components',
+  'layouts',
+  'lib',
+  'pages',
+]
+const templateDirectories = templateDirectoryNames.map((name) => {
+  return customOrDefaultTemplatePath({
+    side: 'web',
+    generator: 'scaffold',
+    templatePath: name,
+  })
+})
+const templateFiles = []
+templateDirectories.forEach((directory) => {
+  const files = jest.requireActual('fs').readdirSync(directory)
+  files.forEach((file) => {
+    templateFiles.push(path.join(directory, file))
+  })
+})
+
+const scaffoldTemplates = {}
+templateFiles.forEach((templateFile) => {
+  scaffoldTemplates[templateFile] = jest
+    .requireActual('fs')
+    .readFileSync(templateFile, { encoding: 'utf8', flag: 'r' })
+})
+
 describe('rw destroy scaffold', () => {
   describe('destroy scaffold post', () => {
     beforeEach(async () => {
+      fs.__setMockFiles(scaffoldTemplates)
       fs.__setMockFiles({
+        ...scaffoldTemplates,
         ...(await files({
           ...getDefaultArgs(defaults),
           model: 'Post',
@@ -52,7 +87,7 @@ describe('rw destroy scaffold', () => {
     })
 
     afterEach(() => {
-      fs.__setMockFiles({})
+      fs.__setMockFiles(scaffoldTemplates)
       jest.spyOn(fs, 'unlinkSync').mockClear()
     })
 
@@ -81,8 +116,9 @@ describe('rw destroy scaffold', () => {
 
     describe('for typescript files', () => {
       beforeEach(async () => {
-        fs.__setMockFiles({}) // clear filesystem so files call works as expected
+        fs.__setMockFiles(scaffoldTemplates) // clear filesystem so files call works as expected
         fs.__setMockFiles({
+          ...scaffoldTemplates,
           ...(await files({
             ...getDefaultArgs(defaults),
             typescript: true,
@@ -154,7 +190,9 @@ describe('rw destroy scaffold', () => {
 
   describe('destroy namespaced scaffold post', () => {
     beforeEach(async () => {
+      fs.__setMockFiles(scaffoldTemplates)
       fs.__setMockFiles({
+        ...scaffoldTemplates,
         ...(await files({
           ...getDefaultArgs(defaults),
           model: 'Post',
@@ -175,7 +213,7 @@ describe('rw destroy scaffold', () => {
     })
 
     afterEach(() => {
-      fs.__setMockFiles({})
+      fs.__setMockFiles(scaffoldTemplates)
       jest.spyOn(fs, 'unlinkSync').mockClear()
     })
 
@@ -206,8 +244,9 @@ describe('rw destroy scaffold', () => {
 
     describe('for typescript files', () => {
       beforeEach(async () => {
-        fs.__setMockFiles({}) // clear filesystem so files call works as expected
+        fs.__setMockFiles(scaffoldTemplates) // clear filesystem so files call works as expected
         fs.__setMockFiles({
+          ...scaffoldTemplates,
           ...(await files({
             ...getDefaultArgs(defaults),
             model: 'Post',
