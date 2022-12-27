@@ -2,15 +2,15 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
-import { ListrTask, ListrTaskWrapper, ListrRenderer } from 'listr2'
+import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { writeFilesTask, transformTSToJS } from '../lib'
+import { transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
 import { getPaths, resolveFile } from '../lib/paths'
 import {
-  isTypeScriptProject,
   getGraphqlPath,
   graphFunctionDoesExist,
+  isTypeScriptProject,
 } from '../lib/project'
 
 import { apiSideFiles, generateUniqueFileNames } from './authFiles'
@@ -272,8 +272,6 @@ export const createWebAuth = (
       const templateFileName = templates.find((template) => {
         return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
       })
-
-      console.log('templateFileName', templateFileName)
 
       if (!templateFileName) {
         throw new Error('Could not find the auth.ts template')
