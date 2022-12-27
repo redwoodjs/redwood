@@ -230,7 +230,8 @@ export const addConfigToWebApp = <
       const webAppPath = getWebAppPath()
 
       if (!fs.existsSync(webAppPath)) {
-        throw new Error('Could not find root App.{js,tsx}')
+        const ext = isTypeScriptProject() ? 'tsx' : 'js'
+        throw new Error(`Could not find root App.${ext}`)
       }
 
       let content = fs.readFileSync(webAppPath).toString()
@@ -260,13 +261,14 @@ export const addConfigToWebApp = <
   }
 }
 
-export const createWebAuth = (templateDir: string, webAuthn: boolean) => {
+export const createWebAuth = (basedir: string, webAuthn: boolean) => {
   const isTSProject = isTypeScriptProject()
+  const ext = isTSProject ? 'ts' : 'js'
 
   return {
-    title: `Creating web/src/auth.${isTSProject ? 'ts' : 'js'}`,
+    title: `Creating web/src/auth.${ext}`,
     task: (ctx: AuthGeneratorCtx) => {
-      const templatesBaseDir = path.join(templateDir, 'templates', 'web')
+      const templatesBaseDir = path.join(basedir, 'templates', 'web')
       const templates = fs.readdirSync(templatesBaseDir)
 
       const templateFileName = templates.find((template) => {
@@ -395,11 +397,10 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
     },
   }
 }
-
 /**
  * Returns a map of file names (not full paths) that already exist
  */
-export function findExistingFiles(filesMap: Record<string, string>) {
+function findExistingFiles(filesMap: Record<string, string>) {
   return Object.keys(filesMap)
     .filter((filePath) => fs.existsSync(filePath))
     .map((filePath) => filePath.replace(getPaths().base, ''))

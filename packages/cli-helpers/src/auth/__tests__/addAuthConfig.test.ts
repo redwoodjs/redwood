@@ -81,24 +81,26 @@ beforeEach(() => {
 
 describe('authTasks', () => {
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0)', () => {
+    const basedir = path.join(__dirname, 'fixtures/dbAuthSetup')
     const ctx = {
       provider: 'auth0',
       setupMode: AuthSetupMode.FORCE,
     }
 
     addConfigToWebApp().task(ctx, {} as any)
-    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), false).task(ctx)
+    createWebAuth(basedir, false).task(ctx)
     addConfigToRoutes().task()
   })
 
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk)', () => {
+    const basedir = path.join(__dirname, 'fixtures/dbAuthSetup')
     const ctx = {
       provider: 'clerk',
       setupMode: AuthSetupMode.FORCE,
     }
 
     addConfigToWebApp().task(ctx, {} as any)
-    createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), false).task(ctx)
+    createWebAuth(basedir, false).task(ctx)
     addConfigToRoutes().task()
   })
 
@@ -109,8 +111,8 @@ describe('authTasks', () => {
       mockWebRoutesPath =
         'src/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
 
-      addConfigToWebApp()
-      addConfigToRoutes()
+      addConfigToWebApp().task()
+      addConfigToRoutes().task()
     })
 
     it('Should not add useAuth if one already exists', () => {
@@ -118,8 +120,8 @@ describe('authTasks', () => {
         'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
       mockWebRoutesPath = 'src/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
 
-      addConfigToWebApp()
-      addConfigToRoutes()
+      addConfigToWebApp().task()
+      addConfigToRoutes().task()
     })
   })
 
@@ -127,7 +129,7 @@ describe('authTasks', () => {
     it('Should add auth config when using explicit return', () => {
       mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
 
-      addConfigToWebApp()
+      addConfigToWebApp().task()
     })
   })
 
@@ -147,7 +149,7 @@ describe('authTasks', () => {
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
-      addConfigToWebApp()
+      addConfigToWebApp().task()
 
       expect(console.warn).toHaveBeenCalledWith(
         expect.stringMatching(/GraphQL.*useAuth/)
