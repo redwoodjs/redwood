@@ -17,7 +17,7 @@ describe('setup', () => {
     const originalMock = fs.__getMockFiles()
     const pathFixedMock = {}
     for (const [key, value] of Object.entries(originalMock)) {
-      const fixedKey = key.replace(path.sep, '/')
+      const fixedKey = key.replaceAll(path.sep, '/')
       pathFixedMock[fixedKey] = value
     }
     expect(pathFixedMock).toMatchInlineSnapshot(`
