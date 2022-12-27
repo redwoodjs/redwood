@@ -34,8 +34,17 @@ it('removes new files', async () => {
   expect(fs.existsSync('fake-file-2')).toBe(false)
 })
 
-// TODO: Handle this when the fs mock implements the additional functions nessecary to inspect dirs
-it.todo('removes empty folders after removing files')
+it('removes empty folders after removing files', async () => {
+  fs.__setMockFiles({
+    'fake_dir/mock_dir/test_dir': undefined,
+  })
+  rollback.addFileToRollback('fake_dir/mock_dir/test_dir/fake-file')
+  fs.writeFileSync('fake_dir/mock_dir/test_dir/fake-file', 'fake-content')
+
+  await rollback.executeRollback()
+  expect(fs.existsSync('fake_dir/mock_dir/test_dir/fake-file')).toBe(false)
+  expect(fs.readdirSync('fake_dir')).toStrictEqual([])
+})
 
 it('executes sync functions', async () => {
   fs.__setMockFiles({})
