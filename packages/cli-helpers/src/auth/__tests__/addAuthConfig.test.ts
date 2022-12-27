@@ -19,7 +19,7 @@ jest.mock('@redwoodjs/telemetry', () => {
 
 import {
   addApiConfig,
-  addConfigToApp,
+  addConfigToWebApp,
   addConfigToRoutes,
   createWebAuth,
 } from '../authTasks'
@@ -80,13 +80,13 @@ beforeEach(() => {
 
 describe('authTasks', () => {
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0)', () => {
-    addConfigToApp()
+    addConfigToWebApp()
     createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), 'auth0', false)
     addConfigToRoutes()
   })
 
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk)', () => {
-    addConfigToApp()
+    addConfigToWebApp()
     createWebAuth(path.join(__dirname, 'fixtures/dbAuthSetup'), 'clerk', false)
     addConfigToRoutes()
   })
@@ -98,7 +98,7 @@ describe('authTasks', () => {
       mockWebRoutesPath =
         'src/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
 
-      addConfigToApp()
+      addConfigToWebApp()
       addConfigToRoutes()
     })
 
@@ -107,7 +107,7 @@ describe('authTasks', () => {
         'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
       mockWebRoutesPath = 'src/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
 
-      addConfigToApp()
+      addConfigToWebApp()
       addConfigToRoutes()
     })
   })
@@ -116,7 +116,7 @@ describe('authTasks', () => {
     it('Should add auth config when using explicit return', () => {
       mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
 
-      addConfigToApp()
+      addConfigToWebApp()
     })
   })
 
@@ -136,7 +136,7 @@ describe('authTasks', () => {
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
-      addConfigToApp()
+      addConfigToWebApp()
 
       expect(console.warn).toHaveBeenCalledWith(
         expect.stringMatching(/GraphQL.*useAuth/)
