@@ -51,7 +51,7 @@ describe('files', () => {
     expect(fs.readFileSync('file_b')).toBe('content_b')
 
     expect(() =>
-      fs.writeFileSync('non_existing_dir/test', 'test')
+      fs.writeFileSync(path.join('non_existing_dir', 'test'), 'test')
     ).toThrowError()
   })
   test('appending', () => {

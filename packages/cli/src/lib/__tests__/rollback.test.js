@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import { Listr } from 'listr2'
 
@@ -36,13 +37,20 @@ it('removes new files', async () => {
 
 it('removes empty folders after removing files', async () => {
   fs.__setMockFiles({
-    'fake_dir/mock_dir/test_dir': undefined,
+    [path.join('fake_dir', 'mock_dir', 'test_dir')]: undefined,
   })
-  rollback.addFileToRollback('fake_dir/mock_dir/test_dir/fake-file')
-  fs.writeFileSync('fake_dir/mock_dir/test_dir/fake-file', 'fake-content')
+  rollback.addFileToRollback(
+    path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file')
+  )
+  fs.writeFileSync(
+    path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file'),
+    'fake-content'
+  )
 
   await rollback.executeRollback()
-  expect(fs.existsSync('fake_dir/mock_dir/test_dir/fake-file')).toBe(false)
+  expect(
+    fs.existsSync(path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file'))
+  ).toBe(false)
   expect(fs.readdirSync('fake_dir')).toStrictEqual([])
 })
 
