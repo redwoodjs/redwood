@@ -46,19 +46,15 @@ const templateDirectories = templateDirectoryNames.map((name) => {
     templatePath: name,
   })
 })
-const templateFiles = []
+const scaffoldTemplates = {}
 templateDirectories.forEach((directory) => {
   const files = jest.requireActual('fs').readdirSync(directory)
   files.forEach((file) => {
-    templateFiles.push(path.join(directory, file))
+    const filePath = path.join(directory, file)
+    scaffoldTemplates[filePath] = jest
+      .requireActual('fs')
+      .readFileSync(filePath, { encoding: 'utf8', flag: 'r' })
   })
-})
-
-const scaffoldTemplates = {}
-templateFiles.forEach((templateFile) => {
-  scaffoldTemplates[templateFile] = jest
-    .requireActual('fs')
-    .readFileSync(templateFile, { encoding: 'utf8', flag: 'r' })
 })
 
 describe('rw destroy scaffold', () => {
