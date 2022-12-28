@@ -189,6 +189,15 @@ describe('the scenario generator', () => {
     expect(service.scenarioFieldValue(field)).toEqual('color-red')
   })
 
+  test('scenarioFieldValue throws an error when scalar type is not supported containing the type name', () => {
+    const unsupportedTypeName = 'UnsupportedScalarType'
+    const field = { type: unsupportedTypeName }
+
+    expect(service.scenarioFieldValue(field)).toThrowError(
+      new RegExp(unsupportedTypeName)
+    )
+  })
+
   test('fieldsToScenario returns scenario data for scalarFields', async () => {
     const scalarFields = [
       {
