@@ -919,6 +919,75 @@ describe('validate presence', () => {
   })
 })
 
+describe('validate custom', () => {
+  it('checks if errors are not thrown', () => {
+    expect(() =>
+      validate(null, 'email', {
+        custom: {
+          with: () => {
+            throw new Error('foo')
+          },
+        },
+      })
+    ).toThrow(ValidationErrors.CustomValidationError)
+
+    expect(() =>
+      validate(null, 'email', {
+        custom: {
+          with: () => {},
+        },
+      })
+    ).not.toThrow(ValidationErrors.CustomValidationError)
+  })
+
+  it('throws with a custom message', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw new Error('foo')
+          },
+          message: 'Gimmie an email',
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('throws with a custom message via the message of the thrown error', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw new Error('Gimmie an email')
+          },
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('throws with a custom message via the thrown message', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw 'Gimmie an email'
+          },
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { custom: undefined })).not.toThrow()
+  })
+})
+
 describe('validate', () => {
   it('accepts the two argument version', () => {
     try {

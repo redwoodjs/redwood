@@ -1,5 +1,0 @@
-export * as setupAuthEthereumCommand from './ethereum/setup'
-export * as setupAuthGoTrueCommand from './goTrue/setup'
-export * as setupAuthMagicLinkCommand from './magicLink/setup'
-export * as setupAuthNhostCommand from './nhost/setup'
-export * as setupAuthOktaCommand from './okta/setup'

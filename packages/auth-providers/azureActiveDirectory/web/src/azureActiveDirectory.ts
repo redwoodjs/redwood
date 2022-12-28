@@ -7,7 +7,7 @@ import type {
 
 import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
-export function createAzureActiveDirectoryAuth(
+export function createAuth(
   azureActiveDirectoryClient: AzureActiveDirectoryClient,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
@@ -16,14 +16,14 @@ export function createAzureActiveDirectoryAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  const authImplementation = createAzureActiveDirectoryAuthImplementation(
+  const authImplementation = createAuthImplementation(
     azureActiveDirectoryClient
   )
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createAzureActiveDirectoryAuthImplementation(
+function createAuthImplementation(
   azureActiveDirectoryClient: AzureActiveDirectoryClient
 ) {
   return {

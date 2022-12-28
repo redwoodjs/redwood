@@ -4,51 +4,61 @@ sidebar_label: Netlify
 
 # Netlify Identity Authentication
 
-## Installation
-
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+To get started, run the setup command:
 
 ```bash
 yarn rw setup auth netlify
 ```
 
-## Setup
+This installs all the packages, writes all the files, and makes all the code modifications you need.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Netlify Identity, see the top-level [Authentication](../authentication.md) doc.
+For now let's focus on Netlify's side of things.
 
-You will need to enable Identity on your Netlify site.
+There's a catch with Netlify Identity: your app has to be be deployed to Netlify to use it.
+If this's a deal breaker for you, there are [other great auth providers to choose from](../authentication.md#official-integrations).
+But here we'll assume it's not and that your app is already deployed.
+(If it isn't, do that first, then come back. And yes, there's a setup command for that: `yarn rw setup deploy netlify`.)
 
-## Netlify Identity Auth Provider Specific Setup
+Once you've deployed your app, go to it's overview, click "Integrations" in the nav at the top, search for Netlify Identity, enable it, and copy the API endpoint in the Identity card.
+(It should look something like `https://my-redwood-app.netlify.app/.netlify/identity`.)
 
-See the Netlify Identity information within this doc's [Auth Provider Specific Integration](#auth-provider-specific-integration) section.
+Let's do one more thing while we're here to make signing up later a little easier.
+Right now, if we sign up, we'll have to verify our email address.
+Let's forego that feature for the purposes of this doc: click "Settings and usage", then scroll down to "Emails" and look for "Confirmation template".
+Click "Edit settings", tick the box next to "Allow users to sign up without verifying their email address", and click "Save".
 
+Netlify Identity works a little differently than the other auth providers in that you don't have to copy API keys to your project's `.env` and `redwood.toml` files.
+Instead, the first time you use it (by, say, calling `signUp` from `useAuth`), it'll ask you for your app's API endpoint.
+So let's go ahead and use it: if this is a brand new project, generate a home page.
+There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
 
-## Integration
+```
+yarn rw g page home /
+```
 
-[Netlify Identity](https://docs.netlify.com/visitor-access/identity) offers [Role-based access control (RBAC)](https://docs.netlify.com/visitor-access/identity/manage-existing-users/#user-account-metadata).
+```tsx title="web/src/pages/HomePage.tsx"
+import { useAuth } from 'src/auth'
 
-### Role-based access control (RBAC)
+const HomePage = () => {
+  const { isAuthenticated, signUp } = useAuth()
 
-Role-based access control (RBAC) refers to the idea of assigning permissions to users based on their role within an organization. It provides fine-grained control and offers a simple, manageable approach to access management that is less prone to error than assigning permissions to users individually.
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
 
-Essentially, a role is a collection of permissions that you can apply to users. A role might be "admin", "editor" or "publisher". This differs from permissions an example of which might be "publish:blog".
-
-### App Metadata
-
-Netlify Identity stores information (such as, support plan subscriptions, security roles, or access control groups) in `app_metadata`. Data stored in `app_metadata` cannot be edited by users.
-
-Create and manage roles for your application in Netlify's "Identity" management views. You can then assign these roles to users.
-
-### Add Application `hasRole` Support
-
-If you intend to support, RBAC then in your `api/src/lib/auth.js` you need to extract `roles` using the `parseJWT` utility and set these roles on `currentUser`.
-
-Netlify will store the user's roles on the `app_metadata` claim and the `parseJWT` function provides an option to extract the roles so they can be assigned to the `currentUser`.
-
-For example:
-
-```jsx title="api/src/lib/auth.js"
-export const getCurrentUser = async (decoded) => {
-  return context.currentUser || { ...decoded, roles: parseJWT({ decoded }).roles }
+      <p>{JSON.stringify({ isAuthenticated })}</p>
+      <button onClick={signUp}>sign up</button>
+    </>
+  )
 }
 ```
 
-Now your `currentUser.roles` info will be available to both `requireAuth()` on the api side and `hasRole()` on the web side.
+Clicking sign up should open a modal; paste the API endpoint you copied earlier there:
+
+<img width="1522" alt="image" src="https://user-images.githubusercontent.com/32992335/209391973-239d5a12-649f-4e33-9098-cd297034f563.png" />
+
+After that, you should see a sign-up modal. Go ahead and sign up:
+
+<img width="1522" alt="image" src="https://user-images.githubusercontent.com/32992335/209392156-e87a04b8-9ce8-4bc6-bc6b-92a2de8effe3.png" />
+
+After you sign up, you should see `{"isAuthenticated":true}` on the page.

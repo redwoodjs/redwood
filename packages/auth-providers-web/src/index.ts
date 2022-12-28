@@ -1,5 +1,0 @@
-export { createEthereumAuth } from './ethereum/ethereum'
-export { createGoTrueAuth } from './goTrue/goTrue'
-export { createMagicLinkAuth } from './magicLink/magicLink'
-export { createNhostAuth } from './nhost/nhost'
-export { createOktaAuth } from './okta/okta'

@@ -41,160 +41,172 @@ class WebAuthnNoAuthenticatorError extends WebAuthnAuthenticationError {
   }
 }
 
-const getApiDbAuthUrl = () => {
-  if (process.env.RWJS_API_DBAUTH_URL) {
-    return process.env.RWJS_API_DBAUTH_URL
+export default class WebAuthnClient {
+  authApiUrl = ''
+
+  private getAuthApiUrl() {
+    return this.authApiUrl || `${process.env.RWJS_API_URL}/auth`
   }
 
-  return `${process.env.RWJS_API_URL}/auth`
-}
+  setAuthApiUrl(authApiUrl?: string) {
+    if (authApiUrl) {
+      this.authApiUrl = authApiUrl
+    }
+  }
 
-const isSupported = async () => {
-  return await platformAuthenticatorIsAvailable()
-}
+  async isSupported() {
+    return await platformAuthenticatorIsAvailable()
+  }
 
-const isEnabled = () => !!document.cookie.match(/webAuthn/)
+  isEnabled() {
+    return !!/\bwebAuthn\b/.test(document.cookie)
+  }
 
-const authenticationOptions = async () => {
-  let options
+  private async authenticationOptions() {
+    let options
 
-  try {
-    const xhr = new XMLHttpRequest()
-    xhr.withCredentials = true
-    xhr.open('GET', `${getApiDbAuthUrl()}?method=webAuthnAuthOptions`, false)
-    xhr.setRequestHeader('content-type', 'application/json')
-    xhr.send(null)
+    try {
+      const xhr = new XMLHttpRequest()
+      xhr.withCredentials = true
+      xhr.open(
+        'GET',
+        `${this.getAuthApiUrl()}?method=webAuthnAuthOptions`,
+        false
+      )
+      xhr.setRequestHeader('content-type', 'application/json')
+      xhr.send(null)
 
-    options = JSON.parse(xhr.responseText)
+      options = JSON.parse(xhr.responseText)
 
-    if (xhr.status !== 200) {
-      if (options.error?.match(/username and password/)) {
-        console.info('regex match')
-        throw new WebAuthnDeviceNotFoundError()
-      } else {
-        console.info('no match')
+      if (xhr.status !== 200) {
+        if (options.error?.match(/username and password/)) {
+          throw new WebAuthnDeviceNotFoundError()
+        } else {
+          throw new WebAuthnAuthenticationError(
+            `Could not start authentication: ${options.error}`
+          )
+        }
+      }
+    } catch (e: any) {
+      console.error(e.message)
+      throw new WebAuthnAuthenticationError(
+        `Could not start authentication: ${e.message}`
+      )
+    }
+
+    return options
+  }
+
+  async authenticate() {
+    const authOptions = await this.authenticationOptions()
+
+    try {
+      const browserResponse = await startAuthentication(authOptions)
+
+      const xhr = new XMLHttpRequest()
+      xhr.withCredentials = true
+      xhr.open('POST', this.getAuthApiUrl(), false)
+      xhr.setRequestHeader('content-type', 'application/json')
+      xhr.send(
+        JSON.stringify({
+          method: 'webAuthnAuthenticate',
+          ...browserResponse,
+        })
+      )
+
+      const options = JSON.parse(xhr.responseText)
+
+      if (xhr.status !== 200) {
         throw new WebAuthnAuthenticationError(
-          `Could not start authentication: ${options.error}`
+          `Could not complete authentication: ${options.error}`
+        )
+      }
+    } catch (e: any) {
+      if (
+        e.message.match(
+          /No available authenticator recognized any of the allowed credentials/
+        )
+      ) {
+        throw new WebAuthnNoAuthenticatorError()
+      } else {
+        throw new WebAuthnAuthenticationError(
+          `Error while authenticating: ${e.message}`
         )
       }
     }
-  } catch (e: any) {
-    console.error(e.message)
-    throw new WebAuthnAuthenticationError(
-      `Could not start authentication: ${e.message}`
-    )
+
+    return true
   }
 
-  return options
-}
+  private registrationOptions() {
+    let options
 
-const authenticate = async () => {
-  const authOptions = await authenticationOptions()
-
-  try {
-    const browserResponse = await startAuthentication(authOptions)
-
-    const xhr = new XMLHttpRequest()
-    xhr.withCredentials = true
-    xhr.open('POST', getApiDbAuthUrl(), false)
-    xhr.setRequestHeader('content-type', 'application/json')
-    xhr.send(
-      JSON.stringify({
-        method: 'webAuthnAuthenticate',
-        ...browserResponse,
-      })
-    )
-
-    const options = JSON.parse(xhr.responseText)
-
-    if (xhr.status !== 200) {
-      throw new WebAuthnAuthenticationError(
-        `Could not complete authentication: ${options.error}`
+    try {
+      const xhr = new XMLHttpRequest()
+      xhr.withCredentials = true
+      xhr.open(
+        'GET',
+        `${this.getAuthApiUrl()}?method=webAuthnRegOptions`,
+        false
       )
-    }
-  } catch (e: any) {
-    if (
-      e.message.match(
-        /No available authenticator recognized any of the allowed credentials/
-      )
-    ) {
-      throw new WebAuthnNoAuthenticatorError()
-    } else {
-      throw new WebAuthnAuthenticationError(
-        `Error while authenticating: ${e.message}`
-      )
-    }
-  }
+      xhr.setRequestHeader('content-type', 'application/json')
+      xhr.send(null)
 
-  return true
-}
+      options = JSON.parse(xhr.responseText)
 
-const registrationOptions = () => {
-  let options
-
-  try {
-    const xhr = new XMLHttpRequest()
-    xhr.withCredentials = true
-    xhr.open('GET', `${getApiDbAuthUrl()}?method=webAuthnRegOptions`, false)
-    xhr.setRequestHeader('content-type', 'application/json')
-    xhr.send(null)
-
-    options = JSON.parse(xhr.responseText)
-
-    if (xhr.status !== 200) {
+      if (xhr.status !== 200) {
+        throw new WebAuthnRegistrationError(
+          `Could not start registration: ${options.error}`
+        )
+      }
+    } catch (e: any) {
+      console.error(e)
       throw new WebAuthnRegistrationError(
-        `Could not start registration: ${options.error}`
+        `Could not start registration: ${e.message}`
       )
     }
-  } catch (e: any) {
-    console.error(e)
-    throw new WebAuthnRegistrationError(
-      `Could not start registration: ${e.message}`
-    )
+
+    return options
   }
 
-  return options
-}
+  async register() {
+    const options = await this.registrationOptions()
+    let regResponse
 
-const register = async () => {
-  const options = await registrationOptions()
-  let regResponse
+    try {
+      regResponse = await startRegistration(options)
+    } catch (e: any) {
+      if (e.name === 'InvalidStateError') {
+        throw new WebAuthnAlreadyRegisteredError()
+      } else {
+        throw new WebAuthnRegistrationError(
+          `Error while registering: ${e.message}`
+        )
+      }
+    }
 
-  try {
-    regResponse = await startRegistration(options)
-  } catch (e: any) {
-    if (e.name === 'InvalidStateError') {
-      throw new WebAuthnAlreadyRegisteredError()
-    } else {
+    try {
+      const xhr = new XMLHttpRequest()
+      xhr.withCredentials = true
+      xhr.open('POST', this.getAuthApiUrl(), false)
+      xhr.setRequestHeader('content-type', 'application/json')
+      xhr.send(JSON.stringify({ method: 'webAuthnRegister', ...regResponse }))
+
+      const options = JSON.parse(xhr.responseText)
+
+      if (xhr.status !== 200) {
+        throw new WebAuthnRegistrationError(
+          `Could not complete registration: ${options.error}`
+        )
+      }
+    } catch (e: any) {
       throw new WebAuthnRegistrationError(
         `Error while registering: ${e.message}`
       )
     }
+
+    return true
   }
-
-  try {
-    const xhr = new XMLHttpRequest()
-    xhr.withCredentials = true
-    xhr.open('POST', getApiDbAuthUrl(), false)
-    xhr.setRequestHeader('content-type', 'application/json')
-    xhr.send(JSON.stringify({ method: 'webAuthnRegister', ...regResponse }))
-
-    const options = JSON.parse(xhr.responseText)
-
-    if (xhr.status !== 200) {
-      throw new WebAuthnRegistrationError(
-        `Could not complete registration: ${options.error}`
-      )
-    }
-  } catch (e: any) {
-    throw new WebAuthnRegistrationError(`Error while registering: ${e.message}`)
-  }
-
-  return true
 }
-
-const WebAuthnClient = { isSupported, isEnabled, authenticate, register }
-
-export default WebAuthnClient
 
 export type WebAuthnClientType = typeof WebAuthnClient

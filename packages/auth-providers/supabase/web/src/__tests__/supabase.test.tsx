@@ -3,7 +3,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createSupabaseAuth } from '../supabase'
+import { createAuth } from '../supabase'
 
 const user: Partial<User> = {
   id: 'unique_user_id',
@@ -112,7 +112,7 @@ function getSupabaseAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createSupabaseAuth(
+  const { useAuth, AuthProvider } = createAuth(
     supabaseMockClient as SupabaseClient,
     customProviderHooks
   )
