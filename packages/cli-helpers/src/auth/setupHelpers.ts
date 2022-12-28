@@ -52,7 +52,7 @@ interface Args {
   apiPackages?: string[]
   extraTask?: ListrTask<AuthGeneratorCtx>
   notes?: string[]
-  verboseArg?: boolean
+  verbose?: boolean
 }
 
 // from lodash
@@ -76,7 +76,7 @@ export const standardAuthHandler = async ({
   apiPackages = [],
   extraTask,
   notes,
-  verboseArg,
+  verbose,
 }: Args) => {
   // @TODO detect if auth already setup. If it is, ask how to proceed:
   // How would you like to proceed?
@@ -132,12 +132,12 @@ export const standardAuthHandler = async ({
     ].filter(truthy),
     {
       rendererOptions: { collapse: false },
+      renderer: verbose ? 'verbose' : 'default',
       ctx: {
         // When you set the force flag, you are saying you want to replace the existing auth provider
         setupMode: AuthSetupMode.UNKNOWN,
         provider, // provider name passed from CLI
       },
-      renderer: verboseArg ? 'verbose' : 'default',
     }
   )
 
