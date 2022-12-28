@@ -125,7 +125,7 @@ export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
       return {
         title: `...waiting to write file \`./${path.relative(base, file)}\`...`,
         task: (
-          _ctx: any,
+          _ctx: never,
           task: ListrTaskWrapper<
             never,
             ListrGetRendererClassFromValue<Renderer>
