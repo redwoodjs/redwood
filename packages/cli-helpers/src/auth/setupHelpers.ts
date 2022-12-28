@@ -134,7 +134,6 @@ export const standardAuthHandler = async ({
       rendererOptions: { collapse: false },
       renderer: verbose ? 'verbose' : 'default',
       ctx: {
-        // When you set the force flag, you are saying you want to replace the existing auth provider
         setupMode: AuthSetupMode.UNKNOWN,
         provider, // provider name passed from CLI
       },
