@@ -14,7 +14,7 @@ import {
   addWebPackages,
   AuthGeneratorCtx,
   AuthSetupMode,
-  checkIfAuthSetupAlready,
+  setAuthSetupMode,
   createWebAuth,
   generateAuthApiFiles,
   installPackages,
@@ -85,7 +85,7 @@ export const standardAuthHandler = async ({
 
   const tasks = new Listr<AuthGeneratorCtx, 'verbose' | 'default'>(
     [
-      !forceArg && checkIfAuthSetupAlready(),
+      setAuthSetupMode(forceArg),
       generateAuthApiFiles(basedir, webAuthn),
 
       addConfigToWebApp(),
@@ -134,7 +134,7 @@ export const standardAuthHandler = async ({
       rendererOptions: { collapse: false },
       ctx: {
         // When you set the force flag, you are saying you want to replace the existing auth provider
-        setupMode: forceArg ? AuthSetupMode.FORCE : AuthSetupMode.UNKNOWN,
+        setupMode: AuthSetupMode.UNKNOWN,
         provider, // provider name passed from CLI
       },
       renderer: verboseArg ? 'verbose' : 'default',

@@ -149,17 +149,6 @@ describe('authTasks', () => {
   })
 
   describe('Swapped out GraphQL client', () => {
-    let consoleWarn
-
-    beforeAll(() => {
-      consoleWarn = console.warn
-      console.warn = jest.fn()
-    })
-
-    afterAll(() => {
-      console.warn = consoleWarn
-    })
-
     it('Should add auth config when app is missing RedwoodApolloProvider', () => {
       const ctx = {
         provider: 'clerk',
@@ -169,11 +158,10 @@ describe('authTasks', () => {
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
-      addConfigToWebApp().task(ctx, {} as any)
+      const task = { output: '' } as any
+      addConfigToWebApp().task(ctx, task)
 
-      expect(console.warn).toHaveBeenCalledWith(
-        expect.stringMatching(/GraphQL.*useAuth/)
-      )
+      expect(task.output).toMatch(/GraphQL.*useAuth/)
     })
   })
 

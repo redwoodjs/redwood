@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import { anyTypeAnnotation } from '@babel/types'
 import execa from 'execa'
 import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
@@ -94,7 +95,13 @@ export const addApiConfig = ({
     if (replaceExistingImport) {
       newContent = replaceAuthDecoderImport(newContent, authDecoderImport)
       newContent = replaceAuthDecoderArg(newContent)
-    } else {
+    }
+
+    const didReplace = newContent.includes(authDecoderImport)
+
+    // If we asked to replace existing code, but didn't actually replace
+    // anything we should just add it. That's why we do `|| !didReplace` here
+    if (!replaceExistingImport || !didReplace) {
       newContent = authDecoderImport + '\n' + newContent
       newContent = addAuthDecoderToCreateGraphQLHandler(newContent)
     }
@@ -461,16 +468,25 @@ export interface AuthGeneratorCtx {
   provider: string
 }
 
-export const checkIfAuthSetupAlready = <
-  Renderer extends typeof ListrRenderer
->() => {
+export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
+  force: boolean
+) => {
   return {
     title: 'Checking project for existing auth...',
     task: async (
       ctx: AuthGeneratorCtx,
       task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
     ) => {
+      console.log('setupMode task function')
       const webAppContents = fs.readFileSync(getWebAppPath(), 'utf-8')
+
+      console.log('webAppContents', webAppContents)
+
+      if (force) {
+        ctx.setupMode = AuthSetupMode.FORCE
+
+        return
+      }
 
       // If we don't know whether the user wants to replace or combine,
       // we prompt them to select a mode.
@@ -500,6 +516,7 @@ export const checkIfAuthSetupAlready = <
 
         return
       } else {
+        ctx.setupMode = AuthSetupMode.FORCE
         task.skip('Setting up Auth from scratch')
       }
     },
