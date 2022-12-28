@@ -591,6 +591,14 @@ As you can probably tell by the names:
 * **currentUser**: any details the app has on that user (more on this in a moment)
 * **logOut**: removes the user's session and logs them out
 
+When displaying currentUser, for example {currentUser.id} you may run into a "Cannot read properties of null (reading 'id')" error, this is due to currentUser not being loaded, in this case add  
+```
+if (loading) {
+    return null
+  }
+```
+Also make sure to add loading to variables fetched from useAuth()
+
 At the top right of the page, let's show the email address of the user (if they're logged in) as well as a link to log out. If they're not logged in, let's show a link to do just that:
 
 <Tabs groupId="js-ts">
