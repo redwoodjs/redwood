@@ -60,6 +60,12 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
       description: 'Overwrite existing configuration',
       type: 'boolean',
     })
+    .option('verbose', {
+      alias: 'v',
+      default: false,
+      description: 'Log setup output',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -78,6 +84,7 @@ interface Args {
   apiPackages?: string[]
   extraTask?: ListrTask<never>
   notes?: string[]
+  verbose?: boolean
 }
 
 // from lodash
@@ -97,10 +104,11 @@ export const standardAuthHandler = async ({
   apiPackages = [],
   extraTask,
   notes,
+  verbose,
 }: Args) => {
   const force = await shouldForce(forceArg, basedir, webAuthn)
 
-  const tasks = new Listr<never>(
+  const tasks = new Listr<never, 'verbose' | 'default'>(
     [
       generateAuthApiFiles(basedir, provider, force, webAuthn),
       addConfigToWebApp(),
@@ -120,7 +128,10 @@ export const standardAuthHandler = async ({
         },
       },
     ].filter(truthy),
-    { rendererOptions: { collapse: false } }
+    {
+      rendererOptions: { collapse: false },
+      renderer: verbose ? 'verbose' : 'default',
+    }
   )
 
   try {
