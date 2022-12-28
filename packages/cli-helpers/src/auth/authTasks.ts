@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import { anyTypeAnnotation } from '@babel/types'
 import execa from 'execa'
 import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
