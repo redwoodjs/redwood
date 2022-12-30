@@ -12,6 +12,8 @@ import {
 
 import { unindented } from './fixtures/unindented'
 
+jest.unmock('fs-extra')
+
 // A particular merge strategy for combining JS-config-style files.
 // This is the only strategy tested in this file.
 function mergeConfig(base, ext) {

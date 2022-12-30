@@ -96,20 +96,39 @@ export const handler = (argv) => {
 }
 ```
 
-### Overview
+## Overview
 
 Contributing to `@redwoodjs/cli` usually means adding a command or modifying an existing one. We've organized this doc around adding a command since if you know how to do this you'll know how to modify one too.
 
+### Quickstart
 
-#### Quickstart
-
-RedwoodJS CLI is usually run in a project, this is problematic for contributors, because the transpiled files are not in a project, but in the RedwoodJS framework repo. Luckily the path can be modified at run-time via an env-var: `RWJS_CWD=../path/to/project`.
-
-We've added a handy yarn alias to test your modified changes to the Redwood CLI against the "example-todo-main" fixture (`__fixtures__/example-todo-main`) you can do the following:
 ```terminal
 cd packages/cli
-yarn dev <command>
 ```
+
+Build package
+
+```terminal
+yarn build
+```
+
+Run command
+
+```terminal
+RWJS_CWD=../path/to/project yarn dev
+```
+
+*RedwoodJS CLI is usually run in a project, this is problematic for contributors, because the transpiled files are not in a project, but in the RedwoodJS framework repo. Luckily the path can be modified at run-time via an env-var: `RWJS_CWD=../path/to/project`.*
+
+*We've also added a handy yarn alias to test your modified changes to the Redwood CLI against the "example-todo-main" fixture (`__fixtures__/example-todo-main`) you can do the following:*
+
+```terminal
+yarn dev:example <command>
+```
+
+*Please note when using the example fixture that any changes your command may make to the fixture will persist.*
+
+---
 
 ### Best Practices
 

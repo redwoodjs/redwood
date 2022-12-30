@@ -5,4 +5,6 @@ module.exports = {
     '^src/(.*)': '<rootDir>/src/$1',
   },
   testTimeout: 15000,
+  collectCoverage: true,
+  coverageReporters: ['text', 'lcov'],
 }

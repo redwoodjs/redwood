@@ -5,11 +5,8 @@ import fs from 'fs-extra'
 import omit from 'lodash/omit'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
-
-import c from '../../lib/colors'
-
-import { deployBuilder, deployHandler } from './helpers/helpers'
+import { colors as c, getPaths } from '../../lib'
+import { deployBuilder, deployHandler } from '../deploy'
 
 export const command = 'layer0 [...commands]'
 export const description = 'Build command for Layer0 deploy'

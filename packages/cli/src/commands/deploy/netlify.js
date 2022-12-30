@@ -1,8 +1,8 @@
-import { deployBuilder, deployHandler } from './helpers/helpers'
+import { commonDeployOptions, buildAndMigratePrisma } from '../deploy'
 
 export const command = 'netlify [...commands]'
 export const description = 'Build command for Netlify deploy'
 
-export const builder = (yargs) => deployBuilder(yargs)
+export const builder = (yargs) => commonDeployOptions(yargs)
 
-export const handler = deployHandler
+export const handler = buildAndMigratePrisma

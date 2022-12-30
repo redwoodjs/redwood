@@ -9,7 +9,7 @@ import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
-import { getPaths, colors as c } from '../../lib'
+import { getPaths, colors as c } from '../lib'
 
 export const command = 'serverless'
 export const aliases = ['aws serverless', 'sls']
@@ -81,7 +81,9 @@ export const buildCommands = ({ sides }) => {
       task: async () => {
         // Dynamically import this function
         // because its dependencies are only installed when `rw setup deploy serverless` is run
-        const { packFunctions } = (await import('./deploy/serverless')).default
+        const { packFunctions } = (
+          await import('./deploy/modules/serverless/packFunctions')
+        ).default
 
         await packFunctions()
       },

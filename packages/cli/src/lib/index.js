@@ -9,7 +9,7 @@ import decamelize from 'decamelize'
 import execa from 'execa'
 import { Listr } from 'listr2'
 import { memoize } from 'lodash'
-import lodash from 'lodash/string'
+import _ from 'lodash'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
@@ -23,6 +23,9 @@ import {
 import c from './colors'
 import { addFileToRollback } from './rollback'
 import { pluralize, singularize } from './rwPluralize'
+
+export { default as colors } from './colors'
+export { zipDir } from './zip'
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -62,7 +65,7 @@ export const nameVariants = (name) => {
 }
 
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
-  const template = lodash.template(readFile(templateFilename).toString())
+  const template = _.template(readFile(templateFilename).toString())
 
   const renderedTemplate = template({
     name,

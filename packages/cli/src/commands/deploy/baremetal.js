@@ -30,13 +30,6 @@ export const description = 'Deploy to baremetal server(s)'
 // systems from a Windows system
 const pathJoin = path.posix.join
 
-export const execaOptions = {
-  cwd: pathJoin(getPaths().base),
-  stdio: 'inherit',
-  shell: true,
-  cleanup: true,
-}
-
 export const builder = (yargs) => {
   yargs.positional('environment', {
     describe: 'The environment to deploy to',

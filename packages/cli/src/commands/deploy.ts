@@ -1,11 +1,26 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
+import { Argv } from 'yargs'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { colors, getPaths } from '../lib'
 
-import c from '../../../lib/colors'
+export const command = 'deploy <target>'
+export const description = 'Deploy your Redwood project'
 
-export const deployBuilder = (yargs) => {
+export const builder = (yargs: Argv) =>
+  yargs
+    .commandDir('./deploy', {
+      recurse: false,
+    })
+    .demandCommand()
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/docs/cli-commands#deploy'
+      )}\n`
+    )
+
+export const commonDeployOptions = (yargs: Argv) => {
   yargs
     .option('build', {
       description: 'Build for production',
@@ -31,10 +46,18 @@ export const deployBuilder = (yargs) => {
     )
 }
 
-export const deployHandler = async ({ build, prisma, dm: dataMigrate }) => {
+export const buildAndMigratePrisma = async ({
+  build,
+  prisma,
+  dm: dataMigrate,
+}: {
+  build: boolean
+  prisma: boolean
+  dm: boolean
+}) => {
   const paths = getPaths()
 
-  let commandSet = []
+  const commandSet = []
   if (build) {
     commandSet.push('yarn rw build --verbose')
   }
@@ -47,7 +70,7 @@ export const deployHandler = async ({ build, prisma, dm: dataMigrate }) => {
 
   const joinedCommands = commandSet.join(' && ')
 
-  console.log(c.green(`\nRunning:\n`) + `${joinedCommands} \n`)
+  console.log(colors.green(`\nRunning:\n`) + `${joinedCommands} \n`)
 
   return execa(joinedCommands, {
     shell: true,

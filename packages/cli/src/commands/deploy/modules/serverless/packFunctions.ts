@@ -1,31 +1,25 @@
 import path from 'path'
 
 import { nodeFileTrace } from '@vercel/nft'
-import archiver from 'archiver'
 import fse from 'fs-extra'
 
-import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
-import { ensurePosixPath, getPaths } from '@redwoodjs/internal/dist/paths'
+import {
+  ensurePosixPath,
+  getPaths,
+  findApiDistFunctions,
+} from '@redwoodjs/internal/dist'
+
+import { zipDir } from '../../../../lib'
 
 const ZIPBALL_DIR = './api/dist/zipball'
 
-function zipDirectory(source, out) {
-  const archive = archiver('zip', { zlib: { level: 5 } })
-  const stream = fse.createWriteStream(out)
-
-  return new Promise((resolve, reject) => {
-    archive
-      .directory(source, false)
-      .on('error', (err) => reject(err))
-      .pipe(stream)
-
-    stream.on('close', () => resolve())
-    archive.finalize()
-  })
+export async function packFunctions() {
+  const filesToBePacked = findApiDistFunctions()
+  await Promise.all(filesToBePacked.map(packageSingleFunction))
 }
 
 // returns a tuple of [filePath, fileContent]
-function generateEntryFile(functionAbsolutePath, name) {
+function generateEntryFile(functionAbsolutePath: string, name: string) {
   const relativeImport = ensurePosixPath(
     path.relative(getPaths().base, functionAbsolutePath)
   )
@@ -35,7 +29,7 @@ function generateEntryFile(functionAbsolutePath, name) {
   ]
 }
 
-async function packageSingleFunction(functionFile) {
+async function packageSingleFunction(functionFile: string) {
   const { name: functionName } = path.parse(functionFile)
 
   const { fileList: functionDependencyFileList } = await nodeFileTrace([
@@ -59,26 +53,7 @@ async function packageSingleFunction(functionFile) {
   copyPromises.push(functionEntryPromise)
 
   await Promise.all(copyPromises)
-  await exports.zipDirectory(
-    `${ZIPBALL_DIR}/${functionName}`,
-    `${ZIPBALL_DIR}/${functionName}.zip`
-  )
+  zipDir(`${ZIPBALL_DIR}/${functionName}`, `${ZIPBALL_DIR}/${functionName}.zip`)
   await fse.remove(`${ZIPBALL_DIR}/${functionName}`)
   return
 }
-
-function nftPack() {
-  const filesToBePacked = findApiDistFunctions()
-  return Promise.all(filesToBePacked.map(exports.packageSingleFunction))
-}
-
-// We do this, so we can spy the functions in the test
-// It didn't make sense to separate into different files
-const exports = {
-  nftPack,
-  packageSingleFunction,
-  generateEntryFile,
-  zipDirectory,
-}
-
-export default exports
