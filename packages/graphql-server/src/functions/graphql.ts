@@ -131,11 +131,13 @@ export const createGraphQLHandler = ({
 
   plugins.push(
     useReadinessCheck({
-      endpoint: '/graphql/readiness',
+      endpoint: graphiQLEndpoint + '/readiness',
       check: async ({ request }) => {
         try {
           // if we can reach the health check endpoint ...
-          const response = await yoga.fetch('/graphql/health')
+          const response = await yoga.fetch(
+            new URL(graphiQLEndpoint + '/health', request.url)
+          )
 
           const expectedHealthCheckId = healthCheckId || 'yoga'
 
@@ -168,7 +170,7 @@ export const createGraphQLHandler = ({
       isDev: isDevEnv,
     },
     logging: logger,
-    healthCheckEndpoint: '/graphql/health',
+    healthCheckEndpoint: graphiQLEndpoint + '/health',
     graphqlEndpoint: graphiQLEndpoint,
     graphiql: isDevEnv
       ? {
@@ -200,16 +202,21 @@ export const createGraphQLHandler = ({
     let lambdaResponse: APIGatewayProxyResult
 
     try {
-      let path = event.path.replace('/.redwood/functions', '')
+      // url needs to be normalized
+      const [, rest = ''] = event.path.split(graphiQLEndpoint)
+      const url = new URL(graphiQLEndpoint + rest, 'http://localhost')
+
       if (event.queryStringParameters != null) {
-        const searchParams = new URLSearchParams(
-          event.queryStringParameters as Record<string, string>
-        )
-        path += `?${searchParams}`
+        for (const queryName in event.queryStringParameters) {
+          const queryValue = event.queryStringParameters[queryName]
+          if (queryValue != null) {
+            url.searchParams.set(queryName, queryValue)
+          }
+        }
       }
 
       const response = await yoga.fetch(
-        path,
+        url,
         {
           method: event.httpMethod,
           headers: event.headers as HeadersInit,
