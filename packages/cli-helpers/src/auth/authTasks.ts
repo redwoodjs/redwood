@@ -2,15 +2,15 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
-import { ListrTask, ListrTaskWrapper, ListrRenderer } from 'listr2'
+import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { writeFilesTask, transformTSToJS } from '../lib'
+import { transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
 import { getPaths, resolveFile } from '../lib/paths'
 import {
-  isTypeScriptProject,
   getGraphqlPath,
   graphFunctionDoesExist,
+  isTypeScriptProject,
 } from '../lib/project'
 
 import { apiSideFiles, generateUniqueFileNames } from './authFiles'
@@ -20,73 +20,109 @@ const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
 
 export const getWebAppPath = () => getPaths().web.app
 
-const addApiConfig = (authDecoderImport?: string) => {
+/**
+ * This function looks for the createGraphQLHandler function call and adds
+ * `authDecoder` to its arguments if it's not already there. Almost always it
+ * will not be there, but if the user already has an auth provider set up and
+ * wants to add another one it's probably there, and in that case we don't
+ * want to add another one
+ *
+ * @param content - The contents of api/src/functions/graphql.ts
+ * @returns content with `authDecoder` added unless it was already there
+ */
+function addAuthDecoderToCreateGraphQLHandler(content: string) {
+  // Have to use a funky looking Regex here to prevent a "Polynomial regular
+  // expression used on uncontrolled data" warning/error. A.k.a "Catastrophic
+  // Backtracking". The usual fix is to use an atomic group, but the JS
+  // regex engine doesn't support that, so we use a lookaround group to
+  // emulate an atomic group.
+  if (
+    !new RegExp('(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder', 's').test(
+      content
+    )
+  ) {
+    return content.replace(
+      /^(?<indentation>\s*)(loggerConfig:)(.*)$/m,
+      `$<indentation>authDecoder,\n$<indentation>$2$3`
+    )
+  }
+
+  return content
+}
+
+/**
+ * Replace the existing `import { authDecoder } from 'x'` with a new one
+ *
+ * @param content - The contents of api/src/functions/graphql.ts
+ * @param decoderImport - Something like
+ *   `import { authDecoder } from '@redwoodjs/auth-clerk-api'`
+ * @returns content with the authDecoder import replaced with the new import
+ */
+function replaceAuthDecoderImport(content: string, decoderImport: string) {
+  return content.replace(/^import { authDecoder .*} from .+/, decoderImport)
+}
+
+/**
+ * Replace the existing `  authDecoder: myAuthDecoder,` with a standard
+ * `  authDecoder,`
+ *
+ * @param content - The contents of api/src/functions/graphql.ts
+ * @returns content with standard authDecoder arg to createGraphQLHandler
+ */
+function replaceAuthDecoderArg(content: string) {
+  return content.replace(/^(\s+)authDecoder\b.+/m, '$1authDecoder,')
+}
+
+// Exporting this to make it easier to test
+export const addApiConfig = (authDecoderImport?: string) => {
   const graphqlPath = getGraphqlPath()
 
   if (!graphqlPath) {
     throw new Error('Could not find your graphql file path')
   }
 
-  let content = fs.readFileSync(graphqlPath).toString()
-  let contentUpdated = false
+  const content = fs.readFileSync(graphqlPath).toString()
+  let newContent = content
 
-  if (authDecoderImport && !content.includes(authDecoderImport)) {
-    content = authDecoderImport + '\n' + content
+  // If there already is an import we replace it with a new one
+  const replaceExistingImport = /^import { authDecoder .*} from /m.test(content)
 
-    // If we have multiple auth providers setup we probably already have an
-    // auth decoder configured. In that case we don't want to add another one
-    // Have to use a funky looking Regex here to prevent a "Polynomial regular
-    // expression used on uncontrolled data" warning/error. A.k.a "Catastrophic
-    // Backtracking". The usual fix is to use an atomic group, but the JS
-    // regex engine doesn't support that, so we use a lookaround group to
-    // emulate an atomic group.
-    if (
-      !new RegExp(
-        '(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder',
-        's'
-      ).test(content)
-    ) {
-      content = content.replace(
-        /^(\s*)(loggerConfig:)(.*)$/m,
-        `$1authDecoder,\n$1$2$3`
-      )
+  if (authDecoderImport) {
+    if (replaceExistingImport) {
+      newContent = replaceAuthDecoderImport(newContent, authDecoderImport)
+      newContent = replaceAuthDecoderArg(newContent)
+    } else {
+      newContent = authDecoderImport + '\n' + newContent
+      newContent = addAuthDecoderToCreateGraphQLHandler(newContent)
     }
-
-    contentUpdated = true
   }
 
-  const hasAuthImport =
+  const hasCurrentUserImport =
     /(^import {.*?getCurrentUser(?!getCurrentUser).*?} from 'src\/lib\/auth')/s.test(
-      content
+      newContent
     )
 
-  if (!hasAuthImport) {
+  if (!hasCurrentUserImport) {
     // add import statement
-    content = content.replace(
+    newContent = newContent.replace(
       /^(import { db } from 'src\/lib\/db')$/m,
       `import { getCurrentUser } from 'src/lib/auth'\n$1`
     )
 
     // add object to handler
-    content = content.replace(
+    newContent = newContent.replace(
       /^(\s*)(loggerConfig:)(.*)$/m,
       `$1getCurrentUser,\n$1$2$3`
     )
-
-    contentUpdated = true
   }
 
-  if (contentUpdated) {
-    fs.writeFileSync(graphqlPath, content)
+  if (newContent !== content) {
+    fs.writeFileSync(graphqlPath, newContent)
   }
 }
 
 const apiSrcDoesExist = () => {
   return fs.existsSync(path.join(getPaths().api.src))
-}
-
-const webIndexDoesExist = () => {
-  return fs.existsSync(getWebAppPath())
 }
 
 const addAuthImportToApp = (content: string) => {
@@ -182,34 +218,44 @@ const addUseAuthHook = (componentName: string, content: string) => {
  * Actually inserts the required config lines into App.{js,tsx}
  * Exported for testing
  */
-export const addConfigToApp = async () => {
-  const webAppPath = getWebAppPath()
+export const addConfigToWebApp = () => {
+  return {
+    title: 'Updating web/src/App.{js,tsx}',
+    task: () => {
+      const webAppPath = getWebAppPath()
 
-  let content = fs.readFileSync(webAppPath).toString()
+      if (!fs.existsSync(webAppPath)) {
+        const ext = isTypeScriptProject() ? 'tsx' : 'js'
+        throw new Error(`Could not find root App.${ext}`)
+      }
 
-  if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
-    content = addAuthImportToApp(content)
+      let content = fs.readFileSync(webAppPath).toString()
+
+      if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
+        content = addAuthImportToApp(content)
+      }
+
+      if (!hasAuthProvider(content)) {
+        content = addAuthProviderToApp(content)
+      }
+
+      if (/\s*<RedwoodApolloProvider/.test(content)) {
+        if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
+          content = addUseAuthHook('RedwoodApolloProvider', content)
+        }
+      } else {
+        console.warn(
+          colors.warning(
+            'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
+              'GraphQL Client you will have to make sure it gets access to your ' +
+              '`useAuth`, if it needs it.'
+          )
+        )
+      }
+
+      fs.writeFileSync(webAppPath, content)
+    },
   }
-
-  if (!hasAuthProvider(content)) {
-    content = addAuthProviderToApp(content)
-  }
-
-  if (/\s*<RedwoodApolloProvider/.test(content)) {
-    if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
-      content = addUseAuthHook('RedwoodApolloProvider', content)
-    }
-  } else {
-    console.warn(
-      colors.warning(
-        'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
-          'GraphQL Client you will have to make sure it gets access to your ' +
-          '`useAuth`, if it needs it.'
-      )
-    )
-  }
-
-  fs.writeFileSync(webAppPath, content)
 }
 
 export const createWebAuth = (
@@ -217,63 +263,73 @@ export const createWebAuth = (
   provider: string,
   webAuthn: boolean
 ) => {
-  const templatesBaseDir = path.join(basedir, 'templates', 'web')
-  const templates = fs.readdirSync(templatesBaseDir)
+  return {
+    title: 'Creating web/src/auth.{js,ts}',
+    task: () => {
+      const templatesBaseDir = path.join(basedir, 'templates', 'web')
+      const templates = fs.readdirSync(templatesBaseDir)
 
-  const templateFileName = templates.find((template) => {
-    return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
-  })
+      const templateFileName = templates.find((template) => {
+        return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
+      })
 
-  if (!templateFileName) {
-    throw new Error('Could not find the auth.ts template')
+      if (!templateFileName) {
+        throw new Error('Could not find the auth.ts template')
+      }
+
+      const templateExtension = templateFileName.split('.').at(-2)
+
+      // Find an unused filename
+      // Start with web/src/auth.{ts,tsx}
+      // Then web/src/providerAuth.{ts,tsx}
+      // Then web/src/providerAuth2.{ts,tsx}
+      // Then web/src/providerAuth3.{ts,tsx}
+      // etc
+      let authFileName = path.join(getPaths().web.src, 'auth')
+      let i = 1
+      while (resolveFile(authFileName)) {
+        const count = i > 1 ? i : ''
+
+        authFileName = path.join(getPaths().web.src, provider + 'Auth' + count)
+
+        i++
+      }
+
+      authFileName = authFileName + '.' + templateExtension
+
+      let template: string | undefined = fs.readFileSync(
+        path.join(templatesBaseDir, templateFileName),
+        'utf-8'
+      )
+
+      template = isTypeScriptProject()
+        ? template
+        : transformTSToJS(authFileName, template)
+
+      fs.writeFileSync(authFileName, template)
+    },
   }
-
-  const templateExtension = templateFileName.split('.').at(-2)
-
-  // Find an unused filename
-  // Start with web/src/auth.{ts,tsx}
-  // Then web/src/providerAuth.{ts,tsx}
-  // Then web/src/providerAuth2.{ts,tsx}
-  // Then web/src/providerAuth3.{ts,tsx}
-  // etc
-  let authFileName = path.join(getPaths().web.src, 'auth')
-  let i = 1
-  while (resolveFile(authFileName)) {
-    const count = i > 1 ? i : ''
-
-    authFileName = path.join(getPaths().web.src, provider + 'Auth' + count)
-
-    i++
-  }
-
-  authFileName = authFileName + '.' + templateExtension
-
-  let template: string | undefined = fs.readFileSync(
-    path.join(templatesBaseDir, templateFileName),
-    'utf-8'
-  )
-
-  template = isTypeScriptProject()
-    ? template
-    : transformTSToJS(authFileName, template)
-
-  fs.writeFileSync(authFileName, template)
 }
 
 export const addConfigToRoutes = () => {
-  const webRoutesPath = getPaths().web.routes
+  return {
+    title: 'Updating Routes file...',
+    task: () => {
+      const webRoutesPath = getPaths().web.routes
 
-  let content = fs.readFileSync(webRoutesPath).toString()
+      let content = fs.readFileSync(webRoutesPath).toString()
 
-  if (!content.includes(AUTH_HOOK_IMPORT)) {
-    content = addAuthImportToRoutes(content)
+      if (!content.includes(AUTH_HOOK_IMPORT)) {
+        content = addAuthImportToRoutes(content)
+      }
+
+      if (!hasUseAuthHook('Router', content)) {
+        content = addUseAuthHook('Router', content)
+      }
+
+      fs.writeFileSync(webRoutesPath, content)
+    },
   }
-
-  if (!hasUseAuthHook('Router', content)) {
-    content = addUseAuthHook('Router', content)
-  }
-
-  fs.writeFileSync(webRoutesPath, content)
 }
 
 export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
@@ -318,27 +374,6 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
     },
   }
 }
-
-export const addAuthConfigToWeb = <Renderer extends typeof ListrRenderer>(
-  basedir: string,
-  provider: string,
-  webAuthn = false
-) => ({
-  title: 'Adding auth config to web...',
-  task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
-    if (webIndexDoesExist()) {
-      addConfigToApp()
-      createWebAuth(basedir, provider, webAuthn)
-      addConfigToRoutes()
-    } else {
-      task.skip?.(
-        `web/src/App.${
-          isTypeScriptProject() ? 'tsx' : 'js'
-        } not found, skipping`
-      )
-    }
-  },
-})
 
 export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
   authDecoderImport?: string

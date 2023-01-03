@@ -1,1 +1,1 @@
-export { createNetlifyAuth } from './netlify'
+export { createAuth } from './netlify'

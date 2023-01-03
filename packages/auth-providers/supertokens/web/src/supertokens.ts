@@ -16,7 +16,7 @@ export type AuthRecipe = {
   redirectToAuth: (input: 'signin' | 'signup') => void
 }
 
-export function createSuperTokensAuth(
+export function createAuth(
   superTokens: {
     authRecipe: AuthRecipe
     sessionRecipe: SessionRecipe
@@ -28,7 +28,7 @@ export function createSuperTokensAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  const authImplementation = createSuperTokensAuthImplementation(superTokens)
+  const authImplementation = createAuthImplementation(superTokens)
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
@@ -38,7 +38,7 @@ export interface SuperTokensAuth {
   sessionRecipe: SessionRecipe
 }
 
-function createSuperTokensAuthImplementation(superTokens: SuperTokensAuth) {
+function createAuthImplementation(superTokens: SuperTokensAuth) {
   return {
     type: 'supertokens',
     login: async () => superTokens.authRecipe.redirectToAuth('signin'),

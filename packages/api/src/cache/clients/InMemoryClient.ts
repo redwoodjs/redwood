@@ -52,6 +52,15 @@ export default class InMemoryClient extends BaseClient {
     return true
   }
 
+  async del(key: string) {
+    if (this.storage[key]) {
+      delete this.storage[key]
+      return true
+    } else {
+      return false
+    }
+  }
+
   /**
    * Special functions for testing, only available in InMemoryClient
    */

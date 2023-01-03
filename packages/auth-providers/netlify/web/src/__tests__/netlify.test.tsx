@@ -3,7 +3,7 @@ import * as NetlifyIdentityNS from 'netlify-identity-widget'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createNetlifyAuth } from '../netlify'
+import { createAuth } from '../netlify'
 
 type NetlifyIdentity = typeof NetlifyIdentityNS
 type User = NetlifyIdentityNS.User
@@ -98,7 +98,7 @@ function getNetlifyAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createNetlifyAuth(
+  const { useAuth, AuthProvider } = createAuth(
     netlifyIdentityMockClient as NetlifyIdentity,
     customProviderHooks
   )
