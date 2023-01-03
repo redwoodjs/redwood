@@ -55,7 +55,6 @@ export const createGraphQLHandler = ({
   depthLimitOptions,
   allowedOperations,
   defaultError = 'Something went wrong.',
-  graphiQLEndpoint = '/graphql',
   schemaOptions,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
@@ -134,13 +133,8 @@ export const createGraphQLHandler = ({
       endpoint: '/graphql/readiness',
       check: async ({ request }) => {
         try {
-          const protocol = isDevEnv ? 'http' : 'https'
-          const { host } = new URL(request.url)
-
-          const requestUrl = new URL('/graphql/health', protocol + '://' + host)
-
           // if we can reach the health check endpoint ...
-          const response = await await yoga.fetch(requestUrl)
+          const response = await await yoga.fetch('/graphql/health')
 
           const expectedHealthCheckId = healthCheckId || 'yoga'
 
@@ -174,7 +168,7 @@ export const createGraphQLHandler = ({
     },
     logging: logger,
     healthCheckEndpoint: '/graphql/health',
-    graphqlEndpoint: graphiQLEndpoint,
+    graphqlEndpoint: '*',
     graphiql: isDevEnv
       ? {
           title: 'Redwood GraphQL Playground',
@@ -205,24 +199,19 @@ export const createGraphQLHandler = ({
     let lambdaResponse: APIGatewayProxyResult
 
     try {
-      const protocol = isDevEnv ? 'http' : 'https'
-
-      const requestUrl = new URL(
-        event.path,
-        protocol + '://' + (event.requestContext?.domainName || 'localhost')
-      )
+      const searchParams = new URLSearchParams()
 
       if (event.queryStringParameters != null) {
         for (const name in event.queryStringParameters) {
           const value = event.queryStringParameters[name]
           if (value != null) {
-            requestUrl.searchParams.set(name, value)
+            searchParams.set(name, value)
           }
         }
       }
 
       const response = await yoga.fetch(
-        requestUrl,
+        event.path + '?' + requestUrl.searchParams.toString(),
         {
           method: event.httpMethod,
           headers: event.headers as HeadersInit,
