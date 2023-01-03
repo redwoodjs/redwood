@@ -56,6 +56,7 @@ export const createGraphQLHandler = ({
   allowedOperations,
   defaultError = 'Something went wrong.',
   schemaOptions,
+  graphiQLEndpoint,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
@@ -134,7 +135,7 @@ export const createGraphQLHandler = ({
       check: async ({ request }) => {
         try {
           // if we can reach the health check endpoint ...
-          const response = await await yoga.fetch('/graphql/health')
+          const response = await yoga.fetch('/graphql/health')
 
           const expectedHealthCheckId = healthCheckId || 'yoga'
 
@@ -168,7 +169,7 @@ export const createGraphQLHandler = ({
     },
     logging: logger,
     healthCheckEndpoint: '/graphql/health',
-    graphqlEndpoint: '*',
+    graphqlEndpoint: graphiQLEndpoint,
     graphiql: isDevEnv
       ? {
           title: 'Redwood GraphQL Playground',
@@ -199,19 +200,16 @@ export const createGraphQLHandler = ({
     let lambdaResponse: APIGatewayProxyResult
 
     try {
-      const searchParams = new URLSearchParams()
-
+      let path = event.path.replace('/.redwood/functions', '')
       if (event.queryStringParameters != null) {
-        for (const name in event.queryStringParameters) {
-          const value = event.queryStringParameters[name]
-          if (value != null) {
-            searchParams.set(name, value)
-          }
-        }
+        const searchParams = new URLSearchParams(
+          event.queryStringParameters as Record<string, string>
+        )
+        path += `?${searchParams}`
       }
 
       const response = await yoga.fetch(
-        event.path + '?' + requestUrl.searchParams.toString(),
+        path,
         {
           method: event.httpMethod,
           headers: event.headers as HeadersInit,
