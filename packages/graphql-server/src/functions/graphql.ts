@@ -55,8 +55,8 @@ export const createGraphQLHandler = ({
   depthLimitOptions,
   allowedOperations,
   defaultError = 'Something went wrong.',
+  graphiQLEndpoint = '/graphql',
   schemaOptions,
-  graphiQLEndpoint,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
