@@ -21,6 +21,7 @@ import {
 } from '@redwoodjs/internal/dist/paths'
 
 import c from './colors'
+import { addFileToRollback } from './rollback'
 import { pluralize, singularize } from './rwPluralize'
 
 export const asyncForEach = async (array, callback) => {
@@ -135,6 +136,8 @@ export const writeFile = (
   if (!overwriteExisting && fs.existsSync(target)) {
     throw new Error(`${target} already exists.`)
   }
+
+  addFileToRollback(target)
 
   const filename = path.basename(target)
   const targetDir = target.replace(filename, '')
