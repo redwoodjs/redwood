@@ -7,7 +7,7 @@ import { createDbAuthClient, DbAuthClientArgs, createAuth } from '../dbAuth'
 process.env.RWJS_API_URL = '/.redwood/functions'
 process.env.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
 
-jest.mock('cross-undici-fetch', () => {
+jest.mock('@whatwg-node/fetch', () => {
   return
 })
 
