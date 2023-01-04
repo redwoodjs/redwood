@@ -7,7 +7,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createAzureActiveDirectoryAuth } from '../azureActiveDirectory'
+import { createAuth } from '../azureActiveDirectory'
 
 const user: AccountInfo = {
   name: 'John',
@@ -120,7 +120,7 @@ function getAzureActiveDirectoryAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createAzureActiveDirectoryAuth(
+  const { useAuth, AuthProvider } = createAuth(
     azureActiveDirectoryMockClient as AzureActiveDirectoryClient,
     customProviderHooks
   )

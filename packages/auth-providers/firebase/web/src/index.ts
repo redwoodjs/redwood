@@ -1,1 +1,1 @@
-export { createFirebaseAuth } from './firebase'
+export { createAuth } from './firebase'

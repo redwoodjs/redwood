@@ -47,7 +47,7 @@ import { toast } from '@redwoodjs/web/toast'
 const PostForm = () => {
   const onSubmit = () => {
     try {
-      {/* Code to save a record... */}
+      // Code to save a record...
       // highlight-next-line
       toast('User created!')
     } catch (e) {

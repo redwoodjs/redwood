@@ -14,8 +14,10 @@ import { apiSideFiles } from './authFiles'
 import {
   addApiPackages,
   addAuthConfigToGqlApi,
-  addAuthConfigToWeb,
+  addConfigToRoutes,
+  addConfigToWebApp,
   addWebPackages,
+  createWebAuth,
   generateAuthApiFiles,
   installPackages,
 } from './authTasks'
@@ -51,11 +53,17 @@ async function shouldForce(force: boolean, basedir: string, webAuthn: boolean) {
 }
 
 export const standardAuthBuilder = (yargs: yargs.Argv) => {
-  yargs
+  return yargs
     .option('force', {
       alias: 'f',
       default: false,
       description: 'Overwrite existing configuration',
+      type: 'boolean',
+    })
+    .option('verbose', {
+      alias: 'v',
+      default: false,
+      description: 'Log setup output',
       type: 'boolean',
     })
     .epilogue(
@@ -68,7 +76,6 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
 
 interface Args {
   basedir: string
-  rwVersion: string
   forceArg: boolean
   provider: string
   authDecoderImport?: string
@@ -77,6 +84,7 @@ interface Args {
   apiPackages?: string[]
   extraTask?: ListrTask<never>
   notes?: string[]
+  verbose?: boolean
 }
 
 // from lodash
@@ -88,7 +96,6 @@ function truthy<T>(value: T): value is Truthy<T> {
 
 export const standardAuthHandler = async ({
   basedir,
-  rwVersion,
   forceArg,
   provider,
   authDecoderImport,
@@ -97,28 +104,34 @@ export const standardAuthHandler = async ({
   apiPackages = [],
   extraTask,
   notes,
+  verbose,
 }: Args) => {
   const force = await shouldForce(forceArg, basedir, webAuthn)
 
-  const tasks = new Listr<never>(
+  const tasks = new Listr<never, 'verbose' | 'default'>(
     [
       generateAuthApiFiles(basedir, provider, force, webAuthn),
-      addAuthConfigToWeb(basedir, provider, webAuthn),
+      addConfigToWebApp(),
+      createWebAuth(basedir, provider, webAuthn),
+      addConfigToRoutes(),
       addAuthConfigToGqlApi(authDecoderImport),
-      addWebPackages(webPackages, rwVersion),
-      addApiPackages(apiPackages),
-      installPackages,
+      webPackages.length && addWebPackages(webPackages),
+      apiPackages.length && addApiPackages(apiPackages),
+      (webPackages.length || apiPackages.length) && installPackages,
       extraTask,
       notes && {
         title: 'One more thing...',
         task: () => {
           // Can't console.log the notes here because of
-          // https://github.com/cenk1cenk2/listr2/issues/296
-          // So we do it after the tasks have all finished instead
+          // https://github.com/cenk1cenk2/listr2/issues/296.
+          // So we do it after the tasks have all finished instead.
         },
       },
     ].filter(truthy),
-    { rendererOptions: { collapse: false } }
+    {
+      rendererOptions: { collapse: false },
+      renderer: verbose ? 'verbose' : 'default',
+    }
   )
 
   try {
