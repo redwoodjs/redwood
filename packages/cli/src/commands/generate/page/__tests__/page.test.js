@@ -48,180 +48,168 @@ import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
 import * as page from '../page'
 
-let singleWordFiles,
-  multiWordFiles,
-  pluralWordFiles,
-  paramFiles,
-  noTestsFiles,
-  noStoriesFiles,
-  typescriptFiles,
-  typescriptParamFiles,
-  typescriptParamTypeFiles
-
-beforeAll(() => {
-  singleWordFiles = page.files({
+describe('Single world files', () => {
+  const singleWordFiles = page.files({
     name: 'Home',
     tests: true,
     stories: true,
     ...page.paramVariants(pathName(undefined, 'home')),
   })
-  multiWordFiles = page.files({
+
+  it('returns exactly 3 files', () => {
+    expect(Object.keys(singleWordFiles).length).toEqual(3)
+  })
+
+  it('creates a page component', () => {
+    expect(
+      singleWordFiles[
+        path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a page test', () => {
+    expect(
+      singleWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/HomePage/HomePage.test.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a page story', () => {
+    expect(
+      singleWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/HomePage/HomePage.stories.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+})
+
+describe('multiWorldFiles', () => {
+  const multiWordFiles = page.files({
     name: 'ContactUs',
     tests: true,
     stories: true,
     ...page.paramVariants(pathName(undefined, 'contact-us')),
   })
-  pluralWordFiles = page.files({
+
+  it('creates a page component', () => {
+    expect(
+      multiWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a test for a component with multiple words for a name', () => {
+    expect(
+      multiWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a page story', () => {
+    expect(
+      multiWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+})
+
+describe('Plural word files', () => {
+  const pluralWordFiles = page.files({
     name: 'Cats',
     tests: true,
     stories: true,
     ...page.paramVariants(pathName(undefined, 'cats')),
   })
-  paramFiles = page.files({
+
+  test('creates a page component with a plural word for name', () => {
+    expect(
+      pluralWordFiles[
+        path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.js')
+      ]
+    ).toMatchSnapshot()
+  })
+})
+
+describe('paramFiles', () => {
+  const paramFiles = page.files({
     name: 'Post',
     tests: true,
     stories: true,
     ...page.paramVariants(pathName('{id}', 'post')),
   })
-  noTestsFiles = page.files({
+
+  it('creates a page component with params', () => {
+    expect(
+      paramFiles[
+        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a test for page component with params', () => {
+    expect(
+      paramFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/PostPage/PostPage.test.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+})
+
+describe('No test files', () => {
+  const noTestsFiles = page.files({
     name: 'NoTests',
     tests: false,
     stories: true,
     ...page.paramVariants(pathName(undefined, 'no-tests')),
   })
-  noStoriesFiles = page.files({
+
+  it('doesnt create a test for page component when tests=false', () => {
+    expect(Object.keys(noTestsFiles)).toEqual([
+      path.normalize(
+        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.js'
+      ),
+      path.normalize(
+        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.js'
+      ),
+    ])
+  })
+})
+
+describe('No stories files', () => {
+  const noStoriesFiles = page.files({
     name: 'NoStories',
     tests: true,
     stories: false,
     ...page.paramVariants(pathName(undefined, 'no-stories')),
   })
-  typescriptFiles = page.files({
-    name: 'TSFiles',
-    typescript: true,
-    tests: true,
-    stories: true,
-    ...page.paramVariants(pathName(undefined, 'typescript')),
+
+  it('doesnt create a story for page component when stories=false', () => {
+    expect(Object.keys(noStoriesFiles)).toEqual([
+      path.normalize(
+        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.js'
+      ),
+      path.normalize(
+        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.js'
+      ),
+    ])
   })
-  typescriptParamFiles = page.files({
-    name: 'TSParamFiles',
-    typescript: true,
-    tests: true,
-    stories: true,
-    ...page.paramVariants(pathName('{id}', 'typescript-param')),
-  })
-  typescriptParamTypeFiles = page.files({
-    name: 'TSParamTypeFiles',
-    typescript: true,
-    tests: false,
-    stories: false,
-    ...page.paramVariants(
-      pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
-    ),
-  })
-})
-
-test('returns exactly 3 files', () => {
-  expect(Object.keys(singleWordFiles).length).toEqual(3)
-})
-
-test('creates a page component', () => {
-  expect(
-    singleWordFiles[
-      path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a page test', () => {
-  expect(
-    singleWordFiles[
-      path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.test.js')
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a page story', () => {
-  expect(
-    singleWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/HomePage/HomePage.stories.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a page component', () => {
-  expect(
-    multiWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a test for a component with multiple words for a name', () => {
-  expect(
-    multiWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a page story', () => {
-  expect(
-    multiWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a page component with a plural word for name', () => {
-  expect(
-    pluralWordFiles[
-      path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.js')
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a page component with params', () => {
-  expect(
-    paramFiles[
-      path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a test for page component with params', () => {
-  expect(
-    paramFiles[
-      path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.test.js')
-    ]
-  ).toMatchSnapshot()
-})
-
-test('doesnt create a test for page component when tests=false', () => {
-  expect(Object.keys(noTestsFiles)).toEqual([
-    path.normalize(
-      '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.js'
-    ),
-    path.normalize('/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.js'),
-  ])
-})
-
-test('doesnt create a story for page component when stories=false', () => {
-  expect(Object.keys(noStoriesFiles)).toEqual([
-    path.normalize(
-      '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.js'
-    ),
-    path.normalize(
-      '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.js'
-    ),
-  ])
 })
 
 test('creates a single-word route name', () => {
@@ -348,132 +336,176 @@ test('paramVariants paramType defaults to string', () => {
   })
 })
 
-test('file generation', async () => {
-  mockFiles = {
-    [getPaths().web.routes]: [
-      "import { Router, Route } from '@redwoodjs/router'",
-      '',
-      'const Routes = () => {',
-      '  return (',
-      '    <Router>',
-      '      <Route path="/about" page={AboutPage} name="about" />',
-      '      <Route notfound page={NotFoundPage} />',
-      '    </Router>',
-      '  )',
-      '}',
-      '',
-      'export default Routes',
-    ].join('\n'),
-  }
-
-  const spy = jest.spyOn(fs, 'writeFileSync')
-
-  global.mockFs = true
-
-  await page.handler({
-    name: 'HomePage', // 'Page' should be trimmed from name
-    path: '',
-    force: false,
-    tests: true,
-    stories: true,
+describe('handler', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'info').mockImplementation(() => {})
+    jest.spyOn(console, 'log').mockImplementation(() => {})
   })
 
-  expect(spy).toHaveBeenCalled()
+  afterEach(() => {
+    console.info.mockRestore()
+    console.log.mockRestore()
+  })
 
-  spy.mock.calls.forEach((calls) => {
-    const testOutput = {
-      // Because windows paths are different, we need to normalise before snapshotting
-      filePath: ensurePosixPath(calls[0]),
-      fileContent: calls[1],
+  test('file generation', async () => {
+    mockFiles = {
+      [getPaths().web.routes]: [
+        "import { Router, Route } from '@redwoodjs/router'",
+        '',
+        'const Routes = () => {',
+        '  return (',
+        '    <Router>',
+        '      <Route path="/about" page={AboutPage} name="about" />',
+        '      <Route notfound page={NotFoundPage} />',
+        '    </Router>',
+        '  )',
+        '}',
+        '',
+        'export default Routes',
+      ].join('\n'),
     }
-    expect(testOutput).toMatchSnapshot()
+
+    const spy = jest.spyOn(fs, 'writeFileSync')
+
+    global.mockFs = true
+
+    await page.handler({
+      name: 'HomePage', // 'Page' should be trimmed from name
+      path: '',
+      force: false,
+      tests: true,
+      stories: true,
+    })
+
+    expect(spy).toHaveBeenCalled()
+
+    spy.mock.calls.forEach((calls) => {
+      const testOutput = {
+        // Because windows paths are different, we need to normalise before snapshotting
+        filePath: ensurePosixPath(calls[0]),
+        fileContent: calls[1],
+      }
+      expect(testOutput).toMatchSnapshot()
+    })
+
+    global.mockFs = false
+    spy.mockRestore()
   })
 
-  global.mockFs = false
-  spy.mockRestore()
+  test('file generation with route params', async () => {
+    mockFiles = {
+      [getPaths().web.routes]: [
+        "import { Router, Route } from '@redwoodjs/router'",
+        '',
+        'const Routes = () => {',
+        '  return (',
+        '    <Router>',
+        '      <Route path="/about" page={AboutPage} name="about" />',
+        '      <Route notfound page={NotFoundPage} />',
+        '    </Router>',
+        '  )',
+        '}',
+        '',
+        'export default Routes',
+      ].join('\n'),
+    }
+
+    const spy = jest.spyOn(fs, 'writeFileSync')
+    global.mockFs = true
+
+    await page.handler({
+      name: 'post',
+      path: '{id}',
+      force: false,
+      tests: true,
+      stories: true,
+    })
+
+    expect(spy).toHaveBeenCalled()
+
+    spy.mock.calls.forEach((calls) => {
+      const testOutput = {
+        filePath: ensurePosixPath(calls[0]),
+        fileContent: calls[1],
+      }
+      expect(testOutput).toMatchSnapshot()
+    })
+
+    global.mockFs = false
+    spy.mockRestore()
+  })
 })
 
-test('file generation with route params', async () => {
-  mockFiles = {
-    [getPaths().web.routes]: [
-      "import { Router, Route } from '@redwoodjs/router'",
-      '',
-      'const Routes = () => {',
-      '  return (',
-      '    <Router>',
-      '      <Route path="/about" page={AboutPage} name="about" />',
-      '      <Route notfound page={NotFoundPage} />',
-      '    </Router>',
-      '  )',
-      '}',
-      '',
-      'export default Routes',
-    ].join('\n'),
-  }
-
-  const spy = jest.spyOn(fs, 'writeFileSync')
-  global.mockFs = true
-
-  await page.handler({
-    name: 'post',
-    path: '{id}',
-    force: false,
+describe('TS Files', () => {
+  const typescriptFiles = page.files({
+    name: 'TSFiles',
+    typescript: true,
     tests: true,
     stories: true,
+    ...page.paramVariants(pathName(undefined, 'typescript')),
+  }) //?
+
+  it('generates typescript pages', () => {
+    expect(
+      typescriptFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.tsx'
+        )
+      ]
+    ).toMatchSnapshot()
+
+    expect(
+      typescriptFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.stories.tsx'
+        )
+      ]
+    ).toMatchSnapshot()
+
+    expect(
+      typescriptFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.test.tsx'
+        )
+      ]
+    ).toMatchSnapshot()
   })
 
-  expect(spy).toHaveBeenCalled()
+  test('TS Params', () => {
+    const typescriptParamFiles = page.files({
+      name: 'TSParamFiles',
+      typescript: true,
+      tests: true,
+      stories: true,
+      ...page.paramVariants(pathName('{id}', 'typescript-param')),
+    })
 
-  spy.mock.calls.forEach((calls) => {
-    const testOutput = {
-      filePath: ensurePosixPath(calls[0]),
-      fileContent: calls[1],
-    }
-    expect(testOutput).toMatchSnapshot()
+    expect(
+      typescriptParamFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx'
+        )
+      ]
+    ).toMatchSnapshot()
   })
 
-  global.mockFs = false
-  spy.mockRestore()
-})
+  test('TS Params with type', () => {
+    const typescriptParamTypeFiles = page.files({
+      name: 'TSParamTypeFiles',
+      typescript: true,
+      tests: false,
+      stories: false,
+      ...page.paramVariants(
+        pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
+      ),
+    })
 
-test('generates typescript pages', () => {
-  expect(
-    typescriptFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/TsFilesPage/TsFilesPage.tsx'
-      )
-    ]
-  ).toMatchSnapshot()
-
-  expect(
-    typescriptFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.stories.tsx'
-      )
-    ]
-  ).toMatchSnapshot()
-
-  expect(
-    typescriptFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.test.tsx'
-      )
-    ]
-  ).toMatchSnapshot()
-
-  expect(
-    typescriptParamFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx'
-      )
-    ]
-  ).toMatchSnapshot()
-
-  expect(
-    typescriptParamTypeFiles[
-      path.normalize(
-        '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx'
-      )
-    ]
-  ).toMatchSnapshot()
+    expect(
+      typescriptParamTypeFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
 })

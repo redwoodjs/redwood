@@ -13,19 +13,20 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth": "3.0.0-rc.285",
-    "@redwoodjs/forms": "3.0.0-rc.285",
-    "@redwoodjs/router": "3.0.0-rc.285",
-    "@redwoodjs/web": "3.0.0-rc.285",
+    "@redwoodjs/auth-dbauth-web": "4.0.0-canary.430+a7c64fa6a",
+    "@redwoodjs/forms": "3.2.0",
+    "@redwoodjs/router": "3.2.0",
+    "@redwoodjs/web": "3.2.0",
+    "humanize-string": "2.1.0",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.8",
-    "postcss": "^8.4.16",
-    "postcss-loader": "^7.0.1",
-    "prettier-plugin-tailwindcss": "^0.1.13",
-    "tailwindcss": "^3.1.8"
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.20",
+    "postcss-loader": "^7.0.2",
+    "prettier-plugin-tailwindcss": "^0.2.1",
+    "tailwindcss": "^3.2.4"
   }
 }

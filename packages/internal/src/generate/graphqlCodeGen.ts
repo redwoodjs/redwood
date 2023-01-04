@@ -10,7 +10,6 @@ import type {
 } from '@graphql-codegen/plugin-helpers'
 import * as typescriptPlugin from '@graphql-codegen/typescript'
 import * as typescriptOperations from '@graphql-codegen/typescript-operations'
-import * as typescriptResolvers from '@graphql-codegen/typescript-resolvers'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
@@ -20,6 +19,8 @@ import { DocumentNode } from 'graphql'
 
 import { getPaths } from '../paths'
 import { getTsConfigs } from '../project'
+
+import * as rwTypescriptResolvers from './plugins/rw-typescript-resolvers'
 
 enum CodegenSide {
   API,
@@ -54,7 +55,7 @@ export const generateTypeDefGraphQLApi = async () => {
     {
       name: 'typescript-resolvers',
       options: {},
-      codegenPlugin: typescriptResolvers,
+      codegenPlugin: rwTypescriptResolvers,
     },
   ]
 
@@ -218,7 +219,7 @@ function getPluginConfig(side: CodegenSide) {
   })
 
   const pluginConfig: CodegenTypes.PluginConfig &
-    typescriptResolvers.TypeScriptResolversPluginConfig = {
+    rwTypescriptResolvers.TypeScriptResolversPluginConfig = {
     makeResolverTypeCallable: true,
     namingConvention: 'keep', // to allow camelCased query names
     scalars: {
@@ -238,7 +239,7 @@ function getPluginConfig(side: CodegenSide) {
     customResolverFn: getResolverFnType(),
     mappers: prismaModels,
     avoidOptionals: {
-      // We do this, so that service tests can call resolvers without doing an null check
+      // We do this, so that service tests can call resolvers without doing a null check
       // see https://github.com/redwoodjs/redwood/pull/6222#issuecomment-1230156868
       // Look at type or source https://shrtm.nu/2BA0 for possible config, not well documented
       resolvers: true,

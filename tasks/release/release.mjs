@@ -45,17 +45,17 @@ let milestone
 
 export default async function release() {
   /**
-   * Make sure that we're on main.
+   * Make sure that we're on next.
    */
   const gitBranchPO = await $`git branch --show-current`
 
-  if (gitBranchPO.stdout.trim() !== 'main') {
-    console.log(fix`Start from main`)
+  if (gitBranchPO.stdout.trim() !== 'next') {
+    console.log(fix`Start from next`)
     process.exitCode = 1
     return
   }
 
-  console.log(ok`On main`)
+  console.log(ok`On next`)
 
   /**
    * - ask for the desired semver
@@ -502,9 +502,8 @@ async function cleanUpTasks(semver, nextVersion) {
       closeMilestone(milestone.number)
     )
   }
-  await confirm(check`Did you merge the release branch into main?`)
+  await confirm(check`Did you merge the release branch into next?`)
   await confirm(check`Did you update yarn.lock?`)
-  await confirmRuns(ask`Ok to update all contributors?`, updateAllContributors)
   if (semver === 'major' || semver === 'minor') {
     await confirmRuns(ask`Ok to version the docs?`, () =>
       versionDocs(nextVersion)
@@ -515,59 +514,6 @@ async function cleanUpTasks(semver, nextVersion) {
   await confirm(check`Did you tweet about it`)
   await confirm(check`Did you post in Discord announcements?`)
 }
-
-export async function updateAllContributors() {
-  await cd('./tasks/all-contributors')
-
-  const allContributorsCheckPO =
-    await $`yarn all-contributors check --config .all-contributorsrc`
-
-  const contributors = allContributorsCheckPO.stdout
-    .trim()
-    .split('\n')[1]
-    .split(',')
-    .map((contributor) => contributor.trim())
-    .filter(
-      (contributor) => !ALL_CONTRIBUTORS_IGNORE_LIST.includes(contributor)
-    )
-
-  for (const contributor of contributors) {
-    await $`yarn all-contributors add --config .all-contributorsrc ${contributor} code`
-  }
-
-  await $`yarn all-contributors generate --contributorsPerLine 5 --config .all-contributorsrc`
-
-  await $`git commit -am "Update all contributors"`
-  await cd('../..')
-}
-
-const ALL_CONTRIBUTORS_IGNORE_LIST = [
-  'peterp',
-  'thedavidprice',
-  'renovate[bot]',
-  'jtoar',
-  'dac09',
-  'cannikin',
-  'Tobbe',
-  'dependabot[bot]',
-  'dthyresson',
-  'mojombo',
-  'RobertBroersma',
-  'kimadeline',
-  'callingmedic911',
-  'aldonline',
-  'forresthayes',
-  'simoncrypta',
-  'KrisCoulson',
-  'realStandal',
-  'virtuoushub',
-  'alicelovescake',
-  'dependabot-preview[bot]',
-  'ajcwebdev',
-  'agiannelli',
-  'codesee-maps[bot]',
-  'noire-munich',
-]
 
 /**
  *

@@ -1,8 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 
+import { transform } from '@babel/core'
 import type { TransformOptions } from '@babel/core'
-import * as babel from '@babel/core'
+import type { PluginItem } from '@babel/core'
 
 import { getPaths } from '../../paths'
 
@@ -14,7 +15,7 @@ import {
   getCommonPlugins,
 } from './common'
 
-export const TARGETS_NODE = '14.20'
+export const TARGETS_NODE = '16.19'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
@@ -150,7 +151,7 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       undefined,
       'rwjs-babel-glob-import-dir',
     ],
-  ].filter(Boolean) as babel.PluginItem[]
+  ].filter(Boolean) as PluginItem[]
 
   return plugins
 }
@@ -203,7 +204,7 @@ export const prebuildApiFile = (
   const code = fs.readFileSync(srcPath, 'utf-8')
   const defaultOptions = getApiSideDefaultBabelConfig()
 
-  const result = babel.transform(code, {
+  const result = transform(code, {
     ...defaultOptions,
     cwd: getPaths().api.base,
     filename: srcPath,

@@ -2,17 +2,16 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   addToGitIgnoreTask,
   addToDotEnvTask,
   addFilesTask,
-  addPackagesTask,
   printSetupNotes,
 } from '../helpers'
 import { SERVERLESS_API_YML } from '../templates/serverless/api'
@@ -131,6 +130,7 @@ export const handler = async ({ force }) => {
     ],
     {
       exitOnError: true,
+      rendererOptions: { collapse: false },
     }
   )
   try {

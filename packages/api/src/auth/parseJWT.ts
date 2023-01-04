@@ -1,4 +1,4 @@
-import { Decoded } from './decoders'
+export type Decoded = Record<string, unknown> | null
 
 interface DecodedWithRoles extends Record<string, unknown> {
   roles: string | string[]

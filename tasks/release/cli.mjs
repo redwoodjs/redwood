@@ -5,7 +5,7 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
 import generateReleaseNotes from './generateReleaseNotes.mjs'
-import release, { updateAllContributors, versionDocs } from './release.mjs'
+import release, { versionDocs } from './release.mjs'
 import updatePRsMilestone from './updatePRsMilestone.mjs'
 
 yargs(hideBin(process.argv))
@@ -50,11 +50,6 @@ yargs(hideBin(process.argv))
       })
     },
     ({ from, to }) => updatePRsMilestone(from, to)
-  )
-  .command(
-    ['update-all-contributors', 'contributors'],
-    'Update all contributors',
-    updateAllContributors
   )
   .command(
     ['version-docs <next-version>', 'docs'],

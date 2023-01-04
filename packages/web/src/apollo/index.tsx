@@ -6,7 +6,6 @@ import type {
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { print } from 'graphql/language/printer'
-import type { F } from 'ts-toolbelt'
 
 // Note: Importing directly from `apollo/client` does not work properly in Storybook.
 const {
@@ -20,8 +19,7 @@ const {
   setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
-import { useAuth as useRWAuth } from '@redwoodjs/auth'
+import { UseAuth, useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
@@ -89,15 +87,14 @@ export type GraphQLClientConfigProp = Omit<
       ) => apolloClient.ApolloLink)
 }
 
-export type UseAuthProp = () => AuthContextInterface
-
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
     cache: ApolloCache<unknown>
   }
-  useAuth: UseAuthProp
-  logLevel: F.Return<typeof setLogVerbosity>
-}> = ({ config, children, useAuth, logLevel }) => {
+  useAuth?: UseAuth
+  logLevel: ReturnType<typeof setLogVerbosity>
+  children: React.ReactNode
+}> = ({ config, children, useAuth = useNoAuth, logLevel }) => {
   /**
    * Should they run into it,
    * this helps users with the "Cannot render cell; GraphQL success but data is null" error.
@@ -255,6 +252,7 @@ type ComponentDidCatch = React.ComponentLifecycle<any, any>['componentDidCatch']
 interface ErrorBoundaryProps {
   error?: unknown
   onError: NonNullable<ComponentDidCatch>
+  children: React.ReactNode
 }
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
@@ -270,11 +268,12 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
-  useAuth?: UseAuthProp
-  logLevel?: F.Return<typeof setLogVerbosity>
+  useAuth?: UseAuth
+  logLevel?: ReturnType<typeof setLogVerbosity>
+  children: React.ReactNode
 }> = ({
   graphQLClientConfig,
-  useAuth = useRWAuth,
+  useAuth = useNoAuth,
   logLevel = 'debug',
   children,
 }) => {
@@ -290,9 +289,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
-        /**
-         * This order so that the user can still completely overwrite the cache.
-         */
+        // This order so that the user can still completely overwrite the cache
         config={{ cache, ...config }}
         useAuth={useAuth}
         logLevel={logLevel}

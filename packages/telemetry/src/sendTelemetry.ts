@@ -15,23 +15,27 @@ const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
 interface SensitiveArgPositions {
   exec: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   g: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   generate: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   prisma: {
+    positions?: never
     options: Array<string>
     redactWith: Array<string>
   }
 }
 
-// Tracks any commands that could contain sensative info and their position in
+// Tracks any commands that could contain sensitive info and their position in
 // the argv array, as well as the text to replace them with
 const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   exec: {
@@ -52,8 +56,12 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   },
 }
 
-// gets diagnostic info and sanitizes by removing references to paths
-const getInfo = async (presets = {}) => {
+interface Args {
+  redwoodVersion?: string
+}
+
+/** Gets diagnostic info and sanitizes by removing references to paths */
+const getInfo = async (presets: Args = {}) => {
   const info = JSON.parse(
     await envinfo.run(
       {
@@ -91,30 +99,31 @@ const getInfo = async (presets = {}) => {
   }
 }
 
-// removes potentially sensative information from an array of argv strings
-export const sanitizeArgv = (argv: Array<string>) => {
+// removes potentially sensitive information from an array of argv strings
+export const sanitizeArgv = (
+  argv: [string, string, keyof SensitiveArgPositions, ...string[]]
+) => {
+  const name = argv[2]
+  const sensitiveCommand = SENSITIVE_ARG_POSITIONS[name]
   const args = argv.slice(2)
-  const name = args[0]
-  const sensativeCommand =
-    SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
-  if (sensativeCommand) {
+  if (sensitiveCommand) {
     // redact positional arguments
-    if (sensativeCommand.positions) {
-      sensativeCommand.positions.forEach((pos: number, index: number) => {
+    if (sensitiveCommand.positions) {
+      sensitiveCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
-        if (args[pos] && !args[pos].match(/--/)) {
-          args[pos] = sensativeCommand.redactWith[index]
+        if (args[pos] && !/--/.test(args[pos])) {
+          args[pos] = sensitiveCommand.redactWith[index]
         }
       })
     }
 
     // redact --option arguments
-    if (sensativeCommand.options) {
-      sensativeCommand.options.forEach((option: string, index: number) => {
+    if (sensitiveCommand.options) {
+      sensitiveCommand.options.forEach((option: string, index: number) => {
         const argIndex = args.indexOf(option)
         if (argIndex !== -1) {
-          args[argIndex + 1] = sensativeCommand.redactWith[index]
+          args[argIndex + 1] = sensitiveCommand.redactWith[index]
         }
       })
     }

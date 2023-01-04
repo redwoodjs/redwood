@@ -130,12 +130,19 @@ describe('Redwood Route detection', () => {
     })
     expect(prerenderRoutes).toContainEqual({ name: 'fooPage', path: '/foo' })
     expect(prerenderRoutes).toContainEqual({ name: 'barPage', path: '/bar' })
-    expect(prerenderRoutes).toContainEqual({ name: 'privatePage', path: '/private-page' })
+    expect(prerenderRoutes).toContainEqual({
+      name: 'privatePage',
+      path: '/private-page',
+    })
   })
 })
 
 function getFixtureDir(
-  name: 'example-todo-main-with-errors' | 'example-todo-main' | 'empty-project' | 'test-project'
+  name:
+    | 'example-todo-main-with-errors'
+    | 'example-todo-main'
+    | 'empty-project'
+    | 'test-project'
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }

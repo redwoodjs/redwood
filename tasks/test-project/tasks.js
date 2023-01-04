@@ -3,10 +3,13 @@ const fs = require('fs')
 const path = require('path')
 
 const execa = require('execa')
-const Listr = require('listr')
-const VerboseRenderer = require('listr-verbose-renderer')
+const Listr = require('listr2').Listr
 
-const { getExecaOptions, applyCodemod } = require('./util')
+const {
+  getExecaOptions,
+  applyCodemod,
+  updatePkgJsonScripts,
+} = require('./util')
 
 // This variable gets used in other functions
 // and is set when webTasks or apiTasks are called
@@ -68,11 +71,11 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       {
         title: 'Creating contact page',
         task: async () => {
-          await createPage('contact')
+          await createPage('contactUs /contact')
 
           return applyCodemod(
-            'contactPage.js',
-            fullPath('web/src/pages/ContactPage/ContactPage')
+            'contactUsPage.js',
+            fullPath('web/src/pages/ContactUsPage/ContactUsPage')
           )
         },
       },
@@ -370,7 +373,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     ],
     {
       exitOnError: true,
-      renderer: verbose && VerboseRenderer,
+      renderer: verbose && 'verbose',
     }
   )
 }
@@ -399,17 +402,52 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   }
 
   const addDbAuth = async () => {
+    // Temporarily disable postinstall script
+    updatePkgJsonScripts({
+      projectPath: outputPath,
+      scripts: {
+        postinstall: '',
+      },
+    })
+
+    const dbAuthSetupPath = path.join(
+      outputPath,
+      'node_modules',
+      '@redwoodjs',
+      'auth-dbauth-setup'
+    )
+
+    // At an earlier step we run `yarn rwfw project:copy` which gives us
+    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
+    // version for auth-dbauth-api and auth-dbauth-web package installations
+    // to work. So we remove the current version and add a canary version
+    // instead.
+
+    fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
+
     await execa(
-      'yarn rw setup auth dbAuth --force --no-webauthn',
+      'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
       [],
       execaOptions
     )
+
+    // Restore postinstall script
+    updatePkgJsonScripts({
+      projectPath: outputPath,
+      scripts: {
+        postinstall: 'yarn rwfw project:copy',
+      },
+    })
 
     if (linkWithLatestFwBuild) {
       await execa('yarn rwfw project:copy', [], execaOptions)
     }
 
-    await execa('yarn rw g dbAuth --no-webauthn', [], execaOptions)
+    await execa(
+      'yarn rw g dbAuth --no-webauthn --username-label=username --password-label=password',
+      [],
+      execaOptions
+    )
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
@@ -473,11 +511,17 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       .replaceAll('username', 'full-name')
       .replaceAll('Username', 'Full Name')
 
-    const newContentSignupPageTs = contentSignupPageTs.replace(
-      '<FieldError name="password" className="rw-field-error" />',
-      '<FieldError name="password" className="rw-field-error" />\n' +
-        fullNameFields
-    )
+    const newContentSignupPageTs = contentSignupPageTs
+      .replace(
+        '<FieldError name="password" className="rw-field-error" />',
+        '<FieldError name="password" className="rw-field-error" />\n' +
+          fullNameFields
+      )
+      // include full-name in the data we pass to `signUp()`
+      .replace(
+        'password: data.password',
+        "password: data.password, 'full-name': data['full-name']"
+      )
 
     fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
 
@@ -515,7 +559,8 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       {
         title: 'Scaffolding post',
         task: async () => {
-          return generateScaffold('post')
+          await generateScaffold('post')
+          await execa(`yarn rwfw project:copy`, [], execaOptions)
         },
       },
       {
@@ -583,7 +628,8 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     ],
     {
       exitOnError: true,
-      renderer: verbose && VerboseRenderer,
+      renderer: verbose && 'verbose',
+      renderOptions: { collapse: false },
     }
   )
 }

@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
   Label,
@@ -14,6 +13,8 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
+import { useAuth } from 'src/auth'
+
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
 
@@ -23,14 +24,18 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on email box on page load
+  // focus on username box on page load
   const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     usernameRef.current?.focus()
   }, [])
 
   const onSubmit = async (data: Record<string, string>) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({
+      username: data.username,
+      password: data.password,
+      'full-name': data['full-name'],
+    })
 
     if (response.message) {
       toast(response.message)

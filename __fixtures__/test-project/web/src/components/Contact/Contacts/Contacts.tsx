@@ -1,4 +1,3 @@
-import humanize from 'humanize-string'
 import type {
   DeleteContactMutationVariables,
   FindContacts,
@@ -9,6 +8,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Contact/ContactsCell'
+import { timeTag, truncate } from 'src/lib/formatters'
 
 const DELETE_CONTACT_MUTATION = gql`
   mutation DeleteContactMutation($id: Int!) {
@@ -17,45 +17,6 @@ const DELETE_CONTACT_MUTATION = gql`
     }
   }
 `
-
-const MAX_STRING_LENGTH = 150
-
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const truncate = (value: string | number) => {
-  const output = value?.toString()
-  if (output?.length > MAX_STRING_LENGTH) {
-    return output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output ?? ''
-}
-
-const jsonTruncate = (obj: unknown) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime?: string) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked: boolean) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
 
 const ContactsList = ({ contacts }: FindContacts) => {
   const [deleteContact] = useMutation(DELETE_CONTACT_MUTATION, {

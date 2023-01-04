@@ -84,7 +84,7 @@ The installation script is built with [Yargs](https://github.com/yargs/yargs)
 ### Template Codebase
 The project codebase in `template/` uses [Yarn Workspace v1](https://classic.yarnpkg.com/en/docs/workspaces/) for a monorepo project containing the API and Web Sides. Redwood packages are included in `template/package.json`, `template/web/package.json`, and `template/api/package.json`, respectively.
 
-### How to run create-redwood-app and create a project
+### How to run create-redwood-app from your local repo and create a project
 Make sure you to first run `yarn install` in your project root.
 
 Step into the `create-redwood-app` package and run the script:
@@ -98,6 +98,19 @@ This will create a new project using the local `template/` codebase
 
 > Note: the new project will install with the most recent stable Redwood package version by default
 
+
+### How to run other published versions for debugging
+By default yarn create will pick the latest stable version to run, but you can specify a different version via yarn too!
+
+To try the canary version, run:
+```
+npx create-redwood-app@canary /path/to/project
+```
+
+Note that this will still create a project with the latest stable version, but run the canary version of create-redwood-app, and is mainly useful for debugging this package, and not the redwood canary release.
+
+You can specify any tag or version instead of `@canary`
+
 ### Develop using the new project
 There are three options for developing with the installed project:
 
@@ -106,10 +119,5 @@ There are three options for developing with the installed project:
 cd /path/to/new/redwood-app
 yarn rw upgrade -t canary
 ```
-**2. Install packages specific to a PR, for example**
-```bash
-cd /path/to/new/redwood-app
-yarn rw upgrade --pr 1703:0.23.0-b06dd35
-```
-**3. Use the workflow and tools for local package development**
+**2. Use the workflow and tools for local package development**
 - [Local Development Instructions](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md#local-development)

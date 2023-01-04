@@ -2,8 +2,9 @@ type BlogLayoutProps = {
   children?: React.ReactNode
 }
 
-import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+
+import { useAuth } from 'src/auth'
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {
   const { logOut, isAuthenticated } = useAuth()
@@ -32,9 +33,9 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
             <li>
               <Link
                 className="rounded py-2 px-4 transition duration-100 hover:bg-blue-600"
-                to={routes.contact()}
+                to={routes.contactUs()}
               >
-                Contact
+                Contact Us
               </Link>
             </li>
             <li>

@@ -1,7 +1,7 @@
 import type {
   QueryResolvers,
   MutationResolvers,
-  PostResolvers,
+  PostRelationResolvers,
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
@@ -35,7 +35,8 @@ export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
   })
 }
 
-export const Post: Partial<PostResolvers> = {
-  author: (_obj, gqlArgs) =>
-    db.post.findUnique({ where: { id: gqlArgs?.root?.id } }).author(),
+export const Post: PostRelationResolvers = {
+  author: (_obj, { root }) => {
+    return db.post.findUnique({ where: { id: root?.id } }).author()
+  },
 }

@@ -2,8 +2,8 @@ name: 🦜 Publish Canary
 
 on:
   push:
-    branches: [main]
-    # We don't want this to run on release
+    branches: [main, next]
+    # We don't want this to run when we publish a release.
     tags-ignore: ['v**']
     # No need to run on docs-only changes
     paths-ignore: ['docs/**']
@@ -40,14 +40,30 @@ jobs:
       - name: 🚢 Publish
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          yarn lerna publish --include-merged-tags \
-                             --canary \
-                             --preid canary \
-                             --dist-tag canary \
-                             --force-publish \
-                             --loglevel verbose \
-                             --no-git-reset \
-                             --yes
+
+          TAG='canary' && [[ "$GITHUB_REF_NAME" = 'next' ]] && TAG='next'
+          echo "Publishing $TAG"
+
+          args=()
+
+          if [[ "$GITHUB_REF_NAME" = 'main' ]]; then
+            args+=(premajor)
+          fi
+
+          args+=(
+            --include-merged-tags
+            --canary
+            --exact
+            --preid "$TAG"
+            --dist-tag "$TAG"
+            --force-publish
+            --loglevel verbose
+            --no-git-reset
+            --yes
+          )
+
+          yarn lerna publish "${args[@]}"
+
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 

@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
@@ -13,11 +12,12 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
+import { isTypeScriptProject } from '../../lib/project'
+import { prepareForRollback } from '../../lib/rollback'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
-import { yargsDefaults } from '../generate'
 
 /**
- * Returns the path to a custom generator template, if found in the app.
+ * Returns the full path to a custom generator template, if found in the app.
  * Otherwise the default Redwood template.
  */
 export const customOrDefaultTemplatePath = ({
@@ -125,6 +125,30 @@ export function removeGeneratorName(name, generatorName) {
   return coercedName
 }
 
+/** @type {Record<string, import('yargs').Options>} */
+export const yargsDefaults = {
+  force: {
+    alias: 'f',
+    default: false,
+    description: 'Overwrite existing files',
+    type: 'boolean',
+  },
+  typescript: {
+    alias: 'ts',
+    default: isTypeScriptProject(),
+    description: 'Generate TypeScript files',
+    type: 'boolean',
+  },
+}
+
+export const validateName = (name) => {
+  if (name.match(/^\W/)) {
+    throw new Error(
+      'The <name> argument must start with a letter, number or underscore.'
+    )
+  }
+}
+
 /**
  * Reduces boilerplate for creating a yargs handler that writes a
  * component/page/layout/etc to a location.
@@ -167,6 +191,11 @@ export const createYargsForComponentGeneration = ({
           type: 'boolean',
           default: false,
         })
+        .option('rollback', {
+          description: 'Revert all generator actions if an error occurs',
+          type: 'boolean',
+          default: true,
+        })
 
       // Add in passed in positionals
       Object.entries(positionalsObj).forEach(([option, config]) => {
@@ -184,6 +213,7 @@ export const createYargsForComponentGeneration = ({
       if (options.stories === undefined) {
         options.stories = getConfig().generate.stories
       }
+      validateName(options.name)
 
       try {
         options = await preTasksFn(options)
@@ -200,12 +230,15 @@ export const createYargsForComponentGeneration = ({
             ...includeAdditionalTasks(options),
           ],
           {
-            collapse: false,
+            rendererOptions: { collapse: false },
             exitOnError: true,
-            renderer: options.verbose && VerboseRenderer,
+            renderer: options.verbose && 'verbose',
           }
         )
 
+        if (options.rollback) {
+          prepareForRollback(tasks)
+        }
         await tasks.run()
       } catch (e) {
         errorTelemetry(process.argv, e.message)

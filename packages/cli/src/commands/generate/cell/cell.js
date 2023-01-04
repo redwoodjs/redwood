@@ -4,9 +4,10 @@ import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/gen
 
 import { nameVariants, transformTSToJS } from '../../../lib'
 import { isWordPluralizable } from '../../../lib/pluralHelpers'
+import { addFunctionToRollback } from '../../../lib/rollback'
 import { isPlural, singularize } from '../../../lib/rwPluralize'
 import { getSchema } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -17,6 +18,7 @@ import {
 import {
   checkProjectForQueryField,
   getIdType,
+  operationNameIsUnique,
   uniqueOperationName,
 } from './utils/utils'
 
@@ -61,9 +63,20 @@ export const files = async ({
     templateNameSuffix = 'List'
     // override operationName so that its find_operationName
   }
-  const operationName = await uniqueOperationName(cellName, {
-    list: shouldGenerateList,
-  })
+
+  let operationName = options.query
+  if (operationName) {
+    const userSpecifiedOperationNameIsUnique = await operationNameIsUnique(
+      operationName
+    )
+    if (!userSpecifiedOperationNameIsUnique) {
+      throw new Error(`Specified query name: "${operationName}" is not unique!`)
+    }
+  } else {
+    operationName = await uniqueOperationName(cellName, {
+      list: shouldGenerateList,
+    })
+  }
 
   const cellFile = templateForComponentFile({
     name: cellName,
@@ -152,6 +165,12 @@ export const { command, description, builder, handler } =
           'Use when you want to generate a cell for a list of the model name.',
         type: 'boolean',
       },
+      query: {
+        default: '',
+        description:
+          'Use to enforce a specific query name within the generated cell - must be unique.',
+        type: 'string',
+      },
     },
     includeAdditionalTasks: ({ name: cellName }) => {
       return [
@@ -167,6 +186,7 @@ export const { command, description, builder, handler } =
 
             if (projectHasSdl) {
               await generateTypes()
+              addFunctionToRollback(generateTypes, true)
             } else {
               task.skip(
                 `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`

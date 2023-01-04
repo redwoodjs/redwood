@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { getSchema, getConfig } from '@prisma/internals'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -89,24 +89,27 @@ const additionalFiles = [
 ]
 
 export const handler = async ({ force, database }) => {
-  const tasks = new Listr([
-    {
-      title: 'Adding render.yaml',
-      task: async () => {
-        const fileData = await getRenderYamlContent(database)
-        let files = {}
-        files[fileData.path] = fileData.content
-        return writeFilesTask(files, { overwriteExisting: force })
+  const tasks = new Listr(
+    [
+      {
+        title: 'Adding render.yaml',
+        task: async () => {
+          const fileData = await getRenderYamlContent(database)
+          let files = {}
+          files[fileData.path] = fileData.content
+          return writeFilesTask(files, { overwriteExisting: force })
+        },
       },
-    },
-    updateApiURLTask('/.redwood/functions'),
-    // Add health check api function
-    addFilesTask({
-      files: additionalFiles,
-      force,
-    }),
-    printSetupNotes(notes),
-  ])
+      updateApiURLTask('/.redwood/functions'),
+      // Add health check api function
+      addFilesTask({
+        files: additionalFiles,
+        force,
+      }),
+      printSetupNotes(notes),
+    ],
+    { rendererOptions: { collapse: false } }
+  )
 
   try {
     await tasks.run()

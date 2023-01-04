@@ -3,6 +3,7 @@ import path from 'node:path'
 
 import {
   expect,
+  Page,
   PlaywrightTestArgs,
   PlaywrightWorkerArgs,
 } from '@playwright/test'
@@ -39,7 +40,7 @@ devServerTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
       page: adminSignupPage,
       email: adminEmail,
       password,
-      fullName: 'Admin User'
+      fullName: 'Admin User',
     }),
     // Signup non-admin user
     signUpTestUser({
@@ -137,6 +138,11 @@ console.log(await db.user.findMany())
 
     // Go to http://localhost:8910/contacts
     await page.goto(`${webUrl}/contacts`)
+
+    // This makes the test less flaky when running locally against the same
+    // test project multiple times
+    const contactCountBefore = await waitForContact(page)
+
     page.once('dialog', (dialog) => {
       console.log(`Dialog message: ${dialog.message()}`)
       dialog.accept().catch(() => {
@@ -152,7 +158,7 @@ console.log(await db.user.findMany())
 
     await expect(
       await page.locator('text=charlie@chimichanga.com').count()
-    ).toBe(0)
+    ).toBe(contactCountBefore - 1)
   }
 )
 
@@ -187,4 +193,29 @@ async function fillOutContactFormAsAnonymousUser({
     successMessage.waitFor({ timeout: 5000 }),
     page.locator('text=Save').click(),
   ])
+}
+
+function waitForContact(page: Page) {
+  const MAX_INTERVALS = 10
+
+  return new Promise<number>((resolve) => {
+    let intervals = 0
+    const watchInterval = setInterval(async () => {
+      console.log('Waiting for Charlie...')
+      const contactCount = await page
+        .locator('text=charlie@chimichanga.com')
+        .count()
+
+      if (contactCount > 0) {
+        clearInterval(watchInterval)
+        resolve(contactCount)
+      }
+
+      if (intervals > MAX_INTERVALS) {
+        expect(contactCount).toBeGreaterThan(0)
+      }
+
+      intervals++
+    }, 100)
+  })
 }

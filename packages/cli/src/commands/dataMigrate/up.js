@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
@@ -160,8 +159,8 @@ export const handler = async () => {
   })
 
   const tasks = new Listr(migrationTasks, {
-    collapse: false,
-    renderer: VerboseRenderer,
+    rendererOptions: { collapse: false },
+    renderer: 'verbose',
   })
 
   try {

@@ -20,12 +20,8 @@ jest.mock('@redwoodjs/internal/dist/config', () => {
   }
 })
 
-import Listr from 'listr'
-jest.mock('listr', () => {
-  return jest.fn().mockImplementation(function FakeListr() {
-    return { run: jest.fn() }
-  })
-})
+import { Listr } from 'listr2'
+jest.mock('listr2')
 
 // Make sure prerender doesn't get triggered
 jest.mock('execa', () =>

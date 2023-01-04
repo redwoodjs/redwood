@@ -2,17 +2,22 @@ import path from 'path'
 
 import camelcase from 'camelcase'
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 import prompts from 'prompts'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import {
+  prepareForRollback,
+  addFunctionToRollback,
+} from '../../../lib/rollback'
+import { yargsDefaults } from '../helpers'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,
+  validateName,
 } from '../helpers'
 
 export const files = ({ name, typescript = false, type, tests }) => {
@@ -113,6 +118,8 @@ export const handler = async (args) => {
     }
 `
 
+  validateName(args.name)
+
   let directiveType = args.type
 
   // Prompt to select what type if not specified
@@ -152,6 +159,13 @@ export const handler = async (args) => {
       {
         title: 'Generating TypeScript definitions and GraphQL schemas ...',
         task: () => {
+          // Regenerate again at the end if we rollback changes
+          addFunctionToRollback(async () => {
+            await execa('yarn rw-gen', [], {
+              stdio: 'pipe',
+              shell: true,
+            })
+          }, true)
           return execa('yarn rw-gen', [], {
             stdio: 'pipe',
             shell: true,
@@ -165,10 +179,13 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { collapse: false }
+    { rendererOptions: { collapse: false } }
   )
 
   try {
+    if (args.rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     console.log(c.error(e.message))

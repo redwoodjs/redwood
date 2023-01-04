@@ -19,11 +19,15 @@ beforeEach(() => {
   fs.__setMockFiles(
     files({ name: 'require-admin', type: 'validator', tests: true })
   )
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
 })
 
 afterEach(() => {
   fs.__setMockFiles({})
   jest.spyOn(fs, 'unlinkSync').mockClear()
+  console.info.mockRestore()
+  console.log.mockRestore()
 })
 
 test('destroys directive files', async () => {
@@ -33,7 +37,7 @@ test('destroys directive files', async () => {
     filesFn: (args) => files({ ...args, type: 'validator' }),
     name: 'require-admin',
   })
-  t.setRenderer('silent')
+  t.options.renderer = 'silent'
 
   return t.run().then(() => {
     const generatedFiles = Object.keys(

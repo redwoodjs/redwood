@@ -1,8 +1,8 @@
 import fs from 'fs'
 
+import toml from '@iarna/toml'
 import merge from 'deepmerge'
 import { env as envInterpolation } from 'string-env-interpolation'
-import toml from 'toml'
 
 import { getConfigPath } from './paths'
 
@@ -46,12 +46,6 @@ interface BrowserTargetConfig {
    * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
    */
   apiGraphQLUrl?: string
-  /**
-   * Optional: FQDN or absolute path to the DbAuth serverless function, without the trailing slash.
-   * This will override the apiUrl configuration just for the dbAuth function
-   * Example: `./redwood/functions/auth` or `https://api.redwoodjs.com/auth`
-   **/
-  apiDbAuthUrl?: string
 
   fastRefresh: boolean
   a11y: boolean

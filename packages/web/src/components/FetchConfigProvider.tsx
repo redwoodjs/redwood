@@ -1,4 +1,6 @@
-import type { AuthContextInterface, SupportedAuthTypes } from '@redwoodjs/auth'
+import React from 'react'
+
+import { UseAuth, useNoAuth } from '@redwoodjs/auth'
 
 export const getApiGraphQLUrl = () => {
   return global.RWJS_API_GRAPHQL_URL
@@ -6,15 +8,17 @@ export const getApiGraphQLUrl = () => {
 
 export interface FetchConfig {
   uri: string
-  headers?: { 'auth-provider'?: SupportedAuthTypes; authorization?: string }
+  headers?: { 'auth-provider'?: string; authorization?: string }
 }
 
 export const FetchConfigContext = React.createContext<FetchConfig>({
   uri: getApiGraphQLUrl(),
 })
 
-const defaultAuthState = { loading: false, isAuthenticated: false }
-type UseAuthType = () => AuthContextInterface
+interface Props {
+  useAuth?: UseAuth
+  children: React.ReactNode
+}
 
 /**
  * The `FetchConfigProvider` understands Redwood's Auth and determines the
@@ -22,10 +26,8 @@ type UseAuthType = () => AuthContextInterface
  * Note that the auth bearer token is now passed in packages/web/src/apollo/index.tsx
  * as the token is retrieved async
  */
-export const FetchConfigProvider: React.FunctionComponent<{
-  useAuth?: UseAuthType
-}> = ({
-  useAuth = global.__REDWOOD__USE_AUTH ?? (() => defaultAuthState),
+export const FetchConfigProvider: React.FC<Props> = ({
+  useAuth = useNoAuth,
   ...rest
 }) => {
   const { isAuthenticated, type } = useAuth()

@@ -288,18 +288,24 @@ exports[`in javascript (default) mode creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
-const PostsLayout = ({ children }) => {
+const ScaffoldLayout = ({
+  title,
+  titleTo,
+  buttonLabel,
+  buttonTo,
+  children,
+}) => {
   return (
     <div className="rw-scaffold">
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className="rw-header">
         <h1 className="rw-heading rw-heading-primary">
-          <Link to={routes.posts()} className="rw-link">
-            Posts
+          <Link to={routes[titleTo]()} className="rw-link">
+            {title}
           </Link>
         </h1>
-        <Link to={routes.newPost()} className="rw-button rw-button-green">
-          <div className="rw-button-icon">+</div> New Post
+        <Link to={routes[buttonTo]()} className="rw-button rw-button-green">
+          <div className="rw-button-icon">+</div> {buttonLabel}
         </Link>
       </header>
       <main className="rw-main">{children}</main>
@@ -307,7 +313,7 @@ const PostsLayout = ({ children }) => {
   )
 }
 
-export default PostsLayout
+export default ScaffoldLayout
 "
 `;
 
@@ -411,11 +417,11 @@ export const Success = ({ post }) => {
 `;
 
 exports[`in javascript (default) mode creates a show component 1`] = `
-"import humanize from 'humanize-string'
-
-import { Link, routes, navigate } from '@redwoodjs/router'
+"import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+
+import { checkboxInputTag, jsonDisplay, timeTag } from 'src/lib/formatters'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -424,39 +430,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-
-const formatEnum = (values) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values)
-    }
-  }
-}
-
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
 
 const Post = ({ post }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -1101,13 +1074,17 @@ export const Success = ({ posts }) => {
 `;
 
 exports[`in javascript (default) mode creates an index component 1`] = `
-"import humanize from 'humanize-string'
-
-import { Link, routes } from '@redwoodjs/router'
+"import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/PostsCell'
+import {
+  checkboxInputTag,
+  jsonTruncate,
+  timeTag,
+  truncate,
+} from 'src/lib/formatters'
 
 const DELETE_POST_MUTATION = gql\`
   mutation DeletePostMutation($id: Int!) {
@@ -1116,45 +1093,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-
-const MAX_STRING_LENGTH = 150
-
-const formatEnum = (values) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values)
-    }
-  }
-}
-
-const truncate = (value) => {
-  const output = value?.toString()
-  if (output?.length > MAX_STRING_LENGTH) {
-    return output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output ?? ''
-}
-
-const jsonTruncate = (obj) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
 
 const PostsList = ({ posts }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -1611,28 +1549,32 @@ exports[`in typescript mode creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
-type PostLayoutProps = {
+type LayoutProps = {
+  title: string
+  titleTo: string
+  buttonLabel: string
+  buttonTo: string
   children: React.ReactNode
 }
 
-const PostsLayout = ({ children }: PostLayoutProps) => {
+const ScaffoldLayout = ({
+  title,
+  titleTo,
+  buttonLabel,
+  buttonTo,
+  children,
+}: LayoutProps) => {
   return (
     <div className="rw-scaffold">
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
       <header className="rw-header">
         <h1 className="rw-heading rw-heading-primary">
-          <Link
-            to={routes.posts()}
-            className="rw-link"
-          >
-            Posts
+          <Link to={routes[titleTo]()} className="rw-link">
+            {title}
           </Link>
         </h1>
-        <Link
-          to={routes.newPost()}
-          className="rw-button rw-button-green"
-        >
-          <div className="rw-button-icon">+</div> New Post
+        <Link to={routes[buttonTo]()} className="rw-button rw-button-green">
+          <div className="rw-button-icon">+</div> {buttonLabel}
         </Link>
       </header>
       <main className="rw-main">{children}</main>
@@ -1640,7 +1582,7 @@ const PostsLayout = ({ children }: PostLayoutProps) => {
   )
 }
 
-export default PostsLayout
+export default ScaffoldLayout
 "
 `;
 
@@ -1750,11 +1692,12 @@ export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
 `;
 
 exports[`in typescript mode creates a show component 1`] = `
-"import humanize from 'humanize-string'
-
+"
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+
+import { checkboxInputTag, jsonDisplay, timeTag,  } from 'src/lib/formatters'
 
 import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
 
@@ -1765,39 +1708,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const jsonDisplay = (obj: unknown) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
-const timeTag = (datetime?: string) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked: boolean) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
 
 interface Props {
   post: NonNullable<FindPostById['post']>
@@ -2527,13 +2437,12 @@ export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
 `;
 
 exports[`in typescript mode creates an index component 1`] = `
-"import humanize from 'humanize-string'
-
-import { Link, routes } from '@redwoodjs/router'
+"import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/PostsCell'
+import { checkboxInputTag, jsonTruncate, timeTag, truncate } from 'src/lib/formatters'
 
 import type { DeletePostMutationVariables, FindPosts } from 'types/graphql'
 
@@ -2544,46 +2453,6 @@ const DELETE_POST_MUTATION = gql\`
     }
   }
 \`
-
-const MAX_STRING_LENGTH = 150
-
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const truncate = (value: string | number) => {
-  const output = value?.toString()
-  if (output?.length > MAX_STRING_LENGTH) {
-    return output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output ?? ''
-}
-
-
-const jsonTruncate = (obj: unknown) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime?: string) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked: boolean) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
 
 const PostsList = ({ posts }: FindPosts) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {

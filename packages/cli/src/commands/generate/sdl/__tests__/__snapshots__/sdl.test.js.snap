@@ -57,7 +57,7 @@ exports[`handler can be called with PascalCase model name 3`] = `
   "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -139,8 +139,9 @@ export const deleteUser = ({ id }) => {
 }
 
 export const User = {
-  profiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).profiles(),
+  profiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).profiles()
+  },
 }
 ",
   "filePath": "/path/to/project/api/src/services/users/users.js",
@@ -204,7 +205,7 @@ exports[`handler can be called with PascalCase model name 7`] = `
 } from './customDatums'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -234,7 +235,6 @@ describe('customDatums', () => {
     const original = await customData({
       id: scenario.customData.one.id,
     })
-
     const result = await updateCustomData({
       id: original.id,
       input: { data: 'String2' },
@@ -247,7 +247,6 @@ describe('customDatums', () => {
     const original = await deleteCustomData({
       id: scenario.customData.one.id,
     })
-
     const result = await customData({ id: original.id })
 
     expect(result).toEqual(null)
@@ -352,7 +351,7 @@ exports[`handler can be called with camelCase model name 3`] = `
   "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -434,8 +433,9 @@ export const deleteUser = ({ id }) => {
 }
 
 export const User = {
-  profiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).profiles(),
+  profiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).profiles()
+  },
 }
 ",
   "filePath": "/path/to/project/api/src/services/users/users.js",
@@ -499,7 +499,7 @@ exports[`handler can be called with camelCase model name 7`] = `
 } from './customDatums'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -529,7 +529,6 @@ describe('customDatums', () => {
     const original = await customData({
       id: scenario.customData.one.id,
     })
-
     const result = await updateCustomData({
       id: original.id,
       input: { data: 'String2' },
@@ -542,7 +541,6 @@ describe('customDatums', () => {
     const original = await deleteCustomData({
       id: scenario.customData.one.id,
     })
-
     const result = await customData({ id: original.id })
 
     expect(result).toEqual(null)

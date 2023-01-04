@@ -1,5 +1,5 @@
 describe('updateResolverTypes', () => {
-  it('Converts PostResolvers to Partial<PostResolvers>', async () => {
+  it('Converts PostResolvers to PostRelationResolvers>', async () => {
     await matchTransformSnapshot('updateResolverTypes', 'default')
   })
 })

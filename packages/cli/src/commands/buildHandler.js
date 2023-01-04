@@ -2,8 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
@@ -50,7 +49,8 @@ export const handler = async ({
     return
   }
 
-  const prerenderRoutes = prerender ? detectPrerenderRoutes() : []
+  const prerenderRoutes =
+    prerender && side.includes('web') ? detectPrerenderRoutes() : []
   const shouldGeneratePrismaClient =
     prisma && (side.includes('api') || prerenderRoutes.length > 0)
 
@@ -136,7 +136,7 @@ export const handler = async ({
   }
 
   const jobs = new Listr(tasks, {
-    renderer: verbose && VerboseRenderer,
+    renderer: verbose && 'verbose',
   })
 
   try {

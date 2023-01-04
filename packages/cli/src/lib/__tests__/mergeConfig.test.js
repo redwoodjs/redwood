@@ -355,7 +355,6 @@ describe('opaque function behavior', () => {
       "const x = (a) => ['d', 'e', 'f'].contains(a)",
       `\
       const x = (a) => ['a', 'b', 'c'].contains(a)
-
       const x = (a) => ['d', 'e', 'f'].contains(a)
       `
     )
@@ -380,7 +379,6 @@ describe('opaque function behavior', () => {
         const arr = ['a', 'b', 'c']
         return arr.contains(a)
       }
-
       const x = (a) => {
         const array = ['a', 'b', 'c']
         return array.contains(a)
@@ -419,7 +417,6 @@ describe('nop behavior', () => {
       'const x = (x, y) => x - y',
       `\
       const x = (x, y) => x + y
-
       const x = (x, y) => x - y
       `
     )

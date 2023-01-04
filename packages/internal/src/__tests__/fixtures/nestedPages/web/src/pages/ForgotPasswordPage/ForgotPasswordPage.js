@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { FieldError, Form, Label, Submit, TextField } from '@redwoodjs/forms'
+
+import { useAuth } from 'src/auth'
 
 const ForgotPasswordPage = () => {
   const { isAuthenticated, forgotPassword } = useAuth()

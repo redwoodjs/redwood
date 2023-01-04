@@ -84,7 +84,8 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *
  * route         - The route path as specified in the <Route path={...} />
  * pathname      - The pathname from the window.location.
- * allParamTypes - The object containing all param type definitions.
+ * paramTypes    - The object containing all param type definitions.
+ * matchSubPaths - Also match sub routes
  *
  * Examples:
  *
@@ -96,11 +97,20 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *
  *  matchPath('/post/{id:Int}', '/post/7')
  *  => { match: true, params: { id: 7 }}
+ *
+ *  matchPath('/post/1', '/post/', { matchSubPaths: true })
+ *  => { match: true, params: {} }
  */
 export const matchPath = (
   route: string,
   pathname: string,
-  paramTypes?: Record<string, ParamType>
+  {
+    paramTypes,
+    matchSubPaths,
+  }: {
+    paramTypes?: Record<string, ParamType>
+    matchSubPaths?: boolean
+  } = {}
 ) => {
   // Get the names and the transform types for the given route.
   const routeParams = paramsForRoute(route)
@@ -119,36 +129,41 @@ export const matchPath = (
     typeMatchingRoute = typeMatchingRoute.replace(match, `(${typeRegexp})`)
   }
 
+  const matchRegex = matchSubPaths
+    ? new RegExp(`^${typeMatchingRoute}(?:/.*)?$`, 'g')
+    : new RegExp(`^${typeMatchingRoute}$`, 'g')
+
   // Does the `pathname` match the route?
-  const matches = [
-    ...pathname.matchAll(new RegExp(`^${typeMatchingRoute}$`, 'g')),
-  ]
+  const matches = [...pathname.matchAll(matchRegex)]
 
   if (matches.length === 0) {
     return { match: false }
   }
-
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
-  const params = providedParams.reduce<Record<string, unknown>>(
-    (acc, value, index) => {
-      const [name, transformName] = routeParams[index]
-      const typeInfo = allParamTypes[transformName as SupportedRouterParamTypes]
+  if (routeParams.length > 0) {
+    const params = providedParams.reduce<Record<string, unknown>>(
+      (acc, value, index) => {
+        const [name, transformName] = routeParams[index]
+        const typeInfo =
+          allParamTypes[transformName as SupportedRouterParamTypes]
 
-      let transformedValue: string | unknown = value
-      if (typeof typeInfo?.parse === 'function') {
-        transformedValue = typeInfo.parse(value)
-      }
+        let transformedValue: string | unknown = value
+        if (typeof typeInfo?.parse === 'function') {
+          transformedValue = typeInfo.parse(value)
+        }
 
-      return {
-        ...acc,
-        [name]: transformedValue,
-      }
-    },
-    {}
-  )
+        return {
+          ...acc,
+          [name]: transformedValue,
+        }
+      },
+      {}
+    )
+    return { match: true, params }
+  }
 
-  return { match: true, params }
+  return { match: true }
 }
 
 /**
@@ -356,5 +371,18 @@ export function normalizePage(
   return {
     name: specOrPage.name,
     loader: async () => ({ default: specOrPage }),
+  }
+}
+
+/**
+ * Detect if we're in an iframe.
+ *
+ * From https://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
+ */
+export function inIframe() {
+  try {
+    return global?.self !== global?.top
+  } catch (e) {
+    return true
   }
 }

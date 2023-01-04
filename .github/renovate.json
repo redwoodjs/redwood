@@ -47,6 +47,7 @@
     "pretty-bytes",
     "is-port-reachable",
     "pretty-ms",
-    "camelcase"
+    "camelcase",
+    "sort-package-json"
   ]
 }

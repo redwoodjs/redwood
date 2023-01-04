@@ -3,8 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 import latestVersion from 'latest-version'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -65,7 +64,7 @@ export const builder = (yargs) => {
 // Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
-const validateTag = (tag) => {
+export const validateTag = (tag) => {
   const isTagValid =
     tag === 'rc' ||
     tag === 'canary' ||
@@ -131,7 +130,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         },
       },
     ],
-    { collapse: false, renderer: verbose && VerboseRenderer }
+    { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
   )
 
   try {
