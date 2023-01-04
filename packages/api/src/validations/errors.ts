@@ -351,6 +351,8 @@ export class CustomValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'CustomValidationError'
+
+    Object.setPrototypeOf(this, CustomValidationError.prototype)
   }
 }
 
