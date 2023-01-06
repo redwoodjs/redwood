@@ -305,4 +305,145 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
       })
     })
   })
+
+  describe('when enforcing the number of aliases in a GraphQL document', () => {
+    describe('with defaults', () => {
+      it('allows up to 15', async () => {
+        const query = `
+        {
+          postsAlias1: posts {
+            id
+            id1: id
+            id2: id
+            id3: id
+            id4: id
+            id5: id
+            title
+            title1: title
+            title2: title
+            title3: title
+            title4: title
+            title5: title
+          }
+        }`
+
+        const response = await mockGraphQLRequest(query)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data.postsAlias1[0].id1).toEqual(1)
+        expect(errors).toBeUndefined()
+      })
+
+      it('protects when more than 15 aliases', async () => {
+        const query = `
+          {
+            postsAlias1: posts {
+              id
+              id1: id
+              id2: id
+              id3: id
+              id4: id
+              id5: id
+              id6: id
+              id7: id
+              id8: id
+              id9: id
+              id10: id
+              title
+              title1: title
+              title2: title
+              title3: title
+              title4: title
+              title5: title
+              title6: title
+              title7: title
+              title8: title
+              title9: title
+              title10: title
+            }
+      }`
+
+        const response = await mockGraphQLRequest(query)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual(
+          'Syntax Error: Aliases limit of 15 exceeded, found 21.'
+        )
+      })
+    })
+
+    describe('when disabled', () => {
+      it('returns no errors', async () => {
+        const query = `
+          {
+            postsAlias1: posts {
+              id
+              id1: id
+              id2: id
+              id3: id
+              id4: id
+              id5: id
+              id6: id
+              id7: id
+              id8: id
+              id9: id
+              id10: id
+              title
+              title1: title
+              title2: title
+              title3: title
+              title4: title
+              title5: title
+              title6: title
+              title7: title
+              title8: title
+              title9: title
+              title10: title
+            }
+          }`
+
+        const armorConfig = {
+          maxAliases: { enabled: false },
+        }
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(errors).toBeUndefined()
+        expect(data.postsAlias1[0].id1).toEqual(1)
+      })
+    })
+
+    describe('wtih a custom alias maximum', () => {
+      it('protects at that level', async () => {
+        const query = `
+          {
+            postsAlias1: posts {
+              id
+              id1: id
+              id2: id
+              title
+              title1: title
+              title2: title
+              title3: title
+            }
+          }`
+
+        const armorConfig = {
+          maxAliases: { n: 3 },
+        }
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual(
+          'Syntax Error: Aliases limit of 3 exceeded, found 6.'
+        )
+      })
+    })
+  })
 })
