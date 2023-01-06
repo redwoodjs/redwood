@@ -25,6 +25,11 @@ export type GenerateGraphiQLHeader = () => string
 export type Context = Record<string, unknown>
 export type ContextFunction = (...args: any[]) => Context | Promise<Context>
 
+export type ArmorConfig = {
+  logContext?: boolean
+  logErrors?: boolean
+} & GraphQLArmorConfig
+
 /** This is an interface so you can extend it inside your application when needed */
 export interface RedwoodGraphQLContext {
   event: APIGatewayProxyEvent
@@ -106,7 +111,7 @@ export interface GraphQLHandlerOptions {
    *
    * @see https://escape-technologies.github.io/graphql-armor/docs/configuration/examples
    */
-  graphQLArmorConfig?: GraphQLArmorConfig
+  armorConfig?: ArmorConfig
 
   /**
    * @description Customize the default error message used to mask errors.

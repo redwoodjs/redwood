@@ -14,7 +14,7 @@ import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
 import {
-  useGraphQLArmor,
+  useArmor,
   useRedwoodAuthContext,
   useRedwoodDirective,
   useRedwoodError,
@@ -52,7 +52,7 @@ export const createGraphQLHandler = ({
   services,
   sdls,
   directives = [],
-  graphQLArmorConfig,
+  armorConfig,
   allowedOperations,
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
@@ -109,7 +109,7 @@ export const createGraphQLHandler = ({
   plugins.push(...redwoodDirectivePlugins)
 
   // Secure the GraphQL server
-  plugins.push(useGraphQLArmor(logger, graphQLArmorConfig))
+  plugins.push(useArmor(logger, armorConfig))
 
   // Only allow execution of specific operation types
   plugins.push(

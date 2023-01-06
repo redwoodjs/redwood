@@ -87,7 +87,7 @@ const mockLambdaEvent = ({
   }
 }
 
-describe('useGraphQLArmor', () => {
+describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost, and other optimistic protections', () => {
   describe('when blocking field suggestions', () => {
     it('returns the field suggestion masked', async () => {
       const handler = createGraphQLHandler({
