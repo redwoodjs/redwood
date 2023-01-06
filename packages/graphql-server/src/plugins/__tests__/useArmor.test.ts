@@ -446,4 +446,91 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
       })
     })
   })
+
+  /**
+   * Parsing a GraphQL operation document is a very expensive and compute intensive operation that blocks the JavaScript event loop.
+   * If an attacker sends a very complex operation document with slight variations over and over again he can easily degrade the performance of the GraphQL server.
+   * Because of the variations simply having an LRU cache for parsed operation documents is not enough.
+   *
+   * A potential solution is to limit the maximal allowed count of tokens within a GraphQL document.
+   *
+   * In computer science, lexical analysis, lexing or tokenization is the process of converting a sequence of characters into a sequence of lexical tokens.
+   * E.g. given the following GraphQL operation.
+   *
+   * graphql {
+   *   me {
+   *     id
+   *     user
+   *   }
+   * }
+   *
+   * The tokens are query, {, me, {, id, user, } and }. Having a total count of 8 tokens.
+   * The optimal maximum token count for your application depends on the complexity of the GrapHQL operations and documents. Usually 800-2000 tokens seems like a sane default.
+   *
+   * GraphQL Armor provides a default maximum token count of 1000 tokens.
+   */
+  describe('when protecting against token complexity', () => {
+    describe('with a custom max', () => {
+      it('enforces a smaller limit', async () => {
+        const query = '{ posts { id, title } }'
+        const armorConfig = {
+          maxTokens: { n: 2 },
+        }
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual(
+          'Syntax Error: Token limit of 2 exceeded, found 3.'
+        )
+      })
+    })
+  })
+
+  describe('when protecting maximum directives', () => {
+    describe('with defaults', () => {
+      it('cannot apply an unknown directive', async () => {
+        const query = '{  __typename @a @a @a @a }'
+        const response = await mockGraphQLRequest(query)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual('Unknown directive "@a".')
+      })
+    })
+
+    describe('when disabled', () => {
+      it('cannot apply an unknown directive', async () => {
+        const query = '{  __typename @a @a @a @a }'
+        const armorConfig = {
+          maxDirectives: { enabled: false },
+        }
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual('Unknown directive "@a".')
+      })
+    })
+
+    describe('with a custom max', () => {
+      it('enforces a smaller limit', async () => {
+        const query = '{  __typename @a @a @a @a }'
+        const armorConfig = {
+          maxDirectives: { n: 2 },
+        }
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual(
+          'Syntax Error: Directives limit of 2 exceeded, found 4.'
+        )
+      })
+    })
+  })
 })
