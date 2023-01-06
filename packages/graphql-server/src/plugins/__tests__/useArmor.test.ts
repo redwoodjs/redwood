@@ -533,4 +533,68 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
       })
     })
   })
+
+  describe('when protecting cost limit', () => {
+    describe('with defaults', () => {
+      it('allows basic queries', async () => {
+        const query = '{ posts { id, title } }'
+        const response = await mockGraphQLRequest(query)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeDefined()
+        expect(data.posts[0]).toEqual({ id: 1, title: 'Ba' })
+        expect(errors).toBeUndefined()
+      })
+    })
+
+    describe('when disabled', () => {
+      it('allows a more costly limit', async () => {
+        const query = '{ posts { id, title } }'
+        const armorConfig = {
+          costLimit: { enabled: false, objectCost: 5000 },
+        }
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(errors).toBeUndefined()
+        expect(data.posts[0]).toEqual({ id: 1, title: 'Ba' })
+      })
+    })
+
+    describe('with a custom max', () => {
+      it('enforces a smaller limit', async () => {
+        const query = '{ posts { id, title } }'
+        const armorConfig = {
+          costLimit: { maxCost: 1 },
+        }
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual(
+          'Syntax Error: Query Cost limit of 1 exceeded, found 9.5.'
+        )
+      })
+    })
+
+    describe('with a custom calculation', () => {
+      it('enforces a larger object cost', async () => {
+        const query = '{ posts { id, title } }'
+        const armorConfig = {
+          costLimit: { maxCost: 2000, objectCost: 5000 },
+        }
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual(
+          'Syntax Error: Query Cost limit of 2000 exceeded, found 12504.5.'
+        )
+      })
+    })
+  })
 })
