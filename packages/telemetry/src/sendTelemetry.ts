@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { fetch } from '@whatwg-node/fetch'
 import ci from 'ci-info'
-import { fetch } from 'cross-undici-fetch'
 import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'

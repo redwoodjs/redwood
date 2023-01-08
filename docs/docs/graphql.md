@@ -554,13 +554,13 @@ For local development,
 with the proxy using `curl` from the command line:
 
 ```bash
-curl "http://localhost:8910/.redwood/functions/graphql/health"
+curl "http://localhost:8910/.redwood/functions/graphql/health" -i
 ```
 
 or by directly invoking the graphql function:
 
 ```bash
-curl "http://localhost:8911/graphql/health"
+curl "http://localhost:8911/graphql/health" -i
 ```
 
 you should get the response:
@@ -587,24 +587,19 @@ For local development, you can make a request to the proxy:
 
 ```bash
 curl "http://localhost:8910/.redwood/functions/graphql/readiness" \
-     -H 'x-yoga-id: yoga'
+     -H 'x-yoga-id: yoga' \
+     -i
 ```
 
 or directly invoke the graphql function:
 
 ```bash
 curl "http://localhost:8911/graphql/readiness" \
-     -H 'x-yoga-id: yoga'
-
+     -H 'x-yoga-id: yoga' \
+     -i
 ```
 
-Either way, you should get the following response:
-
-```json
-{
-  "message": "alive"
-}
-```
+Either way, you should get a `200 OK` HTTP status if ready, or a `503 Service Unavailable` if not.
 
 For production, make a request wherever your `/graphql` function exists.
 
@@ -752,8 +747,8 @@ export const schema = gql`
   }
 
   type Query {
-    posts: [Product!]! @requireAuth
-    post(id: Int!): Product @requireAuth
+    products: [Product!]! @requireAuth
+    product(id: Int!): Product @requireAuth
   }
 
   input CreateProductInput {
@@ -1258,10 +1253,10 @@ Need you own custom error and message?
 
 Maybe you're integrating with a third-party api and want to handle errors from that service and also want control of how that error is shared with your user client-side.
 
-Simply extend from `RedwoodGraphQLError` and you're all set!
+Simply extend from `RedwoodError` and you're all set!
 
 ```tsx
-export class MyCustomError extends RedwoodGraphQLError {
+export class MyCustomError extends RedwoodError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)
   }
@@ -1271,7 +1266,7 @@ export class MyCustomError extends RedwoodGraphQLError {
 For example, in your service, you can create and use it to handle the error and return a friendly message:
 
 ```tsx
-export class WeatherError extends RedwoodGraphQLError {
+export class WeatherError extends RedwoodError {
   constructor(message: string, extensions?: Record<string, any>) {
     super(message, extensions)
   }

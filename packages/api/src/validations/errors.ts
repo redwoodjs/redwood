@@ -32,6 +32,8 @@ export class ServiceValidationError extends RedwoodError {
 
     super(errorMessage, extensions)
     this.name = 'ServiceValidationError'
+
+    Object.setPrototypeOf(this, ServiceValidationError.prototype)
   }
 }
 
@@ -43,6 +45,8 @@ export class AbsenceValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'AbsenceValidationError'
+
+    Object.setPrototypeOf(this, AbsenceValidationError.prototype)
   }
 }
 
@@ -54,6 +58,8 @@ export class AcceptanceValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'AcceptanceValidationError'
+
+    Object.setPrototypeOf(this, AcceptanceValidationError.prototype)
   }
 }
 
@@ -65,6 +71,8 @@ export class EmailValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'EmailValidationError'
+
+    Object.setPrototypeOf(this, EmailValidationError.prototype)
   }
 }
 export class ExclusionValidationError extends ServiceValidationError {
@@ -75,6 +83,8 @@ export class ExclusionValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'ExclusionValidationError'
+
+    Object.setPrototypeOf(this, ExclusionValidationError.prototype)
   }
 }
 
@@ -86,6 +96,8 @@ export class FormatValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'FormatValidationError'
+
+    Object.setPrototypeOf(this, FormatValidationError.prototype)
   }
 }
 
@@ -97,6 +109,8 @@ export class InclusionValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'InclusionValidationError'
+
+    Object.setPrototypeOf(this, InclusionValidationError.prototype)
   }
 }
 
@@ -108,6 +122,8 @@ export class MinLengthValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'MinLengthValidationError'
+
+    Object.setPrototypeOf(this, MinLengthValidationError.prototype)
   }
 }
 
@@ -119,6 +135,8 @@ export class MaxLengthValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'MaxLengthValidationError'
+
+    Object.setPrototypeOf(this, MaxLengthValidationError.prototype)
   }
 }
 
@@ -130,6 +148,8 @@ export class EqualLengthValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'EqualLengthValidationError'
+
+    Object.setPrototypeOf(this, EqualLengthValidationError.prototype)
   }
 }
 
@@ -141,6 +161,8 @@ export class BetweenLengthValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'BetweenLengthValidationError'
+
+    Object.setPrototypeOf(this, BetweenLengthValidationError.prototype)
   }
 }
 
@@ -152,6 +174,8 @@ export class PresenceValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'PresenceValidationError'
+
+    Object.setPrototypeOf(this, PresenceValidationError.prototype)
   }
 }
 
@@ -163,6 +187,8 @@ export class TypeNumericalityValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'TypeNumericalityValidationError'
+
+    Object.setPrototypeOf(this, TypeNumericalityValidationError.prototype)
   }
 }
 
@@ -174,6 +200,8 @@ export class IntegerNumericalityValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'IntegerNumericalityValidationError'
+
+    Object.setPrototypeOf(this, IntegerNumericalityValidationError.prototype)
   }
 }
 
@@ -185,6 +213,8 @@ export class LessThanNumericalityValidationError extends ServiceValidationError 
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'LessThanNumericalityValidationError'
+
+    Object.setPrototypeOf(this, LessThanNumericalityValidationError.prototype)
   }
 }
 
@@ -196,6 +226,10 @@ export class LessThanOrEqualNumericalityValidationError extends ServiceValidatio
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'LessThanOrEqualNumericalityValidationError'
+    Object.setPrototypeOf(
+      this,
+      LessThanOrEqualNumericalityValidationError.prototype
+    )
   }
 }
 
@@ -207,6 +241,10 @@ export class GreaterThanNumericalityValidationError extends ServiceValidationErr
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'GreaterThanNumericalityValidationError'
+    Object.setPrototypeOf(
+      this,
+      GreaterThanNumericalityValidationError.prototype
+    )
   }
 }
 
@@ -218,6 +256,10 @@ export class GreaterThanOrEqualNumericalityValidationError extends ServiceValida
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'GreaterThanOrEqualNumericalityValidationError'
+    Object.setPrototypeOf(
+      this,
+      GreaterThanOrEqualNumericalityValidationError.prototype
+    )
   }
 }
 
@@ -229,6 +271,8 @@ export class EqualNumericalityValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'EqualNumericalityValidationError'
+
+    Object.setPrototypeOf(this, EqualNumericalityValidationError.prototype)
   }
 }
 
@@ -240,6 +284,8 @@ export class OtherThanNumericalityValidationError extends ServiceValidationError
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'OtherThanNumericalityValidationError'
+
+    Object.setPrototypeOf(this, OtherThanNumericalityValidationError.prototype)
   }
 }
 
@@ -251,6 +297,8 @@ export class EvenNumericalityValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'EvenNumericalityValidationError'
+
+    Object.setPrototypeOf(this, EvenNumericalityValidationError.prototype)
   }
 }
 
@@ -262,6 +310,8 @@ export class OddNumericalityValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'OddNumericalityValidationError'
+
+    Object.setPrototypeOf(this, OddNumericalityValidationError.prototype)
   }
 }
 
@@ -273,6 +323,8 @@ export class PositiveNumericalityValidationError extends ServiceValidationError 
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'PositiveNumericalityValidationError'
+
+    Object.setPrototypeOf(this, PositiveNumericalityValidationError.prototype)
   }
 }
 
@@ -284,6 +336,8 @@ export class NegativeNumericalityValidationError extends ServiceValidationError 
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'NegativeNumericalityValidationError'
+
+    Object.setPrototypeOf(this, NegativeNumericalityValidationError.prototype)
   }
 }
 
@@ -297,14 +351,18 @@ export class CustomValidationError extends ServiceValidationError {
   ) {
     super(message, Object.assign(substitutions, { name }))
     this.name = 'CustomValidationError'
+
+    Object.setPrototypeOf(this, CustomValidationError.prototype)
   }
 }
 
 export class UniquenessValidationError extends ServiceValidationError {
-  constructor(name: string, message: string | undefined, _substitutions = {}) {
+  constructor(name: string, message: string | undefined, substitutions = {}) {
     const errorMessage = message ? message : `${name} must be unique`
 
-    super(errorMessage)
+    super(errorMessage, Object.assign(substitutions, { name }))
     this.name = 'UniquenessValidationError'
+
+    Object.setPrototypeOf(this, UniquenessValidationError.prototype)
   }
 }
