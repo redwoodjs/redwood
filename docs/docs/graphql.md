@@ -1215,19 +1215,48 @@ export const handler = createGraphQLHandler({
 
 This protection is enabled by default.
 
-Limit the number of aliases in a document.
+Limit the number of aliases in a document. Defaults to 15.
+
+##### Example
+
+Aliases allow you rename the data that is returned in a query’s results. They manipulate the structure of the query result that is fetched from your service, displaying it according to your web component's needs.
+
+This contrived example uses 11 alias to rename a Post's id an title to various permutations of post, article, and blog to return a different shape in the query result as `articles`:
+
+```ts
+ {
+  articles: posts {
+    id
+    articleId: id
+    postId: id
+    articlePostId: id
+    postArticleId: id
+    blogId: id
+    title
+    articleTitle: title
+    postTitle: title
+    articlePostTitle: title
+    postArticleTitle: title
+    blogTitle: title
+  }
+}
+```
 
 ##### Configuration and Defaults
+
+Limit the number of aliases in a document. Defaults to 15.
+
+You can change the default value via the `maxAliases` setting when creating your GraphQL handler.
 
 ```ts
 {
   maxAliases: {
-    // enabled: true,
+    enabled: true,
     n: 15,
   }
 }
 ```
-#### Max Cost
+#### Cost Limit
 
 This protection is enabled by default.
 
@@ -1235,12 +1264,20 @@ It analyzes incoming GraphQL queries and applies a cost analysis algorithm to pr
 
 The cost computation is quite simple (and naive) at the moment but there are plans to make it evolve toward a extensive plugin with many features.
 
+Defaults to a overall maxCost limit of 5000.
+
+##### Example
 ##### Configuration and Defaults
+
+Defaults to a overall maxCost limit of 5000.
+
+You can change the default value via the `costLimit` setting when creating your GraphQL handler.
+
 
 ```ts
 {
   costLimit: {
-    // enabled: true,
+    enabled: true,
     maxCost: 5000, // maximum cost of a request before it is rejected
     objectCost: 2, // cost of retrieving an object
     scalarCost: 1, // cost of retrieving a scalar
@@ -1253,11 +1290,13 @@ The cost computation is quite simple (and naive) at the moment but there are pla
 
 This protection is enabled by default.
 
-Limit the depth of a document.
+Limit the depth of a document. Defaults to 6 levels.
 
 Attackers often submit expensive, nested queries to abuse query depth that could overload your database or expend costly resources.
 
 Typically, these types of unbounded, complex and expensive GraphQL queries are usually huge deeply nested and take advantage of an understanding of your schema (hence why schema introspection is disabled by default in production) and the data model relationships to create "cyclical" queries.
+
+##### Example
 
 An example of a cyclical query here takes advantage of knowing that and author has posts and each post has and author ... that has posts ... that has an another that ... etc.
 
@@ -1286,16 +1325,16 @@ query cyclical {
   }
 }
 ```
-
-
-You can change the default value via the `depthLimitOptions` setting when creating your GraphQL handler.
-
 ##### Configuration and Defaults
+
+Defaults to 6 levels.
+
+You can change the default value via the `maxDepth` setting when creating your GraphQL handler.
 
 ```ts
 {
   maxDepth: {
-    // enabled: true,
+    enabled: true,
     n: 6,
   }
 }
@@ -1305,15 +1344,17 @@ You can change the default value via the `depthLimitOptions` setting when creati
 
 This protections is enabled by default.
 
-Limit the number of directives in a document.
+Limit the number of directives in a document. Defaults to 50.
 
-
+##### Example
 ##### Configuration and Defaults
+
+You can change the default value via the `maxDirectives` setting when creating your GraphQL handler.
 
 ```ts
 {
   maxDirectives: {
-    // enabled: true,
+    enabled: true,
     n: 50,
   }
 }
@@ -1324,12 +1365,65 @@ This protection is enabled by default.
 
 Limit the number of GraphQL tokens in a document.
 
+ In computer science, lexical analysis, lexing or tokenization is the process of converting a sequence of characters into a sequence of lexical tokens.
+
+ E.g. given the following GraphQL operation.
+
+```ts
+ graphql {
+   me {
+     id
+     user
+   }
+ }
+```
+
+ The tokens are `query`, `{`, `me`, `{`, `id`, `user`, `}` and `}`. Having a total count of 8 tokens.
+
+##### Example
+
+Given the query with 8 tokens:
+
+```ts
+ graphql {
+   me {
+     id
+     user
+   }
+ }
+```
+
+And a custom configuration to all a maximum of two tokens:
+
+```
+const armorConfig = {
+  maxTokens: { n: 2 },
+}
+```
+
+An error is raised:
+
+```
+'Syntax Error: Token limit of 2 exceeded, found 3.'
+```
+
+:::note
+
+When reporting the number of found tokens, then number found is not the total tokens, but the value when found that exceeded the limit.
+
+Therefore found would be n + 1.
+:::
+
 ##### Configuration and Defaults
+
+Defaults to 50.
+
+You can change the default value via the `maxTokens` setting when creating your GraphQL handler.
 
 ```ts
 {
   maxTokens: {
-    // enabled: true,
+    enabled: true,
     n: 1000,
   }
 }
@@ -1338,21 +1432,43 @@ Limit the number of GraphQL tokens in a document.
 
 This plugin is enabled by default.
 
-It will prevent suggesting fields in case of an erroneous request. Suggestions can lead to the leak of your schema even with disabled introspection, which can be very detrimental in case of a private API. One could use GraphDNA to recover an API schema even with disabled introspection, as long as field suggestions are enabled.
+It will prevent suggesting fields in case of an erroneous request. Suggestions can lead to the leak of your schema even with disabled introspection, which can be very detrimental in case of a private API.
 
 Example of such a suggestion:
 
 `Cannot query field "sta" on type "Media". Did you mean "stats", "staff", or "status"?`
 
+##### Example
 ##### Configuration and Defaults
+
+Enabled by default.
+
+You can change the default value via the `blockFieldSuggestions` setting when creating your GraphQL handler.
 
 ```ts
 {
   blockFieldSuggestion: {
-    // enabled: true,
+    enabled: true,
   }
 }
 ```
+Enabling will hide the field suggestion:
+
+`Cannot query field "sta" on type "Media". [Suggestion hidden]?`
+
+Orm if you want a custom mask:
+
+```ts
+{
+
+  blockFieldSuggestion: {
+    mask: '<REDACTED>'
+  },
+}
+```
+
+``Cannot query field "sta" on type "Media". [REDACTED]?`
+
 ### Error Masking
 
 In many GraphQL servers, when an error is thrown, the details of that error are leaked to the outside world. The error and its message are then returned in the response and a client might reveal those errors in logs or even render the message to the user. You could potentially leak sensitive or other information about your app you don't want to share—such as database connection failures or even the presence of certain fields.
@@ -1764,7 +1880,7 @@ You can overwrite the generated docs and bypass the plugin's diffMethod use `--f
 yarn start
 ```
 
-#### Example Screens
+##### Example Screens
 
 ##### Schema Documentation
 ![graphql-doc-example-main](/img/graphql-api-docs/schema-doc.png)

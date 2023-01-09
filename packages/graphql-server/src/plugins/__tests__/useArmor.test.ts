@@ -468,6 +468,15 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
    * The optimal maximum token count for your application depends on the complexity of the GrapHQL operations and documents. Usually 800-2000 tokens seems like a sane default.
    *
    * GraphQL Armor provides a default maximum token count of 1000 tokens.
+   *
+   * Note: When reporting the number of found tokens as in
+   *
+   * 'Syntax Error: Token limit of 2 exceeded, found 3.'
+   *
+   * The number found is not the total tokens, but the value when found that exceeded the limit.
+   *
+   * Therefore found would be n + 1.
+   *
    */
   describe('when protecting against token complexity', () => {
     describe('with a custom max', () => {
