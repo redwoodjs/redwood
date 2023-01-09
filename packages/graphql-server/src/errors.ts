@@ -13,6 +13,7 @@ export class RedwoodGraphQLError extends GraphQLError {
       extensions: {
         ...extensions,
         code: extensions?.code || 'REDWOODJS_ERROR',
+        // http: { status: extensions?.http?.status ?? 400 },
       },
       originalError,
     })
@@ -39,7 +40,7 @@ export class ValidationError extends RedwoodGraphQLError {
 
 export class AuthenticationError extends RedwoodGraphQLError {
   constructor(message: string) {
-    super(message, { code: 'UNAUTHENTICATED' })
+    super(message, { code: 'UNAUTHENTICATED', http: { status: 401 } })
 
     Object.setPrototypeOf(this, AuthenticationError.prototype)
   }
@@ -47,7 +48,7 @@ export class AuthenticationError extends RedwoodGraphQLError {
 
 export class ForbiddenError extends RedwoodGraphQLError {
   constructor(message: string) {
-    super(message, { code: 'FORBIDDEN' })
+    super(message, { code: 'FORBIDDEN', http: { status: 403 } })
 
     Object.setPrototypeOf(this, ForbiddenError.prototype)
   }
@@ -73,7 +74,11 @@ export class PersistedQueryNotSupportedError extends RedwoodGraphQLError {
 
 export class UserInputError extends RedwoodGraphQLError {
   constructor(message: string, properties?: Record<string, any>) {
-    super(message, { code: 'BAD_USER_INPUT', properties })
+    super(message, {
+      code: 'BAD_USER_INPUT',
+      properties,
+      http: { status: 400 },
+    })
 
     Object.setPrototypeOf(this, UserInputError.prototype)
   }

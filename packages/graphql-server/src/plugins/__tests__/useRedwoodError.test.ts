@@ -7,7 +7,10 @@ import { createGraphQLHandler } from '../../functions/graphql'
 
 jest.mock('../../makeMergedSchema/makeMergedSchema', () => {
   const { makeExecutableSchema } = require('@graphql-tools/schema')
-  const { ForbiddenError } = require('@redwoodjs/graphql-server/dist/errors')
+  const {
+    AuthenticationError,
+    ForbiddenError,
+  } = require('@redwoodjs/graphql-server/dist/errors')
   const { EmailValidationError, RedwoodError } = require('@redwoodjs/api')
 
   const { CurrencyResolver } = require('graphql-scalars')
@@ -33,6 +36,7 @@ jest.mock('../../makeMergedSchema/makeMergedSchema', () => {
           }
 
           type Query {
+            unauthenticatedUser: User!
             forbiddenUser: User!
             getUser(id: Int!): User!
             invalidUser: User!
@@ -67,6 +71,9 @@ jest.mock('../../makeMergedSchema/makeMergedSchema', () => {
             me: () => {
               return { _id: 1, firstName: 'Ba', lastName: 'Zinga' }
             },
+            unauthenticatedUser: () => {
+              throw new AuthenticationError('You are not authenticated')
+            },
             forbiddenUser: () => {
               throw new ForbiddenError('You are forbidden')
             },
@@ -96,6 +103,7 @@ jest.mock('../../makeMergedSchema/makeMergedSchema', () => {
             weather: () => {
               throw new WeatherError('Check outside instead', {
                 code: 'RATE_LIMIT',
+                http: { status: 429 },
               })
             },
           },
@@ -170,6 +178,31 @@ describe('useRedwoodError', () => {
       expect(data).toEqual({ me: { id: '1', name: 'Ba Zinga' } })
     })
 
+    it('returns an unmasked error message when the request is unauthenticated', async () => {
+      const handler = createGraphQLHandler({
+        loggerConfig: { logger: createLogger({}), options: {} },
+        sdls: {},
+        directives: {},
+        services: {},
+        onException: () => {},
+      })
+
+      const mockedEvent = mockLambdaEvent({
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: '{ unauthenticatedUser { id, name } }' }),
+        httpMethod: 'POST',
+      })
+
+      const response = await handler(mockedEvent, {} as Context)
+      const { data, errors } = JSON.parse(response.body)
+      console.log(JSON.stringify(response, null, 2))
+      expect(response.statusCode).toBe(401)
+      expect(data).toBeNull()
+      expect(errors[0].message).toEqual('You are not authenticated')
+    })
+
     it('returns an unmasked error message when the request is forbidden', async () => {
       const handler = createGraphQLHandler({
         loggerConfig: { logger: createLogger({}), options: {} },
@@ -189,7 +222,8 @@ describe('useRedwoodError', () => {
 
       const response = await handler(mockedEvent, {} as Context)
       const { data, errors } = JSON.parse(response.body)
-
+      console.log(JSON.stringify(response, null, 2))
+      expect(response.statusCode).toBe(403)
       expect(data).toBeNull()
       expect(errors[0].message).toEqual('You are forbidden')
     })
@@ -214,6 +248,7 @@ describe('useRedwoodError', () => {
       const response = await handler(mockedEvent, {} as Context)
       const { data, errors } = JSON.parse(response.body)
 
+      expect(response.statusCode).toBe(200)
       expect(data).toBeNull()
       expect(errors[0].message).toEqual('Something went wrong.')
     })
@@ -239,6 +274,7 @@ describe('useRedwoodError', () => {
       const response = await handler(mockedEvent, {} as Context)
       const { data, errors } = JSON.parse(response.body)
 
+      expect(response.statusCode).toBe(200)
       expect(data).toBeNull()
       expect(errors[0].message).toEqual('Please try again.')
     })
@@ -262,7 +298,9 @@ describe('useRedwoodError', () => {
         })
 
         const response = await handler(mockedEvent, {} as Context)
-        expect(response.statusCode).toBe(200)
+        console.log(JSON.stringify(response, null, 2))
+
+        expect(response.statusCode).toBe(400)
       })
     })
 
@@ -293,6 +331,7 @@ describe('useRedwoodError', () => {
         const response = await handler(mockedEvent, {} as Context)
         const { data, errors } = JSON.parse(response.body)
 
+        expect(response.statusCode).toBe(200)
         expect(errors).toBeUndefined()
         expect(data.products[0].currency_iso_4217).toEqual('USD')
       })
@@ -323,6 +362,7 @@ describe('useRedwoodError', () => {
         const response = await handler(mockedEvent, {} as Context)
         const { data, errors } = JSON.parse(response.body)
 
+        expect(response.statusCode).toBe(400)
         expect(data).toBeNull()
         expect(errors[0].message).toEqual(
           'Value is not a valid currency value: Calamari flan'
@@ -353,6 +393,7 @@ describe('useRedwoodError', () => {
         const response = await handler(mockedEvent, {} as Context)
         const { data, errors } = JSON.parse(response.body)
 
+        expect(response.statusCode).toBe(429)
         expect(data).toBeNull()
         expect(errors[0].message).toEqual('Check outside instead')
       })
