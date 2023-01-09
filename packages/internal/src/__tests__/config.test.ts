@@ -33,6 +33,7 @@ describe('getConfig', () => {
           "bundler": "webpack",
           "fastRefresh": true,
           "host": "localhost",
+          "includeEnvironmentVariables": [],
           "path": "./web",
           "port": 8910,
           "sourceMap": false,
