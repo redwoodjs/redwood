@@ -1,4 +1,4 @@
-import { Plugin } from '@graphql-yoga/common'
+import { Plugin } from 'graphql-yoga'
 
 import {
   AuthContextPayload,

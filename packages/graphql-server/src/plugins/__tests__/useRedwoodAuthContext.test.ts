@@ -1,4 +1,6 @@
+import { useEngine } from '@envelop/core'
 import { createSpiedPlugin, createTestkit } from '@envelop/testing'
+import * as GraphQLJS from 'graphql'
 
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodAuthContext } from '../useRedwoodAuthContext'
@@ -45,6 +47,7 @@ describe('useRedwoodAuthContext', () => {
 
     const testkit = createTestkit(
       [
+        useEngine(GraphQLJS),
         useRedwoodAuthContext(mockedGetCurrentUser, authDecoder),
         spiedPlugin.plugin,
       ],
@@ -74,7 +77,10 @@ describe('useRedwoodAuthContext', () => {
       .mockRejectedValue(new Error('Could not fetch user from db.'))
 
     const testkit = createTestkit(
-      [useRedwoodAuthContext(mockedGetCurrentUser, authDecoder)],
+      [
+        useEngine(GraphQLJS),
+        useRedwoodAuthContext(mockedGetCurrentUser, authDecoder),
+      ],
       testSchema
     )
 
