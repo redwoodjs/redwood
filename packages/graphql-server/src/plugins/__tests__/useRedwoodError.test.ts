@@ -331,7 +331,7 @@ describe('useRedwoodError', () => {
         const response = await handler(mockedEvent, {} as Context)
         const { data, errors } = JSON.parse(response.body)
 
-        expect(response.statusCode).toBe(200)
+        expect(response.statusCode).toBe(400)
         expect(errors).toBeUndefined()
         expect(data.products[0].currency_iso_4217).toEqual('USD')
       })

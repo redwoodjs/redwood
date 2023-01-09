@@ -13,7 +13,7 @@ export class RedwoodGraphQLError extends GraphQLError {
       extensions: {
         ...extensions,
         code: extensions?.code || 'REDWOODJS_ERROR',
-        // http: { status: extensions?.http?.status ?? 400 },
+        http: { status: extensions?.http?.status ?? 400 },
       },
       originalError,
     })

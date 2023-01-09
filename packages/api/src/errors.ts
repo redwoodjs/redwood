@@ -6,6 +6,7 @@ export class RedwoodError extends Error {
     this.extensions = {
       ...extensions,
       code: extensions?.code || 'REDWOODJS_ERROR',
+      http: { status: extensions?.http?.status ?? 400 },
     }
   }
 }

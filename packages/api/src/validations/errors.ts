@@ -22,6 +22,7 @@ export class ServiceValidationError extends RedwoodError {
       // @see: https://www.apollographql.com/docs/apollo-server/data/errors/#including-custom-error-details
       extensions = {
         code: 'BAD_USER_INPUT',
+        http: { status: 400 },
         properties: {
           messages: {
             [String(value)]: [errorMessage],
