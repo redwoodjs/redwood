@@ -846,7 +846,131 @@ query GetFavoriteTrees {
 
 Redwood will automatically detect your union types in your `sdl` files and resolve *which* of your union's types is being returned. If the returned object does not match any of the valid types, the associated operation will produce a GraphQL error.
 
-### GraphQL Handler Setup
+## GraphQL Handler Setup
+
+Redwood's `GraphQLHandlerOptions` allows you to configure your GraphQL handler schema, context, authentication, security and more.
+
+```ts
+export interface GraphQLHandlerOptions {
+  /**
+   * @description The identifier used in the GraphQL health check response.
+   * It verifies readiness when sent as a header in the readiness check request.
+   *
+   * By default, the identifier is `yoga` as seen in the HTTP response header `x-yoga-id: yoga`
+   */
+  healthCheckId?: string
+
+  /**
+   * @description Customize GraphQL Logger
+   *
+   * Collect resolver timings, and exposes trace data for
+   * an individual request under extensions as part of the GraphQL response.
+   */
+  loggerConfig: LoggerConfig
+
+  /**
+   * @description Modify the resolver and global context.
+   */
+  context?: Context | ContextFunction
+
+  /**
+   * @description An async function that maps the auth token retrieved from the
+   * request headers to an object.
+   * Is it executed when the `auth-provider` contains one of the supported
+   * providers.
+   */
+  getCurrentUser?: GetCurrentUser
+
+  /**
+   * @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
+   */
+  onException?: () => void
+
+  /**
+   * @description Services passed from the glob import:
+   * import services from 'src/services\/**\/*.{js,ts}'
+   */
+  services: ServicesGlobImports
+
+  /**
+   * @description SDLs (schema definitions) passed from the glob import:
+   * import sdls from 'src/graphql\/**\/*.{js,ts}'
+   */
+  sdls: SdlGlobImports
+
+  /**
+   * @description Directives passed from the glob import:
+   * import directives from 'src/directives/**\/*.{js,ts}'
+   */
+  directives?: DirectiveGlobImports
+
+  /**
+   * @description A list of options passed to [makeExecutableSchema]
+   * (https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
+   */
+  schemaOptions?: Partial<IExecutableSchemaDefinition>
+
+  /**
+   * @description CORS configuration
+   */
+  cors?: CorsConfig
+
+  /**
+   *  @description Customize GraphQL Armor plugin configuration
+   *
+   * @see https://escape-technologies.github.io/graphql-armor/docs/configuration/examples
+   */
+  armorConfig?: ArmorConfig
+
+  /**
+   * @description Customize the default error message used to mask errors.
+   *
+   * By default, the masked error message is "Something went wrong"
+   *
+   * @see https://github.com/dotansimha/envelop/blob/main/packages/core/docs/use-masked-errors.md
+   */
+  defaultError?: string
+
+  /**
+   * @description Only allows the specified operation types (e.g. subscription, query or mutation).
+   *
+   * By default, only allow query and mutation (ie, do not allow subscriptions).
+   *
+   * An array of GraphQL's OperationTypeNode enums:
+   * - OperationTypeNode.SUBSCRIPTION
+   * - OperationTypeNode.QUERY
+   * - OperationTypeNode.MUTATION
+   *
+   * @see https://github.com/dotansimha/envelop/tree/main/packages/plugins/filter-operation-type
+   */
+  allowedOperations?: AllowedOperations
+
+  /**
+   * @description Custom Envelop plugins
+   */
+  extraPlugins?: Plugin[]
+
+  /**
+   * @description Auth-provider specific token decoder
+   */
+  authDecoder?: Decoder
+
+  /**
+   * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
+   *
+   * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
+   */
+  graphiQLEndpoint?: string
+  /**
+   * @description Function that returns custom headers (as string) for GraphiQL.
+   *
+   * Headers must set auth-provider, Authorization and (if using dbAuth) the encrypted cookie.
+   */
+  generateGraphiQLHeader?: GenerateGraphiQLHeader
+}
+```
+
+### Directive Setup
 
 Redwood makes it easy to code, organize, and map your directives into the GraphQL schema.
 
@@ -877,6 +1001,13 @@ export const handler = createGraphQLHandler({
 
 > Note: Check-out the [in-depth look at Redwood Directives](directives.md) that explains how to generate directives so you may use them to validate access and transform the response.
 
+
+### Logging Setup
+
+For a details on setting up GraphQL Logging, see [Logging](#logging).
+### Security Setup
+
+For a details on setting up GraphQL Security, see [Security](#security).
 ## Logging
 
 Logging is essential in production apps to be alerted about critical errors and to be able to respond effectively to support issues. In staging and development environments, logging helps you debug queries, resolvers and cell requests.
