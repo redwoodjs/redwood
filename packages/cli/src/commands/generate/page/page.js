@@ -24,6 +24,7 @@ import {
   templateForComponentFile,
   mapRouteParamTypeToTsType,
   removeGeneratorName,
+  validateName,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
@@ -172,6 +173,7 @@ export const handler = async ({
   rollback,
 }) => {
   const pageName = removeGeneratorName(name, 'page')
+  validateName(pageName)
 
   if (tests === undefined) {
     tests = getConfig().generate.tests

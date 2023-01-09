@@ -19,7 +19,7 @@ type SignUpOptions = {
   redirectTo?: string
 }
 
-export function createSupabaseAuth(
+export function createAuth(
   supabaseClient: SupabaseClient,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
@@ -28,12 +28,12 @@ export function createSupabaseAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  const authImplementation = createSupabaseAuthImplementation(supabaseClient)
+  const authImplementation = createAuthImplementation(supabaseClient)
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createSupabaseAuthImplementation(supabaseClient: SupabaseClient) {
+function createAuthImplementation(supabaseClient: SupabaseClient) {
   return {
     type: 'supabase',
     client: supabaseClient,
