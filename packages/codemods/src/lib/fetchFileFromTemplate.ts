@@ -1,4 +1,4 @@
-import { fetch } from 'cross-undici-fetch'
+import { fetch } from '@whatwg-node/fetch'
 
 /**
  * @param tag should be something like 'v0.42.1'

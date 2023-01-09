@@ -1,4 +1,4 @@
-import { CORSOptions } from '@graphql-yoga/common'
+import { CORSOptions } from 'graphql-yoga'
 
 import { CorsConfig } from '@redwoodjs/api'
 

@@ -1,8 +1,8 @@
 import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
-import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import type { Plugin } from 'graphql-yoga'
 
 import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import { CorsConfig } from '@redwoodjs/api'
@@ -134,7 +134,7 @@ export interface GraphQLHandlerOptions {
   /**
    * @description Custom Envelop plugins
    */
-  extraPlugins?: PluginOrDisabledPlugin[]
+  extraPlugins?: Plugin[]
 
   /**
    * @description Auth-provider specific token decoder
