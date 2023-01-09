@@ -1,5 +1,5 @@
 import type { AllowedOperations } from '@envelop/filter-operation-type'
-import type { GraphQLArmorConfig } from '@escape.tech/graphql-armor/dist/declarations/src/config'
+import type { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import type { Plugin } from 'graphql-yoga'
