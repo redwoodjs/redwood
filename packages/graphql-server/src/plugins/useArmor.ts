@@ -3,7 +3,7 @@ import type { GraphQLError, ValidationContext } from 'graphql'
 
 import type { Logger } from '@redwoodjs/api/logger'
 
-import { ArmorConfig } from 'src/functions/types'
+import { ArmorConfig } from '../functions/types'
 
 const armorConfigDefaultOptions: ArmorConfig = {
   logContext: false,
