@@ -1155,9 +1155,163 @@ And with the Yoga Envelop Plugin ecosystem available to you, there are options f
 
 ### Authentication
 
-Some of the biggest security improvements we'll be making revolve around Services (which are intimately linked to GraphQL since they're wrapped into your resolvers). For `v1.0` we plan to make all of your GraphQL resolvers secure by default. You can even opt into this behavior now—see the [Secure Services](services.md#secure-services) section.
+By default, your GraphQL endpoint is open to the world.
 
-TODO
+That means anyone can request any query and invoke any Mutation.
+Whatever types and fields are defined in your SDL is data that anyone can access.
+
+Redwood [encourages being secure by default](http://localhost:3000/docs/canary/directives#secure-by-default-with-built-in-directives) by defaulting all queries and mutations to have the `@requireAuth` directive when generating SDL or a service.
+
+When your app builds and your server starts up, Redwood checks that **all** queries and mutations have `@requireAuth`, `@skipAuth` or a custom directive applied.
+
+If not, then your build will fail:
+
+```bash
+  ✖ Verifying graphql schema...
+    Building API...
+    Cleaning Web...
+    Building Web...
+    Prerendering Web...
+You must specify one of @requireAuth, @skipAuth or a custom directive for
+- contacts Query
+- posts Query
+- post Query
+- updatePost Mutation
+- deletePost Mutation
+```
+
+or your server won't startup and you should see that "Schema validation failed":
+
+```bash
+gen | Generating TypeScript definitions and GraphQL schemas...
+gen | 47 files generated
+api | Building... Took 593 ms
+api | [GQL Server Error] - Schema validation failed
+api | ----------------------------------------
+api | You must specify one of @requireAuth, @skipAuth or a custom directive for
+api | - posts Query
+api | - createPost Mutation
+api | - updatePost Mutation
+api | - deletePost Mutation
+```
+
+To correct, just add the appropriate directive to your queries and mutations.
+
+If not, then your build will fail and your server won't startup.
+
+#### @requireAuth
+
+To enforce authentication, simply add the `@requireAuth` directive in your GraphQL schema for any query or field you want protected.
+
+It's your responsibility to implement the `requireAuth()` function in your app's `api/src/lib/auth.{js|ts}` to check if the user is properly authenticated and/or has the expected role membership.
+
+The `@requireAuth` directive will call the `requireAuth()` function to determine if the user is authenticated or not.
+
+Here we enforce that a user must be logged in to `create`. `update` or `delete` a `Post`.
+
+```ts
+type Post {
+  id: Int!
+  title: String!
+  body: String!
+  authorId: Int!
+  author: User!
+  createdAt: DateTime!
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+  authorId: Int!
+}
+
+input UpdatePostInput {
+  title: String
+  body: String
+  authorId: Int
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post! @requireAuth
+  updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
+  deletePost(id: Int!): Post! @requireAuth
+}
+```
+
+It's your responsibility to implement the `requireAuth()` function in your app's `api/src/lib/auth.{js|ts}` to check if the user is properly authenticated and/or has the expected role membership.
+
+The `@requireAuth` directive will call the requireAuth() function to determine if the user is authenticated or not.
+
+```ts title="api/src/lib/auth.ts"
+// ...
+
+export const isAuthenticated = (): boolean => {
+  return true // 👈 replace with the appropriate check
+}
+
+// ...
+
+export const requireAuth = ({ roles }: { roles: AllowedRoles }) => {
+  if (isAuthenticated()) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+
+  if (!hasRole({ roles })) {
+    throw new ForbiddenError("You don't have access to do that.")
+  }
+}
+```
+
+> **Note**: The `auth.ts` file here is the stub for a new RedwoodJS app. Once you have setup auth with your provider, this will enforce a proper authentication check.
+
+##### Field-level Auth
+
+You can apply the `@requireAuth` to any field as well (not just queries or mutations):
+
+```ts
+type Post {
+  id: Int!
+  title: String!
+  body: String! @requireAuth
+  authorId: Int!
+  author: User!
+  createdAt: DateTime!
+}
+```
+
+##### Role-based Access Control
+
+The `@requireAuth` directive lets you define roles that are permitted to perform the operation:
+
+```ts
+type Mutation {
+  createPost(input: CreatePostInput!): Post! @requireAuth(roles: ['AUTHOR', 'EDITOR'])
+  updatePost(id: Int!, input: UpdatePostInput!): Post! @@requireAuth(roles: ['EDITOR']
+  deletePost(id: Int!): Post! @requireAuth(roles: ['ADMIN']
+}
+```
+
+#### @skipAuth
+
+If, however, you want your query or mutation to be public, then simply use `@skipAuth`.
+
+In the example, fetching all posts or a single post is allowed for all users, authenticated or not.
+
+```ts
+type Post {
+  id: Int!
+  title: String!
+  body: String!
+  authorId: Int!
+  author: User!
+  createdAt: DateTime!
+}
+
+type Query {
+  posts: [Post!]! @skipAuth
+  post(id: Int!): Post @skipAuth
+}
+```
 
 ### Introspection and Playground Disabled in Production
 
