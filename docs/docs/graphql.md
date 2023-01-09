@@ -127,7 +127,7 @@ In contrast to most GraphQL implementations, Redwood provides a "deconstructed" 
 - For each query or mutation, you write a service function with the same name. This is the resolver
 - Redwood then takes all your SDLs and Services (resolvers), combines them into a GraphQL server, and expose it as an endpoint
 
-## Redwood and GraphQL
+## RedwoodJS and GraphQL
 
 Besides taking care of the annoying stuff for you (namely, mapping your resolvers, which gets annoying fast if you do it yourself!), there's not many gotchas with GraphQL in Redwood.
 The only Redwood-specific thing you should really be aware of is [resolver args](#redwoods-resolver-args).
@@ -138,17 +138,28 @@ On the `web` side, Redwood uses [Apollo Client](https://www.apollographql.com/do
 
 
 The `api` side offers a GraphQL server built on [GraphQL Yoga](https://www.graphql-yoga.com) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
+###
 
 Redwood's api side is "serverless first", meaning it's architected as functions which can be deployed on either serverless or traditional infrastructure, and Redwood's GraphQL endpoint is effectively "just another function" (with a whole lot more going on under the hood, but that part is handled for you, out of the box).
 One of the tenets of the Redwood philosophy is "Redwood believes that, as much as possible, you should be able to operate in a serverless mindset and deploy to a generic computational grid.”
 
+### GraphQL Yoga and the Generic Computation Grid
+
 To be able to deploy to a “generic computation grid” means that, as a developer, you should be able to deploy using the provider or technology of your choosing. You should be able to deploy to Netlify, Vercel, Fly, Render, AWS Serverless, or elsewhere with ease and no vendor or platform lock in. You should be in control of the framework, what the response looks like, and how your clients consume it.
 
-The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graphql-yoga.com) makes that possible.
+The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graphql-yoga.com) from [The Guild](https://the-guild.dev) makes that possible.
 
-> Existing libraries like Apollo Server provide you with either a complete HTTP server or a middleware function that you can plug into your framework of choice. GraphQL Yoga takes a different approach—it just provides a handful of functions that you can use to turn an HTTP request into a GraphQL execution result. In other words, GraphQL Yoga leaves it up to you to decide how to send back the response.
+> The fully-featured GraphQL Server with focus on easy setup, performance and great developer experience.
 
-We leverage Envelop plugins to provide GraphQL [security best practices](#security) and implement custom internal plugins to help with authentication, [logging](#logging), [directive handling](#directives), and more.
+RedwoodJS leverages Yoga's Envelop plugins to implement custom internal plugins to help with [authentication](#authentication), [logging](#logging), [directive handling](#directives), and more.
+### Security Best Practices
+
+
+RedwoodJS implements GraphQL Armor from [Escape Technologies](https://escape.tech) to make your endpoint more secure by default by implementing common GraphQL [security best practices](#security).
+
+GraphQL Armor, developed by Escape in partnership with The Guild, is a middleware for JS servers that adds a security layer to the RedwoodJS GraphQL endpoint.
+
+### Conclusion
 
 All this gets us closer to Redwood's goal of being able to deploy to a "generic computation grid". And that’s exciting!
 
@@ -773,7 +784,7 @@ export const schema = gql`
 
 ## Directives
 
-Directives supercharge your GraphQL services. They add configuration to fields, types or operations that act like "middleware" that lets you run reusable code during GraphQL execution to perform tasks like authentication, formatting, and more.
+Directives supercharge your GraphQL services. They add configuration to fields, types or operations that act like "middleware" that lets you run reusable code during GraphQL execution to perform tasks like [authentication](#authentication), formatting, and more.
 
 You'll recognize a directive by its preceded by the `@` character, e.g. `@myDirective`, and by being declared alongside a field:
 
@@ -835,7 +846,6 @@ query GetFavoriteTrees {
 
 Redwood will automatically detect your union types in your `sdl` files and resolve *which* of your union's types is being returned. If the returned object does not match any of the valid types, the associated operation will produce a GraphQL error.
 
-
 ### GraphQL Handler Setup
 
 Redwood makes it easy to code, organize, and map your directives into the GraphQL schema.
@@ -854,6 +864,7 @@ import { logger } from 'src/lib/logger'
 
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: {} },
+  armorConfig, //  👈 custom GraphQL Security configuration
   directives, //  👈 directives are added to the schema here
   sdls,
   services,
@@ -1125,11 +1136,28 @@ By logging the operation name and extracting the duration for each query, you ca
 
 ## Security
 
-We'll document more GraphQL security best practices as Redwood reaches a `v1.0` release candidate. For now, know that Redwood already has some baked-in best practices; for example, when deploying GraphQL to production, GraphQL Playground is automatically disabled.
+Parsing a GraphQL operation document is a very expensive and compute intensive operation that blocks the JavaScript event loop. If an attacker sends a very complex operation document with slight variations over and over again he can easily degrade the performance of the GraphQL server.
 
-### Secure Services
+RedwoodJS will by default reject a variety malicious operation documents; that is, it'll prevent attackers from making malicious queries or mutations.
+
+RedwoodJS is configured out-of-the-box with GraphQL security best practices:
+
+* Schema Directive-based Authentication including RBAC validation
+* Production Deploys disable Introspection and GraphQL Playground automatically
+* Reject Malicious Operation Documents (Max Aliases, Max Cost, Max Depth, Max Directives, Max Tokens)
+* Prevent Information Leaks (Block Field Suggestions, Mask Errors)
+
+And with the Yoga Envelop Plugin ecosystem available to you, there are options for:
+
+* CSRF Protection
+* Rate Limiting
+* and more.
+
+### Authentication
 
 Some of the biggest security improvements we'll be making revolve around Services (which are intimately linked to GraphQL since they're wrapped into your resolvers). For `v1.0` we plan to make all of your GraphQL resolvers secure by default. You can even opt into this behavior now—see the [Secure Services](services.md#secure-services) section.
+
+TODO
 
 ### Introspection and Playground Disabled in Production
 
@@ -1139,7 +1167,93 @@ The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is
 
 > Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
 
-### Query Depth Limit
+### GraphQL Armor Configuration
+
+[GraphQL Armor](https://escape.tech/graphql-armor/) is a middleware that adds a security layer the RedwoodJS GraphQL endpoint configured with sensible defaults.
+
+You don't have to configure anything to enforce protection against alias, cost, depth, directive, tokens abuse in GraphQL operations as well as to block field suggestions or revealing error messages that might leak sensitive infomration.
+
+But, if you need to enable, disable to modify the default settings, GraphQL Armor is fully configurable in a per-plugin fashion.
+
+Simply define and provide a custom GraphQL Security configuration to your `createGraphQLHandler`:
+
+```ts
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  armorConfig, //  👈 custom GraphQL Security configuration
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+```
+
+For example, the default max query depth limit is 6. To change that setting to 2 levels, simply provide the configuration to your handler:
+
+```ts
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  armorConfig: { maxDepth: { n: 2 } },
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+```
+
+#### Max Aliases
+
+This protection is enabled by default.
+
+Limit the number of aliases in a document.
+
+##### Configuration and Defaults
+
+```ts
+{
+  maxAliases: {
+    // enabled: true,
+    n: 15,
+  }
+}
+```
+#### Max Cost
+
+This protection is enabled by default.
+
+It analyzes incoming GraphQL queries and applies a cost analysis algorithm to prevent resource overload by blocking too expensive requests (DoS attack attempts).
+
+The cost computation is quite simple (and naive) at the moment but there are plans to make it evolve toward a extensive plugin with many features.
+
+##### Configuration and Defaults
+
+```ts
+{
+  costLimit: {
+    // enabled: true,
+    maxCost: 5000, // maximum cost of a request before it is rejected
+    objectCost: 2, // cost of retrieving an object
+    scalarCost: 1, // cost of retrieving a scalar
+    depthCostFactor: 1.5, // multiplicative cost of depth
+  }
+}
+```
+
+#### Max Depth Limit
+
+This protection is enabled by default.
+
+Limit the depth of a document.
 
 Attackers often submit expensive, nested queries to abuse query depth that could overload your database or expend costly resources.
 
@@ -1173,23 +1287,72 @@ query cyclical {
 }
 ```
 
-> To mitigate the risk of attacking your application via deeply nested queries, RedwoodJS by default sets the [Query Depth Limit](https://www.npmjs.com/package/graphql-depth-limit#documentation) to 11.
 
 You can change the default value via the `depthLimitOptions` setting when creating your GraphQL handler.
 
-You `depthLimitOptions` are `maxDepth` or `ignore` stops recursive depth checking based on a field name. Ignore can be [either a string or regexp](https://www.npmjs.com/package/graphql-depth-limit#documentation) to match the name, or a function that returns a boolean.
+##### Configuration and Defaults
 
-For example:
-
-```jsx
-// ...
-export const handler = createGraphQLHandler({
-  loggerConfig: { logger, options: { query: true } },
-  depthLimitOptions: { maxDepth: 6 },
-  // ...
-})
+```ts
+{
+  maxDepth: {
+    // enabled: true,
+    n: 6,
+  }
+}
 ```
 
+#### Max Directives
+
+This protections is enabled by default.
+
+Limit the number of directives in a document.
+
+
+##### Configuration and Defaults
+
+```ts
+{
+  maxDirectives: {
+    // enabled: true,
+    n: 50,
+  }
+}
+```
+#### Max Tokens
+
+This protection is enabled by default.
+
+Limit the number of GraphQL tokens in a document.
+
+##### Configuration and Defaults
+
+```ts
+{
+  maxTokens: {
+    // enabled: true,
+    n: 1000,
+  }
+}
+```
+#### Block Field Suggestions
+
+This plugin is enabled by default.
+
+It will prevent suggesting fields in case of an erroneous request. Suggestions can lead to the leak of your schema even with disabled introspection, which can be very detrimental in case of a private API. One could use GraphDNA to recover an API schema even with disabled introspection, as long as field suggestions are enabled.
+
+Example of such a suggestion:
+
+`Cannot query field "sta" on type "Media". Did you mean "stats", "staff", or "status"?`
+
+##### Configuration and Defaults
+
+```ts
+{
+  blockFieldSuggestion: {
+    // enabled: true,
+  }
+}
+```
 ### Error Masking
 
 In many GraphQL servers, when an error is thrown, the details of that error are leaked to the outside world. The error and its message are then returned in the response and a client might reveal those errors in logs or even render the message to the user. You could potentially leak sensitive or other information about your app you don't want to share—such as database connection failures or even the presence of certain fields.
@@ -1286,6 +1449,14 @@ export const getWeather = async ({ input }: WeatherInput) {
   }
 }
 ```
+
+#### CSRF Prevention
+
+If you have CORS enabled, almost all requests coming from the browser will have a preflight request - however, some requests are deemed "simple" and don't make a preflight. One example of such a request is a good ol' GET request without any headers, this request can be marked as "simple" and have preflight CORS checks skipped therefore skipping the CORS check.
+
+This attack can be mitigated by saying: "all GET requests must have a custom header set". This would force all clients to manipulate the headers of GET requests, marking them as "_not-_simple" and therefore always executing a preflight request.
+
+You can achieve this by using the [`@graphql-yoga/plugin-csrf-prevention` GraphQL Yoga plugin](https://the-guild.dev/graphql/yoga-server/docs/features/csrf-prevention).
 
 ## Self-Documenting GraphQL API
 
