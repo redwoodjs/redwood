@@ -57,7 +57,7 @@
     "@babel/runtime-corejs3": "7.20.7",
     "@nrwl/nx-cloud": "15.0.2",
     "@playwright/test": "1.29.1",
-    "@replayio/playwright": "0.3.11",
+    "@replayio/playwright": "0.3.12",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@testing-library/react-hooks": "8.0.1",
