@@ -31,7 +31,7 @@
     "@graphql-tools/schema": "8.5.1",
     "@graphql-tools/utils": "8.13.1",
     "@redwoodjs/api": "3.2.0",
-    "core-js": "3.26.1",
+    "core-js": "3.27.1",
     "graphql": "16.6.0",
     "graphql-scalars": "1.20.1",
     "graphql-tag": "2.12.6",
