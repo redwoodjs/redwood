@@ -290,7 +290,7 @@ export function createCell<
       ...queryRest
     } = useQuery(query, options)
 
-    if (global.__REDWOOD__PRERENDERING) {
+    if (globalThis.__REDWOOD__PRERENDERING) {
       // __REDWOOD__PRERENDERING will always either be set, or not set. So
       // rules-of-hooks are still respected, even though we wrap this in an if
       // statement
