@@ -6934,7 +6934,7 @@ __metadata:
     "@redwoodjs/internal": 3.2.0
     "@redwoodjs/testing": 3.2.0
     "@types/rimraf": 3.0.2
-    babel-loader: 9.1.0
+    babel-loader: 9.1.2
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-inline-react-svg: 2.0.1
@@ -11757,16 +11757,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-loader@npm:9.1.0":
-  version: 9.1.0
-  resolution: "babel-loader@npm:9.1.0"
+"babel-loader@npm:9.1.2":
+  version: 9.1.2
+  resolution: "babel-loader@npm:9.1.2"
   dependencies:
     find-cache-dir: ^3.3.2
     schema-utils: ^4.0.0
   peerDependencies:
     "@babel/core": ^7.12.0
     webpack: ">=5"
-  checksum: 70956ebf4bba016cfb2b8116848dba419a3201da3e1ac03995545c9a179047ecbd2eea8cb9d4d2b2772c7cd2ac4204649821c11e0ccccdbf7cafcd70b2da8911
+  checksum: e62ca6af7dec5e9138908ca23f0f29b0865f733d76680b0b0ebc97b1ae18dc6e9cf887c02439ee0634a16eaaef0dc000d78d20c30c348f651a55f50aea5a62ff
   languageName: node
   linkType: hard
 
