@@ -12,6 +12,10 @@ import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
+const { version } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
+)
+
 export const handler = async ({ force, verbose, addPackage }) => {
   const ts = isTypeScriptProject()
   const tasks = new Listr(
@@ -95,7 +99,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        ...addWebPackages(['@redwoodjs/vite']),
+        ...addWebPackages([`@redwoodjs/vite@${version}}`]),
         title: 'Adding @redwoodjs/vite dependency...',
         skip: () => {
           if (!addPackage) {
