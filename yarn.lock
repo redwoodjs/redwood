@@ -7209,7 +7209,7 @@ __metadata:
     "@types/uuid": 9.0.0
     "@types/yargs": 17.0.17
     "@whatwg-node/fetch": 0.5.3
-    ci-info: 3.7.0
+    ci-info: 3.7.1
     core-js: 3.27.1
     envinfo: 7.8.1
     jest: 29.3.1
@@ -13163,10 +13163,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:3.7.0":
-  version: 3.7.0
-  resolution: "ci-info@npm:3.7.0"
-  checksum: d2432ba9da65ae26e9599451638bf82d994008b9e231e4d29871d7c53346a744d4969e5aca93aa71465cb4cc08a7406c3e8c2dfa368ac80da4e87e22d94c32b5
+"ci-info@npm:3.7.1, ci-info@npm:^3.2.0":
+  version: 3.7.1
+  resolution: "ci-info@npm:3.7.1"
+  checksum: bae9bbcb0c2cdaf9ecceb4680079486e6bd3634f767e7c27eba761bea01fa133ea79432245e6fe6a8f202e4661f43bb5ec42014c6b547f24393457aa53ce56e1
   languageName: node
   linkType: hard
 
@@ -13174,13 +13174,6 @@ __metadata:
   version: 2.0.0
   resolution: "ci-info@npm:2.0.0"
   checksum: 8c5fa3830a2bcee2b53c2e5018226f0141db9ec9f7b1e27a5c57db5512332cde8a0beb769bcbaf0d8775a78afbf2bb841928feca4ea6219638a5b088f9884b46
-  languageName: node
-  linkType: hard
-
-"ci-info@npm:^3.2.0":
-  version: 3.7.1
-  resolution: "ci-info@npm:3.7.1"
-  checksum: bae9bbcb0c2cdaf9ecceb4680079486e6bd3634f767e7c27eba761bea01fa133ea79432245e6fe6a8f202e4661f43bb5ec42014c6b547f24393457aa53ce56e1
   languageName: node
   linkType: hard
 
