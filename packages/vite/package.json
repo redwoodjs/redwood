@@ -24,10 +24,10 @@
     "@babel/runtime-corejs3": "7.20.7",
     "@originjs/vite-plugin-commonjs": "1.0.3",
     "@redwoodjs/internal": "3.2.0",
-    "@vitejs/plugin-react": "3.0.0",
+    "@vitejs/plugin-react": "3.0.1",
     "buffer": "6.0.3",
     "core-js": "3.27.1",
-    "vite": "4.0.3",
+    "vite": "4.0.4",
     "vite-plugin-html": "3.2.0"
   },
   "devDependencies": {

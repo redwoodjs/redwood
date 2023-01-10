@@ -52,7 +52,7 @@
     "@redwoodjs/eslint-config": "3.2.0",
     "@redwoodjs/internal": "3.2.0",
     "@redwoodjs/testing": "3.2.0",
-    "babel-loader": "9.1.0",
+    "babel-loader": "9.1.2",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-inline-react-svg": "2.0.1",
