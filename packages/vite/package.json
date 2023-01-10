@@ -26,7 +26,7 @@
     "@redwoodjs/internal": "3.2.0",
     "@vitejs/plugin-react": "3.0.0",
     "buffer": "6.0.3",
-    "core-js": "3.26.1",
+    "core-js": "3.27.1",
     "vite": "4.0.3",
     "vite-plugin-html": "3.2.0"
   },
