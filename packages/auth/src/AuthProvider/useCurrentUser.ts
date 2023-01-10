@@ -10,7 +10,7 @@ export const useCurrentUser = (authImplementation: AuthImplementation) => {
   return useCallback(async (): Promise<Record<string, unknown>> => {
     // Always get a fresh token, rather than use the one in state
     const token = await getToken()
-    const response = await global.fetch(global.RWJS_API_GRAPHQL_URL, {
+    const response = await globalThis.fetch(globalThis.RWJS_API_GRAPHQL_URL, {
       method: 'POST',
       credentials: 'include',
       headers: {

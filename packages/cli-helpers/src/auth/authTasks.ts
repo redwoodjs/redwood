@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import execa from 'execa'
 import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
 import { transformTSToJS, writeFilesTask } from '../lib'
@@ -387,24 +386,3 @@ export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
     }
   },
 })
-
-export const addWebPackages = (webPackages: string[]) => ({
-  title: 'Adding required web packages...',
-  task: async () => {
-    await execa('yarn', ['workspace', 'web', 'add', ...webPackages])
-  },
-})
-
-export const addApiPackages = (apiPackages: string[]) => ({
-  title: 'Adding required api packages...',
-  task: async () => {
-    await execa('yarn', ['workspace', 'api', 'add', ...apiPackages])
-  },
-})
-
-export const installPackages = {
-  title: 'Installing packages...',
-  task: async () => {
-    await execa('yarn', ['install'])
-  },
-}
