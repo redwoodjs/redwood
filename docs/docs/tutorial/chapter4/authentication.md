@@ -552,7 +552,7 @@ type BlogLayoutProps = {
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {
   // highlight-next-line
-  const { isAuthenticated, currentUser, logOut } = useAuth()
+  const { isAuthenticated, loading,currentUser, logOut } = useAuth()
 
   return (
     <>
@@ -590,6 +590,8 @@ As you can probably tell by the names:
 * **isAuthenticated**: a boolean as to whether or not a user is logged in
 * **currentUser**: any details the app has on that user (more on this in a moment)
 * **logOut**: removes the user's session and logs them out
+* **loading**: a boolean as to whether or not the page has finished loading
+
 
 At the top right of the page, let's show the email address of the user (if they're logged in) as well as a link to log out. If they're not logged in, let's show a link to do just that:
 
@@ -601,8 +603,10 @@ import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }) => {
-  const { isAuthenticated, currentUser, logOut } = useAuth()
-
+  const { isAuthenticated, loading, currentUser, logOut } = useAuth()
+  if (loading) {
+    return false
+  }  
   return (
     <>
       <header>
