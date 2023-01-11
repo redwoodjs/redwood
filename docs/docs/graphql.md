@@ -1632,6 +1632,57 @@ This protections is enabled by default.
 Limit the number of directives in a document. Defaults to 50.
 
 ##### Example
+
+The following example demonstrates that by using the `@include` and `@skip` GraphQL query directives one can design a large request that requires computation, but in fact returns the expected response ...
+
+```ts
+{
+  posts {
+    id @include(if:true)
+    id @include(if:false)
+    id @include(if:false)
+    id @skip(if:true)
+    id @skip(if:true)
+    id @skip(if:true))
+    title @include(if:true)
+    title @include(if:false)
+    title @include(if:false)
+    title @skip(if:true)
+    title @skip(if:true)
+    title @skip(if:true)
+  }
+}
+```
+
+...  of formatted Posts with just a single id and title.
+
+```ts
+{
+  "data": {
+    "posts": [
+      {
+        "id": 1,
+        "title": "A little more about RedwoodJS"
+      },
+      {
+        "id": 2,
+        "title": "What is GraphQL?"
+      },
+      {
+        "id": 3,
+        "title": "Welcome to the RedwoodJS Community!"
+      },
+      {
+        "id": 4,
+        "title": "10 ways to secure your GraphQL endpoint"
+      }
+    ]
+  }
+}
+```
+
+By limiting the maximum number of directives in the document, malicious queries can be rejected.
+
 ##### Configuration and Defaults
 
 You can change the default value via the `maxDirectives` setting when creating your GraphQL handler.
@@ -1701,7 +1752,7 @@ Therefore found would be n + 1.
 
 ##### Configuration and Defaults
 
-Defaults to 50.
+Defaults to 1000.
 
 You can change the default value via the `maxTokens` setting when creating your GraphQL handler.
 
