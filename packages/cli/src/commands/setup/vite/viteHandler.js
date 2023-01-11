@@ -60,7 +60,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
           const redwoodTomlPath = getConfigPath()
           const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-          if (!configContent.includes('bundler = vite')) {
+          if (!configContent.includes('bundler = "vite"')) {
             // Use string replace to preserve comments and formatting
             writeFile(
               redwoodTomlPath,
