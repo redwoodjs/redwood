@@ -5,15 +5,16 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
     return null
   }
 
-  if (!process.env.CLERK_JWT_KEY) {
-    console.error('CLERK_JWT_KEY env var is not set.')
-    throw new Error('CLERK_JWT_KEY env var is not set.')
-  }
-
-  const { users, default: clerk } = await import('@clerk/clerk-sdk-node')
+  const { users, verifyToken } = await import('@clerk/clerk-sdk-node')
 
   try {
-    const jwtPayload = await clerk.base.verifySessionToken(token)
+    const issuer = (iss: string) =>
+      iss.startsWith('https://clerk.') || iss.includes('.clerk.accounts')
+    const jwtPayload = await verifyToken(token, {
+      issuer,
+      jwtKey: process.env.CLERK_JWT_KEY,
+      apiKey: process.env.CLERK_API_KEY,
+    })
 
     if (!jwtPayload.sub) {
       return Promise.reject(new Error('Session invalid'))
