@@ -25,7 +25,7 @@
     "@babel/runtime-corejs3": "7.20.7",
     "@redwoodjs/cli-helpers": "3.2.0",
     "@simplewebauthn/browser": "6.2.2",
-    "core-js": "3.26.1",
+    "core-js": "3.27.1",
     "prompts": "2.4.2",
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1"

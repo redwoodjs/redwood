@@ -99,7 +99,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        ...addWebPackages([`@redwoodjs/vite@${version}}`]),
+        ...addWebPackages([`@redwoodjs/vite@${version}`]),
         title: 'Adding @redwoodjs/vite dependency...',
         skip: () => {
           if (!addPackage) {
