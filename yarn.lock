@@ -2354,18 +2354,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.6.0":
-  version: 6.6.0
-  resolution: "@fastify/static@npm:6.6.0"
+"@fastify/send@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@fastify/send@npm:1.0.0"
+  dependencies:
+    debug: ^4.3.4
+    depd: 2.0.0
+    destroy: 1.2.0
+    encodeurl: ~1.0.2
+    escape-html: ~1.0.3
+    etag: ~1.8.1
+    fresh: 0.5.2
+    http-errors: 2.0.0
+    mime: 1.6.0
+    ms: 2.1.3
+    on-finished: 2.4.1
+    range-parser: ~1.2.1
+    statuses: 2.0.1
+  checksum: 2696b94921847c3db1ee41caa5b0756ba1b1caf2b033a1aee2f064eac43fd82bbb3593f12cec58dc5d420e9b73394121a2c28d7772d507a5ee71fdddfd1391ef
+  languageName: node
+  linkType: hard
+
+"@fastify/static@npm:6.6.1":
+  version: 6.6.1
+  resolution: "@fastify/static@npm:6.6.1"
   dependencies:
     "@fastify/accept-negotiator": ^1.0.0
+    "@fastify/send": ^1.0.0
     content-disposition: ^0.5.3
     fastify-plugin: ^4.0.0
     glob: ^8.0.1
     p-limit: ^3.1.0
     readable-stream: ^4.0.0
-    send: ^0.18.0
-  checksum: e8e180103382a59625e6d58c4868201b157ec9a8e68e612ced4d26d837513200e81b3a60dfa0fbfc18700e3c292485cb0a3c25375663213d4909e4b50991a391
+  checksum: 45f888865ca3d7dd6d73ca757754983948af2273e70b4fc10d7bdd0fc8e25aeae198307be38b608b4d6313fe06208922546f8ab008b47c2eb64ba0a4bc385784
   languageName: node
   linkType: hard
 
@@ -6284,7 +6305,7 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.19.6
     "@babel/runtime-corejs3": 7.20.7
     "@fastify/http-proxy": 8.4.0
-    "@fastify/static": 6.6.0
+    "@fastify/static": 6.6.1
     "@fastify/url-data": 5.2.0
     "@types/aws-lambda": 8.10.109
     "@types/lodash.escape": 4.0.7
@@ -27646,7 +27667,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"send@npm:0.18.0, send@npm:^0.18.0":
+"send@npm:0.18.0":
   version: 0.18.0
   resolution: "send@npm:0.18.0"
   dependencies:
