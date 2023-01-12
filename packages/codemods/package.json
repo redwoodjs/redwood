@@ -44,7 +44,7 @@
   "devDependencies": {
     "@types/babel__core": "7.1.20",
     "@types/findup-sync": "4.0.2",
-    "@types/fs-extra": "9.0.13",
+    "@types/fs-extra": "11.0.1",
     "@types/jest": "29.2.5",
     "@types/jscodeshift": "0.11.6",
     "@types/prettier": "2.7.2",
