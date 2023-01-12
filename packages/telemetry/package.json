@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@types/envinfo": "7.8.1",
     "@types/uuid": "9.0.0",
     "@types/yargs": "17.0.19",
