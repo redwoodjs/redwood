@@ -64,7 +64,7 @@
     "@testing-library/user-event": "14.4.3",
     "@tsd/typescript": "4.9.4",
     "@types/babel__generator": "7.6.4",
-    "@types/fs-extra": "9.0.13",
+    "@types/fs-extra": "11.0.1",
     "@types/jest": "29.2.5",
     "@types/jscodeshift": "0.11.6",
     "@types/lodash.template": "4.5.1",
