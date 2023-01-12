@@ -7397,36 +7397,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.12":
-  version: 0.3.12
-  resolution: "@replayio/playwright@npm:0.3.12"
+"@replayio/playwright@npm:0.3.13":
+  version: 0.3.13
+  resolution: "@replayio/playwright@npm:0.3.13"
   dependencies:
-    "@replayio/replay": ^0.10.8
-    "@replayio/test-utils": ^0.3.6
+    "@replayio/replay": ^0.11.0
+    "@replayio/test-utils": ^0.3.7
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: f8b0fb021a50e9a829041db81dee57812da8ae879df339ff429320c95d06e0371b7e4d6eae785d31775ccff1f5995ef0b3c9fa11f4c325dea3b0381f29a37486
+  checksum: f48243310179318a0d07c34404be83029fa39aae0f8c7d62dd5b618a4f95974d01e861907247fba01c38f90b7612d5a546f6ff00a470389434cba756222fb53e
   languageName: node
   linkType: hard
 
-"@replayio/replay@npm:^0.10.8":
-  version: 0.10.8
-  resolution: "@replayio/replay@npm:0.10.8"
+"@replayio/replay@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "@replayio/replay@npm:0.11.0"
   dependencies:
     "@replayio/sourcemap-upload": ^1.0.5
     commander: ^7.2.0
     debug: ^4.3.4
     is-uuid: ^1.0.2
     jsonata: ^1.8.6
+    p-map: ^4.0.0
     superstruct: ^0.15.4
     text-table: ^0.2.0
     ws: ^7.5.0
   bin:
     replay: bin/replay.js
-  checksum: ec826fb9406a29b8b39f3899622b894bfeabb8b0131c632a4d4f515b7bea2003848144be630dfa1c5741f54a29b563b05578333d253dd5cff6dc5904f82ca828
+  checksum: 54437cd25194c8eae7442a7bef9aa52c1a00882a6b48357f721682be7b4c01b9747bb23830b60c2e408000360b7149a187124a1784c871861344126c78044386
   languageName: node
   linkType: hard
 
@@ -7443,15 +7444,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.3.6":
-  version: 0.3.6
-  resolution: "@replayio/test-utils@npm:0.3.6"
+"@replayio/test-utils@npm:^0.3.7":
+  version: 0.3.7
+  resolution: "@replayio/test-utils@npm:0.3.7"
   dependencies:
-    "@replayio/replay": ^0.10.8
+    "@replayio/replay": ^0.11.0
     "@types/node-fetch": ^2.6.2
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: 22a82dda0bc14011d9fe4d245d36c7a4d53513dffcc7a94ed6f9f2aaaae2167655d4f54977987cb73f86eca31684346c8a66f8db283a07300ddab4deeba45110
+  checksum: 8053b5d11ee966f853a3b6077b2406c76e19da7db1a6d86ca2e5168dd72402acee5e5c0c0001b79526ed39ec8979badadc2708e788ca79cf59374c6553e4ea3e
   languageName: node
   linkType: hard
 
@@ -27278,7 +27279,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@nrwl/nx-cloud": 15.0.2
     "@playwright/test": 1.29.2
-    "@replayio/playwright": 0.3.12
+    "@replayio/playwright": 0.3.13
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
