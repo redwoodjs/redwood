@@ -36,7 +36,7 @@
     "findup-sync": "5.0.0",
     "jest": "29.3.1",
     "jscodeshift": "0.14.0",
-    "prettier": "2.8.1",
+    "prettier": "2.8.2",
     "tasuku": "2.0.0",
     "typescript": "4.7.4",
     "yargs": "17.6.2"
@@ -45,7 +45,7 @@
     "@types/babel__core": "7.1.20",
     "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "29.2.4",
+    "@types/jest": "29.2.5",
     "@types/jscodeshift": "0.11.6",
     "@types/prettier": "2.7.2",
     "@types/yargs": "17.0.17",
