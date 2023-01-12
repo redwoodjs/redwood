@@ -6307,7 +6307,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 3.2.1
-    "@whatwg-node/fetch": 0.5.3
+    "@whatwg-node/fetch": 0.6.2
     core-js: 3.27.1
     humanize-string: 2.1.0
     jest: 29.3.1
@@ -6894,7 +6894,7 @@ __metadata:
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.19
     "@vscode/ripgrep": 1.14.2
-    "@whatwg-node/fetch": 0.5.3
+    "@whatwg-node/fetch": 0.6.2
     core-js: 3.27.1
     deepmerge: 4.2.2
     execa: 5.1.1
@@ -7064,7 +7064,7 @@ __metadata:
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 9.0.0
-    "@whatwg-node/fetch": 0.5.3
+    "@whatwg-node/fetch": 0.6.2
     aws-lambda: 1.0.7
     core-js: 3.27.1
     graphql: 16.6.0
@@ -7145,7 +7145,7 @@ __metadata:
     "@redwoodjs/structure": 3.2.0
     "@redwoodjs/web": 3.2.0
     "@types/mime-types": 2.1.1
-    "@whatwg-node/fetch": 0.5.3
+    "@whatwg-node/fetch": 0.6.2
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 10.1.0
     cheerio: 1.0.0-rc.12
@@ -7248,7 +7248,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.0
     "@types/yargs": 17.0.19
-    "@whatwg-node/fetch": 0.5.3
+    "@whatwg-node/fetch": 0.6.2
     ci-info: 3.7.1
     core-js: 3.27.1
     envinfo: 7.8.1
@@ -10552,22 +10552,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.5.3":
-  version: 0.5.3
-  resolution: "@whatwg-node/fetch@npm:0.5.3"
-  dependencies:
-    "@peculiar/webcrypto": ^1.4.0
-    abort-controller: ^3.0.0
-    busboy: ^1.6.0
-    form-data-encoder: ^1.7.1
-    formdata-node: ^4.3.1
-    node-fetch: ^2.6.7
-    undici: ^5.12.0
-    web-streams-polyfill: ^3.2.0
-  checksum: 2893c35e4a8fec2c38272f98b30815fb04fc7fd7012a6675b565b11bc5a0292783c7924d6ff84ced451662e9dc575f30720d6dd2e1a75b3b673b72b822800ffc
-  languageName: node
-  linkType: hard
-
 "@whatwg-node/fetch@npm:0.5.4, @whatwg-node/fetch@npm:^0.5.0":
   version: 0.5.4
   resolution: "@whatwg-node/fetch@npm:0.5.4"
@@ -10598,6 +10582,23 @@ __metadata:
     urlpattern-polyfill: ^6.0.2
     web-streams-polyfill: ^3.2.0
   checksum: 69555f0db4920101b75547a5283ded0e4d7ec905e56ee684faabf4d1bfce6a9713b632e86c39cc2dccfed1b181f3c7d8620925873377f35d6e79a59f7e5a2011
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/fetch@npm:0.6.2":
+  version: 0.6.2
+  resolution: "@whatwg-node/fetch@npm:0.6.2"
+  dependencies:
+    "@peculiar/webcrypto": ^1.4.0
+    abort-controller: ^3.0.0
+    busboy: ^1.6.0
+    form-data-encoder: ^1.7.1
+    formdata-node: ^4.3.1
+    node-fetch: ^2.6.7
+    undici: ^5.12.0
+    urlpattern-polyfill: ^6.0.2
+    web-streams-polyfill: ^3.2.0
+  checksum: 5552f715598d5a098eb086ca44e22813b40494bb4df2c21a08b14f7d0aeeaf85c40436b522556474da05833f4be0d2b859d7cac1edc95573f0850576a9155648
   languageName: node
   linkType: hard
 
