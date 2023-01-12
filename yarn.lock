@@ -2262,7 +2262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.4.0":
+"@eslint/eslintrc@npm:^1.4.1":
   version: 1.4.1
   resolution: "@eslint/eslintrc@npm:1.4.1"
   dependencies:
@@ -7037,7 +7037,7 @@ __metadata:
     "@redwoodjs/internal": 3.2.0
     "@typescript-eslint/eslint-plugin": 5.48.1
     "@typescript-eslint/parser": 5.48.1
-    eslint: 8.30.0
+    eslint: 8.31.0
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -16543,11 +16543,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.30.0":
-  version: 8.30.0
-  resolution: "eslint@npm:8.30.0"
+"eslint@npm:8.31.0":
+  version: 8.31.0
+  resolution: "eslint@npm:8.31.0"
   dependencies:
-    "@eslint/eslintrc": ^1.4.0
+    "@eslint/eslintrc": ^1.4.1
     "@humanwhocodes/config-array": ^0.11.8
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
@@ -16588,7 +16588,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 124e3e96148dfd7838c669222ab29b02265473fd9d800d1ae01f709991bbc680d53e68e986aee257fa0c31d1cdd135c45faf94d2cfeebea5c02fea41e7df1eb0
+  checksum: 55c32aeeb9b5d6d7417a9c5e5789aa5486ffd31cc0cf498ebaa945f2492964ea2372c38eff084eb99948d81d69cc387ca62ddf58e5824fac3c1d0162a53a76f7
   languageName: node
   linkType: hard
 
@@ -27356,7 +27356,7 @@ __metadata:
     core-js: 3.27.1
     cypress: 11.2.0
     cypress-wait-until: 1.7.2
-    eslint: 8.30.0
+    eslint: 8.31.0
     fast-glob: 3.2.12
     fs-extra: 11.1.0
     is-port-reachable: 3.1.0
