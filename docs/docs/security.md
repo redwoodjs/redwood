@@ -23,7 +23,7 @@ RedwoodJS wants you to be able build and deploy secure applications and takes th
 
 ## Authentication
 
-`@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support [the following authentication providers](authentication.md) as well as a self-hosted solution ([dbAuth](https://redwoodjs.com/docs/auth/dbauth)):
+`@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support [the following authentication providers](authentication.md) as well as a self-hosted solution ([dbAuth](auth/dbauth.md)):
 
 * Netlify Identity Widget
 * Auth0
