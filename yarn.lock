@@ -7352,6 +7352,7 @@ __metadata:
     "@vitejs/plugin-react": 3.0.1
     buffer: 6.0.3
     core-js: 3.27.1
+    typescript: 4.7.4
     vite: 4.0.4
     vite-plugin-html: 3.2.0
   bin:
