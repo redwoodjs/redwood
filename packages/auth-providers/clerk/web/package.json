@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@clerk/clerk-react": "3.5.1",
     "@clerk/types": "2.21.0",
     "@testing-library/react-hooks": "8.0.1",

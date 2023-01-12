@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@testing-library/react-hooks": "8.0.1",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.52",

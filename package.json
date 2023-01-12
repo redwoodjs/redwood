@@ -42,7 +42,7 @@
     "@actions/core": "1.10.0",
     "@actions/exec": "1.1.1",
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@babel/generator": "7.20.7",
     "@babel/node": "7.20.7",
     "@babel/plugin-proposal-class-properties": "7.18.6",
