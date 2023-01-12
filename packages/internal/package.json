@@ -32,7 +32,7 @@
     "@babel/plugin-transform-typescript": "7.20.7",
     "@babel/register": "7.18.9",
     "@babel/runtime-corejs3": "7.20.7",
-    "@babel/traverse": "7.20.10",
+    "@babel/traverse": "7.20.12",
     "@graphql-codegen/add": "3.2.3",
     "@graphql-codegen/cli": "2.16.1",
     "@graphql-codegen/core": "2.6.8",
@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@types/babel-plugin-tester": "9.0.5",
     "@types/babel__core": "7.1.20",
     "@types/findup-sync": "4.0.2",

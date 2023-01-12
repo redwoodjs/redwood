@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@types/aws-lambda": "8.10.109",
     "@types/jsonwebtoken": "9.0.0",
     "@types/memjs": "1",

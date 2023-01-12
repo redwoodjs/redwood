@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@envelop/testing": "5.0.4",
     "@envelop/types": "3.0.1",
     "@types/jsonwebtoken": "9.0.0",

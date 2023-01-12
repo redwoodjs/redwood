@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@babel/plugin-transform-typescript": "7.20.7",
     "@babel/runtime-corejs3": "7.20.7",
     "@iarna/toml": "2.2.5",
