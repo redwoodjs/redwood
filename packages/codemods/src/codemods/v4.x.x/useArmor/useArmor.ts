@@ -16,6 +16,7 @@ export default function transform(file: FileInfo, api: API) {
       })
 
       if (depthLimitOptionsProp.length > 0) {
+        console.info(`Updating createGraphQLHandler config in ${file.path} ...`)
         const maxDepthProp = depthLimitOptionsProp.find(j.ObjectProperty, {
           key: {
             name: 'maxDepth',
@@ -32,7 +33,17 @@ export default function transform(file: FileInfo, api: API) {
               `armorConfig: { maxDepth: { n: ${depthLimitOptionValue || 11} } }`
             ),
           ])
+
+          console.info(
+            `useArmor configured to use existing maxDepth of ${
+              depthLimitOptionValue || 11
+            }.`
+          )
         }
+      } else {
+        console.info(
+          `No mods needed to createGraphQLHandler config in ${file.path}. Skipping...`
+        )
       }
     })
 
