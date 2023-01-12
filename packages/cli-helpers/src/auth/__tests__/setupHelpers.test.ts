@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 // mock Telemetry for CLI commands so they don't try to spawn a process
 jest.mock('@redwoodjs/telemetry', () => {
@@ -70,7 +70,6 @@ describe('Auth generator tests', () => {
   it('Successfully executes the handler for Netlify', async () => {
     await standardAuthHandler({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
-      rwVersion: '1.2.3',
       provider: 'supertokens',
       webAuthn: false,
       forceArg: false,
@@ -91,7 +90,6 @@ describe('Auth generator tests', () => {
   it('Successfully executes the handler for Netlify without prompting the user when --force is true', async () => {
     await standardAuthHandler({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
-      rwVersion: '1.2.3',
       provider: 'supertokens',
       webAuthn: false,
       forceArg: true,
@@ -105,7 +103,6 @@ describe('Auth generator tests', () => {
   it('Successfully executes the handler for dbAuth', async () => {
     await standardAuthHandler({
       basedir: path.join(__dirname, 'fixtures/dbAuthSetup'),
-      rwVersion: '1.2.3',
       provider: 'dbAuth',
       webAuthn: false,
       forceArg: false,
