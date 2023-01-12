@@ -83,32 +83,14 @@ rwServeTest(
 )
 
 rwServeTest(
-  'Check that metatags are rendering the correct dynamic data',
+  'Check that <meta> tags are rendering the correct dynamic data',
   async ({ port }: ServeFixture & PlaywrightTestArgs) => {
     const pageWithoutJs = await noJsBrowser.newPage()
 
     await pageWithoutJs.goto(`http://localhost:${port}/blog-post/1`)
 
-    // const meta = await pageWithoutJs.locator('head meta[name=description]')
-
-    // console.log('meta', meta)
-    // console.log('meta content', await meta.getAttribute('content'))
-
-    // const metaContent = await meta.getAttribute('content')
-
-    // expect(metaContent).toEqual('Description 1')
-
-    const metaDescription = await pageWithoutJs.locator(
-      'meta[name="description"]'
-    )
+    const metaDescription = pageWithoutJs.locator('meta[name="description"]')
     await expect(metaDescription).toHaveAttribute('content', 'Description 1')
-
-    // const content = await pageWithoutJs
-    //   .locator('head meta[name=description]')
-    //   .getAttribute('content')
-
-    // console.log('content', content)
-    // expect(content).toEqual('Description 1')
   }
 )
 
