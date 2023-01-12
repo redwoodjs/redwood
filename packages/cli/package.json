@@ -45,7 +45,7 @@
     "@redwoodjs/structure": "3.2.0",
     "@redwoodjs/telemetry": "3.2.0",
     "@types/secure-random-password": "0.2.1",
-    "@vercel/nft": "^0.22.6",
+    "@vercel/nft": "0.22.6",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
     "chalk": "4.1.2",

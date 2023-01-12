@@ -6759,7 +6759,7 @@ __metadata:
     "@redwoodjs/telemetry": 3.2.0
     "@types/crypto-js": 4.1.1
     "@types/secure-random-password": 0.2.1
-    "@vercel/nft": ^0.22.6
+    "@vercel/nft": 0.22.6
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
@@ -10026,7 +10026,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/nft@npm:^0.22.6":
+"@vercel/nft@npm:0.22.6":
   version: 0.22.6
   resolution: "@vercel/nft@npm:0.22.6"
   dependencies:
@@ -10683,16 +10683,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.0.4, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.0":
-  version: 8.8.0
-  resolution: "acorn@npm:8.8.0"
-  bin:
-    acorn: bin/acorn
-  checksum: 5efce4f59554e0ab766f32932cba34b86cc2ecdf24fcd27463beff41d8a1b1b9575c21f92c1b9f7f82b93374a9d5aed33c91f93e2d0cb1bdf3f1e06ec131e816
-  languageName: node
-  linkType: hard
-
-"acorn@npm:^8.6.0":
+"acorn@npm:^8.0.4, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.6.0, acorn@npm:^8.7.1, acorn@npm:^8.8.0":
   version: 8.8.1
   resolution: "acorn@npm:8.8.1"
   bin:
