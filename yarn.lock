@@ -5386,21 +5386,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:15.3.3":
-  version: 15.3.3
-  resolution: "@nrwl/cli@npm:15.3.3"
+"@nrwl/cli@npm:15.4.8":
+  version: 15.4.8
+  resolution: "@nrwl/cli@npm:15.4.8"
   dependencies:
-    nx: 15.3.3
-  checksum: 5d684ce38ed3ed30007bcfbae8d5243491e3f1f0ebbd8838c8a88117713bb8c67745dcb6e32310ab03fe94de530c5e700c90f3ac18dd0737bd79408049cec310
-  languageName: node
-  linkType: hard
-
-"@nrwl/cli@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@nrwl/cli@npm:15.4.5"
-  dependencies:
-    nx: 15.4.5
-  checksum: bdcdb9671afdc3bd24d04adc40962f6cdac076839d14d75cd798ec40a8728bc39fcd16ccbe64ae264b2263b3f91bc6bcd4db42bc0c460d996074b313d0db8f77
+    nx: 15.4.8
+  checksum: 1d4582ab1a11718c362a4052550fdb484cb0c1029d619a717dc7fe5582c29a300e84077e6d3429d726063ed4e1c66e747eb94095840fff69a4b548aeed543e92
   languageName: node
   linkType: hard
 
@@ -5437,25 +5428,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:15.3.3":
-  version: 15.3.3
-  resolution: "@nrwl/tao@npm:15.3.3"
+"@nrwl/tao@npm:15.4.8":
+  version: 15.4.8
+  resolution: "@nrwl/tao@npm:15.4.8"
   dependencies:
-    nx: 15.3.3
+    nx: 15.4.8
   bin:
     tao: index.js
-  checksum: 3dff6a23a3710d03cb1d82a24a35cc2c508193295bd69dc9d3b7baf9dbffcbc4c017f3f9a4c6d0b1e6f04a381b7ba810e5cde2ec0e61b2bfd2106b24f871b157
-  languageName: node
-  linkType: hard
-
-"@nrwl/tao@npm:15.4.5":
-  version: 15.4.5
-  resolution: "@nrwl/tao@npm:15.4.5"
-  dependencies:
-    nx: 15.4.5
-  bin:
-    tao: index.js
-  checksum: 33930a860bbb0a99c2296c0b46a81773750056ab5e6a41e3002f2d5de5ed7f93f0e5a550704949d4549ae16a65b576ca0810c1a5c43d34102960b2d684657458
+  checksum: fa90573717a96e375062527f5932d8b80fe6158d6b940ea11a05444ee6b4b500e5d66fd8a42ffa8ff956893c10b56eafff055e9216d789412a52c4a993eeea5e
   languageName: node
   linkType: hard
 
@@ -13217,7 +13197,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:3.5.3, chokidar@npm:^3.4.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.1, chokidar@npm:^3.5.2, chokidar@npm:^3.5.3":
+"chokidar@npm:3.5.3, chokidar@npm:^3.4.0, chokidar@npm:^3.4.1, chokidar@npm:^3.4.2, chokidar@npm:^3.5.2, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -17777,7 +17757,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:11.1.0":
+"fs-extra@npm:11.1.0, fs-extra@npm:^11.1.0":
   version: 11.1.0
   resolution: "fs-extra@npm:11.1.0"
   dependencies:
@@ -21832,6 +21812,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lines-and-columns@npm:~2.0.3":
+  version: 2.0.3
+  resolution: "lines-and-columns@npm:2.0.3"
+  checksum: 09525c10010a925b7efe858f1dd3184eeac34f0a9bc34993075ec490efad71e948147746b18e9540279cc87cd44085b038f986903db3de65ffe96d38a7b91c4c
+  languageName: node
+  linkType: hard
+
 "listr2@npm:5.0.6":
   version: 5.0.6
   resolution: "listr2@npm:5.0.6"
@@ -23867,19 +23854,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:15.3.3":
-  version: 15.3.3
-  resolution: "nx@npm:15.3.3"
+"nx@npm:15.4.8, nx@npm:>=14.8.6 < 16, nx@npm:>=15.4.2 < 16":
+  version: 15.4.8
+  resolution: "nx@npm:15.4.8"
   dependencies:
-    "@nrwl/cli": 15.3.3
-    "@nrwl/tao": 15.3.3
+    "@nrwl/cli": 15.4.8
+    "@nrwl/tao": 15.4.8
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
     "@zkochan/js-yaml": 0.0.6
     axios: ^1.0.0
     chalk: 4.1.0
-    chokidar: ^3.5.1
     cli-cursor: 3.1.0
     cli-spinners: 2.6.1
     cliui: ^7.0.2
@@ -23888,64 +23874,12 @@ __metadata:
     fast-glob: 3.2.7
     figures: 3.2.0
     flat: ^5.0.2
-    fs-extra: ^10.1.0
+    fs-extra: ^11.1.0
     glob: 7.1.4
     ignore: ^5.0.4
     js-yaml: 4.1.0
     jsonc-parser: 3.2.0
-    minimatch: 3.0.5
-    npm-run-path: ^4.0.1
-    open: ^8.4.0
-    semver: 7.3.4
-    string-width: ^4.2.3
-    strong-log-transformer: ^2.1.0
-    tar-stream: ~2.2.0
-    tmp: ~0.2.1
-    tsconfig-paths: ^3.9.0
-    tslib: ^2.3.0
-    v8-compile-cache: 2.3.0
-    yargs: ^17.6.2
-    yargs-parser: 21.1.1
-  peerDependencies:
-    "@swc-node/register": ^1.4.2
-    "@swc/core": ^1.2.173
-  peerDependenciesMeta:
-    "@swc-node/register":
-      optional: true
-    "@swc/core":
-      optional: true
-  bin:
-    nx: bin/nx.js
-  checksum: 0614cba481c5b0475fdf97c86760128f1e3df12a05e21b0c80b08f20afd9bc6c34443cd5112f75678fe49d086fe84212a4a2118e8b1f5dff4f7761eab2237040
-  languageName: node
-  linkType: hard
-
-"nx@npm:15.4.5, nx@npm:>=14.8.6 < 16, nx@npm:>=15.4.2 < 16":
-  version: 15.4.5
-  resolution: "nx@npm:15.4.5"
-  dependencies:
-    "@nrwl/cli": 15.4.5
-    "@nrwl/tao": 15.4.5
-    "@parcel/watcher": 2.0.4
-    "@yarnpkg/lockfile": ^1.1.0
-    "@yarnpkg/parsers": ^3.0.0-rc.18
-    "@zkochan/js-yaml": 0.0.6
-    axios: ^1.0.0
-    chalk: 4.1.0
-    chokidar: ^3.5.1
-    cli-cursor: 3.1.0
-    cli-spinners: 2.6.1
-    cliui: ^7.0.2
-    dotenv: ~10.0.0
-    enquirer: ~2.3.6
-    fast-glob: 3.2.7
-    figures: 3.2.0
-    flat: ^5.0.2
-    fs-extra: ^10.1.0
-    glob: 7.1.4
-    ignore: ^5.0.4
-    js-yaml: 4.1.0
-    jsonc-parser: 3.2.0
+    lines-and-columns: ~2.0.3
     minimatch: 3.0.5
     npm-run-path: ^4.0.1
     open: ^8.4.0
@@ -23969,7 +23903,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 5f74fba50f3723a54b4e96d559eeeaf9f8c8998c78d742a04c977e027f3fcbf7e2828a024c293fe6ad4127138b955ad86f98b3a45fd1172bb45100cf445b285e
+  checksum: 252ba40a6a1d7e0d420ad2968285885d199d2c3d9fff62903c9c84d8864e0c316529551bb5a27625f726bf5c958c0823ba65fdcf8e639e36fcb776094ae44591
   languageName: node
   linkType: hard
 
@@ -27372,7 +27306,7 @@ __metadata:
     node-notifier: 10.0.1
     nodemon: 2.0.20
     npm-packlist: 5.1.3
-    nx: 15.3.3
+    nx: 15.4.8
     octokit: 2.0.10
     ora: 5.4.1
     prompts: 2.4.2
@@ -29684,7 +29618,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsconfig-paths@npm:^3.14.1, tsconfig-paths@npm:^3.9.0":
+"tsconfig-paths@npm:^3.14.1":
   version: 3.14.1
   resolution: "tsconfig-paths@npm:3.14.1"
   dependencies:
