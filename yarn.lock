@@ -2346,9 +2346,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor-cost-limit@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "@escape.tech/graphql-armor-cost-limit@npm:1.6.1"
+"@escape.tech/graphql-armor-cost-limit@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@escape.tech/graphql-armor-cost-limit@npm:1.7.0"
   dependencies:
     "@envelop/core": ^3.0.0
     "@escape.tech/graphql-armor-types": 0.4.0
@@ -2358,7 +2358,7 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: c26afe9db86be88bb573ec3922294066e413e53b3727f6f789786b01e7561a29f51a90947cae66cc525ea2a7edd55f9c3e9ea36cc0fcea89a96300693a77da91
+  checksum: 0562efea80c42ffb667f0a46d9fb053979eb04801f60903a9541f0a17afc50f0b3b5aa12e5dcee85247b40679481ad068f2116b3c3560e29aa3b48d0e4f13de9
   languageName: node
   linkType: hard
 
@@ -2435,13 +2435,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor@npm:1.6.0":
-  version: 1.6.0
-  resolution: "@escape.tech/graphql-armor@npm:1.6.0"
+"@escape.tech/graphql-armor@npm:1.7.0":
+  version: 1.7.0
+  resolution: "@escape.tech/graphql-armor@npm:1.7.0"
   dependencies:
     "@envelop/core": ^3.0.0
     "@escape.tech/graphql-armor-block-field-suggestions": ^1.4.0
-    "@escape.tech/graphql-armor-cost-limit": ^1.6.1
+    "@escape.tech/graphql-armor-cost-limit": ^1.7.0
     "@escape.tech/graphql-armor-max-aliases": ^1.6.1
     "@escape.tech/graphql-armor-max-depth": ^1.8.1
     "@escape.tech/graphql-armor-max-directives": ^1.6.1
@@ -2459,7 +2459,7 @@ __metadata:
       optional: true
     apollo-server-types:
       optional: true
-  checksum: 9f5eb639faa779143592f562e771f0f103216b39b3629fd224d2e7245ff9e638dd92924a5fa2509cc8609ed597b42cf61e53e9be6cddda9b0c2301048b1ed7c6
+  checksum: 5d30baa7cdec9ecc3221cb65e191132c73aaea5be6eeaa9afda3814de3022bd9a4688c5c793e6d7124d299eea5baa9556e58631a96c1cb3cee972413f786dd50
   languageName: node
   linkType: hard
 
@@ -7307,7 +7307,7 @@ __metadata:
     "@envelop/filter-operation-type": 4.0.4
     "@envelop/testing": 5.0.4
     "@envelop/types": 3.0.1
-    "@escape.tech/graphql-armor": 1.6.0
+    "@escape.tech/graphql-armor": 1.7.0
     "@graphql-tools/merge": 8.3.14
     "@graphql-tools/schema": 8.5.1
     "@graphql-tools/utils": 8.13.1

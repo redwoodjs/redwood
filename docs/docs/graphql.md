@@ -1576,22 +1576,41 @@ depthCostFactor: 1.5, // multiplicative cost of depth
 
 ##### Example
 
-In this small example, we have one object field `me` that contains two, nested scalar fields `id` and `me`.
-
-The cost breakdown for each field is:
+In this small example, we have one object field `me` that contains two, nested scalar fields `id` and `me`. There is an operation `profile` (which is neither a scalar nor object and thus ignored as part of the cost calculation).
 
 ```ts
 {
-  graphql {
-    me { // <- object + (level 1 * factor) = cost = 2 + (0 * 1.5) = 2
-      id // <- scalar + (level 1 * factor) = cost = 1 + (1 * 1.5) = 1.5
-      user  // <- scalar + (level 1 * factor) = cost = 1 + (1 * 1.5) = 1.5
+  profile {
+    me {
+      id
+      user
     }
   }
 }
 ```
+The cost breakdown for cost is:
 
-Therefore the total cost is 2 + 1.5 + 1.5 = 5.
+* two scalars `id` and `user` worth 1 each
+* they are at level 1 depth with a depth factor of 1.5
+* 2 \* ( 1 \* 1.5 ) = 2 \* 1.5 = 3
+* their parent object is `me` worth 2
+
+Therefore the total cost is 2 + 3 = 5.
+
+:::note
+The operation definition `query` of `profile` is ignored in the calculation. This is the case even if you name your query `MY_PROFILE` like:
+
+```
+{
+  profile MY_PROFILE {
+    me {
+      id
+      user
+    }
+  }
+}
+```
+:::
 
 ##### Configuration and Defaults
 

@@ -575,35 +575,97 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
     describe('with a custom max', () => {
       it('enforces a smaller limit', async () => {
         const query = '{ posts { id, title } }'
+
         const armorConfig = {
           costLimit: { maxCost: 1 },
         }
+
+        // we have two scalars id and title worth 1 each
+        // that's 2 at a level 1 with a factor of 1.5
+        // 2 * (1 * 1.5) = 3
+        // it's parent object of posts and worth 2
+        // so 3 + 2 = 5 total cost
+
         const response = await mockGraphQLRequest(query, armorConfig)
         const { data, errors } = JSON.parse(response.body)
 
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toEqual(
-          'Syntax Error: Query Cost limit of 1 exceeded, found 9.5.'
+          'Syntax Error: Query Cost limit of 1 exceeded, found 5.'
         )
       })
     })
 
     describe('with a custom calculation', () => {
-      it('enforces a larger object cost', async () => {
+      it('enforces a larger scalar cost', async () => {
         const query = '{ posts { id, title } }'
+
         const armorConfig = {
-          costLimit: { maxCost: 2000, objectCost: 5000 },
+          costLimit: { maxCost: 10, scalarCost: 7 },
         }
+
+        // we have two scalars id and title worth 7 each
+        // that's 14 at a level 1 with a factor of 1.5
+        // 14 * (1 * 1.5) = 21
+        // it's parent object of posts and worth 2
+        // so 21 + 2 = 23 total cost
+
         const response = await mockGraphQLRequest(query, armorConfig)
         const { data, errors } = JSON.parse(response.body)
 
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toEqual(
-          'Syntax Error: Query Cost limit of 2000 exceeded, found 12504.5.'
+          'Syntax Error: Query Cost limit of 10 exceeded, found 23.'
         )
       })
+
+      it('enforces a larger object cost', async () => {
+        const query = '{ posts { id, title } }'
+
+        const armorConfig = {
+          costLimit: { maxCost: 2000, objectCost: 5000 },
+        }
+
+        // we have two scalars id and title worth 1 each
+        // that's 2 at a level 1 with a factor of 1.5
+        // 2 * (1 * 1.5) = 3
+        // it's parent object of posts and worth 5000
+        // so 3 + 500 = 5003 total cost
+
+        const response = await mockGraphQLRequest(query, armorConfig)
+        const { data, errors } = JSON.parse(response.body)
+
+        expect(response.statusCode).toBe(200)
+        expect(data).toBeUndefined()
+        expect(errors[0].message).toEqual(
+          'Syntax Error: Query Cost limit of 2000 exceeded, found 5003.'
+        )
+      })
+    })
+
+    it('enforces a larger depthCostFactor cost', async () => {
+      const query = '{ posts { id, title } }'
+
+      const armorConfig = {
+        costLimit: { maxCost: 20, depthCostFactor: 11 },
+      }
+
+      // we have two scalars id and title worth 1 each
+      // that's 2 at a level 1 with a factor of 1.5
+      // 2 * (1 * 11) = 22
+      // it's parent object of posts and worth 2
+      // so 22 + 2 = 24 total cost
+
+      const response = await mockGraphQLRequest(query, armorConfig)
+      const { data, errors } = JSON.parse(response.body)
+
+      expect(response.statusCode).toBe(200)
+      expect(data).toBeUndefined()
+      expect(errors[0].message).toEqual(
+        'Syntax Error: Query Cost limit of 20 exceeded, found 24.'
+      )
     })
   })
 })
