@@ -16,6 +16,9 @@ jobs:
     outputs:
       version: ${{ steps.get-version.outputs.value }}
     steps:
+      - name: ⏹️ Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.11.0
+
       - uses: actions/checkout@v3
         # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
         #  This is required because lerna uses tags to determine the version.
