@@ -2262,7 +2262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.4.0":
+"@eslint/eslintrc@npm:^1.4.1":
   version: 1.4.1
   resolution: "@eslint/eslintrc@npm:1.4.1"
   dependencies:
@@ -6960,7 +6960,7 @@ __metadata:
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-inline-react-svg: 2.0.1
-    babel-plugin-module-resolver: 4.1.0
+    babel-plugin-module-resolver: 5.0.0
     babel-timing: 0.9.1
     copy-webpack-plugin: 11.0.0
     core-js: 3.27.1
@@ -7017,7 +7017,7 @@ __metadata:
     "@redwoodjs/internal": 3.2.0
     "@typescript-eslint/eslint-plugin": 5.48.1
     "@typescript-eslint/parser": 5.48.1
-    eslint: 8.30.0
+    eslint: 8.31.0
     eslint-config-prettier: 8.5.0
     eslint-import-resolver-babel-module: 5.3.1
     eslint-plugin-babel: 5.3.1
@@ -7333,6 +7333,7 @@ __metadata:
     "@vitejs/plugin-react": 3.0.1
     buffer: 6.0.3
     core-js: 3.27.1
+    typescript: 4.7.4
     vite: 4.0.4
     vite-plugin-html: 3.2.0
   bin:
@@ -11918,16 +11919,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-module-resolver@npm:4.1.0":
-  version: 4.1.0
-  resolution: "babel-plugin-module-resolver@npm:4.1.0"
+"babel-plugin-module-resolver@npm:5.0.0":
+  version: 5.0.0
+  resolution: "babel-plugin-module-resolver@npm:5.0.0"
   dependencies:
-    find-babel-config: ^1.2.0
-    glob: ^7.1.6
+    find-babel-config: ^2.0.0
+    glob: ^8.0.3
     pkg-up: ^3.1.0
-    reselect: ^4.0.0
-    resolve: ^1.13.1
-  checksum: b1348f310cf714895b1af86c50fb05f6da42d4920d1435dee5eee57cb94c1e594bc8dfa09b92fe747c974f800dfdd9780807ba90e40b71bcea5eb1ca5f3740a4
+    reselect: ^4.1.7
+    resolve: ^1.22.1
+  checksum: bbddb437bf23ab2e12e25c855d71c906cf7a438d0d4821cf0786f23990718f86f76c49f7952ba2370a312c806d223e1efb7ca16698ff49d019396c8d81e4a870
   languageName: node
   linkType: hard
 
@@ -16523,11 +16524,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.30.0":
-  version: 8.30.0
-  resolution: "eslint@npm:8.30.0"
+"eslint@npm:8.31.0":
+  version: 8.31.0
+  resolution: "eslint@npm:8.31.0"
   dependencies:
-    "@eslint/eslintrc": ^1.4.0
+    "@eslint/eslintrc": ^1.4.1
     "@humanwhocodes/config-array": ^0.11.8
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
@@ -16568,7 +16569,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 124e3e96148dfd7838c669222ab29b02265473fd9d800d1ae01f709991bbc680d53e68e986aee257fa0c31d1cdd135c45faf94d2cfeebea5c02fea41e7df1eb0
+  checksum: 55c32aeeb9b5d6d7417a9c5e5789aa5486ffd31cc0cf498ebaa945f2492964ea2372c38eff084eb99948d81d69cc387ca62ddf58e5824fac3c1d0162a53a76f7
   languageName: node
   linkType: hard
 
@@ -17352,6 +17353,16 @@ __metadata:
     json5: ^0.5.1
     path-exists: ^3.0.0
   checksum: 6ea93bde7fd062fac87f27789aa77142de87dd023a5a60ceb7c91f65c7fab967a57c0a410ef8c51b8e2a924194867ab2e901ff35a7da7b9db5a94150652385a3
+  languageName: node
+  linkType: hard
+
+"find-babel-config@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "find-babel-config@npm:2.0.0"
+  dependencies:
+    json5: ^2.1.1
+    path-exists: ^4.0.0
+  checksum: 4d841cf74f0e17da20c4d52d520831e1ccf42eaa99570c07ea5948adabc14a0d1388dea690efdf66c007de8c4c61629458c11822c88ccc84d855d77668fa5247
   languageName: node
   linkType: hard
 
@@ -18268,7 +18279,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^8.0.1":
+"glob@npm:^8.0.1, glob@npm:^8.0.3":
   version: 8.0.3
   resolution: "glob@npm:8.0.3"
   dependencies:
@@ -21336,7 +21347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.1.2, json5@npm:^2.1.3, json5@npm:^2.2.1, json5@npm:^2.2.2":
+"json5@npm:^2.1.1, json5@npm:^2.1.2, json5@npm:^2.1.3, json5@npm:^2.2.1, json5@npm:^2.2.2":
   version: 2.2.3
   resolution: "json5@npm:2.2.3"
   bin:
@@ -27005,7 +27016,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reselect@npm:^4.0.0":
+"reselect@npm:^4.1.7":
   version: 4.1.7
   resolution: "reselect@npm:4.1.7"
   checksum: d94b6fec351b5f612d2424d8e7aaee9b62cb3a83a345c4e79e09aa35fb9874923a7e82ad9a2cb25491c1522ed07a1c32df9e585ae67c48630613133c7aa14ec7
@@ -27059,7 +27070,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:1.22.1, resolve@npm:^1.10.0, resolve@npm:^1.11.1, resolve@npm:^1.13.1, resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.0, resolve@npm:^1.22.1, resolve@npm:^1.3.2":
+"resolve@npm:1.22.1, resolve@npm:^1.10.0, resolve@npm:^1.11.1, resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.0, resolve@npm:^1.22.1, resolve@npm:^1.3.2":
   version: 1.22.1
   resolution: "resolve@npm:1.22.1"
   dependencies:
@@ -27085,7 +27096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.11.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.13.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#~builtin<compat/resolve>":
+"resolve@patch:resolve@1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.11.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#~builtin<compat/resolve>":
   version: 1.22.1
   resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
@@ -27290,7 +27301,7 @@ __metadata:
     core-js: 3.27.1
     cypress: 11.2.0
     cypress-wait-until: 1.7.2
-    eslint: 8.30.0
+    eslint: 8.31.0
     fast-glob: 3.2.12
     fs-extra: 11.1.0
     is-port-reachable: 3.1.0
