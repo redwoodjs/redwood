@@ -1551,7 +1551,48 @@ The cost computation is quite simple (and naive) at the moment but there are pla
 
 Defaults to a overall maxCost limit of 5000.
 
+##### Overview
+
+Cost is a factor of the kind of field and depth. Total Cost is a cumulative sum of each field based on its type and its depth in the query.
+
+Scalar fields -- those that return values like strings or numbers -- are worth one value; whereas are objects are worth another.
+
+How deep they are nested in the query is a multiplier factor such that:
+
+```
+COST = FIELD_KIND_COST * (DEPTH * DEPTH_COST_FACTOR)
+TOTAL_COST = SUM(COST)
+```
+
+If the `TOTAL_COST` exceeds the `maxCost`, an error stops GraphQL execution and rejects the request.
+
+You have control over the field kind and depth costs settings, but the defaults are:
+
+```
+objectCost: 2, // cost of retrieving an object
+scalarCost: 1, // cost of retrieving a scalar
+depthCostFactor: 1.5, // multiplicative cost of depth
+```
+
 ##### Example
+
+In this small example, we have one object field `me` that contains two, nested scalar fields `id` and `me`.
+
+The cost breakdown for each field is:
+
+```ts
+{
+  graphql {
+    me { // <- object + (level 1 * factor) = cost = 2 + (0 * 1.5) = 2
+      id // <- scalar + (level 1 * factor) = cost = 1 + (1 * 1.5) = 1.5
+      user  // <- scalar + (level 1 * factor) = cost = 1 + (1 * 1.5) = 1.5
+    }
+  }
+}
+```
+
+Therefore the total cost is 2 + 1.5 + 1.5 = 5.
+
 ##### Configuration and Defaults
 
 Defaults to a overall maxCost limit of 5000.
