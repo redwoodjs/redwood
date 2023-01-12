@@ -6849,7 +6849,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     "@types/babel__core": 7.1.20
     "@types/findup-sync": 4.0.2
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.2.5
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
@@ -7065,7 +7065,7 @@ __metadata:
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.1.20
     "@types/findup-sync": 4.0.2
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/rimraf": 3.0.2
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-polyfill-corejs3: 0.6.0
@@ -7168,7 +7168,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     "@prisma/internals": 4.8.1
     "@redwoodjs/internal": 3.2.0
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.191
     "@types/lru-cache": 5.1.1
@@ -9159,7 +9159,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:9.0.13, @types/fs-extra@npm:^9.0.13":
+"@types/fs-extra@npm:11.0.1":
+  version: 11.0.1
+  resolution: "@types/fs-extra@npm:11.0.1"
+  dependencies:
+    "@types/jsonfile": "*"
+    "@types/node": "*"
+  checksum: a65f1fae47849fe1a17441dcabc9400390303405972ff3cbb3578746cea8916b23d5e7652bf57a87767f75a9b2f37caac499b78b5230ae08fef0ba58b34c3a85
+  languageName: node
+  linkType: hard
+
+"@types/fs-extra@npm:^9.0.13":
   version: 9.0.13
   resolution: "@types/fs-extra@npm:9.0.13"
   dependencies:
@@ -9324,6 +9334,15 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 6bf5337bc447b706bb5b4431d37686aa2ea6d07cfd6f79cc31de80170d6ff9b1c7384a9c0ccbc45b3f512bae9e9f75c2e12109806a15331dc94e8a8db6dbb4ac
+  languageName: node
+  linkType: hard
+
+"@types/jsonfile@npm:*":
+  version: 6.1.1
+  resolution: "@types/jsonfile@npm:6.1.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: 96dfca37e856978eaf256bf5200c46a01a27a0455b9323a72598e8d59ddd81095934bf15e9c84d6a30125cf63e1464aef6d70ab4a35f34ee2cdfa1fe0db0720b
   languageName: node
   linkType: hard
 
@@ -26926,7 +26945,7 @@ __metadata:
     "@testing-library/user-event": 14.4.3
     "@tsd/typescript": 4.9.4
     "@types/babel__generator": 7.6.4
-    "@types/fs-extra": 9.0.13
+    "@types/fs-extra": 11.0.1
     "@types/jest": 29.2.5
     "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
