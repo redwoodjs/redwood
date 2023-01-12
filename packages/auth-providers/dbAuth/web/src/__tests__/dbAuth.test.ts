@@ -4,8 +4,8 @@ import { CurrentUser } from '@redwoodjs/auth'
 
 import { createDbAuthClient, DbAuthClientArgs, createAuth } from '../dbAuth'
 
-process.env.RWJS_API_URL = '/.redwood/functions'
-process.env.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
+globalThis.RWJS_API_URL = '/.redwood/functions'
+globalThis.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'
 
 jest.mock('@whatwg-node/fetch', () => {
   return
@@ -70,7 +70,7 @@ fetchMock.mockImplementation(async (url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
+  globalThis.fetch = fetchMock
 })
 
 beforeEach(() => {
@@ -112,8 +112,8 @@ describe('dbAuth', () => {
       await authRef.current.getToken()
     })
 
-    expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth?method=getToken`,
+    expect(globalThis.fetch).toBeCalledWith(
+      `${globalThis.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'same-origin',
       }
@@ -126,7 +126,7 @@ describe('dbAuth', () => {
     await act(async () => await auth.forgotPassword('username'))
 
     expect(fetchMock).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -143,7 +143,7 @@ describe('dbAuth', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1)
 
     expect(fetchMock).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth?method=getToken`,
+      `${globalThis.RWJS_API_URL}/auth?method=getToken`,
       {
         credentials: 'include',
       }
@@ -158,15 +158,15 @@ describe('dbAuth', () => {
         await auth.logIn({ username: 'username', password: 'password' })
     )
 
-    expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth`,
+    expect(globalThis.fetch).toBeCalledWith(
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
     )
 
-    expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth`,
+    expect(globalThis.fetch).toBeCalledWith(
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -179,8 +179,8 @@ describe('dbAuth', () => {
       await auth.logOut()
     })
 
-    expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth`,
+    expect(globalThis.fetch).toBeCalledWith(
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -191,8 +191,8 @@ describe('dbAuth', () => {
     const auth = getDbAuth().current
     await act(async () => await auth.resetPassword({}))
 
-    expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth`,
+    expect(globalThis.fetch).toBeCalledWith(
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -203,8 +203,8 @@ describe('dbAuth', () => {
     const auth = getDbAuth().current
     await act(async () => await auth.signUp({}))
 
-    expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth`,
+    expect(globalThis.fetch).toBeCalledWith(
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })
@@ -215,8 +215,8 @@ describe('dbAuth', () => {
     const auth = getDbAuth().current
     await act(async () => await auth.validateResetToken('token'))
 
-    expect(global.fetch).toBeCalledWith(
-      `${process.env.RWJS_API_URL}/auth`,
+    expect(globalThis.fetch).toBeCalledWith(
+      `${globalThis.RWJS_API_URL}/auth`,
       expect.objectContaining({
         credentials: 'include',
       })

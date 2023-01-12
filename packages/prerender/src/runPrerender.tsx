@@ -10,11 +10,7 @@ import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/a
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { LocationProvider } from '@redwoodjs/router'
-import {
-  CellCacheContextProvider,
-  getOperationName,
-  QueryInfo,
-} from '@redwoodjs/web'
+import type { QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import {
@@ -31,6 +27,12 @@ async function recursivelyRender(
   gqlHandler: any,
   queryCache: Record<string, QueryInfo>
 ): Promise<string> {
+  // Load this async, to prevent rwjs/web being loaded before shims
+  const {
+    CellCacheContextProvider,
+    getOperationName,
+  } = require('@redwoodjs/web')
+
   let shouldShowGraphqlHandlerNotFoundWarn = false
   // Execute all gql queries we haven't already fetched
   await Promise.all(
@@ -138,6 +140,7 @@ export const runPrerender = async ({
   queryCache,
   renderPath,
 }: PrerenderParams): Promise<string | void> => {
+  registerShims(renderPath)
   // registerApiSideBabelHook already includes the default api side babel
   // config. So what we define here is additions to the default config
   registerApiSideBabelHook({
@@ -187,8 +190,6 @@ export const runPrerender = async ({
     ],
   })
 
-  registerShims(renderPath)
-
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)
 
@@ -199,7 +200,7 @@ export const runPrerender = async ({
     queryCache
   )
 
-  const { helmet } = global.__REDWOOD__HELMET_CONTEXT
+  const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
 
   const indexHtmlTree = cheerio.load(indexContent)
 

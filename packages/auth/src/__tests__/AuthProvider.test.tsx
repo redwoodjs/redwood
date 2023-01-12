@@ -32,7 +32,7 @@ let CURRENT_USER_DATA: {
   email: 'nospam@example.net',
 }
 
-global.RWJS_API_GRAPHQL_URL = '/.netlify/functions/graphql'
+globalThis.RWJS_API_GRAPHQL_URL = '/.netlify/functions/graphql'
 
 const server = setupServer(
   graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {

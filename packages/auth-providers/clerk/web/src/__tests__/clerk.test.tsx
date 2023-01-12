@@ -91,8 +91,8 @@ fetchMock.mockImplementation(async (_url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
-  global.Clerk = clerkMockClient
+  globalThis.fetch = fetchMock
+  globalThis.Clerk = clerkMockClient
 })
 
 beforeEach(() => {
