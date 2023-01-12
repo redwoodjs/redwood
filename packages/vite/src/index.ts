@@ -1,11 +1,10 @@
-import { readFile as fsReadFile, existsSync } from 'fs'
+import { existsSync, readFile as fsReadFile } from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
-import { transform } from 'esbuild'
-import { normalizePath, UserConfig } from 'vite'
+import { normalizePath, transformWithEsbuild, UserConfig } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -152,8 +151,13 @@ export default function redwoodPluginVite() {
           return
         }
 
-        const file = await readFile(id, 'utf-8')
-        return transform(file, { loader: 'jsx' })
+        const code = await readFile(id, 'utf-8')
+
+        // Use the exposed transform from vite, instead of directly
+        // transforming with esbuild
+        return transformWithEsbuild(code, id, {
+          loader: 'jsx',
+        })
       },
     },
     react({
