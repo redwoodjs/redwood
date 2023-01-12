@@ -57,7 +57,7 @@
     "prettier": "2.8.2",
     "rimraf": "3.0.2",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.16.9",
+    "systeminformation": "5.17.3",
     "terminal-link": "2.1.1",
     "typescript": "4.7.4"
   },
@@ -67,7 +67,7 @@
     "@types/babel-plugin-tester": "9.0.5",
     "@types/babel__core": "7.1.20",
     "@types/findup-sync": "4.0.2",
-    "@types/fs-extra": "9.0.13",
+    "@types/fs-extra": "11.0.1",
     "@types/rimraf": "3.0.2",
     "babel-plugin-tester": "10.1.0",
     "graphql-tag": "2.12.6",
