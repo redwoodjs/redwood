@@ -131,18 +131,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:1.22.5":
-  version: 1.22.5
-  resolution: "@auth0/auth0-spa-js@npm:1.22.5"
+"@auth0/auth0-spa-js@npm:1.22.6":
+  version: 1.22.6
+  resolution: "@auth0/auth0-spa-js@npm:1.22.6"
   dependencies:
     abortcontroller-polyfill: ^1.7.3
     browser-tabs-lock: ^1.2.15
-    core-js: ^3.25.1
+    core-js: ^3.25.4
     es-cookie: ~1.3.2
     fast-text-encoding: ^1.0.6
     promise-polyfill: ^8.2.3
     unfetch: ^4.2.0
-  checksum: 4456ae0704a9f0dd1206a22902d8a3985f508881d7c33109660531422908b9e58c86250d8d2e899f6b0cdb99a0edd6fd1216db2d5d278d484a1aeadcfc7f9b2c
+  checksum: 7f00391a30d1753ca4dee8c88501cd2d26cb064495e9b346b1639608c5135021ffd09f867fb113da561e1e4b7edb767ea031ca376eed467a0f089e76d2a7769c
   languageName: node
   linkType: hard
 
@@ -6334,7 +6334,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-auth0-web@workspace:packages/auth-providers/auth0/web"
   dependencies:
-    "@auth0/auth0-spa-js": 1.22.5
+    "@auth0/auth0-spa-js": 1.22.6
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
@@ -6346,7 +6346,7 @@ __metadata:
     react: 17.0.2
     typescript: 4.7.4
   peerDependencies:
-    "@auth0/auth0-spa-js": 1.22.5
+    "@auth0/auth0-spa-js": 1.22.6
   languageName: unknown
   linkType: soft
 
@@ -13983,7 +13983,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.27.1, core-js@npm:^3.0.4, core-js@npm:^3.25.1, core-js@npm:^3.26.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.27.1, core-js@npm:^3.0.4, core-js@npm:^3.25.4, core-js@npm:^3.26.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.27.1
   resolution: "core-js@npm:3.27.1"
   checksum: 39bb23f4ab38df2b51f0967b5e398759565e38a92540019a9c2ee7e747b4c833296ef139c8be9db3e16024c450eff1d09be43c3c5c26e0547a004866fe86dadb
