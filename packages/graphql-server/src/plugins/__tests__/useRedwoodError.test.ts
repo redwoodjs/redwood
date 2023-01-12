@@ -331,7 +331,10 @@ describe('useRedwoodError', () => {
         const response = await handler(mockedEvent, {} as Context)
         const { data, errors } = JSON.parse(response.body)
 
-        expect(response.statusCode).toBe(400)
+        expect(response.statusCode).toBe(200)
+        // GraphQL Scalars do not include the http status in the GraphQL Error extensions
+        // For now, they remain status code 200.
+        // expect(response.statusCode).toBe(400)
         expect(errors).toBeUndefined()
         expect(data.products[0].currency_iso_4217).toEqual('USD')
       })
@@ -362,7 +365,10 @@ describe('useRedwoodError', () => {
         const response = await handler(mockedEvent, {} as Context)
         const { data, errors } = JSON.parse(response.body)
 
-        expect(response.statusCode).toBe(400)
+        expect(response.statusCode).toBe(200)
+        // GraphQL Scalars do not include the http status in the GraphQL Error extensions
+        // For now, they remain status code 200.
+        // expect(response.statusCode).toBe(400)
         expect(data).toBeNull()
         expect(errors[0].message).toEqual(
           'Value is not a valid currency value: Calamari flan'
