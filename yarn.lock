@@ -4860,6 +4860,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lerna/publish@patch:@lerna/publish@npm%3A6.4.1#./.yarn/patches/@lerna-publish-npm-6.4.1-27e0fee593.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 6.4.1
+  resolution: "@lerna/publish@patch:@lerna/publish@npm%3A6.4.1#./.yarn/patches/@lerna-publish-npm-6.4.1-27e0fee593.patch::version=6.4.1&hash=24f641&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@lerna/check-working-tree": 6.4.1
+    "@lerna/child-process": 6.4.1
+    "@lerna/collect-updates": 6.4.1
+    "@lerna/command": 6.4.1
+    "@lerna/describe-ref": 6.4.1
+    "@lerna/log-packed": 6.4.1
+    "@lerna/npm-conf": 6.4.1
+    "@lerna/npm-dist-tag": 6.4.1
+    "@lerna/npm-publish": 6.4.1
+    "@lerna/otplease": 6.4.1
+    "@lerna/output": 6.4.1
+    "@lerna/pack-directory": 6.4.1
+    "@lerna/prerelease-id-from-version": 6.4.1
+    "@lerna/prompt": 6.4.1
+    "@lerna/pulse-till-done": 6.4.1
+    "@lerna/run-lifecycle": 6.4.1
+    "@lerna/run-topologically": 6.4.1
+    "@lerna/validation-error": 6.4.1
+    "@lerna/version": 6.4.1
+    fs-extra: ^9.1.0
+    libnpmaccess: ^6.0.3
+    npm-package-arg: 8.1.1
+    npm-registry-fetch: ^13.3.0
+    npmlog: ^6.0.2
+    p-map: ^4.0.0
+    p-pipe: ^3.1.0
+    pacote: ^13.6.1
+    semver: ^7.3.4
+  checksum: 76cfe9636507afa87da3fb4c4963669a1a967f7d3229297b28ee3c1273d469a2355f9dbea850600e9f8e2c68f7dc912281a21ce0a55be6fe34ba355800f461e5
+  languageName: node
+  linkType: hard
+
 "@lerna/pulse-till-done@npm:6.4.1":
   version: 6.4.1
   resolution: "@lerna/pulse-till-done@npm:6.4.1"
