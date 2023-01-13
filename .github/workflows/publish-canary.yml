@@ -61,7 +61,7 @@ jobs:
   message-slack:
     name: 💬 Message Slack
     needs: publish-canary
-    if: always()
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
 
     steps:
