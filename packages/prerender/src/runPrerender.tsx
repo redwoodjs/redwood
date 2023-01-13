@@ -3,7 +3,7 @@ import path from 'path'
 
 import React from 'react'
 
-import cheerio from 'cheerio'
+import { load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
@@ -202,7 +202,7 @@ export const runPrerender = async ({
 
   const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
 
-  const indexHtmlTree = cheerio.load(indexContent)
+  const indexHtmlTree = loadHtml(indexContent)
 
   if (helmet) {
     const helmetElements = `
@@ -215,9 +215,17 @@ export const runPrerender = async ({
     // Add all head elements
     indexHtmlTree('head').prepend(helmetElements)
 
-    // Only change the title, if its not empty
-    if (cheerio.load(helmet?.title.toString())('title').text() !== '') {
-      indexHtmlTree('title').replaceWith(helmet?.title.toString())
+    const titleHtmlTag = helmet.title.toString() // toString from helmet returns HTML, not the same as cherrio!
+
+    // 1. Check if title is set in the helmet context first...
+    if (loadHtml(titleHtmlTag)('title').text() !== '') {
+      // 2. Check if html already had a title
+      if (indexHtmlTree('title').text().length === 0) {
+        // If no title defined in the index.html
+        indexHtmlTree('head').prepend(titleHtmlTag)
+      } else {
+        indexHtmlTree('title').replaceWith(titleHtmlTag)
+      }
     }
   }
 
