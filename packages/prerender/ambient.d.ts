@@ -2,6 +2,21 @@
 import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {
+  var RWJS_ENV: {
+    RWJS_API_GRAPHQL_URL: string
+    /** URL or absolute path to serverless functions */
+    RWJS_API_URL: string
+
+    __REDWOOD__APP_TITLE: string
+  }
+
+  var RWJS_WEB_BUNDLER: 'webpack' | 'vite'
+
+  var RWJS_DEBUG_ENV: {
+    RWJS_SRC_ROOT: string
+    REDWOOD_ENV_EDITOR?: string
+  }
+
   var __REDWOOD__PRERENDERING: boolean
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
   var __REDWOOD__APP_TITLE: string

@@ -23,13 +23,13 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.7",
-    "core-js": "3.26.1",
+    "core-js": "3.27.1",
     "jsonwebtoken": "9.0.0",
     "jwks-rsa": "2.0.5"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@redwoodjs/api": "3.2.0",
     "@types/jsonwebtoken": "9.0.0",
     "jest": "29.3.1",
