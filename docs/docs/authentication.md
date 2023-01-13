@@ -4,98 +4,123 @@ description: Set up an authentication provider
 
 # Authentication
 
-`@redwoodjs/auth` contains both a built-in database-backed authentication system (dbAuth), as well as lightweight wrappers around popular SPA authentication libraries.
+Redwood has integrated auth end to end, from the web side to the api side.
+On the web side, the router can protect pages via the `Private` component (or the `Set` component via the `private` prop), and even restrict access at the role-level.
+And if you'd prefer to work with the primitives, the `useAuth` hook exposes all the pieces to build the experience you want.
 
-- dbAuth _([Redwood Docs](https://redwoodjs.com/docs/auth/dbauth))_
+Likewise, the api side is locked down by default: all SDLs are generated with the `@requireAuth` directive, ensuring that making things publicly available is something that you opt in to rather than out of.
+You can also require auth anywhere in your Services, and even in your serverful or serverless functions.
 
-We currently support the following third-party authentication providers:
+Last but not least, Redwood provides it's own self-hosted, full-featured auth provider: [dbAuth](./auth/dbauth.md).
 
-- Auth0 _([Repo on GitHub](https://github.com/auth0/auth0-spa-js))_
-- Azure Active Directory _([Repo on GitHub](https://github.com/AzureAD/microsoft-authentication-library-for-js))_
-- Clerk _([Website](https://clerk.dev))_
-- Firebase _([Documentation Website](https://firebase.google.com/docs/auth))_
-- Magic Links - Magic.js _([Repo on GitHub](https://github.com/MagicHQ/magic-js))_
-- Netlify Identity _([Repo on GitHub](https://github.com/netlify/netlify-identity-widget))_
-- Netlify GoTrue-JS _([Repo on GitHub](https://github.com/netlify/gotrue-js))_
-- Nhost _([Documentation Website](https://docs.nhost.io/platform/authentication))_
-- Okta _([Repo on GitHub](https://github.com/okta/okta-auth-js))_
-- Supabase _([Documentation Website](https://supabase.io/docs/guides/auth))_
-- WalletConnect _([Repo on GitHub](https://github.com/oneclickdapp/ethereum-auth))_
+In this doc, we'll cover auth at a high level.
+All auth providers share the same interface so the information here will be useful no matter which auth provider you use.
 
-You can also implement your own custom auth client. Check out the [Custom docs](auth/custom) for more info.
+## Official integrations
 
-:::info Auth Playground
+Redwood has a simple API to integrate any auth provider you can think of. But to make it easier for you to get started, Redwood provides official integrations for some of the most popular auth providers out of the box:
 
-Check out the [Auth Playground](https://redwood-playground-auth.netlify.app/) for examples of the auth experience with each provider or check out [the source code](https://github.com/redwoodjs/playground-auth).
+- [Auth0](./auth/auth0.md)
+- [Azure Active Directory](./auth/azure.md)
+- [Clerk](./auth/clerk.md)
+- [Firebase](./auth/firebase.md)
+- [Netlify](./auth/netlify.md)
+- [Supabase](./auth/supabase.md)
+- SuperTokens
+
+:::tip how to tell if an integration is official
+
+To tell if an integration is official, look for the `@redwoodjs` scope.
+For example, Redwood's Auth0 integration comprises two npm packages: `@redwoodjs/auth-auth0-web` and `@redwoodjs/auth-auth0-api`.
 
 :::
 
-## Auth Installation and Setup
+Other than bearing the `@redwoodjs` scope, the reason these providers are official is that we're committed to keeping them up to date.
+You can set up any of them via the corresponding auth setup command:
 
-You will need to instantiate your authentication client and pass it to the `<AuthProvider>`. See individual auth docs in the menu for your specific provider.
-
-## Authentication on the Web Side
-
-Once your auth provider is set up you'll get access to the various authentication variables and functions by destructuring them from the `useAuth` hook:
-
-```jsx
-import { useAuth } from '@redwoodjs/auth'
-
-export const MyComponent = () => {
-  const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
-
-  return (
-    <ul>
-      <li>The current user is: {currentUser}</li>
-      <li>Is the user logged in? {isAuthenticated}</li>
-      <li>Click to <button type="button" onClick={logIn}>login</button></li>
-      <li>Click to <button type="button" onClick={logOut}>logout</button></li>
-    </ul>
-  )
-}
+```
+yarn rw setup auth auth0
 ```
 
-The following variables and functions are available from the `useAuth` hook:
+## The API at a high-level
 
-- async `logIn(options?)`: Differs based on the client library, with Netlify Identity a pop-up is shown, and with Auth0 the user is redirected. Options are passed to the client.
-- async `logOut(options?)`: Log the current user out. Options are passed to the client.
-- async `signUp(options?)`: If the provider has a sign up flow we'll show that, otherwise we'll fall back to the logIn flow.
-- `currentUser`: An object containing information about the current user as set on the `api` side, or `null` if the user is not authenticated.
-- `userMetadata`: An object containing the user's metadata (or profile information) fetched directly from an instance of the auth provider client, or `null` if the user is not authenticated.
-- async `reauthenticate()`: Refetch the authentication data and populate the state.
-- async `getToken()`: Returns a JWT.
-- `client`: Access the instance of the client which you passed into `AuthProvider`.
-- `isAuthenticated`: Determines if the current user has authenticated.
-- `hasRole(['admin'])`: Determines if the current user is assigned a role like `"admin"` or assigned to any of the roles in a list such as `['editor', 'author']`.
-- `loading`: The auth state is restored asynchronously when the user visits the site for the first time, use this to determine if you have the correct state.
+We mentioned that Redwood has a simple API you can use to integrate any provider you want.
+Whether you roll your own auth provider or choose one of Redwood's integrations, it's good to be familiar with it, so let's dive into it here.
 
-### Role Protection
+On the web side, there are two components that can be auth enabled: the `RedwoodApolloProvider` in `web/src/App.tsx` and the `Router` in `web/src/Routes.tsx`.
+Both take a `useAuth` prop. If provided, they'll use this hook to get information about the app's auth state. The `RedwoodApolloProvider` uses it to get a token to include in every GraphQL request, and the `Router` uses it to determine if a user has access to private or role-restricted routes.
 
-The `hasRole()` function can be used to implement basic role-based authorization control (RBAC). This assumes that your `getCurrentUser()` function adds a `roles` property to the returned object.
+When you set up an auth provider, the setup command makes a new file, `web/src/auth.ts`. This file's job is to create the `AuthProvider` component and the `useAuth` hook by integrating with the auth provider of your choice. Whenever you need access to the auth context, you'll import the `useAuth` hook from this file. The `RedwoodApolloProvider` and the `Router` are no exceptions:
 
-```jsx
-export const MyComponent = () => {
-  const { isAuthenticated, hasRole } = useAuth()
+![web-side-auth](https://user-images.githubusercontent.com/32992335/208549951-469617d7-c798-4d9a-8a29-46efe23cca6a.png)
 
-  return (
-    <>
-      {hasRole('admin') && (
-        <Link to={routes.admin()}>Admin</Link>
-      )}
+Once auth is setup on the web side, every GraphQL request includes a JWT (JSON Web Token).
+The api side needs a way of verifying and decoding this token if it's to do anything with it.
+There are two steps to this process:
 
-      {hasRole(['author', 'editor']) && (
-        <Link to={routes.posts()}>Admin</Link>
-      )}
-    </>
-  )
-}
+- decoding the token
+- mapping it into a user object
+
+The `createGraphQLHandler` function in `api/src/functions/graphql.ts` takes two props, `authDecoder` and `getCurrentUser`, for each of these steps (respectively):
+
+```ts title="api/src/functions/graphql.ts"
+// highlight-next-line
+import { authDecoder } from '@redwoodjs/auth-auth0-api'
+import { createGraphQLHandler } from '@redwoodjs/graphql-server'
+
+import directives from 'src/directives/**/*.{js,ts}'
+import sdls from 'src/graphql/**/*.sdl.{js,ts}'
+import services from 'src/services/**/*.{js,ts}'
+
+// highlight-next-line
+import { getCurrentUser } from 'src/lib/auth'
+import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
+
+export const handler = createGraphQLHandler({
+  // highlight-start
+  authDecoder,
+  getCurrentUser,
+  // highlight-end
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
 ```
 
-### Route Protection
+### Destructuring the `useAuth` hook
 
-Routes can require authentication by wrapping them in a `<Private>` component. An unauthenticated user will be redirected to the page specified in `unauthenticated`.
+That was auth at a high level.
+Now for a few more details on something you'll probably use a lot, the `useAuth` hook.
 
-```jsx
+The `useAuth` hook provides a streamlined interface to your auth provider's client SDK.
+Much of what the functions it returns do is self explanatory, but the options they take depend on the auth provider:
+
+| Name              | Description                                                                                                                                                                  |
+| :---------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `client`          | The client instance used in creating the auth provider. Most of the functions here use this under the hood                                                                   |
+| `currentUser`     | An object containing information about the current user as set on the `api` side, or if the user isn't authenticated, `null`                                                 |
+| `getToken`        | Returns a JWT                                                                                                                                                                |
+| `hasRole`         | Determines if the current user is assigned a role like `"admin"` or assigned to any of the roles in an array                                                                 |
+| `isAuthenticated` | A boolean indicating whether or not the user is authenticated                                                                                                                |
+| `loading`         | If the auth context is loading                                                                                                                                               |
+| `logIn`           | Logs a user in                                                                                                                                                               |
+| `logOut`          | Logs a user out                                                                                                                                                              |
+| `reauthenticate`  | Refetch auth data and context. (This one is called internally and shouldn't be something you have to reach for often)                                                        |
+| `signUp`          | Signs a user up                                                                                                                                                              |
+| `userMetadata`    | An object containing the user's metadata (or profile information), fetched directly from an instance of the auth provider client. Or if the user isn't authenticated, `null` |
+
+### Protecting routes
+
+You can require that a user be authenticated to navigate to a route by wrapping it in the `Private` component or the `Set` component with the `private` prop set to `true`.
+An unauthenticated user will be redirected to the route specified in either component's `unauthenticated` prop:
+
+```tsx title="web/src/Routes.tsx"
 import { Router, Route, Private } from '@redwoodjs/router'
 
 const Routes = () => {
@@ -104,7 +129,10 @@ const Routes = () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
 
+      // highlight-start
       <Private unauthenticated="login">
+      {/* Or... <Set private unauthenticated="login"> */}
+      // highlight-end
         <Route path="/admin" page={AdminPage} name="admin" />
         <Route path="/secret-page" page={SecretPage} name="secret" />
       </Private>
@@ -113,10 +141,10 @@ const Routes = () => {
 }
 ```
 
-Routes and Sets can also be restricted by role by specifying `hasRole="role"` or `hasRole={['role', 'another_role']})` in the `<Private>` component. A user not assigned the role will be redirected to the page specified in `unauthenticated`.
+You can also restrict access by role by passing a role or an array of roles to the `Private` or `Set` component's `hasRole` prop:
 
-```jsx
-import { Router, Route, Private } from '@redwoodjs/router'
+```tsx title="web/src/Routes.tsx"
+import { Router, Route, Private, Set } from '@redwoodjs/router'
 
 const Routes = () => {
   return (
@@ -129,11 +157,13 @@ const Routes = () => {
         <Route path="/secret-page" page={SecretPage} name="secret" />
       </Private>
 
-      <Set private unauthenticated="forbidden" roles="admin">
+      // highlight-next-line
+      <Set private unauthenticated="forbidden" hasRole="admin">
         <Route path="/admin" page={AdminPage} name="admin" />
       </Set>
 
-      <Private unauthenticated="forbidden" roles={['author', 'editor']}>
+      // highlight-next-line
+      <Private unauthenticated="forbidden" hasRole={['author', 'editor']}>
         <Route path="/posts" page={PostsPage} name="posts" />
       </Private>
     </Router>
@@ -141,45 +171,35 @@ const Routes = () => {
 }
 ```
 
-## Authentication on the API Side
+### api-side currentUser
 
-GraphQL requests automatically receive an `Authorization` header when a user is authenticated and Redwood will decode and verify the header, making the user available (if they are logged in) in `context.currentUser`.
-`context` is a global so it's always available on your api side, like in your services.
+We briefly mentioned that GraphQL requests include an `Authorization` header in every request when a user is authenticated.
+The api side verifies and decodes the token in this header via the `authDecoder` function.
+While information about the user is technically available at this point, it's still pretty raw.
+You can map it into a real user object via the `getCurrentUser` function.
+Both these functions are passed to the `createGraphQLHandler` function in `api/src/functions/graphql.ts`:
 
-```jsx
-console.log(context.currentUser)
-// {
-//    sub: '<netlify-id>
-//    email: 'user@example.com',
-//    [...]
-// }
-```
-
-You can map the "raw decoded JWT" into a real user object by passing a `getCurrentUser` function to `createGraphQLHandler`
-
-Our recommendation is to create a `src/lib/auth.js|ts` file that exports a `getCurrentUser`. (Note: You may already have stub functions.)
-
-```jsx
-import { getCurrentUser } from 'src/lib/auth'
-// Example:
-//  export const getCurrentUser = async (decoded) => {
-//    return await db.user.findUnique({ where: { decoded.email } })
-//  }
-//
-
+```ts title="api/src/functions/graphql.ts"
 export const handler = createGraphQLHandler({
-  schema: makeMergedSchema({
-    schemas,
-    services: makeServices({ services }),
-  }),
+  authDecoder,
   getCurrentUser,
+  // ...
 })
+
 ```
 
-The value returned by `getCurrentUser()` is available in `context.currentUser`
+If you're using one of Redwood's official integrations, `authDecoder` comes from the corresponding integration package (in auth0's case, `@redwoodjs/auth-auth0-api`):
 
-Use the `requireAuth` and `skipAuth` [GraphQL directives](directives#secure-by-default-with-built-in-directives) to provide protection to individual GraphQL calls.
+```ts
+import { authDecoder } from '@redwoodjs/auth-auth0-api'
+```
 
-## Contributing
+If you're rolling your own, you'll have to write it yourself. See the [Custom Auth](./auth/custom.md#api-side) docs for an example.
 
-If you are interested in contributing to the Redwood Auth Package, please [start here](https://github.com/redwoodjs/redwood/blob/main/packages/auth/README.md).
+It's always up to you to write `getCurrentUser`, though the setup command will stub it out for you in `api/src/lib/auth.ts` with plenty of guidance.
+
+`getCurrentUser`'s return is made globally available in the api side's context via `context.currentUser` for convenience.
+
+### Locking down the GraphQL api
+
+Use the `requireAuth` and `skipAuth` [GraphQL directives](directives#secure-by-default-with-built-in-directives) to protect individual GraphQL calls.
