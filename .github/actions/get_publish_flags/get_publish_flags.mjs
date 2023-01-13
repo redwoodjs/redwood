@@ -21,22 +21,17 @@ if (TAG === 'canary') {
     await $`git tag --sort="-version:refname" --list "v?.?.?" | head -n 1`
   ).stdout.trim()
 
-  console.log('Latest release:', latestRelease)
-
   // Get the major version from a string like v3.8.0
   const currentMajor = +latestRelease.match(/^v(?<currentMajor>\d)\./).groups.currentMajor
   const nextMajor = `${currentMajor + 1}.0.0`
 
-  console.log('Current major:', nextMajor)
-  console.log('Next major:', nextMajor)
+  console.log({ currentMajor, nextMajor })
 
   // Get the latest RC from NPM
   /**
    * @type {{ name: string, version: `${number}.${number}.${number}` }}
    */
   const { version: latestRC } = JSON.parse(await $`yarn npm info @redwoodjs/core@rc --fields version --json`)
-
-  console.log('latest RC:', latestRC)
 
   if (latestRC.startsWith(nextMajor)) {
     console.log('The latest rc is the same as the canary; adding an extra minor to the canary')
