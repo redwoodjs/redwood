@@ -299,7 +299,7 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
       let authFileName = path.join(getPaths().web.src, 'auth')
 
       // Generate a unique name, when you are trying to combine providers
-      if (ctx.setupMode === AuthSetupMode.COMBINE) {
+      if (ctx.setupMode === 'COMBINE') {
         let i = 1
         while (resolveFile(authFileName)) {
           const count = i > 1 ? i : ''
@@ -374,9 +374,9 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
       let filesRecord = apiSideFiles({ basedir, webAuthn })
 
       // Always overwrite files in force mode, no need to prompt
-      let overwriteAllFiles = ctx.setupMode === AuthSetupMode.FORCE
+      let overwriteAllFiles = ctx.setupMode === 'FORCE'
 
-      if (ctx.setupMode === AuthSetupMode.REPLACE) {
+      if (ctx.setupMode === 'REPLACE') {
         // Confirm that we're about to overwrite some files
         const filesToOverwrite = findExistingFiles(filesRecord)
 
@@ -387,7 +387,7 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
         })
       }
 
-      if (ctx.setupMode === AuthSetupMode.COMBINE) {
+      if (ctx.setupMode === 'COMBINE') {
         const uniqueFilesRecord = generateUniqueFileNames(
           filesRecord,
           ctx.provider
@@ -423,8 +423,7 @@ export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
       addApiConfig({
         authDecoderImport,
         replaceExistingImport:
-          ctx.setupMode === AuthSetupMode.REPLACE ||
-          ctx.setupMode === AuthSetupMode.FORCE,
+          ctx.setupMode === 'REPLACE' || ctx.setupMode === 'FORCE',
       })
     } else {
       throw new Error(
@@ -434,12 +433,11 @@ export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
   },
 })
 
-export enum AuthSetupMode {
-  FORCE = 'force', // user passed the --force flag, this is essentially replace without prompts
-  REPLACE = 'replace', // replace existing auth provider, with the one being setup
-  COMBINE = 'combine', // add the new auth provider along side the existing one(s)
-  UNKNOWN = 'unknown', // we will prompt the user to select a mode
-}
+export type AuthSetupMode =
+  | 'FORCE' // user passed the --force flag, this is essentially replace without prompts
+  | 'REPLACE' // replace existing auth provider, with the one being setup
+  | 'COMBINE' // add the new auth provider along side the existing one(s)
+  | 'UNKNOWN' // we will prompt the user to select a mode
 
 export interface AuthGeneratorCtx {
   setupMode: AuthSetupMode
@@ -461,28 +459,25 @@ export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
       console.log('webAppContents', webAppContents)
 
       if (force) {
-        ctx.setupMode = AuthSetupMode.FORCE
+        ctx.setupMode = 'FORCE'
 
         return
       }
 
       // If we don't know whether the user wants to replace or combine,
       // we prompt them to select a mode.
-      if (
-        hasAuthProvider(webAppContents) &&
-        ctx.setupMode === AuthSetupMode.UNKNOWN
-      ) {
-        const setupMode = await task.prompt({
+      if (hasAuthProvider(webAppContents) && ctx.setupMode === 'UNKNOWN') {
+        const setupMode = await task.prompt<AuthSetupMode>({
           type: 'select',
           message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
           choices: [
             {
               message: `Replace existing auth with ${ctx.provider}`,
-              value: AuthSetupMode.REPLACE, // this is the value
+              value: 'REPLACE', // this is the value
             },
             {
               message: `Generate files, setup manually. [ADVANCED]`,
-              value: AuthSetupMode.COMBINE, // this is the value
+              value: 'COMBINE', // this is the value
               disabled: true,
             },
           ],
@@ -494,7 +489,7 @@ export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
 
         return
       } else {
-        ctx.setupMode = AuthSetupMode.FORCE
+        ctx.setupMode = 'FORCE'
         task.skip('Setting up Auth from scratch')
       }
     },

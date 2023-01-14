@@ -1,4 +1,3 @@
-
 import { Listr, ListrTask } from 'listr2'
 import terminalLink from 'terminal-link'
 import yargs from 'yargs'
@@ -17,7 +16,6 @@ import {
   addConfigToRoutes,
   addConfigToWebApp,
   AuthGeneratorCtx,
-  AuthSetupMode,
   setAuthSetupMode,
   createWebAuth,
   generateAuthApiFiles,
@@ -106,7 +104,7 @@ export const standardAuthHandler = async ({
           // Can't console.log the notes here because of
           // https://github.com/cenk1cenk2/listr2/issues/296
           // So we do it after the tasks have all finished instead
-          if (ctx.setupMode === AuthSetupMode.REPLACE) {
+          if (ctx.setupMode === 'REPLACE') {
             notes.push(
               ...[
                 '',
@@ -119,7 +117,7 @@ export const standardAuthHandler = async ({
             )
           }
 
-          if (ctx.setupMode === AuthSetupMode.COMBINE) {
+          if (ctx.setupMode === 'COMBINE') {
             notes.push(
               colors.warning(
                 "To avoid overwriting existing files we've generated new file " +
@@ -137,7 +135,7 @@ export const standardAuthHandler = async ({
       rendererOptions: { collapse: false },
       renderer: verbose ? 'verbose' : 'default',
       ctx: {
-        setupMode: AuthSetupMode.UNKNOWN,
+        setupMode: 'UNKNOWN',
         provider, // provider name passed from CLI
       },
     }
