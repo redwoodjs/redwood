@@ -1004,14 +1004,14 @@ Use this function when you want to cache some data, optionally including a numbe
 // cache forever
 const post = ({ id }) => {
   return cache(`posts`, () => {
-    db.post.findMany()
+    return db.post.findMany()
   })
 }
 
 // cache for 1 hour
 const post = ({ id }) => {
   return cache(`posts`, () => {
-    db.post.findMany()
+    return db.post.findMany()
   }, { expires: 3600 })
 }
 ```
@@ -1021,7 +1021,7 @@ Note that a key can be a string or an array:
 ```js
 const post = ({ id }) => {
   return cache(`posts-${id}-${updatedAt.getTime()}`, () => {
-    db.post.findMany()
+    return db.post.findMany()
   })
 }
 
@@ -1029,7 +1029,7 @@ const post = ({ id }) => {
 
 const post = ({ id }) => {
   return cache(['posts', id,  updatedAt.getTime()], () => {
-    db.post.findMany()
+    return db.post.findMany()
   })
 }
 ```
@@ -1068,11 +1068,11 @@ This is functionally equivalent to the following:
 const latest = await db.user.findFirst({
   where: { roles: 'admin' } },
   orderBy: { updatedAt: 'desc' },
-  select: { id: true, updatedAt: true
+  select: { id: true, updatedAt: true }
 })
 
 return cache(`posts-${latest.id}-${latest.updatedAt.getTime()}`, () => {
-  db.post.findMany({ where: { roles: 'admin' } })
+  return db.post.findMany({ where: { roles: 'admin' } })
 })
 ```
 
