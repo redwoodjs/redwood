@@ -22,7 +22,7 @@ import {
   addConfigToWebApp,
   addConfigToRoutes,
   createWebAuth,
-  AuthSetupMode,
+  AuthGeneratorCtx,
 } from '../authTasks'
 
 jest.mock('../../lib/paths', () => {
@@ -82,9 +82,9 @@ beforeEach(() => {
 describe('authTasks', () => {
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0)', () => {
     const basedir = path.join(__dirname, 'fixtures/dbAuthSetup')
-    const ctx = {
+    const ctx: AuthGeneratorCtx = {
       provider: 'auth0',
-      setupMode: AuthSetupMode.FORCE,
+      setupMode: 'FORCE',
     }
 
     addConfigToWebApp().task(ctx, {} as any)
@@ -94,9 +94,9 @@ describe('authTasks', () => {
 
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk)', () => {
     const basedir = path.join(__dirname, 'fixtures/dbAuthSetup')
-    const ctx = {
+    const ctx: AuthGeneratorCtx = {
       provider: 'clerk',
-      setupMode: AuthSetupMode.FORCE,
+      setupMode: 'FORCE',
     }
 
     addConfigToWebApp().task(ctx, {} as any)
@@ -106,9 +106,9 @@ describe('authTasks', () => {
 
   describe('Components with props', () => {
     it('Should add useAuth on the same line for single line components, and separate line for multiline components', () => {
-      const ctx = {
+      const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
-        setupMode: AuthSetupMode.FORCE,
+        setupMode: 'FORCE',
       }
 
       mockWebAppPath =
@@ -121,9 +121,9 @@ describe('authTasks', () => {
     })
 
     it('Should not add useAuth if one already exists', () => {
-      const ctx = {
+      const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
-        setupMode: AuthSetupMode.FORCE,
+        setupMode: 'FORCE',
       }
 
       mockWebAppPath =
@@ -137,9 +137,9 @@ describe('authTasks', () => {
 
   describe('Customized App.js', () => {
     it('Should add auth config when using explicit return', () => {
-      const ctx = {
+      const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
-        setupMode: AuthSetupMode.FORCE,
+        setupMode: 'FORCE',
       }
 
       mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
@@ -150,9 +150,9 @@ describe('authTasks', () => {
 
   describe('Swapped out GraphQL client', () => {
     it('Should add auth config when app is missing RedwoodApolloProvider', () => {
-      const ctx = {
+      const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
-        setupMode: AuthSetupMode.FORCE,
+        setupMode: 'FORCE',
       }
 
       mockWebAppPath =
