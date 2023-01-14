@@ -24,11 +24,11 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.7",
     "@redwoodjs/auth": "3.2.0",
-    "core-js": "3.26.1"
+    "core-js": "3.27.1"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@clerk/clerk-react": "3.5.1",
     "@clerk/types": "2.21.0",
     "@testing-library/react-hooks": "8.0.1",

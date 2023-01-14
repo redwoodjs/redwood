@@ -1,3 +1,4 @@
+
 import { Listr, ListrTask } from 'listr2'
 import terminalLink from 'terminal-link'
 import yargs from 'yargs'
@@ -5,19 +6,21 @@ import yargs from 'yargs'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { colors } from '../lib/colors'
-
 import {
   addApiPackages,
+  addWebPackages,
+  installPackages,
+} from '../lib/installHelpers'
+
+import {
   addAuthConfigToGqlApi,
   addConfigToRoutes,
   addConfigToWebApp,
-  addWebPackages,
   AuthGeneratorCtx,
   AuthSetupMode,
   setAuthSetupMode,
   createWebAuth,
   generateAuthApiFiles,
-  installPackages,
 } from './authTasks'
 
 export const standardAuthBuilder = (yargs: yargs.Argv) => {

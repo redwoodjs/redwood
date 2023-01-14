@@ -24,12 +24,12 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.7",
     "@redwoodjs/auth": "3.2.0",
-    "core-js": "3.26.1"
+    "core-js": "3.27.1"
   },
   "devDependencies": {
     "@azure/msal-browser": "2.32.1",
     "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.7",
+    "@babel/core": "7.20.12",
     "@testing-library/react-hooks": "8.0.1",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "17.0.52",
