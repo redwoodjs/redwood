@@ -22,6 +22,7 @@ import {
   addConfigToWebApp,
   addConfigToRoutes,
   createWebAuth,
+  AuthGeneratorCtx,
 } from '../authTasks'
 
 jest.mock('../../lib/paths', () => {
@@ -81,86 +82,113 @@ beforeEach(() => {
 describe('authTasks', () => {
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0)', () => {
     const basedir = path.join(__dirname, 'fixtures/dbAuthSetup')
-    addConfigToWebApp().task()
-    createWebAuth(basedir, 'auth0', false).task()
+    const ctx: AuthGeneratorCtx = {
+      provider: 'auth0',
+      setupMode: 'FORCE',
+    }
+
+    addConfigToWebApp().task(ctx, {} as any)
+    createWebAuth(basedir, false).task(ctx)
     addConfigToRoutes().task()
   })
 
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk)', () => {
     const basedir = path.join(__dirname, 'fixtures/dbAuthSetup')
-    addConfigToWebApp().task()
-    createWebAuth(basedir, 'clerk', false).task()
+    const ctx: AuthGeneratorCtx = {
+      provider: 'clerk',
+      setupMode: 'FORCE',
+    }
+
+    addConfigToWebApp().task(ctx, {} as any)
+    createWebAuth(basedir, false).task(ctx)
     addConfigToRoutes().task()
   })
 
   describe('Components with props', () => {
     it('Should add useAuth on the same line for single line components, and separate line for multiline components', () => {
+      const ctx: AuthGeneratorCtx = {
+        provider: 'clerk',
+        setupMode: 'FORCE',
+      }
+
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
       mockWebRoutesPath =
         'src/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
 
-      addConfigToWebApp().task()
+      addConfigToWebApp().task(ctx, {} as any)
       addConfigToRoutes().task()
     })
 
     it('Should not add useAuth if one already exists', () => {
+      const ctx: AuthGeneratorCtx = {
+        provider: 'clerk',
+        setupMode: 'FORCE',
+      }
+
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
       mockWebRoutesPath = 'src/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
 
-      addConfigToWebApp().task()
+      addConfigToWebApp().task(ctx, {} as any)
       addConfigToRoutes().task()
     })
   })
 
   describe('Customized App.js', () => {
     it('Should add auth config when using explicit return', () => {
+      const ctx: AuthGeneratorCtx = {
+        provider: 'clerk',
+        setupMode: 'FORCE',
+      }
+
       mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
 
-      addConfigToWebApp().task()
+      addConfigToWebApp().task(ctx, {} as any)
     })
   })
 
   describe('Swapped out GraphQL client', () => {
-    let consoleWarn
-
-    beforeAll(() => {
-      consoleWarn = console.warn
-      console.warn = jest.fn()
-    })
-
-    afterAll(() => {
-      console.warn = consoleWarn
-    })
-
     it('Should add auth config when app is missing RedwoodApolloProvider', () => {
+      const ctx: AuthGeneratorCtx = {
+        provider: 'clerk',
+        setupMode: 'FORCE',
+      }
+
       mockWebAppPath =
         'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
 
-      addConfigToWebApp().task()
+      const task = { output: '' } as any
+      addConfigToWebApp().task(ctx, task)
 
-      expect(console.warn).toHaveBeenCalledWith(
-        expect.stringMatching(/GraphQL.*useAuth/)
-      )
+      expect(task.output).toMatch(/GraphQL.*useAuth/)
     })
   })
 
   describe('addApiConfig', () => {
     it('Adds authDecoder arg to default graphql.ts file', () => {
-      addApiConfig("import { authDecoder } from 'test-auth-api'")
+      addApiConfig({
+        replaceExistingImport: true,
+        authDecoderImport: "import { authDecoder } from 'test-auth-api'",
+      })
     })
 
     it("Doesn't add authDecoder arg if one already exists", () => {
       mockApiGraphqlPath =
         'src/auth/__tests__/fixtures/app/api/src/functions/graphql.ts'
-      addApiConfig("import { authDecoder } from 'test-auth-api'")
+      addApiConfig({
+        replaceExistingImport: true,
+        authDecoderImport: "import { authDecoder } from 'test-auth-api'",
+      })
     })
 
     it("Doesn't add authDecoder arg if one already exists, even with a non-standard import name and arg placement", () => {
       mockApiGraphqlPath =
         'src/auth/__tests__/fixtures/app/api/src/functions/graphqlNonStandardAuthDecoder.ts'
-      addApiConfig("import { authDecoder } from 'test-auth-api'")
+      addApiConfig({
+        replaceExistingImport: true,
+        authDecoderImport: "import { authDecoder } from 'test-auth-api'",
+      })
     })
   })
 })

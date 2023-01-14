@@ -67,7 +67,7 @@ describe('Auth generator tests', () => {
     mockListrRun.mockClear()
   })
 
-  it('Successfully executes the handler for Netlify', async () => {
+  it('Successfully executes the handler for Supertokens', async () => {
     await standardAuthHandler({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
       provider: 'supertokens',
@@ -77,14 +77,16 @@ describe('Auth generator tests', () => {
 
     expect(mockListrRun).toHaveBeenCalledTimes(1)
     expect(processExitSpy).not.toHaveBeenCalledWith(1)
-    expect(prompts).toHaveBeenCalledTimes(1)
-    expect(prompts).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.stringMatching(
-          /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
-        ),
-      })
-    )
+    // TODO: Add something like this back in when we've added support for
+    // prompting the user
+    // expect(prompts).toHaveBeenCalledTimes(1)
+    // expect(prompts).toHaveBeenCalledWith(
+    //   expect.objectContaining({
+    //     message: expect.stringMatching(
+    //       /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
+    //     ),
+    //   })
+    // )
   })
 
   it('Successfully executes the handler for Netlify without prompting the user when --force is true', async () => {
@@ -110,13 +112,14 @@ describe('Auth generator tests', () => {
 
     expect(mockListrRun).toHaveBeenCalledTimes(1)
     expect(processExitSpy).not.toHaveBeenCalledWith(1)
-    expect(prompts).toHaveBeenCalledTimes(1)
-    expect(prompts).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.stringMatching(
-          /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
-        ),
-      })
-    )
+    // TODO: Add this back in later
+    // expect(prompts).toHaveBeenCalledTimes(1)
+    // expect(prompts).toHaveBeenCalledWith(
+    //   expect.objectContaining({
+    //     message: expect.stringMatching(
+    //       /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
+    //     ),
+    //   })
+    // )
   })
 })

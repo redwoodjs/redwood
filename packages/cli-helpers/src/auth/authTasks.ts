@@ -74,7 +74,13 @@ function replaceAuthDecoderArg(content: string) {
 }
 
 // Exporting this to make it easier to test
-export const addApiConfig = (authDecoderImport?: string) => {
+export const addApiConfig = ({
+  replaceExistingImport,
+  authDecoderImport,
+}: {
+  replaceExistingImport: boolean
+  authDecoderImport?: string
+}) => {
   const graphqlPath = getGraphqlPath()
 
   if (!graphqlPath) {
@@ -84,14 +90,17 @@ export const addApiConfig = (authDecoderImport?: string) => {
   const content = fs.readFileSync(graphqlPath).toString()
   let newContent = content
 
-  // If there already is an import we replace it with a new one
-  const replaceExistingImport = /^import { authDecoder .*} from /m.test(content)
-
   if (authDecoderImport) {
     if (replaceExistingImport) {
       newContent = replaceAuthDecoderImport(newContent, authDecoderImport)
       newContent = replaceAuthDecoderArg(newContent)
-    } else {
+    }
+
+    const didReplace = newContent.includes(authDecoderImport)
+
+    // If we asked to replace existing code, but didn't actually replace
+    // anything we should just add it. That's why we do `|| !didReplace` here
+    if (!replaceExistingImport || !didReplace) {
       newContent = authDecoderImport + '\n' + newContent
       newContent = addAuthDecoderToCreateGraphQLHandler(newContent)
     }
@@ -218,10 +227,12 @@ const addUseAuthHook = (componentName: string, content: string) => {
  * Actually inserts the required config lines into App.{js,tsx}
  * Exported for testing
  */
-export const addConfigToWebApp = () => {
+export const addConfigToWebApp = <
+  Renderer extends typeof ListrRenderer
+>(): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
     title: 'Updating web/src/App.{js,tsx}',
-    task: () => {
+    task: (_ctx, task) => {
       const webAppPath = getWebAppPath()
 
       if (!fs.existsSync(webAppPath)) {
@@ -244,12 +255,10 @@ export const addConfigToWebApp = () => {
           content = addUseAuthHook('RedwoodApolloProvider', content)
         }
       } else {
-        console.warn(
-          colors.warning(
-            'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
-              'GraphQL Client you will have to make sure it gets access to your ' +
-              '`useAuth`, if it needs it.'
-          )
+        task.output = colors.warning(
+          'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
+            'GraphQL Client you will have to make sure it gets access to your ' +
+            '`useAuth`, if it needs it.'
         )
       }
 
@@ -258,14 +267,13 @@ export const addConfigToWebApp = () => {
   }
 }
 
-export const createWebAuth = (
-  basedir: string,
-  provider: string,
-  webAuthn: boolean
-) => {
+export const createWebAuth = (basedir: string, webAuthn: boolean) => {
+  const isTSProject = isTypeScriptProject()
+  const ext = isTSProject ? 'ts' : 'js'
+
   return {
-    title: 'Creating web/src/auth.{js,ts}',
-    task: () => {
+    title: `Creating web/src/auth.${ext}`,
+    task: (ctx: AuthGeneratorCtx) => {
       const templatesBaseDir = path.join(basedir, 'templates', 'web')
       const templates = fs.readdirSync(templatesBaseDir)
 
@@ -279,20 +287,31 @@ export const createWebAuth = (
 
       const templateExtension = templateFileName.split('.').at(-2)
 
+      // @MARK - finding unused file name here,
+      // We should only use an unused filename, if the user is CHOOSING not to replace the existing provider
+
       // Find an unused filename
       // Start with web/src/auth.{ts,tsx}
       // Then web/src/providerAuth.{ts,tsx}
       // Then web/src/providerAuth2.{ts,tsx}
       // Then web/src/providerAuth3.{ts,tsx}
       // etc
+
       let authFileName = path.join(getPaths().web.src, 'auth')
-      let i = 1
-      while (resolveFile(authFileName)) {
-        const count = i > 1 ? i : ''
 
-        authFileName = path.join(getPaths().web.src, provider + 'Auth' + count)
+      // Generate a unique name, when you are trying to combine providers
+      if (ctx.setupMode === 'COMBINE') {
+        let i = 1
+        while (resolveFile(authFileName)) {
+          const count = i > 1 ? i : ''
 
-        i++
+          authFileName = path.join(
+            getPaths().web.src,
+            ctx.provider + 'Auth' + count
+          )
+
+          i++
+        }
       }
 
       authFileName = authFileName + '.' + templateExtension
@@ -302,7 +321,7 @@ export const createWebAuth = (
         'utf-8'
       )
 
-      template = isTypeScriptProject()
+      template = isTSProject
         ? template
         : transformTSToJS(authFileName, template)
 
@@ -332,58 +351,85 @@ export const addConfigToRoutes = () => {
   }
 }
 
+/**
+ * Will find the templates inside `${basedir}/templates/api`,
+ * and write these files to disk with unique names if they are clashing.
+ *
+ * @returns Listr task
+ */
 export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
   basedir: string,
-  provider: string,
-  force: boolean,
   webAuthn: boolean
-): ListrTask<never, Renderer> => {
+): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
     title: 'Generating auth api side files...',
-    task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
+    task: async (ctx, task) => {
       if (!apiSrcDoesExist()) {
-        return task.skip?.('api/src not found, skipping')
+        return new Error(
+          'Could not find api/src directory. Cannot continue setup!'
+        )
       }
 
       // The keys in `filesRecord` are the full paths to where the file contents,
       // which is the values in `filesRecord`, will be written.
       let filesRecord = apiSideFiles({ basedir, webAuthn })
 
-      if (!force) {
-        const uniqueFilesRecord = generateUniqueFileNames(filesRecord, provider)
+      // Always overwrite files in force mode, no need to prompt
+      let overwriteAllFiles = ctx.setupMode === 'FORCE'
 
-        if (
-          Object.keys(filesRecord).join(',') !==
-          Object.keys(uniqueFilesRecord).join(',')
-        ) {
-          console.warn(
-            colors.warning(
-              "To avoid overwriting existing files we've generated new file " +
-                'names for the newly generated files. This probably means ' +
-                `${provider} auth doesn't work out of the box. You'll most ` +
-                'likely have to manually merge some of the generated files ' +
-                'with your existing auth files'
-            )
-          )
-        }
+      if (ctx.setupMode === 'REPLACE') {
+        // Confirm that we're about to overwrite some files
+        const filesToOverwrite = findExistingFiles(filesRecord)
+
+        overwriteAllFiles = await task.prompt({
+          type: 'confirm',
+          message: `Overwrite existing ${filesToOverwrite.join(', ')}?`,
+          initial: false,
+        })
+      }
+
+      if (ctx.setupMode === 'COMBINE') {
+        const uniqueFilesRecord = generateUniqueFileNames(
+          filesRecord,
+          ctx.provider
+        )
 
         filesRecord = uniqueFilesRecord
       }
 
-      return writeFilesTask(filesRecord, { overwriteExisting: force })
+      return writeFilesTask(filesRecord, {
+        overwriteExisting: overwriteAllFiles,
+      })
     },
   }
+}
+/**
+ * Returns a map of file names (not full paths) that already exist
+ */
+function findExistingFiles(filesMap: Record<string, string>) {
+  return Object.keys(filesMap)
+    .filter((filePath) => fs.existsSync(filePath))
+    .map((filePath) => filePath.replace(getPaths().base, ''))
 }
 
 export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
   authDecoderImport?: string
 ) => ({
   title: 'Adding auth config to GraphQL API...',
-  task: (_ctx: never, task: ListrTaskWrapper<never, Renderer>) => {
+  task: (
+    ctx: AuthGeneratorCtx,
+    _task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
+  ) => {
     if (graphFunctionDoesExist()) {
-      addApiConfig(authDecoderImport)
+      addApiConfig({
+        authDecoderImport,
+        replaceExistingImport:
+          ctx.setupMode === 'REPLACE' || ctx.setupMode === 'FORCE',
+      })
     } else {
-      task.skip?.('GraphQL function not found, skipping')
+      throw new Error(
+        'GraphQL function not found. You will need to pass the decoder to the createGraphQLHandler function.'
+      )
     }
   },
 })
@@ -407,4 +453,67 @@ export const installPackages = {
   task: async () => {
     await execa('yarn', ['install'])
   },
+}
+
+export type AuthSetupMode =
+  | 'FORCE' // user passed the --force flag, this is essentially replace without prompts
+  | 'REPLACE' // replace existing auth provider, with the one being setup
+  | 'COMBINE' // add the new auth provider along side the existing one(s)
+  | 'UNKNOWN' // we will prompt the user to select a mode
+
+export interface AuthGeneratorCtx {
+  setupMode: AuthSetupMode
+  provider: string
+}
+
+export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
+  force: boolean
+) => {
+  return {
+    title: 'Checking project for existing auth...',
+    task: async (
+      ctx: AuthGeneratorCtx,
+      task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
+    ) => {
+      console.log('setupMode task function')
+      const webAppContents = fs.readFileSync(getWebAppPath(), 'utf-8')
+
+      console.log('webAppContents', webAppContents)
+
+      if (force) {
+        ctx.setupMode = 'FORCE'
+
+        return
+      }
+
+      // If we don't know whether the user wants to replace or combine,
+      // we prompt them to select a mode.
+      if (hasAuthProvider(webAppContents) && ctx.setupMode === 'UNKNOWN') {
+        const setupMode = await task.prompt<AuthSetupMode>({
+          type: 'select',
+          message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
+          choices: [
+            {
+              message: `Replace existing auth with ${ctx.provider}`,
+              value: 'REPLACE', // this is the value
+            },
+            {
+              message: `Generate files, setup manually. [ADVANCED]`,
+              value: 'COMBINE', // this is the value
+              disabled: true,
+            },
+          ],
+        })
+
+        // User has selected the setup mode, so we set it on the context
+        // This is used in the tasks downstream
+        ctx.setupMode = setupMode
+
+        return
+      } else {
+        ctx.setupMode = 'FORCE'
+        task.skip('Setting up Auth from scratch')
+      }
+    },
+  }
 }
