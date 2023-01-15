@@ -105,6 +105,17 @@ describe('authTasks', () => {
     addConfigToRoutes().task()
   })
 
+  it('Should update App.tsx for legacy apps', () => {
+    const ctx: AuthGeneratorCtx = {
+      provider: 'clerk',
+      setupMode: 'FORCE',
+    }
+
+    mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithLegacyAuth.tsx'
+
+    addConfigToWebApp().task(ctx, {} as any)
+  })
+
   describe('Components with props', () => {
     it('Should add useAuth on the same line for single line components, and separate line for multiline components', () => {
       const ctx: AuthGeneratorCtx = {
