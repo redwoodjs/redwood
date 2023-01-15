@@ -3,7 +3,7 @@ import path from 'path'
 
 import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { transformTSToJS, writeFilesTask } from '../lib'
+import { ExistingFiles, transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
 import { getPaths, resolveFile } from '../lib/paths'
 import {
@@ -441,30 +441,35 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
       let filesRecord = apiSideFiles({ basedir, webAuthn })
 
       // Always overwrite files in force mode, no need to prompt
-      let overwriteAllFiles = ctx.setupMode === 'FORCE'
+      let existingFiles: ExistingFiles = 'FAIL'
 
-      if (ctx.setupMode === 'REPLACE') {
+      if (ctx.setupMode === 'FORCE') {
+        existingFiles = 'OVERWRITE'
+      } else if (ctx.setupMode === 'REPLACE') {
         // Confirm that we're about to overwrite some files
         const filesToOverwrite = findExistingFiles(filesRecord)
 
-        overwriteAllFiles = await task.prompt({
+        const overwrite = await task.prompt({
           type: 'confirm',
           message: `Overwrite existing ${filesToOverwrite.join(', ')}?`,
           initial: false,
         })
-      }
 
-      if (ctx.setupMode === 'COMBINE') {
+        existingFiles = overwrite ? 'OVERWRITE' : 'SKIP'
+      } else if (ctx.setupMode === 'COMBINE') {
         const uniqueFilesRecord = generateUniqueFileNames(
           filesRecord,
           ctx.provider
         )
 
         filesRecord = uniqueFilesRecord
+
+        // Shouldn't happen because we've just generated unique file names
+        existingFiles = 'FAIL'
       }
 
       return writeFilesTask(filesRecord, {
-        overwriteExisting: overwriteAllFiles,
+        existingFiles,
       })
     },
   }
