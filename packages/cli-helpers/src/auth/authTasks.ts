@@ -166,17 +166,77 @@ const addAuthImportToRoutes = (content: string) => {
 
 // exported for testing
 export const hasAuthProvider = (content: string) => {
-  return /\s*<AuthProvider[\s>]/.test(content)
+  return /\s*<AuthProvider([\s>]|$)/.test(content)
+}
+
+/**
+ * Removes <AuthProvider ...> and </AuthProvider> if they exist, and un-indents
+ * the content.
+ *
+ * Exported for testing
+ */
+export const removeAuthProvider = (content: string) => {
+  let remove = false
+  let end = ''
+  let unindent = false
+
+  return content
+    .split('\n')
+    .reduce<string[]>((acc, line) => {
+      let keep = !remove
+      // Find where <AuthProvider begins and remove until it ends (to handle
+      // multi-line auth providers)
+      if (hasAuthProvider(line)) {
+        remove = true
+        keep = false
+        unindent = true
+        // Assume the end line is indented to the same level as the start,
+        // and contains just a single '>'
+        end = line.replace(/^(\s*)<Auth.*/, '$1') + '>'
+      }
+
+      // Single-line AuthProvider, or end of multi-line
+      if ((hasAuthProvider(line) && line.at(-1) === '>') || line === end) {
+        remove = false
+      }
+
+      if (/\s*<\/AuthProvider>/.test(line)) {
+        keep = false
+        unindent = false
+      }
+
+      if (keep) {
+        if (unindent) {
+          acc.push(line.replace('  ', ''))
+        } else {
+          acc.push(line)
+        }
+      }
+
+      return acc
+    }, [])
+    .join('\n')
 }
 
 /** returns the content of App.{js,tsx} with <AuthProvider> added */
-const addAuthProviderToApp = (content: string) => {
+const addAuthProviderToApp = (content: string, setupMode: AuthSetupMode) => {
+  if (setupMode === 'FORCE' || setupMode === 'REPLACE') {
+    content = removeAuthProvider(content)
+  }
+
   const match = content.match(
     /(\s+)(<RedwoodProvider.*?>)(.*)(<\/RedwoodProvider>)/s
   )
 
   if (!match) {
     throw new Error('Could not find <RedwoodProvider> in App.{js,tsx}')
+  }
+
+  // If Auth.tsx already contains exactly what we're trying to add there's no
+  // need to add it (important that this check is performed after the FORCE ||
+  // REPLACE check is made above)
+  if (/\s+<AuthProvider>/.test(content)) {
+    return content
   }
 
   const [
@@ -255,9 +315,7 @@ export const addConfigToWebApp = <
         )
       }
 
-      if (!hasAuthProvider(content)) {
-        content = addAuthProviderToApp(content)
-      }
+      content = addAuthProviderToApp(content, ctx.setupMode)
 
       if (/\s*<RedwoodApolloProvider/.test(content)) {
         if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
