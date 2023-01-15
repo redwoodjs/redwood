@@ -24,6 +24,7 @@ import {
   createWebAuth,
   AuthGeneratorCtx,
   hasAuthProvider,
+  removeAuthProvider,
 } from '../authTasks'
 
 jest.mock('../../lib/paths', () => {
@@ -205,6 +206,20 @@ describe('authTasks', () => {
   })
 
   describe('hasAuthProvider', () => {
+    test('Single line', () => {
+      expect(hasAuthProvider('<AuthProvider')).toBeTruthy()
+      expect(hasAuthProvider('<AuthProvider>')).toBeTruthy()
+      expect(
+        hasAuthProvider(
+          '<AuthProvider client={netlifyIdentity} type="netlify">'
+        )
+      ).toBeTruthy()
+      expect(hasAuthProvider('<AuthProviderFoo')).toBeFalsy()
+      expect(hasAuthProvider('</AuthProvider>')).toBeFalsy()
+      expect(hasAuthProvider('<FooAuthProvider')).toBeFalsy()
+      expect(hasAuthProvider('<FooAuthProvider>')).toBeFalsy()
+    })
+
     test('Legacy auth single line', () => {
       const content = `
         const App = () => (
@@ -281,6 +296,130 @@ describe('authTasks', () => {
       `
 
       expect(hasAuthProvider(content)).toBeFalsy()
+    })
+  })
+
+  describe('removeAuthProvider', () => {
+    test('Legacy auth single line', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider client={netlifyIdentity} type="netlify">
+                <RedwoodApolloProvider>
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `
+
+      expect(removeAuthProvider(content)).toMatch(`
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider>
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `)
+    })
+
+    test('Legacy auth multi-line', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider
+                client={WebAuthnClient}
+                type="dbAuth"
+                config={{ fetchConfig: { credentials: 'include' } }}
+              >
+                <RedwoodApolloProvider
+                  graphQLClientConfig={{
+                    httpLinkConfig: { credentials: 'include' },
+                  }}
+                >
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `
+
+      expect(removeAuthProvider(content)).toMatch(`
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider
+                graphQLClientConfig={{
+                  httpLinkConfig: { credentials: 'include' },
+                }}
+              >
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `)
+    })
+
+    test('AuthProvider exists', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider>
+                <RedwoodApolloProvider useAuth={useAuth}>
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `
+
+      expect(removeAuthProvider(content)).toMatch(`
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider useAuth={useAuth}>
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `)
+    })
+
+    test("AuthProvider doesn't exist", () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider>
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `
+
+      expect(removeAuthProvider(content)).toMatch(`
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider>
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `)
     })
   })
 })
