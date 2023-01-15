@@ -233,7 +233,7 @@ export const addConfigToWebApp = <
 >(): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
     title: 'Updating web/src/App.{js,tsx}',
-    task: (_ctx, task) => {
+    task: (ctx, task) => {
       const webAppPath = getWebAppPath()
 
       if (!fs.existsSync(webAppPath)) {
@@ -245,6 +245,14 @@ export const addConfigToWebApp = <
 
       if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
         content = addAuthImportToApp(content)
+      }
+
+      if (ctx.setupMode === 'REPLACE' || ctx.setupMode === 'FORCE') {
+        // Remove legacy AuthProvider import
+        content = content.replace(
+          "import { AuthProvider } from '@redwoodjs/auth'\n",
+          ''
+        )
       }
 
       if (!hasAuthProvider(content)) {
