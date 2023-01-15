@@ -23,6 +23,7 @@ import {
   addConfigToRoutes,
   createWebAuth,
   AuthGeneratorCtx,
+  hasAuthProvider,
 } from '../authTasks'
 
 jest.mock('../../lib/paths', () => {
@@ -189,6 +190,86 @@ describe('authTasks', () => {
         replaceExistingImport: true,
         authDecoderImport: "import { authDecoder } from 'test-auth-api'",
       })
+    })
+  })
+
+  describe('hasAuthProvider', () => {
+    test('Legacy auth single line', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider client={netlifyIdentity} type="netlify">
+                <RedwoodApolloProvider>
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `
+
+      expect(hasAuthProvider(content)).toBeTruthy()
+    })
+
+    test('Legacy auth multi-line', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider
+                client={WebAuthnClient}
+                type="dbAuth"
+                config={{ fetchConfig: { credentials: 'include' } }}
+              >
+                <RedwoodApolloProvider
+                  graphQLClientConfig={{
+                    httpLinkConfig: { credentials: 'include' },
+                  }}
+                >
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `
+
+      expect(hasAuthProvider(content)).toBeTruthy()
+    })
+
+    test('AuthProvider exists', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider>
+                <RedwoodApolloProvider useAuth={useAuth}>
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `
+
+      expect(hasAuthProvider(content)).toBeTruthy()
+    })
+
+    test("AuthProvider doesn't exist", () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider>
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `
+
+      expect(hasAuthProvider(content)).toBeFalsy()
     })
   })
 })

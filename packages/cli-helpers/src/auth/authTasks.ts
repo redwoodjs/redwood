@@ -163,8 +163,9 @@ const addAuthImportToRoutes = (content: string) => {
   return contentLines.join('\n')
 }
 
-const hasAuthProvider = (content: string) => {
-  return /\s*<AuthProvider>/.test(content)
+// exported for testing
+export const hasAuthProvider = (content: string) => {
+  return /\s*<AuthProvider[\s>]/.test(content)
 }
 
 /** returns the content of App.{js,tsx} with <AuthProvider> added */
@@ -453,16 +454,13 @@ export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
       ctx: AuthGeneratorCtx,
       task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
     ) => {
-      console.log('setupMode task function')
-      const webAppContents = fs.readFileSync(getWebAppPath(), 'utf-8')
-
-      console.log('webAppContents', webAppContents)
-
       if (force) {
         ctx.setupMode = 'FORCE'
 
         return
       }
+
+      const webAppContents = fs.readFileSync(getWebAppPath(), 'utf-8')
 
       // If we don't know whether the user wants to replace or combine,
       // we prompt them to select a mode.
