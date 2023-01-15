@@ -42,7 +42,7 @@ export const signUpTestUser = async ({
   page,
   email = 'testuser@bazinga.com',
   password = 'test123',
-  fullName = 'Test User'
+  fullName = 'Test User',
 }: AuthUtilsParams) => {
   await page.goto(`${webUrl}/signup`)
 
