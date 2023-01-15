@@ -3,7 +3,7 @@ import path from 'path'
 
 import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { transformTSToJS, writeFilesTask } from '../lib'
+import { ExistingFiles, transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
 import { getPaths, resolveFile } from '../lib/paths'
 import {
@@ -163,18 +163,79 @@ const addAuthImportToRoutes = (content: string) => {
   return contentLines.join('\n')
 }
 
-const hasAuthProvider = (content: string) => {
-  return /\s*<AuthProvider>/.test(content)
+// exported for testing
+export const hasAuthProvider = (content: string) => {
+  return /\s*<AuthProvider([\s>]|$)/.test(content)
+}
+
+/**
+ * Removes <AuthProvider ...> and </AuthProvider> if they exist, and un-indents
+ * the content.
+ *
+ * Exported for testing
+ */
+export const removeAuthProvider = (content: string) => {
+  let remove = false
+  let end = ''
+  let unindent = false
+
+  return content
+    .split('\n')
+    .reduce<string[]>((acc, line) => {
+      let keep = !remove
+      // Find where <AuthProvider begins and remove until it ends (to handle
+      // multi-line auth providers)
+      if (hasAuthProvider(line)) {
+        remove = true
+        keep = false
+        unindent = true
+        // Assume the end line is indented to the same level as the start,
+        // and contains just a single '>'
+        end = line.replace(/^(\s*)<Auth.*/, '$1') + '>'
+      }
+
+      // Single-line AuthProvider, or end of multi-line
+      if ((hasAuthProvider(line) && line.at(-1) === '>') || line === end) {
+        remove = false
+      }
+
+      if (/\s*<\/AuthProvider>/.test(line)) {
+        keep = false
+        unindent = false
+      }
+
+      if (keep) {
+        if (unindent) {
+          acc.push(line.replace('  ', ''))
+        } else {
+          acc.push(line)
+        }
+      }
+
+      return acc
+    }, [])
+    .join('\n')
 }
 
 /** returns the content of App.{js,tsx} with <AuthProvider> added */
-const addAuthProviderToApp = (content: string) => {
+const addAuthProviderToApp = (content: string, setupMode: AuthSetupMode) => {
+  if (setupMode === 'FORCE' || setupMode === 'REPLACE') {
+    content = removeAuthProvider(content)
+  }
+
   const match = content.match(
     /(\s+)(<RedwoodProvider.*?>)(.*)(<\/RedwoodProvider>)/s
   )
 
   if (!match) {
     throw new Error('Could not find <RedwoodProvider> in App.{js,tsx}')
+  }
+
+  // If Auth.tsx already contains exactly what we're trying to add there's no
+  // need to add it (important that this check is performed after the FORCE ||
+  // REPLACE check is made above)
+  if (/\s+<AuthProvider>/.test(content)) {
+    return content
   }
 
   const [
@@ -231,7 +292,7 @@ export const addConfigToWebApp = <
 >(): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
     title: 'Updating web/src/App.{js,tsx}',
-    task: (_ctx, task) => {
+    task: (ctx, task) => {
       const webAppPath = getWebAppPath()
 
       if (!fs.existsSync(webAppPath)) {
@@ -245,9 +306,15 @@ export const addConfigToWebApp = <
         content = addAuthImportToApp(content)
       }
 
-      if (!hasAuthProvider(content)) {
-        content = addAuthProviderToApp(content)
+      if (ctx.setupMode === 'REPLACE' || ctx.setupMode === 'FORCE') {
+        // Remove legacy AuthProvider import
+        content = content.replace(
+          "import { AuthProvider } from '@redwoodjs/auth'\n",
+          ''
+        )
       }
+
+      content = addAuthProviderToApp(content, ctx.setupMode)
 
       if (/\s*<RedwoodApolloProvider/.test(content)) {
         if (!hasUseAuthHook('RedwoodApolloProvider', content)) {
@@ -374,30 +441,35 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
       let filesRecord = apiSideFiles({ basedir, webAuthn })
 
       // Always overwrite files in force mode, no need to prompt
-      let overwriteAllFiles = ctx.setupMode === 'FORCE'
+      let existingFiles: ExistingFiles = 'FAIL'
 
-      if (ctx.setupMode === 'REPLACE') {
+      if (ctx.setupMode === 'FORCE') {
+        existingFiles = 'OVERWRITE'
+      } else if (ctx.setupMode === 'REPLACE') {
         // Confirm that we're about to overwrite some files
         const filesToOverwrite = findExistingFiles(filesRecord)
 
-        overwriteAllFiles = await task.prompt({
+        const overwrite = await task.prompt({
           type: 'confirm',
           message: `Overwrite existing ${filesToOverwrite.join(', ')}?`,
           initial: false,
         })
-      }
 
-      if (ctx.setupMode === 'COMBINE') {
+        existingFiles = overwrite ? 'OVERWRITE' : 'SKIP'
+      } else if (ctx.setupMode === 'COMBINE') {
         const uniqueFilesRecord = generateUniqueFileNames(
           filesRecord,
           ctx.provider
         )
 
         filesRecord = uniqueFilesRecord
+
+        // Shouldn't happen because we've just generated unique file names
+        existingFiles = 'FAIL'
       }
 
       return writeFilesTask(filesRecord, {
-        overwriteExisting: overwriteAllFiles,
+        existingFiles,
       })
     },
   }
@@ -453,35 +525,35 @@ export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
       ctx: AuthGeneratorCtx,
       task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
     ) => {
-      console.log('setupMode task function')
-      const webAppContents = fs.readFileSync(getWebAppPath(), 'utf-8')
-
-      console.log('webAppContents', webAppContents)
-
       if (force) {
         ctx.setupMode = 'FORCE'
 
         return
       }
 
+      const webAppContents = fs.readFileSync(getWebAppPath(), 'utf-8')
+
       // If we don't know whether the user wants to replace or combine,
       // we prompt them to select a mode.
       if (hasAuthProvider(webAppContents) && ctx.setupMode === 'UNKNOWN') {
-        const setupMode = await task.prompt<AuthSetupMode>({
-          type: 'select',
-          message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
-          choices: [
-            {
-              message: `Replace existing auth with ${ctx.provider}`,
-              value: 'REPLACE', // this is the value
-            },
-            {
-              message: `Generate files, setup manually. [ADVANCED]`,
-              value: 'COMBINE', // this is the value
-              disabled: true,
-            },
-          ],
-        })
+        // const setupMode = await task.prompt<AuthSetupMode>({
+        //   type: 'select',
+        //   message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
+        //   choices: [
+        //     {
+        //       message: `Replace existing auth with ${ctx.provider}`,
+        //       value: 'REPLACE', // this is the value
+        //     },
+        //     {
+        //       message: `Generate files, setup manually. [ADVANCED]`,
+        //       value: 'COMBINE', // this is the value
+        //       disabled: true,
+        //     },
+        //   ],
+        // })
+        // TODO: Enable code above, and remove this hardcoded value when we
+        // have COMBINE working
+        const setupMode = 'REPLACE'
 
         // User has selected the setup mode, so we set it on the context
         // This is used in the tasks downstream
