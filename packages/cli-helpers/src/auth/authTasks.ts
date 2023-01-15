@@ -553,21 +553,24 @@ export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
       // If we don't know whether the user wants to replace or combine,
       // we prompt them to select a mode.
       if (hasAuthProvider(webAppContents) && ctx.setupMode === 'UNKNOWN') {
-        const setupMode = await task.prompt<AuthSetupMode>({
-          type: 'select',
-          message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
-          choices: [
-            {
-              message: `Replace existing auth with ${ctx.provider}`,
-              value: 'REPLACE', // this is the value
-            },
-            {
-              message: `Generate files, setup manually. [ADVANCED]`,
-              value: 'COMBINE', // this is the value
-              disabled: true,
-            },
-          ],
-        })
+        // const setupMode = await task.prompt<AuthSetupMode>({
+        //   type: 'select',
+        //   message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
+        //   choices: [
+        //     {
+        //       message: `Replace existing auth with ${ctx.provider}`,
+        //       value: 'REPLACE', // this is the value
+        //     },
+        //     {
+        //       message: `Generate files, setup manually. [ADVANCED]`,
+        //       value: 'COMBINE', // this is the value
+        //       disabled: true,
+        //     },
+        //   ],
+        // })
+        // TODO: Enable code above, and remove this hardcoded value when we
+        // have COMBINE working
+        const setupMode = 'REPLACE'
 
         // User has selected the setup mode, so we set it on the context
         // This is used in the tasks downstream
