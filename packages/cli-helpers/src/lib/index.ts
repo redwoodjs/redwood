@@ -84,10 +84,12 @@ export const prettify = (
   })
 }
 
+export type ExistingFiles = 'OVERWRITE' | 'SKIP' | 'FAIL'
+
 export const writeFile = <Renderer extends typeof ListrRenderer>(
   target: string,
   contents: string,
-  { overwriteExisting = false } = {},
+  { existingFiles = 'FAIL' }: { existingFiles?: ExistingFiles } = {},
   // TODO: Remove type cast
   task: ListrTaskWrapper<never, Renderer> = {} as ListrTaskWrapper<
     never,
@@ -96,8 +98,15 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
-  if (!overwriteExisting && fs.existsSync(target)) {
+  const exists = fs.existsSync(target)
+
+  if (exists && existingFiles === 'FAIL') {
     throw new Error(`${target} already exists.`)
+  }
+
+  if (exists && existingFiles === 'SKIP') {
+    task.skip()
+    return
   }
 
   const filename = path.basename(target)
@@ -114,7 +123,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
  */
 export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
   files: Record<string, string>,
-  options: { overwriteExisting: boolean }
+  options: { existingFiles: ExistingFiles }
 ) => {
   const { base } = getPaths()
 
