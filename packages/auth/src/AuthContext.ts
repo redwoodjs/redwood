@@ -1,7 +1,6 @@
 import React from 'react'
 
 export interface CurrentUser {
-  roles?: Array<string> | string
   [key: string]: unknown
 }
 

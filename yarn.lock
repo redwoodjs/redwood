@@ -57,9 +57,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.3":
-  version: 3.7.3
-  resolution: "@apollo/client@npm:3.7.3"
+"@apollo/client@npm:3.7.4":
+  version: 3.7.4
+  resolution: "@apollo/client@npm:3.7.4"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
@@ -89,7 +89,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 92a44232cb6cbe0f9a103fdd4bff5a6ececff285e1fd39cddff904ebfcc6eb7ebd5280cdce9192f5619b7ae68e76fc50db46b8cf6d0cab717e6eafa6b14ab185
+  checksum: da3061816fc4d93e403db9ff68699c0505924d3b9a4c6e78188bff9eb01fbdf8a931a7adf573ddee74e6e376e1a471279b78d124d05c0e4e4b6fbfa33aefdcac
   languageName: node
   linkType: hard
 
@@ -4882,6 +4882,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lerna/publish@patch:@lerna/publish@npm%3A6.4.1#./.yarn/patches/@lerna-publish-npm-6.4.1-27e0fee593.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 6.4.1
+  resolution: "@lerna/publish@patch:@lerna/publish@npm%3A6.4.1#./.yarn/patches/@lerna-publish-npm-6.4.1-27e0fee593.patch::version=6.4.1&hash=24f641&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    "@lerna/check-working-tree": 6.4.1
+    "@lerna/child-process": 6.4.1
+    "@lerna/collect-updates": 6.4.1
+    "@lerna/command": 6.4.1
+    "@lerna/describe-ref": 6.4.1
+    "@lerna/log-packed": 6.4.1
+    "@lerna/npm-conf": 6.4.1
+    "@lerna/npm-dist-tag": 6.4.1
+    "@lerna/npm-publish": 6.4.1
+    "@lerna/otplease": 6.4.1
+    "@lerna/output": 6.4.1
+    "@lerna/pack-directory": 6.4.1
+    "@lerna/prerelease-id-from-version": 6.4.1
+    "@lerna/prompt": 6.4.1
+    "@lerna/pulse-till-done": 6.4.1
+    "@lerna/run-lifecycle": 6.4.1
+    "@lerna/run-topologically": 6.4.1
+    "@lerna/validation-error": 6.4.1
+    "@lerna/version": 6.4.1
+    fs-extra: ^9.1.0
+    libnpmaccess: ^6.0.3
+    npm-package-arg: 8.1.1
+    npm-registry-fetch: ^13.3.0
+    npmlog: ^6.0.2
+    p-map: ^4.0.0
+    p-pipe: ^3.1.0
+    pacote: ^13.6.1
+    semver: ^7.3.4
+  checksum: 76cfe9636507afa87da3fb4c4963669a1a967f7d3229297b28ee3c1273d469a2355f9dbea850600e9f8e2c68f7dc912281a21ce0a55be6fe34ba355800f461e5
+  languageName: node
+  linkType: hard
+
 "@lerna/pulse-till-done@npm:6.4.1":
   version: 6.4.1
   resolution: "@lerna/pulse-till-done@npm:6.4.1"
@@ -5382,12 +5418,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:15.4.8":
-  version: 15.4.8
-  resolution: "@nrwl/cli@npm:15.4.8"
+"@nrwl/cli@npm:15.5.1":
+  version: 15.5.1
+  resolution: "@nrwl/cli@npm:15.5.1"
   dependencies:
-    nx: 15.4.8
-  checksum: 1d4582ab1a11718c362a4052550fdb484cb0c1029d619a717dc7fe5582c29a300e84077e6d3429d726063ed4e1c66e747eb94095840fff69a4b548aeed543e92
+    nx: 15.5.1
+  checksum: 5f6fcf2b5c2edd9e50ad590d8e4c8fae5fcbb779022903d911e9b825965b1fcbc1b9cf65418fb99c60e94c367eaabe66b9c9fbd884b64f4092d80df61e4e4a43
   languageName: node
   linkType: hard
 
@@ -5424,14 +5460,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:15.4.8":
-  version: 15.4.8
-  resolution: "@nrwl/tao@npm:15.4.8"
+"@nrwl/tao@npm:15.5.1":
+  version: 15.5.1
+  resolution: "@nrwl/tao@npm:15.5.1"
   dependencies:
-    nx: 15.4.8
+    nx: 15.5.1
   bin:
     tao: index.js
-  checksum: fa90573717a96e375062527f5932d8b80fe6158d6b940ea11a05444ee6b4b500e5d66fd8a42ffa8ff956893c10b56eafff055e9216d789412a52c4a993eeea5e
+  checksum: 1d0cb425e30d6560584ffc15212651f7cb4bed37bb9eafc3c46657295b3473a28dddabe36f055027098e3b509dd38784146c2f054b5374747470b738de5f6fb7
   languageName: node
   linkType: hard
 
@@ -7042,7 +7078,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 17.0.2
     react-dom: 17.0.2
-    react-hook-form: 7.41.5
+    react-hook-form: 7.42.0
     typescript: 4.7.4
   peerDependencies:
     graphql: 16.6.0
@@ -7334,7 +7370,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.7.3
+    "@apollo/client": 3.7.4
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
@@ -23636,12 +23672,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:15.4.8, nx@npm:>=15.4.2 < 16":
-  version: 15.4.8
-  resolution: "nx@npm:15.4.8"
+"nx@npm:15.5.1, nx@npm:>=15.4.2 < 16":
+  version: 15.5.1
+  resolution: "nx@npm:15.5.1"
   dependencies:
-    "@nrwl/cli": 15.4.8
-    "@nrwl/tao": 15.4.8
+    "@nrwl/cli": 15.5.1
+    "@nrwl/tao": 15.5.1
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -23685,7 +23721,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 252ba40a6a1d7e0d420ad2968285885d199d2c3d9fff62903c9c84d8864e0c316529551bb5a27625f726bf5c958c0823ba65fdcf8e639e36fcb776094ae44591
+  checksum: 722e683926991c1ab5d5b106e3a3eb89ac8ed8761e3a27f3843bed2039702cf52bd5ca8b242320a5e445fe96335e456448ecb3ce7c05e7e242b37ebe2154b976
   languageName: node
   linkType: hard
 
@@ -26078,12 +26114,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.41.5":
-  version: 7.41.5
-  resolution: "react-hook-form@npm:7.41.5"
+"react-hook-form@npm:7.42.0":
+  version: 7.42.0
+  resolution: "react-hook-form@npm:7.42.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 978e3ba90cdcc194aafbdc1ffdb182a00604bcd51d2818f49d12685bc65ab25382850f6ae708e0284e8b5c97197b2b4e1ae76b132fee27a67c8623c41e6dab2f
+  checksum: a244d72d547a0e30980efeeeb0072fcdb9b0c946abe097d69deda6804bf035187840df08440425a11a8b7eb572082f883402076d824ffccb6dee8bb0afe2fe19
   languageName: node
   linkType: hard
 
@@ -27088,7 +27124,7 @@ __metadata:
     node-notifier: 10.0.1
     nodemon: 2.0.20
     npm-packlist: 5.1.3
-    nx: 15.4.8
+    nx: 15.5.1
     octokit: 2.0.10
     ora: 5.4.1
     prompts: 2.4.2
