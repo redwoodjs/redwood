@@ -77,10 +77,9 @@ export const hasRole = (allowedRoles: AllowedRoles): boolean => {
     return false
   }
 
-  const currentUserRoles = context.currentUser.roles
   const roles = typeof allowedRoles === 'string' ? [allowedRoles] : allowedRoles
 
-  return currentUserRoles.some((role) => roles.includes(role))
+  return context.currentUser.roles.some((role) => roles.includes(role))
 }
 
 /**
