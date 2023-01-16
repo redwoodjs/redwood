@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Setup test mocks
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import '../../../lib/test'
 
 import * as helpers from '../helpers'
