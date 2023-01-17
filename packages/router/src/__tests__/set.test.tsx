@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React, { type ReactNode } from 'react'
 
 import { render, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
@@ -10,18 +10,14 @@ import { Set } from '../Set'
 const ChildA = () => <h1>ChildA</h1>
 const ChildB = () => <h1>ChildB</h1>
 const ChildC = () => <h1>ChildC</h1>
-const GlobalLayout: React.FunctionComponent<PropsWithChildren> = ({
-  children,
-}) => (
+const GlobalLayout: React.FC<{ children?: ReactNode }> = ({ children }) => (
   <div>
     <h1>Global Layout</h1>
     {children}
     <footer>This is a footer</footer>
   </div>
 )
-const CustomWrapper: React.FunctionComponent<PropsWithChildren> = ({
-  children,
-}) => (
+const CustomWrapper: React.FC<{ children?: ReactNode }> = ({ children }) => (
   <div>
     <h1>Custom Wrapper</h1>
     {children}
@@ -93,13 +89,10 @@ test('passes props to wrappers', async () => {
   interface Props {
     propOne: string
     propTwo: string
+    children?: ReactNode
   }
 
-  const PropWrapper: React.FunctionComponent<PropsWithChildren<Props>> = ({
-    children,
-    propOne,
-    propTwo,
-  }) => (
+  const PropWrapper: React.FC<Props> = ({ children, propOne, propTwo }) => (
     <div>
       <h1>Prop Wrapper</h1>
       <p>1:{propOne}</p>
