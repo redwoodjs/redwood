@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import path from 'path'
 
 import '../../../../lib/test'
@@ -7,31 +7,25 @@ import * as scaffold from '../scaffold'
 
 jest.mock('execa')
 
-let filesLower, filesUpper
-
-beforeAll(async () => {
-  filesLower = await scaffold.files({
-    model: 'Post',
-    path: 'admin',
-    tests: true,
-    nestScaffoldByModel: true,
-  })
-  filesUpper = await scaffold.files({
-    model: 'Post',
-    path: 'Admin',
-    tests: true,
-    nestScaffoldByModel: true,
-  })
-})
-
 describe('admin/post', () => {
+  let filesLower
+
+  beforeAll(async () => {
+    filesLower = await scaffold.files({
+      model: 'Post',
+      path: 'admin',
+      tests: true,
+      nestScaffoldByModel: true,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
+    it('returns exactly 19 files', () => {
       expect(Object.keys(filesLower).length).toEqual(19)
     })
 
     // Layout
-    test('creates a layout', async () => {
+    it('creates a layout', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
@@ -41,7 +35,7 @@ describe('admin/post', () => {
 
     // Pages
 
-    test('creates a edit page', async () => {
+    it('creates a edit page', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/pages/Admin/Post/EditPostPage/EditPostPage.js'
@@ -49,7 +43,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('the edit page correctly imports the edit cell', async () => {
+    it('the edit page correctly imports the edit cell', async () => {
       expect(
         filesLower[
           path.normalize(
@@ -61,7 +55,7 @@ describe('admin/post', () => {
       )
     })
 
-    test('creates a index page', async () => {
+    it('creates a index page', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/pages/Admin/Post/PostsPage/PostsPage.js'
@@ -69,7 +63,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('the index page correctly imports the index cell', async () => {
+    it('the index page correctly imports the index cell', async () => {
       expect(
         filesLower[
           path.normalize(
@@ -79,7 +73,7 @@ describe('admin/post', () => {
       ).toMatch(`import PostsCell from 'src/components/Admin/Post/PostsCell'`)
     })
 
-    test('creates a new page', async () => {
+    it('creates a new page', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/pages/Admin/Post/NewPostPage/NewPostPage.js'
@@ -87,7 +81,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('the new page correctly imports the new component', async () => {
+    it('the new page correctly imports the new component', async () => {
       expect(
         filesLower[
           path.normalize(
@@ -97,7 +91,7 @@ describe('admin/post', () => {
       ).toMatch(`import NewPost from 'src/components/Admin/Post/NewPost'`)
     })
 
-    test('creates a show page', async () => {
+    it('creates a show page', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/pages/Admin/Post/PostPage/PostPage.js'
@@ -105,7 +99,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('the show page correctly imports the show cell', async () => {
+    it('the show page correctly imports the show cell', async () => {
       expect(
         filesLower[
           path.normalize(
@@ -117,7 +111,7 @@ describe('admin/post', () => {
 
     // Cells
 
-    test('creates an edit cell', async () => {
+    it('creates an edit cell', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/EditPostCell/EditPostCell.js'
@@ -125,7 +119,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('the edit cell correctly imports the form', async () => {
+    it('the edit cell correctly imports the form', async () => {
       expect(
         filesLower[
           path.normalize(
@@ -135,7 +129,7 @@ describe('admin/post', () => {
       ).toMatch(`import PostForm from 'src/components/Admin/Post/PostForm'`)
     })
 
-    test('creates an index cell', async () => {
+    it('creates an index cell', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/PostsCell/PostsCell.js'
@@ -143,7 +137,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('the index cell correctly imports the index component', async () => {
+    it('the index cell correctly imports the index component', async () => {
       expect(
         filesLower[
           path.normalize(
@@ -153,7 +147,7 @@ describe('admin/post', () => {
       ).toMatch(`import Posts from 'src/components/Admin/Post/Posts'`)
     })
 
-    test('creates a show cell', async () => {
+    it('creates a show cell', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/PostCell/PostCell.js'
@@ -161,7 +155,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('the show cell correctly imports the show component', async () => {
+    it('the show cell correctly imports the show component', async () => {
       expect(
         filesLower[
           path.normalize(
@@ -173,7 +167,7 @@ describe('admin/post', () => {
 
     // Components
 
-    test('creates a form component', async () => {
+    it('creates a form component', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/PostForm/PostForm.js'
@@ -181,7 +175,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('creates an index component', async () => {
+    it('creates an index component', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/Posts/Posts.js'
@@ -189,7 +183,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('creates a new component', async () => {
+    it('creates a new component', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/NewPost/NewPost.js'
@@ -197,7 +191,7 @@ describe('admin/post', () => {
       ])
     })
 
-    test('the new component correctly imports the form', async () => {
+    it('the new component correctly imports the form', async () => {
       expect(
         filesLower[
           path.normalize(
@@ -207,7 +201,7 @@ describe('admin/post', () => {
       ).toMatch(`import PostForm from 'src/components/Admin/Post/PostForm'`)
     })
 
-    test('creates a show component', async () => {
+    it('creates a show component', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/Post/Post.js'
@@ -215,6 +209,7 @@ describe('admin/post', () => {
       ])
     })
   })
+
   describe('creates the correct routes', () => {
     // Routes
 
@@ -345,14 +340,24 @@ describe('admin/post', () => {
 })
 
 describe('Admin/Post', () => {
+  let filesUpper
+  beforeAll(async () => {
+    filesUpper = await scaffold.files({
+      model: 'Post',
+      path: 'Admin',
+      tests: true,
+      nestScaffoldByModel: true,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
+    it('returns exactly 19 files', () => {
       expect(Object.keys(filesUpper).length).toEqual(19)
     })
 
     // Layout
 
-    test('creates a layout', async () => {
+    it('creates a layout', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
@@ -362,7 +367,7 @@ describe('Admin/Post', () => {
 
     // Pages
 
-    test('creates a edit page', async () => {
+    it('creates a edit page', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/pages/Admin/Post/EditPostPage/EditPostPage.js'
@@ -370,7 +375,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the edit page correctly imports the edit cell', async () => {
+    it('the edit page correctly imports the edit cell', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -382,7 +387,7 @@ describe('Admin/Post', () => {
       )
     })
 
-    test('creates a index page', async () => {
+    it('creates a index page', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/pages/Admin/Post/PostsPage/PostsPage.js'
@@ -390,7 +395,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the index page correctly imports the index cell', async () => {
+    it('the index page correctly imports the index cell', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -400,7 +405,7 @@ describe('Admin/Post', () => {
       ).toMatch(`import PostsCell from 'src/components/Admin/Post/PostsCell'`)
     })
 
-    test('creates a new page', async () => {
+    it('creates a new page', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/pages/Admin/Post/NewPostPage/NewPostPage.js'
@@ -408,7 +413,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the new page correctly imports the new component', async () => {
+    it('the new page correctly imports the new component', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -418,7 +423,7 @@ describe('Admin/Post', () => {
       ).toMatch(`import NewPost from 'src/components/Admin/Post/NewPost'`)
     })
 
-    test('creates a show page', async () => {
+    it('creates a show page', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/pages/Admin/Post/PostPage/PostPage.js'
@@ -426,7 +431,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the show page correctly imports the show cell', async () => {
+    it('the show page correctly imports the show cell', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -438,7 +443,7 @@ describe('Admin/Post', () => {
 
     // Cells
 
-    test('creates an edit cell', async () => {
+    it('creates an edit cell', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/EditPostCell/EditPostCell.js'
@@ -446,7 +451,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the edit cell correctly imports the form', async () => {
+    it('the edit cell correctly imports the form', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -456,7 +461,7 @@ describe('Admin/Post', () => {
       ).toMatch(`import PostForm from 'src/components/Admin/Post/PostForm'`)
     })
 
-    test('creates an index cell', async () => {
+    it('creates an index cell', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/PostsCell/PostsCell.js'
@@ -464,7 +469,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the index cell correctly imports the index component', async () => {
+    it('the index cell correctly imports the index component', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -474,7 +479,7 @@ describe('Admin/Post', () => {
       ).toMatch(`import Posts from 'src/components/Admin/Post/Posts'`)
     })
 
-    test('creates a show cell', async () => {
+    it('creates a show cell', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/PostCell/PostCell.js'
@@ -482,7 +487,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the show cell correctly imports the show component', async () => {
+    it('the show cell correctly imports the show component', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -494,7 +499,7 @@ describe('Admin/Post', () => {
 
     // Components
 
-    test('creates a form component', async () => {
+    it('creates a form component', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/PostForm/PostForm.js'
@@ -502,7 +507,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('creates an index component', async () => {
+    it('creates an index component', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/Posts/Posts.js'
@@ -510,7 +515,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the index component correctly imports the QUERY', async () => {
+    it('the index component correctly imports the QUERY', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -520,7 +525,7 @@ describe('Admin/Post', () => {
       ).toMatch(`import { QUERY } from 'src/components/Admin/Post/PostsCell'`)
     })
 
-    test('the new component correctly imports the form', async () => {
+    it('the new component correctly imports the form', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -530,7 +535,7 @@ describe('Admin/Post', () => {
       ).toMatch(`import PostForm from 'src/components/Admin/Post/PostForm'`)
     })
 
-    test('creates a new component', async () => {
+    it('creates a new component', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/NewPost/NewPost.js'
@@ -538,7 +543,7 @@ describe('Admin/Post', () => {
       ])
     })
 
-    test('the new component correctly imports the form', async () => {
+    it('the new component correctly imports the form', async () => {
       expect(
         filesUpper[
           path.normalize(
@@ -548,7 +553,7 @@ describe('Admin/Post', () => {
       ).toMatch(`import PostForm from 'src/components/Admin/Post/PostForm'`)
     })
 
-    test('creates a show component', async () => {
+    it('creates a show component', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/components/Admin/Post/Post/Post.js'

@@ -4,13 +4,13 @@ So if Storybook is the first phase of creating/updating a component, phase two m
 
 If you've never done any kind of testing before this may be a little hard to follow. We've got a great document [all about testing](../../testing.md) (including some philosophy, for those so inclined) if you want a good overview of testing in general. We even build a super-simple test runner from scratch in plain Javascript to take some of the mystery out of how this all works!
 
-First let's run the existing suite to see if we broke anything:
+If you still have the test process running from the previous page then then you can just press `a` to run **a**ll tests. If you stopped your test process, you can start it again with:
 
 ```bash
 yarn rw test
 ```
 
-Well that didn't take long! Can you guess what we broke?
+Can you guess what broke in this test?
 
 ![image](https://user-images.githubusercontent.com/300/153312402-dd7f08bc-e23d-4acc-8202-cdfc9798a911.png)
 
@@ -79,6 +79,7 @@ Okay, let's do this:
 ```jsx title="web/src/components/ArticlesCell.test.js"
 // highlight-next-line
 import { render, screen, within } from '@redwoodjs/testing'
+
 import { Loading, Empty, Failure, Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -127,6 +128,7 @@ describe('ArticlesCell', () => {
 ```tsx title="web/src/components/ArticlesCell.test.tsx"
 // highlight-next-line
 import { render, screen, within } from '@redwoodjs/testing'
+
 import { Loading, Empty, Failure, Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -178,42 +180,40 @@ This loops through each article in our `standard()` mock and for each one:
 const truncatedBody = article.body.substring(0, 10)
 ```
 
-Create a variable `truncatedBody` containing the first 10 characters of the post body
+Create a variable `truncatedBody` containing the first 10 characters of the post body.
 
 ```javascript
 const matchedBody = screen.getByText(truncatedBody, { exact: false })
 ```
 
-Search through the rendered HTML on the screen and find the HTML element that contains the truncated body (note the `{ exact: false }` here, as normally the exact text, and only that text, would need to be present, but in this case there's probably more than just the 10 characters)
+Search through the rendered HTML on the screen and find the HTML element that contains the truncated body (note the `{ exact: false }` here, as normally the exact text, and only that text, would need to be present, but in this case there's probably more than just the 10 characters).
 
 ```javascript
 const ellipsis = within(matchedBody).getByText('...', { exact: false })
 ```
 
-Within the HTML element that was found in the previous line, find `...`, again without an exact match
+Within the HTML element that was found in the previous line, find `...`, again without an exact match.
 
 ```javascript
 expect(screen.getByText(article.title)).toBeInTheDocument()
 ```
 
-Find the title of the article in the page
+Find the title of the article in the page.
 
 ```javascript
 expect(screen.queryByText(article.body)).not.toBeInTheDocument()
 ```
-When trying to find the *full* text of the body, it should *not* be present
+When trying to find the *full* text of the body, it should *not* be present.
 
 ```javascript
 expect(matchedBody).toBeInTheDocument()
 ```
-Assert that the truncated text is present
+Assert that the truncated text is .
 
 ```javascript
 expect(ellipsis).toBeInTheDocument()
 ```
-Assert that the ellipsis is present
-
-As soon as you saved that test file the test should have run and passed! Press `a` to run the whole suite if you want to make sure nothing else broke. Remember to press `o` to go back to only testing changes again. (There's nothing wrong with running the full test suite each time, but it will take longer than only testing the things that have changed since the last time you committed your code.)
+Assert that the ellipsis is present.
 
 :::info What's the difference between `getByText()` and `queryByText()`?
 
@@ -221,11 +221,13 @@ As soon as you saved that test file the test should have run and passed! Press `
 
 :::
 
-To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` *is* in the document! Make sure to put the `summary={true}` back before we continue.
+As soon as you saved that test file the test should have run and passed! Press `a` to run the whole suite if you want to make sure nothing else broke. Remember to press `o` to go back to only testing changes again. (There's nothing wrong with running the full test suite each time, but it will take longer than only testing the things that have changed since the last time you committed your code.)
+
+To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and the expectation in our test `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` fails because the full body *is* in the document! Make sure to put the `summary={true}` back before we continue.
 
 ### What's the Deal with Mocks?
 
-Mocks are used when you want to define the data that would normally be returned by GraphQL. In cells, a GraphQL call goes out (the query defined by **QUERY**) and returned to the **Success** component. We don't want to have to run the api-side server and have real data in the database just for Storybook or our tests, so Redwood intercepts those GraphQL calls and returns the data from the mock instead.
+Did you wonder where the articles were coming from in our test? Was it the development database? Nope: that data came from a **Mock**. That's the `ArticlesCell.mock.js` file that lives next to your component, test and stories files. Mocks are used when you want to define the data that would normally be returned by GraphQL in your Storybook stories or tests. In cells, a GraphQL call goes out (the query defined by the variable `QUERY` at the top of the file) and returned to the `Success` component. We don't want to have to run the api-side server and have real data in the database just for Storybook or our tests, so Redwood intercepts those GraphQL calls and returns the data from the mock instead.
 
 :::info If the server is being mocked, how do we test the api-side code?
 
@@ -387,9 +389,9 @@ You can have as many mocks as you want, just import the names of the ones you ne
 
 ### Testing Article
 
-Our test suite is passing again but it's a trick! We never added a test for the actual `summary` functionality that we added to the `Article` component. We tested that `ArticlesCell` requests that `Article` return a summary, but what it means to render a summary is knowledge that only `Article` contains.
+Our test suite is passing again but it's a trick! We never added a test for the actual `summary` functionality that we added to the `Article` component. We tested that `ArticlesCell` renders (that eventually render an `Article`) include a summary, but what it means to render a summary is knowledge that only `Article` contains.
 
-When you get into the flow of building your app it can be very easy to overlook testing functionality like this. Wasn't it Winston Churchill who said "a thorough test suite requires eternal vigilance"? Techniques like [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development) (TDD) were established to help combat this tendency—write the test first, watch it fail, then write the code to make the test pass so that you know every line of real code you write is backed by a test. What we're doing is affectionately known as [Development Driven Testing](https://medium.com/table-xi/development-driven-testing-673d3959dac2). You'll probably settle somewhere in the middle but one maxim is always true—some tests are better than no tests.
+When you get into the flow of building your app it can be very easy to overlook testing functionality like this. Wasn't it Winston Churchill who said "a thorough test suite requires eternal vigilance"? Techniques like [Test Driven Development](https://en.wikipedia.org/wiki/Test-driven_development) (TDD) were established to help combat this tendency: when you want to write a new feature, write the test first, watch it fail, then write the code to make the test pass so that you know every line of real code you write is backed by a test. What we're doing is affectionately known as [Development Driven Testing](https://medium.com/table-xi/development-driven-testing-673d3959dac2). You'll probably settle somewhere in the middle but one maxim is always true: some tests are better than no tests.
 
 The summary functionality in `Article` is pretty simple, but there are a couple of different ways we could test it:
 
@@ -398,15 +400,16 @@ The summary functionality in `Article` is pretty simple, but there are a couple 
 
 In this case `truncate()` "belongs to" `Article` and the outside world really shouldn't need to worry about it or know that it exists. If we came to a point in development where another component needed to truncate text then that would be a perfect time to move this function to a shared location and import it into both components that need it. `truncate()` could then have its own dedicated test. But for now let's keep our separation of concerns and test the one thing that's "public" about this component—the result of the render.
 
-In this case let's just test that the output matches an exact string. You could spin yourself in circles trying to refactor the code to make it absolutely bulletproof to code changes breaking the tests, but will you ever actually need that level of flexibility? It's always a trade-off!
+In this case let's just test that the output matches an exact string. Since the knowledge of how long to make the summary is contained in `Article` itself, at this point it feels okay to have the test tightly coupled to the render result of this particular component. (`ArticlesCell` itself didn't know about how long to truncate, just that *something* was shortening the text.) You could spin yourself in circles trying to refactor the code to make it absolutely bulletproof to code changes breaking the tests, but will you ever actually need that level of flexibility? It's always a trade-off!
 
-We'll move the sample post data to a constant and then use it in both the existing test (which tests that not passing the `summary` prop at all results in the full body being rendered) and our new test that checks for the summary version being rendered:
+We'll move the sample article data in the test to a constant and then use it in both the existing test (which tests that not passing the `summary` prop at all results in the full body being rendered) and our new test that checks for the summary version being rendered:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/Article/Article.test.js"
 import { render, screen } from '@redwoodjs/testing'
+
 import Article from './Article'
 
 // highlight-start
@@ -449,6 +452,7 @@ describe('Article', () => {
 
 ```jsx title="web/src/components/Article/Article.test.tsx"
 import { render, screen } from '@redwoodjs/testing'
+
 import Article from './Article'
 
 // highlight-start

@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import path from 'path'
 
 import '../../../../lib/test'
@@ -7,24 +7,18 @@ import * as scaffold from '../scaffold'
 
 jest.mock('execa')
 
-let filesLower, filesUpper
-
-beforeAll(async () => {
-  filesLower = await scaffold.files({
-    model: 'Post',
-    path: 'admin',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-  filesUpper = await scaffold.files({
-    model: 'Post',
-    path: 'Admin',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-})
-
 describe('admin/Post', () => {
+  let filesLower
+
+  beforeAll(async () => {
+    filesLower = await scaffold.files({
+      model: 'Post',
+      path: 'admin',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
     test('returns exactly 19 files', () => {
       expect(Object.keys(filesLower).length).toEqual(19)
@@ -343,6 +337,17 @@ describe('admin/Post', () => {
 })
 
 describe('Admin/Post', () => {
+  let filesUpper
+
+  beforeAll(async () => {
+    filesUpper = await scaffold.files({
+      model: 'Post',
+      path: 'Admin',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
     test('returns exactly 19 files', () => {
       expect(Object.keys(filesUpper).length).toEqual(19)

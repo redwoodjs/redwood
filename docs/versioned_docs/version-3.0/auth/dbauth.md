@@ -418,6 +418,20 @@ model UserCredential {
 
 Run `yarn rw prisma migrate dev` to apply the changes to your database.
 
+:::caution Do Not Allow GraphQL Access to `UserCredential`
+
+As you can probably tell by the name, this new model contains secret credential info for the user. You **should not** make this data publicly available by adding an SDL file to `api/src/graphql`.
+
+Also: if you (re)generate the SDL for your `User` model, the generator will happily include the `credentials` relationship, assuming you want to allow access to that data (it does this automatically for all relaionships). This will result in an error and warning message in the console from the API server when it tries to read the new SDL file: the `User` SDL refers to a `UserCredential` type, which does not exist (there's no `userCredential.sdl.js` file to define it).
+
+If you see this notice after (re)generating, simply remove the following line from the `User` SDL:
+
+```
+credentials: [UserCredential]!
+```
+
+:::
+
 ### Function Config
 
 Next we need to let dbAuth know about the new field and model names, as well as how you want WebAuthn to behave (see the highlighted section)

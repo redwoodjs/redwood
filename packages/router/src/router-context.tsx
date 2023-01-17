@@ -1,10 +1,19 @@
 import React, { useReducer, createContext, useContext } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
+import { AuthContextInterface, useNoAuth } from '@redwoodjs/auth'
 
 import type { ParamType } from './util'
 
-type UseAuth = typeof useAuth
+type UseAuth = () => AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
 
 export interface RouterState {
   paramTypes?: Record<string, ParamType>
@@ -32,12 +41,12 @@ function stateReducer(state: RouterState, newState: Partial<RouterState>) {
 }
 
 export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
-  useAuth: customUseAuth,
+  useAuth,
   paramTypes,
   children,
 }) => {
   const [state, setState] = useReducer(stateReducer, {
-    useAuth: customUseAuth || useAuth,
+    useAuth: useAuth || useNoAuth,
     paramTypes,
   })
 

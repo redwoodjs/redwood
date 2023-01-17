@@ -282,7 +282,7 @@ export function createCell<
     // eslint-disable-next-line prefer-const
     let { error, loading, data, ...queryRest } = useQuery(query, options)
 
-    if (global.__REDWOOD__PRERENDERING) {
+    if (globalThis.__REDWOOD__PRERENDERING) {
       // __REDWOOD__PRERENDERING will always either be set, or not set. So
       // rules-of-hooks are still respected, even though we wrap this in an if
       // statement
@@ -319,11 +319,12 @@ export function createCell<
           // so using `any` here
           queryRest = { variables } as any
         } else {
-          queryCache[cacheKey] ||= {
-            query,
-            variables: options.variables,
-            hasProcessed: false,
-          }
+          queryCache[cacheKey] ||
+            (queryCache[cacheKey] = {
+              query,
+              variables: options.variables,
+              hasProcessed: false,
+            })
         }
       }
     }

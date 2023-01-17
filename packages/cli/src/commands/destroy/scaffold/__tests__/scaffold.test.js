@@ -1,11 +1,11 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 import fs from 'fs'
 
 import '../../../../lib/test'
 
 import { getPaths, getDefaultArgs } from '../../../../lib'
-import { yargsDefaults as defaults } from '../../../generate'
+import { yargsDefaults as defaults } from '../../../generate/helpers'
 import { files } from '../../../generate/scaffold/scaffold'
 import { tasks } from '../scaffold'
 
@@ -24,7 +24,7 @@ jest.mock('../../../../lib/schemaHelpers', () => {
   return {
     ...jest.requireActual('../../../../lib/schemaHelpers'),
     getSchema: () =>
-      require(path.join(global.__dirname, 'fixtures', 'post.json')),
+      require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
   }
 })
 

@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
+    "emitDeclarationOnly": false,
   },
   "include": ["src"],
   "references": [
@@ -11,5 +12,6 @@
     { "path": "../structure" },
     { "path": "../prerender" },
     { "path": "../api-server" },
+    { "path": "../auth-providers-setup" },
   ]
 }

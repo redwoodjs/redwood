@@ -1,6 +1,10 @@
-import { Plugin } from '@graphql-yoga/common'
+import { Plugin } from 'graphql-yoga'
 
-import { AuthContextPayload, getAuthenticationContext } from '@redwoodjs/api'
+import {
+  AuthContextPayload,
+  getAuthenticationContext,
+  Decoder,
+} from '@redwoodjs/api'
 
 // import { AuthenticationError } from '../errors'
 import {
@@ -13,7 +17,8 @@ import {
  * based on custom getCurrentUser function.
  */
 export const useRedwoodAuthContext = (
-  getCurrentUser: GraphQLHandlerOptions['getCurrentUser']
+  getCurrentUser: GraphQLHandlerOptions['getCurrentUser'],
+  authDecoder?: Decoder | Decoder[]
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {
@@ -23,6 +28,7 @@ export const useRedwoodAuthContext = (
 
       try {
         authContext = await getAuthenticationContext({
+          authDecoder,
           event: context.event,
           context: requestContext,
         })

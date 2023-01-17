@@ -48,7 +48,7 @@ export default (file, api) => {
 
   const useAuthImport = j.importDeclaration(
     [j.importSpecifier(j.identifier('useAuth'))],
-    j.stringLiteral('@redwoodjs/auth')
+    j.stringLiteral('src/auth')
   )
 
   root.find(j.ImportDeclaration).at(0).insertBefore(useAuthImport)

@@ -55,7 +55,10 @@ module.exports = {
           ],
         },
         {
-          'Chapter 7': ['tutorial/chapter7/rbac'],
+          'Chapter 7': [
+            'tutorial/chapter7/rbac',
+            'tutorial/chapter7/api-side-currentuser',
+          ],
         },
         'tutorial/afterword',
       ],
@@ -86,13 +89,8 @@ module.exports = {
             { type: 'doc', id: 'auth/clerk' },
             { type: 'doc', id: 'auth/custom' },
             { type: 'doc', id: 'auth/firebase' },
-            { type: 'doc', id: 'auth/gotrue' },
-            { type: 'doc', id: 'auth/magic-link' },
             { type: 'doc', id: 'auth/netlify' },
-            { type: 'doc', id: 'auth/nhost' },
-            { type: 'doc', id: 'auth/okta' },
             { type: 'doc', id: 'auth/supabase' },
-            { type: 'doc', id: 'auth/wallet-connect' },
           ],
         },
         'builds',
@@ -115,7 +113,11 @@ module.exports = {
           items: [
             { type: 'doc', label: 'Introduction', id: 'deploy/introduction' },
             { type: 'doc', label: 'Baremetal', id: 'deploy/baremetal' },
-            { type: 'doc', label: 'AWS via Flightcontrol', id: 'deploy/flightcontrol' },
+            {
+              type: 'doc',
+              label: 'AWS via Flightcontrol',
+              id: 'deploy/flightcontrol',
+            },
             { type: 'doc', label: 'Layer0', id: 'deploy/layer0' },
             { type: 'doc', label: 'Netlify', id: 'deploy/netlify' },
             { type: 'doc', label: 'Render', id: 'deploy/render' },

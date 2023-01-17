@@ -8,7 +8,8 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
-import { yargsDefaults } from '../../generate'
+import { prepareForRollback } from '../../../lib/rollback'
+import { validateName, yargsDefaults } from '../helpers'
 
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 const TSCONFIG_TEMPLATE = path.resolve(
@@ -42,6 +43,11 @@ export const builder = (yargs) => {
       description: 'A descriptor of what this script does',
       type: 'string',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -64,6 +70,8 @@ export const handler = async ({ force, ...args }) => {
      yarn rw exec ${args.name} --param1 true
 `
 
+  validateName(args.name)
+
   const tasks = new Listr(
     [
       {
@@ -83,6 +91,9 @@ export const handler = async ({ force, ...args }) => {
   )
 
   try {
+    if (args.rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

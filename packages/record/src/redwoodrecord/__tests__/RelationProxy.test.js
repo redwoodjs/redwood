@@ -17,7 +17,7 @@ Comment.schema = datamodel
 Category.db = db
 Category.schema = datamodel
 
-global.console.warn = jest.fn()
+globalThis.console.warn = jest.fn()
 
 beforeEach(() => {
   db.user.mockClear()
@@ -27,7 +27,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  global.console.warn.mockClear()
+  globalThis.console.warn.mockClear()
   jest.restoreAllMocks()
 })
 

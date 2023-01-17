@@ -13,9 +13,11 @@ import BlogLayout from 'src/layouts/BlogLayout'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import HomePage from 'src/pages/HomePage'
 
+import { useAuth } from './auth'
+
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
@@ -38,7 +40,7 @@ const Routes = () => {
           <Route path="/profile" page={ProfilePage} name="profile" />
         </Private>
         <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" prerender />
-        <Route path="/contact" page={ContactPage} name="contact" />
+        <Route path="/contact" page={ContactUsPage} name="contactUs" />
         <Route path="/about" page={AboutPage} name="about" prerender />
         <Route path="/" page={HomePage} name="home" prerender />
         <Route notfound page={NotFoundPage} prerender />

@@ -21,7 +21,7 @@ services:
   - key: NODE_VERSION
     value: 16
   - key: SKIP_INSTALL_DEPS
-    value: TRUE
+    value: true
   routes:
   - type: rewrite
     source: /.redwood/functions/*
@@ -37,6 +37,7 @@ services:
 
 - name: ${PROJECT_NAME}-api
   type: web
+  plan: free
   env: node
   region: oregon
   buildCommand: yarn && yarn rw build api

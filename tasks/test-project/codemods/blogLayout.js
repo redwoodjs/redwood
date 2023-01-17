@@ -25,9 +25,9 @@ return (
           <li>
             <Link
               className="py-2 px-4 hover:bg-blue-600 transition duration-100 rounded"
-              to={routes.contact()}
+              to={routes.contactUs()}
             >
-              Contact
+              Contact Us
             </Link>
           </li>
           <li>
@@ -83,7 +83,7 @@ export default (file, api) => {
 
   const authImport = j.importDeclaration(
     [j.importSpecifier(j.identifier('useAuth'), j.identifier('useAuth'))],
-    j.stringLiteral('@redwoodjs/auth')
+    j.stringLiteral('src/auth')
   )
 
   root.find(j.VariableDeclaration).insertBefore(routerImport)

@@ -1,62 +1,38 @@
-import fs from 'fs'
-
 import { Listr, ListrTask } from 'listr2'
-import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 import yargs from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { colors } from '../lib/colors'
-import { getPaths } from '../lib/paths'
-
-import { apiSideFiles } from './authFiles'
 import {
   addApiPackages,
-  addAuthConfigToGqlApi,
-  addAuthConfigToWeb,
   addWebPackages,
-  generateAuthApiFiles,
   installPackages,
-  printNotes,
+} from '../lib/installHelpers'
+
+import {
+  addAuthConfigToGqlApi,
+  addConfigToRoutes,
+  addConfigToWebApp,
+  AuthGeneratorCtx,
+  setAuthSetupMode,
+  createWebAuth,
+  generateAuthApiFiles,
 } from './authTasks'
 
-/**
- * Check if one of the api side auth files already exists and if so, ask the
- * user to overwrite
- */
-async function shouldForce(force: boolean, basedir: string, webAuthn: boolean) {
-  if (force) {
-    return true
-  }
-
-  const existingFiles = Object.keys(apiSideFiles({ basedir, webAuthn })).filter(
-    (filePath) => fs.existsSync(filePath)
-  )
-
-  if (existingFiles.length > 0) {
-    const shortPaths = existingFiles.map((filePath) =>
-      filePath.replace(getPaths().base, '')
-    )
-    const forceResponse = await prompts({
-      type: 'confirm',
-      name: 'answer',
-      message: `Overwrite existing ${shortPaths.join(', ')}?`,
-      initial: false,
-    })
-
-    return forceResponse.answer
-  }
-
-  return false
-}
-
 export const standardAuthBuilder = (yargs: yargs.Argv) => {
-  yargs
+  return yargs
     .option('force', {
       alias: 'f',
       default: false,
-      description: 'Overwrite existing configuration',
+      description: 'Overwrite existing auth configuration',
+      type: 'boolean',
+    })
+    .option('verbose', {
+      alias: 'v',
+      default: false,
+      description: 'Log setup output',
       type: 'boolean',
     })
     .epilogue(
@@ -69,15 +45,15 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
 
 interface Args {
   basedir: string
-  rwVersion: string
   forceArg: boolean
   provider: string
   authDecoderImport?: string
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTask?: ListrTask<never>
+  extraTask?: ListrTask<AuthGeneratorCtx>
   notes?: string[]
+  verbose?: boolean
 }
 
 // from lodash
@@ -87,9 +63,12 @@ function truthy<T>(value: T): value is Truthy<T> {
   return !!value
 }
 
+/**
+ *  basedir assumes that you must have a templates folder in that directory.
+ *  See folder structure of auth providers in packages/auth-providers/<provider>/setup/src
+ */
 export const standardAuthHandler = async ({
   basedir,
-  rwVersion,
   forceArg,
   provider,
   authDecoderImport,
@@ -98,25 +77,73 @@ export const standardAuthHandler = async ({
   apiPackages = [],
   extraTask,
   notes,
+  verbose,
 }: Args) => {
-  const force = await shouldForce(forceArg, basedir, webAuthn)
+  // @TODO detect if auth already setup. If it is, ask how to proceed:
+  // How would you like to proceed?
+  // 1. Replace existing auth provider with <provider>
+  // 2. Combine providers ~~ NOT SUPPORTED YET ~~
 
-  const tasks = new Listr<never>(
+  const tasks = new Listr<AuthGeneratorCtx, 'verbose' | 'default'>(
     [
-      generateAuthApiFiles(basedir, provider, force, webAuthn),
-      addAuthConfigToWeb(basedir, provider),
+      setAuthSetupMode(forceArg),
+      generateAuthApiFiles(basedir, webAuthn),
+
+      addConfigToWebApp(),
+      createWebAuth(basedir, webAuthn),
+      addConfigToRoutes(),
+
       addAuthConfigToGqlApi(authDecoderImport),
-      addWebPackages(webPackages, rwVersion),
-      addApiPackages(apiPackages),
-      installPackages,
+      webPackages.length && addWebPackages(webPackages),
+      apiPackages.length && addApiPackages(apiPackages),
+      (webPackages.length || apiPackages.length) && installPackages,
       extraTask,
-      notes ? printNotes(notes) : null,
+      notes && {
+        title: 'One more thing...',
+        task: (ctx: AuthGeneratorCtx) => {
+          // Can't console.log the notes here because of
+          // https://github.com/cenk1cenk2/listr2/issues/296
+          // So we do it after the tasks have all finished instead
+          if (ctx.setupMode === 'REPLACE') {
+            notes.push(
+              ...[
+                '',
+                `${colors.warning(
+                  'Your existing auth provider has been replaced!'
+                )}`,
+                'You will still need to manually remove the old auth provider config',
+                'functions and dependencies (in your web and api package.jsons)',
+              ]
+            )
+          }
+
+          if (ctx.setupMode === 'COMBINE') {
+            notes.push(
+              colors.warning(
+                "To avoid overwriting existing files we've generated new file " +
+                  'names for the newly generated files. This probably means ' +
+                  `${ctx.provider} auth doesn't work out of the box. You'll most ` +
+                  'likely have to manually merge some of the generated files ' +
+                  'with your existing auth files'
+              )
+            )
+          }
+        },
+      },
     ].filter(truthy),
-    { rendererOptions: { collapse: false } }
+    {
+      rendererOptions: { collapse: false },
+      renderer: verbose ? 'verbose' : 'default',
+      ctx: {
+        setupMode: 'UNKNOWN',
+        provider, // provider name passed from CLI
+      },
+    }
   )
 
   try {
     await tasks.run()
+    notes && console.log(`\n   ${notes.join('\n   ')}\n`)
   } catch (e) {
     if (isErrorWithMessage(e)) {
       errorTelemetry(process.argv, e.message)

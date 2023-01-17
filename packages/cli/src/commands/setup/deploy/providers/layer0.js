@@ -4,17 +4,13 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   ERR_MESSAGE_MISSING_CLI,
   ERR_MESSAGE_NOT_INITIALIZED,
 } from '../../../deploy/layer0'
-import {
-  preRequisiteCheckTask,
-  printSetupNotes,
-  addPackagesTask,
-} from '../helpers'
+import { preRequisiteCheckTask, printSetupNotes } from '../helpers'
 
 export const command = 'layer0'
 export const description = 'Setup Layer0 deploy'
