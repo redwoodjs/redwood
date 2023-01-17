@@ -7539,7 +7539,7 @@ __metadata:
     "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 18.0.24
+    "@types/react": 18.0.26
     "@types/react-dom": 18.0.8
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.27.1
@@ -7700,7 +7700,7 @@ __metadata:
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 3.2.0
     "@types/lodash.isequal": 4.5.6
-    "@types/react": 18.0.24
+    "@types/react": 18.0.26
     "@types/react-dom": 18.0.8
     core-js: 3.27.1
     jest: 29.3.1
@@ -7799,7 +7799,7 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 29.2.5
     "@types/node": 16.18.11
-    "@types/react": 18.0.24
+    "@types/react": 18.0.26
     "@types/react-dom": 18.0.8
     "@types/webpack": 5.28.0
     babel-jest: 29.3.1
@@ -7847,7 +7847,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/jest-dom": 5.16.5
     "@types/prop-types": 15.7.5
-    "@types/react": 18.0.24
+    "@types/react": 18.0.26
     "@types/react-dom": 18.0.8
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.27.1
@@ -10296,14 +10296,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.0.24":
-  version: 18.0.24
-  resolution: "@types/react@npm:18.0.24"
+"@types/react@npm:18.0.26":
+  version: 18.0.26
+  resolution: "@types/react@npm:18.0.26"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 8ea907a8f944421a120f4db9fe52fe3752837e11031ff16b866e835adebb09b2b2ca3ac5f8aa622683778f6d40f791a369c9008c45537c1a7eb64347648fae3c
+  checksum: 25d59c3d5522ef9e48d5bda4657fa0ba19c50952a18780110c928896897d3136a77c5bc26cbfb08137c9bf6ec0c1f37f4c26dcfb0678fedeb6956fdf9140fd0c
   languageName: node
   linkType: hard
 
