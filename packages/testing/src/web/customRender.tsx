@@ -10,6 +10,8 @@ import type {
 
 import { MockProviders } from './MockProviders'
 
+export type CustomRenderHookOptions<Props> = RenderHookOptions<Props>
+
 export const customRender = (
   ui: React.ReactElement,
   options: RenderOptions = {}
@@ -22,7 +24,7 @@ export const customRender = (
 
 export const customRenderHook = <Props, Result>(
   render: (props: Props) => Result,
-  options?: RenderHookOptions<Props>
+  options?: CustomRenderHookOptions<Props>
 ): RenderHookResult<Result, Props> => {
   return renderHook(render, {
     wrapper: (props: any) => <MockProviders {...props} />,
