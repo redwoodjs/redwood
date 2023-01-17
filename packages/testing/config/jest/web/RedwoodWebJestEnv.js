@@ -11,7 +11,7 @@ module.exports = class RedwoodWebJestEnv extends TestEnvironment {
       this.global.TextDecoder = TextDecoder
     }
     if (typeof this.global.crypto.subtle === 'undefined') {
-      this.global.crypto.subtle = {}
+      this.global.crypto.subtle = {} // To make tests work with auth that use WebCrypto like auth0
     }
   }
 }
