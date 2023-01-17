@@ -271,98 +271,93 @@ describe('slow imports', () => {
     mockDelay = 0
   })
 
-  // test('Basic home page', async () => {
-  //   const screen = render(<TestRouter />)
-  //   await waitFor(() => screen.getByText('HomePagePlaceholder'))
-  //   await waitFor(() => screen.getByText('Home Page'))
-  // })
+  test('Basic home page', async () => {
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('HomePagePlaceholder'))
+    await waitFor(() => screen.getByText('Home Page'))
+  })
 
-  // test('Navigation', async () => {
-  //   const screen = render(<TestRouter />)
-  //   // First we should render an empty page while waiting for pageLoadDelay to
-  //   // pass
-  //   expect(screen.container).toBeEmptyDOMElement()
+  test('Navigation', async () => {
+    const screen = render(<TestRouter />)
+    // First we should render an empty page while waiting for pageLoadDelay to
+    // pass
+    expect(screen.container).toBeEmptyDOMElement()
 
-  //   // Then we should render whileLoadingPage
-  //   await waitFor(() => screen.getByText('HomePagePlaceholder'))
+    // Then we should render whileLoadingPage
+    await waitFor(() => screen.getByText('HomePagePlaceholder'))
 
-  //   // Finally we should render the actual page
-  //   await waitFor(() => screen.getByText('Home Page'))
+    // Finally we should render the actual page
+    await waitFor(() => screen.getByText('Home Page'))
 
-  //   act(() => navigate('/about'))
+    act(() => navigate('/about'))
 
-  //   // Now after navigating we should keep rendering the previous page until
-  //   // the new page has loaded, or until pageLoadDelay has passed. This
-  //   // ensures we don't show a "white flash", i.e. render an empty page, while
-  //   // navigating the page
-  //   expect(screen.container).not.toBeEmptyDOMElement()
-  //   await waitFor(() => screen.getByText('Home Page'))
-  //   expect(screen.container).not.toBeEmptyDOMElement()
+    // Now after navigating we should keep rendering the previous page until
+    // the new page has loaded, or until pageLoadDelay has passed. This
+    // ensures we don't show a "white flash", i.e. render an empty page, while
+    // navigating the page
+    expect(screen.container).not.toBeEmptyDOMElement()
+    await waitFor(() => screen.getByText('Home Page'))
+    expect(screen.container).not.toBeEmptyDOMElement()
 
-  //   // As for HomePage we first render the placeholder...
-  //   await waitFor(() => screen.getByText('AboutPagePlaceholder'))
-  //   // ...and then the actual page
-  //   await waitFor(() => screen.getByText('About Page'))
-  // })
+    // As for HomePage we first render the placeholder...
+    await waitFor(() => screen.getByText('AboutPagePlaceholder'))
+    // ...and then the actual page
+    await waitFor(() => screen.getByText('About Page'))
+  })
 
-  // FIXME(pc): https://github.com/redwoodjs/redwood/actions/runs/3102081808/jobs/5024055246#step:8:1507
-  // test('Redirect page', async () => {
-  //   act(() => navigate('/redirect'))
-  //   const screen = render(<TestRouter />)
-  //   await waitFor(() => screen.getByText('RedirectPagePlaceholder'))
-  //   await waitFor(() => screen.getByText('About Page'))
-  // })
+  test('Redirect page', async () => {
+    act(() => navigate('/redirect'))
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('RedirectPagePlaceholder'))
+    await waitFor(() => screen.getByText('About Page'))
+  })
 
-  // FIXME(pc): https://github.com/redwoodjs/redwood/actions/runs/3380341134/jobs/5613033589#step:8:744
-  // test('Redirect route', async () => {
-  //   const screen = render(<TestRouter />)
-  //   await waitFor(() => screen.getByText('HomePagePlaceholder'))
-  //   await waitFor(() => screen.getByText('Home Page'))
-  //   act(() => navigate('/redirect2/redirected?q=cue'))
-  //   await waitFor(() => screen.getByText('ParamPagePlaceholder'))
-  //   await waitFor(() => screen.getByText('param redirectedcue'))
-  // })
+  test('Redirect route', async () => {
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('HomePagePlaceholder'))
+    await waitFor(() => screen.getByText('Home Page'))
+    act(() => navigate('/redirect2/redirected?q=cue'))
+    await waitFor(() => screen.getByText('ParamPagePlaceholder'))
+    await waitFor(() => screen.getByText('param redirectedcue'))
+  })
 
-  // FIXME(pc): https://github.com/redwoodjs/redwood/actions/runs/3102081808/jobs/5024055246#step:8:1561
-  // test('Private page when not authenticated', async () => {
-  //   act(() => navigate('/private'))
-  //   const screen = render(<TestRouter />)
-  //   await waitFor(() => {
-  //     expect(
-  //       screen.queryByText('PrivatePagePlaceholder')
-  //     ).not.toBeInTheDocument()
-  //     expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
-  //     expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
-  //   })
-  //   await waitFor(() => screen.getByText('Login Page'))
-  // })
+  test('Private page when not authenticated', async () => {
+    act(() => navigate('/private'))
+    const screen = render(<TestRouter />)
+    await waitFor(() => {
+      expect(
+        screen.queryByText('PrivatePagePlaceholder')
+      ).not.toBeInTheDocument()
+      expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
+      expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
+    })
+    await waitFor(() => screen.getByText('Login Page'))
+  })
 
-  // FIXME(pc): https://github.com/redwoodjs/redwood/actions/runs/3381800823/jobs/5616090391#step:8:728
-  // test('Private page when authenticated', async () => {
-  //   act(() => navigate('/private'))
-  //   const screen = render(<TestRouter authenticated={true} />)
+  test('Private page when authenticated', async () => {
+    act(() => navigate('/private'))
+    const screen = render(<TestRouter authenticated={true} />)
 
-  //   await waitFor(() => screen.getByText('PrivatePagePlaceholder'))
-  //   await waitFor(() => screen.getByText('Private Page'))
-  //   await waitFor(() => {
-  //     expect(screen.queryByText('Login Page')).not.toBeInTheDocument()
-  //   })
-  // })
+    await waitFor(() => screen.getByText('PrivatePagePlaceholder'))
+    await waitFor(() => screen.getByText('Private Page'))
+    await waitFor(() => {
+      expect(screen.queryByText('Login Page')).not.toBeInTheDocument()
+    })
+  })
 
-  // FIXME(pc): https://github.com/redwoodjs/redwood/actions/runs/3102081808/jobs/5024055246#step:8:1634
-  // test('Private page when authenticated but does not have the role', async () => {
-  //   act(() => navigate('/private_with_role'))
-  //   const screen = render(<TestRouter authenticated={true} hasRole={false} />)
+  test('Private page when authenticated but does not have the role', async () => {
+    act(() => navigate('/private_with_role'))
+    const screen = render(<TestRouter authenticated={true} hasRole={false} />)
 
-  //   await waitFor(() => {
-  //     expect(
-  //       screen.queryByText('PrivatePagePlaceholder')
-  //     ).not.toBeInTheDocument()
-  //     expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
-  //     expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
-  //   })
-  //   await waitFor(() => screen.getByText('Login Page'))
-  // })
+    await waitFor(() => {
+      expect(
+        screen.queryByText('PrivatePagePlaceholder')
+      ).not.toBeInTheDocument()
+      expect(screen.queryByText('Private Page')).not.toBeInTheDocument()
+      expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
+    })
+    await waitFor(() => screen.getByText('Login Page'))
+  })
 
   test('Private page when authenticated but does have the role', async () => {
     act(() => navigate('/private_with_role'))
@@ -376,71 +371,69 @@ describe('slow imports', () => {
     })
   })
 
-  // FIXME(pc): https://github.com/redwoodjs/redwood/actions/runs/3381614512/jobs/5615718254#step:8:773
-  // test('useLocation', async () => {
-  //   act(() => navigate('/location'))
-  //   const screen = render(<TestRouter />)
-  //   await waitFor(() => screen.getByText('Location Page'))
-  //   await waitFor(() => screen.getByText('/location'))
+  test('useLocation', async () => {
+    act(() => navigate('/location'))
+    const screen = render(<TestRouter />)
+    await waitFor(() => screen.getByText('Location Page'))
+    await waitFor(() => screen.getByText('/location'))
 
-  //   act(() => navigate('/about'))
-  //   // After navigating we will keep rendering the previous page for 100 ms,
-  //   // (which is our configured delay) before rendering the "whileLoading"
-  //   // page.
-  //   await waitFor(() => screen.getByText('Location Page'))
+    act(() => navigate('/about'))
+    // After navigating we will keep rendering the previous page for 100 ms,
+    // (which is our configured delay) before rendering the "whileLoading"
+    // page.
+    await waitFor(() => screen.getByText('Location Page'))
 
-  //   // Because we're still rendering the LocationPage, the pathname returned
-  //   // by useLocation should still be /location
-  //   // But because of a limitation in our implementation, that's currently
-  //   // not the case.
-  //   // TODO: Update this test when #3779 is fixed. (It'll start failing)
-  //   await waitFor(() => screen.getByText('/about'))
-  //   // await waitFor(() => screen.getByText('/location'))
+    // Because we're still rendering the LocationPage, the pathname returned
+    // by useLocation should still be /location
+    // But because of a limitation in our implementation, that's currently
+    // not the case.
+    // TODO: Update this test when #3779 is fixed. (It'll start failing)
+    await waitFor(() => screen.getByText('/about'))
+    // await waitFor(() => screen.getByText('/location'))
 
-  //   // And then we'll render the placeholder...
-  //   await waitFor(() => screen.getByText('AboutPagePlaceholder'))
-  //   // ...followed by the actual page
-  //   await waitFor(() => screen.getByText('About Page'))
-  // })
+    // And then we'll render the placeholder...
+    await waitFor(() => screen.getByText('AboutPagePlaceholder'))
+    // ...followed by the actual page
+    await waitFor(() => screen.getByText('About Page'))
+  })
 
-  // FIXME(pc): https://github.com/redwoodjs/redwood/actions/runs/3381614512/jobs/5615718254#step:8:790
-  // test('path params should never be empty', async () => {
-  //   const PathParamPage = ({ value }) => {
-  //     expect(value).not.toBeFalsy()
-  //     return <p>{value}</p>
-  //   }
+  test('path params should never be empty', async () => {
+    const PathParamPage = ({ value }) => {
+      expect(value).not.toBeFalsy()
+      return <p>{value}</p>
+    }
 
-  //   const TestRouter = () => (
-  //     <Router pageLoadingDelay={100}>
-  //       <Route
-  //         path="/about"
-  //         page={AboutPage}
-  //         name="about"
-  //         whileLoadingPage={AboutPagePlaceholder}
-  //       />
-  //       <Route
-  //         path="/path-param-test/{value}"
-  //         page={PathParamPage}
-  //         name="params"
-  //         whileLoadingPage={ParamPagePlaceholder}
-  //       />
-  //     </Router>
-  //   )
+    const TestRouter = () => (
+      <Router pageLoadingDelay={100}>
+        <Route
+          path="/about"
+          page={AboutPage}
+          name="about"
+          whileLoadingPage={AboutPagePlaceholder}
+        />
+        <Route
+          path="/path-param-test/{value}"
+          page={PathParamPage}
+          name="params"
+          whileLoadingPage={ParamPagePlaceholder}
+        />
+      </Router>
+    )
 
-  //   act(() => navigate('/path-param-test/test_value'))
-  //   const screen = render(<TestRouter />)
+    act(() => navigate('/path-param-test/test_value'))
+    const screen = render(<TestRouter />)
 
-  //   // First we render the path parameter value "test_value"
-  //   await waitFor(() => screen.getByText('test_value'))
+    // First we render the path parameter value "test_value"
+    await waitFor(() => screen.getByText('test_value'))
 
-  //   act(() => navigate('/about'))
-  //   // After navigating we should keep displaying the old path value...
-  //   await waitFor(() => screen.getByText('test_value'))
-  //   // ...until we switch over to render the about page loading component...
-  //   await waitFor(() => screen.getByText('AboutPagePlaceholder'))
-  //   // ...followed by the actual page
-  //   await waitFor(() => screen.getByText('About Page'))
-  // })
+    act(() => navigate('/about'))
+    // After navigating we should keep displaying the old path value...
+    await waitFor(() => screen.getByText('test_value'))
+    // ...until we switch over to render the about page loading component...
+    await waitFor(() => screen.getByText('AboutPagePlaceholder'))
+    // ...followed by the actual page
+    await waitFor(() => screen.getByText('About Page'))
+  })
 
   test('usePageLoadingContext', async () => {
     // We want to show a loading indicator if loading pages is taking a long
