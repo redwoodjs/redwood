@@ -47,7 +47,7 @@
     "@types/jest": "29.2.5",
     "@types/node": "16.18.11",
     "@types/react": "18.0.26",
-    "@types/react-dom": "18.0.8",
+    "@types/react-dom": "18.0.10",
     "@types/webpack": "5.28.0",
     "babel-jest": "29.3.1",
     "babel-plugin-inline-react-svg": "2.0.1",
