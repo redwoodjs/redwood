@@ -4,6 +4,7 @@ jest.mock('fs')
 import fs from 'fs'
 import path from 'path'
 
+import { getPaths } from '../../../../lib'
 import { updateApiURLTask } from '../helpers'
 // Mock telemetry and other things
 import '../../../../lib/test'
@@ -13,7 +14,12 @@ jest.mock('../../../../lib', () => {
   return {
     getPaths: () => {
       return {
-        base: '../../../../../../../__fixtures__/example-todo-main',
+        base: path.resolve(
+          path.join(
+            __dirname,
+            '../../../../../../../__fixtures__/example-todo-main'
+          )
+        ),
       }
     },
     getConfig: () => ({
@@ -30,8 +36,7 @@ jest.mock('../../../../lib', () => {
   }
 })
 
-const REDWOOD_TOML_PATH =
-  '../../../../../../../__fixtures__/example-todo-main/redwood.toml'
+const REDWOOD_TOML_PATH = path.join(getPaths().base, 'redwood.toml')
 
 beforeEach(() => {
   fs.__setMockFiles({
