@@ -50,7 +50,12 @@ export default (file, api) => {
     [j.importSpecifier(j.identifier('useAuth'))],
     j.stringLiteral('src/auth')
   )
+  const reactNodeImport = j.importDeclaration(
+    [j.importSpecifier(j.identifier('ReactNode'))],
+    j.stringLiteral('react')
+  )
 
+  root.find(j.ImportDeclaration).at(0).insertBefore(reactNodeImport)
   root.find(j.ImportDeclaration).at(0).insertBefore(useAuthImport)
 
   return root
