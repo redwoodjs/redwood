@@ -18,7 +18,7 @@ import {
  */
 export const useRedwoodAuthContext = (
   getCurrentUser: GraphQLHandlerOptions['getCurrentUser'],
-  authDecoder?: Decoder
+  authDecoder?: Decoder | Decoder[]
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {

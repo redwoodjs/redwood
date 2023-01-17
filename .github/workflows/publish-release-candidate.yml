@@ -8,6 +8,12 @@ on:
     # No need to run on docs-only changes
     paths-ignore: ['docs/**']
 
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check-git-tags:
     name: 🏷 Check git tags
@@ -95,7 +101,7 @@ jobs:
   message-slack:
     name: 💬 Message Slack
     needs: publish-release-candidate
-    if: always()
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
 
     steps:

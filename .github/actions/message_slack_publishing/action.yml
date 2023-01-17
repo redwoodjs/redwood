@@ -29,7 +29,8 @@ runs:
           {
             "title": "${{ inputs.title }}",
             "status": "${{ steps.get-status-emoji.outputs.value }} ${{ inputs.status }}",
-            "version": "${{ inputs.version }}"
+            "version": "${{ inputs.version }}",
+            "ref": "${{ github.event.head_commit.url }}"
           }
       env:
         SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
