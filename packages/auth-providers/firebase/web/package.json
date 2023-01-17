@@ -29,7 +29,6 @@
   "devDependencies": {
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.12",
-    "@testing-library/react-hooks": "8.0.1",
     "@types/react": "18.0.26",
     "firebase": "9.15.0",
     "jest": "29.3.1",

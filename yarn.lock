@@ -6899,7 +6899,6 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
     "@types/react": 18.0.26
     core-js: 3.27.1
     jest: 29.3.1
@@ -6952,7 +6951,6 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 18.0.26
     core-js: 3.27.1
@@ -7005,7 +7003,6 @@ __metadata:
     "@clerk/clerk-react": 3.5.1
     "@clerk/types": 2.21.0
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
     "@types/react": 18.0.26
     core-js: 3.27.1
     jest: 29.3.1
@@ -7084,7 +7081,6 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@simplewebauthn/browser": 6.2.2
     "@simplewebauthn/typescript-types": 6.2.1
-    "@testing-library/react-hooks": 8.0.1
     "@types/react": 18.0.26
     core-js: 3.27.1
     jest: 29.3.1
@@ -7132,7 +7128,6 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
     "@types/react": 18.0.26
     core-js: 3.27.1
     firebase: 9.15.0
@@ -7184,7 +7179,6 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 18.0.26
     core-js: 3.27.1
@@ -7289,7 +7283,6 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
     "@types/react": 18.0.26
     core-js: 3.27.1
     jest: 29.3.1
