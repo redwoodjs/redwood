@@ -6239,14 +6239,14 @@ __metadata:
   linkType: hard
 
 "@octokit/webhooks@npm:^10.0.0":
-  version: 10.6.1
-  resolution: "@octokit/webhooks@npm:10.6.1"
+  version: 10.6.2
+  resolution: "@octokit/webhooks@npm:10.6.2"
   dependencies:
     "@octokit/request-error": ^3.0.0
     "@octokit/webhooks-methods": ^3.0.0
     "@octokit/webhooks-types": 6.7.0
     aggregate-error: ^3.1.0
-  checksum: fd993ca53b09567a28aaf6df782a3e6dc8d7169da9a8d10a01d4405763610b23cd2afbe916e694f695edfc36331d3b89b45f9b04e56aea8ee9c874497014d350
+  checksum: f1f0bc7690fc0befa31494e436d663cd1e2bd59f2bb921f434189f6bce17f9516c8bb45cbea82fc56e29d7c4fd2131cdd356bfc3953677f1ae66e7228474262d
   languageName: node
   linkType: hard
 
@@ -23704,11 +23704,11 @@ __metadata:
   linkType: hard
 
 "minimatch@npm:^5.0.1, minimatch@npm:^5.1.0":
-  version: 5.1.4
-  resolution: "minimatch@npm:5.1.4"
+  version: 5.1.5
+  resolution: "minimatch@npm:5.1.5"
   dependencies:
     brace-expansion: ^2.0.1
-  checksum: 92090c49aaa8d6f29ab6b225fc4153a575abe6a13580b18e94f704f9012be8b4a98077c1713033e7ff18e9d0db70f543e9c5f0344408ec0ada16bc156a46a76e
+  checksum: 4eb701ed310dcbc2fc19791bb4025cff6c518d200d2e6da28636e98586c6163427a62e9db14f138a86fdc4a795335ebd8944bb147990d3a7e8734b6ad5f97269
   languageName: node
   linkType: hard
 
