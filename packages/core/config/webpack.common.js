@@ -157,17 +157,19 @@ const getSharedPlugins = (isEnvProduction) => {
     // The define plugin will replace these keys with their values during build
     // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
-      ['process.env.RWJS_SRC_ROOT']: JSON.stringify(redwoodPaths.base),
-      ['process.env.RWJS_API_GRAPHQL_URL']: JSON.stringify(
-        redwoodConfig.web.apiGraphQLUrl ?? `${redwoodConfig.web.apiUrl}/graphql`
-      ),
-      ['process.env.RWJS_API_DBAUTH_URL']: JSON.stringify(
-        redwoodConfig.web.apiDbAuthUrl ?? `${redwoodConfig.web.apiUrl}/auth`
-      ),
-      ['process.env.RWJS_API_URL']: JSON.stringify(redwoodConfig.web.apiUrl),
-      ['process.env.__REDWOOD__APP_TITLE']: JSON.stringify(
-        redwoodConfig.web.title || path.basename(redwoodPaths.base)
-      ),
+      ['RWJS_WEB_BUNDLER']: JSON.stringify('webpack'),
+      ['RWJS_ENV']: JSON.stringify({
+        RWJS_API_GRAPHQL_URL:
+          redwoodConfig.web.apiGraphQLUrl ??
+          `${redwoodConfig.web.apiUrl}/graphql`,
+        RWJS_API_URL: redwoodConfig.web.apiUrl,
+        __REDWOOD__APP_TITLE:
+          redwoodConfig.web.title || path.basename(redwoodPaths.base),
+      }),
+      ['RWJS_DEBUG_ENV']: JSON.stringify({
+        RWJS_SRC_ROOT: redwoodPaths.base,
+        REDWOOD_ENV_EDITOR: process.env.REDWOOD_ENV_EDITOR,
+      }),
       ...getEnvVars(),
     }),
     new Dotenv({

@@ -36,7 +36,7 @@ rwServeTest(
     const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
     expect(navLinks.split('\n')).toEqual([
       'About',
-      'Contact',
+      'Contact Us',
       'Admin',
       'Log In',
     ])
@@ -73,12 +73,37 @@ rwServeTest(
     const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
     expect(navLinks.split('\n')).toEqual([
       'About',
-      'Contact',
+      'Contact Us',
       'Admin',
       'Log In',
     ])
 
     pageWithoutJs.close()
+  }
+)
+
+rwServeTest(
+  'Check that <meta> tags are rendering the correct dynamic data',
+  async ({ port }: ServeFixture & PlaywrightTestArgs) => {
+    const pageWithoutJs = await noJsBrowser.newPage()
+
+    await pageWithoutJs.goto(`http://localhost:${port}/blog-post/1`)
+
+    const metaDescription = await pageWithoutJs.locator(
+      'meta[name="description"]'
+    )
+
+    const ogDescription = await pageWithoutJs.locator(
+      'meta[property="og:description"]'
+    )
+    await expect(metaDescription).toHaveAttribute('content', 'Description 1')
+    await expect(ogDescription).toHaveAttribute('content', 'Description 1')
+
+    const title = await pageWithoutJs.locator('title').innerHTML()
+    await expect(title).toBe('Post 1 | Redwood App')
+
+    const ogTitle = await pageWithoutJs.locator('meta[property="og:title"]')
+    await expect(ogTitle).toHaveAttribute('content', 'Post 1')
   }
 )
 

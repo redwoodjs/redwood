@@ -4,7 +4,7 @@ import terminalLink from 'terminal-link'
 import { transformTSToJS } from '../../../lib'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,
@@ -374,6 +374,11 @@ export const builder = (yargs) => {
     .positional('name', {
       description: 'Name of the service',
       type: 'string',
+    })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
     })
     .epilogue(
       `Also see the ${terminalLink(

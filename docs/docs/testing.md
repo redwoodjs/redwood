@@ -274,97 +274,19 @@ render(<Article article={ title: 'Foobar' } />, {
 })
 ```
 :::
+### Mocking useLocation
 
-## Testing Custom Hooks
-
-Custom hooks are a great way to encapsulate non-presentational code.
-To test custom hooks, we'll use the `renderHook` function from `@redwoodjs/testing/web`.
-
-:::info
-Note that Redwood's `renderHook` function is based on [React Testing Library's](https://testing-library.com/docs/react-testing-library/api/#renderhook). The only difference is that Redwood's wraps everything with mock providers for the various providers in Redwood, such as auth, the GraphQL client, the router, etc.
-
-If you were to use [React Testing Library's `renderHook` function](https://testing-library.com/docs/react-testing-library/api/#renderhook), you'd need to provide your own wrapper function. In this case you probably want to compose the mock providers from `@redwoodjs/testing/web`:
+To mock `useLocation` in your component tests, wrap the component with `LocationProvider`:
 
 ```jsx
-import { renderHook, MockProviders } from '@redwoodjs/testing/web'
+import { LocationProvider } from '@redwoodjs/router'
 
-// ...
-
-renderHook(() => myCustomHook(), {
-  wrapper: ({ children }) => (
-    <MockProviders>
-      <MyCustomProvider>{children}</MyCustomProvider>
-    </MockProviders>
-  )
-})
+render(
+  <LocationProvider location={{ pathname: '', search: '?cancelled=true' }}>
+    <Component />
+  </LocationProvider>
+)
 ```
-:::
-
-To use `renderHook`:
-1. Call your custom hook from an inline function passed to `renderHook`. For example:
-```js
-const { result } = renderHook(() => useAccumulator(0))
-```
-2. `renderHook` will return an object with the following properties:
-- `result`: holds the return value of the hook in its `current` property (so `result.current`). Think of `result` as a `ref` for the most recently returned value
-- `rerender`: a function to render the previously rendered hook with new props
-
-Let's go through an example. Given the following custom hook:
-
-```js title="web/src/hooks/useAccumulator/useAccumulator.js"
-const useAccumulator = (initialValue) => {
-  const [total, setTotal] = useState(initialValue)
-
-  const add = (value) => {
-    const newTotal = total + value
-    setTotal(newTotal)
-    return newTotal
-  }
-
-  return { total, add }
-}
-```
-
-The test could look as follows:
-
-```js title="web/src/hooks/useAccumulator/useAccumulator.test.js"
-import { renderHook } from '@redwoodjs/testing/web'
-import { useAccumulator } from './useAccumulator'
-
-describe('useAccumulator hook example in docs', () => {
-  it('has the correct initial state', () => {
-    const { result } = renderHook(() => useAccumulator(42))
-    expect(result.current.total).toBe(42)
-  })
-
-  it('adds a value', () => {
-    const { result } = renderHook(() => useAccumulator(1))
-    result.current.add(5)
-    expect(result.current.total).toBe(6)
-  })
-
-  it('adds multiple values', () => {
-    const { result } = renderHook(() => useAccumulator(0))
-    result.current.add(5)
-    result.current.add(10)
-    expect(result.current.total).toBe(15)
-  })
-
-  it('re-initializes the accumulator if passed a new initializing value', () => {
-    const { result, rerender } = renderHook(
-      (initialValue) => useAccumulator(initialValue),
-      {
-        initialProps: 0,
-      }
-    )
-    result.current.add(5)
-    rerender(99)
-    expect(result.current.total).toBe(99)
-  })
-})
-```
-
-While `renderHook` lets you test a custom hook directly, there are cases where encapsulating the custom hook in a component is more robust. See https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
 
 ### Queries
 
@@ -834,6 +756,97 @@ While the primordial developer inside of you probably breathed a sign of relief 
 Some schools of thought say you should keep your test files flat (that is, no nesting) which trades ease of readability for duplication: when flat, each test is completely self contained and you know you can rely on just the code inside that test to determine what's in scope. It makes future test modifications easier because each test only relies on the code inside of itself. You may get nervous thinking about changing 10 identical instances of `mockCurrentUser()` but that kind of thing is exactly what your IDE is good at!
 
 > For what it's worth, your humble author endorses the flat tests style.
+
+## Testing Custom Hooks
+
+Custom hooks are a great way to encapsulate non-presentational code.
+To test custom hooks, we'll use the `renderHook` function from `@redwoodjs/testing/web`.
+
+:::info
+Note that Redwood's `renderHook` function is based on React Testing Library's. The only difference is that Redwood's wraps everything with mock providers for the various providers in Redwood, such as auth, the GraphQL client, the router, etc.
+
+If you were to use React Testing Library's `renderHook` function, you'd need to provide your own wrapper function. In this case you probably want to compose the mock providers from `@redwoodjs/testing/web`:
+
+```jsx
+import { renderHook, MockProviders } from '@redwoodjs/testing/web'
+
+// ...
+
+renderHook(() => myCustomHook(), {
+  wrapper: ({ children }) => (
+    <MockProviders>
+      <MyCustomProvider>{children}</MyCustomProvider>
+    </MockProviders>
+  )
+})
+```
+:::
+
+To use `renderHook`:
+1. Call your custom hook from an inline function passed to `renderHook`. For example:
+```js
+const { result } = renderHook(() => useAccumulator(0))
+```
+2. `renderHook` will return an object with the following properties:
+- `result`: holds the return value of the hook in its `current` property (so `result.current`). Think of `result` as a `ref` for the most recently returned value
+- `rerender`: a function to render the previously rendered hook with new props
+
+Let's go through an example. Given the following custom hook:
+
+```js title="web/src/hooks/useAccumulator/useAccumulator.js"
+const useAccumulator = (initialValue) => {
+  const [total, setTotal] = useState(initialValue)
+
+  const add = (value) => {
+    const newTotal = total + value
+    setTotal(newTotal)
+    return newTotal
+  }
+
+  return { total, add }
+}
+```
+
+The test could look as follows:
+
+```js title="web/src/hooks/useAccumulator/useAccumulator.test.js"
+import { renderHook } from '@redwoodjs/testing/web'
+import { useAccumulator } from './useAccumulator'
+
+describe('useAccumulator hook example in docs', () => {
+  it('has the correct initial state', () => {
+    const { result } = renderHook(() => useAccumulator(42))
+    expect(result.current.total).toBe(42)
+  })
+
+  it('adds a value', () => {
+    const { result } = renderHook(() => useAccumulator(1))
+    result.current.add(5)
+    expect(result.current.total).toBe(6)
+  })
+
+  it('adds multiple values', () => {
+    const { result } = renderHook(() => useAccumulator(0))
+    result.current.add(5)
+    result.current.add(10)
+    expect(result.current.total).toBe(15)
+  })
+
+  it('re-initializes the accumulator if passed a new initializing value', () => {
+    const { result, rerender } = renderHook(
+      (initialValue) => useAccumulator(initialValue),
+      {
+        initialProps: 0,
+      }
+    )
+    result.current.add(5)
+    rerender(99)
+    expect(result.current.total).toBe(99)
+  })
+})
+```
+
+While `renderHook` lets you test a custom hook directly, there are cases where encapsulating the custom hook in a component is more robust. See https://kentcdodds.com/blog/how-to-test-custom-react-hooks.
 
 ## Testing Pages & Layouts
 
@@ -1731,6 +1744,222 @@ Luckily, RedwoodJS has several api testing utilities to make [testing functions 
 ## Testing GraphQL Directives
 
 Please refer to the [Directives documentation](./directives.md) for details on how to write Redwood [Validator](./directives.md#writing-validator-tests) or [Transformer](./directives.md#writing-transformer-tests) Directives tests.
+
+
+## Testing Caching
+If you're using Redwood's [caching](services#caching), we provide a handful of utilities and patterns to help you test this too!
+
+Let's say you have a service where you cache the result of products, and individual products:
+
+```ts
+export const listProducts: QueryResolvers['listProducts'] = () => {
+  // highlight-next-line
+  return cacheFindMany('products-list', db.product, {
+    expires: 3600,
+  })
+}
+
+export const product: QueryResolvers['product'] = async ({ id }) => {
+  // highlight-next-line
+  return cache(
+    `cached-product-${id}`,
+    () =>
+      db.product.findUnique({
+        where: { id },
+      }),
+    { expires: 3600 }
+  )
+}
+```
+
+With this code, we'll be caching an array of products (from the find many), and individual products that get queried too.
+
+
+:::tip
+It's important to note that when you write scenario or unit tests, it will use the `InMemoryClient`.
+
+The InMemoryClient has a few extra features to help with testing.
+
+1. Allows you to call `cacheClient.clear()` so each of your tests have a fresh cache state
+2. Allows you to get all its contents (without cache-keys) with the `cacheClient.contents` getter
+:::
+
+
+There's a few different things you may want to test, but let's start with the basics.
+
+In your test let's import your cache client and clear after each test:
+
+
+```ts
+import type { InMemoryClient } from '@redwoodjs/api/cache'
+import { client } from 'src/lib/cache'
+
+// For TypeScript users
+const testCacheClient = client as InMemoryClient
+
+describe('products', () => {
+  // highlight-start
+  afterEach(() => {
+    testCacheClient.clear()
+  })
+  // highlight-end
+  //....
+})
+```
+
+### The `toHaveCached` matcher
+We have a custom Jest matcher included in Redwood to make things a little easier. To use it simply add an import to the top of your test file:
+
+```ts
+// highlight-next-line
+import '@redwoodjs/testing/cache'
+// ^^ make `.toHaveCached` available
+```
+
+The `toHaveCached` matcher can take three forms:
+
+`expect(testCacheClient)`
+1. `.toHaveCached(expectedData)` - check for an exact match of the data, regardless of the key
+2. `.toHaveCached('expected-key', expectedData)` - check that the data is cached in the key you supply
+3. `.toHaveCached(/key-regex.*/, expectedData)` - check that data is cached in a key that matches the regex supplied
+
+
+Let's see these in action now:
+
+```ts
+scenario('returns a single product', async (scenario: StandardScenario) => {
+  await product({ id: scenario.product.three.id })
+
+// Pattern 1: Only check that the data is present in the cache
+  expect(testCacheClient).toHaveCached(scenario.product.three)
+
+// Pattern 2: Check that data is cached, at a specific key
+  expect(testCacheClient).toHaveCached(
+    `cached-product-${scenario.product.three.id}`,
+    scenario.product.three
+  )
+
+// Pattern 3: Check that data is cached, in a key matching the regex
+  expect(testCacheClient).toHaveCached(
+    /cached-.*/,
+    scenario.product.three
+  )
+```
+
+
+:::info Serialized Objects in Cache
+Remember that the cache only ever contains serialized objects. So if you passed an object like this:
+```js
+{
+  id: 5,
+  published: new Date('12/10/1995')
+}
+
+```
+
+The published key will be serialized and stored as a string. To make testing easier for you, we serialize the object you are passing when you use the `toHaveCached` matcher, before we compare it against the value in the cache.
+:::
+
+### Partial Matching
+It can be a little tedious to check that every key in the object you are looking for matches. This is especially true if you have autogenerated values such as `updatedAt` and `cuid` IDs.
+
+To help with this, we've provided a helper for partial matching!
+
+```ts
+// highlight-next-line
+import { partialMatch } from '@redwoodjs/testing/cache'
+
+scenario('returns all products', async (scenario: StandardScenario) => {
+  await products()
+
+  // Partial match using the toHaveCached, if you supply a key
+  expect(testCacheClient).toHaveCached(
+    /cached-products.*/,
+    // highlight-next-line
+    partialMatch([{ name: 'LS50', brand: 'KEF' }])
+  )
+
+  // Or you can use the .contents getter
+  expect(testCacheClient.contents).toContainEqual(
+    // check that an array contains an object matching
+    // highlight-next-line
+    partialMatch([{ name: 'LS50', brand: 'KEF' }])
+  )
+}
+
+scenario('finds a single product', () = {
+  await product({id: 5})
+
+  // You can also check for a partial match of an object
+  expect(testCacheClient).toHaveCached(
+    /cached-.*/,
+    // highlight-start
+    partialMatch({
+      name: 'LS50',
+      brand: 'KEF'
+    })
+  )
+  // highlight-end
+})
+```
+
+Partial match is just syntactic sugar—underneath it uses Jest's `expect.objectContaining` and `expect.arrayContaining`.
+
+The `partialMatch` helper takes two forms of arguments:
+
+- If you supply an object, you are expecting a partial match of that object
+- If you supply an array of objects, you are expecting an array containing a partial match of each of the objects
+
+
+:::tip
+Note that you cannot use `partialMatch` with toHaveCached without supplying a key!
+
+```ts
+// 🛑 Will never pass!
+expect(testCacheClient).toHaveCached(partialMatch({name: 'LS50'}))
+```
+
+For partial matches, you either have to supply a key to `toHaveCached` or use the `cacheClient.contents` helper.
+:::
+
+
+### Strict Matching
+
+If you'd like stricter checking (i.e. you do not want helpers to automatically serialize/deserialize your _expected_ value), you can use the `.contents` getter in test cache client. Note that the `.contents` helper will still de-serialize the values in your cache (to make it easier to compare), just not the expected value.
+
+For example:
+
+```ts
+
+const expectedValue = {
+  // Note that this is a date 👇
+  publishDate: new Date('12/10/1988'),
+  title: 'A book from the eighties',
+  id: 1988
+}
+
+// ✅ will pass, because we will serialize the publishedDate for you
+expect(testCacheClient).toHaveCached(expectedValue)
+
+
+// 🛑 won't pass, because publishDate in cache is a string, but you supplied a Date object
+expect(testCacheClient.contents).toContainEqual(expectedValue)
+
+// ✅ will pass, because you serialized the date
+expect(testCacheClient.contents).toContainEqual({
+  ...expectedValue,
+  publishDate: expectedValue.publishDate.toISOString()
+})
+
+// And if you wanted to view the raw contents of the cache
+console.log(testCacheClient.storage)
+```
+
+This is mainly helpful when you are testing for a very specific value, or have edgecases in how the serialization/deserialization works in the cache.
+
+
+
+
 ## Wrapping Up
 
 So that's the world of testing according to Redwood. Did we miss anything? Can we make it even more awesome? Stop by [the community](https://community.redwoodjs.com) and ask questions, or if you've thought of a way to make this doc even better then [open a PR](https://github.com/redwoodjs/redwoodjs.com/pulls).

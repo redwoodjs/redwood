@@ -21,7 +21,9 @@ describe('Tests AWS Lambda to Fastify utility functions', () => {
         'content-type': ['application/json', 'text/html'],
       }
       const merged = mergeMultiValueHeaders(headers, multiValueHeaders)
-      expect(merged).toEqual({ 'content-type': 'application/json; text/html' })
+      expect(merged).toEqual({
+        'content-type': ['application/json; text/html'],
+      })
     })
 
     test('with multi-value header that is title-cased', () => {
@@ -30,7 +32,9 @@ describe('Tests AWS Lambda to Fastify utility functions', () => {
         'Content-Type': ['application/json', 'text/html'],
       }
       const merged = mergeMultiValueHeaders(headers, multiValueHeaders)
-      expect(merged).toEqual({ 'content-type': 'application/json; text/html' })
+      expect(merged).toEqual({
+        'content-type': ['application/json; text/html'],
+      })
     })
 
     test('when no headers, but has multi-value headers', () => {
@@ -39,7 +43,31 @@ describe('Tests AWS Lambda to Fastify utility functions', () => {
         'content-type': ['application/json', 'text/html'],
       }
       const merged = mergeMultiValueHeaders(headers, multiValueHeaders)
-      expect(merged).toEqual({ 'content-type': 'application/json; text/html' })
+      expect(merged).toEqual({
+        'content-type': ['application/json; text/html'],
+      })
+    })
+
+    test('set-cookie', () => {
+      const headers = {}
+      const multiValueHeaders = {
+        'Set-Cookie': ['rob=TS4Life', 'danny=kittens'],
+      }
+      const merged = mergeMultiValueHeaders(headers, multiValueHeaders)
+      expect(merged).toEqual({
+        'set-cookie': ['rob=TS4Life', 'danny=kittens'],
+      })
+    })
+
+    test('set-cookie in both headers and multiValueHeaders', () => {
+      const headers = { 'set-cookie': 'peter=snaplet' }
+      const multiValueHeaders = {
+        'set-cookie': ['peter=snaplet', 'tom=hammer'],
+      }
+      const merged = mergeMultiValueHeaders(headers, multiValueHeaders)
+      expect(merged).toEqual({
+        'set-cookie': ['peter=snaplet', 'tom=hammer'],
+      })
     })
   })
 })

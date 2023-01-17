@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import path from 'path'
 
 import '../../../../lib/test'
@@ -7,24 +7,18 @@ import * as scaffold from '../scaffold'
 
 jest.mock('execa')
 
-let filesNestedLower, filesNestedUpper
-
-beforeAll(async () => {
-  filesNestedLower = await scaffold.files({
-    model: 'Post',
-    path: 'admin/pages',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-  filesNestedUpper = await scaffold.files({
-    model: 'Post',
-    path: 'Admin/Pages',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-})
-
 describe('admin/pages/post', () => {
+  let filesNestedLower
+
+  beforeAll(async () => {
+    filesNestedLower = await scaffold.files({
+      model: 'Post',
+      path: 'admin/pages',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
     test('returns exactly 19 files', () => {
       expect(Object.keys(filesNestedLower).length).toEqual(19)
@@ -347,15 +341,25 @@ describe('admin/pages/post', () => {
 })
 
 describe('Admin/Pages/Post/Post', () => {
+  let filesNestedUpper
+
+  beforeAll(async () => {
+    filesNestedUpper = await scaffold.files({
+      model: 'Post',
+      path: 'Admin/Pages',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
     test('returns exactly 19 files', () => {
       expect(Object.keys(filesNestedUpper).length).toEqual(19)
     })
 
     // Layout
-
     test('creates a layout', async () => {
-      expect(filesNestedLower).toHaveProperty([
+      expect(filesNestedUpper).toHaveProperty([
         path.normalize(
           '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),

@@ -18,7 +18,6 @@ export const flightcontrolConfig = {
           memory: 0.5,
           buildCommand: 'yarn rw deploy flightcontrol api',
           startCommand: 'yarn rw deploy flightcontrol api --serve',
-          postBuildCommand: 'echo 0',
           port: 8911,
           healthCheckPath: '/graphql/health',
           envVariables: {
@@ -31,8 +30,9 @@ export const flightcontrolConfig = {
           id: 'redwood-web',
           name: 'Redwood Web',
           type: 'static',
-          buildType: 'nixpacks',
           singlePageApp: true,
+          installCommand:
+            'yarn set version stable && NODE_ENV=development yarn install',
           buildCommand: 'yarn rw deploy flightcontrol web',
           outputDirectory: 'web/dist',
           envVariables: {
