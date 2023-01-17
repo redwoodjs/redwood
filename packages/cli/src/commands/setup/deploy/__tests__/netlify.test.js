@@ -10,15 +10,10 @@ import '../../../../lib/test'
 
 jest.mock('../../../../lib', () => {
   const path = jest.requireActual('path')
-  const fixturePath = path.resolve(
-    __dirname,
-    './__fixtures__/example-netlify-deploy-project'
-  )
-
   return {
     getPaths: () => {
       return {
-        base: fixturePath,
+        base: '../../../../../../../__fixtures__/example-todo-main',
       }
     },
     getConfig: () => ({
@@ -35,14 +30,12 @@ jest.mock('../../../../lib', () => {
   }
 })
 
-const FIXTURE_PATH = path.resolve(
-  __dirname,
-  './__fixtures__/example-netlify-deploy-project'
-)
+const REDWOOD_TOML_PATH =
+  '../../../../../../../__fixtures__/example-todo-main/redwood.toml'
 
 beforeEach(() => {
   fs.__setMockFiles({
-    [FIXTURE_PATH + '/redwood.toml']: `[web]
+    [REDWOOD_TOML_PATH]: `[web]
   title = "Redwood App"
   port = 8910
   apiUrl = "/.redwood/functions" # you can customize graphql and dbAuth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
@@ -64,7 +57,7 @@ describe('netlify', () => {
   it('Should update redwood.toml apiUrl', () => {
     updateApiURLTask('/.netlify/functions').task()
 
-    expect(fs.readFileSync(FIXTURE_PATH + '/redwood.toml')).toMatch(
+    expect(fs.readFileSync(REDWOOD_TOML_PATH)).toMatch(
       /apiUrl = "\/.netlify\/functions"/
     )
   })
