@@ -4,29 +4,55 @@ jest.mock('fs')
 import fs from 'fs'
 import path from 'path'
 
+import { updateApiURLTask } from '../helpers'
+// Mock telemetry and other things
+import '../../../../lib/test'
+
+jest.mock('../../../../lib', () => {
+  const path = jest.requireActual('path')
+  const fixturePath = path.resolve(
+    __dirname,
+    './__fixtures__/example-netlify-deploy-project'
+  )
+
+  return {
+    getPaths: () => {
+      return {
+        base: fixturePath,
+      }
+    },
+    getConfig: () => ({
+      web: {
+        port: 8910,
+      },
+    }),
+    writeFilesTask: (fileNameToContentMap) => {
+      const keys = Object.keys(fileNameToContentMap)
+      expect(keys.length).toBe(1)
+      expect(keys[0]).toMatch(new RegExp(path.sep + 'netlify.toml$'))
+      expect(fileNameToContentMap[keys[0]]).toMatchSnapshot()
+    },
+  }
+})
+
 const FIXTURE_PATH = path.resolve(
   __dirname,
   './__fixtures__/example-netlify-deploy-project'
 )
 
-// const t = `[web]
-//   title = "Redwood App"
-//   port = 8910
-//   apiUrl = "/.redwood/functions" # you can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
-//   includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
-// [api]
-//   port = 8911
-// [browser]
-// open = true`
-
-beforeAll(() => {
-  // fs.writeFileSync(`${FIXTURE_PATH}/redwood.toml`, t)
-  // fs.writeFileSync(`${FIXTURE_PATH}/netlify.toml`, t)
-  process.env.RWJS_CWD = FIXTURE_PATH
-})
-
-afterAll(() => {
-  delete process.env.RWJS_CWD
+beforeEach(() => {
+  fs.__setMockFiles({
+    [FIXTURE_PATH + '/redwood.toml']: `[web]
+  title = "Redwood App"
+  port = 8910
+  apiUrl = "/.redwood/functions" # you can customize graphql and dbAuth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
+  includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
+[api]
+  port = 8911
+[browser]
+  open = true
+`,
+  })
 })
 
 describe('netlify', () => {
@@ -35,23 +61,17 @@ describe('netlify', () => {
     expect(async () => await netlify.handler({ force: true })).not.toThrow()
   })
 
-  it('should generate a netlify.toml', async () => {
-    const netlify = require('../providers/netlify')
-    await netlify.handler({ force: true })
-    const toml = fs.readFileSync(path.join(FIXTURE_PATH, 'netlify.toml'))
+  it('Should update redwood.toml apiUrl', () => {
+    updateApiURLTask('/.netlify/functions').task()
 
-    console.log(toml)
-
-    expect(toml).toMatchSnapshot()
+    expect(fs.readFileSync(FIXTURE_PATH + '/redwood.toml')).toMatch(
+      /apiUrl = "\/.netlify\/functions"/
+    )
   })
 
-  it('should update redwood.toml apiUrl', async () => {
+  it('should add netlify.toml', async () => {
     const netlify = require('../providers/netlify')
     await netlify.handler({ force: true })
-    const toml = fs.readFileSync(
-      path.join(FIXTURE_PATH, 'redwood.toml'),
-      'utf-8'
-    )
-    expect(toml).toMatchSnapshot()
+    // Will be verified by a snapshot up above in the mocked `writeFilesTask`
   })
 })

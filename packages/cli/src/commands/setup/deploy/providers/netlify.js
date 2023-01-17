@@ -14,7 +14,10 @@ export const command = 'netlify'
 export const description = 'Setup Netlify deploy'
 
 const files = [
-  { path: path.join(getPaths().base, 'netlify.toml'), content: NETLIFY_TOML },
+  {
+    path: path.join(getPaths().base, 'netlify.toml'),
+    content: NETLIFY_TOML,
+  },
 ]
 
 const notes = [
@@ -26,10 +29,7 @@ export const handler = async ({ force }) => {
   const tasks = new Listr(
     [
       updateApiURLTask('/.netlify/functions'),
-      addFilesTask({
-        files,
-        force,
-      }),
+      addFilesTask({ files, force }),
       printSetupNotes(notes),
     ],
     { rendererOptions: { collapse: false } }
