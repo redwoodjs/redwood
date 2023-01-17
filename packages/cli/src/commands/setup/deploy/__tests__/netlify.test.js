@@ -1,6 +1,8 @@
-import path from 'path'
+// Automock fs using ../..../__mocks__/fs
+jest.mock('fs')
 
-import fs from '../../../../../__mocks__/fs'
+import fs from 'fs'
+import path from 'path'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -10,7 +12,7 @@ const FIXTURE_PATH = path.resolve(
 // const t = `[web]
 //   title = "Redwood App"
 //   port = 8910
-//   apiUrl = "/.redwood/functions" # you can customise graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
+//   apiUrl = "/.redwood/functions" # you can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
 //   includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
 // [api]
 //   port = 8911
