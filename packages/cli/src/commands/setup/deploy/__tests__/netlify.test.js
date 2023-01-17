@@ -17,7 +17,10 @@ jest.mock('../../../../lib', () => {
         base: path.resolve(
           path.join(
             __dirname,
-            '../../../../../../../__fixtures__/example-todo-main'
+            '../../../../../../../__fixtures__/example-todo-main'.replace(
+              '/',
+              path.sep
+            )
           )
         ),
       }
