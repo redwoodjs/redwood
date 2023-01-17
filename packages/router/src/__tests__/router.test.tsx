@@ -43,6 +43,10 @@ import { useParams } from '../params'
 import { Set } from '../Set'
 import { Spec } from '../util'
 
+/** running into intermittent test timeout behavior in https://github.com/redwoodjs/redwood/pull/4992
+ attempting to work around by bumping the default timeout of 5000 */
+const timeoutForFlakeyAsyncTests = 6000
+
 function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
   const authContextValues: AuthContextInterface = {
     loading: true,
@@ -310,7 +314,7 @@ describe('slow imports', () => {
     const screen = render(<TestRouter />)
     await waitFor(() => screen.getByText('RedirectPagePlaceholder'))
     await waitFor(() => screen.getByText('About Page'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('Redirect route', async () => {
     const screen = render(<TestRouter />)
@@ -332,7 +336,7 @@ describe('slow imports', () => {
       expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
     })
     await waitFor(() => screen.getByText('Login Page'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('Private page when authenticated', async () => {
     act(() => navigate('/private'))
@@ -357,7 +361,7 @@ describe('slow imports', () => {
       expect(screen.queryByText('LoginPagePlaceholder')).toBeInTheDocument()
     })
     await waitFor(() => screen.getByText('Login Page'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('Private page when authenticated but does have the role', async () => {
     act(() => navigate('/private_with_role'))
