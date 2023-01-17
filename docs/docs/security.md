@@ -43,9 +43,9 @@ For a demonstration, check out the [Auth Playground](https://redwood-playground-
 
 GraphQL is a fundamental part of Redwood. For details on how Redwood uses GraphQL and handles important security considerations, please see the [GraphQL Security](graphql.md#security) section and the [Secure Services](services.md#secure-services) section.
 
-### Depth Limits
+### Malicious Document Requests
 
-The RedwoodJS GraphQL handler sets [reasonable defaults](graphql.md#query-depth-limit) to prevent deep, cyclical nested queries that attackers often use to exploit systems.
+The RedwoodJS GraphQL handler sets [reasonable defaults](graphql.md#security) to prevent abusive queries that attackers often use to exploit systems.
 ### Disable Introspection and Playground
 
 Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to [disable these in production](graphql.md#introspection-and-playground-disabled-in-production), RedwoodJS **only enables introspection and the playground when running in development**.

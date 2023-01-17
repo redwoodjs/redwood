@@ -1,3 +1,4 @@
+export { useArmor } from './useArmor'
 export { useRedwoodAuthContext } from './useRedwoodAuthContext'
 export { useRedwoodDirective } from './useRedwoodDirective'
 export { useRedwoodError } from './useRedwoodError'
