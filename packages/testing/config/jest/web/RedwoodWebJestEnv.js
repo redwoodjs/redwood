@@ -10,5 +10,8 @@ module.exports = class RedwoodWebJestEnv extends TestEnvironment {
       this.global.TextEncoder = TextEncoder
       this.global.TextDecoder = TextDecoder
     }
+    if (typeof this.global.crypto.subtle === 'undefined') {
+      this.global.crypto.subtle = {}
+    }
   }
 }
