@@ -11,18 +11,20 @@ import '../../../../lib/test'
 
 jest.mock('../../../../lib', () => {
   const path = jest.requireActual('path')
+
   return {
     getPaths: () => {
+      const base = path.resolve(
+        path.join(
+          __dirname,
+          '../../../../../../../__fixtures__/example-todo-main'
+        )
+      )
+
+      console.log('base', base)
+
       return {
-        base: path.resolve(
-          path.join(
-            __dirname,
-            '../../../../../../../__fixtures__/example-todo-main'.replace(
-              '/',
-              path.sep
-            )
-          )
-        ),
+        base,
       }
     },
     getConfig: () => ({
