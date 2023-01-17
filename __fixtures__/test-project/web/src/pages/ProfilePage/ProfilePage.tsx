@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+import { ReactNode } from 'react'
 
 import { useAuth } from 'src/auth'
 
@@ -28,7 +29,7 @@ const ProfilePage = () => {
             return (
               <tr key={key}>
                 <td>{key.toUpperCase()}</td>
-                <td>{currentUser[key]}</td>
+                <td>{currentUser[key] as ReactNode}</td>
               </tr>
             )
           })}
