@@ -310,9 +310,9 @@ __metadata:
   linkType: hard
 
 "@azure/msal-common@npm:^9.0.1":
-  version: 9.0.2
-  resolution: "@azure/msal-common@npm:9.0.2"
-  checksum: 337cbc39aa911864833559f61f7ee482a1f9d1755e466f669a07a096419521221a4e81eb473fcce68c17d6c9c90d494c48767e120f576bbd7ac31c3274842fba
+  version: 9.1.0
+  resolution: "@azure/msal-common@npm:9.1.0"
+  checksum: f4fcf7e862bfc7cfc630bedd97382eaedfdec29cfe8cdab6f564cf652ae9c2772e74ff208c39693e2642a6ba1f9f1dc4db13cdec0c86f7751fab05b41a42f13d
   languageName: node
   linkType: hard
 
@@ -5898,8 +5898,8 @@ __metadata:
   linkType: hard
 
 "@nrwl/devkit@npm:>=15.4.2 < 16":
-  version: 15.5.1
-  resolution: "@nrwl/devkit@npm:15.5.1"
+  version: 15.5.2
+  resolution: "@nrwl/devkit@npm:15.5.2"
   dependencies:
     "@phenomnomnominal/tsquery": 4.1.1
     ejs: ^3.1.7
@@ -5908,7 +5908,7 @@ __metadata:
     tslib: ^2.3.0
   peerDependencies:
     nx: ">= 14 <= 16"
-  checksum: 07d9cc318e7d12bc6a0d3a8c8e5d460f8c0ee2eb2004dec154540d6a2f349ce067c1e32134252639d18f3b1dd572111e3153e59202d625e4c93def1677616cfa
+  checksum: 284e56003b4cb215d98775399308e0d601af1a2135de5d13063bff774cb807820059255a2fa2413c212de27c05c5d60ddffb1d11de758a48d777f1cf9c1ec9d1
   languageName: node
   linkType: hard
 
@@ -6231,22 +6231,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/webhooks-types@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@octokit/webhooks-types@npm:6.7.0"
-  checksum: a68573330a39297fe34b5d73064bc0048d09008e220682718eb853940cdf3b20737b2fe9ab661931389df1e2ff3b5438de8ed1e0cc644f77eff91e155c6a9d58
+"@octokit/webhooks-types@npm:6.10.0":
+  version: 6.10.0
+  resolution: "@octokit/webhooks-types@npm:6.10.0"
+  checksum: 784ef3ebf20cac2f83fd03450d8f51d38c61d5e4b0d6d2ae8f0385982a6e05d27feada3cf106214f27a38630f15fae96ff5745caef46d858e026b7fcb8783f1b
   languageName: node
   linkType: hard
 
 "@octokit/webhooks@npm:^10.0.0":
-  version: 10.6.2
-  resolution: "@octokit/webhooks@npm:10.6.2"
+  version: 10.7.0
+  resolution: "@octokit/webhooks@npm:10.7.0"
   dependencies:
     "@octokit/request-error": ^3.0.0
     "@octokit/webhooks-methods": ^3.0.0
-    "@octokit/webhooks-types": 6.7.0
+    "@octokit/webhooks-types": 6.10.0
     aggregate-error: ^3.1.0
-  checksum: f1f0bc7690fc0befa31494e436d663cd1e2bd59f2bb921f434189f6bce17f9516c8bb45cbea82fc56e29d7c4fd2131cdd356bfc3953677f1ae66e7228474262d
+  checksum: 2030faac42606c85872201c0a1d0e7fbfb380ce861f5e0fff1c7232c7b76c2d7fd79e2c0cc9784f0219930e4572788b16708e2432dd721e9a8eed24068992772
   languageName: node
   linkType: hard
 
@@ -9305,7 +9305,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.20.0, @testing-library/dom@npm:^8.5.0, @testing-library/dom@npm:^8.11.1":
+"@testing-library/dom@npm:8.20.0, @testing-library/dom@npm:^8.11.1, @testing-library/dom@npm:^8.5.0":
   version: 8.20.0
   resolution: "@testing-library/dom@npm:8.20.0"
   dependencies:
@@ -9516,7 +9516,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:7.1.20, @types/babel__core@npm:^7.1.14":
+"@types/babel__core@npm:*, @types/babel__core@npm:^7.1.14":
+  version: 7.20.0
+  resolution: "@types/babel__core@npm:7.20.0"
+  dependencies:
+    "@babel/parser": ^7.20.7
+    "@babel/types": ^7.20.7
+    "@types/babel__generator": "*"
+    "@types/babel__template": "*"
+    "@types/babel__traverse": "*"
+  checksum: 75dcd39258bc008b6fd4db7de2c8bfeb29b5cd2c726f54407f70243ddea1d8ce9e7082281557614c4a5f9f30d478387ca6ab6cc576fc829cebeb159bfaa8799f
+  languageName: node
+  linkType: hard
+
+"@types/babel__core@npm:7.1.20":
   version: 7.1.20
   resolution: "@types/babel__core@npm:7.1.20"
   dependencies:
@@ -9854,7 +9867,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.2.5":
+"@types/jest@npm:*":
+  version: 29.2.6
+  resolution: "@types/jest@npm:29.2.6"
+  dependencies:
+    expect: ^29.0.0
+    pretty-format: ^29.0.0
+  checksum: f52c3824c972902e25ed1b3d05086260ef088828168b60bab427dcffc83ddbc95fec82000eecbdae26a0c05da3b65073b88553ce328e71a2ffbaa5e7fd560548
+  languageName: node
+  linkType: hard
+
+"@types/jest@npm:29.2.5":
   version: 29.2.5
   resolution: "@types/jest@npm:29.2.5"
   dependencies:
@@ -10531,7 +10554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.19, @types/yargs@npm:^17.0.8":
+"@types/yargs@npm:17.0.19":
   version: 17.0.19
   resolution: "@types/yargs@npm:17.0.19"
   dependencies:
@@ -10546,6 +10569,15 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: b52519ba68a8d90996b54143ff74fcd8ac1722a1ef4a50ed8c3dbc1f7a76d14210f0262f8b91eabcdab202ff4babdd92ce7332ab1cdd6af4eae7c9fc81c83797
+  languageName: node
+  linkType: hard
+
+"@types/yargs@npm:^17.0.8":
+  version: 17.0.20
+  resolution: "@types/yargs@npm:17.0.20"
+  dependencies:
+    "@types/yargs-parser": "*"
+  checksum: 1f6b1378da6f52f8195bd25c15f5b22187e2dc419b8234f42accb6ed8787bfad2e4c1c3ee0217b574dcb01a4a903ef5f5dde1aa8e1fed4fb1df9ae4c36766e66
   languageName: node
   linkType: hard
 
@@ -11200,12 +11232,12 @@ __metadata:
   linkType: hard
 
 "@yarnpkg/parsers@npm:^3.0.0-rc.18":
-  version: 3.0.0-rc.35
-  resolution: "@yarnpkg/parsers@npm:3.0.0-rc.35"
+  version: 3.0.0-rc.36
+  resolution: "@yarnpkg/parsers@npm:3.0.0-rc.36"
   dependencies:
     js-yaml: ^3.10.0
     tslib: ^2.4.0
-  checksum: 5c5a02dc3754ae2a1bda4961da15ef19c70767c88b9cfc31d0d116a8aed8b20b7275b79b45c53710e990d0055fda477b7489756e1d64774b9ffe37df55d82673
+  checksum: 88ce3989d34f53fcd06dd1ba98b95f7e18134ef4ca554ac6067c5e206f99a267be8c0a5dad4b2c137a507d21cedcb0de8d20ebf1be552c9aafb3eeca0043ae26
   languageName: node
   linkType: hard
 
@@ -12272,8 +12304,8 @@ __metadata:
   linkType: hard
 
 "aws-sdk@npm:^2.814.0":
-  version: 2.1295.0
-  resolution: "aws-sdk@npm:2.1295.0"
+  version: 2.1297.0
+  resolution: "aws-sdk@npm:2.1297.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
@@ -12285,7 +12317,7 @@ __metadata:
     util: ^0.12.4
     uuid: 8.0.0
     xml2js: 0.4.19
-  checksum: 15c4a9611664b12c1a957c3f905e573f8fdd982874cc4e4e9ac5b9b29c3d83cc76144a51bc8bbc9909a5e809fc31b02c709f081fe768752585be4d4360571759
+  checksum: 00228be50c2208859787da2a86c5ebda345ac6f6c26cc581f6fbd759a2909b0bf807ccecf43125ad396d47b6f31260d7e17ea72f765a0c1dc5c2c1edbbc8817e
   languageName: node
   linkType: hard
 
@@ -12320,13 +12352,13 @@ __metadata:
   linkType: hard
 
 "axios@npm:^1.0.0":
-  version: 1.2.2
-  resolution: "axios@npm:1.2.2"
+  version: 1.2.3
+  resolution: "axios@npm:1.2.3"
   dependencies:
     follow-redirects: ^1.15.0
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
-  checksum: 2326cb39481853acb4b9e8cca1e5385d65009089bd80b1297297fc93c385873f690bd3e8b295a92e70054e2df371dc65da0264598dab5fc4dfe603cb3b9d7ddc
+  checksum: 850f61856add0c04c8a6b6c4ce2cc26cc4891183b056b3b29ee2ffe5ec4446232c177d1a862ea07988549baee3a82cb36a4528412c9c1c12a85329ff0db266cc
   languageName: node
   linkType: hard
 
@@ -14683,25 +14715,32 @@ __metadata:
   linkType: hard
 
 "core-js-compat@npm:^3.25.1, core-js-compat@npm:^3.8.1":
-  version: 3.27.1
-  resolution: "core-js-compat@npm:3.27.1"
+  version: 3.27.2
+  resolution: "core-js-compat@npm:3.27.2"
   dependencies:
     browserslist: ^4.21.4
-  checksum: 635ffcc3f40ca4cb45b10ea805ebf57bbba69873014c89bec96ae09f15cbd3012bd5102bdf87551ef2f1c629e279837632200c4888428035cf822f6e40dc383b
+  checksum: 1bb3b63ae46420b55d78171750f58f73f1a0df8312d3be37111588f068f06a2c18f397737f5603c80fa78bd05f224c93fb60459ff05d80f7dbeeb8a97fbdf457
   languageName: node
   linkType: hard
 
 "core-js-pure@npm:^3.23.3, core-js-pure@npm:^3.25.1":
-  version: 3.27.1
-  resolution: "core-js-pure@npm:3.27.1"
-  checksum: c1da3f6ce09544a43fd01e24ae15e248882fa102e6ac19454e46f4f3587e3bf2e00ad2596c8dbe691cb3a4c4cf31c72195e48904be830f541be70a90f8531085
+  version: 3.27.2
+  resolution: "core-js-pure@npm:3.27.2"
+  checksum: 861bb21d83914a01319ddadb42d7b39d253f87b638feaa958208146c0b045f9de984af1a0752dc0484a099b65257746c4a91f8f2c396ce80524126882984079c
   languageName: node
   linkType: hard
 
-"core-js@npm:3.27.1, core-js@npm:^3.0.4, core-js@npm:^3.25.4, core-js@npm:^3.26.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.27.1":
   version: 3.27.1
   resolution: "core-js@npm:3.27.1"
   checksum: 39bb23f4ab38df2b51f0967b5e398759565e38a92540019a9c2ee7e747b4c833296ef139c8be9db3e16024c450eff1d09be43c3c5c26e0547a004866fe86dadb
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.0.4, core-js@npm:^3.25.4, core-js@npm:^3.26.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+  version: 3.27.2
+  resolution: "core-js@npm:3.27.2"
+  checksum: dd0041b8bea1033935bb055e15ce81c09eed7f2548485783993bf93923d4e9908b70cdbccac03f9bf6393497eca1d46b476e3eef773fe2ce7d957d1e552ebdbc
   languageName: node
   linkType: hard
 
@@ -15928,9 +15967,9 @@ __metadata:
   linkType: hard
 
 "dom-accessibility-api@npm:^0.5.6, dom-accessibility-api@npm:^0.5.9":
-  version: 0.5.15
-  resolution: "dom-accessibility-api@npm:0.5.15"
-  checksum: 5995ee3ca77c536312a3938075d9124175223be563b94189c133679bd04b0a6e4fde0a6d3714e53b9e00980798291e761995a1e6a6023ac88031c49cfea7fe65
+  version: 0.5.16
+  resolution: "dom-accessibility-api@npm:0.5.16"
+  checksum: b2c2eda4fae568977cdac27a9f0c001edf4f95a6a6191dfa611e3721db2478d1badc01db5bb4fa8a848aeee13e442a6c2a4386d65ec65a1436f24715a2f8d053
   languageName: node
   linkType: hard
 
@@ -23688,11 +23727,11 @@ __metadata:
   linkType: hard
 
 "minimatch@npm:^5.0.1, minimatch@npm:^5.1.0":
-  version: 5.1.5
-  resolution: "minimatch@npm:5.1.5"
+  version: 5.1.6
+  resolution: "minimatch@npm:5.1.6"
   dependencies:
     brace-expansion: ^2.0.1
-  checksum: 4eb701ed310dcbc2fc19791bb4025cff6c518d200d2e6da28636e98586c6163427a62e9db14f138a86fdc4a795335ebd8944bb147990d3a7e8734b6ad5f97269
+  checksum: 3defdfd230914f22a8da203747c42ee3c405c39d4d37ffda284dac5e45b7e1f6c49aa8be606509002898e73091ff2a3bbfc59c2c6c71d4660609f63aa92f98e3
   languageName: node
   linkType: hard
 
