@@ -94,7 +94,7 @@ jobs:
 
       - name: 🏷 Get version
         id: get-version
-        uses: sergeysova/jq-action@v2.2.1
+        uses: sergeysova/jq-action@v2.3.0
         with:
           cmd: 'jq .version packages/core/package.json -r'
 
