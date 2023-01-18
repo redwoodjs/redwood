@@ -47,8 +47,21 @@ import { Spec } from '../util'
  attempting to work around by bumping the default timeout of 5000 */
 const timeoutForFlakeyAsyncTests = 8000
 
-function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
-  const authContextValues: AuthContextInterface = {
+type UnknownAuthContextInterface = AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
+
+function createDummyAuthContextValues(
+  partial: Partial<UnknownAuthContextInterface>
+) {
+  const authContextValues: UnknownAuthContextInterface = {
     loading: true,
     isAuthenticated: false,
     userMetadata: null,
