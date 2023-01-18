@@ -62,8 +62,8 @@ jobs:
           #  This is required because lerna uses tags to determine the version.
           fetch-depth: 0
 
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
 
       - name: ✅ Check constraints, dependencies, and package.json's
         uses: ./tasks/check
