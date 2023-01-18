@@ -127,7 +127,7 @@ In contrast to most GraphQL implementations, Redwood provides a "deconstructed" 
 - For each query or mutation, you write a service function with the same name. This is the resolver
 - Redwood then takes all your SDLs and Services (resolvers), combines them into a GraphQL server, and expose it as an endpoint
 
-## Redwood and GraphQL
+## RedwoodJS and GraphQL
 
 Besides taking care of the annoying stuff for you (namely, mapping your resolvers, which gets annoying fast if you do it yourself!), there's not many gotchas with GraphQL in Redwood.
 The only Redwood-specific thing you should really be aware of is [resolver args](#redwoods-resolver-args).
@@ -138,17 +138,28 @@ On the `web` side, Redwood uses [Apollo Client](https://www.apollographql.com/do
 
 
 The `api` side offers a GraphQL server built on [GraphQL Yoga](https://www.graphql-yoga.com) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
+###
 
 Redwood's api side is "serverless first", meaning it's architected as functions which can be deployed on either serverless or traditional infrastructure, and Redwood's GraphQL endpoint is effectively "just another function" (with a whole lot more going on under the hood, but that part is handled for you, out of the box).
 One of the tenets of the Redwood philosophy is "Redwood believes that, as much as possible, you should be able to operate in a serverless mindset and deploy to a generic computational grid.”
 
+### GraphQL Yoga and the Generic Computation Grid
+
 To be able to deploy to a “generic computation grid” means that, as a developer, you should be able to deploy using the provider or technology of your choosing. You should be able to deploy to Netlify, Vercel, Fly, Render, AWS Serverless, or elsewhere with ease and no vendor or platform lock in. You should be in control of the framework, what the response looks like, and how your clients consume it.
 
-The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graphql-yoga.com) makes that possible.
+The same should be true of your GraphQL Server. [GraphQL Yoga](https://www.graphql-yoga.com) from [The Guild](https://the-guild.dev) makes that possible.
 
-> Existing libraries like Apollo Server provide you with either a complete HTTP server or a middleware function that you can plug into your framework of choice. GraphQL Yoga takes a different approach—it just provides a handful of functions that you can use to turn an HTTP request into a GraphQL execution result. In other words, GraphQL Yoga leaves it up to you to decide how to send back the response.
+> The fully-featured GraphQL Server with focus on easy setup, performance and great developer experience.
 
-We leverage Envelop plugins to provide GraphQL [security best practices](#security) and implement custom internal plugins to help with authentication, [logging](#logging), [directive handling](#directives), and more.
+RedwoodJS leverages Yoga's Envelop plugins to implement custom internal plugins to help with [authentication](#authentication), [logging](#logging), [directive handling](#directives), and more.
+### Security Best Practices
+
+
+RedwoodJS implements GraphQL Armor from [Escape Technologies](https://escape.tech) to make your endpoint more secure by default by implementing common GraphQL [security best practices](#security).
+
+GraphQL Armor, developed by Escape in partnership with The Guild, is a middleware for JS servers that adds a security layer to the RedwoodJS GraphQL endpoint.
+
+### Conclusion
 
 All this gets us closer to Redwood's goal of being able to deploy to a "generic computation grid". And that’s exciting!
 
@@ -773,7 +784,7 @@ export const schema = gql`
 
 ## Directives
 
-Directives supercharge your GraphQL services. They add configuration to fields, types or operations that act like "middleware" that lets you run reusable code during GraphQL execution to perform tasks like authentication, formatting, and more.
+Directives supercharge your GraphQL services. They add configuration to fields, types or operations that act like "middleware" that lets you run reusable code during GraphQL execution to perform tasks like [authentication](#authentication), formatting, and more.
 
 You'll recognize a directive by its preceded by the `@` character, e.g. `@myDirective`, and by being declared alongside a field:
 
@@ -835,8 +846,131 @@ query GetFavoriteTrees {
 
 Redwood will automatically detect your union types in your `sdl` files and resolve *which* of your union's types is being returned. If the returned object does not match any of the valid types, the associated operation will produce a GraphQL error.
 
+## GraphQL Handler Setup
 
-### GraphQL Handler Setup
+Redwood's `GraphQLHandlerOptions` allows you to configure your GraphQL handler schema, context, authentication, security and more.
+
+```ts
+export interface GraphQLHandlerOptions {
+  /**
+   * @description The identifier used in the GraphQL health check response.
+   * It verifies readiness when sent as a header in the readiness check request.
+   *
+   * By default, the identifier is `yoga` as seen in the HTTP response header `x-yoga-id: yoga`
+   */
+  healthCheckId?: string
+
+  /**
+   * @description Customize GraphQL Logger
+   *
+   * Collect resolver timings, and exposes trace data for
+   * an individual request under extensions as part of the GraphQL response.
+   */
+  loggerConfig: LoggerConfig
+
+  /**
+   * @description Modify the resolver and global context.
+   */
+  context?: Context | ContextFunction
+
+  /**
+   * @description An async function that maps the auth token retrieved from the
+   * request headers to an object.
+   * Is it executed when the `auth-provider` contains one of the supported
+   * providers.
+   */
+  getCurrentUser?: GetCurrentUser
+
+  /**
+   * @description A callback when an unhandled exception occurs. Use this to disconnect your prisma instance.
+   */
+  onException?: () => void
+
+  /**
+   * @description Services passed from the glob import:
+   * import services from 'src/services\/**\/*.{js,ts}'
+   */
+  services: ServicesGlobImports
+
+  /**
+   * @description SDLs (schema definitions) passed from the glob import:
+   * import sdls from 'src/graphql\/**\/*.{js,ts}'
+   */
+  sdls: SdlGlobImports
+
+  /**
+   * @description Directives passed from the glob import:
+   * import directives from 'src/directives/**\/*.{js,ts}'
+   */
+  directives?: DirectiveGlobImports
+
+  /**
+   * @description A list of options passed to [makeExecutableSchema]
+   * (https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
+   */
+  schemaOptions?: Partial<IExecutableSchemaDefinition>
+
+  /**
+   * @description CORS configuration
+   */
+  cors?: CorsConfig
+
+  /**
+   *  @description Customize GraphQL Armor plugin configuration
+   *
+   * @see https://escape-technologies.github.io/graphql-armor/docs/configuration/examples
+   */
+  armorConfig?: ArmorConfig
+
+  /**
+   * @description Customize the default error message used to mask errors.
+   *
+   * By default, the masked error message is "Something went wrong"
+   *
+   * @see https://github.com/dotansimha/envelop/blob/main/packages/core/docs/use-masked-errors.md
+   */
+  defaultError?: string
+
+  /**
+   * @description Only allows the specified operation types (e.g. subscription, query or mutation).
+   *
+   * By default, only allow query and mutation (ie, do not allow subscriptions).
+   *
+   * An array of GraphQL's OperationTypeNode enums:
+   * - OperationTypeNode.SUBSCRIPTION
+   * - OperationTypeNode.QUERY
+   * - OperationTypeNode.MUTATION
+   *
+   * @see https://github.com/dotansimha/envelop/tree/main/packages/plugins/filter-operation-type
+   */
+  allowedOperations?: AllowedOperations
+
+  /**
+   * @description Custom Envelop plugins
+   */
+  extraPlugins?: Plugin[]
+
+  /**
+   * @description Auth-provider specific token decoder
+   */
+  authDecoder?: Decoder
+
+  /**
+   * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground
+   *
+   * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
+   */
+  graphiQLEndpoint?: string
+  /**
+   * @description Function that returns custom headers (as string) for GraphiQL.
+   *
+   * Headers must set auth-provider, Authorization and (if using dbAuth) the encrypted cookie.
+   */
+  generateGraphiQLHeader?: GenerateGraphiQLHeader
+}
+```
+
+### Directive Setup
 
 Redwood makes it easy to code, organize, and map your directives into the GraphQL schema.
 
@@ -854,6 +988,7 @@ import { logger } from 'src/lib/logger'
 
 export const handler = createGraphQLHandler({
   loggerConfig: { logger, options: {} },
+  armorConfig, //  👈 custom GraphQL Security configuration
   directives, //  👈 directives are added to the schema here
   sdls,
   services,
@@ -866,6 +1001,13 @@ export const handler = createGraphQLHandler({
 
 > Note: Check-out the [in-depth look at Redwood Directives](directives.md) that explains how to generate directives so you may use them to validate access and transform the response.
 
+
+### Logging Setup
+
+For a details on setting up GraphQL Logging, see [Logging](#logging).
+### Security Setup
+
+For a details on setting up GraphQL Security, see [Security](#security).
 ## Logging
 
 Logging is essential in production apps to be alerted about critical errors and to be able to respond effectively to support issues. In staging and development environments, logging helps you debug queries, resolvers and cell requests.
@@ -1125,11 +1267,182 @@ By logging the operation name and extracting the duration for each query, you ca
 
 ## Security
 
-We'll document more GraphQL security best practices as Redwood reaches a `v1.0` release candidate. For now, know that Redwood already has some baked-in best practices; for example, when deploying GraphQL to production, GraphQL Playground is automatically disabled.
+Parsing a GraphQL operation document is a very expensive and compute intensive operation that blocks the JavaScript event loop. If an attacker sends a very complex operation document with slight variations over and over again he can easily degrade the performance of the GraphQL server.
 
-### Secure Services
+RedwoodJS will by default reject a variety malicious operation documents; that is, it'll prevent attackers from making malicious queries or mutations.
 
-Some of the biggest security improvements we'll be making revolve around Services (which are intimately linked to GraphQL since they're wrapped into your resolvers). For `v1.0` we plan to make all of your GraphQL resolvers secure by default. You can even opt into this behavior now—see the [Secure Services](services.md#secure-services) section.
+RedwoodJS is configured out-of-the-box with GraphQL security best practices:
+
+* Schema Directive-based Authentication including RBAC validation
+* Production Deploys disable Introspection and GraphQL Playground automatically
+* Reject Malicious Operation Documents (Max Aliases, Max Cost, Max Depth, Max Directives, Max Tokens)
+* Prevent Information Leaks (Block Field Suggestions, Mask Errors)
+
+And with the Yoga Envelop Plugin ecosystem available to you, there are options for:
+
+* CSRF Protection
+* Rate Limiting
+* and more.
+
+### Authentication
+
+By default, your GraphQL endpoint is open to the world.
+
+That means anyone can request any query and invoke any Mutation.
+Whatever types and fields are defined in your SDL is data that anyone can access.
+
+Redwood [encourages being secure by default](http://localhost:3000/docs/canary/directives#secure-by-default-with-built-in-directives) by defaulting all queries and mutations to have the `@requireAuth` directive when generating SDL or a service.
+
+When your app builds and your server starts up, Redwood checks that **all** queries and mutations have `@requireAuth`, `@skipAuth` or a custom directive applied.
+
+If not, then your build will fail:
+
+```bash
+  ✖ Verifying graphql schema...
+    Building API...
+    Cleaning Web...
+    Building Web...
+    Prerendering Web...
+You must specify one of @requireAuth, @skipAuth or a custom directive for
+- contacts Query
+- posts Query
+- post Query
+- updatePost Mutation
+- deletePost Mutation
+```
+
+or your server won't startup and you should see that "Schema validation failed":
+
+```bash
+gen | Generating TypeScript definitions and GraphQL schemas...
+gen | 47 files generated
+api | Building... Took 593 ms
+api | [GQL Server Error] - Schema validation failed
+api | ----------------------------------------
+api | You must specify one of @requireAuth, @skipAuth or a custom directive for
+api | - posts Query
+api | - createPost Mutation
+api | - updatePost Mutation
+api | - deletePost Mutation
+```
+
+To correct, just add the appropriate directive to your queries and mutations.
+
+If not, then your build will fail and your server won't startup.
+
+#### @requireAuth
+
+To enforce authentication, simply add the `@requireAuth` directive in your GraphQL schema for any query or field you want protected.
+
+It's your responsibility to implement the `requireAuth()` function in your app's `api/src/lib/auth.{js|ts}` to check if the user is properly authenticated and/or has the expected role membership.
+
+The `@requireAuth` directive will call the `requireAuth()` function to determine if the user is authenticated or not.
+
+Here we enforce that a user must be logged in to `create`. `update` or `delete` a `Post`.
+
+```ts
+type Post {
+  id: Int!
+  title: String!
+  body: String!
+  authorId: Int!
+  author: User!
+  createdAt: DateTime!
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+  authorId: Int!
+}
+
+input UpdatePostInput {
+  title: String
+  body: String
+  authorId: Int
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post! @requireAuth
+  updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
+  deletePost(id: Int!): Post! @requireAuth
+}
+```
+
+It's your responsibility to implement the `requireAuth()` function in your app's `api/src/lib/auth.{js|ts}` to check if the user is properly authenticated and/or has the expected role membership.
+
+The `@requireAuth` directive will call the requireAuth() function to determine if the user is authenticated or not.
+
+```ts title="api/src/lib/auth.ts"
+// ...
+
+export const isAuthenticated = (): boolean => {
+  return true // 👈 replace with the appropriate check
+}
+
+// ...
+
+export const requireAuth = ({ roles }: { roles: AllowedRoles }) => {
+  if (isAuthenticated()) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
+
+  if (!hasRole({ roles })) {
+    throw new ForbiddenError("You don't have access to do that.")
+  }
+}
+```
+
+> **Note**: The `auth.ts` file here is the stub for a new RedwoodJS app. Once you have setup auth with your provider, this will enforce a proper authentication check.
+
+##### Field-level Auth
+
+You can apply the `@requireAuth` to any field as well (not just queries or mutations):
+
+```ts
+type Post {
+  id: Int!
+  title: String!
+  body: String! @requireAuth
+  authorId: Int!
+  author: User!
+  createdAt: DateTime!
+}
+```
+
+##### Role-based Access Control
+
+The `@requireAuth` directive lets you define roles that are permitted to perform the operation:
+
+```ts
+type Mutation {
+  createPost(input: CreatePostInput!): Post! @requireAuth(roles: ['AUTHOR', 'EDITOR'])
+  updatePost(id: Int!, input: UpdatePostInput!): Post! @@requireAuth(roles: ['EDITOR']
+  deletePost(id: Int!): Post! @requireAuth(roles: ['ADMIN']
+}
+```
+
+#### @skipAuth
+
+If, however, you want your query or mutation to be public, then simply use `@skipAuth`.
+
+In the example, fetching all posts or a single post is allowed for all users, authenticated or not.
+
+```ts
+type Post {
+  id: Int!
+  title: String!
+  body: String!
+  authorId: Int!
+  author: User!
+  createdAt: DateTime!
+}
+
+type Query {
+  posts: [Post!]! @skipAuth
+  post(id: Int!): Post @skipAuth
+}
+```
 
 ### Introspection and Playground Disabled in Production
 
@@ -1139,11 +1452,196 @@ The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is
 
 > Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
 
-### Query Depth Limit
+### GraphQL Armor Configuration
+
+[GraphQL Armor](https://escape.tech/graphql-armor/) is a middleware that adds a security layer the RedwoodJS GraphQL endpoint configured with sensible defaults.
+
+You don't have to configure anything to enforce protection against alias, cost, depth, directive, tokens abuse in GraphQL operations as well as to block field suggestions or revealing error messages that might leak sensitive infomration.
+
+But, if you need to enable, disable to modify the default settings, GraphQL Armor is fully configurable in a per-plugin fashion.
+
+Simply define and provide a custom GraphQL Security configuration to your `createGraphQLHandler`:
+
+```ts
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  armorConfig, //  👈 custom GraphQL Security configuration
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+```
+
+For example, the default max query depth limit is 6. To change that setting to 2 levels, simply provide the configuration to your handler:
+
+```ts
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  armorConfig: { maxDepth: { n: 2 } },
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+```
+
+#### Max Aliases
+
+This protection is enabled by default.
+
+Limit the number of aliases in a document. Defaults to 15.
+
+##### Example
+
+Aliases allow you rename the data that is returned in a query’s results. They manipulate the structure of the query result that is fetched from your service, displaying it according to your web component's needs.
+
+This contrived example uses 11 alias to rename a Post's id an title to various permutations of post, article, and blog to return a different shape in the query result as `articles`:
+
+```ts
+ {
+  articles: posts {
+    id
+    articleId: id
+    postId: id
+    articlePostId: id
+    postArticleId: id
+    blogId: id
+    title
+    articleTitle: title
+    postTitle: title
+    articlePostTitle: title
+    postArticleTitle: title
+    blogTitle: title
+  }
+}
+```
+
+##### Configuration and Defaults
+
+Limit the number of aliases in a document. Defaults to 15.
+
+You can change the default value via the `maxAliases` setting when creating your GraphQL handler.
+
+```ts
+{
+  maxAliases: {
+    enabled: true,
+    n: 15,
+  }
+}
+```
+#### Cost Limit
+
+This protection is enabled by default.
+
+It analyzes incoming GraphQL queries and applies a cost analysis algorithm to prevent resource overload by blocking too expensive requests (DoS attack attempts).
+
+The cost computation is quite simple (and naive) at the moment but there are plans to make it evolve toward a extensive plugin with many features.
+
+Defaults to a overall maxCost limit of 5000.
+
+##### Overview
+
+Cost is a factor of the kind of field and depth. Total Cost is a cumulative sum of each field based on its type and its depth in the query.
+
+Scalar fields -- those that return values like strings or numbers -- are worth one value; whereas are objects are worth another.
+
+How deep they are nested in the query is a multiplier factor such that:
+
+```
+COST = FIELD_KIND_COST * (DEPTH * DEPTH_COST_FACTOR)
+TOTAL_COST = SUM(COST)
+```
+
+If the `TOTAL_COST` exceeds the `maxCost`, an error stops GraphQL execution and rejects the request.
+
+You have control over the field kind and depth costs settings, but the defaults are:
+
+```
+objectCost: 2, // cost of retrieving an object
+scalarCost: 1, // cost of retrieving a scalar
+depthCostFactor: 1.5, // multiplicative cost of depth
+```
+
+##### Example
+
+In this small example, we have one object field `me` that contains two, nested scalar fields `id` and `me`. There is an operation `profile` (which is neither a scalar nor object and thus ignored as part of the cost calculation).
+
+```ts
+{
+  profile {
+    me {
+      id
+      user
+    }
+  }
+}
+```
+The cost breakdown for cost is:
+
+* two scalars `id` and `user` worth 1 each
+* they are at level 1 depth with a depth factor of 1.5
+* 2 \* ( 1 \* 1.5 ) = 2 \* 1.5 = 3
+* their parent object is `me` worth 2
+
+Therefore the total cost is 2 + 3 = 5.
+
+:::note
+The operation definition `query` of `profile` is ignored in the calculation. This is the case even if you name your query `MY_PROFILE` like:
+
+```
+{
+  profile MY_PROFILE {
+    me {
+      id
+      user
+    }
+  }
+}
+```
+:::
+
+##### Configuration and Defaults
+
+Defaults to a overall maxCost limit of 5000.
+
+You can change the default value via the `costLimit` setting when creating your GraphQL handler.
+
+
+```ts
+{
+  costLimit: {
+    enabled: true,
+    maxCost: 5000, // maximum cost of a request before it is rejected
+    objectCost: 2, // cost of retrieving an object
+    scalarCost: 1, // cost of retrieving a scalar
+    depthCostFactor: 1.5, // multiplicative cost of depth
+  }
+}
+```
+
+#### Max Depth Limit
+
+This protection is enabled by default.
+
+Limit the depth of a document. Defaults to 6 levels.
 
 Attackers often submit expensive, nested queries to abuse query depth that could overload your database or expend costly resources.
 
 Typically, these types of unbounded, complex and expensive GraphQL queries are usually huge deeply nested and take advantage of an understanding of your schema (hence why schema introspection is disabled by default in production) and the data model relationships to create "cyclical" queries.
+
+##### Example
 
 An example of a cyclical query here takes advantage of knowing that and author has posts and each post has and author ... that has posts ... that has an another that ... etc.
 
@@ -1172,23 +1670,200 @@ query cyclical {
   }
 }
 ```
+##### Configuration and Defaults
 
-> To mitigate the risk of attacking your application via deeply nested queries, RedwoodJS by default sets the [Query Depth Limit](https://www.npmjs.com/package/graphql-depth-limit#documentation) to 11.
+Defaults to 6 levels.
 
-You can change the default value via the `depthLimitOptions` setting when creating your GraphQL handler.
+You can change the default value via the `maxDepth` setting when creating your GraphQL handler.
 
-You `depthLimitOptions` are `maxDepth` or `ignore` stops recursive depth checking based on a field name. Ignore can be [either a string or regexp](https://www.npmjs.com/package/graphql-depth-limit#documentation) to match the name, or a function that returns a boolean.
-
-For example:
-
-```jsx
-// ...
-export const handler = createGraphQLHandler({
-  loggerConfig: { logger, options: { query: true } },
-  depthLimitOptions: { maxDepth: 6 },
-  // ...
-})
+```ts
+{
+  maxDepth: {
+    enabled: true,
+    n: 6,
+  }
+}
 ```
+
+#### Max Directives
+
+This protections is enabled by default.
+
+Limit the number of directives in a document. Defaults to 50.
+
+##### Example
+
+The following example demonstrates that by using the `@include` and `@skip` GraphQL query directives one can design a large request that requires computation, but in fact returns the expected response ...
+
+```ts
+{
+  posts {
+    id @include(if:true)
+    id @include(if:false)
+    id @include(if:false)
+    id @skip(if:true)
+    id @skip(if:true)
+    id @skip(if:true))
+    title @include(if:true)
+    title @include(if:false)
+    title @include(if:false)
+    title @skip(if:true)
+    title @skip(if:true)
+    title @skip(if:true)
+  }
+}
+```
+
+...  of formatted Posts with just a single id and title.
+
+```ts
+{
+  "data": {
+    "posts": [
+      {
+        "id": 1,
+        "title": "A little more about RedwoodJS"
+      },
+      {
+        "id": 2,
+        "title": "What is GraphQL?"
+      },
+      {
+        "id": 3,
+        "title": "Welcome to the RedwoodJS Community!"
+      },
+      {
+        "id": 4,
+        "title": "10 ways to secure your GraphQL endpoint"
+      }
+    ]
+  }
+}
+```
+
+By limiting the maximum number of directives in the document, malicious queries can be rejected.
+
+##### Configuration and Defaults
+
+You can change the default value via the `maxDirectives` setting when creating your GraphQL handler.
+
+```ts
+{
+  maxDirectives: {
+    enabled: true,
+    n: 50,
+  }
+}
+```
+#### Max Tokens
+
+This protection is enabled by default.
+
+Limit the number of GraphQL tokens in a document.
+
+ In computer science, lexical analysis, lexing or tokenization is the process of converting a sequence of characters into a sequence of lexical tokens.
+
+ E.g. given the following GraphQL operation.
+
+```ts
+ graphql {
+   me {
+     id
+     user
+   }
+ }
+```
+
+ The tokens are `query`, `{`, `me`, `{`, `id`, `user`, `}` and `}`. Having a total count of 8 tokens.
+
+##### Example
+
+Given the query with 8 tokens:
+
+```ts
+ graphql {
+   me {
+     id
+     user
+   }
+ }
+```
+
+And a custom configuration to all a maximum of two tokens:
+
+```
+const armorConfig = {
+  maxTokens: { n: 2 },
+}
+```
+
+An error is raised:
+
+```
+'Syntax Error: Token limit of 2 exceeded, found 3.'
+```
+
+:::note
+
+When reporting the number of found tokens, then number found is not the total tokens, but the value when found that exceeded the limit.
+
+Therefore found would be n + 1.
+:::
+
+##### Configuration and Defaults
+
+Defaults to 1000.
+
+You can change the default value via the `maxTokens` setting when creating your GraphQL handler.
+
+```ts
+{
+  maxTokens: {
+    enabled: true,
+    n: 1000,
+  }
+}
+```
+#### Block Field Suggestions
+
+This plugin is enabled by default.
+
+It will prevent suggesting fields in case of an erroneous request. Suggestions can lead to the leak of your schema even with disabled introspection, which can be very detrimental in case of a private API.
+
+Example of such a suggestion:
+
+`Cannot query field "sta" on type "Media". Did you mean "stats", "staff", or "status"?`
+
+##### Example
+##### Configuration and Defaults
+
+Enabled by default.
+
+You can change the default value via the `blockFieldSuggestions` setting when creating your GraphQL handler.
+
+```ts
+{
+  blockFieldSuggestion: {
+    enabled: true,
+  }
+}
+```
+Enabling will hide the field suggestion:
+
+`Cannot query field "sta" on type "Media". [Suggestion hidden]?`
+
+Orm if you want a custom mask:
+
+```ts
+{
+
+  blockFieldSuggestion: {
+    mask: '<REDACTED>'
+  },
+}
+```
+
+``Cannot query field "sta" on type "Media". [REDACTED]?`
 
 ### Error Masking
 
@@ -1286,6 +1961,14 @@ export const getWeather = async ({ input }: WeatherInput) {
   }
 }
 ```
+
+#### CSRF Prevention
+
+If you have CORS enabled, almost all requests coming from the browser will have a preflight request - however, some requests are deemed "simple" and don't make a preflight. One example of such a request is a good ol' GET request without any headers, this request can be marked as "simple" and have preflight CORS checks skipped therefore skipping the CORS check.
+
+This attack can be mitigated by saying: "all GET requests must have a custom header set". This would force all clients to manipulate the headers of GET requests, marking them as "_not-_simple" and therefore always executing a preflight request.
+
+You can achieve this by using the [`@graphql-yoga/plugin-csrf-prevention` GraphQL Yoga plugin](https://the-guild.dev/graphql/yoga-server/docs/features/csrf-prevention).
 
 ## Self-Documenting GraphQL API
 
@@ -1593,7 +2276,7 @@ You can overwrite the generated docs and bypass the plugin's diffMethod use `--f
 yarn start
 ```
 
-#### Example Screens
+##### Example Screens
 
 ##### Schema Documentation
 ![graphql-doc-example-main](/img/graphql-api-docs/schema-doc.png)
