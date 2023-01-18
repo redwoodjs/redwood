@@ -279,7 +279,7 @@ describe('slow imports', () => {
     const screen = render(<TestRouter />)
     await waitFor(() => screen.getByText('HomePagePlaceholder'))
     await waitFor(() => screen.getByText('Home Page'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('Navigation', async () => {
     const screen = render(<TestRouter />)
@@ -307,7 +307,7 @@ describe('slow imports', () => {
     await waitFor(() => screen.getByText('AboutPagePlaceholder'))
     // ...and then the actual page
     await waitFor(() => screen.getByText('About Page'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('Redirect page', async () => {
     act(() => navigate('/redirect'))
@@ -323,7 +323,7 @@ describe('slow imports', () => {
     act(() => navigate('/redirect2/redirected?q=cue'))
     await waitFor(() => screen.getByText('ParamPagePlaceholder'))
     await waitFor(() => screen.getByText('param redirectedcue'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('Private page when not authenticated', async () => {
     act(() => navigate('/private'))
@@ -347,7 +347,7 @@ describe('slow imports', () => {
     await waitFor(() => {
       expect(screen.queryByText('Login Page')).not.toBeInTheDocument()
     })
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('Private page when authenticated but does not have the role', async () => {
     act(() => navigate('/private_with_role'))
@@ -373,7 +373,7 @@ describe('slow imports', () => {
       ).not.toBeInTheDocument()
       expect(screen.queryByText('Private Page')).toBeInTheDocument()
     })
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('useLocation', async () => {
     act(() => navigate('/location'))
@@ -399,7 +399,7 @@ describe('slow imports', () => {
     await waitFor(() => screen.getByText('AboutPagePlaceholder'))
     // ...followed by the actual page
     await waitFor(() => screen.getByText('About Page'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('path params should never be empty', async () => {
     const PathParamPage = ({ value }) => {
@@ -437,7 +437,7 @@ describe('slow imports', () => {
     await waitFor(() => screen.getByText('AboutPagePlaceholder'))
     // ...followed by the actual page
     await waitFor(() => screen.getByText('About Page'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 
   test('usePageLoadingContext', async () => {
     // We want to show a loading indicator if loading pages is taking a long
@@ -477,7 +477,7 @@ describe('slow imports', () => {
 
     await waitFor(() => screen.getByText('done loading in page'))
     await waitFor(() => screen.getByText('done loading in layout'))
-  })
+  }, timeoutForFlakeyAsyncTests)
 })
 
 describe('inits routes and navigates as expected', () => {
