@@ -72,11 +72,10 @@ jobs:
         run: echo "echo "::remove-matcher owner=tsc::""
 
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔨 Build
         run: yarn build
@@ -115,11 +114,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📁 Create a temporary directory
         id: createpath
@@ -191,11 +189,10 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: 0
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🌲 Setup test project
         id: setup_test_project
