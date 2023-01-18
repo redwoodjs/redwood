@@ -7542,7 +7542,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
-    "@testing-library/dom": 8.19.1
+    "@testing-library/dom": 8.20.0
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.4.3
@@ -9315,23 +9315,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.19.1":
-  version: 8.19.1
-  resolution: "@testing-library/dom@npm:8.19.1"
-  dependencies:
-    "@babel/code-frame": ^7.10.4
-    "@babel/runtime": ^7.12.5
-    "@types/aria-query": ^5.0.1
-    aria-query: ^5.0.0
-    chalk: ^4.1.0
-    dom-accessibility-api: ^0.5.9
-    lz-string: ^1.4.4
-    pretty-format: ^27.0.2
-  checksum: ec249e38a251de16028323841d33b7bae2db659e8219d92136ea231f474896f4bfaff9094c364fd9e49f458f15f8a4fcef61895e44b8eb1342af6c9319ce4327
-  languageName: node
-  linkType: hard
-
-"@testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.11.1":
+"@testing-library/dom@npm:8.20.0, @testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.11.1":
   version: 8.20.0
   resolution: "@testing-library/dom@npm:8.20.0"
   dependencies:
