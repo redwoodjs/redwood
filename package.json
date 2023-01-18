@@ -88,7 +88,7 @@
     "jest-runner-tsd": "4.0.0",
     "jscodeshift": "0.14.0",
     "lerna": "6.4.1",
-    "listr2": "5.0.6",
+    "listr2": "5.0.7",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
     "msw": "0.49.2",
