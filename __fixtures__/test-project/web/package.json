@@ -13,7 +13,7 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth-dbauth-web": "4.1.0-canary.522+9cfaf22ca",
+    "@redwoodjs/auth-dbauth-web": "4.1.0-canary.523+f89d10664",
     "@redwoodjs/forms": "3.2.0",
     "@redwoodjs/router": "3.2.0",
     "@redwoodjs/web": "3.2.0",

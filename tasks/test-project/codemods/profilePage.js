@@ -18,14 +18,18 @@ return (
         </tr>
       </thead>
       <tbody>
-        {Object.keys(currentUser).map((key) => {
-          return (
-            <tr key={key}>
-              <td>{key.toUpperCase()}</td>
-              <td>{currentUser[key] as ReactNode}</td>
-            </tr>
-          )
-        })}
+        <tr>
+          <td>ID</td>
+          <td>{currentUser.id}</td>
+        </tr>
+        <tr>
+          <td>ROLES</td>
+          <td>{currentUser.roles}</td>
+        </tr>
+        <tr>
+          <td>EMAIL</td>
+          <td>{currentUser.email}</td>
+        </tr>
 
         <tr key="isAuthenticated">
           <td>isAuthenticated</td>
@@ -50,12 +54,7 @@ export default (file, api) => {
     [j.importSpecifier(j.identifier('useAuth'))],
     j.stringLiteral('src/auth')
   )
-  const reactNodeImport = j.importDeclaration(
-    [j.importSpecifier(j.identifier('ReactNode'))],
-    j.stringLiteral('react')
-  )
 
-  root.find(j.ImportDeclaration).at(0).insertBefore(reactNodeImport)
   root.find(j.ImportDeclaration).at(0).insertBefore(useAuthImport)
 
   return root
