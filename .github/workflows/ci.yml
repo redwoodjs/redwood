@@ -3,6 +3,12 @@ name: ⚙️ CI
 on:
   pull_request
 
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
@@ -306,7 +312,7 @@ jobs:
 
       - name: Upload Replays
         if: always()
-        uses: replayio/action-upload@v0.4.5
+        uses: replayio/action-upload@v0.4.7
         with:
           api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
 
