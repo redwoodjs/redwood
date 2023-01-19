@@ -3,7 +3,7 @@ import path from 'path'
 
 import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { transformTSToJS, writeFilesTask } from '../lib'
+import { ExistingFiles, transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
 import { getPaths, resolveFile } from '../lib/paths'
 import {
@@ -441,30 +441,35 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
       let filesRecord = apiSideFiles({ basedir, webAuthn })
 
       // Always overwrite files in force mode, no need to prompt
-      let overwriteAllFiles = ctx.setupMode === 'FORCE'
+      let existingFiles: ExistingFiles = 'FAIL'
 
-      if (ctx.setupMode === 'REPLACE') {
+      if (ctx.setupMode === 'FORCE') {
+        existingFiles = 'OVERWRITE'
+      } else if (ctx.setupMode === 'REPLACE') {
         // Confirm that we're about to overwrite some files
         const filesToOverwrite = findExistingFiles(filesRecord)
 
-        overwriteAllFiles = await task.prompt({
+        const overwrite = await task.prompt({
           type: 'confirm',
           message: `Overwrite existing ${filesToOverwrite.join(', ')}?`,
           initial: false,
         })
-      }
 
-      if (ctx.setupMode === 'COMBINE') {
+        existingFiles = overwrite ? 'OVERWRITE' : 'SKIP'
+      } else if (ctx.setupMode === 'COMBINE') {
         const uniqueFilesRecord = generateUniqueFileNames(
           filesRecord,
           ctx.provider
         )
 
         filesRecord = uniqueFilesRecord
+
+        // Shouldn't happen because we've just generated unique file names
+        existingFiles = 'FAIL'
       }
 
       return writeFilesTask(filesRecord, {
-        overwriteExisting: overwriteAllFiles,
+        existingFiles,
       })
     },
   }
@@ -531,21 +536,24 @@ export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
       // If we don't know whether the user wants to replace or combine,
       // we prompt them to select a mode.
       if (hasAuthProvider(webAppContents) && ctx.setupMode === 'UNKNOWN') {
-        const setupMode = await task.prompt<AuthSetupMode>({
-          type: 'select',
-          message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
-          choices: [
-            {
-              message: `Replace existing auth with ${ctx.provider}`,
-              value: 'REPLACE', // this is the value
-            },
-            {
-              message: `Generate files, setup manually. [ADVANCED]`,
-              value: 'COMBINE', // this is the value
-              disabled: true,
-            },
-          ],
-        })
+        // const setupMode = await task.prompt<AuthSetupMode>({
+        //   type: 'select',
+        //   message: `Looks like you have an auth provider already setup. How would you like to proceed?`,
+        //   choices: [
+        //     {
+        //       message: `Replace existing auth with ${ctx.provider}`,
+        //       value: 'REPLACE', // this is the value
+        //     },
+        //     {
+        //       message: `Generate files, setup manually. [ADVANCED]`,
+        //       value: 'COMBINE', // this is the value
+        //       disabled: true,
+        //     },
+        //   ],
+        // })
+        // TODO: Enable code above, and remove this hardcoded value when we
+        // have COMBINE working
+        const setupMode = 'REPLACE'
 
         // User has selected the setup mode, so we set it on the context
         // This is used in the tasks downstream

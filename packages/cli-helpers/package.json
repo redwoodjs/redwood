@@ -29,10 +29,10 @@
     "chalk": "4.1.2",
     "core-js": "3.27.1",
     "execa": "5.1.1",
-    "listr2": "5.0.6",
+    "listr2": "5.0.7",
     "lodash.memoize": "4.1.2",
     "pascalcase": "1.0.0",
-    "prettier": "2.8.2",
+    "prettier": "2.8.3",
     "prompts": "2.4.2",
     "terminal-link": "2.1.1"
   },
