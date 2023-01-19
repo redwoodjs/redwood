@@ -19,6 +19,8 @@ export const cleanWebBuild = () => {
 
 /**
  * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
+ *
+ * Currently only used for debugging purposes
  */
 export const prebuildWebFiles = (srcFiles: string[], flags?: Flags) => {
   const rwjsPaths = getPaths()
@@ -39,5 +41,20 @@ export const prebuildWebFiles = (srcFiles: string[], flags?: Flags) => {
     fs.writeFileSync(dstPath, result.code)
 
     return dstPath
+  })
+}
+
+export const buildWebVite = async () => {
+  // @NOTE: Using dynamic import, because vite is still opt-in
+  const { build } = await import('vite')
+  const viteConfig = getPaths().web.viteConfig
+
+  if (!viteConfig) {
+    throw new Error('Could not locate your web/vite.config.{js,ts} file')
+  }
+
+  return build({
+    configFile: viteConfig,
+    envFile: false,
   })
 }

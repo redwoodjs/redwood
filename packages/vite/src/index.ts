@@ -91,9 +91,7 @@ export default function redwoodPluginVite() {
             postcss: redwoodPaths.web.config,
           },
           server: {
-            // @MARK intentionally commenting this out, on my machine it pops up with "where is undefined"
-            // under the hood it's using https://github.com/sindresorhus/open#app which needs an app specified
-            // open: redwoodConfig.browser.open,
+            open: redwoodConfig.browser.open,
             port: redwoodConfig.web.port,
             proxy: {
               //@TODO we need to do a check for absolute urls here
