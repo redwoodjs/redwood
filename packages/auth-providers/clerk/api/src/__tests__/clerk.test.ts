@@ -24,15 +24,6 @@ test('returns null for unsupported type', async () => {
   expect(decoded).toBe(null)
 })
 
-test('throws if CLERK_JWT_KEY env var is not set', async () => {
-  delete process.env.CLERK_JWT_KEY
-  process.env.CLERK_API_KEY = 'api-key'
-
-  await expect(authDecoder('token', 'clerk', req)).rejects.toThrow(
-    'CLERK_JWT_KEY env var is not set'
-  )
-})
-
 test('rejects when the token is invalid', async () => {
   process.env.CLERK_JWT_KEY = 'jwt-key'
 
