@@ -85,11 +85,13 @@ export const handler = async ({
       },
     },
     side.includes('web') && {
-      // Clean web
+      // Clean web/dist before building
+      // Vite handles this internally
       title: 'Cleaning Web...',
       task: () => {
         rimraf.sync(rwjsPaths.web.dist)
       },
+      enabled: getConfig().web.bundler !== 'vite',
     },
     side.includes('web') && {
       title: 'Building Web...',
