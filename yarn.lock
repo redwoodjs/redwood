@@ -1997,11 +1997,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@clerk/backend@npm:0.4.0"
+"@clerk/backend@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@clerk/backend@npm:0.4.1"
   dependencies:
-    "@clerk/shared": ^0.9.0
     "@clerk/types": ^3.24.0
     "@peculiar/webcrypto": 1.4.1
     "@types/node": 16.18.6
@@ -2011,7 +2010,7 @@ __metadata:
     rfc4648: 1.5.2
     snakecase-keys: 5.4.4
     tslib: 2.4.1
-  checksum: 59c1f3b0f62dcb0d14b6bc713c6875dee9e4cfc6a5c450d1f29da808fe847bf31f6b6d730c5f7e974e5189d46917b6e5ef4a18c66cc9ef46ea2766afd467c7b1
+  checksum: 78d4d36ad9baa5f4b9d0023baec54582759e36f2dbbecac02c0b064d6358e2f21521d925b9bf745d9d2244b76c12990f3090308b7f4e9080a03031f767f048f1
   languageName: node
   linkType: hard
 
@@ -2028,11 +2027,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.6.0":
-  version: 4.6.0
-  resolution: "@clerk/clerk-sdk-node@npm:4.6.0"
+"@clerk/clerk-sdk-node@npm:4.6.1":
+  version: 4.6.1
+  resolution: "@clerk/clerk-sdk-node@npm:4.6.1"
   dependencies:
-    "@clerk/backend": ^0.4.0
+    "@clerk/backend": ^0.4.1
     "@clerk/types": ^3.24.0
     "@types/cookies": 0.7.7
     "@types/express": 4.17.14
@@ -2040,21 +2039,9 @@ __metadata:
     "@types/node-fetch": 2.6.2
     camelcase-keys: 6.2.2
     cookie: 0.5.0
-    jsonwebtoken: 8.5.1
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: abeab2ee09fabb5d475226156dba515c26cb3d1b21885e61b82f2300f85cb9933c1880f5fbe06b79d196b3b1b4afa9f80bae7f1a30d70d4f65034abc67899f20
-  languageName: node
-  linkType: hard
-
-"@clerk/shared@npm:^0.9.0":
-  version: 0.9.0
-  resolution: "@clerk/shared@npm:0.9.0"
-  peerDependencies:
-    react: 18.2.0
-    react-dom: 18.2.0
-    react-test-renderer: ^18.2.0
-  checksum: a71d25f70335220cb7381b1b8f57f16cd883b4929859da26b7d35065de1963117f54e2f0c99ccc89ff44fbc83ab564f2ff288df55a0761f0fe94e6c9e5759e63
+  checksum: 5fce6e61902405277ce0247b2c357b3f34e30ba84db37e6ad6ac77e83f4f26f97dcd5c5a78ce731a7bd1036b4df9ac4d7d112d7c463451073d81eecca2539b40
   languageName: node
   linkType: hard
 
@@ -6997,7 +6984,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
-    "@clerk/clerk-sdk-node": 4.6.0
+    "@clerk/clerk-sdk-node": 4.6.1
     "@redwoodjs/api": 3.2.0
     "@types/aws-lambda": 8.10.109
     core-js: 3.27.1
@@ -22196,7 +22183,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonwebtoken@npm:8.5.1, jsonwebtoken@npm:^8.5.1":
+"jsonwebtoken@npm:9.0.0, jsonwebtoken@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "jsonwebtoken@npm:9.0.0"
+  dependencies:
+    jws: ^3.2.2
+    lodash: ^4.17.21
+    ms: ^2.1.1
+    semver: ^7.3.8
+  checksum: 60c30d90d8a69b8e7148306e0c299ac120dbde9c032add48d26df928fe349e952cf4b09f12d7942257681a936e3374e4d49280ab20f8a4578688c7f08d87f9bc
+  languageName: node
+  linkType: hard
+
+"jsonwebtoken@npm:^8.5.1":
   version: 8.5.1
   resolution: "jsonwebtoken@npm:8.5.1"
   dependencies:
@@ -22211,18 +22210,6 @@ __metadata:
     ms: ^2.1.1
     semver: ^5.6.0
   checksum: c5ad937b6fa23a230efa8ed8ca3c0da8ebfdd377bafc3e8432a11b03ef90e733400a00b26c0dfee47db44a2e64b88b154b57e9926a92990f98dd25aaed15006e
-  languageName: node
-  linkType: hard
-
-"jsonwebtoken@npm:9.0.0, jsonwebtoken@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "jsonwebtoken@npm:9.0.0"
-  dependencies:
-    jws: ^3.2.2
-    lodash: ^4.17.21
-    ms: ^2.1.1
-    semver: ^7.3.8
-  checksum: 60c30d90d8a69b8e7148306e0c299ac120dbde9c032add48d26df928fe349e952cf4b09f12d7942257681a936e3374e4d49280ab20f8a4578688c7f08d87f9bc
   languageName: node
   linkType: hard
 
