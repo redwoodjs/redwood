@@ -44,7 +44,17 @@ export const prebuildWebFiles = (srcFiles: string[], flags?: Flags) => {
   })
 }
 
-export const buildWebVite = async () => {
+interface BuildOptions {
+  verbose?: boolean
+}
+
+/**
+ *
+ * Builds the web side with Vite
+ * Note that the webpack versoin is triggered via the webpack CLI
+ *
+ */
+export const buildWeb = async ({ verbose }: BuildOptions) => {
   // @NOTE: Using dynamic import, because vite is still opt-in
   const { build } = await import('vite')
   const viteConfig = getPaths().web.viteConfig
@@ -56,5 +66,6 @@ export const buildWebVite = async () => {
   return build({
     configFile: viteConfig,
     envFile: false,
+    logLevel: verbose ? 'info' : 'warn',
   })
 }

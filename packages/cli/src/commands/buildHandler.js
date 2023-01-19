@@ -7,6 +7,7 @@ import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
@@ -94,10 +95,8 @@ export const handler = async ({
       title: 'Building Web...',
       task: async () => {
         if (getConfig().web.bundler === 'vite') {
-          await execa(`yarn cross-env NODE_ENV=production vite build`, {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: rwjsPaths.web.base,
+          await buildWeb({
+            verbose,
           })
         } else {
           await execa(
