@@ -35,7 +35,7 @@ jest.mock('../../../../lib', () => {
     writeFilesTask: (fileNameToContentMap) => {
       const keys = Object.keys(fileNameToContentMap)
       expect(keys.length).toBe(1)
-      expect(keys[0]).toMatch(new RegExp(path.sep + 'netlify.toml$'))
+      expect(keys[0]).toMatch(new RegExp(`\\${path.sep}netlify.toml$`))
       expect(fileNameToContentMap[keys[0]]).toMatchSnapshot()
     },
   }
