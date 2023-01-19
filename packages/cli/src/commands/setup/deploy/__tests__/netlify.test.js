@@ -14,17 +14,13 @@ jest.mock('../../../../lib', () => {
 
   return {
     getPaths: () => {
-      const base = path.resolve(
-        path.join(
-          __dirname,
-          '../../../../../../../__fixtures__/example-todo-main'
-        )
-      )
-
-      console.log('base', base)
-
       return {
-        base,
+        base: path.resolve(
+          path.join(
+            __dirname,
+            '../../../../../../../__fixtures__/example-todo-main'
+          )
+        ),
       }
     },
     getConfig: () => ({
@@ -35,6 +31,10 @@ jest.mock('../../../../lib', () => {
     writeFilesTask: (fileNameToContentMap) => {
       const keys = Object.keys(fileNameToContentMap)
       expect(keys.length).toBe(1)
+      // Need to escape path.sep on Windows, otherwise the backslash (that
+      // path.sep is on Windows) together with the 'n' in "netlify" will be
+      // interpreted as a new-line. And need to use double backslashes, so
+      // that one "survives" into the regexp
       expect(keys[0]).toMatch(new RegExp(`\\${path.sep}netlify.toml$`))
       expect(fileNameToContentMap[keys[0]]).toMatchSnapshot()
     },
