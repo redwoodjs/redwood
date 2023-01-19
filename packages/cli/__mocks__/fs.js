@@ -19,7 +19,9 @@ fs.existsSync = (path) => {
   return isString(mockFiles[path])
 }
 
-fs.mkdirSync = () => {}
+fs.mkdirSync = (path) => {
+  mockFiles[path] = ''
+}
 
 fs.readFileSync = (path) => {
   // In prisma v4.3.0, prisma format uses a Wasm module. See https://github.com/prisma/prisma/releases/tag/4.3.0.
