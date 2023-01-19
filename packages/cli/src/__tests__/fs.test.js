@@ -16,10 +16,12 @@ describe('setup', () => {
   test('correct initial mock', () => {
     const originalMock = fs.__getMockFiles()
     const pathFixedMock = {}
+
     for (const [key, value] of Object.entries(originalMock)) {
       const fixedKey = key.replaceAll(path.sep, '/')
       pathFixedMock[fixedKey] = value
     }
+
     expect(pathFixedMock).toMatchInlineSnapshot(`
       {
         "fake_dir": undefined,
@@ -40,10 +42,12 @@ describe('files', () => {
     expect(fs.existsSync('file_a')).toBe(true)
     expect(fs.existsSync('file_b')).toBe(false)
   })
+
   test('reading', () => {
     expect(fs.readFileSync('file_a')).toBe('content_a')
     expect(() => fs.readFileSync('file_b')).toThrowError()
   })
+
   test('writing', () => {
     fs.writeFileSync('file_a', 'content_a_new')
     expect(fs.readFileSync('file_a')).toBe('content_a_new')
@@ -54,6 +58,7 @@ describe('files', () => {
       fs.writeFileSync(path.join('non_existing_dir', 'test'), 'test')
     ).toThrowError()
   })
+
   test('appending', () => {
     fs.appendFileSync('file_a', '_new')
     expect(fs.readFileSync('file_a')).toBe('content_a_new')
@@ -64,6 +69,7 @@ describe('files', () => {
       fs.appendFileSync(path.join('non_existing_dir', 'test'), 'test')
     ).toThrowError()
   })
+
   test('deleting', () => {
     fs.rmSync('file_a')
     expect(() => fs.readFileSync('file_a')).toThrowError()
@@ -75,6 +81,7 @@ describe('files', () => {
     expect(() => fs.rmSync('file_b')).toThrowError()
     expect(() => fs.unlinkSync('file_b')).toThrowError()
   })
+
   test('copy', () => {
     fs.copyFileSync('file_a', 'file_b')
     expect(fs.readFileSync('file_a')).toBe('content_a')
@@ -94,6 +101,7 @@ describe('directories', () => {
     expect(fs.existsSync(path.join('fake_dir', 'mock_dir'))).toBe(true)
     expect(fs.existsSync(path.join('fake_dir', 'not_a_mock_dir'))).toBe(false)
   })
+
   test('reading', () => {
     expect(fs.readdirSync('fake_dir')).toStrictEqual(['mock_dir'])
     expect(fs.readdirSync(path.join('fake_dir', 'mock_dir'))).toStrictEqual([
@@ -104,11 +112,13 @@ describe('directories', () => {
       fs.readdirSync(path.join('fake_dir', 'mock_dir', 'made_up_file'))
     ).toThrowError()
   })
+
   test('writing', () => {
     fs.mkdirSync('new_fake_dir')
     expect(fs.existsSync('new_fake_dir')).toBe(true)
     expect(fs.readdirSync('new_fake_dir')).toStrictEqual([])
   })
+
   test('deleting', () => {
     fs.mkdirSync('new_fake_dir')
     expect(fs.existsSync('new_fake_dir')).toBe(true)

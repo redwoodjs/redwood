@@ -112,7 +112,9 @@ describe('rw destroy scaffold', () => {
 
     describe('for typescript files', () => {
       beforeEach(async () => {
-        fs.__setMockFiles(scaffoldTemplates) // clear filesystem so files call works as expected
+        // clear filesystem so files call works as expected
+        fs.__setMockFiles(scaffoldTemplates)
+
         fs.__setMockFiles({
           ...scaffoldTemplates,
           ...(await files({
@@ -240,7 +242,9 @@ describe('rw destroy scaffold', () => {
 
     describe('for typescript files', () => {
       beforeEach(async () => {
-        fs.__setMockFiles(scaffoldTemplates) // clear filesystem so files call works as expected
+        // clear filesystem so files call works as expected
+        fs.__setMockFiles(scaffoldTemplates)
+
         fs.__setMockFiles({
           ...scaffoldTemplates,
           ...(await files({
