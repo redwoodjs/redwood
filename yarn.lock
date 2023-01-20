@@ -7524,7 +7524,7 @@ __metadata:
     "@typescript-eslint/parser": 5.48.2
     eslint: 8.32.0
     eslint-config-prettier: 8.6.0
-    eslint-import-resolver-babel-module: 5.3.1
+    eslint-import-resolver-babel-module: 5.3.2
     eslint-plugin-babel: 5.3.1
     eslint-plugin-import: 2.27.5
     eslint-plugin-jest-dom: 4.0.3
@@ -16694,16 +16694,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-babel-module@npm:5.3.1":
-  version: 5.3.1
-  resolution: "eslint-import-resolver-babel-module@npm:5.3.1"
+"eslint-import-resolver-babel-module@npm:5.3.2":
+  version: 5.3.2
+  resolution: "eslint-import-resolver-babel-module@npm:5.3.2"
   dependencies:
     pkg-up: ^3.1.0
     resolve: ^1.20.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-    babel-plugin-module-resolver: ^3.0.0 || ^4.0.0
-  checksum: 6163953073f9e51c72de51b392a5f53e9d5793f1ed6e88e905acf210ec7cd8f757512d2997f6e4497cfc37e7e9926f937619e176b4ed37804960fb54062728f7
+    babel-plugin-module-resolver: ^3.0.0 || ^4.0.0 || ^5.0.0
+  checksum: 168fc793cc565cb8c27eb69c67872420980a6fcaac4a5b6951bdaa2700c0745c997d282b3c8cce313c423a12933a0f6fcc347a799398f3cf7f91e9e8a35d2d69
   languageName: node
   linkType: hard
 
