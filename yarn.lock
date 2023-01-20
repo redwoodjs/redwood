@@ -2222,9 +2222,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/android-arm64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/android-arm64@npm:0.17.1"
+"@esbuild/android-arm64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/android-arm64@npm:0.17.3"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
@@ -2236,9 +2236,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/android-arm@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/android-arm@npm:0.17.1"
+"@esbuild/android-arm@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/android-arm@npm:0.17.3"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
@@ -2250,9 +2250,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/android-x64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/android-x64@npm:0.17.1"
+"@esbuild/android-x64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/android-x64@npm:0.17.3"
   conditions: os=android & cpu=x64
   languageName: node
   linkType: hard
@@ -2264,9 +2264,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/darwin-arm64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/darwin-arm64@npm:0.17.1"
+"@esbuild/darwin-arm64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/darwin-arm64@npm:0.17.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
@@ -2278,9 +2278,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/darwin-x64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/darwin-x64@npm:0.17.1"
+"@esbuild/darwin-x64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/darwin-x64@npm:0.17.3"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
@@ -2292,9 +2292,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/freebsd-arm64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/freebsd-arm64@npm:0.17.1"
+"@esbuild/freebsd-arm64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/freebsd-arm64@npm:0.17.3"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
@@ -2306,9 +2306,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/freebsd-x64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/freebsd-x64@npm:0.17.1"
+"@esbuild/freebsd-x64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/freebsd-x64@npm:0.17.3"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
@@ -2320,9 +2320,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-arm64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-arm64@npm:0.17.1"
+"@esbuild/linux-arm64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-arm64@npm:0.17.3"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
@@ -2334,9 +2334,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-arm@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-arm@npm:0.17.1"
+"@esbuild/linux-arm@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-arm@npm:0.17.3"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
@@ -2348,9 +2348,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-ia32@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-ia32@npm:0.17.1"
+"@esbuild/linux-ia32@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-ia32@npm:0.17.3"
   conditions: os=linux & cpu=ia32
   languageName: node
   linkType: hard
@@ -2362,9 +2362,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-loong64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-loong64@npm:0.17.1"
+"@esbuild/linux-loong64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-loong64@npm:0.17.3"
   conditions: os=linux & cpu=loong64
   languageName: node
   linkType: hard
@@ -2376,9 +2376,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-mips64el@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-mips64el@npm:0.17.1"
+"@esbuild/linux-mips64el@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-mips64el@npm:0.17.3"
   conditions: os=linux & cpu=mips64el
   languageName: node
   linkType: hard
@@ -2390,9 +2390,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-ppc64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-ppc64@npm:0.17.1"
+"@esbuild/linux-ppc64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-ppc64@npm:0.17.3"
   conditions: os=linux & cpu=ppc64
   languageName: node
   linkType: hard
@@ -2404,9 +2404,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-riscv64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-riscv64@npm:0.17.1"
+"@esbuild/linux-riscv64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-riscv64@npm:0.17.3"
   conditions: os=linux & cpu=riscv64
   languageName: node
   linkType: hard
@@ -2418,9 +2418,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-s390x@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-s390x@npm:0.17.1"
+"@esbuild/linux-s390x@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-s390x@npm:0.17.3"
   conditions: os=linux & cpu=s390x
   languageName: node
   linkType: hard
@@ -2432,9 +2432,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/linux-x64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/linux-x64@npm:0.17.1"
+"@esbuild/linux-x64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/linux-x64@npm:0.17.3"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
@@ -2446,9 +2446,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/netbsd-x64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/netbsd-x64@npm:0.17.1"
+"@esbuild/netbsd-x64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/netbsd-x64@npm:0.17.3"
   conditions: os=netbsd & cpu=x64
   languageName: node
   linkType: hard
@@ -2460,9 +2460,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/openbsd-x64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/openbsd-x64@npm:0.17.1"
+"@esbuild/openbsd-x64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/openbsd-x64@npm:0.17.3"
   conditions: os=openbsd & cpu=x64
   languageName: node
   linkType: hard
@@ -2474,9 +2474,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/sunos-x64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/sunos-x64@npm:0.17.1"
+"@esbuild/sunos-x64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/sunos-x64@npm:0.17.3"
   conditions: os=sunos & cpu=x64
   languageName: node
   linkType: hard
@@ -2488,9 +2488,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/win32-arm64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/win32-arm64@npm:0.17.1"
+"@esbuild/win32-arm64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/win32-arm64@npm:0.17.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
@@ -2502,9 +2502,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/win32-ia32@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/win32-ia32@npm:0.17.1"
+"@esbuild/win32-ia32@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/win32-ia32@npm:0.17.3"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
@@ -2516,9 +2516,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/win32-x64@npm:0.17.1":
-  version: 0.17.1
-  resolution: "@esbuild/win32-x64@npm:0.17.1"
+"@esbuild/win32-x64@npm:0.17.3":
+  version: 0.17.3
+  resolution: "@esbuild/win32-x64@npm:0.17.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -5934,7 +5934,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/app@npm:^13.0.5":
+"@octokit/app@npm:^13.1.1":
   version: 13.1.1
   resolution: "@octokit/app@npm:13.1.1"
   dependencies:
@@ -6775,7 +6775,7 @@ __metadata:
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     ansi-colors: 4.1.3
     aws-lambda: 1.0.7
     chalk: 4.1.2
@@ -6808,7 +6808,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@prisma/client": 4.9.0
     "@types/aws-lambda": 8.10.109
-    "@types/jsonwebtoken": 9.0.0
+    "@types/jsonwebtoken": 9.0.1
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 3.2.1
@@ -6849,7 +6849,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
-    "@types/jsonwebtoken": 9.0.0
+    "@types/jsonwebtoken": 9.0.1
     core-js: 3.27.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -6866,7 +6866,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -6883,7 +6883,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     core-js: 3.27.1
     jest: 29.3.1
     react: 17.0.2
@@ -6902,7 +6902,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
     "@types/aws-lambda": 8.10.109
-    "@types/jsonwebtoken": 9.0.0
+    "@types/jsonwebtoken": 9.0.1
     core-js: 3.27.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -6919,7 +6919,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -6937,7 +6937,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     core-js: 3.27.1
     jest: 29.3.1
     react: 17.0.2
@@ -6971,7 +6971,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -6989,7 +6989,7 @@ __metadata:
     "@clerk/types": 2.21.0
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     core-js: 3.27.1
     jest: 29.3.1
     react: 17.0.2
@@ -7007,7 +7007,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7047,7 +7047,7 @@ __metadata:
     "@simplewebauthn/browser": 6.2.2
     "@simplewebauthn/typescript-types": 6.2.1
     "@types/secure-random-password": 0.2.1
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     prompts: 2.4.2
@@ -7068,7 +7068,7 @@ __metadata:
     "@simplewebauthn/browser": 6.2.2
     "@simplewebauthn/typescript-types": 6.2.1
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     core-js: 3.27.1
     jest: 29.3.1
     react: 17.0.2
@@ -7100,7 +7100,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7116,7 +7116,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     core-js: 3.27.1
     firebase: 9.15.0
     jest: 29.3.1
@@ -7136,7 +7136,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
     "@types/aws-lambda": 8.10.109
-    "@types/jsonwebtoken": 9.0.0
+    "@types/jsonwebtoken": 9.0.1
     core-js: 3.27.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -7152,7 +7152,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7169,7 +7169,7 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     core-js: 3.27.1
     jest: 29.3.1
     react: 17.0.2
@@ -7188,7 +7188,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
     "@types/aws-lambda": 8.10.109
-    "@types/jsonwebtoken": 9.0.0
+    "@types/jsonwebtoken": 9.0.1
     core-js: 3.27.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -7204,7 +7204,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7220,7 +7220,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@supabase/supabase-js": 1.35.7
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     core-js: 3.27.1
     jest: 29.3.1
     react: 17.0.2
@@ -7238,7 +7238,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/api": 3.2.0
-    "@types/jsonwebtoken": 9.0.0
+    "@types/jsonwebtoken": 9.0.1
     core-js: 3.27.1
     jest: 29.3.1
     jsonwebtoken: 9.0.0
@@ -7257,7 +7257,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7273,7 +7273,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/auth": 3.2.0
     "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     core-js: 3.27.1
     jest: 29.3.1
     react: 17.0.2
@@ -7295,7 +7295,7 @@ __metadata:
     "@testing-library/react-hooks": 8.0.1
     core-js: 3.27.1
     jest: 29.3.1
-    msw: 0.49.2
+    msw: 0.49.3
     react: 17.0.2
     typescript: 4.7.4
   languageName: unknown
@@ -7312,7 +7312,7 @@ __metadata:
     "@redwoodjs/telemetry": 3.2.0
     "@types/lodash.memoize": 4.1.7
     "@types/pascalcase": 1.0.1
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     chalk: 4.1.2
     core-js: 3.27.1
     execa: 5.1.1
@@ -7391,13 +7391,13 @@ __metadata:
     "@babel/plugin-transform-typescript": 7.20.7
     "@babel/runtime-corejs3": 7.20.7
     "@iarna/toml": 2.2.5
-    "@types/babel__core": 7.1.20
+    "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.2.5
+    "@types/jest": 29.2.6
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     "@vscode/ripgrep": 1.14.2
     "@whatwg-node/fetch": 0.6.2
     core-js: 3.27.1
@@ -7452,7 +7452,7 @@ __metadata:
     css-loader: 6.7.3
     css-minimizer-webpack-plugin: 4.2.2
     dotenv-webpack: 8.0.1
-    esbuild: 0.17.1
+    esbuild: 0.17.3
     fast-glob: 3.2.12
     file-loader: 6.2.0
     graphql: 16.6.0
@@ -7530,7 +7530,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     "@types/react-dom": 17.0.18
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.27.1
@@ -7566,7 +7566,7 @@ __metadata:
     "@graphql-tools/schema": 8.5.1
     "@graphql-tools/utils": 8.13.1
     "@redwoodjs/api": 3.2.0
-    "@types/jsonwebtoken": 9.0.0
+    "@types/jsonwebtoken": 9.0.1
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 9.0.0
@@ -7608,7 +7608,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     "@redwoodjs/graphql-server": 3.2.0
     "@types/babel-plugin-tester": 9.0.5
-    "@types/babel__core": 7.1.20
+    "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 11.0.1
     "@types/rimraf": 3.0.2
@@ -7618,7 +7618,7 @@ __metadata:
     chalk: 4.1.2
     core-js: 3.27.1
     deepmerge: 4.2.2
-    esbuild: 0.17.1
+    esbuild: 0.17.3
     fast-glob: 3.2.12
     findup-sync: 5.0.0
     fs-extra: 11.1.0
@@ -7676,7 +7676,7 @@ __metadata:
     "@prisma/client": 4.9.0
     "@prisma/internals": 4.9.0
     core-js: 3.27.1
-    esbuild: 0.17.1
+    esbuild: 0.17.3
     jest: 29.3.1
   languageName: unknown
   linkType: soft
@@ -7691,7 +7691,7 @@ __metadata:
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 3.2.0
     "@types/lodash.isequal": 4.5.6
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     "@types/react-dom": 17.0.18
     core-js: 3.27.1
     jest: 29.3.1
@@ -7753,7 +7753,7 @@ __metadata:
     "@redwoodjs/structure": 3.2.0
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     "@whatwg-node/fetch": 0.6.2
     ci-info: 3.7.1
     core-js: 3.27.1
@@ -7789,9 +7789,9 @@ __metadata:
     "@testing-library/user-event": 14.4.3
     "@types/aws-lambda": 8.10.109
     "@types/babel-core": 6.25.7
-    "@types/jest": 29.2.5
+    "@types/jest": 29.2.6
     "@types/node": 16.18.11
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     "@types/react-dom": 17.0.18
     "@types/webpack": 5.28.0
     babel-jest: 29.3.1
@@ -7801,7 +7801,7 @@ __metadata:
     jest: 29.3.1
     jest-environment-jsdom: 29.3.1
     jest-watch-typeahead: 2.2.1
-    msw: 0.49.2
+    msw: 0.49.3
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
     whatwg-fetch: 3.6.2
@@ -7841,7 +7841,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
     "@types/prop-types": 15.7.5
-    "@types/react": 17.0.52
+    "@types/react": 17.0.53
     "@types/react-dom": 17.0.18
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.27.1
@@ -9510,7 +9510,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:^7.1.14":
+"@types/babel__core@npm:*, @types/babel__core@npm:7.20.0, @types/babel__core@npm:^7.1.14":
   version: 7.20.0
   resolution: "@types/babel__core@npm:7.20.0"
   dependencies:
@@ -9520,19 +9520,6 @@ __metadata:
     "@types/babel__template": "*"
     "@types/babel__traverse": "*"
   checksum: 75dcd39258bc008b6fd4db7de2c8bfeb29b5cd2c726f54407f70243ddea1d8ce9e7082281557614c4a5f9f30d478387ca6ab6cc576fc829cebeb159bfaa8799f
-  languageName: node
-  linkType: hard
-
-"@types/babel__core@npm:7.1.20":
-  version: 7.1.20
-  resolution: "@types/babel__core@npm:7.1.20"
-  dependencies:
-    "@babel/parser": ^7.1.0
-    "@babel/types": ^7.0.0
-    "@types/babel__generator": "*"
-    "@types/babel__template": "*"
-    "@types/babel__traverse": "*"
-  checksum: f88025726047188c9ee96790294d5bb56bf452f6b65f80389788e8b11c16aab77fd709e2d1c07117ddee4e8a267615a88434b0570318301554daf304e20d7ad3
   languageName: node
   linkType: hard
 
@@ -9861,23 +9848,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*":
+"@types/jest@npm:*, @types/jest@npm:29.2.6":
   version: 29.2.6
   resolution: "@types/jest@npm:29.2.6"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
   checksum: f52c3824c972902e25ed1b3d05086260ef088828168b60bab427dcffc83ddbc95fec82000eecbdae26a0c05da3b65073b88553ce328e71a2ffbaa5e7fd560548
-  languageName: node
-  linkType: hard
-
-"@types/jest@npm:29.2.5":
-  version: 29.2.5
-  resolution: "@types/jest@npm:29.2.5"
-  dependencies:
-    expect: ^29.0.0
-    pretty-format: ^29.0.0
-  checksum: df7a21f93d1c6dbe520b2bd735a51dc1675bdc32090d421ea742a320a9ea0126680a3abe66321b0944941061dda698b1e775dcde2d16c44f19e24a94f7ef7020
   languageName: node
   linkType: hard
 
@@ -9946,12 +9923,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@types/jsonwebtoken@npm:9.0.0"
+"@types/jsonwebtoken@npm:9.0.1, @types/jsonwebtoken@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "@types/jsonwebtoken@npm:9.0.1"
   dependencies:
     "@types/node": "*"
-  checksum: 168636cad4dc02b7e42ffa7ac71ca93911f783e8478c854194f3adf6ab518a57a19f620f8c3a9ec2a8a8016f7c613d34c9ee004e516c648471c7fb3c98804672
+  checksum: e603f206c91dac01f23096c6d2aaba014ab60357fc270afef4c68449c335643d76dc1c21cc6464c89d0fb8f7e471d14a03a4ffb13b62d7133c97f61e75d2fcdd
   languageName: node
   linkType: hard
 
@@ -9961,15 +9938,6 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 4374b0f1b5641d1dd8847fa6f50bd34ec215f3244ea045556d2caa74ed559b2571502db73526bb8fbff038a60ff7e6bf56ffa79679c0b03539b55fda32617a23
-  languageName: node
-  linkType: hard
-
-"@types/jsonwebtoken@npm:^9.0.0":
-  version: 9.0.1
-  resolution: "@types/jsonwebtoken@npm:9.0.1"
-  dependencies:
-    "@types/node": "*"
-  checksum: e603f206c91dac01f23096c6d2aaba014ab60357fc270afef4c68449c335643d76dc1c21cc6464c89d0fb8f7e471d14a03a4ffb13b62d7133c97f61e75d2fcdd
   languageName: node
   linkType: hard
 
@@ -10297,14 +10265,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.52":
-  version: 17.0.52
-  resolution: "@types/react@npm:17.0.52"
+"@types/react@npm:17.0.53":
+  version: 17.0.53
+  resolution: "@types/react@npm:17.0.53"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: df8662375c71eab90f9832bf388e210b337514ff0cfd260547c498b5a010a8bba980fa704b0e828070e83363c8d20a0a03e3e2fcd27d50649c3811b1279ea9ed
+  checksum: 4ff3fa58ab32deefacdbd0ee002e294548391238ce2dea2cad213e11b4cc61480be48cb2b7ed3c53220ee1a5b9cadf3417a20db817ab2ca4669c9a4a45042b92
   languageName: node
   linkType: hard
 
@@ -10548,12 +10516,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.19":
-  version: 17.0.19
-  resolution: "@types/yargs@npm:17.0.19"
+"@types/yargs@npm:17.0.20, @types/yargs@npm:^17.0.8":
+  version: 17.0.20
+  resolution: "@types/yargs@npm:17.0.20"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 80cfb1f10f414244ba3134d516f545819488e5809ddc5f7029e152ab142897a2b1116f9d1ac5f7ebef35a4e799fbbdbfdc7986f5cd9dc096ce9443b31e59068d
+  checksum: 1f6b1378da6f52f8195bd25c15f5b22187e2dc419b8234f42accb6ed8787bfad2e4c1c3ee0217b574dcb01a4a903ef5f5dde1aa8e1fed4fb1df9ae4c36766e66
   languageName: node
   linkType: hard
 
@@ -10563,15 +10531,6 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: b52519ba68a8d90996b54143ff74fcd8ac1722a1ef4a50ed8c3dbc1f7a76d14210f0262f8b91eabcdab202ff4babdd92ce7332ab1cdd6af4eae7c9fc81c83797
-  languageName: node
-  linkType: hard
-
-"@types/yargs@npm:^17.0.8":
-  version: 17.0.20
-  resolution: "@types/yargs@npm:17.0.20"
-  dependencies:
-    "@types/yargs-parser": "*"
-  checksum: 1f6b1378da6f52f8195bd25c15f5b22187e2dc419b8234f42accb6ed8787bfad2e4c1c3ee0217b574dcb01a4a903ef5f5dde1aa8e1fed4fb1df9ae4c36766e66
   languageName: node
   linkType: hard
 
@@ -16612,32 +16571,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.17.1":
-  version: 0.17.1
-  resolution: "esbuild@npm:0.17.1"
+"esbuild@npm:0.17.3":
+  version: 0.17.3
+  resolution: "esbuild@npm:0.17.3"
   dependencies:
-    "@esbuild/android-arm": 0.17.1
-    "@esbuild/android-arm64": 0.17.1
-    "@esbuild/android-x64": 0.17.1
-    "@esbuild/darwin-arm64": 0.17.1
-    "@esbuild/darwin-x64": 0.17.1
-    "@esbuild/freebsd-arm64": 0.17.1
-    "@esbuild/freebsd-x64": 0.17.1
-    "@esbuild/linux-arm": 0.17.1
-    "@esbuild/linux-arm64": 0.17.1
-    "@esbuild/linux-ia32": 0.17.1
-    "@esbuild/linux-loong64": 0.17.1
-    "@esbuild/linux-mips64el": 0.17.1
-    "@esbuild/linux-ppc64": 0.17.1
-    "@esbuild/linux-riscv64": 0.17.1
-    "@esbuild/linux-s390x": 0.17.1
-    "@esbuild/linux-x64": 0.17.1
-    "@esbuild/netbsd-x64": 0.17.1
-    "@esbuild/openbsd-x64": 0.17.1
-    "@esbuild/sunos-x64": 0.17.1
-    "@esbuild/win32-arm64": 0.17.1
-    "@esbuild/win32-ia32": 0.17.1
-    "@esbuild/win32-x64": 0.17.1
+    "@esbuild/android-arm": 0.17.3
+    "@esbuild/android-arm64": 0.17.3
+    "@esbuild/android-x64": 0.17.3
+    "@esbuild/darwin-arm64": 0.17.3
+    "@esbuild/darwin-x64": 0.17.3
+    "@esbuild/freebsd-arm64": 0.17.3
+    "@esbuild/freebsd-x64": 0.17.3
+    "@esbuild/linux-arm": 0.17.3
+    "@esbuild/linux-arm64": 0.17.3
+    "@esbuild/linux-ia32": 0.17.3
+    "@esbuild/linux-loong64": 0.17.3
+    "@esbuild/linux-mips64el": 0.17.3
+    "@esbuild/linux-ppc64": 0.17.3
+    "@esbuild/linux-riscv64": 0.17.3
+    "@esbuild/linux-s390x": 0.17.3
+    "@esbuild/linux-x64": 0.17.3
+    "@esbuild/netbsd-x64": 0.17.3
+    "@esbuild/openbsd-x64": 0.17.3
+    "@esbuild/sunos-x64": 0.17.3
+    "@esbuild/win32-arm64": 0.17.3
+    "@esbuild/win32-ia32": 0.17.3
+    "@esbuild/win32-x64": 0.17.3
   dependenciesMeta:
     "@esbuild/android-arm":
       optional: true
@@ -16685,7 +16644,7 @@ __metadata:
       optional: true
   bin:
     esbuild: bin/esbuild
-  checksum: eb88a7ef9a79bbe39afc0441e6e62cc68b2f8831e0dda025644b41dc6509ff530b6e1bdd63148b88ef8241ca97bcf1dee7798d8fc0e56a5411590a62f8580cb3
+  checksum: 0b17e66f68c6cc0665cc47fdc03d5189d27ba6aeca15513d777b09053c3ce2565417841f706db3c7ce34653d57f82d8168c10ffb569eb2dd7926aed8d628f8e2
   languageName: node
   linkType: hard
 
@@ -23746,9 +23705,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:0.49.2":
-  version: 0.49.2
-  resolution: "msw@npm:0.49.2"
+"msw@npm:0.49.3":
+  version: 0.49.3
+  resolution: "msw@npm:0.49.3"
   dependencies:
     "@mswjs/cookies": ^0.2.2
     "@mswjs/interceptors": ^0.17.5
@@ -23766,7 +23725,7 @@ __metadata:
     node-fetch: ^2.6.7
     outvariant: ^1.3.0
     path-to-regexp: ^6.2.0
-    strict-event-emitter: ^0.2.6
+    strict-event-emitter: ^0.4.3
     type-fest: ^2.19.0
     yargs: ^17.3.1
   peerDependencies:
@@ -23776,7 +23735,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: f39f4fd6a30bddb9c87c158781c0fbe057b71fe80a6cbdc157fec155fcf61edcba90fff230363e702b07c3f1119bdf151b878205fa4b480b2e8bf2f07f15422e
+  checksum: 993e87ce639eae8edcbb492a7bbc4772bafe8ae2760ce543933e4598c24e371df9b20fe31f9d022e838810cc1fdc46438782fc6c7430be77d78d9526bd82ebee
   languageName: node
   linkType: hard
 
@@ -24662,11 +24621,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.10":
-  version: 2.0.10
-  resolution: "octokit@npm:2.0.10"
+"octokit@npm:2.0.11":
+  version: 2.0.11
+  resolution: "octokit@npm:2.0.11"
   dependencies:
-    "@octokit/app": ^13.0.5
+    "@octokit/app": ^13.1.1
     "@octokit/core": ^4.0.4
     "@octokit/oauth-app": ^4.0.6
     "@octokit/plugin-paginate-rest": ^5.0.0
@@ -24674,7 +24633,7 @@ __metadata:
     "@octokit/plugin-retry": ^4.0.3
     "@octokit/plugin-throttling": ^4.0.1
     "@octokit/types": ^8.0.0
-  checksum: b20210d853d61b627fe1324969942e753666379d271e24b876a11012f3f392d836cf40959bbfe4388619b989fe816f0d17a38052a5865d76fbb45f58cc5dd7bf
+  checksum: 9ae99a7b444bf40f78a8ceab9c857a88bd50404ed0e72be4a6b2fee1e062918110043ab0a77563cb8d8e056306dcf86f252cae86ed95706eada9dff218864ea8
   languageName: node
   linkType: hard
 
@@ -27878,7 +27837,7 @@ __metadata:
     "@tsd/typescript": 4.9.4
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.2.5
+    "@types/jest": 29.2.6
     "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
@@ -27903,13 +27862,13 @@ __metadata:
     listr2: 5.0.7
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 0.49.2
+    msw: 0.49.3
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.20
     npm-packlist: 5.1.3
     nx: 15.5.2
-    octokit: 2.0.10
+    octokit: 2.0.11
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2
@@ -29107,12 +29066,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strict-event-emitter@npm:^0.2.4, strict-event-emitter@npm:^0.2.6":
+"strict-event-emitter@npm:^0.2.4":
   version: 0.2.8
   resolution: "strict-event-emitter@npm:0.2.8"
   dependencies:
     events: ^3.3.0
   checksum: 6891e19fea4f0289e4da2fe7050d85906eaca7f774aa38fe674f0e58fdece1b63b868614fa23974c4cb862aa99358caa987523b705fdfff4639231c62e384394
+  languageName: node
+  linkType: hard
+
+"strict-event-emitter@npm:^0.4.3":
+  version: 0.4.4
+  resolution: "strict-event-emitter@npm:0.4.4"
+  checksum: 1d73c4db48d3b3b861c0f9d1720269ecd8156834abb2e5b5a32064d49f2f402925da54aee8a6a66e6f70c5ca7b4b4cf4a9162e244e564410069cabb4fcecec50
   languageName: node
   linkType: hard
 
