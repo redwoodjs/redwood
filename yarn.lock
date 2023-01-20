@@ -27915,7 +27915,7 @@ __metadata:
     rimraf: 3.0.2
     terminal-link: 2.1.1
     typescript: 4.7.4
-    typescript-transform-paths: 3.4.4
+    typescript-transform-paths: 3.4.6
     zx: 7.1.1
   languageName: unknown
   linkType: soft
@@ -30483,14 +30483,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-transform-paths@npm:3.4.4":
-  version: 3.4.4
-  resolution: "typescript-transform-paths@npm:3.4.4"
+"typescript-transform-paths@npm:3.4.6":
+  version: 3.4.6
+  resolution: "typescript-transform-paths@npm:3.4.6"
   dependencies:
     minimatch: ^3.0.4
   peerDependencies:
     typescript: ">=3.6.5"
-  checksum: 5c1d564eed54948e01b99e6fcbc4c52ebd35aae137cc1895c823ff3383aa5313cf4675ef62792f8fa9684a034270d44d2f1e1936ccfce8b053ad82073ae26e60
+  checksum: 5a85cc2a1a93cba283576e65972e82b51c506b2cb004dfc039421003ef9e56c1fec565749f1ddaf3edd97ad0f2698d0f4a0f6562893585f1d2a66a94162139d4
   languageName: node
   linkType: hard
 
