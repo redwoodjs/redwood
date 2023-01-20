@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.7",
     "@redwoodjs/cli-helpers": "3.2.0",
-    "core-js": "3.27.1"
+    "core-js": "3.27.2"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
