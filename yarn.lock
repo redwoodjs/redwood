@@ -27915,7 +27915,6 @@ __metadata:
     rimraf: 3.0.2
     terminal-link: 2.1.1
     typescript: 4.7.4
-    typescript-transform-paths: 3.4.4
     zx: 7.1.1
   languageName: unknown
   linkType: soft
@@ -30480,17 +30479,6 @@ __metadata:
   version: 0.0.6
   resolution: "typedarray@npm:0.0.6"
   checksum: 6005cb31df50eef8b1f3c780eb71a17925f3038a100d82f9406ac2ad1de5eb59f8e6decbdc145b3a1f8e5836e17b0c0002fb698b9fe2516b8f9f9ff602d36412
-  languageName: node
-  linkType: hard
-
-"typescript-transform-paths@npm:3.4.4":
-  version: 3.4.4
-  resolution: "typescript-transform-paths@npm:3.4.4"
-  dependencies:
-    minimatch: ^3.0.4
-  peerDependencies:
-    typescript: ">=3.6.5"
-  checksum: 5c1d564eed54948e01b99e6fcbc4c52ebd35aae137cc1895c823ff3383aa5313cf4675ef62792f8fa9684a034270d44d2f1e1936ccfce8b053ad82073ae26e60
   languageName: node
   linkType: hard
 
