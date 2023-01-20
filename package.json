@@ -103,7 +103,6 @@
     "rimraf": "3.0.2",
     "terminal-link": "2.1.1",
     "typescript": "4.7.4",
-    "typescript-transform-paths": "3.4.4",
     "zx": "7.1.1"
   },
   "packageManager": "yarn@3.3.1",
