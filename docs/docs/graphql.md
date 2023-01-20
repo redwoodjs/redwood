@@ -17,7 +17,7 @@ There's three types of GraphQL operations, but here we'll only focus on two: Que
 The following GraphQL query:
 
 ```graphql
-query GetProjectl
+query GetProject {
   project(name: "GraphQL") {
     id
     title
@@ -1504,7 +1504,7 @@ Limit the number of aliases in a document. Defaults to 15.
 
 ##### Example
 
-Aliases allows you to rename the data that is returned in a query’s results. They manipulate the structure of the query result that is fetched from your service, displaying it according to your web component's needs.
+Aliases allow you to rename the data that is returned in a query’s results. They manipulate the structure of the query result that is fetched from your service, displaying it according to your web component's needs.
 
 This contrived example uses 11 alias to rename a Post's id and title to various permutations of post, article, and blog to return a different shape in the query result as `articles`:
 
