@@ -147,6 +147,11 @@ AZURE_ACTIVE_DIRECTORY_JWT_ISSUER=https://rwauthtestb2c.b2clogin.com/775527ef-8a
 AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://rwauthtestb2c.b2clogin.com
 ```
 
+Don't forget to also add `AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY` to the
+`includeEnvironmentVariables` list in `redwood.toml`.
+(`AZURE_ACTIVE_DIRECTORY_JWT_ISSUER` is only used on the API side and should
+*not* be added to `redwood.toml`)
+
 #### Update const activeDirectoryClient instance
 This lets the MSAL (Microsoft Authentication Library) web side client know
 about our new B2C allowed authority that we defined in the .env file
