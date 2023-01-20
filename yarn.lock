@@ -6853,7 +6853,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.3.1
     jsonwebtoken: 9.0.0
-    jwks-rsa: 2.0.5
+    jwks-rsa: 2.1.5
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -6906,7 +6906,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.3.1
     jsonwebtoken: 9.0.0
-    jwks-rsa: 2.0.5
+    jwks-rsa: 2.1.5
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -7242,7 +7242,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.3.1
     jsonwebtoken: 9.0.0
-    jwks-rsa: 2.0.5
+    jwks-rsa: 2.1.5
     typescript: 4.7.4
   peerDependencies:
     supertokens-node: 12.1.4
@@ -9685,16 +9685,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-jwt@npm:0.0.42":
-  version: 0.0.42
-  resolution: "@types/express-jwt@npm:0.0.42"
-  dependencies:
-    "@types/express": "*"
-    "@types/express-unless": "*"
-  checksum: fa0c3219ab0a9ccd1c3c1a7057626148d3f81ab53846d247e2729d006fa913bf202d8c0716a91d10fa94ebc8ab8861acbfca3118d3b671a6dc411f00f5553d68
-  languageName: node
-  linkType: hard
-
 "@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.31":
   version: 4.17.32
   resolution: "@types/express-serve-static-core@npm:4.17.32"
@@ -9703,15 +9693,6 @@ __metadata:
     "@types/qs": "*"
     "@types/range-parser": "*"
   checksum: 283024a1d8247e4d39ca0f9ff23bbd3b88799dbd508c52b7ea479b21d326a2d0a9c362ec4b91d621d2cb7c5e961eb5a094d79702aeae25b295c6f2a70271c13e
-  languageName: node
-  linkType: hard
-
-"@types/express-unless@npm:*":
-  version: 0.5.3
-  resolution: "@types/express-unless@npm:0.5.3"
-  dependencies:
-    "@types/express": "*"
-  checksum: 2d461c1b0122978037f883b3596d9f7d460fe8ce95f99058b09df8faf0b30d143fd8f1436f92e592db611922096fc1e1f2d61855b30e1c2e00543dd9ec623592
   languageName: node
   linkType: hard
 
@@ -21569,7 +21550,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^2.0.5, jose@npm:^2.0.6":
+"jose@npm:^2.0.6":
   version: 2.0.6
   resolution: "jose@npm:2.0.6"
   dependencies:
@@ -22009,20 +21990,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jwks-rsa@npm:2.0.5":
-  version: 2.0.5
-  resolution: "jwks-rsa@npm:2.0.5"
-  dependencies:
-    "@types/express-jwt": 0.0.42
-    debug: ^4.3.2
-    jose: ^2.0.5
-    limiter: ^1.1.5
-    lru-memoizer: ^2.1.4
-  checksum: 8faa3d0a1cce1326474717cef4a0f33dab03b2075340c7b55452fda064a468a453c67bf79e1a94361c61a88f33c7b2375f1d630867c5457c4f571e8ed4dc1f57
-  languageName: node
-  linkType: hard
-
-"jwks-rsa@npm:^2.0.2, jwks-rsa@npm:^2.0.4":
+"jwks-rsa@npm:2.1.5, jwks-rsa@npm:^2.0.2, jwks-rsa@npm:^2.0.4":
   version: 2.1.5
   resolution: "jwks-rsa@npm:2.1.5"
   dependencies:
