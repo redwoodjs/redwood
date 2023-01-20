@@ -59,11 +59,11 @@ export async function executeRollback(_ = null, task = null) {
           fs.unlinkSync(step.path)
           // Remove any empty parent/grandparent directories, only need 2 levels so just do it manually
           let parent = path.dirname(step.path)
-          if (fs.readdirSync(parent).length === 0) {
+          if (parent !== '.' && fs.readdirSync(parent).length === 0) {
             fs.rmdirSync(parent)
           }
           parent = path.dirname(parent)
-          if (fs.readdirSync(parent).length === 0) {
+          if (parent !== '.' && fs.readdirSync(parent).length === 0) {
             fs.rmdirSync(parent)
           }
         } else {
