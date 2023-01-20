@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import { Listr } from 'listr2'
 
@@ -31,11 +32,27 @@ it('removes new files', async () => {
 
   await rollback.executeRollback()
   expect(fs.readFileSync('fake-file-1')).toBe('fake-content-1')
-  expect(fs.readFileSync('fake-file-2')).toBe(undefined)
+  expect(fs.existsSync('fake-file-2')).toBe(false)
 })
 
-// TODO: Handle this when the fs mock implements the additional functions nessecary to inspect dirs
-it.todo('removes empty folders after removing files')
+it('removes empty folders after removing files', async () => {
+  fs.__setMockFiles({
+    [path.join('fake_dir', 'mock_dir', 'test_dir')]: undefined,
+  })
+  rollback.addFileToRollback(
+    path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file')
+  )
+  fs.writeFileSync(
+    path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file'),
+    'fake-content'
+  )
+
+  await rollback.executeRollback()
+  expect(
+    fs.existsSync(path.join('fake_dir', 'mock_dir', 'test_dir', 'fake-file'))
+  ).toBe(false)
+  expect(fs.readdirSync('fake_dir')).toStrictEqual([])
+})
 
 it('executes sync functions', async () => {
   fs.__setMockFiles({})
@@ -126,7 +143,7 @@ it('reset clears the stack', async () => {
   })
   rollback.resetRollback()
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe(undefined)
+  expect(fs.existsSync('fake-file')).toBe(false)
 })
 
 it('prepare clears the stack', async () => {
@@ -136,7 +153,7 @@ it('prepare clears the stack', async () => {
   })
   rollback.prepareForRollback({})
   await rollback.executeRollback()
-  expect(fs.readFileSync('fake-file')).toBe(undefined)
+  expect(fs.existsSync('fake-file')).toBe(false)
 })
 
 it('prepare sets listr2 rollback functions and rollback executes correctly', async () => {
