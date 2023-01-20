@@ -17,7 +17,7 @@ There's three types of GraphQL operations, but here we'll only focus on two: Que
 The following GraphQL query:
 
 ```graphql
-query GetProject {
+query GetProjectl
   project(name: "GraphQL") {
     id
     title
@@ -1275,13 +1275,7 @@ RedwoodJS is configured out-of-the-box with GraphQL security best practices:
 
 * Schema Directive-based Authentication including RBAC validation
 * Production Deploys disable Introspection and GraphQL Playground automatically
-* Reject Malicious Operation Documents (
-
-
-
-
-
-es, Max Cost, Max Depth, Max Directives, Max Tokens)
+* Reject Malicious Operation Documents (Max Aliases, Max Cost, Max Depth, Max Directives, Max Tokens)
 * Prevent Information Leaks (Block Field Suggestions, Mask Errors)
 
 And with the Yoga Envelop Plugin ecosystem available to you, there are options for:
