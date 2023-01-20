@@ -62,7 +62,7 @@
     "prettier": "2.8.3",
     "prisma": "4.9.0",
     "prompts": "2.4.2",
-    "rimraf": "3.0.2",
+    "rimraf": "4.1.1",
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
