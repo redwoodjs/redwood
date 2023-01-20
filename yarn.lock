@@ -5768,24 +5768,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/app@npm:^13.0.5":
-  version: 13.1.0
-  resolution: "@octokit/app@npm:13.1.0"
+"@octokit/app@npm:^13.1.1":
+  version: 13.1.2
+  resolution: "@octokit/app@npm:13.1.2"
   dependencies:
-    "@octokit/auth-app": ^4.0.0
+    "@octokit/auth-app": ^4.0.8
     "@octokit/auth-unauthenticated": ^3.0.0
     "@octokit/core": ^4.0.0
     "@octokit/oauth-app": ^4.0.7
-    "@octokit/plugin-paginate-rest": ^5.0.0
-    "@octokit/types": ^8.0.0
+    "@octokit/plugin-paginate-rest": ^6.0.0
+    "@octokit/types": ^9.0.0
     "@octokit/webhooks": ^10.0.0
-  checksum: 7076ebde66fa806ced93291e9eaba4eb38965f50c5f40b3922d465a3b46122f133a7f7b71faecc6f3d557e2a7041280c2a1a35a9e34dcdd0755d14953bfdfb33
+  checksum: 3127e8c95a8bf9ba50e5635dadfc7ae0fb9f0910bf411d2436fff95ffa239dab46331431f32b5a68c023c5c9e3e97738b5abaefc1e3f1f927e7be55f37e7b40c
   languageName: node
   linkType: hard
 
-"@octokit/auth-app@npm:^4.0.0":
-  version: 4.0.7
-  resolution: "@octokit/auth-app@npm:4.0.7"
+"@octokit/auth-app@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "@octokit/auth-app@npm:4.0.8"
   dependencies:
     "@octokit/auth-oauth-app": ^5.0.0
     "@octokit/auth-oauth-user": ^2.0.0
@@ -5795,9 +5795,9 @@ __metadata:
     "@types/lru-cache": ^5.1.0
     deprecation: ^2.3.1
     lru-cache: ^6.0.0
-    universal-github-app-jwt: ^1.0.1
+    universal-github-app-jwt: ^1.1.1
     universal-user-agent: ^6.0.0
-  checksum: 57b5567f75d8d0d838d853983164dc30542af61fab0da4c537ec2278f5b10dbad27ac1950699b5433c8c5f950de4f30eab7870ef73235754aa5b968fea918dd7
+  checksum: 69ed489b48a71c91a3d6fab4a74c72568d3e1d7d2f1e3db6798e5e1173612b49d00ce4ea4af695f2e26bcd91a258746ae67ab5973dca299e6f328e24d6005034
   languageName: node
   linkType: hard
 
@@ -5942,6 +5942,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/openapi-types@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "@octokit/openapi-types@npm:16.0.0"
+  checksum: 8d45fc0249e8ba0c0c1ef4de5ac2dddbb8f8b42b66383d58ab026b59282f908466d344a98ef0ff198b1d42ef1fae7e6f8b69ab88c11c955d3ac54426bf6c17d2
+  languageName: node
+  linkType: hard
+
 "@octokit/plugin-enterprise-rest@npm:^6.0.1":
   version: 6.0.1
   resolution: "@octokit/plugin-enterprise-rest@npm:6.0.1"
@@ -5957,6 +5964,17 @@ __metadata:
   peerDependencies:
     "@octokit/core": ">=4"
   checksum: a6754bfa3c6e3b917f1b03266e90e96ba97957e3ca15b1cc5a306cebc8ef96f1757fe85d8fade41b4c0e7e3805c753e94d360375f2ec9fa96b1fec79b239a662
+  languageName: node
+  linkType: hard
+
+"@octokit/plugin-paginate-rest@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@octokit/plugin-paginate-rest@npm:6.0.0"
+  dependencies:
+    "@octokit/types": ^9.0.0
+  peerDependencies:
+    "@octokit/core": ">=4"
+  checksum: 5dbde9bc44d5b70f977d343af7eb65b1a3c6d7178dc52440e5dc565ba2bb772d84a43a235161ae022b59b6a48b089fab0d3aa58157e0636a12fbcead0dc19d84
   languageName: node
   linkType: hard
 
@@ -6048,6 +6066,15 @@ __metadata:
   dependencies:
     "@octokit/openapi-types": ^14.0.0
   checksum: 2c51b30f7f48c8a51e8aa9c932bd0fb7c6746b4e5b154299e3d462180f5642d4ce1cc19d92a64a7bd1b1b3df09a0c3af416940c81b269ddcad51c834464af731
+  languageName: node
+  linkType: hard
+
+"@octokit/types@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@octokit/types@npm:9.0.0"
+  dependencies:
+    "@octokit/openapi-types": ^16.0.0
+  checksum: 33e165e9ddaf7f1e8e94e3e48e2bb73f6193b1405887c382b5079450bebf67fe844784e3bb91c90acdb5718c3551936202de3ee98aaf7f7ec428a064032e158a
   languageName: node
   linkType: hard
 
@@ -9735,7 +9762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:^8.3.3, @types/jsonwebtoken@npm:^8.5.0, @types/jsonwebtoken@npm:^8.5.9":
+"@types/jsonwebtoken@npm:^8.5.0, @types/jsonwebtoken@npm:^8.5.9":
   version: 8.5.9
   resolution: "@types/jsonwebtoken@npm:8.5.9"
   dependencies:
@@ -24224,11 +24251,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.10":
-  version: 2.0.10
-  resolution: "octokit@npm:2.0.10"
+"octokit@npm:2.0.11":
+  version: 2.0.11
+  resolution: "octokit@npm:2.0.11"
   dependencies:
-    "@octokit/app": ^13.0.5
+    "@octokit/app": ^13.1.1
     "@octokit/core": ^4.0.4
     "@octokit/oauth-app": ^4.0.6
     "@octokit/plugin-paginate-rest": ^5.0.0
@@ -24236,7 +24263,7 @@ __metadata:
     "@octokit/plugin-retry": ^4.0.3
     "@octokit/plugin-throttling": ^4.0.1
     "@octokit/types": ^8.0.0
-  checksum: b20210d853d61b627fe1324969942e753666379d271e24b876a11012f3f392d836cf40959bbfe4388619b989fe816f0d17a38052a5865d76fbb45f58cc5dd7bf
+  checksum: 9ae99a7b444bf40f78a8ceab9c857a88bd50404ed0e72be4a6b2fee1e062918110043ab0a77563cb8d8e056306dcf86f252cae86ed95706eada9dff218864ea8
   languageName: node
   linkType: hard
 
@@ -27448,7 +27475,7 @@ __metadata:
     nodemon: 2.0.20
     npm-packlist: 5.1.3
     nx: 15.5.2
-    octokit: 2.0.10
+    octokit: 2.0.11
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2
@@ -30290,13 +30317,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"universal-github-app-jwt@npm:^1.0.1":
-  version: 1.1.0
-  resolution: "universal-github-app-jwt@npm:1.1.0"
+"universal-github-app-jwt@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "universal-github-app-jwt@npm:1.1.1"
   dependencies:
-    "@types/jsonwebtoken": ^8.3.3
-    jsonwebtoken: ^8.5.1
-  checksum: 48d0b58527c32bb4dad8d165649a4674c9c6c6ee00f56a5358f8079e063b6fefbf9c014269ca69e1c92b9a299faec6a6fa6a1b2b0029468fd35d776786aa7dc3
+    "@types/jsonwebtoken": ^9.0.0
+    jsonwebtoken: ^9.0.0
+  checksum: f735a3fa0c9156898d128f45237eefa598edfab2424428ccc12e4b7dd9d217ff91b5a2b7a9a1ed6a16fd7985723f0ae34d5efbd3f81ab203c83184b7675c970a
   languageName: node
   linkType: hard
 
