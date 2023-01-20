@@ -1275,7 +1275,13 @@ RedwoodJS is configured out-of-the-box with GraphQL security best practices:
 
 * Schema Directive-based Authentication including RBAC validation
 * Production Deploys disable Introspection and GraphQL Playground automatically
-* Reject Malicious Operation Documents (Max Aliases, Max Cost, Max Depth, Max Directives, Max Tokens)
+* Reject Malicious Operation Documents (
+
+
+
+
+
+es, Max Cost, Max Depth, Max Directives, Max Tokens)
 * Prevent Information Leaks (Block Field Suggestions, Mask Errors)
 
 And with the Yoga Envelop Plugin ecosystem available to you, there are options for:
@@ -1504,9 +1510,9 @@ Limit the number of aliases in a document. Defaults to 15.
 
 ##### Example
 
-Aliases allow you rename the data that is returned in a query’s results. They manipulate the structure of the query result that is fetched from your service, displaying it according to your web component's needs.
+Aliases allows you to rename the data that is returned in a query’s results. They manipulate the structure of the query result that is fetched from your service, displaying it according to your web component's needs.
 
-This contrived example uses 11 alias to rename a Post's id an title to various permutations of post, article, and blog to return a different shape in the query result as `articles`:
+This contrived example uses 11 alias to rename a Post's id and title to various permutations of post, article, and blog to return a different shape in the query result as `articles`:
 
 ```ts
  {
@@ -1643,7 +1649,7 @@ Typically, these types of unbounded, complex and expensive GraphQL queries are u
 
 ##### Example
 
-An example of a cyclical query here takes advantage of knowing that and author has posts and each post has and author ... that has posts ... that has an another that ... etc.
+An example of a cyclical query here takes advantage of knowing that an author has posts and each post has an author ... that has posts ... that has an another that ... etc.
 
 This cyclical query has a depth of 8.
 
