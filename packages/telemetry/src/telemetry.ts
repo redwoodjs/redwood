@@ -15,7 +15,7 @@ const spawnProcess = (...args: Array<string>) => {
           stdio: process.env.REDWOOD_VERBOSE_TELEMETRY
             ? ['ignore', 'inherit', 'inherit']
             : 'ignore',
-          // The following options run the process in the background within a console window, even though they don't look like they would.
+          // The following options run the process in the background without a console window, even though they don't look like they would.
           // See https://github.com/nodejs/node/issues/21825#issuecomment-503766781 for information
           detached: false,
           windowsHide: false,
