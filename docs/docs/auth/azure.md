@@ -10,9 +10,11 @@ To get started, run the setup command:
 yarn rw setup auth azureActiveDirectory
 ```
 
-This installs all the packages, writes all the files, and makes all the code modifications you need.
-For a detailed explanation of all the api- and web-side changes that aren't exclusive to Azure, see the top-level [Authentication](../authentication.md) doc.
-For now, let's focus on Azure's side of things.
+This installs all the packages, writes all the files, and makes all the code
+modifications you need. For a detailed explanation of all the api- and web-side
+changes that aren't exclusive to Azure, see the top-level
+[Authentication](../authentication.md) doc. For now, let's focus on Azure's
+side of things.
 
 ## Setup
 
@@ -20,20 +22,28 @@ To get your application credentials, create an
 [App Registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration)
 using your Azure Active Directory tenant and make sure you configure as a
 [MSAL.js 2.0 with auth code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration#redirect-uri-msaljs-20-with-auth-code-flow)
-registration. Take a note of your generated _Application ID_ (client), and the _Directory ID_ (tenant).
-_Application ID_ should be stored in an environment variable called `AZURE_ACTIVE_DIRECTORY_CLIENT_ID`
+registration. Take a note of your generated _Application ID_ (client), and the
+_Directory ID_ (tenant). _Application ID_ should be stored in an environment
+variable called `AZURE_ACTIVE_DIRECTORY_CLIENT_ID`
 
 [Learn more about authorization code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-third-party-cookies-spas).
 
 ## Redirect URIs
 
-Enter allowed redirect urls for the integrations, e.g. `http://localhost:8910/login`. This will be the
+Enter allowed redirect urls for the integrations, e.g.
+`http://localhost:8910/login`. This will be the
 `AZURE_ACTIVE_DIRECTORY_REDIRECT_URI` environment variable, and suggestively
 `AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI`.
 
 ## Authority
 
-The Authority is a URL that indicates a directory that MSAL can request tokens from which you can read about [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-client-application-configuration#authority). However, you most likely want to have e.g. `https://login.microsoftonline.com/<tenant>` as Authority URL, where `<tenant>` is the Azure Active Directory tenant id. This will be the `AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
+The Authority is a URL that indicates a directory that MSAL can request tokens
+from which you can read about
+[here](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-client-application-configuration#authority).
+However, you most likely want to have e.g.
+`https://login.microsoftonline.com/<tenant>` as Authority URL, where `<tenant>`
+is the Azure Active Directory tenant id. This will be the
+`AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
 
 ## Environment variables
 
@@ -99,7 +109,9 @@ const HomePage = () => {
 
 ### Roles
 
-To setup your App Registration with custom roles and have them exposed via the `roles` claim, follow [this documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps).
+To setup your App Registration with custom roles and have them exposed via the
+`roles` claim, follow
+[this documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps).
 
 ### Login Options
 
