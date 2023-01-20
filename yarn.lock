@@ -6775,7 +6775,7 @@ __metadata:
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     ansi-colors: 4.1.3
     aws-lambda: 1.0.7
     chalk: 4.1.2
@@ -6866,7 +6866,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -6919,7 +6919,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -6971,7 +6971,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7007,7 +7007,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7047,7 +7047,7 @@ __metadata:
     "@simplewebauthn/browser": 6.2.2
     "@simplewebauthn/typescript-types": 6.2.1
     "@types/secure-random-password": 0.2.1
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     prompts: 2.4.2
@@ -7100,7 +7100,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7152,7 +7152,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7204,7 +7204,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7257,7 +7257,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
     "@redwoodjs/cli-helpers": 3.2.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     core-js: 3.27.1
     jest: 29.3.1
     typescript: 4.7.4
@@ -7312,7 +7312,7 @@ __metadata:
     "@redwoodjs/telemetry": 3.2.0
     "@types/lodash.memoize": 4.1.7
     "@types/pascalcase": 1.0.1
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     chalk: 4.1.2
     core-js: 3.27.1
     execa: 5.1.1
@@ -7397,7 +7397,7 @@ __metadata:
     "@types/jest": 29.2.6
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     "@vscode/ripgrep": 1.14.2
     "@whatwg-node/fetch": 0.6.2
     core-js: 3.27.1
@@ -7753,7 +7753,7 @@ __metadata:
     "@redwoodjs/structure": 3.2.0
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.0
-    "@types/yargs": 17.0.19
+    "@types/yargs": 17.0.20
     "@whatwg-node/fetch": 0.6.2
     ci-info: 3.7.1
     core-js: 3.27.1
@@ -10516,12 +10516,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.19":
-  version: 17.0.19
-  resolution: "@types/yargs@npm:17.0.19"
+"@types/yargs@npm:17.0.20, @types/yargs@npm:^17.0.8":
+  version: 17.0.20
+  resolution: "@types/yargs@npm:17.0.20"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 80cfb1f10f414244ba3134d516f545819488e5809ddc5f7029e152ab142897a2b1116f9d1ac5f7ebef35a4e799fbbdbfdc7986f5cd9dc096ce9443b31e59068d
+  checksum: 1f6b1378da6f52f8195bd25c15f5b22187e2dc419b8234f42accb6ed8787bfad2e4c1c3ee0217b574dcb01a4a903ef5f5dde1aa8e1fed4fb1df9ae4c36766e66
   languageName: node
   linkType: hard
 
@@ -10531,15 +10531,6 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: b52519ba68a8d90996b54143ff74fcd8ac1722a1ef4a50ed8c3dbc1f7a76d14210f0262f8b91eabcdab202ff4babdd92ce7332ab1cdd6af4eae7c9fc81c83797
-  languageName: node
-  linkType: hard
-
-"@types/yargs@npm:^17.0.8":
-  version: 17.0.20
-  resolution: "@types/yargs@npm:17.0.20"
-  dependencies:
-    "@types/yargs-parser": "*"
-  checksum: 1f6b1378da6f52f8195bd25c15f5b22187e2dc419b8234f42accb6ed8787bfad2e4c1c3ee0217b574dcb01a4a903ef5f5dde1aa8e1fed4fb1df9ae4c36766e66
   languageName: node
   linkType: hard
 
