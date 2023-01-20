@@ -25,7 +25,7 @@
     "@babel/runtime-corejs3": "7.20.7",
     "core-js": "3.27.1",
     "jsonwebtoken": "9.0.0",
-    "jwks-rsa": "2.0.5"
+    "jwks-rsa": "3.0.1"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
