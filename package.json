@@ -78,7 +78,7 @@
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",
     "boxen": "5.1.2",
-    "core-js": "3.27.1",
+    "core-js": "3.27.2",
     "cypress": "11.2.0",
     "cypress-wait-until": "1.7.2",
     "eslint": "8.32.0",
@@ -104,7 +104,6 @@
     "rimraf": "3.0.2",
     "terminal-link": "2.1.1",
     "typescript": "4.7.4",
-    "typescript-transform-paths": "3.4.4",
     "zx": "7.1.1"
   },
   "packageManager": "yarn@3.3.1",
