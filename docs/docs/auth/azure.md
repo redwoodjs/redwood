@@ -4,71 +4,95 @@ sidebar_label: Azure
 
 # Azure Active Directory Authentication
 
-> **Azure AD B2C Compatibility Note**
->
->  Microsoft [Azure AD B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/overview) auth product *is* compatible with this auth provider. See below for additional configuration details.
-
-## Installation
-
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+To get started, run the setup command:
 
 ```bash
 yarn rw setup auth azureActiveDirectory
 ```
 
-_If you prefer to manually install the package and add code_, run the following command and then add the required code provided in the next section.
-
-```bash
-cd web
-yarn add @azure/msal-browser
-```
+This installs all the packages, writes all the files, and makes all the code modifications you need.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Azure, see the top-level [Authentication](../authentication.md) doc.
+For now, let's focus on Azure's side of things.
 
 ## Setup
 
-To get your application credentials, create an [App Registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration) using your Azure Active Directory tenant and make sure you configure as a [MSAL.js 2.0 with auth code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration#redirect-uri-msaljs-20-with-auth-code-flow) registration. Take a note of your generated _Application ID_ (client), and the _Directory ID_ (tenant).
+To get your application credentials, create an
+[App Registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration)
+using your Azure Active Directory tenant and make sure you configure as a
+[MSAL.js 2.0 with auth code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration#redirect-uri-msaljs-20-with-auth-code-flow)
+registration. Take a note of your generated _Application ID_ (client), and the _Directory ID_ (tenant).
+_Application ID_ should be stored in an environment variable called `AZURE_ACTIVE_DIRECTORY_CLIENT_ID`
 
 [Learn more about authorization code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-third-party-cookies-spas).
 
 ## Redirect URIs
 
-Enter allowed redirect urls for the integrations, e.g. `http://localhost:8910/login`. This will be the `AZURE_ACTIVE_DIRECTORY_REDIRECT_URI` environment variable, and suggestively `AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI`.
+Enter allowed redirect urls for the integrations, e.g. `http://localhost:8910/login`. This will be the
+`AZURE_ACTIVE_DIRECTORY_REDIRECT_URI` environment variable, and suggestively
+`AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI`.
 
 ## Authority
 
 The Authority is a URL that indicates a directory that MSAL can request tokens from which you can read about [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-client-application-configuration#authority). However, you most likely want to have e.g. `https://login.microsoftonline.com/<tenant>` as Authority URL, where `<tenant>` is the Azure Active Directory tenant id. This will be the `AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
 
-```jsx title="web/src/App.{js,tsx}"
-import { AuthProvider } from '@redwoodjs/auth'
-import { PublicClientApplication } from '@azure/msal-browser'
-import { FatalErrorBoundary } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+## Environment variables
 
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
+Copy all your environment variables into your project's `.env` file:
 
-import './index.css'
+```bash title=".env"
+AZURE_ACTIVE_DIRECTORY_CLIENT_ID="..."
+AZURE_ACTIVE_DIRECTORY_REDIRECT_URI="..."
+AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI="..."
+AZURE_ACTIVE_DIRECTORY_AUTHORITY="..."
+```
 
-const azureActiveDirectoryClient = new PublicClientApplication({
-  auth: {
-    clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
-    authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
-    redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
-    postLogoutRedirectUri:
-      process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
-  },
-})
+Here are some example values
+```bash title=".env"
+AZURE_ACTIVE_DIRECTORY_CLIENT_ID=831080ad-742f-4507-847d-c4b05ff6b825
+# https://login.microsoftonline.com/<tenant> as Authority URL, where <tenant> is the Azure Active Directory tenant id
+AZURE_ACTIVE_DIRECTORY_AUTHORITY=https://login.microsoftonline.com/e1337ae2-8308-440d-9745-292bd4d1de17
+AZURE_ACTIVE_DIRECTORY_REDIRECT_URI=http://localhost:8910/
+AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI=http://localhost:8910/login
+```
 
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <AuthProvider client={azureActiveDirectoryClient} type="azureActiveDirectory">
-      <RedwoodApolloProvider>
-        <Routes />
-      </RedwoodApolloProvider>
-    </AuthProvider>
-  </FatalErrorBoundary>
-)
+All environment variables also need to be included in the list of env vars that
+should be available to the web side.
 
-export default App
+```toml title="redwood.toml"
+[web]
+  # ...
+  includeEnvironmentVariables = [
+    "AZURE_ACTIVE_DIRECTORY_CLIENT_ID",
+    "AZURE_ACTIVE_DIRECTORY_REDIRECT_URI",
+    "AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI",
+    "AZURE_ACTIVE_DIRECTORY_AUTHORITY",
+  ]
+```
+
+## Example code
+
+Now let's make sure everything works: if this is a brand new project, generate
+a home page. There we'll try to sign up by destructuring `signUp` from the
+`useAuth` hook (import that from `'src/auth'`). We'll also destructure and
+display `isAuthenticated` to see if it worked:
+
+```tsx title="web/src/pages/HomePage.tsx"
+import { useAuth } from 'src/auth'
+
+const HomePage = () => {
+  const { isAuthenticated, signUp } = useAuth()
+
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
+
+      <p>{JSON.stringify({ isAuthenticated })}</p>
+      <button onClick={() => signUp()}>
+        Sign Up
+      </button>
+    </>
+  )
+}
 ```
 
 ## Integration
@@ -124,20 +148,22 @@ AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://rwauthtestb2c.b2clogin.com
 ```
 
 #### Update const activeDirectoryClient instance
- This lets the MSAL (Microsoft Authentication Library) web side client know about our new B2C allowed authority that we defined in the .env file
-```jsx title="./web/App.{js,tsx}
+This lets the MSAL (Microsoft Authentication Library) web side client know
+about our new B2C allowed authority that we defined in the .env file
 
+```jsx title="./web/auth.{js,ts}
 const azureActiveDirectoryClient = new PublicClientApplication({
-    auth: {
-      clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
-      authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
-      redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
-      postLogoutRedirectUri:
-        process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
-      // highlight-next-line
-      knownAuthorities: [process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
-    },
-  })
+  auth: {
+    clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
+    authority: process.env.AZURE_ACTIVE_DIRECTORY_AUTHORITY,
+    redirectUri: process.env.AZURE_ACTIVE_DIRECTORY_REDIRECT_URI,
+    postLogoutRedirectUri:
+      process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
+    // highlight-next-line
+    knownAuthorities: [process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
+  },
+})
 ```
 
-Now you can call the login and logout functions from useAuth(), and everything should just work®
+Now you can call the `logIn` and `logOut` functions from `useAuth()`, and
+everything should just work®
