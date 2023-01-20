@@ -7,7 +7,7 @@ sidebar_label: Azure
 To get started, run the setup command:
 
 ```bash
-yarn rw setup auth azureActiveDirectory
+yarn rw setup auth azure-active-directory
 ```
 
 This installs all the packages, writes all the files, and makes all the code
