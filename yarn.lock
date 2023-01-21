@@ -7677,16 +7677,16 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.13
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 3.2.0
-    "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.53
     "@types/react-dom": 17.0.18
     core-js: 3.27.2
     jest: 29.3.1
-    lodash.isequal: 4.5.0
-    prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
     typescript: 4.7.4
+  peerDependencies:
+    react: 17.0.2
+    react-dom: 17.0.2
   languageName: unknown
   linkType: soft
 
@@ -9920,15 +9920,6 @@ __metadata:
   dependencies:
     "@types/lodash": "*"
   checksum: cc980619559a3e67f40d078e76da67d110eecec7f774987bf595349e4642ce3110ec61a787a98ab89ea6d5c9dc5b1b16b47ceb878e678e3b7dc30e5d6b22fc97
-  languageName: node
-  linkType: hard
-
-"@types/lodash.isequal@npm:4.5.6":
-  version: 4.5.6
-  resolution: "@types/lodash.isequal@npm:4.5.6"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: d14cb561e3db36b80bde1d6eea5b012c46c8bb7a7dadb2844bd80b209d7c324eb54ad5ca7b6e57c253593662d8fc676da430f2216aaca1c04b087d38030151ae
   languageName: node
   linkType: hard
 
@@ -22483,13 +22474,6 @@ __metadata:
   version: 3.0.3
   resolution: "lodash.isboolean@npm:3.0.3"
   checksum: 0aac604c1ef7e72f9a6b798e5b676606042401dd58e49f051df3cc1e3adb497b3d7695635a5cbec4ae5f66456b951fdabe7d6b387055f13267cde521f10ec7f7
-  languageName: node
-  linkType: hard
-
-"lodash.isequal@npm:4.5.0":
-  version: 4.5.0
-  resolution: "lodash.isequal@npm:4.5.0"
-  checksum: dfdb2356db19631a4b445d5f37868a095e2402292d59539a987f134a8778c62a2810c2452d11ae9e6dcac71fc9de40a6fedcb20e2952a15b431ad8b29e50e28f
   languageName: node
   linkType: hard
 
