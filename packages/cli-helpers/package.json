@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/core": "7.20.12",
-    "@babel/runtime-corejs3": "7.20.7",
+    "@babel/runtime-corejs3": "7.20.13",
     "@redwoodjs/internal": "3.2.0",
     "@redwoodjs/telemetry": "3.2.0",
     "chalk": "4.1.2",

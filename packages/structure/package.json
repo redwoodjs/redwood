@@ -30,7 +30,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.7",
+    "@babel/runtime-corejs3": "7.20.13",
     "@iarna/toml": "2.2.5",
     "@prisma/internals": "4.9.0",
     "@redwoodjs/internal": "3.2.0",
