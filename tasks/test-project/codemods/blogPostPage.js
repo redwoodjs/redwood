@@ -1,5 +1,13 @@
 const body = `
-<BlogPostCell id={id} />
+{
+  return (
+    <>
+      <MetaTags title={\`Post \${id}\`} description={\`Description \${id}\`} />
+
+      <BlogPostCell id={id} />
+    </>
+  )
+}
 `
 
 export default (file, api) => {

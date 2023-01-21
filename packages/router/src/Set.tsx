@@ -77,7 +77,8 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
       return whileLoadingAuth?.() || null
     } else {
       const currentLocation =
-        global.location.pathname + encodeURIComponent(global.location.search)
+        globalThis.location.pathname +
+        encodeURIComponent(globalThis.location.search)
 
       if (!namedRoutes[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
