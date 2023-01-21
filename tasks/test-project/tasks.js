@@ -426,13 +426,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
 
     await execa(
-      'yarn add -D @redwoodjs/auth-dbauth-setup@canary',
-      [],
-      execaOptions
-    )
-
-    await execa(
-      'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
+      'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       execaOptions
     )

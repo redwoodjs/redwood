@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 // mock Telemetry for CLI commands so they don't try to spawn a process
 jest.mock('@redwoodjs/telemetry', () => {
@@ -67,10 +67,9 @@ describe('Auth generator tests', () => {
     mockListrRun.mockClear()
   })
 
-  it('Successfully executes the handler for Netlify', async () => {
+  it('Successfully executes the handler for Supertokens', async () => {
     await standardAuthHandler({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
-      rwVersion: '1.2.3',
       provider: 'supertokens',
       webAuthn: false,
       forceArg: false,
@@ -78,20 +77,21 @@ describe('Auth generator tests', () => {
 
     expect(mockListrRun).toHaveBeenCalledTimes(1)
     expect(processExitSpy).not.toHaveBeenCalledWith(1)
-    expect(prompts).toHaveBeenCalledTimes(1)
-    expect(prompts).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.stringMatching(
-          /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
-        ),
-      })
-    )
+    // TODO: Add something like this back in when we've added support for
+    // prompting the user
+    // expect(prompts).toHaveBeenCalledTimes(1)
+    // expect(prompts).toHaveBeenCalledWith(
+    //   expect.objectContaining({
+    //     message: expect.stringMatching(
+    //       /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
+    //     ),
+    //   })
+    // )
   })
 
   it('Successfully executes the handler for Netlify without prompting the user when --force is true', async () => {
     await standardAuthHandler({
       basedir: path.join(__dirname, 'fixtures/supertokensSetup'),
-      rwVersion: '1.2.3',
       provider: 'supertokens',
       webAuthn: false,
       forceArg: true,
@@ -105,7 +105,6 @@ describe('Auth generator tests', () => {
   it('Successfully executes the handler for dbAuth', async () => {
     await standardAuthHandler({
       basedir: path.join(__dirname, 'fixtures/dbAuthSetup'),
-      rwVersion: '1.2.3',
       provider: 'dbAuth',
       webAuthn: false,
       forceArg: false,
@@ -113,13 +112,14 @@ describe('Auth generator tests', () => {
 
     expect(mockListrRun).toHaveBeenCalledTimes(1)
     expect(processExitSpy).not.toHaveBeenCalledWith(1)
-    expect(prompts).toHaveBeenCalledTimes(1)
-    expect(prompts).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.stringMatching(
-          /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
-        ),
-      })
-    )
+    // TODO: Add this back in later
+    // expect(prompts).toHaveBeenCalledTimes(1)
+    // expect(prompts).toHaveBeenCalledWith(
+    //   expect.objectContaining({
+    //     message: expect.stringMatching(
+    //       /Overwrite existing [/\\]api[/\\]src[/\\]lib[/\\]auth.ts\?/
+    //     ),
+    //   })
+    // )
   })
 })

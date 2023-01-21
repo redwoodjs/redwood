@@ -17,7 +17,8 @@ export interface RouteInformation {
  */
 export function getDuplicateRoutes() {
   const duplicateRoutes: RouteInformation[] = []
-  const allRoutes: typeof RWRoute[] = getProject(getPaths().base).router.routes
+  const allRoutes: (typeof RWRoute)[] = getProject(getPaths().base).router
+    .routes
   const uniquePathNames = new Set(allRoutes.map((route) => route.name))
   uniquePathNames.forEach((name) => {
     const routesWithName = allRoutes.filter((route) => {

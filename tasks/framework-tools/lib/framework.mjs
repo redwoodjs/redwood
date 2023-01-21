@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import url from 'node:url'
 
+import Arborist from '@npmcli/arborist'
 import c from 'ansi-colors'
 import execa from 'execa'
 import fg from 'fast-glob'
@@ -92,9 +93,9 @@ export async function frameworkPackagesFiles(
   for (const packageFile of packages) {
     const packageJson = JSON.parse(fs.readFileSync(packageFile))
 
-    fileList[packageJson.name] = await packlist({
-      path: path.dirname(packageFile),
-    })
+    const arborist = new Arborist({ path: path.dirname(packageFile) })
+    const tree = await arborist.loadActual()
+    fileList[packageJson.name] = await packlist(tree)
   }
   return fileList
 }
@@ -120,6 +121,9 @@ export function frameworkPackagesBins(packages = frameworkPkgJsonFiles()) {
     if (!packageJson.bin) {
       continue
     }
+
+    // @TODO @MARK this interferes with having a single bin file
+    // yarn will automatically switch from using an a Map to a string Array
     for (const [binName, binPath] of Object.entries(packageJson.bin)) {
       bins[binName] = path.join(packageJson.name, binPath)
     }
