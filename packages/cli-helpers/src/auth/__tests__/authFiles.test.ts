@@ -1,7 +1,7 @@
 // Have to use `var` here to avoid "Temporal Dead Zone" issues
 let mockBasePath = ''
 let mockIsTypeScriptProject = true
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 jest.mock('../../lib/paths', () => {
   const path = require('path')

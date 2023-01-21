@@ -14,12 +14,14 @@ import {
 } from './common'
 
 export const getWebSideBabelPlugins = (
-  { forJest }: Flags = { forJest: false }
+  { forJest, forVite }: Flags = { forJest: false, forVite: false }
 ) => {
   const rwjsPaths = getPaths()
 
-  const plugins: TransformOptions['plugins'] = [
-    ...getCommonPlugins(),
+  // Vite does not need these plugins
+  const commonPlugins = forVite ? [] : getCommonPlugins()
+  const plugins = [
+    ...commonPlugins,
     // === Import path handling
     [
       'babel-plugin-module-resolver',
@@ -111,7 +113,7 @@ export const getWebSideOverrides = (
     // Automatically import files in `./web/src/pages/*` in to
     // the `./web/src/Routes.[ts|jsx]` file.
     {
-      test: /Routes.(js|tsx)$/,
+      test: /Routes.(js|tsx|jsx)$/,
       plugins: [
         [
           require('../babelPlugins/babel-plugin-redwood-routes-auto-loader')
@@ -136,7 +138,11 @@ export const getWebSideOverrides = (
   return overrides as TransformOptions[]
 }
 
-export const getWebSideBabelPresets = () => {
+export const getWebSideBabelPresets = (options: Flags) => {
+  if (options.forVite) {
+    return []
+  }
+
   let reactPresetConfig = undefined
 
   // This is a special case, where @babel/preset-react needs config
@@ -195,6 +201,7 @@ export const getWebSideBabelConfigPath = () => {
 export interface Flags {
   forJest?: boolean // will change the alias for module-resolver plugin
   staticImports?: boolean // will use require instead of import for routes-auto-loader plugin
+  forVite?: boolean
 }
 
 export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
@@ -203,7 +210,7 @@ export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
   // and merge them because we have specified the filename property, unless babelrc = false
 
   return {
-    presets: getWebSideBabelPresets(),
+    presets: getWebSideBabelPresets(options),
     plugins: getWebSideBabelPlugins(options),
     overrides: getWebSideOverrides(options),
     extends: getWebSideBabelConfigPath(),
