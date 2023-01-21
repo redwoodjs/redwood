@@ -41,9 +41,9 @@ The Authority is a URL that indicates a directory that MSAL (Microsoft
 Authentication Library) can request tokens from which you can read about
 [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-client-application-configuration#authority).
 However, you most likely want to have
-`https://login.microsoftonline.com/<tenant>` as Authority URL, where `<tenant>`
-is the Azure Active Directory tenant id. This value will be used for the
-`AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
+`https://login.microsoftonline.com/{{tenantId}}` as Authority URL, where
+`{{tenantId}}` is the Azure Active Directory tenant id. This value will be used
+for the `AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
 
 ## Environment variables
 
