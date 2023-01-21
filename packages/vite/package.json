@@ -22,7 +22,7 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.7",
+    "@babel/runtime-corejs3": "7.20.13",
     "@redwoodjs/internal": "3.2.0",
     "@vitejs/plugin-react": "3.0.1",
     "buffer": "6.0.3",
