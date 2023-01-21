@@ -300,19 +300,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/msal-browser@npm:2.32.1":
-  version: 2.32.1
-  resolution: "@azure/msal-browser@npm:2.32.1"
+"@azure/msal-browser@npm:2.32.2":
+  version: 2.32.2
+  resolution: "@azure/msal-browser@npm:2.32.2"
   dependencies:
-    "@azure/msal-common": ^9.0.1
-  checksum: a4698c7e63e54d51ae7cdd3a138f9c7ddfc37d2a384aa48136e8490a0d2b327c8317c73e9fd8cebaaeee677c0c1a6aea52b51cc5c363cd20fcf7534f6fc847d4
+    "@azure/msal-common": ^9.0.2
+  checksum: 75ba873a782bc2f4634ec8d3865b6dd102bb056dfcc8f74360a7526f30368d27c1d94ccf105e7d471523255a7519a20ac1a7a3030e83fbe0becaf836320ffe6f
   languageName: node
   linkType: hard
 
-"@azure/msal-common@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "@azure/msal-common@npm:9.0.1"
-  checksum: 0d18984fcf2843c6642f447b1c69b90c9203e23466cdeaf4936e851fee95bd991de9b9d9333e2f801edeffb3ee371a977398c0c0bb7857d15eb76bec62436aa4
+"@azure/msal-common@npm:^9.0.2":
+  version: 9.1.1
+  resolution: "@azure/msal-common@npm:9.1.1"
+  checksum: ae06c97ab10b3fb7f2811ccc15f2f16a271ad9e47b7e3b2afd1956e72cf48e2c11dcc36876f1fcdb1774b0e511d13f8b81c7cf722634f7036f6f4c338e9bfd32
   languageName: node
   linkType: hard
 
@@ -6947,7 +6947,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-azure-active-directory-web@workspace:packages/auth-providers/azureActiveDirectory/web"
   dependencies:
-    "@azure/msal-browser": 2.32.1
+    "@azure/msal-browser": 2.32.2
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.7
@@ -6960,7 +6960,7 @@ __metadata:
     react: 17.0.2
     typescript: 4.7.4
   peerDependencies:
-    "@azure/msal-browser": 2.32.1
+    "@azure/msal-browser": 2.32.2
   languageName: unknown
   linkType: soft
 
@@ -23895,7 +23895,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.7, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
+"node-fetch@npm:2.6.7":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:
@@ -23917,6 +23917,20 @@ __metadata:
     fetch-blob: ^3.1.4
     formdata-polyfill: ^4.0.10
   checksum: b9b754517df2dd55d16eaa6be681d277fe772ea0ac61e67ca4aef8f5154baf8581e2fd32c03cb8c5fdefa07dc24cafdb327b2033715edd9e4abc6883e20650c0
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7, node-fetch@npm:^2.6.8":
+  version: 2.6.8
+  resolution: "node-fetch@npm:2.6.8"
+  dependencies:
+    whatwg-url: ^5.0.0
+  peerDependencies:
+    encoding: ^0.1.0
+  peerDependenciesMeta:
+    encoding:
+      optional: true
+  checksum: 4e3cfdeb3e5e0e6d1192be08942d6530d74b0ac4fe6d8fc1cbcc3e7f274807b4f662ff1218393ba9e5e0e0c15c66365128726ed5400585feda707c31234d1f16
   languageName: node
   linkType: hard
 
