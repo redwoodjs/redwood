@@ -6768,7 +6768,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.27.2
     fast-json-parse: 1.0.3
-    fastify: 4.11.0
+    fastify: 4.12.0
     fastify-raw-body: 4.2.0
     jest: 29.3.1
     lodash.escape: 4.0.1
@@ -14461,7 +14461,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"content-type@npm:^1.0.4, content-type@npm:~1.0.4":
+"content-type@npm:~1.0.4":
   version: 1.0.4
   resolution: "content-type@npm:1.0.4"
   checksum: 19e08f406f9ae3f80fb4607c75fbde1f22546647877e8047c9fa0b1c61e38f3ede853f51e915c95fd499c2e1c7478cb23c35cfb804d0e8e0495e8db88cfaed75
@@ -17305,6 +17305,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-content-type-parse@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "fast-content-type-parse@npm:1.0.0"
+  checksum: 4267249a0d4b26de4c39eb41cfc891bd9f295008e42cc7368129a74ff8b316adc0b4999bb5cd8ee7569031663832edf77c2298bf3ab275bda093ee207bfa3a99
+  languageName: node
+  linkType: hard
+
 "fast-decode-uri-component@npm:^1.0.1":
   version: 1.0.1
   resolution: "fast-decode-uri-component@npm:1.0.1"
@@ -17463,16 +17470,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.11.0":
-  version: 4.11.0
-  resolution: "fastify@npm:4.11.0"
+"fastify@npm:4.12.0":
+  version: 4.12.0
+  resolution: "fastify@npm:4.12.0"
   dependencies:
     "@fastify/ajv-compiler": ^3.3.1
     "@fastify/error": ^3.0.0
     "@fastify/fast-json-stringify-compiler": ^4.1.0
     abstract-logging: ^2.0.1
     avvio: ^8.2.0
-    content-type: ^1.0.4
+    fast-content-type-parse: ^1.0.0
     find-my-way: ^7.3.0
     light-my-request: ^5.6.1
     pino: ^8.5.0
@@ -17482,7 +17489,7 @@ __metadata:
     secure-json-parse: ^2.5.0
     semver: ^7.3.7
     tiny-lru: ^10.0.0
-  checksum: db23dd24ae906702f7f0e6e3336d3980c525b563e4704a24ed964f3e8c09bc0575e83948bbc5a9d1945d13520e82405deeb6d9bb96a9102a008267bbaf21eb3c
+  checksum: 42b6f5ddd7ddc31ee01c425efc684b2bfd710656c4103c43de2c212a755a56859944bbc733a766b7665add781671250c3d51314e0f4bc99a6326fcded5a4c898
   languageName: node
   linkType: hard
 
