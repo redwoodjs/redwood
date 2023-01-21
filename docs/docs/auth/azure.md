@@ -13,7 +13,7 @@ sidebar_label: Azure
 The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
 
 ```bash
-yarn rw setup auth azureActiveDirectory
+yarn rw setup auth azure-active-directory
 ```
 
 _If you prefer to manually install the package and add code_, run the following command and then add the required code provided in the next section.

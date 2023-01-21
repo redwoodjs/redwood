@@ -43,8 +43,21 @@ import { useParams } from '../params'
 import { Set } from '../Set'
 import { Spec } from '../util'
 
-function createDummyAuthContextValues(partial: Partial<AuthContextInterface>) {
-  const authContextValues: AuthContextInterface = {
+type UnknownAuthContextInterface = AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>
+
+function createDummyAuthContextValues(
+  partial: Partial<UnknownAuthContextInterface>
+) {
+  const authContextValues: UnknownAuthContextInterface = {
     loading: true,
     isAuthenticated: false,
     userMetadata: null,
