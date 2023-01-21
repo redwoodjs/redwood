@@ -1,5 +1,5 @@
 import { transformTSToJS } from '../../../lib'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,

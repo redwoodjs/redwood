@@ -232,6 +232,70 @@ If running via `yarn rw serve`, only register a plugin once either in `api` or i
 
 Running via `yarn rw serve` uses a single Fastify instance to serve both api functions and web assets, so registering the plugin in a single side applies it to that instance.
 
+### How to Configure Fastify to Accept File Uploads
+
+If you try to POST file content to the api server such as images or PDFs, you may see the following error from Fastify:
+
+```json
+{
+    "statusCode": 400,
+    "code": "FST_ERR_CTP_INVALID_CONTENT_LENGTH",
+    "error": "Bad Request",
+    "message": "Request body size did not match Content-Length"
+}
+```
+
+This's because Fastify [only supports `application/json` and `text/plain` content types natively](https://www.fastify.io/docs/latest/Reference/ContentTypeParser/).
+While Redwood configures the api server to also accept `application/x-www-form-urlencoded` and  `multipart/form-data`, if you want to support other content or MIME types (likes images or PDFs), you'll need to configure them yourself.
+
+You can use Fastify's `addContentTypeParser` function to allow uploads of the content types your application needs.
+For example, to support image file uploads you'd tell Fastify to allow `/^image\/.*/` content types:
+
+```js
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastify = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
+
+    fastify.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
+      payload.on('end', () => {
+        done()
+      })
+    })
+  }
+
+  return fastify
+}
+```
+
+:::note
+
+The above regular expression (`/^image\/.*/`) allows all image content or MIME types because [they start with "image"](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
+
+:::
+
+Now, when you POST those content types to a function served by the api server, you can access the file content on `event.body`:
+
+```bash
+curl --location --request POST 'http://localhost:8911/upload' \
+  --form 'image=@"/path/to/my/image/web/public/favicon.png"' \
+  --header 'Content-Type: image/png'
+```
+
+```terminal
+api | 17:38:49 🌲 request completed 0ms
+api | 17:38:49 🐛 body
+api | 🗒 Custom
+api | "--------------------------e66d9a27b7c2b271\r\nContent-Disposition: attachment; name=\"image\"; filename=\"favicon.png\"\r\nContent-Type: image/png\r\n\r\n�PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR\u0000\u0000\u0000 \u0000\u0000\u0000<data trimmed for docs...>`�\r\n--------------------------e66d9a27b7c2b271--\r\n"
+```
+
+:::caution File uploads only work in a serverful deploy
+
+Serverless functions on Netlify or Vercel do not use this Fastify configuration.
+They also have memory and execution time limits that don't lend themselves to handling file uploads of any practical size.
+
+:::
+
 ## [browser]
 
 ```toml title="redwood.toml"

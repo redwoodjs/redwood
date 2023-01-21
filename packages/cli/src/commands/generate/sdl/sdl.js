@@ -17,9 +17,13 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import {
+  prepareForRollback,
+  addFunctionToRollback,
+} from '../../../lib/rollback'
 import { pluralize } from '../../../lib/rwPluralize'
 import { getSchema, getEnum, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
@@ -249,6 +253,11 @@ export const builder = (yargs) => {
       description: 'Generate SDL and GraphQL comments to use in documentation',
       type: 'boolean',
     })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -269,6 +278,7 @@ export const handler = async ({
   tests,
   typescript,
   docs,
+  rollback,
 }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
@@ -288,12 +298,18 @@ export const handler = async ({
         },
         {
           title: `Generating types ...`,
-          task: generateTypes,
+          task: async () => {
+            await generateTypes()
+            addFunctionToRollback(generateTypes, true)
+          },
         },
       ].filter(Boolean),
       { rendererOptions: { collapse: false }, exitOnError: true }
     )
 
+    if (rollback) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

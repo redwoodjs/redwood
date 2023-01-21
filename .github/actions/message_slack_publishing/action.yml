@@ -18,7 +18,7 @@ runs:
   steps:
     - name: Get status emoji
       id: get-status-emoji
-      uses: sergeysova/jq-action@v2.2.1
+      uses: sergeysova/jq-action@v2.3.0
       with:
         cmd: 'echo "{ \"success\": \"✅\", \"failure\": \"🚨\" }" | jq .${{ inputs.status }} -r'
 
@@ -29,7 +29,8 @@ runs:
           {
             "title": "${{ inputs.title }}",
             "status": "${{ steps.get-status-emoji.outputs.value }} ${{ inputs.status }}",
-            "version": "${{ inputs.version }}"
+            "version": "${{ inputs.version }}",
+            "ref": "${{ github.event.head_commit.url }}"
           }
       env:
         SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}

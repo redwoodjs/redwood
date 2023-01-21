@@ -77,7 +77,7 @@ export async function triageCommits(commits) {
       const answer = await question(
         `Does ${chalk.bold(chalk.yellow(hash))} ${chalk.cyan(
           message
-        )} need to be cherry picked into ${this.branch}? (Y/n/o(pen)) > `
+        )} need to be cherry picked into ${this.branch}? [Y/n/o(pen)] > `
       )
 
       commit = this.cache.get(hash)
