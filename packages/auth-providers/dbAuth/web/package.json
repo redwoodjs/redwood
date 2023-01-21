@@ -26,7 +26,7 @@
     "@babel/runtime-corejs3": "7.20.7",
     "@redwoodjs/auth": "3.2.0",
     "@simplewebauthn/browser": "6.2.2",
-    "core-js": "3.27.1"
+    "core-js": "3.27.2"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
