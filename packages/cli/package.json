@@ -28,7 +28,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.7",
+    "@babel/runtime-corejs3": "7.20.13",
     "@prisma/internals": "4.9.0",
     "@redwoodjs/api-server": "3.2.0",
     "@redwoodjs/cli-helpers": "3.2.0",
@@ -42,7 +42,7 @@
     "chalk": "4.1.2",
     "concurrently": "7.6.0",
     "configstore": "3.1.5",
-    "core-js": "3.27.1",
+    "core-js": "3.27.2",
     "cross-env": "7.0.3",
     "crypto-js": "4.1.1",
     "decamelize": "5.0.0",

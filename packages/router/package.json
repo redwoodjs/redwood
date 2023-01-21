@@ -22,17 +22,17 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.7",
+    "@babel/runtime-corejs3": "7.20.13",
     "@reach/skip-nav": "0.18.0",
     "@redwoodjs/auth": "3.2.0",
-    "core-js": "3.27.1",
+    "core-js": "3.27.2",
     "lodash.isequal": "4.5.0"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.12",
     "@types/lodash.isequal": "4.5.6",
-    "@types/react": "17.0.52",
+    "@types/react": "17.0.53",
     "@types/react-dom": "17.0.18",
     "jest": "29.3.1",
     "prop-types": "15.8.1",
