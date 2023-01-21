@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import path from 'path'
 import '../../../../lib/test'
 
@@ -13,11 +13,11 @@ const asyncForEach = async (array, callback) => {
 const RealDate = Date
 
 afterEach(() => {
-  global.Date = RealDate
+  globalThis.Date = RealDate
 })
 
 const mockDate = (isoDate) => {
-  global.Date = class extends RealDate {
+  globalThis.Date = class extends RealDate {
     constructor() {
       return new RealDate(isoDate)
     }

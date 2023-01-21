@@ -3,10 +3,16 @@ name: 🦜 Publish Canary
 on:
   push:
     branches: [main, next]
-    # We don't want this to run when we publish a release.
+    # We don't want this to run when we publish a release
     tags-ignore: ['v**']
     # No need to run on docs-only changes
     paths-ignore: ['docs/**']
+
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   publish-canary:
@@ -18,12 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
-        #  This is required because lerna uses tags to determine the version.
+        #  This is required because lerna uses tags to determine the version
         with:
           fetch-depth: 0
 
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
 
       - name: ✅ Check constraints, dependencies, and package.json's
         uses: ./tasks/check
@@ -37,45 +43,28 @@ jobs:
       - name: 🧪 Test
         run: yarn test
 
+      - name: Get publish flags
+        id: get-publish-flags
+        uses: ./.github/actions/get_publish_flags
+
       - name: 🚢 Publish
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
 
-          TAG='canary' && [[ "$GITHUB_REF_NAME" = 'next' ]] && TAG='next'
-          echo "Publishing $TAG"
-
-          args=()
-
-          if [[ "$GITHUB_REF_NAME" = 'main' ]]; then
-            args+=(premajor)
-          fi
-
-          args+=(
-            --include-merged-tags
-            --canary
-            --preid "$TAG"
-            --dist-tag "$TAG"
-            --force-publish
-            --loglevel verbose
-            --no-git-reset
-            --yes
-          )
-
-          yarn lerna publish "${args[@]}"
-
+          yarn lerna publish ${{ steps.get-publish-flags.outputs.flags }}
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: 🏷 Get version
         id: get-version
-        uses: sergeysova/jq-action@v2.2.1
+        uses: sergeysova/jq-action@v2.3.0
         with:
           cmd: 'jq .version packages/core/package.json -r'
 
   message-slack:
     name: 💬 Message Slack
     needs: publish-canary
-    if: always()
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
 
     steps:

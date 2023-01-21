@@ -96,6 +96,7 @@ describe('paths', () => {
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
           index: null,
+          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
           webpack: path.join(
             FIXTURE_BASEDIR,
@@ -324,6 +325,7 @@ describe('paths', () => {
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.js'),
           index: null,
+          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
           webpack: path.join(
             FIXTURE_BASEDIR,
@@ -598,6 +600,7 @@ describe('paths', () => {
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: null,
           index: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.js'),
+          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
           webpack: path.join(
             FIXTURE_BASEDIR,
@@ -832,6 +835,7 @@ describe('paths', () => {
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
           index: null,
+          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
           webpack: path.join(
             FIXTURE_BASEDIR,

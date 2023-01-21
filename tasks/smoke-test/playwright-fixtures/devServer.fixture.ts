@@ -86,8 +86,8 @@ const test = base.extend<any, DevServerFixtures>({
       }
 
       console.log('Waiting for dev servers.....')
-      await waitForServer(webServerPort, 1000)
-      await waitForServer(apiServerPort, 1000)
+      await waitForServer(webServerPort)
+      await waitForServer(apiServerPort)
 
       console.log('Starting tests!')
 
