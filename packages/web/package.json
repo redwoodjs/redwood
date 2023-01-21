@@ -51,7 +51,7 @@
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.12",
     "@testing-library/jest-dom": "5.16.5",
-    "@testing-library/react": "12.1.5",
+    "@testing-library/react": "13.4.0",
     "@types/prop-types": "15.7.5",
     "@types/react": "17.0.53",
     "@types/react-dom": "17.0.18",
