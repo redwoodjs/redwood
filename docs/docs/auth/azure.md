@@ -20,7 +20,7 @@ side of things.
 
 To get your application credentials, create an
 [App Registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration)
-using your Azure Active Directory tenant and make sure you configure as a
+using your Azure Active Directory tenant and make sure you configure an
 [MSAL.js 2.0 with auth code flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration#redirect-uri-msaljs-20-with-auth-code-flow)
 registration. Take a note of your generated _Application ID_ (client), and the
 _Directory ID_ (tenant). _Application ID_ should be stored in an environment
@@ -31,18 +31,18 @@ variable called `AZURE_ACTIVE_DIRECTORY_CLIENT_ID`
 ## Redirect URIs
 
 Enter allowed redirect urls for the integrations, e.g.
-`http://localhost:8910/login`. This will be the
-`AZURE_ACTIVE_DIRECTORY_REDIRECT_URI` environment variable, and suggestively
-`AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI`.
+`http://localhost:8910` and `http://localhost:8910/login`. These urls should be
+used for the `AZURE_ACTIVE_DIRECTORY_REDIRECT_URI` and
+`AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI` environment variables
 
 ## Authority
 
-The Authority is a URL that indicates a directory that MSAL can request tokens
-from which you can read about
+The Authority is a URL that indicates a directory that MSAL (Microsoft
+Authentication Library) can request tokens from which you can read about
 [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-client-application-configuration#authority).
-However, you most likely want to have e.g.
+However, you most likely want to have
 `https://login.microsoftonline.com/<tenant>` as Authority URL, where `<tenant>`
-is the Azure Active Directory tenant id. This will be the
+is the Azure Active Directory tenant id. This value will be used for the
 `AZURE_ACTIVE_DIRECTORY_AUTHORITY` environment variable.
 
 ## Environment variables
@@ -165,8 +165,9 @@ Don't forget to also add `AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY` to the
 *not* be added to `redwood.toml`)
 
 #### Update const activeDirectoryClient instance
-This lets the MSAL (Microsoft Authentication Library) web side client know
-about our new B2C allowed authority that we defined in the .env file
+
+This lets the MSAL web side client know about our new B2C allowed authority
+that we defined in the .env file
 
 ```jsx title="./web/auth.{js,ts}
 const azureActiveDirectoryClient = new PublicClientApplication({
