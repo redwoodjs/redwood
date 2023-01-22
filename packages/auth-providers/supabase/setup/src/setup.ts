@@ -3,7 +3,7 @@ import yargs from 'yargs'
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 export const command = 'supabase'
-export const description = 'Generate an auth configuration for Supabase'
+export const description = 'Set up an auth configuration for Supabase'
 
 export function builder(yargs: yargs.Argv) {
   return standardAuthBuilder(yargs)

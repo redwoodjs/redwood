@@ -8,22 +8,10 @@ import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../../lib/'
 
-function redirectCommand(provider) {
-  return [
-    provider,
-    false,
-    () => {},
-    () => {
-      console.log(getRedirectMessage(provider))
-    },
-  ]
-}
-
 export const command = 'auth <provider>'
 
-export const description = 'Generate an auth configuration'
+export const description = 'Set up an auth configuration'
 
-// Don't forget to update test-project setup if you change something here
 export async function builder(yargs) {
   yargs
     .demandCommand()
@@ -39,33 +27,36 @@ export async function builder(yargs) {
     .command(...redirectCommand('magicLink'))
     .command(...redirectCommand('nhost'))
     .command(...redirectCommand('okta'))
-    // Providers we support
+    // Auth providers we support
     .command(
       'auth0',
-      'Generate an auth configuration for Auth0',
+      'Set up an auth configuration for Auth0',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-auth0-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'azure-active-directory',
-      'Generate an auth configuration for Azure Active Directory',
+      'Set up an auth configuration for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler(
           '@redwoodjs/auth-azure-active-directory-setup'
         )
+        console.log()
         handler(args)
       }
     )
     .command(
       'clerk',
-      'Generate an auth configuration for Clerk',
+      'Set up an auth configuration for Clerk',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-clerk-setup')
+        console.log()
         handler(args)
       }
     )
@@ -75,12 +66,13 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-custom-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'dbAuth',
-      'Generate an auth configuration for dbAuth',
+      'Set up an auth configuration for dbAuth',
       (yargs) => {
         return standardAuthBuilder(yargs).option('webauthn', {
           alias: 'w',
@@ -91,47 +83,67 @@ export async function builder(yargs) {
       },
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-dbauth-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'firebase',
-      'Generate an auth configuration for Firebase',
+      'Set up an auth configuration for Firebase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-firebase-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'netlify',
-      'Generate an auth configuration for Netlify',
+      'Set up an auth configuration for Netlify',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-netlify-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'supabase',
-      'Generate an auth configuration for Supabase',
+      'Set up an auth configuration for Supabase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-supabase-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'supertokens',
-      'Generate an auth configuration for SuperTokens',
+      'Set up an auth configuration for SuperTokens',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler(
           '@redwoodjs/auth-supertokens-setup'
         )
+        console.log()
         handler(args)
       }
     )
+}
+
+/**
+ * @param {string} provider
+ * @returns {[string, boolean, () => void, () => void]}
+ */
+function redirectCommand(provider) {
+  return [
+    provider,
+    false,
+    () => {},
+    () => {
+      console.log(getRedirectMessage(provider))
+    },
+  ]
 }
 
 /**
@@ -147,6 +159,9 @@ function getRedirectMessage(provider) {
   )}`
 }
 
+/**
+ * @param {string} module
+ */
 async function getAuthHandler(module) {
   // Here we're reading this package's (@redwoodjs/cli) package.json.
   // So, in a user's project, `packageJsonPath` will be something like...
@@ -189,7 +204,6 @@ async function getAuthHandler(module) {
  * Check if a user's project's has a module listed as a dependency or devDependency.
  *
  * @param {string} module
- * @returns {boolean}
  */
 function isInstalled(module) {
   const { dependencies, devDependencies } = fs.readJSONSync(

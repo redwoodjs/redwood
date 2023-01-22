@@ -2,7 +2,7 @@ import terminalLink from 'terminal-link'
 import yargs from 'yargs'
 
 export const command = 'dbAuth'
-export const description = 'Generate an auth configuration for dbAuth'
+export const description = 'Set up an auth configuration for dbAuth'
 
 export function builder(yargs: yargs.Argv) {
   yargs
