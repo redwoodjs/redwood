@@ -19,19 +19,34 @@ function redirectCommand(provider) {
   ]
 }
 
-export const command = 'auth <provider>'
+export const command = 'auth [provider]'
 
 export const description = 'Generate an auth configuration'
 
 // Don't forget to update test-project setup if you change something here
 export async function builder(yargs) {
   yargs
-    .demandCommand()
+    // .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
         'https://redwoodjs.com/docs/cli-commands#setup-auth'
       )}`
+    )
+    .option('list', {
+      alias: 'l',
+      description: 'List all available providers',
+      type: 'boolean',
+      default: false,
+    })
+    .strict()
+    .command(
+      '$0',
+      'default command',
+      () => {},
+      (argv) => {
+        console.log('argv', argv)
+      }
     )
     // Command "redirects" for auth providers we used to support
     .command(...redirectCommand('ethereum'))
