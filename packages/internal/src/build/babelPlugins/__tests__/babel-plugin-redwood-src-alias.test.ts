@@ -16,11 +16,9 @@ describe('babel plugin redwood import dir - graphql function', () => {
       srcAbsPath: path.join(FIXTURE_PATH, 'api/src'),
     },
     pluginName: 'babel-plugin-redwood-src-alias',
-    babelOptions: {
-      // We need to set the filename so that state.file.opts.filename is set
-      // See https://github.com/babel-utils/babel-plugin-tester/issues/87
-      filename: path.join(FIXTURE_PATH, 'api/src/functions/graphql.ts'),
-    },
+    // We need to set the filename so that state.file.opts.filename is set
+    // See https://github.com/babel-utils/babel-plugin-tester/issues/87
+    filename: path.join(FIXTURE_PATH, 'api/src/functions/graphql.ts'),
     tests: {
       'transforms auth imports': {
         code: "import { getCurrentUser } from 'src/lib/auth'",
@@ -45,10 +43,8 @@ describe('Handles import statements from a service too', () => {
       srcAbsPath: path.join(FIXTURE_PATH, 'api/src'),
     },
     pluginName: 'babel-plugin-redwood-src-alias',
-    babelOptions: {
-      // As if the import statement is in another service
-      filename: path.join(FIXTURE_PATH, 'api/src/services/bazinga/bazinga.ts'),
-    },
+    // As if the import statement is in another service
+    filename: path.join(FIXTURE_PATH, 'api/src/services/bazinga/bazinga.ts'),
     tests: {
       'transforms auth imports from service': {
         code: "import { requireAuth } from 'src/lib/auth'",
@@ -69,10 +65,8 @@ describe('Handles typical web imports', () => {
       srcAbsPath: path.join(FIXTURE_PATH, 'web/src'),
     },
     pluginName: 'babel-plugin-redwood-src-alias',
-    babelOptions: {
-      // As if the import statement is in another service
-      filename: path.join(FIXTURE_PATH, 'web/src/components/Posts/Post.tsx'),
-    },
+    // As if the import statement is in another service
+    filename: path.join(FIXTURE_PATH, 'web/src/components/Posts/Post.tsx'),
     tests: {
       'handles imports from another component': {
         code: "import { QUERY } from 'src/components/Posts/PostsCell'",
