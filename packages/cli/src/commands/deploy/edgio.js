@@ -11,17 +11,17 @@ import c from '../../lib/colors'
 
 import { deployBuilder, deployHandler } from './helpers/helpers'
 
-export const command = 'layer0 [...commands]'
-export const description = 'Build command for Layer0 deploy'
+export const command = 'edgio [...commands]'
+export const description = 'Build command for Edgio deploy'
 
 export const builder = async (yargs) => {
-  const { builder: layer0Builder } = require('@layer0/cli/commands/deploy')
+  const { builder: edgioBuilder } = require('@edgio/cli/commands/deploy')
   deployBuilder(yargs)
 
-  layer0Builder['skip-init'] = {
+  edgioBuilder['skip-init'] = {
     type: 'boolean',
     description: [
-      'Layer0 will attempt to initialize your project before deployment.',
+      'Edgio will attempt to initialize your project before deployment.',
       'If your project has already been initialized and you wish to skip',
       'this step, set this to `true`',
     ].join(' '),
@@ -29,11 +29,11 @@ export const builder = async (yargs) => {
   }
 
   yargs
-    // allow Layer0 CLI options to pass through
-    .options(layer0Builder)
+    // allow Edgio CLI options to pass through
+    .options(edgioBuilder)
     .group(
-      Object.keys(omit(layer0Builder, ['skip-init'])),
-      'Layer0 deploy options:'
+      Object.keys(omit(edgioBuilder, ['skip-init'])),
+      'Edgio deploy options:'
     )
 }
 
@@ -45,46 +45,46 @@ const execaOptions = {
 }
 
 export const handler = async (args) => {
-  const { builder: layer0Builder } = require('@layer0/cli/commands/deploy')
+  const { builder: edgioBuilder } = require('@edgio/cli/commands/deploy')
   const cwd = path.join(getPaths().base)
 
   try {
-    // check that Layer0 is setup in the project
-    await execa('yarn', ['layer0', '--version'], execaOptions)
+    // check that Edgio is setup in the project
+    await execa('yarn', ['edgio', '--version'], execaOptions)
   } catch (e) {
     logAndExit(ERR_MESSAGE_MISSING_CLI)
   }
 
   // check that the project has been already been initialized.
   // if not, we will run init automatically unless specified by arg
-  const configExists = await fs.pathExists(path.join(cwd, 'layer0.config.js'))
+  const configExists = await fs.pathExists(path.join(cwd, 'edgio.config.js'))
 
   if (!configExists) {
     if (args.skipInit) {
       logAndExit(ERR_MESSAGE_NOT_INITIALIZED)
     }
 
-    await execa('yarn', ['layer0', 'init'], execaOptions)
+    await execa('yarn', ['edgio', 'init'], execaOptions)
   }
 
   await deployHandler(args)
 
   // construct args for deploy command
-  const deployArgs = Object.keys(layer0Builder).reduce((acc, key) => {
+  const deployArgs = Object.keys(edgioBuilder).reduce((acc, key) => {
     if (args[key]) {
       acc.push(`--${key}=${args[key]}`)
     }
     return acc
   }, [])
 
-  // Even if rw builds the project, we still need to run the build for Layer0
+  // Even if rw builds the project, we still need to run the build for Edgio
   // to bundle the router so we just skip the framework build.
   //
-  //    --skip-framework (layer0 build):
+  //    --skip-framework (edgio build):
   //      skips the framework build, but bundles the router and
   //      assets for deployment
   //
-  //    --skip-build (layer0 deploy):
+  //    --skip-build (edgio deploy):
   //      skips the whole build process during deploy; user may
   //      opt out of this if they already did a build and just
   //      want to deploy
@@ -93,27 +93,27 @@ export const handler = async (args) => {
   // skip bundling the router.
   if (!args.skipBuild) {
     deployArgs.push('--skip-build')
-    await execa('yarn', ['layer0', 'build', '--skip-framework'], execaOptions)
+    await execa('yarn', ['edgio', 'build', '--skip-framework'], execaOptions)
   }
 
-  await execa('yarn', ['layer0', 'deploy', ...deployArgs], execaOptions)
+  await execa('yarn', ['edgio', 'deploy', ...deployArgs], execaOptions)
 }
 
 export const ERR_MESSAGE_MISSING_CLI = buildErrorMessage(
-  'Layer0 not found!',
+  'Edgio not found!',
   [
-    'It looks like Layer0 is not configured for your project.',
-    'Run the following to add Layer0 to your project:',
-    `  ${c.info('yarn add -D @layer0/cli')}`,
+    'It looks like Edgio is not configured for your project.',
+    'Run the following to add Edgio to your project:',
+    `  ${c.info('yarn add -D @edgio/cli')}`,
   ].join('\n')
 )
 
 export const ERR_MESSAGE_NOT_INITIALIZED = buildErrorMessage(
-  'Layer0 not initialized!',
+  'Edgio not initialized!',
   [
-    'It looks like Layer0 is not configured for your project.',
-    'Run the following to initialize Layer0 on your project:',
-    `  ${c.info('yarn layer0 init')}`,
+    'It looks like Edgio is not configured for your project.',
+    'Run the following to initialize Edgio on your project:',
+    `  ${c.info('yarn edgio init')}`,
   ].join('\n')
 )
 
@@ -124,8 +124,8 @@ export function buildErrorMessage(title, message) {
     message,
     '',
     `Also see the ${terminalLink(
-      'RedwoodJS on Layer0 Guide',
-      'https://docs.layer0.co/guides/redwoodjs'
+      'RedwoodJS on Edgio Guide',
+      'https://docs.edg.io/guides/redwoodjs'
     )} for additional resources.`,
     '',
   ].join('\n')

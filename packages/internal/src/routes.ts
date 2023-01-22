@@ -19,7 +19,7 @@ export interface RouteInformation {
  */
 export function getDuplicateRoutes() {
   const duplicateRoutes: RouteInformation[] = []
-  const allRoutes: typeof RedwoodRoute[] = RedwoodProject.getProject({
+  const allRoutes: (typeof RedwoodRoute)[] = RedwoodProject.getProject({
     pathWithinProject: getPaths().base,
   }).getRouters()[0].routes // TODO: Assumes that we want the first router (only router right now)
   const uniquePathNames = new Set(allRoutes.map((route) => route.name))

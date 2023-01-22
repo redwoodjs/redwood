@@ -15,7 +15,7 @@ import {
   getCommonPlugins,
 } from './common'
 
-export const TARGETS_NODE = '14.20'
+export const TARGETS_NODE = '16.19'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env

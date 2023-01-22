@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import { ClerkLoaded, ClerkProvider, useUser } from '@clerk/clerk-react'
 
 import { createAuth } from '@redwoodjs/auth-clerk-web'
-import { navigate } from '@redwoodjs/router'
 
 // You can set user roles in a "roles" array on the public metadata in Clerk.
 //
