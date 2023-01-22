@@ -617,7 +617,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
               )
             })
             .sort()
-          const datetime = new Date(1641038400000) // 2022-01-01 12:00:00
+          const datetime = new Date('2022-01-01T12:00:00.000Z')
           migrationFolders.forEach((name) => {
             const datetimeInCorrectFormat =
               datetime.getFullYear() +
