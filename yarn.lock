@@ -6215,15 +6215,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@octokit/types@npm:9.0.0"
-  dependencies:
-    "@octokit/openapi-types": ^16.0.0
-  checksum: 33e165e9ddaf7f1e8e94e3e48e2bb73f6193b1405887c382b5079450bebf67fe844784e3bb91c90acdb5718c3551936202de3ee98aaf7f7ec428a064032e158a
-  languageName: node
-  linkType: hard
-
 "@octokit/webhooks-methods@npm:^3.0.0":
   version: 3.0.1
   resolution: "@octokit/webhooks-methods@npm:3.0.1"
