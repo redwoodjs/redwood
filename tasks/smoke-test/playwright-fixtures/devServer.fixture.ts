@@ -1,5 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
+import chalk from 'chalk'
 import execa, { ExecaChildProcess } from 'execa'
 import isPortReachable from 'is-port-reachable'
 
@@ -79,15 +80,21 @@ const test = base.extend<any, DevServerFixtures>({
         // Pipe out logs so we can debug, when required
         devServerHandler.stdout.on('data', (data) => {
           console.log(
-            '[devServer-fixture] ',
+            '[devServer-fixture]',
+            Buffer.from(data, 'utf-8').toString()
+          )
+        })
+        devServerHandler.stderr.on('data', (data) => {
+          console.log(
+            chalk.bgRed('[devServer-fixture]'),
             Buffer.from(data, 'utf-8').toString()
           )
         })
       }
 
       console.log('Waiting for dev servers.....')
-      await waitForServer(webServerPort, 1000)
-      await waitForServer(apiServerPort, 1000)
+      await waitForServer(webServerPort)
+      await waitForServer(apiServerPort)
 
       console.log('Starting tests!')
 

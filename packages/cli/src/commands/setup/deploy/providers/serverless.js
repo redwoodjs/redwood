@@ -6,13 +6,12 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   addToGitIgnoreTask,
   addToDotEnvTask,
   addFilesTask,
-  addPackagesTask,
   printSetupNotes,
 } from '../helpers'
 import { SERVERLESS_API_YML } from '../templates/serverless/api'

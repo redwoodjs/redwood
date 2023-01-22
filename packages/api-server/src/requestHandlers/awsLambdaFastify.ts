@@ -36,8 +36,10 @@ const fastifyResponseForLambdaResult = (
     body = '',
     multiValueHeaders,
   } = lambdaResult
-  const h = mergeMultiValueHeaders(headers, multiValueHeaders)
-  reply.headers(h)
+  const mergedHeaders = mergeMultiValueHeaders(headers, multiValueHeaders)
+  Object.entries(mergedHeaders).forEach(([name, values]) =>
+    values.forEach((value) => reply.header(name, value))
+  )
   reply.status(statusCode)
 
   if (lambdaResult.isBase64Encoded) {

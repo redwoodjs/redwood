@@ -230,7 +230,7 @@ type UserExample {
 
 type Query {
  userExamples: [UserExample!]! @requireAuth 👈 will enforce auth when fetching all users
- userExamples(id: Int!): UserExample @requireAuth 👈 will enforce auth when fetching a us
+ userExamples(id: Int!): UserExample @requireAuth 👈 will enforce auth when fetching a single user
 }
 ```
 

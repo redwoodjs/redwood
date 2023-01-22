@@ -4,9 +4,10 @@ import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/gen
 
 import { nameVariants, transformTSToJS } from '../../../lib'
 import { isWordPluralizable } from '../../../lib/pluralHelpers'
+import { addFunctionToRollback } from '../../../lib/rollback'
 import { isPlural, singularize } from '../../../lib/rwPluralize'
 import { getSchema } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../../generate'
+import { yargsDefaults } from '../helpers'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
@@ -185,6 +186,7 @@ export const { command, description, builder, handler } =
 
             if (projectHasSdl) {
               await generateTypes()
+              addFunctionToRollback(generateTypes, true)
             } else {
               task.skip(
                 `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`

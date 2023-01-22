@@ -11,10 +11,11 @@ import path from 'path'
 
 import chalk from 'chalk'
 import checkNodeVersion from 'check-node-version'
+import { prompt } from 'enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
-import { Listr } from 'listr2'
-import prompts from 'prompts'
+import { Listr, figures } from 'listr2'
+import terminalLink from 'terminal-link'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -69,6 +70,7 @@ import { name, version } from '../package'
     overwrite,
     telemetry: telemetry,
     yarn1,
+    'git-init': gitInit,
   } = yargs(hideBin(process.argv))
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
@@ -101,40 +103,14 @@ import { name, version } from '../package'
       type: 'boolean',
       describe: 'Use yarn 1. yarn 3 by default',
     })
+    .option('git-init', {
+      alias: 'git',
+      default: null,
+      type: 'boolean',
+      describe: 'Initialize a git repository.',
+    })
     .version(version)
     .parse()
-
-  // Variable to hold the user args as an object that can be used for prompt overides
-  // This gets more useful as there are more prompts to override
-  let userArgs = {}
-
-  // Handle if typescript is selected via --ts
-  if (typescript === true) {
-    Object.assign(userArgs, { typescript: true })
-  }
-  // Handle if typescript is skipped via --no-ts
-  if (typescript === false) {
-    Object.assign(userArgs, { typescript: false })
-  }
-
-  // User prompts
-  // See https://github.com/terkelg/prompts
-  const questions = [
-    {
-      type: 'confirm',
-      name: 'typescript',
-      message: 'Use TypeScript?',
-      initial: true,
-      active: 'Yes',
-      inactive: 'No',
-    },
-  ]
-
-  // Override prompts based on initial args from user
-  prompts.override(userArgs)
-
-  // Get the answers from the user
-  const answers = await prompts(questions)
 
   // Get the directory for installation from the args
   const targetDir = String(args).replace(/,/g, '-')
@@ -163,44 +139,6 @@ import { name, version } from '../package'
 
   const createProjectTasks = ({ newAppDir, overwrite }) => {
     return [
-      {
-        title: 'Checking node and yarn compatibility',
-        skip: () => {
-          if (yarnInstall === false) {
-            return 'Warning: skipping check on request'
-          }
-        },
-        task: () => {
-          return new Promise((resolve, reject) => {
-            const { engines } = require(path.join(templateDir, 'package.json'))
-
-            // this checks all engine requirements, including Node.js and Yarn
-            checkNodeVersion(engines, (_error, result) => {
-              if (result.isSatisfied) {
-                return resolve()
-              }
-
-              const logStatements = Object.keys(result.versions)
-                .filter((name) => !result.versions[name].isSatisfied)
-                .map((name) => {
-                  const { version, wanted } = result.versions[name]
-                  return style.error(
-                    `${name} ${wanted} required, but you have ${version}`
-                  )
-                })
-              logStatements.push(
-                style.header(`\nVisit requirements documentation:`)
-              )
-              logStatements.push(
-                style.warning(
-                  `/docs/tutorial/chapter1/prerequisites/#nodejs-and-yarn-versions\n`
-                )
-              )
-              return reject(new Error(logStatements.join('\n')))
-            })
-          })
-        },
-      },
       {
         title: `${
           appDirExists ? 'Using' : 'Creating'
@@ -235,7 +173,10 @@ import { name, version } from '../package'
           // - .yarnrc.yml
           // - .yarn
           fs.rmSync(path.join(newAppDir, '.yarnrc.yml'))
-          fs.rmdirSync(path.join(newAppDir, '.yarn'), { recursive: true })
+          fs.rmSync(path.join(newAppDir, '.yarn'), {
+            recursive: true,
+            force: true,
+          })
 
           // rm after `.pnp.*`
           const gitignore = fs.readFileSync(
@@ -315,8 +256,127 @@ import { name, version } from '../package'
 
   const startTime = Date.now()
 
+  // Engine check Listr. Separate Listr to avoid https://github.com/cenk1cenk2/listr2/issues/296
+  // Boolean flag
+  let hasPassedEngineCheck = null
+  // Array of strings
+  let engineErrorLog = []
+  // Docs link for engine errors
+  const engineErrorDocsLink = terminalLink(
+    'Tutorial - Prerequisites',
+    'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+  )
+
+  await new Listr(
+    [
+      {
+        title: 'Checking node and yarn compatibility',
+        skip: () => {
+          if (yarnInstall === false) {
+            return 'Warning: skipping check on request'
+          }
+        },
+        task: () => {
+          return new Promise((resolve) => {
+            const { engines } = require(path.join(templateDir, 'package.json'))
+
+            // this checks all engine requirements, including Node.js and Yarn
+            checkNodeVersion(engines, (_error, result) => {
+              if (result.isSatisfied) {
+                hasPassedEngineCheck = true
+                return resolve()
+              }
+              const logStatements = Object.keys(result.versions)
+                .filter((name) => !result.versions[name].isSatisfied)
+                .map((name) => {
+                  const { version, wanted } = result.versions[name]
+                  return `${name} ${wanted} required, but you have ${version}`
+                })
+              engineErrorLog = logStatements
+              hasPassedEngineCheck = false
+              return resolve()
+            })
+          })
+        },
+      },
+    ],
+    { rendererOptions: { clearOutput: true } }
+  ).run()
+
+  // Show a success message if required engines are present
+  if (hasPassedEngineCheck === true) {
+    console.log(`${style.success(figures.tick)} Compatibility checks passed`)
+  }
+
+  // Show an error and prompt if failed engines check
+  if (hasPassedEngineCheck === false) {
+    console.log(`${style.error(figures.cross)} Compatibility checks failed`)
+    console.log(
+      [
+        `  ${style.warning(figures.warning)} ${engineErrorLog.join('\n')}`,
+        '',
+        `    This may make your project incompatible with some deploy targets.`,
+        `    See: ${engineErrorDocsLink}`,
+        '',
+      ].join('\n')
+    )
+    // Prompt user for how to proceed
+    const response = await prompt({
+      type: 'select',
+      name: 'override-engine-error',
+      message: 'How would you like to proceed?',
+      choices: ['Override error and continue install', 'Quit install'],
+      initial: 0,
+      onCancel: () => process.exit(1),
+    })
+    // Quit the install if user selects this option, otherwise it will proceed
+    if (response['override-engine-error'] === 'Quit install') {
+      process.exit(1)
+    }
+  }
+
+  // Main install Listr
   new Listr(
     [
+      {
+        title: 'Language preference',
+        skip: () => typescript !== null,
+        task: async (ctx, task) => {
+          ctx.language = await task.prompt({
+            type: 'Select',
+            choices: ['TypeScript', 'JavaScript'],
+            message: 'Select your preferred coding language',
+            initial: 'TypeScript',
+          })
+          task.output = ctx.language
+          // Error code and exit if someone has disabled yarn install but selected JavaScript
+          if (!yarnInstall && ctx.language === 'JavaScript') {
+            throw new Error(
+              'JavaScript transpilation requires running yarn install. Please rerun create-redwood-app without disabling yarn install.'
+            )
+          }
+        },
+        options: {
+          persistentOutput: true,
+        },
+      },
+      {
+        title: 'Git preference',
+        skip: () => gitInit !== null,
+        task: async (ctx, task) => {
+          ctx.gitInit = await task.prompt({
+            type: 'Toggle',
+            message: 'Do you want to initialize a git repo?',
+            enabled: 'Yes',
+            disabled: 'no',
+            initial: 'Yes',
+          })
+          task.output = ctx.gitInit ? 'Initialize a git repo' : 'Skip'
+        },
+        options: {
+          persistentOutput: true,
+        },
+      },
       {
         title: 'Creating Redwood app',
         task: () => new Listr(createProjectTasks({ newAppDir, overwrite })),
@@ -329,9 +389,9 @@ import { name, version } from '../package'
         title: 'Convert TypeScript files to JavaScript',
         // Enabled if user selects no to typescript prompt
         // Enabled if user specified --no-ts via command line
-        enabled: () =>
+        enabled: (ctx) =>
           yarnInstall === true &&
-          (typescript === false || answers.typescript === false),
+          (typescript === false || ctx.language === 'JavaScript'),
         task: () => {
           return execa('yarn rw ts-to-js', {
             shell: true,
@@ -349,8 +409,24 @@ import { name, version } from '../package'
           })
         },
       },
+      {
+        title: 'Initializing a git repo',
+        enabled: (ctx) => gitInit || ctx.gitInit,
+        task: () => {
+          return execa(
+            'git init && git add . && git commit -m "Initial commit"',
+            {
+              shell: true,
+              cwd: newAppDir,
+            }
+          )
+        },
+      },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    {
+      rendererOptions: { collapse: false },
+      exitOnError: true,
+    }
   )
     .run()
     .then(() => {

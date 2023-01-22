@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Setup test mocks
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import '../../../lib/test'
 
 import * as helpers from '../helpers'
@@ -40,7 +40,7 @@ test('customOrDefaultTemplatePath returns the default path if no custom template
 
   expect(output).toMatch(
     path.normalize(
-      'redwood/packages/cli/src/commands/generate/page/templates/page.tsx.template'
+      '/packages/cli/src/commands/generate/page/templates/page.tsx.template'
     )
   )
 })
@@ -542,5 +542,25 @@ describe('mapPrismaScalarToPagePropTsType', () => {
 
   it('maps all other type not-known to TS to unknown', () => {
     expect(helpers.mapPrismaScalarToPagePropTsType('Json')).toBe('unknown')
+  })
+})
+
+describe('validateName', () => {
+  it('throws an error if name starts with an invalid character', () => {
+    expect(() => helpers.validateName('/')).toThrow()
+    expect(() => helpers.validateName('/foo')).toThrow()
+    expect(() => helpers.validateName('.foo')).toThrow()
+    expect(() => helpers.validateName(',foo')).toThrow()
+    expect(() => helpers.validateName('-foo')).toThrow()
+  })
+  it('does nothing if name is valid', () => {
+    expect(() => helpers.validateName('foo')).not.toThrow()
+    expect(() => helpers.validateName('foo/')).not.toThrow()
+    expect(() => helpers.validateName('_foo')).not.toThrow()
+    expect(() => helpers.validateName('1foo')).not.toThrow()
+    expect(() => helpers.validateName('foo/bar')).not.toThrow()
+    expect(() => helpers.validateName('foo.bar')).not.toThrow()
+    expect(() => helpers.validateName('foo,bar')).not.toThrow()
+    expect(() => helpers.validateName('foo-bar')).not.toThrow()
   })
 })

@@ -40,7 +40,7 @@ const Routes = () => {
           <Route path="/profile" page={ProfilePage} name="profile" />
         </Private>
         <Route path="/blog-post/{id:Int}" page={BlogPostPage} name="blogPost" prerender />
-        <Route path="/contact" page={ContactPage} name="contact" />
+        <Route path="/contact" page={ContactUsPage} name="contactUs" />
         <Route path="/about" page={AboutPage} name="about" prerender />
         <Route path="/" page={HomePage} name="home" prerender />
         <Route notfound page={NotFoundPage} prerender />
