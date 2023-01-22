@@ -1,4 +1,4 @@
-import React, { Children, ReactElement, ReactNode } from 'react'
+import React, { Children, isValidElement, ReactNode } from 'react'
 
 /** Create a React Context with the given name. */
 export const createNamedContext = <T>(name: string, defaultValue?: T) => {
@@ -283,19 +283,11 @@ export const replaceParams = (
   return path
 }
 
-export function isReactElement(node: ReactNode): node is ReactElement {
-  return (
-    node !== undefined &&
-    node !== null &&
-    (node as ReactElement).type !== undefined
-  )
-}
-
 export function flattenAll(children: ReactNode): ReactNode[] {
   const childrenArray = Children.toArray(children)
 
   return childrenArray.flatMap((child) => {
-    if (isReactElement(child) && child.props.children) {
+    if (isValidElement(child) && child.props.children) {
       return [child, ...flattenAll(child.props.children)]
     }
 
