@@ -11,7 +11,7 @@ export default (file, api) => {
     .forEach((obj) => {
       const stringValue = obj.value.value
       if (endsWith6DigitsRE.test(stringValue)) {
-        obj.value.value = `String${obj.value.start}`
+        obj.value.value = `String${obj.value.loc.start.line}`
       }
     })
     .toSource()
