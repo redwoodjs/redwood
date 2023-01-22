@@ -9,7 +9,7 @@ import {
 } from './ActivePageContext'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { useIsMounted } from './useIsMounted'
-import { Spec } from './util'
+import { inIframe, Spec } from './util'
 
 import { ParamsProvider, useLocation } from '.'
 
@@ -58,7 +58,12 @@ export const ActiveRouteLoader = ({
   }
 
   useEffect(() => {
-    global?.scrollTo(0, 0)
+    // Make this hook a no-op if we're rendering in an iframe.
+    if (inIframe()) {
+      return
+    }
+
+    globalThis?.scrollTo(0, 0)
 
     if (announcementRef.current) {
       announcementRef.current.innerText = getAnnouncement()
@@ -180,7 +185,7 @@ export const ActiveRouteLoader = ({
   // It might feel tempting to move this code further up in the file for an
   // "early return", but React doesn't allow that because pretty much all code
   // above is hooks, and they always need to come before any `return`
-  if (global.__REDWOOD__PRERENDERING) {
+  if (globalThis.__REDWOOD__PRERENDERING) {
     // babel auto-loader plugin uses withStaticImport in prerender mode
     // override the types for this condition
     const syncPageLoader = spec.loader as unknown as synchronousLoaderSpec

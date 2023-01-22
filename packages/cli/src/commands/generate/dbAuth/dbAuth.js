@@ -1,9 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
+import { camelCase } from 'camel-case'
+import Enquirer from 'enquirer'
 import { Listr } from 'listr2'
-import prompts from 'prompts'
 import terminalLink from 'terminal-link'
+import { titleCase } from 'title-case'
 
 import {
   addRoutesToRouterTask,
@@ -14,6 +16,7 @@ import {
   writeFilesTask,
 } from '../../../lib'
 import c from '../../../lib/colors'
+import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import { templateForComponentFile } from '../helpers'
 
@@ -92,7 +95,21 @@ export const builder = (yargs) => {
       description: 'Include WebAuthn support (TouchID/FaceID)',
       type: 'boolean',
     })
-
+    .option('username-label', {
+      default: null,
+      description: 'Override default form label for username field',
+      type: 'string',
+    })
+    .option('password-label', {
+      default: null,
+      description: 'Override default form label for password field',
+      type: 'string',
+    })
+    .option('rollback', {
+      description: 'Revert all generator actions if an error occurs',
+      type: 'boolean',
+      default: true,
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -113,9 +130,23 @@ export const files = ({
   skipLogin,
   skipReset,
   skipSignup,
-  webAuthn,
+  webauthn,
+  usernameLabel,
+  passwordLabel,
 }) => {
   const files = []
+
+  usernameLabel = usernameLabel || 'username'
+  passwordLabel = passwordLabel || 'password'
+
+  const templateVars = {
+    usernameLowerCase: usernameLabel.toLowerCase(),
+    usernameCamelCase: camelCase(usernameLabel),
+    usernameTitleCase: titleCase(usernameLabel),
+    passwordLowerCase: passwordLabel.toLowerCase(),
+    passwordCamelCase: camelCase(passwordLabel),
+    passwordTitleCase: titleCase(passwordLabel),
+  }
 
   if (!skipForgot) {
     files.push(
@@ -126,6 +157,7 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'forgotPassword.tsx.template',
+        templateVars,
       })
     )
   }
@@ -138,9 +170,10 @@ export const files = ({
         extension: typescript ? '.tsx' : '.js',
         webPathSection: 'pages',
         generator: 'dbAuth',
-        templatePath: webAuthn
+        templatePath: webauthn
           ? 'login.webAuthn.tsx.template'
           : 'login.tsx.template',
+        templateVars,
       })
     )
   }
@@ -154,6 +187,7 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'resetPassword.tsx.template',
+        templateVars,
       })
     )
   }
@@ -167,6 +201,7 @@ export const files = ({
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'signup.tsx.template',
+        templateVars,
       })
     )
   }
@@ -205,6 +240,8 @@ export const files = ({
 }
 
 const tasks = ({
+  enquirer,
+  listr2,
   force,
   tests,
   typescript,
@@ -212,10 +249,81 @@ const tasks = ({
   skipLogin,
   skipReset,
   skipSignup,
-  webAuthn,
+  webauthn,
+  usernameLabel,
+  passwordLabel,
 }) => {
   return new Listr(
     [
+      {
+        title: 'Determining UI labels...',
+        skip: () => {
+          return usernameLabel && passwordLabel
+        },
+        task: async (ctx, task) => {
+          return task.newListr([
+            {
+              title: 'Username label',
+              task: async (subctx, subtask) => {
+                if (usernameLabel) {
+                  subtask.skip(
+                    `Argument username-label is set, using: "${usernameLabel}"`
+                  )
+                  return
+                }
+                usernameLabel = await subtask.prompt({
+                  type: 'input',
+                  name: 'username',
+                  message: 'What would you like the username label to be:',
+                  default: 'Username',
+                })
+                subtask.title = `Username label: "${usernameLabel}"`
+              },
+            },
+            {
+              title: 'Password label',
+              task: async (subctx, subtask) => {
+                if (passwordLabel) {
+                  subtask.skip(
+                    `Argument password-label passed, using: "${passwordLabel}"`
+                  )
+                  return
+                }
+                passwordLabel = await subtask.prompt({
+                  type: 'input',
+                  name: 'password',
+                  message: 'What would you like the password label to be:',
+                  default: 'Password',
+                })
+                subtask.title = `Password label: "${passwordLabel}"`
+              },
+            },
+          ])
+        },
+      },
+      {
+        title: 'Querying WebAuthn addition...',
+        task: async (ctx, task) => {
+          if (webauthn != null) {
+            task.skip(
+              `Querying WebAuthn addition: argument webauthn passed, WebAuthn ${
+                webauthn ? '' : 'not'
+              } included`
+            )
+            return
+          }
+          const response = await task.prompt({
+            type: 'confirm',
+            name: 'answer',
+            message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
+            default: false,
+          })
+          webauthn = response
+          task.title = `Querying WebAuthn addition: WebAuthn addition ${
+            webauthn ? '' : 'not'
+          } included`
+        },
+      },
       {
         title: 'Creating pages...',
         task: async () => {
@@ -227,7 +335,9 @@ const tasks = ({
               skipLogin,
               skipReset,
               skipSignup,
-              webAuthn,
+              webauthn,
+              usernameLabel,
+              passwordLabel,
             }),
             {
               overwriteExisting: force,
@@ -248,30 +358,26 @@ const tasks = ({
       {
         title: 'One more thing...',
         task: (ctx, task) => {
-          task.title = webAuthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
+          task.title = webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL
         },
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    {
+      rendererSilent: () => listr2?.rendererSilent,
+      rendererOptions: { collapse: false },
+      injectWrapper: { enquirer: enquirer || new Enquirer() },
+      exitOnError: true,
+    }
   )
 }
 
 export const handler = async (yargs) => {
-  let includeWebAuthn = yargs.webauthn
-
-  if (includeWebAuthn === null) {
-    const response = await prompts({
-      type: 'confirm',
-      name: 'answer',
-      message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
-      initial: false,
-    })
-    includeWebAuthn = response.answer
-  }
-
-  const t = tasks({ ...yargs, webAuthn: includeWebAuthn })
+  const t = tasks({ ...yargs })
 
   try {
+    if (yargs.rollback) {
+      prepareForRollback(t)
+    }
     await t.run()
   } catch (e) {
     console.log(c.error(e.message))

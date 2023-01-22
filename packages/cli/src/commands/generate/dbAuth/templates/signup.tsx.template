@@ -24,14 +24,14 @@ const SignupPage = () => {
     }
   }, [isAuthenticated])
 
-  // focus on email box on page load
-  const usernameRef = useRef<HTMLInputElement>(null)
+  // focus on ${usernameLowerCase} box on page load
+  const ${usernameCamelCase}Ref = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    usernameRef.current?.focus()
+    ${usernameCamelCase}Ref.current?.focus()
   }, [])
 
   const onSubmit = async (data: Record<string, string>) => {
-    const response = await signUp({ ...data })
+    const response = await signUp({ username: data.${usernameCamelCase}, password: data.${passwordCamelCase} })
 
     if (response.message) {
       toast(response.message)
@@ -59,46 +59,46 @@ const SignupPage = () => {
               <div className="rw-form-wrapper">
                 <Form onSubmit={onSubmit} className="rw-form-wrapper">
                   <Label
-                    name="username"
+                    name="${usernameCamelCase}"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    ${usernameTitleCase}
                   </Label>
                   <TextField
-                    name="username"
+                    name="${usernameCamelCase}"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
+                    ref={${usernameCamelCase}Ref}
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: '${usernameTitleCase} is required',
                       },
                     }}
                   />
-                  <FieldError name="username" className="rw-field-error" />
+                  <FieldError name="${usernameCamelCase}" className="rw-field-error" />
 
                   <Label
-                    name="password"
+                    name="${passwordCamelCase}"
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    ${passwordTitleCase}
                   </Label>
                   <PasswordField
-                    name="password"
+                    name="${passwordCamelCase}"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: '${passwordTitleCase} is required',
                       },
                     }}
                   />
-                  <FieldError name="password" className="rw-field-error" />
+                  <FieldError name="${passwordCamelCase}" className="rw-field-error" />
 
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
