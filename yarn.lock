@@ -7873,7 +7873,7 @@ __metadata:
     proxyquire: 2.1.3
     ts-morph: 15.1.0
     typescript: 4.7.4
-    vscode-languageserver: 6.1.1
+    vscode-languageserver: 8.0.2
     vscode-languageserver-textdocument: 1.0.8
     vscode-languageserver-types: 3.17.2
     yargs-parser: 21.1.1
@@ -31749,14 +31749,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vscode-languageserver@npm:6.1.1":
-  version: 6.1.1
-  resolution: "vscode-languageserver@npm:6.1.1"
+"vscode-languageserver@npm:8.0.2":
+  version: 8.0.2
+  resolution: "vscode-languageserver@npm:8.0.2"
   dependencies:
-    vscode-languageserver-protocol: ^3.15.3
+    vscode-languageserver-protocol: 3.17.2
   bin:
-    installServerIntoExtension: ./bin/installServerIntoExtension
-  checksum: 90d7a6a3d3428a381d84a563299ebb59cec3f534ec78b76f6444f79da514380088b7bab2f2c428e15f071afa0b75aaf30a97e644f314e00753231870e8ead204
+    installServerIntoExtension: bin/installServerIntoExtension
+  checksum: 0dfe96f9c7ecee29ed3005cedde8a1055a6be2d56a28824328ea687d4df584227964888f55ec35d8d496db63869eda8c2782b3d2a97cf4685c9f7e24c20ef72e
   languageName: node
   linkType: hard
 
