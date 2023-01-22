@@ -63,8 +63,8 @@ export interface Config {
     stories: boolean
     nestScaffoldByModel: boolean
   }
-  cli: {
-    checkForUpgrades: boolean
+  notifications: {
+    versionUpdates: string[]
   }
 }
 
@@ -100,8 +100,8 @@ const DEFAULT_CONFIG: Config = {
     stories: true,
     nestScaffoldByModel: true,
   },
-  cli: {
-    checkForUpgrades: false,
+  notifications: {
+    versionUpdates: [],
   },
 }
 
