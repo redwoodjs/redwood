@@ -1,4 +1,6 @@
+import { useEngine } from '@envelop/core'
 import { createSpiedPlugin, createTestkit } from '@envelop/testing'
+import * as GraphQLJS from 'graphql'
 
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodPopulateContext } from '../useRedwoodPopulateContext'
@@ -27,6 +29,7 @@ describe('Populates context', () => {
 
     const testkit = createTestkit(
       [
+        useEngine(GraphQLJS),
         useRedwoodPopulateContext(populateContextSpy),
         // @NOTE add spy here to check if context has been changed
         spiedPlugin.plugin,
@@ -49,6 +52,7 @@ describe('Populates context', () => {
 
     const testkit = createTestkit(
       [
+        useEngine(GraphQLJS),
         useRedwoodPopulateContext({
           dtWasHere: 'hello!',
         }),

@@ -12,13 +12,14 @@ declare global {
   const gql: typeof _gql
 
   interface Window {
-    /** URL or absolute path to the DbAuth serverless function */
-    RWJS_API_DBAUTH_URL: string
     /** URL or absolute path to the GraphQL serverless function */
     RWJS_API_GRAPHQL_URL: string
     /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
     __REDWOOD__APP_TITLE: string
+
+    // Used by FatalErrorPage to determine how to import the DevFatalErrorPage
+    RWJS_WEB_BUNDLER: string
   }
 
   type GraphQLOperationVariables = Record<string, any>

@@ -11,10 +11,11 @@ description: How to deploy a Redwood app to AWS via Flightcontrol
 1. In your project, run the command `yarn rw setup deploy flightcontrol`
 2. Commit the changes and push to github
 3. If you don't have an account, sign up at [app.flightcontrol.dev/signup](https://app.flightcontrol.dev/signup?ref=redwood)
-4. Create a new project at [app.flightcontrol.dev/projects/new/1](https://app.flightcontrol.dev/projects/new/1)
+4. Create a new project from the onboarding screen or project list
   1. Connect your Github account and select your repo
   2. Select "Config Type" as `flightcontrol.json`
   3. Click "Create Project" and complete any required steps like linking your AWS account.
+5. If using dbAuth, add the session secret key env variable in the Flightcontrol dashboard
 
 
 NOTE: If you are using yarn v1, remove the `installCommand`'s from flightcontrol.json

@@ -772,6 +772,20 @@ And there you have it.
       <td align="center" valign="top" width="20%"><a href="http://everfund.io/"><img src="https://avatars.githubusercontent.com/u/15834048?v=4" width="100px;" alt=""/><br /><sub><b>Christopher Burns</b></sub></a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/bigbuckalex"><img src="https://avatars.githubusercontent.com/u/13971705?v=4" width="100px;" alt=""/><br /><sub><b>Alex Lilly</b></sub></a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/dphuang2"><img src="https://avatars.githubusercontent.com/u/14287381?v=4" width="100px;" alt=""/><br /><sub><b>dphuang2</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://danielescoto.com/"><img src="https://avatars.githubusercontent.com/u/20568385?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Escoto</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/james-interfold"><img src="https://avatars.githubusercontent.com/u/115298833?v=4" width="100px;" alt=""/><br /><sub><b>James Hester</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/mrjahz"><img src="https://avatars.githubusercontent.com/u/3082385?v=4" width="100px;" alt=""/><br /><sub><b>Guillaume Mantopoulos</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/linus1703"><img src="https://avatars.githubusercontent.com/u/6771965?v=4" width="100px;" alt=""/><br /><sub><b>Linus Timm</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/mabadir"><img src="https://avatars.githubusercontent.com/u/3389914?v=4" width="100px;" alt=""/><br /><sub><b>Mina Abadir</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/tomjdickson"><img src="https://avatars.githubusercontent.com/u/44155439?v=4" width="100px;" alt=""/><br /><sub><b>Tom Dickson</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/MrOnosa"><img src="https://avatars.githubusercontent.com/u/2931245?v=4" width="100px;" alt=""/><br /><sub><b>Tyler</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://bloeckchengrafik.github.io/"><img src="https://avatars.githubusercontent.com/u/37768199?v=4" width="100px;" alt=""/><br /><sub><b>Christian Bergschneider</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="http://emreerdogan.net/"><img src="https://avatars.githubusercontent.com/u/2360385?v=4" width="100px;" alt=""/><br /><sub><b>Emre Erdoğan</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://tsugitta.com/"><img src="https://avatars.githubusercontent.com/u/8144911?v=4" width="100px;" alt=""/><br /><sub><b>Toshinori Tsugita</b></sub></a></td>
     </tr>
   </tbody>
 </table>
