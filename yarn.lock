@@ -7243,7 +7243,7 @@ __metadata:
     jwks-rsa: 2.0.5
     typescript: 4.7.4
   peerDependencies:
-    supertokens-node: 12.1.5
+    supertokens-node: 12.1.6
   languageName: unknown
   linkType: soft
 
