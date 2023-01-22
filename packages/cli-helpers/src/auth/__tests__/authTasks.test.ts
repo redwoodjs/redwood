@@ -63,10 +63,6 @@ const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
   readdirSync: () => string[]
 }
 
-mockFS.readdirSync = () => {
-  return ['auth.ts.template']
-}
-
 import fs from 'fs'
 import path from 'path'
 
@@ -82,9 +78,10 @@ import {
 } from '../authTasks'
 
 import {
+  auth0WebAuthTsTemplate,
+  clerkWebAuthTsTemplate,
   customApolloAppTsx,
   customPropsRoutesTsx,
-  dbAuthWebAuthTsTemplate,
   explicitReturnAppTsx,
   graphqlTs,
   legacyAuthWebAppTsx,
@@ -113,19 +110,24 @@ beforeEach(() => {
     [getPaths().api.graphql]: graphqlTs,
     [getPaths().web.routes]: routesTsx,
   })
+
+  mockFS.readdirSync = () => {
+    return ['auth.ts.template']
+  }
 })
 
 describe('authTasks', () => {
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0)', () => {
+    const templatePath = path.join(
+      getPaths().base,
+      platformPath('/templates/web/auth.ts.template')
+    )
+
     mockFS.__setMockFiles({
       ...mockFS.__getMockFiles(),
-      [path.join(
-        getPaths().base,
-        platformPath('/templates/web/auth.ts.template')
-      )]: dbAuthWebAuthTsTemplate,
+      [templatePath]: auth0WebAuthTsTemplate,
     })
 
-    // TODO: Switch from dbAuth to Auth0
     const ctx: AuthGeneratorCtx = {
       provider: 'auth0',
       setupMode: 'FORCE',
@@ -143,15 +145,19 @@ describe('authTasks', () => {
   })
 
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk)', () => {
+    const templatePath = path.join(
+      getPaths().base,
+      platformPath('/templates/web/auth.tsx.template')
+    )
+
     mockFS.__setMockFiles({
       ...mockFS.__getMockFiles(),
-      [path.join(
-        getPaths().base,
-        platformPath('/templates/web/auth.ts.template')
-      )]: dbAuthWebAuthTsTemplate,
+      [templatePath]: clerkWebAuthTsTemplate,
     })
+    mockFS.readdirSync = () => {
+      return ['auth.tsx.template']
+    }
 
-    // TODO: Switch from dbAuth to Clerk
     const ctx: AuthGeneratorCtx = {
       provider: 'clerk',
       setupMode: 'FORCE',
@@ -161,7 +167,7 @@ describe('authTasks', () => {
     createWebAuth(getPaths().base, false).task(ctx)
     addConfigToRoutes().task()
 
-    const authTsPath = path.join(getPaths().web.src, 'auth.ts')
+    const authTsPath = path.join(getPaths().web.src, 'auth.tsx')
 
     expect(fs.readFileSync(getPaths().web.app)).toMatchSnapshot()
     expect(fs.readFileSync(authTsPath)).toMatchSnapshot()
