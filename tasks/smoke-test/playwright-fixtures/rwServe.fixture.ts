@@ -69,7 +69,7 @@ const test = base.extend<any, ServeFixture>({
       })
 
       console.log('Waiting for server.....')
-      await waitForServer(port, 1000)
+      await waitForServer(port, { host: '127.0.0.1' })
 
       console.log('Starting tests!')
       await use()

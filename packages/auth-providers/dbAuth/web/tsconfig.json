@@ -7,6 +7,6 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist"
   },
-  "include": ["src"],
+  "include": ["src", "ambient.d.ts"],
   "references": [{ "path": "../../../auth" }]
 }
