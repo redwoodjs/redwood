@@ -351,8 +351,6 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
         throw new Error('Could not find the auth.ts template')
       }
 
-      const templateExtension = templateFileName.split('.').at(-2)
-
       // @MARK - finding unused file name here,
       // We should only use an unused filename, if the user is CHOOSING not to replace the existing provider
 
@@ -380,7 +378,7 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
         }
       }
 
-      authFileName = authFileName + '.' + templateExtension
+      authFileName = authFileName + '.' + ext
 
       let template: string | undefined = fs.readFileSync(
         path.join(templatesBaseDir, templateFileName),
