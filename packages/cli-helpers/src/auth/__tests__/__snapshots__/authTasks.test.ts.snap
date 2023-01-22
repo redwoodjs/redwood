@@ -431,8 +431,4 @@ export const handler = createGraphQLHandler({
 
 exports[`authTasks writes an auth.js file for JS projects 1`] = `"// web auth template"`;
 
-exports[`authTasks writes an auth.js file for JS projects 2`] = `"// web auth template"`;
-
 exports[`authTasks writes an auth.ts file for TS projects 1`] = `"// web auth template"`;
-
-exports[`authTasks writes an auth.ts file for TS projects 2`] = `"// web auth template"`;
