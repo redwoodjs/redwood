@@ -6217,6 +6217,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/openapi-types@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "@octokit/openapi-types@npm:16.0.0"
+  checksum: 8d45fc0249e8ba0c0c1ef4de5ac2dddbb8f8b42b66383d58ab026b59282f908466d344a98ef0ff198b1d42ef1fae7e6f8b69ab88c11c955d3ac54426bf6c17d2
+  languageName: node
+  linkType: hard
+
 "@octokit/plugin-enterprise-rest@npm:^6.0.1":
   version: 6.0.1
   resolution: "@octokit/plugin-enterprise-rest@npm:6.0.1"
@@ -6244,7 +6251,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-rest-endpoint-methods@npm:^6.0.0, @octokit/plugin-rest-endpoint-methods@npm:^6.7.0":
+"@octokit/plugin-rest-endpoint-methods@npm:^6.7.0":
   version: 6.7.0
   resolution: "@octokit/plugin-rest-endpoint-methods@npm:6.7.0"
   dependencies:
@@ -6253,6 +6260,18 @@ __metadata:
   peerDependencies:
     "@octokit/core": ">=3"
   checksum: 4f6290cb405ad0a8e9f149a259836ef1bd2d82670571a108c613385e4fde1f940c265fa7047441f234f7b659934545a22b9feaba2b0ca5abeeeef94b7fc2859b
+  languageName: node
+  linkType: hard
+
+"@octokit/plugin-rest-endpoint-methods@npm:^7.0.0":
+  version: 7.0.1
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:7.0.1"
+  dependencies:
+    "@octokit/types": ^9.0.0
+    deprecation: ^2.3.1
+  peerDependencies:
+    "@octokit/core": ">=3"
+  checksum: 4cca2bcae506a8e7d3a9465dbfcac2546e6456a2389951c49617714f0c1152a315e3ad507ba82b6c096814e0bcf694bb17ee3e243926d7a00e6e3912071dd530
   languageName: node
   linkType: hard
 
@@ -6268,15 +6287,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-throttling@npm:^4.0.1":
-  version: 4.3.2
-  resolution: "@octokit/plugin-throttling@npm:4.3.2"
+"@octokit/plugin-throttling@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "@octokit/plugin-throttling@npm:5.0.1"
   dependencies:
-    "@octokit/types": ^8.0.0
+    "@octokit/types": ^9.0.0
     bottleneck: ^2.15.3
   peerDependencies:
     "@octokit/core": ^4.0.0
-  checksum: 5891c75694a87ef1bb5d5ba599cafd534c9fa4bb6ea665be1fb0931fdbd03312b92368330bcb34a16eb5e5b5df445742854f4f4fae326ee6d49f16e74d72fd33
+  checksum: 7b0e68a822b46a1a8ca568998678697a51b9b03bc02d0bbfe28bb93f76ceca42e61bb31e058d30dc6ef643e4242039e499bb3fa0110c8de56e8bb1751ed0b1fd
   languageName: node
   linkType: hard
 
@@ -6323,6 +6342,15 @@ __metadata:
   dependencies:
     "@octokit/openapi-types": ^14.0.0
   checksum: 0b908a047c3fc307e18b0da0a4312c26a31fb67aa30694945e9ecb3e7bb441480096ea984a7acda2d09a680f50dce52739632bd521aa1249c2020def8d389ad3
+  languageName: node
+  linkType: hard
+
+"@octokit/types@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@octokit/types@npm:9.0.0"
+  dependencies:
+    "@octokit/openapi-types": ^16.0.0
+  checksum: 33e165e9ddaf7f1e8e94e3e48e2bb73f6193b1405887c382b5079450bebf67fe844784e3bb91c90acdb5718c3551936202de3ee98aaf7f7ec428a064032e158a
   languageName: node
   linkType: hard
 
@@ -7800,16 +7828,16 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.13
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 3.2.0
-    "@types/lodash.isequal": 4.5.6
     "@types/react": 17.0.53
     "@types/react-dom": 17.0.18
     core-js: 3.27.2
     jest: 29.3.1
-    lodash.isequal: 4.5.0
-    prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
     typescript: 4.7.4
+  peerDependencies:
+    react: 17.0.2
+    react-dom: 17.0.2
   languageName: unknown
   linkType: soft
 
@@ -10074,15 +10102,6 @@ __metadata:
   dependencies:
     "@types/lodash": "*"
   checksum: cc980619559a3e67f40d078e76da67d110eecec7f774987bf595349e4642ce3110ec61a787a98ab89ea6d5c9dc5b1b16b47ceb878e678e3b7dc30e5d6b22fc97
-  languageName: node
-  linkType: hard
-
-"@types/lodash.isequal@npm:4.5.6":
-  version: 4.5.6
-  resolution: "@types/lodash.isequal@npm:4.5.6"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: d14cb561e3db36b80bde1d6eea5b012c46c8bb7a7dadb2844bd80b209d7c324eb54ad5ca7b6e57c253593662d8fc676da430f2216aaca1c04b087d38030151ae
   languageName: node
   linkType: hard
 
@@ -22784,13 +22803,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.isequal@npm:4.5.0":
-  version: 4.5.0
-  resolution: "lodash.isequal@npm:4.5.0"
-  checksum: dfdb2356db19631a4b445d5f37868a095e2402292d59539a987f134a8778c62a2810c2452d11ae9e6dcac71fc9de40a6fedcb20e2952a15b431ad8b29e50e28f
-  languageName: node
-  linkType: hard
-
 "lodash.isinteger@npm:^4.0.4":
   version: 4.0.4
   resolution: "lodash.isinteger@npm:4.0.4"
@@ -24947,19 +24959,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.11":
-  version: 2.0.11
-  resolution: "octokit@npm:2.0.11"
+"octokit@npm:2.0.13":
+  version: 2.0.13
+  resolution: "octokit@npm:2.0.13"
   dependencies:
     "@octokit/app": ^13.1.1
     "@octokit/core": ^4.0.4
     "@octokit/oauth-app": ^4.0.6
     "@octokit/plugin-paginate-rest": ^5.0.0
-    "@octokit/plugin-rest-endpoint-methods": ^6.0.0
+    "@octokit/plugin-rest-endpoint-methods": ^7.0.0
     "@octokit/plugin-retry": ^4.0.3
-    "@octokit/plugin-throttling": ^4.0.1
-    "@octokit/types": ^8.0.0
-  checksum: 9ae99a7b444bf40f78a8ceab9c857a88bd50404ed0e72be4a6b2fee1e062918110043ab0a77563cb8d8e056306dcf86f252cae86ed95706eada9dff218864ea8
+    "@octokit/plugin-throttling": ^5.0.0
+    "@octokit/types": ^9.0.0
+  checksum: 00f9e135c37ebcb85cab1ce4a7abfc0329303424fcc24b3c1b37e8257e4cb391557bfd042bb506315cfbf59cbc0f30aaf55ac55ab620b5c09fa942b53cecce1f
   languageName: node
   linkType: hard
 
@@ -28269,7 +28281,7 @@ __metadata:
     nodemon: 2.0.20
     npm-packlist: 7.0.4
     nx: 15.5.3
-    octokit: 2.0.11
+    octokit: 2.0.13
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2
