@@ -1,4 +1,5 @@
 import fs from 'fs'
+import os from 'os'
 import path from 'path'
 
 import { fetch } from '@whatwg-node/fetch'
@@ -136,7 +137,30 @@ const buildPayload = async () => {
   let payload: Record<string, unknown> = {}
   let project
 
-  const argv = require('yargs/yargs')(process.argv.slice(2)).argv
+  const processArgv = [...process.argv]
+
+  // On windows process.argv may not return an array of strings.
+  // It will look something like [a,b,c] rather than ["a","b","c"] so we must stringify them before parsing as JSON
+  // "os.type()" returns 'Windows_NT' on Windows. See https://nodejs.org/docs/latest-v12.x/api/os.html#os_os_type.
+  if (os.type() === 'Windows_NT') {
+    const argvIndex = processArgv.findIndex((arg) => arg === '--argv') + 1
+    let argvFormatted = argvIndex !== 0 ? processArgv[argvIndex] : null
+    if (argvFormatted) {
+      argvFormatted =
+        '[' +
+        argvFormatted
+          .substring(1, argvFormatted.length - 1)
+          .split(',')
+          .map((arg) => {
+            return arg.startsWith('"') || arg.startsWith("'") ? arg : `"${arg}"`
+          })
+          .join(',') +
+        ']'
+      processArgv[argvIndex] = argvFormatted
+    }
+  }
+
+  const argv = require('yargs/yargs')(processArgv.slice(2)).parse()
   const rootDir = argv.root
   payload = {
     type: argv.type || 'command',

@@ -41,8 +41,10 @@ const buildRedwoodFramework = () => {
       }
     )
   } catch (e) {
-    console.error('Error: Could not build Redwood Framework')
-    console.error(e)
+    if (e.signal !== 'SIGINT') {
+      console.error('Error: Could not build Redwood Framework')
+      console.error(e)
+    }
     process.exit(1)
   }
 }
@@ -85,8 +87,10 @@ const createRedwoodJSApp = ({ yarn1 }) => {
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
   } catch (e) {
-    console.error('Error: Could not create Redwood Project')
-    console.error(e)
+    if (e.signal !== 'SIGINT') {
+      console.error('Error: Could not create Redwood Project')
+      console.error(e)
+    }
     process.exit(1)
   }
 }
@@ -103,10 +107,12 @@ const addFrameworkDepsToProject = () => {
       },
     })
   } catch (e) {
-    console.error(
-      'Error: Could not add Redwood Framework dependencies to project'
-    )
-    console.error(e)
+    if (e.signal !== 'SIGINT') {
+      console.error(
+        'Error: Could not add Redwood Framework dependencies to project'
+      )
+      console.error(e)
+    }
     process.exit(1)
   }
 }
@@ -123,8 +129,10 @@ const copyFrameworkPackages = () => {
       },
     })
   } catch (e) {
-    console.error('Error: We could not copy Redwood Framework packages')
-    console.error(e)
+    if (e.signal !== 'SIGINT') {
+      console.error('Error: We could not copy Redwood Framework packages')
+      console.error(e)
+    }
     process.exit(1)
   }
 }
@@ -137,8 +145,10 @@ const runYarnInstall = () => {
       stdio: 'inherit',
     })
   } catch (e) {
-    console.error('Error: Could not run `yarn install`')
-    console.error(e)
+    if (e.signal !== 'SIGINT') {
+      console.error('Error: Could not run `yarn install`')
+      console.error(e)
+    }
     process.exit(1)
   }
 }
@@ -152,56 +162,84 @@ const convertProjectToJavaScript = () => {
       stdio: 'inherit',
     })
   } catch (e) {
-    console.error('Could not convert the TypeScript app to JavaScript`')
-    console.error(e)
+    if (e.signal !== 'SIGINT') {
+      console.error('Could not convert the TypeScript app to JavaScript')
+      console.error(e)
+    }
     process.exit(1)
   }
 }
 
 const runDevServerInBackground = () => {
-  console.log('Starting RedwoodJS dev server...')
-  execa.sync('yarn rw dev --no-generate --fwd="--no-open" &', {
-    cwd: REDWOOD_PROJECT_DIRECTORY,
-    shell: true,
-    stdio: 'inherit',
-    env: {
-      RWJS_DELAY_RESTART: '500',
-      REDWOOD_CI: '1',
-    },
-  })
+  try {
+    console.log('Starting RedwoodJS dev server...')
+    execa('yarn rw dev --no-generate --fwd="--no-open"', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+      env: {
+        RWJS_DELAY_RESTART: '500',
+        REDWOOD_CI: '1',
+      },
+    })
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error('There was an error with the RedwoodJS dev server:')
+      console.error(e)
+    }
+    process.exit(1)
+  }
 }
 
 const runCypress = () => {
-  console.log('Starting Cypress...')
-  execa.sync(
-    // do not use Yarn to run Cypress; this avoids missing binary errors
-    '../../node_modules/.bin/cypress',
-    [
-      'open',
-      `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`,
-      '--e2e',
-      '--browser chrome',
-    ],
-    {
-      cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
-      shell: true,
-      stdio: 'inherit',
+  try {
+    console.log('Starting Cypress...')
+    execa.sync(
+      // do not use Yarn to run Cypress; this avoids missing binary errors
+      '../../node_modules/.bin/cypress',
+      [
+        'open',
+        `--env RW_PATH=${REDWOOD_PROJECT_DIRECTORY}`,
+        '--e2e',
+        '--browser chrome',
+      ],
+      {
+        cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error('There was an error with Cypress:')
+      console.error(e)
     }
-  )
+    process.exit(1)
+  }
 }
 
 const initGit = () => {
-  console.log('Initializing Git')
-  execa.sync('git init --initial-branch main && git add .', {
-    cwd: REDWOOD_PROJECT_DIRECTORY,
-    shell: true,
-    stdio: 'inherit',
-  })
-  execa.sync('git commit -a --message=init', {
-    cwd: REDWOOD_PROJECT_DIRECTORY,
-    shell: true,
-    stdio: 'inherit',
-  })
+  try {
+    console.log('Initializing Git')
+    execa.sync('git init --initial-branch main && git add .', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+    execa.sync('git commit -a --message=init', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error(
+        'There was an error with the `git init` or `git commit` step:'
+      )
+      console.error(e)
+    }
+    process.exit(1)
+  }
 }
 
 const args = yargs(hideBin(process.argv))
@@ -211,6 +249,7 @@ const args = yargs(hideBin(process.argv))
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
   .option('yarn1', { default: false, type: 'boolean' })
+  .option('clean-files', { default: true, type: 'boolean' })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -241,6 +280,7 @@ let {
   typescript,
   autoStart,
   yarn1,
+  cleanFiles,
 } = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
@@ -254,16 +294,28 @@ const tasks = [
   autoStart && runCypress,
 ].filter(Boolean)
 
+process.on('SIGINT', () => {
+  process.exit(0)
+})
+
+process.on('exit', () => {
+  console.log('')
+  console.log('-'.repeat(80))
+  if (cleanFiles && autoStart) {
+    console.log('Cleaning up e2e resources...')
+    console.log(' - Cleaning up files (may take a few seconds)...')
+    fs.rmSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true, force: true })
+    console.log('Clean up complete')
+  } else {
+    console.log(
+      `E2E files within "${REDWOOD_PROJECT_DIRECTORY}" have not been automatically cleaned up.`
+    )
+  }
+})
+
 for (const task of tasks) {
   console.log()
   task()
   console.log()
   console.log('-'.repeat(80))
 }
-
-process.on('SIGINT', () => {
-  console.log()
-  console.log(REDWOOD_PROJECT_DIRECTORY)
-  console.log('-'.repeat(80))
-  process.exit(0)
-})
