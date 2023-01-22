@@ -373,3 +373,16 @@ export function normalizePage(
     loader: async () => ({ default: specOrPage }),
   }
 }
+
+/**
+ * Detect if we're in an iframe.
+ *
+ * From https://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
+ */
+export function inIframe() {
+  try {
+    return global?.self !== global?.top
+  } catch (e) {
+    return true
+  }
+}

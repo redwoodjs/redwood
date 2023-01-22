@@ -1,5 +1,5 @@
-import * as firebaseAuth from 'firebase/auth'
 import { initializeApp, getApp, getApps } from 'firebase/app'
+import * as firebaseAuth from 'firebase/auth'
 
 import { createAuth } from '@redwoodjs/auth-firebase-web'
 

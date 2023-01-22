@@ -143,7 +143,9 @@ export const yargsDefaults = {
 
 export const validateName = (name) => {
   if (name.match(/^\W/)) {
-    throw new Error('The <name> argument must start with a letter, number or underscore.')
+    throw new Error(
+      'The <name> argument must start with a letter, number or underscore.'
+    )
   }
 }
 

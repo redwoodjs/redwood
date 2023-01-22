@@ -1,0 +1,40 @@
+{
+  "name": "@redwoodjs/vite",
+  "version": "3.2.0",
+  "description": "Vite configuration package for Redwood",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/vite"
+  },
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "bin": {
+    "vite": "./bins/vite.mjs",
+    "vite__": "./bins/vite.mjs"
+  },
+  "scripts": {
+    "build": "yarn build:js && yarn build:types",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:types": "tsc --build --verbose"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.20.7",
+    "@redwoodjs/internal": "3.2.0",
+    "@vitejs/plugin-react": "3.0.1",
+    "buffer": "6.0.3",
+    "core-js": "3.27.2",
+    "vite": "4.0.4",
+    "vite-plugin-commonjs": "0.6.1",
+    "vite-plugin-environment": "1.1.3",
+    "vite-plugin-html": "3.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.20.7",
+    "typescript": "4.7.4"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}
