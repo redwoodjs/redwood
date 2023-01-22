@@ -57,7 +57,7 @@ export const getAuthenticationContext = async ({
   event,
   context,
 }: {
-  authDecoder?: Decoder
+  authDecoder?: Decoder | Decoder[]
   event: APIGatewayProxyEvent
   context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
@@ -70,6 +70,15 @@ export const getAuthenticationContext = async ({
   }
 
   const { schema, token } = parseAuthorizationHeader(event)
-  const decoded = await authDecoder(token, type, { event, context })
+
+  const authDecoders = Array.isArray(authDecoder) ? authDecoder : [authDecoder]
+  let decoded = null
+
+  let i = 0
+  while (!decoded && i < authDecoders.length) {
+    decoded = await authDecoders[i](token, type, { event, context })
+    i++
+  }
+
   return [decoded, { type, schema, token }, { event, context }]
 }

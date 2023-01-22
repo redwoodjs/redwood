@@ -49,7 +49,7 @@ export function createDbAuthClient({
   let cachedToken: string | null
 
   const getApiDbAuthUrl = () => {
-    return dbAuthUrl || `${process.env.RWJS_API_URL}/auth`
+    return dbAuthUrl || `${RWJS_API_URL}/auth`
   }
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {

@@ -371,6 +371,35 @@ If so then your API side is up and running! The only thing left to test is that 
 
 Was the problem with starting your PM2 process? That will be harder to debug here in this doc, but visit us in the [forums](https://community.redwoodjs.com) or [Discord](https://discord.gg/redwoodjs) and we'll try to help!
 
+:::note My pm2 processes are running but your app has errors, how do I see them?
+
+If your processes are up and running in pm2 you can monitor their log output. Run `pm2 monit` and get a nice graphical interface for watching the logs on your processes. Press the up/down arrows to move through the processes and left/right to switch panes.
+
+![pm2 monit screenshot](https://user-images.githubusercontent.com/300/213776175-2f78d9d4-7e6e-4d69-81b2-a648cc37b6ea.png)
+
+Sometimes the log messages are too long to read in the pane at the right. In that case you can watch them live by "tailing" them right in the terminal. pm2 logs are written to `~/.pm2/logs` and are named after the process name and id, and whether they are standard output or error messages. Here's an example directory listing:
+
+```
+ubuntu@ip-123-45-67-89:~/.pm2/logs$ ll
+total 116
+drwxrwxr-x 2 ubuntu ubuntu  4096 Jan 20 17:58 ./
+drwxrwxr-x 5 ubuntu ubuntu  4096 Jan 20 17:40 ../
+-rw-rw-r-- 1 ubuntu ubuntu     0 Jan 20 17:58 api-error-0.log
+-rw-rw-r-- 1 ubuntu ubuntu     0 Jan 20 17:58 api-error-1.log
+-rw-rw-r-- 1 ubuntu ubuntu 27788 Jan 20 18:11 api-out-0.log
+-rw-rw-r-- 1 ubuntu ubuntu 21884 Jan 20 18:11 api-out-1.log
+```
+
+To watch a log live, run:
+
+```terminal
+tail -f ~/.pm2/logs/api-out-0.log
+```
+
+Note that if you have more than one process running, like we do here, requesting a page on the website will send the request to one of available processes randomly, so you may not see your request show up unless you refresh a few times. Or you can connect to two separate SSH sessions and tail both of the log files at the same time.
+
+:::
+
 ## Starting Processes on Server Restart
 
 The `pm2` service requires some system "hooks" to be installed so it can boot up using your system's service manager.  Otherwise, your PM2 services will need to be manually started again on a server restart.  These steps only need to be run the first time you install PM2.

@@ -886,7 +886,7 @@ const INPUT_TYPES = [
   'week',
 ] as const
 
-type InputType = typeof INPUT_TYPES[number]
+type InputType = (typeof INPUT_TYPES)[number]
 
 export interface InputFieldProps
   extends Omit<FieldProps<HTMLInputElement>, 'type'>,
