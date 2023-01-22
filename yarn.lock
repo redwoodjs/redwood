@@ -7751,7 +7751,7 @@ __metadata:
     "@types/rimraf": 3.0.2
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-polyfill-corejs3: 0.6.0
-    babel-plugin-tester: 10.1.0
+    babel-plugin-tester: 11.0.1
     chalk: 4.1.2
     core-js: 3.27.2
     deepmerge: 4.2.2
@@ -7791,7 +7791,7 @@ __metadata:
     "@types/mime-types": 2.1.1
     "@whatwg-node/fetch": 0.6.2
     babel-plugin-ignore-html-and-css-imports: 0.1.0
-    babel-plugin-tester: 10.1.0
+    babel-plugin-tester: 11.0.1
     cheerio: 1.0.0-rc.12
     core-js: 3.27.2
     graphql: 16.6.0
@@ -9613,7 +9613,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel-plugin-tester@npm:9.0.5, @types/babel-plugin-tester@npm:^9.0.0":
+"@types/babel-plugin-tester@npm:9.0.5":
   version: 9.0.5
   resolution: "@types/babel-plugin-tester@npm:9.0.5"
   dependencies:
@@ -12707,17 +12707,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-tester@npm:10.1.0":
-  version: 10.1.0
-  resolution: "babel-plugin-tester@npm:10.1.0"
+"babel-plugin-tester@npm:11.0.1":
+  version: 11.0.1
+  resolution: "babel-plugin-tester@npm:11.0.1"
   dependencies:
-    "@types/babel-plugin-tester": ^9.0.0
+    debug: ^4.3.4
     lodash.mergewith: ^4.6.2
-    prettier: ^2.0.1
+    prettier: ^2.8.3
     strip-indent: ^3.0.0
   peerDependencies:
-    "@babel/core": ^7.11.6
-  checksum: 0a78c54c69b67fd052e7822a7d7da1eac6fe83a56a82df517b8184ab930a3c76530313c41f5425ac32e83e54ea80da39f2f8c8fb916d92df34f89ea25a139497
+    "@babel/core": ">=7.11.6"
+  checksum: 3be22eb31f991019fc25a22669ca5ea7e4e5b7f4ec2737e2e29b32d118b2812bd6d592a4f6d10aeb134286110936082e2e87f519e5579f473beb184f2c38583c
   languageName: node
   linkType: hard
 
@@ -26493,7 +26493,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.8.3, prettier@npm:^2.0.1, prettier@npm:^2.6.2":
+"prettier@npm:2.8.3, prettier@npm:^2.6.2, prettier@npm:^2.8.3":
   version: 2.8.3
   resolution: "prettier@npm:2.8.3"
   bin:
