@@ -14,5 +14,5 @@
   port = 8911
 [browser]
   open = true
-[cli]
-  checkForUpgrades = true
+[notifications]
+  versionUpdates = ["latest"]
