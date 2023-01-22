@@ -22,8 +22,8 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.7",
-    "core-js": "3.27.1"
+    "@babel/runtime-corejs3": "7.20.13",
+    "core-js": "3.27.2"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",

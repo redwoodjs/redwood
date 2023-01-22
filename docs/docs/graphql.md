@@ -1504,9 +1504,9 @@ Limit the number of aliases in a document. Defaults to 15.
 
 ##### Example
 
-Aliases allow you rename the data that is returned in a query’s results. They manipulate the structure of the query result that is fetched from your service, displaying it according to your web component's needs.
+Aliases allow you to rename the data that is returned in a query’s results. They manipulate the structure of the query result that is fetched from your service, displaying it according to your web component's needs.
 
-This contrived example uses 11 alias to rename a Post's id an title to various permutations of post, article, and blog to return a different shape in the query result as `articles`:
+This contrived example uses 11 alias to rename a Post's id and title to various permutations of post, article, and blog to return a different shape in the query result as `articles`:
 
 ```ts
  {
@@ -1643,7 +1643,7 @@ Typically, these types of unbounded, complex and expensive GraphQL queries are u
 
 ##### Example
 
-An example of a cyclical query here takes advantage of knowing that and author has posts and each post has and author ... that has posts ... that has an another that ... etc.
+An example of a cyclical query here takes advantage of knowing that an author has posts and each post has an author ... that has posts ... that has an another that ... etc.
 
 This cyclical query has a depth of 8.
 

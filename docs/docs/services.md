@@ -635,25 +635,6 @@ You could just write your own function and throw whatever you like, without usin
 
 This validation guarantees that the field(s) given in the first argument are unique in the database before executing the callback given in the last argument. If a record is found with the given fields then an error is thrown and the callback is not invoked.
 
-> **Enable Prisma Preview Feature**
->
-> Being able to use transactions with the syntax used internally by `validateUniqueness()` is experimental for Prisma as of v2.29.0. You'll need to enable it as a preview feature. In your `api/db/schema.prisma` file:
->
-> ```text {4}
-> generator client {
->   provider        = "prisma-client-js"
->   binaryTargets   = "native"
->   previewFeatures = ["interactiveTransactions"]
-> }
-> ```
->
-> You'll need to regenerate the prisma client and restart your dev server for changes to take effect:
->
-> ```bash
-> yarn rw prisma generate
-> yarn rw dev
->```
-
 The uniqueness guarantee is handled through Prisma's [transaction API](https://www.prisma.io/docs/concepts/components/prisma-client/transactions). Given this example validation:
 
 ```jsx

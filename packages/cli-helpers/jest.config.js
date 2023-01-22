@@ -1,4 +1,4 @@
 /** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
-  testPathIgnorePatterns: ['fixtures', 'dist'],
+  testPathIgnorePatterns: ['fixtures', 'dist', 'mockFsFiles'],
 }
