@@ -17,8 +17,8 @@ You can configure your Redwood app in `redwood.toml`. By default, `redwood.toml`
   port = 8911
 [browser]
   open = true
-[cli]
-  checkForUpgrades = true
+[notifications]
+  versionUpdates = ["latest"]
 ```
 
 These are listed by default because they're the ones that you're most likely to configure, but there are plenty more available.
@@ -326,14 +326,14 @@ These toml keys allows you to toggle the generation of test or story files.
 ## [cli]
 
 ```toml title="redwood.toml"
-[cli]
-  checkForUpgrades = true
+[notifications]
+  versionUpdates = ["latest"]
 ```
 
 There's new versions of the framework all the time—a major every couple months, a minor every week or two, and patches when appropriate.
 And if you're on an experimental release line, like canary, there's new versions every day, multiple times.
 
-If you'd like to get notified (at most, once a day) when there's a new version, set `checkForUpgrades` to true in `redwood.toml`'s `cli` table.
+If you'd like to get notified (at most, once a day) when there's a new version, set `versionUpdates` to include the version tags you're interested in within `redwood.toml`'s `notifications` table.
 
 ## Using Environment Variables in `redwood.toml`
 

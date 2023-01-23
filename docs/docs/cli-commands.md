@@ -2064,7 +2064,7 @@ yarn redwood upgrade -t 0.19.3
 The CLI can check for things in the background, like new versions of the framework, while you dev.
 
 Right now it can only check for new versions.
-If you'd like it to do so, set `cli.checkForUpgrades` to `true` in the `redwood.toml` file, or set the `REDWOOD_ENABLE_UPGRADE_CHECKS` env var to true.
+If you'd like it to do so, set `notifications.versionUpdates` in the `redwood.toml` file to include an array of the tags you're interested in hearing about, or set the `REDWOOD_ENABLE_UPDATE_CHECKS` env var to true.
 (The former has priority.)
 
 By default, the CLI won't check for upgrades—you have to opt into it.
