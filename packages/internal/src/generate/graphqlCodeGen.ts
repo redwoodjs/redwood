@@ -318,9 +318,10 @@ const printMappedModelsPlugin: CodegenPlugin = {
 }
 
 /**
- * Codgen plugin that creates types for all the Prisma models with type intersections for the interfaces they implement that are also mapped Prisma models
+ * Codegen plugin that creates types for all the Prisma models with type intersections for the interfaces they implement that are also mapped Prisma models
  * We use a plugin, because we need to know the SDL types and the SDL interfaces they implement and then we need to reflect that in the constructed types made up of Prisma models.
- * This is not information we can glean from the Prisma models since there is currently no support in Prisma for representing model inheritence (whether via Single Table Inheritence or Polymorphic associations).
+ * This is not information we can glean from the Prisma models since there is currently no official support in Prisma for representing model inheritence (whether via Single Table Inheritence or Polymorphic associations).
+ * These relationships can be represented in Prisma, but they cannot currently be represented in the Prisma schema.
  * Essentially we are constructing types out of Prisma models that reflect the SDL types and their interface/implementor relationships.
  * If there is no SDL type or interface for a Prisma model, then essentially we are creating an alias
  *
