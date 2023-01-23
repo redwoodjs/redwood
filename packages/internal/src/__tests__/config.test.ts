@@ -22,13 +22,13 @@ describe('getConfig', () => {
         "browser": {
           "open": false,
         },
-        "cli": {
-          "checkForUpgrades": false,
-        },
         "generate": {
           "nestScaffoldByModel": true,
           "stories": true,
           "tests": true,
+        },
+        "notifications": {
+          "versionUpdates": [],
         },
         "web": {
           "a11y": true,
