@@ -4,7 +4,7 @@ import {
   DiagConsoleLogger,
   DiagLogLevel,
 } from '@opentelemetry/api'
-import { JaegerExporter } from '@opentelemetry/exporter-jaeger'
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { registerInstrumentations } from '@opentelemetry/instrumentation'
 import { Resource } from '@opentelemetry/resources'
 import {
@@ -42,7 +42,7 @@ if (!process.env.REDWOOD_DISABLE_CLI_TELEMETRY) {
 
   // Default exporter to collector.redwoodjs.com
   // TODO: This needs to be configured to send to an actual collector
-  const exporter = new JaegerExporter()
+  const exporter = new OTLPTraceExporter()
   const processor = new BatchSpanProcessor(exporter)
   provider.addSpanProcessor(processor)
 

@@ -34,6 +34,11 @@ export const handler = async () => {
       Databases: ['SQLite'],
     })
     console.log(output)
+
+    // TODO: JGMW-testing
+    if (Math.random() < 0.5) {
+      handlerSpan.recordException(new Error('Random error'))
+    }
     handlerSpan.end()
   } catch (e) {
     console.log('Error: Cannot access environment info')

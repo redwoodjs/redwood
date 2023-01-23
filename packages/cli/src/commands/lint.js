@@ -1,10 +1,12 @@
 import fs from 'fs'
 
+import opentelemetry from '@opentelemetry/api'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
+import { tracerName } from '../telemetry/const'
 
 export const command = 'lint [path..]'
 export const description = 'Lint your files'
@@ -29,6 +31,13 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ path, fix }) => {
+  const tracer = opentelemetry.trace.getTracer(tracerName)
+  const handlerSpan = tracer.startSpan(
+    'handler',
+    undefined,
+    opentelemetry.context.active()
+  )
+  handlerSpan.setAttribute('command', 'lint')
   try {
     const pathString = path?.join(' ')
     const result = await execa(
@@ -47,8 +56,11 @@ export const handler = async ({ path, fix }) => {
         stdio: 'inherit',
       }
     )
+    handlerSpan.end()
     process.exit(result.exitCode)
   } catch (e) {
+    handlerSpan.recordException(e)
+    handlerSpan.end()
     console.log(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
