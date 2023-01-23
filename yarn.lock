@@ -7361,11 +7361,10 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@supabase/supabase-js": 1.35.7
-    "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   peerDependencies:
     "@supabase/supabase-js": 1.35.7
@@ -7839,8 +7838,8 @@ __metadata:
     react-dom: 18.2.0
     typescript: 4.7.4
   peerDependencies:
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
   languageName: unknown
   linkType: soft
 
@@ -9470,28 +9469,6 @@ __metadata:
     lodash: ^4.17.15
     redent: ^3.0.0
   checksum: 0925fda78096cca355d164d5358b84b9371c4fb6ba60ce60c2263446ac6d9c6aaca75e2792cdb42699fe78c379924c53db672a3510361b577ebb89a0c6e1c629
-  languageName: node
-  linkType: hard
-
-"@testing-library/react-hooks@npm:8.0.1":
-  version: 8.0.1
-  resolution: "@testing-library/react-hooks@npm:8.0.1"
-  dependencies:
-    "@babel/runtime": ^7.12.5
-    react-error-boundary: ^3.1.0
-  peerDependencies:
-    "@types/react": ^16.9.0 || ^17.0.0
-    react: ^16.9.0 || ^17.0.0
-    react-dom: ^16.9.0 || ^17.0.0
-    react-test-renderer: ^16.9.0 || ^17.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    react-dom:
-      optional: true
-    react-test-renderer:
-      optional: true
-  checksum: 83bef2d4c437b84143213b5275ef00ef14e5bcd344f9ded12b162d253dc3c799138ead4428026b9c725e5a38dbebf611f2898aa43f3e43432bcaccbd7bf413e5
   languageName: node
   linkType: hard
 
@@ -27196,17 +27173,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-error-boundary@npm:^3.1.0":
-  version: 3.1.4
-  resolution: "react-error-boundary@npm:3.1.4"
-  dependencies:
-    "@babel/runtime": ^7.12.5
-  peerDependencies:
-    react: ">=16.13.1"
-  checksum: f977ca61823e43de2381d53dd7aa8b4d79ff6a984c9afdc88dc44f9973b99de7fd382d2f0f91f2688e24bb987c0185bf45d0b004f22afaaab0f990a830253bfb
-  languageName: node
-  linkType: hard
-
 "react-fast-compare@npm:^3.2.0":
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
@@ -28233,8 +28199,7 @@ __metadata:
     "@playwright/test": 1.29.2
     "@replayio/playwright": 0.3.15
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 12.1.5
-    "@testing-library/react-hooks": 8.0.1
+    "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
     "@tsd/typescript": 4.9.4
     "@types/babel__generator": 7.6.4
