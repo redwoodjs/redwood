@@ -142,7 +142,7 @@ export const handler = async ({
 
   const webCommand =
     getConfig().web.bundler === 'vite' // @NOTE: can't use enums, not TS
-      ? `yarn cross-env NODE_ENV=development vite`
+      ? `yarn cross-env NODE_ENV=development rw-vite-dev`
       : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
           watchNodeModules ? '1' : ''
         } webpack serve --config "${webpackDevConfig}" ${forward}`
