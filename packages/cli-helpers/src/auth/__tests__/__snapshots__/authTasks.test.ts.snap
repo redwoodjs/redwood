@@ -194,9 +194,30 @@ export default App
 `;
 
 exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0) 2`] = `
-"import { createAuth } from '@redwoodjs/auth-dbauth-web'
+"import { Auth0Client } from '@auth0/auth0-spa-js'
 
-export const { AuthProvider, useAuth } = createAuth()
+import { createAuth } from '@redwoodjs/auth-auth0-web'
+
+const auth0 = new Auth0Client({
+  domain: process.env.AUTH0_DOMAIN || '',
+  client_id: process.env.AUTH0_CLIENT_ID || '',
+  redirect_uri: process.env.AUTH0_REDIRECT_URI,
+
+  // ** NOTE ** Storing tokens in browser local storage provides persistence across page refreshes and browser tabs.
+  // However, if an attacker can achieve running JavaScript in the SPA using a cross-site scripting (XSS) attack,
+  // they can retrieve the tokens stored in local storage.
+  // https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options
+  cacheLocation: 'localstorage',
+  audience: process.env.AUTH0_AUDIENCE,
+
+  // @MARK useRefreshTokens is required for automatically extending sessions
+  // beyond that set in the initial JWT expiration.
+  //
+  // @see https://auth0.com/docs/tokens/refresh-tokens
+  // useRefreshTokens: true,
+})
+
+export const { AuthProvider, useAuth } = createAuth(auth0)
 "
 `;
 
@@ -254,9 +275,55 @@ export default App
 `;
 
 exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk) 2`] = `
-"import { createAuth } from '@redwoodjs/auth-dbauth-web'
+"import React, { useEffect } from 'react'
 
-export const { AuthProvider, useAuth } = createAuth()
+import { ClerkLoaded, ClerkProvider, useUser } from '@clerk/clerk-react'
+
+import { createAuth } from '@redwoodjs/auth-clerk-web'
+
+// You can set user roles in a "roles" array on the public metadata in Clerk.
+//
+// Also, you need to add three env variables: CLERK_FRONTEND_API_URL for web and
+// CLERK_API_KEY plus CLERK_JWT_KEY for api. All three can be found under "API Keys"
+// on your Clerk.dev dashboard.
+//
+// Lastly, be sure to add the key "CLERK_FRONTEND_API_URL" in your app's redwood.toml
+// [web] config "includeEnvironmentVariables" setting.
+
+export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createAuth()
+
+interface Props {
+  children: React.ReactNode
+}
+
+const ClerkStatusUpdater = () => {
+  const { isSignedIn, user, isLoaded } = useUser()
+  const { reauthenticate } = useAuth()
+
+  useEffect(() => {
+    if (isLoaded) {
+      reauthenticate()
+    }
+  }, [isSignedIn, user, reauthenticate, isLoaded])
+
+  return null
+}
+
+export const AuthProvider = ({ children }: Props) => {
+  const frontendApi = process.env.CLERK_FRONTEND_API_URL
+  if (!frontendApi) {
+    throw new Error('Need to define env variable CLERK_FRONTEND_API_URL')
+  }
+
+  return (
+    <ClerkProvider frontendApi={frontendApi} navigate={(to) => navigate(to)}>
+      <ClerkRwAuthProvider>
+        <ClerkLoaded>{children}</ClerkLoaded>
+        <ClerkStatusUpdater />
+      </ClerkRwAuthProvider>
+    </ClerkProvider>
+  )
+}
 "
 `;
 
@@ -428,3 +495,7 @@ export const handler = createGraphQLHandler({
 })
 "
 `;
+
+exports[`authTasks writes an auth.js file for JS projects 1`] = `"// web auth template"`;
+
+exports[`authTasks writes an auth.ts file for TS projects 1`] = `"// web auth template"`;

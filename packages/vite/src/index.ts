@@ -2,9 +2,9 @@ import { existsSync, readFile as fsReadFile } from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 
-import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
 import { normalizePath, transformWithEsbuild, UserConfig } from 'vite'
+import EnvironmentPlugin from 'vite-plugin-environment'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -12,6 +12,9 @@ import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const readFile = promisify(fsReadFile)
+
+// Using require, because plugin has TS errors
+const commonjs = require('vite-plugin-commonjs')
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
@@ -125,20 +128,21 @@ export default function redwoodPluginVite() {
         }
       },
     },
-    {
-      // Adds the variables defined in "includeEnvironmentVariables" in redwood.toml to import.meta.env
-      name: 'include-env-variables',
-      config: (): UserConfig => {
-        return {
-          define: Object.fromEntries(
-            redwoodConfig.web.includeEnvironmentVariables.map((envName) => [
-              `import.meta.env.${envName}`,
-              JSON.stringify(process.env[envName]),
-            ])
-          ),
-        }
-      },
-    },
+    // Loading Environment Variables, to process.env in the browser
+    // This maintains compatibility with Webpack. We can choose to switch to import.meta.env at a later stage
+    EnvironmentPlugin('all', { prefix: 'REDWOOD_ENV_', loadEnvFiles: false }),
+    EnvironmentPlugin(
+      Object.fromEntries(
+        redwoodConfig.web.includeEnvironmentVariables.map((envName) => [
+          envName,
+          JSON.stringify(process.env[envName]),
+        ])
+      ),
+      {
+        loadEnvFiles: false, // to prevent vite from loading .env files
+      }
+    ),
+    // -----------------
     {
       // @MARK Adding this custom plugin to support jsx files with .js extensions
       // This is the default in Redwood JS projects. We can remove this once Vite is stable,
@@ -178,7 +182,11 @@ export default function redwoodPluginVite() {
     }),
     // @MARK We add this as a temporary workaround for DevFatalErrorPage being required
     // Note that it only transforms commonjs in dev, which is exactly what we want!
-    // Maybe we could have a custom plugin to only transform the DevFatalErrorPage?
-    viteCommonjs(),
+    // and is limited to the default FatalErrorPage (by name)
+    commonjs({
+      filter: (id: string) => {
+        return id.includes('FatalErrorPage')
+      },
+    }),
   ]
 }

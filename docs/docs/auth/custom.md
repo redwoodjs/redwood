@@ -16,7 +16,7 @@ yarn rw setup auth custom
 This makes all the code modifications it can, but whereas with other auth providers, all you have to do now is get your keys, here you have to write some code.
 
 Let's work on the web side first.
-Here most of our time will be spent in the the `web/src/auth.ts` file.
+Here most of our time will be spent in the `web/src/auth.ts` file.
 It comes commented to guide us, but we'll get into it here.
 If you're using TypeScript, scroll past the boilerplate interfaces for now to get to our first task, instantiating the client:
 
@@ -95,7 +95,7 @@ const client = new NhostClient({
 
 Ok, that's it for the client.
 At this point, you could update some of the TS interfaces, but we'll leave that to you and press on with the integration.
-Now we have create the `useAuth` hook using the client we just made so that the rest of Redwood, like the router, works.
+Now we have to create the `useAuth` hook using the client we just made so that the rest of Redwood, like the router, works.
 Scroll down a little more to the `createAuthImplementation` function:
 
 ```ts title="web/src/auth.ts"
