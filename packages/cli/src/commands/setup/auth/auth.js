@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { fetch } from '@whatwg-node/fetch'
+import chalk from 'chalk'
 import execa from 'execa'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
@@ -39,15 +41,61 @@ export async function builder(yargs) {
       type: 'boolean',
       default: false,
     })
-    .strict()
     .command(
       '$0',
-      'default command',
+      false,
       () => {},
-      (argv) => {
-        console.log('argv', argv)
+      async (argv) => {
+        // The initial checks here are workarounds for
+        // https://github.com/yargs/yargs/issues/2291
+        if (argv._.length > 2) {
+          console.log(execa.commandSync('yarn dev setup auth --help').stdout)
+          console.log(`\n${chalk.red.bold('Error:')} Too many arguments`)
+          process.exit(1)
+        }
+
+        if (!argv.list) {
+          console.log(execa.commandSync('yarn dev setup auth --help').stdout)
+          console.log(
+            `\n${chalk.red.bold('Error:')} Missing or unsupported argument(s)`
+          )
+          process.exit(1)
+        }
+
+        // argv.list is true - Let's fetch a list of all auth provider setup
+        // packages on npm!
+        console.log('')
+        console.log('Fetching auth provider setup packages...')
+        console.log('')
+
+        let setupPackages = []
+
+        try {
+          const url =
+            'https://registry.npmjs.org/-/v1/search?text=@redwoodjs/auth-setup'
+          const result = await fetch(url)
+          const data = await result.json()
+          setupPackages = data.objects
+            .map((o) => o.package)
+            .filter(
+              (p) =>
+                p.name.endsWith('-setup') &&
+                !p.name.endsWith('auth-providers-setup')
+            )
+        } catch (error) {
+          console.error('Could not fetch packages', error)
+        }
+
+        console.log('These are the auth provider setup packages we support:')
+        console.log(setupPackages.map((p) => `  - ${p.name}`).join('\n'))
+        console.log('')
+        console.log(
+          'Run `yarn rw setup auth <package name>` to setup the auth ' +
+            'provider integration you need'
+        )
       }
     )
+    .strict(false)
     // Command "redirects" for auth providers we used to support
     .command(...redirectCommand('ethereum'))
     .command(...redirectCommand('goTrue'))
