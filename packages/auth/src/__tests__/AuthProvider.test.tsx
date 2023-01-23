@@ -687,8 +687,7 @@ describe('Custom auth provider', () => {
     await waitFor(() => screen.getByText('Log In'))
   })
 
-  // FIXME(pc): "Expected one assertion to be called but received zero assertion calls."
-  test.skip('proxies forgotPassword() calls to client', async () => {
+  test('proxies forgotPassword() calls to client', async () => {
     const mockedForgotPassword = jest.spyOn(customTestAuth, 'forgotPassword')
     mockedForgotPassword.mockImplementation((username: string) => {
       expect(username).toEqual('username')
@@ -712,9 +711,7 @@ describe('Custom auth provider', () => {
       </AuthProvider>
     )
 
-    await waitFor(() => mockedForgotPassword.mock.calls.length === 1)
-
-    expect.assertions(1)
+    await waitFor(() => expect(mockedForgotPassword.mock.calls.length).toBe(1))
   })
 
   test('proxies resetPassword() calls to client', async () => {
