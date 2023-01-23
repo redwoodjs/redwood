@@ -139,7 +139,8 @@ See [acquireTokenSilent](https://azuread.github.io/microsoft-authentication-libr
 
 ## Azure AD B2C specific configuration
 
-Using Azure AD B2C with [hosted user flows](https://docs.microsoft.com/en-us/azure/active-directory-b2c/add-sign-up-and-sign-in-policy?pivots=b2c-user-flow) requires 2 extra settings
+Using Azure AD B2C requires 2 extra settings. You can design your own auth flow
+with Azure AD B2C using [hosted user flows](https://docs.microsoft.com/en-us/azure/active-directory-b2c/add-sign-up-and-sign-in-policy?pivots=b2c-user-flow).
 
 #### Update the .env file:
 
