@@ -1,13 +1,14 @@
 // Have to use `var` here to avoid "Temporal Dead Zone" issues
 // eslint-disable-next-line
-var mockWebAppPath = ''
-// eslint-disable-next-line
-var mockWebRoutesPath = ''
-// eslint-disable-next-line
-var mockApiGraphqlPath = ''
+var mockIsTypeScriptProject = true
 
-import fs from 'fs'
-import path from 'path'
+jest.mock('../../lib/project', () => ({
+  isTypeScriptProject: () => mockIsTypeScriptProject,
+}))
+
+jest.mock('../../lib', () => ({
+  transformTSToJS: (_path: string, data: string) => data,
+}))
 
 // mock Telemetry for CLI commands so they don't try to spawn a process
 jest.mock('@redwoodjs/telemetry', () => {
@@ -17,6 +18,55 @@ jest.mock('@redwoodjs/telemetry', () => {
   }
 })
 
+jest.mock('../../lib/paths', () => {
+  const path = require('path')
+  const actualPaths = jest.requireActual('../../lib/paths')
+  const basedir = '/mock/setup/path'
+  const app = mockIsTypeScriptProject ? 'App.tsx' : 'App.js'
+  const routes = mockIsTypeScriptProject ? 'Routes.tsx' : 'Routes.js'
+
+  return {
+    resolveFile: actualPaths.resolveFile,
+    getPaths: () => ({
+      api: {
+        functions: '',
+        src: '',
+        lib: '',
+        graphql: path.join(basedir, 'api/src/functions/graphql.ts'),
+      },
+      web: {
+        src: path.join(basedir, 'web/src'),
+        app: path.join(basedir, `web/src/${app}`),
+        routes: path.join(basedir, `web/src/${routes}`),
+      },
+      base: path.join(basedir),
+    }),
+  }
+})
+
+jest.mock('../../lib/project', () => {
+  return {
+    isTypeScriptProject: () => mockIsTypeScriptProject,
+    getGraphqlPath: () => {
+      const { getPaths } = require('../../lib/paths')
+      return getPaths().api.graphql
+    },
+  }
+})
+
+// This will load packages/cli-helpers/__mocks__/fs.js
+jest.mock('fs')
+
+const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
+  __setMockFiles: (files: Record<string, string>) => void
+  __getMockFiles: () => Record<string, string>
+  readdirSync: () => string[]
+}
+
+import fs from 'fs'
+import path from 'path'
+
+import { getPaths } from '../../lib/paths'
 import {
   addApiConfig,
   addConfigToWebApp,
@@ -27,154 +77,194 @@ import {
   removeAuthProvider,
 } from '../authTasks'
 
-jest.mock('../../lib/paths', () => {
-  const path = require('path')
-  const __dirname = path.resolve()
-  const originalModule = jest.requireActual('../../lib/paths')
+import {
+  auth0WebAuthTsTemplate,
+  clerkWebAuthTsTemplate,
+  customApolloAppTsx,
+  customPropsRoutesTsx,
+  explicitReturnAppTsx,
+  graphqlTs,
+  legacyAuthWebAppTsx,
+  nonStandardAuthDecoderGraphqlTs,
+  routesTsx,
+  useAuthRoutesTsx,
+  webAppTsx,
+  withAuthDecoderGraphqlTs,
+  withoutRedwoodApolloAppTsx,
+} from './mockFsFiles'
 
-  return {
-    resolveFile: originalModule.resolveFile,
-    getPaths: () => ({
-      api: { functions: '', src: '', lib: '' },
-      web: {
-        src: path.join(__dirname, '../create-redwood-app/template/web/src'),
-        app: path.join(
-          __dirname,
-          mockWebAppPath || '../create-redwood-app/template/web/src/App.tsx'
-        ),
-        routes: path.join(
-          __dirname,
-          mockWebRoutesPath ||
-            '../create-redwood-app/template/web/src/Routes.tsx'
-        ),
-      },
-      base: path.join(__dirname, '../create-redwood-app/template'),
-    }),
-  }
-})
-
-jest.mock('../../lib/project', () => {
-  const path = require('path')
-  const __dirname = path.resolve()
-
-  return {
-    isTypeScriptProject: () => false,
-    getGraphqlPath: () => {
-      const graphqlPath = path.join(
-        __dirname,
-        mockApiGraphqlPath ||
-          '../create-redwood-app/template/api/src/functions/graphql.ts'
-      )
-      return graphqlPath
-    },
-  }
-})
-
-// This function checks output matches
-const writeFileSyncSpy = jest.fn((_, content) => {
-  expect(content).toMatchSnapshot()
-})
+function platformPath(filePath: string) {
+  return filePath.split('/').join(path.sep)
+}
 
 beforeEach(() => {
-  mockWebAppPath = ''
+  mockIsTypeScriptProject = true
   jest.restoreAllMocks()
-  jest.spyOn(fs, 'writeFileSync').mockImplementation(writeFileSyncSpy)
+
+  mockFS.__setMockFiles({
+    [path.join(
+      getPaths().base,
+      platformPath('/templates/web/auth.ts.template')
+    )]: '// web auth template',
+    [getPaths().web.app]: webAppTsx,
+    [getPaths().api.graphql]: graphqlTs,
+    [getPaths().web.routes]: routesTsx,
+  })
+
+  mockFS.readdirSync = () => {
+    return ['auth.ts.template']
+  }
 })
 
 describe('authTasks', () => {
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0)', () => {
-    const basedir = path.join(__dirname, 'fixtures/dbAuthSetup')
+    const templatePath = path.join(
+      getPaths().base,
+      platformPath('/templates/web/auth.ts.template')
+    )
+
+    mockFS.__setMockFiles({
+      ...mockFS.__getMockFiles(),
+      [templatePath]: auth0WebAuthTsTemplate,
+    })
+
     const ctx: AuthGeneratorCtx = {
       provider: 'auth0',
       setupMode: 'FORCE',
     }
 
     addConfigToWebApp().task(ctx, {} as any)
-    createWebAuth(basedir, false).task(ctx)
+    createWebAuth(getPaths().base, false).task(ctx)
     addConfigToRoutes().task()
+
+    const authTsPath = path.join(getPaths().web.src, 'auth.ts')
+
+    expect(fs.readFileSync(getPaths().web.app)).toMatchSnapshot()
+    expect(fs.readFileSync(authTsPath)).toMatchSnapshot()
+    expect(fs.readFileSync(getPaths().web.routes)).toMatchSnapshot()
   })
 
   it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk)', () => {
-    const basedir = path.join(__dirname, 'fixtures/dbAuthSetup')
+    const templatePath = path.join(
+      getPaths().base,
+      platformPath('/templates/web/auth.tsx.template')
+    )
+
+    mockFS.__setMockFiles({
+      ...mockFS.__getMockFiles(),
+      [templatePath]: clerkWebAuthTsTemplate,
+    })
+    mockFS.readdirSync = () => {
+      return ['auth.tsx.template']
+    }
+
     const ctx: AuthGeneratorCtx = {
       provider: 'clerk',
       setupMode: 'FORCE',
     }
 
     addConfigToWebApp().task(ctx, {} as any)
-    createWebAuth(basedir, false).task(ctx)
+    createWebAuth(getPaths().base, false).task(ctx)
     addConfigToRoutes().task()
+
+    const authTsPath = path.join(getPaths().web.src, 'auth.tsx')
+
+    expect(fs.readFileSync(getPaths().web.app)).toMatchSnapshot()
+    expect(fs.readFileSync(authTsPath)).toMatchSnapshot()
+    expect(fs.readFileSync(getPaths().web.routes)).toMatchSnapshot()
   })
 
   it('Should update App.tsx for legacy apps', () => {
+    mockFS.__setMockFiles({
+      ...mockFS.__getMockFiles(),
+      [getPaths().web.app]: legacyAuthWebAppTsx,
+    })
+
     const ctx: AuthGeneratorCtx = {
       provider: 'clerk',
       setupMode: 'FORCE',
     }
 
-    mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithLegacyAuth.tsx'
-
     addConfigToWebApp().task(ctx, {} as any)
+
+    expect(fs.readFileSync(getPaths().web.app)).toMatchSnapshot()
   })
 
   describe('Components with props', () => {
     it('Should add useAuth on the same line for single line components, and separate line for multiline components', () => {
+      mockFS.__setMockFiles({
+        ...mockFS.__getMockFiles(),
+        [getPaths().web.app]: customApolloAppTsx,
+        [getPaths().web.routes]: customPropsRoutesTsx,
+      })
+
       const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
         setupMode: 'FORCE',
       }
 
-      mockWebAppPath =
-        'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
-      mockWebRoutesPath =
-        'src/auth/__tests__/fixtures/RoutesWithCustomRouterProps.tsx'
-
       addConfigToWebApp().task(ctx, {} as any)
       addConfigToRoutes().task()
+
+      expect(fs.readFileSync(getPaths().web.app)).toMatchSnapshot()
+      expect(fs.readFileSync(getPaths().web.routes)).toMatchSnapshot()
     })
 
     it('Should not add useAuth if one already exists', () => {
+      mockFS.__setMockFiles({
+        ...mockFS.__getMockFiles(),
+        [getPaths().web.app]: customApolloAppTsx,
+        [getPaths().web.routes]: useAuthRoutesTsx,
+      })
+
       const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
         setupMode: 'FORCE',
       }
 
-      mockWebAppPath =
-        'src/auth/__tests__/fixtures/AppWithCustomRedwoodApolloProvider.js'
-      mockWebRoutesPath = 'src/auth/__tests__/fixtures/RoutesWithUseAuth.tsx'
-
       addConfigToWebApp().task(ctx, {} as any)
       addConfigToRoutes().task()
+
+      expect(fs.readFileSync(getPaths().web.app)).toMatchSnapshot()
+      expect(fs.readFileSync(getPaths().web.routes)).toMatchSnapshot()
     })
   })
 
   describe('Customized App.js', () => {
     it('Should add auth config when using explicit return', () => {
+      mockFS.__setMockFiles({
+        ...mockFS.__getMockFiles(),
+        [getPaths().web.app]: explicitReturnAppTsx,
+      })
+
       const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
         setupMode: 'FORCE',
       }
 
-      mockWebAppPath = 'src/auth/__tests__/fixtures/AppWithExplicitReturn.js'
-
       addConfigToWebApp().task(ctx, {} as any)
+
+      expect(fs.readFileSync(getPaths().web.app)).toMatchSnapshot()
     })
   })
 
   describe('Swapped out GraphQL client', () => {
     it('Should add auth config when app is missing RedwoodApolloProvider', () => {
+      mockFS.__setMockFiles({
+        ...mockFS.__getMockFiles(),
+        [getPaths().web.app]: withoutRedwoodApolloAppTsx,
+      })
+
       const ctx: AuthGeneratorCtx = {
         provider: 'clerk',
         setupMode: 'FORCE',
       }
 
-      mockWebAppPath =
-        'src/auth/__tests__/fixtures/AppWithoutRedwoodApolloProvider.js'
-
       const task = { output: '' } as any
       addConfigToWebApp().task(ctx, task)
 
       expect(task.output).toMatch(/GraphQL.*useAuth/)
+      expect(fs.readFileSync(getPaths().web.app)).toMatchSnapshot()
     })
   })
 
@@ -184,24 +274,36 @@ describe('authTasks', () => {
         replaceExistingImport: true,
         authDecoderImport: "import { authDecoder } from 'test-auth-api'",
       })
+
+      expect(fs.readFileSync(getPaths().api.graphql)).toMatchSnapshot()
     })
 
     it("Doesn't add authDecoder arg if one already exists", () => {
-      mockApiGraphqlPath =
-        'src/auth/__tests__/fixtures/app/api/src/functions/graphql.ts'
+      mockFS.__setMockFiles({
+        ...mockFS.__getMockFiles(),
+        [getPaths().api.graphql]: withAuthDecoderGraphqlTs,
+      })
+
       addApiConfig({
         replaceExistingImport: true,
         authDecoderImport: "import { authDecoder } from 'test-auth-api'",
       })
+
+      expect(fs.readFileSync(getPaths().api.graphql)).toMatchSnapshot()
     })
 
     it("Doesn't add authDecoder arg if one already exists, even with a non-standard import name and arg placement", () => {
-      mockApiGraphqlPath =
-        'src/auth/__tests__/fixtures/app/api/src/functions/graphqlNonStandardAuthDecoder.ts'
+      mockFS.__setMockFiles({
+        ...mockFS.__getMockFiles(),
+        [getPaths().api.graphql]: nonStandardAuthDecoderGraphqlTs,
+      })
+
       addApiConfig({
         replaceExistingImport: true,
         authDecoderImport: "import { authDecoder } from 'test-auth-api'",
       })
+
+      expect(fs.readFileSync(getPaths().api.graphql)).toMatchSnapshot()
     })
   })
 
@@ -421,5 +523,36 @@ describe('authTasks', () => {
         )
       `)
     })
+  })
+
+  it('writes an auth.ts file for TS projects', () => {
+    const ctx: AuthGeneratorCtx = {
+      provider: 'auth0',
+      setupMode: 'FORCE',
+    }
+    createWebAuth(getPaths().base, false).task(ctx)
+
+    expect(
+      fs.readFileSync(path.join(getPaths().web.src, 'auth.ts'))
+    ).toMatchSnapshot()
+  })
+
+  it('writes an auth.js file for JS projects', () => {
+    mockIsTypeScriptProject = false
+
+    mockFS.__setMockFiles({
+      ...mockFS.__getMockFiles(),
+      [getPaths().web.app]: webAppTsx,
+    })
+
+    const ctx: AuthGeneratorCtx = {
+      provider: 'auth0',
+      setupMode: 'FORCE',
+    }
+    createWebAuth(getPaths().base, false).task(ctx)
+
+    expect(
+      fs.readFileSync(path.join(getPaths().web.src, 'auth.js'))
+    ).toMatchSnapshot()
   })
 })
