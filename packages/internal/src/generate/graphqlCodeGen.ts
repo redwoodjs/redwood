@@ -15,7 +15,11 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import execa from 'execa'
-import { DocumentNode } from 'graphql'
+import {
+  DocumentNode,
+  InterfaceTypeDefinitionNode,
+  ObjectTypeDefinitionNode,
+} from 'graphql'
 
 import { getPaths } from '../paths'
 import { getTsConfigs } from '../project'
@@ -51,6 +55,11 @@ export const generateTypeDefGraphQLApi = async () => {
       name: 'print-mapped-moddels',
       options: {},
       codegenPlugin: printMappedModelsPlugin,
+    },
+    {
+      name: 'print-prisma-models-with-implementation-chain',
+      options: {},
+      codegenPlugin: printPrismaTypesWithImplementationChainPlugin,
     },
     {
       name: 'typescript-resolvers',
@@ -209,13 +218,13 @@ function getPluginConfig(side: CodegenSide) {
   Object.keys(prismaModels).forEach((key) => {
     /** creates an object like this
      * {
-     *  Post: MergePrismaWithSdlTypes<PrismaPost, MakeRelationsOptional<Post, AllMappedModels>, AllMappedModels>>
+     *  Post: MergePrismaWithSdlTypes<PrismaPostWithImplementationChain, MakeRelationsOptional<Post, AllMappedModels>, AllMappedModels>>
      *  ...
      * }
      */
     prismaModels[
       key
-    ] = `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
+    ] = `MergePrismaWithSdlTypes<Prisma${key}WithImplementationChain, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
   })
 
   const pluginConfig: CodegenTypes.PluginConfig &
@@ -305,6 +314,63 @@ const printMappedModelsPlugin: CodegenPlugin = {
     return `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];\ntype AllMappedModels = MaybeOrArrayOfMaybe<${sdlTypesWhichAreMapped.join(
       ' | '
     )}>`
+  },
+}
+
+/**
+ * Codgen plugin that creates types for all the Prisma models with type intersections for the interfaces they implement that are also mapped Prisma models
+ * We use a plugin, because we need to know the SDL types and the SDL interfaces they implement and then we need to reflect that in the constructed types made up of Prisma models.
+ * This is not information we can glean from the Prisma models since there is currently no support in Prisma for representing model inheritence (whether via Single Table Inheritence or Polymorphic associations).
+ * Essentially we are constructing types out of Prisma models that reflect the SDL types and their interface/implementor relationships.
+ * If there is no SDL type or interface for a Prisma model, then essentially we are creating an alias
+ *
+ * Examples of generated types:
+ * type PrismaUserWithImplementationChain = PrismaUser
+ * type PrismaCommentWithImplementationChain = PrismaComment
+ * type PrismaTextCommentWithImplementationChain = PrismaTextComment & PrismaComment
+ *
+ * Note that the types are Prisma types, not SDL types.
+ * Thus we do not include SDL-only (unmapped) types in this list.
+ */
+const printPrismaTypesWithImplementationChainPlugin: CodegenPlugin = {
+  plugin: (schema, _documents, config) => {
+    // this way we can make sure relation types are not required
+    const prismaTypesWithImplementationChain = Object.values(
+      schema.getTypeMap()
+    )
+      .filter((type) => {
+        const kind = type.astNode?.kind
+        return (
+          kind === 'ObjectTypeDefinition' || kind === 'InterfaceTypeDefinition'
+        )
+      })
+      .filter((objectDefType) => {
+        const modelName = objectDefType.astNode?.name.value
+        return (
+          modelName && modelName in config.mappers // Only keep the mapped Prisma models
+        )
+      })
+      .map((objectDefType) => {
+        const modelName = objectDefType.astNode?.name.value
+        const interfaces = (
+          objectDefType.astNode as
+            | ObjectTypeDefinitionNode
+            | InterfaceTypeDefinitionNode
+        ).interfaces
+        if (interfaces == null || interfaces.length === 0) {
+          return `type Prisma${modelName}WithImplementationChain = Prisma${modelName};`
+        }
+
+        const mappedInterfaceNames = interfaces
+          .map((interfaceNode) => interfaceNode.name.value)
+          .filter((interfaceName) => interfaceName in config.mappers)
+          .map((interfaceName) => `Prisma${interfaceName}`)
+        return `type Prisma${modelName}WithImplementationChain = Prisma${modelName} & ${mappedInterfaceNames.join(
+          ' & '
+        )};`
+      })
+
+    return prismaTypesWithImplementationChain.join('\n')
   },
 }
 

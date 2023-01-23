@@ -130,6 +130,9 @@ export type UpdateTextCommentInput = {
 
 type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];
 type AllMappedModels = MaybeOrArrayOfMaybe<Comment | TextComment | Todo>
+type PrismaCommentWithImplementationChain = PrismaComment;
+type PrismaTextCommentWithImplementationChain = PrismaTextComment & PrismaComment;
+type PrismaTodoWithImplementationChain = PrismaTodo;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -190,7 +193,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Comment: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaComment, MakeRelationsOptional<Comment, AllMappedModels>, AllMappedModels>>;
+  Comment: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaCommentWithImplementationChain, MakeRelationsOptional<Comment, AllMappedModels>, AllMappedModels>>;
   CreateCommentInput: CreateCommentInput;
   CreateTextCommentInput: CreateTextCommentInput;
   Date: ResolverTypeWrapper<Scalars['Date']>;
@@ -202,9 +205,9 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   Redwood: ResolverTypeWrapper<Redwood>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  TextComment: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaTextComment, MakeRelationsOptional<TextComment, AllMappedModels>, AllMappedModels>>;
+  TextComment: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaTextCommentWithImplementationChain, MakeRelationsOptional<TextComment, AllMappedModels>, AllMappedModels>>;
   Time: ResolverTypeWrapper<Scalars['Time']>;
-  Todo: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaTodo, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>>;
+  Todo: ResolverTypeWrapper<MergePrismaWithSdlTypes<PrismaTodoWithImplementationChain, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>>;
   UpdateCommentInput: UpdateCommentInput;
   UpdateTextCommentInput: UpdateTextCommentInput;
 };
@@ -213,7 +216,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   BigInt: Scalars['BigInt'];
   Boolean: Scalars['Boolean'];
-  Comment: MergePrismaWithSdlTypes<PrismaComment, MakeRelationsOptional<Comment, AllMappedModels>, AllMappedModels>;
+  Comment: MergePrismaWithSdlTypes<PrismaCommentWithImplementationChain, MakeRelationsOptional<Comment, AllMappedModels>, AllMappedModels>;
   CreateCommentInput: CreateCommentInput;
   CreateTextCommentInput: CreateTextCommentInput;
   Date: Scalars['Date'];
@@ -225,9 +228,9 @@ export type ResolversParentTypes = {
   Query: {};
   Redwood: Redwood;
   String: Scalars['String'];
-  TextComment: MergePrismaWithSdlTypes<PrismaTextComment, MakeRelationsOptional<TextComment, AllMappedModels>, AllMappedModels>;
+  TextComment: MergePrismaWithSdlTypes<PrismaTextCommentWithImplementationChain, MakeRelationsOptional<TextComment, AllMappedModels>, AllMappedModels>;
   Time: Scalars['Time'];
-  Todo: MergePrismaWithSdlTypes<PrismaTodo, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>;
+  Todo: MergePrismaWithSdlTypes<PrismaTodoWithImplementationChain, MakeRelationsOptional<Todo, AllMappedModels>, AllMappedModels>;
   UpdateCommentInput: UpdateCommentInput;
   UpdateTextCommentInput: UpdateTextCommentInput;
 };
