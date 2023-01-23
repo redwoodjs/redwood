@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { isValidElement } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { useActivePageContext } from './ActivePageContext'
@@ -13,7 +13,6 @@ import {
 import { SplashPage } from './splash-page'
 import {
   flattenAll,
-  isReactElement,
   parseSearch,
   replaceParams,
   matchPath,
@@ -126,7 +125,7 @@ const InternalRoute = ({
 function isRoute(
   node: React.ReactNode
 ): node is React.ReactElement<InternalRouteProps> {
-  return isReactElement(node) && node.type === Route
+  return isValidElement(node) && node.type === Route
 }
 
 export interface RouterProps extends RouterContextProviderProps {
@@ -335,7 +334,7 @@ function analyzeRouterTree(
 
           return childWithKey
         }
-      } else if (isReactElement(child) && child.props.children) {
+      } else if (isValidElement(child) && child.props.children) {
         // We have a child element that's not a <Route ...>, and that has
         // children. It's probably a <Set>. Recurse down one level
         const nestedActive = analyzeRouterTreeInternal(child.props.children)

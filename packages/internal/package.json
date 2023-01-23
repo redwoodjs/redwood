@@ -28,11 +28,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/parser": "7.20.7",
-    "@babel/plugin-transform-typescript": "7.20.7",
+    "@babel/parser": "7.20.13",
+    "@babel/plugin-transform-typescript": "7.20.13",
     "@babel/register": "7.18.9",
-    "@babel/runtime-corejs3": "7.20.7",
-    "@babel/traverse": "7.20.12",
+    "@babel/runtime-corejs3": "7.20.13",
+    "@babel/traverse": "7.20.13",
     "@graphql-codegen/add": "3.2.3",
     "@graphql-codegen/cli": "2.16.4",
     "@graphql-codegen/core": "2.6.8",
@@ -48,7 +48,7 @@
     "chalk": "4.1.2",
     "core-js": "3.27.2",
     "deepmerge": "4.2.2",
-    "esbuild": "0.17.3",
+    "esbuild": "0.17.4",
     "fast-glob": "3.2.12",
     "findup-sync": "5.0.0",
     "fs-extra": "11.1.0",
@@ -70,7 +70,7 @@
     "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "11.0.1",
     "@types/rimraf": "3.0.2",
-    "babel-plugin-tester": "10.1.0",
+    "babel-plugin-tester": "11.0.1",
     "graphql-tag": "2.12.6",
     "jest": "29.3.1"
   },
