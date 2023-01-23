@@ -6044,17 +6044,17 @@ __metadata:
   linkType: hard
 
 "@octokit/app@npm:^13.1.1":
-  version: 13.1.1
-  resolution: "@octokit/app@npm:13.1.1"
+  version: 13.1.2
+  resolution: "@octokit/app@npm:13.1.2"
   dependencies:
     "@octokit/auth-app": ^4.0.8
     "@octokit/auth-unauthenticated": ^3.0.0
     "@octokit/core": ^4.0.0
     "@octokit/oauth-app": ^4.0.7
-    "@octokit/plugin-paginate-rest": ^5.0.0
-    "@octokit/types": ^8.0.0
+    "@octokit/plugin-paginate-rest": ^6.0.0
+    "@octokit/types": ^9.0.0
     "@octokit/webhooks": ^10.0.0
-  checksum: 02865fd0f7d8fa5688fd2f5ac53ff3ab0a7ee35de240e0345ab76423c2032d5eff67b2bac6230f77ae765b38cfb7a204a9dc41f51c70841934e1d6dd81abb6b4
+  checksum: 3127e8c95a8bf9ba50e5635dadfc7ae0fb9f0910bf411d2436fff95ffa239dab46331431f32b5a68c023c5c9e3e97738b5abaefc1e3f1f927e7be55f37e7b40c
   languageName: node
   linkType: hard
 
@@ -6242,6 +6242,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/plugin-paginate-rest@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@octokit/plugin-paginate-rest@npm:6.0.0"
+  dependencies:
+    "@octokit/types": ^9.0.0
+  peerDependencies:
+    "@octokit/core": ">=4"
+  checksum: 5dbde9bc44d5b70f977d343af7eb65b1a3c6d7178dc52440e5dc565ba2bb772d84a43a235161ae022b59b6a48b089fab0d3aa58157e0636a12fbcead0dc19d84
+  languageName: node
+  linkType: hard
+
 "@octokit/plugin-request-log@npm:^1.0.4":
   version: 1.0.4
   resolution: "@octokit/plugin-request-log@npm:1.0.4"
@@ -6252,14 +6263,14 @@ __metadata:
   linkType: hard
 
 "@octokit/plugin-rest-endpoint-methods@npm:^6.7.0":
-  version: 6.7.0
-  resolution: "@octokit/plugin-rest-endpoint-methods@npm:6.7.0"
+  version: 6.8.1
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:6.8.1"
   dependencies:
-    "@octokit/types": ^8.0.0
+    "@octokit/types": ^8.1.1
     deprecation: ^2.3.1
   peerDependencies:
     "@octokit/core": ">=3"
-  checksum: 4f6290cb405ad0a8e9f149a259836ef1bd2d82670571a108c613385e4fde1f940c265fa7047441f234f7b659934545a22b9feaba2b0ca5abeeeef94b7fc2859b
+  checksum: 1ab8d3042fac9673f7152a783551c60cdbd3fa1383e6fc026f0ab5aca9105419e1cfa12c6e7955b5904a8c7dc9d2da413b31f3f6c45f6fb048cfb378b4e3dd66
   languageName: node
   linkType: hard
 
@@ -6336,12 +6347,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^8.0.0":
-  version: 8.1.1
-  resolution: "@octokit/types@npm:8.1.1"
+"@octokit/types@npm:^8.0.0, @octokit/types@npm:^8.1.1":
+  version: 8.2.1
+  resolution: "@octokit/types@npm:8.2.1"
   dependencies:
     "@octokit/openapi-types": ^14.0.0
-  checksum: 0b908a047c3fc307e18b0da0a4312c26a31fb67aa30694945e9ecb3e7bb441480096ea984a7acda2d09a680f50dce52739632bd521aa1249c2020def8d389ad3
+  checksum: 85a97bca714b88ea0d34066b4821e48ba4f8dda8f3970f1a00deb02b3e3f1cc315720d25430082dc651c400717510273193ac6af610268488160bb9e6a30bef8
   languageName: node
   linkType: hard
 
@@ -7019,11 +7030,10 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   peerDependencies:
     "@auth0/auth0-spa-js": 1.22.6
@@ -7072,12 +7082,11 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   peerDependencies:
     "@azure/msal-browser": 2.32.2
@@ -7125,11 +7134,10 @@ __metadata:
     "@clerk/clerk-react": 3.5.1
     "@clerk/types": 2.21.0
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   peerDependencies:
     "@clerk/clerk-react": 3.5.1
@@ -7204,11 +7212,10 @@ __metadata:
     "@redwoodjs/auth": 3.2.0
     "@simplewebauthn/browser": 6.2.2
     "@simplewebauthn/typescript-types": 6.2.1
-    "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -7252,12 +7259,11 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     firebase: 9.16.0
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   peerDependencies:
     firebase: 9.16.0
@@ -7304,12 +7310,11 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   peerDependencies:
     netlify-identity-widget: 1.9.2
@@ -7356,11 +7361,10 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@supabase/supabase-js": 1.35.7
-    "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   peerDependencies:
     "@supabase/supabase-js": 1.35.7
@@ -7409,11 +7413,10 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/auth": 3.2.0
-    "@testing-library/react-hooks": 8.0.1
-    "@types/react": 17.0.53
+    "@types/react": 18.0.27
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   peerDependencies:
     supertokens-auth-react: 0.30.2
@@ -7428,12 +7431,11 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 12.1.5
-    "@testing-library/react-hooks": 8.0.1
+    "@testing-library/react": 13.4.0
     core-js: 3.27.2
     jest: 29.3.1
     msw: 0.49.3
-    react: 17.0.2
+    react: 18.2.0
     typescript: 4.7.4
   languageName: unknown
   linkType: soft
@@ -7664,24 +7666,24 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.13
     "@testing-library/dom": 8.20.0
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 12.1.5
+    "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 17.0.53
-    "@types/react-dom": 17.0.18
+    "@types/react": 18.0.27
+    "@types/react-dom": 18.0.10
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.27.2
     graphql: 16.6.0
     jest: 29.3.1
     nodemon: 2.0.20
     pascalcase: 1.0.0
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
     react-hook-form: 7.42.1
     typescript: 4.7.4
   peerDependencies:
     graphql: 16.6.0
-    react: 17.0.2
+    react: 18.2.0
   languageName: unknown
   linkType: soft
 
@@ -7799,8 +7801,8 @@ __metadata:
     mime-types: 2.1.35
     typescript: 4.7.4
   peerDependencies:
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
   languageName: unknown
   linkType: soft
 
@@ -7828,16 +7830,16 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.13
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 3.2.0
-    "@types/react": 17.0.53
-    "@types/react-dom": 17.0.18
+    "@types/react": 18.0.27
+    "@types/react-dom": 18.0.10
     core-js: 3.27.2
     jest: 29.3.1
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
     typescript: 4.7.4
   peerDependencies:
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
   languageName: unknown
   linkType: soft
 
@@ -7922,15 +7924,14 @@ __metadata:
     "@storybook/manager-webpack5": 6.5.15
     "@storybook/react": 6.5.15
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 12.1.5
-    "@testing-library/react-hooks": 8.0.1
+    "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
     "@types/aws-lambda": 8.10.109
     "@types/babel-core": 6.25.7
     "@types/jest": 29.2.6
     "@types/node": 16.18.11
-    "@types/react": 17.0.53
-    "@types/react-dom": 17.0.18
+    "@types/react": 18.0.27
+    "@types/react-dom": 18.0.10
     "@types/webpack": 5.28.0
     babel-jest: 29.3.1
     babel-plugin-inline-react-svg: 2.0.1
@@ -7977,10 +7978,10 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/auth": 3.2.0
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 12.1.5
+    "@testing-library/react": 13.4.0
     "@types/prop-types": 15.7.5
-    "@types/react": 17.0.53
-    "@types/react-dom": 17.0.18
+    "@types/react": 18.0.27
+    "@types/react-dom": 18.0.10
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.27.2
     graphql: 16.6.0
@@ -7988,8 +7989,8 @@ __metadata:
     jest: 29.3.1
     nodemon: 2.0.20
     prop-types: 15.8.1
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
     react-helmet-async: 1.3.0
     react-hot-toast: 2.4.0
     stacktracey: 2.1.8
@@ -7997,8 +7998,8 @@ __metadata:
     typescript: 4.7.4
   peerDependencies:
     prop-types: 15.8.1
-    react: 17.0.2
-    react-dom: 17.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
   bin:
     build-storybook: ./dist/bins/build-storybook.js
     cross-env: ./dist/bins/cross-env.js
@@ -9438,7 +9439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.20.0, @testing-library/dom@npm:^8.0.0, @testing-library/dom@npm:^8.11.1":
+"@testing-library/dom@npm:8.20.0, @testing-library/dom@npm:^8.11.1, @testing-library/dom@npm:^8.5.0":
   version: 8.20.0
   resolution: "@testing-library/dom@npm:8.20.0"
   dependencies:
@@ -9471,39 +9472,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react-hooks@npm:8.0.1":
-  version: 8.0.1
-  resolution: "@testing-library/react-hooks@npm:8.0.1"
+"@testing-library/react@npm:13.4.0":
+  version: 13.4.0
+  resolution: "@testing-library/react@npm:13.4.0"
   dependencies:
     "@babel/runtime": ^7.12.5
-    react-error-boundary: ^3.1.0
+    "@testing-library/dom": ^8.5.0
+    "@types/react-dom": ^18.0.0
   peerDependencies:
-    "@types/react": ^16.9.0 || ^17.0.0
-    react: ^16.9.0 || ^17.0.0
-    react-dom: ^16.9.0 || ^17.0.0
-    react-test-renderer: ^16.9.0 || ^17.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    react-dom:
-      optional: true
-    react-test-renderer:
-      optional: true
-  checksum: 83bef2d4c437b84143213b5275ef00ef14e5bcd344f9ded12b162d253dc3c799138ead4428026b9c725e5a38dbebf611f2898aa43f3e43432bcaccbd7bf413e5
-  languageName: node
-  linkType: hard
-
-"@testing-library/react@npm:12.1.5":
-  version: 12.1.5
-  resolution: "@testing-library/react@npm:12.1.5"
-  dependencies:
-    "@babel/runtime": ^7.12.5
-    "@testing-library/dom": ^8.0.0
-    "@types/react-dom": <18.0.0
-  peerDependencies:
-    react: <18.0.0
-    react-dom: <18.0.0
-  checksum: 3c2433d2fdb6535261f62cd85d79657989cebd96f9072da03c098a1cfa56dec4dfec83d7c2e93633a3ccebdb178ea8578261533d11551600966edab77af00c8b
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 371bf982dd0deb27da004f368b06904353eac0f23f9c08ff0f24443c3f51a6d647009e366034417565d2484c40f1c7eff74413738abf4ec55209da9bd3253b0e
   languageName: node
   linkType: hard
 
@@ -10367,23 +10346,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:17.0.18, @types/react-dom@npm:<18.0.0":
-  version: 17.0.18
-  resolution: "@types/react-dom@npm:17.0.18"
+"@types/react-dom@npm:18.0.10, @types/react-dom@npm:^18.0.0":
+  version: 18.0.10
+  resolution: "@types/react-dom@npm:18.0.10"
   dependencies:
-    "@types/react": ^17
-  checksum: a787471157d66e834ee2afa57d81171c8cae26d3b0def23709da8256433d0b3c5c9f35c03913c9c4137f79acf78af9e2483ee1578197f77298344f33b7186791
+    "@types/react": "*"
+  checksum: a07b900a2d5559830f88b3e525cf279f9f04b4893f4d17e64f5adb08d8abe0e3151e0d3c0ea17d836104ae47594be577529a004265600e4304a43a93b0d5d61e
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.53":
-  version: 17.0.53
-  resolution: "@types/react@npm:17.0.53"
+"@types/react@npm:*, @types/react@npm:18.0.27":
+  version: 18.0.27
+  resolution: "@types/react@npm:18.0.27"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 4ff3fa58ab32deefacdbd0ee002e294548391238ce2dea2cad213e11b4cc61480be48cb2b7ed3c53220ee1a5b9cadf3417a20db817ab2ca4669c9a4a45042b92
+  checksum: 87711931b14cdca07c4149531b4c96e7a56609ed2d010c52bf6bde14b417ac128c326924b14b25667fdaeddacfe98c31fa9625a95af52dae45061df8e30b46a3
   languageName: node
   linkType: hard
 
@@ -26728,7 +26707,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.0.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -27168,16 +27147,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:17.0.2":
-  version: 17.0.2
-  resolution: "react-dom@npm:17.0.2"
+"react-dom@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react-dom@npm:18.2.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    scheduler: ^0.20.2
+    scheduler: ^0.23.0
   peerDependencies:
-    react: 17.0.2
-  checksum: 51abbcb72450fe527ebf978c3bc989ba266630faaa53f47a2fae5392369729e8de62b2e4683598cbe651ea7873cd34ec7d5127e2f50bf4bfe6bd0c3ad9bddcb0
+    react: ^18.2.0
+  checksum: 66dfc5f93e13d0674e78ef41f92ed21dfb80f9c4ac4ac25a4b51046d41d4d2186abc915b897f69d3d0ebbffe6184e7c5876f2af26bfa956f179225d921be713a
   languageName: node
   linkType: hard
 
@@ -27192,17 +27170,6 @@ __metadata:
     react: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1
     react-dom: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1
   checksum: 4ead664b2e26e76af57c9ce2f2a46e79fda1d3a408afb5f34d03357d195b7f41a1a86bb9286b6d6ba76c9c2611fe56bc038665cf27fdb56f571d235ddfce9ffb
-  languageName: node
-  linkType: hard
-
-"react-error-boundary@npm:^3.1.0":
-  version: 3.1.4
-  resolution: "react-error-boundary@npm:3.1.4"
-  dependencies:
-    "@babel/runtime": ^7.12.5
-  peerDependencies:
-    react: ">=16.13.1"
-  checksum: f977ca61823e43de2381d53dd7aa8b4d79ff6a984c9afdc88dc44f9973b99de7fd382d2f0f91f2688e24bb987c0185bf45d0b004f22afaaab0f990a830253bfb
   languageName: node
   linkType: hard
 
@@ -27310,13 +27277,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:17.0.2":
-  version: 17.0.2
-  resolution: "react@npm:17.0.2"
+"react@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react@npm:18.2.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: 07ae8959acf1596f0550685102fd6097d461a54a4fd46a50f88a0cd7daaa97fdd6415de1dcb4bfe0da6aa43221a6746ce380410fa848acc60f8ac41f6649c148
+  checksum: b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
   languageName: node
   linkType: hard
 
@@ -28233,8 +28199,7 @@ __metadata:
     "@playwright/test": 1.29.2
     "@replayio/playwright": 0.3.15
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 12.1.5
-    "@testing-library/react-hooks": 8.0.1
+    "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
     "@tsd/typescript": 4.9.4
     "@types/babel__generator": 7.6.4
@@ -28436,13 +28401,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.20.2":
-  version: 0.20.2
-  resolution: "scheduler@npm:0.20.2"
+"scheduler@npm:^0.23.0":
+  version: 0.23.0
+  resolution: "scheduler@npm:0.23.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b0982e4b0f34f4ffa4f2f486161c0fd9ce9b88680b045dccbf250eb1aa4fd27413570645455187a83535e2370f5c667a251045547765408492bd883cbe95fcdb
+  checksum: b777f7ca0115e6d93e126ac490dbd82642d14983b3079f58f35519d992fa46260be7d6e6cede433a92db70306310c6f5f06e144f0e40c484199e09c1f7be53dd
   languageName: node
   linkType: hard
 
@@ -30876,13 +30840,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>":
+"typescript@npm:^3 || ^4":
+  version: 4.9.4
+  resolution: "typescript@npm:4.9.4"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 5008b97a2a3afdbe57ea70e504ebc8ec98f18d888059dfb7932a41f566a1360a28afc8de2a440fd6143b4014cc6d2616079931dc690c7513c2d21fa53957e0ec
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@4.7.4#~builtin<compat/typescript>":
   version: 4.7.4
   resolution: "typescript@patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 2eb6e31b04fabec84a4d07b5d567deb5ef0a2971d89d9adb16895f148f7d8508adfb12074abc2efc6966805d3664e68ab67925060e5b0ebd8da616db4b151906
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^3 || ^4#~builtin<compat/typescript>":
+  version: 4.9.4
+  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=ad5954"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: a98c97a7abb391a00c51a427b074ab58c02df490358b7db7c3f4cc4fceb6d620457a0ef5d58e1c8db08fcb4ece9f3ba656cbfef3f81c12a383b0b8df8f198c7c
   languageName: node
   linkType: hard
 
