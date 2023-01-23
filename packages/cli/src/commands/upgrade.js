@@ -189,11 +189,9 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
       x.startsWith('@redwoodjs/')
     )) {
       if (verbose || dryRun) {
-        console.log(
-          ` - ${depName}: ${pkg.dependencies[depName]} => ^${version}`
-        )
+        console.log(` - ${depName}: ${pkg.dependencies[depName]} => ${version}`)
       }
-      pkg.dependencies[depName] = `^${version}`
+      pkg.dependencies[depName] = `${version}`
     }
   }
   if (pkg.devDependencies) {
@@ -202,10 +200,10 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
     )) {
       if (verbose || dryRun) {
         console.log(
-          ` - ${depName}: ${pkg.devDependencies[depName]} => ^${version}`
+          ` - ${depName}: ${pkg.devDependencies[depName]} => ${version}`
         )
       }
-      pkg.devDependencies[depName] = `^${version}`
+      pkg.devDependencies[depName] = `${version}`
     }
   }
 

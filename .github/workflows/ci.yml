@@ -3,6 +3,12 @@ name: ⚙️ CI
 on:
   pull_request
 
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
@@ -66,11 +72,10 @@ jobs:
         run: echo "echo "::remove-matcher owner=tsc::""
 
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔨 Build
         run: yarn build
@@ -109,11 +114,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📁 Create a temporary directory
         id: createpath
@@ -185,11 +189,10 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: 0
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🌲 Setup test project
         id: setup_test_project
@@ -213,7 +216,7 @@ jobs:
 
       - name: Run smoke tests on 'rw dev', 'rw serve', 'rw storybook'
         working-directory: ./tasks/smoke-test
-        run: npx playwright test --project 'chromium' --reporter @replayio/playwright/reporter,line
+        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }} --reporter @replayio/playwright/reporter,line
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -306,7 +309,7 @@ jobs:
 
       - name: Upload Replays
         if: always()
-        uses: replayio/action-upload@v0.4.5
+        uses: replayio/action-upload@v0.4.7
         with:
           api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
 
@@ -321,87 +324,3 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Only doc changes"
-
-  cherry-pick:
-    needs: [build-lint-test, tutorial-e2e, smoke-test]
-    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'next' && !contains(join(needs.*.result, ','), 'failure')
-    name: cherry-pick
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: next
-          fetch-depth: 0
-          token: ${{ secrets.JTOAR_TOKEN }}
-
-      - name: 🍒 Cherry pick
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-          git cherry-pick ${{ github.event.pull_request.head.sha }}
-          git push
-
-      - name: 🔑 Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
-
-      - name: Close PR
-        env:
-          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
-        run: |
-          gh api graphql -F id=${{ github.event.pull_request.node_id }} -f query='
-            mutation($id: ID!) {
-              closePullRequest(input: {
-                pullRequestId: $id
-              }) {
-                clientMutationId
-              }
-            }
-          '
-
-  cherry-pick-docs:
-    needs: [build-lint-test-docs, tutorial-e2e-docs, smoke-test-docs]
-    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'next' && !contains(join(needs.*.result, ','), 'failure')
-    name: cherry-pick-docs
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: next
-          fetch-depth: 0
-          token: ${{ secrets.JTOAR_TOKEN }}
-
-      - name: 🍒 Cherry pick
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-          git cherry-pick ${{ github.event.pull_request.head.sha }}
-          git push
-
-      - name: 🔑 Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
-
-      - name: Close PR
-        env:
-          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
-        run: |
-          gh api graphql -F id=${{ github.event.pull_request.node_id }} -f query='
-            mutation($id: ID!) {
-              closePullRequest(input: {
-                pullRequestId: $id
-              }) {
-                clientMutationId
-              }
-            }
-          '
