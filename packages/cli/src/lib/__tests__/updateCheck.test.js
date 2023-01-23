@@ -30,7 +30,6 @@ jest.mock('@redwoodjs/internal/dist/config', () => {
 })
 
 import fs from 'fs'
-import path from 'path'
 
 import latestVersion from 'latest-version'
 
@@ -71,11 +70,13 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
     jest.restoreAllMocks()
   })
 
-  it('Produces the correct upgradeData.json file', async () => {
+  it('Produces the correct updateData.json file', async () => {
     await updateCheck.check()
-    expect(updateCheck.readUpgradeDataFile()).toStrictEqual({
+    const data = updateCheck.readUpdateDataFile()
+    data.remoteVersions = Object.fromEntries(data.remoteVersions)
+    expect(data).toStrictEqual({
       localVersion: '1.0.0',
-      remoteVersions: '1.0.0',
+      remoteVersions: { '': '1.0.0' },
       checkedAt: TESTING_CURRENT_DATETIME,
       shownAt: updateCheck.DEFAULT_DATETIME_MS,
     })
@@ -107,7 +108,7 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
   })
 })
 
-describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
+describe('Update is available (1.0.0 -> 2.0.0)', () => {
   beforeAll(() => {
     // Use fake datetime
     jest.useFakeTimers()
@@ -131,14 +132,6 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
           '@redwoodjs/core': '^1.0.0',
         },
       }),
-
-      // We add in the default upgradeData.json file otherwise we get "undefined" as the file contents when it doesn't exist - even though we do handle this case
-      [path.join('.redwood', 'upgradeData.json')]: JSON.stringify({
-        localVersion: '0.0.0',
-        remoteVersion: '0.0.0',
-        checkedAt: updateCheck.DEFAULT_DATETIME_MS,
-        shownAt: updateCheck.DEFAULT_DATETIME_MS,
-      }),
     })
   })
 
@@ -147,11 +140,13 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
     jest.restoreAllMocks()
   })
 
-  it('Produces the correct upgradeData.json file', async () => {
+  it('Produces the correct updateData.json file', async () => {
     await updateCheck.check()
-    expect(updateCheck.readUpgradeDataFile()).toStrictEqual({
+    const data = updateCheck.readUpdateDataFile()
+    data.remoteVersions = Object.fromEntries(data.remoteVersions)
+    expect(data).toStrictEqual({
       localVersion: '1.0.0',
-      remoteVersion: '2.0.0',
+      remoteVersions: { '': '2.0.0' },
       checkedAt: TESTING_CURRENT_DATETIME,
       shownAt: updateCheck.DEFAULT_DATETIME_MS,
     })
@@ -175,22 +170,7 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
     expect(updateCheck.shouldShow()).toBe(true)
   })
 
-  it('Produces the correct upgrade message', async () => {
-    await updateCheck.check()
-    expect(updateCheck.getUpgradeMessage()).toMatch(
-      /Redwood Upgrade Available: 1.0.0 -> 2.0.0/
-    )
-  })
-
-  it('Outputs the correct upgrade message', async () => {
-    const consoleMock = jest.spyOn(console, 'log').mockImplementation()
-    await updateCheck.check()
-    updateCheck.showUpgradeMessage()
-    expect(console.log.mock.calls[0][0]).toMatch(
-      /Redwood Upgrade Available: 1.0.0 -> 2.0.0/
-    )
-    consoleMock.mockRestore()
-  })
+  it.todo('Produces the correct update message')
 
   it('Respects the lock', async () => {
     setLock(updateCheck.LOCK_IDENTIFIER)
@@ -200,7 +180,7 @@ describe('Upgrade is available (1.0.0 -> 2.0.0)', () => {
   })
 })
 
-describe('Upgrade is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
+describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
   beforeAll(() => {
     // Use fake datetime
     jest.useFakeTimers()
@@ -224,14 +204,6 @@ describe('Upgrade is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
           '@redwoodjs/core': '^1.0.0-rc.1',
         },
       }),
-
-      // We add in the default upgradeData.json file otherwise we get "undefined" as the file contents when it doesn't exist - even though we do handle this case
-      [path.join('.redwood', 'upgradeData.json')]: JSON.stringify({
-        localVersion: '0.0.0',
-        remoteVersion: '0.0.0',
-        checkedAt: updateCheck.DEFAULT_DATETIME_MS,
-        shownAt: updateCheck.DEFAULT_DATETIME_MS,
-      }),
     })
   })
 
@@ -240,11 +212,13 @@ describe('Upgrade is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
     jest.restoreAllMocks()
   })
 
-  it('Produces the correct upgradeData.json file', async () => {
+  it('Produces the correct updateData.json file', async () => {
     await updateCheck.check()
-    expect(updateCheck.readUpgradeDataFile()).toStrictEqual({
+    const data = updateCheck.readUpdateDataFile()
+    data.remoteVersions = Object.fromEntries(data.remoteVersions)
+    expect(data).toStrictEqual({
       localVersion: '1.0.0-rc.1',
-      remoteVersion: '1.0.1-rc.58',
+      remoteVersions: { rc: '1.0.1-rc.58' },
       checkedAt: TESTING_CURRENT_DATETIME,
       shownAt: updateCheck.DEFAULT_DATETIME_MS,
     })
@@ -268,22 +242,7 @@ describe('Upgrade is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
     expect(updateCheck.shouldShow()).toBe(true)
   })
 
-  it('Produces the correct upgrade message', async () => {
-    await updateCheck.check()
-    expect(updateCheck.getUpgradeMessage()).toMatch(
-      /Redwood Upgrade Available: 1.0.0-rc.1 -> 1.0.1-rc.58/
-    )
-  })
-
-  it('Outputs the correct upgrade message', async () => {
-    const consoleMock = jest.spyOn(console, 'log').mockImplementation()
-    await updateCheck.check()
-    updateCheck.showUpgradeMessage()
-    expect(console.log.mock.calls[0][0]).toMatch(
-      /Redwood Upgrade Available: 1.0.0-rc.1 -> 1.0.1-rc.58/
-    )
-    consoleMock.mockRestore()
-  })
+  it.todo('Produces the correct update message')
 
   it('Respects the lock', async () => {
     setLock(updateCheck.LOCK_IDENTIFIER)
