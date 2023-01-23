@@ -711,7 +711,7 @@ describe('Custom auth provider', () => {
       </AuthProvider>
     )
 
-    await waitFor(() => expect(mockedForgotPassword.mock.calls.length).toBe(1))
+    await waitFor(() => expect(mockedForgotPassword).toBeCalledWith('username'))
   })
 
   test('proxies resetPassword() calls to client', async () => {
