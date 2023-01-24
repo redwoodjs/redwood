@@ -3,8 +3,7 @@
   "workspaces": {
     "packages": [
       "api",
-      "web",
-      "packages/*"
+      "web"
     ]
   },
   "devDependencies": {
