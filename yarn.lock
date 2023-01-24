@@ -24616,19 +24616,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.13":
-  version: 2.0.13
-  resolution: "octokit@npm:2.0.13"
+"octokit@npm:2.0.14":
+  version: 2.0.14
+  resolution: "octokit@npm:2.0.14"
   dependencies:
     "@octokit/app": ^13.1.1
     "@octokit/core": ^4.0.4
     "@octokit/oauth-app": ^4.0.6
-    "@octokit/plugin-paginate-rest": ^5.0.0
+    "@octokit/plugin-paginate-rest": ^6.0.0
     "@octokit/plugin-rest-endpoint-methods": ^7.0.0
     "@octokit/plugin-retry": ^4.0.3
     "@octokit/plugin-throttling": ^5.0.0
     "@octokit/types": ^9.0.0
-  checksum: 00f9e135c37ebcb85cab1ce4a7abfc0329303424fcc24b3c1b37e8257e4cb391557bfd042bb506315cfbf59cbc0f30aaf55ac55ab620b5c09fa942b53cecce1f
+  checksum: 97cafa7c50821b0b52ec64218538678a19254182bd9d64f24e1b0ee8f9d196e748f9aa857fa8eedc74ccf5666793a5df41e9e8a3801993a75aa8dfc96543d88e
   languageName: node
   linkType: hard
 
@@ -27915,7 +27915,7 @@ __metadata:
     nodemon: 2.0.20
     npm-packlist: 7.0.4
     nx: 15.5.3
-    octokit: 2.0.13
+    octokit: 2.0.14
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 3.0.2
