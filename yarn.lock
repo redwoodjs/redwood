@@ -7753,7 +7753,7 @@ __metadata:
     "@types/rimraf": 3.0.2
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-polyfill-corejs3: 0.6.0
-    babel-plugin-tester: 11.0.1
+    babel-plugin-tester: 11.0.2
     chalk: 4.1.2
     core-js: 3.27.2
     deepmerge: 4.2.2
@@ -7793,7 +7793,7 @@ __metadata:
     "@types/mime-types": 2.1.1
     "@whatwg-node/fetch": 0.6.2
     babel-plugin-ignore-html-and-css-imports: 0.1.0
-    babel-plugin-tester: 11.0.1
+    babel-plugin-tester: 11.0.2
     cheerio: 1.0.0-rc.12
     core-js: 3.27.2
     graphql: 16.6.0
@@ -12686,17 +12686,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-tester@npm:11.0.1":
-  version: 11.0.1
-  resolution: "babel-plugin-tester@npm:11.0.1"
+"babel-plugin-tester@npm:11.0.2":
+  version: 11.0.2
+  resolution: "babel-plugin-tester@npm:11.0.2"
   dependencies:
+    core-js: ^3.27.2
     debug: ^4.3.4
     lodash.mergewith: ^4.6.2
     prettier: ^2.8.3
     strip-indent: ^3.0.0
   peerDependencies:
     "@babel/core": ">=7.11.6"
-  checksum: 3be22eb31f991019fc25a22669ca5ea7e4e5b7f4ec2737e2e29b32d118b2812bd6d592a4f6d10aeb134286110936082e2e87f519e5579f473beb184f2c38583c
+  checksum: c2b7d26ae7a99c558f4286ac2abcc03a35c3f2ae14cf93deb418df451735d7569a4ca5eecfe7734eff5e073b9d634b8db740ceebba1e483f7cc4b23381c2f46a
   languageName: node
   linkType: hard
 
@@ -14814,7 +14815,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.27.2, core-js@npm:^3.0.4, core-js@npm:^3.25.4, core-js@npm:^3.26.0, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
+"core-js@npm:3.27.2, core-js@npm:^3.0.4, core-js@npm:^3.25.4, core-js@npm:^3.26.0, core-js@npm:^3.27.2, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.27.2
   resolution: "core-js@npm:3.27.2"
   checksum: dd0041b8bea1033935bb055e15ce81c09eed7f2548485783993bf93923d4e9908b70cdbccac03f9bf6393497eca1d46b476e3eef773fe2ce7d957d1e552ebdbc
