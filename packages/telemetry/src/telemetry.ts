@@ -1,23 +1,42 @@
 import { spawn } from 'child_process'
+import type { SpawnOptions } from 'child_process'
 import os from 'os'
 import path from 'path'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const spawnProcess = (...args: Array<string>) => {
+  // "os.type()" returns 'Windows_NT' on Windows. See https://nodejs.org/docs/latest-v12.x/api/os.html#os_os_type.
+  const execPath =
+    os.type() === 'Windows_NT' ? `"${process.execPath}"` : process.execPath
+  const spawnOptions: Partial<SpawnOptions> =
+    os.type() === 'Windows_NT'
+      ? {
+          stdio: process.env.REDWOOD_VERBOSE_TELEMETRY
+            ? ['ignore', 'inherit', 'inherit']
+            : 'ignore',
+          // The following options run the process in the background without a console window, even though they don't look like they would.
+          // See https://github.com/nodejs/node/issues/21825#issuecomment-503766781 for information
+          detached: false,
+          windowsHide: false,
+          shell: true,
+        }
+      : {
+          stdio: process.env.REDWOOD_VERBOSE_TELEMETRY
+            ? ['ignore', 'inherit', 'inherit']
+            : 'ignore',
+          detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
+          windowsHide: true,
+        }
   spawn(
-    process.execPath,
+    execPath,
     [
       path.join(__dirname, 'scripts', 'invoke.js'),
       ...args,
       '--root',
       getPaths().base,
     ],
-    {
-      detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
-      stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',
-      windowsHide: true,
-    }
+    spawnOptions
   ).unref()
 }
 
@@ -47,14 +66,8 @@ export const timedTelemetry = async (
   return result
 }
 
-// Returns 'Windows_NT' on Windows.
-// See https://nodejs.org/docs/latest-v12.x/api/os.html#os_os_type.
-const isWindows = os.type() === 'Windows_NT'
-
 export const errorTelemetry = async (argv: Array<string>, error: any) => {
-  // FIXME: on Windows, cmd opens and closes a few times.
-  // See https://github.com/redwoodjs/redwood/issues/5728.
-  if (isWindows || process.env.REDWOOD_DISABLE_TELEMETRY) {
+  if (process.env.REDWOOD_DISABLE_TELEMETRY) {
     return
   }
 
@@ -63,9 +76,7 @@ export const errorTelemetry = async (argv: Array<string>, error: any) => {
 
 // used as yargs middleware when any command is invoked
 export const telemetryMiddleware = async () => {
-  // FIXME: on Windows, cmd opens and closes a few times.
-  // See https://github.com/redwoodjs/redwood/issues/5728.
-  if (isWindows || process.env.REDWOOD_DISABLE_TELEMETRY) {
+  if (process.env.REDWOOD_DISABLE_TELEMETRY) {
     return
   }
 
