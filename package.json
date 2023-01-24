@@ -90,7 +90,7 @@
     "node-notifier": "10.0.1",
     "nodemon": "2.0.20",
     "npm-packlist": "7.0.4",
-    "nx": "15.5.3",
+    "nx": "15.6.0",
     "octokit": "2.0.14",
     "ora": "5.4.1",
     "prompts": "2.4.2",
