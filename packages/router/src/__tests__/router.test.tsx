@@ -206,7 +206,7 @@ describe('slow imports', () => {
   }) => (
     <Router
       useAuth={mockUseAuth({ isAuthenticated: authenticated, hasRole })}
-      pageLoadingDelay={0}
+      pageLoadingDelay={200}
     >
       <Route
         path="/"
