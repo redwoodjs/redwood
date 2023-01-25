@@ -3,7 +3,7 @@ import yargs from 'yargs'
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 export const command = 'supertokens'
-export const description = 'Set up an auth configuration for SuperTokens'
+export const description = 'Set up auth for for SuperTokens'
 
 export async function builder(yargs: yargs.Argv) {
   return standardAuthBuilder(yargs)
