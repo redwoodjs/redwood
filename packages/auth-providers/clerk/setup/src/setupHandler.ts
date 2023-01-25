@@ -16,7 +16,7 @@ export const handler = async ({ force: forceArg }: Args) => {
     authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-clerk-api'`,
     provider: 'clerk',
     webPackages: [
-      '@clerk/clerk-react@3.5.1',
+      '@clerk/clerk-react@^4',
       `@redwoodjs/auth-clerk-web@${version}`,
     ],
     apiPackages: [`@redwoodjs/auth-clerk-api@${version}`],
