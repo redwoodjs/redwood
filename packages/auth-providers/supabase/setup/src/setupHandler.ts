@@ -29,7 +29,7 @@ export const handler = async ({ force: forceArg }: Args) => {
       '```',
       '',
       "You can find their values on your Supabase app's dashboard.",
-      'Be sure to include them the `includeEnvironmentVariables` array in redwood.toml:',
+      'Be sure to include them in the `includeEnvironmentVariables` array in redwood.toml:',
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
