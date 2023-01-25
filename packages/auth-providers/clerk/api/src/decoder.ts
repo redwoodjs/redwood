@@ -10,6 +10,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   try {
     const issuer = (iss: string) =>
       iss.startsWith('https://clerk.') || iss.includes('.clerk.accounts')
+
     const jwtPayload = await verifyToken(token, {
       issuer,
       apiUrl: process.env.CLERK_API_URL || 'https://api.clerk.dev',
