@@ -26,6 +26,7 @@ export async function handler({ force: forceArg }: Args) {
       '',
       '```bash title=".env"',
       'AZURE_ACTIVE_DIRECTORY_CLIENT_ID="..."',
+      `# Where \`tenantId\` is your app's "Directory (tenant) ID"`,
       'AZURE_ACTIVE_DIRECTORY_AUTHORITY="https://login.microsoftonline.com/${tenantId}}"',
       'AZURE_ACTIVE_DIRECTORY_REDIRECT_URI="http://localhost:8910"',
       'AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI="http://localhost:8910/login"',
