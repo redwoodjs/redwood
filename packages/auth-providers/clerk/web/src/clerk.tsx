@@ -25,6 +25,10 @@ export function createAuth(customProviderHooks?: {
 function createAuthImplementation() {
   return {
     type: 'clerk',
+    // Using a getter here to make sure we're always returning a fresh value
+    // and not creating a closure around an old (probably `undefined`) value
+    // for Clerk that'll we always return, even when Clerk on the window object
+    // eventually refreshes
     get client(): Clerk | undefined {
       return (window as any).Clerk
     },
