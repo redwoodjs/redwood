@@ -23,7 +23,7 @@ export async function handler({ force: forceArg }: Args) {
     notes: [
       'Done! But you have a little more work to do.',
       "You'll have to write the actual implementation yourself.",
-      `Take a look in ${authFilename}, and for a full walk through`,
+      `Take a look in ${authFilename}, and for a full walkthrough`,
       'see https://redwoodjs.com/docs/auth/custom.',
     ],
   })
