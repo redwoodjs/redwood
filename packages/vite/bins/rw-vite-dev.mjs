@@ -18,6 +18,13 @@ const startDevServer = async () => {
 
   await devServer.listen()
 
+  process.stdin.on('data', (data) => {
+    const str = data.toString().trim().toLowerCase()
+    if (str === 'rs') {
+      devServer.restart(true)
+    }
+  })
+
   devServer.printUrls()
 }
 

@@ -182,6 +182,7 @@ export const handler = async ({
     {
       prefix: '{name} |',
       timestampFormat: 'HH:mm:ss',
+      handleInput: true,
     }
   )
   result.catch((e) => {
