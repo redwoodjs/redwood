@@ -6852,23 +6852,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/bloom@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@redis/bloom@npm:1.1.0"
+"@redis/bloom@npm:1.2.0":
+  version: 1.2.0
+  resolution: "@redis/bloom@npm:1.2.0"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: 4d9a2eb060aa2a64afbf2bd055d5b75d2388d70244f749c13a25d8744dd89d434e6d0ebe1df710b4e2cbb6dc8b47cfcc43d8aa2715556b1ed2f9ba3082bcfb97
+  checksum: 7dde8e67188164e96226c8a5c78ebd2801f1662947371e78fb95fb180c1e9ddff8d237012eb5e9182775be61cb546f67f759927cdaee0d178d863ee290e1fb27
   languageName: node
   linkType: hard
 
-"@redis/client@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@redis/client@npm:1.4.2"
+"@redis/client@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@redis/client@npm:1.5.0"
   dependencies:
-    cluster-key-slot: 1.1.1
+    cluster-key-slot: 1.1.2
     generic-pool: 3.9.0
     yallist: 4.0.0
-  checksum: 99552f2e1c95a0a9e642e31852174c679525665f401bbd373d5e4c904feca59139381250cea8b6108f1d19fc6efcfe0022925e8a71fc9e6756df75c7077d2933
+  checksum: 221c6680456e1e3735e08a3f83fa7a9a3e51f558ad238a60eabde0e041dcaa448eca77bcd2210c82a0ca79840519f23748c19000ecefacad99fd198a683dbfb6
   languageName: node
   linkType: hard
 
@@ -6890,12 +6890,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/search@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@redis/search@npm:1.1.0"
+"@redis/search@npm:1.1.1":
+  version: 1.1.1
+  resolution: "@redis/search@npm:1.1.1"
   peerDependencies:
     "@redis/client": ^1.0.0
-  checksum: ba577f335a9235f5e3a4663fc240a44ea6ce52d80c4018a05cbc290b3f042ebaba7874146400b5bf7e5c98724d28f6c555867fd292b9fa28542609ba67d6a734
+  checksum: 1bbdd7ea738c68e7541bf437bb0b842cbe4fabf89611bcebfe393ef3fd93926ef747a8493aeb554488d1d9d61ade2650b90976120445f47838766efc87f9bde3
   languageName: node
   linkType: hard
 
@@ -6968,14 +6968,14 @@ __metadata:
     memjs: 1.3.0
     pascalcase: 1.0.0
     pino: 8.8.0
-    redis: 4.5.1
+    redis: 4.6.0
     split2: 4.1.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
   peerDependencies:
     memjs: 1.3.0
-    redis: 4.5.1
+    redis: 4.6.0
   peerDependenciesMeta:
     memjs:
       optional: true
@@ -7533,7 +7533,7 @@ __metadata:
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.2.6
+    "@types/jest": 29.4.0
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.20
@@ -7928,7 +7928,7 @@ __metadata:
     "@testing-library/user-event": 14.4.3
     "@types/aws-lambda": 8.10.109
     "@types/babel-core": 6.25.7
-    "@types/jest": 29.2.6
+    "@types/jest": 29.4.0
     "@types/node": 16.18.11
     "@types/react": 18.0.27
     "@types/react-dom": 18.0.10
@@ -9947,13 +9947,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.2.6":
-  version: 29.2.6
-  resolution: "@types/jest@npm:29.2.6"
+"@types/jest@npm:*, @types/jest@npm:29.4.0":
+  version: 29.4.0
+  resolution: "@types/jest@npm:29.4.0"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: f52c3824c972902e25ed1b3d05086260ef088828168b60bab427dcffc83ddbc95fec82000eecbdae26a0c05da3b65073b88553ce328e71a2ffbaa5e7fd560548
+  checksum: db1c148e8acf30247e39c6d7db9dadb7dad15f71f22f41cbee5f8037f939b090839e45e5ca506167db3b8a8dd9c850f788d9b41ec8082bc0036cce65fd6c2ff7
   languageName: node
   linkType: hard
 
@@ -14164,10 +14164,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cluster-key-slot@npm:1.1.1":
-  version: 1.1.1
-  resolution: "cluster-key-slot@npm:1.1.1"
-  checksum: 079b1ae86b20e2d53308a877b08de5e830722a45c07810569d0dab4955bed569da33ac9f79998289d014adf02cca7223a0647cb0ee6548a12ab3c4f9beac1377
+"cluster-key-slot@npm:1.1.2":
+  version: 1.1.2
+  resolution: "cluster-key-slot@npm:1.1.2"
+  checksum: d7d39ca28a8786e9e801eeb8c770e3c3236a566625d7299a47bb71113fb2298ce1039596acb82590e598c52dbc9b1f088c8f587803e697cb58e1867a95ff94d3
   languageName: node
   linkType: hard
 
@@ -27592,17 +27592,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redis@npm:4.5.1":
-  version: 4.5.1
-  resolution: "redis@npm:4.5.1"
+"redis@npm:4.6.0":
+  version: 4.6.0
+  resolution: "redis@npm:4.6.0"
   dependencies:
-    "@redis/bloom": 1.1.0
-    "@redis/client": 1.4.2
+    "@redis/bloom": 1.2.0
+    "@redis/client": 1.5.0
     "@redis/graph": 1.1.0
     "@redis/json": 1.0.4
-    "@redis/search": 1.1.0
+    "@redis/search": 1.1.1
     "@redis/time-series": 1.0.4
-  checksum: ef840ab183e00b9632960797ed90da57551120eb43e41ee2a18e2ebb3e59c222f7f9bc4e1e16d8e3f646a176a4ad13a19f41f03746cdacdd83e31c14609c6b37
+  checksum: df95b2c89cf137bc93ab0235bea3dc62483715056bc55ab1fae6681edf69106d3d372612dc2b84fb94c182d24d2ffd1691c7953f11dbd4edc66f5f4349e029d3
   languageName: node
   linkType: hard
 
@@ -28206,7 +28206,7 @@ __metadata:
     "@tsd/typescript": 4.9.4
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.2.6
+    "@types/jest": 29.4.0
     "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
