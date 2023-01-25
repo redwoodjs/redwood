@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 
-require('./telemetry/index')
-
 import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-import opentelemetry from '@opentelemetry/api'
 import { config } from 'dotenv-defaults'
 import findup from 'findup-sync'
 import { hideBin, Parser } from 'yargs/helpers'
@@ -37,184 +34,153 @@ import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths } from './lib'
 import * as upgradeCheck from './lib/upgradeCheck'
-import { tracerName } from './telemetry/const'
 
-const tracer = opentelemetry.trace.getTracer(tracerName)
-tracer.startActiveSpan('root', (rootSpan) => {
-  // End the root span when the process is ending
-  process.on('beforeExit', () => {
-    if (rootSpan.isRecording()) {
-      rootSpan.end()
+// # Setting the CWD
+//
+// The current working directory can be set via:
+//
+// 1. The `--cwd` option
+// 2. The `RWJS_CWD` env-var
+// 3. By traversing directories upwards for the first `redwood.toml`
+//
+// ## Examples
+//
+// ```
+// yarn rw info --cwd /path/to/project
+// RWJS_CWD=/path/to/project yarn rw info
+//
+// # In this case, `--cwd` wins out over `RWJS_CWD`
+// RWJS_CWD=/path/to/project yarn rw info --cwd /path/to/other/project
+//
+// # Here we traverses upwards for a redwood.toml.
+// cd api
+// yarn rw info
+// ```
+
+let { cwd } = Parser(hideBin(process.argv))
+cwd ??= process.env.RWJS_CWD
+
+try {
+  if (cwd) {
+    // `cwd` was set by the `--cwd` option or the `RWJS_CWD` env var. In this case,
+    // we don't want to find up for a `redwood.toml` file. The `redwood.toml` should just be in that directory.
+    if (!fs.existsSync(path.join(cwd, 'redwood.toml'))) {
+      throw new Error(`Couldn't find a "redwood.toml" file in ${cwd}`)
     }
-  })
-  // # Setting the CWD
-  //
-  // The current working directory can be set via:
-  //
-  // 1. The `--cwd` option
-  // 2. The `RWJS_CWD` env-var
-  // 3. By traversing directories upwards for the first `redwood.toml`
-  //
-  // ## Examples
-  //
-  // ```
-  // yarn rw info --cwd /path/to/project
-  // RWJS_CWD=/path/to/project yarn rw info
-  //
-  // # In this case, `--cwd` wins out over `RWJS_CWD`
-  // RWJS_CWD=/path/to/project yarn rw info --cwd /path/to/other/project
-  //
-  // # Here we traverses upwards for a redwood.toml.
-  // cd api
-  // yarn rw info
-  // ```
+  } else {
+    // `cwd` wasn't set. Odds are they're in a Redwood project,
+    // but they could be in ./api or ./web, so we have to find up to be sure.
 
-  const cwdSpan = tracer.startSpan(
-    'cwd-detection',
-    undefined,
-    opentelemetry.context.active()
-  )
-  let { cwd } = Parser(hideBin(process.argv))
-  cwd ??= process.env.RWJS_CWD
+    const redwoodTOMLPath = findup('redwood.toml', { cwd: process.cwd() })
 
-  try {
-    if (cwd) {
-      // `cwd` was set by the `--cwd` option or the `RWJS_CWD` env var. In this case,
-      // we don't want to find up for a `redwood.toml` file. The `redwood.toml` should just be in that directory.
-      if (!fs.existsSync(path.join(cwd, 'redwood.toml'))) {
-        throw new Error(`Couldn't find a "redwood.toml" file in ${cwd}`)
-      }
-    } else {
-      // `cwd` wasn't set. Odds are they're in a Redwood project,
-      // but they could be in ./api or ./web, so we have to find up to be sure.
-
-      const redwoodTOMLPath = findup('redwood.toml', { cwd: process.cwd() })
-
-      if (!redwoodTOMLPath) {
-        throw new Error(
-          `Couldn't find up a "redwood.toml" file from ${process.cwd()}`
-        )
-      }
-
-      cwd = path.dirname(redwoodTOMLPath)
+    if (!redwoodTOMLPath) {
+      throw new Error(
+        `Couldn't find up a "redwood.toml" file from ${process.cwd()}`
+      )
     }
-  } catch (error) {
-    console.error(error.message)
-    process.exit(1)
+
+    cwd = path.dirname(redwoodTOMLPath)
   }
+} catch (error) {
+  console.error(error.message)
+  process.exit(1)
+}
 
-  process.env.RWJS_CWD = cwd
-  cwdSpan.end()
+process.env.RWJS_CWD = cwd
 
-  // # Load .env, .env.defaults
-  //
-  // This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
-
-  const configSpan = tracer.startSpan(
-    'config-load',
-    undefined,
-    opentelemetry.context.active()
-  )
-  config({
-    path: path.join(getPaths().base, '.env'),
-    defaults: path.join(getPaths().base, '.env.defaults'),
-    multiline: true,
-  })
-  configSpan.end()
-
-  // # Build the CLI and run it
-
-  function upgradeCheckMiddleware(argv) {
-    const updateCheckSpan = tracer.startSpan(
-      'update-check-middleware',
-      undefined,
-      opentelemetry.context.active()
-    )
-    if (upgradeCheck.EXCLUDED_COMMANDS.includes(argv._[0])) {
-      return
-    }
-
-    if (upgradeCheck.shouldShow()) {
-      updateCheckSpan.addEvent('should-show')
-      process.on('exit', () => {
-        upgradeCheck.showUpgradeMessage()
-      })
-    }
-
-    if (upgradeCheck.shouldCheck()) {
-      updateCheckSpan.addEvent('should-check')
-      const stdout = fs.openSync(
-        path.join(getPaths().generated.base, 'upgradeCheckStdout.log'),
-        'w'
-      )
-
-      const stderr = fs.openSync(
-        path.join(getPaths().generated.base, 'upgradeCheckStderr.log'),
-        'w'
-      )
-
-      const child = spawn(
-        'yarn',
-        ['node', path.join(__dirname, 'lib', 'runUpgradeCheck.js')],
-        {
-          detached: true,
-          stdio: ['ignore', stdout, stderr],
-          shell: process.platform === 'win32',
-        }
-      )
-
-      child.unref()
-    }
-    updateCheckSpan.end()
-  }
-
-  yargs(hideBin(process.argv))
-    // Config
-    .scriptName('rw')
-    .middleware(
-      [
-        // We've already handled `cwd` above, but it may still be in `argv`.
-        // We don't need it anymore so let's get rid of it.
-        (argv) => {
-          delete argv.cwd
-        },
-        telemetryMiddleware,
-        upgradeCheck.isEnabled() && upgradeCheckMiddleware,
-      ].filter(Boolean)
-    )
-    .option('cwd', {
-      describe: 'Working directory to use (where `redwood.toml` is located)',
-    })
-    .example(
-      'yarn rw g page home /',
-      "\"Create a page component named 'Home' at path '/'\""
-    )
-    .demandCommand()
-    .strict()
-
-    // Commands
-    .command(buildCommand)
-    .command(checkCommand)
-    .command(consoleCommand)
-    .command(dataMigrateCommand)
-    .command(deployCommand)
-    .command(destroyCommand)
-    .command(devCommand)
-    .command(execCommand)
-    .command(generateCommand)
-    .command(infoCommand)
-    .command(lintCommand)
-    .command(prerenderCommand)
-    .command(prismaCommand)
-    .command(recordCommand)
-    .command(serveCommand)
-    .command(setupCommand)
-    .command(storybookCommand)
-    .command(testCommand)
-    .command(tstojsCommand)
-    .command(typeCheckCommand)
-    .command(upgradeCommand)
-
-    // Run
-    .parse()
+// # Load .env, .env.defaults
+//
+// This should be done as early as possible, and the earliest we can do it is after setting `cwd`.
+config({
+  path: path.join(getPaths().base, '.env'),
+  defaults: path.join(getPaths().base, '.env.defaults'),
+  multiline: true,
 })
+
+// # Build the CLI and run it
+
+function upgradeCheckMiddleware(argv) {
+  if (upgradeCheck.EXCLUDED_COMMANDS.includes(argv._[0])) {
+    return
+  }
+
+  if (upgradeCheck.shouldShow()) {
+    process.on('exit', () => {
+      upgradeCheck.showUpgradeMessage()
+    })
+  }
+
+  if (upgradeCheck.shouldCheck()) {
+    const stdout = fs.openSync(
+      path.join(getPaths().generated.base, 'upgradeCheckStdout.log'),
+      'w'
+    )
+
+    const stderr = fs.openSync(
+      path.join(getPaths().generated.base, 'upgradeCheckStderr.log'),
+      'w'
+    )
+
+    const child = spawn(
+      'yarn',
+      ['node', path.join(__dirname, 'lib', 'runUpgradeCheck.js')],
+      {
+        detached: true,
+        stdio: ['ignore', stdout, stderr],
+        shell: process.platform === 'win32',
+      }
+    )
+
+    child.unref()
+  }
+}
+
+yargs(hideBin(process.argv))
+  // Config
+  .scriptName('rw')
+  .middleware(
+    [
+      // We've already handled `cwd` above, but it may still be in `argv`.
+      // We don't need it anymore so let's get rid of it.
+      (argv) => {
+        delete argv.cwd
+      },
+      telemetryMiddleware,
+      upgradeCheck.isEnabled() && upgradeCheckMiddleware,
+    ].filter(Boolean)
+  )
+  .option('cwd', {
+    describe: 'Working directory to use (where `redwood.toml` is located)',
+  })
+  .example(
+    'yarn rw g page home /',
+    "\"Create a page component named 'Home' at path '/'\""
+  )
+  .demandCommand()
+  .strict()
+
+  // Commands
+  .command(buildCommand)
+  .command(checkCommand)
+  .command(consoleCommand)
+  .command(dataMigrateCommand)
+  .command(deployCommand)
+  .command(destroyCommand)
+  .command(devCommand)
+  .command(execCommand)
+  .command(generateCommand)
+  .command(infoCommand)
+  .command(lintCommand)
+  .command(prerenderCommand)
+  .command(prismaCommand)
+  .command(recordCommand)
+  .command(serveCommand)
+  .command(setupCommand)
+  .command(storybookCommand)
+  .command(testCommand)
+  .command(tstojsCommand)
+  .command(typeCheckCommand)
+  .command(upgradeCommand)
+
+  // Run
+  .parse()
