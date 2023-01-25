@@ -173,7 +173,10 @@ import { name, version } from '../package'
           // - .yarnrc.yml
           // - .yarn
           fs.rmSync(path.join(newAppDir, '.yarnrc.yml'))
-          fs.rmdirSync(path.join(newAppDir, '.yarn'), { recursive: true })
+          fs.rmSync(path.join(newAppDir, '.yarn'), {
+            recursive: true,
+            force: true,
+          })
 
           // rm after `.pnp.*`
           const gitignore = fs.readFileSync(

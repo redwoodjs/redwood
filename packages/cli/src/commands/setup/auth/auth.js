@@ -8,6 +8,17 @@ import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../../lib/'
 
+function redirectCommand(provider) {
+  return [
+    provider,
+    false,
+    () => {},
+    () => {
+      console.log(getRedirectMessage(provider))
+    },
+  ]
+}
+
 export const command = 'auth <provider>'
 
 export const description = 'Generate an auth configuration'
@@ -23,46 +34,11 @@ export async function builder(yargs) {
       )}`
     )
     // Command "redirects" for auth providers we used to support
-    .command(
-      'ethereum',
-      false,
-      () => {},
-      () => {
-        console.log(getRedirectMessage('ethereum'))
-      }
-    )
-    .command(
-      'goTrue',
-      false,
-      () => {},
-      () => {
-        console.log(getRedirectMessage('goTrue'))
-      }
-    )
-    .command(
-      'magicLink',
-      false,
-      () => {},
-      () => {
-        console.log(getRedirectMessage('magicLink'))
-      }
-    )
-    .command(
-      'nhost',
-      false,
-      () => {},
-      () => {
-        console.log(getRedirectMessage('nhost'))
-      }
-    )
-    .command(
-      'okta',
-      false,
-      () => {},
-      () => {
-        console.log(getRedirectMessage('okta'))
-      }
-    )
+    .command(...redirectCommand('ethereum'))
+    .command(...redirectCommand('goTrue'))
+    .command(...redirectCommand('magicLink'))
+    .command(...redirectCommand('nhost'))
+    .command(...redirectCommand('okta'))
     // Providers we support
     .command(
       'auth0',

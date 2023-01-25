@@ -1,16 +1,17 @@
-import ReactDOM from 'react-dom'
+import { hydrateRoot, createRoot } from 'react-dom/client'
 
 import App from '~redwood-app-root'
 /**
  * When `#redwood-app` isn't empty then it's very likely that you're using
  * prerendering. So React attaches event listeners to the existing markup
  * rather than replacing it.
- * https://reactjs.org/docs/react-dom.html#hydrate
+ * https://reactjs.org/docs/react-dom-client.html#hydrateroot
  */
-const rootElement = document.getElementById('redwood-app')
+const redwoodAppElement = document.getElementById('redwood-app')
 
-if (rootElement.children?.length > 0) {
-  ReactDOM.hydrate(<App />, rootElement)
+if (redwoodAppElement.children?.length > 0) {
+  hydrateRoot(redwoodAppElement, <App />)
 } else {
-  ReactDOM.render(<App />, rootElement)
+  const root = createRoot(redwoodAppElement)
+  root.render(<App />)
 }
