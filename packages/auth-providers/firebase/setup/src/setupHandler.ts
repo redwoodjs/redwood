@@ -31,7 +31,7 @@ export async function handler({ force: forceArg }: Args) {
       '```',
       '',
       "You can find their values on your Firebase app's dashboard.",
-      'Be sure to include `FIREBASE_API_KEY` and `FIREBASE_AUTH_DOMAIN` the `includeEnvironmentVariables` array in redwood.toml:',
+      'Be sure to include `FIREBASE_API_KEY` and `FIREBASE_AUTH_DOMAIN` in the `includeEnvironmentVariables` array in redwood.toml:',
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
