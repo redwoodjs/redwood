@@ -1,7 +1,5 @@
 import path from 'path'
 
-import { fetch } from '@whatwg-node/fetch'
-import chalk from 'chalk'
 import execa from 'execa'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
