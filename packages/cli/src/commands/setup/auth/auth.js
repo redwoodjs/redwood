@@ -5,6 +5,8 @@ import chalk from 'chalk'
 import execa from 'execa'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
+import { hideBin, Parser } from 'yargs/helpers'
+// import { default as yargsRaw } from 'yargs/yargs'
 
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
@@ -108,7 +110,7 @@ export async function builder(yargs) {
       'Generate an auth configuration for Auth0',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
-        const handler = await getAuthHandler('@redwoodjs/auth-auth0-setup')
+        const { handler } = await getAuthSetup('@redwoodjs/auth-auth0-setup')
         handler(args)
       }
     )
@@ -117,7 +119,7 @@ export async function builder(yargs) {
       'Generate an auth configuration for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
-        const handler = await getAuthHandler(
+        const { handler } = await getAuthSetup(
           '@redwoodjs/auth-azure-active-directory-setup'
         )
         handler(args)
@@ -128,7 +130,7 @@ export async function builder(yargs) {
       'Generate an auth configuration for Clerk',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
-        const handler = await getAuthHandler('@redwoodjs/auth-clerk-setup')
+        const { handler } = await getAuthSetup('@redwoodjs/auth-clerk-setup')
         handler(args)
       }
     )
@@ -137,7 +139,7 @@ export async function builder(yargs) {
       'Generate a custom auth configuration',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
-        const handler = await getAuthHandler('@redwoodjs/auth-custom-setup')
+        const { handler } = await getAuthSetup('@redwoodjs/auth-custom-setup')
         handler(args)
       }
     )
@@ -153,7 +155,7 @@ export async function builder(yargs) {
         })
       },
       async (args) => {
-        const handler = await getAuthHandler('@redwoodjs/auth-dbauth-setup')
+        const { handler } = await getAuthSetup('@redwoodjs/auth-dbauth-setup')
         handler(args)
       }
     )
@@ -162,7 +164,7 @@ export async function builder(yargs) {
       'Generate an auth configuration for Firebase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
-        const handler = await getAuthHandler('@redwoodjs/auth-firebase-setup')
+        const { handler } = await getAuthSetup('@redwoodjs/auth-firebase-setup')
         handler(args)
       }
     )
@@ -171,7 +173,7 @@ export async function builder(yargs) {
       'Generate an auth configuration for Netlify',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
-        const handler = await getAuthHandler('@redwoodjs/auth-netlify-setup')
+        const { handler } = await getAuthSetup('@redwoodjs/auth-netlify-setup')
         handler(args)
       }
     )
@@ -180,7 +182,7 @@ export async function builder(yargs) {
       'Generate an auth configuration for Supabase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
-        const handler = await getAuthHandler('@redwoodjs/auth-supabase-setup')
+        const { handler } = await getAuthSetup('@redwoodjs/auth-supabase-setup')
         handler(args)
       }
     )
@@ -189,10 +191,63 @@ export async function builder(yargs) {
       'Generate an auth configuration for SuperTokens',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
-        const handler = await getAuthHandler(
+        const { handler } = await getAuthSetup(
           '@redwoodjs/auth-supertokens-setup'
         )
         handler(args)
+      }
+    )
+    .strict(false)
+    .parserConfiguration({ 'unknown-options-as-args': true })
+    .command(
+      '$0 <npm-package>',
+      'Generate an auth configuration for the given provider',
+      () => {},
+      async () => {
+        // Here be dragons...
+        // There's no way for the user to actually end up here, but we need
+        // this command to get the help output we want from yargs
+      }
+    )
+    .command(
+      '$0',
+      false,
+      () => {},
+      async (args) => {
+        // This is a workaround for https://github.com/yargs/yargs/issues/2291
+        if (args._.length <= 2) {
+          let helpCmd = 'yarn rw setup auth --help'
+
+          if (/cli[\/\\]dist[\/\\]index.js/.test(process.argv[1])) {
+            helpCmd = 'yarn dev setup auth --help'
+          }
+
+          console.error(execa.commandSync(helpCmd).stdout)
+          process.exit(1)
+        }
+
+        console.log()
+        console.log('Set up auth using', args._[2])
+        console.log()
+
+        // TODO: Figure out how to use builder
+        const { handler, _builder } = await getAuthSetup(args._[2], {
+          versionStrategy: '',
+        })
+
+        // Maybe we can do something here to also use builder from above
+        // const yargsParsed = yargsRaw(hideBin(process.argv))
+        //   // Config
+        //   .scriptName('rw')
+        //   .command('setup auth <provider>')
+        //   .parse()
+
+        const parsed = {
+          ...args,
+          ...Parser(hideBin(process.argv)),
+        }
+
+        handler(parsed)
       }
     )
 }
@@ -210,7 +265,50 @@ function getRedirectMessage(provider) {
   )}`
 }
 
-async function getAuthHandler(module) {
+const SEMVER_REGEX =
+  /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
+
+async function getAuthSetup(module, { versionStrategy = 'MATCH' } = {}) {
+  if (versionStrategy === 'MATCH') {
+    return getMatchingAuthSetup(module)
+  }
+
+  const splitName = module.split('@')
+  if (splitName.length >= 2 && SEMVER_REGEX.test(splitName.at(-1))) {
+    return getSpecificAuthSetup(module)
+  }
+
+  return getLatestAuthSetup(module)
+}
+
+async function getSpecificAuthSetup(module) {
+  execa.commandAsync(`yarn add -D ${module}`, {
+    stdio: 'inherit',
+    cwd: getPaths().base,
+  })
+
+  return await import(module)
+}
+
+async function getLatestAuthSetup(module) {
+  const { stdout } = execa.commandSync(
+    `yarn npm info ${module} --fields versions --json`
+  )
+
+  const versions = JSON.parse(stdout).versions
+  const latestVersion = versions.at(-1)
+
+  if (!isInstalled(module, latestVersion)) {
+    execa.commandSync(`yarn add -D ${module}@${latestVersion}`, {
+      stdio: 'inherit',
+      cwd: getPaths().base,
+    })
+  }
+
+  return await import(module)
+}
+
+async function getMatchingAuthSetup(module) {
   // Here we're reading this package's (@redwoodjs/cli) package.json.
   // So, in a user's project, `packageJsonPath` will be something like...
   // /Users/bob/tmp/rw-app/node_modules/@redwoodjs/cli/package.json
@@ -243,9 +341,7 @@ async function getAuthHandler(module) {
     })
   }
 
-  const { handler } = await import(module)
-
-  return handler
+  return await import(module)
 }
 
 /**
@@ -254,10 +350,19 @@ async function getAuthHandler(module) {
  * @param {string} module
  * @returns {boolean}
  */
-function isInstalled(module) {
+function isInstalled(module, version) {
   const { dependencies, devDependencies } = fs.readJSONSync(
     path.join(getPaths().base, 'package.json')
   )
+
+  const deps = {
+    ...dependencies,
+    ...devDependencies,
+  }
+
+  if (version) {
+    return deps[module] === version
+  }
 
   return Object.hasOwn(
     {
