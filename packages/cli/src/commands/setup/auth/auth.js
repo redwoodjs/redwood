@@ -62,7 +62,7 @@ export async function builder(yargs) {
     )
     .command(
       'custom',
-      'Generate a custom auth configuration',
+      'Set up a custom auth provider',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-custom-setup')
