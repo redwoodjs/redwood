@@ -32,7 +32,7 @@ export async function handler({ force: forceArg }: Args) {
       '```',
       '',
       "You can find their values on your Auth0 app's dashboard.",
-      'Be sure to include them the `includeEnvironmentVariables` array in redwood.toml:',
+      'Be sure to include them in the `includeEnvironmentVariables` array in redwood.toml:',
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
