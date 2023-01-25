@@ -115,7 +115,8 @@ To setup your App Registration with custom roles and have them exposed via the
 
 ### Login Options
 
-Options in method `logIn(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest) and is a good place to pass in optional [scopes](https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions) to be authorized. By default, MSAL sets `scopes` to [/.default](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope) which is built in for every application that refers to the static list of permissions configured on the application registration. Furthermore, MSAL will add `openid` and `profile` to all requests. In the example below we explicit include `User.Read.All` in the login scope.
+`options` in `logIn(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest) and is a good place to pass in optional [scopes](https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions) to be authorized.
+By default, MSAL sets `scopes` to [/.default](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope) which is built in for every application that refers to the static list of permissions configured on the application registration. Furthermore, MSAL will add `openid` and `profile` to all requests. In the example below we explicit include `User.Read.All` in the login scope.
 
 ```jsx
 await logIn({
@@ -127,20 +128,22 @@ See [loginRedirect](https://azuread.github.io/microsoft-authentication-library-f
 
 ### getToken Options
 
-Options in method `getToken(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest). By default, `getToken` will be called with scope `['openid', 'profile']`. As Azure Active Directory apply [incremental consent](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#dynamic-scopes-and-incremental-consent), we can extend the permissions from the login example by including another scope, for example `Mail.Read`.
+`options` in `getToken(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest).
+By default, `getToken` will be called with scope `['openid', 'profile']`.
+Since Azure Active Directory applies [incremental consent](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#dynamic-scopes-and-incremental-consent), we can extend the permissions from the login example by including another scope, for example `Mail.Read`:
 
-```jsx
+```js
 await getToken({
   scopes: ['Mail.Read'], // becomes ['openid', 'profile', 'User.Read.All', 'Mail.Read']
 })
 ```
 
-See [acquireTokenSilent](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.publicclientapplication.html#acquiretokensilent), [Resources and Scopes](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#resources-and-scopes) or [full class documentation](https://pub.dev/documentation/msal_js/latest/msal_js/PublicClientApplication-class.html#constructors) for more documentation.
+See [acquireTokenSilent](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.publicclientapplication.html#acquiretokensilent), [Resources and Scopes](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#resources-and-scopes) or [full class documentation](https://pub.dev/documentation/msal_js/latest/msal_js/PublicClientApplication-class.html#constructors) for more.
 
 ## Azure AD B2C specific configuration
 
-Using Azure AD B2C requires 2 extra settings. You can design your own auth flow
-with Azure AD B2C using [hosted user flows](https://docs.microsoft.com/en-us/azure/active-directory-b2c/add-sign-up-and-sign-in-policy?pivots=b2c-user-flow).
+Using Azure AD B2C requires two extra settings.
+You can design your own auth flow with Azure AD B2C using [hosted user flows](https://docs.microsoft.com/en-us/azure/active-directory-b2c/add-sign-up-and-sign-in-policy?pivots=b2c-user-flow).
 
 #### Update the .env file:
 
@@ -153,24 +156,22 @@ AZURE_ACTIVE_DIRECTORY_JWT_ISSUER=https://{{your-microsoft-tenant-name}}.b2clogi
 AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://{{your-microsoft-tenant-name}}.b2clogin.com
 ```
 
-Here are some example values
+Here are some example values:
+
 ```bash title="./env.example"
 AZURE_ACTIVE_DIRECTORY_AUTHORITY=https://rwauthtestb2c.b2clogin.com/rwauthtestb2c.onmicrosoft.com/B2C_1_signupsignin1
 AZURE_ACTIVE_DIRECTORY_JWT_ISSUER=https://rwauthtestb2c.b2clogin.com/775527ef-8a37-4307-8b3d-cc311f58d922/v2.0/
 AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://rwauthtestb2c.b2clogin.com
 ```
 
-Don't forget to also add `AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY` to the
-`includeEnvironmentVariables` list in `redwood.toml`.
-(`AZURE_ACTIVE_DIRECTORY_JWT_ISSUER` is only used on the API side and should
-*not* be added to `redwood.toml`)
+And don't forget to add `AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY` to the `includeEnvironmentVariables` list in `redwood.toml`.
+(`AZURE_ACTIVE_DIRECTORY_JWT_ISSUER` is only used on the API side and should *not* be added to `redwood.toml`)
 
-#### Update const activeDirectoryClient instance
+#### Update `activeDirectoryClient` instance
 
-This lets the MSAL web side client know about our new B2C allowed authority
-that we defined in the .env file
+This lets the MSAL web-side client know about our new B2C allowed authority that we defined in the .env file:
 
-```jsx title="./web/auth.{js,ts}
+```jsx title="web/src/auth.{js,ts}"
 const azureActiveDirectoryClient = new PublicClientApplication({
   auth: {
     clientId: process.env.AZURE_ACTIVE_DIRECTORY_CLIENT_ID,
@@ -184,5 +185,4 @@ const azureActiveDirectoryClient = new PublicClientApplication({
 })
 ```
 
-Now you can call the `logIn` and `logOut` functions from `useAuth()`, and
-everything should just work®
+Now you can call the `logIn` and `logOut` functions from `useAuth()`, and everything should just work.
