@@ -6,20 +6,7 @@
 // Usage:
 // `$ yarn create redwood-app ./path/to/new-project`
 
-import { spawn } from 'child_process'
 import path from 'path'
-
-import chalk from 'chalk'
-import checkNodeVersion from 'check-node-version'
-import { prompt } from 'enquirer'
-import execa from 'execa'
-import fs from 'fs-extra'
-import { Listr, figures } from 'listr2'
-import terminalLink from 'terminal-link'
-import { hideBin } from 'yargs/helpers'
-import yargs from 'yargs/yargs'
-
-import { name, version } from '../package'
 
 /**
  * To keep a consistent color/style palette between cli packages, such as
@@ -33,7 +20,31 @@ import { name, version } from '../package'
  * - packages/create-redwood-app/src/create-redwood-app.js (this file)
  *
  */
+import chalk from 'chalk'
+import checkNodeVersion from 'check-node-version'
+import { prompt } from 'enquirer'
+import execa from 'execa'
+import fs from 'fs-extra'
+import { Listr, figures } from 'listr2'
+import terminalLink from 'terminal-link'
+import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs/yargs'
+
+import { name, version } from '../package'
+
+import { startTelemetry, shutdownTelemetry } from './telemetry'
 ;(async () => {
+  //
+
+  // Telemetry
+  if (
+    !process.argv.includes('--no-telemetry') && // Must include '--no-telemetry' exactly because we want to do this check before any yargs. TODO: Communicate this on cmd help
+    !process.env.REDWOOD_DISABLE_TELEMETRY // We should use the same condition as in full projects here too
+  ) {
+    // Setup and start root span
+    await startTelemetry()
+  }
+
   // Styles for terminal
   const style = {
     error: chalk.bold.red,
@@ -68,7 +79,6 @@ import { name, version } from '../package'
     'yarn-install': yarnInstall,
     typescript,
     overwrite,
-    telemetry: telemetry,
     yarn1,
     'git-init': gitInit,
   } = yargs(hideBin(process.argv))
@@ -91,12 +101,6 @@ import { name, version } from '../package'
       default: false,
       type: 'boolean',
       describe: "Create even if target directory isn't empty",
-    })
-    .option('telemetry', {
-      default: true,
-      type: 'boolean',
-      describe:
-        'Enables sending telemetry events for this create command and all Redwood CLI commands https://telemetry.redwoodjs.com',
     })
     .option('yarn1', {
       default: false,
@@ -130,6 +134,9 @@ import { name, version } from '../package'
         'my-redwood-app'
       )}`
     )
+    await shutdownTelemetry({
+      exception: new Error('no target directory specified'),
+    })
     process.exit(1)
   }
 
@@ -152,7 +159,9 @@ import { name, version } from '../package'
                   `\n'${newAppDir}' already exists and is not empty\n`
                 )
               )
-              process.exit(1)
+              shutdownTelemetry({
+                exception: new Error('target directory not empty'),
+              }).finally(() => process.exit(1))
             }
           } else {
             fs.ensureDirSync(path.dirname(newAppDir))
@@ -219,42 +228,6 @@ import { name, version } from '../package'
       },
     ]
   }
-
-  const sendTelemetry = ({ error } = {}) => {
-    // send 'create' telemetry event, or disable for new app
-    if (telemetry) {
-      const command = process.argv
-      // make command show 'create redwood-app [path] --flags'
-      command.splice(2, 0, 'create', 'redwood-app')
-      command[4] = '[path]'
-
-      let args = [
-        '--root',
-        newAppDir,
-        '--argv',
-        JSON.stringify(command),
-        '--duration',
-        Date.now() - startTime,
-        '--rwVersion',
-        version,
-      ]
-      if (error) {
-        args = [...args, '--error', `"${error}"`]
-      }
-
-      spawn(process.execPath, [path.join(__dirname, 'telemetry.js'), ...args], {
-        detached: process.env.REDWOOD_VERBOSE_TELEMETRY ? false : true,
-        stdio: process.env.REDWOOD_VERBOSE_TELEMETRY ? 'inherit' : 'ignore',
-      }).unref()
-    } else {
-      fs.appendFileSync(
-        path.join(newAppDir, '.env'),
-        'REDWOOD_DISABLE_TELEMETRY=1\n'
-      )
-    }
-  }
-
-  const startTime = Date.now()
 
   // Engine check Listr. Separate Listr to avoid https://github.com/cenk1cenk2/listr2/issues/296
   // Boolean flag
@@ -327,10 +300,18 @@ import { name, version } from '../package'
       message: 'How would you like to proceed?',
       choices: ['Override error and continue install', 'Quit install'],
       initial: 0,
-      onCancel: () => process.exit(1),
+      onCancel: async () => {
+        await shutdownTelemetry({
+          exception: new Error('cancelled engine override'),
+        })
+        process.exit(1)
+      },
     })
     // Quit the install if user selects this option, otherwise it will proceed
     if (response['override-engine-error'] === 'Quit install') {
+      await shutdownTelemetry({
+        exception: new Error('quit install at engine override'),
+      })
       process.exit(1)
     }
   }
@@ -430,8 +411,6 @@ import { name, version } from '../package'
   )
     .run()
     .then(() => {
-      sendTelemetry()
-
       // zOMG the semicolon below is a real Prettier thing. What??
       // https://prettier.io/docs/en/rationale.html#semicolons
       ;[
@@ -482,11 +461,13 @@ import { name, version } from '../package'
         `${style.redwood(` > ${style.green(`yarn rw dev`)}`)}`,
         '',
       ].map((item) => console.log(item))
+      shutdownTelemetry().then(() => {
+        process.exit(0)
+      })
     })
     .catch((e) => {
       console.log()
       console.log(e)
-      sendTelemetry({ error: e.message })
 
       if (fs.existsSync(newAppDir)) {
         console.log(
@@ -497,6 +478,6 @@ import { name, version } from '../package'
             )
         )
       }
-      process.exit(1)
+      shutdownTelemetry({ exception: e }).finally(() => process.exit(1))
     })
 })()
