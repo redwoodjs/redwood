@@ -20,7 +20,7 @@ const startDevServer = async () => {
 
   process.stdin.on('data', (data) => {
     const str = data.toString().trim().toLowerCase()
-    if (str === 'rs') {
+    if (str === 'rs' || str === 'restart') {
       devServer.restart(true)
     }
   })
