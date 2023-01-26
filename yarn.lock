@@ -6729,14 +6729,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/client@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@redis/client@npm:1.5.0"
+"@redis/client@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@redis/client@npm:1.5.2"
   dependencies:
     cluster-key-slot: 1.1.2
     generic-pool: 3.9.0
     yallist: 4.0.0
-  checksum: 221c6680456e1e3735e08a3f83fa7a9a3e51f558ad238a60eabde0e041dcaa448eca77bcd2210c82a0ca79840519f23748c19000ecefacad99fd198a683dbfb6
+  checksum: f9cf44d8e4f8c03e07256636acfdd5931c1b26bee50f140903a8904e52173c21114acbf0616cb3b17930c0c06313501c8fc3bcc6ad741759266f5794fcf64b09
   languageName: node
   linkType: hard
 
@@ -6836,14 +6836,14 @@ __metadata:
     memjs: 1.3.0
     pascalcase: 1.0.0
     pino: 8.8.0
-    redis: 4.6.0
+    redis: 4.6.1
     split2: 4.1.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
   peerDependencies:
     memjs: 1.3.0
-    redis: 4.6.0
+    redis: 4.6.1
   peerDependenciesMeta:
     memjs:
       optional: true
@@ -27309,17 +27309,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redis@npm:4.6.0":
-  version: 4.6.0
-  resolution: "redis@npm:4.6.0"
+"redis@npm:4.6.1":
+  version: 4.6.1
+  resolution: "redis@npm:4.6.1"
   dependencies:
     "@redis/bloom": 1.2.0
-    "@redis/client": 1.5.0
+    "@redis/client": 1.5.2
     "@redis/graph": 1.1.0
     "@redis/json": 1.0.4
     "@redis/search": 1.1.1
     "@redis/time-series": 1.0.4
-  checksum: df95b2c89cf137bc93ab0235bea3dc62483715056bc55ab1fae6681edf69106d3d372612dc2b84fb94c182d24d2ffd1691c7953f11dbd4edc66f5f4349e029d3
+  checksum: 833c8ff4900ae079cd9b9891d067b4f01d86998eb24e96ded76d5467199d6752984911a533512a1e4d5a49ddf8a4a19775e62697de031cea308fb24550815798
   languageName: node
   linkType: hard
 
