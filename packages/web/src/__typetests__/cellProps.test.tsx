@@ -2,9 +2,9 @@
 import React from 'react'
 
 import gql from 'graphql-tag'
-import { expectAssignable, expectType } from 'tsd-lite'
+import { expectAssignable } from 'tsd-lite'
 
-import type { CellProps, CellSuccessProps } from '../components/createCell'
+import type { CellProps, CellSuccessProps } from '@redwoodjs/web'
 
 type ExampleQueryVariables = {
   category: string
@@ -25,6 +25,7 @@ type QueryResult = {
   recipes: Array<Recipe>
 }
 
+// This Cell takes a customProp i.e. one not provided by the Cell's query
 interface SuccessProps extends CellSuccessProps<QueryResult> {
   customProp: number
 }
@@ -44,7 +45,11 @@ const ExampleCell = {
   Success: (props: SuccessProps) => {
     return (
       <>
-        Example Component {props.recipes} {props.otherProp}
+        <h1>Example Component</h1>
+        <ul>
+          <li>Recipe prop {props.recipes.length} </li>
+          <li>Custom prop {props.customProp}</li>
+        </ul>
       </>
     )
   },
@@ -62,6 +67,8 @@ describe('CellProps mapper type', () => {
   test('Inputs expect props outside cell', () => {
     expectAssignable<CellInputs>({
       customProp: 55,
+      category: 'Dinner',
+      saved: true,
     })
   })
 })
