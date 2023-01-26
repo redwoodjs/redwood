@@ -50,7 +50,7 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "@babel/runtime-corejs3": "7.20.13",
-    "@npmcli/arborist": "6.1.6",
+    "@npmcli/arborist": "6.2.0",
     "@nrwl/nx-cloud": "15.0.2",
     "@playwright/test": "1.30.0",
     "@replayio/playwright": "0.3.16",
