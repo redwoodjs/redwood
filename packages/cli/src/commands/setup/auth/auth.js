@@ -176,9 +176,12 @@ export async function builder(yargs) {
         //   .command('setup auth <provider>')
         //   .parse()
 
+        const parsedArgv = Parser(hideBin(process.argv))
+
         const parsed = {
           ...args,
-          ...Parser(hideBin(process.argv)),
+          ...parsedArgv,
+          force: parsedArgv.force || parsedArgv.f,
         }
 
         handler(parsed)
