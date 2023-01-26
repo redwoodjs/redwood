@@ -30,7 +30,7 @@ interface SuccessProps extends CellSuccessProps<QueryResult> {
   customProp: number
 }
 
-const ExampleCell = {
+const recipeCell = {
   QUERY: gql`
     query ListRecipes {
       recipes {
@@ -53,22 +53,63 @@ const ExampleCell = {
       </>
     )
   },
-  beforeQuery: () => {},
 }
 
-type CellInputs = CellProps<
-  typeof ExampleCell.Success,
-  QueryResult,
-  typeof ExampleCell,
-  ExampleQueryVariables
->
-
 describe('CellProps mapper type', () => {
-  test('Inputs expect props outside cell', () => {
+  test('Inputs expect props outside cell, no beforeQuery', () => {
+    type CellInputs = CellProps<
+      typeof recipeCell.Success,
+      QueryResult,
+      typeof recipeCell,
+      ExampleQueryVariables
+    >
+
     expectAssignable<CellInputs>({
       customProp: 55,
       category: 'Dinner',
       saved: true,
+    })
+  })
+
+  test('Inputs expect parameters defined in beforeQuery', () => {
+    const cellWithBeforeQuery = {
+      ...recipeCell,
+      beforeQuery: ({ word }: { word: string }) => {
+        return {
+          variables: {
+            category: word,
+            saved: !!word,
+          },
+        }
+      },
+    }
+
+    type CellWithBeforeQueryInputs = CellProps<
+      typeof cellWithBeforeQuery.Success,
+      QueryResult,
+      typeof cellWithBeforeQuery,
+      ExampleQueryVariables
+    >
+
+    // Note that the gql variables are no longer required here
+    expectAssignable<CellWithBeforeQueryInputs>({
+      word: 'abracadabra',
+      customProp: 99,
+    })
+  })
+
+  test('Inputs work as expected when no QueryVariables supplied', () => {
+    type CellWithoutVariablesInputs = CellProps<
+      typeof recipeCell.Success,
+      QueryResult,
+      typeof recipeCell,
+      /*GQL Vars */ { [key: string]: never } // This is how graphql-codegen defines queries that don't take vars
+    >
+
+    // @MARK - this test is failing...
+    // I think the never in gql vars is overriding the customProp
+    expectAssignable<CellWithoutVariablesInputs>({
+      customProp: 55,
     })
   })
 })

@@ -13,6 +13,11 @@ import { useQuery } from './GraphQLHooksProvider'
 
 /**
  * GraphQL Variables required to be included in the Cell props.
+ *
+ * If the Cell has a `beforeQuery` function, then the variables are not required,
+ * but instead the arguments of the `beforeQuery` function are required.
+ *
+ * They are defined
  */
 type CellPropsVariables<Cell, GQLVariables> = Cell extends {
   beforeQuery: (...args: any[]) => { variables: any }
