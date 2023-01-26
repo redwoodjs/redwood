@@ -18,10 +18,10 @@ const startDevServer = async () => {
 
   await devServer.listen()
 
-  process.stdin.on('data', (data) => {
+  process.stdin.on('data', async (data) => {
     const str = data.toString().trim().toLowerCase()
     if (str === 'rs' || str === 'restart') {
-      devServer.restart(true)
+      await devServer.restart(true)
     }
   })
 
