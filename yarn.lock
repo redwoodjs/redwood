@@ -1997,9 +1997,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:^0.4.2":
-  version: 0.4.3
-  resolution: "@clerk/backend@npm:0.4.3"
+"@clerk/backend@npm:^0.4.5":
+  version: 0.4.5
+  resolution: "@clerk/backend@npm:0.4.5"
   dependencies:
     "@clerk/types": ^3.24.1
     "@peculiar/webcrypto": 1.4.1
@@ -2009,7 +2009,7 @@ __metadata:
     rfc4648: 1.5.2
     snakecase-keys: 5.4.4
     tslib: 2.4.1
-  checksum: e0c7ba73ed4b1d5e6c42cd525e1b45727fa411fa7ac05578f129bcb4d378ffbbcf067ea27966a9a677cbcd3781983c59c4aab235c7283047d42d52877946d8dd
+  checksum: 5aa6e8bd48663e054e09007b6670ced1b89556ca6e3f6508398ffcbd0c9679a06873cf33bac2a536348015e4d21b705be1b2d86e1f4a686559e91941ea2b1668
   languageName: node
   linkType: hard
 
@@ -2028,11 +2028,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.6.3":
-  version: 4.6.3
-  resolution: "@clerk/clerk-sdk-node@npm:4.6.3"
+"@clerk/clerk-sdk-node@npm:4.6.5":
+  version: 4.6.5
+  resolution: "@clerk/clerk-sdk-node@npm:4.6.5"
   dependencies:
-    "@clerk/backend": ^0.4.2
+    "@clerk/backend": ^0.4.5
     "@clerk/types": ^3.24.1
     "@types/cookies": 0.7.7
     "@types/express": 4.17.14
@@ -2042,7 +2042,7 @@ __metadata:
     cookie: 0.5.0
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: b1be7d8506f48b2afd492ba99cef1888474e437fb534f0baeb1d019cedbcde1be048f9cf0606b6a6f96e27baefbff3b3937f65e8d94ba896ad6d6db070b2b4c0
+  checksum: 2b6103491157498c554c240d12ac2a755c13ba442b4b3936d081c216c22588ebe6c5c34cfbd98f0ce07c0b5785a9b1fa8afd9f1b986c53833ad0d33e477b2b61
   languageName: node
   linkType: hard
 
@@ -7118,7 +7118,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
-    "@clerk/clerk-sdk-node": 4.6.3
+    "@clerk/clerk-sdk-node": 4.6.5
     "@redwoodjs/api": 3.2.0
     "@types/aws-lambda": 8.10.109
     core-js: 3.27.2
