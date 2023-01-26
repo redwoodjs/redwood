@@ -3801,7 +3801,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.3.15, @graphql-tools/merge@npm:^8.2.6":
+"@graphql-tools/merge@npm:8.3.15":
   version: 8.3.15
   resolution: "@graphql-tools/merge@npm:8.3.15"
   dependencies:
@@ -3810,6 +3810,18 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: eb04c170a1b4b24c3feff7a4b45f63ea1d7d53fe90891f82195349ec47264a51657e15e390b43f48e5012d5e7de07a9d1f4385418d7a80f51a361f4521e2fe99
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/merge@npm:8.3.16, @graphql-tools/merge@npm:^8.2.6":
+  version: 8.3.16
+  resolution: "@graphql-tools/merge@npm:8.3.16"
+  dependencies:
+    "@graphql-tools/utils": 9.1.4
+    tslib: ^2.4.0
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 791895d73ed73429710f971551419ef2344984dfa3cb52cb3e0fafdc5e9647c68d3eeb4789121f4ded052794a0415dbfa09e288539743e97666964053f9cb19c
   languageName: node
   linkType: hard
 
@@ -3906,7 +3918,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:9.0.13, @graphql-tools/schema@npm:^9.0.0":
+"@graphql-tools/schema@npm:9.0.13":
   version: 9.0.13
   resolution: "@graphql-tools/schema@npm:9.0.13"
   dependencies:
@@ -3917,6 +3929,20 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: a46cfdda42cb94f175231cef12bb00e4dd71a15ff6d48018d4c4cc837884269b67fe9bb1ee9301aa07e21583af7f4927a7876ff3930a25ae778b1cc7841859ea
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/schema@npm:9.0.14, @graphql-tools/schema@npm:^9.0.0":
+  version: 9.0.14
+  resolution: "@graphql-tools/schema@npm:9.0.14"
+  dependencies:
+    "@graphql-tools/merge": 8.3.16
+    "@graphql-tools/utils": 9.1.4
+    tslib: ^2.4.0
+    value-or-promise: 1.0.12
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 691f100618243a00b51c437cef04d3b76f4c31db25b3fb68b33069db920c008520a115a074856ec703c038c95a677227d466561d5ddb7020f14d50e36e6c8b8d
   languageName: node
   linkType: hard
 
@@ -7578,8 +7604,8 @@ __metadata:
     "@envelop/testing": 5.0.4
     "@envelop/types": 3.0.1
     "@escape.tech/graphql-armor": 1.7.0
-    "@graphql-tools/merge": 8.3.15
-    "@graphql-tools/schema": 9.0.13
+    "@graphql-tools/merge": 8.3.16
+    "@graphql-tools/schema": 9.0.14
     "@graphql-tools/utils": 9.1.4
     "@redwoodjs/api": 3.2.0
     "@types/jsonwebtoken": 9.0.1
