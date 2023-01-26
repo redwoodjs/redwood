@@ -10,7 +10,7 @@ import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../../lib/'
 
-export const command = 'auth [provider]'
+export const command = 'auth <provider>'
 
 export const description = 'Set up an auth configuration'
 
