@@ -44,7 +44,7 @@
     "@testing-library/user-event": "14.4.3",
     "@types/aws-lambda": "8.10.109",
     "@types/babel-core": "6.25.7",
-    "@types/jest": "29.2.6",
+    "@types/jest": "29.4.0",
     "@types/node": "16.18.11",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",

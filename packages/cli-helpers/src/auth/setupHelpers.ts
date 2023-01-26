@@ -111,8 +111,8 @@ export const standardAuthHandler = async ({
                 `${colors.warning(
                   'Your existing auth provider has been replaced!'
                 )}`,
-                'You will still need to manually remove the old auth provider config',
-                'functions and dependencies (in your web and api package.jsons)',
+                "You'll still need to manually remove your old auth provider's config,",
+                "functions, and dependencies (in your web and api package.json's).",
               ]
             )
           }
