@@ -18,11 +18,11 @@ export async function handler({ force: forceArg }: Args) {
     apiPackages: [`@redwoodjs/auth-netlify-api@${version}`],
     webPackages: [
       `@redwoodjs/auth-netlify-web@${version}`,
-      'netlify-identity-widget@1.9.2',
+      'netlify-identity-widget@^1',
     ],
     notes: [
-      'You will need to enable Identity on your Netlify site and configure the API endpoint.',
-      'See: https://github.com/netlify/netlify-identity-widget#localhost',
+      "You'll need to enable Identity on your Netlify site and configure the API endpoint locally.",
+      'See https://redwoodjs.com/docs/auth/netlify for a full walkthrough.',
     ],
   })
 }

@@ -29,7 +29,10 @@ export const useReauthenticate = <TUser>(
       const userMetadata = await authImplementation.getUserMetadata()
 
       if (!userMetadata) {
-        setAuthProviderState(notAuthenticatedState)
+        setAuthProviderState({
+          ...notAuthenticatedState,
+          client: authImplementation.client,
+        })
       } else {
         await getToken()
 
@@ -41,6 +44,7 @@ export const useReauthenticate = <TUser>(
           currentUser,
           isAuthenticated: true,
           loading: false,
+          client: authImplementation.client,
         }))
       }
     } catch (e: any) {

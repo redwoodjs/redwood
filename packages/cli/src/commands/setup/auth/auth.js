@@ -10,22 +10,10 @@ import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../../lib/'
 
-function redirectCommand(provider) {
-  return [
-    provider,
-    false,
-    () => {},
-    () => {
-      console.log(getRedirectMessage(provider))
-    },
-  ]
-}
-
 export const command = 'auth [provider]'
 
-export const description = 'Generate an auth configuration'
+export const description = 'Set up an auth configuration'
 
-// Don't forget to update test-project setup if you change something here
 export async function builder(yargs) {
   yargs
     // .demandCommand()
@@ -41,48 +29,52 @@ export async function builder(yargs) {
     .command(...redirectCommand('magicLink'))
     .command(...redirectCommand('nhost'))
     .command(...redirectCommand('okta'))
-    // Providers we support
+    // Auth providers we support
     .command(
       'auth0',
-      'Generate an auth configuration for Auth0',
+      'Set up auth for for Auth0',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const { handler } = await getAuthSetup('@redwoodjs/auth-auth0-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'azure-active-directory',
-      'Generate an auth configuration for Azure Active Directory',
+      'Set up auth for for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const { handler } = await getAuthSetup(
           '@redwoodjs/auth-azure-active-directory-setup'
         )
+        console.log()
         handler(args)
       }
     )
     .command(
       'clerk',
-      'Generate an auth configuration for Clerk',
+      'Set up auth for for Clerk',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const { handler } = await getAuthSetup('@redwoodjs/auth-clerk-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'custom',
-      'Generate a custom auth configuration',
+      'Set up a custom auth provider',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const { handler } = await getAuthSetup('@redwoodjs/auth-custom-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'dbAuth',
-      'Generate an auth configuration for dbAuth',
+      'Set up auth for for dbAuth',
       (yargs) => {
         return standardAuthBuilder(yargs).option('webauthn', {
           alias: 'w',
@@ -93,44 +85,49 @@ export async function builder(yargs) {
       },
       async (args) => {
         const { handler } = await getAuthSetup('@redwoodjs/auth-dbauth-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'firebase',
-      'Generate an auth configuration for Firebase',
+      'Set up auth for for Firebase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const { handler } = await getAuthSetup('@redwoodjs/auth-firebase-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'netlify',
-      'Generate an auth configuration for Netlify',
+      'Set up auth for for Netlify',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const { handler } = await getAuthSetup('@redwoodjs/auth-netlify-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'supabase',
-      'Generate an auth configuration for Supabase',
+      'Set up auth for for Supabase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const { handler } = await getAuthSetup('@redwoodjs/auth-supabase-setup')
+        console.log()
         handler(args)
       }
     )
     .command(
       'supertokens',
-      'Generate an auth configuration for SuperTokens',
+      'Set up auth for for SuperTokens',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const { handler } = await getAuthSetup(
           '@redwoodjs/auth-supertokens-setup'
         )
+        console.log()
         handler(args)
       }
     )
@@ -190,6 +187,21 @@ export async function builder(yargs) {
 }
 
 /**
+ * @param {string} provider
+ * @returns {[string, boolean, () => void, () => void]}
+ */
+function redirectCommand(provider) {
+  return [
+    provider,
+    false,
+    () => {},
+    () => {
+      console.log(getRedirectMessage(provider))
+    },
+  ]
+}
+
+/**
  * Get a stock message for one of our removed auth providers
  * directing the user to the Custom Auth docs.
  *
@@ -205,6 +217,9 @@ function getRedirectMessage(provider) {
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
 
+/**
+ * @param {string} module
+ */
 async function getAuthSetup(module, { versionStrategy = 'MATCH' } = {}) {
   if (versionStrategy === 'MATCH') {
     return getMatchingAuthSetup(module)
@@ -285,7 +300,6 @@ async function getMatchingAuthSetup(module) {
  * Check if a user's project's has a module listed as a dependency or devDependency.
  *
  * @param {string} module
- * @returns {boolean}
  */
 function isInstalled(module, version) {
   const { dependencies, devDependencies } = fs.readJSONSync(
