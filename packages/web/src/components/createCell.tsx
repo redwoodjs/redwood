@@ -12,26 +12,23 @@ import { useCellCacheContext } from './CellCacheContext'
 import { useQuery } from './GraphQLHooksProvider'
 
 /**
- * GraphQL Variables required to be included in the Cell props.
  *
  * If the Cell has a `beforeQuery` function, then the variables are not required,
  * but instead the arguments of the `beforeQuery` function are required.
  *
- * They are defined
+ * If the Cell does not have a `beforeQuery` function, then the variables are required.
+ *
+ * Note that a query that doesnt take any variables is defined as {[x: string]: never}
+ * The ternary at the end makes sure we don't include it, otherwise it won't allow merging any
+ * other custom props from the Success component.
+ *
  */
 type CellPropsVariables<Cell, GQLVariables> = Cell extends {
   beforeQuery: (...args: any[]) => { variables: any }
 }
+  ? Parameters<Cell['beforeQuery']>[0]
+  : GQLVariables extends Record<string, never>
   ? unknown
-  : GQLVariables
-
-declare type CustomCellProps<Cell, GQLVariables> = Cell extends {
-  beforeQuery: (...args: any[]) => unknown
-}
-  ? Parameters<Cell['beforeQuery']> extends [unknown, ...any]
-    ? Parameters<Cell['beforeQuery']>[0] &
-        CellPropsVariables<Cell, GQLVariables>
-    : CellPropsVariables<Cell, GQLVariables>
   : GQLVariables
 
 /**
@@ -50,7 +47,7 @@ export type CellProps<
     | keyof GQLResult
     | 'updating'
   > &
-    CustomCellProps<CellType, GQLVariables>
+    CellPropsVariables<CellType, GQLVariables>
 >
 
 export type CellLoadingProps<TVariables = any> = Partial<

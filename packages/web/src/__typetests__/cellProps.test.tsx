@@ -98,7 +98,7 @@ describe('CellProps mapper type', () => {
     })
   })
 
-  test('Inputs work as expected when no QueryVariables supplied', () => {
+  test('Inputs still expect custom props when query does not take variables', () => {
     type CellWithoutVariablesInputs = CellProps<
       typeof recipeCell.Success,
       QueryResult,
@@ -106,8 +106,6 @@ describe('CellProps mapper type', () => {
       /*GQL Vars */ { [key: string]: never } // This is how graphql-codegen defines queries that don't take vars
     >
 
-    // @MARK - this test is failing...
-    // I think the never in gql vars is overriding the customProp
     expectAssignable<CellWithoutVariablesInputs>({
       customProp: 55,
     })
