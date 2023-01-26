@@ -166,7 +166,7 @@ export async function builder(yargs) {
 
         // TODO: Figure out how to use builder
         const { handler, _builder } = await getAuthSetup(args._[2], {
-          versionStrategy: '',
+          matchRwVersion: false,
         })
 
         // Maybe we can do something here to also use builder from above
@@ -214,19 +214,17 @@ function getRedirectMessage(provider) {
   )}`
 }
 
-const SEMVER_REGEX =
-  /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
-
 /**
  * @param {string} module
  */
-async function getAuthSetup(module, { versionStrategy = 'MATCH' } = {}) {
-  if (versionStrategy === 'MATCH') {
+async function getAuthSetup(module, { matchRwVersion = true } = {}) {
+  if (matchRwVersion) {
     return getMatchingAuthSetup(module)
   }
 
-  const splitName = module.split('@')
-  if (splitName.length >= 2 && SEMVER_REGEX.test(splitName.at(-1))) {
+  // If there's an '@' symbol, and it's not the first character, then we assume
+  // a version is specified
+  if (module.lastIndexOf('@') > 0) {
     return getSpecificAuthSetup(module)
   }
 
@@ -234,10 +232,13 @@ async function getAuthSetup(module, { versionStrategy = 'MATCH' } = {}) {
 }
 
 async function getSpecificAuthSetup(module) {
-  execa.commandAsync(`yarn add -D ${module}`, {
-    stdio: 'inherit',
-    cwd: getPaths().base,
-  })
+  const [moduleName, version] = module.split('@')
+  if (!isInstalled(moduleName, version)) {
+    execa.commandAsync(`yarn add -D ${module}`, {
+      stdio: 'inherit',
+      cwd: getPaths().base,
+    })
+  }
 
   return await import(module)
 }
@@ -300,6 +301,7 @@ async function getMatchingAuthSetup(module) {
  * Check if a user's project's has a module listed as a dependency or devDependency.
  *
  * @param {string} module
+ * @param {string=} version
  */
 function isInstalled(module, version) {
   const { dependencies, devDependencies } = fs.readJSONSync(
