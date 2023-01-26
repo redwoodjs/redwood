@@ -5,7 +5,10 @@ sidebar_label: Custom
 # Custom Authentication
 
 If Redwood doesn't officially integrate with the auth provider you want to use, you're not out of luck just yet: Redwood has an API you can use to integrate your auth provider of choice.
-There's a little more work to do, but we'll walk you through all that here, using [Nhost](https://nhost.io/) as an example.
+
+If you came here because you were previously using Nhost, magic.link, GoTrue, Okta or Wallet Connect (ethereum) we've moved the code for those out into their own separate repos. https://github.com/redwoodjs/auth-nhost, https://github.com/redwoodjs/auth-magiclink, https://github.com/redwoodjs/auth-gotrue, https://github.com/redwoodjs/auth-okta and https://github.com/redwoodjs/auth-walletconnect. The code has been updated to work with the new and update auth APIs for Redwood v4, but it is mostly untested, so no guarantees it will work. But together with the guide below we hope getting them working in your own app isn't going to be too difficult.
+
+There's a little more work to do writing a custom auth integration compared to just using one of the ready made packages. We'll walk you through all that work here, using [Nhost](https://nhost.io/) as an example. Hopefully you have auth up and running before too long!
 
 To get started, run the setup command:
 
