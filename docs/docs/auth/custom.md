@@ -251,8 +251,8 @@ const HomePage = () => {
 
       <p>{JSON.stringify({ isAuthenticated })}</p>
       <button onClick={() => signUp({
-        // email: 'your.email@email.com'
-        // password: 'super secret password'
+        // email: 'your.email@email.com',
+        // password: 'super secret password',
       })}>sign up</button>
     </>
   )
