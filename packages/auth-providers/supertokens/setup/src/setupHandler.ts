@@ -25,9 +25,8 @@ export async function handler({ force: forceArg }: Args) {
       'supertokens-auth-react',
     ],
     notes: [
-      "We've generated some example recipe implementations, but do feel free",
-      'to switch to something else that better fit your needs.',
-      'See: https://supertokens.com/docs/guides',
+      "We've implemented some of SuperToken's recipes, but do feel free",
+      'to switch to something that better fits your needs. See https://supertokens.com/docs/guides.',
     ],
   })
 }
