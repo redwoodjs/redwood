@@ -15,7 +15,10 @@ export const handler = async ({ force: forceArg }: Args) => {
     forceArg,
     authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-clerk-api'`,
     provider: 'clerk',
-    webPackages: ['@clerk/clerk-react', `@redwoodjs/auth-clerk-web@${version}`],
+    webPackages: [
+      '@clerk/clerk-react@^4',
+      `@redwoodjs/auth-clerk-web@${version}`,
+    ],
     apiPackages: [`@redwoodjs/auth-clerk-api@${version}`],
     notes: [
       'You will need to add three environment variables with your Clerk URL, API key and JWT key.',
