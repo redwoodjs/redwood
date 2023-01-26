@@ -9,7 +9,7 @@ import {
   waitFor,
   configure,
 } from '@testing-library/react'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
@@ -32,7 +32,7 @@ let CURRENT_USER_DATA: {
   email: 'nospam@example.net',
 }
 
-global.RWJS_API_GRAPHQL_URL = '/.netlify/functions/graphql'
+globalThis.RWJS_API_GRAPHQL_URL = '/.netlify/functions/graphql'
 
 const server = setupServer(
   graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
@@ -711,9 +711,7 @@ describe('Custom auth provider', () => {
       </AuthProvider>
     )
 
-    await waitFor(() => mockedForgotPassword.mock.calls.length === 1)
-
-    expect.assertions(1)
+    await waitFor(() => expect(mockedForgotPassword).toBeCalledWith('username'))
   })
 
   test('proxies resetPassword() calls to client', async () => {

@@ -1,13 +1,14 @@
-import type {
+import {
   EndSessionRequest,
   PublicClientApplication as AzureActiveDirectoryClient,
   RedirectRequest,
   SilentRequest,
+  InteractionRequiredAuthError,
 } from '@azure/msal-browser'
 
 import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
-export function createAzureActiveDirectoryAuth(
+export function createAuth(
   azureActiveDirectoryClient: AzureActiveDirectoryClient,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
@@ -16,14 +17,14 @@ export function createAzureActiveDirectoryAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   }
 ) {
-  const authImplementation = createAzureActiveDirectoryAuthImplementation(
+  const authImplementation = createAuthImplementation(
     azureActiveDirectoryClient
   )
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createAzureActiveDirectoryAuthImplementation(
+function createAuthImplementation(
   azureActiveDirectoryClient: AzureActiveDirectoryClient
 ) {
   return {
@@ -45,16 +46,15 @@ function createAzureActiveDirectoryAuthImplementation(
       // acquireTokenSilent, and if it fails with an
       // InteractionRequiredAuthError, call acquireTokenRedirect
       // https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/acquire-token.md
-      // NOTE: We are not catching the `InteractionRequiredAuthError`,
-      // perhaps we can branch off `error.name` if this strategy doesn't work
-      // properly.
       try {
         const token = await azureActiveDirectoryClient.acquireTokenSilent(
           request
         )
         return token.idToken
-      } catch (err) {
-        azureActiveDirectoryClient.acquireTokenRedirect(request)
+      } catch (error) {
+        if (error instanceof InteractionRequiredAuthError) {
+          azureActiveDirectoryClient.acquireTokenRedirect(request)
+        }
       }
 
       return null

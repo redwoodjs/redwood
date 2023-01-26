@@ -3,11 +3,11 @@ import type {
   PublicClientApplication as AzureActiveDirectoryClient,
   RedirectRequest,
 } from '@azure/msal-browser'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createAzureActiveDirectoryAuth } from '../azureActiveDirectory'
+import { createAuth } from '../azureActiveDirectory'
 
 const user: AccountInfo = {
   name: 'John',
@@ -106,7 +106,7 @@ fetchMock.mockImplementation(async (_url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
+  globalThis.fetch = fetchMock
 })
 
 beforeEach(() => {
@@ -120,7 +120,7 @@ function getAzureActiveDirectoryAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createAzureActiveDirectoryAuth(
+  const { useAuth, AuthProvider } = createAuth(
     azureActiveDirectoryMockClient as AzureActiveDirectoryClient,
     customProviderHooks
   )

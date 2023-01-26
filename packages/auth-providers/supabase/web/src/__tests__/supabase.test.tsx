@@ -1,9 +1,9 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createSupabaseAuth } from '../supabase'
+import { createAuth } from '../supabase'
 
 const user: Partial<User> = {
   id: 'unique_user_id',
@@ -98,7 +98,7 @@ fetchMock.mockImplementation(async (_url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
+  globalThis.fetch = fetchMock
 })
 
 beforeEach(() => {
@@ -112,7 +112,7 @@ function getSupabaseAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createSupabaseAuth(
+  const { useAuth, AuthProvider } = createAuth(
     supabaseMockClient as SupabaseClient,
     customProviderHooks
   )

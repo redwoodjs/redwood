@@ -4,11 +4,11 @@ import {
   EmailAddressResource,
   ActiveSessionResource,
 } from '@clerk/types'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createClerkAuth } from '../clerk'
+import { createAuth } from '../clerk'
 
 const user: Partial<UserResource> = {
   id: 'unique_user_id',
@@ -91,8 +91,8 @@ fetchMock.mockImplementation(async (_url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
-  global.Clerk = clerkMockClient
+  globalThis.fetch = fetchMock
+  globalThis.Clerk = clerkMockClient
 })
 
 beforeEach(() => {
@@ -106,7 +106,7 @@ function getClerkAuth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createClerkAuth(customProviderHooks)
+  const { useAuth, AuthProvider } = createAuth(customProviderHooks)
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
   })

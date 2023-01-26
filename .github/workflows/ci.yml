@@ -3,6 +3,12 @@ name: ⚙️ CI
 on:
   pull_request
 
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
@@ -56,7 +62,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        node-version: [16, 18]
       fail-fast: true
     name: 🏗 Build, lint, test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -66,8 +72,8 @@ jobs:
         run: echo "echo "::remove-matcher owner=tsc::""
 
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -91,7 +97,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        node-version: [16, 18]
     name: 🏗 Build, lint, test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
@@ -102,14 +108,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [14, 16]
+        node-version: [16, 18]
       fail-fast: true
     name: 🌲 Tutorial E2E / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -139,7 +145,7 @@ jobs:
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
       - name: 🌲 Run cypress
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RW_PATH:  "${{ steps.createpath.outputs.project_path }}"
@@ -149,7 +155,7 @@ jobs:
           env: true
           browser: chrome
           record: false
-          wait-on: 'http://localhost:8910'
+          wait-on: ${{ matrix.node-version == 18 && 'http://[::1]:8910' || 'http://localhost:8910' }}
           working-directory: ./tasks/e2e
           spec: |
              cypress/e2e/01-tutorial/*.cy.js
@@ -161,7 +167,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [14, 16]
+        node-version: [16, 18]
     name: 🌲 Tutorial E2E / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
@@ -172,7 +178,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        node-version: [16, 18]
       fail-fast: true
     name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -183,8 +189,8 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: 0
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -210,7 +216,7 @@ jobs:
 
       - name: Run smoke tests on 'rw dev', 'rw serve', 'rw storybook'
         working-directory: ./tasks/smoke-test
-        run: npx playwright test --project 'chromium' --reporter @replayio/playwright/reporter,line
+        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }} --reporter @replayio/playwright/reporter,line
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -303,7 +309,7 @@ jobs:
 
       - name: Upload Replays
         if: always()
-        uses: replayio/action-upload@v0.4.5
+        uses: replayio/action-upload@v0.4.7
         with:
           api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
 
@@ -313,92 +319,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14, 16]
+        node-version: [16, 18]
     name: 👀 Smoke test / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Only doc changes"
-
-  cherry-pick:
-    needs: [build-lint-test, tutorial-e2e, smoke-test]
-    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'next' && !contains(join(needs.*.result, ','), 'failure')
-    name: cherry-pick
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: next
-          fetch-depth: 0
-          token: ${{ secrets.JTOAR_TOKEN }}
-
-      - name: 🍒 Cherry pick
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-          git cherry-pick ${{ github.event.pull_request.head.sha }}
-          git push
-
-      - name: 🔑 Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
-
-      - name: Close PR
-        env:
-          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
-        run: |
-          gh api graphql -F id=${{ github.event.pull_request.node_id }} -f query='
-            mutation($id: ID!) {
-              closePullRequest(input: {
-                pullRequestId: $id
-              }) {
-                clientMutationId
-              }
-            }
-          '
-
-  cherry-pick-docs:
-    needs: [build-lint-test-docs, tutorial-e2e-docs, smoke-test-docs]
-    if: github.event.pull_request.user.login == 'redwoodjs-bot[bot]' && github.base_ref == 'next' && !contains(join(needs.*.result, ','), 'failure')
-    name: cherry-pick-docs
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: next
-          fetch-depth: 0
-          token: ${{ secrets.JTOAR_TOKEN }}
-
-      - name: 🍒 Cherry pick
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-          git cherry-pick ${{ github.event.pull_request.head.sha }}
-          git push
-
-      - name: 🔑 Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
-
-      - name: Close PR
-        env:
-          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
-        run: |
-          gh api graphql -F id=${{ github.event.pull_request.node_id }} -f query='
-            mutation($id: ID!) {
-              closePullRequest(input: {
-                pullRequestId: $id
-              }) {
-                clientMutationId
-              }
-            }
-          '

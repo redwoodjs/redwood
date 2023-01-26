@@ -4,11 +4,11 @@ import type {
   GetTokenSilentlyVerboseResponse,
   User,
 } from '@auth0/auth0-spa-js'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth0Auth } from '../auth0'
+import { createAuth } from '../auth0'
 
 const user: User = {
   sub: 'unique_user_id',
@@ -85,7 +85,7 @@ function getAuth0Auth(customProviderHooks?: {
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
-  const { useAuth, AuthProvider } = createAuth0Auth(
+  const { useAuth, AuthProvider } = createAuth(
     auth0MockClient as Auth0Client,
     customProviderHooks
   )

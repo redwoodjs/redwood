@@ -14,42 +14,42 @@ export interface ResetPasswordAttributes {
 
 export type SignupAttributes = Record<string, unknown> & LoginAttributes
 
-export type DbAuth = undefined | WebAuthnClientType
+const TOKEN_CACHE_TIME = 5000
 
-export type DbAuthConfig = {
+export function createAuth(
+  dbAuthClient: ReturnType<typeof createDbAuthClient>,
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  }
+) {
+  return createAuthentication(dbAuthClient, customProviderHooks)
+}
+
+export interface DbAuthClientArgs {
+  webAuthn?: InstanceType<WebAuthnClientType>
+  dbAuthUrl?: string
   fetchConfig?: {
     credentials?: 'include' | 'same-origin'
   }
-  useCurrentUser?: () => Promise<Record<string, unknown>>
-  useHasRole?: (
-    currentUser: CurrentUser | null
-  ) => (rolesToCheck: string | string[]) => boolean
-}
-const TOKEN_CACHE_TIME = 5000
-
-export function createDbAuth(dbAuthClient?: DbAuth, config?: DbAuthConfig) {
-  const authImplementation = createDbAuthImplementation(dbAuthClient, config)
-
-  return createAuthentication(authImplementation, {
-    useCurrentUser: config?.useCurrentUser,
-    useHasRole: config?.useHasRole,
-  })
 }
 
-// TODO: Better types for login, signup etc
-function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
-  const credentials = config?.fetchConfig?.credentials || 'same-origin'
+export function createDbAuthClient({
+  webAuthn,
+  dbAuthUrl,
+  fetchConfig,
+}: DbAuthClientArgs = {}) {
+  const credentials = fetchConfig?.credentials || 'same-origin'
+  webAuthn?.setAuthApiUrl(dbAuthUrl)
 
   let getTokenPromise: null | Promise<string | null>
   let lastTokenCheckAt = new Date('1970-01-01T00:00:00')
   let cachedToken: string | null
 
   const getApiDbAuthUrl = () => {
-    if (process.env.RWJS_API_DBAUTH_URL) {
-      return process.env.RWJS_API_DBAUTH_URL
-    }
-
-    return `${process.env.RWJS_API_URL}/auth`
+    return dbAuthUrl || `${RWJS_API_URL}/auth`
   }
 
   const resetAndFetch = async (...params: Parameters<typeof fetch>) => {
@@ -160,7 +160,7 @@ function createDbAuthImplementation(dbAuth: DbAuth, config?: DbAuthConfig) {
 
   return {
     type: 'dbAuth',
-    client: dbAuth,
+    client: webAuthn,
     login,
     logout,
     signup,

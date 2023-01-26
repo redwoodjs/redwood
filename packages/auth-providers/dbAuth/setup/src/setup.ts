@@ -2,15 +2,10 @@ import terminalLink from 'terminal-link'
 import yargs from 'yargs'
 
 export const command = 'dbAuth'
-export const description = 'Generate an auth configuration for dbAuth'
+export const description = 'Set up auth for for dbAuth'
 
 export function builder(yargs: yargs.Argv) {
   yargs
-    .option('warn', {
-      default: true,
-      description: 'Experimental auth warning',
-      type: 'boolean',
-    })
     .option('force', {
       alias: 'f',
       default: false,

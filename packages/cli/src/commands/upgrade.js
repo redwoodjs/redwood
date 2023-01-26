@@ -64,7 +64,7 @@ export const builder = (yargs) => {
 // Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
-const validateTag = (tag) => {
+export const validateTag = (tag) => {
   const isTagValid =
     tag === 'rc' ||
     tag === 'canary' ||
@@ -189,11 +189,9 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
       x.startsWith('@redwoodjs/')
     )) {
       if (verbose || dryRun) {
-        console.log(
-          ` - ${depName}: ${pkg.dependencies[depName]} => ^${version}`
-        )
+        console.log(` - ${depName}: ${pkg.dependencies[depName]} => ${version}`)
       }
-      pkg.dependencies[depName] = `^${version}`
+      pkg.dependencies[depName] = `${version}`
     }
   }
   if (pkg.devDependencies) {
@@ -202,10 +200,10 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
     )) {
       if (verbose || dryRun) {
         console.log(
-          ` - ${depName}: ${pkg.devDependencies[depName]} => ^${version}`
+          ` - ${depName}: ${pkg.devDependencies[depName]} => ${version}`
         )
       }
-      pkg.devDependencies[depName] = `^${version}`
+      pkg.devDependencies[depName] = `${version}`
     }
   }
 

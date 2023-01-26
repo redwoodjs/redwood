@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 import fs from 'fs'
 

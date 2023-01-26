@@ -5,7 +5,11 @@ const path = require('path')
 const execa = require('execa')
 const Listr = require('listr2').Listr
 
-const { getExecaOptions, applyCodemod } = require('./util')
+const {
+  getExecaOptions,
+  applyCodemod,
+  updatePkgJsonScripts,
+} = require('./util')
 
 // This variable gets used in other functions
 // and is set when webTasks or apiTasks are called
@@ -398,17 +402,52 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   }
 
   const addDbAuth = async () => {
+    // Temporarily disable postinstall script
+    updatePkgJsonScripts({
+      projectPath: outputPath,
+      scripts: {
+        postinstall: '',
+      },
+    })
+
+    const dbAuthSetupPath = path.join(
+      outputPath,
+      'node_modules',
+      '@redwoodjs',
+      'auth-dbauth-setup'
+    )
+
+    // At an earlier step we run `yarn rwfw project:copy` which gives us
+    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
+    // version for auth-dbauth-api and auth-dbauth-web package installations
+    // to work. So we remove the current version and add a canary version
+    // instead.
+
+    fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
+
     await execa(
-      'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
+      'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       execaOptions
     )
+
+    // Restore postinstall script
+    updatePkgJsonScripts({
+      projectPath: outputPath,
+      scripts: {
+        postinstall: 'yarn rwfw project:copy',
+      },
+    })
 
     if (linkWithLatestFwBuild) {
       await execa('yarn rwfw project:copy', [], execaOptions)
     }
 
-    await execa('yarn rw g dbAuth --no-webauthn', [], execaOptions)
+    await execa(
+      'yarn rw g dbAuth --no-webauthn --username-label=username --password-label=password',
+      [],
+      execaOptions
+    )
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
@@ -472,11 +511,17 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       .replaceAll('username', 'full-name')
       .replaceAll('Username', 'Full Name')
 
-    const newContentSignupPageTs = contentSignupPageTs.replace(
-      '<FieldError name="password" className="rw-field-error" />',
-      '<FieldError name="password" className="rw-field-error" />\n' +
-        fullNameFields
-    )
+    const newContentSignupPageTs = contentSignupPageTs
+      .replace(
+        '<FieldError name="password" className="rw-field-error" />',
+        '<FieldError name="password" className="rw-field-error" />\n' +
+          fullNameFields
+      )
+      // include full-name in the data we pass to `signUp()`
+      .replace(
+        'password: data.password',
+        "password: data.password, 'full-name': data['full-name']"
+      )
 
     fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
 
@@ -515,6 +560,13 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
         title: 'Scaffolding post',
         task: async () => {
           await generateScaffold('post')
+
+          // Replace the random numbers in the scenario with consistent values
+          await applyCodemod(
+            'scenarioValueSuffix.js',
+            fullPath('api/src/services/posts/posts.scenarios')
+          )
+
           await execa(`yarn rwfw project:copy`, [], execaOptions)
         },
       },
@@ -544,6 +596,48 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
         },
       },
       {
+        // This task renames the migration folders so that we don't have to deal with duplicates/conflicts when commiting to the repo
+        title: 'Adjust dates within migration folder names',
+        task: () => {
+          const migrationsFolderPath = path.join(
+            OUTPUT_PATH,
+            'api',
+            'db',
+            'migrations'
+          )
+          // Migration folders are folders which start with 14 digits because they have a yyyymmddhhmmss
+          const migrationFolders = fs
+            .readdirSync(migrationsFolderPath)
+            .filter((name) => {
+              return (
+                name.match(/\d{14}.+/) &&
+                fs
+                  .lstatSync(path.join(migrationsFolderPath, name))
+                  .isDirectory()
+              )
+            })
+            .sort()
+          const datetime = new Date('2022-01-01T12:00:00.000Z')
+          migrationFolders.forEach((name) => {
+            const datetimeInCorrectFormat =
+              datetime.getFullYear() +
+              ('0' + (datetime.getMonth() + 1)).slice(-2) +
+              ('0' + datetime.getDate()).slice(-2) +
+              ('0' + datetime.getHours()).slice(-2) +
+              ('0' + datetime.getMinutes()).slice(-2) +
+              ('0' + datetime.getSeconds()).slice(-2)
+            fs.renameSync(
+              path.join(migrationsFolderPath, name),
+              path.join(
+                migrationsFolderPath,
+                `${datetimeInCorrectFormat}${name.substring(14)}`
+              )
+            )
+            datetime.setDate(datetime.getDate() + 1)
+          })
+        },
+      },
+      {
         title: 'Add dbAuth',
         task: async () => addDbAuth(),
       },
@@ -562,6 +656,12 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           await applyCodemod(
             'usersService.js',
             fullPath('api/src/services/users/users')
+          )
+
+          // Replace the random numbers in the scenario with consistent values
+          await applyCodemod(
+            'scenarioValueSuffix.js',
+            fullPath('api/src/services/users/users.scenarios')
           )
 
           const test = `import { user } from './users'
