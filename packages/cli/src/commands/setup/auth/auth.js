@@ -217,6 +217,13 @@ function getRedirectMessage(provider) {
   )}`
 }
 
+function yarnAddPackage(module) {
+  execa.commandSync(`yarn add -D ${module}`, {
+    stdio: 'inherit',
+    cwd: getPaths().base,
+  })
+}
+
 /**
  * @param {string} module
  */
@@ -237,10 +244,7 @@ async function getAuthSetup(module, { matchRwVersion = true } = {}) {
 async function getSpecificAuthSetup(module) {
   const [moduleName, version] = module.split('@')
   if (!isInstalled(moduleName, version)) {
-    execa.commandAsync(`yarn add -D ${module}`, {
-      stdio: 'inherit',
-      cwd: getPaths().base,
-    })
+    yarnAddPackage(module)
   }
 
   return await import(module)
@@ -255,10 +259,7 @@ async function getLatestAuthSetup(module) {
   const latestVersion = versions.at(-1)
 
   if (!isInstalled(module, latestVersion)) {
-    execa.commandSync(`yarn add -D ${module}@${latestVersion}`, {
-      stdio: 'inherit',
-      cwd: getPaths().base,
-    })
+    yarnAddPackage(`${module}@${latestVersion}`)
   }
 
   return await import(module)
@@ -291,10 +292,7 @@ async function getMatchingAuthSetup(module) {
 
     // We use `version` to make sure we install the same version of the auth
     // setup package as the rest of the RW packages
-    await execa.command(`yarn add -D ${module}@${version}`, {
-      stdio: 'inherit',
-      cwd: getPaths().base,
-    })
+    yarnAddPackage(`${module}@${version}`)
   }
 
   return await import(module)
