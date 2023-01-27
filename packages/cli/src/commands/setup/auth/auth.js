@@ -117,18 +117,21 @@ export async function builder(yargs) {
         handler(args)
       }
     )
-    .command(
-      'supertokens',
-      'Set up auth for for SuperTokens',
-      (yargs) => standardAuthBuilder(yargs),
-      async (args) => {
-        const handler = await getAuthHandler(
-          '@redwoodjs/auth-supertokens-setup'
-        )
-        console.log()
-        handler(args)
-      }
-    )
+  // @MARK We'll add this back when we finalize it in a v4 minor.
+  // This setup command wasn't in v3.x, so leaving it out isn't breaking.
+  //
+  // .command(
+  //   'supertokens',
+  //   'Set up auth for for SuperTokens',
+  //   (yargs) => standardAuthBuilder(yargs),
+  //   async (args) => {
+  //     const handler = await getAuthHandler(
+  //       '@redwoodjs/auth-supertokens-setup'
+  //     )
+  //     console.log()
+  //     handler(args)
+  //   }
+  // )
 }
 
 /**
