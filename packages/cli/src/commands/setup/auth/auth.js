@@ -10,6 +10,14 @@ import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../../lib/'
 
+const whitelistedNpmPackages = [
+  '@redwoodjs/auth-gotrue',
+  '@redwoodjs/auth-nhost',
+  '@redwoodjs/auth-magiclink',
+  '@redwoodjs/auth-okta',
+  '@redwoodjs/auth-walletconnect',
+]
+
 export const command = 'auth <provider>'
 
 export const description = 'Set up an auth configuration'
@@ -160,13 +168,34 @@ export async function builder(yargs) {
           process.exit(1)
         }
 
-        console.log()
-        console.log('Set up auth using', args._[2])
-        console.log()
+        const packageName = args._[2]
+
+        // Whitelist package for now. When we've figured out how we want to
+        // handle the security implications of installing any random package
+        // we can remove this check.
+        // We also need to solve the TODO further down about using builder()
+        // before we can support any npm package
+        if (whitelistedNpmPackages.includes(packageName)) {
+          console.log()
+          console.log('Set up auth using', packageName)
+          console.log()
+        } else {
+          console.error(
+            `Right now we don't support setting up auth using \`${packageName}\``
+          )
+          console.error('Supported npm packages are:')
+          for (const packageName of whitelistedNpmPackages) {
+            console.error(`  - ${packageName}`)
+          }
+          process.exit(1)
+        }
 
         // TODO: Figure out how to use builder
         const { handler, _builder } = await getAuthSetup(args._[2], {
           matchRwVersion: false,
+          // TODO: Add a yargs option to control ignoreScripts.
+          // Maybe --execute-yarn-scripts -x
+          ignoreScripts: true,
         })
 
         // Maybe we can do something here to also use builder from above
@@ -217,40 +246,48 @@ function getRedirectMessage(provider) {
   )}`
 }
 
-function yarnAddPackage(module) {
-  execa.commandSync(`yarn add -D ${module}`, {
-    stdio: 'inherit',
-    cwd: getPaths().base,
-  })
+// It's safer to run with --ignore-scripts because it won't automatically run
+// post-install scripts. But some packages have legitimate uses of it.
+function yarnAddPackage(module, ignoreScripts = true) {
+  execa.commandSync(
+    `yarn add -D ${module} ${ignoreScripts ? '--ignore-scripts' : ''}`,
+    {
+      stdio: 'inherit',
+      cwd: getPaths().base,
+    }
+  )
 }
 
 /**
  * @param {string} module
  */
-async function getAuthSetup(module, { matchRwVersion = true } = {}) {
+async function getAuthSetup(
+  module,
+  { matchRwVersion = true, ignoreScripts = false } = {}
+) {
   if (matchRwVersion) {
-    return getMatchingAuthSetup(module)
+    return getMatchingAuthSetup(module, ignoreScripts)
   }
 
   // If there's an '@' symbol, and it's not the first character, then we assume
   // a version is specified
   if (module.lastIndexOf('@') > 0) {
-    return getSpecificAuthSetup(module)
+    return getSpecificAuthSetup(module, ignoreScripts)
   }
 
-  return getLatestAuthSetup(module)
+  return getLatestAuthSetup(module, ignoreScripts)
 }
 
-async function getSpecificAuthSetup(module) {
+async function getSpecificAuthSetup(module, ignoreScripts) {
   const [moduleName, version] = module.split('@')
   if (!isInstalled(moduleName, version)) {
-    yarnAddPackage(module)
+    yarnAddPackage(module, ignoreScripts)
   }
 
   return await import(module)
 }
 
-async function getLatestAuthSetup(module) {
+async function getLatestAuthSetup(module, ignoreScripts) {
   const { stdout } = execa.commandSync(
     `yarn npm info ${module} --fields versions --json`
   )
@@ -259,13 +296,13 @@ async function getLatestAuthSetup(module) {
   const latestVersion = versions.at(-1)
 
   if (!isInstalled(module, latestVersion)) {
-    yarnAddPackage(`${module}@${latestVersion}`)
+    yarnAddPackage(`${module}@${latestVersion}`, ignoreScripts)
   }
 
   return await import(module)
 }
 
-async function getMatchingAuthSetup(module) {
+async function getMatchingAuthSetup(module, ignoreScripts) {
   // Here we're reading this package's (@redwoodjs/cli) package.json.
   // So, in a user's project, `packageJsonPath` will be something like...
   // /Users/bob/tmp/rw-app/node_modules/@redwoodjs/cli/package.json
@@ -292,7 +329,7 @@ async function getMatchingAuthSetup(module) {
 
     // We use `version` to make sure we install the same version of the auth
     // setup package as the rest of the RW packages
-    yarnAddPackage(`${module}@${version}`)
+    yarnAddPackage(`${module}@${version}`, ignoreScripts)
   }
 
   return await import(module)
