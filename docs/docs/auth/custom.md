@@ -6,9 +6,22 @@ sidebar_label: Custom
 
 If Redwood doesn't officially integrate with the auth provider you want to use, you're not out of luck just yet: Redwood has an API you can use to integrate your auth provider of choice.
 
-If you came here because you were previously using Nhost, magic.link, GoTrue, Okta or Wallet Connect (ethereum) we've moved the code for those out into their own separate repos: https://github.com/redwoodjs/auth-nhost, https://github.com/redwoodjs/auth-magiclink, https://github.com/redwoodjs/auth-gotrue, https://github.com/redwoodjs/auth-okta and https://github.com/redwoodjs/auth-walletconnect. The code has been updated to work with the new and updated auth APIs introduced with Redwood v4, but it is mostly untested, so no guarantees it will work. But together with the guide below we hope getting the auth providers working in your own app isn't going to be too difficult.
+:::tip Were you using Nhost, magic.link, GoTrue, Okta or Wallet Connect (ethereum)?
 
-There's a little more work to do writing a custom auth integration compared to just using one of the ready made packages. We'll walk you through all that work here, using [Nhost](https://nhost.io/) as an example. Hopefully you have auth up and running before too long!
+If you're here because you're using one of the providers Redwood used to support (Nhost, magic.link, GoTrue, Okta or Wallet Connect (Ethereum)), we've moved the code for them out into their own separate repos:
+
+- [Nhost](https://github.com/redwoodjs/auth-nhost)
+- [magic.link](https://github.com/redwoodjs/auth-magiclink)
+- [GoTrue](https://github.com/redwoodjs/auth-gotrue)
+- [Okta](https://github.com/redwoodjs/auth-okta)
+- [WalletConnect (Ethereum)](https://github.com/redwoodjs/auth-walletconnect)
+
+The code has been updated to work with the auth APIs introduced in v4, but it's mostly untested, so no guarantee it'll work.
+But together with this doc, we hope getting one of the auth providers working won't be too difficult.
+
+:::
+
+When it comes to writing a custom auth integration, there's a little more work to do than just using one of the ready-made packages. But we'll walk you through all that work here, using [Nhost](https://nhost.io/) as an example. Hopefully you have auth up and running before too long!
 
 To get started, run the setup command:
 
