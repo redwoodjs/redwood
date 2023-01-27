@@ -2,23 +2,23 @@
 // Rails' routing approach and from both React Router and Reach Router (the
 // latter of which has closely inspired some of this code).
 
-export { navigate, back } from './history'
-export { Link, NavLink, useMatch, Redirect } from './links'
-export { useLocation, LocationProvider } from './location'
+export { SkipNavContent, SkipNavLink } from '@reach/skip-nav'
+export { back, navigate } from './history'
+export { Link, NavLink, Redirect, useMatch } from './links'
+export { LocationProvider, useLocation } from './location'
 export {
-  usePageLoadingContext,
   PageLoadingContextProvider,
+  usePageLoadingContext
 } from './PageLoadingContext'
-export { useParams, ParamsProvider, ParamsContext } from './params'
-export { Router, Route, routes } from './router'
-
-export * from './Set'
-
-export { default as RouteAnnouncement } from './route-announcement'
+export { ParamsContext, ParamsProvider, useParams } from './params'
 export * from './route-announcement'
-export { default as RouteFocus } from './route-focus'
+export { default as RouteAnnouncement } from './route-announcement'
 export * from './route-focus'
-
+export { default as RouteFocus } from './route-focus'
+// Used by packages/internal/src/generate/templates/web-routerRoutes.d.ts.template
+export * from './routeParamsTypes'
+export { Route, Router, routes } from './router'
+export * from './Set'
 export { parseSearch } from './util'
 
 /**
@@ -30,15 +30,14 @@ export { parseSearch } from './util'
  *   home: (params?: RouteParams<"/">) => "/"
  *   post: (params?: RouteParams<"/posts/{id:Int}">) => "/posts/{id:Int}"
  * }
+ *
+ * the route can be called as function post({ id })
+ * and the path with parameters is available as string via post.path: /posts/{id:Int}
  */
 // Keep this in index.ts so it can be extended with declaration merging
 export interface AvailableRoutes {
-  [key: string]: (
-    args?: Record<string | number, string | number | boolean>
-  ) => string
+  [key: string]: {
+    (args?: Record<string | number, string | number | boolean>): string
+    path: string
+  }
 }
-
-export { SkipNavLink, SkipNavContent } from '@reach/skip-nav'
-
-// Used by packages/internal/src/generate/templates/web-routerRoutes.d.ts.template
-export * from './routeParamsTypes'

@@ -3,24 +3,24 @@ import React, { isValidElement } from 'react'
 import { ActiveRouteLoader } from './active-route-loader'
 import { useActivePageContext } from './ActivePageContext'
 import { Redirect } from './links'
-import { useLocation, LocationProvider } from './location'
+import { LocationProvider, useLocation } from './location'
 import { ParamsProvider } from './params'
 import {
   RouterContextProvider,
   RouterContextProviderProps,
-  useRouterState,
+  useRouterState
 } from './router-context'
 import { SplashPage } from './splash-page'
 import {
   flattenAll,
+  matchPath,
+  normalizePage,
+  ParamType,
   parseSearch,
   replaceParams,
-  matchPath,
-  validatePath,
-  TrailingSlashesTypes,
-  ParamType,
   Spec,
-  normalizePage,
+  TrailingSlashesTypes,
+  validatePath
 } from './util'
 
 import type { AvailableRoutes } from './index'
@@ -191,7 +191,10 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
         validatePath(path)
 
         if (name && path) {
-          namedRoutes[name] = (args = {}) => replaceParams(path, args)
+          namedRoutes[name] = Object.assign(
+            (args = {}) => replaceParams(path, args),
+            { path: path }
+          )
         }
       }
     }
