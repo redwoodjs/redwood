@@ -33,7 +33,7 @@
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.12",
     "@redwoodjs/api": "3.2.0",
-    "@simplewebauthn/server": "6.2.2",
+    "@simplewebauthn/server": "7.0.0",
     "@types/crypto-js": "4.1.1",
     "@types/md5": "2.3.2",
     "@types/uuid": "9.0.0",
