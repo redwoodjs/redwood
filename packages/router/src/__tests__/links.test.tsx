@@ -1,11 +1,12 @@
 import React from 'react'
 
 import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
-import { render } from '@testing-library/react'
+import { act, render, waitFor } from '@testing-library/react'
 // TODO: Remove when jest configs are in place
 expect.extend({ toHaveClass, toHaveStyle })
 
-import { NavLink, useMatch, Link } from '../links'
+import { navigate, Route, Router, routes } from '../'
+import { Link, NavLink, useMatch } from '../links'
 import { LocationProvider } from '../location'
 import { flattenSearchParams } from '../util'
 
@@ -351,5 +352,51 @@ describe('useMatch', () => {
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
+  })
+  it('returns a match on the same pathname', async () => {
+    Object.keys(routes).forEach((key) => delete routes[key])
+
+    const MyPage = () => {
+      const matchExactPath = useMatch(
+        routes.home({
+          dynamic: 'dunder-mifflin',
+          path: '1',
+        })
+      )
+      const matchWrongPath = useMatch(
+        routes.home({
+          dynamic: 'dunder-mifflin',
+          path: '0',
+        })
+      )
+      const matchParameterPath = useMatch(routes.home.path)
+      return (
+        <>
+          {matchExactPath.match ? 'Exact Path true Match' : null}
+          {matchWrongPath.match ? null : 'Wrong Path false Match'}
+          {matchParameterPath.match ? 'Parameter Path true Match' : null}
+        </>
+      )
+    }
+    const TestRouter = () => (
+      <Router>
+        <Route path="/{dynamic}/{path}" page={MyPage} name="home" />
+      </Router>
+    )
+
+    const screen = render(<TestRouter />)
+
+    act(() =>
+      navigate(
+        routes.home({
+          dynamic: 'dunder-mifflin',
+          path: '1',
+        })
+      )
+    )
+
+    await waitFor(() => expect(screen.getByText(/Exact Path true Match/)))
+    await waitFor(() => expect(screen.getByText(/Wrong Path false Match/)))
+    await waitFor(() => expect(screen.getByText(/Parameter Path true Match/)))
   })
 })
