@@ -122,7 +122,7 @@ export async function builder(yargs) {
   //
   // .command(
   //   'supertokens',
-  //   'Set up auth for for SuperTokens',
+  //   'Set up auth for SuperTokens',
   //   (yargs) => standardAuthBuilder(yargs),
   //   async (args) => {
   //     const handler = await getAuthHandler(
