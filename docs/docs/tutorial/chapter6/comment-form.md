@@ -961,10 +961,11 @@ We used `hidden` to just hide the form and "Leave a comment" title completely fr
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
-import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 // highlight-next-line
 import { Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 const BlogLayout = ({ children }) => {
   const { logOut, isAuthenticated, currentUser } = useAuth()
@@ -1036,9 +1037,10 @@ export default BlogLayout
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
 import { Link, routes } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
 // highlight-next-line
 import { Toaster } from '@redwoodjs/web/toast'
+
+import { useAuth } from 'src/auth'
 
 type BlogLayoutProps = {
   children?: React.ReactNode
