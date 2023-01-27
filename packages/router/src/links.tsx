@@ -34,6 +34,10 @@ type UseMatchOptions = {
  * Match sub paths
  * const match = useMatch('/product', { matchSubPaths: true })
  *
+ *  Match parameter paths
+ *  const match = useMatch('/post/{id:Int}') // works for all '/post/7', 'post/8' ...
+ *  const match = useMatch(routes.post.path) // same as above. routes.post.path stores '/post/{id:Int}'
+ *  const match = useMatch(routes.post({id: 7})) // works only for '/post/7'
  */
 const useMatch = (pathname: string, options?: UseMatchOptions) => {
   const location = useLocation()
