@@ -370,17 +370,22 @@ describe('useMatch', () => {
         })
       )
       const matchParameterPath = useMatch(routes.home.path)
+      // const matchWrongParameterPath = useMatch(routes.anotherHome.path)
       return (
         <>
           {matchExactPath.match ? 'Exact Path true Match' : null}
           {matchWrongPath.match ? null : 'Wrong Path false Match'}
           {matchParameterPath.match ? 'Parameter Path true Match' : null}
+          {/* {matchWrongParameterPath.match
+            ? null
+            : 'Wrong Parameter Path false Match'} */}
         </>
       )
     }
     const TestRouter = () => (
       <Router>
         <Route path="/{dynamic}/{path}" page={MyPage} name="home" />
+        {/* <Route path="/{another}/{path}" page={MyPage} name="anotherHome" /> */}
       </Router>
     )
 
@@ -398,5 +403,8 @@ describe('useMatch', () => {
     await waitFor(() => expect(screen.getByText(/Exact Path true Match/)))
     await waitFor(() => expect(screen.getByText(/Wrong Path false Match/)))
     await waitFor(() => expect(screen.getByText(/Parameter Path true Match/)))
+    // await waitFor(() =>
+    //   expect(screen.getByText(/Wrong Parameter Path false Match/))
+    // )
   })
 })
