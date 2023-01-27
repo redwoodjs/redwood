@@ -25,6 +25,9 @@ type QueryResult = {
   recipes: Array<Recipe>
 }
 
+// This is how graphql-codegen defines queries that don't take vars
+type EmptyVariables = { [key: string]: never }
+
 // This Cell takes a customProp i.e. one not provided by the Cell's query
 interface SuccessProps extends CellSuccessProps<QueryResult> {
   customProp: number
@@ -56,58 +59,135 @@ const recipeCell = {
 }
 
 describe('CellProps mapper type', () => {
-  test('Inputs expect props outside cell, no beforeQuery', () => {
-    type CellInputs = CellProps<
-      typeof recipeCell.Success,
-      QueryResult,
-      typeof recipeCell,
-      ExampleQueryVariables
-    >
+  describe('when beforeQuery does not exist', () => {
+    test('Inputs expect props outside cell', () => {
+      type CellInputs = CellProps<
+        typeof recipeCell.Success,
+        QueryResult,
+        typeof recipeCell,
+        ExampleQueryVariables
+      >
 
-    expectAssignable<CellInputs>({
-      customProp: 55,
-      category: 'Dinner',
-      saved: true,
+      expectAssignable<CellInputs>({
+        customProp: 55,
+        category: 'Dinner',
+        saved: true,
+      })
+    })
+
+    test('Inputs still expect custom props when query does not take variables', () => {
+      type CellWithoutVariablesInputs = CellProps<
+        typeof recipeCell.Success,
+        QueryResult,
+        typeof recipeCell,
+        EmptyVariables
+      >
+
+      expectAssignable<CellWithoutVariablesInputs>({
+        customProp: 55,
+      })
     })
   })
 
-  test('Inputs expect parameters defined in beforeQuery', () => {
-    const cellWithBeforeQuery = {
-      ...recipeCell,
-      beforeQuery: ({ word }: { word: string }) => {
-        return {
-          variables: {
-            category: word,
-            saved: !!word,
-          },
-        }
-      },
-    }
+  describe('when beforeQuery exists and has arguments', () => {
+    test('Inputs expect props outside cell', () => {
+      const cellWithBeforeQuery = {
+        ...recipeCell,
+        beforeQuery: ({ word }: { word: string }) => {
+          return {
+            variables: {
+              category: word,
+              saved: !!word,
+            },
+          }
+        },
+      }
 
-    type CellWithBeforeQueryInputs = CellProps<
-      typeof cellWithBeforeQuery.Success,
-      QueryResult,
-      typeof cellWithBeforeQuery,
-      ExampleQueryVariables
-    >
+      type CellWithBeforeQueryInputs = CellProps<
+        typeof cellWithBeforeQuery.Success,
+        QueryResult,
+        typeof cellWithBeforeQuery,
+        ExampleQueryVariables
+      >
 
-    // Note that the gql variables are no longer required here
-    expectAssignable<CellWithBeforeQueryInputs>({
-      word: 'abracadabra',
-      customProp: 99,
+      // Note that the gql variables are no longer required here
+      expectAssignable<CellWithBeforeQueryInputs>({
+        word: 'abracadabra',
+        customProp: 99,
+      })
+    })
+
+    test('Inputs still expect custom props when query does not take variables', () => {
+      const cellWithBeforeQuery = {
+        ...recipeCell,
+        beforeQuery: ({ fetchPolicy }: { fetchPolicy: string }) => {
+          return {
+            fetchPolicy,
+          }
+        },
+      }
+
+      type CellWithBeforeQueryInputs = CellProps<
+        typeof cellWithBeforeQuery.Success,
+        QueryResult,
+        typeof cellWithBeforeQuery,
+        EmptyVariables
+      >
+
+      expectAssignable<CellWithBeforeQueryInputs>({
+        fetchPolicy: 'cache-only',
+        customProp: 55,
+      })
     })
   })
 
-  test('Inputs still expect custom props when query does not take variables', () => {
-    type CellWithoutVariablesInputs = CellProps<
-      typeof recipeCell.Success,
-      QueryResult,
-      typeof recipeCell,
-      /*GQL Vars */ { [key: string]: never } // This is how graphql-codegen defines queries that don't take vars
-    >
+  describe('when beforeQuery exists and has no arguments', () => {
+    test('Inputs expect props outside cell', () => {
+      const cellWithBeforeQuery = {
+        ...recipeCell,
+        beforeQuery: () => {
+          return {
+            variables: {
+              category: 'Dinner',
+              saved: true,
+            },
+          }
+        },
+      }
 
-    expectAssignable<CellWithoutVariablesInputs>({
-      customProp: 55,
+      type CellWithBeforeQueryInputs = CellProps<
+        typeof cellWithBeforeQuery.Success,
+        QueryResult,
+        typeof cellWithBeforeQuery,
+        ExampleQueryVariables
+      >
+
+      // Note that the gql variables are no longer required here
+      expectAssignable<CellWithBeforeQueryInputs>({
+        customProp: 99,
+      })
+    })
+
+    test('Inputs still expect custom props when query does not take variables', () => {
+      const cellWithBeforeQuery = {
+        ...recipeCell,
+        beforeQuery: () => {
+          return {
+            fetchPolicy: 'cache-only',
+          }
+        },
+      }
+
+      type CellWithBeforeQueryInputs = CellProps<
+        typeof cellWithBeforeQuery.Success,
+        QueryResult,
+        typeof cellWithBeforeQuery,
+        EmptyVariables
+      >
+
+      expectAssignable<CellWithBeforeQueryInputs>({
+        customProp: 55,
+      })
     })
   })
 })
