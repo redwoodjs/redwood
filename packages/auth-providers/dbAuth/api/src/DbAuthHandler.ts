@@ -8,8 +8,8 @@ import type {
   VerifiedAuthenticationResponse,
 } from '@simplewebauthn/server'
 import type {
-  AuthenticationCredentialJSON,
-  RegistrationCredentialJSON,
+  AuthenticationResponseJSON,
+  RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import base64url from 'base64url'
@@ -234,8 +234,8 @@ export type AuthMethodNames =
   | 'webAuthnAuthOptions'
   | 'webAuthnAuthenticate'
 
-type Params = AuthenticationCredentialJSON &
-  RegistrationCredentialJSON & {
+type Params = AuthenticationResponseJSON &
+  RegistrationResponseJSON & {
     username?: string
     password?: string
     method: AuthMethodNames
@@ -722,7 +722,7 @@ export class DbAuthHandler<
     let verification: VerifiedAuthenticationResponse
     try {
       const opts: VerifyAuthenticationResponseOpts = {
-        credential: this.params,
+        response: this.params,
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: webAuthnOptions.origin,
         expectedRPID: webAuthnOptions.domain,
@@ -899,7 +899,7 @@ export class DbAuthHandler<
     let verification: VerifiedRegistrationResponse
     try {
       const options: VerifyRegistrationResponseOpts = {
-        credential: this.params,
+        response: this.params,
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: this.options.webAuthn.origin,
         expectedRPID: this.options.webAuthn.domain,
@@ -915,7 +915,7 @@ export class DbAuthHandler<
 
     if (verified && registrationInfo) {
       const { credentialPublicKey, credentialID, counter } = registrationInfo
-      plainCredentialId = base64url.encode(credentialID)
+      plainCredentialId = base64url.encode(Buffer.from(credentialID))
 
       const existingDevice = await this.dbCredentialAccessor.findFirst({
         where: {
