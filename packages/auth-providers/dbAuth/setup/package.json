@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.13",
     "@redwoodjs/cli-helpers": "3.2.0",
-    "@simplewebauthn/browser": "6.2.2",
+    "@simplewebauthn/browser": "7.0.0",
     "core-js": "3.27.2",
     "prompts": "2.4.2",
     "secure-random-password": "0.2.3",

@@ -7216,7 +7216,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 3.2.0
-    "@simplewebauthn/browser": 6.2.2
+    "@simplewebauthn/browser": 7.0.0
     "@simplewebauthn/typescript-types": 6.2.1
     "@types/secure-random-password": 0.2.1
     "@types/yargs": 17.0.20
@@ -7237,7 +7237,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/auth": 3.2.0
-    "@simplewebauthn/browser": 6.2.2
+    "@simplewebauthn/browser": 7.0.0
     "@simplewebauthn/typescript-types": 6.2.1
     "@types/react": 18.0.27
     core-js: 3.27.2
@@ -8117,10 +8117,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/browser@npm:6.2.2":
-  version: 6.2.2
-  resolution: "@simplewebauthn/browser@npm:6.2.2"
-  checksum: 9863a954709f151a32a35bf370e33a2dc18f94cb55e8b8af96b557431952689df4cd857e130b07d1b069b1a6ab86b697d4264c46a59c3332b86708d853c92187
+"@simplewebauthn/browser@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@simplewebauthn/browser@npm:7.0.0"
+  checksum: 4c78e1c42912219dc655dda63e9ad810bd2e45239ceffc3403ffc3b4ed9b10f6752f82644f9e771af9913caa4115b26f0172e258eb4ff64bc0fcb9042893b558
   languageName: node
   linkType: hard
 
