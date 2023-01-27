@@ -26,7 +26,9 @@ import { useQuery } from './GraphQLHooksProvider'
 type CellPropsVariables<Cell, GQLVariables> = Cell extends {
   beforeQuery: (...args: any[]) => any
 }
-  ? Parameters<Cell['beforeQuery']>[0]
+  ? Parameters<Cell['beforeQuery']>[0] extends unknown
+    ? Record<string, unknown>
+    : Parameters<Cell['beforeQuery']>[0]
   : GQLVariables extends Record<string, never>
   ? unknown
   : GQLVariables
