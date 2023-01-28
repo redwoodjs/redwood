@@ -22,7 +22,7 @@ jest.mock('@redwoodjs/cli-helpers', () => {
   }
 })
 
-// This will load packages/auth-providers/__mocks__/fs.js
+// This will load packages/auth-providers/supertokens/setup/__mocks__/fs.js
 jest.mock('fs')
 
 const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
