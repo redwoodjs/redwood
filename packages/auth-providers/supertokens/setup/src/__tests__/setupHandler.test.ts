@@ -27,8 +27,6 @@ jest.mock('fs')
 
 const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
   __setMockFiles: (files: Record<string, string>) => void
-  __getMockFiles: () => Record<string, string>
-  readdirSync: () => string[]
 }
 
 import fs from 'fs'
