@@ -95,13 +95,9 @@ Redwood includes [integrations](../../authentication.md) for several of the most
 - [Auth0](https://auth0.com/)
 - [Clerk](https://clerk.dev/)
 - [Netlify Identity](https://docs.netlify.com/visitor-access/identity/)
-- [Netlify GoTrue-JS](https://github.com/netlify/gotrue-js)
-- [Magic](https://magic.link)
-- [Nhost](https://nhost.io)
 - [Firebase's GoogleAuthProvider](https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider)
 - [Supabase](https://supabase.io/docs/guides/auth)
 - [SuperTokens](https://supertokens.com)
-- [WalletConnect](https://github.com/oneclickdapp/ethereum-auth)
 
 As for our blog, we're going to use self-hosted authentication (named *dbAuth* in Redwood) since it's the simplest to get started with and doesn't involve any third party signups.
 
@@ -131,9 +127,7 @@ Run this setup command to get the internals of dbAuth added to our app:
 yarn rw setup auth dbAuth
 ```
 
-When asked if you want to override the existing file `/api/src/lib/auth.{js,ts}` say yes. The shell `auth.{js,ts}` that's created in a new app makes sure things like the `@requireAuth` directive work, but now we'll replace it with a real implementation. When prompted to "Enable WebAuthn support", pick no - this is a separate piece of functionality we won't need for the tutorial.
-
-You'll see that the process creates several files and includes some post-install instructions for the last couple of customizations you'll need to make. Let's go through them now.
+When prompted to "Enable WebAuthn support", pick no—this is a separate piece of functionality we won't need for the tutorial. You'll see that the process creates several files and includes some post-install instructions for the last couple of customizations you'll need to make. Let's go through them now.
 
 ### Create a User Model
 
@@ -209,12 +203,15 @@ Going to the admin section now prevents a non-logged in user from seeing posts, 
 ```jsx title="web/src/Routes.js"
 // highlight-next-line
 import { Private, Router, Route, Set } from '@redwoodjs/router'
+
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
 
+import { useAuth } from './auth'
+
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
       // highlight-next-line
       <Private unauthenticated="home">
         <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
@@ -245,12 +242,15 @@ export default Routes
 ```jsx title="web/src/Routes.tsx"
 // highlight-next-line
 import { Private, Router, Route, Set } from '@redwoodjs/router'
+
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
 
+import { useAuth } from './auth'
+
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
       // highlight-next-line
       <Private unauthenticated="home">
         <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
@@ -369,7 +369,7 @@ Reload the homepage and:
 
 ![image](https://user-images.githubusercontent.com/300/146463788-7ab8afbb-8cd8-4c16-b8d2-02a00bcd7b46.png)
 
-They're back! Let's just check that if we click on one of our posts that we can see it...UGH:
+They're back! Let's just check that if we click on one of our posts that we can see it... UGH:
 
 ![image](https://user-images.githubusercontent.com/300/146463841-cb9c95b6-3cc8-4697-9056-97fdebb49c51.png)
 
@@ -496,15 +496,16 @@ Awesome! Signing up will automatically log you in (although this behavior [can b
 
 Now that we're logged in, how do we log out? Let's add a link to the `BlogLayout` so that it's present on all pages, and also include an indicator of who you're actually logged in as.
 
-Redwood provides a [hook](../../authentication.md#api) `useAuth` which we can use in our components to determine the state of the user's login-ness, get their user info, and more. In `BlogLayout` we want to destructure the `isAuthenticated`, `currentUser` and `logOut` properties from `useAuth()`:
+Redwood provides a [hook](../../authentication.md#destructuring-the-useauth-hook) `useAuth` which we can use in our components to determine the state of the user's login-ness, get their user info, and more. In `BlogLayout` we want to destructure the `isAuthenticated`, `currentUser` and `logOut` properties from `useAuth()`:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
-// highlight-next-line
-import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+
+// highlight-next-line
+import { useAuth } from 'src/auth'
 
 const BlogLayout = ({ children }) => {
   // highlight-next-line
@@ -542,9 +543,10 @@ export default BlogLayout
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
-// highlight-next-line
-import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+
+// highlight-next-line
+import { useAuth } from 'src/auth'
 
 type BlogLayoutProps = {
   children?: React.ReactNode
@@ -597,8 +599,9 @@ At the top right of the page, let's show the email address of the user (if they'
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
-import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+
+import { useAuth } from 'src/auth'
 
 const BlogLayout = ({ children }) => {
   const { isAuthenticated, currentUser, logOut } = useAuth()
@@ -650,8 +653,9 @@ export default BlogLayout
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
-import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+
+import { useAuth } from 'src/auth'
 
 type BlogLayoutProps = {
   children?: React.ReactNode
@@ -886,7 +890,7 @@ You can generate a new value with the `yarn rw g secret` command. It only output
 
 Believe it or not, that's pretty much it for authentication! You can use the combination of `@requireAuth` and `@skipAuth` directives to lock down access to GraphQL query/mutations, and the `<Private>` component to restrict access to entire pages of your app. If you only want to restrict access to certain components, or certain parts of a component, you can always get `isAuthenticated` from the `useAuth()` hook and then render one thing or another.
 
-Head over to the Redwood docs to read more about [self-hosted authentication](../../authentication.md#self-hosted-auth-installation-and-setup) and [third-party authentication](../../authentication.md#third-party-providers-installation-and-setup).
+Head over to the Redwood docs to read more about [self-hosted](../../auth/dbauth.md) and [third-party authentication](../../authentication.md#official-integrations).
 
 ## One More Thing
 

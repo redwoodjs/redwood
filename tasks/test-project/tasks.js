@@ -560,6 +560,13 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
         title: 'Scaffolding post',
         task: async () => {
           await generateScaffold('post')
+
+          // Replace the random numbers in the scenario with consistent values
+          await applyCodemod(
+            'scenarioValueSuffix.js',
+            fullPath('api/src/services/posts/posts.scenarios')
+          )
+
           await execa(`yarn rwfw project:copy`, [], execaOptions)
         },
       },
@@ -589,6 +596,48 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
         },
       },
       {
+        // This task renames the migration folders so that we don't have to deal with duplicates/conflicts when commiting to the repo
+        title: 'Adjust dates within migration folder names',
+        task: () => {
+          const migrationsFolderPath = path.join(
+            OUTPUT_PATH,
+            'api',
+            'db',
+            'migrations'
+          )
+          // Migration folders are folders which start with 14 digits because they have a yyyymmddhhmmss
+          const migrationFolders = fs
+            .readdirSync(migrationsFolderPath)
+            .filter((name) => {
+              return (
+                name.match(/\d{14}.+/) &&
+                fs
+                  .lstatSync(path.join(migrationsFolderPath, name))
+                  .isDirectory()
+              )
+            })
+            .sort()
+          const datetime = new Date('2022-01-01T12:00:00.000Z')
+          migrationFolders.forEach((name) => {
+            const datetimeInCorrectFormat =
+              datetime.getFullYear() +
+              ('0' + (datetime.getMonth() + 1)).slice(-2) +
+              ('0' + datetime.getDate()).slice(-2) +
+              ('0' + datetime.getHours()).slice(-2) +
+              ('0' + datetime.getMinutes()).slice(-2) +
+              ('0' + datetime.getSeconds()).slice(-2)
+            fs.renameSync(
+              path.join(migrationsFolderPath, name),
+              path.join(
+                migrationsFolderPath,
+                `${datetimeInCorrectFormat}${name.substring(14)}`
+              )
+            )
+            datetime.setDate(datetime.getDate() + 1)
+          })
+        },
+      },
+      {
         title: 'Add dbAuth',
         task: async () => addDbAuth(),
       },
@@ -607,6 +656,12 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           await applyCodemod(
             'usersService.js',
             fullPath('api/src/services/users/users')
+          )
+
+          // Replace the random numbers in the scenario with consistent values
+          await applyCodemod(
+            'scenarioValueSuffix.js',
+            fullPath('api/src/services/users/users.scenarios')
           )
 
           const test = `import { user } from './users'

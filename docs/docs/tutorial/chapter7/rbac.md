@@ -281,7 +281,7 @@ Redwood provides a `hasRole()` function you can get from the `useAuth()` hook (y
 
 ```jsx title="web/src/components/Comment/Comment.js"
 // highlight-next-line
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const formattedDate = (datetime) => {
   const parsedDate = new Date(datetime)
@@ -332,7 +332,7 @@ export default Comment
 
 ```tsx title="web/src/components/Comment/Comment.tsx"
 // highlight-next-line
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const formattedDate = (datetime: ConstructorParameters<typeof Date>[0]) => {
   const parsedDate = new Date(datetime)
@@ -401,12 +401,13 @@ And due to the nice encapsulation of our **Comment** component we can make all t
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/Comment/Comment.js"
-import { useAuth } from '@redwoodjs/auth'
-// highlight-start
+// highlight-next-line
 import { useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
+
+// highlight-next-line
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
-// highlight-end
 
 // highlight-start
 const DELETE = gql`
@@ -476,12 +477,13 @@ export default Comment
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/Comment/Comment.tsx"
-import { useAuth } from '@redwoodjs/auth'
-// highlight-start
+// highlight-next-line
 import { useMutation } from '@redwoodjs/web'
 
+import { useAuth } from 'src/auth'
+
+// highlight-next-line
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
-// highlight-end
 
 // highlight-next-line
 import type { Comment as IComment } from 'types/graphql'
