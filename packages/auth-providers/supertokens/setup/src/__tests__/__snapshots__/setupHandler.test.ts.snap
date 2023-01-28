@@ -1,11 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`extraTask 1`] = `
-"import SuperTokens from 'supertokens-auth-react'
+"// In this file, all Page components from 'src/pages' are auto-imported.
 
-// In this file, all Page components from 'src/pages' are auto-imported.
+import SuperTokens from 'supertokens-auth-react'
 
 import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
 
 const Routes = () => {
   if (SuperTokens.canHandleRoute()) {

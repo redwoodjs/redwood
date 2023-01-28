@@ -14,14 +14,35 @@ export const extraTask = {
     let content = fs.readFileSync(webRoutesPath).toString()
 
     if (!/^\sif \(SuperTokens.canHandleRoute\(\)\) \{/.test(content)) {
-      content = "import SuperTokens from 'supertokens-auth-react'\n\n" + content
-      content = content.replace(
-        /const Routes = \(\) => \{\n/,
-        'const Routes = () => {\n' +
-          '  if (SuperTokens.canHandleRoute()) {\n' +
-          '    return SuperTokens.getRoutingComponent()\n' +
-          '  }\n\n'
-      )
+      let hasImportedSuperTokens = false
+
+      content = content
+        .split('\n')
+        .reduce<string[]>((acc, line) => {
+          // Add the SuperTokens import before the first import from @redwoodjs
+          if (
+            !hasImportedSuperTokens &&
+            line.includes('import') &&
+            line.includes('@redwoodjs')
+          ) {
+            acc.push("import SuperTokens from 'supertokens-auth-react'")
+            acc.push('')
+
+            hasImportedSuperTokens = true
+          }
+
+          acc.push(line)
+
+          return acc
+        }, [])
+        .join('\n')
+        .replace(
+          /const Routes = \(\) => \{\n/,
+          'const Routes = () => {\n' +
+            '  if (SuperTokens.canHandleRoute()) {\n' +
+            '    return SuperTokens.getRoutingComponent()\n' +
+            '  }\n\n'
+        )
 
       fs.writeFileSync(webRoutesPath, content)
     }
