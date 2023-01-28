@@ -22,8 +22,8 @@ export async function handler({ force: forceArg }: Args) {
     ],
     webPackages: [
       `@redwoodjs/auth-supertokens-web@${version}`,
-      'supertokens-auth-react@^0',
-      'supertokens-web-js@^0',
+      'supertokens-auth-react@^0.30',
+      'supertokens-web-js@^0.4',
     ],
     notes: [
       "We've implemented some of SuperToken's recipes, but feel free",
