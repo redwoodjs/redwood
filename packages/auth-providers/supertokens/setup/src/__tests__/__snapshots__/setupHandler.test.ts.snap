@@ -3,7 +3,7 @@
 exports[`extraTask 1`] = `
 "import SuperTokens from 'supertokens-auth-react'
 
-// In this file, all Page components from 'src/pages\` are auto-imported.
+// In this file, all Page components from 'src/pages' are auto-imported.
 
 import { Router, Route } from '@redwoodjs/router'
 

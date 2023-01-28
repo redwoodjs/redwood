@@ -38,7 +38,7 @@ import { extraTask } from '../setupHandler'
 test('extraTask', () => {
   mockFS.__setMockFiles({
     'Routes.tsx':
-      "// In this file, all Page components from 'src/pages` are auto-imported.\n" +
+      "// In this file, all Page components from 'src/pages' are auto-imported.\n" +
       `
 import { Router, Route } from '@redwoodjs/router'
 
