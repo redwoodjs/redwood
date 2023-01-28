@@ -14,12 +14,7 @@ import {
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { getASTFromFile } from '../../lib/ast'
-import {
-  RedwoodError,
-  RedwoodErrorCode,
-  RedwoodWarning,
-  RedwoodWarningCode,
-} from '../diagnostic'
+import { RedwoodErrorCode, RedwoodWarningCode } from '../diagnostic'
 import type { RedwoodProject } from '../project'
 import { RedwoodSkeleton } from '../skeleton'
 
@@ -27,9 +22,6 @@ import { extractMutations, RedwoodSDLMutation } from './mutations'
 import { extractQueries, RedwoodSDLQuery } from './query'
 
 export class RedwoodSDL extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   // TODO: Maybe we don't need the full gql
   readonly gql: string | undefined
 
@@ -102,7 +94,7 @@ export class RedwoodSDL extends RedwoodSkeleton {
     this.mutations = extractMutations(this)
   }
 
-  executeAdditionalChecks(): void {
+  executeAdditionalChecks() {
     this.queries?.forEach((query) => {
       query.executeAdditionalChecks()
     })
@@ -112,13 +104,11 @@ export class RedwoodSDL extends RedwoodSkeleton {
   }
 }
 
-export function extractSDL(filepath: string): RedwoodSDL {
+export function extractSDL(filepath: string) {
   return new RedwoodSDL(filepath)
 }
 
-export function extractSDLs(
-  project: RedwoodProject | undefined = undefined
-): RedwoodSDL[] {
+export function extractSDLs(project?: RedwoodProject) {
   const sdls: RedwoodSDL[] = []
 
   const sdlPath = project

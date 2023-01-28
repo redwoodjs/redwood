@@ -2,26 +2,20 @@ import fs from 'fs'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from './diagnostic'
+import { RedwoodErrorCode } from './diagnostic'
 import type { RedwoodProject } from './project'
 import { RedwoodSkeleton } from './skeleton'
 
-export enum RedwoodSideType {
-  WEB = 'web',
-  API = 'api',
-}
+export type RedwoodSideType = 'web' | 'api'
 
 export class RedwoodSide extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly type: RedwoodSideType
 
   constructor(filepath: string) {
     super(filepath)
 
-    // TODO: Decide how best to determine sides from the folder
-    this.type = this.name === 'web' ? RedwoodSideType.WEB : RedwoodSideType.API
+    // TODO: Decide how best to determine sides from the project
+    this.type = this.name === 'web' ? 'web' : 'api'
 
     if (!fs.existsSync(this.filepath)) {
       this.errors.push({
@@ -32,13 +26,11 @@ export class RedwoodSide extends RedwoodSkeleton {
   }
 }
 
-export function extractSide(filepath: string): RedwoodSide {
+export function extractSide(filepath: string) {
   return new RedwoodSide(filepath)
 }
 
-export function extractSides(
-  project: RedwoodProject | undefined = undefined
-): RedwoodSide[] {
+export function extractSides(project?: RedwoodProject) {
   const sides: RedwoodSide[] = []
 
   const basePath = project ? getPaths(project.filepath).base : getPaths().base

@@ -1,18 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from './diagnostic'
+import { RedwoodErrorCode } from './diagnostic'
 import { RedwoodProject } from './project'
 import { extractRoutes } from './route'
 import type { RedwoodRoute } from './route'
-import { extractSides, RedwoodSideType } from './side'
-import type { RedwoodSide } from './side'
+import { extractSides } from './side'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodRouter extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly routes: RedwoodRoute[]
 
   constructor(filepath: string) {
@@ -53,13 +49,13 @@ export class RedwoodRouter extends RedwoodSkeleton {
     })
   }
 
-  executeAdditionalChecks(): void {
+  executeAdditionalChecks() {
     this.routes.forEach((route) => {
       route.executeAdditionalChecks()
     })
   }
 
-  getSide(): RedwoodSide {
+  getSide() {
     const sides = RedwoodProject.getProject({
       pathWithinProject: this.filepath,
     }).getSides()
@@ -73,13 +69,11 @@ export class RedwoodRouter extends RedwoodSkeleton {
   }
 }
 
-export function extractRouter(filepath: string): RedwoodRouter {
+export function extractRouter(filepath: string) {
   return new RedwoodRouter(filepath)
 }
 
-export function extractRouters(
-  project: RedwoodProject | undefined = undefined
-): RedwoodRouter[] {
+export function extractRouters(project?: RedwoodProject) {
   const routers: RedwoodRouter[] = []
 
   const routerFiles: string[] = []
@@ -87,13 +81,13 @@ export function extractRouters(
   sides
     ?.filter((side) => {
       // Extract only sides which support a router
-      return side.type === RedwoodSideType.WEB
+      return side.type === 'web'
     })
     .forEach((side) => {
       // Find the router file and create a RedwoodRouter
       let routerFileName = ''
       switch (side.type) {
-        case RedwoodSideType.WEB:
+        case 'web':
           routerFileName = fs
             .readdirSync(path.join(side.filepath, 'src'))
             .filter((path) => {

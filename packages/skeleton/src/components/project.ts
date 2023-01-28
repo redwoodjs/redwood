@@ -9,7 +9,6 @@ import { getRootPath } from '../lib/path'
 
 import { extractCells } from './cell'
 import type { RedwoodCell } from './cell'
-import { RedwoodError, RedwoodWarning } from './diagnostic'
 import { extractDirectives } from './directive'
 import type { RedwoodDirective } from './directive'
 import { extractFunctions } from './function'
@@ -31,31 +30,25 @@ import { extractTOMLs } from './toml'
 import type { RedwoodTOML } from './toml'
 
 /**
- * Used to enumerate either JS or TS project types
+ * Used to distinguish either JS or TS project types
  */
-export enum RedwoodProjectType {
-  TYPESCRIPT = 'typescript',
-  JAVASCRIPT = 'javascript',
-}
+export type RedwoodProjectType = 'typescript' | 'javascript'
 
 export class RedwoodProject extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly type: RedwoodProjectType
 
-  private cells?: RedwoodCell[] | undefined
-  private directives?: RedwoodDirective[] | undefined
-  private functions?: RedwoodFunction[] | undefined
-  private layouts?: RedwoodLayout[] | undefined
-  private pages?: RedwoodPage[] | undefined
-  private routers?: RedwoodRouter[] | undefined
-  private sdls?: RedwoodSDL[] | undefined
-  private services?: RedwoodService[] | undefined
-  private sides?: RedwoodSide[] | undefined
-  private tomls?: RedwoodTOML[] | undefined
+  #cells?: RedwoodCell[]
+  #directives?: RedwoodDirective[]
+  #functions?: RedwoodFunction[]
+  #layouts?: RedwoodLayout[]
+  #pages?: RedwoodPage[]
+  #routers?: RedwoodRouter[]
+  #sdls?: RedwoodSDL[]
+  #services?: RedwoodService[]
+  #sides?: RedwoodSide[]
+  #tomls?: RedwoodTOML[]
 
-  public static getProject({
+  static getProject({
     pathWithinProject = '',
     full = false,
     readFromCache = true,
@@ -85,162 +78,160 @@ export class RedwoodProject extends RedwoodSkeleton {
     super(rootPath)
 
     // A project is typescript if we detect a tsconfig.json
-    this.type =
+    const tsconfigFound =
       fs.existsSync(
         path.join(getPaths(this.filepath).web.base, 'tsconfig.json')
       ) ||
       fs.existsSync(
         path.join(getPaths(this.filepath).api.base, 'tsconfig.json')
       )
-        ? RedwoodProjectType.TYPESCRIPT
-        : RedwoodProjectType.JAVASCRIPT
+    this.type = tsconfigFound ? 'typescript' : 'javascript'
 
     if (full) {
-      this.cells = extractCells(this)
-      this.directives = extractDirectives(this)
-      this.functions = extractFunctions(this)
-      this.layouts = extractLayouts(this)
-      this.pages = extractPages(this)
-      this.routers = extractRouters(this)
-      this.sdls = extractSDLs(this)
-      this.services = extractServices(this)
-      this.sides = extractSides(this)
-      this.tomls = extractTOMLs(this)
+      this.#cells = extractCells(this)
+      this.#directives = extractDirectives(this)
+      this.#functions = extractFunctions(this)
+      this.#layouts = extractLayouts(this)
+      this.#pages = extractPages(this)
+      this.#routers = extractRouters(this)
+      this.#sdls = extractSDLs(this)
+      this.#services = extractServices(this)
+      this.#sides = extractSides(this)
+      this.#tomls = extractTOMLs(this)
 
       // Execute the additional checks since we've already extracted all components
       this.executeAdditionalChecks()
     }
   }
 
-  executeAdditionalChecks(): void {
-    this.cells?.forEach((cell) => {
+  executeAdditionalChecks() {
+    this.#cells?.forEach((cell) => {
       cell.executeAdditionalChecks()
     })
-    this.directives?.forEach((directive) => {
+    this.#directives?.forEach((directive) => {
       directive.executeAdditionalChecks()
     })
-    this.functions?.forEach((func) => {
+    this.#functions?.forEach((func) => {
       func.executeAdditionalChecks()
     })
-    this.layouts?.forEach((layout) => {
+    this.#layouts?.forEach((layout) => {
       layout.executeAdditionalChecks()
     })
-    this.pages?.forEach((page) => {
+    this.#pages?.forEach((page) => {
       page.executeAdditionalChecks()
     })
-    this.routers?.forEach((router) => {
+    this.#routers?.forEach((router) => {
       router.executeAdditionalChecks()
     })
-    this.sdls?.forEach((sdl) => {
+    this.#sdls?.forEach((sdl) => {
       sdl.executeAdditionalChecks()
     })
-    this.services?.forEach((service) => {
+    this.#services?.forEach((service) => {
       service.executeAdditionalChecks()
     })
-    this.sides?.forEach((side) => {
+    this.#sides?.forEach((side) => {
       side.executeAdditionalChecks()
     })
-    this.tomls?.forEach((toml) => {
+    this.#tomls?.forEach((toml) => {
       toml.executeAdditionalChecks()
     })
   }
 
-  getTOMLs(forceExtract = false): RedwoodTOML[] {
-    if (forceExtract || this.tomls === undefined) {
-      this.tomls = extractTOMLs(this)
+  getTOMLs(forceExtract = false) {
+    if (forceExtract || this.#tomls === undefined) {
+      this.#tomls = extractTOMLs(this)
     }
-    return this.tomls
+    return this.#tomls
   }
 
-  getSDLs(forceExtract = false): RedwoodSDL[] {
-    if (forceExtract || this.sdls === undefined) {
-      this.sdls = extractSDLs(this)
+  getSDLs(forceExtract = false) {
+    if (forceExtract || this.#sdls === undefined) {
+      this.#sdls = extractSDLs(this)
     }
-    return this.sdls
+    return this.#sdls
   }
 
-  getServices(forceExtract = false): RedwoodService[] {
-    if (forceExtract || this.services === undefined) {
-      this.services = extractServices(this)
+  getServices(forceExtract = false) {
+    if (forceExtract || this.#services === undefined) {
+      this.#services = extractServices(this)
     }
-    return this.services
+    return this.#services
   }
 
-  getSides(forceExtract = false): RedwoodSide[] {
-    if (forceExtract || this.sides === undefined) {
-      this.sides = extractSides(this)
+  getSides(forceExtract = false) {
+    if (forceExtract || this.#sides === undefined) {
+      this.#sides = extractSides(this)
     }
-    return this.sides
+    return this.#sides
   }
 
-  getCells(forceExtract = false): RedwoodCell[] {
-    if (forceExtract || this.cells === undefined) {
-      this.cells = extractCells(this)
+  getCells(forceExtract = false) {
+    if (forceExtract || this.#cells === undefined) {
+      this.#cells = extractCells(this)
     }
-    return this.cells
+    return this.#cells
   }
 
-  getRouters(forceExtract = false): RedwoodRouter[] {
-    if (forceExtract || this.routers === undefined) {
-      this.routers = extractRouters(this)
+  getRouters(forceExtract = false) {
+    if (forceExtract || this.#routers === undefined) {
+      this.#routers = extractRouters(this)
     }
-    return this.routers
+    return this.#routers
   }
 
-  getLayouts(forceExtract = false): RedwoodLayout[] {
-    if (forceExtract || this.layouts === undefined) {
-      this.layouts = extractLayouts(this)
+  getLayouts(forceExtract = false) {
+    if (forceExtract || this.#layouts === undefined) {
+      this.#layouts = extractLayouts(this)
     }
-    return this.layouts
+    return this.#layouts
   }
 
-  getPages(forceExtract = false): RedwoodPage[] {
-    if (forceExtract || this.pages === undefined) {
-      this.pages = extractPages(this)
+  getPages(forceExtract = false) {
+    if (forceExtract || this.#pages === undefined) {
+      this.#pages = extractPages(this)
     }
-    return this.pages
+    return this.#pages
   }
 
-  getFunctions(forceExtract = false): RedwoodFunction[] {
-    if (forceExtract || this.functions === undefined) {
-      this.functions = extractFunctions(this)
+  getFunctions(forceExtract = false) {
+    if (forceExtract || this.#functions === undefined) {
+      this.#functions = extractFunctions(this)
     }
-    return this.functions
+    return this.#functions
   }
 
-  getDirectives(forceExtract = false): RedwoodDirective[] {
-    if (forceExtract || this.directives === undefined) {
-      this.directives = extractDirectives(this)
+  getDirectives(forceExtract = false) {
+    if (forceExtract || this.#directives === undefined) {
+      this.#directives = extractDirectives(this)
     }
-    return this.directives
+    return this.#directives
   }
 
-  hasWarnings(cascade = false): boolean {
-    let warningsFound = this.warnings.length > 0
-    // if project has warnings then we can skip checking children and just return
+  hasWarnings(cascade = false) {
+    let warningsFound = super.hasWarnings()
     if (cascade && !warningsFound) {
-      this.cells?.forEach((cell) => {
+      this.#cells?.forEach((cell) => {
         warningsFound ||= cell.hasWarnings()
       })
-      this.directives?.forEach((directive) => {
+      this.#directives?.forEach((directive) => {
         warningsFound ||= directive.hasWarnings()
       })
-      this.functions?.forEach((func) => {
+      this.#functions?.forEach((func) => {
         warningsFound ||= func.hasWarnings()
       })
-      this.layouts?.forEach((layout) => {
+      this.#layouts?.forEach((layout) => {
         warningsFound ||= layout.hasWarnings()
       })
-      this.pages?.forEach((page) => {
+      this.#pages?.forEach((page) => {
         warningsFound ||= page.hasWarnings()
       })
-      this.routers?.forEach((router) => {
+      this.#routers?.forEach((router) => {
         warningsFound ||= router.hasWarnings()
         router.routes.forEach((route) => {
           warningsFound ||= route.hasWarnings()
         })
       })
-      this.sdls?.forEach((sdl) => {
+      this.#sdls?.forEach((sdl) => {
         warningsFound ||= sdl.hasWarnings()
         sdl.queries?.forEach((query) => {
           warningsFound ||= query.hasWarnings()
@@ -249,24 +240,24 @@ export class RedwoodProject extends RedwoodSkeleton {
           warningsFound ||= mutation.hasWarnings()
         })
       })
-      this.services?.forEach((service) => {
+      this.#services?.forEach((service) => {
         warningsFound ||= service.hasWarnings()
         service.functions.forEach((func) => {
           warningsFound ||= func.hasWarnings()
         })
       })
-      this.sides?.forEach((side) => {
+      this.#sides?.forEach((side) => {
         warningsFound ||= side.hasWarnings()
       })
-      this.tomls?.forEach((toml) => {
+      this.#tomls?.forEach((toml) => {
         warningsFound ||= toml.hasWarnings()
       })
     }
     return warningsFound
   }
 
-  printWarnings(cascade = false): void {
-    if (this.warnings.length > 0) {
+  printWarnings(cascade = false) {
+    if (super.hasWarnings()) {
       const titleLine = `${chalk.bgYellow('[Warn]')}\t${this.name} ${chalk.dim(
         this.filepath
       )}`
@@ -276,28 +267,28 @@ export class RedwoodProject extends RedwoodSkeleton {
       console.log(titleLine.concat('\n', ...warningLines).trimEnd())
     }
     if (cascade) {
-      this.cells?.forEach((cell) => {
+      this.#cells?.forEach((cell) => {
         cell.printWarnings()
       })
-      this.directives?.forEach((directive) => {
+      this.#directives?.forEach((directive) => {
         directive.printWarnings()
       })
-      this.functions?.forEach((func) => {
+      this.#functions?.forEach((func) => {
         func.printWarnings()
       })
-      this.layouts?.forEach((layout) => {
+      this.#layouts?.forEach((layout) => {
         layout.printWarnings()
       })
-      this.pages?.forEach((page) => {
+      this.#pages?.forEach((page) => {
         page.printWarnings()
       })
-      this.routers?.forEach((router) => {
+      this.#routers?.forEach((router) => {
         router.printWarnings()
         router.routes.forEach((route) => {
           route.printWarnings()
         })
       })
-      this.sdls?.forEach((sdl) => {
+      this.#sdls?.forEach((sdl) => {
         sdl.printWarnings()
         sdl.queries?.forEach((query) => {
           query.printWarnings()
@@ -306,47 +297,46 @@ export class RedwoodProject extends RedwoodSkeleton {
           mutation.printWarnings()
         })
       })
-      this.services?.forEach((service) => {
+      this.#services?.forEach((service) => {
         service.printWarnings()
         service.functions.forEach((func) => {
           func.printWarnings()
         })
       })
-      this.sides?.forEach((side) => {
+      this.#sides?.forEach((side) => {
         side.printWarnings()
       })
-      this.tomls?.forEach((toml) => {
+      this.#tomls?.forEach((toml) => {
         toml.printWarnings()
       })
     }
   }
 
-  hasErrors(cascade = false): boolean {
-    let errorsFound = this.errors.length > 0
-    // if project has errors then we can skip checking children and just return
+  hasErrors(cascade = false) {
+    let errorsFound = super.hasErrors()
     if (cascade && !errorsFound) {
-      this.cells?.forEach((cell) => {
+      this.#cells?.forEach((cell) => {
         errorsFound ||= cell.hasErrors()
       })
-      this.directives?.forEach((directive) => {
+      this.#directives?.forEach((directive) => {
         errorsFound ||= directive.hasErrors()
       })
-      this.functions?.forEach((func) => {
+      this.#functions?.forEach((func) => {
         errorsFound ||= func.hasErrors()
       })
-      this.layouts?.forEach((layout) => {
+      this.#layouts?.forEach((layout) => {
         errorsFound ||= layout.hasErrors()
       })
-      this.pages?.forEach((page) => {
+      this.#pages?.forEach((page) => {
         errorsFound ||= page.hasErrors()
       })
-      this.routers?.forEach((router) => {
+      this.#routers?.forEach((router) => {
         errorsFound ||= router.hasErrors()
         router.routes.forEach((route) => {
           errorsFound ||= route.hasErrors()
         })
       })
-      this.sdls?.forEach((sdl) => {
+      this.#sdls?.forEach((sdl) => {
         errorsFound ||= sdl.hasErrors()
         sdl.queries?.forEach((query) => {
           errorsFound ||= query.hasErrors()
@@ -355,24 +345,24 @@ export class RedwoodProject extends RedwoodSkeleton {
           errorsFound ||= mutation.hasErrors()
         })
       })
-      this.services?.forEach((service) => {
+      this.#services?.forEach((service) => {
         errorsFound ||= service.hasErrors()
         service.functions.forEach((func) => {
           errorsFound ||= func.hasErrors()
         })
       })
-      this.sides?.forEach((side) => {
+      this.#sides?.forEach((side) => {
         errorsFound ||= side.hasErrors()
       })
-      this.tomls?.forEach((toml) => {
+      this.#tomls?.forEach((toml) => {
         errorsFound ||= toml.hasErrors()
       })
     }
     return errorsFound
   }
 
-  printErrors(cascade = false): void {
-    if (this.errors.length > 0) {
+  printErrors(cascade = false) {
+    if (super.hasErrors()) {
       const titleLine = `${chalk.bgRed('[Error]')}\t${this.name} ${chalk.dim(
         this.filepath
       )}`
@@ -382,28 +372,28 @@ export class RedwoodProject extends RedwoodSkeleton {
       console.log(titleLine.concat('\n', ...errorLines).trimEnd())
     }
     if (cascade) {
-      this.cells?.forEach((cell) => {
+      this.#cells?.forEach((cell) => {
         cell.printErrors()
       })
-      this.directives?.forEach((directive) => {
+      this.#directives?.forEach((directive) => {
         directive.printErrors()
       })
-      this.functions?.forEach((func) => {
+      this.#functions?.forEach((func) => {
         func.printErrors()
       })
-      this.layouts?.forEach((layout) => {
+      this.#layouts?.forEach((layout) => {
         layout.printErrors()
       })
-      this.pages?.forEach((page) => {
+      this.#pages?.forEach((page) => {
         page.printErrors()
       })
-      this.routers?.forEach((router) => {
+      this.#routers?.forEach((router) => {
         router.printErrors()
         router.routes.forEach((route) => {
           route.printErrors()
         })
       })
-      this.sdls?.forEach((sdl) => {
+      this.#sdls?.forEach((sdl) => {
         sdl.printErrors()
         sdl.queries?.forEach((query) => {
           query.printErrors()
@@ -412,16 +402,16 @@ export class RedwoodProject extends RedwoodSkeleton {
           mutation.printErrors()
         })
       })
-      this.services?.forEach((service) => {
+      this.#services?.forEach((service) => {
         service.printErrors()
         service.functions.forEach((func) => {
           func.printErrors()
         })
       })
-      this.sides?.forEach((side) => {
+      this.#sides?.forEach((side) => {
         side.printErrors()
       })
-      this.tomls?.forEach((toml) => {
+      this.#tomls?.forEach((toml) => {
         toml.printErrors()
       })
     }
@@ -447,13 +437,13 @@ export class RedwoodProject extends RedwoodSkeleton {
 class RedwoodProjectsCache {
   private static instance: RedwoodProjectsCache
 
-  public projects: Map<string, RedwoodProject>
+  projects: Map<string, RedwoodProject>
 
   private constructor() {
     this.projects = new Map()
   }
 
-  public static getInstance(): RedwoodProjectsCache {
+  static getInstance() {
     if (!RedwoodProjectsCache.instance) {
       RedwoodProjectsCache.instance = new RedwoodProjectsCache()
     }

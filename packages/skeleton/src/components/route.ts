@@ -12,22 +12,12 @@ import {
 
 import { getASTFromCode, getJSXElementAttributes } from '../lib/ast'
 
-import {
-  RedwoodError,
-  RedwoodErrorCode,
-  RedwoodWarning,
-  RedwoodWarningCode,
-} from './diagnostic'
-import type { RedwoodPage } from './page'
+import { RedwoodErrorCode, RedwoodWarningCode } from './diagnostic'
 import { RedwoodProject } from './project'
 import type { RedwoodRouter } from './router'
-import { RedwoodSideType } from './side'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodRoute extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly path: string | undefined
   readonly pageIdentifier: string | undefined
   readonly prerender: boolean
@@ -99,7 +89,7 @@ export class RedwoodRoute extends RedwoodSkeleton {
     }
   }
 
-  executeAdditionalChecks(): void {
+  executeAdditionalChecks() {
     if (this.pageIdentifier !== undefined) {
       if (this.getPage() === undefined) {
         this.errors.push({
@@ -110,7 +100,7 @@ export class RedwoodRoute extends RedwoodSkeleton {
     }
   }
 
-  getPage(): RedwoodPage | undefined {
+  getPage() {
     return RedwoodProject.getProject({
       pathWithinProject: this.filepath,
     })
@@ -121,10 +111,10 @@ export class RedwoodRoute extends RedwoodSkeleton {
   }
 }
 
-export function extractRoutes(router: RedwoodRouter): RedwoodRoute[] {
+export function extractRoutes(router: RedwoodRouter) {
   let routes: RedwoodRoute[] = []
   switch (router.getSide().type) {
-    case RedwoodSideType.WEB:
+    case 'web':
       routes = extractFromWebRouter(router)
       break
     default:
@@ -134,7 +124,7 @@ export function extractRoutes(router: RedwoodRouter): RedwoodRoute[] {
   return routes
 }
 
-function extractFromWebRouter(router: RedwoodRouter): RedwoodRoute[] {
+function extractFromWebRouter(router: RedwoodRouter) {
   const routes: RedwoodRoute[] = []
 
   const code = fs.readFileSync(router.filepath, { encoding: 'utf8', flag: 'r' })

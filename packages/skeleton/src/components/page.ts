@@ -5,15 +5,11 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { getRootPath } from '../lib/path'
 
-import { RedwoodError, RedwoodWarning } from './diagnostic'
 import { RedwoodProject } from './project'
 import type { RedwoodRoute } from './route'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodPage extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   constructor(filepath: string) {
     const pagesPath = getPaths(getRootPath(filepath)).web.pages
     const name = filepath
@@ -22,7 +18,7 @@ export class RedwoodPage extends RedwoodSkeleton {
     super(filepath, name)
   }
 
-  getRoutes(): RedwoodRoute[] {
+  getRoutes() {
     const routes: RedwoodRoute[] = []
     RedwoodProject.getProject({
       pathWithinProject: this.filepath,
@@ -40,13 +36,11 @@ export class RedwoodPage extends RedwoodSkeleton {
   }
 }
 
-export function extractPage(filepath: string): RedwoodPage {
+export function extractPage(filepath: string) {
   return new RedwoodPage(filepath)
 }
 
-export function extractPages(
-  project: RedwoodProject | undefined = undefined
-): RedwoodPage[] {
+export function extractPages(project?: RedwoodProject) {
   const pages: RedwoodPage[] = []
 
   const pagesPath = project

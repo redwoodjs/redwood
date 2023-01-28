@@ -3,26 +3,20 @@ import path from 'path'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { RedwoodError, RedwoodWarning } from './diagnostic'
 import type { RedwoodProject } from './project'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodLayout extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   constructor(filepath: string) {
     super(filepath)
   }
 }
 
-export function extractLayout(filepath: string): RedwoodLayout {
+export function extractLayout(filepath: string) {
   return new RedwoodLayout(filepath)
 }
 
-export function extractLayouts(
-  project: RedwoodProject | undefined = undefined
-): RedwoodLayout[] {
+export function extractLayouts(project?: RedwoodProject) {
   const layouts: RedwoodLayout[] = []
 
   const layoutsPath = project

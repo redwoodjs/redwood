@@ -3,16 +3,13 @@ import path from 'path'
 import { FieldDefinitionNode } from 'graphql'
 
 import { parseGraphQL } from '../../lib/gql'
-import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from '../diagnostic'
+import { RedwoodErrorCode } from '../diagnostic'
 import { RedwoodProject } from '../project'
 import { RedwoodSkeleton } from '../skeleton'
 
 import { RedwoodSDL } from './sdl'
 
 export class RedwoodSDLMutation extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly SDLName: string
   readonly parameters: string[] = []
   readonly directiveNames: string[] = []
@@ -35,7 +32,7 @@ export class RedwoodSDLMutation extends RedwoodSkeleton {
     }
   }
 
-  executeAdditionalChecks(): void {
+  executeAdditionalChecks() {
     const knownDirectives = RedwoodProject.getProject({
       pathWithinProject: this.filepath,
     }).getDirectives()
@@ -80,7 +77,7 @@ export class RedwoodSDLMutation extends RedwoodSkeleton {
   }
 }
 
-export function extractMutations(sdl: RedwoodSDL): RedwoodSDLMutation[] {
+export function extractMutations(sdl: RedwoodSDL) {
   const mutations: RedwoodSDLMutation[] = []
 
   if (sdl.gql === undefined) {

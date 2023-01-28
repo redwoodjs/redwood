@@ -6,16 +6,12 @@ import traverse from '@babel/traverse'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { getASTFromFile } from '../../lib/ast'
-import { RedwoodError, RedwoodWarning } from '../diagnostic'
 import type { RedwoodProject } from '../project'
 import { RedwoodSkeleton } from '../skeleton'
 
 import { RedwoodServiceFunction } from './function'
 
 export class RedwoodService extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly functions: RedwoodServiceFunction[] = []
 
   constructor(filepath: string) {
@@ -30,20 +26,18 @@ export class RedwoodService extends RedwoodSkeleton {
     })
   }
 
-  executeAdditionalChecks(): void {
+  executeAdditionalChecks() {
     this.functions.forEach((func) => {
       func.executeAdditionalChecks()
     })
   }
 }
 
-export function extractService(filepath: string): RedwoodService {
+export function extractService(filepath: string) {
   return new RedwoodService(filepath)
 }
 
-export function extractServices(
-  project: RedwoodProject | undefined = undefined
-): RedwoodService[] {
+export function extractServices(project?: RedwoodProject) {
   const services: RedwoodService[] = []
 
   const servicesPath = project

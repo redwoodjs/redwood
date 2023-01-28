@@ -4,7 +4,7 @@ export function parseGraphQL(gql: string) {
   return parse(gql)
 }
 
-export function getGraphQLQueryName(gql: string): string | undefined {
+export function getGraphQLQueryName(gql: string) {
   const ast = parse(gql)
   for (const def of ast.definitions) {
     if (def.kind === 'OperationDefinition' && def.operation === 'query') {

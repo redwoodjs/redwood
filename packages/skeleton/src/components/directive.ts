@@ -29,9 +29,6 @@ import type { RedwoodProject } from './project'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodDirective extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly gql: string | undefined
   readonly kind: 'transform' | 'validate' | 'unknown' = 'unknown'
 
@@ -162,13 +159,11 @@ export class RedwoodDirective extends RedwoodSkeleton {
   }
 }
 
-export function extractDirective(filepath: string): RedwoodDirective {
+export function extractDirective(filepath: string) {
   return new RedwoodDirective(filepath)
 }
 
-export function extractDirectives(
-  project: RedwoodProject | undefined = undefined
-): RedwoodDirective[] {
+export function extractDirectives(project?: RedwoodProject) {
   const directives: RedwoodDirective[] = []
 
   const directivesPath = project

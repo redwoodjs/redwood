@@ -13,14 +13,11 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import { getASTFromFile } from '../lib/ast'
 
-import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from './diagnostic'
+import { RedwoodErrorCode } from './diagnostic'
 import type { RedwoodProject } from './project'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodFunction extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   constructor(filepath: string) {
     super(filepath)
 
@@ -48,13 +45,11 @@ export class RedwoodFunction extends RedwoodSkeleton {
   }
 }
 
-export function extractFunction(filepath: string): RedwoodFunction {
+export function extractFunction(filepath: string) {
   return new RedwoodFunction(filepath)
 }
 
-export function extractFunctions(
-  project: RedwoodProject | undefined = undefined
-): RedwoodFunction[] {
+export function extractFunctions(project?: RedwoodProject) {
   const functions: RedwoodFunction[] = []
 
   const functionsPath = project

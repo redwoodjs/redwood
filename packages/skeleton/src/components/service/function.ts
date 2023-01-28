@@ -11,16 +11,11 @@ import {
   isVariableDeclarator,
 } from '@babel/types'
 
-import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from '../diagnostic'
+import { RedwoodErrorCode } from '../diagnostic'
 import { RedwoodProject } from '../project'
-import type { RedwoodSDLMutation } from '../sdl/mutations'
-import type { RedwoodSDLQuery } from '../sdl/query'
 import { RedwoodSkeleton } from '../skeleton'
 
 export class RedwoodServiceFunction extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly serviceName: string
   readonly parameters: string[] = []
 
@@ -77,7 +72,7 @@ export class RedwoodServiceFunction extends RedwoodSkeleton {
     }
   }
 
-  executeAdditionalChecks(): void {
+  executeAdditionalChecks() {
     const associatedSDLOperation = this.getAssociatedSDLOperation()
     if (associatedSDLOperation) {
       let parametersMatch =
@@ -95,10 +90,7 @@ export class RedwoodServiceFunction extends RedwoodSkeleton {
     }
   }
 
-  getAssociatedSDLOperation():
-    | undefined
-    | RedwoodSDLQuery
-    | RedwoodSDLMutation {
+  getAssociatedSDLOperation() {
     const sdl = RedwoodProject.getProject({ pathWithinProject: this.filepath })
       .getSDLs()
       .find((sdl) => {

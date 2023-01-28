@@ -4,19 +4,9 @@ exports[`From within the empty-project fixture Complexity is measured correctly:
 
 exports[`From within the empty-project fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
-  "cells": undefined,
-  "directives": undefined,
   "errors": [],
   "filepath": "",
-  "functions": undefined,
-  "layouts": undefined,
   "name": "empty-project",
-  "pages": undefined,
-  "routers": undefined,
-  "sdls": undefined,
-  "services": undefined,
-  "sides": undefined,
-  "tomls": undefined,
   "type": "typescript",
   "warnings": [],
 }
@@ -26,19 +16,9 @@ exports[`From within the example-todo-main fixture Complexity is measured correc
 
 exports[`From within the example-todo-main fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
-  "cells": undefined,
-  "directives": undefined,
   "errors": [],
   "filepath": "",
-  "functions": undefined,
-  "layouts": undefined,
   "name": "example-todo-main",
-  "pages": undefined,
-  "routers": undefined,
-  "sdls": undefined,
-  "services": undefined,
-  "sides": undefined,
-  "tomls": undefined,
   "type": "typescript",
   "warnings": [],
 }
@@ -48,19 +28,9 @@ exports[`From within the example-todo-main-with-errors fixture Complexity is mea
 
 exports[`From within the example-todo-main-with-errors fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
-  "cells": undefined,
-  "directives": undefined,
   "errors": [],
   "filepath": "",
-  "functions": undefined,
-  "layouts": undefined,
   "name": "example-todo-main-with-errors",
-  "pages": undefined,
-  "routers": undefined,
-  "sdls": undefined,
-  "services": undefined,
-  "sides": undefined,
-  "tomls": undefined,
   "type": "javascript",
   "warnings": [],
 }
@@ -70,19 +40,9 @@ exports[`From within the test-project fixture Complexity is measured correctly: 
 
 exports[`From within the test-project fixture Minimal project matches expectation 1`] = `
 RedwoodProject {
-  "cells": undefined,
-  "directives": undefined,
   "errors": [],
   "filepath": "",
-  "functions": undefined,
-  "layouts": undefined,
   "name": "test-project",
-  "pages": undefined,
-  "routers": undefined,
-  "sdls": undefined,
-  "services": undefined,
-  "sides": undefined,
-  "tomls": undefined,
   "type": "typescript",
   "warnings": [],
 }

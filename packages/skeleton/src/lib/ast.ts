@@ -83,9 +83,7 @@ export function getVariableDeclarator(ast: File, name: string) {
   return variableDeclarator
 }
 
-export function getJSXElementAttributes(
-  element: JSXElement
-): Map<string, string> {
+export function getJSXElementAttributes(element: JSXElement) {
   const attributes: Map<string, string> = new Map()
   assertJSXOpeningElement(element.openingElement)
   if (element.openingElement.attributes.length > 0) {

@@ -5,14 +5,11 @@ import { parse as parseTOML } from '@iarna/toml'
 
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
-import { RedwoodError, RedwoodErrorCode, RedwoodWarning } from './diagnostic'
+import { RedwoodErrorCode } from './diagnostic'
 import type { RedwoodProject } from './project'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodTOML extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly contents: any
 
   constructor(filepath: string) {
@@ -31,13 +28,11 @@ export class RedwoodTOML extends RedwoodSkeleton {
   }
 }
 
-export function extractTOML(filepath: string): RedwoodTOML {
+export function extractTOML(filepath: string) {
   return new RedwoodTOML(filepath)
 }
 
-export function extractTOMLs(
-  project: RedwoodProject | undefined = undefined
-): RedwoodTOML[] {
+export function extractTOMLs(project?: RedwoodProject) {
   const tomls: RedwoodTOML[] = []
 
   const toml = path.join(

@@ -14,19 +14,11 @@ import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { getASTFromFile } from '../lib/ast'
 import { getGraphQLQueryName } from '../lib/gql'
 
-import {
-  RedwoodError,
-  RedwoodErrorCode,
-  RedwoodWarning,
-  RedwoodWarningCode,
-} from './diagnostic'
+import { RedwoodErrorCode, RedwoodWarningCode } from './diagnostic'
 import type { RedwoodProject } from './project'
 import { RedwoodSkeleton } from './skeleton'
 
 export class RedwoodCell extends RedwoodSkeleton {
-  warnings: RedwoodWarning[] = []
-  errors: RedwoodError[] = []
-
   readonly gqlQuery: string | undefined
   readonly gqlQueryName: string | undefined
 
@@ -150,13 +142,11 @@ export class RedwoodCell extends RedwoodSkeleton {
   }
 }
 
-export function extractCell(filepath: string): RedwoodCell {
+export function extractCell(filepath: string) {
   return new RedwoodCell(filepath)
 }
 
-export function extractCells(
-  project: RedwoodProject | undefined = undefined
-): RedwoodCell[] {
+export function extractCells(project?: RedwoodProject) {
   const cells: RedwoodCell[] = []
 
   const componentsPath = project
