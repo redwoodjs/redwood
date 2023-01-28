@@ -7,6 +7,7 @@ import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
@@ -84,20 +85,20 @@ export const handler = async ({
       },
     },
     side.includes('web') && {
-      // Clean web
+      // Clean web/dist before building
+      // Vite handles this internally
       title: 'Cleaning Web...',
       task: () => {
         rimraf.sync(rwjsPaths.web.dist)
       },
+      enabled: getConfig().web.bundler !== 'vite',
     },
     side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
         if (getConfig().web.bundler === 'vite') {
-          await execa(`yarn cross-env NODE_ENV=production vite build`, {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: rwjsPaths.web.base,
+          await buildWeb({
+            verbose,
           })
         } else {
           await execa(

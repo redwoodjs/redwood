@@ -13,8 +13,8 @@
   ],
   "main": "dist/index.js",
   "bin": {
-    "vite": "./bins/vite.mjs",
-    "vite__": "./bins/vite.mjs"
+    "rw-vite-dev": "./bins/rw-vite-dev.mjs",
+    "vite": "./bins/vite.mjs"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",

@@ -3,7 +3,7 @@ import yargs from 'yargs'
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
 export const command = 'netlify'
-export const description = 'Generate an auth configuration for Netlify'
+export const description = 'Set up auth for for Netlify'
 
 export function builder(yargs: yargs.Argv) {
   return standardAuthBuilder(yargs)
