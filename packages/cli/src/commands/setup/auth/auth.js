@@ -204,7 +204,8 @@ async function getAuthHandler(module) {
 }
 
 /**
- * Check if a user's project's has a module listed as a dependency or devDependency.
+ * Check if a user's project's package.json has a module listed as a dependency
+ * or devDependency. If not, we'll also check inside node_modules
  *
  * @param {string} module
  */
@@ -213,11 +214,40 @@ function isInstalled(module) {
     path.join(getPaths().base, 'package.json')
   )
 
-  return Object.hasOwn(
-    {
-      ...dependencies,
-      ...devDependencies,
-    },
-    module
-  )
+  const deps = {
+    ...dependencies,
+    ...devDependencies,
+  }
+
+  if (!deps[module]) {
+    // Check node_modules to see if it exists there (this is mainly to handle
+    // testing setup packages with rwfw project:copy)
+    const nodeModulesPackageJsonPath = path.resolve(
+      __dirname,
+      // Back up to the project root dir node_modules
+      '../../../../../..',
+      module,
+      'package.json'
+    )
+    console.log('nodeModulesPackageJsonPath', nodeModulesPackageJsonPath)
+
+    if (fs.existsSync(nodeModulesPackageJsonPath)) {
+      const { version: installedVersion } = fs.readJSONSync(
+        nodeModulesPackageJsonPath
+      )
+
+      // We're in node_modules/@redwoodjs/cli/dist/commands/setup/auth/
+      // Backing up four steps takes us to node_modules/@redwoodjs/cli
+      const packageJsonPath = path.resolve(
+        __dirname,
+        '../../../../package.json'
+      )
+
+      const { version } = fs.readJSONSync(packageJsonPath)
+
+      return installedVersion === version
+    }
+  }
+
+  return !!deps[module]
 }
