@@ -47,6 +47,14 @@ const action = {
 
 let routesWarningMessage = ''
 
+process.stdin.on('data', async (data) => {
+  const str = data.toString().trim().toLowerCase()
+  if (str === 'g' || str === 'rs') {
+    console.log('Regenerating types and schemas....')
+    await generate()
+  }
+})
+
 watcher
   .on('ready', async () => {
     console.log('Generating TypeScript definitions and GraphQL schemas...')

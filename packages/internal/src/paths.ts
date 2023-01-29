@@ -37,6 +37,7 @@ export interface BrowserTargetPaths {
   layouts: string
   config: string
   webpack: string
+  viteConfig: string | null // because vite is opt-in only
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string
@@ -98,6 +99,7 @@ const PATH_WEB_INDEX_HTML = 'web/src/index.html'
 const PATH_WEB_DIR_GENERATORS = 'web/generators'
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
+const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
@@ -203,6 +205,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
+      viteConfig: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_VITE)),
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
       storybookConfig: path.join(
         BASE_DIR,

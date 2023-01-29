@@ -21,9 +21,10 @@ export async function handler({ force: forceArg }: Args) {
     provider: 'custom',
     webPackages: [`@redwoodjs/auth@${version}`],
     notes: [
-      'Done! But you have a little more work to do:\n',
-      'You will have to write the actual auth implementation/integration',
-      `yourself. Take a look in ${authFilename} and do the necessary changes.`,
+      'Done! But you have a little more work to do.',
+      "You'll have to write the actual implementation yourself.",
+      `Take a look in ${authFilename}, and for a full walkthrough`,
+      'see https://redwoodjs.com/docs/auth/custom.',
     ],
   })
 }
