@@ -27,7 +27,7 @@ import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr, figures } from 'listr2'
 import terminalLink from 'terminal-link'
-import { hideBin } from 'yargs/helpers'
+import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { name, version } from '../package'
@@ -37,10 +37,8 @@ import { startTelemetry, shutdownTelemetry } from './telemetry'
   //
 
   // Telemetry
-  if (
-    !process.argv.includes('--no-telemetry') && // Must include '--no-telemetry' exactly because we want to do this check before any yargs. TODO: Communicate this on cmd help
-    !process.env.REDWOOD_DISABLE_TELEMETRY // We should use the same condition as in full projects here too
-  ) {
+  const { telemetry } = Parser(hideBin(process.argv))
+  if (telemetry !== 'false' && !process.env.REDWOOD_DISABLE_TELEMETRY) {
     // Setup and start root span
     await startTelemetry()
   }

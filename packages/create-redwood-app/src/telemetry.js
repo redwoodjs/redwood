@@ -2,11 +2,15 @@ import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import opentelemetry, { SpanStatusCode } from '@opentelemetry/api'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { Resource } from '@opentelemetry/resources'
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
-import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node'
+import {
+  NodeTracerProvider,
+  BatchSpanProcessor,
+} from '@opentelemetry/sdk-trace-node'
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 import envinfo from 'envinfo'
 import system from 'systeminformation'
+
+import { name as packageName, version as packageVersion } from '../package'
 
 /**
  * @type NodeTracerProvider
@@ -58,12 +62,9 @@ export async function startTelemetry() {
 
   const resource = Resource.default().merge(
     new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: 'create-redwood-app',
+      [SemanticResourceAttributes.SERVICE_NAME]: packageName,
       // TODO: Get a better way of recording what version of CRWA is running because this is just null...
-      [SemanticResourceAttributes.SERVICE_VERSION]:
-        info.npmPackages != null
-          ? info.npmPackages['@redwoodjs/core']?.installed
-          : undefined,
+      [SemanticResourceAttributes.SERVICE_VERSION]: packageVersion,
       [SemanticResourceAttributes.OS_TYPE]: info.System?.OS?.split(' ')[0],
       [SemanticResourceAttributes.OS_VERSION]: info.System?.OS?.split(' ')[1],
       'shell.name': info.System?.Shell?.name,
@@ -82,6 +83,7 @@ export async function startTelemetry() {
   })
   traceExporter = new OTLPTraceExporter({
     // TODO: Point this to somewhere permanent
+    // url: 'https://telemetry.redwoodjs.com/v1/traces',
   })
   traceProcessor = new BatchSpanProcessor(traceExporter)
   traceProvider.addSpanProcessor(traceProcessor)
@@ -89,7 +91,11 @@ export async function startTelemetry() {
 
   // Start root span
   const tracer = opentelemetry.trace.getTracer('crwa-tracer')
-  rootSpan = tracer.startSpan('root', undefined, opentelemetry.context.active())
+  rootSpan = tracer.startSpan(
+    'root',
+    undefined,
+    opentelemetry.context.ROOT_CONTEXT
+  )
 }
 
 export async function shutdownTelemetry({ exception } = {}) {

@@ -6423,6 +6423,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/context-async-hooks@npm:1.9.0":
+  version: 1.9.0
+  resolution: "@opentelemetry/context-async-hooks@npm:1.9.0"
+  peerDependencies:
+    "@opentelemetry/api": ">=1.0.0 <1.5.0"
+  checksum: 639ff710015f2dd4c399e17fdcebf5fa1023eae533fcf84bd496050476429276a227700d05c3eabc5d54453267bb43ef788be7fff6897e16eadcf40b21c3ce21
+  languageName: node
+  linkType: hard
+
 "@opentelemetry/core@npm:1.9.0":
   version: 1.9.0
   resolution: "@opentelemetry/core@npm:1.9.0"
@@ -6474,6 +6483,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/propagator-b3@npm:1.9.0":
+  version: 1.9.0
+  resolution: "@opentelemetry/propagator-b3@npm:1.9.0"
+  dependencies:
+    "@opentelemetry/core": 1.9.0
+  peerDependencies:
+    "@opentelemetry/api": ">=1.0.0 <1.5.0"
+  checksum: 01aafd3551d52c7d85f28656d846587ee27457a6c7413d14a76a74ed451e90316acbb1f01ef37176a0325f3aed68cea7dff7866565d804ecba14fbb22ae667de
+  languageName: node
+  linkType: hard
+
+"@opentelemetry/propagator-jaeger@npm:1.9.0":
+  version: 1.9.0
+  resolution: "@opentelemetry/propagator-jaeger@npm:1.9.0"
+  dependencies:
+    "@opentelemetry/core": 1.9.0
+  peerDependencies:
+    "@opentelemetry/api": ">=1.0.0 <1.5.0"
+  checksum: ffea89dd14a29df01403219d847a0aefcbccbbf2f21889543e67e4b6d233ad75186a7fbf98916b53333470d717e486797a82a79711dc8530c2f158c5c2986c35
+  languageName: node
+  linkType: hard
+
 "@opentelemetry/resources@npm:1.9.0":
   version: 1.9.0
   resolution: "@opentelemetry/resources@npm:1.9.0"
@@ -6509,6 +6540,22 @@ __metadata:
   peerDependencies:
     "@opentelemetry/api": ">=1.0.0 <1.5.0"
   checksum: 216895040b79fb60793fb79122c3bf8951f9f76d4b85729b3c41c27715d1264139d3524554dc9b041192dc12806f655db29bc1a39c9bd3a896bfb4ec3a3971af
+  languageName: node
+  linkType: hard
+
+"@opentelemetry/sdk-trace-node@npm:1.9.0":
+  version: 1.9.0
+  resolution: "@opentelemetry/sdk-trace-node@npm:1.9.0"
+  dependencies:
+    "@opentelemetry/context-async-hooks": 1.9.0
+    "@opentelemetry/core": 1.9.0
+    "@opentelemetry/propagator-b3": 1.9.0
+    "@opentelemetry/propagator-jaeger": 1.9.0
+    "@opentelemetry/sdk-trace-base": 1.9.0
+    semver: ^7.3.5
+  peerDependencies:
+    "@opentelemetry/api": ">=1.0.0 <1.5.0"
+  checksum: ee23f10e6f367127fbec149c03af5ff05848abb3e9f6fd8a4d3f1a95d80348c2eb936e24d51b2d5fa0bb5c1c71cdcb65d2407da3313de053f99bf5ca2cb0464c
   languageName: node
   linkType: hard
 
@@ -15085,7 +15132,7 @@ __metadata:
     "@opentelemetry/api": 1.4.0
     "@opentelemetry/exporter-trace-otlp-http": 0.35.0
     "@opentelemetry/resources": 1.9.0
-    "@opentelemetry/sdk-trace-base": 1.9.0
+    "@opentelemetry/sdk-trace-node": 1.9.0
     "@opentelemetry/semantic-conventions": 1.9.0
     "@types/prompts": 2.4.2
     chalk: 4.1.2
