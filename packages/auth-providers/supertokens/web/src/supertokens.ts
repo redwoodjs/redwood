@@ -17,10 +17,7 @@ export type AuthRecipe = {
 }
 
 export function createAuth(
-  superTokens: {
-    authRecipe: AuthRecipe
-    sessionRecipe: SessionRecipe
-  },
+  superTokens: SuperTokensAuth,
   customProviderHooks?: {
     useCurrentUser?: () => Promise<Record<string, unknown>>
     useHasRole?: (
@@ -34,16 +31,16 @@ export function createAuth(
 }
 
 export interface SuperTokensAuth {
-  authRecipe: AuthRecipe
+  redirectToAuth: (input: 'signin' | 'signup') => void
   sessionRecipe: SessionRecipe
 }
 
 function createAuthImplementation(superTokens: SuperTokensAuth) {
   return {
     type: 'supertokens',
-    login: async () => superTokens.authRecipe.redirectToAuth('signin'),
+    login: async () => superTokens.redirectToAuth('signin'),
 
-    signup: async () => superTokens.authRecipe.redirectToAuth('signup'),
+    signup: async () => superTokens.redirectToAuth('signup'),
 
     logout: async () => superTokens.sessionRecipe.signOut(),
 
