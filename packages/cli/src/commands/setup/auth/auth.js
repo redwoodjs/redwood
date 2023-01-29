@@ -216,12 +216,12 @@ function isInstalled(module) {
     ...devDependencies,
   }
 
-  if (!deps[module]) {
-    // Check node_modules to see if it's there.
-    // This enables testing auth setup packages with `yarn rwfw project:copy`.
-    const nodeModulesPackageJsonPath = require.resolve(`${module}/package.json`)
-    return fs.existsSync(nodeModulesPackageJsonPath)
+  if (deps[module]) {
+    return true
   }
 
-  return false
+  // Check node_modules to see if the module is there.
+  // This enables testing auth setup packages with `yarn rwfw project:copy`.
+  const nodeModulesPackageJsonPath = require.resolve(`${module}/package.json`)
+  return fs.existsSync(nodeModulesPackageJsonPath)
 }
