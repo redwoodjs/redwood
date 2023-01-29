@@ -166,10 +166,7 @@ function getRedirectMessage(provider) {
  * @param {string} module
  */
 async function getAuthHandler(module) {
-  // Here we're reading this package's (@redwoodjs/cli) package.json.
-  // So, in a user's project, `packageJsonPath` will be something like...
-  // /Users/bob/tmp/rw-app/node_modules/@redwoodjs/cli/package.json
-  const packageJsonPath = path.resolve(__dirname, '../../../../package.json')
+  const packageJsonPath = require.resolve('@redwoodjs/cli/package.json')
   let { version } = fs.readJSONSync(packageJsonPath)
 
   if (!isInstalled(module)) {
@@ -205,7 +202,7 @@ async function getAuthHandler(module) {
 
 /**
  * Check if a user's project's package.json has a module listed as a dependency
- * or devDependency. If not, we'll also check inside node_modules
+ * or devDependency. If not, check node_modules.
  *
  * @param {string} module
  */
@@ -220,21 +217,11 @@ function isInstalled(module) {
   }
 
   if (!deps[module]) {
-    // Check node_modules to see if the module exists there (this is mainly to
-    // handle testing setup packages with rwfw project:copy)
+    // Check node_modules to see if it's there.
+    // This enables testing auth setup packages with `yarn rwfw project:copy`.
     const nodeModulesPackageJsonPath = require.resolve(`${module}/package.json`)
-
-    if (fs.existsSync(nodeModulesPackageJsonPath)) {
-      const { version: installedModuleVersion } = fs.readJSONSync(
-        nodeModulesPackageJsonPath
-      )
-
-      const cliPackageJsonPath = require.resolve('@redwoodjs/cli/package.json')
-      const { version: cliVersion } = fs.readJSONSync(cliPackageJsonPath)
-
-      return installedModuleVersion === cliVersion
-    }
+    return fs.existsSync(nodeModulesPackageJsonPath)
   }
 
-  return !!deps[module]
+  return false
 }
