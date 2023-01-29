@@ -104,6 +104,7 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
+          viteConfig: null, // no vite file in empty-project fixture
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -333,6 +334,7 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
+          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -608,6 +610,7 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
+          viteConfig: null, // no vite config in example-todo-main-with-errors
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -843,6 +846,7 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
+          viteConfig: null, // no vite configured in test-project fixture
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',

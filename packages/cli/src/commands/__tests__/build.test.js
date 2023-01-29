@@ -16,7 +16,13 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
 
 jest.mock('@redwoodjs/internal/dist/config', () => {
   return {
-    getConfig: () => {},
+    getConfig: () => {
+      return {
+        web: {
+          bundler: 'webpack',
+        },
+      }
+    },
   }
 })
 

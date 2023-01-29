@@ -51,6 +51,12 @@ Next, you should start the amazing [**Redwood Tutorial**](tutorial/chapter1/inst
 
 Or run `yarn create redwood-app myApp` to get started with a new project.
 
+## Troubleshooting
 
->⚠️ Heads Up
+### Beware case-insensitivity
+
 On Windows Git Bash, `cd myapp` and `cd myApp` will select the same directory because Windows is case-insensitive. But make sure you type the original capitalization to avoid strange errors in your Redwood project.
+
+### Microsoft Visual C++ Redistributable
+
+If your machine doesn't have Microsoft Visual C++ Redistributable, then you need to install it from [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022).
