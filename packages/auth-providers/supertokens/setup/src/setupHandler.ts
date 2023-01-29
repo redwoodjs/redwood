@@ -13,7 +13,7 @@ export const extraTask = {
 
     let content = fs.readFileSync(webRoutesPath).toString()
 
-    if (!/^\sif \(SuperTokens.canHandleRoute\(\)\) \{/.test(content)) {
+    if (!/\n\s*if \(SuperTokens.canHandleRoute\(\)\) \{/.test(content)) {
       let hasImportedSuperTokens = false
 
       content = content

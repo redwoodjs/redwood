@@ -60,3 +60,37 @@ export default Routes
 
   expect(mockFS.readFileSync('Routes.tsx')).toMatchSnapshot()
 })
+
+test('extraTask already setup', () => {
+  mockFS.__setMockFiles({
+    'Routes.tsx':
+      "// In this file, all Page components from 'src/pages' are auto-imported.\n" +
+      `
+import SuperTokens from 'supertokens-auth-react'
+
+import { Router, Route } from '@redwoodjs/router'
+
+import { useAuth } from './auth'
+
+const Routes = () => {
+  if (SuperTokens.canHandleRoute()) {
+    return SuperTokens.getRoutingComponent()
+  }
+
+  return (
+    <Router useAuth={useAuth}>
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/signup" page={SignupPage} name="signup" />
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+`,
+  })
+
+  extraTask.task()
+
+  expect(mockFS.readFileSync('Routes.tsx')).toMatchSnapshot()
+})
