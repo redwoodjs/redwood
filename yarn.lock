@@ -6879,14 +6879,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/client@npm:1.5.3":
-  version: 1.5.3
-  resolution: "@redis/client@npm:1.5.3"
+"@redis/client@npm:1.5.4":
+  version: 1.5.4
+  resolution: "@redis/client@npm:1.5.4"
   dependencies:
     cluster-key-slot: 1.1.2
     generic-pool: 3.9.0
     yallist: 4.0.0
-  checksum: fb5371be244dcc4b795ede4ebcffd1a593dc4337afe5b7af216dec06b859b9a6efa59f9b4ac87e2e5dd2afe4599ac9bdb3418fe7b8f761dc917170b37e35d764
+  checksum: e2eadb28bb29420c9121088db2956861e9a11ec602585598673bed202e052ff106865da78b3917e7952b20d1bb4a6eb9f8c71081014c562a15e49424bc43f6b4
   languageName: node
   linkType: hard
 
@@ -6986,14 +6986,14 @@ __metadata:
     memjs: 1.3.0
     pascalcase: 1.0.0
     pino: 8.8.0
-    redis: 4.6.2
+    redis: 4.6.3
     split2: 4.1.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
     typescript: 4.7.4
   peerDependencies:
     memjs: 1.3.0
-    redis: 4.6.2
+    redis: 4.6.3
   peerDependenciesMeta:
     memjs:
       optional: true
@@ -7566,7 +7566,7 @@ __metadata:
     jest: 29.4.1
     jscodeshift: 0.14.0
     prettier: 2.8.3
-    tasuku: 2.0.0
+    tasuku: 2.0.1
     tempy: 1.0.1
     typescript: 4.7.4
     yargs: 17.6.2
@@ -27600,17 +27600,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redis@npm:4.6.2":
-  version: 4.6.2
-  resolution: "redis@npm:4.6.2"
+"redis@npm:4.6.3":
+  version: 4.6.3
+  resolution: "redis@npm:4.6.3"
   dependencies:
     "@redis/bloom": 1.2.0
-    "@redis/client": 1.5.3
+    "@redis/client": 1.5.4
     "@redis/graph": 1.1.0
     "@redis/json": 1.0.4
     "@redis/search": 1.1.1
     "@redis/time-series": 1.0.4
-  checksum: 7013e4239a865cd90db839924fcdddeb381c6cc9280f19c144b3a4b1a16e96daf605b9db80b40073472ac0bb9ff52cb7d5adfe4dbfcd57651ec07e2ce7ee2b81
+  checksum: 5ff2e4162fc59da977277dc94c2c73d06ef30caa568e4d4c92caa76f81669cc37b8ea822c51e3b307d3b84368d1e4a94130880bac62465e7d510ccb68436867c
   languageName: node
   linkType: hard
 
@@ -29948,12 +29948,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tasuku@npm:2.0.0":
-  version: 2.0.0
-  resolution: "tasuku@npm:2.0.0"
+"tasuku@npm:2.0.1":
+  version: 2.0.1
+  resolution: "tasuku@npm:2.0.1"
   dependencies:
     yoga-layout-prebuilt: 1.10.0
-  checksum: 0c79080b093832e2084532ba62ab6454a6fd3871575bc4881e5e1545a40c63061b3d23f8e33609391e30b593b102b9e81ec8fae2a013306fb7296a99e65b24b2
+  checksum: 0c28c9c9b836826d2858b92d69a2d5125c89cacd1f856159dad567fdbdc85b21e6fc2876dfce65dc698b47791bc8c553687eaab922355b9c331875786b86e7fc
   languageName: node
   linkType: hard
 
