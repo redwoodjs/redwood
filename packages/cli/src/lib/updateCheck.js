@@ -53,7 +53,7 @@ export const EXCLUDED_COMMANDS = ['upgrade', 'ts-to-js']
  */
 export const PERSISTENCE_DIRECTORY = path.join(
   getPaths().generated.base,
-  'update-check'
+  'updateCheck'
 )
 
 /**
@@ -134,7 +134,7 @@ export function shouldCheck() {
 export function shouldShow() {
   const data = readUpdateDataFile()
   let newerVersion = false
-  data.remoteVersions.forEach((version, _tag) => {
+  data.remoteVersions.forEach((version) => {
     newerVersion ||= semver.gt(version, data.localVersion)
   })
   return data.shownAt < new Date().getTime() - SHOW_PERIOD && newerVersion
@@ -158,7 +158,7 @@ export function getUpdateMessage() {
 
   // Whatever tag the user is currently on or 'latest'
   const localTag =
-    extractTagFromVersion(data.localVersion).split('.')[0] || 'latest'
+    extractTagFromVersion(data.localVersion) || 'latest'
 
   let updateCount = 0
   let message =
@@ -167,7 +167,6 @@ export function getUpdateMessage() {
     if (semver.gt(version, data.localVersion)) {
       updateCount += 1
 
-      console.log(tag, localTag)
 
       if (tag === localTag) {
         message += `\n\n ❖  ${chalk.underline(chalk.bold(tag))}:\n     v${
