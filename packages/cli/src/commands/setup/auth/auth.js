@@ -220,32 +220,19 @@ function isInstalled(module) {
   }
 
   if (!deps[module]) {
-    // Check node_modules to see if it exists there (this is mainly to handle
-    // testing setup packages with rwfw project:copy)
-    const nodeModulesPackageJsonPath = path.resolve(
-      __dirname,
-      // Back up to the project root dir node_modules
-      '../../../../../..',
-      module,
-      'package.json'
-    )
-    console.log('nodeModulesPackageJsonPath', nodeModulesPackageJsonPath)
+    // Check node_modules to see if the module exists there (this is mainly to
+    // handle testing setup packages with rwfw project:copy)
+    const nodeModulesPackageJsonPath = require.resolve(`${module}/package.json`)
 
     if (fs.existsSync(nodeModulesPackageJsonPath)) {
-      const { version: installedVersion } = fs.readJSONSync(
+      const { version: installedModuleVersion } = fs.readJSONSync(
         nodeModulesPackageJsonPath
       )
 
-      // We're in node_modules/@redwoodjs/cli/dist/commands/setup/auth/
-      // Backing up four steps takes us to node_modules/@redwoodjs/cli
-      const packageJsonPath = path.resolve(
-        __dirname,
-        '../../../../package.json'
-      )
+      const cliPackageJsonPath = require.resolve('@redwoodjs/cli/package.json')
+      const { version: cliVersion } = fs.readJSONSync(cliPackageJsonPath)
 
-      const { version } = fs.readJSONSync(packageJsonPath)
-
-      return installedVersion === version
+      return installedModuleVersion === cliVersion
     }
   }
 
