@@ -30,7 +30,7 @@ export async function builder(yargs) {
     // Auth providers we support
     .command(
       'auth0',
-      'Set up auth for for Auth0',
+      'Set up auth for Auth0',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-auth0-setup')
@@ -40,7 +40,7 @@ export async function builder(yargs) {
     )
     .command(
       'azure-active-directory',
-      'Set up auth for for Azure Active Directory',
+      'Set up auth for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler(
@@ -52,7 +52,7 @@ export async function builder(yargs) {
     )
     .command(
       'clerk',
-      'Set up auth for for Clerk',
+      'Set up auth for Clerk',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-clerk-setup')
@@ -72,7 +72,7 @@ export async function builder(yargs) {
     )
     .command(
       'dbAuth',
-      'Set up auth for for dbAuth',
+      'Set up auth for dbAuth',
       (yargs) => {
         return standardAuthBuilder(yargs).option('webauthn', {
           alias: 'w',
@@ -89,7 +89,7 @@ export async function builder(yargs) {
     )
     .command(
       'firebase',
-      'Set up auth for for Firebase',
+      'Set up auth for Firebase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-firebase-setup')
@@ -99,7 +99,7 @@ export async function builder(yargs) {
     )
     .command(
       'netlify',
-      'Set up auth for for Netlify',
+      'Set up auth for Netlify',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-netlify-setup')
@@ -109,7 +109,7 @@ export async function builder(yargs) {
     )
     .command(
       'supabase',
-      'Set up auth for for Supabase',
+      'Set up auth for Supabase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-supabase-setup')
