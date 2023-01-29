@@ -24,8 +24,8 @@ describe('The CLI sets `cwd` correctly', () => {
 
       expect(status).toBe(1)
       expect(stdout).toBe('')
-      expect(stderr).toMatch(
-        `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
+      expect(stderr).toMatchInlineSnapshot(
+        `"Couldn't find a "redwood.toml" file in __fixtures__"`
       )
     })
   })
@@ -54,8 +54,8 @@ describe('The CLI sets `cwd` correctly', () => {
 
       expect(status).toBe(1)
       expect(stdout).toBe('')
-      expect(stderr).toMatch(
-        `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
+      expect(stderr).toMatchInlineSnapshot(
+        `"Couldn't find a "redwood.toml" file in __fixtures__"`
       )
     })
   })
@@ -115,8 +115,8 @@ describe('The CLI sets `cwd` correctly', () => {
       expect(status).toBe(1)
       expect(stdout).toBe('')
       // We don't want to match on the entire error message since it includes an absolute path.
-      expect(stderr).toMatch(
-        `Could not find a "redwood.toml" file, are you sure you're in a Redwood project?`
+      expect(stderr).toMatchInlineSnapshot(
+        `"Couldn't find up a "redwood.toml" file from /Users/dom/prjcts/redwood/redwood/__fixtures__"`
       )
     })
   })

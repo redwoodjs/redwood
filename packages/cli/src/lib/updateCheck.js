@@ -51,10 +51,17 @@ export const EXCLUDED_COMMANDS = ['upgrade', 'ts-to-js']
 /**
  * @const {string} Filepath of the file which persists update check data within the .redwood directory
  */
-export const PERSISTENCE_DIRECTORY = path.join(
-  getPaths().generated.base,
-  'updateCheck'
-)
+let persistenceDirectory
+
+function getPersistenceDirectory() {
+  if (persistenceDirectory) {
+    return persistenceDirectory
+  }
+
+  persistenceDirectory = path.join(getPaths().generated.base, 'updateCheck')
+
+  return persistenceDirectory
+}
 
 /**
  * Performs an update check to detect if a newer version of redwood is available and records the result to a file within .redwood for persistence
@@ -157,8 +164,7 @@ export function getUpdateMessage() {
   const data = readUpdateDataFile()
 
   // Whatever tag the user is currently on or 'latest'
-  const localTag =
-    extractTagFromVersion(data.localVersion) || 'latest'
+  const localTag = extractTagFromVersion(data.localVersion) || 'latest'
 
   let updateCount = 0
   let message =
@@ -166,7 +172,6 @@ export function getUpdateMessage() {
   data.remoteVersions.forEach((version, tag) => {
     if (semver.gt(version, data.localVersion)) {
       updateCount += 1
-
 
       if (tag === localTag) {
         message += `\n\n ❖  ${chalk.underline(chalk.bold(tag))}:\n     v${
@@ -196,11 +201,11 @@ export function getUpdateMessage() {
  */
 export function readUpdateDataFile() {
   try {
-    if (!fs.existsSync(PERSISTENCE_DIRECTORY)) {
-      fs.mkdirSync(PERSISTENCE_DIRECTORY)
+    if (!fs.existsSync(getPersistenceDirectory())) {
+      fs.mkdirSync(getPersistenceDirectory())
     }
     const persistedData = JSON.parse(
-      fs.readFileSync(path.join(PERSISTENCE_DIRECTORY, 'data.json'))
+      fs.readFileSync(path.join(getPersistenceDirectory(), 'data.json'))
     )
     // Reconstruct the map
     persistedData.remoteVersions = new Map(
@@ -244,7 +249,7 @@ function updateUpdateDataFile({
   }
 
   fs.writeFileSync(
-    path.join(PERSISTENCE_DIRECTORY, 'data.json'),
+    path.join(getPersistenceDirectory(), 'data.json'),
     JSON.stringify(updatedData, null, 2)
   )
 }
@@ -274,17 +279,17 @@ export function updateCheckMiddleware(argv) {
   }
 
   if (shouldCheck()) {
-    if (!fs.existsSync(PERSISTENCE_DIRECTORY)) {
-      fs.mkdirSync(PERSISTENCE_DIRECTORY)
+    if (!fs.existsSync(getPersistenceDirectory())) {
+      fs.mkdirSync(getPersistenceDirectory())
     }
 
     const stdout = fs.openSync(
-      path.join(PERSISTENCE_DIRECTORY, 'stdout.log'),
+      path.join(getPersistenceDirectory(), 'stdout.log'),
       'w'
     )
 
     const stderr = fs.openSync(
-      path.join(PERSISTENCE_DIRECTORY, 'stderr.log'),
+      path.join(getPersistenceDirectory(), 'stderr.log'),
       'w'
     )
 
