@@ -23,7 +23,7 @@ RedwoodJS wants you to be able build and deploy secure applications and takes th
 
 ## Authentication
 
-`@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We [currently support](authentication.md) the following authentication providers:
+`@redwoodjs/auth` is a lightweight wrapper around popular SPA authentication libraries. We currently support [the following authentication providers](authentication.md) as well as a self-hosted solution ([dbAuth](auth/dbauth.md)):
 
 * Netlify Identity Widget
 * Auth0
@@ -43,9 +43,9 @@ For a demonstration, check out the [Auth Playground](https://redwood-playground-
 
 GraphQL is a fundamental part of Redwood. For details on how Redwood uses GraphQL and handles important security considerations, please see the [GraphQL Security](graphql.md#security) section and the [Secure Services](services.md#secure-services) section.
 
-### Depth Limits
+### Malicious Document Requests
 
-The RedwoodJS GraphQL handler sets [reasonable defaults](graphql.md#query-depth-limit) to prevent deep, cyclical nested queries that attackers often use to exploit systems.
+The RedwoodJS GraphQL handler sets [reasonable defaults](graphql.md#security) to prevent abusive queries that attackers often use to exploit systems.
 ### Disable Introspection and Playground
 
 Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to [disable these in production](graphql.md#introspection-and-playground-disabled-in-production), RedwoodJS **only enables introspection and the playground when running in development**.

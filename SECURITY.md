@@ -11,7 +11,9 @@ The Redwood repo is scanned frequently for code and dependency vulnerabilities. 
 
 If you discover a potential security issue, do let us know as soon as possible. We'll work toward a resolution as quickly as possible, so please provide us with a reasonable amount of time before disclosure to the public or a third-party.
 
-Contact us at [security@redwoodjs.com](mailto:security@redwoodjs.com)
+There are two ways to contact us:
+1. Email [security@redwoodjs.com](mailto:security@redwoodjs.com), or
+2. Use GitHub's private [Vulnerability Reporting feature](https://github.com/redwoodjs/redwood/security/advisories) (to learn how this works, [click here](https://docs.github.com/en/code-security/security-advisories/repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository))
 
 Thank you for helping improve Redwood security!
 

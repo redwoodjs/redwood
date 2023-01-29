@@ -68,7 +68,10 @@ const ForgotPasswordPage = () => {
                       errorClassName="rw-input rw-input-error"
                       ref={usernameRef}
                       validation={{
-                        required: true,
+                        required: {
+                          value: true,
+                          message: 'Username is required',
+                        },
                       }}
                     />
 

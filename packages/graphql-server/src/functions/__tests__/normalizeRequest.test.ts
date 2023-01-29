@@ -1,5 +1,5 @@
+import { Headers } from '@whatwg-node/fetch'
 import type { APIGatewayProxyEvent } from 'aws-lambda'
-import { Headers } from 'cross-undici-fetch'
 
 import { normalizeRequest } from '@redwoodjs/api'
 

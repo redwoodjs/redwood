@@ -3,8 +3,7 @@ import '@redwoodjs/auth'
 
 import { getCurrentUser } from '../../../api/src/lib/auth'
 
-type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
-export type InferredCurrentUser = ThenArg<ReturnType<typeof getCurrentUser>>
+export type InferredCurrentUser = Awaited<ReturnType<typeof getCurrentUser>>
 
 type UndefinedRoles = {
   /**
