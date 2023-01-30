@@ -33,7 +33,7 @@
     "firebase": "9.16.0",
     "jest": "29.4.1",
     "react": "18.2.0",
-    "typescript": "4.7.4"
+    "typescript": "4.9.4"
   },
   "peerDependencies": {
     "firebase": "9.16.0"
