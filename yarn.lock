@@ -5980,9 +5980,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/nx-cloud@npm:15.0.2":
-  version: 15.0.2
-  resolution: "@nrwl/nx-cloud@npm:15.0.2"
+"@nrwl/nx-cloud@npm:15.0.3":
+  version: 15.0.3
+  resolution: "@nrwl/nx-cloud@npm:15.0.3"
   dependencies:
     axios: ^0.21.2
     chalk: 4.1.0
@@ -5994,7 +5994,7 @@ __metadata:
     yargs-parser: ">=21.0.1"
   bin:
     nx-cloud: bin/nx-cloud.js
-  checksum: 3aad35b39fc9495f35e53bd6d321a89b3fbd8ff635e7d8b6e6f62b589aa0e4deac96c3e34b021ceee33ef77840b7e47804a49648383b6b831b6a3b413120a28b
+  checksum: b844dd45112bdc2efc4e5ec0f0af9abf3e67065b0de971beebc4dba257bc43fdb34c8ffad2ba22a771320d04ca8dbf4d5194eb4338d613c0a32d59eeed06c013
   languageName: node
   linkType: hard
 
@@ -28194,7 +28194,7 @@ __metadata:
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.20.13
     "@npmcli/arborist": 6.2.0
-    "@nrwl/nx-cloud": 15.0.2
+    "@nrwl/nx-cloud": 15.0.3
     "@playwright/test": 1.30.0
     "@replayio/playwright": 0.3.16
     "@testing-library/jest-dom": 5.16.5
