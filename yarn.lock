@@ -2763,39 +2763,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/send@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@fastify/send@npm:1.0.0"
+"@fastify/send@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "@fastify/send@npm:2.0.1"
   dependencies:
-    debug: ^4.3.4
-    depd: 2.0.0
-    destroy: 1.2.0
-    encodeurl: ~1.0.2
+    "@lukeed/ms": ^2.0.1
     escape-html: ~1.0.3
-    etag: ~1.8.1
-    fresh: 0.5.2
+    fast-decode-uri-component: ^1.0.1
     http-errors: 2.0.0
-    mime: 1.6.0
-    ms: 2.1.3
-    on-finished: 2.4.1
-    range-parser: ~1.2.1
-    statuses: 2.0.1
-  checksum: 2696b94921847c3db1ee41caa5b0756ba1b1caf2b033a1aee2f064eac43fd82bbb3593f12cec58dc5d420e9b73394121a2c28d7772d507a5ee71fdddfd1391ef
+    mime: ^3.0.0
+  checksum: 1b69e2c70df964a9a5c7e548ffcc5efd53a5a4be21dffca7f3f8d71b65624bec33b2318c08b228a3c3ceac3b802c289c9d20659e99482f3b3011042887e4a00e
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@fastify/static@npm:6.7.0"
+"@fastify/static@npm:6.8.0":
+  version: 6.8.0
+  resolution: "@fastify/static@npm:6.8.0"
   dependencies:
     "@fastify/accept-negotiator": ^1.0.0
-    "@fastify/send": ^1.0.0
+    "@fastify/send": ^2.0.0
     content-disposition: ^0.5.3
     fastify-plugin: ^4.0.0
     glob: ^8.0.1
     p-limit: ^3.1.0
     readable-stream: ^4.0.0
-  checksum: baf89af8ce178cfcc4b35a63daff3b67aed42c0d540f1658d001f00ceaa536e97694cb4050550efb6ccc3b2ee389b7be9a2d1c8ac5559d2492c84a233fa54c4d
+  checksum: 33967c7c51a1afffe795742ee0402db7902cd1cdc535ed25b3b3efd37a23ed57e931b5e93d0c950e296f355fd21cbed25eda7cadd17dd4487d0a94d60b0c1a36
   languageName: node
   linkType: hard
 
@@ -5531,6 +5523,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lukeed/ms@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@lukeed/ms@npm:2.0.1"
+  checksum: 06a5c9985194fb5e5e3ea60766589c808efee61661d85f869f92432bfb2fa5e5326b56b99df4c5d900bf4e9ce861791db058cae89a1d02a6be0638d9e804644a
+  languageName: node
+  linkType: hard
+
 "@mdx-js/mdx@npm:^1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/mdx@npm:1.6.22"
@@ -6935,7 +6934,7 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.19.6
     "@babel/runtime-corejs3": 7.20.13
     "@fastify/http-proxy": 8.4.0
-    "@fastify/static": 6.7.0
+    "@fastify/static": 6.8.0
     "@fastify/url-data": 5.2.0
     "@types/aws-lambda": 8.10.110
     "@types/lodash.escape": 4.0.7
