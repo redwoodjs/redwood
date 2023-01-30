@@ -96,7 +96,7 @@
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "terminal-link": "2.1.1",
-    "typescript": "4.7.4",
+    "typescript": "4.9.4",
     "zx": "7.1.1"
   },
   "packageManager": "yarn@3.3.1",
