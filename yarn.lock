@@ -8005,6 +8005,7 @@ __metadata:
     graphql: 16.6.0
     graphql-tag: 2.12.6
     jest: 29.4.1
+    jest-runner-tsd: 4.0.0
     nodemon: 2.0.20
     prop-types: 15.8.1
     react: 18.2.0

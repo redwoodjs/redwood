@@ -11,15 +11,25 @@ import { useCellCacheContext } from './CellCacheContext'
  */
 import { useQuery } from './GraphQLHooksProvider'
 
-declare type CustomCellProps<Cell, GQLVariables> = Cell extends {
-  beforeQuery: (...args: unknown[]) => unknown
+/**
+ *
+ * If the Cell has a `beforeQuery` function, then the variables are not required,
+ * but instead the arguments of the `beforeQuery` function are required.
+ *
+ * If the Cell does not have a `beforeQuery` function, then the variables are required.
+ *
+ * Note that a query that doesnt take any variables is defined as {[x: string]: never}
+ * The ternary at the end makes sure we don't include it, otherwise it won't allow merging any
+ * other custom props from the Success component.
+ *
+ */
+type CellPropsVariables<Cell, GQLVariables> = Cell extends {
+  beforeQuery: (...args: any[]) => any
 }
-  ? Parameters<Cell['beforeQuery']> extends [unknown, ...any]
-    ? Parameters<Cell['beforeQuery']>[0]
-    : Record<string, never>
-  : GQLVariables extends {
-      [key: string]: never
-    }
+  ? Parameters<Cell['beforeQuery']>[0] extends unknown
+    ? Record<string, unknown>
+    : Parameters<Cell['beforeQuery']>[0]
+  : GQLVariables extends Record<string, never>
   ? unknown
   : GQLVariables
 
@@ -34,9 +44,12 @@ export type CellProps<
 > = A.Compute<
   Omit<
     ComponentProps<CellSuccess>,
-    keyof QueryOperationResult | keyof GQLResult | 'updating'
+    | keyof CellPropsVariables<CellType, GQLVariables>
+    | keyof QueryOperationResult
+    | keyof GQLResult
+    | 'updating'
   > &
-    CustomCellProps<CellType, GQLVariables>
+    CellPropsVariables<CellType, GQLVariables>
 >
 
 export type CellLoadingProps<TVariables = any> = Partial<
