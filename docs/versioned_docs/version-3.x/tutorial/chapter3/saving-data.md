@@ -298,8 +298,9 @@ export const deleteContact = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```js title="api/src/services/contacts/contacts.ts"
-import { db } from 'src/lib/db'
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const contacts: QueryResolvers['contacts'] = () => {
   return db.contact.findMany()
@@ -1280,14 +1281,14 @@ export const createContact = ({ input }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```ts title="api/src/services/contacts/contacts.ts"
-import type { Prisma } from '@prisma/client'
+import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
 // ...
 
-export const createContact = ({ input }: CreateContactArgs) => {
+export const createContact: MutationResolvers['createContact'] = ({ input }) => {
   // highlight-next-line
   validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })
@@ -1559,7 +1560,7 @@ We get that error message at the top saying something went wrong in plain Englis
 
 This just scratches the surface of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Service validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
 
-<Tabs>
+<Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```js

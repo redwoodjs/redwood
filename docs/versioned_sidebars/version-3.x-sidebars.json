@@ -60,7 +60,8 @@
         },
         {
           "Chapter 7": [
-            "tutorial/chapter7/rbac"
+            "tutorial/chapter7/rbac",
+            "tutorial/chapter7/api-side-currentuser"
           ]
         },
         "tutorial/afterword"
