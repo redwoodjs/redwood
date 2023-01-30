@@ -220,13 +220,14 @@ function isInstalled(module) {
     return true
   }
 
-  // Check node_modules to see if the module is there.
+  // Check any of the places require would look for this module.
   // This enables testing auth setup packages with `yarn rwfw project:copy`.
-  // If `require.resolve` can't find the module, it throws a `MODULE_NOT_FOUND` error.
-  try {
-    require.resolve(`${module}/package.json`)
-    return true
-  } catch (e) {
-    return false
-  }
+  //
+  // We can't use require.resolve here because it cahces the exception
+  // Making it impossible to require when we actually do install it...
+  return require.resolve
+    .paths(`${module}/package.json`)
+    .some((requireResolvePath) => {
+      return fs.existsSync(path.join(requireResolvePath, module))
+    })
 }
