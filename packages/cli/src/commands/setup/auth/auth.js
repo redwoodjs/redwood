@@ -30,7 +30,7 @@ export async function builder(yargs) {
     // Auth providers we support
     .command(
       'auth0',
-      'Set up auth for for Auth0',
+      'Set up auth for Auth0',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-auth0-setup')
@@ -40,7 +40,7 @@ export async function builder(yargs) {
     )
     .command(
       'azure-active-directory',
-      'Set up auth for for Azure Active Directory',
+      'Set up auth for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler(
@@ -52,7 +52,7 @@ export async function builder(yargs) {
     )
     .command(
       'clerk',
-      'Set up auth for for Clerk',
+      'Set up auth for Clerk',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-clerk-setup')
@@ -72,7 +72,7 @@ export async function builder(yargs) {
     )
     .command(
       'dbAuth',
-      'Set up auth for for dbAuth',
+      'Set up auth for dbAuth',
       (yargs) => {
         return standardAuthBuilder(yargs).option('webauthn', {
           alias: 'w',
@@ -89,7 +89,7 @@ export async function builder(yargs) {
     )
     .command(
       'firebase',
-      'Set up auth for for Firebase',
+      'Set up auth for Firebase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-firebase-setup')
@@ -99,7 +99,7 @@ export async function builder(yargs) {
     )
     .command(
       'netlify',
-      'Set up auth for for Netlify',
+      'Set up auth for Netlify',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-netlify-setup')
@@ -109,7 +109,7 @@ export async function builder(yargs) {
     )
     .command(
       'supabase',
-      'Set up auth for for Supabase',
+      'Set up auth for Supabase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         const handler = await getAuthHandler('@redwoodjs/auth-supabase-setup')
@@ -117,18 +117,21 @@ export async function builder(yargs) {
         handler(args)
       }
     )
-    .command(
-      'supertokens',
-      'Set up auth for for SuperTokens',
-      (yargs) => standardAuthBuilder(yargs),
-      async (args) => {
-        const handler = await getAuthHandler(
-          '@redwoodjs/auth-supertokens-setup'
-        )
-        console.log()
-        handler(args)
-      }
-    )
+  // @MARK We'll add this back when we finalize it in a v4 minor.
+  // This setup command wasn't in v3.x, so leaving it out isn't breaking.
+  //
+  // .command(
+  //   'supertokens',
+  //   'Set up auth for SuperTokens',
+  //   (yargs) => standardAuthBuilder(yargs),
+  //   async (args) => {
+  //     const handler = await getAuthHandler(
+  //       '@redwoodjs/auth-supertokens-setup'
+  //     )
+  //     console.log()
+  //     handler(args)
+  //   }
+  // )
 }
 
 /**
@@ -163,10 +166,7 @@ function getRedirectMessage(provider) {
  * @param {string} module
  */
 async function getAuthHandler(module) {
-  // Here we're reading this package's (@redwoodjs/cli) package.json.
-  // So, in a user's project, `packageJsonPath` will be something like...
-  // /Users/bob/tmp/rw-app/node_modules/@redwoodjs/cli/package.json
-  const packageJsonPath = path.resolve(__dirname, '../../../../package.json')
+  const packageJsonPath = require.resolve('@redwoodjs/cli/package.json')
   let { version } = fs.readJSONSync(packageJsonPath)
 
   if (!isInstalled(module)) {
@@ -201,7 +201,8 @@ async function getAuthHandler(module) {
 }
 
 /**
- * Check if a user's project's has a module listed as a dependency or devDependency.
+ * Check if a user's project's package.json has a module listed as a dependency
+ * or devDependency. If not, check node_modules.
  *
  * @param {string} module
  */
@@ -210,11 +211,23 @@ function isInstalled(module) {
     path.join(getPaths().base, 'package.json')
   )
 
-  return Object.hasOwn(
-    {
-      ...dependencies,
-      ...devDependencies,
-    },
-    module
-  )
+  const deps = {
+    ...dependencies,
+    ...devDependencies,
+  }
+
+  if (deps[module]) {
+    return true
+  }
+
+  // Check any of the places require would look for this module.
+  // This enables testing auth setup packages with `yarn rwfw project:copy`.
+  //
+  // We can't use require.resolve here because it cahces the exception
+  // Making it impossible to require when we actually do install it...
+  return require.resolve
+    .paths(`${module}/package.json`)
+    .some((requireResolvePath) => {
+      return fs.existsSync(path.join(requireResolvePath, module))
+    })
 }

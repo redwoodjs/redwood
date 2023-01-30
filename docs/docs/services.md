@@ -52,7 +52,7 @@ import { validate, validateWith, validateUniqueness } from '@redwoodjs/api'
 export const createUser = async ({ input }) => {
   validate(input.firstName, 'First name', {
     presence: true,
-    excludes: { in: ['Admin', 'Owner'], message: 'That name is reserved, sorry!' },
+    exclusion: { in: ['Admin', 'Owner'], message: 'That name is reserved, sorry!' },
     length: { min: 2, max: 255 }
   })
   validateWith(() => {
