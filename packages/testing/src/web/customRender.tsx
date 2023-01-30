@@ -1,16 +1,18 @@
 import React from 'react'
 
-import { render, renderHook } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import type { RenderResult, RenderOptions } from '@testing-library/react'
 import type {
-  RenderResult,
-  RenderOptions,
   RenderHookOptions,
   RenderHookResult,
-} from '@testing-library/react'
+} from '@testing-library/react-hooks'
+// `@testing-library/react-hooks` is being deprecated
+// since the functionality is moving into v13 of `@testing-library/react`.
+// But v13 of `@testing-library/react` drops support for React 17, so we can't upgrade just yet.
+// We can remove `@testing-library/react-hooks` after upgrading Redwood to React 18.
+import { renderHook } from '@testing-library/react-hooks/dom'
 
 import { MockProviders } from './MockProviders'
-
-export type CustomRenderHookOptions<Props> = RenderHookOptions<Props>
 
 export const customRender = (
   ui: React.ReactElement,
@@ -24,8 +26,8 @@ export const customRender = (
 
 export const customRenderHook = <Props, Result>(
   render: (props: Props) => Result,
-  options?: CustomRenderHookOptions<Props>
-): RenderHookResult<Result, Props> => {
+  options?: RenderHookOptions<Props>
+): RenderHookResult<Props, Result> => {
   return renderHook(render, {
     wrapper: (props: any) => <MockProviders {...props} />,
     ...options,

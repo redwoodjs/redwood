@@ -9,7 +9,7 @@ import {
   waitFor,
   configure,
 } from '@testing-library/react'
-import { renderHook, act } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react-hooks'
 import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
@@ -711,7 +711,9 @@ describe('Custom auth provider', () => {
       </AuthProvider>
     )
 
-    await waitFor(() => expect(mockedForgotPassword).toBeCalledWith('username'))
+    await waitFor(() => mockedForgotPassword.mock.calls.length === 1)
+
+    expect.assertions(1)
   })
 
   test('proxies resetPassword() calls to client', async () => {

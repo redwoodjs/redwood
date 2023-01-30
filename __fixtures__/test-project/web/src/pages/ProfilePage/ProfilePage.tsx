@@ -24,18 +24,14 @@ const ProfilePage = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>ID</td>
-            <td>{currentUser.id}</td>
-          </tr>
-          <tr>
-            <td>ROLES</td>
-            <td>{currentUser.roles}</td>
-          </tr>
-          <tr>
-            <td>EMAIL</td>
-            <td>{currentUser.email}</td>
-          </tr>
+          {Object.keys(currentUser).map((key) => {
+            return (
+              <tr key={key}>
+                <td>{key.toUpperCase()}</td>
+                <td>{currentUser[key]}</td>
+              </tr>
+            )
+          })}
 
           <tr key="isAuthenticated">
             <td>isAuthenticated</td>

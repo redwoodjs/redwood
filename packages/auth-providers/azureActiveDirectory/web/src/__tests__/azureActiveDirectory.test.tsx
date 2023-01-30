@@ -3,7 +3,7 @@ import type {
   PublicClientApplication as AzureActiveDirectoryClient,
   RedirectRequest,
 } from '@azure/msal-browser'
-import { renderHook, act } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 

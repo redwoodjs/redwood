@@ -4,7 +4,7 @@ import type {
   GetTokenSilentlyVerboseResponse,
   User,
 } from '@auth0/auth0-spa-js'
-import { renderHook, act } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react-hooks'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
