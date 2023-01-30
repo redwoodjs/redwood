@@ -264,7 +264,8 @@ export function createCell<
 >({
   QUERY,
   beforeQuery = (props) => ({
-    variables: props as CellVariables,
+    // By default, we assume that the props are the gql-variables.
+    variables: props as unknown as CellVariables,
     /**
      * We're duplicating these props here due to a suspected bug in Apollo Client v3.5.4
      * (it doesn't seem to be respecting `defaultOptions` in `RedwoodApolloProvider`.)
