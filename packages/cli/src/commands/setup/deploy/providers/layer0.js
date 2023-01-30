@@ -9,16 +9,16 @@ import c from '../../../../lib/colors'
 import {
   ERR_MESSAGE_MISSING_CLI,
   ERR_MESSAGE_NOT_INITIALIZED,
-} from '../../../deploy/edgio'
+} from '../../../deploy/layer0'
 import { preRequisiteCheckTask, printSetupNotes } from '../helpers'
 
-export const command = 'edgio'
-export const description = 'Setup Edgio deploy'
+export const command = 'layer0'
+export const description = 'Setup Layer0 deploy'
 
 const notes = [
-  'You are almost ready to deploy to Edgio!',
+  'You are almost ready to deploy to Layer0!',
   '',
-  'See https://redwoodjs.com/docs/deploy#edgio-deploy for the remaining',
+  'See https://redwoodjs.com/docs/deploy#layer0-deploy for the remaining',
   'config and setup required before you can perform your first deploy.',
 ]
 
@@ -39,18 +39,18 @@ export const handler = async () => {
   const tasks = new Listr(
     [
       addPackagesTask({
-        packages: ['@edgio/cli'],
+        packages: ['@layer0/cli'],
         devDependency: true,
       }),
       preRequisiteCheckTask([
         {
-          title: 'Checking if Edgio is installed...',
-          command: ['yarn', ['edgio', '--version']],
+          title: 'Checking if Layer0 is installed...',
+          command: ['yarn', ['layer0', '--version']],
           errorMessage: ERR_MESSAGE_MISSING_CLI,
         },
         {
-          title: 'Initializing with Edgio',
-          command: ['yarn', ['edgio', 'init']],
+          title: 'Initializing with Layer0',
+          command: ['yarn', ['layer0', 'init']],
           errorMessage: ERR_MESSAGE_NOT_INITIALIZED,
         },
       ]),
