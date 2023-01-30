@@ -1,4 +1,4 @@
-import SuperTokens from 'supertokens-auth-react'
+import SuperTokens, { SuperTokensWrapper } from 'supertokens-auth-react'
 import Session from 'supertokens-auth-react/recipe/session'
 import ThirdPartyEmailPassword, {
   Github,
@@ -37,4 +37,19 @@ isBrowser &&
     ],
   })
 
-export const { AuthProvider, useAuth } = createAuth(superTokensClient)
+const { AuthProvider: SuperTokensAuthProvider, useAuth } =
+  createAuth(superTokensClient)
+
+interface Props {
+  children: React.ReactNode
+}
+
+const AuthProvider = ({ children }: Props) => {
+  return (
+    <SuperTokensWrapper>
+      <SuperTokensAuthProvider>{props.children}</SuperTokensAuthProvider>
+    </SuperTokensWrapper>
+  )
+}
+
+export { AuthProvider, useAuth }
