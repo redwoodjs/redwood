@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/vite",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "description": "Vite configuration package for Redwood",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.13",
-    "@redwoodjs/internal": "3.2.0",
+    "@redwoodjs/internal": "4.0.0",
     "@vitejs/plugin-react": "3.0.1",
     "buffer": "6.0.3",
     "core-js": "3.27.2",
