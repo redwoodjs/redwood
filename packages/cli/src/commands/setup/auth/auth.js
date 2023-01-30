@@ -222,6 +222,11 @@ function isInstalled(module) {
 
   // Check node_modules to see if the module is there.
   // This enables testing auth setup packages with `yarn rwfw project:copy`.
-  const nodeModulesPackageJsonPath = require.resolve(`${module}/package.json`)
-  return fs.existsSync(nodeModulesPackageJsonPath)
+  // If `require.resolve` can't find the module, it throws a `MODULE_NOT_FOUND` error.
+  try {
+    require.resolve(`${module}/package.json`)
+    return true
+  } catch (e) {
+    return false
+  }
 }
