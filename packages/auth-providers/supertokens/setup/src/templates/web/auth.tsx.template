@@ -12,7 +12,7 @@ import { isBrowser } from '@redwoodjs/prerender/browserUtils'
 const websiteDomain =
   process.env.SUPERTOKENS_WEBSITE_DOMAIN || 'http://localhost:8910'
 const apiDomain =
-  process.env.SUPERTOKENS_API_DOMAIN || `${websiteDomain}${global.RWJS_API_URL}`
+  process.env.SUPERTOKENS_API_DOMAIN || websiteDomain
 
 const superTokensClient = {
   sessionRecipe: Session,
@@ -25,7 +25,7 @@ isBrowser &&
       websiteDomain,
       appName: 'SuperTokens RedwoodJS',
       websiteBasePath: '/auth',
-      apiBasePath: '/auth',
+      apiBasePath: `${global.RWJS_API_URL}/auth`,
     },
     recipeList: [
       Session.init(),
