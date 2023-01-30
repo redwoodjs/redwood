@@ -10,7 +10,7 @@ const websiteDomain =
   process.env.SUPERTOKENS_WEBSITE_DOMAIN || 'http://localhost:8910'
 const apiDomain =
   process.env.SUPERTOKENS_API_DOMAIN ||
-  `${websiteDomain}${process.env.SUPERTOKENS_API_GATEWAY_PATH}`
+  `${websiteDomain}${process.env.SUPERTOKENS_API_PATH}`
 const apiBasePath = '/auth'
 
 const jwksIssuerUrl = {}
