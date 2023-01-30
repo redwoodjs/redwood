@@ -6827,14 +6827,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redis/client@npm:1.5.4":
-  version: 1.5.4
-  resolution: "@redis/client@npm:1.5.4"
+"@redis/client@npm:1.5.5":
+  version: 1.5.5
+  resolution: "@redis/client@npm:1.5.5"
   dependencies:
     cluster-key-slot: 1.1.2
     generic-pool: 3.9.0
     yallist: 4.0.0
-  checksum: e2eadb28bb29420c9121088db2956861e9a11ec602585598673bed202e052ff106865da78b3917e7952b20d1bb4a6eb9f8c71081014c562a15e49424bc43f6b4
+  checksum: a3edeaa3c667aab0dcbdc581b4058256d1429ca308ab92e3abf38b479f86a9bd8e623b7d37e81770f918f9e7acea17d76fc4506146125a7d66476b630a1e95b3
   languageName: node
   linkType: hard
 
@@ -6904,7 +6904,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.11.0
     split2: 4.1.0
-    typescript: 4.9.4
+    typescript: 4.9.5
     yargs: 17.6.2
   bin:
     rw-api-server-watch: ./dist/watch.js
@@ -6934,14 +6934,14 @@ __metadata:
     memjs: 1.3.0
     pascalcase: 1.0.0
     pino: 8.8.0
-    redis: 4.6.3
+    redis: 4.6.4
     split2: 4.1.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     memjs: 1.3.0
-    redis: 4.6.3
+    redis: 4.6.4
   peerDependenciesMeta:
     memjs:
       optional: true
@@ -6968,7 +6968,7 @@ __metadata:
     jest: 29.4.1
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -6983,7 +6983,7 @@ __metadata:
     "@types/yargs": 17.0.20
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7000,7 +7000,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     "@auth0/auth0-spa-js": 1.22.6
   languageName: unknown
@@ -7020,7 +7020,7 @@ __metadata:
     jest: 29.4.1
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7035,7 +7035,7 @@ __metadata:
     "@types/yargs": 17.0.20
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7053,7 +7053,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     "@azure/msal-browser": 2.32.2
   languageName: unknown
@@ -7071,7 +7071,7 @@ __metadata:
     "@types/aws-lambda": 8.10.110
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7086,7 +7086,7 @@ __metadata:
     "@types/yargs": 17.0.20
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7104,7 +7104,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     "@clerk/clerk-react": 4.9.0
   languageName: unknown
@@ -7121,7 +7121,7 @@ __metadata:
     "@types/yargs": 17.0.20
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7142,7 +7142,7 @@ __metadata:
     crypto-js: 4.1.1
     jest: 29.4.1
     md5: 2.3.0
-    typescript: 4.9.4
+    typescript: 4.9.5
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -7164,7 +7164,7 @@ __metadata:
     prompts: 2.4.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7182,7 +7182,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7198,7 +7198,7 @@ __metadata:
     core-js: 3.27.2
     firebase-admin: 10.3.0
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7213,7 +7213,7 @@ __metadata:
     "@types/yargs": 17.0.20
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7230,7 +7230,7 @@ __metadata:
     firebase: 9.16.0
     jest: 29.4.1
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     firebase: 9.16.0
   languageName: unknown
@@ -7249,7 +7249,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     jsonwebtoken: 9.0.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7264,7 +7264,7 @@ __metadata:
     "@types/yargs": 17.0.20
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7281,7 +7281,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     netlify-identity-widget: 1.9.2
   languageName: unknown
@@ -7300,7 +7300,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     jsonwebtoken: 9.0.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7315,7 +7315,7 @@ __metadata:
     "@types/yargs": 17.0.20
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7331,7 +7331,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     "@supabase/supabase-js": 1.35.7
   languageName: unknown
@@ -7350,7 +7350,7 @@ __metadata:
     jest: 29.4.1
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     supertokens-node: 12.1.6
   languageName: unknown
@@ -7367,7 +7367,7 @@ __metadata:
     "@types/yargs": 17.0.20
     core-js: 3.27.2
     jest: 29.4.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7383,7 +7383,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     supertokens-auth-react: 0.30.2
   languageName: unknown
@@ -7402,7 +7402,7 @@ __metadata:
     jest: 29.4.1
     msw: 0.49.3
     react: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7428,7 +7428,7 @@ __metadata:
     prettier: 2.8.3
     prompts: 2.4.2
     terminal-link: 2.1.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7478,7 +7478,7 @@ __metadata:
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
     title-case: 3.0.3
-    typescript: 4.9.4
+    typescript: 4.9.5
     yargs: 17.6.2
   bin:
     redwood: ./dist/index.js
@@ -7516,7 +7516,7 @@ __metadata:
     prettier: 2.8.3
     tasuku: 2.0.1
     tempy: 1.0.1
-    typescript: 4.9.4
+    typescript: 4.9.5
     yargs: 17.6.2
   bin:
     codemods: ./dist/codemods.js
@@ -7571,7 +7571,7 @@ __metadata:
     react-refresh: 0.14.0
     rimraf: 3.0.2
     style-loader: 3.3.1
-    typescript: 4.9.4
+    typescript: 4.9.5
     url-loader: 4.1.1
     webpack: 5.75.0
     webpack-bundle-analyzer: 4.7.0
@@ -7619,7 +7619,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.6.0
     jest: 29.4.1
     prettier: 2.8.3
-    typescript: 4.9.4
+    typescript: 4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7646,7 +7646,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: 7.42.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     graphql: 16.6.0
     react: 18.2.0
@@ -7686,7 +7686,7 @@ __metadata:
     jsonwebtoken: 9.0.0
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    typescript: 4.9.4
+    typescript: 4.9.5
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -7737,7 +7737,7 @@ __metadata:
     systeminformation: 5.17.8
     terminal-link: 2.1.1
     ts-node: 10.9.1
-    typescript: 4.9.4
+    typescript: 4.9.5
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -7765,7 +7765,7 @@ __metadata:
     graphql: 16.6.0
     jest: 29.4.1
     mime-types: 2.1.35
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     react: 18.2.0
     react-dom: 18.2.0
@@ -7802,7 +7802,7 @@ __metadata:
     jest: 29.4.1
     react: 18.2.0
     react-dom: 18.2.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     react: 18.2.0
     react-dom: 18.2.0
@@ -7840,7 +7840,7 @@ __metadata:
     lru-cache: 6.0.0
     proxyquire: 2.1.3
     ts-morph: 15.1.0
-    typescript: 4.9.4
+    typescript: 4.9.5
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.8
     vscode-languageserver-types: 3.17.2
@@ -7908,7 +7908,7 @@ __metadata:
     jest-watch-typeahead: 2.2.2
     msw: 0.49.3
     ts-toolbelt: 9.6.0
-    typescript: 4.9.4
+    typescript: 4.9.5
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -7923,7 +7923,7 @@ __metadata:
     "@vitejs/plugin-react": 3.0.1
     buffer: 6.0.3
     core-js: 3.27.2
-    typescript: 4.9.4
+    typescript: 4.9.5
     vite: 4.0.4
     vite-plugin-commonjs: 0.6.1
     vite-plugin-environment: 1.1.3
@@ -7962,7 +7962,7 @@ __metadata:
     react-hot-toast: 2.4.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    typescript: 4.9.4
+    typescript: 4.9.5
   peerDependencies:
     prop-types: 15.8.1
     react: 18.2.0
@@ -15016,7 +15016,7 @@ __metadata:
     jest: 29.4.1
     listr2: 5.0.7
     terminal-link: 2.1.1
-    typescript: 4.9.4
+    typescript: 4.9.5
     yargs: 17.6.2
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
@@ -27582,17 +27582,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redis@npm:4.6.3":
-  version: 4.6.3
-  resolution: "redis@npm:4.6.3"
+"redis@npm:4.6.4":
+  version: 4.6.4
+  resolution: "redis@npm:4.6.4"
   dependencies:
     "@redis/bloom": 1.2.0
-    "@redis/client": 1.5.4
+    "@redis/client": 1.5.5
     "@redis/graph": 1.1.0
     "@redis/json": 1.0.4
     "@redis/search": 1.1.1
     "@redis/time-series": 1.0.4
-  checksum: 5ff2e4162fc59da977277dc94c2c73d06ef30caa568e4d4c92caa76f81669cc37b8ea822c51e3b307d3b84368d1e4a94130880bac62465e7d510ccb68436867c
+  checksum: 935c798b0f87689dd407652258325b5da4ec63b286910617c4bd7a0595654831e0f7b28a8c33c30d846b1d6ab37cca3253cd43e2f3ac2fb673bc144f7c3d14f1
   languageName: node
   linkType: hard
 
@@ -28239,7 +28239,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 3.0.2
     terminal-link: 2.1.1
-    typescript: 4.9.4
+    typescript: 4.9.5
     zx: 7.1.1
   languageName: unknown
   linkType: soft
@@ -30815,23 +30815,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.9.4, typescript@npm:^3 || ^4":
-  version: 4.9.4
-  resolution: "typescript@npm:4.9.4"
+"typescript@npm:4.9.5, typescript@npm:^3 || ^4":
+  version: 4.9.5
+  resolution: "typescript@npm:4.9.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 5008b97a2a3afdbe57ea70e504ebc8ec98f18d888059dfb7932a41f566a1360a28afc8de2a440fd6143b4014cc6d2616079931dc690c7513c2d21fa53957e0ec
+  checksum: 5f6cad2e728a8a063521328e612d7876e12f0d8a8390d3b3aaa452a6a65e24e9ac8ea22beb72a924fd96ea0a49ea63bb4e251fb922b12eedfb7f7a26475e5c56
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.9.4#~builtin<compat/typescript>, typescript@patch:typescript@^3 || ^4#~builtin<compat/typescript>":
-  version: 4.9.4
-  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=ad5954"
+"typescript@patch:typescript@4.9.5#~builtin<compat/typescript>, typescript@patch:typescript@^3 || ^4#~builtin<compat/typescript>":
+  version: 4.9.5
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: a98c97a7abb391a00c51a427b074ab58c02df490358b7db7c3f4cc4fceb6d620457a0ef5d58e1c8db08fcb4ece9f3ba656cbfef3f81c12a383b0b8df8f198c7c
+  checksum: 5db0510cc74ad3f2d0300b695dc9de58e3652f286cac595ae34788c6fc0f85af85b637c93b803d4af8003c5ceb695a4be13cd5c5240768ec932be167e7161a76
   languageName: node
   linkType: hard
 
