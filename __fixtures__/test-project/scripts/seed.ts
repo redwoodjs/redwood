@@ -95,7 +95,7 @@ export default async () => {
     // and associated `salt` to their record. Here's how to create them using
     // the same algorithm that dbAuth uses internally:
     //
-    //   import { hashPassword } from '@redwoodjs/auth-providers-api'
+    //   import { hashPassword } from '@redwoodjs/auth-dbauth-api'
     //
     //   const users = [
     //     { name: 'john', email: 'john@example.com', password: 'secret1' },
