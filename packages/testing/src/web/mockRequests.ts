@@ -1,17 +1,17 @@
 // MSW is shared by Jest (NodeJS) and Storybook (Webpack)
-import {
-  setupWorker,
-  graphql,
+import { setupWorker, graphql } from 'msw'
+import type {
+  StartOptions as StartMSWWorkerOptions,
+  SharedOptions as SharedMSWOptions,
+  MockedResponse,
+  DefaultBodyType,
   RequestHandler,
   GraphQLContext,
   GraphQLRequest,
   ResponseTransformer,
-  MockedResponse,
   SetupWorkerApi,
   ResponseComposition,
 } from 'msw'
-import type { StartOptions as StartMSWWorkerOptions } from 'msw'
-import type { SharedOptions as SharedMSWOptions } from 'msw'
 
 // Allow users to call "mockGraphQLQuery" and "mockGraphQLMutation"
 // before the server has started. We store the request handlers in
@@ -86,7 +86,7 @@ export type DataFunction<
 ) => Query | void
 
 // These should get exported from MSW
-type ResponseFunction<BodyType = any> = (
+type ResponseFunction<BodyType extends DefaultBodyType = any> = (
   ...transformers: ResponseTransformer<BodyType>[]
 ) => MockedResponse<BodyType>
 
