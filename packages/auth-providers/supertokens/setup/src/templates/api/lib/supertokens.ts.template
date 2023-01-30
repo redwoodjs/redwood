@@ -4,17 +4,18 @@ import ThirdPartyEmailPassword, {
   Github,
   Apple,
 } from 'supertokens-node/recipe/thirdpartyemailpassword'
+import type { TypeInput } from 'supertokens-node/types'
 
 const websiteDomain =
   process.env.SUPERTOKENS_WEBSITE_DOMAIN || 'http://localhost:8910'
 const apiDomain =
   process.env.SUPERTOKENS_API_DOMAIN ||
-  `${websiteDomain}${process.env.RWJS_API_URL}`
+  `${websiteDomain}${process.env.SUPERTOKENS_API_GATEWAY_PATH}`
 const apiBasePath = '/auth'
 
-const jwksIssuerUrl = { issuer: `${apiDomain}${apiBasePath}` }
+const jwksIssuerUrl = {}
 
-export const config = {
+export const config: TypeInput = {
   framework: 'awsLambda',
   isInServerlessEnv: true,
   appInfo: {
