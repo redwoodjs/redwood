@@ -26,6 +26,7 @@ export const handler = async ({ force: forceArg }: Args) => {
       '```bash title=".env"',
       'SUPABASE_URL="..."',
       'SUPABASE_KEY="..."',
+      'SUPABASE_JWT_SECRET="..."',
       '```',
       '',
       "You can find their values on your Supabase app's dashboard.",
