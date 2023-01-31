@@ -39,7 +39,7 @@ export async function builder(yargs) {
       }
     )
     .command(
-      'azure-active-directory',
+      ['azure-active-directory', 'azureActiveDirectory'],
       'Set up auth for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
@@ -166,10 +166,7 @@ function getRedirectMessage(provider) {
  * @param {string} module
  */
 async function getAuthHandler(module) {
-  // Here we're reading this package's (@redwoodjs/cli) package.json.
-  // So, in a user's project, `packageJsonPath` will be something like...
-  // /Users/bob/tmp/rw-app/node_modules/@redwoodjs/cli/package.json
-  const packageJsonPath = path.resolve(__dirname, '../../../../package.json')
+  const packageJsonPath = require.resolve('@redwoodjs/cli/package.json')
   let { version } = fs.readJSONSync(packageJsonPath)
 
   if (!isInstalled(module)) {
@@ -204,7 +201,8 @@ async function getAuthHandler(module) {
 }
 
 /**
- * Check if a user's project's has a module listed as a dependency or devDependency.
+ * Check if a user's project's package.json has a module listed as a dependency
+ * or devDependency. If not, check node_modules.
  *
  * @param {string} module
  */
@@ -213,11 +211,23 @@ function isInstalled(module) {
     path.join(getPaths().base, 'package.json')
   )
 
-  return Object.hasOwn(
-    {
-      ...dependencies,
-      ...devDependencies,
-    },
-    module
-  )
+  const deps = {
+    ...dependencies,
+    ...devDependencies,
+  }
+
+  if (deps[module]) {
+    return true
+  }
+
+  // Check any of the places require would look for this module.
+  // This enables testing auth setup packages with `yarn rwfw project:copy`.
+  //
+  // We can't use require.resolve here because it cahces the exception
+  // Making it impossible to require when we actually do install it...
+  return require.resolve
+    .paths(`${module}/package.json`)
+    .some((requireResolvePath) => {
+      return fs.existsSync(path.join(requireResolvePath, module))
+    })
 }
