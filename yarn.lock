@@ -7347,6 +7347,7 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.1
     react: 18.2.0
+    supertokens-auth-react: 0.30.2
     typescript: 4.9.5
   peerDependencies:
     supertokens-auth-react: 0.30.2
@@ -20207,6 +20208,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"intl-tel-input@npm:^17.0.19":
+  version: 17.0.19
+  resolution: "intl-tel-input@npm:17.0.19"
+  checksum: 3e3eb360957b372d399a403b15978c092b47fd51cf7a3c48d1cd3bbf21febac036ee9eb3efee81b7c2fbbb2bbd217102ba0ec01d511d635ffebd1cd635806826
+  languageName: node
+  linkType: hard
+
 "invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
@@ -26673,7 +26681,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.0.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:*, prop-types@npm:15.8.1, prop-types@npm:^15.0.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -29712,6 +29720,28 @@ __metadata:
   version: 0.15.5
   resolution: "superstruct@npm:0.15.5"
   checksum: 73ae2043443dcc7868da6e8b4e4895410c79a88e021b514c665161199675ee920d5eadd85bb9dee5a9f515817e62f4b65a67ccb82d29f73259d012afcbcd3ce4
+  languageName: node
+  linkType: hard
+
+"supertokens-auth-react@npm:0.30.2":
+  version: 0.30.2
+  resolution: "supertokens-auth-react@npm:0.30.2"
+  dependencies:
+    intl-tel-input: ^17.0.19
+    prop-types: "*"
+    supertokens-js-override: ^0.0.4
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+    supertokens-web-js: ^0.4.0
+  checksum: bcf23a2aabeb28a197a4e7d01b6ae8a0fa3bb8d72ab8de184cb02d957b61afcb56555245158542925f15feb8354f7d65e8a18fe3c85e922b26088bf406be35c5
+  languageName: node
+  linkType: hard
+
+"supertokens-js-override@npm:^0.0.4":
+  version: 0.0.4
+  resolution: "supertokens-js-override@npm:0.0.4"
+  checksum: 75468560e2f9fa0386e38d22f80aea705342f728db877b069623d3cfe070d85977b257508a2c8d3c6439280bfd6f1c7448ba8ac312b9abba6c8927428330028e
   languageName: node
   linkType: hard
 
