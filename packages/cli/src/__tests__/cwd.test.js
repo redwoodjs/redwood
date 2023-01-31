@@ -115,9 +115,7 @@ describe('The CLI sets `cwd` correctly', () => {
       expect(status).toBe(1)
       expect(stdout).toBe('')
       // We don't want to match on the entire error message since it includes an absolute path.
-      expect(stderr).toMatchInlineSnapshot(
-        `"Couldn't find up a "redwood.toml" file from /Users/dom/prjcts/redwood/redwood/__fixtures__"`
-      )
+      expect(stderr).toMatch(`Couldn't find up a "redwood.toml" file from`)
     })
   })
 })
