@@ -82,11 +82,6 @@ export async function check() {
     }
 
     const tagsOfInterest = [...getConfig().notifications.versionUpdates]
-    if (tagsOfInterest.length === 0) {
-      // This branch is reached if a user has enabled update checks via the ENV var and has no tags listed in their redwood.toml config
-      // Use whatever tag the user is currently on
-      tagsOfInterest.push(extractTagFromVersion(localVersion))
-    }
 
     const remoteVersions = new Map()
     for (const tag of tagsOfInterest) {
@@ -113,14 +108,10 @@ export async function check() {
 }
 
 /**
- * Determines if background checks are enabled. Checks are enabled within the redwood.toml notifications config or by the `REDWOOD_ENABLE_UPDATE_CHECKS` env var.
- * @return {boolean} `true` if background update checks are enabled
+ * Determines if background checks are enabled. Checks are enabled within the redwood.toml notifications config.
  */
 export function isEnabled() {
-  return (
-    getConfig().notifications.versionUpdates.length > 0 ||
-    process.env.REDWOOD_ENABLE_UPDATE_CHECKS
-  )
+  return getConfig().notifications.versionUpdates.length > 0
 }
 
 /**
@@ -183,7 +174,7 @@ export function getUpdateMessage() {
     }
   })
   message +=
-    '\n\n See any release notes at: https://github.com/redwoodjs/redwood/releases '
+    '\n\n See release notes at: https://github.com/redwoodjs/redwood/releases '
   message = message.replace('#REPLACEME#', updateCount > 1 ? ' -t [tag]' : '')
 
   return boxen(message, {
