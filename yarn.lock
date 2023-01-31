@@ -6853,7 +6853,7 @@ __metadata:
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     ansi-colors: 4.1.3
     aws-lambda: 1.0.7
     chalk: 4.1.2
@@ -6944,7 +6944,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 4.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     typescript: 4.9.5
@@ -6996,7 +6996,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 4.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     typescript: 4.9.5
@@ -7047,7 +7047,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 4.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     typescript: 4.9.5
@@ -7082,7 +7082,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 4.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     typescript: 4.9.5
@@ -7122,7 +7122,7 @@ __metadata:
     "@simplewebauthn/browser": 6.2.2
     "@simplewebauthn/typescript-types": 6.2.1
     "@types/secure-random-password": 0.2.1
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     prompts: 2.4.2
@@ -7174,7 +7174,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 4.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     typescript: 4.9.5
@@ -7225,7 +7225,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 4.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     typescript: 4.9.5
@@ -7276,7 +7276,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 4.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     typescript: 4.9.5
@@ -7328,7 +7328,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/cli-helpers": 4.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     core-js: 3.27.2
     jest: 29.4.1
     typescript: 4.9.5
@@ -7382,7 +7382,7 @@ __metadata:
     "@redwoodjs/telemetry": 4.0.0
     "@types/lodash.memoize": 4.1.7
     "@types/pascalcase": 1.0.1
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     chalk: 4.1.2
     core-js: 3.27.2
     execa: 5.1.1
@@ -7467,7 +7467,7 @@ __metadata:
     "@types/jest": 29.4.0
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     "@vscode/ripgrep": 1.14.2
     "@whatwg-node/fetch": 0.6.5
     core-js: 3.27.2
@@ -7646,7 +7646,7 @@ __metadata:
     graphql: 16.6.0
     graphql-scalars: 1.20.1
     graphql-tag: 2.12.6
-    graphql-yoga: 3.4.0
+    graphql-yoga: 3.4.1
     jest: 29.4.1
     jsonwebtoken: 9.0.0
     lodash.merge: 4.6.2
@@ -7824,7 +7824,7 @@ __metadata:
     "@redwoodjs/structure": 4.0.0
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.0
-    "@types/yargs": 17.0.21
+    "@types/yargs": 17.0.22
     "@whatwg-node/fetch": 0.6.5
     ci-info: 3.7.1
     core-js: 3.27.2
@@ -10576,12 +10576,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.21, @types/yargs@npm:^17.0.8":
-  version: 17.0.21
-  resolution: "@types/yargs@npm:17.0.21"
+"@types/yargs@npm:17.0.22, @types/yargs@npm:^17.0.8":
+  version: 17.0.22
+  resolution: "@types/yargs@npm:17.0.22"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: e5e825c63e072105d7e2c3c803142506e9565c5a8bb2ef30300eaaf9d5ec66ae35dd1c25f2aba3acd72622f2d2e14a6fd5ed56b082ce04d774f8fdb945452462
+  checksum: 1c5ed11692e495c49caf3c7cb2ec2aa973634cc7298ce4ecf8255177d908040cf51ced53731553380727a42299f06645c24d3c6eaa38cbd5d910ed0e332c9530
   languageName: node
   linkType: hard
 
@@ -11170,15 +11170,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/server@npm:0.5.8":
-  version: 0.5.8
-  resolution: "@whatwg-node/server@npm:0.5.8"
+"@whatwg-node/server@npm:0.5.11":
+  version: 0.5.11
+  resolution: "@whatwg-node/server@npm:0.5.11"
   dependencies:
-    "@whatwg-node/fetch": 0.6.2
+    "@whatwg-node/fetch": 0.6.5
     tslib: ^2.3.1
-  peerDependencies:
-    "@types/node": ^18.0.6
-  checksum: c9fa1aea940bf1d31dbca9d41564b7fa85d78bf158080dbd1521df28e0d726f7d269fc7bef5b1c76af7c57332db5d345167f6154012c5237dbae22218b8a6282
+  checksum: 7462004124b70b3c51056ffc9d979d80c2a1722a01529f8f296bcafa7351ce2c1ed4f1d33da1630f90579230d2ea62afa236788aa3e22f750607e5b32ffa7fd6
   languageName: node
   linkType: hard
 
@@ -19184,9 +19182,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-yoga@npm:3.4.0":
-  version: 3.4.0
-  resolution: "graphql-yoga@npm:3.4.0"
+"graphql-yoga@npm:3.4.1":
+  version: 3.4.1
+  resolution: "graphql-yoga@npm:3.4.1"
   dependencies:
     "@envelop/core": 3.0.4
     "@envelop/parser-cache": ^5.0.4
@@ -19195,13 +19193,13 @@ __metadata:
     "@graphql-tools/schema": ^9.0.0
     "@graphql-tools/utils": ^9.0.1
     "@graphql-yoga/subscription": ^3.1.0
-    "@whatwg-node/fetch": 0.6.2
-    "@whatwg-node/server": 0.5.8
+    "@whatwg-node/fetch": 0.6.5
+    "@whatwg-node/server": 0.5.11
     dset: ^3.1.1
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 4bd31ffe8252447bd30333fb4dc1b3e0861f53ab03b119e8e81130b919dca754930cebaf5a4dc4b8c7c1cafa84ec13058959aaae2fe00135e82dbeb6d33e1c0c
+  checksum: f4b891153aca4d1f0a9ef79f8b5c64399f3da342fef3ce5359a954c1e2c71519208e3dd5efbe15bbdd4d351920261bb304752ad5c5cae951ed76d57c154ec104
   languageName: node
   linkType: hard
 
