@@ -17,6 +17,7 @@ const apiGatewayPath =
 
 const superTokensClient = {
   sessionRecipe: Session,
+  redirectToAuth: SuperTokens.redirectToAuth,
 }
 
 isBrowser &&

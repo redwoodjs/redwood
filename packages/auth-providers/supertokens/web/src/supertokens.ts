@@ -1,4 +1,4 @@
-import SuperTokens from 'supertokens-auth-react'
+import type SuperTokens from 'supertokens-auth-react'
 
 import { createAuthentication, CurrentUser } from '@redwoodjs/auth'
 
@@ -30,16 +30,17 @@ export function createAuth(
 
 export interface SuperTokensAuth {
   sessionRecipe: SessionRecipe
+  redirectToAuth: (typeof SuperTokens)['redirectToAuth']
 }
 
 function createAuthImplementation(superTokens: SuperTokensAuth) {
   return {
     type: 'supertokens',
     login: () => {
-      return SuperTokens.redirectToAuth({ show: 'signin', redirectBack: true })
+      return superTokens.redirectToAuth({ show: 'signin', redirectBack: true })
     },
     signup: () => {
-      return SuperTokens.redirectToAuth({ show: 'signup', redirectBack: true })
+      return superTokens.redirectToAuth({ show: 'signup', redirectBack: true })
     },
     logout: () => {
       return superTokens.sessionRecipe.signOut()
