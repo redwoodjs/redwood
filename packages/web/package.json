@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -38,7 +38,7 @@
   "dependencies": {
     "@apollo/client": "3.7.5",
     "@babel/runtime-corejs3": "7.20.13",
-    "@redwoodjs/auth": "3.2.0",
+    "@redwoodjs/auth": "4.0.0",
     "core-js": "3.27.2",
     "graphql": "16.6.0",
     "graphql-tag": "2.12.6",
@@ -57,11 +57,12 @@
     "@types/react-dom": "18.0.10",
     "@types/testing-library__jest-dom": "5.14.5",
     "jest": "29.4.1",
+    "jest-runner-tsd": "4.0.0",
     "nodemon": "2.0.20",
     "prop-types": "15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "4.7.4"
+    "typescript": "4.9.5"
   },
   "peerDependencies": {
     "prop-types": "15.8.1",
