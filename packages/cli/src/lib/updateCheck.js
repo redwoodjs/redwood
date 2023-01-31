@@ -81,10 +81,8 @@ export async function check() {
       localVersion = localVersion.substring(1)
     }
 
-    const tagsOfInterest = [...getConfig().notifications.versionUpdates]
-
     const remoteVersions = new Map()
-    for (const tag of tagsOfInterest) {
+    for (const tag of getConfig().notifications.versionUpdates) {
       try {
         remoteVersions.set(
           tag,
