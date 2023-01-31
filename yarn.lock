@@ -9480,10 +9480,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsd/typescript@npm:4.9.4":
-  version: 4.9.4
-  resolution: "@tsd/typescript@npm:4.9.4"
-  checksum: 1b013c6c5eab00849692cb6b28a314677723b1a481ff551492c5525a95f69093125a86242d57c27ac4a0b9450a7371177c164f8a65d2bdf36ec75039ba62540c
+"@tsd/typescript@npm:4.9.5":
+  version: 4.9.5
+  resolution: "@tsd/typescript@npm:4.9.5"
+  checksum: ec32c2a990c75646f3b8bc50e8a6b9b2fbd43752882a3b8d302a54d7e8eccaefc269114920681bf6f2509c2db3f48629b85ac93170fe2557bcb64169976f510d
   languageName: node
   linkType: hard
 
@@ -28164,7 +28164,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
-    "@tsd/typescript": 4.9.4
+    "@tsd/typescript": 4.9.5
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.4.0
