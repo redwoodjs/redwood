@@ -9,7 +9,7 @@ import type { TypeInput } from 'supertokens-node/types'
 const websiteDomain =
   process.env.SUPERTOKENS_WEBSITE_DOMAIN || 'http://localhost:8910'
 const apiDomain = process.env.SUPERTOKENS_API_DOMAIN || websiteDomain
-const apiBasePath = `${process.env.SUPERTOKENS_API_PATH}/auth`
+const apiGatewayPath = process.env.SUPERTOKENS_API_GATEWAY_PATH || '/.redwood/functions'
 
 const jwksIssuerUrl = {}
 
@@ -17,11 +17,12 @@ export const config: TypeInput = {
   framework: 'awsLambda',
   isInServerlessEnv: true,
   appInfo: {
+    appName: 'SuperTokens RedwoodJS',
     apiDomain,
     websiteDomain,
-    appName: 'SuperTokens RedwoodJS',
+    apiGatewayPath,
     websiteBasePath: '/auth',
-    apiBasePath,
+    apiBasePath: '/auth',
   },
   supertokens: {
     connectionURI: process.env.SUPERTOKENS_CONNECTION_URI,
