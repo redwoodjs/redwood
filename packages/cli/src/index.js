@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -33,7 +32,7 @@ import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths } from './lib'
-import * as upgradeCheck from './lib/upgradeCheck'
+import * as updateCheck from './lib/updateCheck'
 
 // # Setting the CWD
 //
@@ -99,43 +98,6 @@ config({
 })
 
 // # Build the CLI and run it
-
-function upgradeCheckMiddleware(argv) {
-  if (upgradeCheck.EXCLUDED_COMMANDS.includes(argv._[0])) {
-    return
-  }
-
-  if (upgradeCheck.shouldShow()) {
-    process.on('exit', () => {
-      upgradeCheck.showUpgradeMessage()
-    })
-  }
-
-  if (upgradeCheck.shouldCheck()) {
-    const stdout = fs.openSync(
-      path.join(getPaths().generated.base, 'upgradeCheckStdout.log'),
-      'w'
-    )
-
-    const stderr = fs.openSync(
-      path.join(getPaths().generated.base, 'upgradeCheckStderr.log'),
-      'w'
-    )
-
-    const child = spawn(
-      'yarn',
-      ['node', path.join(__dirname, 'lib', 'runUpgradeCheck.js')],
-      {
-        detached: true,
-        stdio: ['ignore', stdout, stderr],
-        shell: process.platform === 'win32',
-      }
-    )
-
-    child.unref()
-  }
-}
-
 yargs(hideBin(process.argv))
   // Config
   .scriptName('rw')
@@ -147,7 +109,7 @@ yargs(hideBin(process.argv))
         delete argv.cwd
       },
       telemetryMiddleware,
-      upgradeCheck.isEnabled() && upgradeCheckMiddleware,
+      updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
     ].filter(Boolean)
   )
   .option('cwd', {
