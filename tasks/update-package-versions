@@ -1,94 +1,80 @@
 #!/usr/bin/env node
+/* eslint-env node */
 
 const child = require('child_process')
-const fs = require('fs')
 const path = require('path')
 
-const version = process.argv[2].replace(/v/, '')
-if (!version) {
-  console.error(
-    'You must supply a version.\nUsage ./update-package-versions [version]'
-  )
-  process.exit(1)
+const fs = require('fs-extra')
+
+async function run() {
+  const version = process.argv[2].replace(/v/, '')
+
+  if (!version) {
+    console.error(
+      'You have to provide a version.\nUsage ./update-package-versions <version>'
+    )
+    process.exitCode = 1
+    return
+  }
+
+  const cwd = path.join(__dirname, '../')
+
+  const cmd = [
+    'yarn lerna version',
+    version,
+    '--force-publish',
+    '--no-push',
+    '--no-git-tag-version',
+    '--exact',
+    '--yes',
+  ].join(' ')
+
+  console.log(`Running "${cmd}"`)
+  console.log()
+  child.execSync(cmd, {
+    cwd,
+  })
+  console.log()
+
+  // Updates create-redwood-app template
+  console.log('Updating CRWA template...')
+  const templatePath = path.join(cwd, 'packages/create-redwood-app/template')
+  updateRWJSPkgsVersion(templatePath, version)
+  updateRWJSPkgsVersion(path.join(templatePath, 'api'), version)
+  updateRWJSPkgsVersion(path.join(templatePath, 'web'), version)
+  console.log()
+
+  // Updates __fixtures__/test-project packages
+  console.log('Updating test-project fixture...')
+  const fixturePath = path.join(cwd, '__fixtures__/test-project')
+  updateRWJSPkgsVersion(fixturePath, version)
+  updateRWJSPkgsVersion(path.join(fixturePath, 'api'), version)
+  updateRWJSPkgsVersion(path.join(fixturePath, 'web'), version)
+  console.log()
 }
 
 /**
- * Iterates over Redwood dependencies in package.json files and updates the version.
+ * Iterates over `@redwoodjs/*` dependencies in a package.json and updates their version.
+ *
+ * @param {string} pkgPath
+ * @param {string} version
  */
-const updatePackageVersion = (pkgPath, version) => {
-  const pkg = JSON.parse(
-    fs.readFileSync(path.join(pkgPath, 'package.json'), 'utf-8')
-  )
+function updateRWJSPkgsVersion(pkgPath, version) {
+  const pkg = fs.readJSONSync(path.join(pkgPath, 'package.json'), 'utf-8')
 
-  if (pkg.dependencies) {
-    for (const depName of Object.keys(pkg.dependencies).filter((x) =>
-      x.startsWith('@redwoodjs/')
-    )) {
-      console.log(` - ${depName}: ${pkg.dependencies[depName]} => ${version}`)
-      pkg.dependencies[depName] = `${version}`
-    }
-  }
-  if (pkg.devDependencies) {
-    for (const depName of Object.keys(pkg.devDependencies).filter((x) =>
-      x.startsWith('@redwoodjs/')
-    )) {
-      console.log(
-        ` - ${depName}: ${pkg.devDependencies[depName]} => ${version}`
-      )
-      pkg.devDependencies[depName] = `${version}`
-    }
+  for (const dep of Object.keys(pkg.dependencies ?? {}).filter(isRWJSPkg)) {
+    console.log(` - ${dep}: ${pkg.dependencies[dep]} => ${version}`)
+    pkg.dependencies[dep] = `${version}`
   }
 
-  fs.writeFileSync(
-    path.join(pkgPath, 'package.json'),
-    JSON.stringify(pkg, undefined, 2) + '\n'
-  )
+  for (const dep of Object.keys(pkg.devDependencies ?? {}).filter(isRWJSPkg)) {
+    console.log(` - ${dep}: ${pkg.devDependencies[dep]} => ${version}`)
+    pkg.devDependencies[dep] = `${version}`
+  }
+
+  fs.writeJSONSync(path.join(pkgPath, 'package.json'), pkg, { spaces: 2 })
 }
 
-const cwd = path.join(__dirname, '../')
-const cmd = [
-  'yarn lerna version',
-  version,
-  '--force-publish',
-  '--no-push',
-  '--no-git-tag-version',
-  '--yes',
-].join(' ')
+const isRWJSPkg = (pkg) => pkg.startsWith('@redwoodjs/')
 
-console.log(`Running ${cmd}...`)
-child.execSync(cmd, {
-  cwd,
-  stdio: 'inherit',
-})
-console.log()
-
-// Updates create-redwood-app template
-console.log('UPDATING CRWA template...')
-console.log('Changes: ')
-const templatePath = path.join(cwd, 'packages/create-redwood-app/template')
-updatePackageVersion(templatePath, version)
-updatePackageVersion(path.join(templatePath, 'api'), version)
-updatePackageVersion(path.join(templatePath, 'web'), version)
-console.log()
-
-// Updates __fixtures__/test-project packages
-console.log('UPDATING Test-project Fixture...')
-console.log('Changes: ')
-const fixturePath = path.join(cwd, '__fixtures__/test-project')
-updatePackageVersion(fixturePath, version)
-updatePackageVersion(path.join(fixturePath, 'api'), version)
-updatePackageVersion(path.join(fixturePath, 'web'), version)
-console.log()
-
-// Lerna adds '^' to dependencies. To pin, we need to overwrite.
-console.log("CLEANUP Lerna version bump dependency '^'...")
-const packagesDir = path.join(cwd, 'packages')
-fs.readdirSync(packagesDir).forEach((file) => {
-  if (fs.statSync(packagesDir + '/' + file).isDirectory()) {
-    console.log(`Package ${file}:`)
-    updatePackageVersion(path.join(packagesDir, file), version)
-  }
-})
-console.log()
-console.log(`All done! You are now ready to publish ${version}.`)
-console.log()
+run()
