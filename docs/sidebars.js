@@ -91,6 +91,7 @@ module.exports = {
             { type: 'doc', id: 'auth/firebase' },
             { type: 'doc', id: 'auth/netlify' },
             { type: 'doc', id: 'auth/supabase' },
+            { type: 'doc', id: 'auth/supertokens' },
           ],
         },
         'builds',
