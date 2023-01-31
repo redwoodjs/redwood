@@ -39,7 +39,7 @@ export async function builder(yargs) {
       }
     )
     .command(
-      'azure-active-directory',
+      ['azure-active-directory', 'azureActiveDirectory'],
       'Set up auth for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
