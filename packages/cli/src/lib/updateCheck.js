@@ -151,7 +151,7 @@ export function showUpdateMessage() {
  * Returns a nicely formatted string containing an update notification
  * @return {string} A specifically formatted update notification message
  */
-export function getUpdateMessage() {
+function getUpdateMessage() {
   const data = readUpdateDataFile()
 
   // Whatever tag the user is currently on or 'latest'
