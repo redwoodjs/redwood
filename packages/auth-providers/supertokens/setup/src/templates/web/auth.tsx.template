@@ -28,7 +28,7 @@ isBrowser &&
       websiteDomain,
       apiGatewayPath,
       websiteBasePath: '/auth',
-      apiBasePath: `/auth`,
+      apiBasePath: '/auth',
     },
     recipeList: [
       Session.init(),
@@ -50,7 +50,7 @@ interface Props {
 const AuthProvider = ({ children }: Props) => {
   return (
     <SuperTokensWrapper>
-      <SuperTokensAuthProvider>{props.children}</SuperTokensAuthProvider>
+      <SuperTokensAuthProvider>{children}</SuperTokensAuthProvider>
     </SuperTokensWrapper>
   )
 }
