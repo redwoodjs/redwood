@@ -197,6 +197,8 @@ Try reloading the Posts admin and we'll see something that's 50% correct:
 
 Going to the admin section now prevents a non-logged in user from seeing posts, great! This is the result of the `@requireAuth` directive in `api/src/graphql/posts.sdl.{js,ts}`: you're not authenticated so GraphQL will not respond to your request for data. But, ideally they wouldn't be able to see the admin pages themselves. Let's fix that with a new component in the Routes file, `<Private>`:
 
+Warning: In the following code the useAuth may not be available to you. I would suggest only adding the lines marked as diff.
+
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
