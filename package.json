@@ -98,6 +98,6 @@
     "typescript": "4.9.5",
     "zx": "7.1.1"
   },
-  "packageManager": "yarn@3.3.1",
+  "packageManager": "yarn@3.4.1",
   "npmClient": "yarn"
 }
