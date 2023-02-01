@@ -120,14 +120,19 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
             `One more thing...\n\n   ${c.warning(
               `🎉 Your project has been upgraded to RedwoodJS ${version}!`
             )} \n\n`,
-            `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
-              `Redwood community discussion`,
-              `https://community.redwoodjs.com/search?q=${version}%23announcements`
-            )}\n   ❖ ${terminalLink(
-              `GitHub Release notes`,
-              `https://github.com/redwoodjs/redwood/releases` // intentionally not linking to specific version
-            )} \n\n`,
           ]
+          // Show links when switching to 'latest' or 'rc', undefined is essentially an alias of 'latest'
+          if ([undefined, 'latest', 'rc'].includes(tag)) {
+            messageSections.push(
+              `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
+                `Redwood community discussion`,
+                `https://community.redwoodjs.com/search?q=${version}%23announcements`
+              )}\n   ❖ ${terminalLink(
+                `GitHub Release notes`,
+                `https://github.com/redwoodjs/redwood/releases` // intentionally not linking to specific version
+              )} \n\n`
+            )
+          }
           // @MARK
           // This should be temporary and eventually superseded by a more generic notification system
           if (tag) {
@@ -146,8 +151,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
                 )} To fix this you have to manually update your web/package.json to use React 18 and then run \`yarn install\`\n`
               )
             }
-
-            // Append additional messages
+            // Append additional messages with a header
             if (additionalMessages.length > 0) {
               messageSections.push(
                 `   📢 ${c.warning(`We'd also like to remind you that:`)} \n`,
