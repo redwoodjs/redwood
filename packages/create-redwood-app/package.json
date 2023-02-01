@@ -31,6 +31,7 @@
     "@opentelemetry/semantic-conventions": "1.9.0",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
+    "ci-info": "3.7.1",
     "core-js": "3.27.2",
     "enquirer": "2.3.6",
     "envinfo": "7.8.1",

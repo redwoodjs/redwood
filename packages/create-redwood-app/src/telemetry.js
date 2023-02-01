@@ -7,6 +7,7 @@ import {
   BatchSpanProcessor,
 } from '@opentelemetry/sdk-trace-node'
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
+import ci from 'ci-info'
 import envinfo from 'envinfo'
 import system from 'systeminformation'
 
@@ -63,7 +64,6 @@ export async function startTelemetry() {
   const resource = Resource.default().merge(
     new Resource({
       [SemanticResourceAttributes.SERVICE_NAME]: packageName,
-      // TODO: Get a better way of recording what version of CRWA is running because this is just null...
       [SemanticResourceAttributes.SERVICE_VERSION]: packageVersion,
       [SemanticResourceAttributes.OS_TYPE]: info.System?.OS?.split(' ')[0],
       [SemanticResourceAttributes.OS_VERSION]: info.System?.OS?.split(' ')[1],
@@ -74,6 +74,10 @@ export async function startTelemetry() {
       'vscode.version': info.IDEs?.VSCode?.version,
       'cpu.count': cpu.physicalCores,
       'memory.gb': Math.round(mem.total / 1073741824),
+      'env.node_env': process.env.NODE_ENV || null,
+      'ci.redwood': !!process.env.REDWOOD_CI,
+      'ci.isci': ci.isCI,
+      fingerprint: undefined, // We don't provide a fingerprint here because it needs a fully setup project
     })
   )
 
@@ -83,7 +87,7 @@ export async function startTelemetry() {
   })
   traceExporter = new OTLPTraceExporter({
     // TODO: Point this to somewhere permanent
-    // url: 'https://telemetry.redwoodjs.com/v1/traces',
+    url: 'http://localhost:4318/v1/traces',
   })
   traceProcessor = new BatchSpanProcessor(traceExporter)
   traceProvider.addSpanProcessor(traceProcessor)
@@ -98,9 +102,30 @@ export async function startTelemetry() {
   )
 }
 
-export async function shutdownTelemetry({ exception } = {}) {
-  if (rootSpan?.isRecording()) {
+export function startChildSpan(name) {
+  const tracer = opentelemetry.trace.getTracer('crwa-tracer')
+  const childSpan = tracer.startSpan(
+    name,
+    undefined,
+    opentelemetry.trace.setSpan(opentelemetry.context.active(), rootSpan)
+  )
+  return childSpan
+}
+
+export async function shutdownTelemetry({ span, exception } = {}) {
+  if (span?.isRecording()) {
     if (exception !== undefined) {
+      // TODO: Think about how best to redact this exception information
+      span.recordException(exception)
+      span.setStatus({
+        code: SpanStatusCode.ERROR,
+        message: exception.message,
+      })
+    }
+    span.end()
+  }
+  if (rootSpan?.isRecording()) {
+    if (span === undefined && exception !== undefined) {
       // TODO: Think about how best to redact this exception information
       rootSpan.recordException(exception)
       rootSpan.setStatus({

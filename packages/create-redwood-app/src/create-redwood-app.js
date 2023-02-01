@@ -32,7 +32,7 @@ import yargs from 'yargs/yargs'
 
 import { name, version } from '../package'
 
-import { startTelemetry, shutdownTelemetry } from './telemetry'
+import { startTelemetry, shutdownTelemetry, startChildSpan } from './telemetry'
 ;(async () => {
   //
 
@@ -149,6 +149,7 @@ import { startTelemetry, shutdownTelemetry } from './telemetry'
           appDirExists ? 'Using' : 'Creating'
         } directory '${newAppDir}'`,
         task: () => {
+          const span = startChildSpan('file_copy')
           if (appDirExists && !overwrite) {
             // make sure that the target directory is empty
             if (fs.readdirSync(newAppDir).length > 0) {
@@ -158,6 +159,7 @@ import { startTelemetry, shutdownTelemetry } from './telemetry'
                 )
               )
               shutdownTelemetry({
+                span,
                 exception: new Error('target directory not empty'),
               }).finally(() => process.exit(1))
             }
@@ -170,12 +172,14 @@ import { startTelemetry, shutdownTelemetry } from './telemetry'
             path.join(newAppDir, 'gitignore.template'),
             path.join(newAppDir, '.gitignore')
           )
+          span.end()
         },
       },
       {
         title: 'Converting to yarn 1',
         enabled: () => yarn1,
         task: () => {
+          const span = startChildSpan('yarn_1')
           // rm files:
           // - .yarnrc.yml
           // - .yarn
@@ -203,6 +207,7 @@ import { startTelemetry, shutdownTelemetry } from './telemetry'
           fs.writeJSONSync(path.join(newAppDir, 'package.json'), packageJSON, {
             spaces: 2,
           })
+          span.end()
         },
       },
     ]
@@ -217,11 +222,13 @@ import { startTelemetry, shutdownTelemetry } from './telemetry'
             return 'skipped on request'
           }
         },
-        task: () => {
-          return execa('yarn install', {
+        task: async () => {
+          const span = startChildSpan('yarn_install')
+          await execa('yarn install', {
             shell: true,
             cwd: newAppDir,
           })
+          span.end()
         },
       },
     ]
@@ -371,34 +378,40 @@ import { startTelemetry, shutdownTelemetry } from './telemetry'
         enabled: (ctx) =>
           yarnInstall === true &&
           (typescript === false || ctx.language === 'JavaScript'),
-        task: () => {
-          return execa('yarn rw ts-to-js', {
+        task: async () => {
+          const span = startChildSpan('ts_to_js')
+          await execa('yarn rw ts-to-js', {
             shell: true,
             cwd: newAppDir,
           })
+          span.end()
         },
       },
       {
         title: 'Generating types',
         skip: () => yarnInstall === false,
-        task: () => {
-          return execa('yarn rw-gen', {
+        task: async () => {
+          const span = startChildSpan('generate_types')
+          await execa('yarn rw-gen', {
             shell: true,
             cwd: newAppDir,
           })
+          span.end()
         },
       },
       {
         title: 'Initializing a git repo',
         enabled: (ctx) => gitInit || ctx.gitInit,
-        task: () => {
-          return execa(
+        task: async () => {
+          const span = startChildSpan('git_init')
+          await execa(
             'git init && git add . && git commit -m "Initial commit"',
             {
               shell: true,
               cwd: newAppDir,
             }
           )
+          span.end()
         },
       },
     ],
