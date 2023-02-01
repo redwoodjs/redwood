@@ -75,7 +75,7 @@ export interface DefineScenario {
       ModelName,
       ScenarioDefinitionMap<PrismaCreateType, ModelName, TKeys>
     >
-  ): Record<ModelName, Record<TKeys, unknown>>
+  ): Record<ModelName, Record<TKeys, any>>
 }
 
 /**
