@@ -6,6 +6,7 @@ import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal/dist/config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
@@ -115,18 +116,46 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         title: 'One more thing..',
         task: (ctx, task) => {
           const version = ctx.versionToUpgradeTo
-          task.title =
+          const messageSections = [
             `One more thing...\n\n   ${c.warning(
               `🎉 Your project has been upgraded to RedwoodJS ${version}!`
-            )} \n\n` +
+            )} \n\n`,
             `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
               `Redwood community discussion`,
               `https://community.redwoodjs.com/search?q=${version}%23announcements`
             )}\n   ❖ ${terminalLink(
               `GitHub Release notes`,
               `https://github.com/redwoodjs/redwood/releases` // intentionally not linking to specific version
-            )}
-          `
+            )} \n\n`,
+          ]
+          // @MARK
+          // This should be temporary and eventually superseded by a more generic notification system
+          if (tag) {
+            const additionalMessages = []
+            // Reminder to update the `notifications.versionUpdates` TOML option
+            if (!getConfig().notifications.versionUpdates.includes(tag)) {
+              additionalMessages.push(
+                `   ❖ You may want to update your redwood.toml config so that \`notifications.versionUpdates\` includes "${tag}"\n`
+              )
+            }
+            // Notify about React17/18 issue on the current canary
+            if (tag === 'canary') {
+              additionalMessages.push(
+                `   ❖ Beware that if you have just upgraded a new project then your project might be broken.\n    ${c.info(
+                  `->`
+                )} To fix this you have to manually update your web/package.json to use React 18 and then run \`yarn\`\n`
+              )
+            }
+
+            // Append additional messages
+            if (additionalMessages.length > 0) {
+              messageSections.push(
+                `   📢 ${c.warning(`We'd also like to remind you that:`)} \n`,
+                ...additionalMessages
+              )
+            }
+          }
+          task.title = messageSections.join('').trimEnd()
         },
       },
     ],
