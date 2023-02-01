@@ -7646,7 +7646,7 @@ __metadata:
     graphql: 16.6.0
     graphql-scalars: 1.20.1
     graphql-tag: 2.12.6
-    graphql-yoga: 3.4.1
+    graphql-yoga: 3.5.1
     jest: 29.4.1
     jsonwebtoken: 9.0.0
     lodash.merge: 4.6.2
@@ -19183,9 +19183,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-yoga@npm:3.4.1":
-  version: 3.4.1
-  resolution: "graphql-yoga@npm:3.4.1"
+"graphql-yoga@npm:3.5.1":
+  version: 3.5.1
+  resolution: "graphql-yoga@npm:3.5.1"
   dependencies:
     "@envelop/core": 3.0.4
     "@envelop/parser-cache": ^5.0.4
@@ -19200,7 +19200,7 @@ __metadata:
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: f4b891153aca4d1f0a9ef79f8b5c64399f3da342fef3ce5359a954c1e2c71519208e3dd5efbe15bbdd4d351920261bb304752ad5c5cae951ed76d57c154ec104
+  checksum: 4cd1a4758085f9e46b03e71fafd7f36ef103c08bdfa1f5bf2faef9b61adf407b04e1010bc541d7cb8f50823cd4a1a0a55782b862f0a84005b7889ab185bba0af
   languageName: node
   linkType: hard
 
