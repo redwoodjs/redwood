@@ -141,9 +141,9 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
             // Notify about React17/18 issue on the current canary
             if (tag === 'canary') {
               additionalMessages.push(
-                `   ❖ Beware that if you have just upgraded a new project then your project might be broken.\n    ${c.info(
+                `   ❖ If you have just upgraded a new project then your project might be broken.\n    ${c.info(
                   `->`
-                )} To fix this you have to manually update your web/package.json to use React 18 and then run \`yarn\`\n`
+                )} To fix this you have to manually update your web/package.json to use React 18 and then run \`yarn install\`\n`
               )
             }
 
