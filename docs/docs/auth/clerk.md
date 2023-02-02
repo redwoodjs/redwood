@@ -14,20 +14,20 @@ This installs all the packages, writes all the files, and makes all the code mod
 For a detailed explanation of all the api- and web-side changes that aren't exclusive to Clerk, see the top-level [Authentication](../authentication.md) doc.
 There's one Clerk-specific thing we'll get to, but for now, let's focus on Clerk's side of things.
 
-If you don't have a Clerk account yet, now's the time to make one: navigate to https://clerk.dev and sign up, then create an application.
+If you don't have a Clerk account yet, now's the time to make one: navigate to [https://clerk.dev](https://clerk.dev?utm_source=redwoodjs), sign up, and create an application.
 The defaults are good enough to get us going, but feel free to configure things as you wish.
 We'll get the application's API keys from its dashboard next.
 
 :::note we'll only focus on the development instance
 
 By default, Clerk applications have two instances, "Development" and "Production".
-We'll only focus on the "Development" instance here.
+We'll only focus on the "Development" instance here, which is used for local development.
 When you're ready to deploy, switch the instance the dashboard is displaying by clicking "Development" in the header at the top.
 How you get your API keys to production depends on your deploy provider.
 
 :::
 
-We're looking for three API keys.
+We're looking for two API keys.
 Head over to the "Developers" section in the nav on the left and click "API Keys". Finally select RedwoodJS in the Framework dropdown in the Quick Copy section.
 Do as it says and copy the two keys into your project's `.env` file:
 
