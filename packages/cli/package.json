@@ -19,7 +19,7 @@
   "scripts": {
     "build": "yarn build:js",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build:js": "babel --root-mode upward src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "dev": "RWJS_CWD=../../__fixtures__/example-todo-main node dist/index.js",
     "fix:permissions": "chmod +x dist/index.js dist/rwfw.js",

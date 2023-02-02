@@ -17,10 +17,6 @@ const CORE_JS_VERSION = packageJSON.devDependencies['core-js']
   .slice(0, 2)
   .join('.') // Produces: 3.12, instead of 3.12.1
 
-// We use the recommended babel configuration for monorepos, which is a base directory
-// `babel.config.js` file, but then use a per-project `.babelrc.js` file.
-// Learn more: https://babeljs.io/docs/en/config-files#monorepos
-
 /** @type {import('@babel/core').TransformOptions} */
 module.exports = {
   presets: [

@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "yarn build:js",
-    "build:js": "babel src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
+    "build:js": "babel --root-mode upward src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
     "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
     "generate:codemod": "yarn node ./tasks/generateCodemod/generateCodemod.mjs",
     "prepublishOnly": "yarn build",

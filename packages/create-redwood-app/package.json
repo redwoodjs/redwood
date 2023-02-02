@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "yarn build:js",
-    "build:js": "babel src -d dist",
+    "build:js": "babel --root-mode upward src -d dist",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",

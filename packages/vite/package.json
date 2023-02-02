@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:js": "babel --root-mode upward src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
