@@ -28,23 +28,20 @@ How you get your API keys to production depends on your deploy provider.
 :::
 
 We're looking for three API keys.
-Head over to the "Developers" section in the nav on the left and click "API Keys".
-You'll need all three of the ones on this page: the Frontend API key, the default Backend API key, and the JWT verification key.
-Copy them into your project's `.env` file:
+Head over to the "Developers" section in the nav on the left and click "API Keys". Finally select RedwoodJS in the Framework dropdown in the Quick Copy section.
+Do as it says and copy the two keys into your project's `.env` file:
 
 ```bash title=".env"
-CLERK_FRONTEND_API_URL="..."
-# This one is the default Backend API Key.
-CLERK_API_KEY="..."
-CLERK_JWT_KEY="..."
+CLERK_PUBLISHABLE_KEY="..."
+CLERK_SECRET_KEY="..."
 ```
 
-Lastly, in your project's `redwood.toml` file, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be available to the web side:
+Lastly, in your project's `redwood.toml` file, include `CLERK_PUBLISHABLE_KEY` in the list of env vars that should be available to the web side:
 
 ```toml title="redwood.toml"
 [web]
   # ...
-  includeEnvironmentVariables = ["CLERK_FRONTEND_API_URL"]
+  includeEnvironmentVariables = ["CLERK_PUBLISHABLE_KEY"]
 ```
 
 That should be enough; now, things should just work.
