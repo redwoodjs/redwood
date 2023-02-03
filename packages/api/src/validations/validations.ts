@@ -616,11 +616,6 @@ export const validateWith = (func: () => void) => {
 // check that it is only unique among a subset of records with the same
 // `companyId`.
 //
-// As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be
-// enabled in schema.prisma:
-//
-//   previewFeatures = ["interactiveTransactions"]
-//
 // return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, { message: '...'}, (db) => {
 //   return db.create(data: { email })
 // })

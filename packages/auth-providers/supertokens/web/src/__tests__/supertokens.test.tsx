@@ -1,11 +1,10 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
 import {
   createAuth,
   SuperTokensUser,
-  AuthRecipe,
   SessionRecipe,
   SuperTokensAuth,
 } from '../supertokens'
@@ -21,12 +20,6 @@ const adminUser: SuperTokensUser = {
 }
 
 let loggedInUser: SuperTokensUser | undefined
-
-const superTokensAuthRecipe: AuthRecipe = {
-  redirectToAuth: () => {
-    loggedInUser ||= user
-  },
-}
 
 const superTokensSessionRecipe: SessionRecipe = {
   signOut: async () => {
@@ -50,8 +43,10 @@ const superTokensSessionRecipe: SessionRecipe = {
 }
 
 const superTokensMockClient: SuperTokensAuth = {
-  authRecipe: superTokensAuthRecipe,
   sessionRecipe: superTokensSessionRecipe,
+  redirectToAuth: async () => {
+    loggedInUser ||= user
+  },
 }
 
 const fetchMock = jest.fn()
@@ -73,7 +68,7 @@ fetchMock.mockImplementation(async (_url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
+  globalThis.fetch = fetchMock
 })
 
 beforeEach(() => {

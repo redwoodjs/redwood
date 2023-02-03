@@ -27,11 +27,16 @@ describe('getConfig', () => {
           "stories": true,
           "tests": true,
         },
+        "notifications": {
+          "versionUpdates": [],
+        },
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
+          "bundler": "webpack",
           "fastRefresh": true,
           "host": "localhost",
+          "includeEnvironmentVariables": [],
           "path": "./web",
           "port": 8910,
           "sourceMap": false,

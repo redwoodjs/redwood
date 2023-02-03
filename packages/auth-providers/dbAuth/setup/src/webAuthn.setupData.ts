@@ -8,10 +8,10 @@ import { functionsPath, libPath } from './setupData'
 export { extraTask } from './setupData'
 
 // required packages to install on the web side
-export const webPackages = ['@simplewebauthn/browser']
+export const webPackages = ['@simplewebauthn/browser@^6']
 
 // required packages to install on the api side
-export const apiPackages = ['@simplewebauthn/server']
+export const apiPackages = ['@simplewebauthn/server@^6']
 
 // any notes to print out when the job is done
 export const notes = [

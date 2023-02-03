@@ -1,4 +1,4 @@
-import { Plugin } from '@graphql-yoga/common'
+import { Plugin } from 'graphql-yoga'
 
 import {
   AuthContextPayload,
@@ -18,7 +18,7 @@ import {
  */
 export const useRedwoodAuthContext = (
   getCurrentUser: GraphQLHandlerOptions['getCurrentUser'],
-  authDecoder?: Decoder
+  authDecoder?: Decoder | Decoder[]
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ context, extendContext }) {

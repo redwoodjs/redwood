@@ -3,19 +3,18 @@
   "workspaces": {
     "packages": [
       "api",
-      "web",
-      "packages/*"
+      "web"
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "3.2.0"
+    "@redwoodjs/core": "4.0.0"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
   },
   "engines": {
-    "node": ">=14.19 <=18.x",
+    "node": ">=16.19 <=18.x",
     "yarn": ">=1.15"
   },
   "prisma": {

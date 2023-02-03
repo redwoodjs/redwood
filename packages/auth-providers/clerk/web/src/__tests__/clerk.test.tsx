@@ -4,7 +4,7 @@ import {
   EmailAddressResource,
   ActiveSessionResource,
 } from '@clerk/types'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 
 import { CurrentUser } from '@redwoodjs/auth'
 
@@ -91,8 +91,8 @@ fetchMock.mockImplementation(async (_url, options) => {
 })
 
 beforeAll(() => {
-  global.fetch = fetchMock
-  global.Clerk = clerkMockClient
+  globalThis.fetch = fetchMock
+  globalThis.Clerk = clerkMockClient
 })
 
 beforeEach(() => {
