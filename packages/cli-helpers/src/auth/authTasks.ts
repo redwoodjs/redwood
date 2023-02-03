@@ -191,11 +191,15 @@ export const removeAuthProvider = (content: string) => {
         unindent = true
         // Assume the end line is indented to the same level as the start,
         // and contains just a single '>'
-        end = line.replace(/^(\s*)<Auth.*/, '$1') + '>'
+        end = line.replace(/^(\s*)<Auth.*/s, '$1') + '>'
       }
 
       // Single-line AuthProvider, or end of multi-line
-      if ((hasAuthProvider(line) && line.at(-1) === '>') || line === end) {
+      // .trimEnd() to handle CRLF
+      if (
+        (hasAuthProvider(line) && line.trimEnd().at(-1) === '>') ||
+        line.trimEnd() === end
+      ) {
         remove = false
       }
 
@@ -300,7 +304,7 @@ export const addConfigToWebApp = <
         throw new Error(`Could not find root App.${ext}`)
       }
 
-      let content = fs.readFileSync(webAppPath).toString()
+      let content = fs.readFileSync(webAppPath, 'utf-8')
 
       if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
         content = addAuthImportToApp(content)
