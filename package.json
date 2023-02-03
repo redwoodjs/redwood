@@ -52,7 +52,7 @@
     "@npmcli/arborist": "6.2.1",
     "@nrwl/nx-cloud": "15.0.3",
     "@playwright/test": "1.30.0",
-    "@replayio/playwright": "0.3.16",
+    "@replayio/playwright": "0.3.17",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
     "@testing-library/user-event": "14.4.3",
@@ -71,7 +71,7 @@
     "babel-plugin-remove-code": "0.0.6",
     "boxen": "5.1.2",
     "core-js": "3.27.2",
-    "cypress": "12.5.0",
+    "cypress": "12.5.1",
     "cypress-wait-until": "1.7.2",
     "eslint": "8.33.0",
     "fast-glob": "3.2.12",
@@ -98,6 +98,6 @@
     "typescript": "4.9.5",
     "zx": "7.1.1"
   },
-  "packageManager": "yarn@3.3.1",
+  "packageManager": "yarn@3.4.1",
   "npmClient": "yarn"
 }

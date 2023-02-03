@@ -139,7 +139,7 @@ Launch an interactive Redwood shell (experimental):
 yarn redwood console
 ```
 
-Right now, you can only use the Redwood console to interact with your database:
+Right now, you can only use the Redwood console to interact with your database (always with `await`):
 
 **Example**
 

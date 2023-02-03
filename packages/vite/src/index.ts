@@ -34,7 +34,7 @@ export default function redwoodPluginVite() {
         if (existsSync(clientEntryPath)) {
           return html.replace(
             '</head>',
-            `<script type="module" src="${clientEntryPath}"></script>
+            `<script type="module" src="entry-client.jsx"></script>
         </head>`
           )
         } else {
