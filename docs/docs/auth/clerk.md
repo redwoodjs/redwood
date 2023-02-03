@@ -14,7 +14,7 @@ This installs all the packages, writes all the files, and makes all the code mod
 For a detailed explanation of all the api- and web-side changes that aren't exclusive to Clerk, see the top-level [Authentication](../authentication.md) doc.
 There's one Clerk-specific thing we'll get to, but for now, let's focus on Clerk's side of things.
 
-If you don't have a Clerk account yet, now's the time to make one: navigate to [https://clerk.dev](https://clerk.dev?utm_source=redwoodjs), sign up, and create an application.
+If you don't have a Clerk account yet, now's the time to make one: navigate to https://clerk.dev, sign up, and create an application.
 The defaults are good enough to get us going, but feel free to configure things as you wish.
 We'll get the application's API keys from its dashboard next.
 
