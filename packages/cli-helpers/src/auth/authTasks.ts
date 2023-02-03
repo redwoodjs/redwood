@@ -300,7 +300,11 @@ export const addConfigToWebApp = <
         throw new Error(`Could not find root App.${ext}`)
       }
 
-      let content = fs.readFileSync(webAppPath).toString()
+      let content = fs
+        .readFileSync(webAppPath)
+        .toString()
+        // For Windows. Replaces all CRLFs with LFs.
+        .replaceAll(/\r\n/g, '\n')
 
       if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
         content = addAuthImportToApp(content)
