@@ -567,7 +567,7 @@ That being said, if you really wanted to you could use Jest's [mocking utilities
 
 Where does that data come from? Take a look at the `comments.scenarios.{js,ts}` file which is next door:
 
-<Tabs>
+<Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```javascript title="api/src/services/comments.scenarios.js"
