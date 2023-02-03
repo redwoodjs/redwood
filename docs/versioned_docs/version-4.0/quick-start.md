@@ -6,7 +6,7 @@ description: Redwood quick start
 
 > **Prerequisites**
 >
-> - Redwood requires [Node.js](https://nodejs.org/en/) (>=14.19.x <=16.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
+> - Redwood requires [Node.js](https://nodejs.org/en/) (>=16.19 <=18.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
 > - Are you on Windows? For best results, follow our [Windows development setup](how-to/windows-development-setup.md) guide
 
 Create a Redwood project with `yarn create redwood-app`:
