@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useTabGroupChoice } from '@docusaurus/theme-common/internal'
+import { useStorageSlot } from '@docusaurus/theme-common'
 import MDXContent from '@theme/MDXContent'
 
 interface Props {
@@ -19,9 +19,7 @@ interface Props {
  * **/
 
 export default function ShowForTs({ children }: Props) {
-  const { tabGroupChoices } = useTabGroupChoice()
+  const [jsTs] = useStorageSlot('docusaurus.tab.js-ts')
 
-  const isTsSelected = tabGroupChoices['js-ts'] === 'ts'
-
-  return isTsSelected && <MDXContent>{children}</MDXContent>
+  return jsTs === 'ts' && <MDXContent>{children}</MDXContent>
 }
