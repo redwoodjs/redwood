@@ -8,6 +8,8 @@ import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
+import { getConfig } from '@redwoodjs/internal/dist/config'
+
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
 const { DefaultHost } = require('@redwoodjs/structure/dist/hosts')
@@ -97,6 +99,7 @@ const getInfo = async (presets: Args = {}) => {
     redwoodVersion:
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
+    webBundler: getConfig().web.bundler,
   }
 }
 
