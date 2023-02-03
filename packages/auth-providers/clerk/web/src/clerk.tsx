@@ -30,7 +30,7 @@ function createAuthImplementation() {
     // for Clerk that'll we always return, even when Clerk on the window object
     // eventually refreshes
     get client(): Clerk | undefined {
-      return globalThis.__REDWOOD__PRERENDERING ? null : (window as any).Clerk
+      return typeof window === 'undefined' ? undefined : (window as any).Clerk
     },
     login: async (options?: SignInProps) => {
       const clerk = (window as any).Clerk as Clerk
