@@ -383,7 +383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.20.12, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.20.7, @babel/core@npm:^7.7.5":
+"@babel/core@npm:7.20.12, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.20.12, @babel/core@npm:^7.7.5":
   version: 7.20.12
   resolution: "@babel/core@npm:7.20.12"
   dependencies:
@@ -7827,7 +7827,7 @@ __metadata:
     "@types/lodash": 4.14.191
     "@types/lru-cache": 5.1.1
     "@types/node": 16.18.11
-    "@types/vscode": 1.74.0
+    "@types/vscode": 1.74.1
     camelcase: 6.3.0
     core-js: 3.27.2
     deepmerge: 4.3.0
@@ -7923,7 +7923,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/internal": 4.0.0
-    "@vitejs/plugin-react": 3.0.1
+    "@vitejs/plugin-react": 3.1.0
     buffer: 6.0.3
     core-js: 3.27.2
     typescript: 4.9.5
@@ -7990,24 +7990,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.16":
-  version: 0.3.16
-  resolution: "@replayio/playwright@npm:0.3.16"
+"@replayio/playwright@npm:0.3.17":
+  version: 0.3.17
+  resolution: "@replayio/playwright@npm:0.3.17"
   dependencies:
-    "@replayio/replay": ^0.12.0
-    "@replayio/test-utils": ^0.4.0
+    "@replayio/replay": ^0.12.1
+    "@replayio/test-utils": ^0.4.1
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: 1e829b9974651d4ee0f1cd10cee312954397a1f94fa4bf619be22a5d2a5d72842e75620e6db937436c52e9bae250cb9fc076eba51f5a801df18efb93ee1b9bc3
+  checksum: c9dd9bf1bc96c3b93bbd1eade5044133fe283f10e52630d7b51f5ef70de158b550171869bb169381d390d36159acfe6b5a58265fa0d0609a3318dea8d9762310
   languageName: node
   linkType: hard
 
-"@replayio/replay@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "@replayio/replay@npm:0.12.0"
+"@replayio/replay@npm:^0.12.1":
+  version: 0.12.1
+  resolution: "@replayio/replay@npm:0.12.1"
   dependencies:
     "@replayio/sourcemap-upload": ^1.0.5
     commander: ^7.2.0
@@ -8021,7 +8021,7 @@ __metadata:
     ws: ^7.5.0
   bin:
     replay: bin/replay.js
-  checksum: 2f07643a1278101b2d2a663a3bf91d014b897bbea3dd8f402ae3d8a9a249c5a99b96e93ca1d2850730b0552f48904b923aafcf9a3f77d3f0042b8a28d4421b2e
+  checksum: b5e9027fe1cee409756a213ed84e6e2a9492c7e9da422074da63fdaf73a6aaa2e6a069b6aa463c89d908b775dac5d428d745f09776ce79e5a8ea4e6b6b6ea7b9
   languageName: node
   linkType: hard
 
@@ -8038,15 +8038,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@replayio/test-utils@npm:0.4.0"
+"@replayio/test-utils@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@replayio/test-utils@npm:0.4.1"
   dependencies:
-    "@replayio/replay": ^0.12.0
+    "@replayio/replay": ^0.12.1
     "@types/node-fetch": ^2.6.2
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: 9b0b17762c13c200af19ee4e33352601ad8d412cf460773fb82e994f0b6b13f5e0be3c9fa65242bdf7c89829d9e6b2caa9ee9857528e8ae869165fce1cf65d0a
+  checksum: b32f48ca552356b93c0467611e291521a8d922935a9e532d6495c6fb6be038cda5aa086c965f3335ef627905a3551a3eec0d04edc75ab26256784920e05fa743
   languageName: node
   linkType: hard
 
@@ -10541,10 +10541,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:1.74.0":
-  version: 1.74.0
-  resolution: "@types/vscode@npm:1.74.0"
-  checksum: 74afab8a1b7b89a306bf7d7dcd736b1ae8d387cffa842eb24b378ec41f84e7e5ba4fb77debcdbcb926e929472f7cd6139064abfed7d8e210284c961b06a0bc4a
+"@types/vscode@npm:1.74.1":
+  version: 1.74.1
+  resolution: "@types/vscode@npm:1.74.1"
+  checksum: b9c932660e5ec0b4582bd3b64b196a54158fa79f54c35a0e8ecc8b5916a92abcd417fb5adcc6bd3d4f1ce5e4832c6204a0130b3a6ef352f24335fa09afa323c1
   languageName: node
   linkType: hard
 
@@ -10769,18 +10769,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@vitejs/plugin-react@npm:3.0.1"
+"@vitejs/plugin-react@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@vitejs/plugin-react@npm:3.1.0"
   dependencies:
-    "@babel/core": ^7.20.7
+    "@babel/core": ^7.20.12
     "@babel/plugin-transform-react-jsx-self": ^7.18.6
     "@babel/plugin-transform-react-jsx-source": ^7.19.6
     magic-string: ^0.27.0
     react-refresh: ^0.14.0
   peerDependencies:
-    vite: ^4.0.0
-  checksum: 1fe811383ac67c17ba1454cc301876dfea423ae719b18ef4693e949e92e7b9db20945ac590b5b41501a1b0f0b9515351472b804b6a7fc73f8d2c8afa60abc749
+    vite: ^4.1.0-beta.0
+  checksum: 259a92a303cd736240dc0d3282d1261339e7bbcf51c5b326868c910b35d4bd22a360334b2dafa5bfc7f3e935f2cd0fdc7ccb6ec6b519b81017c4c4812cd05290
   languageName: node
   linkType: hard
 
@@ -28205,7 +28205,7 @@ __metadata:
     "@npmcli/arborist": 6.2.1
     "@nrwl/nx-cloud": 15.0.3
     "@playwright/test": 1.30.0
-    "@replayio/playwright": 0.3.16
+    "@replayio/playwright": 0.3.17
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
