@@ -42,12 +42,14 @@ interface RouteProps {
 interface RedirectRouteProps {
   path: string
   redirect: string
+  name?: string
 }
 
 interface NotFoundRouteProps {
   notfound: boolean
   page: PageType
   prerender?: boolean
+  name?: string
 }
 
 export type InternalRouteProps = Partial<

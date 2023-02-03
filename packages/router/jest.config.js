@@ -5,7 +5,10 @@ module.exports = {
       displayName: 'code',
       setupFilesAfterEnv: ['./jest.setup.js'],
       testEnvironment: 'jest-environment-jsdom',
-      testMatch: ['**/*.test.+(ts|tsx|js)', '!**/__typetests__/*.ts'],
+      testMatch: [
+        '**/*.test.+(ts|tsx|js)',
+        '!**/__typetests__/*.+(ts|tsx|js|jsx)',
+      ],
     },
     {
       displayName: {
@@ -13,7 +16,7 @@ module.exports = {
         name: 'types',
       },
       runner: 'jest-runner-tsd',
-      testMatch: ['**/__typetests__/*.test.ts'],
+      testMatch: ['**/__typetests__/*.test.+(ts|tsx|js|jsx)'],
     },
   ],
 }
