@@ -251,6 +251,23 @@ export const authDecoder = async (token: string, type: string) => {
 }
 ```
 
+Great—now we've got a way of decoding the token in requests coming from the web side.
+Just one more important step that's easy to overlook: we have to pass this function to `createGraphQLHandler` in `api/src/functions/graphql.ts`:
+
+```ts title="api/src/functions/graphql.ts"
+// highlight-next-line
+import { authDecoder, getCurrentUser } from 'src/lib/auth'
+
+// ...
+
+export const handler = createGraphQLHandler({
+  // highlight-next-line
+  authDecoder,
+  getCurrentUser,
+  // ...
+})
+```
+
 That should be enough; now, things should just work.
 Let's make sure: if this is a brand new project, generate a home page.
 There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
