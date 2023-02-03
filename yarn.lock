@@ -383,7 +383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.20.12, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.20.7, @babel/core@npm:^7.7.5":
+"@babel/core@npm:7.20.12, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.20.12, @babel/core@npm:^7.7.5":
   version: 7.20.12
   resolution: "@babel/core@npm:7.20.12"
   dependencies:
@@ -5661,9 +5661,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.0":
-  version: 6.2.0
-  resolution: "@npmcli/arborist@npm:6.2.0"
+"@npmcli/arborist@npm:6.2.1":
+  version: 6.2.1
+  resolution: "@npmcli/arborist@npm:6.2.1"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
@@ -5700,7 +5700,7 @@ __metadata:
     walk-up-path: ^1.0.0
   bin:
     arborist: bin/index.js
-  checksum: 57584cecbc0834ecd6e0699e8ae51789bcee8fde65a7359a5dd11349255e833d4c804079a193034430ac8a2127c111a85f6daf36c7c05e2c6ccec0d2ae29ca18
+  checksum: 91a3f31c4ebdc084172da03e6b132dee4d529cd644b82b461d78415c21b817d9d16cb9cdec48d2dae11663c5e522e468b1769d19a1de2e5c4462cdcf0e723978
   languageName: node
   linkType: hard
 
@@ -7827,7 +7827,7 @@ __metadata:
     "@types/lodash": 4.14.191
     "@types/lru-cache": 5.1.1
     "@types/node": 16.18.11
-    "@types/vscode": 1.74.0
+    "@types/vscode": 1.74.1
     camelcase: 6.3.0
     core-js: 3.27.2
     deepmerge: 4.3.0
@@ -7923,11 +7923,11 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/runtime-corejs3": 7.20.13
     "@redwoodjs/internal": 4.0.0
-    "@vitejs/plugin-react": 3.0.1
+    "@vitejs/plugin-react": 3.1.0
     buffer: 6.0.3
     core-js: 3.27.2
     typescript: 4.9.5
-    vite: 4.0.4
+    vite: 4.1.1
     vite-plugin-commonjs: 0.6.1
     vite-plugin-environment: 1.1.3
     vite-plugin-html: 3.2.0
@@ -7990,24 +7990,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.16":
-  version: 0.3.16
-  resolution: "@replayio/playwright@npm:0.3.16"
+"@replayio/playwright@npm:0.3.17":
+  version: 0.3.17
+  resolution: "@replayio/playwright@npm:0.3.17"
   dependencies:
-    "@replayio/replay": ^0.12.0
-    "@replayio/test-utils": ^0.4.0
+    "@replayio/replay": ^0.12.1
+    "@replayio/test-utils": ^0.4.1
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: 1e829b9974651d4ee0f1cd10cee312954397a1f94fa4bf619be22a5d2a5d72842e75620e6db937436c52e9bae250cb9fc076eba51f5a801df18efb93ee1b9bc3
+  checksum: c9dd9bf1bc96c3b93bbd1eade5044133fe283f10e52630d7b51f5ef70de158b550171869bb169381d390d36159acfe6b5a58265fa0d0609a3318dea8d9762310
   languageName: node
   linkType: hard
 
-"@replayio/replay@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "@replayio/replay@npm:0.12.0"
+"@replayio/replay@npm:^0.12.1":
+  version: 0.12.1
+  resolution: "@replayio/replay@npm:0.12.1"
   dependencies:
     "@replayio/sourcemap-upload": ^1.0.5
     commander: ^7.2.0
@@ -8021,7 +8021,7 @@ __metadata:
     ws: ^7.5.0
   bin:
     replay: bin/replay.js
-  checksum: 2f07643a1278101b2d2a663a3bf91d014b897bbea3dd8f402ae3d8a9a249c5a99b96e93ca1d2850730b0552f48904b923aafcf9a3f77d3f0042b8a28d4421b2e
+  checksum: b5e9027fe1cee409756a213ed84e6e2a9492c7e9da422074da63fdaf73a6aaa2e6a069b6aa463c89d908b775dac5d428d745f09776ce79e5a8ea4e6b6b6ea7b9
   languageName: node
   linkType: hard
 
@@ -8038,15 +8038,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@replayio/test-utils@npm:0.4.0"
+"@replayio/test-utils@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@replayio/test-utils@npm:0.4.1"
   dependencies:
-    "@replayio/replay": ^0.12.0
+    "@replayio/replay": ^0.12.1
     "@types/node-fetch": ^2.6.2
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: 9b0b17762c13c200af19ee4e33352601ad8d412cf460773fb82e994f0b6b13f5e0be3c9fa65242bdf7c89829d9e6b2caa9ee9857528e8ae869165fce1cf65d0a
+  checksum: b32f48ca552356b93c0467611e291521a8d922935a9e532d6495c6fb6be038cda5aa086c965f3335ef627905a3551a3eec0d04edc75ab26256784920e05fa743
   languageName: node
   linkType: hard
 
@@ -10541,10 +10541,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:1.74.0":
-  version: 1.74.0
-  resolution: "@types/vscode@npm:1.74.0"
-  checksum: 74afab8a1b7b89a306bf7d7dcd736b1ae8d387cffa842eb24b378ec41f84e7e5ba4fb77debcdbcb926e929472f7cd6139064abfed7d8e210284c961b06a0bc4a
+"@types/vscode@npm:1.74.1":
+  version: 1.74.1
+  resolution: "@types/vscode@npm:1.74.1"
+  checksum: b9c932660e5ec0b4582bd3b64b196a54158fa79f54c35a0e8ecc8b5916a92abcd417fb5adcc6bd3d4f1ce5e4832c6204a0130b3a6ef352f24335fa09afa323c1
   languageName: node
   linkType: hard
 
@@ -10769,18 +10769,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@vitejs/plugin-react@npm:3.0.1"
+"@vitejs/plugin-react@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@vitejs/plugin-react@npm:3.1.0"
   dependencies:
-    "@babel/core": ^7.20.7
+    "@babel/core": ^7.20.12
     "@babel/plugin-transform-react-jsx-self": ^7.18.6
     "@babel/plugin-transform-react-jsx-source": ^7.19.6
     magic-string: ^0.27.0
     react-refresh: ^0.14.0
   peerDependencies:
-    vite: ^4.0.0
-  checksum: 1fe811383ac67c17ba1454cc301876dfea423ae719b18ef4693e949e92e7b9db20945ac590b5b41501a1b0f0b9515351472b804b6a7fc73f8d2c8afa60abc749
+    vite: ^4.1.0-beta.0
+  checksum: 259a92a303cd736240dc0d3282d1261339e7bbcf51c5b326868c910b35d4bd22a360334b2dafa5bfc7f3e935f2cd0fdc7ccb6ec6b519b81017c4c4812cd05290
   languageName: node
   linkType: hard
 
@@ -16764,7 +16764,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.16.3":
+"esbuild@npm:^0.16.14":
   version: 0.16.17
   resolution: "esbuild@npm:0.16.17"
   dependencies:
@@ -26444,7 +26444,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.15, postcss@npm:^8.4.17, postcss@npm:^8.4.19, postcss@npm:^8.4.20":
+"postcss@npm:^8.2.15, postcss@npm:^8.4.17, postcss@npm:^8.4.19, postcss@npm:^8.4.21":
   version: 8.4.21
   resolution: "postcss@npm:8.4.21"
   dependencies:
@@ -28168,9 +28168,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.7.0":
-  version: 3.10.0
-  resolution: "rollup@npm:3.10.0"
+"rollup@npm:^3.10.0":
+  version: 3.12.1
+  resolution: "rollup@npm:3.12.1"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -28178,7 +28178,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 2803c8142865de4d5f68267a6e8810d2dff0a5414927b936773b7c27504ab7302c5ada1f85b0871de26a1e6d10363bdc2928fddcd3d55bb93c2c2570f704f8f6
+  checksum: a34a11b03779b46a810fe69df98395ebd588145b792d149eb39a56fb4e92b19afb249075f86065d0fd767709348b5a034df913e81d1bf7ac66c25e14e0c8bb1b
   languageName: node
   linkType: hard
 
@@ -28202,10 +28202,10 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.20.13
-    "@npmcli/arborist": 6.2.0
+    "@npmcli/arborist": 6.2.1
     "@nrwl/nx-cloud": 15.0.3
     "@playwright/test": 1.30.0
-    "@replayio/playwright": 0.3.16
+    "@replayio/playwright": 0.3.17
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
@@ -31642,15 +31642,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.0.4":
-  version: 4.0.4
-  resolution: "vite@npm:4.0.4"
+"vite@npm:4.1.1":
+  version: 4.1.1
+  resolution: "vite@npm:4.1.1"
   dependencies:
-    esbuild: ^0.16.3
+    esbuild: ^0.16.14
     fsevents: ~2.3.2
-    postcss: ^8.4.20
+    postcss: ^8.4.21
     resolve: ^1.22.1
-    rollup: ^3.7.0
+    rollup: ^3.10.0
   peerDependencies:
     "@types/node": ">= 14"
     less: "*"
@@ -31676,7 +31676,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: f567ec2e8449a8beeb61c1471323378801a398d326125d9359125db3caba21bb3a3f818af27fc4693fa7e124f7dda54df8fdd730c7720658a4e6b60d69ff2c1d
+  checksum: 0f09c6686d9fbe9d8fb4ac68865c68ad02e8f076477b25871941939ecfc1f330002e3bd32733466cb7e192c45d7baae85933223de747870fdbb5cfb6e89d3919
   languageName: node
   linkType: hard
 
