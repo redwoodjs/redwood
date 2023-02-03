@@ -27,6 +27,9 @@ describe('getConfig', () => {
           "stories": true,
           "tests": true,
         },
+        "notifications": {
+          "versionUpdates": [],
+        },
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
