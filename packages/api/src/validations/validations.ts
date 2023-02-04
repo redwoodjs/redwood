@@ -191,7 +191,7 @@ interface ValidationRecipe {
   /**
    * Requires that the value match a given regular expression.
    */
-  format?: FormatValidatorOptions
+  format?: RegExp | FormatValidatorOptions
   /**
    * Requires that the given value is equal to one in a list of given values.
    *
