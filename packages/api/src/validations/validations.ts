@@ -187,7 +187,7 @@ interface ValidationRecipe {
    *
    * Opposite of the [inclusion](https://redwoodjs.com/docs/services.html#inclusion) validation.
    */
-  exclusion?: ExclusionValidatorOptions
+  exclusion?: Array<unknown> | ExclusionValidatorOptions
   /**
    * Requires that the value match a given regular expression.
    */
@@ -197,7 +197,7 @@ interface ValidationRecipe {
    *
    * Opposite of the [exclusion](https://redwoodjs.com/docs/services.html#exclusion) validation.
    */
-  inclusion?: InclusionValidatorOptions
+  inclusion?: Array<unknown> | InclusionValidatorOptions
   /**
    * Requires that the value meet one or more of a number of string length validations.
    */
