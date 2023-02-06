@@ -242,13 +242,13 @@ describe('validate format', () => {
       ValidationErrors.FormatValidationError
     )
     // inline regex
-    ;[(/foo/, /^foo/)].forEach((pattern) => {
+    ;[/foo/, /^foo/].forEach((pattern) => {
       expect(() =>
         validate('foobar', 'text', { format: pattern })
       ).not.toThrow()
     })
     // options format
-    ;[(/foo/, /^foo/)].forEach((pattern) => {
+    ;[/foo/, /^foo/].forEach((pattern) => {
       expect(() =>
         validate('foobar', 'text', { format: { pattern } })
       ).not.toThrow()
