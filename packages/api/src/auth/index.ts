@@ -65,13 +65,17 @@ export const getAuthenticationContext = async ({
 
   // No `auth-provider` header means that the user is logged out,
   // and none of this auth malarky is required.
-  if (!type || !authDecoder) {
+  if (!type) {
     return undefined
   }
 
   const { schema, token } = parseAuthorizationHeader(event)
 
-  const authDecoders = Array.isArray(authDecoder) ? authDecoder : [authDecoder]
+  const authDecoders = Array.isArray(authDecoder)
+    ? authDecoder
+    : authDecoder
+    ? [authDecoder]
+    : []
   let decoded = null
 
   let i = 0
@@ -80,5 +84,5 @@ export const getAuthenticationContext = async ({
     i++
   }
 
-  return [decoded, { type, schema, token }, { event, context }]
+  return [decoded || null, { type, schema, token }, { event, context }]
 }
