@@ -172,11 +172,11 @@ describe('useRequireAuth', () => {
       handlerFn: handler,
       getCurrentUser,
       authDecoder: async (
-        _token: string,
+        token: string,
         _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
-        return null
+        return { token }
       },
     })
 
@@ -302,11 +302,11 @@ describe('useRequireAuth', () => {
       handlerFn: handler,
       getCurrentUser,
       authDecoder: async (
-        _token: string,
+        token: string,
         _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
-        return null
+        return { token }
       },
     })
 
