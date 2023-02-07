@@ -18,7 +18,7 @@ import { useQuery } from './GraphQLHooksProvider'
  *
  * If the Cell does not have a `beforeQuery` function, then the variables are required.
  *
- * Note that a query that doesnt take any variables is defined as {[x: string]: never}
+ * Note that a query that doesn't take any variables is defined as {[x: string]: never}
  * The ternary at the end makes sure we don't include it, otherwise it won't allow merging any
  * other custom props from the Success component.
  *
@@ -298,10 +298,7 @@ export function createCell<
       error,
       loading,
       data,
-      // importing client with an alias to avoid naming conflict with `client` prop
-      // eslint-disable-next-line prefer-const
-      client: gqlClient,
-      ...queryRest
+      ...queryResult
     } = useQuery(query, options)
 
     if (globalThis.__REDWOOD__PRERENDERING) {
@@ -339,7 +336,7 @@ export function createCell<
 
           // All of the gql client's props aren't available when pre-rendering,
           // so using `any` here
-          queryRest = { variables } as any
+          queryResult = { variables } as any
         } else {
           queryCache[cacheKey] ||
             (queryCache[cacheKey] = {
@@ -356,11 +353,13 @@ export function createCell<
         return (
           <Failure
             error={error}
-            errorCode={error.graphQLErrors?.[0]?.extensions?.['code'] as string}
+            errorCode={
+              queryResult?.errorCode ??
+              (error.graphQLErrors?.[0]?.extensions?.['code'] as string)
+            }
             {...props}
             updating={loading}
-            gqlClient={gqlClient}
-            {...queryRest}
+            queryResult={queryResult}
           />
         )
       } else {
@@ -375,8 +374,7 @@ export function createCell<
             {...props}
             {...afterQueryData}
             updating={loading}
-            gqlClient={gqlClient}
-            {...queryRest}
+            queryResult={queryResult}
           />
         )
       } else {
@@ -385,8 +383,7 @@ export function createCell<
             {...props}
             {...afterQueryData}
             updating={loading}
-            gqlClient={gqlClient}
-            {...queryRest}
+            queryResult={queryResult}
           />
         )
       }
@@ -394,8 +391,7 @@ export function createCell<
       return (
         <Loading
           {...{
-            gqlClient: { gqlClient },
-            ...queryRest,
+            queryResult,
             ...props,
           }}
         />
