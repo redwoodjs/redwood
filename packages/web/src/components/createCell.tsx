@@ -350,11 +350,18 @@ export function createCell<
 
     if (error) {
       if (Failure) {
+        // errorCode is not part of the type returned by useQuery
+        // but it is returned as part of the queryResult
+        type QueryResultWithErrorCode = typeof queryResult & {
+          errorCode: string
+        }
+
         return (
           <Failure
             error={error}
             errorCode={
-              queryResult?.errorCode ??
+              // Use the ad-hoc QueryResultWithErrorCode type to access the errorCode
+              (queryResult as QueryResultWithErrorCode).errorCode ??
               (error.graphQLErrors?.[0]?.extensions?.['code'] as string)
             }
             {...props}
