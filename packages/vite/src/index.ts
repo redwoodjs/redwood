@@ -3,7 +3,12 @@ import path from 'path'
 import { promisify } from 'util'
 
 import react from '@vitejs/plugin-react'
-import { normalizePath, transformWithEsbuild, UserConfig } from 'vite'
+import {
+  normalizePath,
+  PluginOption,
+  transformWithEsbuild,
+  UserConfig,
+} from 'vite'
 import EnvironmentPlugin from 'vite-plugin-environment'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
@@ -29,17 +34,26 @@ export default function redwoodPluginVite() {
   return [
     {
       name: 'redwood-plugin-vite',
+
+      // ---------- Bundle injection ----------
       // Used by Vite during dev, to inject the entrypoint.
-      transformIndexHtml: (html: string) => {
-        if (existsSync(clientEntryPath)) {
-          return html.replace(
-            '</head>',
-            `<script type="module" src="entry-client.jsx"></script>
+      transformIndexHtml: {
+        order: 'pre',
+        handler: (html: string) => {
+          // Remove the prerender placeholder
+          const outputHtml = html.replace('<%= prerenderPlaceholder %>', '')
+
+          // And then inject the entry
+          if (existsSync(clientEntryPath)) {
+            return outputHtml.replace(
+              '</head>',
+              `<script type="module" src="/entry-client.jsx"></script>
         </head>`
-          )
-        } else {
-          return html
-        }
+            )
+          } else {
+            return outputHtml
+          }
+        },
       },
       // Used by rollup during build to inject the entrypoint
       // but note index.html does not come through as an id during dev
@@ -50,13 +64,15 @@ export default function redwoodPluginVite() {
         ) {
           return code.replace(
             '</head>',
-            `<script type="module" src="entry-client.jsx"></script>
+            `<script type="module" src="/entry-client.jsx"></script>
         </head>`
           )
         } else {
           return code
         }
       },
+      // ---------- End Bundle injection ----------
+
       config: (): UserConfig => {
         return {
           root: redwoodPaths.web.src,
@@ -117,12 +133,6 @@ export default function redwoodPluginVite() {
               loader: {
                 '.js': 'jsx',
               },
-              // Node.js global to browser globalThis
-              // @MARK unsure why we need this,
-              // but as soon as we added the buffer polyfill, this seems to be required
-              define: {
-                global: 'globalThis',
-              },
             },
           },
         }
@@ -169,6 +179,8 @@ export default function redwoodPluginVite() {
         }),
       },
     }),
+    // HTML Transform: To replace the  <%= prerenderPlaceholder %> in index.html
+    // This is only done on build. During dev the placeholder is removed in transformIndexHtml
     createHtmlPlugin({
       template: './index.html',
       inject: {
@@ -179,7 +191,9 @@ export default function redwoodPluginVite() {
           escape: (str: string) => str, // skip escaping
         },
       },
-    }),
+    }).map(applyOn('build')),
+    // End HTML transform------------------
+
     // @MARK We add this as a temporary workaround for DevFatalErrorPage being required
     // Note that it only transforms commonjs in dev, which is exactly what we want!
     // and is limited to the default FatalErrorPage (by name)
@@ -189,4 +203,13 @@ export default function redwoodPluginVite() {
       },
     }),
   ]
+}
+
+const applyOn = (apply: 'build' | 'serve') => {
+  return (plugin: PluginOption) => {
+    return {
+      ...plugin,
+      apply,
+    }
+  }
 }
