@@ -19,7 +19,12 @@ import {
   PrerenderGqlError,
 } from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
-import { getRootHtmlPath, registerShims, writeToDist } from './internal'
+import {
+  getRootHtmlPath,
+  registerShims,
+  writeToDist,
+  getPathsFromWebTsconfig,
+} from './internal'
 
 async function recursivelyRender(
   App: React.ElementType,
@@ -180,6 +185,17 @@ export const runPrerender = async ({
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
+    plugins: [
+      [
+        'babel-plugin-module-resolver',
+        {
+          // gets the config from `web/tsconfig.json`
+          // then add the the user defined aliases
+          alias: getPathsFromWebTsconfig(),
+          loglevel: 'silent', // to silence the unnecessary warnings
+        },
+      ],
+    ],
     overrides: [
       {
         plugins: [
