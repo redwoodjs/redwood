@@ -71,11 +71,14 @@ export const getAuthenticationContext = async ({
 
   const { schema, token } = parseAuthorizationHeader(event)
 
-  const authDecoders = Array.isArray(authDecoder)
-    ? authDecoder
-    : authDecoder
-    ? [authDecoder]
-    : []
+  let authDecoders: Array<Decoder> = []
+
+  if (Array.isArray(authDecoder)) {
+    authDecoders = authDecoder
+  } else if (authDecoder) {
+    authDecoders = [authDecoder]
+  }
+
   let decoded = null
 
   let i = 0
