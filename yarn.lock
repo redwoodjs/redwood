@@ -7936,8 +7936,10 @@ __metadata:
     fast-glob: 3.2.12
     jest: 29.4.2
     jest-environment-jsdom: 29.4.2
+    jest-mock-extended: 3.0.1
     jest-watch-typeahead: 2.2.2
     msw: 0.49.3
+    prisma-mock: 0.3.1
     ts-toolbelt: 9.6.0
     typescript: 4.9.5
     whatwg-fetch: 3.6.2
@@ -21508,6 +21510,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-mock-extended@npm:3.0.1":
+  version: 3.0.1
+  resolution: "jest-mock-extended@npm:3.0.1"
+  dependencies:
+    ts-essentials: ^7.0.3
+  peerDependencies:
+    jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0
+    typescript: ^3.0.0 || ^4.0.0
+  checksum: a0ce58a3f6e3212383c5f91a473ba62992b97e059322bdf49fc824cee268027040b8305d462b150c9f587e803fbe7d59621005a9c6e9c3e9961dfa242092625d
+  languageName: node
+  linkType: hard
+
 "jest-mock@npm:^29.4.2":
   version: 29.4.2
   resolution: "jest-mock@npm:29.4.2"
@@ -26665,6 +26679,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prisma-mock@npm:0.3.1":
+  version: 0.3.1
+  resolution: "prisma-mock@npm:0.3.1"
+  peerDependencies:
+    "@prisma/client": ^3.5.0 || ^4.7.0
+  checksum: d4e0eeb4abe7efa46ac902e21dbdee27f50670bcb981178120d8dda73c9281faec548b30b9f5c656cbac3ec1377cdc2b4a3cbcaf3827e242c9527b5a78bed4b6
+  languageName: node
+  linkType: hard
+
 "prisma@npm:4.9.0":
   version: 4.9.0
   resolution: "prisma@npm:4.9.0"
@@ -30591,6 +30614,15 @@ __metadata:
   version: 2.2.0
   resolution: "ts-dedent@npm:2.2.0"
   checksum: 175adea838468cc2ff7d5e97f970dcb798bbcb623f29c6088cb21aa2880d207c5784be81ab1741f56b9ac37840cbaba0c0d79f7f8b67ffe61c02634cafa5c303
+  languageName: node
+  linkType: hard
+
+"ts-essentials@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "ts-essentials@npm:7.0.3"
+  peerDependencies:
+    typescript: ">=3.7.0"
+  checksum: ea1919534ec6ce4ca4d9cb0ff1ab8e053509237da8d4298762ab3bfba4e78ca5649a599ce78a5c7c2624f3a7a971f62b265b7b0c3c881336e4fa6acaf6f37544
   languageName: node
   linkType: hard
 

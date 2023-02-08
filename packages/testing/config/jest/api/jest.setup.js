@@ -1,6 +1,9 @@
 /* eslint-env jest */
 // @ts-check
 
+const { mockDeep, mockReset } = require('jest-mock-extended')
+const createPrismaMock = require('prisma-mock').default
+
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
@@ -14,6 +17,17 @@ const { apiSrcPath, tearDownCachePath, dbSchemaPath } =
   global.__RWJS__TEST_IMPORTS
 
 global.defineScenario = defineScenario
+
+const d = { rwDummy: 'foo', ...mockDeep, ...mockReset, ...createPrismaMock }
+console.log('d', d.rwDummy)
+const dbPath = `${apiSrcPath}/lib/db`
+console.log('dbPath', dbPath)
+
+jest.mock(dbPath, () => ({
+  __esModule: true,
+  ...jest.requireActual(dbPath),
+  db: mockDeep(),
+}))
 
 // Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
 // fails on DELETE
@@ -230,6 +244,17 @@ afterAll(async () => {
   if (wasDbUsed()) {
     getProjectDb().$disconnect()
   }
+})
+
+beforeEach(() => {
+  const date = Date.now()
+  const db = getProjectDb()
+  const { Prisma } = require('@prisma/client')
+
+  mockReset(db)
+  // @ts-expect-error - dmmf will exist when the client is generated
+  createPrismaMock({}, Prisma.dmmf.datamodel, db)
+  console.log('time delta', Date.now() - date)
 })
 
 afterEach(async () => {
