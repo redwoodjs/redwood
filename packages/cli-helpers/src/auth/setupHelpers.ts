@@ -38,7 +38,7 @@ export const standardAuthBuilder = (yargs: yargs.Argv) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-auth'
+        'https://redwoodjs.com/docs/tutorial/chapter4/authentication#auth-setup'
       )}`
     )
 }
