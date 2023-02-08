@@ -3968,15 +3968,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.3.17, @graphql-tools/merge@npm:^8.2.6":
-  version: 8.3.17
-  resolution: "@graphql-tools/merge@npm:8.3.17"
+"@graphql-tools/merge@npm:8.3.18, @graphql-tools/merge@npm:^8.2.6":
+  version: 8.3.18
+  resolution: "@graphql-tools/merge@npm:8.3.18"
   dependencies:
-    "@graphql-tools/utils": 9.2.0
+    "@graphql-tools/utils": 9.2.1
     tslib: ^2.4.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 1f8d13feed66686cc9579ff274f2d35f51df20deaa72d60603cbc8b77521292d17f01d0d17c5e8598951746dca525c241d5c454566da206cefe4c80438bb0db5
+  checksum: 5420f5cc51f2d1c115af67661ef2ff6c87c72f66e0a160ff6f19864841a6e16d6624600f93d370ff5e29bf90734ecb073081d26b200b205f33b519a8a25724dc
   languageName: node
   linkType: hard
 
@@ -4075,17 +4075,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:9.0.15, @graphql-tools/schema@npm:^9.0.0":
-  version: 9.0.15
-  resolution: "@graphql-tools/schema@npm:9.0.15"
+"@graphql-tools/schema@npm:9.0.16, @graphql-tools/schema@npm:^9.0.0":
+  version: 9.0.16
+  resolution: "@graphql-tools/schema@npm:9.0.16"
   dependencies:
-    "@graphql-tools/merge": 8.3.17
-    "@graphql-tools/utils": 9.2.0
+    "@graphql-tools/merge": 8.3.18
+    "@graphql-tools/utils": 9.2.1
     tslib: ^2.4.0
     value-or-promise: 1.0.12
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: d30975b2ba1a4e46768b3a85f648857bc49cd4e73210dc2423a815760fe1d91988a3b54f0f4fba56ab40be941f3632ba295c2295b24a7b091d52905cc0a76847
+  checksum: 640dcc92612df79e80d178adb82e8cf76caf36f3080f35f6b586cb368905892c9d319e2891dcc30717bb8c2a708897033d1ab43ba492ec4a4ea013d8a2d1448d
   languageName: node
   linkType: hard
 
@@ -4148,7 +4148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:9.2.0, @graphql-tools/utils@npm:^9.0.0, @graphql-tools/utils@npm:^9.0.1, @graphql-tools/utils@npm:^9.1.1":
+"@graphql-tools/utils@npm:9.2.0":
   version: 9.2.0
   resolution: "@graphql-tools/utils@npm:9.2.0"
   dependencies:
@@ -4157,6 +4157,18 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: cd1f9887c96313ef7f6cc556bcb82d3b8b026da92739019f5a278b9b4a9e66aff8c0886d56177cb4d57b96b93cea2398deaf72590cf6590ed448ef5e493bfe25
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/utils@npm:9.2.1, @graphql-tools/utils@npm:^9.0.0, @graphql-tools/utils@npm:^9.0.1, @graphql-tools/utils@npm:^9.1.1":
+  version: 9.2.1
+  resolution: "@graphql-tools/utils@npm:9.2.1"
+  dependencies:
+    "@graphql-typed-document-node/core": ^3.1.1
+    tslib: ^2.4.0
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 37a7bd7e14d28ff1bacc007dca84bc6cef2d7d7af9a547b5dbe52fcd134afddd6d4a7b2148cfbaff5ddba91a868453d597da77bd0457fb0be15928f916901606
   languageName: node
   linkType: hard
 
@@ -6951,7 +6963,7 @@ __metadata:
     jsonwebtoken: 9.0.0
     memjs: 1.3.0
     pascalcase: 1.0.0
-    pino: 8.8.0
+    pino: 8.9.0
     redis: 4.6.4
     split2: 4.1.0
     title-case: 3.0.3
@@ -7686,9 +7698,9 @@ __metadata:
     "@envelop/testing": 5.0.4
     "@envelop/types": 3.0.1
     "@escape.tech/graphql-armor": 1.7.0
-    "@graphql-tools/merge": 8.3.17
-    "@graphql-tools/schema": 9.0.15
-    "@graphql-tools/utils": 9.2.0
+    "@graphql-tools/merge": 8.3.18
+    "@graphql-tools/schema": 9.0.16
+    "@graphql-tools/utils": 9.2.1
     "@redwoodjs/api": 4.0.0
     "@types/jsonwebtoken": 9.0.1
     "@types/lodash.merge": 4.6.7
@@ -25928,9 +25940,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:8.8.0, pino@npm:^8.5.0":
-  version: 8.8.0
-  resolution: "pino@npm:8.8.0"
+"pino@npm:8.9.0, pino@npm:^8.5.0":
+  version: 8.9.0
+  resolution: "pino@npm:8.9.0"
   dependencies:
     atomic-sleep: ^1.0.0
     fast-redact: ^3.1.1
@@ -25945,7 +25957,7 @@ __metadata:
     thread-stream: ^2.0.0
   bin:
     pino: bin.js
-  checksum: b7d9e62b068ef28a5850fdb990ff0a229012bf312f423ea279bc8beaac43c0a333209b4e2b1b54d78e97e88457cac87efb6fa1b5b9ebe9bb670d6a3e1d706289
+  checksum: 2e239cc57fd387f052f133456f0e52f6006a96d2fb7b39f2c798060e71acc1c3f85bd5aa113fd1b4d2c418bfb2822523205979ede47c141b4e8bd434b710f3fa
   languageName: node
   linkType: hard
 
