@@ -5689,46 +5689,46 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.1":
-  version: 6.2.1
-  resolution: "@npmcli/arborist@npm:6.2.1"
+"@npmcli/arborist@npm:6.2.2":
+  version: 6.2.2
+  resolution: "@npmcli/arborist@npm:6.2.2"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
     "@npmcli/installed-package-contents": ^2.0.0
-    "@npmcli/map-workspaces": ^3.0.0
+    "@npmcli/map-workspaces": ^3.0.2
     "@npmcli/metavuln-calculator": ^5.0.0
-    "@npmcli/name-from-folder": ^1.0.1
+    "@npmcli/name-from-folder": ^2.0.0
     "@npmcli/node-gyp": ^3.0.0
     "@npmcli/package-json": ^3.0.0
     "@npmcli/query": ^3.0.0
     "@npmcli/run-script": ^6.0.0
     bin-links: ^4.0.1
-    cacache: ^17.0.3
+    cacache: ^17.0.4
     common-ancestor-path: ^1.0.1
     hosted-git-info: ^6.1.1
     json-parse-even-better-errors: ^3.0.0
     json-stringify-nice: ^1.1.4
-    minimatch: ^5.1.1
+    minimatch: ^6.1.6
     nopt: ^7.0.0
     npm-install-checks: ^6.0.0
     npm-package-arg: ^10.1.0
     npm-pick-manifest: ^8.0.1
     npm-registry-fetch: ^14.0.3
     npmlog: ^7.0.1
-    pacote: ^15.0.7
+    pacote: ^15.0.8
     parse-conflict-json: ^3.0.0
     proc-log: ^3.0.0
     promise-all-reject-late: ^1.0.0
     promise-call-limit: ^1.0.1
-    read-package-json-fast: ^3.0.1
+    read-package-json-fast: ^3.0.2
     semver: ^7.3.7
     ssri: ^10.0.1
     treeverse: ^3.0.0
     walk-up-path: ^1.0.0
   bin:
     arborist: bin/index.js
-  checksum: 91a3f31c4ebdc084172da03e6b132dee4d529cd644b82b461d78415c21b817d9d16cb9cdec48d2dae11663c5e522e468b1769d19a1de2e5c4462cdcf0e723978
+  checksum: 2bbe866bf84073dfb99c65a466830e02f9dc703b9ad6f79af30abdfeb7418a114c83238c4e153fa33cc2571b08079a165e0a99389c32e74cedd16b06e883fa83
   languageName: node
   linkType: hard
 
@@ -5831,15 +5831,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/map-workspaces@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "@npmcli/map-workspaces@npm:3.0.1"
+"@npmcli/map-workspaces@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@npmcli/map-workspaces@npm:3.0.2"
   dependencies:
     "@npmcli/name-from-folder": ^2.0.0
     glob: ^8.0.1
-    minimatch: ^5.0.1
+    minimatch: ^6.1.6
     read-package-json-fast: ^3.0.0
-  checksum: 260619110a67df5c1f945c1c3469503f98f57024428be0834a6f49a090efc6e91ee000249df7e4808c51580ae99d5bc14601988f01aea912a2c11c9697714859
+  checksum: 234c8be72f5781d79cb299f97b409e3526fea44315e04bc5eddcaa27fa492ac35d142a206f9c9f195380fc2e4b4ab306da86f60b11d578bdc75369cfb528f789
   languageName: node
   linkType: hard
 
@@ -13521,7 +13521,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cacache@npm:^17.0.0, cacache@npm:^17.0.3":
+"cacache@npm:^17.0.0, cacache@npm:^17.0.4":
   version: 17.0.4
   resolution: "cacache@npm:17.0.4"
   dependencies:
@@ -23710,12 +23710,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^5.0.1, minimatch@npm:^5.1.0, minimatch@npm:^5.1.1":
+"minimatch@npm:^5.0.1, minimatch@npm:^5.1.0":
   version: 5.1.6
   resolution: "minimatch@npm:5.1.6"
   dependencies:
     brace-expansion: ^2.0.1
   checksum: 3defdfd230914f22a8da203747c42ee3c405c39d4d37ffda284dac5e45b7e1f6c49aa8be606509002898e73091ff2a3bbfc59c2c6c71d4660609f63aa92f98e3
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:^6.1.6":
+  version: 6.1.6
+  resolution: "minimatch@npm:6.1.6"
+  dependencies:
+    brace-expansion: ^2.0.1
+  checksum: e2a94c3d9286aa12254b9730504e80b69d4fc5b0784733d9a6813cd7a8e433a78078f74e55ec5dc8269a6c0bc87c5fbb9ee60bd316a4b4965f41b8a10232471f
   languageName: node
   linkType: hard
 
@@ -25423,7 +25432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pacote@npm:^15.0.0, pacote@npm:^15.0.7":
+"pacote@npm:^15.0.0, pacote@npm:^15.0.8":
   version: 15.0.8
   resolution: "pacote@npm:15.0.8"
   dependencies:
@@ -27365,7 +27374,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"read-package-json-fast@npm:^3.0.0, read-package-json-fast@npm:^3.0.1":
+"read-package-json-fast@npm:^3.0.0, read-package-json-fast@npm:^3.0.2":
   version: 3.0.2
   resolution: "read-package-json-fast@npm:3.0.2"
   dependencies:
@@ -28256,7 +28265,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.20.13
-    "@npmcli/arborist": 6.2.1
+    "@npmcli/arborist": 6.2.2
     "@nrwl/nx-cloud": 15.0.3
     "@playwright/test": 1.30.0
     "@replayio/playwright": 0.3.17
