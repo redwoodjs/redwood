@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { fetch } from '@whatwg-node/fetch'
+import { parse } from 'jsonc-parser'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
@@ -75,9 +76,7 @@ export const writeToDist = (outputHtmlPath: string, renderOutput: string) => {
 const readTsconfig = (configPath?: string) => {
   const filePath = path.join(configPath ?? process.cwd(), 'tsconfig.json')
 
-  return fs.existsSync(filePath)
-    ? JSON.parse(fs.readFileSync(filePath, 'utf8'))
-    : {}
+  return fs.existsSync(filePath) ? parse(fs.readFileSync(filePath, 'utf8')) : {}
 }
 /**
  * Extracts the paths from the web tsconfig.json file

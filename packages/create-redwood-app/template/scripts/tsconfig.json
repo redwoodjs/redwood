@@ -31,7 +31,7 @@
       "types/*": ["../types/*", "../web/types/*", "../api/types/*"],
     },
     "typeRoots": ["../node_modules/@types"],
-    "jsx": "preserve"
+    "jsx": "preserve",
   },
   "include": [
     ".",
