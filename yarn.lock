@@ -2057,12 +2057,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.25.1, @clerk/types@npm:^3.25.1":
-  version: 3.25.1
-  resolution: "@clerk/types@npm:3.25.1"
+"@clerk/types@npm:3.26.1, @clerk/types@npm:^3.25.1":
+  version: 3.26.1
+  resolution: "@clerk/types@npm:3.26.1"
   dependencies:
     csstype: 3.1.1
-  checksum: 40fef7969d7a8beeb15b1f05bc43fffadfb2f0b7a09eeddc561786b368becc864c01366991481d2b8c5355756c5a4e2dcf566e0d6bb6f60721424f1edc8163a6
+  checksum: d15a88ec01ce22a759f65dec3bf007378d178e0dd8847c9e5dfcff1179d3450ee4646ad3c44ce61040da9b5685fc6a7c1988fec4ca4895ed15d1f9721fbceebb
   languageName: node
   linkType: hard
 
@@ -7128,7 +7128,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@clerk/clerk-react": 4.10.0
-    "@clerk/types": 3.25.1
+    "@clerk/types": 3.26.1
     "@redwoodjs/auth": 4.0.0
     "@types/react": 18.0.27
     core-js: 3.27.2
@@ -7456,7 +7456,7 @@ __metadata:
     listr2: 5.0.7
     lodash.memoize: 4.1.2
     pascalcase: 1.0.0
-    prettier: 2.8.3
+    prettier: 2.8.4
     prompts: 2.4.2
     terminal-link: 2.1.1
     typescript: 4.9.5
@@ -7502,7 +7502,7 @@ __metadata:
     pascalcase: 1.0.0
     pluralize: 8.0.0
     portfinder: 1.0.32
-    prettier: 2.8.3
+    prettier: 2.8.4
     prisma: 4.9.0
     prompts: 2.4.2
     rimraf: 3.0.2
@@ -7544,7 +7544,7 @@ __metadata:
     fs-extra: 11.1.0
     jest: 29.4.2
     jscodeshift: 0.14.0
-    prettier: 2.8.3
+    prettier: 2.8.4
     tasuku: 2.0.1
     tempy: 1.0.1
     typescript: 4.9.5
@@ -7649,7 +7649,7 @@ __metadata:
     eslint-plugin-react: 7.32.2
     eslint-plugin-react-hooks: 4.6.0
     jest: 29.4.2
-    prettier: 2.8.3
+    prettier: 2.8.4
     typescript: 4.9.5
   languageName: unknown
   linkType: soft
@@ -7762,7 +7762,7 @@ __metadata:
     graphql-tag: 2.12.6
     jest: 29.4.2
     kill-port: 1.6.1
-    prettier: 2.8.3
+    prettier: 2.8.4
     rimraf: 3.0.2
     string-env-interpolation: 1.0.1
     systeminformation: 5.17.8
@@ -26575,12 +26575,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.8.3, prettier@npm:^2.6.2, prettier@npm:^2.8.3":
-  version: 2.8.3
-  resolution: "prettier@npm:2.8.3"
+"prettier@npm:2.8.4, prettier@npm:^2.6.2, prettier@npm:^2.8.3":
+  version: 2.8.4
+  resolution: "prettier@npm:2.8.4"
   bin:
     prettier: bin-prettier.js
-  checksum: 373fda1908c8f7f06e6b9966986f35784152d4f10c907c7153062fe36542358d696433450f3efb356b7438c855a8d8b4133c3e486057dc63117d94596ff3f5f1
+  checksum: d272cbd842d466fbd10e7efc22fd99ebdbfb78c06c0fe8ffdaa86d50883e7b3d3fba822a86fd8a1c851ca91ec5dfc867e612071c9c54d0e29954f20954262dcb
   languageName: node
   linkType: hard
 
