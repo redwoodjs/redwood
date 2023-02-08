@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -42,7 +42,7 @@
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-codegen/typescript-resolvers": "3.0.0",
     "@iarna/toml": "2.2.5",
-    "@redwoodjs/graphql-server": "4.0.0",
+    "@redwoodjs/graphql-server": "4.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.6.0",
     "chalk": "4.1.2",
