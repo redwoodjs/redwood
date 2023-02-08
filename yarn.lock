@@ -2013,18 +2013,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.10.0":
-  version: 4.10.0
-  resolution: "@clerk/clerk-react@npm:4.10.0"
+"@clerk/clerk-react@npm:4.11.1":
+  version: 4.11.1
+  resolution: "@clerk/clerk-react@npm:4.11.1"
   dependencies:
-    "@clerk/shared": ^0.10.0
-    "@clerk/types": ^3.25.1
+    "@clerk/shared": ^0.11.1
+    "@clerk/types": ^3.26.1
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 47409d6e9ed2b77d8fc45db6d940be1de8290634e1a5134d45997f3d3666d5bd00c6c018685d3825a6488e22851d4d2253f3448824bb06727c3212ee6b16c1f5
+  checksum: 422057473d90fcfb792ab7dd2afe201f3ba3d2d1daf736e2a5b823f18d2da96b7efe6e5502fe9a4901cc513f2b7709cee87b5e6c2f6063d455777b419d27c053
   languageName: node
   linkType: hard
 
@@ -2046,18 +2046,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "@clerk/shared@npm:0.10.0"
+"@clerk/shared@npm:^0.11.1":
+  version: 0.11.1
+  resolution: "@clerk/shared@npm:0.11.1"
   peerDependencies:
     react: 18.2.0
     react-dom: 18.2.0
     react-test-renderer: ^18.2.0
-  checksum: cd033f3eab9d7aa754dce9cb36f8a0fff7fc85c00f4811fb1dfc1c8464a4316e83cbd013c8d12f3c2cd2164c13aec4a051b17b5365c57dd2f84e350ac0123c2a
+  checksum: 14536142835b795fdedc55873eb2557227585c80b0f8e0a36a97842dc1ca0e133be51b852887a65f1a57339714da73cf39e56da8cd8ab7f02597a743685db606
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.26.1, @clerk/types@npm:^3.25.1, @clerk/types@npm:^3.26.1":
+"@clerk/types@npm:3.26.1, @clerk/types@npm:^3.26.1":
   version: 3.26.1
   resolution: "@clerk/types@npm:3.26.1"
   dependencies:
@@ -7135,7 +7135,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
-    "@clerk/clerk-react": 4.10.0
+    "@clerk/clerk-react": 4.11.1
     "@clerk/types": 3.26.1
     "@redwoodjs/auth": 4.0.0
     "@types/react": 18.0.27
@@ -7144,7 +7144,7 @@ __metadata:
     react: 18.2.0
     typescript: 4.9.5
   peerDependencies:
-    "@clerk/clerk-react": 4.10.0
+    "@clerk/clerk-react": 4.11.1
   languageName: unknown
   linkType: soft
 
@@ -7421,10 +7421,10 @@ __metadata:
     core-js: 3.27.2
     jest: 29.4.2
     react: 18.2.0
-    supertokens-auth-react: 0.30.2
+    supertokens-auth-react: 0.31.0
     typescript: 4.9.5
   peerDependencies:
-    supertokens-auth-react: 0.30.2
+    supertokens-auth-react: 0.31.0
   languageName: unknown
   linkType: soft
 
@@ -8026,24 +8026,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.18":
-  version: 0.3.18
-  resolution: "@replayio/playwright@npm:0.3.18"
+"@replayio/playwright@npm:0.3.19":
+  version: 0.3.19
+  resolution: "@replayio/playwright@npm:0.3.19"
   dependencies:
-    "@replayio/replay": ^0.12.1
-    "@replayio/test-utils": ^0.4.2
+    "@replayio/replay": ^0.12.2
+    "@replayio/test-utils": ^0.4.3
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: 16751529289a92a720c44e216fd9505d64260d218326b06b8ddfb31688d03c02f481d7802543f3c06e4194c497287f736b3d781f1e3c2211e5e4c95f92e84796
+  checksum: 0f67792f7eb136a831b60a32b3ddac1144f493c870c7e9acd4fd8ab605916d2bf45edad1af84db6849067b29e5ceead3e2c60d4ac2100b2bc115be63b524b538
   languageName: node
   linkType: hard
 
-"@replayio/replay@npm:^0.12.1":
-  version: 0.12.1
-  resolution: "@replayio/replay@npm:0.12.1"
+"@replayio/replay@npm:^0.12.2":
+  version: 0.12.2
+  resolution: "@replayio/replay@npm:0.12.2"
   dependencies:
     "@replayio/sourcemap-upload": ^1.0.5
     commander: ^7.2.0
@@ -8057,7 +8057,7 @@ __metadata:
     ws: ^7.5.0
   bin:
     replay: bin/replay.js
-  checksum: b5e9027fe1cee409756a213ed84e6e2a9492c7e9da422074da63fdaf73a6aaa2e6a069b6aa463c89d908b775dac5d428d745f09776ce79e5a8ea4e6b6b6ea7b9
+  checksum: e1fe47c34961b5bd7a4295008f16f7b6a4870b023870b0df7ec717a7a8999bcf8f47747d0a270039aa7a95385a8643a8f711ddd0ce1a764c5d03b05ff2833dc8
   languageName: node
   linkType: hard
 
@@ -8074,16 +8074,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "@replayio/test-utils@npm:0.4.2"
+"@replayio/test-utils@npm:^0.4.3":
+  version: 0.4.3
+  resolution: "@replayio/test-utils@npm:0.4.3"
   dependencies:
-    "@replayio/replay": ^0.12.1
+    "@replayio/replay": ^0.12.2
     "@types/node-fetch": ^2.6.2
     debug: ^4.3.4
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: eb5973435c553d44563b6a14f2c28066dcaab3378d066c9410db90b54a2737a8128152408501886b725825bfb5887c8d88a65c03d5d4825abe1ffbebdbcb8366
+  checksum: 61c699c507acb7e0b9572a469732d2dd238fee0fcabbf5c01c661692dbba775b7b0697c68181ce81df142c07dd6428579c89b48d9dd27a8e066a36933276f891
   languageName: node
   linkType: hard
 
@@ -28294,7 +28294,7 @@ __metadata:
     "@npmcli/arborist": 6.2.2
     "@nrwl/nx-cloud": 15.0.3
     "@playwright/test": 1.30.0
-    "@replayio/playwright": 0.3.18
+    "@replayio/playwright": 0.3.19
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
@@ -29851,9 +29851,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.30.2":
-  version: 0.30.2
-  resolution: "supertokens-auth-react@npm:0.30.2"
+"supertokens-auth-react@npm:0.31.0":
+  version: 0.31.0
+  resolution: "supertokens-auth-react@npm:0.31.0"
   dependencies:
     intl-tel-input: ^17.0.19
     prop-types: "*"
@@ -29861,8 +29861,8 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-    supertokens-web-js: ^0.4.0
-  checksum: bcf23a2aabeb28a197a4e7d01b6ae8a0fa3bb8d72ab8de184cb02d957b61afcb56555245158542925f15feb8354f7d65e8a18fe3c85e922b26088bf406be35c5
+    supertokens-web-js: ^0.5.0
+  checksum: 1f21febd40f8f7486cb040572458e3e7fe7225fd0837af9c5012339d50d92f6344adcc9655bb9c424cc8e8f8631cdf7593aad49be5468db5e4c9a8ec3cf7480e
   languageName: node
   linkType: hard
 
