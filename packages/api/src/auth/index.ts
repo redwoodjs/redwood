@@ -87,5 +87,5 @@ export const getAuthenticationContext = async ({
     i++
   }
 
-  return [decoded || null, { type, schema, token }, { event, context }]
+  return [decoded, { type, schema, token }, { event, context }]
 }
