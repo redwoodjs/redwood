@@ -30,6 +30,7 @@ export const flightcontrolConfig = {
           id: 'redwood-web',
           name: 'Redwood Web',
           type: 'static',
+          buildType: 'nixpacks',
           singlePageApp: true,
           installCommand:
             'yarn set version stable && NODE_ENV=development yarn install',
