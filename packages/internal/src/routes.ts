@@ -19,8 +19,12 @@ export function getDuplicateRoutes() {
   const duplicateRoutes: RouteInformation[] = []
   const allRoutes: (typeof RWRoute)[] = getProject(getPaths().base).router
     .routes
-  const uniquePathNames = new Set(allRoutes.map((route) => route.name))
-  uniquePathNames.forEach((name) => {
+  const uniqueNames = new Set(
+    allRoutes
+      .filter((route) => route.name !== undefined)
+      .map((route) => route.name)
+  )
+  uniqueNames.forEach((name) => {
     const routesWithName = allRoutes.filter((route) => {
       return route.name === name
     })
