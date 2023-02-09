@@ -32,8 +32,6 @@ export const flightcontrolConfig = {
           type: 'static',
           buildType: 'nixpacks',
           singlePageApp: true,
-          installCommand:
-            'yarn set version stable && NODE_ENV=development yarn install',
           buildCommand: 'yarn rw deploy flightcontrol web',
           outputDirectory: 'web/dist',
           envVariables: {
