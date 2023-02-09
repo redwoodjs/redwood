@@ -395,14 +395,7 @@ export function createCell<
         )
       }
     } else if (loading) {
-      return (
-        <Loading
-          {...{
-            queryResult,
-            ...props,
-          }}
-        />
-      )
+      return <Loading {...props} queryResult={queryResult} />
     } else {
       /**
        * There really shouldn't be an `else` here, but like any piece of software, GraphQL clients have bugs.
