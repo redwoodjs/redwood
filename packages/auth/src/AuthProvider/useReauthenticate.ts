@@ -24,6 +24,12 @@ export const useReauthenticate = <TUser>(
 ) => {
   const getToken = useToken(authImplementation)
 
+  const { type, client } = authImplementation
+
+  if (type === 'clerk') {
+    notAuthenticatedState.loading = client === undefined
+  }
+
   return useCallback(async () => {
     try {
       const userMetadata = await authImplementation.getUserMetadata()
@@ -31,7 +37,7 @@ export const useReauthenticate = <TUser>(
       if (!userMetadata) {
         setAuthProviderState({
           ...notAuthenticatedState,
-          client: authImplementation.client,
+          client,
         })
       } else {
         await getToken()
@@ -56,6 +62,7 @@ export const useReauthenticate = <TUser>(
     }
   }, [
     authImplementation,
+    client,
     getToken,
     setAuthProviderState,
     skipFetchCurrentUser,
