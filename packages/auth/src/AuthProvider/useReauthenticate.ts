@@ -12,7 +12,7 @@ const notAuthenticatedState = {
   userMetadata: null,
   loading: false,
   hasError: false,
-}
+} as const
 
 export const useReauthenticate = <TUser>(
   authImplementation: AuthImplementation<TUser>,
