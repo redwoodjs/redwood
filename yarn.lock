@@ -2776,9 +2776,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.8.0":
-  version: 6.8.0
-  resolution: "@fastify/static@npm:6.8.0"
+"@fastify/static@npm:6.9.0":
+  version: 6.9.0
+  resolution: "@fastify/static@npm:6.9.0"
   dependencies:
     "@fastify/accept-negotiator": ^1.0.0
     "@fastify/send": ^2.0.0
@@ -2787,7 +2787,7 @@ __metadata:
     glob: ^8.0.1
     p-limit: ^3.1.0
     readable-stream: ^4.0.0
-  checksum: 33967c7c51a1afffe795742ee0402db7902cd1cdc535ed25b3b3efd37a23ed57e931b5e93d0c950e296f355fd21cbed25eda7cadd17dd4487d0a94d60b0c1a36
+  checksum: 6ae8dd00c6f6ef75cfa9517d98f8c322336a2783bd89e9f24b8006763316275f30894558bd257e13d55053fbef20a176e133eaaea167d82b9f05f15b395e7ad1
   languageName: node
   linkType: hard
 
@@ -6921,7 +6921,7 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.19.6
     "@babel/runtime-corejs3": 7.20.13
     "@fastify/http-proxy": 8.4.0
-    "@fastify/static": 6.8.0
+    "@fastify/static": 6.9.0
     "@fastify/url-data": 5.2.0
     "@types/aws-lambda": 8.10.110
     "@types/lodash.escape": 4.0.7
