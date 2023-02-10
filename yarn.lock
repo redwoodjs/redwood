@@ -6964,7 +6964,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 3.2.1
-    "@whatwg-node/fetch": 0.7.1
+    "@whatwg-node/fetch": 0.8.1
     core-js: 3.27.2
     humanize-string: 2.1.0
     jest: 29.4.2
@@ -7552,7 +7552,7 @@ __metadata:
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.22
     "@vscode/ripgrep": 1.14.2
-    "@whatwg-node/fetch": 0.7.1
+    "@whatwg-node/fetch": 0.8.1
     core-js: 3.27.2
     deepmerge: 4.3.0
     execa: 5.1.1
@@ -7723,7 +7723,7 @@ __metadata:
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 9.0.0
-    "@whatwg-node/fetch": 0.7.1
+    "@whatwg-node/fetch": 0.8.1
     aws-lambda: 1.0.7
     core-js: 3.27.2
     graphql: 16.6.0
@@ -7805,7 +7805,7 @@ __metadata:
     "@redwoodjs/structure": 4.1.2
     "@redwoodjs/web": 4.1.2
     "@types/mime-types": 2.1.1
-    "@whatwg-node/fetch": 0.7.1
+    "@whatwg-node/fetch": 0.8.1
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 11.0.4
     cheerio: 1.0.0-rc.12
@@ -7908,7 +7908,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.0
     "@types/yargs": 17.0.22
-    "@whatwg-node/fetch": 0.7.1
+    "@whatwg-node/fetch": 0.8.1
     ci-info: 3.7.1
     core-js: 3.27.2
     envinfo: 7.8.1
@@ -11265,16 +11265,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.7.1":
-  version: 0.7.1
-  resolution: "@whatwg-node/fetch@npm:0.7.1"
+"@whatwg-node/fetch@npm:0.8.1":
+  version: 0.8.1
+  resolution: "@whatwg-node/fetch@npm:0.8.1"
   dependencies:
     "@peculiar/webcrypto": ^1.4.0
-    "@whatwg-node/node-fetch": ^0.1.0
+    "@whatwg-node/node-fetch": ^0.3.0
     busboy: ^1.6.0
     urlpattern-polyfill: ^6.0.2
     web-streams-polyfill: ^3.2.1
-  checksum: d75c0b05bc92e5f39b0790e4c2fff1a2131c4147fa96226322b052c79f12a4875415bf4925987db96348fd907439be3e64a8b480674e95cc032220eb1f6efc32
+  checksum: daf897c2e651878b5a0a14299875f4cb2d9364ced4d0880cb6fa3f92a8d48d02be563d8442c56c4e8339b8cfdd25a31efed93560182932a49027135df75f62c5
   languageName: node
   linkType: hard
 
@@ -11317,16 +11317,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/node-fetch@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@whatwg-node/node-fetch@npm:0.1.0"
+"@whatwg-node/node-fetch@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@whatwg-node/node-fetch@npm:0.3.0"
   dependencies:
     "@whatwg-node/events": ^0.0.2
     busboy: ^1.6.0
+    fast-querystring: ^1.1.1
+    fast-url-parser: ^1.1.3
     tslib: ^2.3.1
   peerDependencies:
     "@types/node": ^18.0.6
-  checksum: f6f05711f2445536767532cc09ee412b55024deabdb450d32545a7562f5f5415ced58c2f39cc6b81b3684bb06867bd9af7663fc16597a4d055180e6b9ce2aa00
+  checksum: 894393c9a8655b20ed8ad53ccc43ef6e8e6d93298e663794122ad8aaa54cd198411783d6e93811bbf9a4a575f33398bb0204653abb05cbf7851e8e6207efc0cb
   languageName: node
   linkType: hard
 
@@ -17802,12 +17804,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-querystring@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "fast-querystring@npm:1.1.0"
+"fast-querystring@npm:^1.0.0, fast-querystring@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "fast-querystring@npm:1.1.1"
   dependencies:
     fast-decode-uri-component: ^1.0.1
-  checksum: 2c82885a553792f860e2d27981e6db6b58a9028a9134ca0e5025229893195a1427138a1ec1512fb5ebe1fa59fbe930f0ee64ce3d6914462921fea3966ecf34c8
+  checksum: bfc14761201796ef2ad9b4c645512701c474c8ed2bd503f7dd4b966894f29ef67e38ef4d3cfb4c633fa6e9118d512b610356b1eae9d89a710f773f585d56d391
   languageName: node
   linkType: hard
 
@@ -17829,6 +17831,15 @@ __metadata:
   version: 2.2.0
   resolution: "fast-uri@npm:2.2.0"
   checksum: 2242463c97c187762a6212c59eb9d881832d15210f16923daf40ee66fba06a801f4da7d6f1010fb4da101069ec99aeb2700bbbb3eb89141b2701a54048989a9c
+  languageName: node
+  linkType: hard
+
+"fast-url-parser@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "fast-url-parser@npm:1.1.3"
+  dependencies:
+    punycode: ^1.3.2
+  checksum: d85c5c409cf0215417380f98a2d29c23a95004d93ff0d8bdf1af5f1a9d1fc608ac89ac6ffe863783d2c73efb3850dd35390feb1de3296f49877bfee0392eb5d3
   languageName: node
   linkType: hard
 
@@ -27065,7 +27076,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:^1.2.4":
+"punycode@npm:^1.2.4, punycode@npm:^1.3.2":
   version: 1.4.1
   resolution: "punycode@npm:1.4.1"
   checksum: 354b743320518aef36f77013be6e15da4db24c2b4f62c5f1eb0529a6ed02fbaf1cb52925785f6ab85a962f2b590d9cd5ad730b70da72b5f180e2556b8bd3ca08
