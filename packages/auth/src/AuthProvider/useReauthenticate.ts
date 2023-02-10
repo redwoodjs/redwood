@@ -29,8 +29,15 @@ export const useReauthenticate = <TUser>(
       const userMetadata = await authImplementation.getUserMetadata()
 
       if (!userMetadata) {
+        let loading = false
+
+        if (authImplementation.clientHasLoaded) {
+          loading = !authImplementation.clientHasLoaded()
+        }
+
         setAuthProviderState({
           ...notAuthenticatedState,
+          loading,
           client: authImplementation.client,
         })
       } else {
