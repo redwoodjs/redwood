@@ -75,6 +75,19 @@ const rebuildApiServer = () => {
     const forkOpts = {
       execArgv: process.execArgv,
     }
+
+    // OpenTelemetry SDK Setup
+    if (process.env.REDWOOD_OPENTELEMETRY_API) {
+      console.log(
+        `Setting up OpenTelemetry using the setup file: ${process.env.REDWOOD_OPENTELEMETRY_API}`
+      )
+      // TODO: Safety checks around does the file exist, is it a file etc...
+      forkOpts.execArgv = forkOpts.execArgv.concat([
+        // `--require ${path.join(__dirname, 'openTelemetry.js')}`,
+        `--require=${process.env.REDWOOD_OPENTELEMETRY_API}`,
+      ])
+    }
+
     const debugPort = argv['debug-port']
     if (debugPort) {
       forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])
