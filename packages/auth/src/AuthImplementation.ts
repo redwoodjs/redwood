@@ -20,6 +20,7 @@ export interface AuthImplementation<
   forgotPassword?(username: string): Promise<TForgotPassword>
   resetPassword?(options?: unknown): Promise<TResetPassword>
   validateResetToken?(token: string | null): Promise<TValidateResetToken>
+  clientHasLoaded?(): boolean
 
   /**
    * The user's data from the AuthProvider
