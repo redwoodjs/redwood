@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { ClerkLoaded, ClerkProvider, useUser } from '@clerk/clerk-react'
+import { ClerkProvider, useUser } from '@clerk/clerk-react'
 
 import { createAuth } from '@redwoodjs/auth-clerk-web'
 import { navigate } from '@redwoodjs/router'
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: Props) => {
   return (
     <ClerkProvider {...clerkOptions} navigate={(to) => navigate(to)}>
       <ClerkRwAuthProvider>
-        <ClerkLoaded>{children}</ClerkLoaded>
+        {children}
         <ClerkStatusUpdater />
       </ClerkRwAuthProvider>
     </ClerkProvider>
