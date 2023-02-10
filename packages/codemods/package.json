@@ -28,7 +28,7 @@
     "@babel/runtime-corejs3": "7.20.13",
     "@iarna/toml": "2.2.5",
     "@vscode/ripgrep": "1.14.2",
-    "@whatwg-node/fetch": "0.7.0",
+    "@whatwg-node/fetch": "0.7.1",
     "core-js": "3.27.2",
     "deepmerge": "4.3.0",
     "execa": "5.1.1",
