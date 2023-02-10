@@ -112,6 +112,7 @@ export default function redwoodPluginVite() {
           server: {
             open: redwoodConfig.browser.open,
             port: redwoodConfig.web.port,
+            host: redwoodConfig.web.host,
             proxy: {
               //@TODO we need to do a check for absolute urls here
               [redwoodConfig.web.apiUrl]: {
