@@ -7487,7 +7487,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
-    "@prisma/internals": 4.10.0
+    "@prisma/internals": 4.10.1
     "@redwoodjs/api-server": 4.1.1
     "@redwoodjs/cli-helpers": 4.1.1
     "@redwoodjs/internal": 4.1.1
@@ -7865,7 +7865,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@iarna/toml": 2.2.5
-    "@prisma/internals": 4.10.0
+    "@prisma/internals": 4.10.1
     "@redwoodjs/internal": 4.1.1
     "@types/fs-extra": 11.0.1
     "@types/line-column": 1.0.0
