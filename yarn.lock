@@ -2013,18 +2013,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.11.1":
-  version: 4.11.1
-  resolution: "@clerk/clerk-react@npm:4.11.1"
+"@clerk/clerk-react@npm:4.11.2":
+  version: 4.11.2
+  resolution: "@clerk/clerk-react@npm:4.11.2"
   dependencies:
-    "@clerk/shared": ^0.11.1
-    "@clerk/types": ^3.26.1
+    "@clerk/shared": ^0.11.2
+    "@clerk/types": ^3.27.0
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 422057473d90fcfb792ab7dd2afe201f3ba3d2d1daf736e2a5b823f18d2da96b7efe6e5502fe9a4901cc513f2b7709cee87b5e6c2f6063d455777b419d27c053
+  checksum: 17f06f14cca1d11c3e3f8d9809f7d84113eae767aa5d3d067d23487ddb922aa2073b0c1e5b747c3405be2d393007feb23d14bc08bcaa188e0347c2558c40849b
   languageName: node
   linkType: hard
 
@@ -2046,23 +2046,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.11.1":
-  version: 0.11.1
-  resolution: "@clerk/shared@npm:0.11.1"
+"@clerk/shared@npm:^0.11.2":
+  version: 0.11.2
+  resolution: "@clerk/shared@npm:0.11.2"
   peerDependencies:
     react: 18.2.0
     react-dom: 18.2.0
     react-test-renderer: ^18.2.0
-  checksum: 14536142835b795fdedc55873eb2557227585c80b0f8e0a36a97842dc1ca0e133be51b852887a65f1a57339714da73cf39e56da8cd8ab7f02597a743685db606
+  checksum: c229aa734371f9c23a4788460311be88a53836b17c153a8b66fe54ba0d266c7ac100290e1da88e9f695516b8bde0a647826370ab1d3ef2409939e7dc3f2a61cf
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.26.1, @clerk/types@npm:^3.26.1":
+"@clerk/types@npm:3.26.1":
   version: 3.26.1
   resolution: "@clerk/types@npm:3.26.1"
   dependencies:
     csstype: 3.1.1
   checksum: d15a88ec01ce22a759f65dec3bf007378d178e0dd8847c9e5dfcff1179d3450ee4646ad3c44ce61040da9b5685fc6a7c1988fec4ca4895ed15d1f9721fbceebb
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^3.26.1, @clerk/types@npm:^3.27.0":
+  version: 3.27.0
+  resolution: "@clerk/types@npm:3.27.0"
+  dependencies:
+    csstype: 3.1.1
+  checksum: 13acd8652b12500d2a22d113e00493fcfee2318fdcb7611cb38b5787338f2ecfa7f74dcfb57864ab8a3219933d1244d741bda09a53ebaa0e0544ea2ff0429864
   languageName: node
   linkType: hard
 
@@ -7135,7 +7144,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
-    "@clerk/clerk-react": 4.11.1
+    "@clerk/clerk-react": 4.11.2
     "@clerk/types": 3.26.1
     "@redwoodjs/auth": 4.0.0
     "@types/react": 18.0.27
@@ -7144,7 +7153,7 @@ __metadata:
     react: 18.2.0
     typescript: 4.9.5
   peerDependencies:
-    "@clerk/clerk-react": 4.11.1
+    "@clerk/clerk-react": 4.11.2
   languageName: unknown
   linkType: soft
 
