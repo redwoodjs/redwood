@@ -1,0 +1,5 @@
+name: 'Listen for CRWA telemetry'
+description: 'Builds and executes the CRWA while listening for redirected telemetry'
+runs:
+  using: 'node16'
+  main: 'telemetry_check_crwa.mjs'
