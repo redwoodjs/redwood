@@ -61,6 +61,7 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
 
 interface Args {
   redwoodVersion?: string
+  command?: string
 }
 
 /** Gets diagnostic info and sanitizes by removing references to paths */
@@ -88,6 +89,12 @@ const getInfo = async (presets: Args = {}) => {
   const cpu = await system.cpu()
   const mem = await system.mem()
 
+  // Must only call getConfig() once the project is setup - so not within telemetry for CRWA
+  // Default to 'webpack' for new projects
+  const webBundler = presets.command?.startsWith('create redwood-app')
+    ? 'webpack'
+    : getConfig().web.bundler
+
   return {
     os: info.System?.OS?.split(' ')[0],
     osVersion: info.System?.OS?.split(' ')[1],
@@ -99,7 +106,7 @@ const getInfo = async (presets: Args = {}) => {
     redwoodVersion:
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
-    webBundler: getConfig().web.bundler,
+    webBundler,
   }
 }
 
@@ -165,15 +172,16 @@ const buildPayload = async () => {
 
   const argv = require('yargs/yargs')(processArgv.slice(2)).parse()
   const rootDir = argv.root
+  const command = argv.argv ? sanitizeArgv(JSON.parse(argv.argv)) : ''
   payload = {
     type: argv.type || 'command',
-    command: argv.argv ? sanitizeArgv(JSON.parse(argv.argv)) : '',
+    command,
     duration: argv.duration ? parseInt(argv.duration) : null,
     uid: uniqueId(rootDir) || null,
     ci: ci.isCI,
     redwoodCi: !!process.env.REDWOOD_CI,
     NODE_ENV: process.env.NODE_ENV || null,
-    ...(await getInfo({ redwoodVersion: argv.rwVersion })),
+    ...(await getInfo({ redwoodVersion: argv.rwVersion, command })),
   }
 
   if (argv.error) {
@@ -221,6 +229,10 @@ const uniqueId = (rootDir: string | null) => {
   ) {
     uuid = uuidv4()
     try {
+      // Create `.redwood` directory if it does not exist
+      if (!fs.existsSync(path.dirname(telemetryCachePath))) {
+        fs.mkdirSync(path.dirname(telemetryCachePath), { recursive: true })
+      }
       fs.writeFileSync(telemetryCachePath, uuid)
     } catch (error) {
       console.error('\nCould not create telemetry.txt file\n')
