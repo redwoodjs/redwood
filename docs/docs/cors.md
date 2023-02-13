@@ -161,7 +161,7 @@ const App = () => (
 
 ### Auth XHR Credentials
 
-Finally, we need to tell dbAuth to include credentials in its own XHR requests. We'll do this within in `web/src/auth.{ts,js}` when creating the `AuthProvider`:
+Finally, we need to tell dbAuth to include credentials in its own XHR requests. We'll do this within `web/src/auth.{ts,js}` when creating the `AuthProvider`:
 
 ```jsx {3-5}
 import { createDbAuthClient, createAuth } from '@redwoodjs/auth-dbauth-web'
