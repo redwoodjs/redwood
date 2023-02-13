@@ -2,6 +2,7 @@
 
 import { fork } from 'child_process'
 import type { ChildProcess } from 'child_process'
+import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
@@ -81,11 +82,15 @@ const rebuildApiServer = () => {
       console.log(
         `Setting up OpenTelemetry using the setup file: ${process.env.REDWOOD_OPENTELEMETRY_API}`
       )
-      // TODO: Safety checks around does the file exist, is it a file etc...
-      forkOpts.execArgv = forkOpts.execArgv.concat([
-        // `--require ${path.join(__dirname, 'openTelemetry.js')}`,
-        `--require=${process.env.REDWOOD_OPENTELEMETRY_API}`,
-      ])
+      if (fs.existsSync(process.env.REDWOOD_OPENTELEMETRY_API)) {
+        forkOpts.execArgv = forkOpts.execArgv.concat([
+          `--require=${process.env.REDWOOD_OPENTELEMETRY_API}`,
+        ])
+      } else {
+        console.error(
+          `OpenTelemetry setup file does not exist at ${process.env.REDWOOD_OPENTELEMETRY_API}`
+        )
+      }
     }
 
     const debugPort = argv['debug-port']
