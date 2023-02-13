@@ -343,9 +343,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: ⚒️ Build the framework packages
+      - name: 🔨 Build
         run: yarn build
-        working-directory: .
 
       - name: 📢 Listen for telemetry
         uses: ./.github/actions/telemetry_check_crwa
