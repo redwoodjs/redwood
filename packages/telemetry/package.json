@@ -29,11 +29,11 @@
     "@babel/runtime-corejs3": "7.20.13",
     "@redwoodjs/internal": "4.0.0",
     "@redwoodjs/structure": "4.0.0",
-    "@whatwg-node/fetch": "0.7.0",
+    "@whatwg-node/fetch": "0.8.1",
     "ci-info": "3.7.1",
     "core-js": "3.27.2",
     "envinfo": "7.8.1",
-    "systeminformation": "5.17.8",
+    "systeminformation": "5.17.9",
     "uuid": "9.0.0",
     "yargs": "17.6.2"
   },
