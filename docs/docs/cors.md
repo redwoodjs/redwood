@@ -136,14 +136,17 @@ In order to be able accept cookies from another domain we'll need to make a chan
 
 ### GraphQL XHR Credentials
 
-Next we need to tell the GraphQL client to include credentials (the dbAuth cookie) in any requests. This config goes in `web/src/App.js`:
+Next we need to tell the GraphQL client to include credentials (the dbAuth cookie) in any requests. This config goes in `web/src/App.{ts,js}`:
 
-```jsx {5-9}
+```jsx {7-12}
+import { AuthProvider, useAuth } from 'src/auth'
+
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <AuthProvider type="dbAuth">
         <RedwoodApolloProvider
+          useAuth={useAuth}
           graphQLClientConfig={{
             httpLinkConfig: { credentials: 'include' },
           }}
@@ -158,27 +161,16 @@ const App = () => (
 
 ### Auth XHR Credentials
 
-Finally, we need to tell dbAuth to include credentials in its own XHR requests:
+Finally, we need to tell dbAuth to include credentials in its own XHR requests. We'll do this within in `web/src/auth.{ts,js}` when creating the `AuthProvider`:
 
-```jsx {4-7}
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <AuthProvider
-        type="dbAuth"
-        config={{ fetchConfig: { credentials: 'include' } }}
-      >
-        <RedwoodApolloProvider
-          graphQLClientConfig={{
-            httpLinkConfig: { credentials: 'include' },
-          }}
-        >
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
+```jsx {3-5}
+import { createDbAuthClient, createAuth } from '@redwoodjs/auth-dbauth-web'
+
+const dbAuthClient = createDbAuthClient({
+  fetchConfig: { credentials: 'include' },
+})
+
+export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
 ```
 
 ## Testing CORS Locally
