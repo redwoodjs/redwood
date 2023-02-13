@@ -1,0 +1,36 @@
+const { diag, DiagConsoleLogger, DiagLogLevel } = require('@opentelemetry/api')
+const {
+  getNodeAutoInstrumentations,
+} = require('@opentelemetry/auto-instrumentations-node')
+const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http')
+const { Resource } = require('@opentelemetry/resources')
+const opentelemetry = require('@opentelemetry/sdk-node')
+const {
+  SemanticResourceAttributes,
+} = require('@opentelemetry/semantic-conventions')
+
+// For troubleshooting, set the log level to DiagLogLevel.DEBUG
+diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
+
+const packageJSON = require('../package.json')
+const specificResourceInfo = new Resource({
+  [SemanticResourceAttributes.SERVICE_NAME]: packageJSON.name,
+  [SemanticResourceAttributes.SERVICE_VERSION]: packageJSON.version,
+})
+
+const sdk = new opentelemetry.NodeSDK({
+  traceExporter: new OTLPTraceExporter({
+    // Update this URL to point to where your OTLP compatible collector is listening
+    url: 'http://127.0.0.1:4318/v1/traces',
+  }),
+  instrumentations: [
+    getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-graphql': {
+        allowValues: true,
+      },
+    }),
+  ],
+  resource: Resource.default().merge(specificResourceInfo),
+})
+
+sdk.start()
