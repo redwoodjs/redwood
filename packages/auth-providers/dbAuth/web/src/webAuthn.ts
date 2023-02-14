@@ -45,7 +45,7 @@ export default class WebAuthnClient {
   authApiUrl = ''
 
   private getAuthApiUrl() {
-    return this.authApiUrl || `${process.env.RWJS_API_URL}/auth`
+    return this.authApiUrl || `${globalThis.RWJS_API_URL}/auth`
   }
 
   setAuthApiUrl(authApiUrl?: string) {
