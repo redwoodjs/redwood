@@ -16,6 +16,8 @@ import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/bab
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
+import virtualRoutes from './virtualRoutes'
+
 const readFile = promisify(fsReadFile)
 
 // Using require, because plugin has TS errors
@@ -207,6 +209,8 @@ export default function redwoodPluginVite() {
         return id.includes('FatalErrorPage')
       },
     }),
+    // Used for routeHooks, and access to routes introspection in the brow
+    virtualRoutes(),
   ]
 }
 

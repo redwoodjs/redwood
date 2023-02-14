@@ -5,6 +5,7 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
 
 // Note: Importing directly from `apollo/client` does not work properly in Storybook.
@@ -174,7 +175,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    */
   const { httpLinkConfig, link: userLink, ...rest } = config ?? {}
 
-  const httpLink = new HttpLink({ uri, ...httpLinkConfig })
+  const httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
 
   /**
    * The order here is important. The last link *must* be a terminating link like HttpLink.
