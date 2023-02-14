@@ -23,7 +23,7 @@ const expectedPacketFields = [
   "system",
   "complexity",
   "sides",
-  "bundler"
+  "webBundler"
 ]
 
 // Setup fake telemetry server
