@@ -370,7 +370,7 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
 
   if (newRoutes.length) {
     const [routerStart, routerParams, newLineAndIndent] = routesContent.match(
-      /\s*<Router(.*?)>(\s*)/
+      /\s*<Router(.*?)>(\s*)/s
     )
 
     if (/trailingSlashes={?(["'])always\1}?/.test(routerParams)) {
