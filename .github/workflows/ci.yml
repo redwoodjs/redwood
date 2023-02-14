@@ -324,3 +324,44 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Only doc changes"
+
+  telemetry-check:
+    needs: check
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [16, 18]
+      fail-fast: true
+    name: 🔭 Telemetry check / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    runs-on: ${{ matrix.os }}
+    env:
+      REDWOOD_REDIRECT_TELEMETRY: "http://127.0.0.1:48619" # Random port
+    steps:
+      - uses: actions/checkout@v3
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 🔨 Build
+        run: yarn build
+
+      - name: 📢 Listen for telemetry (CRWA)
+        run: node ./.github/actions/telemetry_check/check.mjs --mode crwa
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: 📢 Listen for telemetry (CLI)
+        run: node ./.github/actions/telemetry_check/check.mjs --mode cli
+
+  telemetry-check-docs:
+    needs: only-doc-changes
+    if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [16, 18]
+    name: 🔭 Telemetry check / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo "Only doc changes"
