@@ -246,7 +246,9 @@ const uniqueId = (rootDir: string | null) => {
 
 // actually call the API with telemetry data
 export const sendTelemetry = async () => {
-  const telemetryUrl = 'https://telemetry.redwoodjs.com/api/v1/telemetry'
+  const telemetryUrl =
+    process.env.REDWOOD_REDIRECT_TELEMETRY ||
+    'https://telemetry.redwoodjs.com/api/v1/telemetry'
 
   try {
     const payload = await buildPayload()
