@@ -1012,7 +1012,7 @@ For a details on setting up GraphQL Security, see [Security](#security).
 
 Logging is essential in production apps to be alerted about critical errors and to be able to respond effectively to support issues. In staging and development environments, logging helps you debug queries, resolvers and cell requests.
 
-We want to make logging simple when using RedwoodJS and therefore have configured the api-side GraphQL handler to log common information about your queries and mutations. Log statements also be optionally enriched with [operation names](https://graphql.org/learn/queries/#operation-name), user agents, request ids, and performance timings to give you move visibility into your GraphQL api.
+We want to make logging simple when using RedwoodJS and therefore have configured the api-side GraphQL handler to log common information about your queries and mutations. Log statements also be optionally enriched with [operation names](https://graphql.org/learn/queries/#operation-name), user agents, request ids, and performance timings to give you more visibility into your GraphQL api.
 
 By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger.md), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](logger.md#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
 
