@@ -325,14 +325,14 @@ jobs:
     steps:
       - run: echo "Only doc changes"
 
-  telemetry-crwa:
+  telemetry-check:
     needs: check
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
         node-version: [16, 18]
       fail-fast: true
-    name: 🔭 Telemetry check - CRWA / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    name: 🔭 Telemetry check / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     env:
       REDWOOD_REDIRECT_TELEMETRY: "http://127.0.0.1:48619" # Random port
@@ -343,20 +343,25 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: 🔨 Build
+      - name: ⚒️ Build the framework packages
         run: yarn build
 
-      - name: 📢 Listen for telemetry
-        uses: ./.github/actions/telemetry_check_crwa
+      - name: 📢 Listen for telemetry (CRWA)
+        run: node ./.github/actions/telemetry_check/check.mjs --mode crwa
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
-  telemetry-crwa-docs:
+      - name: 📢 Listen for telemetry (CLI)
+        run: node ./.github/actions/telemetry_check/check.mjs --mode cli
+
+  telemetry-check-docs:
     needs: only-doc-changes
     if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
         node-version: [16, 18]
-    name: 🔭 Telemetry check - CRWA / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
+    name: 🔭 Telemetry check / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Only doc changes"
