@@ -78,17 +78,18 @@ const rebuildApiServer = () => {
     }
 
     // OpenTelemetry SDK Setup
-    if (process.env.REDWOOD_OPENTELEMETRY_API) {
+    const opentelemetrySDKScriptPath = getConfig().opentelemetry.scriptPath
+    if (opentelemetrySDKScriptPath) {
       console.log(
-        `Setting up OpenTelemetry using the setup file: ${process.env.REDWOOD_OPENTELEMETRY_API}`
+        `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPath}`
       )
-      if (fs.existsSync(process.env.REDWOOD_OPENTELEMETRY_API)) {
+      if (fs.existsSync(opentelemetrySDKScriptPath)) {
         forkOpts.execArgv = forkOpts.execArgv.concat([
-          `--require=${process.env.REDWOOD_OPENTELEMETRY_API}`,
+          `--require=${opentelemetrySDKScriptPath}`,
         ])
       } else {
         console.error(
-          `OpenTelemetry setup file does not exist at ${process.env.REDWOOD_OPENTELEMETRY_API}`
+          `OpenTelemetry setup file does not exist at ${opentelemetrySDKScriptPath}`
         )
       }
     }

@@ -5,6 +5,7 @@ import chalk from 'chalk'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
+import { getConfigPath } from '@redwoodjs/internal/dist/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
@@ -19,10 +20,10 @@ export const handler = async ({ force, verbose, addPackage }) => {
     ts ? 'ts' : 'js'
   }`
 
-  // TODO: Consider extracting these from the template? Consider version pinning?
+  // TODO: Consider extracting these from the templates? Consider version pinning?
   const opentelemetryPackages = [
     '@opentelemetry/api',
-    '@opentelemetry/auto-instrumentations-node',
+    '@opentelemetry/instrumentation',
     '@opentelemetry/exporter-trace-otlp-http',
     '@opentelemetry/resources',
     '@opentelemetry/sdk-node',
@@ -45,43 +46,42 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: `Adding opentelemetry.${ts ? 'ts' : 'js'}...`,
+        title: `Adding OpenTelemetry files...`,
         task: () => {
-          const templateContent = fs.readFileSync(
+          const setupTemplateContent = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'opentelemetry.ts.template'),
             'utf-8'
           )
+          const setupScriptContent = ts
+            ? setupTemplateContent
+            : transformTSToJS(opentelemetryScriptPath, setupTemplateContent)
 
-          const openTelemetryScriptContent = ts
-            ? templateContent
-            : transformTSToJS(opentelemetryScriptPath, templateContent)
-
-          return writeFile(
-            opentelemetryScriptPath,
-            openTelemetryScriptContent,
-            {
+          return [
+            writeFile(opentelemetryScriptPath, setupScriptContent, {
               overwriteExisting: force,
-            }
-          )
+            }),
+          ]
         },
       },
       {
-        title: 'Adding OpenTelemetry setup script path to .env file...',
+        title: 'Adding OpenTelemetry config to redwood.toml...',
         task: (_ctx, task) => {
-          const envPath = path.join(getPaths().base, '.env')
-          const envContent = fs.readFileSync(envPath, 'utf-8')
-          if (!envContent.includes('REDWOOD_OPENTELEMETRY_API=')) {
-            // Append the setting on a new line with comment above
+          const redwoodTomlPath = getConfigPath()
+          const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+          if (!configContent.includes('[opentelemetry]')) {
+            // Use string replace to preserve comments and formatting
             writeFile(
-              envPath,
-              `${envContent}\n# Location of setup script for OpenTelemetry (added by 'rw setup opentelemetry')\nREDWOOD_OPENTELEMETRY_API=${opentelemetryScriptPath}\n`,
+              redwoodTomlPath,
+              configContent.concat(
+                `\n[opentelemetry]\n\tscriptPath = "${opentelemetryScriptPath}"`
+              ),
               {
-                overwriteExisting: true, // We're manually appending so it should be okay
+                overwriteExisting: true, // redwood.toml always exists
               }
             )
           } else {
             task.skip(
-              `"REDWOOD_OPENTELEMETRY_API" is already set in your .env file. Please update it to point to:\n${opentelemetryScriptPath}`
+              `The [opentelemetry] config block already exists in your 'redwood.toml' file.`
             )
           }
         },
@@ -93,6 +93,87 @@ export const handler = async ({ force, verbose, addPackage }) => {
           if (!addPackage) {
             return 'Skipping package install, you will need to add all necessary @opentelemetry packages manaually as a dependency on the api workspace'
           }
+        },
+      },
+      {
+        title: 'Envelop confirmation',
+        task: async (ctx, task) => {
+          const confirmation = await task.prompt({
+            type: 'Confirm',
+            message:
+              'Do you wish to add the OpenTelemetry Envelop plugin for GraphQL Yoga?',
+          })
+          ctx.setupEnvelop ||= confirmation
+        },
+      },
+      {
+        title: 'Setup Envelop OpenTelemetry plugin...',
+        enabled: (ctx) => {
+          return ctx.setupEnvelop
+        },
+        task: (_ctx, task) => {
+          const graphqlPath = path.join(
+            getPaths().api.functions,
+            `graphql.${ts ? 'ts' : 'js'}`
+          )
+          const graphqlContents = fs.readFileSync(graphqlPath, {
+            encoding: 'utf-8',
+            flag: 'r',
+          })
+
+          const envelopTemplateContent = fs.readFileSync(
+            path.resolve(__dirname, 'templates', 'envelop.ts.template'),
+            'utf-8'
+          )
+          const envelopContent = ts
+            ? envelopTemplateContent
+            : transformTSToJS(graphqlPath, envelopTemplateContent)
+
+          const splitPosition = graphqlContents.indexOf(
+            '\n',
+            graphqlContents.lastIndexOf('import')
+          )
+          const contentBefore = graphqlContents
+            .slice(0, splitPosition)
+            .trimEnd()
+          const contentAfter = graphqlContents.slice(splitPosition).trimStart()
+          let newGraphqlContents = [
+            contentBefore,
+            envelopContent,
+            contentAfter,
+          ].join('\n')
+
+          if (graphqlContents.includes('extraPlugins')) {
+            task.output = `You will have to manually update 'extraPlugins' to include the OpenTelemetry plugin within ${graphqlPath}`
+          } else {
+            const splitPosition = newGraphqlContents.indexOf(
+              '\n',
+              newGraphqlContents.lastIndexOf(
+                'export const handler = createGraphQLHandler({'
+              )
+            )
+            const contentBefore = newGraphqlContents
+              .slice(0, splitPosition)
+              .trimEnd()
+            const contentAfter = newGraphqlContents
+              .slice(splitPosition)
+              .trimStart()
+            newGraphqlContents = [
+              contentBefore,
+              'extraPlugins: [opentelemetryPlugin],',
+              contentAfter,
+            ].join('\n')
+          }
+
+          return [
+            writeFile(graphqlPath, newGraphqlContents, {
+              overwriteExisting: true, // We'll likely always already have this file in the project
+            }),
+            addApiPackages(['@envelop/opentelemetry']),
+          ]
+        },
+        options: {
+          persistentOutput: true,
         },
       },
       {
@@ -111,6 +192,9 @@ export const handler = async ({ force, verbose, addPackage }) => {
     {
       rendererOptions: { collapse: false },
       renderer: verbose ? 'verbose' : 'default',
+      ctx: {
+        setupEnvelop: false, // Default value to hide envelop steps
+      },
     }
   )
 

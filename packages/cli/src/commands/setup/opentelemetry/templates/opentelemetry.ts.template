@@ -1,36 +1,41 @@
 const { diag, DiagConsoleLogger, DiagLogLevel } = require('@opentelemetry/api')
-const {
-  getNodeAutoInstrumentations,
-} = require('@opentelemetry/auto-instrumentations-node')
 const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http')
+const { registerInstrumentations } = require('@opentelemetry/instrumentation')
 const { Resource } = require('@opentelemetry/resources')
-const opentelemetry = require('@opentelemetry/sdk-node')
+const {
+  NodeTracerProvider,
+  BatchSpanProcessor,
+} = require('@opentelemetry/sdk-trace-node')
 const {
   SemanticResourceAttributes,
 } = require('@opentelemetry/semantic-conventions')
 
-// For troubleshooting, set the log level to DiagLogLevel.DEBUG
+// You may wish to set this to DiagLogLevel.DEBUG when you need to debug opentelemetry itself
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
 
-const packageJSON = require('../package.json')
-const specificResourceInfo = new Resource({
-  [SemanticResourceAttributes.SERVICE_NAME]: packageJSON.name,
-  [SemanticResourceAttributes.SERVICE_VERSION]: packageJSON.version,
+// Optionally register instrumentation libraries here
+registerInstrumentations({
+  instrumentations: [],
 })
 
-const sdk = new opentelemetry.NodeSDK({
-  traceExporter: new OTLPTraceExporter({
-    // Update this URL to point to where your OTLP compatible collector is listening
-    url: 'http://127.0.0.1:4318/v1/traces',
-  }),
-  instrumentations: [
-    getNodeAutoInstrumentations({
-      '@opentelemetry/instrumentation-graphql': {
-        allowValues: true,
-      },
-    }),
-  ],
-  resource: Resource.default().merge(specificResourceInfo),
+const resource = Resource.default().merge(
+  new Resource({
+    [SemanticResourceAttributes.SERVICE_NAME]: 'redwood-app',
+    [SemanticResourceAttributes.SERVICE_VERSION]: '0.0.0',
+  })
+)
+
+const exporter = new OTLPTraceExporter({
+  // Update this URL to point to where your OTLP compatible collector is listening
+  url: 'http://127.0.0.1:4318/v1/traces',
 })
 
-sdk.start()
+// You may wish to switch to SimpleSpanProcessor if you wish to ensure spans are processed immediately
+const processor = new BatchSpanProcessor(exporter)
+
+const provider = new NodeTracerProvider({
+  resource: resource,
+})
+provider.addSpanProcessor(processor)
+
+provider.register()

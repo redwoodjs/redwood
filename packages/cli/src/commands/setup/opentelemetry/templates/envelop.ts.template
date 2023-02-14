@@ -1,0 +1,12 @@
+
+import { useOpenTelemetry } from '@envelop/opentelemetry'
+import { trace } from '@opentelemetry/api'
+
+const opentelemetryPlugin = useOpenTelemetry(
+  {
+    resolvers: true, // Tracks resolvers calls, and tracks resolvers thrown errors
+    variables: true, // Includes the operation variables values as part of the metadata collected
+    result: true, // Includes execution result object as part of the metadata collected
+  },
+  trace.getTracerProvider()
+)

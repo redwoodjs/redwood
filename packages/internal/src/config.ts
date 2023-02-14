@@ -73,6 +73,9 @@ export interface Config {
   notifications: {
     versionUpdates: string[]
   }
+  opentelemetry: {
+    scriptPath?: string
+  }
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -111,6 +114,9 @@ const DEFAULT_CONFIG: Config = {
   },
   notifications: {
     versionUpdates: [],
+  },
+  opentelemetry: {
+    scriptPath: undefined,
   },
 }
 
