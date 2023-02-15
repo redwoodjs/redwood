@@ -181,4 +181,22 @@ describe('getAuthenticationContext', () => {
     expect(schema).toEqual('Bearer')
     expect(token).toEqual('auth-test-token')
   })
+
+  it('Works even without any auth decoders', async () => {
+    const result = await getAuthenticationContext({
+      event: createMockedEvent({ authProvider: 'two' }),
+      context: {} as Context,
+    })
+
+    if (!result) {
+      fail('Result is undefined')
+    }
+
+    const [decoded, { type, schema, token }] = result
+
+    expect(decoded).toEqual(null)
+    expect(type).toEqual('two')
+    expect(schema).toEqual('Bearer')
+    expect(token).toEqual('auth-test-token')
+  })
 })
