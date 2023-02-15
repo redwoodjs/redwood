@@ -177,12 +177,41 @@ describe('validate exclusion', () => {
     expect(() =>
       validate('bar', 'selection', { exclusion: { in: ['foo', 'bar'] } })
     ).toThrow(ValidationErrors.ExclusionValidationError)
+    expect(() =>
+      validate('bar', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
 
     expect(() =>
       validate('qux', 'selection', { exclusion: ['foo', 'bar'] })
     ).not.toThrow()
     expect(() =>
       validate('qux', 'selection', { exclusion: { in: ['foo', 'bar'] } })
+    ).not.toThrow()
+    expect(() =>
+      validate('qux', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).not.toThrow()
+  })
+
+  it('checks for case-insensitive exclusion', () => {
+    expect(() =>
+      validate('Bar', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
+    expect(() =>
+      validate('bar', 'selection', {
+        exclusion: { in: ['foo', 'Bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
+
+    expect(() =>
+      validate('qux', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
     ).not.toThrow()
   })
 
@@ -325,12 +354,41 @@ describe('validate inclusion', () => {
     expect(() =>
       validate('quux', 'selection', { inclusion: { in: ['foo', 'bar'] } })
     ).toThrow(ValidationErrors.InclusionValidationError)
+    expect(() =>
+      validate('QUUX', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).toThrow(ValidationErrors.InclusionValidationError)
 
     expect(() =>
       validate('foo', 'selection', { inclusion: ['foo', 'bar'] })
     ).not.toThrow()
     expect(() =>
       validate('foo', 'selection', { inclusion: { in: ['foo', 'bar'] } })
+    ).not.toThrow()
+    expect(() =>
+      validate('foo', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).not.toThrow()
+  })
+
+  it('checks for case-insensitive inclusion', () => {
+    expect(() =>
+      validate('quux', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.InclusionValidationError)
+
+    expect(() =>
+      validate('Foo', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).not.toThrow()
+    expect(() =>
+      validate('foo', 'selection', {
+        inclusion: { in: ['FOO', 'bar'], caseSensitive: false },
+      })
     ).not.toThrow()
   })
 
