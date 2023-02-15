@@ -78,9 +78,9 @@ const getQuoteStyle = async () => {
 }
 
 const getProjectDb = () => {
-  const { db } = require(`${apiSrcPath}/lib/db`)
+  const { db, testDb } = require(`${apiSrcPath}/lib/db`)
 
-  return db
+  return process.env.TEST_DATABASE_STRATEGY === 'rls' ? testDb : db
 }
 
 const buildScenario =
