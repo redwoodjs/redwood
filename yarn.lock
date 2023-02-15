@@ -2013,18 +2013,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.11.2":
-  version: 4.11.2
-  resolution: "@clerk/clerk-react@npm:4.11.2"
+"@clerk/clerk-react@npm:4.11.3":
+  version: 4.11.3
+  resolution: "@clerk/clerk-react@npm:4.11.3"
   dependencies:
-    "@clerk/shared": ^0.11.2
-    "@clerk/types": ^3.27.0
+    "@clerk/shared": ^0.11.3
+    "@clerk/types": ^3.28.0
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 17f06f14cca1d11c3e3f8d9809f7d84113eae767aa5d3d067d23487ddb922aa2073b0c1e5b747c3405be2d393007feb23d14bc08bcaa188e0347c2558c40849b
+  checksum: f713a65d11c3b9cfb92bf836dc821221b767b1fb0743c3988eae9852fc2d4ee4c780804dc0608dd5cb5e3109cfccf05f2abdbe2e62eb5aa8fb40ad3fb772db5c
   languageName: node
   linkType: hard
 
@@ -2045,23 +2045,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.11.2":
-  version: 0.11.2
-  resolution: "@clerk/shared@npm:0.11.2"
+"@clerk/shared@npm:^0.11.3":
+  version: 0.11.3
+  resolution: "@clerk/shared@npm:0.11.3"
   peerDependencies:
-    react: 18.2.0
-    react-dom: 18.2.0
-    react-test-renderer: ^18.2.0
-  checksum: c229aa734371f9c23a4788460311be88a53836b17c153a8b66fe54ba0d266c7ac100290e1da88e9f695516b8bde0a647826370ab1d3ef2409939e7dc3f2a61cf
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: bd53a9d9eca50ffdd209cd38d088bd83b6d7befaad84b4789193969c3d484747f2fcea6f36e3042875d50ce05a1f8aaacd4b863ec7d2af29a81291c3c2690ffa
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.27.0, @clerk/types@npm:^3.27.0":
+"@clerk/types@npm:3.27.0":
   version: 3.27.0
   resolution: "@clerk/types@npm:3.27.0"
   dependencies:
     csstype: 3.1.1
   checksum: 13acd8652b12500d2a22d113e00493fcfee2318fdcb7611cb38b5787338f2ecfa7f74dcfb57864ab8a3219933d1244d741bda09a53ebaa0e0544ea2ff0429864
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^3.27.0, @clerk/types@npm:^3.28.0":
+  version: 3.28.0
+  resolution: "@clerk/types@npm:3.28.0"
+  dependencies:
+    csstype: 3.1.1
+  checksum: 22712dd6f0dd1c027d2c71413a68dade119dc083cd65fcb8bc1082fe57ce7868a92fd9aae4024d6e5f790c5254d990c6a118d1fb4095a9163070efce96c253dd
   languageName: node
   linkType: hard
 
@@ -7134,7 +7142,7 @@ __metadata:
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
-    "@clerk/clerk-react": 4.11.2
+    "@clerk/clerk-react": 4.11.3
     "@clerk/types": 3.27.0
     "@redwoodjs/auth": 4.0.0
     "@types/react": 18.0.28
@@ -7143,7 +7151,7 @@ __metadata:
     react: 18.2.0
     typescript: 4.9.5
   peerDependencies:
-    "@clerk/clerk-react": 4.11.2
+    "@clerk/clerk-react": 4.11.3
   languageName: unknown
   linkType: soft
 
@@ -8025,18 +8033,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.20":
-  version: 0.3.20
-  resolution: "@replayio/playwright@npm:0.3.20"
+"@replayio/playwright@npm:0.3.21":
+  version: 0.3.21
+  resolution: "@replayio/playwright@npm:0.3.21"
   dependencies:
     "@replayio/replay": ^0.12.2
-    "@replayio/test-utils": ^0.5.0
+    "@replayio/test-utils": ^0.5.1
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: 530eac3b23461ddc3c28684107886c81c70068519a4835402419d741622dc2b4ed775ea6503fcf97122bfe81659b5f3854f626930ef3bde13b8fde5c86b95280
+  checksum: 235bef9d11135a980e1fbf19be434be162e64e62980334e5640ce109c54ff1fba76d12ae502828ef5e2093ea1b76fdb3b5ea73e55c2fc0b267c433814bd0b8b7
   languageName: node
   linkType: hard
 
@@ -8073,16 +8081,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@replayio/test-utils@npm:0.5.0"
+"@replayio/test-utils@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "@replayio/test-utils@npm:0.5.1"
   dependencies:
     "@replayio/replay": ^0.12.2
     "@types/node-fetch": ^2.6.2
     debug: ^4.3.4
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: 5361799118703bd652c498cc4506bd2ab22dd50259cf4f299f12ad6573544c5803b0bfb2f06cb1d0e16699a1121cdee583ac5888bb27b0d909f4b8eef4ead17c
+  checksum: 026f89c182eb6562887bdf00cac094ee2676d59cef2b3fc4cf814a34b02d635de596dee64e6dc71c3573530b097e6d0588c873d66b39fb6dd208e025abf223eb
   languageName: node
   linkType: hard
 
@@ -28304,7 +28312,7 @@ __metadata:
     "@npmcli/arborist": 6.2.2
     "@nrwl/nx-cloud": 15.0.3
     "@playwright/test": 1.30.0
-    "@replayio/playwright": 0.3.20
+    "@replayio/playwright": 0.3.21
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
