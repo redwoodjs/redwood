@@ -1,6 +1,6 @@
 import WebAuthnClient from '../webAuthn'
 
-process.env.RWJS_API_URL = '/.redwood/functions'
+globalThis.RWJS_API_URL = '/.redwood/functions'
 
 jest.mock('@whatwg-node/fetch', () => {
   return
@@ -81,12 +81,12 @@ describe('webAuthn', () => {
 
     expect(mockOpen).toBeCalledWith(
       'GET',
-      `${process.env.RWJS_API_URL}/auth?method=webAuthnAuthOptions`,
+      `${globalThis.RWJS_API_URL}/auth?method=webAuthnAuthOptions`,
       false
     )
     expect(mockOpen).toBeCalledWith(
       'POST',
-      `${process.env.RWJS_API_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       false
     )
     expect(mockSend).toBeCalledWith(
@@ -122,12 +122,12 @@ describe('webAuthn', () => {
 
     expect(mockOpen).toBeCalledWith(
       'GET',
-      `${process.env.RWJS_API_URL}/auth?method=webAuthnRegOptions`,
+      `${globalThis.RWJS_API_URL}/auth?method=webAuthnRegOptions`,
       false
     )
     expect(mockOpen).toBeCalledWith(
       'POST',
-      `${process.env.RWJS_API_URL}/auth`,
+      `${globalThis.RWJS_API_URL}/auth`,
       false
     )
     expect(mockSend).toBeCalledWith(

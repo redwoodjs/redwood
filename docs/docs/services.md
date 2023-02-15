@@ -276,6 +276,7 @@ validate(input.name, 'Name', {
 ##### Options
 
 * `in`: the list of values that cannot be used
+* `caseSensitive`: toggles case sensitivity; default: `true`
 
 ```jsx
 validate(input.name, 'Name', {
@@ -339,6 +340,7 @@ validate(input.role, 'Role', {
 ##### Options
 
 * `in`: the list of values that can be used
+* `caseSensitive`: toggles case sensitivity; default: `true`
 
 ```jsx
 validate(input.role, 'Role', {
