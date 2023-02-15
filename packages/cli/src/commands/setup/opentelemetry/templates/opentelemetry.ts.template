@@ -1,6 +1,10 @@
 const { diag, DiagConsoleLogger, DiagLogLevel } = require('@opentelemetry/api')
 const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http')
 const { registerInstrumentations } = require('@opentelemetry/instrumentation')
+const {
+  FastifyInstrumentation,
+} = require('@opentelemetry/instrumentation-fastify')
+const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http')
 const { Resource } = require('@opentelemetry/resources')
 const {
   NodeTracerProvider,
@@ -9,14 +13,10 @@ const {
 const {
   SemanticResourceAttributes,
 } = require('@opentelemetry/semantic-conventions')
+const { PrismaInstrumentation } = require ('@prisma/instrumentation')
 
 // You may wish to set this to DiagLogLevel.DEBUG when you need to debug opentelemetry itself
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
-
-// Optionally register instrumentation libraries here
-registerInstrumentations({
-  instrumentations: [],
-})
 
 const resource = Resource.default().merge(
   new Resource({
@@ -37,5 +37,17 @@ const provider = new NodeTracerProvider({
   resource: resource,
 })
 provider.addSpanProcessor(processor)
+
+// Optionally register instrumentation libraries here
+registerInstrumentations({
+  tracerProvider: provider,
+  instrumentations: [
+    new HttpInstrumentation(),
+    new FastifyInstrumentation(),
+    new PrismaInstrumentation({
+      middleware: true,
+    })
+  ],
+})
 
 provider.register()
