@@ -14,7 +14,8 @@ module.exports = async function () {
     process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
     const command =
-      process.env.TEST_DATABASE_STRATEGY === 'reset'
+      process.env.TEST_DATABASE_STRATEGY === 'reset' ||
+      process.env.TEST_DATABASE_STRATEGY === 'rls'
         ? ['prisma', 'migrate', 'reset', '--force', '--skip-seed']
         : ['prisma', 'db', 'push', '--force-reset', '--accept-data-loss']
 
