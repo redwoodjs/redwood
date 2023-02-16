@@ -109,7 +109,7 @@ async function recursivelyRender(
   )
 
   const componentAsHtml = ReactDOMServer.renderToString(
-    <LocationProvider location={{ pathname: renderPath }}>
+    <LocationProvider location={{ pathname: renderPath }} mode="sync">
       <CellCacheContextProvider queryCache={queryCache}>
         <App />
       </CellCacheContextProvider>

@@ -43,7 +43,10 @@ export default function redwoodPluginVite() {
         order: 'pre',
         handler: (html: string) => {
           // Remove the prerender placeholder
-          const outputHtml = html.replace('<%= prerenderPlaceholder %>', '')
+          const outputHtml = html.replace(
+            '<%= prerenderPlaceholder %>',
+            '<!--appbody-->'
+          )
 
           // And then inject the entry
           if (existsSync(clientEntryPath)) {
@@ -206,7 +209,7 @@ export default function redwoodPluginVite() {
     // and is limited to the default FatalErrorPage (by name)
     commonjs({
       filter: (id: string) => {
-        return id.includes('FatalErrorPage')
+        return id.includes('FatalErrorPage') || id.includes('Routes')
       },
     }),
     // Used for routeHooks, and access to routes introspection in the brow

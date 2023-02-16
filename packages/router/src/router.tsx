@@ -140,18 +140,21 @@ const Router: React.FC<RouterProps> = ({
   pageLoadingDelay,
   trailingSlashes = 'never',
   children,
-}) => (
-  // Level 1/3 (outer-most)
-  <LocationProvider trailingSlashes={trailingSlashes}>
-    <LocationAwareRouter
-      useAuth={useAuth}
-      paramTypes={paramTypes}
-      pageLoadingDelay={pageLoadingDelay}
-    >
-      {children}
-    </LocationAwareRouter>
-  </LocationProvider>
-)
+}) => {
+  console.log('Level 1/3')
+  return (
+    // Level 1/3 (outer-most)
+    <LocationProvider trailingSlashes={trailingSlashes}>
+      <LocationAwareRouter
+        useAuth={useAuth}
+        paramTypes={paramTypes}
+        pageLoadingDelay={pageLoadingDelay}
+      >
+        {children}
+      </LocationAwareRouter>
+    </LocationProvider>
+  )
+}
 
 const LocationAwareRouter: React.FC<RouterProps> = ({
   useAuth,
@@ -160,6 +163,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   children,
 }) => {
   const location = useLocation()
+  console.log(`👉 \n ~ file: router.tsx:163 ~ location`, location)
   const flatChildArray = flattenAll(children)
 
   const hasHomeRoute = flatChildArray.some((child) => {
@@ -178,6 +182,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     isRoute(flatChildArray[0]) &&
     flatChildArray[0].props.notfound
   )
+
+  console.log('xxxxxxxx before generating routes', flatChildArray)
 
   const shouldShowSplash =
     (!hasHomeRoute && location.pathname === '/') || !hasGeneratedRoutes
@@ -245,6 +251,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 
   const searchParams = parseSearch(location.search)
   const allParams = { ...searchParams, ...pathParams }
+
+  console.log('Level 2/3 (LocationAwareRouter)')
 
   // Level 2/3 (LocationAwareRouter)
   return (

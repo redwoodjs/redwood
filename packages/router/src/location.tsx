@@ -7,6 +7,7 @@ export interface LocationContextType {
   pathname: string
   search?: string
   hash?: string
+  mode?: 'sync' | 'chunk'
 }
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
@@ -19,6 +20,7 @@ interface LocationProviderProps {
   }
   trailingSlashes?: TrailingSlashesTypes
   children?: React.ReactNode
+  mode?: 'sync' | 'chunk'
 }
 
 class LocationProvider extends React.Component<LocationProviderProps> {
@@ -77,7 +79,12 @@ class LocationProvider extends React.Component<LocationProviderProps> {
 
     const { pathname, search, hash } = this.props.location || windowLocation
 
-    return { pathname, search, hash }
+    return {
+      pathname,
+      search,
+      hash,
+      mode: this.props.mode || this.context?.mode || 'chunk',
+    }
   }
 
   componentDidMount() {
@@ -93,6 +100,8 @@ class LocationProvider extends React.Component<LocationProviderProps> {
   }
 
   render() {
+    // @HELP Tobbe
+    // @MARK note that I see location rendering twice on the server
     return (
       <LocationContext.Provider value={this.state.context}>
         {this.props.children}

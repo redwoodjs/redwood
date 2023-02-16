@@ -120,17 +120,21 @@ export default function (
                       t.stringLiteral(importName)
                     ),
                     t.objectProperty(
-                      t.identifier('loader'),
+                      t.identifier('chunkLoader'),
                       t.arrowFunctionExpression(
                         [],
-                        t.callExpression(
-                          // If useStaticImports, do a synchronous import with require (ssr/prerender)
-                          // otherwise do a dynamic import (browser)
-                          useStaticImports
-                            ? t.identifier('require')
-                            : t.identifier('import'),
-                          [t.stringLiteral(relativeImport)]
-                        )
+                        t.callExpression(t.identifier('import'), [
+                          t.stringLiteral(relativeImport),
+                        ])
+                      )
+                    ),
+                    t.objectProperty(
+                      t.identifier('syncLoader'),
+                      t.arrowFunctionExpression(
+                        [],
+                        t.callExpression(t.identifier('require'), [
+                          t.stringLiteral(relativeImport),
+                        ])
                       )
                     ),
                   ])
