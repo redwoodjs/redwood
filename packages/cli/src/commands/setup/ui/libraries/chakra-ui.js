@@ -36,10 +36,10 @@ export async function handler({ force, install }) {
   const rwPaths = getPaths()
 
   const packages = [
-    '@chakra-ui/react@^1',
-    '@emotion/react@^11',
-    '@emotion/styled@^11',
-    'framer-motion@^6',
+    '@chakra-ui/react',
+    '@emotion/react',
+    '@emotion/styled',
+    'framer-motion',
   ]
 
   const tasks = new Listr(
