@@ -43,10 +43,7 @@ export default function redwoodPluginVite() {
         order: 'pre',
         handler: (html: string) => {
           // Remove the prerender placeholder
-          const outputHtml = html.replace(
-            '<%= prerenderPlaceholder %>',
-            '<!--appbody-->'
-          )
+          const outputHtml = html.replace('<%= prerenderPlaceholder %>', '')
 
           // And then inject the entry
           if (existsSync(clientEntryPath)) {
