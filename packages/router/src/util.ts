@@ -365,6 +365,7 @@ export function normalizePage(
   return {
     name: specOrPage.name,
     chunkLoader: async () => ({ default: specOrPage }),
+    syncLoader: () => ({ default: specOrPage }),
   }
 }
 
