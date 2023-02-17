@@ -12,3 +12,5 @@ export * from './cors'
 const packageJson = require('../package.json')
 export const prismaVersion = packageJson?.dependencies['@prisma/client']
 export const redwoodVersion = packageJson?.version
+
+export * from './opentelemetry'
