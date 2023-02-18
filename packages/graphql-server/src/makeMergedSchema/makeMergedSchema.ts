@@ -5,6 +5,7 @@ import {
   IExecutableSchemaDefinition,
 } from '@graphql-tools/schema'
 import { IResolvers } from '@graphql-tools/utils'
+import * as opentelemetry from '@opentelemetry/api'
 import type {
   GraphQLSchema,
   GraphQLFieldMap,
@@ -57,7 +58,31 @@ const mapFieldsToService = ({
           args: unknown,
           context: unknown,
           info: unknown
-        ) => services[name](args, { root, context, info }),
+        ) => {
+          const tracer = opentelemetry.trace.getTracer('redwoodjs')
+          return tracer.startActiveSpan(
+            `redwoodjs:graphql:resolver:${name}`,
+            async (span) => {
+              span.setAttribute(
+                'graphql.execute.operationName',
+                // @ts-expect-error we know it's unknown
+                `${args.operationName || 'Anonymous Operation'}`
+              )
+              let result
+              try {
+                result = await services[name](args, { root, context, info })
+                span.end()
+                return result
+              } catch (ex) {
+                span.recordException(ex as Error)
+                span.setStatus({ code: opentelemetry.SpanStatusCode.ERROR })
+                span.end()
+                throw ex
+              }
+            }
+          )
+          // return services[name](args, { root, context, info })
+        },
       }
     }
 

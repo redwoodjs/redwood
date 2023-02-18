@@ -151,6 +151,11 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       undefined,
       'rwjs-babel-glob-import-dir',
     ],
+    [
+      require('../babelPlugins/babel-plugin-redwood-otel-wrapping').default,
+      undefined,
+      'rwjs-babel-otel-wrapping',
+    ],
   ].filter(Boolean) as PluginItem[]
 
   return plugins
