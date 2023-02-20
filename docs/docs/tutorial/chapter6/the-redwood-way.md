@@ -114,7 +114,7 @@ export default {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title="web/src/components/Comment/Comment.stories.txs"
+```tsx title="web/src/components/Comment/Comment.stories.tsx"
 import Comment from './Comment'
 
 export const generated = () => {
