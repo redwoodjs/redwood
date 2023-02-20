@@ -237,6 +237,7 @@ function getPluginConfig(side: CodegenSide) {
     omitOperationSuffix: true,
     showUnusedMappers: false,
     customResolverFn: getResolverFnType(),
+    resolverTypeWrapperSignature: 'T', // do this to prevent double wrapping of resolved types in Promises
     mappers: prismaModels,
     avoidOptionals: {
       // We do this, so that service tests can call resolvers without doing a null check
