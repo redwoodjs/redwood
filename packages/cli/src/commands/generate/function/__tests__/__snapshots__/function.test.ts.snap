@@ -19,8 +19,8 @@ exports[`Single word default files creates a single word function file 1`] = `
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event, context) => {
-  logger.info('Invoked foo function')
+export const handler = async (event, _context) => {
+  logger.info(\`\${event.httpMethod} \${event.path}: foo function\`)
 
   return {
     statusCode: 200,
@@ -95,8 +95,8 @@ exports[`creates a .js file if --javascript=true 1`] = `
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event, context) => {
-  logger.info('Invoked javascriptFunction function')
+export const handler = async (event, _context) => {
+  logger.info(\`\${event.httpMethod} \${event.path}: javascriptFunction function\`)
 
   return {
     statusCode: 200,
@@ -113,6 +113,7 @@ export const handler = async (event, context) => {
 
 exports[`creates a .ts file if --typescript=true 1`] = `
 "import type { APIGatewayEvent, Context } from 'aws-lambda'
+
 import { logger } from 'src/lib/logger'
 
 /**
@@ -131,8 +132,8 @@ import { logger } from 'src/lib/logger'
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event: APIGatewayEvent, context: Context) => {
-  logger.info('Invoked typescriptFunction function')
+export const handler = async (event: APIGatewayEvent, _context: Context) => {
+  logger.info(\`\${event.httpMethod} \${event.path}: typescriptFunction function\`)
 
   return {
     statusCode: 200,
@@ -166,8 +167,8 @@ exports[`creates a multi word function file 1`] = `
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event, context) => {
-  logger.info('Invoked sendMail function')
+export const handler = async (event, _context) => {
+  logger.info(\`\${event.httpMethod} \${event.path}: sendMail function\`)
 
   return {
     statusCode: 200,
