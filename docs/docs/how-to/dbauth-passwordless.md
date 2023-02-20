@@ -1,10 +1,10 @@
 # Setting up dbAuth to be passwordless
 
-Security is really important.  Sometimes you don't want to integrate with a third-party service like Auth0 or Firebase Auth.  In this case, you can use the built-in dbAuth to authenticate users.  This is a great option if you're building a small app and don't want to pay for a third-party service.
+Security is really important.  Sometimes you don't want to integrate with a third-party authentication services.  Whatever the reason, Redwood has you covered with Redwood's dbAuth to authenticate users.  This is a great option.
 
-However, dbAuth stores passwords and salts in your database. This is a security risk.  One way to mitigate this risk is to use a passwordless authentication method.  In this case, you send a link to the user's email address.  When they click the link, they are logged in.
+One thing though is now you're collecting the user's login, password and salt.  If you'd like to not collect all of this, an alternative is passwordless.  The only data needed for passwordless is the users email address.
 
-In this how-to I'll show you how to set up dbAuth to be passwordless, you'll still need to set up a third-party service to send emails.
+In this how-to I'll show you how to set up dbAuth to be passwordless, you'll still need to set up a a way to send [send emails](../how-to/sending-emails.md), but there's plenty of ways to do that.
 
 ## Background
 
@@ -51,79 +51,86 @@ yarn rw g service users
 
 Now that you have the file, let's add the `generateToken` function.
 
-```js
+```javascript {21} title="/api/src/services/users/users.js"
 // add this to the bottom of the file
-// api/src/services/users/users.js
-export const generateToken = asnyc ({ email }) => {
-    // this method is called when a user requests a token
-    // so whatever we return with the user will see on the screen
-    let user = await db.user.findUnique({ where: { email } })
-    // if the user doesn't exist, we still respond
-    if (!user) return { message: 'Login Request received' }
-    let randomNumber = (()=>{
-      let number = Math.floor(Math.random() * 1000000)
-      if(number < 100000) number += 100000
-      return number
-    })()
-    // this would be where you'd send an email, for now we'll just log it
-    console.log({ randomNumber })
-
-    // next we need to create a new salt
-    let salt = (()=>{
-      let charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-      charSet += 'abcdefghijklmnopqrstuvwxyz'
-      charSet += '0123456789'
-      let returnSalt = ''
-      for(let i = 0; i < 30; i++){
-        returnSalt += charSet.charAt(Math.floor(Math.random() * charSet.length))
+export const generateLoginToken = async ({ email }) => {
+  try {
+    // look up if the user exists
+    let lookupUser = await db.user.findFirst({ where: { email } })
+    if (!lookupUser) return { message: 'Login Request received' }
+    // here we're going to generate a random password of 6 numbers
+    let randomNumber = (() => {
+      let random = CryptoJS.lib.WordArray.random(6)
+      let randomString = random.toString()
+      let sixDigitNumber = randomString.replace(/\D/g, '')
+      if (sixDigitNumber.length < 6) {
+        sixDigitNumber = sixDigitNumber.padStart(6, '0')
       }
-      return returnSalt
+      if (sixDigitNumber.length > 6) {
+        sixDigitNumber = sixDigitNumber.slice(0, 6)
+      }
+      return sixDigitNumber.toString()
     })()
-
-    // now we need to hash the random number
+    console.log({ randomNumber }) // email the user this number
+    let salt = CryptoJS.lib.WordArray.random(30)
     let loginToken = CryptoJS.PBKDF2(randomNumber, salt, {
       keySize: 256 / 32,
     }).toString()
-
-    // last thing we need is to set an expiration date
+    // now we'll update the user with the new salt and loginToken
     let loginTokenExpiresAt = new Date()
     loginTokenExpiresAt.setMinutes(loginTokenExpiresAt.getMinutes() + 15)
-
-    // now we need to update the user
-    await db.user.update({
-      where: { email },
-      data: {
+    let data = {
+        salt,
         loginToken,
         loginTokenExpiresAt,
-        salt,
-      },
+    }
+    await db.user.update({
+      where: { id: lookupUser.id },
+      data
     })
 
     return { message: 'Login Request received' }
+  } catch (error) {
+    console.log({ error })
+    throw new UserInputError(error.message)
+  }
 }
+
 ```
+### 3. Add generateToken to the SDL and secure loginToken
 
-In addition to the new function, we need to add it to the sdl file.
+In addition to the new function, we need to add it to the sdl file.  While we're here let's also ensure we do not expose the loginToken.
 
-```js
-// api/src/graphql/users.sdl.js
-// ... other imports
+```javascript {21} title="/api/src/graphql/users.sdl.js"
+type User {
+  id: Int!
+  name: String
+  email: String!
+}
+input CreateUserInput {
+  name: String
+  email: String!
+}
+input UpdateUserInput {
+  name: String
+  email: String!
+}
 type userTokenResponse {
   message: String!
 }
-
 type Mutation {
-  // ... other mutations
+  createUser(input: CreateUserInput!): User! @requireAuth
+  updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+  deleteUser(id: Int!): User! @requireAuth
   generateToken(email: String!): userTokenResponse! @skipAuth
 }
 ```
 
-### 3. Modify the auth function
+### 4. Modify the auth function
 
 We need to consider how we want to limit the authentication.  I've added a expiration date to the token, so we'll need to check that.
 
-```js
-// api/src/functions/auth.js
+```js title="/api/src/functions/auth.js"
 // ... other functions
 const loginOptions = {
   handler: async (user) =>{
@@ -144,13 +151,13 @@ const loginOptions = {
     return user
   },
   errors: {
-    // here i modified the following, feel free to modify the other messages
+    // here I modified the following, feel free to modify the other messages
     incorrectPassword: 'Incorrect token',
   }
 }
 // we also need to update the signupOptions
 const signupOptions = {
-  handler: ({ username, hashedPassword, salt, userAttributes }) => {
+  handler: ({ username, hashedPassword, userAttributes }) => {
     return db.user.create({
       data: {
         email: username,
@@ -179,7 +186,7 @@ const authHandler = new DbAuthHandler(event, context, {
 
 As of right now, nothing works, lets fix that.
 
-### 4. Making the login form
+### 5. Making the login form
 
 We need to make a form that will allow the user to enter their email address.
 
@@ -191,8 +198,7 @@ yarn rw g component LoginPasswordlessForm
 
 This created a component in `web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.js`.  Let's update it.
 
-```jsx
-// web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.js
+```jsx title="/web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.js"
 import {
   Form,
   Label,
@@ -297,7 +303,11 @@ const LoginPasswordlessForm = ({ setWaitingForCode, setEmail }) => {
 export default LoginPasswordlessForm
 ```
 
-### 5. Making the login with token form
+We aren't rendering it anywhere yet, but when we do it will look like this.
+
+![image](https://user-images.githubusercontent.com/638764/220204773-6c6aaf86-680f-4e2c-877c-3876070254d3.png)
+
+### 6. Making the login with token form
 
 Now we also need a form that will accept the code that was sent to the user.
 
@@ -305,8 +315,7 @@ Now we also need a form that will accept the code that was sent to the user.
 yarn rw g component LoginPasswordlessTokenForm
 ```
 
-```jsx
-// web/src/components/LoginPasswordlessTokenForm/LoginPasswordlessTokenForm.js
+```jsx  title="/web/src/components/LoginPasswordlessTokenForm/LoginPasswordlessTokenForm.js"
 import { useEffect, useRef } from 'react'
 
 import {
@@ -426,14 +435,21 @@ const LoginPasswordlessTokenForm = ({ setWaitingForCode, email, code }) => {
 
 export default LoginPasswordlessTokenForm
 ```
-### 6. Making the new login page
+
+This will be the form loaded after the email is entered.  Again, we aren't rendering it anywhere, but we will in the next step.
+
+Here's a preview of the form.
+
+![image](https://user-images.githubusercontent.com/638764/220212316-bcc5cde6-53cf-4a65-ab54-0e2763da924a.png)
+
+### 7. Making the new login page
 Now each of those forms are controlled with the props we pass to them. We will make a new page that will control the state of the forms.
 
 ```bash
 yarn rw g page LoginPasswordless
 ```
 
-```jsx
+```jsx title="/web/pages/LoginPasswordlessPage/LoginPasswordlessPage.js"
 import { useEffect, useState } from 'react'
 
 import { useLocation } from '@redwoodjs/router'
@@ -489,11 +505,10 @@ const LoginPasswordlessPage = () => {
 
 export default LoginPasswordlessPage
 ```
-### 7. Updating the signup page
+### 8. Updating the signup page
 We need to update the signup page to just take the email.
 
-```jsx
-// web/src/pages/SignupPage/SignupPage.js
+```jsx title="/web/src/pages/SignupPage/SignupPage.js"
 import { useRef } from 'react'
 import { useEffect } from 'react'
 
@@ -604,11 +619,15 @@ const SignupPage = () => {
 export default SignupPage
 ```
 
+You should see the changes and it should look like this!
+
+![image](https://user-images.githubusercontent.com/638764/220204883-800829ab-e037-41e1-a2da-d47923c4d20c.png)
+
+
 ### 7. Updating the routes
 The last thing we need to to do is update the routes to use the new page.
 
-```jsx
-// web/src/Routes.js
+```jsx  title="/web/src/Routes.js"
 const Routes = () => {
   // other stuff
   return (
@@ -620,3 +639,6 @@ const Routes = () => {
   )
 }
 ```
+## You did it!
+
+Now that you did you can rest easy.  You're authentication relies on just your database but also, if some bad actor got access to it the only user data you have is really the email address.
