@@ -64,5 +64,8 @@ function createAuthImplementation() {
       const clerk = (window as any).Clerk as Clerk
       return clerk?.user
     },
+    clientHasLoaded: () => {
+      return (window as any).Clerk !== undefined
+    },
   }
 }

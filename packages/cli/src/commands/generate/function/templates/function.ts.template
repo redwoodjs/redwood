@@ -1,4 +1,5 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda'
+
 import { logger } from 'src/lib/logger'
 
 /**
@@ -17,8 +18,8 @@ import { logger } from 'src/lib/logger'
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event: APIGatewayEvent, context: Context) => {
-  logger.info('Invoked ${name} function')
+export const handler = async (event: APIGatewayEvent, _context: Context) => {
+  logger.info(`<%= '$' %>{event.httpMethod} <%= '$' %>{event.path}: <%= name %> function`)
 
   return {
     statusCode: 200,

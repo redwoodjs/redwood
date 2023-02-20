@@ -64,13 +64,19 @@ export default function redwoodPluginVite() {
           existsSync(clientEntryPath) &&
           normalizePath(id) === normalizePath(redwoodPaths.web.html)
         ) {
-          return code.replace(
-            '</head>',
-            `<script type="module" src="/entry-client.jsx"></script>
+          return {
+            code: code.replace(
+              '</head>',
+              `<script type="module" src="/entry-client.jsx"></script>
         </head>`
-          )
+            ),
+            map: null,
+          }
         } else {
-          return code
+          return {
+            code,
+            map: null, // Returning null here preserves the original sourcemap
+          }
         }
       },
       // ---------- End Bundle injection ----------
@@ -114,6 +120,7 @@ export default function redwoodPluginVite() {
           server: {
             open: redwoodConfig.browser.open,
             port: redwoodConfig.web.port,
+            host: redwoodConfig.web.host,
             proxy: {
               //@TODO we need to do a check for absolute urls here
               [redwoodConfig.web.apiUrl]: {
@@ -128,6 +135,7 @@ export default function redwoodPluginVite() {
             outDir: redwoodPaths.web.dist,
             emptyOutDir: true,
             manifest: 'build-manifest.json',
+            sourcemap: redwoodConfig.web.sourceMap, // Note that this can be boolean or 'inline'
           },
           optimizeDeps: {
             esbuildOptions: {
