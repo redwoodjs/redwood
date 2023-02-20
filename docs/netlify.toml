@@ -245,3 +245,37 @@
   from = "/docs/1.5/*"
   to = "/docs/1.x/:splat"
   status = 301
+    
+# v2.0-v2.2 redirects (to v2.x)
+
+[[redirects]]
+  from = "/docs/2.0/*"
+  to = "/docs/2.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/2.1/*"
+  to = "/docs/2.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/2.2/*"
+  to = "/docs/2.x/:splat"
+  status = 301
+
+# v3.0-v3.2 redirects (to v3.x)
+
+[[redirects]]
+  from = "/docs/3.0/*"
+  to = "/docs/3.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/3.1/*"
+  to = "/docs/3.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/3.2/*"
+  to = "/docs/3.x/:splat"
+  status = 301
