@@ -30583,14 +30583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^3.0.0":
-  version: 3.5.2
-  resolution: "type-fest@npm:3.5.2"
-  checksum: 4d15398a91bc2e732fb9f97fcdb19d4b45d5710222c0701296e7b37099a6886db929e5ba271ba96c6d275d5a236d7c02cc6bdff375493a417788a972c23c0260
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^3.5.1":
+"type-fest@npm:^3.0.0, type-fest@npm:^3.5.1":
   version: 3.6.0
   resolution: "type-fest@npm:3.6.0"
   checksum: 8ced56c1f7e5ef0f11580a5562f5ed58d06a30e1c7acecdf0c23323ad0b86d61836560fb9f1be2da660f3643344b6966c96a280d6dfdc7386050d5b20e89f02f
