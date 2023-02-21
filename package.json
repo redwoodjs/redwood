@@ -58,7 +58,7 @@
     "@testing-library/user-event": "14.4.3",
     "@tsd/typescript": "4.9.5",
     "@types/babel__generator": "7.6.4",
-    "@types/fast-redact": "^3.0.2",
+    "@types/fast-redact": "3.0.2",
     "@types/fs-extra": "11.0.1",
     "@types/jest": "29.4.0",
     "@types/jscodeshift": "0.11.6",

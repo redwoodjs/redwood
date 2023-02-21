@@ -7056,7 +7056,7 @@ __metadata:
     "@graphql-tools/schema": 9.0.16
     "@graphql-tools/utils": 9.2.1
     "@redwoodjs/api": 4.0.0
-    "@types/humps": ^2
+    "@types/humps": 2.0.1
     "@types/jsonwebtoken": 9.0.1
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
@@ -9208,7 +9208,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fast-redact@npm:^3.0.2":
+"@types/fast-redact@npm:3.0.2":
   version: 3.0.2
   resolution: "@types/fast-redact@npm:3.0.2"
   checksum: 833463393a20cf9de7e21cc485ff1a1a7a2778ec1b0bc7f3362c434a0286622824c1a0464a56ec00cce50d136a8a3213b22c696ec3bedd3346d633934d01a1a7
@@ -9304,10 +9304,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/humps@npm:^2":
-  version: 2.0.2
-  resolution: "@types/humps@npm:2.0.2"
-  checksum: b2697f0d51a905b3961232acf9ad7ceb5c64379fdfd72745840aa0f83a5dcadcd28961a57b2f6317746a01e9f99a85c02f537f851d2f88d2864a1fc8d11e46b9
+"@types/humps@npm:2.0.1":
+  version: 2.0.1
+  resolution: "@types/humps@npm:2.0.1"
+  checksum: 2b569777c161de9872484c2f168c3defa6921e4c1da2bdc89ee15788a48454d101f60e2b8d94fa23c0f85f96cedadecbf6293134a32f7e2b886eb7d242b3ee58
   languageName: node
   linkType: hard
 
@@ -28014,7 +28014,7 @@ __metadata:
     "@testing-library/user-event": 14.4.3
     "@tsd/typescript": 4.9.5
     "@types/babel__generator": 7.6.4
-    "@types/fast-redact": ^3.0.2
+    "@types/fast-redact": 3.0.2
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.4.0
     "@types/jscodeshift": 0.11.6
