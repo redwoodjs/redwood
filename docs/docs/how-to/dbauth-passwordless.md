@@ -2,7 +2,7 @@
 
 Security is really important.  Sometimes you don't want to integrate with a third-party authentication services.  Whatever the reason, Redwood has you covered with Redwood's dbAuth to authenticate users.  This is a great option.
 
-One thing though is now you're collecting the user's login, password and salt.  If you'd like to not collect all of this, an alternative is passwordless.  The only data needed for passwordless is the users email address.
+One thing though is now you're collecting the user's login and password.  If you'd like to not collect that, an alternative is to generate a token in place of the password.  The only data needed for passwordless is the users email address.
 
 In this how-to I'll show you how to set up dbAuth to be passwordless, you'll still need to set up a a way to send [send emails](../how-to/sending-emails.md), but there's plenty of ways to do that.
 
