@@ -4,6 +4,7 @@ import { promisify } from 'util'
 
 import react from '@vitejs/plugin-react'
 import {
+  ConfigEnv,
   normalizePath,
   PluginOption,
   transformWithEsbuild,
@@ -81,17 +82,17 @@ export default function redwoodPluginVite() {
       },
       // ---------- End Bundle injection ----------
 
-      config: (): UserConfig => {
+      config: (options: UserConfig, env: ConfigEnv): UserConfig => {
         return {
           root: redwoodPaths.web.src,
-          resolve: {
-            alias: [
-              {
-                find: 'src',
-                replacement: redwoodPaths.web.src,
-              },
-            ],
-          },
+          // resolve: {
+          //   alias: [
+          //     {
+          //       find: 'src',
+          //       replacement: redwoodPaths.web.src,
+          //     },
+          //   ],
+          // },
           envPrefix: 'REDWOOD_ENV_',
           publicDir: path.join(redwoodPaths.web.base, 'public'),
           define: {
@@ -132,10 +133,10 @@ export default function redwoodPluginVite() {
             },
           },
           build: {
-            outDir: redwoodPaths.web.dist,
+            outDir: options.build?.outDir || redwoodPaths.web.dist,
             emptyOutDir: true,
-            manifest: 'build-manifest.json',
-            sourcemap: redwoodConfig.web.sourceMap, // Note that this can be boolean or 'inline'
+            manifest: !env.ssrBuild ? 'build-manifest.json' : undefined,
+            sourcemap: !env.ssrBuild && redwoodConfig.web.sourceMap, // Note that this can be boolean or 'inline'
           },
           optimizeDeps: {
             esbuildOptions: {
