@@ -125,7 +125,7 @@ const InternalRoute = ({
 function isRoute(
   node: React.ReactNode
 ): node is React.ReactElement<InternalRouteProps> {
-  return isValidElement(node) && node.type === Route
+  return isValidElement(node) && (node.type === Route || node.props.route)
 }
 
 export interface RouterProps extends RouterContextProviderProps {
