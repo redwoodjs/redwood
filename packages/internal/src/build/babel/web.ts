@@ -31,6 +31,7 @@ export const getWebSideBabelPlugins = (
             // Jest monorepo and multi project runner is not correctly determining
             // the `cwd`: https://github.com/facebook/jest/issues/7359
             forJest ? rwjsPaths.web.src : './src',
+          $api: rwjsPaths.api.base,
         },
         root: [rwjsPaths.web.base],
         cwd: 'packagejson',
