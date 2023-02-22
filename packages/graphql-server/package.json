@@ -44,7 +44,7 @@
   "devDependencies": {
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.12",
-    "@envelop/testing": "5.0.4",
+    "@envelop/testing": "5.0.6",
     "@envelop/types": "3.0.1",
     "@types/jsonwebtoken": "9.0.1",
     "@types/lodash.merge": "4.6.7",
