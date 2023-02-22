@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.13",
     "@redwoodjs/auth": "4.1.4",
-    "core-js": "3.27.2"
+    "core-js": "3.28.0"
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "1.22.6",
