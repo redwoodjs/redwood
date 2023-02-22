@@ -66,7 +66,7 @@
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
-    "yargs": "17.6.2"
+    "yargs": "17.7.1"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
