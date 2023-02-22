@@ -390,10 +390,6 @@ describe('schema-helpers', () => {
           },
         }
 
-        // const options: Pick<UseInngestExecuteOptions, 'params'> = {
-        //   params: executeOptions,
-        // }
-
         const { types, identifiers } = await buildTypeIdentifiers({
           params: executeOptions,
           eventName: '',
@@ -425,10 +421,6 @@ describe('schema-helpers', () => {
             contextValue: {},
           },
         }
-
-        // const options: Pick<UseInngestExecuteOptions, 'params'> = {
-        //   params: executeOptions,
-        // }
 
         const { types, identifiers } = await buildTypeIdentifiers({
           params: executeOptions,
@@ -472,10 +464,6 @@ describe('schema-helpers', () => {
           },
         }
 
-        // const options: Pick<UseInngestExecuteOptions, 'params'> = {
-        //   params: executeOptions,
-        // }
-
         const { types, identifiers } = await buildTypeIdentifiers({
           params: executeOptions,
           eventName: 'graphql-test/update-post.mutation',
@@ -515,10 +503,6 @@ describe('schema-helpers', () => {
           },
         }
 
-        // const options: Pick<UseInngestExecuteOptions, 'params'> = {
-        //   params: executeOptions,
-        // }
-
         const denied = denyType({
           params: executeOptions,
           eventName: '',
@@ -555,10 +539,6 @@ describe('schema-helpers', () => {
             contextValue: {},
           },
         }
-
-        // const options: Pick<UseInngestExecuteOptions, 'params'> = {
-        //   params: executeOptions,
-        // }
 
         const denied = denyType({
           params: executeOptions,
@@ -601,10 +581,6 @@ describe('schema-helpers', () => {
           },
         }
 
-        // const options: Pick<UseInngestExecuteOptions, 'params'> = {
-        //   params: executeOptions,
-        // }
-
         const denied = denySchemaCoordinate({
           params: executeOptions,
           eventName: '',
@@ -641,10 +617,6 @@ describe('schema-helpers', () => {
             contextValue: {},
           },
         }
-
-        // const options: Pick<UseInngestExecuteOptions, 'params'> = {
-        //   params: executeOptions,
-        // }
 
         const denied = denySchemaCoordinate({
           params: executeOptions,
