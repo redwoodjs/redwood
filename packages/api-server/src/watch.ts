@@ -62,14 +62,14 @@ const validate = async () => {
   }
 }
 
-const rebuildApiServer = () => {
+const rebuildApiServer = async () => {
   try {
     // Shutdown API server
     killApiServer()
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
-    buildApi()
+    await buildApi()
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     const forkOpts = {
