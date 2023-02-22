@@ -7102,7 +7102,6 @@ __metadata:
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 11.0.1
     "@types/rimraf": 3.0.2
-    babel-plugin-graphql-tag: 3.3.0
     babel-plugin-polyfill-corejs3: 0.6.0
     babel-plugin-tester: 11.0.4
     chalk: 4.1.2
