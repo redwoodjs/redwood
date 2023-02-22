@@ -13,6 +13,8 @@ import {
   CORE_JS_VERSION,
   RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,
+  parseConfigFiles,
+  getPathsFromConfig,
 } from './common'
 
 export const TARGETS_NODE = '16.19'
@@ -72,6 +74,9 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
   //   .splice(0, 2)
   //   .join('.') // Gives '3.16' instead of '3.16.12'
 
+  //get the config object from the file
+  const config = parseConfigFiles()
+
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
     ['@babel/plugin-transform-typescript', undefined, 'rwjs-babel-typescript'],
@@ -106,6 +111,8 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       {
         alias: {
           src: './src',
+          // adds the paths from [ts|js]config.json to the module resolver
+          ...getPathsFromConfig(config.api),
         },
         root: [rwjsPaths.api.base],
         cwd: 'packagejson',
