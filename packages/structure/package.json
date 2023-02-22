@@ -51,7 +51,7 @@
     "ts-morph": "15.1.0",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.8",
-    "vscode-languageserver-types": "3.17.2",
+    "vscode-languageserver-types": "3.17.3",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
