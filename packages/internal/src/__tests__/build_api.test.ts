@@ -4,7 +4,8 @@ import path from 'path'
 import * as babel from '@babel/core'
 import compat from 'core-js-compat'
 
-import { cleanApiBuild, prebuildApiFiles } from '../build/api'
+import { cleanApiBuild } from '../build/api'
+import { prebuildApiFile } from '../build/babel/api'
 import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
@@ -19,6 +20,31 @@ const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../__fixtures__/example-todo-main'
 )
+
+export const prebuildApiFiles = (srcFiles: string[]) => {
+  const rwjsPaths = getPaths()
+  const plugins = getApiSideBabelPlugins()
+
+  return srcFiles.map((srcPath) => {
+    const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
+    const dstPath = path
+      .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
+      .replace(/\.(ts)$/, '.js')
+
+    const result = prebuildApiFile(srcPath, dstPath, plugins)
+    if (!result?.code) {
+      // TODO: Figure out a better way to return these programatically.
+      console.warn('Error:', srcPath, 'could not prebuilt.')
+
+      return undefined
+    }
+
+    fs.mkdirSync(path.dirname(dstPath), { recursive: true })
+    fs.writeFileSync(dstPath, result.code)
+
+    return dstPath
+  })
+}
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
