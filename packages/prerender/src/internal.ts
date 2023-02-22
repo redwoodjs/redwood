@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import { fetch } from '@whatwg-node/fetch'
-import { parse } from 'jsonc-parser'
 
 import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
@@ -66,57 +65,4 @@ export const writeToDist = (outputHtmlPath: string, renderOutput: string) => {
   }
 
   fs.writeFileSync(outputHtmlPath, renderOutput)
-}
-
-/**
- * Read and parse the tsconfig.json file
- * @param configPath The path to the tsconfig.json file
- * @returns The tsconfig object
- */
-const readTsconfig = (configPath?: string) => {
-  const filePath = path.join(configPath ?? process.cwd(), 'tsconfig.json')
-
-  return fs.existsSync(filePath) ? parse(fs.readFileSync(filePath, 'utf8')) : {}
-}
-/**
- * Extracts the paths from the web tsconfig.json file
- * @returns The paths object from the web tsconfig.json file
- */
-export const getPathsFromWebTsconfig = () => {
-  return getPathsFromTsconfig(readTsconfig(getPaths().web.base))
-}
-/**
- * Extracts the paths from the api tsconfig.json file
- * @returns The paths object from the api tsconfig.json file
- */
-export const getPathsFromApiTsconfig = () => {
-  return getPathsFromTsconfig(readTsconfig(getPaths().api.base))
-}
-
-/**
- * Extracts the paths from the tsconfig.json file
- * @param tsconfig The tsconfig object
- * @returns {Record<string, string>}  The paths object
- */
-const getPathsFromTsconfig = (tsconfig: {
-  compilerOptions: { baseUrl: string; paths: string }
-}): Record<string, string> => {
-  // These are the default paths that are included in the the tsconfig.json file
-  const defaultPaths = ['src/*', '$api/*', 'types/*', '@redwood/testing']
-
-  const { baseUrl, paths } = tsconfig.compilerOptions
-  const pathsObj: Record<string, string> = {}
-  for (const [key, value] of Object.entries(paths)) {
-    // exclude the default paths
-    if (defaultPaths.includes(key)) {
-      continue
-    }
-    const aliasKey = key.replace('/*', '')
-    const aliasValue = path.join(
-      baseUrl,
-      (value as string)[0].replace('/*', '')
-    )
-    pathsObj[aliasKey] = aliasValue
-  }
-  return pathsObj
 }

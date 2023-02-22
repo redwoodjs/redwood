@@ -7,6 +7,10 @@ import { load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
+import {
+  parseConfigFiles,
+  getPathsFromConfig,
+} from '@redwoodjs/internal/dist/build/babel/common'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { LocationProvider } from '@redwoodjs/router'
@@ -19,12 +23,7 @@ import {
   PrerenderGqlError,
 } from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
-import {
-  getRootHtmlPath,
-  registerShims,
-  writeToDist,
-  getPathsFromWebTsconfig,
-} from './internal'
+import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
 async function recursivelyRender(
   App: React.ElementType,
@@ -146,6 +145,9 @@ export const runPrerender = async ({
   renderPath,
 }: PrerenderParams): Promise<string | void> => {
   registerShims(renderPath)
+
+  //get the config object from the file
+  const config = parseConfigFiles()
   // registerApiSideBabelHook already includes the default api side babel
   // config. So what we define here is additions to the default config
   registerApiSideBabelHook({
@@ -170,6 +172,8 @@ export const runPrerender = async ({
             {
               alias: {
                 src: getPaths().api.src,
+                // adds the paths from [ts|js]config.json to the module resolver
+                ...getPathsFromConfig(config.api),
               },
               loglevel: 'silent',
             },
@@ -191,7 +195,7 @@ export const runPrerender = async ({
         {
           // gets the config from `web/tsconfig.json`
           // then add the the user defined aliases
-          alias: getPathsFromWebTsconfig(),
+          alias: getPathsFromConfig(config.web),
           loglevel: 'silent', // to silence the unnecessary warnings
         },
       ],
