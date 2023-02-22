@@ -187,7 +187,7 @@ export const registerApiSideBabelHook = ({
   })
 }
 
-export const prebuildApiFile = (
+export const transformWithBabel = (
   srcPath: string,
   // we need to know dstPath as well
   // so we can generate an inline, relative sourcemap

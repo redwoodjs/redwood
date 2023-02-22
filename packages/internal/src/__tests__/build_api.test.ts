@@ -5,7 +5,7 @@ import * as babel from '@babel/core'
 import compat from 'core-js-compat'
 
 import { cleanApiBuild } from '../build/api'
-import { prebuildApiFile } from '../build/babel/api'
+import { transformWithBabel } from '../build/babel/api'
 import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
@@ -34,7 +34,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
       .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
       .replace(/\.(ts)$/, '.js')
 
-    const result = prebuildApiFile(srcPath, dstPath, plugins)
+    const result = transformWithBabel(srcPath, dstPath, plugins)
     if (!result?.code) {
       throw new Error(`Could not prebuild ${srcPath}`)
     }

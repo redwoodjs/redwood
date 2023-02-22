@@ -7,7 +7,7 @@ import { removeSync } from 'fs-extra'
 import { findApiFiles } from '../files'
 import { getPaths } from '../paths'
 
-import { getApiSideBabelPlugins, prebuildApiFile } from './babel/api'
+import { getApiSideBabelPlugins, transformWithBabel } from './babel/api'
 
 export const buildApi = async () => {
   // TODO: Be smarter about caching and invalidating files,
@@ -41,7 +41,7 @@ const runRwBabelTransformsPlugin = {
         .replace(/\.(ts)$/, '.js')
 
       //  * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
-      const transformedCode = prebuildApiFile(
+      const transformedCode = transformWithBabel(
         args.path,
         dstPath,
         getApiSideBabelPlugins()
