@@ -13,14 +13,7 @@ export const buildApi = async () => {
   // TODO: Be smarter about caching and invalidating files,
   // but right now we just delete everything.
   cleanApiBuild()
-
-  const srcFiles = findApiFiles()
-
-  // const prebuiltFiles = prebuildApiFiles(srcFiles).filter(
-  //   (path): path is string => path !== undefined
-  // )
-
-  return await transpileApi(srcFiles)
+  return await transpileApi(findApiFiles())
 }
 
 export const cleanApiBuild = () => {
