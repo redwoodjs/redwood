@@ -21,6 +21,9 @@ const FIXTURE_PATH = path.resolve(
   '../../../../__fixtures__/example-todo-main'
 )
 
+// @NOTE: we no longer prebuild files into the .redwood/prebuild folder
+// However, prebuilding in the tests still helpful for us to  validate
+// that everything is working as expected.
 export const prebuildApiFiles = (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
   const plugins = getApiSideBabelPlugins()
@@ -33,10 +36,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
 
     const result = prebuildApiFile(srcPath, dstPath, plugins)
     if (!result?.code) {
-      // TODO: Figure out a better way to return these programatically.
-      console.warn('Error:', srcPath, 'could not prebuilt.')
-
-      return undefined
+      throw new Error(`Could not prebuild ${srcPath}`)
     }
 
     fs.mkdirSync(path.dirname(dstPath), { recursive: true })
