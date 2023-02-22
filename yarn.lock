@@ -2798,13 +2798,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/url-data@npm:5.2.0":
-  version: 5.2.0
-  resolution: "@fastify/url-data@npm:5.2.0"
+"@fastify/url-data@npm:5.3.1":
+  version: 5.3.1
+  resolution: "@fastify/url-data@npm:5.3.1"
   dependencies:
+    fast-uri: ^2.2.0
     fastify-plugin: ^4.0.0
-    uri-js: ^4.2.1
-  checksum: d086989546e0451aa76e34bf42e0f5ae33d49f7ccf677340b42b82a120ecaa5a259b2f834e650bb0c15dccdac810d39aad5c977ffc0ac7fe62e5e5b5e5d66d97
+  checksum: 8f3eee7d8328a2df993a4d34b09031a9d32dca08de9a702ba87bd4241c7064e22dc836029b6016925bf649274a155196a947414974a49ebb81e3fb84882b694f
   languageName: node
   linkType: hard
 
@@ -6268,7 +6268,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.20.13
     "@fastify/http-proxy": 8.4.0
     "@fastify/static": 6.9.0
-    "@fastify/url-data": 5.2.0
+    "@fastify/url-data": 5.3.1
     "@types/aws-lambda": 8.10.110
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
@@ -17171,7 +17171,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-uri@npm:^2.0.0, fast-uri@npm:^2.1.0":
+"fast-uri@npm:^2.0.0, fast-uri@npm:^2.1.0, fast-uri@npm:^2.2.0":
   version: 2.2.0
   resolution: "fast-uri@npm:2.2.0"
   checksum: 2242463c97c187762a6212c59eb9d881832d15210f16923daf40ee66fba06a801f4da7d6f1010fb4da101069ec99aeb2700bbbb3eb89141b2701a54048989a9c
@@ -30943,7 +30943,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uri-js@npm:^4.2.1, uri-js@npm:^4.2.2":
+"uri-js@npm:^4.2.2":
   version: 4.4.1
   resolution: "uri-js@npm:4.4.1"
   dependencies:
