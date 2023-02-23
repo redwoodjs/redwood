@@ -13,12 +13,12 @@ const FIXTURE_PATH = path.resolve(
 
 let functionDistFiles
 
-beforeAll(() => {
+beforeAll(async () => {
   process.env.RWJS_CWD = FIXTURE_PATH
 
   // Actually build the fixture, if we need it
   if (!fs.existsSync(path.join(FIXTURE_PATH, 'api/dist/functions'))) {
-    buildApi()
+    await buildApi()
   }
 
   functionDistFiles = findApiDistFunctions()
