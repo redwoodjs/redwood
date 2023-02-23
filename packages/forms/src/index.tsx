@@ -161,7 +161,7 @@ const isValueEmpty = (val: string): boolean => val === ''
  * the comments above the setCoercion function for more details)
  */
 
-type EmptyAsValue = null | 'undefined' | 0 | ''
+export type EmptyAsValue = null | 'undefined' | 0 | ''
 
 type ValueAsType =
   | 'valueAsDate'

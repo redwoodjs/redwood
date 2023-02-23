@@ -35,6 +35,7 @@ interface ExclusionValidatorOptions extends WithOptionalMessage {
    * The list of values that cannot be used.
    */
   in?: Array<unknown>
+  caseSensitive?: boolean
 }
 
 interface FormatValidatorOptions extends WithOptionalMessage {
@@ -49,6 +50,7 @@ interface InclusionValidatorOptions extends WithOptionalMessage {
    * The list of values that can be used.
    */
   in?: Array<unknown>
+  caseSensitive?: boolean
 }
 
 interface LengthValidatorOptions extends WithOptionalMessage {
@@ -309,10 +311,9 @@ const VALIDATORS = {
     name: string,
     options: Array<unknown> | ExclusionValidatorOptions
   ) => {
-    const exclusionList =
-      (Array.isArray(options) && options) || options.in || []
+    const [exclusionList, val] = prepareExclusionInclusion(value, options)
 
-    if (exclusionList.includes(value)) {
+    if (exclusionList.includes(val)) {
       validationError('exclusion', name, options)
     }
   },
@@ -349,10 +350,9 @@ const VALIDATORS = {
     name: string,
     options: Array<unknown> | InclusionValidatorOptions
   ) => {
-    const inclusionList =
-      (Array.isArray(options) && options) || options.in || []
+    const [inclusionList, val] = prepareExclusionInclusion(value, options)
 
-    if (!inclusionList.includes(value)) {
+    if (!inclusionList.includes(val)) {
       validationError('inclusion', name, options)
     }
   },
@@ -547,6 +547,28 @@ const validationError = (
     typeof options === 'object' ? (options.message as string) : undefined
 
   throw new ErrorClass(name, errorMessage, substitutions)
+}
+
+// Generate the final list and value used for exclusion/inclusion by taking
+// case-sensitivity into consideration. The returned array and value then
+// can simply be used with Array.includes to perform exclusion/inclusion checks.
+const prepareExclusionInclusion = (
+  value: unknown,
+  options:
+    | Array<unknown>
+    | InclusionValidatorOptions
+    | ExclusionValidatorOptions
+): [Array<unknown>, unknown] => {
+  const inputList = (Array.isArray(options) && options) || options.in || []
+
+  // default case sensitivity to true
+  const caseSensitive = Array.isArray(options)
+    ? true
+    : options.caseSensitive ?? true
+
+  return caseSensitive
+    ? [inputList, value]
+    : [inputList.map((s) => s.toLowerCase()), (value as string).toLowerCase()]
 }
 
 // Main validation function, `directives` decides which actual validators
