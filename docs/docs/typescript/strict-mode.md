@@ -89,7 +89,14 @@ export const Post: PostRelationResolvers = {
     db.post.findUnique({ where: { id: root?.id } }).author() as Promise<Author>, // 👈
 }
 
-// Option 2: Check for null
+// Option 2: Non-null assertion operator
+// If you do not want to import the Author type, you can also use the !-operator within then.
+export const Post: PostRelationResolvers = {
+  author: (_obj, { root }) =>
+    db.post.findUnique({ where: { id: root?.id } }).author().then((x)=>x!), // 👈
+}
+
+// Option 3: Check for null
 export const Post: PostRelationResolvers = {
   author: async (_obj, { root }) => {
     // Here, `findUnique` can return `null`, so we have to handle it:
