@@ -35,7 +35,6 @@
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.28.0",
     "graphql": "16.6.0",
-    "jsonc-parser": "3.2.0",
     "mime-types": "2.1.35"
   },
   "devDependencies": {
