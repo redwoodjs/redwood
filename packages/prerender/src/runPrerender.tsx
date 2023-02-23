@@ -141,7 +141,6 @@ export const runPrerender = async ({
   renderPath,
 }: PrerenderParams): Promise<string | void> => {
   registerShims(renderPath)
-
   // registerApiSideBabelHook already includes the default api side babel
   // config. So what we define here is additions to the default config
   registerApiSideBabelHook({
@@ -181,14 +180,6 @@ export const runPrerender = async ({
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
-    plugins: [
-      [
-        'babel-plugin-module-resolver',
-        {
-          loglevel: 'silent', // to silence the unnecessary warnings
-        },
-      ],
-    ],
     overrides: [
       {
         plugins: [
