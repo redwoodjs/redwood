@@ -47,7 +47,7 @@ const runRwBabelTransformsPlugin = {
 export const transpileApi = async (files: string[], options = {}) => {
   const rwjsPaths = getPaths()
 
-  return await build({
+  return build({
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',

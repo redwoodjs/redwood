@@ -34,7 +34,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
       .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
       .replace(/\.(ts)$/, '.js')
 
-    const result = transformWithBabel(srcPath, dstPath, plugins)
+    const result = transformWithBabel(srcPath, plugins)
     if (!result?.code) {
       throw new Error(`Could not prebuild ${srcPath}`)
     }
