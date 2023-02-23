@@ -15,7 +15,7 @@ export const handler = () => {
     const authFile = isTSProject ? 'auth.ts' : 'auth.js'
 
     await runTransform({
-      transformPath: path.join(__dirname, 'clerkGetCurrentUser.js'),
+      transformPath: path.join(__dirname, 'updateClerkGetCurrentUser.js'),
       targetPaths: [path.join(getRWPaths().api.base, 'src', 'lib', authFile)],
     })
 
