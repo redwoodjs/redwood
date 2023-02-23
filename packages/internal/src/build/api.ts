@@ -13,7 +13,7 @@ export const buildApi = async () => {
   // TODO: Be smarter about caching and invalidating files,
   // but right now we just delete everything.
   cleanApiBuild()
-  return await transpileApi(findApiFiles())
+  return transpileApi(findApiFiles())
 }
 
 export const cleanApiBuild = () => {
@@ -23,20 +23,12 @@ export const cleanApiBuild = () => {
 }
 
 const runRwBabelTransformsPlugin = {
-  name: 'rw-babel-transform',
+  name: 'rw-esbuild-babel-transform',
   setup(build: PluginBuild) {
     build.onLoad({ filter: /.(js|ts|tsx|jsx)$/ }, async (args) => {
-      const rwjsPaths = getPaths()
-
-      const relativePathFromSrc = path.relative(rwjsPaths.base, args.path)
-      const dstPath = path
-        .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
-        .replace(/\.(ts)$/, '.js')
-
-      //  * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
+      //  Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
       const transformedCode = transformWithBabel(
         args.path,
-        dstPath,
         getApiSideBabelPlugins()
       )
 
