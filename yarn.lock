@@ -2055,16 +2055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.27.0":
-  version: 3.27.0
-  resolution: "@clerk/types@npm:3.27.0"
-  dependencies:
-    csstype: 3.1.1
-  checksum: 13acd8652b12500d2a22d113e00493fcfee2318fdcb7611cb38b5787338f2ecfa7f74dcfb57864ab8a3219933d1244d741bda09a53ebaa0e0544ea2ff0429864
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^3.28.0, @clerk/types@npm:^3.28.1":
+"@clerk/types@npm:3.28.1, @clerk/types@npm:^3.28.0, @clerk/types@npm:^3.28.1":
   version: 3.28.1
   resolution: "@clerk/types@npm:3.28.1"
   dependencies:
@@ -2204,17 +2195,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/testing@npm:5.0.4":
-  version: 5.0.4
-  resolution: "@envelop/testing@npm:5.0.4"
+"@envelop/testing@npm:5.0.6":
+  version: 5.0.6
+  resolution: "@envelop/testing@npm:5.0.6"
   dependencies:
     "@graphql-tools/utils": ^8.8.0
-    tslib: ^2.4.0
+    tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^3.0.4
-    "@envelop/types": ^3.0.1
+    "@envelop/core": ^3.0.6
+    "@envelop/types": ^3.0.2
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 49c83d671578796206236ced79c95613b2e072b6bb243a71ea3a804b65f93c2aee7f68d21fe71533a6e31741f6e81573007f0eb33c5bff8827815b35e8ca8e2a
+  checksum: 7e7985c7043f17e56474c0b9bdcf493c51de6a35cca5bb9620b6b53ac83ddf683e5e2bd930c55cbbdf2b510e7f7dd9b52ee9f8acabd999bcad2675626be2369a
   languageName: node
   linkType: hard
 
@@ -2224,6 +2215,15 @@ __metadata:
   dependencies:
     tslib: ^2.4.0
   checksum: f715d6d565c31cfe221c82e678d23b973dd3321a7ed1f5ab1fad1db332acd7700075e91abe77880020a4b4ec570b30abd3e36c1a15dcc989aff30c605b49f3ec
+  languageName: node
+  linkType: hard
+
+"@envelop/types@npm:3.0.2":
+  version: 3.0.2
+  resolution: "@envelop/types@npm:3.0.2"
+  dependencies:
+    tslib: ^2.5.0
+  checksum: 1e71237bdb0d65256136760227402306e9d5aec1306f9e437085de2a1a0d8ea007be9302e9e397f96fd455f65da33cb3fe5822757af680ade9cecf218ce42a7c
   languageName: node
   linkType: hard
 
@@ -4923,9 +4923,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.2":
-  version: 6.2.2
-  resolution: "@npmcli/arborist@npm:6.2.2"
+"@npmcli/arborist@npm:6.2.3":
+  version: 6.2.3
+  resolution: "@npmcli/arborist@npm:6.2.3"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
@@ -4962,7 +4962,7 @@ __metadata:
     walk-up-path: ^1.0.0
   bin:
     arborist: bin/index.js
-  checksum: 2bbe866bf84073dfb99c65a466830e02f9dc703b9ad6f79af30abdfeb7418a114c83238c4e153fa33cc2571b08079a165e0a99389c32e74cedd16b06e883fa83
+  checksum: 1422ba03aa5689379e976825198c9bf960ddb363a6bd6e4286527707b158b3467b3aafcfac957ce4e62502778943cb2dc0bee4dd207e3de5d3533fc066173f66
   languageName: node
   linkType: hard
 
@@ -6482,7 +6482,7 @@ __metadata:
     "@babel/core": 7.20.12
     "@babel/runtime-corejs3": 7.20.13
     "@clerk/clerk-react": 4.11.3
-    "@clerk/types": 3.27.0
+    "@clerk/types": 3.28.1
     "@redwoodjs/auth": 4.0.0
     "@types/react": 18.0.28
     core-js: 3.28.0
@@ -6520,7 +6520,7 @@ __metadata:
     "@simplewebauthn/server": 6.2.2
     "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
-    "@types/uuid": 9.0.0
+    "@types/uuid": 9.0.1
     base64url: 3.0.1
     core-js: 3.28.0
     crypto-js: 4.1.1
@@ -7049,8 +7049,8 @@ __metadata:
     "@envelop/depth-limit": 2.0.4
     "@envelop/disable-introspection": 4.0.4
     "@envelop/filter-operation-type": 4.0.4
-    "@envelop/testing": 5.0.4
-    "@envelop/types": 3.0.1
+    "@envelop/testing": 5.0.6
+    "@envelop/types": 3.0.2
     "@escape.tech/graphql-armor": 1.7.0
     "@graphql-tools/merge": 8.3.18
     "@graphql-tools/schema": 9.0.16
@@ -7059,7 +7059,7 @@ __metadata:
     "@types/jsonwebtoken": 9.0.1
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
-    "@types/uuid": 9.0.0
+    "@types/uuid": 9.0.1
     "@whatwg-node/fetch": 0.8.1
     aws-lambda: 1.0.7
     core-js: 3.28.0
@@ -7228,7 +7228,7 @@ __metadata:
     typescript: 4.9.5
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.8
-    vscode-languageserver-types: 3.17.2
+    vscode-languageserver-types: 3.17.3
     yargs-parser: 21.1.1
   languageName: unknown
   linkType: soft
@@ -7243,7 +7243,7 @@ __metadata:
     "@redwoodjs/internal": 4.0.0
     "@redwoodjs/structure": 4.0.0
     "@types/envinfo": 7.8.1
-    "@types/uuid": 9.0.0
+    "@types/uuid": 9.0.1
     "@types/yargs": 17.0.22
     "@whatwg-node/fetch": 0.8.1
     ci-info: 3.7.1
@@ -7372,26 +7372,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.21":
-  version: 0.3.21
-  resolution: "@replayio/playwright@npm:0.3.21"
+"@replayio/playwright@npm:0.3.23":
+  version: 0.3.23
+  resolution: "@replayio/playwright@npm:0.3.23"
   dependencies:
-    "@replayio/replay": ^0.12.2
-    "@replayio/test-utils": ^0.5.1
+    "@replayio/replay": ^0.12.4
+    "@replayio/test-utils": ^0.5.3
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: 235bef9d11135a980e1fbf19be434be162e64e62980334e5640ce109c54ff1fba76d12ae502828ef5e2093ea1b76fdb3b5ea73e55c2fc0b267c433814bd0b8b7
+  checksum: aef7fcf2f56aaff383eb4822f7876097e9c213cb35bb53373ed65d7bfa7ba63b2fd9d25469e0db576333da3b1afb9c70d6238fe2821cccff66b3e9ee022e7904
   languageName: node
   linkType: hard
 
-"@replayio/replay@npm:^0.12.2":
-  version: 0.12.2
-  resolution: "@replayio/replay@npm:0.12.2"
+"@replayio/replay@npm:^0.12.4":
+  version: 0.12.4
+  resolution: "@replayio/replay@npm:0.12.4"
   dependencies:
-    "@replayio/sourcemap-upload": ^1.0.5
+    "@replayio/sourcemap-upload": ^1.0.6
     commander: ^7.2.0
     debug: ^4.3.4
     is-uuid: ^1.0.2
@@ -7403,33 +7403,33 @@ __metadata:
     ws: ^7.5.0
   bin:
     replay: bin/replay.js
-  checksum: e1fe47c34961b5bd7a4295008f16f7b6a4870b023870b0df7ec717a7a8999bcf8f47747d0a270039aa7a95385a8643a8f711ddd0ce1a764c5d03b05ff2833dc8
+  checksum: 8c99852906bd79b10678479b63a28652cf5e11211e768cbea066c47522bca69c56daee580192e85b40b6fd759511bb004befc5744f3e3a9b3435dc9a5f10a291
   languageName: node
   linkType: hard
 
-"@replayio/sourcemap-upload@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "@replayio/sourcemap-upload@npm:1.0.5"
+"@replayio/sourcemap-upload@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "@replayio/sourcemap-upload@npm:1.0.6"
   dependencies:
     commander: ^7.2.0
     debug: ^4.3.1
     glob: ^7.1.6
     node-fetch: ^2.6.1
     string.prototype.matchall: ^4.0.5
-  checksum: 2683079c31f57bf39cf6f89de1cf472d0b7d94fb30f6640e00317c9d87df856aa1dc9b1800ab530126a67e1fbc170bba5c4cb005818638ac6840398989f3b70e
+  checksum: d1f70c666e4b2081a4f67be2b4d2f233964074d619ee3d1459b639d0c06fb1f2f422cb47e3a44cf7b975ec2f8ab63178712b644c324d26628b6d3fee5dddc021
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.5.1":
-  version: 0.5.1
-  resolution: "@replayio/test-utils@npm:0.5.1"
+"@replayio/test-utils@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "@replayio/test-utils@npm:0.5.3"
   dependencies:
-    "@replayio/replay": ^0.12.2
+    "@replayio/replay": ^0.12.4
     "@types/node-fetch": ^2.6.2
     debug: ^4.3.4
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: 026f89c182eb6562887bdf00cac094ee2676d59cef2b3fc4cf814a34b02d635de596dee64e6dc71c3573530b097e6d0588c873d66b39fb6dd208e025abf223eb
+  checksum: 58f3b7c357130ac2f98de50585be37d1298d38c86e3f83129f42e6aad216b303f340cec5b38419f8f1fac4e9a0e4b09ef44a0c4dc28439e6900e2fe363648bfc
   languageName: node
   linkType: hard
 
@@ -9917,10 +9917,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@types/uuid@npm:9.0.0"
-  checksum: b0dc4582249b4efdbb6a9ebcd6acbcb864da14d558acfd5b17648972f8756e1a8e1de216a5e49a52b51d3804d56e60314467d9ac9450c8b90de138130021ed87
+"@types/uuid@npm:9.0.1":
+  version: 9.0.1
+  resolution: "@types/uuid@npm:9.0.1"
+  checksum: 234e14e053504a98532bb5d1490c8d649fe24ae04a94ba042b09b380a900094df1032aa7c3864b74b7a85a0a5e97530b2d1340048ed9d07855140cb99b2cefc8
   languageName: node
   linkType: hard
 
@@ -27903,10 +27903,10 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.18.6
     "@babel/runtime-corejs3": 7.20.13
-    "@npmcli/arborist": 6.2.2
+    "@npmcli/arborist": 6.2.3
     "@nrwl/nx-cloud": 15.0.3
     "@playwright/test": 1.30.0
-    "@replayio/playwright": 0.3.21
+    "@replayio/playwright": 0.3.23
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 13.4.0
     "@testing-library/user-event": 14.4.3
@@ -30337,7 +30337,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:~2.5.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:^2.5.0, tslib@npm:~2.5.0":
   version: 2.5.0
   resolution: "tslib@npm:2.5.0"
   checksum: e32fc99cc730dd514e53c44e668d76016e738f0bcc726aad5dbd2d335cf19b87a95a9b1e4f0a9993e370f1d702b5e471cdd4acabcac428a3099d496b9af2021e
@@ -31387,10 +31387,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vscode-languageserver-types@npm:3.17.2":
-  version: 3.17.2
-  resolution: "vscode-languageserver-types@npm:3.17.2"
-  checksum: 3d9424311070dc4a5e3a06dd454a1971988d3b76a7eca80660ee20e26c20fb7cc03359a117b11a887e8c1b7a65c13fd81120bc85b618c7c571eb200dbd7ed45c
+"vscode-languageserver-types@npm:3.17.3":
+  version: 3.17.3
+  resolution: "vscode-languageserver-types@npm:3.17.3"
+  checksum: a70d4ac0dbc08ba425b97e329e6a5696dabc6a264415bacb861e10d859b224f1b46d1fb41c17b6fdd31b32749d3bdfc819cb1b8a57dbe0d1e70e661ba8cfa397
   languageName: node
   linkType: hard
 
