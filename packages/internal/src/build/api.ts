@@ -25,7 +25,7 @@ export const cleanApiBuild = () => {
 const runRwBabelTransformsPlugin = {
   name: 'rw-esbuild-babel-transform',
   setup(build: PluginBuild) {
-    build.onLoad({ filter: /.(js|ts|tsx|jsx)$/ }, async (args) => {
+    build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
       //  Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
       const transformedCode = transformWithBabel(
         args.path,
