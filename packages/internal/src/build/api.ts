@@ -1,7 +1,5 @@
-import path from 'path'
-
-import { build } from 'esbuild'
 import type { PluginBuild } from 'esbuild'
+import { build } from 'esbuild'
 import { removeSync } from 'fs-extra'
 
 import { findApiFiles } from '../files'
