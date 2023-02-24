@@ -134,7 +134,10 @@ export const handler = async ({
           'file://' + rwjsPaths.web.routes
         )}.`
       )
+
+      return
     }
+
     // Running a separate process here, otherwise it wouldn't pick up the
     // generated Prisma Client due to require module caching
     await execa('yarn rw prerender', {
