@@ -11,20 +11,27 @@ import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type Clerk = ClerkClient | undefined | null
 
-export function createAuth(customProviderHooks?: {
+interface CustomProviderHooks {
   useCurrentUser?: () => Promise<Record<string, unknown>>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
-}) {
-  const authImplementation = createAuthImplementation()
+}
+
+interface CreateAuthArgs {
+  type?: string
+  customProviderHooks?: CustomProviderHooks
+}
+
+export function createAuth({ type, customProviderHooks }: CreateAuthArgs) {
+  const authImplementation = createAuthImplementation(type)
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createAuthImplementation() {
+function createAuthImplementation(type?: string) {
   return {
-    type: 'clerk',
+    type: type || 'clerk',
     // Using a getter here to make sure we're always returning a fresh value
     // and not creating a closure around an old (probably `undefined`) value
     // for Clerk that'll we always return, even when Clerk on the window object
