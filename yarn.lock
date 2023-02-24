@@ -6534,7 +6534,7 @@ __metadata:
     "@simplewebauthn/server": 6.2.2
     "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
-    "@types/uuid": 9.0.0
+    "@types/uuid": 9.0.1
     base64url: 3.0.1
     core-js: 3.28.0
     crypto-js: 4.1.1
@@ -7079,7 +7079,7 @@ __metadata:
     "@types/jsonwebtoken": 9.0.1
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
-    "@types/uuid": 9.0.0
+    "@types/uuid": 9.0.1
     "@whatwg-node/fetch": 0.8.1
     aws-lambda: 1.0.7
     core-js: 3.28.0
@@ -7263,7 +7263,7 @@ __metadata:
     "@redwoodjs/internal": 4.2.0
     "@redwoodjs/structure": 4.2.0
     "@types/envinfo": 7.8.1
-    "@types/uuid": 9.0.0
+    "@types/uuid": 9.0.1
     "@types/yargs": 17.0.22
     "@whatwg-node/fetch": 0.8.1
     ci-info: 3.7.1
@@ -9960,10 +9960,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@types/uuid@npm:9.0.0"
-  checksum: b0dc4582249b4efdbb6a9ebcd6acbcb864da14d558acfd5b17648972f8756e1a8e1de216a5e49a52b51d3804d56e60314467d9ac9450c8b90de138130021ed87
+"@types/uuid@npm:9.0.1":
+  version: 9.0.1
+  resolution: "@types/uuid@npm:9.0.1"
+  checksum: 234e14e053504a98532bb5d1490c8d649fe24ae04a94ba042b09b380a900094df1032aa7c3864b74b7a85a0a5e97530b2d1340048ed9d07855140cb99b2cefc8
   languageName: node
   linkType: hard
 
