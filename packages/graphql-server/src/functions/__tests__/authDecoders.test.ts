@@ -161,16 +161,6 @@ describe('createGraphQLHandler', () => {
     }
   }
 
-  const arrayHandler = createGraphQLHandler({
-    getCurrentUser,
-    authDecoder: [adminAuthDecoder, customerAuthDecoder],
-    loggerConfig: { logger: createLogger({}), options: {} },
-    sdls: {},
-    directives: {},
-    services: {},
-    onException: () => {},
-  })
-
   it('should allow you to pass an auth decoder', async () => {
     const handler = createGraphQLHandler({
       getCurrentUser,
@@ -206,6 +196,16 @@ describe('createGraphQLHandler', () => {
   })
 
   it('should allow you to pass an array of auth decoders, using the first one to decode', async () => {
+    const handler = createGraphQLHandler({
+      getCurrentUser,
+      authDecoder: [adminAuthDecoder, customerAuthDecoder],
+      loggerConfig: { logger: createLogger({}), options: {} },
+      sdls: {},
+      directives: {},
+      services: {},
+      onException: () => {},
+    })
+
     const mockedEvent = mockLambdaEvent({
       headers: {
         'Content-Type': 'application/json',
@@ -216,7 +216,7 @@ describe('createGraphQLHandler', () => {
       httpMethod: 'POST',
     })
 
-    const response = await arrayHandler(mockedEvent, {} as Context)
+    const response = await handler(mockedEvent, {} as Context)
 
     const body = JSON.parse(response.body)
     const globalContext = require('../../globalContext').context
@@ -230,6 +230,16 @@ describe('createGraphQLHandler', () => {
   })
 
   it('should allow you to pass an array of auth decoders, using the second one to decode', async () => {
+    const handler = createGraphQLHandler({
+      getCurrentUser,
+      authDecoder: [adminAuthDecoder, customerAuthDecoder],
+      loggerConfig: { logger: createLogger({}), options: {} },
+      sdls: {},
+      directives: {},
+      services: {},
+      onException: () => {},
+    })
+
     const mockedEvent = mockLambdaEvent({
       headers: {
         'Content-Type': 'application/json',
@@ -240,7 +250,7 @@ describe('createGraphQLHandler', () => {
       httpMethod: 'POST',
     })
 
-    const response = await arrayHandler(mockedEvent, {} as Context)
+    const response = await handler(mockedEvent, {} as Context)
 
     const body = JSON.parse(response.body)
     const globalContext = require('../../globalContext').context
