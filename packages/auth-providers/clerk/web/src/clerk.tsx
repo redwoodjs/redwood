@@ -11,20 +11,43 @@ import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type Clerk = ClerkClient | undefined | null
 
-export function createAuth(customProviderHooks?: {
+function isCreateAuthArgs(
+  args: CreateAuthArgs | CustomProviderHooks
+): args is CreateAuthArgs {
+  const createAuthArgs = args as CreateAuthArgs
+  return (
+    typeof createAuthArgs.type !== undefined ||
+    typeof createAuthArgs.customProviderHooks !== undefined
+  )
+}
+
+interface CustomProviderHooks {
   useCurrentUser?: () => Promise<Record<string, unknown>>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
-}) {
-  const authImplementation = createAuthImplementation()
-
-  return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createAuthImplementation() {
+interface CreateAuthArgs {
+  type?: string
+  customProviderHooks?: CustomProviderHooks
+}
+
+export function createAuth(args: CreateAuthArgs | CustomProviderHooks) {
+  let authImplementation
+
+  if (isCreateAuthArgs(args)) {
+    authImplementation = createAuthImplementation(args.type)
+    return createAuthentication(authImplementation, args.customProviderHooks)
+  } else {
+    authImplementation = createAuthImplementation()
+    return createAuthentication(authImplementation, args)
+  }
+}
+
+function createAuthImplementation(type?: string) {
   return {
-    type: 'clerk',
+    type: type || 'clerk',
     // Using a getter here to make sure we're always returning a fresh value
     // and not creating a closure around an old (probably `undefined`) value
     // for Clerk that'll we always return, even when Clerk on the window object
