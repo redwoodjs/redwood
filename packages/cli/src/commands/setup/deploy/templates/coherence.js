@@ -46,11 +46,9 @@ resources:
   type: database
 `
 
-
 export const COHERENCE_HEALTH_CHECK = `// coherence-health-check
 export const handler = async () => {
   return {
     statusCode: 200,
   }
 }`
-

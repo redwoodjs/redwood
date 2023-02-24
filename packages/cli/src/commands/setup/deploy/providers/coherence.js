@@ -9,9 +9,8 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { addFilesTask, printSetupNotes, updateApiURLTask } from '../helpers'
+import { printSetupNotes } from '../helpers'
 import {
-  COHERENCE_HEALTH_CHECK,
   DATABASE_YAML,
   COHERENCE_YAML,
 } from '../templates/coherence'
@@ -23,16 +22,25 @@ export const getCoherenceYamlContent = async () => {
   if (!fs.existsSync('api/db/schema.prisma')) {
     return {
       path: path.join(getPaths().base, 'coherence.yml'),
-      content: COHERENCE_YAML(""),
+      content: COHERENCE_YAML(''),
     }
   } else {
-    const detectedDatabase = config.datasources[0].activeProvider
     const schema = await getSchema('api/db/schema.prisma')
     const config = await getConfig({ datamodel: schema })
-  }
-  return {
-    path: path.join(getPaths().base, 'coherence.yml'),
-    content: COHERENCE_YAML(DATABASE_YAML()),
+    const detectedDatabase = config.datasources[0].activeProvider
+
+    if (detectedDatabase === 'postgres') {
+      return {
+        path: path.join(getPaths().base, 'coherence.yml'),
+        content: COHERENCE_YAML(DATABASE_YAML()),
+      }
+    } else {
+      printSetupNotes('Only postgres supported at this time...')
+      return {
+        path: path.join(getPaths().base, 'coherence.yml'),
+        content: COHERENCE_YAML(''),
+      }
+    }
   }
 }
 
