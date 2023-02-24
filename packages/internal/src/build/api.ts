@@ -19,7 +19,6 @@ export const buildApi = async () => {
 export const cleanApiBuild = () => {
   const rwjsPaths = getPaths()
   removeSync(rwjsPaths.api.dist)
-  removeSync(path.join(rwjsPaths.generated.prebuild, 'api'))
 }
 
 const runRwBabelTransformsPlugin = {
