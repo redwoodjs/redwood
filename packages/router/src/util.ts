@@ -325,15 +325,13 @@ export function flattenSearchParams(
 
 export interface Spec {
   name: string
-  chunkLoader: () => Promise<{ default: React.ComponentType<unknown> }>
-  // @MARK: may have default in it!
-  syncLoader?: () => { default: React.ComponentType<unknown> }
+  loader: () => Promise<{ default: React.ComponentType<unknown> }>
 }
 
 export function isSpec(
   specOrPage: Spec | React.ComponentType
 ): specOrPage is Spec {
-  return (specOrPage as Spec).chunkLoader !== undefined
+  return (specOrPage as Spec).loader !== undefined
 }
 
 /**
@@ -364,8 +362,7 @@ export function normalizePage(
   // an async module import.
   return {
     name: specOrPage.name,
-    chunkLoader: async () => ({ default: specOrPage }),
-    syncLoader: () => ({ default: specOrPage }),
+    loader: async () => ({ default: specOrPage }),
   }
 }
 

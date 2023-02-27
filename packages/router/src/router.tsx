@@ -184,6 +184,10 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   const shouldShowSplash =
     (!hasHomeRoute && location.pathname === '/') || !hasGeneratedRoutes
 
+  /**
+   * Create the namedRoutes object that let's us navigate to a route by name.
+   * e.g. routes.home() => "/"
+   */
   flatChildArray.forEach((child) => {
     if (isRoute(child)) {
       const { name, path } = child.props
@@ -214,6 +218,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     paramTypes
   )
 
+  // Render 404 page if no route matches
   if (!activeRoute) {
     if (NotFoundPage) {
       return (
