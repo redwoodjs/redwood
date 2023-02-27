@@ -36,7 +36,7 @@
     "@redwoodjs/internal": "4.0.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
-    "core-js": "3.27.2",
+    "core-js": "3.28.0",
     "deepmerge": "4.3.0",
     "dotenv-defaults": "5.0.2",
     "enquirer": "2.3.6",
@@ -51,7 +51,7 @@
     "ts-morph": "15.1.0",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.8",
-    "vscode-languageserver-types": "3.17.2",
+    "vscode-languageserver-types": "3.17.3",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
