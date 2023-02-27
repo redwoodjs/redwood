@@ -38,12 +38,9 @@ export const getCurrentUser = async (
   { token, type },
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   req?: { event: APIGatewayEvent, context: Context }
-): Promise<RedwoodUser> => {
-  // if (!decoded) {
-  //   return null
-  // }
-  if (!decoded && token) {
-    return { token }
+): Promise<RedwoodUser | null> => {
+  if (!decoded) {
+    return null
   }
 
   const { roles } = parseJWT({ decoded })

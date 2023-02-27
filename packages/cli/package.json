@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.13",
-    "@prisma/internals": "4.9.0",
+    "@prisma/internals": "4.10.1",
     "@redwoodjs/api-server": "4.0.0",
     "@redwoodjs/cli-helpers": "4.0.0",
     "@redwoodjs/internal": "4.0.0",
@@ -42,7 +42,7 @@
     "chalk": "4.1.2",
     "concurrently": "7.6.0",
     "configstore": "3.1.5",
-    "core-js": "3.27.2",
+    "core-js": "3.28.0",
     "cross-env": "7.0.3",
     "crypto-js": "4.1.1",
     "decamelize": "5.0.0",
@@ -59,20 +59,20 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "portfinder": "1.0.32",
-    "prettier": "2.8.3",
-    "prisma": "4.9.0",
+    "prettier": "2.8.4",
+    "prisma": "4.10.1",
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
-    "yargs": "17.6.2"
+    "yargs": "17.7.1"
   },
   "devDependencies": {
     "@babel/cli": "7.20.7",
     "@babel/core": "7.20.12",
     "@types/crypto-js": "4.1.1",
-    "jest": "29.4.1",
+    "jest": "29.4.2",
     "typescript": "4.9.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

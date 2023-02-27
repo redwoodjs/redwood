@@ -32,11 +32,11 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.20.13",
     "@iarna/toml": "2.2.5",
-    "@prisma/internals": "4.9.0",
+    "@prisma/internals": "4.10.1",
     "@redwoodjs/internal": "4.0.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
-    "core-js": "3.27.2",
+    "core-js": "3.28.0",
     "deepmerge": "4.3.0",
     "dotenv-defaults": "5.0.2",
     "enquirer": "2.3.6",
@@ -51,7 +51,7 @@
     "ts-morph": "15.1.0",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.8",
-    "vscode-languageserver-types": "3.17.2",
+    "vscode-languageserver-types": "3.17.3",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
@@ -60,9 +60,9 @@
     "@types/fs-extra": "11.0.1",
     "@types/lodash": "4.14.191",
     "@types/lru-cache": "5.1.1",
-    "@types/node": "16.18.11",
-    "@types/vscode": "1.74.1",
-    "jest": "29.4.1",
+    "@types/node": "16.18.12",
+    "@types/vscode": "1.75.1",
+    "jest": "29.4.2",
     "typescript": "4.9.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
