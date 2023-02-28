@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -31,7 +31,7 @@
     "@graphql-tools/merge": "8.3.18",
     "@graphql-tools/schema": "9.0.16",
     "@graphql-tools/utils": "9.2.1",
-    "@redwoodjs/api": "4.2.0",
+    "@redwoodjs/api": "4.2.1",
     "core-js": "3.28.0",
     "graphql": "16.6.0",
     "graphql-scalars": "1.20.1",
