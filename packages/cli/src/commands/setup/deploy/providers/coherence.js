@@ -92,7 +92,7 @@ export const handler = async ({ force, database }) => {
         },
       },
       addFilesTask({
-        title: "Adding helath check function...",
+        title: "Adding health check function...",
         files: additionalFiles,
         force,
       }),

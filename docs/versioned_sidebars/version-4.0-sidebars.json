@@ -156,6 +156,11 @@
             },
             {
               "type": "doc",
+              "label": "GCP or AWS via Coherence",
+              "id": "deploy/coherence"
+            },
+            {
+              "type": "doc",
               "label": "Layer0",
               "id": "deploy/layer0"
             },

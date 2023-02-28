@@ -18,4 +18,8 @@ You have to have your project hosted on GitHub, and you must have an [AWS](https
 If you want to deploy your redwood project on Coherence:
 1. If you don't already have one, create a new redwood project: `yarn create redwood-app ./test-deploy`
 3. run the command `yarn rw setup deploy coherence`. The command will inspect your `prisma` config to determine if you are using a supported database (`postgres` or `mysql` are supported on Coherence)
-4. follow the [Coherence Redwood Deploy Docs](https://docs.withcoherence.com/docs/configuration/frameworks#redwood-js) for more information
+4. follow the [Coherence Redwood Deploy Docs](https://docs.withcoherence.com/docs/configuration/frameworks#redwood-js) for more information, including if you want to set up:
+- redis server
+- database migration/seeding/snapshot loading
+- cron jobs or async workers
+- object storage using Google Cloud Storage or AWS's S3
