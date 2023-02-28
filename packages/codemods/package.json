@@ -22,10 +22,10 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.12",
-    "@babel/plugin-transform-typescript": "7.20.13",
-    "@babel/runtime-corejs3": "7.20.13",
+    "@babel/cli": "7.21.0",
+    "@babel/core": "7.21.0",
+    "@babel/plugin-transform-typescript": "7.21.0",
+    "@babel/runtime-corejs3": "7.21.0",
     "@iarna/toml": "2.2.5",
     "@vscode/ripgrep": "1.14.2",
     "@whatwg-node/fetch": "0.8.1",
