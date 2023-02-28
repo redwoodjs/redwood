@@ -83,6 +83,7 @@ const createRedwoodJSApp = ({ yarn1 }) => {
       prisma: getVersionFrmRwPkg('prisma', 'cli'),
       '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
       '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
+      'graphql-yoga': getVersionFrmRwPkg('graphql-yoga', 'graphql-server'),
     }
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
