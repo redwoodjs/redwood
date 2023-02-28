@@ -9,7 +9,7 @@ export type LoadingStateRecord = Record<
   | {
       specName: string
       state: LoadingState
-      page: React.ComponentType<unknown>
+      page?: React.ComponentType<unknown>
       location: LocationContextType
     }
   | undefined

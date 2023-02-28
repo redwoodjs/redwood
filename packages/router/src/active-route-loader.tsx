@@ -1,6 +1,11 @@
-import React, { Suspense, useEffect, useRef } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 
 import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
+import {
+  ActivePageContextProvider,
+  LoadingStateRecord,
+} from './ActivePageContext'
+import { useLocation } from './location'
 import { inIframe, Spec } from './util'
 
 interface Props {
@@ -8,13 +13,22 @@ interface Props {
   spec: Spec
   delay?: number
   params?: Record<string, string>
-  whileLoadingPage?: () => React.ReactElement | null
+  whileLoadingPage?: () => React.ReactNode | null
   children?: React.ReactNode
 }
 
-export const ActiveRouteLoader = ({ spec, params }: Props) => {
+export const ActiveRouteLoader = ({
+  path,
+  spec,
+  params,
+  whileLoadingPage,
+}: Props) => {
+  const location = useLocation()
   const announcementRef = useRef<HTMLDivElement>(null)
   const LazyRouteComponent = spec.LazyComponent
+  const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
+    [path]: { specName: '', state: 'PRE_SHOW', location },
+  })
 
   useEffect(() => {
     // Make this hook a no-op if we're rendering in an iframe.
@@ -36,12 +50,43 @@ export const ActiveRouteLoader = ({ spec, params }: Props) => {
     }
   }, [spec, params])
 
-  // @MARK we need to wrap this outside the component, may be in spec normalizer
-  // https://beta.reactjs.org/reference/react/lazy#my-lazy-components-state-gets-reset-unexpectedly
+  // @MARK keep this useffect to see if we can get the params to work
+  useEffect(() => {
+    setLoadingState((loadingState: LoadingStateRecord) => ({
+      ...loadingState,
+      [path]: {
+        specName: spec.name,
+        state: 'DONE',
+        location,
+      },
+    }))
+  }, [spec, path, location])
 
+  // @TODO whileLoadingPage is undefined, why?
   return (
-    <Suspense>
-      <LazyRouteComponent />
+    <Suspense fallback={whileLoadingPage?.()}>
+      <ActivePageContextProvider value={{ loadingState }}>
+        <LazyRouteComponent {...params} />
+        {/* @TODO adding announcer causes hydration warnings */}
+        {/* <div
+              id="redwood-announcer"
+              style={{
+                position: 'absolute',
+                top: 0,
+                width: 1,
+                height: 1,
+                padding: 0,
+                overflow: 'hidden',
+                clip: 'rect(0, 0, 0, 0)',
+                whiteSpace: 'nowrap',
+                border: 0,
+              }}
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+              ref={announcementRef}
+            ></div> */}
+      </ActivePageContextProvider>
     </Suspense>
   )
 }

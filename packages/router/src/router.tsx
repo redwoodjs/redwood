@@ -317,6 +317,8 @@ function analyzeRouterTree(
         return previousValue
       }
 
+      console.log(`👉 \n ~ file: router.tsx:358 ~ child:`, child)
+
       if (isRoute(child)) {
         if (child.props.notfound && child.props.page) {
           NotFoundPage = child.props.page
