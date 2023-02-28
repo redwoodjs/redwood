@@ -1,11 +1,6 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef } from 'react'
 
 import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
-import {
-  ActivePageContextProvider,
-  LoadingStateRecord,
-} from './ActivePageContext'
-import { useLocation } from './location'
 import { inIframe, Spec } from './util'
 
 interface Props {
@@ -18,17 +13,12 @@ interface Props {
 }
 
 export const ActiveRouteLoader = ({
-  path,
   spec,
   params,
   whileLoadingPage,
 }: Props) => {
-  const location = useLocation()
   const announcementRef = useRef<HTMLDivElement>(null)
   const LazyRouteComponent = spec.LazyComponent
-  const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
-    [path]: { specName: '', state: 'PRE_SHOW', location },
-  })
 
   useEffect(() => {
     // Make this hook a no-op if we're rendering in an iframe.
@@ -50,25 +40,13 @@ export const ActiveRouteLoader = ({
     }
   }, [spec, params])
 
-  // @MARK keep this useffect to see if we can get the params to work
-  useEffect(() => {
-    setLoadingState((loadingState: LoadingStateRecord) => ({
-      ...loadingState,
-      [path]: {
-        specName: spec.name,
-        state: 'DONE',
-        location,
-      },
-    }))
-  }, [spec, path, location])
-
   // @TODO whileLoadingPage is undefined, why?
   return (
     <Suspense fallback={whileLoadingPage?.()}>
-      <ActivePageContextProvider value={{ loadingState }}>
-        <LazyRouteComponent {...params} />
-        {/* @TODO adding announcer causes hydration warnings */}
-        {/* <div
+      <LazyRouteComponent {...params} />
+      {/* @TODO why do we need activePageContext in InternalRoute??? */}
+      {/* @TODO adding announcer causes hydration warnings */}
+      {/* <div
               id="redwood-announcer"
               style={{
                 position: 'absolute',
@@ -86,7 +64,6 @@ export const ActiveRouteLoader = ({
               aria-atomic="true"
               ref={announcementRef}
             ></div> */}
-      </ActivePageContextProvider>
     </Suspense>
   )
 }

@@ -61,6 +61,11 @@ function Route(props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
   return <InternalRoute {...props} />
 }
 
+// @MARK Why do we need this???
+// The actual route gets loaded by active-route-loader, and not render by this component
+// is this component only used to validate?
+// The matchPath, parseSearch, validatePath functions are used already in the Router, why do
+// repeat them here? (see analyzeRouterPath and Router component)
 const InternalRoute = ({
   path,
   page,
@@ -256,18 +261,20 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   // Level 2/3 (LocationAwareRouter)
   return (
     <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
-      {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
-      {!redirect && page && (
-        <ActiveRouteLoader
-          path={path}
-          spec={normalizePage(page)}
-          delay={pageLoadingDelay}
-          params={allParams}
-          whileLoadingPage={whileLoadingPage}
-        >
-          {root}
-        </ActiveRouteLoader>
-      )}
+      <ParamsProvider allParams={allParams}>
+        {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
+        {!redirect && page && (
+          <ActiveRouteLoader
+            path={path}
+            spec={normalizePage(page)}
+            delay={pageLoadingDelay}
+            params={allParams}
+            whileLoadingPage={whileLoadingPage}
+          >
+            {root}
+          </ActiveRouteLoader>
+        )}
+      </ParamsProvider>
     </RouterContextProvider>
   )
 }
@@ -316,8 +323,6 @@ function analyzeRouterTree(
       if (previousValue) {
         return previousValue
       }
-
-      console.log(`👉 \n ~ file: router.tsx:358 ~ child:`, child)
 
       if (isRoute(child)) {
         if (child.props.notfound && child.props.page) {
