@@ -35,6 +35,8 @@ export const ActiveRouteLoader = ({ spec, params }: Props) => {
     }
   }, [spec, params])
 
+  // @MARK we need to wrap this outside the component, may be in spec normalizer
+  // https://beta.reactjs.org/reference/react/lazy#my-lazy-components-state-gets-reset-unexpectedly
   const LazyPageComponent = lazy(spec.loader)
 
   return (
