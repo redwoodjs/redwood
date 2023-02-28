@@ -326,6 +326,9 @@ export function flattenSearchParams(
 export interface Spec {
   name: string
   loader: () => Promise<{ default: React.ComponentType<unknown> }>
+  LazyComponent:
+    | React.LazyExoticComponent<React.ComponentType<unknown>>
+    | React.ComponentType<unknown>
 }
 
 export function isSpec(
@@ -363,6 +366,7 @@ export function normalizePage(
   return {
     name: specOrPage.name,
     loader: async () => ({ default: specOrPage }),
+    LazyComponent: specOrPage,
   }
 }
 

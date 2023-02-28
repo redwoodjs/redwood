@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useRef } from 'react'
+import React, { Suspense, useEffect, useRef } from 'react'
 
 import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
 import { inIframe, Spec } from './util'
@@ -14,6 +14,7 @@ interface Props {
 
 export const ActiveRouteLoader = ({ spec, params }: Props) => {
   const announcementRef = useRef<HTMLDivElement>(null)
+  const LazyRouteComponent = spec.LazyComponent
 
   useEffect(() => {
     // Make this hook a no-op if we're rendering in an iframe.
@@ -37,11 +38,10 @@ export const ActiveRouteLoader = ({ spec, params }: Props) => {
 
   // @MARK we need to wrap this outside the component, may be in spec normalizer
   // https://beta.reactjs.org/reference/react/lazy#my-lazy-components-state-gets-reset-unexpectedly
-  const LazyPageComponent = lazy(spec.loader)
 
   return (
     <Suspense>
-      <LazyPageComponent />
+      <LazyRouteComponent />
     </Suspense>
   )
 }
