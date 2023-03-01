@@ -14,19 +14,43 @@ import { AuthError } from '@supabase/supabase-js'
 
 import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
-const isSignInWithPasswordCredentials = (
+/**
+ * Checks if the credentials are for signing in with email and password
+ *
+ * True if the credentials contains a password
+ *
+ * @param credentials
+ * @returns true if credentials is of type SignInWithPasswordCredentials
+ */
+export const isSignInWithPasswordCredentials = (
   credentials: SignInWithPasswordCredentials
 ): boolean => {
   return credentials.password ? true : false
 }
 
-const isSignInWithOAuthCredentials = (
+/**
+ * Checks if the credentials are for signing in with OAuth
+ *
+ * True if the credentials contains a provider
+ *
+ * @param credentials
+ * @returns true if credentials is of type SignInWithOAuthCredentials
+ */
+export const isSignInWithOAuthCredentials = (
   credentials: SignInWithOAuthCredentials
 ): boolean => {
   return credentials.provider ? true : false
 }
 
-const isSignInWithPasswordlessCredentials = (
+/**
+ * Checks if the credentials are for signing in with Passwordless
+ *
+ * True if the credentials contains an email or phone, but no password
+ *
+ * @param credentials
+ * @returns true if credentials is of type SignInWithPasswordlessCredentials
+ */
+export const isSignInWithPasswordlessCredentials = (
   credentials: SignInWithPasswordlessCredentials
 ): boolean => {
   if (typeof credentials !== 'object') {
@@ -45,7 +69,15 @@ const isSignInWithPasswordlessCredentials = (
   return false
 }
 
-const isSignInWithSSO = (credentials: SignInWithSSO): boolean => {
+/**
+ * Checks if the credentials are for signing in with SSO
+ *
+ * True if the credentials contains a providerId or domain
+ *
+ * @param credentials
+ * @returns true if credentials is of type SignInWithSSO
+ */
+export const isSignInWithSSO = (credentials: SignInWithSSO): boolean => {
   if (typeof credentials !== 'object') {
     return false
   }
@@ -63,7 +95,15 @@ const isSignInWithSSO = (credentials: SignInWithSSO): boolean => {
   return false
 }
 
-const isSignInWithIdTokenCredentials = (
+/**
+ * Checks if the credentials are for signing in with IdToken
+ *
+ * True if the credentials contains a provider and a token
+ *
+ * @param credentials
+ * @returns true if credentials is of type SignInWithIdTokenCredentials
+ */
+export const isSignInWithIdTokenCredentials = (
   credentials: SignInWithIdTokenCredentials
 ): boolean => {
   if (typeof credentials !== 'object') {
