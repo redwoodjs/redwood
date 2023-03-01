@@ -307,7 +307,7 @@ export const handler = async ({
       { rendererOptions: { collapse: false }, exitOnError: true }
     )
 
-    if (rollback) {
+    if (rollback && !force) {
       prepareForRollback(tasks)
     }
     await tasks.run()
