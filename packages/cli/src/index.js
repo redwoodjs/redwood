@@ -13,6 +13,7 @@ import { telemetryMiddleware } from '@redwoodjs/telemetry'
 import * as buildCommand from './commands/build'
 import * as checkCommand from './commands/check'
 import * as consoleCommand from './commands/console'
+import * as dashboardCommand from './commands/dashboard'
 import * as dataMigrateCommand from './commands/data-migrate'
 import * as deployCommand from './commands/deploy'
 import * as destroyCommand from './commands/destroy'
@@ -126,6 +127,7 @@ yargs(hideBin(process.argv))
   .command(buildCommand)
   .command(checkCommand)
   .command(consoleCommand)
+  .command(dashboardCommand)
   .command(dataMigrateCommand)
   .command(deployCommand)
   .command(destroyCommand)

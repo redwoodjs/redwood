@@ -60,6 +60,13 @@ const mapFieldsToService = ({
           info: unknown
         ) => {
           const tracer = opentelemetry.trace.getTracer('redwoodjs')
+          console.log(
+            name,
+            // @ts-expect-error casting
+            opentelemetry.trace.getActiveSpan()?.name,
+            // @ts-expect-error casting
+            opentelemetry.trace.getSpan(opentelemetry.context.active())?.name
+          )
           return tracer.startActiveSpan(
             `redwoodjs:graphql:resolver:${name}`,
             async (span) => {

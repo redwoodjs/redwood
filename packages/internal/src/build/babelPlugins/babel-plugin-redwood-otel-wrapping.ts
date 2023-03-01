@@ -1,4 +1,8 @@
+import * as nodejsPath from 'path'
+
 import type { PluginObj, types } from '@babel/core'
+
+import { getBaseDirFromFile } from '../../paths'
 
 // This wraps user code within opentelemetry spans to provide greater ease in trace analysis.
 
@@ -63,13 +67,25 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             }
           }
 
+          const filename = state.file.opts.filename
+          const filenameOffset = filename
+            ? getBaseDirFromFile(filename).length + 9 // 9 is the length of '/api/src/'
+            : 0
+          const apiFolder = filename
+            ? filename.substring(
+                filenameOffset,
+                filename.substring(filenameOffset).indexOf(nodejsPath.sep) +
+                  filenameOffset
+              )
+            : '?'
+
           const activeSpanBlock = t.callExpression(
             t.memberExpression(
               t.identifier('tracer'),
               t.identifier('startActiveSpan')
             ),
             [
-              t.stringLiteral(`redwoodjs:service:${originalFuncId}`),
+              t.stringLiteral(`redwoodjs:api:${apiFolder}:${originalFuncId}`),
               t.arrowFunctionExpression(
                 [t.identifier('span')],
                 t.blockStatement([
