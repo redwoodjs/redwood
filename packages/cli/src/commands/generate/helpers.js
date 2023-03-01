@@ -236,7 +236,7 @@ export const createYargsForComponentGeneration = ({
           }
         )
 
-        if (options.rollback) {
+        if (options.rollback && !options.force) {
           prepareForRollback(tasks)
         }
         await tasks.run()
