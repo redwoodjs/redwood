@@ -33,7 +33,7 @@
     "ci-info": "3.8.0",
     "core-js": "3.29.0",
     "envinfo": "7.8.1",
-    "systeminformation": "5.17.9",
+    "systeminformation": "5.17.12",
     "uuid": "9.0.0",
     "yargs": "17.7.1"
   },
