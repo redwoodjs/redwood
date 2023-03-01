@@ -5925,15 +5925,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.30.0":
-  version: 1.30.0
-  resolution: "@playwright/test@npm:1.30.0"
+"@playwright/test@npm:1.31.1":
+  version: 1.31.1
+  resolution: "@playwright/test@npm:1.31.1"
   dependencies:
     "@types/node": "*"
-    playwright-core: 1.30.0
+    fsevents: 2.3.2
+    playwright-core: 1.31.1
+  dependenciesMeta:
+    fsevents:
+      optional: true
   bin:
     playwright: cli.js
-  checksum: 4022492dacfd57d2d9a6a7ade7753660f9f47199d0a47b110b0ecf21f167fb9c5a017a9a1fdf89b97810545ac86620218cabd6f4717cd468af030c5bd9128059
+  checksum: db0a4666d0399d26ff563346749e6a8c1f5b16a16a361ec0daa3b4956ea4cd9f44e8e18a48d48492d37409fba411980b383cb2d19c2dfffa7b14b7a8b3fee983
   languageName: node
   linkType: hard
 
@@ -17997,6 +18001,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fsevents@npm:2.3.2, fsevents@npm:^2.1.2, fsevents@npm:^2.3.2, fsevents@npm:~2.3.2":
+  version: 2.3.2
+  resolution: "fsevents@npm:2.3.2"
+  dependencies:
+    node-gyp: latest
+  checksum: be78a3efa3e181cda3cf7a4637cb527bcebb0bd0ea0440105a3bb45b86f9245b307dc10a2507e8f4498a7d4ec349d1910f4d73e4d4495b16103106e07eee735b
+  conditions: os=darwin
+  languageName: node
+  linkType: hard
+
 "fsevents@npm:^1.2.7":
   version: 1.2.13
   resolution: "fsevents@npm:1.2.13"
@@ -18008,12 +18022,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@npm:^2.1.2, fsevents@npm:^2.3.2, fsevents@npm:~2.3.2":
+"fsevents@patch:fsevents@2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@^2.1.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@npm:2.3.2"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
     node-gyp: latest
-  checksum: be78a3efa3e181cda3cf7a4637cb527bcebb0bd0ea0440105a3bb45b86f9245b307dc10a2507e8f4498a7d4ec349d1910f4d73e4d4495b16103106e07eee735b
   conditions: os=darwin
   languageName: node
   linkType: hard
@@ -18024,15 +18037,6 @@ __metadata:
   dependencies:
     bindings: ^1.5.0
     nan: ^2.12.1
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"fsevents@patch:fsevents@^2.1.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
-  version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
-  dependencies:
-    node-gyp: latest
   conditions: os=darwin
   languageName: node
   linkType: hard
@@ -25687,12 +25691,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.30.0":
-  version: 1.30.0
-  resolution: "playwright-core@npm:1.30.0"
+"playwright-core@npm:1.31.1":
+  version: 1.31.1
+  resolution: "playwright-core@npm:1.31.1"
   bin:
     playwright: cli.js
-  checksum: cad74ca8ff028f4e65336323f7eec54497e344810c2f2e9c1ffaf836dcc20eb15c073aae6c5e994eaf800b75ea0f0817ffb60ff7ecaadc59229df54779d5f429
+  checksum: 9df7cb50df49a61fc7146dfd5a8d08488a295fabdedb2e522678ba2f393149f8baaaeff189fb4efbc3c1849ee375c6be3cbe5adf379e816b5efd365954e26f6c
   languageName: node
   linkType: hard
 
@@ -27973,7 +27977,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@npmcli/arborist": 6.2.3
     "@nrwl/nx-cloud": 15.0.3
-    "@playwright/test": 1.30.0
+    "@playwright/test": 1.31.1
     "@replayio/playwright": 0.3.23
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 12.1.5
