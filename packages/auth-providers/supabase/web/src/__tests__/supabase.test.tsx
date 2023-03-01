@@ -7,6 +7,7 @@ import { createAuth } from '../supabase'
 
 const user: Partial<User> = {
   id: 'unique_user_id',
+  aud: 'authenticated',
   user_metadata: {
     full_name: 'John Doe',
   },
@@ -19,6 +20,7 @@ const user: Partial<User> = {
 
 const adminUser: Partial<User> = {
   id: 'unique_user_id_admin',
+  aud: 'authenticated',
   user_metadata: {
     full_name: 'Mr Smith',
   },
@@ -32,13 +34,17 @@ const adminUser: Partial<User> = {
 let loggedInUser: User | undefined
 
 const supabaseAuth: Partial<SupabaseClient['auth']> = {
-  signIn: async ({ email }: { email: string }) => {
+  signInWithPassword: async (credentials) => {
+    const { email } = credentials as any
+
     loggedInUser =
       email === 'admin@example.com' ? (adminUser as User) : (user as User)
 
     return {
-      user: loggedInUser,
-      session: null,
+      data: {
+        user: loggedInUser as User,
+        session: null,
+      },
       error: null,
     }
   },
@@ -47,22 +53,44 @@ const supabaseAuth: Partial<SupabaseClient['auth']> = {
 
     return { error: null }
   },
-  signUp: async ({ email }: { email: string }) => {
+  signUp: async (credentials) => {
+    const { email } = credentials as any
+
     loggedInUser =
       email === 'admin@example.com' ? (adminUser as User) : (user as User)
 
     return {
-      user: loggedInUser,
-      session: null,
+      data: {
+        user: loggedInUser,
+        session: null,
+      },
       error: null,
     }
   },
-  user: () => loggedInUser || null,
-  getSessionFromUrl: async () => ({ data: null, error: null }),
-  session: () => ({
-    access_token: 'token',
-    token_type: '',
-    user: loggedInUser || null,
+  getSession: async () => ({
+    data: {
+      session: {
+        access_token: 'token',
+        refresh_token: 'token',
+        expires_in: 999,
+        token_type: 'Bearer',
+        user: loggedInUser as User,
+      },
+    },
+    error: null,
+  }),
+  refreshSession: async () => ({
+    data: {
+      user: loggedInUser as User,
+      session: {
+        access_token: 'jwt_1234567890',
+        refresh_token: 'refresh_token_1234567890',
+        expires_in: 999,
+        token_type: 'Bearer',
+        user: loggedInUser as User,
+      },
+    },
+    error: null,
   }),
 }
 

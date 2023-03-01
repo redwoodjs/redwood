@@ -165,9 +165,11 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
           credentials as SignInWithPasswordCredentials
         )
       ) {
-        return await supabaseClient.auth.signInWithPassword(
+        const r = await supabaseClient.auth.signInWithPassword(
           credentials as SignInWithPasswordCredentials
         )
+
+        return r
       }
 
       /**
@@ -311,18 +313,19 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
      * manually when checking for an error from an auth redirect (oauth, magiclink, password recovery, etc).
      */
     restoreAuthState: async () => {
-      const { error } = await supabaseClient.auth.initialize()
+      try {
+        await supabaseClient.auth.refreshSession()
 
-      // Modify URL state only if there is a session.
-      // Prevents resetting URL state (like query params) for all other cases.
-      if (!error) {
+        // Modify URL state only if there is a session.
+        // Prevents resetting URL state (like query params) for all other cases.
         window.history.replaceState(
           {},
           document.title,
           window.location.pathname
         )
+      } catch (error) {
+        console.error(error)
       }
-
       return
     },
   }
