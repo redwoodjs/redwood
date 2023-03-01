@@ -2171,15 +2171,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/filter-operation-type@npm:4.0.4":
-  version: 4.0.4
-  resolution: "@envelop/filter-operation-type@npm:4.0.4"
+"@envelop/filter-operation-type@npm:4.0.6":
+  version: 4.0.6
+  resolution: "@envelop/filter-operation-type@npm:4.0.6"
   dependencies:
-    tslib: ^2.4.0
+    tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^3.0.4
+    "@envelop/core": ^3.0.6
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 95b2a3d73cc37bb8b74c4ff0ad8b532f40320f2136fdc0aecbfebceb6e8ce7401fbcc0ef186115500695fc81f607c18498003e93a54e9e8bc0ec1ec45c884138
+  checksum: dc607b8e588a7f6c92b290c41edfcc594e0e5407310eba8f3b8599a4b249f0f3622b2951cafcde8ab2824c8d4ddb4091397546bdea7af08907af08d6126e1eae
   languageName: node
   linkType: hard
 
@@ -7050,7 +7050,7 @@ __metadata:
     "@envelop/core": 3.0.6
     "@envelop/depth-limit": 2.0.6
     "@envelop/disable-introspection": 4.0.6
-    "@envelop/filter-operation-type": 4.0.4
+    "@envelop/filter-operation-type": 4.0.6
     "@envelop/testing": 5.0.6
     "@envelop/types": 3.0.2
     "@escape.tech/graphql-armor": 1.7.1
