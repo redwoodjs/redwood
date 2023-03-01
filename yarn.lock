@@ -2159,15 +2159,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/disable-introspection@npm:4.0.4":
-  version: 4.0.4
-  resolution: "@envelop/disable-introspection@npm:4.0.4"
+"@envelop/disable-introspection@npm:4.0.6":
+  version: 4.0.6
+  resolution: "@envelop/disable-introspection@npm:4.0.6"
   dependencies:
-    tslib: ^2.4.0
+    tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^3.0.4
+    "@envelop/core": ^3.0.6
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 80e82bc380e107e1600fe96eed22d7a7c498be9c2b567ccb68a9bfee8de08f4ce223ff1c39c216ec3dfb625614d597b970f368d22ac426b763faa6ce58709162
+  checksum: e52b82ecbfdefe0ea25854eb42ad4d1c66ef4d343a4aac64b389c2227a4a35cbe187f94ee17b2ea543b5ba2df169c18df8691af64f4f31a18c4132b0b88e910d
   languageName: node
   linkType: hard
 
@@ -7049,7 +7049,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@envelop/core": 3.0.6
     "@envelop/depth-limit": 2.0.4
-    "@envelop/disable-introspection": 4.0.4
+    "@envelop/disable-introspection": 4.0.6
     "@envelop/filter-operation-type": 4.0.4
     "@envelop/testing": 5.0.6
     "@envelop/types": 3.0.2
