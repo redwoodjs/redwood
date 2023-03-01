@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.13",
+    "@babel/runtime-corejs3": "7.21.0",
     "@redwoodjs/cli-helpers": "4.0.0",
     "@simplewebauthn/browser": "6.2.2",
     "core-js": "3.28.0",
@@ -31,8 +31,8 @@
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.12",
+    "@babel/cli": "7.21.0",
+    "@babel/core": "7.21.0",
     "@simplewebauthn/typescript-types": "6.2.1",
     "@types/secure-random-password": "0.2.1",
     "@types/yargs": "17.0.22",
