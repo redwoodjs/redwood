@@ -13,7 +13,7 @@ const user: Partial<User> = {
   },
   email: 'john.doe@example.com',
   app_metadata: {
-    provider: 'netlify',
+    provider: 'supabase',
     roles: ['user'],
   },
 }
@@ -26,7 +26,7 @@ const adminUser: Partial<User> = {
   },
   email: 'admin@example.com',
   app_metadata: {
-    provider: 'netlify',
+    provider: 'supabase',
     roles: ['user', 'admin'],
   },
 }
