@@ -36,7 +36,7 @@
     "@redwoodjs/internal": "4.2.1",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
-    "core-js": "3.28.0",
+    "core-js": "3.29.0",
     "deepmerge": "4.3.0",
     "dotenv-defaults": "5.0.2",
     "enquirer": "2.3.6",
