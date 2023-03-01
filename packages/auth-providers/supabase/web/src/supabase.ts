@@ -45,8 +45,20 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
     ): Promise<AuthResponse> => {
       return supabaseClient.auth.signInWithPassword(credentials)
     },
+    /**
+     * Inside a browser context, `signOut()` will remove the logged in user from the browser session
+     * and log them out - removing all items from localstorage and then trigger a `"SIGNED_OUT"` event.
+     *
+     * For server-side management, you can revoke all refresh tokens for a user by passing a user's JWT through to `auth.api.signOut(JWT: string)`.
+     * There is no way to revoke a user's access token jwt until it expires. It is recommended to set a shorter expiry on the jwt for this reason.
+     */
     logout: async () => {
-      return await supabaseClient.auth.signOut()
+      const { error } = await supabaseClient.auth.signOut()
+      if (error) {
+        console.error(error)
+      }
+
+      return
     },
     /**
      * Creates a new user.
