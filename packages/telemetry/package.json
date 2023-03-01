@@ -30,7 +30,7 @@
     "@redwoodjs/internal": "4.0.0",
     "@redwoodjs/structure": "4.0.0",
     "@whatwg-node/fetch": "0.8.1",
-    "ci-info": "3.7.1",
+    "ci-info": "3.8.0",
     "core-js": "3.29.0",
     "envinfo": "7.8.1",
     "systeminformation": "5.17.9",

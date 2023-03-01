@@ -7248,7 +7248,7 @@ __metadata:
     "@types/uuid": 9.0.1
     "@types/yargs": 17.0.22
     "@whatwg-node/fetch": 0.8.1
-    ci-info: 3.7.1
+    ci-info: 3.8.0
     core-js: 3.29.0
     envinfo: 7.8.1
     jest: 29.4.2
@@ -13405,10 +13405,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:3.7.1, ci-info@npm:^3.2.0":
-  version: 3.7.1
-  resolution: "ci-info@npm:3.7.1"
-  checksum: bae9bbcb0c2cdaf9ecceb4680079486e6bd3634f767e7c27eba761bea01fa133ea79432245e6fe6a8f202e4661f43bb5ec42014c6b547f24393457aa53ce56e1
+"ci-info@npm:3.8.0, ci-info@npm:^3.2.0":
+  version: 3.8.0
+  resolution: "ci-info@npm:3.8.0"
+  checksum: 0d3052193b58356372b34ab40d2668c3e62f1006d5ca33726d1d3c423853b19a85508eadde7f5908496fb41448f465263bf61c1ee58b7832cb6a924537e3863a
   languageName: node
   linkType: hard
 
