@@ -16,7 +16,7 @@ export const handler = () => {
     const authFile = isTSProject ? 'auth.ts' : 'auth.js'
 
     try {
-      await execa.command('yarn up @auth0/auth0-spa-js', {
+      await execa.command('yarn up @auth0/auth0-spa-js@^2', {
         cwd: getRWPaths().web.base,
       })
     } catch {
