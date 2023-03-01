@@ -3,125 +3,30 @@ import type {
   AuthResponse,
   OAuthResponse,
   SSOResponse,
-  SignInWithOAuthCredentials,
-  SignInWithIdTokenCredentials,
-  SignInWithPasswordCredentials,
-  SignInWithPasswordlessCredentials,
-  SignInWithSSO,
+  SignInWithOAuthCredentials as SbSignInWithOauthCredentials,
+  SignInWithIdTokenCredentials as SbSignInWithIdTokenCredentials,
+  SignInWithPasswordCredentials as SbSignInWithPasswordCredentials,
+  SignInWithPasswordlessCredentials as SbSignInWithPasswordlessCredentials,
+  SignInWithSSO as SbSignInWithSSO,
   SignUpWithPasswordCredentials,
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 
 import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
-/**
- * Checks if the credentials are for signing in with email and password
- *
- * True if the credentials contains a password
- *
- * @param credentials
- * @returns true if credentials is of type SignInWithPasswordCredentials
- */
-export const isSignInWithPasswordCredentials = (
-  credentials: SignInWithPasswordCredentials
-): boolean => {
-  return credentials.password ? true : false
+type SignInWithOAuthCredentials = SbSignInWithOauthCredentials & {
+  authType: 'OAuth'
 }
-
-/**
- * Checks if the credentials are for signing in with OAuth
- *
- * True if the credentials contains a provider
- *
- * @param credentials
- * @returns true if credentials is of type SignInWithOAuthCredentials
- */
-export const isSignInWithOAuthCredentials = (
-  credentials: SignInWithOAuthCredentials
-): boolean => {
-  return credentials.provider ? true : false
+type SignInWithIdTokenCredentials = SbSignInWithIdTokenCredentials & {
+  authType: 'IdToken'
 }
-
-/**
- * Checks if the credentials are for signing in with Passwordless
- *
- * True if the credentials contains an email or phone, but no password
- *
- * @param credentials
- * @returns true if credentials is of type SignInWithPasswordlessCredentials
- */
-export const isSignInWithPasswordlessCredentials = (
-  credentials: SignInWithPasswordlessCredentials
-): boolean => {
-  if (typeof credentials !== 'object') {
-    return false
-  }
-
-  const hasEmailOrPhone =
-    // eslint-disable-next-line no-prototype-builtins
-    credentials.hasOwnProperty('email') || credentials.hasOwnProperty('phone')
-  // eslint-disable-next-line no-prototype-builtins
-  const hasPassword = credentials.hasOwnProperty('password')
-  if (hasEmailOrPhone && !hasPassword) {
-    return true
-  }
-
-  return false
+type SignInWithPasswordCredentials = SbSignInWithPasswordCredentials & {
+  authType: 'Password'
 }
-
-/**
- * Checks if the credentials are for signing in with SSO
- *
- * True if the credentials contains a providerId or domain
- *
- * @param credentials
- * @returns true if credentials is of type SignInWithSSO
- */
-export const isSignInWithSSO = (credentials: SignInWithSSO): boolean => {
-  if (typeof credentials !== 'object') {
-    return false
-  }
-
-  const hasProviderIdOrDomain =
-    // eslint-disable-next-line no-prototype-builtins
-    credentials.hasOwnProperty('providerId') ||
-    // eslint-disable-next-line no-prototype-builtins
-    credentials.hasOwnProperty('domain')
-
-  if (hasProviderIdOrDomain) {
-    return true
-  }
-
-  return false
+type SignInWithPasswordlessCredentials = SbSignInWithPasswordlessCredentials & {
+  authType: 'Passwordless'
 }
-
-/**
- * Checks if the credentials are for signing in with IdToken
- *
- * True if the credentials contains a provider and a token
- *
- * @param credentials
- * @returns true if credentials is of type SignInWithIdTokenCredentials
- */
-export const isSignInWithIdTokenCredentials = (
-  credentials: SignInWithIdTokenCredentials
-): boolean => {
-  if (typeof credentials !== 'object') {
-    return false
-  }
-
-  const hasProviderAndToken =
-    // eslint-disable-next-line no-prototype-builtins
-    credentials.hasOwnProperty('provider') &&
-    // eslint-disable-next-line no-prototype-builtins
-    credentials.hasOwnProperty('token')
-
-  if (hasProviderAndToken) {
-    return true
-  }
-
-  return false
-}
+type SignInWithSSO = SbSignInWithSSO & { authType: 'SSO' }
 
 export function createAuth(
   supabaseClient: SupabaseClient,
@@ -160,27 +65,15 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        * email/phone and password combination is wrong or that the account can only
        * be accessed via social login.
        */
-      if (
-        isSignInWithPasswordCredentials(
-          credentials as SignInWithPasswordCredentials
-        )
-      ) {
-        const r = await supabaseClient.auth.signInWithPassword(
-          credentials as SignInWithPasswordCredentials
-        )
-
-        return r
+      if (credentials.authType === 'Password') {
+        return await supabaseClient.auth.signInWithPassword(credentials)
       }
 
       /**
        * Log in an existing user via a third-party provider.
        */
-      if (
-        isSignInWithOAuthCredentials(credentials as SignInWithOAuthCredentials)
-      ) {
-        return await supabaseClient.auth.signInWithOAuth(
-          credentials as SignInWithOAuthCredentials
-        )
+      if (credentials.authType === 'OAuth') {
+        return await supabaseClient.auth.signInWithOAuth(credentials)
       }
 
       /**
@@ -194,14 +87,8 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        * between the cases where the account does not exist or, that the account
        * can only be accessed via social login.
        */
-      if (
-        isSignInWithPasswordlessCredentials(
-          credentials as SignInWithPasswordlessCredentials
-        )
-      ) {
-        return await supabaseClient.auth.signInWithOtp(
-          credentials as SignInWithPasswordlessCredentials
-        )
+      if (credentials.authType === 'Passwordless') {
+        return await supabaseClient.auth.signInWithOtp(credentials)
       }
 
       /**
@@ -223,10 +110,8 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        *
        * @experimental
        */
-      if (isSignInWithSSO(credentials as SignInWithSSO)) {
-        return await supabaseClient.auth.signInWithSSO(
-          credentials as SignInWithSSO
-        )
+      if (credentials.authType === 'SSO') {
+        return await supabaseClient.auth.signInWithSSO(credentials)
       }
 
       /**
@@ -235,14 +120,8 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        *
        * @experimental
        */
-      if (
-        isSignInWithIdTokenCredentials(
-          credentials as SignInWithIdTokenCredentials
-        )
-      ) {
-        return await supabaseClient.auth.signInWithIdToken(
-          credentials as SignInWithIdTokenCredentials
-        )
+      if (credentials.authType === 'IdToken') {
+        return await supabaseClient.auth.signInWithIdToken(credentials)
       }
 
       /* Unsupported login */

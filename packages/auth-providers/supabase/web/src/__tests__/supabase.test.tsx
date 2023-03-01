@@ -165,6 +165,7 @@ describe('Supabase', () => {
 
     await act(async () => {
       authRef.current.logIn({
+        authType: 'Password',
         email: 'john.doe@example.com',
         password: 'ThereIsNoSpoon',
       })
@@ -178,6 +179,7 @@ describe('Supabase', () => {
 
     await act(async () => {
       authRef.current.logIn({
+        authType: 'Password',
         email: 'john.doe@example.com',
         password: 'ThereIsNoSpoon',
       })
@@ -199,6 +201,7 @@ describe('Supabase', () => {
 
     await act(async () => {
       authRef.current.logIn({
+        authType: 'Password',
         email: 'john.doe@example.com',
         password: 'ThereIsNoSpoon',
       })
@@ -215,6 +218,7 @@ describe('Supabase', () => {
     await act(async () => {
       loggedInUser = adminUser as User
       authRef.current.logIn({
+        authType: 'Password',
         email: 'admin@example.com',
         password: 'RedPill',
       })
@@ -253,6 +257,7 @@ describe('Supabase', () => {
 
     await act(async () => {
       authRef.current.logIn({
+        authType: 'Password',
         email: 'john.doe@example.com',
         password: 'ThereIsNoSpoon',
       })
@@ -264,6 +269,7 @@ describe('Supabase', () => {
     await act(async () => {
       loggedInUser = adminUser as User
       authRef.current.logIn({
+        authType: 'Password',
         email: 'admin@example.com',
         password: 'RedPill',
       })
@@ -286,6 +292,7 @@ describe('Supabase', () => {
     // Need to be logged in, otherwise getCurrentUser won't be invoked
     await act(async () => {
       authRef.current.logIn({
+        authType: 'Password',
         email: 'john.doe@example.com',
         password: 'ThereIsNoSpoon',
       })
