@@ -11,8 +11,78 @@ import type {
   SignUpWithPasswordCredentials,
   VerifyOtpParams,
 } from '@supabase/supabase-js'
+import { AuthError } from '@supabase/supabase-js'
 
 import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+
+const isSignInWithPasswordCredentials = (
+  credentials: SignInWithPasswordCredentials
+): boolean => {
+  return credentials.password ? true : false
+}
+
+const isSignInWithOAuthCredentials = (
+  credentials: SignInWithOAuthCredentials
+): boolean => {
+  return credentials.provider ? true : false
+}
+
+const isSignInWithPasswordlessCredentials = (
+  credentials: SignInWithPasswordlessCredentials
+): boolean => {
+  if (typeof credentials !== 'object') {
+    return false
+  }
+
+  const hasEmailOrPhone =
+    // eslint-disable-next-line no-prototype-builtins
+    credentials.hasOwnProperty('email') || credentials.hasOwnProperty('phone')
+  // eslint-disable-next-line no-prototype-builtins
+  const hasPassword = credentials.hasOwnProperty('password')
+  if (hasEmailOrPhone && !hasPassword) {
+    return true
+  }
+
+  return false
+}
+
+const isSignInWithSSO = (credentials: SignInWithSSO): boolean => {
+  if (typeof credentials !== 'object') {
+    return false
+  }
+
+  const hasProviderIdOrDomain =
+    // eslint-disable-next-line no-prototype-builtins
+    credentials.hasOwnProperty('providerId') ||
+    // eslint-disable-next-line no-prototype-builtins
+    credentials.hasOwnProperty('domain')
+
+  if (hasProviderIdOrDomain) {
+    return true
+  }
+
+  return false
+}
+
+const isSignInWithIdTokenCredentials = (
+  credentials: SignInWithIdTokenCredentials
+): boolean => {
+  if (typeof credentials !== 'object') {
+    return false
+  }
+
+  const hasProviderAndToken =
+    // eslint-disable-next-line no-prototype-builtins
+    credentials.hasOwnProperty('provider') &&
+    // eslint-disable-next-line no-prototype-builtins
+    credentials.hasOwnProperty('token')
+
+  if (hasProviderAndToken) {
+    return true
+  }
+
+  return false
+}
 
 export function createAuth(
   supabaseClient: SupabaseClient,
@@ -32,18 +102,113 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
   return {
     type: 'supabase',
     client: supabaseClient,
-    /**
-     * Log in an existing user with an email and password or phone and password.
-     *
-     * Be aware that you may get back an error message that will not distinguish
-     * between the cases where the account does not exist or that the
-     * email/phone and password combination is wrong or that the account can only
-     * be accessed via social login.
+    /*
+     * All Supabase Sign In
      */
     login: async (
-      credentials: SignInWithPasswordCredentials
-    ): Promise<AuthResponse> => {
-      return supabaseClient.auth.signInWithPassword(credentials)
+      credentials:
+        | SignInWithPasswordCredentials
+        | SignInWithOAuthCredentials
+        | SignInWithIdTokenCredentials
+        | SignInWithPasswordlessCredentials
+        | SignInWithSSO
+    ): Promise<AuthResponse | OAuthResponse | SSOResponse> => {
+      /**
+       * Log in an existing user with an email and password or phone and password.
+       *
+       * Be aware that you may get back an error message that will not distinguish
+       * between the cases where the account does not exist or that the
+       * email/phone and password combination is wrong or that the account can only
+       * be accessed via social login.
+       */
+      if (
+        isSignInWithPasswordCredentials(
+          credentials as SignInWithPasswordCredentials
+        )
+      ) {
+        return await supabaseClient.auth.signInWithPassword(
+          credentials as SignInWithPasswordCredentials
+        )
+      }
+
+      /**
+       * Log in an existing user via a third-party provider.
+       */
+      if (
+        isSignInWithOAuthCredentials(credentials as SignInWithOAuthCredentials)
+      ) {
+        return await supabaseClient.auth.signInWithOAuth(
+          credentials as SignInWithOAuthCredentials
+        )
+      }
+
+      /**
+       * Log in a user using magiclink or a one-time password (OTP).
+       *
+       * If the `{{ .ConfirmationURL }}` variable is specified in the email template, a magiclink will be sent.
+       * If the `{{ .Token }}` variable is specified in the email template, an OTP will be sent.
+       * If you're using phone sign-ins, only an OTP will be sent. You won't be able to send a magiclink for phone sign-ins.
+       *
+       * Be aware that you may get back an error message that will not distinguish
+       * between the cases where the account does not exist or, that the account
+       * can only be accessed via social login.
+       */
+      if (
+        isSignInWithPasswordlessCredentials(
+          credentials as SignInWithPasswordlessCredentials
+        )
+      ) {
+        return await supabaseClient.auth.signInWithOtp(
+          credentials as SignInWithPasswordlessCredentials
+        )
+      }
+
+      /**
+       * Attempts a single-sign on using an enterprise Identity Provider. A
+       * successful SSO attempt will redirect the current page to the identity
+       * provider authorization page. The redirect URL is implementation and SSO
+       * protocol specific.
+       *
+       * You can use it by providing a SSO domain. Typically you can extract this
+       * domain by asking users for their email address. If this domain is
+       * registered on the Auth instance the redirect will use that organization's
+       * currently active SSO Identity Provider for the login.
+       *
+       * If you have built an organization-specific login page, you can use the
+       * organization's SSO Identity Provider UUID directly instead.
+       *
+       * This API is experimental and availability is conditional on correct
+       * settings on the Auth service.
+       *
+       * @experimental
+       */
+      if (isSignInWithSSO(credentials as SignInWithSSO)) {
+        return await supabaseClient.auth.signInWithSSO(
+          credentials as SignInWithSSO
+        )
+      }
+
+      /**
+       * Allows signing in with an ID token issued by certain supported providers.
+       * The ID token is verified for validity and a new session is established.
+       *
+       * @experimental
+       */
+      if (
+        isSignInWithIdTokenCredentials(
+          credentials as SignInWithIdTokenCredentials
+        )
+      ) {
+        return await supabaseClient.auth.signInWithIdToken(
+          credentials as SignInWithIdTokenCredentials
+        )
+      }
+
+      /* Unsupported login */
+      return {
+        data: { user: null, session: null },
+        error: new AuthError('Invalid Login Credentials'),
+      }
     },
     /**
      * Inside a browser context, `signOut()` will remove the logged in user from the browser session
@@ -73,63 +238,6 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
       credentials: SignUpWithPasswordCredentials
     ): Promise<AuthResponse> => {
       return await supabaseClient.auth.signUp(credentials)
-    },
-    /**
-     * Log in an existing user via a third-party provider.
-     */
-    signInWithOAuth: async (
-      credentials: SignInWithOAuthCredentials
-    ): Promise<OAuthResponse> => {
-      return await supabaseClient.auth.signInWithOAuth(credentials)
-    },
-    /**
-     * Allows signing in with an ID token issued by certain supported providers.
-     * The ID token is verified for validity and a new session is established.
-     *
-     * @experimental
-     */
-    signInWithIdToken: async (
-      credentials: SignInWithIdTokenCredentials
-    ): Promise<AuthResponse> => {
-      return await supabaseClient.auth.signInWithIdToken(credentials)
-    },
-    /**
-     * Log in a user using magiclink or a one-time password (OTP).
-     *
-     * If the `{{ .ConfirmationURL }}` variable is specified in the email template, a magiclink will be sent.
-     * If the `{{ .Token }}` variable is specified in the email template, an OTP will be sent.
-     * If you're using phone sign-ins, only an OTP will be sent. You won't be able to send a magiclink for phone sign-ins.
-     *
-     * Be aware that you may get back an error message that will not distinguish
-     * between the cases where the account does not exist or, that the account
-     * can only be accessed via social login.
-     */
-    signInWithOtp: async (
-      credentials: SignInWithPasswordlessCredentials
-    ): Promise<AuthResponse> => {
-      return await supabaseClient.auth.signInWithOtp(credentials)
-    },
-    /**
-     * Attempts a single-sign on using an enterprise Identity Provider. A
-     * successful SSO attempt will redirect the current page to the identity
-     * provider authorization page. The redirect URL is implementation and SSO
-     * protocol specific.
-     *
-     * You can use it by providing a SSO domain. Typically you can extract this
-     * domain by asking users for their email address. If this domain is
-     * registered on the Auth instance the redirect will use that organization's
-     * currently active SSO Identity Provider for the login.
-     *
-     * If you have built an organization-specific login page, you can use the
-     * organization's SSO Identity Provider UUID directly instead.
-     *
-     * This API is experimental and availability is conditional on correct
-     * settings on the Auth service.
-     *
-     * @experimental
-     */
-    signInWithSSO: async (params: SignInWithSSO): Promise<SSOResponse> => {
-      return await supabaseClient.auth.signInWithSSO(params)
     },
     /**
      * Log in a user given a User supplied OTP received via mobile.
