@@ -2056,12 +2056,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.28.3, @clerk/types@npm:^3.28.3":
-  version: 3.28.3
-  resolution: "@clerk/types@npm:3.28.3"
+"@clerk/types@npm:3.28.4, @clerk/types@npm:^3.28.3":
+  version: 3.28.4
+  resolution: "@clerk/types@npm:3.28.4"
   dependencies:
     csstype: 3.1.1
-  checksum: dad7dc150681dac5b3fa5ee6c83ef153b4d09a6f8496004d062d29711eeca9670179427b38569741389b58d9f3aa0bd22e1b6733c243f626d84af3a29b6830d1
+  checksum: a54fa4098beaed2905372a3f1f1d3d087c4eb7ce68ff5460e131d5ac11ad6741cdc0759fb9923341b2d90dad801d93b6be6d8d1d5aa786fb0e738c8d09ff1089
   languageName: node
   linkType: hard
 
@@ -6497,7 +6497,7 @@ __metadata:
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@clerk/clerk-react": 4.11.6
-    "@clerk/types": 3.28.3
+    "@clerk/types": 3.28.4
     "@redwoodjs/auth": 4.2.2
     "@testing-library/react-hooks": 8.0.1
     "@types/react": 17.0.53
