@@ -22,8 +22,8 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/core": "7.20.12",
-    "@babel/runtime-corejs3": "7.20.13",
+    "@babel/core": "7.21.0",
+    "@babel/runtime-corejs3": "7.21.0",
     "@redwoodjs/internal": "4.0.0",
     "@redwoodjs/telemetry": "4.0.0",
     "chalk": "4.1.2",
@@ -37,7 +37,7 @@
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.20.7",
+    "@babel/cli": "7.21.0",
     "@types/lodash.memoize": "4.1.7",
     "@types/pascalcase": "1.0.1",
     "@types/yargs": "17.0.22",
