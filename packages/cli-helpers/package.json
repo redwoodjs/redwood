@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli-helpers",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,8 +24,8 @@
   "dependencies": {
     "@babel/core": "7.21.0",
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/internal": "4.2.1",
-    "@redwoodjs/telemetry": "4.2.1",
+    "@redwoodjs/internal": "4.2.2",
+    "@redwoodjs/telemetry": "4.2.2",
     "chalk": "4.1.2",
     "core-js": "3.29.0",
     "execa": "5.1.1",
