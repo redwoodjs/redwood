@@ -44,9 +44,9 @@ if (!CORE_JS_VERSION) {
   )
 }
 
-export const RUNTIME_CORE_JS_VERSION =
-  pkgJson.dependencies['@babel/runtime-corejs3']
-if (!RUNTIME_CORE_JS_VERSION) {
+export const RUNTIME_VERSION = pkgJson.dependencies['@babel/runtime']
+
+if (!RUNTIME_VERSION) {
   throw new Error(
     'RedwoodJS Project Babel: Could not determine core-js runtime version'
   )

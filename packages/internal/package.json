@@ -31,6 +31,7 @@
     "@babel/parser": "7.21.2",
     "@babel/plugin-transform-typescript": "7.21.0",
     "@babel/register": "7.21.0",
+    "@babel/runtime": "7.21.0",
     "@babel/runtime-corejs3": "7.21.0",
     "@babel/traverse": "7.21.2",
     "@graphql-codegen/add": "4.0.1",
