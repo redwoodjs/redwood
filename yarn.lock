@@ -2136,17 +2136,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:3.0.4":
-  version: 3.0.4
-  resolution: "@envelop/core@npm:3.0.4"
-  dependencies:
-    "@envelop/types": 3.0.1
-    tslib: 2.4.0
-  checksum: 607c0aa5ebc45c1713432bf8379a89f46f82785c9894c6c322cb8c2b375a9191892087bf07550f682ba2012e76c9f2225d04f18aaa87ef5eb2a970817fd855d6
-  languageName: node
-  linkType: hard
-
-"@envelop/core@npm:^3.0.0, @envelop/core@npm:^3.0.4":
+"@envelop/core@npm:3.0.6, @envelop/core@npm:^3.0.0, @envelop/core@npm:^3.0.4":
   version: 3.0.6
   resolution: "@envelop/core@npm:3.0.6"
   dependencies:
@@ -2204,15 +2194,6 @@ __metadata:
     "@envelop/types": ^3.0.2
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: 7e7985c7043f17e56474c0b9bdcf493c51de6a35cca5bb9620b6b53ac83ddf683e5e2bd930c55cbbdf2b510e7f7dd9b52ee9f8acabd999bcad2675626be2369a
-  languageName: node
-  linkType: hard
-
-"@envelop/types@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@envelop/types@npm:3.0.1"
-  dependencies:
-    tslib: ^2.4.0
-  checksum: f715d6d565c31cfe221c82e678d23b973dd3321a7ed1f5ab1fad1db332acd7700075e91abe77880020a4b4ec570b30abd3e36c1a15dcc989aff30c605b49f3ec
   languageName: node
   linkType: hard
 
@@ -7078,7 +7059,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
-    "@envelop/core": 3.0.4
+    "@envelop/core": 3.0.6
     "@envelop/depth-limit": 2.0.4
     "@envelop/disable-introspection": 4.0.4
     "@envelop/filter-operation-type": 4.0.4
@@ -30312,13 +30293,6 @@ __metadata:
   peerDependencies:
     "@tsd/typescript": ^3.8.3 || ^4.0.7
   checksum: f8d66238d50c764c7afb93a355e8c437b853d0a66ab6dedf55c08b63614619d8a94aaab19c4c4b0a183b76c1bad088fccdc812778f574e02fd62206cc4b8ec30
-  languageName: node
-  linkType: hard
-
-"tslib@npm:2.4.0":
-  version: 2.4.0
-  resolution: "tslib@npm:2.4.0"
-  checksum: eb19bda3ae545b03caea6a244b34593468e23d53b26bf8649fbc20fce43e9b21a71127fd6d2b9662c0fe48ee6ff668ead48fd00d3b88b2b716b1c12edae25b5d
   languageName: node
   linkType: hard
 

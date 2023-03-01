@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@envelop/core": "3.0.4",
+    "@envelop/core": "3.0.6",
     "@envelop/depth-limit": "2.0.4",
     "@envelop/disable-introspection": "4.0.4",
     "@envelop/filter-operation-type": "4.0.4",
