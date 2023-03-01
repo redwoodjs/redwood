@@ -9,7 +9,6 @@ import type {
   SignInWithPasswordlessCredentials,
   SignInWithSSO,
   SignUpWithPasswordCredentials,
-  VerifyOtpParams,
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 
@@ -238,12 +237,6 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
       credentials: SignUpWithPasswordCredentials
     ): Promise<AuthResponse> => {
       return await supabaseClient.auth.signUp(credentials)
-    },
-    /**
-     * Log in a user given a User supplied OTP received via mobile.
-     */
-    verifyOtp: async (params: VerifyOtpParams): Promise<AuthResponse> => {
-      return await supabaseClient.auth.verifyOtp(params)
     },
     getToken: async (): Promise<string | null> => {
       const { data, error } = await supabaseClient.auth.getSession()
