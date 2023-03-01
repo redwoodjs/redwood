@@ -375,7 +375,7 @@ export const handler = async (yargs) => {
   const t = tasks({ ...yargs })
 
   try {
-    if (yargs.rollback) {
+    if (yargs.rollback && !yargs.force) {
       prepareForRollback(t)
     }
     await t.run()
