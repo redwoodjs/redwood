@@ -29,7 +29,7 @@
     "@iarna/toml": "2.2.5",
     "@vscode/ripgrep": "1.14.2",
     "@whatwg-node/fetch": "0.8.1",
-    "core-js": "3.28.0",
+    "core-js": "3.29.0",
     "deepmerge": "4.3.0",
     "execa": "5.1.1",
     "fast-glob": "3.2.12",
