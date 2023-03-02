@@ -2014,18 +2014,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.11.6":
-  version: 4.11.6
-  resolution: "@clerk/clerk-react@npm:4.11.6"
+"@clerk/clerk-react@npm:4.12.0":
+  version: 4.12.0
+  resolution: "@clerk/clerk-react@npm:4.12.0"
   dependencies:
-    "@clerk/shared": ^0.12.1
-    "@clerk/types": ^3.28.3
+    "@clerk/shared": ^0.12.2
+    "@clerk/types": ^3.28.4
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: d5baff817965c2ad21e54055d5848786252df78dd4c7129508ede97a82e9824620a7833579e7e59ced1dedd3cdab5e04603384a9025dbd330ed3b0b82e1b060c
+  checksum: 6b585efaf9f7c0af51a0ac67343c2a9a975e0953832b9b6b58e4e71aff93156a7a03e8c292b48bff8f121e35f22ea93ba3d764a8e0e8c5ce29c801c135ba49aa
   languageName: node
   linkType: hard
 
@@ -2046,17 +2046,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.12.1":
-  version: 0.12.1
-  resolution: "@clerk/shared@npm:0.12.1"
+"@clerk/shared@npm:^0.12.2":
+  version: 0.12.2
+  resolution: "@clerk/shared@npm:0.12.2"
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 093a936873be5d6700ee577d44b8c7234a534b042364d57c81053858d176a2fa482dfd2f3ddbe047cef49100b27056d9ab0c6c8a88cd1e3058c45bf77f72edd8
+  checksum: 064934b2e77c61833eb499a1707bf9b6ff216c0a4935a78d4e6998629484db516fd12525ff545703cbdc1705dae6995ad75d78b1ac133e2ac8b5b22462127298
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.28.4, @clerk/types@npm:^3.28.3, @clerk/types@npm:^3.28.4":
+"@clerk/types@npm:3.28.4, @clerk/types@npm:^3.28.4":
   version: 3.28.4
   resolution: "@clerk/types@npm:3.28.4"
   dependencies:
@@ -6496,7 +6496,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
-    "@clerk/clerk-react": 4.11.6
+    "@clerk/clerk-react": 4.12.0
     "@clerk/types": 3.28.4
     "@redwoodjs/auth": 4.2.2
     "@testing-library/react-hooks": 8.0.1
@@ -6506,7 +6506,7 @@ __metadata:
     react: 17.0.2
     typescript: 4.9.5
   peerDependencies:
-    "@clerk/clerk-react": 4.11.6
+    "@clerk/clerk-react": 4.12.0
   languageName: unknown
   linkType: soft
 
