@@ -7125,7 +7125,7 @@ __metadata:
     "@types/fs-extra": 11.0.1
     "@types/rimraf": 3.0.2
     babel-plugin-graphql-tag: 3.3.0
-    babel-plugin-polyfill-corejs3: 0.6.0
+    babel-plugin-polyfill-corejs3: 0.7.1
     babel-plugin-tester: 11.0.4
     chalk: 4.1.2
     core-js: 3.29.0
@@ -12098,15 +12098,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs3@npm:0.6.0, babel-plugin-polyfill-corejs3@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "babel-plugin-polyfill-corejs3@npm:0.6.0"
+"babel-plugin-polyfill-corejs3@npm:0.7.1":
+  version: 0.7.1
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.7.1"
   dependencies:
     "@babel/helper-define-polyfill-provider": ^0.3.3
-    core-js-compat: ^3.25.1
+    core-js-compat: ^3.29.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 58f7d16c1fbc5e4a68cc58126039cb997edc9b9d29adf1bc4124eb6a12ec31eb9e1da8df769b7219714748af7916cfbb194b2f15bd55571b3b43cdcd7839fe8f
+  checksum: ecf010cbed20b3ac6cc3256fe9b9a470458b8091c721a0cc410eac527f5b83a1a7876739c1b2ef917a0de0b9d17398db85aef3059ffb0d059382264ae8439e0a
   languageName: node
   linkType: hard
 
@@ -12119,6 +12119,18 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: d31c7f0c210994593e2cc57d202ada8539cbbff1a112f52aa3607c8c9ba23b64e03fa52fbdc243dccbce8b8052f29f8d541bc4151e3055738cb03647708c0f42
+  languageName: node
+  linkType: hard
+
+"babel-plugin-polyfill-corejs3@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.6.0"
+  dependencies:
+    "@babel/helper-define-polyfill-provider": ^0.3.3
+    core-js-compat: ^3.25.1
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 58f7d16c1fbc5e4a68cc58126039cb997edc9b9d29adf1bc4124eb6a12ec31eb9e1da8df769b7219714748af7916cfbb194b2f15bd55571b3b43cdcd7839fe8f
   languageName: node
   linkType: hard
 
@@ -12674,17 +12686,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.12.0, browserslist@npm:^4.14.5, browserslist@npm:^4.16.6, browserslist@npm:^4.21.3, browserslist@npm:^4.21.4":
-  version: 4.21.4
-  resolution: "browserslist@npm:4.21.4"
+"browserslist@npm:^4.0.0, browserslist@npm:^4.12.0, browserslist@npm:^4.14.5, browserslist@npm:^4.16.6, browserslist@npm:^4.21.3, browserslist@npm:^4.21.4, browserslist@npm:^4.21.5":
+  version: 4.21.5
+  resolution: "browserslist@npm:4.21.5"
   dependencies:
-    caniuse-lite: ^1.0.30001400
-    electron-to-chromium: ^1.4.251
-    node-releases: ^2.0.6
-    update-browserslist-db: ^1.0.9
+    caniuse-lite: ^1.0.30001449
+    electron-to-chromium: ^1.4.284
+    node-releases: ^2.0.8
+    update-browserslist-db: ^1.0.10
   bin:
     browserslist: cli.js
-  checksum: bbc5fe2b4280a590cb40b110cd282f18f4542d75ddb559dfe0a174fda0263d2a7dd5b1634d0f795d617d69cb5f9716479c4a90d9a954a7ef16bc0a2878965af8
+  checksum: 903040d2c45b733e1177c288b4f146ff21d45e8a44ccc87d1d7fc2f6a8d021c7ee54b514fd7722529c282381969382a54bd2ab4263f5b6c8981a856b457ea162
   languageName: node
   linkType: hard
 
@@ -13090,10 +13102,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001400":
-  version: 1.0.30001446
-  resolution: "caniuse-lite@npm:1.0.30001446"
-  checksum: 07af2c24ecf86bda64c8483ccc5b1f73b570ea262af22e795092d8fb4c0968214a3ba6897666be944b8380c8c83d992a58d7613d2f91d9e17e3e8d3eb51807b8
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001449":
+  version: 1.0.30001458
+  resolution: "caniuse-lite@npm:1.0.30001458"
+  checksum: 92ddb0819736d5d2e0efcbb0a729c172ddebc409c4fc39f2a8a8b5e0083fed795cf3efbaec299215298979d4f88da94e6be0ad2f1988cb25ec9be0772c29d0af
   languageName: node
   linkType: hard
 
@@ -14261,12 +14273,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.25.1, core-js-compat@npm:^3.8.1":
-  version: 3.27.2
-  resolution: "core-js-compat@npm:3.27.2"
+"core-js-compat@npm:^3.25.1, core-js-compat@npm:^3.29.0, core-js-compat@npm:^3.8.1":
+  version: 3.29.0
+  resolution: "core-js-compat@npm:3.29.0"
   dependencies:
-    browserslist: ^4.21.4
-  checksum: 1bb3b63ae46420b55d78171750f58f73f1a0df8312d3be37111588f068f06a2c18f397737f5603c80fa78bd05f224c93fb60459ff05d80f7dbeeb8a97fbdf457
+    browserslist: ^4.21.5
+  checksum: 2f596222b50b30b3051fbe412bf152c355580fa73aa1d5d2263b6de98703d4e2154eac95fdd0fd38877a4b45d00698dffa8da37694c0c33f4541d4f81e68801b
   languageName: node
   linkType: hard
 
@@ -15802,10 +15814,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:^1.4.251":
-  version: 1.4.284
-  resolution: "electron-to-chromium@npm:1.4.284"
-  checksum: 33a7509755efbc0e13e81cdf0486ed37ea354857213b92a987a81e229083c1b2ee5f663c1103db9e5ec142a611e0daeeee02f757f7184833866f8aecb7046c2b
+"electron-to-chromium@npm:^1.4.284":
+  version: 1.4.315
+  resolution: "electron-to-chromium@npm:1.4.315"
+  checksum: d11d74cc06ab5bf2baa2d39f3feaba888693c7a703ee93121a3cacaef9e66db33ab35daa262a7d650682db8d19ef8d28552ef24369a2dd019904b900c44735c2
   languageName: node
   linkType: hard
 
@@ -23856,10 +23868,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-releases@npm:^2.0.6":
-  version: 2.0.8
-  resolution: "node-releases@npm:2.0.8"
-  checksum: 4b58f44de428b630fae7e8bcd7bf8e4030dab628122acff3ce2df6bb480c00b97319bb9408e3be23b258329350c31e1cb27a232ba548c35f3bce2d647717be58
+"node-releases@npm:^2.0.8":
+  version: 2.0.10
+  resolution: "node-releases@npm:2.0.10"
+  checksum: 90947653e8e3d85bda4bcbf28d019693ccfb5d5947838ca64e91208b51d7bfc13ba930b8216389a4faffbad8145b2c616bf1f7a09c97a1a9ac57fd6ef6d01c5c
   languageName: node
   linkType: hard
 
@@ -30893,7 +30905,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"update-browserslist-db@npm:^1.0.9":
+"update-browserslist-db@npm:^1.0.10":
   version: 1.0.10
   resolution: "update-browserslist-db@npm:1.0.10"
   dependencies:
