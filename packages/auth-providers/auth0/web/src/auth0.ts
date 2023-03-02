@@ -46,8 +46,10 @@ function createAuthImplementation(auth0Client: Auth0Client) {
     signup: async (options?: RedirectLoginOptions) =>
       auth0Client.loginWithRedirect({
         ...options,
-        screen_hint: 'signup',
-        prompt: 'login',
+        authorizationParams: {
+          screen_hint: 'signup',
+          prompt: 'login',
+        },
       }),
     getToken: () => auth0Client.getTokenSilently(),
     getUserMetadata: async () => {
