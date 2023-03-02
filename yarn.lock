@@ -6689,7 +6689,7 @@ __metadata:
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 13.4.0
+    "@testing-library/react": 14.0.0
     core-js: 3.29.0
     jest: 29.4.3
     msw: 1.1.0
@@ -6927,7 +6927,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@testing-library/dom": 8.20.0
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 13.4.0
+    "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
     "@types/react": 18.0.28
@@ -7185,7 +7185,7 @@ __metadata:
     "@storybook/manager-webpack5": 6.5.16
     "@storybook/react": 6.5.16
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 13.4.0
+    "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
     "@types/aws-lambda": 8.10.111
     "@types/babel-core": 6.25.7
@@ -7239,7 +7239,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 13.4.0
+    "@testing-library/react": 14.0.0
     "@types/prop-types": 15.7.5
     "@types/react": 18.0.28
     "@types/react-dom": 18.0.11
@@ -8702,7 +8702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.20.0, @testing-library/dom@npm:^8.11.1, @testing-library/dom@npm:^8.5.0":
+"@testing-library/dom@npm:8.20.0, @testing-library/dom@npm:^8.11.1":
   version: 8.20.0
   resolution: "@testing-library/dom@npm:8.20.0"
   dependencies:
@@ -8715,6 +8715,22 @@ __metadata:
     lz-string: ^1.4.4
     pretty-format: ^27.0.2
   checksum: 454c71f65708d1504256ae055f060adf8ed9eadcc7ddbf6d07a528045beceb842783c1253871759f5c137eca58e5e32700dc64b130cbb37e10e7a52ab08d7b44
+  languageName: node
+  linkType: hard
+
+"@testing-library/dom@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@testing-library/dom@npm:9.0.0"
+  dependencies:
+    "@babel/code-frame": ^7.10.4
+    "@babel/runtime": ^7.12.5
+    "@types/aria-query": ^5.0.1
+    aria-query: ^5.0.0
+    chalk: ^4.1.0
+    dom-accessibility-api: ^0.5.9
+    lz-string: ^1.4.4
+    pretty-format: ^27.0.2
+  checksum: 3dfb7997acf573af7b20be0e5acb594bd9371558242aa7c270ab48af9759a14227aea9663beae1b7e26493c695432ba4e6d63ed292a10fc7b2ce49c8ac7ba022
   languageName: node
   linkType: hard
 
@@ -8735,17 +8751,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:13.4.0":
-  version: 13.4.0
-  resolution: "@testing-library/react@npm:13.4.0"
+"@testing-library/react@npm:14.0.0":
+  version: 14.0.0
+  resolution: "@testing-library/react@npm:14.0.0"
   dependencies:
     "@babel/runtime": ^7.12.5
-    "@testing-library/dom": ^8.5.0
+    "@testing-library/dom": ^9.0.0
     "@types/react-dom": ^18.0.0
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 371bf982dd0deb27da004f368b06904353eac0f23f9c08ff0f24443c3f51a6d647009e366034417565d2484c40f1c7eff74413738abf4ec55209da9bd3253b0e
+  checksum: 81035913024faf18ba7e163418af517b2c3b85aef496fbd6334bda38f6f6dd4072678c6b76c41148b46b7fc846764f875e1156cbfc7643ffa1b62ee069d78951
   languageName: node
   linkType: hard
 
@@ -27783,7 +27799,7 @@ __metadata:
     "@playwright/test": 1.31.1
     "@replayio/playwright": 0.3.23
     "@testing-library/jest-dom": 5.16.5
-    "@testing-library/react": 13.4.0
+    "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
     "@tsd/typescript": 4.9.5
     "@types/babel__generator": 7.6.4
