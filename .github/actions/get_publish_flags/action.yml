@@ -1,8 +1,0 @@
-name: Get publish flags
-description: Get flags for canary publishing
-outputs:
-  flags:
-    description: The flags for canary publishing
-runs:
-  using: node16
-  main: get_publish_flags.mjs

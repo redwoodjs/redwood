@@ -3,9 +3,9 @@ import { getConfig } from '../../../../lib'
 const config = getConfig()
 
 export const NETLIFY_TOML = `[build]
-command = "yarn rw deploy netlify"
-publish = "web/dist"
-functions = "api/dist/functions"
+  command = "yarn rw deploy netlify"
+  publish = "web/dist"
+  functions = "api/dist/functions"
 
 [dev]
   # To use [Netlify Dev](https://www.netlify.com/products/dev/),

@@ -191,11 +191,15 @@ export const removeAuthProvider = (content: string) => {
         unindent = true
         // Assume the end line is indented to the same level as the start,
         // and contains just a single '>'
-        end = line.replace(/^(\s*)<Auth.*/, '$1') + '>'
+        end = line.replace(/^(\s*)<Auth.*/s, '$1') + '>'
       }
 
       // Single-line AuthProvider, or end of multi-line
-      if ((hasAuthProvider(line) && line.at(-1) === '>') || line === end) {
+      // .trimEnd() to handle CRLF
+      if (
+        (hasAuthProvider(line) && line.trimEnd().at(-1) === '>') ||
+        line.trimEnd() === end
+      ) {
         remove = false
       }
 
@@ -300,7 +304,7 @@ export const addConfigToWebApp = <
         throw new Error(`Could not find root App.${ext}`)
       }
 
-      let content = fs.readFileSync(webAppPath).toString()
+      let content = fs.readFileSync(webAppPath, 'utf-8')
 
       if (!content.includes(AUTH_PROVIDER_HOOK_IMPORT)) {
         content = addAuthImportToApp(content)
@@ -334,25 +338,27 @@ export const addConfigToWebApp = <
 }
 
 export const createWebAuth = (basedir: string, webAuthn: boolean) => {
+  const templatesBaseDir = path.join(basedir, 'templates', 'web')
+  const templates = fs.readdirSync(templatesBaseDir)
+
+  const templateFileName = templates.find((template) => {
+    return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
+  })
+
+  if (!templateFileName) {
+    throw new Error('Could not find the auth.ts template')
+  }
+
+  const templateExtension = templateFileName.split('.').at(-2)
+
   const isTSProject = isTypeScriptProject()
-  const ext = isTSProject ? 'ts' : 'js'
+
+  // ext will be tsx, ts or js
+  const ext = isTypeScriptProject() ? templateExtension : 'js'
 
   return {
     title: `Creating web/src/auth.${ext}`,
     task: (ctx: AuthGeneratorCtx) => {
-      const templatesBaseDir = path.join(basedir, 'templates', 'web')
-      const templates = fs.readdirSync(templatesBaseDir)
-
-      const templateFileName = templates.find((template) => {
-        return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
-      })
-
-      if (!templateFileName) {
-        throw new Error('Could not find the auth.ts template')
-      }
-
-      const templateExtension = templateFileName.split('.').at(-2)
-
       // @MARK - finding unused file name here,
       // We should only use an unused filename, if the user is CHOOSING not to replace the existing provider
 
@@ -380,7 +386,7 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
         }
       }
 
-      authFileName = authFileName + '.' + templateExtension
+      authFileName = authFileName + '.' + ext
 
       let template: string | undefined = fs.readFileSync(
         path.join(templatesBaseDir, templateFileName),

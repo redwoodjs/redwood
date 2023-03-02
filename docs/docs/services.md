@@ -52,7 +52,7 @@ import { validate, validateWith, validateUniqueness } from '@redwoodjs/api'
 export const createUser = async ({ input }) => {
   validate(input.firstName, 'First name', {
     presence: true,
-    excludes: { in: ['Admin', 'Owner'], message: 'That name is reserved, sorry!' },
+    exclusion: { in: ['Admin', 'Owner'], message: 'That name is reserved, sorry!' },
     length: { min: 2, max: 255 }
   })
   validateWith(() => {
@@ -276,6 +276,7 @@ validate(input.name, 'Name', {
 ##### Options
 
 * `in`: the list of values that cannot be used
+* `caseSensitive`: toggles case sensitivity; default: `true`
 
 ```jsx
 validate(input.name, 'Name', {
@@ -339,6 +340,7 @@ validate(input.role, 'Role', {
 ##### Options
 
 * `in`: the list of values that can be used
+* `caseSensitive`: toggles case sensitivity; default: `true`
 
 ```jsx
 validate(input.role, 'Role', {
@@ -634,25 +636,6 @@ You could just write your own function and throw whatever you like, without usin
 ### validateUniqueness()
 
 This validation guarantees that the field(s) given in the first argument are unique in the database before executing the callback given in the last argument. If a record is found with the given fields then an error is thrown and the callback is not invoked.
-
-> **Enable Prisma Preview Feature**
->
-> Being able to use transactions with the syntax used internally by `validateUniqueness()` is experimental for Prisma as of v2.29.0. You'll need to enable it as a preview feature. In your `api/db/schema.prisma` file:
->
-> ```text {4}
-> generator client {
->   provider        = "prisma-client-js"
->   binaryTargets   = "native"
->   previewFeatures = ["interactiveTransactions"]
-> }
-> ```
->
-> You'll need to regenerate the prisma client and restart your dev server for changes to take effect:
->
-> ```bash
-> yarn rw prisma generate
-> yarn rw dev
->```
 
 The uniqueness guarantee is handled through Prisma's [transaction API](https://www.prisma.io/docs/concepts/components/prisma-client/transactions). Given this example validation:
 
@@ -1004,14 +987,14 @@ Use this function when you want to cache some data, optionally including a numbe
 // cache forever
 const post = ({ id }) => {
   return cache(`posts`, () => {
-    db.post.findMany()
+    return db.post.findMany()
   })
 }
 
 // cache for 1 hour
 const post = ({ id }) => {
   return cache(`posts`, () => {
-    db.post.findMany()
+    return db.post.findMany()
   }, { expires: 3600 })
 }
 ```
@@ -1021,7 +1004,7 @@ Note that a key can be a string or an array:
 ```js
 const post = ({ id }) => {
   return cache(`posts-${id}-${updatedAt.getTime()}`, () => {
-    db.post.findMany()
+    return db.post.findMany()
   })
 }
 
@@ -1029,7 +1012,7 @@ const post = ({ id }) => {
 
 const post = ({ id }) => {
   return cache(['posts', id,  updatedAt.getTime()], () => {
-    db.post.findMany()
+    return db.post.findMany()
   })
 }
 ```
@@ -1068,11 +1051,11 @@ This is functionally equivalent to the following:
 const latest = await db.user.findFirst({
   where: { roles: 'admin' } },
   orderBy: { updatedAt: 'desc' },
-  select: { id: true, updatedAt: true
+  select: { id: true, updatedAt: true }
 })
 
 return cache(`posts-${latest.id}-${latest.updatedAt.getTime()}`, () => {
-  db.post.findMany({ where: { roles: 'admin' } })
+  return db.post.findMany({ where: { roles: 'admin' } })
 })
 ```
 

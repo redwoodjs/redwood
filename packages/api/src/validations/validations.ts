@@ -35,6 +35,7 @@ interface ExclusionValidatorOptions extends WithOptionalMessage {
    * The list of values that cannot be used.
    */
   in?: Array<unknown>
+  caseSensitive?: boolean
 }
 
 interface FormatValidatorOptions extends WithOptionalMessage {
@@ -49,6 +50,7 @@ interface InclusionValidatorOptions extends WithOptionalMessage {
    * The list of values that can be used.
    */
   in?: Array<unknown>
+  caseSensitive?: boolean
 }
 
 interface LengthValidatorOptions extends WithOptionalMessage {
@@ -187,17 +189,17 @@ interface ValidationRecipe {
    *
    * Opposite of the [inclusion](https://redwoodjs.com/docs/services.html#inclusion) validation.
    */
-  exclusion?: ExclusionValidatorOptions
+  exclusion?: Array<unknown> | ExclusionValidatorOptions
   /**
    * Requires that the value match a given regular expression.
    */
-  format?: FormatValidatorOptions
+  format?: RegExp | FormatValidatorOptions
   /**
    * Requires that the given value is equal to one in a list of given values.
    *
    * Opposite of the [exclusion](https://redwoodjs.com/docs/services.html#exclusion) validation.
    */
-  inclusion?: InclusionValidatorOptions
+  inclusion?: Array<unknown> | InclusionValidatorOptions
   /**
    * Requires that the value meet one or more of a number of string length validations.
    */
@@ -309,10 +311,9 @@ const VALIDATORS = {
     name: string,
     options: Array<unknown> | ExclusionValidatorOptions
   ) => {
-    const exclusionList =
-      (Array.isArray(options) && options) || options.in || []
+    const [exclusionList, val] = prepareExclusionInclusion(value, options)
 
-    if (exclusionList.includes(value)) {
+    if (exclusionList.includes(val)) {
       validationError('exclusion', name, options)
     }
   },
@@ -349,10 +350,9 @@ const VALIDATORS = {
     name: string,
     options: Array<unknown> | InclusionValidatorOptions
   ) => {
-    const inclusionList =
-      (Array.isArray(options) && options) || options.in || []
+    const [inclusionList, val] = prepareExclusionInclusion(value, options)
 
-    if (!inclusionList.includes(value)) {
+    if (!inclusionList.includes(val)) {
       validationError('inclusion', name, options)
     }
   },
@@ -549,6 +549,28 @@ const validationError = (
   throw new ErrorClass(name, errorMessage, substitutions)
 }
 
+// Generate the final list and value used for exclusion/inclusion by taking
+// case-sensitivity into consideration. The returned array and value then
+// can simply be used with Array.includes to perform exclusion/inclusion checks.
+const prepareExclusionInclusion = (
+  value: unknown,
+  options:
+    | Array<unknown>
+    | InclusionValidatorOptions
+    | ExclusionValidatorOptions
+): [Array<unknown>, unknown] => {
+  const inputList = (Array.isArray(options) && options) || options.in || []
+
+  // default case sensitivity to true
+  const caseSensitive = Array.isArray(options)
+    ? true
+    : options.caseSensitive ?? true
+
+  return caseSensitive
+    ? [inputList, value]
+    : [inputList.map((s) => s.toLowerCase()), (value as string).toLowerCase()]
+}
+
 // Main validation function, `directives` decides which actual validators
 // above to use
 //
@@ -615,11 +637,6 @@ export const validateWith = (func: () => void) => {
 // a product name having to be unique across the entire database, you could
 // check that it is only unique among a subset of records with the same
 // `companyId`.
-//
-// As of Prisma v3.2.1 requires preview feature "interactiveTransactions" be
-// enabled in schema.prisma:
-//
-//   previewFeatures = ["interactiveTransactions"]
 //
 // return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, { message: '...'}, (db) => {
 //   return db.create(data: { email })

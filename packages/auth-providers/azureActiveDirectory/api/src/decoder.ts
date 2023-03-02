@@ -36,7 +36,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
       (header, callback) => {
         client.getSigningKey(header.kid as string, (error, key) => {
           try {
-            callback(error, key.getPublicKey())
+            callback(error, key?.getPublicKey())
           } catch (err) {
             console.error(
               'An error occurred while trying to obtain signing key from ' +

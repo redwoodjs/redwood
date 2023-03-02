@@ -14,37 +14,34 @@ This installs all the packages, writes all the files, and makes all the code mod
 For a detailed explanation of all the api- and web-side changes that aren't exclusive to Clerk, see the top-level [Authentication](../authentication.md) doc.
 There's one Clerk-specific thing we'll get to, but for now, let's focus on Clerk's side of things.
 
-If you don't have a Clerk account yet, now's the time to make one: navigate to https://clerk.dev and sign up, then create an application.
+If you don't have a Clerk account yet, now's the time to make one: navigate to https://clerk.dev, sign up, and create an application.
 The defaults are good enough to get us going, but feel free to configure things as you wish.
 We'll get the application's API keys from its dashboard next.
 
 :::note we'll only focus on the development instance
 
 By default, Clerk applications have two instances, "Development" and "Production".
-We'll only focus on the "Development" instance here.
+We'll only focus on the "Development" instance here, which is used for local development.
 When you're ready to deploy, switch the instance the dashboard is displaying by clicking "Development" in the header at the top.
 How you get your API keys to production depends on your deploy provider.
 
 :::
 
-We're looking for three API keys.
-Head over to the "Developers" section in the nav on the left and click "API Keys".
-You'll need all three of the ones on this page: the Frontend API key, the default Backend API key, and the JWT verification key.
-Copy them into your project's `.env` file:
+We're looking for two API keys.
+Head over to the "Developers" section in the nav on the left and click "API Keys". Finally select RedwoodJS in the Framework dropdown in the Quick Copy section.
+Do as it says and copy the two keys into your project's `.env` file:
 
 ```bash title=".env"
-CLERK_FRONTEND_API_URL="..."
-# This one is the default Backend API Key.
-CLERK_API_KEY="..."
-CLERK_JWT_KEY="..."
+CLERK_PUBLISHABLE_KEY="..."
+CLERK_SECRET_KEY="..."
 ```
 
-Lastly, in your project's `redwood.toml` file, include `CLERK_FRONTEND_API_URL` in the list of env vars that should be available to the web side:
+Lastly, in your project's `redwood.toml` file, include `CLERK_PUBLISHABLE_KEY` in the list of env vars that should be available to the web side:
 
 ```toml title="redwood.toml"
 [web]
   # ...
-  includeEnvironmentVariables = ["CLERK_FRONTEND_API_URL"]
+  includeEnvironmentVariables = ["CLERK_PUBLISHABLE_KEY"]
 ```
 
 That should be enough; now, things should just work.

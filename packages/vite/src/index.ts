@@ -2,9 +2,14 @@ import { existsSync, readFile as fsReadFile } from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 
-import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 import react from '@vitejs/plugin-react'
-import { normalizePath, transformWithEsbuild, UserConfig } from 'vite'
+import {
+  normalizePath,
+  PluginOption,
+  transformWithEsbuild,
+  UserConfig,
+} from 'vite'
+import EnvironmentPlugin from 'vite-plugin-environment'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -12,6 +17,9 @@ import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 const readFile = promisify(fsReadFile)
+
+// Using require, because plugin has TS errors
+const commonjs = require('vite-plugin-commonjs')
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
@@ -26,17 +34,26 @@ export default function redwoodPluginVite() {
   return [
     {
       name: 'redwood-plugin-vite',
+
+      // ---------- Bundle injection ----------
       // Used by Vite during dev, to inject the entrypoint.
-      transformIndexHtml: (html: string) => {
-        if (existsSync(clientEntryPath)) {
-          return html.replace(
-            '</head>',
-            `<script type="module" src="${clientEntryPath}"></script>
+      transformIndexHtml: {
+        order: 'pre',
+        handler: (html: string) => {
+          // Remove the prerender placeholder
+          const outputHtml = html.replace('<%= prerenderPlaceholder %>', '')
+
+          // And then inject the entry
+          if (existsSync(clientEntryPath)) {
+            return outputHtml.replace(
+              '</head>',
+              `<script type="module" src="/entry-client.jsx"></script>
         </head>`
-          )
-        } else {
-          return html
-        }
+            )
+          } else {
+            return outputHtml
+          }
+        },
       },
       // Used by rollup during build to inject the entrypoint
       // but note index.html does not come through as an id during dev
@@ -45,15 +62,23 @@ export default function redwoodPluginVite() {
           existsSync(clientEntryPath) &&
           normalizePath(id) === normalizePath(redwoodPaths.web.html)
         ) {
-          return code.replace(
-            '</head>',
-            `<script type="module" src="entry-client.jsx"></script>
+          return {
+            code: code.replace(
+              '</head>',
+              `<script type="module" src="/entry-client.jsx"></script>
         </head>`
-          )
+            ),
+            map: null,
+          }
         } else {
-          return code
+          return {
+            code,
+            map: null, // Returning null here preserves the original sourcemap
+          }
         }
       },
+      // ---------- End Bundle injection ----------
+
       config: (): UserConfig => {
         return {
           root: redwoodPaths.web.src,
@@ -91,10 +116,9 @@ export default function redwoodPluginVite() {
             postcss: redwoodPaths.web.config,
           },
           server: {
-            // @MARK intentionally commenting this out, on my machine it pops up with "where is undefined"
-            // under the hood it's using https://github.com/sindresorhus/open#app which needs an app specified
-            // open: redwoodConfig.browser.open,
+            open: redwoodConfig.browser.open,
             port: redwoodConfig.web.port,
+            host: redwoodConfig.web.host,
             proxy: {
               //@TODO we need to do a check for absolute urls here
               [redwoodConfig.web.apiUrl]: {
@@ -109,6 +133,7 @@ export default function redwoodPluginVite() {
             outDir: redwoodPaths.web.dist,
             emptyOutDir: true,
             manifest: 'build-manifest.json',
+            sourcemap: redwoodConfig.web.sourceMap, // Note that this can be boolean or 'inline'
           },
           optimizeDeps: {
             esbuildOptions: {
@@ -117,8 +142,7 @@ export default function redwoodPluginVite() {
                 '.js': 'jsx',
               },
               // Node.js global to browser globalThis
-              // @MARK unsure why we need this,
-              // but as soon as we added the buffer polyfill, this seems to be required
+              // @MARK unsure why we need this, but required for DevFatalErrorPage atleast
               define: {
                 global: 'globalThis',
               },
@@ -127,20 +151,21 @@ export default function redwoodPluginVite() {
         }
       },
     },
-    {
-      // Adds the variables defined in "includeEnvironmentVariables" in redwood.toml to import.meta.env
-      name: 'include-env-variables',
-      config: (): UserConfig => {
-        return {
-          define: Object.fromEntries(
-            redwoodConfig.web.includeEnvironmentVariables.map((envName) => [
-              `import.meta.env.${envName}`,
-              JSON.stringify(process.env[envName]),
-            ])
-          ),
-        }
-      },
-    },
+    // Loading Environment Variables, to process.env in the browser
+    // This maintains compatibility with Webpack. We can choose to switch to import.meta.env at a later stage
+    EnvironmentPlugin('all', { prefix: 'REDWOOD_ENV_', loadEnvFiles: false }),
+    EnvironmentPlugin(
+      Object.fromEntries(
+        redwoodConfig.web.includeEnvironmentVariables.map((envName) => [
+          envName,
+          JSON.stringify(process.env[envName]),
+        ])
+      ),
+      {
+        loadEnvFiles: false, // to prevent vite from loading .env files
+      }
+    ),
+    // -----------------
     {
       // @MARK Adding this custom plugin to support jsx files with .js extensions
       // This is the default in Redwood JS projects. We can remove this once Vite is stable,
@@ -167,6 +192,8 @@ export default function redwoodPluginVite() {
         }),
       },
     }),
+    // HTML Transform: To replace the  <%= prerenderPlaceholder %> in index.html
+    // This is only done on build. During dev the placeholder is removed in transformIndexHtml
     createHtmlPlugin({
       template: './index.html',
       inject: {
@@ -177,10 +204,25 @@ export default function redwoodPluginVite() {
           escape: (str: string) => str, // skip escaping
         },
       },
-    }),
+    }).map(applyOn('build')),
+    // End HTML transform------------------
+
     // @MARK We add this as a temporary workaround for DevFatalErrorPage being required
     // Note that it only transforms commonjs in dev, which is exactly what we want!
-    // Maybe we could have a custom plugin to only transform the DevFatalErrorPage?
-    viteCommonjs(),
+    // and is limited to the default FatalErrorPage (by name)
+    commonjs({
+      filter: (id: string) => {
+        return id.includes('FatalErrorPage')
+      },
+    }),
   ]
+}
+
+const applyOn = (apply: 'build' | 'serve') => {
+  return (plugin: PluginOption) => {
+    return {
+      ...plugin,
+      apply,
+    }
+  }
 }
