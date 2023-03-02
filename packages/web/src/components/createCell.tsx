@@ -185,9 +185,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
 }
 
 /**
- * The default `isEmpty` implementation. Checks if the first field is `null` or an empty array.
- *
- * @remarks
+ * The default `isEmpty` implementation. Checks if any of the field is `null` or an empty array.
  *
  * Consider the following queries. The former returns an object, the latter a list:
  *
@@ -222,37 +220,16 @@ export interface CreateCellProps<CellProps, CellVariables> {
  * ```
  *
  * Note that the latter can return `null` as well depending on the SDL (`posts: [Post!]`).
- *
- * @remarks
- *
- * We only check the first field (in the example below, `users`):
- *
- * ```js
- * export const QUERY = gql`
- *   users {
- *     name
- *   }
- *   posts {
- *     title
- *   }
- * `
  * ```
  */
-const dataField = (data: DataObject) => {
-  return data[Object.keys(data)[0]]
-}
-
-const isDataNull = (data: DataObject) => {
-  return dataField(data) === null
-}
-
-const isDataEmptyArray = (data: DataObject) => {
-  const field = dataField(data)
+function isFieldEmptyArray(field: unknown) {
   return Array.isArray(field) && field.length === 0
 }
 
-const isDataEmpty = (data: DataObject) => {
-  return isDataNull(data) || isDataEmptyArray(data)
+function isDataEmpty(data: DataObject) {
+  return Object.values(data).every((fieldValue) => {
+    return fieldValue === null || isFieldEmptyArray(fieldValue)
+  })
 }
 
 /**

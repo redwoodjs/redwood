@@ -6785,8 +6785,10 @@ __metadata:
   dependencies:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.0
+    "@babel/parser": 7.21.2
     "@babel/plugin-transform-typescript": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
+    "@babel/traverse": 7.21.2
     "@iarna/toml": 2.2.5
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
@@ -6803,6 +6805,7 @@ __metadata:
     fast-glob: 3.2.12
     findup-sync: 5.0.0
     fs-extra: 11.1.0
+    graphql: 16.6.0
     jest: 29.4.3
     jscodeshift: 0.14.0
     prettier: 2.8.4
