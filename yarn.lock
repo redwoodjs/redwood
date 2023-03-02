@@ -7282,24 +7282,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.23":
-  version: 0.3.23
-  resolution: "@replayio/playwright@npm:0.3.23"
+"@replayio/playwright@npm:0.3.24":
+  version: 0.3.24
+  resolution: "@replayio/playwright@npm:0.3.24"
   dependencies:
-    "@replayio/replay": ^0.12.4
-    "@replayio/test-utils": ^0.5.3
+    "@replayio/replay": ^0.12.5
+    "@replayio/test-utils": ^0.5.4
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: aef7fcf2f56aaff383eb4822f7876097e9c213cb35bb53373ed65d7bfa7ba63b2fd9d25469e0db576333da3b1afb9c70d6238fe2821cccff66b3e9ee022e7904
+  checksum: 10191376a5c3e1760dcc9471a1c03fa4eaef43a3981c1b1173c3629f56e3f0b4ea1359d10dcb5f2aa6319144ab86ad3d9eb3b33371b01250251998b51571e9b5
   languageName: node
   linkType: hard
 
-"@replayio/replay@npm:^0.12.4":
-  version: 0.12.4
-  resolution: "@replayio/replay@npm:0.12.4"
+"@replayio/replay@npm:^0.12.5":
+  version: 0.12.5
+  resolution: "@replayio/replay@npm:0.12.5"
   dependencies:
     "@replayio/sourcemap-upload": ^1.0.6
     commander: ^7.2.0
@@ -7313,7 +7313,7 @@ __metadata:
     ws: ^7.5.0
   bin:
     replay: bin/replay.js
-  checksum: 8c99852906bd79b10678479b63a28652cf5e11211e768cbea066c47522bca69c56daee580192e85b40b6fd759511bb004befc5744f3e3a9b3435dc9a5f10a291
+  checksum: 747505db7e6384725da906ffc92bb9f703d2b3136747f9225937d9402a36dac52c92aa02017fba9abe1943283ae9763876e168a104848e0391217bdcd073a36a
   languageName: node
   linkType: hard
 
@@ -7330,16 +7330,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.5.3":
-  version: 0.5.3
-  resolution: "@replayio/test-utils@npm:0.5.3"
+"@replayio/test-utils@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "@replayio/test-utils@npm:0.5.4"
   dependencies:
-    "@replayio/replay": ^0.12.4
+    "@replayio/replay": ^0.12.5
     "@types/node-fetch": ^2.6.2
     debug: ^4.3.4
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: 58f3b7c357130ac2f98de50585be37d1298d38c86e3f83129f42e6aad216b303f340cec5b38419f8f1fac4e9a0e4b09ef44a0c4dc28439e6900e2fe363648bfc
+  checksum: 3000f4d13616db429fd8777bc3ebe8bd0f0397e9fd12c2efda6350c4de3be83777342c393e87e4bc809eed0e016c077827e029426ab845cc8492488f88003e0c
   languageName: node
   linkType: hard
 
@@ -27788,7 +27788,7 @@ __metadata:
     "@npmcli/arborist": 6.2.3
     "@nrwl/nx-cloud": 15.1.1
     "@playwright/test": 1.31.1
-    "@replayio/playwright": 0.3.23
+    "@replayio/playwright": 0.3.24
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
