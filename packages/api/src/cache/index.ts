@@ -187,19 +187,20 @@ export const createCache = (
 
   const deleteCacheKey = async (key: CacheKey) => {
     let result
+    const cacheKey = formatCacheKey(key, prefix)
 
     try {
       await Promise.race([
-        (result = client.del(key as string)),
+        (result = client.del(cacheKey as string)),
         wait(timeout).then(() => {
           throw new CacheTimeoutError()
         }),
       ])
 
-      logger?.debug(`[Cache] DEL '${key}'`)
+      logger?.debug(`[Cache] DEL '${cacheKey}'`)
       return result
     } catch (e: any) {
-      logger?.error(`[Cache] Error DEL '${key}': ${e.message}`)
+      logger?.error(`[Cache] Error DEL '${cacheKey}': ${e.message}`)
       return false
     }
   }
