@@ -4839,13 +4839,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.3":
-  version: 6.2.3
-  resolution: "@npmcli/arborist@npm:6.2.3"
+"@npmcli/arborist@npm:6.2.4":
+  version: 6.2.4
+  resolution: "@npmcli/arborist@npm:6.2.4"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
-    "@npmcli/installed-package-contents": ^2.0.0
+    "@npmcli/installed-package-contents": ^2.0.2
     "@npmcli/map-workspaces": ^3.0.2
     "@npmcli/metavuln-calculator": ^5.0.0
     "@npmcli/name-from-folder": ^2.0.0
@@ -4878,7 +4878,7 @@ __metadata:
     walk-up-path: ^1.0.0
   bin:
     arborist: bin/index.js
-  checksum: 1422ba03aa5689379e976825198c9bf960ddb363a6bd6e4286527707b158b3467b3aafcfac957ce4e62502778943cb2dc0bee4dd207e3de5d3533fc066173f66
+  checksum: 63ed3724b870172965064a83e6b8545e313720f1b07ba6b056d6962be93fc3661ea9b06b367d1ae0c2ffcee88d1eaef10c79899334722503b63e5421620c39ce
   languageName: node
   linkType: hard
 
@@ -4957,15 +4957,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/installed-package-contents@npm:^2.0.0, @npmcli/installed-package-contents@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@npmcli/installed-package-contents@npm:2.0.1"
+"@npmcli/installed-package-contents@npm:^2.0.1, @npmcli/installed-package-contents@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@npmcli/installed-package-contents@npm:2.0.2"
   dependencies:
     npm-bundled: ^3.0.0
     npm-normalize-package-bin: ^3.0.0
   bin:
     installed-package-contents: lib/index.js
-  checksum: cf4b4411d75d96b366bb4805f4912a1191e79d6f7a8d071d7ee10fc9e0498765def3c39b1043dbab313c6ae46fe5140ff31d61753569bfd3c4871cfa5636b4e3
+  checksum: 03efadb365997e3b54d1d1ea30ef3555729a68939ab2b7b7800a4a2750afb53da222f52be36bd7c44950434c3e26cbe7be28dac093efdf7b1bbe9e025ab62a07
   languageName: node
   linkType: hard
 
@@ -27785,7 +27785,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
-    "@npmcli/arborist": 6.2.3
+    "@npmcli/arborist": 6.2.4
     "@nrwl/nx-cloud": 15.1.1
     "@playwright/test": 1.31.1
     "@replayio/playwright": 0.3.24
