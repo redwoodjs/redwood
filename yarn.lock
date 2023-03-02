@@ -2121,7 +2121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discoveryjs/json-ext@npm:^0.5.0, @discoveryjs/json-ext@npm:^0.5.3":
+"@discoveryjs/json-ext@npm:0.5.7, @discoveryjs/json-ext@npm:^0.5.0, @discoveryjs/json-ext@npm:^0.5.3":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
   checksum: e10f1b02b78e4812646ddf289b7d9f2cb567d336c363b266bd50cd223cf3de7c2c74018d91cd2613041568397ef3a4a2b500aba588c6e5bd78c38374ba68f38c
@@ -6869,7 +6869,7 @@ __metadata:
     typescript: 4.9.5
     url-loader: 4.1.1
     webpack: 5.75.0
-    webpack-bundle-analyzer: 4.7.0
+    webpack-bundle-analyzer: 4.8.0
     webpack-cli: 5.0.1
     webpack-dev-server: 4.11.1
     webpack-manifest-plugin: 5.0.0
@@ -31425,10 +31425,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:4.7.0":
-  version: 4.7.0
-  resolution: "webpack-bundle-analyzer@npm:4.7.0"
+"webpack-bundle-analyzer@npm:4.8.0":
+  version: 4.8.0
+  resolution: "webpack-bundle-analyzer@npm:4.8.0"
   dependencies:
+    "@discoveryjs/json-ext": 0.5.7
     acorn: ^8.0.4
     acorn-walk: ^8.0.0
     chalk: ^4.1.0
@@ -31440,7 +31441,7 @@ __metadata:
     ws: ^7.3.1
   bin:
     webpack-bundle-analyzer: lib/bin/analyzer.js
-  checksum: 7ca9546dae1271ecd4524646bf45fad32dc69f2293c1ade5f9a0d581d44ab4a12af94294c5ecfe0ed12c5b9327f827a3adfc733b77c162ebe3e0411371f8788e
+  checksum: 52f2b1442ff01742d6fd7b143487f872449700a2b3b212ec54ce149d2c4e7ab04a34ee2d7d9a54e59749c9f585bc25c923e78fef7946a51e8b64797b967fd0c9
   languageName: node
   linkType: hard
 
