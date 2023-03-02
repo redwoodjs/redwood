@@ -5,6 +5,7 @@ import { createAuth } from '@redwoodjs/auth-auth0-web'
 const auth0 = new Auth0Client({
   domain: process.env.AUTH0_DOMAIN || '',
   clientId: process.env.AUTH0_CLIENT_ID || '',
+
   authorizationParams: {
     redirect_uri: process.env.AUTH0_REDIRECT_URI,
     audience: process.env.AUTH0_AUDIENCE,
@@ -15,10 +16,6 @@ const auth0 = new Auth0Client({
   // they can retrieve the tokens stored in local storage.
   // See https://auth0.com/docs/libraries/auth0-spa-js#change-storage-options.
   cacheLocation: 'localstorage',
-
-  // `useRefreshTokens` is required for automatically extending sessions beyond what's set in the initial JWT expiration.
-  // See https://auth0.com/docs/tokens/refresh-tokens.
-  // useRefreshTokens: true,
 })
 
 export const { AuthProvider, useAuth } = createAuth(auth0)

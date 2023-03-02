@@ -18,7 +18,7 @@ export async function handler({ force: forceArg }: Args) {
       "import { authDecoder } from '@redwoodjs/auth-auth0-api'",
     apiPackages: [`@redwoodjs/auth-auth0-api@${version}`],
     webPackages: [
-      '@auth0/auth0-spa-js@^1',
+      '@auth0/auth0-spa-js@^2',
       `@redwoodjs/auth-auth0-web@${version}`,
     ],
     notes: [

@@ -17,7 +17,7 @@ jest.mock('@prisma/client', () => ({
 
 describe('cacheFindMany', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    jest.clearAllMocks()
   })
 
   it('adds the collection to the cache based on latest updated user', async () => {

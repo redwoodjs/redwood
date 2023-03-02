@@ -67,7 +67,7 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
 
   afterEach(() => {
     fs.__setMockFiles({})
-    jest.restoreAllMocks()
+    jest.clearAllMocks()
   })
 
   it('Produces the correct updateData.json file', async () => {
@@ -142,7 +142,7 @@ describe('Update is available (1.0.0 -> 2.0.0)', () => {
 
   afterEach(() => {
     fs.__setMockFiles({})
-    jest.restoreAllMocks()
+    jest.clearAllMocks()
   })
 
   it('Produces the correct updateData.json file', async () => {
@@ -217,7 +217,7 @@ describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
 
   afterEach(() => {
     fs.__setMockFiles({})
-    jest.restoreAllMocks()
+    jest.clearAllMocks()
   })
 
   it('Produces the correct updateData.json file', async () => {
