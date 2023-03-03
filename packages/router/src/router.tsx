@@ -76,36 +76,41 @@ const InternalRoute = ({
   const routerState = useRouterState()
   const activePageContext = useActivePageContext()
 
+  // @DElETE no need because this is handled by the Router component
   if (notfound) {
     // The "notfound" route is handled by <NotFoundChecker>
     return null
   }
 
+  // @REIMPLEMENT we can do this in validatePath which gets called in LocationAwareRouter
   if (!path) {
     throw new Error(`Route "${name}" needs to specify a path`)
   }
 
+  // @DELETE as above
   // Check for issues with the path.
   validatePath(path)
 
+  // @DELETE no longer exists
   const location = activePageContext.loadingState[path]?.location
-
   if (!location) {
     throw new Error(`No location for route "${name}"`)
   }
 
+  // @DELETE params are handled in the active-route-loader
   const { params: pathParams } = matchPath(path, location.pathname, {
     paramTypes: routerState.paramTypes,
   })
-
   const searchParams = parseSearch(location.search)
   const allParams: Record<string, string> = { ...searchParams, ...pathParams }
 
+  // @REIMPLEMENT
   if (redirect) {
     const newPath = replaceParams(redirect, allParams)
     return <Redirect to={newPath} />
   }
 
+  // @REIMPLEMENT: possibly a new validateRoute function needed in Router
   if (!page || !name) {
     throw new Error(
       "A route that's not a redirect or notfound route needs to specify " +
@@ -113,6 +118,7 @@ const InternalRoute = ({
     )
   }
 
+  // @DELETE no longer have activepagecontext
   const Page = activePageContext.loadingState[path]?.page || (() => null)
 
   // There are two special props in React: `ref` and `key`. (See https://reactjs.org/warnings/special-props.html.)
@@ -120,10 +126,14 @@ const InternalRoute = ({
   // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`, otherwise the page will break.
   // (The page won't actually break if `key` is passed, but it feels unclean.)
   // If users want to access them, they can use `useParams`.
+
+  // @REIMPLEMENT: possibly in active-route-loader, or before we pass params
+  // to ARL in the Router component
   delete allParams['ref']
   delete allParams['key']
 
   // Level 3/3 (InternalRoute)
+  // @DELETE
   return <Page {...allParams} />
 }
 
