@@ -9,7 +9,7 @@ import type {
   GraphQLContext,
   GraphQLRequest,
   ResponseTransformer,
-  SetupWorkerApi,
+  SetupWorker,
   ResponseComposition,
 } from 'msw'
 
@@ -17,7 +17,7 @@ import type {
 // before the server has started. We store the request handlers in
 // a queue that is drained once the server is started.
 let REQUEST_HANDLER_QUEUE: RequestHandler[] = []
-let SERVER_INSTANCE: SetupWorkerApi | any
+let SERVER_INSTANCE: SetupWorker | any
 
 /**
  * Plugs fetch for the correct target in order to capture requests.

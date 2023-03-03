@@ -144,7 +144,7 @@ export interface GraphQLHandlerOptions {
   /**
    * @description Auth-provider specific token decoder
    */
-  authDecoder?: Decoder
+  authDecoder?: Decoder | Decoder[]
 
   /**
    * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground

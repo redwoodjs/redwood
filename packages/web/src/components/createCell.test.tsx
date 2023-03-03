@@ -54,6 +54,58 @@ describe('createCell', () => {
     screen.getByText(/^42$/)
   })
 
+  test.only('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
+    const TestCell = createCell({
+      // @ts-expect-error - Purposefully using a plain string here.
+      QUERY: 'query TestQuery { users { name } posts { title } }',
+      Empty: () => <>No users or posts</>,
+      Success: ({ users, posts }) => (
+        <>
+          <div>
+            {users.length > 0 ? (
+              <ul>
+                {users.map(({ name }) => (
+                  <li key={name}>{name}</li>
+                ))}
+              </ul>
+            ) : (
+              'no users'
+            )}
+          </div>
+          <div>
+            {posts.length > 0 ? (
+              <ul>
+                {posts.map(({ title }) => (
+                  <li key={title}>{title}</li>
+                ))}
+              </ul>
+            ) : (
+              'no posts'
+            )}
+          </div>
+        </>
+      ),
+    })
+
+    const myUseQueryHook = () => {
+      return {
+        data: {
+          users: [],
+          posts: [{ title: 'bazinga' }, { title: 'kittens' }],
+        },
+      }
+    }
+
+    render(
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
+        <TestCell />
+      </GraphQLHooksProvider>
+    )
+
+    screen.getByText(/bazinga/)
+    screen.getByText(/kittens/)
+  })
+
   test('Renders default Loading when there is no data', async () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.

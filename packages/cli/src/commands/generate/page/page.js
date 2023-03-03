@@ -257,7 +257,7 @@ export const handler = async ({
   )
 
   try {
-    if (rollback) {
+    if (rollback && !force) {
       prepareForRollback(tasks)
     }
     await tasks.run()
