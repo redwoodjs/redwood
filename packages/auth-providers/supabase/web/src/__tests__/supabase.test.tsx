@@ -69,6 +69,8 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
     loggedInUser =
       email === 'admin@example.com' ? (adminUser as User) : (user as User)
 
+    loggedInUser.email = email
+
     return {
       data: {
         user: loggedInUser as User,
@@ -159,6 +161,8 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
 
     loggedInUser =
       email === 'admin@example.com' ? (adminUser as User) : (user as User)
+
+    loggedInUser.email = email
 
     return {
       data: {
@@ -283,6 +287,22 @@ describe('Supabase Authentication', () => {
   })
 
   describe('Password Authentication', () => {
+    it('is authenticated after signing up', async () => {
+      const authRef = getSupabaseAuth()
+
+      await act(async () => {
+        authRef.current.signUp({
+          email: 'jane.doe@example.com',
+          password: 'ThereIsNoSpoon',
+        })
+      })
+
+      const currentUser = authRef.current.currentUser
+
+      expect(authRef.current.isAuthenticated).toBeTruthy()
+      expect(currentUser?.email).toEqual('jane.doe@example.com')
+    })
+
     it('is authenticated after logging in', async () => {
       const authRef = getSupabaseAuth()
 
@@ -294,7 +314,10 @@ describe('Supabase Authentication', () => {
         })
       })
 
+      const currentUser = authRef.current.currentUser
+
       expect(authRef.current.isAuthenticated).toBeTruthy()
+      expect(currentUser?.email).toEqual('john.doe@example.com')
     })
 
     it('is not authenticated after logging out', async () => {

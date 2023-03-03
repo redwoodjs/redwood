@@ -113,6 +113,17 @@ await logIn({
 
 ### Sign Up with email and password
 
+Creates a new user.
+
+```ts
+const { signUp } = useAuth()
+
+await signUp({
+  email: 'example@email.com',
+  password: 'example-password',
+})
+```
+
 ### Sign in a user with email and password
 
 Log in an existing user with an email and password or phone and password.
