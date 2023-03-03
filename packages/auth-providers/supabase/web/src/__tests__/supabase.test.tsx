@@ -9,6 +9,9 @@ import type {
   SignInWithPasswordlessCredentials,
   SignInWithSSO,
   SignInWithPasswordCredentials,
+  SignUpWithPasswordCredentials,
+  Session,
+  AuthError,
 } from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react'
 
@@ -57,7 +60,7 @@ const oAuthUser: Partial<User> = {
 
 let loggedInUser: User | undefined
 
-const supabaseAuth: Partial<SupabaseClient['auth']> = {
+const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
   signInWithPassword: async (
     credentials: SignInWithPasswordCredentials
   ): Promise<AuthResponse> => {
@@ -130,6 +133,7 @@ const supabaseAuth: Partial<SupabaseClient['auth']> = {
     loggedInUser = user as User
 
     const url = `https://${credentials['domain']}.${credentials['providerId']}.com`
+
     loggedInUser.app_metadata = {
       url,
       domain: credentials['domain'],
@@ -148,7 +152,9 @@ const supabaseAuth: Partial<SupabaseClient['auth']> = {
 
     return { error: null }
   },
-  signUp: async (credentials) => {
+  signUp: async (
+    credentials: SignUpWithPasswordCredentials
+  ): Promise<AuthResponse> => {
     const { email } = credentials as any
 
     loggedInUser =
@@ -162,7 +168,26 @@ const supabaseAuth: Partial<SupabaseClient['auth']> = {
       error: null,
     }
   },
-  getSession: async () => ({
+  getSession: async (): Promise<
+    | {
+        data: {
+          session: Session
+        }
+        error: null
+      }
+    | {
+        data: {
+          session: null
+        }
+        error: AuthError
+      }
+    | {
+        data: {
+          session: null
+        }
+        error: null
+      }
+  > => ({
     data: {
       session: {
         access_token: 'token',
@@ -174,12 +199,14 @@ const supabaseAuth: Partial<SupabaseClient['auth']> = {
     },
     error: null,
   }),
-  refreshSession: async () => ({
+  refreshSession: async (currentSession?: {
+    refresh_token: string
+  }): Promise<AuthResponse> => ({
     data: {
       user: loggedInUser as User,
       session: {
         access_token: 'jwt_1234567890',
-        refresh_token: 'refresh_token_1234567890',
+        refresh_token: `refresh_token_1234567890_${currentSession?.refresh_token}`,
         expires_in: 999,
         token_type: 'Bearer',
         user: loggedInUser as User,
@@ -190,7 +217,7 @@ const supabaseAuth: Partial<SupabaseClient['auth']> = {
 }
 
 const supabaseMockClient: Partial<SupabaseClient> = {
-  auth: supabaseAuth as SupabaseClient['auth'],
+  auth: mockSupabaseAuthClient as SupabaseClient['auth'],
 }
 
 const fetchMock = jest.fn()
