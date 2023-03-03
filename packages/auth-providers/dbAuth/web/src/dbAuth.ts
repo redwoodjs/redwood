@@ -8,7 +8,7 @@ export interface LoginAttributes {
 }
 
 export interface ResetPasswordAttributes {
-  token: string
+  resetToken: string
   password: string
 }
 

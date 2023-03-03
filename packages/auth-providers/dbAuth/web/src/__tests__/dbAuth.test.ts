@@ -192,7 +192,7 @@ describe('dbAuth', () => {
     await act(
       async () =>
         await auth.resetPassword({
-          token: 'reset-token',
+          resetToken: 'reset-token',
           password: 'password',
         })
     )
