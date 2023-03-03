@@ -22,7 +22,7 @@ type SignUpOptions = {
 export function createAuth(
   supabaseClient: SupabaseClient,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
