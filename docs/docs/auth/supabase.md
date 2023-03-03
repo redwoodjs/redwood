@@ -56,8 +56,7 @@ In a real app, you'd build a form here, but we're going to hardcode an email and
 After you sign up, head to your inbox: there should be a confirmation email from Supabase waiting for you.
 
 Click the link, then head back to your app.
-Once you refresh the page, you should see `
-{"isAuthenticated":true}` on the page.
+Once you refresh the page, you should see `{"isAuthenticated":true}` on the page.
 
 
 Let's make sure: if this is a brand new project, generate a home page.
@@ -88,7 +87,7 @@ const HomePage = () => {
 
 You will notice that [Supabase Javascript SDK Auth API](https://supabase.com/docs/reference/javascript/auth-api) reference documentation presents methods to sign in with the various integrations Supabase supports: password, OAuth, IDToken, SSO, etc.
 
-The RedwoodJS implementation of Supabase authentication supports these as well, but within the `login` method of the `useAuth` hook.
+The RedwoodJS implementation of Supabase authentication supports these as well, but within the `logIn` method of the `useAuth` hook.
 
 That means that you will see that Supabase documents sign in with email password as:
 
@@ -225,12 +224,12 @@ logOut()
 
 Log in a user given a User supplied OTP received via mobile.
 
-*The verifyOtp method takes in different verification types. If a phone number is used, the type can either be sms or phone_change. If an email address is used, the type can be one of the following: signup, magiclink, recovery, invite or email_change.
+* The verifyOtp method takes in different verification types. If a phone number is used, the type can either be sms or phone_change. If an email address is used, the type can be one of the following: signup, magiclink, recovery, invite or email_change.
 
 * The verification type used should be determined based on the corresponding auth method called before verifyOtp to sign up / sign-in a user.
 
 
-The RedwoodJS auth provider doesn't expose the `veriftyOtp` method from the Supabase SDk directly.
+The RedwoodJS auth provider doesn't expose the `veriftyOtp` method from the Supabase SDK directly.
 
 Instead, since you always have access the the Supabase Auth client, you can access any method it exposes.
 
