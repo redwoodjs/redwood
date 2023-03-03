@@ -32,7 +32,7 @@ function createAuthImplementation(netlifyIdentity: NetlifyIdentity) {
   return {
     type: 'netlify',
     client: netlifyIdentity,
-    // _options: never is needed to help TS infer the TLogInOptions type
+    // `_options: never` is needed to help TS infer the TLogInOptions type
     login: (_options: never) => {
       return new Promise<NetlifyIdentityNS.User | null>((resolve, reject) => {
         let autoClosedModal = false
