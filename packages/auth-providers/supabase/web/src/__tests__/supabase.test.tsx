@@ -1,4 +1,15 @@
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type {
+  SupabaseClient,
+  User,
+  AuthResponse,
+  OAuthResponse,
+  SSOResponse,
+  SignInWithOAuthCredentials,
+  SignInWithIdTokenCredentials,
+  SignInWithPasswordlessCredentials,
+  SignInWithSSO,
+  SignInWithPasswordCredentials,
+} from '@supabase/supabase-js'
 import { renderHook, act } from '@testing-library/react'
 
 import { CurrentUser } from '@redwoodjs/auth'
@@ -31,10 +42,25 @@ const adminUser: Partial<User> = {
   },
 }
 
+const oAuthUser: Partial<User> = {
+  id: 'unique_user_id',
+  aud: 'authenticated',
+  user_metadata: {
+    full_name: 'Octo Cat',
+  },
+  email: 'octo.cat@example.com',
+  app_metadata: {
+    provider: 'github',
+    roles: ['user'],
+  },
+}
+
 let loggedInUser: User | undefined
 
 const supabaseAuth: Partial<SupabaseClient['auth']> = {
-  signInWithPassword: async (credentials) => {
+  signInWithPassword: async (
+    credentials: SignInWithPasswordCredentials
+  ): Promise<AuthResponse> => {
     const { email } = credentials as any
 
     loggedInUser =
@@ -44,6 +70,75 @@ const supabaseAuth: Partial<SupabaseClient['auth']> = {
       data: {
         user: loggedInUser as User,
         session: null,
+      },
+      error: null,
+    }
+  },
+  signInWithOAuth: async (
+    credentials: SignInWithOAuthCredentials
+  ): Promise<OAuthResponse> => {
+    loggedInUser = oAuthUser as User
+
+    return {
+      data: {
+        provider: credentials.provider,
+        url: `https://${credentials.provider}.com`,
+      },
+      error: null,
+    }
+  },
+  signInWithOtp: async (
+    credentials: SignInWithPasswordlessCredentials
+  ): Promise<AuthResponse> => {
+    loggedInUser = user as User
+    loggedInUser.email = credentials['email']
+
+    return {
+      data: {
+        user: loggedInUser as User,
+        session: null,
+      },
+      error: null,
+    }
+  },
+
+  signInWithIdToken: async (
+    credentials: SignInWithIdTokenCredentials
+  ): Promise<AuthResponse> => {
+    loggedInUser = user as User
+
+    const session = {
+      access_token: `token ${credentials.token}`,
+      refresh_token: 'refresh_token_1234567890',
+      token_type: `Bearer ${credentials.provider}`,
+      expires_in: 999,
+    }
+    loggedInUser.app_metadata = session
+
+    return {
+      data: {
+        user: null,
+        session: {
+          user: loggedInUser as User,
+          ...session,
+        },
+      },
+      error: null,
+    }
+  },
+  signInWithSSO: async (credentials: SignInWithSSO): Promise<SSOResponse> => {
+    loggedInUser = user as User
+
+    const url = `https://${credentials['domain']}.${credentials['providerId']}.com`
+    loggedInUser.app_metadata = {
+      url,
+      domain: credentials['domain'],
+      providerId: credentials['providerId'],
+    }
+
+    return {
+      data: {
+        url,
       },
       error: null,
     }
@@ -151,7 +246,7 @@ function getSupabaseAuth(customProviderHooks?: {
   return result
 }
 
-describe('Supabase', () => {
+describe('Supabase Authentication', () => {
   it('is not authenticated before logging in', async () => {
     const authRef = getSupabaseAuth()
 
@@ -160,147 +255,229 @@ describe('Supabase', () => {
     })
   })
 
-  it('is authenticated after logging in', async () => {
-    const authRef = getSupabaseAuth()
+  describe('Password Authentication', () => {
+    it('is authenticated after logging in', async () => {
+      const authRef = getSupabaseAuth()
 
-    await act(async () => {
-      authRef.current.logIn({
-        authType: 'Password',
-        email: 'john.doe@example.com',
-        password: 'ThereIsNoSpoon',
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'password',
+          email: 'john.doe@example.com',
+          password: 'ThereIsNoSpoon',
+        })
       })
+
+      expect(authRef.current.isAuthenticated).toBeTruthy()
     })
 
-    expect(authRef.current.isAuthenticated).toBeTruthy()
-  })
+    it('is not authenticated after logging out', async () => {
+      const authRef = getSupabaseAuth()
 
-  it('is not authenticated after logging out', async () => {
-    const authRef = getSupabaseAuth()
-
-    await act(async () => {
-      authRef.current.logIn({
-        authType: 'Password',
-        email: 'john.doe@example.com',
-        password: 'ThereIsNoSpoon',
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'password',
+          email: 'john.doe@example.com',
+          password: 'ThereIsNoSpoon',
+        })
       })
-    })
 
-    expect(authRef.current.isAuthenticated).toBeTruthy()
+      expect(authRef.current.isAuthenticated).toBeTruthy()
 
-    await act(async () => {
-      await authRef.current.logOut()
-    })
-
-    expect(authRef.current.isAuthenticated).toBeFalsy()
-  })
-
-  it('has role "user"', async () => {
-    const authRef = getSupabaseAuth()
-
-    expect(authRef.current.hasRole('user')).toBeFalsy()
-
-    await act(async () => {
-      authRef.current.logIn({
-        authType: 'Password',
-        email: 'john.doe@example.com',
-        password: 'ThereIsNoSpoon',
+      await act(async () => {
+        await authRef.current.logOut()
       })
+
+      expect(authRef.current.isAuthenticated).toBeFalsy()
     })
 
-    expect(authRef.current.hasRole('user')).toBeTruthy()
-  })
+    it('has role "user"', async () => {
+      const authRef = getSupabaseAuth()
 
-  it('has role "admin"', async () => {
-    const authRef = getSupabaseAuth()
+      expect(authRef.current.hasRole('user')).toBeFalsy()
 
-    expect(authRef.current.hasRole('admin')).toBeFalsy()
-
-    await act(async () => {
-      loggedInUser = adminUser as User
-      authRef.current.logIn({
-        authType: 'Password',
-        email: 'admin@example.com',
-        password: 'RedPill',
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'password',
+          email: 'john.doe@example.com',
+          password: 'ThereIsNoSpoon',
+        })
       })
+
+      expect(authRef.current.hasRole('user')).toBeTruthy()
     })
 
-    expect(authRef.current.hasRole('admin')).toBeTruthy()
-  })
+    it('has role "admin"', async () => {
+      const authRef = getSupabaseAuth()
 
-  it('can specify custom hasRole function', async () => {
-    function useHasRole(currentUser: CurrentUser | null) {
-      return (rolesToCheck: string | string[]) => {
-        if (!currentUser || typeof rolesToCheck !== 'string') {
+      expect(authRef.current.hasRole('admin')).toBeFalsy()
+
+      await act(async () => {
+        loggedInUser = adminUser as User
+        authRef.current.logIn({
+          authenticationMethod: 'password',
+          email: 'admin@example.com',
+          password: 'RedPill',
+        })
+      })
+
+      expect(authRef.current.hasRole('admin')).toBeTruthy()
+    })
+
+    it('can specify custom hasRole function', async () => {
+      function useHasRole(currentUser: CurrentUser | null) {
+        return (rolesToCheck: string | string[]) => {
+          if (!currentUser || typeof rolesToCheck !== 'string') {
+            return false
+          }
+
+          if (rolesToCheck === 'user') {
+            // Everyone has role "user"
+            return true
+          }
+
+          // For the admin role we check their email address
+          if (
+            rolesToCheck === 'admin' &&
+            currentUser.email === 'admin@example.com'
+          ) {
+            return true
+          }
+
           return false
         }
-
-        if (rolesToCheck === 'user') {
-          // Everyone has role "user"
-          return true
-        }
-
-        // For the admin role we check their email address
-        if (
-          rolesToCheck === 'admin' &&
-          currentUser.email === 'admin@example.com'
-        ) {
-          return true
-        }
-
-        return false
       }
-    }
 
-    const authRef = getSupabaseAuth({ useHasRole })
+      const authRef = getSupabaseAuth({ useHasRole })
 
-    expect(authRef.current.hasRole('user')).toBeFalsy()
+      expect(authRef.current.hasRole('user')).toBeFalsy()
 
-    await act(async () => {
-      authRef.current.logIn({
-        authType: 'Password',
-        email: 'john.doe@example.com',
-        password: 'ThereIsNoSpoon',
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'password',
+          email: 'john.doe@example.com',
+          password: 'ThereIsNoSpoon',
+        })
       })
+
+      expect(authRef.current.hasRole('user')).toBeTruthy()
+      expect(authRef.current.hasRole('admin')).toBeFalsy()
+
+      await act(async () => {
+        loggedInUser = adminUser as User
+        authRef.current.logIn({
+          authenticationMethod: 'password',
+          email: 'admin@example.com',
+          password: 'RedPill',
+        })
+      })
+
+      expect(authRef.current.hasRole('user')).toBeTruthy()
+      expect(authRef.current.hasRole('admin')).toBeTruthy()
     })
 
-    expect(authRef.current.hasRole('user')).toBeTruthy()
-    expect(authRef.current.hasRole('admin')).toBeFalsy()
+    it('can specify custom getCurrentUser function', async () => {
+      async function useCurrentUser() {
+        return {
+          ...loggedInUser,
+          roles: ['custom-current-user'],
+        }
+      }
 
-    await act(async () => {
-      loggedInUser = adminUser as User
-      authRef.current.logIn({
-        authType: 'Password',
-        email: 'admin@example.com',
-        password: 'RedPill',
+      const authRef = getSupabaseAuth({ useCurrentUser })
+
+      // Need to be logged in, otherwise getCurrentUser won't be invoked
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'password',
+          email: 'john.doe@example.com',
+          password: 'ThereIsNoSpoon',
+        })
+      })
+
+      await act(async () => {
+        expect(authRef.current.hasRole('user')).toBeFalsy()
+        expect(authRef.current.hasRole('custom-current-user')).toBeTruthy()
       })
     })
-
-    expect(authRef.current.hasRole('user')).toBeTruthy()
-    expect(authRef.current.hasRole('admin')).toBeTruthy()
   })
 
-  it('can specify custom getCurrentUser function', async () => {
-    async function useCurrentUser() {
-      return {
-        ...loggedInUser,
-        roles: ['custom-current-user'],
-      }
-    }
+  describe('OAuth Authentication', () => {
+    it('is authenticated after logging in with an OAuth provider', async () => {
+      const authRef = getSupabaseAuth()
 
-    const authRef = getSupabaseAuth({ useCurrentUser })
-
-    // Need to be logged in, otherwise getCurrentUser won't be invoked
-    await act(async () => {
-      authRef.current.logIn({
-        authType: 'Password',
-        email: 'john.doe@example.com',
-        password: 'ThereIsNoSpoon',
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'oauth',
+          provider: 'github',
+        })
       })
-    })
 
-    await act(async () => {
-      expect(authRef.current.hasRole('user')).toBeFalsy()
-      expect(authRef.current.hasRole('custom-current-user')).toBeTruthy()
+      const currentUser = authRef.current.currentUser
+
+      expect(authRef.current.isAuthenticated).toBeTruthy()
+      expect(currentUser?.app_metadata?.['provider']).toEqual('github')
+    })
+  })
+
+  describe('Passwordless/OTP Authentication', () => {
+    it('is authenticated after logging just an email', async () => {
+      const authRef = getSupabaseAuth()
+
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'otp',
+          email: 'les@example.com',
+        })
+      })
+
+      const currentUser = authRef.current.currentUser
+
+      expect(authRef.current.isAuthenticated).toBeTruthy()
+      expect(currentUser?.['email']).toEqual('les@example.com')
+    })
+  })
+
+  describe('IDToken Authentication', () => {
+    it('is authenticated after logging with Apple IDToken', async () => {
+      const authRef = getSupabaseAuth()
+
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'id_token',
+          provider: 'apple',
+          token: 'cortland-apple-id-token',
+        })
+      })
+
+      const currentUser = authRef.current.currentUser
+      const appMetadata = currentUser?.['app_metadata']
+
+      expect(authRef.current.isAuthenticated).toBeTruthy()
+      expect(appMetadata?.['access_token']).toEqual(
+        'token cortland-apple-id-token'
+      )
+      expect(appMetadata?.['token_type']).toEqual('Bearer apple')
+    })
+  })
+
+  describe('SSO Authentication', () => {
+    it('is authenticated after logging with SSO', async () => {
+      const authRef = getSupabaseAuth()
+
+      await act(async () => {
+        authRef.current.logIn({
+          authenticationMethod: 'sso',
+          providerId: 'sso-provider-identity-uuid',
+          domain: 'example.com',
+        })
+      })
+
+      const currentUser = authRef.current.currentUser
+      const appMetadata = currentUser?.['app_metadata']
+
+      expect(authRef.current.isAuthenticated).toBeTruthy()
+      expect(appMetadata?.['domain']).toEqual('example.com')
+      expect(appMetadata?.['providerId']).toEqual('sso-provider-identity-uuid')
     })
   })
 })

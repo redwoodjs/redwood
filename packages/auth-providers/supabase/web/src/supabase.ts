@@ -3,30 +3,37 @@ import type {
   AuthResponse,
   OAuthResponse,
   SSOResponse,
-  SignInWithOAuthCredentials as SbSignInWithOauthCredentials,
-  SignInWithIdTokenCredentials as SbSignInWithIdTokenCredentials,
-  SignInWithPasswordCredentials as SbSignInWithPasswordCredentials,
-  SignInWithPasswordlessCredentials as SbSignInWithPasswordlessCredentials,
-  SignInWithSSO as SbSignInWithSSO,
+  SignInWithOAuthCredentials,
+  SignInWithIdTokenCredentials,
+  SignInWithPasswordCredentials,
+  SignInWithPasswordlessCredentials,
+  SignInWithSSO,
   SignUpWithPasswordCredentials,
 } from '@supabase/supabase-js'
 import { AuthError } from '@supabase/supabase-js'
 
 import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
-type SignInWithOAuthCredentials = SbSignInWithOauthCredentials & {
-  authType: 'OAuth'
+export type SignInWithOAuthOptions = SignInWithOAuthCredentials & {
+  authenticationMethod: 'oauth'
 }
-type SignInWithIdTokenCredentials = SbSignInWithIdTokenCredentials & {
-  authType: 'IdToken'
+
+export type SignInWithIdTokenOptions = SignInWithIdTokenCredentials & {
+  authenticationMethod: 'id_token'
 }
-type SignInWithPasswordCredentials = SbSignInWithPasswordCredentials & {
-  authType: 'Password'
+
+export type SignInWithPasswordOptions = SignInWithPasswordCredentials & {
+  authenticationMethod: 'password'
 }
-type SignInWithPasswordlessCredentials = SbSignInWithPasswordlessCredentials & {
-  authType: 'Passwordless'
+
+export type SignInWithPasswordlessOptions =
+  SignInWithPasswordlessCredentials & {
+    authenticationMethod: 'otp'
+  }
+
+export type SignInWithSSOOptions = SignInWithSSO & {
+  authenticationMethod: 'sso'
 }
-type SignInWithSSO = SbSignInWithSSO & { authType: 'SSO' }
 
 export function createAuth(
   supabaseClient: SupabaseClient,
@@ -47,15 +54,15 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
     type: 'supabase',
     client: supabaseClient,
     /*
-     * All Supabase Sign In
+     * All Supabase Sign In Authentication Methods
      */
     login: async (
       credentials:
-        | SignInWithPasswordCredentials
-        | SignInWithOAuthCredentials
-        | SignInWithIdTokenCredentials
-        | SignInWithPasswordlessCredentials
-        | SignInWithSSO
+        | SignInWithPasswordOptions
+        | SignInWithOAuthOptions
+        | SignInWithIdTokenOptions
+        | SignInWithPasswordlessOptions
+        | SignInWithSSOOptions
     ): Promise<AuthResponse | OAuthResponse | SSOResponse> => {
       /**
        * Log in an existing user with an email and password or phone and password.
@@ -65,14 +72,14 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        * email/phone and password combination is wrong or that the account can only
        * be accessed via social login.
        */
-      if (credentials.authType === 'Password') {
+      if (credentials.authenticationMethod === 'password') {
         return await supabaseClient.auth.signInWithPassword(credentials)
       }
 
       /**
        * Log in an existing user via a third-party provider.
        */
-      if (credentials.authType === 'OAuth') {
+      if (credentials.authenticationMethod === 'oauth') {
         return await supabaseClient.auth.signInWithOAuth(credentials)
       }
 
@@ -87,7 +94,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        * between the cases where the account does not exist or, that the account
        * can only be accessed via social login.
        */
-      if (credentials.authType === 'Passwordless') {
+      if (credentials.authenticationMethod === 'otp') {
         return await supabaseClient.auth.signInWithOtp(credentials)
       }
 
@@ -110,7 +117,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        *
        * @experimental
        */
-      if (credentials.authType === 'SSO') {
+      if (credentials.authenticationMethod === 'sso') {
         return await supabaseClient.auth.signInWithSSO(credentials)
       }
 
@@ -120,19 +127,19 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        *
        * @experimental
        */
-      if (credentials.authType === 'IdToken') {
+      if (credentials.authenticationMethod === 'id_token') {
         return await supabaseClient.auth.signInWithIdToken(credentials)
       }
 
-      /* Unsupported login */
+      /* Unsupported authentication method */
       return {
         data: { user: null, session: null },
-        error: new AuthError('Invalid Login Credentials'),
+        error: new AuthError('Unsupported authentication method'),
       }
     },
     /**
      * Inside a browser context, `signOut()` will remove the logged in user from the browser session
-     * and log them out - removing all items from localstorage and then trigger a `"SIGNED_OUT"` event.
+     * and log them out - removing all items from localStorage and then trigger a `"SIGNED_OUT"` event.
      *
      * For server-side management, you can revoke all refresh tokens for a user by passing a user's JWT through to `auth.api.signOut(JWT: string)`.
      * There is no way to revoke a user's access token jwt until it expires. It is recommended to set a shorter expiry on the jwt for this reason.
