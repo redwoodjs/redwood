@@ -481,10 +481,13 @@ describe('Supabase Authentication', () => {
         })
       })
 
-      const currentUser = authRef.current.currentUser
+      // In a real RW app the type for `currentUser` is generated from the
+      // return type of getCurrentUser in api/lib/auth. Here we have to
+      // cast it to the correct type
+      const currentUser = authRef.current.currentUser as User | null
 
       expect(authRef.current.isAuthenticated).toBeTruthy()
-      expect(currentUser?.app_metadata?.['provider']).toEqual('github')
+      expect(currentUser?.app_metadata?.provider).toEqual('github')
     })
   })
 
@@ -499,10 +502,13 @@ describe('Supabase Authentication', () => {
         })
       })
 
-      const currentUser = authRef.current.currentUser
+      // In a real RW app the type for `currentUser` is generated from the
+      // return type of getCurrentUser in api/lib/auth. Here we have to
+      // cast it to the correct type
+      const currentUser = authRef.current.currentUser as User | null
 
       expect(authRef.current.isAuthenticated).toBeTruthy()
-      expect(currentUser?.['email']).toEqual('les@example.com')
+      expect(currentUser?.email).toEqual('les@example.com')
     })
   })
 
@@ -518,14 +524,15 @@ describe('Supabase Authentication', () => {
         })
       })
 
-      const currentUser = authRef.current.currentUser
-      const appMetadata = currentUser?.['app_metadata']
+      // In a real RW app the type for `currentUser` is generated from the
+      // return type of getCurrentUser in api/lib/auth. Here we have to
+      // cast it to the correct type
+      const currentUser = authRef.current.currentUser as User | null
+      const appMetadata = currentUser?.app_metadata
 
       expect(authRef.current.isAuthenticated).toBeTruthy()
-      expect(appMetadata?.['access_token']).toEqual(
-        'token cortland-apple-id-token'
-      )
-      expect(appMetadata?.['token_type']).toEqual('Bearer apple')
+      expect(appMetadata?.access_token).toEqual('token cortland-apple-id-token')
+      expect(appMetadata?.token_type).toEqual('Bearer apple')
     })
   })
 
@@ -541,12 +548,15 @@ describe('Supabase Authentication', () => {
         })
       })
 
-      const currentUser = authRef.current.currentUser
-      const appMetadata = currentUser?.['app_metadata']
+      // In a real RW app the type for `currentUser` is generated from the
+      // return type of getCurrentUser in api/lib/auth. Here we have to
+      // cast it to the correct type
+      const currentUser = authRef.current.currentUser as User | null
+      const appMetadata = currentUser?.app_metadata
 
       expect(authRef.current.isAuthenticated).toBeTruthy()
-      expect(appMetadata?.['domain']).toEqual('example.com')
-      expect(appMetadata?.['providerId']).toEqual('sso-provider-identity-uuid')
+      expect(appMetadata?.domain).toEqual('example.com')
+      expect(appMetadata?.providerId).toEqual('sso-provider-identity-uuid')
     })
   })
 })
