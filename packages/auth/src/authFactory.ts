@@ -6,10 +6,14 @@ import { createUseAuth } from './useAuth'
 export function createAuthentication<
   TUser,
   TRestoreAuth,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
   TClient
@@ -17,10 +21,14 @@ export function createAuthentication<
   authImplementation: AuthImplementation<
     TUser,
     TRestoreAuth,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
     TValidateResetToken,
     TClient
@@ -34,10 +42,14 @@ export function createAuthentication<
 ) {
   const AuthContext = createAuthContext<
     TUser,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
     TValidateResetToken,
     TClient

@@ -26,10 +26,14 @@ export interface AuthProviderProps {
 export function createAuthProvider<
   TUser,
   TRestoreAuth,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
   TClient
@@ -37,10 +41,14 @@ export function createAuthProvider<
   AuthContext: React.Context<
     | AuthContextInterface<
         TUser,
+        TLogInOptions,
         TLogIn,
+        TLogOutOptions,
         TLogOut,
+        TSignUpOptions,
         TSignUp,
         TForgotPassword,
+        TResetPasswordOptions,
         TResetPassword,
         TValidateResetToken,
         TClient
@@ -50,10 +58,14 @@ export function createAuthProvider<
   authImplementation: AuthImplementation<
     TUser,
     TRestoreAuth,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
     TValidateResetToken,
     TClient
