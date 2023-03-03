@@ -32,7 +32,8 @@ function createAuthImplementation(netlifyIdentity: NetlifyIdentity) {
   return {
     type: 'netlify',
     client: netlifyIdentity,
-    login: () => {
+    // _options: never is needed to help TS infer the TLogInOptions type
+    login: (_options: never) => {
       return new Promise<NetlifyIdentityNS.User | null>((resolve, reject) => {
         let autoClosedModal = false
         netlifyIdentity.open('login')
@@ -48,14 +49,14 @@ function createAuthImplementation(netlifyIdentity: NetlifyIdentity) {
         netlifyIdentity.on('error', reject)
       })
     },
-    logout: () => {
+    logout: (_options: never) => {
       return new Promise<void>((resolve, reject) => {
         netlifyIdentity.logout()
         netlifyIdentity.on('logout', resolve)
         netlifyIdentity.on('error', reject)
       })
     },
-    signup: () => {
+    signup: (_options: never) => {
       return new Promise<null>((resolve, reject) => {
         netlifyIdentity.open('signup')
         netlifyIdentity.on('close', () => {

@@ -43,7 +43,7 @@ const auth0MockClient: Partial<Auth0Client> = {
   loginWithRedirect: async () => {
     loggedInUser = user
   },
-  logout: () => {},
+  logout: async () => {},
   getTokenSilently,
   getUser: <TUser extends User>() => {
     return new Promise<TUser | undefined>((resolve) => {
