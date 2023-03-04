@@ -8,7 +8,7 @@ export interface LoginAttributes {
 }
 
 export interface ResetPasswordAttributes {
-  token: string
+  resetToken: string
   password: string
 }
 
@@ -19,7 +19,7 @@ const TOKEN_CACHE_TIME = 5000
 export function createAuth(
   dbAuthClient: ReturnType<typeof createDbAuthClient>,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
