@@ -27,6 +27,7 @@ const resource = Resource.default().merge(
 
 const exporter = new OTLPTraceExporter({
   // Update this URL to point to where your OTLP compatible collector is listening
+  // The redwood development dashboard (`yarn rw dashboard`) can collect your telemetry at `http://127.0.0.1:4318/v1/traces`
   url: 'http://127.0.0.1:4318/v1/traces',
 })
 

@@ -30,6 +30,9 @@ describe('getConfig', () => {
         "notifications": {
           "versionUpdates": [],
         },
+        "opentelemetry": {
+          "scriptPath": undefined,
+        },
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",

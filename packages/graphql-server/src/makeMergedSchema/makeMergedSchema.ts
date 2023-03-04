@@ -60,19 +60,12 @@ const mapFieldsToService = ({
           info: unknown
         ) => {
           const tracer = opentelemetry.trace.getTracer('redwoodjs')
-          console.log(
-            name,
-            // @ts-expect-error casting
-            opentelemetry.trace.getActiveSpan()?.name,
-            // @ts-expect-error casting
-            opentelemetry.trace.getSpan(opentelemetry.context.active())?.name
-          )
           return tracer.startActiveSpan(
             `redwoodjs:graphql:resolver:${name}`,
             async (span) => {
               span.setAttribute(
                 'graphql.execute.operationName',
-                // @ts-expect-error we know it's unknown
+                // @ts-expect-error we know it's an unknown type
                 `${args.operationName || 'Anonymous Operation'}`
               )
               let result
@@ -88,7 +81,6 @@ const mapFieldsToService = ({
               }
             }
           )
-          // return services[name](args, { root, context, info })
         },
       }
     }

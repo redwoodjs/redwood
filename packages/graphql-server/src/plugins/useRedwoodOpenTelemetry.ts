@@ -45,13 +45,6 @@ export const useRedwoodOpenTelemetry = (): Plugin<PluginContext> => {
               typeof context === 'object' &&
               context[tracingSpanSymbol]
             ) {
-              // tracer.getActiveSpanProcessor()
-
-              console.log(
-                'before',
-                // @ts-expect-error casting
-                opentelemetry.trace.getActiveSpan()?.name
-              )
               const ctx = opentelemetry.trace.setSpan(
                 opentelemetry.context.active(),
                 context[tracingSpanSymbol]
@@ -71,24 +64,16 @@ export const useRedwoodOpenTelemetry = (): Plugin<PluginContext> => {
                 ctx
               )
 
-              console.log(
-                'after',
-                // @ts-expect-error casting
-                opentelemetry.trace.getActiveSpan()?.name
-              )
-
               return ({ result }) => {
                 if (result instanceof Error) {
                   resolverSpan.recordException({
                     name: AttributeName.RESOLVER_EXCEPTION,
                     message: JSON.stringify(result),
                   })
-                  // } else {
                 }
                 resolverSpan.end()
               }
             }
-
             return () => {}
           })
         )

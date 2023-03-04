@@ -2268,7 +2268,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/on-resolve@npm:^2.0.6":
+"@envelop/on-resolve@npm:2.0.6":
   version: 2.0.6
   resolution: "@envelop/on-resolve@npm:2.0.6"
   peerDependencies:
@@ -7321,7 +7321,7 @@ __metadata:
     "@envelop/depth-limit": 2.0.6
     "@envelop/disable-introspection": 4.0.6
     "@envelop/filter-operation-type": 4.0.6
-    "@envelop/on-resolve": ^2.0.6
+    "@envelop/on-resolve": 2.0.6
     "@envelop/testing": 5.0.6
     "@envelop/types": 3.0.2
     "@escape.tech/graphql-armor": 1.7.1

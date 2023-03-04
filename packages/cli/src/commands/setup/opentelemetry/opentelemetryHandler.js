@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
+import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
@@ -30,7 +31,6 @@ export const handler = async ({ force, verbose }) => {
     '@opentelemetry/semantic-conventions',
     '@opentelemetry/instrumentation-http',
     '@opentelemetry/instrumentation-fastify',
-    '@envelop/opentelemetry',
     '@prisma/instrumentation',
   ]
 
@@ -81,72 +81,6 @@ export const handler = async ({ force, verbose }) => {
     },
   ]
 
-  const envelopTasks = [
-    {
-      // TODO: Handle the case where the user already has setup the plugin before
-      // TODO: Make this conditional?
-      // TODO: Implement the updating of the extraPlugins parameter
-      title: 'Setuping up Envelop plugin...',
-      task: (_ctz, task) => {
-        const graphqlPath = path.join(
-          getPaths().api.functions,
-          `graphql.${ts ? 'ts' : 'js'}`
-        )
-        const graphqlContents = fs.readFileSync(graphqlPath, {
-          encoding: 'utf-8',
-          flag: 'r',
-        })
-
-        const envelopTemplateContent = fs.readFileSync(
-          path.resolve(__dirname, 'templates', 'envelop.ts.template'),
-          'utf-8'
-        )
-        const envelopContent = ts
-          ? envelopTemplateContent
-          : transformTSToJS(graphqlPath, envelopTemplateContent)
-
-        const splitPosition = graphqlContents.indexOf(
-          '\n',
-          graphqlContents.lastIndexOf('import')
-        )
-        const contentBefore = graphqlContents.slice(0, splitPosition).trimEnd()
-        const contentAfter = graphqlContents.slice(splitPosition).trimStart()
-
-        let newGraphqlContents = [
-          contentBefore,
-          envelopContent,
-          contentAfter,
-        ].join('\n')
-
-        if (graphqlContents.includes('extraPlugins')) {
-          task.output = `You will have to manually update 'extraPlugins' to include the OpenTelemetry plugin within ${graphqlPath}`
-        } else {
-          const splitPosition = newGraphqlContents.indexOf(
-            '\n',
-            newGraphqlContents.lastIndexOf(
-              'export const handler = createGraphQLHandler({'
-            )
-          )
-          const contentBefore = newGraphqlContents
-            .slice(0, splitPosition)
-            .trimEnd()
-          const contentAfter = newGraphqlContents
-            .slice(splitPosition)
-            .trimStart()
-          newGraphqlContents = [
-            contentBefore,
-            'extraPlugins: [opentelemetryPlugin],',
-            contentAfter,
-          ].join('\n')
-        }
-
-        return writeFile(graphqlPath, newGraphqlContents, {
-          overwriteExisting: true, // We'll likely always already have this file in the project
-        })
-      },
-    },
-  ]
-
   const prismaTasks = [
     {
       title: 'Setup Prisma OpenTelemetry...',
@@ -192,6 +126,16 @@ export const handler = async ({ force, verbose }) => {
         })
       },
     },
+    {
+      title: 'Regenerate the Prisma client...',
+      task: (_ctx, _task) => {
+        return execa(`yarn rw prisma generate`, {
+          stdio: 'inherit',
+          shell: true,
+          cwd: getPaths().web.base,
+        })
+      },
+    },
   ]
 
   const tasks = new Listr(
@@ -210,7 +154,6 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       ...opentelemetryTasks,
-      ...envelopTasks,
       ...prismaTasks,
       {
         title: 'One more thing...',

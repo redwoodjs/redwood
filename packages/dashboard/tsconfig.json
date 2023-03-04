@@ -1,11 +1,11 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "outDir": "dist",
+    "baseUrl": "./",
+    "rootDir": "backend",
+    "tsBuildInfoFile": "dist-backend/tsconfig.tsbuildinfo",
+    "outDir": "dist-backend",
   },
-  "include": ["src", "ambient.d.ts"],
+  "include": ["backend", "ambient.d.ts"],
   "references": [{ "path": "../internal" }]
 }
