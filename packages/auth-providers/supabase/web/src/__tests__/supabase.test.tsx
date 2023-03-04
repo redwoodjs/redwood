@@ -327,7 +327,7 @@ describe('Supabase Authentication', () => {
 
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'password',
+          authMethod: 'password',
           email: 'john.doe@example.com',
           password: 'ThereIsNoSpoon',
         })
@@ -344,7 +344,7 @@ describe('Supabase Authentication', () => {
 
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'password',
+          authMethod: 'password',
           email: 'john.doe@example.com',
           password: 'ThereIsNoSpoon',
         })
@@ -366,7 +366,7 @@ describe('Supabase Authentication', () => {
 
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'password',
+          authMethod: 'password',
           email: 'john.doe@example.com',
           password: 'ThereIsNoSpoon',
         })
@@ -383,7 +383,7 @@ describe('Supabase Authentication', () => {
       await act(async () => {
         loggedInUser = adminUser
         authRef.current.logIn({
-          authenticationMethod: 'password',
+          authMethod: 'password',
           email: 'admin@example.com',
           password: 'RedPill',
         })
@@ -422,7 +422,7 @@ describe('Supabase Authentication', () => {
 
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'password',
+          authMethod: 'password',
           email: 'john.doe@example.com',
           password: 'ThereIsNoSpoon',
         })
@@ -434,7 +434,7 @@ describe('Supabase Authentication', () => {
       await act(async () => {
         loggedInUser = adminUser
         authRef.current.logIn({
-          authenticationMethod: 'password',
+          authMethod: 'password',
           email: 'admin@example.com',
           password: 'RedPill',
         })
@@ -457,7 +457,7 @@ describe('Supabase Authentication', () => {
       // Need to be logged in, otherwise getCurrentUser won't be invoked
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'password',
+          authMethod: 'password',
           email: 'john.doe@example.com',
           password: 'ThereIsNoSpoon',
         })
@@ -476,7 +476,7 @@ describe('Supabase Authentication', () => {
 
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'oauth',
+          authMethod: 'oauth',
           provider: 'github',
         })
       })
@@ -497,7 +497,7 @@ describe('Supabase Authentication', () => {
 
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'otp',
+          authMethod: 'otp',
           email: 'les@example.com',
         })
       })
@@ -518,7 +518,7 @@ describe('Supabase Authentication', () => {
 
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'id_token',
+          authMethod: 'id_token',
           provider: 'apple',
           token: 'cortland-apple-id-token',
         })
@@ -542,7 +542,7 @@ describe('Supabase Authentication', () => {
 
       await act(async () => {
         authRef.current.logIn({
-          authenticationMethod: 'sso',
+          authMethod: 'sso',
           providerId: 'sso-provider-identity-uuid',
           domain: 'example.com',
         })

@@ -15,24 +15,24 @@ import { AuthError } from '@supabase/supabase-js'
 import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 export type SignInWithOAuthOptions = SignInWithOAuthCredentials & {
-  authenticationMethod: 'oauth'
+  authMethod: 'oauth'
 }
 
 export type SignInWithIdTokenOptions = SignInWithIdTokenCredentials & {
-  authenticationMethod: 'id_token'
+  authMethod: 'id_token'
 }
 
 export type SignInWithPasswordOptions = SignInWithPasswordCredentials & {
-  authenticationMethod: 'password'
+  authMethod: 'password'
 }
 
 export type SignInWithPasswordlessOptions =
   SignInWithPasswordlessCredentials & {
-    authenticationMethod: 'otp'
+    authMethod: 'otp'
   }
 
 export type SignInWithSSOOptions = SignInWithSSO & {
-  authenticationMethod: 'sso'
+  authMethod: 'sso'
 }
 
 export function createAuth(
@@ -72,14 +72,14 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        * email/phone and password combination is wrong or that the account can only
        * be accessed via social login.
        */
-      if (credentials.authenticationMethod === 'password') {
+      if (credentials.authMethod === 'password') {
         return await supabaseClient.auth.signInWithPassword(credentials)
       }
 
       /**
        * Log in an existing user via a third-party provider.
        */
-      if (credentials.authenticationMethod === 'oauth') {
+      if (credentials.authMethod === 'oauth') {
         return await supabaseClient.auth.signInWithOAuth(credentials)
       }
 
@@ -94,7 +94,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        * between the cases where the account does not exist or, that the account
        * can only be accessed via social login.
        */
-      if (credentials.authenticationMethod === 'otp') {
+      if (credentials.authMethod === 'otp') {
         return await supabaseClient.auth.signInWithOtp(credentials)
       }
 
@@ -117,7 +117,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        *
        * @experimental
        */
-      if (credentials.authenticationMethod === 'sso') {
+      if (credentials.authMethod === 'sso') {
         return await supabaseClient.auth.signInWithSSO(credentials)
       }
 
@@ -127,7 +127,7 @@ function createAuthImplementation(supabaseClient: SupabaseClient) {
        *
        * @experimental
        */
-      if (credentials.authenticationMethod === 'id_token') {
+      if (credentials.authMethod === 'id_token') {
         return await supabaseClient.auth.signInWithIdToken(credentials)
       }
 
