@@ -51,7 +51,7 @@
     "@babel/runtime-corejs3": "7.21.0",
     "@npmcli/arborist": "6.2.4",
     "@nrwl/nx-cloud": "15.1.1",
-    "@playwright/test": "1.31.1",
+    "@playwright/test": "1.31.2",
     "@replayio/playwright": "0.3.24",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
