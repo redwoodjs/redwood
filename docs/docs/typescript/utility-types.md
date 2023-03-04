@@ -134,7 +134,7 @@ It takes three generic parameters:
 |:--------|:---------------------------------------------------------------------------------|
 | `TData` | The Prisma model that'll be returned                                             |
 | `TName` | (Optional) the name of the model. ("post" in the example below)                  |
-| `TKeys` | (optional) the keys(s) used to define the scenario. ("one" in the example below) |
+| `TKeys` | (optional) the key(s) used to define the scenario. ("one" in the example below) |
 
 We know this is a lot of generics, but that's so you get to choose how specific you want to be with the types!
 
