@@ -90,10 +90,13 @@ const getInfo = async (presets: Args = {}) => {
   const mem = await system.mem()
 
   // Must only call getConfig() once the project is setup - so not within telemetry for CRWA
+  const isCrwa = presets.command?.startsWith('create redwood-app')
+
   // Default to 'webpack' for new projects
-  const webBundler = presets.command?.startsWith('create redwood-app')
-    ? 'webpack'
-    : getConfig().web.bundler
+  const webBundler = isCrwa ? 'webpack' : getConfig().web.bundler
+  // New projects don't have any experiments going, so we default to an empty
+  // array
+  const experiments = isCrwa ? { enabled: [] } : getConfig().experiments
 
   return {
     os: info.System?.OS?.split(' ')[0],
@@ -107,6 +110,7 @@ const getInfo = async (presets: Args = {}) => {
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
     webBundler,
+    experiments,
   }
 }
 
