@@ -87,7 +87,7 @@
     "msw": "1.1.0",
     "ncp": "2.0.0",
     "node-notifier": "10.0.1",
-    "nodemon": "2.0.20",
+    "nodemon": "2.0.21",
     "npm-packlist": "7.0.4",
     "nx": "15.8.1",
     "octokit": "2.0.14",
