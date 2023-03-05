@@ -62,9 +62,15 @@ export default function (
         )[0]
 
         // Remove Page imports in prerender mode (see babel-preset)
-        // This is to make sure that all the imported "Page modules" are normal imports
-        // and not asynchronous ones.
-        // But note that jest in a user's project does not enter this block, but our tests do
+        // The removed imports will be replaced further down in this file
+        // with declarations like these:
+        // const HomePage = {
+        //   name: "HomePage",
+        //   loader: () => require("./pages/HomePage/HomePage")
+        // };
+        // This is to make sure that all the imported "Page modules" are normal
+        // imports and not asynchronous ones.
+        // Note that jest in a user's project does not enter this block, but our tests do
         if (useStaticImports) {
           // Match import paths, const name could be different
 

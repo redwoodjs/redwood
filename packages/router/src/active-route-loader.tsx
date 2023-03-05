@@ -19,7 +19,7 @@ import { ParamsProvider, useLocation } from '.'
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
-type synchronousLoaderSpec = () => { default: React.ComponentType<unknown> }
+type LoadedLoaderSpec = { default: React.ComponentType<unknown> }
 
 interface Props {
   path: string
@@ -114,9 +114,16 @@ export const ActiveRouteLoader = ({
         setRenderedPath(path)
       }, delay)
 
-      // Wait to download and parse the page.
       waitingFor.current = name
-      const module = await loader()
+
+      let module: LoadedLoaderSpec
+
+      if (globalThis.__REDWOOD__PRERENDERING) {
+        module = loader() as unknown as LoadedLoaderSpec
+      } else {
+        // Wait to download and parse the page.
+        module = await loader()
+      }
 
       // Remove the timeout because the page has loaded.
       clearLoadingTimeout()
@@ -180,37 +187,6 @@ export const ActiveRouteLoader = ({
       clearLoadingTimeout()
     }
   }, [spec, delay, children, whileLoadingPage, path, location, isMounted])
-
-  // It might feel tempting to move this code further up in the file for an
-  // "early return", but React doesn't allow that because pretty much all code
-  // above is hooks, and they always need to come before any `return`
-  if (globalThis.__REDWOOD__PRERENDERING) {
-    // babel auto-loader plugin uses withStaticImport in prerender mode
-    // override the types for this condition
-    const syncPageLoader = spec.loader as unknown as synchronousLoaderSpec
-    const PageFromLoader = syncPageLoader().default
-
-    const prerenderLoadingState: LoadingStateRecord = {
-      [path]: {
-        state: 'DONE',
-        specName: spec.name,
-        page: PageFromLoader,
-        location,
-      },
-    }
-
-    return (
-      <ParamsProvider path={path} location={location}>
-        <PageLoadingContextProvider value={{ loading: false }}>
-          <ActivePageContextProvider
-            value={{ loadingState: prerenderLoadingState }}
-          >
-            {children}
-          </ActivePageContextProvider>
-        </PageLoadingContextProvider>
-      </ParamsProvider>
-    )
-  }
 
   return (
     <ParamsProvider
