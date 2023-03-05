@@ -119,6 +119,8 @@ export const ActiveRouteLoader = ({
       let module: LoadedLoaderSpec
 
       if (globalThis.__REDWOOD__PRERENDERING) {
+        // babel-plugin-redwood-routes-auto-loader uses withStaticImport in
+        // prerender mode, making this type cast safe
         module = loader() as unknown as LoadedLoaderSpec
       } else {
         // Wait to download and parse the page.
