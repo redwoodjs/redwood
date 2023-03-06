@@ -117,6 +117,41 @@ await signUp({
 })
 ```
 
+### Sign Up with email and password and additional user metadata
+
+Creates a new user with additional user metadata.
+
+```ts
+const { signUp } = useAuth()
+
+await signUp({
+email: 'example@email.com',
+  password: 'example-password',
+  options: {
+    data: {
+      first_name: 'John',
+      age: 27,
+    }
+  }
+})
+```
+
+### Sign Up with email and password and a redirect URL
+
+Creates a new user with a redirect URL.
+
+```ts
+const { signUp } = useAuth()
+
+await signUp({
+email: 'example@email.com',
+  password: 'example-password',
+  options: {
+    emailRedirectTo: 'https://example.com/welcome'
+  }
+})
+```
+
 ### Sign in a user with email and password
 
 Log in an existing user with an email and password or phone and password.
