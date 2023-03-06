@@ -30,7 +30,7 @@
     "@redwoodjs/router": "4.0.0",
     "@redwoodjs/structure": "4.0.0",
     "@redwoodjs/web": "4.0.0",
-    "@whatwg-node/fetch": "0.8.1",
+    "@whatwg-node/fetch": "0.8.2",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.29.0",
