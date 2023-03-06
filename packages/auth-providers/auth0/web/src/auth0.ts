@@ -12,7 +12,7 @@ export interface Auth0User {}
 export function createAuth(
   auth0Client: Auth0Client,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
@@ -46,8 +46,10 @@ function createAuthImplementation(auth0Client: Auth0Client) {
     signup: async (options?: RedirectLoginOptions) =>
       auth0Client.loginWithRedirect({
         ...options,
-        screen_hint: 'signup',
-        prompt: 'login',
+        authorizationParams: {
+          screen_hint: 'signup',
+          prompt: 'login',
+        },
       }),
     getToken: () => auth0Client.getTokenSilently(),
     getUserMetadata: async () => {

@@ -77,7 +77,7 @@ const applyProviderOptions = (
 export function createAuth(
   firebaseClient: FirebaseClient,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
