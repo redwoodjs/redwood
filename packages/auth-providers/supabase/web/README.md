@@ -1,141 +1,290 @@
-# Authentication
+# Supabase Authentication
 
-## Contributing
+To get started, run the setup command:
 
-If you want to contribute a new auth provider integration we recommend you
-start by implementing it as a custom auth provider in a Redwood App first. When
-that works you can package it up as an npm package and publish it on your own.
-You can then create a PR on this repo with support for your new auth provider
-in our `yarn rw setup auth` cli command. The easiest option is probably to just
-look at one of the existing auth providers in
-`packages/cli/src/commands/setup/auth/providers` and the corresponding
-templates in `../templates`.
-
-If you need help setting up a custom auth provider you can read the auth docs
-on the web.
-
-### Contributing to the base auth implementation
-
-If you want to contribute to our auth implementation, the interface towards
-both auth service providers and RW apps we recommend you start looking in
-`authFactory.ts` and then continue to `AuthProvider.tsx`. `AuthProvider.tsx`
-has most of our implementation together with all the custom hooks it uses.
-Another file to be accustomed with is `AuthContext.ts`. The interface in there
-has pretty god code comments, and is what will be exposed to RW apps.
-
-## getCurrentUser
-
-`getCurrentUser` returns the user information together with
-an optional collection of roles used by requireAuth() to check if the user is authenticated or has role-based access.
-
-Use in conjunction with `requireAuth` in your services to check that a user is logged in, whether or not they are assigned a role, and optionally raise an error if they're not.
-
-```js
-@param decoded - The decoded access token containing user info and JWT claims like `sub`
-@param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
-@param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
-such as headers and cookies, and the context information about the invocation such as IP Address
+```bash
+yarn rw setup auth supabase
 ```
 
-### Examples
+This installs all the packages, writes all the files, and makes all the code modifications you need.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Supabase, see the top-level [Authentication](../authentication.md) doc. For now, let's focus on Supabase's side of things.
 
-#### Checks if currentUser is authenticated
+## Setup
 
-This example is the standard use of `getCurrentUser`.
+If you don't have a Supabase account yet, now's the time to make one: navigate to https://supabase.com and click "Start your project" in the top right. Then sign up and create an organization and a project.
 
-```js
-export const getCurrentUser = async (decoded, { _token, _type }, { _event, _context }) => {
-  return { ...decoded, roles: parseJWT({ decoded }).roles }
+While Supabase creates your project, it thoughtfully shows your project's API keys.
+(If the page refreshes while you're copying them over, just scroll down a bit and look for "Connecting to your new project".)
+We're looking for "Project URL" and "API key" (the `anon`, `public` one).
+Copy them into your project's `.env` file as `SUPABASE_URL` and `SUPABASE_KEY` respectively.
+
+There's one more we need, the "JWT Secret", that's not here.
+To get that one, click the cog icon ("Project Settings") near the bottom of the nav on the left.
+Then click "API", scroll down a bit, and you should see it—"JWT Secret" under "JWT Settings".
+Copy it into your project's `.env` file as `SUPABASE_JWT_SECRET`.
+All together now:
+
+```bash title=".env"
+SUPABASE_URL="..."
+SUPABASE_KEY="..."
+SUPABASE_JWT_SECRET="..."
+```
+
+Lastly, in `redwood.toml`, include `SUPABASE_URL` and `SUPABASE_KEY` in the list of env vars that should be available to the web side:
+
+```toml title="redwood.toml"
+[web]
+  # ...
+  includeEnvironmentVariables = ["SUPABASE_URL", "SUPABASE_KEY"]
+```
+
+
+
+## Authentication UI
+
+Supabase doesn't redirect to a hosted sign-up page or open a sign-up modal.
+In a real app, you'd build a form here, but we're going to hardcode an email and password.
+
+### Basic Example
+
+After you sign up, head to your inbox: there should be a confirmation email from Supabase waiting for you.
+
+Click the link, then head back to your app.
+Once you refresh the page, you should see `{"isAuthenticated":true}` on the page.
+
+
+Let's make sure: if this is a brand new project, generate a home page.
+
+There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
+
+```tsx title="web/src/pages/HomePage.tsx"
+import { useAuth } from 'src/auth'
+
+const HomePage = () => {
+  const { isAuthenticated, signUp } = useAuth()
+
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
+
+      <p>{JSON.stringify({ isAuthenticated })}</p>
+      <button onClick={() => signUp({
+        email: 'your.email@email.com',
+        password: 'super secret password',
+      })}>sign up</button>
+    </>
+  )
 }
 ```
 
-#### User details fetched via database query
+## Authentication Reference
 
-```js
-export const getCurrentUser = async (decoded) => {
-  return await db.user.findUnique({ where: { decoded.email } })
-}
+You will notice that [Supabase Javascript SDK Auth API](https://supabase.com/docs/reference/javascript/auth-api) reference documentation presents methods to sign in with the various integrations Supabase supports: password, OAuth, IDToken, SSO, etc.
+
+The RedwoodJS implementation of Supabase authentication supports these as well, but within the `logIn` method of the `useAuth` hook.
+
+That means that you will see that Supabase documents sign in with email password as:
+
+```ts
+const { data, error } = await supabase.auth.signInWithPassword({
+  email: 'example@email.com',
+  password: 'example-password',
+})
 ```
 
-#### User info is decoded from the access token
+In RedwoodJS, you will always use `logIn` and pass the necessary credential options and also an `authenticationMethod` to declare how you want to authenticate.
 
-```js
-export const getCurrentUser = async (decoded) => {
-  return { ...decoded }
-}
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'password',
+  email: 'example@email.com',
+  password: 'example-password',
+})
 ```
 
-#### User info is contained in the decoded token and roles extracted
+### Sign Up with email and password
 
-```js
-export const getCurrentUser = async (decoded) => {
-  return { ...decoded, roles: parseJWT({ decoded }).roles }
-}
+Creates a new user.
+
+```ts
+const { signUp } = useAuth()
+
+await signUp({
+  email: 'example@email.com',
+  password: 'example-password',
+})
 ```
 
-#### User record query by email with namespaced app_metadata roles as Auth0 requires custom JWT claims to be namespaced
+### Sign in a user with email and password
 
-```js
-export const getCurrentUser = async (decoded) => {
-  const currentUser = await db.user.findUnique({ where: { email: decoded.email } })
+Log in an existing user with an email and password or phone and password.
 
-  return {
-    ...currentUser,
-    roles: parseJWT({ decoded: decoded, namespace: NAMESPACE }).roles,
+* Requires either an email and password or a phone number and password.
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'password',
+  email: 'example@email.com',
+  password: 'example-password',
+})
+```
+
+### Sign in a user through Passwordless/OTP
+
+Log in a user using magiclink or a one-time password (OTP).
+
+* Requires either an email or phone number.
+
+* This method is used for passwordless sign-ins where a OTP is sent to the user's email or phone number.
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'otp',
+  email: 'example@email.com',
+  options: {
+    emailRedirectTo: 'https://example.com/welcome'
   }
-}
+})
 ```
 
-#### User record query by an identity with app_metadata roles
+### Sign in a user through OAuth
 
-```js
-const getCurrentUser = async (decoded) => {
-  const currentUser = await db.user.findUnique({ where: { userIdentity: decoded.sub } })
-  return {
-    ...currentUser,
-    roles: parseJWT({ decoded: decoded }).roles,
+Log in an existing user via a third-party provider.
+
+* This method is used for signing in using a third-party provider.
+
+* Supabase supports many different [third-party providers](https://supabase.com/docs/guides/auth#providers).
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'otp',
+  email: 'example@email.com',
+  options: {
+    emailRedirectTo: 'https://example.com/welcome'
   }
-}
+})
 ```
 
-#### Cookies and other request information are available in the req parameter, just in case
+### Sign in a user with IDToken
 
-```js
-const getCurrentUser = async (_decoded, _raw, { event, _context }) => {
-  const cookies = cookie(event.headers.cookies)
-  const session = cookies['my.cookie.name']
-  const currentUser = await db.sessions.findUnique({ where: { id: session } })
-  return currentUser
-}
+Log in a user using IDToken.
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'id_token',
+  provider: 'apple',
+  token: 'cortland-apple-id-token',
+})
 ```
 
+### Sign in a user with SSO
 
-## requireAuth
+Log in a user using IDToken.
 
- Use `requireAuth` in your services to check that a user is logged in, whether or not they are assigned a role, and optionally raise an error if they're not.
+```ts
+const { logIn } = useAuth()
 
-```js
-@param {string=} roles - An optional role or list of roles
-@param {string[]=} roles - An optional list of roles
-
-@returns {boolean} - If the currentUser is authenticated (and assigned one of the given roles)
-
-@throws {AuthenticationError} - If the currentUser is not authenticated
-@throws {ForbiddenError} If the currentUser is not allowed due to role permissions
+await logIn({
+  authenticationMethod: 'sso',
+  providerId: 'sso-provider-identity-uuid',
+  domain: 'example.com',
+})
 ```
 
-### Examples
+### Get Current User
 
-#### Checks if currentUser is authenticated
+Gets the content of the current user set by API side authentication.
 
-```js
-requireAuth()
+```ts
+const { currentUser } = useAuth()
+
+<p>{JSON.stringify({ currentUser })}</p>
 ```
 
-#### Checks if currentUser is authenticated and assigned one of the given roles
+### Get Current User Metadata
 
-```js
- requireAuth({ role: 'admin' })
- requireAuth({ role: ['editor', 'author'] })
- requireAuth({ role: ['publisher'] })
+Gets content of the current Supabase user session, i.e., `auth.getSession()`.
+
+```ts
+const { userMetadata } = useAuth()
+
+<p>{JSON.stringify({ userMetadata })}</p>
+```
+
+### Sign out a user
+
+Inside a browser context, signOut() will remove the logged in user from the browser session and log them out - removing all items from localStorage and then trigger a "SIGNED_OUT" event.
+
+In order to use the signOut() method, the user needs to be signed in first.
+
+```ts
+const { logOut } = useAuth()
+
+logOut()
+```
+
+### Verify and log in through OTP
+
+Log in a user given a User supplied OTP received via mobile.
+
+* The verifyOtp method takes in different verification types. If a phone number is used, the type can either be sms or phone_change. If an email address is used, the type can be one of the following: signup, magiclink, recovery, invite or email_change.
+
+* The verification type used should be determined based on the corresponding auth method called before verifyOtp to sign up / sign-in a user.
+
+
+The RedwoodJS auth provider doesn't expose the `veriftyOtp` method from the Supabase SDK directly.
+
+Instead, since you always have access the the Supabase Auth client, you can access any method it exposes.
+
+So, in order to use the `verifyOtp` method, you would:
+
+```ts
+const { client } = useAuth()
+
+const { data, error } = await client.verifyOtp({ phone, token, type: 'sms'})
+```
+
+### Access the Supabase Auth Client
+
+Sometimes you may need to access the Supabase Auth client directly.
+
+```ts
+const { client } = useAuth()
+```
+
+You can then use it to work with Supabase sessions, or auth events.
+
+
+### Retrieve a session
+
+Returns the session, refreshing it if necessary. The session returned can be null if the session is not detected which can happen in the event a user is not signed-in or has logged out.
+
+```ts
+const { client } = useAuth()
+
+const { data, error } = await client.getSession()
+```
+
+### Listen to auth events
+
+Receive a notification every time an auth event happens.
+
+* Types of auth events: `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED`, `USER_UPDATED`, `PASSWORD_RECOVERY`
+
+```ts
+const { client } = useAuth()
+
+client.onAuthStateChange((event, session) => {
+  console.log(event, session)
+})
 ```

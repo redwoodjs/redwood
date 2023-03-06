@@ -75,8 +75,8 @@ const HomePage = () => {
 
       <p>{JSON.stringify({ isAuthenticated })}</p>
       <button onClick={() => signUp({
-        // email: 'your.email@email.com',
-        // password: 'super secret password',
+        email: 'your.email@email.com',
+        password: 'super secret password',
       })}>sign up</button>
     </>
   )
@@ -207,6 +207,27 @@ await logIn({
 })
 ```
 
+### Get Current User
+
+Gets the content of the current user set by API side authentication.
+
+```ts
+const { currentUser } = useAuth()
+
+<p>{JSON.stringify({ currentUser })}</p>
+```
+
+### Get Current User Metadata
+
+Gets content of the current Supabase user session, i.e., `auth.getSession()`.
+
+```ts
+const { userMetadata } = useAuth()
+
+<p>{JSON.stringify({ userMetadata })}</p>
+```
+
+
 ### Sign out a user
 
 Inside a browser context, signOut() will remove the logged in user from the browser session and log them out - removing all items from localStorage and then trigger a "SIGNED_OUT" event.
@@ -218,7 +239,6 @@ const { logOut } = useAuth()
 
 logOut()
 ```
-
 
 ### Verify and log in through OTP
 
