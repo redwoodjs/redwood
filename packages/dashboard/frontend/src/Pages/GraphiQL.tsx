@@ -17,6 +17,7 @@ function GraphiQL() {
   if (data) {
     headers = `{"auth-provider-test": "${data?.authProvider}"}`
   }
+
   console.log(data)
   return <RedwoodGraphiQL headers={headers} />
 }
