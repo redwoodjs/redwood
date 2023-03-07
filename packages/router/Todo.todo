@@ -3,9 +3,14 @@ Restore existing functionality:
     ✔ activeRoute @done(23-03-07 13:33)
       ✔ if no activeRoute render notfound @done(23-03-07 14:02)
       It needs to know if any of the Routes match
-      ☐ check if splashpage is still OK
-      ☐ do we still need react.cloneElement with the key?
+      ✔ check if splashpage is still OK @done(23-03-07 18:56)
+      ✔ do we still need react.cloneElement with the key? @done(23-03-07 18:43)
+        Doesn't seem like it
       ☐ actually delete analyze function, rename krisilyze
+      ☐ fix isValidRoute function
+        ☐ Add test for no path
+        ☐ Add test for no page
+        ☐ Add test for no name
 
 
 

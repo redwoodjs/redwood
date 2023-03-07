@@ -1,6 +1,12 @@
-import React, { Children, isValidElement, ReactNode } from 'react'
+import React, { Children, isValidElement, ReactElement, ReactNode } from 'react'
 
-import { isStandardRoute, isValidRoute, PageType, RouteProps } from './router'
+import {
+  isNotFoundRoute,
+  isRedirectRoute,
+  isStandardRoute,
+  isValidRoute,
+} from './route-validators'
+import { PageType } from './router'
 import { isSetNode } from './Set'
 
 import { AvailableRoutes } from './'
@@ -257,20 +263,22 @@ export function parseSearch(
  * are found, a descriptive Error will be thrown, as problems with routes are
  * critical enough to be considered fatal.
  */
-export function validatePath(path: string) {
+export function validatePath(path: string, routeName: string) {
   // Check that path begins with a slash.
   if (!path.startsWith('/')) {
-    throw new Error(`Route path does not begin with a slash: "${path}"`)
+    throw new Error(
+      `Route path for ${routeName} does not begin with a slash: "${path}"`
+    )
   }
 
   if (path.indexOf(' ') >= 0) {
-    throw new Error(`Route path contains spaces: "${path}"`)
+    throw new Error(`Route path for ${routeName} contains spaces: "${path}"`)
   }
 
   if (/{(?:ref|key)(?::|})/.test(path)) {
     throw new Error(
       [
-        `Route contains ref or key as a path parameter: "${path}"`,
+        `Route for ${routeName} contains ref or key as a path parameter: "${path}"`,
         "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
         'You can fix this by renaming the path parameter.',
       ].join('\n')
@@ -425,18 +433,28 @@ export function inIframe() {
     return true
   }
 }
-interface KrisilyzeOptions {
+interface AnayzeRoutesOptions {
   currentPathName: string
   userParamTypes?: Record<string, ParamType>
 }
 
-export function krisilyze(
+// This is essentially the same as RouteProps
+// but it allows for page and redirect to be null or undefined
+// Keeping the shape consistent makes it easier to use
+interface AnalyzedRoute {
+  path: string
+  name: string
+  whileLoadingPage?: () => ReactElement | null
+  page: PageType | null
+  redirect: string | null
+}
+
+export function analyzeRoutes(
   children: ReactNode,
-  { currentPathName, userParamTypes }: KrisilyzeOptions
+  { currentPathName, userParamTypes }: AnayzeRoutesOptions
 ) {
   // @TODO rename this variable, once we figure out all its uses
-  const namePathMap: Record<string, RouteProps & { redirect: string | null }> =
-    {}
+  const namePathMap: Record<string, AnalyzedRoute> = {}
   const namedRoutesMap: AvailableRoutes = {}
   let hasHomeRoute = false
   let NotFoundPage: PageType | undefined
@@ -447,16 +465,36 @@ export function krisilyze(
       if (isValidRoute(node)) {
         // Just for readability
         const route = node
+
+        if (isNotFoundRoute(route)) {
+          NotFoundPage = route.props.page
+          // Dont add notFound routes to the maps, and exit early
+          return
+        }
+
+        // Used to decide whether to display SplashPage
         if (route.props.path === '/') {
           hasHomeRoute = true
         }
 
-        if (route.props.notfound) {
-          NotFoundPage = route.props.page
+        if (isRedirectRoute(route)) {
+          const { name, redirect, path } = route.props
+
+          validatePath(path, name)
+
+          namePathMap[name] = {
+            redirect,
+            name,
+            path,
+            page: null, // Redirects don't need pages. We set this to null for consistency
+          }
         }
 
         if (isStandardRoute(route)) {
-          const { name, path } = route.props
+          const { name, path, page } = route.props
+          // Will throw if invalid path
+          validatePath(path, name)
+
           const { match } = matchPath(path, currentPathName, {
             userParamTypes,
           })
@@ -465,13 +503,14 @@ export function krisilyze(
             activeRouteName = name
           }
 
-          // Will throw if invalid path
-          validatePath(path)
-
-          // e.g. namePathMap['homePage'] = { name: 'homePage', path: '/home' }
+          // e.g. namePathMap['homePage'] = { name: 'homePage', path: '/home', ...}
+          // We always set all the keys, even if their values are null/undefined for consistency
           namePathMap[name] = {
             redirect: null,
-            ...route.props,
+            name,
+            path,
+            whileLoadingPage: route.props.whileLoadingPage,
+            page: page,
           }
 
           // e.g. namedRoutesMap.homePage = () => '/home'

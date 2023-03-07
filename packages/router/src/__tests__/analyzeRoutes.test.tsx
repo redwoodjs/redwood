@@ -1,7 +1,7 @@
 import React, { isValidElement } from 'react'
 
 import { Route, Router } from '../router'
-import { krisilyze } from '../util'
+import { analyzeRoutes } from '../util'
 
 const FakePage = () => <h1>Fake Page</h1>
 
@@ -16,12 +16,10 @@ describe('Krisilyze: with homePage and Children', () => {
     </Router>
   )
 
-  const { namePathMap, namedRoutesMap, hasHomeRoute, NotFoundPage } = krisilyze(
-    CheckRoutes.props.children,
-    {
+  const { namePathMap, namedRoutesMap, hasHomeRoute, NotFoundPage } =
+    analyzeRoutes(CheckRoutes.props.children, {
       currentPathName: '/',
-    }
-  )
+    })
   test('Should return namePathMap and hasHomeRoute correctly', () => {
     expect(namePathMap).toEqual(
       expect.objectContaining({
@@ -51,7 +49,7 @@ describe('Krisilyze: with homePage and Children', () => {
   })
 
   test('Should return the active Route by name', () => {
-    const { activeRouteName } = krisilyze(CheckRoutes.props.children, {
+    const { activeRouteName } = analyzeRoutes(CheckRoutes.props.children, {
       currentPathName: '/recipe/512512',
     })
     expect(activeRouteName).toBeDefined()
@@ -67,7 +65,7 @@ test('No home Route', () => {
     </Router>
   )
 
-  const { namePathMap, namedRoutesMap, hasHomeRoute } = krisilyze(
+  const { namePathMap, namedRoutesMap, hasHomeRoute } = analyzeRoutes(
     CheckRoutes.props.children,
     {
       currentPathName: '/',

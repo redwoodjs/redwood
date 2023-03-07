@@ -17,10 +17,6 @@ export const ActiveRouteLoader = ({
   params,
   whileLoadingPage,
 }: Props) => {
-  console.log(
-    `👉 \n ~ file: active-route-loader.tsx:20 ~ whileLoadingPage:`,
-    whileLoadingPage
-  )
   const announcementRef = useRef<HTMLDivElement>(null)
   const LazyRouteComponent = spec.LazyComponent
 
