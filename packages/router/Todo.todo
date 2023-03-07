@@ -1,9 +1,21 @@
 Restore existing functionality:
+  ☐ Remove analyze, move into krisilyze
+    ✔ activeRoute @done(23-03-07 13:33)
+      ✔ if no activeRoute render notfound @done(23-03-07 14:02)
+      It needs to know if any of the Routes match
+      ☐ check if splashpage is still OK
+      ☐ do we still need react.cloneElement with the key?
+      ☐ actually delete analyze function, rename krisilyze
+
+
+
   ☐ Handling the redirect prop in a Route
     ```  if (redirect) {
       const newPath = replaceParams(redirect, allParams)
       return <Redirect to={newPath} />
     }```
+  ☐ whileLoading and whileLoadingAuth
+
   ☐ Validating path (I commented out the logic)
     ☐ Check Route has a path prop
     ☐ Check that Route has page and name
@@ -16,10 +28,12 @@ Restore existing functionality:
     // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`, otherwise the page will break.
     // (The page won't actually break if `key` is passed, but it feels unclean.)
     // If users want to access them, they can use `useParams`.
-  ☐ whileLoading and whileLoadingAuth
   ☐ trailingSlashes and customParam types
   These need to be extracted by Babel/Vite plugins at build time, before constructing the virtual routes module
 
 Checks:
   ☐ Check DX of error messages when using notFound, redirect and standard route
   ☐ Update unit tests, to check if all the functionality is there
+  ☐ On Throttled network, we see
+    Uncaught Error: This Suspense boundary received an update before it finished hydrating. This caused the boundary to switch to client rendering. The usual way to fix this is to wrap the original update in startTransition.
+      Quite possibly a vite dev mode issue. We need to build and test the production build

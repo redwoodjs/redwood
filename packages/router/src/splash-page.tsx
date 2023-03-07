@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
+type Name = string
 interface SplashPageProps {
   hasGeneratedRoutes: boolean
-  allStandardRoutes: Record<string, { name: string; path: string }>
+  allStandardRoutes: Record<Name, { name: Name; path: string }>
 }
 
 const SplashPage = ({

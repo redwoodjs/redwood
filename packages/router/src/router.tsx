@@ -1,4 +1,4 @@
-import React, { isValidElement, ReactNode, ReactElement } from 'react'
+import React, { isValidElement, ReactNode, ReactElement, useMemo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { Redirect } from './links'
@@ -29,7 +29,7 @@ let namedRoutes: AvailableRoutes = {}
 
 type PageType = Spec | React.ComponentType<any> | ((props: any) => JSX.Element)
 
-interface RouteProps {
+export interface RouteProps {
   path: string
   page: PageType
   name: string
@@ -37,8 +37,12 @@ interface RouteProps {
   whileLoadingPage?: () => ReactElement | null
 }
 
-interface RedirectRouteProps {
-  path: string
+// @MARK a redirect route should just be a standard route, with
+// the extra redirect prop
+// why can't a redirect route have a name?
+// if you put a redirect prop on a route, you should still be able
+// to call routes.myRouteName()
+interface RedirectRouteProps extends RouteProps {
   redirect: string
 }
 
@@ -77,13 +81,29 @@ const isNodeTypeRoute = (
 
 /**
  * Narrows down the type of the Route element to RouteProps
+ *
+ * It means it cannot be a NotFoundPage
+ *
  * @param node
  * @returns boolean
  */
 export function isStandardRoute(
   node: ReactElement<InternalRouteProps>
-): node is ReactElement<RouteProps> {
-  return !node.props.redirect && !node.props.notfound
+): node is ReactElement<RouteProps | RedirectRouteProps> {
+  return !node.props.notfound
+}
+
+/**
+ *
+ * Checks if a Route element is a Redirect Route
+ *
+ * @param node
+ * @returns
+ */
+export function isRedirectRoute(
+  node: ReactElement<InternalRouteProps>
+): node is ReactElement<RedirectRouteProps> {
+  return !!node.props.redirect
 }
 
 /**
@@ -158,7 +178,20 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 }) => {
   const location = useLocation()
 
-  const { namePathMap, hasHomeRoute, namedRoutesMap } = krisilyze(children)
+  const {
+    namePathMap,
+    hasHomeRoute,
+    namedRoutesMap,
+    NotFoundPage,
+    activeRouteName,
+  } = useMemo(
+    () =>
+      krisilyze(children, {
+        currentPathName: location.pathname,
+        userParamTypes: paramTypes,
+      }),
+    [location.pathname, children, paramTypes]
+  )
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
@@ -181,14 +214,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     )
   }
 
-  const { root, activeRoute, NotFoundPage } = analyzeRouterTree(
-    children,
-    location.pathname,
-    paramTypes
-  )
-
   // Render 404 page if no route matches
-  if (!activeRoute) {
+  if (!activeRouteName) {
     if (NotFoundPage) {
       return (
         <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
@@ -206,7 +233,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     return null
   }
 
-  const { path, page, name, redirect, whileLoadingPage } = activeRoute.props
+  const { path, page, name, redirect, whileLoadingPage } =
+    namePathMap[activeRouteName]
 
   if (!path) {
     throw new Error(`Route "${name}" needs to specify a path`)
@@ -216,7 +244,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   validatePath(path)
 
   const { params: pathParams } = matchPath(path, location.pathname, {
-    paramTypes,
+    userParamTypes: paramTypes,
   })
 
   const searchParams = parseSearch(location.search)
@@ -234,9 +262,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
             delay={pageLoadingDelay}
             params={allParams}
             whileLoadingPage={whileLoadingPage}
-          >
-            {root}
-          </ActiveRouteLoader>
+          />
         )}
       </ParamsProvider>
     </RouterContextProvider>
@@ -254,7 +280,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
  *    the active route, and in that case we don't need the NotFoundPage, so it
  *    doesn't matter.
  */
-function analyzeRouterTree(
+export function analyzeRouterTree(
   children: ReactNode,
   pathname: string,
   paramTypes?: Record<string, ParamType>
@@ -268,7 +294,9 @@ function analyzeRouterTree(
 
   function isActiveRoute(route: ReactElement<InternalRouteProps>) {
     if (route.props.path) {
-      const { match } = matchPath(route.props.path, pathname, { paramTypes })
+      const { match } = matchPath(route.props.path, pathname, {
+        userParamTypes: paramTypes,
+      })
 
       if (match) {
         return true

@@ -1,7 +1,9 @@
 import React, { Children, isValidElement, ReactNode } from 'react'
 
-import { isStandardRoute, isValidRoute } from './router'
+import { isStandardRoute, isValidRoute, PageType, RouteProps } from './router'
 import { isSetNode } from './Set'
+
+import { AvailableRoutes } from './'
 
 /** Create a React Context with the given name. */
 export function createNamedContext<T>(name: string, defaultValue?: T) {
@@ -119,18 +121,18 @@ export function matchPath(
   route: string,
   pathname: string,
   {
-    paramTypes,
+    userParamTypes,
     matchSubPaths,
   }: {
-    paramTypes?: Record<string, ParamType>
+    userParamTypes?: Record<string, ParamType>
     matchSubPaths?: boolean
   } = {
-    paramTypes: {},
+    userParamTypes: {},
     matchSubPaths: false,
   }
 ) {
   // Get the names and the transform types for the given route.
-  const allParamTypes = { ...coreParamTypes, ...paramTypes }
+  const allParamTypes = { ...coreParamTypes, ...userParamTypes }
 
   const { matchRegex, routeParams } = getRouteRegexAndParams(route, {
     matchSubPaths,
@@ -423,12 +425,22 @@ export function inIframe() {
     return true
   }
 }
+interface KrisilyzeOptions {
+  currentPathName: string
+  userParamTypes?: Record<string, ParamType>
+}
 
-export function krisilyze(children: ReactNode) {
+export function krisilyze(
+  children: ReactNode,
+  { currentPathName, userParamTypes }: KrisilyzeOptions
+) {
   // @TODO rename this variable, once we figure out all its uses
-  const namePathMap: Record<string, { name: string; path: string }> = {}
-  const namedRoutesMap: Record<string, () => string> = {}
+  const namePathMap: Record<string, RouteProps & { redirect: string | null }> =
+    {}
+  const namedRoutesMap: AvailableRoutes = {}
   let hasHomeRoute = false
+  let NotFoundPage: PageType | undefined
+  let activeRouteName: string | undefined
 
   const recurseThroughRouter = (nodes: ReturnType<typeof Children.toArray>) => {
     nodes.forEach((node) => {
@@ -439,14 +451,28 @@ export function krisilyze(children: ReactNode) {
           hasHomeRoute = true
         }
 
+        if (route.props.notfound) {
+          NotFoundPage = route.props.page
+        }
+
         if (isStandardRoute(route)) {
           const { name, path } = route.props
+          const { match } = matchPath(path, currentPathName, {
+            userParamTypes,
+          })
+
+          if (match) {
+            activeRouteName = name
+          }
 
           // Will throw if invalid path
           validatePath(path)
 
-          // e.g. namePathMap['/home'] = { name: 'homePage', path: '/home' }
-          namePathMap[path] = { name, path }
+          // e.g. namePathMap['homePage'] = { name: 'homePage', path: '/home' }
+          namePathMap[name] = {
+            redirect: null,
+            ...route.props,
+          }
 
           // e.g. namedRoutesMap.homePage = () => '/home'
           namedRoutesMap[name] = (args = {}) => replaceParams(path, args)
@@ -464,5 +490,11 @@ export function krisilyze(children: ReactNode) {
 
   recurseThroughRouter(Children.toArray(children))
 
-  return { namePathMap, namedRoutesMap, hasHomeRoute }
+  return {
+    namePathMap,
+    namedRoutesMap,
+    hasHomeRoute,
+    NotFoundPage,
+    activeRouteName,
+  }
 }
