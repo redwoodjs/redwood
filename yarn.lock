@@ -3988,15 +3988,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.3.18, @graphql-tools/merge@npm:^8.2.6":
-  version: 8.3.18
-  resolution: "@graphql-tools/merge@npm:8.3.18"
+"@graphql-tools/merge@npm:8.4.0, @graphql-tools/merge@npm:^8.2.6":
+  version: 8.4.0
+  resolution: "@graphql-tools/merge@npm:8.4.0"
   dependencies:
     "@graphql-tools/utils": 9.2.1
     tslib: ^2.4.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 5420f5cc51f2d1c115af67661ef2ff6c87c72f66e0a160ff6f19864841a6e16d6624600f93d370ff5e29bf90734ecb073081d26b200b205f33b519a8a25724dc
+  checksum: 33c95b998f9625d8008dab2b81c86bbbce2ec3055f219ce42666a6a79b847941e69ea31152e9e1124bb58d10faac2d96a628371fcd96e50843fff11a2d35504c
   languageName: node
   linkType: hard
 
@@ -4095,17 +4095,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:9.0.16, @graphql-tools/schema@npm:^9.0.0":
-  version: 9.0.16
-  resolution: "@graphql-tools/schema@npm:9.0.16"
+"@graphql-tools/schema@npm:9.0.17, @graphql-tools/schema@npm:^9.0.0":
+  version: 9.0.17
+  resolution: "@graphql-tools/schema@npm:9.0.17"
   dependencies:
-    "@graphql-tools/merge": 8.3.18
+    "@graphql-tools/merge": 8.4.0
     "@graphql-tools/utils": 9.2.1
     tslib: ^2.4.0
     value-or-promise: 1.0.12
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 640dcc92612df79e80d178adb82e8cf76caf36f3080f35f6b586cb368905892c9d319e2891dcc30717bb8c2a708897033d1ab43ba492ec4a4ea013d8a2d1448d
+  checksum: af455718ffe02dd8d2fb6a6bbe661f9770cbf6773360c69b8536618dc35d9a8fdadea397e8a9fd87e464a9a96f5dae2987c25378b24ac53b7db92243a1fb5ce6
   languageName: node
   linkType: hard
 
@@ -7101,8 +7101,8 @@ __metadata:
     "@envelop/testing": 5.0.6
     "@envelop/types": 3.0.2
     "@escape.tech/graphql-armor": 1.7.1
-    "@graphql-tools/merge": 8.3.18
-    "@graphql-tools/schema": 9.0.16
+    "@graphql-tools/merge": 8.4.0
+    "@graphql-tools/schema": 9.0.17
     "@graphql-tools/utils": 9.2.1
     "@redwoodjs/api": 4.2.2
     "@types/jsonwebtoken": 9.0.1
