@@ -163,3 +163,11 @@ export function Private<WrapperProps>(props: PrivateProps<WrapperProps>) {
     </Set>
   )
 }
+
+export const isSetNode = (
+  node: ReactNode
+): node is ReactElement<SetProps<any>> => {
+  return (
+    React.isValidElement(node) && (node.type === Set || node.type === Private)
+  )
+}

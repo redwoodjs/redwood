@@ -18,6 +18,7 @@ import { getConfig } from '@redwoodjs/internal/dist/config'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 
 import virtualRoutes from './virtualRoutes'
+export type { VirtualRoute } from './virtualRoutes'
 
 const readFile = promisify(fsReadFile)
 
