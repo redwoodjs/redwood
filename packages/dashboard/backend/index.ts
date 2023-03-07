@@ -2,7 +2,7 @@ import Fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 // import open from 'open'
 
-import { setupTables } from './database'
+import { setupTables, setupViews } from './database'
 import reactRoutes from './fastify/react'
 import spanRoutes from './fastify/spanIngester'
 import yogaRoutes from './fastify/yoga'
@@ -23,6 +23,7 @@ export const start = async () => {
   })
 
   await setupTables()
+  await setupViews()
 
   const yogaServer = setupYoga(fastify)
   fastify.register(spanRoutes)

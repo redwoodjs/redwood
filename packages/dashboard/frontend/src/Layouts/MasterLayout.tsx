@@ -32,6 +32,9 @@ function MasterLayout() {
           <NavLink className="flex p-2 [&.active]:bg-gray-200" to="/tracing">
             <span className="text-center w-full">Tracing</span>
           </NavLink>
+          <NavLink className="flex p-2 [&.active]:bg-gray-200" to="/graphiql">
+            <span className="text-center w-full">GraphiQL</span>
+          </NavLink>
           <NavLink
             className="flex p-2 [&.active]:bg-gray-200"
             to="/something-else"

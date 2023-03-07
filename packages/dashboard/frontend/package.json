@@ -10,12 +10,17 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.8",
+    "@graphiql/plugin-explorer": "^0.1.14",
+    "@graphiql/toolkit": "^0.8.2",
+    "graphiql": "^2.4.0",
     "graphql": "^16.6.0",
+    "json-bigint-patch": "^0.0.8",
     "pretty-ms": "^7.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.1",
-    "react-split-pane": "^0.1.92"
+    "react-split-pane": "^0.1.92",
+    "use-url-search-params": "^2.5.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

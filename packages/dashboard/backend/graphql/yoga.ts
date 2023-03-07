@@ -2,6 +2,7 @@ import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
 import { createYoga, createSchema } from 'graphql-yoga'
 
 import { authProvider } from '../services/auth'
+import { prismaQueries } from '../services/prisma'
 import { traces, trace } from '../services/span'
 
 export const setupYoga = (fastify: FastifyInstance) => {
@@ -29,9 +30,28 @@ export const setupYoga = (fastify: FastifyInstance) => {
         attributes: String # JSON
         resources: String # JSON
       }
+
+      type PrismaQuerySpan {
+        id: String
+        trace: String
+        parent_id: String
+        parent_trace: String
+        name: String
+        method: String
+        model: String
+        prisma_name: String
+        start_nano: String
+        end_nano: String
+        duration_nano: String
+        duration_ms: String
+        duration_sec: String
+        db_statement: String
+      }
+
       type Query {
         traces: [Trace]!
         trace(id: String!): Trace
+        prismaQueries(id: String!): [PrismaQuerySpan]!
         authProvider: String
       }
     `,
@@ -40,6 +60,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         traces,
         trace,
         authProvider,
+        prismaQueries,
       },
     },
   })

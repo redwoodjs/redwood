@@ -4,6 +4,7 @@ import { useQuery, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner from '../Components/LoadingSpinner'
+import PrismaQueryView from '../Components/PrismaQueryView'
 import TraceFlameView from '../Components/TraceFlameView'
 import TraceTimelineView from '../Components/TraceTimelineView'
 
@@ -26,6 +27,22 @@ const GET_TRACE_SPANS = gql`
         resources
       }
     }
+    prismaQueries(id: $id) {
+      id
+      trace
+      parent_id
+      parent_trace
+      name
+      method
+      model
+      prisma_name
+      start_nano
+      end_nano
+      duration_nano
+      duration_ms
+      duration_sec
+      db_statement
+    }
     authProvider
   }
 `
@@ -37,7 +54,7 @@ function Trace() {
   })
 
   const [visualisationMode, setVisualisationMode] = useState<
-    'timeline' | 'flame'
+    'timeline' | 'flame' | 'prisma_query'
   >(() => {
     return 'timeline'
   })
@@ -91,6 +108,12 @@ function Trace() {
           <option value="flame" selected={visualisationMode === 'flame'}>
             🔥 Flame Table
           </option>
+          <option
+            value="prisma_query"
+            selected={visualisationMode === 'prisma_query'}
+          >
+            🔍 Prisma Queries
+          </option>
         </select>
       </div>
       <div className="flex flex-col border border-gray-400 p-2 grow">
@@ -99,6 +122,9 @@ function Trace() {
         )}
         {visualisationMode === 'flame' && (
           <TraceFlameView trace={data?.trace} />
+        )}
+        {visualisationMode === 'prisma_query' && (
+          <PrismaQueryView prismaQueries={data?.prismaQueries} />
         )}
       </div>
     </div>

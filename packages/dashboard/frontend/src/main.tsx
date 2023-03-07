@@ -7,6 +7,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 
 import MasterLayout from './Layouts/MasterLayout'
+import GraphiQL from './Pages/GraphiQL'
 import Landing from './Pages/Landing'
 import NotFound from './Pages/NotFound'
 import Trace from './Pages/Trace'
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <Route index element={<Landing />} />
             <Route path="/tracing" element={<Tracing />} />
             <Route path="/tracing/:traceId" element={<Trace />} />
+            <Route path="/graphiql" element={<GraphiQL />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
