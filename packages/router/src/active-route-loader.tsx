@@ -114,18 +114,9 @@ export const ActiveRouteLoader = ({
         setRenderedPath(path)
       }, delay)
 
+      // Wait to download and parse the page.
       waitingFor.current = name
-
-      let module: LoadedLoaderSpec
-
-      if (globalThis.__REDWOOD__PRERENDERING) {
-        // babel-plugin-redwood-routes-auto-loader uses withStaticImport in
-        // prerender mode, making this type cast safe
-        module = loader() as unknown as LoadedLoaderSpec
-      } else {
-        // Wait to download and parse the page.
-        module = await loader()
-      }
+      const module = await loader()
 
       // Remove the timeout because the page has loaded.
       clearLoadingTimeout()
@@ -190,19 +181,39 @@ export const ActiveRouteLoader = ({
     }
   }, [spec, delay, children, whileLoadingPage, path, location, isMounted])
 
+  let renderedLoadingState = loadingState
+
+  if (globalThis.__REDWOOD__PRERENDERING) {
+    // babel auto-loader plugin uses withStaticImport in prerender mode
+    // override the types for this condition
+    const PageFromLoader = (spec.loader() as unknown as LoadedLoaderSpec)
+      .default
+
+    renderedLoadingState = {
+      [path]: {
+        state: 'DONE',
+        specName: spec.name,
+        page: PageFromLoader,
+        location,
+      },
+    }
+  }
+
   return (
     <ParamsProvider
       path={renderedPath}
       location={loadingState[renderedPath]?.location}
     >
-      <ActivePageContextProvider value={{ loadingState }}>
-        <PageLoadingContextProvider
-          value={{
-            loading: loadingState[renderedPath]?.state === 'SHOW_LOADING',
-          }}
+      <PageLoadingContextProvider
+        value={{
+          loading: loadingState[renderedPath]?.state === 'SHOW_LOADING',
+        }}
+      >
+        <ActivePageContextProvider
+          value={{ loadingState: renderedLoadingState }}
         >
           {renderedChildren}
-          {loadingState[path]?.state === 'DONE' && (
+          {renderedLoadingState[path]?.state === 'DONE' && (
             <div
               id="redwood-announcer"
               style={{
@@ -222,8 +233,8 @@ export const ActiveRouteLoader = ({
               ref={announcementRef}
             ></div>
           )}
-        </PageLoadingContextProvider>
-      </ActivePageContextProvider>
+        </ActivePageContextProvider>
+      </PageLoadingContextProvider>
     </ParamsProvider>
   )
 }
