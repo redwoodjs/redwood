@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useQuery, gql } from '@apollo/client'
 
-import { RedwoodGraphiQL } from '../Components/RedwoodGraphiQL'
+import { RedwoodGraphiQL } from '../Components/RedwoodGraphiQL/RedwoodGraphiQL'
 
 const GET_AUTH = gql`
   query {
