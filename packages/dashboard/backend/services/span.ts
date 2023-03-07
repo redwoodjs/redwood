@@ -4,6 +4,7 @@ export const traces = async (_parent: unknown) => {
   const db = await getDatabase()
   const stmt = await db.prepare('SELECT * FROM span;')
   const spans = await stmt.all()
+  await stmt.finalize()
 
   const traceIds = new Set(spans.map((span) => span.trace))
 
@@ -23,6 +24,7 @@ export const trace = async (_parent: any, { id }: { id: string }) => {
   const db = await getDatabase()
   const stmt = await db.prepare('SELECT * FROM span WHERE trace=?;')
   const spans = await stmt.all(id)
+  await stmt.finalize()
   return {
     id,
     spans: spans.map((span) => restructureSpan(span)),

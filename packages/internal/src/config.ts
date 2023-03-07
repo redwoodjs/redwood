@@ -77,6 +77,7 @@ export interface Config {
     scriptPath?: string
   }
   dashboard: {
+    inMemory: boolean
     authProvider: string
   }
 }
@@ -122,6 +123,7 @@ const DEFAULT_CONFIG: Config = {
     scriptPath: undefined,
   },
   dashboard: {
+    inMemory: false,
     authProvider: 'dbAuth',
   },
 }

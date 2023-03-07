@@ -1,4 +1,5 @@
 import Fastify from 'fastify'
+import type { FastifyInstance } from 'fastify'
 // import open from 'open'
 
 import { setupTables } from './database'
@@ -10,8 +11,10 @@ import { setupYoga } from './graphql/yoga'
 const HOST = 'localhost'
 const PORT = 4318
 
+let fastify: FastifyInstance
+
 export const start = async () => {
-  const fastify = Fastify({
+  fastify = Fastify({
     logger: {
       level: 'info',
       timestamp: () => `,"time":"${new Date(Date.now()).toISOString()}"`,
@@ -33,7 +36,18 @@ export const start = async () => {
     // TODO: Disabled for my own sanity but should enable for users
     // open(`http://${HOST}:${PORT}`)
   })
-  process.on('exit', () => {
-    fastify?.close()
+
+  process.on('SIGTERM', async () => {
+    await stop()
   })
+  process.on('SIGINT', async () => {
+    await stop()
+  })
+  process.on('beforeExit', async () => {
+    await stop()
+  })
+}
+
+const stop = async () => {
+  await fastify?.close()
 }
