@@ -26,6 +26,7 @@ const GET_TRACE_SPANS = gql`
         resources
       }
     }
+    authProvider
   }
 `
 
@@ -68,6 +69,7 @@ function Trace() {
     <div className="flex flex-col gap-2 min-h-full">
       <div className="flex flex-col gap-0">
         <span>Trace ID: {traceId}</span>
+        <span>Auth Provider: {data.authProvider}</span>
         <div className="flex flex-row border border-gray-400 gap-0">
           <div className="p-2 italic">
             TODO: Some trace info (e.g. duration, status, etc.)

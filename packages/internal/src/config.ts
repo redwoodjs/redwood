@@ -76,6 +76,9 @@ export interface Config {
   opentelemetry: {
     scriptPath?: string
   }
+  dashboard: {
+    authProvider: string
+  }
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -117,6 +120,9 @@ const DEFAULT_CONFIG: Config = {
   },
   opentelemetry: {
     scriptPath: undefined,
+  },
+  dashboard: {
+    authProvider: 'dbAuth',
   },
 }
 

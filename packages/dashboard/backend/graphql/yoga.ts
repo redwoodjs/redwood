@@ -1,6 +1,7 @@
 import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
 import { createYoga, createSchema } from 'graphql-yoga'
 
+import { authProvider } from '../services/auth'
 import { traces, trace } from '../services/span'
 
 export const setupYoga = (fastify: FastifyInstance) => {
@@ -31,12 +32,14 @@ export const setupYoga = (fastify: FastifyInstance) => {
       type Query {
         traces: [Trace]!
         trace(id: String!): Trace
+        authProvider: String
       }
     `,
     resolvers: {
       Query: {
         traces,
         trace,
+        authProvider,
       },
     },
   })
