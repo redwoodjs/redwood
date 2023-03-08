@@ -441,10 +441,12 @@ interface AnayzeRoutesOptions {
 // This is essentially the same as RouteProps
 // but it allows for page and redirect to be null or undefined
 // Keeping the shape consistent makes it easier to use
+
+type WhileLoadingPage = () => ReactElement | null
 interface AnalyzedRoute {
   path: string
   name: string
-  whileLoadingPage?: () => ReactElement | null
+  whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
 }
@@ -460,12 +462,16 @@ export function analyzeRoutes(
   let NotFoundPage: PageType | undefined
   let activeRouteName: string | undefined
 
-  const recurseThroughRouter = (nodes: ReturnType<typeof Children.toArray>) => {
+  const recurseThroughRouter = (
+    nodes: ReturnType<typeof Children.toArray>,
+    whileLoadingPageFromSet?: WhileLoadingPage
+  ) => {
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
         // Just for readability
         const route = node
 
+        // We don't add not found pages to our list of named routes
         if (isNotFoundRoute(route)) {
           NotFoundPage = route.props.page
           // Dont add notFound routes to the maps, and exit early
@@ -509,7 +515,8 @@ export function analyzeRoutes(
             redirect: null,
             name,
             path,
-            whileLoadingPage: route.props.whileLoadingPage,
+            whileLoadingPage:
+              route.props.whileLoadingPage || whileLoadingPageFromSet,
             page: page,
           }
 
@@ -521,7 +528,13 @@ export function analyzeRoutes(
       // @NOTE: A <Private> is also a Set
       if (isSetNode(node)) {
         if (node.props.children) {
-          recurseThroughRouter(Children.toArray(node.props.children))
+          recurseThroughRouter(
+            Children.toArray(node.props.children),
+            // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
+            // If the parent node was also a Set with whileLoadingPage, we pass it down. The child's whileLoadingPage
+            // will always take precedence over the parent's
+            node.props.whileLoadingPage || whileLoadingPageFromSet
+          )
         }
       }
     })

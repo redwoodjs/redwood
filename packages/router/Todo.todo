@@ -1,12 +1,12 @@
 Restore existing functionality:
-  ☐ Remove analyze, move into krisilyze
+  ✔ Remove analyze, move into krisilyze @done(23-03-08 10:31)
     ✔ activeRoute @done(23-03-07 13:33)
       ✔ if no activeRoute render notfound @done(23-03-07 14:02)
       It needs to know if any of the Routes match
       ✔ check if splashpage is still OK @done(23-03-07 18:56)
       ✔ do we still need react.cloneElement with the key? @done(23-03-07 18:43)
         Doesn't seem like it
-      ☐ actually delete analyze function, rename krisilyze
+      ✔ actually delete analyze function, rename krisilyze @done(23-03-08 10:21)
       ☐ fix isValidRoute function
         ☐ Add test for no path
         ☐ Add test for no page
@@ -19,7 +19,8 @@ Restore existing functionality:
       const newPath = replaceParams(redirect, allParams)
       return <Redirect to={newPath} />
     }```
-  ☐ whileLoading and whileLoadingAuth
+  ✔ whileLoading @done(23-03-08 12:10)
+  ☐ and whileLoadingAuth
 
   ☐ Validating path (I commented out the logic)
     ☐ Check Route has a path prop

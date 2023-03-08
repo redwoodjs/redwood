@@ -171,7 +171,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
             spec={normalizePage(page)}
             delay={pageLoadingDelay}
             params={allParams}
-            whileLoadingPage={whileLoadingPage}
+            whileLoadingPage={whileLoadingPage as any}
           />
         )}
       </ParamsProvider>

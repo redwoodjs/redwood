@@ -102,8 +102,11 @@ export function isValidRoute(
     const missingKeys = requiredKeys.filter((key) => !(key in node.props))
 
     if (missingKeys.length > 0) {
+      const routeNameString = node.props.name ? `for ${node.props.name}` : ''
       throw new Error(
-        `Route element is missing requiredKeys: ${missingKeys.join(', ')}`
+        `Route element "${routeNameString}" is missing requiredKeys: ${missingKeys.join(
+          ', '
+        )}`
       )
     }
   }
