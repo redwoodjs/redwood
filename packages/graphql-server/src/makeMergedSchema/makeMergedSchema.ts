@@ -60,8 +60,22 @@ const mapFieldsToService = ({
           info: unknown
         ) => {
           const tracer = opentelemetry.trace.getTracer('redwoodjs')
+
+          // @ts-expect-error we know it's an unknown type
+          const parentSpan = context['OPEN_TELEMETRY_GRAPHQL'] as
+            | opentelemetry.Span
+            | undefined
+          const parentContext = parentSpan
+            ? opentelemetry.trace.setSpan(
+                opentelemetry.context.active(),
+                parentSpan
+              )
+            : opentelemetry.context.active()
+
           return tracer.startActiveSpan(
             `redwoodjs:graphql:resolver:${name}`,
+            {},
+            parentContext,
             async (span) => {
               span.setAttribute(
                 'graphql.execute.operationName',
