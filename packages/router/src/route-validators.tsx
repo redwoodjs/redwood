@@ -95,16 +95,19 @@ export function isValidRoute(
     const notFoundOrRedirect = node.props.notfound || node.props.redirect
     const requiredKeys = [
       !node.props.notfound && 'path',
-      !notFoundOrRedirect && 'page',
-      !notFoundOrRedirect && 'name', // this not so sure about! Redirects should have names too
+      !node.props.redirect && 'page', // redirects dont need an actual page, but notfound and standard do
+      !notFoundOrRedirect && 'name', // this not so sure about! Redirects should have names too, but maybe we don't need to throw an error for it
     ].filter(Boolean) as string[]
 
     const missingKeys = requiredKeys.filter((key) => !(key in node.props))
 
     if (missingKeys.length > 0) {
-      const routeNameString = node.props.name ? `for ${node.props.name}` : ''
+      const stringToHelpIdentify =
+        node.props.name || node.props.path
+          ? `for "${node.props.name || node.props.path}" `
+          : ''
       throw new Error(
-        `Route element "${routeNameString}" is missing requiredKeys: ${missingKeys.join(
+        `Route element ${stringToHelpIdentify}is missing required props: ${missingKeys.join(
           ', '
         )}`
       )

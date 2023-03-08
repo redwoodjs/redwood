@@ -5,7 +5,7 @@ import { analyzeRoutes } from '../util'
 
 const FakePage = () => <h1>Fake Page</h1>
 
-describe('Krisilyze: with homePage and Children', () => {
+describe('AnalyzeRoutes: with homePage and Children', () => {
   const CheckRoutes = (
     <Router>
       <Route path="/hello" name="hello" page={FakePage} />

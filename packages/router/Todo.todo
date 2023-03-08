@@ -7,10 +7,10 @@ Restore existing functionality:
       ✔ do we still need react.cloneElement with the key? @done(23-03-07 18:43)
         Doesn't seem like it
       ✔ actually delete analyze function, rename krisilyze @done(23-03-08 10:21)
-      ☐ fix isValidRoute function
-        ☐ Add test for no path
-        ☐ Add test for no page
-        ☐ Add test for no name
+      ✔ fix isValidRoute function @done(23-03-08 18:24)
+        ✔ Add test for no path @done(23-03-08 18:21)
+        ✔ Add test for no page @done(23-03-08 18:21)
+        ✔ Add test for no name @done(23-03-08 18:21)
 
 
 
