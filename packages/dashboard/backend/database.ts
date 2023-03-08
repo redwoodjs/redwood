@@ -33,28 +33,32 @@ export const setupTables = async () => {
 }
 
 export const setupViews = async () => {
-  const v = `CREATE VIEW IF NOT EXISTS prisma_queries as SELECT DISTINCT
-s.id,
-s.trace,
-s.parent as parent_id,
-p.trace as parent_trace,
-s.name,
-json_extract(p. "attributes", '$.method') AS method,
-json_extract(p. "attributes", '$.model') AS model,
-json_extract(p. "attributes", '$.name') AS prisma_name,
-s.start_nano,
-s.end_nano,
-s.duration_nano,
-cast((s.duration_nano / 1000000.000) as REAL) as duration_ms,
-cast((s.duration_nano / 1000000000.0000) as number) as duration_sec,
-json_extract(s. "attributes", '$."db.statement"') AS db_statement
-FROM
-span s
-JOIN span p ON s.trace = p.trace
-WHERE
-s. "name" = 'prisma:engine:db_query'
-AND p. "name" = 'prisma:client:operation' order by s.start_nano desc, s.parent;
+  const prismaQueriesView = `
+  DROP VIEW prisma_queries;
+  CREATE VIEW IF NOT EXISTS prisma_queries as SELECT DISTINCT
+    s.id,
+    s.trace,
+    s.parent as parent_id,
+    p.trace as parent_trace,
+    s.name,
+    json_extract(p. "attributes", '$.method') AS method,
+    json_extract(p. "attributes", '$.model') AS model,
+    json_extract(p. "attributes", '$.name') AS prisma_name,
+    s.start_nano,
+    s.end_nano,
+    s.duration_nano,
+    cast((s.duration_nano / 1000000.000) as REAL) as duration_ms,
+    cast((s.duration_nano / 1000000000.0000) as number) as duration_sec,
+    json_extract(s. "attributes", '$."db.statement"') AS db_statement
+    FROM
+    span s
+    JOIN span p ON s.trace = p.trace
+    WHERE
+    s. "name" = 'prisma:engine:db_query'
+      AND
+      p. "name" = 'prisma:client:operation'
+    ORDER BY s.start_nano desc, s.parent;
 `
 
-  await db.exec(v)
+  await db.exec(prismaQueriesView)
 }

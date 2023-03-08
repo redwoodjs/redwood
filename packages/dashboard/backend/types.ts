@@ -69,3 +69,7 @@ export interface RestructuredSpan {
   attributes?: RestructuredAttributes
   resourceAttributes?: RestructuredAttributes
 }
+
+export interface DashboardConfig {
+  authProvider: string
+}

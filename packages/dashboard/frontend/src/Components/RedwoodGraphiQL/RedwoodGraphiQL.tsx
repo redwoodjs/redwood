@@ -69,7 +69,7 @@ export function RedwoodGraphiQL(
 # Welcome to ${props.title || 'Yoga GraphiQL'}
 #
 # ${
-    props.title || 'Yoga GraphiQL'
+    props.title || 'Redwood GraphiQL'
   } is an in-browser tool for writing, validating, and
 # testing GraphQL queries.
 #

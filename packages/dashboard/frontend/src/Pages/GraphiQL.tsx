@@ -6,7 +6,10 @@ import { RedwoodGraphiQL } from '../Components/RedwoodGraphiQL/RedwoodGraphiQL'
 
 const GET_AUTH = gql`
   query {
-    authProvider
+    generateAuthHeaders(userId: "1") {
+      authProvider
+      authorization
+    }
   }
 `
 
@@ -15,7 +18,7 @@ function GraphiQL() {
   let headers = ''
 
   if (data) {
-    headers = `{"auth-provider-test": "${data?.authProvider}"}`
+    headers = `{"auth-provider-test": "${data?.generateAuthHeaders.authProvider}", "authorization": "${data?.generateAuthHeaders.authorization}"}`
   }
 
   console.log(data)

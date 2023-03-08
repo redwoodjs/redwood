@@ -15,7 +15,7 @@ const QUERY_GET_ALL_TRACES = gql`
         parent
         name
         kind
-        statusCode # TODO: Give an idicator if an error occured
+        statusCode # TODO: Give an indicator if an error occurred
         startNano
         endNano
       }
