@@ -94,12 +94,17 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                       t.variableDeclaration('const', [
                         t.variableDeclarator(
                           t.identifier('innerResult'),
-                          t.awaitExpression(
-                            t.callExpression(
-                              t.identifier(`_${originalFuncId}`),
-                              originalFuncArguments
-                            )
-                          )
+                          originalFunc.async
+                            ? t.awaitExpression(
+                                t.callExpression(
+                                  t.identifier(`_${originalFuncId}`),
+                                  originalFuncArguments
+                                )
+                              )
+                            : t.callExpression(
+                                t.identifier(`_${originalFuncId}`),
+                                originalFuncArguments
+                              )
                         ),
                       ]),
                       t.expressionStatement(
@@ -163,7 +168,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                     )
                   ),
                 ]),
-                true
+                originalFunc.async
               ),
             ]
           )
