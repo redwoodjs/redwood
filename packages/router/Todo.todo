@@ -12,16 +12,13 @@ Restore existing functionality:
         ✔ Add test for no page @done(23-03-08 18:21)
         ✔ Add test for no name @done(23-03-08 18:21)
 
+Props on Sets/Private/etc.:
+      ✔ whileLoading @done(23-03-08 12:10)
+      ☐ and whileLoadingAuth
 
-
-  ☐ Handling the redirect prop in a Route
-    ```  if (redirect) {
-      const newPath = replaceParams(redirect, allParams)
-      return <Redirect to={newPath} />
-    }```
-  ✔ whileLoading @done(23-03-08 12:10)
-  ☐ and whileLoadingAuth
-
+Redirects:
+  ☐ Handling the redirect prop in a Route client side
+  ☐ Handling server side redirects
   ☐ Validating path (I commented out the logic)
     ☐ Check Route has a path prop
     ☐ Check that Route has page and name
