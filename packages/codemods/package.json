@@ -37,7 +37,7 @@
     "fast-glob": "3.2.12",
     "findup-sync": "5.0.0",
     "graphql": "16.6.0",
-    "jest": "29.4.3",
+    "jest": "29.5.0",
     "jscodeshift": "0.14.0",
     "prettier": "2.8.4",
     "tasuku": "2.0.1",
