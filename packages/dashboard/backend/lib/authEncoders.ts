@@ -1,5 +1,11 @@
+import fs from 'fs'
+import path from 'path'
+
 import CryptoJS from 'crypto-js'
+import dotenv from 'dotenv'
 import { v4 as uuidv4 } from 'uuid'
+
+import { getPaths } from '@redwoodjs/internal'
 
 const isNumeric = (id: string) => {
   return /^\d+$/.test(parseInt(id).toString())
@@ -10,8 +16,14 @@ export const getDBAuthHeader = (userId: string) => {
     throw new Error('Require an unique id to generate session cookie')
   }
 
-  const sessionSecret =
-    'ZBqGP662p7eGcUmAeqH6gS9MaMP7SZMsAFQjw8LGSxPQJyqYRup3mvH5t9PfYtWf'
+  const basePath = getPaths().base
+  const envPath = path.join(basePath, '.env')
+  const envFile = fs.readFileSync(envPath, 'utf8')
+  const buf = Buffer.from(envFile)
+
+  const appEnv = dotenv.parse(buf)
+
+  const sessionSecret = appEnv.SESSION_SECRET
 
   if (!sessionSecret) {
     throw new Error(

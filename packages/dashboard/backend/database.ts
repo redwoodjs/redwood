@@ -34,7 +34,6 @@ export const setupTables = async () => {
 
 export const setupViews = async () => {
   const prismaQueriesView = `
-  DROP VIEW prisma_queries;
   CREATE VIEW IF NOT EXISTS prisma_queries as SELECT DISTINCT
     s.id,
     s.trace,

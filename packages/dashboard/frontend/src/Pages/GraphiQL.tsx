@@ -21,7 +21,7 @@ function GraphiQL() {
   console.log(data?.generateAuthHeaders)
 
   if (data) {
-    headers = `{"auth-provider-test": "${data?.generateAuthHeaders.authProvider}", "cookie": "${data?.generateAuthHeaders.cookie}", "authorization": "${data?.generateAuthHeaders.authorization}"}`
+    headers = `{"auth-provider": "${data?.generateAuthHeaders.authProvider}", "cookie": "${data?.generateAuthHeaders.cookie}", "authorization": "${data?.generateAuthHeaders.authorization}"}`
   }
 
   console.log(data)
