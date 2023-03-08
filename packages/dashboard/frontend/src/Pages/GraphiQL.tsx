@@ -8,6 +8,7 @@ const GET_AUTH = gql`
   query {
     generateAuthHeaders(userId: "1") {
       authProvider
+      cookie
       authorization
     }
   }
@@ -17,8 +18,10 @@ function GraphiQL() {
   const { data } = useQuery(GET_AUTH)
   let headers = ''
 
+  console.log(data?.generateAuthHeaders)
+
   if (data) {
-    headers = `{"auth-provider-test": "${data?.generateAuthHeaders.authProvider}", "authorization": "${data?.generateAuthHeaders.authorization}"}`
+    headers = `{"auth-provider-test": "${data?.generateAuthHeaders.authProvider}", "cookie": "${data?.generateAuthHeaders.cookie}", "authorization": "${data?.generateAuthHeaders.authorization}"}`
   }
 
   console.log(data)

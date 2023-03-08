@@ -54,8 +54,9 @@ export const setupYoga = (fastify: FastifyInstance) => {
       }
 
       type AuthHeaders {
-        authProvider: String
-        authorization: String
+        authProvider: String!
+        cookie: String
+        authorization: String!
       }
 
       type Query {
