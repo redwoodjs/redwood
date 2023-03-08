@@ -37,6 +37,12 @@ Restore existing functionality:
   ☐ trailingSlashes and customParam types
   These need to be extracted by Babel/Vite plugins at build time, before constructing the virtual routes module
 
+
+Enabling streaming/FE server:
+  ☐ During prerendering, make sure routeHooks doesn't break when routeParameters function isn't defined
+    i.e. the routeHooks file only has serverData
+
+
 Checks:
   ☐ Check DX of error messages when using notFound, redirect and standard route
   ☐ Update unit tests, to check if all the functionality is there
