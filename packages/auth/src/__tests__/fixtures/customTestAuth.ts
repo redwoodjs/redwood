@@ -25,7 +25,7 @@ export interface CustomTestAuthClient {
 export function createCustomTestAuth(
   customTest: CustomTestAuthClient,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean

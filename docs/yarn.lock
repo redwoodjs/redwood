@@ -4636,11 +4636,11 @@ __metadata:
   linkType: hard
 
 "dns-packet@npm:^5.2.2":
-  version: 5.3.1
-  resolution: "dns-packet@npm:5.3.1"
+  version: 5.4.0
+  resolution: "dns-packet@npm:5.4.0"
   dependencies:
     "@leichtgewicht/ip-codec": ^2.0.1
-  checksum: 5e74ccd47437f936b81c1d93363c2a57ce78374159ea4893435b95961f09685adb048f72e6e09fcc5c38a08550e20b67dfbbd7c7fd9c2c9f24c8cf88c592fe46
+  checksum: bd5ecfd7d8b9cacd4d0029819699051c4e231d8fa6ed96e1573f7fee4b9147c3406207a260adbd7fb5c6d08a7db7641836467f450fa88e2ec5075f482e39ed77
   languageName: node
   linkType: hard
 
@@ -4658,7 +4658,7 @@ __metadata:
     clsx: 1.2.1
     react: 17.0.2
     react-dom: 17.0.2
-    react-player: 2.11.2
+    react-player: 2.12.0
     typescript: 4.9.5
   languageName: unknown
   linkType: soft
@@ -8550,9 +8550,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-player@npm:2.11.2":
-  version: 2.11.2
-  resolution: "react-player@npm:2.11.2"
+"react-player@npm:2.12.0":
+  version: 2.12.0
+  resolution: "react-player@npm:2.12.0"
   dependencies:
     deepmerge: ^4.0.0
     load-script: ^1.0.0
@@ -8561,7 +8561,7 @@ __metadata:
     react-fast-compare: ^3.0.1
   peerDependencies:
     react: ">=16.6.0"
-  checksum: 5138f4865677ddaeb74f4ef9f469e54b77163dece1918414a2b75feed2e41a3e8d5432593d0fdfc1a8078d1cd951003e57fd37731a6988df673bd957a298942f
+  checksum: ef0c89cc5de17a149dc10c2ca36880679534980bc6fd9814b93636019af0132ebb516f282ceee249a991eef844f011fd91cb56126f5ab6c8ff0be29370c193bc
   languageName: node
   linkType: hard
 

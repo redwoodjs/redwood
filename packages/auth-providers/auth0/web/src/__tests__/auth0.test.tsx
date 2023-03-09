@@ -43,7 +43,7 @@ const auth0MockClient: Partial<Auth0Client> = {
   loginWithRedirect: async () => {
     loggedInUser = user
   },
-  logout: () => {},
+  logout: async () => {},
   getTokenSilently,
   getUser: <TUser extends User>() => {
     return new Promise<TUser | undefined>((resolve) => {
@@ -80,7 +80,7 @@ beforeEach(() => {
 })
 
 function getAuth0Auth(customProviderHooks?: {
-  useCurrentUser?: () => Promise<Record<string, unknown>>
+  useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
