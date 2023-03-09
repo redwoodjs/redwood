@@ -4954,9 +4954,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.4":
-  version: 6.2.4
-  resolution: "@npmcli/arborist@npm:6.2.4"
+"@npmcli/arborist@npm:6.2.5":
+  version: 6.2.5
+  resolution: "@npmcli/arborist@npm:6.2.5"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
@@ -4993,7 +4993,7 @@ __metadata:
     walk-up-path: ^1.0.0
   bin:
     arborist: bin/index.js
-  checksum: 63ed3724b870172965064a83e6b8545e313720f1b07ba6b056d6962be93fc3661ea9b06b367d1ae0c2ffcee88d1eaef10c79899334722503b63e5421620c39ce
+  checksum: ce2b1aeb90ef2aab7250c96148bf47c1937a189127f71857c1821fabc91a7a6487029baa12740bd4af43fef823c3893bfcf538ca0db7e35eb5f9c39359dd2796
   languageName: node
   linkType: hard
 
@@ -27923,7 +27923,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
-    "@npmcli/arborist": 6.2.4
+    "@npmcli/arborist": 6.2.5
     "@nrwl/nx-cloud": 15.1.1
     "@playwright/test": 1.31.2
     "@replayio/playwright": 0.3.24
