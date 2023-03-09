@@ -4,8 +4,12 @@ import { useQuery, gql } from '@apollo/client'
 
 import { RedwoodGraphiQL } from '../Components/RedwoodGraphiQL/RedwoodGraphiQL'
 
+// TODO: How to set the userId? Form? Query param? Toml config?
 const GET_AUTH = gql`
   query {
+    webConfig {
+      graphqlEndpoint
+    }
     generateAuthHeaders(userId: "1") {
       authProvider
       cookie
@@ -18,14 +22,16 @@ function GraphiQL() {
   const { data } = useQuery(GET_AUTH)
   let headers = ''
 
-  console.log(data?.generateAuthHeaders)
-
   if (data) {
     headers = `{"auth-provider": "${data?.generateAuthHeaders.authProvider}", "cookie": "${data?.generateAuthHeaders.cookie}", "authorization": "${data?.generateAuthHeaders.authorization}"}`
-  }
 
-  console.log(data)
-  return <RedwoodGraphiQL headers={headers} />
+    return (
+      <RedwoodGraphiQL
+        headers={headers}
+        endpoint={data?.webConfig?.graphqlEndpoint}
+      />
+    )
+  }
 }
 
 export default GraphiQL

@@ -100,12 +100,7 @@ export function RedwoodGraphiQL(
 #
 `
 
-  // const endpoint = new URL(
-  //   props.endpoint ?? location.pathname,
-  //   location.href
-  // ).toString()
-  // TODO: Fetch from the config graphql api url
-  const endpoint = 'http://localhost:8910/.redwood/functions/graphql'
+  const endpoint = props.endpoint || ''
 
   const type = {
     query: String,

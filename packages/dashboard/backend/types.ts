@@ -70,6 +70,48 @@ export interface RestructuredSpan {
   resourceAttributes?: RestructuredAttributes
 }
 
+export interface ApiConfig {
+  title: string
+  name?: string
+  host: string
+  port: number
+  path: string
+  // target: TargetEnum.NODE
+  schemaPath: string
+  serverConfig: string
+  debugPort?: number
+}
+
+export interface WebConfig {
+  title: string
+  name?: string
+  host: string
+  port: number
+  path: string
+  // target: TargetEnum.BROWSER
+  // bundler: BundlerEnum
+  includeEnvironmentVariables: string[]
+  /**
+   * Specify the URL to your api-server.
+   * This can be an absolute path proxied on the current domain (`/.netlify/functions`),
+   * or a fully qualified URL (`https://api.example.org:8911/functions`).
+   *
+   * Note: This should not include the path to the GraphQL Server.
+   **/
+  apiUrl: string
+  /**
+   * Optional: FQDN or absolute path to the GraphQL serverless function, without the trailing slash.
+   * This will override the apiUrl configuration just for the graphql function
+   * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
+   */
+  apiGraphQLUrl?: string
+
+  fastRefresh: boolean
+  a11y: boolean
+  sourceMap: boolean
+  graphqlEndpoint?: string
+}
+
 export interface DashboardConfig {
   authProvider: string
 }

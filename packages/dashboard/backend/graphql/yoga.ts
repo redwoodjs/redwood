@@ -2,7 +2,7 @@ import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
 import { createYoga, createSchema } from 'graphql-yoga'
 
 import { authProvider, generateAuthHeaders } from '../services/auth'
-import { dashboardConfig } from '../services/config'
+import { dashboardConfig, webConfig } from '../services/config'
 import { prismaQueries } from '../services/prisma'
 import { traces, trace } from '../services/span'
 
@@ -53,6 +53,10 @@ export const setupYoga = (fastify: FastifyInstance) => {
         authProvider: String
       }
 
+      type WebConfig {
+        graphqlEndpoint: String
+      }
+
       type AuthHeaders {
         authProvider: String!
         cookie: String
@@ -65,6 +69,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         prismaQueries(id: String!): [PrismaQuerySpan]!
         authProvider: String
         dashboardConfig: DashboardConfig
+        webConfig: WebConfig
         generateAuthHeaders(userId: String!): AuthHeaders
       }
     `,
@@ -73,6 +78,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         traces,
         trace,
         dashboardConfig,
+        webConfig,
         authProvider,
         generateAuthHeaders,
         prismaQueries,
