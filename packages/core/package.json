@@ -70,7 +70,7 @@
     "graphql-tag": "2.12.6",
     "html-webpack-plugin": "5.5.0",
     "lodash.escaperegexp": "4.1.2",
-    "mini-css-extract-plugin": "2.7.2",
+    "mini-css-extract-plugin": "2.7.3",
     "nodemon": "2.0.21",
     "null-loader": "4.0.1",
     "react-refresh": "0.14.0",
