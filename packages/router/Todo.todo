@@ -19,12 +19,9 @@ Props on Sets/Private/etc.:
 Redirects:
   ☐ Handling the redirect prop in a Route client side
   ☐ Handling server side redirects
-  ☐ Validating path (I commented out the logic)
-    ☐ Check Route has a path prop
-    ☐ Check that Route has page and name
-    "A route that's not a redirect or notfound route needs to specify " +
-    'both a `page` and a `name`'
-    ☐ validatePath
+
+
+Other features:
   ☐ Delete `ref` and `key` from allParams
     // There are two special props in React: `ref` and `key`. (See https://reactjs.org/warnings/special-props.html.)
     // It's very possible that the URL has `ref` as a search param (e.g. https://redwoodjs.com/?ref=producthunt).
@@ -41,7 +38,7 @@ Enabling streaming/FE server:
 
 
 Checks:
-  ☐ Check DX of error messages when using notFound, redirect and standard route
+  ✔ Check DX of error messages when using notFound, redirect and standard route @done(23-03-08 18:48)
   ☐ Update unit tests, to check if all the functionality is there
   ☐ On Throttled network, we see
     Uncaught Error: This Suspense boundary received an update before it finished hydrating. This caused the boundary to switch to client rendering. The usual way to fix this is to wrap the original update in startTransition.
