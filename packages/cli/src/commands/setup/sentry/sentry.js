@@ -98,7 +98,11 @@ export const handler = async ({ force }) => {
           "import 'src/lib/sentry'",
           '',
           'export const handler = createGraphQLHandler({',
-          'extraPlugins: [useSentry()],'
+          'extraPlugins: [useSentry({',
+          'includeRawResult: true,',
+          'includeResolverArgs: true,',
+          'includeExecuteVariables: true,',
+          '})],'
         )
 
         contentLines.splice(0, 0, "import { useSentry } from '@envelop/sentry'")
