@@ -15,3 +15,4 @@ const getRedwoodAppEnvVars = () => {
 }
 
 export const SESSION_SECRET = getRedwoodAppEnvVars().SESSION_SECRET
+export const SUPABASE_JWT_SECRET = getRedwoodAppEnvVars().SUPABASE_JWT_SECRET
