@@ -32,6 +32,7 @@ function GraphiQL() {
       />
     )
   }
+  return <>Error</>
 }
 
 export default GraphiQL

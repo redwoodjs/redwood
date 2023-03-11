@@ -1,6 +1,6 @@
 import Fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
-// import open from 'open'
+import open from 'open'
 
 import { setupTables, setupViews } from './database'
 import reactRoutes from './fastify/react'
@@ -33,9 +33,7 @@ export const start = async () => {
   fastify.listen({ port: PORT, host: HOST })
   fastify.ready(() => {
     console.log(`Dashboard API listening on ${HOST}:${PORT}`)
-
-    // TODO: Disabled for my own sanity but should enable for users
-    // open(`http://${HOST}:${PORT}`)
+    open(`http://${HOST}:${PORT}`)
   })
 
   process.on('SIGTERM', async () => {

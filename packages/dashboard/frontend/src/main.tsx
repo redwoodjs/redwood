@@ -7,11 +7,12 @@ import { HashRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 
 import MasterLayout from './Layouts/MasterLayout'
+import ComingSoon from './Pages/ComingSoon'
 import GraphiQL from './Pages/GraphiQL'
 import Landing from './Pages/Landing'
 import NotFound from './Pages/NotFound'
-import Trace from './Pages/Trace'
-import Tracing from './Pages/Tracing'
+import Trace from './Pages/Tracing/Trace'
+import Tracing from './Pages/Tracing/Tracing'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4318/graphql',
@@ -25,9 +26,18 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Routes>
           <Route element={<MasterLayout />}>
             <Route index element={<Landing />} />
+
+            {/* Tracing */}
             <Route path="/tracing" element={<Tracing />} />
             <Route path="/tracing/:traceId" element={<Trace />} />
+
+            {/* GraphiQL */}
             <Route path="/graphiql" element={<GraphiQL />} />
+
+            {/* Coming Soon */}
+            <Route path="/coming-soon" element={<ComingSoon />} />
+
+            {/* 404 */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

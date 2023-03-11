@@ -1,6 +1,7 @@
 import terminalLink from 'terminal-link'
 
 export const command = 'dashboard'
+export const aliases = ['dash']
 export const description = 'Run the Redwood development dashboard'
 export const builder = (yargs) => {
   yargs.epilogue(
