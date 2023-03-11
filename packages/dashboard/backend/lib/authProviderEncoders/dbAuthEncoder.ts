@@ -15,7 +15,9 @@ export const getDBAuthHeader = async (userId?: string) => {
   }
 
   const cookie = CryptoJS.AES.encrypt(
-    JSON.stringify({ userId }) + ';' + uuidv4(),
+    // ids muts be integers, so can they be uuids or cuids?
+    // why this may not work on MongoDB?
+    JSON.stringify({ id: parseInt(userId) }) + ';' + uuidv4(),
     SESSION_SECRET
   ).toString()
 
