@@ -1,5 +1,28 @@
 import React from 'react'
 
+// See https://gist.github.com/IceCreamYou/6ffa1b18c4c8f6aeaad2
+const percentile = (numbers: number[], percentile: number): number => {
+  if (numbers.length === 0) {
+    return 0
+  }
+  if (percentile <= 0) {
+    return numbers[0]
+  }
+  if (percentile >= 1) {
+    return numbers[numbers.length - 1]
+  }
+
+  const index = (numbers.length - 1) * percentile,
+    lower = Math.floor(index),
+    upper = lower + 1,
+    weight = index % 1
+
+  if (upper >= numbers.length) {
+    return numbers[lower]
+  }
+  return numbers[lower] * (1 - weight) + numbers[upper] * weight
+}
+
 function FlameTableView({ trace }: { trace: any }) {
   const spanStats: any[] = trace.spans.map((span: any) => {
     return {
@@ -14,27 +37,32 @@ function FlameTableView({ trace }: { trace: any }) {
     new Set(spanStats.map((span) => span.name))
   )
 
-  const spanFlameData = uniqueSpanNames.map((spanName: string) => {
-    const spansOfInterest = spanStats.filter((span) => span.name === spanName)
-    const total = spansOfInterest.reduce((acc: number, span: any) => {
-      return acc + span.duration
-    }, 0)
+  const spanFlameData = uniqueSpanNames
+    .map((spanName: string) => {
+      const spansOfInterest = spanStats.filter((span) => span.name === spanName)
+      const durations = (
+        spansOfInterest.map((span) => span.duration) as number[]
+      ).sort((a, b) => a - b)
 
-    const spanIdsWithName = spansOfInterest.map((span) => span.id)
-    const childTime = spanStats.reduce((acc: number, span: any) => {
-      if (spanIdsWithName.includes(span.parent)) {
-        return acc + span.duration
+      const sum = durations.reduce((acc, duration) => acc + duration, 0)
+      const middle = Math.floor(durations.length / 2)
+
+      return {
+        name: spanName,
+        count: spansOfInterest.length,
+        mean: sum / spansOfInterest.length,
+        min: Math.min(...durations),
+        median:
+          durations.length % 2 === 0
+            ? (durations[middle - 1] + durations[middle]) / 2
+            : durations[middle],
+        max: Math.max(...durations),
+        p90: percentile(durations, 0.9),
+        p95: percentile(durations, 0.95),
+        sum,
       }
-      return acc
-    }, 0)
-
-    return {
-      name: spanName,
-      count: spansOfInterest.length,
-      total,
-      self: Math.max(0, total - childTime),
-    }
-  })
+    })
+    .sort((a, b) => (a.p90 > b.p90 ? 1 : b.p90 > a.p90 ? -1 : 0))
 
   const numberFormatter = new Intl.NumberFormat(undefined, {
     minimumFractionDigits: 3,
@@ -46,10 +74,12 @@ function FlameTableView({ trace }: { trace: any }) {
       <div className="sm:flex sm:items-center -mx-4 sm:-mx-6 lg:-mx-8">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Prisma Queries
+            Flame Table
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all Prisma queries executed during this trace.
+            A list of all the spans grouped by name. The values below are
+            calculated based on the total duration of a span which includes the
+            durations of any child spans.
           </p>
         </div>
       </div>
@@ -69,19 +99,49 @@ function FlameTableView({ trace }: { trace: any }) {
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Count
+                    Quantity
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                   >
-                    Self (ms)
+                    Mean (ms)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                  >
+                    Min (ms)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                  >
+                    Median (ms)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                  >
+                    Max (ms)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                  >
+                    p(90) (ms)
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                  >
+                    p(95) (ms)
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 pr-4 sm:pr-6 lg:pr-8"
                   >
-                    Total (ms)
+                    Sum (ms)
                   </th>
                 </tr>
               </thead>
@@ -97,10 +157,25 @@ function FlameTableView({ trace }: { trace: any }) {
                         {row.count}
                       </td>
                       <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                        {numberFormatter.format(row.self / 1e6)}
+                        {numberFormatter.format(row.mean / 1e6)}
+                      </td>
+                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                        {numberFormatter.format(row.min / 1e6)}
+                      </td>
+                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                        {numberFormatter.format(row.median / 1e6)}
+                      </td>
+                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                        {numberFormatter.format(row.max / 1e6)}
+                      </td>
+                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                        {numberFormatter.format(row.p90 / 1e6)}
+                      </td>
+                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                        {numberFormatter.format(row.p95 / 1e6)}
                       </td>
                       <td className="whitespace-pre-wrap py-4 px-3 text-sm text-gray-500 flex-wrap sm:pr-6 lg:pr-8 text-right">
-                        {numberFormatter.format(row.total / 1e6)}
+                        {numberFormatter.format(row.sum / 1e6)}
                       </td>
                     </tr>
                   ))}
@@ -110,34 +185,6 @@ function FlameTableView({ trace }: { trace: any }) {
         </div>
       </div>
     </div>
-    // <table className="table-auto">
-    //   <thead>
-    //     <tr>
-    //       <th className="text-left">Span Name</th>
-    //       <th className="text-right">Count</th>
-    //       <th className="text-right">Self (ms)</th>
-    //       <th className="text-right">Total (ms)</th>
-    //     </tr>
-    //   </thead>
-    //   <tbody>
-    //     {spanFlameData
-    //       .sort((a: any, b: any) => (a.self < b.self ? 1 : -1))
-    //       .map((row: any) => {
-    //         return (
-    //           <tr key={row.name}>
-    //             <td className="text-left">{row.name}</td>
-    //             <td className="text-right">{row.count}</td>
-    //             <td className="text-right">
-    //               {numberFormatter.format(row.self / 1e6)}
-    //             </td>
-    //             <td className="text-right">
-    //               {numberFormatter.format(row.total / 1e6)}
-    //             </td>
-    //           </tr>
-    //         )
-    //       })}
-    //   </tbody>
-    // </table>
   )
 }
 

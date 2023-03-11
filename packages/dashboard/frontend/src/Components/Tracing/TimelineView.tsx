@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
 
+import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+
+const numberFormatter = new Intl.NumberFormat(undefined, {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
 function SpanSegment({
   trace,
   span,
@@ -23,18 +30,16 @@ function SpanSegment({
   const spanStart = BigInt.asUintN(63, BigInt(span.startNano))
   const spanEnd = BigInt.asUintN(63, BigInt(span.endNano))
 
-  const startBasis = (
-    (Number(spanStart - traceStart) / traceDuration) *
-    99.999
-  ).toFixed(0)
-  const duringBasis = (
-    (Number(spanEnd - spanStart) / traceDuration) *
-    99.999
-  ).toFixed(0)
-  const endBasis = (
-    (Number(traceEnd - spanEnd) / traceDuration) *
-    99.999
-  ).toFixed(0)
+  const startBasis = (Number(spanStart - traceStart) / traceDuration) * 99.999
+  const duringBasis = (Number(spanEnd - spanStart) / traceDuration) * 99.999
+  const endBasis = (Number(traceEnd - spanEnd) / traceDuration) * 99.999
+
+  const durationText = `${numberFormatter.format(
+    Number(spanEnd - spanStart) / 1_000_000
+  )}ms`
+  const durationTextAtEnd = endBasis > 0.2
+  const durationTextAtDuring = !durationTextAtEnd && duringBasis > 0.2
+  const durationTextAtStart = !durationTextAtEnd && !durationTextAtDuring
 
   const children = trace.spans
     .filter((child: any) => child.parent === span.id)
@@ -47,7 +52,7 @@ function SpanSegment({
       <div className="flex flex-row ">
         <div
           className="basis-2/5 flex flex-row gap-2"
-          style={{ paddingLeft: depth * 16 }}
+          style={{ paddingLeft: depth * 16 + (children.length > 0 ? -2 : 26) }}
         >
           {children.length > 0 && (
             <button
@@ -55,7 +60,11 @@ function SpanSegment({
               onClick={() => setIsExpanded(!isExpanded)}
               disabled={children.length === 0}
             >
-              {isExpanded ? '▼' : '▶'}
+              {isExpanded ? (
+                <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+              )}
             </button>
           )}
           <button
@@ -67,16 +76,32 @@ function SpanSegment({
         </div>
         <div className="basis-3/5 border-l border-gray-400">
           <div className="px-2 flex flex-row w-full min-w-full">
-            <div style={{ flexBasis: `${startBasis}%` }}>⠀</div>
             <div
               style={{
-                flexBasis: `${duringBasis}%`,
-                backgroundColor: '#00AA00',
+                flexBasis: `${startBasis.toFixed(3)}%`,
+                paddingRight: '0.5rem',
               }}
             >
-              ⠀
+              {durationTextAtStart ? durationText : '⠀'}
             </div>
-            <div style={{ flexBasis: `${endBasis}%` }}>⠀</div>
+            <div
+              style={{
+                flexBasis: `${duringBasis.toFixed(3)}%`,
+                backgroundColor: '#00AA00',
+                color: '#FFFFFF',
+                paddingLeft: '0.5rem',
+              }}
+            >
+              {durationTextAtDuring ? durationText : '⠀'}
+            </div>
+            <div
+              style={{
+                flexBasis: `${endBasis.toFixed(3)}%`,
+                paddingLeft: '0.5rem',
+              }}
+            >
+              {durationTextAtEnd ? durationText : '⠀'}
+            </div>
           </div>
         </div>
       </div>

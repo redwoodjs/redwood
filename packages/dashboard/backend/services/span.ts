@@ -10,11 +10,14 @@ export const traces = async (_parent: unknown) => {
 
   const results: any = []
   for (const traceId of traceIds) {
+    const traceSpans = spans
+      .filter((span) => span.trace === traceId)
+      .map((span) => restructureSpan(span))
+
     results.push({
       id: traceId,
-      spans: spans
-        .filter((span) => span.trace === traceId)
-        .map((span) => restructureSpan(span)),
+      spans: traceSpans,
+      enhancements: buildEnhancements(traceSpans),
     })
   }
   return results
@@ -25,9 +28,12 @@ export const trace = async (_parent: any, { id }: { id: string }) => {
   const stmt = await db.prepare('SELECT * FROM span WHERE trace=?;')
   const spans = await stmt.all(id)
   await stmt.finalize()
+
+  const restructuredSpans = spans.map((span) => restructureSpan(span))
   return {
     id,
-    spans: spans.map((span) => restructureSpan(span)),
+    spans: restructuredSpans,
+    enhancements: buildEnhancements(restructuredSpans),
   }
 }
 
@@ -40,6 +46,27 @@ export const traceCount = async (_parent: unknown) => {
   await stmt.finalize()
 
   return result['trace_count']
+}
+
+const buildEnhancements = (spans: any[]) => {
+  const enhancements = {
+    features: [] as string[],
+    containsError: false,
+  }
+  spans.forEach((span) => {
+    if (span.statusCode) {
+      enhancements.containsError = true
+    }
+    if (span.name.startsWith('redwoodjs:api:services')) {
+      enhancements.features.push('service_function')
+    }
+    const attributesKeys = Object.keys(JSON.parse(span.attributes))
+    if (attributesKeys.includes('db.statement')) {
+      enhancements.features.push('sql')
+    }
+  })
+  enhancements.features = Array.from(new Set(enhancements.features))
+  return enhancements
 }
 
 const restructureSpan = (span: any) => {

@@ -16,6 +16,11 @@ export const setupYoga = (fastify: FastifyInstance) => {
       type Trace {
         id: String
         spans: [Span]
+        enhancements: TraceEnhancements
+      }
+      type TraceEnhancements {
+        features: [String]
+        containsError: Boolean
       }
       type Span {
         id: String

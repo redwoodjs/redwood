@@ -3,7 +3,6 @@ import React, { useState, Fragment } from 'react'
 import { useQuery, gql } from '@apollo/client'
 import { Listbox, Transition } from '@headlessui/react'
 import {
-  UsersIcon,
   CircleStackIcon,
   CodeBracketIcon,
   ClockIcon,
@@ -35,6 +34,9 @@ const GET_TRACE_SPANS = gql`
         events
         attributes
         resources
+      }
+      enhancements {
+        features
       }
     }
     prismaQueries(id: $id) {
@@ -185,27 +187,24 @@ function Trace() {
             </div>
           </div>
           <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
-            <div className="mt-2 flex items-center text-sm text-gray-500">
-              <UsersIcon
-                className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                aria-hidden="true"
-              />
-              Auth
-            </div>
-            <div className="mt-2 flex items-center text-sm text-gray-500">
-              <CircleStackIcon
-                className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                aria-hidden="true"
-              />
-              SQL
-            </div>
-            <div className="mt-2 flex items-center text-sm text-gray-500">
-              <CodeBracketIcon
-                className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                aria-hidden="true"
-              />
-              Service Function
-            </div>
+            {data.trace.enhancements.features.includes('sql') && (
+              <div className="mt-2 flex items-center text-sm text-gray-500">
+                <CircleStackIcon
+                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                  aria-hidden="true"
+                />
+                SQL
+              </div>
+            )}
+            {data.trace.enhancements.features.includes('service_function') && (
+              <div className="mt-2 flex items-center text-sm text-gray-500">
+                <CodeBracketIcon
+                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                  aria-hidden="true"
+                />
+                Service Function
+              </div>
+            )}
           </div>
         </div>
       </div>
