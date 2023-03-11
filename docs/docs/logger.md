@@ -615,7 +615,7 @@ export const logger = createLogger({
 - Install the [pino-papertrail](https://www.npmjs.com/package/pino-papertrail) package into `api`
 
 ```bash
-yarn workspace api add pino-papertrail]
+yarn workspace api add pino-papertrail
 ```
 
 - Import `pino-papertrail` into `logger.ts`
