@@ -539,6 +539,11 @@ export const logger = createLogger({
 ### Log to Logflare using a Transport Stream Destination
 
 - Install the [`pino-logflare`](https://www.npmjs.com/package/pino-logflare) package into `api`
+
+```bash
+yarn workspace api add pino-logflare
+```
+
 - Import `pino-logflare` into `api/src/lib/logger.ts`
 - Configure the `stream` with your [API key and sourceToken](https://github.com/Logflare/pino-logflare/blob/master/docs/API.md)
 - Set the logger `destination` to the `stream`
