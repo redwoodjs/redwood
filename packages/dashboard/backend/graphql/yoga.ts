@@ -4,7 +4,8 @@ import { createYoga, createSchema } from 'graphql-yoga'
 import { authProvider, generateAuthHeaders } from '../services/auth'
 import { dashboardConfig, webConfig } from '../services/config'
 import { prismaQueries } from '../services/prisma'
-import { traces, trace } from '../services/span'
+import { traces, trace, traceCount } from '../services/span'
+import { sqlSpans, sqlCount } from '../services/sql'
 
 export const setupYoga = (fastify: FastifyInstance) => {
   const schema = createSchema<{
@@ -78,6 +79,9 @@ export const setupYoga = (fastify: FastifyInstance) => {
         dashboardConfig: DashboardConfig
         webConfig: WebConfig
         generateAuthHeaders(userId: String): AuthHeaders
+        sqlSpans: [Span]!
+        sqlCount: Int!
+        traceCount: Int!
       }
     `,
     resolvers: {
@@ -89,6 +93,9 @@ export const setupYoga = (fastify: FastifyInstance) => {
         authProvider,
         generateAuthHeaders,
         prismaQueries,
+        sqlSpans,
+        sqlCount,
+        traceCount,
       },
     },
   })

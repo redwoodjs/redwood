@@ -58,6 +58,18 @@ export const setupViews = async () => {
       p. "name" = 'prisma:client:operation'
     ORDER BY s.start_nano desc, s.parent;
 `
-
   await db.exec(prismaQueriesView)
+
+  const SQLSpansView = `
+  CREATE VIEW IF NOT EXISTS sql_spans as SELECT DISTINCT
+    *,
+    cast((duration_nano / 1000000.000) as REAL) as duration_ms,
+    cast((duration_nano / 1000000000.0000) as number) as duration_sec
+    FROM
+    span
+    WHERE
+    json_extract(attributes, '$."db.statement"') IS NOT NULL
+    ORDER BY start_nano desc;
+`
+  await db.exec(SQLSpansView)
 }

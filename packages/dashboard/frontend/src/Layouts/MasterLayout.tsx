@@ -191,11 +191,6 @@ export default function MasterLayout() {
 
           <main>
             <Outlet />
-            {/* <div className="py-6">
-              <div className="mx-auto">
-
-              </div>
-            </div> */}
           </main>
         </div>
       </div>

@@ -31,10 +31,21 @@ export const trace = async (_parent: any, { id }: { id: string }) => {
   }
 }
 
+export const traceCount = async (_parent: unknown) => {
+  const db = await getDatabase()
+  const stmt = await db.prepare(
+    'SELECT COUNT(DISTINCT trace) AS trace_count FROM span;'
+  )
+  const result = await stmt.get()
+  await stmt.finalize()
+
+  return result['trace_count']
+}
+
 const restructureSpan = (span: any) => {
   const restructuredSpan = {
     id: span.id,
-    trace: span.span,
+    trace: span.trace,
     parent: span.parent,
     name: span.name,
     kind: span.kind,

@@ -11,6 +11,7 @@ import ComingSoon from './Pages/ComingSoon'
 import GraphiQL from './Pages/GraphiQL'
 import Landing from './Pages/Landing'
 import NotFound from './Pages/NotFound'
+import SQL from './Pages/SQL'
 import Trace from './Pages/Tracing/Trace'
 import Tracing from './Pages/Tracing/Tracing'
 
@@ -33,6 +34,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
             {/* GraphiQL */}
             <Route path="/graphiql" element={<GraphiQL />} />
+
+            {/* SQL */}
+            <Route path="/sql" element={<SQL />} />
 
             {/* Coming Soon */}
             <Route path="/coming-soon" element={<ComingSoon />} />
