@@ -29,7 +29,7 @@
   "devDependencies": {
     "@babel/cli": "7.21.0",
     "@babel/core": "7.21.0",
-    "@clerk/clerk-react": "4.12.2",
+    "@clerk/clerk-react": "4.12.4",
     "@clerk/types": "3.30.1",
     "@testing-library/react-hooks": "8.0.1",
     "@types/react": "17.0.53",
@@ -38,7 +38,7 @@
     "typescript": "4.9.5"
   },
   "peerDependencies": {
-    "@clerk/clerk-react": "4.12.2"
+    "@clerk/clerk-react": "4.12.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
