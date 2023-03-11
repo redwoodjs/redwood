@@ -8,6 +8,7 @@ import './index.css'
 
 import MasterLayout from './Layouts/MasterLayout'
 import ComingSoon from './Pages/ComingSoon'
+import Config from './Pages/Config'
 import GraphiQL from './Pages/GraphiQL'
 import Landing from './Pages/Landing'
 import NotFound from './Pages/NotFound'
@@ -37,6 +38,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
             {/* SQL */}
             <Route path="/sql" element={<SQL />} />
+
+            {/* Config */}
+            <Route path="/config" element={<Config />} />
 
             {/* Coming Soon */}
             <Route path="/coming-soon" element={<ComingSoon />} />

@@ -10,6 +10,7 @@ import {
   HomeIcon,
   MagnifyingGlassIcon,
   XMarkIcon,
+  WrenchIcon,
 } from '@heroicons/react/24/outline'
 import { Outlet, NavLink } from 'react-router-dom'
 
@@ -20,6 +21,7 @@ const navigation = [
   { name: 'Tracing', to: '/tracing', icon: MagnifyingGlassIcon },
   { name: 'GraphiQL', to: '/graphiql', icon: FolderIcon },
   { name: 'SQL', to: '/sql', icon: CircleStackIcon },
+  { name: 'Config', to: '/config', icon: WrenchIcon },
   { name: 'Coming Soon', to: '/coming-soon', icon: EllipsisHorizontalIcon },
 ]
 
