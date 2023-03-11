@@ -22,7 +22,7 @@ function GraphiQL() {
   let headers = undefined as undefined | Record<string, string>
 
   if (data && data.generateAuthHeaders) {
-    const { authProvider, authorization, cookie } = data?.generateAuthHeaders
+    const { authProvider, authorization, cookie } = data.generateAuthHeaders
 
     if (authProvider) {
       headers = {
