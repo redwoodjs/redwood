@@ -1,28 +1,31 @@
 import { getDBAuthHeader } from '../lib/authProviderEncoders/dbAuthEncoder'
 import { getNetlifyAuthHeader } from '../lib/authProviderEncoders/netlifyAuthEncoder'
 import { getSupabaseAuthHeader } from '../lib/authProviderEncoders/supabaseAuthEncoder'
-
-import { dashboardConfig } from './config'
+import { getDashboardConfig } from '../lib/config'
 
 export const authProvider = async (_parent: unknown) => {
-  return (await dashboardConfig(_parent)).authProvider
+  return getDashboardConfig().authProvider
 }
 
 export const generateAuthHeaders = async (
   _parent: unknown,
-  { userId }: { userId: string }
+  { userId }: { userId?: string }
 ) => {
-  const provider = await authProvider(_parent)
+  const dashboardConfig = getDashboardConfig()
+
+  const provider = dashboardConfig.authProvider
+  const impersonateUserId = dashboardConfig.userId
+  const email = dashboardConfig.email
 
   if (provider == 'dbAuth') {
-    return getDBAuthHeader(userId)
+    return getDBAuthHeader(userId || impersonateUserId)
   }
   if (provider == 'netlify') {
-    return getNetlifyAuthHeader(userId)
+    return getNetlifyAuthHeader(userId || impersonateUserId, email)
   }
 
   if (provider == 'supabase') {
-    return getSupabaseAuthHeader(userId)
+    return getSupabaseAuthHeader(userId || impersonateUserId, email)
   }
 
   return {}

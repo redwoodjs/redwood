@@ -6,7 +6,7 @@ const getExpiryTime = () => {
   return Date.now() + 3600 * 1000
 }
 
-export const getSupabaseAuthHeader = (userId: string) => {
+export const getSupabaseAuthHeader = (userId?: string, email?: string) => {
   if (!SUPABASE_JWT_SECRET) {
     throw new Error('SUPABASE_JWT_SECRET env var is not set.')
   }
@@ -15,7 +15,7 @@ export const getSupabaseAuthHeader = (userId: string) => {
     aud: 'authenticated',
     exp: getExpiryTime(),
     sub: userId ?? 'test-user-id',
-    email: 'user@example.com',
+    email: email ?? 'user@example.com',
     app_metadata: {
       provider: 'email',
     },

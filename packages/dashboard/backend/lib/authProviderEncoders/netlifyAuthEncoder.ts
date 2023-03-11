@@ -4,11 +4,11 @@ const getExpiryTime = () => {
   return Date.now() + 3600 * 1000
 }
 
-export const getNetlifyAuthHeader = (userId: string) => {
+export const getNetlifyAuthHeader = (userId?: string, email?: string) => {
   const payload = {
     exp: getExpiryTime(),
     sub: userId ?? 'test-user-id',
-    email: 'user@example.com',
+    email: email ?? 'user@example.com',
     app_metadata: {
       provider: 'email',
     },

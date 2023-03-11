@@ -78,7 +78,10 @@ export interface Config {
   }
   dashboard: {
     inMemory: boolean
-    authProvider: string
+    authProvider?: string
+    userId?: string
+    email?: string
+    roles?: string[]
   }
 }
 
@@ -124,7 +127,9 @@ const DEFAULT_CONFIG: Config = {
   },
   dashboard: {
     inMemory: false,
-    authProvider: 'dbAuth',
+    userId: undefined,
+    email: undefined,
+    roles: undefined,
   },
 }
 

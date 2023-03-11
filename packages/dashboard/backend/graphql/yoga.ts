@@ -49,8 +49,15 @@ export const setupYoga = (fastify: FastifyInstance) => {
         db_statement: String
       }
 
+      type ImpersonateUser {
+        id: String!
+        email: String
+        roles: [String]
+      }
+
       type DashboardConfig {
         authProvider: String
+        impersonateUser: ImpersonateUser
       }
 
       type WebConfig {
@@ -58,9 +65,9 @@ export const setupYoga = (fastify: FastifyInstance) => {
       }
 
       type AuthHeaders {
-        authProvider: String!
+        authProvider: String
         cookie: String
-        authorization: String!
+        authorization: String
       }
 
       type Query {
@@ -70,7 +77,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         authProvider: String
         dashboardConfig: DashboardConfig
         webConfig: WebConfig
-        generateAuthHeaders(userId: String!): AuthHeaders
+        generateAuthHeaders(userId: String): AuthHeaders
       }
     `,
     resolvers: {

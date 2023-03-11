@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { SESSION_SECRET } from '../envars'
 
-export const getDBAuthHeader = (userId: string) => {
+export const getDBAuthHeader = async (userId?: string) => {
   if (!userId) {
     throw new Error('Require an unique id to generate session cookie')
   }

@@ -113,5 +113,9 @@ export interface WebConfig {
 }
 
 export interface DashboardConfig {
-  authProvider: string
+  inMemory: boolean
+  authProvider?: string
+  userId?: string
+  email?: string
+  roles?: string[]
 }
