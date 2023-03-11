@@ -6805,7 +6805,7 @@ __metadata:
     style-loader: 3.3.1
     typescript: 4.9.5
     url-loader: 4.1.1
-    webpack: 5.76.0
+    webpack: 5.76.1
     webpack-bundle-analyzer: 4.8.0
     webpack-cli: 5.0.1
     webpack-dev-server: 4.11.1
@@ -31670,9 +31670,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.76.0, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
-  version: 5.76.0
-  resolution: "webpack@npm:5.76.0"
+"webpack@npm:5.76.1, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
+  version: 5.76.1
+  resolution: "webpack@npm:5.76.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
@@ -31703,7 +31703,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 0a287f725a0873dadd35c2318a651356934c9fd69ae2bcaaa4a177f8e65184fb2fd2c09434cb632673bcb8274f0c246d243f0b008720143f19d52ea43e06a038
+  checksum: 9cfc3f5a42d55bfe4fa1b2637ee984aa4455c785b9b3a938de2bdc717dcb9b6222fbc0175f53691b8098aa02db180fdc488a6417cd6a8676da70372d78db8e9f
   languageName: node
   linkType: hard
 
