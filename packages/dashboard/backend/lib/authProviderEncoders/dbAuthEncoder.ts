@@ -3,10 +3,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { SESSION_SECRET } from '../envars'
 
-const isNumeric = (id: string) => {
-  return /^\d+$/.test(parseInt(id).toString())
-}
-
 export const getDBAuthHeader = (userId: string) => {
   if (!userId) {
     throw new Error('Require an unique id to generate session cookie')
@@ -18,16 +14,14 @@ export const getDBAuthHeader = (userId: string) => {
     )
   }
 
-  const id = isNumeric(userId) ? parseInt(userId) : userId
-
   const cookie = CryptoJS.AES.encrypt(
-    JSON.stringify({ id }) + ';' + uuidv4(),
+    JSON.stringify({ userId }) + ';' + uuidv4(),
     SESSION_SECRET
   ).toString()
 
   return {
     authProvider: 'dbAuth',
     cookie: `session=${cookie}`,
-    authorization: `Bearer ${id}`,
+    authorization: `Bearer ${userId}`,
   }
 }

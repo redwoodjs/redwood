@@ -20,14 +20,28 @@ const GET_AUTH = gql`
 
 function GraphiQL() {
   const { data } = useQuery(GET_AUTH)
-  let headers = ''
+  let headers = {} as Record<string, string>
 
   if (data) {
-    headers = `{"auth-provider": "${data?.generateAuthHeaders.authProvider}", "cookie": "${data?.generateAuthHeaders.cookie}", "authorization": "${data?.generateAuthHeaders.authorization}"}`
+    const authProvider = data?.generateAuthHeaders.authProvider
+    const authorization = data?.generateAuthHeaders.authorization
+    const cookie = data?.generateAuthHeaders.cookie
+
+    headers = {
+      'auth-provider': authProvider,
+      authorization: authorization,
+    }
+    if (cookie) {
+      headers = {
+        'auth-provider': authProvider,
+        authorization: authorization,
+        cookie,
+      }
+    }
 
     return (
       <RedwoodGraphiQL
-        headers={headers}
+        headers={headers.toString()}
         endpoint={data?.webConfig?.graphqlEndpoint}
       />
     )

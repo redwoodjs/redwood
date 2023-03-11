@@ -1,4 +1,6 @@
-import { getDBAuthHeader } from '../lib/authProviderEncoders/dbAuthEncoders'
+import { getDBAuthHeader } from '../lib/authProviderEncoders/dbAuthEncoder'
+import { getNetlifyAuthHeader } from '../lib/authProviderEncoders/netlifyAuthEncoder'
+import { getSupabaseAuthHeader } from '../lib/authProviderEncoders/supabaseAuthEncoder'
 
 import { dashboardConfig } from './config'
 
@@ -14,6 +16,13 @@ export const generateAuthHeaders = async (
 
   if (provider == 'dbAuth') {
     return getDBAuthHeader(userId)
+  }
+  if (provider == 'netlify') {
+    return getNetlifyAuthHeader(userId)
+  }
+
+  if (provider == 'supabase') {
+    return getSupabaseAuthHeader(userId)
   }
 
   return {}
