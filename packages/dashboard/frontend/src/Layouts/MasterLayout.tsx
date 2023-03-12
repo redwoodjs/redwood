@@ -5,10 +5,11 @@ import {
   Bars3BottomLeftIcon,
   BellIcon,
   CircleStackIcon,
-  FolderIcon,
-  EllipsisHorizontalIcon,
+  ViewColumnsIcon,
+  EllipsisHorizontalCircleIcon,
   HomeIcon,
   MagnifyingGlassIcon,
+  RadioIcon,
   XMarkIcon,
   WrenchIcon,
 } from '@heroicons/react/24/outline'
@@ -18,11 +19,15 @@ import redwooodLogo from '../assets/redwoodjs_diecut_name.svg'
 
 const navigation = [
   { name: 'Overview', to: '/', icon: HomeIcon },
-  { name: 'Tracing', to: '/tracing', icon: MagnifyingGlassIcon },
-  { name: 'GraphiQL', to: '/graphiql', icon: FolderIcon },
-  { name: 'SQL', to: '/sql', icon: CircleStackIcon },
-  { name: 'Config', to: '/config', icon: WrenchIcon },
-  { name: 'Coming Soon', to: '/coming-soon', icon: EllipsisHorizontalIcon },
+  { name: 'Telemetry Tracing', to: '/tracing', icon: RadioIcon },
+  { name: 'GraphiQL Playground', to: '/graphiql', icon: ViewColumnsIcon },
+  { name: 'SQL Statements', to: '/sql', icon: CircleStackIcon },
+  { name: 'Settings', to: '/config', icon: WrenchIcon },
+  {
+    name: 'Coming Soon',
+    to: '/coming-soon',
+    icon: EllipsisHorizontalCircleIcon,
+  },
 ]
 
 export default function MasterLayout() {
@@ -96,7 +101,7 @@ export default function MasterLayout() {
                         <NavLink
                           key={item.name}
                           to={item.to}
-                          className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-green-800 [&.active]:text-white text-green-100 hover:bg-green-600"
+                          className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-green-700 [&.active]:text-white text-green-100 hover:bg-green-600"
                         >
                           <item.icon
                             className="mr-3 h-6 w-6 flex-shrink-0 text-green-300"
@@ -119,7 +124,7 @@ export default function MasterLayout() {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-grow flex-col overflow-y-auto bg-green-700 pt-5">
+          <div className="flex flex-grow flex-col overflow-y-auto bg-green-600 pt-5">
             <div className="flex flex-shrink-0 items-center px-4">
               <img
                 className="h-8 w-auto"
@@ -133,7 +138,7 @@ export default function MasterLayout() {
                   <NavLink
                     key={item.name}
                     to={item.to}
-                    className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-green-800 [&.active]:text-white text-green-100 hover:bg-green-600"
+                    className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-green-700 [&.active]:text-white text-green-100 hover:bg-green-600"
                   >
                     <item.icon
                       className="mr-3 h-6 w-6 flex-shrink-0 text-green-300"

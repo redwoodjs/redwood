@@ -2,6 +2,12 @@ import React from 'react'
 
 import { useQuery, gql } from '@apollo/client'
 import { XCircleIcon } from '@heroicons/react/20/solid'
+import {
+  EnvelopeIcon,
+  KeyIcon,
+  UserCircleIcon,
+  UserGroupIcon,
+} from '@heroicons/react/24/outline'
 
 import LoadingSpinner from '../Components/LoadingSpinner'
 
@@ -59,7 +65,7 @@ function Config() {
       <div className="px-4 py-5 sm:px-6">
         <h3 className="text-base font-semibold leading-6 text-gray-900">
           {' '}
-          Dashboard Config
+          Dashboard Configuration Settings
         </h3>
         <p className="mt-1 max-w-2xl text-sm text-gray-500">
           These are the various config options the dashboard is currently using.
@@ -73,15 +79,17 @@ function Config() {
           {data?.dashboardConfig && (
             <>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Auth Provider
+                <dt className="text-sm font-medium text-gray-500 flex items-center">
+                  <KeyIcon className="h-6 w-6 mr-2" aria-hidden="true" /> Auth
+                  Provider
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                   {data?.dashboardConfig.authProvider}
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
+                <dt className="text-sm font-medium text-gray-500 flex items-center">
+                  <UserCircleIcon className="h-6 w-6 mr-2" aria-hidden="true" />
                   Impersonated User Id
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
@@ -89,7 +97,8 @@ function Config() {
                 </dd>
               </div>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
+                <dt className="text-sm font-medium text-gray-500 flex items-center">
+                  <EnvelopeIcon className="h-6 w-6 mr-2" aria-hidden="true" />
                   Impersonated Email
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
@@ -98,7 +107,8 @@ function Config() {
               </div>
 
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
+                <dt className="text-sm font-medium text-gray-500 flex items-center">
+                  <UserGroupIcon className="h-6 w-6 mr-2" aria-hidden="true" />{' '}
                   Impersonated Roles
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">

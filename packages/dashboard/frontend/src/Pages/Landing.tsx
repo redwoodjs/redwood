@@ -5,7 +5,7 @@ import {
   CircleStackIcon,
   CodeBracketIcon,
   EllipsisHorizontalIcon,
-  MagnifyingGlassIcon,
+  RadioIcon,
 } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom'
 
@@ -50,11 +50,8 @@ function App() {
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
             <dt>
-              <div className="absolute rounded-md bg-green-500 p-3">
-                <MagnifyingGlassIcon
-                  className="h-6 w-6 text-white"
-                  aria-hidden="true"
-                />
+              <div className="absolute rounded-md bg-green-400 p-3">
+                <RadioIcon className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <p className="ml-16 truncate text-sm font-medium text-gray-500">
                 OpenTelemetry Traces
@@ -86,7 +83,7 @@ function App() {
           </div>
           <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
             <dt>
-              <div className="absolute rounded-md bg-green-500 p-3">
+              <div className="absolute rounded-md bg-green-600 p-3">
                 <CodeBracketIcon
                   className="h-6 w-6 text-white"
                   aria-hidden="true"
@@ -122,7 +119,7 @@ function App() {
           </div>
           <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
             <dt>
-              <div className="absolute rounded-md bg-green-500 p-3">
+              <div className="absolute rounded-md bg-green-800 p-3">
                 <CircleStackIcon
                   className="h-6 w-6 text-white"
                   aria-hidden="true"

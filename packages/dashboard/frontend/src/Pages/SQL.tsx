@@ -68,7 +68,7 @@ function SQL() {
         <div className="sm:flex sm:items-center -mx-4 sm:-mx-6 lg:-mx-8">
           <div className="sm:flex-auto">
             <h1 className="text-base font-semibold leading-6 text-gray-900">
-              SQL Records
+              SQL Statements
             </h1>
             <p className="mt-2 text-sm text-gray-700">
               A livestream of all the SQL queries that have been executed,
