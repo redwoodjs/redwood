@@ -6,7 +6,7 @@ import {
   BellIcon,
   CircleStackIcon,
   ViewColumnsIcon,
-  EllipsisHorizontalCircleIcon,
+  InformationCircleIcon,
   HomeIcon,
   MagnifyingGlassIcon,
   RadioIcon,
@@ -24,9 +24,9 @@ const navigation = [
   { name: 'SQL Statements', to: '/sql', icon: CircleStackIcon },
   { name: 'Settings', to: '/config', icon: WrenchIcon },
   {
-    name: 'Coming Soon',
+    name: 'About',
     to: '/coming-soon',
-    icon: EllipsisHorizontalCircleIcon,
+    icon: InformationCircleIcon,
   },
 ]
 
