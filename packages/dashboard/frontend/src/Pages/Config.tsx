@@ -9,11 +9,9 @@ const QUERY_GET_CONFIG = gql`
   query GetConfig {
     dashboardConfig {
       authProvider
-      impersonateUser {
-        id
-        email
-        roles
-      }
+      userId
+      email
+      roles
     }
   }
 `
@@ -57,24 +55,59 @@ function Config() {
   }
 
   return (
-    <div className="mx-auto py-6 px-4 max-w-[95%] md:max-w-[80%] sm:px-6 lg:px-8">
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="sm:flex sm:items-center -mx-4 sm:-mx-6 lg:-mx-8">
-          <div className="sm:flex-auto">
-            <h1 className="text-base font-semibold leading-6 text-gray-900">
-              Dashboard Config
-            </h1>
-            <p className="mt-2 text-sm text-gray-700">
-              These are the various config options the dashboard is currently
-              using. You can update some of these values from within your
-              `redwood.toml` file under the `dashboard` section and others you
-              can update directly within the various dashboard webpages.
-            </p>
-          </div>
-        </div>
-        <pre className="mt-4 -my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 bg-white rounded-md">
-          {JSON.stringify(data.dashboardConfig, null, 2)}
-        </pre>
+    <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+      <div className="px-4 py-5 sm:px-6">
+        <h3 className="text-base font-semibold leading-6 text-gray-900">
+          {' '}
+          Dashboard Config
+        </h3>
+        <p className="mt-1 max-w-2xl text-sm text-gray-500">
+          These are the various config options the dashboard is currently using.
+          You can update some of these values from within your `redwood.toml`
+          file under the `dashboard` section and others you can update directly
+          within the various dashboard webpages.
+        </p>
+      </div>
+      <div className="border-t border-gray-200 h-screen">
+        <dl>
+          {data?.dashboardConfig && (
+            <>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Auth Provider
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {data?.dashboardConfig.authProvider}
+                </dd>
+              </div>
+              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Impersonated User Id
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {data?.dashboardConfig.userId}
+                </dd>
+              </div>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Impersonated Email
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {data?.dashboardConfig.email}
+                </dd>
+              </div>
+
+              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Impersonated Roles
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                  {data?.dashboardConfig.roles}
+                </dd>
+              </div>
+            </>
+          )}
+        </dl>
       </div>
     </div>
   )

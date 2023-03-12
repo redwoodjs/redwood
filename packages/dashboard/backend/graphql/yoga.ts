@@ -55,15 +55,11 @@ export const setupYoga = (fastify: FastifyInstance) => {
         db_statement: String
       }
 
-      type ImpersonateUser {
-        id: String!
-        email: String
-        roles: [String]
-      }
-
       type DashboardConfig {
         authProvider: String
-        impersonateUser: ImpersonateUser
+        userId: String
+        email: String
+        roles: [String]
       }
 
       type WebConfig {
