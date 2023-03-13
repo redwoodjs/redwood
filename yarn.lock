@@ -6946,7 +6946,7 @@ __metadata:
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.22
-    "@vscode/ripgrep": 1.14.2
+    "@vscode/ripgrep": 1.15.0
     "@whatwg-node/fetch": 0.8.2
     core-js: 3.29.0
     deepmerge: 4.3.0
@@ -10239,13 +10239,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vscode/ripgrep@npm:1.14.2":
-  version: 1.14.2
-  resolution: "@vscode/ripgrep@npm:1.14.2"
+"@vscode/ripgrep@npm:1.15.0":
+  version: 1.15.0
+  resolution: "@vscode/ripgrep@npm:1.15.0"
   dependencies:
     https-proxy-agent: ^5.0.0
     proxy-from-env: ^1.1.0
-  checksum: e6ca97b8bab121a6c397f7c42cdbbb4322b0726dc323b0d280ea2d867bdc879f64e23afe7158861e81db8d58918f3e8c61bf4773f8d87b53de9b785e8d3cb602
+  checksum: ff2e7f1172c4f7c18703992b19e632aa4e43a2a02719896cc1ddb70edbe8a167508cfa77366d48b8d093a20ef83baa199f11e527945c22bad8f4d523cbe8a919
   languageName: node
   linkType: hard
 
