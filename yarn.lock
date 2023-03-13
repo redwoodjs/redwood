@@ -6752,7 +6752,7 @@ __metadata:
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.22
-    "@vscode/ripgrep": 1.14.2
+    "@vscode/ripgrep": 1.15.0
     "@whatwg-node/fetch": 0.8.2
     core-js: 3.29.1
     deepmerge: 4.3.0
@@ -7175,7 +7175,7 @@ __metadata:
     core-js: 3.29.1
     typescript: 4.9.5
     vite: 4.1.4
-    vite-plugin-commonjs: 0.6.1
+    vite-plugin-commonjs: 0.6.2
     vite-plugin-environment: 1.1.3
     vite-plugin-html: 3.2.0
   bin:
@@ -9596,13 +9596,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prompts@npm:2.4.2":
-  version: 2.4.2
-  resolution: "@types/prompts@npm:2.4.2"
+"@types/prompts@npm:2.4.3":
+  version: 2.4.3
+  resolution: "@types/prompts@npm:2.4.3"
   dependencies:
     "@types/node": "*"
     kleur: ^3.0.3
-  checksum: f6fbd91a6a23017ee9a8da870f1354aaa5052a7907d17c41a2364ca4c546f4bad952c7bb6dfe824f0a7385aad4d9f2faf284cc7239e99c2f7675dea3bc2cdcc4
+  checksum: 58199375329c15563d43814609b433fef52a2a3ed8e0940c7900a9b937c1972d2afaa41f6594274280af4172b7af010426b747e6de933350a23ed29cd5daf699
   languageName: node
   linkType: hard
 
@@ -10064,13 +10064,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vscode/ripgrep@npm:1.14.2":
-  version: 1.14.2
-  resolution: "@vscode/ripgrep@npm:1.14.2"
+"@vscode/ripgrep@npm:1.15.0":
+  version: 1.15.0
+  resolution: "@vscode/ripgrep@npm:1.15.0"
   dependencies:
     https-proxy-agent: ^5.0.0
     proxy-from-env: ^1.1.0
-  checksum: e6ca97b8bab121a6c397f7c42cdbbb4322b0726dc323b0d280ea2d867bdc879f64e23afe7158861e81db8d58918f3e8c61bf4773f8d87b53de9b785e8d3cb602
+  checksum: ff2e7f1172c4f7c18703992b19e632aa4e43a2a02719896cc1ddb70edbe8a167508cfa77366d48b8d093a20ef83baa199f11e527945c22bad8f4d523cbe8a919
   languageName: node
   linkType: hard
 
@@ -14277,7 +14277,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/internal": 4.0.0
     "@redwoodjs/telemetry": 4.0.0
-    "@types/prompts": 2.4.2
+    "@types/prompts": 2.4.3
     chalk: 4.1.2
     check-node-version: 4.2.1
     core-js: 3.29.1
@@ -27729,7 +27729,7 @@ __metadata:
     "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
-    "@types/prompts": 2.4.2
+    "@types/prompts": 2.4.3
     all-contributors-cli: 6.24.0
     ansi-colors: 4.1.3
     babel-jest: 29.5.0
@@ -31142,12 +31142,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-commonjs@npm:0.6.1":
-  version: 0.6.1
-  resolution: "vite-plugin-commonjs@npm:0.6.1"
+"vite-plugin-commonjs@npm:0.6.2":
+  version: 0.6.2
+  resolution: "vite-plugin-commonjs@npm:0.6.2"
   dependencies:
     fast-glob: ~3.2.11
-  checksum: 6dcd8f1b932b5a0cc76a99b498b6ace0d45ef8cf9e43d75db621c0ae11d28206fa14ebf393b8f66819e71126b4c1708d95d472636a6a7a1fc7671b61899283da
+  checksum: 498623f609702fc36afdb08ec1261f8bc6acb5eb80746671229301fd1db3b9409aeab8465df3bfc4f12c1c0da6f15d38711d3265577db3017352d31d58e08bd4
   languageName: node
   linkType: hard
 
