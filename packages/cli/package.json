@@ -42,7 +42,7 @@
     "chalk": "4.1.2",
     "concurrently": "7.6.0",
     "configstore": "3.1.5",
-    "core-js": "3.29.0",
+    "core-js": "3.29.1",
     "cross-env": "7.0.3",
     "crypto-js": "4.1.1",
     "decamelize": "5.0.0",
