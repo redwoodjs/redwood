@@ -7369,7 +7369,7 @@ __metadata:
     core-js: 3.29.0
     typescript: 4.9.5
     vite: 4.1.4
-    vite-plugin-commonjs: 0.6.1
+    vite-plugin-commonjs: 0.6.2
     vite-plugin-environment: 1.1.3
     vite-plugin-html: 3.2.0
   bin:
@@ -31309,12 +31309,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-commonjs@npm:0.6.1":
-  version: 0.6.1
-  resolution: "vite-plugin-commonjs@npm:0.6.1"
+"vite-plugin-commonjs@npm:0.6.2":
+  version: 0.6.2
+  resolution: "vite-plugin-commonjs@npm:0.6.2"
   dependencies:
     fast-glob: ~3.2.11
-  checksum: 6dcd8f1b932b5a0cc76a99b498b6ace0d45ef8cf9e43d75db621c0ae11d28206fa14ebf393b8f66819e71126b4c1708d95d472636a6a7a1fc7671b61899283da
+  checksum: 498623f609702fc36afdb08ec1261f8bc6acb5eb80746671229301fd1db3b9409aeab8465df3bfc4f12c1c0da6f15d38711d3265577db3017352d31d58e08bd4
   languageName: node
   linkType: hard
 
