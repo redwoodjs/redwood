@@ -43,7 +43,7 @@ yarn rw prisma migrate dev
 ### 2. Setting up the generateToken function
 Next, we need to create a function that will generate a token and an expiration date.
 
-If you followed the tutorial, you might not have a `/api/src/services/users/users.js` file.  If that's the case, you can create it.
+If you followed the tutorial, you might not have a `/api/src/services/users/users.js` file.  If that's the case, you can create it with the following command using your terminal.
 
 ```bash
 yarn rw g service users
