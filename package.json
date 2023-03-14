@@ -79,7 +79,7 @@
     "fs-extra": "11.1.0",
     "is-port-reachable": "3.1.0",
     "jest": "29.4.2",
-    "jest-runner-tsd": "4.0.0",
+    "jest-runner-tsd": "5.0.0",
     "jscodeshift": "0.14.0",
     "lerna": "6.5.1",
     "listr2": "5.0.8",
