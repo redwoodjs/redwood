@@ -8,7 +8,7 @@ const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http')
 const { Resource } = require('@opentelemetry/resources')
 const {
   NodeTracerProvider,
-  BatchSpanProcessor,
+  SimpleSpanProcessor,
 } = require('@opentelemetry/sdk-trace-node')
 const {
   SemanticResourceAttributes,
@@ -31,8 +31,8 @@ const exporter = new OTLPTraceExporter({
   url: 'http://127.0.0.1:4318/v1/traces',
 })
 
-// You may wish to switch to SimpleSpanProcessor if you wish to ensure spans are processed immediately
-const processor = new BatchSpanProcessor(exporter)
+// You may wish to switch to BatchSpanProcessor in production as it is the recommended choice for performance reasons
+const processor = new SimpleSpanProcessor(exporter)
 
 const provider = new NodeTracerProvider({
   resource: resource,
