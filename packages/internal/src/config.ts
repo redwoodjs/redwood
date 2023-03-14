@@ -76,7 +76,7 @@ export interface Config {
   opentelemetry: {
     scriptPath?: string
   }
-  dashboard: {
+  studio: {
     inMemory: boolean
     authProvider?: string
     userId?: string
@@ -125,7 +125,7 @@ const DEFAULT_CONFIG: Config = {
   opentelemetry: {
     scriptPath: undefined,
   },
-  dashboard: {
+  studio: {
     inMemory: false,
     userId: undefined,
     email: undefined,
