@@ -7127,7 +7127,7 @@ __metadata:
     graphql: 16.6.0
     graphql-scalars: 1.20.4
     graphql-tag: 2.12.6
-    graphql-yoga: 3.7.2
+    graphql-yoga: 3.7.3
     jest: 29.4.2
     jsonwebtoken: 9.0.0
     lodash.merge: 4.6.2
@@ -18746,9 +18746,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-yoga@npm:3.7.2":
-  version: 3.7.2
-  resolution: "graphql-yoga@npm:3.7.2"
+"graphql-yoga@npm:3.7.3":
+  version: 3.7.3
+  resolution: "graphql-yoga@npm:3.7.3"
   dependencies:
     "@envelop/core": ^3.0.4
     "@envelop/validation-cache": ^5.1.2
@@ -18760,11 +18760,11 @@ __metadata:
     "@whatwg-node/fetch": ^0.8.2
     "@whatwg-node/server": ^0.7.3
     dset: ^3.1.1
-    lru-cache: ^7.14.1
+    lru-cache: ^8.0.0
     tslib: ^2.3.1
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 50a950dbe92c82308c05ec061438b4c7fe202e68f4b5589cc3289ae9600ba762621876a58ac94241cb5438c3182b40e7ff189cbf58f404f9d5acc3d11604e0c2
+  checksum: 0bfb1661946ef8a33fb61d8927a59748c16ddd50f0f78e08cd088294a0fcb578a3a97e4bd5272f742052ebd1ff23beb975bc2a8b59cfda808ed8eae564b0ee9b
   languageName: node
   linkType: hard
 
@@ -22606,10 +22606,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^7.14.1, lru-cache@npm:^7.4.4, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1":
+"lru-cache@npm:^7.4.4, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1":
   version: 7.17.0
   resolution: "lru-cache@npm:7.17.0"
   checksum: 5c1b796a52c0a0574b3bac784a0198a68efbe7e35097f5f246cfbc00a6ed901461aaab6c638dd648a10afb51ee517670f2dc95381a8cbf08f2894c9d7d3967e4
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "lru-cache@npm:8.0.0"
+  checksum: f326033bb6aec9acd4731a0664c0e1e690f7b1451f90bcfdbb0ece66d688cadb5b033378770fc7b65c58aab0197cf3e0e746de6e8fc07339b37643c5d7ccc367
   languageName: node
   linkType: hard
 
