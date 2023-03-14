@@ -4,7 +4,7 @@ Security is really important.  Sometimes you don't want to integrate with a thir
 
 One thing though is now you're collecting the user's login and password.  If you'd like to not collect that, an alternative is to generate a token in place of the password.  The only data needed for passwordless is the users email address.
 
-In this how-to I'll show you how to set up dbAuth to be passwordless, you'll still need to set up a a way to send [send emails](../how-to/sending-emails.md), but there's plenty of ways to do that.
+In this how-to I'll show you how to set up dbAuth to be passwordless, you'll still need to set up a a way to [send emails](../how-to/sending-emails.md), but there's plenty of ways to do that.
 
 ## Background
 
