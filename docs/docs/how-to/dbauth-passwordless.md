@@ -99,7 +99,7 @@ export const generateLoginToken = async ({ email }) => {
 ```
 ### 3. Add generateToken to the SDL and secure loginToken
 
-In addition to the new function, we need to add it to the sdl file.  While we're here let's also ensure we do not expose the loginToken.
+In addition to the new function, we need to add it to the sdl file.  While we're here let's also ensure we do not expose the loginToken.  This file may be users.sdl.js or users.sdl.ts depending on if you set up Redwood to use JavaScript or TypeScript.
 
 ```javascript {21} title="/api/src/graphql/users.sdl.js"
 type User {
@@ -177,8 +177,6 @@ const authHandler = new DbAuthHandler(event, context, {
     id: 'id',
     hashedPassword: 'loginToken',
     salt: 'salt',
-    resetToken: 'resetToken',// we don't use this.
-    resetTokenExpiresAt: 'resetTokenExpiresAt',// we don't use this.
   },
   // ... other stuff
 })
@@ -206,7 +204,6 @@ import {
   PasswordField,
   Submit,
   FieldError,
-  useForm,
 } from '@redwoodjs/forms'
 import { navigate, routes, Link } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
@@ -229,11 +226,6 @@ const LoginPasswordlessForm = ({ setWaitingForCode, setEmail }) => {
       },
     }
   )
-  const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
-  } = useForm()
   const onSubmit = async (data) => {
     setEmail(data.email)
     const response = await generateLoginToken({
@@ -325,7 +317,6 @@ import {
   PasswordField,
   Submit,
   FieldError,
-  useForm,
 } from '@redwoodjs/forms'
 import { navigate, routes, Link } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
@@ -344,11 +335,6 @@ const LoginPasswordlessTokenForm = ({ setWaitingForCode, email, code }) => {
       logIn({ username: email, password: code })
     }
   }, [isAuthenticated, email, code, logIn])
-  const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
-  } = useForm()
   const onSubmit = async (data) => {
     // login expects a username and password for dbauth
     // so we are passing them.
@@ -468,7 +454,7 @@ const LoginPasswordlessPage = () => {
     let params = new URLSearchParams(search)
     // decode magic param
     let magic = params.get('magic')
-    let decoded = atob(params.get('magic'))
+    let decoded = window.atob(params.get('magic'))
     // if magic param exists, set email and waitingForCode
     if (magic) {
           // decoded is email:code
@@ -528,8 +514,15 @@ import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
-  let randomString = () => {
-    return Math.random().toString(36).substring(2, 15)
+  let randomString = (length) {
+    if(typeof length == undefined) length = 32;
+    const characterSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    const returnString = Array.from(array)
+      .map((value) => characterSet[value % characterSet.length])
+      .join('');
+    return returnString;
   }
   useEffect(() => {
     if (isAuthenticated) {
