@@ -84,18 +84,6 @@ export const LogFormatter = () => {
   const output = (logData: any) => {
     const output = []
 
-    if (!logData.level) {
-      logData.level = 'customlevel'
-    }
-
-    if (!logData.name) {
-      logData.name = ''
-    }
-
-    if (!logData.ns) {
-      logData.ns = ''
-    }
-
     output.push(formatDate(logData.time || Date.now()))
     output.push(formatLevel(logData.level))
     output.push(formatNs(logData.ns))
@@ -106,30 +94,65 @@ export const LogFormatter = () => {
     const req = logData.req
     const res = logData.res
 
-    const statusCode = res ? res.statusCode : logData.statusCode
-    const responseTime = logData.responseTime || logData.elapsed
-    const method = req ? req.method : logData.method
-    const custom = logData.custom
-    const contentLength = logData.contentLength
-    const operationName = logData.operationName
-    const query = logData.query
-    const graphQLData = logData.data
-    const responseCache = logData.responseCache
-    const tracing = logData.tracing
-    const url = req ? req.url : logData.url
-    const userAgent = logData.userAgent
+    const { statusCode: responseStatusCode } = res || {}
+    const { method: requestMethod, url: requestUrl } = req || {}
+
+    const {
+      level,
+      message,
+      name,
+      ns,
+      err: logDataErr,
+      stack: logDataStack,
+      statusCode: logDataStatusCode,
+      elapsed,
+      responseTime: logDataResponseTime,
+      method: logDataMethod,
+      custom,
+      contentLength,
+      operationName,
+      query,
+      data: graphQLData,
+      responseCache,
+      tracing,
+      url: logDataUrl,
+      userAgent,
+      ...rest
+    } = logData
+
+    const statusCode = res ? responseStatusCode : logDataStatusCode
+    const responseTime = logDataResponseTime || elapsed
+    const method = requestMethod || logDataMethod
+    const url = requestUrl || logDataUrl
+
     const stack =
-      logData.level === 'fatal' || logData.level === 'error'
-        ? logData.stack || (logData.err && logData.err.stack)
+      level === 'fatal' || level === 'error'
+        ? logDataStack || (logDataErr && logDataErr.stack)
         : null
 
     // Output err if it has more keys than 'stack'
     const err =
-      (logData.level === 'fatal' || logData.level === 'error') &&
-      logData.err &&
-      Object.keys(logData.err).find((key) => key !== 'stack')
-        ? logData.err
+      (level === 'fatal' || level === 'error') &&
+      logDataErr &&
+      Object.keys(logDataErr).find((key) => key !== 'stack')
+        ? logDataErr
         : null
+
+    if (!message) {
+      logData.message = ''
+    }
+
+    if (!level) {
+      logData.level = 'customlevel'
+    }
+
+    if (!name) {
+      logData.name = ''
+    }
+
+    if (!ns) {
+      logData.ns = ''
+    }
 
     if (method != null) {
       output.push(formatMethod(method))
@@ -184,6 +207,12 @@ export const LogFormatter = () => {
       output.push(formatStack(stack))
     }
 
+    console.debug('rest', JSON.stringify(rest))
+
+    if (rest) {
+      output.push(formatCustom(rest))
+    }
+
     return output.filter(noEmpty).join(' ')
   }
 
@@ -194,6 +223,8 @@ export const LogFormatter = () => {
   }
 
   const formatCustom = (query: any) => {
+    console.debug('query', query)
+    console.debug('js query', JSON.stringify(query, null, 2))
     if (!isEmptyObject(query)) {
       return chalk.white(
         newline + '🗒 Custom' + newline + JSON.stringify(query, null, 2)
@@ -224,6 +255,7 @@ export const LogFormatter = () => {
 
   const formatErrorProp = (errorPropValue: any) => {
     const errorType = errorPropValue['type'] || 'Error'
+
     delete errorPropValue['message']
     delete errorPropValue['stack']
     delete errorPropValue['type']
@@ -252,24 +284,26 @@ export const LogFormatter = () => {
   }
 
   const formatMessage = (logData: any) => {
-    const msg = formatMessageName(logData.message)
+    const { level, message } = logData
+
+    const msg = formatMessageName(message)
     let pretty
-    if (logData.level === 'error') {
+    if (level === 'error') {
       pretty = chalk.red(msg)
     }
-    if (logData.level === 'trace') {
+    if (level === 'trace') {
       pretty = chalk.white(msg)
     }
-    if (logData.level === 'warn') {
+    if (level === 'warn') {
       pretty = chalk.magenta(msg)
     }
-    if (logData.level === 'debug') {
+    if (level === 'debug') {
       pretty = chalk.yellow(msg)
     }
-    if (logData.level === 'info' || logData.level === 'customlevel') {
+    if (level === 'info' || level === 'customlevel') {
       pretty = chalk.green(msg)
     }
-    if (logData.level === 'fatal') {
+    if (level === 'fatal') {
       pretty = chalk.white.bgRed(msg)
     }
     return pretty
@@ -283,8 +317,8 @@ export const LogFormatter = () => {
     return requestId && chalk.cyan(requestId)
   }
 
-  const formatNs = (name: any) => {
-    return chalk.cyan(name)
+  const formatNs = (ns: any) => {
+    return chalk.cyan(ns)
   }
 
   const formatName = (name: any) => {
