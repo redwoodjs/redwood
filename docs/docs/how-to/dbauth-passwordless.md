@@ -136,8 +136,7 @@ const loginOptions = {
   handler: async (user) =>{
     let loginExpiresAt = new Date(user?.loginTokenExpiresAt)
     let now = new Date()
-    let tokenExpired = loginExpiresAt < now
-    if(tokenExpired) throw 'Login token expired'
+    if (loginExpiresAt < now) throw 'Login token expired'
     // if the user logged in with a token we need to break
     // the token.  We'll do this by clearing the salt and
     // expiration
