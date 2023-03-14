@@ -141,12 +141,13 @@ const loginOptions = {
     // the token.  We'll do this by clearing the salt and
     // expiration
     // this will make the token a one-time use
-    let where = { id: user.id }
-    let data = {
-      loginTokenExpiresAt: null,
-      salt: null,
-    }
-    let result = db.user.update({ where, data })
+    db.user.update({
+        where: { id: user.id },
+        data: {
+            loginTokenExpiresAt: null,
+            salt: null,
+        }
+    })
     return user
   },
   errors: {
