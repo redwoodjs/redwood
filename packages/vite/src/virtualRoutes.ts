@@ -29,6 +29,7 @@ export interface VirtualRoute {
   id: string
   isNotFound: boolean
   filePath: string | undefined
+  relativeFilePath: string | undefined
   routeHooks: string | undefined | null
   matchRegexString: string | null
 }
@@ -45,6 +46,9 @@ export const listRoutes = (): VirtualRoute[] => {
       id: route.id,
       isNotFound: route.isNotFound,
       filePath: route.page?.filePath,
+      relativeFilePath: route.page?.filePath
+        ? path.relative(getPaths().web.src, route.page?.filePath)
+        : undefined,
       routeHooks: getRouteHookForPage(route.page?.filePath),
       matchRegexString: route.isNotFound
         ? null
