@@ -219,7 +219,7 @@ const GENERATE_LOGIN_TOKEN = gql`
 `
 
 const LoginPasswordlessForm = ({ setWaitingForCode, setEmail }) => {
-  const [generateLoginToken, { loading, error }] = useMutation(
+  const [generateLoginToken] = useMutation(
     GENERATE_LOGIN_TOKEN,
     {
       onCompleted: () => {
