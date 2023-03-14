@@ -28,17 +28,17 @@
     "@redwoodjs/telemetry": "4.0.0",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
-    "core-js": "3.29.0",
+    "core-js": "3.29.1",
     "enquirer": "2.3.6",
     "execa": "5.1.1",
     "fs-extra": "11.1.0",
-    "listr2": "5.0.7",
+    "listr2": "5.0.8",
     "terminal-link": "2.1.1",
     "yargs": "17.7.1"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
-    "@types/prompts": "2.4.2",
+    "@types/prompts": "2.4.3",
     "jest": "29.5.0",
     "typescript": "4.9.5"
   },

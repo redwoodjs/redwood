@@ -29,7 +29,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
     "@prisma/client": "4.11.0",
-    "core-js": "3.29.0"
+    "core-js": "3.29.1"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
