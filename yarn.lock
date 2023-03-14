@@ -7203,7 +7203,7 @@ __metadata:
     graphql: 16.6.0
     graphql-tag: 2.12.6
     jest: 29.5.0
-    jest-runner-tsd: 4.0.0
+    jest-runner-tsd: 5.0.0
     nodemon: 2.0.21
     prop-types: 15.8.1
     react: 18.2.0
@@ -20785,17 +20785,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-runner-tsd@npm:4.0.0":
-  version: 4.0.0
-  resolution: "jest-runner-tsd@npm:4.0.0"
+"jest-runner-tsd@npm:5.0.0":
+  version: 5.0.0
+  resolution: "jest-runner-tsd@npm:5.0.0"
   dependencies:
     "@babel/code-frame": ^7.15.8
     chalk: ^4.1.2
     create-jest-runner: ^0.12.0
-    tsd-lite: ^0.6.0
+    tsd-lite: ^0.7.0
   peerDependencies:
-    "@tsd/typescript": ^3.8.3 || ^4.0.7
-  checksum: 4c64092881d29575589ad97ce3cf849d430a132319607fd6b8e172d45c231dcb67e2d1f4c4ca74e567c651421a30438c41077a452a3acfb59a27f7b34b1e47ac
+    "@tsd/typescript": 4.x || 5.x
+  checksum: 33f7a30a42601d62816b71220e1e176f3512c61e48680572879f1e6c0c1c1eb746d82f3da49581ee9c6215f7616b4838bd2e98870dc609b99e96a6782be924bf
   languageName: node
   linkType: hard
 
@@ -27726,7 +27726,7 @@ __metadata:
     fs-extra: 11.1.0
     is-port-reachable: 3.1.0
     jest: 29.5.0
-    jest-runner-tsd: 4.0.0
+    jest-runner-tsd: 5.0.0
     jscodeshift: 0.14.0
     lerna: 6.5.1
     listr2: 5.0.8
@@ -30127,12 +30127,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsd-lite@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "tsd-lite@npm:0.6.0"
+"tsd-lite@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "tsd-lite@npm:0.7.0"
   peerDependencies:
-    "@tsd/typescript": ^3.8.3 || ^4.0.7
-  checksum: f8d66238d50c764c7afb93a355e8c437b853d0a66ab6dedf55c08b63614619d8a94aaab19c4c4b0a183b76c1bad088fccdc812778f574e02fd62206cc4b8ec30
+    "@tsd/typescript": 4.x || 5.x
+  checksum: 855a14ba9edc262500365b2b47d0fa5302148e6228a962d88a4519ffe77a8cc80474b45a95071891f90c70bcd4eee16cad47a0144ec4c7ce92c550e9d67808f4
   languageName: node
   linkType: hard
 
