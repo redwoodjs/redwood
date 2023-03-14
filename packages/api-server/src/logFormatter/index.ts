@@ -1,52 +1,50 @@
-import chalk from 'chalk'
 import jsonParse from 'fast-json-parse'
-import prettyBytes from 'pretty-bytes'
-import prettyMs from 'pretty-ms'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 
-const newline = '\n'
-
-const emojiLog: any = {
-  warn: '🚦',
-  info: '🌲',
-  error: '🚨',
-  debug: '🐛',
-  fatal: '💀',
-  trace: '🧵',
-}
-
-const isObject = (input: any) => {
-  return Object.prototype.toString.apply(input) === '[object Object]'
-}
-
-const isEmptyObject = (object: any) => {
-  return object && !Object.keys(object).length
-}
-
-const isPinoLog = (log: any) => {
-  return log && Object.prototype.hasOwnProperty.call(log, 'level')
-}
-
-const isWideEmoji = (character: any) => {
-  return character !== '🚦'
-}
+import {
+  NEWLINE,
+  isObject,
+  isPinoLog,
+  noEmpty,
+  formatDate,
+  formatLevel,
+  formatBundleSize,
+  formatCustom,
+  formatData,
+  formatErrorProp,
+  formatLoadTime,
+  formatMessage,
+  formatMethod,
+  formatName,
+  formatNs,
+  formatOperationName,
+  formatQuery,
+  formatRequestId,
+  formatResponseCache,
+  formatStack,
+  formatStatusCode,
+  formatTracing,
+  formatUserAgent,
+  formatUrl,
+} from './formatters'
 
 export const LogFormatter = () => {
-  const parse = (inputData: any) => {
+  const parse = (inputData: string | Record<string, unknown>) => {
     let logData
     if (typeof inputData === 'string') {
       const parsedData = jsonParse(inputData)
       if (!parsedData.value || parsedData.err || !isPinoLog(parsedData.value)) {
-        return inputData + newline
+        return inputData + NEWLINE
       }
       logData = parsedData.value
     } else if (isObject(inputData) && isPinoLog(inputData)) {
       logData = inputData
     } else {
-      return inputData + newline
+      return inputData + NEWLINE
     }
 
     if (!logData.level) {
-      return inputData + newline
+      return inputData + NEWLINE
     }
 
     if (!logData.message) {
@@ -57,10 +55,10 @@ export const LogFormatter = () => {
       convertLogNumber(logData)
     }
 
-    return output(logData) + newline
+    return output(logData) + NEWLINE
   }
 
-  const convertLogNumber = (logData: any) => {
+  const convertLogNumber = (logData: Record<string, unknown>) => {
     if (logData.level === 10) {
       logData.level = 'trace'
     }
@@ -81,18 +79,18 @@ export const LogFormatter = () => {
     }
   }
 
-  const output = (logData: any) => {
+  const output = (logData: Record<string, unknown>) => {
     const output = []
 
-    output.push(formatDate(logData.time || Date.now()))
+    output.push(formatDate((logData.time as Date) || Date.now()))
     output.push(formatLevel(logData.level))
-    output.push(formatNs(logData.ns))
-    output.push(formatName(logData.name))
-    output.push(formatRequestId(logData.requestId))
+    output.push(formatNs(logData.ns as string))
+    output.push(formatName(logData.name as string))
+    output.push(formatRequestId(logData.requestId as string))
     output.push(formatMessage(logData))
 
-    const req = logData.req
-    const res = logData.res
+    const req = logData.req as FastifyRequest
+    const res = logData.res as FastifyReply
 
     const { statusCode: responseStatusCode } = res || {}
     const { method: requestMethod, url: requestUrl } = req || {}
@@ -118,16 +116,18 @@ export const LogFormatter = () => {
       url: logDataUrl,
       userAgent,
       ...rest
-    } = logData
+    }: Record<string, unknown> = logData
 
-    const statusCode = res ? responseStatusCode : logDataStatusCode
+    const statusCode = responseStatusCode || logDataStatusCode
     const responseTime = logDataResponseTime || elapsed
     const method = requestMethod || logDataMethod
     const url = requestUrl || logDataUrl
 
+    const logDataErrStack = logDataErr && (logDataErr as Error).stack
+
     const stack =
       level === 'fatal' || level === 'error'
-        ? logDataStack || (logDataErr && logDataErr.stack)
+        ? logDataStack || (logDataErr && logDataErrStack)
         : null
 
     // Output err if it has more keys than 'stack'
@@ -155,246 +155,63 @@ export const LogFormatter = () => {
     }
 
     if (method != null) {
-      output.push(formatMethod(method))
-      output.push(formatStatusCode(statusCode))
+      output.push(formatMethod(method as string))
+      output.push(formatStatusCode(statusCode as string))
     }
 
     if (url != null) {
-      output.push(formatUrl(url))
+      output.push(formatUrl(url as string))
     }
 
     if (contentLength != null) {
-      output.push(formatBundleSize(contentLength))
+      output.push(formatBundleSize(contentLength as string))
     }
 
     if (custom) {
-      output.push(formatCustom(custom))
+      output.push(formatCustom(custom as Record<string, unknown>))
     }
 
     if (responseTime != null) {
-      output.push(formatLoadTime(responseTime))
+      output.push(formatLoadTime(responseTime as string))
     }
 
     if (userAgent != null) {
-      output.push(formatUserAgent(userAgent))
+      output.push(formatUserAgent(userAgent as string))
     }
 
     if (operationName != null) {
-      output.push(formatOperationName(operationName))
+      output.push(formatOperationName(operationName as string))
     }
 
     if (query != null) {
-      output.push(formatQuery(query))
+      output.push(formatQuery(query as Record<string, unknown>))
     }
 
     if (graphQLData != null) {
-      output.push(formatData(graphQLData))
+      output.push(formatData(graphQLData as Record<string, unknown>))
     }
 
     if (responseCache != null) {
-      output.push(formatResponseCache(responseCache))
+      output.push(formatResponseCache(responseCache as Record<string, unknown>))
     }
 
     if (tracing != null) {
-      output.push(formatTracing(tracing))
+      output.push(formatTracing(tracing as Record<string, unknown>))
     }
 
     if (err != null) {
-      output.push(formatErrorProp(err))
+      output.push(formatErrorProp(err as Record<string, unknown>))
     }
 
     if (stack != null) {
-      output.push(formatStack(stack))
+      output.push(formatStack(stack as Record<string, unknown>))
     }
 
-    console.debug('rest', JSON.stringify(rest))
-
     if (rest) {
-      output.push(formatCustom(rest))
+      output.push(formatCustom(rest as Record<string, unknown>))
     }
 
     return output.filter(noEmpty).join(' ')
-  }
-
-  const formatBundleSize = (bundle: any) => {
-    const bytes = parseInt(bundle, 10)
-    const size = prettyBytes(bytes).replace(/ /, '')
-    return chalk.gray(size)
-  }
-
-  const formatCustom = (query: any) => {
-    console.debug('query', query)
-    console.debug('js query', JSON.stringify(query, null, 2))
-    if (!isEmptyObject(query)) {
-      return chalk.white(
-        newline + '🗒 Custom' + newline + JSON.stringify(query, null, 2)
-      )
-    }
-
-    return
-  }
-
-  const formatData = (data: any) => {
-    if (!isEmptyObject(data)) {
-      return chalk.white(
-        newline + '📦 Result Data' + newline + JSON.stringify(data, null, 2)
-      )
-    }
-
-    return
-  }
-
-  const formatDate = (instant: Date) => {
-    const date = new Date(instant)
-    const hours = date.getHours().toString().padStart(2, '0')
-    const minutes = date.getMinutes().toString().padStart(2, '0')
-    const seconds = date.getSeconds().toString().padStart(2, '0')
-    const prettyDate = hours + ':' + minutes + ':' + seconds
-    return chalk.gray(prettyDate)
-  }
-
-  const formatErrorProp = (errorPropValue: any) => {
-    const errorType = errorPropValue['type'] || 'Error'
-
-    delete errorPropValue['message']
-    delete errorPropValue['stack']
-    delete errorPropValue['type']
-
-    return chalk.redBright(
-      newline +
-        newline +
-        `🚨 ${errorType} Info` +
-        newline +
-        newline +
-        JSON.stringify(errorPropValue, null, 2) +
-        newline
-    )
-  }
-
-  const formatLevel = (level: any) => {
-    const emoji = emojiLog[level]
-    const padding = isWideEmoji(emoji) ? '' : ' '
-    return emoji + padding
-  }
-
-  const formatLoadTime = (elapsedTime: any) => {
-    const elapsed = parseInt(elapsedTime, 10)
-    const time = prettyMs(elapsed)
-    return chalk.gray(time)
-  }
-
-  const formatMessage = (logData: any) => {
-    const { level, message } = logData
-
-    const msg = formatMessageName(message)
-    let pretty
-    if (level === 'error') {
-      pretty = chalk.red(msg)
-    }
-    if (level === 'trace') {
-      pretty = chalk.white(msg)
-    }
-    if (level === 'warn') {
-      pretty = chalk.magenta(msg)
-    }
-    if (level === 'debug') {
-      pretty = chalk.yellow(msg)
-    }
-    if (level === 'info' || level === 'customlevel') {
-      pretty = chalk.green(msg)
-    }
-    if (level === 'fatal') {
-      pretty = chalk.white.bgRed(msg)
-    }
-    return pretty
-  }
-
-  const formatMethod = (method: any) => {
-    return chalk.white(method)
-  }
-
-  const formatRequestId = (requestId: any) => {
-    return requestId && chalk.cyan(requestId)
-  }
-
-  const formatNs = (ns: any) => {
-    return chalk.cyan(ns)
-  }
-
-  const formatName = (name: any) => {
-    return chalk.blue(name)
-  }
-
-  const formatMessageName = (message: any) => {
-    if (message === 'request') {
-      return '<--'
-    }
-    if (message === 'response') {
-      return '-->'
-    }
-    return message
-  }
-
-  const formatOperationName = (operationName: any) => {
-    return chalk.white(newline + '🏷  ' + operationName)
-  }
-
-  const formatQuery = (query: any) => {
-    if (!isEmptyObject(query)) {
-      return chalk.white(
-        newline + '🔭 Query' + newline + JSON.stringify(query, null, 2)
-      )
-    }
-
-    return
-  }
-
-  const formatResponseCache = (responseCache: any) => {
-    if (!isEmptyObject(responseCache)) {
-      return chalk.white(
-        newline +
-          '💾 Response Cache' +
-          newline +
-          JSON.stringify(responseCache, null, 2)
-      )
-    }
-
-    return
-  }
-
-  const formatStatusCode = (statusCode: any) => {
-    statusCode = statusCode || 'xxx'
-    return chalk.white(statusCode)
-  }
-
-  const formatStack = (stack: any) => {
-    return chalk.redBright(
-      stack
-        ? newline + '🥞 Error Stack' + newline + newline + stack + newline
-        : ''
-    )
-  }
-
-  const formatTracing = (data: any) => {
-    if (!isEmptyObject(data)) {
-      return chalk.white(
-        newline + '⏰ Timing' + newline + JSON.stringify(data, null, 2)
-      )
-    }
-
-    return
-  }
-
-  const formatUrl = (url: any) => {
-    return chalk.white(url)
-  }
-
-  const formatUserAgent = (userAgent: any) => {
-    return chalk.grey(newline + '🕵️‍♀️ ' + userAgent)
-  }
-
-  const noEmpty = (value: any) => {
-    return !!value
   }
 
   return parse
