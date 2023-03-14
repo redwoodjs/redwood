@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.0",
+    "@babel/core": "7.21.3",
     "@supabase/supabase-js": "2.10.0",
     "@types/react": "18.0.28",
     "jest": "29.5.0",
