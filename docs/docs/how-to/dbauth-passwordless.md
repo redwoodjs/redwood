@@ -52,6 +52,8 @@ yarn rw g service users
 Now that you have the file, let's add the `generateToken` function.
 
 ```javascript {21} title="/api/src/services/users/users.js"
+// add this import to the top of the file
+import CryptoJS from 'crypto-js'
 // add this to the bottom of the file
 export const generateLoginToken = async ({ email }) => {
   try {
