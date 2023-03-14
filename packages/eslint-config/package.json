@@ -12,8 +12,8 @@
     "build": "echo 'Nothing to build..'"
   },
   "dependencies": {
-    "@babel/core": "7.21.0",
-    "@babel/eslint-parser": "7.19.1",
+    "@babel/core": "7.21.3",
+    "@babel/eslint-parser": "7.21.3",
     "@babel/eslint-plugin": "7.19.1",
     "@redwoodjs/internal": "4.0.0",
     "@typescript-eslint/eslint-plugin": "5.55.0",
