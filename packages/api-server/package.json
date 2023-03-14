@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.0",
+    "@babel/core": "7.21.3",
     "@types/aws-lambda": "8.10.112",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",
