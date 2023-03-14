@@ -6318,7 +6318,7 @@ __metadata:
     "@fastify/http-proxy": 8.4.0
     "@fastify/static": 6.9.0
     "@fastify/url-data": 5.3.1
-    "@types/aws-lambda": 8.10.111
+    "@types/aws-lambda": 8.10.112
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 3.2.1
@@ -6354,7 +6354,7 @@ __metadata:
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@prisma/client": 4.11.0
-    "@types/aws-lambda": 8.10.111
+    "@types/aws-lambda": 8.10.112
     "@types/jsonwebtoken": 9.0.1
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
@@ -6448,7 +6448,7 @@ __metadata:
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/api": 4.3.1
-    "@types/aws-lambda": 8.10.111
+    "@types/aws-lambda": 8.10.112
     "@types/jsonwebtoken": 9.0.1
     core-js: 3.29.1
     jest: 29.4.2
@@ -6503,7 +6503,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@clerk/clerk-sdk-node": 4.7.11
     "@redwoodjs/api": 4.3.1
-    "@types/aws-lambda": 8.10.111
+    "@types/aws-lambda": 8.10.112
     core-js: 3.29.1
     jest: 29.4.2
     typescript: 4.9.5
@@ -6631,7 +6631,7 @@ __metadata:
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/api": 4.3.1
-    "@types/aws-lambda": 8.10.111
+    "@types/aws-lambda": 8.10.112
     core-js: 3.29.1
     firebase-admin: 10.3.0
     jest: 29.4.2
@@ -6682,7 +6682,7 @@ __metadata:
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/api": 4.3.1
-    "@types/aws-lambda": 8.10.111
+    "@types/aws-lambda": 8.10.112
     "@types/jsonwebtoken": 9.0.1
     core-js: 3.29.1
     jest: 29.4.2
@@ -6734,7 +6734,7 @@ __metadata:
     "@babel/core": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/api": 4.3.1
-    "@types/aws-lambda": 8.10.111
+    "@types/aws-lambda": 8.10.112
     "@types/jsonwebtoken": 9.0.1
     core-js: 3.29.1
     jest: 29.4.2
@@ -7336,7 +7336,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
     "@testing-library/user-event": 14.4.3
-    "@types/aws-lambda": 8.10.111
+    "@types/aws-lambda": 8.10.112
     "@types/babel-core": 6.25.7
     "@types/jest": 29.4.0
     "@types/node": 16.18.16
@@ -8997,10 +8997,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.111, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.111
-  resolution: "@types/aws-lambda@npm:8.10.111"
-  checksum: 8d7ba73975914499d00ac8f510b256ee6f86d260f010b04eeb11716d6a0f5076e972dcad546704903a19d038b998741b850f8b7d19d9b1db3d3dae2c6d1c3174
+"@types/aws-lambda@npm:8.10.112, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.112
+  resolution: "@types/aws-lambda@npm:8.10.112"
+  checksum: 390c25b707ce4b930e80c89dc7c60deb2241c333de3ba11592598adddfac744a90ccc4eb70d9e8ac5dcbdcf443d8ef53f5f34442329efd140e1731797ca1b462
   languageName: node
   linkType: hard
 
