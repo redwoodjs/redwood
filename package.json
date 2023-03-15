@@ -59,7 +59,7 @@
     "@tsd/typescript": "4.9.5",
     "@types/babel__generator": "7.6.4",
     "@types/fs-extra": "11.0.1",
-    "@types/jest": "29.4.2",
+    "@types/jest": "29.4.3",
     "@types/jscodeshift": "0.11.6",
     "@types/lodash.template": "4.5.1",
     "@types/ncp": "2.0.5",
