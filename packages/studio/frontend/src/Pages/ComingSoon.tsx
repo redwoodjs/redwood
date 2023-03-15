@@ -39,7 +39,7 @@ function ComingSoon() {
     <div className="py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold leading-7 text-green-600">
+          <h2 className="text-base font-semibold leading-7 text-slate-600">
             Coming soon...
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -48,7 +48,7 @@ function ComingSoon() {
           <p className="mt-6 text-lg leading-8 text-gray-600">
             It shouldn&apos;t just be in production that you can monitor your
             app with power and with ease. Development can be better when
-            you&apos;re able to understand extactly what is happening and
+            you&apos;re able to understand exactly what is happening and
             identify how your app is performing or breaking.
           </p>
         </div>
@@ -57,7 +57,7 @@ function ComingSoon() {
             {features.map((feature) => (
               <div key={feature.name} className="relative pl-16">
                 <dt className="text-base font-semibold leading-7 text-gray-900">
-                  <div className="absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg bg-green-600">
+                  <div className="absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg bg-slate-600">
                     <feature.icon
                       className="h-6 w-6 text-white"
                       aria-hidden="true"

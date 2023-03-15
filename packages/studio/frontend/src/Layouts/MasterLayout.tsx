@@ -64,7 +64,7 @@ export default function MasterLayout() {
                 leaveFrom="translate-x-0"
                 leaveTo="-translate-x-full"
               >
-                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-green-700 pt-5 pb-4">
+                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-slate-700 pt-5 pb-4">
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-300"
@@ -101,10 +101,10 @@ export default function MasterLayout() {
                         <NavLink
                           key={item.name}
                           to={item.to}
-                          className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-green-700 [&.active]:text-white text-green-100 hover:bg-green-600"
+                          className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-slate-700 [&.active]:text-white text-slate-100 hover:bg-slate-600"
                         >
                           <item.icon
-                            className="mr-3 h-6 w-6 flex-shrink-0 text-green-300"
+                            className="mr-3 h-6 w-6 flex-shrink-0 text-slate-300"
                             aria-hidden="true"
                           />
                           {item.name}
@@ -124,7 +124,7 @@ export default function MasterLayout() {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-grow flex-col overflow-y-auto bg-green-600 pt-5">
+          <div className="flex flex-grow flex-col overflow-y-auto bg-slate-600 pt-5">
             <div className="flex flex-shrink-0 items-center px-4">
               <img
                 className="h-8 w-auto"
@@ -138,10 +138,10 @@ export default function MasterLayout() {
                   <NavLink
                     key={item.name}
                     to={item.to}
-                    className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-green-700 [&.active]:text-white text-green-100 hover:bg-green-600"
+                    className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-slate-700 [&.active]:text-white text-slate-100 hover:bg-slate-600"
                   >
                     <item.icon
-                      className="mr-3 h-6 w-6 flex-shrink-0 text-green-300"
+                      className="mr-3 h-6 w-6 flex-shrink-0 text-slate-300"
                       aria-hidden="true"
                     />
                     {item.name}
@@ -155,7 +155,7 @@ export default function MasterLayout() {
           <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
             <button
               type="button"
-              className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 lg:hidden"
+              className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-500 lg:hidden"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>
@@ -187,7 +187,7 @@ export default function MasterLayout() {
               <div className="ml-4 flex items-center lg:ml-6">
                 <button
                   type="button"
-                  className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />

@@ -74,7 +74,7 @@ function SpanSegment({
             {span.name}
           </button>
         </div>
-        <div className="basis-3/5 border-l border-gray-400">
+        <div className="basis-3/5">
           <div className="px-2 flex flex-row w-full min-w-full">
             <div
               style={{
@@ -85,19 +85,17 @@ function SpanSegment({
               {durationTextAtStart ? durationText : '⠀'}
             </div>
             <div
+              className="bg-gradient-to-r from-slate-500 to-slate-700 rounded-md pl-2 text-white text-md shadow-md"
               style={{
                 flexBasis: `${duringBasis.toFixed(3)}%`,
-                backgroundColor: '#00AA00',
-                color: '#FFFFFF',
-                paddingLeft: '0.5rem',
               }}
             >
               {durationTextAtDuring ? durationText : '⠀'}
             </div>
             <div
+              className="ml-2 text-md text-slate-400"
               style={{
                 flexBasis: `${endBasis.toFixed(3)}%`,
-                paddingLeft: '0.5rem',
               }}
             >
               {durationTextAtEnd ? durationText : '⠀'}
@@ -106,7 +104,7 @@ function SpanSegment({
         </div>
       </div>
       {showDetails && (
-        <div className="flex flex-col gap-1 border border-gray-400 p-2">
+        <div className="flex flex-col gap-1 border border-neutral-400 p-2 rounded-md shadow-md">
           <details>
             <summary>Attributes</summary>
             <div className="flex flex-col gap-1">

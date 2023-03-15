@@ -17,7 +17,6 @@ import {
 import { DocumentNode, Kind, parse } from 'graphql'
 import { useUrlSearchParams } from 'use-url-search-params'
 
-import { RedwoodLogo } from './RedwoodLogo'
 import 'graphiql/graphiql.css'
 import '@graphiql/plugin-explorer/dist/style.css'
 import './styles.css'
@@ -167,20 +166,7 @@ export function RedwoodGraphiQL(
         >
           <GraphiQL.Logo>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ width: 40, display: 'flex' }}>
-                <RedwoodLogo />
-              </div>
-              <span>
-                {props?.title ? (
-                  props.title
-                ) : (
-                  <>
-                    Redwood Graph
-                    <em>i</em>
-                    QL
-                  </>
-                )}
-              </span>
+              <span>{props?.title ? props.title : <>GraphiQL</>}</span>
             </div>
           </GraphiQL.Logo>
         </GraphiQLInterface>
