@@ -7,7 +7,7 @@ import {
   CircleStackIcon,
   ViewColumnsIcon,
   InformationCircleIcon,
-  HomeIcon,
+  WindowIcon,
   MagnifyingGlassIcon,
   RadioIcon,
   XMarkIcon,
@@ -18,7 +18,7 @@ import { Outlet, NavLink } from 'react-router-dom'
 import redwooodLogo from '../assets/redwoodjs_diecut_name.svg'
 
 const navigation = [
-  { name: 'Overview', to: '/', icon: HomeIcon },
+  { name: 'Studio', to: '/', icon: WindowIcon },
   { name: 'Telemetry Tracing', to: '/tracing', icon: RadioIcon },
   { name: 'GraphiQL Playground', to: '/graphiql', icon: ViewColumnsIcon },
   { name: 'SQL Statements', to: '/sql', icon: CircleStackIcon },
@@ -101,7 +101,7 @@ export default function MasterLayout() {
                         <NavLink
                           key={item.name}
                           to={item.to}
-                          className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-slate-700 [&.active]:text-white text-slate-100 hover:bg-slate-600"
+                          className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-amber-700 [&.active]:text-white text-slate-100 hover:bg-amber-600"
                         >
                           <item.icon
                             className="mr-3 h-6 w-6 flex-shrink-0 text-slate-300"
@@ -124,7 +124,7 @@ export default function MasterLayout() {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-grow flex-col overflow-y-auto bg-slate-600 pt-5">
+          <div className="flex flex-grow flex-col overflow-y-auto pt-5 bg-slate-500">
             <div className="flex flex-shrink-0 items-center px-4">
               <img
                 className="h-8 w-auto"
@@ -138,7 +138,7 @@ export default function MasterLayout() {
                   <NavLink
                     key={item.name}
                     to={item.to}
-                    className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-slate-700 [&.active]:text-white text-slate-100 hover:bg-slate-600"
+                    className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-amber-500 [&.active]:text-white text-slate-100 hover:bg-amber-400"
                   >
                     <item.icon
                       className="mr-3 h-6 w-6 flex-shrink-0 text-slate-300"

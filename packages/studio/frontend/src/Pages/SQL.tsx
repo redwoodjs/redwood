@@ -120,7 +120,7 @@ function SQL() {
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 font-mono sm:pl-6 lg:pl-8">
                         <Link to={`/tracing/${span.trace}`}>
                           <LinkIcon
-                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400"
+                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-cyan-400"
                             aria-hidden="true"
                           />
                         </Link>

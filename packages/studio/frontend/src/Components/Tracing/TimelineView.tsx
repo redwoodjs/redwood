@@ -85,7 +85,7 @@ function SpanSegment({
               {durationTextAtStart ? durationText : '⠀'}
             </div>
             <div
-              className="bg-gradient-to-r from-slate-500 to-slate-700 rounded-md pl-2 text-white text-md shadow-md"
+              className="bg-gradient-to-r from-slate-400 to-slate-600 rounded-md pl-2 text-white text-md shadow-md"
               style={{
                 flexBasis: `${duringBasis.toFixed(3)}%`,
               }}

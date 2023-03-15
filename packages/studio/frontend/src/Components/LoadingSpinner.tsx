@@ -1,7 +1,7 @@
 import React from 'react'
 
 function LoadingSpinner({ colour }: { colour?: string }) {
-  const fill = colour ?? '#16A34A'
+  const fill = colour ?? '#4b5563'
   return (
     <svg
       width="10%"
