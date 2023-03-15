@@ -26,11 +26,11 @@
     "@babel/runtime-corejs3": "7.21.0",
     "@redwoodjs/auth": "4.0.0",
     "@simplewebauthn/browser": "6.2.2",
-    "core-js": "3.29.0"
+    "core-js": "3.29.1"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.0",
+    "@babel/core": "7.21.3",
     "@simplewebauthn/typescript-types": "6.2.1",
     "@types/react": "18.0.28",
     "jest": "29.5.0",

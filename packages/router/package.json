@@ -25,11 +25,11 @@
     "@babel/runtime-corejs3": "7.21.0",
     "@reach/skip-nav": "0.18.0",
     "@redwoodjs/auth": "4.0.0",
-    "core-js": "3.29.0"
+    "core-js": "3.29.1"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.0",
+    "@babel/core": "7.21.3",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "jest": "29.5.0",

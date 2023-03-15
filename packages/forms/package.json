@@ -23,13 +23,13 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "core-js": "3.29.0",
+    "core-js": "3.29.1",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.42.1"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.0",
+    "@babel/core": "7.21.3",
     "@testing-library/dom": "9.0.1",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
