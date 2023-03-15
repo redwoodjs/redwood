@@ -71,7 +71,7 @@
     "babel-plugin-remove-code": "0.0.6",
     "boxen": "5.1.2",
     "core-js": "3.29.1",
-    "cypress": "12.7.0",
+    "cypress": "12.8.0",
     "cypress-wait-until": "1.7.2",
     "eslint": "8.36.0",
     "fast-glob": "3.2.12",
