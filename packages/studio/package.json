@@ -52,9 +52,9 @@
     "yargs": "17.7.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.20.7",
-    "@babel/core": "7.20.12",
-    "@types/aws-lambda": "8.10.110",
+    "@babel/cli": "7.21.0",
+    "@babel/core": "7.21.3",
+    "@types/aws-lambda": "8.10.113",
     "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "9.0.1",
     "@types/lodash.escape": "4.0.7",
