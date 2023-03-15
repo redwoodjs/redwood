@@ -31230,20 +31230,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vscode-jsonrpc@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "vscode-jsonrpc@npm:5.0.1"
-  checksum: 365dc54648247f0eb31ffdeb45b67c17f2cfac6cf55810b52376bad0becc7ee029dbe722e8d94fc779217e012466e8f7c7360749667946ff4e1156731abe1941
+"vscode-jsonrpc@npm:8.1.0":
+  version: 8.1.0
+  resolution: "vscode-jsonrpc@npm:8.1.0"
+  checksum: cb797b892227e7997378c6a1563b9849b6ec8190daae6fd18909fff4b33f6a98690bb315b95a3e4eeb9bf373d11896028c2111d71101544dfa16cb18a53cfcaa
   languageName: node
   linkType: hard
 
-"vscode-languageserver-protocol@npm:3.15.3":
-  version: 3.15.3
-  resolution: "vscode-languageserver-protocol@npm:3.15.3"
+"vscode-languageserver-protocol@npm:3.17.3":
+  version: 3.17.3
+  resolution: "vscode-languageserver-protocol@npm:3.17.3"
   dependencies:
-    vscode-jsonrpc: ^5.0.1
-    vscode-languageserver-types: 3.15.1
-  checksum: 2facc23c351e7a3e1e402d6ccbd32c3e75e9e6474ac954edb68fdedc798e42575fd6830d04015e820733c585b7ef269008a4353558aa7a67b512acf03dfbc0f0
+    vscode-jsonrpc: 8.1.0
+    vscode-languageserver-types: 3.17.3
+  checksum: c8448cab8c8e3df386825f129a2f06a748510ad3407cb3d2122c6b661e973c32bb2f2612d64ea80e8c0344001adc80ee2f4c8bbce4fa81dd3eef888309457578
   languageName: node
   linkType: hard
 
