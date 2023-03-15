@@ -49,7 +49,7 @@ function SpanSegment({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex flex-row ">
+      <div className="flex flex-row bg-slate-50 py-2 px-1 rounded-md shadow-sm">
         <div
           className="basis-2/5 flex flex-row gap-2"
           style={{ paddingLeft: depth * 16 + (children.length > 0 ? -2 : 26) }}
@@ -85,7 +85,7 @@ function SpanSegment({
               {durationTextAtStart ? durationText : '⠀'}
             </div>
             <div
-              className="bg-gradient-to-r from-slate-400 to-slate-600 rounded-md pl-2 text-white text-md shadow-md"
+              className="bg-gradient-to-r from-slate-600 to-slate-400 rounded-md pl-2 text-white text-md shadow-md"
               style={{
                 flexBasis: `${duringBasis.toFixed(3)}%`,
               }}
@@ -104,7 +104,7 @@ function SpanSegment({
         </div>
       </div>
       {showDetails && (
-        <div className="flex flex-col gap-1 border border-neutral-400 p-2 rounded-md shadow-md">
+        <div className="flex flex-col gap-1 bg-slate-50 mx-6 border border-neutral-400 p-2 rounded-md shadow-md">
           <details>
             <summary>Attributes</summary>
             <div className="flex flex-col gap-1">
