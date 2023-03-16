@@ -33,6 +33,12 @@ describe('getConfig', () => {
         "opentelemetry": {
           "scriptPath": undefined,
         },
+        "studio": {
+          "email": undefined,
+          "inMemory": false,
+          "roles": undefined,
+          "userId": undefined,
+        },
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
