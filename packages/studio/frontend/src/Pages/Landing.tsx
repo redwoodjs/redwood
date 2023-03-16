@@ -4,13 +4,11 @@ import { useQuery, gql } from '@apollo/client'
 import {
   CircleStackIcon,
   CodeBracketIcon,
-  EllipsisHorizontalIcon,
   RadioIcon,
   ShareIcon,
 } from '@heroicons/react/24/outline'
-import { NavLink } from 'react-router-dom'
 
-import LoadingSpinner from '../Components/LoadingSpinner'
+import CountCard from '../Components/CountCard'
 
 const QUERY_GET_SPAN_COUNTS = gql`
   query GetSpanCount {
@@ -33,144 +31,42 @@ function App() {
         </h3>
 
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
-            <dt>
-              <div className="absolute rounded-md bg-emerald-500 p-3">
-                <RadioIcon className="h-6 w-6 text-white" aria-hidden="true" />
-              </div>
-              <p className="ml-16 truncate text-sm font-medium text-gray-500">
-                OpenTelemetry Traces
-              </p>
-            </dt>
-            <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-              <p className="text-2xl font-semibold text-gray-900">
-                {error ? (
-                  'error'
-                ) : loading ? (
-                  <LoadingSpinner />
-                ) : (
-                  data?.traceCount
-                )}
-              </p>
-              <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-                <div className="text-sm">
-                  <NavLink
-                    to="/tracing"
-                    className="font-medium text-slate-600 hover:text-slate-500"
-                  >
-                    {' '}
-                    View all
-                    <span className="sr-only"> OpenTelemetry Trace stats</span>
-                  </NavLink>
-                </div>
-              </div>
-            </dd>
-          </div>
-          <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
-            <dt>
-              <div className="absolute rounded-md bg-fuchsia-600 p-3">
-                <CodeBracketIcon
-                  className="h-6 w-6 text-white"
-                  aria-hidden="true"
-                />
-              </div>
-              <p className="ml-16 truncate text-sm font-medium text-gray-500">
-                Service Function Calls
-              </p>
-            </dt>
-            <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-              <p className="text-2xl font-semibold text-gray-900">
-                <EllipsisHorizontalIcon
-                  className="h-6 w-6"
-                  aria-hidden="true"
-                />
-              </p>
-              <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-                <div className="text-sm">
-                  <NavLink
-                    to="/coming-soon"
-                    className="font-medium text-slate-600 hover:text-slate-500"
-                  >
-                    {' '}
-                    View all
-                    <span className="sr-only">
-                      {' '}
-                      Service Function Calls stats
-                    </span>
-                  </NavLink>
-                </div>
-              </div>
-            </dd>
-          </div>
-          <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
-            <dt>
-              <div className="absolute rounded-md bg-cyan-600 p-3">
-                <CircleStackIcon
-                  className="h-6 w-6 text-white"
-                  aria-hidden="true"
-                />
-              </div>
-              <p className="ml-16 truncate text-sm font-medium text-gray-500">
-                SQL Queries
-              </p>
-            </dt>
-            <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-              <p className="text-2xl font-semibold text-gray-900">
-                {error ? (
-                  'error'
-                ) : loading ? (
-                  <LoadingSpinner />
-                ) : (
-                  data?.sqlCount
-                )}
-              </p>
-              <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-                <div className="text-sm">
-                  <NavLink
-                    to="/sql"
-                    className="font-medium text-slate-600 hover:text-slate-500"
-                  >
-                    {' '}
-                    View all
-                    <span className="sr-only"> SQL Queries stats</span>
-                  </NavLink>
-                </div>
-              </div>
-            </dd>
-          </div>
-          <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
-            <dt>
-              <div className="absolute rounded-md bg-orange-600 p-3">
-                <ShareIcon className="h-6 w-6 text-white" aria-hidden="true" />
-              </div>
-              <p className="ml-16 truncate text-sm font-medium text-gray-500">
-                GraphQL Resolvers
-              </p>
-            </dt>
-            <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-              <p className="text-2xl font-semibold text-gray-900">
-                {error ? (
-                  'error'
-                ) : loading ? (
-                  <LoadingSpinner />
-                ) : (
-                  data?.graphQLSpanCount
-                )}
-              </p>
-              <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-                <div className="text-sm">
-                  <NavLink
-                    to="/coming-soon"
-                    className="font-medium text-slate-600 hover:text-slate-500"
-                  >
-                    {' '}
-                    View all
-                    <span className="sr-only">GraphQL stats</span>
-                  </NavLink>
-                </div>
-              </div>
-            </dd>
-          </div>
+          <CountCard
+            title="OpenTelemetry Traces"
+            colouring="emerald-500"
+            icon={RadioIcon}
+            link="/tracing"
+            loading={loading}
+            error={error}
+            value={data?.traceCount}
+          ></CountCard>
+          <CountCard
+            title="Service Function Calls"
+            colouring="fuchsia-600"
+            icon={CodeBracketIcon}
+            link="/coming-soon"
+            loading={false}
+            error={undefined}
+            value={undefined}
+          ></CountCard>
+          <CountCard
+            title="SQL Queries"
+            colouring="cyan-600"
+            icon={CircleStackIcon}
+            link="/sql"
+            loading={loading}
+            error={error}
+            value={data?.sqlCount}
+          ></CountCard>
+          <CountCard
+            title="GraphQL Resolver Calls"
+            colouring="orange-600"
+            icon={ShareIcon}
+            link="/coming-soon"
+            loading={loading}
+            error={error}
+            value={data?.graphQLSpanCount}
+          ></CountCard>
         </dl>
       </div>
     </div>
