@@ -282,7 +282,7 @@ const formatters = async (name, isTypescript) => {
       : transformTSToJS(outputPath, template),
     [outputPathTest]: isTypescript
       ? templateTest
-      : transformTSToJS(outputPath, templateTest),
+      : transformTSToJS(outputPathTest, templateTest),
   }
 }
 
