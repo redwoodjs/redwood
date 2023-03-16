@@ -2,17 +2,14 @@ import React, { useState, Fragment } from 'react'
 
 import { useQuery, gql } from '@apollo/client'
 import { Listbox, Transition } from '@headlessui/react'
-import {
-  CircleStackIcon,
-  CodeBracketIcon,
-  ClockIcon,
-} from '@heroicons/react/20/solid'
+import { ClockIcon } from '@heroicons/react/20/solid'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { XCircleIcon } from '@heroicons/react/20/solid'
 import prettyMilliseconds from 'pretty-ms'
 import { useParams } from 'react-router-dom'
 
 import LoadingSpinner from '../../Components/LoadingSpinner'
+import EnhancementList from '../../Components/Tracing/EnhancementList'
 import FlameTableView from '../../Components/Tracing/FlameTableView'
 import PrismaQueryView from '../../Components/Tracing/PrismaQueryView'
 import TimelineView from '../../Components/Tracing/TimelineView'
@@ -153,8 +150,8 @@ function Trace() {
     <div className="mx-auto py-6 px-4 max-w-[95%] md:max-w-[80%] sm:px-6 lg:px-8">
       <div className="lg:flex lg:items-center lg:justify-between">
         <div className="min-w-0 flex-1">
-          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight font-mono">
-            {data.trace.id}
+          <h2 className="text-2xl font-bold font-mono leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            {data.trace.id} | {startSpan(data.trace.spans).name}
           </h2>
           <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
             <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -186,25 +183,10 @@ function Trace() {
               ).toISOString()}
             </div>
           </div>
-          <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
-            {data.trace.enhancements.features.includes('sql') && (
-              <div className="mt-2 flex items-center text-sm text-gray-500">
-                <CircleStackIcon
-                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                  aria-hidden="true"
-                />
-                SQL
-              </div>
-            )}
-            {data.trace.enhancements.features.includes('service_function') && (
-              <div className="mt-2 flex items-center text-sm text-gray-500">
-                <CodeBracketIcon
-                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                  aria-hidden="true"
-                />
-                Service Function
-              </div>
-            )}
+          <div className="mt-1 flex flex-col sm:mt-2 sm:flex-row sm:flex-wrap sm:space-x-6">
+            <EnhancementList
+              enhancementFeatures={data.trace.enhancements.features}
+            ></EnhancementList>
           </div>
         </div>
       </div>
