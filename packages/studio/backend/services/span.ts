@@ -61,8 +61,16 @@ const buildEnhancements = (spans: any[]) => {
       enhancements.features.push('service_function')
     }
     const attributesKeys = Object.keys(JSON.parse(span.attributes))
+
     if (attributesKeys.includes('db.statement')) {
       enhancements.features.push('sql')
+    }
+
+    if (
+      attributesKeys.includes('graphql.resolver.fieldName') ||
+      attributesKeys.includes('graphql.resolver.typeName')
+    ) {
+      enhancements.features.push('graphql')
     }
   })
   enhancements.features = Array.from(new Set(enhancements.features))

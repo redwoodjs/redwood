@@ -3,9 +3,10 @@ import { createYoga, createSchema } from 'graphql-yoga'
 
 import { authProvider, generateAuthHeaders } from '../services/auth'
 import { studioConfig, webConfig } from '../services/config'
-import { prismaQueries } from '../services/prisma'
+import { graphQLSpans, graphQLSpanCount } from '../services/graphqlSpans'
+import { prismaQuerySpans } from '../services/prismaSpans'
 import { traces, trace, traceCount } from '../services/span'
-import { sqlSpans, sqlCount } from '../services/sql'
+import { sqlSpans, sqlCount } from '../services/sqlSpans'
 
 export const setupYoga = (fastify: FastifyInstance) => {
   const schema = createSchema<{
@@ -55,6 +56,17 @@ export const setupYoga = (fastify: FastifyInstance) => {
         db_statement: String
       }
 
+      type GraphQLSpan {
+        id: String
+        parent: String
+        name: String
+        field_name: String
+        type_name: String
+        start_nano: String
+        end_nano: String
+        duration_nano: String
+      }
+
       type StudioConfig {
         authProvider: String
         userId: String
@@ -82,6 +94,8 @@ export const setupYoga = (fastify: FastifyInstance) => {
         generateAuthHeaders(userId: String): AuthHeaders
         sqlSpans: [Span]!
         sqlCount: Int!
+        graphQLSpans: [GraphQLSpan]!
+        graphQLSpanCount: Int!
         traceCount: Int!
       }
     `,
@@ -93,10 +107,12 @@ export const setupYoga = (fastify: FastifyInstance) => {
         webConfig,
         authProvider,
         generateAuthHeaders,
-        prismaQueries,
+        prismaQueries: prismaQuerySpans,
         sqlSpans,
         sqlCount,
         traceCount,
+        graphQLSpans,
+        graphQLSpanCount,
       },
     },
   })

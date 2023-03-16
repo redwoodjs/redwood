@@ -6,37 +6,22 @@ import {
   CodeBracketIcon,
   EllipsisHorizontalIcon,
   RadioIcon,
+  ShareIcon,
 } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom'
 
 import LoadingSpinner from '../Components/LoadingSpinner'
 
-const QUERY_SQL_COUNT = gql`
-  query GetSQLCount {
+const QUERY_GET_SPAN_COUNTS = gql`
+  query GetSpanCount {
+    graphQLSpanCount
     sqlCount
-  }
-`
-
-const QUERY_TRACE_COUNT = gql`
-  query GetTraceCount {
     traceCount
   }
 `
 
 function App() {
-  const {
-    loading: countSQLLoading,
-    error: countSQLError,
-    data: countSQLData,
-  } = useQuery(QUERY_SQL_COUNT, {
-    pollInterval: 1000,
-  })
-
-  const {
-    loading: countTraceLoading,
-    error: countTraceError,
-    data: countTraceData,
-  } = useQuery(QUERY_TRACE_COUNT, {
+  const { loading, error, data } = useQuery(QUERY_GET_SPAN_COUNTS, {
     pollInterval: 1000,
   })
 
@@ -59,12 +44,12 @@ function App() {
             </dt>
             <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
               <p className="text-2xl font-semibold text-gray-900">
-                {countTraceError ? (
+                {error ? (
                   'error'
-                ) : countTraceLoading ? (
+                ) : loading ? (
                   <LoadingSpinner />
                 ) : (
-                  countTraceData?.traceCount
+                  data?.traceCount
                 )}
               </p>
               <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
@@ -131,12 +116,12 @@ function App() {
             </dt>
             <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
               <p className="text-2xl font-semibold text-gray-900">
-                {countSQLError ? (
+                {error ? (
                   'error'
-                ) : countSQLLoading ? (
+                ) : loading ? (
                   <LoadingSpinner />
                 ) : (
-                  countSQLData?.sqlCount
+                  data?.sqlCount
                 )}
               </p>
               <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
@@ -148,6 +133,39 @@ function App() {
                     {' '}
                     View all
                     <span className="sr-only"> SQL Queries stats</span>
+                  </NavLink>
+                </div>
+              </div>
+            </dd>
+          </div>
+          <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
+            <dt>
+              <div className="absolute rounded-md bg-orange-600 p-3">
+                <ShareIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+              <p className="ml-16 truncate text-sm font-medium text-gray-500">
+                GraphQL Resolvers
+              </p>
+            </dt>
+            <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+              <p className="text-2xl font-semibold text-gray-900">
+                {error ? (
+                  'error'
+                ) : loading ? (
+                  <LoadingSpinner />
+                ) : (
+                  data?.graphQLSpanCount
+                )}
+              </p>
+              <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
+                <div className="text-sm">
+                  <NavLink
+                    to="/coming-soon"
+                    className="font-medium text-slate-600 hover:text-slate-500"
+                  >
+                    {' '}
+                    View all
+                    <span className="sr-only">GraphQL stats</span>
                   </NavLink>
                 </div>
               </div>
