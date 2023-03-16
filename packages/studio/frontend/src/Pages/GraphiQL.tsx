@@ -45,12 +45,12 @@ function GraphiQL() {
       return (
         <RedwoodGraphiQL
           headers={JSON.stringify(headers)}
-          endpoint={data?.webConfig?.graphqlEndpoint}
+          endpoint="http://localhost:4318/proxies/graphql"
         />
       )
     }
 
-    return <RedwoodGraphiQL endpoint={data?.webConfig?.graphqlEndpoint} />
+    return <RedwoodGraphiQL endpoint="http://localhost:4318/proxies/graphql" />
   }
 
   return <div>Loading...</div>
