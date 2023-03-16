@@ -61,7 +61,8 @@ export const setupViews = async () => {
   await db.exec(prismaQueriesView)
 
   const SQLSpansView = `
-  CREATE VIEW IF NOT EXISTS sql_spans as SELECT DISTINCT
+  CREATE VIEW IF NOT EXISTS sql_spans AS
+  SELECT DISTINCT
     *,
     cast((duration_nano / 1000000.000) as REAL) as duration_ms,
     cast((duration_nano / 1000000000.0000) as number) as duration_sec
@@ -72,4 +73,24 @@ export const setupViews = async () => {
     ORDER BY start_nano desc;
 `
   await db.exec(SQLSpansView)
+
+  const graphQLSpansView = `CREATE VIEW IF NOT EXISTS graphql_spans AS
+    SELECT
+      id,
+      parent,
+      name,
+      json_extract(ATTRIBUTES, '$."graphql.resolver.fieldName"') AS field_name,
+      json_extract(ATTRIBUTES, '$."graphql.resolver.typeName"') AS type_name,
+      start_nano,
+      end_nano,
+      duration_nano
+    FROM
+      span
+    WHERE
+      field_name IS NOT NULL
+      OR type_name IS NOT NULL
+    ORDER BY
+      start_nano DESC;`
+
+  await db.exec(graphQLSpansView)
 }

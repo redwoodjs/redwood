@@ -6,6 +6,7 @@ import {
   ClockIcon,
   CircleStackIcon,
   CodeBracketIcon,
+  ShareIcon,
 } from '@heroicons/react/20/solid'
 import prettyMilliseconds from 'pretty-ms'
 import { Link } from 'react-router-dom'
@@ -138,9 +139,9 @@ function Tracing() {
                   <div className="mt-2 sm:flex sm:justify-between">
                     <div className="sm:flex">
                       {trace.enhancements.features.includes('sql') && (
-                        <p className="flex items-center text-sm text-gray-500 pr-2">
+                        <p className="flex items-center text-sm text-orange-500 pr-2">
                           <CircleStackIcon
-                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-orange-500"
                             aria-hidden="true"
                           />
                           SQL
@@ -149,12 +150,21 @@ function Tracing() {
                       {trace.enhancements.features.includes(
                         'service_function'
                       ) && (
-                        <p className="flex items-center text-sm text-gray-500 pr-2">
+                        <p className="flex items-center text-sm text-fuchsia-500 pr-2">
                           <CodeBracketIcon
-                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-fuchsia-500"
                             aria-hidden="true"
                           />
                           Service Function
+                        </p>
+                      )}
+                      {trace.enhancements.features.includes('graphql') && (
+                        <p className="flex items-center text-sm text-cyan-500 pr-2">
+                          <ShareIcon
+                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-cyan-500"
+                            aria-hidden="true"
+                          />
+                          GraphQL
                         </p>
                       )}
                     </div>
