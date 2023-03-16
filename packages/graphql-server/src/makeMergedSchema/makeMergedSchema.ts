@@ -61,10 +61,12 @@ const mapFieldsToService = ({
         ) => {
           const tracer = opentelemetry.trace.getTracer('redwoodjs')
 
-          // @ts-expect-error we know it's an unknown type
-          const parentSpan = context['OPEN_TELEMETRY_GRAPHQL'] as
-            | opentelemetry.Span
-            | undefined
+          const parentSpan =
+            context !== null &&
+            // @ts-expect-error we know it's an unknown type
+            (context['OPEN_TELEMETRY_GRAPHQL'] as
+              | opentelemetry.Span
+              | undefined)
           const parentContext = parentSpan
             ? opentelemetry.trace.setSpan(
                 opentelemetry.context.active(),
