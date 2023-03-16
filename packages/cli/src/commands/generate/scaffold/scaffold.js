@@ -254,17 +254,27 @@ const formatters = async (name, isTypescript) => {
     return
   }
 
-  const template = generateTemplate(customOrDefaultTemplatePath({
-    side: 'web',
-    generator: 'scaffold',
-    templatePath: path.join('lib', 'formatters.tsx.template'),
-  }), { name })
+  const template = generateTemplate(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: path.join('lib', 'formatters.tsx.template'),
+    }),
+    {
+      name,
+    }
+  )
 
-  const templateTest = generateTemplate(customOrDefaultTemplatePath({
-    side: 'web',
-    generator: 'scaffold',
-    templatePath: path.join('lib', 'formatters.test.tsx.template'),
-  }), { name })
+  const templateTest = generateTemplate(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: path.join('lib', 'formatters.test.tsx.template'),
+    }),
+    {
+      name,
+    }
+  )
 
   return {
     [outputPath]: isTypescript
@@ -272,7 +282,7 @@ const formatters = async (name, isTypescript) => {
       : transformTSToJS(outputPath, template),
     [outputPathTest]: isTypescript
       ? templateTest
-      : transformTSToJS(templateTestFileName, templateTest),
+      : transformTSToJS(outputPath, templateTest),
   }
 }
 
