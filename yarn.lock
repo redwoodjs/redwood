@@ -6777,7 +6777,7 @@ __metadata:
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.4.3
+    "@types/jest": 29.4.4
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.22
@@ -7221,7 +7221,7 @@ __metadata:
     "@testing-library/user-event": 14.4.3
     "@types/aws-lambda": 8.10.113
     "@types/babel-core": 6.25.7
-    "@types/jest": 29.4.3
+    "@types/jest": 29.4.4
     "@types/node": 16.18.16
     "@types/react": 18.0.28
     "@types/react-dom": 18.0.11
@@ -9290,13 +9290,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.4.3":
-  version: 29.4.3
-  resolution: "@types/jest@npm:29.4.3"
+"@types/jest@npm:*, @types/jest@npm:29.4.4":
+  version: 29.4.4
+  resolution: "@types/jest@npm:29.4.4"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: 1fdcfc8e260a3af66c72cf2aa7f3a840ed7ae02be4195d18db53127b402404b9dc890e33d5080dfe01b2001b6e15447e4690f24911e434a7125129e330712cf7
+  checksum: cb26a82015360ad51951c38a945a97b89d895626e9d83ae4ae6ac9af1a5ab55428f1f13faf2c06b1026e5f171a892c8e3e56f6dc6407eac64f8b7486fbea64cc
   languageName: node
   linkType: hard
 
@@ -14753,9 +14753,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:12.8.0":
-  version: 12.8.0
-  resolution: "cypress@npm:12.8.0"
+"cypress@npm:12.8.1":
+  version: 12.8.1
+  resolution: "cypress@npm:12.8.1"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -14801,7 +14801,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: c439fd259e9ca64574f2c113a3da7ab6457e3ae59505fb2bbb4599a1aa0d7356721a80872ccf5e830b5dba18f06adf735ec97e9d78a8351517aaeb8432320780
+  checksum: 6fc76e2351bc8e0c8f64e8aa23173aa08e215c2cbb87e468a2aaaa3103660db7cab74a7beaced3a7189065d59562c2af5e92342f149dcbc5080418e16c69f643
   languageName: node
   linkType: hard
 
@@ -27898,7 +27898,7 @@ __metadata:
     "@tsd/typescript": 4.9.5
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.4.3
+    "@types/jest": 29.4.4
     "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
@@ -27910,7 +27910,7 @@ __metadata:
     babel-plugin-remove-code: 0.0.6
     boxen: 5.1.2
     core-js: 3.29.1
-    cypress: 12.8.0
+    cypress: 12.8.1
     cypress-wait-until: 1.7.2
     eslint: 8.36.0
     fast-glob: 3.2.12
