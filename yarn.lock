@@ -6788,7 +6788,7 @@ __metadata:
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.4.4
+    "@types/jest": 29.5.0
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.22
@@ -7184,7 +7184,7 @@ __metadata:
     "@testing-library/user-event": 14.4.3
     "@types/aws-lambda": 8.10.113
     "@types/babel-core": 6.25.7
-    "@types/jest": 29.4.4
+    "@types/jest": 29.5.0
     "@types/node": 16.18.16
     "@types/react": 17.0.53
     "@types/react-dom": 17.0.18
@@ -9242,13 +9242,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.4.4":
-  version: 29.4.4
-  resolution: "@types/jest@npm:29.4.4"
+"@types/jest@npm:*, @types/jest@npm:29.5.0":
+  version: 29.5.0
+  resolution: "@types/jest@npm:29.5.0"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: cb26a82015360ad51951c38a945a97b89d895626e9d83ae4ae6ac9af1a5ab55428f1f13faf2c06b1026e5f171a892c8e3e56f6dc6407eac64f8b7486fbea64cc
+  checksum: e77f88cbdf867838320767bf42915570bcebbf7c378578d60654b9ea8c15981b6c2c06e4e56985e35467d0cdb673d9129fd49e21a485fda9db4bb0a152f2cb86
   languageName: node
   linkType: hard
 
@@ -27720,7 +27720,7 @@ __metadata:
     "@tsd/typescript": 4.9.5
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.4.4
+    "@types/jest": 29.5.0
     "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
