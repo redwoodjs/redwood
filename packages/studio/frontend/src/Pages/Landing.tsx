@@ -33,7 +33,7 @@ function App() {
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <CountCard
             title="OpenTelemetry Traces"
-            colouring="emerald-500"
+            colouring="bg-emerald-500"
             icon={RadioIcon}
             link="/tracing"
             loading={loading}
@@ -42,7 +42,7 @@ function App() {
           ></CountCard>
           <CountCard
             title="Service Function Calls"
-            colouring="fuchsia-600"
+            colouring="bg-fuchsia-600"
             icon={CodeBracketIcon}
             link="/coming-soon"
             loading={false}
@@ -51,7 +51,7 @@ function App() {
           ></CountCard>
           <CountCard
             title="SQL Queries"
-            colouring="cyan-600"
+            colouring="bg-cyan-600"
             icon={CircleStackIcon}
             link="/sql"
             loading={loading}
@@ -59,8 +59,8 @@ function App() {
             value={data?.sqlCount}
           ></CountCard>
           <CountCard
-            title="GraphQL Resolver Calls"
-            colouring="orange-600"
+            title="GraphQL Resolutions"
+            colouring="bg-orange-600"
             icon={ShareIcon}
             link="/coming-soon"
             loading={loading}

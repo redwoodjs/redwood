@@ -21,9 +21,9 @@ const featureIconMapping = {
 }
 
 const featureColourMapping = {
-  sql: 'cyan-500',
-  service_function: 'fuchsia-500',
-  graphql: 'orange-500',
+  sql: 'text-cyan-500',
+  service_function: 'text-fuchsia-500',
+  graphql: 'text-orange-500',
 } as { [key: string]: string }
 
 function EnhancementList({
@@ -40,10 +40,10 @@ function EnhancementList({
           return (
             <p
               key={feature}
-              className={`flex items-center text-sm text-${featureColourMapping[feature]} pr-2`}
+              className={`flex items-center text-sm ${featureColourMapping[feature]} pr-2`}
             >
               <Icon
-                className={`mr-1.5 h-5 w-5 flex-shrink-0 text-${featureColourMapping[feature]}`}
+                className={`mr-1.5 h-5 w-5 flex-shrink-0 ${featureColourMapping[feature]}`}
                 aria-hidden="true"
               />
               {featureNameMapping[feature]}

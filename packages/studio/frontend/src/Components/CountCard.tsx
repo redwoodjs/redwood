@@ -25,7 +25,7 @@ function CountCard({
   return (
     <div className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6">
       <dt>
-        <div className={`absolute rounded-md bg-${colouring} p-3`}>
+        <div className={`absolute rounded-md ${colouring} p-3`}>
           <Icon className="h-6 w-6 text-white" aria-hidden="true" />
         </div>
         <p className="ml-16 truncate text-sm font-medium text-gray-500">
