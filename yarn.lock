@@ -27765,7 +27765,7 @@ __metadata:
     rimraf: 3.0.2
     terminal-link: 2.1.1
     typescript: 4.9.5
-    zx: 7.2.0
+    zx: 7.2.1
   languageName: unknown
   linkType: soft
 
@@ -31729,7 +31729,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpod@npm:^0.0.2":
+"webpod@npm:^0":
   version: 0.0.2
   resolution: "webpod@npm:0.0.2"
   bin:
@@ -32396,9 +32396,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zx@npm:7.2.0":
-  version: 7.2.0
-  resolution: "zx@npm:7.2.0"
+"zx@npm:7.2.1":
+  version: 7.2.1
+  resolution: "zx@npm:7.2.1"
   dependencies:
     "@types/fs-extra": ^11.0.1
     "@types/minimist": ^1.2.2
@@ -32411,11 +32411,11 @@ __metadata:
     minimist: ^1.2.8
     node-fetch: 3.2.10
     ps-tree: ^1.2.0
-    webpod: ^0.0.2
+    webpod: ^0
     which: ^3.0.0
     yaml: ^2.2.1
   bin:
     zx: build/cli.js
-  checksum: bf2cc4ab2edb555d2abf4fb4ebc6b58470a810b9ec884ded28314e4099f324f0b0d4acfc1a6dc5ae0816ed86bfce125d00ed14fa26d39ef849310d5f2374c167
+  checksum: 8a4b32b65b6f8b4113f3470d55337d522133c30aed395d1784d7f81e9d9f9ea62fcbc30f0d4b5e7fd7f7c8b60a848cb9458378b51c9d8a576a77fa1871bcfc82
   languageName: node
   linkType: hard
