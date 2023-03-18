@@ -50,7 +50,7 @@ export const ActiveRouteLoader = ({
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
     [path]: {
       page: prerender ? spec.syncLoader().default : ArlNullPage,
-      specName: '',
+      specName: prerender ? spec.name : '',
       state: 'DONE',
       location,
     },
@@ -188,34 +188,19 @@ export const ActiveRouteLoader = ({
     }
   }, [spec, delay, children, whileLoadingPage, path, location, isMounted])
 
-  let renderedLoadingState = loadingState
-
-  if (globalThis.__REDWOOD__PRERENDERING) {
-    const PageFromLoader = spec.syncLoader().default
-
-    renderedLoadingState = {
-      [path]: {
-        state: 'DONE',
-        specName: spec.name,
-        page: PageFromLoader,
-        location,
-      },
-    }
-  }
-
   return (
     <ParamsProvider
       path={renderedPath}
       location={loadingState[renderedPath]?.location}
     >
-      <ActivePageContextProvider value={{ loadingState: renderedLoadingState }}>
+      <ActivePageContextProvider value={{ loadingState }}>
         <PageLoadingContextProvider
           value={{
             loading: loadingState[renderedPath]?.state === 'SHOW_LOADING',
           }}
         >
           {renderedChildren}
-          {renderedLoadingState[path]?.state === 'DONE' && (
+          {loadingState[path]?.state === 'DONE' && (
             <div
               id="redwood-announcer"
               style={{
