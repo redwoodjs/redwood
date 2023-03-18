@@ -23,7 +23,7 @@ It takes two arguments as generics:
 
 Not only does `CellSuccessProps` type the data returned from the query, but it also types the variables and methods returned by Apollo Client's `useQuery` hook!
 
-```ts title="web/src/components/BlogPost.cell.tsx"
+```ts title="web/src/components/BlogPostCell.tsx"
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -49,7 +49,7 @@ export const Success = ({
 This gives you the types of the props in your Cell's `Failure` component.
 It takes `TVariables` as an optional generic parameter, which is useful if you want to print error messages like `"Couldn't load data for ${variables.searchTerm}"`:
 
-```ts title=web/src/components/BlogPost.cell.tsx
+```ts title=web/src/components/BlogPostCell.tsx
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -70,7 +70,7 @@ export const Failure = ({
 
 Similar to `CellFailureProps`, but for the props of your Cell's `Loading` component:
 
-```ts title=web/src/components/BlogPost.cell.tsx
+```ts title=web/src/components/BlogPostCell.tsx
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line

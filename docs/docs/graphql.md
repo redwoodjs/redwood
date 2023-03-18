@@ -2168,7 +2168,14 @@ If your project uses [Docusaurus](https://docusaurus.io), the generated commente
 
 The following is some basic setup information, but please consult [Docusaurus](https://docusaurus.io) and the [graphql-markdown](https://graphql-markdown.github.io) for latest instructions.
 
-1. Add `docs` to your `workspaces` in the project's `package.json`:
+1. Install Docusaurus (if you have not done so already)
+
+```terminal
+npx create-docusaurus@latest docs classic
+```
+
+
+Add `docs` to your `workspaces` in the project's `package.json`:
 
 ```
   "workspaces": {
@@ -2181,19 +2188,30 @@ The following is some basic setup information, but please consult [Docusaurus](h
   },
 ```
 
-2. Create a `docs` directory at the root of your project
+2. Ensure a `docs` directory exists at the root of your project
 
 ```terminal
-mcd docs
-`
-
-3. Install the plugin
-
-```terminal
-yarn add @edno/docusaurus2-graphql-doc-generator graphql
+mkdir docs // if needed
 ```
 
-4. Update `docs/docusaurus.config.js` and configure the plugin and navbar
+3. Install the GraphQL Generators Plugin
+
+```terminal
+yarn workspace docs add @edno/docusaurus2-graphql-doc-generator graphql
+```
+
+4. Ensure a Directory for your GraphQL APi generated documentation resides in with the Docusaurus directory `/docs` structure
+
+```terminal
+// Change into the "docs" workspace
+
+cd docs
+
+// you should have the "docs" directory and within that a "graphql-api" directory
+mkdir docs/graphql-api // if needed
+```
+
+5. Update `docs/docusaurus.config.js` and configure the plugin and navbar
 
 ```
 // docs/docusaurus.config.js
@@ -2205,7 +2223,6 @@ yarn add @edno/docusaurus2-graphql-doc-generator graphql
         schema: '../.redwood/schema.graphql',
         rootPath: './docs',
         baseURL: 'graphql-api',
-        homepage: './docs/graphql-api/generated.md',
         linkRoot: '../..',
       },
     ],
@@ -2224,11 +2241,11 @@ themeConfig:
           {
             to: '/docs/graphql-api', // adjust the location depending on your baseURL (see configuration)
             label: 'GraphQL API', // change the label with yours
-            position: 'left',
+            position: 'right',
           },
 //...
 ```
-5. Update `docs/sidebars.js` to include the generated `graphql-api/sidebar-schema.js`
+6. Update `docs/sidebars.js` to include the generated `graphql-api/sidebar-schema.js`
 
 ```
 // docs/sidebars.js
@@ -2260,7 +2277,7 @@ const sidebars = {
 module.exports = sidebars
 ```
 
-6. Generate the docs
+7. Generate the docs
 
 `yarn docusaurus graphql-to-doc`
 
@@ -2270,7 +2287,7 @@ You can overwrite the generated docs and bypass the plugin's diffMethod use `--f
 ``yarn docusaurus graphql-to-doc --force`
 :::
 
-7. Start Docusaurus
+8. Start Docusaurus
 
 ```
 yarn start
