@@ -7,8 +7,8 @@ import { getPaths } from '../paths'
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
 
 describe('User specified imports, with static imports', () => {
-  let outputWithStaticImports
-  let outputNoStaticImports
+  let outputWithStaticImports: string | null | undefined
+  let outputNoStaticImports: string | null | undefined
   beforeEach(() => {
     process.env.RWJS_CWD = FIXTURE_PATH
     cleanWebBuild()
@@ -25,11 +25,11 @@ describe('User specified imports, with static imports', () => {
     outputWithStaticImports = prebuildWebFile(routesFile, {
       staticImports: true,
       forJest: true,
-    }).code
+    })?.code
 
     outputNoStaticImports = prebuildWebFile(routesFile, {
       forJest: true,
-    }).code
+    })?.code
   })
 
   it('Imports layouts correctly', () => {
