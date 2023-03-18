@@ -19,11 +19,10 @@ import { ParamsProvider, useLocation } from '.'
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
-type LoadedLoaderSpec = { default: React.ComponentType<unknown> }
-
 interface Props {
   path: string
   spec: Spec
+  prerender?: boolean
   delay?: number
   params?: Record<string, string>
   whileLoadingPage?: () => React.ReactElement | null
@@ -36,6 +35,7 @@ const ArlWhileLoadingNullPage = () => null
 export const ActiveRouteLoader = ({
   path,
   spec,
+  prerender,
   delay,
   params,
   whileLoadingPage,
@@ -46,9 +46,16 @@ export const ActiveRouteLoader = ({
   const loadingTimeout = useRef<NodeJS.Timeout>()
   const announcementRef = useRef<HTMLDivElement>(null)
   const waitingFor = useRef<string>('')
+
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
-    [path]: { page: ArlNullPage, specName: '', state: 'PRE_SHOW', location },
+    [path]: {
+      page: prerender ? spec.syncLoader().default : ArlNullPage,
+      specName: '',
+      state: 'DONE',
+      location,
+    },
   })
+
   const [renderedChildren, setRenderedChildren] = useState<
     React.ReactNode | undefined
   >(children)
@@ -184,10 +191,7 @@ export const ActiveRouteLoader = ({
   let renderedLoadingState = loadingState
 
   if (globalThis.__REDWOOD__PRERENDERING) {
-    // babel auto-loader plugin uses withStaticImport in prerender mode
-    // override the types for this condition
-    const PageFromLoader = (spec.loader() as unknown as LoadedLoaderSpec)
-      .default
+    const PageFromLoader = spec.syncLoader().default
 
     renderedLoadingState = {
       [path]: {
@@ -204,13 +208,11 @@ export const ActiveRouteLoader = ({
       path={renderedPath}
       location={loadingState[renderedPath]?.location}
     >
-      <PageLoadingContextProvider
-        value={{
-          loading: loadingState[renderedPath]?.state === 'SHOW_LOADING',
-        }}
-      >
-        <ActivePageContextProvider
-          value={{ loadingState: renderedLoadingState }}
+      <ActivePageContextProvider value={{ loadingState: renderedLoadingState }}>
+        <PageLoadingContextProvider
+          value={{
+            loading: loadingState[renderedPath]?.state === 'SHOW_LOADING',
+          }}
         >
           {renderedChildren}
           {renderedLoadingState[path]?.state === 'DONE' && (
@@ -233,8 +235,8 @@ export const ActiveRouteLoader = ({
               ref={announcementRef}
             ></div>
           )}
-        </ActivePageContextProvider>
-      </PageLoadingContextProvider>
+        </PageLoadingContextProvider>
+      </ActivePageContextProvider>
     </ParamsProvider>
   )
 }

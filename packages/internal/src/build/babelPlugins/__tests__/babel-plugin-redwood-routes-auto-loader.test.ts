@@ -32,10 +32,11 @@ describe('page auto loader correctly imports pages', () => {
     delete process.env.RWJS_CWD
   })
 
-  test('Pages are automatically imported', () => {
+  test('Pages get both a loader and a syncLoader', () => {
     expect(result?.code).toContain(`const HomePage = {
   name: "HomePage",
-  loader: () => import("`)
+  loader: () => import("./pages/HomePage/HomePage"),
+  syncLoader: () => __webpack_require__("`)
   })
 
   test('Already imported pages are left alone.', () => {

@@ -1,4 +1,4 @@
-import type { ComponentProps, JSXElementConstructor } from 'react'
+import { ComponentProps, JSXElementConstructor, Suspense } from 'react'
 
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
@@ -391,5 +391,11 @@ export function createCell<
 
   NamedCell.displayName = displayName
 
-  return NamedCell
+  return (props: CellProps) => {
+    return (
+      <Suspense fallback={<div>Loading suspense...</div>}>
+        <NamedCell {...props} />
+      </Suspense>
+    )
+  }
 }

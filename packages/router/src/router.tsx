@@ -206,11 +206,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     )
   }
 
-  const { root, activeRoute, NotFoundPage } = analyzeRouterTree(
-    children,
-    location.pathname,
-    paramTypes
-  )
+  const { root, activeRoute, NotFoundPage, notFoundPrerendered } =
+    analyzeRouterTree(children, location.pathname, paramTypes)
 
   if (!activeRoute) {
     if (NotFoundPage) {
@@ -219,6 +216,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
           <ParamsProvider>
             <ActiveRouteLoader
               spec={normalizePage(NotFoundPage)}
+              prerender={notFoundPrerendered}
               delay={pageLoadingDelay}
               path={location.pathname}
             />
@@ -230,7 +228,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     return null
   }
 
-  const { path, page, name, redirect, whileLoadingPage } = activeRoute.props
+  const { path, page, name, redirect, whileLoadingPage, prerender } =
+    activeRoute.props
 
   if (!path) {
     throw new Error(`Route "${name}" needs to specify a path`)
@@ -254,6 +253,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
         <ActiveRouteLoader
           path={path}
           spec={normalizePage(page)}
+          prerender={prerender}
           delay={pageLoadingDelay}
           params={allParams}
           whileLoadingPage={whileLoadingPage}
@@ -284,8 +284,10 @@ function analyzeRouterTree(
   root: React.ReactElement | undefined
   activeRoute: React.ReactElement<InternalRouteProps> | undefined
   NotFoundPage: PageType | undefined
+  notFoundPrerendered: boolean | undefined
 } {
   let NotFoundPage: PageType | undefined = undefined
+  let notFoundPrerendered: boolean | undefined = undefined
   let activeRoute: React.ReactElement | undefined = undefined
 
   function isActiveRoute(route: React.ReactElement<InternalRouteProps>) {
@@ -313,6 +315,7 @@ function analyzeRouterTree(
       if (isRoute(child)) {
         if (child.props.notfound && child.props.page) {
           NotFoundPage = child.props.page
+          notFoundPrerendered = child.props.prerender
         }
 
         // We have a <Route ...> element, let's check if it's the one we should
@@ -351,7 +354,7 @@ function analyzeRouterTree(
 
   const root = analyzeRouterTreeInternal(children)
 
-  return { root, activeRoute, NotFoundPage }
+  return { root, activeRoute, NotFoundPage, notFoundPrerendered }
 }
 
 export { Router, Route, namedRoutes as routes, isRoute, PageType }

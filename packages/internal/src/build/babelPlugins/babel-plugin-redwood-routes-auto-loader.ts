@@ -66,7 +66,8 @@ export default function (
         // with declarations like these:
         // const HomePage = {
         //   name: "HomePage",
-        //   loader: () => require("./pages/HomePage/HomePage")
+        //   loader: () => import("./pages/HomePage/HomePage")
+        //   syncLoader: () => require("./pages/HomePage/HomePage")
         // };
         // This is to make sure that all the imported "Page modules" are normal
         // imports and not asynchronous ones.
@@ -114,7 +115,11 @@ export default function (
           const nodes = []
           // Prepend all imports to the top of the file
           for (const { importName, relativeImport } of pages) {
-            // + const <importName> = { name: <importName>, loader: () => import(<relativeImportPath>) }
+            // + const <importName> = {
+            //     name: <importName>,
+            //     loader: () => import(<relativeImportPath>)
+            //     syncLoader: () => require(<relativeImportPath>)
+            //   }
 
             nodes.push(
               t.variableDeclaration('const', [
@@ -125,16 +130,28 @@ export default function (
                       t.identifier('name'),
                       t.stringLiteral(importName)
                     ),
+                    // loader for dynamic imports (browser)
                     t.objectProperty(
                       t.identifier('loader'),
                       t.arrowFunctionExpression(
                         [],
+                        t.callExpression(t.identifier('import'), [
+                          t.stringLiteral(relativeImport),
+                        ])
+                      )
+                    ),
+                    // syncLoader for ssr/prerender and first load of
+                    // prerendered pages in browser (csr)
+                    t.objectProperty(
+                      t.identifier('syncLoader'),
+                      t.arrowFunctionExpression(
+                        [],
                         t.callExpression(
-                          // If useStaticImports, do a synchronous import with require (ssr/prerender)
-                          // otherwise do a dynamic import (browser)
-                          useStaticImports
-                            ? t.identifier('require')
-                            : t.identifier('import'),
+                          t.identifier(
+                            // Use __webpack_require__ otherwise all pages will
+                            // be bundled
+                            useStaticImports ? 'require' : '__webpack_require__'
+                          ),
                           [t.stringLiteral(relativeImport)]
                         )
                       )
