@@ -51,7 +51,7 @@ export const ActiveRouteLoader = ({
     [path]: {
       page: prerender ? spec.syncLoader().default : ArlNullPage,
       specName: prerender ? spec.name : '',
-      state: 'DONE',
+      state: prerender ? 'DONE' : 'PRE_SHOW',
       location,
     },
   })
