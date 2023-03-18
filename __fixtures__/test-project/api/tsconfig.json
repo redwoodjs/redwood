@@ -6,7 +6,7 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "baseUrl": "./",
     "rootDirs": [
       "./src",
