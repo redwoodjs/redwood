@@ -9,7 +9,7 @@ import App from '~redwood-app-root'
  */
 const redwoodAppElement = document.getElementById('redwood-app')
 
-if (redwoodAppElement.children?.length > 0) {
+if (!redwoodAppElement.innerHTML.includes('<server-markup></server-markup>')) {
   hydrateRoot(redwoodAppElement, <App />)
 } else {
   const root = createRoot(redwoodAppElement)
