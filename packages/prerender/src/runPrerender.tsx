@@ -229,6 +229,11 @@ export const runPrerender = async ({
     }
   }
 
+  // TODO: Figure out how this should work
+  // indexHtmlTree('head').append(
+  //   '<script defer="defer" src="/static/js/nnn.hash.chunk.js"></script>'
+  // )
+
   // This is set by webpack by the html plugin
   indexHtmlTree('server-markup').replaceWith(componentAsHtml)
 

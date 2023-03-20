@@ -118,7 +118,10 @@ export default function (
             // + const <importName> = {
             //     name: <importName>,
             //     loader: () => import(<relativeImportPath>)
+            //     // prerender
             //     syncLoader: () => require(<relativeImportPath>)
+            //     // crs
+            //     syncLoader: () => __webpack_require__(require.resolveWeak(<relativeImportPath>))
             //   }
 
             nodes.push(
@@ -146,14 +149,23 @@ export default function (
                       t.identifier('syncLoader'),
                       t.arrowFunctionExpression(
                         [],
-                        t.callExpression(
-                          t.identifier(
-                            // Use __webpack_require__ otherwise all pages will
-                            // be bundled
-                            useStaticImports ? 'require' : '__webpack_require__'
-                          ),
-                          [t.stringLiteral(relativeImport)]
-                        )
+                        useStaticImports
+                          ? t.callExpression(t.identifier('require'), [
+                              t.stringLiteral(relativeImport),
+                            ])
+                          : t.callExpression(
+                              t.identifier(
+                                // Use __webpack_require__ otherwise all pages will
+                                // be bundled
+                                '__webpack_require__'
+                              ),
+                              [
+                                t.callExpression(
+                                  t.identifier('require.resolveWeak'),
+                                  [t.stringLiteral(relativeImport)]
+                                ),
+                              ]
+                            )
                       )
                     ),
                   ])
