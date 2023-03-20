@@ -51,7 +51,7 @@
     "execa": "5.1.1",
     "fast-glob": "3.2.12",
     "findup-sync": "5.0.0",
-    "fs-extra": "11.1.0",
+    "fs-extra": "11.1.1",
     "latest-version": "5.1.0",
     "listr2": "5.0.8",
     "lodash": "4.17.21",
