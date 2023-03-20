@@ -97,7 +97,8 @@ const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
 
       <h1>TsParamFilesPage</h1>
       <p>
-        Find me in <code>./web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx</code>
+        Find me in{' '}
+        <code>./web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx</code>
       </p>
       <p>
         My default route is named <code>tsParamFiles</code>, link to me with \`
@@ -127,11 +128,18 @@ const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
 
       <h1>TsParamTypeFilesPage</h1>
       <p>
-        Find me in <code>./web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx</code>
+        Find me in{' '}
+        <code>
+          ./web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx
+        </code>
       </p>
       <p>
-        My default route is named <code>tsParamTypeFiles</code>, link to me with \`
-        <Link to={routes.tsParamTypeFiles({ id: 42 })}>TsParamTypeFiles 42</Link>\`
+        My default route is named <code>tsParamTypeFiles</code>, link to me with
+        \`
+        <Link to={routes.tsParamTypeFiles({ id: 42 })}>
+          TsParamTypeFiles 42
+        </Link>
+        \`
       </p>
       <p>The parameter passed to me is {id}</p>
     </>
