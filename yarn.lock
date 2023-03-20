@@ -6416,14 +6416,14 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@supabase/supabase-js": 2.11.0
+    "@supabase/supabase-js": 2.12.0
     "@types/react": 18.0.28
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
     typescript: 4.9.5
   peerDependencies:
-    "@supabase/supabase-js": 2.11.0
+    "@supabase/supabase-js": 2.12.0
   languageName: unknown
   linkType: soft
 
@@ -8460,13 +8460,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:^2.7.0":
-  version: 2.7.0
-  resolution: "@supabase/realtime-js@npm:2.7.0"
+"@supabase/realtime-js@npm:^2.7.1":
+  version: 2.7.1
+  resolution: "@supabase/realtime-js@npm:2.7.1"
   dependencies:
     "@types/phoenix": ^1.5.4
+    "@types/websocket": ^1.0.3
     websocket: ^1.0.34
-  checksum: f3db917544b83a2f720817dab3b1f045425d592033bf77b8e57acf4a66832cb764fdb5a008b0b880e46e74089a9b89adede921006d2383f910820dcf0bad3468
+  checksum: cb1f26f1073e10e6cda0355fab1eef4df4554c4a6470822ac917a81641c80ca05e0391050aed50010bd8d8944f7264c4b9cbb690d430764c3dc12ea40264fae3
   languageName: node
   linkType: hard
 
@@ -8479,17 +8480,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:2.11.0":
-  version: 2.11.0
-  resolution: "@supabase/supabase-js@npm:2.11.0"
+"@supabase/supabase-js@npm:2.12.0":
+  version: 2.12.0
+  resolution: "@supabase/supabase-js@npm:2.12.0"
   dependencies:
     "@supabase/functions-js": ^2.1.0
     "@supabase/gotrue-js": ^2.12.0
     "@supabase/postgrest-js": ^1.1.1
-    "@supabase/realtime-js": ^2.7.0
+    "@supabase/realtime-js": ^2.7.1
     "@supabase/storage-js": ^2.3.1
     cross-fetch: ^3.1.5
-  checksum: 5094aa3ec93feca489bee0f3bbbadee65cd5c6090e71ef2fe60cb8b4cec290116441551a1d20b01e2f54d4977a1219af247313b5fa63b797d936de882f68ca9a
+  checksum: 4efc0d07732ef8dbaa3fc175ef91e6d0d3d8293168013b6513b6098964b5e8cf4e5475e01f86ba41f48d670d988322bf9d244f80ed8b5ef3106f962eb5cd4bfd
   languageName: node
   linkType: hard
 
@@ -9712,6 +9713,15 @@ __metadata:
     anymatch: ^3.0.0
     source-map: ^0.6.0
   checksum: dc6db66fa84664d8fab7ea79bd2482ea1c4500b09ed6939258e205548501b8d29c06b0fe5e869c4b59f74acf884c61a391875dadb9f7a91c8cd10c3841143729
+  languageName: node
+  linkType: hard
+
+"@types/websocket@npm:^1.0.3":
+  version: 1.0.5
+  resolution: "@types/websocket@npm:1.0.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 866f31a394d4fbcb4055420daaec16096e42666e30c573ca4291fc7fcde8316eb2ab4995f7f21c6e5e37572bcbf72483d8a6d340db303c6c2fcbbf79377b8b5a
   languageName: node
   linkType: hard
 
