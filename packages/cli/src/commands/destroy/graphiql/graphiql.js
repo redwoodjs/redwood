@@ -8,7 +8,7 @@ import {
   getGraphqlPath,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { getOutputPath } from '../../setup/graphiql/graphiql'
+import { getOutputPath } from '../../setup/graphiql/graphiqlHelpers'
 
 const removeGraphiqlFromGraphqlHandler = () => {
   const graphqlPath = getGraphqlPath()
