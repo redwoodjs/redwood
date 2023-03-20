@@ -10,9 +10,11 @@ import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/a
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
 import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { LocationProvider } from '@redwoodjs/router'
+import { matchPath } from '@redwoodjs/router/dist/util'
 import type { QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
+import { detectPrerenderRoutes } from './detection'
 import {
   GqlHandlerImportError,
   JSONParseError,
@@ -115,6 +117,17 @@ async function recursivelyRender(
       </CellCacheContextProvider>
     </LocationProvider>
   )
+
+  const prerenderRoutes = detectPrerenderRoutes()
+
+  const route = prerenderRoutes.find((route: any) => {
+    const { match } = matchPath(route.routePath, renderPath)
+    if (match) {
+      return route
+    }
+  })
+
+  console.log('renderPath', renderPath, 'route', route)
 
   if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
     // We found new queries that we haven't fetched yet. Execute all new
