@@ -2028,9 +2028,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.7.14":
-  version: 4.7.14
-  resolution: "@clerk/clerk-sdk-node@npm:4.7.14"
+"@clerk/clerk-sdk-node@npm:4.7.15":
+  version: 4.7.15
+  resolution: "@clerk/clerk-sdk-node@npm:4.7.15"
   dependencies:
     "@clerk/backend": ^0.13.4
     "@clerk/types": ^3.31.1
@@ -2041,7 +2041,7 @@ __metadata:
     cookie: 0.5.0
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: 1bf790d6ede56bc7a8e47faf7aed0176b357145d854a6151d2c4fa34cdcf6ee83792f5a929e501b91de0deecf702f3eff9f227e7c2a40938696aa1775528b220
+  checksum: d4cc078a9257b0edd93ecf09d6d36a627f3c063f284f0e2e0bfdc49d4500dc3466423674aa692881547641684489e67aca39afb676a0c7a1cbcc89573ace86a9
   languageName: node
   linkType: hard
 
@@ -6156,7 +6156,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@clerk/clerk-sdk-node": 4.7.14
+    "@clerk/clerk-sdk-node": 4.7.15
     "@redwoodjs/api": 4.0.0
     "@types/aws-lambda": 8.10.114
     core-js: 3.29.1
