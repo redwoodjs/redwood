@@ -25,6 +25,11 @@ export const useReauthenticate = <TUser>(
   const getToken = useToken(authImplementation)
 
   return useCallback(async () => {
+    setAuthProviderState((oldState) => ({
+      ...oldState,
+      loading: true,
+    }))
+
     try {
       const userMetadata = await authImplementation.getUserMetadata()
 
