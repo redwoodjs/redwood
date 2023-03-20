@@ -63,7 +63,7 @@ export const handler = async ({ force, verbose }) => {
           writeFile(
             redwoodTomlPath,
             configContent.concat(
-              `\n[opentelemetry]\n\tscriptPath = "${opentelemetryScriptPath}"`
+              `\n[opentelemetry]\n\tenabled = true\n\tapiSdk = "${opentelemetryScriptPath}"`
             ),
             {
               overwriteExisting: true, // redwood.toml always exists
@@ -76,9 +76,7 @@ export const handler = async ({ force, verbose }) => {
         }
       },
     },
-    {
-      ...addApiPackages(opentelemetryPackages),
-    },
+    addApiPackages(opentelemetryPackages),
   ]
 
   const prismaTasks = [

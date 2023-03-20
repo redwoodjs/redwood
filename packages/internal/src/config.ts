@@ -74,7 +74,8 @@ export interface Config {
     versionUpdates: string[]
   }
   opentelemetry: {
-    scriptPath?: string
+    enabled: boolean
+    apiSdk?: string
   }
   studio: {
     inMemory: boolean
@@ -123,7 +124,8 @@ const DEFAULT_CONFIG: Config = {
     versionUpdates: [],
   },
   opentelemetry: {
-    scriptPath: undefined,
+    enabled: false,
+    apiSdk: undefined,
   },
   studio: {
     inMemory: false,

@@ -31,7 +31,8 @@ describe('getConfig', () => {
           "versionUpdates": [],
         },
         "opentelemetry": {
-          "scriptPath": undefined,
+          "apiSdk": undefined,
+          "enabled": false,
         },
         "studio": {
           "email": undefined,

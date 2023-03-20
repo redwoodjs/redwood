@@ -4,6 +4,7 @@ import path from 'path'
 import * as esbuild from 'esbuild'
 import { removeSync } from 'fs-extra'
 
+import { getConfig } from '../config'
 import { findApiFiles } from '../files'
 import { getPaths } from '../paths'
 
@@ -34,7 +35,10 @@ export const cleanApiBuild = () => {
  */
 export const prebuildApiFiles = (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
-  const plugins = getApiSideBabelPlugins()
+  const plugins = getApiSideBabelPlugins({
+    forJest: false,
+    openTelemetry: getConfig().opentelemetry.enabled,
+  })
 
   return srcFiles.map((srcPath) => {
     const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)

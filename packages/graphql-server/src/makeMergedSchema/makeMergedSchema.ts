@@ -59,8 +59,9 @@ const mapFieldsToService = ({
           context: unknown,
           info: unknown
         ) => {
+          // TODO: Enable this conditionally based on the opentelemetry config
+          // if (getConfig().opentelemetry.enabled) {
           const tracer = opentelemetry.trace.getTracer('redwoodjs')
-
           const parentSpan =
             context !== null &&
             // @ts-expect-error we know it's an unknown type
@@ -84,9 +85,13 @@ const mapFieldsToService = ({
                 // @ts-expect-error we know it's an unknown type
                 `${args.operationName || 'Anonymous Operation'}`
               )
-              let result
               try {
-                result = await services[name](args, { root, context, info })
+                // TODO: Conditionally await this!
+                const result: any = await services[name](args, {
+                  root,
+                  context,
+                  info,
+                })
                 span.end()
                 return result
               } catch (ex) {
@@ -97,6 +102,8 @@ const mapFieldsToService = ({
               }
             }
           )
+          // }
+          // return services[name](args, { root, context, info })
         },
       }
     }

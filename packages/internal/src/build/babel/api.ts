@@ -61,7 +61,12 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
   version: RUNTIME_CORE_JS_VERSION,
 }
 
-export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
+export const getApiSideBabelPlugins = (
+  { forJest, openTelemetry } = {
+    forJest: false,
+    openTelemetry: false,
+  }
+) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
   // a custom "name" is supplied so that user's do not accidently overwrite
@@ -151,7 +156,7 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       undefined,
       'rwjs-babel-glob-import-dir',
     ],
-    [
+    openTelemetry && [
       require('../babelPlugins/babel-plugin-redwood-otel-wrapping').default,
       undefined,
       'rwjs-babel-otel-wrapping',
