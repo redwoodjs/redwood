@@ -155,15 +155,15 @@ describe('makeMergedSchema', () => {
       ).toEqual("I'm defined in the resolver.")
     })
 
-    it('Service functions are mapped correctly.', () => {
+    it('Service functions are mapped correctly.', async () => {
       expect(
         queryFields.inServices.resolve &&
-          queryFields.inServices.resolve(
+          (await queryFields.inServices.resolve(
             null,
             {},
             null,
             {} as GraphQLResolveInfo
-          )
+          ))
       ).toEqual("I'm defined in the service.")
     })
   })
@@ -196,15 +196,15 @@ describe('makeMergedSchema', () => {
       ).toEqual("MyOwnType: I'm defined in the resolver.")
     })
 
-    it('Service functions are mapped correctly.', () => {
+    it('Service functions are mapped correctly.', async () => {
       expect(
         myOwnTypeFields.inTypeServices.resolve &&
-          myOwnTypeFields.inTypeServices.resolve(
+          (await myOwnTypeFields.inTypeServices.resolve(
             null,
             {},
             null,
             {} as GraphQLResolveInfo
-          )
+          ))
       ).toEqual("MyOwnType: I'm defined in the services.")
     })
   })

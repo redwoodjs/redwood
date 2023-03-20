@@ -53,7 +53,7 @@ const mapFieldsToService = ({
         ...resolvers,
         // Map the arguments from GraphQL to an ordinary function a service would
         // expect.
-        [name]: (
+        [name]: async (
           root: unknown,
           args: unknown,
           context: unknown,
@@ -75,7 +75,7 @@ const mapFieldsToService = ({
               )
             : opentelemetry.context.active()
 
-          return tracer.startActiveSpan(
+          return await tracer.startActiveSpan(
             `redwoodjs:graphql:resolver:${name}`,
             {},
             parentContext,
