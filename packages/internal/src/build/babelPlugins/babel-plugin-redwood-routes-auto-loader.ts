@@ -67,7 +67,7 @@ export default function (
         // const HomePage = {
         //   name: "HomePage",
         //   loader: () => import("./pages/HomePage/HomePage")
-        //   syncLoader: () => require("./pages/HomePage/HomePage")
+        //   prerenderLoader: () => require("./pages/HomePage/HomePage")
         // };
         // This is to make sure that all the imported "Page modules" are normal
         // imports and not asynchronous ones.
@@ -119,9 +119,9 @@ export default function (
             //     name: <importName>,
             //     loader: () => import(/* webpackChunkName: "app" */ <relativeImportPath>)
             //     // prerender
-            //     syncLoader: () => require(<relativeImportPath>)
+            //     prerenderLoader: () => require(<relativeImportPath>)
             //     // crs
-            //     syncLoader: () => __webpack_require__(require.resolveWeak(<relativeImportPath>))
+            //     prerenderLoader: () => __webpack_require__(require.resolveWeak(<relativeImportPath>))
             //   }
 
             const importArgument = t.stringLiteral(relativeImport)
@@ -152,10 +152,10 @@ export default function (
                         ])
                       )
                     ),
-                    // syncLoader for ssr/prerender and first load of
+                    // prerenderLoader for ssr/prerender and first load of
                     // prerendered pages in browser (csr)
                     t.objectProperty(
-                      t.identifier('syncLoader'),
+                      t.identifier('prerenderLoader'),
                       t.arrowFunctionExpression(
                         [],
                         useStaticImports

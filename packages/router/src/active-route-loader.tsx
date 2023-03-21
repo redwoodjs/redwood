@@ -49,7 +49,7 @@ export const ActiveRouteLoader = ({
 
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
     [path]: {
-      page: prerender ? spec.syncLoader().default : ArlNullPage,
+      page: prerender ? spec.prerenderLoader().default : ArlNullPage,
       specName: prerender ? spec.name : '',
       state: prerender ? 'DONE' : 'PRE_SHOW',
       location,
