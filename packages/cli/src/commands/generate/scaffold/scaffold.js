@@ -843,7 +843,7 @@ export const handler = async ({
       typescript,
       tailwind,
     })
-    if (rollback) {
+    if (rollback && !force) {
       prepareForRollback(t)
     }
     await t.run()

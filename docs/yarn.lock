@@ -2561,10 +2561,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/docusaurus@npm:1.0.6":
-  version: 1.0.6
-  resolution: "@tsconfig/docusaurus@npm:1.0.6"
-  checksum: 7a5d84549b6506d6ed9281a6f3fd60418e1c7a764a165f5f25441be3a78829380980682a86cb3cf50ca45f6a30557a8354df7abd39880a4012ad814ed136e053
+"@tsconfig/docusaurus@npm:1.0.7":
+  version: 1.0.7
+  resolution: "@tsconfig/docusaurus@npm:1.0.7"
+  checksum: 49a9bb6f04a4eaee889a6950084dd14c6755fbd68951c7b9101f7031f7186ab7b46bb7e58e60e7a42d58db7ea20f981f43501ea653c1125f9863287c7108eb86
   languageName: node
   linkType: hard
 
@@ -3079,12 +3079,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.0.4, acorn@npm:^8.4.1, acorn@npm:^8.5.0":
+"acorn@npm:^8.0.4, acorn@npm:^8.5.0":
   version: 8.7.0
   resolution: "acorn@npm:8.7.0"
   bin:
     acorn: bin/acorn
   checksum: 8168e567c2f0b9fb7a418d2651b4b614326a0814b4937ebddee0f5e5e25ddd6320aec0c20d3a67efd97a02d836cc7f9e5c84befe3daeeea68ed89a48ee8f7a5d
+  languageName: node
+  linkType: hard
+
+"acorn@npm:^8.7.1":
+  version: 8.8.2
+  resolution: "acorn@npm:8.8.2"
+  bin:
+    acorn: bin/acorn
+  checksum: b5c54e736af5ed753911c6752fafd02d0a74cf4d55be606bd81fe71faba4f986dc090952329931ac2aba165803fd0005c59eeef08f9c6c689e8dc420031f3df0
   languageName: node
   linkType: hard
 
@@ -4636,11 +4645,11 @@ __metadata:
   linkType: hard
 
 "dns-packet@npm:^5.2.2":
-  version: 5.3.1
-  resolution: "dns-packet@npm:5.3.1"
+  version: 5.4.0
+  resolution: "dns-packet@npm:5.4.0"
   dependencies:
     "@leichtgewicht/ip-codec": ^2.0.1
-  checksum: 5e74ccd47437f936b81c1d93363c2a57ce78374159ea4893435b95961f09685adb048f72e6e09fcc5c38a08550e20b67dfbbd7c7fd9c2c9f24c8cf88c592fe46
+  checksum: bd5ecfd7d8b9cacd4d0029819699051c4e231d8fa6ed96e1573f7fee4b9147c3406207a260adbd7fb5c6d08a7db7641836467f450fa88e2ec5075f482e39ed77
   languageName: node
   linkType: hard
 
@@ -4654,11 +4663,11 @@ __metadata:
     "@docusaurus/preset-classic": 2.3.1
     "@docusaurus/theme-common": 2.3.1
     "@mdx-js/react": 1.6.22
-    "@tsconfig/docusaurus": 1.0.6
+    "@tsconfig/docusaurus": 1.0.7
     clsx: 1.2.1
     react: 17.0.2
     react-dom: 17.0.2
-    react-player: 2.11.2
+    react-player: 2.12.0
     typescript: 4.9.5
   languageName: unknown
   linkType: soft
@@ -4848,13 +4857,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.9.3":
-  version: 5.9.3
-  resolution: "enhanced-resolve@npm:5.9.3"
+"enhanced-resolve@npm:^5.10.0":
+  version: 5.12.0
+  resolution: "enhanced-resolve@npm:5.12.0"
   dependencies:
     graceful-fs: ^4.2.4
     tapable: ^2.2.0
-  checksum: 743428030e1d627835bfd05b7a9570ee163e728ab1d55fcd69de9c4ff3e84356c0c9c9deaa8164afb3c648699681a403801ac85b94d6a343838d38f36109643c
+  checksum: 5738924cfe3641d04b89c2856fee3d109d7bd71bbe234fb7f54843dda65f293e5f3eee6d5970ced70dbb09016085b961e60d1eb26cac72a21044479954b6cdfd
   languageName: node
   linkType: hard
 
@@ -8550,9 +8559,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-player@npm:2.11.2":
-  version: 2.11.2
-  resolution: "react-player@npm:2.11.2"
+"react-player@npm:2.12.0":
+  version: 2.12.0
+  resolution: "react-player@npm:2.12.0"
   dependencies:
     deepmerge: ^4.0.0
     load-script: ^1.0.0
@@ -8561,7 +8570,7 @@ __metadata:
     react-fast-compare: ^3.0.1
   peerDependencies:
     react: ">=16.6.0"
-  checksum: 5138f4865677ddaeb74f4ef9f469e54b77163dece1918414a2b75feed2e41a3e8d5432593d0fdfc1a8078d1cd951003e57fd37731a6988df673bd957a298942f
+  checksum: ef0c89cc5de17a149dc10c2ca36880679534980bc6fd9814b93636019af0132ebb516f282ceee249a991eef844f011fd91cb56126f5ab6c8ff0be29370c193bc
   languageName: node
   linkType: hard
 
@@ -10331,13 +10340,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watchpack@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "watchpack@npm:2.3.1"
+"watchpack@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "watchpack@npm:2.4.0"
   dependencies:
     glob-to-regexp: ^0.4.1
     graceful-fs: ^4.1.2
-  checksum: 00e44f5cc6ca299dd1ff52bf926a70a23ae1aeb6b399b7e32569d6d31ef1fc9bc3f5570ade6fef220dd6d74ee70259c9621b79cf487552caf1ea2727aa40f984
+  checksum: c5e35f9fb9338d31d2141d9835643c0f49b5f9c521440bb648181059e5940d93dd8ed856aa8a33fbcdd4e121dad63c7e8c15c063cf485429cd9d427be197fe62
   languageName: node
   linkType: hard
 
@@ -10460,19 +10469,19 @@ __metadata:
   linkType: hard
 
 "webpack@npm:^5.73.0":
-  version: 5.73.0
-  resolution: "webpack@npm:5.73.0"
+  version: 5.76.1
+  resolution: "webpack@npm:5.76.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
     "@webassemblyjs/ast": 1.11.1
     "@webassemblyjs/wasm-edit": 1.11.1
     "@webassemblyjs/wasm-parser": 1.11.1
-    acorn: ^8.4.1
+    acorn: ^8.7.1
     acorn-import-assertions: ^1.7.6
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.9.3
+    enhanced-resolve: ^5.10.0
     es-module-lexer: ^0.9.0
     eslint-scope: 5.1.1
     events: ^3.2.0
@@ -10485,14 +10494,14 @@ __metadata:
     schema-utils: ^3.1.0
     tapable: ^2.1.1
     terser-webpack-plugin: ^5.1.3
-    watchpack: ^2.3.1
+    watchpack: ^2.4.0
     webpack-sources: ^3.2.3
   peerDependenciesMeta:
     webpack-cli:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 761add2395e37c7bd0b0727bea327496b8a2f5a702b29bd4907f9e80f6e7ea17ecdeefabf0683fdefe1148f725cd51eb81c4a73b4646eda9eb1a8d1a74ac8cae
+  checksum: 9cfc3f5a42d55bfe4fa1b2637ee984aa4455c785b9b3a938de2bdc717dcb9b6222fbc0175f53691b8098aa02db180fdc488a6417cd6a8676da70372d78db8e9f
   languageName: node
   linkType: hard
 
