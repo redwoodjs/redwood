@@ -449,6 +449,8 @@ interface AnalyzedRoute {
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
+  wrappers: ReactNode[]
+  setProps: Record<any, any>
 }
 
 export function analyzeRoutes(
@@ -462,10 +464,19 @@ export function analyzeRoutes(
   let NotFoundPage: PageType | undefined
   let activeRouteName: string | undefined
 
-  const recurseThroughRouter = (
-    nodes: ReturnType<typeof Children.toArray>,
+  interface RecurseParams {
+    nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
-  ) => {
+    wrappersFromSet?: ReactNode[]
+    propsFromSet?: Record<any, any> // we don't know, or care about what props users are passing donw
+  }
+
+  const recurseThroughRouter = ({
+    nodes,
+    whileLoadingPageFromSet,
+    wrappersFromSet = [],
+    propsFromSet = {},
+  }: RecurseParams) => {
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
         // Just for readability
@@ -475,6 +486,8 @@ export function analyzeRoutes(
         if (isNotFoundRoute(route)) {
           NotFoundPage = route.props.page
           // Dont add notFound routes to the maps, and exit early
+          // @TODO: We may need to add it to the map, because you can in
+          // theory wrap a notfound page in a Set wrapper
           return
         }
 
@@ -493,6 +506,8 @@ export function analyzeRoutes(
             name,
             path,
             page: null, // Redirects don't need pages. We set this to null for consistency
+            wrappers: wrappersFromSet,
+            setProps: propsFromSet,
           }
         }
 
@@ -518,6 +533,8 @@ export function analyzeRoutes(
             whileLoadingPage:
               route.props.whileLoadingPage || whileLoadingPageFromSet,
             page: page,
+            wrappers: wrappersFromSet,
+            setProps: propsFromSet,
           }
 
           // e.g. namedRoutesMap.homePage = () => '/home'
@@ -527,20 +544,36 @@ export function analyzeRoutes(
 
       // @NOTE: A <Private> is also a Set
       if (isSetNode(node)) {
-        if (node.props.children) {
-          recurseThroughRouter(
-            Children.toArray(node.props.children),
+        const {
+          children,
+          whileLoadingPage: whileLoadingPageFromCurrentSet,
+          wrap: wrapFromCurrentSet,
+          ...otherPropsFromCurrentSet
+        } = node.props
+
+        const wrapperComponentsArray = Array.isArray(wrapFromCurrentSet)
+          ? wrapFromCurrentSet
+          : [wrapFromCurrentSet]
+
+        if (children) {
+          recurseThroughRouter({
+            nodes: Children.toArray(children),
             // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
             // If the parent node was also a Set with whileLoadingPage, we pass it down. The child's whileLoadingPage
             // will always take precedence over the parent's
-            node.props.whileLoadingPage || whileLoadingPageFromSet
-          )
+            whileLoadingPageFromSet:
+              whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
+            wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
+            propsFromSet: { ...propsFromSet, ...otherPropsFromCurrentSet }, // Current one takes precedence
+            // @TODO pass this in
+            // otherPropsFromSet: otherSetProps,
+          })
         }
       }
     })
   }
 
-  recurseThroughRouter(Children.toArray(children))
+  recurseThroughRouter({ nodes: Children.toArray(children) })
 
   return {
     namePathMap,

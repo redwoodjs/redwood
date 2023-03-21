@@ -14,7 +14,17 @@ Restore existing functionality:
 
 Props on Sets/Private/etc.:
       ✔ whileLoading @done(23-03-08 12:10)
-      ☐ and whileLoadingAuth
+      ☐ Auth related
+      Do we even need this? When server rendering, we won't load auth
+        ☐ error on unauthorized
+        ☐ whileLoadingAuth component
+        ☐ redirect on unauthenticated, and error if route not found
+        ☐ error on missing parameters
+      ✔ wrap components not rendered @done(23-03-21 15:21)
+
+
+While loading:
+  ☐ Can we wrap the whileLoadingPage in a component that updates itself with startTransition?
 
 Redirects:
   ☐ Handling the redirect prop in a Route client side

@@ -5,7 +5,7 @@ import { usePageLoadingContext } from './PageLoadingContext'
 import { routes as namedRoutes } from './router'
 import { useRouterState } from './router-context'
 
-type WrapperType<WTProps> = (
+export type WrapperType<WTProps> = (
   props: WTProps & { children: ReactNode }
 ) => ReactElement | null
 

@@ -1,4 +1,4 @@
-import React, { ReactNode, ReactElement, useMemo } from 'react'
+import React, { ReactNode, ReactElement, useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { Redirect } from './links'
@@ -98,6 +98,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     () =>
       analyzeRoutes(children, {
         currentPathName: location.pathname,
+        // @TODO We haven't handled this with SSR/Streaming yet.
+        // May need a babel plugin to extract userParamTypes from Routes.tsx
         userParamTypes: paramTypes,
       }),
     [location.pathname, children, paramTypes]
@@ -143,8 +145,15 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     return null
   }
 
-  const { path, page, name, redirect, whileLoadingPage } =
-    namePathMap[activeRouteName]
+  const {
+    path,
+    page,
+    name,
+    redirect,
+    whileLoadingPage,
+    wrappers = [],
+    setProps,
+  } = namePathMap[activeRouteName]
 
   if (!path) {
     throw new Error(`Route "${name}" needs to specify a path`)
@@ -166,18 +175,50 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       <ParamsProvider allParams={allParams}>
         {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
         {!redirect && page && (
-          <ActiveRouteLoader
-            path={path}
-            spec={normalizePage(page)}
-            delay={pageLoadingDelay}
-            params={allParams}
-            whileLoadingPage={whileLoadingPage as any}
+          <WrappedPage
+            wrappers={wrappers}
+            routeLoaderElement={
+              <ActiveRouteLoader
+                path={path}
+                spec={normalizePage(page as any)}
+                delay={pageLoadingDelay}
+                params={allParams}
+                whileLoadingPage={whileLoadingPage as any}
+                {...setProps}
+              />
+            }
+            setProps={setProps}
           />
         )}
       </ParamsProvider>
     </RouterContextProvider>
   )
 }
+
+interface WrappedPageProps {
+  wrappers: ReactNode[]
+  routeLoaderElement: ReactNode
+  setProps: Record<any, any>
+}
+
+const WrappedPage = memo(
+  ({ wrappers, routeLoaderElement, setProps }: WrappedPageProps) => {
+    if (wrappers.length > 0) {
+      // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a>
+      return wrappers.reduceRight((acc, wrapper) => {
+        return React.createElement(
+          wrapper as any,
+          {
+            ...setProps,
+          },
+          acc ? acc : routeLoaderElement
+        )
+      }, undefined) as any
+    }
+
+    return routeLoaderElement
+  }
+)
 
 export {
   Router,
