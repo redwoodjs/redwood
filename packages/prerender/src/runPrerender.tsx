@@ -118,17 +118,6 @@ async function recursivelyRender(
     </LocationProvider>
   )
 
-  const prerenderRoutes = detectPrerenderRoutes()
-
-  const route = prerenderRoutes.find((route: any) => {
-    const { match } = matchPath(route.routePath, renderPath)
-    if (match) {
-      return route
-    }
-  })
-
-  console.log('renderPath', renderPath, 'route', route)
-
   if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
     // We found new queries that we haven't fetched yet. Execute all new
     // queries and render again
@@ -242,13 +231,31 @@ export const runPrerender = async ({
     }
   }
 
-  // TODO: Figure out how this should work
-  // indexHtmlTree('head').append(
-  //   '<script defer="defer" src="/static/js/nnn.hash.chunk.js"></script>'
-  // )
+  const prerenderRoutes = detectPrerenderRoutes()
 
-  // This is set by webpack by the html plugin
-  indexHtmlTree('server-markup').replaceWith(componentAsHtml)
+  const route = prerenderRoutes.find((route: any) => {
+    const { match } = matchPath(route.routePath, renderPath)
+    if (match) {
+      return route
+    }
+  })
+
+  const buildManifest = JSON.parse(
+    fs.readFileSync(
+      path.join(getPaths().web.dist, 'build-manifest.json'),
+      'utf-8'
+    )
+  )
+
+  const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+
+  console.log(chunkPath)
+
+  indexHtmlTree('head').prepend(
+    `<script defer="defer" src="${chunkPath}"></script>`
+  )
+
+  indexHtmlTree('#redwood-app').append(componentAsHtml)
 
   const renderOutput = indexHtmlTree.html()
 

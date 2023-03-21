@@ -117,12 +117,21 @@ export default function (
           for (const { importName, relativeImport } of pages) {
             // + const <importName> = {
             //     name: <importName>,
-            //     loader: () => import(<relativeImportPath>)
+            //     loader: () => import(/* webpackChunkName: "app" */ <relativeImportPath>)
             //     // prerender
             //     syncLoader: () => require(<relativeImportPath>)
             //     // crs
             //     syncLoader: () => __webpack_require__(require.resolveWeak(<relativeImportPath>))
             //   }
+
+            const node = t.stringLiteral(relativeImport)
+
+            node.leadingComments = [
+              {
+                type: 'CommentBlock',
+                value: ` webpackChunkName: "${importName}" `,
+              },
+            ]
 
             nodes.push(
               t.variableDeclaration('const', [
@@ -138,9 +147,7 @@ export default function (
                       t.identifier('loader'),
                       t.arrowFunctionExpression(
                         [],
-                        t.callExpression(t.identifier('import'), [
-                          t.stringLiteral(relativeImport),
-                        ])
+                        t.callExpression(t.identifier('import'), [node])
                       )
                     ),
                     // syncLoader for ssr/prerender and first load of

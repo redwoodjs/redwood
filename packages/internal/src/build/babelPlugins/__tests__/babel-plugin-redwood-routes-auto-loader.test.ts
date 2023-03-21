@@ -35,8 +35,8 @@ describe('page auto loader correctly imports pages', () => {
   test('Pages get both a loader and a syncLoader', () => {
     expect(result?.code).toContain(`const HomePage = {
   name: "HomePage",
-  loader: () => import("./pages/HomePage/HomePage"),
-  syncLoader: () => __webpack_require__("`)
+  loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
+  syncLoader: () => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage"))`)
   })
 
   test('Already imported pages are left alone.', () => {
