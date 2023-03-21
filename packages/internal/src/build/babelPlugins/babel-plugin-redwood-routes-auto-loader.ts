@@ -117,7 +117,7 @@ export default function (
           for (const { importName, relativeImport } of pages) {
             // + const <importName> = {
             //     name: <importName>,
-            //     loader: () => import(/* webpackChunkName: "app" */ <relativeImportPath>)
+            //     loader: () => import(/* webpackChunkName: "<importName>" */ <relativeImportPath>)
             //     // prerender
             //     prerenderLoader: () => require(<relativeImportPath>)
             //     // crs
