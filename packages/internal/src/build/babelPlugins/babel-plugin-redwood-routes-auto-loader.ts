@@ -124,9 +124,9 @@ export default function (
             //     syncLoader: () => __webpack_require__(require.resolveWeak(<relativeImportPath>))
             //   }
 
-            const node = t.stringLiteral(relativeImport)
+            const importArgument = t.stringLiteral(relativeImport)
 
-            node.leadingComments = [
+            importArgument.leadingComments = [
               {
                 type: 'CommentBlock',
                 value: ` webpackChunkName: "${importName}" `,
@@ -147,7 +147,9 @@ export default function (
                       t.identifier('loader'),
                       t.arrowFunctionExpression(
                         [],
-                        t.callExpression(t.identifier('import'), [node])
+                        t.callExpression(t.identifier('import'), [
+                          importArgument,
+                        ])
                       )
                     ),
                     // syncLoader for ssr/prerender and first load of

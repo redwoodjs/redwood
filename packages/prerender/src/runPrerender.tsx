@@ -3,7 +3,7 @@ import path from 'path'
 
 import React from 'react'
 
-import { load as loadHtml } from 'cheerio'
+import { CheerioAPI, load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
@@ -133,6 +133,34 @@ async function recursivelyRender(
   }
 }
 
+function insertChunkLoadingScript(
+  indexHtmlTree: CheerioAPI,
+  renderPath: string
+) {
+  const prerenderRoutes = detectPrerenderRoutes()
+
+  const route = prerenderRoutes.find((route: any) => {
+    return matchPath(route.routePath, renderPath).match
+  })
+
+  if (!route) {
+    throw new Error('Could not find a Route matching ' + renderPath)
+  }
+
+  const buildManifest = JSON.parse(
+    fs.readFileSync(
+      path.join(getPaths().web.dist, 'build-manifest.json'),
+      'utf-8'
+    )
+  )
+
+  const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+
+  indexHtmlTree('head').prepend(
+    `<script defer="defer" src="${chunkPath}"></script>`
+  )
+}
+
 interface PrerenderParams {
   queryCache: Record<string, QueryInfo>
   renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
@@ -231,29 +259,7 @@ export const runPrerender = async ({
     }
   }
 
-  const prerenderRoutes = detectPrerenderRoutes()
-
-  const route = prerenderRoutes.find((route: any) => {
-    const { match } = matchPath(route.routePath, renderPath)
-    if (match) {
-      return route
-    }
-  })
-
-  const buildManifest = JSON.parse(
-    fs.readFileSync(
-      path.join(getPaths().web.dist, 'build-manifest.json'),
-      'utf-8'
-    )
-  )
-
-  const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
-
-  console.log(chunkPath)
-
-  indexHtmlTree('head').prepend(
-    `<script defer="defer" src="${chunkPath}"></script>`
-  )
+  insertChunkLoadingScript(indexHtmlTree, renderPath)
 
   indexHtmlTree('#redwood-app').append(componentAsHtml)
 
