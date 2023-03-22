@@ -931,7 +931,7 @@ export class DbAuthHandler<
             [this.options.webAuthn.credentialFields.userId]:
               user[this.options.authFields.id],
             [this.options.webAuthn.credentialFields.publicKey]:
-              credentialPublicKey,
+              Buffer.from(credentialPublicKey),
             [this.options.webAuthn.credentialFields.transports]: this.params
               .transports
               ? JSON.stringify(this.params.transports)
