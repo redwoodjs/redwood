@@ -80,7 +80,9 @@ export const prettify = (templateFilename, renderedTemplate) => {
   const parser = {
     '.css': 'css',
     '.js': 'babel',
+    '.jsx': 'babel',
     '.ts': 'babel-ts',
+    '.tsx': 'babel-ts',
   }[path.extname(templateFilename.replace('.template', ''))]
 
   if (typeof parser === 'undefined') {
