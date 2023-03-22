@@ -27,16 +27,18 @@ export const handler = () => {
         [
           `The react root (<div id="redwood-app"></div>) in ${indexHTMLFilepath} has children:`,
           reactRoot.html(),
-          'React expects to control this DOM node completely. Either move the children 1) outside the react root or 2) into your App component',
+          'React expects to control this DOM node completely. This codemod has moved the children outside the react root',
+          'but consider moving them into a layout.',
           '',
         ].join('\n')
       )
     }
 
+    indexHTML('body').append(reactRootChildren)
     reactRoot.text('')
 
     fs.writeFileSync(indexHTMLFilepath, indexHTML.html())
 
-    setOutput('All done! Run `yarn rw lint --fix` to prettify your code')
+    setOutput('All done!')
   })
 }

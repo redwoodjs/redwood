@@ -1,4 +1,27 @@
 # Check React Root
 
-<!-- Practice README-driven development by explaining what your codemod does:
-     https://tom.preston-werner.com/2010/08/23/readme-driven-development.html -->
+React 18 doesn't handle hydration errors the same way 17 did. It's very strict, so we have to be very careful about the server HTML we send to the browser to be hydrated.
+
+In v5, we changed the default index.html file a bit—we removed the `prerenderPlaceholder`:
+
+```diff
+ <!DOCTYPE html>
+ <html lang="en">
+
+ <head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="icon" type="image/png" href="/favicon.png" />
+ </head>
+
+ <body>
+   <div id="redwood-app">
+-    <!-- Please keep the line below for prerender support. -->
+-    <%= prerenderPlaceholder %>
+   </div>
+ </body>
+
+ </html>
+```
+
+This codemod removes that templating syntax from a user's index.html, and warns about other children in the react root.
