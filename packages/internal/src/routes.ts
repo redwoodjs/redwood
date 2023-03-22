@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 
-import { getPaths } from './paths'
+import { getPaths } from '@redwoodjs/paths'
 
 // Circular dependency when trying to use the standard import
 const { getProject } = require('@redwoodjs/structure/dist/index')
