@@ -6,7 +6,7 @@ import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/paths'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'

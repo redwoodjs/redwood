@@ -8,7 +8,7 @@ import chalk from 'chalk'
 import latestVersion from 'latest-version'
 import semver from 'semver'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/paths'
 
 import { setLock, unsetLock } from './locking'
 
