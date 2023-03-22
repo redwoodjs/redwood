@@ -519,7 +519,6 @@ test('core-js polyfill list', () => {
     [
       "es.regexp.flags",
       "es.typed-array.set",
-      "esnext.aggregate-error",
       "esnext.array.last-index",
       "esnext.array.last-item",
       "esnext.composite-key",
@@ -556,7 +555,6 @@ test('core-js polyfill list', () => {
       "esnext.math.umulh",
       "esnext.number.from-string",
       "esnext.observable",
-      "esnext.promise.any",
       "esnext.promise.try",
       "esnext.reflect.define-metadata",
       "esnext.reflect.delete-metadata",
@@ -587,7 +585,6 @@ test('core-js polyfill list', () => {
       "esnext.set.union",
       "esnext.string.at",
       "esnext.string.code-points",
-      "esnext.string.replace-all",
       "esnext.symbol.dispose",
       "esnext.symbol.observable",
       "esnext.symbol.pattern-match",

@@ -87,7 +87,7 @@ const {
 // Require 1 and only 1 arg if not rebuildFixture
 if (!rebuildFixture && args._.length > 1) {
   console.log(
-    chalk.default.red.bold(
+    chalk.red.bold(
       `
       Multiple <project directory> arguments
       Specify ONE project directory outside the framework directory (no spaces allowed)
@@ -98,7 +98,7 @@ if (!rebuildFixture && args._.length > 1) {
   process.exit(1)
 } else if (!rebuildFixture && args._.length < 1) {
   console.log(
-    chalk.default.red.bold(
+    chalk.red.bold(
       `
       Missing <project directory> argument
       Specify a project directory outside the framework directory
@@ -128,7 +128,7 @@ if (
   !path.isAbsolute(relativePathCheck)
 ) {
   console.log(
-    chalk.default.red.bold(
+    chalk.red.bold(
       `
       Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'
       Specify a project directory outside the framework directory

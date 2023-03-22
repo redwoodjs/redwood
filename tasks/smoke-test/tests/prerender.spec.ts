@@ -12,6 +12,11 @@ import execa from 'execa'
 import rwServeTest from '../playwright-fixtures/rwServe.fixture'
 import type { ServeFixture } from '../playwright-fixtures/rwServe.fixture'
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
+
 let noJsBrowser: BrowserContext
 rwServeTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
   noJsBrowser = await browser.newContext({
@@ -26,9 +31,9 @@ rwServeTest(
     await pageWithoutJs.goto(`http://localhost:${port}/`)
 
     const cellSuccessState = await pageWithoutJs.locator('main').innerHTML()
-    expect(cellSuccessState).toMatch('Welcome to the blog!')
-    expect(cellSuccessState).toMatch('A little more about me')
-    expect(cellSuccessState).toMatch('What is the meaning of life?')
+    expect(cellSuccessState).toMatch(/Welcome to the blog!/)
+    expect(cellSuccessState).toMatch(/A little more about me/)
+    expect(cellSuccessState).toMatch(/What is the meaning of life\?/)
 
     const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
     expect(navTitle).toBe('Redwood Blog')
@@ -36,7 +41,7 @@ rwServeTest(
     const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
     expect(navLinks.split('\n')).toEqual([
       'About',
-      'Contact',
+      'Contact Us',
       'Admin',
       'Log In',
     ])
@@ -61,11 +66,11 @@ rwServeTest(
     await pageWithoutJs.goto(`http://localhost:${port}${meaningOfLifeHref}`)
 
     const mainContent = await pageWithoutJs.locator('main').innerHTML()
-    expect(mainContent).toMatch('What is the meaning of life?')
+    expect(mainContent).toMatch(/What is the meaning of life\?/)
     // Test that nested cell content is also rendered
-    expect(mainContent).toMatch('user.two@example.com')
-    expect(mainContent).not.toMatch('Welcome to the blog!')
-    expect(mainContent).not.toMatch('A little more about me')
+    expect(mainContent).toMatch(/user\.two@example\.com/)
+    expect(mainContent).not.toMatch(/Welcome to the blog!/)
+    expect(mainContent).not.toMatch(/A little more about me/)
 
     const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
     expect(navTitle).toBe('Redwood Blog')
@@ -73,12 +78,37 @@ rwServeTest(
     const navLinks = await pageWithoutJs.locator('nav >> ul').innerText()
     expect(navLinks.split('\n')).toEqual([
       'About',
-      'Contact',
+      'Contact Us',
       'Admin',
       'Log In',
     ])
 
     pageWithoutJs.close()
+  }
+)
+
+rwServeTest(
+  'Check that meta-tags are rendering the correct dynamic data',
+  async ({ port }: ServeFixture & PlaywrightTestArgs) => {
+    const pageWithoutJs = await noJsBrowser.newPage()
+
+    await pageWithoutJs.goto(`http://localhost:${port}/blog-post/1`)
+
+    const metaDescription = await pageWithoutJs.locator(
+      'meta[name="description"]'
+    )
+
+    const ogDescription = await pageWithoutJs.locator(
+      'meta[property="og:description"]'
+    )
+    await expect(metaDescription).toHaveAttribute('content', 'Description 1')
+    await expect(ogDescription).toHaveAttribute('content', 'Description 1')
+
+    const title = await pageWithoutJs.locator('title').innerHTML()
+    await expect(title).toBe('Post 1 | Redwood App')
+
+    const ogTitle = await pageWithoutJs.locator('meta[property="og:title"]')
+    await expect(ogTitle).toHaveAttribute('content', 'Post 1')
   }
 )
 
@@ -89,9 +119,9 @@ rwServeTest(
     await pageWithoutJs.goto(`http://localhost:${port}`)
 
     let mainContent = await pageWithoutJs.locator('main').innerHTML()
-    expect(mainContent).toMatch('Welcome to the blog!')
-    expect(mainContent).toMatch('A little more about me')
-    expect(mainContent).toMatch('What is the meaning of life?')
+    expect(mainContent).toMatch(/Welcome to the blog!/)
+    expect(mainContent).toMatch(/A little more about me/)
+    expect(mainContent).toMatch(/What is the meaning of life\?/)
 
     await pageWithoutJs.goto(`http://localhost:${port}/`)
     const aboutMeAnchor = await pageWithoutJs.locator(
@@ -104,10 +134,12 @@ rwServeTest(
     expect(aboutMeAnchorHref).not.toEqual('')
 
     mainContent = await pageWithoutJs.locator('main').innerHTML()
-    expect(mainContent).toMatch('A little more about me')
-    expect(mainContent).not.toMatch('Welcome to the blog!')
-    expect(mainContent).not.toMatch('What is the meaning of life?')
-    expect(pageWithoutJs.url()).toMatch(aboutMeAnchorHref)
+    expect(mainContent).toMatch(/A little more about me/)
+    expect(mainContent).not.toMatch(/Welcome to the blog!/)
+    expect(mainContent).not.toMatch(/What is the meaning of life\?/)
+    expect(pageWithoutJs.url()).toMatch(
+      new RegExp(escapeRegExp(aboutMeAnchorHref))
+    )
 
     pageWithoutJs.close()
   }
@@ -156,7 +188,7 @@ rwServeTest('prerender with broken gql query', async () => {
     })
   } catch (e) {
     expect(e.message).toMatch(
-      'GQL error: Cannot query field "timestamp" on type "Post".'
+      /GQL error: Cannot query field "timestamp" on type "Post"\./
     )
   }
 
@@ -183,7 +215,7 @@ rwServeTest(
     const mainContent = await pageWithoutJs.locator('main').innerHTML()
     expect(mainContent).toMatch(/<header.*<h2.*>[\w\s?!]+<\/h2><\/header>/)
     // Test that nested cell content is also rendered
-    expect(mainContent).toMatch('class="author-cell"')
+    expect(mainContent).toMatch(/class="author-cell"/)
     expect(mainContent).toMatch(/user.(one|two)@example.com/)
 
     pageWithoutJs.close()

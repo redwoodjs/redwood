@@ -4,7 +4,7 @@ jest.mock('@redwoodjs/paths', () => {
   return {
     ...jest.requireActual('@redwoodjs/paths'),
     getPaths: () => {
-      const BASE_PATH = path.join(global.__dirname, 'fixtures')
+      const BASE_PATH = path.join(globalThis.__dirname, 'fixtures')
       return {
         base: BASE_PATH,
         api: {
@@ -92,7 +92,7 @@ describe('usingVSCode', () => {
   })
 
   test('return true when .vscode folder does exist', () => {
-    const BASE_PATH = path.join(global.__dirname, 'fixtures')
+    const BASE_PATH = path.join(globalThis.__dirname, 'fixtures')
     fs.mkdirSync(path.join(BASE_PATH, '.vscode'))
 
     const output = index.usingVSCode()

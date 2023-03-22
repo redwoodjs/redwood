@@ -27,11 +27,16 @@ describe('getConfig', () => {
           "stories": true,
           "tests": true,
         },
+        "notifications": {
+          "versionUpdates": [],
+        },
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
+          "bundler": "webpack",
           "fastRefresh": true,
           "host": "localhost",
+          "includeEnvironmentVariables": [],
           "path": "./web",
           "port": 8910,
           "sourceMap": false,
@@ -45,6 +50,15 @@ describe('getConfig', () => {
   it('merges configs', () => {
     const config = getConfig(path.join(__dirname, './fixtures/redwood.toml'))
     expect(config.web.port).toEqual(8888)
+  })
+
+  it('throws an error when given a bad config path', () => {
+    const runGetConfig = () => {
+      getConfig(path.join(__dirname, './fixtures/fake_redwood.toml'))
+    }
+    expect(runGetConfig).toThrow(
+      /Could not parse .+fake_redwood.toml.+ Error: ENOENT: no such file or directory, open .+fake_redwood.toml./
+    )
   })
 
   it('interpolates environment variables correctly', () => {

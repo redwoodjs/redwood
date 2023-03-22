@@ -177,12 +177,41 @@ describe('validate exclusion', () => {
     expect(() =>
       validate('bar', 'selection', { exclusion: { in: ['foo', 'bar'] } })
     ).toThrow(ValidationErrors.ExclusionValidationError)
+    expect(() =>
+      validate('bar', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
 
     expect(() =>
       validate('qux', 'selection', { exclusion: ['foo', 'bar'] })
     ).not.toThrow()
     expect(() =>
       validate('qux', 'selection', { exclusion: { in: ['foo', 'bar'] } })
+    ).not.toThrow()
+    expect(() =>
+      validate('qux', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).not.toThrow()
+  })
+
+  it('checks for case-insensitive exclusion', () => {
+    expect(() =>
+      validate('Bar', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
+    expect(() =>
+      validate('bar', 'selection', {
+        exclusion: { in: ['foo', 'Bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
+
+    expect(() =>
+      validate('qux', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
     ).not.toThrow()
   })
 
@@ -242,13 +271,13 @@ describe('validate format', () => {
       ValidationErrors.FormatValidationError
     )
     // inline regex
-    ;[(/foo/, /^foo/)].forEach((pattern) => {
+    ;[/foo/, /^foo/].forEach((pattern) => {
       expect(() =>
         validate('foobar', 'text', { format: pattern })
       ).not.toThrow()
     })
     // options format
-    ;[(/foo/, /^foo/)].forEach((pattern) => {
+    ;[/foo/, /^foo/].forEach((pattern) => {
       expect(() =>
         validate('foobar', 'text', { format: { pattern } })
       ).not.toThrow()
@@ -325,12 +354,41 @@ describe('validate inclusion', () => {
     expect(() =>
       validate('quux', 'selection', { inclusion: { in: ['foo', 'bar'] } })
     ).toThrow(ValidationErrors.InclusionValidationError)
+    expect(() =>
+      validate('QUUX', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).toThrow(ValidationErrors.InclusionValidationError)
 
     expect(() =>
       validate('foo', 'selection', { inclusion: ['foo', 'bar'] })
     ).not.toThrow()
     expect(() =>
       validate('foo', 'selection', { inclusion: { in: ['foo', 'bar'] } })
+    ).not.toThrow()
+    expect(() =>
+      validate('foo', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).not.toThrow()
+  })
+
+  it('checks for case-insensitive inclusion', () => {
+    expect(() =>
+      validate('quux', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.InclusionValidationError)
+
+    expect(() =>
+      validate('Foo', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).not.toThrow()
+    expect(() =>
+      validate('foo', 'selection', {
+        inclusion: { in: ['FOO', 'bar'], caseSensitive: false },
+      })
     ).not.toThrow()
   })
 
@@ -916,6 +974,75 @@ describe('validate presence', () => {
 
   it('will not throw when option is undefined', () => {
     expect(() => validate('foo', { presence: undefined })).not.toThrow()
+  })
+})
+
+describe('validate custom', () => {
+  it('checks if errors are not thrown', () => {
+    expect(() =>
+      validate(null, 'email', {
+        custom: {
+          with: () => {
+            throw new Error('foo')
+          },
+        },
+      })
+    ).toThrow(ValidationErrors.CustomValidationError)
+
+    expect(() =>
+      validate(null, 'email', {
+        custom: {
+          with: () => {},
+        },
+      })
+    ).not.toThrow(ValidationErrors.CustomValidationError)
+  })
+
+  it('throws with a custom message', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw new Error('foo')
+          },
+          message: 'Gimmie an email',
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('throws with a custom message via the message of the thrown error', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw new Error('Gimmie an email')
+          },
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('throws with a custom message via the thrown message', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw 'Gimmie an email'
+          },
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { custom: undefined })).not.toThrow()
   })
 })
 

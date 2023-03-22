@@ -10,7 +10,7 @@ import {
 import type { GetCurrentUser } from './types'
 
 interface Args {
-  authDecoder: Decoder
+  authDecoder?: Decoder | Decoder[]
   handlerFn: (
     event: APIGatewayEvent,
     context: LambdaContext,

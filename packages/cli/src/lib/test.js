@@ -29,8 +29,12 @@ jest.mock('@redwoodjs/paths', () => {
         base: BASE_PATH,
         api: {
           dataMigrations: path.join(BASE_PATH, './api/prisma/dataMigrations'),
-          db: path.join(global.__dirname, 'fixtures'), // this folder
-          dbSchema: path.join(global.__dirname, 'fixtures', 'schema.prisma'), // this folder
+          db: path.join(globalThis.__dirname, 'fixtures'), // this folder
+          dbSchema: path.join(
+            globalThis.__dirname,
+            'fixtures',
+            'schema.prisma'
+          ), // this folder
           generators: path.join(BASE_PATH, './api/generators'),
           src: path.join(BASE_PATH, './api/src'),
           services: path.join(BASE_PATH, './api/src/services'),
@@ -46,6 +50,7 @@ jest.mock('@redwoodjs/paths', () => {
           components: path.join(BASE_PATH, '/web/src/components'),
           layouts: path.join(BASE_PATH, '/web/src/layouts'),
           pages: path.join(BASE_PATH, '/web/src/pages'),
+          app: path.join(BASE_PATH, '/web/src/App.js'),
         },
         scripts: path.join(BASE_PATH, 'scripts'),
         generated: {
@@ -66,7 +71,7 @@ jest.mock('./project', () => ({
   sides: () => ['web', 'api'],
 }))
 
-global.__prettierPath = path.resolve(
+globalThis.__prettierPath = path.resolve(
   __dirname,
   './__tests__/fixtures/prettier.config.js'
 )
@@ -81,7 +86,7 @@ jest.mock('path', () => {
         paths[0] === '/path/to/project' &&
         paths[1] === 'prettier.config.js'
       ) {
-        return global.__prettierPath
+        return globalThis.__prettierPath
       }
       return path.join(...paths)
     },

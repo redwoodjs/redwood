@@ -1,6 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react'
-
-import { unstable_batchedUpdates } from 'react-dom'
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  SetStateAction,
+  ReactNode,
+} from 'react'
 
 import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
 import {
@@ -9,7 +13,7 @@ import {
 } from './ActivePageContext'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { useIsMounted } from './useIsMounted'
-import { Spec } from './util'
+import { inIframe, Spec } from './util'
 
 import { ParamsProvider, useLocation } from '.'
 
@@ -58,7 +62,12 @@ export const ActiveRouteLoader = ({
   }
 
   useEffect(() => {
-    global?.scrollTo(0, 0)
+    // Make this hook a no-op if we're rendering in an iframe.
+    if (inIframe()) {
+      return
+    }
+
+    globalThis?.scrollTo(0, 0)
 
     if (announcementRef.current) {
       announcementRef.current.innerText = getAnnouncement()
@@ -92,19 +101,17 @@ export const ActiveRouteLoader = ({
       // Consumers of the context can show a loading indicator
       // to signal to the user that something is happening.
       loadingTimeout.current = setTimeout(() => {
-        unstable_batchedUpdates(() => {
-          setLoadingState((loadingState) => ({
-            ...loadingState,
-            [path]: {
-              page: whileLoadingPage || ArlWhileLoadingNullPage,
-              specName: '',
-              state: 'SHOW_LOADING',
-              location,
-            },
-          }))
-          setRenderedChildren(children)
-          setRenderedPath(path)
-        })
+        setLoadingState((loadingState) => ({
+          ...loadingState,
+          [path]: {
+            page: whileLoadingPage || ArlWhileLoadingNullPage,
+            specName: '',
+            state: 'SHOW_LOADING',
+            location,
+          },
+        }))
+        setRenderedChildren(children)
+        setRenderedPath(path)
       }, delay)
 
       // Wait to download and parse the page.
@@ -117,26 +124,25 @@ export const ActiveRouteLoader = ({
       // Only update all state if we're still interested (i.e. we're still
       // waiting for the page that just finished loading)
       if (isMounted() && name === waitingFor.current) {
-        unstable_batchedUpdates(() => {
-          setLoadingState((loadingState) => ({
-            ...loadingState,
-            [path]: {
-              page: module.default,
-              specName: name,
-              state: 'DONE',
-              location,
-            },
-          }))
-          // `children` could for example be a Set or a Route. Either way the
-          // just-loaded page will be somewhere in the children tree. But
-          // children could also be undefined, in which case we'll just render
-          // the just-loaded page itself. For example, when we render the
-          // NotFoundPage children will be undefined and the default export in
-          // `module` will be the NotFoundPage itself.
-          setRenderedChildren(children ?? module.default)
-          setRenderedPath(path)
-          setPageName(name)
-        })
+        setLoadingState((loadingState) => ({
+          ...loadingState,
+          [path]: {
+            page: module.default,
+            specName: name,
+            state: 'DONE',
+            location,
+          },
+        }))
+        // `children` could for example be a Set or a Route. Either way the
+        // just-loaded page will be somewhere in the children tree. But
+        // children could also be undefined, in which case we'll just render
+        // the just-loaded page itself. For example, when we render the
+        // NotFoundPage children will be undefined and the default export in
+        // `module` will be the NotFoundPage itself.
+        const renderedChildren = children ?? module.default
+        setRenderedChildren(renderedChildren as SetStateAction<ReactNode>) //FIXME: test this?
+        setRenderedPath(path)
+        setPageName(name)
       }
     }
 
@@ -144,32 +150,30 @@ export const ActiveRouteLoader = ({
       clearLoadingTimeout()
       startPageLoadTransition(spec, delay)
     } else {
-      unstable_batchedUpdates(() => {
-        // Handle navigating to the same page again, but with different path
-        // params (i.e. new `location` or route params)
-        setLoadingState((loadingState) => {
-          // If path is same, fetch the page again
-          let existingPage = loadingState[path]?.page
-          // If path is different, try to find the existing page
-          if (!existingPage) {
-            const pageState = Object.values(loadingState).find(
-              (state) => state?.specName === spec.name
-            )
-            existingPage = pageState?.page
-          }
-          return {
-            ...loadingState,
-            [path]: {
-              page: existingPage || ArlNullPage,
-              specName: spec.name,
-              state: 'DONE',
-              location,
-            },
-          }
-        })
-        setRenderedChildren(children)
-        setRenderedPath(path)
+      // Handle navigating to the same page again, but with different path
+      // params (i.e. new `location` or route params)
+      setLoadingState((loadingState) => {
+        // If path is same, fetch the page again
+        let existingPage = loadingState[path]?.page
+        // If path is different, try to find the existing page
+        if (!existingPage) {
+          const pageState = Object.values(loadingState).find(
+            (state) => state?.specName === spec.name
+          )
+          existingPage = pageState?.page
+        }
+        return {
+          ...loadingState,
+          [path]: {
+            page: existingPage || ArlNullPage,
+            specName: spec.name,
+            state: 'DONE',
+            location,
+          },
+        }
       })
+      setRenderedChildren(children)
+      setRenderedPath(path)
     }
 
     return () => {
@@ -180,7 +184,7 @@ export const ActiveRouteLoader = ({
   // It might feel tempting to move this code further up in the file for an
   // "early return", but React doesn't allow that because pretty much all code
   // above is hooks, and they always need to come before any `return`
-  if (global.__REDWOOD__PRERENDERING) {
+  if (globalThis.__REDWOOD__PRERENDERING) {
     // babel auto-loader plugin uses withStaticImport in prerender mode
     // override the types for this condition
     const syncPageLoader = spec.loader as unknown as synchronousLoaderSpec

@@ -128,6 +128,7 @@ module.exports = {
         'packages/eslint-config/*.js',
         'packages/record/src/**',
         'packages/telemetry/src/**',
+        'packages/vite/bins/**',
       ],
       env: {
         node: true,

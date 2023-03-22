@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useTabGroupChoice } from '@docusaurus/theme-common/internal'
+import { useStorageSlot } from '@docusaurus/theme-common'
 
 interface Props {
   path: string
@@ -12,16 +12,12 @@ interface Props {
  * on what language the user has selected for the code blocks
  */
 export default function FileExtSwitcher({ path }: Props) {
-  const { tabGroupChoices } = useTabGroupChoice()
+  const [jsTs] = useStorageSlot('docusaurus.tab.js-ts')
 
   const extensionStart = path.lastIndexOf('{')
   const extensions = path.slice(extensionStart + 1, path.length - 1)
   const ts = extensions.split(',')[1]
   const pathWithoutExt = path.slice(0, extensionStart)
 
-  return (
-    <code>
-      {pathWithoutExt + (tabGroupChoices['js-ts'] === 'js' ? 'js' : ts)}
-    </code>
-  )
+  return <code>{pathWithoutExt + (jsTs === 'js' ? 'js' : ts)}</code>
 }

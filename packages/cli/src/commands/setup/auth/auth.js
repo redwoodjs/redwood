@@ -1,65 +1,19 @@
-import prompts from 'prompts'
+import path from 'path'
+
+import execa from 'execa'
+import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
-import c from '../../../lib/colors'
+import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
+
+import { getPaths } from '../../../lib/'
 
 export const command = 'auth <provider>'
 
-export const description = 'Generate an auth configuration'
+export const description = 'Set up an auth configuration'
 
 export async function builder(yargs) {
-  const {
-    setupAuthAuth0Command,
-    setupAuthAzureActiveDirectoryCommand,
-    setupAuthClerkCommand,
-    setupAuthCustomCommand,
-    setupAuthDbAuthCommand,
-    setupAuthEthereumCommand,
-    setupAuthFirebaseCommand,
-    setupAuthGoTrueCommand,
-    setupAuthMagicLinkCommand,
-    setupAuthNetlifyCommand,
-    setupAuthNhostCommand,
-    setupAuthOktaCommand,
-    setupAuthSupabaseCommand,
-    setupAuthSupertokensCommand,
-  } = await import('@redwoodjs/auth-providers-setup')
-
-  // Don't forget to update test-project setup if you change something here
-  const printExperimentalWarning = async (argv, yargs) => {
-    if (!argv.warn) {
-      return
-    }
-
-    console.log(
-      c.warning(
-        [
-          '',
-          "You're running the experimental @canary version of auth. It might",
-          'be broken, and after running this command you will not be able to',
-          'downgrade to a stable version of Redwood without breaking your',
-          'auth setup. Please only use this version of auth in throwaway',
-          'projects. For a more stable experience, but still updated with the',
-          "latest patches, try switching to Redwood's @next version by",
-          'running `yarn rw upgrade -t next`',
-          '',
-        ].join('\n')
-      )
-    )
-    const response = await prompts({
-      type: 'confirm',
-      name: 'answer',
-      message: 'Do you want to continue?',
-      initial: false,
-    })
-
-    if (!response.answer) {
-      yargs.exit(1)
-    }
-  }
-
   yargs
-    .middleware([printExperimentalWarning])
     .demandCommand()
     .epilogue(
       `Also see the ${terminalLink(
@@ -67,18 +21,210 @@ export async function builder(yargs) {
         'https://redwoodjs.com/docs/cli-commands#setup-auth'
       )}`
     )
-    .command(setupAuthAuth0Command)
-    .command(setupAuthAzureActiveDirectoryCommand)
-    .command(setupAuthClerkCommand)
-    .command(setupAuthCustomCommand)
-    .command(setupAuthDbAuthCommand)
-    .command(setupAuthEthereumCommand)
-    .command(setupAuthFirebaseCommand)
-    .command(setupAuthGoTrueCommand)
-    .command(setupAuthMagicLinkCommand)
-    .command(setupAuthNetlifyCommand)
-    .command(setupAuthNhostCommand)
-    .command(setupAuthOktaCommand)
-    .command(setupAuthSupabaseCommand)
-    .command(setupAuthSupertokensCommand)
+    // Command "redirects" for auth providers we used to support
+    .command(...redirectCommand('ethereum'))
+    .command(...redirectCommand('goTrue'))
+    .command(...redirectCommand('magicLink'))
+    .command(...redirectCommand('nhost'))
+    .command(...redirectCommand('okta'))
+    // Auth providers we support
+    .command(
+      'auth0',
+      'Set up auth for Auth0',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        const handler = await getAuthHandler('@redwoodjs/auth-auth0-setup')
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
+      ['azure-active-directory', 'azureActiveDirectory'],
+      'Set up auth for Azure Active Directory',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        const handler = await getAuthHandler(
+          '@redwoodjs/auth-azure-active-directory-setup'
+        )
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
+      'clerk',
+      'Set up auth for Clerk',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        const handler = await getAuthHandler('@redwoodjs/auth-clerk-setup')
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
+      'custom',
+      'Set up a custom auth provider',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        const handler = await getAuthHandler('@redwoodjs/auth-custom-setup')
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
+      'dbAuth',
+      'Set up auth for dbAuth',
+      (yargs) => {
+        return standardAuthBuilder(yargs).option('webauthn', {
+          alias: 'w',
+          default: null,
+          description: 'Include WebAuthn support (TouchID/FaceID)',
+          type: 'boolean',
+        })
+      },
+      async (args) => {
+        const handler = await getAuthHandler('@redwoodjs/auth-dbauth-setup')
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
+      'firebase',
+      'Set up auth for Firebase',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        const handler = await getAuthHandler('@redwoodjs/auth-firebase-setup')
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
+      'netlify',
+      'Set up auth for Netlify',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        const handler = await getAuthHandler('@redwoodjs/auth-netlify-setup')
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
+      'supabase',
+      'Set up auth for Supabase',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        const handler = await getAuthHandler('@redwoodjs/auth-supabase-setup')
+        console.log()
+        handler(args)
+      }
+    )
+    .command(
+      'supertokens',
+      'Set up auth for SuperTokens',
+      (yargs) => standardAuthBuilder(yargs),
+      async (args) => {
+        const handler = await getAuthHandler(
+          '@redwoodjs/auth-supertokens-setup'
+        )
+        console.log()
+        handler(args)
+      }
+    )
+}
+
+/**
+ * @param {string} provider
+ * @returns {[string, boolean, () => void, () => void]}
+ */
+function redirectCommand(provider) {
+  return [
+    provider,
+    false,
+    () => {},
+    () => {
+      console.log(getRedirectMessage(provider))
+    },
+  ]
+}
+
+/**
+ * Get a stock message for one of our removed auth providers
+ * directing the user to the Custom Auth docs.
+ *
+ * @param {string} provider
+ */
+function getRedirectMessage(provider) {
+  return `${provider} is no longer supported out of the box. But you can still integrate it yourself with ${terminalLink(
+    'Custom Auth',
+    'https://redwoodjs.com/docs/canary/auth/custom'
+  )}`
+}
+
+/**
+ * @param {string} module
+ */
+async function getAuthHandler(module) {
+  const packageJsonPath = require.resolve('@redwoodjs/cli/package.json')
+  let { version } = fs.readJSONSync(packageJsonPath)
+
+  if (!isInstalled(module)) {
+    const { stdout } = await execa.command(
+      `yarn npm info ${module} --fields versions --json`
+    )
+
+    // If the version includes a plus, like '4.0.0-rc.428+dd79f1726'
+    // (all @canary, @next, and @rc packages do), get rid of everything after the plus.
+    if (version.includes('+')) {
+      version = version.split('+')[0]
+    }
+
+    const versionIsPublished = JSON.parse(stdout).versions.includes(version)
+
+    if (!versionIsPublished) {
+      // Fallback to canary. This is most likely because it's a new package
+      version = 'canary'
+    }
+
+    // We use `version` to make sure we install the same version of the auth
+    // setup package as the rest of the RW packages
+    await execa.command(`yarn add -D ${module}@${version}`, {
+      stdio: 'inherit',
+      cwd: getPaths().base,
+    })
+  }
+
+  const { handler } = await import(module)
+
+  return handler
+}
+
+/**
+ * Check if a user's project's package.json has a module listed as a dependency
+ * or devDependency. If not, check node_modules.
+ *
+ * @param {string} module
+ */
+function isInstalled(module) {
+  const { dependencies, devDependencies } = fs.readJSONSync(
+    path.join(getPaths().base, 'package.json')
+  )
+
+  const deps = {
+    ...dependencies,
+    ...devDependencies,
+  }
+
+  if (deps[module]) {
+    return true
+  }
+
+  // Check any of the places require would look for this module.
+  // This enables testing auth setup packages with `yarn rwfw project:copy`.
+  //
+  // We can't use require.resolve here because it cahces the exception
+  // Making it impossible to require when we actually do install it...
+  return require.resolve
+    .paths(`${module}/package.json`)
+    .some((requireResolvePath) => {
+      return fs.existsSync(path.join(requireResolvePath, module))
+    })
 }

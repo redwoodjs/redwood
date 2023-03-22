@@ -4,57 +4,274 @@ sidebar_label: Supabase
 
 # Supabase Authentication
 
-## Installation
-
-The following CLI command will install required packages and generate boilerplate code and files for Redwood Projects:
+To get started, run the setup command:
 
 ```bash
 yarn rw setup auth supabase
 ```
 
+<!-- vA47SZpaCR7BinC9 -->
+
+This installs all the packages, writes all the files, and makes all the code modifications you need.
+For a detailed explanation of all the api- and web-side changes that aren't exclusive to Supabase, see the top-level [Authentication](../authentication.md) doc. For now, let's focus on Supabase's side of things.
+
 ## Setup
 
-Update your .env file with the following settings supplied when you created your new Supabase project:
+If you don't have a Supabase account yet, now's the time to make one: navigate to https://supabase.com and click "Start your project" in the top right. Then sign up and create an organization and a project.
 
-- `SUPABASE_URL` with the unique Supabase URL for your project
-- `SUPABASE_KEY` with the unique Supabase Key that identifies which API KEY to use
-- `SUPABASE_JWT_SECRET` with the secret used to sign and verify the JSON Web Token (JWT)
+While Supabase creates your project, it thoughtfully shows your project's API keys.
+(If the page refreshes while you're copying them over, just scroll down a bit and look for "Connecting to your new project".)
+We're looking for "Project URL" and "API key" (the `anon`, `public` one).
+Copy them into your project's `.env` file as `SUPABASE_URL` and `SUPABASE_KEY` respectively.
 
-You can find these values in your project's dashboard under Settings -> API.
+There's one more we need, the "JWT Secret", that's not here.
+To get that one, click the cog icon ("Project Settings") near the bottom of the nav on the left.
+Then click "API", scroll down a bit, and you should see it—"JWT Secret" under "JWT Settings".
+Copy it into your project's `.env` file as `SUPABASE_JWT_SECRET`.
+All together now:
 
-For full Supabase documentation, see: <https://supabase.io/docs>
+```bash title=".env"
+SUPABASE_URL="..."
+SUPABASE_KEY="..."
+SUPABASE_JWT_SECRET="..."
+```
 
-## Usage
+Lastly, in `redwood.toml`, include `SUPABASE_URL` and `SUPABASE_KEY` in the list of env vars that should be available to the web side:
 
-Supabase supports several sign in methods:
+```toml title="redwood.toml"
+[web]
+  # ...
+  includeEnvironmentVariables = ["SUPABASE_URL", "SUPABASE_KEY"]
+```
 
-- email/password
-- passwordless via emailed magiclink
-- authenticate via phone with SMS based OTP (One-Time Password) tokens. See: [SMS OTP with Twilio](https://supabase.io/docs/guides/auth/auth-twilio)
-- Sign in with redirect. You can control where the user is redirected to after they are logged in via a `redirectTo` option.
-- Sign in with a valid refresh token that was returned on login.
-- Sign in using third-party providers/OAuth via
-  - [Apple](https://supabase.io/docs/guides/auth/auth-apple)
-  - Azure Active Directory
-  - [Bitbucket](https://supabase.io/docs/guides/auth/auth-bitbucket)
-  - [Discord](https://supabase.io/docs/guides/auth/auth-discord)
-  - [Facebook](https://supabase.io/docs/guides/auth/auth-facebook)
-  - [GitHub](https://supabase.io/docs/guides/auth/auth-github)
-  - [GitLab](https://supabase.io/docs/guides/auth/auth-gitlab)
-  - [Google](https://supabase.io/docs/guides/auth/auth-google)
-  - [Twitch](https://supabase.io/docs/guides/auth/auth-twitch)
-  - [Twitter](https://supabase.io/docs/guides/auth/auth-twitter)
-- Sign in with a [valid refresh token](https://supabase.io/docs/reference/javascript/auth-signin#sign-in-using-a-refresh-token-eg-in-react-native) that was returned on login. Used e.g. in React Native.
-- Sign in with scopes. If you need additional data from an OAuth provider, you can include a space-separated list of `scopes` in your request options to get back an OAuth `provider_token`.
 
-Depending on the credentials provided:
 
-- A user can sign up either via email or sign in with supported OAuth provider: `'apple' | 'azure' | 'bitbucket' | 'discord' | 'facebook' | 'github' | 'gitlab' | 'google' | 'twitch' | 'twitter'`
-- If you sign in with a valid refreshToken, the current user will be updated
-- If you provide email without a password, the user will be sent a magic link.
-- The magic link's destination URL is determined by the SITE_URL config variable. To change this, you can go to Authentication -> Settings on `app.supabase.io` for your project.
-- Specifying an OAuth provider will open the browser to the relevant login page
-- Note: You must enable and configure the OAuth provider appropriately. To configure these providers, you can go to Authentication -> Settings on `app.supabase.io` for your project.
-- Note: To authenticate using SMS based OTP (One-Time Password) you will need a [Twilio](https://www.twilio.com/try-twilio) account
+## Authentication UI
 
-For Supabase Authentication documentation, see: <https://supabase.io/docs/guides/auth>
+Supabase doesn't redirect to a hosted sign-up page or open a sign-up modal.
+In a real app, you'd build a form here, but we're going to hardcode an email and password.
+
+### Basic Example
+
+After you sign up, head to your inbox: there should be a confirmation email from Supabase waiting for you.
+
+Click the link, then head back to your app.
+Once you refresh the page, you should see `{"isAuthenticated":true}` on the page.
+
+
+Let's make sure: if this is a brand new project, generate a home page.
+
+There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
+
+```tsx title="web/src/pages/HomePage.tsx"
+import { useAuth } from 'src/auth'
+
+const HomePage = () => {
+  const { isAuthenticated, signUp } = useAuth()
+
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
+
+      <p>{JSON.stringify({ isAuthenticated })}</p>
+      <button onClick={() => signUp({
+        // email: 'your.email@email.com',
+        // password: 'super secret password',
+      })}>sign up</button>
+    </>
+  )
+}
+```
+
+## Authentication Reference
+
+You will notice that [Supabase Javascript SDK Auth API](https://supabase.com/docs/reference/javascript/auth-api) reference documentation presents methods to sign in with the various integrations Supabase supports: password, OAuth, IDToken, SSO, etc.
+
+The RedwoodJS implementation of Supabase authentication supports these as well, but within the `logIn` method of the `useAuth` hook.
+
+That means that you will see that Supabase documents sign in with email password as:
+
+```ts
+const { data, error } = await supabase.auth.signInWithPassword({
+  email: 'example@email.com',
+  password: 'example-password',
+})
+```
+
+In RedwoodJS, you will always use `logIn` and pass the necessary credential options and also an `authenticationMethod` to declare how you want to authenticate.
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'password',
+  email: 'example@email.com',
+  password: 'example-password',
+})
+```
+
+### Sign Up with email and password
+
+Creates a new user.
+
+```ts
+const { signUp } = useAuth()
+
+await signUp({
+  email: 'example@email.com',
+  password: 'example-password',
+})
+```
+
+### Sign in a user with email and password
+
+Log in an existing user with an email and password or phone and password.
+
+* Requires either an email and password or a phone number and password.
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'password',
+  email: 'example@email.com',
+  password: 'example-password',
+})
+```
+
+### Sign in a user through Passwordless/OTP
+
+Log in a user using magiclink or a one-time password (OTP).
+
+* Requires either an email or phone number.
+
+* This method is used for passwordless sign-ins where a OTP is sent to the user's email or phone number.
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'otp',
+  email: 'example@email.com',
+  options: {
+    emailRedirectTo: 'https://example.com/welcome'
+  }
+})
+```
+
+### Sign in a user through OAuth
+
+Log in an existing user via a third-party provider.
+
+* This method is used for signing in using a third-party provider.
+
+* Supabase supports many different [third-party providers](https://supabase.com/docs/guides/auth#providers).
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'otp',
+  email: 'example@email.com',
+  options: {
+    emailRedirectTo: 'https://example.com/welcome'
+  }
+})
+```
+
+### Sign in a user with IDToken
+
+Log in a user using IDToken.
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'id_token',
+  provider: 'apple',
+  token: 'cortland-apple-id-token',
+})
+```
+
+### Sign in a user with SSO
+
+Log in a user using IDToken.
+
+```ts
+const { logIn } = useAuth()
+
+await logIn({
+  authenticationMethod: 'sso',
+  providerId: 'sso-provider-identity-uuid',
+  domain: 'example.com',
+})
+```
+
+### Sign out a user
+
+Inside a browser context, signOut() will remove the logged in user from the browser session and log them out - removing all items from localStorage and then trigger a "SIGNED_OUT" event.
+
+In order to use the signOut() method, the user needs to be signed in first.
+
+```ts
+const { logOut } = useAuth()
+
+logOut()
+```
+
+
+### Verify and log in through OTP
+
+Log in a user given a User supplied OTP received via mobile.
+
+* The verifyOtp method takes in different verification types. If a phone number is used, the type can either be sms or phone_change. If an email address is used, the type can be one of the following: signup, magiclink, recovery, invite or email_change.
+
+* The verification type used should be determined based on the corresponding auth method called before verifyOtp to sign up / sign-in a user.
+
+
+The RedwoodJS auth provider doesn't expose the `veriftyOtp` method from the Supabase SDK directly.
+
+Instead, since you always have access the the Supabase Auth client, you can access any method it exposes.
+
+So, in order to use the `verifyOtp` method, you would:
+
+```ts
+const { client } = useAuth()
+
+const { data, error } = await client.verifyOtp({ phone, token, type: 'sms'})
+```
+
+### Access the Supabase Auth Client
+
+Sometimes you may need to access the Supabase Auth client directly.
+
+```ts
+const { client } = useAuth()
+```
+
+You can then use it to work with Supabase sessions, or auth events.
+
+
+### Retrieve a session
+
+Returns the session, refreshing it if necessary. The session returned can be null if the session is not detected which can happen in the event a user is not signed-in or has logged out.
+
+```ts
+const { client } = useAuth()
+
+const { data, error } = await client.getSession()
+```
+
+### Listen to auth events
+
+Receive a notification every time an auth event happens.
+
+* Types of auth events: `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED`, `USER_UPDATED`, `PASSWORD_RECOVERY`
+
+```ts
+const { client } = useAuth()
+
+client.onAuthStateChange((event, session) => {
+  console.log(event, session)
+})
+```

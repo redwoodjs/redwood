@@ -1,6 +1,7 @@
 import React, { ReactElement, ReactNode, useCallback } from 'react'
 
 import { Redirect } from './links'
+import { usePageLoadingContext } from './PageLoadingContext'
 import { routes as namedRoutes } from './router'
 import { useRouterState } from './router-context'
 
@@ -24,19 +25,29 @@ type SetProps<P> = P & {
   private?: boolean
   /** The page name where a user will be redirected when not authenticated */
   unauthenticated?: string
-  /** Route is permitted when authenticated and use has any of the provided roles such as "admin" or ["admin", "editor"] */
+  /**
+   * Route is permitted when authenticated and use has any of the provided
+   * roles such as "admin" or ["admin", "editor"]
+   */
   roles?: string | string[]
   /** Prerender all pages in the set */
   prerender?: boolean
   children: ReactNode
   /** Loading state for auth to distinguish with whileLoading */
   whileLoadingAuth?: () => React.ReactElement | null
+  whileLoadingPage?: () => React.ReactElement | null
 }
 
 const IdentityWrapper: WrapperType<Record<string, any>> = ({ children }) => {
   return <>{children}</>
 }
 
+/**
+ * TypeScript will often infer the type of the props you can forward to the
+ * wrappers for you, but if you need to you can specify it yourself in your
+ * JSX like so:
+ *   <Set<{theme: string}> wrap={ThemeableLayout} theme="dark">
+ */
 export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   const {
     wrap,
@@ -45,10 +56,16 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
     unauthenticated,
     roles,
     whileLoadingAuth,
+    whileLoadingPage,
     ...rest
   } = props
   const routerState = useRouterState()
-  const { loading, isAuthenticated, hasRole } = routerState.useAuth()
+  const {
+    loading: authLoading,
+    isAuthenticated,
+    hasRole,
+  } = routerState.useAuth()
+  const { loading: pageLoading } = usePageLoadingContext()
 
   const unauthorized = useCallback(() => {
     return !(isAuthenticated && (!roles || hasRole(roles)))
@@ -65,11 +82,12 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
       )
     }
 
-    if (loading) {
+    if (authLoading) {
       return whileLoadingAuth?.() || null
     } else {
       const currentLocation =
-        global.location.pathname + encodeURIComponent(global.location.search)
+        globalThis.location.pathname +
+        encodeURIComponent(globalThis.location.search)
 
       if (!namedRoutes[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
@@ -102,12 +120,15 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
     }
   }
 
+  const baseChildren =
+    pageLoading && whileLoadingPage ? whileLoadingPage() : children
+
   // Expand and nest the wrapped elements.
   return (
     wrappers.reduceRight<ReduceType>((acc, wrapper) => {
       return React.createElement(wrapper, {
         ...rest,
-        children: acc ? acc : children,
+        children: acc ? acc : baseChildren,
       } as SetProps<WrapperProps>)
     }, undefined) || null
   )
@@ -126,8 +147,8 @@ export function Private<WrapperProps>(props: PrivateProps<WrapperProps>) {
   const { children, unauthenticated, roles, wrap, ...rest } = props
 
   return (
-    // @MARK Doesn't matter that we pass `any` here
-    // Because user's still get a typed Private component
+    // @MARK Doesn't matter that we pass `any` here because users still get a
+    // typed Private component.
     // If we leave `<any>` out, TS will infer the generic argument to be
     // `WrapperProps`, which looks more correct, but it will cause a type
     // error I'm not sure how to solve

@@ -3,18 +3,14 @@ import path from 'path'
 
 import React from 'react'
 
-import cheerio from 'cheerio'
+import { load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
 import { getPaths } from '@redwoodjs/paths'
 import { LocationProvider } from '@redwoodjs/router'
-import {
-  CellCacheContextProvider,
-  getOperationName,
-  QueryInfo,
-} from '@redwoodjs/web'
+import type { QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
 import {
@@ -31,6 +27,12 @@ async function recursivelyRender(
   gqlHandler: any,
   queryCache: Record<string, QueryInfo>
 ): Promise<string> {
+  // Load this async, to prevent rwjs/web being loaded before shims
+  const {
+    CellCacheContextProvider,
+    getOperationName,
+  } = require('@redwoodjs/web')
+
   let shouldShowGraphqlHandlerNotFoundWarn = false
   // Execute all gql queries we haven't already fetched
   await Promise.all(
@@ -138,6 +140,7 @@ export const runPrerender = async ({
   queryCache,
   renderPath,
 }: PrerenderParams): Promise<string | void> => {
+  registerShims(renderPath)
   // registerApiSideBabelHook already includes the default api side babel
   // config. So what we define here is additions to the default config
   registerApiSideBabelHook({
@@ -187,8 +190,6 @@ export const runPrerender = async ({
     ],
   })
 
-  registerShims(renderPath)
-
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)
 
@@ -199,9 +200,9 @@ export const runPrerender = async ({
     queryCache
   )
 
-  const { helmet } = global.__REDWOOD__HELMET_CONTEXT
+  const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
 
-  const indexHtmlTree = cheerio.load(indexContent)
+  const indexHtmlTree = loadHtml(indexContent)
 
   if (helmet) {
     const helmetElements = `
@@ -214,9 +215,17 @@ export const runPrerender = async ({
     // Add all head elements
     indexHtmlTree('head').prepend(helmetElements)
 
-    // Only change the title, if its not empty
-    if (cheerio.load(helmet?.title.toString())('title').text() !== '') {
-      indexHtmlTree('title').replaceWith(helmet?.title.toString())
+    const titleHtmlTag = helmet.title.toString() // toString from helmet returns HTML, not the same as cherrio!
+
+    // 1. Check if title is set in the helmet context first...
+    if (loadHtml(titleHtmlTag)('title').text() !== '') {
+      // 2. Check if html already had a title
+      if (indexHtmlTree('title').text().length === 0) {
+        // If no title defined in the index.html
+        indexHtmlTree('head').prepend(titleHtmlTag)
+      } else {
+        indexHtmlTree('title').replaceWith(titleHtmlTag)
+      }
     }
   }
 

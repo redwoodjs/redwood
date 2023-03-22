@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import fs from 'fs'
 import path from 'path'
 
@@ -31,6 +32,7 @@ import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths } from './lib'
+import * as updateCheck from './lib/updateCheck'
 
 // # Setting the CWD
 //
@@ -96,18 +98,20 @@ config({
 })
 
 // # Build the CLI and run it
-
 yargs(hideBin(process.argv))
   // Config
   .scriptName('rw')
-  .middleware([
-    // We've already handled `cwd` above, but it may still be in `argv`.
-    // We don't need it anymore so let's get rid of it.
-    (argv) => {
-      delete argv.cwd
-    },
-    telemetryMiddleware,
-  ])
+  .middleware(
+    [
+      // We've already handled `cwd` above, but it may still be in `argv`.
+      // We don't need it anymore so let's get rid of it.
+      (argv) => {
+        delete argv.cwd
+      },
+      telemetryMiddleware,
+      updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
+    ].filter(Boolean)
+  )
   .option('cwd', {
     describe: 'Working directory to use (where `redwood.toml` is located)',
   })

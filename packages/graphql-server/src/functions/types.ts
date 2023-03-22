@@ -1,8 +1,8 @@
-import { DepthLimitConfig } from '@envelop/depth-limit'
 import type { AllowedOperations } from '@envelop/filter-operation-type'
+import type { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types'
 import { IExecutableSchemaDefinition } from '@graphql-tools/schema'
-import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
+import type { Plugin } from 'graphql-yoga'
 
 import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import { CorsConfig } from '@redwoodjs/api'
@@ -24,6 +24,11 @@ export type GenerateGraphiQLHeader = () => string
 
 export type Context = Record<string, unknown>
 export type ContextFunction = (...args: any[]) => Context | Promise<Context>
+
+export type ArmorConfig = {
+  logContext?: boolean
+  logErrors?: boolean
+} & GraphQLArmorConfig
 
 /** This is an interface so you can extend it inside your application when needed */
 export interface RedwoodGraphQLContext {
@@ -102,11 +107,11 @@ export interface GraphQLHandlerOptions {
   cors?: CorsConfig
 
   /**
-   *  @description Limit the complexity of the queries solely by their depth.
+   *  @description Customize GraphQL Armor plugin configuration
    *
-   * @see https://www.npmjs.com/package/graphql-depth-limit#documentation
+   * @see https://escape-technologies.github.io/graphql-armor/docs/configuration/examples
    */
-  depthLimitOptions?: DepthLimitConfig
+  armorConfig?: ArmorConfig
 
   /**
    * @description Customize the default error message used to mask errors.
@@ -134,12 +139,12 @@ export interface GraphQLHandlerOptions {
   /**
    * @description Custom Envelop plugins
    */
-  extraPlugins?: PluginOrDisabledPlugin[]
+  extraPlugins?: Plugin[]
 
   /**
    * @description Auth-provider specific token decoder
    */
-  authDecoder?: Decoder
+  authDecoder?: Decoder | Decoder[]
 
   /**
    * @description Customize the GraphiQL Endpoint that appears in the location bar of the GraphQL Playground

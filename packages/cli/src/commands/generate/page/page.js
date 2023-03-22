@@ -15,11 +15,16 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import {
+  prepareForRollback,
+  addFunctionToRollback,
+} from '../../../lib/rollback'
+import {
   createYargsForComponentGeneration,
   pathName,
   templateForComponentFile,
   mapRouteParamTypeToTsType,
   removeGeneratorName,
+  validateName,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
@@ -165,8 +170,10 @@ export const handler = async ({
   tests,
   stories,
   typescript = false,
+  rollback,
 }) => {
   const pageName = removeGeneratorName(name, 'page')
+  validateName(pageName)
 
   if (tests === undefined) {
     tests = getConfig().generate.tests
@@ -228,7 +235,10 @@ export const handler = async ({
       },
       {
         title: `Generating types...`,
-        task: generateTypes,
+        task: async () => {
+          await generateTypes()
+          addFunctionToRollback(generateTypes, true)
+        },
       },
       {
         title: 'One more thing...',
@@ -247,6 +257,9 @@ export const handler = async ({
   )
 
   try {
+    if (rollback && !force) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

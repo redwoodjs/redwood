@@ -13,6 +13,11 @@ export enum TargetEnum {
   ELECTRON = 'electron',
 }
 
+export enum BundlerEnum {
+  WEBPACK = 'webpack',
+  VITE = 'vite',
+}
+
 export interface NodeTargetConfig {
   title: string
   name?: string
@@ -32,6 +37,8 @@ interface BrowserTargetConfig {
   port: number
   path: string
   target: TargetEnum.BROWSER
+  bundler: BundlerEnum
+  includeEnvironmentVariables: string[]
   /**
    * Specify the URL to your api-server.
    * This can be an absolute path proxied on the current domain (`/.netlify/functions`),
@@ -46,12 +53,6 @@ interface BrowserTargetConfig {
    * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`
    */
   apiGraphQLUrl?: string
-  /**
-   * Optional: FQDN or absolute path to the DbAuth serverless function, without the trailing slash.
-   * This will override the apiUrl configuration just for the dbAuth function
-   * Example: `./redwood/functions/auth` or `https://api.redwoodjs.com/auth`
-   **/
-  apiDbAuthUrl?: string
 
   fastRefresh: boolean
   a11y: boolean
@@ -69,6 +70,9 @@ export interface Config {
     stories: boolean
     nestScaffoldByModel: boolean
   }
+  notifications: {
+    versionUpdates: string[]
+  }
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -80,6 +84,8 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
+    bundler: BundlerEnum.WEBPACK,
+    includeEnvironmentVariables: [],
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
     a11y: true,
@@ -102,6 +108,9 @@ const DEFAULT_CONFIG: Config = {
     tests: true,
     stories: true,
     nestScaffoldByModel: true,
+  },
+  notifications: {
+    versionUpdates: [],
   },
 }
 

@@ -12,6 +12,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
+import { prepareForRollback } from '../../lib/rollback'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
 
 /**
@@ -139,6 +140,14 @@ export const yargsDefaults = {
   },
 }
 
+export const validateName = (name) => {
+  if (name.match(/^\W/)) {
+    throw new Error(
+      'The <name> argument must start with a letter, number or underscore.'
+    )
+  }
+}
+
 /**
  * Reduces boilerplate for creating a yargs handler that writes a
  * component/page/layout/etc to a location.
@@ -181,6 +190,11 @@ export const createYargsForComponentGeneration = ({
           type: 'boolean',
           default: false,
         })
+        .option('rollback', {
+          description: 'Revert all generator actions if an error occurs',
+          type: 'boolean',
+          default: true,
+        })
 
       // Add in passed in positionals
       Object.entries(positionalsObj).forEach(([option, config]) => {
@@ -198,6 +212,7 @@ export const createYargsForComponentGeneration = ({
       if (options.stories === undefined) {
         options.stories = getConfig().generate.stories
       }
+      validateName(options.name)
 
       try {
         options = await preTasksFn(options)
@@ -220,6 +235,9 @@ export const createYargsForComponentGeneration = ({
           }
         )
 
+        if (options.rollback && !options.force) {
+          prepareForRollback(tasks)
+        }
         await tasks.run()
       } catch (e) {
         errorTelemetry(process.argv, e.message)

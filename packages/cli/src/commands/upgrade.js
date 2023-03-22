@@ -6,6 +6,7 @@ import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { getConfig } from '@redwoodjs/internal/dist/config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
@@ -64,7 +65,7 @@ export const builder = (yargs) => {
 // Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
-const validateTag = (tag) => {
+export const validateTag = (tag) => {
   const isTagValid =
     tag === 'rc' ||
     tag === 'canary' ||
@@ -115,18 +116,50 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         title: 'One more thing..',
         task: (ctx, task) => {
           const version = ctx.versionToUpgradeTo
-          task.title =
+          const messageSections = [
             `One more thing...\n\n   ${c.warning(
               `🎉 Your project has been upgraded to RedwoodJS ${version}!`
-            )} \n\n` +
-            `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
-              `Redwood community discussion`,
-              `https://community.redwoodjs.com/search?q=${version}%23announcements`
-            )}\n   ❖ ${terminalLink(
-              `GitHub Release notes`,
-              `https://github.com/redwoodjs/redwood/releases` // intentionally not linking to specific version
-            )}
-          `
+            )} \n\n`,
+          ]
+          // Show links when switching to 'latest' or 'rc', undefined is essentially an alias of 'latest'
+          if ([undefined, 'latest', 'rc'].includes(tag)) {
+            messageSections.push(
+              `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
+                `Redwood community discussion`,
+                `https://community.redwoodjs.com/search?q=${version}%23announcements`
+              )}\n   ❖ ${terminalLink(
+                `GitHub Release notes`,
+                `https://github.com/redwoodjs/redwood/releases` // intentionally not linking to specific version
+              )} \n\n`
+            )
+          }
+          // @MARK
+          // This should be temporary and eventually superseded by a more generic notification system
+          if (tag) {
+            const additionalMessages = []
+            // Reminder to update the `notifications.versionUpdates` TOML option
+            if (!getConfig().notifications.versionUpdates.includes(tag)) {
+              additionalMessages.push(
+                `   ❖ You may want to update your redwood.toml config so that \`notifications.versionUpdates\` includes "${tag}"\n`
+              )
+            }
+            // Notify about React17/18 issue on the current canary
+            if (tag === 'canary') {
+              additionalMessages.push(
+                `   ❖ If you just upgraded a new project then it may be broken.\n    ${c.info(
+                  `->`
+                )} To fix this you have to manually update your web/package.json to use React 18 and then run \`yarn install\`\n`
+              )
+            }
+            // Append additional messages with a header
+            if (additionalMessages.length > 0) {
+              messageSections.push(
+                `   📢 ${c.warning(`We'd also like to remind you that:`)} \n`,
+                ...additionalMessages
+              )
+            }
+          }
+          task.title = messageSections.join('').trimEnd()
         },
       },
     ],
@@ -189,11 +222,9 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
       x.startsWith('@redwoodjs/')
     )) {
       if (verbose || dryRun) {
-        console.log(
-          ` - ${depName}: ${pkg.dependencies[depName]} => ^${version}`
-        )
+        console.log(` - ${depName}: ${pkg.dependencies[depName]} => ${version}`)
       }
-      pkg.dependencies[depName] = `^${version}`
+      pkg.dependencies[depName] = `${version}`
     }
   }
   if (pkg.devDependencies) {
@@ -202,10 +233,10 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
     )) {
       if (verbose || dryRun) {
         console.log(
-          ` - ${depName}: ${pkg.devDependencies[depName]} => ^${version}`
+          ` - ${depName}: ${pkg.devDependencies[depName]} => ${version}`
         )
       }
-      pkg.devDependencies[depName] = `^${version}`
+      pkg.devDependencies[depName] = `${version}`
     }
   }
 

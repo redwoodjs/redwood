@@ -11,7 +11,18 @@ jest.mock('@redwoodjs/paths', () => {
         },
       }
     },
-    getConfig: () => {},
+  }
+})
+
+jest.mock('@redwoodjs/paths', () => {
+  return {
+    getConfig: () => {
+      return {
+        web: {
+          bundler: 'webpack',
+        },
+      }
+    },
   }
 })
 

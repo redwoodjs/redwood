@@ -8,6 +8,12 @@ on:
     # No need to run on docs-only changes
     paths-ignore: ['docs/**']
 
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   publish-canary:
     name: 🦜 Publish Canary
@@ -22,8 +28,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🧶 Setup job
-        uses: ./.github/actions/setup_job
+      - name: 🧶 Set up job
+        uses: ./.github/actions/set-up-job
 
       - name: ✅ Check constraints, dependencies, and package.json's
         uses: ./tasks/check
@@ -53,6 +59,7 @@ jobs:
           args+=(
             --include-merged-tags
             --canary
+            --exact
             --preid "$TAG"
             --dist-tag "$TAG"
             --force-publish
@@ -68,14 +75,14 @@ jobs:
 
       - name: 🏷 Get version
         id: get-version
-        uses: sergeysova/jq-action@v2.2.1
+        uses: sergeysova/jq-action@v2.3.0
         with:
           cmd: 'jq .version packages/core/package.json -r'
 
   message-slack:
     name: 💬 Message Slack
     needs: publish-canary
-    if: always()
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
 
     steps:
