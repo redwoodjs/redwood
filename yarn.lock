@@ -57,9 +57,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.5":
-  version: 3.7.5
-  resolution: "@apollo/client@npm:3.7.5"
+"@apollo/client@npm:3.7.10":
+  version: 3.7.10
+  resolution: "@apollo/client@npm:3.7.10"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
@@ -89,7 +89,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 833820835bf91d9a17318c0f89ffd876ed2a689ce0e7d017aa0c0f5266468ed7335752a9e4f39319e99ae2f741fa7bfe830fd64568b36d9514b365044639cb9c
+  checksum: 0320c2ca606d8d391739cb97b308f6d05fffad1d48a18ef71255040ff34a3d48e568961b5c425eb9027ecd7dbd9a5e95bd9a06e0b7c84211608950d878e3cafa
   languageName: node
   linkType: hard
 
@@ -6556,7 +6556,7 @@ __metadata:
     "@testing-library/react": 14.0.0
     core-js: 3.29.1
     jest: 29.5.0
-    msw: 1.1.1
+    msw: 1.2.0
     react: 18.2.0
     typescript: 4.9.5
   languageName: unknown
@@ -7065,7 +7065,7 @@ __metadata:
     jest: 29.5.0
     jest-environment-jsdom: 29.5.0
     jest-watch-typeahead: 2.2.2
-    msw: 1.1.1
+    msw: 1.2.0
     ts-toolbelt: 9.6.0
     typescript: 4.9.5
     whatwg-fetch: 3.6.2
@@ -7097,7 +7097,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.7.5
+    "@apollo/client": 3.7.10
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
@@ -23172,9 +23172,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:1.1.1":
-  version: 1.1.1
-  resolution: "msw@npm:1.1.1"
+"msw@npm:1.2.0":
+  version: 1.2.0
+  resolution: "msw@npm:1.2.0"
   dependencies:
     "@mswjs/cookies": ^0.2.2
     "@mswjs/interceptors": ^0.17.5
@@ -23202,7 +23202,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: bc15634af3072718c001f577fc8201d6d58c1056b1bb08d50ebc790d155aa0d89acca04f551c21c8887cc9df42ae631ff913dd5f6d53448cf57de7f253f2f643
+  checksum: 4198e7364c6df489f3654eb92b0c8cd506c01a6e1d2522d6445e2fd128cf7b316ef038aa8bcd4c475ddafbd8cbc7a2c6db62b0aad20a0dbcda62f42ef097729d
   languageName: node
   linkType: hard
 
@@ -27633,7 +27633,7 @@ __metadata:
     listr2: 5.0.8
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
-    msw: 1.1.1
+    msw: 1.2.0
     ncp: 2.0.0
     node-notifier: 10.0.1
     nodemon: 2.0.21
