@@ -6725,7 +6725,7 @@ __metadata:
     jest: 29.5.0
     lodash.escaperegexp: 4.1.2
     mini-css-extract-plugin: 2.7.5
-    nodemon: 2.0.21
+    nodemon: 2.0.22
     null-loader: 4.0.1
     react-refresh: 0.14.0
     rimraf: 3.0.2
@@ -6800,7 +6800,7 @@ __metadata:
     core-js: 3.29.1
     graphql: 16.6.0
     jest: 29.5.0
-    nodemon: 2.0.21
+    nodemon: 2.0.22
     pascalcase: 1.0.0
     react: 18.2.0
     react-dom: 18.2.0
@@ -7113,7 +7113,7 @@ __metadata:
     graphql-tag: 2.12.6
     jest: 29.5.0
     jest-runner-tsd: 5.0.0
-    nodemon: 2.0.21
+    nodemon: 2.0.22
     prop-types: 15.8.1
     react: 18.2.0
     react-dom: 18.2.0
@@ -23576,9 +23576,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:2.0.21":
-  version: 2.0.21
-  resolution: "nodemon@npm:2.0.21"
+"nodemon@npm:2.0.22":
+  version: 2.0.22
+  resolution: "nodemon@npm:2.0.22"
   dependencies:
     chokidar: ^3.5.2
     debug: ^3.2.7
@@ -23592,7 +23592,7 @@ __metadata:
     undefsafe: ^2.0.5
   bin:
     nodemon: bin/nodemon.js
-  checksum: b6e84f8aefc5d260a2e96508b8e696d79d5d10b97c9b033e672fb674cda2df5108df06688dcc63a0a4253492594aa036879f0e9098db903f78a0234b211f30bc
+  checksum: 37e960b995b66e6d9e3b0e435ecc07a45200c4c566c4820a4deb6e7cc234b305e076a8ff0b4dc9c01ee690c663ae82a217d60c591dcbbcd4af1e3a7d0ad2b2c6
   languageName: node
   linkType: hard
 
@@ -27636,7 +27636,7 @@ __metadata:
     msw: 1.2.0
     ncp: 2.0.0
     node-notifier: 10.0.1
-    nodemon: 2.0.21
+    nodemon: 2.0.22
     npm-packlist: 7.0.4
     nx: 15.8.7
     octokit: 2.0.14
