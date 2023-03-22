@@ -24,7 +24,7 @@ jest.mock('@redwoodjs/internal/dist/dev', () => {
   }
 })
 
-jest.mock('@redwoodjs/paths', () => {
+jest.mock('@redwoodjs/config', () => {
   return {
     getConfig: jest.fn(),
     getConfigPath: () => '/mocked/project/redwood.toml',
@@ -62,7 +62,7 @@ jest.mock('../../lib/ports', () => {
 import concurrently from 'concurrently'
 import { find } from 'lodash'
 
-import { getConfig } from '@redwoodjs/paths'
+import { getConfig } from '@redwoodjs/config'
 
 import { generatePrismaClient } from '../../lib/generatePrismaClient'
 import { handler } from '../dev'

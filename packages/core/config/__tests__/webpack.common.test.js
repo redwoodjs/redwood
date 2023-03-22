@@ -3,7 +3,7 @@
 
 const { getEnvVars } = require('../webpack.common')
 
-jest.mock('@redwoodjs/paths', () => {
+jest.mock('@redwoodjs/config', () => {
   return {
     getConfigPath: () => '/path/to/project/redwood.toml',
     getConfig: () => ({

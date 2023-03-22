@@ -3,7 +3,7 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
-import { getPaths } from '@redwoodjs/paths'
+import { getPaths } from '@redwoodjs/config'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { errorTelemetry } from '@redwoodjs/telemetry'

@@ -1,4 +1,4 @@
-jest.mock('@redwoodjs/paths', () => ({
+jest.mock('@redwoodjs/config', () => ({
   getPaths: () => ({
     base: '',
   }),

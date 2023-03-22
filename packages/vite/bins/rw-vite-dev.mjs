@@ -1,6 +1,6 @@
 import { createServer } from 'vite'
 
-import { getPaths } from '@redwoodjs/paths'
+import { getPaths } from '@redwoodjs/config'
 
 const rwPaths = getPaths()
 

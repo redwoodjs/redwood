@@ -19,10 +19,10 @@ jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
   }
 })
 
-jest.mock('@redwoodjs/paths', () => {
+jest.mock('@redwoodjs/config', () => {
   const path = require('path')
   return {
-    ...jest.requireActual('@redwoodjs/paths'),
+    ...jest.requireActual('@redwoodjs/config'),
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {

@@ -6,9 +6,9 @@ import React from 'react'
 import { load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
+import { getPaths } from '@redwoodjs/config'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getPaths } from '@redwoodjs/paths'
 import { LocationProvider } from '@redwoodjs/router'
 import type { QueryInfo } from '@redwoodjs/web'
 

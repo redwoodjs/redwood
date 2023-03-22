@@ -3,7 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 
-import { ensurePosixPath } from '@redwoodjs/paths'
+import { ensurePosixPath } from '@redwoodjs/config'
 import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'

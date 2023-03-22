@@ -3,7 +3,7 @@ import path from 'path'
 import type { PluginObj, types } from '@babel/core'
 import fg from 'fast-glob'
 
-import { importStatementPath } from '@redwoodjs/paths'
+import { importStatementPath } from '@redwoodjs/config'
 
 /**
  * This babel plugin will search for import statements that include star `**`

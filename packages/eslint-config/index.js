@@ -11,7 +11,7 @@ const {
 const {
   getWebSideDefaultBabelConfig,
 } = require('@redwoodjs/internal/dist/build/babel/web')
-const { getConfig } = require('@redwoodjs/paths')
+const { getConfig } = require('@redwoodjs/config')
 
 const config = getConfig()
 

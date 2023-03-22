@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/paths",
+  "name": "@redwoodjs/config",
   "version": "4.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/paths"
+    "directory": "packages/config"
   },
   "license": "MIT",
   "main": "dist/index.js",

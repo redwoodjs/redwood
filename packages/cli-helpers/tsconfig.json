@@ -10,7 +10,7 @@
   "include": ["src"],
   "references": [
     { "path": "../telemetry" },
-    { "path": "../paths" }
+    { "path": "../config" }
 
   ]
 }

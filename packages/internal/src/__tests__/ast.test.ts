@@ -8,7 +8,7 @@ import {
   fileToAst,
 } from '../ast'
 
-jest.mock('@redwoodjs/paths', () => {
+jest.mock('@redwoodjs/config', () => {
   const path = require('path')
   const baseFixturePath = path.join(__dirname, 'fixtures')
   return {

@@ -2,7 +2,7 @@ import { extname, basename, join } from 'path'
 
 import type { PluginObj, types, NodePath } from '@babel/core'
 
-import { getPaths } from '@redwoodjs/paths'
+import { getPaths } from '@redwoodjs/config'
 
 import { convertToDataUrl } from './utils'
 

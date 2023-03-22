@@ -5,7 +5,7 @@ import fs from 'fs-extra'
 import omit from 'lodash/omit'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '@redwoodjs/paths'
+import { getPaths } from '@redwoodjs/config'
 
 import c from '../../lib/colors'
 

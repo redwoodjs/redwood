@@ -1,6 +1,6 @@
 import c from 'ansi-colors'
 
-import { getConfig } from '@redwoodjs/paths'
+import { getConfig } from '@redwoodjs/config'
 
 import createFastifyInstance from './fastify'
 import withApiProxy from './plugins/withApiProxy'

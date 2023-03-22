@@ -12,8 +12,8 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
+const { getConfig, getPaths } = require('@redwoodjs/config')
 const { getWebSideDefaultBabelConfig } = require('@redwoodjs/internal')
-const { getConfig, getPaths } = require('@redwoodjs/paths')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()

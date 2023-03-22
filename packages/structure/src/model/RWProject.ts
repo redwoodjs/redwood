@@ -3,7 +3,7 @@ import { join } from 'path'
 import type { DMMF } from '@prisma/generator-helper'
 import { getDMMF } from '@prisma/internals'
 
-import { getPaths, processPagesDir } from '@redwoodjs/paths'
+import { getPaths, processPagesDir } from '@redwoodjs/config'
 
 import { Host } from '../hosts'
 import { BaseNode } from '../ide'

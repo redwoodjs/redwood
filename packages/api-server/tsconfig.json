@@ -7,5 +7,5 @@
     "outDir": "dist",
   },
   "include": ["src", "ambient.d.ts"],
-  "references": [{ "path": "../internal" }, { "path": "../paths" }]
+  "references": [{ "path": "../internal" }, { "path": "../config" }]
 }

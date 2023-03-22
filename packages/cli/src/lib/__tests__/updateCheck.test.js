@@ -3,9 +3,8 @@ global.__dirname = __dirname
 jest.mock('fs')
 jest.mock('latest-version')
 
-jest.mock('@redwoodjs/paths', () => {
+jest.mock('@redwoodjs/config', () => {
   return {
-    // ...jest.requireActual('@redwoodjs/paths'),
     getPaths: () => {
       return {
         generated: {
@@ -22,7 +21,7 @@ import fs from 'fs'
 
 import latestVersion from 'latest-version'
 
-import { getConfig } from '@redwoodjs/paths'
+import { getConfig } from '@redwoodjs/config'
 
 import { setLock } from '../locking'
 import * as updateCheck from '../updateCheck'

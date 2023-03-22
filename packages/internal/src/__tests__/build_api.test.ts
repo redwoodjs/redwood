@@ -4,7 +4,7 @@ import path from 'path'
 import * as babel from '@babel/core'
 import compat from 'core-js-compat'
 
-import { ensurePosixPath, getPaths } from '@redwoodjs/paths'
+import { ensurePosixPath, getPaths } from '@redwoodjs/config'
 
 import { cleanApiBuild, prebuildApiFiles } from '../build/api'
 import {

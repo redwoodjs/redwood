@@ -1,4 +1,4 @@
-# Paths
+# Config
 
 This offers functionality to parse the Redwood configurations and a way to get a project's paths.
 

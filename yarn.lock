@@ -6569,8 +6569,8 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/internal": 4.0.0
-    "@redwoodjs/paths": 4.0.0
     "@redwoodjs/telemetry": 4.0.0
     "@types/lodash.memoize": 4.1.7
     "@types/pascalcase": 1.0.1
@@ -6599,8 +6599,8 @@ __metadata:
     "@prisma/internals": 4.11.0
     "@redwoodjs/api-server": 4.0.0
     "@redwoodjs/cli-helpers": 4.0.0
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/internal": 4.0.0
-    "@redwoodjs/paths": 4.0.0
     "@redwoodjs/prerender": 4.0.0
     "@redwoodjs/structure": 4.0.0
     "@redwoodjs/telemetry": 4.0.0
@@ -6684,6 +6684,31 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/config@4.0.0, @redwoodjs/config@workspace:packages/config":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/config@workspace:packages/config"
+  dependencies:
+    "@babel/cli": 7.21.0
+    "@babel/core": 7.21.3
+    "@babel/runtime-corejs3": 7.21.0
+    "@iarna/toml": 2.2.5
+    "@redwoodjs/graphql-server": 4.0.0
+    "@types/babel__core": 7.20.0
+    "@types/findup-sync": 4.0.2
+    "@types/rimraf": 3.0.2
+    core-js: 3.29.1
+    deepmerge: 4.3.1
+    fast-glob: 3.2.12
+    findup-sync: 5.0.0
+    graphql: 16.6.0
+    graphql-tag: 2.12.6
+    jest: 29.5.0
+    rimraf: 3.0.2
+    string-env-interpolation: 1.0.1
+    typescript: 4.9.5
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/core@workspace:packages/core"
@@ -6703,9 +6728,9 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.10
     "@redwoodjs/cli": 4.0.0
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/eslint-config": 4.0.0
     "@redwoodjs/internal": 4.0.0
-    "@redwoodjs/paths": 4.0.0
     "@redwoodjs/testing": 4.0.0
     "@types/rimraf": 3.0.2
     babel-loader: 9.1.2
@@ -6766,8 +6791,8 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/eslint-parser": 7.21.3
     "@babel/eslint-plugin": 7.19.1
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/internal": 4.0.0
-    "@redwoodjs/paths": 4.0.0
     "@typescript-eslint/eslint-plugin": 5.56.0
     "@typescript-eslint/parser": 5.56.0
     eslint: 8.36.0
@@ -6873,8 +6898,8 @@ __metadata:
     "@graphql-codegen/typescript-operations": 3.0.2
     "@graphql-codegen/typescript-react-apollo": 3.3.7
     "@graphql-codegen/typescript-resolvers": 3.1.1
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/graphql-server": 4.0.0
-    "@redwoodjs/paths": 4.0.0
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
@@ -6907,31 +6932,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/paths@4.0.0, @redwoodjs/paths@workspace:packages/paths":
-  version: 0.0.0-use.local
-  resolution: "@redwoodjs/paths@workspace:packages/paths"
-  dependencies:
-    "@babel/cli": 7.21.0
-    "@babel/core": 7.21.3
-    "@babel/runtime-corejs3": 7.21.0
-    "@iarna/toml": 2.2.5
-    "@redwoodjs/graphql-server": 4.0.0
-    "@types/babel__core": 7.20.0
-    "@types/findup-sync": 4.0.2
-    "@types/rimraf": 3.0.2
-    core-js: 3.29.1
-    deepmerge: 4.3.1
-    fast-glob: 3.2.12
-    findup-sync: 5.0.0
-    graphql: 16.6.0
-    graphql-tag: 2.12.6
-    jest: 29.5.0
-    rimraf: 3.0.2
-    string-env-interpolation: 1.0.1
-    typescript: 4.9.5
-  languageName: unknown
-  linkType: soft
-
 "@redwoodjs/prerender@4.0.0, @redwoodjs/prerender@workspace:packages/prerender":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
@@ -6940,8 +6940,8 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/internal": 4.0.0
-    "@redwoodjs/paths": 4.0.0
     "@redwoodjs/router": 4.0.0
     "@redwoodjs/structure": 4.0.0
     "@redwoodjs/web": 4.0.0
@@ -6970,7 +6970,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@prisma/client": 4.11.0
     "@prisma/internals": 4.11.0
-    "@redwoodjs/paths": 4.0.0
+    "@redwoodjs/config": 4.0.0
     core-js: 3.29.1
     esbuild: 0.17.12
     jest: 29.5.0
@@ -7008,7 +7008,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@iarna/toml": 2.2.5
     "@prisma/internals": 4.11.0
-    "@redwoodjs/paths": 4.0.0
+    "@redwoodjs/config": 4.0.0
     "@types/fs-extra": 11.0.1
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.191
@@ -7045,7 +7045,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/paths": 4.0.0
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/structure": 4.0.0
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.1
@@ -7069,9 +7069,9 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/graphql-server": 4.0.0
     "@redwoodjs/internal": 4.0.0
-    "@redwoodjs/paths": 4.0.0
     "@redwoodjs/router": 4.0.0
     "@redwoodjs/web": 4.0.0
     "@storybook/addon-a11y": 6.5.16
@@ -14262,7 +14262,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/node": 7.20.7
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/paths": 4.0.0
+    "@redwoodjs/config": 4.0.0
     "@redwoodjs/telemetry": 4.0.0
     "@types/prompts": 2.4.3
     chalk: 4.1.2

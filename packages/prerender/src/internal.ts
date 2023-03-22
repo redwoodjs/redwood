@@ -3,7 +3,7 @@ import path from 'path'
 
 import { fetch } from '@whatwg-node/fetch'
 
-import { getConfig, getPaths } from '@redwoodjs/paths'
+import { getConfig, getPaths } from '@redwoodjs/config'
 
 const INDEX_FILE = path.join(getPaths().web.dist, 'index.html')
 const DEFAULT_INDEX = path.join(getPaths().web.dist, '200.html')
