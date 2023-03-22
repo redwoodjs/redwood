@@ -5550,14 +5550,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peculiar/asn1-android@npm:^2.1.7":
-  version: 2.3.3
-  resolution: "@peculiar/asn1-android@npm:2.3.3"
+"@peculiar/asn1-android@npm:^2.3.3":
+  version: 2.3.6
+  resolution: "@peculiar/asn1-android@npm:2.3.6"
   dependencies:
-    "@peculiar/asn1-schema": ^2.3.3
+    "@peculiar/asn1-schema": ^2.3.6
     asn1js: ^3.0.5
     tslib: ^2.4.0
-  checksum: b9bc650227a357c246a474fd1abe20de4b2b216c47dde16b846c2428c3bbf5ab311b0d98ec1f2bf2b0265b34080c51852b5f75a431f65b8c80998ec32c8dae33
+  checksum: e7e6d91b72671386863a1451c622b7728ff346a4dc22ea3dcf58c042d58af02baab0bda133ad725f44d20d9590ba78cf13b37fd841a27426447eacecc2f30fc7
   languageName: node
   linkType: hard
 
@@ -5585,7 +5585,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peculiar/asn1-schema@npm:^2.1.6, @peculiar/asn1-schema@npm:^2.1.7, @peculiar/asn1-schema@npm:^2.3.0, @peculiar/asn1-schema@npm:^2.3.3":
+"@peculiar/asn1-schema@npm:^2.1.6, @peculiar/asn1-schema@npm:^2.3.0, @peculiar/asn1-schema@npm:^2.3.3":
   version: 2.3.3
   resolution: "@peculiar/asn1-schema@npm:2.3.3"
   dependencies:
@@ -5596,7 +5596,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peculiar/asn1-x509@npm:^2.1.7, @peculiar/asn1-x509@npm:^2.3.4":
+"@peculiar/asn1-schema@npm:^2.3.6":
+  version: 2.3.6
+  resolution: "@peculiar/asn1-schema@npm:2.3.6"
+  dependencies:
+    asn1js: ^3.0.5
+    pvtsutils: ^1.3.2
+    tslib: ^2.4.0
+  checksum: 86591b1691f6b296b515137d699e45c6384a08f38ddd080dc13a5b7f85d59aa4a0a1c52fa857b47e727c4b997293bc50c0812d22f1ba9ed7b246a8a8aac5491c
+  languageName: node
+  linkType: hard
+
+"@peculiar/asn1-x509@npm:^2.3.4":
   version: 2.3.4
   resolution: "@peculiar/asn1-x509@npm:2.3.4"
   dependencies:
@@ -6288,7 +6299,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/api": 4.0.0
-    "@simplewebauthn/server": 7.0.0
+    "@simplewebauthn/server": 7.2.0
     "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
     "@types/uuid": 9.0.1
@@ -6310,7 +6321,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/cli-helpers": 4.0.0
-    "@simplewebauthn/browser": 7.0.0
+    "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
     "@types/secure-random-password": 0.2.1
     "@types/yargs": 17.0.23
@@ -6331,7 +6342,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
-    "@simplewebauthn/browser": 7.0.0
+    "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
     "@types/react": 18.0.28
     core-js: 3.29.1
@@ -7217,39 +7228,47 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/browser@npm:7.0.0":
-  version: 7.0.0
-  resolution: "@simplewebauthn/browser@npm:7.0.0"
-  checksum: 4c78e1c42912219dc655dda63e9ad810bd2e45239ceffc3403ffc3b4ed9b10f6752f82644f9e771af9913caa4115b26f0172e258eb4ff64bc0fcb9042893b558
+"@simplewebauthn/browser@npm:7.2.0":
+  version: 7.2.0
+  resolution: "@simplewebauthn/browser@npm:7.2.0"
+  dependencies:
+    "@simplewebauthn/typescript-types": "*"
+  checksum: 7a12b06bb20e1f6214524603b5d030ec110c85dee1399946400315ee4fb9e1fcc79809a41851445b7f09513b56fb6e6fca5c78365e04dee7244e19b985672cb4
   languageName: node
   linkType: hard
 
-"@simplewebauthn/iso-webcrypto@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@simplewebauthn/iso-webcrypto@npm:7.0.0"
-  checksum: 5aac69c759e50e8273b4874ffc620f4db47b8a4b82c9b2f1267d4ff3b87e0667d5af0a74c5ef59871d5a396178a316941096afe9660a08b81bed4cdb9957863d
+"@simplewebauthn/iso-webcrypto@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@simplewebauthn/iso-webcrypto@npm:7.2.0"
+  dependencies:
+    "@simplewebauthn/typescript-types": "*"
+    "@types/node": ^18.11.9
+  checksum: f4f851a872239fe28835fc06550c4ec196888fae6f03ce84fccc0f4abbf2b57d1ca105191fc7efd82dbc35c79170cf817e54fdcc3f65105e2427486a38189d48
   languageName: node
   linkType: hard
 
-"@simplewebauthn/server@npm:7.0.0":
-  version: 7.0.0
-  resolution: "@simplewebauthn/server@npm:7.0.0"
+"@simplewebauthn/server@npm:7.2.0":
+  version: 7.2.0
+  resolution: "@simplewebauthn/server@npm:7.2.0"
   dependencies:
     "@hexagon/base64": ^1.1.25
-    "@peculiar/asn1-android": ^2.1.7
+    "@peculiar/asn1-android": ^2.3.3
     "@peculiar/asn1-ecc": ^2.3.4
     "@peculiar/asn1-rsa": ^2.3.4
-    "@peculiar/asn1-schema": ^2.1.7
-    "@peculiar/asn1-x509": ^2.1.7
-    "@simplewebauthn/iso-webcrypto": ^7.0.0
+    "@peculiar/asn1-schema": ^2.3.3
+    "@peculiar/asn1-x509": ^2.3.4
+    "@simplewebauthn/iso-webcrypto": ^7.2.0
+    "@simplewebauthn/typescript-types": "*"
+    "@types/debug": ^4.1.7
+    "@types/node": ^18.11.9
     cbor-x: ^1.4.1
     cross-fetch: ^3.1.5
     debug: ^4.3.2
-  checksum: e0eb4f2a388b6e8ed335519609baa6f75c81ee3ca71d0b150c7d8a6eb7af51160e222ee80e7504b8f8299223cf40a18f711e36e70bb340c0136fe9af481a000f
+  checksum: adc9ed9af73d008f58ec80b78f01e3619835121adae484b2c3a5ca656c6d3e152b3630469c8ee5188a1f526d520b238ecc057648f7a8792ec1bc144d21e71fa3
   languageName: node
   linkType: hard
 
-"@simplewebauthn/typescript-types@npm:7.0.0":
+"@simplewebauthn/typescript-types@npm:*, @simplewebauthn/typescript-types@npm:7.0.0":
   version: 7.0.0
   resolution: "@simplewebauthn/typescript-types@npm:7.0.0"
   checksum: 4682a353bace25f195b6621d4b96e9db48562edc68a005785230519c71838028de20154a842c4c1859f605562668ff689ab532b0afdce926d5720e7573160da4
@@ -9454,6 +9473,13 @@ __metadata:
   version: 14.18.37
   resolution: "@types/node@npm:14.18.37"
   checksum: cb2bcd7177fe0fa0e6db899e06d86955b85c7629359842278fa47a58ff2c3b96c9a88fa40493c23b12b5febb5195f783d028d63d44da64401a55956a8555aaeb
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.11.9":
+  version: 18.15.5
+  resolution: "@types/node@npm:18.15.5"
+  checksum: 9035946e1b5b00dd418d95c86ab50deafed904fcede7e3ece3ece348ba7ab1fd88af11bd9c0ce2074b355c42985ed607763f2ce53b8246e77c494a131e14a84c
   languageName: node
   linkType: hard
 
