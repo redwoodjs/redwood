@@ -24,4 +24,4 @@ In v5, we changed the default index.html file a bit—we removed the `prerenderP
  </html>
 ```
 
-This codemod removes that templating syntax from a user's index.html, and warns about other children in the react root.
+This codemod removes that templating syntax from a user's `index.html` file, and warns about other children in the react root.
