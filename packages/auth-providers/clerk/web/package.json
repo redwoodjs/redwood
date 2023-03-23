@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-clerk-web",
-  "version": "4.3.1",
+  "version": "4.4.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/auth": "4.3.1",
+    "@redwoodjs/auth": "4.4.0",
     "core-js": "3.29.1"
   },
   "devDependencies": {
