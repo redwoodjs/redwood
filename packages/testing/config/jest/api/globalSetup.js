@@ -12,6 +12,8 @@ module.exports = async function () {
 
     const cacheDirDb = `file:${path.join(__dirname, '.redwood', 'test.db')}`
     process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
+    process.env.DIRECT_URL =
+      process.env.TEST_DIRECT_URL || process.env.TEST_DATABASE_URL || cacheDirDb
 
     const command =
       process.env.TEST_DATABASE_STRATEGY === 'reset'
@@ -25,6 +27,7 @@ module.exports = async function () {
       shell: true,
       env: {
         DATABASE_URL: process.env.DATABASE_URL,
+        DIRECT_URL: process.env.DIRECT_URL,
       },
     })
   }
