@@ -43,7 +43,7 @@ TOML (an obvious, minimal configuration language used by many projects).
 application looks like, take a look at the following projects:
 
 - [Todo](https://github.com/redwoodjs/example-todo)
-- [Blog](https://github.com/redwoodjs/example-blog)
+- [Store](https://github.com/redwoodjs/example-store-stripe)
 - [Invoice](https://github.com/redwoodjs/example-invoice)
 
 ## Technologies
