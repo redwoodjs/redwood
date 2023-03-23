@@ -104,29 +104,30 @@ export const generateLoginToken = async ({ email }) => {
 In addition to the new function, we need to add it to the sdl file.  While we're here let's also ensure we do not expose the loginToken.  This file may be users.sdl.js or users.sdl.ts depending on if you set up Redwood to use JavaScript or TypeScript.
 
 ```javascript {21} title="/api/src/graphql/users.sdl.js"
-type User {
-  id: Int!
-  name: String
-  email: String!
-}
-input CreateUserInput {
-  name: String
-  email: String!
-}
-input UpdateUserInput {
-  name: String
-  email: String!
-}
-type userTokenResponse {
-  message: String!
-}
-type Mutation {
-  createUser(input: CreateUserInput!): User! @requireAuth
-  updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
-  deleteUser(id: Int!): User! @requireAuth
-  generateToken(email: String!): userTokenResponse! @skipAuth
-}
-```
+export const schema = gql`
+  type User {
+    id: Int!
+    name: String
+    email: String!
+  }
+  input CreateUserInput {
+    name: String
+    email: String!
+  }
+  input UpdateUserInput {
+    name: String
+    email: String!
+  }
+  type userTokenResponse {
+    message: String!
+  }
+  type Mutation {
+    createUser(input: CreateUserInput!): User! @requireAuth
+    updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
+    deleteUser(id: Int!): User! @requireAuth
+    generateToken(email: String!): userTokenResponse! @skipAuth
+  }
+`
 
 ### 4. Modify the auth function
 
