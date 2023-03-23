@@ -614,9 +614,19 @@ export function validate(
 // just send "Something went wrong" back to the client. This captures any custom
 // error you throw and turns it into a ServiceValidationError which will show
 // the actual error message.
-export const validateWith = (func: () => void) => {
+export const validateWithSync = (func: () => void) => {
   try {
     func()
+  } catch (e) {
+    const message = (e as Error).message || (e as string)
+    throw new ValidationErrors.ServiceValidationError(message)
+  }
+}
+
+// Async version is the default
+export const validateWith = async (func: () => Promise<any>) => {
+  try {
+    await func()
   } catch (e) {
     const message = (e as Error).message || (e as string)
     throw new ValidationErrors.ServiceValidationError(message)
