@@ -76,7 +76,7 @@
     "react-refresh": "0.14.0",
     "rimraf": "3.0.2",
     "style-loader": "3.3.2",
-    "typescript": "4.9.5",
+    "typescript": "5.0.2",
     "url-loader": "4.1.1",
     "webpack": "5.76.3",
     "webpack-bundle-analyzer": "4.8.0",
