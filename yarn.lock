@@ -6481,14 +6481,14 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@supabase/supabase-js": 2.12.0
+    "@supabase/supabase-js": 2.12.1
     "@types/react": 18.0.28
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
     typescript: 4.9.5
   peerDependencies:
-    "@supabase/supabase-js": 2.12.0
+    "@supabase/supabase-js": 2.12.1
   languageName: unknown
   linkType: soft
 
@@ -8522,12 +8522,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/gotrue-js@npm:^2.12.0":
-  version: 2.12.2
-  resolution: "@supabase/gotrue-js@npm:2.12.2"
+"@supabase/gotrue-js@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "@supabase/gotrue-js@npm:2.16.0"
   dependencies:
     cross-fetch: ^3.1.5
-  checksum: 613e51df27e58e5352905d8373dbdcee42f56a894cea829b8376424ec67d51a1f6b54cc1ef8493bca0a1f2be722f745baee0e234f6afe3c5ea33708ff8bd30ad
+  checksum: 5665084b03c6b54da2823dbeae6179caeb4490c57a89f85bd4ff3df36d2927f4f4f685a9acb628798db04ab169ba9c35a8370e6e337adc986f5a67e689cc1da7
   languageName: node
   linkType: hard
 
@@ -8560,17 +8560,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:2.12.0":
-  version: 2.12.0
-  resolution: "@supabase/supabase-js@npm:2.12.0"
+"@supabase/supabase-js@npm:2.12.1":
+  version: 2.12.1
+  resolution: "@supabase/supabase-js@npm:2.12.1"
   dependencies:
     "@supabase/functions-js": ^2.1.0
-    "@supabase/gotrue-js": ^2.12.0
+    "@supabase/gotrue-js": ^2.16.0
     "@supabase/postgrest-js": ^1.1.1
     "@supabase/realtime-js": ^2.7.1
     "@supabase/storage-js": ^2.3.1
     cross-fetch: ^3.1.5
-  checksum: 4efc0d07732ef8dbaa3fc175ef91e6d0d3d8293168013b6513b6098964b5e8cf4e5475e01f86ba41f48d670d988322bf9d244f80ed8b5ef3106f962eb5cd4bfd
+  checksum: d8dd716569e2e4b7083387d2b01fac71e8bf599b5784454d59b8452026437cb930e98e26b1077bbddf994db5d6421e6ff6afc4e1de4d0ac67755bbe9a7a49316
   languageName: node
   linkType: hard
 
