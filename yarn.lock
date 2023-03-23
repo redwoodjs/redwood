@@ -4384,16 +4384,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/schemas@npm:^29.4.2":
-  version: 29.4.2
-  resolution: "@jest/schemas@npm:29.4.2"
-  dependencies:
-    "@sinclair/typebox": ^0.25.16
-  checksum: afbf8a13d413691d29cb8d87d9db2098e4e1d259e5fa74a50d72c0149a0a3d2e885781abe5c30971e3341dc8ec60968d828ed08767bb4279760fb860ec0a18b8
-  languageName: node
-  linkType: hard
-
-"@jest/schemas@npm:^29.4.3":
+"@jest/schemas@npm:^29.4.2, @jest/schemas@npm:^29.4.3":
   version: 29.4.3
   resolution: "@jest/schemas@npm:29.4.3"
   dependencies:
@@ -25982,7 +25973,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:29.4.3":
+"pretty-format@npm:29.4.3, pretty-format@npm:^29.0.0, pretty-format@npm:^29.4.2":
   version: 29.4.3
   resolution: "pretty-format@npm:29.4.3"
   dependencies:
@@ -26001,17 +25992,6 @@ __metadata:
     ansi-styles: ^5.0.0
     react-is: ^17.0.1
   checksum: 0cbda1031aa30c659e10921fa94e0dd3f903ecbbbe7184a729ad66f2b6e7f17891e8c7d7654c458fa4ccb1a411ffb695b4f17bbcd3fe075fabe181027c4040ed
-  languageName: node
-  linkType: hard
-
-"pretty-format@npm:^29.0.0, pretty-format@npm:^29.4.2":
-  version: 29.4.2
-  resolution: "pretty-format@npm:29.4.2"
-  dependencies:
-    "@jest/schemas": ^29.4.2
-    ansi-styles: ^5.0.0
-    react-is: ^18.0.0
-  checksum: 993da7351e16480013231530a4a9d79c1e9e2e8fca3e065987888de1ad33c74b44e1bd62fd50414f488467475384ed1ec94fe2be3cb2e524fe6fd2e5a37cf59d
   languageName: node
   linkType: hard
 
