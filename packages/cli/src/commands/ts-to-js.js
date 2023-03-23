@@ -1,4 +1,4 @@
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 import {
   convertTsProjectToJs,
   convertTsScriptsToJs,

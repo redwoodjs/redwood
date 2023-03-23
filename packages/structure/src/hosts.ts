@@ -1,8 +1,8 @@
 import * as fs from 'fs-extra'
 import glob from 'glob'
 
-import type { Paths } from '@redwoodjs/config'
-import { getPaths } from '@redwoodjs/config'
+import type { Paths } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { lazy } from './x/decorators'
 

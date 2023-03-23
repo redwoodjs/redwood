@@ -18,7 +18,7 @@ import {
   getConfig as getRedwoodConfig,
   getPaths as getRedwoodPaths,
   resolveFile as internalResolveFile,
-} from '@redwoodjs/config'
+} from '@redwoodjs/project-config'
 
 import c from './colors'
 import { addFileToRollback } from './rollback'

@@ -6,7 +6,7 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { getConfig, ensurePosixPath } from '@redwoodjs/config'
+import { getConfig, ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'

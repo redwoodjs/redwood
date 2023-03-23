@@ -9,7 +9,7 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/config'
+import { getConfig } from '@redwoodjs/project-config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 
 import {

@@ -42,7 +42,7 @@ import path from 'path'
 // Load mocks
 import '../../../../lib/test'
 
-import { ensurePosixPath } from '@redwoodjs/config'
+import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'

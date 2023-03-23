@@ -1,4 +1,4 @@
-jest.mock('@redwoodjs/config', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {

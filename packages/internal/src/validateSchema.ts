@@ -3,7 +3,7 @@ import { loadTypedefs } from '@graphql-tools/load'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import { DocumentNode, Kind, ObjectTypeDefinitionNode, visit } from 'graphql'
 
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 import { rootSchema } from '@redwoodjs/graphql-server'
 
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =

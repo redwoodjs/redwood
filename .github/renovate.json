@@ -29,7 +29,7 @@
     "@redwoodjs/auth",
     "@redwoodjs/cli",
     "@redwoodjs/codemods",
-    "@redwoodjs/config",
+    "@redwoodjs/project-config",
     "@redwoodjs/core",
     "@redwoodjs/create-redwood-app",
     "@redwoodjs/eslint-config",

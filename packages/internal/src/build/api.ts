@@ -4,7 +4,7 @@ import path from 'path'
 import * as esbuild from 'esbuild'
 import { removeSync } from 'fs-extra'
 
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
 

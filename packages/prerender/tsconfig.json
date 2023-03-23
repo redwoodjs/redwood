@@ -15,7 +15,7 @@
     { "path": "../web" },
     { "path": "../router" },
     { "path": "../internal" },
-    { "path": "../config" },
+    { "path": "../project-config" },
     { "path": "../auth" },
     { "path": "../structure" }
   ]

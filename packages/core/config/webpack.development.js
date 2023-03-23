@@ -1,7 +1,7 @@
 const escapeRegExp = require('lodash.escaperegexp')
 const { merge } = require('webpack-merge')
 
-const { getConfig } = require('@redwoodjs/config')
+const { getConfig } = require('@redwoodjs/project-config')
 
 const webpackConfig = require('./webpack.common')
 

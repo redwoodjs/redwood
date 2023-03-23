@@ -9,7 +9,7 @@
   "include": ["src"],
   "references": [
     { "path": "../internal" },
-    { "path": "../config" },
+    { "path": "../project-config" },
     { "path": "../structure" },
     { "path": "../prerender" },
     { "path": "../api-server" },

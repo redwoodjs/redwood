@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { getConfigPath } from '@redwoodjs/config'
+import { getConfigPath } from '@redwoodjs/project-config'
 
 describe('getConfigPath', () => {
   it('throws an error when not in a project', () => {

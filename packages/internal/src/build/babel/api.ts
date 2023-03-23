@@ -5,7 +5,7 @@ import { transform } from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 import type { PluginItem } from '@babel/core'
 
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import {
   registerBabel,

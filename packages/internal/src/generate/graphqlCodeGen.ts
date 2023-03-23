@@ -17,7 +17,7 @@ import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import execa from 'execa'
 import { DocumentNode } from 'graphql'
 
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { getTsConfigs } from '../project'
 

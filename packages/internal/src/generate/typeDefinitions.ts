@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getPaths, processPagesDir } from '@redwoodjs/config'
+import { getPaths, processPagesDir } from '@redwoodjs/project-config'
 
 import { getCellGqlQuery, fileToAst } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'

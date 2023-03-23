@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/config')
+const { getPaths } = require('@redwoodjs/project-config')
 
 const rwjsPaths = getPaths()
 

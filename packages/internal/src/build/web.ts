@@ -3,7 +3,7 @@ import path from 'path'
 
 import { removeSync } from 'fs-extra'
 
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { prebuildWebFile, Flags } from './babel/web'
 

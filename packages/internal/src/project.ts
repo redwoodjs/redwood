@@ -3,7 +3,7 @@ import path from 'path'
 
 import { parseConfigFileTextToJson } from 'typescript'
 
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 
 export const getTsConfigs = () => {
   const rwPaths = getPaths()

@@ -6,7 +6,7 @@ import chalk from 'chalk'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/config'
+import { getConfig } from '@redwoodjs/project-config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 

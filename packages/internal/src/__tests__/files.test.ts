@@ -12,7 +12,7 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-import { ensurePosixPath, getPaths } from '@redwoodjs/config'
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
 import {
   findApiServerFunctions,

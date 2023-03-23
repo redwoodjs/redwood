@@ -15,7 +15,7 @@
   "references": [
     { "path": "../router" },
     { "path": "../internal" },
-    { "path": "../config" },
+    { "path": "../project-config" },
     { "path": "../web" },
     { "path": "../auth" },
     { "path": "../graphql-server" },

@@ -4,7 +4,7 @@ import path from 'path'
 import { getDMMF } from '@prisma/internals'
 import * as esbuild from 'esbuild'
 
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 
 const DATAMODEL_PATH = path.join(getPaths().api.models, 'datamodel.js')
 const MODELS_PATH = path.join(getPaths().api.src, 'models')

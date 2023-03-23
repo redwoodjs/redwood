@@ -3,7 +3,7 @@ import path from 'path'
 
 import * as babel from '@babel/core'
 
-import { getPaths } from '@redwoodjs/config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import babelRoutesAutoLoader from '../babel-plugin-redwood-routes-auto-loader'
 

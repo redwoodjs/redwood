@@ -1,7 +1,7 @@
 // @ts-check
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/config')
+const { getPaths } = require('@redwoodjs/project-config')
 const {
   getApiSideDefaultBabelConfig,
 } = require('@redwoodjs/internal/dist/build/babel/api')

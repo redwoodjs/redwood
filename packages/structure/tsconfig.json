@@ -15,7 +15,7 @@
   ],
   "references": [
     {
-      "path": "../config"
+      "path": "../project-config"
     },
   ],
 }
