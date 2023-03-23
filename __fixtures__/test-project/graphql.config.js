@@ -1,4 +1,4 @@
-const { getPaths } = require('@redwoodjs/paths')
+const { getPaths } = require('@redwoodjs/internal')
 
 module.exports = {
   schema: getPaths().generated.schema,
