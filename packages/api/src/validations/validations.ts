@@ -568,7 +568,10 @@ const prepareExclusionInclusion = (
 
   return caseSensitive
     ? [inputList, value]
-    : [inputList.map((s) => s.toLowerCase()), (value as string).toLowerCase()]
+    : [
+        inputList.map((s) => (s as string).toLowerCase()),
+        (value as string).toLowerCase(),
+      ]
 }
 
 // Main validation function, `directives` decides which actual validators
