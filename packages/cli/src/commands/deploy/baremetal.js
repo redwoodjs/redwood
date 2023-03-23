@@ -387,7 +387,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
             `--branch=${serverConfig.branch}`,
             `--depth=1`,
             serverConfig.repo,
-            yargs.releaseDir,
+            pathJoin(serverConfig.path, yargs.releaseDir),
           ])
         },
       },
