@@ -1,5 +1,6 @@
 import type { ComponentProps, JSXElementConstructor } from 'react'
 
+import { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
@@ -18,7 +19,7 @@ import { useQuery } from './GraphQLHooksProvider'
  *
  * If the Cell does not have a `beforeQuery` function, then the variables are required.
  *
- * Note that a query that doesnt take any variables is defined as {[x: string]: never}
+ * Note that a query that doesn't take any variables is defined as {[x: string]: never}
  * The ternary at the end makes sure we don't include it, otherwise it won't allow merging any
  * other custom props from the Success component.
  *
@@ -52,20 +53,25 @@ export type CellProps<
     CellPropsVariables<CellType, GQLVariables>
 >
 
-export type CellLoadingProps<TVariables = any> = Partial<
-  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
->
+export type CellLoadingProps<TVariables extends OperationVariables = any> =
+  Partial<
+    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
+  >
 
-export type CellFailureProps<TVariables = any> = Partial<
-  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'> & {
-    error: QueryOperationResult['error'] | Error // for tests and storybook
-    /**
-     * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
-     */
-    errorCode: string
-    updating: boolean
-  }
->
+export type CellFailureProps<TVariables extends OperationVariables = any> =
+  Partial<
+    Omit<
+      QueryOperationResult<any, TVariables>,
+      'loading' | 'error' | 'data'
+    > & {
+      error: QueryOperationResult['error'] | Error // for tests and storybook
+      /**
+       * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
+       */
+      errorCode: string
+      updating: boolean
+    }
+  >
 
 // aka guarantee that all properties in T exist
 // This is necessary for Cells, because if it doesn't exist it'll go to Empty or Failure
@@ -95,7 +101,10 @@ export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
  * `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
  * this prop lets users render something like a spinner to show that a request is in-flight.
  */
-export type CellSuccessProps<TData = any, TVariables = any> = Partial<
+export type CellSuccessProps<
+  TData = any,
+  TVariables extends OperationVariables = any
+> = Partial<
   Omit<
     QueryOperationResult<TData, TVariables>,
     'loading' | 'error' | 'data'
@@ -185,9 +194,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
 }
 
 /**
- * The default `isEmpty` implementation. Checks if the first field is `null` or an empty array.
- *
- * @remarks
+ * The default `isEmpty` implementation. Checks if any of the field is `null` or an empty array.
  *
  * Consider the following queries. The former returns an object, the latter a list:
  *
@@ -222,37 +229,16 @@ export interface CreateCellProps<CellProps, CellVariables> {
  * ```
  *
  * Note that the latter can return `null` as well depending on the SDL (`posts: [Post!]`).
- *
- * @remarks
- *
- * We only check the first field (in the example below, `users`):
- *
- * ```js
- * export const QUERY = gql`
- *   users {
- *     name
- *   }
- *   posts {
- *     title
- *   }
- * `
  * ```
  */
-const dataField = (data: DataObject) => {
-  return data[Object.keys(data)[0]]
-}
-
-const isDataNull = (data: DataObject) => {
-  return dataField(data) === null
-}
-
-const isDataEmptyArray = (data: DataObject) => {
-  const field = dataField(data)
+function isFieldEmptyArray(field: unknown) {
   return Array.isArray(field) && field.length === 0
 }
 
-const isDataEmpty = (data: DataObject) => {
-  return isDataNull(data) || isDataEmptyArray(data)
+function isDataEmpty(data: DataObject) {
+  return Object.values(data).every((fieldValue) => {
+    return fieldValue === null || isFieldEmptyArray(fieldValue)
+  })
 }
 
 /**
@@ -293,8 +279,13 @@ export function createCell<
 
     // queryRest includes `variables: { ... }`, with any variables returned
     // from beforeQuery
-    // eslint-disable-next-line prefer-const
-    let { error, loading, data, ...queryRest } = useQuery(query, options)
+    let {
+      // eslint-disable-next-line prefer-const
+      error,
+      loading,
+      data,
+      ...queryResult
+    } = useQuery(query, options)
 
     if (globalThis.__REDWOOD__PRERENDERING) {
       // __REDWOOD__PRERENDERING will always either be set, or not set. So
@@ -331,7 +322,7 @@ export function createCell<
 
           // All of the gql client's props aren't available when pre-rendering,
           // so using `any` here
-          queryRest = { variables } as any
+          queryResult = { variables } as any
         } else {
           queryCache[cacheKey] ||
             (queryCache[cacheKey] = {
@@ -345,13 +336,23 @@ export function createCell<
 
     if (error) {
       if (Failure) {
+        // errorCode is not part of the type returned by useQuery
+        // but it is returned as part of the queryResult
+        type QueryResultWithErrorCode = typeof queryResult & {
+          errorCode: string
+        }
+
         return (
           <Failure
             error={error}
-            errorCode={error.graphQLErrors?.[0]?.extensions?.['code'] as string}
+            errorCode={
+              // Use the ad-hoc QueryResultWithErrorCode type to access the errorCode
+              (queryResult as QueryResultWithErrorCode).errorCode ??
+              (error.graphQLErrors?.[0]?.extensions?.['code'] as string)
+            }
             {...props}
             updating={loading}
-            {...queryRest}
+            queryResult={queryResult}
           />
         )
       } else {
@@ -366,7 +367,7 @@ export function createCell<
             {...props}
             {...afterQueryData}
             updating={loading}
-            {...queryRest}
+            queryResult={queryResult}
           />
         )
       } else {
@@ -375,12 +376,12 @@ export function createCell<
             {...props}
             {...afterQueryData}
             updating={loading}
-            {...queryRest}
+            queryResult={queryResult}
           />
         )
       }
     } else if (loading) {
-      return <Loading {...{ ...queryRest, ...props }} />
+      return <Loading {...props} queryResult={queryResult} />
     } else {
       /**
        * There really shouldn't be an `else` here, but like any piece of software, GraphQL clients have bugs.

@@ -5,26 +5,36 @@ import type { AuthImplementation } from '../AuthImplementation'
 export const useResetPassword = <
   TUser,
   TRestoreAuth,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
-  TValidateResetToken
+  TValidateResetToken,
+  TClient
 >(
   authImplementation: AuthImplementation<
     TUser,
     TRestoreAuth,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
-    TValidateResetToken
+    TValidateResetToken,
+    TClient
   >
 ) => {
   return useCallback(
-    async (options?: unknown) => {
+    async (options?: TResetPasswordOptions) => {
       if (authImplementation.resetPassword) {
         return await authImplementation.resetPassword(options)
       } else {

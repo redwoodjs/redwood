@@ -12,22 +12,32 @@ import { useReauthenticate } from './useReauthenticate'
 export const useLogIn = <
   TUser,
   TRestoreAuth,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
-  TValidateResetToken
+  TValidateResetToken,
+  TClient
 >(
   authImplementation: AuthImplementation<
     TUser,
     TRestoreAuth,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
-    TValidateResetToken
+    TValidateResetToken,
+    TClient
   >,
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>
@@ -43,7 +53,7 @@ export const useLogIn = <
   )
 
   return useCallback(
-    async (options?: unknown) => {
+    async (options?: TLogInOptions) => {
       setAuthProviderState(defaultAuthProviderState)
       const loginResult = await authImplementation.login(options)
       await reauthenticate()
