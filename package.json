@@ -92,7 +92,7 @@
     "prompts": "2.4.2",
     "rimraf": "3.0.2",
     "typescript": "5.0.2",
-    "yargs": "17.6.2",
+    "yargs": "17.7.1",
     "zx": "7.2.1"
   },
   "packageManager": "yarn@3.5.0",
