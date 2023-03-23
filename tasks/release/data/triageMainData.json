@@ -1,0 +1,106 @@
+{
+  "23f1f3299e65868ec9ddbacd4f343bf119040f44": {
+    "message": "Revert \"chore: run checks on merge queues\"",
+    "needsCherryPick": false
+  },
+  "a51352635aa09c680d257315510136e0a00d10fb": {
+    "message": "chore: run checks on merge queues",
+    "needsCherryPick": false
+  },
+  "836eb2d93a65fc55966695d56803c11a40f6b478": {
+    "message": "chore(deps): update dependency @types/react to v18.0.28 (#7620)",
+    "needsCherryPick": false
+  },
+  "c58b39cf9cf838775007e969db90f4b4fb3a0bf6": {
+    "message": "chore(deps): update dependency @types/react-dom to v18.0.11 (#7644)",
+    "needsCherryPick": false
+  },
+  "f044dcd5d2412d14db818ae97e9f8f76f778b4e0": {
+    "message": "chore(deps): bump setup of Chakra UI to V2 (#7649)",
+    "needsCherryPick": false
+  },
+  "ce642a591cf5e126206e9f2ded7081ebfc9a638a": {
+    "message": "chore(deps): update dependency @testing-library/react to v14 (#7737)",
+    "needsCherryPick": false
+  },
+  "eda5cdec82901bed0eae96c06802a833e502dde8": {
+    "message": "chore(deps): update dependency @testing-library/dom to v9 (#7736)",
+    "needsCherryPick": false
+  },
+  "ce1e3709363c51357bceb88fc4944a429ca988e8": {
+    "message": "fix(deps): update dependency msw to v1.1.0 (#7733)",
+    "needsCherryPick": false
+  },
+  "28bdd735f678ea9e202309f29f636ac7ed3d841c": {
+    "message": "fix: change isDataEmpty, add codemod, fix codemod (#7704)",
+    "needsCherryPick": false
+  },
+  "c7aa4291d0890831dfce4c4f8e2bbf4e88664ac8": {
+    "message": "fix: avoid naming conflict with `client` prop (#7024)",
+    "needsCherryPick": false
+  },
+  "4d8f0a8216e890272822f27aa38fbdc5d0b93c6d": {
+    "message": "fix(deps): update jest monorepo to v29.4.3 (#7651)",
+    "needsCherryPick": false
+  },
+  "37999cba7bbe89218baabf1d939596eb5e4a1353": {
+    "message": "chore(deps): update dependency @auth0/auth0-spa-js to v2 (#7524)",
+    "needsCherryPick": false
+  },
+  "01237a1e4dcee1b44d9a51de2739c5c17ddc9126": {
+    "message": "fix(deps): update dependency firebase-admin to v11 (#7523)",
+    "needsCherryPick": false
+  },
+  "0678d11d87eaf34c52241d075e665bbc7b9e881f": {
+    "message": "fix(deps): update dependency msw to v1 (#7450)",
+    "needsCherryPick": false
+  },
+  "32f049b171794b718fe8bd63b33583239230f4ce": {
+    "message": "fix(deps): update jest monorepo to v29.5.0 (#7770)",
+    "needsCherryPick": false
+  },
+  "6e5e883491e3d423873be4968272c8c13ce56b23": {
+    "message": "chore(deps): update dependency @supabase/supabase-js to v2.10.0 (#7758)",
+    "needsCherryPick": false
+  },
+  "85ba8f74e7f175df5ac3f9c06be97b8aed1d9942": {
+    "message": "Auth: Add TS types for auth method options (#7745)",
+    "needsCherryPick": false
+  },
+  "bc5b3e5b298a69e09f5eeade9a44dbf9620e6e41": {
+    "message": "feature: Upgrade Supabase Auth to v2. (#7719)",
+    "needsCherryPick": false
+  },
+  "b75bfe3234f9351f9259b98a46efe2b329654579": {
+    "message": "chore(deps): update dependency @testing-library/dom to v9.0.1 (#7782)",
+    "needsCherryPick": false
+  },
+  "da2060c21759d010f71f332ecde92e4aabbf3532": {
+    "message": "Upgrade simplewebauthn packages (#7477)",
+    "needsCherryPick": false
+  },
+  "8c4072e2f76ad2a973947312c3e45d6c865cc15e": {
+    "message": "fix(deps): update dependency msw to v1.2.0 (#7883)",
+    "needsCherryPick": false
+  },
+  "1bed14ee216b660ec525b51763f27671cbf41154": {
+    "message": "fix(deps): update dependency @apollo/client to v3.7.10 (#7520)",
+    "needsCherryPick": false
+  },
+  "56567f3f7620b876109d3def0014d6526042cf4b": {
+    "message": "fix(deps): update dependency msw to v1.1.1 (#7871)",
+    "needsCherryPick": false
+  },
+  "8069563ef8015e04991e7d8da8c3e8b0341dbc54": {
+    "message": "chore(deps): update dependency @supabase/supabase-js to v2.12.0 (#7867)",
+    "needsCherryPick": false
+  },
+  "889b9855eed0265bd41b6a23f11e484179697d05": {
+    "message": "chore(deps): update dependency @supabase/supabase-js to v2.11.0 (#7840)",
+    "needsCherryPick": false
+  },
+  "874c01897b13f1c511b7b347b8f6f2c7aeacdfcb": {
+    "message": "chore(deps): update dependency @supabase/supabase-js to v2.12.1 (#7891)",
+    "needsCherryPick": false
+  }
+}
