@@ -7,6 +7,19 @@ import { navigate } from '@redwoodjs/router'
 
 export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createAuth()
 
+const ClerkStatusUpdater = () => {
+  const { isSignedIn, user, isLoaded } = useUser()
+  const { reauthenticate } = useAuth()
+
+  useEffect(() => {
+    if (isLoaded) {
+      reauthenticate()
+    }
+  }, [isSignedIn, user, reauthenticate, isLoaded])
+
+  return null
+}
+
 const ClerkProviderWrapper = ({ children, clerkOptions }) => {
   const { reauthenticate } = useAuth()
 
@@ -16,6 +29,7 @@ const ClerkProviderWrapper = ({ children, clerkOptions }) => {
       navigate={(to) => reauthenticate().then(() => navigate(to))}
     >
       {children}
+      <ClerkStatusUpdater />
     </ClerkProvider>
   )
 }
