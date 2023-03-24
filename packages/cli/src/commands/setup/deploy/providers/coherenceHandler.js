@@ -60,7 +60,7 @@ const getCoherenceYamlContent = async () => {
     const schema = await getSchema(getPaths().api.dbSchema)
     const config = await getConfig({ datamodel: schema })
 
-    var detectedDatabase = config.datasources[0].activeProvider
+    let detectedDatabase = config.datasources[0].activeProvider
 
     if (detectedDatabase === 'mysql' || detectedDatabase === 'postgresql') {
       if (detectedDatabase === 'postgresql') {
@@ -151,7 +151,7 @@ const updateRedwoodTomlTask = () => {
       const configPath = path.join(getPaths().base, 'redwood.toml')
       const content = fs.readFileSync(configPath, 'utf-8')
 
-      const newContent = content.replace(/port.*?\n/m, 'port = "${PORT}"')
+      const newContent = content.replace(/port.*?\n/m, 'port = "${PORT}"\n')
 
       fs.writeFileSync(configPath, newContent)
     },
