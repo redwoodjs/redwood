@@ -8892,10 +8892,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsd/typescript@npm:4.9.5":
-  version: 4.9.5
-  resolution: "@tsd/typescript@npm:4.9.5"
-  checksum: ec32c2a990c75646f3b8bc50e8a6b9b2fbd43752882a3b8d302a54d7e8eccaefc269114920681bf6f2509c2db3f48629b85ac93170fe2557bcb64169976f510d
+"@tsd/typescript@npm:5.0.2":
+  version: 5.0.2
+  resolution: "@tsd/typescript@npm:5.0.2"
+  checksum: f5c1a231a60aa0e077c97a0735dce444094c67f632a6c51e52d31ac95cc5a15b47a8fb8d11cb43477eefb4cdfc8e7e4842c3a7c747091b124cd5c9f35888cda1
   languageName: node
   linkType: hard
 
@@ -27798,7 +27798,7 @@ __metadata:
     "@testing-library/react": 12.1.5
     "@testing-library/react-hooks": 8.0.1
     "@testing-library/user-event": 14.4.3
-    "@tsd/typescript": 4.9.5
+    "@tsd/typescript": 5.0.2
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.0
