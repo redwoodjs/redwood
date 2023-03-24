@@ -82,7 +82,7 @@
     "listr2": "5.0.8",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
-    "msw": "1.2.0",
+    "msw": "1.2.1",
     "ncp": "2.0.0",
     "nodemon": "2.0.22",
     "npm-packlist": "7.0.4",
