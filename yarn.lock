@@ -6188,7 +6188,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
@@ -6241,7 +6241,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
@@ -6292,7 +6292,7 @@ __metadata:
     "@clerk/clerk-react": 4.12.8
     "@clerk/types": 3.31.1
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
@@ -6370,7 +6370,7 @@ __metadata:
     "@redwoodjs/auth": 4.0.0
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
@@ -6417,7 +6417,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     core-js: 3.29.1
     firebase: 9.18.0
     jest: 29.5.0
@@ -6469,7 +6469,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
@@ -6519,7 +6519,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@supabase/supabase-js": 2.12.1
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
@@ -6571,7 +6571,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
@@ -6834,7 +6834,7 @@ __metadata:
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     "@types/react-dom": 18.0.11
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.29.1
@@ -7018,7 +7018,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     "@types/react-dom": 18.0.11
     core-js: 3.29.1
     jest: 29.5.0
@@ -7119,7 +7119,7 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 29.5.0
     "@types/node": 16.18.19
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     "@types/react-dom": 18.0.11
     "@types/webpack": 5.28.0
     babel-jest: 29.5.0
@@ -7169,7 +7169,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@types/prop-types": 15.7.5
-    "@types/react": 18.0.28
+    "@types/react": 18.0.29
     "@types/react-dom": 18.0.11
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.29.1
@@ -9632,14 +9632,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.0.28":
-  version: 18.0.28
-  resolution: "@types/react@npm:18.0.28"
+"@types/react@npm:*, @types/react@npm:18.0.29":
+  version: 18.0.29
+  resolution: "@types/react@npm:18.0.29"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 6d94ec25c18b39aac687814b3a717e767f2fba3289c3b682caa4d0182160a72a9816a612b5a207c8ea73f1d288019f56f3d08742ac7cfff91719abb77da9d11a
+  checksum: 2a0fdf99692afbd4368f341e952702c6737a09d2090baedc93d5c13e0282909f697b2dee1625caa17b2f963454f7e399dab96cc7e56548e5cd4b269f2786ba08
   languageName: node
   linkType: hard
 
