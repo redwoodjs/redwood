@@ -4,8 +4,8 @@ import path from 'path'
 import fastifyStatic from '@fastify/static'
 import { FastifyInstance, FastifyReply } from 'fastify'
 
-import { getPaths } from '@redwoodjs/project-config'
 import { findPrerenderedHtml } from '@redwoodjs/internal/dist/files'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { loadFastifyConfig } from '../fastify'
 import { WebServerArgs } from '../types'

@@ -11,8 +11,8 @@ import {
   visit,
 } from 'graphql'
 
-import { getPaths } from '@redwoodjs/project-config'
 import { rootSchema } from '@redwoodjs/graphql-server'
+import { getPaths } from '@redwoodjs/project-config'
 
 interface Operation {
   operation: OperationTypeNode

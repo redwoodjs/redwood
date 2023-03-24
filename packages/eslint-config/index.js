@@ -2,7 +2,6 @@
 // Shared eslint config (projects and framework) is located in ./shared.js
 // Framework main config is in monorepo root ./.eslintrc.js
 
-const { getConfig } = require('@redwoodjs/project-config')
 const {
   getApiSideDefaultBabelConfig,
 } = require('@redwoodjs/internal/dist/build/babel/api')
@@ -12,6 +11,7 @@ const {
 const {
   getWebSideDefaultBabelConfig,
 } = require('@redwoodjs/internal/dist/build/babel/web')
+const { getConfig } = require('@redwoodjs/project-config')
 
 const config = getConfig()
 

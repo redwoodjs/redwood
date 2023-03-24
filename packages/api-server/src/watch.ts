@@ -11,9 +11,9 @@ import { debounce } from 'lodash'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { getPaths, ensurePosixPath, getConfig } from '@redwoodjs/project-config'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
+import { getPaths, ensurePosixPath, getConfig } from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
   .option('debug-port', {

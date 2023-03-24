@@ -1,10 +1,10 @@
 // @ts-check
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/project-config')
 const {
   getApiSideDefaultBabelConfig,
 } = require('@redwoodjs/internal/dist/build/babel/api')
+const { getPaths } = require('@redwoodjs/project-config')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
