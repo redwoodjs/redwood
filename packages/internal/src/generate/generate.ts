@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { getPaths } from '../paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { generateGraphQLSchema } from './graphqlSchema'
 import { generateTypeDefs } from './typeDefinitions'

@@ -2,7 +2,7 @@ import path from 'path'
 
 const BASE_PATH = path.resolve(__dirname, '../../src/__tests__/fixtures')
 
-const originalInternal = require('@redwoodjs/internal')
+const originalPaths = require('@redwoodjs/project-config')
 
 const mockedGetPaths = () => ({
   base: BASE_PATH,
@@ -14,6 +14,6 @@ const mockedGetPaths = () => ({
 })
 
 module.exports = {
-  ...originalInternal,
+  ...originalPaths,
   getPaths: mockedGetPaths,
 }

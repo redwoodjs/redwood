@@ -31,6 +31,7 @@
     "@redwoodjs/auth": "4.4.1",
     "@redwoodjs/graphql-server": "4.4.1",
     "@redwoodjs/internal": "4.4.1",
+    "@redwoodjs/project-config": "4.4.1",
     "@redwoodjs/router": "4.4.1",
     "@redwoodjs/web": "4.4.1",
     "@storybook/addon-a11y": "6.5.16",

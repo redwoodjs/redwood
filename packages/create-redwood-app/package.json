@@ -24,7 +24,7 @@
     "@babel/core": "7.21.3",
     "@babel/node": "7.20.7",
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/internal": "4.4.1",
+    "@redwoodjs/project-config": "4.4.1",
     "@redwoodjs/telemetry": "4.4.1",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
