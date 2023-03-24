@@ -5,12 +5,14 @@ description: Serverful deploys on GCP or AWS via Coherence's full-lifecycle envi
 # Deploy to Coherence
 
 [Coherence](https://www.withcoherence.com) delivers automated environments across the full software development lifecycle, without requiring you to glue together your own mess of open source tools to get a world-class develper experience for your team. Coherence is focused on serving startups, who are doing mission-critical work. With one simple configuration, Coherence offers:
+
 - Cloud-hosted development environments, based on VSCode. Similar to gitpod or Github CodeSpaces
 - Production-ready CI/CD running in your own GCP/AWS account, including: database migration/seeding/snapshot loading, parallelized tests, container building and docker registry management
 - Full-stack branch previews. Vercel/netlify like developer experience for arbitrary container apps, including dependencies such as CDN, redis, and database resources
 - Staging and production environment management in your AWS/GCP accounts. Production runs in its own cloud account (AWS) or project (GCP). Integrated secrets management across all environment types with a developer-friendly UI.
 
 ## Coherence Prerequisites
+
 You have to have your project hosted on GitHub, and you must have an [AWS](https://docs.withcoherence.com/docs/tutorials/creating-an-app-on-aws) or [GCP](https://docs.withcoherence.com/docs/tutorials/creating-an-app-on-gcp) account.
 
 ## Coherence Deploy
