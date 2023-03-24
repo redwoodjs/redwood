@@ -7,7 +7,11 @@
     "directory": "packages/config"
   },
   "license": "MIT",
-  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./config": "./dist/config.js",
+    "./paths": "./dist/path.js"
+  },
   "types": "dist/index.d.ts",
   "files": [
     "dist"
