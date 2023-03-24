@@ -14,6 +14,13 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { printSetupNotes, addFilesTask } from '../helpers'
 
+const notes = [
+  "You're ready to deploy to Coherence!\n",
+  'Go to https://app.withcoherence.com to create your account and setup your cloud or GitHub connections.',
+  'Check out the deployment docs at https://docs.withcoherence.com for detailed instructions and more information.\n',
+  "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
+]
+
 export const handler = async ({ force, database }) => {
   const tasks = new Listr(
     [
@@ -50,7 +57,7 @@ export const handler = async ({ force, database }) => {
   }
 }
 
-const getCoherenceYamlContent = async () => {
+const getCoherenceYamlContent = async (database) => {
   // If the schema.prisma file doesn't exist (99% of the time it will), return some defaults.
 
   if (!fs.existsSync(getPaths().api.dbSchema)) {
@@ -84,8 +91,8 @@ const getCoherenceYamlContent = async () => {
       content: COHERENCE_YAML(DATABASE_YAML(detectedDatabase)),
     }
   } else {
-    console.warn(
-      'Only mysql & postgresql prisma DBs are supported on Coherence at this time.'
+    notes.unshift(
+      '⚠️  Warning: only mysql and postgresql prisma databases are supported on Coherence at this time.\n'
     )
 
     return {
@@ -170,10 +177,3 @@ const updateRedwoodTomlTask = () => {
     },
   }
 }
-
-const notes = [
-  "You're ready to deploy to Coherence!\n",
-  'Go to https://app.withcoherence.com to create your account and setup your cloud or GitHub connections.',
-  'Check out the deployment docs at https://docs.withcoherence.com for detailed instructions and more information.\n',
-  "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
-]
