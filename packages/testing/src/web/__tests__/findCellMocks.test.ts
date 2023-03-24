@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
+import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { findCellMocks } from '../findCellMocks'
 
