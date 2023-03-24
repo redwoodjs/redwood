@@ -20,10 +20,10 @@ export const handler = async ({ force, database }) => {
       {
         title: 'Adding coherence.yml',
         task: async () => {
-          const { filepath, content } = await getCoherenceYamlContent(database)
+          const { path, content } = await getCoherenceYamlContent(database)
 
           return writeFilesTask(
-            { [filepath]: content },
+            { [path]: content },
             { overwriteExisting: force }
           )
         },
@@ -51,33 +51,36 @@ export const handler = async ({ force, database }) => {
 }
 
 const getCoherenceYamlContent = async () => {
+  // If the schema.prisma file doesn't exist (99% of the time it will), return some defaults.
   if (!fs.existsSync(getPaths().api.dbSchema)) {
     return {
       path: path.join(getPaths().base, 'coherence.yml'),
       content: COHERENCE_YAML(''),
     }
+  }
+
+  const schema = await getSchema(getPaths().api.dbSchema)
+  const config = await getConfig({ datamodel: schema })
+
+  let detectedDatabase = config.datasources[0].activeProvider
+
+  if (detectedDatabase === 'mysql' || detectedDatabase === 'postgresql') {
+    if (detectedDatabase === 'postgresql') {
+      detectedDatabase = 'postgres'
+    }
+
+    return {
+      path: path.join(getPaths().base, 'coherence.yml'),
+      content: COHERENCE_YAML(DATABASE_YAML(detectedDatabase)),
+    }
   } else {
-    const schema = await getSchema(getPaths().api.dbSchema)
-    const config = await getConfig({ datamodel: schema })
-
-    let detectedDatabase = config.datasources[0].activeProvider
-
-    if (detectedDatabase === 'mysql' || detectedDatabase === 'postgresql') {
-      if (detectedDatabase === 'postgresql') {
-        detectedDatabase = 'postgres'
-      }
-      return {
-        path: path.join(getPaths().base, 'coherence.yml'),
-        content: COHERENCE_YAML(DATABASE_YAML(detectedDatabase)),
-      }
-    } else {
-      printSetupNotes(
-        'Only mysql & postgresql prisma DBs are supported on Coherence at this time...'
-      )
-      return {
-        path: path.join(getPaths().base, 'coherence.yml'),
-        content: COHERENCE_YAML(''),
-      }
+    // TODO: Not seeing this currently.
+    printSetupNotes(
+      'Only mysql & postgresql prisma DBs are supported on Coherence at this time.'
+    )
+    return {
+      path: path.join(getPaths().base, 'coherence.yml'),
+      content: COHERENCE_YAML(''),
     }
   }
 }
