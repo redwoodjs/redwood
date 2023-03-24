@@ -6,8 +6,8 @@ import chalk from 'chalk'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -307,7 +307,7 @@ export const handler = async ({
       { rendererOptions: { collapse: false }, exitOnError: true }
     )
 
-    if (rollback) {
+    if (rollback && !force) {
       prepareForRollback(tasks)
     }
     await tasks.run()

@@ -5,7 +5,7 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 import prompts from 'prompts'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
@@ -183,7 +183,7 @@ export const handler = async (args) => {
   )
 
   try {
-    if (args.rollback) {
+    if (args.rollback && !args.force) {
       prepareForRollback(tasks)
     }
     await tasks.run()

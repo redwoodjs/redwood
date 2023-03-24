@@ -6,8 +6,7 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
-import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
+import { getConfig, ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
@@ -236,7 +235,7 @@ export const createYargsForComponentGeneration = ({
           }
         )
 
-        if (options.rollback) {
+        if (options.rollback && !options.force) {
           prepareForRollback(tasks)
         }
         await tasks.run()

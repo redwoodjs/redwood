@@ -65,7 +65,7 @@ import FormError from './FormError'
  *
  * @see {@link https://react-hook-form.com/api/useform/register}
  */
-interface RedwoodRegisterOptions extends RegisterOptions {
+type RedwoodRegisterOptions = RegisterOptions & {
   valueAsBoolean?: boolean
   valueAsJSON?: boolean
 }
@@ -161,7 +161,7 @@ const isValueEmpty = (val: string): boolean => val === ''
  * the comments above the setCoercion function for more details)
  */
 
-type EmptyAsValue = null | 'undefined' | 0 | ''
+export type EmptyAsValue = null | 'undefined' | 0 | ''
 
 type ValueAsType =
   | 'valueAsDate'

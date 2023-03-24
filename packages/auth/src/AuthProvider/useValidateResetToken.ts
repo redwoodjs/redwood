@@ -5,22 +5,32 @@ import type { AuthImplementation } from '../AuthImplementation'
 export const useValidateResetToken = <
   TUser,
   TRestoreAuth,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
-  TValidateResetToken
+  TValidateResetToken,
+  TClient
 >(
   authImplementation: AuthImplementation<
     TUser,
     TRestoreAuth,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
-    TValidateResetToken
+    TValidateResetToken,
+    TClient
   >
 ) => {
   return useCallback(

@@ -18,7 +18,7 @@ export const handler = async ({ force: forceArg }: Args) => {
     apiPackages: [`@redwoodjs/auth-supabase-api@${version}`],
     webPackages: [
       `@redwoodjs/auth-supabase-web@${version}`,
-      '@supabase/supabase-js@^1',
+      '@supabase/supabase-js@^2',
     ],
     notes: [
       "You'll need to add two env vars to your .env file:",
