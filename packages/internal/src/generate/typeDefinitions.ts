@@ -1,11 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
+import { getPaths, processPagesDir } from '@redwoodjs/project-config'
+
 import { getCellGqlQuery, fileToAst } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
 import { parseGqlQueryToAst } from '../gql'
 import { getJsxElements } from '../jsx'
-import { getPaths, processPagesDir } from '../paths'
 
 import {
   generateTypeDefGraphQLApi,

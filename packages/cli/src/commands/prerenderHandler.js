@@ -3,9 +3,9 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
+import { getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'

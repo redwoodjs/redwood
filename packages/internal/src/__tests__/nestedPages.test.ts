@@ -1,8 +1,9 @@
 import path from 'path'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import { prebuildWebFile } from '../build/babel/web'
 import { cleanWebBuild } from '../build/web'
-import { getPaths } from '../paths'
 
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
 

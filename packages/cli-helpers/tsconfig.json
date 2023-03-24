@@ -9,7 +9,7 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../internal" },
-    { "path": "../telemetry" }
+    { "path": "../telemetry" },
+    { "path": "../project-config" }
   ]
 }
