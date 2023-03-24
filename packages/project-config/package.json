@@ -15,16 +15,16 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build": "run build:js && run build:types",
+    "build:clean-dist": "rimraf 'dist/**/__tests__'",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && run build:clean-dist",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "deps:dist": "depcruise dist --config --output-type dot | dot -T svg > dependency-graph-dist.svg",
     "deps:src": "depcruise src --config --exclude \"^src/__tests__\" --output-type dot | dot -T svg > dependency-graph-src.svg",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",
-    "test:watch": "yarn test --watch"
+    "test:watch": "run test --watch"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
