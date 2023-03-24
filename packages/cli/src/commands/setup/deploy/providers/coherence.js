@@ -1,14 +1,17 @@
-// import terminalLink from 'terminal-link'
 import fs from 'fs'
 import path from 'path'
 
 import { getSchema, getConfig } from '@prisma/internals'
 import { Listr } from 'listr2'
 
+import {
+  colors as c,
+  getPaths,
+  writeFilesTask,
+  isTypeScriptProject,
+} from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
-import c from '../../../../lib/colors'
 import { printSetupNotes, addFilesTask } from '../helpers'
 import {
   COHERENCE_HEALTH_CHECK,
@@ -20,7 +23,7 @@ export const command = 'coherence'
 export const description = 'Setup Coherence deploy'
 
 export const getCoherenceYamlContent = async () => {
-  if (!fs.existsSync('api/db/schema.prisma')) {
+  if (!fs.existsSync(getPaths().api.dbSchema)) {
     return {
       path: path.join(getPaths().base, 'coherence.yml'),
       content: COHERENCE_YAML(''),
@@ -60,7 +63,10 @@ const notes = [
 
 const additionalFiles = [
   {
-    path: path.join(getPaths().base, 'api/src/functions/health.js'),
+    path: path.join(
+      getPaths().api.functions,
+      `health.${isTypeScriptProject ? 'ts' : 'js'}`
+    ),
     content: COHERENCE_HEALTH_CHECK,
   },
 ]
