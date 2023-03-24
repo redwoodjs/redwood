@@ -2,7 +2,8 @@
 
 > **Warning**
 >
-> This is a new internal package. There are still changes we want to make, so we're marking it as experimental for now. Don't depend on this directly in a redwood project.
+> This is a new internal package. There are still changes we want to make, so we're marking it as experimental for now.
+> **Don't depend on this directly in a Redwood project**.
 
 This offers functionality to parse the Redwood configurations and a way to get a project's paths.
 
