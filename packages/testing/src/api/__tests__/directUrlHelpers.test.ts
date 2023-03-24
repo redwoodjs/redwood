@@ -29,7 +29,7 @@ it("overwrites directUrl if it's set", () => {
 
   const defaultDb = getDefaultDb(DIRECT_URL_FIXTURE_PATH)
 
-  checkAndReplaceDirectUrl(
+  const directUrlEnvVar = checkAndReplaceDirectUrl(
     fs.readFileSync(
       path.join(DIRECT_URL_FIXTURE_PATH, 'api', 'db', 'schema.prisma'),
       'utf-8'
@@ -37,7 +37,7 @@ it("overwrites directUrl if it's set", () => {
     defaultDb
   )
 
-  expect(process.env.DIRECT_URL).toBe(defaultDb)
+  expect(process.env[directUrlEnvVar as string]).toBe(defaultDb)
 
   delete process.env.RWJS_CWD
 })

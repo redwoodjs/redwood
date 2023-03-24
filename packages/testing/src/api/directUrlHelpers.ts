@@ -7,7 +7,7 @@ export function getDefaultDb(rwjsCwd: string) {
 export function checkAndReplaceDirectUrl(
   prismaSchema: string,
   defaultDb: string
-): void {
+) {
   // Check the schema.prisma for a directUrl.
   const directUrl = prismaSchema.match(PRISMA_DIRECT_URL_REGEXP)
 
@@ -31,6 +31,8 @@ export function checkAndReplaceDirectUrl(
 
   process.env[directUrlEnv] =
     process.env.TEST_DIRECT_URL || process.env.TEST_DATABASE_URL || defaultDb
+
+  return directUrlEnv
 }
 
 const PRISMA_DIRECT_URL_REGEXP = /directUrl(\s?)=(\s?)env\(('|")(.*)('|")\)/g

@@ -25,7 +25,7 @@ module.exports = async function () {
       'utf-8'
     )
 
-    checkAndReplaceDirectUrl(prismaSchema, defaultDb)
+    const directUrlEnvVar = checkAndReplaceDirectUrl(prismaSchema, defaultDb)
 
     const command =
       process.env.TEST_DATABASE_STRATEGY === 'reset'
@@ -39,7 +39,7 @@ module.exports = async function () {
       shell: true,
       env: {
         DATABASE_URL: process.env.DATABASE_URL,
-        DIRECT_URL: process.env.DIRECT_URL,
+        [directUrlEnvVar]: process.env[directUrlEnvVar],
       },
     })
   }
