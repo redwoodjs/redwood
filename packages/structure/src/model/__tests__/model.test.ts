@@ -41,7 +41,7 @@ describe('Redwood Project Model', () => {
     const uri = URL_file(projectRoot, 'api/src/graphql/todos.sdl.js')
     const node = await project.findNode(uri)
     expect(node).toBeDefined()
-    expect(node.id).toEqual(uri)
+    expect(node?.id).toEqual(uri)
     if (node) {
       const info = await node.collectIDEInfo()
       info.length
@@ -78,7 +78,7 @@ describe('Cells', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.tsx'))
-    expect(cell.queryOperationName).toMatch('TodoListCell_GetTodos')
+    expect(cell?.queryOperationName).toMatch('TodoListCell_GetTodos')
   })
 
   it('Warns you when you do not supply a name to QUERY', async () => {
@@ -86,8 +86,9 @@ describe('Cells', () => {
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
 
     const cell = project.cells.find((x) => x.uri.endsWith('TodoListCell.js'))
-    const x = await cell.collectDiagnostics()
-    expect(x.map((e) => e.diagnostic.message)).toContain(
+    const x = await cell?.collectDiagnostics()
+    expect(x).not.toBeUndefined()
+    expect(x?.map((e) => e.diagnostic.message)).toContain(
       'We recommend that you name your query operation'
     )
   })
