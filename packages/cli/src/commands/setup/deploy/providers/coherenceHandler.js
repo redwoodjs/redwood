@@ -24,7 +24,7 @@ export const handler = async ({ force, database }) => {
 
           return writeFilesTask(
             { [path]: content },
-            { overwriteExisting: force }
+            { existingFiles: force ? 'OVERWRITE' : 'FAIL' }
           )
         },
       },
@@ -52,12 +52,22 @@ export const handler = async ({ force, database }) => {
 
 const getCoherenceYamlContent = async () => {
   // If the schema.prisma file doesn't exist (99% of the time it will), return some defaults.
+
   if (!fs.existsSync(getPaths().api.dbSchema)) {
     return {
       path: path.join(getPaths().base, 'coherence.yml'),
       content: COHERENCE_YAML(''),
     }
   }
+
+  // If it does, we have to check the provider in datasource:
+  //
+  // ```prisma
+  // datasource db {
+  //   provider = "sqlite"
+  //   url      = env("DATABASE_URL")
+  // }
+  // ```
 
   const schema = await getSchema(getPaths().api.dbSchema)
   const config = await getConfig({ datamodel: schema })
@@ -74,10 +84,10 @@ const getCoherenceYamlContent = async () => {
       content: COHERENCE_YAML(DATABASE_YAML(detectedDatabase)),
     }
   } else {
-    // TODO: Not seeing this currently.
-    printSetupNotes(
+    console.warn(
       'Only mysql & postgresql prisma DBs are supported on Coherence at this time.'
     )
+
     return {
       path: path.join(getPaths().base, 'coherence.yml'),
       content: COHERENCE_YAML(''),
