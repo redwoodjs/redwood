@@ -6,7 +6,7 @@ const { getPaths } = require('@redwoodjs/project-config')
 const {
   getDefaultDb,
   checkAndReplaceDirectUrl,
-} = require('../../../src/api/directUrlHelpers')
+} = require('../../../dist/api/directUrlHelpers')
 
 const rwjsPaths = getPaths()
 
@@ -16,14 +16,16 @@ module.exports = async function () {
     // Load dotenvs
     require('dotenv-defaults/config')
 
-    process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || getDefaultDb()
+    const defaultDb = getDefaultDb(rwjsPaths.base)
+
+    process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || defaultDb
 
     const prismaSchema = fs.readFileSync(
       path.join(rwjsPaths.api.dbSchema),
       'utf-8'
     )
 
-    checkAndReplaceDirectUrl(prismaSchema, getDefaultDb(rwjsPaths.base))
+    checkAndReplaceDirectUrl(prismaSchema, defaultDb)
 
     const command =
       process.env.TEST_DATABASE_STRATEGY === 'reset'
