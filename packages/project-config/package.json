@@ -8,11 +8,9 @@
   },
   "license": "MIT",
   "exports": {
-    ".": "./dist/index.js",
-    "./config": "./dist/config.js",
-    "./paths": "./dist/path.js"
+    ".": "./dist/index.js"
   },
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
