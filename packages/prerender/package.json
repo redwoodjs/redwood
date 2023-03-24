@@ -27,6 +27,7 @@
     "@babel/runtime-corejs3": "7.21.0",
     "@redwoodjs/auth": "4.0.0",
     "@redwoodjs/internal": "4.0.0",
+    "@redwoodjs/project-config": "4.0.0",
     "@redwoodjs/router": "4.0.0",
     "@redwoodjs/structure": "4.0.0",
     "@redwoodjs/web": "4.0.0",

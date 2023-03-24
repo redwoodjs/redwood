@@ -5,7 +5,8 @@ import { loadTypedefs } from '@graphql-tools/load'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import { DocumentNode } from 'graphql'
 
-import { getPaths } from '../,,/../paths'
+import { getPaths } from '@redwoodjs/project-config'
+
 import {
   validateSchemaForDirectives,
   DIRECTIVE_REQUIRED_ERROR_MESSAGE,

@@ -2,9 +2,9 @@ import fs from 'fs'
 import path from 'path'
 
 import fg from 'fast-glob'
-import findUp from 'findup-sync'
 
 import { getConfig } from './config'
+import { getConfigPath } from './configPath'
 
 export interface NodeTargetPaths {
   base: string
@@ -75,8 +75,6 @@ export interface PagesDependency {
   importStatement: string
 }
 
-const CONFIG_FILE_NAME = 'redwood.toml'
-
 // TODO: Remove these.
 const PATH_API_DIR_FUNCTIONS = 'api/src/functions'
 const PATH_RW_SCRIPTS = 'scripts'
@@ -106,21 +104,6 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
-
-/**
- * Search the parent directories for the Redwood configuration file.
- */
-export const getConfigPath = (
-  cwd: string = process.env.RWJS_CWD ?? process.cwd()
-): string => {
-  const configPath = findUp(CONFIG_FILE_NAME, { cwd })
-  if (!configPath) {
-    throw new Error(
-      `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`
-    )
-  }
-  return configPath
-}
 
 /**
  * The Redwood config file is used as an anchor for the base directory of a project.
