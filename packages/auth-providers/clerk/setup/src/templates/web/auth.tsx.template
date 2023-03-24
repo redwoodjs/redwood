@@ -7,11 +7,14 @@ import { navigate } from '@redwoodjs/router'
 
 export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createAuth()
 
-const ClerkProviderWrapper = ({ children, clerkOptions}) => {
+const ClerkProviderWrapper = ({ children, clerkOptions }) => {
   const { reauthenticate } = useAuth()
 
   return (
-    <ClerkProvider {...clerkOptions} navigate={(to) => reauthenticate().then(() => navigate(to))}>
+    <ClerkProvider
+      {...clerkOptions}
+      navigate={(to) => reauthenticate().then(() => navigate(to))}
+    >
       {children}
     </ClerkProvider>
   )
@@ -36,7 +39,9 @@ export const AuthProvider = ({ children }: Props) => {
 
   return (
     <ClerkRwAuthProvider>
-      <ClerkProviderWrapper clerkOptions={clerkOptions}>{children}</ClerkProviderWrapper>
+      <ClerkProviderWrapper clerkOptions={clerkOptions}>
+        {children}
+      </ClerkProviderWrapper>
     </ClerkRwAuthProvider>
   )
 }
