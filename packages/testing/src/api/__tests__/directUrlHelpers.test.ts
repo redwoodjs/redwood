@@ -8,8 +8,6 @@ const FIXTURE_DIR_PATH = path.resolve('..', '..', '__fixtures__')
 const NO_DIRECT_URL_FIXTURE_PATH = path.join(FIXTURE_DIR_PATH, 'test-project')
 const DIRECT_URL_FIXTURE_PATH = path.join(FIXTURE_DIR_PATH, 'empty-project')
 
-afterAll(() => {})
-
 it("does nothing if directUrl isn't set", () => {
   process.env.RWJS_CWD = NO_DIRECT_URL_FIXTURE_PATH
 
