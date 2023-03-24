@@ -116,6 +116,8 @@ web:
 `
 }
 
+const PROJECT_NAME = path.basename(getPaths().base)
+
 const DATABASE_YAML = (detectedDatabase) => `
   resources:
   - name: ${PROJECT_NAME}-db
@@ -124,7 +126,12 @@ const DATABASE_YAML = (detectedDatabase) => `
     type: database
 `
 
-const PROJECT_NAME = path.basename(getPaths().base)
+const COHERENCE_HEALTH_CHECK = `// coherence-health-check
+export const handler = async () => {
+  return {
+    statusCode: 200,
+  }
+}`
 
 const additionalFiles = [
   {
@@ -135,13 +142,6 @@ const additionalFiles = [
     content: COHERENCE_HEALTH_CHECK,
   },
 ]
-
-const COHERENCE_HEALTH_CHECK = `// coherence-health-check
-export const handler = async () => {
-  return {
-    statusCode: 200,
-  }
-}`
 
 // Updates the PORTs to use an environment variable.
 const updateRedwoodTomlTask = () => {
