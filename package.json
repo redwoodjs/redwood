@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "lerna run build",
-    "build:clean": "yarn clean:prisma && rimraf \"packages/**/dist\"",
+    "build:clean": "yarn clean:prisma && rimraf \"packages/**/dist\" --glob",
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project",
     "build:watch": "lerna run build:watch --parallel; tsc --build",
@@ -90,7 +90,7 @@
     "octokit": "2.0.14",
     "ora": "5.4.1",
     "prompts": "2.4.2",
-    "rimraf": "3.0.2",
+    "rimraf": "4.4.1",
     "typescript": "5.0.2",
     "yargs": "17.7.1",
     "zx": "7.2.1"
