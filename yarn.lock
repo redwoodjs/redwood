@@ -6742,7 +6742,6 @@ __metadata:
     "@redwoodjs/internal": 4.0.0
     "@redwoodjs/project-config": 4.0.0
     "@redwoodjs/testing": 4.0.0
-    "@types/rimraf": 3.0.2
     babel-loader: 9.1.2
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -6914,7 +6913,6 @@ __metadata:
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 11.0.1
-    "@types/rimraf": 3.0.2
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-polyfill-corejs3: 0.7.1
     babel-plugin-tester: 11.0.4
@@ -9658,7 +9656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/rimraf@npm:3.0.2, @types/rimraf@npm:^3.0.2":
+"@types/rimraf@npm:^3.0.2":
   version: 3.0.2
   resolution: "@types/rimraf@npm:3.0.2"
   dependencies:

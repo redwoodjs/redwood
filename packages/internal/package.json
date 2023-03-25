@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:clean-dist": "rimraf 'dist/**/*/__tests__'",
+    "build:clean-dist": "rimraf 'dist/**/*/__tests__' --glob",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
@@ -69,7 +69,6 @@
     "@types/babel__core": "7.20.0",
     "@types/findup-sync": "4.0.2",
     "@types/fs-extra": "11.0.1",
-    "@types/rimraf": "3.0.2",
     "babel-plugin-tester": "11.0.4",
     "graphql-tag": "2.12.6",
     "jest": "29.5.0"
