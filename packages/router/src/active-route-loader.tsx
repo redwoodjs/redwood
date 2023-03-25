@@ -50,7 +50,8 @@ export const ActiveRouteLoader = ({
   const waitingFor = useRef<string>('')
 
   const usePrerenderLoader =
-    prerender && (firstLoad || globalThis.__REDWOOD__PRERENDERING)
+    globalThis.__REDWOOD__PRERENDERING ||
+    (prerender && firstLoad && process.env.NODE_ENV === 'production')
 
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
     [path]: {
