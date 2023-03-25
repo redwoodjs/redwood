@@ -6828,7 +6828,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@testing-library/dom": 9.1.0
+    "@testing-library/dom": 9.2.0
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
@@ -8645,9 +8645,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:9.1.0, @testing-library/dom@npm:^9.0.0":
-  version: 9.1.0
-  resolution: "@testing-library/dom@npm:9.1.0"
+"@testing-library/dom@npm:9.2.0, @testing-library/dom@npm:^9.0.0":
+  version: 9.2.0
+  resolution: "@testing-library/dom@npm:9.2.0"
   dependencies:
     "@babel/code-frame": ^7.10.4
     "@babel/runtime": ^7.12.5
@@ -8657,7 +8657,7 @@ __metadata:
     dom-accessibility-api: ^0.5.9
     lz-string: ^1.5.0
     pretty-format: ^27.0.2
-  checksum: 730aa4b191b86c95abf9bae08495c135b7f02450938915bd6e6a6bb938680daf827dba5705b263c0b80795543c020cac0d0893c2a103989687e5578b879519ca
+  checksum: 0b2284c06d445cb043686204417d17f5eff282cabed7d5187ab6d8bde41d52953bab69ddad86b36469424576f4c7277c2132c128d4d033b1df24476c523361eb
   languageName: node
   linkType: hard
 
