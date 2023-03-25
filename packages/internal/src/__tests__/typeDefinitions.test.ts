@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { ensurePosixPath } from '@redwoodjs/project-config'
+
 import { findCells, findDirectoryNamedModules } from '../files'
 import {
   generateMirrorCells,
@@ -14,7 +16,6 @@ import {
   mirrorPathForCell,
   generateTypeDefScenarios,
 } from '../generate/typeDefinitions'
-import { ensurePosixPath } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,

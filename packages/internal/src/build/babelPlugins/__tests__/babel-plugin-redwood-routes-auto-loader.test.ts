@@ -3,7 +3,8 @@ import path from 'path'
 
 import * as babel from '@babel/core'
 
-import { getPaths } from '../../../paths'
+import { getPaths } from '@redwoodjs/project-config'
+
 import babelRoutesAutoLoader from '../babel-plugin-redwood-routes-auto-loader'
 
 const FIXTURE_PATH = path.resolve(

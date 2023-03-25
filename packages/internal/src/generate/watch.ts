@@ -5,13 +5,14 @@ import path from 'path'
 
 import chokidar from 'chokidar'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import {
   isCellFile,
   isPageFile,
   isDirectoryNamedModuleFile,
   isGraphQLSchemaFile,
 } from '../files'
-import { getPaths } from '../paths'
 import { warningForDuplicateRoutes } from '../routes'
 
 import { generate } from './generate'

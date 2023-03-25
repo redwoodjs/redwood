@@ -1,8 +1,8 @@
-globalThis.__dirname = __dirname
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+global.__dirname = __dirname
+jest.mock('@redwoodjs/project-config', () => {
   const path = require('path')
   return {
-    ...jest.requireActual('@redwoodjs/internal/dist/paths'),
+    ...jest.requireActual('@redwoodjs/project-config'),
     getPaths: () => {
       const BASE_PATH = path.join(globalThis.__dirname, 'fixtures')
       return {

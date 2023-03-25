@@ -1,5 +1,6 @@
 import { ComponentProps, JSXElementConstructor, Suspense } from 'react'
 
+import { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
@@ -52,20 +53,25 @@ export type CellProps<
     CellPropsVariables<CellType, GQLVariables>
 >
 
-export type CellLoadingProps<TVariables = any> = Partial<
-  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
->
+export type CellLoadingProps<TVariables extends OperationVariables = any> =
+  Partial<
+    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
+  >
 
-export type CellFailureProps<TVariables = any> = Partial<
-  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'> & {
-    error: QueryOperationResult['error'] | Error // for tests and storybook
-    /**
-     * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
-     */
-    errorCode: string
-    updating: boolean
-  }
->
+export type CellFailureProps<TVariables extends OperationVariables = any> =
+  Partial<
+    Omit<
+      QueryOperationResult<any, TVariables>,
+      'loading' | 'error' | 'data'
+    > & {
+      error: QueryOperationResult['error'] | Error // for tests and storybook
+      /**
+       * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
+       */
+      errorCode: string
+      updating: boolean
+    }
+  >
 
 // aka guarantee that all properties in T exist
 // This is necessary for Cells, because if it doesn't exist it'll go to Empty or Failure
@@ -95,7 +101,10 @@ export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
  * `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
  * this prop lets users render something like a spinner to show that a request is in-flight.
  */
-export type CellSuccessProps<TData = any, TVariables = any> = Partial<
+export type CellSuccessProps<
+  TData = any,
+  TVariables extends OperationVariables = any
+> = Partial<
   Omit<
     QueryOperationResult<TData, TVariables>,
     'loading' | 'error' | 'data'
