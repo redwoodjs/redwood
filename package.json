@@ -90,7 +90,7 @@
     "octokit": "2.0.14",
     "ora": "5.4.1",
     "prompts": "2.4.2",
-    "rimraf": "3.0.2",
+    "rimraf": "4.4.1",
     "typescript": "5.0.2",
     "yargs": "17.7.1",
     "zx": "7.2.1"
