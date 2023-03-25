@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "7.21.0",
     "@babel/runtime-corejs3": "7.21.0",
-    "@fastify/http-proxy": "8.4.0",
+    "@fastify/http-proxy": "9.0.0",
     "@fastify/static": "6.9.0",
     "@fastify/url-data": "5.3.1",
     "ansi-colors": "4.1.3",
