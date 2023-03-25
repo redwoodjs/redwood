@@ -6667,7 +6667,7 @@ __metadata:
     prettier: 2.8.7
     prisma: 4.11.0
     prompts: 2.4.2
-    rimraf: 3.0.2
+    rimraf: 4.4.1
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
     title-case: 3.0.3
@@ -6766,7 +6766,7 @@ __metadata:
     nodemon: 2.0.22
     null-loader: 4.0.1
     react-refresh: 0.14.0
-    rimraf: 3.0.2
+    rimraf: 4.4.1
     style-loader: 3.3.2
     typescript: 5.0.2
     url-loader: 4.1.1
@@ -6930,7 +6930,7 @@ __metadata:
     jest: 29.5.0
     kill-port: 1.6.1
     prettier: 2.8.7
-    rimraf: 3.0.2
+    rimraf: 4.4.1
     string-env-interpolation: 1.0.1
     systeminformation: 5.17.12
     terminal-link: 2.1.1
@@ -6986,7 +6986,7 @@ __metadata:
     fast-glob: 3.2.12
     findup-sync: 5.0.0
     jest: 29.5.0
-    rimraf: 3.0.2
+    rimraf: 4.4.1
     string-env-interpolation: 1.0.1
     typescript: 5.0.2
   languageName: unknown
@@ -27617,6 +27617,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rimraf@npm:4.4.1, rimraf@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "rimraf@npm:4.4.1"
+  dependencies:
+    glob: ^9.2.0
+  bin:
+    rimraf: dist/cjs/src/bin.js
+  checksum: 8c5e142d26d8b222be9dc9a1a41ba48e95d8f374e813e66a8533e87c6180174fcb3f573b9b592eca12740ebf8b78526d136acd971d4a790763d6f2232c34fa24
+  languageName: node
+  linkType: hard
+
 "rimraf@npm:^2.5.4, rimraf@npm:^2.6.3":
   version: 2.7.1
   resolution: "rimraf@npm:2.7.1"
@@ -27625,17 +27636,6 @@ __metadata:
   bin:
     rimraf: ./bin.js
   checksum: 4eef73d406c6940927479a3a9dee551e14a54faf54b31ef861250ac815172bade86cc6f7d64a4dc5e98b65e4b18a2e1c9ff3b68d296be0c748413f092bb0dd40
-  languageName: node
-  linkType: hard
-
-"rimraf@npm:^4.4.1":
-  version: 4.4.1
-  resolution: "rimraf@npm:4.4.1"
-  dependencies:
-    glob: ^9.2.0
-  bin:
-    rimraf: dist/cjs/src/bin.js
-  checksum: 8c5e142d26d8b222be9dc9a1a41ba48e95d8f374e813e66a8533e87c6180174fcb3f573b9b592eca12740ebf8b78526d136acd971d4a790763d6f2232c34fa24
   languageName: node
   linkType: hard
 
@@ -27737,7 +27737,7 @@ __metadata:
     octokit: 2.0.14
     ora: 5.4.1
     prompts: 2.4.2
-    rimraf: 3.0.2
+    rimraf: 4.4.1
     typescript: 5.0.2
     yargs: 17.7.1
     zx: 7.2.1
