@@ -22,7 +22,6 @@ const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 interface Props {
   path: string
   spec: Spec
-  prerender?: boolean
   delay?: number
   params?: Record<string, string>
   whileLoadingPage?: () => React.ReactElement | null
@@ -32,12 +31,21 @@ interface Props {
 const ArlNullPage = () => null
 const ArlWhileLoadingNullPage = () => null
 
+let isPrerendered = false
+
+if (typeof window !== 'undefined') {
+  const redwoodAppElement = document.getElementById('redwood-app')
+
+  if (redwoodAppElement && redwoodAppElement.children.length > 0) {
+    isPrerendered = true
+  }
+}
+
 let firstLoad = true
 
 export const ActiveRouteLoader = ({
   path,
   spec,
-  prerender,
   delay,
   params,
   whileLoadingPage,
@@ -50,8 +58,7 @@ export const ActiveRouteLoader = ({
   const waitingFor = useRef<string>('')
 
   const usePrerenderLoader =
-    globalThis.__REDWOOD__PRERENDERING ||
-    (prerender && firstLoad && process.env.NODE_ENV === 'production')
+    globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad)
 
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
     [path]: {

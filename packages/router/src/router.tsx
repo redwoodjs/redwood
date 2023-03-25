@@ -206,7 +206,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     )
   }
 
-  const { root, activeRoute, NotFoundPage, prerender } = analyzeRouterTree(
+  const { root, activeRoute, NotFoundPage } = analyzeRouterTree(
     children,
     location.pathname,
     paramTypes
@@ -219,7 +219,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
           <ParamsProvider>
             <ActiveRouteLoader
               spec={normalizePage(NotFoundPage)}
-              prerender={prerender}
               delay={pageLoadingDelay}
               path={location.pathname}
             />
@@ -255,7 +254,6 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
         <ActiveRouteLoader
           path={path}
           spec={normalizePage(page)}
-          prerender={prerender}
           delay={pageLoadingDelay}
           params={allParams}
           whileLoadingPage={whileLoadingPage}
