@@ -2643,19 +2643,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:8.4.0":
-  version: 8.4.0
-  resolution: "@fastify/http-proxy@npm:8.4.0"
+"@fastify/http-proxy@npm:9.0.0":
+  version: 9.0.0
+  resolution: "@fastify/http-proxy@npm:9.0.0"
   dependencies:
-    "@fastify/reply-from": ^8.0.0
+    "@fastify/reply-from": ^9.0.0
+    fastify-plugin: ^4.5.0
     ws: ^8.4.2
-  checksum: f2e0e79e36fffe3bd03cc16cd43c7cc151f8cd3386069f9555093dcdc6a03e4a9d3bae9c0d0f5d879ca85c67247ddc2583afc815e92770d2405f29a4efb7c721
+  checksum: 04293dafbe2f30ac848e2ade2c3c7581b8a200e8a0a2768d9f0674162e82619ab43486a383a416f220a4a82fa4745cd764d44f602bb39296a42207594ffc753c
   languageName: node
   linkType: hard
 
-"@fastify/reply-from@npm:^8.0.0":
-  version: 8.4.3
-  resolution: "@fastify/reply-from@npm:8.4.3"
+"@fastify/reply-from@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "@fastify/reply-from@npm:9.0.1"
   dependencies:
     "@fastify/error": ^3.0.0
     end-of-stream: ^1.4.4
@@ -2664,7 +2665,7 @@ __metadata:
     pump: ^3.0.0
     tiny-lru: ^10.0.0
     undici: ^5.19.1
-  checksum: c4066effb7b8075f1fb25bac3964585074afffee6274a7ec836445f1b44255252d93807c2970a21f6c08268fe1089987cc7001c47c6c0100833fe4fc77149a42
+  checksum: eadee7751ec2679cb9ae732258bc53a57e7232f1bec0fd4265e4124e27301dc879972adc024435d36a271b632cbd9283b819a41b71fd44d0d329f74156bede72
   languageName: node
   linkType: hard
 
@@ -6073,7 +6074,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/plugin-transform-runtime": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
-    "@fastify/http-proxy": 8.4.0
+    "@fastify/http-proxy": 9.0.0
     "@fastify/static": 6.9.0
     "@fastify/url-data": 5.3.1
     "@types/aws-lambda": 8.10.114
@@ -6842,7 +6843,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 18.2.0
     react-dom: 18.2.0
-    react-hook-form: 7.43.7
+    react-hook-form: 7.43.8
     typescript: 5.0.2
   peerDependencies:
     graphql: 16.6.0
@@ -17003,7 +17004,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:^4.0.0":
+"fastify-plugin@npm:^4.0.0, fastify-plugin@npm:^4.5.0":
   version: 4.5.0
   resolution: "fastify-plugin@npm:4.5.0"
   checksum: 81a63886e038fffb5427df5104c53b0f5d8ad89e59a451110cf591a81372ead1986df59d95bd897d9bd742f78e20eb3ff50bda0115382e6359ed1616883b9a01
@@ -26679,12 +26680,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.43.7":
-  version: 7.43.7
-  resolution: "react-hook-form@npm:7.43.7"
+"react-hook-form@npm:7.43.8":
+  version: 7.43.8
+  resolution: "react-hook-form@npm:7.43.8"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: ff376fd31c0a63191d4073fb64e05cd6384ac1ff46a28316be64c4bd4e9f5949c435ba99db19765806a61089308cbac1fdb0981848aa8a7e75df416371eb0799
+  checksum: c0122f31548589fa73ae31a141d7166b11d55bd2dfc1615f28fae99af6e1315e96d06445c561cbe662887413a14a197a37ffdac87defb1aeb642483975e86a90
   languageName: node
   linkType: hard
 
