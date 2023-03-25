@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "description": "The Redwood Command Line",
   "repository": {
     "type": "git",
@@ -30,13 +30,13 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
     "@prisma/internals": "4.11.0",
-    "@redwoodjs/api-server": "4.4.1",
-    "@redwoodjs/cli-helpers": "4.4.1",
-    "@redwoodjs/internal": "4.4.1",
-    "@redwoodjs/prerender": "4.4.1",
-    "@redwoodjs/project-config": "4.4.1",
-    "@redwoodjs/structure": "4.4.1",
-    "@redwoodjs/telemetry": "4.4.1",
+    "@redwoodjs/api-server": "4.4.2",
+    "@redwoodjs/cli-helpers": "4.4.2",
+    "@redwoodjs/internal": "4.4.2",
+    "@redwoodjs/prerender": "4.4.2",
+    "@redwoodjs/project-config": "4.4.2",
+    "@redwoodjs/structure": "4.4.2",
+    "@redwoodjs/telemetry": "4.4.2",
     "@types/secure-random-password": "0.2.1",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
