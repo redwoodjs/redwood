@@ -50,7 +50,7 @@
     "@faker-js/faker": "7.6.0",
     "@npmcli/arborist": "6.2.5",
     "@nrwl/nx-cloud": "15.3.2",
-    "@playwright/test": "1.32.0",
+    "@playwright/test": "1.32.1",
     "@replayio/playwright": "0.3.27",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
