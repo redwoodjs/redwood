@@ -32,6 +32,8 @@ interface Props {
 const ArlNullPage = () => null
 const ArlWhileLoadingNullPage = () => null
 
+let firstLoad = true
+
 export const ActiveRouteLoader = ({
   path,
   spec,
@@ -47,14 +49,21 @@ export const ActiveRouteLoader = ({
   const announcementRef = useRef<HTMLDivElement>(null)
   const waitingFor = useRef<string>('')
 
+  const usePrerenderLoader =
+    prerender && (firstLoad || globalThis.__REDWOOD__PRERENDERING)
+
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
     [path]: {
-      page: prerender ? spec.prerenderLoader().default : ArlNullPage,
-      specName: prerender ? spec.name : '',
-      state: prerender ? 'DONE' : 'PRE_SHOW',
+      page: usePrerenderLoader ? spec.prerenderLoader().default : ArlNullPage,
+      specName: usePrerenderLoader ? spec.name : '',
+      state: usePrerenderLoader ? 'DONE' : 'PRE_SHOW',
       location,
     },
   })
+
+  if (firstLoad) {
+    firstLoad = false
+  }
 
   const [renderedChildren, setRenderedChildren] = useState<
     React.ReactNode | undefined
