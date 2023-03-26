@@ -147,18 +147,26 @@ function insertChunkLoadingScript(
     throw new Error('Could not find a Route matching ' + renderPath)
   }
 
-  const buildManifest = JSON.parse(
-    fs.readFileSync(
-      path.join(getPaths().web.dist, 'build-manifest.json'),
-      'utf-8'
+  // The code for `/` is already included in app.<hash>.js and won't have a
+  // separate chunk
+  if (renderPath !== '/') {
+    const buildManifest = JSON.parse(
+      fs.readFileSync(
+        path.join(getPaths().web.dist, 'build-manifest.json'),
+        'utf-8'
+      )
     )
-  )
 
-  const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+    const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
 
-  indexHtmlTree('head').prepend(
-    `<script defer="defer" src="${chunkPath}"></script>`
-  )
+    if (!chunkPath) {
+      throw new Error('Could not found chunk for ' + route?.pageIdentifier)
+    }
+
+    indexHtmlTree('head').prepend(
+      `<script defer="defer" src="${chunkPath}"></script>`
+    )
+  }
 }
 
 interface PrerenderParams {
