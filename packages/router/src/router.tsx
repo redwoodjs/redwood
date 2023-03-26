@@ -275,9 +275,8 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
  *    NotFoundPage specified we might not find it, but only if we first find
  *    the active route, and in that case we don't need the NotFoundPage, so it
  *    doesn't matter.
- *  - prerender: Should the current route be prerendered?
  */
-export function analyzeRouterTree(
+function analyzeRouterTree(
   children: React.ReactNode,
   pathname: string,
   paramTypes?: Record<string, ParamType>
@@ -285,13 +284,9 @@ export function analyzeRouterTree(
   root: React.ReactElement | undefined
   activeRoute: React.ReactElement<InternalRouteProps> | undefined
   NotFoundPage: PageType | undefined
-  prerender: boolean | undefined
 } {
   let NotFoundPage: PageType | undefined = undefined
-  let notFoundPrerendered: boolean | undefined = undefined
   let activeRoute: React.ReactElement | undefined = undefined
-  let activeRoutePrerender: boolean | undefined = undefined
-  let setPrerender: boolean | undefined = undefined
 
   function isActiveRoute(route: React.ReactElement<InternalRouteProps>) {
     if (route.props.path) {
@@ -303,15 +298,6 @@ export function analyzeRouterTree(
     }
 
     return false
-  }
-
-  function isChildWithPrerender(
-    child: unknown
-  ): child is { props: { prerender: boolean } } {
-    return (
-      typeof (child as { props: { prerender: boolean | undefined } }).props
-        .prerender !== 'undefined'
-    )
   }
 
   function analyzeRouterTreeInternal(
@@ -327,7 +313,6 @@ export function analyzeRouterTree(
       if (isRoute(child)) {
         if (child.props.notfound && child.props.page) {
           NotFoundPage = child.props.page
-          notFoundPrerendered = child.props.prerender
         }
 
         // We have a <Route ...> element, let's check if it's the one we should
@@ -345,10 +330,6 @@ export function analyzeRouterTree(
             key: '.rw-route',
           })
 
-          if (isChildWithPrerender(child)) {
-            activeRoutePrerender = child.props.prerender
-          }
-
           activeRoute = childWithKey
 
           return childWithKey
@@ -359,16 +340,6 @@ export function analyzeRouterTree(
         const nestedActive = analyzeRouterTreeInternal(child.props.children)
 
         if (nestedActive) {
-          // If this Set has the active child we read the prerender prop from it
-          // We only set this once, to give the inner-most set precedence
-          const set = child
-          if (
-            isChildWithPrerender(set) &&
-            typeof setPrerender === 'undefined'
-          ) {
-            setPrerender = set.props.prerender
-          }
-
           // We found something we wanted to keep. So let's return it
           return React.cloneElement(child, child.props, nestedActive)
         }
@@ -380,23 +351,7 @@ export function analyzeRouterTree(
 
   const root = analyzeRouterTreeInternal(children)
 
-  let prerender: boolean | undefined = false
-  if (typeof activeRoute === 'undefined') {
-    prerender = notFoundPrerendered
-  } else if (typeof activeRoutePrerender !== 'undefined') {
-    // If `prerender` is explicitly set on the active route that always takes
-    // precedence
-    prerender = activeRoutePrerender
-  } else {
-    prerender = setPrerender
-  }
-
-  return {
-    root,
-    activeRoute,
-    NotFoundPage,
-    prerender,
-  }
+  return { root, activeRoute, NotFoundPage }
 }
 
 export { Router, Route, namedRoutes as routes, isRoute, PageType }
