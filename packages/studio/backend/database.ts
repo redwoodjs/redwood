@@ -4,8 +4,7 @@ import { open } from 'sqlite'
 import type { Database } from 'sqlite'
 import sqlite3 from 'sqlite3'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 let db: Database<sqlite3.Database, sqlite3.Statement>
 

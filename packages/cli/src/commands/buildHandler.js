@@ -89,7 +89,7 @@ export const handler = async ({
       // Vite handles this internally
       title: 'Cleaning Web...',
       task: () => {
-        rimraf.sync(rwjsPaths.web.dist)
+        return rimraf(rwjsPaths.web.dist)
       },
       enabled: getConfig().web.bundler !== 'vite',
     },

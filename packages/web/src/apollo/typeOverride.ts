@@ -9,13 +9,17 @@ import type {
 
 // @MARK: Override relevant types from Apollo here
 declare global {
-  interface QueryOperationResult<TData = any, TVariables = OperationVariables>
-    extends QueryResult<TData, TVariables> {}
+  interface QueryOperationResult<
+    TData = any,
+    TVariables extends OperationVariables = OperationVariables
+  > extends QueryResult<TData, TVariables> {}
   interface MutationOperationResult<TData, TVariables>
     extends MutationTuple<TData, TVariables> {}
 
-  interface GraphQLQueryHookOptions<TData, TVariables>
-    extends QueryHookOptions<TData, TVariables> {}
+  interface GraphQLQueryHookOptions<
+    TData,
+    TVariables extends OperationVariables
+  > extends QueryHookOptions<TData, TVariables> {}
   interface GraphQLMutationHookOptions<TData, TVariables>
     extends MutationHookOptions<TData, TVariables> {}
 }

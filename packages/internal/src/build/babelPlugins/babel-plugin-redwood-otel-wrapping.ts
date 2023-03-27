@@ -2,7 +2,7 @@ import * as nodejsPath from 'path'
 
 import type { PluginObj, types } from '@babel/core'
 
-import { getBaseDirFromFile } from '../../paths'
+import { getBaseDirFromFile } from '@redwoodjs/project-config'
 
 // This wraps user code within opentelemetry spans to provide greater ease in trace analysis.
 

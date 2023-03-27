@@ -6,7 +6,7 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/internal/dist/paths'
+import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
