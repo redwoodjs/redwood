@@ -402,7 +402,9 @@ export function createCell<
 
   return (props: CellProps) => {
     return (
-      <Suspense fallback={<div>Loading suspense...</div>}>
+      // Cells don't suspend, so the fallback won't render. We only use
+      // <Suspense> for cell prerender rehydration support
+      <Suspense fallback={null}>
         <NamedCell {...props} />
       </Suspense>
     )
