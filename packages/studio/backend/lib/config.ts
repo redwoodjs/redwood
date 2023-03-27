@@ -12,8 +12,10 @@ export const getWebConfig = (): WebConfig => {
 
   // Construct the graphql url from apiUrl by default
   // But if apiGraphQLUrl is specified, use that instead
+  const studioConfig = getStudioConfig()
+  const graphql = studioConfig.graphiql?.endpoint ?? 'graphql'
   const graphqlEndpoint =
-    web.apiGraphQLUrl ?? `http://${web.host}:${web.port}${apiUrl}/graphql`
+    web.apiGraphQLUrl ?? `http://${web.host}:${web.port}${apiUrl}/${graphql}`
 
   const webConfigWithGraphQlEndpoint = {
     ...getConfig().web,
