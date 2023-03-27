@@ -59,7 +59,7 @@ RedwoodJS adds a way to do no verification as well of testing or in the case you
 
 - SkipVerifier (bypass verification, or no verification)
 
-RedwoodJS implements [signatureVerifiers](https://github.com/dthyresson/redwood/tree/dt-secure-handler/packages/api/src/auth/verifiers) for each of these so you can get started integrating your app with third-parties right away.
+RedwoodJS implements [signatureVerifiers](https://github.com/redwoodjs/redwood/tree/main/packages/api/src/auth/verifiers) for each of these so you can get started integrating your app with third-parties right away.
 
 ```jsx
 export type SupportedVerifiers =
@@ -69,7 +69,6 @@ export type SupportedVerifiers =
   | Sha256Verifier
   | Base64Sha1Verifier
   | Base64Sha256Verifier
-  | Sha1Verifier
   | TimestampSchemeVerifier
   | JwtVerifier
 ```
