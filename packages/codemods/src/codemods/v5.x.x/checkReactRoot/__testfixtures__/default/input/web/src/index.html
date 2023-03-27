@@ -8,8 +8,11 @@
 </head>
 
 <body>
-  <!-- Please keep this div empty -->
-  <div id="redwood-app"></div>
+  <div id="redwood-app">
+    <!-- Please keep the line below for prerender support. -->
+    <%= prerenderPlaceholder %>
+    <div>I shouldn't be here</div>
+  </div>
 </body>
 
 </html>

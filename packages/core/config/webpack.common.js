@@ -230,11 +230,6 @@ module.exports = (webpackEnv) => {
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
-        templateParameters: {
-          prerenderPlaceholder: isEnvProduction
-            ? '<server-markup></server-markup>'
-            : '<!-- Prerender placeholder -->',
-        },
         scriptLoading: 'defer',
         inject: true,
         chunks: 'all',
