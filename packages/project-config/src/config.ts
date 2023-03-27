@@ -59,6 +59,24 @@ interface BrowserTargetConfig {
   sourceMap: boolean
 }
 
+interface GraphiQLStudioConfig {
+  endpoint?: string
+  authImpersonation?: AuthImpersonationConfig
+}
+
+interface AuthImpersonationConfig {
+  authProvider?: string
+  jwtSecret?: string
+  userId?: string
+  email?: string
+  roles?: string[]
+}
+
+interface StudioConfig {
+  inMemory: boolean
+  graphiql?: GraphiQLStudioConfig
+}
+
 export interface Config {
   web: BrowserTargetConfig
   api: NodeTargetConfig
@@ -77,13 +95,7 @@ export interface Config {
     enabled: boolean
     apiSdk?: string
   }
-  studio: {
-    inMemory: boolean
-    authProvider?: string
-    userId?: string
-    email?: string
-    roles?: string[]
-  }
+  studio: StudioConfig
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -129,9 +141,16 @@ const DEFAULT_CONFIG: Config = {
   },
   studio: {
     inMemory: false,
-    userId: undefined,
-    email: undefined,
-    roles: undefined,
+    graphiql: {
+      endpoint: 'graphql',
+      authImpersonation: {
+        authProvider: undefined,
+        userId: undefined,
+        email: undefined,
+        roles: undefined,
+        jwtSecret: 'secret',
+      },
+    },
   },
 }
 

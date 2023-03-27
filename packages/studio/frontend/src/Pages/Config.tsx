@@ -14,10 +14,16 @@ import LoadingSpinner from '../Components/LoadingSpinner'
 const QUERY_GET_CONFIG = gql`
   query GetConfig {
     studioConfig {
-      authProvider
-      userId
-      email
-      roles
+      graphiql {
+        endpoint
+        authImpersonation {
+          authProvider
+          userId
+          email
+          roles
+          jwtSecret
+        }
+      }
     }
   }
 `
@@ -84,7 +90,7 @@ function Config() {
                   Provider
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {data?.studioConfig.authProvider}
+                  {data?.studioConfig.graphiql.authImpersonation.authProvider}
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -93,7 +99,7 @@ function Config() {
                   Impersonated User Id
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {data?.studioConfig.userId}
+                  {data?.studioConfig.graphiql.authImpersonation.userId}
                 </dd>
               </div>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -102,7 +108,7 @@ function Config() {
                   Impersonated Email
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {data?.studioConfig.email}
+                  {data?.studioConfig.graphiql.authImpersonation.email}
                 </dd>
               </div>
 
@@ -112,7 +118,7 @@ function Config() {
                   Impersonated Roles
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {data?.studioConfig.roles}
+                  {data?.studioConfig.graphiql.authImpersonation.roles}
                 </dd>
               </div>
             </>

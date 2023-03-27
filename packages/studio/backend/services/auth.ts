@@ -4,24 +4,25 @@ import { getSupabaseAuthHeader } from '../lib/authProviderEncoders/supabaseAuthE
 import { getStudioConfig } from '../lib/config'
 
 export const authProvider = async (_parent: unknown) => {
-  return getStudioConfig().authProvider
+  return getStudioConfig().graphiql?.authImpersonation?.authProvider
 }
 
 export const generateAuthHeaders = async (
   _parent: unknown,
   { userId }: { userId?: string }
 ) => {
-  const dashboardConfig = getStudioConfig()
+  const studioConfig = getStudioConfig()
 
-  const provider = dashboardConfig.authProvider
-  const impersonateUserId = dashboardConfig.userId
-  const email = dashboardConfig.email
+  const provider = studioConfig.graphiql?.authImpersonation?.authProvider
+  const impersonateUserId = studioConfig.graphiql?.authImpersonation?.userId
+  const email = studioConfig.graphiql?.authImpersonation?.email
+  const secret = studioConfig.graphiql?.authImpersonation?.jwtSecret
 
   if (provider == 'dbAuth') {
     return getDBAuthHeader(userId || impersonateUserId)
   }
   if (provider == 'netlify') {
-    return getNetlifyAuthHeader(userId || impersonateUserId, email)
+    return getNetlifyAuthHeader(userId || impersonateUserId, email, secret)
   }
 
   if (provider == 'supabase') {

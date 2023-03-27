@@ -112,10 +112,20 @@ export interface WebConfig {
   graphqlEndpoint?: string
 }
 
-export interface StudioConfig {
-  inMemory: boolean
+export interface GraphiQLStudioConfig {
+  endpoint?: string
+  authImpersonation?: AuthImpersonationConfig
+}
+
+export interface AuthImpersonationConfig {
   authProvider?: string
+  jwtSecret?: string
   userId?: string
   email?: string
   roles?: string[]
+}
+
+export interface StudioConfig {
+  inMemory: boolean
+  graphiql?: GraphiQLStudioConfig
 }

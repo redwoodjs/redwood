@@ -4,7 +4,11 @@ const getExpiryTime = () => {
   return Date.now() + 3600 * 1000
 }
 
-export const getNetlifyAuthHeader = (userId?: string, email?: string) => {
+export const getNetlifyAuthHeader = (
+  userId?: string,
+  email?: string,
+  secret?: string
+) => {
   const payload = {
     exp: getExpiryTime(),
     sub: userId ?? 'test-user-id',
@@ -17,7 +21,7 @@ export const getNetlifyAuthHeader = (userId?: string, email?: string) => {
   }
 
   // in dev, Netlify simply decodes as there is no access to the actual secret used to sign the JWT
-  const token = jwt.sign(payload, 'secret')
+  const token = jwt.sign(payload, secret || 'secret')
 
   return {
     authProvider: 'netlify',

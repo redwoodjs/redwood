@@ -67,11 +67,22 @@ export const setupYoga = (fastify: FastifyInstance) => {
         duration_nano: String
       }
 
-      type StudioConfig {
+      type GraphiQLConfig {
+        endpoint: String
+        authImpersonation: AuthImpersonationConfig
+      }
+
+      type AuthImpersonationConfig {
         authProvider: String
         userId: String
         email: String
         roles: [String]
+        jwtSecret: String
+      }
+
+      type StudioConfig {
+        inMemory: Boolean
+        graphiql: GraphiQLConfig
       }
 
       type WebConfig {
