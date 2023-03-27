@@ -6,14 +6,11 @@ import { getBaseDirFromFile } from '@redwoodjs/project-config'
 
 // This wraps user code within opentelemetry spans to provide greater ease in trace analysis.
 
-// TODO: Don't wrap EVERYTHING, be smarter and name them appropriately so they are not all redwoodjs:service:[FunctionName]
-
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   return {
     name: 'babel-plugin-redwood-otel-wrapping',
     visitor: {
       Program(path) {
-        // console.log(JSON.stringify(state.file.opts))
         path.node.body.unshift(
           t.importDeclaration(
             [t.importNamespaceSpecifier(t.identifier('opentelemetry'))],
