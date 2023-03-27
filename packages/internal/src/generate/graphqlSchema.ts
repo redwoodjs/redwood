@@ -10,8 +10,7 @@ import { DocumentNode, print } from 'graphql'
 import terminalLink from 'terminal-link'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
-
-import { getPaths } from '../paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 export const generateGraphQLSchema = async () => {
   const schemaPointerMap = {

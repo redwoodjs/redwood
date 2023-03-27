@@ -1,0 +1,26 @@
+{
+  "c308c022db9fad1e6771d7dfc6dd951583bc24f7": {
+    "message": "Forms: Export EmptyAsValue (#7656)",
+    "needsCherryPick": true
+  },
+  "1424096a5393e12784a0102fc80bca6f2f8de370": {
+    "message": "Update useRequireAuth docs to v4 auth (#7646)",
+    "needsCherryPick": true
+  },
+  "c212568ec05e35cb84982d6bbc0f474e9115da4f": {
+    "message": "Fix the world's most minor typo (txs -> tsx) (#7658)",
+    "needsCherryPick": true
+  },
+  "bc18d60d04a87acc929481d67a834d4fbd6d74a1": {
+    "message": "chore(deps): update dependency lerna to v6.5.1 (#7631)",
+    "needsCherryPick": true
+  },
+  "164ab11e598534eb8df3c4ccead78c6b79e0b89b": {
+    "message": "Get rid of red squiggles in new lambda functions (#7640)",
+    "needsCherryPick": true
+  },
+  "5101e9fddb6c3dfee85125d710a04ea4c8819a08": {
+    "message": "chore: add redirects for compressed v2, v3 docs",
+    "needsCherryPick": true
+  }
+}

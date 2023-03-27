@@ -4,10 +4,14 @@ import type { AuthContextInterface } from './AuthContext'
 
 export function createUseAuth<
   TUser,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
   TClient
@@ -15,10 +19,14 @@ export function createUseAuth<
   AuthContext: React.Context<
     | AuthContextInterface<
         TUser,
+        TLogInOptions,
         TLogIn,
+        TLogOutOptions,
         TLogOut,
+        TSignUpOptions,
         TSignUp,
         TForgotPassword,
+        TResetPasswordOptions,
         TResetPassword,
         TValidateResetToken,
         TClient
@@ -28,10 +36,14 @@ export function createUseAuth<
 ) {
   const useAuth = (): AuthContextInterface<
     TUser,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
     TValidateResetToken,
     TClient
@@ -50,6 +62,10 @@ export function createUseAuth<
 
 export function useNoAuth(): AuthContextInterface<
   null,
+  void,
+  void,
+  void,
+  void,
   void,
   void,
   void,
@@ -80,6 +96,10 @@ export function useNoAuth(): AuthContextInterface<
 }
 
 export type UseAuth = () => AuthContextInterface<
+  unknown,
+  unknown,
+  unknown,
+  unknown,
   unknown,
   unknown,
   unknown,

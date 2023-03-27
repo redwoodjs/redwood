@@ -58,7 +58,8 @@ const defaultToken = () => ({
 
 const azureActiveDirectoryMockClient: Partial<AzureActiveDirectoryClient> = {
   loginRedirect: async (options?: RedirectRequest) => {
-    if (options?.claims?.includes('admin')) {
+    const claims = JSON.parse(options?.claims || '{}')
+    if (claims.accessToken?.find((token) => token.name === 'role')) {
       loggedInUser = adminUser
     } else {
       loggedInUser = user
@@ -115,7 +116,7 @@ beforeEach(() => {
 })
 
 function getAzureActiveDirectoryAuth(customProviderHooks?: {
-  useCurrentUser?: () => Promise<Record<string, unknown>>
+  useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
@@ -184,7 +185,22 @@ describe('azureActiveDirectoryAuth', () => {
     expect(authRef.current.hasRole('admin')).toBeFalsy()
 
     await act(async () => {
-      authRef.current.logIn({ claims: ['admin'] })
+      const claimsRequest = {
+        idToken: [
+          { name: 'name', essential: true },
+          { name: 'email', essential: true },
+          { name: 'country', essential: false },
+        ],
+        accessToken: [
+          { name: 'role', essential: true },
+          { name: 'permissions', essential: true },
+        ],
+      }
+
+      authRef.current.logIn({
+        scopes: ['openid', 'profile'],
+        claims: JSON.stringify(claimsRequest),
+      })
     })
 
     expect(authRef.current.hasRole('admin')).toBeTruthy()

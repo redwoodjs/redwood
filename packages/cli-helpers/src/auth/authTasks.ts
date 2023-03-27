@@ -136,7 +136,6 @@ const apiSrcDoesExist = () => {
 const addAuthImportToApp = (content: string) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
-  // @ts-expect-error - We polyfill findLastIndex
   const importIndex = contentLines.findLastIndex((line: string) =>
     /^\s*import (?!.*(?:.css'|.scss'))/.test(line)
   )
@@ -151,7 +150,6 @@ const addAuthImportToApp = (content: string) => {
 const addAuthImportToRoutes = (content: string) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
-  // @ts-expect-error - We polyfill findLastIndex
   const importIndex = contentLines.findLastIndex((line: string) =>
     /^\s*import (?!.*(?:.css'|.scss'))/.test(line)
   )

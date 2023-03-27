@@ -1,8 +1,9 @@
+import { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 
 type DefaultUseQueryType = <
   TData = any,
-  TVariables = GraphQLOperationVariables
+  TVariables extends OperationVariables = GraphQLOperationVariables
 >(
   query: DocumentNode,
   options?: GraphQLQueryHookOptions<TData, TVariables>
@@ -70,7 +71,10 @@ export const GraphQLHooksProvider = <
   )
 }
 
-export function useQuery<TData = any, TVariables = GraphQLOperationVariables>(
+export function useQuery<
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
   query: DocumentNode,
   options?: GraphQLQueryHookOptions<TData, TVariables>
 ): QueryOperationResult<TData, TVariables> {

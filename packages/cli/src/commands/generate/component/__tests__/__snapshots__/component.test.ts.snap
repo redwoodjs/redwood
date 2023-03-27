@@ -5,7 +5,9 @@ exports[`creates a TS component and test 1`] = `
   return (
     <div>
       <h2>{'TypescriptUser'}</h2>
-      <p>{'Find me in ./web/src/components/TypescriptUser/TypescriptUser.tsx'}</p>
+      <p>
+        {'Find me in ./web/src/components/TypescriptUser/TypescriptUser.tsx'}
+      </p>
     </div>
   )
 }

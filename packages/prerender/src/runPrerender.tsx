@@ -8,7 +8,7 @@ import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import type { QueryInfo } from '@redwoodjs/web'
 
