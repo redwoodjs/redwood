@@ -153,7 +153,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         whileLoadingPage: undefined,
         wrappers: [WrapperX, WrapperY], // both wrappers
         setProps: {
-          id: 'set-two',
+          id: 'set-two', // the id gets overwritten by the second Set
           theme: 'blue',
           passThruProp: 'bazinga', // from the first set
         },

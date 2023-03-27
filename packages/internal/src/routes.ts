@@ -1,6 +1,9 @@
+import path from 'path'
+
 import chalk from 'chalk'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, getRouteHookForPage } from '@redwoodjs/project-config'
+import { getRouteRegexAndParams } from '@redwoodjs/router'
 
 // Circular dependency when trying to use the standard import
 const { getProject } = require('@redwoodjs/structure/dist/index')
@@ -62,4 +65,39 @@ export function warningForDuplicateRoutes() {
     })
   }
   return message.trimEnd()
+}
+
+export interface VirtualRoute {
+  name: string
+  path: string
+  hasParams: boolean
+  id: string
+  isNotFound: boolean
+  filePath: string | undefined
+  relativeFilePath: string | undefined
+  routeHooks: string | undefined | null
+  matchRegexString: string | null
+}
+
+export const listRoutes = (): VirtualRoute[] => {
+  const rwProject = getProject(getPaths().base)
+  const routes = rwProject.getRouter().routes
+
+  return routes.map((route: any) => {
+    return {
+      name: route.isNotFound ? '404' : route.name,
+      path: route.isNotFound ? '/404' : route.path,
+      hasParams: route.hasParameters,
+      id: route.id,
+      isNotFound: route.isNotFound,
+      filePath: route.page?.filePath,
+      relativeFilePath: route.page?.filePath
+        ? path.relative(getPaths().web.src, route.page?.filePath)
+        : undefined,
+      routeHooks: getRouteHookForPage(route.page?.filePath),
+      matchRegexString: route.isNotFound
+        ? null
+        : getRouteRegexAndParams(route.path).matchRegexString,
+    }
+  })
 }

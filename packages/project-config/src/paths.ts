@@ -213,6 +213,21 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   return paths
 }
 
+export const getRouteHookForPage = (pagePath: string | undefined | null) => {
+  if (!pagePath) {
+    return null
+  }
+
+  // We just use fg, so if they make typos in the routeHook file name,
+  // it's all good, we'll still find it
+  return fg
+    .sync('*.routeHooks.{js,ts,tsx,jsx}', {
+      absolute: true,
+      cwd: path.dirname(pagePath), // the page's folder
+    })
+    .at(0)
+}
+
 /**
  * Process the pages directory and return information useful for automated imports.
  *

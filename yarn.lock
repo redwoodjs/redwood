@@ -7135,6 +7135,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/internal": 4.0.0
+    "@redwoodjs/project-config": 4.0.0
     "@vitejs/plugin-react": 3.1.0
     buffer: 6.0.3
     core-js: 3.29.1

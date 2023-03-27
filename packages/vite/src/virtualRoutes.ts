@@ -2,12 +2,10 @@ import path from 'path'
 
 import fg from 'fast-glob'
 
-import { getPaths } from '@redwoodjs/internal/dist/paths'
-import { getRouteRegexAndParams } from '@redwoodjs/router'
 // @MARK we should avoid using structure
-import { getProject } from '@redwoodjs/structure'
+import { listRoutes } from '@redwoodjs/internal/dist/routes'
 
-const getRouteHookForPage = (pagePath: string | undefined | null) => {
+export const getRouteHookForPage = (pagePath: string | undefined | null) => {
   if (!pagePath) {
     return null
   }
@@ -18,43 +16,6 @@ const getRouteHookForPage = (pagePath: string | undefined | null) => {
       cwd: path.dirname(pagePath), // the page's folder
     })
     .at(0)
-}
-
-// @NOTE:
-// We pass the matchRegex as string, because serializing/deserializing a regex is a pain
-export interface VirtualRoute {
-  name: string
-  path: string
-  hasParams: boolean
-  id: string
-  isNotFound: boolean
-  filePath: string | undefined
-  relativeFilePath: string | undefined
-  routeHooks: string | undefined | null
-  matchRegexString: string | null
-}
-
-export const listRoutes = (): VirtualRoute[] => {
-  const rwProject = getProject(getPaths().base)
-  const routes = rwProject.getRouter().routes
-
-  return routes.map((route: any) => {
-    return {
-      name: route.isNotFound ? '404' : route.name,
-      path: route.isNotFound ? '/404' : route.path,
-      hasParams: route.hasParameters,
-      id: route.id,
-      isNotFound: route.isNotFound,
-      filePath: route.page?.filePath,
-      relativeFilePath: route.page?.filePath
-        ? path.relative(getPaths().web.src, route.page?.filePath)
-        : undefined,
-      routeHooks: getRouteHookForPage(route.page?.filePath),
-      matchRegexString: route.isNotFound
-        ? null
-        : getRouteRegexAndParams(route.path).matchRegexString,
-    }
-  })
 }
 
 export default function virtualRoutes() {

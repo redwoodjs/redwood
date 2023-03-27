@@ -17,7 +17,6 @@ import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/bab
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import virtualRoutes from './virtualRoutes'
-export type { VirtualRoute } from './virtualRoutes'
 
 const readFile = promisify(fsReadFile)
 
