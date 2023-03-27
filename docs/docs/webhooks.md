@@ -75,7 +75,7 @@ export type SupportedVerifiers =
 
 Each `SupportedVerifier` implements a method to `sign` and `verify` a payload with a secret (if needed).
 
-When the webhook needs [creates a verifier](https://github.com/dthyresson/redwood/blob/b3b21a4a2c7a96ac8d1fd8b078a9869d3f2f1cec/packages/api/src/auth/verifiers/index.ts#L12) in order to `verifyEvent`, `verifySignature` or `signPayload` it does so via:
+When the webhook needs [creates a verifier](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/auth/verifiers/index.ts#L12) in order to `verifyEvent`, `verifySignature` or `signPayload` it does so via:
 
 ```jsx
 createVerifier(type, options)
