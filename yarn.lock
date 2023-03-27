@@ -6183,7 +6183,7 @@ __metadata:
     pretty-bytes: 5.6.0
     pretty-ms: 7.0.1
     qs: 6.11.1
-    split2: 4.1.0
+    split2: 4.2.0
     typescript: 4.9.5
     yargs: 17.7.1
   bin:
@@ -6215,7 +6215,7 @@ __metadata:
     pascalcase: 1.0.0
     pino: 8.11.0
     redis: 4.6.5
-    split2: 4.1.0
+    split2: 4.2.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
     typescript: 4.9.5
@@ -28718,10 +28718,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"split2@npm:4.1.0, split2@npm:^4.0.0":
-  version: 4.1.0
-  resolution: "split2@npm:4.1.0"
-  checksum: c02219211c6c55137977b729b44a22462386bf8878f61c9221ebb0347509ffeaf1285f93a9376e361e03f2c8969e83fff0c04745f56dcccdd30c65bec7db8084
+"split2@npm:4.2.0, split2@npm:^4.0.0":
+  version: 4.2.0
+  resolution: "split2@npm:4.2.0"
+  checksum: b292beb8ce9215f8c642bb68be6249c5a4c7f332fc8ecadae7be5cbdf1ea95addc95f0459ef2e7ad9d45fd1064698a097e4eb211c83e772b49bc0ee423e91534
   languageName: node
   linkType: hard
 
