@@ -64,8 +64,10 @@ interface GraphiQLStudioConfig {
   authImpersonation?: AuthImpersonationConfig
 }
 
+type SupportedAuthImpersonationProviders = 'dbAuth' | 'netlify' | 'supabase'
+
 interface AuthImpersonationConfig {
-  authProvider?: string
+  authProvider?: SupportedAuthImpersonationProviders
   jwtSecret?: string
   userId?: string
   email?: string

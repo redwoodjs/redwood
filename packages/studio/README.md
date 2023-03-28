@@ -16,16 +16,17 @@ TOML example:
   port = 8888
 [studio]
   inMemory = false
-  [studio.graphiql]
-    endpoint = "graphql"
-    [studio.graphiql.authImpersonation]
-      authProvider = "dbAuth"
-      email = "user@example.com"
-      userId = "1"
+[studio.graphiql]
+  endpoint = "graphql"
+[studio.graphiql.authImpersonation]
+  authProvider = "dbAuth"
+  email = "user@example.com"
+  userId = "1"
 ```
 
 ### Netlify
 
+Since Netlify does not expose the JWT secret used to sign the token in production, impersonation requires a `jwtSecret` to encode and decode the auth token.
 
 TOML example:
 
@@ -34,13 +35,13 @@ TOML example:
   port = 8888
 [studio]
   inMemory = false
-  [studio.graphiql]
-    endpoint = "graphql"
-    [studio.graphiql.authImpersonation]
-      authProvider = "netlify"
-      email = "user@example.com"
-      userId = "1"
-      jwtSecret = "some-secret-setting"
+[studio.graphiql]
+  endpoint = "graphql"
+[studio.graphiql.authImpersonation]
+  authProvider = "netlify"
+  email = "user@example.com"
+  userId = "1"
+  jwtSecret = "some-secret-setting"
 ```
 
 ### Supabase
@@ -54,12 +55,12 @@ TOML example:
   port = 8888
 [studio]
   inMemory = false
-  [studio.graphiql]
-    endpoint = "graphql"
-    [studio.graphiql.authImpersonation]
-      authProvider = "supabase"
-      email = "user@example.com"
-      userId = "1"
+[studio.graphiql]
+  endpoint = "graphql"
+[studio.graphiql.authImpersonation]
+  authProvider = "supabase"
+  email = "user@example.com"
+  userId = "1"
 ```
 
 ## TODO:
