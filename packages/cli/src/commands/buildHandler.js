@@ -7,12 +7,12 @@ import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
-import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
-import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
+import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
+import { buildFeServer } from '@redwoodjs/vite'
 
-import { getPaths, getConfig } from '../lib'
+import { getConfig, getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
@@ -97,7 +97,7 @@ export const handler = async ({
       title: 'Building Web...',
       task: async () => {
         if (getConfig().web.bundler === 'vite') {
-          await buildWeb({
+          await buildFeServer({
             verbose,
           })
         } else {

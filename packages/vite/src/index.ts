@@ -208,3 +208,6 @@ const applyOn = (apply: 'build' | 'serve') => {
     }
   }
 }
+
+// Exports from other files
+export { buildFeServer } from './buildFeServer'

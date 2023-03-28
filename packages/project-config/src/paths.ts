@@ -45,6 +45,8 @@ export interface BrowserTargetPaths {
   storybookPreviewConfig: string
   storybookManagerConfig: string
   dist: string
+  distServer: string
+  routeManifest: string
   types: string
 }
 
@@ -109,6 +111,8 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
+const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
+const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
 
 /**
  * The Redwood config file is used as an anchor for the base directory of a project.
@@ -208,9 +212,11 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
+      distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
       entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),
+      routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
     },
   }
 
