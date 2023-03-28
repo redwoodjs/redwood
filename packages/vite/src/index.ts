@@ -36,26 +36,6 @@ export default function redwoodPluginVite() {
       name: 'redwood-plugin-vite',
 
       // ---------- Bundle injection ----------
-      // Used by Vite during dev, to inject the entrypoint.
-      transformIndexHtml: {
-        order: 'pre',
-        handler: (html: string) => {
-          // Remove the prerender placeholder
-          // @TODO may not be needed after React 18 changes in v5
-          const outputHtml = html.replace('<%= prerenderPlaceholder %>', '')
-
-          // And then inject the entry
-          if (existsSync(clientEntryPath)) {
-            return outputHtml.replace(
-              '</head>',
-              `<script type="module" src="/entry-client.jsx"></script>
-        </head>`
-            )
-          } else {
-            return outputHtml
-          }
-        },
-      },
       // Used by rollup during build to inject the entrypoint
       // but note index.html does not come through as an id during dev
       transform: (code: string, id: string) => {

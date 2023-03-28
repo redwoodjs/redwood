@@ -9,11 +9,12 @@
   },
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "inject"
   ],
   "main": "dist/index.js",
   "bin": {
-    "rw-vite-dev": "./bins/rw-vite-dev.mjs",
+    "rw-dev-stream": "./dist/rw-dev-stream.js",
     "vite": "./bins/vite.mjs"
   },
   "scripts": {

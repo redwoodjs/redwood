@@ -49,11 +49,16 @@ Enabling streaming/FE server:
 Packaging:
   ☐ Swap out handlers for:
     ☐ build
-    ☐ dev
+    ✔ dev @done(23-03-28 13:12)
     ☐ serve
-  ☐ Add to internal paths:
-    ☐ entry-client
-    ☐ entry-server
+  ✔ Add to internal paths: @done(23-03-28 14:45)
+    ✔ entry-client @done(23-03-28 13:10)
+    ✔ entry-server @done(23-03-28 13:10)
+    ✔  configFile: '../web/vite.config.ts', @done(23-03-28 13:02)
+    ✔ '/bootstrapScript.js @done(23-03-28 14:45)
+  ☐ Introduce entry-server
+
+
   ☐ Detect routes function
     This should live in the internal package.
   ☐ Remove virtual routes module?
