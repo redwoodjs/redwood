@@ -1,8 +1,8 @@
 import { createServer } from 'vite'
 
-import { getPaths } from '@redwoodjs/project-config'
+import projectConfig from '@redwoodjs/project-config'
 
-const rwPaths = getPaths()
+const rwPaths = projectConfig.getPaths()
 
 const startDevServer = async () => {
   const configFile = rwPaths.web.viteConfig
