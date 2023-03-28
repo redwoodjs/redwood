@@ -8,11 +8,6 @@ const {
   checkAndReplaceDirectUrl,
 } = require('../../../dist/api/directUrlHelpers')
 
-const {
-  getDefaultDb,
-  checkAndReplaceDirectUrl,
-} = require('../../../dist/api/directUrlHelpers')
-
 const rwjsPaths = getPaths()
 
 module.exports = async function () {
