@@ -2434,9 +2434,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor-cost-limit@npm:1.7.1":
+"@escape.tech/graphql-armor-cost-limit@npm:1.7.2":
+  version: 1.7.2
+  resolution: "@escape.tech/graphql-armor-cost-limit@npm:1.7.2"
+  dependencies:
+    "@envelop/core": ^3.0.0
+    "@escape.tech/graphql-armor-types": 0.4.0
+    graphql: ^16.0.0
+  dependenciesMeta:
+    "@envelop/core":
+      optional: true
+    "@escape.tech/graphql-armor-types":
+      optional: true
+  checksum: 1e0ab7442957053a762119498aa858a4fd86e8d8938df29b8ecd3b7d82466cbcf6aa389859c7fedf2ddac0c5fb57db289eff30ed69db00366e0156828c1dba55
+  languageName: node
+  linkType: hard
+
+"@escape.tech/graphql-armor-max-aliases@npm:1.7.1":
   version: 1.7.1
-  resolution: "@escape.tech/graphql-armor-cost-limit@npm:1.7.1"
+  resolution: "@escape.tech/graphql-armor-max-aliases@npm:1.7.1"
   dependencies:
     "@envelop/core": ^3.0.0
     "@escape.tech/graphql-armor-types": 0.4.0
@@ -2446,13 +2462,13 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: a8eb755f8f6f69ac735867f5b111c7fecc327ac288a438c3525ae12009dfab5853d366ecb14c7fc885262a5f7fb374baf59c7d6b389823a1ef6cb80b7c916c48
+  checksum: 752ac428607f9af88008f429a9bf618f583cb9ec76dee2ee8b47c983b5a57efd68aa377580942764526bff9aa4b8151f338345e78376c898c99c78411bddd556
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor-max-aliases@npm:1.7.0":
-  version: 1.7.0
-  resolution: "@escape.tech/graphql-armor-max-aliases@npm:1.7.0"
+"@escape.tech/graphql-armor-max-depth@npm:1.8.3":
+  version: 1.8.3
+  resolution: "@escape.tech/graphql-armor-max-depth@npm:1.8.3"
   dependencies:
     "@envelop/core": ^3.0.0
     "@escape.tech/graphql-armor-types": 0.4.0
@@ -2462,13 +2478,13 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: f6f56fb8af0bb93ded75082dbf9fec464ecba431592e264e6a37c3e63834aad8b0e8275c847a1f76a2fdbb288e1ab0eb278ec665be47b52737b4f0ffcf2ee9b6
+  checksum: 3c1026b99add7f93e57e93d3bd895769ad5a82f4c7d0db067d6d8d72abed06d8680577bb828b2fa301562ff9a8b68ae4b9b801b0395543dc3c0a765858038278
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor-max-depth@npm:1.8.2":
-  version: 1.8.2
-  resolution: "@escape.tech/graphql-armor-max-depth@npm:1.8.2"
+"@escape.tech/graphql-armor-max-directives@npm:1.6.4":
+  version: 1.6.4
+  resolution: "@escape.tech/graphql-armor-max-directives@npm:1.6.4"
   dependencies:
     "@envelop/core": ^3.0.0
     "@escape.tech/graphql-armor-types": 0.4.0
@@ -2478,23 +2494,7 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: 37f9f1ffba4acd66a95026130180670d3ee5e761ecb7c9d59ee619bb01b961dde5376e5526b304f80decf43ec8b3d6ff2a5d69c098662605ff6f43e72c60a405
-  languageName: node
-  linkType: hard
-
-"@escape.tech/graphql-armor-max-directives@npm:1.6.3":
-  version: 1.6.3
-  resolution: "@escape.tech/graphql-armor-max-directives@npm:1.6.3"
-  dependencies:
-    "@envelop/core": ^3.0.0
-    "@escape.tech/graphql-armor-types": 0.4.0
-    graphql: ^16.0.0
-  dependenciesMeta:
-    "@envelop/core":
-      optional: true
-    "@escape.tech/graphql-armor-types":
-      optional: true
-  checksum: 6817f08efafcd381c21c6cdd4ae3a880418f7653a5f30d1bbf161da64d46e83771660975f0c706b54c2af9063d6d1722944c2b002349ff3ffa10775285e6cebe
+  checksum: 7f32dfae10c74adea1caec593c5a342cefcbc31b681e3fd9ed048b495c36906ee2cc29f6c800efc8a6e809b3bdeb4f35a340776fa403e3e8e8e8ec4a7f75a38b
   languageName: node
   linkType: hard
 
@@ -2523,17 +2523,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@escape.tech/graphql-armor@npm:1.8.0"
+"@escape.tech/graphql-armor@npm:1.8.1":
+  version: 1.8.1
+  resolution: "@escape.tech/graphql-armor@npm:1.8.1"
   dependencies:
     "@apollo/server": ^4.0.0
     "@envelop/core": ^3.0.0
     "@escape.tech/graphql-armor-block-field-suggestions": 1.4.0
-    "@escape.tech/graphql-armor-cost-limit": 1.7.1
-    "@escape.tech/graphql-armor-max-aliases": 1.7.0
-    "@escape.tech/graphql-armor-max-depth": 1.8.2
-    "@escape.tech/graphql-armor-max-directives": 1.6.3
+    "@escape.tech/graphql-armor-cost-limit": 1.7.2
+    "@escape.tech/graphql-armor-max-aliases": 1.7.1
+    "@escape.tech/graphql-armor-max-depth": 1.8.3
+    "@escape.tech/graphql-armor-max-directives": 1.6.4
     "@escape.tech/graphql-armor-max-tokens": 1.3.1
     "@escape.tech/graphql-armor-types": 0.4.0
     graphql: ^16.0.0
@@ -2544,7 +2544,7 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: 8cf7cc37eb57c3d16c1523be60955ae1623766b77c996fb69b5970372367c6400172535bf6d6d8d0f0f032d38b6d75d62d272455c75202c067f2127708067c9f
+  checksum: 25e899d6ce0b2ac996cde7e4fcd318cfb34f30a51ed2d0f1f9e4f287115921d4364ea85bb2cc0fcd8522a2576cb59d2746b1507e860c5fc871730e7791fc65dc
   languageName: node
   linkType: hard
 
@@ -6961,7 +6961,7 @@ __metadata:
     "@envelop/filter-operation-type": 4.0.6
     "@envelop/testing": 5.0.6
     "@envelop/types": 3.0.2
-    "@escape.tech/graphql-armor": 1.8.0
+    "@escape.tech/graphql-armor": 1.8.1
     "@graphql-tools/merge": 8.4.0
     "@graphql-tools/schema": 9.0.17
     "@graphql-tools/utils": 9.2.1
