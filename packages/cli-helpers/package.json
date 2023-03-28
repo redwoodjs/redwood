@@ -40,7 +40,7 @@
     "@babel/cli": "7.21.0",
     "@types/lodash.memoize": "4.1.7",
     "@types/pascalcase": "1.0.1",
-    "@types/yargs": "17.0.23",
+    "@types/yargs": "17.0.24",
     "jest": "29.4.2",
     "typescript": "4.9.5"
   },
