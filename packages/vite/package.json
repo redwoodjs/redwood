@@ -14,7 +14,8 @@
   ],
   "main": "dist/index.js",
   "bin": {
-    "rw-dev-stream": "./dist/rw-dev-stream.js",
+    "rw-dev-fe": "./dist/devFeServer.js",
+    "rw-serve-fe": "./dist/runFeServer.js",
     "vite": "./bins/vite.mjs"
   },
   "scripts": {
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
+    "@babel/plugin-syntax-import-assertions": "^7.20.0",
     "typescript": "5.0.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

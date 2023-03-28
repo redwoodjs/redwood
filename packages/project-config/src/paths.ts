@@ -24,7 +24,7 @@ export interface NodeTargetPaths {
   models: string
 }
 
-export interface BrowserTargetPaths {
+export interface WebPaths {
   base: string
   src: string
   app: string
@@ -46,6 +46,7 @@ export interface BrowserTargetPaths {
   storybookManagerConfig: string
   dist: string
   distServer: string
+  distRouteHooks: string
   routeManifest: string
   types: string
 }
@@ -61,7 +62,7 @@ export interface Paths {
     }
     prebuild: string
   }
-  web: BrowserTargetPaths
+  web: WebPaths
   api: NodeTargetPaths
   scripts: string
 }
@@ -112,6 +113,7 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
+const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
 const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
 
 /**
@@ -213,6 +215,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
+      distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
       entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),

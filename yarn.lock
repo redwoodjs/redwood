@@ -7133,6 +7133,7 @@ __metadata:
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
     "@babel/cli": 7.21.0
+    "@babel/plugin-syntax-import-assertions": ^7.20.0
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/internal": 4.0.0
     "@redwoodjs/project-config": 4.0.0
@@ -7145,7 +7146,8 @@ __metadata:
     vite-plugin-environment: 1.1.3
     vite-plugin-html: 3.2.0
   bin:
-    rw-vite-dev: ./bins/rw-vite-dev.mjs
+    rw-dev-fe: ./dist/devFeServer.js
+    rw-serve-fe: ./dist/runFeServer.js
     vite: ./bins/vite.mjs
   languageName: unknown
   linkType: soft

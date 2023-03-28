@@ -87,7 +87,7 @@ export const getProjectRoutes = (): RouteSpec[] => {
   return routes.map((route: any) => {
     return {
       name: route.isNotFound ? 'NotFoundPage' : route.name,
-      path: route.isNotFound ? null : route.path,
+      path: route.isNotFound ? 'notfound' : route.path,
       hasParams: route.hasParameters,
       id: route.id,
       isNotFound: route.isNotFound,

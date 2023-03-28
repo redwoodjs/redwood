@@ -90,7 +90,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     plugins: [runRwBabelTransformsPlugin],
     packages: 'external',
     logLevel: verbose ? 'info' : 'error',
-    outdir: path.join(rwPaths.web.distServer, '/routeHooks'),
+    outdir: rwPaths.web.distRouteHooks,
   })
 
   // Step 3: Generate route-manifest.json
