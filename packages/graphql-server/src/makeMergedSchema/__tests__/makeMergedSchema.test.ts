@@ -13,6 +13,18 @@ import {
 } from '../../types'
 import { makeMergedSchema } from '../makeMergedSchema'
 
+jest.mock('@redwoodjs/project-config', () => {
+  return {
+    getConfig: () => {
+      return {
+        opentelemetry: {
+          enabled: false,
+        },
+      }
+    },
+  }
+})
+
 describe('makeMergedSchema', () => {
   // Simulate `importAll`
   // ./graphql/tests.sdl.js
