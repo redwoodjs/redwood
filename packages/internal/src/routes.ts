@@ -67,7 +67,7 @@ export function warningForDuplicateRoutes() {
   return message.trimEnd()
 }
 
-export interface VirtualRoute {
+export interface RouteSpec {
   name: string
   path: string
   hasParams: boolean
@@ -77,16 +77,17 @@ export interface VirtualRoute {
   relativeFilePath: string | undefined
   routeHooks: string | undefined | null
   matchRegexString: string | null
+  renderMode: 'stream' | 'html' | 'client'
 }
 
-export const listRoutes = (): VirtualRoute[] => {
+export const getProjectRoutes = (): RouteSpec[] => {
   const rwProject = getProject(getPaths().base)
   const routes = rwProject.getRouter().routes
 
   return routes.map((route: any) => {
     return {
-      name: route.isNotFound ? '404' : route.name,
-      path: route.isNotFound ? '/404' : route.path,
+      name: route.isNotFound ? 'NotFoundPage' : route.name,
+      path: route.isNotFound ? null : route.path,
       hasParams: route.hasParameters,
       id: route.id,
       isNotFound: route.isNotFound,
@@ -98,6 +99,8 @@ export const listRoutes = (): VirtualRoute[] => {
       matchRegexString: route.isNotFound
         ? null
         : getRouteRegexAndParams(route.path).matchRegexString,
+      //@TODO detect render mode on Route, but also Set
+      renderMode: null,
     }
   })
 }

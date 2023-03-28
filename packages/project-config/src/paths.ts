@@ -204,6 +204,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       types: path.join(BASE_DIR, 'web/types'),
+      // entryClient: path.join()
     },
   }
 

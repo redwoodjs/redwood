@@ -16,8 +16,6 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import virtualRoutes from './virtualRoutes'
-
 const readFile = promisify(fsReadFile)
 
 // Using require, because plugin has TS errors
@@ -43,6 +41,7 @@ export default function redwoodPluginVite() {
         order: 'pre',
         handler: (html: string) => {
           // Remove the prerender placeholder
+          // @TODO may not be needed after React 18 changes in v5
           const outputHtml = html.replace('<%= prerenderPlaceholder %>', '')
 
           // And then inject the entry
@@ -200,6 +199,7 @@ export default function redwoodPluginVite() {
       template: './index.html',
       inject: {
         data: {
+          // @TODO may not be needed after React 18 changes in v5
           prerenderPlaceholder: '<server-markup></server-markup>', // remove the placeholder
         },
         ejsOptions: {
@@ -217,8 +217,6 @@ export default function redwoodPluginVite() {
         return id.includes('FatalErrorPage') || id.includes('Routes')
       },
     }),
-    // Used for routeHooks, and access to routes introspection in the brow
-    virtualRoutes(),
   ]
 }
 
