@@ -6,14 +6,21 @@ const TAGS = ['latest', 'rc', 'next', 'canary', 'experimental']
 
 async function main() {
   const [_nodeBinPath, scriptPath, tag = 'latest'] = process.argv
+  const targetVersion = process.argv[3]
 
   if (['help', '-h', '--help'].includes(tag)) {
     console.log(
       [
-        `yarn node tasks/${basename(scriptPath)} [tag]`,
+        '',
+        `yarn node tasks/${basename(scriptPath)} [tag] [expectedVersion]`,
         '',
         `Valid tags: ${TAGS.join(', ')}`,
         'If no tag is provided, defaults to latest',
+        '',
+        `'expectedVersion' [not required, string]`,
+        'If provided, will ONLY display packages where current version != expectedVersion',
+        '',
+        '',
       ].join('\n')
     )
 
@@ -57,7 +64,11 @@ async function main() {
 
       namesToVersions[packageName] = version
 
-      console.log(`Latest @${tag} version for ${packageName}: ${version}`)
+      if (!targetVersion || version !== targetVersion) {
+        console.log(`Latest @${tag} version for ${packageName}: ${version}`)
+      } else {
+        console.log('found matching version...')
+      }
     } catch (error) {
       console.error(`Error fetching information for ${packageName}:`, error)
     }
