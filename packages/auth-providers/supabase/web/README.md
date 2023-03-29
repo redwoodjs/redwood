@@ -281,7 +281,9 @@ So, in order to use the `verifyOtp` method, you would:
 ```ts
 const { client } = useAuth()
 
-const { data, error } = await client.verifyOtp({ phone, token, type: 'sms'})
+useEffect(() => {
+  const { data, error } = await client.verifyOtp({ phone, token, type: 'sms'})
+}, [client])
 ```
 
 ### Access the Supabase Auth Client
@@ -294,6 +296,7 @@ const { client } = useAuth()
 
 You can then use it to work with Supabase sessions, or auth events.
 
+When using in a React component, you'll have to put any method that needs an `await` in a `useEffect()`.
 
 ### Retrieve a session
 
@@ -302,7 +305,9 @@ Returns the session, refreshing it if necessary. The session returned can be nul
 ```ts
 const { client } = useAuth()
 
-const { data, error } = await client.getSession()
+useEffect(() => {
+  const { data, error } = await client.getSession()
+}, [client])
 ```
 
 ### Listen to auth events
@@ -314,7 +319,13 @@ Receive a notification every time an auth event happens.
 ```ts
 const { client } = useAuth()
 
-client.onAuthStateChange((event, session) => {
-  console.log(event, session)
-})
+useEffect(() => {
+  const { data: { subscription } } = client.onAuthStateChange((event, session) => {
+    console.log(event, session)
+  })
+
+  return () => {
+    subscription.unsubscribe()
+  }
+}, [client])
 ```

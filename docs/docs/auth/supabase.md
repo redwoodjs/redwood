@@ -1,7 +1,6 @@
 ---
 sidebar_label: Supabase
 ---
-
 # Supabase Authentication
 
 To get started, run the setup command:
@@ -41,6 +40,7 @@ Lastly, in `redwood.toml`, include `SUPABASE_URL` and `SUPABASE_KEY` in the list
   # ...
   includeEnvironmentVariables = ["SUPABASE_URL", "SUPABASE_KEY"]
 ```
+
 ## Authentication UI
 
 Supabase doesn't redirect to a hosted sign-up page or open a sign-up modal.
@@ -126,7 +126,7 @@ Creates a new user with additional user metadata.
 const { signUp } = useAuth()
 
 await signUp({
-  email: 'example@email.com',
+email: 'example@email.com',
   password: 'example-password',
   options: {
     data: {
@@ -145,7 +145,7 @@ Creates a new user with a redirect URL.
 const { signUp } = useAuth()
 
 await signUp({
-  email: 'example@email.com',
+email: 'example@email.com',
   password: 'example-password',
   options: {
     emailRedirectTo: 'https://example.com/welcome'
@@ -201,7 +201,7 @@ Log in an existing user via a third-party provider.
 const { logIn } = useAuth()
 
 await logIn({
-  authenticationMethod: 'oauth',
+  authMethod: 'oauth',
   provider: 'github',
 })
 ```
@@ -254,7 +254,6 @@ const { userMetadata } = useAuth()
 <p>{JSON.stringify({ userMetadata })}</p>
 ```
 
-
 ### Sign out a user
 
 Inside a browser context, signOut() will remove the logged in user from the browser session and log them out - removing all items from localStorage and then trigger a "SIGNED_OUT" event.
@@ -285,7 +284,9 @@ So, in order to use the `verifyOtp` method, you would:
 ```ts
 const { client } = useAuth()
 
-const { data, error } = await client.verifyOtp({ phone, token, type: 'sms'})
+useEffect(() => {
+  const { data, error } = await client.verifyOtp({ phone, token, type: 'sms'})
+}, [client])
 ```
 
 ### Access the Supabase Auth Client
@@ -298,6 +299,7 @@ const { client } = useAuth()
 
 You can then use it to work with Supabase sessions, or auth events.
 
+When using in a React component, you'll have to put any method that needs an `await` in a `useEffect()`.
 
 ### Retrieve a session
 
@@ -306,7 +308,9 @@ Returns the session, refreshing it if necessary. The session returned can be nul
 ```ts
 const { client } = useAuth()
 
-const { data, error } = await client.getSession()
+useEffect(() => {
+  const { data, error } = await client.getSession()
+}, [client])
 ```
 
 ### Listen to auth events
@@ -318,7 +322,13 @@ Receive a notification every time an auth event happens.
 ```ts
 const { client } = useAuth()
 
-client.onAuthStateChange((event, session) => {
-  console.log(event, session)
-})
+useEffect(() => {
+  const { data: { subscription } } = client.onAuthStateChange((event, session) => {
+    console.log(event, session)
+  })
+
+  return () => {
+    subscription.unsubscribe()
+  }
+}, [client])
 ```
