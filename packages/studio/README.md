@@ -3,6 +3,13 @@
 ## About
 This package intends to contain the redwood development studio. The studio contains a dashboard users can use during development to gain insights into their project.
 
+## Running Studio
+
+To run the redwood studio simply execute the following redwood cli command:
+```bash
+yarn rw studio
+```
+
 ## Studio Config
 
 You may provide the following configuration options in your `redwood.toml` file to control the behaviour of the studio.
