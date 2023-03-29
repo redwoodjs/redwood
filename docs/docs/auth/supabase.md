@@ -129,7 +129,7 @@ Creates a new user with additional user metadata.
 const { signUp } = useAuth()
 
 await signUp({
-email: 'example@email.com',
+  email: 'example@email.com',
   password: 'example-password',
   options: {
     data: {
@@ -148,7 +148,7 @@ Creates a new user with a redirect URL.
 const { signUp } = useAuth()
 
 await signUp({
-email: 'example@email.com',
+  email: 'example@email.com',
   password: 'example-password',
   options: {
     emailRedirectTo: 'https://example.com/welcome'
