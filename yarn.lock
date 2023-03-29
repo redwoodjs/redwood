@@ -2143,7 +2143,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.32.0, @clerk/types@npm:^3.31.2, @clerk/types@npm:^3.32.0":
+"@clerk/types@npm:3.32.0, @clerk/types@npm:^3.32.0":
   version: 3.32.0
   resolution: "@clerk/types@npm:3.32.0"
   dependencies:
