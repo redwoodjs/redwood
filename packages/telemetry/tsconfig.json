@@ -7,4 +7,5 @@
     "outDir": "dist"
   },
   "include": ["src"],
+  "references": [{ "path": "../project-config" }]
 }

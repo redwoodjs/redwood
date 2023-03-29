@@ -14,11 +14,11 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
 
-import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
+  getConfig as getRedwoodConfig,
   getPaths as getRedwoodPaths,
   resolveFile as internalResolveFile,
-} from '@redwoodjs/internal/dist/paths'
+} from '@redwoodjs/project-config'
 
 import c from './colors'
 import { addFileToRollback } from './rollback'
@@ -62,15 +62,20 @@ export const nameVariants = (name) => {
 }
 
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
-  const template = lodash.template(readFile(templateFilename).toString())
+  try {
+    const template = lodash.template(readFile(templateFilename).toString())
 
-  const renderedTemplate = template({
-    name,
-    ...nameVariants(name),
-    ...rest,
-  })
+    const renderedTemplate = template({
+      name,
+      ...nameVariants(name),
+      ...rest,
+    })
 
-  return prettify(templateFilename, renderedTemplate)
+    return prettify(templateFilename, renderedTemplate)
+  } catch (error) {
+    error.message = `Error applying template at ${templateFilename} for ${name}: ${error.message}`
+    throw error
+  }
 }
 
 export const prettify = (templateFilename, renderedTemplate) => {
@@ -80,7 +85,9 @@ export const prettify = (templateFilename, renderedTemplate) => {
   const parser = {
     '.css': 'css',
     '.js': 'babel',
+    '.jsx': 'babel',
     '.ts': 'babel-ts',
+    '.tsx': 'babel-ts',
   }[path.extname(templateFilename.replace('.template', ''))]
 
   if (typeof parser === 'undefined') {

@@ -9,8 +9,8 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { getConfig } from '@redwoodjs/project-config'
 
 import {
   generateTemplate,
@@ -286,128 +286,7 @@ const formatters = async (name, isTypescript) => {
   }
 }
 
-const layoutFiles = (name, force, generateTypescript, templateStrings) => {
-  let fileList = {}
-
-  const layouts = fs.readdirSync(
-    customOrDefaultTemplatePath({
-      side: 'web',
-      generator: 'scaffold',
-      templatePath: 'layouts',
-    })
-  )
-
-  layouts.forEach((layout) => {
-    const outputLayoutName = layout.replace(
-      /\.tsx\.template/,
-      generateTypescript ? '.tsx' : '.js'
-    )
-
-    const outputPath = path.join(
-      getPaths().web.layouts,
-      'ScaffoldLayout',
-      outputLayoutName
-    )
-
-    // Since the ScaffoldLayout is shared, don't overwrite by default
-    if (!fs.existsSync(outputPath) || force) {
-      const template = generateTemplate(
-        customOrDefaultTemplatePath({
-          side: 'web',
-          generator: 'scaffold',
-          templatePath: path.join('layouts', layout),
-        }),
-        {
-          name,
-          pascalScaffoldPath: '',
-          ...templateStrings,
-        }
-      )
-
-      fileList[outputPath] = generateTypescript
-        ? template
-        : transformTSToJS(outputPath, template)
-    }
-  })
-
-  return fileList
-}
-
-const pageFiles = async (
-  name,
-  pascalScaffoldPath = '',
-  generateTypescript,
-  nestScaffoldByModel = true,
-  templateStrings
-) => {
-  const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(singularize(name))
-  const model = await getSchema(singularName)
-  const idType = getIdType(model)
-  const idTsType = mapPrismaScalarToPagePropTsType(idType)
-
-  let fileList = {}
-
-  const pages = fs.readdirSync(
-    customOrDefaultTemplatePath({
-      side: 'web',
-      generator: 'scaffold',
-      templatePath: 'pages',
-    })
-  )
-
-  pages.forEach((page) => {
-    // Sanitize page names
-    const outputPageName = page
-      .replace(/Names/, pluralName)
-      .replace(/Name/, singularName)
-      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
-
-    const finalFolder =
-      (nestScaffoldByModel ? singularName + '/' : '') +
-      outputPageName.replace(/\.(js|tsx?)/, '')
-
-    const outputPath = path.join(
-      getPaths().web.pages,
-      pascalScaffoldPath,
-      finalFolder,
-      outputPageName
-    )
-    const template = generateTemplate(
-      customOrDefaultTemplatePath({
-        side: 'web',
-        generator: 'scaffold',
-        templatePath: path.join('pages', page),
-      }),
-      {
-        idTsType,
-        name,
-        pascalScaffoldPath,
-        ...templateStrings,
-      }
-    )
-
-    fileList[outputPath] = generateTypescript
-      ? template
-      : transformTSToJS(outputPath, template)
-  })
-
-  return fileList
-}
-
-const componentFiles = async (
-  name,
-  pascalScaffoldPath = '',
-  generateTypescript,
-  nestScaffoldByModel = true,
-  templateStrings
-) => {
-  const pluralName = pascalcase(pluralize(name))
-  const singularName = pascalcase(singularize(name))
-  const model = await getSchema(singularName)
-  const idType = getIdType(model)
-  const intForeignKeys = intForeignKeysForModel(model)
-  let fileList = {}
+const modelRelatedVariables = (model) => {
   const componentMetadata = {
     Enum: {
       componentName: 'RadioField',
@@ -522,16 +401,8 @@ const componentFiles = async (
   )
 
   if (!fieldsToImport.length) {
-    throw new Error(`There are no editable fields in the ${name} model`)
+    throw new Error(`There are no editable fields in the ${model.name} model`)
   }
-
-  const components = fs.readdirSync(
-    customOrDefaultTemplatePath({
-      side: 'web',
-      generator: 'scaffold',
-      templatePath: 'components',
-    })
-  )
 
   const formattersImports = columns
     .map((column) => column.displayFunction)
@@ -546,6 +417,147 @@ const componentFiles = async (
     // filter out duplicates, so we only keep unique import names
     .filter((name, index, array) => array.indexOf(name) === index)
     .join(', ')
+
+  return {
+    columns,
+    fieldsToImport,
+    editableColumns,
+    listFormattersImports,
+    formattersImports,
+  }
+}
+
+const layoutFiles = (name, force, generateTypescript, templateStrings) => {
+  let fileList = {}
+
+  const layouts = fs.readdirSync(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'layouts',
+    })
+  )
+
+  layouts.forEach((layout) => {
+    const outputLayoutName = layout.replace(
+      /\.tsx\.template/,
+      generateTypescript ? '.tsx' : '.js'
+    )
+
+    const outputPath = path.join(
+      getPaths().web.layouts,
+      'ScaffoldLayout',
+      outputLayoutName
+    )
+
+    // Since the ScaffoldLayout is shared, don't overwrite by default
+    if (!fs.existsSync(outputPath) || force) {
+      const template = generateTemplate(
+        customOrDefaultTemplatePath({
+          side: 'web',
+          generator: 'scaffold',
+          templatePath: path.join('layouts', layout),
+        }),
+        {
+          name,
+          pascalScaffoldPath: '',
+          ...templateStrings,
+        }
+      )
+
+      fileList[outputPath] = generateTypescript
+        ? template
+        : transformTSToJS(outputPath, template)
+    }
+  })
+
+  return fileList
+}
+
+const pageFiles = async (
+  name,
+  pascalScaffoldPath = '',
+  generateTypescript,
+  nestScaffoldByModel = true,
+  templateStrings
+) => {
+  const pluralName = pascalcase(pluralize(name))
+  const singularName = pascalcase(singularize(name))
+  const model = await getSchema(singularName)
+  const idType = getIdType(model)
+  const idTsType = mapPrismaScalarToPagePropTsType(idType)
+
+  let fileList = {}
+
+  const pages = fs.readdirSync(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'pages',
+    })
+  )
+
+  pages.forEach((page) => {
+    // Sanitize page names
+    const outputPageName = page
+      .replace(/Names/, pluralName)
+      .replace(/Name/, singularName)
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
+
+    const finalFolder =
+      (nestScaffoldByModel ? singularName + '/' : '') +
+      outputPageName.replace(/\.(js|tsx?)/, '')
+
+    const outputPath = path.join(
+      getPaths().web.pages,
+      pascalScaffoldPath,
+      finalFolder,
+      outputPageName
+    )
+    const template = generateTemplate(
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: path.join('pages', page),
+      }),
+      {
+        idTsType,
+        name,
+        pascalScaffoldPath,
+        ...templateStrings,
+        ...modelRelatedVariables(model),
+      }
+    )
+
+    fileList[outputPath] = generateTypescript
+      ? template
+      : transformTSToJS(outputPath, template)
+  })
+
+  return fileList
+}
+
+const componentFiles = async (
+  name,
+  pascalScaffoldPath = '',
+  generateTypescript,
+  nestScaffoldByModel = true,
+  templateStrings
+) => {
+  const pluralName = pascalcase(pluralize(name))
+  const singularName = pascalcase(singularize(name))
+  const model = await getSchema(singularName)
+  const idType = getIdType(model)
+  const intForeignKeys = intForeignKeysForModel(model)
+  let fileList = {}
+
+  const components = fs.readdirSync(
+    customOrDefaultTemplatePath({
+      side: 'web',
+      generator: 'scaffold',
+      templatePath: 'components',
+    })
+  )
 
   await asyncForEach(components, (component) => {
     const outputComponentName = component
@@ -572,15 +584,11 @@ const componentFiles = async (
       }),
       {
         name,
-        columns,
-        fieldsToImport,
-        editableColumns,
         idType,
         intForeignKeys,
         pascalScaffoldPath,
-        listFormattersImports,
-        formattersImports,
         ...templateStrings,
+        ...modelRelatedVariables(model),
       }
     )
 

@@ -19,8 +19,6 @@ import { ParamsProvider, useLocation } from '.'
 
 const DEFAULT_PAGE_LOADING_DELAY = 1000 // milliseconds
 
-type synchronousLoaderSpec = () => { default: React.ComponentType<unknown> }
-
 interface Props {
   path: string
   spec: Spec
@@ -32,6 +30,18 @@ interface Props {
 
 const ArlNullPage = () => null
 const ArlWhileLoadingNullPage = () => null
+
+let isPrerendered = false
+
+if (typeof window !== 'undefined') {
+  const redwoodAppElement = document.getElementById('redwood-app')
+
+  if (redwoodAppElement && redwoodAppElement.children.length > 0) {
+    isPrerendered = true
+  }
+}
+
+let firstLoad = true
 
 export const ActiveRouteLoader = ({
   path,
@@ -46,9 +56,23 @@ export const ActiveRouteLoader = ({
   const loadingTimeout = useRef<NodeJS.Timeout>()
   const announcementRef = useRef<HTMLDivElement>(null)
   const waitingFor = useRef<string>('')
+
+  const usePrerenderLoader =
+    globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad)
+
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
-    [path]: { page: ArlNullPage, specName: '', state: 'PRE_SHOW', location },
+    [path]: {
+      page: usePrerenderLoader ? spec.prerenderLoader().default : ArlNullPage,
+      specName: usePrerenderLoader ? spec.name : '',
+      state: usePrerenderLoader ? 'DONE' : 'PRE_SHOW',
+      location,
+    },
   })
+
+  if (firstLoad) {
+    firstLoad = false
+  }
+
   const [renderedChildren, setRenderedChildren] = useState<
     React.ReactNode | undefined
   >(children)
@@ -180,37 +204,6 @@ export const ActiveRouteLoader = ({
       clearLoadingTimeout()
     }
   }, [spec, delay, children, whileLoadingPage, path, location, isMounted])
-
-  // It might feel tempting to move this code further up in the file for an
-  // "early return", but React doesn't allow that because pretty much all code
-  // above is hooks, and they always need to come before any `return`
-  if (globalThis.__REDWOOD__PRERENDERING) {
-    // babel auto-loader plugin uses withStaticImport in prerender mode
-    // override the types for this condition
-    const syncPageLoader = spec.loader as unknown as synchronousLoaderSpec
-    const PageFromLoader = syncPageLoader().default
-
-    const prerenderLoadingState: LoadingStateRecord = {
-      [path]: {
-        state: 'DONE',
-        specName: spec.name,
-        page: PageFromLoader,
-        location,
-      },
-    }
-
-    return (
-      <ParamsProvider path={path} location={location}>
-        <PageLoadingContextProvider value={{ loading: false }}>
-          <ActivePageContextProvider
-            value={{ loadingState: prerenderLoadingState }}
-          >
-            {children}
-          </ActivePageContextProvider>
-        </PageLoadingContextProvider>
-      </ParamsProvider>
-    )
-  }
 
   return (
     <ParamsProvider
