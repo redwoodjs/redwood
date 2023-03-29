@@ -2143,12 +2143,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.31.2, @clerk/types@npm:^3.31.2":
-  version: 3.31.2
-  resolution: "@clerk/types@npm:3.31.2"
+"@clerk/types@npm:3.32.0, @clerk/types@npm:^3.31.2":
+  version: 3.32.0
+  resolution: "@clerk/types@npm:3.32.0"
   dependencies:
     csstype: 3.1.1
-  checksum: f9f459d58cba8df0fd4699d33ade08356f5e49665fa9ea1b7108c690205a2701897ac14dfb87a17604587c6637c2445ae5ed731654a38d4a475d08223339ebf8
+  checksum: c748b3aabea11aedbc27d30dc4e2421c4aadae8b60dda431fc1ac18b88907b75f70869914c1b55cdd1c5106173125070a0b6cba230a8cf7008e12c78f86950fd
   languageName: node
   linkType: hard
 
@@ -5044,9 +5044,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/nx-cloud@npm:15.3.2":
-  version: 15.3.2
-  resolution: "@nrwl/nx-cloud@npm:15.3.2"
+"@nrwl/nx-cloud@npm:15.3.3":
+  version: 15.3.3
+  resolution: "@nrwl/nx-cloud@npm:15.3.3"
   dependencies:
     axios: ^0.21.2
     chalk: 4.1.0
@@ -5058,7 +5058,7 @@ __metadata:
     yargs-parser: ">=21.0.1"
   bin:
     nx-cloud: bin/nx-cloud.js
-  checksum: 37b5bab52f99b5b13d01bd3edcba040b7c8757af6e6793a20d68a60d1cab5b178a6b7040168c2fd7f29ac4452ed03281020eda9e2a393eed81e8d8308f01d20f
+  checksum: 6337b00c236c53c612ebf26708f810dd9df162a4b7256698835eaa4b92f7c0e717a5f0c7491c1ead6eec7c37409d4068ef28ce0f1011ace6a9764db1566e8e35
   languageName: node
   linkType: hard
 
@@ -6284,7 +6284,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@clerk/clerk-react": 4.12.9
-    "@clerk/types": 3.31.2
+    "@clerk/types": 3.32.0
     "@redwoodjs/auth": 4.0.0
     "@types/react": 18.0.31
     core-js: 3.29.1
@@ -6538,7 +6538,7 @@ __metadata:
     jwks-rsa: 3.0.1
     typescript: 5.0.2
   peerDependencies:
-    supertokens-node: 13.1.5
+    supertokens-node: 13.2.0
   languageName: unknown
   linkType: soft
 
@@ -6569,10 +6569,10 @@ __metadata:
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
-    supertokens-auth-react: 0.31.3
+    supertokens-auth-react: 0.31.4
     typescript: 5.0.2
   peerDependencies:
-    supertokens-auth-react: 0.31.3
+    supertokens-auth-react: 0.31.4
   languageName: unknown
   linkType: soft
 
@@ -6639,7 +6639,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    concurrently: 7.6.0
+    concurrently: 8.0.1
     configstore: 3.1.5
     core-js: 3.29.1
     cross-env: 7.0.3
@@ -13725,23 +13725,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:7.6.0":
-  version: 7.6.0
-  resolution: "concurrently@npm:7.6.0"
+"concurrently@npm:8.0.1":
+  version: 8.0.1
+  resolution: "concurrently@npm:8.0.1"
   dependencies:
-    chalk: ^4.1.0
-    date-fns: ^2.29.1
+    chalk: ^4.1.2
+    date-fns: ^2.29.3
     lodash: ^4.17.21
-    rxjs: ^7.0.0
-    shell-quote: ^1.7.3
-    spawn-command: ^0.0.2-1
-    supports-color: ^8.1.0
+    rxjs: ^7.8.0
+    shell-quote: ^1.8.0
+    spawn-command: 0.0.2-1
+    supports-color: ^8.1.1
     tree-kill: ^1.2.2
-    yargs: ^17.3.1
+    yargs: ^17.7.1
   bin:
     conc: dist/bin/concurrently.js
     concurrently: dist/bin/concurrently.js
-  checksum: c5b59f9ce726775272b8e61db0798594bdeb1ac53c78e1cfaffa26f46cf2c09e04a26742265b3eb8ec655ea1a9851eeaa47ae50766a7e5c6b4e1de7b8c8a9b3f
+  checksum: a2c7937073d3ee9980ce504d12bc7af7a19598258320015fdbb7c5e164f96aa5969df8b0da8a900e983544eb15f19984b30c9ad4403428a22793064af5fec9b3
   languageName: node
   linkType: hard
 
@@ -14768,7 +14768,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.29.1":
+"date-fns@npm:^2.29.3":
   version: 2.29.3
   resolution: "date-fns@npm:2.29.3"
   checksum: aa9128c876ef69a05988029d6aa3d7e5c47a1e978f18b77b48126683d1a2e6605a16c3f5293ca9f4ca790d0755b5061fcea5b469f097871cd53f6590a5c1adc4
@@ -27627,7 +27627,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@faker-js/faker": 7.6.0
     "@npmcli/arborist": 6.2.5
-    "@nrwl/nx-cloud": 15.3.2
+    "@nrwl/nx-cloud": 15.3.3
     "@playwright/test": 1.32.1
     "@replayio/playwright": 0.3.27
     "@testing-library/jest-dom": 5.16.5
@@ -27716,7 +27716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.0.0, rxjs@npm:^7.5.1, rxjs@npm:^7.5.5, rxjs@npm:^7.8.0":
+"rxjs@npm:^7.5.1, rxjs@npm:^7.5.5, rxjs@npm:^7.8.0":
   version: 7.8.0
   resolution: "rxjs@npm:7.8.0"
   dependencies:
@@ -28229,7 +28229,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shell-quote@npm:^1.7.3":
+"shell-quote@npm:^1.7.3, shell-quote@npm:^1.8.0":
   version: 1.8.0
   resolution: "shell-quote@npm:1.8.0"
   checksum: 651a201a1af981d49326fac8c005bbe2af97bc56fcabded0b22944c08eea0ba3bccfa497168d4bcb70508ca5802fe1cb83ca89a7e121eb0701d4c8b1d6c71a5d
@@ -28556,10 +28556,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"spawn-command@npm:^0.0.2-1":
-  version: 0.0.2
-  resolution: "spawn-command@npm:0.0.2"
-  checksum: b22f2d71239e6e628a400831861ba747750bbb40c0a53323754cf7b84330b73d81e40ff1f9055e6d1971818679510208a9302e13d9ff3b32feb67e74d7a1b3ef
+"spawn-command@npm:0.0.2-1":
+  version: 0.0.2-1
+  resolution: "spawn-command@npm:0.0.2-1"
+  checksum: 4e1fae2db43a7e7159b7fc4cd813bab56c0a5c0bc04c152749f7ef68170ccbe9014a35f444e19e5c095afec780bc5bca1ac73ec16eb1ab0f9a2f881c180e6b70
   languageName: node
   linkType: hard
 
@@ -29205,9 +29205,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.31.3":
-  version: 0.31.3
-  resolution: "supertokens-auth-react@npm:0.31.3"
+"supertokens-auth-react@npm:0.31.4":
+  version: 0.31.4
+  resolution: "supertokens-auth-react@npm:0.31.4"
   dependencies:
     intl-tel-input: ^17.0.19
     prop-types: "*"
@@ -29216,7 +29216,7 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
     supertokens-web-js: ^0.5.0
-  checksum: 27b143444226959e0df53c7401a4c1289cc7de3fb6c11f6393f989a22a432b783902ee7b956f573ce42dbf2582448183a9227b578752c362877ded6b7f34a3e5
+  checksum: 778a25df8054565b3f176de4007a23a4fff8f0dff7a86f816627fcc9517a570b56a6f26df8951c503eee2ca01928a779c4511f2a6a56f7919b66442b1f026eea
   languageName: node
   linkType: hard
 
@@ -29245,7 +29245,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supports-color@npm:^8.0.0, supports-color@npm:^8.1.0, supports-color@npm:^8.1.1":
+"supports-color@npm:^8.0.0, supports-color@npm:^8.1.1":
   version: 8.1.1
   resolution: "supports-color@npm:8.1.1"
   dependencies:
@@ -32250,7 +32250,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.7.1, yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.6.2":
+"yargs@npm:17.7.1, yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.6.2, yargs@npm:^17.7.1":
   version: 17.7.1
   resolution: "yargs@npm:17.7.1"
   dependencies:
