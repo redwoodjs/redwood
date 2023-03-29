@@ -5044,9 +5044,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/nx-cloud@npm:15.3.2":
-  version: 15.3.2
-  resolution: "@nrwl/nx-cloud@npm:15.3.2"
+"@nrwl/nx-cloud@npm:15.3.3":
+  version: 15.3.3
+  resolution: "@nrwl/nx-cloud@npm:15.3.3"
   dependencies:
     axios: ^0.21.2
     chalk: 4.1.0
@@ -5058,7 +5058,7 @@ __metadata:
     yargs-parser: ">=21.0.1"
   bin:
     nx-cloud: bin/nx-cloud.js
-  checksum: 37b5bab52f99b5b13d01bd3edcba040b7c8757af6e6793a20d68a60d1cab5b178a6b7040168c2fd7f29ac4452ed03281020eda9e2a393eed81e8d8308f01d20f
+  checksum: 6337b00c236c53c612ebf26708f810dd9df162a4b7256698835eaa4b92f7c0e717a5f0c7491c1ead6eec7c37409d4068ef28ce0f1011ace6a9764db1566e8e35
   languageName: node
   linkType: hard
 
@@ -6538,7 +6538,7 @@ __metadata:
     jwks-rsa: 3.0.1
     typescript: 5.0.2
   peerDependencies:
-    supertokens-node: 13.1.5
+    supertokens-node: 13.2.0
   languageName: unknown
   linkType: soft
 
@@ -27638,7 +27638,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@faker-js/faker": 7.6.0
     "@npmcli/arborist": 6.2.5
-    "@nrwl/nx-cloud": 15.3.2
+    "@nrwl/nx-cloud": 15.3.3
     "@playwright/test": 1.32.1
     "@replayio/playwright": 0.3.27
     "@testing-library/jest-dom": 5.16.5
