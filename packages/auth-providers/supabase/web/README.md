@@ -38,8 +38,6 @@ Lastly, in `redwood.toml`, include `SUPABASE_URL` and `SUPABASE_KEY` in the list
   includeEnvironmentVariables = ["SUPABASE_URL", "SUPABASE_KEY"]
 ```
 
-
-
 ## Authentication UI
 
 Supabase doesn't redirect to a hosted sign-up page or open a sign-up modal.
@@ -200,11 +198,8 @@ Log in an existing user via a third-party provider.
 const { logIn } = useAuth()
 
 await logIn({
-  authenticationMethod: 'otp',
-  email: 'example@email.com',
-  options: {
-    emailRedirectTo: 'https://example.com/welcome'
-  }
+  authMethod: 'oauth',
+  provider: 'github',
 })
 ```
 
