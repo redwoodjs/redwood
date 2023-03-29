@@ -159,12 +159,19 @@ const mockSupabaseAuthClient: Partial<SupabaseClient['auth']> = {
   signUp: async (
     credentials: SignUpWithPasswordCredentials
   ): Promise<AuthResponse> => {
-    const { email } = credentials as { email: string }
+    const { email } = credentials as {
+      email: string
+    }
 
     loggedInUser = email === 'admin@example.com' ? adminUser : user
 
     loggedInUser.email = email
 
+    if (credentials.options) {
+      loggedInUser.user_metadata = credentials.options
+    }
+
+    console.log('signUp', loggedInUser)
     return {
       data: {
         user: loggedInUser,
@@ -306,20 +313,66 @@ describe('Supabase Authentication', () => {
   })
 
   describe('Password Authentication', () => {
-    it('is authenticated after signing up', async () => {
-      const authRef = getSupabaseAuth()
+    describe('Sign up', () => {
+      it('is authenticated after signing up with username and password', async () => {
+        const authRef = getSupabaseAuth()
 
-      await act(async () => {
-        authRef.current.signUp({
-          email: 'jane.doe@example.com',
-          password: 'ThereIsNoSpoon',
+        await act(async () => {
+          authRef.current.signUp({
+            email: 'jane.doe@example.com',
+            password: 'ThereIsNoSpoon',
+          })
         })
+
+        const currentUser = authRef.current.currentUser
+
+        expect(authRef.current.isAuthenticated).toBeTruthy()
+        expect(currentUser?.email).toEqual('jane.doe@example.com')
       })
 
-      const currentUser = authRef.current.currentUser
+      it('is authenticated after signing up with username and password and additional metadata', async () => {
+        const authRef = getSupabaseAuth()
 
-      expect(authRef.current.isAuthenticated).toBeTruthy()
-      expect(currentUser?.email).toEqual('jane.doe@example.com')
+        await act(async () => {
+          authRef.current.signUp({
+            email: 'jane.doe@example.com',
+            password: 'ThereIsNoSpoon',
+            options: {
+              data: {
+                first_name: 'Jane',
+                age: 27,
+              },
+            },
+          })
+        })
+
+        const currentUser = authRef.current.currentUser
+        const userMetadata = authRef.current.userMetadata
+
+        expect(authRef.current.isAuthenticated).toBeTruthy()
+        expect(currentUser?.email).toEqual('jane.doe@example.com')
+        expect(userMetadata?.data?.first_name).toEqual('Jane')
+        expect(userMetadata?.data?.age).toEqual(27)
+      })
+
+      it('is authenticated after signing up with username and password and a redirect URL', async () => {
+        const authRef = getSupabaseAuth()
+
+        await act(async () => {
+          authRef.current.signUp({
+            email: 'example@email.com',
+            password: 'example-password',
+            options: {
+              emailRedirectTo: 'https://example.com/welcome',
+            },
+          })
+        })
+
+        const currentUser = authRef.current.currentUser
+
+        expect(authRef.current.isAuthenticated).toBeTruthy()
+        expect(currentUser?.email).toEqual('example@email.com')
+      })
     })
 
     it('is authenticated after logging in', async () => {
