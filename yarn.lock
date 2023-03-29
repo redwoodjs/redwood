@@ -7054,7 +7054,7 @@ __metadata:
     lodash-decorators: 6.0.1
     lru-cache: 6.0.0
     proxyquire: 2.1.3
-    ts-morph: 15.1.0
+    ts-morph: 18.0.0
     typescript: 5.0.2
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.8
@@ -8726,15 +8726,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@npm:~0.16.0":
-  version: 0.16.0
-  resolution: "@ts-morph/common@npm:0.16.0"
+"@ts-morph/common@npm:~0.19.0":
+  version: 0.19.0
+  resolution: "@ts-morph/common@npm:0.19.0"
   dependencies:
-    fast-glob: ^3.2.11
-    minimatch: ^5.1.0
-    mkdirp: ^1.0.4
+    fast-glob: ^3.2.12
+    minimatch: ^7.4.3
+    mkdirp: ^2.1.6
     path-browserify: ^1.0.1
-  checksum: a9f306dd5c0c022b805400a1e54f18ec3fd1d80cc62e41f5f6964755d4b2538c10584b2fd040f9184121269dfebbe20ac7ffeb9965e74c3d6cb5b8891e29e5cb
+  checksum: e25fd46158d72be238ab1dda74e7ee284085895b12b9ab279f37d50f1cd71b2be95a56f3efa19d5f52986534e9f34ae4a294467cd1637b27cf4fb82bd7318bb7
   languageName: node
   linkType: hard
 
@@ -13424,10 +13424,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"code-block-writer@npm:^11.0.0":
-  version: 11.0.3
-  resolution: "code-block-writer@npm:11.0.3"
-  checksum: 12fe4c02152a2b607e8913b39dcc31dcb5240f7c8933a3335d4e42a5418af409bf7ed454c80d6d8c12f9c59bb685dd88f9467874b46be62236dfbed446d03fd6
+"code-block-writer@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "code-block-writer@npm:12.0.0"
+  checksum: ced73cdc466bff968bba9e8e32340d88420d25a229b9269f7425a10a7c2c9a12ca702dcb601b2462b96472d354f021cf66e552179fcbe30c8f7ecd0173c5fa07
   languageName: node
   linkType: hard
 
@@ -16820,7 +16820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:3.2.12, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.9, fast-glob@npm:~3.2.11":
+"fast-glob@npm:3.2.12, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:~3.2.11":
   version: 3.2.12
   resolution: "fast-glob@npm:3.2.12"
   dependencies:
@@ -23027,7 +23027,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^7.4.1":
+"minimatch@npm:^7.4.1, minimatch@npm:^7.4.3":
   version: 7.4.3
   resolution: "minimatch@npm:7.4.3"
   dependencies:
@@ -23212,6 +23212,15 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: 46ea0f3ffa8bc6a5bc0c7081ffc3907777f0ed6516888d40a518c5111f8366d97d2678911ad1a6882bf592fa9de6c784fea32e1687bb94e1f4944170af48a5cf
+  languageName: node
+  linkType: hard
+
+"mkdirp@npm:^2.1.6":
+  version: 2.1.6
+  resolution: "mkdirp@npm:2.1.6"
+  bin:
+    mkdirp: dist/cjs/src/bin.js
+  checksum: 96f551c651dd8f5f9435d53df1a7b9bfc553be769ee6da5192c37c1f303a376ef1c6996f96913d4a8d357060451d4526a346031d1919f92c58806a5fa3cd8dfe
   languageName: node
   linkType: hard
 
@@ -30003,13 +30012,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:15.1.0":
-  version: 15.1.0
-  resolution: "ts-morph@npm:15.1.0"
+"ts-morph@npm:18.0.0":
+  version: 18.0.0
+  resolution: "ts-morph@npm:18.0.0"
   dependencies:
-    "@ts-morph/common": ~0.16.0
-    code-block-writer: ^11.0.0
-  checksum: ef72fe65e5837afb49f11a67f98922687c92653a3391a258448d36b2d2a16d82487a8de93c0e61f7f79151539f2b6e46fa1ef8cb17f1e1bc9317f3d6819c0655
+    "@ts-morph/common": ~0.19.0
+    code-block-writer: ^12.0.0
+  checksum: 6ea3259bf46a786eb446f75586aaa3a23715529889069e28e7bbd57e85e21585097559ec5b94e1b99cd6e6e9097d644d71e4a1e3274499f46b1cafd6a009b534
   languageName: node
   linkType: hard
 
