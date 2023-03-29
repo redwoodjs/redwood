@@ -117,7 +117,7 @@ export async function copyFrameworkFilesToProject(
       files.length,
       'files'
     )
-    rimraf.sync(packageDstPath)
+    await rimraf(packageDstPath)
 
     for (const file of files) {
       const src = path.join(packageNamesToPaths[packageName], file)

@@ -32,7 +32,7 @@
     "listr2": "5.0.8",
     "lodash.memoize": "4.1.2",
     "pascalcase": "1.0.0",
-    "prettier": "2.8.6",
+    "prettier": "2.8.7",
     "prompts": "2.4.2",
     "terminal-link": "2.1.1"
   },
@@ -40,7 +40,7 @@
     "@babel/cli": "7.21.0",
     "@types/lodash.memoize": "4.1.7",
     "@types/pascalcase": "1.0.1",
-    "@types/yargs": "17.0.23",
+    "@types/yargs": "17.0.24",
     "jest": "29.5.0",
     "typescript": "5.0.2"
   },
