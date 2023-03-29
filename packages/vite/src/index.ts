@@ -116,6 +116,10 @@ export default function redwoodPluginVite() {
             manifest: !env.ssrBuild ? 'build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && redwoodConfig.web.sourceMap, // Note that this can be boolean or 'inline'
           },
+          // To produce a cjs bundle for SSR
+          legacy: {
+            buildSsrCjsExternalHeuristics: true,
+          },
           optimizeDeps: {
             esbuildOptions: {
               // @MARK this is because JS projects in Redwood don't have .jsx extensions

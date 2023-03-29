@@ -13078,22 +13078,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"check-node-version@npm:4.2.1":
-  version: 4.2.1
-  resolution: "check-node-version@npm:4.2.1"
-  dependencies:
-    chalk: ^3.0.0
-    map-values: ^1.0.1
-    minimist: ^1.2.0
-    object-filter: ^1.0.2
-    run-parallel: ^1.1.4
-    semver: ^6.3.0
-  bin:
-    check-node-version: bin.js
-  checksum: 7778e04d240710c64d952181d45c1efe21c2a032da529d8eafced5811652137bd24d53b0a850fac27cb75de8041f40fa268df66e8f57fbeeff82813215eefab7
-  languageName: node
-  linkType: hard
-
 "checkpoint-client@npm:1.1.23":
   version: 1.1.23
   resolution: "checkpoint-client@npm:1.1.23"
@@ -14217,33 +14201,6 @@ __metadata:
   checksum: 88b4a0a47a88fb005cbe1bbc34626af4e881d358e854a77cbe2db67571cc69772cea23fc0851257566a824d5858f08259742fc3e7a3bd3ca95446498d4ea6430
   languageName: node
   linkType: hard
-
-"create-redwood-app@workspace:packages/create-redwood-app":
-  version: 0.0.0-use.local
-  resolution: "create-redwood-app@workspace:packages/create-redwood-app"
-  dependencies:
-    "@babel/cli": 7.21.0
-    "@babel/core": 7.21.3
-    "@babel/node": 7.20.7
-    "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.1
-    "@redwoodjs/telemetry": 0.0.0-experimental-streaming.1
-    "@types/prompts": 2.4.3
-    chalk: 4.1.2
-    check-node-version: 4.2.1
-    core-js: 3.29.1
-    enquirer: 2.3.6
-    execa: 5.1.1
-    fs-extra: 11.1.1
-    jest: 29.5.0
-    listr2: 5.0.8
-    terminal-link: 2.1.1
-    typescript: 5.0.2
-    yargs: 17.7.1
-  bin:
-    create-redwood-app: ./dist/create-redwood-app.js
-  languageName: unknown
-  linkType: soft
 
 "create-require@npm:^1.1.0":
   version: 1.1.1
@@ -22494,13 +22451,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"map-values@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "map-values@npm:1.0.1"
-  checksum: a1e2a4fe64f60e43c6f6508e872a081651544fd654b643ffcbdd2cae72611af1f6e4dfb51484fe3e802db4eb5f340cab4022b9b86075136801e9d1db45053b40
-  languageName: node
-  linkType: hard
-
 "map-visit@npm:^1.0.0":
   version: 1.0.0
   resolution: "map-visit@npm:1.0.0"
@@ -24150,13 +24100,6 @@ __metadata:
     define-property: ^0.2.5
     kind-of: ^3.0.3
   checksum: 79314b05e9d626159a04f1d913f4c4aba9eae8848511cf5f4c8e3b04bb3cc313b65f60357f86462c959a14c2d58380fedf89b6b32ecec237c452a5ef3900a293
-  languageName: node
-  linkType: hard
-
-"object-filter@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "object-filter@npm:1.0.2"
-  checksum: 15ce6852c1826db20b7c65ddc7519ce76f9cf06b1cf5140b49a2d06b265ab897692cfc90627c0a907f4d1e8fd0c1fe6d36e20931d4ced5e2e30c49451b7d4b70
   languageName: node
   linkType: hard
 
@@ -27668,7 +27611,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"run-parallel@npm:^1.1.4, run-parallel@npm:^1.1.9":
+"run-parallel@npm:^1.1.9":
   version: 1.2.0
   resolution: "run-parallel@npm:1.2.0"
   dependencies:
