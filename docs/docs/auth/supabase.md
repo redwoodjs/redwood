@@ -10,8 +10,6 @@ To get started, run the setup command:
 yarn rw setup auth supabase
 ```
 
-<!-- vA47SZpaCR7BinC9 -->
-
 This installs all the packages, writes all the files, and makes all the code modifications you need.
 For a detailed explanation of all the api- and web-side changes that aren't exclusive to Supabase, see the top-level [Authentication](../authentication.md) doc. For now, let's focus on Supabase's side of things.
 
