@@ -6664,6 +6664,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 4.4.1
     secure-random-password: 0.2.3
+    string-env-interpolation: 1.0.1
     terminal-link: 2.1.1
     title-case: 3.0.3
     typescript: 5.0.3
