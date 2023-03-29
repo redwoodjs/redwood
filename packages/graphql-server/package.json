@@ -38,7 +38,7 @@
     "graphql": "16.6.0",
     "graphql-scalars": "1.21.3",
     "graphql-tag": "2.12.6",
-    "graphql-yoga": "3.7.3",
+    "graphql-yoga": "3.8.0",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
     "uuid": "9.0.0"
