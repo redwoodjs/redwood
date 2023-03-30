@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/record",
-  "version": "0.0.0-experimental-streaming.1",
+  "version": "0.0.0-experimental-streaming.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -29,7 +29,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
     "@prisma/client": "4.11.0",
-    "@redwoodjs/project-config": "0.0.0-experimental-streaming.1",
+    "@redwoodjs/project-config": "0.0.0-experimental-streaming.2",
     "core-js": "3.29.1"
   },
   "devDependencies": {

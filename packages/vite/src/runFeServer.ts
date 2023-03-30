@@ -1,5 +1,6 @@
 import path from 'path'
 
+// @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
@@ -23,7 +24,7 @@ globalThis.RWJS_ENV = {}
 // ---- @MARK This is should be removed one we have rearchitected the rw serve command --
 // We need the dotenv, so that prisma knows the DATABASE env var
 // Normally the RW cli loads this for us, but we expect this file to be run directly
-// without using the CLI
+// without using the CLI. Remember to remove dotenv-defaults dependency from this package
 loadDotEnv({
   path: path.join(getPaths().base, '.env'),
   defaults: path.join(getPaths().base, '.env.defaults'),

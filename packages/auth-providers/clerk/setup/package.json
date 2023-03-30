@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-clerk-setup",
-  "version": "0.0.0-experimental-streaming.1",
+  "version": "0.0.0-experimental-streaming.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/cli-helpers": "0.0.0-experimental-streaming.1",
+    "@redwoodjs/cli-helpers": "0.0.0-experimental-streaming.2",
     "core-js": "3.29.1"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/core",
-  "version": "0.0.0-experimental-streaming.1",
+  "version": "0.0.0-experimental-streaming.2",
   "description": "Foundational packages and config required to build RedwoodJS.",
   "repository": {
     "type": "git",
@@ -17,12 +17,12 @@
     "rimraf": "./dist/bins/rimraf.js",
     "rw": "./dist/bins/redwood.js",
     "rw-api-server-watch": "./dist/bins/rw-api-server-watch.js",
+    "rw-dev-fe": "./dist/bins/rw-dev-fe.js",
     "rw-gen": "./dist/bins/rw-gen.js",
     "rw-gen-watch": "./dist/bins/rw-gen-watch.js",
     "rw-log-formatter": "./dist/bins/rw-log-formatter.js",
-    "rwfw": "./dist/bins/rwfw.js",
-    "rw-dev-fe": "./dist/bins/rw-dev-fe.js",
-    "rw-serve-fe": "./dist/bins/rw-serve-fe.js"
+    "rw-serve-fe": "./dist/bins/rw-serve-fe.js",
+    "rwfw": "./dist/bins/rwfw.js"
   },
   "files": [
     "config",
@@ -50,11 +50,11 @@
     "@babel/preset-typescript": "7.21.0",
     "@babel/runtime-corejs3": "7.21.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
-    "@redwoodjs/cli": "0.0.0-experimental-streaming.1",
-    "@redwoodjs/eslint-config": "0.0.0-experimental-streaming.1",
-    "@redwoodjs/internal": "0.0.0-experimental-streaming.1",
-    "@redwoodjs/project-config": "0.0.0-experimental-streaming.1",
-    "@redwoodjs/testing": "0.0.0-experimental-streaming.1",
+    "@redwoodjs/cli": "0.0.0-experimental-streaming.2",
+    "@redwoodjs/eslint-config": "0.0.0-experimental-streaming.2",
+    "@redwoodjs/internal": "0.0.0-experimental-streaming.2",
+    "@redwoodjs/project-config": "0.0.0-experimental-streaming.2",
+    "@redwoodjs/testing": "0.0.0-experimental-streaming.2",
     "babel-loader": "9.1.2",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
