@@ -64,6 +64,7 @@ async function createServer() {
 
       if (currentRoute?.redirect) {
         // @TODO deal with permanent/temp
+        // Shortcircuit, and return a 301 or 302
         return res.redirect(currentRoute.redirect.to)
       }
 

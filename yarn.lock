@@ -7137,9 +7137,12 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/internal": 0.0.0-experimental-streaming.1
     "@redwoodjs/project-config": 0.0.0-experimental-streaming.1
+    "@types/express": ^4
     "@vitejs/plugin-react": 3.1.0
     buffer: 6.0.3
     core-js: 3.29.1
+    express: 4.18.2
+    http-proxy-middleware: 2.0.6
     typescript: 5.0.2
     vite: 4.2.1
     vite-plugin-commonjs: 0.6.2
@@ -9054,7 +9057,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*, @types/express@npm:^4.17.13, @types/express@npm:^4.17.14":
+"@types/express@npm:*, @types/express@npm:^4, @types/express@npm:^4.17.13, @types/express@npm:^4.17.14":
   version: 4.17.17
   resolution: "@types/express@npm:4.17.17"
   dependencies:
@@ -16577,7 +16580,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.17.1, express@npm:^4.17.3":
+"express@npm:4.18.2, express@npm:^4.17.1, express@npm:^4.17.3":
   version: 4.18.2
   resolution: "express@npm:4.18.2"
   dependencies:
@@ -19017,7 +19020,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-proxy-middleware@npm:^2.0.3":
+"http-proxy-middleware@npm:2.0.6, http-proxy-middleware@npm:^2.0.3":
   version: 2.0.6
   resolution: "http-proxy-middleware@npm:2.0.6"
   dependencies:

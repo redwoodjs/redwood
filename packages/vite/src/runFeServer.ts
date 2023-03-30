@@ -124,6 +124,13 @@ export async function runFeServer() {
       }
 
       let routeContext = {}
+
+      if (currentRoute?.redirect) {
+        // @TODO deal with permanent/temp
+        // Shortcircuit, and return a 301 or 302
+        return res.redirect(currentRoute.redirect.to)
+      }
+
       if (currentRoute && currentRoute.routeHooks) {
         try {
           const routeHooks = await import(

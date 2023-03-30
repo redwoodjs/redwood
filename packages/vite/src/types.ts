@@ -2,11 +2,11 @@ export interface RWRouteManifestItem {
   matchRegexString: string | null
   routeHooks: string | null
   bundle: string | null
-  routePath: RoutePath
+  pathDefinition: PathDefinition
   name: string
   redirect: { to: string; permanent: boolean } | null
 }
 
-export type RWRouteManifest = Record<RoutePath, RWRouteManifestItem>
+export type RWRouteManifest = Record<PathDefinition, RWRouteManifestItem>
 
-type RoutePath = string
+type PathDefinition = string

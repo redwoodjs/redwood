@@ -20,7 +20,9 @@
     "rw-gen": "./dist/bins/rw-gen.js",
     "rw-gen-watch": "./dist/bins/rw-gen-watch.js",
     "rw-log-formatter": "./dist/bins/rw-log-formatter.js",
-    "rwfw": "./dist/bins/rwfw.js"
+    "rwfw": "./dist/bins/rwfw.js",
+    "rw-dev-fe": "./dist/bins/rw-dev-fe.js",
+    "rw-serve-fe": "./dist/bins/rw-serve-fe.js"
   },
   "files": [
     "config",

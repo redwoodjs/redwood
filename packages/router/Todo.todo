@@ -31,7 +31,6 @@ Router:
   ✔ Handling server side redirects @done(23-03-30 15:24)
   ☐ Multiple path matches
   ☐ Duplicated names
-  ☐ Subclass RouteManifest from RouteSpec
 
 
 Other features:
