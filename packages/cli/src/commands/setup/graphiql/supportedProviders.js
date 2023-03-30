@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 // tests if id, which is always a string from cli, is actually a number or uuid
 const isNumeric = (id) => {
-  return /^\d+$/.test(id)
+  return Number.isInteger(Number(id))
 }
 
 const getExpiryTime = (expiry) => {
