@@ -7129,6 +7129,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/tui@workspace:packages/tui":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/tui@workspace:packages/tui"
+  dependencies:
+    "@babel/cli": 7.21.0
+    "@babel/core": 7.21.3
+    "@babel/runtime-corejs3": 7.21.0
+    boxen: 5.1.2
+    chalk: 4.1.2
+    core-js: 3.29.1
+    enquirer: 2.3.6
+    jest: 29.5.0
+    stdout-update: 1.6.8
+    typescript: 5.0.2
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/vite@workspace:packages/vite":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
@@ -10887,7 +10904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.0":
+"ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.0, ansi-escapes@npm:^4.3.2":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
   dependencies:
@@ -10953,7 +10970,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-styles@npm:^5.0.0":
+"ansi-styles@npm:^5.0.0, ansi-styles@npm:^5.2.0":
   version: 5.2.0
   resolution: "ansi-styles@npm:5.2.0"
   checksum: 9c4ca80eb3c2fb7b33841c210d2f20807f40865d27008d7c3f707b7f95cab7d67462a565e2388ac3285b71cb3d9bb2173de8da37c57692a362885ec34d6e27df
@@ -14230,11 +14247,9 @@ __metadata:
     chalk: 4.1.2
     check-node-version: 4.2.1
     core-js: 3.29.1
-    enquirer: 2.3.6
     execa: 5.1.1
     fs-extra: 11.1.1
     jest: 29.5.0
-    listr2: 5.0.8
     terminal-link: 2.1.1
     typescript: 5.0.2
     yargs: 17.7.1
@@ -28812,6 +28827,18 @@ __metadata:
   version: 1.5.0
   resolution: "statuses@npm:1.5.0"
   checksum: e433900956357b3efd79b1c547da4d291799ac836960c016d10a98f6a810b1b5c0dcc13b5a7aa609a58239b5190e1ea176ad9221c2157d2fd1c747393e6b2940
+  languageName: node
+  linkType: hard
+
+"stdout-update@npm:1.6.8":
+  version: 1.6.8
+  resolution: "stdout-update@npm:1.6.8"
+  dependencies:
+    ansi-escapes: ^4.3.2
+    ansi-styles: ^5.2.0
+    string-width: ^4.2.2
+    strip-ansi: ^6.0.0
+  checksum: 2435eba195367cde1bb4f4ae19af3f9a7d38f240bfa05c9f562c0feb8e6f46fd83f78e928b3025f105e6b3baefcca693009cc46b7065679ca0edaec2e223f193
   languageName: node
   linkType: hard
 
