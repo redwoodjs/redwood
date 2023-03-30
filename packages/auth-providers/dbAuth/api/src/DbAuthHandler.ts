@@ -170,6 +170,7 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   authFields: {
     id: string
     username: string
+    usernameInsensitive: string
     hashedPassword: string
     salt: string
     resetToken: string
@@ -216,6 +217,7 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
 
 interface SignupHandlerOptions {
   username: string
+  usernameInsensitive: string
   hashedPassword: string
   salt: string
   userAttributes?: Record<string, string>
@@ -468,7 +470,7 @@ export class DbAuthHandler<
 
     try {
       user = await this.dbAccessor.findUnique({
-        where: { [this.options.authFields.username]: username },
+        where: { [this.options.authFields.usernameInsensitive]: username.toLowerCase() },
       })
     } catch (e) {
       throw new DbAuthError.GenericError()
@@ -1213,7 +1215,7 @@ export class DbAuthHandler<
     try {
       // does user exist?
       user = await this.dbAccessor.findUnique({
-        where: { [this.options.authFields.username]: username },
+        where: { [this.options.authFields.usernameInsensitive]: username.toLowerCase() },
       })
     } catch (e) {
       throw new DbAuthError.GenericError()
@@ -1282,8 +1284,9 @@ export class DbAuthHandler<
       this._validateField('username', username) &&
       this._validateField('password', password)
     ) {
+      const usernameInsensitive = username.toLowerCase()
       const user = await this.dbAccessor.findUnique({
-        where: { [this.options.authFields.username]: username },
+        where: { [this.options.authFields.usernameInsensitive]: usernameInsensitive },
       })
       if (user) {
         throw new DbAuthError.DuplicateUsernameError(
@@ -1294,9 +1297,12 @@ export class DbAuthHandler<
 
       // if we get here everything is good, call the app's signup handler and let
       // them worry about scrubbing data and saving to the DB
+      // We are storing both a username and usernameInsenitive so that we retain the pretty formatted version
+      // the user is expecting to see but use the usernameInsensitive for comparrison checking.
       const [hashedPassword, salt] = hashPassword(password)
       const newUser = await (this.options.signup as SignupFlowOptions).handler({
         username,
+        usernameInsensitive,
         hashedPassword,
         salt,
         userAttributes,

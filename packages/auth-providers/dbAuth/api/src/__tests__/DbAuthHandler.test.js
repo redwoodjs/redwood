@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js'
+import { M } from 'msw/lib/glossary-de6278a9'
 
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
@@ -83,9 +84,11 @@ const UTC_DATE_REGEX = /\w{3}, \d{2} \w{3} \d{4} [\d:]{8} GMT/
 const LOGOUT_COOKIE = 'session=;Expires=Thu, 01 Jan 1970 00:00:00 GMT'
 
 const createDbUser = async (attributes = {}) => {
+  const email = "roB@redWoodjs.com";
   return await db.user.create({
     data: {
-      email: 'rob@redwoodjs.com',
+      email,
+      emailInsensitive: email.toLocaleLowerCase(),
       hashedPassword:
         '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
       salt: '2ef27f4073c603ba8b7807c6de6d6a89',
@@ -129,6 +132,7 @@ describe('dbAuth', () => {
       authFields: {
         id: 'id',
         username: 'email',
+        usernameInsensitive: 'emailInsensitive',
         hashedPassword: 'hashedPassword',
         salt: 'salt',
         resetToken: 'resetToken',
@@ -159,6 +163,7 @@ describe('dbAuth', () => {
           return db.user.create({
             data: {
               email: username,
+              emailInsensitive: username.toLowerCase(),
               hashedPassword: hashedPassword,
               salt: salt,
               name: userAttributes.name,
