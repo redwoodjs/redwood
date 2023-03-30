@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { renderToPipeableStream } from 'react-dom/server'
@@ -18,6 +19,17 @@ globalThis.RWJS_ENV = {}
  * We will need to decide where to put it, so that rwjs/internal and other heavy dependencies
  * can be removed from the final docker image
  */
+
+// ---- @MARK This is should be removed one we have rearchitected the rw serve command --
+// We need the dotenv, so that prisma knows the DATABASE env var
+// Normally the RW cli loads this for us, but we expect this file to be run directly
+// without using the CLI
+loadDotEnv({
+  path: path.join(getPaths().base, '.env'),
+  defaults: path.join(getPaths().base, '.env.defaults'),
+  multiline: true,
+})
+//------------------------------------------------
 
 export async function runFeServer() {
   const app = express()
