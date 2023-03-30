@@ -77,6 +77,7 @@ export interface RouteSpec {
   relativeFilePath: string | undefined
   routeHooks: string | undefined | null
   matchRegexString: string | null
+  redirect: { to: string; permanent: boolean } | null
   renderMode: 'stream' | 'html' | 'client'
 }
 
@@ -99,6 +100,10 @@ export const getProjectRoutes = (): RouteSpec[] => {
       matchRegexString: route.isNotFound
         ? null
         : getRouteRegexAndParams(route.path).matchRegexString,
+      // @TODO deal with permanent/temp later
+      redirect: route.redirect
+        ? { to: route.redirect, permanent: false }
+        : null,
       //@TODO detect render mode on Route, but also Set
       renderMode: null,
     }

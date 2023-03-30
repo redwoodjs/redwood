@@ -113,6 +113,12 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
         ? // @MARK need to change to .mjs here if we use esm
           path.relative(rwPaths.web.src, route.routeHooks).replace('.ts', '.js')
         : null,
+      redirect: route.redirect
+        ? {
+            to: route.redirect?.to,
+            permanent: false,
+          }
+        : null,
     }
     return acc
   }, {})

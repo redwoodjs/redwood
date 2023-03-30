@@ -162,6 +162,10 @@ export class RWRoute extends BaseNode {
     return typeof this.jsxNode.getAttribute('notfound') !== 'undefined'
   }
 
+  @lazy() get redirect() {
+    return this.getStringAttr('redirect')
+  }
+
   *diagnostics() {
     if (this.page_identifier && !this.page) {
       // normally this would be caught by TypeScript

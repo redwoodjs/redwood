@@ -26,9 +26,12 @@ Props on Sets/Private/etc.:
 While loading:
   ☐ Can we wrap the whileLoadingPage in a component that updates itself with startTransition?
 
-Redirects:
-  ☐ Handling the redirect prop in a Route client side
-  ☐ Handling server side redirects
+Router:
+  ✔ Handling the redirect prop in a Route client side @done(23-03-30 15:24)
+  ✔ Handling server side redirects @done(23-03-30 15:24)
+  ☐ Multiple path matches
+  ☐ Duplicated names
+  ☐ Subclass RouteManifest from RouteSpec
 
 
 Other features:
@@ -47,19 +50,27 @@ Enabling streaming/FE server:
     i.e. the routeHooks file only has serverData
 
 Packaging:
-  ☐ Swap out handlers for:
+  ✔ Swap out handlers for: @done(23-03-29 13:41)
     ✔ build @done(23-03-28 16:49)
     ✔ dev @done(23-03-28 13:12)
-    ☐ serve
+    ✔ serve @done(23-03-29 13:41)
   ✔ Add to internal paths: @done(23-03-28 14:45)
     ✔ entry-client @done(23-03-28 13:10)
     ✔ entry-server @done(23-03-28 13:10)
     ✔  configFile: '../web/vite.config.ts', @done(23-03-28 13:02)
     ✔ '/bootstrapScript.js @done(23-03-28 14:45)
 
+    ☐ Render crash causes feServer to crash
+
+
+Router:
+  ☐ crashes when you're not using default import for Set wrappers
 
 "Codemod":
   ☐ Introduce entry-server
+  ☐ Introduce document
+  ☐ Update entry-client
+  ☐ Add react import to App.js
 
 
 

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 
-type Name = string
+type PathDefinition = string
 interface SplashPageProps {
   hasGeneratedRoutes: boolean
-  allStandardRoutes: Record<Name, { name: Name; path: string }>
+  allStandardRoutes: Record<
+    PathDefinition,
+    { name: string | null; path: PathDefinition }
+  >
 }
 
 const SplashPage = ({

@@ -10,13 +10,14 @@ export type PageType =
 
 // @MARK a redirect route should just be a standard route, with
 // the extra redirect prop
+// @TODO
 // why can't a redirect route have a name?
 // if you put a redirect prop on a route, you should still be able
 // to call routes.myRouteName()
 export interface RedirectRouteProps {
   redirect: string
   path: string
-  name: string
+  name?: string
 }
 
 export interface NotFoundRouteProps {
@@ -46,7 +47,7 @@ const isNodeTypeRoute = (
 export function isStandardRoute(
   node: ReactElement<InternalRouteProps>
 ): node is ReactElement<RouteProps> {
-  return !node.props.notfound || !node.props.redirect
+  return !node.props.notfound && !node.props.redirect
 }
 /**
  *

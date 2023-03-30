@@ -26,10 +26,16 @@ const commonjs = require('vite-plugin-commonjs')
  *
  */
 export default function redwoodPluginVite() {
-  const redwoodPaths = getPaths()
-  const redwoodConfig = getConfig()
+  const rwPaths = getPaths()
+  const rwConfig = getConfig()
 
-  const clientEntryPath = path.join(redwoodPaths.web.src, 'entry-client.jsx')
+  const clientEntryPath = rwPaths.web.entryClient
+
+  if (!clientEntryPath) {
+    throw new Error(
+      'Vite client entry point not found. Please check that your project has an entry-client.{jsx,tsx} file in the web/src directory.'
+    )
+  }
 
   return [
     {
@@ -41,7 +47,7 @@ export default function redwoodPluginVite() {
       transform: (code: string, id: string) => {
         if (
           existsSync(clientEntryPath) &&
-          normalizePath(id) === normalizePath(redwoodPaths.web.html)
+          normalizePath(id) === normalizePath(rwPaths.web.html)
         ) {
           return {
             code: code.replace(
@@ -62,7 +68,7 @@ export default function redwoodPluginVite() {
 
       config: (options: UserConfig, env: ConfigEnv): UserConfig => {
         return {
-          root: redwoodPaths.web.src,
+          root: rwPaths.web.src,
           // resolve: {
           //   alias: [
           //     {
@@ -72,20 +78,19 @@ export default function redwoodPluginVite() {
           //   ],
           // },
           envPrefix: 'REDWOOD_ENV_',
-          publicDir: path.join(redwoodPaths.web.base, 'public'),
+          publicDir: path.join(rwPaths.web.base, 'public'),
           define: {
             RWJS_WEB_BUNDLER: JSON.stringify('vite'),
             RWJS_ENV: {
               // @NOTE we're avoiding process.env here, unlike webpack
               RWJS_API_GRAPHQL_URL:
-                redwoodConfig.web.apiGraphQLUrl ??
-                redwoodConfig.web.apiUrl + '/graphql',
-              RWJS_API_URL: redwoodConfig.web.apiUrl,
+                rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql',
+              RWJS_API_URL: rwConfig.web.apiUrl,
               __REDWOOD__APP_TITLE:
-                redwoodConfig.web.title || path.basename(redwoodPaths.base),
+                rwConfig.web.title || path.basename(rwPaths.base),
             },
             RWJS_DEBUG_ENV: {
-              RWJS_SRC_ROOT: redwoodPaths.web.src,
+              RWJS_SRC_ROOT: rwPaths.web.src,
               REDWOOD_ENV_EDITOR: JSON.stringify(
                 process.env.REDWOOD_ENV_EDITOR
               ),
@@ -94,27 +99,27 @@ export default function redwoodPluginVite() {
           css: {
             // @NOTE config path is relative to where vite.config.js is if you use relative path
             // postcss: './config/',
-            postcss: redwoodPaths.web.config,
+            postcss: rwPaths.web.config,
           },
           server: {
-            open: redwoodConfig.browser.open,
-            port: redwoodConfig.web.port,
-            host: redwoodConfig.web.host,
+            open: rwConfig.browser.open,
+            port: rwConfig.web.port,
+            host: rwConfig.web.host,
             proxy: {
               //@TODO we need to do a check for absolute urls here
-              [redwoodConfig.web.apiUrl]: {
-                target: `http://localhost:${redwoodConfig.api.port}`,
+              [rwConfig.web.apiUrl]: {
+                target: `http://localhost:${rwConfig.api.port}`,
                 changeOrigin: true,
                 // @MARK might be better to use a regex maybe
-                rewrite: (path) => path.replace(redwoodConfig.web.apiUrl, ''),
+                rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),
               },
             },
           },
           build: {
-            outDir: options.build?.outDir || redwoodPaths.web.dist,
+            outDir: options.build?.outDir || rwPaths.web.dist,
             emptyOutDir: true,
             manifest: !env.ssrBuild ? 'build-manifest.json' : undefined,
-            sourcemap: !env.ssrBuild && redwoodConfig.web.sourceMap, // Note that this can be boolean or 'inline'
+            sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
           },
           // To produce a cjs bundle for SSR
           legacy: {
@@ -141,7 +146,7 @@ export default function redwoodPluginVite() {
     EnvironmentPlugin('all', { prefix: 'REDWOOD_ENV_', loadEnvFiles: false }),
     EnvironmentPlugin(
       Object.fromEntries(
-        redwoodConfig.web.includeEnvironmentVariables.map((envName) => [
+        rwConfig.web.includeEnvironmentVariables.map((envName) => [
           envName,
           JSON.stringify(process.env[envName]),
         ])
@@ -154,7 +159,7 @@ export default function redwoodPluginVite() {
     {
       // @MARK Adding this custom plugin to support jsx files with .js extensions
       // This is the default in Redwood JS projects. We can remove this once Vite is stable,
-      // and have a codemod to convert all JSX files to .jsx extensions
+      // and have a codtemod to convert all JSX files to .jsx extensions
       name: 'load-js-files-as-jsx',
       async load(id: string) {
         if (!id.match(/src\/.*\.js$/)) {

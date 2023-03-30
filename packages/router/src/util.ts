@@ -443,9 +443,11 @@ interface AnayzeRoutesOptions {
 // Keeping the shape consistent makes it easier to use
 
 type WhileLoadingPage = () => ReactElement | null
+
+type RoutePath = string
 interface AnalyzedRoute {
-  path: string
-  name: string
+  path: RoutePath
+  name: string | null
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
@@ -457,18 +459,18 @@ export function analyzeRoutes(
   children: ReactNode,
   { currentPathName, userParamTypes }: AnayzeRoutesOptions
 ) {
-  // @TODO rename this variable, once we figure out all its uses
-  const namePathMap: Record<string, AnalyzedRoute> = {}
+  const pathRouteMap: Record<RoutePath, AnalyzedRoute> = {}
   const namedRoutesMap: AvailableRoutes = {}
   let hasHomeRoute = false
   let NotFoundPage: PageType | undefined
-  let activeRouteName: string | undefined
+  let activeRoutePath: string | undefined
 
   interface RecurseParams {
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
     wrappersFromSet?: ReactNode[]
-    propsFromSet?: Record<any, any> // we don't know, or care about what props users are passing donw
+    // we don't know, or care about, what props users are passing down
+    propsFromSet?: Record<string, unknown>
   }
 
   const recurseThroughRouter = ({
@@ -499,15 +501,29 @@ export function analyzeRoutes(
         if (isRedirectRoute(route)) {
           const { name, redirect, path } = route.props
 
-          validatePath(path, name)
+          // The name is just for showing a human-readable error message
+          validatePath(path, name || path)
 
-          namePathMap[name] = {
+          const { match } = matchPath(path, currentPathName, {
+            userParamTypes,
+          })
+
+          if (match) {
+            activeRoutePath = path
+          }
+
+          // If the redirect route doesn't have a name, no need to add it to the map
+          pathRouteMap[path] = {
             redirect,
-            name,
+            name: name || null,
             path,
             page: null, // Redirects don't need pages. We set this to null for consistency
             wrappers: wrappersFromSet,
             setProps: propsFromSet,
+          }
+
+          if (name) {
+            namedRoutesMap[name] = (args = {}) => replaceParams(path, args)
           }
         }
 
@@ -521,12 +537,12 @@ export function analyzeRoutes(
           })
 
           if (match) {
-            activeRouteName = name
+            activeRoutePath = path
           }
 
           // e.g. namePathMap['homePage'] = { name: 'homePage', path: '/home', ...}
           // We always set all the keys, even if their values are null/undefined for consistency
-          namePathMap[name] = {
+          pathRouteMap[path] = {
             redirect: null,
             name,
             path,
@@ -576,10 +592,10 @@ export function analyzeRoutes(
   recurseThroughRouter({ nodes: Children.toArray(children) })
 
   return {
-    namePathMap,
+    pathRouteMap,
     namedRoutesMap,
     hasHomeRoute,
     NotFoundPage,
-    activeRouteName,
+    activeRoutePath,
   }
 }

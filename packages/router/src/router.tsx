@@ -89,29 +89,26 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   const location = useLocation()
 
   const {
-    namePathMap,
+    pathRouteMap,
     hasHomeRoute,
     namedRoutesMap,
     NotFoundPage,
-    activeRouteName,
-  } = useMemo(
-    () =>
-      analyzeRoutes(children, {
-        currentPathName: location.pathname,
-        // @TODO We haven't handled this with SSR/Streaming yet.
-        // May need a babel plugin to extract userParamTypes from Routes.tsx
-        userParamTypes: paramTypes,
-      }),
-    [location.pathname, children, paramTypes]
-  )
+    activeRoutePath,
+  } = useMemo(() => {
+    return analyzeRoutes(children, {
+      currentPathName: location.pathname,
+      // @TODO We haven't handled this with SSR/Streaming yet.
+      // May need a babel plugin to extract userParamTypes from Routes.tsx
+      userParamTypes: paramTypes,
+    })
+  }, [location.pathname, children, paramTypes])
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
   namedRoutes = namedRoutesMap
 
-  // The user has not generated routes
-  // if the only route that exists is
-  // is the not found page
+  // The user has not generated routes if the only route that exists is the
+  // not found page
   const hasGeneratedRoutes = Object.keys(namedRoutes).length > 0
 
   const shouldShowSplash =
@@ -121,13 +118,13 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     return (
       <SplashPage
         hasGeneratedRoutes={hasGeneratedRoutes}
-        allStandardRoutes={namePathMap}
+        allStandardRoutes={pathRouteMap}
       />
     )
   }
 
   // Render 404 page if no route matches
-  if (!activeRouteName) {
+  if (!activeRoutePath) {
     if (NotFoundPage) {
       return (
         <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
@@ -153,14 +150,14 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     whileLoadingPage,
     wrappers = [],
     setProps,
-  } = namePathMap[activeRouteName]
+  } = pathRouteMap[activeRoutePath]
 
   if (!path) {
     throw new Error(`Route "${name}" needs to specify a path`)
   }
 
   // Check for issues with the path.
-  validatePath(path, name)
+  validatePath(path, name || path)
 
   const { params: pathParams } = matchPath(path, location.pathname, {
     userParamTypes: paramTypes,

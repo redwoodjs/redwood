@@ -155,7 +155,7 @@ export async function runFeServer() {
           // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
           bootstrapModules: ['/' + indexEntry.file, '/' + currentRoute.bundle],
           onShellReady() {
-            res.setHeader('content-type', 'text/html')
+            res.setHeader('content-type', 'text/html; charset=utf-8')
             pipe(res)
           },
           // onAllReady() {

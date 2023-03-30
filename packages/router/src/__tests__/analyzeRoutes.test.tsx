@@ -1,10 +1,14 @@
 import React, { isValidElement } from 'react'
 
 import { Route, Router } from '../router'
-import { Set } from '../Set'
+import { Private, Set } from '../Set'
 import { analyzeRoutes } from '../util'
 
 const FakePage = () => <h1>Fake Page</h1>
+
+const FakeLayout1 = ({ children }) => <div className="layout1">{children}</div>
+const FakeLayout2 = ({ children }) => <div className="layout2">{children}</div>
+const FakeLayout3 = ({ children }) => <div className="layout2">{children}</div>
 
 describe('AnalyzeRoutes: with homePage and Children', () => {
   const CheckRoutes = (
@@ -17,19 +21,20 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     </Router>
   )
 
-  const { namePathMap, namedRoutesMap, hasHomeRoute, NotFoundPage } =
+  const { pathRouteMap, namedRoutesMap, hasHomeRoute, NotFoundPage } =
     analyzeRoutes(CheckRoutes.props.children, {
       currentPathName: '/',
     })
+
   test('Should return namePathMap and hasHomeRoute correctly', () => {
-    expect(Object.keys(namePathMap)).toEqual([
-      'hello',
-      'world',
-      'recipeById',
-      'home',
+    expect(Object.keys(pathRouteMap)).toEqual([
+      '/hello',
+      '/world',
+      '/recipe/{id}',
+      '/',
     ])
 
-    expect(namePathMap.hello).toEqual(
+    expect(pathRouteMap['/hello']).toEqual(
       expect.objectContaining({
         name: 'hello',
         page: FakePage,
@@ -37,7 +42,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       })
     )
 
-    expect(namePathMap.world).toEqual(
+    expect(pathRouteMap['/world']).toEqual(
       expect.objectContaining({
         name: 'world',
         page: FakePage,
@@ -45,7 +50,8 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       })
     )
 
-    expect(namePathMap.recipeById).toEqual(
+    // @NOTE the path here is the path DEFINITION, not that actual path
+    expect(pathRouteMap['/recipe/{id}']).toEqual(
       expect.objectContaining({
         name: 'recipeById',
         page: FakePage,
@@ -72,11 +78,11 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
   })
 
   test('Should return the active Route by name', () => {
-    const { activeRouteName } = analyzeRoutes(CheckRoutes.props.children, {
+    const { activeRoutePath } = analyzeRoutes(CheckRoutes.props.children, {
       currentPathName: '/recipe/512512',
     })
-    expect(activeRouteName).toBeDefined()
-    expect(activeRouteName).toBe('recipeById')
+    expect(activeRoutePath).toBeDefined()
+    expect(activeRoutePath).toBe('/recipe/{id}')
   })
 
   test('No home Route', () => {
@@ -87,7 +93,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       </Router>
     )
 
-    const { namePathMap, namedRoutesMap, hasHomeRoute } = analyzeRoutes(
+    const { pathRouteMap, namedRoutesMap, hasHomeRoute } = analyzeRoutes(
       CheckRoutes.props.children,
       {
         currentPathName: '/',
@@ -95,7 +101,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
     )
 
     expect(Object.keys(namedRoutesMap).length).toEqual(2)
-    expect(Object.keys(namePathMap).length).toEqual(2)
+    expect(Object.keys(pathRouteMap).length).toEqual(2)
     expect(hasHomeRoute).toBe(false)
   })
 
@@ -126,11 +132,11 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       </Router>
     )
 
-    const { namePathMap } = analyzeRoutes(Simple.props.children, {
+    const { pathRouteMap } = analyzeRoutes(Simple.props.children, {
       currentPathName: '/',
     })
 
-    expect(namePathMap.routeA).toEqual(
+    expect(pathRouteMap['/a']).toEqual(
       expect.objectContaining({
         redirect: null,
         name: 'routeA',
@@ -145,7 +151,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       })
     )
 
-    expect(namePathMap.routeB).toEqual(
+    expect(pathRouteMap['/b']).toEqual(
       expect.objectContaining({
         redirect: null,
         name: 'routeB',
@@ -160,7 +166,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       })
     )
 
-    expect(namePathMap.routeC).toEqual(
+    expect(pathRouteMap['/c']).toEqual(
       expect.objectContaining({
         redirect: null,
         name: 'routeC',
@@ -174,5 +180,105 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
         },
       })
     )
+  })
+
+  test('Creates setWrapper map with nested sets', () => {
+    const KrismasTree = (
+      <Private unauthenticated="signIn">
+        <Route path="/dashboard" page={FakePage} name="dashboard" />
+        <Set wrap={[FakeLayout1, FakeLayout2]}>
+          <Route
+            path="/{org}/settings/general"
+            page={FakePage}
+            name="settingsGeneral"
+          />
+          <Route
+            path="/{org}/settings/api"
+            page={FakePage}
+            name="settingsAPI"
+          />
+          <Route
+            path="/{org}/settings/twitter"
+            page={FakePage}
+            name="settingsTwitter"
+          />
+        </Set>
+        <Set wrap={FakeLayout1}>
+          <Set wrap={[FakeLayout2, FakeLayout3]}>
+            <Route path="/{org}/series" page={FakePage} name="series" />
+            <Route path="/{org}" page={FakePage} name="organization" />
+            <Route
+              path="/account/reset-password"
+              page={FakePage}
+              name="resetPassword"
+              prerender
+            />
+          </Set>
+          <Set wrap={FakeLayout2}>
+            <Route
+              path="/{org}/events/{eventCode}/edit"
+              page={FakePage}
+              name="editEvent"
+            />
+            <Route
+              path="/{org}/events/{eventCode}/players"
+              page={FakePage}
+              name="eventPlayers"
+            />
+            <Route
+              path="/{org}/events/{eventCode}/analytics"
+              page={FakePage}
+              name="eventAnalytics"
+            />
+            <Route
+              path="/{org}/events/{eventCode}/scores"
+              page={FakePage}
+              name="eventScores"
+            />
+            <Route
+              path="/{org}/events/{eventCode}/tweets"
+              page={FakePage}
+              name="eventTweets"
+            />
+          </Set>
+        </Set>
+      </Private>
+    )
+
+    const { pathRouteMap } = analyzeRoutes(KrismasTree.props.children, {
+      currentPathName: '/bazingaOrg/events/kittenCode/edit',
+    })
+
+    expect(Object.keys(pathRouteMap).length).toBe(12)
+
+    // @TODO finish writing the expectations
+  })
+
+  test('Redirect routes analysis', () => {
+    const RedirectedRoutes = (
+      <Router>
+        <Route path="/simple" redirect="/rdSimple" name="simple" />
+        <Route
+          path="/rdSimple"
+          name="rdSimple"
+          page={() => <h1>Redirected page</h1>}
+        />
+      </Router>
+    )
+
+    const { pathRouteMap, namedRoutesMap } = analyzeRoutes(
+      RedirectedRoutes.props.children,
+      {
+        currentPathName: '/simple',
+      }
+    )
+
+    expect(pathRouteMap['/simple'].redirect).toBe('/rdSimple')
+    expect(pathRouteMap['/rdSimple'].redirect).toBeFalsy()
+
+    // @TODO true for now, but we may not allow names on a redirect route
+    expect(Object.keys(namedRoutesMap).length).toBe(2)
+    expect(namedRoutesMap.simple()).toBe('/simple')
+    expect(namedRoutesMap.rdSimple()).toBe('/rdSimple')
   })
 })

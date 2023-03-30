@@ -61,6 +61,12 @@ async function createServer() {
       })
 
       let routeContext = {}
+
+      if (currentRoute?.redirect) {
+        // @TODO deal with permanent/temp
+        return res.redirect(currentRoute.redirect.to)
+      }
+
       if (currentRoute && currentRoute.routeHooks) {
         try {
           const routeHooks = await vite.ssrLoadModule(currentRoute.routeHooks)
@@ -104,7 +110,7 @@ async function createServer() {
             rwPaths.web.entryClient,
           ],
           onAllReady() {
-            res.setHeader('content-type', 'text/html')
+            res.setHeader('content-type', 'text/html; charset=utf-8')
             pipe(res)
           },
         }
