@@ -24,7 +24,7 @@ jest.mock('@redwoodjs/project-config', () => {
       }
     },
     ensurePosixPath: (path) => {
-      return path
+      return path.replace(/\\/g, '/')
     },
   }
 })
