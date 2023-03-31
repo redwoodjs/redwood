@@ -113,6 +113,14 @@ export const builder = (yargs) => {
     help: 'Rollback [count] number of releases',
   })
 
+  // Can be defaulted with the environment variable
+  // `DEPLOY_INTERPRET_ENV_VARIABLES`
+  yargs.option('interpretEnvVars', {
+    describe: 'Interpret environment variables in deploy.toml',
+    default: process.env.DEPLOY_INTERPRET_ENV_VARIABLES === 'true',
+    type: 'boolean',
+  })
+
   // TODO: Allow option to pass --sides and only deploy select sides instead of all, always
 
   yargs.epilogue(
@@ -590,7 +598,9 @@ const mergeLifecycleEvents = (lifecycle, other) => {
 }
 
 export const parseConfig = (yargs, rawConfigToml) => {
-  const configToml = envInterpolation(rawConfigToml)
+  const configToml = yargs.interpretEnvVariables
+    ? envInterpolation(rawConfigToml)
+    : rawConfigToml
   const config = toml.parse(configToml)
   let envConfig
   const emptyLifecycle = {}
