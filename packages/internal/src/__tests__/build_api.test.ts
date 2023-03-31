@@ -4,8 +4,9 @@ import path from 'path'
 import * as babel from '@babel/core'
 import compat from 'core-js-compat'
 
-import { cleanApiBuild } from '../build/api'
-import { transformWithBabel } from '../build/babel/api'
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
+
+import { cleanApiBuild, prebuildApiFiles } from '../build/api'
 import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
@@ -14,7 +15,6 @@ import {
   TARGETS_NODE,
 } from '../build/babel/api'
 import { findApiFiles } from '../files'
-import { ensurePosixPath, getPaths } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,

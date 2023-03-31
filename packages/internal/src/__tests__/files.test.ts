@@ -12,6 +12,8 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
+
 import {
   findApiServerFunctions,
   findCells,
@@ -21,7 +23,6 @@ import {
   isCellFile,
   isFileInsideFolder,
 } from '../files'
-import { ensurePosixPath, getPaths } from '../paths'
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))

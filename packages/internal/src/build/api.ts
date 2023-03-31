@@ -2,8 +2,9 @@ import type { PluginBuild } from 'esbuild'
 import { build } from 'esbuild'
 import { removeSync } from 'fs-extra'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import { findApiFiles } from '../files'
-import { getPaths } from '../paths'
 
 import { getApiSideBabelPlugins, transformWithBabel } from './babel/api'
 

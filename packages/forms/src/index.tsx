@@ -65,7 +65,7 @@ import FormError from './FormError'
  *
  * @see {@link https://react-hook-form.com/api/useform/register}
  */
-interface RedwoodRegisterOptions extends RegisterOptions {
+type RedwoodRegisterOptions = RegisterOptions & {
   valueAsBoolean?: boolean
   valueAsJSON?: boolean
 }

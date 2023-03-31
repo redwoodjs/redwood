@@ -7,4 +7,5 @@ module.exports = {
     '^src/(.*)': '<rootDir>/src/$1',
   },
   testTimeout: 60000,
+  setupFilesAfterEnv: ['./jest.setup.js'],
 }

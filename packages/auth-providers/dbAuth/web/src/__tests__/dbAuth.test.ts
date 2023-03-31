@@ -79,7 +79,7 @@ beforeEach(() => {
 })
 
 const defaultArgs: DbAuthClientArgs & {
-  useCurrentUser?: () => Promise<Record<string, unknown>>
+  useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean
@@ -189,7 +189,13 @@ describe('dbAuth', () => {
 
   it('passes through fetchOptions to resetPassword calls', async () => {
     const auth = getDbAuth().current
-    await act(async () => await auth.resetPassword({}))
+    await act(
+      async () =>
+        await auth.resetPassword({
+          resetToken: 'reset-token',
+          password: 'password',
+        })
+    )
 
     expect(globalThis.fetch).toBeCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
@@ -201,7 +207,13 @@ describe('dbAuth', () => {
 
   it('passes through fetchOptions to signup calls', async () => {
     const auth = getDbAuth().current
-    await act(async () => await auth.signUp({}))
+    await act(
+      async () =>
+        await auth.signUp({
+          username: 'username',
+          password: 'password',
+        })
+    )
 
     expect(globalThis.fetch).toBeCalledWith(
       `${globalThis.RWJS_API_URL}/auth`,
