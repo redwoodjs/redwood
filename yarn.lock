@@ -7074,6 +7074,7 @@ __metadata:
     "@graphql-codegen/typescript-resolvers": 3.1.1
     "@redwoodjs/graphql-server": 0.0.0-experimental-streaming.2
     "@redwoodjs/project-config": 0.0.0-experimental-streaming.2
+    "@redwoodjs/router": 0.0.0-experimental-streaming.2
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
