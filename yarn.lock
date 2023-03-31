@@ -6512,14 +6512,14 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@supabase/supabase-js": 2.12.1
+    "@supabase/supabase-js": 2.13.0
     "@types/react": 18.0.31
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
     typescript: 5.0.2
   peerDependencies:
-    "@supabase/supabase-js": 2.12.1
+    "@supabase/supabase-js": 2.13.0
   languageName: unknown
   linkType: soft
 
@@ -6538,7 +6538,7 @@ __metadata:
     jwks-rsa: 3.0.1
     typescript: 5.0.2
   peerDependencies:
-    supertokens-node: 13.2.0
+    supertokens-node: 13.3.0
   languageName: unknown
   linkType: soft
 
@@ -6569,10 +6569,10 @@ __metadata:
     core-js: 3.29.1
     jest: 29.5.0
     react: 18.2.0
-    supertokens-auth-react: 0.31.4
+    supertokens-auth-react: 0.31.5
     typescript: 5.0.2
   peerDependencies:
-    supertokens-auth-react: 0.31.4
+    supertokens-auth-react: 0.31.5
   languageName: unknown
   linkType: soft
 
@@ -7038,7 +7038,7 @@ __metadata:
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.192
     "@types/lru-cache": 5.1.1
-    "@types/node": 16.18.22
+    "@types/node": 16.18.23
     "@types/vscode": 1.76.0
     camelcase: 6.3.0
     core-js: 3.29.1
@@ -7111,7 +7111,7 @@ __metadata:
     "@types/aws-lambda": 8.10.114
     "@types/babel-core": 6.25.7
     "@types/jest": 29.5.0
-    "@types/node": 16.18.22
+    "@types/node": 16.18.23
     "@types/react": 18.0.31
     "@types/react-dom": 18.0.11
     "@types/webpack": 5.28.1
@@ -8617,9 +8617,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:2.12.1":
-  version: 2.12.1
-  resolution: "@supabase/supabase-js@npm:2.12.1"
+"@supabase/supabase-js@npm:2.13.0":
+  version: 2.13.0
+  resolution: "@supabase/supabase-js@npm:2.13.0"
   dependencies:
     "@supabase/functions-js": ^2.1.0
     "@supabase/gotrue-js": ^2.16.0
@@ -8627,7 +8627,7 @@ __metadata:
     "@supabase/realtime-js": ^2.7.1
     "@supabase/storage-js": ^2.3.1
     cross-fetch: ^3.1.5
-  checksum: d8dd716569e2e4b7083387d2b01fac71e8bf599b5784454d59b8452026437cb930e98e26b1077bbddf994db5d6421e6ff6afc4e1de4d0ac67755bbe9a7a49316
+  checksum: b66a132ce88effcb0e6aa6a4b42ba70674550ea4e666b7c38cc8736a2930f0f9444e4582a05737a8f1618db7ad58fa635a3c30a5a06be8b94b80cda4a6b5c9fd
   languageName: node
   linkType: hard
 
@@ -9494,10 +9494,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.18.22, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
-  version: 16.18.22
-  resolution: "@types/node@npm:16.18.22"
-  checksum: 518210a6707d519488398adc72bf921859ba718794afacc3019884d0fbddee87d134e75316287fab27fb55865bec5cee6816a2e222aad824be789be8bc919ea8
+"@types/node@npm:16.18.23, @types/node@npm:^14.0.10 || ^16.0.0, @types/node@npm:^14.14.20 || ^16.0.0":
+  version: 16.18.23
+  resolution: "@types/node@npm:16.18.23"
+  checksum: 01cd6b3046273e1796bba0fb4bf8acff263212d16753385378952e77d239eb4b9535ff0c2427d751cb413c4883248475706e3115795c27be41176f0a7b8fccc8
   languageName: node
   linkType: hard
 
@@ -29198,9 +29198,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.31.4":
-  version: 0.31.4
-  resolution: "supertokens-auth-react@npm:0.31.4"
+"supertokens-auth-react@npm:0.31.5":
+  version: 0.31.5
+  resolution: "supertokens-auth-react@npm:0.31.5"
   dependencies:
     intl-tel-input: ^17.0.19
     prop-types: "*"
@@ -29209,7 +29209,7 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
     supertokens-web-js: ^0.5.0
-  checksum: 778a25df8054565b3f176de4007a23a4fff8f0dff7a86f816627fcc9517a570b56a6f26df8951c503eee2ca01928a779c4511f2a6a56f7919b66442b1f026eea
+  checksum: 3d8929c041a26368c741622293549b1fd80f406696d8ecbf43fa058b60836a56d38d0df469bc0250a0b6324b3e2374c457306933fd0ab5092b8e02117b9f443f
   languageName: node
   linkType: hard
 
