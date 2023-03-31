@@ -114,10 +114,10 @@ export const builder = (yargs) => {
   })
 
   // Can be defaulted with the environment variable
-  // `DEPLOY_INTERPRET_ENV_VARIABLES`
-  yargs.option('interpretEnvVars', {
-    describe: 'Interpret environment variables in deploy.toml',
-    default: process.env.DEPLOY_INTERPRET_ENV_VARIABLES === 'true',
+  // `DEPLOY_INTERPOLATE_ENV_VARIABLES`
+  yargs.option('interpolateEnvVars', {
+    describe: 'Interpolate environment variables in deploy.toml',
+    default: process.env.DEPLOY_INTERPOLATE_ENV_VARIABLES === 'true',
     type: 'boolean',
   })
 
@@ -598,7 +598,7 @@ const mergeLifecycleEvents = (lifecycle, other) => {
 }
 
 export const parseConfig = (yargs, rawConfigToml) => {
-  const configToml = yargs.interpretEnvVariables
+  const configToml = yargs.interpolateEnvVariables
     ? envInterpolation(rawConfigToml)
     : rawConfigToml
   const config = toml.parse(configToml)

@@ -300,11 +300,34 @@ describe('parseConfig', () => {
     expect(envLifecycle.after).toEqual({})
   })
 
+  it('doesnt interpolates environment variables w/ no yarg', () => {
+    process.env.TEST_VAR_HOST = 'staging.server.com'
+    process.env.TEST_VAR_REPO = 'git://staging.github.com'
+    const { envConfig } = baremetal.parseConfig(
+      { environment: 'production', interpretEnvVars: false },
+      `
+        [[production.servers]]
+        host = '\${TEST_VAR_HOST:server.com}'
+        repo = '\${TEST_VAR_REPO:git://github.com}';
+        path = '\${TEST_VAR_PATH:/var/www/app}'
+        privateKeyPath = '/Users/me/.ssh/id_rsa'
+      `
+    )
+    // No substitutions should work
+    expect(envConfig.host).toEqual('${TEST_VAR_HOST:server.com}')
+    expect(envConfig.repo).toEqual('${TEST_VAR_REPO:git://github.com}')
+    expect(envConfig.path).toEqual('${TEST_VAR_PATH:/var/www/app}')
+    expect(envConfig.privateKeyPath).toEqual('/Users/me/.ssh/id_rsa')
+
+    delete process.env['TEST_VAR_HOST']
+    delete process.env['TEST_VAR_REPO']
+  })
+
   it('interpolates environment variables correctly', () => {
     process.env.TEST_VAR_HOST = 'staging.server.com'
     process.env.TEST_VAR_REPO = 'git://staging.github.com'
     const { envConfig } = baremetal.parseConfig(
-      { environment: 'production' },
+      { environment: 'production', interpretEnvVars: true },
       `
         [[production.servers]]
         host = '\${TEST_VAR_HOST:server.com}'
