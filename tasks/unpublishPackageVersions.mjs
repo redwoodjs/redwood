@@ -2,9 +2,9 @@
 
 // HOW TO UNPUBLISH
 // npm only allows unpublishig if the following conditions are met:
-// 1. only one maintainer of the package
-// 2. less than 300 downloads in X amount of time
-// 3. no dependencies that can't be unpublished
+// 1. no other packages in the npm Public Registry depend on
+// 2. had less than 300 downloads over the last week
+// 3. has a single owner/maintainer
 //
 // At this time, I cannot approval to unpublish any packages < 1.0.0
 // The script is working fine
