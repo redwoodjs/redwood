@@ -597,7 +597,7 @@ const mergeLifecycleEvents = (lifecycle, other) => {
 }
 
 export const parseConfig = (yargs, rawConfigToml) => {
-  const configToml = yargs.interpolateEnvVariables
+  const configToml = yargs.interpolateEnvVars
     ? envInterpolation(rawConfigToml)
     : rawConfigToml
   const config = toml.parse(configToml)
