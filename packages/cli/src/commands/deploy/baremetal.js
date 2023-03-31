@@ -113,10 +113,9 @@ export const builder = (yargs) => {
     help: 'Rollback [count] number of releases',
   })
 
-  // Can be defaulted with the environment variable
-  // `DEPLOY_INTERPOLATE_ENV_VARIABLES`
   yargs.option('interpolateEnvVars', {
     describe: 'Interpolate environment variables in deploy.toml',
+    help: 'Interpolate environment variables in deploy.toml (can be defaulted with env variable DEPLOY_INTERPOLATE_ENV_VARIABLES)',
     default: process.env.DEPLOY_INTERPOLATE_ENV_VARIABLES === 'true',
     type: 'boolean',
   })
