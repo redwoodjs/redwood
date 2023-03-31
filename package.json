@@ -49,7 +49,7 @@
     "@babel/runtime-corejs3": "7.21.0",
     "@faker-js/faker": "7.6.0",
     "@npmcli/arborist": "6.2.6",
-    "@nrwl/nx-cloud": "15.3.3",
+    "@nrwl/nx-cloud": "15.3.4",
     "@playwright/test": "1.32.1",
     "@replayio/playwright": "0.3.27",
     "@testing-library/jest-dom": "5.16.5",
