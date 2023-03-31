@@ -29,7 +29,9 @@ import type { AvailableRoutes } from './index'
 
 // namedRoutes is populated at run-time by iterating over the `<Route />`
 // components, and appending them to this object.
-let namedRoutes: AvailableRoutes = {}
+// Has to be `const`, or there'll be a race condition with imports in users'
+// projects
+const namedRoutes: AvailableRoutes = {}
 
 export interface RouteProps {
   path: string
@@ -105,10 +107,10 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
-  namedRoutes = namedRoutesMap
+  Object.assign(namedRoutes, namedRoutesMap)
 
   // The user has not generated routes if the only route that exists is the
-  // not found page
+  // not found page, and that page is not part of the namedRoutes object
   const hasGeneratedRoutes = Object.keys(namedRoutes).length > 0
 
   const shouldShowSplash =
