@@ -9,17 +9,27 @@
 // import { spawn } from 'child_process'
 import path from 'path'
 
+import { trace, SpanStatusCode } from '@opentelemetry/api'
 import chalk from 'chalk'
 import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
-import { hideBin } from 'yargs/helpers'
+import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { RedwoodTUI, styling } from '@redwoodjs/tui'
 
 import { name, version } from '../package'
+
+import {
+  startTelemetry,
+  shutdownTelemetry,
+  recordErrorViaTelemetry,
+} from './telemetry'
+
+// Telemetry
+const { telemetry } = Parser(hideBin(process.argv))
 
 const tui = new RedwoodTUI()
 
@@ -78,48 +88,65 @@ async function checkCompatibility(templateDir, yarnInstall) {
         `  See: ${engineCheckErrorDocs}`,
       ].join('\n')
     )
-    const response = await tui.prompt({
-      type: 'select',
-      name: 'override-engine-error',
-      message: 'How would you like to proceed?',
-      choices: ['Override error and continue install', 'Quit install'],
-      initial: 0,
-      onCancel: () => process.exit(1),
-    })
-    if (response['override-engine-error'] === 'Quit install') {
-      process.exit(1) // TODO: Should we use a different exit code?
+    try {
+      const response = await tui.prompt({
+        type: 'select',
+        name: 'override-engine-error',
+        message: 'How would you like to proceed?',
+        choices: ['Override error and continue install', 'Quit install'],
+        initial: 0,
+      })
+      if (response['override-engine-error'] === 'Quit install') {
+        recordErrorViaTelemetry('User quit after engine check error')
+        await shutdownTelemetry()
+        process.exit(1) // TODO: Should we use a different exit code?
+      }
+    } catch (error) {
+      recordErrorViaTelemetry('User cancelled install at engine check error')
+      await shutdownTelemetry()
+      process.exit(1)
     }
   }
 }
 
 async function promptForTypescript() {
   tui.setContentMode('text')
-  const response = await tui.prompt({
-    type: 'Select',
-    name: 'language',
-    choices: ['TypeScript', 'JavaScript'],
-    message: 'Select your preferred coding language',
-    initial: 'TypeScript',
-    onCancel: () => process.exit(1),
-  })
-  return response.language === 'TypeScript'
+  try {
+    const response = await tui.prompt({
+      type: 'Select',
+      name: 'language',
+      choices: ['TypeScript', 'JavaScript'],
+      message: 'Select your preferred coding language',
+      initial: 'TypeScript',
+    })
+    return response.language === 'TypeScript'
+  } catch (_error) {
+    recordErrorViaTelemetry('User cancelled install at language prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
 }
 
 async function promptForGit() {
   tui.setContentMode('text')
-  const response = await tui.prompt({
-    type: 'Toggle',
-    name: 'git',
-    message: 'Do you want to initialize a git repo?',
-    enabled: 'Yes',
-    disabled: 'no',
-    initial: 'Yes',
-    onCancel: () => process.exit(1),
-  })
-  return response.git
+  try {
+    const response = await tui.prompt({
+      type: 'Toggle',
+      name: 'git',
+      message: 'Do you want to initialize a git repo?',
+      enabled: 'Yes',
+      disabled: 'no',
+      initial: 'Yes',
+    })
+    return response.git
+  } catch (_error) {
+    recordErrorViaTelemetry('User cancelled install at git prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
 }
 
-function createProjectFiles(newAppDir, overwrite, yarn1) {
+async function createProjectFiles(newAppDir, overwrite, yarn1) {
   // Check if the new app directory already exists
   if (fs.existsSync(newAppDir) && !overwrite) {
     // Check if the directory contains files and show an error if it does
@@ -141,6 +168,8 @@ function createProjectFiles(newAppDir, overwrite, yarn1) {
         ].join('\n')
       )
       tui.disable()
+      recordErrorViaTelemetry(`Project directory already contains files`)
+      await shutdownTelemetry()
       process.exit(1)
     }
   }
@@ -185,13 +214,7 @@ function createProjectFiles(newAppDir, overwrite, yarn1) {
   }
 }
 
-async function installNodeModules(newAppDir, yarnInstall) {
-  if (!yarnInstall) {
-    tui.setContentMode('text')
-    tui.setContent('Skipping yarn install')
-    return
-  }
-
+async function installNodeModules(newAppDir) {
   tui.setContentMode('text')
   tui.setHeader('Installing node modules', { spinner: true })
   tui.setContent('  ⏱  This could take a minute or more...')
@@ -217,6 +240,8 @@ async function installNodeModules(newAppDir, yarnInstall) {
         error,
       ].join('\n')
     )
+    recordErrorViaTelemetry(error)
+    await shutdownTelemetry()
     process.exit(1)
   }
 
@@ -250,6 +275,8 @@ async function convertToJavascript(newAppDir) {
         error,
       ].join('\n')
     )
+    recordErrorViaTelemetry(error)
+    await shutdownTelemetry()
     process.exit(1)
   }
 
@@ -282,6 +309,8 @@ async function generateTypes(newAppDir) {
         error,
       ].join('\n')
     )
+    recordErrorViaTelemetry(error)
+    await shutdownTelemetry()
     process.exit(1)
   }
 
@@ -317,6 +346,8 @@ async function initialiseGit(newAppDir) {
         error,
       ].join('\n')
     )
+    recordErrorViaTelemetry(error)
+    await shutdownTelemetry()
     process.exit(1)
   }
 
@@ -346,7 +377,7 @@ async function createRedwoodApp() {
     'yarn-install': yarnInstall,
     typescript,
     overwrite,
-    telemetry,
+    // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
     yarn1,
     'git-init': gitInit,
   } = yargs(hideBin(process.argv))
@@ -390,6 +421,11 @@ async function createRedwoodApp() {
     .version(version)
     .parse()
 
+  // Record some of the arguments for telemetry
+  trace.getActiveSpan().setAttribute('yarn-install', yarnInstall)
+  trace.getActiveSpan().setAttribute('overwrite', overwrite)
+  trace.getActiveSpan().setAttribute('yarn1', yarn1)
+
   // Get the directory for installation from the args
   const targetDir = String(args).replace(/,/g, '-')
 
@@ -409,6 +445,9 @@ async function createRedwoodApp() {
         )}`,
       ].join('\n')
     )
+
+    recordErrorViaTelemetry('No target directory specified')
+    await shutdownTelemetry()
     process.exit(1)
   }
 
@@ -421,15 +460,27 @@ async function createRedwoodApp() {
   // Determine ts/js preference
   const useTypescript =
     typescript === null ? await promptForTypescript() : typescript
+  trace.getActiveSpan().setAttribute('typescript', useTypescript)
 
-  // TODO: Git preference
+  // Determine git preference
   const useGit = gitInit === null ? await promptForGit() : gitInit
+  trace.getActiveSpan().setAttribute('git', useGit)
 
   // Create project files
-  createProjectFiles(newAppDir, overwrite, yarn1)
+  await createProjectFiles(newAppDir, overwrite, yarn1)
 
   // Install the node packages
-  await installNodeModules(newAppDir, yarnInstall)
+  if (yarnInstall) {
+    const yarnInstallStart = Date.now()
+    await installNodeModules(newAppDir)
+    trace
+      .getActiveSpan()
+      .setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
+  } else {
+    tui.setContentMode('text')
+    tui.setContent('Skipping yarn install')
+    trace.getActiveSpan().setAttribute('yarn-install-time', 0)
+  }
 
   // Conditionally convert to javascript
   if (!useTypescript && yarnInstall) {
@@ -497,4 +548,32 @@ async function createRedwoodApp() {
   tui.disable()
 }
 
-createRedwoodApp()
+;(async () => {
+  // Conditionally start telemetry
+  if (telemetry !== 'false' && !process.env.REDWOOD_DISABLE_TELEMETRY) {
+    try {
+      await startTelemetry()
+    } catch (error) {
+      console.error('Telemetry startup error')
+      console.error(error)
+    }
+  }
+
+  // Execute create redwood app within a span
+  const tracer = trace.getTracer('redwoodjs')
+  await tracer.startActiveSpan('create-redwood-app', async (span) => {
+    await createRedwoodApp()
+
+    // Span housekeeping
+    span.setStatus({ code: SpanStatusCode.OK })
+    span.end()
+  })
+
+  // Shutdown telemetry, ensures data is sent before the process exits
+  try {
+    await shutdownTelemetry()
+  } catch (error) {
+    console.error('Telemetry shutdown error')
+    console.error(error)
+  }
+})()

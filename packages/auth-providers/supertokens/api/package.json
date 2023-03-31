@@ -33,10 +33,10 @@
     "@redwoodjs/api": "4.0.0",
     "@types/jsonwebtoken": "9.0.1",
     "jest": "29.5.0",
-    "typescript": "5.0.2"
+    "typescript": "5.0.3"
   },
   "peerDependencies": {
-    "supertokens-node": "13.1.5"
+    "supertokens-node": "13.3.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

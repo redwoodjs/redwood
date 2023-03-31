@@ -4660,7 +4660,7 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
     react-player: 2.12.0
-    typescript: 5.0.2
+    typescript: 5.0.3
   languageName: unknown
   linkType: soft
 
@@ -9923,23 +9923,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.0.2":
-  version: 5.0.2
-  resolution: "typescript@npm:5.0.2"
+"typescript@npm:5.0.3":
+  version: 5.0.3
+  resolution: "typescript@npm:5.0.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: aa0e2a766412a0c9f609133681753cc88098aa44e079820d203dc0628a8fc3997d4e6b93c2c813c483f770698561c3225c5ab3e5c8896639cfc5d94528e3005f
+  checksum: 13221c7f7dd2aa9cf8ac2fb1b5ca3825ff3d97a43b4656fd22ca36c0ec30179643b5157d620c3e4af9d3fc9234a571bd3ea175624b3d37c494d7ed159b038df2
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.0.2#~builtin<compat/typescript>":
-  version: 5.0.2
-  resolution: "typescript@patch:typescript@npm%3A5.0.2#~builtin<compat/typescript>::version=5.0.2&hash=85af82"
+"typescript@patch:typescript@5.0.3#~builtin<compat/typescript>":
+  version: 5.0.3
+  resolution: "typescript@patch:typescript@npm%3A5.0.3#~builtin<compat/typescript>::version=5.0.3&hash=85af82"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 3ff588d800f76d5f46b7ee41ca713d9c4274ea10f3283aa8bb2cec834075622e23a743eb63b8734da4ff2780f946849a009a8571ff59ac297abe4011125361fe
+  checksum: 8e9c3ec234f934bfdf35ad3c16c6dcbb797be2fa2393065f99e0829276e2b1fab9e26071c342a780c8d7045c7611c96d811adc6a55c1dad27ed8a9e879f1b76e
   languageName: node
   linkType: hard
 
