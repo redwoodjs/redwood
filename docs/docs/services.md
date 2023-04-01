@@ -44,10 +44,10 @@ Finally, Services can also be called from [serverless functions](serverless-func
 
 ## Service Validations
 
-Starting with `v0.38`, Redwood includes a feature we call Service Validations. These simplify an extremely common task: making sure that incoming data is formatted properly before continuing. These validations are meant to be included at the start of your Service function and will throw an error if conditions are not met:
+Redwood includes a feature we call Service Validations. These simplify an extremely common task: making sure that incoming data is formatted properly before continuing. These validations are meant to be included at the start of your Service function and will throw an error if conditions are not met:
 
 ```jsx
-import { validate, validateWith, validateUniqueness } from '@redwoodjs/api'
+import { validate, validateWith, validateWithSync, validateUniqueness } from '@redwoodjs/api'
 
 export const createUser = async ({ input }) => {
   validate(input.firstName, 'First name', {
@@ -55,9 +55,15 @@ export const createUser = async ({ input }) => {
     exclusion: { in: ['Admin', 'Owner'], message: 'That name is reserved, sorry!' },
     length: { min: 2, max: 255 }
   })
-  validateWith(() => {
+  validateWithSync(() => {
     if (input.role === 'Manager' && !context.currentUser.roles.includes('admin')) {
       throw 'Only Admins can create new Managers'
+    }
+  })
+  validateWith(async () => {
+    const inviteCount = await db.invites.count({ where: { userId: currentUser.id  } })
+    if (inviteCount >= 10) {
+      throw 'You have already invited your max of 10 users'
     }
   })
 
@@ -610,19 +616,18 @@ validate(input.value, 'Value', {
   }
 })
 ```
-
-### validateWith()
+### validateWithSync()
 
 `validateWith()` is simply given a function to execute. This function should throw with a message if there is a problem, otherwise do nothing.
 
 ```jsx
-validateWith(() => {
+validateWithSync(() => {
   if (input.name === 'Name') {
     throw "You'll have to be more creative than that"
   }
 })
 
-validateWith(() => {
+validateWithSync(() => {
   if (input.name === 'Name') {
     throw new Error("You'll have to be more creative than that")
   }
@@ -632,6 +637,18 @@ validateWith(() => {
 Either of these errors will be caught and re-thrown as a `ServiceValidationError` with your text as the `message` of the error (although technically you should always throw errors with `new Error()` like in the second example).
 
 You could just write your own function and throw whatever you like, without using `validateWith()`. But, when accessing your Service function through GraphQL, that error would be swallowed and the user would simply see "Something went wrong" for security reasons: error messages could reveal source code or other sensitive information so most are hidden. Errors thrown by Service Validations are considered "safe" and allowed to be shown to the client.
+
+### validateWithSync()
+
+The same behavior as `validateWithSync()` but works with Promises.
+
+```jsx
+validateWithSync(async () => {
+  if (await db.products.count() >= 100) {
+    throw "There can only be a maximum of 100 products in your store"
+  }
+})
+```
 
 ### validateUniqueness()
 

@@ -80,6 +80,7 @@ module.exports = {
         'packages/api/src/**',
         'packages/graphql-server/src/**',
         'packages/record/src/**',
+        'packages/project-config/src/**',
       ],
       rules: {
         'no-restricted-imports': [

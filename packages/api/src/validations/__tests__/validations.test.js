@@ -1,5 +1,10 @@
 import * as ValidationErrors from '../errors'
-import { validate, validateUniqueness, validateWith } from '../validations'
+import {
+  validate,
+  validateUniqueness,
+  validateWith,
+  validateWithSync,
+} from '../validations'
 
 describe('validate absence', () => {
   it('checks if value is null or undefined', () => {
@@ -1146,10 +1151,10 @@ describe('validate', () => {
   })
 })
 
-describe('validateWith', () => {
+describe('validateWithSync', () => {
   it('runs a custom function as a validation', () => {
     const validateFunction = jest.fn()
-    validateWith(validateFunction)
+    validateWithSync(validateFunction)
 
     expect(validateFunction).toBeCalledWith()
   })
@@ -1157,7 +1162,7 @@ describe('validateWith', () => {
   it('catches errors and raises ServiceValidationError', () => {
     // Error instance
     try {
-      validateWith(() => {
+      validateWithSync(() => {
         throw new Error('Invalid value')
       })
     } catch (e) {
@@ -1167,7 +1172,7 @@ describe('validateWith', () => {
 
     // Error string
     try {
-      validateWith(() => {
+      validateWithSync(() => {
         throw 'Bad input'
       })
     } catch (e) {
@@ -1175,6 +1180,37 @@ describe('validateWith', () => {
       expect(e.message).toEqual('Bad input')
     }
 
+    expect.assertions(4)
+  })
+})
+
+describe('validateWith', () => {
+  it('runs a custom function as a validation', () => {
+    const validateFunction = jest.fn()
+    validateWith(validateFunction)
+
+    expect(validateFunction).toBeCalledWith()
+  })
+
+  it('catches errors and raises ServiceValidationError', async () => {
+    // Error instance
+    try {
+      await validateWith(() => {
+        throw new Error('Invalid value')
+      })
+    } catch (e) {
+      expect(e instanceof ValidationErrors.ServiceValidationError).toEqual(true)
+      expect(e.message).toEqual('Invalid value')
+    }
+    // Error string
+    try {
+      await validateWith(() => {
+        throw 'Bad input'
+      })
+    } catch (e) {
+      expect(e instanceof ValidationErrors.ServiceValidationError).toEqual(true)
+      expect(e.message).toEqual('Bad input')
+    }
     expect.assertions(4)
   })
 })

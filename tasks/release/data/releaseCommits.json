@@ -1,0 +1,1305 @@
+{
+  "commits": [
+    {
+      "line": "< ac6e051f3dd4297f9c65711b6be91ce84714af24 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.3 (#7645)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< ac6e051f3dd4297f9c65711b6be91ce84714af24 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.3 (#7645)",
+      "hash": "ac6e051f3dd4297f9c65711b6be91ce84714af24",
+      "message": "fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.3 (#7645)",
+      "pr": "7645"
+    },
+    {
+      "line": "< f54cb843c5652392dd8ad6813cb76fe0a76a3b0d 7482/validators exclude include caseinsensitive (#7573)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< f54cb843c5652392dd8ad6813cb76fe0a76a3b0d 7482/validators exclude include caseinsensitive (#7573)",
+      "hash": "f54cb843c5652392dd8ad6813cb76fe0a76a3b0d",
+      "message": "7482/validators exclude include caseinsensitive (#7573)",
+      "pr": "7573"
+    },
+    {
+      "line": "< 6b54c0dd93853b5ff77e26440b8bb04150693103 chore(deps): update dependency @clerk/clerk-react to v4.11.3 (#7642)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 6b54c0dd93853b5ff77e26440b8bb04150693103 chore(deps): update dependency @clerk/clerk-react to v4.11.3 (#7642)",
+      "hash": "6b54c0dd93853b5ff77e26440b8bb04150693103",
+      "message": "chore(deps): update dependency @clerk/clerk-react to v4.11.3 (#7642)",
+      "pr": "7642"
+    },
+    {
+      "line": "< 3a6054a329aa2e2d12da5141d865863f0cd6441a chore(deps): update dependency @replayio/playwright to v0.3.21 (#7643)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 3a6054a329aa2e2d12da5141d865863f0cd6441a chore(deps): update dependency @replayio/playwright to v0.3.21 (#7643)",
+      "hash": "3a6054a329aa2e2d12da5141d865863f0cd6441a",
+      "message": "chore(deps): update dependency @replayio/playwright to v0.3.21 (#7643)",
+      "pr": "7643"
+    },
+    {
+      "line": "< e99df3ed826e5a90250963626779d55cefc3f2bd chore(deps): update dependency supertokens-auth-react to v0.31.1 (#7628)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< e99df3ed826e5a90250963626779d55cefc3f2bd chore(deps): update dependency supertokens-auth-react to v0.31.1 (#7628)",
+      "hash": "e99df3ed826e5a90250963626779d55cefc3f2bd",
+      "message": "chore(deps): update dependency supertokens-auth-react to v0.31.1 (#7628)",
+      "pr": "7628"
+    },
+    {
+      "line": "< 4f9a3e75edc45fb6ab201de19cc1e87b456ab50b chore(deps): update dependency @types/vscode to v1.75.1 (#7630)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 4f9a3e75edc45fb6ab201de19cc1e87b456ab50b chore(deps): update dependency @types/vscode to v1.75.1 (#7630)",
+      "hash": "4f9a3e75edc45fb6ab201de19cc1e87b456ab50b",
+      "message": "chore(deps): update dependency @types/vscode to v1.75.1 (#7630)",
+      "pr": "7630"
+    },
+    {
+      "line": "< e0badd871f325ce00cd6eee74e245ca1147746d3 chore(deps): update dependency supertokens-node to v13.0.2 (#7629)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< e0badd871f325ce00cd6eee74e245ca1147746d3 chore(deps): update dependency supertokens-node to v13.0.2 (#7629)",
+      "hash": "e0badd871f325ce00cd6eee74e245ca1147746d3",
+      "message": "chore(deps): update dependency supertokens-node to v13.0.2 (#7629)",
+      "pr": "7629"
+    },
+    {
+      "line": "= fac9ee660edcec7d06068511b378b919b105ba2b fix:(webAuthn) use `globalThis`, not `process.env` (#7639)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= fac9ee660edcec7d06068511b378b919b105ba2b fix:(webAuthn) use `globalThis`, not `process.env` (#7639)\u001b[39m\u001b[22m",
+      "hash": "fac9ee660edcec7d06068511b378b919b105ba2b",
+      "message": "fix:(webAuthn) use `globalThis`, not `process.env` (#7639)",
+      "pr": "7639"
+    },
+    {
+      "line": "= 5b750aa4a04577100784f88ab1b9b0d620266b8b feat(api): support building .jsx, .tsx files (#7638)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 5b750aa4a04577100784f88ab1b9b0d620266b8b feat(api): support building .jsx, .tsx files (#7638)\u001b[39m\u001b[22m",
+      "hash": "5b750aa4a04577100784f88ab1b9b0d620266b8b",
+      "message": "feat(api): support building .jsx, .tsx files (#7638)",
+      "pr": "7638"
+    },
+    {
+      "line": "< dd1439356822c51008ccc22d632f9181d644d016 chore(CI): CI telemetry checking (#7623)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< dd1439356822c51008ccc22d632f9181d644d016 chore(CI): CI telemetry checking (#7623)",
+      "hash": "dd1439356822c51008ccc22d632f9181d644d016",
+      "message": "chore(CI): CI telemetry checking (#7623)",
+      "pr": "7623"
+    },
+    {
+      "line": "< 5ad833048332ead09285b9cec5a1c99a4d4ad8b3 fix(docs): typo in `GraphQL` docs (#7634)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 5ad833048332ead09285b9cec5a1c99a4d4ad8b3 fix(docs): typo in `GraphQL` docs (#7634)",
+      "hash": "5ad833048332ead09285b9cec5a1c99a4d4ad8b3",
+      "message": "fix(docs): typo in `GraphQL` docs (#7634)",
+      "pr": "7634"
+    },
+    {
+      "line": "= 20de09c0e03475553263fd36c84b29f06fa14897 fix(ts): Undo skipLibCheck change (#7633)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 20de09c0e03475553263fd36c84b29f06fa14897 fix(ts): Undo skipLibCheck change (#7633)\u001b[39m\u001b[22m",
+      "hash": "20de09c0e03475553263fd36c84b29f06fa14897",
+      "message": "fix(ts): Undo skipLibCheck change (#7633)",
+      "pr": "7633"
+    },
+    {
+      "line": "= 3a73f63e3df900a4f59f5173fe841aad4e440924 fix(generator): add dotAll to Router regex (#7605)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 3a73f63e3df900a4f59f5173fe841aad4e440924 fix(generator): add dotAll to Router regex (#7605)\u001b[39m\u001b[22m",
+      "hash": "3a73f63e3df900a4f59f5173fe841aad4e440924",
+      "message": "fix(generator): add dotAll to Router regex (#7605)",
+      "pr": "7605"
+    },
+    {
+      "line": "< 01f3856c9f1778e338d2ef1d127dad4f4cb65c37 chore(deps): update dependency @clerk/types to v3.27.0 (#7614)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 01f3856c9f1778e338d2ef1d127dad4f4cb65c37 chore(deps): update dependency @clerk/types to v3.27.0 (#7614)",
+      "hash": "01f3856c9f1778e338d2ef1d127dad4f4cb65c37",
+      "message": "chore(deps): update dependency @clerk/types to v3.27.0 (#7614)",
+      "pr": "7614"
+    },
+    {
+      "line": "< 1d53dfebdc92c888fabf702296f5436fe812a10d fix(deps): update dependency eslint to v8.34.0 (#7615)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 1d53dfebdc92c888fabf702296f5436fe812a10d fix(deps): update dependency eslint to v8.34.0 (#7615)",
+      "hash": "1d53dfebdc92c888fabf702296f5436fe812a10d",
+      "message": "fix(deps): update dependency eslint to v8.34.0 (#7615)",
+      "pr": "7615"
+    },
+    {
+      "line": "< 76c4bdcf3862ca845ee6982bc87448c14becfa20 fix(deps): update dependency systeminformation to v5.17.9 (#7622)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 76c4bdcf3862ca845ee6982bc87448c14becfa20 fix(deps): update dependency systeminformation to v5.17.9 (#7622)",
+      "hash": "76c4bdcf3862ca845ee6982bc87448c14becfa20",
+      "message": "fix(deps): update dependency systeminformation to v5.17.9 (#7622)",
+      "pr": "7622"
+    },
+    {
+      "line": "< 2562afd54c40181e1bfe62b2a84cb4e2e1eb15f8 chore(deps): update dependency esbuild to v0.17.8 (#7626)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 2562afd54c40181e1bfe62b2a84cb4e2e1eb15f8 chore(deps): update dependency esbuild to v0.17.8 (#7626)",
+      "hash": "2562afd54c40181e1bfe62b2a84cb4e2e1eb15f8",
+      "message": "chore(deps): update dependency esbuild to v0.17.8 (#7626)",
+      "pr": "7626"
+    },
+    {
+      "line": "< a45612d1a80fcfb8a6364d0ac9d942ef8fb21448 Update CORS docs to reflect Redwood 4 changes (#7627)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< a45612d1a80fcfb8a6364d0ac9d942ef8fb21448 Update CORS docs to reflect Redwood 4 changes (#7627)",
+      "hash": "a45612d1a80fcfb8a6364d0ac9d942ef8fb21448",
+      "message": "Update CORS docs to reflect Redwood 4 changes (#7627)",
+      "pr": "7627"
+    },
+    {
+      "line": "= 86070532e7dea851a49c58d4f14d76f213505577 fix(telemetry): Avoid getConfig for CRWA (#7621)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 86070532e7dea851a49c58d4f14d76f213505577 fix(telemetry): Avoid getConfig for CRWA (#7621)\u001b[39m\u001b[22m",
+      "hash": "86070532e7dea851a49c58d4f14d76f213505577",
+      "message": "fix(telemetry): Avoid getConfig for CRWA (#7621)",
+      "pr": "7621"
+    },
+    {
+      "line": "< 9b344fb671ec94937c1a3d2818f6da25688ddfe4 chore(deps): update dependency @replayio/playwright to v0.3.20 (#7613)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 9b344fb671ec94937c1a3d2818f6da25688ddfe4 chore(deps): update dependency @replayio/playwright to v0.3.20 (#7613)",
+      "hash": "9b344fb671ec94937c1a3d2818f6da25688ddfe4",
+      "message": "chore(deps): update dependency @replayio/playwright to v0.3.20 (#7613)",
+      "pr": "7613"
+    },
+    {
+      "line": "< e990ab26149ffec249d39b47b9f651c8ef5e6605 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.2 (#7612)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< e990ab26149ffec249d39b47b9f651c8ef5e6605 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.2 (#7612)\u001b[39m\u001b[22m",
+      "hash": "e990ab26149ffec249d39b47b9f651c8ef5e6605",
+      "message": "fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.2 (#7612)",
+      "pr": "7612"
+    },
+    {
+      "line": "< 6b7bc03dcdf362ef7fc2447aa2e00ffefb63067a fix(deps): update dependency react-player to v2.11.2 (#7594)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 6b7bc03dcdf362ef7fc2447aa2e00ffefb63067a fix(deps): update dependency react-player to v2.11.2 (#7594)",
+      "hash": "6b7bc03dcdf362ef7fc2447aa2e00ffefb63067a",
+      "message": "fix(deps): update dependency react-player to v2.11.2 (#7594)",
+      "pr": "7594"
+    },
+    {
+      "line": "< b8bdedd7d18a2e8f953d806b8dc4e8b6612699a5 chore(deps): update dependency @clerk/clerk-react to v4.11.2 (#7611)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< b8bdedd7d18a2e8f953d806b8dc4e8b6612699a5 chore(deps): update dependency @clerk/clerk-react to v4.11.2 (#7611)\u001b[39m\u001b[22m",
+      "hash": "b8bdedd7d18a2e8f953d806b8dc4e8b6612699a5",
+      "message": "chore(deps): update dependency @clerk/clerk-react to v4.11.2 (#7611)",
+      "pr": "7611"
+    },
+    {
+      "line": "= 97d670f6626ffaed50d437e4c618fb61374d909a fix(vite): Respect `host`, `sourceMap` settings in redwood.toml on vite dev server (#7606)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 97d670f6626ffaed50d437e4c618fb61374d909a fix(vite): Respect `host`, `sourceMap` settings in redwood.toml on vite dev server (#7606)\u001b[39m\u001b[22m",
+      "hash": "97d670f6626ffaed50d437e4c618fb61374d909a",
+      "message": "fix(vite): Respect `host`, `sourceMap` settings in redwood.toml on vite dev server (#7606)",
+      "pr": "7606"
+    },
+    {
+      "line": "= 279a314e24f8a7ad2c205edd7231f6a5006855b8 Check if client has loaded before saying that loading is finished (#7608)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 279a314e24f8a7ad2c205edd7231f6a5006855b8 Check if client has loaded before saying that loading is finished (#7608)\u001b[39m\u001b[22m",
+      "hash": "279a314e24f8a7ad2c205edd7231f6a5006855b8",
+      "message": "Check if client has loaded before saying that loading is finished (#7608)",
+      "pr": "7608"
+    },
+    {
+      "line": "< 284b429840b9b598507f9d2a4667b8d60d52c62d fix(deps): update dependency @fastify/static to v6.9.0 (#7610)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 284b429840b9b598507f9d2a4667b8d60d52c62d fix(deps): update dependency @fastify/static to v6.9.0 (#7610)",
+      "hash": "284b429840b9b598507f9d2a4667b8d60d52c62d",
+      "message": "fix(deps): update dependency @fastify/static to v6.9.0 (#7610)",
+      "pr": "7610"
+    },
+    {
+      "line": "< 372c6a7cdc309f858e56add9e82e62d7881a11d3 fix(deps): update dependency @whatwg-node/fetch to v0.8.1 (#7609)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 372c6a7cdc309f858e56add9e82e62d7881a11d3 fix(deps): update dependency @whatwg-node/fetch to v0.8.1 (#7609)",
+      "hash": "372c6a7cdc309f858e56add9e82e62d7881a11d3",
+      "message": "fix(deps): update dependency @whatwg-node/fetch to v0.8.1 (#7609)",
+      "pr": "7609"
+    },
+    {
+      "line": "= 4b14e49ca0b711b291f3afb0695a05c8f4f5e508 Reinforce the constness of notAuthenticatedState (#7607)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 4b14e49ca0b711b291f3afb0695a05c8f4f5e508 Reinforce the constness of notAuthenticatedState (#7607)\u001b[39m\u001b[22m",
+      "hash": "4b14e49ca0b711b291f3afb0695a05c8f4f5e508",
+      "message": "Reinforce the constness of notAuthenticatedState (#7607)",
+      "pr": "7607"
+    },
+    {
+      "line": "< e432ef4d1e370ff0aa896b13ce01bbf677a1919a fix(deps): update dependency @whatwg-node/fetch to v0.7.1 (#7600)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< e432ef4d1e370ff0aa896b13ce01bbf677a1919a fix(deps): update dependency @whatwg-node/fetch to v0.7.1 (#7600)",
+      "hash": "e432ef4d1e370ff0aa896b13ce01bbf677a1919a",
+      "message": "fix(deps): update dependency @whatwg-node/fetch to v0.7.1 (#7600)",
+      "pr": "7600"
+    },
+    {
+      "line": "< 5c0f6f63b13d2731b38ac9cb7c115181659904e2 fix(deps): update dependency fastify to v4.13.0 (#7604)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 5c0f6f63b13d2731b38ac9cb7c115181659904e2 fix(deps): update dependency fastify to v4.13.0 (#7604)",
+      "hash": "5c0f6f63b13d2731b38ac9cb7c115181659904e2",
+      "message": "fix(deps): update dependency fastify to v4.13.0 (#7604)",
+      "pr": "7604"
+    },
+    {
+      "line": "< 1b4ef7cd76b2da17673a96825741c1d682fbbc15 chore(deps): update dependency esbuild to v0.17.7 (#7603)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 1b4ef7cd76b2da17673a96825741c1d682fbbc15 chore(deps): update dependency esbuild to v0.17.7 (#7603)",
+      "hash": "1b4ef7cd76b2da17673a96825741c1d682fbbc15",
+      "message": "chore(deps): update dependency esbuild to v0.17.7 (#7603)",
+      "pr": "7603"
+    },
+    {
+      "line": "< 0fe8dabc3a14b7957c7113f626523e5fb6c3a464 chore: update yarn.lock",
+      "ref": "release/minor/v4.2.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< 0fe8dabc3a14b7957c7113f626523e5fb6c3a464 chore: update yarn.lock\u001b[22m",
+      "hash": "0fe8dabc3a14b7957c7113f626523e5fb6c3a464",
+      "message": "chore: update yarn.lock"
+    },
+    {
+      "line": "= 7bf0bca060e637fc47346fec6bd5d59f33ac07fd Add back `buildType: nixpacks` per Flightcontrol request (#7598)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 7bf0bca060e637fc47346fec6bd5d59f33ac07fd Add back `buildType: nixpacks` per Flightcontrol request (#7598)\u001b[39m\u001b[22m",
+      "hash": "7bf0bca060e637fc47346fec6bd5d59f33ac07fd",
+      "message": "Add back `buildType: nixpacks` per Flightcontrol request (#7598)",
+      "pr": "7598"
+    },
+    {
+      "line": "< 42197fc55757f93c243d22904498a176bc87c75a fix(deps): update dependency pino to v8.10.0 (#7599)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 42197fc55757f93c243d22904498a176bc87c75a fix(deps): update dependency pino to v8.10.0 (#7599)",
+      "hash": "42197fc55757f93c243d22904498a176bc87c75a",
+      "message": "fix(deps): update dependency pino to v8.10.0 (#7599)",
+      "pr": "7599"
+    },
+    {
+      "line": "< d944edf6149592e0b20df4160e287fcd620b6bb0 fix(deps): update prisma monorepo to v4.10.1 (#7601)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< d944edf6149592e0b20df4160e287fcd620b6bb0 fix(deps): update prisma monorepo to v4.10.1 (#7601)",
+      "hash": "d944edf6149592e0b20df4160e287fcd620b6bb0",
+      "message": "fix(deps): update prisma monorepo to v4.10.1 (#7601)",
+      "pr": "7601"
+    },
+    {
+      "line": "= a408475b8b4d3ac225c249162c4ce168c0614eb1 getDuplicateRoutes: Ignore redirects and other unnamed routes (#7564)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= a408475b8b4d3ac225c249162c4ce168c0614eb1 getDuplicateRoutes: Ignore redirects and other unnamed routes (#7564)\u001b[39m\u001b[22m",
+      "hash": "a408475b8b4d3ac225c249162c4ce168c0614eb1",
+      "message": "getDuplicateRoutes: Ignore redirects and other unnamed routes (#7564)",
+      "pr": "7564"
+    },
+    {
+      "line": "< 01ae5bfe0e7274b510e077ec76be73ed62b82707 Merge branch 'release/patch/v4.1.1' into next",
+      "ref": "release/minor/v4.2.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< 01ae5bfe0e7274b510e077ec76be73ed62b82707 Merge branch 'release/patch/v4.1.1' into next\u001b[22m",
+      "hash": "01ae5bfe0e7274b510e077ec76be73ed62b82707",
+      "message": "Merge branch 'release/patch/v4.1.1' into next"
+    },
+    {
+      "line": "< 112576aff0f29bd38708f685fd78036aef5e9ee8 chore(deps): bump @sideway/formula from 3.0.0 to 3.0.1 in /docs (#7593)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 112576aff0f29bd38708f685fd78036aef5e9ee8 chore(deps): bump @sideway/formula from 3.0.0 to 3.0.1 in /docs (#7593)",
+      "hash": "112576aff0f29bd38708f685fd78036aef5e9ee8",
+      "message": "chore(deps): bump @sideway/formula from 3.0.0 to 3.0.1 in /docs (#7593)",
+      "pr": "7593"
+    },
+    {
+      "line": "< a75af9f0285574464633a1e33be15340fa73589c fix(deps): update typescript-eslint monorepo to v5.51.0 (#7592)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< a75af9f0285574464633a1e33be15340fa73589c fix(deps): update typescript-eslint monorepo to v5.51.0 (#7592)",
+      "hash": "a75af9f0285574464633a1e33be15340fa73589c",
+      "message": "fix(deps): update typescript-eslint monorepo to v5.51.0 (#7592)",
+      "pr": "7592"
+    },
+    {
+      "line": "< c876595f2be7649a106c62480d3778daf8393529 chore(deps): update dependency supertokens-node to v13 (#7595)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< c876595f2be7649a106c62480d3778daf8393529 chore(deps): update dependency supertokens-node to v13 (#7595)",
+      "hash": "c876595f2be7649a106c62480d3778daf8393529",
+      "message": "chore(deps): update dependency supertokens-node to v13 (#7595)",
+      "pr": "7595"
+    },
+    {
+      "line": "< 46c51ab4da29e67ba520a8da18da858475a3c912 fix(deps): update prisma monorepo to v4.10.0 (#7591)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 46c51ab4da29e67ba520a8da18da858475a3c912 fix(deps): update prisma monorepo to v4.10.0 (#7591)",
+      "hash": "46c51ab4da29e67ba520a8da18da858475a3c912",
+      "message": "fix(deps): update prisma monorepo to v4.10.0 (#7591)",
+      "pr": "7591"
+    },
+    {
+      "line": "< 66030606bf68cdf85edcb31f7139349e87b8ccdc chore: update yarn.lock",
+      "ref": "release/minor/v4.2.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< 66030606bf68cdf85edcb31f7139349e87b8ccdc chore: update yarn.lock\u001b[22m",
+      "hash": "66030606bf68cdf85edcb31f7139349e87b8ccdc",
+      "message": "chore: update yarn.lock"
+    },
+    {
+      "line": "< 109a5b4cd9207fa7fb942c17537a8c49a4b1112b chore(deps): update dependency @replayio/playwright to v0.3.19 (#7590)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 109a5b4cd9207fa7fb942c17537a8c49a4b1112b chore(deps): update dependency @replayio/playwright to v0.3.19 (#7590)",
+      "hash": "109a5b4cd9207fa7fb942c17537a8c49a4b1112b",
+      "message": "chore(deps): update dependency @replayio/playwright to v0.3.19 (#7590)",
+      "pr": "7590"
+    },
+    {
+      "line": "< 311b856c1f4f2d3222a5fee1a4c44139dcc76d20 chore(deps): update dependency @clerk/clerk-react to v4.11.1 (#7585)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 311b856c1f4f2d3222a5fee1a4c44139dcc76d20 chore(deps): update dependency @clerk/clerk-react to v4.11.1 (#7585)",
+      "hash": "311b856c1f4f2d3222a5fee1a4c44139dcc76d20",
+      "message": "chore(deps): update dependency @clerk/clerk-react to v4.11.1 (#7585)",
+      "pr": "7585"
+    },
+    {
+      "line": "< d93d6f123f4864561211a8f460b2fa92d9ad524b chore(deps): update dependency supertokens-auth-react to v0.31.0 (#7588)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< d93d6f123f4864561211a8f460b2fa92d9ad524b chore(deps): update dependency supertokens-auth-react to v0.31.0 (#7588)",
+      "hash": "d93d6f123f4864561211a8f460b2fa92d9ad524b",
+      "message": "chore(deps): update dependency supertokens-auth-react to v0.31.0 (#7588)",
+      "pr": "7588"
+    },
+    {
+      "line": "< 3080e8e2595bf96d03b801c084a3689150756cb0 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.1 (#7589)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 3080e8e2595bf96d03b801c084a3689150756cb0 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.1 (#7589)",
+      "hash": "3080e8e2595bf96d03b801c084a3689150756cb0",
+      "message": "fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.1 (#7589)",
+      "pr": "7589"
+    },
+    {
+      "line": "< 80a4609fbe09b232a30a6d94f17544ceb375edb6 Truly optional auth decoder (#7572)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 80a4609fbe09b232a30a6d94f17544ceb375edb6 Truly optional auth decoder (#7572)\u001b[39m\u001b[22m",
+      "hash": "80a4609fbe09b232a30a6d94f17544ceb375edb6",
+      "message": "Truly optional auth decoder (#7572)",
+      "pr": "7572"
+    },
+    {
+      "line": "< e51258152f085d74b08d5dde4350c502b4137482 Merge branch 'release/minor/v4.1.0' into next",
+      "ref": "release/minor/v4.2.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< e51258152f085d74b08d5dde4350c502b4137482 Merge branch 'release/minor/v4.1.0' into next\u001b[22m",
+      "hash": "e51258152f085d74b08d5dde4350c502b4137482",
+      "message": "Merge branch 'release/minor/v4.1.0' into next"
+    },
+    {
+      "line": "< 3c824e16ab2da388a74d3713cefdeb5299afdb67 chore(deps): update dependency @azure/msal-browser to v2.33.0 (#7583)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 3c824e16ab2da388a74d3713cefdeb5299afdb67 chore(deps): update dependency @azure/msal-browser to v2.33.0 (#7583)\u001b[39m\u001b[22m",
+      "hash": "3c824e16ab2da388a74d3713cefdeb5299afdb67",
+      "message": "chore(deps): update dependency @azure/msal-browser to v2.33.0 (#7583)",
+      "pr": "7583"
+    },
+    {
+      "line": "< 9ad91e345fcc0f03b1d39fef5f2d60d15ec1b71d fix(deps): update dependency prettier to v2.8.4 (#7582)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 9ad91e345fcc0f03b1d39fef5f2d60d15ec1b71d fix(deps): update dependency prettier to v2.8.4 (#7582)\u001b[39m\u001b[22m",
+      "hash": "9ad91e345fcc0f03b1d39fef5f2d60d15ec1b71d",
+      "message": "fix(deps): update dependency prettier to v2.8.4 (#7582)",
+      "pr": "7582"
+    },
+    {
+      "line": "< 5cf1f47e9110831ba65161cae45054ce550a17c6 chore(deps): update dependency @clerk/types to v3.26.1 (#7586)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 5cf1f47e9110831ba65161cae45054ce550a17c6 chore(deps): update dependency @clerk/types to v3.26.1 (#7586)\u001b[39m\u001b[22m",
+      "hash": "5cf1f47e9110831ba65161cae45054ce550a17c6",
+      "message": "chore(deps): update dependency @clerk/types to v3.26.1 (#7586)",
+      "pr": "7586"
+    },
+    {
+      "line": "< 8994e65199c42a8934bb9c9ebcf2812d3c229c6b fix(deps): update jest monorepo to v29.4.2 (#7581)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 8994e65199c42a8934bb9c9ebcf2812d3c229c6b fix(deps): update jest monorepo to v29.4.2 (#7581)\u001b[39m\u001b[22m",
+      "hash": "8994e65199c42a8934bb9c9ebcf2812d3c229c6b",
+      "message": "fix(deps): update jest monorepo to v29.4.2 (#7581)",
+      "pr": "7581"
+    },
+    {
+      "line": "< 337f6b285d0d0c62618b5243aa534392807e6609 fix(clerk): check if we're prerendering in Clerk client getter (#7551)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 337f6b285d0d0c62618b5243aa534392807e6609 fix(clerk): check if we're prerendering in Clerk client getter (#7551)\u001b[39m\u001b[22m",
+      "hash": "337f6b285d0d0c62618b5243aa534392807e6609",
+      "message": "fix(clerk): check if we're prerendering in Clerk client getter (#7551)",
+      "pr": "7551"
+    },
+    {
+      "line": "< fd4c431231c9e7cfc754205aabf9cec61a9bc9cf chore(deps): update dependency esbuild to v0.17.6 (#7580)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< fd4c431231c9e7cfc754205aabf9cec61a9bc9cf chore(deps): update dependency esbuild to v0.17.6 (#7580)\u001b[39m\u001b[22m",
+      "hash": "fd4c431231c9e7cfc754205aabf9cec61a9bc9cf",
+      "message": "chore(deps): update dependency esbuild to v0.17.6 (#7580)",
+      "pr": "7580"
+    },
+    {
+      "line": "< 5e3bed474dc5620bc102867c7498a89ce34876d8 chore(deps): update dependency @npmcli/arborist to v6.2.2 (#7578)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 5e3bed474dc5620bc102867c7498a89ce34876d8 chore(deps): update dependency @npmcli/arborist to v6.2.2 (#7578)\u001b[39m\u001b[22m",
+      "hash": "5e3bed474dc5620bc102867c7498a89ce34876d8",
+      "message": "chore(deps): update dependency @npmcli/arborist to v6.2.2 (#7578)",
+      "pr": "7578"
+    },
+    {
+      "line": "< c62b61f0a8cb1069b88e130740eaf72f25ddf827 chore(deps): update dependency @replayio/playwright to v0.3.18 (#7579)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< c62b61f0a8cb1069b88e130740eaf72f25ddf827 chore(deps): update dependency @replayio/playwright to v0.3.18 (#7579)\u001b[39m\u001b[22m",
+      "hash": "c62b61f0a8cb1069b88e130740eaf72f25ddf827",
+      "message": "chore(deps): update dependency @replayio/playwright to v0.3.18 (#7579)",
+      "pr": "7579"
+    },
+    {
+      "line": "< 74ebed42adf19381039b0a344dbac72a49eabe8b fix(deps): update dependency @whatwg-node/fetch to v0.7.0 (#7567)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 74ebed42adf19381039b0a344dbac72a49eabe8b fix(deps): update dependency @whatwg-node/fetch to v0.7.0 (#7567)\u001b[39m\u001b[22m",
+      "hash": "74ebed42adf19381039b0a344dbac72a49eabe8b",
+      "message": "fix(deps): update dependency @whatwg-node/fetch to v0.7.0 (#7567)",
+      "pr": "7567"
+    },
+    {
+      "line": "< 79f38830228139dda77814293a3756e9d6737b93 fix(vite): A few fixes for vite (#7576)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 79f38830228139dda77814293a3756e9d6737b93 fix(vite): A few fixes for vite (#7576)\u001b[39m\u001b[22m",
+      "hash": "79f38830228139dda77814293a3756e9d6737b93",
+      "message": "fix(vite): A few fixes for vite (#7576)",
+      "pr": "7576"
+    },
+    {
+      "line": "< 310c8769a0cc0c6cf72cd7acd57dc8c475dfb8a4 fix(deps): update dependency @types/node to v16.18.12 (#7566)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 310c8769a0cc0c6cf72cd7acd57dc8c475dfb8a4 fix(deps): update dependency @types/node to v16.18.12 (#7566)\u001b[39m\u001b[22m",
+      "hash": "310c8769a0cc0c6cf72cd7acd57dc8c475dfb8a4",
+      "message": "fix(deps): update dependency @types/node to v16.18.12 (#7566)",
+      "pr": "7566"
+    },
+    {
+      "line": "< b90e88fd0df7d911cbfccf98f95a1fdcd8d8aa3e fix(deps): update graphql-tools monorepo (#7571)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< b90e88fd0df7d911cbfccf98f95a1fdcd8d8aa3e fix(deps): update graphql-tools monorepo (#7571)\u001b[39m\u001b[22m",
+      "hash": "b90e88fd0df7d911cbfccf98f95a1fdcd8d8aa3e",
+      "message": "fix(deps): update graphql-tools monorepo (#7571)",
+      "pr": "7571"
+    },
+    {
+      "line": "< 309799c9be940ef0568f5ab9286dca38314751a4 fix(deps): update dependency pino to v8.9.0 (#7570)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 309799c9be940ef0568f5ab9286dca38314751a4 fix(deps): update dependency pino to v8.9.0 (#7570)\u001b[39m\u001b[22m",
+      "hash": "309799c9be940ef0568f5ab9286dca38314751a4",
+      "message": "fix(deps): update dependency pino to v8.9.0 (#7570)",
+      "pr": "7570"
+    },
+    {
+      "line": "< f44ed7ad55793646517ae68d5a56c2a44a7550c9 Set.tsx: Improve comments (#7577)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< f44ed7ad55793646517ae68d5a56c2a44a7550c9 Set.tsx: Improve comments (#7577)\u001b[39m\u001b[22m",
+      "hash": "f44ed7ad55793646517ae68d5a56c2a44a7550c9",
+      "message": "Set.tsx: Improve comments (#7577)",
+      "pr": "7577"
+    },
+    {
+      "line": "< aa1b67a1b76b87adbefa6c453f15871b516b9808 Fix validation types and tests (#7565)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< aa1b67a1b76b87adbefa6c453f15871b516b9808 Fix validation types and tests (#7565)\u001b[39m\u001b[22m",
+      "hash": "aa1b67a1b76b87adbefa6c453f15871b516b9808",
+      "message": "Fix validation types and tests (#7565)",
+      "pr": "7565"
+    },
+    {
+      "line": "< d7bca4d15592dc0aecb28c60ec2f36b5d728edee fix: finish custom auth docs on authDecoder (#7563)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< d7bca4d15592dc0aecb28c60ec2f36b5d728edee fix: finish custom auth docs on authDecoder (#7563)\u001b[39m\u001b[22m",
+      "hash": "d7bca4d15592dc0aecb28c60ec2f36b5d728edee",
+      "message": "fix: finish custom auth docs on authDecoder (#7563)",
+      "pr": "7563"
+    },
+    {
+      "line": "< 2ad60f9ca240c1d137e9de2c63303bd41cd89425 chore(deps): update dependency @types/vscode to v1.75.0 (#7562)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 2ad60f9ca240c1d137e9de2c63303bd41cd89425 chore(deps): update dependency @types/vscode to v1.75.0 (#7562)\u001b[39m\u001b[22m",
+      "hash": "2ad60f9ca240c1d137e9de2c63303bd41cd89425",
+      "message": "chore(deps): update dependency @types/vscode to v1.75.0 (#7562)",
+      "pr": "7562"
+    },
+    {
+      "line": "< af133de43b9901109ac36fcdd1969f77377cd9d5 chore(deps): update dependency firebase to v9.17.1 (#7561)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< af133de43b9901109ac36fcdd1969f77377cd9d5 chore(deps): update dependency firebase to v9.17.1 (#7561)\u001b[39m\u001b[22m",
+      "hash": "af133de43b9901109ac36fcdd1969f77377cd9d5",
+      "message": "chore(deps): update dependency firebase to v9.17.1 (#7561)",
+      "pr": "7561"
+    },
+    {
+      "line": "< f597fb88c2ab09d2d3d13c7cd8d13c4865647b38 fix(auth): handle CRLFs in `yarn rw setup auth` (#7560)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< f597fb88c2ab09d2d3d13c7cd8d13c4865647b38 fix(auth): handle CRLFs in `yarn rw setup auth` (#7560)\u001b[39m\u001b[22m",
+      "hash": "f597fb88c2ab09d2d3d13c7cd8d13c4865647b38",
+      "message": "fix(auth): handle CRLFs in `yarn rw setup auth` (#7560)",
+      "pr": "7560"
+    },
+    {
+      "line": "< 90d542faa383aeb44e63b9f76b7a15166777f439 Clerk docs updates, take 2 (#7544)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 90d542faa383aeb44e63b9f76b7a15166777f439 Clerk docs updates, take 2 (#7544)\u001b[39m\u001b[22m",
+      "hash": "90d542faa383aeb44e63b9f76b7a15166777f439",
+      "message": "Clerk docs updates, take 2 (#7544)",
+      "pr": "7544"
+    },
+    {
+      "line": "< 51b6424fc1b6105e12df8e5e534d6b04031208b0 fix(vite): Fix Vite entry point on windows (#7554)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 51b6424fc1b6105e12df8e5e534d6b04031208b0 fix(vite): Fix Vite entry point on windows (#7554)\u001b[39m\u001b[22m",
+      "hash": "51b6424fc1b6105e12df8e5e534d6b04031208b0",
+      "message": "fix(vite): Fix Vite entry point on windows (#7554)",
+      "pr": "7554"
+    },
+    {
+      "line": "< 778f5ad15e758414240e85edb12f8ba10752020b fix(deps): update graphqlcodegenerator monorepo (#7555)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 778f5ad15e758414240e85edb12f8ba10752020b fix(deps): update graphqlcodegenerator monorepo (#7555)\u001b[39m\u001b[22m",
+      "hash": "778f5ad15e758414240e85edb12f8ba10752020b",
+      "message": "fix(deps): update graphqlcodegenerator monorepo (#7555)",
+      "pr": "7555"
+    },
+    {
+      "line": "< e3cba0b5511419f4d7a57259e5f6935f52acc788 fix(docs): correct Node.js versions",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< e3cba0b5511419f4d7a57259e5f6935f52acc788 fix(docs): correct Node.js versions\u001b[39m\u001b[22m",
+      "hash": "e3cba0b5511419f4d7a57259e5f6935f52acc788",
+      "message": "fix(docs): correct Node.js versions"
+    },
+    {
+      "line": "< 9f318326eafd3fcdc353d1ee4b14c7d9a1f5b1e0 fix: bump minimum node.js version",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 9f318326eafd3fcdc353d1ee4b14c7d9a1f5b1e0 fix: bump minimum node.js version\u001b[39m\u001b[22m",
+      "hash": "9f318326eafd3fcdc353d1ee4b14c7d9a1f5b1e0",
+      "message": "fix: bump minimum node.js version"
+    },
+    {
+      "line": "< 7b3a69724f86be6494b0a15f67b14afb9d2cd778 fix(deps): update docusaurus monorepo to v2.3.0 (#7475)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 7b3a69724f86be6494b0a15f67b14afb9d2cd778 fix(deps): update docusaurus monorepo to v2.3.0 (#7475)\u001b[39m\u001b[22m",
+      "hash": "7b3a69724f86be6494b0a15f67b14afb9d2cd778",
+      "message": "fix(deps): update docusaurus monorepo to v2.3.0 (#7475)",
+      "pr": "7475"
+    },
+    {
+      "line": "< de4ce58d44a376c998c1f598d2bfb6739250a257 fix(deps): update dependency @whatwg-node/fetch to v0.6.6 (#7559)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< de4ce58d44a376c998c1f598d2bfb6739250a257 fix(deps): update dependency @whatwg-node/fetch to v0.6.6 (#7559)\u001b[39m\u001b[22m",
+      "hash": "de4ce58d44a376c998c1f598d2bfb6739250a257",
+      "message": "fix(deps): update dependency @whatwg-node/fetch to v0.6.6 (#7559)",
+      "pr": "7559"
+    },
+    {
+      "line": "< 5e8bb716dcde9ccf82882b6061b95ef26ed5ac5f chore(deps): update dependency firebase to v9.17.0 (#7553)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 5e8bb716dcde9ccf82882b6061b95ef26ed5ac5f chore(deps): update dependency firebase to v9.17.0 (#7553)\u001b[39m\u001b[22m",
+      "hash": "5e8bb716dcde9ccf82882b6061b95ef26ed5ac5f",
+      "message": "chore(deps): update dependency firebase to v9.17.0 (#7553)",
+      "pr": "7553"
+    },
+    {
+      "line": "< 1e4bcb7f5c4e5c296876e15ab88e6a1cb9a46d22 fix(deps): update dependency @clerk/clerk-sdk-node to v4.6.6 (#7552)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 1e4bcb7f5c4e5c296876e15ab88e6a1cb9a46d22 fix(deps): update dependency @clerk/clerk-sdk-node to v4.6.6 (#7552)\u001b[39m\u001b[22m",
+      "hash": "1e4bcb7f5c4e5c296876e15ab88e6a1cb9a46d22",
+      "message": "fix(deps): update dependency @clerk/clerk-sdk-node to v4.6.6 (#7552)",
+      "pr": "7552"
+    },
+    {
+      "line": "< db25e6697c15d4d4ac7ad0d0410912563ca6c736 feat(telemetry): Capture bundler flag (#7536)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< db25e6697c15d4d4ac7ad0d0410912563ca6c736 feat(telemetry): Capture bundler flag (#7536)\u001b[39m\u001b[22m",
+      "hash": "db25e6697c15d4d4ac7ad0d0410912563ca6c736",
+      "message": "feat(telemetry): Capture bundler flag (#7536)",
+      "pr": "7536"
+    },
+    {
+      "line": "< dfd6eb204bda95b7ee04e08b29f3acaded956f98 chore(deps): update dependency cypress to v12.5.1 (#7549)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< dfd6eb204bda95b7ee04e08b29f3acaded956f98 chore(deps): update dependency cypress to v12.5.1 (#7549)\u001b[39m\u001b[22m",
+      "hash": "dfd6eb204bda95b7ee04e08b29f3acaded956f98",
+      "message": "chore(deps): update dependency cypress to v12.5.1 (#7549)",
+      "pr": "7549"
+    },
+    {
+      "line": "< 3bf8ce2b6904b0421cdc3fbfbcf400da5d9083c4 fix(deps): update dependency @babel/parser to v7.20.15 (#7550)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 3bf8ce2b6904b0421cdc3fbfbcf400da5d9083c4 fix(deps): update dependency @babel/parser to v7.20.15 (#7550)\u001b[39m\u001b[22m",
+      "hash": "3bf8ce2b6904b0421cdc3fbfbcf400da5d9083c4",
+      "message": "fix(deps): update dependency @babel/parser to v7.20.15 (#7550)",
+      "pr": "7550"
+    },
+    {
+      "line": "< cdd3282333172bfff3b6150795fdcc1a2d5e9832 Update cli-commands.md (#7511)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< cdd3282333172bfff3b6150795fdcc1a2d5e9832 Update cli-commands.md (#7511)\u001b[39m\u001b[22m",
+      "hash": "cdd3282333172bfff3b6150795fdcc1a2d5e9832",
+      "message": "Update cli-commands.md (#7511)",
+      "pr": "7511"
+    },
+    {
+      "line": "< 47e29583facea96ff53b975a4c22b35f466e7d1e chore(deps): update yarn to v3.4.1 (#7530)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 47e29583facea96ff53b975a4c22b35f466e7d1e chore(deps): update yarn to v3.4.1 (#7530)\u001b[39m\u001b[22m",
+      "hash": "47e29583facea96ff53b975a4c22b35f466e7d1e",
+      "message": "chore(deps): update yarn to v3.4.1 (#7530)",
+      "pr": "7530"
+    },
+    {
+      "line": "< c5ff8c2c39c1f1cce4cccc693a8501a359a28848 Docs: Add missing groupId to <Tabs> (#7547)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< c5ff8c2c39c1f1cce4cccc693a8501a359a28848 Docs: Add missing groupId to <Tabs> (#7547)\u001b[39m\u001b[22m",
+      "hash": "c5ff8c2c39c1f1cce4cccc693a8501a359a28848",
+      "message": "Docs: Add missing groupId to <Tabs> (#7547)",
+      "pr": "7547"
+    },
+    {
+      "line": "< 584cecea992e8324d14c435df30c3612faaf4f2d chore(deps): bump http-cache-semantics from 4.1.0 to 4.1.1 (#7541)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 584cecea992e8324d14c435df30c3612faaf4f2d chore(deps): bump http-cache-semantics from 4.1.0 to 4.1.1 (#7541)\u001b[39m\u001b[22m",
+      "hash": "584cecea992e8324d14c435df30c3612faaf4f2d",
+      "message": "chore(deps): bump http-cache-semantics from 4.1.0 to 4.1.1 (#7541)",
+      "pr": "7541"
+    },
+    {
+      "line": "< b826c144f1588e98bbabb97e8b633fafcf4b0bb8 chore(deps): bump http-cache-semantics (#7540)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< b826c144f1588e98bbabb97e8b633fafcf4b0bb8 chore(deps): bump http-cache-semantics (#7540)\u001b[39m\u001b[22m",
+      "hash": "b826c144f1588e98bbabb97e8b633fafcf4b0bb8",
+      "message": "chore(deps): bump http-cache-semantics (#7540)",
+      "pr": "7540"
+    },
+    {
+      "line": "< 2139e6ccac4b07f93917cbf48643f0d1a6c17dbc chore(deps): bump http-cache-semantics from 4.1.0 to 4.1.1 in /docs (#7539)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 2139e6ccac4b07f93917cbf48643f0d1a6c17dbc chore(deps): bump http-cache-semantics from 4.1.0 to 4.1.1 in /docs (#7539)\u001b[39m\u001b[22m",
+      "hash": "2139e6ccac4b07f93917cbf48643f0d1a6c17dbc",
+      "message": "chore(deps): bump http-cache-semantics from 4.1.0 to 4.1.1 in /docs (#7539)",
+      "pr": "7539"
+    },
+    {
+      "line": "< c36a15b4ad5391ae99b4a53b0fcafc12a26ea9c4 chore(deps): update dependency @replayio/playwright to v0.3.17 (#7546)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< c36a15b4ad5391ae99b4a53b0fcafc12a26ea9c4 chore(deps): update dependency @replayio/playwright to v0.3.17 (#7546)\u001b[39m\u001b[22m",
+      "hash": "c36a15b4ad5391ae99b4a53b0fcafc12a26ea9c4",
+      "message": "chore(deps): update dependency @replayio/playwright to v0.3.17 (#7546)",
+      "pr": "7546"
+    },
+    {
+      "line": "< ec31cf4bb90957dac0ee6afb66cb3bc8731e16f6 chore(deps): update dependency @types/vscode to v1.74.1 (#7548)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< ec31cf4bb90957dac0ee6afb66cb3bc8731e16f6 chore(deps): update dependency @types/vscode to v1.74.1 (#7548)\u001b[39m\u001b[22m",
+      "hash": "ec31cf4bb90957dac0ee6afb66cb3bc8731e16f6",
+      "message": "chore(deps): update dependency @types/vscode to v1.74.1 (#7548)",
+      "pr": "7548"
+    },
+    {
+      "line": "< 4b2664e079dde795e0cbf392688fdbfcb5fec613 fix(deps): update dependency @vitejs/plugin-react to v3.1.0 (#7542)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 4b2664e079dde795e0cbf392688fdbfcb5fec613 fix(deps): update dependency @vitejs/plugin-react to v3.1.0 (#7542)\u001b[39m\u001b[22m",
+      "hash": "4b2664e079dde795e0cbf392688fdbfcb5fec613",
+      "message": "fix(deps): update dependency @vitejs/plugin-react to v3.1.0 (#7542)",
+      "pr": "7542"
+    },
+    {
+      "line": "< 230e25c18754822ae2c5a1c45da151013ee299d7 fix(deps): update dependency vite to v4.1.1 (#7543)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 230e25c18754822ae2c5a1c45da151013ee299d7 fix(deps): update dependency vite to v4.1.1 (#7543)\u001b[39m\u001b[22m",
+      "hash": "230e25c18754822ae2c5a1c45da151013ee299d7",
+      "message": "fix(deps): update dependency vite to v4.1.1 (#7543)",
+      "pr": "7543"
+    },
+    {
+      "line": "< 8057dc1d53446eaf0944c11a4686c8950f838a71 chore(deps): update dependency @npmcli/arborist to v6.2.1 (#7535)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 8057dc1d53446eaf0944c11a4686c8950f838a71 chore(deps): update dependency @npmcli/arborist to v6.2.1 (#7535)\u001b[39m\u001b[22m",
+      "hash": "8057dc1d53446eaf0944c11a4686c8950f838a71",
+      "message": "chore(deps): update dependency @npmcli/arborist to v6.2.1 (#7535)",
+      "pr": "7535"
+    },
+    {
+      "line": "< 2b84a44219ee3006fc45c5fc1f5dcdc3cca52c07 Clerk docs: Update to use new env vars (#7528)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 2b84a44219ee3006fc45c5fc1f5dcdc3cca52c07 Clerk docs: Update to use new env vars (#7528)\u001b[39m\u001b[22m",
+      "hash": "2b84a44219ee3006fc45c5fc1f5dcdc3cca52c07",
+      "message": "Clerk docs: Update to use new env vars (#7528)",
+      "pr": "7528"
+    },
+    {
+      "line": "< 0a9aa7b3a37d096b9e4edb114c04c6aac80d2d4e feat(cli): Additional post upgrade messages (#7529)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 0a9aa7b3a37d096b9e4edb114c04c6aac80d2d4e feat(cli): Additional post upgrade messages (#7529)\u001b[39m\u001b[22m",
+      "hash": "0a9aa7b3a37d096b9e4edb114c04c6aac80d2d4e",
+      "message": "feat(cli): Additional post upgrade messages (#7529)",
+      "pr": "7529"
+    },
+    {
+      "line": "< 51b3509f68ea7e6b9c93c52e72e2700b9d9aaeb9 chore(deps): update dependency @clerk/types to v3.25.1 (#7532)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 51b3509f68ea7e6b9c93c52e72e2700b9d9aaeb9 chore(deps): update dependency @clerk/types to v3.25.1 (#7532)\u001b[39m\u001b[22m",
+      "hash": "51b3509f68ea7e6b9c93c52e72e2700b9d9aaeb9",
+      "message": "chore(deps): update dependency @clerk/types to v3.25.1 (#7532)",
+      "pr": "7532"
+    },
+    {
+      "line": "< 27857fa46749f413c50164f56b28313f6c5184db fix(deps): update graphql-tools monorepo (#7534)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 27857fa46749f413c50164f56b28313f6c5184db fix(deps): update graphql-tools monorepo (#7534)\u001b[39m\u001b[22m",
+      "hash": "27857fa46749f413c50164f56b28313f6c5184db",
+      "message": "fix(deps): update graphql-tools monorepo (#7534)",
+      "pr": "7534"
+    },
+    {
+      "line": "< c614629b29ade1550747a9b85bc88a2796cd13ae chore(deps): update dependency @clerk/clerk-react to v4.10.0 (#7533)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< c614629b29ade1550747a9b85bc88a2796cd13ae chore(deps): update dependency @clerk/clerk-react to v4.10.0 (#7533)\u001b[39m\u001b[22m",
+      "hash": "c614629b29ade1550747a9b85bc88a2796cd13ae",
+      "message": "chore(deps): update dependency @clerk/clerk-react to v4.10.0 (#7533)",
+      "pr": "7533"
+    },
+    {
+      "line": "< 0b0dea795f166f4075644729bbb2a23651f895a8 fix(deps): update dependency graphql-yoga to v3.5.1 (#7531)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m< 0b0dea795f166f4075644729bbb2a23651f895a8 fix(deps): update dependency graphql-yoga to v3.5.1 (#7531)\u001b[39m\u001b[22m",
+      "hash": "0b0dea795f166f4075644729bbb2a23651f895a8",
+      "message": "fix(deps): update dependency graphql-yoga to v3.5.1 (#7531)",
+      "pr": "7531"
+    },
+    {
+      "line": "< 29b452c87e77d4f358156a31a45a01cb9f1c2bbe Merge branch 'release/patch/v4.0.1' into next",
+      "ref": "release/minor/v4.2.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< 29b452c87e77d4f358156a31a45a01cb9f1c2bbe Merge branch 'release/patch/v4.0.1' into next\u001b[22m",
+      "hash": "29b452c87e77d4f358156a31a45a01cb9f1c2bbe",
+      "message": "Merge branch 'release/patch/v4.0.1' into next"
+    },
+    {
+      "line": "< c480ed97f619e6adac920749a5f31e2c78adb66b v4.0.1",
+      "ref": "v4.0.1",
+      "type": "tag",
+      "pretty": "\u001b[2m< c480ed97f619e6adac920749a5f31e2c78adb66b v4.0.1\u001b[22m",
+      "hash": "c480ed97f619e6adac920749a5f31e2c78adb66b",
+      "message": "v4.0.1"
+    },
+    {
+      "line": "< 31aa37b79d803dff0466a3a43b70297d868dd05c hotfix(ts): Add temporary work around for defineScenario typedef (#7527)",
+      "ref": "v4.0.1",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;144m< 31aa37b79d803dff0466a3a43b70297d868dd05c hotfix(ts): Add temporary work around for defineScenario typedef (#7527)\u001b[39m\u001b[22m",
+      "hash": "31aa37b79d803dff0466a3a43b70297d868dd05c",
+      "message": "hotfix(ts): Add temporary work around for defineScenario typedef (#7527)",
+      "pr": "7527"
+    },
+    {
+      "line": "> 99928e7f48ef4a5507cf6ae8a7bf70bd47a1ff6c v4.1.4",
+      "ref": "v4.1.4",
+      "type": "tag",
+      "pretty": "\u001b[2m> 99928e7f48ef4a5507cf6ae8a7bf70bd47a1ff6c v4.1.4\u001b[22m",
+      "hash": "99928e7f48ef4a5507cf6ae8a7bf70bd47a1ff6c",
+      "message": "v4.1.4"
+    },
+    {
+      "line": "= a5e039e64f902aa4d0e8d3ae8d9cb95473f14007 fix:(webAuthn) use `globalThis`, not `process.env` (#7639)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= a5e039e64f902aa4d0e8d3ae8d9cb95473f14007 fix:(webAuthn) use `globalThis`, not `process.env` (#7639)\u001b[39m\u001b[22m",
+      "hash": "a5e039e64f902aa4d0e8d3ae8d9cb95473f14007",
+      "message": "fix:(webAuthn) use `globalThis`, not `process.env` (#7639)",
+      "pr": "7639"
+    },
+    {
+      "line": "= 9ee232892f1dad549a6568217ac78f90f65757f1 feat(api): support building .jsx, .tsx files (#7638)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 9ee232892f1dad549a6568217ac78f90f65757f1 feat(api): support building .jsx, .tsx files (#7638)\u001b[39m\u001b[22m",
+      "hash": "9ee232892f1dad549a6568217ac78f90f65757f1",
+      "message": "feat(api): support building .jsx, .tsx files (#7638)",
+      "pr": "7638"
+    },
+    {
+      "line": "= fd70dc9165f552f223ed413a7b61ede8884f1ff9 fix(ts): Undo skipLibCheck change (#7633)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= fd70dc9165f552f223ed413a7b61ede8884f1ff9 fix(ts): Undo skipLibCheck change (#7633)\u001b[39m\u001b[22m",
+      "hash": "fd70dc9165f552f223ed413a7b61ede8884f1ff9",
+      "message": "fix(ts): Undo skipLibCheck change (#7633)",
+      "pr": "7633"
+    },
+    {
+      "line": "= 7b719182373f541ec840ac82d74342b2f30ac036 fix(generator): add dotAll to Router regex (#7605)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 7b719182373f541ec840ac82d74342b2f30ac036 fix(generator): add dotAll to Router regex (#7605)\u001b[39m\u001b[22m",
+      "hash": "7b719182373f541ec840ac82d74342b2f30ac036",
+      "message": "fix(generator): add dotAll to Router regex (#7605)",
+      "pr": "7605"
+    },
+    {
+      "line": "= e4ee251940c39761cef7ee939a8ef4e0c37cf003 fix(telemetry): Avoid getConfig for CRWA (#7621)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= e4ee251940c39761cef7ee939a8ef4e0c37cf003 fix(telemetry): Avoid getConfig for CRWA (#7621)\u001b[39m\u001b[22m",
+      "hash": "e4ee251940c39761cef7ee939a8ef4e0c37cf003",
+      "message": "fix(telemetry): Avoid getConfig for CRWA (#7621)",
+      "pr": "7621"
+    },
+    {
+      "line": "> 4512e279f7f7766a88c2ff17622e6624d833022f v4.1.3",
+      "ref": "v4.1.3",
+      "type": "tag",
+      "pretty": "\u001b[2m> 4512e279f7f7766a88c2ff17622e6624d833022f v4.1.3\u001b[22m",
+      "hash": "4512e279f7f7766a88c2ff17622e6624d833022f",
+      "message": "v4.1.3"
+    },
+    {
+      "line": "> 7e17cb39981ca523a8cb068262b0295c241b2472 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.2 (#7612)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m> 7e17cb39981ca523a8cb068262b0295c241b2472 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.2 (#7612)\u001b[39m\u001b[22m",
+      "hash": "7e17cb39981ca523a8cb068262b0295c241b2472",
+      "message": "fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.2 (#7612)",
+      "pr": "7612"
+    },
+    {
+      "line": "> 0a6c85bc33feee08eb111893bb064dd22f316bd7 chore(deps): update dependency @clerk/clerk-react to v4.11.2 (#7611)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m> 0a6c85bc33feee08eb111893bb064dd22f316bd7 chore(deps): update dependency @clerk/clerk-react to v4.11.2 (#7611)\u001b[39m\u001b[22m",
+      "hash": "0a6c85bc33feee08eb111893bb064dd22f316bd7",
+      "message": "chore(deps): update dependency @clerk/clerk-react to v4.11.2 (#7611)",
+      "pr": "7611"
+    },
+    {
+      "line": "= 7adcbdc15c8feee6d14abc2739ad00311fc70f90 fix(vite): Respect `host`, `sourceMap` settings in redwood.toml on vite dev server (#7606)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 7adcbdc15c8feee6d14abc2739ad00311fc70f90 fix(vite): Respect `host`, `sourceMap` settings in redwood.toml on vite dev server (#7606)\u001b[39m\u001b[22m",
+      "hash": "7adcbdc15c8feee6d14abc2739ad00311fc70f90",
+      "message": "fix(vite): Respect `host`, `sourceMap` settings in redwood.toml on vite dev server (#7606)",
+      "pr": "7606"
+    },
+    {
+      "line": "= a77fef741141c1847972c6254ce38e53e174e845 Check if client has loaded before saying that loading is finished (#7608)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= a77fef741141c1847972c6254ce38e53e174e845 Check if client has loaded before saying that loading is finished (#7608)\u001b[39m\u001b[22m",
+      "hash": "a77fef741141c1847972c6254ce38e53e174e845",
+      "message": "Check if client has loaded before saying that loading is finished (#7608)",
+      "pr": "7608"
+    },
+    {
+      "line": "= 3a6c3f05402264a7071c10e34580e93342f86a27 Reinforce the constness of notAuthenticatedState (#7607)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 3a6c3f05402264a7071c10e34580e93342f86a27 Reinforce the constness of notAuthenticatedState (#7607)\u001b[39m\u001b[22m",
+      "hash": "3a6c3f05402264a7071c10e34580e93342f86a27",
+      "message": "Reinforce the constness of notAuthenticatedState (#7607)",
+      "pr": "7607"
+    },
+    {
+      "line": "> 4ecf4d3f269c53aa32787c4b5689637b141eb5b0 v4.1.2",
+      "ref": "v4.1.2",
+      "type": "tag",
+      "pretty": "\u001b[2m> 4ecf4d3f269c53aa32787c4b5689637b141eb5b0 v4.1.2\u001b[22m",
+      "hash": "4ecf4d3f269c53aa32787c4b5689637b141eb5b0",
+      "message": "v4.1.2"
+    },
+    {
+      "line": "= abc2612e05e80f83ecec7ba5456604183b2000d7 Add back `buildType: nixpacks` per Flightcontrol request (#7598)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= abc2612e05e80f83ecec7ba5456604183b2000d7 Add back `buildType: nixpacks` per Flightcontrol request (#7598)\u001b[39m\u001b[22m",
+      "hash": "abc2612e05e80f83ecec7ba5456604183b2000d7",
+      "message": "Add back `buildType: nixpacks` per Flightcontrol request (#7598)",
+      "pr": "7598"
+    },
+    {
+      "line": "= 07ba3107137f33d0041d13d87ff9eefffe0dbe68 getDuplicateRoutes: Ignore redirects and other unnamed routes (#7564)",
+      "ref": "v4.1.4",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;5;128m= 07ba3107137f33d0041d13d87ff9eefffe0dbe68 getDuplicateRoutes: Ignore redirects and other unnamed routes (#7564)\u001b[39m\u001b[22m",
+      "hash": "07ba3107137f33d0041d13d87ff9eefffe0dbe68",
+      "message": "getDuplicateRoutes: Ignore redirects and other unnamed routes (#7564)",
+      "pr": "7564"
+    }
+  ],
+  "tagsToColors": {
+    "v4.1.4": "#940ece",
+    "v4.0.1": "#9a9773"
+  },
+  "releaseCommits": [
+    {
+      "line": "< ac6e051f3dd4297f9c65711b6be91ce84714af24 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.3 (#7645)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< ac6e051f3dd4297f9c65711b6be91ce84714af24 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.3 (#7645)",
+      "hash": "ac6e051f3dd4297f9c65711b6be91ce84714af24",
+      "message": "fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.3 (#7645)",
+      "pr": "7645"
+    },
+    {
+      "line": "< f54cb843c5652392dd8ad6813cb76fe0a76a3b0d 7482/validators exclude include caseinsensitive (#7573)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< f54cb843c5652392dd8ad6813cb76fe0a76a3b0d 7482/validators exclude include caseinsensitive (#7573)",
+      "hash": "f54cb843c5652392dd8ad6813cb76fe0a76a3b0d",
+      "message": "7482/validators exclude include caseinsensitive (#7573)",
+      "pr": "7573"
+    },
+    {
+      "line": "< 6b54c0dd93853b5ff77e26440b8bb04150693103 chore(deps): update dependency @clerk/clerk-react to v4.11.3 (#7642)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 6b54c0dd93853b5ff77e26440b8bb04150693103 chore(deps): update dependency @clerk/clerk-react to v4.11.3 (#7642)",
+      "hash": "6b54c0dd93853b5ff77e26440b8bb04150693103",
+      "message": "chore(deps): update dependency @clerk/clerk-react to v4.11.3 (#7642)",
+      "pr": "7642"
+    },
+    {
+      "line": "< 3a6054a329aa2e2d12da5141d865863f0cd6441a chore(deps): update dependency @replayio/playwright to v0.3.21 (#7643)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 3a6054a329aa2e2d12da5141d865863f0cd6441a chore(deps): update dependency @replayio/playwright to v0.3.21 (#7643)",
+      "hash": "3a6054a329aa2e2d12da5141d865863f0cd6441a",
+      "message": "chore(deps): update dependency @replayio/playwright to v0.3.21 (#7643)",
+      "pr": "7643"
+    },
+    {
+      "line": "< e99df3ed826e5a90250963626779d55cefc3f2bd chore(deps): update dependency supertokens-auth-react to v0.31.1 (#7628)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< e99df3ed826e5a90250963626779d55cefc3f2bd chore(deps): update dependency supertokens-auth-react to v0.31.1 (#7628)",
+      "hash": "e99df3ed826e5a90250963626779d55cefc3f2bd",
+      "message": "chore(deps): update dependency supertokens-auth-react to v0.31.1 (#7628)",
+      "pr": "7628"
+    },
+    {
+      "line": "< 4f9a3e75edc45fb6ab201de19cc1e87b456ab50b chore(deps): update dependency @types/vscode to v1.75.1 (#7630)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 4f9a3e75edc45fb6ab201de19cc1e87b456ab50b chore(deps): update dependency @types/vscode to v1.75.1 (#7630)",
+      "hash": "4f9a3e75edc45fb6ab201de19cc1e87b456ab50b",
+      "message": "chore(deps): update dependency @types/vscode to v1.75.1 (#7630)",
+      "pr": "7630"
+    },
+    {
+      "line": "< e0badd871f325ce00cd6eee74e245ca1147746d3 chore(deps): update dependency supertokens-node to v13.0.2 (#7629)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< e0badd871f325ce00cd6eee74e245ca1147746d3 chore(deps): update dependency supertokens-node to v13.0.2 (#7629)",
+      "hash": "e0badd871f325ce00cd6eee74e245ca1147746d3",
+      "message": "chore(deps): update dependency supertokens-node to v13.0.2 (#7629)",
+      "pr": "7629"
+    },
+    {
+      "line": "< dd1439356822c51008ccc22d632f9181d644d016 chore(CI): CI telemetry checking (#7623)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< dd1439356822c51008ccc22d632f9181d644d016 chore(CI): CI telemetry checking (#7623)",
+      "hash": "dd1439356822c51008ccc22d632f9181d644d016",
+      "message": "chore(CI): CI telemetry checking (#7623)",
+      "pr": "7623"
+    },
+    {
+      "line": "< 5ad833048332ead09285b9cec5a1c99a4d4ad8b3 fix(docs): typo in `GraphQL` docs (#7634)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 5ad833048332ead09285b9cec5a1c99a4d4ad8b3 fix(docs): typo in `GraphQL` docs (#7634)",
+      "hash": "5ad833048332ead09285b9cec5a1c99a4d4ad8b3",
+      "message": "fix(docs): typo in `GraphQL` docs (#7634)",
+      "pr": "7634"
+    },
+    {
+      "line": "< 01f3856c9f1778e338d2ef1d127dad4f4cb65c37 chore(deps): update dependency @clerk/types to v3.27.0 (#7614)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 01f3856c9f1778e338d2ef1d127dad4f4cb65c37 chore(deps): update dependency @clerk/types to v3.27.0 (#7614)",
+      "hash": "01f3856c9f1778e338d2ef1d127dad4f4cb65c37",
+      "message": "chore(deps): update dependency @clerk/types to v3.27.0 (#7614)",
+      "pr": "7614"
+    },
+    {
+      "line": "< 1d53dfebdc92c888fabf702296f5436fe812a10d fix(deps): update dependency eslint to v8.34.0 (#7615)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 1d53dfebdc92c888fabf702296f5436fe812a10d fix(deps): update dependency eslint to v8.34.0 (#7615)",
+      "hash": "1d53dfebdc92c888fabf702296f5436fe812a10d",
+      "message": "fix(deps): update dependency eslint to v8.34.0 (#7615)",
+      "pr": "7615"
+    },
+    {
+      "line": "< 76c4bdcf3862ca845ee6982bc87448c14becfa20 fix(deps): update dependency systeminformation to v5.17.9 (#7622)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 76c4bdcf3862ca845ee6982bc87448c14becfa20 fix(deps): update dependency systeminformation to v5.17.9 (#7622)",
+      "hash": "76c4bdcf3862ca845ee6982bc87448c14becfa20",
+      "message": "fix(deps): update dependency systeminformation to v5.17.9 (#7622)",
+      "pr": "7622"
+    },
+    {
+      "line": "< 2562afd54c40181e1bfe62b2a84cb4e2e1eb15f8 chore(deps): update dependency esbuild to v0.17.8 (#7626)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 2562afd54c40181e1bfe62b2a84cb4e2e1eb15f8 chore(deps): update dependency esbuild to v0.17.8 (#7626)",
+      "hash": "2562afd54c40181e1bfe62b2a84cb4e2e1eb15f8",
+      "message": "chore(deps): update dependency esbuild to v0.17.8 (#7626)",
+      "pr": "7626"
+    },
+    {
+      "line": "< a45612d1a80fcfb8a6364d0ac9d942ef8fb21448 Update CORS docs to reflect Redwood 4 changes (#7627)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< a45612d1a80fcfb8a6364d0ac9d942ef8fb21448 Update CORS docs to reflect Redwood 4 changes (#7627)",
+      "hash": "a45612d1a80fcfb8a6364d0ac9d942ef8fb21448",
+      "message": "Update CORS docs to reflect Redwood 4 changes (#7627)",
+      "pr": "7627"
+    },
+    {
+      "line": "< 9b344fb671ec94937c1a3d2818f6da25688ddfe4 chore(deps): update dependency @replayio/playwright to v0.3.20 (#7613)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 9b344fb671ec94937c1a3d2818f6da25688ddfe4 chore(deps): update dependency @replayio/playwright to v0.3.20 (#7613)",
+      "hash": "9b344fb671ec94937c1a3d2818f6da25688ddfe4",
+      "message": "chore(deps): update dependency @replayio/playwright to v0.3.20 (#7613)",
+      "pr": "7613"
+    },
+    {
+      "line": "< 6b7bc03dcdf362ef7fc2447aa2e00ffefb63067a fix(deps): update dependency react-player to v2.11.2 (#7594)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 6b7bc03dcdf362ef7fc2447aa2e00ffefb63067a fix(deps): update dependency react-player to v2.11.2 (#7594)",
+      "hash": "6b7bc03dcdf362ef7fc2447aa2e00ffefb63067a",
+      "message": "fix(deps): update dependency react-player to v2.11.2 (#7594)",
+      "pr": "7594"
+    },
+    {
+      "line": "< 284b429840b9b598507f9d2a4667b8d60d52c62d fix(deps): update dependency @fastify/static to v6.9.0 (#7610)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 284b429840b9b598507f9d2a4667b8d60d52c62d fix(deps): update dependency @fastify/static to v6.9.0 (#7610)",
+      "hash": "284b429840b9b598507f9d2a4667b8d60d52c62d",
+      "message": "fix(deps): update dependency @fastify/static to v6.9.0 (#7610)",
+      "pr": "7610"
+    },
+    {
+      "line": "< 372c6a7cdc309f858e56add9e82e62d7881a11d3 fix(deps): update dependency @whatwg-node/fetch to v0.8.1 (#7609)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 372c6a7cdc309f858e56add9e82e62d7881a11d3 fix(deps): update dependency @whatwg-node/fetch to v0.8.1 (#7609)",
+      "hash": "372c6a7cdc309f858e56add9e82e62d7881a11d3",
+      "message": "fix(deps): update dependency @whatwg-node/fetch to v0.8.1 (#7609)",
+      "pr": "7609"
+    },
+    {
+      "line": "< e432ef4d1e370ff0aa896b13ce01bbf677a1919a fix(deps): update dependency @whatwg-node/fetch to v0.7.1 (#7600)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< e432ef4d1e370ff0aa896b13ce01bbf677a1919a fix(deps): update dependency @whatwg-node/fetch to v0.7.1 (#7600)",
+      "hash": "e432ef4d1e370ff0aa896b13ce01bbf677a1919a",
+      "message": "fix(deps): update dependency @whatwg-node/fetch to v0.7.1 (#7600)",
+      "pr": "7600"
+    },
+    {
+      "line": "< 5c0f6f63b13d2731b38ac9cb7c115181659904e2 fix(deps): update dependency fastify to v4.13.0 (#7604)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 5c0f6f63b13d2731b38ac9cb7c115181659904e2 fix(deps): update dependency fastify to v4.13.0 (#7604)",
+      "hash": "5c0f6f63b13d2731b38ac9cb7c115181659904e2",
+      "message": "fix(deps): update dependency fastify to v4.13.0 (#7604)",
+      "pr": "7604"
+    },
+    {
+      "line": "< 1b4ef7cd76b2da17673a96825741c1d682fbbc15 chore(deps): update dependency esbuild to v0.17.7 (#7603)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 1b4ef7cd76b2da17673a96825741c1d682fbbc15 chore(deps): update dependency esbuild to v0.17.7 (#7603)",
+      "hash": "1b4ef7cd76b2da17673a96825741c1d682fbbc15",
+      "message": "chore(deps): update dependency esbuild to v0.17.7 (#7603)",
+      "pr": "7603"
+    },
+    {
+      "line": "< 42197fc55757f93c243d22904498a176bc87c75a fix(deps): update dependency pino to v8.10.0 (#7599)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 42197fc55757f93c243d22904498a176bc87c75a fix(deps): update dependency pino to v8.10.0 (#7599)",
+      "hash": "42197fc55757f93c243d22904498a176bc87c75a",
+      "message": "fix(deps): update dependency pino to v8.10.0 (#7599)",
+      "pr": "7599"
+    },
+    {
+      "line": "< d944edf6149592e0b20df4160e287fcd620b6bb0 fix(deps): update prisma monorepo to v4.10.1 (#7601)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< d944edf6149592e0b20df4160e287fcd620b6bb0 fix(deps): update prisma monorepo to v4.10.1 (#7601)",
+      "hash": "d944edf6149592e0b20df4160e287fcd620b6bb0",
+      "message": "fix(deps): update prisma monorepo to v4.10.1 (#7601)",
+      "pr": "7601"
+    },
+    {
+      "line": "< 112576aff0f29bd38708f685fd78036aef5e9ee8 chore(deps): bump @sideway/formula from 3.0.0 to 3.0.1 in /docs (#7593)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 112576aff0f29bd38708f685fd78036aef5e9ee8 chore(deps): bump @sideway/formula from 3.0.0 to 3.0.1 in /docs (#7593)",
+      "hash": "112576aff0f29bd38708f685fd78036aef5e9ee8",
+      "message": "chore(deps): bump @sideway/formula from 3.0.0 to 3.0.1 in /docs (#7593)",
+      "pr": "7593"
+    },
+    {
+      "line": "< a75af9f0285574464633a1e33be15340fa73589c fix(deps): update typescript-eslint monorepo to v5.51.0 (#7592)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< a75af9f0285574464633a1e33be15340fa73589c fix(deps): update typescript-eslint monorepo to v5.51.0 (#7592)",
+      "hash": "a75af9f0285574464633a1e33be15340fa73589c",
+      "message": "fix(deps): update typescript-eslint monorepo to v5.51.0 (#7592)",
+      "pr": "7592"
+    },
+    {
+      "line": "< c876595f2be7649a106c62480d3778daf8393529 chore(deps): update dependency supertokens-node to v13 (#7595)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< c876595f2be7649a106c62480d3778daf8393529 chore(deps): update dependency supertokens-node to v13 (#7595)",
+      "hash": "c876595f2be7649a106c62480d3778daf8393529",
+      "message": "chore(deps): update dependency supertokens-node to v13 (#7595)",
+      "pr": "7595"
+    },
+    {
+      "line": "< 46c51ab4da29e67ba520a8da18da858475a3c912 fix(deps): update prisma monorepo to v4.10.0 (#7591)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 46c51ab4da29e67ba520a8da18da858475a3c912 fix(deps): update prisma monorepo to v4.10.0 (#7591)",
+      "hash": "46c51ab4da29e67ba520a8da18da858475a3c912",
+      "message": "fix(deps): update prisma monorepo to v4.10.0 (#7591)",
+      "pr": "7591"
+    },
+    {
+      "line": "< 109a5b4cd9207fa7fb942c17537a8c49a4b1112b chore(deps): update dependency @replayio/playwright to v0.3.19 (#7590)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 109a5b4cd9207fa7fb942c17537a8c49a4b1112b chore(deps): update dependency @replayio/playwright to v0.3.19 (#7590)",
+      "hash": "109a5b4cd9207fa7fb942c17537a8c49a4b1112b",
+      "message": "chore(deps): update dependency @replayio/playwright to v0.3.19 (#7590)",
+      "pr": "7590"
+    },
+    {
+      "line": "< 311b856c1f4f2d3222a5fee1a4c44139dcc76d20 chore(deps): update dependency @clerk/clerk-react to v4.11.1 (#7585)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 311b856c1f4f2d3222a5fee1a4c44139dcc76d20 chore(deps): update dependency @clerk/clerk-react to v4.11.1 (#7585)",
+      "hash": "311b856c1f4f2d3222a5fee1a4c44139dcc76d20",
+      "message": "chore(deps): update dependency @clerk/clerk-react to v4.11.1 (#7585)",
+      "pr": "7585"
+    },
+    {
+      "line": "< d93d6f123f4864561211a8f460b2fa92d9ad524b chore(deps): update dependency supertokens-auth-react to v0.31.0 (#7588)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< d93d6f123f4864561211a8f460b2fa92d9ad524b chore(deps): update dependency supertokens-auth-react to v0.31.0 (#7588)",
+      "hash": "d93d6f123f4864561211a8f460b2fa92d9ad524b",
+      "message": "chore(deps): update dependency supertokens-auth-react to v0.31.0 (#7588)",
+      "pr": "7588"
+    },
+    {
+      "line": "< 3080e8e2595bf96d03b801c084a3689150756cb0 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.1 (#7589)",
+      "ref": "release/minor/v4.2.0",
+      "type": "commit",
+      "pretty": "< 3080e8e2595bf96d03b801c084a3689150756cb0 fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.1 (#7589)",
+      "hash": "3080e8e2595bf96d03b801c084a3689150756cb0",
+      "message": "fix(deps): update dependency @clerk/clerk-sdk-node to v4.7.1 (#7589)",
+      "pr": "7589"
+    }
+  ],
+  "noReleaseCommits": 31
+}

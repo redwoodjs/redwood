@@ -2,8 +2,9 @@ import path from 'path'
 
 import fg from 'fast-glob'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import { getNamedExports, hasDefaultExport, fileToAst } from './ast'
-import { getPaths } from './paths'
 
 export const findCells = (cwd: string = getPaths().web.src) => {
   const modules = fg.sync('**/*Cell.{js,jsx,ts,tsx}', {

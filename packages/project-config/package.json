@@ -1,0 +1,48 @@
+{
+  "name": "@redwoodjs/project-config",
+  "version": "4.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/config"
+  },
+  "license": "MIT",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "run build:js && run build:types",
+    "build:clean-dist": "rimraf 'dist/**/__tests__' --glob",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && run build:clean-dist",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "deps:dist": "depcruise dist --config --output-type dot | dot -T svg > dependency-graph-dist.svg",
+    "deps:src": "depcruise src --config --exclude \"^src/__tests__\" --output-type dot | dot -T svg > dependency-graph-src.svg",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "jest src",
+    "test:watch": "run test --watch"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "7.21.0",
+    "@iarna/toml": "2.2.5",
+    "core-js": "3.29.1",
+    "deepmerge": "4.3.1",
+    "fast-glob": "3.2.12",
+    "findup-sync": "5.0.0",
+    "string-env-interpolation": "1.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.21.0",
+    "@babel/core": "7.21.3",
+    "@types/findup-sync": "4.0.2",
+    "dependency-cruiser": "12.11.0",
+    "jest": "29.5.0",
+    "rimraf": "4.4.1",
+    "typescript": "5.0.3"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}
