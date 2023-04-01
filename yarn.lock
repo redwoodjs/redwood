@@ -66,9 +66,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.10":
-  version: 3.7.10
-  resolution: "@apollo/client@npm:3.7.10"
+"@apollo/client@npm:3.7.11":
+  version: 3.7.11
+  resolution: "@apollo/client@npm:3.7.11"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
@@ -76,7 +76,7 @@ __metadata:
     "@wry/trie": ^0.3.0
     graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
-    optimism: ^0.16.1
+    optimism: ^0.16.2
     prop-types: ^15.7.2
     response-iterator: ^0.2.6
     symbol-observable: ^4.0.0
@@ -98,7 +98,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 0320c2ca606d8d391739cb97b308f6d05fffad1d48a18ef71255040ff34a3d48e568961b5c425eb9027ecd7dbd9a5e95bd9a06e0b7c84211608950d878e3cafa
+  checksum: 5b95f820d177bdc6fbd1818072624d0307bbf7970c5bce8b526d254ccbb16c3c35cb172b81f7270f2d42cb7a61d36f1e97bcfb54b4dbe1e8b63e0d5a55f50132
   languageName: node
   linkType: hard
 
@@ -5019,12 +5019,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cli@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/cli@npm:15.9.1"
+"@nrwl/cli@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/cli@npm:15.9.2"
   dependencies:
-    nx: 15.9.1
-  checksum: 6195589b76cead9188f98ae615d87bc06d3d8e77293c96c0cd5196c7519febb2182493db5ae451c439a42fae0f2bd538a1ff7946b19fc6683f5199e6ab8b2b8b
+    nx: 15.9.2
+  checksum: 7d2bba130321d466dd24ee95d97b8b3d6a101144bdeecfc0e21ce4f68e701bc465b8e3c5584eee276a31b90f4718efe657b83cabd4edede5986f7e0c1bd134e7
   languageName: node
   linkType: hard
 
@@ -5044,9 +5044,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/nx-cloud@npm:15.3.4":
-  version: 15.3.4
-  resolution: "@nrwl/nx-cloud@npm:15.3.4"
+"@nrwl/nx-cloud@npm:15.3.5":
+  version: 15.3.5
+  resolution: "@nrwl/nx-cloud@npm:15.3.5"
   dependencies:
     axios: ^0.21.2
     chalk: 4.1.0
@@ -5058,81 +5058,81 @@ __metadata:
     yargs-parser: ">=21.0.1"
   bin:
     nx-cloud: bin/nx-cloud.js
-  checksum: 62048e2c45fe407c0190187ac46639ae616cbf8b40a1fe2f37207e8ad24a5691678269dc8b075097b7c870d4baf480ee0658f23c0867f2a4bbfed45af676ca9b
+  checksum: e222805a25c3ef5100e9963f5b4a392961b61a9a540f7dc2fa0404614a26ae734c87ae9342aacdc1da26c38ae0f34a04110e7955190ab51258bb8ddb488ad0a5
   languageName: node
   linkType: hard
 
-"@nrwl/nx-darwin-arm64@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-darwin-arm64@npm:15.9.1"
+"@nrwl/nx-darwin-arm64@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-darwin-arm64@npm:15.9.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nrwl/nx-darwin-x64@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-darwin-x64@npm:15.9.1"
+"@nrwl/nx-darwin-x64@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-darwin-x64@npm:15.9.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@nrwl/nx-linux-arm-gnueabihf@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-linux-arm-gnueabihf@npm:15.9.1"
+"@nrwl/nx-linux-arm-gnueabihf@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-linux-arm-gnueabihf@npm:15.9.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@nrwl/nx-linux-arm64-gnu@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-linux-arm64-gnu@npm:15.9.1"
+"@nrwl/nx-linux-arm64-gnu@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-linux-arm64-gnu@npm:15.9.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nrwl/nx-linux-arm64-musl@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-linux-arm64-musl@npm:15.9.1"
+"@nrwl/nx-linux-arm64-musl@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-linux-arm64-musl@npm:15.9.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nrwl/nx-linux-x64-gnu@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-linux-x64-gnu@npm:15.9.1"
+"@nrwl/nx-linux-x64-gnu@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-linux-x64-gnu@npm:15.9.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nrwl/nx-linux-x64-musl@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-linux-x64-musl@npm:15.9.1"
+"@nrwl/nx-linux-x64-musl@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-linux-x64-musl@npm:15.9.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nrwl/nx-win32-arm64-msvc@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-win32-arm64-msvc@npm:15.9.1"
+"@nrwl/nx-win32-arm64-msvc@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-win32-arm64-msvc@npm:15.9.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nrwl/nx-win32-x64-msvc@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/nx-win32-x64-msvc@npm:15.9.1"
+"@nrwl/nx-win32-x64-msvc@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/nx-win32-x64-msvc@npm:15.9.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:15.9.1":
-  version: 15.9.1
-  resolution: "@nrwl/tao@npm:15.9.1"
+"@nrwl/tao@npm:15.9.2":
+  version: 15.9.2
+  resolution: "@nrwl/tao@npm:15.9.2"
   dependencies:
-    nx: 15.9.1
+    nx: 15.9.2
   bin:
     tao: index.js
-  checksum: 27371f76328a645fb979410e357eee297a3bc6f650dacefd7b15fb9c1c5631fdaa77ef42fdf3a873e9b6861e2d38f5336bdc55c34cc34acf7fcd0fb4e8e99cff
+  checksum: 99f191e8c80451dc82bbc96d4f3513a34f432a6b5e093992d3887d675828aabb6a47148a8a6fba580e7393ea885561b4210b224ef10a1b956eff79a45d133145
   languageName: node
   linkType: hard
 
@@ -7154,7 +7154,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.7.10
+    "@apollo/client": 3.7.11
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
@@ -24069,21 +24069,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:15.9.1, nx@npm:>=15.5.2 < 16":
-  version: 15.9.1
-  resolution: "nx@npm:15.9.1"
+"nx@npm:15.9.2, nx@npm:>=15.5.2 < 16":
+  version: 15.9.2
+  resolution: "nx@npm:15.9.2"
   dependencies:
-    "@nrwl/cli": 15.9.1
-    "@nrwl/nx-darwin-arm64": 15.9.1
-    "@nrwl/nx-darwin-x64": 15.9.1
-    "@nrwl/nx-linux-arm-gnueabihf": 15.9.1
-    "@nrwl/nx-linux-arm64-gnu": 15.9.1
-    "@nrwl/nx-linux-arm64-musl": 15.9.1
-    "@nrwl/nx-linux-x64-gnu": 15.9.1
-    "@nrwl/nx-linux-x64-musl": 15.9.1
-    "@nrwl/nx-win32-arm64-msvc": 15.9.1
-    "@nrwl/nx-win32-x64-msvc": 15.9.1
-    "@nrwl/tao": 15.9.1
+    "@nrwl/cli": 15.9.2
+    "@nrwl/nx-darwin-arm64": 15.9.2
+    "@nrwl/nx-darwin-x64": 15.9.2
+    "@nrwl/nx-linux-arm-gnueabihf": 15.9.2
+    "@nrwl/nx-linux-arm64-gnu": 15.9.2
+    "@nrwl/nx-linux-arm64-musl": 15.9.2
+    "@nrwl/nx-linux-x64-gnu": 15.9.2
+    "@nrwl/nx-linux-x64-musl": 15.9.2
+    "@nrwl/nx-win32-arm64-msvc": 15.9.2
+    "@nrwl/nx-win32-x64-msvc": 15.9.2
+    "@nrwl/tao": 15.9.2
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24146,7 +24146,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 051c0b0c52e9d34922f0ebdab375c34b81b1e47e3b9f08af61a7ac44fac744d7e5421308bfe509d9f75d9dddf8c38136d3973933fa00db5c1547b75ea522c668
+  checksum: a60b9684d624f785b81068b89778c8b2bcefe2951d0b28f207ef15ed827f199bbd6ea770a7925660c5a59bdb592f1b88a46e9ee31860c278999e4345a9707f8a
   languageName: node
   linkType: hard
 
@@ -24392,7 +24392,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.16.1":
+"optimism@npm:^0.16.2":
   version: 0.16.2
   resolution: "optimism@npm:0.16.2"
   dependencies:
@@ -27620,7 +27620,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@faker-js/faker": 7.6.0
     "@npmcli/arborist": 6.2.6
-    "@nrwl/nx-cloud": 15.3.4
+    "@nrwl/nx-cloud": 15.3.5
     "@playwright/test": 1.32.1
     "@replayio/playwright": 0.3.27
     "@testing-library/jest-dom": 5.16.5
@@ -27657,7 +27657,7 @@ __metadata:
     ncp: 2.0.0
     nodemon: 2.0.22
     npm-packlist: 7.0.4
-    nx: 15.9.1
+    nx: 15.9.2
     octokit: 2.0.14
     ora: 5.4.1
     prompts: 2.4.2
