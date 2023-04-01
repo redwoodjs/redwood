@@ -25,6 +25,8 @@ async function main() {
           scriptPath
         )} [packageName] [targetTag] [targetVersion] --iKnowWhatImDoing`,
         '',
+        '     STATUS: Options only work if you pass ALL or NONE',
+        '',
         '     This script uses "npm unpublish" and passes "--dry-run" by defaul because safety.',
         '     Read on if you want to run it for realz...',
         '',
@@ -65,18 +67,26 @@ async function main() {
   }
 
   try {
+    // ONLY works if you pass all or none
     const packageName =
-      argOptions[0] !== '--iKnowWhatImDoing'
+      argOptions.length === 0
+        ? await prompt('Name')
+        : argOptions[0] !== '--iKnowWhatImDoing'
         ? argOptions[0]
-        : undefined || (await prompt('Name'))
+        : await prompt('Name')
     const targetTag =
-      argOptions[1] !== '--iKnowWhatImDoing'
+      argOptions.length === 0
+        ? await prompt('NPM Tag')
+        : argOptions[1] !== '--iKnowWhatImDoing'
         ? argOptions[1]
-        : undefined || (await prompt('NPM Tag'))
+        : await prompt('NPM Tag')
     const targetVersion =
-      argOptions[2] !== '--iKnowWhatImDoing'
+      argOptions.length === 0
+        ? await prompt('Semver "startsWith" string')
+        : argOptions[2] !== '--iKnowWhatImDoing'
         ? argOptions[2]
-        : undefined || (await prompt('Semver "startsWith" string'))
+        : await prompt('Semver "startsWith" string')
+
     const stdout = execSync(`npm view ${packageName} --json`).toString()
 
     const packageData = JSON.parse(stdout)
