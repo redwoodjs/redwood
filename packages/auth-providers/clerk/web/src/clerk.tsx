@@ -67,5 +67,6 @@ function createAuthImplementation() {
     clientHasLoaded: () => {
       return (window as any).Clerk !== undefined
     },
+    loadWhileReauthenticating: true,
   }
 }
