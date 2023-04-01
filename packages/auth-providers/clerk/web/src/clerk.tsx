@@ -11,14 +11,8 @@ import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type Clerk = ClerkClient | undefined | null
 
-type GetTokenFunction = Pick<
-  ReturnType<typeof createAuthImplementation>,
-  'getToken'
->['getToken']
-
 type AuthImplementationOptions = {
   defaultGetTokenOptions?: GetTokenOptions
-  getToken?: (getToken: GetTokenFunction) => GetTokenFunction
 }
 
 export function createAuth(
@@ -37,9 +31,8 @@ export function createAuth(
 
 function createAuthImplementation({
   defaultGetTokenOptions = {},
-  getToken: getTokenWrapper = undefined,
 }: AuthImplementationOptions = {}) {
-  const authImplementation = {
+  return {
     type: 'clerk',
     // Using a getter here to make sure we're always returning a fresh value
     // and not creating a closure around an old (probably `undefined`) value
@@ -87,16 +80,4 @@ function createAuthImplementation({
       return (window as any).Clerk !== undefined
     },
   }
-
-  if (getTokenWrapper) {
-    if (typeof getTokenWrapper !== 'function') {
-      throw new Error(
-        `getToken must be a wrapper function around the default getToken function. For example, getToken: (cb) => (options) => cb({ ...options, myCustomOption: myCustomValue })`
-      )
-    }
-
-    authImplementation.getToken = getTokenWrapper(authImplementation.getToken)
-  }
-
-  return authImplementation
 }
