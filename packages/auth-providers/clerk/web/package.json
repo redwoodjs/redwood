@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.3",
+    "@babel/core": "7.21.4",
     "@clerk/clerk-react": "4.14.1",
     "@clerk/types": "3.33.0",
     "@types/react": "18.0.31",
