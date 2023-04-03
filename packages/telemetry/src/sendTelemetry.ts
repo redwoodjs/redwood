@@ -9,11 +9,8 @@ import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
 import { getConfig } from '@redwoodjs/project-config'
-
-// circular dependency when trying to import @redwoodjs/structure so lets do it
-// the old fashioned way
-const { DefaultHost } = require('@redwoodjs/structure/dist/hosts')
-const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
+import { DefaultHost } from '@redwoodjs/structure'
+import { RWProject } from '@redwoodjs/structure'
 
 interface SensitiveArgPositions {
   exec: {
@@ -203,10 +200,10 @@ const buildPayload = async () => {
   // add in app stats
   payload = {
     ...payload,
-    complexity: `${project.getRouter().routes.length}.${
-      project.services.length
-    }.${project.cells.length}.${project.pages.length}`,
-    sides: project.sides.join(','),
+    complexity: `${project?.getRouter().routes.length}.${
+      project?.services.length
+    }.${project?.cells.length}.${project?.pages.length}`,
+    sides: project?.sides.join(','),
   }
 
   return payload

@@ -1,5 +1,5 @@
 {
-  "name": "@redwoodjs/cli",
+  "name": "@rw-alpha/cli",
   "version": "0.0.0-experimental-streaming.2",
   "description": "The Redwood Command Line",
   "repository": {
