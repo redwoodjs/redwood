@@ -21,7 +21,10 @@ export const getNetlifyAuthHeader = (
   }
 
   // in dev, Netlify simply decodes as there is no access to the actual secret used to sign the JWT
-  const token = jwt.sign(payload, secret || 'secret')
+  if (!secret) {
+    throw new Error('No secret provided for Netlify auth provider')
+  }
+  const token = jwt.sign(payload, secret)
 
   return {
     authProvider: 'netlify',
