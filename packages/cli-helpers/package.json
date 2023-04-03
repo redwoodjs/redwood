@@ -40,9 +40,9 @@
     "@babel/cli": "7.21.0",
     "@types/lodash.memoize": "4.1.7",
     "@types/pascalcase": "1.0.1",
-    "@types/yargs": "17.0.23",
+    "@types/yargs": "17.0.24",
     "jest": "29.5.0",
-    "typescript": "5.0.2"
+    "typescript": "5.0.3"
   },
   "gitHead": "a14ce0918fca2ea277ff47ba0b0c0f95fdb55f6a"
 }

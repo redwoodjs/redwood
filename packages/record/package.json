@@ -28,15 +28,15 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@prisma/client": "4.11.0",
+    "@prisma/client": "4.12.0",
     "@redwoodjs/project-config": "0.0.0-experimental-streaming.2",
     "core-js": "3.29.1"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
     "@babel/core": "7.21.3",
-    "@prisma/internals": "4.11.0",
-    "esbuild": "0.17.13",
+    "@prisma/internals": "4.12.0",
+    "esbuild": "0.17.14",
     "jest": "29.5.0"
   },
   "gitHead": "a14ce0918fca2ea277ff47ba0b0c0f95fdb55f6a"

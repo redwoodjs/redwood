@@ -62,9 +62,16 @@ export default function (
         )[0]
 
         // Remove Page imports in prerender mode (see babel-preset)
-        // This is to make sure that all the imported "Page modules" are normal imports
-        // and not asynchronous ones.
-        // But note that jest in a user's project does not enter this block, but our tests do
+        // The removed imports will be replaced further down in this file
+        // with declarations like these:
+        // const HomePage = {
+        //   name: "HomePage",
+        //   loader: () => import("./pages/HomePage/HomePage")
+        //   prerenderLoader: () => require("./pages/HomePage/HomePage")
+        // };
+        // This is to make sure that all the imported "Page modules" are normal
+        // imports and not asynchronous ones.
+        // Note that jest in a user's project does not enter this block, but our tests do
         if (useStaticImports) {
           // Match import paths, const name could be different
 
@@ -116,7 +123,23 @@ export default function (
           )
           // Prepend all imports to the top of the file
           for (const { importName, relativeImport } of pages) {
-            // + const <importName> = { name: <importName>, loader: () => import(<relativeImportPath>) }
+            // + const <importName> = {
+            //     name: <importName>,
+            //     loader: () => import(/* webpackChunkName: "<importName>" */ <relativeImportPath>)
+            //     // prerender
+            //     prerenderLoader: () => require(<relativeImportPath>)
+            //     // crs
+            //     prerenderLoader: () => __webpack_require__(require.resolveWeak(<relativeImportPath>))
+            //   }
+
+            const importArgument = t.stringLiteral(relativeImport)
+
+            importArgument.leadingComments = [
+              {
+                type: 'CommentBlock',
+                value: ` webpackChunkName: "${importName}" `,
+              },
+            ]
 
             nodes.push(
               t.variableDeclaration('const', [
@@ -127,18 +150,39 @@ export default function (
                       t.identifier('name'),
                       t.stringLiteral(importName)
                     ),
+                    // loader for dynamic imports (browser)
                     t.objectProperty(
                       t.identifier('loader'),
                       t.arrowFunctionExpression(
                         [],
-                        t.callExpression(
-                          // If useStaticImports, do a synchronous import with require (ssr/prerender)
-                          // otherwise do a dynamic import (browser)
-                          useStaticImports
-                            ? t.identifier('require')
-                            : t.identifier('import'),
-                          [t.stringLiteral(relativeImport)]
-                        )
+                        t.callExpression(t.identifier('import'), [
+                          importArgument,
+                        ])
+                      )
+                    ),
+                    // prerenderLoader for ssr/prerender and first load of
+                    // prerendered pages in browser (csr)
+                    t.objectProperty(
+                      t.identifier('prerenderLoader'),
+                      t.arrowFunctionExpression(
+                        [],
+                        useStaticImports
+                          ? t.callExpression(t.identifier('require'), [
+                              t.stringLiteral(relativeImport),
+                            ])
+                          : t.callExpression(
+                              t.identifier(
+                                // Use __webpack_require__ otherwise all pages will
+                                // be bundled
+                                '__webpack_require__'
+                              ),
+                              [
+                                t.callExpression(
+                                  t.identifier('require.resolveWeak'),
+                                  [t.stringLiteral(relativeImport)]
+                                ),
+                              ]
+                            )
                       )
                     ),
                     t.objectProperty(

@@ -31,6 +31,7 @@
     "@iarna/toml": "2.2.5",
     "@vscode/ripgrep": "1.15.0",
     "@whatwg-node/fetch": "0.8.4",
+    "cheerio": "1.0.0-rc.12",
     "core-js": "3.29.1",
     "deepmerge": "4.3.1",
     "execa": "5.1.1",
@@ -41,7 +42,7 @@
     "jscodeshift": "0.14.0",
     "prettier": "2.8.7",
     "tasuku": "2.0.1",
-    "typescript": "5.0.2",
+    "typescript": "5.0.3",
     "yargs": "17.7.1"
   },
   "devDependencies": {
@@ -51,7 +52,7 @@
     "@types/jest": "29.5.0",
     "@types/jscodeshift": "0.11.6",
     "@types/prettier": "2.7.2",
-    "@types/yargs": "17.0.23",
+    "@types/yargs": "17.0.24",
     "fs-extra": "11.1.1",
     "tempy": "1.0.1"
   },
