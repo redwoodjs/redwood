@@ -8,7 +8,7 @@
     "directory": "packages/studio"
   },
   "license": "MIT",
-  "main": "dist-backend/index",
+  "main": "dist-backend/index.js",
   "files": [
     "dist-backend",
     "dist-frontend"
