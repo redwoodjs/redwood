@@ -42,7 +42,7 @@
     "jscodeshift": "0.14.0",
     "prettier": "2.8.7",
     "tasuku": "2.0.1",
-    "typescript": "5.0.2",
+    "typescript": "5.0.3",
     "yargs": "17.7.1"
   },
   "devDependencies": {
