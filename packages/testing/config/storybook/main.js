@@ -17,8 +17,12 @@ const rwjsPaths = getPaths()
 const staticAssetsFolder = path.join(getPaths().web.base, 'public')
 
 const baseConfig = {
-  core: {
-    builder: 'webpack5',
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {
+      builder: { lazyCompilation: true },
+    },
+    // options: { fastRefresh: true },
   },
   stories: [
     `${importStatementPath(

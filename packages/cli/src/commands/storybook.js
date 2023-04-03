@@ -46,6 +46,11 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
+    .option('upgrade', {
+      describe: 'automigration',
+      type: 'boolean',
+      default: false,
+    })
     .option('smoke-test', {
       describe:
         "CI mode plus Smoke-test (skip prompts, don't open browser, exit after successful start)",
@@ -78,6 +83,7 @@ export const handler = ({
   port,
   build,
   ci,
+  upgrade,
   buildDirectory,
   managerCache,
   smokeTest,
@@ -100,7 +106,7 @@ export const handler = ({
   try {
     if (build) {
       execa(
-        `yarn build-storybook`,
+        `yarn storybook build`,
         [
           `--config-dir "${storybookConfig}"`,
           `--output-dir "${buildDirectory}"`,
@@ -114,7 +120,7 @@ export const handler = ({
       )
     } else if (smokeTest) {
       execa(
-        `yarn start-storybook`,
+        `yarn storybook dev`,
         [
           `--config-dir "${storybookConfig}"`,
           `--port ${port}`,
@@ -128,9 +134,19 @@ export const handler = ({
           cwd,
         }
       )
+    } else if (upgrade) {
+      execa(
+        `yarn storybook upgrade`,
+        [`--config-dir "${storybookConfig}"`].filter(Boolean),
+        {
+          stdio: 'inherit',
+          shell: true,
+          cwd,
+        }
+      )
     } else {
       execa(
-        `yarn start-storybook`,
+        `yarn storybook dev`,
         [
           `--config-dir "${storybookConfig}"`,
           `--port ${port}`,
