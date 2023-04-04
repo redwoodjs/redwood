@@ -41,3 +41,19 @@ it("overwrites directUrl if it's set", () => {
 
   delete process.env.RWJS_CWD
 })
+
+it("overwrites directUrl if it's set and formatted", () => {
+  const prismaSchema = `datasource db {
+    provider          = "sqlite"
+    url               = env("DATABASE_URL")
+    directUrl         = env("DIRECT_URL")
+    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  }`
+  process.env.RWJS_CWD = DIRECT_URL_FIXTURE_PATH
+
+  const defaultDb = getDefaultDb(DIRECT_URL_FIXTURE_PATH)
+
+  const directUrlEnvVar = checkAndReplaceDirectUrl(prismaSchema, defaultDb)
+
+  expect(process.env[directUrlEnvVar as string]).toBe(defaultDb)
+})
