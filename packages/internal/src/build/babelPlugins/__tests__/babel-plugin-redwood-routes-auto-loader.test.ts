@@ -33,10 +33,11 @@ describe('page auto loader correctly imports pages', () => {
     delete process.env.RWJS_CWD
   })
 
-  test('Pages are automatically imported', () => {
+  test('Pages get both a loader and a prerenderLoader', () => {
     expect(result?.code).toContain(`const HomePage = {
   name: "HomePage",
-  loader: () => import("`)
+  loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
+  prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage"))`)
   })
 
   test('Already imported pages are left alone.', () => {
