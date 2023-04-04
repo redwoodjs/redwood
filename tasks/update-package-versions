@@ -36,13 +36,15 @@ async function run() {
   })
   console.log()
 
+  // @UNDO @UNDO @UNDO
+  // Removing this because I don't have permissions to publish CRWA, and needed to remove it from the monorepo
   // Updates create-redwood-app template
-  console.log('Updating CRWA template...')
-  const templatePath = path.join(cwd, 'packages/create-redwood-app/template')
-  updateRWJSPkgsVersion(templatePath, version)
-  updateRWJSPkgsVersion(path.join(templatePath, 'api'), version)
-  updateRWJSPkgsVersion(path.join(templatePath, 'web'), version)
-  console.log()
+  // console.log('Updating CRWA template...')
+  // const templatePath = path.join(cwd, 'packages/create-redwood-app/template')
+  // updateRWJSPkgsVersion(templatePath, version)
+  // updateRWJSPkgsVersion(path.join(templatePath, 'api'), version)
+  // updateRWJSPkgsVersion(path.join(templatePath, 'web'), version)
+  // console.log()
 
   // Updates __fixtures__/test-project packages
   console.log('Updating test-project fixture...')

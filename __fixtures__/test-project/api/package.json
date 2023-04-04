@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@redwoodjs/api": "0.0.0-experimental-streaming.1",
-    "@redwoodjs/auth-dbauth-api": "0.0.0-experimental-streaming.1",
-    "@redwoodjs/graphql-server": "0.0.0-experimental-streaming.1"
+    "@redwoodjs/api": "0.0.0-experimental-streaming.3",
+    "@redwoodjs/auth-dbauth-api": "0.0.0-experimental-streaming.3",
+    "@redwoodjs/graphql-server": "0.0.0-experimental-streaming.3"
   }
 }
