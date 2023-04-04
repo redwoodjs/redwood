@@ -4,11 +4,11 @@ const path = require('path')
 const { mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
-const { getConfig } = require('@redwoodjs/internal/dist/config')
 const {
+  getConfig,
   getPaths,
   importStatementPath,
-} = require('@redwoodjs/internal/dist/paths')
+} = require('@redwoodjs/project-config')
 
 const config = getConfig()
 

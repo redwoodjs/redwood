@@ -1,4 +1,4 @@
-import type { ComponentProps, JSXElementConstructor } from 'react'
+import { ComponentProps, JSXElementConstructor, Suspense } from 'react'
 
 import { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
@@ -400,5 +400,13 @@ export function createCell<
 
   NamedCell.displayName = displayName
 
-  return NamedCell
+  return (props: CellProps) => {
+    return (
+      // Cells don't suspend, so the fallback won't render. We only use
+      // <Suspense> for cell prerender rehydration support
+      <Suspense fallback={null}>
+        <NamedCell {...props} />
+      </Suspense>
+    )
+  }
 }
