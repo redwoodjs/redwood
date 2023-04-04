@@ -54,6 +54,7 @@ export const createGraphQLHandler = ({
   directives = [],
   armorConfig,
   allowedOperations,
+  allowIntrospectionInProduction = false,
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
@@ -93,7 +94,7 @@ export const createGraphQLHandler = ({
 
   const plugins: Array<Plugin<any>> = []
 
-  if (!isDevEnv) {
+  if (!isDevEnv && !allowIntrospectionInProduction) {
     plugins.push(useDisableIntrospection())
   }
 
