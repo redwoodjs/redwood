@@ -190,7 +190,7 @@ async function yarnInstall({ verbose }) {
     )
   } catch (e) {
     throw new Error(
-      'Could not finish installation. Please run `yarn install --force`, before continuing'
+      'Could not finish installation. Please run `yarn install` and then `yarn dedupe`, before continuing'
     )
   }
 }
