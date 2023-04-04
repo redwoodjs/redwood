@@ -51,7 +51,7 @@
     "@npmcli/arborist": "6.2.6",
     "@nrwl/nx-cloud": "15.3.5",
     "@playwright/test": "1.32.1",
-    "@replayio/playwright": "0.3.27",
+    "@replayio/playwright": "0.3.28",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@testing-library/react-hooks": "8.0.1",
