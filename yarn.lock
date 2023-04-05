@@ -7103,7 +7103,7 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@fastify/http-proxy": 9.0.0
-    "@fastify/static": 6.9.0
+    "@fastify/static": 6.10.0
     "@fastify/url-data": 5.3.1
     "@redwoodjs/internal": 4.0.0
     "@types/aws-lambda": 8.10.114
@@ -7118,7 +7118,7 @@ __metadata:
     aws-lambda: 1.0.7
     chalk: 4.1.2
     chokidar: 3.5.3
-    core-js: 3.29.1
+    core-js: 3.30.0
     crypto-js: 4.1.1
     dotenv: 16.0.3
     fast-json-parse: 1.0.3
