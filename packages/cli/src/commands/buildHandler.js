@@ -73,8 +73,8 @@ export const handler = async ({
     },
     side.includes('api') && {
       title: 'Building API...',
-      task: () => {
-        const { errors, warnings } = buildApi()
+      task: async () => {
+        const { errors, warnings } = await buildApi()
 
         if (errors.length) {
           console.error(errors)
@@ -134,7 +134,10 @@ export const handler = async ({
           'file://' + rwjsPaths.web.routes
         )}.`
       )
+
+      return
     }
+
     // Running a separate process here, otherwise it wouldn't pick up the
     // generated Prisma Client due to require module caching
     await execa('yarn rw prerender', {
