@@ -17,8 +17,10 @@ jest.mock('@redwoodjs/project-config', () => {
   return {
     getConfig: () => {
       return {
-        opentelemetry: {
-          enabled: false,
+        experimental: {
+          opentelemetry: {
+            enabled: false,
+          },
         },
       }
     },
