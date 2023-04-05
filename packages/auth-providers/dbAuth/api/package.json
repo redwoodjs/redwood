@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
     "base64url": "3.0.1",
-    "core-js": "3.29.1",
+    "core-js": "3.30.0",
     "crypto-js": "4.1.1",
     "md5": "2.3.0",
     "uuid": "9.0.0"
