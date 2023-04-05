@@ -11,12 +11,38 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
     name: 'babel-plugin-redwood-otel-wrapping',
     visitor: {
       Program(path) {
-        path.node.body.unshift(
-          t.importDeclaration(
-            [t.importNamespaceSpecifier(t.identifier('opentelemetry'))],
-            t.stringLiteral('@opentelemetry/api')
-          )
+        // Only import if it isn't already imported in the way we need it
+        // TODO: Check for ImportNamespaceSpecifier like "import * as opentelemetry from '@opentelemetry/api'"
+        // TODO: Consider just checking for the import name "opentelemetry" and don't consider the source
+        const importDeclarations = path.node.body.filter(
+          (node) => node.type === 'ImportDeclaration'
+        ) as types.ImportDeclaration[]
+        const requiredOpenTelemetryImportExists = importDeclarations.some(
+          (importDeclaration) => {
+            if (importDeclaration.source.value !== '@opentelemetry/api') {
+              return false
+            }
+            if (
+              importDeclaration.specifiers[0].type !== 'ImportDefaultSpecifier'
+            ) {
+              return false
+            }
+            if (
+              importDeclaration.specifiers[0].local.name === 'opentelemetry'
+            ) {
+              return true
+            }
+            return false
+          }
         )
+        if (!requiredOpenTelemetryImportExists) {
+          path.node.body.unshift(
+            t.importDeclaration(
+              [t.importDefaultSpecifier(t.identifier('opentelemetry'))],
+              t.stringLiteral('@opentelemetry/api')
+            )
+          )
+        }
       },
       ExportNamedDeclaration(path, state) {
         if (
