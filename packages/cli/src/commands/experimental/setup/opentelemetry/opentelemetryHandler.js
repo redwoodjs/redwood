@@ -9,9 +9,9 @@ import { addApiPackages } from '@redwoodjs/cli-helpers'
 import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFile } from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
+import { getPaths, transformTSToJS, writeFile } from '../../../../lib'
+import c from '../../../../lib/colors'
+import { isTypeScriptProject } from '../../../../lib/project'
 
 export const handler = async ({ force, verbose }) => {
   const ts = isTypeScriptProject()
@@ -156,11 +156,29 @@ export const handler = async ({ force, verbose }) => {
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
+          console.log(
+            `${chalk.hex('#ff845e')(
+              `------------------------------------------------------------------\n 🧪 ${chalk.green(
+                'Experimental Feature'
+              )} 🧪\n------------------------------------------------------------------`
+            )}`
+          )
+          console.log(
+            `Studio is an experimental feature, please find documentation and links to provide feedback at:\n -> https://community.redwoodjs.com/t/redwood-studio-experimental/4771`
+          )
+          console.log(
+            `${chalk.hex('#ff845e')(
+              '------------------------------------------------------------------'
+            )}\n`
+          )
+
           task.title = `One more thing...\n
           ${c.green('OpenTelemetry Support is still experimental!')}
-          ${c.green('Please let us know if you find bugs or quirks.')}
+          ${c.green(
+            'Please let us know if you find bugs or quirks or if you have any feedback!'
+          )}
           ${chalk.hex('#e8e8e8')(
-            'https://github.com/redwoodjs/redwood/issues/new'
+            'https://community.redwoodjs.com/t/opentelemetry-support-experimental/4772'
           )}
         `
         },

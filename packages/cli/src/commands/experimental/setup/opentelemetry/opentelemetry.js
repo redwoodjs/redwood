@@ -1,7 +1,6 @@
 export const command = 'opentelemetry'
 
-export const description =
-  '[Experimental] Create an OpenTelemetry setup script within the api side'
+export const description = 'Setup OpenTelemetry within the api side'
 
 export const builder = (yargs) => {
   yargs.option('force', {

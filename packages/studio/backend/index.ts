@@ -1,3 +1,4 @@
+import chalk from 'chalk'
 import Fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 import open from 'open'
@@ -63,6 +64,21 @@ export const start = async () => {
 
   fastify.listen({ port: PORT, host: HOST })
   fastify.ready(() => {
+    console.log(
+      `${chalk.hex('#ff845e')(
+        `------------------------------------------------------------------\n 🧪 ${chalk.green(
+          'Experimental Feature'
+        )} 🧪\n------------------------------------------------------------------`
+      )}`
+    )
+    console.log(
+      `Studio is an experimental feature, please find documentation and links to provide feedback at:\n -> https://community.redwoodjs.com/t/redwood-studio-experimental/4771`
+    )
+    console.log(
+      `${chalk.hex('#ff845e')(
+        '------------------------------------------------------------------'
+      )}\n`
+    )
     console.log(`Dashboard API listening on ${HOST}:${PORT}`)
     open(`http://${HOST}:${PORT}`)
   })

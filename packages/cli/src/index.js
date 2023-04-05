@@ -18,6 +18,7 @@ import * as deployCommand from './commands/deploy'
 import * as destroyCommand from './commands/destroy'
 import * as devCommand from './commands/dev'
 import * as execCommand from './commands/exec'
+import * as experimentalCommand from './commands/experimental'
 import * as generateCommand from './commands/generate'
 import * as infoCommand from './commands/info'
 import * as lintCommand from './commands/lint'
@@ -27,7 +28,6 @@ import * as recordCommand from './commands/record'
 import * as serveCommand from './commands/serve'
 import * as setupCommand from './commands/setup'
 import * as storybookCommand from './commands/storybook'
-import * as studioCommand from './commands/studio'
 import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
@@ -132,6 +132,7 @@ yargs(hideBin(process.argv))
   .command(destroyCommand)
   .command(devCommand)
   .command(execCommand)
+  .command(experimentalCommand)
   .command(generateCommand)
   .command(infoCommand)
   .command(lintCommand)
@@ -141,7 +142,6 @@ yargs(hideBin(process.argv))
   .command(serveCommand)
   .command(setupCommand)
   .command(storybookCommand)
-  .command(studioCommand)
   .command(testCommand)
   .command(tstojsCommand)
   .command(typeCheckCommand)
