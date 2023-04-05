@@ -7078,7 +7078,7 @@ __metadata:
     "@types/findup-sync": 4.0.2
     core-js: 3.29.1
     deepmerge: 4.3.1
-    dependency-cruiser: 12.11.0
+    dependency-cruiser: 12.11.1
     fast-glob: 3.2.12
     findup-sync: 5.0.0
     jest: 29.4.2
@@ -15163,9 +15163,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dependency-cruiser@npm:12.11.0":
-  version: 12.11.0
-  resolution: "dependency-cruiser@npm:12.11.0"
+"dependency-cruiser@npm:12.11.1":
+  version: 12.11.1
+  resolution: "dependency-cruiser@npm:12.11.1"
   dependencies:
     acorn: 8.8.2
     acorn-jsx: 5.3.2
@@ -15182,7 +15182,7 @@ __metadata:
     handlebars: 4.7.7
     ignore: 5.2.4
     indent-string: ^4.0.0
-    interpret: ^3.1.0
+    interpret: ^3.1.1
     is-installed-globally: 0.4.0
     json5: 2.2.3
     lodash: 4.17.21
@@ -15190,7 +15190,7 @@ __metadata:
     rechoir: ^0.8.0
     safe-regex: 2.1.1
     semver: ^7.3.7
-    semver-try-require: 6.1.0
+    semver-try-require: 6.2.0
     teamcity-service-messages: 0.1.14
     tsconfig-paths-webpack-plugin: 4.0.1
     watskeburt: 0.10.1
@@ -15202,7 +15202,7 @@ __metadata:
     depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.js
     dependency-cruise: bin/dependency-cruise.js
     dependency-cruiser: bin/dependency-cruise.js
-  checksum: 6ea68e6abeadba2194acb4f488e888d2e23939218528f5a4f52b9acaa82f73906a56d5b9aa9a9a686a449748de8a582912ac9baf78e2d375665de0c1a2becf56
+  checksum: fbad8841d2e099bd0200b1c713a6424300b6d5cfcac9652e497248e08b05e7b34ce84abf3e90838c7442bc21ecb41f22babc621cd16e74f5113aeac8109de493
   languageName: node
   linkType: hard
 
@@ -19582,7 +19582,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"interpret@npm:^3.1.0, interpret@npm:^3.1.1":
+"interpret@npm:^3.1.1":
   version: 3.1.1
   resolution: "interpret@npm:3.1.1"
   checksum: 6f3c4d0aa6ec1b43a8862375588a249e3c917739895cbe67fe12f0a76260ea632af51e8e2431b50fbcd0145356dc28ca147be08dbe6a523739fd55c0f91dc2a5
@@ -28040,12 +28040,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver-try-require@npm:6.1.0":
-  version: 6.1.0
-  resolution: "semver-try-require@npm:6.1.0"
+"semver-try-require@npm:6.2.0":
+  version: 6.2.0
+  resolution: "semver-try-require@npm:6.2.0"
   dependencies:
     semver: ^7.3.8
-  checksum: ac49e2596f92c7beb4b016b328dcca3c0824cdc06b7f520a887062bc03e616753c7a99e138f76ca05435b85a2ef9fb8f9b6a17bc10be145a256f2caec77aba0d
+  checksum: 3134a8d834866e86c1b17afdb5fe46679de9a90a9706967dfad821ca766e43e4c30ebc34d0afe9680f9c3c1ff1114478ecafa0d61f3d7bf175142d3470c146e8
   languageName: node
   linkType: hard
 
