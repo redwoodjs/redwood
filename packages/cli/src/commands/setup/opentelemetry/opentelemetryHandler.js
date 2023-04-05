@@ -58,12 +58,12 @@ export const handler = async ({ force, verbose }) => {
       task: (_ctx, task) => {
         const redwoodTomlPath = getConfigPath()
         const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-        if (!configContent.includes('[opentelemetry]')) {
+        if (!configContent.includes('[experimental.opentelemetry]')) {
           // Use string replace to preserve comments and formatting
           writeFile(
             redwoodTomlPath,
             configContent.concat(
-              `\n[opentelemetry]\n\tenabled = true\n\tapiSdk = "${opentelemetryScriptPath}"`
+              `\n[experimental.opentelemetry]\n\tenabled = true\n\tapiSdk = "${opentelemetryScriptPath}"`
             ),
             {
               overwriteExisting: true, // redwood.toml always exists
@@ -71,7 +71,7 @@ export const handler = async ({ force, verbose }) => {
           )
         } else {
           task.skip(
-            `The [opentelemetry] config block already exists in your 'redwood.toml' file.`
+            `The [experimental.opentelemetry] config block already exists in your 'redwood.toml' file.`
           )
         }
       },

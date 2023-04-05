@@ -10,7 +10,7 @@ let db: Database<sqlite3.Database, sqlite3.Statement>
 
 export const getDatabase = async () => {
   // Switch between in-memory and file-based database based on toml config
-  const filename = getConfig().studio.inMemory
+  const filename = getConfig().experimental.studio.inMemory
     ? ':memory:'
     : path.join(getPaths().generated.base, 'dashboard.db')
 

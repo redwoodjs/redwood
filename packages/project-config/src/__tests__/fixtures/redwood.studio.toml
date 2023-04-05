@@ -1,6 +1,6 @@
 [web]
   port = 8888
-[studio]
+[experimental.studio]
   inMemory = false
-  [studio.graphiql]
+  [experimental.studio.graphiql]
     endpoint = "graphql-endpoint"

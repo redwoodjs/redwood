@@ -93,11 +93,13 @@ export interface Config {
   notifications: {
     versionUpdates: string[]
   }
-  opentelemetry: {
-    enabled: boolean
-    apiSdk?: string
+  experimental: {
+    opentelemetry: {
+      enabled: boolean
+      apiSdk?: string
+    }
+    studio: StudioConfig
   }
-  studio: StudioConfig
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -137,20 +139,22 @@ const DEFAULT_CONFIG: Config = {
   notifications: {
     versionUpdates: [],
   },
-  opentelemetry: {
-    enabled: false,
-    apiSdk: undefined,
-  },
-  studio: {
-    inMemory: false,
-    graphiql: {
-      endpoint: 'graphql',
-      authImpersonation: {
-        authProvider: undefined,
-        userId: undefined,
-        email: undefined,
-        roles: undefined,
-        jwtSecret: 'secret',
+  experimental: {
+    opentelemetry: {
+      enabled: false,
+      apiSdk: undefined,
+    },
+    studio: {
+      inMemory: false,
+      graphiql: {
+        endpoint: 'graphql',
+        authImpersonation: {
+          authProvider: undefined,
+          userId: undefined,
+          email: undefined,
+          roles: undefined,
+          jwtSecret: 'secret',
+        },
       },
     },
   },

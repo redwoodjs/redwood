@@ -26,5 +26,5 @@ export const getWebConfig = (): WebConfig => {
 }
 
 export const getStudioConfig = (): StudioConfig => {
-  return getConfig().studio
+  return getConfig().experimental.studio
 }

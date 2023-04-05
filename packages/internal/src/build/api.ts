@@ -37,7 +37,7 @@ export const prebuildApiFiles = (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
   const plugins = getApiSideBabelPlugins({
     forJest: false,
-    openTelemetry: getConfig().opentelemetry.enabled,
+    openTelemetry: getConfig().experimental.opentelemetry.enabled,
   })
 
   return srcFiles.map((srcPath) => {

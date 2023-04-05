@@ -1,10 +1,10 @@
 [web]
   port = 8888
-[studio]
+[experimental.studio]
   inMemory = false
-  [studio.graphiql]
+  [experimental.studio.graphiql]
     endpoint = "graphql"
-    [studio.graphiql.authImpersonation]
+    [experimental.studio.graphiql.authImpersonation]
       authProvider = "supabase"
       email = "supauser@example.com"
       jwtSecret = "supa-secret"
