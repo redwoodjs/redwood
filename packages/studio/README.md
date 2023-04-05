@@ -1,4 +1,4 @@
-# Redwood Studio
+# Redwood Studio [Experimental]
 
 ## About
 This package intends to contain the redwood development studio. The studio contains a dashboard users can use during development to gain insights into their project.
@@ -7,7 +7,7 @@ This package intends to contain the redwood development studio. The studio conta
 
 To run the redwood studio simply execute the following redwood cli command:
 ```bash
-yarn rw studio
+yarn rw experimental studio
 ```
 
 ## Studio Config
@@ -15,19 +15,19 @@ yarn rw studio
 You may provide the following configuration options in your `redwood.toml` file to control the behaviour of the studio.
 
 ```toml
-[studio]
+[experimental.studio]
   # Determines whether the studio should run with an in memory database or persist the data to a file in your project within `./redwood`
   inMemory = false
 
-[studio.graphiql]
-  endpoint = ?
+[experimental.studio.graphiql]
+  endpoint = 'graphql'
 
-[studio.graphiql.authImpersonation]
-  authProvider = ?
-  jwtSecret = ?
-  userId = ?
-  email = ?
-  roles = ?
+[experimental.studio.graphiql.authImpersonation]
+  # authProvider = undefined (default value)
+  jwtSecret = 'secret'
+  # userId = undefined (default value)
+  # email = undefined (default value)
+  # roles = undefined (default value)
 ```
 
 ## OpenTelemetry Ingestion
@@ -54,11 +54,11 @@ TOML example:
 ```toml
 [web]
   port = 8888
-[studio]
+[experimental.studio]
   inMemory = false
-[studio.graphiql]
+[experimental.studio.graphiql]
   endpoint = "graphql"
-[studio.graphiql.authImpersonation]
+[experimental.studio.graphiql.authImpersonation]
   authProvider = "dbAuth"
   email = "user@example.com"
   userId = "1"
@@ -73,11 +73,11 @@ TOML example:
 ```toml
 [web]
   port = 8888
-[studio]
+[experimental.studio]
   inMemory = false
-[studio.graphiql]
+[experimental.studio.graphiql]
   endpoint = "graphql"
-[studio.graphiql.authImpersonation]
+[experimental.studio.graphiql.authImpersonation]
   authProvider = "netlify"
   email = "user@example.com"
   userId = "1"
@@ -93,11 +93,11 @@ TOML example:
 ```toml
 [web]
   port = 8888
-[studio]
+[experimental.studio]
   inMemory = false
-[studio.graphiql]
+[experimental.studio.graphiql]
   endpoint = "graphql"
-[studio.graphiql.authImpersonation]
+[experimental.studio.graphiql.authImpersonation]
   authProvider = "supabase"
   email = "user@example.com"
   userId = "1"
