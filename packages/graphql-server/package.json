@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "0.0.0-experimental-streaming.2",
+  "version": "0.0.0-experimental-streaming.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -31,7 +31,7 @@
     "@graphql-tools/merge": "8.4.0",
     "@graphql-tools/schema": "9.0.17",
     "@graphql-tools/utils": "9.2.1",
-    "@redwoodjs/api": "0.0.0-experimental-streaming.2",
+    "@redwoodjs/api": "0.0.0-experimental-streaming.4",
     "core-js": "3.29.1",
     "graphql": "16.6.0",
     "graphql-scalars": "1.21.3",
@@ -56,5 +56,5 @@
     "jsonwebtoken": "9.0.0",
     "typescript": "5.0.3"
   },
-  "gitHead": "a14ce0918fca2ea277ff47ba0b0c0f95fdb55f6a"
+  "gitHead": "867c1182a55d1506866ccd42db445bb89c46fd67"
 }

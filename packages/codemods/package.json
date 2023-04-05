@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "0.0.0-experimental-streaming.2",
+  "version": "0.0.0-experimental-streaming.4",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
@@ -56,5 +56,5 @@
     "fs-extra": "11.1.1",
     "tempy": "1.0.1"
   },
-  "gitHead": "a14ce0918fca2ea277ff47ba0b0c0f95fdb55f6a"
+  "gitHead": "867c1182a55d1506866ccd42db445bb89c46fd67"
 }

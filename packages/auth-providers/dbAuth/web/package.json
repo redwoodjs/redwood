@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-dbauth-web",
-  "version": "0.0.0-experimental-streaming.2",
+  "version": "0.0.0-experimental-streaming.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/auth": "0.0.0-experimental-streaming.2",
+    "@redwoodjs/auth": "0.0.0-experimental-streaming.4",
     "@simplewebauthn/browser": "7.2.0",
     "core-js": "3.29.1"
   },
@@ -37,5 +37,5 @@
     "react": "18.2.0",
     "typescript": "5.0.3"
   },
-  "gitHead": "a14ce0918fca2ea277ff47ba0b0c0f95fdb55f6a"
+  "gitHead": "867c1182a55d1506866ccd42db445bb89c46fd67"
 }

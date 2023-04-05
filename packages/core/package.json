@@ -1,6 +1,6 @@
 {
-  "name": "@rw-alpha/core",
-  "version": "0.0.0-experimental-streaming.2",
+  "name": "@redwoodjs/core",
+  "version": "0.0.0-experimental-streaming.4",
   "description": "Foundational packages and config required to build RedwoodJS.",
   "repository": {
     "type": "git",
@@ -50,11 +50,11 @@
     "@babel/preset-typescript": "7.21.0",
     "@babel/runtime-corejs3": "7.21.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
-    "@redwoodjs/eslint-config": "0.0.0-experimental-streaming.2",
-    "@redwoodjs/internal": "0.0.0-experimental-streaming.2",
-    "@redwoodjs/project-config": "0.0.0-experimental-streaming.2",
-    "@redwoodjs/testing": "0.0.0-experimental-streaming.2",
-    "@rw-alpha/cli": "0.0.0-experimental-streaming.2",
+    "@redwoodjs/cli": "0.0.0-experimental-streaming.4",
+    "@redwoodjs/eslint-config": "0.0.0-experimental-streaming.4",
+    "@redwoodjs/internal": "0.0.0-experimental-streaming.4",
+    "@redwoodjs/project-config": "0.0.0-experimental-streaming.4",
+    "@redwoodjs/testing": "0.0.0-experimental-streaming.4",
     "babel-loader": "9.1.2",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
@@ -92,5 +92,5 @@
   "devDependencies": {
     "jest": "29.5.0"
   },
-  "gitHead": "a14ce0918fca2ea277ff47ba0b0c0f95fdb55f6a"
+  "gitHead": "867c1182a55d1506866ccd42db445bb89c46fd67"
 }

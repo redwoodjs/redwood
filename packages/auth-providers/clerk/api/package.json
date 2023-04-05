@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-clerk-api",
-  "version": "0.0.0-experimental-streaming.2",
+  "version": "0.0.0-experimental-streaming.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -29,10 +29,10 @@
   "devDependencies": {
     "@babel/cli": "7.21.0",
     "@babel/core": "7.21.3",
-    "@redwoodjs/api": "0.0.0-experimental-streaming.2",
+    "@redwoodjs/api": "0.0.0-experimental-streaming.4",
     "@types/aws-lambda": "8.10.114",
     "jest": "29.5.0",
     "typescript": "5.0.3"
   },
-  "gitHead": "a14ce0918fca2ea277ff47ba0b0c0f95fdb55f6a"
+  "gitHead": "867c1182a55d1506866ccd42db445bb89c46fd67"
 }
