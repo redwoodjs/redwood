@@ -77,8 +77,9 @@ const rebuildApiServer = () => {
     }
 
     // OpenTelemetry SDK Setup
-    if (getConfig().opentelemetry.enabled) {
-      const opentelemetrySDKScriptPath = getConfig().opentelemetry.apiSdk
+    if (getConfig().experimental.opentelemetry.enabled) {
+      const opentelemetrySDKScriptPath =
+        getConfig().experimental.opentelemetry.apiSdk
       if (opentelemetrySDKScriptPath) {
         console.log(
           `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPath}`

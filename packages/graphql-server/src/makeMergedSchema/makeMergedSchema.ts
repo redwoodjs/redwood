@@ -53,7 +53,6 @@ const wrapWithOpenTelemetry = async (
         `${args.operationName || 'Anonymous Operation'}`
       )
       try {
-        // TODO: Conditionally await this!
         const result: any = await func(args, {
           root,
           context,
@@ -105,7 +104,7 @@ const mapFieldsToService = ({
           context: unknown,
           info: unknown
         ) => {
-          if (getConfig().opentelemetry.enabled) {
+          if (getConfig().experimental.opentelemetry.enabled) {
             return wrapWithOpenTelemetry(
               services[name],
               args,
