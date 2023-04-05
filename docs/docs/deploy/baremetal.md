@@ -177,12 +177,7 @@ The easiest connection method is generally to include your own public key in the
 
 #### Using Environment Variables in `deploy.toml`
 
-Similarly to `redwood.toml`, `deploy.toml` supports interpolation of environment variables.  This functionality is not enabled by default so you can enable it in one of two ways:
-
-1. Run `yarn deploy` with the argument `--interpolate-env-vars`.
-2. Add `DEPLOY_INTERPOLATE_ENV_VARIABLES=true` to your `.env` file.
-
-For more details on how to use the environment variable interpolation see [Using Environment Variables in redwood.toml](app-configuration-redwood-toml#using-environment-variables-in-redwoodtoml)
+Similarly to `redwood.toml`, `deploy.toml` supports interpolation of environment variables.  For more details on how to use the environment variable interpolation see [Using Environment Variables in redwood.toml](app-configuration-redwood-toml#using-environment-variables-in-redwoodtoml)
 
 #### Multiple Servers
 

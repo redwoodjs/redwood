@@ -113,13 +113,6 @@ export const builder = (yargs) => {
     help: 'Rollback [count] number of releases',
   })
 
-  yargs.option('interpolateEnvVars', {
-    describe: 'Interpolate environment variables in deploy.toml',
-    help: 'Interpolate environment variables in deploy.toml (can be defaulted with env variable DEPLOY_INTERPOLATE_ENV_VARIABLES)',
-    default: process.env.DEPLOY_INTERPOLATE_ENV_VARIABLES === 'true',
-    type: 'boolean',
-  })
-
   // TODO: Allow option to pass --sides and only deploy select sides instead of all, always
 
   yargs.epilogue(
@@ -597,9 +590,7 @@ const mergeLifecycleEvents = (lifecycle, other) => {
 }
 
 export const parseConfig = (yargs, rawConfigToml) => {
-  const configToml = yargs.interpolateEnvVars
-    ? envInterpolation(rawConfigToml)
-    : rawConfigToml
+  const configToml = envInterpolation(rawConfigToml)
   const config = toml.parse(configToml)
   let envConfig
   const emptyLifecycle = {}
