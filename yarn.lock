@@ -2062,9 +2062,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.14.1":
-  version: 4.14.1
-  resolution: "@clerk/clerk-react@npm:4.14.1"
+"@clerk/clerk-react@npm:4.14.2":
+  version: 4.14.2
+  resolution: "@clerk/clerk-react@npm:4.14.2"
   dependencies:
     "@clerk/shared": ^0.15.1
     "@clerk/types": ^3.33.0
@@ -2072,7 +2072,7 @@ __metadata:
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: 826d8ff22be3c774fb53c431bf1cc9d105f0fe58a794d12681a0640c2d698a5ac91152e8328f3547b3f62c3db92896fd41f743588feb00cb8b800be9fa2c789e
+  checksum: e460b5c413ecb0e7dc6192e32b33963157aeb440ab813791e64b80661ac5ca481065fa378d8cd4183ee40a76106162574bde88ab8c13359116f0f1593455bd5b
   languageName: node
   linkType: hard
 
@@ -6379,7 +6379,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@clerk/clerk-react": 4.14.1
+    "@clerk/clerk-react": 4.14.2
     "@clerk/types": 3.33.0
     "@redwoodjs/auth": 4.4.3
     "@testing-library/react-hooks": 8.0.1
@@ -6389,7 +6389,7 @@ __metadata:
     react: 17.0.2
     typescript: 4.9.5
   peerDependencies:
-    "@clerk/clerk-react": 4.14.1
+    "@clerk/clerk-react": 4.14.2
   languageName: unknown
   linkType: soft
 
