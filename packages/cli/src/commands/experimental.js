@@ -3,6 +3,7 @@ import terminalLink from 'terminal-link'
 import detectRwVersion from '../middleware/detectProjectRwVersion'
 
 export const command = 'experimental <command>'
+export const aliases = ['exp']
 export const description = 'Run or setup experimental features'
 
 export const builder = (yargs) =>
