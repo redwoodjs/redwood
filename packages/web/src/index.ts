@@ -33,3 +33,4 @@ export { Helmet as Head, Helmet } from 'react-helmet-async'
 
 export * from './components/htmlTags'
 export * from './components/serverContext'
+export * from './routeHooks.types'

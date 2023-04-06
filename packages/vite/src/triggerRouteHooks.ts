@@ -2,18 +2,12 @@
 
 import { Request } from 'express'
 
-import { TagDescriptor } from '@redwoodjs/web'
-
-interface RouteHookEvent {
-  params: Record<string, string> // this has to be provided from RW router
-  headers: Record<string, string | string[] | undefined>
-  query: Record<string, string | string[] | undefined>
-  cookies: Record<string, string>
-}
+import { MetaHook, ServerDataHook, TagDescriptor } from '@redwoodjs/web'
+import type { RouteHookEvent } from '@redwoodjs/web'
 
 interface RouteHooks {
-  serverData?: (event: RouteHookEvent) => any
-  meta?: (event: RouteHookEvent & { serverData: any }) => TagDescriptor[]
+  serverData?: ServerDataHook
+  meta?: MetaHook<any>
 }
 
 export const triggerRouteHooks = async (
@@ -37,7 +31,13 @@ export const triggerRouteHooks = async (
   }
 
   try {
-    meta = (await routeHooks?.meta?.({ ...event, serverData })) || []
+    const metaRouteHookOutput =
+      (await routeHooks?.meta?.({ ...event, serverData })) || []
+
+    // Convert it to an array, if it's not already
+    meta = Array.isArray(metaRouteHookOutput)
+      ? metaRouteHookOutput
+      : [metaRouteHookOutput]
   } catch (e: any) {
     throw new Error(`Error in meta hook: ${e.message}`)
   }

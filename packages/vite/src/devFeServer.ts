@@ -81,8 +81,7 @@ async function createServer() {
             ...serverData,
           }
 
-          // Convert it to an array, if it's not already
-          metaTags = Array.isArray(meta) ? meta : [meta]
+          metaTags = meta
         } catch (e) {
           console.error(
             `Error running route hooks in ${currentRoute.routeHooks}}`

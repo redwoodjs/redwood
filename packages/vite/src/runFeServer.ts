@@ -8,7 +8,9 @@ import { renderToPipeableStream } from 'react-dom/server'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
+import type { TagDescriptor } from '@redwoodjs/web'
 
+import { triggerRouteHooks } from './triggerRouteHooks'
 import { RWRouteManifest } from './types'
 
 globalThis.RWJS_ENV = {}
@@ -137,6 +139,7 @@ export async function runFeServer() {
       }
 
       let routeContext = {}
+      let metaTags: TagDescriptor[] = []
 
       if (currentRoute?.redirect) {
         // @TODO deal with permanent/temp
@@ -149,11 +152,14 @@ export async function runFeServer() {
           const routeHooks = await import(
             path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
           )
-          const serverData = await routeHooks.serverData(req)
+
+          const { serverData, meta } = await triggerRouteHooks(routeHooks, req)
 
           routeContext = {
             ...serverData,
           }
+
+          metaTags = meta
         } catch (e) {
           console.error(e)
           return
@@ -169,7 +175,7 @@ export async function runFeServer() {
         serverEntry({ url, routeContext, css: indexEntry.css }),
         {
           bootstrapScriptContent: `window.__loadServerData = function() { return ${serialisedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
-            { css: indexEntry.css }
+            { css: indexEntry.css, meta: metaTags }
           )} }`,
           // @NOTE have to add slash so subpaths still pick up the right file
           // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
