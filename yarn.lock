@@ -20777,14 +20777,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock@npm:^29.4.2, jest-mock@npm:^29.5.0":
-  version: 29.5.0
-  resolution: "jest-mock@npm:29.5.0"
+"jest-mock@npm:29.4.2":
+  version: 29.4.2
+  resolution: "jest-mock@npm:29.4.2"
   dependencies:
-    "@jest/types": ^29.5.0
+    "@jest/types": ^29.4.2
     "@types/node": "*"
-    jest-util: ^29.5.0
-  checksum: c5b71d397d6acd44d99cd48dad8ca76334fc5a27e120da72d264d7527a9efc7c6fc431d79de64d0b73aa0ab26a2d0712498e323d42b9e03bee05e983b0d2035c
+    jest-util: ^29.4.2
+  checksum: 4cf4eb219e638190fc7b8eeed42c964ed26658a8eee310418d434a4ab0084af9edc91dcce0760061e03b52c73e0c5adf1fd51935a78f0d06b9cc806f174246a2
   languageName: node
   linkType: hard
 
