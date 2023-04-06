@@ -67,16 +67,14 @@ const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
 export const validateTag = (tag) => {
   const isTagValid =
-    tag === 'rc' ||
-    tag === 'canary' ||
-    tag === 'latest' ||
+    ['rc', 'canary', 'latest', 'next', 'experimental'].includes(tag) ||
     SEMVER_REGEX.test(tag)
 
   if (!isTagValid) {
     // Stop execution
     throw new Error(
       c.error(
-        'Invalid tag supplied. Supported values: rc, canary, latest, or valid semver version\n'
+        "Invalid tag supplied. Supported values: 'rc', 'canary', 'latest', 'next', 'experimental', or valid semver version\n"
       )
     )
   }
