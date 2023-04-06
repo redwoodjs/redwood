@@ -30,7 +30,7 @@ export const builder = (yargs) => {
     .option('tag', {
       alias: 't',
       description:
-        '[choices: "rc", "canary", "latest", "next", "experimental", or specific-version (see example below)] WARNING: "canary", "rc" and "experimental" tags are unstable releases!',
+        '[choices: "rc", "canary", "latest", "next", a tag beginning with "experimental-", or a specific-version (see example below)] WARNING: "canary", "rc" and "experimental-" tags are unstable releases!',
       requiresArg: true,
       type: 'string',
       coerce: validateTag,
@@ -67,14 +67,15 @@ const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
 export const validateTag = (tag) => {
   const isTagValid =
-    ['rc', 'canary', 'latest', 'next', 'experimental'].includes(tag) ||
+    ['rc', 'canary', 'latest', 'next'].includes(tag) ||
+    tag.startsWith('experimental-') ||
     SEMVER_REGEX.test(tag)
 
   if (!isTagValid) {
     // Stop execution
     throw new Error(
       c.error(
-        "Invalid tag supplied. Supported values: 'rc', 'canary', 'latest', 'next', 'experimental', or valid semver version\n"
+        "Invalid tag supplied. Supported values: 'rc', 'canary', 'latest', 'next', a tag beginning with 'experimental-', or a valid semver version\n"
       )
     )
   }
