@@ -185,6 +185,8 @@ export async function runFeServer() {
         }
       )
     } catch (e) {
+      console.error(e)
+
       // streaming no longer requires us to send back a blank page
       // React will automatically switch to client rendering on error
       return res.sendStatus(500)

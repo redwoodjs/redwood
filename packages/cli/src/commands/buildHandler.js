@@ -2,9 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
-import { Listr } from 'listr2'
 import rimraf from 'rimraf'
-import terminalLink from 'terminal-link'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
@@ -125,37 +123,38 @@ export const handler = async ({
     },
   ].filter(Boolean)
 
-  const triggerPrerender = async () => {
-    console.log('Starting prerendering...')
-    if (prerenderRoutes.length === 0) {
-      console.log(
-        `You have not marked any routes to "prerender" in your ${terminalLink(
-          'Routes',
-          'file://' + rwjsPaths.web.routes
-        )}.`
-      )
-    }
-    // Running a separate process here, otherwise it wouldn't pick up the
-    // generated Prisma Client due to require module caching
-    await execa('yarn rw prerender', {
-      stdio: 'inherit',
-      shell: true,
-      cwd: rwjsPaths.web.base,
-    })
-  }
+  // const triggerPrerender = async () => {
+  //   console.log('Starting prerendering...')
+  //   if (prerenderRoutes.length === 0) {
+  //     console.log(
+  //       `You have not marked any routes to "prerender" in your ${terminalLink(
+  //         'Routes',
+  //         'file://' + rwjsPaths.web.routes
+  //       )}.`
+  //     )
+  //   }
+  //   // Running a separate process here, otherwise it wouldn't pick up the
+  //   // generated Prisma Client due to require module caching
+  //   await execa('yarn rw prerender', {
+  //     stdio: 'inherit',
+  //     shell: true,
+  //     cwd: rwjsPaths.web.base,
+  //   })
+  // }
 
-  const jobs = new Listr(tasks, {
-    renderer: verbose && 'verbose',
-  })
+  // const jobs = new Listr(tasks, {
+  //   renderer: verbose && 'verbose',
+  // })
 
   try {
     await timedTelemetry(process.argv, { type: 'build' }, async () => {
       await jobs.run()
 
-      if (side.includes('web') && prerender) {
-        // This step is outside Listr so that it prints clearer, complete messages
-        await triggerPrerender()
-      }
+      // Removing prerender for streaming setup
+      // if (side.includes('web') && prerender) {
+      //   // This step is outside Listr so that it prints clearer, complete messages
+      //   await triggerPrerender()
+      // }
     })
   } catch (e) {
     console.log(c.error(e.message))

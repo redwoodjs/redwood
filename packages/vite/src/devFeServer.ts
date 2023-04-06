@@ -7,6 +7,8 @@ import { createServer as createViteServer } from 'vite'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
+import { triggerRouteHooks } from './triggerRouteHooks'
+
 // These values are defined in the vite.config.ts
 globalThis.RWJS_ENV = {}
 
@@ -61,6 +63,7 @@ async function createServer() {
       })
 
       let routeContext = {}
+      let metaTags = {}
 
       if (currentRoute?.redirect) {
         // @TODO deal with permanent/temp
@@ -72,13 +75,18 @@ async function createServer() {
         try {
           const routeHooks = await vite.ssrLoadModule(currentRoute.routeHooks)
 
-          // @TODO decide what the shape of parameters passed to serverData should be
-          const serverData = await routeHooks.serverData(req)
+          const { serverData, meta } = await triggerRouteHooks(routeHooks, req)
 
           routeContext = {
             ...serverData,
           }
+
+          // Convert it to an array, if it's not already
+          metaTags = Array.isArray(meta) ? meta : [meta]
         } catch (e) {
+          console.error(
+            `Error running route hooks in ${currentRoute.routeHooks}}`
+          )
           console.error(e)
         }
       }
@@ -100,12 +108,25 @@ async function createServer() {
 
       // Serialize route context so it can be passed to the client entry
       const serialisedRouteContext = JSON.stringify(routeContext)
+      const FIXME_HardcodedIndexCss = ['index.css']
 
       const { pipe } = renderToPipeableStream(
-        // CSS is handled by Vite in dev mode, we don't need to worry about it in dev
-        serverEntry({ url, routeContext, css: [] }),
+        // @TODO CSS is handled by Vite in dev mode, we don't need to worry about it in dev
+        // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
+
+        serverEntry({
+          url,
+          routeContext,
+          css: FIXME_HardcodedIndexCss,
+          meta: metaTags,
+        }),
         {
-          bootstrapScriptContent: `window.__loadServerData = function() { return ${serialisedRouteContext} }`,
+          bootstrapScriptContent: `window.__loadServerData = function() { return ${serialisedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
+            {
+              css: FIXME_HardcodedIndexCss,
+              meta: metaTags,
+            }
+          )} }`,
           bootstrapModules: [
             path.join(__dirname, '../inject', 'reactRefresh.js'),
             rwPaths.web.entryClient,
