@@ -4,7 +4,7 @@ import path from 'path'
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { prebuildApiFile } from '@redwoodjs/internal/dist/build/babel/api'
+import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
 import { getWebSideBabelPlugins } from '@redwoodjs/internal/dist/build/babel/web'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
@@ -59,10 +59,11 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
       build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
         // Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
         // @TODO: We need the new transformWithBabel function in https://github.com/redwoodjs/redwood/pull/7672/files
-        const transformedCode = prebuildApiFile(
+        const transformedCode = transformWithBabel(
           args.path,
-          args.path,
-          getWebSideBabelPlugins()
+          getWebSideBabelPlugins({
+            forVite: false,
+          })
         )
 
         if (transformedCode?.code) {

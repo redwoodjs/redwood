@@ -1,73 +1,58 @@
-import fs from 'fs'
-import path from 'path'
-
-import * as esbuild from 'esbuild'
+import type { PluginBuild } from 'esbuild'
+import { build } from 'esbuild'
 import { removeSync } from 'fs-extra'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
 
-import { getApiSideBabelPlugins, prebuildApiFile } from './babel/api'
+import { getApiSideBabelPlugins, transformWithBabel } from './babel/api'
 
-export const buildApi = () => {
+export const buildApi = async () => {
   // TODO: Be smarter about caching and invalidating files,
   // but right now we just delete everything.
   cleanApiBuild()
-
-  const srcFiles = findApiFiles()
-
-  const prebuiltFiles = prebuildApiFiles(srcFiles).filter(
-    (path): path is string => path !== undefined
-  )
-
-  return transpileApi(prebuiltFiles)
+  return transpileApi(findApiFiles())
 }
 
 export const cleanApiBuild = () => {
   const rwjsPaths = getPaths()
   removeSync(rwjsPaths.api.dist)
-  removeSync(path.join(rwjsPaths.generated.prebuild, 'api'))
 }
 
-/**
- * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
- */
-export const prebuildApiFiles = (srcFiles: string[]) => {
-  const rwjsPaths = getPaths()
-  const plugins = getApiSideBabelPlugins()
+const runRwBabelTransformsPlugin = {
+  name: 'rw-esbuild-babel-transform',
+  setup(build: PluginBuild) {
+    build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
+      //  Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
+      const transformedCode = transformWithBabel(
+        args.path,
+        getApiSideBabelPlugins()
+      )
 
-  return srcFiles.map((srcPath) => {
-    const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
-    const dstPath = path
-      .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
-      .replace(/\.(ts)$/, '.js')
+      if (transformedCode?.code) {
+        return {
+          contents: transformedCode.code,
+          loader: 'js',
+        }
+      }
 
-    const result = prebuildApiFile(srcPath, dstPath, plugins)
-    if (!result?.code) {
-      // TODO: Figure out a better way to return these programatically.
-      console.warn('Error:', srcPath, 'could not prebuilt.')
-
-      return undefined
-    }
-
-    fs.mkdirSync(path.dirname(dstPath), { recursive: true })
-    fs.writeFileSync(dstPath, result.code)
-
-    return dstPath
-  })
+      throw new Error(`Could not transform file: ${args.path}`)
+    })
+  },
 }
 
-export const transpileApi = (files: string[], options = {}) => {
+export const transpileApi = async (files: string[], options = {}) => {
   const rwjsPaths = getPaths()
 
-  return esbuild.buildSync({
+  return build({
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
     target: 'node16',
     format: 'cjs',
     bundle: false,
+    plugins: [runRwBabelTransformsPlugin],
     outdir: rwjsPaths.api.dist,
     // setting this to 'true' will generate an external sourcemap x.js.map
     // AND set the sourceMappingURL comment

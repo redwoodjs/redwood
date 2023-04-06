@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import { Listr } from 'listr2'
 import rimraf from 'rimraf'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
@@ -71,8 +72,8 @@ export const handler = async ({
     },
     side.includes('api') && {
       title: 'Building API...',
-      task: () => {
-        const { errors, warnings } = buildApi()
+      task: async () => {
+        const { errors, warnings } = await buildApi()
 
         if (errors.length) {
           console.error(errors)
@@ -123,28 +124,9 @@ export const handler = async ({
     },
   ].filter(Boolean)
 
-  // const triggerPrerender = async () => {
-  //   console.log('Starting prerendering...')
-  //   if (prerenderRoutes.length === 0) {
-  //     console.log(
-  //       `You have not marked any routes to "prerender" in your ${terminalLink(
-  //         'Routes',
-  //         'file://' + rwjsPaths.web.routes
-  //       )}.`
-  //     )
-  //   }
-  //   // Running a separate process here, otherwise it wouldn't pick up the
-  //   // generated Prisma Client due to require module caching
-  //   await execa('yarn rw prerender', {
-  //     stdio: 'inherit',
-  //     shell: true,
-  //     cwd: rwjsPaths.web.base,
-  //   })
-  // }
-
-  // const jobs = new Listr(tasks, {
-  //   renderer: verbose && 'verbose',
-  // })
+  const jobs = new Listr(tasks, {
+    renderer: verbose && 'verbose',
+  })
 
   try {
     await timedTelemetry(process.argv, { type: 'build' }, async () => {
