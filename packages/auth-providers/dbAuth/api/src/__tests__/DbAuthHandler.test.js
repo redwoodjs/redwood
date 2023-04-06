@@ -2340,6 +2340,41 @@ describe('dbAuth', () => {
       expect.assertions(2)
     })
 
+    it('createUser db check is called with insensitive string when user has provided one in SignupFlowOptions', async () => {
+      const spy = jest.spyOn(db.user, 'findUnique');
+      options.signup.usernameMatch = "insensitive"
+
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._createUser();
+      expect(spy).toHaveBeenCalled()
+      expect(spy).toHaveBeenCalledWith({ 'where' : {
+        'email' : expect.objectContaining({ mode: 'insensitive'})
+      } })
+    })
+
+    it('createUser db check is not called with insensitive string when user has not provided one in SignupFlowOptions', async () => {
+      const spy = jest.spyOn(db.user, 'findUnique');
+      delete options.signup.usernameMatch
+
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      dbAuth._createUser().catch((e) => {})
+      expect(spy).not.toHaveBeenCalledWith({ 'where' : {
+        'email' : expect.objectContaining({ mode: 'insensitive'})
+      } })
+    })
+
     it('throws a default error message if username is missing', async () => {
       const defaultMessage = options.signup.errors.fieldMissing
       delete options.signup.errors.fieldMissing
