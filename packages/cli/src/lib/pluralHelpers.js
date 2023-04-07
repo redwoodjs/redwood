@@ -44,7 +44,7 @@ export const ensureUniquePlural = async ({
 
   const promptMessage = isDestroyer ? destroyMessage : generateMessage
 
-  // News => Newses; Equipment => Equipment
+  // News => Newses; Equipment => Equipments
   const initialPlural = model.slice(-1) === 's' ? `${model}es` : `${model}s`
 
   const promptResult = await prompts({
