@@ -1,5 +1,5 @@
 describe('changeSrcImports', () => {
-  it('Converts world to bazinga', async () => {
+  it('Converts all api src imports to api/src', async () => {
     await matchTransformSnapshot('changeSrcImports', 'default')
   })
 })
