@@ -123,7 +123,7 @@ export default function redwoodPluginVite() {
           },
           // To produce a cjs bundle for SSR
           legacy: {
-            buildSsrCjsExternalHeuristics: true,
+            buildSsrCjsExternalHeuristics: env.ssrBuild,
           },
           optimizeDeps: {
             esbuildOptions: {
