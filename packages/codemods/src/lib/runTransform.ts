@@ -6,7 +6,6 @@
  * @see react-codemod {@link https://github.com/reactjs/react-codemod/blob/master/bin/cli.js}
  */
 
-// @ts-expect-error We don't have this in types but need for workaround https://github.com/facebook/jscodeshift/issues/398
 import * as jscodeshift from 'jscodeshift/src/Runner'
 
 const defaultJscodeshiftOpts = {
