@@ -107,7 +107,7 @@ export const getWebSideOverrides = (
 ) => {
   const overrides = [
     {
-      test: /.+Cell.(js|tsx)$/,
+      test: /.+Cell.(js|tsx|jsx)$/,
       plugins: [require('../babelPlugins/babel-plugin-redwood-cell').default],
     },
     // Automatically import files in `./web/src/pages/*` in to
