@@ -363,7 +363,7 @@ const setCoercion = (
   { type, name, emptyAs }: SetCoersionProps
 ) => {
   if (validation.setValueAs) {
-    // Note, this case could overide other props
+    // Note, this case could override other props
     return
   }
   let valueAs: ValueAsType

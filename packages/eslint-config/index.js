@@ -16,9 +16,9 @@ const { getConfig } = require('@redwoodjs/project-config')
 const config = getConfig()
 
 const getProjectBabelOptions = () => {
-  // We cant nest the web overrides inside the overrides block
+  // We can't nest the web overrides inside the overrides block
   // So we just take it out and put it as a separate item
-  // Ignoring ovverrides, as I don't think it has any impact on linting
+  // Ignoring overrides, as I don't think it has any impact on linting
   const { overrides: _overrides, ...otherWebConfig } =
     getWebSideDefaultBabelConfig()
 

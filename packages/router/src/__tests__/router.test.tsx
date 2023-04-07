@@ -1285,7 +1285,7 @@ test('params should never be an empty object in Set without waitFor (II)', async
   const SetWithUseParams = ({ children }) => {
     const params = useParams()
     // 1st run: { documentId: '1' }
-    // 2rd run: { documentId: '2' }
+    // 2nd run: { documentId: '2' }
     expect(params).not.toEqual({})
     return children
   }
