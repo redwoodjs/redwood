@@ -1616,7 +1616,7 @@ describe('Unauthorized redirect error messages', () => {
     console.error = jest.fn()
   })
 
-  after all(() => {
+  afterAll(() => {
     console.error = err
   })
 
