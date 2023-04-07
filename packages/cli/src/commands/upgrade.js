@@ -30,7 +30,7 @@ export const builder = (yargs) => {
     .option('tag', {
       alias: 't',
       description:
-        '[choices: "rc", "canary", "latest", "next", "experimental", or a specific-version (see example below)] WARNING: "canary", "rc" and "experimental" are unstable releases!',
+        '[choices: "rc", "canary", "latest", "next", "experimental", or a specific-version (see example below)] WARNING: "canary", "rc" and "experimental" are unstable releases! And "canary" releases include breaking changes often requiring codemods if upgrading a project.',
       requiresArg: true,
       type: 'string',
       coerce: validateTag,
