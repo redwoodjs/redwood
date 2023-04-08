@@ -12,7 +12,8 @@
   "bin": {
     "rw-api-server-watch": "./dist/watch.js",
     "rw-log-formatter": "./dist/logFormatter/bin.js",
-    "rw-server": "./dist/index.js"
+    "rw-server": "./dist/index.js",
+    "rw-serve-api": "./dist/index.js api"
   },
   "files": [
     "dist"

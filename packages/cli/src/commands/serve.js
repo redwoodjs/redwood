@@ -9,22 +9,32 @@ import c from '../lib/colors'
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
+const streamServerErrorHandler = () => {
+  console.error('⚠️  Experimental Render Mode ~ Cannot serve the web side ⚠️')
+  console.log('~'.repeat(50))
+  console.log()
+  console.log()
+  console.log('You can run the new frontend server with: `yarn rw-serve-fe`')
+  console.log('You can run the api server with: yarn rw serve api')
+  console.log()
+  console.log()
+  console.log('~'.repeat(50))
+
+  throw new Error(
+    'You will need to run the FE server and API server separately.'
+  )
+}
+
 export const builder = async (yargs) => {
-  const {
-    apiCliOptions,
-    webCliOptions,
-    commonOptions,
-    apiServerHandler,
-    webServerHandler,
-    bothServerHandler,
-  } = await import('@redwoodjs/api-server')
+  const { apiCliOptions, webCliOptions, commonOptions, apiServerHandler } =
+    await import('@redwoodjs/api-server')
 
   yargs
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
       descriptions: 'Run both api and web servers',
-      handler: bothServerHandler,
+      handler: streamServerErrorHandler,
       builder: (yargs) => yargs.options(commonOptions),
     })
     .command({
@@ -36,7 +46,7 @@ export const builder = async (yargs) => {
     .command({
       command: 'web',
       description: 'start server for serving only the web side',
-      handler: webServerHandler,
+      handler: streamServerErrorHandler,
       builder: (yargs) => yargs.options(webCliOptions),
     })
     .middleware((argv) => {

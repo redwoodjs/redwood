@@ -61,7 +61,7 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
   version: RUNTIME_CORE_JS_VERSION,
 }
 
-export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
+export const getApiSideBabelPlugins = () => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
   // a custom "name" is supplied so that user's do not accidently overwrite
@@ -100,25 +100,18 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
      *
      */
     ['@babel/plugin-transform-runtime', BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS],
-    // // still needed for jest.mock
-    forJest && [
+    [
       'babel-plugin-module-resolver',
       {
         alias: {
           src: './src',
+          'api/src': './src',
         },
         root: [rwjsPaths.api.base],
         cwd: 'packagejson',
         loglevel: 'silent', // to silence the unnecessary warnings
       },
       'rwjs-api-module-resolver',
-    ],
-    [
-      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
-      {
-        srcAbsPath: rwjsPaths.api.src,
-      },
-      'rwjs-babel-src-alias',
     ],
     [
       require('../babelPlugins/babel-plugin-redwood-directory-named-import')
