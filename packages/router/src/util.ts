@@ -560,6 +560,7 @@ export function analyzeRoutes(
 
       // @NOTE: A <Private> is also a Set
       if (isSetNode(node)) {
+        // TODO: Need to fix the types here. Everything is just `any` right now
         const {
           children,
           whileLoadingPage: whileLoadingPageFromCurrentSet,
@@ -567,9 +568,12 @@ export function analyzeRoutes(
           ...otherPropsFromCurrentSet
         } = node.props
 
-        const wrapperComponentsArray = Array.isArray(wrapFromCurrentSet)
-          ? wrapFromCurrentSet
-          : [wrapFromCurrentSet]
+        let wrapperComponentsArray = []
+        if (wrapFromCurrentSet) {
+          wrapperComponentsArray = Array.isArray(wrapFromCurrentSet)
+            ? wrapFromCurrentSet
+            : [wrapFromCurrentSet]
+        }
 
         if (children) {
           recurseThroughRouter({

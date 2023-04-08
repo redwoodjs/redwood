@@ -15,15 +15,14 @@ import { RWRouteManifest } from './types'
 
 globalThis.RWJS_ENV = {}
 
-/***
- *
+/**
  * @MARK @TODO
  * We have this server in the vite package only temporarily.
  * We will need to decide where to put it, so that rwjs/internal and other heavy dependencies
  * can be removed from the final docker image
  */
 
-// ---- @MARK This is should be removed one we have rearchitected the rw serve command --
+// --- @MARK This should be removed once we have re-architected the rw serve command ---
 // We need the dotenv, so that prisma knows the DATABASE env var
 // Normally the RW cli loads this for us, but we expect this file to be run directly
 // without using the CLI. Remember to remove dotenv-defaults dependency from this package
@@ -74,7 +73,9 @@ export async function runFeServer() {
       pathRewrite: {
         [`^${rwConfig.web.apiUrl}`]: '', // remove base path
       },
-      target: `http://localhost:${rwConfig.api.port}`,
+      // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
+      // if it's going to be ipv4 or ipv6
+      target: `http://127.0.0.1:${rwConfig.api.port}`,
     })
   )
 
@@ -143,7 +144,7 @@ export async function runFeServer() {
 
       if (currentRoute?.redirect) {
         // @TODO deal with permanent/temp
-        // Shortcircuit, and return a 301 or 302
+        // Short-circuit, and return a 301 or 302
         return res.redirect(currentRoute.redirect.to)
       }
 
@@ -167,14 +168,14 @@ export async function runFeServer() {
       }
 
       // Serialize route context so it can be passed to the client entry
-      const serialisedRouteContext = JSON.stringify(routeContext)
+      const serializedRouteContext = JSON.stringify(routeContext)
 
       const { pipe } = renderToPipeableStream(
         // @TODO: we can pass in meta here as well
         // we should use the same shape as Remix or Next for the meta object
         serverEntry({ url, routeContext, css: indexEntry.css }),
         {
-          bootstrapScriptContent: `window.__loadServerData = function() { return ${serialisedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
+          bootstrapScriptContent: `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
             { css: indexEntry.css, meta: metaTags }
           )} }`,
           // @NOTE have to add slash so subpaths still pick up the right file
