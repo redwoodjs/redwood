@@ -187,11 +187,11 @@ type user {
 
 and if the `currentUser` is an `ADMIN`, then skip the masking transform and simply return the original resolved field value:
 
-```jsx title="./api/directives/maskedEmail.directive.js"
+```jsx title="./api/src/directives/maskedEmail.directive.js"
 import { createTransformerDirective, TransformerDirectiveFunc } from '@redwoodjs/graphql-server'
 
 export const schema = gql`
-  directive @maskedEmail on FIELD_DEFINITION
+  directive @maskedEmail(permittedRoles: [String]) on FIELD_DEFINITION
 `
 
 const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
@@ -230,7 +230,7 @@ type UserExample {
 
 type Query {
  userExamples: [UserExample!]! @requireAuth 👈 will enforce auth when fetching all users
- userExamples(id: Int!): UserExample @requireAuth 👈 will enforce auth when fetching a us
+ userExamples(id: Int!): UserExample @requireAuth 👈 will enforce auth when fetching a single user
 }
 ```
 

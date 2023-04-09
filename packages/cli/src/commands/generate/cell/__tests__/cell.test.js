@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
@@ -8,138 +8,69 @@ import * as cell from '../cell'
 jest.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
-      cells: [{ queryOperationName: undefined }],
+      cells: [{ queryOperationName: 'AlreadyDefinedQueryName' }],
     }),
   }
 })
 
-let singleWordFiles,
-  multiWordFiles,
-  snakeCaseWordFiles,
-  kebabCaseWordFiles,
-  camelCaseWordFiles,
-  withoutTestFiles,
-  withoutStoryFiles,
-  withoutTestAndStoryFiles,
-  listFlagPassedIn,
-  listInferredFromName,
-  modelPluralMatchesSingularWithList,
-  modelPluralMatchesSingularWithoutList,
-  modelWithStringId,
-  modelWithStringIdList,
-  findDataByIdTypeScript,
-  listInferredFromNameTypeScript
+describe('Single word files', () => {
+  let singleWordFiles
 
-beforeAll(async () => {
-  singleWordFiles = await cell.files({
-    name: 'User',
-    tests: true,
-    stories: true,
-    list: false,
-  })
-  multiWordFiles = await cell.files({
-    name: 'UserProfile',
-    tests: true,
-    stories: true,
-    list: false,
-  })
-  snakeCaseWordFiles = await cell.files({
-    name: 'user_profile',
-    tests: true,
-    stories: true,
-    list: false,
-  })
-  kebabCaseWordFiles = await cell.files({
-    name: 'user-profile',
-    tests: true,
-    stories: true,
-    list: false,
-  })
-  camelCaseWordFiles = await cell.files({
-    name: 'userProfile',
-    tests: true,
-    stories: true,
-    list: false,
-  })
-  withoutTestFiles = await cell.files({
-    name: 'User',
-    tests: false,
-    stories: true,
-    list: false,
-  })
-  withoutStoryFiles = await cell.files({
-    name: 'User',
-    tests: true,
-    stories: false,
-    list: false,
-  })
-  withoutTestAndStoryFiles = await cell.files({
-    name: 'User',
-    tests: false,
-    stories: false,
-    list: false,
+  beforeAll(async () => {
+    singleWordFiles = await cell.files({
+      name: 'User',
+      tests: true,
+      stories: true,
+      list: false,
+    })
   })
 
-  listFlagPassedIn = await cell.files({
-    name: 'Member',
-    tests: true,
-    stories: true,
-    list: true,
+  it('returns exactly 4 files', () => {
+    expect(Object.keys(singleWordFiles).length).toEqual(4)
   })
 
-  listInferredFromName = await cell.files({
-    name: 'Members',
-    tests: true,
-    stories: true,
+  it('creates a cell component with a single word name', () => {
+    expect(
+      singleWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserCell/UserCell.js'
+        )
+      ]
+    ).toMatchSnapshot()
   })
 
-  modelPluralMatchesSingularWithList = await cell.files({
-    name: 'equipment',
-    tests: true,
-    stories: true,
-    list: true,
+  it('creates a cell test with a single word name', () => {
+    expect(
+      singleWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+        )
+      ]
+    ).toMatchSnapshot()
   })
 
-  modelPluralMatchesSingularWithoutList = await cell.files({
-    name: 'equipment',
-    tests: true,
-    stories: true,
-    list: false,
+  it('creates a cell stories with a single word name', () => {
+    expect(
+      singleWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
+        )
+      ]
+    ).toMatchSnapshot()
   })
 
-  modelWithStringId = await cell.files({
-    name: 'address',
-    tests: true,
-    stories: true,
-    list: false,
-  })
-
-  modelWithStringIdList = await cell.files({
-    name: 'address',
-    tests: true,
-    stories: true,
-    list: true,
-  })
-
-  findDataByIdTypeScript = await cell.files({
-    name: 'Bazinga',
-    tests: true,
-    stories: true,
-    typescript: true,
-  })
-
-  listInferredFromNameTypeScript = await cell.files({
-    name: 'Members',
-    tests: true,
-    stories: true,
-    typescript: true,
+  it('creates a cell mock with a single word name', () => {
+    expect(
+      singleWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
+        )
+      ]
+    ).toMatchSnapshot()
   })
 })
 
 // Single Word Scenario: User
-test('returns exactly 4 files', () => {
-  expect(Object.keys(singleWordFiles).length).toEqual(4)
-})
 
 test('trims Cell from end of name', async () => {
   const files = await cell.files({
@@ -161,209 +92,229 @@ test('trims Cell from end of name', async () => {
   ).toBeTruthy()
 })
 
-test('creates a cell component with a single word name', () => {
-  expect(
-    singleWordFiles[
-      path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js')
-    ]
-  ).toMatchSnapshot()
+describe('Multiword files', () => {
+  let multiWordFiles
+
+  beforeAll(async () => {
+    multiWordFiles = await cell.files({
+      name: 'UserProfile',
+      tests: true,
+      stories: true,
+      list: false,
+    })
+  })
+
+  // Multi Word Scenario: UserProfile
+  it('creates a cell component with a multi word name', () => {
+    expect(
+      multiWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell test with a multi word name', () => {
+    expect(
+      multiWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell stories with a multi word name', () => {
+    expect(
+      multiWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell mock with a multi word name', () => {
+    expect(
+      multiWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
 })
 
-test('creates a cell test with a single word name', () => {
-  expect(
-    singleWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserCell/UserCell.test.js'
-      )
-    ]
-  ).toMatchSnapshot()
+describe('Snake case words', () => {
+  let snakeCaseWordFiles
+
+  beforeAll(async () => {
+    snakeCaseWordFiles = await cell.files({
+      name: 'user_profile',
+      tests: true,
+      stories: true,
+      list: false,
+    })
+  })
+
+  // SnakeCase Word Scenario: user_profile
+  it('creates a cell component with a snakeCase word name', () => {
+    expect(
+      snakeCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell test with a snakeCase word name', () => {
+    expect(
+      snakeCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell stories with a snakeCase word name', () => {
+    expect(
+      snakeCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell mock with a snakeCase word name', () => {
+    expect(
+      snakeCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
 })
 
-test('creates a cell stories with a single word name', () => {
-  expect(
-    singleWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
-      )
-    ]
-  ).toMatchSnapshot()
+describe('Kebab case words', () => {
+  let kebabCaseWordFiles
+  beforeAll(async () => {
+    kebabCaseWordFiles = await cell.files({
+      name: 'user-profile',
+      tests: true,
+      stories: true,
+      list: false,
+    })
+  })
+
+  // KebabCase Word Scenario: user-profile
+  it('creates a cell component with a kebabCase word name', () => {
+    expect(
+      kebabCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell test with a kebabCase word name', () => {
+    expect(
+      kebabCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell stories with a kebabCase word name', () => {
+    expect(
+      kebabCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell mock with a kebabCase word name', () => {
+    expect(
+      kebabCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
 })
 
-test('creates a cell mock with a single word name', () => {
-  expect(
-    singleWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
-      )
-    ]
-  ).toMatchSnapshot()
+describe('camelCase words', () => {
+  let camelCaseWordFiles
+
+  beforeAll(async () => {
+    camelCaseWordFiles = await cell.files({
+      name: 'userProfile',
+      tests: true,
+      stories: true,
+      list: false,
+    })
+  })
+
+  // camelCase Word Scenario: user-profile
+  it('creates a cell component with a camelCase word name', () => {
+    expect(
+      camelCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell test with a camelCase word name', () => {
+    expect(
+      camelCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell stories with a camelCase word name', () => {
+    expect(
+      camelCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
+
+  it('creates a cell mock with a camelCase word name', () => {
+    expect(
+      camelCaseWordFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
+        )
+      ]
+    ).toMatchSnapshot()
+  })
 })
 
-// Multi Word Scenario: UserProfile
-test('creates a cell component with a multi word name', () => {
-  expect(
-    multiWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
+test("doesn't include test file when --tests is set to false", async () => {
+  const withoutTestFiles = await cell.files({
+    name: 'User',
+    tests: false,
+    stories: true,
+    list: false,
+  })
 
-test('creates a cell test with a multi word name', () => {
-  expect(
-    multiWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell stories with a multi word name', () => {
-  expect(
-    multiWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell mock with a multi word name', () => {
-  expect(
-    multiWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-// SnakeCase Word Scenario: user_profile
-test('creates a cell component with a snakeCase word name', () => {
-  expect(
-    snakeCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell test with a snakeCase word name', () => {
-  expect(
-    snakeCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell stories with a snakeCase word name', () => {
-  expect(
-    snakeCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell mock with a snakeCase word name', () => {
-  expect(
-    snakeCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-// KebabCase Word Scenario: user-profile
-test('creates a cell component with a kebabCase word name', () => {
-  expect(
-    kebabCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell test with a kebabCase word name', () => {
-  expect(
-    kebabCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell stories with a kebabCase word name', () => {
-  expect(
-    kebabCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell mock with a kebabCase word name', () => {
-  expect(
-    kebabCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-// camelCase Word Scenario: user-profile
-test('creates a cell component with a camelCase word name', () => {
-  expect(
-    camelCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell test with a camelCase word name', () => {
-  expect(
-    camelCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell stories with a camelCase word name', () => {
-  expect(
-    camelCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test('creates a cell mock with a camelCase word name', () => {
-  expect(
-    camelCaseWordFiles[
-      path.normalize(
-        '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
-      )
-    ]
-  ).toMatchSnapshot()
-})
-
-test("doesn't include test file when --tests is set to false", () => {
   expect(Object.keys(withoutTestFiles)).toEqual([
     path.normalize(
       '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
@@ -375,7 +326,14 @@ test("doesn't include test file when --tests is set to false", () => {
   ])
 })
 
-test("doesn't include storybook file when --stories is set to false", () => {
+test("doesn't include storybook file when --stories is set to false", async () => {
+  const withoutStoryFiles = await cell.files({
+    name: 'User',
+    tests: true,
+    stories: false,
+    list: false,
+  })
+
   expect(Object.keys(withoutStoryFiles)).toEqual([
     path.normalize(
       '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
@@ -387,13 +345,27 @@ test("doesn't include storybook file when --stories is set to false", () => {
   ])
 })
 
-test("doesn't include storybook and test files when --stories and --tests is set to false", () => {
+test("doesn't include storybook and test files when --stories and --tests is set to false", async () => {
+  const withoutTestAndStoryFiles = await cell.files({
+    name: 'User',
+    tests: false,
+    stories: false,
+    list: false,
+  })
+
   expect(Object.keys(withoutTestAndStoryFiles)).toEqual([
     path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
   ])
 })
 
-test('generates list cells if list flag passed in', () => {
+test('generates list cells if list flag passed in', async () => {
+  const listFlagPassedIn = await cell.files({
+    name: 'Member',
+    tests: true,
+    stories: true,
+    list: true,
+  })
+
   const CELL_PATH = path.normalize(
     '/path/to/project/web/src/components/MembersCell/MembersCell.js'
   )
@@ -425,7 +397,13 @@ test('generates list cells if list flag passed in', () => {
   expect(listFlagPassedIn[MOCK_PATH]).toMatchSnapshot()
 })
 
-test('generates list cells if name is plural', () => {
+test('generates list cells if name is plural', async () => {
+  const listInferredFromName = await cell.files({
+    name: 'Members',
+    tests: true,
+    stories: true,
+  })
+
   const CELL_PATH = path.normalize(
     '/path/to/project/web/src/components/MembersCell/MembersCell.js'
   )
@@ -454,7 +432,14 @@ test('generates list cells if name is plural', () => {
   expect(listInferredFromName[CELL_PATH]).toMatchSnapshot()
 })
 
-test('TypeScript: generates list cells if list flag passed in', () => {
+test('TypeScript: generates list cells if list flag passed in', async () => {
+  const findDataByIdTypeScript = await cell.files({
+    name: 'Bazinga',
+    tests: true,
+    stories: true,
+    typescript: true,
+  })
+
   const CELL_PATH = path.normalize(
     '/path/to/project/web/src/components/BazingaCell/BazingaCell.tsx'
   )
@@ -486,7 +471,14 @@ test('TypeScript: generates list cells if list flag passed in', () => {
   expect(findDataByIdTypeScript[MOCK_PATH]).toMatchSnapshot()
 })
 
-test('TypeScript: generates list cells if name is plural', () => {
+test('TypeScript: generates list cells if name is plural', async () => {
+  const listInferredFromNameTypeScript = await cell.files({
+    name: 'Members',
+    tests: true,
+    stories: true,
+    typescript: true,
+  })
+
   const CELL_PATH = path.normalize(
     '/path/to/project/web/src/components/MembersCell/MembersCell.tsx'
   )
@@ -515,7 +507,14 @@ test('TypeScript: generates list cells if name is plural', () => {
   expect(listInferredFromNameTypeScript[CELL_PATH]).toMatchSnapshot()
 })
 
-test('"equipment" with list flag', () => {
+test('"equipment" with list flag', async () => {
+  const modelPluralMatchesSingularWithList = await cell.files({
+    name: 'equipment',
+    tests: true,
+    stories: true,
+    list: true,
+  })
+
   const CELL_PATH = path.normalize(
     '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.js'
   )
@@ -544,7 +543,14 @@ test('"equipment" with list flag', () => {
   expect(modelPluralMatchesSingularWithList[CELL_PATH]).toMatchSnapshot()
 })
 
-test('"equipment" withOUT list flag should find equipment by id', () => {
+test('"equipment" withOUT list flag should find equipment by id', async () => {
+  const modelPluralMatchesSingularWithoutList = await cell.files({
+    name: 'equipment',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+
   const CELL_PATH = path.normalize(
     '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.js'
   )
@@ -573,7 +579,14 @@ test('"equipment" withOUT list flag should find equipment by id', () => {
   expect(modelPluralMatchesSingularWithoutList[CELL_PATH]).toMatchSnapshot()
 })
 
-test('generates a cell with a string primary id key', () => {
+test('generates a cell with a string primary id key', async () => {
+  const modelWithStringId = await cell.files({
+    name: 'address',
+    tests: true,
+    stories: true,
+    list: false,
+  })
+
   const CELL_PATH = path.normalize(
     '/path/to/project/web/src/components/AddressCell/AddressCell.js'
   )
@@ -605,7 +618,14 @@ test('generates a cell with a string primary id key', () => {
   expect(modelWithStringId[MOCK_PATH]).toMatchSnapshot()
 })
 
-test('generates list a cell with a string primary id keys', () => {
+test('generates list a cell with a string primary id keys', async () => {
+  const modelWithStringIdList = await cell.files({
+    name: 'address',
+    tests: true,
+    stories: true,
+    list: true,
+  })
+
   const CELL_PATH = path.normalize(
     '/path/to/project/web/src/components/AddressesCell/AddressesCell.js'
   )
@@ -635,4 +655,34 @@ test('generates list a cell with a string primary id keys', () => {
   expect(modelWithStringIdList[TEST_PATH]).toMatchSnapshot()
   expect(modelWithStringIdList[STORY_PATH]).toMatchSnapshot()
   expect(modelWithStringIdList[MOCK_PATH]).toMatchSnapshot()
+})
+
+describe('Custom query names', () => {
+  test('Accepts custom query names', async () => {
+    const generatedFiles = await cell.files({
+      name: 'Clues',
+      tests: false,
+      stories: false,
+      query: 'FindBluesClues',
+    })
+
+    const CELL_PATH = path.normalize(
+      '/path/to/project/web/src/components/CluesCell/CluesCell.js'
+    )
+
+    expect(generatedFiles[CELL_PATH]).toContain('query FindBluesClues {')
+  })
+
+  test('Throws if a duplicated query name is used', async () => {
+    await expect(
+      cell.files({
+        name: 'Clues',
+        tests: false,
+        stories: false,
+        query: 'AlreadyDefinedQueryName',
+      })
+    ).rejects.toThrow(
+      'Specified query name: "AlreadyDefinedQueryName" is not unique'
+    )
+  })
 })

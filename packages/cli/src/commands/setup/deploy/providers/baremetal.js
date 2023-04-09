@@ -1,13 +1,13 @@
 // import terminalLink from 'terminal-link'
 import path from 'path'
 
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { addFilesTask, addPackagesTask, printSetupNotes } from '../helpers'
+import { addFilesTask, printSetupNotes } from '../helpers'
 import { DEPLOY, ECOSYSTEM, MAINTENANCE } from '../templates/baremetal'
 
 export const command = 'baremetal'
@@ -37,17 +37,20 @@ const notes = [
 ]
 
 export const handler = async ({ force }) => {
-  const tasks = new Listr([
-    addPackagesTask({
-      packages: ['node-ssh'],
-      devDependency: true,
-    }),
-    addFilesTask({
-      files,
-      force,
-    }),
-    printSetupNotes(notes),
-  ])
+  const tasks = new Listr(
+    [
+      addPackagesTask({
+        packages: ['node-ssh'],
+        devDependency: true,
+      }),
+      addFilesTask({
+        files,
+        force,
+      }),
+      printSetupNotes(notes),
+    ],
+    { rendererOptions: { collapse: false } }
+  )
   try {
     await tasks.run()
   } catch (e) {

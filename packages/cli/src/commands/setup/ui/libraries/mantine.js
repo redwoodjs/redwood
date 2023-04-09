@@ -1,7 +1,7 @@
 import path from 'path'
 
 import execa from 'execa'
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
@@ -60,65 +60,72 @@ export async function handler({ force, install, packages }) {
     packages.includes(ALL_KEYWORD) ? ALL_MANTINE_PACKAGES : packages
   ).map((pack) => `@mantine/${pack}`)
 
-  const tasks = new Listr([
-    {
-      title: 'Installing packages...',
-      skip: () => !install,
-      task: () => {
-        return new Listr([
-          {
-            title: `Install ${installPackages.join(', ')}`,
-            task: async () => {
-              await execa('yarn', [
-                'workspace',
-                'web',
-                'add',
-                '-D',
-                ...installPackages,
-              ])
-            },
-          },
-        ])
-      },
-    },
-    {
-      title: 'Setting up Mantine...',
-      skip: () => fileIncludes(rwPaths.web.app, 'MantineProvider'),
-      task: () =>
-        extendJSXFile(rwPaths.web.app, {
-          insertComponent: {
-            name: 'MantineProvider',
-            props: { theme: 'theme' },
-            within: 'RedwoodProvider',
-          },
-          imports: [
-            "import { MantineProvider } from '@mantine/core'",
-            "import * as theme from 'config/mantine.config'",
-          ],
-        }),
-    },
-    {
-      title: `Creating Theme File...`,
-      task: () => {
-        writeFile(configFilePath, MANTINE_THEME_AND_COMMENTS, {
-          overwriteExisting: force,
-        })
-      },
-    },
-    {
-      title: 'Configure Storybook...',
-      skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withMantine'),
-      task: async () =>
-        extendStorybookConfiguration(
-          path.join(
-            __dirname,
-            '..',
-            'templates',
-            'mantine.storybook.preview.js.template'
+  const tasks = new Listr(
+    [
+      {
+        title: 'Installing packages...',
+        skip: () => !install,
+        task: () => {
+          return new Listr(
+            [
+              {
+                title: `Install ${installPackages.join(', ')}`,
+                task: async () => {
+                  await execa('yarn', [
+                    'workspace',
+                    'web',
+                    'add',
+                    '-D',
+                    '@emotion/react',
+                    ...installPackages,
+                  ])
+                },
+              },
+            ],
+            { rendererOptions: { collapse: false } }
           )
-        ),
-    },
-  ])
+        },
+      },
+      {
+        title: 'Setting up Mantine...',
+        skip: () => fileIncludes(rwPaths.web.app, 'MantineProvider'),
+        task: () =>
+          extendJSXFile(rwPaths.web.app, {
+            insertComponent: {
+              name: 'MantineProvider',
+              props: { theme: 'theme' },
+              within: 'RedwoodProvider',
+            },
+            imports: [
+              "import { MantineProvider } from '@mantine/core'",
+              "import * as theme from 'config/mantine.config'",
+            ],
+          }),
+      },
+      {
+        title: `Creating Theme File...`,
+        task: () => {
+          writeFile(configFilePath, MANTINE_THEME_AND_COMMENTS, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
+        title: 'Configure Storybook...',
+        skip: () => fileIncludes(rwPaths.web.storybookConfig, 'withMantine'),
+        task: async () =>
+          extendStorybookConfiguration(
+            path.join(
+              __dirname,
+              '..',
+              'templates',
+              'mantine.storybook.preview.js.template'
+            )
+          ),
+      },
+    ],
+    { rendererOptions: { collapse: false } }
+  )
 
   try {
     await tasks.run()

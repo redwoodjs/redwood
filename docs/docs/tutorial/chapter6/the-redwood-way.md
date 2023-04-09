@@ -105,13 +105,16 @@ export const generated = () => {
   // highlight-end
 }
 
-export default { title: 'Components/Comment' }
+export default {
+  title: 'Components/Comment',
+  component: Comment,
+}
 ```
 
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title="web/src/components/Comment/Comment.stories.txs"
+```tsx title="web/src/components/Comment/Comment.stories.tsx"
 import Comment from './Comment'
 
 export const generated = () => {
@@ -128,7 +131,10 @@ export const generated = () => {
   // highlight-end
 }
 
-export default { title: 'Components/Comment' }
+export default {
+  title: 'Components/Comment',
+  component: Comment,
+}
 ```
 
 </TabItem>
@@ -236,6 +242,7 @@ Let's add a sample comment to the test and check that the various parts are bein
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/Comment.test.js"
+// highlight-next-line
 import { render, screen } from '@redwoodjs/testing'
 
 import Comment from './Comment'
@@ -265,6 +272,7 @@ describe('Comment', () => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/Comment.test.tsx"
+// highlight-next-line
 import { render, screen } from '@redwoodjs/testing'
 
 import Comment from './Comment'
@@ -294,6 +302,12 @@ describe('Comment', () => {
 </Tabs>
 
 Here we're testing for both elements of the output `createdAt` timestamp: the actual text that's output (similar to how we tested for an article's truncated body) but also that the element that wraps that text is a `<time>` tag and that it contains a `datetime` attribute with the raw value of `comment.createdAt`. This might seem like overkill but the point of the `datetime` attribute is to provide a machine-readable timestamp that the browser could (theoretically) hook into and do stuff with. This makes sure that we preserve that ability.
+
+If your tests aren't already running in another terminal window, you can start them now:
+
+```bash
+yarn rw test
+```
 
 :::info What happens if we change the formatted output of the timestamp? Wouldn't we have to change the test?
 

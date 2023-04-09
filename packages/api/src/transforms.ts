@@ -1,5 +1,5 @@
+import { Headers } from '@whatwg-node/fetch'
 import type { APIGatewayProxyEvent } from 'aws-lambda'
-import { Headers } from 'cross-undici-fetch'
 
 // This is the same interface used by GraphQL Yoga
 // But not importing here to avoid adding a dependency
@@ -34,4 +34,27 @@ export function normalizeRequest(event: APIGatewayProxyEvent): Request {
     query: event.queryStringParameters,
     body,
   }
+}
+
+// Internal note:  Equivalent to dnull package on npm, which seems to have import issues in latest versions
+
+/**
+ * Useful for removing nulls from an object, such as an input from a GraphQL mutation used directly in a Prisma query
+ * @param input - Object to remove nulls from
+ * See {@link https://www.prisma.io/docs/concepts/components/prisma-client/null-and-undefined Prisma docs: null vs undefined}
+ */
+export const removeNulls = (input: Record<number | symbol | string, any>) => {
+  for (const key in input) {
+    if (input[key] === null) {
+      input[key] = undefined
+    } else if (
+      typeof input[key] === 'object' &&
+      !(input[key] instanceof Date) // dates are objects too
+    ) {
+      // Note arrays are also typeof object!
+      input[key] = removeNulls(input[key])
+    }
+  }
+
+  return input
 }

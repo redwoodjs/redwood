@@ -18,20 +18,15 @@ jest.mock('fs', () => {
   }
 })
 
-jest.mock('@redwoodjs/internal/dist/config', () => {
-  return {
-    getConfig: jest.fn(),
-  }
-})
-
 jest.mock('@redwoodjs/internal/dist/dev', () => {
   return {
     shutdownPort: jest.fn(),
   }
 })
 
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
+    getConfig: jest.fn(),
     getConfigPath: () => '/mocked/project/redwood.toml',
     getPaths: () => {
       return {
@@ -55,10 +50,19 @@ jest.mock('../../lib/generatePrismaClient', () => {
   }
 })
 
+jest.mock('../../lib/ports', () => {
+  return {
+    // We're not actually going to use the port, so it's fine to just say it's
+    // free. It prevents the tests from failing if the ports are already in use
+    // (probably by some external `yarn rw dev` process)
+    getFreePort: (port) => port,
+  }
+})
+
 import concurrently from 'concurrently'
 import { find } from 'lodash'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/project-config'
 
 import { generatePrismaClient } from '../../lib/generatePrismaClient'
 import { handler } from '../dev'
@@ -68,13 +72,17 @@ describe('yarn rw dev', () => {
     jest.clearAllMocks()
   })
 
-  it('Should run api and web dev servers, and  by default', async () => {
+  it('Should run api and web dev servers, and generator watcher by default', async () => {
     getConfig.mockReturnValue({
-      web: {},
+      web: {
+        port: 8910,
+      },
       api: {
+        port: 8911,
         debugPort: 18911,
       },
     })
+
     await handler({
       side: ['api', 'web'],
     })
@@ -92,7 +100,7 @@ describe('yarn rw dev', () => {
     )
 
     expect(apiCommand.command).toMatchInlineSnapshot(
-      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch \\"/mocked/project/redwood.toml\\" --exec \\"yarn rw-api-server-watch --debug-port 18911 | rw-log-formatter\\""`
+      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
     )
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
@@ -100,11 +108,15 @@ describe('yarn rw dev', () => {
 
   it('Debug port passed in command line overrides TOML', async () => {
     getConfig.mockReturnValue({
-      web: {},
+      web: {
+        port: 8910,
+      },
       api: {
+        port: 8911,
         debugPort: 505050,
       },
     })
+
     await handler({
       side: ['api'],
       apiDebugPort: 90909090,
@@ -115,17 +127,21 @@ describe('yarn rw dev', () => {
     const apiCommand = find(concurrentlyArgs, { name: 'api' })
 
     expect(apiCommand.command).toContain(
-      'yarn rw-api-server-watch --debug-port 90909090'
+      'yarn rw-api-server-watch --port 8911 --debug-port 90909090'
     )
   })
 
   it('Can disable debugger by setting toml to false', async () => {
     getConfig.mockReturnValue({
-      web: {},
+      web: {
+        port: 8910,
+      },
       api: {
+        port: 8911,
         debugPort: false,
       },
     })
+
     await handler({
       side: ['api'],
     })
@@ -135,5 +151,29 @@ describe('yarn rw dev', () => {
     const apiCommand = find(concurrentlyArgs, { name: 'api' })
 
     expect(apiCommand.command).not.toContain('--debug-port')
+  })
+
+  it('Will run vite, via rw-vite-dev bin if config has bundler set to Vite', async () => {
+    getConfig.mockReturnValue({
+      web: {
+        port: 8910,
+        bundler: 'vite', // <-- enable vite mode
+      },
+      api: {
+        port: 8911,
+      },
+    })
+
+    await handler({
+      side: ['web'],
+    })
+
+    const concurrentlyArgs = concurrently.mock.lastCall[0]
+
+    const webCommand = find(concurrentlyArgs, { name: 'web' })
+
+    expect(webCommand.command).toContain(
+      'yarn cross-env NODE_ENV=development rw-vite-dev'
+    )
   })
 })

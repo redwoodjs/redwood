@@ -1,7 +1,7 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 // We mock these to skip the check for web/dist and api/dist
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
@@ -13,11 +13,6 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
         },
       }
     },
-  }
-})
-
-jest.mock('@redwoodjs/internal/dist/config', () => {
-  return {
     getConfig: () => {
       return {
         api: {},
@@ -60,7 +55,7 @@ describe('yarn rw serve', () => {
   it('Should proxy serve api with params to api-server handler', async () => {
     const parser = yargs.command('serve [side]', false, builder)
 
-    parser.parse('serve api --port 5555 --apiRootPath funkyFunctions')
+    await parser.parse('serve api --port 5555 --apiRootPath funkyFunctions')
 
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -73,7 +68,9 @@ describe('yarn rw serve', () => {
   it('Should proxy serve api with params to api-server handler (alias and slashes in path)', async () => {
     const parser = yargs.command('serve [side]', false, builder)
 
-    parser.parse('serve api --port 5555 --rootPath funkyFunctions/nested/')
+    await parser.parse(
+      'serve api --port 5555 --rootPath funkyFunctions/nested/'
+    )
 
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -86,7 +83,7 @@ describe('yarn rw serve', () => {
   it('Should proxy serve web with params to web server handler', async () => {
     const parser = yargs.command('serve [side]', false, builder)
 
-    parser.parse(
+    await parser.parse(
       'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
     )
 
@@ -102,7 +99,7 @@ describe('yarn rw serve', () => {
   it('Should proxy rw serve with params to appropriate handler', async () => {
     const parser = yargs.command('serve [side]', false, builder)
 
-    parser.parse('serve --port 9898 --socket abc')
+    await parser.parse('serve --port 9898 --socket abc')
 
     expect(bothServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({

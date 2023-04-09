@@ -1,4 +1,0 @@
-{
-  "main": "./index.js",
-  "types": "../dist/webAuthn/index.d.ts"
-}

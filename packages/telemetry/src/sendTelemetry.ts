@@ -1,11 +1,14 @@
 import fs from 'fs'
+import os from 'os'
 import path from 'path'
 
+import { fetch } from '@whatwg-node/fetch'
 import ci from 'ci-info'
-import { fetch } from 'cross-undici-fetch'
 import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
+
+import { getConfig } from '@redwoodjs/project-config'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
@@ -15,23 +18,27 @@ const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
 interface SensitiveArgPositions {
   exec: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   g: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   generate: {
     positions: Array<number>
+    options?: never
     redactWith: Array<string>
   }
   prisma: {
+    positions?: never
     options: Array<string>
     redactWith: Array<string>
   }
 }
 
-// Tracks any commands that could contain sensative info and their position in
+// Tracks any commands that could contain sensitive info and their position in
 // the argv array, as well as the text to replace them with
 const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   exec: {
@@ -52,8 +59,13 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   },
 }
 
-// gets diagnostic info and sanitizes by removing references to paths
-const getInfo = async (presets = {}) => {
+interface Args {
+  redwoodVersion?: string
+  command?: string
+}
+
+/** Gets diagnostic info and sanitizes by removing references to paths */
+const getInfo = async (presets: Args = {}) => {
   const info = JSON.parse(
     await envinfo.run(
       {
@@ -77,6 +89,12 @@ const getInfo = async (presets = {}) => {
   const cpu = await system.cpu()
   const mem = await system.mem()
 
+  // Must only call getConfig() once the project is setup - so not within telemetry for CRWA
+  // Default to 'webpack' for new projects
+  const webBundler = presets.command?.startsWith('create redwood-app')
+    ? 'webpack'
+    : getConfig().web.bundler
+
   return {
     os: info.System?.OS?.split(' ')[0],
     osVersion: info.System?.OS?.split(' ')[1],
@@ -88,33 +106,35 @@ const getInfo = async (presets = {}) => {
     redwoodVersion:
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
+    webBundler,
   }
 }
 
-// removes potentially sensative information from an array of argv strings
-export const sanitizeArgv = (argv: Array<string>) => {
+// removes potentially sensitive information from an array of argv strings
+export const sanitizeArgv = (
+  argv: [string, string, keyof SensitiveArgPositions, ...string[]]
+) => {
+  const name = argv[2]
+  const sensitiveCommand = SENSITIVE_ARG_POSITIONS[name]
   const args = argv.slice(2)
-  const name = args[0]
-  const sensativeCommand =
-    SENSITIVE_ARG_POSITIONS[name as keyof SensitiveArgPositions]
 
-  if (sensativeCommand) {
+  if (sensitiveCommand) {
     // redact positional arguments
-    if (sensativeCommand.positions) {
-      sensativeCommand.positions.forEach((pos: number, index: number) => {
+    if (sensitiveCommand.positions) {
+      sensitiveCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
-        if (args[pos] && !args[pos].match(/--/)) {
-          args[pos] = sensativeCommand.redactWith[index]
+        if (args[pos] && !/--/.test(args[pos])) {
+          args[pos] = sensitiveCommand.redactWith[index]
         }
       })
     }
 
     // redact --option arguments
-    if (sensativeCommand.options) {
-      sensativeCommand.options.forEach((option: string, index: number) => {
+    if (sensitiveCommand.options) {
+      sensitiveCommand.options.forEach((option: string, index: number) => {
         const argIndex = args.indexOf(option)
         if (argIndex !== -1) {
-          args[argIndex + 1] = sensativeCommand.redactWith[index]
+          args[argIndex + 1] = sensitiveCommand.redactWith[index]
         }
       })
     }
@@ -127,17 +147,41 @@ const buildPayload = async () => {
   let payload: Record<string, unknown> = {}
   let project
 
-  const argv = require('yargs/yargs')(process.argv.slice(2)).argv
+  const processArgv = [...process.argv]
+
+  // On windows process.argv may not return an array of strings.
+  // It will look something like [a,b,c] rather than ["a","b","c"] so we must stringify them before parsing as JSON
+  // "os.type()" returns 'Windows_NT' on Windows. See https://nodejs.org/docs/latest-v12.x/api/os.html#os_os_type.
+  if (os.type() === 'Windows_NT') {
+    const argvIndex = processArgv.findIndex((arg) => arg === '--argv') + 1
+    let argvFormatted = argvIndex !== 0 ? processArgv[argvIndex] : null
+    if (argvFormatted) {
+      argvFormatted =
+        '[' +
+        argvFormatted
+          .substring(1, argvFormatted.length - 1)
+          .split(',')
+          .map((arg) => {
+            return arg.startsWith('"') || arg.startsWith("'") ? arg : `"${arg}"`
+          })
+          .join(',') +
+        ']'
+      processArgv[argvIndex] = argvFormatted
+    }
+  }
+
+  const argv = require('yargs/yargs')(processArgv.slice(2)).parse()
   const rootDir = argv.root
+  const command = argv.argv ? sanitizeArgv(JSON.parse(argv.argv)) : ''
   payload = {
     type: argv.type || 'command',
-    command: argv.argv ? sanitizeArgv(JSON.parse(argv.argv)) : '',
+    command,
     duration: argv.duration ? parseInt(argv.duration) : null,
     uid: uniqueId(rootDir) || null,
     ci: ci.isCI,
     redwoodCi: !!process.env.REDWOOD_CI,
     NODE_ENV: process.env.NODE_ENV || null,
-    ...(await getInfo({ redwoodVersion: argv.rwVersion })),
+    ...(await getInfo({ redwoodVersion: argv.rwVersion, command })),
   }
 
   if (argv.error) {
@@ -185,6 +229,10 @@ const uniqueId = (rootDir: string | null) => {
   ) {
     uuid = uuidv4()
     try {
+      // Create `.redwood` directory if it does not exist
+      if (!fs.existsSync(path.dirname(telemetryCachePath))) {
+        fs.mkdirSync(path.dirname(telemetryCachePath), { recursive: true })
+      }
       fs.writeFileSync(telemetryCachePath, uuid)
     } catch (error) {
       console.error('\nCould not create telemetry.txt file\n')
@@ -198,7 +246,9 @@ const uniqueId = (rootDir: string | null) => {
 
 // actually call the API with telemetry data
 export const sendTelemetry = async () => {
-  const telemetryUrl = 'https://telemetry.redwoodjs.com/api/v1/telemetry'
+  const telemetryUrl =
+    process.env.REDWOOD_REDIRECT_TELEMETRY ||
+    'https://telemetry.redwoodjs.com/api/v1/telemetry'
 
   try {
     const payload = await buildPayload()

@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import url from 'node:url'
 
+import Arborist from '@npmcli/arborist'
 import c from 'ansi-colors'
 import execa from 'execa'
 import fg from 'fast-glob'
@@ -19,11 +20,13 @@ export const REDWOOD_PACKAGES_PATH = path.resolve(
 /**
  * A list of the `@redwoodjs` package.json files that are published to npm
  * and installed into a Redwood Project.
+ *
+ * The reason there's more logic here than seems necessary is because we have package.json files
+ * like packages/web/toast/package.json that aren't real packages, but just entry points.
  */
 export function frameworkPkgJsonFiles() {
-  return fg.sync('**/package.json', {
+  let pkgJsonFiles = fg.sync('**/package.json', {
     cwd: REDWOOD_PACKAGES_PATH,
-    deep: 2, // Only the top-level-packages.
     ignore: [
       '**/node_modules/**',
       '**/create-redwood-app/**',
@@ -31,6 +34,21 @@ export function frameworkPkgJsonFiles() {
     ],
     absolute: true,
   })
+
+  for (const pkgJsonFile of pkgJsonFiles) {
+    try {
+      JSON.parse(fs.readFileSync(pkgJsonFile))
+    } catch (e) {
+      throw new Error(pkgJsonFile + ' is not a valid package.json file.')
+    }
+  }
+
+  pkgJsonFiles = pkgJsonFiles.filter((pkgJsonFile) => {
+    const pkgJson = JSON.parse(fs.readFileSync(pkgJsonFile))
+    return !!pkgJson.name
+  })
+
+  return pkgJsonFiles
 }
 
 /**
@@ -40,14 +58,7 @@ export function frameworkDependencies(packages = frameworkPkgJsonFiles()) {
   const dependencies = {}
 
   for (const packageJsonPath of packages) {
-    let packageJson
-    try {
-      packageJson = JSON.parse(fs.readFileSync(packageJsonPath))
-    } catch (e) {
-      throw new Error(
-        packageJsonPath + ' is not a valid package.json file.' + e
-      )
-    }
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath))
 
     for (const [name, version] of Object.entries(
       packageJson?.dependencies ?? {}
@@ -80,21 +91,11 @@ export async function frameworkPackagesFiles(
 ) {
   const fileList = {}
   for (const packageFile of packages) {
-    let packageJson
+    const packageJson = JSON.parse(fs.readFileSync(packageFile))
 
-    try {
-      packageJson = JSON.parse(fs.readFileSync(packageFile))
-    } catch (e) {
-      throw new Error(packageFile + ' is not a valid package.json file.')
-    }
-
-    if (!packageJson.name) {
-      continue
-    }
-
-    fileList[packageJson.name] = await packlist({
-      path: path.dirname(packageFile),
-    })
+    const arborist = new Arborist({ path: path.dirname(packageFile) })
+    const tree = await arborist.loadActual()
+    fileList[packageJson.name] = await packlist(tree)
   }
   return fileList
 }
@@ -120,6 +121,9 @@ export function frameworkPackagesBins(packages = frameworkPkgJsonFiles()) {
     if (!packageJson.bin) {
       continue
     }
+
+    // @TODO @MARK this interferes with having a single bin file
+    // yarn will automatically switch from using an a Map to a string Array
     for (const [binName, binPath] of Object.entries(packageJson.bin)) {
       bins[binName] = path.join(packageJson.name, binPath)
     }

@@ -1,83 +1,33 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import type { useRedwoodDirectiveReturn } from '../plugins/useRedwoodDirective'
-
-import {
-  EnvelopError,
-  FormatErrorHandler,
-  GraphQLYogaError,
-} from '@graphql-yoga/common'
-import type { PluginOrDisabledPlugin } from '@graphql-yoga/common'
-
-import { useDepthLimit } from '@envelop/depth-limit'
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
-import { RedwoodError } from '@redwoodjs/api'
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
   Context as LambdaContext,
 } from 'aws-lambda'
-import { GraphQLError, GraphQLSchema, OperationTypeNode } from 'graphql'
-import { createServer } from '@graphql-yoga/common'
+import { GraphQLSchema, OperationTypeNode } from 'graphql'
+import { Plugin, useReadinessCheck, createYoga } from 'graphql-yoga'
 
+import { mapRwCorsOptionsToYoga } from '../cors'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
 import { makeMergedSchema } from '../makeMergedSchema/makeMergedSchema'
-import { useRedwoodAuthContext } from '../plugins/useRedwoodAuthContext'
 import {
-  DirectivePluginOptions,
+  useArmor,
+  useRedwoodAuthContext,
   useRedwoodDirective,
+  useRedwoodError,
+  useRedwoodGlobalContextSetter,
+  useRedwoodLogger,
+  useRedwoodPopulateContext,
+} from '../plugins'
+import type {
+  useRedwoodDirectiveReturn,
+  DirectivePluginOptions,
 } from '../plugins/useRedwoodDirective'
-import { useRedwoodGlobalContextSetter } from '../plugins/useRedwoodGlobalContextSetter'
-import { useRedwoodLogger } from '../plugins/useRedwoodLogger'
-import { useRedwoodPopulateContext } from '../plugins/useRedwoodPopulateContext'
-
-import { ValidationError } from '../errors'
 
 import type { GraphQLHandlerOptions } from './types'
-import { Headers, Request } from 'cross-undici-fetch'
-import { mapRwCorsOptionsToYoga } from '../cors'
-
-/*
- * Prevent unexpected error messages from leaking to the GraphQL clients.
- *
- * Unexpected errors are those that are not Envelop, GraphQL, or Redwood errors
- **/
-export const formatError: FormatErrorHandler = (err: any, message: string) => {
-  const allowErrors = [GraphQLYogaError, EnvelopError, RedwoodError]
-
-  // If using graphql-scalars, when validating input
-  // the original TypeError is wrapped in an GraphQLError object.
-  // We extract out and present the portion of the original error's
-  // validation message that is friendly to send to the end user
-  // @see https://github.com/Urigo/graphql-scalars and their validate method
-  if (err && err instanceof GraphQLError) {
-    if (err.originalError && err.originalError instanceof TypeError) {
-      return new ValidationError(err.originalError.message)
-    }
-  }
-
-  if (
-    err.originalError &&
-    !allowErrors.find(
-      (allowedError) => err.originalError instanceof allowedError
-    )
-  ) {
-    return new GraphQLError(message)
-  }
-
-  return err
-}
-
-const convertToMultiValueHeaders = (headers: Headers) => {
-  const multiValueHeaders: APIGatewayProxyResult['multiValueHeaders'] = {}
-  for (const [key, value] of headers) {
-    multiValueHeaders[key] = multiValueHeaders[key] || []
-    multiValueHeaders[key].push(value)
-  }
-  return multiValueHeaders
-}
-
 /**
  * Creates an Enveloped GraphQL Server, configured with default Redwood plugins
  *
@@ -97,18 +47,19 @@ export const createGraphQLHandler = ({
   onException,
   generateGraphiQLHeader,
   extraPlugins,
+  authDecoder,
   cors,
   services,
   sdls,
   directives = [],
-  depthLimitOptions,
+  armorConfig,
   allowedOperations,
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
 }: GraphQLHandlerOptions) => {
   let schema: GraphQLSchema
-  let redwoodDirectivePlugins = [] as PluginOrDisabledPlugin[]
+  let redwoodDirectivePlugins = [] as Plugin[]
   const logger = loggerConfig.logger
 
   try {
@@ -140,14 +91,14 @@ export const createGraphQLHandler = ({
   // so the order here matters
   const isDevEnv = process.env.NODE_ENV === 'development'
 
-  const plugins: Array<PluginOrDisabledPlugin> = []
+  const plugins: Array<Plugin<any>> = []
 
   if (!isDevEnv) {
     plugins.push(useDisableIntrospection())
   }
 
   // Custom Redwood plugins
-  plugins.push(useRedwoodAuthContext(getCurrentUser))
+  plugins.push(useRedwoodAuthContext(getCurrentUser, authDecoder))
   plugins.push(useRedwoodGlobalContextSetter())
 
   if (context) {
@@ -157,13 +108,9 @@ export const createGraphQLHandler = ({
   // Custom Redwood plugins
   plugins.push(...redwoodDirectivePlugins)
 
-  // Limits the depth of your GraphQL selection sets.
-  plugins.push(
-    useDepthLimit({
-      maxDepth: (depthLimitOptions && depthLimitOptions.maxDepth) || 10,
-      ignore: (depthLimitOptions && depthLimitOptions.ignore) || [],
-    })
-  )
+  // Secure the GraphQL server
+  plugins.push(useArmor(logger, armorConfig))
+
   // Only allow execution of specific operation types
   plugins.push(
     useFilterAllowedOperations(
@@ -176,23 +123,54 @@ export const createGraphQLHandler = ({
     plugins.push(...extraPlugins)
   }
 
+  plugins.push(useRedwoodError(logger))
+
+  plugins.push(
+    useReadinessCheck({
+      endpoint: graphiQLEndpoint + '/readiness',
+      check: async ({ request }) => {
+        try {
+          // if we can reach the health check endpoint ...
+          const response = await yoga.fetch(
+            new URL(graphiQLEndpoint + '/health', request.url)
+          )
+
+          const expectedHealthCheckId = healthCheckId || 'yoga'
+
+          // ... and the health check id's match the request and response's
+          const status =
+            response.headers.get('x-yoga-id') === expectedHealthCheckId &&
+            request.headers.get('x-yoga-id') === expectedHealthCheckId
+
+          // then we're good to go (or not)
+          return status
+        } catch (err) {
+          logger.error(err)
+          return false
+        }
+      },
+    })
+  )
+
   // Must be "last" in plugin chain, but before error masking
   // so can process any data added to results and extensions
   plugins.push(useRedwoodLogger(loggerConfig))
 
-  const yoga = createServer({
+  const yoga = createYoga({
     id: healthCheckId,
+    landingPage: isDevEnv,
     schema,
     plugins,
     maskedErrors: {
-      formatError,
       errorMessage: defaultError,
+      isDev: isDevEnv,
     },
     logging: logger,
+    healthCheckEndpoint: graphiQLEndpoint + '/health',
+    graphqlEndpoint: graphiQLEndpoint,
     graphiql: isDevEnv
       ? {
           title: 'Redwood GraphQL Playground',
-          endpoint: graphiQLEndpoint,
           headers: generateGraphiQLHeader
             ? generateGraphiQLHeader()
             : `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiQL-headers on how to auto generate auth headers"}`,
@@ -210,120 +188,59 @@ export const createGraphQLHandler = ({
     },
   })
 
-  function buildRequestObject(event: APIGatewayProxyEvent) {
-    const requestHeaders = new Headers()
-    const supportsMultiValueHeaders =
-      event.multiValueHeaders && Object.keys(event.multiValueHeaders).length > 0
-    // Avoid duplicating header values, because Yoga gets confused with CORS
-    if (supportsMultiValueHeaders) {
-      for (const headerName in event.multiValueHeaders) {
-        const headerValues = event.multiValueHeaders[headerName]
-        if (headerValues) {
-          for (const headerValue of headerValues) {
-            requestHeaders.append(headerName, headerValue)
-          }
-        }
-      }
-    } else {
-      for (const headerName in event.headers) {
-        const headerValue = event.headers[headerName]
-        if (headerValue) {
-          requestHeaders.append(headerName, headerValue)
-        }
-      }
-    }
-
-    const protocol = isDevEnv ? 'http' : 'https'
-
-    const requestUrl = new URL(
-      event.path,
-      protocol + '://' + (event.requestContext?.domainName || 'localhost')
-    )
-
-    if (event.multiValueQueryStringParameters) {
-      for (const queryStringParam in event.multiValueQueryStringParameters) {
-        const queryStringValues =
-          event.multiValueQueryStringParameters[queryStringParam]
-        if (queryStringValues) {
-          if (Array.isArray(queryStringValues)) {
-            for (const queryStringValue of queryStringValues) {
-              requestUrl.searchParams.append(queryStringParam, queryStringValue)
-            }
-          } else {
-            requestUrl.searchParams.append(
-              queryStringParam,
-              String(queryStringValues)
-            )
-          }
-        }
-      }
-    } else if (event.queryStringParameters) {
-      for (const queryStringParam in event.queryStringParameters) {
-        const queryStringValue = event.queryStringParameters[queryStringParam]
-        if (queryStringValue) {
-          requestUrl.searchParams.append(queryStringParam, queryStringValue)
-        }
-      }
-    }
-
-    if (
-      event.httpMethod === 'GET' ||
-      event.httpMethod === 'HEAD' ||
-      event.body == null
-    ) {
-      return new Request(requestUrl.toString(), {
-        method: event.httpMethod,
-        headers: requestHeaders,
-      })
-    } else {
-      const body = event.isBase64Encoded
-        ? Buffer.from(event.body, 'base64').toString('utf-8')
-        : event.body
-      return new Request(requestUrl.toString(), {
-        method: event.httpMethod,
-        headers: requestHeaders,
-        body,
-      })
-    }
-  }
-
   const handlerFn = async (
     event: APIGatewayProxyEvent,
-    lambdaContext: LambdaContext
+    requestContext: LambdaContext
   ): Promise<APIGatewayProxyResult> => {
     // In the future, this could be part of a specific handler for AWS lambdas
-    lambdaContext.callbackWaitsForEmptyEventLoop = false
+    requestContext.callbackWaitsForEmptyEventLoop = false
 
     let lambdaResponse: APIGatewayProxyResult
 
-    // @NOTE AWS types define that multiValueHeaders always exist, even as an empty object
-    // But this isn't true on Vercel, it's just undefined.
-    const supportsMultiValueHeaders =
-      event.multiValueHeaders && Object.keys(event.multiValueHeaders).length > 0
-
     try {
-      const request = buildRequestObject(event)
+      // url needs to be normalized
+      const [, rest = ''] = event.path.split(graphiQLEndpoint)
+      const url = new URL(graphiQLEndpoint + rest, 'http://localhost')
 
-      const response = await yoga.handleRequest(request, {
-        event,
-        requestContext: lambdaContext,
-      })
+      if (event.queryStringParameters != null) {
+        for (const queryName in event.queryStringParameters) {
+          const queryValue = event.queryStringParameters[queryName]
+          if (queryValue != null) {
+            url.searchParams.set(queryName, queryValue)
+          }
+        }
+      }
+
+      const response = await yoga.fetch(
+        url,
+        {
+          method: event.httpMethod,
+          headers: event.headers as HeadersInit,
+          body: event.body
+            ? Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8')
+            : undefined,
+        },
+        {
+          event,
+          requestContext,
+        }
+      )
 
       // @WARN - multivalue headers aren't supported on all deployment targets correctly
       // Netlify ✅, Vercel 🛑, AWS ✅,...
       // From https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
       // If you specify values for both headers and multiValueHeaders, API Gateway merges them into a single list.
+      const responseHeaders: Record<string, string> = {}
+
+      response.headers.forEach((value, name) => {
+        responseHeaders[name] = value
+      })
 
       lambdaResponse = {
         body: await response.text(),
         statusCode: response.status,
-
-        // Only supply headers if MVH aren't supported, otherwise it causes duplicated headers
-        headers: supportsMultiValueHeaders
-          ? {}
-          : Object.fromEntries(response.headers),
-        // Gets ignored if MVH isn't supported
-        multiValueHeaders: convertToMultiValueHeaders(response.headers),
+        headers: responseHeaders,
+        isBase64Encoded: false,
       }
     } catch (e: any) {
       logger.error(e)
@@ -346,8 +263,11 @@ export const createGraphQLHandler = ({
      *
      * @see: https://www.rfc-editor.org/rfc/rfc7540#section-8.1.2
      */
-    lambdaResponse.headers['content-type'] = 'application/json'
-
+    // DT: Yoga v3 uses `application/graphql-response+json; charset=utf-8`
+    // But we still do want to make sure the header is lowercase.
+    // Comment out for now since GraphiQL doesn't work with this header anymore
+    // because it loads its UI from a CDN and needs text/html to be the response type
+    // lambdaResponse.headers['content-type'] = 'application/json'
     return lambdaResponse
   }
 

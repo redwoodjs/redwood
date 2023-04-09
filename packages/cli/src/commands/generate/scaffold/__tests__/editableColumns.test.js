@@ -1,12 +1,14 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import path from 'path'
 
 // Load mocks
 import '../../../../lib/test'
 
 import { getDefaultArgs } from '../../../../lib'
-import { yargsDefaults as defaults } from '../../../generate'
+import { yargsDefaults as defaults } from '../../helpers'
 import * as scaffold from '../scaffold'
+
+jest.mock('execa')
 
 describe('editable columns', () => {
   let files

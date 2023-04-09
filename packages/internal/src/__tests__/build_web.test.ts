@@ -1,9 +1,10 @@
 import path from 'path'
 
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
+
 import { prebuildWebFile } from '../build/babel/web'
 import { prebuildWebFiles, cleanWebBuild } from '../build/web'
 import { findWebFiles } from '../files'
-import { ensurePosixPath, getPaths } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -31,7 +32,7 @@ test('web files are prebuilt (no prerender)', async () => {
     .map(cleanPaths)
   // Builds non-nested functions
   expect(relativePaths).toMatchInlineSnapshot(`
-    Array [
+    [
       ".redwood/prebuild/web/src/App.js",
       ".redwood/prebuild/web/src/Routes.js",
       ".redwood/prebuild/web/src/components/AddTodo/AddTodo.js",

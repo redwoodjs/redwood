@@ -1,8 +1,9 @@
-import humanize from 'humanize-string'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+
+import { ${formattersImports} } from 'src/lib/formatters'
 
 import type { Delete${singularPascalName}MutationVariables, Find${singularPascalName}ById } from 'types/graphql'
 
@@ -14,40 +15,11 @@ const DELETE_${singularConstantName}_MUTATION = gql`
   }
 `
 
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
+interface Props {
+  ${singularCamelName}: NonNullable<Find${singularPascalName}ById['${singularCamelName}']>
 }
 
-const jsonDisplay = (obj: unknown) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
-const timeTag = (datetime?: string) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked: boolean) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-
-const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalName}ById) => {
+const ${singularPascalName} = ({ ${singularCamelName} }: Props) => {
   const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
     onCompleted: () => {
       toast.success('${singularPascalName} deleted')
@@ -69,7 +41,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalNam
       <div className="rw-segment">
         <header className="rw-segment-header">
           <h2 className="rw-heading rw-heading-secondary">
-            ${singularPascalName} {${singularCamelName}?.id} Detail
+            ${singularPascalName} {${singularCamelName}.id} Detail
           </h2>
         </header>
         <table className="rw-table">
@@ -87,7 +59,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalNam
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.${editRouteName}({ id: ${singularCamelName}?.id })}
+          to={routes.${editRouteName}({ id: ${singularCamelName}.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -95,7 +67,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }: Find${singularPascalNam
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(${singularCamelName}?.id)}
+          onClick={() => onDeleteClick(${singularCamelName}.id)}
         >
           Delete
         </button>

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`handler can be called with PascalCase model name 1`] = `
-Object {
+{
   "fileContent": "export const schema = gql\`
   type User {
     id: Int!
@@ -40,7 +40,7 @@ Object {
 `;
 
 exports[`handler can be called with PascalCase model name 2`] = `
-Object {
+{
   "fileContent": "export const standard = defineScenario({
   user: {
     one: { data: { email: 'String1234567' } },
@@ -53,11 +53,11 @@ Object {
 `;
 
 exports[`handler can be called with PascalCase model name 3`] = `
-Object {
+{
   "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -106,7 +106,7 @@ describe('users', () => {
 `;
 
 exports[`handler can be called with PascalCase model name 4`] = `
-Object {
+{
   "fileContent": "import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -139,8 +139,9 @@ export const deleteUser = ({ id }) => {
 }
 
 export const User = {
-  profiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).profiles(),
+  profiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).profiles()
+  },
 }
 ",
   "filePath": "/path/to/project/api/src/services/users/users.js",
@@ -148,7 +149,7 @@ export const User = {
 `;
 
 exports[`handler can be called with PascalCase model name 5`] = `
-Object {
+{
   "fileContent": "export const schema = gql\`
   type CustomData {
     id: Int!
@@ -181,7 +182,7 @@ Object {
 `;
 
 exports[`handler can be called with PascalCase model name 6`] = `
-Object {
+{
   "fileContent": "export const standard = defineScenario({
   customData: {
     one: { data: { data: 'String' } },
@@ -194,7 +195,7 @@ Object {
 `;
 
 exports[`handler can be called with PascalCase model name 7`] = `
-Object {
+{
   "fileContent": "import {
   customDatums,
   customData,
@@ -204,7 +205,7 @@ Object {
 } from './customDatums'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -234,7 +235,6 @@ describe('customDatums', () => {
     const original = await customData({
       id: scenario.customData.one.id,
     })
-
     const result = await updateCustomData({
       id: original.id,
       input: { data: 'String2' },
@@ -247,7 +247,6 @@ describe('customDatums', () => {
     const original = await deleteCustomData({
       id: scenario.customData.one.id,
     })
-
     const result = await customData({ id: original.id })
 
     expect(result).toEqual(null)
@@ -259,7 +258,7 @@ describe('customDatums', () => {
 `;
 
 exports[`handler can be called with PascalCase model name 8`] = `
-Object {
+{
   "fileContent": "import { db } from 'src/lib/db'
 
 export const customDatums = () => {
@@ -296,7 +295,7 @@ export const deleteCustomData = ({ id }) => {
 `;
 
 exports[`handler can be called with camelCase model name 1`] = `
-Object {
+{
   "fileContent": "export const schema = gql\`
   type User {
     id: Int!
@@ -335,7 +334,7 @@ Object {
 `;
 
 exports[`handler can be called with camelCase model name 2`] = `
-Object {
+{
   "fileContent": "export const standard = defineScenario({
   user: {
     one: { data: { email: 'String1234567' } },
@@ -348,11 +347,11 @@ Object {
 `;
 
 exports[`handler can be called with camelCase model name 3`] = `
-Object {
+{
   "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -401,7 +400,7 @@ describe('users', () => {
 `;
 
 exports[`handler can be called with camelCase model name 4`] = `
-Object {
+{
   "fileContent": "import { db } from 'src/lib/db'
 
 export const users = () => {
@@ -434,8 +433,9 @@ export const deleteUser = ({ id }) => {
 }
 
 export const User = {
-  profiles: (_obj, gqlArgs) =>
-    db.user.findUnique({ where: { id: gqlArgs?.root?.id } }).profiles(),
+  profiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).profiles()
+  },
 }
 ",
   "filePath": "/path/to/project/api/src/services/users/users.js",
@@ -443,7 +443,7 @@ export const User = {
 `;
 
 exports[`handler can be called with camelCase model name 5`] = `
-Object {
+{
   "fileContent": "export const schema = gql\`
   type CustomData {
     id: Int!
@@ -476,7 +476,7 @@ Object {
 `;
 
 exports[`handler can be called with camelCase model name 6`] = `
-Object {
+{
   "fileContent": "export const standard = defineScenario({
   customData: {
     one: { data: { data: 'String' } },
@@ -489,7 +489,7 @@ Object {
 `;
 
 exports[`handler can be called with camelCase model name 7`] = `
-Object {
+{
   "fileContent": "import {
   customDatums,
   customData,
@@ -499,7 +499,7 @@ Object {
 } from './customDatums'
 
 // Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float and DateTime types.
+// and can fail without adjustments, e.g. Float.
 //           Please refer to the RedwoodJS Testing Docs:
 //       https://redwoodjs.com/docs/testing#testing-services
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
@@ -529,7 +529,6 @@ describe('customDatums', () => {
     const original = await customData({
       id: scenario.customData.one.id,
     })
-
     const result = await updateCustomData({
       id: original.id,
       input: { data: 'String2' },
@@ -542,7 +541,6 @@ describe('customDatums', () => {
     const original = await deleteCustomData({
       id: scenario.customData.one.id,
     })
-
     const result = await customData({ id: original.id })
 
     expect(result).toEqual(null)
@@ -554,7 +552,7 @@ describe('customDatums', () => {
 `;
 
 exports[`handler can be called with camelCase model name 8`] = `
-Object {
+{
   "fileContent": "import { db } from 'src/lib/db'
 
 export const customDatums = () => {
@@ -592,68 +590,68 @@ export const deleteCustomData = ({ id }) => {
 
 exports[`with graphql documentations in javascript mode creates a multi word sdl file 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   Representation of UserProfile.
-  \\"\\"\\"
+  """
   type UserProfile {
-    \\"Description for id.\\"
+    "Description for id."
     id: Int!
 
-    \\"Description for username.\\"
+    "Description for username."
     username: String!
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int!
 
-    \\"Description for user.\\"
+    "Description for user."
     user: User!
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch UserProfiles.\\"
+    "Fetch UserProfiles."
     userProfiles: [UserProfile!]! @requireAuth
 
-    \\"Fetch a UserProfile by id.\\"
+    "Fetch a UserProfile by id."
     userProfile(id: Int!): UserProfile @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputUserProfile.
-  \\"\\"\\"
+  """
   input CreateUserProfileInput {
-    \\"Description for username.\\"
+    "Description for username."
     username: String!
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdateUserProfile.
-  \\"\\"\\"
+  """
   input UpdateUserProfileInput {
-    \\"Description for username.\\"
+    "Description for username."
     username: String
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new UserProfile.\\"
+    "Creates a new UserProfile."
     createUserProfile(input: CreateUserProfileInput!): UserProfile! @requireAuth
 
-    \\"Updates an existing UserProfile.\\"
+    "Updates an existing UserProfile."
     updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
       @requireAuth
 
-    \\"Deletes an existing UserProfile.\\"
+    "Deletes an existing UserProfile."
     deleteUserProfile(id: Int!): UserProfile! @requireAuth
   }
 \`
@@ -662,68 +660,68 @@ exports[`with graphql documentations in javascript mode creates a multi word sdl
 
 exports[`with graphql documentations in javascript mode creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   Representation of UserProfile.
-  \\"\\"\\"
+  """
   type UserProfile {
-    \\"Description for id.\\"
+    "Description for id."
     id: Int!
 
-    \\"Description for username.\\"
+    "Description for username."
     username: String!
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int!
 
-    \\"Description for user.\\"
+    "Description for user."
     user: User!
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch UserProfiles.\\"
+    "Fetch UserProfiles."
     userProfiles: [UserProfile!]! @requireAuth
 
-    \\"Fetch a UserProfile by id.\\"
+    "Fetch a UserProfile by id."
     userProfile(id: Int!): UserProfile @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputUserProfile.
-  \\"\\"\\"
+  """
   input CreateUserProfileInput {
-    \\"Description for username.\\"
+    "Description for username."
     username: String!
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdateUserProfile.
-  \\"\\"\\"
+  """
   input UpdateUserProfileInput {
-    \\"Description for username.\\"
+    "Description for username."
     username: String
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new UserProfile.\\"
+    "Creates a new UserProfile."
     createUserProfile(input: CreateUserProfileInput!): UserProfile! @requireAuth
 
-    \\"Updates an existing UserProfile.\\"
+    "Updates an existing UserProfile."
     updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
       @requireAuth
 
-    \\"Deletes an existing UserProfile.\\"
+    "Deletes an existing UserProfile."
     deleteUserProfile(id: Int!): UserProfile! @requireAuth
   }
 \`
@@ -732,64 +730,64 @@ exports[`with graphql documentations in javascript mode creates a multi word sdl
 
 exports[`with graphql documentations in javascript mode creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   A shoe worn by a user.
-  \\"\\"\\"
+  """
   type Shoe {
-    \\"The underlaying ID\\"
+    "The underlaying ID"
     id: Int!
 
-    \\"Shoe color\\"
+    "Shoe color"
     color: Color!
   }
 
-  \\"\\"\\"
+  """
   A list of allowed colors.
-  \\"\\"\\"
+  """
   enum Color {
     RED
     GREEN
     BLUE
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch Shoes.\\"
+    "Fetch Shoes."
     shoes: [Shoe!]! @requireAuth
 
-    \\"Fetch a Shoe by id.\\"
+    "Fetch a Shoe by id."
     shoe(id: Int!): Shoe @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputShoe.
-  \\"\\"\\"
+  """
   input CreateShoeInput {
-    \\"Shoe color\\"
+    "Shoe color"
     color: Color!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdateShoe.
-  \\"\\"\\"
+  """
   input UpdateShoeInput {
-    \\"Shoe color\\"
+    "Shoe color"
     color: Color
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new Shoe.\\"
+    "Creates a new Shoe."
     createShoe(input: CreateShoeInput!): Shoe! @requireAuth
 
-    \\"Updates an existing Shoe.\\"
+    "Updates an existing Shoe."
     updateShoe(id: Int!, input: UpdateShoeInput!): Shoe! @requireAuth
 
-    \\"Deletes an existing Shoe.\\"
+    "Deletes an existing Shoe."
     deleteShoe(id: Int!): Shoe! @requireAuth
   }
 \`
@@ -798,64 +796,64 @@ exports[`with graphql documentations in javascript mode creates a sdl file with 
 
 exports[`with graphql documentations in javascript mode creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   A photograph taken by a user.
-  \\"\\"\\"
+  """
   type Photo {
-    \\"The underlaying ID\\"
+    "The underlaying ID"
     id: Int!
 
-    \\"The name of the Photo\\"
+    "The name of the Photo"
     name: String!
 
-    \\"Description for metadata.\\"
+    "Description for metadata."
     metadata: JSON!
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch Photos.\\"
+    "Fetch Photos."
     photos: [Photo!]! @requireAuth
 
-    \\"Fetch a Photo by id.\\"
+    "Fetch a Photo by id."
     photo(id: Int!): Photo @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputPhoto.
-  \\"\\"\\"
+  """
   input CreatePhotoInput {
-    \\"The name of the Photo\\"
+    "The name of the Photo"
     name: String!
 
-    \\"Description for metadata.\\"
+    "Description for metadata."
     metadata: JSON!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdatePhoto.
-  \\"\\"\\"
+  """
   input UpdatePhotoInput {
-    \\"The name of the Photo\\"
+    "The name of the Photo"
     name: String
 
-    \\"Description for metadata.\\"
+    "Description for metadata."
     metadata: JSON
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new Photo.\\"
+    "Creates a new Photo."
     createPhoto(input: CreatePhotoInput!): Photo! @requireAuth
 
-    \\"Updates an existing Photo.\\"
+    "Updates an existing Photo."
     updatePhoto(id: Int!, input: UpdatePhotoInput!): Photo! @requireAuth
 
-    \\"Deletes an existing Photo.\\"
+    "Deletes an existing Photo."
     deletePhoto(id: Int!): Photo! @requireAuth
   }
 \`
@@ -864,59 +862,59 @@ exports[`with graphql documentations in javascript mode creates a sdl file with 
 
 exports[`with graphql documentations in javascript mode creates a single word sdl file 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   Representation of User.
-  \\"\\"\\"
+  """
   type User {
-    \\"Description for id.\\"
+    "Description for id."
     id: Int!
 
-    \\"Description for name.\\"
+    "Description for name."
     name: String
 
-    \\"Description for email.\\"
+    "Description for email."
     email: String!
 
-    \\"Description for isAdmin.\\"
+    "Description for isAdmin."
     isAdmin: Boolean!
 
-    \\"Description for profiles.\\"
+    "Description for profiles."
     profiles: [UserProfile]!
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch Users.\\"
+    "Fetch Users."
     users: [User!]! @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputUser.
-  \\"\\"\\"
+  """
   input CreateUserInput {
-    \\"Description for name.\\"
+    "Description for name."
     name: String
 
-    \\"Description for email.\\"
+    "Description for email."
     email: String!
 
-    \\"Description for isAdmin.\\"
+    "Description for isAdmin."
     isAdmin: Boolean!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdateUser.
-  \\"\\"\\"
+  """
   input UpdateUserInput {
-    \\"Description for name.\\"
+    "Description for name."
     name: String
 
-    \\"Description for email.\\"
+    "Description for email."
     email: String
 
-    \\"Description for isAdmin.\\"
+    "Description for isAdmin."
     isAdmin: Boolean
   }
 \`
@@ -925,100 +923,100 @@ exports[`with graphql documentations in javascript mode creates a single word sd
 
 exports[`with graphql documentations in javascript mode creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   Representation of Post.
-  \\"\\"\\"
+  """
   type Post {
-    \\"Description for id.\\"
+    "Description for id."
     id: Int!
 
-    \\"Description for title.\\"
+    "Description for title."
     title: String!
 
-    \\"Description for slug.\\"
+    "Description for slug."
     slug: String!
 
-    \\"Description for author.\\"
+    "Description for author."
     author: String!
 
-    \\"Description for body.\\"
+    "Description for body."
     body: String!
 
-    \\"Description for image.\\"
+    "Description for image."
     image: String
 
-    \\"Description for postedAt.\\"
+    "Description for postedAt."
     postedAt: DateTime
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch Posts.\\"
+    "Fetch Posts."
     posts: [Post!]! @requireAuth
 
-    \\"Fetch a Post by id.\\"
+    "Fetch a Post by id."
     post(id: Int!): Post @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputPost.
-  \\"\\"\\"
+  """
   input CreatePostInput {
-    \\"Description for title.\\"
+    "Description for title."
     title: String!
 
-    \\"Description for slug.\\"
+    "Description for slug."
     slug: String!
 
-    \\"Description for author.\\"
+    "Description for author."
     author: String!
 
-    \\"Description for body.\\"
+    "Description for body."
     body: String!
 
-    \\"Description for image.\\"
+    "Description for image."
     image: String
 
-    \\"Description for postedAt.\\"
+    "Description for postedAt."
     postedAt: DateTime
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdatePost.
-  \\"\\"\\"
+  """
   input UpdatePostInput {
-    \\"Description for title.\\"
+    "Description for title."
     title: String
 
-    \\"Description for slug.\\"
+    "Description for slug."
     slug: String
 
-    \\"Description for author.\\"
+    "Description for author."
     author: String
 
-    \\"Description for body.\\"
+    "Description for body."
     body: String
 
-    \\"Description for image.\\"
+    "Description for image."
     image: String
 
-    \\"Description for postedAt.\\"
+    "Description for postedAt."
     postedAt: DateTime
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new Post.\\"
+    "Creates a new Post."
     createPost(input: CreatePostInput!): Post! @requireAuth
 
-    \\"Updates an existing Post.\\"
+    "Updates an existing Post."
     updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
 
-    \\"Deletes an existing Post.\\"
+    "Deletes an existing Post."
     deletePost(id: Int!): Post! @requireAuth
   }
 \`
@@ -1027,68 +1025,68 @@ exports[`with graphql documentations in javascript mode creates a single word sd
 
 exports[`with graphql documentations in typescript mode creates a multi word sdl file 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   Representation of UserProfile.
-  \\"\\"\\"
+  """
   type UserProfile {
-    \\"Description for id.\\"
+    "Description for id."
     id: Int!
 
-    \\"Description for username.\\"
+    "Description for username."
     username: String!
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int!
 
-    \\"Description for user.\\"
+    "Description for user."
     user: User!
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch UserProfiles.\\"
+    "Fetch UserProfiles."
     userProfiles: [UserProfile!]! @requireAuth
 
-    \\"Fetch a UserProfile by id.\\"
+    "Fetch a UserProfile by id."
     userProfile(id: Int!): UserProfile @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputUserProfile.
-  \\"\\"\\"
+  """
   input CreateUserProfileInput {
-    \\"Description for username.\\"
+    "Description for username."
     username: String!
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdateUserProfile.
-  \\"\\"\\"
+  """
   input UpdateUserProfileInput {
-    \\"Description for username.\\"
+    "Description for username."
     username: String
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new UserProfile.\\"
+    "Creates a new UserProfile."
     createUserProfile(input: CreateUserProfileInput!): UserProfile! @requireAuth
 
-    \\"Updates an existing UserProfile.\\"
+    "Updates an existing UserProfile."
     updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
       @requireAuth
 
-    \\"Deletes an existing UserProfile.\\"
+    "Deletes an existing UserProfile."
     deleteUserProfile(id: Int!): UserProfile! @requireAuth
   }
 \`
@@ -1097,68 +1095,68 @@ exports[`with graphql documentations in typescript mode creates a multi word sdl
 
 exports[`with graphql documentations in typescript mode creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   Representation of UserProfile.
-  \\"\\"\\"
+  """
   type UserProfile {
-    \\"Description for id.\\"
+    "Description for id."
     id: Int!
 
-    \\"Description for username.\\"
+    "Description for username."
     username: String!
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int!
 
-    \\"Description for user.\\"
+    "Description for user."
     user: User!
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch UserProfiles.\\"
+    "Fetch UserProfiles."
     userProfiles: [UserProfile!]! @requireAuth
 
-    \\"Fetch a UserProfile by id.\\"
+    "Fetch a UserProfile by id."
     userProfile(id: Int!): UserProfile @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputUserProfile.
-  \\"\\"\\"
+  """
   input CreateUserProfileInput {
-    \\"Description for username.\\"
+    "Description for username."
     username: String!
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdateUserProfile.
-  \\"\\"\\"
+  """
   input UpdateUserProfileInput {
-    \\"Description for username.\\"
+    "Description for username."
     username: String
 
-    \\"Description for userId.\\"
+    "Description for userId."
     userId: Int
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new UserProfile.\\"
+    "Creates a new UserProfile."
     createUserProfile(input: CreateUserProfileInput!): UserProfile! @requireAuth
 
-    \\"Updates an existing UserProfile.\\"
+    "Updates an existing UserProfile."
     updateUserProfile(id: Int!, input: UpdateUserProfileInput!): UserProfile!
       @requireAuth
 
-    \\"Deletes an existing UserProfile.\\"
+    "Deletes an existing UserProfile."
     deleteUserProfile(id: Int!): UserProfile! @requireAuth
   }
 \`
@@ -1167,64 +1165,64 @@ exports[`with graphql documentations in typescript mode creates a multi word sdl
 
 exports[`with graphql documentations in typescript mode creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   A shoe worn by a user.
-  \\"\\"\\"
+  """
   type Shoe {
-    \\"The underlaying ID\\"
+    "The underlaying ID"
     id: Int!
 
-    \\"Shoe color\\"
+    "Shoe color"
     color: Color!
   }
 
-  \\"\\"\\"
+  """
   A list of allowed colors.
-  \\"\\"\\"
+  """
   enum Color {
     RED
     GREEN
     BLUE
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch Shoes.\\"
+    "Fetch Shoes."
     shoes: [Shoe!]! @requireAuth
 
-    \\"Fetch a Shoe by id.\\"
+    "Fetch a Shoe by id."
     shoe(id: Int!): Shoe @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputShoe.
-  \\"\\"\\"
+  """
   input CreateShoeInput {
-    \\"Shoe color\\"
+    "Shoe color"
     color: Color!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdateShoe.
-  \\"\\"\\"
+  """
   input UpdateShoeInput {
-    \\"Shoe color\\"
+    "Shoe color"
     color: Color
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new Shoe.\\"
+    "Creates a new Shoe."
     createShoe(input: CreateShoeInput!): Shoe! @requireAuth
 
-    \\"Updates an existing Shoe.\\"
+    "Updates an existing Shoe."
     updateShoe(id: Int!, input: UpdateShoeInput!): Shoe! @requireAuth
 
-    \\"Deletes an existing Shoe.\\"
+    "Deletes an existing Shoe."
     deleteShoe(id: Int!): Shoe! @requireAuth
   }
 \`
@@ -1233,64 +1231,64 @@ exports[`with graphql documentations in typescript mode creates a sdl file with 
 
 exports[`with graphql documentations in typescript mode creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   A photograph taken by a user.
-  \\"\\"\\"
+  """
   type Photo {
-    \\"The underlaying ID\\"
+    "The underlaying ID"
     id: Int!
 
-    \\"The name of the Photo\\"
+    "The name of the Photo"
     name: String!
 
-    \\"Description for metadata.\\"
+    "Description for metadata."
     metadata: JSON!
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch Photos.\\"
+    "Fetch Photos."
     photos: [Photo!]! @requireAuth
 
-    \\"Fetch a Photo by id.\\"
+    "Fetch a Photo by id."
     photo(id: Int!): Photo @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputPhoto.
-  \\"\\"\\"
+  """
   input CreatePhotoInput {
-    \\"The name of the Photo\\"
+    "The name of the Photo"
     name: String!
 
-    \\"Description for metadata.\\"
+    "Description for metadata."
     metadata: JSON!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdatePhoto.
-  \\"\\"\\"
+  """
   input UpdatePhotoInput {
-    \\"The name of the Photo\\"
+    "The name of the Photo"
     name: String
 
-    \\"Description for metadata.\\"
+    "Description for metadata."
     metadata: JSON
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new Photo.\\"
+    "Creates a new Photo."
     createPhoto(input: CreatePhotoInput!): Photo! @requireAuth
 
-    \\"Updates an existing Photo.\\"
+    "Updates an existing Photo."
     updatePhoto(id: Int!, input: UpdatePhotoInput!): Photo! @requireAuth
 
-    \\"Deletes an existing Photo.\\"
+    "Deletes an existing Photo."
     deletePhoto(id: Int!): Photo! @requireAuth
   }
 \`
@@ -1299,59 +1297,59 @@ exports[`with graphql documentations in typescript mode creates a sdl file with 
 
 exports[`with graphql documentations in typescript mode creates a single word sdl file 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   Representation of User.
-  \\"\\"\\"
+  """
   type User {
-    \\"Description for id.\\"
+    "Description for id."
     id: Int!
 
-    \\"Description for name.\\"
+    "Description for name."
     name: String
 
-    \\"Description for email.\\"
+    "Description for email."
     email: String!
 
-    \\"Description for isAdmin.\\"
+    "Description for isAdmin."
     isAdmin: Boolean!
 
-    \\"Description for profiles.\\"
+    "Description for profiles."
     profiles: [UserProfile]!
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch Users.\\"
+    "Fetch Users."
     users: [User!]! @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputUser.
-  \\"\\"\\"
+  """
   input CreateUserInput {
-    \\"Description for name.\\"
+    "Description for name."
     name: String
 
-    \\"Description for email.\\"
+    "Description for email."
     email: String!
 
-    \\"Description for isAdmin.\\"
+    "Description for isAdmin."
     isAdmin: Boolean!
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdateUser.
-  \\"\\"\\"
+  """
   input UpdateUserInput {
-    \\"Description for name.\\"
+    "Description for name."
     name: String
 
-    \\"Description for email.\\"
+    "Description for email."
     email: String
 
-    \\"Description for isAdmin.\\"
+    "Description for isAdmin."
     isAdmin: Boolean
   }
 \`
@@ -1360,100 +1358,100 @@ exports[`with graphql documentations in typescript mode creates a single word sd
 
 exports[`with graphql documentations in typescript mode creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
-  \\"\\"\\"
+  """
   Representation of Post.
-  \\"\\"\\"
+  """
   type Post {
-    \\"Description for id.\\"
+    "Description for id."
     id: Int!
 
-    \\"Description for title.\\"
+    "Description for title."
     title: String!
 
-    \\"Description for slug.\\"
+    "Description for slug."
     slug: String!
 
-    \\"Description for author.\\"
+    "Description for author."
     author: String!
 
-    \\"Description for body.\\"
+    "Description for body."
     body: String!
 
-    \\"Description for image.\\"
+    "Description for image."
     image: String
 
-    \\"Description for postedAt.\\"
+    "Description for postedAt."
     postedAt: DateTime
   }
 
-  \\"\\"\\"
+  """
   About queries
-  \\"\\"\\"
+  """
   type Query {
-    \\"Fetch Posts.\\"
+    "Fetch Posts."
     posts: [Post!]! @requireAuth
 
-    \\"Fetch a Post by id.\\"
+    "Fetch a Post by id."
     post(id: Int!): Post @requireAuth
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of InputPost.
-  \\"\\"\\"
+  """
   input CreatePostInput {
-    \\"Description for title.\\"
+    "Description for title."
     title: String!
 
-    \\"Description for slug.\\"
+    "Description for slug."
     slug: String!
 
-    \\"Description for author.\\"
+    "Description for author."
     author: String!
 
-    \\"Description for body.\\"
+    "Description for body."
     body: String!
 
-    \\"Description for image.\\"
+    "Description for image."
     image: String
 
-    \\"Description for postedAt.\\"
+    "Description for postedAt."
     postedAt: DateTime
   }
 
-  \\"\\"\\"
+  """
   Autogenerated input type of UpdatePost.
-  \\"\\"\\"
+  """
   input UpdatePostInput {
-    \\"Description for title.\\"
+    "Description for title."
     title: String
 
-    \\"Description for slug.\\"
+    "Description for slug."
     slug: String
 
-    \\"Description for author.\\"
+    "Description for author."
     author: String
 
-    \\"Description for body.\\"
+    "Description for body."
     body: String
 
-    \\"Description for image.\\"
+    "Description for image."
     image: String
 
-    \\"Description for postedAt.\\"
+    "Description for postedAt."
     postedAt: DateTime
   }
 
-  \\"\\"\\"
+  """
   About mutations
-  \\"\\"\\"
+  """
   type Mutation {
-    \\"Creates a new Post.\\"
+    "Creates a new Post."
     createPost(input: CreatePostInput!): Post! @requireAuth
 
-    \\"Updates an existing Post.\\"
+    "Updates an existing Post."
     updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
 
-    \\"Deletes an existing Post.\\"
+    "Deletes an existing Post."
     deletePost(id: Int!): Post! @requireAuth
   }
 \`

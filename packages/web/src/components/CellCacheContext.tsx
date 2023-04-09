@@ -5,7 +5,8 @@ import { DocumentNode } from 'graphql'
 export interface QueryInfo {
   query: DocumentNode
   variables?: Record<string, unknown>
-  hasFetched: boolean
+  renderLoading?: boolean
+  hasProcessed: boolean
   data?: unknown
 }
 

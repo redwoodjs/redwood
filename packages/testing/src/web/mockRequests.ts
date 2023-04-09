@@ -1,23 +1,23 @@
 // MSW is shared by Jest (NodeJS) and Storybook (Webpack)
-import {
-  setupWorker,
-  graphql,
+import { setupWorker, graphql } from 'msw'
+import type {
+  StartOptions as StartMSWWorkerOptions,
+  SharedOptions as SharedMSWOptions,
+  MockedResponse,
+  DefaultBodyType,
   RequestHandler,
   GraphQLContext,
   GraphQLRequest,
   ResponseTransformer,
-  MockedResponse,
-  SetupWorkerApi,
+  SetupWorker,
   ResponseComposition,
 } from 'msw'
-import type { StartOptions as StartMSWWorkerOptions } from 'msw/lib/types/setupWorker/glossary'
-import type { SharedOptions as SharedMSWOptions } from 'msw/lib/types/sharedOptions'
 
 // Allow users to call "mockGraphQLQuery" and "mockGraphQLMutation"
 // before the server has started. We store the request handlers in
 // a queue that is drained once the server is started.
 let REQUEST_HANDLER_QUEUE: RequestHandler[] = []
-let SERVER_INSTANCE: SetupWorkerApi | any
+let SERVER_INSTANCE: SetupWorker | any
 
 /**
  * Plugs fetch for the correct target in order to capture requests.
@@ -57,6 +57,10 @@ export const setupRequestHandlers = () => {
   }
 }
 
+export const closeServer = () => {
+  SERVER_INSTANCE.close()
+}
+
 export const registerHandler = (handler: RequestHandler) => {
   if (!SERVER_INSTANCE) {
     // The server hasn't started yet, so add the request handler to the queue.
@@ -82,7 +86,7 @@ export type DataFunction<
 ) => Query | void
 
 // These should get exported from MSW
-type ResponseFunction<BodyType = any> = (
+type ResponseFunction<BodyType extends DefaultBodyType = any> = (
   ...transformers: ResponseTransformer<BodyType>[]
 ) => MockedResponse<BodyType>
 
@@ -128,6 +132,7 @@ const mockGraphQL = (
         data: captureTransform(ctx.data),
         extensions: captureTransform(ctx.extensions),
         cookie: captureTransform(ctx.cookie),
+        field: captureTransform(ctx.field),
       }
 
       d = data(req.variables, {

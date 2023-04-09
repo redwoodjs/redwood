@@ -1,4 +1,4 @@
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
@@ -7,24 +7,30 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
         },
         web: {
           dist: '/mocked/project/web/dist',
+          routes: '/mocked/project/web/Routes.tsx',
+        },
+      }
+    },
+    getConfig: () => {
+      return {
+        web: {
+          bundler: 'webpack',
         },
       }
     },
   }
 })
 
-jest.mock('@redwoodjs/internal/dist/config', () => {
-  return {
-    getConfig: () => {},
-  }
-})
+import { Listr } from 'listr2'
+jest.mock('listr2')
 
-import Listr from 'listr'
-jest.mock('listr', () => {
-  return jest.fn().mockImplementation(function FakeListr() {
-    return { run: jest.fn() }
-  })
-})
+// Make sure prerender doesn't get triggered
+jest.mock('execa', () =>
+  jest.fn((cmd, params) => ({
+    cmd,
+    params,
+  }))
+)
 
 import { handler } from '../build'
 
@@ -33,14 +39,14 @@ afterEach(() => jest.clearAllMocks())
 test('the build tasks are in the correct sequence', async () => {
   await handler({})
   expect(Listr.mock.calls[0][0].map((x) => x.title)).toMatchInlineSnapshot(`
-Array [
-  "Generating Prisma Client...",
-  "Verifying graphql schema...",
-  "Building API...",
-  "Cleaning Web...",
-  "Building Web...",
-]
-`)
+    [
+      "Generating Prisma Client...",
+      "Verifying graphql schema...",
+      "Building API...",
+      "Cleaning Web...",
+      "Building Web...",
+    ]
+  `)
 })
 
 jest.mock('@redwoodjs/prerender/detection', () => {
@@ -48,16 +54,20 @@ jest.mock('@redwoodjs/prerender/detection', () => {
 })
 
 test('Should run prerender for web', async () => {
+  const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+
   await handler({ side: ['web'], prerender: true })
   expect(Listr.mock.calls[0][0].map((x) => x.title)).toMatchInlineSnapshot(`
-    Array [
+    [
       "Cleaning Web...",
       "Building Web...",
-      "Prerendering Web...",
     ]
   `)
-  // Run prerendering task, but expect failure,
+
+  // Run prerendering task, but expect warning,
   // because `detectPrerenderRoutes` is empty.
-  const x = await Listr.mock.calls[0][0][2].task()
-  expect(x.startsWith('You have not marked any "prerender" in your Routes'))
+  expect(consoleSpy.mock.calls[0][0]).toBe('Starting prerendering...')
+  expect(consoleSpy.mock.calls[1][0]).toMatch(
+    /You have not marked any routes to "prerender"/
+  )
 })

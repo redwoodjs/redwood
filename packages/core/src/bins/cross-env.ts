@@ -7,4 +7,5 @@ const requireFromCrossEnv = createRequire(
 
 const bins = requireFromCrossEnv('./package.json')['bin']
 
+// Most package.json's list their bins as relative paths, but not cross-env.
 requireFromCrossEnv(`./${bins['cross-env']}`)

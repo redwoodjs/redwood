@@ -1,7 +1,6 @@
 import path from 'path'
 
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -117,14 +116,15 @@ export const handler = async (args) => {
           })
         } catch (e) {
           console.error(c.error(`Error in script: ${e.message}`))
+          throw e
         }
       },
     },
   ]
 
   const tasks = new Listr(scriptTasks, {
-    collapse: false,
-    renderer: VerboseRenderer,
+    rendererOptions: { collapse: false },
+    renderer: 'verbose',
   })
 
   try {

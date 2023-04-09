@@ -5,7 +5,7 @@ import archiver from 'archiver'
 import fse from 'fs-extra'
 
 import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
-import { ensurePosixPath, getPaths } from '@redwoodjs/internal/dist/paths'
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
 const ZIPBALL_DIR = './api/dist/zipball'
 

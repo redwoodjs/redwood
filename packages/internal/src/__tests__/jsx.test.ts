@@ -11,33 +11,33 @@ test('simple jsx tree', () => {
   const simpleAst = fileToAst(getFixturePath('web/src/router/simple.tsx'))
   const elements = getJsxElements(simpleAst, 'Router')
   expect(elements).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [
-              Object {
-                "children": Array [],
+    [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [],
                 "name": "Route",
-                "props": Object {
+                "props": {
                   "name": "home",
                   "page": "HomePage",
                   "path": "/home",
                 },
               },
-              Object {
-                "children": Array [],
+              {
+                "children": [],
                 "name": "Route",
-                "props": Object {
+                "props": {
                   "name": "login",
                   "page": "LoginPage",
                   "path": "/login",
                 },
               },
-              Object {
-                "children": Array [],
+              {
+                "children": [],
                 "name": "Route",
-                "props": Object {
+                "props": {
                   "name": "404",
                   "page": "ArrowFunctionExpression is not supported",
                   "path": "/404",
@@ -45,13 +45,13 @@ test('simple jsx tree', () => {
               },
             ],
             "name": "Set",
-            "props": Object {
+            "props": {
               "private": true,
             },
           },
         ],
         "name": "Router",
-        "props": Object {},
+        "props": {},
       },
     ]
   `)

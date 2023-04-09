@@ -1,38 +1,34 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import path from 'path'
 
 import '../../../../lib/test'
 
 import * as scaffold from '../scaffold'
 
-let filesLower, filesUpper
-
-beforeAll(async () => {
-  filesLower = await scaffold.files({
-    model: 'Post',
-    path: 'admin',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-  filesUpper = await scaffold.files({
-    model: 'Post',
-    path: 'Admin',
-    tests: true,
-    nestScaffoldByModel: false,
-  })
-})
+jest.mock('execa')
 
 describe('admin/Post', () => {
+  let filesLower
+
+  beforeAll(async () => {
+    filesLower = await scaffold.files({
+      model: 'Post',
+      path: 'admin',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesLower).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesLower).length).toEqual(19)
     })
 
     // Layout
     test('creates a layout', async () => {
       expect(filesLower).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/Admin/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })
@@ -341,9 +337,20 @@ describe('admin/Post', () => {
 })
 
 describe('Admin/Post', () => {
+  let filesUpper
+
+  beforeAll(async () => {
+    filesUpper = await scaffold.files({
+      model: 'Post',
+      path: 'Admin',
+      tests: true,
+      nestScaffoldByModel: false,
+    })
+  })
+
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 17 files', () => {
-      expect(Object.keys(filesUpper).length).toEqual(17)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesUpper).length).toEqual(19)
     })
 
     // Layout
@@ -351,7 +358,7 @@ describe('Admin/Post', () => {
     test('creates a layout', async () => {
       expect(filesUpper).toHaveProperty([
         path.normalize(
-          '/path/to/project/web/src/layouts/Admin/PostsLayout/PostsLayout.js'
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.js'
         ),
       ])
     })

@@ -2,12 +2,13 @@
 
 exports[`creates a JavaScript validator directive: js directive 1`] = `
 "import { createValidatorDirective } from '@redwoodjs/graphql-server'
+
 import { logger } from 'src/lib/logger'
 
 export const schema = gql\`
-  \\"\\"\\"
+  """
   Use @requireAdmin to validate access to a field, query or mutation.
-  \\"\\"\\"
+  """
   directive @requireAdmin on FIELD_DEFINITION
 \`
 
@@ -71,9 +72,9 @@ exports[`creates a TypeScript transformer directive: ts directive 1`] = `
 import { logger } from 'src/lib/logger'
 
 export const schema = gql\`
-  \\"\\"\\"
+  """
   Use @bazingaFooBar to transform the resolved value to return a modified result.
-  \\"\\"\\"
+  """
   directive @bazingaFooBar on FIELD_DEFINITION
 \`
 

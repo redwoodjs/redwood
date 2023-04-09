@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { isValidElement } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { useActivePageContext } from './ActivePageContext'
@@ -13,7 +13,6 @@ import {
 import { SplashPage } from './splash-page'
 import {
   flattenAll,
-  isReactElement,
   parseSearch,
   replaceParams,
   matchPath,
@@ -90,14 +89,12 @@ const InternalRoute = ({
     throw new Error(`No location for route "${name}"`)
   }
 
-  const { params: pathParams } = matchPath(
-    path,
-    location.pathname,
-    routerState.paramTypes
-  )
+  const { params: pathParams } = matchPath(path, location.pathname, {
+    paramTypes: routerState.paramTypes,
+  })
 
   const searchParams = parseSearch(location.search)
-  const allParams = { ...searchParams, ...pathParams }
+  const allParams: Record<string, string> = { ...searchParams, ...pathParams }
 
   if (redirect) {
     const newPath = replaceParams(redirect, allParams)
@@ -113,6 +110,14 @@ const InternalRoute = ({
 
   const Page = activePageContext.loadingState[path]?.page || (() => null)
 
+  // There are two special props in React: `ref` and `key`. (See https://reactjs.org/warnings/special-props.html.)
+  // It's very possible that the URL has `ref` as a search param (e.g. https://redwoodjs.com/?ref=producthunt).
+  // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`, otherwise the page will break.
+  // (The page won't actually break if `key` is passed, but it feels unclean.)
+  // If users want to access them, they can use `useParams`.
+  delete allParams['ref']
+  delete allParams['key']
+
   // Level 3/3 (InternalRoute)
   return <Page {...allParams} />
 }
@@ -120,12 +125,13 @@ const InternalRoute = ({
 function isRoute(
   node: React.ReactNode
 ): node is React.ReactElement<InternalRouteProps> {
-  return isReactElement(node) && node.type === Route
+  return isValidElement(node) && node.type === Route
 }
 
-interface RouterProps extends RouterContextProviderProps {
+export interface RouterProps extends RouterContextProviderProps {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
+  children: React.ReactNode
 }
 
 const Router: React.FC<RouterProps> = ({
@@ -233,7 +239,9 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   // Check for issues with the path.
   validatePath(path)
 
-  const { params: pathParams } = matchPath(path, location.pathname, paramTypes)
+  const { params: pathParams } = matchPath(path, location.pathname, {
+    paramTypes,
+  })
 
   const searchParams = parseSearch(location.search)
   const allParams = { ...searchParams, ...pathParams }
@@ -282,7 +290,7 @@ function analyzeRouterTree(
 
   function isActiveRoute(route: React.ReactElement<InternalRouteProps>) {
     if (route.props.path) {
-      const { match } = matchPath(route.props.path, pathname, paramTypes)
+      const { match } = matchPath(route.props.path, pathname, { paramTypes })
 
       if (match) {
         return true
@@ -326,7 +334,7 @@ function analyzeRouterTree(
 
           return childWithKey
         }
-      } else if (isReactElement(child) && child.props.children) {
+      } else if (isValidElement(child) && child.props.children) {
         // We have a child element that's not a <Route ...>, and that has
         // children. It's probably a <Set>. Recurse down one level
         const nestedActive = analyzeRouterTreeInternal(child.props.children)

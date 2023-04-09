@@ -3,11 +3,15 @@
 // Framework main config is in monorepo root ./.eslintrc.js
 
 const {
-  getConfig,
-  getCommonPlugins,
-  getWebSideDefaultBabelConfig,
   getApiSideDefaultBabelConfig,
-} = require('@redwoodjs/internal')
+} = require('@redwoodjs/internal/dist/build/babel/api')
+const {
+  getCommonPlugins,
+} = require('@redwoodjs/internal/dist/build/babel/common')
+const {
+  getWebSideDefaultBabelConfig,
+} = require('@redwoodjs/internal/dist/build/babel/web')
+const { getConfig } = require('@redwoodjs/project-config')
 
 const config = getConfig()
 
@@ -83,6 +87,7 @@ module.exports = {
       env: {
         browser: true,
         es6: true,
+        'shared-node-browser': true,
       },
       globals: {
         React: 'readonly',

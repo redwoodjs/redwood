@@ -4,7 +4,7 @@ description: Securely integrate third-party services
 
 # Webhooks
 
-If you've used [Automate](https://automate.io/), [IFTTT](https://ifttt.com/maker_webhooks), [Pipedream](https://pipedream.com/docs/api/rest/webhooks/), or [Zapier](https://zapier.com/apps/webhook/integrations) then you're familiar with how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps. RedwoodJS helps you work with webhooks by giving you the tools to both receive and verify incoming webhooks and sign outgoing ones with ease.
+If you've used [IFTTT](https://ifttt.com/maker_webhooks), [Pipedream](https://pipedream.com/docs/api/rest/webhooks/), or [Zapier](https://zapier.com/apps/webhook/integrations) then you're familiar with how webhooks can give your app the power to create complex workflows, build one-to-one automation, and sync data between apps. RedwoodJS helps you work with webhooks by giving you the tools to both receive and verify incoming webhooks and sign outgoing ones with ease.
 
 ## What is a webhook
 
@@ -59,7 +59,7 @@ RedwoodJS adds a way to do no verification as well of testing or in the case you
 
 - SkipVerifier (bypass verification, or no verification)
 
-RedwoodJS implements [signatureVerifiers](https://github.com/dthyresson/redwood/tree/dt-secure-handler/packages/api/src/auth/verifiers) for each of these so you can get started integrating your app with third-parties right away.
+RedwoodJS implements [signatureVerifiers](https://github.com/redwoodjs/redwood/tree/main/packages/api/src/auth/verifiers) for each of these so you can get started integrating your app with third-parties right away.
 
 ```jsx
 export type SupportedVerifiers =
@@ -69,14 +69,13 @@ export type SupportedVerifiers =
   | Sha256Verifier
   | Base64Sha1Verifier
   | Base64Sha256Verifier
-  | Sha1Verifier
   | TimestampSchemeVerifier
   | JwtVerifier
 ```
 
 Each `SupportedVerifier` implements a method to `sign` and `verify` a payload with a secret (if needed).
 
-When the webhook needs [creates a verifier](https://github.com/dthyresson/redwood/blob/b3b21a4a2c7a96ac8d1fd8b078a9869d3f2f1cec/packages/api/src/auth/verifiers/index.ts#L12) in order to `verifyEvent`, `verifySignature` or `signPayload` it does so via:
+When the webhook needs [creates a verifier](https://github.com/redwoodjs/redwood/blob/main/packages/api/src/auth/verifiers/index.ts#L12) in order to `verifyEvent`, `verifySignature` or `signPayload` it does so via:
 
 ```jsx
 createVerifier(type, options)

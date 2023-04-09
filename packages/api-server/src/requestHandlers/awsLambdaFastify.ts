@@ -36,16 +36,18 @@ const fastifyResponseForLambdaResult = (
     body = '',
     multiValueHeaders,
   } = lambdaResult
-  const h = mergeMultiValueHeaders(headers, multiValueHeaders)
-  reply.headers(h)
+  const mergedHeaders = mergeMultiValueHeaders(headers, multiValueHeaders)
+  Object.entries(mergedHeaders).forEach(([name, values]) =>
+    values.forEach((value) => reply.header(name, value))
+  )
   reply.status(statusCode)
 
   if (lambdaResult.isBase64Encoded) {
     // Correctly handle base 64 encoded binary data. See
     // https://aws.amazon.com/blogs/compute/handling-binary-data-using-amazon-api-gateway-http-apis
-    reply.send(Buffer.from(body, 'base64'))
+    return reply.send(Buffer.from(body, 'base64'))
   } else {
-    reply.send(body)
+    return reply.send(body)
   }
 }
 

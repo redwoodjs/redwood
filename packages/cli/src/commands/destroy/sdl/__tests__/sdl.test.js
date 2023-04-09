@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 import fs from 'fs'
 
@@ -22,7 +22,7 @@ jest.mock('../../../../lib/schemaHelpers', () => {
   return {
     ...jest.requireActual('../../../../lib/schemaHelpers'),
     getSchema: () =>
-      require(path.join(global.__dirname, 'fixtures', 'post.json')),
+      require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
   }
 })
 
@@ -42,9 +42,9 @@ describe('rw destory sdl', () => {
     test('destroys sdl files', async () => {
       const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
       const t = tasks({ model: 'Post' })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
-      return t._tasks[0].run().then(async () => {
+      return t.tasks[0].run().then(async () => {
         const generatedFiles = Object.keys(
           await files({ ...getDefaultArgs(builder), name: 'Post' })
         )
@@ -68,9 +68,9 @@ describe('rw destory sdl', () => {
     test('destroys sdl files', async () => {
       const unlinkSpy = jest.spyOn(fs, 'unlinkSync')
       const t = tasks({ model: 'Post' })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
-      return t._tasks[0].run().then(async () => {
+      return t.tasks[0].run().then(async () => {
         const generatedFiles = Object.keys(
           await files({
             ...getDefaultArgs(builder),

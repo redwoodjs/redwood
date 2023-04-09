@@ -227,6 +227,7 @@
   margin-top: 1.5rem;
   color: #4a5568;
   font-weight: 600;
+  text-align: left;
 }
 .rw-label.rw-label-error {
   color: #c53030;
@@ -377,6 +378,7 @@
 }
 .rw-login-container .rw-form-wrapper {
   width: 100%;
+  text-align: center;
 }
 .rw-login-link {
   margin-top: 1rem;
@@ -384,4 +386,13 @@
   font-size: 90%;
   text-align: center;
   flex-basis: 100%;
+}
+.rw-webauthn-wrapper {
+  margin: 1.5rem 1rem 1rem;
+  line-height: 1.4;
+}
+.rw-webauthn-wrapper h2 {
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }

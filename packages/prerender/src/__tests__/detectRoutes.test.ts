@@ -1,6 +1,8 @@
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
+
 import { detectPrerenderRoutes } from '../detection'
 
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: jest.fn(() => {
       return {
@@ -14,7 +16,7 @@ jest.mock('@redwoodjs/internal/dist/paths', () => {
 
 // Mock route detection, tested in @redwoodjs/structure separately
 
-let mockedRoutes = []
+let mockedRoutes: Partial<RWRoute>[] = []
 jest.mock('@redwoodjs/structure', () => {
   return {
     getProject: jest.fn(() => {

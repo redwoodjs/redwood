@@ -4,12 +4,18 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
 
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   require-release-label:
     name: 🏷 Require release label
     runs-on: ubuntu-latest
     steps:
-      - uses: mheap/github-action-required-labels@v2
+      - uses: mheap/github-action-required-labels@v4
         with:
           mode: exactly
           count: 1

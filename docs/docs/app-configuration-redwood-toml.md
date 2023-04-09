@@ -17,6 +17,8 @@ You can configure your Redwood app in `redwood.toml`. By default, `redwood.toml`
   port = 8911
 [browser]
   open = true
+[notifications]
+  versionUpdates = ["latest"]
 ```
 
 These are listed by default because they're the ones that you're most likely to configure, but there are plenty more available.
@@ -41,6 +43,7 @@ For certain options, instead of having to deal with build tools like webpack dir
 | `includeEnvironmentVariables` | Environment variables to include                           | `[]`                    |
 | `path`                        | Path to the web side                                       | `"./web"`               |
 | `port`                        | Port to listen on                                          | `8910`                  |
+| `sourceMap`                   | Enable source maps for production builds                   | `false`                 |
 | `target`                      | Target for the web side                                    | `"browser"`             |
 | `title`                       | Title of your Redwood app                                  | `"Redwood App"`         |
 
@@ -110,38 +113,38 @@ Instead of including them in `includeEnvironmentVariables`, you can also prefix 
 
 ### Configure Fastify
 
-You can configure the Fastify Server used by Redwood, in `api/server.config.js`.
+You can configure the Fastify server instance in `api/server.config.js`.
+For all the configuration options, see [Fastify's docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
 
-For all the configuration options, see the [Fastify Server docs](https://www.fastify.io/docs/latest/Reference/Server/#factory).
+:::info Where does this configuration apply?
 
+This configuration does **not** apply in a serverless deploy.
+Typically when you deploy to a serverless provider like Netlify or Vercel, your project's web side is served from a CDN, and functions are invoked directly.
+But this configuration does apply when running:
 
-:::info Where do these configurations apply?
- This configuration does **not** apply in a serverless deploy. Typically when you deploy to serverless providers like Netlify or Vercel, your web side is served from a CDN - and your functions are invoked directly - so none of these settings will be applied.
+| Command         | api  | web  |
+| :-------------- | :--- | :--- |
+| `yarn rw dev`   | ✅    | ❌    |
+| `yarn rw serve` | ✅    | ✅    |
 
- But they do, when you run:
- - `yarn rw dev` (the dev server) - the configuration will be picked up and used for the API side. Note that the web side is served by the Webpack dev server, in development.
- - `yarn rw serve` (serving api and web sides in production mode) - the configuration will be applied to the Fastify instance serving static files from `./web/dist` and your api functions in `./api/dist/functions`
-
- Or if you're running them separately:
- - `yarn rw serve api` (serving just the api side) - configuration will only apply to the Fastify instance serving your api side
- - `yarn rw serve web` (serving just the web side) - configuration will only apply to the Fastify instance that serves your static files in `./web/dist/`
 :::
 
-Using [redwood.toml's env var interpolation](#using-environment-variables-in-redwoodtoml), you can configure a different `server.config.js` based on your deployment environment:
+Using redwood.toml's [env var interpolation](#using-environment-variables-in-redwoodtoml), you can change the server config used based on your deployment environment:
 
 ```toml title="redwood.toml"
 [api]
   serverConfig = "./api/${DEPLOY_ENVIRONMENT}-server.config.js"
 ```
 
-### Register Custom Fastify Plug-ins
+### Register Custom Fastify Plugins
 
-You can also register Fastify plugins for the API and Web sides in the `configureFastify` function.
-
-This function has access to the Fastify instance and options, such as the side (web or api) that is being configured and other settings like the `apiRootPath` of the functions endpoint.
+You can register Fastify plugins for the api and web sides using the `configureFastify` function.
+This function has access to the Fastify server instance and options, such as the side that's being configured.
 
 :::warning Reminder
- This configuration does not apply in a serverless deploy.
+
+This configuration does **not** apply in a serverless deploy.
+
 :::
 
 ```js
@@ -159,26 +162,22 @@ const configureFastify = async (fastify, options) => {
 }
 ```
 
-##### How to Configure a Fastify Plug-in for the API Side
+#### How to configure a Fastify plugin for the api side
 
-Suppose you want to compress payloads and also rate limit your RedwoodJS api.
+Let's say that you want to compress payloads and rate limit your API.
+You can leverage two Fastify ecosystem plugins, [@fastify/compress](https://github.com/fastify/fastify-compress) and [@fastify/rate-limit](https://github.com/fastify/fastify-rate-limit) respectively.
 
-You can leverage the Fastify ecosystem plug-ins:
+Here, we configure compression so that it handles all requests, compresses responses only if they're larger than 1K, and to prefer the `deflate` method over `gzip`.
+Using @fastify/rate-limit, we allow an IP address to only make 100 requests in a five minute window.
 
-* [@fastify/compress](https://github.com/fastify/fastify-compress)
-* [@fastify/rate-limit](https://github.com/fastify/fastify-rate-limit)
+:::important Plugins need to be installed
 
-And then configure them in your API side.
+You'll need to install plugin packages in your project's `api` workspace:
 
-Here, we setup compression to handle all requests (global), compress responses only if larger than 1K, and to prefer the `deflate` method over `gzip`.
-only allow one IP address to make 100 requests in a five minute window.
+```
+yarn workspace api add @fastify/rate-limit @fastify/compress
+```
 
-Of course, these are just examples and please see the plugin documentaiton for the settings that best meet your needs.
-
-:::important
-You will need to install any custom plug-in packages to your project's `api` workspace.
-
-To do this you run `yarn workspace api add @fastify/rate-limit @fastify/compress`
 :::
 
 ```js
@@ -199,23 +198,19 @@ const configureFastify = async (fastify, options) => {
     })
   }
 
-
   return fastify
 }
 ```
 
-:::important
-You will need to install any custom plug-in packages to your project's `api` workspace.
-:::
+#### How to Configure a Fastify plugin for the web side
 
-##### How to Configure a Fastify Plug-in for the Web Side
+If you're running the web side using `yarn rw serve`, you can configure plugins like [@fastify/etag](https://github.com/fastify/fastify-etag) to register HTTP Etags.
 
-If you are running your web side using `yarn rw serve` and not as part of a serverless deployment, you can configure plug-ins such ones to register HTTP Etags using the Fastify plug-in:
+:::important Plugins need to be installed
 
-* [@fastify/etag](https://github.com/fastify/fastify-etag)
+You'll need to install plugin packages in your project's `api` workspace.
+This may seem counter-intuitive, since you're configuring the `web` side, but the `api-server` gets configured in your project's `api` side and that's what's serving web assets.
 
-:::note
-If you run `yarn rw serve` because the same Fastify instance handles the api and web side, this plugin will apply to the API side as well.
 :::
 
 ```js
@@ -231,25 +226,78 @@ const configureFastify = async (fastify, options) => {
 }
 ```
 
-:::important
-You will need to install any custom plug-in packages to your project's `api` workspace.
-
-This may seem counter-intuitive, since you are configuring the `web` side, but the `api-server` gets configured in your project's `api` and that is what server web assets.
-:::
-
-
 #### Troubleshooting Custom Fastify Configuration
 
-There are a few important considerations to be made when configuring Fastify.
+There are a few important things to consider when configuring Fastify.
 
-:::important Troubleshooting
+If running via `yarn rw serve`, only register a plugin once either in `api` or in `web`. Registering the same plugin in both sides will error saying that it has already been registered.
 
- * If running `yarn rw serve`, only register the plugin once either in `web` or in `api`. Registering the same pugin in both side will raise an error saying that it has already been registered.
+Running via `yarn rw serve` uses a single Fastify instance to serve both api functions and web assets, so registering the plugin in a single side applies it to that instance.
 
- Remember that `yarn rw serve` is  single Fastify instance that server both functions and web assets, so registering the plugin in a single side applies it to that instance.
+### How to Configure Fastify to Accept File Uploads
 
- * TODO log level
+If you try to POST file content to the api server such as images or PDFs, you may see the following error from Fastify:
+
+```json
+{
+    "statusCode": 400,
+    "code": "FST_ERR_CTP_INVALID_CONTENT_LENGTH",
+    "error": "Bad Request",
+    "message": "Request body size did not match Content-Length"
+}
+```
+
+This's because Fastify [only supports `application/json` and `text/plain` content types natively](https://www.fastify.io/docs/latest/Reference/ContentTypeParser/).
+While Redwood configures the api server to also accept `application/x-www-form-urlencoded` and  `multipart/form-data`, if you want to support other content or MIME types (likes images or PDFs), you'll need to configure them yourself.
+
+You can use Fastify's `addContentTypeParser` function to allow uploads of the content types your application needs.
+For example, to support image file uploads you'd tell Fastify to allow `/^image\/.*/` content types:
+
+```js
+/** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
+const configureFastify = async (fastify, options) => {
+  if (options.side === 'api') {
+    fastify.log.info({ custom: { options } }, 'Configuring api side')
+
+    fastify.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
+      payload.on('end', () => {
+        done()
+      })
+    })
+  }
+
+  return fastify
+}
+```
+
+:::note
+
+The above regular expression (`/^image\/.*/`) allows all image content or MIME types because [they start with "image"](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
+
 :::
+
+Now, when you POST those content types to a function served by the api server, you can access the file content on `event.body`:
+
+```bash
+curl --location --request POST 'http://localhost:8911/upload' \
+  --form 'image=@"/path/to/my/image/web/public/favicon.png"' \
+  --header 'Content-Type: image/png'
+```
+
+```terminal
+api | 17:38:49 🌲 request completed 0ms
+api | 17:38:49 🐛 body
+api | 🗒 Custom
+api | "--------------------------e66d9a27b7c2b271\r\nContent-Disposition: attachment; name=\"image\"; filename=\"favicon.png\"\r\nContent-Type: image/png\r\n\r\n�PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR\u0000\u0000\u0000 \u0000\u0000\u0000<data trimmed for docs...>`�\r\n--------------------------e66d9a27b7c2b271--\r\n"
+```
+
+:::caution File uploads only work in a serverful deploy
+
+Serverless functions on Netlify or Vercel do not use this Fastify configuration.
+They also have memory and execution time limits that don't lend themselves to handling file uploads of any practical size.
+
+:::
+
 ## [browser]
 
 ```toml title="redwood.toml"
@@ -274,6 +322,18 @@ There's actually a lot more you can do here. For more, see webpack's docs on [de
 Many of Redwood's generators create Jest test or Storybook files.
 Understandably, this can be lot of files, and sometimes you don't want all of them, either because you don't plan on using Jest or Storybook, or are just getting started and don't want the overhead.
 These toml keys allows you to toggle the generation of test or story files.
+
+## [cli]
+
+```toml title="redwood.toml"
+[notifications]
+  versionUpdates = ["latest"]
+```
+
+There's new versions of the framework all the time—a major every couple months, a minor every week or two, and patches when appropriate.
+And if you're on an experimental release line, like canary, there's new versions every day, multiple times.
+
+If you'd like to get notified (at most, once a day) when there's a new version, set `versionUpdates` to include the version tags you're interested in within `redwood.toml`'s `notifications` table.
 
 ## Using Environment Variables in `redwood.toml`
 

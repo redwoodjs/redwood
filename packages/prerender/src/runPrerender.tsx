@@ -3,31 +3,25 @@ import path from 'path'
 
 import React from 'react'
 
-import cheerio from 'cheerio'
+import { CheerioAPI, load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
-import { CellCacheContextProvider, QueryInfo } from '@redwoodjs/web'
+import { matchPath } from '@redwoodjs/router/dist/util'
+import type { QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
+import { detectPrerenderRoutes } from './detection'
+import {
+  GqlHandlerImportError,
+  JSONParseError,
+  PrerenderGqlError,
+} from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
-
-export class PrerenderGqlError {
-  message: string
-  stack: string
-
-  constructor(message: string) {
-    this.message = 'GQL error: ' + message
-    // The stacktrace would just point to this file, which isn't helpful,
-    // because that's not where the error is. So we're just putting the
-    // message there as well
-    this.stack = this.message
-  }
-}
 
 async function recursivelyRender(
   App: React.ElementType,
@@ -35,34 +29,84 @@ async function recursivelyRender(
   gqlHandler: any,
   queryCache: Record<string, QueryInfo>
 ): Promise<string> {
+  // Load this async, to prevent rwjs/web being loaded before shims
+  const {
+    CellCacheContextProvider,
+    getOperationName,
+  } = require('@redwoodjs/web')
+
+  let shouldShowGraphqlHandlerNotFoundWarn = false
   // Execute all gql queries we haven't already fetched
   await Promise.all(
     Object.entries(queryCache).map(async ([cacheKey, value]) => {
-      if (value.hasFetched) {
-        // Already fetched this one; skip it!
+      if (value.hasProcessed) {
+        // Already fetched, or decided that we can't render this one; skip it!
         return Promise.resolve('')
       }
 
-      const resultString = await executeQuery(
-        gqlHandler,
-        value.query,
-        value.variables
-      )
-      const result = JSON.parse(resultString)
+      try {
+        const resultString = await executeQuery(
+          gqlHandler,
+          value.query,
+          value.variables
+        )
 
-      if (result.errors) {
-        const message =
-          result.errors[0].message ?? JSON.stringify(result.errors)
-        throw new PrerenderGqlError(message)
+        let result
+
+        try {
+          result = JSON.parse(resultString)
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            throw new JSONParseError({
+              query: value.query,
+              variables: value.variables,
+              result: resultString,
+            })
+          }
+        }
+
+        if (result.errors) {
+          const message =
+            result.errors[0].message ?? JSON.stringify(result.errors, null, 4)
+
+          if (result.errors[0]?.extensions?.code === 'UNAUTHENTICATED') {
+            console.error(
+              `\n \n 🛑  Cannot prerender the query ${getOperationName(
+                value.query
+              )} as it requires auth. \n`
+            )
+          }
+
+          throw new PrerenderGqlError(message)
+        }
+
+        queryCache[cacheKey] = {
+          ...value,
+          data: result.data,
+          hasProcessed: true,
+        }
+
+        return result
+      } catch (e) {
+        if (e instanceof GqlHandlerImportError) {
+          // We need to need to swallow the error here, so that
+          // we can continue to render the page, with cells in loading state
+          // e.g. if the GQL handler is located elsewhere
+          shouldShowGraphqlHandlerNotFoundWarn = true
+
+          queryCache[cacheKey] = {
+            ...value,
+            // tried to fetch, but failed
+            renderLoading: true,
+            hasProcessed: true,
+          }
+
+          return
+        } else {
+          // Otherwise forward on the error
+          throw e
+        }
       }
-
-      queryCache[cacheKey] = {
-        ...value,
-        data: result.data,
-        hasFetched: true,
-      }
-
-      return result
     })
   )
 
@@ -74,12 +118,54 @@ async function recursivelyRender(
     </LocationProvider>
   )
 
-  if (Object.values(queryCache).some((value) => !value.hasFetched)) {
+  if (Object.values(queryCache).some((value) => !value.hasProcessed)) {
     // We found new queries that we haven't fetched yet. Execute all new
     // queries and render again
     return recursivelyRender(App, renderPath, gqlHandler, queryCache)
   } else {
+    if (shouldShowGraphqlHandlerNotFoundWarn) {
+      console.warn(
+        '\n  ⚠️  Could not load your GraphQL handler. \n Your Cells have been prerendered in the "Loading" state. \n'
+      )
+    }
+
     return Promise.resolve(componentAsHtml)
+  }
+}
+
+function insertChunkLoadingScript(
+  indexHtmlTree: CheerioAPI,
+  renderPath: string
+) {
+  const prerenderRoutes = detectPrerenderRoutes()
+
+  const route = prerenderRoutes.find((route: any) => {
+    return matchPath(route.routePath, renderPath).match
+  })
+
+  if (!route) {
+    throw new Error('Could not find a Route matching ' + renderPath)
+  }
+
+  // The code for `/` is already included in app.<hash>.js and won't have a
+  // separate chunk
+  if (renderPath !== '/') {
+    const buildManifest = JSON.parse(
+      fs.readFileSync(
+        path.join(getPaths().web.dist, 'build-manifest.json'),
+        'utf-8'
+      )
+    )
+
+    const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+
+    if (!chunkPath) {
+      throw new Error('Could not find chunk for ' + route?.pageIdentifier)
+    }
+
+    indexHtmlTree('head').prepend(
+      `<script defer="defer" src="${chunkPath}"></script>`
+    )
   }
 }
 
@@ -92,6 +178,7 @@ export const runPrerender = async ({
   queryCache,
   renderPath,
 }: PrerenderParams): Promise<string | void> => {
+  registerShims(renderPath)
   // registerApiSideBabelHook already includes the default api side babel
   // config. So what we define here is additions to the default config
   registerApiSideBabelHook({
@@ -141,8 +228,6 @@ export const runPrerender = async ({
     ],
   })
 
-  registerShims(renderPath)
-
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)
 
@@ -153,9 +238,9 @@ export const runPrerender = async ({
     queryCache
   )
 
-  const { helmet } = global.__REDWOOD__HELMET_CONTEXT
+  const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
 
-  const indexHtmlTree = cheerio.load(indexContent)
+  const indexHtmlTree = loadHtml(indexContent)
 
   if (helmet) {
     const helmetElements = `
@@ -168,14 +253,23 @@ export const runPrerender = async ({
     // Add all head elements
     indexHtmlTree('head').prepend(helmetElements)
 
-    // Only change the title, if its not empty
-    if (cheerio.load(helmet?.title.toString())('title').text() !== '') {
-      indexHtmlTree('title').replaceWith(helmet?.title.toString())
+    const titleHtmlTag = helmet.title.toString() // toString from helmet returns HTML, not the same as cherrio!
+
+    // 1. Check if title is set in the helmet context first...
+    if (loadHtml(titleHtmlTag)('title').text() !== '') {
+      // 2. Check if html already had a title
+      if (indexHtmlTree('title').text().length === 0) {
+        // If no title defined in the index.html
+        indexHtmlTree('head').prepend(titleHtmlTag)
+      } else {
+        indexHtmlTree('title').replaceWith(titleHtmlTag)
+      }
     }
   }
 
-  // This is set by webpack by the html plugin
-  indexHtmlTree('server-markup').replaceWith(componentAsHtml)
+  insertChunkLoadingScript(indexHtmlTree, renderPath)
+
+  indexHtmlTree('#redwood-app').append(componentAsHtml)
 
   const renderOutput = indexHtmlTree.html()
 

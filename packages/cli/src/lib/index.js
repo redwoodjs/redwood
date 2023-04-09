@@ -1,3 +1,4 @@
+import { execSync } from 'child_process'
 import fs from 'fs'
 import https from 'https'
 import path from 'path'
@@ -6,21 +7,21 @@ import * as babel from '@babel/core'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
-import Listr from 'listr'
-import VerboseRenderer from 'listr-verbose-renderer'
+import { Listr } from 'listr2'
 import { memoize } from 'lodash'
 import lodash from 'lodash/string'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
 
-import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
+  getConfig as getRedwoodConfig,
   getPaths as getRedwoodPaths,
-  resolveFile,
-} from '@redwoodjs/internal/dist/paths'
+  resolveFile as internalResolveFile,
+} from '@redwoodjs/project-config'
 
 import c from './colors'
+import { addFileToRollback } from './rollback'
 import { pluralize, singularize } from './rwPluralize'
 
 export const asyncForEach = async (array, callback) => {
@@ -61,15 +62,20 @@ export const nameVariants = (name) => {
 }
 
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
-  const template = lodash.template(readFile(templateFilename).toString())
+  try {
+    const template = lodash.template(readFile(templateFilename).toString())
 
-  const renderedTemplate = template({
-    name,
-    ...nameVariants(name),
-    ...rest,
-  })
+    const renderedTemplate = template({
+      name,
+      ...nameVariants(name),
+      ...rest,
+    })
 
-  return prettify(templateFilename, renderedTemplate)
+    return prettify(templateFilename, renderedTemplate)
+  } catch (error) {
+    error.message = `Error applying template at ${templateFilename} for ${name}: ${error.message}`
+    throw error
+  }
 }
 
 export const prettify = (templateFilename, renderedTemplate) => {
@@ -79,7 +85,9 @@ export const prettify = (templateFilename, renderedTemplate) => {
   const parser = {
     '.css': 'css',
     '.js': 'babel',
+    '.jsx': 'babel',
     '.ts': 'babel-ts',
+    '.tsx': 'babel-ts',
   }[path.extname(templateFilename.replace('.template', ''))]
 
   if (typeof parser === 'undefined') {
@@ -136,6 +144,8 @@ export const writeFile = (
     throw new Error(`${target} already exists.`)
   }
 
+  addFileToRollback(target)
+
   const filename = path.basename(target)
   const targetDir = target.replace(filename, '')
   fs.mkdirSync(targetDir, { recursive: true })
@@ -170,6 +180,7 @@ export const saveRemoteFileToDisk = (
 
 export const getInstalledRedwoodVersion = () => {
   try {
+    // @ts-ignore TS Config issue, due to src being the rootDir
     const packageJson = require('../../package.json')
     return packageJson.version
   } catch (e) {
@@ -193,6 +204,7 @@ export const _getPaths = () => {
   }
 }
 export const getPaths = memoize(_getPaths)
+export const resolveFile = internalResolveFile
 
 export const getGraphqlPath = () =>
   resolveFile(path.join(getPaths().api.functions, 'graphql'))
@@ -244,7 +256,7 @@ export const transformTSToJS = (filename, content) => {
     retainLines: true,
   })
 
-  return prettify(filename.replace(/\.ts$/, '.js'), code)
+  return prettify(filename.replace(/\.tsx?$/, '.js'), code)
 }
 
 /**
@@ -330,28 +342,42 @@ export const cleanupEmptyDirsTask = (files) => {
   )
 }
 
-const wrapWithSet = (routesContent, layout, routes, newLineAndIndent) => {
+const wrapWithSet = (
+  routesContent,
+  layout,
+  routes,
+  newLineAndIndent,
+  props = {}
+) => {
   const [_, indentOne, indentTwo] = routesContent.match(
     /([ \t]*)<Router.*?>[^<]*[\r\n]+([ \t]+)/
   ) || ['', 0, 2]
   const oneLevelIndent = indentTwo.slice(0, indentTwo.length - indentOne.length)
   const newRoutesWithExtraIndent = routes.map((route) => oneLevelIndent + route)
-  return [`<Set wrap={${layout}}>`, ...newRoutesWithExtraIndent, `</Set>`].join(
-    newLineAndIndent
-  )
+
+  // converts { foo: 'bar' } to `foo="bar"`
+  const propsString = Object.entries(props)
+    .map((values) => `${values[0]}="${values[1]}"`)
+    .join(' ')
+
+  return [
+    `<Set wrap={${layout}}${propsString && ' ' + propsString}>`,
+    ...newRoutesWithExtraIndent,
+    `</Set>`,
+  ].join(newLineAndIndent)
 }
 
 /**
  * Update the project's routes file.
  */
-export const addRoutesToRouterTask = (routes, layout) => {
+export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
   const redwoodPaths = getPaths()
   const routesContent = readFile(redwoodPaths.web.routes).toString()
   let newRoutes = routes.filter((route) => !routesContent.match(route))
 
   if (newRoutes.length) {
     const [routerStart, routerParams, newLineAndIndent] = routesContent.match(
-      /\s*<Router(.*?)>(\s*)/
+      /\s*<Router(.*?)>(\s*)/s
     )
 
     if (/trailingSlashes={?(["'])always\1}?/.test(routerParams)) {
@@ -364,7 +390,13 @@ export const addRoutesToRouterTask = (routes, layout) => {
     }
 
     const routesBatch = layout
-      ? wrapWithSet(routesContent, layout, newRoutes, newLineAndIndent)
+      ? wrapWithSet(
+          routesContent,
+          layout,
+          newRoutes,
+          newLineAndIndent,
+          setProps
+        )
       : newRoutes.join(newLineAndIndent)
 
     const newRoutesContent = routesContent.replace(
@@ -433,6 +465,66 @@ export const removeRoutesFromRouterTask = (routes, layout) => {
   })
 }
 
+/**
+ *
+ * Use this util to install dependencies on a user's Redwood app
+ *
+ * @example addPackagesTask({
+ * packages: ['fs-extra', 'somePackage@2.1.0'],
+ * side: 'api', // <-- leave empty for project root
+ * devDependency: true
+ * })
+ */
+export const addPackagesTask = ({
+  packages,
+  side = 'project',
+  devDependency = false,
+}) => {
+  const packagesWithSameRWVersion = packages.map((pkg) => {
+    if (pkg.includes('@redwoodjs')) {
+      return `${pkg}@${getInstalledRedwoodVersion()}`
+    } else {
+      return pkg
+    }
+  })
+
+  let installCommand
+  // if web,api
+  if (side !== 'project') {
+    installCommand = [
+      'yarn',
+      [
+        'workspace',
+        side,
+        'add',
+        devDependency && '--dev',
+        ...packagesWithSameRWVersion,
+      ].filter(Boolean),
+    ]
+  } else {
+    const stdout = execSync('yarn --version')
+
+    const yarnVersion = stdout.toString().trim()
+
+    installCommand = [
+      'yarn',
+      [
+        yarnVersion.startsWith('1') && '-W',
+        'add',
+        devDependency && '--dev',
+        ...packagesWithSameRWVersion,
+      ].filter(Boolean),
+    ]
+  }
+
+  return {
+    title: `Adding dependencies to ${side}`,
+    task: async () => {
+      await execa(...installCommand)
+    },
+  }
+}
+
 export const runCommandTask = async (commands, { verbose }) => {
   const tasks = new Listr(
     commands.map(({ title, cmd, args, opts = {}, cwd = getPaths().base }) => ({
@@ -449,8 +541,8 @@ export const runCommandTask = async (commands, { verbose }) => {
       },
     })),
     {
-      renderer: verbose && VerboseRenderer,
-      dateFormat: false,
+      renderer: verbose && 'verbose',
+      rendererOptions: { collapse: false, dateFormat: false },
     }
   )
 

@@ -9,11 +9,29 @@ module.exports = (path, options) => {
   return options.defaultResolver(path, {
     ...options,
     packageFilter: (pkg) => {
-      if (pkg.name === 'uuid') {
+      if (OVERRIDE_EXPORTS_LIST.has(pkg.name)) {
         delete pkg['exports']
         delete pkg['module']
       }
+
       return pkg
     },
   })
 }
+
+const OVERRIDE_EXPORTS_LIST = new Set([
+  '@firebase/analytics',
+  '@firebase/app',
+  '@firebase/app-check',
+  '@firebase/auth',
+  '@firebase/database',
+  '@firebase/firestore',
+  '@firebase/functions',
+  '@firebase/installations',
+  '@firebase/messaging',
+  '@firebase/performance',
+  '@firebase/remote-config',
+  '@firebase/storage',
+  '@firebase/util',
+  'firebase',
+])

@@ -36,6 +36,13 @@ module.exports = {
     react: {
       version: 'detect',
     },
+    // For the import/order rule. Configures how it tells if an import is "internal" or not.
+    // An "internal" import is basically just one that's aliased.
+    //
+    // See...
+    // - https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#groups-array
+    // - https://github.com/import-js/eslint-plugin-import/blob/main/README.md#importinternal-regex
+    'import/internal-regex': '^src/',
   },
   rules: {
     'prettier/prettier': 'warn',
@@ -68,7 +75,25 @@ module.exports = {
       'error',
       {
         'newlines-between': 'always',
-        pathGroupsExcludedImportTypes: ['react'],
+        // We set this to an empty array to override the default value, which is `['builtin', 'external', 'object']`.
+        // Judging by the number of issues on the repo, this option seems to be notoriously tricky to understand.
+        // From what I can tell, if the value of this is `['builtin']` that means it won't sort builtins.
+        // But we have a rule for builtins below (react), so that's not what we want.
+        //
+        // See...
+        // - https://github.com/import-js/eslint-plugin-import/pull/1570
+        // - https://github.com/import-js/eslint-plugin-import/issues/1565
+        pathGroupsExcludedImportTypes: [],
+        // Only doing this to add internal. The order here maters.
+        // See https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#groups-array
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
         pathGroups: [
           {
             pattern: 'react',
@@ -81,13 +106,20 @@ module.exports = {
             position: 'after',
           },
           {
-            pattern: 'src/lib/test',
-            group: 'parent',
-            position: 'before',
-          },
-          {
-            pattern: 'src/**',
-            group: 'parent',
+            // Matches...
+            // - src/directives/**/*.{js,ts}
+            // - src/services/**/*.{js,ts}
+            // - src/graphql/**/*.sdl.{js,ts}
+            //
+            // Uses https://github.com/isaacs/minimatch under the hood
+            // See https://github.com/isaacs/node-glob#glob-primer for syntax
+            // eslint-disable-next-line prettier/prettier
+            pattern: 'src/*/**/\*.?(sdl.){js,ts}',
+            patternOptions: {
+              nobrace: true,
+              noglobstar: true,
+            },
+            group: 'internal',
             position: 'before',
           },
         ],

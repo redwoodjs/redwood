@@ -1,21 +1,25 @@
-// /* eslint-env jest */
-const fs = require('fs')
-const path = require('path')
+/* eslint-env jest */
+// @ts-check
 
-const { getConfig, getDMMF } = require('@prisma/internals')
+// @NOTE without these imports in the setup file, mockCurrentUser
+// will remain undefined in the user's tests
+// Remember to use specific imports
+const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
+const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
-const { setContext } = require('@redwoodjs/graphql-server')
-const { getPaths } = require('@redwoodjs/internal/dist/paths')
-const { defineScenario } = require('@redwoodjs/testing/dist/api')
+// @NOTE we do this because jest.setup.js runs every time in each context
+// while jest-preset runs once. This significantly reduces memory footprint, and testing time
+// The key is to reduce the amount of imports in this file, because the require.cache is not shared between each test context
+const { apiSrcPath, tearDownCachePath, dbSchemaPath } =
+  global.__RWJS__TEST_IMPORTS
+
+global.defineScenario = defineScenario
 
 // Error codes thrown by [MySQL, SQLite, Postgres] when foreign key constraint
 // fails on DELETE
 const FOREIGN_KEY_ERRORS = [1451, 1811, 23503]
+const TEARDOWN_CACHE_PATH = tearDownCachePath
 const DEFAULT_SCENARIO = 'standard'
-const TEARDOWN_CACHE_PATH = path.join(
-  getPaths().generated.base,
-  'scenarioTeardown.json'
-)
 let teardownOrder = []
 let originalTeardownOrder = []
 
@@ -28,9 +32,12 @@ const isIdenticalArray = (a, b) => {
 }
 
 const configureTeardown = async () => {
+  const { getDMMF } = require('@prisma/internals')
+  const fs = require('fs')
+
   // @NOTE prisma utils are available in cli lib/schemaHelpers
   // But avoid importing them, to prevent memory leaks in jest
-  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
+  const schema = await getDMMF({ datamodelPath: dbSchemaPath })
   const schemaModels = schema.datamodel.models.map((m) => m.dbName || m.name)
 
   // check if pre-defined delete order already exists and if so, use it to start
@@ -47,50 +54,93 @@ const configureTeardown = async () => {
   originalTeardownOrder = deepCopy(teardownOrder)
 }
 
-const seedScenario = async (scenario) => {
-  if (scenario) {
-    const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+let quoteStyle
+// determine what kind of quotes are needed around table names in raw SQL
+const getQuoteStyle = async () => {
+  const { getConfig: getPrismaConfig } = require('@prisma/internals')
+  const fs = require('fs')
 
-    const scenarios = {}
-    for (const [model, namedFixtures] of Object.entries(scenario)) {
-      scenarios[model] = {}
-      for (const [name, createArgs] of Object.entries(namedFixtures)) {
-        if (typeof createArgs === 'function') {
-          scenarios[model][name] = await db[model].create(createArgs(scenarios))
-        } else {
-          scenarios[model][name] = await db[model].create(createArgs)
-        }
-      }
-    }
-    return scenarios
-  } else {
-    return {}
-  }
-}
-
-const teardown = async () => {
-  // Don't populate global scope, keep util functions inside teardown
-  // determine what kind of quotes are needed around table names in raw SQL
-  const getQuoteStyle = async () => {
-    const config = await getConfig({
-      datamodel: fs.readFileSync(getPaths().api.dbSchema).toString(),
+  if (!quoteStyle) {
+    const config = await getPrismaConfig({
+      datamodel: fs.readFileSync(dbSchemaPath).toString(),
     })
 
     switch (config.datasources?.[0]?.provider) {
       case 'mysql':
-        return '`'
+        quoteStyle = '`'
+        break
       default:
-        return '"'
+        quoteStyle = '"'
     }
   }
 
-  const quoteStyle = await getQuoteStyle()
+  return quoteStyle
+}
 
-  const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
+const getProjectDb = () => {
+  const { db } = require(`${apiSrcPath}/lib/db`)
+
+  return db
+}
+
+const buildScenario =
+  (it, testPath) =>
+  (...args) => {
+    let scenarioName, testName, testFunc
+
+    if (args.length === 3) {
+      ;[scenarioName, testName, testFunc] = args
+    } else if (args.length === 2) {
+      scenarioName = DEFAULT_SCENARIO
+      ;[testName, testFunc] = args
+    } else {
+      throw new Error('scenario() requires 2 or 3 arguments')
+    }
+
+    return it(testName, async () => {
+      const path = require('path')
+      const testFileDir = path.parse(testPath)
+      // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
+      const testFileNameParts = testFileDir.name.split('.')
+      const testFilePath = `${testFileDir.dir}/${testFileNameParts
+        .slice(0, testFileNameParts.length - 1)
+        .join('.')}.scenarios`
+      let allScenarios, scenario, result
+
+      try {
+        allScenarios = require(testFilePath)
+      } catch (e) {
+        // ignore error if scenario file not found, otherwise re-throw
+        if (e.code !== 'MODULE_NOT_FOUND') {
+          throw e
+        }
+      }
+
+      if (allScenarios) {
+        if (allScenarios[scenarioName]) {
+          scenario = allScenarios[scenarioName]
+        } else {
+          throw new Error(
+            `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
+          )
+        }
+      }
+
+      const scenarioData = await seedScenario(scenario)
+      result = await testFunc(scenarioData)
+
+      return result
+    })
+  }
+
+const teardown = async () => {
+  const fs = require('fs')
+
+  const quoteStyle = await getQuoteStyle()
 
   for (const modelName of teardownOrder) {
     try {
-      await db.$executeRawUnsafe(
+      await getProjectDb().$executeRawUnsafe(
         `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`
       )
     } catch (e) {
@@ -115,77 +165,75 @@ const teardown = async () => {
   }
 }
 
-const buildScenario =
-  (it) =>
-  (...args) => {
-    let scenarioName, testName, testFunc
-
-    if (args.length === 3) {
-      ;[scenarioName, testName, testFunc] = args
-    } else if (args.length === 2) {
-      scenarioName = DEFAULT_SCENARIO
-      ;[testName, testFunc] = args
-    } else {
-      throw new Error('scenario() requires 2 or 3 arguments')
-    }
-
-    return it(testName, async () => {
-      const path = require('path')
-      const testFileDir = path.parse(global.testPath)
-      // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
-      const testFileNameParts = testFileDir.name.split('.')
-      const testFilePath = `${testFileDir.dir}/${testFileNameParts
-        .slice(0, testFileNameParts.length - 1)
-        .join('.')}.scenarios`
-      let allScenarios, scenario, result
-
-      try {
-        allScenarios = require(testFilePath)
-      } catch (e) {
-        // ignore error if scenario file not found, otherwise re-throw
-        if (e.code !== 'MODULE_NOT_FOUND') {
-          throw e
-        }
-      }
-
-      if (allScenarios) {
-        if (allScenarios[scenarioName]) {
-          scenario = allScenarios[scenarioName]
+const seedScenario = async (scenario) => {
+  if (scenario) {
+    const scenarios = {}
+    for (const [model, namedFixtures] of Object.entries(scenario)) {
+      scenarios[model] = {}
+      for (const [name, createArgs] of Object.entries(namedFixtures)) {
+        if (typeof createArgs === 'function') {
+          scenarios[model][name] = await getProjectDb()[model].create(
+            createArgs(scenarios)
+          )
         } else {
-          throw (
-            ('UndefinedScenario',
-            `There is no scenario named "${scenarioName}" in ${testFilePath}.js`)
+          scenarios[model][name] = await getProjectDb()[model].create(
+            createArgs
           )
         }
       }
-
-      const scenarioData = await seedScenario(scenario)
-      result = await testFunc(scenarioData)
-
-      return result
-    })
+    }
+    return scenarios
+  } else {
+    return {}
   }
+}
 
-global.scenario = buildScenario(global.it)
-global.scenario.only = buildScenario(global.it.only)
-
-global.defineScenario = defineScenario
+global.scenario = buildScenario(global.it, global.testPath)
+global.scenario.only = buildScenario(global.it.only, global.testPath)
 
 global.mockCurrentUser = (currentUser) => {
   setContext({ currentUser })
 }
 
+/**
+ *
+ * All these hooks run in the VM/Context that the test runs in since we're using "setupAfterEnv".
+ * There's a new context for each test-suite i.e. each test file
+ *
+ * Doing this means if the db isn't used in the current test context,
+ * no need to do any of the teardown logic - allowing simple tests to run faster
+ * At the same time, if the db is used, disconnecting it in this context prevents connection limit errors.
+ * Just disconnecting db in jest-preset is not enough, because
+ * the Prisma client is created in a different context.
+ */
+const wasDbUsed = () => {
+  try {
+    const libDbPath = require.resolve(`${apiSrcPath}/lib/db`)
+    return Object.keys(require.cache).some((module) => {
+      return module === libDbPath
+    })
+  } catch (e) {
+    // If db wasn't resolved, no point trying to perform db resets
+    return false
+  }
+}
+
 beforeAll(async () => {
   // Disable perRequestContext for tests
   process.env.DISABLE_CONTEXT_ISOLATION = '1'
-  await configureTeardown()
+  if (wasDbUsed()) {
+    await configureTeardown()
+  }
 })
 
 afterAll(async () => {
-  const { db } = require(path.join(getPaths().api.src, 'lib', 'db'))
-  await db.$disconnect()
+  if (wasDbUsed()) {
+    getProjectDb().$disconnect()
+  }
 })
 
 afterEach(async () => {
-  await teardown()
+  if (wasDbUsed()) {
+    await teardown()
+  }
 })

@@ -2,12 +2,14 @@
  * @jest-environment jsdom
  */
 
+import React from 'react'
+
 import { render, screen, waitFor } from '@testing-library/react'
 
 import type { AuthContextInterface } from '@redwoodjs/auth'
 import '@testing-library/jest-dom/extend-expect'
 
-global.RWJS_API_GRAPHQL_URL = 'https://api.example.com/graphql'
+globalThis.RWJS_API_GRAPHQL_URL = 'https://api.example.com/graphql'
 
 import { FetchConfigProvider, useFetchConfig } from './FetchConfigProvider'
 
@@ -24,7 +26,16 @@ describe('FetchConfigProvider', () => {
           ({
             loading: false,
             isAuthenticated: false,
-          } as AuthContextInterface)
+          } as AuthContextInterface<
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown
+          >)
         }
       >
         <FetchConfigToString />
@@ -44,7 +55,16 @@ describe('FetchConfigProvider', () => {
             loading: false,
             isAuthenticated: true,
             type: 'custom',
-          } as AuthContextInterface)
+          } as AuthContextInterface<
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown,
+            unknown
+          >)
         }
       >
         <FetchConfigToString />

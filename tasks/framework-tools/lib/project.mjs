@@ -13,7 +13,7 @@ import {
   frameworkPkgJsonFiles,
   frameworkPackagesFiles,
   frameworkPackagesBins,
-  REDWOOD_PACKAGES_PATH,
+  packageJsonName,
 } from './framework.mjs'
 
 /**
@@ -99,22 +99,28 @@ export async function copyFrameworkFilesToProject(
 ) {
   // Loop over every package, delete all existing files, copy over the new files,
   // and fix binaries.
-  packages = await frameworkPackagesFiles(packages)
-  for (const [packageName, files] of Object.entries(packages)) {
+  const packagesFiles = await frameworkPackagesFiles(packages)
+
+  const packageNamesToPaths = packages.reduce(
+    (packageNamesToPaths, packagePath) => {
+      packageNamesToPaths[packageJsonName(packagePath)] =
+        path.dirname(packagePath)
+      return packageNamesToPaths
+    },
+    {}
+  )
+
+  for (const [packageName, files] of Object.entries(packagesFiles)) {
     const packageDstPath = path.join(projectPath, 'node_modules', packageName)
     console.log(
       terminalLink(packageName, 'file://' + packageDstPath),
       files.length,
       'files'
     )
-    rimraf.sync(packageDstPath)
+    await rimraf(packageDstPath)
 
     for (const file of files) {
-      const src = path.join(
-        REDWOOD_PACKAGES_PATH,
-        packageName.replace('@redwoodjs', ''),
-        file
-      )
+      const src = path.join(packageNamesToPaths[packageName], file)
       const dst = path.join(packageDstPath, file)
       fs.mkdirSync(path.dirname(dst), { recursive: true })
       fs.copyFileSync(src, dst)

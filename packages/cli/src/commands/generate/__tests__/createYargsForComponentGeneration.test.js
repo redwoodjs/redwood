@@ -1,9 +1,9 @@
 // Setup test mocks
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import '../../../lib/test'
 
-jest.mock('listr')
-import Listr from 'listr'
+jest.mock('listr2')
+import { Listr } from 'listr2'
 
 import * as helpers from '../helpers'
 
@@ -27,6 +27,7 @@ test('createYargsForComponentGeneration generates a yargs handler as expected', 
 
   // Now lets check that the tasks are being called correctly
   await result.handler({
+    name: 'foo',
     tests: false,
     stories: false,
   })

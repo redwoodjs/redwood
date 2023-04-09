@@ -298,8 +298,9 @@ export const deleteContact = ({ id }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```js title="api/src/services/contacts/contacts.ts"
-import { db } from 'src/lib/db'
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+
+import { db } from 'src/lib/db'
 
 export const contacts: QueryResolvers['contacts'] = () => {
   return db.contact.findMany()
@@ -346,15 +347,15 @@ Often it's nice to experiment and call your API in a more "raw" form before you 
 
 When you started development with `yarn redwood dev` (or `yarn rw dev`) you actually started a second process running at the same time. Open a new browser tab and head to [http://localhost:8911/graphql](http://localhost:8911/graphql) This is GraphQL Yoga's [GraphiQL](https://www.graphql-yoga.com/docs/features/graphiql), a web-based GUI for GraphQL APIs:
 
-<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488164-37663b8a-0bfa-4d52-8312-8cfaac7c2915.png" />
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/22184161/226866579-896e8edc-4ac0-48bd-80f0-2ba28da677b5.png" />
 
-Not very exciting yet, but check out that "Docs" tab on the far right:
+Not very exciting yet, but select the "Docs" tab on the top left and click on `query: Query`.
 
-<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161487889-8525abd6-1b44-4ba6-b637-8a3426f53197.png" />
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/22184161/226866573-41697d10-a056-4e3a-add3-b940147de802.png" />
 
 It's the complete schema as defined by our SDL files! The Playground will ingest these definitions and give you autocomplete hints on the left to help you build queries from scratch. Try getting the IDs of all the posts in the database; type the query at the left and then click the "Play" button to execute:
 
-<img width="1410" alt="image" src="https://user-images.githubusercontent.com/32992335/161488332-53547702-81e7-4c8b-b674-aef2f3773ace.png" />
+<img width="1410" alt="image" src="https://user-images.githubusercontent.com/22184161/226866554-3daefe7f-7b4d-4503-aaa0-9895ee5bd38e.png" />
 
 The GraphQL Playground is a great way to experiment with your API or troubleshoot when you come across a query or mutation that isn't behaving in the way you expect.
 
@@ -1280,14 +1281,14 @@ export const createContact = ({ input }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```ts title="api/src/services/contacts/contacts.ts"
-import type { Prisma } from '@prisma/client'
+import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 // highlight-next-line
 import { validate } from '@redwoodjs/api'
 
 // ...
 
-export const createContact = ({ input }: CreateContactArgs) => {
+export const createContact: MutationResolvers['createContact'] = ({ input }) => {
   // highlight-next-line
   validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })
@@ -1559,7 +1560,7 @@ We get that error message at the top saying something went wrong in plain Englis
 
 This just scratches the surface of what Service Validations can do. You can perform more complex validations, including combining multiple directives in a single call. What if we had a model representing a `Car`, and users could submit them to us for sale on our exclusive car shopping site. How do we make sure we only get the cream of the crop of motorized vehicles? Service validations would allow us to be very particular about the values someone would be allowed to submit, all without any custom checks, just built-in `validate()` calls:
 
-<Tabs>
+<Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```js

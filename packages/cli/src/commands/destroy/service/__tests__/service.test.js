@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import fs from 'fs'
 
 import '../../../../lib/test'
@@ -21,14 +21,21 @@ jest.mock('../../../../lib/schemaHelpers', () => {
   return {
     ...jest.requireActual('../../../../lib/schemaHelpers'),
     getSchema: () =>
-      require(path.join(global.__dirname, 'fixtures', 'post.json')),
+      require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
   }
 })
 
 describe('rw destory service', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'info').mockImplementation(() => {})
+    jest.spyOn(console, 'log').mockImplementation(() => {})
+  })
+
   afterEach(() => {
     fs.__setMockFiles({})
     jest.spyOn(fs, 'unlinkSync').mockClear()
+    console.info.mockRestore()
+    console.log.mockRestore()
   })
 
   describe('for javascript files', () => {
@@ -44,7 +51,7 @@ describe('rw destory service', () => {
         filesFn: files,
         name: 'User',
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
       return t.run().then(async () => {
         const generatedFiles = Object.keys(
@@ -74,7 +81,7 @@ describe('rw destory service', () => {
         filesFn: files,
         name: 'User',
       })
-      t.setRenderer('silent')
+      t.options.renderer = 'silent'
 
       return t.run().then(async () => {
         const generatedFiles = Object.keys(

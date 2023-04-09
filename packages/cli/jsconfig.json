@@ -4,12 +4,14 @@
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
+    "emitDeclarationOnly": false,
   },
   "include": ["src"],
   "references": [
     { "path": "../internal" },
+    { "path": "../project-config" },
     { "path": "../structure" },
     { "path": "../prerender" },
-    { "path": "../api-server" },
+    { "path": "../api-server" }
   ]
 }

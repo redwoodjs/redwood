@@ -23,7 +23,7 @@ It takes two arguments as generics:
 
 Not only does `CellSuccessProps` type the data returned from the query, but it also types the variables and methods returned by Apollo Client's `useQuery` hook!
 
-```ts title="web/src/components/BlogPost.cell.tsx"
+```ts title="web/src/components/BlogPostCell.tsx"
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -49,7 +49,7 @@ export const Success = ({
 This gives you the types of the props in your Cell's `Failure` component.
 It takes `TVariables` as an optional generic parameter, which is useful if you want to print error messages like `"Couldn't load data for ${variables.searchTerm}"`:
 
-```ts title=web/src/components/BlogPost.cell.tsx
+```ts title=web/src/components/BlogPostCell.tsx
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -70,7 +70,7 @@ export const Failure = ({
 
 Similar to `CellFailureProps`, but for the props of your Cell's `Loading` component:
 
-```ts title=web/src/components/BlogPost.cell.tsx
+```ts title=web/src/components/BlogPostCell.tsx
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -134,7 +134,7 @@ It takes three generic parameters:
 |:--------|:---------------------------------------------------------------------------------|
 | `TData` | The Prisma model that'll be returned                                             |
 | `TName` | (Optional) the name of the model. ("post" in the example below)                  |
-| `TKeys` | (optional) the keys(s) used to define the scenario. ("one" in the example below) |
+| `TKeys` | (optional) the key(s) used to define the scenario. ("one" in the example below) |
 
 We know this is a lot of generics, but that's so you get to choose how specific you want to be with the types!
 
@@ -220,3 +220,68 @@ export const handler = async (
 ```
 
 Note that in strict mode, you'll likely see errors where the handlers expect "truthy" values. All you have to do is make sure you return a boolean. For example, `return !!user` instead of `return user`.
+
+## Directives
+
+
+### `ValidatorDirectiveFunc`
+When you generate a [validator directive](directives.md#validators) you will see your `validate` function typed already with `ValidatorDirectiveFunc<TDirectiveArgs>`
+
+```ts
+import {
+  createValidatorDirective,
+  // highlight-next-line
+  ValidatorDirectiveFunc,
+} from '@redwoodjs/graphql-server'
+
+export const schema = gql`
+  directive @myValidator on FIELD_DEFINITION
+`
+// 👇 makes sure "context" and directive args are typed
+// highlight-next-line
+const validate: ValidatorDirectiveFunc = ({ context, directiveArgs }) => {
+```
+
+This type takes a single generic - the type of your `directiveArgs`.
+
+Let's take a look at the built-in `@requireAuth(roles: ["ADMIN"])` directive, for example - which we ship with your Redwood app by default in `./api/src/directives/requireAuth/requireAuth.ts`
+
+```ts
+// highlight-next-line
+type RequireAuthValidate = ValidatorDirectiveFunc<{ roles?: string[] }>
+
+const validate: RequireAuthValidate = ({ directiveArgs }) => {
+  // roles 👇 will be typed correctly as string[] | undefined
+  // highlight-next-line
+  const { roles } = directiveArgs
+  // ....
+}
+```
+
+| Generic          | Description                                               |
+|:-----------------|:----------------------------------------------------------|
+| `TDirectiveArgs` | The type of arguments passed to your directive in the SDL |
+
+### `TransformerDirectiveFunc`
+When you generate a [transformer directive](directives.md#transformers) you will see your `transform` function typed with `TransformDirectiveFunc<TField, TDirectiveArgs>`.
+
+```ts
+// 👇 makes sure the functions' arguments are typed
+// highlight-next-line
+const transform: TransformerDirectiveFunc = ({ context, resolvedValue }) => {
+```
+
+This type takes two generics - the type of the field you are transforming, and the type of your `directiveArgs`.
+
+So for example, let's say you have a transformer directive `@maskedEmail(permittedRoles: ['ADMIN'])` that you apply to `String` fields. You would pass in the following types
+
+```ts
+type MaskedEmailTransform = TransformerDirectiveFunc<string, {permittedRoles?: string[]}>
+```
+
+| Generic          | Description                                                                    |
+|:-----------------|:-------------------------------------------------------------------------------|
+| `TField`         | This will type `resolvedValue` i.e. the type of the field you are transforming |
+| `TDirectiveArgs` | The type of arguments passed to your directive in the SDL                      |
+
+

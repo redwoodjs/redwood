@@ -1,4 +1,4 @@
-import Listr from 'listr'
+import { Listr } from 'listr2'
 
 import {
   existsAnyExtensionSync,
@@ -8,7 +8,7 @@ import {
   getGraphqlPath,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { getOutputPath } from '../../setup/graphiql/graphiql'
+import { getOutputPath } from '../../setup/graphiql/graphiqlHelpers'
 
 const removeGraphiqlFromGraphqlHandler = () => {
   const graphqlPath = getGraphqlPath()
@@ -46,7 +46,7 @@ export const handler = () => {
         task: removeGraphiqlFromGraphqlHandler,
       },
     ],
-    { collapse: false, exitOnError: true }
+    { rendererOptions: { collapse: false }, exitOnError: true }
   )
   try {
     tasks.run()

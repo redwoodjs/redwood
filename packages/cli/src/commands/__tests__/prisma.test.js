@@ -1,4 +1,4 @@
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
@@ -32,6 +32,16 @@ jest.mock('fs', () => {
 import execa from 'execa'
 
 import { handler } from '../prisma'
+
+beforeEach(() => {
+  jest.spyOn(console, 'info').mockImplementation(() => {})
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+
+afterEach(() => {
+  console.info.mockRestore()
+  console.log.mockRestore()
+})
 
 test('the prisma command handles spaces', async () => {
   await handler({

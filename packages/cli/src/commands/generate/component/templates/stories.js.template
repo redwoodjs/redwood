@@ -1,0 +1,21 @@
+// When you've added props to your component,
+// pass Storybook's `args` through this story to control it from the addons panel:
+//
+// ```jsx
+// export const generated = (args) => {
+//   return <${pascalName} {...args} />
+// }
+// ```
+//
+// See https://storybook.js.org/docs/react/writing-stories/args.
+
+import ${pascalName} from './${pascalName}'
+
+export const generated = () => {
+  return <${pascalName} />
+}
+
+export default {
+  title: 'Components/${pascalName}',
+  component: ${pascalName},
+}

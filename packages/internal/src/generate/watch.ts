@@ -5,13 +5,15 @@ import path from 'path'
 
 import chokidar from 'chokidar'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import {
   isCellFile,
   isPageFile,
   isDirectoryNamedModuleFile,
   isGraphQLSchemaFile,
 } from '../files'
-import { getPaths } from '../paths'
+import { warningForDuplicateRoutes } from '../routes'
 
 import { generate } from './generate'
 import {
@@ -44,11 +46,25 @@ const action = {
   change: 'Modified',
 }
 
+let routesWarningMessage = ''
+
+process.stdin.on('data', async (data) => {
+  const str = data.toString().trim().toLowerCase()
+  if (str === 'g' || str === 'rs') {
+    console.log('Regenerating types and schemas....')
+    await generate()
+  }
+})
+
 watcher
   .on('ready', async () => {
     console.log('Generating TypeScript definitions and GraphQL schemas...')
     const files = await generate()
     console.log(files.length, 'files generated')
+    routesWarningMessage = warningForDuplicateRoutes()
+    if (routesWarningMessage) {
+      console.warn(routesWarningMessage)
+    }
   })
   .on('all', async (eventName, p) => {
     if (!['add', 'change', 'unlink'].includes(eventName)) {
@@ -69,6 +85,7 @@ watcher
       console.log(action[eventName], 'Cell:', '\x1b[2m', p, '\x1b[0m')
     } else if (absPath === rwjsPaths.web.routes) {
       generateTypeDefRouterRoutes()
+      routesWarningMessage = warningForDuplicateRoutes()
       console.log(action[eventName], 'Routes:', '\x1b[2m', p, '\x1b[0m')
     } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
       generateTypeDefRouterPages()
@@ -90,5 +107,9 @@ watcher
       await generateGraphQLSchema()
       await generateTypeDefGraphQLApi()
       console.log(action[eventName], 'GraphQL Schema:', '\x1b[2m', p, '\x1b[0m')
+    }
+
+    if (routesWarningMessage) {
+      console.warn(routesWarningMessage)
     }
   })

@@ -1,5 +1,10 @@
 import * as ValidationErrors from '../errors'
-import { validate, validateUniqueness, validateWith } from '../validations'
+import {
+  validate,
+  validateUniqueness,
+  validateWith,
+  validateWithSync,
+} from '../validations'
 
 describe('validate absence', () => {
   it('checks if value is null or undefined', () => {
@@ -177,12 +182,41 @@ describe('validate exclusion', () => {
     expect(() =>
       validate('bar', 'selection', { exclusion: { in: ['foo', 'bar'] } })
     ).toThrow(ValidationErrors.ExclusionValidationError)
+    expect(() =>
+      validate('bar', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
 
     expect(() =>
       validate('qux', 'selection', { exclusion: ['foo', 'bar'] })
     ).not.toThrow()
     expect(() =>
       validate('qux', 'selection', { exclusion: { in: ['foo', 'bar'] } })
+    ).not.toThrow()
+    expect(() =>
+      validate('qux', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).not.toThrow()
+  })
+
+  it('checks for case-insensitive exclusion', () => {
+    expect(() =>
+      validate('Bar', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
+    expect(() =>
+      validate('bar', 'selection', {
+        exclusion: { in: ['foo', 'Bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.ExclusionValidationError)
+
+    expect(() =>
+      validate('qux', 'selection', {
+        exclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
     ).not.toThrow()
   })
 
@@ -242,13 +276,13 @@ describe('validate format', () => {
       ValidationErrors.FormatValidationError
     )
     // inline regex
-    ;[(/foo/, /^foo/)].forEach((pattern) => {
+    ;[/foo/, /^foo/].forEach((pattern) => {
       expect(() =>
         validate('foobar', 'text', { format: pattern })
       ).not.toThrow()
     })
     // options format
-    ;[(/foo/, /^foo/)].forEach((pattern) => {
+    ;[/foo/, /^foo/].forEach((pattern) => {
       expect(() =>
         validate('foobar', 'text', { format: { pattern } })
       ).not.toThrow()
@@ -325,12 +359,41 @@ describe('validate inclusion', () => {
     expect(() =>
       validate('quux', 'selection', { inclusion: { in: ['foo', 'bar'] } })
     ).toThrow(ValidationErrors.InclusionValidationError)
+    expect(() =>
+      validate('QUUX', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).toThrow(ValidationErrors.InclusionValidationError)
 
     expect(() =>
       validate('foo', 'selection', { inclusion: ['foo', 'bar'] })
     ).not.toThrow()
     expect(() =>
       validate('foo', 'selection', { inclusion: { in: ['foo', 'bar'] } })
+    ).not.toThrow()
+    expect(() =>
+      validate('foo', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: true },
+      })
+    ).not.toThrow()
+  })
+
+  it('checks for case-insensitive inclusion', () => {
+    expect(() =>
+      validate('quux', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).toThrow(ValidationErrors.InclusionValidationError)
+
+    expect(() =>
+      validate('Foo', 'selection', {
+        inclusion: { in: ['foo', 'bar'], caseSensitive: false },
+      })
+    ).not.toThrow()
+    expect(() =>
+      validate('foo', 'selection', {
+        inclusion: { in: ['FOO', 'bar'], caseSensitive: false },
+      })
     ).not.toThrow()
   })
 
@@ -919,6 +982,75 @@ describe('validate presence', () => {
   })
 })
 
+describe('validate custom', () => {
+  it('checks if errors are not thrown', () => {
+    expect(() =>
+      validate(null, 'email', {
+        custom: {
+          with: () => {
+            throw new Error('foo')
+          },
+        },
+      })
+    ).toThrow(ValidationErrors.CustomValidationError)
+
+    expect(() =>
+      validate(null, 'email', {
+        custom: {
+          with: () => {},
+        },
+      })
+    ).not.toThrow(ValidationErrors.CustomValidationError)
+  })
+
+  it('throws with a custom message', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw new Error('foo')
+          },
+          message: 'Gimmie an email',
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('throws with a custom message via the message of the thrown error', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw new Error('Gimmie an email')
+          },
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('throws with a custom message via the thrown message', () => {
+    try {
+      validate(undefined, {
+        custom: {
+          with: () => {
+            throw 'Gimmie an email'
+          },
+        },
+      })
+    } catch (e) {
+      expect(e.message).toEqual('Gimmie an email')
+    }
+  })
+
+  it('will not throw when option is undefined', () => {
+    expect(() => validate('foo', { custom: undefined })).not.toThrow()
+  })
+})
+
 describe('validate', () => {
   it('accepts the two argument version', () => {
     try {
@@ -1019,10 +1151,10 @@ describe('validate', () => {
   })
 })
 
-describe('validateWith', () => {
+describe('validateWithSync', () => {
   it('runs a custom function as a validation', () => {
     const validateFunction = jest.fn()
-    validateWith(validateFunction)
+    validateWithSync(validateFunction)
 
     expect(validateFunction).toBeCalledWith()
   })
@@ -1030,7 +1162,7 @@ describe('validateWith', () => {
   it('catches errors and raises ServiceValidationError', () => {
     // Error instance
     try {
-      validateWith(() => {
+      validateWithSync(() => {
         throw new Error('Invalid value')
       })
     } catch (e) {
@@ -1040,7 +1172,7 @@ describe('validateWith', () => {
 
     // Error string
     try {
-      validateWith(() => {
+      validateWithSync(() => {
         throw 'Bad input'
       })
     } catch (e) {
@@ -1048,6 +1180,37 @@ describe('validateWith', () => {
       expect(e.message).toEqual('Bad input')
     }
 
+    expect.assertions(4)
+  })
+})
+
+describe('validateWith', () => {
+  it('runs a custom function as a validation', () => {
+    const validateFunction = jest.fn()
+    validateWith(validateFunction)
+
+    expect(validateFunction).toBeCalledWith()
+  })
+
+  it('catches errors and raises ServiceValidationError', async () => {
+    // Error instance
+    try {
+      await validateWith(() => {
+        throw new Error('Invalid value')
+      })
+    } catch (e) {
+      expect(e instanceof ValidationErrors.ServiceValidationError).toEqual(true)
+      expect(e.message).toEqual('Invalid value')
+    }
+    // Error string
+    try {
+      await validateWith(() => {
+        throw 'Bad input'
+      })
+    } catch (e) {
+      expect(e instanceof ValidationErrors.ServiceValidationError).toEqual(true)
+      expect(e.message).toEqual('Bad input')
+    }
     expect.assertions(4)
   })
 })

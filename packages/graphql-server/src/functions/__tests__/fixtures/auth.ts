@@ -1,5 +1,6 @@
 import { parseJWT } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
+import { APIGatewayEvent } from 'aws-lambda'
 
 interface Context extends Record<string, any> {}
 
@@ -36,13 +37,10 @@ export const getCurrentUser = async (
   /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   { token, type },
   /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
-  { event, context }
-): Promise<RedwoodUser> => {
-  // if (!decoded) {
-  //   return null
-  // }
-  if (!decoded && token) {
-    return { token }
+  req?: { event: APIGatewayEvent, context: Context }
+): Promise<RedwoodUser | null> => {
+  if (!decoded) {
+    return null
   }
 
   const { roles } = parseJWT({ decoded })
@@ -82,6 +80,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
     return false
   }
 
+  // @ts-expect-error - When not testing we have better types for currentUser
   const currentUserRoles = context.currentUser?.roles
 
   if (typeof roles === 'string') {
@@ -100,10 +99,10 @@ export const hasRole = (roles: AllowedRoles): boolean => {
       return currentUserRoles?.some((allowedRole) =>
         roles.includes(allowedRole)
       )
-    } else if (typeof context.currentUser.roles === 'string') {
+    } else if (typeof currentUserRoles === 'string') {
       // roles to check is an array, currentUser.roles is a string
       return roles.some(
-        (allowedRole) => context.currentUser?.roles === allowedRole
+        (allowedRole) => currentUserRoles === allowedRole
       )
     }
   }
