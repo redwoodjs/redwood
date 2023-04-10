@@ -13,6 +13,7 @@ import type { TagDescriptor } from '@redwoodjs/web'
 
 import { triggerRouteHooks } from './triggerRouteHooks'
 import { RWRouteManifest } from './types'
+import { stripQueryStringAndHashFromPath } from './utils'
 
 globalThis.RWJS_ENV = {}
 
@@ -84,7 +85,7 @@ export async function runFeServer() {
   // This is where we match the url to the correct route, and render it
   // We also call the relevant routeHooks here
   app.use('*', async (req, res) => {
-    const url = req.originalUrl
+    const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
 
     try {
       const { serverEntry } = await import(
@@ -100,7 +101,7 @@ export async function runFeServer() {
         }
 
         const matches = [
-          ...url.matchAll(new RegExp(route.matchRegexString, 'g')),
+          ...currentPathName.matchAll(new RegExp(route.matchRegexString, 'g')),
         ]
         return matches.length > 0
       })
@@ -118,7 +119,11 @@ export async function runFeServer() {
         const { pipe } = renderToPipeableStream(
           // @TODO: we can pass in meta here as well
           // we should use the same shape as Remix or Next for the meta object
-          serverEntry({ url, routeContext: null, css: indexEntry.css }),
+          serverEntry({
+            url: currentPathName,
+            routeContext: null,
+            css: indexEntry.css,
+          }),
           {
             bootstrapScriptContent: `window.__assetMap = function() { return ${JSON.stringify(
               { css: indexEntry.css }
@@ -159,7 +164,7 @@ export async function runFeServer() {
             routeHooks,
             req,
             parsedParams: currentRoute.hasParams
-              ? matchPath(currentRoute.pathDefinition, url).params
+              ? matchPath(currentRoute.pathDefinition, currentPathName).params
               : undefined,
           })
 
@@ -180,7 +185,11 @@ export async function runFeServer() {
       const { pipe } = renderToPipeableStream(
         // @TODO: we can pass in meta here as well
         // we should use the same shape as Remix or Next for the meta object
-        serverEntry({ url, routeContext, css: indexEntry.css }),
+        serverEntry({
+          url: currentPathName,
+          routeContext,
+          css: indexEntry.css,
+        }),
         {
           bootstrapScriptContent: `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
             { css: indexEntry.css, meta: metaTags }

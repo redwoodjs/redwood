@@ -10,6 +10,7 @@ import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import { triggerRouteHooks } from './triggerRouteHooks'
+import { stripQueryStringAndHashFromPath } from './utils'
 
 // These values are defined in the vite.config.ts
 globalThis.RWJS_ENV = {}
@@ -41,7 +42,8 @@ async function createServer() {
   app.use(vite.middlewares)
 
   app.use('*', async (req, res, next) => {
-    const url = req.originalUrl
+    const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
+
     try {
       const routes = getProjectRoutes()
 
@@ -53,7 +55,7 @@ async function createServer() {
         }
 
         const matches = [
-          ...url.matchAll(new RegExp(route.matchRegexString, 'g')),
+          ...currentPathName.matchAll(new RegExp(route.matchRegexString, 'g')),
         ]
 
         return matches.length > 0
@@ -74,7 +76,7 @@ async function createServer() {
             routeHooks,
             req,
             parsedParams: currentRoute.hasParams
-              ? matchPath(currentRoute.path, url).params
+              ? matchPath(currentRoute.path, currentPathName).params
               : undefined,
           })
 
@@ -115,7 +117,7 @@ async function createServer() {
         // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
 
         serverEntry({
-          url,
+          url: currentPathName,
           routeContext,
           css: FIXME_HardcodedIndexCss,
           meta: metaTags,
