@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/telemetry",
-  "version": "0.0.0-experimental-streaming.4",
+  "version": "0.0.0-experimental-streaming.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/project-config": "0.0.0-experimental-streaming.4",
-    "@redwoodjs/structure": "0.0.0-experimental-streaming.4",
+    "@redwoodjs/project-config": "0.0.0-experimental-streaming.5",
+    "@redwoodjs/structure": "0.0.0-experimental-streaming.5",
     "@whatwg-node/fetch": "0.8.4",
     "ci-info": "3.8.0",
     "core-js": "3.30.0",
