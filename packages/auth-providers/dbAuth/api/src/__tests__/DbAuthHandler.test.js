@@ -2341,8 +2341,8 @@ describe('dbAuth', () => {
     })
 
     it('createUser db check is called with insensitive string when user has provided one in SignupFlowOptions', async () => {
-      const spy = jest.spyOn(db.user, 'findUnique');
-      options.signup.usernameMatch = "insensitive"
+      const spy = jest.spyOn(db.user, 'findUnique')
+      options.signup.usernameMatch = 'insensitive'
 
       const dbUser = await createDbUser()
       event.body = JSON.stringify({
@@ -2351,15 +2351,20 @@ describe('dbAuth', () => {
       })
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      dbAuth._createUser();
+      await dbAuth._createUser()
       expect(spy).toHaveBeenCalled()
-      expect(spy).toHaveBeenCalledWith({ 'where' : {
-        'email' : expect.objectContaining({ mode: 'insensitive'})
-      } })
+      return expect(spy).toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
     })
 
     it('createUser db check is not called with insensitive string when user has not provided one in SignupFlowOptions', async () => {
-      const spy = jest.spyOn(db.user, 'findUnique');
+      jest.resetAllMocks()
+      jest.clearAllMocks()
+
+      const spy = jest.spyOn(db.user, 'findUnique')
       delete options.signup.usernameMatch
 
       const dbUser = await createDbUser()
@@ -2368,11 +2373,14 @@ describe('dbAuth', () => {
         password: 'password',
       })
       const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth._createUser().catch((e) => {})
 
-      dbAuth._createUser().catch((e) => {})
-      expect(spy).not.toHaveBeenCalledWith({ 'where' : {
-        'email' : expect.objectContaining({ mode: 'insensitive'})
-      } })
+      expect(spy).toHaveBeenCalled()
+      return expect(spy).not.toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
     })
 
     it('throws a default error message if username is missing', async () => {
