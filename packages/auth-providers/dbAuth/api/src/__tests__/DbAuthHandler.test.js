@@ -2364,6 +2364,7 @@ describe('dbAuth', () => {
       jest.resetAllMocks()
       jest.clearAllMocks()
 
+      const defaultMessage = options.signup.errors.usernameTaken
       const spy = jest.spyOn(db.user, 'findUnique')
       delete options.signup.usernameMatch
 
@@ -2373,7 +2374,12 @@ describe('dbAuth', () => {
         password: 'password',
       })
       const dbAuth = new DbAuthHandler(event, context, options)
-      await dbAuth._createUser().catch((e) => {})
+      await dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{username\}/, dbUser.email)
+        )
+      })
 
       expect(spy).toHaveBeenCalled()
       return expect(spy).not.toHaveBeenCalledWith({

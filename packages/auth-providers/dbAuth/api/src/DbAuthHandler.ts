@@ -1287,20 +1287,19 @@ export class DbAuthHandler<
       this._validateField('username', username) &&
       this._validateField('password', password)
     ) {
-
       // Each db provider has it owns rules for case insensitive comparison.
       // We are checking if you have defined one for your db choice here
       // https://www.prisma.io/docs/concepts/components/prisma-client/case-sensitivity
-      const usernameMatchFlowOption = (this.options.signup as SignupFlowOptions)?.usernameMatch;
-      const findUniqueUserMatchCriteriaOptions = !usernameMatchFlowOption ?
-        { [this.options.authFields.username]: username }
-        :
-        {
-          [this.options.authFields.username]: {
-            equals: username,
-            mode: usernameMatchFlowOption
+      const usernameMatchFlowOption = (this.options.signup as SignupFlowOptions)
+        ?.usernameMatch
+      const findUniqueUserMatchCriteriaOptions = !usernameMatchFlowOption
+        ? { [this.options.authFields.username]: username }
+        : {
+            [this.options.authFields.username]: {
+              equals: username,
+              mode: usernameMatchFlowOption,
+            },
           }
-        }
 
       const user = await this.dbAccessor.findUnique({
         where: findUniqueUserMatchCriteriaOptions,
