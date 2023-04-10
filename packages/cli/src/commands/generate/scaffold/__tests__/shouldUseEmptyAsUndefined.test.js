@@ -11,25 +11,22 @@ import * as scaffold from '../scaffold'
 jest.mock('execa')
 
 describe('relational form field', () => {
-  let files
   let form
 
   beforeAll(async () => {
-    files = await scaffold.files({
+    const files = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'Tag',
       tests: true,
       nestScaffoldByModel: true,
     })
-    form =
-      files[
-        path.normalize(
-          '/path/to/project/web/src/components/Tag/TagForm/TagForm.js'
-        )
-      ]
+
+    const tagFormPath =
+      '/path/to/project/web/src/components/Tag/TagForm/TagForm.js'
+    form = files[path.normalize(tagFormPath)]
   })
 
-  test("includes optional relational fields with an emptyAs('undefined')", async () => {
-    expect(form).toMatch("emptyAs={'undefined'}")
+  test("includes optional relational fields with an emptyAs('undefined')", () => {
+    expect(form).toMatch("emptyAs={'Undefined'}")
   })
 })
