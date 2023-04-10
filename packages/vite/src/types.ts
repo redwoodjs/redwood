@@ -3,6 +3,7 @@ export interface RWRouteManifestItem {
   routeHooks: string | null
   bundle: string | null
   pathDefinition: PathDefinition
+  hasParams: boolean
   name: string
   redirect: { to: string; permanent: boolean } | null
 }

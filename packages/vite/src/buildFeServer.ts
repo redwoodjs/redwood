@@ -107,6 +107,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
       matchRegexString: route.matchRegexString,
       // @NOTE this is the path definition, not the actual path
       pathDefinition: route.path,
+      hasParams: route.hasParams,
       routeHooks: route.routeHooks
         ? // @MARK need to change to .mjs here if we use esm
           path.relative(rwPaths.web.src, route.routeHooks).replace('.ts', '.js')

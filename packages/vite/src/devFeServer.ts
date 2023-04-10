@@ -6,6 +6,8 @@ import { createServer as createViteServer } from 'vite'
 
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { matchPath } from '@redwoodjs/router'
+import type { TagDescriptor } from '@redwoodjs/web'
 
 import { triggerRouteHooks } from './triggerRouteHooks'
 
@@ -41,15 +43,9 @@ async function createServer() {
   app.use('*', async (req, res, next) => {
     const url = req.originalUrl
     try {
-      // @MARK: using virtual modules here, so we can actually find the chunk we need! 🤯
-      // I'm not convinved we need virtual modules anymore..... or we'd need to rollup the logic in serveBuilt
-      // into a function in internal, and generate the virtual module using it
-      // const { default: routes } = (await vite.ssrLoadModule(
-      //   'virtual:rw-routes'
-      // )) as { default: VirtualRoute[] }
-
       const routes = getProjectRoutes()
 
+      // Do a simple match with regex, don't bother parsing params yet
       const currentRoute = routes.find((route) => {
         if (!route.matchRegexString) {
           // This is the 404/NotFoundPage case
@@ -59,15 +55,14 @@ async function createServer() {
         const matches = [
           ...url.matchAll(new RegExp(route.matchRegexString, 'g')),
         ]
+
         return matches.length > 0
       })
 
       let routeContext = {}
-      let metaTags = {}
+      let metaTags: TagDescriptor[] = []
 
       if (currentRoute?.redirect) {
-        // @TODO deal with permanent/temp
-        // Shortcircuit, and return a 301 or 302
         return res.redirect(currentRoute.redirect.to)
       }
 
@@ -75,7 +70,13 @@ async function createServer() {
         try {
           const routeHooks = await vite.ssrLoadModule(currentRoute.routeHooks)
 
-          const { serverData, meta } = await triggerRouteHooks(routeHooks, req)
+          const { serverData, meta } = await triggerRouteHooks({
+            routeHooks,
+            req,
+            parsedParams: currentRoute.hasParams
+              ? matchPath(currentRoute.path, url).params
+              : undefined,
+          })
 
           routeContext = {
             ...serverData,

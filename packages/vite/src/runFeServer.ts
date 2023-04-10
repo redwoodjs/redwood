@@ -8,6 +8,7 @@ import { renderToPipeableStream } from 'react-dom/server'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import { triggerRouteHooks } from './triggerRouteHooks'
@@ -154,7 +155,13 @@ export async function runFeServer() {
             path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
           )
 
-          const { serverData, meta } = await triggerRouteHooks(routeHooks, req)
+          const { serverData, meta } = await triggerRouteHooks({
+            routeHooks,
+            req,
+            parsedParams: currentRoute.hasParams
+              ? matchPath(currentRoute.pathDefinition, url).params
+              : undefined,
+          })
 
           routeContext = {
             ...serverData,

@@ -86,6 +86,10 @@ export const getProjectRoutes = (): RouteSpec[] => {
   const routes = rwProject.getRouter().routes
 
   return routes.map((route: any) => {
+    const { matchRegexString, routeParams } = route.isNotFound
+      ? { matchRegexString: null, routeParams: null }
+      : getRouteRegexAndParams(route.path)
+
     return {
       name: route.isNotFound ? 'NotFoundPage' : route.name,
       path: route.isNotFound ? 'notfound' : route.path,
@@ -97,9 +101,8 @@ export const getProjectRoutes = (): RouteSpec[] => {
         ? path.relative(getPaths().web.src, route.page?.filePath)
         : undefined,
       routeHooks: getRouteHookForPage(route.page?.filePath),
-      matchRegexString: route.isNotFound
-        ? null
-        : getRouteRegexAndParams(route.path).matchRegexString,
+      matchRegexString: matchRegexString,
+      paramNames: routeParams,
       // @TODO deal with permanent/temp later
       redirect: route.redirect
         ? { to: route.redirect, permanent: false }

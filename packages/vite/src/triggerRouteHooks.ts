@@ -10,15 +10,22 @@ interface RouteHooks {
   meta?: MetaHook<any>
 }
 
-export const triggerRouteHooks = async (
-  routeHooks: RouteHooks,
+interface TriggerRouteHooksParam {
+  routeHooks: RouteHooks
   req: Request
-) => {
+  parsedParams?: Record<string, any>
+}
+
+export const triggerRouteHooks = async ({
+  routeHooks,
+  req,
+  parsedParams = {},
+}: TriggerRouteHooksParam) => {
   const event: RouteHookEvent = {
-    params: {}, // @TODO
+    params: parsedParams,
     headers: req.headers || {},
     query: req.query as any, // @TODO we should parse query parameters the same way as RW router
-    cookies: req.cookies || {},
+    // cookies: req.cookies || {}, // @TODO we probably need some sort of cookie parser
   }
 
   let serverData = {}
