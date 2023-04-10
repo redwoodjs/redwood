@@ -118,6 +118,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
             permanent: false,
           }
         : null,
+      renderMode: route.renderMode,
     }
     return acc
   }, {})

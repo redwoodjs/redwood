@@ -144,6 +144,10 @@ export class RWRoute extends BaseNode {
     return this.getBoolAttr('prerender')
   }
 
+  @lazy() get renderMode(): string | undefined {
+    return this.getStringAttr('renderMode') || 'stream'
+  }
+
   @lazy() get path_literal_node() {
     const a = this.jsxNode.getAttribute('path')
     if (!a) {

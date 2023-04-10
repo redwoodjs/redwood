@@ -110,12 +110,20 @@ async function createServer() {
 
       // Serialize route context so it can be passed to the client entry
       const serialisedRouteContext = JSON.stringify(routeContext)
+
+      // @TODO CSS is handled by Vite in dev mode, we don't need to worry about it in dev
+      // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
       const FIXME_HardcodedIndexCss = ['index.css']
 
-      const { pipe } = renderToPipeableStream(
-        // @TODO CSS is handled by Vite in dev mode, we don't need to worry about it in dev
-        // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
+      const bootstrapModules = [
+        path.join(__dirname, '../inject', 'reactRefresh.js'),
+      ]
 
+      if (currentRoute?.renderMode !== 'html') {
+        bootstrapModules.push(rwPaths.web.entryClient)
+      }
+
+      const { pipe } = renderToPipeableStream(
         serverEntry({
           url: currentPathName,
           routeContext,
@@ -129,11 +137,8 @@ async function createServer() {
               meta: metaTags,
             }
           )} }`,
-          bootstrapModules: [
-            path.join(__dirname, '../inject', 'reactRefresh.js'),
-            rwPaths.web.entryClient,
-          ],
-          onAllReady() {
+          bootstrapModules,
+          onShellReady() {
             res.setHeader('content-type', 'text/html; charset=utf-8')
             pipe(res)
           },

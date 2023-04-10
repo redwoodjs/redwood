@@ -78,7 +78,7 @@ export interface RouteSpec {
   routeHooks: string | undefined | null
   matchRegexString: string | null
   redirect: { to: string; permanent: boolean } | null
-  renderMode: 'stream' | 'html' | 'client'
+  renderMode: 'stream' | 'html'
 }
 
 export const getProjectRoutes = (): RouteSpec[] => {
@@ -101,14 +101,13 @@ export const getProjectRoutes = (): RouteSpec[] => {
         ? path.relative(getPaths().web.src, route.page?.filePath)
         : undefined,
       routeHooks: getRouteHookForPage(route.page?.filePath),
+      renderMode: route.renderMode,
       matchRegexString: matchRegexString,
       paramNames: routeParams,
       // @TODO deal with permanent/temp later
       redirect: route.redirect
         ? { to: route.redirect, permanent: false }
         : null,
-      //@TODO detect render mode on Route, but also Set
-      renderMode: null,
     }
   })
 }

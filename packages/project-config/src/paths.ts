@@ -229,6 +229,13 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   return paths
 }
 
+/**
+ * Returns the route hook for the supplied page path.
+ * Note that the page name doesn't have to match
+ *
+ * @param pagePath
+ * @returns string
+ */
 export const getRouteHookForPage = (pagePath: string | undefined | null) => {
   if (!pagePath) {
     return null
@@ -242,6 +249,10 @@ export const getRouteHookForPage = (pagePath: string | undefined | null) => {
       cwd: path.dirname(pagePath), // the page's folder
     })
     .at(0)
+}
+
+export const getAppRouteHook = () => {
+  return resolveFile(path.join(getPaths().web.src, 'App.routeHooks'))
 }
 
 /**
