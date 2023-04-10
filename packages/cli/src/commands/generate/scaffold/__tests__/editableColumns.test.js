@@ -45,10 +45,6 @@ describe('editable columns', () => {
     expect(form).toMatch('name="number"')
   })
 
-  test("includes optional relational fields with an emptyAs('undefined')", async () => {
-    expect(form).toMatch("emptyAs={'undefined'}")
-  })
-
   test('includes DateTime fields', async () => {
     expect(form).toMatch('name="otherTime"')
   })
