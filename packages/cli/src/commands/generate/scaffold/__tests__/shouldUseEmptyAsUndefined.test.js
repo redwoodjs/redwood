@@ -27,6 +27,6 @@ describe('relational form field', () => {
   })
 
   test("includes optional relational fields with an emptyAs('undefined')", () => {
-    expect(form).toMatch("emptyAs={'Undefined'}")
+    expect(form).toMatch("emptyAs={'undefined'}")
   })
 })
