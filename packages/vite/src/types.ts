@@ -6,6 +6,7 @@ export interface RWRouteManifestItem {
   hasParams: boolean
   name: string
   redirect: { to: string; permanent: boolean } | null
+  renderMode: 'html' | 'stream'
 }
 
 export type RWRouteManifest = Record<PathDefinition, RWRouteManifestItem>

@@ -117,8 +117,6 @@ export async function runFeServer() {
         }
 
         const { pipe } = renderToPipeableStream(
-          // @TODO: we can pass in meta here as well
-          // we should use the same shape as Remix or Next for the meta object
           serverEntry({
             url: currentPathName,
             routeContext: null,
@@ -182,13 +180,18 @@ export async function runFeServer() {
       // Serialize route context so it can be passed to the client entry
       const serializedRouteContext = JSON.stringify(routeContext)
 
+      const bootstrapModules =
+        currentRoute.renderMode !== 'html'
+          ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
+          : undefined
+
       const { pipe } = renderToPipeableStream(
-        // @TODO: we can pass in meta here as well
         // we should use the same shape as Remix or Next for the meta object
         serverEntry({
           url: currentPathName,
           routeContext,
           css: indexEntry.css,
+          meta: metaTags,
         }),
         {
           bootstrapScriptContent: `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
@@ -196,7 +199,7 @@ export async function runFeServer() {
           )} }`,
           // @NOTE have to add slash so subpaths still pick up the right file
           // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
-          bootstrapModules: ['/' + indexEntry.file, '/' + currentRoute.bundle],
+          bootstrapModules,
           onShellReady() {
             res.setHeader('content-type', 'text/html; charset=utf-8')
             pipe(res)
