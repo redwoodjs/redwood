@@ -101,8 +101,9 @@ export const getWebSideBabelPlugins = (
 }
 
 export const getWebSideOverrides = (
-  { staticImports }: Flags = {
+  { staticImports, forVite }: Flags = {
     staticImports: false,
+    forVite: false,
   }
 ) => {
   const overrides = [
@@ -120,6 +121,7 @@ export const getWebSideOverrides = (
             .default,
           {
             useStaticImports: staticImports,
+            vite: forVite,
           },
         ],
       ],
@@ -221,9 +223,10 @@ export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
 
 // Used in prerender only currently
 export const registerWebSideBabelHook = ({
+  forVite = false,
   plugins = [],
   overrides = [],
-}: RegisterHookOptions = {}) => {
+}: RegisterHookOptions & { forVite?: boolean } = {}) => {
   const defaultOptions = getWebSideDefaultBabelConfig()
   registerBabel({
     ...defaultOptions,
@@ -233,7 +236,10 @@ export const registerWebSideBabelHook = ({
     cache: false,
     // We only register for prerender currently
     // Static importing pages makes sense
-    overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
+    overrides: [
+      ...getWebSideOverrides({ staticImports: true, forVite }),
+      ...overrides,
+    ],
   })
 }
 

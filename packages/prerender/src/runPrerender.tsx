@@ -8,7 +8,7 @@ import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import { matchPath } from '@redwoodjs/router/dist/util'
 import type { QueryInfo } from '@redwoodjs/web'
@@ -157,14 +157,30 @@ function insertChunkLoadingScript(
       )
     )
 
-    const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+    // Webpack
+    let chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+    let isModule = false
+
+    if (!chunkPath && route?.filePath) {
+      // Vite
+
+      // TODO: Make sure this works on Windows
+      const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
+      const pagePath = route.filePath.slice(pagesIndex)
+
+      // TODO: Check if the initial / is needed
+      chunkPath = '/' + buildManifest[pagePath].file
+      isModule = true
+    }
 
     if (!chunkPath) {
       throw new Error('Could not find chunk for ' + route?.pageIdentifier)
     }
 
     indexHtmlTree('head').prepend(
-      `<script defer="defer" src="${chunkPath}"></script>`
+      `<script defer="defer" src="${chunkPath}" ${
+        isModule ? 'type="module"' : ''
+      }></script>`
     )
   }
 }
@@ -218,6 +234,7 @@ export const runPrerender = async ({
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
+    forVite: getConfig().web.bundler === 'vite',
     overrides: [
       {
         plugins: [

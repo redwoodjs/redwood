@@ -12,6 +12,7 @@ import {
 
 interface PluginOptions {
   useStaticImports?: boolean
+  vite?: boolean
 }
 
 /**
@@ -37,7 +38,7 @@ const withRelativeImports = (page: PagesDependency) => {
 
 export default function (
   { types: t }: { types: typeof types },
-  { useStaticImports = false }: PluginOptions
+  { useStaticImports = false, vite = false }: PluginOptions
 ): PluginObj {
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
@@ -162,6 +163,10 @@ export default function (
                           ? t.callExpression(t.identifier('require'), [
                               t.stringLiteral(relativeImport),
                             ])
+                          : vite
+                          ? t.callExpression(t.identifier('await import'), [
+                              t.stringLiteral(relativeImport),
+                            ])
                           : t.callExpression(
                               t.identifier(
                                 // Use __webpack_require__ otherwise all pages will
@@ -174,7 +179,8 @@ export default function (
                                   [t.stringLiteral(relativeImport)]
                                 ),
                               ]
-                            )
+                            ),
+                        vite // async arrow function when using vite
                       )
                     ),
                   ])
