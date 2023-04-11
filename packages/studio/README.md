@@ -38,7 +38,7 @@ To enable ingestion of OpenTelemetry tracing into the studio please provide the 
 ```ts
 const exporter = new OTLPTraceExporter({
   // Update this URL to point to where your OTLP compatible collector is listening
-  // The redwood development dashboard (`yarn rw dashboard`) can collect your telemetry at `http://127.0.0.1:4318/v1/traces`
+  // The redwood development studio (`yarn rw exp studio`) can collect your telemetry at `http://127.0.0.1:4318/v1/traces`
   url: 'http://127.0.0.1:4318/v1/traces',
 })
 ```

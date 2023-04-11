@@ -79,7 +79,7 @@ export const start = async () => {
         '------------------------------------------------------------------'
       )}\n`
     )
-    console.log(`Dashboard API listening on ${HOST}:${PORT}`)
+    console.log(`Studio API listening on ${HOST}:${PORT}`)
     open(`http://${HOST}:${PORT}`)
   })
 }

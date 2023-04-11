@@ -12,7 +12,7 @@ export const getDatabase = async () => {
   // Switch between in-memory and file-based database based on toml config
   const filename = getConfig().experimental.studio.inMemory
     ? ':memory:'
-    : path.join(getPaths().generated.base, 'dashboard.db')
+    : path.join(getPaths().generated.base, 'studio.db')
 
   if (db === undefined) {
     db = await open({
