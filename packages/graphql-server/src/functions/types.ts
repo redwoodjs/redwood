@@ -154,10 +154,10 @@ export interface GraphQLHandlerOptions {
   graphiQLEndpoint?: string
 
   /**
-   * @description Allow schema introspection in production.
-   * By default, schema introspection is disabled in production. Enable this to allow introspection in production.
+   * @description Allow schema introspection.
+   * By default, schema introspection is disabled in production. Explicitly set this to true or false to override in all environments.
    */
-  allowIntrospectionInProduction?: boolean
+  allowIntrospection?: boolean
 
   /**
    * @description Function that returns custom headers (as string) for GraphiQL.
