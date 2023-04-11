@@ -7,7 +7,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "0.0.0-experimental-streaming.6"
+    "@redwoodjs/core": "0.0.0-experimental-streaming.7"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",

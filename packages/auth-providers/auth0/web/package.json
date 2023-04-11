@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-auth0-web",
-  "version": "0.0.0-experimental-streaming.6",
+  "version": "0.0.0-experimental-streaming.7",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/auth": "0.0.0-experimental-streaming.6",
+    "@redwoodjs/auth": "0.0.0-experimental-streaming.7",
     "core-js": "3.30.0"
   },
   "devDependencies": {

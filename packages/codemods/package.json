@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "0.0.0-experimental-streaming.6",
+  "version": "0.0.0-experimental-streaming.7",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",

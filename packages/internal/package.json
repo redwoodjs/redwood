@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "0.0.0-experimental-streaming.6",
+  "version": "0.0.0-experimental-streaming.7",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -41,9 +41,9 @@
     "@graphql-codegen/typescript-operations": "3.0.2",
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-codegen/typescript-resolvers": "3.1.1",
-    "@redwoodjs/graphql-server": "0.0.0-experimental-streaming.6",
-    "@redwoodjs/project-config": "0.0.0-experimental-streaming.6",
-    "@redwoodjs/router": "0.0.0-experimental-streaming.6",
+    "@redwoodjs/graphql-server": "0.0.0-experimental-streaming.7",
+    "@redwoodjs/project-config": "0.0.0-experimental-streaming.7",
+    "@redwoodjs/router": "0.0.0-experimental-streaming.7",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.7.1",
     "chalk": "4.1.2",

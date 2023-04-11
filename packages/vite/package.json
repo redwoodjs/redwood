@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/vite",
-  "version": "0.0.0-experimental-streaming.6",
+  "version": "0.0.0-experimental-streaming.7",
   "description": "Vite configuration package for Redwood",
   "repository": {
     "type": "git",
@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/internal": "0.0.0-experimental-streaming.6",
-    "@redwoodjs/project-config": "0.0.0-experimental-streaming.6",
+    "@redwoodjs/internal": "0.0.0-experimental-streaming.7",
+    "@redwoodjs/project-config": "0.0.0-experimental-streaming.7",
     "@vitejs/plugin-react": "3.1.0",
     "buffer": "6.0.3",
     "core-js": "3.30.0",
