@@ -2043,7 +2043,7 @@ A canary release is published to npm every time a PR is merged to the `main` bra
 | Option          | Description                                                                                                                                                                                                        |
 | :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--dry-run, -d` | Check for outdated packages without upgrading                                                                                                                                                                      |
-| `--tag, -t`     | Choices are "canary", "rc", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary" and "rc", which will force upgrade packages to the most recent release of the specified tag. |
+| `--tag, -t`     | Choices are "rc", "canary", "latest", "next", "experimental", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary", "rc", "next", and "experimental". And "canary" releases include breaking changes often requiring codemods if upgrading a project. |
 
 **Example**
 
