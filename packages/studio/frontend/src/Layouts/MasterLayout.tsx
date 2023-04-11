@@ -7,6 +7,7 @@ import {
   CircleStackIcon,
   ViewColumnsIcon,
   InformationCircleIcon,
+  ChatBubbleLeftEllipsisIcon,
   WindowIcon,
   MagnifyingGlassIcon,
   RadioIcon,
@@ -27,6 +28,11 @@ const navigation = [
     name: 'About',
     to: '/coming-soon',
     icon: InformationCircleIcon,
+  },
+  {
+    name: 'Support & Docs',
+    to: 'https://community.redwoodjs.com/t/redwood-studio-experimental/4771',
+    icon: ChatBubbleLeftEllipsisIcon,
   },
 ]
 
