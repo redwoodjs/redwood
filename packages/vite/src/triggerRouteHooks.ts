@@ -3,7 +3,7 @@
 import { Request } from 'express'
 
 import { MetaHook, ServerDataHook, TagDescriptor } from '@redwoodjs/web'
-import type { RouteHookEvent } from '@redwoodjs/web'
+import type { RouteHookEvent, RouteHookOutput } from '@redwoodjs/web'
 
 interface RouteHooks {
   serverData?: ServerDataHook
@@ -14,18 +14,21 @@ interface TriggerRouteHooksParam {
   routeHooks: RouteHooks
   req: Request
   parsedParams?: Record<string, any>
+  appRouteHookOutput?: RouteHookOutput
 }
 
 export const triggerRouteHooks = async ({
   routeHooks,
   req,
   parsedParams = {},
+  appRouteHookOutput,
 }: TriggerRouteHooksParam) => {
   const event: RouteHookEvent = {
     params: parsedParams,
     headers: req.headers || {},
     query: req.query as any, // @TODO we should parse query parameters the same way as RW router
     // cookies: req.cookies || {}, // @TODO we probably need some sort of cookie parser
+    appRouteHook: appRouteHookOutput,
   }
 
   let serverData = {}

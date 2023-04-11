@@ -9,7 +9,7 @@ import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
-import { getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
 import { RWRouteManifest } from './types'
 
@@ -108,10 +108,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
       // @NOTE this is the path definition, not the actual path
       pathDefinition: route.path,
       hasParams: route.hasParams,
-      routeHooks: route.routeHooks
-        ? // @MARK need to change to .mjs here if we use esm
-          path.relative(rwPaths.web.src, route.routeHooks).replace('.ts', '.js')
-        : null,
+      routeHooks: FIXME_constructRouteHookPath(route.routeHooks),
       redirect: route.redirect
         ? {
             to: route.redirect?.to,
@@ -124,4 +121,22 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   }, {})
 
   await fs.writeFile(rwPaths.web.routeManifest, JSON.stringify(routeManifest))
+}
+
+// @TODO @MARK Hacky work around because when you don't have a App.routeHook, esbuild doesn't create
+// the pages folder in the dist/server/routeHooks directory.
+// @MARK need to change to .mjs here if we use esm
+const FIXME_constructRouteHookPath = (rhSrcPath: string | null | undefined) => {
+  const rwPaths = getPaths()
+  if (!rhSrcPath) {
+    return null
+  }
+
+  if (getAppRouteHook()) {
+    return path.relative(rwPaths.web.src, rhSrcPath).replace('.ts', '.js')
+  } else {
+    return path
+      .relative(path.join(rwPaths.web.src, 'pages'), rhSrcPath)
+      .replace('.ts', '.js')
+  }
 }

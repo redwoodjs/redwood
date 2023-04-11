@@ -147,7 +147,7 @@ export async function runFeServer() {
         return
       }
 
-      let routeContext = {}
+      let serverData = {}
       let metaTags: TagDescriptor[] = []
 
       if (currentRoute?.redirect) {
@@ -156,33 +156,38 @@ export async function runFeServer() {
         return res.redirect(currentRoute.redirect.to)
       }
 
-      if (currentRoute && currentRoute.routeHooks) {
-        try {
-          const routeHooks = await import(
-            path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
-          )
+      if (currentRoute) {
+        // @TODO hardcoded JS file, watchout if we switch to ESM!
+        const prodAppRouteHookPath = path.join(
+          rwPaths.web.distRouteHooks,
+          'App.routeHooks.js'
+        )
 
-          const { serverData, meta } = await triggerRouteHooks({
-            routeHooks,
-            req,
-            parsedParams: currentRoute.hasParams
-              ? matchPath(currentRoute.pathDefinition, currentPathName).params
-              : undefined,
-          })
+        // A. Trigger app route hook
+        const rootRouteHookOutput = await runProdRouteHooks(
+          prodAppRouteHookPath
+        )
 
-          routeContext = {
-            ...serverData,
-          }
+        // B. Trigger current route RH
+        const currentRouteHookOutput = await runProdRouteHooks(
+          path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks || ''),
+          currentRoute.hasParams
+            ? matchPath(currentRoute.pathDefinition, currentPathName).params
+            : undefined,
+          rootRouteHookOutput
+        )
 
-          metaTags = meta
-        } catch (e) {
-          console.error(e)
-          return
+        // Compose the appRH output and RH output
+        serverData = {
+          ...rootRouteHookOutput.serverData,
+          ...currentRouteHookOutput.serverData,
         }
+
+        metaTags = [...rootRouteHookOutput.meta, ...currentRouteHookOutput.meta]
       }
 
       // Serialize route context so it can be passed to the client entry
-      const serializedRouteContext = JSON.stringify(routeContext)
+      const serializedRouteContext = JSON.stringify(serverData)
 
       // @NOTE have to add slash so subpaths still pick up the right file
       // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
@@ -197,7 +202,7 @@ export async function runFeServer() {
         // we should use the same shape as Remix or Next for the meta object
         serverEntry({
           url: currentPathName,
-          routeContext,
+          routeContext: serverData,
           css: indexEntry.css,
           meta: metaTags,
         }),
@@ -234,6 +239,38 @@ export async function runFeServer() {
       // streaming no longer requires us to send back a blank page
       // React will automatically switch to client rendering on error
       return res.sendStatus(500)
+    }
+
+    // @TODO Refactor this
+    // WE are repeating code a lot between runFeServer and devFeServer
+    async function runProdRouteHooks(
+      routeHookPath: string | null | undefined,
+      parsedParams?: Record<string, any>,
+      appRouteHookOutput?: { meta: TagDescriptor[]; serverData: any }
+    ) {
+      if (routeHookPath) {
+        try {
+          const routeHooks = await import(routeHookPath)
+
+          const output = await triggerRouteHooks({
+            routeHooks,
+            req,
+            parsedParams,
+            appRouteHookOutput,
+          })
+
+          return {
+            serverData: output.serverData,
+            meta: output.meta,
+          }
+        } catch (e) {
+          console.error(`Error running route hooks in ${routeHookPath}}`)
+          console.error(e)
+        }
+      }
+
+      // Empty values if error, or no routeHookPath
+      return { serverData: {}, meta: [] }
     }
 
     return

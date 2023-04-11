@@ -5,7 +5,7 @@ import { renderToPipeableStream } from 'react-dom/server'
 import { createServer as createViteServer } from 'vite'
 
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
-import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
@@ -61,36 +61,33 @@ async function createServer() {
         return matches.length > 0
       })
 
-      let routeContext = {}
+      let serverData = {}
       let metaTags: TagDescriptor[] = []
 
       if (currentRoute?.redirect) {
         return res.redirect(currentRoute.redirect.to)
       }
 
-      if (currentRoute && currentRoute.routeHooks) {
-        try {
-          const routeHooks = await vite.ssrLoadModule(currentRoute.routeHooks)
+      if (currentRoute) {
+        // A. Trigger app route hook
+        const rootRouteHookOutput = await runDevRouteHooks(getAppRouteHook())
 
-          const { serverData, meta } = await triggerRouteHooks({
-            routeHooks,
-            req,
-            parsedParams: currentRoute.hasParams
-              ? matchPath(currentRoute.path, currentPathName).params
-              : undefined,
-          })
+        // B. Trigger current route RH
+        const currentRouteHookOutput = await runDevRouteHooks(
+          currentRoute.routeHooks,
+          currentRoute.hasParams
+            ? matchPath(currentRoute.path, currentPathName).params
+            : undefined,
+          rootRouteHookOutput
+        )
 
-          routeContext = {
-            ...serverData,
-          }
-
-          metaTags = meta
-        } catch (e) {
-          console.error(
-            `Error running route hooks in ${currentRoute.routeHooks}}`
-          )
-          console.error(e)
+        // Compose the appRH output and RH output
+        serverData = {
+          ...rootRouteHookOutput.serverData,
+          ...currentRouteHookOutput.serverData,
         }
+
+        metaTags = [...rootRouteHookOutput.meta, ...currentRouteHookOutput.meta]
       }
 
       if (!currentRoute) {
@@ -109,7 +106,7 @@ async function createServer() {
       const { serverEntry } = await vite.ssrLoadModule(rwPaths.web.entryServer)
 
       // Serialize route context so it can be passed to the client entry
-      const serialisedRouteContext = JSON.stringify(routeContext)
+      const serialisedRouteContext = JSON.stringify(serverData)
 
       // @TODO CSS is handled by Vite in dev mode, we don't need to worry about it in dev
       // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
@@ -126,7 +123,7 @@ async function createServer() {
       const { pipe } = renderToPipeableStream(
         serverEntry({
           url: currentPathName,
-          routeContext,
+          routeContext: serverData,
           css: FIXME_HardcodedIndexCss,
           meta: metaTags,
         }),
@@ -152,6 +149,38 @@ async function createServer() {
       // your actual source code.
       vite.ssrFixStacktrace(e as any)
       next(e)
+    }
+
+    // @TODO Refactor this
+    // WE are repeating code a lot between runFeServer and devFeServer
+    async function runDevRouteHooks(
+      routeHookPath: string | null | undefined,
+      parsedParams?: Record<string, any>,
+      appRouteHookOutput?: { meta: TagDescriptor[]; serverData: any }
+    ) {
+      if (routeHookPath) {
+        try {
+          const routeHooks = await vite.ssrLoadModule(routeHookPath)
+
+          const output = await triggerRouteHooks({
+            routeHooks,
+            req,
+            parsedParams,
+            appRouteHookOutput,
+          })
+
+          return {
+            serverData: output.serverData,
+            meta: output.meta,
+          }
+        } catch (e) {
+          console.error(`Error running route hooks in ${routeHookPath}}`)
+          console.error(e)
+        }
+      }
+
+      // Empty values if error, or no routeHookPath
+      return { serverData: {}, meta: [] }
     }
   })
 
