@@ -308,7 +308,7 @@ describe('parseConfig', () => {
       `
         [[production.servers]]
         host = '\${TEST_VAR_HOST:server.com}'
-        repo = '\${TEST_VAR_REPO:git://github.com}';
+        repo = '\${TEST_VAR_REPO:git://github.com}'
         path = '\${TEST_VAR_PATH:/var/www/app}'
         privateKeyPath = '/Users/me/.ssh/id_rsa'
       `
