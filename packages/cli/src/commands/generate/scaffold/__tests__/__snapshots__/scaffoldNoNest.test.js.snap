@@ -1222,14 +1222,11 @@ exports[`in typescript mode creates a form component 1`] = `
 import type { EditPostById, UpdatePostInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
 
-
-
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\\d{2}\\.\\d{3}\\w/, '')
   }
 }
-
 
 type FormPost = NonNullable<EditPostById['post']>
 
@@ -1242,43 +1239,6 @@ interface PostFormProps {
 
 const PostForm = (props: PostFormProps) => {
   const onSubmit = (data: FormPost) => {
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
-    
-    
-  
     props.onSave(data, props?.post?.id)
   }
 
@@ -1291,7 +1251,7 @@ const PostForm = (props: PostFormProps) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="title"
           className="rw-label"
@@ -1299,15 +1259,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Title
         </Label>
-        
-          <TextField
-            name="title"
-            defaultValue={props.post?.title}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="title"
+          defaultValue={props.post?.title}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="title" className="rw-field-error" />
 
@@ -1318,15 +1277,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Slug
         </Label>
-        
-          <TextField
-            name="slug"
-            defaultValue={props.post?.slug}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="slug"
+          defaultValue={props.post?.slug}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="slug" className="rw-field-error" />
 
@@ -1337,15 +1295,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Author
         </Label>
-        
-          <TextField
-            name="author"
-            defaultValue={props.post?.author}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="author"
+          defaultValue={props.post?.author}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="author" className="rw-field-error" />
 
@@ -1356,15 +1313,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Body
         </Label>
-        
-          <TextField
-            name="body"
-            defaultValue={props.post?.body}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="body"
+          defaultValue={props.post?.body}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="body" className="rw-field-error" />
 
@@ -1375,14 +1331,13 @@ const PostForm = (props: PostFormProps) => {
         >
           Image
         </Label>
-        
-          <TextField
-            name="image"
-            defaultValue={props.post?.image}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-        
+
+        <TextField
+          name="image"
+          defaultValue={props.post?.image}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <FieldError name="image" className="rw-field-error" />
 
@@ -1393,14 +1348,13 @@ const PostForm = (props: PostFormProps) => {
         >
           Posted at
         </Label>
-        
-          <DatetimeLocalField
-            name="postedAt"
-            defaultValue={formatDatetime(props.post?.postedAt)}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-        
+
+        <DatetimeLocalField
+          name="postedAt"
+          defaultValue={formatDatetime(props.post?.postedAt)}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <FieldError name="postedAt" className="rw-field-error" />
 
@@ -1411,14 +1365,13 @@ const PostForm = (props: PostFormProps) => {
         >
           Is pinned
         </Label>
-        
-          <CheckboxField
-            name="isPinned"
-            defaultChecked={props.post?.isPinned}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-        
+
+        <CheckboxField
+          name="isPinned"
+          defaultChecked={props.post?.isPinned}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <FieldError name="isPinned" className="rw-field-error" />
 
@@ -1429,15 +1382,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Read time
         </Label>
-        
-          <TextField
-            name="readTime"
-            defaultValue={props.post?.readTime}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ valueAsNumber: true, required: true }}
-          />
-        
+
+        <TextField
+          name="readTime"
+          defaultValue={props.post?.readTime}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ valueAsNumber: true, required: true }}
+        />
 
         <FieldError name="readTime" className="rw-field-error" />
 
@@ -1448,15 +1400,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Rating
         </Label>
-        
-          <TextField
-            name="rating"
-            defaultValue={props.post?.rating}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ valueAsNumber: true }}
-          />
-        
+
+        <TextField
+          name="rating"
+          defaultValue={props.post?.rating}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ valueAsNumber: true }}
+        />
 
         <FieldError name="rating" className="rw-field-error" />
 
@@ -1467,15 +1418,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Upvotes
         </Label>
-        
-          <NumberField
-            name="upvotes"
-            defaultValue={props.post?.upvotes}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <NumberField
+          name="upvotes"
+          defaultValue={props.post?.upvotes}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="upvotes" className="rw-field-error" />
 
@@ -1486,15 +1436,14 @@ const PostForm = (props: PostFormProps) => {
         >
           Metadata
         </Label>
-        
-          <TextAreaField
-            name="metadata"
-            defaultValue={JSON.stringify(props.post?.metadata)}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ valueAsJSON: true, required: true }}
-          />
-        
+
+        <TextAreaField
+          name="metadata"
+          defaultValue={JSON.stringify(props.post?.metadata)}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ valueAsJSON: true, required: true }}
+        />
 
         <FieldError name="metadata" className="rw-field-error" />
 
@@ -1505,23 +1454,19 @@ const PostForm = (props: PostFormProps) => {
         >
           Huge number
         </Label>
-        
-          <TextField
-            name="hugeNumber"
-            defaultValue={props.post?.hugeNumber}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="hugeNumber"
+          defaultValue={props.post?.hugeNumber}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="hugeNumber" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>
@@ -1692,12 +1637,11 @@ export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
 `;
 
 exports[`in typescript mode creates a show component 1`] = `
-"
-import { Link, routes, navigate } from '@redwoodjs/router'
+"import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import { checkboxInputTag, jsonDisplay, timeTag,  } from 'src/lib/formatters'
+import { checkboxInputTag, jsonDisplay, timeTag } from 'src/lib/formatters'
 
 import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
 
@@ -1743,40 +1687,52 @@ const Post = ({ post }: Props) => {
             <tr>
               <th>Id</th>
               <td>{post.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Title</th>
               <td>{post.title}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Slug</th>
               <td>{post.slug}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Author</th>
               <td>{post.author}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Body</th>
               <td>{post.body}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Image</th>
               <td>{post.image}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Posted at</th>
               <td>{timeTag(post.postedAt)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Is pinned</th>
               <td>{checkboxInputTag(post.isPinned)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Read time</th>
               <td>{post.readTime}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Rating</th>
               <td>{post.rating}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Upvotes</th>
               <td>{post.upvotes}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Metadata</th>
               <td>{jsonDisplay(post.metadata)}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Huge number</th>
               <td>{post.hugeNumber}</td>
             </tr>
@@ -2278,30 +2234,26 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
-  const [updatePost, { loading, error }] = useMutation(
-    UPDATE_POST_MUTATION,
-    {
-      onCompleted: () => {
-        toast.success('Post updated')
-        navigate(routes.posts())
-      },
-      onError: (error) => {
-        toast.error(error.message)
-      },
-    }
-  )
+  const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
+    onCompleted: () => {
+      toast.success('Post updated')
+      navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
-  const onSave = (
-    input: UpdatePostInput,
-    id: EditPostById['post']['id']
-  ) => {
+  const onSave = (input: UpdatePostInput, id: EditPostById['post']['id']) => {
     updatePost({ variables: { id, input } })
   }
 
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit Post {post?.id}</h2>
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit Post {post?.id}
+        </h2>
       </header>
       <div className="rw-segment-main">
         <PostForm post={post} onSave={onSave} error={error} loading={loading} />
@@ -2332,7 +2284,10 @@ export const QUERY = gql\`
   }
 \`
 const UPDATE_USER_PROFILE_MUTATION = gql\`
-  mutation UpdateUserProfileMutation($id: Int!, $input: UpdateUserProfileInput!) {
+  mutation UpdateUserProfileMutation(
+    $id: Int!
+    $input: UpdateUserProfileInput!
+  ) {
     updateUserProfile(id: $id, input: $input) {
       id
       username
@@ -2347,7 +2302,9 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) => {
+export const Success = ({
+  userProfile,
+}: CellSuccessProps<EditUserProfileById>) => {
   const [updateUserProfile, { loading, error }] = useMutation(
     UPDATE_USER_PROFILE_MUTATION,
     {
@@ -2371,10 +2328,17 @@ export const Success = ({ userProfile }: CellSuccessProps<EditUserProfileById>) 
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit UserProfile {userProfile?.id}</h2>
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit UserProfile {userProfile?.id}
+        </h2>
       </header>
       <div className="rw-segment-main">
-        <UserProfileForm userProfile={userProfile} onSave={onSave} error={error} loading={loading} />
+        <UserProfileForm
+          userProfile={userProfile}
+          onSave={onSave}
+          error={error}
+          loading={loading}
+        />
       </div>
     </div>
   )
@@ -2416,10 +2380,7 @@ export const Empty = () => {
   return (
     <div className="rw-text-center">
       {'No posts yet. '}
-      <Link
-        to={routes.newPost()}
-        className="rw-link"
-      >
+      <Link to={routes.newPost()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>
@@ -2442,7 +2403,12 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/PostsCell'
-import { checkboxInputTag, jsonTruncate, timeTag, truncate } from 'src/lib/formatters'
+import {
+  checkboxInputTag,
+  jsonTruncate,
+  timeTag,
+  truncate,
+} from 'src/lib/formatters'
 
 import type { DeletePostMutationVariables, FindPosts } from 'types/graphql'
 

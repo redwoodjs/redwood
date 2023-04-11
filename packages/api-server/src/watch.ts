@@ -12,9 +12,8 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
-import { getConfig } from '@redwoodjs/internal/dist/config'
-import { getPaths, ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
+import { getPaths, ensurePosixPath, getConfig } from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
   .option('debug-port', {
@@ -62,14 +61,14 @@ const validate = async () => {
   }
 }
 
-const rebuildApiServer = () => {
+const rebuildApiServer = async () => {
   try {
     // Shutdown API server
     killApiServer()
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
-    buildApi()
+    await buildApi()
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     const forkOpts = {

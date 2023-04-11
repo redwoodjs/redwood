@@ -8,7 +8,7 @@ import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/project-config'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way

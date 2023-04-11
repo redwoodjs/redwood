@@ -4,21 +4,48 @@ import path from 'path'
 import * as babel from '@babel/core'
 import compat from 'core-js-compat'
 
-import { cleanApiBuild, prebuildApiFiles } from '../build/api'
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
+
+import { cleanApiBuild } from '../build/api'
 import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
   getApiSideDefaultBabelConfig,
+  transformWithBabel,
   BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS,
   TARGETS_NODE,
 } from '../build/babel/api'
 import { findApiFiles } from '../files'
-import { ensurePosixPath, getPaths } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../__fixtures__/example-todo-main'
 )
+
+// @NOTE: we no longer prebuild files into the .redwood/prebuild folder
+// However, prebuilding in the tests still helpful for us to  validate
+// that everything is working as expected.
+export const prebuildApiFiles = (srcFiles: string[]) => {
+  const rwjsPaths = getPaths()
+  const plugins = getApiSideBabelPlugins()
+
+  return srcFiles.map((srcPath) => {
+    const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
+    const dstPath = path
+      .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
+      .replace(/\.(ts)$/, '.js')
+
+    const result = transformWithBabel(srcPath, plugins)
+    if (!result?.code) {
+      throw new Error(`Could not prebuild ${srcPath}`)
+    }
+
+    fs.mkdirSync(path.dirname(dstPath), { recursive: true })
+    fs.writeFileSync(dstPath, result.code)
+
+    return dstPath
+  })
+}
 
 const cleanPaths = (p) => {
   return ensurePosixPath(path.relative(FIXTURE_PATH, p))
@@ -88,6 +115,10 @@ test.skip('api prebuild transforms gql with `babel-plugin-graphql-tag`', () => {
     .filter((x) => typeof x !== 'undefined')
     .filter((p) => p.endsWith('todos.sdl.js'))
     .pop()
+
+  if (!p) {
+    throw new Error('No built files')
+  }
 
   const code = fs.readFileSync(p, 'utf-8')
   expect(code.includes('import gql from "graphql-tag";')).toEqual(false)
@@ -492,7 +523,7 @@ test('jest mock statements also handle', () => {
     cwd: getPaths().api.base,
     // We override the plugins, to match packages/testing/config/jest/api/index.js
     plugins: getApiSideBabelPlugins({ forJest: true }),
-  }).code
+  })?.code
 
   // Step 2: check that output has correct import statement path
   expect(outputForJest).toContain('import dog from "../../lib/dog"')
@@ -502,10 +533,13 @@ test('jest mock statements also handle', () => {
 
 test('core-js polyfill list', () => {
   const { list } = compat({
+    // @ts-expect-error TODO: Figure out why this is needed
     targets: { node: TARGETS_NODE },
+    // @ts-expect-error TODO: Figure out why this is needed
     version: BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS.corejs.version,
   })
 
+  // TODO: Node.js 12? Really?
   /**
    * Redwood targets Node.js 12, but that doesn't factor into what gets polyfilled
    * because Redwood uses the plugin-transform-runtime polyfill strategy.

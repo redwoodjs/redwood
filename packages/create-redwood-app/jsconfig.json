@@ -10,6 +10,6 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../internal" },
+    { "path": "../project-config" },
   ]
 }

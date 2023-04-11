@@ -13,8 +13,7 @@ import EnvironmentPlugin from 'vite-plugin-environment'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
-import { getConfig } from '@redwoodjs/internal/dist/config'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 const readFile = promisify(fsReadFile)
 

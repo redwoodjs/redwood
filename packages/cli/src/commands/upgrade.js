@@ -6,7 +6,7 @@ import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
@@ -30,7 +30,7 @@ export const builder = (yargs) => {
     .option('tag', {
       alias: 't',
       description:
-        '[choices: "canary", "rc", or specific-version (see example below)] WARNING: "canary" and "rc" tags are unstable releases!',
+        '[choices: "latest", "rc", "next", "canary", "experimental", or a specific-version (see example below)] WARNING: "canary", "rc" and "experimental" are unstable releases! And "canary" releases include breaking changes often requiring codemods if upgrading a project.',
       requiresArg: true,
       type: 'string',
       coerce: validateTag,
@@ -67,16 +67,14 @@ const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
 export const validateTag = (tag) => {
   const isTagValid =
-    tag === 'rc' ||
-    tag === 'canary' ||
-    tag === 'latest' ||
+    ['rc', 'canary', 'latest', 'next', 'experimental'].includes(tag) ||
     SEMVER_REGEX.test(tag)
 
   if (!isTagValid) {
     // Stop execution
     throw new Error(
       c.error(
-        'Invalid tag supplied. Supported values: rc, canary, latest, or valid semver version\n'
+        "Invalid tag supplied. Supported values: 'rc', 'canary', 'latest', 'next', 'experimental', or a valid semver version\n"
       )
     )
   }
@@ -190,7 +188,7 @@ async function yarnInstall({ verbose }) {
     )
   } catch (e) {
     throw new Error(
-      'Could not finish installation. Please run `yarn install --force`, before continuing'
+      'Could not finish installation. Please run `yarn install` and then `yarn dedupe`, before continuing'
     )
   }
 }

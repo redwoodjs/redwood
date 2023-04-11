@@ -5,7 +5,7 @@ import { transform } from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 import type { PluginItem } from '@babel/core'
 
-import { getPaths } from '../../paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 import {
   registerBabel,
@@ -15,7 +15,7 @@ import {
   getCommonPlugins,
 } from './common'
 
-export const TARGETS_NODE = '16.19'
+export const TARGETS_NODE = '16.20'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
@@ -194,11 +194,8 @@ export const registerApiSideBabelHook = ({
   })
 }
 
-export const prebuildApiFile = (
+export const transformWithBabel = (
   srcPath: string,
-  // we need to know dstPath as well
-  // so we can generate an inline, relative sourcemap
-  dstPath: string,
   plugins: TransformOptions['plugins']
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
@@ -208,9 +205,6 @@ export const prebuildApiFile = (
     ...defaultOptions,
     cwd: getPaths().api.base,
     filename: srcPath,
-    // we set the sourceFile (for the sourcemap) as a correct, relative path
-    // this is why this function (prebuildFile) must know about the dstPath
-    sourceFileName: path.relative(path.dirname(dstPath), srcPath),
     // we need inline sourcemaps at this level
     // because this file will eventually be fed to esbuild
     // when esbuild finds an inline sourcemap, it tries to "combine" it

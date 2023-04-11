@@ -4,7 +4,7 @@ import path from 'path'
 import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
-import { getPaths } from '../../paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 import {
   CORE_JS_VERSION,
@@ -107,7 +107,7 @@ export const getWebSideOverrides = (
 ) => {
   const overrides = [
     {
-      test: /.+Cell.(js|tsx)$/,
+      test: /.+Cell.(js|tsx|jsx)$/,
       plugins: [require('../babelPlugins/babel-plugin-redwood-cell').default],
     },
     // Automatically import files in `./web/src/pages/*` in to
