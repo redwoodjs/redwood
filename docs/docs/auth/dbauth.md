@@ -265,7 +265,7 @@ By default no setting is required. This is because each db has its own rules for
 | Postgres  | 'default'  | 'insensitive'  | |
 | MySQL  | 'case-insensitive'  | N/A  | turned on by default so no setting required |
 | MongoDB  | 'default'  | 'insensitive'  |
-| SQLit  | N/A  | N/A  | [Not Supported] Insensitive checks can only be defioned at a per column level |
+| SQLite | N/A  | N/A  | [Not Supported] Insensitive checks can only be defined at a per column level |
 | Microsoft SQL Server | 'case-insensitive' | N/A | turned on by default so no setting required |
 
 
