@@ -4,6 +4,7 @@ import path from 'path'
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
+import isbot from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
@@ -34,6 +35,9 @@ loadDotEnv({
   multiline: true,
 })
 //------------------------------------------------
+
+const checkUaForSeoCrawler = isbot.spawn()
+checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
 
 export async function runFeServer() {
   const app = express()
@@ -180,12 +184,16 @@ export async function runFeServer() {
       // Serialize route context so it can be passed to the client entry
       const serializedRouteContext = JSON.stringify(routeContext)
 
+      // @NOTE have to add slash so subpaths still pick up the right file
+      // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
       const bootstrapModules =
         currentRoute.renderMode !== 'html'
           ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
           : undefined
 
-      const { pipe } = renderToPipeableStream(
+      const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
+
+      const { pipe, abort } = renderToPipeableStream(
         // we should use the same shape as Remix or Next for the meta object
         serverEntry({
           url: currentPathName,
@@ -197,19 +205,29 @@ export async function runFeServer() {
           bootstrapScriptContent: `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
             { css: indexEntry.css, meta: metaTags }
           )} }`,
-          // @NOTE have to add slash so subpaths still pick up the right file
-          // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
           bootstrapModules,
           onShellReady() {
-            res.setHeader('content-type', 'text/html; charset=utf-8')
-            pipe(res)
+            if (!isSeoCrawler) {
+              res.setHeader('content-type', 'text/html; charset=utf-8')
+              pipe(res)
+            }
           },
-          // onAllReady() {
-          //   res.setHeader('content-type', 'text/html')
-          //   pipe(res)
-          // }
+          onAllReady() {
+            if (isSeoCrawler) {
+              res.setHeader('content-type', 'text/html; charset=utf-8')
+              pipe(res)
+            }
+          },
+          onError(error) {
+            console.error(error)
+          },
         }
       )
+
+      // @TODO make the timeout configurable
+      setTimeout(() => {
+        abort()
+      }, 10_000)
     } catch (e) {
       console.error(e)
 

@@ -3,6 +3,8 @@ import { isValidElement, ReactNode, ReactElement } from 'react'
 import { Route, RouteProps } from './router'
 import { Spec } from './util'
 
+export type RenderMode = 'stream' | 'html'
+
 export type PageType =
   | Spec
   | React.ComponentType<any>
@@ -24,6 +26,7 @@ export interface NotFoundRouteProps {
   notfound: boolean
   page: PageType
   prerender?: boolean
+  renderMode?: RenderMode
 }
 
 export type InternalRouteProps = Partial<

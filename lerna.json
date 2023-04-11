@@ -1,5 +1,5 @@
 {
-  "version": "0.0.0-experimental-streaming.5",
+  "version": "0.0.0-experimental-streaming.6",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "command": {

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/project-config",
-  "version": "0.0.0-experimental-streaming.5",
+  "version": "0.0.0-experimental-streaming.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",

@@ -9,6 +9,7 @@ import {
   NotFoundRouteProps,
   PageType,
   RedirectRouteProps,
+  RenderMode,
 } from './route-validators'
 import {
   RouterContextProvider,
@@ -38,6 +39,7 @@ export interface RouteProps {
   page: PageType
   name: string
   prerender?: boolean
+  renderMode?: RenderMode
   whileLoadingPage?: () => ReactElement | null
 }
 

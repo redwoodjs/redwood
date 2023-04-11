@@ -6060,7 +6060,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redwoodjs/api-server@0.0.0-experimental-streaming.5, @redwoodjs/api-server@workspace:packages/api-server":
+"@redwoodjs/api-server@0.0.0-experimental-streaming.6, @redwoodjs/api-server@workspace:packages/api-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
@@ -6100,7 +6100,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/api@0.0.0-experimental-streaming.5, @redwoodjs/api@workspace:packages/api":
+"@redwoodjs/api@0.0.0-experimental-streaming.6, @redwoodjs/api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api@workspace:packages/api"
   dependencies:
@@ -6149,7 +6149,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@types/jsonwebtoken": 9.0.1
     core-js: 3.30.0
     jest: 29.5.0
@@ -6166,7 +6166,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@types/yargs": 17.0.24
     core-js: 3.30.0
     jest: 29.5.0
@@ -6182,7 +6182,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@types/react": 18.0.33
     core-js: 3.30.0
     jest: 29.5.0
@@ -6200,7 +6200,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@types/aws-lambda": 8.10.114
     "@types/jsonwebtoken": 9.0.1
     core-js: 3.30.0
@@ -6218,7 +6218,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@types/yargs": 17.0.24
     core-js: 3.30.0
     jest: 29.5.0
@@ -6234,7 +6234,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 18.0.33
     core-js: 3.30.0
@@ -6254,7 +6254,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@clerk/clerk-sdk-node": 4.8.1
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@types/aws-lambda": 8.10.114
     core-js: 3.30.0
     jest: 29.5.0
@@ -6269,7 +6269,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@types/yargs": 17.0.24
     core-js: 3.30.0
     jest: 29.5.0
@@ -6286,7 +6286,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@clerk/clerk-react": 4.14.2
     "@clerk/types": 3.33.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@types/react": 18.0.33
     core-js: 3.30.0
     jest: 29.5.0
@@ -6304,7 +6304,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@types/yargs": 17.0.24
     core-js: 3.30.0
     jest: 29.5.0
@@ -6319,7 +6319,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@simplewebauthn/server": 7.2.0
     "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
@@ -6341,7 +6341,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
     "@types/secure-random-password": 0.2.1
@@ -6362,7 +6362,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
     "@types/react": 18.0.33
@@ -6380,7 +6380,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@types/aws-lambda": 8.10.114
     core-js: 3.30.0
     firebase-admin: 11.5.0
@@ -6396,7 +6396,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@types/yargs": 17.0.24
     core-js: 3.30.0
     jest: 29.5.0
@@ -6411,7 +6411,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@types/react": 18.0.33
     core-js: 3.30.0
     firebase: 9.19.1
@@ -6430,7 +6430,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@types/aws-lambda": 8.10.114
     "@types/jsonwebtoken": 9.0.1
     core-js: 3.30.0
@@ -6447,7 +6447,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@types/yargs": 17.0.24
     core-js: 3.30.0
     jest: 29.5.0
@@ -6462,7 +6462,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 18.0.33
     core-js: 3.30.0
@@ -6481,7 +6481,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@types/aws-lambda": 8.10.114
     "@types/jsonwebtoken": 9.0.1
     core-js: 3.30.0
@@ -6498,7 +6498,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@types/yargs": 17.0.24
     core-js: 3.30.0
     jest: 29.5.0
@@ -6531,7 +6531,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@types/jsonwebtoken": 9.0.1
     core-js: 3.30.0
     jest: 29.5.0
@@ -6550,7 +6550,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
     "@types/yargs": 17.0.24
     core-js: 3.30.0
     jest: 29.5.0
@@ -6565,7 +6565,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@types/react": 18.0.33
     core-js: 3.30.0
     jest: 29.5.0
@@ -6577,7 +6577,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/auth@0.0.0-experimental-streaming.5, @redwoodjs/auth@workspace:packages/auth":
+"@redwoodjs/auth@0.0.0-experimental-streaming.6, @redwoodjs/auth@workspace:packages/auth":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
@@ -6594,15 +6594,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cli-helpers@0.0.0-experimental-streaming.5, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
+"@redwoodjs/cli-helpers@0.0.0-experimental-streaming.6, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
   dependencies:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
-    "@redwoodjs/telemetry": 0.0.0-experimental-streaming.5
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
+    "@redwoodjs/telemetry": 0.0.0-experimental-streaming.6
     "@types/lodash.memoize": 4.1.7
     "@types/pascalcase": 1.0.1
     "@types/yargs": 17.0.24
@@ -6620,7 +6620,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cli@0.0.0-experimental-streaming.5, @redwoodjs/cli@workspace:packages/cli":
+"@redwoodjs/cli@0.0.0-experimental-streaming.6, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
   dependencies:
@@ -6628,13 +6628,13 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@prisma/internals": 4.12.0
-    "@redwoodjs/api-server": 0.0.0-experimental-streaming.5
-    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.5
-    "@redwoodjs/internal": 0.0.0-experimental-streaming.5
-    "@redwoodjs/prerender": 0.0.0-experimental-streaming.5
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
-    "@redwoodjs/structure": 0.0.0-experimental-streaming.5
-    "@redwoodjs/telemetry": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api-server": 0.0.0-experimental-streaming.6
+    "@redwoodjs/cli-helpers": 0.0.0-experimental-streaming.6
+    "@redwoodjs/internal": 0.0.0-experimental-streaming.6
+    "@redwoodjs/prerender": 0.0.0-experimental-streaming.6
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
+    "@redwoodjs/structure": 0.0.0-experimental-streaming.6
+    "@redwoodjs/telemetry": 0.0.0-experimental-streaming.6
     "@types/crypto-js": 4.1.1
     "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
@@ -6734,11 +6734,11 @@ __metadata:
     "@babel/preset-typescript": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.10
-    "@redwoodjs/cli": 0.0.0-experimental-streaming.5
-    "@redwoodjs/eslint-config": 0.0.0-experimental-streaming.5
-    "@redwoodjs/internal": 0.0.0-experimental-streaming.5
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
-    "@redwoodjs/testing": 0.0.0-experimental-streaming.5
+    "@redwoodjs/cli": 0.0.0-experimental-streaming.6
+    "@redwoodjs/eslint-config": 0.0.0-experimental-streaming.6
+    "@redwoodjs/internal": 0.0.0-experimental-streaming.6
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
+    "@redwoodjs/testing": 0.0.0-experimental-streaming.6
     babel-loader: 9.1.2
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -6791,7 +6791,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/eslint-config@0.0.0-experimental-streaming.5, @redwoodjs/eslint-config@workspace:packages/eslint-config":
+"@redwoodjs/eslint-config@0.0.0-experimental-streaming.6, @redwoodjs/eslint-config@workspace:packages/eslint-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/eslint-config@workspace:packages/eslint-config"
   dependencies:
@@ -6799,8 +6799,8 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/eslint-parser": 7.21.3
     "@babel/eslint-plugin": 7.19.1
-    "@redwoodjs/internal": 0.0.0-experimental-streaming.5
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
+    "@redwoodjs/internal": 0.0.0-experimental-streaming.6
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
     "@typescript-eslint/eslint-plugin": 5.57.1
     "@typescript-eslint/parser": 5.57.1
     eslint: 8.37.0
@@ -6849,7 +6849,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/graphql-server@0.0.0-experimental-streaming.5, @redwoodjs/graphql-server@workspace:packages/graphql-server":
+"@redwoodjs/graphql-server@0.0.0-experimental-streaming.6, @redwoodjs/graphql-server@workspace:packages/graphql-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
@@ -6866,7 +6866,7 @@ __metadata:
     "@graphql-tools/merge": 8.4.0
     "@graphql-tools/schema": 9.0.17
     "@graphql-tools/utils": 9.2.1
-    "@redwoodjs/api": 0.0.0-experimental-streaming.5
+    "@redwoodjs/api": 0.0.0-experimental-streaming.6
     "@types/jsonwebtoken": 9.0.1
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
@@ -6887,7 +6887,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/internal@0.0.0-experimental-streaming.5, @redwoodjs/internal@workspace:packages/internal":
+"@redwoodjs/internal@0.0.0-experimental-streaming.6, @redwoodjs/internal@workspace:packages/internal":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
@@ -6906,9 +6906,9 @@ __metadata:
     "@graphql-codegen/typescript-operations": 3.0.2
     "@graphql-codegen/typescript-react-apollo": 3.3.7
     "@graphql-codegen/typescript-resolvers": 3.1.1
-    "@redwoodjs/graphql-server": 0.0.0-experimental-streaming.5
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
-    "@redwoodjs/router": 0.0.0-experimental-streaming.5
+    "@redwoodjs/graphql-server": 0.0.0-experimental-streaming.6
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
+    "@redwoodjs/router": 0.0.0-experimental-streaming.6
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
@@ -6940,19 +6940,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/prerender@0.0.0-experimental-streaming.5, @redwoodjs/prerender@workspace:packages/prerender":
+"@redwoodjs/prerender@0.0.0-experimental-streaming.6, @redwoodjs/prerender@workspace:packages/prerender":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
   dependencies:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
-    "@redwoodjs/internal": 0.0.0-experimental-streaming.5
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
-    "@redwoodjs/router": 0.0.0-experimental-streaming.5
-    "@redwoodjs/structure": 0.0.0-experimental-streaming.5
-    "@redwoodjs/web": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
+    "@redwoodjs/internal": 0.0.0-experimental-streaming.6
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
+    "@redwoodjs/router": 0.0.0-experimental-streaming.6
+    "@redwoodjs/structure": 0.0.0-experimental-streaming.6
+    "@redwoodjs/web": 0.0.0-experimental-streaming.6
     "@types/mime-types": 2.1.1
     "@whatwg-node/fetch": 0.8.4
     babel-plugin-ignore-html-and-css-imports: 0.1.0
@@ -6969,7 +6969,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/project-config@0.0.0-experimental-streaming.5, @redwoodjs/project-config@workspace:packages/project-config":
+"@redwoodjs/project-config@0.0.0-experimental-streaming.6, @redwoodjs/project-config@workspace:packages/project-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
@@ -6999,14 +6999,14 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@prisma/client": 4.12.0
     "@prisma/internals": 4.12.0
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
     core-js: 3.30.0
     esbuild: 0.17.15
     jest: 29.5.0
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/router@0.0.0-experimental-streaming.5, @redwoodjs/router@workspace:packages/router":
+"@redwoodjs/router@0.0.0-experimental-streaming.6, @redwoodjs/router@workspace:packages/router":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
@@ -7014,7 +7014,7 @@ __metadata:
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
     "@reach/skip-nav": 0.18.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@types/react": 18.0.33
     "@types/react-dom": 18.0.11
     core-js: 3.30.0
@@ -7028,7 +7028,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/structure@0.0.0-experimental-streaming.5, @redwoodjs/structure@workspace:packages/structure":
+"@redwoodjs/structure@0.0.0-experimental-streaming.6, @redwoodjs/structure@workspace:packages/structure":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
@@ -7037,7 +7037,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@iarna/toml": 2.2.5
     "@prisma/internals": 4.12.0
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
     "@types/fs-extra": 11.0.1
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.192
@@ -7067,15 +7067,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/telemetry@0.0.0-experimental-streaming.5, @redwoodjs/telemetry@workspace:packages/telemetry":
+"@redwoodjs/telemetry@0.0.0-experimental-streaming.6, @redwoodjs/telemetry@workspace:packages/telemetry":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
-    "@redwoodjs/structure": 0.0.0-experimental-streaming.5
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
+    "@redwoodjs/structure": 0.0.0-experimental-streaming.6
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.1
     "@types/yargs": 17.0.24
@@ -7090,19 +7090,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/testing@0.0.0-experimental-streaming.5, @redwoodjs/testing@workspace:packages/testing":
+"@redwoodjs/testing@0.0.0-experimental-streaming.6, @redwoodjs/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/testing@workspace:packages/testing"
   dependencies:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
-    "@redwoodjs/graphql-server": 0.0.0-experimental-streaming.5
-    "@redwoodjs/internal": 0.0.0-experimental-streaming.5
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
-    "@redwoodjs/router": 0.0.0-experimental-streaming.5
-    "@redwoodjs/web": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
+    "@redwoodjs/graphql-server": 0.0.0-experimental-streaming.6
+    "@redwoodjs/internal": 0.0.0-experimental-streaming.6
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
+    "@redwoodjs/router": 0.0.0-experimental-streaming.6
+    "@redwoodjs/web": 0.0.0-experimental-streaming.6
     "@storybook/addon-a11y": 6.5.17-alpha.0
     "@storybook/addon-docs": 6.5.17-alpha.0
     "@storybook/addon-essentials": 6.5.17-alpha.0
@@ -7140,8 +7140,8 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/plugin-syntax-import-assertions": ^7.20.0
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/internal": 0.0.0-experimental-streaming.5
-    "@redwoodjs/project-config": 0.0.0-experimental-streaming.5
+    "@redwoodjs/internal": 0.0.0-experimental-streaming.6
+    "@redwoodjs/project-config": 0.0.0-experimental-streaming.6
     "@types/express": 4
     "@vitejs/plugin-react": 3.1.0
     buffer: 6.0.3
@@ -7149,6 +7149,7 @@ __metadata:
     dotenv-defaults: 5.0.2
     express: 4.18.2
     http-proxy-middleware: 2.0.6
+    isbot: 3.6.8
     typescript: 5.0.3
     vite: 4.2.1
     vite-plugin-commonjs: 0.6.2
@@ -7163,7 +7164,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/web@0.0.0-experimental-streaming.5, @redwoodjs/web@workspace:packages/web":
+"@redwoodjs/web@0.0.0-experimental-streaming.6, @redwoodjs/web@workspace:packages/web":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
@@ -7171,7 +7172,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@redwoodjs/auth": 0.0.0-experimental-streaming.5
+    "@redwoodjs/auth": 0.0.0-experimental-streaming.6
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@types/prop-types": 15.7.5
@@ -20239,6 +20240,13 @@ __metadata:
   version: 2.0.5
   resolution: "isarray@npm:2.0.5"
   checksum: 4199f14a7a13da2177c66c31080008b7124331956f47bca57dd0b6ea9f11687aa25e565a2c7a2b519bc86988d10398e3049a1f5df13c9f6b7664154690ae79fd
+  languageName: node
+  linkType: hard
+
+"isbot@npm:3.6.8":
+  version: 3.6.8
+  resolution: "isbot@npm:3.6.8"
+  checksum: fbc067d6567fc006026f24527fd09ff655f5eb7e3672070ceb7e62afae9973aeb88f37dd29b88318ee25404818bb294bcc0cab93fb447c798294f0fd36b4b436
   languageName: node
   linkType: hard
 
