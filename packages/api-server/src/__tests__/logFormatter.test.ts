@@ -98,16 +98,6 @@ describe('LogFormatter', () => {
     })
   })
 
-  // describe('Unknown log data', () => {
-  //   it('Should not include an unknown log data attribute', () => {
-  //     expect(
-  //       logFormatter({
-  //         level: 10,
-  //         unknown: 'I should not see this',
-  //       })
-  //     ).not.toMatch('I should not see this')
-  //   })
-  // })
 
   describe('Custom log data', () => {
     it('Should include the custom log attribute text', () => {
