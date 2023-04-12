@@ -799,6 +799,21 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
 
+    it('invokes forgotPassword.handler() with the raw resetToken', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      options.forgotPassword.handler = (handlerUser) => {
+        // user should have the raw resetToken NOT the hash
+        // resetToken consists of 16 base64 characters
+        expect(handlerUser.resetToken).toMatch(/^\w{16}$/)
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth.forgotPassword()
+      expect.assertions(1)
+    })
+
     it('removes the token from the forgotPassword response', async () => {
       const user = await createDbUser()
       event.body = JSON.stringify({
