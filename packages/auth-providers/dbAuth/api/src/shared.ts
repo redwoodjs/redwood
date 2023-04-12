@@ -1,6 +1,5 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda'
 import CryptoJS from 'crypto-js'
-import sha256 from 'crypto-js/sha256'
 
 import * as DbAuthError from './errors'
 
@@ -102,7 +101,7 @@ export const webAuthnSession = (event: APIGatewayProxyEvent) => {
 }
 
 export const hashToken = (token: string) => {
-  return sha256(token).toString(CryptoJS.enc.Hex)
+  return CryptoJS.SHA256(token).toString(CryptoJS.enc.Hex)
 }
 
 // hashes a password using either the given `salt` argument, or creates a new
