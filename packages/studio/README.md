@@ -1,6 +1,5 @@
 # Redwood Studio [Experimental]
 
-
 RedwoodJS Studio is an experimental package used during development to gain runtime insights into a project.
 
 ## Motivation
@@ -13,14 +12,14 @@ While [logging](https://redwoodjs.com/docs/logger) can show you some of these st
 
 We hope Studio helps solve this problem with an observability tool that combines:
 
-* Tracing with OpenTelemetry (service and RraphQL)
+* Tracing with OpenTelemetry (service and GraphQL)
 * SQL statement logging
 * general metrics (how many invocations)
 * GraphiQL playground with impersonated authentication
 
 With Studio, it is easier to:
 
-* identify slow running SQl statements without reviewing captured log files
+* identify slow running SQL statements without reviewing captured log files
 * identify and improve N+1 queries by comparing before and after traces
 * impersonate the user authentication headers in GraphiQL
 
