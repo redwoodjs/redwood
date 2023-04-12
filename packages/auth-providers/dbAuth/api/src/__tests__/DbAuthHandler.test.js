@@ -760,7 +760,6 @@ describe('dbAuth', () => {
       })
 
       expect(resetUser.resetToken).not.toEqual(undefined)
-      // base64 characters only, except =
       // Should be a 64 character hex string for a 256 bit token hash
       expect(resetUser.resetToken).toMatch(/^\w{64}$/)
       expect(resetUser.resetTokenExpiresAt instanceof Date).toEqual(true)
