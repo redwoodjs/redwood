@@ -1,7 +1,28 @@
 # Redwood Studio [Experimental]
 
-## About
-This package intends to contain the redwood development studio. The studio contains a dashboard users can use during development to gain insights into their project.
+
+RedwoodJS Studio is an experimental package used during development to gain runtime insights into a project.
+
+## Motivation
+
+Redwood provides tools that lets developers "get to work on what makes your application special, instead of wasting cycles choosing and re-choosing various technologies and configurations."[1](https://github.com/redwoodjs/redwood/blob/main/README.md).
+
+Much happens while your app processes a request: Invoke a function; handle a GraphQL request; resolve the request with a service; build and execute a SQL statement; connect to the database; handle the query response; further resolve the response so in contains all the data needed; return the result ... and more.
+
+While [logging](https://redwoodjs.com/docs/logger) can show you some of these steps, there is no easy way to see how the relate to each other, compare, or break down individual timings. Observability needed to debug, iterate, try out, and refactor your code is lacking.
+
+We hope Studio helps solve this problem with an observability tool that combines:
+
+* Tracing with OpenTelemetry (service and RraphQL)
+* SQL statement logging
+* general metrics (how many invocations)
+* GraphiQL playground with impersonated authentication
+
+With Studio, it is easier to:
+
+* identify slow running SQl statements without reviewing captured log files
+* identify and improve N+1 queries by comparing before and after traces
+* impersonate the user authentication headers in GraphiQL
 
 ## Running Studio
 
@@ -102,3 +123,37 @@ TOML example:
   email = "user@example.com"
   userId = "1"
 ```
+
+## Future
+
+Since Studio is experiment, its feature set will change. Some will be added, others improved, and several perhaps removed.
+
+Some ideas to improve the Studio are:
+
+* More metric widgets
+  * time from launch
+  * count of queries/services/functions
+  * etc
+* Annotations
+  * add warnings on slow queries
+  * add warning on possible N+1
+* Charts and visualizations
+  * Line charts of request over time
+  * Histograms of executing timings per request
+* Track errors
+  * Capture api-side errors for review
+* Instrument web side
+* ChatGPT UI to ask questions about schema
+* Prism ER diagrams
+* Search
+    * Prisma
+    * Tracing
+    * Rrrors
+* Notification on warnings
+  * issue to fix like n+1
+
+## Contributing
+
+We welcome your [feedback](https://community.redwoodjs.com/t/redwood-studio-experimental/4771) and also your contributions to improve Studio.
+
+For more [information on contributing](https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md) see: https://github.com/redwoodjs/redwood/blob/main/CONTRIBUTING.md
