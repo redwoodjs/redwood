@@ -141,15 +141,25 @@ Some ideas to improve the Studio are:
   * Histograms of executing timings per request
 * Track errors
   * Capture api-side errors for review
+  * Perhaps via Envelop GraphQL plugin
 * Instrument web side
 * ChatGPT UI to ask questions about schema
-* Prism ER diagrams
+* Prisma ER diagrams
+* Send api logs via Pino transport
 * Search
     * Prisma
     * Tracing
     * Rrrors
 * Notification on warnings
   * issue to fix like n+1
+* Custom dashboards with specific charts, or service or GraphQL focus
+* Intelligence
+  * anomalies
+  * trends
+  * warn on issues before they happen
+* More tags and data per request
+  * Prisma version
+  * RedwoodJS Version
 
 ## Contributing
 
