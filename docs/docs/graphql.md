@@ -1471,7 +1471,11 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-Note that enabling introspection in production may pose a security risk, as it allows users to access information about your schema, queries, and mutations. Use this option with caution and make sure to secure your GraphQL API properly.
+:::caution
+
+Enabling introspection in production may pose a security risk, as it allows users to access information about your schema, queries, and mutations. Use this option with caution and make sure to secure your GraphQL API properly.
+
+:::
 
 ### GraphQL Armor Configuration
 
