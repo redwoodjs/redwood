@@ -1,11 +1,11 @@
 import type { PrismaClient } from '@prisma/client'
 import type {
-  GenerateRegistrationOptionsOpts,
   GenerateAuthenticationOptionsOpts,
-  VerifyRegistrationResponseOpts,
-  VerifyAuthenticationResponseOpts,
-  VerifiedRegistrationResponse,
+  GenerateRegistrationOptionsOpts,
   VerifiedAuthenticationResponse,
+  VerifiedRegistrationResponse,
+  VerifyAuthenticationResponseOpts,
+  VerifyRegistrationResponseOpts,
 } from '@simplewebauthn/server'
 import type {
   AuthenticationResponseJSON,
@@ -31,6 +31,7 @@ import {
   extractCookie,
   getSession,
   hashPassword,
+  hashToken,
   webAuthnSession,
 } from './shared'
 
@@ -491,6 +492,9 @@ export class DbAuthHandler<
       const buffer = Buffer.from(token)
       token = buffer.toString('base64').replace('=', '').substring(0, 16)
 
+      // Store the token hash in the database so we can verify it later
+      const tokenHash = hashToken(token)
+
       try {
         // set token and expires time
         user = await this.dbAccessor.update({
@@ -498,7 +502,7 @@ export class DbAuthHandler<
             [this.options.authFields.id]: user[this.options.authFields.id],
           },
           data: {
-            [this.options.authFields.resetToken]: token,
+            [this.options.authFields.resetToken]: tokenHash,
             [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
           },
         })
@@ -1150,9 +1154,11 @@ export class DbAuthHandler<
         (this.options.forgotPassword as ForgotPasswordFlowOptions).expires
     )
 
+    const tokenHash = hashToken(token)
+
     const user = await this.dbAccessor.findFirst({
       where: {
-        [this.options.authFields.resetToken]: token,
+        [this.options.authFields.resetToken]: tokenHash,
       },
     })
 

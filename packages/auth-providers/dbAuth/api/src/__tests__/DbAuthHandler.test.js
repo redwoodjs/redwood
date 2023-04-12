@@ -2,6 +2,7 @@ import CryptoJS from 'crypto-js'
 
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
+import { hashToken } from '../shared'
 
 // mock prisma db client
 const DbMock = class {
@@ -760,7 +761,8 @@ describe('dbAuth', () => {
 
       expect(resetUser.resetToken).not.toEqual(undefined)
       // base64 characters only, except =
-      expect(resetUser.resetToken).toMatch(/^\w{16}$/)
+      // Should be a 64 character hex string for a 256 bit token hash
+      expect(resetUser.resetToken).toMatch(/^\w{64}$/)
       expect(resetUser.resetTokenExpiresAt instanceof Date).toEqual(true)
 
       // response contains data returned from the handler
@@ -1144,7 +1146,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires - 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1172,7 +1174,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1194,7 +1196,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1214,7 +1216,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1240,7 +1242,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1265,7 +1267,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1287,7 +1289,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1308,7 +1310,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
