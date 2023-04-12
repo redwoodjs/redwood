@@ -1139,7 +1139,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires - 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
