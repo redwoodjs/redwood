@@ -23,6 +23,7 @@ However, we're following best practices for storing these credentials:
 1. Users' passwords are [salted and hashed](https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/) with PBKDF2 before being stored
 2. Plaintext passwords are never stored anywhere, and only transferred between client and server during the login/signup phase (and hopefully only over HTTPS)
 3. Our logger scrubs sensitive parameters (like `password`) before they are output
+4. We only store the hashes of reset tokens to prevent an attacker from being able to reset user passwords.
 
 Even if you later decide you want to let someone else handle your user data for you, dbAuth is a great option for getting up and running quickly (we even have a generator for creating basic login and signup pages for you).
 
@@ -232,6 +233,8 @@ This handler is invoked if a user is found with the username/email that they sub
 If you changed the path to the Reset Password page in your routes you'll need to change it here. If you used another name for the `resetToken` database field, you'll need to change that here as well:
 
     https://example.com/reset-password?resetKey=${user.resetKey}
+
+> Note that although we store a hash for `resetToken` in the user table, only for the handler, `user.resetToken` will contain the raw `resetToken` to use for generating a password reset link.
 
 ### resetPassword.enabled
 

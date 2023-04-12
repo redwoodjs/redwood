@@ -510,6 +510,9 @@ export class DbAuthHandler<
         throw new DbAuthError.GenericError()
       }
 
+      // Temporarily set the token on the user back to the raw token so it's
+      // available to the handler.
+      user.resetToken = token
       // call user-defined handler in their functions/auth.js
       const response = await (
         this.options.forgotPassword as ForgotPasswordFlowOptions
