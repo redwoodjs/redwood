@@ -234,7 +234,7 @@ If you changed the path to the Reset Password page in your routes you'll need to
 
     https://example.com/reset-password?resetKey=${user.resetKey}
 
-> Note that although we store a hash for `resetToken` in the user table, only for the handler, `user.resetToken` will contain the raw `resetToken` to use for generating a password reset link.
+> Note that although the user table contains a hash of `resetToken`, only for the handler, `user.resetToken` will contain the raw `resetToken` to use for generating a password reset link.
 
 ### resetPassword.enabled
 
