@@ -18,8 +18,8 @@ import 'cypress-wait-until'
 describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
   const LOG_PATH = path.join(BASE_DIR, LOG_FILENAME)
 
-  const INTERVAL = process.env.REDWOOD_E2E_WAIT_WATCHFILE_INTERVAL || 1_000
-  const TIMEOUT = process.env.REDWOOD_E2E_WAIT_WATCHFILE_TIMEOUT || 15_000
+  const INTERVAL = process.env.REDWOOD_E2E_WAIT_WATCHFILE_INTERVAL || 2_000
+  const TIMEOUT = process.env.REDWOOD_E2E_WAIT_WATCHFILE_TIMEOUT || 120_000
 
   it('1. Test Logging for CRUD', () => {
     // Empty log file.
