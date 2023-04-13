@@ -8,33 +8,6 @@ import { prompt as enquirerPrompt } from 'enquirer'
 import { UpdateManager } from 'stdout-update'
 
 /**
- * Specifications:
- * - A basic progress bar
- * - Templates for common tasks:
- *   - ~~Errors~~
- *   - Warnings
- *   - Info
- *   - Success
- */
-
-export interface RedwoodTUIHeaderOptions {
-  spinner: boolean
-  spinnerIndex: number
-  spinnerCharacters: string[]
-}
-
-/**
- * Configuration for the TUI
- *
- * Accepts an out and err stream which the TUI will write to.
- */
-export interface RedwoodTUIConfig {
-  out?: NodeJS.WriteStream
-  err?: NodeJS.WriteStream
-}
-
-// TODO: Rename this to RedwoodChalk?
-/**
  * A default set of styling for the TUI, designed for a cohesive look and feel around the Redwood CLI, CRWA and vairous plugins
  */
 export const RedwoodStyling = {
@@ -51,6 +24,9 @@ export const RedwoodStyling = {
   green: chalk.green,
 }
 
+/**
+ * An object used to describe a "reactive" TUI element, that is an element that is updated a number of times per second
+ */
 export class ReactiveTUIContent {
   private outStream?: stream.Writable
 
@@ -63,6 +39,8 @@ export class ReactiveTUIContent {
   }
   private boxen: boxen.Options
   private frameInterval: number
+
+  // TODO: Implement a progress bar
 
   private spinnerIndex = 0
 
@@ -175,28 +153,21 @@ export class ReactiveTUIContent {
     }
 
     return renderedString
-    // buildContent(): string {
-    //   const content: string[] = []
-    //   switch (this.contentMode) {
-    //     case 'text':
-    //       if (this.contentText) {
-    //         content.push(this.contentText)
-    //       }
-    //       break
-    //     case 'stream':
-    //       if (this.contentText) {
-    //         content.push(this.contentText)
-    //       }
-    //       break
-    //   }
-    //   return content.join('\n')
-    // }
-    return ''
   }
 
   getFrameInterval() {
     return this.frameInterval
   }
+}
+
+/**
+ * Configuration for the TUI
+ *
+ * Accepts an out and err stream which the TUI will write to.
+ */
+export interface RedwoodTUIConfig {
+  out?: NodeJS.WriteStream
+  err?: NodeJS.WriteStream
 }
 
 /**
@@ -211,7 +182,7 @@ export class RedwoodTUI {
   private timerId?: NodeJS.Timer
   private isReactive = false
 
-  reactiveContent?: ReactiveTUIContent
+  private reactiveContent?: ReactiveTUIContent
 
   constructor({ out, err }: RedwoodTUIConfig = {}) {
     this.outStream = out || process.stdout
@@ -224,6 +195,11 @@ export class RedwoodTUI {
     })
   }
 
+  /**
+   * Enables rendering of a reactive component to the TUI
+   *
+   * @param reactiveContent A new ReactiveTUIContent object set as the current reactive content
+   */
   startReactive(reactiveContent?: ReactiveTUIContent) {
     // Stop any existing reactive content
     if (this.isReactive) {
@@ -252,6 +228,11 @@ export class RedwoodTUI {
     }
   }
 
+  /**
+   * Stops any new draws of the current reactive content to the TUI
+   *
+   * @param clear If true, the last drawn content will be cleared
+   */
   stopReactive(clear = false) {
     if (this.manager.isHooked) {
       // Stop the draw loop
@@ -272,8 +253,9 @@ export class RedwoodTUI {
   }
 
   /**
+   * Renders the current reactive content and draws it to the TUI
    *
-   * @param force
+   * @param force Force a draw even if the TUI is not reactive
    */
   private drawReactive(force = false) {
     if (this.isReactive || force) {
@@ -291,37 +273,25 @@ export class RedwoodTUI {
     }
   }
 
+  /**
+   * Gets the current reactive TUI content if there is one
+   *
+   * @returns The current reactive content or undefined if there isn't one
+   */
   getCurrentReactive(): ReactiveTUIContent | undefined {
     return this.reactiveContent
   }
 
+  /**
+   * Writes a string to the TUI output stream
+   *
+   * @param text The string to write out
+   */
   drawText(text: string) {
     this.outStream.write(`${text}\n`)
   }
 
-  // /**
-  //  * TODO: This should be used to prevent overriding all of the history, like move on to a newline and update any new content
-  //  */
-  // moveOn() {
-  //   // If needed redraw to remove artifacts like spinners
-  //   if (this.header) {
-  //     this.setHeader(this.header, { spinner: false })
-  //     this.loop(true)
-  //   }
-
-  //   // Disable
-  //   this.disable()
-
-  //   // Clear any previously defined content and settings
-  //   this.contentText = ''
-  //   this.contentMode = 'text'
-  //   this.clearHeader()
-  //   this.clearBoxen()
-
-  //   // Re-enable
-  //   this.enable()
-  // }
-
+  // TODO: Consider a custom prompting implementation for full control of look/feel/functionality etc...
   /**
    * A wrapper around enquirer.prompt that disables the reactive TUI and prompts
    *

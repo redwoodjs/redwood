@@ -80,7 +80,7 @@ export async function startTelemetry() {
   })
   traceExporter = new OTLPTraceExporter({
     // TODO: Point this to somewhere permanent
-    url: 'https://master.telemetry-analytics.c66.me/v1/traces',
+    url: 'https://master-axolotl.telemetry-analytics-jgmw.c66.me/v1/traces',
   })
   traceProcessor = new BatchSpanProcessor(traceExporter)
   traceProvider.addSpanProcessor(traceProcessor)
