@@ -149,7 +149,7 @@ Some ideas to improve the Studio are:
 * Search
     * Prisma
     * Tracing
-    * Rrrors
+    * Errors
 * Notification on warnings
   * issue to fix like n+1
 * Custom dashboards with specific charts, or service or GraphQL focus
