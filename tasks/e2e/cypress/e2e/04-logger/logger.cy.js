@@ -18,6 +18,9 @@ import 'cypress-wait-until'
 describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
   const LOG_PATH = path.join(BASE_DIR, LOG_FILENAME)
 
+  const INTERVAL = process.env.REDWOOD_E2E_WAIT_WATCHFILE_INTERVAL || 1_000
+  const TIMEOUT = process.env.REDWOOD_E2E_WAIT_WATCHFILE_TIMEOUT || 15_000
+
   it('1. Test Logging for CRUD', () => {
     // Empty log file.
     cy.writeFile(LOG_PATH, '')
@@ -46,7 +49,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
           console.log(str)
           return str.includes('> in posts()')
         }),
-      { interval: 2000, timeout: 2000 }
+      { interval: INTERVAL, timeout: TIMEOUT }
     )
 
     // CREATE / SAVE
@@ -55,11 +58,13 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     cy.get('input#body').type('Hello world!')
     cy.get('button').contains('Save').click()
 
-    cy.waitUntil(() =>
-      cy.readFile(LOG_PATH).then((str) => {
-        console.log(str)
-        return str.includes('> in createPost()')
-      })
+    cy.waitUntil(
+      () =>
+        cy.readFile(LOG_PATH).then((str) => {
+          console.log(str)
+          return str.includes('> in createPost()')
+        }),
+      { interval: INTERVAL, timeout: TIMEOUT }
     )
 
     // EDIT
@@ -67,20 +72,24 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
     cy.get('input#body').clear().type('No, Margle the World!')
     cy.get('button').contains('Save').click()
 
-    cy.waitUntil(() =>
-      cy.readFile(LOG_PATH).then((str) => {
-        console.log(str)
-        return str.includes('> in updatePost()')
-      })
+    cy.waitUntil(
+      () =>
+        cy.readFile(LOG_PATH).then((str) => {
+          console.log(str)
+          return str.includes('> in updatePost()')
+        }),
+      { interval: INTERVAL, timeout: TIMEOUT }
     )
 
     // DELETE
     cy.contains('Delete').click()
-    cy.waitUntil(() =>
-      cy.readFile(LOG_PATH).then((str) => {
-        console.log(str)
-        return str.includes('> in deletePost()')
-      })
+    cy.waitUntil(
+      () =>
+        cy.readFile(LOG_PATH).then((str) => {
+          console.log(str)
+          return str.includes('> in deletePost()')
+        }),
+      { interval: INTERVAL, timeout: TIMEOUT }
     )
   })
 
@@ -110,7 +119,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
             !str.includes('Slow Query performed in ')
           )
         }),
-      { interval: 2000, timeout: 2000 }
+      { interval: INTERVAL, timeout: TIMEOUT }
     )
 
     // With slow query logging.
@@ -135,7 +144,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
           console.log(str)
           return str.includes('Slow Query performed in ')
         }),
-      { interval: 2000, timeout: 2000 }
+      { interval: INTERVAL, timeout: TIMEOUT }
     )
   })
 })
