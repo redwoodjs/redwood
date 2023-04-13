@@ -18,7 +18,7 @@ import terminalLink from 'terminal-link'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { RedwoodTUI, styling } from '@redwoodjs/tui'
+import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 
 import { name, version } from '../package'
 
@@ -33,17 +33,26 @@ const { telemetry } = Parser(hideBin(process.argv))
 
 const tui = new RedwoodTUI()
 
-async function checkCompatibility(templateDir, yarnInstall) {
-  tui.setContentMode('text')
-  tui.setHeader('Checking node and yarn compatibility', { spinner: true })
+async function executeCompatibilityCheck(templateDir, yarnInstall) {
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    content: 'Checking node and yarn compatibility',
+    spinner: {
+      enabled: true,
+    },
+  })
+  tui.startReactive(tuiContent)
 
   if (!yarnInstall) {
-    tui.setContent(
-      ` ${styling.warning(
-        '⚠ Warning'
-      )}: Skipped check because yarn install was skipped with "--yarn-install false"`
-    )
-    tui.moveOn()
+    tuiContent.update({
+      spinner: {
+        enabled: false,
+      },
+      content: `${RedwoodStyling.warning(
+        '⚠'
+      )} Skipped compatibility check because yarn install was skipped via command line flag`,
+    })
+    tui.stopReactive()
     return
   }
 
@@ -68,13 +77,18 @@ async function checkCompatibility(templateDir, yarnInstall) {
   )
 
   if (engineCheckPassed) {
-    tui.setContent(' ✔ Compatibility checks passed')
-    tui.moveOn()
+    tuiContent.update({
+      spinner: {
+        enabled: false,
+      },
+      content: `${RedwoodStyling.green('✔')} Compatibility checks passed`,
+    })
+    tui.stopReactive()
     return
   }
 
-  // TODO: Handle engine check errors
   if (!engineCheckPassed) {
+    tui.stopReactive(true)
     const engineCheckErrorDocs = terminalLink(
       'Tutorial - Prerequisites',
       'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
@@ -109,65 +123,31 @@ async function checkCompatibility(templateDir, yarnInstall) {
   }
 }
 
-async function promptForTypescript() {
-  tui.setContentMode('text')
-  try {
-    const response = await tui.prompt({
-      type: 'Select',
-      name: 'language',
-      choices: ['TypeScript', 'JavaScript'],
-      message: 'Select your preferred coding language',
-      initial: 'TypeScript',
-    })
-    return response.language === 'TypeScript'
-  } catch (_error) {
-    recordErrorViaTelemetry('User cancelled install at language prompt')
-    await shutdownTelemetry()
-    process.exit(1)
-  }
-}
-
-async function promptForGit() {
-  tui.setContentMode('text')
-  try {
-    const response = await tui.prompt({
-      type: 'Toggle',
-      name: 'git',
-      message: 'Do you want to initialize a git repo?',
-      enabled: 'Yes',
-      disabled: 'no',
-      initial: 'Yes',
-    })
-    return response.git
-  } catch (_error) {
-    recordErrorViaTelemetry('User cancelled install at git prompt')
-    await shutdownTelemetry()
-    process.exit(1)
-  }
-}
-
 async function createProjectFiles(newAppDir, overwrite, yarn1) {
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    content: 'Creating project files',
+    spinner: {
+      enabled: true,
+    },
+  })
+  tui.startReactive(tuiContent)
+
   // Check if the new app directory already exists
   if (fs.existsSync(newAppDir) && !overwrite) {
     // Check if the directory contains files and show an error if it does
     if (fs.readdirSync(newAppDir).length > 0) {
-      tui.setBoxen({
-        padding: 1,
-        borderColor: 'red',
-        title: '⚠ Project directory already contains files',
-        titleAlignment: 'left',
-      })
-      tui.setContentMode('text')
-      tui.setContent(
+      tui.stopReactive(true)
+      tui.displayError(
+        'Project directory already contains files',
         [
-          `'${styling.info(newAppDir)}' already exists and is not empty`,
+          `'${RedwoodStyling.info(newAppDir)}' already exists and is not empty`,
           ``,
-          `You can use the '${styling.info(
+          `You can use the '${RedwoodStyling.info(
             'overwrite'
           )}' flag to create the project even if target directory isn't empty`,
         ].join('\n')
       )
-      tui.disable()
       recordErrorViaTelemetry(`Project directory already contains files`)
       await shutdownTelemetry()
       process.exit(1)
@@ -212,12 +192,26 @@ async function createProjectFiles(newAppDir, overwrite, yarn1) {
       spaces: 2,
     })
   }
+
+  tuiContent.update({
+    spinner: {
+      enabled: false,
+    },
+    content: `${RedwoodStyling.green('✔')} Project files created`,
+  })
+  tui.stopReactive()
 }
 
 async function installNodeModules(newAppDir) {
-  tui.setContentMode('text')
-  tui.setHeader('Installing node modules', { spinner: true })
-  tui.setContent('  ⏱  This could take a minute or more...')
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    header: 'Installing node modules',
+    content: '  ⏱  This could take a while...',
+    spinner: {
+      enabled: true,
+    },
+  })
+  tui.startReactive(tuiContent)
 
   const yarnInstallSubprocess = execa('yarn install', {
     shell: true,
@@ -225,15 +219,13 @@ async function installNodeModules(newAppDir) {
   })
 
   try {
-    // TODO: We didn't want to have the yarn output show up?
-    // tui.setOutStream(yarnInstallSubprocess.stdout)
-    // tui.setErrStream(yarnInstallSubprocess.stderr)
     await yarnInstallSubprocess
   } catch (error) {
+    tui.stopReactive(true)
     tui.displayError(
       "Couldn't install node modules",
       [
-        `We could not install node modules via ${styling.info(
+        `We could not install node modules via ${RedwoodStyling.info(
           "'yarn install'"
         )}. Please see below for the full error message.`,
         '',
@@ -245,14 +237,25 @@ async function installNodeModules(newAppDir) {
     process.exit(1)
   }
 
-  tui.setHeader('Node modules successfully installed', { spinner: false })
-  tui.setContent('')
-  tui.moveOn()
+  tuiContent.update({
+    header: '',
+    content: `${RedwoodStyling.green('✔')} Node modules successfully installed`,
+    spinner: {
+      enabled: false,
+    },
+  })
+  tui.stopReactive()
 }
 
 async function convertToJavascript(newAppDir) {
-  tui.setContentMode('text')
-  tui.setHeader('Converting TypeScript files to JavaScript', { spinner: true })
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    content: 'Converting TypeScript files to JavaScript',
+    spinner: {
+      enabled: true,
+    },
+  })
+  tui.startReactive(tuiContent)
 
   const conversionSubprocess = execa('yarn rw ts-to-js', {
     shell: true,
@@ -260,15 +263,13 @@ async function convertToJavascript(newAppDir) {
   })
 
   try {
-    // TODO: We didn't want to have the yarn output show up?
-    // tui.setOutStream(conversionSubprocess.stdout)
-    // tui.setErrStream(conversionSubprocess.stderr)
     await conversionSubprocess
   } catch (error) {
+    tui.stopReactive(true)
     tui.displayError(
       "Couldn't convert TypeScript files to JavaScript",
       [
-        `We could not convert the Typescript files to Javascript using ${styling.info(
+        `We could not convert the Typescript files to Javascript using ${RedwoodStyling.info(
           "'yarn rw ts-to-js'"
         )}. Please see below for the full error message.`,
         '',
@@ -280,13 +281,26 @@ async function convertToJavascript(newAppDir) {
     process.exit(1)
   }
 
-  tui.setHeader('Converted TypeScript files to JavaScript', { spinner: false })
-  tui.moveOn()
+  tuiContent.update({
+    content: `${RedwoodStyling.green(
+      '✔'
+    )} Converted TypeScript files to JavaScript`,
+    spinner: {
+      enabled: false,
+    },
+  })
+  tui.stopReactive()
 }
 
 async function generateTypes(newAppDir) {
-  tui.setContentMode('text')
-  tui.setHeader('Generating types', { spinner: true })
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    content: 'Generating types',
+    spinner: {
+      enabled: true,
+    },
+  })
+  tui.startReactive(tuiContent)
 
   const generateSubprocess = execa('yarn rw-gen', {
     shell: true,
@@ -294,15 +308,13 @@ async function generateTypes(newAppDir) {
   })
 
   try {
-    // TODO: We didn't want to have the yarn output show up?
-    // tui.setOutStream(conversionSubprocess.stdout)
-    // tui.setErrStream(conversionSubprocess.stderr)
     await generateSubprocess
   } catch (error) {
+    tui.stopReactive(true)
     tui.displayError(
       "Couldn't generate types",
       [
-        `We could not generate types using ${styling.info(
+        `We could not generate types using ${RedwoodStyling.info(
           "'yarn rw-gen'"
         )}. Please see below for the full error message.`,
         '',
@@ -314,13 +326,24 @@ async function generateTypes(newAppDir) {
     process.exit(1)
   }
 
-  tui.setHeader('Generated types', { spinner: false })
-  tui.moveOn()
+  tuiContent.update({
+    content: `${RedwoodStyling.green('✔')} Generated types`,
+    spinner: {
+      enabled: false,
+    },
+  })
+  tui.stopReactive()
 }
 
 async function initialiseGit(newAppDir) {
-  tui.setContentMode('text')
-  tui.setHeader('Initialising a git repo', { spinner: true })
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    content: 'Initialising a git repo',
+    spinner: {
+      enabled: true,
+    },
+  })
+  tui.startReactive(tuiContent)
 
   const gitSubprocess = execa(
     'git init && git add . && git commit -m "Initial commit"',
@@ -331,15 +354,13 @@ async function initialiseGit(newAppDir) {
   )
 
   try {
-    // TODO: We didn't want to have the yarn output show up?
-    // tui.setOutStream(conversionSubprocess.stdout)
-    // tui.setErrStream(conversionSubprocess.stderr)
     await gitSubprocess
   } catch (error) {
+    tui.stopReactive(true)
     tui.displayError(
       "Couldn't initialise a git repo",
       [
-        `We could not initialise a git repo using ${styling.info(
+        `We could not initialise a git repo using ${RedwoodStyling.info(
           'git init && git add . && git commit -m "Initial commit"'
         )}. Please see below for the full error message.`,
         '',
@@ -351,8 +372,70 @@ async function initialiseGit(newAppDir) {
     process.exit(1)
   }
 
-  tui.setHeader('Initialied a git repo', { spinner: false })
-  tui.moveOn()
+  tuiContent.update({
+    content: `${RedwoodStyling.green('✔')} Initialised a git repo`,
+    spinner: {
+      enabled: false,
+    },
+  })
+  tui.stopReactive()
+}
+
+async function handleTypescriptPreference(typescriptFlag) {
+  // Handle case where flag is set
+  if (typescriptFlag !== null) {
+    tui.drawText(
+      `${RedwoodStyling.green('✔')} Using ${
+        typescriptFlag ? 'TypeScript' : 'JavaScript'
+      } based on command line flag`
+    )
+    return typescriptFlag
+  }
+
+  // Prompt user for preference
+  try {
+    const response = await tui.prompt({
+      type: 'Select',
+      name: 'language',
+      choices: ['TypeScript', 'JavaScript'],
+      message: 'Select your preferred coding language',
+      initial: 'TypeScript',
+    })
+    return response.language === 'TypeScript'
+  } catch (_error) {
+    recordErrorViaTelemetry('User cancelled install at language prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+}
+
+async function handleGitPreference(gitInitFlag) {
+  // Handle case where flag is set
+  if (gitInitFlag !== null) {
+    tui.drawText(
+      `${RedwoodStyling.green('✔')} ${
+        gitInitFlag ? 'Will' : 'Will not'
+      } initialise a git repo based on command line flag`
+    )
+    return gitInitFlag
+  }
+
+  // Prompt user for preference
+  try {
+    const response = await tui.prompt({
+      type: 'Toggle',
+      name: 'git',
+      message: 'Do you want to initialize a git repo?',
+      enabled: 'Yes',
+      disabled: 'no',
+      initial: 'Yes',
+    })
+    return response.git
+  } catch (_error) {
+    recordErrorViaTelemetry('User cancelled install at git prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
 }
 
 /**
@@ -362,24 +445,27 @@ async function initialiseGit(newAppDir) {
  *  - TODO - Add a list of what this function does
  */
 async function createRedwoodApp() {
-  tui.enable()
-
   // Introductory message
-  tui.drawLinesAndMoveOn(
-    `${styling.redwood('-'.repeat(66))}`,
-    `${' '.repeat(16)}🌲⚡️ ${styling.header('Welcome to RedwoodJS!')} ⚡️🌲`,
-    `${styling.redwood('-'.repeat(66))}`
+  tui.drawText(
+    [
+      `${RedwoodStyling.redwood('-'.repeat(66))}`,
+      `${' '.repeat(16)}🌲⚡️ ${RedwoodStyling.header(
+        'Welcome to RedwoodJS!'
+      )} ⚡️🌲`,
+      `${RedwoodStyling.redwood('-'.repeat(66))}`,
+    ].join('\n')
   )
 
   // Extract the args as provided by the user in the command line
+  // TODO: Make all flags have the 'flag' suffix
   const {
     _: args,
     'yarn-install': yarnInstall,
-    typescript,
+    typescript: typescriptFlag,
     overwrite,
     // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
     yarn1,
-    'git-init': gitInit,
+    'git-init': gitInitFlag,
   } = yargs(hideBin(process.argv))
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
@@ -445,7 +531,6 @@ async function createRedwoodApp() {
         )}`,
       ].join('\n')
     )
-
     recordErrorViaTelemetry('No target directory specified')
     await shutdownTelemetry()
     process.exit(1)
@@ -455,15 +540,14 @@ async function createRedwoodApp() {
   const templateDir = path.resolve(__dirname, '../template')
 
   // Engine check
-  await checkCompatibility(templateDir, yarnInstall)
+  await executeCompatibilityCheck(templateDir, yarnInstall)
 
   // Determine ts/js preference
-  const useTypescript =
-    typescript === null ? await promptForTypescript() : typescript
+  const useTypescript = await handleTypescriptPreference(typescriptFlag)
   trace.getActiveSpan().setAttribute('typescript', useTypescript)
 
   // Determine git preference
-  const useGit = gitInit === null ? await promptForGit() : gitInit
+  const useGit = await handleGitPreference(gitInitFlag)
   trace.getActiveSpan().setAttribute('git', useGit)
 
   // Create project files
@@ -477,14 +561,28 @@ async function createRedwoodApp() {
       .getActiveSpan()
       .setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
   } else {
-    tui.setContentMode('text')
-    tui.setContent('Skipping yarn install')
-    trace.getActiveSpan().setAttribute('yarn-install-time', 0)
+    tui.drawText(
+      `${RedwoodStyling.warning(
+        '⚠'
+      )} Skipped yarn install step based on command line flag`
+    )
   }
 
   // Conditionally convert to javascript
-  if (!useTypescript && yarnInstall) {
-    await convertToJavascript(newAppDir)
+  if (!useTypescript) {
+    if (yarnInstall) {
+      await convertToJavascript(newAppDir)
+    } else {
+      tui.drawText(
+        [
+          `${RedwoodStyling.warning(
+            '⚠'
+          )} Unable to convert to javascript without yarn install step`,
+          '  Please run the following command inside your project once yarn install has been executed:',
+          `  ${RedwoodStyling.info("'yarn rw ts-to-js'")}`,
+        ].join('\n')
+      )
+    }
   }
 
   // Generate types
@@ -498,54 +596,62 @@ async function createRedwoodApp() {
   }
 
   // Post install message
-  tui.drawLinesAndMoveOn(
-    '',
-    styling.success('Thanks for trying out Redwood!'),
-    '',
-    ` ⚡️ ${styling.redwood(
-      'Get up and running fast with this Quick Start guide'
-    )}: https://redwoodjs.com/docs/quick-start`,
-    '',
-    styling.header('Join the Community'),
-    '',
-    `${styling.redwood(' ❖ Join our Forums')}: https://community.redwoodjs.com`,
-    `${styling.redwood(' ❖ Join our Chat')}: https://discord.gg/redwoodjs`,
-    '',
-    styling.header('Get some help'),
-    '',
-    `${styling.redwood(
-      ' ❖ Get started with the Tutorial'
-    )}: https://redwoodjs.com/docs/tutorial`,
-    `${styling.redwood(
-      ' ❖ Read the Documentation'
-    )}: https://redwoodjs.com/docs`,
-    '',
-    styling.header('Stay updated'),
-    '',
-    `${styling.redwood(
-      ' ❖ Sign up for our Newsletter'
-    )}: https://www.redwoodjs.com/newsletter`,
-    `${styling.redwood(
-      ' ❖ Follow us on Twitter'
-    )}: https://twitter.com/redwoodjs`,
-    '',
-    `${styling.header(`Become a Contributor`)} ${styling.love('❤')}`,
-    '',
-    `${styling.redwood(
-      ' ❖ Learn how to get started'
-    )}: https://redwoodjs.com/docs/contributing`,
-    `${styling.redwood(
-      ' ❖ Find a Good First Issue'
-    )}: https://redwoodjs.com/good-first-issue`,
-    '',
-    `${styling.header(`Fire it up!`)} 🚀`,
-    '',
-    `${styling.redwood(` > ${styling.green(`cd ${targetDir}`)}`)}`,
-    `${styling.redwood(` > ${styling.green(`yarn rw dev`)}`)}`,
-    ''
+  tui.drawText(
+    [
+      '',
+      RedwoodStyling.success('Thanks for trying out Redwood!'),
+      '',
+      ` ⚡️ ${RedwoodStyling.redwood(
+        'Get up and running fast with this Quick Start guide'
+      )}: https://redwoodjs.com/docs/quick-start`,
+      '',
+      RedwoodStyling.header('Join the Community'),
+      '',
+      `${RedwoodStyling.redwood(
+        ' ❖ Join our Forums'
+      )}: https://community.redwoodjs.com`,
+      `${RedwoodStyling.redwood(
+        ' ❖ Join our Chat'
+      )}: https://discord.gg/redwoodjs`,
+      '',
+      RedwoodStyling.header('Get some help'),
+      '',
+      `${RedwoodStyling.redwood(
+        ' ❖ Get started with the Tutorial'
+      )}: https://redwoodjs.com/docs/tutorial`,
+      `${RedwoodStyling.redwood(
+        ' ❖ Read the Documentation'
+      )}: https://redwoodjs.com/docs`,
+      '',
+      RedwoodStyling.header('Stay updated'),
+      '',
+      `${RedwoodStyling.redwood(
+        ' ❖ Sign up for our Newsletter'
+      )}: https://www.redwoodjs.com/newsletter`,
+      `${RedwoodStyling.redwood(
+        ' ❖ Follow us on Twitter'
+      )}: https://twitter.com/redwoodjs`,
+      '',
+      `${RedwoodStyling.header(`Become a Contributor`)} ${RedwoodStyling.love(
+        '❤'
+      )}`,
+      '',
+      `${RedwoodStyling.redwood(
+        ' ❖ Learn how to get started'
+      )}: https://redwoodjs.com/docs/contributing`,
+      `${RedwoodStyling.redwood(
+        ' ❖ Find a Good First Issue'
+      )}: https://redwoodjs.com/good-first-issue`,
+      '',
+      `${RedwoodStyling.header(`Fire it up!`)} 🚀`,
+      '',
+      `${RedwoodStyling.redwood(
+        ` > ${RedwoodStyling.green(`cd ${targetDir}`)}`
+      )}`,
+      `${RedwoodStyling.redwood(` > ${RedwoodStyling.green(`yarn rw dev`)}`)}`,
+      '',
+    ].join('\n')
   )
-
-  tui.disable()
 }
 
 ;(async () => {

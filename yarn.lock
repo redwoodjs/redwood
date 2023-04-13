@@ -7279,7 +7279,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/tui@workspace:packages/tui":
+"@redwoodjs/tui@workspace:^, @redwoodjs/tui@workspace:packages/tui":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/tui@workspace:packages/tui"
   dependencies:
@@ -14394,6 +14394,7 @@ __metadata:
     "@opentelemetry/resources": 1.11.0
     "@opentelemetry/sdk-trace-node": 1.11.0
     "@opentelemetry/semantic-conventions": 1.11.0
+    "@redwoodjs/tui": "workspace:^"
     "@types/prompts": 2.4.4
     chalk: 4.1.2
     check-node-version: 4.2.1

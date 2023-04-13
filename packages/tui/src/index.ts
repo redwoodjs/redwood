@@ -9,15 +9,13 @@ import { UpdateManager } from 'stdout-update'
 
 /**
  * Specifications:
- * - Prompting support
  * - A basic progress bar
- * - Templates for common tasks, printing errors etc.
+ * - Templates for common tasks:
+ *   - ~~Errors~~
+ *   - Warnings
+ *   - Info
+ *   - Success
  */
-
-export interface RedwoodTUIConfig {
-  out?: NodeJS.WriteStream
-  err?: NodeJS.WriteStream
-}
 
 export interface RedwoodTUIHeaderOptions {
   spinner: boolean
@@ -26,18 +24,20 @@ export interface RedwoodTUIHeaderOptions {
 }
 
 /**
- * To keep a consistent color/style palette between cli packages, such as
- * @redwood/create-redwood-app and @redwood/cli, please keep them compatible
- * with one and another. We'll might split up and refactor these into a
- * separate package when there is a strong motivation behind it.
+ * Configuration for the TUI
  *
- * Current files:
- *
- * - packages/cli/src/lib/colors.js
- * - packages/create-redwood-app/src/create-redwood-app.js (this file)
- *
+ * Accepts an out and err stream which the TUI will write to.
  */
-export const styling = {
+export interface RedwoodTUIConfig {
+  out?: NodeJS.WriteStream
+  err?: NodeJS.WriteStream
+}
+
+// TODO: Rename this to RedwoodChalk?
+/**
+ * A default set of styling for the TUI, designed for a cohesive look and feel around the Redwood CLI, CRWA and vairous plugins
+ */
+export const RedwoodStyling = {
   error: chalk.bold.red,
   warning: chalk.keyword('orange'),
   success: chalk.greenBright,
@@ -51,178 +51,94 @@ export const styling = {
   green: chalk.green,
 }
 
-/**
- * TODO: Documentation for this
- */
-export class RedwoodTUI {
-  private manager: UpdateManager
-
-  private timerId?: NodeJS.Timer
-  private looping = false
-
-  private header?: string
-  private headerOptions = {
-    spinner: false,
-    spinnerIndex: 0,
-    spinnerCharacters: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'],
-  }
-
-  private boxen?: boxen.Options
-
-  private contentText = ''
-  private contentMode: 'text' | 'stream' = 'text'
-
+export class ReactiveTUIContent {
   private outStream?: stream.Writable
-  private errStream?: stream.Writable
 
-  constructor({ out, err }: RedwoodTUIConfig = {}) {
-    this.manager = UpdateManager.getInstance(out, err)
+  private mode: 'text' | 'stream'
+  private header: string
+  private content: string
+  private spinner: {
+    enabled: boolean
+    characters: string[]
   }
+  private boxen: boxen.Options
+  private frameInterval: number
 
-  /**
-   * Enable control of the terminal and allow writing content
-   */
-  enable() {
-    if (!this.manager.isHooked) {
-      this.manager.hook()
-      this.looping = true
-      this.timerId = setInterval(() => {
-        this.loop()
-      }, 80)
+  private spinnerIndex = 0
+
+  constructor(options: {
+    mode?: 'text' | 'stream'
+    header?: string
+    content?: string
+    spinner?: {
+      enabled?: boolean
+      characters?: string[]
+    }
+    boxen?: boxen.Options
+    outStream?: stream.Readable
+    frameInterval?: number
+  }) {
+    this.mode = options.mode || 'text'
+    this.header = options.header || ''
+    this.content = options.content || ''
+
+    const defaultSpinner = {
+      enabled: false,
+      characters: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'].map((c) =>
+        RedwoodStyling.redwood(c)
+      ),
+    }
+    this.spinner = { ...defaultSpinner, ...options.spinner }
+    this.boxen = { ...options.boxen }
+    this.frameInterval = options.frameInterval || 80
+
+    if (options.outStream) {
+      this.setOutStream(options.outStream)
     }
   }
 
-  /**
-   * Disable control of the terminal and stop writing content
-   */
-  disable() {
-    if (this.manager.isHooked) {
-      // Stop the draw loop
-      this.looping = false
-      clearInterval(this.timerId)
-
-      // Draw one last time
-      this.loop(true)
-
-      this.outStream?.destroy()
-      this.errStream?.destroy()
-      this.manager.unhook()
+  update(options: {
+    mode?: 'text' | 'stream'
+    header?: string
+    content?: string
+    spinner?: {
+      enabled?: boolean
+      characters?: string[]
+    }
+    boxen?: boxen.Options
+    outStream?: stream.Readable
+    frameInterval?: number
+  }) {
+    if (options.mode) {
+      this.mode = options.mode
+    }
+    if (options.header !== undefined) {
+      this.header = options.header
+    }
+    if (options.content !== undefined) {
+      this.content = options.content
+    }
+    if (options.spinner) {
+      // TODO: Validate characters array has at least two characters
+      this.spinner = { ...this.spinner, ...options.spinner }
+    }
+    if (options.boxen) {
+      this.boxen = { ...this.boxen, ...options.boxen }
+    }
+    if (options.outStream) {
+      this.setOutStream(options.outStream)
+    }
+    if (options.frameInterval) {
+      // TODO: Validate > 0
+      this.frameInterval = options.frameInterval
     }
   }
-
-  /**
-   * The draw loop
-   */
-  loop(force = false) {
-    if (this.looping || force) {
-      const builtContent = this.buildContent()
-      const content: string[] = []
-      if (this.boxen) {
-        content.push(...boxen(builtContent || '', this.boxen).split('\n'))
-      } else {
-        if (this.header) {
-          if (this.headerOptions.spinner) {
-            content.push(
-              `${
-                this.headerOptions.spinnerCharacters[
-                  this.headerOptions.spinnerIndex
-                ]
-              } ${this.header}`
-            )
-            this.headerOptions.spinnerIndex += 1
-            this.headerOptions.spinnerIndex =
-              this.headerOptions.spinnerIndex %
-              this.headerOptions.spinnerCharacters.length
-          } else {
-            content.push(this.header)
-          }
-        }
-        if (builtContent) {
-          content.push(builtContent)
-        }
-      }
-      this.manager.update(content)
-    }
-  }
-
-  /**
-   * TODO: This should be used to prevent overriding all of the history, like move on to a newline and update any new content
-   */
-  moveOn() {
-    // If needed redraw to remove artifacts like spinners
-    if (this.header) {
-      this.setHeader(this.header, { spinner: false })
-      this.loop(true)
-    }
-
-    // Disable
-    this.disable()
-
-    // Clear any previously defined content and settings
-    this.contentText = ''
-    this.contentMode = 'text'
-    this.clearHeader()
-    this.clearBoxen()
-
-    // Re-enable
-    this.enable()
-  }
-
-  buildContent(): string {
-    const content: string[] = []
-    switch (this.contentMode) {
-      case 'text':
-        if (this.contentText) {
-          content.push(this.contentText)
-        }
-        break
-      case 'stream':
-        if (this.contentText) {
-          content.push(this.contentText)
-        }
-        break
-    }
-    return content.join('\n')
-  }
-
-  // ---
-
-  setHeader(header: string, options?: Partial<RedwoodTUIHeaderOptions>) {
-    this.header = header
-    this.headerOptions = { ...this.headerOptions, ...options }
-  }
-
-  clearHeader() {
-    this.header = undefined
-  }
-
-  // ---
-
-  setBoxen(options: boxen.Options) {
-    this.boxen = options
-  }
-
-  clearBoxen() {
-    this.boxen = undefined
-  }
-
-  // ---
-
-  setContent(text: string) {
-    this.contentText = text
-  }
-
-  setContentMode(mode: 'text' | 'stream') {
-    this.contentMode = mode
-  }
-
-  // ---
 
   setOutStream(out: stream.Readable) {
     this.outStream = new stream.Writable({
       write: (chunk: Buffer, _encoding, next) => {
-        if (this.contentMode === 'stream') {
-          this.contentText += chunk.toString('utf-8')
+        if (this.content === 'stream') {
+          this.content += chunk.toString('utf-8')
         }
         next()
         return true
@@ -231,56 +147,216 @@ export class RedwoodTUI {
     out.pipe(this.outStream, { end: true })
   }
 
-  setErrStream(err: stream.Readable) {
-    this.errStream = new stream.Writable({
-      write: (_chunk, _encoding, _next) => {
-        // if(this.contentMode === "stream"){
-        // this.contentText += chunk
-        // }
-        return true
-      },
-    })
-    err.pipe(this.errStream, { end: true })
+  renderToString(): string {
+    // Stream based content
+    if (this.mode === 'stream') {
+      return 'Not implemented yet'
+    }
+
+    // Text based content
+    let renderedString = this.content
+
+    // Add the header if it exists
+    if (this.header) {
+      renderedString = `${this.header}\n${renderedString}`
+    }
+
+    // Add a spinner if enabled
+    if (this.spinner.enabled) {
+      renderedString = `${
+        this.spinner.characters[this.spinnerIndex]
+      } ${renderedString}`
+
+      // Increment the spinner index and reset if necessary
+      this.spinnerIndex += 1
+      if (this.spinnerIndex >= this.spinner.characters.length) {
+        this.spinnerIndex = 0
+      }
+    }
+
+    return renderedString
+    // buildContent(): string {
+    //   const content: string[] = []
+    //   switch (this.contentMode) {
+    //     case 'text':
+    //       if (this.contentText) {
+    //         content.push(this.contentText)
+    //       }
+    //       break
+    //     case 'stream':
+    //       if (this.contentText) {
+    //         content.push(this.contentText)
+    //       }
+    //       break
+    //   }
+    //   return content.join('\n')
+    // }
+    return ''
   }
 
-  // ---
+  getFrameInterval() {
+    return this.frameInterval
+  }
+}
 
-  drawLinesAndMoveOn(...lines: string[]) {
-    lines.forEach((line) => {
-      this.setContentMode('text')
-      this.setContent(line)
-      this.loop(true)
-      this.moveOn()
+/**
+ * TODO: Documentation for this
+ */
+export class RedwoodTUI {
+  private manager: UpdateManager
+
+  private outStream: NodeJS.WriteStream
+  private errStream: NodeJS.WriteStream
+
+  private timerId?: NodeJS.Timer
+  private isReactive = false
+
+  reactiveContent?: ReactiveTUIContent
+
+  constructor({ out, err }: RedwoodTUIConfig = {}) {
+    this.outStream = out || process.stdout
+    this.errStream = err || process.stderr
+    this.manager = UpdateManager.getInstance(this.outStream, this.errStream)
+
+    // Stop any remaining reactive content or there could be side effects like the cursor being hidden
+    process.on('exit', () => {
+      this.stopReactive()
     })
   }
 
-  // ---
+  startReactive(reactiveContent?: ReactiveTUIContent) {
+    // Stop any existing reactive content
+    if (this.isReactive) {
+      this.stopReactive()
+    }
 
-  promptA = enquirerPrompt
+    // Set the reactive content if passed in
+    if (reactiveContent) {
+      this.reactiveContent = reactiveContent
+    }
 
-  // TODO: Fix types of questions, enquirer does not export their types...
-  async prompt<T = object>(questions: any): Promise<T> {
-    this.moveOn()
-    this.disable()
+    // Check if there is reactive content
+    if (!this.reactiveContent) {
+      throw new Error('TUI has no reactive content')
+    }
+
+    if (!this.manager.isHooked) {
+      // Take control of the terminal
+      this.manager.hook()
+
+      // Start the draw loop
+      this.isReactive = true
+      this.timerId = setInterval(() => {
+        this.drawReactive()
+      }, this.reactiveContent.getFrameInterval())
+    }
+  }
+
+  stopReactive(clear = false) {
+    if (this.manager.isHooked) {
+      // Stop the draw loop
+      this.isReactive = false
+      clearInterval(this.timerId)
+
+      // Draw one last time to ensure the final state is shown
+      this.drawReactive(true)
+
+      // Clear the last drawn content if requested
+      if (clear) {
+        this.manager.erase(this.manager.lastLength)
+      }
+
+      // Give up control of the terminal
+      this.manager.unhook()
+    }
+  }
+
+  /**
+   *
+   * @param force
+   */
+  private drawReactive(force = false) {
+    if (this.isReactive || force) {
+      const wasHooked = this.manager.isHooked
+      if (force && !wasHooked) {
+        this.manager.hook()
+      }
+      const content = this.reactiveContent?.renderToString()
+      if (content) {
+        this.manager.update(content.split('\n'))
+      }
+      if (force && !wasHooked) {
+        this.manager.unhook()
+      }
+    }
+  }
+
+  getCurrentReactive(): ReactiveTUIContent | undefined {
+    return this.reactiveContent
+  }
+
+  drawText(text: string) {
+    this.outStream.write(`${text}\n`)
+  }
+
+  // /**
+  //  * TODO: This should be used to prevent overriding all of the history, like move on to a newline and update any new content
+  //  */
+  // moveOn() {
+  //   // If needed redraw to remove artifacts like spinners
+  //   if (this.header) {
+  //     this.setHeader(this.header, { spinner: false })
+  //     this.loop(true)
+  //   }
+
+  //   // Disable
+  //   this.disable()
+
+  //   // Clear any previously defined content and settings
+  //   this.contentText = ''
+  //   this.contentMode = 'text'
+  //   this.clearHeader()
+  //   this.clearBoxen()
+
+  //   // Re-enable
+  //   this.enable()
+  // }
+
+  /**
+   * A wrapper around enquirer.prompt that disables the reactive TUI and prompts
+   *
+   * @param questions A question or array of questions to prompt the user with
+   *
+   * @returns The prompt result
+   */
+  async prompt<T = object>(
+    questions: Parameters<typeof enquirerPrompt>[0]
+  ): Promise<T> {
+    const wasReactive = this.isReactive
+    if (wasReactive) {
+      this.stopReactive()
+    }
     const result = await enquirerPrompt<T>(questions)
-    this.enable()
+    if (wasReactive) {
+      this.startReactive()
+    }
     return result
   }
 
-  // ---
-
+  /**
+   * Display an error message in a box
+   *
+   * @param title Error box title
+   * @param message Error message
+   */
   displayError(title: string, message: string) {
-    this.moveOn()
-    this.setBoxen({
-      padding: 1,
-      borderColor: 'red',
-      title: `⚠ Error: ${title}`,
-      titleAlignment: 'left',
-    })
-    this.setContentMode('text')
-    this.setContent(message)
-    this.moveOn()
+    this.drawText(
+      boxen(message, {
+        padding: 1,
+        borderColor: 'red',
+        title: `⚠ Error: ${title}`,
+        titleAlignment: 'left',
+      })
+    )
   }
-
-  // ---
 }
