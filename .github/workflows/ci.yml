@@ -330,7 +330,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [16, 18]
+        node-version: [16.20.0, 18]
       fail-fast: true
     name: 🔭 Telemetry check / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
@@ -360,7 +360,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [16, 18]
+        node-version: [16.20.0, 18]
     name: 🔭 Telemetry check / ${{ matrix.os }} / node ${{ matrix.node-version }} latest
     runs-on: ${{ matrix.os }}
     steps:

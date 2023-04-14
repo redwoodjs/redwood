@@ -100,8 +100,9 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
             name="${column.name}"
             ${column.defaultProp}={${column.deserializeFunction && column.deserializeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserializeFunction && ')'}}
             className="rw-input"
-            errorClassName="rw-input rw-input-error"<%= !column.validation ? '' : `
-            validation=${column.validation}` %>
+            errorClassName="rw-input rw-input-error"
+            <%= !column.validation ? '' : `validation=${column.validation}` %>
+            <%= column.isRelationalField && !column.isRequired ? `emptyAs={'undefined'}` : '' %>
           />
         <% } %>
 

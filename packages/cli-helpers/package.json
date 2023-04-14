@@ -27,7 +27,7 @@
     "@redwoodjs/project-config": "4.0.0",
     "@redwoodjs/telemetry": "4.0.0",
     "chalk": "4.1.2",
-    "core-js": "3.29.1",
+    "core-js": "3.30.0",
     "execa": "5.1.1",
     "listr2": "5.0.8",
     "lodash.memoize": "4.1.2",
