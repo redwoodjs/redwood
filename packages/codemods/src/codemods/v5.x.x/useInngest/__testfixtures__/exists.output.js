@@ -16,11 +16,10 @@ export const handler = createGraphQLHandler({
   directives,
   sdls,
   services,
+  extraPlugins: [inngestPlugin],
 
   onException: () => {
     // Disconnect from your database with an unhandled exception.
     db.$disconnect();
   },
-
-  extraPlugins: [inngestPlugin],
 });

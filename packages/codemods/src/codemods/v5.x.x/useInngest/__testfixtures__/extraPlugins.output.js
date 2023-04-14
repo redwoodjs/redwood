@@ -8,13 +8,18 @@ import { getCurrentUser } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
+import {foo} from 'src/lib/foo'
+
+import { inngestPlugin } from "src/inngest/plugin";
+
 export const handler = createGraphQLHandler({
   getCurrentUser,
   loggerConfig: { logger, options: {} },
   directives,
   sdls,
   services,
-  extraPlugins: [foo],
+  extraPlugins: [foo, inngestPlugin],
+
   onException: () => {
     // Disconnect from your database with an unhandled exception.
     db.$disconnect()
