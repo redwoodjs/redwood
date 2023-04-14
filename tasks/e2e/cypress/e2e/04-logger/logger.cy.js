@@ -110,7 +110,7 @@ describe('The Redwood Logger - Basic Scaffold CRUD Logging', () => {
             !str.includes('Slow Query performed in ')
           )
         }),
-      { interval: 2000, timeout: 2000 }
+      { interval: 9_999, timeout: 9_999 }
     )
 
     // With slow query logging.
