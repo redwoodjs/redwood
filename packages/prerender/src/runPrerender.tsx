@@ -168,8 +168,11 @@ function insertChunkLoadingScript(
       const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
       const pagePath = route.filePath.slice(pagesIndex)
 
+      console.log('buildManifest', buildManifest)
+      console.log('pagePath', pagePath)
+
       // TODO: Check if the initial / is needed
-      chunkPath = '/' + buildManifest[pagePath].file
+      chunkPath = '/' + buildManifest[pagePath]?.file
       isModule = true
     }
 

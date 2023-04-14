@@ -1,6 +1,7 @@
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
+import generate from '@babel/generator'
 
 import {
   importStatementPath,
@@ -158,13 +159,24 @@ export default function (
                     t.objectProperty(
                       t.identifier('prerenderLoader'),
                       t.arrowFunctionExpression(
-                        [],
-                        useStaticImports
+                        [t.identifier('name')],
+                        vite
+                          ? useStaticImports
+                            ? t.callExpression(t.identifier('require'), [
+                                importArgument,
+                              ])
+                            : t.objectExpression([
+                                t.objectProperty(
+                                  t.identifier('default'),
+                                  t.memberExpression(
+                                    t.identifier('globalThis'),
+                                    t.identifier('name'),
+                                    true
+                                  )
+                                ),
+                              ])
+                          : useStaticImports
                           ? t.callExpression(t.identifier('require'), [
-                              t.stringLiteral(relativeImport),
-                            ])
-                          : vite
-                          ? t.callExpression(t.identifier('await import'), [
                               t.stringLiteral(relativeImport),
                             ])
                           : t.callExpression(
@@ -179,8 +191,8 @@ export default function (
                                   [t.stringLiteral(relativeImport)]
                                 ),
                               ]
-                            ),
-                        vite // async arrow function when using vite
+                            )
+                        // !useStaticImports && vite // async arrow function when using vite
                       )
                     ),
                   ])
@@ -188,8 +200,12 @@ export default function (
               ])
             )
           }
+
           // Insert at the top of the file
           p.node.body.unshift(...nodes)
+
+          // console log the generated code
+          console.log(generate(p.node))
         },
       },
     },

@@ -326,7 +326,7 @@ export function flattenSearchParams(
 export interface Spec {
   name: string
   loader: () => Promise<{ default: React.ComponentType<unknown> }>
-  prerenderLoader: () => { default: React.ComponentType<unknown> }
+  prerenderLoader: (name?: string) => { default: React.ComponentType<unknown> }
 }
 
 export function isSpec(
