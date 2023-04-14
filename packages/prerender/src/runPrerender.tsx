@@ -149,7 +149,7 @@ function insertChunkLoadingScript(
 
   // The code for `/` is already included in app.<hash>.js and won't have a
   // separate chunk
-  if (renderPath !== '/') {
+  if (renderPath !== '-TODO: vite check-/') {
     const buildManifest = JSON.parse(
       fs.readFileSync(
         path.join(getPaths().web.dist, 'build-manifest.json'),
@@ -159,7 +159,7 @@ function insertChunkLoadingScript(
 
     // Webpack
     let chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
-    let isModule = false
+    let isVite = false
 
     if (!chunkPath && route?.filePath) {
       // Vite
@@ -173,7 +173,7 @@ function insertChunkLoadingScript(
 
       // TODO: Check if the initial / is needed
       chunkPath = '/' + buildManifest[pagePath]?.file
-      isModule = true
+      isVite = true
     }
 
     if (!chunkPath) {
@@ -182,8 +182,34 @@ function insertChunkLoadingScript(
 
     indexHtmlTree('head').prepend(
       `<script defer="defer" src="${chunkPath}" ${
-        isModule ? 'type="module"' : ''
+        isVite ? 'type="module"' : ''
       }></script>`
+    )
+
+    if (!isVite || !route.pageIdentifier) {
+      return
+    }
+
+    const fullChunkPath = path.join(getPaths().web.dist, chunkPath)
+    const jsChunk = fs.readFileSync(fullChunkPath, 'utf-8')
+
+    // The chunk will end with something like this: ,{});export{y as default};
+    // We need to extract the variable name (y) so that we expose it on
+    // `window` as `<PageName>Page`
+    const matches = jsChunk.match(/export\s*\{\s*\w+ as default\s*\}/g) || []
+    const lastIndex = jsChunk.lastIndexOf(matches[matches.length - 1])
+    const varNameMatch = jsChunk
+      .slice(lastIndex)
+      .match(/export\s*\{\s*(\w+) as default\s*\}/)
+
+    // TODO: Do we need to name space the pages on `window`?
+    // E.g. `globalThis.__REDWOOD_PRERENDER_PAGES__.<PageName>`
+    fs.writeFileSync(
+      fullChunkPath,
+      jsChunk +
+        '\n' +
+        `globalThis.${route?.pageIdentifier}=${varNameMatch?.[1]}` +
+        '\n'
     )
   }
 }
