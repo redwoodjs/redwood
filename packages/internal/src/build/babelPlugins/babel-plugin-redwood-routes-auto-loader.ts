@@ -169,7 +169,9 @@ export default function (
                                 t.objectProperty(
                                   t.identifier('default'),
                                   t.memberExpression(
-                                    t.identifier('globalThis'),
+                                    t.identifier(
+                                      'globalThis.__REDWOOD__PRERENDER_PAGES'
+                                    ),
                                     t.identifier('name'),
                                     true
                                   )

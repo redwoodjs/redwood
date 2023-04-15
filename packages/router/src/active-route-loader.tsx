@@ -60,15 +60,8 @@ export const ActiveRouteLoader = ({
   const usePrerenderLoader =
     globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad)
 
-  console.log('spec.name', spec.name)
-  // @ts-expect-error - just testing
-  console.log('globalThis[spec.name]', globalThis[spec.name])
-  console.log('page', spec.prerenderLoader(spec.name).default)
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
     [path]: {
-      // ? // @ts-expect-error - just testing
-      //   globalThis[spec.name] || spec.prerenderLoader(spec.name).default
-      // : ArlNullPage,
       page: usePrerenderLoader
         ? spec.prerenderLoader(spec.name).default
         : ArlNullPage,

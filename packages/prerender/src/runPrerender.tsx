@@ -202,14 +202,11 @@ function insertChunkLoadingScript(
       .slice(lastIndex)
       .match(/export\s*\{\s*(\w+) as default\s*\}/)
 
-    // TODO: Do we need to name space the pages on `window`?
-    // E.g. `globalThis.__REDWOOD_PRERENDER_PAGES__.<PageName>`
     fs.writeFileSync(
       fullChunkPath,
       jsChunk +
-        '\n' +
-        `globalThis.${route?.pageIdentifier}=${varNameMatch?.[1]}` +
-        '\n'
+        'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
+        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
     )
   }
 }
