@@ -5,6 +5,7 @@ import {
   IExecutableSchemaDefinition,
 } from '@graphql-tools/schema'
 import { IResolvers } from '@graphql-tools/utils'
+import * as opentelemetry from '@opentelemetry/api'
 import type {
   GraphQLSchema,
   GraphQLFieldMap,
@@ -15,6 +16,8 @@ import type {
 import merge from 'lodash.merge'
 import omitBy from 'lodash.omitby'
 
+import { getConfig } from '@redwoodjs/project-config'
+
 import type { RedwoodDirective } from '../plugins/useRedwoodDirective'
 import * as rootGqlSchema from '../rootSchema'
 import {
@@ -23,6 +26,49 @@ import {
   GraphQLTypeWithFields,
   SdlGlobImports,
 } from '../types'
+
+const wrapWithOpenTelemetry = async (
+  func: any,
+  args: any,
+  root: any,
+  context: any,
+  info: any,
+  name: string
+) => {
+  const tracer = opentelemetry.trace.getTracer('redwoodjs')
+  const parentSpan =
+    context !== null &&
+    (context['OPEN_TELEMETRY_GRAPHQL'] as opentelemetry.Span | undefined)
+  const parentContext = parentSpan
+    ? opentelemetry.trace.setSpan(opentelemetry.context.active(), parentSpan)
+    : opentelemetry.context.active()
+
+  return await tracer.startActiveSpan(
+    `redwoodjs:graphql:resolver:${name}`,
+    {},
+    parentContext,
+    async (span) => {
+      span.setAttribute(
+        'graphql.execute.operationName',
+        `${args.operationName || 'Anonymous Operation'}`
+      )
+      try {
+        const result: any = await func(args, {
+          root,
+          context,
+          info,
+        })
+        span.end()
+        return result
+      } catch (ex) {
+        span.recordException(ex as Error)
+        span.setStatus({ code: opentelemetry.SpanStatusCode.ERROR })
+        span.end()
+        throw ex
+      }
+    }
+  )
+}
 
 const mapFieldsToService = ({
   fields = {},
@@ -52,12 +98,24 @@ const mapFieldsToService = ({
         ...resolvers,
         // Map the arguments from GraphQL to an ordinary function a service would
         // expect.
-        [name]: (
+        [name]: async (
           root: unknown,
           args: unknown,
           context: unknown,
           info: unknown
-        ) => services[name](args, { root, context, info }),
+        ) => {
+          if (getConfig().experimental.opentelemetry.enabled) {
+            return wrapWithOpenTelemetry(
+              services[name],
+              args,
+              root,
+              context,
+              info,
+              name
+            )
+          }
+          return services[name](args, { root, context, info })
+        },
       }
     }
 
