@@ -7133,7 +7133,7 @@ __metadata:
     qs: 6.11.1
     split2: 4.2.0
     sqlite: 4.1.2
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     typescript: 5.0.3
     uuid: 9.0.0
     yargs: 17.7.1
@@ -28868,9 +28868,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite3@npm:5.1.4":
-  version: 5.1.4
-  resolution: "sqlite3@npm:5.1.4"
+"sqlite3@npm:5.1.5":
+  version: 5.1.5
+  resolution: "sqlite3@npm:5.1.5"
   dependencies:
     "@mapbox/node-pre-gyp": ^1.0.0
     node-addon-api: ^4.2.0
@@ -28884,7 +28884,7 @@ __metadata:
   peerDependenciesMeta:
     node-gyp:
       optional: true
-  checksum: 6105ef77ff7da578645bba9a6b86ca9838b22ee8cc07a4fb21909201745fe6f8a06c158c42eeb18e4ebcc45e1f53c606d2faec0d88dc884b8934619a67cb5ac4
+  checksum: 36dfd99b7b97c643606ac1e74813c0510f58e43b061674aad9ed0f0b986a27e27cbf51fe7c17ee34b2fea4172b9769309efea8c754a33e4cb77217ce55da75d0
   languageName: node
   linkType: hard
 
