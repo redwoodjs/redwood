@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/studio",
-  "version": "0.0.1",
+  "version": "4.0.0",
   "description": "Redwood's development studio",
   "repository": {
     "type": "git",
