@@ -1,7 +1,6 @@
-import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '../../lib'
+import { isModuleInstalled, installRedwoodModule } from '../../lib/packages'
 
 export const command = 'studio'
 export const description = 'Run the Redwood development studio'
@@ -17,28 +16,21 @@ export const builder = (yargs) => {
 
 export const handler = async () => {
   try {
+    // Check the module is installed
+    if (!isModuleInstalled('@redwoodjs/studio')) {
+      console.log(
+        'The studio package is not installed, installing it for you, this may take a moment...'
+      )
+      await installRedwoodModule('@redwoodjs/studio')
+      console.log('Studio package installed successfully.')
+    }
+
     // Import studio and start it
     const { start } = await import('@redwoodjs/studio')
     await start()
   } catch (e) {
     console.log('Cannot start the development studio')
-
-    // If we don't have the package installed, install it for the user
-    if (e.code === 'MODULE_NOT_FOUND') {
-      console.log(
-        'Installing the studio package for you, this may take a moment...'
-      )
-      await execa('yarn', ['add', '@redwoodjs/studio', '--dev'], {
-        shell: true,
-        cwd: getPaths().base,
-      })
-      console.log(
-        'Studio package installed successfully, please execute the command again.'
-      )
-    } else {
-      // Otherwise, log the error and exit
-      console.log(e)
-      process.exit(1)
-    }
+    console.log(e)
+    process.exit(1)
   }
 }
