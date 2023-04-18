@@ -7,12 +7,11 @@ import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
-import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, getConfig } from '../lib'
+import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
@@ -86,32 +85,24 @@ export const handler = async ({
     },
     side.includes('web') && {
       // Clean web/dist before building
-      // Vite handles this internally
       title: 'Cleaning Web...',
       task: () => {
         return rimraf(rwjsPaths.web.dist)
       },
-      enabled: getConfig().web.bundler !== 'vite',
     },
     side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
-        if (getConfig().web.bundler === 'vite') {
-          await buildWeb({
-            verbose,
-          })
-        } else {
-          await execa(
-            `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-              '@redwoodjs/core/config/webpack.production.js'
-            )}`,
-            {
-              stdio: verbose ? 'inherit' : 'pipe',
-              shell: true,
-              cwd: rwjsPaths.web.base,
-            }
-          )
-        }
+        await execa(
+          `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
+            '@redwoodjs/core/config/webpack.production.js'
+          )}`,
+          {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+            cwd: rwjsPaths.web.base,
+          }
+        )
 
         console.log('Creating 200.html...')
 

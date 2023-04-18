@@ -43,29 +43,3 @@ export const prebuildWebFiles = (srcFiles: string[], flags?: Flags) => {
     return dstPath
   })
 }
-
-interface BuildOptions {
-  verbose?: boolean
-}
-
-/**
- *
- * Builds the web side with Vite
- * Note that the webpack versoin is triggered via the webpack CLI
- *
- */
-export const buildWeb = async ({ verbose }: BuildOptions) => {
-  // @NOTE: Using dynamic import, because vite is still opt-in
-  const { build } = await import('vite')
-  const viteConfig = getPaths().web.viteConfig
-
-  if (!viteConfig) {
-    throw new Error('Could not locate your web/vite.config.{js,ts} file')
-  }
-
-  return build({
-    configFile: viteConfig,
-    envFile: false,
-    logLevel: verbose ? 'info' : 'warn',
-  })
-}
