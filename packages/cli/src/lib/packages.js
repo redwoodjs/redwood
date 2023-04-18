@@ -64,9 +64,9 @@ export function isModuleInstalled(module) {
   }
 
   // Check any of the places require would look for this module.
-  // This enables testing auth setup packages with `yarn rwfw project:copy`.
+  // This enables testing with `yarn rwfw project:copy`.
   //
-  // We can't use require.resolve here because it cahces the exception
+  // We can't use require.resolve here because it caches the exception
   // Making it impossible to require when we actually do install it...
   return require.resolve
     .paths(`${module}/package.json`)
