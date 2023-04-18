@@ -2341,7 +2341,7 @@ describe('dbAuth', () => {
     })
 
     it('createUser db check is called with insensitive string when user has provided one in SignupFlowOptions', async () => {
-      const spy = jest.spyOn(db.user, 'findUnique')
+      const spy = jest.spyOn(db.user, 'findFirst')
       options.signup.usernameMatch = 'insensitive'
 
       const dbUser = await createDbUser()
@@ -2365,7 +2365,7 @@ describe('dbAuth', () => {
       jest.clearAllMocks()
 
       const defaultMessage = options.signup.errors.usernameTaken
-      const spy = jest.spyOn(db.user, 'findUnique')
+      const spy = jest.spyOn(db.user, 'findFirst')
       delete options.signup.usernameMatch
 
       const dbUser = await createDbUser()
