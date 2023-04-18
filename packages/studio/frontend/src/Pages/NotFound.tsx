@@ -1,12 +1,16 @@
 import React from 'react'
 
+import WarningPanel from '../Components/Panels/WarningPanel'
+
 function App() {
   return (
-    <div className="flex flex-col justify-center py-12 sm:py-16 mx-auto max-w-[95%] md:max-w-[80%] px-6 lg:px-8">
-      <span className="text-4xl font-mono">4🤔4</span>
-      <span className="text-xl">
-        We couldn&apos;t find something cool to show you...
-      </span>
+    <div className="flex flex-col justify-center sm:py-4 mx-auto max-w-[97.5%] md:max-w-[90%] px-6 lg:px-8">
+      <WarningPanel
+        warning={{
+          status: 404,
+          message: `Unable to find anything cool to show you.`,
+        }}
+      />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify'
 
 import { getDatabase } from '../database'
+import { retypeSpan } from '../services/span'
 import type {
   RawAttribute,
   RestructuredAttributes,
@@ -124,6 +125,9 @@ export default async function routes(fastify: FastifyInstance, _options: any) {
         JSON.stringify(span.attributes),
         JSON.stringify(span.resourceAttributes)
       )
+      if (spanInsertResult.lastID) {
+        await retypeSpan(undefined, { id: spanInsertResult.lastID })
+      }
       return spanInsertResult
     }
 

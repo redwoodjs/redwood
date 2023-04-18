@@ -3,18 +3,22 @@ import React from 'react'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import ReactDOM from 'react-dom/client'
 import { HashRouter, Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
+import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 
 import MasterLayout from './Layouts/MasterLayout'
 import ComingSoon from './Pages/ComingSoon'
 import Config from './Pages/Config'
+import Span from './Pages/Explore/Span'
+import SpanList from './Pages/Explore/SpanList'
+import Trace from './Pages/Explore/Trace'
+import TraceList from './Pages/Explore/TraceList'
+import TraceTree from './Pages/Explore/TraceTree'
 import GraphiQL from './Pages/GraphiQL'
 import Landing from './Pages/Landing'
 import NotFound from './Pages/NotFound'
-import SQL from './Pages/SQL'
-import Trace from './Pages/Tracing/Trace'
-import Tracing from './Pages/Tracing/Tracing'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4318/graphql',
@@ -29,15 +33,18 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <Route element={<MasterLayout />}>
             <Route index element={<Landing />} />
 
-            {/* Tracing */}
-            <Route path="/tracing" element={<Tracing />} />
-            <Route path="/tracing/:traceId" element={<Trace />} />
+            {/* Explore */}
+            <Route path="/explorer">
+              {/* OpenTelemetry tracing */}
+              <Route path="trace" element={<TraceList />} />
+              <Route path="trace/:traceId" element={<Trace />} />
+              <Route path="trace-tree/:traceId" element={<TraceTree />} />
+              <Route path="span" element={<SpanList />} />
+              <Route path="span/:spanId" element={<Span />} />
+            </Route>
 
             {/* GraphiQL */}
             <Route path="/graphiql" element={<GraphiQL />} />
-
-            {/* SQL */}
-            <Route path="/sql" element={<SQL />} />
 
             {/* Config */}
             <Route path="/config" element={<Config />} />
@@ -51,5 +58,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </Routes>
       </HashRouter>
     </ApolloProvider>
+    <ToastContainer position="bottom-right" autoClose={5_000} />
   </React.StrictMode>
 )
