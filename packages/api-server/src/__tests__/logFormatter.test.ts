@@ -98,7 +98,6 @@ describe('LogFormatter', () => {
     })
   })
 
-
   describe('Custom log data', () => {
     it('Should include the custom log attribute text', () => {
       expect(
