@@ -160,7 +160,7 @@ function insertChunkLoadingScript(
     const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
 
     if (!chunkPath) {
-      throw new Error('Could not found chunk for ' + route?.pageIdentifier)
+      throw new Error('Could not find chunk for ' + route?.pageIdentifier)
     }
 
     indexHtmlTree('head').prepend(

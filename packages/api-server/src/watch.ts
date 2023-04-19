@@ -2,6 +2,7 @@
 
 import { fork } from 'child_process'
 import type { ChildProcess } from 'child_process'
+import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
@@ -61,19 +62,40 @@ const validate = async () => {
   }
 }
 
-const rebuildApiServer = () => {
+const rebuildApiServer = async () => {
   try {
     // Shutdown API server
     killApiServer()
 
     const buildTs = Date.now()
     process.stdout.write(c.dim(c.italic('Building... ')))
-    buildApi()
+    await buildApi()
     console.log(c.dim(c.italic('Took ' + (Date.now() - buildTs) + ' ms')))
 
     const forkOpts = {
       execArgv: process.execArgv,
     }
+
+    // OpenTelemetry SDK Setup
+    if (getConfig().experimental.opentelemetry.enabled) {
+      const opentelemetrySDKScriptPath =
+        getConfig().experimental.opentelemetry.apiSdk
+      if (opentelemetrySDKScriptPath) {
+        console.log(
+          `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPath}`
+        )
+        if (fs.existsSync(opentelemetrySDKScriptPath)) {
+          forkOpts.execArgv = forkOpts.execArgv.concat([
+            `--require=${opentelemetrySDKScriptPath}`,
+          ])
+        } else {
+          console.error(
+            `OpenTelemetry setup file does not exist at ${opentelemetrySDKScriptPath}`
+          )
+        }
+      }
+    }
+
     const debugPort = argv['debug-port']
     if (debugPort) {
       forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])

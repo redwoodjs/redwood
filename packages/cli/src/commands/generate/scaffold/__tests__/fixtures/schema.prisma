@@ -25,6 +25,7 @@ model Post {
   metadata   Json
   hugeNumber BigInt      @default(9007199254740992)
   favorites  Favorite[]
+  tag        Tag[]
 }
 
 model User {
@@ -63,4 +64,11 @@ model ExcludeDefault {
   updatedTime DateTime @updatedAt
   nowTime     DateTime @default(now())
   otherTime   DateTime
+}
+
+model Tag {
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  post   Post?  @relation(fields: [postId], references: [id])
+  postId Int?
 }

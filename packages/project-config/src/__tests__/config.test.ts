@@ -22,6 +22,25 @@ describe('getConfig', () => {
         "browser": {
           "open": false,
         },
+        "experimental": {
+          "opentelemetry": {
+            "apiSdk": undefined,
+            "enabled": false,
+          },
+          "studio": {
+            "graphiql": {
+              "authImpersonation": {
+                "authProvider": undefined,
+                "email": undefined,
+                "jwtSecret": "secret",
+                "roles": undefined,
+                "userId": undefined,
+              },
+              "endpoint": "graphql",
+            },
+            "inMemory": false,
+          },
+        },
         "generate": {
           "nestScaffoldByModel": true,
           "stories": true,
@@ -50,6 +69,60 @@ describe('getConfig', () => {
   it('merges configs', () => {
     const config = getConfig(path.join(__dirname, './fixtures/redwood.toml'))
     expect(config.web.port).toEqual(8888)
+
+    expect(config.experimental.studio.inMemory).toEqual(false)
+    expect(config.experimental.studio.graphiql?.endpoint).toEqual('graphql')
+  })
+
+  describe('with studio configs', () => {
+    it('merges studio configs', () => {
+      const config = getConfig(
+        path.join(__dirname, './fixtures/redwood.studio.toml')
+      )
+
+      expect(config.experimental.studio.inMemory).toEqual(false)
+      expect(config.experimental.studio.graphiql?.endpoint).toEqual(
+        'graphql-endpoint'
+      )
+    })
+
+    it('merges studio configs with dbAuth impersonation', () => {
+      const config = getConfig(
+        path.join(__dirname, './fixtures/redwood.studio.dbauth.toml')
+      )
+      expect(config.experimental.studio.inMemory).toEqual(false)
+      expect(config.experimental.studio.graphiql?.endpoint).toEqual('graphql')
+      expect(
+        config.experimental.studio.graphiql?.authImpersonation?.authProvider
+      ).toEqual('dbAuth')
+      expect(
+        config.experimental.studio.graphiql?.authImpersonation?.email
+      ).toEqual('user@example.com')
+      expect(
+        config.experimental.studio.graphiql?.authImpersonation?.userId
+      ).toEqual('1')
+    })
+
+    it('merges studio configs with supabase impersonation', () => {
+      const config = getConfig(
+        path.join(__dirname, './fixtures/redwood.studio.supabase.toml')
+      )
+
+      expect(config.experimental.studio.inMemory).toEqual(false)
+      expect(config.experimental.studio.graphiql?.endpoint).toEqual('graphql')
+      expect(
+        config.experimental.studio.graphiql?.authImpersonation?.authProvider
+      ).toEqual('supabase')
+      expect(
+        config.experimental.studio.graphiql?.authImpersonation?.email
+      ).toEqual('supauser@example.com')
+      expect(
+        config.experimental.studio.graphiql?.authImpersonation?.userId
+      ).toEqual('1')
+      expect(
+        config.experimental.studio.graphiql?.authImpersonation?.jwtSecret
+      ).toEqual('supa-secret')
+    })
   })
 
   it('throws an error when given a bad config path', () => {

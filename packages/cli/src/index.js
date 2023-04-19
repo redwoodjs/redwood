@@ -18,6 +18,7 @@ import * as deployCommand from './commands/deploy'
 import * as destroyCommand from './commands/destroy'
 import * as devCommand from './commands/dev'
 import * as execCommand from './commands/exec'
+import * as experimentalCommand from './commands/experimental'
 import * as generateCommand from './commands/generate'
 import * as infoCommand from './commands/info'
 import * as lintCommand from './commands/lint'
@@ -131,6 +132,7 @@ yargs(hideBin(process.argv))
   .command(destroyCommand)
   .command(devCommand)
   .command(execCommand)
+  .command(experimentalCommand)
   .command(generateCommand)
   .command(infoCommand)
   .command(lintCommand)
