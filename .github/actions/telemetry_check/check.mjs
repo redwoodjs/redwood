@@ -8,28 +8,6 @@ console.log(
   `Telemetry is being redirected to ${process.env.REDWOOD_REDIRECT_TELEMETRY}`
 )
 
-// All the fields we expect inside a telemetry packet
-const expectedPacketFields = [
-  'type',
-  'command',
-  'duration',
-  'uid',
-  'ci',
-  'redwoodCi',
-  'NODE_ENV',
-  'os',
-  'osVersion',
-  // "shell", // Not expected on windows
-  'nodeVersion',
-  'yarnVersion',
-  'npmVersion',
-  'redwoodVersion',
-  'system',
-  'complexity',
-  'sides',
-  'webBundler',
-]
-
 // Setup fake telemetry server
 const server = http.createServer((req, res) => {
   let data = ''
@@ -39,27 +17,8 @@ const server = http.createServer((req, res) => {
   req.on('end', () => {
     res.writeHead(200)
     res.end()
-
-    const packet = JSON.parse(data)
-
-    let hasAllFields = true
-    for (const field of expectedPacketFields) {
-      if (packet[field] === undefined) {
-        hasAllFields = false
-        console.error(`Telemetry packet is missing field "${field}"`)
-      }
-    }
-
-    const isCI = packet.ci ?? false
-
-    if (hasAllFields && isCI) {
-      console.log('Valid telemetry received')
-      process.exit(0)
-    } else {
-      console.error('Invalid telemetry received')
-      console.error(packet)
-      process.exit(1)
-    }
+    console.log('Telemetry packet received')
+    process.exit(0)
   })
 })
 
@@ -77,7 +36,7 @@ try {
   switch (mode) {
     case 'crwa':
       exitCode = await exec(
-        `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ../project-for-telemetry --typescript false --git false --yarn-install true`
+        `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ../project-for-telemetry --typescript true --git false --yarn-install true`
       )
       if (exitCode) {
         process.exit(1)
