@@ -175,13 +175,14 @@ function insertChunkLoadingScript(
     const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
     const pagePath = route.filePath.slice(pagesIndex)
 
-    console.log('buildManifest', buildManifest)
-    console.log('pagePath', pagePath)
+    chunkPath = buildManifest[pagePath]?.file
 
-    // TODO: Check if the initial / is needed
-    chunkPath = '/' + buildManifest[pagePath]?.file
-
-    if (!buildManifest[pagePath]?.file) {
+    if (!chunkPath) {
+      // This happens when the page is manually imported in Routes.tsx
+      // (as opposed to being auto-imported)
+      // It could also be that Vite for some reason didn't create a chunk for
+      // this page. In that case it'd be nice to throw an error, but there's no
+      // easy way to differentiate between the two cases.
       return
     }
   }

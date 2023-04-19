@@ -1,7 +1,6 @@
 import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
-import generate from '@babel/generator'
 
 import {
   importStatementPath,
@@ -170,9 +169,6 @@ export default function (
 
           // Insert at the top of the file
           p.node.body.unshift(...nodes)
-
-          // console log the generated code
-          console.log('babel plugin', generate(p.node))
         },
       },
     },
