@@ -14422,6 +14422,7 @@ __metadata:
   resolution: "create-redwood-app@workspace:packages/create-redwood-app"
   dependencies:
     "@babel/cli": 7.21.0
+    "@babel/node": 7.20.7
     "@babel/runtime-corejs3": 7.21.0
     "@opentelemetry/api": 1.4.1
     "@opentelemetry/exporter-trace-otlp-http": 0.37.0
