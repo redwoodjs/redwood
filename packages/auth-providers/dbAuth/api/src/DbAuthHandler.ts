@@ -1301,7 +1301,7 @@ export class DbAuthHandler<
             },
           }
 
-      const user = await this.dbAccessor.findUnique({
+      const user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
       })
       if (user) {
