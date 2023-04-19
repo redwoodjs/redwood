@@ -173,6 +173,11 @@ function insertChunkLoadingScript(
 
       // TODO: Check if the initial / is needed
       chunkPath = '/' + buildManifest[pagePath]?.file
+
+      if (!buildManifest[pagePath]?.file) {
+        return
+      }
+
       isVite = true
     }
 

@@ -361,6 +361,7 @@ export function normalizePage(
 
   // Wrap the Page in a fresh spec, and put it in a promise to emulate
   // an async module import.
+  // Also provide a synchronous version of the loader for prerendered pages.
   return {
     name: specOrPage.name,
     loader: async () => ({ default: specOrPage }),

@@ -101,8 +101,8 @@ export const getWebSideBabelPlugins = (
 }
 
 export const getWebSideOverrides = (
-  { staticImports, forVite }: Flags = {
-    staticImports: false,
+  { prerender, forVite }: Flags = {
+    prerender: false,
     forVite: false,
   }
 ) => {
@@ -120,7 +120,7 @@ export const getWebSideOverrides = (
           require('../babelPlugins/babel-plugin-redwood-routes-auto-loader')
             .default,
           {
-            useStaticImports: staticImports,
+            prerender,
             vite: forVite,
           },
         ],
@@ -202,7 +202,7 @@ export const getWebSideBabelConfigPath = () => {
 // These flags toggle on/off certain features
 export interface Flags {
   forJest?: boolean // will change the alias for module-resolver plugin
-  staticImports?: boolean // will use require instead of import for routes-auto-loader plugin
+  prerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
   forVite?: boolean
 }
 
@@ -237,7 +237,7 @@ export const registerWebSideBabelHook = ({
     // We only register for prerender currently
     // Static importing pages makes sense
     overrides: [
-      ...getWebSideOverrides({ staticImports: true, forVite }),
+      ...getWebSideOverrides({ prerender: true, forVite }),
       ...overrides,
     ],
   })
