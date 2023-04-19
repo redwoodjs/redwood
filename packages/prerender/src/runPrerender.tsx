@@ -148,10 +148,8 @@ function insertChunkLoadingScript(
     throw new Error('Could not find a Route matching ' + renderPath)
   }
 
-  // For WebPack the code for the page at `/` is already included in
-  // app.<hash>.js and won't have a separate chunk
-  if (!vite && renderPath === '/') {
-    return
+  if (!route.pageIdentifier) {
+    throw new Error(`Route for ${renderPath} has no pageIdentifier`)
   }
 
   const buildManifest = JSON.parse(
@@ -161,34 +159,25 @@ function insertChunkLoadingScript(
     )
   )
 
-  if (!route.pageIdentifier) {
-    throw new Error(`Route for ${renderPath} has no pageIdentifier`)
-  }
-
   // Webpack
   let chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
 
-  if (!chunkPath && route?.filePath) {
-    // Vite
-
+  if (vite && !chunkPath && route?.filePath) {
     // TODO: Make sure this works on Windows
     const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
     const pagePath = route.filePath.slice(pagesIndex)
 
     chunkPath = buildManifest[pagePath]?.file
-
-    if (!chunkPath) {
-      // This happens when the page is manually imported in Routes.tsx
-      // (as opposed to being auto-imported)
-      // It could also be that Vite for some reason didn't create a chunk for
-      // this page. In that case it'd be nice to throw an error, but there's no
-      // easy way to differentiate between the two cases.
-      return
-    }
   }
 
   if (!chunkPath) {
-    throw new Error('Could not find chunk for ' + route?.pageIdentifier)
+    // This happens when the page is manually imported in Routes.tsx
+    // (as opposed to being auto-imported)
+    // It also happens for the page at '/' with Webpack
+    // It could also be that Webpack or Vite for some reason didn't create a
+    // chunk for this page. In that case it'd be nice to throw an error, but
+    // there's no easy way to differentiate between the two cases.
+    return
   }
 
   indexHtmlTree('head').prepend(

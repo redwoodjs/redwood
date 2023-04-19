@@ -207,6 +207,7 @@ function prerenderLoaderImpl(
       ),
     ])
   } else {
+    // Use __webpack_require__ otherwise all pages will be bundled
     implForBuild = t.callExpression(t.identifier('__webpack_require__'), [
       t.callExpression(t.identifier('require.resolveWeak'), [
         t.stringLiteral(relativeImport),
