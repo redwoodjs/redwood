@@ -18,11 +18,21 @@ import { SERVERLESS_API_YML } from '../templates/serverless/api'
 import { SERVERLESS_WEB_YML } from '../templates/serverless/web'
 
 export const command = 'serverless'
-export const description = 'Setup deployments via the Serverless Framework'
+export const description =
+  '[DEPRECATED]\n' +
+  'Setup Serverless Framework AWS deploy\n' +
+  'For more information:\n' +
+  'https://redwoodjs.com/docs/deploy/serverless'
 
 export const aliases = ['aws-serverless']
 
 export const notes = [
+  c.error('DEPRECATED option not officially supported'),
+  '',
+  'For more information:',
+  'https://redwoodjs.com/docs/deploy/serverless',
+  '',
+  '',
   c.green("You're almost ready to deploy using the Serverless framework!"),
   '',
   '• See https://redwoodjs.com/docs/deploy#serverless-deploy for more info. If you ',
