@@ -31,7 +31,7 @@
     "@babel/runtime-corejs3": "7.21.0",
     "boxen": "5.1.2",
     "chalk": "4.1.2",
-    "core-js": "3.29.1",
+    "core-js": "3.30.0",
     "enquirer": "2.3.6",
     "stdout-update": "1.6.8"
   },
