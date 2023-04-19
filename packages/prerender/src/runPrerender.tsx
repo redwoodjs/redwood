@@ -147,8 +147,8 @@ function insertChunkLoadingScript(
     throw new Error('Could not find a Route matching ' + renderPath)
   }
 
-  // The code for `/` is already included in app.<hash>.js and won't have a
-  // separate chunk
+  // For WebPack the code for `/` is already included in app.<hash>.js and
+  // won't have a separate chunk
   if (renderPath !== '-TODO: vite check-/') {
     const buildManifest = JSON.parse(
       fs.readFileSync(
@@ -194,8 +194,8 @@ function insertChunkLoadingScript(
     const jsChunk = fs.readFileSync(fullChunkPath, 'utf-8')
 
     // The chunk will end with something like this: ,{});export{y as default};
-    // We need to extract the variable name (y) so that we expose it on
-    // `window` as `<PageName>Page`
+    // We need to extract the variable name (y) so that we can expose it on
+    // `globalThis` as `<PageName>Page`
     const matches = jsChunk.match(/export\s*\{\s*\w+ as default\s*\}/g) || []
     const lastIndex = jsChunk.lastIndexOf(matches[matches.length - 1])
     const varNameMatch = jsChunk
