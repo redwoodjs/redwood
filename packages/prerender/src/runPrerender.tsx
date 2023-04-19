@@ -135,7 +135,8 @@ async function recursivelyRender(
 
 function insertChunkLoadingScript(
   indexHtmlTree: CheerioAPI,
-  renderPath: string
+  renderPath: string,
+  vite: boolean
 ) {
   const prerenderRoutes = detectPrerenderRoutes()
 
@@ -147,73 +148,78 @@ function insertChunkLoadingScript(
     throw new Error('Could not find a Route matching ' + renderPath)
   }
 
-  // For WebPack the code for `/` is already included in app.<hash>.js and
-  // won't have a separate chunk
-  if (renderPath !== '-TODO: vite check-/') {
-    const buildManifest = JSON.parse(
-      fs.readFileSync(
-        path.join(getPaths().web.dist, 'build-manifest.json'),
-        'utf-8'
-      )
+  // For WebPack the code for the page at `/` is already included in
+  // app.<hash>.js and won't have a separate chunk
+  if (!vite && renderPath === '/') {
+    return
+  }
+
+  const buildManifest = JSON.parse(
+    fs.readFileSync(
+      path.join(getPaths().web.dist, 'build-manifest.json'),
+      'utf-8'
     )
+  )
 
-    // Webpack
-    let chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
-    let isVite = false
+  if (!route.pageIdentifier) {
+    throw new Error(`Route for ${renderPath} has no pageIdentifier`)
+  }
 
-    if (!chunkPath && route?.filePath) {
-      // Vite
+  // Webpack
+  let chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
 
-      // TODO: Make sure this works on Windows
-      const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
-      const pagePath = route.filePath.slice(pagesIndex)
+  if (!chunkPath && route?.filePath) {
+    // Vite
 
-      console.log('buildManifest', buildManifest)
-      console.log('pagePath', pagePath)
+    // TODO: Make sure this works on Windows
+    const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
+    const pagePath = route.filePath.slice(pagesIndex)
 
-      // TODO: Check if the initial / is needed
-      chunkPath = '/' + buildManifest[pagePath]?.file
+    console.log('buildManifest', buildManifest)
+    console.log('pagePath', pagePath)
 
-      if (!buildManifest[pagePath]?.file) {
-        return
-      }
+    // TODO: Check if the initial / is needed
+    chunkPath = '/' + buildManifest[pagePath]?.file
 
-      isVite = true
-    }
-
-    if (!chunkPath) {
-      throw new Error('Could not find chunk for ' + route?.pageIdentifier)
-    }
-
-    indexHtmlTree('head').prepend(
-      `<script defer="defer" src="${chunkPath}" ${
-        isVite ? 'type="module"' : ''
-      }></script>`
-    )
-
-    if (!isVite || !route.pageIdentifier) {
+    if (!buildManifest[pagePath]?.file) {
       return
     }
-
-    const fullChunkPath = path.join(getPaths().web.dist, chunkPath)
-    const jsChunk = fs.readFileSync(fullChunkPath, 'utf-8')
-
-    // The chunk will end with something like this: ,{});export{y as default};
-    // We need to extract the variable name (y) so that we can expose it on
-    // `globalThis` as `<PageName>Page`
-    const matches = jsChunk.match(/export\s*\{\s*\w+ as default\s*\}/g) || []
-    const lastIndex = jsChunk.lastIndexOf(matches[matches.length - 1])
-    const varNameMatch = jsChunk
-      .slice(lastIndex)
-      .match(/export\s*\{\s*(\w+) as default\s*\}/)
-
-    fs.writeFileSync(
-      fullChunkPath,
-      jsChunk +
-        'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
-        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
-    )
   }
+
+  if (!chunkPath) {
+    throw new Error('Could not find chunk for ' + route?.pageIdentifier)
+  }
+
+  indexHtmlTree('head').prepend(
+    `<script defer="defer" src="${chunkPath}" ${
+      vite ? 'type="module"' : ''
+    }></script>`
+  )
+
+  if (!vite) {
+    return
+  }
+
+  // This is not needed for WebPack
+
+  const fullChunkPath = path.join(getPaths().web.dist, chunkPath)
+  const jsChunk = fs.readFileSync(fullChunkPath, 'utf-8')
+
+  // The chunk will end with something like this: ,{});export{y as default};
+  // We need to extract the variable name (y) so that we can expose it on
+  // `globalThis` as `<PageName>Page`
+  const matches = jsChunk.match(/export\s*\{\s*\w+ as default\s*\}/g) || []
+  const lastIndex = jsChunk.lastIndexOf(matches[matches.length - 1])
+  const varNameMatch = jsChunk
+    .slice(lastIndex)
+    .match(/export\s*\{\s*(\w+) as default\s*\}/)
+
+  fs.writeFileSync(
+    fullChunkPath,
+    jsChunk +
+      'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
+      `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
+  )
 }
 
 interface PrerenderParams {
@@ -261,11 +267,12 @@ export const runPrerender = async ({
   })
 
   const gqlHandler = await getGqlHandler()
+  const vite = getConfig().web.bundler === 'vite'
 
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
-    forVite: getConfig().web.bundler === 'vite',
+    forVite: vite,
     overrides: [
       {
         plugins: [
@@ -315,7 +322,7 @@ export const runPrerender = async ({
     }
   }
 
-  insertChunkLoadingScript(indexHtmlTree, renderPath)
+  insertChunkLoadingScript(indexHtmlTree, renderPath, vite)
 
   indexHtmlTree('#redwood-app').append(componentAsHtml)
 
