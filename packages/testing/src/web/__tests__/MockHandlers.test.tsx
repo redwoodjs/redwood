@@ -18,11 +18,12 @@ describe('GraphQLMockHandlers', () => {
     }
     const onceResult = {
       article: {
-        id: 1,
+        id: 2,
         title: 'Foobar1',
         body: 'Lorem ipsum123...',
       },
     }
+
     // Create the base response that always returns
     mockGraphQLQuery('GetArticle', () => baseResult)
     // Create a one time handler
@@ -30,6 +31,7 @@ describe('GraphQLMockHandlers', () => {
 
     const FakeComponent = () => {
       const [result, setResult] = useState()
+      const [error, setError] = useState()
       const [fetching, setFetching] = useState(false)
 
       const doFetch = useCallback(() => {
@@ -50,7 +52,7 @@ describe('GraphQLMockHandlers', () => {
                 }
               `,
             variables: {
-              id: 1,
+              id: 3,
             },
           }),
         })
@@ -60,6 +62,7 @@ describe('GraphQLMockHandlers', () => {
           })
           .catch((err) => {
             console.error('err', err)
+            setError(err)
           })
           .finally(() => setFetching(false))
       }, [])
@@ -71,11 +74,12 @@ describe('GraphQLMockHandlers', () => {
           </button>
           <div data-testid="result">{JSON.stringify(result)}</div>
           <div data-testid="status">{String(fetching)}</div>
+          {error && <div data-testid="error">{JSON.stringify(error)}</div>}
         </div>
       )
     }
 
-    render(<FakeComponent />)
+    const { rerender } = render(<FakeComponent />)
 
     const button = screen.getByTestId('fetch')
     const result = screen.getByTestId('result')
@@ -85,7 +89,7 @@ describe('GraphQLMockHandlers', () => {
 
     await waitFor(
       () =>
-        expect(JSON.parse(result.textContent)).toEqual({
+        expect(JSON.parse(result?.textContent ?? '')).toEqual({
           data: onceResult,
         }),
       {
@@ -97,7 +101,7 @@ describe('GraphQLMockHandlers', () => {
 
     await waitFor(
       () =>
-        expect(JSON.parse(result.textContent)).toEqual({
+        expect(JSON.parse(result.textContent ?? '')).toEqual({
           data: baseResult,
         }),
       {
@@ -110,10 +114,43 @@ describe('GraphQLMockHandlers', () => {
     await waitFor(
       () => {
         expect(status).toHaveTextContent('false')
-        expect(JSON.parse(result.textContent)).toEqual({
+        expect(JSON.parse(result.textContent ?? '')).toEqual({
           data: baseResult,
         })
       },
+      {
+        timeout: 2_000,
+      }
+    )
+
+    // Create a networkError
+    mockGraphQLQuery(
+      'GetArticle',
+      () => {
+        return {
+          article: {
+            id: 9001,
+            title: 'Foobar1a',
+            body: 'Lorem ipssfaum123...',
+          },
+        }
+      },
+      'networkError'
+    )
+
+    rerender(<FakeComponent />)
+
+    fireEvent.click(button)
+
+    const error = await screen.findByTestId('error')
+
+    await waitFor(
+      () =>
+        expect(JSON.parse(error?.textContent ?? '')).toEqual({
+          cause: {
+            name: 'NetworkError',
+          },
+        }),
       {
         timeout: 2_000,
       }
