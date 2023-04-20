@@ -508,9 +508,9 @@ async function createRedwoodApp() {
     .parse()
 
   // Record some of the arguments for telemetry
-  trace.getActiveSpan().setAttribute('yarn-install', yarnInstall)
-  trace.getActiveSpan().setAttribute('overwrite', overwrite)
-  trace.getActiveSpan().setAttribute('yarn1', yarn1)
+  trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstall)
+  trace.getActiveSpan()?.setAttribute('overwrite', overwrite)
+  trace.getActiveSpan()?.setAttribute('yarn1', yarn1)
 
   // Get the directory for installation from the args
   const targetDir = String(args).replace(/,/g, '-')
@@ -544,11 +544,11 @@ async function createRedwoodApp() {
 
   // Determine ts/js preference
   const useTypescript = await handleTypescriptPreference(typescriptFlag)
-  trace.getActiveSpan().setAttribute('typescript', useTypescript)
+  trace.getActiveSpan()?.setAttribute('typescript', useTypescript)
 
   // Determine git preference
   const useGit = await handleGitPreference(gitInitFlag)
-  trace.getActiveSpan().setAttribute('git', useGit)
+  trace.getActiveSpan()?.setAttribute('git', useGit)
 
   // Create project files
   await createProjectFiles(newAppDir, overwrite, yarn1)
@@ -559,7 +559,7 @@ async function createRedwoodApp() {
     await installNodeModules(newAppDir)
     trace
       .getActiveSpan()
-      .setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
+      ?.setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
   } else {
     tui.drawText(
       `${RedwoodStyling.warning(
@@ -671,8 +671,8 @@ async function createRedwoodApp() {
     await createRedwoodApp()
 
     // Span housekeeping
-    span.setStatus({ code: SpanStatusCode.OK })
-    span.end()
+    span?.setStatus({ code: SpanStatusCode.OK })
+    span?.end()
   })
 
   // Shutdown telemetry, ensures data is sent before the process exits
