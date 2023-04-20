@@ -48,7 +48,7 @@
     "@babel/preset-typescript": "7.21.0",
     "@babel/runtime-corejs3": "7.21.0",
     "@faker-js/faker": "7.6.0",
-    "@npmcli/arborist": "6.2.6",
+    "@npmcli/arborist": "6.2.8",
     "@nrwl/nx-cloud": "15.3.5",
     "@playwright/test": "1.32.2",
     "@replayio/playwright": "0.3.28",

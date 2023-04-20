@@ -2088,18 +2088,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:^0.16.0":
-  version: 0.16.0
-  resolution: "@clerk/backend@npm:0.16.0"
+"@clerk/backend@npm:^0.17.2":
+  version: 0.17.2
+  resolution: "@clerk/backend@npm:0.17.2"
   dependencies:
-    "@clerk/types": ^3.33.0
+    "@clerk/types": ^3.35.3
     "@peculiar/webcrypto": 1.4.1
     "@types/node": 16.18.6
     deepmerge: 4.2.2
     node-fetch-native: 1.0.1
     snakecase-keys: 5.4.4
     tslib: 2.4.1
-  checksum: b03133e0de46ef37d028766caf85939dbde8efd9803477ea260a069fa9818e21781577bcb579640425c9d4cf2dd69d0d99a0fafb8a246cb0efbf3d4e6fdf35fd
+  checksum: 0b979035f89018981b1906dce852f85647bfde769c06e17b0e7629334f88d831d474f676ad37de43a33d4366a14614350c117ef910c9604fe4cd36b2918c77dc
   languageName: node
   linkType: hard
 
@@ -2117,12 +2117,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.8.1":
-  version: 4.8.1
-  resolution: "@clerk/clerk-sdk-node@npm:4.8.1"
+"@clerk/clerk-sdk-node@npm:4.8.6":
+  version: 4.8.6
+  resolution: "@clerk/clerk-sdk-node@npm:4.8.6"
   dependencies:
-    "@clerk/backend": ^0.16.0
-    "@clerk/types": ^3.33.0
+    "@clerk/backend": ^0.17.2
+    "@clerk/types": ^3.35.3
     "@types/cookies": 0.7.7
     "@types/express": 4.17.14
     "@types/node-fetch": 2.6.2
@@ -2130,7 +2130,7 @@ __metadata:
     cookie: 0.5.0
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: 29b927f9bafcfb3967d143a221c2a65efafc555db37069da6108c808382328c07348b3648d11c932baef778de2859ca809583163375184725eec8ddba69b061c
+  checksum: 517f6e9341d88bee11df3c084104fe6a5fc32bfb408d215a4b75988349326d15086470117fc048f69f0e87bf306b0ca2873f5896de6088e0278b34b69d53b6ce
   languageName: node
   linkType: hard
 
@@ -2143,12 +2143,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.34.0, @clerk/types@npm:^3.33.0":
+"@clerk/types@npm:3.34.0":
   version: 3.34.0
   resolution: "@clerk/types@npm:3.34.0"
   dependencies:
     csstype: 3.1.1
   checksum: 29aba3b6842d5d55692d290eab41bea6936ae9c0b43b9911e3820f09aca875e09bd6b9846f74bfd2db1b5a62e0c0fd6bf4f1836910c3d5447a128d2d75b3bf50
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^3.33.0, @clerk/types@npm:^3.35.3":
+  version: 3.35.3
+  resolution: "@clerk/types@npm:3.35.3"
+  dependencies:
+    csstype: 3.1.1
+  checksum: 9e27e9890bf793c512d8c2dde15035dc2688e951fc158d8d8647553452195aa6c6e1c2adb5279612baa61d93bdb7f0ff8ae8237ab6bd391d06b8a9a0acc7aa6b
   languageName: node
   linkType: hard
 
@@ -4778,9 +4787,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.6":
-  version: 6.2.6
-  resolution: "@npmcli/arborist@npm:6.2.6"
+"@npmcli/arborist@npm:6.2.8":
+  version: 6.2.8
+  resolution: "@npmcli/arborist@npm:6.2.8"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
@@ -4809,15 +4818,15 @@ __metadata:
     parse-conflict-json: ^3.0.0
     proc-log: ^3.0.0
     promise-all-reject-late: ^1.0.0
-    promise-call-limit: ^1.0.1
+    promise-call-limit: ^1.0.2
     read-package-json-fast: ^3.0.2
     semver: ^7.3.7
     ssri: ^10.0.1
     treeverse: ^3.0.0
-    walk-up-path: ^1.0.0
+    walk-up-path: ^3.0.1
   bin:
     arborist: bin/index.js
-  checksum: b03f5c35ff9a9d4440925261eba787d32f23927864b8da9de0d01cd9dea03aa09c03e1acfe9ec83bcfc5db3d2e8ece436516f133483ecf7c1fe36af4e2d3820f
+  checksum: 5703eeca35e2a9f658b91f5e37fe987800deb883eb188eeb71736011e945f78f6ae4b5abac9487c9769f40645cd9e4f12554c2fc443008bc6996d0d75b96bd24
   languageName: node
   linkType: hard
 
@@ -6381,7 +6390,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.3
     "@babel/runtime-corejs3": 7.21.0
-    "@clerk/clerk-sdk-node": 4.8.1
+    "@clerk/clerk-sdk-node": 4.8.6
     "@redwoodjs/api": 4.0.0
     "@types/aws-lambda": 8.10.114
     core-js: 3.30.0
@@ -7233,7 +7242,7 @@ __metadata:
     qs: 6.11.1
     split2: 4.2.0
     sqlite: 4.1.2
-    sqlite3: 5.1.4
+    sqlite3: 5.1.5
     typescript: 5.0.3
     uuid: 9.0.0
     yargs: 17.7.1
@@ -26313,10 +26322,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise-call-limit@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "promise-call-limit@npm:1.0.1"
-  checksum: d78141d605a5ceaa3dd1845f4739a31c950c9a62e165e1e7d68c23ada070b4ebe56e00569090deea201f55bcf37b6f5b38840be4f330dfc47f2ec725427af5d9
+"promise-call-limit@npm:^1.0.1, promise-call-limit@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "promise-call-limit@npm:1.0.2"
+  checksum: 500aed321d7b9212da403db369551d7190c96c8937c3b2d15c6097d1037b17fb802c7decfbc8ba6bb937f1cc1ea291e5eba10ed9ea76adc0f398ab9f7d174a58
   languageName: node
   linkType: hard
 
@@ -27921,7 +27930,7 @@ __metadata:
     "@babel/preset-typescript": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@faker-js/faker": 7.6.0
-    "@npmcli/arborist": 6.2.6
+    "@npmcli/arborist": 6.2.8
     "@nrwl/nx-cloud": 15.3.5
     "@playwright/test": 1.32.2
     "@replayio/playwright": 0.3.28
@@ -28989,9 +28998,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite3@npm:5.1.4":
-  version: 5.1.4
-  resolution: "sqlite3@npm:5.1.4"
+"sqlite3@npm:5.1.5":
+  version: 5.1.5
+  resolution: "sqlite3@npm:5.1.5"
   dependencies:
     "@mapbox/node-pre-gyp": ^1.0.0
     node-addon-api: ^4.2.0
@@ -29005,7 +29014,7 @@ __metadata:
   peerDependenciesMeta:
     node-gyp:
       optional: true
-  checksum: 6105ef77ff7da578645bba9a6b86ca9838b22ee8cc07a4fb21909201745fe6f8a06c158c42eeb18e4ebcc45e1f53c606d2faec0d88dc884b8934619a67cb5ac4
+  checksum: 36dfd99b7b97c643606ac1e74813c0510f58e43b061674aad9ed0f0b986a27e27cbf51fe7c17ee34b2fea4172b9769309efea8c754a33e4cb77217ce55da75d0
   languageName: node
   linkType: hard
 
@@ -31584,6 +31593,13 @@ __metadata:
   version: 1.0.0
   resolution: "walk-up-path@npm:1.0.0"
   checksum: e2dc2346acfeec355c8af17095aa8689b57906f0f3ad5f3ff1b0a29a36ee41904608e9a3545a933a2cfa22f20905e2bbe5dd6469cb31b110c8e129c23103e985
+  languageName: node
+  linkType: hard
+
+"walk-up-path@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "walk-up-path@npm:3.0.1"
+  checksum: 3184738e0cf33698dd58b0ee4418285b9c811e58698f52c1f025435a85c25cbc5a63fee599f1a79cb29ca7ef09a44ec9417b16bfd906b1a37c305f7aa20ee5bc
   languageName: node
   linkType: hard
 
