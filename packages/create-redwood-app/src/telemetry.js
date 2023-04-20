@@ -106,9 +106,9 @@ export async function shutdownTelemetry() {
 }
 
 export function recordErrorViaTelemetry(error) {
-  opentelemetry.trace.getActiveSpan().setStatus({
+  opentelemetry.trace.getActiveSpan()?.setStatus({
     code: SpanStatusCode.ERROR,
     message: error.toString().split('\n')[0],
   })
-  opentelemetry.trace.getActiveSpan().recordException(error)
+  opentelemetry.trace.getActiveSpan()?.recordException(error)
 }
