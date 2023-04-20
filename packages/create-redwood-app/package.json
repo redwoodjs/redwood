@@ -17,7 +17,7 @@
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
-  "dependencies": {
+  "devDependencies": {
     "@opentelemetry/api": "1.4.1",
     "@opentelemetry/exporter-trace-otlp-http": "0.38.0",
     "@opentelemetry/resources": "1.12.0",
@@ -28,14 +28,12 @@
     "check-node-version": "4.2.1",
     "ci-info": "3.8.0",
     "envinfo": "7.8.1",
+    "esbuild": "0.17.18",
     "execa": "5.1.1",
     "fs-extra": "11.1.1",
     "systeminformation": "5.17.12",
     "terminal-link": "2.1.1",
     "yargs": "17.7.1"
-  },
-  "devDependencies": {
-    "esbuild": "0.17.18"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -11,8 +11,6 @@ const result = await esbuild.build({
   bundle: true,
   platform: 'node',
   target: ['node18'],
-  // See https://esbuild.github.io/getting-started/#bundling-for-node.
-  packages: 'external',
   outfile: 'dist/create-redwood-app.js',
   minify: true,
 
