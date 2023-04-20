@@ -23,6 +23,13 @@ describe('GraphQLMockHandlers', () => {
         body: 'Lorem ipsum123...',
       },
     }
+    const fragmentResult = {
+      article: {
+        id: 18,
+        title: 'Foobar18',
+        body: 'Lorem ipsum1238...',
+      },
+    }
 
     // Create the base response that always returns
     mockGraphQLQuery('GetArticle', () => baseResult)
@@ -150,6 +157,81 @@ describe('GraphQLMockHandlers', () => {
           cause: {
             name: 'NetworkError',
           },
+        }),
+      {
+        timeout: 2_000,
+      }
+    )
+
+    // test for fragment graphql
+    const FakeFragmentComponent = () => {
+      const [result, setResult] = useState()
+      const [error, setError] = useState()
+      const [fetching, setFetching] = useState(false)
+
+      const doFetch = useCallback(() => {
+        setFetching(true)
+        fetch('https://example.com/graphql', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: `
+                query GetArticle($id: ID!) {
+                  article(id: $id) {
+                    ...ArticleFragment
+                  }
+                }
+                fragment ArticleFragment on Article {
+                  id
+                  title
+                  body
+                }
+              `,
+            variables: {
+              id: 4,
+            },
+          }),
+        })
+          .then(async (result) => {
+            const data = await result.json()
+            setResult(data)
+          })
+          .catch((err) => {
+            console.error('err', err)
+            setError(err)
+          })
+          .finally(() => setFetching(false))
+      }, [])
+
+      return (
+        <div>
+          <button data-testid="fragment-fetch" onClick={doFetch}>
+            Fetch
+          </button>
+          <div data-testid="fragment-result">{JSON.stringify(result)}</div>
+          <div data-testid="fragment-status">{String(fetching)}</div>
+          {error && (
+            <div data-testid="fragment-error">{JSON.stringify(error)}</div>
+          )}
+        </div>
+      )
+    }
+
+    mockGraphQLQuery('GetArticle', () => fragmentResult)
+
+    rerender(<FakeFragmentComponent />)
+
+    const fragButton = screen.getByTestId('fragment-fetch')
+    const fragResult = screen.getByTestId('fragment-result')
+
+    fireEvent.click(fragButton)
+
+    await waitFor(
+      () =>
+        expect(JSON.parse(fragResult?.textContent ?? '')).toEqual({
+          data: fragmentResult,
         }),
       {
         timeout: 2_000,
