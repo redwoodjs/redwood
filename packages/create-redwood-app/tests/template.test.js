@@ -1,7 +1,8 @@
 const assert = require('assert')
 const fs = require('fs')
-const test = require('node:test')
 const path = require('path')
+
+const test = require('node:test')
 
 const TEMPLATE_PATH = path.resolve(__dirname, '../template')
 
