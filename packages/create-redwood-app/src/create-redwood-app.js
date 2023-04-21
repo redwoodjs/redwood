@@ -6,8 +6,7 @@
 // Usage:
 // `$ yarn create redwood-app ./path/to/new-project`
 
-// import { spawn } from 'child_process'
-import path from 'path'
+import path from 'node:path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
 import chalk from 'chalk'
@@ -440,9 +439,6 @@ async function handleGitPreference(gitInitFlag) {
 
 /**
  * This function creates a new RedwoodJS app.
- *
- * It performs the following actions:
- *  - TODO - Add a list of what this function does
  */
 async function createRedwoodApp() {
   // Introductory message
@@ -457,7 +453,6 @@ async function createRedwoodApp() {
   )
 
   // Extract the args as provided by the user in the command line
-  // TODO: Make all flags have the 'flag' suffix
   const {
     _: args,
     'yarn-install': yarnInstall,
