@@ -42,9 +42,7 @@
   "devDependencies": {
     "@babel/cli": "7.21.0",
     "@babel/node": "7.20.7",
-    "@types/prompts": "2.4.4",
-    "jest": "29.5.0",
-    "typescript": "5.0.3"
+    "jest": "29.5.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
