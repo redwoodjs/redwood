@@ -2746,9 +2746,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.10.0":
-  version: 6.10.0
-  resolution: "@fastify/static@npm:6.10.0"
+"@fastify/static@npm:6.10.1":
+  version: 6.10.1
+  resolution: "@fastify/static@npm:6.10.1"
   dependencies:
     "@fastify/accept-negotiator": ^1.0.0
     "@fastify/send": ^2.0.0
@@ -2757,7 +2757,7 @@ __metadata:
     glob: ^8.0.1
     p-limit: ^3.1.0
     readable-stream: ^4.0.0
-  checksum: 56f2fecb52f7da4ce3faf731507987516cbd9ee21411232f62024044b687825d3b1eb7391b6d0602abf9113d431e04093a39e42ccf361c467c73661fa57c41d7
+  checksum: cac800cebe98bce33e28de9a80eed6a48d56ee230313f3425ae6d68f5373c3923842d393c7c51aae2f755736787eb8326fea7d9f481e354f5766f155c16fba48
   languageName: node
   linkType: hard
 
@@ -6207,7 +6207,7 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@fastify/http-proxy": 9.0.0
-    "@fastify/static": 6.10.0
+    "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@types/aws-lambda": 8.10.114
     "@types/lodash.escape": 4.0.7
@@ -7212,7 +7212,7 @@ __metadata:
     "@babel/plugin-transform-runtime": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@fastify/http-proxy": 9.0.0
-    "@fastify/static": 6.10.0
+    "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@redwoodjs/internal": 4.0.0
     "@types/aws-lambda": 8.10.114
