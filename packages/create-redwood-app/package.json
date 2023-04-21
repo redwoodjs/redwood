@@ -15,9 +15,7 @@
   "scripts": {
     "build": "yarn node ./build.mjs",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest src",
-    "test:watch": "yarn test --watch"
+    "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
     "@opentelemetry/api": "1.4.1",
