@@ -14439,7 +14439,6 @@ __metadata:
     "@opentelemetry/sdk-trace-node": 1.11.0
     "@opentelemetry/semantic-conventions": 1.11.0
     "@redwoodjs/tui": 4.0.0
-    "@types/prompts": 2.4.4
     chalk: 4.1.2
     check-node-version: 4.2.1
     ci-info: 3.8.0
@@ -14450,7 +14449,6 @@ __metadata:
     jest: 29.5.0
     systeminformation: 5.17.12
     terminal-link: 2.1.1
-    typescript: 5.0.3
     yargs: 17.7.1
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
