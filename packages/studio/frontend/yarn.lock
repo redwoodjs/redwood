@@ -517,8 +517,8 @@ __metadata:
   linkType: hard
 
 "@graphiql/toolkit@npm:^0.8.2":
-  version: 0.8.2
-  resolution: "@graphiql/toolkit@npm:0.8.2"
+  version: 0.8.3
+  resolution: "@graphiql/toolkit@npm:0.8.3"
   dependencies:
     "@n1ru4l/push-pull-async-iterable-iterator": ^3.1.0
     meros: ^1.1.4
@@ -528,7 +528,7 @@ __metadata:
   peerDependenciesMeta:
     graphql-ws:
       optional: true
-  checksum: c07bcf27356da73dc99cb8eb4372e75b0ea15cd98b82d46ed221b390172aecfefaf3cb3773425fd8e8ca067540752440a55bc46eaa92311e5d16d270d5b8f1da
+  checksum: 369752b258cea5993298ec29ddb321e0a70351c5d53eb1fe6168772ba29137e32404e7daf3938d4075d8a092cadd65574c75875bc77e59bfdf3eb4ef414eaa7f
   languageName: node
   linkType: hard
 
