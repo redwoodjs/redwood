@@ -3,6 +3,10 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { SESSION_SECRET } from '../envars'
 
+const isNumeric = (id: string) => {
+  return /^\d+$/.test(id)
+}
+
 export const getDBAuthHeader = async (userId?: string) => {
   if (!userId) {
     throw new Error('Require an unique id to generate session cookie')
@@ -14,10 +18,9 @@ export const getDBAuthHeader = async (userId?: string) => {
     )
   }
 
+  const id = isNumeric(userId) ? parseInt(userId) : userId;
   const cookie = CryptoJS.AES.encrypt(
-    // ids muts be integers, so can they be uuids or cuids?
-    // why this may not work on MongoDB?
-    JSON.stringify({ id: parseInt(userId) }) + ';' + uuidv4(),
+    JSON.stringify({ id }) + ';' + uuidv4(),
     SESSION_SECRET
   ).toString()
 
