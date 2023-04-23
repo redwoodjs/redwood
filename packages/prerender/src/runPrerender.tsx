@@ -219,7 +219,9 @@ function insertChunkLoadingScript(
     const pageChunkPath = buildManifest[pagePath]?.file
 
     if (pageChunkPath) {
-      chunkPaths.push(pageChunkPath)
+      // The / is needed, otherwise the path is relative to the current page
+      // so for example prerendering /userExamples/new wouldn't work
+      chunkPaths.push('/' + pageChunkPath)
     }
   }
 
