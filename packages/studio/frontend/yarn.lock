@@ -554,11 +554,11 @@ __metadata:
   linkType: hard
 
 "@heroicons/react@npm:^2.0.16":
-  version: 2.0.16
-  resolution: "@heroicons/react@npm:2.0.16"
+  version: 2.0.17
+  resolution: "@heroicons/react@npm:2.0.17"
   peerDependencies:
     react: ">= 16"
-  checksum: daed283947a4b2a5d8e15d1431ce2feaa7ffc36b116dd26471769cd030249046c212382f0ac50ad6cf2724b912c93e78fc64d66f4e0ec3ffbe30b23237fe65a9
+  checksum: 34f1b13989ccdbea439c9f0555d7806c803be045da7753ab0167fa8ad317b13b193cec58b324f242d7b2123cd1d1d092d45708febb25304eecf19a301bfd564c
   languageName: node
   linkType: hard
 
