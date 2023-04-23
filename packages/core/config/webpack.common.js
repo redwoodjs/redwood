@@ -16,8 +16,8 @@ const {
   getWebSideDefaultBabelConfig,
 } = require('@redwoodjs/internal/dist/build/babel/web')
 const {
-  ChunkReferencePlugin,
-} = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencePlugin')
+  ChunkReferencesPlugin,
+} = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
 const { getConfig, getPaths } = require('@redwoodjs/project-config')
 
 const redwoodConfig = getConfig()
@@ -266,7 +266,7 @@ module.exports = (webpackEnv) => {
         new WebpackManifestPlugin({
           fileName: 'build-manifest.json',
         }),
-      isEnvProduction && new ChunkReferencePlugin(),
+      isEnvProduction && new ChunkReferencesPlugin(),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {
