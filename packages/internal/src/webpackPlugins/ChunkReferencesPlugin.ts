@@ -25,7 +25,7 @@ export class ChunkReferencesPlugin {
           output.push({
             name: chunk.name,
             id: chunk.id,
-            files: Array.from(chunk.files),
+            files: Array.from(chunk.files).map((f) => '/' + f),
             referencedChunks: Array.from(chunk.getAllReferencedChunks())
               .filter((c): c is Chunk & { id: string | number } => {
                 return !!c.id && c.id !== chunk.id

@@ -23,6 +23,13 @@ import {
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
+interface ChunkReference {
+  name?: string
+  id: string | number
+  files: Array<string>
+  referencedChunks: Array<string | number>
+}
+
 async function recursivelyRender(
   App: React.ElementType,
   renderPath: string,
@@ -159,18 +166,64 @@ function insertChunkLoadingScript(
     )
   )
 
-  // Webpack
-  let chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+  const chunkPaths: Array<string> = []
 
-  if (vite && !chunkPath && route?.filePath) {
+  if (!vite) {
+    // Webpack
+
+    const pageChunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+
+    if (pageChunkPath) {
+      chunkPaths.push(pageChunkPath)
+
+      const chunkReferencesJson: Array<ChunkReference> = JSON.parse(
+        fs.readFileSync(
+          path.join(getPaths().web.dist, 'chunk-references.json'),
+          'utf-8'
+        )
+      )
+
+      const chunkReferences = chunkReferencesJson.find((chunkRef) => {
+        return chunkRef.name === route?.pageIdentifier
+      })
+
+      if (chunkReferences?.referencedChunks) {
+        chunkReferences.referencedChunks.forEach((chunkId) => {
+          const chunkRef = chunkReferencesJson.find((chunkRef) => {
+            return chunkRef.id === chunkId
+          })
+
+          // Some chunks also produces css files, and maybe other files as well
+          // We're only interested in the .js files
+          const chunkRefJsFiles: string[] =
+            chunkRef?.files.filter((file) => {
+              return file.endsWith('.js')
+            }) || []
+
+          chunkRefJsFiles.forEach((file) => {
+            chunkPaths.push(file)
+          })
+
+          const chunkPath = buildManifest[`${chunkId}.js`]
+
+          if (chunkPath) {
+            chunkPaths.push(chunkPath)
+          }
+        })
+      }
+    }
+  } else if (vite && route?.filePath) {
     // TODO: Make sure this works on Windows
     const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
     const pagePath = route.filePath.slice(pagesIndex)
+    const pageChunkPath = buildManifest[pagePath]?.file
 
-    chunkPath = buildManifest[pagePath]?.file
+    if (pageChunkPath) {
+      chunkPaths.push(pageChunkPath)
+    }
   }
 
-  if (!chunkPath) {
+  if (chunkPaths.length === 0) {
     // This happens when the page is manually imported in Routes.tsx
     // (as opposed to being auto-imported)
     // It also happens for the page at '/' with Webpack
@@ -180,11 +233,13 @@ function insertChunkLoadingScript(
     return
   }
 
-  indexHtmlTree('head').prepend(
-    `<script defer="defer" src="${chunkPath}" ${
-      vite ? 'type="module"' : ''
-    }></script>`
-  )
+  chunkPaths.forEach((chunkPath) => {
+    indexHtmlTree('head').prepend(
+      `<script defer="defer" src="${chunkPath}" ${
+        vite ? 'type="module"' : ''
+      }></script>`
+    )
+  })
 
   if (!vite) {
     return
@@ -192,24 +247,26 @@ function insertChunkLoadingScript(
 
   // This is not needed for WebPack
 
-  const fullChunkPath = path.join(getPaths().web.dist, chunkPath)
-  const jsChunk = fs.readFileSync(fullChunkPath, 'utf-8')
+  chunkPaths.forEach((chunkPath) => {
+    const fullChunkPath = path.join(getPaths().web.dist, chunkPath)
+    const jsChunk = fs.readFileSync(fullChunkPath, 'utf-8')
 
-  // The chunk will end with something like this: ,{});export{y as default};
-  // We need to extract the variable name (y) so that we can expose it on
-  // `globalThis` as `<PageName>Page`
-  const matches = jsChunk.match(/export\s*\{\s*\w+ as default\s*\}/g) || []
-  const lastIndex = jsChunk.lastIndexOf(matches[matches.length - 1])
-  const varNameMatch = jsChunk
-    .slice(lastIndex)
-    .match(/export\s*\{\s*(\w+) as default\s*\}/)
+    // The chunk will end with something like this: ,{});export{y as default};
+    // We need to extract the variable name (y) so that we can expose it on
+    // `globalThis` as `<PageName>Page`
+    const matches = jsChunk.match(/export\s*\{\s*\w+ as default\s*\}/g) || []
+    const lastIndex = jsChunk.lastIndexOf(matches[matches.length - 1])
+    const varNameMatch = jsChunk
+      .slice(lastIndex)
+      .match(/export\s*\{\s*(\w+) as default\s*\}/)
 
-  fs.writeFileSync(
-    fullChunkPath,
-    jsChunk +
-      'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
-      `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
-  )
+    fs.writeFileSync(
+      fullChunkPath,
+      jsChunk +
+        'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
+        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
+    )
+  })
 }
 
 interface PrerenderParams {
