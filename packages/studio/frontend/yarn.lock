@@ -542,14 +542,14 @@ __metadata:
   linkType: hard
 
 "@headlessui/react@npm:^1.7.13":
-  version: 1.7.13
-  resolution: "@headlessui/react@npm:1.7.13"
+  version: 1.7.14
+  resolution: "@headlessui/react@npm:1.7.14"
   dependencies:
     client-only: ^0.0.1
   peerDependencies:
     react: ^16 || ^17 || ^18
     react-dom: ^16 || ^17 || ^18
-  checksum: 2bc29abe4a087c9c4ff0275d5a24846071fda6e3bc731ae843e113a35276f717a353547dd7b4b9b23264ce2ed3bbba55d9b02a8c85d8e001846e9fd9b1022b73
+  checksum: 42170548641b7a58fc16d11c9100ff67961cb800cd8f4012ab0077c0aa254d680106166127aaf33548dae0c7ae5ed036ab4caec23a3ed745926a1e87ec6ea198
   languageName: node
   linkType: hard
 
