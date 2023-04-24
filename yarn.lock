@@ -2675,7 +2675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/busboy@npm:^1.1.0":
+"@fastify/busboy@npm:^1.2.1":
   version: 1.2.1
   resolution: "@fastify/busboy@npm:1.2.1"
   dependencies:
@@ -2943,7 +2943,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/database-compat@npm:0.3.4, @firebase/database-compat@npm:^0.3.0":
+"@firebase/database-compat@npm:0.3.4, @firebase/database-compat@npm:^0.3.4":
   version: 0.3.4
   resolution: "@firebase/database-compat@npm:0.3.4"
   dependencies:
@@ -2957,7 +2957,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/database-types@npm:0.10.4, @firebase/database-types@npm:^0.10.0":
+"@firebase/database-types@npm:0.10.4, @firebase/database-types@npm:^0.10.4":
   version: 0.10.4
   resolution: "@firebase/database-types@npm:0.10.4"
   dependencies:
@@ -3285,15 +3285,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/firestore@npm:^6.4.0":
-  version: 6.4.3
-  resolution: "@google-cloud/firestore@npm:6.4.3"
+"@google-cloud/firestore@npm:^6.5.0":
+  version: 6.5.0
+  resolution: "@google-cloud/firestore@npm:6.5.0"
   dependencies:
     fast-deep-equal: ^3.1.1
     functional-red-black-tree: ^1.0.1
-    google-gax: ^3.5.3
+    google-gax: ^3.5.7
     protobufjs: ^7.0.0
-  checksum: f3e8476df8837466a5d553452ecd304eb62e049e0080cf68fa1533f796631e9a237937f5a201e49bb30a720cd1d026020eecb27ecc5b1e224ee374a281937040
+  checksum: 0332132ea0df5bbb9938b6daaf4b7950fa43f6fa123a66b1612d1b651dd3dba859f3cbb8637435defaca7131a61002a64ea785568314a9e6f636214936c4b530
   languageName: node
   linkType: hard
 
@@ -3321,9 +3321,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/storage@npm:^6.5.2":
-  version: 6.9.4
-  resolution: "@google-cloud/storage@npm:6.9.4"
+"@google-cloud/storage@npm:^6.9.5":
+  version: 6.9.5
+  resolution: "@google-cloud/storage@npm:6.9.5"
   dependencies:
     "@google-cloud/paginator": ^3.0.7
     "@google-cloud/projectify": ^3.0.0
@@ -3342,7 +3342,7 @@ __metadata:
     retry-request: ^5.0.0
     teeny-request: ^8.0.0
     uuid: ^8.0.0
-  checksum: 0bf3655b023fecc158ece764d385657f024ef87e27ab50b9bcd4d7c8ce2f3de73f778087416ef78d08fe9b358e9a14e587ecd6cb781c67a04864237d4976125f
+  checksum: c12f62d9c02f4a2de8a8a5bc3d122a532b5d26f5b90543bd1808d83cb17ed2e8876bf83eaab0961885aa64ba1b8db6864e4c9a05d900ec9af5737f8ca2436f79
   languageName: node
   linkType: hard
 
@@ -6520,7 +6520,7 @@ __metadata:
     "@redwoodjs/api": 4.0.0
     "@types/aws-lambda": 8.10.114
     core-js: 3.30.0
-    firebase-admin: 11.5.0
+    firebase-admin: 11.7.0
     jest: 29.5.0
     typescript: 5.0.3
   languageName: unknown
@@ -17517,15 +17517,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-admin@npm:11.5.0":
-  version: 11.5.0
-  resolution: "firebase-admin@npm:11.5.0"
+"firebase-admin@npm:11.7.0":
+  version: 11.7.0
+  resolution: "firebase-admin@npm:11.7.0"
   dependencies:
-    "@fastify/busboy": ^1.1.0
-    "@firebase/database-compat": ^0.3.0
-    "@firebase/database-types": ^0.10.0
-    "@google-cloud/firestore": ^6.4.0
-    "@google-cloud/storage": ^6.5.2
+    "@fastify/busboy": ^1.2.1
+    "@firebase/database-compat": ^0.3.4
+    "@firebase/database-types": ^0.10.4
+    "@google-cloud/firestore": ^6.5.0
+    "@google-cloud/storage": ^6.9.5
     "@types/node": ">=12.12.47"
     jsonwebtoken: ^9.0.0
     jwks-rsa: ^3.0.1
@@ -17536,7 +17536,7 @@ __metadata:
       optional: true
     "@google-cloud/storage":
       optional: true
-  checksum: 50d0c25237a2cb52d6013c3dee7652ed127a01523ca6395c957dc6e8d72293097d52337320af6bb11f153b8792eea13b269f9201ab167ca49e787bdac9ab4777
+  checksum: f4bf7173f39256fc7ca9427c96d055623bf1d12b01abe854c61a29b1956b0076f9dc25c431b009e4517ddff7d24cbeaa06c385ca94ca39576e4966cd6f163503
   languageName: node
   linkType: hard
 
@@ -18527,9 +18527,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-gax@npm:^3.5.3":
-  version: 3.5.7
-  resolution: "google-gax@npm:3.5.7"
+"google-gax@npm:^3.5.7":
+  version: 3.6.0
+  resolution: "google-gax@npm:3.6.0"
   dependencies:
     "@grpc/grpc-js": ~1.8.0
     "@grpc/proto-loader": ^0.7.0
@@ -18543,13 +18543,13 @@ __metadata:
     node-fetch: ^2.6.1
     object-hash: ^3.0.0
     proto3-json-serializer: ^1.0.0
-    protobufjs: 7.2.2
+    protobufjs: 7.2.3
     protobufjs-cli: 1.1.1
     retry-request: ^5.0.0
   bin:
     compileProtos: build/tools/compileProtos.js
     minifyProtoJson: build/tools/minify.js
-  checksum: 594f7018243451572147301b4dcdbd4aa06f4c12cbdd35ff98e29f19c7d2bcf8301008fe7be00b85ee6a145eccb57ed18703a731a86345565ba6a814d6b716d2
+  checksum: 438c0ab4c7ef858855d9c66a391f45f3cb2288c64ea320d091bbcc29b349b7f6301faa951728c2a076afe13d22ff773825028b8f7ad8739c21ddc2353a51fb7b
   languageName: node
   linkType: hard
 
@@ -26461,9 +26461,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:7.2.2, protobufjs@npm:^7.0.0":
-  version: 7.2.2
-  resolution: "protobufjs@npm:7.2.2"
+"protobufjs@npm:7.2.3, protobufjs@npm:^7.0.0":
+  version: 7.2.3
+  resolution: "protobufjs@npm:7.2.3"
   dependencies:
     "@protobufjs/aspromise": ^1.1.2
     "@protobufjs/base64": ^1.1.2
@@ -26477,7 +26477,7 @@ __metadata:
     "@protobufjs/utf8": ^1.1.0
     "@types/node": ">=13.7.0"
     long: ^5.0.0
-  checksum: eb630c6aa9419c448605b6ad550d5c001538071e4ef437ececa3cf25e36839aa817757f60bca7dff4037872fdd1b265ac55b6a12bdb735dd72299bb8c959252d
+  checksum: 8092a67a31d961622322887a2374a63a3509f22d45ed7ada39be5987d590bf3ec46eb17aa64ba08f79b42be44adfce63c2fdedc389aea1423013417b6af2c61f
   languageName: node
   linkType: hard
 
