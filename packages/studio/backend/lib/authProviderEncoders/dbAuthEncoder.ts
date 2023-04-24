@@ -18,7 +18,7 @@ export const getDBAuthHeader = async (userId?: string) => {
     )
   }
 
-  const id = isNumeric(userId) ? parseInt(userId) : userId;
+  const id = isNumeric(userId) ? parseInt(userId) : userId
   const cookie = CryptoJS.AES.encrypt(
     JSON.stringify({ id }) + ';' + uuidv4(),
     SESSION_SECRET
