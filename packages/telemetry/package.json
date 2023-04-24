@@ -29,7 +29,7 @@
     "@babel/runtime-corejs3": "7.21.0",
     "@redwoodjs/project-config": "4.0.0",
     "@redwoodjs/structure": "4.0.0",
-    "@whatwg-node/fetch": "0.8.4",
+    "@whatwg-node/fetch": "0.8.6",
     "ci-info": "3.8.0",
     "core-js": "3.30.0",
     "envinfo": "7.8.1",
