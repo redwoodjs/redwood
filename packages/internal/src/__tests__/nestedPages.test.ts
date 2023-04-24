@@ -57,7 +57,7 @@ describe('User specified imports, with static imports', () => {
           `const LoginPage = {
   name: "LoginPage",
   loader: () => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"),
-  prerenderLoader: () => require("./pages/LoginPage/LoginPage")
+  prerenderLoader: name => require("./pages/LoginPage/LoginPage")
 }`
         )
 
@@ -65,7 +65,7 @@ describe('User specified imports, with static imports', () => {
           `const HomePage = {
   name: "HomePage",
   loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
-  prerenderLoader: () => require("./pages/HomePage/HomePage")
+  prerenderLoader: name => require("./pages/HomePage/HomePage")
 }`
         )
       })
@@ -77,7 +77,7 @@ describe('User specified imports, with static imports', () => {
           `const LoginPage = {
   name: "LoginPage",
   loader: () => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"),
-  prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage"))
+  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage"))
 }`
         )
 
@@ -85,7 +85,7 @@ describe('User specified imports, with static imports', () => {
           `const HomePage = {
   name: "HomePage",
   loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
-  prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage"))
+  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage"))
 }`
         )
       })
@@ -100,7 +100,7 @@ describe('User specified imports, with static imports', () => {
           `const NewJobPage = {
   name: "NewJobPage",
   loader: () => import( /* webpackChunkName: "NewJobPage" */"./pages/Jobs/NewJobPage/NewJobPage"),
-  prerenderLoader: () => require("./pages/Jobs/NewJobPage/NewJobPage")
+  prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage")
 }`
         )
       })
@@ -111,7 +111,7 @@ describe('User specified imports, with static imports', () => {
           `const BazingaJobProfilePageWithFunnyName = {
   name: "BazingaJobProfilePageWithFunnyName",
   loader: () => import( /* webpackChunkName: "BazingaJobProfilePageWithFunnyName" */"./pages/Jobs/JobProfilePage/JobProfilePage"),
-  prerenderLoader: () => require("./pages/Jobs/JobProfilePage/JobProfilePage")
+  prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage")
 }`
         )
       })
@@ -153,7 +153,7 @@ describe('User specified imports, with static imports', () => {
         expect(outputNoStaticImports).toContain(`const HomePage = {
   name: "HomePage",
   loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
-  prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage"))
+  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage"))
 }`)
         expect(outputNoStaticImports).toContain(`.createElement(_router.Route, {
     path: "/",
@@ -188,7 +188,7 @@ describe('User specified imports, with static imports', () => {
     expect(outputWithStaticImports).toContain(`const EditJobPage = {
   name: "EditJobPage",
   loader: () => import( /* webpackChunkName: "EditJobPage" */"./pages/Jobs/EditJobPage/EditJobPage"),
-  prerenderLoader: () => require("./pages/Jobs/EditJobPage/EditJobPage")
+  prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage")
 }`)
 
     expect(outputNoStaticImports).toContain(
