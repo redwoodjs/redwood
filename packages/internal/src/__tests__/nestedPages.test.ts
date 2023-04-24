@@ -24,7 +24,7 @@ describe('User specified imports, with static imports', () => {
 
     const routesFile = getPaths().web.routes
     outputWithStaticImports = prebuildWebFile(routesFile, {
-      staticImports: true,
+      prerender: true,
       forJest: true,
     })?.code
 
