@@ -2105,17 +2105,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.14.2":
-  version: 4.14.2
-  resolution: "@clerk/clerk-react@npm:4.14.2"
+"@clerk/clerk-react@npm:4.15.3":
+  version: 4.15.3
+  resolution: "@clerk/clerk-react@npm:4.15.3"
   dependencies:
-    "@clerk/shared": ^0.15.1
-    "@clerk/types": ^3.33.0
+    "@clerk/shared": ^0.15.6
+    "@clerk/types": ^3.35.3
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: e460b5c413ecb0e7dc6192e32b33963157aeb440ab813791e64b80661ac5ca481065fa378d8cd4183ee40a76106162574bde88ab8c13359116f0f1593455bd5b
+  checksum: c05196fd5ed7c6b9c5b0069c530649e102cfbe079e6dffd665d889adb9fcda8b00c66d7f3d077e309ee2f0029146c88654d4737a0482d7f23b099a691005ee44
   languageName: node
   linkType: hard
 
@@ -2136,16 +2136,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.15.1":
-  version: 0.15.1
-  resolution: "@clerk/shared@npm:0.15.1"
+"@clerk/shared@npm:^0.15.6":
+  version: 0.15.6
+  resolution: "@clerk/shared@npm:0.15.6"
   peerDependencies:
     react: ">=16"
-  checksum: 3f9b90faaf1542dc9c1248c663718e68a79ae16170ea6500649c68fa6c7e1cb305ddb5d51cdc85736ca330d252696bfbb07a4d12e0b75842243b25e92a5b7b44
+  checksum: e474a41460173cad9b9181aaa476848ce73cae5d353b389a4c5b0de1553583a84e2de12d90c42be8ac713aaf92cc59db2d9aebc199943322911252b4994cde7f
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.35.3, @clerk/types@npm:^3.33.0, @clerk/types@npm:^3.35.3":
+"@clerk/types@npm:3.35.3, @clerk/types@npm:^3.35.3":
   version: 3.35.3
   resolution: "@clerk/types@npm:3.35.3"
   dependencies:
@@ -6422,7 +6422,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.4
     "@babel/runtime-corejs3": 7.21.0
-    "@clerk/clerk-react": 4.14.2
+    "@clerk/clerk-react": 4.15.3
     "@clerk/types": 3.35.3
     "@redwoodjs/auth": 4.0.0
     "@types/react": 18.0.38
@@ -6431,7 +6431,7 @@ __metadata:
     react: 18.2.0
     typescript: 5.0.4
   peerDependencies:
-    "@clerk/clerk-react": 4.14.2
+    "@clerk/clerk-react": 4.15.3
   languageName: unknown
   linkType: soft
 
