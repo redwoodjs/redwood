@@ -52,7 +52,7 @@ const buildRedwoodFramework = () => {
 const createRedwoodJSApp = ({ yarn1 }) => {
   try {
     execa.sync(
-      'yarn babel-node src/create-redwood-app.js',
+      'yarn node dist/create-redwood-app.js',
       [
         REDWOOD_PROJECT_DIRECTORY,
         '--no-yarn-install',

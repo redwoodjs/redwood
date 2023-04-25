@@ -248,6 +248,27 @@ resetPassword: {
 
 This handler is invoked after the password has been successfully changed in the database. Returning something truthy (like `return user`) will automatically log the user in after their password is changed. If you'd like to return them to the login page and make them log in manually, `return false` and redirect the user in the Reset Password page.
 
+### usernameMatch
+
+This configuration allows you to perform a case insensitive check on a username at the point of user creation.
+
+```javascript
+signup: {
+  usernameMatch: 'insensitive'
+}
+```
+
+By default no setting is required. This is because each db has its own rules for enabling this feature. To enable please see the table below and pick the correct 'userMatchString' for your db of choice.
+
+| DB | Default  | usernameMatchString  | notes |
+|---|---|---|---|
+| Postgres  | 'default'  | 'insensitive'  | |
+| MySQL  | 'case-insensitive'  | N/A  | turned on by default so no setting required |
+| MongoDB  | 'default'  | 'insensitive'  |
+| SQLite | N/A  | N/A  | [Not Supported] Insensitive checks can only be defined at a per column level |
+| Microsoft SQL Server | 'case-insensitive' | N/A | turned on by default so no setting required |
+
+
 ### Cookie config
 
 These options determine how the cookie that tracks whether the client is authorized is stored in the browser. The default configuration should work for most use cases. If you serve your web and api sides from different domains you'll need to make some changes: set `SameSite` to `None` and then add [CORS configuration](#cors-config).

@@ -57,6 +57,47 @@ model User {
 }
 ```
 
+:::info User SDL
+We created a User model in Chapter 4 when we set up authentication for our blog. Redwood's `setup auth dbAuth` command generated two files for us that manage authentication: the `auth` file in `api/src/lib/`, and the `auth` file in `api/src/functions/`. Both of these files use our PrismaClient directly to work with the User model, so we didn't need to set up an SDL or services for the User model.
+
+If you followed our recommendation in the Intermission to use the Example repo, the User SDL and service is already added for you. If not, you'll need to add it yourself:
+
+```bash
+yarn rw g sdl User --no-crud
+```
+
+We'll comment out the sensitive fields of our GraphQL User type so there's no chance of them leaking:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
+```jsx title="api/src/graphql/users.sdl.js"
+  type User {
+    ...
+    # hashedPassword: String!
+    # salt: String!
+    # resetToken: String
+    # resetTokenExpiresAt: DateTime
+  }
+```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```tsx title="api/src/graphql/users.sdl.tsx"
+  type User {
+    ...
+    # hashedPassword: String!
+    # salt: String!
+    # resetToken: String
+    # resetTokenExpiresAt: DateTime
+  }
+```
+
+</TabItem>
+</Tabs>
+:::
+
 ### Migrate the Database
 
 Next, migrate the database to apply the changes (when given the option, name the migration something like "add userId to post"):
