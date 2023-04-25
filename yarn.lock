@@ -2105,17 +2105,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.14.2":
-  version: 4.14.2
-  resolution: "@clerk/clerk-react@npm:4.14.2"
+"@clerk/clerk-react@npm:4.15.3":
+  version: 4.15.3
+  resolution: "@clerk/clerk-react@npm:4.15.3"
   dependencies:
-    "@clerk/shared": ^0.15.1
-    "@clerk/types": ^3.33.0
+    "@clerk/shared": ^0.15.6
+    "@clerk/types": ^3.35.3
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: e460b5c413ecb0e7dc6192e32b33963157aeb440ab813791e64b80661ac5ca481065fa378d8cd4183ee40a76106162574bde88ab8c13359116f0f1593455bd5b
+  checksum: c05196fd5ed7c6b9c5b0069c530649e102cfbe079e6dffd665d889adb9fcda8b00c66d7f3d077e309ee2f0029146c88654d4737a0482d7f23b099a691005ee44
   languageName: node
   linkType: hard
 
@@ -2136,16 +2136,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.15.1":
-  version: 0.15.1
-  resolution: "@clerk/shared@npm:0.15.1"
+"@clerk/shared@npm:^0.15.6":
+  version: 0.15.6
+  resolution: "@clerk/shared@npm:0.15.6"
   peerDependencies:
     react: ">=16"
-  checksum: 3f9b90faaf1542dc9c1248c663718e68a79ae16170ea6500649c68fa6c7e1cb305ddb5d51cdc85736ca330d252696bfbb07a4d12e0b75842243b25e92a5b7b44
+  checksum: e474a41460173cad9b9181aaa476848ce73cae5d353b389a4c5b0de1553583a84e2de12d90c42be8ac713aaf92cc59db2d9aebc199943322911252b4994cde7f
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.35.3, @clerk/types@npm:^3.33.0, @clerk/types@npm:^3.35.3":
+"@clerk/types@npm:3.35.3, @clerk/types@npm:^3.35.3":
   version: 3.35.3
   resolution: "@clerk/types@npm:3.35.3"
   dependencies:
@@ -2636,10 +2636,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.37.0":
-  version: 8.37.0
-  resolution: "@eslint/js@npm:8.37.0"
-  checksum: 6abb3d97412ac960c7436ecdaa56eb00ac57c34782dc0901c82b259c32704e45044927b2910d786ec2127e548986d67e7ba29fec46abfb5d8fc9bedf379af2cf
+"@eslint/js@npm:8.39.0":
+  version: 8.39.0
+  resolution: "@eslint/js@npm:8.39.0"
+  checksum: bb7ed9c22b998e8c765d87b12225ae046ae4c571c5c88d1012908c3ae1ae28e6248ebc98aed66b08334a8a9e43420bcc31a0e7f80173dafa6cc97f59735512e6
   languageName: node
   linkType: hard
 
@@ -6229,7 +6229,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.11.1
     split2: 4.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
     yargs: 17.7.1
   bin:
     rw-api-server-watch: ./dist/watch.js
@@ -6263,7 +6263,7 @@ __metadata:
     split2: 4.2.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     memjs: 1.3.1
     redis: 4.6.5
@@ -6293,7 +6293,7 @@ __metadata:
     jest: 29.5.0
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6308,7 +6308,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6321,11 +6321,11 @@ __metadata:
     "@babel/core": 7.21.4
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.38
+    "@types/react": 18.2.0
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     "@auth0/auth0-spa-js": 2.0.4
   languageName: unknown
@@ -6345,7 +6345,7 @@ __metadata:
     jest: 29.5.0
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6360,7 +6360,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6374,11 +6374,11 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 18.0.38
+    "@types/react": 18.2.0
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     "@azure/msal-browser": 2.35.0
   languageName: unknown
@@ -6396,7 +6396,7 @@ __metadata:
     "@types/aws-lambda": 8.10.114
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6411,7 +6411,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6422,16 +6422,16 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/core": 7.21.4
     "@babel/runtime-corejs3": 7.21.0
-    "@clerk/clerk-react": 4.14.2
+    "@clerk/clerk-react": 4.15.3
     "@clerk/types": 3.35.3
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.38
+    "@types/react": 18.2.0
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
-    "@clerk/clerk-react": 4.14.2
+    "@clerk/clerk-react": 4.15.3
   languageName: unknown
   linkType: soft
 
@@ -6446,7 +6446,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6467,7 +6467,7 @@ __metadata:
     crypto-js: 4.1.1
     jest: 29.5.0
     md5: 2.3.0
-    typescript: 5.0.3
+    typescript: 5.0.4
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -6489,7 +6489,7 @@ __metadata:
     prompts: 2.4.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6503,11 +6503,11 @@ __metadata:
     "@redwoodjs/auth": 4.0.0
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
-    "@types/react": 18.0.38
+    "@types/react": 18.2.0
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6523,7 +6523,7 @@ __metadata:
     core-js: 3.30.1
     firebase-admin: 11.7.0
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6538,7 +6538,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6550,12 +6550,12 @@ __metadata:
     "@babel/core": 7.21.4
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.38
+    "@types/react": 18.2.0
     core-js: 3.30.1
     firebase: 9.20.0
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     firebase: 9.20.0
   languageName: unknown
@@ -6574,7 +6574,7 @@ __metadata:
     core-js: 3.30.1
     jest: 29.5.0
     jsonwebtoken: 9.0.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6589,7 +6589,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6602,11 +6602,11 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 18.0.38
+    "@types/react": 18.2.0
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     netlify-identity-widget: 1.9.2
   languageName: unknown
@@ -6625,7 +6625,7 @@ __metadata:
     core-js: 3.30.1
     jest: 29.5.0
     jsonwebtoken: 9.0.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6640,7 +6640,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6652,11 +6652,11 @@ __metadata:
     "@babel/core": 7.21.4
     "@babel/runtime-corejs3": 7.21.0
     "@supabase/supabase-js": 2.21.0
-    "@types/react": 18.0.38
+    "@types/react": 18.2.0
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     "@supabase/supabase-js": 2.21.0
   languageName: unknown
@@ -6675,7 +6675,7 @@ __metadata:
     jest: 29.5.0
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     supertokens-node: 13.5.0
   languageName: unknown
@@ -6692,7 +6692,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.1
     jest: 29.5.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6704,12 +6704,12 @@ __metadata:
     "@babel/core": 7.21.4
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.38
+    "@types/react": 18.2.0
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
     supertokens-auth-react: 0.31.5
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     supertokens-auth-react: 0.31.5
   languageName: unknown
@@ -6728,7 +6728,7 @@ __metadata:
     jest: 29.5.0
     msw: 1.2.1
     react: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6754,7 +6754,7 @@ __metadata:
     prettier: 2.8.8
     prompts: 2.4.2
     terminal-link: 2.1.1
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6805,7 +6805,7 @@ __metadata:
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
     title-case: 3.0.3
-    typescript: 5.0.3
+    typescript: 5.0.4
     yargs: 17.7.1
   bin:
     redwood: ./dist/index.js
@@ -6847,7 +6847,7 @@ __metadata:
     prettier: 2.8.8
     tasuku: 2.0.1
     tempy: 1.0.1
-    typescript: 5.0.3
+    typescript: 5.0.4
     yargs: 17.7.1
   bin:
     codemods: ./dist/codemods.js
@@ -6902,7 +6902,7 @@ __metadata:
     react-refresh: 0.14.0
     rimraf: 4.4.1
     style-loader: 3.3.2
-    typescript: 5.0.3
+    typescript: 5.0.4
     url-loader: 4.1.1
     webpack: 5.80.0
     webpack-bundle-analyzer: 4.8.0
@@ -6939,7 +6939,7 @@ __metadata:
     "@redwoodjs/project-config": 4.0.0
     "@typescript-eslint/eslint-plugin": 5.57.1
     "@typescript-eslint/parser": 5.57.1
-    eslint: 8.37.0
+    eslint: 8.39.0
     eslint-config-prettier: 8.8.0
     eslint-import-resolver-babel-module: 5.3.2
     eslint-plugin-babel: 5.3.1
@@ -6951,7 +6951,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.6.0
     jest: 29.5.0
     prettier: 2.8.8
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -6967,8 +6967,8 @@ __metadata:
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 18.0.38
-    "@types/react-dom": 18.0.11
+    "@types/react": 18.2.0
+    "@types/react-dom": 18.2.0
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.30.1
     graphql: 16.6.0
@@ -6978,7 +6978,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: 7.43.9
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     graphql: 16.6.0
     react: 18.2.0
@@ -7020,7 +7020,7 @@ __metadata:
     jsonwebtoken: 9.0.0
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    typescript: 5.0.3
+    typescript: 5.0.4
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -7070,7 +7070,7 @@ __metadata:
     systeminformation: 5.17.12
     terminal-link: 2.1.1
     ts-node: 10.9.1
-    typescript: 5.0.3
+    typescript: 5.0.4
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -7099,7 +7099,7 @@ __metadata:
     graphql: 16.6.0
     jest: 29.5.0
     mime-types: 2.1.35
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     react: 18.2.0
     react-dom: 18.2.0
@@ -7123,7 +7123,7 @@ __metadata:
     jest: 29.5.0
     rimraf: 4.4.1
     string-env-interpolation: 1.0.1
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -7152,13 +7152,13 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 4.0.0
-    "@types/react": 18.0.38
-    "@types/react-dom": 18.0.11
+    "@types/react": 18.2.0
+    "@types/react-dom": 18.2.0
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
     react-dom: 18.2.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     react: 18.2.0
     react-dom: 18.2.0
@@ -7196,7 +7196,7 @@ __metadata:
     lru-cache: 6.0.0
     proxyquire: 2.1.3
     ts-morph: 15.1.0
-    typescript: 5.0.3
+    typescript: 5.0.4
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.8
     vscode-languageserver-types: 3.17.3
@@ -7244,7 +7244,7 @@ __metadata:
     split2: 4.2.0
     sqlite: 4.1.2
     sqlite3: 5.1.6
-    typescript: 5.0.3
+    typescript: 5.0.4
     uuid: 9.0.0
     yargs: 17.7.1
   languageName: unknown
@@ -7299,8 +7299,8 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 29.5.1
     "@types/node": 16.18.24
-    "@types/react": 18.0.38
-    "@types/react-dom": 18.0.11
+    "@types/react": 18.2.0
+    "@types/react-dom": 18.2.0
     "@types/webpack": 5.28.1
     babel-jest: 29.5.0
     babel-plugin-inline-react-svg: 2.0.2
@@ -7311,7 +7311,7 @@ __metadata:
     jest-watch-typeahead: 2.2.2
     msw: 1.2.1
     ts-toolbelt: 9.6.0
-    typescript: 5.0.3
+    typescript: 5.0.4
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -7326,7 +7326,7 @@ __metadata:
     esbuild: 0.17.18
     jest: 29.5.0
     stdout-update: 1.6.8
-    typescript: 5.0.3
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -7340,7 +7340,7 @@ __metadata:
     "@vitejs/plugin-react": 3.1.0
     buffer: 6.0.3
     core-js: 3.30.1
-    typescript: 5.0.3
+    typescript: 5.0.4
     vite: 4.2.1
     vite-plugin-commonjs: 0.6.2
     vite-plugin-environment: 1.1.3
@@ -7363,8 +7363,8 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@types/prop-types": 15.7.5
-    "@types/react": 18.0.38
-    "@types/react-dom": 18.0.11
+    "@types/react": 18.2.0
+    "@types/react-dom": 18.2.0
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.30.1
     graphql: 16.6.0
@@ -7379,7 +7379,7 @@ __metadata:
     react-hot-toast: 2.4.0
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    typescript: 5.0.3
+    typescript: 5.0.4
   peerDependencies:
     prop-types: 15.8.1
     react: 18.2.0
@@ -9817,23 +9817,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.0.11, @types/react-dom@npm:^18.0.0":
-  version: 18.0.11
-  resolution: "@types/react-dom@npm:18.0.11"
+"@types/react-dom@npm:18.2.0, @types/react-dom@npm:^18.0.0":
+  version: 18.2.0
+  resolution: "@types/react-dom@npm:18.2.0"
   dependencies:
     "@types/react": "*"
-  checksum: 8bf1e3f710221a937613df4d192f3b9e5a30e5c3103cac52c5210fb56b79f7a8cc66137d3bc5c9d92d375165a97fae53284724191bc01cb9898564fa02595569
+  checksum: f9f7a396c5499a6fb97e31ef9b050cf9ec5f61e6ec4040badb53428f9e73258c95e5b3dd8233541631b0461d623739b3f6348a4130359c92ce0a69d74a5e9176
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.0.38":
-  version: 18.0.38
-  resolution: "@types/react@npm:18.0.38"
+"@types/react@npm:*, @types/react@npm:18.2.0":
+  version: 18.2.0
+  resolution: "@types/react@npm:18.2.0"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 39bad7b8ffe2288f7168fb35ce0fe12109771dcf985e673351074ca7ba8b67884686f92696692b90bbe28a68c2cfe3aabd691e717f88fbf19e01284a14abfdb5
+  checksum: e38f98b7524817459bb1214d39f4cfcb1dd7ffb31992a427b4494f3988aa6195dc349dfb66b299270b399b34568d045bf1cb6230349a6d343e183052ee486eaa
   languageName: node
   linkType: hard
 
@@ -16511,13 +16511,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-scope@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "eslint-scope@npm:7.1.1"
+"eslint-scope@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "eslint-scope@npm:7.2.0"
   dependencies:
     esrecurse: ^4.3.0
     estraverse: ^5.2.0
-  checksum: 3ae3280cbea34af3b816e941b83888aca063aaa0169966ff7e4c1bfb0715dbbeac3811596e56315e8ceea84007a7403754459ae4f1d19f25487eb02acd951aa7
+  checksum: 5b48a3cc2485a3a58ca0bdecfb557c349009308a9b2afb24d070b1c0c254d445ee86d78bfee2c4ed6d1b8944307604a987c92f6d7e611e29de5d06256747a0ff
   languageName: node
   linkType: hard
 
@@ -16535,14 +16535,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.37.0":
-  version: 8.37.0
-  resolution: "eslint@npm:8.37.0"
+"eslint@npm:8.39.0":
+  version: 8.39.0
+  resolution: "eslint@npm:8.39.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.4.0
     "@eslint/eslintrc": ^2.0.2
-    "@eslint/js": 8.37.0
+    "@eslint/js": 8.39.0
     "@humanwhocodes/config-array": ^0.11.8
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
@@ -16552,7 +16552,7 @@ __metadata:
     debug: ^4.3.2
     doctrine: ^3.0.0
     escape-string-regexp: ^4.0.0
-    eslint-scope: ^7.1.1
+    eslint-scope: ^7.2.0
     eslint-visitor-keys: ^3.4.0
     espree: ^9.5.1
     esquery: ^1.4.2
@@ -16581,7 +16581,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 3798781652b1c32d8a4a654c2dd7f2abbff808a806ddd7fd8f86a49586a824854369943d49ee52dcda47b8b03cd49585820f2ab69fc61bb17a0d7677785a2cf7
+  checksum: 34679da06fbc9ee75d13de57864589537e7460408c923510029b87cdf9f52fec2eb7f85cebbbff7ed15de0b37b7b14969efb036804f774aa4455809c9ccea2cb
   languageName: node
   linkType: hard
 
@@ -27943,7 +27943,7 @@ __metadata:
     core-js: 3.30.1
     cypress: 12.10.0
     cypress-wait-until: 1.7.2
-    eslint: 8.37.0
+    eslint: 8.39.0
     fast-glob: 3.2.12
     fs-extra: 11.1.1
     is-port-reachable: 3.1.0
@@ -27963,7 +27963,7 @@ __metadata:
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 4.4.1
-    typescript: 5.0.3
+    typescript: 5.0.4
     yargs: 17.7.1
     zx: 7.2.1
   languageName: unknown
@@ -30669,13 +30669,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.0.3":
-  version: 5.0.3
-  resolution: "typescript@npm:5.0.3"
+"typescript@npm:5.0.4":
+  version: 5.0.4
+  resolution: "typescript@npm:5.0.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 13221c7f7dd2aa9cf8ac2fb1b5ca3825ff3d97a43b4656fd22ca36c0ec30179643b5157d620c3e4af9d3fc9234a571bd3ea175624b3d37c494d7ed159b038df2
+  checksum: 2f5bd1cead194905957cb34e220b1d6ff1662399adef8ec1864f74620922d860ee35b6e50eafb3b636ea6fd437195e454e1146cb630a4236b5095ed7617395c2
   languageName: node
   linkType: hard
 
@@ -30689,13 +30689,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.0.3#~builtin<compat/typescript>":
-  version: 5.0.3
-  resolution: "typescript@patch:typescript@npm%3A5.0.3#~builtin<compat/typescript>::version=5.0.3&hash=85af82"
+"typescript@patch:typescript@5.0.4#~builtin<compat/typescript>":
+  version: 5.0.4
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=85af82"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 8e9c3ec234f934bfdf35ad3c16c6dcbb797be2fa2393065f99e0829276e2b1fab9e26071c342a780c8d7045c7611c96d811adc6a55c1dad27ed8a9e879f1b76e
+  checksum: eec385fd53e1800b0986bac2889deafee8e1910ce10108a5fe10644422426f71625c47b3e78e042371df16592881b1b1f97884ab45dc993f3b96a5c954f65dc2
   languageName: node
   linkType: hard
 
