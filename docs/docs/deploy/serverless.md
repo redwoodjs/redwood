@@ -4,6 +4,15 @@ description: Deploy to AWS with Serverless Framework
 
 # Deploy to AWS with Serverless Framework
 
+>⚠️ **Deprecated**
+>As of Redwood v5, we are deprecating this deploy setup as an "officially" supported provider. This means:
+>- For projects already using this deploy provider, there will be NO change at this time
+>- Both the associated `setup` and `deploy` commands will remain in the framework as is; when setup is run, there will be a “deprecation” message
+>- We will no longer run CI/CD on the Serverless-AWS deployments, which means we are no longer guaranteeing this deploy works with each new version
+>- We are exploring better options to deploy directly to AWS Lambdas; the current deploy commands will not be removed until we find a replacement
+>
+>For more details (e.g. why?) and current status, see the Forum post ["Deprecating support for Serverless Framework Deployments to AWS Lambdas"](https://community.redwoodjs.com/t/deprecating-support-for-serverless-framework-deployments-to-aws-lambdas/4755/10)
+
 >The following instructions assume you have read the [General Deployment Setup](./introduction.md#general-deployment-setup) section above.
 
 Yes, the name is confusing, but Serverless provides a very interesting option—deploy to your own cloud service account and skip the middleman entirely! By default, Serverless just orchestrates starting up services in your cloud provider of choice and pushing your code up to them. Any bill you receive is from your hosting provider (although many offer a generous free tier). You can optionally use the [Serverless Dashboard](https://www.serverless.com/dashboard/) to monitor your deploys and setup CI/CD to automatically deploy when pushing to your repo of choice. If you don't setup CI/CD you actually deploy from your development machine (or another designated machine you've setup to do the deployment).
