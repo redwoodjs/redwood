@@ -1,6 +1,7 @@
 import path from 'path'
 
 import fastifyUrlData from '@fastify/url-data'
+import c from 'ansi-colors'
 import type {
   APIGatewayProxyResult,
   APIGatewayProxyEvent,
@@ -13,14 +14,19 @@ import escape from 'lodash.escape'
 import qs from 'qs'
 
 import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
-import { getConfig } from '@redwoodjs/project-config'
 
 export type Lambdas = Record<string, Handler>
 export const LAMBDA_FUNCTIONS: Lambdas = {}
 
+interface RedwoodFastifyOptions {
+  redwood: {
+    apiRootPath: string
+  }
+}
+
 async function redwoodFastifyPlugin(
   fastify: FastifyInstance,
-  _opts: Record<string, unknown>,
+  opts: RedwoodFastifyOptions,
   done: HookHandlerDoneFunction
 ) {
   fastify.register(fastifyUrlData)
@@ -33,9 +39,7 @@ async function redwoodFastifyPlugin(
     fastify.defaultTextParser
   )
 
-  const redwoodConfig = getConfig()
-  const apiRootPath = path.resolve(redwoodConfig.api.path)
-
+  const apiRootPath = opts.redwood.apiRootPath
   fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
 
@@ -49,8 +53,11 @@ export { redwoodFastifyPlugin }
 // Import the API functions and add them to the LAMBDA_FUNCTIONS object
 
 export const setLambdaFunctions = async (foundFunctions: string[]) => {
+  const tsImport = Date.now()
+  console.log(c.italic(c.dim('Importing Server Functions... ')))
   const imports = foundFunctions.map((fnPath) => {
     return new Promise((resolve) => {
+      const ts = Date.now()
       const routeName = path.basename(fnPath).replace('.js', '')
 
       const { handler } = require(fnPath)
@@ -63,11 +70,19 @@ export const setLambdaFunctions = async (foundFunctions: string[]) => {
           'does not have a function called handler defined.'
         )
       }
+      console.log(
+        c.magenta('/' + routeName),
+        c.italic(c.dim(Date.now() - ts + ' ms'))
+      )
       return resolve(true)
     })
   })
 
-  Promise.all(imports)
+  Promise.all(imports).then((_results) => {
+    console.log(
+      c.italic(c.dim('...Done importing in ' + (Date.now() - tsImport) + ' ms'))
+    )
+  })
 }
 
 // TODO: Use v8 caching to load these crazy fast.

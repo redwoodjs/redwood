@@ -56,7 +56,11 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
   // Import Server Functions.
   // fastify = await withFunctions(fastify, options)
 
-  await fastify.register(redwoodFastifyPlugin)
+  await fastify.register(redwoodFastifyPlugin, {
+    redwood: {
+      apiRootPath,
+    },
+  })
 
   const http = startFastifyServer({
     port,
