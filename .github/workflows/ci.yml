@@ -73,8 +73,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: 🧶 Set up job
         uses: ./.github/actions/set-up-job
-        with:
-          node-version: 18
 
       - name: 🔨 Build
         run: yarn build
@@ -113,8 +111,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: 🧶 Set up job
         uses: ./.github/actions/set-up-job
-        with:
-          node-version: 18
 
       - name: 📁 Create a temporary directory
         id: createpath
@@ -186,8 +182,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: 🧶 Set up job
         uses: ./.github/actions/set-up-job
-        with:
-          node-version: 18
 
       - name: 🌲 Setup test project
         id: setup_test_project
@@ -333,8 +327,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: 🧶 Set up job
         uses: ./.github/actions/set-up-job
-        with:
-          node-version: 18
 
       - name: 🔨 Build
         run: yarn build
