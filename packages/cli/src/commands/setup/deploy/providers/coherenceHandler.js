@@ -7,7 +7,6 @@ import { Listr } from 'listr2'
 import {
   colors as c,
   getPaths,
-  writeFilesTask,
   isTypeScriptProject,
 } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -16,40 +15,14 @@ import { printSetupNotes, addFilesTask } from '../helpers'
 
 const redwoodProjectPaths = getPaths()
 
+const EXTENSION = isTypeScriptProject ? 'ts' : 'js'
+
 export async function handler({ force }) {
+  const addCoherenceFilesTask = await getAddCoherenceFilesTask(force)
+
   const tasks = new Listr(
     [
-      {
-        title: 'Adding coherence.yml...',
-        task: async () => {
-          const coherenceConfigFilePath = path.join(
-            redwoodProjectPaths.base,
-            'coherence.yml'
-          )
-          const coherenceConfigFileContent =
-            await getCoherenceConfigFileContent()
-
-          return writeFilesTask(
-            { [coherenceConfigFilePath]: coherenceConfigFileContent },
-            { existingFiles: force ? 'OVERWRITE' : 'FAIL' }
-          )
-        },
-      },
-
-      addFilesTask({
-        title: 'Adding health check function',
-        files: [
-          {
-            path: path.join(
-              redwoodProjectPaths.api.functions,
-              `health.${isTypeScriptProject ? 'ts' : 'js'}`
-            ),
-            content: coherenceFiles.healthCheck,
-          },
-        ],
-        force,
-      }),
-
+      addCoherenceFilesTask,
       updateRedwoodTOMLPortsTask(),
       printSetupNotes(notes),
     ],
@@ -69,12 +42,37 @@ export async function handler({ force }) {
 // Tasks and helpers
 // ------------------------
 
+async function getAddCoherenceFilesTask(force) {
+  const files = [
+    {
+      path: path.join(redwoodProjectPaths.api.functions, `health.${EXTENSION}`),
+      content: coherenceFiles.healthCheck,
+    },
+  ]
+
+  const coherenceConfigFile = {
+    path: path.join(redwoodProjectPaths.base, 'coherence.yml'),
+  }
+
+  coherenceConfigFile.content = await getCoherenceConfigFileContent()
+
+  files.push(coherenceConfigFile)
+
+  return addFilesTask({
+    title: `Adding coherence.yml and health.${EXTENSION}`,
+    files,
+    force,
+  })
+}
+
 const notes = [
   "You're ready to deploy to Coherence!\n",
   'Go to https://app.withcoherence.com to create your account and setup your cloud or GitHub connections.',
   'Check out the deployment docs at https://docs.withcoherence.com for detailed instructions and more information.\n',
   "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
 ]
+
+const SUPPORTED_DATABASES = ['mysql', 'postgresql']
 
 /**
  * Check the value of `provider` in the datasource block in `schema.prisma`:
@@ -92,7 +90,7 @@ async function getCoherenceConfigFileContent() {
 
   let db = prismaConfig.datasources[0].activeProvider
 
-  if (!['mysql', 'postgresql'].includes(db)) {
+  if (!SUPPORTED_DATABASES.includes(db)) {
     notes.unshift(
       '⚠️  Warning: only mysql and postgresql prisma databases are supported on Coherence at this time.\n'
     )
