@@ -62,7 +62,7 @@ const test = base.extend<any, DevServerFixtures>({
       } else {
         console.log(`Launching dev server at ${projectPath}`)
 
-        // Don't wait for this to finish, because it doens't
+        // Don't wait for this to finish, because it doesn't
         devServerHandler = execa(
           `yarn rw dev --fwd="--no-open" --no-generate`,
           {

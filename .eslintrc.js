@@ -27,6 +27,7 @@ module.exports = {
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
+    'packages/studio/dist-*/**/*',
   ],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',

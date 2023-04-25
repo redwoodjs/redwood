@@ -61,10 +61,15 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
   version: RUNTIME_CORE_JS_VERSION,
 }
 
-export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
+export const getApiSideBabelPlugins = (
+  { forJest, openTelemetry } = {
+    forJest: false,
+    openTelemetry: false,
+  }
+) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
-  // a custom "name" is supplied so that user's do not accidently overwrite
+  // a custom "name" is supplied so that user's do not accidentally overwrite
   // Redwood's own plugins when they specify their own.
 
   // const corejsMajorMinorVersion = pkgJson.dependencies['core-js']
@@ -150,6 +155,11 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       require('../babelPlugins/babel-plugin-redwood-import-dir').default,
       undefined,
       'rwjs-babel-glob-import-dir',
+    ],
+    openTelemetry && [
+      require('../babelPlugins/babel-plugin-redwood-otel-wrapping').default,
+      undefined,
+      'rwjs-babel-otel-wrapping',
     ],
   ].filter(Boolean) as PluginItem[]
 
