@@ -2,7 +2,7 @@ const path = require('path')
 
 const packageJSON = require(path.join(__dirname, 'package.json'))
 
-const TARGETS_NODE = '16.20'
+const TARGETS_NODE = '18.16'
 
 // Run `npx browserslist "defaults, not IE 11, not IE_Mob 11"` to see a list
 // of target browsers.

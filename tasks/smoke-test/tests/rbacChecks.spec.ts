@@ -18,7 +18,7 @@ import { loginAsTestUser, signUpTestUser } from './common'
 // This is a special test that does the following
 // Signup a user (admin@bazinga.com), because salt/secrets won't match, we need to do this
 // Then makes them admin with an rw exec script
-// Then checks if they have admin priviledges
+// Then checks if they have admin privileges
 const adminEmail = 'admin@bazinga.com'
 const password = 'test123'
 

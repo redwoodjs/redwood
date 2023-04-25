@@ -127,7 +127,7 @@ export class RWEnvHelper extends BaseNode {
 }
 
 /**
- * An occurence of process.env somewhere in the codebase
+ * An occurrence of process.env somewhere in the codebase
  */
 class ProcessDotEnvExpression extends BaseNode {
   constructor(

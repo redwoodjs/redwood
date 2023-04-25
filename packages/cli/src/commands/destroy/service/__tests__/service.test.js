@@ -25,7 +25,7 @@ jest.mock('../../../../lib/schemaHelpers', () => {
   }
 })
 
-describe('rw destory service', () => {
+describe('rw destroy service', () => {
   beforeEach(() => {
     jest.spyOn(console, 'info').mockImplementation(() => {})
     jest.spyOn(console, 'log').mockImplementation(() => {})

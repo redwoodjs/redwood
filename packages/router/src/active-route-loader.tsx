@@ -62,7 +62,9 @@ export const ActiveRouteLoader = ({
 
   const [loadingState, setLoadingState] = useState<LoadingStateRecord>({
     [path]: {
-      page: usePrerenderLoader ? spec.prerenderLoader().default : ArlNullPage,
+      page: usePrerenderLoader
+        ? spec.prerenderLoader(spec.name).default
+        : ArlNullPage,
       specName: usePrerenderLoader ? spec.name : '',
       state: usePrerenderLoader ? 'DONE' : 'PRE_SHOW',
       location,
