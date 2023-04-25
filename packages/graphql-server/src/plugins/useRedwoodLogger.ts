@@ -85,7 +85,7 @@ type GraphQLLoggerOptions = {
   /**
    * @description Include the tracing and timing information.
    *
-   * This will log various performance timings withing the GraphQL event lifecycle (parsing, validating, executing, etc).
+   * This will log various performance timings within the GraphQL event lifecycle (parsing, validating, executing, etc).
    */
   tracing?: boolean
 
