@@ -141,7 +141,7 @@ export default function redwoodPluginVite() {
                 '.js': 'jsx',
               },
               // Node.js global to browser globalThis
-              // @MARK unsure why we need this, but required for DevFatalErrorPage atleast
+              // @MARK unsure why we need this, but required for DevFatalErrorPage at least
               define: {
                 global: 'globalThis',
               },
