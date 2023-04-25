@@ -14,35 +14,43 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { printSetupNotes, addFilesTask } from '../helpers'
 
-const notes = [
-  "You're ready to deploy to Coherence!\n",
-  'Go to https://app.withcoherence.com to create your account and setup your cloud or GitHub connections.',
-  'Check out the deployment docs at https://docs.withcoherence.com for detailed instructions and more information.\n',
-  "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
-]
+const redwoodProjectPaths = getPaths()
 
-export const handler = async ({ force, database }) => {
+export async function handler({ force }) {
   const tasks = new Listr(
     [
       {
-        title: 'Adding coherence.yml',
+        title: 'Adding coherence.yml...',
         task: async () => {
-          const { path, content } = await getCoherenceYamlContent(database)
+          const coherenceConfigFilePath = path.join(
+            redwoodProjectPaths.base,
+            'coherence.yml'
+          )
+          const coherenceConfigFileContent =
+            await getCoherenceConfigFileContent()
 
           return writeFilesTask(
-            { [path]: content },
+            { [coherenceConfigFilePath]: coherenceConfigFileContent },
             { existingFiles: force ? 'OVERWRITE' : 'FAIL' }
           )
         },
       },
 
       addFilesTask({
-        title: 'Adding health check function...',
-        files: additionalFiles,
+        title: 'Adding health check function',
+        files: [
+          {
+            path: path.join(
+              redwoodProjectPaths.api.functions,
+              `health.${isTypeScriptProject ? 'ts' : 'js'}`
+            ),
+            content: coherenceFiles.healthCheck,
+          },
+        ],
         force,
       }),
 
-      updateRedwoodTomlTask(),
+      updateRedwoodTOMLPortsTask(),
       printSetupNotes(notes),
     ],
     { rendererOptions: { collapse: false } }
@@ -57,53 +65,77 @@ export const handler = async ({ force, database }) => {
   }
 }
 
-const getCoherenceYamlContent = async (database) => {
-  // If the schema.prisma file doesn't exist (99% of the time it will), return some defaults.
+// ------------------------
+// Tasks and helpers
+// ------------------------
 
-  if (!fs.existsSync(getPaths().api.dbSchema)) {
-    return {
-      path: path.join(getPaths().base, 'coherence.yml'),
-      content: COHERENCE_YAML(''),
-    }
-  }
+const notes = [
+  "You're ready to deploy to Coherence!\n",
+  'Go to https://app.withcoherence.com to create your account and setup your cloud or GitHub connections.',
+  'Check out the deployment docs at https://docs.withcoherence.com for detailed instructions and more information.\n',
+  "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
+]
 
-  // If it does, we have to check the provider in datasource:
-  //
-  // ```prisma
-  // datasource db {
-  //   provider = "sqlite"
-  //   url      = env("DATABASE_URL")
-  // }
-  // ```
+/**
+ * Check the value of `provider` in the datasource block in `schema.prisma`:
+ *
+ * ```prisma title="schema.prisma"
+ * datasource db {
+ *   provider = "sqlite"
+ *   url      = env("DATABASE_URL")
+ * }
+ * ```
+ */
+async function getCoherenceConfigFileContent() {
+  const prismaSchema = await getSchema(redwoodProjectPaths.api.dbSchema)
+  const prismaConfig = await getConfig({ datamodel: prismaSchema })
 
-  const schema = await getSchema(getPaths().api.dbSchema)
-  const config = await getConfig({ datamodel: schema })
+  let db = prismaConfig.datasources[0].activeProvider
 
-  let detectedDatabase = config.datasources[0].activeProvider
-
-  if (detectedDatabase === 'mysql' || detectedDatabase === 'postgresql') {
-    if (detectedDatabase === 'postgresql') {
-      detectedDatabase = 'postgres'
-    }
-
-    return {
-      path: path.join(getPaths().base, 'coherence.yml'),
-      content: COHERENCE_YAML(DATABASE_YAML(detectedDatabase)),
-    }
-  } else {
+  if (!['mysql', 'postgresql'].includes(db)) {
     notes.unshift(
       '⚠️  Warning: only mysql and postgresql prisma databases are supported on Coherence at this time.\n'
     )
+  }
 
-    return {
-      path: path.join(getPaths().base, 'coherence.yml'),
-      content: COHERENCE_YAML(''),
-    }
+  if (db === 'postgresql') {
+    db = 'postgres'
+  }
+
+  return coherenceFiles.yamlTemplate(db)
+}
+
+/**
+ * Updates the ports in redwood.toml to use an environment variable.
+ */
+function updateRedwoodTOMLPortsTask() {
+  return {
+    title: 'Updating ports in redwood.toml...',
+    task: () => {
+      const redwoodTOMLPath = path.join(
+        redwoodProjectPaths.base,
+        'redwood.toml'
+      )
+
+      let redwoodTOMLContent = fs.readFileSync(redwoodTOMLPath, 'utf-8')
+
+      redwoodTOMLContent = redwoodTOMLContent.replace(
+        /port.*?\n/m,
+        'port = "${PORT}"\n'
+      )
+
+      fs.writeFileSync(redwoodTOMLPath, redwoodTOMLContent)
+    },
   }
 }
 
-const COHERENCE_YAML = (database) => {
-  return `
+// ------------------------
+// Files
+// ------------------------
+
+const coherenceFiles = {
+  yamlTemplate(db) {
+    return `\
 api:
   type: backend
   url_path: "/api"
@@ -118,7 +150,11 @@ api:
     memory: 2G
     health_check: "/health"
 
-  ${database}
+  resources:
+    - name: ${path.basename(redwoodProjectPaths.base)}-db
+      engine: ${db}
+      version: 13
+      type: database
 
 web:
   type: frontend
@@ -134,46 +170,13 @@ web:
     cpu: 2
     memory: 2G
 `
-}
-
-const PROJECT_NAME = path.basename(getPaths().base)
-
-const DATABASE_YAML = (detectedDatabase) => `
-  resources:
-  - name: ${PROJECT_NAME}-db
-    engine: ${detectedDatabase}
-    version: 13
-    type: database
-`
-
-const COHERENCE_HEALTH_CHECK = `// coherence-health-check
+  },
+  healthCheck: `\
+// Coherence health check
 export const handler = async () => {
   return {
     statusCode: 200,
   }
-}`
-
-const additionalFiles = [
-  {
-    path: path.join(
-      getPaths().api.functions,
-      `health.${isTypeScriptProject ? 'ts' : 'js'}`
-    ),
-    content: COHERENCE_HEALTH_CHECK,
-  },
-]
-
-// Updates the PORTs to use an environment variable.
-const updateRedwoodTomlTask = () => {
-  return {
-    title: 'Updating redwood.toml PORTs...',
-    task: () => {
-      const configPath = path.join(getPaths().base, 'redwood.toml')
-      const content = fs.readFileSync(configPath, 'utf-8')
-
-      const newContent = content.replace(/port.*?\n/m, 'port = "${PORT}"\n')
-
-      fs.writeFileSync(configPath, newContent)
-    },
-  }
+}
+`,
 }

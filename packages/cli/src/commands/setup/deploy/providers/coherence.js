@@ -2,7 +2,7 @@ export const command = 'coherence'
 
 export const description = 'Setup Coherence deploy'
 
-export const builder = (yargs) => {
+export function builder(yargs) {
   yargs.option('force', {
     description: 'Overwrite existing configuration',
     type: 'boolean',
@@ -10,7 +10,7 @@ export const builder = (yargs) => {
   })
 }
 
-export const handler = async (options) => {
+export async function handler(options) {
   const { handler } = await import('./coherenceHandler')
   return handler(options)
 }
