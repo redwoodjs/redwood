@@ -59,7 +59,7 @@
     "@types/jsonwebtoken": "9.0.1",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",
-    "@types/split2": "3.2.1",
+    "@types/split2": "4.2.0",
     "@types/uuid": "9.0.1",
     "@types/yargs": "17.0.24",
     "aws-lambda": "1.0.7",

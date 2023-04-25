@@ -6220,7 +6220,7 @@ __metadata:
     "@types/aws-lambda": 8.10.114
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
-    "@types/split2": 3.2.1
+    "@types/split2": 4.2.0
     "@types/yargs": 17.0.24
     ansi-colors: 4.1.3
     aws-lambda: 1.0.7
@@ -6257,7 +6257,7 @@ __metadata:
     "@types/jsonwebtoken": 9.0.1
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
-    "@types/split2": 3.2.1
+    "@types/split2": 4.2.0
     "@whatwg-node/fetch": 0.8.8
     core-js: 3.30.1
     humanize-string: 2.1.0
@@ -7228,7 +7228,7 @@ __metadata:
     "@types/jsonwebtoken": 9.0.1
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
-    "@types/split2": 3.2.1
+    "@types/split2": 4.2.0
     "@types/uuid": 9.0.1
     "@types/yargs": 17.0.24
     ansi-colors: 4.1.3
@@ -9949,12 +9949,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/split2@npm:3.2.1":
-  version: 3.2.1
-  resolution: "@types/split2@npm:3.2.1"
+"@types/split2@npm:4.2.0":
+  version: 4.2.0
+  resolution: "@types/split2@npm:4.2.0"
   dependencies:
     "@types/node": "*"
-  checksum: 1886a77c5eb73cf0d81a16fb0f299606276e068f6bf395e637983c60bc175d0491aaaa6500c0a695a53875dc8e316d8e8324c6c8607cead6d0ce7e79e072d503
+  checksum: a0b8ba04ee7f60aef4d1367df11d5688a92a057c368a8280b6329106dd87eb71c49e264a924dbd2ceee798a4ab0a1c21e0a54c622a87ec1b438ec9368db1b909
   languageName: node
   linkType: hard
 
