@@ -91,7 +91,7 @@
     "ora": "5.4.1",
     "prompts": "2.4.2",
     "rimraf": "4.4.1",
-    "typescript": "5.0.3",
+    "typescript": "5.0.4",
     "yargs": "17.7.1",
     "zx": "7.2.1"
   },
