@@ -61,10 +61,15 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
   version: RUNTIME_CORE_JS_VERSION,
 }
 
-export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
+export const getApiSideBabelPlugins = (
+  { forJest, openTelemetry } = {
+    forJest: false,
+    openTelemetry: false,
+  }
+) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
-  // a custom "name" is supplied so that user's do not accidently overwrite
+  // a custom "name" is supplied so that user's do not accidentally overwrite
   // Redwood's own plugins when they specify their own.
 
   // const corejsMajorMinorVersion = pkgJson.dependencies['core-js']
@@ -151,6 +156,11 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       undefined,
       'rwjs-babel-glob-import-dir',
     ],
+    openTelemetry && [
+      require('../babelPlugins/babel-plugin-redwood-otel-wrapping').default,
+      undefined,
+      'rwjs-babel-otel-wrapping',
+    ],
   ].filter(Boolean) as PluginItem[]
 
   return plugins
@@ -194,8 +204,11 @@ export const registerApiSideBabelHook = ({
   })
 }
 
-export const transformWithBabel = (
+export const prebuildApiFile = (
   srcPath: string,
+  // we need to know dstPath as well
+  // so we can generate an inline, relative sourcemap
+  dstPath: string,
   plugins: TransformOptions['plugins']
 ) => {
   const code = fs.readFileSync(srcPath, 'utf-8')
@@ -205,6 +218,9 @@ export const transformWithBabel = (
     ...defaultOptions,
     cwd: getPaths().api.base,
     filename: srcPath,
+    // we set the sourceFile (for the sourcemap) as a correct, relative path
+    // this is why this function (prebuildFile) must know about the dstPath
+    sourceFileName: path.relative(path.dirname(dstPath), srcPath),
     // we need inline sourcemaps at this level
     // because this file will eventually be fed to esbuild
     // when esbuild finds an inline sourcemap, it tries to "combine" it
