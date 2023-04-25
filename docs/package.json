@@ -37,6 +37,6 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.4.0",
     "@tsconfig/docusaurus": "1.0.7",
-    "typescript": "5.0.3"
+    "typescript": "5.0.4"
   }
 }
