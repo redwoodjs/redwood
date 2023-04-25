@@ -596,7 +596,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
         },
       },
       {
-        // This task renames the migration folders so that we don't have to deal with duplicates/conflicts when commiting to the repo
+        // This task renames the migration folders so that we don't have to deal with duplicates/conflicts when committing to the repo
         title: 'Adjust dates within migration folder names',
         task: () => {
           const migrationsFolderPath = path.join(

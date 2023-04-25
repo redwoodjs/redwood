@@ -354,7 +354,7 @@ When would you want to do this? If you just want a file to end in "Cell" for som
 
 ## Advanced Example: Implementing a Cell Yourself
 
-If we didn't do all that built-time stuff for you, how might you go about implementing a Cell yourself?
+If we didn't do all that build-time stuff for you, how might you go about implementing a Cell yourself?
 
 Consider the [example from the Tutorial](tutorial/chapter2/cells.md#our-first-cell) where we're fetching posts:
 

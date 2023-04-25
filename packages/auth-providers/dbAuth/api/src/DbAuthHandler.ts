@@ -1301,7 +1301,7 @@ export class DbAuthHandler<
             },
           }
 
-      const user = await this.dbAccessor.findUnique({
+      const user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
       })
       if (user) {
@@ -1343,9 +1343,9 @@ export class DbAuthHandler<
   }
 
   // checks that a single field meets validation requirements and
-  // currently checks for presense only
+  // currently checks for presence only
   _validateField(name: string, value: string | undefined): value is string {
-    // check for presense
+    // check for presence
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(
         name,
