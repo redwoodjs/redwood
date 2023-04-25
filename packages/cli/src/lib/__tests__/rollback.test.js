@@ -181,7 +181,7 @@ it('prepare sets listr2 rollback functions and rollback executes correctly', asy
         },
       },
     ],
-    { rendererSilent: true }
+    { silentRendererCondition: true }
   )
 
   rollback.prepareForRollback(tasks)

@@ -253,7 +253,7 @@ export const handler = async ({
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

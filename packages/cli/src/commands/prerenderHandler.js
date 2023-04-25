@@ -278,7 +278,7 @@ export const handler = async ({ path: routerPath, dryRun, verbose }) => {
 
   const tasks = new Listr(listrTasks, {
     renderer: verbose ? 'verbose' : 'default',
-    rendererOptions: { collapse: false },
+    rendererOptions: { collapseSubtasks: false },
     concurrent: false,
   })
 

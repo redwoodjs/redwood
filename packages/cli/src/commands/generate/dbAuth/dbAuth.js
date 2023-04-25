@@ -364,7 +364,7 @@ const tasks = ({
     ],
     {
       rendererSilent: () => listr2?.rendererSilent,
-      rendererOptions: { collapse: false },
+      rendererOptions: { collapseSubtasks: false },
       injectWrapper: { enquirer: enquirer || new Enquirer() },
       exitOnError: true,
     }
