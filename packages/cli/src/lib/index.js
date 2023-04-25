@@ -302,7 +302,7 @@ export const deleteFilesTask = (files) => {
 
 /**
  * @param files - {[filepath]: contents}
- * Deletes any empty directrories that are more than three levels deep below the base directory
+ * Deletes any empty directories that are more than three levels deep below the base directory
  * i.e. any directory below /web/src/components
  */
 export const cleanupEmptyDirsTask = (files) => {
@@ -572,7 +572,7 @@ export const getDefaultArgs = (builder) => {
 /**
  * Check if user is using VS Code
  *
- * i.e. check for the existance of .vscode folder in root project directory
+ * i.e. check for the existence of .vscode folder in root project directory
  */
 export const usingVSCode = () => {
   const redwoodPaths = getPaths()

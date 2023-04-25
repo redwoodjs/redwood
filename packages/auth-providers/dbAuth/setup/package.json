@@ -25,14 +25,14 @@
     "@babel/runtime-corejs3": "7.21.0",
     "@redwoodjs/cli-helpers": "4.0.0",
     "@simplewebauthn/browser": "7.2.0",
-    "core-js": "3.30.0",
+    "core-js": "3.30.1",
     "prompts": "2.4.2",
     "secure-random-password": "0.2.3",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.3",
+    "@babel/core": "7.21.4",
     "@simplewebauthn/typescript-types": "7.0.0",
     "@types/secure-random-password": "0.2.1",
     "@types/yargs": "17.0.24",

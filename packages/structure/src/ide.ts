@@ -95,7 +95,7 @@ export abstract class BaseNode {
       return this.parent.host
     }
     throw new Error(
-      "Could not find host implementation on root node (you must override the 'host' gettter)"
+      "Could not find host implementation on root node (you must override the 'host' getter)"
     )
   }
   exists = true
