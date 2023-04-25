@@ -30,7 +30,7 @@
     "boxen": "5.1.2",
     "chalk": "4.1.2",
     "enquirer": "2.3.6",
-    "stdout-update": "1.6.8"
+    "stdout-update": "3.1.1"
   },
   "devDependencies": {
     "esbuild": "0.17.18",

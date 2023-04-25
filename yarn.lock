@@ -7332,7 +7332,7 @@ __metadata:
     enquirer: 2.3.6
     esbuild: 0.17.18
     jest: 29.5.0
-    stdout-update: 1.6.8
+    stdout-update: 3.1.1
     typescript: 5.0.4
   languageName: unknown
   linkType: soft
@@ -11107,7 +11107,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.0, ansi-escapes@npm:^4.3.2":
+"ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.0":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
   dependencies:
@@ -11173,10 +11173,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-styles@npm:^5.0.0, ansi-styles@npm:^5.2.0":
+"ansi-styles@npm:^5.0.0":
   version: 5.2.0
   resolution: "ansi-styles@npm:5.2.0"
   checksum: 9c4ca80eb3c2fb7b33841c210d2f20807f40865d27008d7c3f707b7f95cab7d67462a565e2388ac3285b71cb3d9bb2173de8da37c57692a362885ec34d6e27df
+  languageName: node
+  linkType: hard
+
+"ansi-styles@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "ansi-styles@npm:6.2.1"
+  checksum: 5d1ec38c123984bcedd996eac680d548f31828bd679a66db2bdf11844634dde55fec3efa9c6bb1d89056a5e79c1ac540c4c784d592ea1d25028a92227d2f2d5c
   languageName: node
   linkType: hard
 
@@ -15776,6 +15783,13 @@ __metadata:
     readable-stream: ^3.1.1
     stream-shift: ^1.0.0
   checksum: cacd09d8f1c58f92f83e17dffc14ece50415b32753446ed92046236a27a9e73cb914cda495d955ea12e0e615381082a511f20e219f48a06e84675c9d6950675b
+  languageName: node
+  linkType: hard
+
+"eastasianwidth@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "eastasianwidth@npm:0.2.0"
+  checksum: 26f364ebcdb6395f95124fda411f63137a4bfb5d3a06453f7f23dfe52502905bd84e0488172e0f9ec295fdc45f05c23d5d91baf16bd26f0fe9acd777a188dc39
   languageName: node
   linkType: hard
 
@@ -29222,15 +29236,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stdout-update@npm:1.6.8":
-  version: 1.6.8
-  resolution: "stdout-update@npm:1.6.8"
+"stdout-update@npm:3.1.1":
+  version: 3.1.1
+  resolution: "stdout-update@npm:3.1.1"
   dependencies:
-    ansi-escapes: ^4.3.2
-    ansi-styles: ^5.2.0
-    string-width: ^4.2.2
-    strip-ansi: ^6.0.0
-  checksum: 2435eba195367cde1bb4f4ae19af3f9a7d38f240bfa05c9f562c0feb8e6f46fd83f78e928b3025f105e6b3baefcca693009cc46b7065679ca0edaec2e223f193
+    ansi-escapes: ^6.0.0
+    ansi-styles: ^6.2.1
+    string-width: ^5.1.2
+    strip-ansi: ^7.0.1
+  checksum: 61d29a2d6af1b384d6e646a834e108fb4187c0959838ca07e592562346b222a3716fdfc5f921726e3aa79a934baf2d8b5aab079c32084e9ac5aa9539d9dee51c
   languageName: node
   linkType: hard
 
@@ -29366,6 +29380,17 @@ __metadata:
     is-fullwidth-code-point: ^3.0.0
     strip-ansi: ^6.0.1
   checksum: 1e525e92e5eae0afd7454086eed9c818ee84374bb80328fc41217ae72ff5f065ef1c9d7f72da41de40c75fa8bb3dee63d92373fd492c84260a552c636392a47b
+  languageName: node
+  linkType: hard
+
+"string-width@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "string-width@npm:5.1.2"
+  dependencies:
+    eastasianwidth: ^0.2.0
+    emoji-regex: ^9.2.2
+    strip-ansi: ^7.0.1
+  checksum: ab9c4264443d35b8b923cbdd513a089a60de339216d3b0ed3be3ba57d6880e1a192b70ae17225f764d7adbf5994e9bb8df253a944736c15a0240eff553c678ca
   languageName: node
   linkType: hard
 
