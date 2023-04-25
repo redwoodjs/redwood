@@ -4,7 +4,7 @@ import path from 'path'
 import * as esbuild from 'esbuild'
 import { removeSync } from 'fs-extra'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
 
@@ -35,7 +35,10 @@ export const cleanApiBuild = () => {
  */
 export const prebuildApiFiles = (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
-  const plugins = getApiSideBabelPlugins()
+  const plugins = getApiSideBabelPlugins({
+    forJest: false,
+    openTelemetry: getConfig().experimental.opentelemetry.enabled,
+  })
 
   return srcFiles.map((srcPath) => {
     const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)

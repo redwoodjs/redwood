@@ -3,16 +3,18 @@ import path from 'path'
 
 import React from 'react'
 
-import { load as loadHtml } from 'cheerio'
+import { CheerioAPI, load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
 import { getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
+import { matchPath } from '@redwoodjs/router/dist/util'
 import type { QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
+import { detectPrerenderRoutes } from './detection'
 import {
   GqlHandlerImportError,
   JSONParseError,
@@ -131,6 +133,42 @@ async function recursivelyRender(
   }
 }
 
+function insertChunkLoadingScript(
+  indexHtmlTree: CheerioAPI,
+  renderPath: string
+) {
+  const prerenderRoutes = detectPrerenderRoutes()
+
+  const route = prerenderRoutes.find((route: any) => {
+    return matchPath(route.routePath, renderPath).match
+  })
+
+  if (!route) {
+    throw new Error('Could not find a Route matching ' + renderPath)
+  }
+
+  // The code for `/` is already included in app.<hash>.js and won't have a
+  // separate chunk
+  if (renderPath !== '/') {
+    const buildManifest = JSON.parse(
+      fs.readFileSync(
+        path.join(getPaths().web.dist, 'build-manifest.json'),
+        'utf-8'
+      )
+    )
+
+    const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+
+    if (!chunkPath) {
+      throw new Error('Could not find chunk for ' + route?.pageIdentifier)
+    }
+
+    indexHtmlTree('head').prepend(
+      `<script defer="defer" src="${chunkPath}"></script>`
+    )
+  }
+}
+
 interface PrerenderParams {
   queryCache: Record<string, QueryInfo>
   renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
@@ -229,8 +267,9 @@ export const runPrerender = async ({
     }
   }
 
-  // This is set by webpack by the html plugin
-  indexHtmlTree('server-markup').replaceWith(componentAsHtml)
+  insertChunkLoadingScript(indexHtmlTree, renderPath)
+
+  indexHtmlTree('#redwood-app').append(componentAsHtml)
 
   const renderOutput = indexHtmlTree.html()
 

@@ -7,10 +7,6 @@ import { navigate } from '@redwoodjs/router'
 
 export const { AuthProvider: ClerkRwAuthProvider, useAuth } = createAuth()
 
-interface Props {
-  children: React.ReactNode
-}
-
 const ClerkStatusUpdater = () => {
   const { isSignedIn, user, isLoaded } = useUser()
   const { reauthenticate } = useAuth()
@@ -24,25 +20,45 @@ const ClerkStatusUpdater = () => {
   return null
 }
 
+type ClerkOptions =
+  | { publishableKey: string; frontendApi?: never }
+  | { publishableKey?: never; frontendApi: string }
+
+interface Props {
+  children: React.ReactNode
+}
+
+const ClerkProviderWrapper = ({
+  children,
+  clerkOptions,
+}: Props & { clerkOptions: ClerkOptions }) => {
+  const { reauthenticate } = useAuth()
+
+  return (
+    <ClerkProvider
+      {...clerkOptions}
+      navigate={(to) => reauthenticate().then(() => navigate(to))}
+    >
+      {children}
+      <ClerkStatusUpdater />
+    </ClerkProvider>
+  )
+}
+
 export const AuthProvider = ({ children }: Props) => {
   const publishableKey = process.env.CLERK_PUBLISHABLE_KEY
   const frontendApi =
     process.env.CLERK_FRONTEND_API_URL || process.env.CLERK_FRONTEND_API
-
-  type ClerkOptions =
-    | { publishableKey: string; frontendApi?: never }
-    | { publishableKey?: never; frontendApi: string }
 
   const clerkOptions: ClerkOptions = publishableKey
     ? { publishableKey }
     : { frontendApi }
 
   return (
-    <ClerkProvider {...clerkOptions} navigate={(to) => navigate(to)}>
-      <ClerkRwAuthProvider>
+    <ClerkRwAuthProvider>
+      <ClerkProviderWrapper clerkOptions={clerkOptions}>
         {children}
-        <ClerkStatusUpdater />
-      </ClerkRwAuthProvider>
-    </ClerkProvider>
+      </ClerkProviderWrapper>
+    </ClerkRwAuthProvider>
   )
 }

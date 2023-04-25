@@ -326,6 +326,7 @@ export function flattenSearchParams(
 export interface Spec {
   name: string
   loader: () => Promise<{ default: React.ComponentType<unknown> }>
+  prerenderLoader: () => { default: React.ComponentType<unknown> }
 }
 
 export function isSpec(
@@ -363,6 +364,7 @@ export function normalizePage(
   return {
     name: specOrPage.name,
     loader: async () => ({ default: specOrPage }),
+    prerenderLoader: () => ({ default: specOrPage }),
   }
 }
 
