@@ -59,6 +59,26 @@ interface BrowserTargetConfig {
   sourceMap: boolean
 }
 
+interface GraphiQLStudioConfig {
+  endpoint?: string
+  authImpersonation?: AuthImpersonationConfig
+}
+
+type SupportedAuthImpersonationProviders = 'dbAuth' | 'netlify' | 'supabase'
+
+interface AuthImpersonationConfig {
+  authProvider?: SupportedAuthImpersonationProviders
+  jwtSecret?: string
+  userId?: string
+  email?: string
+  roles?: string[]
+}
+
+interface StudioConfig {
+  inMemory: boolean
+  graphiql?: GraphiQLStudioConfig
+}
+
 export interface Config {
   web: BrowserTargetConfig
   api: NodeTargetConfig
@@ -72,6 +92,13 @@ export interface Config {
   }
   notifications: {
     versionUpdates: string[]
+  }
+  experimental: {
+    opentelemetry: {
+      enabled: boolean
+      apiSdk?: string
+    }
+    studio: StudioConfig
   }
 }
 
@@ -111,6 +138,25 @@ const DEFAULT_CONFIG: Config = {
   },
   notifications: {
     versionUpdates: [],
+  },
+  experimental: {
+    opentelemetry: {
+      enabled: false,
+      apiSdk: undefined,
+    },
+    studio: {
+      inMemory: false,
+      graphiql: {
+        endpoint: 'graphql',
+        authImpersonation: {
+          authProvider: undefined,
+          userId: undefined,
+          email: undefined,
+          roles: undefined,
+          jwtSecret: 'secret',
+        },
+      },
+    },
   },
 }
 
