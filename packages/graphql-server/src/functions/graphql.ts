@@ -19,6 +19,7 @@ import {
   useRedwoodDirective,
   useRedwoodError,
   useRedwoodGlobalContextSetter,
+  useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
 } from '../plugins'
@@ -107,6 +108,9 @@ export const createGraphQLHandler = ({
 
   // Custom Redwood plugins
   plugins.push(...redwoodDirectivePlugins)
+
+  // Custom Redwood OpenTelemetry plugin
+  plugins.push(useRedwoodOpenTelemetry())
 
   // Secure the GraphQL server
   plugins.push(useArmor(logger, armorConfig))

@@ -257,13 +257,13 @@ This configuration allows you to perform a case insensitive check on a username 
 
 ```javascript
 signup: {
-  userMatch: 'insensitive'
+  usernameMatch: 'insensitive'
 }
 ```
 
 By default no setting is required. This is because each db has its own rules for enabling this feature. To enable please see the table below and pick the correct 'userMatchString' for your db of choice.
 
-| DB | Default  | userMatchString  | notes |
+| DB | Default  | usernameMatchString  | notes |
 |---|---|---|---|
 | Postgres  | 'default'  | 'insensitive'  | |
 | MySQL  | 'case-insensitive'  | N/A  | turned on by default so no setting required |
