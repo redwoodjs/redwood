@@ -1,5 +1,6 @@
 import c from 'ansi-colors'
 
+import { redwoodFastifyPlugin } from '@redwoodjs/fastify'
 import { getConfig } from '@redwoodjs/project-config'
 
 import createFastifyInstance from './fastify'
@@ -50,10 +51,12 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
 
-  let fastify = createFastifyInstance()
+  const fastify = createFastifyInstance()
 
   // Import Server Functions.
-  fastify = await withFunctions(fastify, options)
+  // fastify = await withFunctions(fastify, options)
+
+  await fastify.register(redwoodFastifyPlugin)
 
   const http = startFastifyServer({
     port,
