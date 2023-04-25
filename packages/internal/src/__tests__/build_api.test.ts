@@ -518,7 +518,6 @@ test('core-js polyfill list', () => {
   expect(list).toMatchInlineSnapshot(`
     [
       "es.regexp.flags",
-      "es.typed-array.set",
       "esnext.array.last-index",
       "esnext.array.last-item",
       "esnext.composite-key",
