@@ -223,7 +223,7 @@ post {   <- root
 }
 ```
 
-That post will already be retreived from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Now we know everything we need to to make a `findFirst()` query in Prisma, giving it the `id` of the record we already found, but returning the `user` associated to that record, rather than the `post` itself.
+That post will already be retrieved from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Now we know everything we need to to make a `findFirst()` query in Prisma, giving it the `id` of the record we already found, but returning the `user` associated to that record, rather than the `post` itself.
 
 We could also write this resolver as follows:
 

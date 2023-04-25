@@ -69,7 +69,7 @@ export const getApiSideBabelPlugins = (
 ) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
-  // a custom "name" is supplied so that user's do not accidently overwrite
+  // a custom "name" is supplied so that user's do not accidentally overwrite
   // Redwood's own plugins when they specify their own.
 
   // const corejsMajorMinorVersion = pkgJson.dependencies['core-js']

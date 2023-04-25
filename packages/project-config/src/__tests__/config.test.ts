@@ -142,7 +142,7 @@ describe('getConfig', () => {
       path.join(__dirname, './fixtures/redwood.withEnv.toml')
     )
 
-    // Fallsback to the defualt if env var not supplied
+    // Fallsback to the default if env var not supplied
     expect(config.web.port).toBe('8910') // remember env vars have to be strings
 
     // Uses the env var if supplied
