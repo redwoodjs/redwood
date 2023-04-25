@@ -17,7 +17,7 @@ For a reference on dotenv syntax, see the dotenv README's [Rules](https://github
 
 <!-- also in a Redwood app's base directory. -->
 
-Redwood also configures Webpack with `dotenv-webpack`, so that all references to `process.env` vars on the Web side will be replaced with the variable's actual value at built-time. More on this in [Web](#Web).
+Redwood also configures Webpack with `dotenv-webpack`, so that all references to `process.env` vars on the Web side will be replaced with the variable's actual value at build-time. More on this in [Web](#Web).
 
 ## Web
 
@@ -48,7 +48,7 @@ Note: if someone inspects your site's source, _they could see your `REDWOOD_ENV_
 
 #### Option 2: Prefixing with REDWOOD*ENV*
 
-In `.env`, if you prefix your environment variables with `REDWOOD_ENV_`, they'll be available via `process.env.REDWOOD_ENV_MY_VAR_NAME`, and will be dynamically replaced at built-time.
+In `.env`, if you prefix your environment variables with `REDWOOD_ENV_`, they'll be available via `process.env.REDWOOD_ENV_MY_VAR_NAME`, and will be dynamically replaced at build-time.
 
 Like the option above, these are also removed and replaced with the _actual value_ during build in order to be available in production.
 

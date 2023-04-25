@@ -82,7 +82,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           )
 
           // Insert at the bottom of the file:
-          // + export default createCell({ QUERY?, Loading?, Succes?, Failure?, Empty?, beforeQuery?, isEmpty, afterQuery?, displayName? })
+          // + export default createCell({ QUERY?, Loading?, Success?, Failure?, Empty?, beforeQuery?, isEmpty, afterQuery?, displayName? })
           path.node.body.push(
             t.exportDefaultDeclaration(
               t.callExpression(t.identifier('createCell'), [
