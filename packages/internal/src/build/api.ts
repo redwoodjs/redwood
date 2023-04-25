@@ -68,7 +68,7 @@ export const transpileApi = (files: string[], options = {}) => {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
-    target: 'node16',
+    target: 'node18',
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,
