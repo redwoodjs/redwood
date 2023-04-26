@@ -1,8 +1,8 @@
-# Check React Root
+# Upgrade to React 18
 
 React 18 doesn't handle hydration errors the same way 17 did. It's very strict, so we have to be very careful about the server HTML we send to the browser to be hydrated.
 
-In v5, we changed the default index.html file a bit—we removed the `prerenderPlaceholder`:
+In v5, we changed the default `index.html` file a bit—we removed `prerenderPlaceholder`:
 
 ```diff
  <!DOCTYPE html>

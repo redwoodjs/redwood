@@ -3,15 +3,12 @@ import path from 'path'
 
 import { load } from 'cheerio'
 import execa from 'execa'
+import type { TaskInnerAPI } from 'tasuku'
 
 import getRWPaths from '../../../lib/getRWPaths'
 
-export function checkReactRoot() {
-  const indexHTMLFilepath = path.join(
-    getRWPaths().web.base,
-    'src',
-    'index.html'
-  )
+function checkAndTransformReactRoot(taskContext: TaskInnerAPI) {
+  const indexHTMLFilepath = path.join(getRWPaths().web.src, 'index.html')
 
   const indexHTML = load(fs.readFileSync(indexHTMLFilepath, 'utf-8'))
 
@@ -19,13 +16,29 @@ export function checkReactRoot() {
   const reactRootChildren = reactRoot.children()
 
   if (reactRootChildren.length) {
-    console.log(
+    let reactRootHTML = reactRoot.html()
+
+    if (!reactRootHTML) {
+      throw new Error(
+        `Couldn't get HTML in react root (div with id="redwood-app")`
+      )
+    }
+
+    reactRootHTML = reactRootHTML
+      .replace('<!-- Please keep the line below for prerender support. -->', '')
+      .replace('&lt;%= prerenderPlaceholder %&gt;', '')
+      .split('\n')
+      .filter((line) => line.match(/\S/))
+      .join('\n')
+
+    taskContext.setWarning(
       [
         `The react root (<div id="redwood-app"></div>) in ${indexHTMLFilepath} has children:`,
-        reactRoot.html(),
+        '',
+        reactRootHTML,
+        '',
         'React expects to control this DOM node completely. This codemod has moved the children outside the react root',
         'but consider moving them into a layout.',
-        '',
       ].join('\n')
     )
   }
@@ -36,7 +49,7 @@ export function checkReactRoot() {
   fs.writeFileSync(indexHTMLFilepath, indexHTML.html())
 }
 
-export function updateReactDeps() {
+async function upgradeReactDepsTo18() {
   const redwoodProjectPaths = getRWPaths()
 
   const webPackageJSONPath = path.join(
@@ -62,8 +75,9 @@ export function updateReactDeps() {
 
   fs.writeFileSync(webPackageJSONPath, JSON.stringify(webPackageJSON, null, 2))
 
-  execa.commandSync('yarn install', {
+  await execa.command('yarn install', {
     cwd: redwoodProjectPaths.base,
-    stdio: 'inherit',
   })
 }
+
+export { checkAndTransformReactRoot, upgradeReactDepsTo18 }
