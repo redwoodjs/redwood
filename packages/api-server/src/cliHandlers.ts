@@ -1,13 +1,18 @@
 import c from 'ansi-colors'
 
-import { redwoodFastifyPlugin } from '@redwoodjs/fastify'
+import {
+  createFastifyInstance,
+  redwoodFastifyAPI,
+  redwoodFastifyWeb,
+} from '@redwoodjs/fastify'
+import { withApiProxy } from '@redwoodjs/fastify/dist/plugins/withApiProxy'
 import { getConfig } from '@redwoodjs/project-config'
 
-import createFastifyInstance from './fastify'
-import withApiProxy from './plugins/withApiProxy'
-import withFunctions from './plugins/withFunctions'
-import withWebServer from './plugins/withWebServer'
-import { startServer as startFastifyServer } from './server'
+// import createFastifyInstance from './fastify'
+// import withApiProxy from './plugins/withApiProxy'
+// import withFunctions from './plugins/withFunctions'
+// import withWebServer from './plugins/withWebServer'
+// import { startServer as startFastifyServer } from './server'
 import { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
 
 /*
@@ -17,6 +22,14 @@ import { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
 
 const sendProcessReady = () => {
   return process.send && process.send('ready')
+}
+
+function coerceRootPath(path: string) {
+  // Make sure that we create a root path that starts and ends with a slash (/)
+  const prefix = path.charAt(0) !== '/' ? '/' : ''
+  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
+
+  return `${prefix}${path}${suffix}`
 }
 
 export const commonOptions = {
@@ -46,6 +59,21 @@ export const webCliOptions = {
   },
 } as const
 
+/**
+ * TODO:
+ *  Check if the server.ts file exists, if so simply execute it with node
+ */
+/**
+ * TODO:
+ *  Consider if we should do also do the same for the web side given upcoming streaming support
+ */
+
+/**
+ * NOTE:
+ *  All of the following code would eventually move into a server.ts file in the users project.
+ *  This means custom server configuration would be done in the server.ts file and does not need to be supported here.
+ */
+
 export const apiServerHandler = async (options: ApiServerArgs) => {
   const { port, socket, apiRootPath } = options
   const tsApiServer = Date.now()
@@ -53,60 +81,31 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 
   const fastify = createFastifyInstance()
 
-  // Import Server Functions.
-  // fastify = await withFunctions(fastify, options)
+  process.on('exit', () => {
+    fastify?.close()
+  })
 
-  await fastify.register(redwoodFastifyPlugin, {
+  await fastify.register(redwoodFastifyAPI, {
     redwood: {
       apiRootPath,
     },
   })
 
-  const http = startFastifyServer({
-    port,
-    socket,
-    fastify,
-  }).ready(() => {
+  fastify.listen({
+    port: socket ? parseInt(socket) : port,
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+  })
+
+  fastify.ready(() => {
+    fastify.log.debug(
+      { custom: { ...fastify.initialConfig } },
+      'Fastify server configuration'
+    )
+    fastify.log.debug(`Registered plugins \n${fastify.printPlugins()}`)
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsApiServer) + ' ms')))
-
     const on = socket
       ? socket
       : c.magenta(`http://localhost:${port}${apiRootPath}`)
-    console.log(`API listening on ${on}`)
-    const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL endpoint at ${graphqlEnd}`)
-    sendProcessReady()
-  })
-  process.on('exit', () => {
-    http?.close()
-  })
-}
-
-export const bothServerHandler = async (options: BothServerArgs) => {
-  const { port, socket } = options
-  const tsServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
-  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
-
-  let fastify = createFastifyInstance()
-
-  // Attach plugins
-  fastify = await withWebServer(fastify, options)
-  fastify = await withFunctions(fastify, { ...options, apiRootPath })
-
-  startFastifyServer({
-    port,
-    socket,
-    fastify,
-  }).ready(() => {
-    console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
-    const on = socket
-      ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
-    const webServer = c.green(`http://localhost:${port}`)
-    const apiServer = c.magenta(`http://localhost:${port}`)
-    console.log(`Web server started on ${webServer}`)
-    console.log(`API serving from ${apiServer}`)
     console.log(`API listening on ${on}`)
     const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
@@ -125,23 +124,32 @@ export const webServerHandler = async (options: WebServerArgs) => {
     getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
-  let fastify = createFastifyInstance()
+  const fastify = createFastifyInstance()
+
+  process.on('exit', () => {
+    fastify?.close()
+  })
 
   // serve static files from "web/dist"
-  fastify = await withWebServer(fastify, options)
+  await fastify.register(redwoodFastifyWeb, {
+    redwood: {
+      apiHost,
+    },
+  })
 
   // If apiHost is supplied, it means the functions are running elsewhere
   // So we should just proxy requests
   if (apiHost) {
     // Attach plugin for proxying
-    fastify = await withApiProxy(fastify, { apiHost, apiUrl })
+    fastify.register(withApiProxy, { apiHost, apiUrl })
   }
 
-  startFastifyServer({
-    port: port,
-    socket,
-    fastify,
-  }).ready(() => {
+  fastify.listen({
+    port: socket ? parseInt(socket) : port,
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+  })
+
+  fastify.ready(() => {
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
     if (socket) {
       console.log(`Listening on ` + c.magenta(`${socket}`))
@@ -153,10 +161,48 @@ export const webServerHandler = async (options: WebServerArgs) => {
   })
 }
 
-function coerceRootPath(path: string) {
-  // Make sure that we create a root path that starts and ends with a slash (/)
-  const prefix = path.charAt(0) !== '/' ? '/' : ''
-  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
+export const bothServerHandler = async (options: BothServerArgs) => {
+  const { port, socket } = options
+  const tsServer = Date.now()
+  process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
+  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
-  return `${prefix}${path}${suffix}`
+  const fastify = createFastifyInstance()
+
+  process.on('exit', () => {
+    fastify?.close()
+  })
+
+  await fastify.register(redwoodFastifyWeb, {
+    redwood: {
+      // apiHost,
+    },
+  })
+
+  await fastify.register(redwoodFastifyAPI, {
+    redwood: {
+      ...options,
+      apiRootPath,
+    },
+  })
+
+  fastify.listen({
+    port: socket ? parseInt(socket) : port,
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+  })
+
+  fastify.ready(() => {
+    console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
+    const on = socket
+      ? socket
+      : c.magenta(`http://localhost:${port}${apiRootPath}`)
+    const webServer = c.green(`http://localhost:${port}`)
+    const apiServer = c.magenta(`http://localhost:${port}`)
+    console.log(`Web server started on ${webServer}`)
+    console.log(`API serving from ${apiServer}`)
+    console.log(`API listening on ${on}`)
+    const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
+    console.log(`GraphQL endpoint at ${graphqlEnd}`)
+    sendProcessReady()
+  })
 }
