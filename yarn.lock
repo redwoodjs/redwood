@@ -7364,7 +7364,7 @@ __metadata:
     buffer: 6.0.3
     core-js: 3.30.1
     typescript: 5.0.4
-    vite: 4.3.2
+    vite: 4.3.3
     vite-plugin-commonjs: 0.6.2
     vite-plugin-environment: 1.1.3
     vite-plugin-html: 3.2.0
@@ -23743,12 +23743,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.1, nanoid@npm:^3.3.4":
-  version: 3.3.4
-  resolution: "nanoid@npm:3.3.4"
+"nanoid@npm:^3.3.1, nanoid@npm:^3.3.6":
+  version: 3.3.6
+  resolution: "nanoid@npm:3.3.6"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: a0747d5c6021828fe8d38334e5afb05d3268d7d4b06024058ec894ccc47070e4e81d268a6b75488d2ff3485fa79a75c251d4b7c6f31051bb54bb662b6fd2a27d
+  checksum: 606b355960d0fcbe3d27924c4c52ef7d47d3b57208808ece73279420d91469b01ec1dce10fae512b6d4a8c5a5432b352b228336a8b2202a6ea68e67fa348e2ee
   languageName: node
   linkType: hard
 
@@ -26263,14 +26263,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.15, postcss@npm:^8.4.19, postcss@npm:^8.4.21":
-  version: 8.4.21
-  resolution: "postcss@npm:8.4.21"
+"postcss@npm:^8.2.15, postcss@npm:^8.4.19, postcss@npm:^8.4.21, postcss@npm:^8.4.23":
+  version: 8.4.23
+  resolution: "postcss@npm:8.4.23"
   dependencies:
-    nanoid: ^3.3.4
+    nanoid: ^3.3.6
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: a26e7cc86a1807d624d9965914c26c20faa3f237184cbd69db537387f6a4f62df97347549144284d47e9e8e27e7c60e797cb3b92ad36cb2f4c3c9cb3b73f9758
+  checksum: 35c2e26496be286a63706a0b8240fc4d2075a746466df530989208f60ea33cbc80c89420221cffb7d4fdd605afc385993f5f60302447e3047a7c0a8756b6471d
   languageName: node
   linkType: hard
 
@@ -31691,13 +31691,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.3.2":
-  version: 4.3.2
-  resolution: "vite@npm:4.3.2"
+"vite@npm:4.3.3":
+  version: 4.3.3
+  resolution: "vite@npm:4.3.3"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
-    postcss: ^8.4.21
+    postcss: ^8.4.23
     rollup: ^3.21.0
   peerDependencies:
     "@types/node": ">= 14"
@@ -31724,7 +31724,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: efcc6238864b3e1998ca1bed3f352edc1c8f658ab0de7ab472ad3d2322f7de9a4934d233f4c3427b49a5fafaef96df301de4acca4bc15f137d77cb6ae52aab7f
+  checksum: 87814f40a1e21fb372014fe43d0faf3b8f166ee0bc458527b6bccd1b6340782f8e6f5a8986492d99bd31d02f7d1b1538cc0006a0ab6f7e311e603fd1782ae04e
   languageName: node
   linkType: hard
 
