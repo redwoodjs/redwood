@@ -45,7 +45,7 @@ const test = base.extend<any, StorybookFixture>({
           port,
         })
       } else {
-        // Don't wait for this to finish, because it doens't
+        // Don't wait for this to finish, because it doesn't
         const serverHandler = execa(
           `yarn rw storybook`,
           ['--port', port, '--no-open', '--ci'],

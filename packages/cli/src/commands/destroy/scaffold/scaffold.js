@@ -106,7 +106,7 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
         task: () => removeLayoutImport({ model, path }),
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
 
 export const handler = async ({ model: modelArg }) => {
