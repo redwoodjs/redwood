@@ -1,6 +1,7 @@
 {
   "name": "create-redwood-app",
   "version": "5.0.0",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -14,8 +15,7 @@
   ],
   "scripts": {
     "build": "yarn node ./build.mjs",
-    "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build"
+    "test": "yarn node ./tests/template.test.js"
   },
   "dependencies": {
     "@opentelemetry/api": "1.4.1",

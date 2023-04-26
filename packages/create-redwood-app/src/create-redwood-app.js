@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import path from 'path'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
 import chalk from 'chalk'
@@ -14,13 +15,21 @@ import yargs from 'yargs/yargs'
 
 import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 
-import { name, version } from '../package'
-
+// In ESM, for relative paths, the extension is important.
+// See https://nodejs.org/dist/latest-v18.x/docs/api/esm.html#mandatory-file-extensions.
 import {
   startTelemetry,
   shutdownTelemetry,
   recordErrorViaTelemetry,
-} from './telemetry'
+} from './telemetry.js'
+
+// JSON modules aren't stable yet, but if they were we could use them instead.
+// See https://nodejs.org/dist/latest-v18.x/docs/api/esm.html#json-modules.
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+const { name, version } = fs.readJSONSync(
+  path.resolve(__dirname, '../package.json')
+)
 
 // Telemetry
 const { telemetry } = Parser(hideBin(process.argv))
@@ -152,7 +161,7 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
  */
 function checkNodeAndYarnVersion(templateDir) {
   return new Promise((resolve) => {
-    const { engines } = require(path.join(templateDir, 'package.json'))
+    const { engines } = fs.readJSONSync(path.join(templateDir, 'package.json'))
 
     checkNodeVersionCb(engines, (_error, result) => {
       return resolve([result.isSatisfied, result.versions])

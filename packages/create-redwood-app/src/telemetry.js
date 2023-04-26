@@ -1,3 +1,6 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import opentelemetry, { SpanStatusCode } from '@opentelemetry/api'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
@@ -9,9 +12,14 @@ import {
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 import ci from 'ci-info'
 import envinfo from 'envinfo'
+import fs from 'fs-extra'
 import system from 'systeminformation'
 
-import { name as packageName, version as packageVersion } from '../package'
+// JSON modules aren't stable yet, but if they were we could use them instead.
+// See https://nodejs.org/dist/latest-v18.x/docs/api/esm.html#json-modules.
+const { name: packageName, version: packageVersion } = fs.readJSONSync(
+  path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../package.json')
+)
 
 /**
  * @type NodeTracerProvider

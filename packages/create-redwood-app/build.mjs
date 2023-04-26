@@ -8,6 +8,7 @@ import * as esbuild from 'esbuild'
 // instead of using the catch-all `packages: 'external'` option.
 const result = await esbuild.build({
   entryPoints: ['src/create-redwood-app.js'],
+  format: 'esm',
   bundle: true,
   platform: 'node',
   target: ['node18'],
