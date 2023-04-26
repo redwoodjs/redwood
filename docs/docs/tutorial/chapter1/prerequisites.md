@@ -6,7 +6,7 @@
 
 Redwood is composed of several popular libraries to make full-stack web development easier. Unfortunately, we can't teach all of those technologies from scratch during this tutorial, so we're going to assume you are already familiar with a few core concepts:
 
-- [React](https://reactjs.org/)
+- [React](https://react.dev/)
 - [GraphQL](https://graphql.org/)
 - [Prisma](https://prisma.io/)
 - [Jamstack Deployment](https://jamstack.org/)
