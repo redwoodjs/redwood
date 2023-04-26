@@ -69,7 +69,7 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
           .filter((name) => !result.versions[name].isSatisfied)
           .map((name) => {
             const { version, wanted } = result.versions[name]
-            return `${name} ${wanted} required, but you have ${version}`
+            return `${name} ${wanted} required; found ${version}`
           })
         return resolve([false, logStatements])
       })
@@ -89,37 +89,22 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
 
   if (!engineCheckPassed) {
     tui.stopReactive(true)
-    const engineCheckErrorDocs = terminalLink(
-      'Tutorial - Prerequisites',
-      'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
-    )
     tui.displayError(
       'Compatibility checks failed',
       [
         `  ${engineCheckErrors.join('\n')}`,
         '',
-        `  This may make your project incompatible with some deploy targets.`,
-        `  See: ${engineCheckErrorDocs}`,
+        `  Please use tools like nvm or corepack to change to a compatible version.`,
+        `  See: ${terminalLink(
+          'Tutorial - Prerequisites',
+          'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+        )}`,
       ].join('\n')
     )
-    try {
-      const response = await tui.prompt({
-        type: 'select',
-        name: 'override-engine-error',
-        message: 'How would you like to proceed?',
-        choices: ['Override error and continue install', 'Quit install'],
-        initial: 0,
-      })
-      if (response['override-engine-error'] === 'Quit install') {
-        recordErrorViaTelemetry('User quit after engine check error')
-        await shutdownTelemetry()
-        process.exit(1) // TODO: Should we use a different exit code?
-      }
-    } catch (error) {
-      recordErrorViaTelemetry('User cancelled install at engine check error')
-      await shutdownTelemetry()
-      process.exit(1)
-    }
+
+    recordErrorViaTelemetry('Compatibility checks failed')
+    await shutdownTelemetry()
+    process.exit(1)
   }
 }
 
