@@ -243,7 +243,7 @@ async function installNodeModules(newAppDir) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
     header: 'Installing node modules',
-    content: '  ⏱  This could take a while...',
+    content: '  ⏱ This could take a while...',
     spinner: {
       enabled: true,
     },
