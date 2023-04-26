@@ -329,4 +329,21 @@ export class RedwoodTUI {
       })
     )
   }
+
+  /**
+   * Display a warning message in a box
+   *
+   * @param title Error box title
+   * @param message Error message
+   */
+  displayWarning(title: string, message: string) {
+    this.drawText(
+      boxen(message, {
+        padding: 1,
+        borderColor: 'yellow',
+        title: `⚠ Warning: ${title}`,
+        titleAlignment: 'left',
+      })
+    )
+  }
 }
