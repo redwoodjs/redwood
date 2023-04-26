@@ -187,7 +187,7 @@ it('prepare sets listr2 rollback functions and rollback executes correctly', asy
   rollback.prepareForRollback(tasks)
 
   tasks.tasks.forEach((task) => {
-    expect(task.tasks.rollback).toBe(rollback.executeRollback)
+    expect(task.task.rollback).toBe(rollback.executeRollback)
   })
 
   try {
