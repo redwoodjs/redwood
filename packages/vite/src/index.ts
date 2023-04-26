@@ -263,8 +263,6 @@ export const transform = async (srcPath: string) => {
     loader: 'jsx',
   })
 
-  // console.log('viteResult.code', viteResult.code)
-
   // return viteResult.code
   return esbuildResult.code
 }
