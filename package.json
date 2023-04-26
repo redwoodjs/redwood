@@ -63,7 +63,7 @@
     "@types/lodash.template": "4.5.1",
     "@types/ncp": "2.0.5",
     "@types/prompts": "2.4.4",
-    "all-contributors-cli": "6.24.0",
+    "all-contributors-cli": "6.25.0",
     "babel-jest": "29.5.0",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",
