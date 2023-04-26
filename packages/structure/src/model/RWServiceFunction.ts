@@ -84,7 +84,7 @@ export class RWServiceFunction extends BaseNode {
       // TODO: check that types match
       // to do this it is probably easier to leverage a graphql code generator and the typescript compiler
       // the trick is to create a source file with an interface assignment that will fail if there is a mismatch
-      // we then simpy "bubble up" the type errors from the typescript compiler
+      // we then simply "bubble up" the type errors from the typescript compiler
     }
   }
 }

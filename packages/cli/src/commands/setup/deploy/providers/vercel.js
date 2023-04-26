@@ -16,7 +16,7 @@ const notes = [
 
 export const handler = async () => {
   const tasks = new Listr([updateApiURLTask('/api'), printSetupNotes(notes)], {
-    rendererOptions: { collapse: false },
+    rendererOptions: { collapseSubtasks: false },
   })
   try {
     await tasks.run()

@@ -46,7 +46,7 @@ export const handler = () => {
         task: removeGraphiqlFromGraphqlHandler,
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
   try {
     tasks.run()

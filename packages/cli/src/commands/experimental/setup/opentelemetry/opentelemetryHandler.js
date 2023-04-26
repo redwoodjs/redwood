@@ -185,7 +185,7 @@ export const handler = async ({ force, verbose }) => {
       },
     ],
     {
-      rendererOptions: { collapse: false, persistentOutput: true },
+      rendererOptions: { collapseSubtasks: false, persistentOutput: true },
       renderer: verbose ? 'verbose' : 'default',
     }
   )
