@@ -100,6 +100,10 @@ export const webAuthnSession = (event: APIGatewayProxyEvent) => {
   return webAuthnCookie.split('=')[1].trim()
 }
 
+export const hashToken = (token: string) => {
+  return CryptoJS.SHA256(token).toString(CryptoJS.enc.Hex)
+}
+
 // hashes a password using either the given `salt` argument, or creates a new
 // salt and hashes using that. Either way, returns an array with [hash, salt]
 export const hashPassword = (text: string, salt?: string) => {
