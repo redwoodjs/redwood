@@ -171,7 +171,10 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         },
       },
     ],
-    { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
+    {
+      renderer: verbose && 'verbose',
+      rendererOptions: { collapseSubtasks: false },
+    }
   )
 
   try {
