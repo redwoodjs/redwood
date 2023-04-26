@@ -32,11 +32,11 @@ declare global {
   > {
     data: TData | undefined
     loading: boolean
-    // @MARK not adding error here, as it gets overriden by type overrides
+    // @MARK not adding error here, as it gets overridden by type overrides
     // see packages/web/src/apollo/typeOverride.ts
   }
 
-  // not defining it here, because it gets overriden by Apollo provider anyway
+  // not defining it here, because it gets overridden by Apollo provider anyway
   interface MutationOperationResult<TData, TVariables> {}
 
   // Overridable useQuery and useMutation hooks

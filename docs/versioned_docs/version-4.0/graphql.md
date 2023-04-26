@@ -1456,7 +1456,7 @@ The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is
 
 [GraphQL Armor](https://escape.tech/graphql-armor/) is a middleware that adds a security layer the RedwoodJS GraphQL endpoint configured with sensible defaults.
 
-You don't have to configure anything to enforce protection against alias, cost, depth, directive, tokens abuse in GraphQL operations as well as to block field suggestions or revealing error messages that might leak sensitive infomration.
+You don't have to configure anything to enforce protection against alias, cost, depth, directive, tokens abuse in GraphQL operations as well as to block field suggestions or revealing error messages that might leak sensitive information.
 
 But, if you need to enable, disable to modify the default settings, GraphQL Armor is fully configurable in a per-plugin fashion.
 

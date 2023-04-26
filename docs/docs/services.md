@@ -854,7 +854,7 @@ cache(product, () => {
 
 One drawback to this key is in potentially responding to *too many* data changes, even ones we don't care about caching. Imagine that a product has a `views` field that tracks how many times it has been viewed in the browser. This number will be changing all the time, but if we don't display that count to the user then we're constantly re-creating the cache for the product even though no data the user will see is changing. There's no way to tell Prisma "set the `updatedAt` when the record changes, but not if the `views` column changes." This cache key is too variable. One solution would be to move the `views` column to another table with a `productId` pointing back to this record. Now the `product` is back to just containing data we care about caching.
 
-What if you want to expire a cache regardless of whether the data itself has changed? Maybe you make a UI change where you now show a product's SKU on the page where you didn't before. You weren't previously selecing the `sku` field out of the database, and so it hasn't been cached. But now that you're showing it you'll need to add it the list of fields to return from the service. One solution would be forceably update all of the `updatedAt` fields in the database. But a) Prisma won't easily let you do this since it think it controls that column, and b) every product is going to appear to have been edited at the same time, when in fact nothing changed—you just needed to bust the cache.
+What if you want to expire a cache regardless of whether the data itself has changed? Maybe you make a UI change where you now show a product's SKU on the page where you didn't before. You weren't previously selecting the `sku` field out of the database, and so it hasn't been cached. But now that you're showing it you'll need to add it the list of fields to return from the service. One solution would be forcibly update all of the `updatedAt` fields in the database. But a) Prisma won't easily let you do this since it think it controls that column, and b) every product is going to appear to have been edited at the same time, when in fact nothing changed—you just needed to bust the cache.
 
 An easier solution to this problem would be to add some kind of version number to your cache key that you are in control of and can change whenever you like. Something like appending a `v1` to the key: `v1-product-${id}-${updatedAt}`
 
@@ -1097,7 +1097,7 @@ const post = ({ id }) => {
 
 ### `deleteCacheKey()`
 
-There may be instances where you want to explictly remove something from the cache so that it gets re-created with the same cache key. A good example is caching a single user, using only their `id` as the cache key. By default, the cache would never bust because a user's `id` is not going to change, no matter how many other fields on user are updated. With `deleteCacheKey()` you can choose to delete the key, for example, when the `updateUser()` service is called. The next time `user()` is called, it will be re-cached with the same key, but it will now contain whatever data was updated.
+There may be instances where you want to explicitly remove something from the cache so that it gets re-created with the same cache key. A good example is caching a single user, using only their `id` as the cache key. By default, the cache would never bust because a user's `id` is not going to change, no matter how many other fields on user are updated. With `deleteCacheKey()` you can choose to delete the key, for example, when the `updateUser()` service is called. The next time `user()` is called, it will be re-cached with the same key, but it will now contain whatever data was updated.
 
 ```javascript
 import { cache, deleteCacheKey } from 'src/lib/cache'
@@ -1116,7 +1116,7 @@ const updateUser = async ({ id, input }) => {
 
 :::caution
 
-When explictly deleting cache keys like this you could find yourself going down a rabbit hole. What if there is another service somewhere that also updates user? Or another service that updates an organization, as well as all of its underlying child users at the same time? You'll need to be sure to call `deleteCacheKey()` in these places as well. As a general guideline, it's better to come up with a cache key that encapsulates any triggers for when the data has changed (like the `updatedAt` timestamp, which will change no matter who updates the user, anywhere in your codebase).
+When explicitly deleting cache keys like this you could find yourself going down a rabbit hole. What if there is another service somewhere that also updates user? Or another service that updates an organization, as well as all of its underlying child users at the same time? You'll need to be sure to call `deleteCacheKey()` in these places as well. As a general guideline, it's better to come up with a cache key that encapsulates any triggers for when the data has changed (like the `updatedAt` timestamp, which will change no matter who updates the user, anywhere in your codebase).
 
 Scenarios like this are what people are talking about when they say that caching is hard!
 

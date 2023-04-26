@@ -175,6 +175,10 @@ This lists a single server, in the `production` environment, providing the hostn
 
 The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` file, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
 
+#### Using Environment Variables in `deploy.toml`
+
+Similarly to `redwood.toml`, `deploy.toml` supports interpolation of environment variables.  For more details on how to use the environment variable interpolation see [Using Environment Variables in redwood.toml](/docs/app-configuration-redwood-toml#using-environment-variables-in-redwoodtoml)
+
 #### Multiple Servers
 
 If you start horizontally scaling your application you may find it necessary to have the web and api sides served from different servers. The configuration files can accommodate this:
