@@ -152,6 +152,13 @@ export interface GraphQLHandlerOptions {
    * Defaults to '/graphql' as this value must match the name of the `graphql` function on the api-side.
    */
   graphiQLEndpoint?: string
+
+  /**
+   * @description Allow schema introspection.
+   * By default, schema introspection is disabled in production. Explicitly set this to true or false to override in all environments.
+   */
+  allowIntrospection?: boolean
+
   /**
    * @description Function that returns custom headers (as string) for GraphiQL.
    *
