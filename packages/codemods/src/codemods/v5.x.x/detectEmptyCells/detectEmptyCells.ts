@@ -24,7 +24,7 @@ async function detectEmptyCells() {
   if (susceptibleCells.length > 0) {
     console.log(
       [
-        'You have Cells that are susceptible to the new isDataEmpty behavior:',
+        'You have Cells that are susceptible to the new `isDataEmpty` behavior:',
         '',
         susceptibleCells.map((c) => `• ${c}`).join('\n'),
         '',
