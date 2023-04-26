@@ -93,6 +93,6 @@ export function resetRollback() {
 export function prepareForRollback(tasks) {
   resetRollback()
   tasks.tasks?.forEach((task) => {
-    task.tasks.rollback = executeRollback
+    task.task.rollback = executeRollback
   })
 }

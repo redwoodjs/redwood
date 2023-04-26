@@ -32,7 +32,7 @@ export const handler = async ({ force }) => {
       addFilesTask({ files, force }),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
   try {
     await tasks.run()
