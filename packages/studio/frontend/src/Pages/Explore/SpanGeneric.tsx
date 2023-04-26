@@ -9,11 +9,13 @@ import ErrorPanel from '../../Components/Panels/ErrorPanel'
 import EventList from '../../Components/Span/EventList'
 import ResourceList from '../../Components/Span/ResourceList'
 import SpanDetails from '../../Components/Span/SpanDetails'
+import { ITEM_POLLING_INTERVAL } from '../../util/polling'
 
 const GET_SPAN_DATA = gql`
   query GetSpanData($spanId: String!) {
     span(spanId: $spanId) {
       id
+      type
       trace
       parent
       name
@@ -26,12 +28,12 @@ const GET_SPAN_DATA = gql`
       attributes
       events
       resources
-      descendantFeatures {
+      descendantSpans {
         id
         type
         brief
       }
-      ancestorFeatures {
+      ancestorSpans {
         id
         type
         brief
@@ -55,7 +57,7 @@ const attemptJSONDisplay = (value: any) => {
 export default function SpanGeneric({ id: spanId }: { id: string }) {
   const { loading, error, data } = useQuery(GET_SPAN_DATA, {
     variables: { spanId },
-    pollInterval: 2_500,
+    pollInterval: ITEM_POLLING_INTERVAL,
   })
 
   if (error) {
@@ -99,8 +101,8 @@ export default function SpanGeneric({ id: spanId }: { id: string }) {
         </div>
 
         {/* Feature lists */}
-        <DescendantFeatureList features={data.span.descendantFeatures} />
-        <AncestorFeatureList features={data.span.ancestorFeatures} />
+        <DescendantFeatureList features={data.span.descendantSpans} />
+        <AncestorFeatureList features={data.span.ancestorSpans} />
 
         {/* Other span data */}
         <div className="overflow-hidden bg-white shadow rounded-md">

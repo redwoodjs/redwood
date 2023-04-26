@@ -6,7 +6,7 @@ import { Callout } from '@tremor/react'
 export default function ErrorPanel({ error }: { error: any }) {
   return (
     <Callout
-      className="w-full min-h-12 mt-4"
+      className="w-full min-h-12"
       title="An error occurred"
       icon={ExclamationTriangleIcon}
       color="rose"

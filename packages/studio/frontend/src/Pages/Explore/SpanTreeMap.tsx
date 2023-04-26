@@ -30,7 +30,7 @@ const GET_TRACE_SPANS = gql`
   }
 `
 
-export default function Trace() {
+export default function SpanTreeMap() {
   const [genericSpansEnabled, setGenericSpansEnabled] = useState(true)
 
   const { traceId } = useParams()

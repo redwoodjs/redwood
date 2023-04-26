@@ -8,11 +8,8 @@ import { studioConfig, webConfig } from '../services/config'
 import { span, spans } from '../services/explore/span'
 import { traces, trace, traceCount } from '../services/explore/trace'
 import { prismaQuerySpans } from '../services/prismaSpans'
-import { retypeSpans } from '../services/span'
-import {
-  getFeaturesFromAncestors,
-  getFeaturesFromDescendants,
-} from '../services/util'
+import { retypeSpans, truncateSpans } from '../services/span'
+import { getAncestorSpans, getDescendantSpans } from '../services/util'
 
 export const setupYoga = (fastify: FastifyInstance) => {
   const schema = createSchema<{
@@ -21,13 +18,6 @@ export const setupYoga = (fastify: FastifyInstance) => {
   }>({
     typeDefs: /* GraphQL */ `
       ${JSONDefinition}
-
-      # Feature
-      type Feature {
-        id: String
-        type: String
-        brief: String
-      }
 
       # HTTP
       type HttpSpan {
@@ -45,7 +35,6 @@ export const setupYoga = (fastify: FastifyInstance) => {
       type Trace {
         id: String
         spans: [Span]
-        features: [Feature]
       }
 
       # Spans
@@ -68,8 +57,8 @@ export const setupYoga = (fastify: FastifyInstance) => {
         # Enrichments
         type: String
         brief: String
-        descendantFeatures: [Feature]
-        ancestorFeatures: [Feature]
+        descendantSpans: [Span]
+        ancestorSpans: [Span]
       }
 
       type SpanTypeTimelineData {
@@ -162,12 +151,14 @@ export const setupYoga = (fastify: FastifyInstance) => {
 
       type Mutation {
         retypeSpans: Boolean!
+        truncateSpans: Boolean!
       }
     `,
     resolvers: {
       JSON: JSONResolver,
       Mutation: {
         retypeSpans,
+        truncateSpans,
       },
       Query: {
         studioConfig,
@@ -186,11 +177,11 @@ export const setupYoga = (fastify: FastifyInstance) => {
         spanTypeTimeline,
       },
       Span: {
-        descendantFeatures: async (span, _args, _ctx) => {
-          return getFeaturesFromDescendants(span.id)
+        descendantSpans: async (span, _args, _ctx) => {
+          return getDescendantSpans(span.id)
         },
-        ancestorFeatures: async (span, _args, _ctx) => {
-          return getFeaturesFromAncestors(span.id)
+        ancestorSpans: async (span, _args, _ctx) => {
+          return getAncestorSpans(span.id)
         },
       },
     },

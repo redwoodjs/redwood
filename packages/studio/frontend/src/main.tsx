@@ -13,16 +13,23 @@ import ComingSoon from './Pages/ComingSoon'
 import Config from './Pages/Config'
 import Span from './Pages/Explore/Span'
 import SpanList from './Pages/Explore/SpanList'
+import SpanTreeMap from './Pages/Explore/SpanTreeMap'
 import Trace from './Pages/Explore/Trace'
 import TraceList from './Pages/Explore/TraceList'
-import TraceTree from './Pages/Explore/TraceTree'
 import GraphiQL from './Pages/GraphiQL'
 import Landing from './Pages/Landing'
 import NotFound from './Pages/NotFound'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4318/graphql',
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Span: {
+        keyFields: ['id', 'type'],
+      },
+    },
+  }),
+  connectToDevTools: true,
 })
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -38,9 +45,15 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               {/* OpenTelemetry tracing */}
               <Route path="trace" element={<TraceList />} />
               <Route path="trace/:traceId" element={<Trace />} />
-              <Route path="trace-tree/:traceId" element={<TraceTree />} />
               <Route path="span" element={<SpanList />} />
               <Route path="span/:spanId" element={<Span />} />
+              <Route path="map/:spanId" element={<SpanTreeMap />} />
+            </Route>
+
+            {/* Monitor */}
+            <Route path="/monitor">
+              <Route path="performance" element={<ComingSoon />} />
+              <Route path="error" element={<ComingSoon />} />
             </Route>
 
             {/* GraphiQL */}

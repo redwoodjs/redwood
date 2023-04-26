@@ -22,7 +22,7 @@ async function migrate000(db: Database<sqlite3.Database, sqlite3.Statement>) {
 
   // NOTE: PRAGMA user_version does not support prepared statement variables
   const sql = `
-    BEGIN;
+    BEGIN TRANSACTION;
       ALTER TABLE span ADD COLUMN type TEXT(255) DEFAULT NULL;
       ALTER TABLE span ADD COLUMN brief TEXT(255) DEFAULT NULL;
       PRAGMA user_version = ${user_version + 1};
@@ -35,7 +35,7 @@ const setupTables = async (
   db: Database<sqlite3.Database, sqlite3.Statement>
 ) => {
   // BIGINT for UnixNano times will break in 239 years (Fri Apr 11 2262 23:47:16 GMT+0000)
-  const spanTableSQL = `CREATE TABLE IF NOT EXISTS span (id TEXT PRIMARY KEY, trace TEXT NOT NULL, parent TEXT, name TEXT, kind INTEGER, status_code INTEGER, status_message TEXT, start_nano BIGINT, end_nano BIGINT, duration_nano BIGINT, events JSON, attributes JSON, resources, JSON);`
+  const spanTableSQL = `CREATE TABLE IF NOT EXISTS span (id TEXT PRIMARY KEY, trace TEXT NOT NULL, parent TEXT, name TEXT, kind INTEGER, status_code INTEGER, status_message TEXT, start_nano BIGINT, end_nano BIGINT, duration_nano BIGINT, events JSON, attributes JSON, resources JSON);`
   await db.exec(spanTableSQL)
 }
 

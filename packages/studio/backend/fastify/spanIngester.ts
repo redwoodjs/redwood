@@ -108,9 +108,9 @@ export default async function routes(fastify: FastifyInstance, _options: any) {
 
       // Insert the span
       const spanInsertStatement = await db.prepare(
-        'INSERT INTO span (id, trace, parent, name, kind, status_code, status_message, start_nano, end_nano, duration_nano, events, attributes, resources) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, json(?), json(?), json(?)) RETURNING *;'
+        'INSERT INTO span (id, trace, parent, name, kind, status_code, status_message, start_nano, end_nano, duration_nano, events, attributes, resources) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, json(?), json(?), json(?)) RETURNING id;'
       )
-      const spanInsertResult = await spanInsertStatement.run(
+      const spanInsertResult = await spanInsertStatement.get(
         span.id,
         span.trace,
         span.parent,
@@ -125,8 +125,8 @@ export default async function routes(fastify: FastifyInstance, _options: any) {
         JSON.stringify(span.attributes),
         JSON.stringify(span.resourceAttributes)
       )
-      if (spanInsertResult.lastID) {
-        await retypeSpan(undefined, { id: spanInsertResult.lastID })
+      if (spanInsertResult.id) {
+        await retypeSpan(undefined, { id: spanInsertResult.id })
       }
       return spanInsertResult
     }

@@ -28,13 +28,15 @@ export async function retypeSpan(_parent: unknown, { id }: { id: number }) {
 
   let lastID = undefined
 
+  // substr(json_extract(attributes, '$.\"http.method\"') || ' ' || json_extract(attributes, '$.\"http.method\"'), 0, 255)
+
   // HTTP Requests
   lastID = (
     await db.run(
       `
     UPDATE span SET
       type = 'http',
-      brief = substr(json_extract(attributes, '$.\"http.method\"') || ' ' || json_extract(attributes, '$.\"http.method\"'), 0, 255)
+      brief = 'http'
     WHERE
       json_extract(attributes, '$.\"http.method\"') IS NOT NULL AND
       id = ?;
@@ -97,15 +99,30 @@ export async function retypeSpan(_parent: unknown, { id }: { id: number }) {
     )
   ).lastID
 
-  // // Redwood Services
+  // Redwood Services
   lastID = (
     await db.run(
       `
     UPDATE span SET
-      type = 'prisma',
+      type = 'redwood-service',
       brief = NULL
     WHERE
       name LIKE 'redwoodjs:api:services%' AND
+      id = ?;
+  `,
+      id
+    )
+  ).lastID
+
+  // Redwood Functions
+  lastID = (
+    await db.run(
+      `
+    UPDATE span SET
+      type = 'redwood-function',
+      brief = NULL
+    WHERE
+      name LIKE 'redwoodjs:api:functions%' AND
       id = ?;
   `,
       id
@@ -162,14 +179,31 @@ export async function retypeSpans(_parent: unknown) {
       name LIKE 'prisma:client:operation%';
   `)
 
-  // // Redwood Services
+  // Redwood Services
   await db.run(`
     UPDATE span SET
-      type = 'prisma',
+      type = 'redwood-service',
       brief = NULL
     WHERE
       name LIKE 'redwoodjs:api:services%';
   `)
 
+  // Redwood Functions
+  await db.run(`
+    UPDATE span SET
+      type = 'redwood-function',
+      brief = NULL
+    WHERE
+      name LIKE 'redwoodjs:api:functions%';
+  `)
+
+  return true
+}
+
+export async function truncateSpans(_parent: unknown) {
+  const db = await getDatabase()
+  await db.exec(`
+    DELETE FROM span
+  `)
   return true
 }

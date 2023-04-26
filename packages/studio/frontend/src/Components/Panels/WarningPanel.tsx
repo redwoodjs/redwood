@@ -6,7 +6,7 @@ import { Callout } from '@tremor/react'
 export default function WarningPanel({ warning }: { warning: any }) {
   return (
     <Callout
-      className="w-full min-h-12 mt-4"
+      className="w-full min-h-12"
       title="A warning"
       icon={ExclamationCircleIcon}
       color="orange"

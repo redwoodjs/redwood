@@ -13,6 +13,9 @@ import {
   RadioIcon,
   XMarkIcon,
   WrenchIcon,
+  ExclamationTriangleIcon,
+  ClockIcon,
+  MapIcon,
 } from '@heroicons/react/24/outline'
 import { Outlet, NavLink } from 'react-router-dom'
 
@@ -21,6 +24,12 @@ import redwooodLogo from '../assets/redwoodjs_diecut_name.svg'
 const explorerNavigation = [
   { name: 'Traces', to: '/explorer/trace', icon: RadioIcon },
   { name: 'Spans', to: '/explorer/span', icon: CubeIcon },
+  { name: 'Maps', to: '/explorer/map', icon: MapIcon },
+]
+
+const monitorNavigation = [
+  { name: 'Performance', to: '/monitor/performance', icon: ClockIcon },
+  { name: 'Errors', to: '/monitor/error', icon: ExclamationTriangleIcon },
 ]
 
 const apiNavigation = [
@@ -63,6 +72,26 @@ function SidebarContent() {
         </div>
         <ul>
           {explorerNavigation.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.to}
+              className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-sinopia text-slate-100 hover:bg-persimmon"
+            >
+              <item.icon
+                className="mr-3 h-6 w-6 flex-shrink-0 text-slate-100"
+                aria-hidden="true"
+              />
+              {item.name}
+            </NavLink>
+          ))}
+        </ul>
+      </li>
+      <li>
+        <div className="text-xs font-semibold leading-6 text-gray-400">
+          Monitoring Dashboards
+        </div>
+        <ul>
+          {monitorNavigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.to}

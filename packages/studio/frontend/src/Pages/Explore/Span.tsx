@@ -55,4 +55,6 @@ export default function Span() {
     default:
       return <SpanGeneric id={data.span.id}></SpanGeneric>
   }
+
+  // return <>{spanId}</>
 }

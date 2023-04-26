@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom'
 import LoadingSpinner from '../../Components/LoadingSpinner'
 import ErrorPanel from '../../Components/Panels/ErrorPanel'
 import InformationPanel from '../../Components/Panels/InformationPanel'
-import WarningPanel from '../../Components/Panels/WarningPanel'
 import SpanTypeLabel from '../../Components/Span/SpanTypeLabel'
 import { LIST_POLLING_INTERVAL } from '../../util/polling'
 import {
@@ -25,7 +24,11 @@ const QUERY_GET_ALL_TRACES = gql`
       spans {
         id
         type
+        name
+        parent
+        statusCode
         startNano
+        endNano
       }
     }
   }
@@ -38,12 +41,12 @@ function TraceListComponent({ traces }: { traces: any[] }) {
 
   return (
     <>
-      {traces?.map((row: any) => {
-        const countOfType = row.spans.reduce((acc: any, span: any) => {
+      {traces.map((row: any) => {
+        const typeCountMap = new Map<string | null, number>()
+        row.spans.forEach((span: any) => {
           const type = span.type
-          acc[type] = acc[type] ? acc[type] + 1 : 1
-          return acc
-        }, {})
+          typeCountMap.set(type, (typeCountMap.get(type) || 0) + 1)
+        })
 
         return (
           <div
@@ -74,13 +77,13 @@ function TraceListComponent({ traces }: { traces: any[] }) {
                   </div>
                 </div>
                 <div className="mt-2 flex flex-row flex-wrap gap-2">
-                  {Object.keys(countOfType)
+                  {Array.from(typeCountMap.keys())
                     .sort()
-                    .map((type: string) => (
+                    .map((type: string | null) => (
                       <SpanTypeLabel
                         key={type}
                         type={type}
-                        count={countOfType[type]}
+                        count={typeCountMap.get(type)}
                       />
                     ))}
                 </div>
@@ -132,9 +135,10 @@ export default function TraceList() {
       {/* Header  */}
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-slate-100 px-4 pt-2 pb-2 bg-rich-black rounded-md">
-            OpenTelemetry Traces
-          </h1>
+          <div className="text-base font-semibold leading-6 text-slate-100 px-4 pt-2 pb-2 bg-rich-black rounded-md flex justify-between">
+            <div>OpenTelemetry Traces</div>
+            <div>{data?.rows?.length && `(${data.rows.length})`}</div>
+          </div>
         </div>
       </div>
 

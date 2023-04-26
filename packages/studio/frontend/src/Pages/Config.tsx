@@ -3,6 +3,7 @@ import React from 'react'
 import { useQuery, gql, useMutation } from '@apollo/client'
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
 import {
+  Bold,
   Button,
   Callout,
   Card,
@@ -42,6 +43,12 @@ const MUTATION_RETYPE_SPANS = gql`
   }
 `
 
+const MUTATION_TRUNCATE_SPANS = gql`
+  mutation truncateSpans {
+    truncateSpans
+  }
+`
+
 function Config() {
   const getConfigQuery = useQuery(QUERY_GET_CONFIG, {
     pollInterval: ITEM_POLLING_INTERVAL,
@@ -50,7 +57,6 @@ function Config() {
   const [executeRetypeSpansMutation, retypeSpansMutation] = useMutation(
     MUTATION_RETYPE_SPANS
   )
-
   async function handleRetypeSpans() {
     try {
       const success = await executeRetypeSpansMutation()
@@ -61,6 +67,26 @@ function Config() {
       }
     } catch (error) {
       toast.error('Failed to retyped spans!')
+      console.error(error)
+    }
+  }
+
+  const [executeTruncateSpansMutation, truncateSpansMutation] = useMutation(
+    MUTATION_TRUNCATE_SPANS
+  )
+  async function handleTruncateSpans() {
+    if (!confirm("This action can't be undone! Are you sure?")) {
+      return
+    }
+    try {
+      const success = await executeTruncateSpansMutation()
+      if (success) {
+        toast.success('Successfully truncated spans.')
+      } else {
+        toast.error('Failed to truncate spans!')
+      }
+    } catch (error) {
+      toast.error('Failed to truncate spans!')
       console.error(error)
     }
   }
@@ -135,6 +161,21 @@ function Config() {
             onClick={() => {
               handleRetypeSpans()
             }}
+          >
+            Execute
+          </Button>
+        </Flex>
+        <Flex className="mt-4">
+          <Text>
+            Truncate Spans <Bold>[Irreversible action!]</Bold>
+          </Text>
+          <Button
+            loading={truncateSpansMutation.loading}
+            loadingText="Running..."
+            onClick={() => {
+              handleTruncateSpans()
+            }}
+            color="red"
           >
             Execute
           </Button>

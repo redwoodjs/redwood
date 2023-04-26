@@ -12,19 +12,16 @@ import WarningPanel from '../../Components/Panels/WarningPanel'
 import TraceDetails from '../../Components/Trace/TraceDetails'
 import FlameTableView from '../../Components/Tracing/FlameTableView'
 import TimelineView from '../../Components/Tracing/TimelineView'
+import { ITEM_POLLING_INTERVAL } from '../../util/polling'
 import { classNames } from '../../util/ui'
 
 const GET_TRACE_SPANS = gql`
   query GetTraceSpans($id: String!) {
     trace(traceId: $id) {
       id
-      features {
-        id
-        type
-        brief
-      }
       spans {
         id
+        type
         name
         parent
         kind
@@ -55,6 +52,7 @@ export default function Trace() {
   const { traceId } = useParams()
   const { loading, error, data } = useQuery(GET_TRACE_SPANS, {
     variables: { id: traceId },
+    pollInterval: ITEM_POLLING_INTERVAL,
   })
 
   const [visualisationMode, setVisualisationMode] = useState<VisualisationMode>(
