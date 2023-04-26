@@ -4,6 +4,7 @@ import path from 'path'
 import toml from '@iarna/toml'
 import boxen from 'boxen'
 import { Listr } from 'listr2'
+import { env as envInterpolation } from 'string-env-interpolation'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
 
@@ -588,7 +589,8 @@ const mergeLifecycleEvents = (lifecycle, other) => {
   return lifecycleCopy
 }
 
-export const parseConfig = (yargs, configToml) => {
+export const parseConfig = (yargs, rawConfigToml) => {
+  const configToml = envInterpolation(rawConfigToml)
   const config = toml.parse(configToml)
   let envConfig
   const emptyLifecycle = {}
