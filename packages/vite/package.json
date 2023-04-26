@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
     "@redwoodjs/internal": "4.0.0",
-    "@vitejs/plugin-react": "3.1.0",
+    "@vitejs/plugin-react": "4.0.0",
     "buffer": "6.0.3",
     "core-js": "3.30.1",
     "vite": "4.3.2",
