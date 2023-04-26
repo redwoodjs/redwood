@@ -933,11 +933,11 @@ __metadata:
   linkType: hard
 
 "@types/react-dom@npm:^18.0.10":
-  version: 18.2.0
-  resolution: "@types/react-dom@npm:18.2.0"
+  version: 18.2.1
+  resolution: "@types/react-dom@npm:18.2.1"
   dependencies:
     "@types/react": "*"
-  checksum: f9f7a396c5499a6fb97e31ef9b050cf9ec5f61e6ec4040badb53428f9e73258c95e5b3dd8233541631b0461d623739b3f6348a4130359c92ce0a69d74a5e9176
+  checksum: 3af3c2a85f0f9fd96a03ce717559423cbd0bac3c8e279107008708d457db4b75a4ee7fd64d3af3ddad94cb97ff74dc422241edc56ab54f1905caca7fd717c759
   languageName: node
   linkType: hard
 
