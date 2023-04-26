@@ -1450,7 +1450,32 @@ Because it is often useful to ask a GraphQL schema for information about what qu
 
 The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
 
-> Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
+> Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **, by default, only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
+
+However, there may be cases where you want to enable introspection. You can enable introspection by setting the `allowIntrospection` option to `true`.
+
+Here is an example of `createGraphQLHandler` function with the `allowIntrospection` option set to `true`:
+```ts {8}
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  allowIntrospection: true, // 👈 enable introspection in all environments
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+```
+
+:::caution
+
+Enabling introspection in production may pose a security risk, as it allows users to access information about your schema, queries, and mutations. Use this option with caution and make sure to secure your GraphQL API properly.
+
+:::
 
 ### GraphQL Armor Configuration
 

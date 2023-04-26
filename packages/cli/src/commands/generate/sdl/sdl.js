@@ -304,7 +304,7 @@ export const handler = async ({
           },
         },
       ].filter(Boolean),
-      { rendererOptions: { collapse: false }, exitOnError: true }
+      { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
     )
 
     if (rollback && !force) {

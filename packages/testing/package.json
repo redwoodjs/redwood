@@ -46,9 +46,9 @@
     "@types/aws-lambda": "8.10.114",
     "@types/babel-core": "6.25.7",
     "@types/jest": "29.5.1",
-    "@types/node": "16.18.24",
-    "@types/react": "18.0.38",
-    "@types/react-dom": "18.0.11",
+    "@types/node": "16.18.25",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.1",
     "@types/webpack": "5.28.1",
     "babel-jest": "29.5.0",
     "babel-plugin-inline-react-svg": "2.0.2",
@@ -64,7 +64,7 @@
   "devDependencies": {
     "@babel/cli": "7.21.0",
     "@babel/core": "7.21.4",
-    "typescript": "5.0.3"
+    "typescript": "5.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

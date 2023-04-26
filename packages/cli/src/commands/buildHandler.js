@@ -3,7 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 import { Listr } from 'listr2'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
