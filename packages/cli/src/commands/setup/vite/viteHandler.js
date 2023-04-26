@@ -121,7 +121,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
       },
     ],
     {
-      rendererOptions: { collapse: false },
+      rendererOptions: { collapseSubtasks: false },
       renderer: verbose ? 'verbose' : 'default',
     }
   )
