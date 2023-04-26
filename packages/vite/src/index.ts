@@ -1,8 +1,10 @@
-import { existsSync, readFile as fsReadFile } from 'fs'
+import { existsSync, readFile as fsReadFile, readFileSync } from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 
+import * as babel from '@babel/core'
 import react from '@vitejs/plugin-react'
+import * as esbuild from 'esbuild'
 import {
   normalizePath,
   PluginOption,
@@ -12,7 +14,10 @@ import {
 import EnvironmentPlugin from 'vite-plugin-environment'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
+import {
+  Flags,
+  getWebSideDefaultBabelConfig,
+} from '@redwoodjs/internal/dist/build/babel/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 const readFile = promisify(fsReadFile)
@@ -224,4 +229,40 @@ const applyOn = (apply: 'build' | 'serve') => {
       apply,
     }
   }
+}
+
+// @MARK
+// Currently only used in testing
+export const vitePrebuildWebFile = async (
+  srcPath: string,
+  flags: Flags = {}
+) => {
+  const code = await transform(srcPath)
+  const config = getWebSideDefaultBabelConfig(flags)
+  const result = babel.transform(code, {
+    ...config,
+    cwd: getPaths().web.base,
+    filename: srcPath,
+  })
+
+  return result
+}
+
+export const transform = async (srcPath: string) => {
+  const code = readFileSync(srcPath, 'utf-8')
+
+  // This doesn't work for some reason, so we're using esbuild directly
+  // instead, which is what Vite uses internally
+  // const viteResult = await transformWithEsbuild(code, srcPath, {
+  //   loader: 'jsx',
+  // })
+
+  const esbuildResult = await esbuild.transform(code, {
+    loader: 'jsx',
+  })
+
+  // console.log('viteResult.code', viteResult.code)
+
+  // return viteResult.code
+  return esbuildResult.code
 }
