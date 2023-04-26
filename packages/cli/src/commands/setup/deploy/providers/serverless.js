@@ -140,7 +140,7 @@ export const handler = async ({ force }) => {
     ],
     {
       exitOnError: true,
-      rendererOptions: { collapse: false },
+      rendererOptions: { collapseSubtasks: false },
     }
   )
   try {

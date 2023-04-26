@@ -108,7 +108,7 @@ export const handler = async ({ force, database }) => {
       }),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {
