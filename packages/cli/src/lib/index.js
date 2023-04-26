@@ -542,7 +542,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     })),
     {
       renderer: verbose && 'verbose',
-      rendererOptions: { collapse: false, dateFormat: false },
+      rendererOptions: { collapseSubtasks: false, dateFormat: false },
     }
   )
 

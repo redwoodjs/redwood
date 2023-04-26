@@ -82,7 +82,7 @@ export async function handler({ force, install, packages }) {
                 },
               },
             ],
-            { rendererOptions: { collapse: false } }
+            { rendererOptions: { collapseSubtasks: false } }
           )
         },
       },
@@ -124,7 +124,7 @@ export async function handler({ force, install, packages }) {
           ),
       },
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

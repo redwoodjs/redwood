@@ -132,7 +132,7 @@ export const standardAuthHandler = async ({
       },
     ].filter(truthy),
     {
-      rendererOptions: { collapse: false },
+      rendererOptions: { collapseSubtasks: false },
       renderer: verbose ? 'verbose' : 'default',
       ctx: {
         setupMode: 'UNKNOWN',

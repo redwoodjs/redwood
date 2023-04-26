@@ -433,7 +433,7 @@ const globalTasks = () =>
     {
       exitOnError: true,
       renderer: verbose && 'verbose',
-      renderOptions: { collapse: false },
+      renderOptions: { collapseSubtasks: false },
     }
   )
 
