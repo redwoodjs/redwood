@@ -5099,21 +5099,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/nx-cloud@npm:15.3.5":
-  version: 15.3.5
-  resolution: "@nrwl/nx-cloud@npm:15.3.5"
+"@nrwl/nx-cloud@npm:16.0.4":
+  version: 16.0.4
+  resolution: "@nrwl/nx-cloud@npm:16.0.4"
   dependencies:
-    axios: ^0.21.2
-    chalk: 4.1.0
-    dotenv: ~10.0.0
-    fs-extra: ^10.1.0
-    node-machine-id: ^1.1.12
-    strip-json-comments: ^3.1.1
-    tar: 6.1.11
-    yargs-parser: ">=21.0.1"
-  bin:
-    nx-cloud: bin/nx-cloud.js
-  checksum: e222805a25c3ef5100e9963f5b4a392961b61a9a540f7dc2fa0404614a26ae734c87ae9342aacdc1da26c38ae0f34a04110e7955190ab51258bb8ddb488ad0a5
+    nx-cloud: 16.0.4
+  checksum: b4d4bf75d22567789baa2d9814c85b4ae9881bf635a4b5038e337f99c4fc5f21aecaaa5196bbc7aa6c3bcb7f334e219d556db79e891f5d11de6936c7d5fdada1
   languageName: node
   linkType: hard
 
@@ -11825,15 +11816,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.2":
-  version: 0.21.4
-  resolution: "axios@npm:0.21.4"
-  dependencies:
-    follow-redirects: ^1.14.0
-  checksum: fbcff55ec68f71f02d3773d467db2fcecdf04e749826c82c2427a232f9eba63242150a05f15af9ef15818352b814257541155de0281f8fb2b7e8a5b79f7f2142
-  languageName: node
-  linkType: hard
-
 "axios@npm:^1.0.0":
   version: 1.3.4
   resolution: "axios@npm:1.3.4"
@@ -17684,7 +17666,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.15.0":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.15.0":
   version: 1.15.2
   resolution: "follow-redirects@npm:1.15.2"
   peerDependenciesMeta:
@@ -24529,6 +24511,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nx-cloud@npm:16.0.4":
+  version: 16.0.4
+  resolution: "nx-cloud@npm:16.0.4"
+  dependencies:
+    "@nrwl/nx-cloud": 16.0.4
+    axios: ^1.0.0
+    chalk: ^4.1.0
+    dotenv: ~10.0.0
+    fs-extra: ^11.1.0
+    node-machine-id: ^1.1.12
+    open: ~8.4.0
+    strip-json-comments: ^3.1.1
+    tar: 6.1.11
+    yargs-parser: ">=21.1.1"
+  bin:
+    nx-cloud: bin/nx-cloud.js
+  checksum: 7e8565c340e13688146ac8edef5e0604d97419c6ebec9627020bbba2674ca71635f799ba8c6e63b36b3e01db73e5ac6eda4c33506b516aefcdaced31d344d5c3
+  languageName: node
+  linkType: hard
+
 "nx@npm:15.9.2, nx@npm:>=15.5.2 < 16":
   version: 15.9.2
   resolution: "nx@npm:15.9.2"
@@ -24832,7 +24834,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"open@npm:^8.0.9, open@npm:^8.4.0":
+"open@npm:^8.0.9, open@npm:^8.4.0, open@npm:~8.4.0":
   version: 8.4.2
   resolution: "open@npm:8.4.2"
   dependencies:
@@ -28101,7 +28103,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.0
     "@faker-js/faker": 7.6.0
     "@npmcli/arborist": 6.2.8
-    "@nrwl/nx-cloud": 15.3.5
+    "@nrwl/nx-cloud": 16.0.4
     "@playwright/test": 1.32.3
     "@replayio/playwright": 0.3.28
     "@testing-library/jest-dom": 5.16.5
@@ -32778,7 +32780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:21.1.1, yargs-parser@npm:>=21.0.1, yargs-parser@npm:^21.1.1":
+"yargs-parser@npm:21.1.1, yargs-parser@npm:>=21.1.1, yargs-parser@npm:^21.1.1":
   version: 21.1.1
   resolution: "yargs-parser@npm:21.1.1"
   checksum: f84b5e48169479d2f402239c59f084cfd1c3acc197a05c59b98bab067452e6b3ea46d4dd8ba2985ba7b3d32a343d77df0debd6b343e5dae3da2aab2cdf5886b2
