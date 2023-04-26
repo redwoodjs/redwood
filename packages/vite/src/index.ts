@@ -253,6 +253,8 @@ export const transform = async (srcPath: string) => {
 
   // This doesn't work for some reason, so we're using esbuild directly
   // instead, which is what Vite uses internally
+  // Trying to use transformWithEsbuild here also makes jest complain
+  // about ESM support
   // const viteResult = await transformWithEsbuild(code, srcPath, {
   //   loader: 'jsx',
   // })
