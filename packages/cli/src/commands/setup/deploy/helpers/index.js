@@ -36,7 +36,7 @@ export const updateApiURLTask = (apiUrl) => {
 }
 
 /**
- * Use this to create checks prior to runnning setup commands
+ * Use this to create checks prior to running setup commands
  * with a better error output
  *
  * @example preRequisiteCheckTask([

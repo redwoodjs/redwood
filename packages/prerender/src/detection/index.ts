@@ -6,8 +6,8 @@ export const detectPrerenderRoutes = () => {
   const routes = rwProject.getRouter().routes
 
   const prerenderRoutes = routes
-    .filter((route: any) => route.prerender) // only select routes with prerender prop
-    .map((route: any) => ({
+    .filter((route) => route.prerender) // only select routes with prerender prop
+    .map((route) => ({
       name: route.isNotFound ? '404' : route.name,
       // `path` will be updated/expanded later where route parameters will be
       // replaced with actual values

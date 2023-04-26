@@ -22,7 +22,7 @@ There is also an `errors.js` file which contains all error messages that Redwood
 
 ### Tasks
 
-RedwoodRecord depends on reading the Prisma schema file to determine relations to other tables. In order to avoid the `async` wait when parsing the schema with Prisma's build-in function, we have a task which parses the schema file and then saves out a JSON version to the cache `.redwood` directory. This task also creates an `index.js` file in your `api/src/models` directory that imports the models themselves and also adds some configuration to support relations without a circular dependency. The models are then re-exported.
+RedwoodRecord depends on reading the Prisma schema file to determine relations to other tables. In order to avoid the `async` wait when parsing the schema with Prisma's built-in function, we have a task which parses the schema file and then saves out a JSON version to the cache `.redwood` directory. This task also creates an `index.js` file in your `api/src/models` directory that imports the models themselves and also adds some configuration to support relations without a circular dependency. The models are then re-exported.
 
 This task is run with:
 

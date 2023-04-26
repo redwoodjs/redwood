@@ -49,7 +49,7 @@ export const handler = async ({ force }) => {
       }),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
   try {
     await tasks.run()
