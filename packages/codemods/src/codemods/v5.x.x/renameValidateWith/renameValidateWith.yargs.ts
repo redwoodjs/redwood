@@ -9,17 +9,17 @@ import runTransform from '../../../lib/runTransform'
 export const command = 'rename-validate-with'
 
 export const description =
-  '(v4.x.x->v5.x.x) Converts validateWith to validateWithSync'
+  '(v4.x.x->v5.x.x) Renames validateWith to validateWithSync'
 
 export const handler = () => {
   task(
     'Renaming `validateWith` to `validateWithSync`',
     async ({ setOutput }) => {
-      const rwPaths = getRWPaths()
+      const redwoodProjectPaths = getRWPaths()
 
       const files = getFilesWithPattern({
         pattern: 'validateWith',
-        filesToSearch: [rwPaths.api.src],
+        filesToSearch: [redwoodProjectPaths.api.src],
       })
 
       await runTransform({

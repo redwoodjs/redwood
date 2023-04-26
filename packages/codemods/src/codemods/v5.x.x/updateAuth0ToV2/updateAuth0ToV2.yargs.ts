@@ -10,7 +10,7 @@ import runTransform from '../../../lib/runTransform'
 export const command = 'update-auth0-to-v2'
 
 export const description =
-  '(v4.x.x->v5.x.x) For Auth0 users, updates the web-side auth.{ts,js} file to the v2 SDK'
+  '(v4.x.x->v5.x.x) Updates the web-side auth.{ts,js} file to the v2 SDK'
 
 export const handler = () => {
   task('Updating Auth0 to v2', async ({ setOutput }) => {

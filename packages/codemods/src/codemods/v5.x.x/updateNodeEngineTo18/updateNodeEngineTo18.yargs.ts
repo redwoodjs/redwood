@@ -4,7 +4,8 @@ import { updateNodeEngineTo18 } from './updateNodeEngineTo18'
 
 export const command = 'update-node-engine-to-18'
 
-export const description = `(v4.x.x->v5.x.x) Updates engines.node to "=18.x" in your project's root package.json`
+export const description =
+  '(v4.x.x->v5.x.x) Updates `engines.node` to `"=18.x"` in your project\'s root package.json'
 
 export const handler = () => {
   task(
