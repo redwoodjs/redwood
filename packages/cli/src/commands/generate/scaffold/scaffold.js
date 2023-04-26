@@ -828,7 +828,7 @@ export const tasks = ({
         },
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
 }
 

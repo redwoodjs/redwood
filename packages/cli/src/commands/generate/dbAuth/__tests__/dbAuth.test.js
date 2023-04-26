@@ -88,7 +88,7 @@ describe('dbAuth', () => {
       const mockConsoleInfo = jest.spyOn(console, 'info').mockImplementation()
 
       await dbAuth.handler({
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
         usernameLabel: 'email',
         passwordLabel: 'password',
         webauthn: false,
@@ -118,7 +118,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
       })
       expect(correctPrompt).toBe(true)
     })
@@ -136,7 +136,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
         usernameLabel: 'email',
       })
       expect(correctPrompt).toBe(false)
@@ -155,7 +155,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
       })
       expect(correctPrompt).toBe(true)
     })
@@ -173,7 +173,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
         passwordLabel: 'secret',
       })
       expect(correctPrompt).toBe(false)
@@ -192,7 +192,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
       })
       expect(correctPrompt).toBe(true)
     })
@@ -210,7 +210,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
         webauthn: false,
       })
       expect(correctPrompt).toBe(false)
@@ -224,7 +224,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
       })
 
       const forgotPasswordPage = fs
@@ -272,7 +272,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
         usernameLabel: 'Email',
       })
 
@@ -324,7 +324,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
       })
 
       const forgotPasswordPage = fs
@@ -372,7 +372,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
         passwordLabel: 'Secret',
       })
 
@@ -424,7 +424,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
       })
 
       const forgotPasswordPage = fs
@@ -472,7 +472,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
         usernameLabel: 'Email',
         passwordLabel: 'Secret',
       })
@@ -528,7 +528,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
       })
 
       const forgotPasswordPage = fs
@@ -582,7 +582,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
         webauthn: true,
       })
 
@@ -640,7 +640,7 @@ describe('dbAuth', () => {
 
       await dbAuth.handler({
         enquirer: customEnquirer,
-        listr2: { rendererSilent: true },
+        listr2: { silentRendererCondition: true },
       })
 
       const forgotPasswordPage = fs

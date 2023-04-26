@@ -684,7 +684,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     {
       exitOnError: true,
       renderer: verbose && 'verbose',
-      renderOptions: { collapse: false },
+      renderOptions: { collapseSubtasks: false },
     }
   )
 }
