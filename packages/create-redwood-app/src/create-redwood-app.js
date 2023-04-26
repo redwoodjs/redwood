@@ -1,19 +1,13 @@
 #!/usr/bin/env node
 
-// This downloads the latest release of Redwood from https://github.com/redwoodjs/create-redwood-app/
-// and extracts it into the supplied directory.
-//
-// Usage:
-// `$ yarn create redwood-app ./path/to/new-project`
-
-// import { spawn } from 'child_process'
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
 import chalk from 'chalk'
-import checkNodeVersion from 'check-node-version'
+import checkNodeVersionCb from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
+import semver from 'semver'
 import terminalLink from 'terminal-link'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -53,30 +47,13 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
       )} Skipped compatibility check because yarn install was skipped via command line flag`,
     })
     tui.stopReactive()
+
     return
   }
 
-  const [engineCheckPassed, engineCheckErrors] = await new Promise(
-    (resolve) => {
-      const { engines } = require(path.join(templateDir, 'package.json'))
+  const [checksPassed, checksData] = await checkNodeAndYarnVersion(templateDir)
 
-      // this checks all engine requirements, including Node.js and Yarn
-      checkNodeVersion(engines, (_error, result) => {
-        if (result.isSatisfied) {
-          return resolve([true, []])
-        }
-        const logStatements = Object.keys(result.versions)
-          .filter((name) => !result.versions[name].isSatisfied)
-          .map((name) => {
-            const { version, wanted } = result.versions[name]
-            return `${name} ${wanted} required; found ${version}`
-          })
-        return resolve([false, logStatements])
-      })
-    }
-  )
-
-  if (engineCheckPassed) {
+  if (checksPassed) {
     tuiContent.update({
       spinner: {
         enabled: false,
@@ -84,17 +61,61 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
       content: `${RedwoodStyling.green('✔')} Compatibility checks passed`,
     })
     tui.stopReactive()
+
     return
   }
 
-  if (!engineCheckPassed) {
+  if (!checksPassed) {
+    const foundNodeVersionIsLessThanRequired = semver.lt(
+      checksData.node.version.version,
+      semver.minVersion(checksData.node.wanted.raw)
+    )
+
+    const foundYarnVersionIsLessThanRequired = semver.lt(
+      checksData.yarn.version.version,
+      semver.minVersion(checksData.yarn.wanted.raw)
+    )
+
+    if (
+      foundNodeVersionIsLessThanRequired ||
+      foundNodeVersionIsLessThanRequired
+    ) {
+      const errorMessages = [
+        { type: 'node', ok: foundNodeVersionIsLessThanRequired },
+        { type: 'yarn', ok: foundYarnVersionIsLessThanRequired },
+      ]
+        .filter(({ ok }) => !ok)
+        .map(
+          ({ type }) =>
+            `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
+        )
+
+      tui.stopReactive(true)
+      tui.displayError(
+        'Compatibility checks failed',
+        [
+          `  ${errorMessages.join('\n')}`,
+          '',
+          `  Please use tools like nvm or corepack to change to a compatible version.`,
+          `  See: ${terminalLink(
+            'Tutorial - Prerequisites',
+            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+          )}`,
+        ].join('\n')
+      )
+
+      recordErrorViaTelemetry('Compatibility checks failed')
+      await shutdownTelemetry()
+      process.exit(1)
+    }
+
     tui.stopReactive(true)
-    tui.displayError(
+    tui.displayWarning(
       'Compatibility checks failed',
       [
-        `  ${engineCheckErrors.join('\n')}`,
+        `  node ${checksData.node.wanted.range} supported; found ${checksData.node.version.version}`,
         '',
-        `  Please use tools like nvm or corepack to change to a compatible version.`,
+        `  This may make your project incompatible with some deploy targets, especially those using AWS Lambdas.`,
         `  See: ${terminalLink(
           'Tutorial - Prerequisites',
           'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
@@ -102,10 +123,41 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
       ].join('\n')
     )
 
-    recordErrorViaTelemetry('Compatibility checks failed')
-    await shutdownTelemetry()
-    process.exit(1)
+    // Try catch for handling if the user cancels the prompt.
+    try {
+      const response = await tui.prompt({
+        type: 'select',
+        name: 'override-engine-error',
+        message: 'How would you like to proceed?',
+        choices: ['Override error and continue install', 'Quit install'],
+        initial: 0,
+      })
+      if (response['override-engine-error'] === 'Quit install') {
+        recordErrorViaTelemetry('User quit after engine check error')
+        await shutdownTelemetry()
+        process.exit(1)
+      }
+    } catch (error) {
+      recordErrorViaTelemetry('User cancelled install at engine check error')
+      await shutdownTelemetry()
+      process.exit(1)
+    }
   }
+}
+
+/**
+ *
+ * This type has to be updated if the engines field in the create redwood app template package.json is updated.
+ * @returns [boolean, Record<'node' | 'yarn', any>]
+ */
+function checkNodeAndYarnVersion(templateDir) {
+  return new Promise((resolve) => {
+    const { engines } = require(path.join(templateDir, 'package.json'))
+
+    checkNodeVersionCb(engines, (_error, result) => {
+      return resolve([result.isSatisfied, result.versions])
+    })
+  })
 }
 
 async function createProjectFiles(newAppDir, overwrite, yarn1) {
@@ -191,7 +243,7 @@ async function installNodeModules(newAppDir) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
     header: 'Installing node modules',
-    content: '  ⏱  This could take a while...',
+    content: '  ⏱ This could take a while...',
     spinner: {
       enabled: true,
     },
