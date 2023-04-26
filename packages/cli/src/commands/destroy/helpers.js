@@ -14,7 +14,7 @@ const tasks = ({ componentName, filesFn, name }) =>
         },
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
 
 export const createYargsForComponentDestroy = ({

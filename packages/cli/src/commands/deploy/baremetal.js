@@ -595,7 +595,7 @@ export const parseConfig = (yargs, configToml) => {
 
   verifyConfig(config, yargs)
 
-  // start with an emtpy set of hooks, { before: {}, after: {} }
+  // start with an empty set of hooks, { before: {}, after: {} }
   for (const hook of LIFECYCLE_HOOKS) {
     emptyLifecycle[hook] = {}
   }

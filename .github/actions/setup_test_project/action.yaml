@@ -4,5 +4,6 @@ outputs:
   test_project_path:
     description: 'Path to the test project'
 runs:
-  using: 'node16'
+  # `node18` isn't supported yet
+  using: node16
   main: 'setup_test_project.mjs'

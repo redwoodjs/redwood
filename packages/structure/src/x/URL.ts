@@ -4,7 +4,7 @@ import { isAbsolute, join, normalize, sep as path_sep } from 'path'
  * Creates a file:// URL
  * Works with linux and windows paths
  * If the passed in value is already as file:// URL, it returns that same value
- * TOOD: rename to URL_fromFile
+ * TODO: rename to URL_fromFile
  * @param filePath
  */
 export function URL_file(filePath: string, ...parts: string[]): string {
