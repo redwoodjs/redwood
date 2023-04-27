@@ -46,7 +46,7 @@
     "pretty-ms": "7.0.1",
     "qs": "6.11.1",
     "split2": "4.2.0",
-    "yargs": "17.7.1"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
