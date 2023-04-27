@@ -742,13 +742,16 @@ The `useRequireAuth` wrapper configures your handler's `context` so that you can
 
 - import `useRequireAuth` from `@redwoodjs/graphql-server`
 - import your app's custom `getCurrentUser` and the `isAuthenticated` check from `src/lib/auth`
+- import your auth provider's `authDecoder`
 - implement your serverless function as you would, but do not `export` it (see `myHandler` below).
-- pass your implementation and `getCurrentUser` to the `useRequireAuth` wrapper and export its return
+- pass your implementation, `getCurrentUser` and `authDecoder` to the `useRequireAuth` wrapper and export its return
 - check if the user `isAuthenticated()` and, if not, handle the unauthenticated case by returning a `401` status code (for example)
 
 ```tsx
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 
+// highlight-next-line
+import { authDecoder } from '@redwoodjs/auth-dbauth-api'
 // highlight-next-line
 import { useRequireAuth } from '@redwoodjs/graphql-server'
 
@@ -772,20 +775,21 @@ const myHandler = async (event: APIGatewayEvent, context: Context) => {
         data: 'myHandler function',
       }),
     }
+  // highlight-start
   } else {
-    // highlight-start
     logger.error('Access to myHandler was denied')
 
     return {
       statusCode: 401,
     }
-    // highlight-end
   }
+  // highlight-end
 }
 
 export const handler = useRequireAuth({
   handlerFn: myHandler,
   getCurrentUser,
+  authDecoder,
 })
 ```
 
@@ -805,16 +809,9 @@ As there is no login flow when using functions, the `useRequireAuth` check assum
 
 In your request, you must include the following headers:
 
-- the auth provider type that your application is using
+- the auth provider type that your application is using, e.g. `dbAuth`
 - the Bearer token (JWT access token)
 - if using dbAuth, then also the dbAuth Cookie
-
-You can find the auth provider type as the `type` attribute set on the `AuthProvider`:
-
-```jsx
-<AuthProvider client={netlifyIdentity} type="netlify">
-<AuthProvider client={supabaseClient} type="supabase">
-```
 
 For example:
 

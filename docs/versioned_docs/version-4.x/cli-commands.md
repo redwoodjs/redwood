@@ -139,7 +139,7 @@ Launch an interactive Redwood shell (experimental):
 yarn redwood console
 ```
 
-Right now, you can only use the Redwood console to interact with your database:
+Right now, you can only use the Redwood console to interact with your database (always with `await`):
 
 **Example**
 
@@ -2043,7 +2043,7 @@ A canary release is published to npm every time a PR is merged to the `main` bra
 | Option          | Description                                                                                                                                                                                                        |
 | :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--dry-run, -d` | Check for outdated packages without upgrading                                                                                                                                                                      |
-| `--tag, -t`     | Choices are "canary", "rc", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary" and "rc", which will force upgrade packages to the most recent release of the specified tag. |
+| `--tag, -t`     | Choices are "rc", "canary", "latest", "next", "experimental", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary", "rc", "next", and "experimental". And "canary" releases include breaking changes often requiring codemods if upgrading a project. |
 
 **Example**
 
@@ -2058,3 +2058,15 @@ Upgrade to a specific version:
 ```bash
 yarn redwood upgrade -t 0.19.3
 ```
+
+## Background checks
+
+The CLI can check for things in the background, like new versions of the framework, while you dev.
+
+Right now it can only check for new versions.
+If you'd like it to do so, set `notifications.versionUpdates` in the `redwood.toml` file to include an array of the tags you're interested in hearing about.
+(The former has priority.)
+
+By default, the CLI won't check for upgrades—you have to opt into it.
+
+You'll see this notification once a day at most. And the CLI will check for it once a day at most. So, nothing heavy-handed going on here.
