@@ -6319,6 +6319,7 @@ __metadata:
     "@fastify/http-proxy": 9.0.0
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
+    "@redwoodjs/project-config": 4.0.0
     "@types/aws-lambda": 8.10.114
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
@@ -7115,6 +7116,7 @@ __metadata:
     "@graphql-tools/utils": 9.2.1
     "@opentelemetry/api": 1.4.1
     "@redwoodjs/api": 4.0.0
+    "@redwoodjs/project-config": 4.0.0
     "@types/jsonwebtoken": 9.0.1
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
@@ -7326,6 +7328,7 @@ __metadata:
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@redwoodjs/internal": 4.0.0
+    "@redwoodjs/project-config": 4.0.0
     "@types/aws-lambda": 8.10.114
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 9.0.1
@@ -7447,6 +7450,7 @@ __metadata:
     "@babel/cli": 7.21.0
     "@babel/runtime-corejs3": 7.21.0
     "@redwoodjs/internal": 4.0.0
+    "@redwoodjs/project-config": 4.0.0
     "@vitejs/plugin-react": 4.0.0
     buffer: 6.0.3
     core-js: 3.30.1
