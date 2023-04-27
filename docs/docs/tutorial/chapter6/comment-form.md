@@ -1304,7 +1304,7 @@ scenario('returns all comments', async (scenario: StandardScenario) => {
 </TabItem>
 </Tabs>
 
-When the test suite runs everything will still pass. Javascript won't care if you're passing an argument all of a sudden (although if you were using Typescript you will actually get an error at this point!). In TDD you generally want to get your test to fail before adding code to the thing you're testing which will then cause the test to pass. What's something in this test that will be different once we're only returning *some* comments? How about the number of comments expected to be returned?
+When the test suite runs everything will still pass. JavaScript won't care if you're passing an argument all of a sudden (although if you were using Typescript you will actually get an error at this point!). In TDD you generally want to get your test to fail before adding code to the thing you're testing which will then cause the test to pass. What's something in this test that will be different once we're only returning *some* comments? How about the number of comments expected to be returned?
 
 Let's take a look at the scenario we're using (remember, it's `standard()` by default):
 
