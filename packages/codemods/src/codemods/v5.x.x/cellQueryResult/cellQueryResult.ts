@@ -43,6 +43,11 @@ export default function transform(file: FileInfo, api: API) {
           if (firstParameter.type === 'ObjectPattern') {
             const previouslySpreadPropertiesInUse =
               firstParameter.properties.filter((property: Property) => {
+                // skip rest params
+                if (property.type === 'RestElement') {
+                  return false
+                }
+
                 return nonSpreadVariables.includes(property.key.name)
               })
             if (previouslySpreadPropertiesInUse.length > 0) {
