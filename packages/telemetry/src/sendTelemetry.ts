@@ -99,6 +99,11 @@ const getInfo = async (presets: Args = {}) => {
   // This detects all top level [experimental.X] and returns all X's, ignoring all Y's for any [experimental.X.Y]
   const experiments = Object.keys(getRawConfig()['experimental'] || {})
 
+  // NOTE: Added this way to avoid the need to disturb the existing toml structure
+  if (webBundler !== 'webpack') {
+    experiments.push(webBundler)
+  }
+
   return {
     os: info.System?.OS?.split(' ')[0],
     osVersion: info.System?.OS?.split(' ')[1],
