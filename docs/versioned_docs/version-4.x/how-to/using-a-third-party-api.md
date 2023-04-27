@@ -66,7 +66,7 @@ For some reason it can take up to 30 minutes for OpenWeather to enable your API 
 }
 ```
 
-Good ol' faithful JSON. Let's see, what can we use here to display on our site? How about the `name` of the city that the zip is in, the `main.temp` (listed here in Kelvin, so we'll need to [convert](https://www.google.com/search?q=297+kelvin+to+fahrenheit&oq=297+kelvin+to+fahrenheit)) and then under the `weather` key we have an array with a `main` that lists the current conditions in english. How about that `icon`? Turns out OpenWeather has some we can use! Just take the icon code and use it in a URL like http://openweathermap.org/img/wn/10d@2x.png
+Good ol' faithful JSON. Let's see, what can we use here to display on our site? How about the `name` of the city that the zip is in, the `main.temp` (listed here in Kelvin, so we'll need to [convert](https://www.google.com/search?q=297+kelvin+to+fahrenheit&oq=297+kelvin+to+farenheit)) and then under the `weather` key we have an array with a `main` that lists the current conditions in english. How about that `icon`? Turns out OpenWeather has some we can use! Just take the icon code and use it in a URL like http://openweathermap.org/img/wn/10d@2x.png
 
 ![rain icon](https://user-images.githubusercontent.com/300/79376259-c33c4c80-7f0e-11ea-8285-701375665451.png)
 
