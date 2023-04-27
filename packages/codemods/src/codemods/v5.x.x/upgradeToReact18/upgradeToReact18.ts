@@ -37,7 +37,7 @@ function checkAndTransformReactRoot(taskContext: TaskInnerAPI) {
         '',
         reactRootHTML,
         '',
-        'React expects to control this DOM node completely. This codemod has moved the children outside the react root',
+        'React expects to control this DOM node completely. This codemod has moved the children outside the react root,',
         'but consider moving them into a layout.',
       ].join('\n')
     )
