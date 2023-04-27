@@ -1,6 +1,26 @@
 import path from 'path'
 
-import { getConfig } from '../config'
+import { getConfig, getRawConfig } from '../config'
+
+describe('getRawConfig', () => {
+  it('returns nothing for an empty config', () => {
+    const config = getRawConfig(
+      path.join(__dirname, './fixtures/redwood.empty.toml')
+    )
+    expect(config).toMatchInlineSnapshot(`{}`)
+  })
+
+  it('returns only the defined values', () => {
+    const config = getRawConfig(path.join(__dirname, './fixtures/redwood.toml'))
+    expect(config).toMatchInlineSnapshot(`
+      {
+        "web": {
+          "port": 8888,
+        },
+      }
+    `)
+  })
+})
 
 describe('getConfig', () => {
   it('returns a default config', () => {

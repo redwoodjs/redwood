@@ -8,7 +8,7 @@ import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getConfig } from '@redwoodjs/project-config'
+import { getConfig, getRawConfig } from '@redwoodjs/project-config'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
@@ -95,6 +95,10 @@ const getInfo = async (presets: Args = {}) => {
     ? 'webpack'
     : getConfig().web.bundler
 
+  // Returns a list of all enabled experiments
+  // This detects all top level [experimental.X] and returns all X's, ignoring all Y's for any [experimental.X.Y]
+  const experiments = Object.keys(getRawConfig()['experimental'] || {})
+
   return {
     os: info.System?.OS?.split(' ')[0],
     osVersion: info.System?.OS?.split(' ')[1],
@@ -107,6 +111,7 @@ const getInfo = async (presets: Args = {}) => {
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
     webBundler,
+    experiments,
   }
 }
 
