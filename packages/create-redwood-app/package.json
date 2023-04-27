@@ -33,7 +33,7 @@
     "semver": "7.3.8",
     "systeminformation": "5.17.12",
     "terminal-link": "2.1.1",
-    "yargs": "17.7.1"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
     "esbuild": "0.17.18"

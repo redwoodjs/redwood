@@ -68,7 +68,7 @@
     "string-env-interpolation": "1.0.1",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
-    "yargs": "17.7.1"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",

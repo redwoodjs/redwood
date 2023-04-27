@@ -6340,7 +6340,7 @@ __metadata:
     qs: 6.11.1
     split2: 4.2.0
     typescript: 5.0.4
-    yargs: 17.7.1
+    yargs: 17.7.2
   bin:
     rw-api-server-watch: ./dist/watch.js
     rw-log-formatter: ./dist/logFormatter/bin.js
@@ -6917,7 +6917,7 @@ __metadata:
     terminal-link: 2.1.1
     title-case: 3.0.3
     typescript: 5.0.4
-    yargs: 17.7.1
+    yargs: 17.7.2
   bin:
     redwood: ./dist/index.js
     rw: ./dist/index.js
@@ -6959,7 +6959,7 @@ __metadata:
     tasuku: 2.0.1
     tempy: 1.0.1
     typescript: 5.0.4
-    yargs: 17.7.1
+    yargs: 17.7.2
   bin:
     codemods: ./dist/codemods.js
   languageName: unknown
@@ -7359,7 +7359,7 @@ __metadata:
     sqlite3: 5.1.6
     typescript: 5.0.4
     uuid: 9.0.0
-    yargs: 17.7.1
+    yargs: 17.7.2
   languageName: unknown
   linkType: soft
 
@@ -7382,7 +7382,7 @@ __metadata:
     jest: 29.5.0
     systeminformation: 5.17.12
     uuid: 9.0.0
-    yargs: 17.7.1
+    yargs: 17.7.2
   languageName: unknown
   linkType: soft
 
@@ -14572,7 +14572,7 @@ __metadata:
     semver: 7.3.8
     systeminformation: 5.17.12
     terminal-link: 2.1.1
-    yargs: 17.7.1
+    yargs: 17.7.2
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
   languageName: unknown
@@ -28169,7 +28169,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 5.0.0
     typescript: 5.0.4
-    yargs: 17.7.1
+    yargs: 17.7.2
     zx: 7.2.1
   languageName: unknown
   linkType: soft
@@ -32835,9 +32835,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.7.1, yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.6.2, yargs@npm:^17.7.1":
-  version: 17.7.1
-  resolution: "yargs@npm:17.7.1"
+"yargs@npm:17.7.2, yargs@npm:^17.0.0, yargs@npm:^17.3.1, yargs@npm:^17.6.2, yargs@npm:^17.7.1":
+  version: 17.7.2
+  resolution: "yargs@npm:17.7.2"
   dependencies:
     cliui: ^8.0.1
     escalade: ^3.1.1
@@ -32846,7 +32846,7 @@ __metadata:
     string-width: ^4.2.3
     y18n: ^5.0.5
     yargs-parser: ^21.1.1
-  checksum: 0ed3b7694d94da777f3591f1d786d947ed2e59b897da0a0c30e541109ae087979ac26b4ec39557f5e9c4592f19806447963fb132049b9806a1d416bcdd24d2b4
+  checksum: ccd7e723e61ad5965fffbb791366db689572b80cca80e0f96aad968dfff4156cd7cd1ad18607afe1046d8241e6fb2d6c08bf7fa7bfb5eaec818735d8feac8f05
   languageName: node
   linkType: hard
 
