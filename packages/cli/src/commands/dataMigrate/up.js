@@ -159,7 +159,7 @@ export const handler = async () => {
   })
 
   const tasks = new Listr(migrationTasks, {
-    rendererOptions: { collapse: false },
+    rendererOptions: { collapseSubtasks: false },
     renderer: 'verbose',
   })
 

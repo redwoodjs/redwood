@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -33,12 +33,13 @@
     "@graphql-tools/schema": "9.0.19",
     "@graphql-tools/utils": "9.2.1",
     "@opentelemetry/api": "1.4.1",
-    "@redwoodjs/api": "4.0.0",
+    "@redwoodjs/api": "5.0.0",
+    "@redwoodjs/project-config": "5.0.0",
     "core-js": "3.30.1",
     "graphql": "16.6.0",
     "graphql-scalars": "1.21.3",
     "graphql-tag": "2.12.6",
-    "graphql-yoga": "3.8.0",
+    "graphql-yoga": "3.9.1",
     "lodash.merge": "4.6.2",
     "lodash.omitby": "4.6.0",
     "uuid": "9.0.0"
@@ -48,7 +49,7 @@
     "@babel/core": "7.21.4",
     "@envelop/testing": "5.0.6",
     "@envelop/types": "3.0.2",
-    "@types/jsonwebtoken": "9.0.1",
+    "@types/jsonwebtoken": "9.0.2",
     "@types/lodash.merge": "4.6.7",
     "@types/lodash.omitby": "4.6.7",
     "@types/uuid": "9.0.1",

@@ -7,14 +7,14 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "4.0.0"
+    "@redwoodjs/core": "5.0.0"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
   },
   "engines": {
-    "node": ">=18.16",
+    "node": "=18.x",
     "yarn": ">=1.15"
   },
   "prisma": {

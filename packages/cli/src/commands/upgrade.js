@@ -65,10 +65,17 @@ export const builder = (yargs) => {
 // Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
+
+const isValidSemver = (string) => {
+  return SEMVER_REGEX.test(string)
+}
+
+const isValidRedwoodJSTag = (tag) => {
+  return ['rc', 'canary', 'latest', 'next', 'experimental'].includes(tag)
+}
+
 export const validateTag = (tag) => {
-  const isTagValid =
-    ['rc', 'canary', 'latest', 'next', 'experimental'].includes(tag) ||
-    SEMVER_REGEX.test(tag)
+  const isTagValid = isValidSemver(tag) || isValidRedwoodJSTag(tag)
 
   if (!isTagValid) {
     // Stop execution
@@ -136,7 +143,10 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
           if (tag) {
             const additionalMessages = []
             // Reminder to update the `notifications.versionUpdates` TOML option
-            if (!getConfig().notifications.versionUpdates.includes(tag)) {
+            if (
+              !getConfig().notifications.versionUpdates.includes(tag) &&
+              isValidRedwoodJSTag(tag)
+            ) {
               additionalMessages.push(
                 `   ❖ You may want to update your redwood.toml config so that \`notifications.versionUpdates\` includes "${tag}"\n`
               )
@@ -161,7 +171,10 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         },
       },
     ],
-    { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
+    {
+      renderer: verbose && 'verbose',
+      rendererOptions: { collapseSubtasks: false },
+    }
   )
 
   try {
