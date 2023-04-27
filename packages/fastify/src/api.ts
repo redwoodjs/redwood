@@ -2,6 +2,7 @@ import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
+import { loadFastifyConfig } from './config'
 import { lambdaRequestHandler, loadFunctionsFromDist } from './lambda'
 import type { RedwoodFastifyAPIOptions } from './types'
 
@@ -19,6 +20,12 @@ async function redwoodFastifyAPI(
     { parseAs: 'string' },
     fastify.defaultTextParser
   )
+
+  // NOTE: We should deprecate this config loading when we move to a `server.js|ts` file
+  const { configureFastify } = loadFastifyConfig()
+  if (configureFastify) {
+    await configureFastify(fastify, { side: 'api', ...opts })
+  }
 
   // Lambda handler
   const apiRootPath = opts.redwood?.apiRootPath || '/'

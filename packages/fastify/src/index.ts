@@ -1,11 +1,14 @@
 import type { FastifyServerOptions } from 'fastify'
 import Fastify from 'fastify'
 
-import { DEFAULT_REDWOOD_FASTIFY_CONFIG } from './config.js'
+import { DEFAULT_REDWOOD_FASTIFY_CONFIG, loadFastifyConfig } from './config.js'
 
 export function createFastifyInstance(options?: FastifyServerOptions) {
-  return Fastify(options || DEFAULT_REDWOOD_FASTIFY_CONFIG)
+  const { config } = loadFastifyConfig()
+  return Fastify(options || config || DEFAULT_REDWOOD_FASTIFY_CONFIG)
 }
 
 export { redwoodFastifyAPI } from './api.js'
 export { redwoodFastifyWeb } from './web.js'
+
+export type * from './types.js'

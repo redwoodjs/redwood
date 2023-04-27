@@ -28,9 +28,9 @@ jest.mock('fs', () => {
   }
 })
 
-jest.mock('@redwoodjs/api-server', () => {
+jest.mock('../serveHandler', () => {
   return {
-    ...jest.requireActual('@redwoodjs/api-server'),
+    ...jest.requireActual('../serveHandler'),
     apiServerHandler: jest.fn(),
     webServerHandler: jest.fn(),
     bothServerHandler: jest.fn(),
@@ -39,13 +39,12 @@ jest.mock('@redwoodjs/api-server', () => {
 
 import yargs from 'yargs'
 
+import { builder } from '../serve'
 import {
   apiServerHandler,
   bothServerHandler,
   webServerHandler,
-} from '@redwoodjs/api-server'
-
-import { builder } from '../serve'
+} from '../serveHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {

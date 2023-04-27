@@ -7,39 +7,12 @@ import type {
   FastifyInstance,
   FastifyReply,
   HookHandlerDoneFunction,
-  // FastifyServerOptions,
 } from 'fastify'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { loadFastifyConfig } from './config'
 import { RedwoodFastifyWebOptions } from './types'
-
-// export interface HttpServerParams {
-//   port: number
-//   socket?: string
-//   fastify: FastifyInstance
-// }
-
-// export interface WebServerArgs extends Omit<HttpServerParams, 'fastify'> {
-//   apiHost?: string
-// }
-
-// export interface ApiServerArgs extends Omit<HttpServerParams, 'fastify'> {
-//   apiRootPath: string // either user supplied or '/'
-// }
-
-// export type BothServerArgs = Omit<HttpServerParams, 'fastify'>
-
-// // Types for using server.config.js
-// export type FastifySideConfigFnOptions = {
-//   side: SupportedSides
-// } & (WebServerArgs | BothServerArgs | ApiServerArgs)
-
-// export type SupportedSides = 'api' | 'web'
-// export type FastifySideConfigFn = (
-//   fastify: FastifyInstance,
-//   options?: FastifySideConfigFnOptions
-// ) => Promise<FastifyInstance> | void
 
 /**
  * NOTE: Copied from @redwoodjs/internal/dist/files because I don't want to depend on @redwoodjs/internal
@@ -60,53 +33,9 @@ export const getFallbackIndexPath = () => {
   }
 }
 
-// const DEFAULT_OPTIONS = {
-//   logger: {
-//     level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
-//   },
-// }
-
-// let isServerConfigLoaded = false
-// let serverConfigFile: {
-//   config: FastifyServerOptions
-//   configureFastify: FastifySideConfigFn
-// } = {
-//   config: DEFAULT_OPTIONS,
-//   configureFastify: async (fastify, options) => {
-//     fastify.log.info(
-//       options,
-//       `In configureFastify hook for side: ${options?.side}`
-//     )
-//     return fastify
-//   },
-// }
-
-// function loadFastifyConfig() {
-//   // @TODO use require.resolve to find the config file
-//   // do we need to babel first?
-//   const serverConfigPath = path.join(
-//     getPaths().base,
-//     getConfig().api.serverConfig
-//   )
-
-//   // If a server.config.js is not found, use the default
-//   // options set in packages/api-server/src/app.ts
-//   if (!fs.existsSync(serverConfigPath)) {
-//     return serverConfigFile
-//   }
-
-//   if (!isServerConfigLoaded) {
-//     console.log(`Loading server config from ${serverConfigPath} \n`)
-//     serverConfigFile = { ...require(serverConfigPath) }
-//     isServerConfigLoaded = true
-//   }
-
-//   return serverConfigFile
-// }
-
 async function redwoodFastifyWeb(
   fastify: FastifyInstance,
-  _opts: RedwoodFastifyWebOptions,
+  opts: RedwoodFastifyWebOptions,
   done: HookHandlerDoneFunction
 ) {
   const prerenderedFiles = findPrerenderedHtml()
@@ -123,11 +52,11 @@ async function redwoodFastifyWeb(
       })
     })
 
-  // const { configureFastify } = loadFastifyConfig()
-
-  // if (configureFastify) {
-  //   await configureFastify(fastify, { side: 'web', ...opts })
-  // }
+  // NOTE: We should deprecate this config loading when we move to a `server.js|ts` file
+  const { configureFastify } = loadFastifyConfig()
+  if (configureFastify) {
+    await configureFastify(fastify, { side: 'web', ...opts })
+  }
 
   // Serve other non-html assets
   fastify.register(fastifyStatic, {

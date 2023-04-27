@@ -1,4 +1,11 @@
+import fs from 'node:fs'
+import path from 'node:path'
+
 import type { FastifyServerOptions } from 'fastify'
+
+import { getPaths, getConfig } from '@redwoodjs/project-config'
+
+import { FastifySideConfigFn } from './types'
 
 /**
  * This is the default Fastify Server settings used by the
@@ -20,4 +27,42 @@ export const DEFAULT_REDWOOD_FASTIFY_CONFIG: FastifyServerOptions = {
     // the default non-development level to `info`
     level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
   },
+}
+
+let isServerConfigLoaded = false
+let serverConfigFile: {
+  config: FastifyServerOptions
+  configureFastify: FastifySideConfigFn
+} = {
+  config: DEFAULT_REDWOOD_FASTIFY_CONFIG,
+  configureFastify: async (fastify, options) => {
+    fastify.log.info(
+      options,
+      `In configureFastify hook for side: ${options?.side}`
+    )
+    return fastify
+  },
+}
+
+export function loadFastifyConfig() {
+  // @TODO use require.resolve to find the config file
+  // do we need to babel first?
+  const serverConfigPath = path.join(
+    getPaths().base,
+    getConfig().api.serverConfig
+  )
+
+  // If a server.config.js is not found, use the default
+  // options set in packages/api-server/src/app.ts
+  if (!fs.existsSync(serverConfigPath)) {
+    return serverConfigFile
+  }
+
+  if (!isServerConfigLoaded) {
+    console.log(`Loading server config from ${serverConfigPath} \n`)
+    serverConfigFile = { ...require(serverConfigPath) }
+    isServerConfigLoaded = true
+  }
+
+  return serverConfigFile
 }
