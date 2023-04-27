@@ -118,6 +118,10 @@
             {
               "type": "doc",
               "id": "auth/supabase"
+            },
+            {
+              "type": "doc",
+              "id": "auth/supertokens"
             }
           ]
         },

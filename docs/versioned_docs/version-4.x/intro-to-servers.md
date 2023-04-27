@@ -359,7 +359,7 @@ And you should be in!
 
 When connecting to a remote server, it would be nice if you could also SSH into other machines and have them identify you as *you*, on your personal computer, not as the server itself. By default this doesn't happen: making an SSH connection from your remote server uses the credentials on the server itself, meaning you'd have to go through all of the steps above to now treat the remote server as the client as whatever server *that* server wants to connect to as the host, allowing you to connect with your public key. Ugh.
 
-Luckily SSH has a mechanism that supports this: SSH Agent Forwarding.
+Luckly SSH has a mechanism that supports this: SSH Agent Forwarding.
 
 This is most useful when trying to deploy a codebase from GitHub to your remote server: you're already connected to the remote server as you, and you're already authorized to connect to GitHub, so just use those credentials. You can verify if this is already working for you:
 
