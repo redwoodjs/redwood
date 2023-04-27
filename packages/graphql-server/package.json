@@ -34,6 +34,7 @@
     "@graphql-tools/utils": "9.2.1",
     "@opentelemetry/api": "1.4.1",
     "@redwoodjs/api": "4.0.0",
+    "@redwoodjs/project-config": "4.0.0",
     "core-js": "3.30.1",
     "graphql": "16.6.0",
     "graphql-scalars": "1.21.3",
