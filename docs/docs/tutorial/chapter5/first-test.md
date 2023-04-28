@@ -2,7 +2,7 @@
 
 So if Storybook is the first phase of creating/updating a component, phase two must be confirming the functionality with a test. Let's add a test for our new summary feature.
 
-If you've never done any kind of testing before this may be a little hard to follow. We've got a great document [all about testing](../../testing.md) (including some philosophy, for those so inclined) if you want a good overview of testing in general. We even build a super-simple test runner from scratch in plain Javascript to take some of the mystery out of how this all works!
+If you've never done any kind of testing before this may be a little hard to follow. We've got a great document [all about testing](../../testing.md) (including some philosophy, for those so inclined) if you want a good overview of testing in general. We even build a super-simple test runner from scratch in plain JavaScript to take some of the mystery out of how this all works!
 
 If you still have the test process running from the previous page then then you can just press `a` to run **a**ll tests. If you stopped your test process, you can start it again with:
 
