@@ -183,7 +183,7 @@ export const standard = () => ({
 
 :::info What's this `standard` thing?
 
-Think of it as the standard, default mock if you don't do anything else. We would have loved to use the name "default" but that's already a reserved word in Javascript!
+Think of it as the standard, default mock if you don't do anything else. We would have loved to use the name "default" but that's already a reserved word in JavaScript!
 
 :::
 

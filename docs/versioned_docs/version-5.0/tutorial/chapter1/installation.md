@@ -1,6 +1,6 @@
 # Installation & Starting Development
 
-We'll use yarn ([yarn](https://yarnpkg.com/en/docs/install) is a requirement) to create the basic structure of our app:
+We'll use yarn ([yarn](https://yarnpkg.com/getting-started/install) is a requirement) to create the basic structure of our app:
 
 
 <Tabs groupId="js-ts">
@@ -37,7 +37,7 @@ Remembering the port number is as easy as counting: 8-9-10!
 
 :::
 
-The splash page gives you links to a ton of good resources, but don't get distracted: we've got a job to do!
+The splash page gives you links to many resources, but don't get distracted: we've got a job to do!
 
 ### First Commit
 
