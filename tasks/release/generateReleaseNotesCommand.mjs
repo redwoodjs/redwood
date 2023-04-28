@@ -68,10 +68,10 @@ export async function handler({ milestone }) {
 
       const labels = pr.labels.nodes.map((label) => label.name)
 
-      // if (labels.includes('release:feature-breaking')) {
-      //   obj.breaking.push(`- ${formatPR(pr)}`)
-      //   return obj
-      // }
+      if (labels.includes('release:feature-breaking')) {
+        obj.breaking.push(`- ${formatPR(pr)}`)
+        return obj
+      }
 
       if (labels.includes('release:feature')) {
         obj.features.push(`- ${formatPR(pr)}`)

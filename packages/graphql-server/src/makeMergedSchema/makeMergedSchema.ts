@@ -104,7 +104,18 @@ const mapFieldsToService = ({
           context: unknown,
           info: unknown
         ) => {
-          if (getConfig().experimental.opentelemetry.enabled) {
+          // In serverless deploys like Netilfy and Vercel, the redwood.toml file may not be present,
+          // so we need to try-catch the attempt here to read it
+          let experimentalOpenTelemetryEnabled = false
+
+          try {
+            experimentalOpenTelemetryEnabled =
+              getConfig().experimental.opentelemetry.enabled
+          } catch (e) {
+            // Swallow the error for now
+          }
+
+          if (experimentalOpenTelemetryEnabled) {
             return wrapWithOpenTelemetry(
               services[name],
               args,

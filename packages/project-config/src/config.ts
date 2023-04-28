@@ -166,8 +166,21 @@ const DEFAULT_CONFIG: Config = {
  */
 export const getConfig = (configPath = getConfigPath()): Config => {
   try {
-    const rawConfig = envInterpolation(fs.readFileSync(configPath, 'utf8'))
-    return merge(DEFAULT_CONFIG, toml.parse(rawConfig))
+    return merge(DEFAULT_CONFIG, getRawConfig(configPath))
+  } catch (e) {
+    throw new Error(`Could not parse "${configPath}": ${e}`)
+  }
+}
+
+/**
+ * Returns the JSON parse of the config file without any default values.
+ *
+ * @param configPath Path to the config file, defaults to automatically find the project `redwood.toml` file
+ * @returns A JSON object from the parsed toml values
+ */
+export function getRawConfig(configPath = getConfigPath()) {
+  try {
+    return toml.parse(envInterpolation(fs.readFileSync(configPath, 'utf8')))
   } catch (e) {
     throw new Error(`Could not parse "${configPath}": ${e}`)
   }

@@ -174,7 +174,9 @@ const updateDbAuth = () => {
     `)
         return
       }
-      authContent[sameSiteLineIndex] = `      SameSite: 'None',`
+      authContent[
+        sameSiteLineIndex
+      ] = `      SameSite: process.env.NODE_ENV === 'development' ? 'Strict' : 'None',`
 
       const dbHandlerIndex = authContent.findIndex((line) =>
         line.includes('new DbAuthHandler(')
