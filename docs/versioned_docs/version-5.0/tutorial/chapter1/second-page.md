@@ -89,8 +89,8 @@ export default HomePage
 
 Let's point out a few things here:
 
-- Redwood loves [Function Components](https://www.robinwieruch.de/react-function-component). We'll make extensive use of [React Hooks](https://reactjs.org/docs/hooks-intro.html) as we go and these are only enabled in function components. You're free to use class components, but we recommend avoiding them unless you need their special capabilities.
-- Redwood's `<Link>` tag, in its most basic usage, takes a single `to` attribute. That `to` attribute calls a [_named route function_](../../router.md#link-and-named-route-functions) in order to generate the correct URL. The function has the same name as the `name` attribute on the `<Route>`:
+- Redwood loves [Function Components](https://www.robinwieruch.de/react-function-component). We'll make extensive use of [React Hooks](https://react.dev/reference/react) as we go and these are only enabled in function components. Now that Redwood is on React 18, we discourage using class components since they won't be able to take advantage of React's concurrent rendering features.
+- Redwood's `<Link>` tag, in its most basic usage, takes a single `to` attribute. That `to` attribute calls a [_named route function_](../../router.md#link-and-named-route-functions) to generate the correct URL. The function has the same name as the `name` attribute on the `<Route>`:
 
   `<Route path="/about" page={AboutPage} name="about" />`
 
@@ -179,7 +179,7 @@ export default AboutPage
 </TabItem>
 </Tabs>
 
-Great! Try that out in the browser and verify you can get back and forth.
+Great! Try that out in the browser and verify that you can get back and forth.
 
 ![image](https://user-images.githubusercontent.com/300/145899850-2906c2e3-4ec1-4f8a-9c95-e43b0f7da73f.png)
 
