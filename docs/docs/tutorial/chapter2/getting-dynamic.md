@@ -6,14 +6,14 @@
 
 These two pages are great and all but where are the actual blog posts in this blog? Let's work on those next.
 
-For the purposes of our tutorial we're going to get our blog posts from a database. Because relational databases are still the workhorses of many complex (and not-so-complex) web applications, we've made SQL access a first-class citizen. For Redwood apps, it all starts with the schema.
+For the purposes of our tutorial we're going to get our blog posts from a database. Because relational databases are still the workhorses of many complex (and not-so-complex) web applications, we've made SQL access first-class. For Redwood apps, it all starts with the schema.
 
 ### Creating the Database Schema
 
 We need to decide what data we'll need for a blog post. We'll expand on this at some point, but at a minimum we'll want to start with:
 
 - `id` the unique identifier for this blog post (all of our database tables will have one of these)
-- `title` something click-baity like "Top 10 Javascript Frameworks Named After Trees—You Won't Believe Number 4!"
+- `title` something click-baity like "Top 10 JavaScript Frameworks Named After Trees—You Won't Believe Number 4!"
 - `body` the actual content of the blog post
 - `createdAt` a timestamp of when this record was created in the database
 
@@ -103,7 +103,7 @@ Click on "Post" and you'll see an empty database table. Let's have our app start
 
 We haven't decided on the look and feel of our site yet, but wouldn't it be amazing if we could play around with posts without having to build a bunch of pages that we'll probably throw away once the design team gets back to us? As you can imagine, we wouldn't have thrown around this scenario unless Redwood had a solution!
 
-Let's generate everything we need to perform all the CRUD (Create, Retrieve, Update, Delete) actions on posts so we can not only verify that we've got the right fields in the database, but it will let us get some sample posts in there so we can start laying out our pages and see real content. Redwood has a *generator* for just this occasion:
+Let's generate everything we need to perform all the CRUD (Create, Retrieve, Update, Delete) actions on posts so we can not only verify that we've got the right fields in the database, but that it will let us get some sample posts in there so we can start laying out our pages and see real content. Redwood has a *generator* for just this occasion:
 
 ```bash
 yarn rw g scaffold post

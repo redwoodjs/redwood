@@ -4,7 +4,7 @@ Welcome to Redwood! If you haven't yet, check out the [Redwood README](https://g
 
 :::info Sign up for tutorial reminders
 
-There's a new Javascript framework coming out every week, we know it can be hard to keep up. If you'd like some non-spammy emails reminding you to go through the tutorial, give us your email below:
+There's a new JavaScript framework coming out every week, we know it can be hard to keep up. If you'd like some non-spammy emails reminding you to go through the tutorial, give us your email below:
 
 <MailchimpForm />
 
@@ -40,7 +40,7 @@ It's usually something that goes into more detail about a specific point, refers
 
 :::info
 
-This tutorial assumes you are using version 1.0.0 or greater of RedwoodJS.
+This tutorial assumes you are using version 5.0.0 or greater of RedwoodJS.
 
 :::
 
