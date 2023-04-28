@@ -1,7 +1,7 @@
 import { join } from 'path'
 
 import { readFileSync } from 'fs-extra'
-import glob from 'glob'
+import { globSync } from 'glob'
 import * as tsm from 'ts-morph'
 
 import { iter } from '../../x/Array'
@@ -9,7 +9,7 @@ import { createTSMSourceFile_cached } from '../../x/ts-morph'
 
 export function process_env_findAll(dir: string) {
   return iter(function* () {
-    for (const file of glob.sync(join(dir, 'src/**/*.{js,ts,jsx,tsx}'))) {
+    for (const file of globSync(join(dir, 'src/**/*.{js,ts,jsx,tsx}'))) {
       yield* process_env_findInFile(file, readFileSync(file).toString())
     }
   })
