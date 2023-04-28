@@ -6932,7 +6932,7 @@ __metadata:
     core-js: 3.30.1
     execa: 5.1.1
     jest: 29.5.0
-    listr2: 6.3.1
+    listr2: 6.4.0
     lodash.memoize: 4.1.2
     pascalcase: 1.0.0
     prettier: 2.8.8
@@ -6976,7 +6976,7 @@ __metadata:
     fs-extra: 11.1.1
     jest: 29.5.0
     latest-version: 5.1.0
-    listr2: 6.3.1
+    listr2: 6.4.0
     lodash: 4.17.21
     param-case: 3.0.4
     pascalcase: 1.0.0
@@ -22300,9 +22300,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"listr2@npm:6.3.1":
-  version: 6.3.1
-  resolution: "listr2@npm:6.3.1"
+"listr2@npm:6.4.0":
+  version: 6.4.0
+  resolution: "listr2@npm:6.4.0"
   dependencies:
     cli-truncate: ^3.1.0
     colorette: ^2.0.19
@@ -22315,7 +22315,7 @@ __metadata:
   peerDependenciesMeta:
     enquirer:
       optional: true
-  checksum: 838420220398956f2e799ea644adfe68a69e1eb02a66070e8ae5ae5074f7b7108b0bca55797e1811b8a7a8c71f32cd35407bad3f085830cd93e41532b2eb7050
+  checksum: d839ddbf7188e53f647c6f1c1f8818ff9fbcf2661790d5b27b3e68138ad7a795cb3daf59b1b609b7263fc9250b674ce00e56f9a87832d6df3644e5cff6126240
   languageName: node
   linkType: hard
 
@@ -28317,7 +28317,7 @@ __metadata:
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.14.0
     lerna: 6.6.1
-    listr2: 6.3.1
+    listr2: 6.4.0
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
     msw: 1.2.1
