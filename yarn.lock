@@ -6308,7 +6308,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redwoodjs/api-server@5.0.0, @redwoodjs/api-server@workspace:packages/api-server":
+"@redwoodjs/api-server@workspace:packages/api-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
@@ -6876,7 +6876,6 @@ __metadata:
     "@babel/core": 7.21.4
     "@babel/runtime-corejs3": 7.21.0
     "@prisma/internals": 4.13.0
-    "@redwoodjs/api-server": 5.0.0
     "@redwoodjs/cli-helpers": 5.0.0
     "@redwoodjs/fastify": 5.0.0
     "@redwoodjs/internal": 5.0.0

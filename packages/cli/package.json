@@ -30,7 +30,6 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
     "@prisma/internals": "4.13.0",
-    "@redwoodjs/api-server": "5.0.0",
     "@redwoodjs/cli-helpers": "5.0.0",
     "@redwoodjs/fastify": "5.0.0",
     "@redwoodjs/internal": "5.0.0",
