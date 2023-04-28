@@ -291,7 +291,7 @@ async function installNodeModules(newAppDir) {
         [
           "Yarn couldn't run esbuild's postinstall script.\n",
           logFile &&
-            `You can see the log file for more details here: ${RedwoodStyling.info(
+            `You can see the log file here for more details: ${RedwoodStyling.info(
               logFile
             )}\n`,
           `This is a known issue we're trying to sort out. (See ${terminalLink(
