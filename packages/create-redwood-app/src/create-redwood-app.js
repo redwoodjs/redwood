@@ -255,7 +255,7 @@ async function installNodeModules(newAppDir) {
   )
 
   const yarnInstallSubprocess = execa.command(
-    `${path.join(newAppDir, '.yarn', 'releases', yarnBin)} install`,
+    `${path.join(`./${newAppDir}`, '.yarn', 'releases', yarnBin)} install`,
     {
       shell: true,
       cwd: newAppDir,
