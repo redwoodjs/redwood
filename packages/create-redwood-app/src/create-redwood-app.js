@@ -250,10 +250,13 @@ async function installNodeModules(newAppDir) {
   })
   tui.startReactive(tuiContent)
 
-  const yarnInstallSubprocess = execa('yarn install', {
-    shell: true,
-    cwd: newAppDir,
-  })
+  const yarnInstallSubprocess = execa.command(
+    `${path.join('.yarn', 'releases', 'yarn-3.5.0.cjs')} install`,
+    {
+      shell: true,
+      cwd: newAppDir,
+    }
+  )
 
   try {
     await yarnInstallSubprocess
