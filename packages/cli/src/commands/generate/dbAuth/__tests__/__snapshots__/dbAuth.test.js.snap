@@ -278,7 +278,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const secretRef = useRef(null)
   useEffect(() => {
@@ -766,7 +766,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const secretRef = useRef(null)
   useEffect(() => {
@@ -1254,7 +1254,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const secretRef = useRef(null)
   useEffect(() => {
@@ -1742,7 +1742,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const secretRef = useRef(null)
   useEffect(() => {
@@ -2362,7 +2362,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const secretRef = useRef(null)
   useEffect(() => {
@@ -2850,7 +2850,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const secretRef = useRef(null)
   useEffect(() => {
@@ -3343,7 +3343,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const passwordRef = useRef(null)
   useEffect(() => {
@@ -3838,7 +3838,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const passwordRef = useRef(null)
   useEffect(() => {
@@ -4333,7 +4333,7 @@ const ResetPasswordPage = ({ resetToken }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const passwordRef = useRef(null)
   useEffect(() => {

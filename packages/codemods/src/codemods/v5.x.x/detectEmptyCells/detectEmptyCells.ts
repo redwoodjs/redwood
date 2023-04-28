@@ -1,3 +1,5 @@
+import type { TaskInnerAPI } from 'tasuku'
+
 import {
   findCells,
   fileToAst,
@@ -5,7 +7,7 @@ import {
   parseGqlQueryToAst,
 } from '../../../lib/cells'
 
-async function detectEmptyCells() {
+async function detectEmptyCells(taskContext: TaskInnerAPI) {
   const cellPaths = findCells()
 
   const susceptibleCells = cellPaths.filter((cellPath) => {
@@ -22,17 +24,22 @@ async function detectEmptyCells() {
   })
 
   if (susceptibleCells.length > 0) {
-    console.log(
+    taskContext.setOutput(
       [
-        'You have Cells that are susceptible to the new isDataEmpty behavior:',
+        'You have Cells that are susceptible to the new `isDataEmpty` behavior:',
         '',
         susceptibleCells.map((c) => `• ${c}`).join('\n'),
         '',
-        "The new behavior is documented in detail here. It's most likely what you want, but consider whether it affects you.",
+        'The new behavior is documented in detail on the forums: https://community.redwoodjs.com/t/redwood-v5-0-0-rc-is-now-available/4715.',
+        "It's most likely what you want, but consider whether it affects you.",
         "If you'd like to revert to the old behavior, you can override the `isDataEmpty` function.",
       ].join('\n')
+    )
+  } else {
+    taskContext.setOutput(
+      "None of your project's Cells are susceptible to the new `isDataEmpty` behavior."
     )
   }
 }
 
-export default detectEmptyCells
+export { detectEmptyCells }
