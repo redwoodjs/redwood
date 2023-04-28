@@ -1,9 +1,16 @@
+import assert from 'node:assert/strict'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { after, before, beforeEach, describe, it } from 'node:test'
+
+import projectConfig from '@redwoodjs/project-config'
 import { vitePrebuildWebFile } from '@redwoodjs/vite'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
+const { getPaths } = projectConfig
 
 describe('User specified imports, with static imports', () => {
   let outputWithStaticImports: string | null | undefined
@@ -13,11 +20,11 @@ describe('User specified imports, with static imports', () => {
     process.env.RWJS_CWD = FIXTURE_PATH
   })
 
-  afterAll(() => {
+  after(() => {
     delete process.env.RWJS_CWD
   })
 
-  beforeAll(async () => {
+  before(async () => {
     process.env.RWJS_CWD = FIXTURE_PATH
 
     const routesFile = getPaths().web.routes
@@ -208,3 +215,27 @@ describe('User specified imports, with static imports', () => {
     )
   })
 })
+
+function expect(str) {
+  return {
+    toContain: (sub) => {
+      assert.equal(str.includes(sub), true, `Expected ${str} to contain ${sub}`)
+    },
+    not: {
+      toContain: (sub) => {
+        assert.equal(
+          str.includes(sub),
+          false,
+          `Expected ${str} to not contain ${sub}`
+        )
+      },
+      toMatch: (regex) => {
+        assert.equal(
+          regex.test(str),
+          false,
+          `Expected ${str} to not match ${regex}`
+        )
+      },
+    },
+  }
+}

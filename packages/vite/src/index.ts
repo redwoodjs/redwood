@@ -4,7 +4,6 @@ import { promisify } from 'util'
 
 import * as babel from '@babel/core'
 import react from '@vitejs/plugin-react'
-import * as esbuild from 'esbuild'
 import {
   normalizePath,
   PluginOption,
@@ -251,18 +250,9 @@ export const vitePrebuildWebFile = async (
 export const transform = async (srcPath: string) => {
   const code = readFileSync(srcPath, 'utf-8')
 
-  // This doesn't work for some reason, so we're using esbuild directly
-  // instead, which is what Vite uses internally
-  // Trying to use transformWithEsbuild here also makes jest complain
-  // about ESM support
-  // const viteResult = await transformWithEsbuild(code, srcPath, {
-  //   loader: 'jsx',
-  // })
-
-  const esbuildResult = await esbuild.transform(code, {
+  const transformed = await transformWithEsbuild(code, srcPath, {
     loader: 'jsx',
   })
 
-  // return viteResult.code
-  return esbuildResult.code
+  return transformed.code
 }
