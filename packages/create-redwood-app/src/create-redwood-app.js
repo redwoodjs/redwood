@@ -258,6 +258,58 @@ async function installNodeModules(newAppDir) {
   try {
     await yarnInstallSubprocess
   } catch (error) {
+    // On yarn 3, esbuild's postinstall script doesn't seem to work. See https://github.com/redwoodjs/redwood/issues/8164.
+    // In debugging, we realized:
+    //
+    //   1) it doesn't need to be built for this script to finish
+    //   2) users can easily build it by running `yarn install`
+    //
+    // So it feels like we should handle this error and continue.
+    // While matching on stdout is brittle, it's just a check, and if there's no match,
+    // (i.e. yarn's output changes from under us—unlikely), it's not a big deal.
+    // The error will just bubble up to the user anyway, like it always has.
+    //
+    // An esbuild build error message looks like:
+    //
+    // ```
+    // ➤ YN0009: │ esbuild@npm:0.17.18 couldn't be built successfully (exit code 1, logs can be found here: /private/var/folders/dt/yks4v5m53k114qxgz6jh4pgw0000gn/T/xfs-ca44a5dd/build.log)
+    // ```
+    //
+    const esbuildErrorMessageRegExp =
+      /➤ YN0009: │ esbuild@npm:\d+.\d+.\d+ couldn't be built successfully \(exit code 1, logs can be found here: (?<logFile>.+)\)/
+
+    const esbuildErrorMessageFound = error.message.match(
+      esbuildErrorMessageRegExp
+    )
+
+    if (esbuildErrorMessageFound) {
+      const logFile = esbuildErrorMessageFound.groups?.logFile
+
+      tui.stopReactive()
+      tui.displayWarning(
+        "Couldn't build esbuild",
+        [
+          "Yarn couldn't run esbuild's postinstall script.\n",
+          logFile &&
+            `You can see the log file for more details here: ${RedwoodStyling.info(
+              logFile
+            )}\n`,
+          `This is a known issue we're trying to sort out. (See ${terminalLink(
+            '#8164',
+            'https://github.com/redwoodjs/redwood/issues/8164'
+          )})`,
+          "The good news is this shouldn't affect the rest of this script, and you can build it yourself fairly easily.",
+          `Just \`cd\` into ${RedwoodStyling.green(
+            newAppDir
+          )} and run \`yarn install\`.`,
+        ]
+          .filter(Boolean)
+          .join('\n')
+      )
+
+      return
+    }
+
     tui.stopReactive(true)
     tui.displayError(
       "Couldn't install node modules",
