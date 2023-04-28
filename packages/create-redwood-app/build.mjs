@@ -16,6 +16,7 @@ const result = await esbuild.build({
   packages: 'external',
   outfile: 'dist/create-redwood-app.js',
   minify: true,
+  logLevel: 'info',
 
   // For visualizing the bundle.
   // See https://esbuild.github.io/api/#metafile and https://esbuild.github.io/analyze/.
