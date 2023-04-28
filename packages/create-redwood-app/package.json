@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "yarn node ./build.mjs",
-    "test": "yarn node ./tests/template.test.js"
+    "test": "yarn node --test-reporter spec ./tests/template.test.js"
   },
   "dependencies": {
     "@opentelemetry/api": "1.4.1",
