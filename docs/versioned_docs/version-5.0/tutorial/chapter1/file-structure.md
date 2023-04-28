@@ -99,7 +99,7 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 </TabItem>
 </Tabs>
 
-At the top level we have three directories, `api`, `scripts` and `web`. Redwood separates the backend (`api`) and frontend (`web`) concerns into their own paths in the codebase. ([Yarn refers to these as "workspaces"](https://yarnpkg.com/lang/en/docs/workspaces/). In Redwood, we refer to them as "sides.") When you add packages going forward you'll need to specify which workspace they should go in. For example (don't run these commands, we're just looking at the syntax):
+At the top level we have three directories, `api`, `scripts` and `web`. Redwood separates the backend (`api`) and frontend (`web`) concerns into their own paths in the codebase. ([Yarn refers to these as "workspaces"](https://yarnpkg.com/features/workspaces). In Redwood, we refer to them as "sides.") When you add packages going forward you'll need to specify which workspace they should go in. For example (**don't run these commands**, we're just looking at the syntax):
 
 ```bash
 yarn workspace web add marked
@@ -115,7 +115,7 @@ Within `api` there are four directories:
 - `db` contains the plumbing for the database:
   - `schema.prisma` contains the database schema (tables and columns)
 
-  After we add our first database table there will also be a SQLite database file named `dev.db` and a directory called `migrations` created for us. `migrations` contains the files that act as snapshots of the database schema changing over time.
+  After we add our first database table, there will also be a SQLite database file named `dev.db` and a directory called `migrations` created for us. `migrations` contains the files that act as snapshots of the database schema changing over time.
 
 - `dist` contains the compiled code for the api side and can be ignored when developing.
 
