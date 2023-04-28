@@ -3,9 +3,8 @@
 import assert from 'node:assert'
 import fs from 'node:fs'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-
 import { test } from 'node:test'
+import { fileURLToPath } from 'node:url'
 
 const TEMPLATE_PATH = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
