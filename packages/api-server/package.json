@@ -33,7 +33,6 @@
     "@fastify/http-proxy": "9.0.0",
     "@fastify/static": "6.10.1",
     "@fastify/url-data": "5.3.1",
-    "@redwoodjs/fastify": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
     "ansi-colors": "4.1.3",
     "chalk": "4.1.2",
