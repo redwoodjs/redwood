@@ -5,7 +5,7 @@ import { getConfigPath } from '@redwoodjs/project-config'
 import { writeFile } from '../../lib'
 import { isModuleInstalled, installRedwoodModule } from '../../lib/packages'
 
-export const handler = async () => {
+export const handler = async (options) => {
   try {
     // Check the module is installed
     if (!isModuleInstalled('@redwoodjs/studio')) {
@@ -37,7 +37,7 @@ export const handler = async () => {
 
     // Import studio and start it
     const { start } = await import('@redwoodjs/studio')
-    await start()
+    await start({ open: options.open })
   } catch (e) {
     console.log('Cannot start the development studio')
     console.log(e)

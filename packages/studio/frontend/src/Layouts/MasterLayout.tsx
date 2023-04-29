@@ -17,9 +17,11 @@ import {
   ClockIcon,
   MapIcon,
 } from '@heroicons/react/24/outline'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet, NavLink } from 'react-router-dom'
 
 import redwooodLogo from '../assets/redwoodjs_diecut_name.svg'
+import ErrorPanel from '../Components/Panels/ErrorPanel'
 
 const explorerNavigation = [
   { name: 'Traces', to: '/explorer/trace', icon: RadioIcon },
@@ -47,12 +49,13 @@ const miscNavigation = [
     name: 'Support & Docs',
     to: 'https://community.redwoodjs.com/t/redwood-studio-experimental/4771',
     icon: ChatBubbleLeftEllipsisIcon,
+    other: { target: '_blank', rel: 'noopener noreferrer' },
   },
 ]
 
 function SidebarContent() {
   return (
-    <ul>
+    <ul className="flex-grow">
       <li>
         <NavLink
           key="Overview"
@@ -135,6 +138,7 @@ function SidebarContent() {
             <NavLink
               key={item.name}
               to={item.to}
+              {...item.other}
               className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-sinopia text-slate-100 hover:bg-persimmon"
             >
               <item.icon
@@ -293,10 +297,20 @@ export default function MasterLayout() {
           </div>
 
           <main>
-            <Outlet />
+            <ErrorBoundary FallbackComponent={ErrorComponent}>
+              <Outlet />
+            </ErrorBoundary>
           </main>
         </div>
       </div>
     </>
+  )
+}
+
+function ErrorComponent({ error }: { error: any }) {
+  return (
+    <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8 flex justify-center">
+      <ErrorPanel error={error} />
+    </div>
   )
 }

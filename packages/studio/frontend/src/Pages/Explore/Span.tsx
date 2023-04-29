@@ -27,7 +27,11 @@ export default function Span() {
   })
 
   if (error) {
-    return <ErrorPanel error={error} />
+    return (
+      <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8 flex justify-center">
+        <ErrorPanel error={error} />
+      </div>
+    )
   }
 
   if (loading) {
@@ -40,12 +44,14 @@ export default function Span() {
 
   if (data.span == null) {
     return (
-      <WarningPanel
-        warning={{
-          spanId,
-          message: `Unable to find any data for this span.`,
-        }}
-      />
+      <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8 flex justify-center">
+        <WarningPanel
+          warning={{
+            spanId,
+            message: `Unable to find any data for this span.`,
+          }}
+        />
+      </div>
     )
   }
 

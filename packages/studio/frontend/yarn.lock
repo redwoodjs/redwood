@@ -283,6 +283,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.12.5":
+  version: 7.21.5
+  resolution: "@babel/runtime@npm:7.21.5"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: c704c36bf1c7f948b1d404e3ad3b00897f6dbaf8bb9455b0a78f96ed0e2f24599f89fd3950a277566be6694ab8814a47bec743e98dd7c7f57e9f0fedc6c6c32f
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.20.7":
   version: 7.20.7
   resolution: "@babel/template@npm:7.20.7"
@@ -591,7 +600,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headlessui/react@npm:^1.7.13":
+"@headlessui/react@npm:^1.7.14":
   version: 1.7.14
   resolution: "@headlessui/react@npm:1.7.14"
   dependencies:
@@ -603,7 +612,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@heroicons/react@npm:^2.0.16":
+"@heroicons/react@npm:^2.0.17":
   version: 2.0.17
   resolution: "@heroicons/react@npm:2.0.17"
   peerDependencies:
@@ -661,80 +670,80 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nivo/annotations@npm:0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/annotations@npm:0.80.0"
+"@nivo/annotations@npm:0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/annotations@npm:0.81.0"
   dependencies:
-    "@nivo/colors": 0.80.0
-    "@react-spring/web": 9.4.5
+    "@nivo/colors": 0.81.0
+    "@react-spring/web": 9.4.5 || ^9.7.2
     lodash: ^4.17.21
   peerDependencies:
-    "@nivo/core": 0.80.0
+    "@nivo/core": 0.81.0
     react: ">= 16.14.0 < 19.0.0"
-  checksum: e6d1339d37bc26087255cdd24e81fef41e25a7cb07c3e7a08146a1be5fdcb1717a8f7514b2bdcdb44ccee0fa700849596dee086166c52fa1ca1b4344f7bb51f0
+  checksum: 8e5775fd633a43d857af4c376e4d3e4c80c642e8eb8aae90c236796bb067770a0d081ae676c11b4e03ac8e493cf14b3933c2d98df5650c16f73934f79ef21759
   languageName: node
   linkType: hard
 
-"@nivo/axes@npm:0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/axes@npm:0.80.0"
+"@nivo/axes@npm:0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/axes@npm:0.81.0"
   dependencies:
-    "@nivo/scales": 0.80.0
-    "@react-spring/web": 9.4.5
+    "@nivo/scales": 0.81.0
+    "@react-spring/web": 9.4.5 || ^9.7.2
     d3-format: ^1.4.4
     d3-time-format: ^3.0.0
   peerDependencies:
-    "@nivo/core": 0.80.0
+    "@nivo/core": 0.81.0
     prop-types: ">= 15.5.10 < 16.0.0"
     react: ">= 16.14.0 < 19.0.0"
-  checksum: ee03a3651b9bdae036f039f99cc8c442ea84e41311a0158d5c276b6cdd12cc1b156f93ddb28f6a0fe82e6dc79135e69f92aa38bfd7bd47fa0c2bf118f3a1e691
+  checksum: 7449ebfd8edf138d9a4e75b52e3097ae582af2093c27f2a8bcf1a303b46f76e91d301c76629035dc4b40119f18e411d83c15a3708a65a42697b8b9c8425f9714
   languageName: node
   linkType: hard
 
-"@nivo/bar@npm:^0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/bar@npm:0.80.0"
+"@nivo/bar@npm:^0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/bar@npm:0.81.0"
   dependencies:
-    "@nivo/annotations": 0.80.0
-    "@nivo/axes": 0.80.0
-    "@nivo/colors": 0.80.0
-    "@nivo/legends": 0.80.0
-    "@nivo/scales": 0.80.0
-    "@nivo/tooltip": 0.80.0
-    "@react-spring/web": 9.4.5
+    "@nivo/annotations": 0.81.0
+    "@nivo/axes": 0.81.0
+    "@nivo/colors": 0.81.0
+    "@nivo/legends": 0.81.0
+    "@nivo/scales": 0.81.0
+    "@nivo/tooltip": 0.81.0
+    "@react-spring/web": 9.4.5 || ^9.7.2
     d3-scale: ^3.2.3
     d3-shape: ^1.3.5
     lodash: ^4.17.21
   peerDependencies:
-    "@nivo/core": 0.80.0
+    "@nivo/core": 0.81.0
     react: ">= 16.14.0 < 19.0.0"
-  checksum: 5e908d9f24cbb4f053848094055b58cea394f222a0c1059b62ec082e23cc059f29d4c24686e4ef42d28f3fba4d3fe13071da5986759226f333fc37ccdd1aac27
+  checksum: cef4f021fff8a3631a809510fe5a6098745eca311f27efdce0cb76b384d080719da707320fa7641a56301bce9634e658503c8095bf8f77725ca3e74eb44f1eb1
   languageName: node
   linkType: hard
 
-"@nivo/colors@npm:0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/colors@npm:0.80.0"
+"@nivo/colors@npm:0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/colors@npm:0.81.0"
   dependencies:
-    d3-color: ^2.0.0
+    d3-color: ^3.1.0
     d3-scale: ^3.2.3
     d3-scale-chromatic: ^2.0.0
     lodash: ^4.17.21
   peerDependencies:
-    "@nivo/core": 0.80.0
+    "@nivo/core": 0.81.0
     prop-types: ">= 15.5.10 < 16.0.0"
     react: ">= 16.14.0 < 19.0.0"
-  checksum: 7d2a076708fed34274e621ef4334316829849ded413efbddad3f97e155fbebbfb8105f7ec7eacda8c36e72b543b9ff05b99bc92240ddb33e696a5a74ce995699
+  checksum: 179deb020622f7eb1c3a1c4205fbcf48068ccf66476ff8046361736f0f2f4ed834fe2be15b3929b91889ee2d150a11b55e347abf9c0975b2e5d89d07271f3522
   languageName: node
   linkType: hard
 
-"@nivo/core@npm:^0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/core@npm:0.80.0"
+"@nivo/core@npm:^0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/core@npm:0.81.0"
   dependencies:
-    "@nivo/recompose": 0.80.0
-    "@react-spring/web": 9.4.5
-    d3-color: ^2.0.0
+    "@nivo/recompose": 0.81.0
+    "@react-spring/web": 9.4.5 || ^9.7.2
+    d3-color: ^3.1.0
     d3-format: ^1.4.4
     d3-interpolate: ^2.0.1
     d3-scale: ^3.2.3
@@ -743,55 +752,71 @@ __metadata:
     d3-time-format: ^3.0.0
     lodash: ^4.17.21
   peerDependencies:
-    "@nivo/tooltip": 0.80.0
+    "@nivo/tooltip": 0.81.0
     prop-types: ">= 15.5.10 < 16.0.0"
     react: ">= 16.14.0 < 19.0.0"
-  checksum: ad65f892450c1942346ebbd0b2e2596cf609842aa4cccfe3e991ee12241e947b7810f7235c54ce6173d2005321e296115c8c412dc72db4ae0ecc9cd40cf4e7a7
+  checksum: a3901f0e74af341198420bb65c14009fbd8781f5e8485802071fd01fd3b14d6518eae33bd223ed99e23ee33a9f1db6b1462ec340bfc48096eefe70c3cec2420c
   languageName: node
   linkType: hard
 
-"@nivo/legends@npm:0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/legends@npm:0.80.0"
+"@nivo/legends@npm:0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/legends@npm:0.81.0"
   peerDependencies:
-    "@nivo/core": 0.80.0
+    "@nivo/core": 0.81.0
     prop-types: ">= 15.5.10 < 16.0.0"
     react: ">= 16.14.0 < 19.0.0"
-  checksum: 4b5b9a18f48deac448c383c80d99f2123b3c9f2fdd9c4d5de82b193c2c40edeada461fa4191a906989a7d715423060e5904b0561684aacbc123721146a450750
+  checksum: b1c6ff308a408d31d76739d7d639aa9f2cf1a5d797b3886537a9b45c1a6aa1eaa275471e26b63a92f6cf8a483b93da0e6d5d3219cc4ae33169034fcee6aa2a27
   languageName: node
   linkType: hard
 
-"@nivo/recompose@npm:0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/recompose@npm:0.80.0"
+"@nivo/recompose@npm:0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/recompose@npm:0.81.0"
   dependencies:
     react-lifecycles-compat: ^3.0.4
   peerDependencies:
     react: ">= 16.14.0 < 19.0.0"
-  checksum: 619887e86536ff6cedfd670b8ca74e49cb39974496ecdd80487c7fd5d4c0840fe37f1587b675f2417097b0d6bd03e43fdd866da9e5f8709a511a191a1844404a
+  checksum: bc755579a6ac29308fe823954df5d585071aee052aa94f7d6067d9d3d6f77af337e1c3f998a0610d9c6321ac259a8ba0bcd67df1f79405f56a9d3beb42c09212
   languageName: node
   linkType: hard
 
-"@nivo/scales@npm:0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/scales@npm:0.80.0"
+"@nivo/scales@npm:0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/scales@npm:0.81.0"
   dependencies:
     d3-scale: ^3.2.3
     d3-time: ^1.0.11
     d3-time-format: ^3.0.0
     lodash: ^4.17.21
-  checksum: 2555a5ba570f693aa83becca38d2af5dbf61193c4869eeede6386335f35c3be3fdfeb5b4e59e83970589c6c943e2c6d45693474349ecbfb5e5b117838c9d0209
+  checksum: 72ef46ea8305a85d82d2ad0e2f00e64a3e2c9ceb97c416b32a9a8bec08d98183a66ae8ca307a862bf0b809ced22f787bb2a4c0f25750a2c02dcb33d2600e9f08
   languageName: node
   linkType: hard
 
-"@nivo/tooltip@npm:0.80.0":
-  version: 0.80.0
-  resolution: "@nivo/tooltip@npm:0.80.0"
+"@nivo/tooltip@npm:0.81.0, @nivo/tooltip@npm:^0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/tooltip@npm:0.81.0"
   dependencies:
-    "@react-spring/web": 9.4.5
+    "@react-spring/web": 9.4.5 || ^9.7.2
   peerDependencies:
-    "@nivo/core": 0.80.0
-  checksum: 68c45a2f000f4e72e7cd62fb134d95da6487657b78601347612ee01f4e371bb693b30d8bc28298cf78c98830f09368710c825d698fe30d2a807b16bf4875d8c6
+    "@nivo/core": 0.81.0
+  checksum: 39772da233b2ece16a304a49fce9bc078d00dd8f0075f57d3fd115a5c5fe1eb19540b866e6849d750833a30e6a533b6802823d7a046d990fecc6120ea36a9c14
+  languageName: node
+  linkType: hard
+
+"@nivo/treemap@npm:^0.81.0":
+  version: 0.81.0
+  resolution: "@nivo/treemap@npm:0.81.0"
+  dependencies:
+    "@nivo/colors": 0.81.0
+    "@nivo/tooltip": 0.81.0
+    "@react-spring/web": 9.4.5 || ^9.7.2
+    d3-hierarchy: ^1.1.8
+    lodash: ^4.17.21
+  peerDependencies:
+    "@nivo/core": 0.81.0
+    react: ">= 16.14.0 < 19.0.0"
+  checksum: 75e31a3f25240992dea1a2c67c3dc162fc41c14651f6ef90d8de9cc24fdc487339e7a0e783c107d09d422d71d6126ebe62eb4cf3ce9b50df9d4006d18a27ee05
   languageName: node
   linkType: hard
 
@@ -1067,70 +1092,70 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-spring/animated@npm:~9.4.5":
-  version: 9.4.5
-  resolution: "@react-spring/animated@npm:9.4.5"
+"@react-spring/animated@npm:~9.7.2":
+  version: 9.7.2
+  resolution: "@react-spring/animated@npm:9.7.2"
   dependencies:
-    "@react-spring/shared": ~9.4.5
-    "@react-spring/types": ~9.4.5
+    "@react-spring/shared": ~9.7.2
+    "@react-spring/types": ~9.7.2
   peerDependencies:
-    react: ^16.8.0  || >=17.0.0 || >=18.0.0
-  checksum: aba2a64e7e0d120de51346e534a1b1bf2c7d9516baf3c200fc2c506e84703c0ffdc08ace2e0466a2fb759350653aa774b3b39e9b14884f767a8098509c7e1aaf
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 4addd335562d88ad4d34766366330c811c55f6ece1239be6ce387233ee5444e4d53d33c5d45fdb29ce2c56d93ced89ee09aa86390f570680724ce0f23d30f01d
   languageName: node
   linkType: hard
 
-"@react-spring/core@npm:~9.4.5":
-  version: 9.4.5
-  resolution: "@react-spring/core@npm:9.4.5"
+"@react-spring/core@npm:~9.7.2":
+  version: 9.7.2
+  resolution: "@react-spring/core@npm:9.7.2"
   dependencies:
-    "@react-spring/animated": ~9.4.5
-    "@react-spring/rafz": ~9.4.5
-    "@react-spring/shared": ~9.4.5
-    "@react-spring/types": ~9.4.5
+    "@react-spring/animated": ~9.7.2
+    "@react-spring/rafz": ~9.7.2
+    "@react-spring/shared": ~9.7.2
+    "@react-spring/types": ~9.7.2
   peerDependencies:
-    react: ^16.8.0  || >=17.0.0 || >=18.0.0
-  checksum: bf1a81d9d1eb93727c98112d3b31ee788e495348a26073dc4eb88d7b3d669d6400fccf190f39f4cbb8417a64fb1e6b7fd71ae4152a4592922c75ddf685dfe54d
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 052d90560fcb9612f9e3d7a7499a229d8f0528c7d167c5e53ffb837f9ad90bc63ee4a254b99d4530abdbb11e0e54914d21a5d5143fbfe985b77279f2d83a9f86
   languageName: node
   linkType: hard
 
-"@react-spring/rafz@npm:~9.4.5":
-  version: 9.4.5
-  resolution: "@react-spring/rafz@npm:9.4.5"
-  checksum: e4889c548e4627bf312767544360ade2ddf5e93a464033d041d7bf37763457a9a0f56a3abf473f002d30b15440b4b8cfe94a8d9cfe85160f16cdb9754147f6c2
+"@react-spring/rafz@npm:~9.7.2":
+  version: 9.7.2
+  resolution: "@react-spring/rafz@npm:9.7.2"
+  checksum: 36344a95a1dcd60630eba137ace40039a8c44122234b587db594eb41199df06542c496d3d01e02fa888350de1579635a30e78d48ac3905790a20bd83c3564b48
   languageName: node
   linkType: hard
 
-"@react-spring/shared@npm:~9.4.5":
-  version: 9.4.5
-  resolution: "@react-spring/shared@npm:9.4.5"
+"@react-spring/shared@npm:~9.7.2":
+  version: 9.7.2
+  resolution: "@react-spring/shared@npm:9.7.2"
   dependencies:
-    "@react-spring/rafz": ~9.4.5
-    "@react-spring/types": ~9.4.5
+    "@react-spring/rafz": ~9.7.2
+    "@react-spring/types": ~9.7.2
   peerDependencies:
-    react: ^16.8.0  || >=17.0.0 || >=18.0.0
-  checksum: 0edcc4c417027e9ea24ee63739cfd4e380eb32bcff672cea7d93006e068b5ed92a8fc28f868ee205f222498a38191ec5e5245674ed948617b06595a3349b7f46
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: a03a5cb50234e12d50dd0a5b484285716af0c63194d62ba6a57d4c9cd3d2b719808358901fa73d1067f79f0b1492dcc2cd326aa38cda06a0d1fe4d215059f59c
   languageName: node
   linkType: hard
 
-"@react-spring/types@npm:~9.4.5":
-  version: 9.4.5
-  resolution: "@react-spring/types@npm:9.4.5"
-  checksum: 498a03e4e101c903af5d7c933535efa38025c95f7b19341a4af1d3a3336a3929a44e625cf8b9ad9ab2efdd7d22f4fc19505b127e652211e6f2f7c40a86ab92cf
+"@react-spring/types@npm:~9.7.2":
+  version: 9.7.2
+  resolution: "@react-spring/types@npm:9.7.2"
+  checksum: d9afe87cc4931b87c88eca94891f01e154338adac0c196c97431ba42e879bbdc9e0656d3e11e011b6ef1838d9ee41b11742ae86d20dc282a350cf639d9cfa6b2
   languageName: node
   linkType: hard
 
-"@react-spring/web@npm:9.4.5":
-  version: 9.4.5
-  resolution: "@react-spring/web@npm:9.4.5"
+"@react-spring/web@npm:9.4.5 || ^9.7.2":
+  version: 9.7.2
+  resolution: "@react-spring/web@npm:9.7.2"
   dependencies:
-    "@react-spring/animated": ~9.4.5
-    "@react-spring/core": ~9.4.5
-    "@react-spring/shared": ~9.4.5
-    "@react-spring/types": ~9.4.5
+    "@react-spring/animated": ~9.7.2
+    "@react-spring/core": ~9.7.2
+    "@react-spring/shared": ~9.7.2
+    "@react-spring/types": ~9.7.2
   peerDependencies:
-    react: ^16.8.0  || >=17.0.0 || >=18.0.0
-    react-dom: ^16.8.0  || >=17.0.0 || >=18.0.0
-  checksum: bd66cfb918466a74022696e672fa69ff0e8f8e5cc67a1369c894e7d9e17fcc70861fe2ac9f4ab2fc3cbdd6e3cac9149c12edda6e3b842ac600bf04117cb0e89d
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 7022012c18f16dcd96839ecadfd24e3c92b54bc6a94671a706370f373d765aa9666291e3ce83656ef2cdf0238dc2a4fbfc67ac6a3110407ec00dacca95c33b0c
   languageName: node
   linkType: hard
 
@@ -1747,14 +1772,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-color@npm:1 - 2, d3-color@npm:^2.0.0":
+"d3-color@npm:1 - 2":
   version: 2.0.0
   resolution: "d3-color@npm:2.0.0"
   checksum: 5aa58dfb78e3db764373a904eabb643dc024ff6071128a41e86faafa100e0e17a796e06ac3f2662e9937242bb75b8286788629773d76936f11c17bd5fe5e15cd
   languageName: node
   linkType: hard
 
-"d3-color@npm:1 - 3":
+"d3-color@npm:1 - 3, d3-color@npm:^3.1.0":
   version: 3.1.0
   resolution: "d3-color@npm:3.1.0"
   checksum: a4e20e1115fa696fce041fbe13fbc80dc4c19150fa72027a7c128ade980bc0eeeba4bcf28c9e21f0bce0e0dbfe7ca5869ef67746541dcfda053e4802ad19783c
@@ -1786,6 +1811,13 @@ __metadata:
   version: 1.4.5
   resolution: "d3-format@npm:1.4.5"
   checksum: 40800a2fb2182d2d711cea3acc2b8b2b3afdb6f644c51de77feb9b08a6150b14c753933d2fd4ad2f6f45130757b738673372c45b4b820466c560f3b1ec0b3ce8
+  languageName: node
+  linkType: hard
+
+"d3-hierarchy@npm:^1.1.8":
+  version: 1.1.9
+  resolution: "d3-hierarchy@npm:1.1.9"
+  checksum: 63b0ae0953bda076866b8705f8ea6fa1f67ded7ee99d98b20ef4364ce21868c292c9b45e887fde0f0dba1d0202466b2a87e7d5a6cc6388e759aadc5f055142e0
   languageName: node
   linkType: hard
 
@@ -2208,10 +2240,12 @@ __metadata:
     "@apollo/client": ^3.7.8
     "@graphiql/plugin-explorer": ^0.1.14
     "@graphiql/toolkit": ^0.8.2
-    "@headlessui/react": ^1.7.13
-    "@heroicons/react": ^2.0.16
-    "@nivo/bar": ^0.80.0
-    "@nivo/core": ^0.80.0
+    "@headlessui/react": ^1.7.14
+    "@heroicons/react": ^2.0.17
+    "@nivo/bar": ^0.81.0
+    "@nivo/core": ^0.81.0
+    "@nivo/tooltip": ^0.81.0
+    "@nivo/treemap": ^0.81.0
     "@tailwindcss/forms": ^0.5.3
     "@tremor/react": ^2.2.0
     "@types/react": ^18.0.27
@@ -2227,11 +2261,12 @@ __metadata:
     pretty-ms: ^7.0.0
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-error-boundary: ^4.0.4
     react-grid-layout: ^1.3.4
     react-router-dom: ^6.8.1
     react-split-pane: ^0.1.92
     react-toastify: ^9.1.2
-    tailwindcss: ^3.2.7
+    tailwindcss: ^3.3.2
     typescript: ^5.0.0
     use-url-search-params: ^2.5.1
     vite: ^4.1.0
@@ -3357,6 +3392,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-error-boundary@npm:^4.0.4":
+  version: 4.0.4
+  resolution: "react-error-boundary@npm:4.0.4"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 23020323992d0d0355a29e8282e1d2774d95fdee48597b22ac87df75e7fbf36ce795b7ebf84ebbf89322985993e018c37d3848ac948e0e9b420fb2613682e96b
+  languageName: node
+  linkType: hard
+
 "react-focus-lock@npm:^2.5.2":
   version: 2.9.4
   resolution: "react-focus-lock@npm:2.9.4"
@@ -3961,7 +4007,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.2.7":
+"tailwindcss@npm:^3.3.2":
   version: 3.3.2
   resolution: "tailwindcss@npm:3.3.2"
   dependencies:

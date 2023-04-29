@@ -3,6 +3,7 @@ import React from 'react'
 import { useQuery, gql } from '@apollo/client'
 import { ClockIcon } from '@heroicons/react/20/solid'
 import { CubeTransparentIcon } from '@heroicons/react/24/outline'
+import { Badge, Card, Flex, Subtitle, Title, Text } from '@tremor/react'
 import { Link } from 'react-router-dom'
 
 import LoadingSpinner from '../../Components/LoadingSpinner'
@@ -49,67 +50,122 @@ function TraceListComponent({ traces }: { traces: any[] }) {
         })
 
         return (
-          <div
+          <Card
+            className="min-w-full max-w-full mb-2 flex flex-row gap-3 hover:bg-gray-50 transition-colors duration-75 ease-in-out"
             key={row.id}
-            className="overflow-hidden bg-white shadow rounded-md mb-2 border border-white hover:border-gray-400 hover:bg-gray-50 flex flex-row justify-between"
           >
-            <div className="flex flex-grow px-4 py-4 sm:px-6">
-              <Link to={`/explorer/trace/${row.id}`} className="min-w-full">
-                <div className="flex flex-col gap-0 border-b border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <span className="truncate font-medium">
-                      {getTraceName(row.spans)}
-                    </span>
-                    <span className="ml-2 flex flex-shrink-0">
-                      <span
-                        className={`inline-flex items-center rounded-md px-2 py-1 text-sm font-medium ${
-                          hasAnyErrors(row.spans)
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}
-                      >
-                        {hasAnyErrors(row.spans) ? 'Error' : 'Ok/Unset'}
-                      </span>
-                    </span>
-                  </div>
-                  <div className="font-mono text-sm text-gray-500">
-                    {row.id}
-                  </div>
-                </div>
-                <div className="mt-2 flex flex-row flex-wrap gap-2">
-                  {Array.from(typeCountMap.keys())
-                    .sort()
-                    .map((type: string | null) => (
-                      <SpanTypeLabel
-                        key={type}
-                        type={type}
-                        count={typeCountMap.get(type)}
-                      />
-                    ))}
-                </div>
-                <div className="mt-2 flex flex-col gap-2 justify-end">
-                  <div className="flex items-center text-sm text-gray-500 ml-auto">
-                    <ClockIcon
-                      className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <p>
-                      {new Date(
-                        parseInt(traceStart(row.spans).slice(0, -6), 10)
-                      ).toLocaleString()}
-                      , duration {traceDuration(row.spans).slice(0, -6)}ms
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            </div>
             <Link
-              to={`/explorer/trace-tree/${row.id}`}
-              className="flex flex-shrink-0 bg-rich-black text-white my-2 mr-2 p-2 rounded-md items-center justify-center"
+              to={`/explorer/trace/${row.id}`}
+              className="flex-1 flex-col items-start min-w-0"
             >
-              <CubeTransparentIcon className="h-5 w-5" />
+              <Flex>
+                <Title className="flex-1 truncate">
+                  {getTraceName(row.spans)}
+                </Title>
+                <Badge
+                  size="lg"
+                  className="px-3.5 py-0.5"
+                  color={hasAnyErrors(row.spans) ? 'red' : 'green'}
+                >
+                  {hasAnyErrors(row.spans) ? 'Error' : 'Ok/Unset'}
+                </Badge>
+              </Flex>
+              <Flex className="border-b border-gray-200 pb-2 mb-2">
+                <Subtitle>{row.id}</Subtitle>
+              </Flex>
+              <Flex className="justify-start flex-wrap">
+                {Array.from(typeCountMap.keys())
+                  .sort()
+                  .map((type: string | null, index) => (
+                    <SpanTypeLabel
+                      key={type}
+                      type={type}
+                      count={typeCountMap.get(type)}
+                      padLeft={index !== 0}
+                    />
+                  ))}
+              </Flex>
+              <Flex className="justify-end mt-2">
+                <ClockIcon
+                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                  aria-hidden="true"
+                />
+                <Text>
+                  {new Date(
+                    parseInt(traceStart(row.spans).slice(0, -6), 10)
+                  ).toLocaleString()}
+                  , duration {traceDuration(row.spans).slice(0, -6)}ms
+                </Text>
+              </Flex>
             </Link>
-          </div>
+            <Link
+              to={`/explorer/map/${row.id}`}
+              className="flex flex-shrink-0 bg-rich-black text-white rounded-md items-center justify-center px-2 min-h-full"
+            >
+              <CubeTransparentIcon className="h-full w-6" />
+            </Link>
+          </Card>
+          // <div
+          //   key={row.id}
+          //   className="overflow-hidden bg-white shadow rounded-md mb-2 border border-white hover:border-gray-400 hover:bg-gray-50 flex flex-row justify-between"
+          // >
+          //   <div className="flex flex-grow px-4 py-4 sm:px-6">
+          //     <Link to={`/explorer/trace/${row.id}`} className="min-w-full">
+          //       <div className="flex flex-col gap-0 border-b border-gray-200">
+          //         <div className="flex items-center justify-between">
+          //           <span className="truncate font-medium">
+          //
+          //           </span>
+          //           <span className="ml-2 flex flex-shrink-0">
+          //             <span
+          //               className={`inline-flex items-center rounded-md px-2 py-1 text-sm font-medium ${
+          //                 hasAnyErrors(row.spans)
+          //                   ? 'bg-red-100 text-red-800'
+          //                   : 'bg-green-100 text-green-800'
+          //               }`}
+          //             >
+          //               {hasAnyErrors(row.spans) ? 'Error' : 'Ok/Unset'}
+          //             </span>
+          //           </span>
+          //         </div>
+          //         <div className="font-mono text-sm text-gray-500">
+          //           {row.id}
+          //         </div>
+          //       </div>
+          //       <div className="mt-2 flex flex-row flex-wrap gap-2">
+          //         {Array.from(typeCountMap.keys())
+          //           .sort()
+          //           .map((type: string | null) => (
+          //             <SpanTypeLabel
+          //               key={type}
+          //               type={type}
+          //               count={typeCountMap.get(type)}
+          //             />
+          //           ))}
+          //       </div>
+          //       <div className="mt-2 flex flex-col gap-2 justify-end">
+          //         <div className="flex items-center text-sm text-gray-500 ml-auto">
+          //           <ClockIcon
+          //             className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+          //             aria-hidden="true"
+          //           />
+          //           <p>
+          //             {new Date(
+          //               parseInt(traceStart(row.spans).slice(0, -6), 10)
+          //             ).toLocaleString()}
+          //             , duration {traceDuration(row.spans).slice(0, -6)}ms
+          //           </p>
+          //         </div>
+          //       </div>
+          //     </Link>
+          //   </div>
+          //   <Link
+          //     to={`/explorer/trace-tree/${row.id}`}
+          //     className="flex flex-shrink-0 bg-rich-black text-white my-2 mr-2 p-2 rounded-md items-center justify-center"
+          //   >
+          //     <CubeTransparentIcon className="h-5 w-5" />
+          //   </Link>
+          // </div>
         )
       })}
     </>

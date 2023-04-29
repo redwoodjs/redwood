@@ -77,9 +77,10 @@ export default function SpanGeneric({ id: spanId }: { id: string }) {
       {/* Header  */}
       <div className="sm:flex sm:items-center" key="header">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-slate-100 px-4 pt-2 pb-2 bg-rich-black rounded-md">
-            Generic Span
-          </h1>
+          <div className="text-base font-semibold leading-6 text-slate-100 px-4 pt-2 pb-2 bg-rich-black rounded-md flex justify-between">
+            <div>Generic Span</div>
+            <div>({spanId})</div>
+          </div>
         </div>
       </div>
 

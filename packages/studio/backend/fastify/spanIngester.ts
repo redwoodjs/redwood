@@ -62,6 +62,11 @@ export default async function routes(fastify: FastifyInstance, _options: any) {
   fastify.post('/v1/traces', async (request, _reply) => {
     const data: { resourceSpans: ResourceSpan[] } = request.body as any
 
+    const db = await getDatabase()
+    const spanInsertStatement = await db.prepare(
+      'INSERT INTO span (id, trace, parent, name, kind, status_code, status_message, start_nano, end_nano, duration_nano, events, attributes, resources) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, json(?), json(?), json(?)) RETURNING id;'
+    )
+
     // TODO: Consider better typing here`
     const spans: RestructuredSpan[] = []
 
@@ -104,12 +109,7 @@ export default async function routes(fastify: FastifyInstance, _options: any) {
     }
 
     for (const span of spans) {
-      const db = await getDatabase()
-
       // Insert the span
-      const spanInsertStatement = await db.prepare(
-        'INSERT INTO span (id, trace, parent, name, kind, status_code, status_message, start_nano, end_nano, duration_nano, events, attributes, resources) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, json(?), json(?), json(?)) RETURNING id;'
-      )
       const spanInsertResult = await spanInsertStatement.get(
         span.id,
         span.trace,

@@ -3,7 +3,7 @@ import { JSONDefinition, JSONResolver } from 'graphql-scalars'
 import { createYoga, createSchema } from 'graphql-yoga'
 
 import { authProvider, generateAuthHeaders } from '../services/auth'
-import { spanTypeTimeline } from '../services/charts'
+import { spanTypeTimeline, spanTreeMapData } from '../services/charts'
 import { studioConfig, webConfig } from '../services/config'
 import { span, spans } from '../services/explore/span'
 import { traces, trace, traceCount } from '../services/explore/trace'
@@ -147,6 +147,8 @@ export const setupYoga = (fastify: FastifyInstance) => {
           timeLimit: Int!
           timeBucket: Int!
         ): SpanTypeTimelineData
+
+        spanTreeMapData(spanId: String): JSON
       }
 
       type Mutation {
@@ -175,6 +177,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         spans,
         // Charts
         spanTypeTimeline,
+        spanTreeMapData,
       },
       Span: {
         descendantSpans: async (span, _args, _ctx) => {

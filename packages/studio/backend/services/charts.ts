@@ -1,5 +1,7 @@
 import { getDatabase } from '../database'
 
+import { getDescendantSpans, getSpan } from './util'
+
 export async function spanTypeTimeline(
   _parent: unknown,
   {
@@ -107,4 +109,29 @@ export async function spanTypeTimeline(
     axisLeft,
     axisBottom,
   }
+}
+
+function buildTree(objects: any[], id: string) {
+  const tree: any = {}
+
+  const root = objects.find((o) => o.id === id)
+  tree.id = root.id
+  tree.name = root.name
+  tree.durationMilli = root.duration_nano / 1e6
+
+  const children = objects.filter((o) => o.parent === id)
+  if (children.length > 0) {
+    tree.children = children.map((c) => buildTree(objects, c.id))
+  }
+
+  return tree
+}
+
+export async function spanTreeMapData(
+  _parent: unknown,
+  { spanId }: { spanId: string }
+) {
+  const rootSpan = await getSpan(spanId)
+  const descendantSpans = await getDescendantSpans(spanId)
+  return buildTree([...descendantSpans, rootSpan], spanId)
 }

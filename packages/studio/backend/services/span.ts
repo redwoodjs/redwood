@@ -139,7 +139,7 @@ export async function retypeSpans(_parent: unknown) {
   await db.run(`
     UPDATE span SET
       type = 'http',
-      brief = substr(json_extract(attributes, '$.\"http.method\"') || ' ' || json_extract(attributes, '$.\"http.method\"'), 0, 255)
+      brief = substr(json_extract(attributes, '$.\"http.method\"') || ' ' || json_extract(attributes, '$.\"http.url\"'), 0, 255)
     WHERE
       json_extract(attributes, '$.\"http.method\"') IS NOT NULL;
   `)

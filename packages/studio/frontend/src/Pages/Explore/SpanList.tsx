@@ -3,6 +3,7 @@ import React from 'react'
 import { useQuery, gql } from '@apollo/client'
 import { CubeTransparentIcon } from '@heroicons/react/24/outline'
 import { ClockIcon } from '@heroicons/react/24/solid'
+import { Badge, Card, Flex, Subtitle, Title, Text } from '@tremor/react'
 import { Link } from 'react-router-dom'
 
 import LoadingSpinner from '../../Components/LoadingSpinner'
@@ -13,7 +14,7 @@ import { LIST_POLLING_INTERVAL } from '../../util/polling'
 import { hasAnyErrors } from '../../util/trace'
 
 const QUERY_GET_ALL_SPANS = gql`
-  query GetAllTraces {
+  query GetAllSpans {
     spans {
       id
       name
@@ -22,10 +23,6 @@ const QUERY_GET_ALL_SPANS = gql`
       statusCode
       startNano
       endNano
-      # descendantSpans {
-      #   id
-      #   type
-      # }
     }
   }
 `
@@ -39,66 +36,59 @@ function SpanListComponent({ spans }: { spans: any[] }) {
     <>
       {spans.map((row: any) => {
         return (
-          <div
+          <Card
+            className="min-w-full max-w-full mb-2 flex flex-row gap-3 hover:bg-gray-50 transition-colors duration-75 ease-in-out"
             key={row.id}
-            className="overflow-hidden bg-white shadow rounded-md mb-2 border border-white hover:border-gray-400 hover:bg-gray-50 flex flex-row justify-between"
           >
-            <div className="px-4 py-4 sm:px-6 flex flex-grow">
-              <Link to={`/explorer/span/${row.id}`} className="min-w-full">
-                <div className="flex flex-col gap-0 border-b border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <span className="truncate font-medium">{row.name}</span>
-                    <span className="ml-2 flex flex-shrink-0">
-                      <span
-                        className={`inline-flex items-center rounded-md px-2 py-1 text-sm font-medium ${
-                          hasAnyErrors([row])
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}
-                      >
-                        {hasAnyErrors([row]) ? 'Error' : 'Ok/Unset'}
-                      </span>
-                    </span>
-                  </div>
-                  <div className="font-mono text-sm text-gray-500">
-                    {row.id}
-                    {row.brief && (
-                      <span className="truncate"> | {row.brief}</span>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="flex md:flex-row flex-col">
-                    <SpanTypeLabel type={row.type} />
-                  </div>
-                </div>
-                <div className="mt-2 flex flex-col gap-2 justify-end">
-                  <div className="flex items-center text-sm text-gray-500 ml-auto">
-                    <ClockIcon
-                      className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <p>
-                      {new Date(
-                        parseInt(row.startNano.slice(0, -6), 10)
-                      ).toLocaleString()}
-                      , duration{' '}
-                      {(BigInt(row.endNano) - BigInt(row.startNano))
-                        .toString(10)
-                        .slice(0, -6)}
-                      ms
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            </div>
+            <Link
+              to={`/explorer/span/${row.id}`}
+              className="flex-1 flex-col items-start min-w-0"
+            >
+              <Flex>
+                <Title className="flex-1 truncate">{row.name}</Title>
+                <Badge
+                  size="lg"
+                  className="px-3.5 py-0.5"
+                  color={hasAnyErrors([row]) ? 'red' : 'green'}
+                >
+                  {hasAnyErrors([row]) ? 'Error' : 'Ok/Unset'}
+                </Badge>
+              </Flex>
+              <Flex className="border-b border-gray-200 pb-2 mb-2">
+                <Subtitle>{row.id}</Subtitle>
+                {row.brief && (
+                  <Subtitle className="truncate ml-2 pl-2 flex-1 border-l border-gray-200">
+                    {row.brief}
+                  </Subtitle>
+                )}
+              </Flex>
+              <Flex className="justify-start">
+                <SpanTypeLabel type={row.type} />
+              </Flex>
+              <Flex className="justify-end mt-2">
+                <ClockIcon
+                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                  aria-hidden="true"
+                />
+                <Text>
+                  {new Date(
+                    parseInt(row.startNano.slice(0, -6), 10)
+                  ).toLocaleString()}
+                  , duration{' '}
+                  {(BigInt(row.endNano) - BigInt(row.startNano))
+                    .toString(10)
+                    .slice(0, -6)}
+                  ms
+                </Text>
+              </Flex>
+            </Link>
             <Link
               to={`/explorer/map/${row.id}`}
-              className="flex flex-shrink-0 bg-rich-black text-white my-2 mr-2 p-2 rounded-md items-center justify-center"
+              className="flex flex-shrink-0 bg-rich-black text-white rounded-md items-center justify-center px-2 min-h-full"
             >
-              <CubeTransparentIcon className="h-5 w-5" />
+              <CubeTransparentIcon className="h-full w-6" />
             </Link>
-          </div>
+          </Card>
         )
       })}
     </>

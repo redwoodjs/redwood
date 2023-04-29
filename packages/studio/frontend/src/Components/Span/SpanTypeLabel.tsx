@@ -1,5 +1,32 @@
 import React from 'react'
 
+import { Badge } from '@tremor/react'
+
+type tailwindColours =
+  | 'red'
+  | 'green'
+  | 'slate'
+  | 'gray'
+  | 'zinc'
+  | 'neutral'
+  | 'stone'
+  | 'orange'
+  | 'amber'
+  | 'yellow'
+  | 'lime'
+  | 'emerald'
+  | 'teal'
+  | 'cyan'
+  | 'sky'
+  | 'blue'
+  | 'indigo'
+  | 'violet'
+  | 'purple'
+  | 'fuchsia'
+  | 'pink'
+  | 'rose'
+  | undefined
+
 const typeNames = new Map<string | null, string>([
   ['http', 'HTTP'],
   ['sql', 'SQL'],
@@ -10,41 +37,41 @@ const typeNames = new Map<string | null, string>([
   [null, 'Generic'],
 ])
 
-const typeColours = new Map<string | null, string>([
-  ['http', 'bg-blue-100 text-blue-800'],
-  ['sql', 'bg-yellow-100 text-yellow-800'],
-  ['redwood-service', 'bg-green-100 text-green-800'],
-  ['redwood-function', 'bg-green-100 text-green-800'],
-  ['graphql', 'bg-purple-100 text-purple-800'],
-  ['prisma', 'bg-pink-100 text-pink-800'],
-  [null, 'bg-gray-100 text-gray-800'],
+const typeColours = new Map<string | null, tailwindColours>([
+  ['http', 'blue'],
+  ['sql', 'yellow'],
+  ['redwood-service', 'green'],
+  ['redwood-function', 'green'],
+  ['graphql', 'purple'],
+  ['prisma', 'pink'],
+  [null, 'gray'],
 ])
 
 export default function SpanTypeLabel({
   type,
   count,
+  padLeft,
 }: {
   type: string | null
   count?: number
+  padLeft?: boolean
 }) {
   if (count) {
     return (
-      <span
-        className={`inline-flex items-center rounded-md px-2 py-1 text-sm font-medium ${typeColours.get(
-          type || null
-        )}`}
+      <Badge
+        className={`px-3.5 py-0.5 ${padLeft ? 'ml-2' : ''}`}
+        color={`${typeColours.get(type || null) || 'gray'}`}
       >
         {count}x {typeNames.get(type || null)}
-      </span>
+      </Badge>
     )
   }
   return (
-    <span
-      className={`inline-flex items-center rounded-md px-2 py-1 text-sm font-medium ${typeColours.get(
-        type || null
-      )}`}
+    <Badge
+      className={`px-3.5 py-0.5 ${padLeft ? 'ml-2' : ''}`}
+      color={`${typeColours.get(type || null) || 'gray'}`}
     >
       {typeNames.get(type || null)}
-    </span>
+    </Badge>
   )
 }
