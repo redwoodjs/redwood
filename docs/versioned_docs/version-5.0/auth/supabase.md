@@ -93,13 +93,13 @@ const { data, error } = await supabase.auth.signInWithPassword({
 })
 ```
 
-In RedwoodJS, you will always use `logIn` and pass the necessary credential options and also an `authenticationMethod` to declare how you want to authenticate.
+In RedwoodJS, you will always use `logIn` and pass the necessary credential options and also an `authMethod` to declare how you want to authenticate.
 
 ```ts
 const { logIn } = useAuth()
 
 await logIn({
-  authenticationMethod: 'password',
+  authMethod: 'password',
   email: 'example@email.com',
   password: 'example-password',
 })
@@ -163,7 +163,7 @@ Log in an existing user with an email and password or phone and password.
 const { logIn } = useAuth()
 
 await logIn({
-  authenticationMethod: 'password',
+  authMethod: 'password',
   email: 'example@email.com',
   password: 'example-password',
 })
@@ -181,7 +181,7 @@ Log in a user using magiclink or a one-time password (OTP).
 const { logIn } = useAuth()
 
 await logIn({
-  authenticationMethod: 'otp',
+  authMethod: 'otp',
   email: 'example@email.com',
   options: {
     emailRedirectTo: 'https://example.com/welcome'
@@ -214,7 +214,7 @@ Log in a user using IDToken.
 const { logIn } = useAuth()
 
 await logIn({
-  authenticationMethod: 'id_token',
+  authMethod: 'id_token',
   provider: 'apple',
   token: 'cortland-apple-id-token',
 })
@@ -228,7 +228,7 @@ Log in a user using IDToken.
 const { logIn } = useAuth()
 
 await logIn({
-  authenticationMethod: 'sso',
+  authMethod: 'sso',
   providerId: 'sso-provider-identity-uuid',
   domain: 'example.com',
 })
