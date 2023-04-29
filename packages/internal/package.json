@@ -24,7 +24,7 @@
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "yarn test:jest && yarn test:node",
+    "test": "yarn test:node && yarn test:jest",
     "test:jest": "jest src",
     "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --test'",
     "test:watch": "yarn test --watch"
