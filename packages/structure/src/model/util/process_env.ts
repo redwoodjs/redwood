@@ -1,7 +1,7 @@
 import { join } from 'path'
 
+import fg from 'fast-glob'
 import { readFileSync } from 'fs-extra'
-import { sync as globSync } from 'glob'
 import * as tsm from 'ts-morph'
 
 import { iter } from '../../x/Array'
@@ -9,7 +9,8 @@ import { createTSMSourceFile_cached } from '../../x/ts-morph'
 
 export function process_env_findAll(dir: string) {
   return iter(function* () {
-    for (const file of globSync(join(dir, 'src/**/*.{js,ts,jsx,tsx}'))) {
+    const globPath = join(dir, 'src/**/*.{js,ts,jsx,tsx}').replaceAll('\\', '/')
+    for (const file of fg.sync(globPath)) {
       yield* process_env_findInFile(file, readFileSync(file).toString())
     }
   })

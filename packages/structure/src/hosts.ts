@@ -1,5 +1,5 @@
+import fg from 'fast-glob'
 import * as fs from 'fs-extra'
-import { sync as globSync } from 'glob'
 
 import type { Paths } from '@redwoodjs/project-config'
 import { getPaths } from '@redwoodjs/project-config'
@@ -31,7 +31,7 @@ export class DefaultHost implements Host {
     return fs.readdirSync(path)
   }
   globSync(pattern: string) {
-    return globSync(pattern)
+    return fg.sync(pattern.replaceAll('\\', '/'))
   }
   writeFileSync(path: string, contents: string) {
     return fs.writeFileSync(path, contents)
