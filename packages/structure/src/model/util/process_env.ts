@@ -9,6 +9,7 @@ import { createTSMSourceFile_cached } from '../../x/ts-morph'
 
 export function process_env_findAll(dir: string) {
   return iter(function* () {
+    // globSync only works with / as the path separator, even on Windows
     const globPath = join(dir, 'src/**/*.{js,ts,jsx,tsx}').replaceAll('\\', '/')
     for (const file of fg.sync(globPath)) {
       yield* process_env_findInFile(file, readFileSync(file).toString())

@@ -31,6 +31,7 @@ export class DefaultHost implements Host {
     return fs.readdirSync(path)
   }
   globSync(pattern: string) {
+    // globSync only works with / as the path separator, even on Windows
     return fg.sync(pattern.replaceAll('\\', '/'))
   }
   writeFileSync(path: string, contents: string) {

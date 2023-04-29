@@ -30,11 +30,11 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/parser": "7.21.4",
+    "@babel/parser": "7.21.5",
     "@babel/plugin-transform-typescript": "7.21.3",
     "@babel/register": "7.21.0",
-    "@babel/runtime-corejs3": "7.21.0",
-    "@babel/traverse": "7.21.4",
+    "@babel/runtime-corejs3": "7.21.5",
+    "@babel/traverse": "7.21.5",
     "@graphql-codegen/add": "4.0.1",
     "@graphql-codegen/cli": "3.3.1",
     "@graphql-codegen/core": "3.1.0",
@@ -65,8 +65,8 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.4",
+    "@babel/cli": "7.21.5",
+    "@babel/core": "7.21.5",
     "@types/babel-plugin-tester": "9.0.5",
     "@types/babel__core": "7.20.0",
     "@types/findup-sync": "4.0.2",

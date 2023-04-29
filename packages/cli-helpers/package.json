@@ -22,14 +22,14 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/core": "7.21.4",
-    "@babel/runtime-corejs3": "7.21.0",
+    "@babel/core": "7.21.5",
+    "@babel/runtime-corejs3": "7.21.5",
     "@redwoodjs/project-config": "5.0.0",
     "@redwoodjs/telemetry": "5.0.0",
     "chalk": "4.1.2",
     "core-js": "3.30.1",
     "execa": "5.1.1",
-    "listr2": "6.3.1",
+    "listr2": "6.4.0",
     "lodash.memoize": "4.1.2",
     "pascalcase": "1.0.0",
     "prettier": "2.8.8",
@@ -37,7 +37,7 @@
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.0",
+    "@babel/cli": "7.21.5",
     "@types/lodash.memoize": "4.1.7",
     "@types/pascalcase": "1.0.1",
     "@types/yargs": "17.0.24",
