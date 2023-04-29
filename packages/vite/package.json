@@ -11,7 +11,7 @@
   "files": [
     "dist"
   ],
-  "_main": "dist/index.js",
+  "main": "dist/index.js",
   "bin": {
     "rw-vite-dev": "./bins/rw-vite-dev.mjs",
     "vite": "./bins/vite.mjs"

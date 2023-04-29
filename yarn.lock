@@ -7263,6 +7263,7 @@ __metadata:
     "@graphql-codegen/typescript-resolvers": 3.2.1
     "@redwoodjs/graphql-server": 5.0.0
     "@redwoodjs/project-config": 5.0.0
+    "@redwoodjs/vite": 5.0.0
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.20.0
     "@types/findup-sync": 4.0.2
@@ -7551,7 +7552,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/vite@workspace:packages/vite":
+"@redwoodjs/vite@5.0.0, @redwoodjs/vite@workspace:packages/vite":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
