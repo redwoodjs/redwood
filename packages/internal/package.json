@@ -67,7 +67,6 @@
   "devDependencies": {
     "@babel/cli": "7.21.5",
     "@babel/core": "7.21.5",
-    "@redwoodjs/vite": "5.0.0",
     "@types/babel-plugin-tester": "9.0.5",
     "@types/babel__core": "7.20.0",
     "@types/findup-sync": "4.0.2",
