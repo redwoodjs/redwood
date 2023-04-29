@@ -22,7 +22,7 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.21.0",
+    "@babel/runtime-corejs3": "7.21.5",
     "@redwoodjs/internal": "5.0.2",
     "@redwoodjs/project-config": "5.0.2",
     "@vitejs/plugin-react": "4.0.0",
@@ -34,7 +34,7 @@
     "vite-plugin-html": "3.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.0",
+    "@babel/cli": "7.21.5",
     "typescript": "5.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
