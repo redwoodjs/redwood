@@ -116,6 +116,7 @@ function buildTree(objects: any[], id: string) {
 
   const root = objects.find((o) => o.id === id)
   tree.id = root.id
+  tree.parent = root.parent
   tree.name = root.name
   tree.durationMilli = root.duration_nano / 1e6
 

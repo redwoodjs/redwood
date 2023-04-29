@@ -1,5 +1,7 @@
 import { getDatabase } from '../database'
 
+import { restructureSpan } from './span'
+
 async function getAncestorSpanIDs(spanId: string): Promise<string[]> {
   // Note: generated with GPT because I am not a SQL expert
   const query = `
@@ -35,7 +37,7 @@ export async function getAncestorSpans(spanId: string): Promise<any[]> {
   )
   const result = await stmt.all(...ancestorSpanIDs)
   await stmt.finalize()
-  return result
+  return result.map((span) => restructureSpan(span))
 }
 
 async function getDescendantSpanIDs(spanId: string): Promise<string[]> {

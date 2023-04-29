@@ -31,3 +31,15 @@ export const traceDuration = (spans: any) => {
   const end = traceEnd(spans)
   return (BigInt(end) - BigInt(start)).toString(10)
 }
+
+export const traceRootSpan = (spans: any) => {
+  const roots = spans
+    .filter((span: any) => span.parent === null)
+    .sort((a: any, b: any) => {
+      return BigInt(a.startNano) - BigInt(b.startNano)
+    })
+  if (roots.length >= 1) {
+    return roots[0]
+  }
+  return null
+}

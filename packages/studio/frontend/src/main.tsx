@@ -18,6 +18,7 @@ import Trace from './Pages/Explore/Trace'
 import TraceList from './Pages/Explore/TraceList'
 import GraphiQL from './Pages/GraphiQL'
 import Landing from './Pages/Landing'
+import MapLanding from './Pages/MapLanding'
 import NotFound from './Pages/NotFound'
 
 const client = new ApolloClient({
@@ -47,6 +48,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               <Route path="trace/:traceId" element={<Trace />} />
               <Route path="span" element={<SpanList />} />
               <Route path="span/:spanId" element={<Span />} />
+              <Route path="map" element={<MapLanding />} />
               <Route path="map/:spanId" element={<SpanTreeMap />} />
             </Route>
 

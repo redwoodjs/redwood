@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useQuery, gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import SpanTreeMapChart from '../../Charts/SpanTreeMapChart'
 import LoadingSpinner from '../../Components/LoadingSpinner'
@@ -25,15 +25,11 @@ const GET_SPAN_DATA = gql`
       kind
       statusCode
       statusMessage
-      descendantSpans {
-        id
-        type
-        name
-      }
       ancestorSpans {
         id
         type
         name
+        parent
       }
     }
     spanTreeMapData(spanId: $id)
@@ -63,7 +59,7 @@ export default function SpanTreeMap() {
     )
   }
 
-  if (data.span == null) {
+  if (spanId === undefined || data.span == null) {
     return (
       <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8 flex justify-center">
         <WarningPanel
@@ -75,6 +71,25 @@ export default function SpanTreeMap() {
       </div>
     )
   }
+
+  const getParents = (parentId: string) => {
+    const parents: string[] = []
+    const parent = data.span.ancestorSpans.find(
+      (span: any) => span.id === parentId
+    )
+    console.log(parent, parentId)
+    if (parent) {
+      if (parent.parent) {
+        parents.push(...getParents(parent.parent))
+      }
+      parents.push(parent.id)
+    }
+    return parents
+  }
+
+  const breadcrumIds = [...getParents(data.span.parent), spanId]
+  console.log(data.span.ancestorSpans)
+  console.log(breadcrumIds)
 
   return (
     <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8">
@@ -91,8 +106,21 @@ export default function SpanTreeMap() {
         <SpanTreeMapChart data={data.spanTreeMapData || {}} />
       </div>
 
-      <div className="overflow-hidden bg-white shadow rounded-md mt-4 p-3">
-        BREADCRUMB
+      <div className="overflow-hidden bg-white shadow rounded-md mt-4 p-3 flex flex-row overflow-x-auto">
+        {breadcrumIds.map((id, index) => (
+          <>
+            <Link
+              to={`/explorer/map/${id}`}
+              key={id}
+              className={id === spanId ? `text-sinopia underline` : ``}
+            >
+              {id}
+            </Link>
+            {index !== breadcrumIds.length - 1 && (
+              <span className="mx-1">&gt;</span>
+            )}
+          </>
+        ))}
       </div>
 
       <div className="overflow-hidden bg-white shadow rounded-md mt-2 p-3">

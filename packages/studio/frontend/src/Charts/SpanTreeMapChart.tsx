@@ -28,12 +28,22 @@ export default function SpanTreeMapChart({ data }: { data: any }) {
         modifiers: [['darker', 0.1]],
       }}
       onClick={(node, event) => {
-        console.log(node)
-        if (event.ctrlKey) {
-          navigate(`/explorer/span/${node.data.id}`)
+        event.preventDefault()
+        if (event.button === 0) {
+          // Move to span view
+          if (event.ctrlKey) {
+            navigate(`/explorer/span/${node.data.id}`)
+            return
+          }
+          // Go up to parent span
+          if (event.shiftKey && node.data.parent != null) {
+            navigate(`/explorer/map/${node.data.parent}`)
+            return
+          }
+          // Go down to child span
+          navigate(`/explorer/map/${node.data.id}`)
           return
         }
-        navigate(`/explorer/map/${node.data.id}`)
       }}
     />
   )

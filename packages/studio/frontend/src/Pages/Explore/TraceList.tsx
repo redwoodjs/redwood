@@ -15,6 +15,7 @@ import {
   getTraceName,
   hasAnyErrors,
   traceDuration,
+  traceRootSpan,
   traceStart,
 } from '../../util/trace'
 
@@ -99,73 +100,12 @@ function TraceListComponent({ traces }: { traces: any[] }) {
               </Flex>
             </Link>
             <Link
-              to={`/explorer/map/${row.id}`}
+              to={`/explorer/map/${traceRootSpan(row.spans)?.id}`}
               className="flex flex-shrink-0 bg-rich-black text-white rounded-md items-center justify-center px-2 min-h-full"
             >
               <CubeTransparentIcon className="h-full w-6" />
             </Link>
           </Card>
-          // <div
-          //   key={row.id}
-          //   className="overflow-hidden bg-white shadow rounded-md mb-2 border border-white hover:border-gray-400 hover:bg-gray-50 flex flex-row justify-between"
-          // >
-          //   <div className="flex flex-grow px-4 py-4 sm:px-6">
-          //     <Link to={`/explorer/trace/${row.id}`} className="min-w-full">
-          //       <div className="flex flex-col gap-0 border-b border-gray-200">
-          //         <div className="flex items-center justify-between">
-          //           <span className="truncate font-medium">
-          //
-          //           </span>
-          //           <span className="ml-2 flex flex-shrink-0">
-          //             <span
-          //               className={`inline-flex items-center rounded-md px-2 py-1 text-sm font-medium ${
-          //                 hasAnyErrors(row.spans)
-          //                   ? 'bg-red-100 text-red-800'
-          //                   : 'bg-green-100 text-green-800'
-          //               }`}
-          //             >
-          //               {hasAnyErrors(row.spans) ? 'Error' : 'Ok/Unset'}
-          //             </span>
-          //           </span>
-          //         </div>
-          //         <div className="font-mono text-sm text-gray-500">
-          //           {row.id}
-          //         </div>
-          //       </div>
-          //       <div className="mt-2 flex flex-row flex-wrap gap-2">
-          //         {Array.from(typeCountMap.keys())
-          //           .sort()
-          //           .map((type: string | null) => (
-          //             <SpanTypeLabel
-          //               key={type}
-          //               type={type}
-          //               count={typeCountMap.get(type)}
-          //             />
-          //           ))}
-          //       </div>
-          //       <div className="mt-2 flex flex-col gap-2 justify-end">
-          //         <div className="flex items-center text-sm text-gray-500 ml-auto">
-          //           <ClockIcon
-          //             className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-          //             aria-hidden="true"
-          //           />
-          //           <p>
-          //             {new Date(
-          //               parseInt(traceStart(row.spans).slice(0, -6), 10)
-          //             ).toLocaleString()}
-          //             , duration {traceDuration(row.spans).slice(0, -6)}ms
-          //           </p>
-          //         </div>
-          //       </div>
-          //     </Link>
-          //   </div>
-          //   <Link
-          //     to={`/explorer/trace-tree/${row.id}`}
-          //     className="flex flex-shrink-0 bg-rich-black text-white my-2 mr-2 p-2 rounded-md items-center justify-center"
-          //   >
-          //     <CubeTransparentIcon className="h-5 w-5" />
-          //   </Link>
-          // </div>
         )
       })}
     </>
