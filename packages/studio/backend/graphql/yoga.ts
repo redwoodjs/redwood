@@ -136,11 +136,11 @@ export const setupYoga = (fastify: FastifyInstance) => {
         # Explore - Tracing
         traceCount: Int
         trace(traceId: String): Trace
-        traces: [Trace]
+        traces(searchFilter: String): [Trace]
 
         # Explore - Span
         span(spanId: String!): Span
-        spans: [Span]
+        spans(searchFilter: String): [Span]
 
         # Charts
         spanTypeTimeline(

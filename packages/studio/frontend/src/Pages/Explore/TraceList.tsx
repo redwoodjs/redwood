@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { useQuery, gql } from '@apollo/client'
 import { ClockIcon } from '@heroicons/react/20/solid'
 import { CubeTransparentIcon } from '@heroicons/react/24/outline'
-import { Badge, Card, Flex, Subtitle, Title, Text } from '@tremor/react'
+import { Badge, Card, Flex, Title, Text } from '@tremor/react'
 import { Link } from 'react-router-dom'
 
 import LoadingSpinner from '../../Components/LoadingSpinner'
 import ErrorPanel from '../../Components/Panels/ErrorPanel'
 import InformationPanel from '../../Components/Panels/InformationPanel'
 import SpanTypeLabel from '../../Components/Span/SpanTypeLabel'
+import { SearchFilterContext } from '../../Context/SearchFilterContextProvider'
 import { LIST_POLLING_INTERVAL } from '../../util/polling'
 import {
   getTraceName,
@@ -20,8 +21,8 @@ import {
 } from '../../util/trace'
 
 const QUERY_GET_ALL_TRACES = gql`
-  query GetAllTraces {
-    rows: traces {
+  query GetAllTraces($searchFilter: String) {
+    rows: traces(searchFilter: $searchFilter) {
       id
       spans {
         id
@@ -72,7 +73,7 @@ function TraceListComponent({ traces }: { traces: any[] }) {
                 </Badge>
               </Flex>
               <Flex className="border-b border-gray-200 pb-2 mb-2">
-                <Subtitle>{row.id}</Subtitle>
+                <Text>{row.id}</Text>
               </Flex>
               <Flex className="justify-start flex-wrap">
                 {Array.from(typeCountMap.keys())
@@ -113,8 +114,13 @@ function TraceListComponent({ traces }: { traces: any[] }) {
 }
 
 export default function TraceList() {
+  const [{ tracesFilter: searchFilter }] = useContext(SearchFilterContext)
+
   const { loading, error, data } = useQuery(QUERY_GET_ALL_TRACES, {
     pollInterval: LIST_POLLING_INTERVAL,
+    variables: {
+      searchFilter,
+    },
   })
 
   const sortedTraces = data?.rows?.sort((a: any, b: any) => {

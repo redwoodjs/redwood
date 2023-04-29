@@ -1,21 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { useQuery, gql } from '@apollo/client'
 import { CubeTransparentIcon } from '@heroicons/react/24/outline'
 import { ClockIcon } from '@heroicons/react/24/solid'
-import { Badge, Card, Flex, Subtitle, Title, Text } from '@tremor/react'
+import { Badge, Card, Flex, Title, Text } from '@tremor/react'
 import { Link } from 'react-router-dom'
 
 import LoadingSpinner from '../../Components/LoadingSpinner'
 import ErrorPanel from '../../Components/Panels/ErrorPanel'
 import InformationPanel from '../../Components/Panels/InformationPanel'
 import SpanTypeLabel from '../../Components/Span/SpanTypeLabel'
+import { SearchFilterContext } from '../../Context/SearchFilterContextProvider'
 import { LIST_POLLING_INTERVAL } from '../../util/polling'
 import { hasAnyErrors } from '../../util/trace'
 
 const QUERY_GET_ALL_SPANS = gql`
-  query GetAllSpans {
-    spans {
+  query GetAllSpans($searchFilter: String) {
+    spans(searchFilter: $searchFilter) {
       id
       name
       type
@@ -55,11 +56,11 @@ function SpanListComponent({ spans }: { spans: any[] }) {
                 </Badge>
               </Flex>
               <Flex className="border-b border-gray-200 pb-2 mb-2">
-                <Subtitle>{row.id}</Subtitle>
+                <Text>{row.id}</Text>
                 {row.brief && (
-                  <Subtitle className="truncate ml-2 pl-2 flex-1 border-l border-gray-200">
+                  <Text className="truncate ml-2 pl-2 flex-1 border-l border-gray-200">
                     {row.brief}
-                  </Subtitle>
+                  </Text>
                 )}
               </Flex>
               <Flex className="justify-start">
@@ -96,8 +97,13 @@ function SpanListComponent({ spans }: { spans: any[] }) {
 }
 
 export default function SpanList() {
+  const [{ spansFilter: searchFilter }] = useContext(SearchFilterContext)
+
   const { loading, error, data } = useQuery(QUERY_GET_ALL_SPANS, {
     pollInterval: LIST_POLLING_INTERVAL,
+    variables: {
+      searchFilter,
+    },
   })
 
   return (
