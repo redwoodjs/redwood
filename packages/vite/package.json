@@ -20,7 +20,8 @@
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
-    "test": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --test'",
+    "test": "yarn test:node && echo",
+    "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --test'",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
