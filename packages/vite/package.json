@@ -11,7 +11,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
+  "_main": "dist/index.js",
   "bin": {
     "rw-vite-dev": "./bins/rw-vite-dev.mjs",
     "vite": "./bins/vite.mjs"
@@ -20,7 +20,7 @@
     "build": "yarn build:js && yarn build:types",
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
-    "test": "jest src",
+    "test": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --test'",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
+    "glob": "10.2.2",
     "jest": "29.5.0",
     "typescript": "5.0.4"
   },
