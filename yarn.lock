@@ -7373,6 +7373,7 @@ __metadata:
     deepmerge: 4.3.1
     dotenv-defaults: 5.0.2
     enquirer: 2.3.6
+    fast-glob: 3.2.12
     findup-sync: 5.0.0
     graphql: 16.6.0
     jest: 29.5.0
