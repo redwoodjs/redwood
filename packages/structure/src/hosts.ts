@@ -1,5 +1,5 @@
+import fg from 'fast-glob'
 import * as fs from 'fs-extra'
-import { globSync } from 'glob'
 
 import type { Paths } from '@redwoodjs/project-config'
 import { getPaths } from '@redwoodjs/project-config'
@@ -32,7 +32,7 @@ export class DefaultHost implements Host {
   }
   globSync(pattern: string) {
     // globSync only works with / as the path separator, even on Windows
-    return globSync(pattern.replaceAll('\\', '/'))
+    return fg.sync(pattern) //.replaceAll('\\', '/'))
   }
   writeFileSync(path: string, contents: string) {
     return fs.writeFileSync(path, contents)
