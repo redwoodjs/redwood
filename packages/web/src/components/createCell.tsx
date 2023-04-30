@@ -54,24 +54,26 @@ export type CellProps<
 >
 
 export type CellLoadingProps<TVariables extends OperationVariables = any> =
-  Partial<
-    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
-  >
-
-export type CellFailureProps<TVariables extends OperationVariables = any> =
-  Partial<
-    Omit<
+  Partial<{
+    queryResult: Omit<
       QueryOperationResult<any, TVariables>,
       'loading' | 'error' | 'data'
-    > & {
-      error: QueryOperationResult['error'] | Error // for tests and storybook
-      /**
-       * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
-       */
-      errorCode: string
-      updating: boolean
-    }
-  >
+    >
+  }>
+
+export type CellFailureProps<TVariables extends OperationVariables = any> =
+  Partial<{
+    queryResult: Omit<
+      QueryOperationResult<any, TVariables>,
+      'loading' | 'error' | 'data'
+    >
+    error: QueryOperationResult['error'] | Error // for tests and storybook
+    /**
+     * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
+     */
+    errorCode: string
+    updating: boolean
+  }>
 
 // aka guarantee that all properties in T exist
 // This is necessary for Cells, because if it doesn't exist it'll go to Empty or Failure
