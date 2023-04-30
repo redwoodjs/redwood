@@ -28,11 +28,14 @@ In [previous section](./first-page) we....
 
 ## Contributing
 
-Open a PR against the repo on GitHub. That will build and launch a copy of the site that you can get from the `netlify/redwoodjs/deploy-preview` check (click "Details" to open it):
+Fork the repo, make your changes and open a PR on GitHub. That will build and launch a copy of the site that you can get from the `netlify/redwoodjs/deploy-preview` check (click "Details" to open it):
 
 ![image](https://user-images.githubusercontent.com/300/76569613-c4421000-6470-11ea-8223-eb98504e6994.png)
 
 Double check that your changes look good!
+
+### Updating Doc Images
+To update any images in the doc, first upload your screenshot into a comment textbox in your PR. Once it's uploaded, you can open the image in a new tab and use the github url as a image link in your docs.
 
 ## Contributors
 

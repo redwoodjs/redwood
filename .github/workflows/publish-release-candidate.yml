@@ -28,7 +28,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - name: 🏷 Check git tags
         run: |
@@ -82,6 +82,7 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           SEMVER=$(basename $(dirname ${{ github.ref_name }}))
           yarn lerna publish pre$SEMVER --include-merged-tags \
+                                        --exact \
                                         --canary \
                                         --preid rc \
                                         --dist-tag rc \

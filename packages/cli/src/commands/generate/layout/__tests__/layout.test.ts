@@ -94,7 +94,7 @@ describe('JS Files', () => {
     stories: true,
   })
 
-  it('creates JS layout components if javacript = true', () => {
+  it('creates JS layout components if javascript = true', () => {
     expect(
       javascriptFiles[
         path.normalize(

@@ -4,8 +4,9 @@ import path from 'path'
 import * as esbuild from 'esbuild'
 import { removeSync } from 'fs-extra'
 
+import { getPaths, getConfig } from '@redwoodjs/project-config'
+
 import { findApiFiles } from '../files'
-import { getPaths } from '../paths'
 
 import { getApiSideBabelPlugins, prebuildApiFile } from './babel/api'
 
@@ -34,7 +35,10 @@ export const cleanApiBuild = () => {
  */
 export const prebuildApiFiles = (srcFiles: string[]) => {
   const rwjsPaths = getPaths()
-  const plugins = getApiSideBabelPlugins()
+  const plugins = getApiSideBabelPlugins({
+    forJest: false,
+    openTelemetry: getConfig().experimental.opentelemetry.enabled,
+  })
 
   return srcFiles.map((srcPath) => {
     const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
@@ -64,7 +68,7 @@ export const transpileApi = (files: string[], options = {}) => {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
-    target: 'node16',
+    target: 'node18',
     format: 'cjs',
     bundle: false,
     outdir: rwjsPaths.api.dist,

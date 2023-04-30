@@ -124,7 +124,7 @@ export const handler = async ({ provider, id, token, expiry, view }) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

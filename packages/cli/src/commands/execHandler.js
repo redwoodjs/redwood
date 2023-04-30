@@ -123,7 +123,7 @@ export const handler = async (args) => {
   ]
 
   const tasks = new Listr(scriptTasks, {
-    rendererOptions: { collapse: false },
+    rendererOptions: { collapseSubtasks: false },
     renderer: 'verbose',
   })
 

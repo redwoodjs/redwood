@@ -3,7 +3,7 @@ import path from 'path'
 
 import { removeSync } from 'fs-extra'
 
-import { getPaths } from '../paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { prebuildWebFile, Flags } from './babel/web'
 
@@ -51,7 +51,7 @@ interface BuildOptions {
 /**
  *
  * Builds the web side with Vite
- * Note that the webpack versoin is triggered via the webpack CLI
+ * Note that the webpack version is triggered via the webpack CLI
  *
  */
 export const buildWeb = async ({ verbose }: BuildOptions) => {

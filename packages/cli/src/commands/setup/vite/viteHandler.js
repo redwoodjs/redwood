@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import { Listr } from 'listr2'
 
 import { addWebPackages } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/internal/dist/paths'
+import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
@@ -121,7 +121,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
       },
     ],
     {
-      rendererOptions: { collapse: false },
+      rendererOptions: { collapseSubtasks: false },
       renderer: verbose ? 'verbose' : 'default',
     }
   )

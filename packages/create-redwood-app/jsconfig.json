@@ -8,8 +8,5 @@
       "src/*": ["./src/*"]
     }
   },
-  "include": ["src"],
-  "references": [
-    { "path": "../internal" },
-  ]
+  "include": ["src"]
 }

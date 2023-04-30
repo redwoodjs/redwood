@@ -8,7 +8,7 @@ import chalk from 'chalk'
 import latestVersion from 'latest-version'
 import semver from 'semver'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/project-config'
 
 import { setLock, unsetLock } from './locking'
 
@@ -89,7 +89,7 @@ export async function check() {
           await latestVersion('@redwoodjs/core', { version: tag })
         )
       } catch (error) {
-        // This error may result as the ability of the user to specify arbitary tags within their config file
+        // This error may result as the ability of the user to specify arbitrary tags within their config file
         console.error(error)
       }
     }
@@ -254,7 +254,7 @@ function extractTagFromVersion(version) {
 
 /**
  * Yargs middleware which will automatically check and show update messages.
- * @param {string[]} argv arguements
+ * @param {string[]} argv arguments
  */
 export function updateCheckMiddleware(argv) {
   if (EXCLUDED_COMMANDS.includes(argv._[0])) {

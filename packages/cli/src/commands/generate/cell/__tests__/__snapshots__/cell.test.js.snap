@@ -575,7 +575,6 @@ exports[`TypeScript: generates list cells if name is plural 1`] = `
 "import type { MembersQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-
 export const QUERY = gql\`
   query MembersQuery {
     members {

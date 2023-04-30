@@ -135,7 +135,7 @@ export const handler = async ({ name, force, ...rest }) => {
         },
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
 
   try {
