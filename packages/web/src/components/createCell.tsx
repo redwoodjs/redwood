@@ -104,14 +104,13 @@ export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
 export type CellSuccessProps<
   TData = any,
   TVariables extends OperationVariables = any
-> = Partial<
-  Omit<
+> = Partial<{
+  queryResult: Omit<
     QueryOperationResult<TData, TVariables>,
     'loading' | 'error' | 'data'
-  > & {
-    updating: boolean
-  }
-> &
+  >
+  updating: boolean
+}> &
   A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
 
 /**
