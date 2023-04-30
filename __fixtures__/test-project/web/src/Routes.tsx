@@ -18,11 +18,11 @@ import { useAuth } from './auth'
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
+      <Route path="/double" page={DoublePage} name="double" prerender />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
-      <Route path="/double" page={DoublePage} name="double" prerender />
       <Set wrap={ScaffoldLayout} title="Contacts" titleTo="contacts" buttonLabel="New Contact" buttonTo="newContact">
         <Route path="/contacts/new" page={ContactNewContactPage} name="newContact" prerender />
         <Route path="/contacts/{id:Int}/edit" page={ContactEditContactPage} name="editContact" />
