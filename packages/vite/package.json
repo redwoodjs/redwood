@@ -21,7 +21,7 @@
     "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
     "test": "yarn test:node && echo",
-    "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --test'",
+    "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test'",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {

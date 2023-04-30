@@ -6,7 +6,7 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
   },
-  "include": ["src/**/*", "./ambient.d.ts"],
+  "include": ["src/**/*", "./ambient.d.ts", "../vite/src/__tests__/viteNestedPages.test.mts"],
   "references": [
     { "path": "../graphql-server" }, // ODD, but we do this so we dont have to have internal as a runtime dependency
     { "path": "../project-config" },
