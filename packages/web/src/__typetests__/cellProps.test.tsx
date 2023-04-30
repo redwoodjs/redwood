@@ -72,6 +72,7 @@ describe('CellProps mapper type', () => {
         customProp: 55,
         category: 'Dinner',
         saved: true,
+        queryResult: {},
       })
     })
 
