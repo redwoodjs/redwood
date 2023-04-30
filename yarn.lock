@@ -7304,7 +7304,7 @@ __metadata:
     "@types/findup-sync": 4.0.2
     core-js: 3.30.1
     deepmerge: 4.3.1
-    dependency-cruiser: 12.11.3
+    dependency-cruiser: 12.12.0
     fast-glob: 3.2.12
     findup-sync: 5.0.0
     jest: 29.5.0
@@ -13955,13 +13955,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:10.0.0":
-  version: 10.0.0
-  resolution: "commander@npm:10.0.0"
-  checksum: f1824812019664598ba7409c489cb5c15d33f65b43b08952a84e87e0023144c08d101e2f43af968cf2d464c0d667b50a2a9780f4a6c52915324f54fe9b451a31
-  languageName: node
-  linkType: hard
-
 "commander@npm:10.0.1, commander@npm:^10.0.1":
   version: 10.0.1
   resolution: "commander@npm:10.0.1"
@@ -15487,9 +15480,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dependency-cruiser@npm:12.11.3":
-  version: 12.11.3
-  resolution: "dependency-cruiser@npm:12.11.3"
+"dependency-cruiser@npm:12.12.0":
+  version: 12.12.0
+  resolution: "dependency-cruiser@npm:12.12.0"
   dependencies:
     acorn: 8.8.2
     acorn-jsx: 5.3.2
@@ -15517,7 +15510,7 @@ __metadata:
     semver-try-require: 6.2.2
     teamcity-service-messages: 0.1.14
     tsconfig-paths-webpack-plugin: 4.0.1
-    watskeburt: 0.10.2
+    watskeburt: 0.11.1
     wrap-ansi: ^7.0.0
   bin:
     depcruise: bin/dependency-cruise.js
@@ -15526,7 +15519,7 @@ __metadata:
     depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.js
     dependency-cruise: bin/dependency-cruise.js
     dependency-cruiser: bin/dependency-cruise.js
-  checksum: ee4298aee0236439a723e5ff791d04ae09aabd3150d01d9fe20282463b6196e9b6dfeafce6fc9d469f91e8cfc0485d5a6739bac82cadbe84f3ebb08c373a6fb2
+  checksum: f85a2cf7d0553793dc0e99368b8b304c5af60dbcbbe89b0eb70d1f18bd0c933ca0f36098c43e8f5458fc7c5daed5f60a15c73f7cf5153dc1069921ed2935073a
   languageName: node
   linkType: hard
 
@@ -32024,14 +32017,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watskeburt@npm:0.10.2":
-  version: 0.10.2
-  resolution: "watskeburt@npm:0.10.2"
+"watskeburt@npm:0.11.1":
+  version: 0.11.1
+  resolution: "watskeburt@npm:0.11.1"
   dependencies:
-    commander: 10.0.0
+    commander: 10.0.1
   bin:
     watskeburt: bin/cli.js
-  checksum: 3df19447399153546ee51909b269d6ab96cfb10ad1e609974f5cf5642ee50c31373685164ac43392dbb343d2b921e18a8a8168481f45b9382f5fc55dd952102a
+  checksum: f5c1e454cfeb04407e4c112710f70f2b6affc5ef848365de49b2dc7d3d9743aa2c86bb07c7d8f13d59ac6107fffbd905a4d11d25347ebf43a956029dbeac95cc
   languageName: node
   linkType: hard
 
