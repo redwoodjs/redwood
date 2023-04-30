@@ -86,6 +86,7 @@ describe('CellProps mapper type', () => {
 
       expectAssignable<CellWithoutVariablesInputs>({
         customProp: 55,
+        queryResult: {},
       })
     })
   })
