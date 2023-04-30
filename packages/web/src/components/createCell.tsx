@@ -53,27 +53,23 @@ export type CellProps<
     CellPropsVariables<CellType, GQLVariables>
 >
 
-export type CellLoadingProps<TVariables extends OperationVariables = any> =
-  Partial<{
-    queryResult: Omit<
-      QueryOperationResult<any, TVariables>,
-      'loading' | 'error' | 'data'
-    >
-  }>
+export type CellLoadingProps<TVariables extends OperationVariables = any> = {
+  queryResult: Partial<
+    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
+  >
+}
 
-export type CellFailureProps<TVariables extends OperationVariables = any> =
-  Partial<{
-    queryResult: Omit<
-      QueryOperationResult<any, TVariables>,
-      'loading' | 'error' | 'data'
-    >
-    error: QueryOperationResult['error'] | Error // for tests and storybook
-    /**
-     * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
-     */
-    errorCode: string
-    updating: boolean
-  }>
+export type CellFailureProps<TVariables extends OperationVariables = any> = {
+  queryResult: Partial<
+    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
+  >
+  error?: QueryOperationResult['error'] | Error // for tests and storybook
+  /**
+   * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
+   */
+  errorCode?: string
+  updating?: boolean
+}
 
 // aka guarantee that all properties in T exist
 // This is necessary for Cells, because if it doesn't exist it'll go to Empty or Failure
@@ -106,14 +102,12 @@ export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
 export type CellSuccessProps<
   TData = any,
   TVariables extends OperationVariables = any
-> = Partial<{
-  queryResult: Omit<
-    QueryOperationResult<TData, TVariables>,
-    'loading' | 'error' | 'data'
+> = {
+  queryResult: Partial<
+    Omit<QueryOperationResult<TData, TVariables>, 'loading' | 'error' | 'data'>
   >
-  updating: boolean
-}> &
-  A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
+  updating?: boolean
+} & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
 
 /**
  * A coarse type for the `data` prop returned by `useQuery`.
