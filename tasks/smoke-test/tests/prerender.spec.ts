@@ -67,6 +67,12 @@ rwServeTest(
 
     await page.goto(`http://localhost:${port}/double`)
 
+    // Wait for page to have been rehydrated before getting page content.
+    // We know the page has been rehydrated when it sends an auth request
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/auth')
+    )
+
     await page.locator('h1').first().waitFor()
     const headerCount = await page
       .locator('h1', { hasText: 'DoublePage' })
@@ -87,7 +93,7 @@ rwServeTest(
 
 rwServeTest(
   'Check that rehydration works for page with Cell in Set',
-  async ({ port, page, context }: ServeFixture & PlaywrightTestArgs) => {
+  async ({ port, page }: ServeFixture & PlaywrightTestArgs) => {
     const errors: string[] = []
 
     page.on('pageerror', (err) => {
@@ -102,8 +108,9 @@ rwServeTest(
 
     await page.goto(`http://localhost:${port}/`)
 
-    // Wait for page to have been rehydrated before getting page content.
-    // We know the page has been rehydrated when it does graphql requests
+    // Wait for page to have been rehydrated and cells have fetched their data
+    // before getting page content.
+    // We know cells have started fetching data when we see graphql requests
     await page.waitForResponse((response) =>
       response.url().includes('/.redwood/functions/graphql')
     )
@@ -138,6 +145,12 @@ rwServeTest(
     // forms out into a separate chunk. We need to make sure our prerender
     // code can handle that
     await page.goto(`http://localhost:${port}/contacts/new`)
+
+    // Wait for page to have been rehydrated before getting page content.
+    // We know the page has been rehydrated when it sends an auth request
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/auth')
+    )
 
     await expect(page.getByLabel('Name')).toBeVisible()
     await expect(page.getByLabel('Email')).toBeVisible()
