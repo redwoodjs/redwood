@@ -107,7 +107,7 @@ export type CellSuccessProps<
     Omit<QueryOperationResult<TData, TVariables>, 'loading' | 'error' | 'data'>
   >
   updating?: boolean
-} & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
+} & A.Compute<Partial<CellSuccessData<TData>>> // pre-computing makes the types more readable on hover
 
 /**
  * A coarse type for the `data` prop returned by `useQuery`.
