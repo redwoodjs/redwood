@@ -72,7 +72,6 @@ describe('CellProps mapper type', () => {
         customProp: 55,
         category: 'Dinner',
         saved: true,
-        queryResult: {},
       })
     })
 
@@ -86,7 +85,6 @@ describe('CellProps mapper type', () => {
 
       expectAssignable<CellWithoutVariablesInputs>({
         customProp: 55,
-        queryResult: {},
       })
     })
   })
