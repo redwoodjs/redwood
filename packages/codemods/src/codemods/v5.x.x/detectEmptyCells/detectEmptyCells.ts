@@ -14,14 +14,13 @@ async function detectEmptyCells(taskContext: TaskInnerAPI) {
 
   const susceptibleCells = cellPaths.filter((cellPath) => {
     const fileContents = fileToAst(cellPath)
-
     const cellQuery = getCellGqlQuery(fileContents)
 
     if (!cellQuery) {
       return false
     }
 
-    let fields
+    let fields: ReturnType<typeof parseGqlQueryToAst>[0]['fields']
 
     try {
       fields = parseGqlQueryToAst(cellQuery)[0].fields
@@ -40,7 +39,7 @@ async function detectEmptyCells(taskContext: TaskInnerAPI) {
     return
   }
 
-  const message = []
+  const message: string[] = []
 
   if (susceptibleCells.length > 0) {
     message.push(
