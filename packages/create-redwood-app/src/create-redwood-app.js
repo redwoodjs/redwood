@@ -206,7 +206,7 @@ async function createProjectFiles(newAppDir, overwrite, yarn1) {
   )
 
   // Write the uid
-  fs.writeFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
+  fs.ensureFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
 
   // We need to update some files when the user selects to use yarn v1
   if (yarn1) {
