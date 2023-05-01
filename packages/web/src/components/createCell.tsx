@@ -46,21 +46,21 @@ export type CellProps<
   Omit<
     ComponentProps<CellSuccess>,
     | keyof CellPropsVariables<CellType, GQLVariables>
-    | keyof QueryOperationResult
     | keyof GQLResult
     | 'updating'
+    | 'queryResult'
   > &
     CellPropsVariables<CellType, GQLVariables>
 >
 
 export type CellLoadingProps<TVariables extends OperationVariables = any> = {
-  queryResult: Partial<
+  queryResult?: Partial<
     Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
   >
 }
 
 export type CellFailureProps<TVariables extends OperationVariables = any> = {
-  queryResult: Partial<
+  queryResult?: Partial<
     Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
   >
   error?: QueryOperationResult['error'] | Error // for tests and storybook
@@ -103,7 +103,7 @@ export type CellSuccessProps<
   TData = any,
   TVariables extends OperationVariables = any
 > = {
-  queryResult: Partial<
+  queryResult?: Partial<
     Omit<QueryOperationResult<TData, TVariables>, 'loading' | 'error' | 'data'>
   >
   updating?: boolean
