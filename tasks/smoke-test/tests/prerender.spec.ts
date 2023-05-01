@@ -87,7 +87,7 @@ rwServeTest(
 
 rwServeTest(
   'Check that rehydration works for page with Cell in Set',
-  async ({ port, page }: ServeFixture & PlaywrightTestArgs) => {
+  async ({ port, page, context }: ServeFixture & PlaywrightTestArgs) => {
     const errors: string[] = []
 
     page.on('pageerror', (err) => {
@@ -101,6 +101,12 @@ rwServeTest(
     })
 
     await page.goto(`http://localhost:${port}/`)
+
+    // Wait for page to have been rehydrated before getting page content.
+    // We know the page has been rehydrated when it does graphql requests
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/graphql')
+    )
 
     await page.locator('h2').first().waitFor()
     const mainText = await page.locator('main').innerText()
