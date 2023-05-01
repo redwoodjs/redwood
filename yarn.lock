@@ -7431,7 +7431,7 @@ __metadata:
     pretty-bytes: 5.6.0
     qs: 6.11.1
     split2: 4.2.0
-    sqlite: 4.1.2
+    sqlite: 4.2.0
     sqlite3: 5.1.6
     typescript: 5.0.4
     uuid: 9.0.0
@@ -29387,10 +29387,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite@npm:4.1.2":
-  version: 4.1.2
-  resolution: "sqlite@npm:4.1.2"
-  checksum: d6b67cdf141863455a3c4eb1e051bbf302718d7ed10d1d3315366b0e99355930d44895d49a7a0da5897e16e781598b88aab31f06907e5c75a3fe421b8a2d12e0
+"sqlite@npm:4.2.0":
+  version: 4.2.0
+  resolution: "sqlite@npm:4.2.0"
+  checksum: db1593fc30e3bf9632f01d2087041c46da480a066cbfeaee008cc5b911885d0e34b2822c03a57ded42e71f3f65c2dafa1d166650611c0d9fba8dde5cf93e4981
   languageName: node
   linkType: hard
 
