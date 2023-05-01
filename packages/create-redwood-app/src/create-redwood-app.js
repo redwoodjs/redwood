@@ -17,6 +17,7 @@ import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 import { name, version } from '../package'
 
 import {
+  UID,
   startTelemetry,
   shutdownTelemetry,
   recordErrorViaTelemetry,
@@ -203,6 +204,9 @@ async function createProjectFiles(newAppDir, overwrite, yarn1) {
     path.join(newAppDir, 'gitignore.template'),
     path.join(newAppDir, '.gitignore')
   )
+
+  // Write the uid
+  fs.ensureFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
 
   // We need to update some files when the user selects to use yarn v1
   if (yarn1) {
