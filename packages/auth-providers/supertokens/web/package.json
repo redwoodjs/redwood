@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-supertokens-web",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
-    "@redwoodjs/auth": "5.0.2",
+    "@redwoodjs/auth": "5.0.3",
     "core-js": "3.30.1"
   },
   "devDependencies": {
