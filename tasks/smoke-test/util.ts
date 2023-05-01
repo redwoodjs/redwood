@@ -10,9 +10,9 @@ interface Options {
 
 // On Node.js 18, when using `yarn rw serve`, we have to pass '127.0.0.1'
 // instead of 'localhost'. See https://github.com/nodejs/node/issues/40537
-export function waitForServer(port, options: Options) {
-  const interval = options.interval || 1_000
-  const host = options.host || 'localhost'
+export function waitForServer(port, options?: Options) {
+  const interval = options?.interval || 1_000
+  const host = options?.host || 'localhost'
 
   return new Promise((resolve) => {
     const watchInterval = setInterval(async () => {

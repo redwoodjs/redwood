@@ -7532,7 +7532,7 @@ __metadata:
     core-js: 3.30.1
     typescript: 5.0.4
     vite: 4.3.3
-    vite-plugin-commonjs: 0.6.2
+    vite-plugin-commonjs: 0.7.0
     vite-plugin-environment: 1.1.3
     vite-plugin-html: 3.2.0
   bin:
@@ -11045,7 +11045,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:8.8.2, acorn@npm:^8.0.4, acorn@npm:^8.1.0, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.0, acorn@npm:^8.8.1":
+"acorn@npm:8.8.2, acorn@npm:^8.0.4, acorn@npm:^8.1.0, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1, acorn@npm:^8.8.0, acorn@npm:^8.8.1, acorn@npm:^8.8.2":
   version: 8.8.2
   resolution: "acorn@npm:8.8.2"
   bin:
@@ -17219,7 +17219,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:3.2.12, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.9, fast-glob@npm:~3.2.11":
+"fast-glob@npm:3.2.12, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9":
   version: 3.2.12
   resolution: "fast-glob@npm:3.2.12"
   dependencies:
@@ -31823,12 +31823,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-commonjs@npm:0.6.2":
-  version: 0.6.2
-  resolution: "vite-plugin-commonjs@npm:0.6.2"
+"vite-plugin-commonjs@npm:0.7.0":
+  version: 0.7.0
+  resolution: "vite-plugin-commonjs@npm:0.7.0"
   dependencies:
-    fast-glob: ~3.2.11
-  checksum: 498623f609702fc36afdb08ec1261f8bc6acb5eb80746671229301fd1db3b9409aeab8465df3bfc4f12c1c0da6f15d38711d3265577db3017352d31d58e08bd4
+    acorn: ^8.8.2
+    fast-glob: ^3.2.12
+    vite-plugin-dynamic-import: ^1.3.2
+  checksum: bac062401fd95707d3138718c2c1aaed1a1976a4753f10a83c5e86662d9ef872ea8b049b93f279520811fafae781de3cfa531f119840417240887c72df31b6c3
+  languageName: node
+  linkType: hard
+
+"vite-plugin-dynamic-import@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "vite-plugin-dynamic-import@npm:1.3.2"
+  dependencies:
+    acorn: ^8.8.2
+    es-module-lexer: ^1.2.1
+    fast-glob: ^3.2.12
+  checksum: 2a6f476fc91088e5ae2a67b0ddab7fadd0bc99709fe6094f9b894c9acc52f9f1de3fa584c0039a8d8605c4fc06e4eced035a88c4329bb47e4eb05399b3b1c663
   languageName: node
   linkType: hard
 
