@@ -6,9 +6,11 @@ jest.mock('@redwoodjs/project-config', () => {
     getPaths: () => {
       return {
         api: {
+          base: '/mocked/project/api',
           dist: '/mocked/project/api/dist',
         },
         web: {
+          base: '/mocked/project/web',
           dist: '/mocked/project/web/dist',
         },
       }
@@ -24,7 +26,13 @@ jest.mock('@redwoodjs/project-config', () => {
 jest.mock('fs', () => {
   return {
     ...jest.requireActual('fs'),
-    existsSync: () => true,
+    existsSync: (path) => {
+      // Don't detect the experimental server file
+      if (path === '/mocked/project/api/dist/server.ts') {
+        return false
+      }
+      return true
+    },
   }
 })
 
