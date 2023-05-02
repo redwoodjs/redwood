@@ -95,7 +95,7 @@ export async function handler({ force, verbose }) {
             )}`
           )
           console.log(
-            `The server file is an experimental feature, please find documentation and links to provide feedback at:\n -> todo`
+            `The server file is an experimental feature, please find documentation and links to provide feedback at:\n -> https://community.redwoodjs.com/t/fastify-server-file-experiment/4851`
           )
           console.log(
             `${chalk.hex('#ff845e')(
