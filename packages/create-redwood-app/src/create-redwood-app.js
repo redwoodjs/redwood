@@ -17,14 +17,11 @@ import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 import { name, version } from '../package'
 
 import {
+  UID,
   startTelemetry,
   shutdownTelemetry,
   recordErrorViaTelemetry,
 } from './telemetry'
-
-const [yarnBin] = fs.readdirSync(
-  path.join(__dirname, '../template', '.yarn', 'releases')
-)
 
 // Telemetry
 const { telemetry } = Parser(hideBin(process.argv))
@@ -208,6 +205,9 @@ async function createProjectFiles(newAppDir, overwrite, yarn1) {
     path.join(newAppDir, '.gitignore')
   )
 
+  // Write the uid
+  fs.ensureFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
+
   // We need to update some files when the user selects to use yarn v1
   if (yarn1) {
     // rm files:
@@ -254,12 +254,10 @@ async function installNodeModules(newAppDir) {
   })
   tui.startReactive(tuiContent)
 
-  const yarnInstallSubprocess = execa.command(
-    `${path.join(newAppDir, '.yarn', 'releases', yarnBin)} install`,
-    {
-      cwd: newAppDir,
-    }
-  )
+  const yarnInstallSubprocess = execa('yarn install', {
+    shell: true,
+    cwd: newAppDir,
+  })
 
   try {
     await yarnInstallSubprocess
@@ -300,12 +298,10 @@ async function convertToJavascript(newAppDir) {
   })
   tui.startReactive(tuiContent)
 
-  const conversionSubprocess = execa.command(
-    `${path.join(newAppDir, '.yarn', 'releases', yarnBin)} rw ts-to-js1`,
-    {
-      cwd: newAppDir,
-    }
-  )
+  const conversionSubprocess = execa('yarn rw ts-to-js', {
+    shell: true,
+    cwd: newAppDir,
+  })
 
   try {
     await conversionSubprocess
@@ -347,12 +343,10 @@ async function generateTypes(newAppDir) {
   })
   tui.startReactive(tuiContent)
 
-  const generateSubprocess = execa.command(
-    `${path.join(newAppDir, '.yarn', 'releases', yarnBin)} rw-gen`,
-    {
-      cwd: newAppDir,
-    }
-  )
+  const generateSubprocess = execa('yarn rw-gen', {
+    shell: true,
+    cwd: newAppDir,
+  })
 
   try {
     await generateSubprocess
@@ -392,7 +386,7 @@ async function initialiseGit(newAppDir) {
   })
   tui.startReactive(tuiContent)
 
-  const gitSubprocess = execa.command(
+  const gitSubprocess = execa(
     'git init && git add . && git commit -m "Initial commit"',
     {
       shell: true,

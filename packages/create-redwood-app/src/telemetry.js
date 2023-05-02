@@ -10,6 +10,7 @@ import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 import ci from 'ci-info'
 import envinfo from 'envinfo'
 import system from 'systeminformation'
+import { v4 as uuidv4 } from 'uuid'
 
 import { name as packageName, version as packageVersion } from '../package'
 
@@ -27,6 +28,8 @@ let traceProcessor
  * @type OTLPTraceExporter
  */
 let traceExporter
+
+export const UID = uuidv4()
 
 export async function startTelemetry() {
   diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
@@ -70,7 +73,7 @@ export async function startTelemetry() {
       'env.node_env': process.env.NODE_ENV || null,
       'ci.redwood': !!process.env.REDWOOD_CI,
       'ci.isci': ci.isCI,
-      fingerprint: undefined, // We don't provide a fingerprint here because it needs a fully setup project
+      uid: UID,
     })
   )
 
