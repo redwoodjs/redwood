@@ -2701,14 +2701,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@fastify/http-proxy@npm:9.0.0"
+"@fastify/http-proxy@npm:9.1.0":
+  version: 9.1.0
+  resolution: "@fastify/http-proxy@npm:9.1.0"
   dependencies:
     "@fastify/reply-from": ^9.0.0
     fastify-plugin: ^4.5.0
     ws: ^8.4.2
-  checksum: 04293dafbe2f30ac848e2ade2c3c7581b8a200e8a0a2768d9f0674162e82619ab43486a383a416f220a4a82fa4745cd764d44f602bb39296a42207594ffc753c
+  checksum: 247dad3b504b69a9c24b8b7f194bb4057a0f50b06395067d7e58c5eb424bc54b41e936d46a345927888749bc2c300f6d7330d8a445c2f7828bd9c8bc7797bc26
   languageName: node
   linkType: hard
 
@@ -5263,76 +5263,76 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nrwl/tao@npm:16.0.1"
+"@nrwl/tao@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nrwl/tao@npm:16.0.2"
   dependencies:
-    nx: 16.0.1
+    nx: 16.0.2
   bin:
     tao: index.js
-  checksum: 88ea6fcbba4f44146ece52d75d6ae1c262a032ca19fcac7f60b261b10f25ea19a9b274b0f5389844afd62809c2ee087c83209017d8ef8d2d956b4804c1e5f6b2
+  checksum: 7a5256a3d07acd54ab27202d092eb51e91c9c59872243c06375e8905d4d73a2513423e8b65ee1c302491c985c983d6adeb8188056d8fb392e1692f46acabba86
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-arm64@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-darwin-arm64@npm:16.0.1"
+"@nx/nx-darwin-arm64@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-darwin-arm64@npm:16.0.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-x64@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-darwin-x64@npm:16.0.1"
+"@nx/nx-darwin-x64@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-darwin-x64@npm:16.0.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm-gnueabihf@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.0.1"
+"@nx/nx-linux-arm-gnueabihf@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.0.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-gnu@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-arm64-gnu@npm:16.0.1"
+"@nx/nx-linux-arm64-gnu@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-arm64-gnu@npm:16.0.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-musl@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-arm64-musl@npm:16.0.1"
+"@nx/nx-linux-arm64-musl@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-arm64-musl@npm:16.0.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-gnu@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-x64-gnu@npm:16.0.1"
+"@nx/nx-linux-x64-gnu@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-x64-gnu@npm:16.0.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-musl@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-x64-musl@npm:16.0.1"
+"@nx/nx-linux-x64-musl@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-x64-musl@npm:16.0.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-arm64-msvc@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-win32-arm64-msvc@npm:16.0.1"
+"@nx/nx-win32-arm64-msvc@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-win32-arm64-msvc@npm:16.0.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-x64-msvc@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-win32-x64-msvc@npm:16.0.1"
+"@nx/nx-win32-x64-msvc@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-win32-x64-msvc@npm:16.0.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -6391,7 +6391,7 @@ __metadata:
     "@babel/core": 7.21.5
     "@babel/plugin-transform-runtime": 7.21.4
     "@babel/runtime-corejs3": 7.21.5
-    "@fastify/http-proxy": 9.0.0
+    "@fastify/http-proxy": 9.1.0
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.0.0
@@ -7401,7 +7401,7 @@ __metadata:
     "@babel/core": 7.21.5
     "@babel/plugin-transform-runtime": 7.21.4
     "@babel/runtime-corejs3": 7.21.5
-    "@fastify/http-proxy": 9.0.0
+    "@fastify/http-proxy": 9.1.0
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@redwoodjs/internal": 5.0.0
@@ -24750,20 +24750,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:16.0.1":
-  version: 16.0.1
-  resolution: "nx@npm:16.0.1"
+"nx@npm:16.0.2":
+  version: 16.0.2
+  resolution: "nx@npm:16.0.2"
   dependencies:
-    "@nrwl/tao": 16.0.1
-    "@nx/nx-darwin-arm64": 16.0.1
-    "@nx/nx-darwin-x64": 16.0.1
-    "@nx/nx-linux-arm-gnueabihf": 16.0.1
-    "@nx/nx-linux-arm64-gnu": 16.0.1
-    "@nx/nx-linux-arm64-musl": 16.0.1
-    "@nx/nx-linux-x64-gnu": 16.0.1
-    "@nx/nx-linux-x64-musl": 16.0.1
-    "@nx/nx-win32-arm64-msvc": 16.0.1
-    "@nx/nx-win32-x64-msvc": 16.0.1
+    "@nrwl/tao": 16.0.2
+    "@nx/nx-darwin-arm64": 16.0.2
+    "@nx/nx-darwin-x64": 16.0.2
+    "@nx/nx-linux-arm-gnueabihf": 16.0.2
+    "@nx/nx-linux-arm64-gnu": 16.0.2
+    "@nx/nx-linux-arm64-musl": 16.0.2
+    "@nx/nx-linux-x64-gnu": 16.0.2
+    "@nx/nx-linux-x64-musl": 16.0.2
+    "@nx/nx-win32-arm64-msvc": 16.0.2
+    "@nx/nx-win32-x64-msvc": 16.0.2
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24826,7 +24826,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: b94b0604df5f527b7e1d9af75169d0d376118b738479e09818a247d55a3cc3246b3f6f84959953e545676a5e1f3b94c69bd0decf679259b5d24fa439e9130123
+  checksum: 9de70ad21043dcc5a92295b2ab593cc90fad21e30367afca66356f49f73b8c35dd1ba594e3e91135a0936b2ea14a61b8e71b35926edfb22404c3f840cea36396
   languageName: node
   linkType: hard
 
@@ -28337,7 +28337,7 @@ __metadata:
     ncp: 2.0.0
     nodemon: 2.0.22
     npm-packlist: 7.0.4
-    nx: 16.0.1
+    nx: 16.0.2
     octokit: 2.0.14
     ora: 5.4.1
     prompts: 2.4.2
