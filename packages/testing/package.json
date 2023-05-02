@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.5",
+    "@babel/core": "7.21.8",
     "typescript": "5.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

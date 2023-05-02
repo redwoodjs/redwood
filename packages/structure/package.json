@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.5",
+    "@babel/core": "7.21.8",
     "@types/fs-extra": "11.0.1",
     "@types/lodash": "4.14.194",
     "@types/lru-cache": "5.1.1",
