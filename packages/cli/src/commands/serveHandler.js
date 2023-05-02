@@ -1,14 +1,13 @@
 import chalk from 'chalk'
 
 import {
+  coerceRootPath,
   createFastifyInstance,
   redwoodFastifyAPI,
   redwoodFastifyWeb,
 } from '@redwoodjs/fastify'
 import { withApiProxy } from '@redwoodjs/fastify/dist/plugins/withApiProxy'
 import { getConfig } from '@redwoodjs/project-config'
-
-import { coerceRootPath } from './serve'
 
 function sendProcessReady() {
   return process.send && process.send('ready')
