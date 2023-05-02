@@ -6862,7 +6862,7 @@ __metadata:
     jwks-rsa: 3.0.1
     typescript: 5.0.4
   peerDependencies:
-    supertokens-node: 13.5.0
+    supertokens-node: 13.6.0
   languageName: unknown
   linkType: soft
 
