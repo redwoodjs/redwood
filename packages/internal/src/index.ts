@@ -1,5 +1,6 @@
 export * from '@redwoodjs/project-config'
 
+export * from './ts2js'
 export * from './dev'
 export * from './routes'
 
