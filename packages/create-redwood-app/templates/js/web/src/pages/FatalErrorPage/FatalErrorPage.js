@@ -1,12 +1,16 @@
-let RedwoodDevFatalErrorPage = void 0;
-if (process.env.NODE_ENV === "development") {
-  RedwoodDevFatalErrorPage = require("@redwoodjs/web/dist/components/DevFatalErrorPage").DevFatalErrorPage;
+let RedwoodDevFatalErrorPage = void 0
+if (process.env.NODE_ENV === 'development') {
+  RedwoodDevFatalErrorPage =
+    require('@redwoodjs/web/dist/components/DevFatalErrorPage').DevFatalErrorPage
 }
-export default RedwoodDevFatalErrorPage || (() => /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement(
-  "style",
-  {
-    dangerouslySetInnerHTML: {
-      __html: `
+export default RedwoodDevFatalErrorPage ||
+  (() =>
+    /* @__PURE__ */ React.createElement(
+      'main',
+      null,
+      /* @__PURE__ */ React.createElement('style', {
+        dangerouslySetInnerHTML: {
+          __html: `
               html, body {
                 margin: 0;
               }
@@ -36,7 +40,20 @@ export default RedwoodDevFatalErrorPage || (() => /* @__PURE__ */ React.createEl
                 line-height: 1;
                 color: #2D3748;
               }
-            `
-    }
-  }
-), /* @__PURE__ */ React.createElement("section", null, /* @__PURE__ */ React.createElement("h1", null, /* @__PURE__ */ React.createElement("span", null, "Something went wrong")))));
+            `,
+        },
+      }),
+      /* @__PURE__ */ React.createElement(
+        'section',
+        null,
+        /* @__PURE__ */ React.createElement(
+          'h1',
+          null,
+          /* @__PURE__ */ React.createElement(
+            'span',
+            null,
+            'Something went wrong'
+          )
+        )
+      )
+    ))

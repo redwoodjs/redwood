@@ -1,8 +1,10 @@
-export default () => /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement(
-  "style",
-  {
-    dangerouslySetInnerHTML: {
-      __html: `
+export default () =>
+  /* @__PURE__ */ React.createElement(
+    'main',
+    null,
+    /* @__PURE__ */ React.createElement('style', {
+      dangerouslySetInnerHTML: {
+        __html: `
               html, body {
                 margin: 0;
               }
@@ -32,7 +34,16 @@ export default () => /* @__PURE__ */ React.createElement("main", null, /* @__PUR
                 line-height: 1;
                 color: #2D3748;
               }
-            `
-    }
-  }
-), /* @__PURE__ */ React.createElement("section", null, /* @__PURE__ */ React.createElement("h1", null, /* @__PURE__ */ React.createElement("span", null, "404 Page Not Found"))));
+            `,
+      },
+    }),
+    /* @__PURE__ */ React.createElement(
+      'section',
+      null,
+      /* @__PURE__ */ React.createElement(
+        'h1',
+        null,
+        /* @__PURE__ */ React.createElement('span', null, '404 Page Not Found')
+      )
+    )
+  )
