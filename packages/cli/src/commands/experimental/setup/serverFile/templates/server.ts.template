@@ -1,4 +1,7 @@
+import path from 'path'
+
 import chalk from 'chalk'
+import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
 
 import {
@@ -7,12 +10,22 @@ import {
   redwoodFastifyAPI,
   DEFAULT_REDWOOD_FASTIFY_CONFIG,
 } from '@redwoodjs/fastify'
-import { getConfig } from '@redwoodjs/project-config'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 async function serve() {
+  // Load .env files
+  const redwoodProjectPaths = getPaths()
+
+  config({
+    path: path.join(redwoodProjectPaths.base, '.env'),
+    defaults: path.join(redwoodProjectPaths.base, '.env.defaults'),
+    multiline: true,
+  })
+
   const tsServer = Date.now()
   console.log(chalk.italic.dim('Starting API and Web Servers...'))
 
+  // Configure Fastify
   const fastify = Fastify({
     ...DEFAULT_REDWOOD_FASTIFY_CONFIG,
   })
@@ -30,6 +43,7 @@ async function serve() {
     },
   })
 
+  // Start
   fastify.listen({ port })
 
   fastify.ready(() => {
