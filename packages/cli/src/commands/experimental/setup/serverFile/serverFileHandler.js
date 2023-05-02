@@ -78,12 +78,12 @@ export async function handler({ force, verbose }) {
           }
         },
       },
-      // addApiPackages([
-      //   'fastify',
-      //   'chalk@4.1.2',
-      //   '@redwoodjs/fastify@canary',
-      //   '@redwoodjs/project-config',
-      // ]),
+      addApiPackages([
+        'fastify',
+        'chalk@4.1.2',
+        '@redwoodjs/fastify@canary',
+        '@redwoodjs/project-config',
+      ]),
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
