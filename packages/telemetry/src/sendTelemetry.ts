@@ -9,6 +9,7 @@ import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
 import { getConfig, getRawConfig } from '@redwoodjs/project-config'
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
 // the old fashioned way
@@ -210,12 +211,16 @@ const buildPayload = async () => {
     })
   }
 
+  const routes: RWRoute[] = project.getRouter().routes
+  const prerenderedRoutes = routes.filter((route) => route.hasPrerender)
+
   // add in app stats
   payload = {
     ...payload,
-    complexity: `${project.getRouter().routes.length}.${
-      project.services.length
-    }.${project.cells.length}.${project.pages.length}`,
+    complexity:
+      `${routes.length}.${prerenderedRoutes.length}.` +
+      `${project.services.length}.${project.cells.length}.` +
+      `${project.pages.length}`,
     sides: project.sides.join(','),
   }
 

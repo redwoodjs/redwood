@@ -28,7 +28,8 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.21.0",
+    "@babel/runtime-corejs3": "7.21.5",
+    "@iarna/toml": "2.2.5",
     "@prisma/internals": "4.13.0",
     "@redwoodjs/cli-helpers": "5.0.0",
     "@redwoodjs/fastify": "5.0.0",
@@ -54,7 +55,7 @@
     "findup-sync": "5.0.0",
     "fs-extra": "11.1.1",
     "latest-version": "5.1.0",
-    "listr2": "6.3.1",
+    "listr2": "6.4.1",
     "lodash": "4.17.21",
     "param-case": "3.0.4",
     "pascalcase": "1.0.0",
@@ -71,8 +72,8 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.4",
+    "@babel/cli": "7.21.5",
+    "@babel/core": "7.21.8",
     "@types/crypto-js": "4.1.1",
     "jest": "29.5.0",
     "typescript": "5.0.4"
