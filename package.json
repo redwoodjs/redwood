@@ -86,14 +86,14 @@
     "ncp": "2.0.0",
     "nodemon": "2.0.22",
     "npm-packlist": "7.0.4",
-    "nx": "16.0.1",
+    "nx": "16.0.2",
     "octokit": "2.0.14",
     "ora": "5.4.1",
     "prompts": "2.4.2",
     "rimraf": "5.0.0",
     "typescript": "5.0.4",
     "yargs": "17.7.2",
-    "zx": "7.2.1"
+    "zx": "7.2.2"
   },
   "packageManager": "yarn@3.5.0",
   "npmClient": "yarn"
