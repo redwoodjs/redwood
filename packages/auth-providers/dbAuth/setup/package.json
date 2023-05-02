@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.5",
+    "@babel/core": "7.21.8",
     "@simplewebauthn/typescript-types": "7.0.0",
     "@types/secure-random-password": "0.2.1",
     "@types/yargs": "17.0.24",
