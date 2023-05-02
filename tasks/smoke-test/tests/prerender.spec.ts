@@ -51,6 +51,130 @@ rwServeTest(
 )
 
 rwServeTest(
+  'Check that rehydration works for page not wrapped in Set',
+  async ({ port, page }: ServeFixture & PlaywrightTestArgs) => {
+    const errors: string[] = []
+
+    page.on('pageerror', (err) => {
+      errors.push(err.message)
+    })
+
+    page.on('console', (message) => {
+      if (message.type() === 'error') {
+        errors.push(message.text())
+      }
+    })
+
+    await page.goto(`http://localhost:${port}/double`)
+
+    // Wait for page to have been rehydrated before getting page content.
+    // We know the page has been rehydrated when it sends an auth request
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/auth')
+    )
+
+    await page.locator('h1').first().waitFor()
+    const headerCount = await page
+      .locator('h1', { hasText: 'DoublePage' })
+      .count()
+    expect(headerCount).toEqual(1)
+
+    const bodyText = await page.locator('body').innerText()
+    expect(bodyText.match(/#7757/g)).toHaveLength(1)
+
+    const title = await page.locator('title').innerText()
+    expect(title).toBe('Double | Redwood App')
+
+    expect(errors).toMatchObject([])
+
+    page.close()
+  }
+)
+
+rwServeTest(
+  'Check that rehydration works for page with Cell in Set',
+  async ({ port, page, context }: ServeFixture & PlaywrightTestArgs) => {
+    const errors: string[] = []
+
+    page.on('pageerror', (err) => {
+      errors.push(err.message)
+    })
+
+    page.on('console', (message) => {
+      if (message.type() === 'error') {
+        errors.push(message.text())
+      }
+    })
+
+    await page.goto(`http://localhost:${port}/`)
+
+    // Wait for page to have been rehydrated and cells have fetched their data
+    // before getting page content.
+    // We know cells have started fetching data when we see graphql requests
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/graphql')
+    )
+
+    await page.locator('h2').first().waitFor()
+    const mainText = await page.locator('main').innerText()
+    expect(mainText.match(/Welcome to the blog!/g)).toHaveLength(1)
+    expect(mainText.match(/A little more about me/g)).toHaveLength(1)
+
+    // Something strange is going on here. Sometimes React generates errors,
+    // sometimes it doesn't.
+    // The problem is we have a Cell with prerendered content. Then when the
+    // page is rehydrated JS kicks in and the cell fetches data from the
+    // server. While it's getting the data "Loading..." is shown. This doesn't
+    // match up with the content that was prerendered, so React complains.
+    // We have a <Suspense> around the Cell, so React will stop at the
+    // suspense boundary and do full CSR of the cell content (instead of
+    // throwing away the entire page and do a CSR of the whole thing as it
+    // would have done without the <Suspense>).
+    // Until we fully understand why we only get the errors sometimes we can't
+    // have this `expect` enabled
+    // expect(errors).toMatchObject([])
+
+    page.close()
+  }
+)
+
+rwServeTest(
+  'Check that rehydration works for page with code split chunks',
+  async ({ port, page }: ServeFixture & PlaywrightTestArgs) => {
+    const errors: string[] = []
+
+    page.on('pageerror', (err) => {
+      errors.push(err.message)
+    })
+
+    page.on('console', (message) => {
+      if (message.type() === 'error') {
+        errors.push(message.text())
+      }
+    })
+
+    // This page uses Redwood Forms, and so does /posts/new. Webpack splits rw
+    // forms out into a separate chunk. We need to make sure our prerender
+    // code can handle that
+    await page.goto(`http://localhost:${port}/contacts/new`)
+
+    // Wait for page to have been rehydrated before getting page content.
+    // We know the page has been rehydrated when it sends an auth request
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/auth')
+    )
+
+    await expect(page.getByLabel('Name')).toBeVisible()
+    await expect(page.getByLabel('Email')).toBeVisible()
+    await expect(page.getByLabel('Message')).toBeVisible()
+
+    expect(errors).toMatchObject([])
+
+    page.close()
+  }
+)
+
+rwServeTest(
   'Check that a specific blog post is prerendered',
   async ({ port }: ServeFixture & PlaywrightTestArgs) => {
     const pageWithoutJs = await noJsBrowser.newPage()

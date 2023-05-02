@@ -3,21 +3,17 @@ import path from 'node:path'
 import { pathExistsSync } from 'fs-extra'
 import isPortReachable from 'is-port-reachable'
 
+interface Options {
+  interval?: number
+  host?: string
+}
+
 // On Node.js 18, when using `yarn rw serve`, we have to pass '127.0.0.1'
-// instead of 'localhost'. (Not sure why.)
-export function waitForServer(
-  port,
-  {
-    interval,
-    host,
-  }: {
-    interval?: number
-    host?: string
-  } = {
-    interval: 1_000,
-    host: 'localhost',
-  }
-) {
+// instead of 'localhost'. See https://github.com/nodejs/node/issues/40537
+export function waitForServer(port, options?: Options) {
+  const interval = options?.interval || 1_000
+  const host = options?.host || 'localhost'
+
   return new Promise((resolve) => {
     const watchInterval = setInterval(async () => {
       console.log(`Waiting for server at localhost:${port}....`)
