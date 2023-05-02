@@ -1,10 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
+import chalk from 'chalk'
+import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
+import { isTypeScriptProject } from '../lib/project'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
@@ -24,6 +27,32 @@ export const builder = async (yargs) => {
       command: '$0',
       descriptions: 'Run both api and web servers',
       handler: async (argv) => {
+        const serverFileName = `server.${isTypeScriptProject() ? 'ts' : 'js'}`
+        const serverFilePath = path.join(getPaths().api.dist, serverFileName)
+        if (fs.existsSync(serverFilePath)) {
+          console.log(
+            `${chalk.hex('#ff845e')(
+              `------------------------------------------------------------------\n 🧪 ${chalk.green(
+                'Experimental Feature'
+              )} 🧪\n------------------------------------------------------------------`
+            )}`
+          )
+          console.log(
+            `Using the experimental API server file: 'api/dist/${serverFileName}'.`
+          )
+          console.log(
+            `${chalk.hex('#ff845e')(
+              '------------------------------------------------------------------'
+            )}\n`
+          )
+          await execa('node', [path.join('dist', serverFileName)], {
+            cwd: getPaths().api.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+          return
+        }
+
         const { bothServerHandler } = await import('./serveHandler.js')
         await bothServerHandler(argv)
       },
