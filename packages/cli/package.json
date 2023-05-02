@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.0",
+    "@iarna/toml": "2.2.5",
     "@prisma/internals": "4.13.0",
     "@redwoodjs/api-server": "5.0.3",
     "@redwoodjs/cli-helpers": "5.0.3",
