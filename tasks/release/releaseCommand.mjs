@@ -705,3 +705,10 @@ function closeMilestone(number) {
     }
   )
 }
+
+function tsToJS() {
+  // cd into packages/create-rdwood-app.js
+  // run script there...
+}
+
+function yarnLock() {}
