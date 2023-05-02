@@ -161,7 +161,7 @@ function checkNodeAndYarnVersion(templateDir) {
   })
 }
 
-async function createProjectFiles(newAppDir, overwrite, yarn1) {
+async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
     content: 'Creating project files',
@@ -196,8 +196,7 @@ async function createProjectFiles(newAppDir, overwrite, yarn1) {
   fs.ensureDirSync(path.dirname(newAppDir))
 
   // Copy the template files to the new app directory
-  const templateDirectory = path.resolve(__dirname, '../template')
-  fs.copySync(templateDirectory, newAppDir, { overwrite })
+  fs.copySync(templateDir, newAppDir, { overwrite })
 
   // .gitignore is renamed here to force file inclusion during publishing
   fs.rename(
@@ -207,32 +206,6 @@ async function createProjectFiles(newAppDir, overwrite, yarn1) {
 
   // Write the uid
   fs.ensureFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
-
-  // We need to update some files when the user selects to use yarn v1
-  if (yarn1) {
-    // rm files:
-    // - .yarnrc.yml
-    // - .yarn
-    fs.rmSync(path.join(newAppDir, '.yarnrc.yml'))
-    fs.rmSync(path.join(newAppDir, '.yarn'), {
-      recursive: true,
-      force: true,
-    })
-
-    // rm after `.pnp.*`
-    const gitignore = fs.readFileSync(path.join(newAppDir, '.gitignore'), {
-      encoding: 'utf-8',
-    })
-    const [yarn1Gitignore, _yarn3Gitignore] = gitignore.split('.pnp.*')
-    fs.writeFileSync(path.join(newAppDir, '.gitignore'), yarn1Gitignore)
-
-    // rm `packageManager` from package.json
-    const packageJSON = fs.readJSONSync(path.join(newAppDir, 'package.json'))
-    delete packageJSON.packageManager
-    fs.writeJSONSync(path.join(newAppDir, 'package.json'), packageJSON, {
-      spaces: 2,
-    })
-  }
 
   tuiContent.update({
     spinner: {
@@ -281,51 +254,6 @@ async function installNodeModules(newAppDir) {
   tuiContent.update({
     header: '',
     content: `${RedwoodStyling.green('✔')} Node modules successfully installed`,
-    spinner: {
-      enabled: false,
-    },
-  })
-  tui.stopReactive()
-}
-
-async function convertToJavascript(newAppDir) {
-  const tuiContent = new ReactiveTUIContent({
-    mode: 'text',
-    content: 'Converting TypeScript files to JavaScript',
-    spinner: {
-      enabled: true,
-    },
-  })
-  tui.startReactive(tuiContent)
-
-  const conversionSubprocess = execa('yarn rw ts-to-js', {
-    shell: true,
-    cwd: newAppDir,
-  })
-
-  try {
-    await conversionSubprocess
-  } catch (error) {
-    tui.stopReactive(true)
-    tui.displayError(
-      "Couldn't convert TypeScript files to JavaScript",
-      [
-        `We could not convert the Typescript files to Javascript using ${RedwoodStyling.info(
-          "'yarn rw ts-to-js'"
-        )}. Please see below for the full error message.`,
-        '',
-        error,
-      ].join('\n')
-    )
-    recordErrorViaTelemetry(error)
-    await shutdownTelemetry()
-    process.exit(1)
-  }
-
-  tuiContent.update({
-    content: `${RedwoodStyling.green(
-      '✔'
-    )} Converted TypeScript files to JavaScript`,
     spinner: {
       enabled: false,
     },
@@ -505,7 +433,6 @@ async function createRedwoodApp() {
     typescript: typescriptFlag,
     overwrite,
     // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
-    yarn1,
     'git-init': gitInitFlag,
   } = yargs(hideBin(process.argv))
     .scriptName(name)
@@ -534,11 +461,6 @@ async function createRedwoodApp() {
       describe:
         'Enables sending telemetry events for this create command and all Redwood CLI commands https://telemetry.redwoodjs.com',
     })
-    .option('yarn1', {
-      default: false,
-      type: 'boolean',
-      describe: 'Use yarn 1. yarn 3 by default',
-    })
     .option('git-init', {
       alias: 'git',
       default: null,
@@ -551,7 +473,6 @@ async function createRedwoodApp() {
   // Record some of the arguments for telemetry
   trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstall)
   trace.getActiveSpan()?.setAttribute('overwrite', overwrite)
-  trace.getActiveSpan()?.setAttribute('yarn1', yarn1)
 
   // Get the directory for installation from the args
   const targetDir = String(args).replace(/,/g, '-')
@@ -578,21 +499,23 @@ async function createRedwoodApp() {
   }
 
   const newAppDir = path.resolve(process.cwd(), targetDir)
-  const templateDir = path.resolve(__dirname, '../template')
+  const templatesDir = path.resolve(__dirname, '../templates')
 
   // Engine check
-  await executeCompatibilityCheck(templateDir, yarnInstall)
+  await executeCompatibilityCheck(path.join(templatesDir, 'ts'), yarnInstall)
 
   // Determine ts/js preference
   const useTypescript = await handleTypescriptPreference(typescriptFlag)
   trace.getActiveSpan()?.setAttribute('typescript', useTypescript)
+
+  const templateDir = path.join(templatesDir, useTypescript ? 'ts' : 'js')
 
   // Determine git preference
   const useGit = await handleGitPreference(gitInitFlag)
   trace.getActiveSpan()?.setAttribute('git', useGit)
 
   // Create project files
-  await createProjectFiles(newAppDir, overwrite, yarn1)
+  await createProjectFiles(newAppDir, { templateDir, overwrite })
 
   // Install the node packages
   if (yarnInstall) {
@@ -607,23 +530,6 @@ async function createRedwoodApp() {
         '⚠'
       )} Skipped yarn install step based on command line flag`
     )
-  }
-
-  // Conditionally convert to javascript
-  if (!useTypescript) {
-    if (yarnInstall) {
-      await convertToJavascript(newAppDir)
-    } else {
-      tui.drawText(
-        [
-          `${RedwoodStyling.warning(
-            '⚠'
-          )} Unable to convert to javascript without yarn install step`,
-          '  Please run the following command inside your project once yarn install has been executed:',
-          `  ${RedwoodStyling.info("'yarn rw ts-to-js'")}`,
-        ].join('\n')
-      )
-    }
   }
 
   // Generate types

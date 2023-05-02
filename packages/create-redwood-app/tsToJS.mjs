@@ -1,81 +1,93 @@
-import fs from 'node:fs'
+#!/usr/bin/env node
+/* eslint-env node */
+
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { transform } from '@babel/core'
+import * as esbuild from 'esbuild'
 import fg from 'fast-glob'
+import fs from 'fs-extra'
 
-const cwd = path.join(fileURLToPath(import.meta.url), './template')
+// copy, then transform in place...
 
-const jsTemplateDirPath = path.join(
-  fileURLToPath(import.meta.url),
-  './templateJS'
+const TS_TEMPLATE = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  './templates',
+  'ts'
 )
 
+const JS_TEMPLATE = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  './templates',
+  'js'
+)
+
+fs.copySync(TS_TEMPLATE, JS_TEMPLATE)
+
+console.group('Transforming TS files to TS')
+
 // Get all TS files in the template.
-const filePaths = fg.sync('{api,web}/src/**/*.{ts,tsx}', { cwd })
+const filePaths = fg.sync('{api,web,scripts}/src/**/*.{ts,tsx}', {
+  cwd: JS_TEMPLATE,
+  absolute: true,
+})
+
+/**
+ * @type {string[]}
+ */
+let warnings = []
 
 // Transform every file in turn.
 for (const filePath of filePaths) {
-  const jsCode = transformFile(filePath)
+  console.log('Transforming', filePath)
 
-  fs.writeFileSync(
-    path.join(
-      jsTemplateDirPath,
-      filePath.replace('.tsx', '.js').replace('.ts', '.js')
-    ),
-    jsCode,
-    'utf-8'
-  )
-}
-
-/**
- * Helper for transforming TS file to JS using Babel.
- *
- * @param {string} filePath
- */
-function transformFile(filePath) {
   const tsCode = fs.readFileSync(filePath, 'utf8')
-  const filename = path.basename(filePath)
 
-  const result = transform(tsCode, {
-    filename,
-    cwd,
-    configFile: false,
-    plugins: [
-      [
-        '@babel/plugin-transform-typescript',
-        // {
-        //   isTSX: true,
-        //   allExtensions: true,
-        // },
-      ],
-    ],
-    // retainLines: true,
+  const result = await esbuild.transform(tsCode, {
+    loader: path.extname(filePath).replace('.', ''),
   })
 
-  if (!result?.code) {
-    throw new Error(`Failed to transform ${filePath}`)
-  }
+  warnings = [...warnings, ...result.warnings]
 
-  return result.code
+  fs.writeFileSync(
+    filePath.replace('.tsx', '.js').replace('.ts', '.js'),
+    result.code,
+    'utf-8'
+  )
 
-  // return prettify(result.code, filename.replace(/\.ts$/, '.js'))
+  fs.rmSync(filePath)
 }
 
+if (warnings.length > 0) {
+  console.warn('Warnings')
+  console.warn(warnings.join('\n'))
+}
+
+console.groupEnd()
+console.log()
+
+console.group('Transforming tsconfig files to jsconfig')
+
 // Handle config files.
-// Going to have to be rewritten slightly.
-// fs.copyFileSync(
-//   path.join(cwd, 'api/tsconfig.json'),
-//   path.join(cwd, 'api/jsconfig.json')
-// )
+const TSConfigFilePaths = fg.sync('{api,web,scripts}/**/tsconfig.json', {
+  cwd: JS_TEMPLATE,
+  absolute: true,
+})
 
-// fs.copyFileSync(
-//   path.join(cwd, 'web/tsconfig.json'),
-//   path.join(cwd, 'web/jsconfig.json')
-// )
+for (const tsConfigFilePath of TSConfigFilePaths) {
+  console.log('Transforming', tsConfigFilePath)
 
-// fs.copyFileSync(
-//   path.join(cwd, 'scripts/tsconfig.json'),
-//   path.join(cwd, 'scripts/jsconfig.json')
-// )
+  const jsConfigFilePath = path.join(
+    path.dirname(tsConfigFilePath),
+    'jsconfig.json'
+  )
+
+  fs.renameSync(tsConfigFilePath, jsConfigFilePath)
+
+  const jsConfig = fs.readJSONSync(jsConfigFilePath)
+  delete jsConfig.allowJs
+
+  fs.writeJSONSync(jsConfigFilePath, jsConfig, { spaces: 2 })
+}
+
+console.groupEnd()

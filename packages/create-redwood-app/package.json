@@ -10,7 +10,7 @@
   "bin": "./dist/create-redwood-app.js",
   "files": [
     "dist",
-    "template"
+    "templates"
   ],
   "scripts": {
     "build": "yarn node ./build.mjs",
