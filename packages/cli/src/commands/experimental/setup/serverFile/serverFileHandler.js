@@ -11,7 +11,7 @@ import { getPaths, transformTSToJS, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import { isTypeScriptProject } from '../../../../lib/project'
 
-export async function handler({ force }) {
+export async function handler({ force, verbose }) {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
 
@@ -36,7 +36,7 @@ export async function handler({ force }) {
         },
       },
       {
-        title: 'Adding experimental server file...',
+        title: 'Adding the experimental server file...',
         task: () => {
           const serverFileTemplateContent = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'server.ts.template'),
@@ -71,7 +71,7 @@ export async function handler({ force }) {
             )}`
           )
           console.log(
-            `The server file is an experimental feature, please find documentation and links to provide feedback at:\n -> https://community.redwoodjs.com/t/todo`
+            `The server file is an experimental feature, please find documentation and links to provide feedback at:\n -> todo`
           )
           console.log(
             `${chalk.hex('#ff845e')(
@@ -84,14 +84,14 @@ export async function handler({ force }) {
           ${c.green(
             'Please let us know if you find bugs or quirks or if you have any feedback!'
           )}
-          ${chalk.hex('#e8e8e8')('https://community.redwoodjs.com/t/todo')}
+          ${chalk.hex('#e8e8e8')('todo')}
         `
         },
       },
     ],
     {
       rendererOptions: { collapseSubtasks: false, persistentOutput: true },
-      // renderer: verbose ? 'verbose' : 'default',
+      renderer: verbose ? 'verbose' : 'default',
     }
   )
 

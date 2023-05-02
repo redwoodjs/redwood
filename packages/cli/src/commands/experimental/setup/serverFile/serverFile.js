@@ -1,6 +1,6 @@
-export const command = 'server'
+export const command = 'server-file'
 
-export const description = 'Setup experimental server'
+export const description = 'Setup the experimental server file'
 
 export const builder = (yargs) => {
   yargs
@@ -19,6 +19,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./serverHandler')
+  const { handler } = await import('./serverFileHandler')
   return handler(options)
 }
