@@ -5,6 +5,7 @@ import chalk from 'chalk'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
+import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../../lib'
@@ -54,12 +55,35 @@ export async function handler({ force, verbose }) {
           ]
         },
       },
-      addApiPackages([
-        'fastify',
-        'chalk@4.1.2',
-        '@redwoodjs/fastify@canary',
-        '@redwoodjs/project-config',
-      ]),
+      {
+        title: 'Adding config to redwood.toml...',
+        task: (_ctx, task) => {
+          const redwoodTomlPath = getConfigPath()
+          const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+          if (!configContent.includes('[experimental.serverFile]')) {
+            // Use string replace to preserve comments and formatting
+            writeFile(
+              redwoodTomlPath,
+              configContent.concat(
+                `\n[experimental.serverFile]\n\tenabled = true\n`
+              ),
+              {
+                overwriteExisting: true, // redwood.toml always exists
+              }
+            )
+          } else {
+            task.skip(
+              `The [experimental.serverFile] config block already exists in your 'redwood.toml' file.`
+            )
+          }
+        },
+      },
+      // addApiPackages([
+      //   'fastify',
+      //   'chalk@4.1.2',
+      //   '@redwoodjs/fastify@canary',
+      //   '@redwoodjs/project-config',
+      // ]),
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
