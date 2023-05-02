@@ -22,7 +22,7 @@
     "build:types": "tsc --build --verbose",
     "test": "yarn test:node && echo",
     "test:node": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test'",
-    "test:watch": "yarn test --watch"
+    "test:watch": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test --watch'"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.5",
