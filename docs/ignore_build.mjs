@@ -8,8 +8,6 @@ const dashes = '-'.repeat(10)
 function main() {
   console.log(`${dashes} IGNORE BUILD START ${dashes}`)
 
-  console.log(JSON.stringify(process.env, null, 2))
-
   const branch = process.env.BRANCH
   console.log(`Branch: ${branch}`)
 
@@ -26,17 +24,17 @@ function main() {
   }).includes('origin')
 
   if (remoteExists) {
-    console.log('Remote exists')
+    console.log('Remote "origin" exists')
   } else {
-    console.log('Adding remote')
+    console.log('Adding remote "origin"')
     execSync('git remote add origin https://github.com/redwoodjs/redwood.git')
   }
 
-  console.log('Fetching main')
+  console.log('Fetching "main" from remote "origin"')
   execSync('git fetch origin main')
 
-  console.log('Diffing changed files against main (name only)')
-  const changedFiles = execSync('git diff origin/main --name-only', {
+  console.log('Diffing changed files against "main" (name only)')
+  const changedFiles = execSync('git diff main --name-only', {
     encoding: 'utf-8',
   })
     .trim()
