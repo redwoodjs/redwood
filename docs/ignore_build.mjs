@@ -7,7 +7,8 @@ const dashes = '-'.repeat(10)
 
 function main() {
   console.log(`${dashes} IGNORE BUILD START ${dashes}`)
-  console.log('Running ./docs/ignore_build.js')
+
+  console.log(JSON.stringify(process.env, null, 2))
 
   const branch = process.env.BRANCH
   console.log(`Branch: ${branch}`)
