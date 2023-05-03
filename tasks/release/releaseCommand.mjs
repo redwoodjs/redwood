@@ -556,6 +556,8 @@ async function releasePatch({ currentVersion, nextVersion }) {
     console.log()
 
     await $`git push`
+    console.log()
+
     await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
     console.log()
 
@@ -566,6 +568,8 @@ async function releasePatch({ currentVersion, nextVersion }) {
 
   await updateCreateRedwoodAppTemplates()
   await $`git push`
+  console.log()
+
   await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
   console.log()
 
@@ -725,6 +729,8 @@ function closeMilestone(number) {
 }
 
 async function updateCreateRedwoodAppTemplates() {
+  logSection('Updating create-redwood-app templates\n')
+
   if (
     !isYes(
       await question('Ok to update create-redwood-app templates? [Y/n] > ')
