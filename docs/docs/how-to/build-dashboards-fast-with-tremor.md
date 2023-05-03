@@ -14,7 +14,7 @@ In this how to, you'll learn how to
 * use a chart and card component to visualize static data
 * access a GitHub repo to make your dashboard dynamic using an [example RedwoodJS app](https://github.com/redwoodjs/redwoodjs-tremor-dashboard-demo))
 
-### Live Demo
+## Live Demo
 
 Let's fist, see what's possible with a [dynamic dashboard live demo](https://tremor-redwood-dashboard-demo.netlify.app) build with RedwoodJS and Tremor.
 
@@ -75,7 +75,7 @@ module.exports = {
 
 > **Note:** the path for node_modules is `../` because the web workspace is in a subdirectory of the root directory.
 
-# 2. Add a Dashboard Page
+## Add a Dashboard Page
 
 Generate a page from your command line.
 
@@ -173,7 +173,7 @@ yarn rw dev
 
 Your app will start up and you should see the Dashboard page with an area with two `Newsletter revenue over time (USD)` data series.
 
-# 3. Add a new component for a KPI Card
+## Add a new component for a KPI Card
 
 Generate a component for a KPI (Key Performance Indicator) from your command line.
 
@@ -240,7 +240,7 @@ const KpiCard = ({ kpi }: Props) => {
 export default KpiCard
 ```
 
-# 4. Add the KPI Card component to your Dashboard
+## Add the KPI Card component to your Dashboard
 
 Import the `KpiCard` component and `Kpi` type.
 
@@ -400,7 +400,7 @@ export default DashboardPage
 
 Congratulations! You made your first dashboard.
 
-# 4. Next Steps
+## Next Steps
 
 Now that you have a Dashboard
 
