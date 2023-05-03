@@ -423,9 +423,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.21.5, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.21.4, @babel/core@npm:^7.7.5":
-  version: 7.21.5
-  resolution: "@babel/core@npm:7.21.5"
+"@babel/core@npm:7.21.8, @babel/core@npm:^7.1.0, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.21.4, @babel/core@npm:^7.7.5":
+  version: 7.21.8
+  resolution: "@babel/core@npm:7.21.8"
   dependencies:
     "@ampproject/remapping": ^2.2.0
     "@babel/code-frame": ^7.21.4
@@ -433,7 +433,7 @@ __metadata:
     "@babel/helper-compilation-targets": ^7.21.5
     "@babel/helper-module-transforms": ^7.21.5
     "@babel/helpers": ^7.21.5
-    "@babel/parser": ^7.21.5
+    "@babel/parser": ^7.21.8
     "@babel/template": ^7.20.7
     "@babel/traverse": ^7.21.5
     "@babel/types": ^7.21.5
@@ -442,13 +442,13 @@ __metadata:
     gensync: ^1.0.0-beta.2
     json5: ^2.2.2
     semver: ^6.3.0
-  checksum: e57e4347b459c89b0bcd141007ce4fb4dbf783d4bab68e59ceee463b2ffd6e8b6960e46bfee957518da2350d08d8f4fbfc7de63233d3a2d3520cc680f2674e6d
+  checksum: bf6bb92bd78fb8b6628bb0612ac0915407b996b179e1404108f92ed32972978340b4457b08f2abf86390a58fb51815cab419edb2dbbc8846efc39eaa61b8cde3
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:7.21.3":
-  version: 7.21.3
-  resolution: "@babel/eslint-parser@npm:7.21.3"
+"@babel/eslint-parser@npm:7.21.8":
+  version: 7.21.8
+  resolution: "@babel/eslint-parser@npm:7.21.8"
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals": 5.1.1-v1
     eslint-visitor-keys: ^2.1.0
@@ -456,7 +456,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ^7.5.0 || ^8.0.0
-  checksum: 2bf20f688d0fb17c707e799a7e81e0daed22f5e5113193e2728f129c20c7877d4a37413a4f2b97ed62bd7f71f69832d5e6bd2ea289920649e458f7a3ebea1f41
+  checksum: cbd9423f1131b35a1880d9e61e827779966dcea0e6c0c769fe011ae99f27f1c9ed1e7aae056c48a941f7ba98b6beb9236241dcd27005945dc3f649047bee06af
   languageName: node
   linkType: hard
 
@@ -802,12 +802,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:7.21.5, @babel/parser@npm:^7.0.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.1.6, @babel/parser@npm:^7.12.11, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.13.16, @babel/parser@npm:^7.14.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.8, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.21.5, @babel/parser@npm:^7.3.2":
-  version: 7.21.5
-  resolution: "@babel/parser@npm:7.21.5"
+"@babel/parser@npm:7.21.8, @babel/parser@npm:^7.0.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.1.6, @babel/parser@npm:^7.12.11, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.13.16, @babel/parser@npm:^7.14.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.8, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.21.5, @babel/parser@npm:^7.21.8, @babel/parser@npm:^7.3.2":
+  version: 7.21.8
+  resolution: "@babel/parser@npm:7.21.8"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: f0604aacc72129028f54e08def563cf0cac63dae6f7c1dd8c1318b36bd10c4e85c055307178eee133a5566b3e1d0d78bef392c56225108a36ed51b40a90b85b8
+  checksum: 58789e972e5acce3abbd9dd4c8d4be7e15e071818d2038d195bc56664722f238abb8842d91da5c8894ab0b8f8c0841eabc675f681925c2fba12675bf3ec5c5fc
   languageName: node
   linkType: hard
 
@@ -2701,14 +2701,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@fastify/http-proxy@npm:9.0.0"
+"@fastify/http-proxy@npm:9.1.0":
+  version: 9.1.0
+  resolution: "@fastify/http-proxy@npm:9.1.0"
   dependencies:
     "@fastify/reply-from": ^9.0.0
     fastify-plugin: ^4.5.0
     ws: ^8.4.2
-  checksum: 04293dafbe2f30ac848e2ade2c3c7581b8a200e8a0a2768d9f0674162e82619ab43486a383a416f220a4a82fa4745cd764d44f602bb39296a42207594ffc753c
+  checksum: 247dad3b504b69a9c24b8b7f194bb4057a0f50b06395067d7e58c5eb424bc54b41e936d46a345927888749bc2c300f6d7330d8a445c2f7828bd9c8bc7797bc26
   languageName: node
   linkType: hard
 
@@ -5263,76 +5263,76 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nrwl/tao@npm:16.0.1"
+"@nrwl/tao@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nrwl/tao@npm:16.0.2"
   dependencies:
-    nx: 16.0.1
+    nx: 16.0.2
   bin:
     tao: index.js
-  checksum: 88ea6fcbba4f44146ece52d75d6ae1c262a032ca19fcac7f60b261b10f25ea19a9b274b0f5389844afd62809c2ee087c83209017d8ef8d2d956b4804c1e5f6b2
+  checksum: 7a5256a3d07acd54ab27202d092eb51e91c9c59872243c06375e8905d4d73a2513423e8b65ee1c302491c985c983d6adeb8188056d8fb392e1692f46acabba86
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-arm64@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-darwin-arm64@npm:16.0.1"
+"@nx/nx-darwin-arm64@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-darwin-arm64@npm:16.0.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-x64@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-darwin-x64@npm:16.0.1"
+"@nx/nx-darwin-x64@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-darwin-x64@npm:16.0.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm-gnueabihf@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.0.1"
+"@nx/nx-linux-arm-gnueabihf@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.0.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-gnu@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-arm64-gnu@npm:16.0.1"
+"@nx/nx-linux-arm64-gnu@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-arm64-gnu@npm:16.0.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-musl@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-arm64-musl@npm:16.0.1"
+"@nx/nx-linux-arm64-musl@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-arm64-musl@npm:16.0.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-gnu@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-x64-gnu@npm:16.0.1"
+"@nx/nx-linux-x64-gnu@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-x64-gnu@npm:16.0.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-musl@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-linux-x64-musl@npm:16.0.1"
+"@nx/nx-linux-x64-musl@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-linux-x64-musl@npm:16.0.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-arm64-msvc@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-win32-arm64-msvc@npm:16.0.1"
+"@nx/nx-win32-arm64-msvc@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-win32-arm64-msvc@npm:16.0.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-x64-msvc@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@nx/nx-win32-x64-msvc@npm:16.0.1"
+"@nx/nx-win32-x64-msvc@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@nx/nx-win32-x64-msvc@npm:16.0.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -6388,10 +6388,10 @@ __metadata:
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/plugin-transform-runtime": 7.21.4
     "@babel/runtime-corejs3": 7.21.5
-    "@fastify/http-proxy": 9.0.0
+    "@fastify/http-proxy": 9.1.0
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.0.0
@@ -6428,7 +6428,7 @@ __metadata:
   resolution: "@redwoodjs/api@workspace:packages/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@prisma/client": 4.13.0
     "@types/aws-lambda": 8.10.114
@@ -6443,7 +6443,7 @@ __metadata:
     jsonwebtoken: 9.0.0
     memjs: 1.3.1
     pascalcase: 1.0.0
-    pino: 8.11.0
+    pino: 8.12.0
     redis: 4.6.6
     split2: 4.2.0
     title-case: 3.0.3
@@ -6470,7 +6470,7 @@ __metadata:
   resolution: "@redwoodjs/auth-auth0-api@workspace:packages/auth-providers/auth0/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
     "@types/jsonwebtoken": 9.0.2
@@ -6487,7 +6487,7 @@ __metadata:
   resolution: "@redwoodjs/auth-auth0-setup@workspace:packages/auth-providers/auth0/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
@@ -6503,10 +6503,10 @@ __metadata:
   dependencies:
     "@auth0/auth0-spa-js": 2.0.4
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
-    "@types/react": 18.2.0
+    "@types/react": 18.2.1
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
@@ -6521,7 +6521,7 @@ __metadata:
   resolution: "@redwoodjs/auth-azure-active-directory-api@workspace:packages/auth-providers/azureActiveDirectory/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.114
@@ -6539,7 +6539,7 @@ __metadata:
   resolution: "@redwoodjs/auth-azure-active-directory-setup@workspace:packages/auth-providers/azureActiveDirectory/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
@@ -6555,11 +6555,11 @@ __metadata:
   dependencies:
     "@azure/msal-browser": 2.37.0
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 18.2.0
+    "@types/react": 18.2.1
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
@@ -6574,7 +6574,7 @@ __metadata:
   resolution: "@redwoodjs/auth-clerk-api@workspace:packages/auth-providers/clerk/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@clerk/clerk-sdk-node": 4.8.6
     "@redwoodjs/api": 5.0.0
@@ -6590,7 +6590,7 @@ __metadata:
   resolution: "@redwoodjs/auth-clerk-setup@workspace:packages/auth-providers/clerk/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
@@ -6605,12 +6605,12 @@ __metadata:
   resolution: "@redwoodjs/auth-clerk-web@workspace:packages/auth-providers/clerk/web"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@clerk/clerk-react": 4.15.3
     "@clerk/types": 3.35.3
     "@redwoodjs/auth": 5.0.0
-    "@types/react": 18.2.0
+    "@types/react": 18.2.1
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
@@ -6625,7 +6625,7 @@ __metadata:
   resolution: "@redwoodjs/auth-custom-setup@workspace:packages/auth-providers/custom/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
@@ -6640,7 +6640,7 @@ __metadata:
   resolution: "@redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
     "@simplewebauthn/server": 7.2.0
@@ -6662,7 +6662,7 @@ __metadata:
   resolution: "@redwoodjs/auth-dbauth-setup@workspace:packages/auth-providers/dbAuth/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@simplewebauthn/browser": 7.2.0
@@ -6683,12 +6683,12 @@ __metadata:
   resolution: "@redwoodjs/auth-dbauth-web@workspace:packages/auth-providers/dbAuth/web"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
-    "@types/react": 18.2.0
+    "@types/react": 18.2.1
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
@@ -6701,7 +6701,7 @@ __metadata:
   resolution: "@redwoodjs/auth-firebase-api@workspace:packages/auth-providers/firebase/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.114
@@ -6717,7 +6717,7 @@ __metadata:
   resolution: "@redwoodjs/auth-firebase-setup@workspace:packages/auth-providers/firebase/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
@@ -6732,10 +6732,10 @@ __metadata:
   resolution: "@redwoodjs/auth-firebase-web@workspace:packages/auth-providers/firebase/web"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
-    "@types/react": 18.2.0
+    "@types/react": 18.2.1
     core-js: 3.30.1
     firebase: 9.21.0
     jest: 29.5.0
@@ -6751,7 +6751,7 @@ __metadata:
   resolution: "@redwoodjs/auth-netlify-api@workspace:packages/auth-providers/netlify/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.114
@@ -6768,7 +6768,7 @@ __metadata:
   resolution: "@redwoodjs/auth-netlify-setup@workspace:packages/auth-providers/netlify/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
@@ -6783,11 +6783,11 @@ __metadata:
   resolution: "@redwoodjs/auth-netlify-web@workspace:packages/auth-providers/netlify/web"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
     "@types/netlify-identity-widget": 1.9.3
-    "@types/react": 18.2.0
+    "@types/react": 18.2.1
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
@@ -6802,7 +6802,7 @@ __metadata:
   resolution: "@redwoodjs/auth-supabase-api@workspace:packages/auth-providers/supabase/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.114
@@ -6819,7 +6819,7 @@ __metadata:
   resolution: "@redwoodjs/auth-supabase-setup@workspace:packages/auth-providers/supabase/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
@@ -6834,10 +6834,10 @@ __metadata:
   resolution: "@redwoodjs/auth-supabase-web@workspace:packages/auth-providers/supabase/web"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@supabase/supabase-js": 2.21.0
-    "@types/react": 18.2.0
+    "@types/react": 18.2.1
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
@@ -6852,7 +6852,7 @@ __metadata:
   resolution: "@redwoodjs/auth-supertokens-api@workspace:packages/auth-providers/supertokens/api"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
     "@types/jsonwebtoken": 9.0.2
@@ -6862,7 +6862,7 @@ __metadata:
     jwks-rsa: 3.0.1
     typescript: 5.0.4
   peerDependencies:
-    supertokens-node: 13.5.0
+    supertokens-node: 13.6.0
   languageName: unknown
   linkType: soft
 
@@ -6871,7 +6871,7 @@ __metadata:
   resolution: "@redwoodjs/auth-supertokens-setup@workspace:packages/auth-providers/supertokens/setup"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
@@ -6886,10 +6886,10 @@ __metadata:
   resolution: "@redwoodjs/auth-supertokens-web@workspace:packages/auth-providers/supertokens/web"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
-    "@types/react": 18.2.0
+    "@types/react": 18.2.1
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
@@ -6905,7 +6905,7 @@ __metadata:
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
@@ -6922,7 +6922,7 @@ __metadata:
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/project-config": 5.0.0
     "@redwoodjs/telemetry": 5.0.0
@@ -6948,8 +6948,9 @@ __metadata:
   resolution: "@redwoodjs/cli@workspace:packages/cli"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
+    "@iarna/toml": 2.2.5
     "@prisma/internals": 4.13.0
     "@redwoodjs/api-server": 5.0.0
     "@redwoodjs/cli-helpers": 5.0.0
@@ -6970,11 +6971,13 @@ __metadata:
     crypto-js: 4.1.1
     decamelize: 5.0.0
     dotenv-defaults: 5.0.2
+    enquirer: 2.3.6
     envinfo: 7.8.1
     execa: 5.1.1
     fast-glob: 3.2.12
     findup-sync: 5.0.0
     fs-extra: 11.1.1
+    humanize-string: 2.1.0
     jest: 29.5.0
     latest-version: 5.1.0
     listr2: 6.4.1
@@ -6988,10 +6991,12 @@ __metadata:
     prompts: 2.4.2
     rimraf: 5.0.0
     secure-random-password: 0.2.3
+    semver: 7.3.8
     string-env-interpolation: 1.0.1
     terminal-link: 2.1.1
     title-case: 3.0.3
     typescript: 5.0.4
+    uuid: 9.0.0
     yargs: 17.7.2
   bin:
     redwood: ./dist/index.js
@@ -7005,8 +7010,8 @@ __metadata:
   resolution: "@redwoodjs/codemods@workspace:packages/codemods"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
-    "@babel/parser": 7.21.5
+    "@babel/core": 7.21.8
+    "@babel/parser": 7.21.8
     "@babel/plugin-transform-typescript": 7.21.3
     "@babel/runtime-corejs3": 7.21.5
     "@babel/traverse": 7.21.5
@@ -7045,7 +7050,7 @@ __metadata:
   resolution: "@redwoodjs/core@workspace:packages/core"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/eslint-plugin": 7.19.1
     "@babel/node": 7.20.7
     "@babel/plugin-proposal-class-properties": 7.18.6
@@ -7118,8 +7123,8 @@ __metadata:
   resolution: "@redwoodjs/eslint-config@workspace:packages/eslint-config"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
-    "@babel/eslint-parser": 7.21.3
+    "@babel/core": 7.21.8
+    "@babel/eslint-parser": 7.21.8
     "@babel/eslint-plugin": 7.19.1
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/project-config": 5.0.0
@@ -7146,15 +7151,15 @@ __metadata:
   resolution: "@redwoodjs/forms@workspace:packages/forms"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@testing-library/dom": 9.2.0
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
     "@types/pascalcase": 1.0.1
-    "@types/react": 18.2.0
-    "@types/react-dom": 18.2.1
+    "@types/react": 18.2.1
+    "@types/react-dom": 18.2.2
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.30.1
     graphql: 16.6.0
@@ -7176,7 +7181,7 @@ __metadata:
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@envelop/core": 3.0.6
     "@envelop/depth-limit": 2.0.6
@@ -7217,8 +7222,8 @@ __metadata:
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
-    "@babel/parser": 7.21.5
+    "@babel/core": 7.21.8
+    "@babel/parser": 7.21.8
     "@babel/plugin-transform-typescript": 7.21.3
     "@babel/register": 7.21.0
     "@babel/runtime-corejs3": 7.21.5
@@ -7269,7 +7274,7 @@ __metadata:
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
     "@redwoodjs/internal": 5.0.0
@@ -7298,7 +7303,7 @@ __metadata:
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@iarna/toml": 2.2.5
     "@types/findup-sync": 4.0.2
@@ -7319,7 +7324,7 @@ __metadata:
   resolution: "@redwoodjs/record@workspace:packages/record"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@prisma/client": 4.13.0
     "@prisma/internals": 4.13.0
@@ -7335,12 +7340,12 @@ __metadata:
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 5.0.0
-    "@types/react": 18.2.0
-    "@types/react-dom": 18.2.1
+    "@types/react": 18.2.1
+    "@types/react-dom": 18.2.2
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
@@ -7357,7 +7362,7 @@ __metadata:
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@iarna/toml": 2.2.5
     "@prisma/internals": 4.13.0
@@ -7397,10 +7402,10 @@ __metadata:
   resolution: "@redwoodjs/studio@workspace:packages/studio"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/plugin-transform-runtime": 7.21.4
     "@babel/runtime-corejs3": 7.21.5
-    "@fastify/http-proxy": 9.0.0
+    "@fastify/http-proxy": 9.1.0
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@redwoodjs/internal": 5.0.0
@@ -7431,7 +7436,7 @@ __metadata:
     pretty-bytes: 5.6.0
     qs: 6.11.1
     split2: 4.2.0
-    sqlite: 4.1.2
+    sqlite: 4.2.0
     sqlite3: 5.1.6
     typescript: 5.0.4
     uuid: 9.0.0
@@ -7444,7 +7449,7 @@ __metadata:
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/project-config": 5.0.0
     "@redwoodjs/structure": 5.0.0
@@ -7467,7 +7472,7 @@ __metadata:
   resolution: "@redwoodjs/testing@workspace:packages/testing"
   dependencies:
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
     "@redwoodjs/graphql-server": 5.0.0
@@ -7488,8 +7493,8 @@ __metadata:
     "@types/babel-core": 6.25.7
     "@types/jest": 29.5.1
     "@types/node": 18.16.1
-    "@types/react": 18.2.0
-    "@types/react-dom": 18.2.1
+    "@types/react": 18.2.1
+    "@types/react-dom": 18.2.2
     "@types/webpack": 5.28.1
     babel-jest: 29.5.0
     babel-plugin-inline-react-svg: 2.0.2
@@ -7531,7 +7536,7 @@ __metadata:
     buffer: 6.0.3
     core-js: 3.30.1
     typescript: 5.0.4
-    vite: 4.3.3
+    vite: 4.3.4
     vite-plugin-commonjs: 0.7.0
     vite-plugin-environment: 1.1.3
     vite-plugin-html: 3.2.0
@@ -7547,14 +7552,14 @@ __metadata:
   dependencies:
     "@apollo/client": 3.7.13
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/auth": 5.0.0
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@types/prop-types": 15.7.5
-    "@types/react": 18.2.0
-    "@types/react-dom": 18.2.1
+    "@types/react": 18.2.1
+    "@types/react-dom": 18.2.2
     "@types/testing-library__jest-dom": 5.14.5
     core-js: 3.30.1
     graphql: 16.6.0
@@ -9999,23 +10004,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.2.1, @types/react-dom@npm:^18.0.0":
-  version: 18.2.1
-  resolution: "@types/react-dom@npm:18.2.1"
+"@types/react-dom@npm:18.2.2, @types/react-dom@npm:^18.0.0":
+  version: 18.2.2
+  resolution: "@types/react-dom@npm:18.2.2"
   dependencies:
     "@types/react": "*"
-  checksum: 3af3c2a85f0f9fd96a03ce717559423cbd0bac3c8e279107008708d457db4b75a4ee7fd64d3af3ddad94cb97ff74dc422241edc56ab54f1905caca7fd717c759
+  checksum: f2aacd7e444fbc6905606236bf8c00ff183cd7182a630f000e969fdca9ee147bd906f7f87aaebf0a0899c2b3e276d1d3221063879d29e94cc4a10a3367a5d998
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.2.0":
-  version: 18.2.0
-  resolution: "@types/react@npm:18.2.0"
+"@types/react@npm:*, @types/react@npm:18.2.1":
+  version: 18.2.1
+  resolution: "@types/react@npm:18.2.1"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: e38f98b7524817459bb1214d39f4cfcb1dd7ffb31992a427b4494f3988aa6195dc349dfb66b299270b399b34568d045bf1cb6230349a6d343e183052ee486eaa
+  checksum: b8bef5cc01d72e41b49f726b3a9c5d0a32a57f4289f5892916411aacd4d7e6fe25349932eabcb38f630190307b38ca283de93ad207c72ad0129ae3ae0b6b5987
   languageName: node
   linkType: hard
 
@@ -24763,20 +24768,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:16.0.1":
-  version: 16.0.1
-  resolution: "nx@npm:16.0.1"
+"nx@npm:16.0.2":
+  version: 16.0.2
+  resolution: "nx@npm:16.0.2"
   dependencies:
-    "@nrwl/tao": 16.0.1
-    "@nx/nx-darwin-arm64": 16.0.1
-    "@nx/nx-darwin-x64": 16.0.1
-    "@nx/nx-linux-arm-gnueabihf": 16.0.1
-    "@nx/nx-linux-arm64-gnu": 16.0.1
-    "@nx/nx-linux-arm64-musl": 16.0.1
-    "@nx/nx-linux-x64-gnu": 16.0.1
-    "@nx/nx-linux-x64-musl": 16.0.1
-    "@nx/nx-win32-arm64-msvc": 16.0.1
-    "@nx/nx-win32-x64-msvc": 16.0.1
+    "@nrwl/tao": 16.0.2
+    "@nx/nx-darwin-arm64": 16.0.2
+    "@nx/nx-darwin-x64": 16.0.2
+    "@nx/nx-linux-arm-gnueabihf": 16.0.2
+    "@nx/nx-linux-arm64-gnu": 16.0.2
+    "@nx/nx-linux-arm64-musl": 16.0.2
+    "@nx/nx-linux-x64-gnu": 16.0.2
+    "@nx/nx-linux-x64-musl": 16.0.2
+    "@nx/nx-win32-arm64-msvc": 16.0.2
+    "@nx/nx-win32-x64-msvc": 16.0.2
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24839,7 +24844,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: b94b0604df5f527b7e1d9af75169d0d376118b738479e09818a247d55a3cc3246b3f6f84959953e545676a5e1f3b94c69bd0decf679259b5d24fa439e9130123
+  checksum: 9de70ad21043dcc5a92295b2ab593cc90fad21e30367afca66356f49f73b8c35dd1ba594e3e91135a0936b2ea14a61b8e71b35926edfb22404c3f840cea36396
   languageName: node
   linkType: hard
 
@@ -25944,9 +25949,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:8.11.0, pino@npm:^8.5.0":
-  version: 8.11.0
-  resolution: "pino@npm:8.11.0"
+"pino@npm:8.12.0, pino@npm:^8.5.0":
+  version: 8.12.0
+  resolution: "pino@npm:8.12.0"
   dependencies:
     atomic-sleep: ^1.0.0
     fast-redact: ^3.1.1
@@ -25961,7 +25966,7 @@ __metadata:
     thread-stream: ^2.0.0
   bin:
     pino: bin.js
-  checksum: 456694c935008b0ad3df75991a3b494c0325806cb5378ef672828554e67e5bcedc7a8fbfc3e513d098e585e1c6f7489415eaa9d7b9a95453278bfe2ce5f68bc6
+  checksum: 7d468f84703a714c4999f56c8d2a4a425fba8ec47a0a349277d83d6ca1cb5917e250f58820e9e004730e5512c76cd20173154fb58ad91256a0180c6d2e599e37
   languageName: node
   linkType: hard
 
@@ -28298,7 +28303,7 @@ __metadata:
     "@actions/core": 1.10.0
     "@actions/exec": 1.1.1
     "@babel/cli": 7.21.5
-    "@babel/core": 7.21.5
+    "@babel/core": 7.21.8
     "@babel/generator": 7.21.5
     "@babel/node": 7.20.7
     "@babel/plugin-proposal-class-properties": 7.18.6
@@ -28350,7 +28355,7 @@ __metadata:
     ncp: 2.0.0
     nodemon: 2.0.22
     npm-packlist: 7.0.4
-    nx: 16.0.1
+    nx: 16.0.2
     octokit: 2.0.14
     ora: 5.4.1
     prompts: 2.4.2
@@ -29417,10 +29422,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sqlite@npm:4.1.2":
-  version: 4.1.2
-  resolution: "sqlite@npm:4.1.2"
-  checksum: d6b67cdf141863455a3c4eb1e051bbf302718d7ed10d1d3315366b0e99355930d44895d49a7a0da5897e16e781598b88aab31f06907e5c75a3fe421b8a2d12e0
+"sqlite@npm:4.2.0":
+  version: 4.2.0
+  resolution: "sqlite@npm:4.2.0"
+  checksum: db1593fc30e3bf9632f01d2087041c46da480a066cbfeaee008cc5b911885d0e34b2822c03a57ded42e71f3f65c2dafa1d166650611c0d9fba8dde5cf93e4981
   languageName: node
   linkType: hard
 
@@ -31118,21 +31123,21 @@ __metadata:
 
 "typescript@patch:typescript@5.0.4#~builtin<compat/typescript>":
   version: 5.0.4
-  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=85af82"
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: eec385fd53e1800b0986bac2889deafee8e1910ce10108a5fe10644422426f71625c47b3e78e042371df16592881b1b1f97884ab45dc993f3b96a5c954f65dc2
+  checksum: c3f7b80577bddf6fab202a7925131ac733bfc414aec298c2404afcddc7a6f242cfa8395cf2d48192265052e11a7577c27f6e5fac8d8fe6a6602023c83d6b3292
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^3 || ^4#~builtin<compat/typescript>":
   version: 4.9.5
-  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76"
+  resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10d31da0caa997927eab0167b7ddacb9ac8d3fd87e6584185b14da32b7f033e727309682fc0395021f4ac110860a3be6054e9b039a996a24d282a20bafc599f4
+  checksum: e3333f887c6829dfe0ab6c1dbe0dd1e3e2aeb56c66460cb85c5440c566f900c833d370ca34eb47558c0c69e78ced4bfe09b8f4f98b6de7afed9b84b8d1dd06a1
   languageName: node
   linkType: hard
 
@@ -31907,9 +31912,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.3.3":
-  version: 4.3.3
-  resolution: "vite@npm:4.3.3"
+"vite@npm:4.3.4":
+  version: 4.3.4
+  resolution: "vite@npm:4.3.4"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
@@ -31940,7 +31945,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 87814f40a1e21fb372014fe43d0faf3b8f166ee0bc458527b6bccd1b6340782f8e6f5a8986492d99bd31d02f7d1b1538cc0006a0ab6f7e311e603fd1782ae04e
+  checksum: 05cbff29d9379a4441845a2b6c6c6770a35a858408f3e17f56c86e01d88dc7eda60f41aff7b15b99382b64c198b892a76f9a16505a62a2b0d53ec38e454d5948
   languageName: node
   linkType: hard
 

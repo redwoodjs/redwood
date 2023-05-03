@@ -29,14 +29,14 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.5",
+    "@babel/core": "7.21.8",
     "@redwoodjs/api": "5.0.0",
     "@types/jsonwebtoken": "9.0.2",
     "jest": "29.5.0",
     "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "supertokens-node": "13.5.0"
+    "supertokens-node": "13.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

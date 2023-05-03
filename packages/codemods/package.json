@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.5",
-    "@babel/parser": "7.21.5",
+    "@babel/core": "7.21.8",
+    "@babel/parser": "7.21.8",
     "@babel/plugin-transform-typescript": "7.21.3",
     "@babel/runtime-corejs3": "7.21.5",
     "@babel/traverse": "7.21.5",

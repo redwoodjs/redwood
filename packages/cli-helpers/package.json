@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/core": "7.21.5",
+    "@babel/core": "7.21.8",
     "@babel/runtime-corejs3": "7.21.5",
     "@redwoodjs/project-config": "5.0.0",
     "@redwoodjs/telemetry": "5.0.0",
