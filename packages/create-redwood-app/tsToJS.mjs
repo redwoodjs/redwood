@@ -9,29 +9,22 @@ import fg from 'fast-glob'
 import fs from 'fs-extra'
 import { format } from 'prettier'
 
-const TS_TEMPLATE = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  './templates',
-  'ts'
-)
-
-const JS_TEMPLATE = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  './templates',
-  'js'
-)
+const [TS_TEMPLATE_FILEPATH, JS_TEMPLATE_FILEPATH] = [
+  new URL('./templates/ts', import.meta.url),
+  new URL('./templates/js', import.meta.url),
+].map(fileURLToPath)
 
 const { default: prettierConfig } = await import(
   new URL('./templates/ts/prettier.config.js', import.meta.url)
 )
 
-fs.copySync(TS_TEMPLATE, JS_TEMPLATE)
+fs.copySync(TS_TEMPLATE_FILEPATH, JS_TEMPLATE_FILEPATH)
 
 console.group('Transforming TS files to TS')
 
 // Get all TS files in the template.
 const filePaths = fg.sync('{api,web,scripts}/src/**/*.{ts,tsx}', {
-  cwd: JS_TEMPLATE,
+  cwd: JS_TEMPLATE_FILEPATH,
   absolute: true,
 })
 
@@ -40,7 +33,7 @@ for (const filePath of filePaths) {
   console.log('Transforming', filePath)
 
   const result = transformFileSync(filePath, {
-    cwd: TS_TEMPLATE,
+    cwd: TS_TEMPLATE_FILEPATH,
     configFile: false,
     plugins: [
       [
@@ -79,7 +72,7 @@ console.group('Transforming tsconfig files to jsconfig')
 
 // Handle config files.
 const TSConfigFilePaths = fg.sync('{api,web,scripts}/**/tsconfig.json', {
-  cwd: JS_TEMPLATE,
+  cwd: JS_TEMPLATE_FILEPATH,
   absolute: true,
 })
 
