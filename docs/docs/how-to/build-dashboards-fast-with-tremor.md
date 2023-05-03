@@ -10,9 +10,9 @@ description: "Learn how to build dashboards fast using the termor React library 
 In this how to, you'll learn how to
 
 * setup tremor in a new or existing RedwoodJS app
-* use tremor components to layout a ne dashboard
+* use tremor components to layout a new dashboard
 * use a chart and card component to visualize static data
-* access a GitHub repo to make your dashboard dynamic using an [example RedwoodJS app](https://github.com/redwoodjs/redwoodjs-tremor-dashboard-demo))
+* access a GitHub repo to make your dashboard dynamic using an [example RedwoodJS app](https://github.com/redwoodjs/redwoodjs-tremor-dashboard-demo)
 
 ## Live Demo
 
