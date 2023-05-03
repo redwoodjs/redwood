@@ -3,10 +3,10 @@
 // Netilfy runs this via Node.js v16.
 
 import { execSync } from 'node:child_process'
-const separator = '-'.repeat(process.stdout.columns)
+const dashes = '-'.repeat(10)
 
 function main() {
-  console.log(separator)
+  console.log(`${dashes} IGNORE BUILD START ${dashes}`)
   console.log('Running ./docs/ignore_build.js')
 
   const branch = process.env.BRANCH
@@ -15,7 +15,7 @@ function main() {
   if (branch === 'main') {
     console.log(`Branch is main. Proceeding with build`)
     process.exitCode = 1
-    console.log(separator)
+    console.log(`${dashes} IGNORE BUILD END ${dashes}`)
 
     return
   }
@@ -60,12 +60,13 @@ function main() {
       `PR '${process.env.HEAD}' has doc changes. Proceeding with build`
     )
     process.exitCode = 1
+    console.log(`${dashes} IGNORE BUILD END ${dashes}`)
 
     return
   }
 
   console.log(`PR '${process.env.HEAD}' doesn't have doc changes. Ignoring`)
-  console.log(separator)
+  console.log(`${dashes} IGNORE BUILD END ${dashes}`)
 }
 
 main()
