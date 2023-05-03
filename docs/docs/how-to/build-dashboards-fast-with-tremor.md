@@ -16,7 +16,7 @@ In this how to, you'll learn how to
 
 ## Live Demo
 
-Let's first see what's possible with a [dynamic dashboard live demo](https://tremor-redwood-dashboard-demo.netlify.app) build with RedwoodJS and Tremor.
+See what's possible with a [dynamic dashboard live demo](https://tremor-redwood-dashboard-demo.netlify.app) build with RedwoodJS and Tremor.
 
 Cool, right?
 
