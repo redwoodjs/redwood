@@ -14632,12 +14632,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-redwood-app@workspace:packages/create-redwood-app"
   dependencies:
+    "@babel/core": 7.21.5
+    "@babel/plugin-transform-typescript": 7.21.3
     "@opentelemetry/api": 1.4.1
     "@opentelemetry/exporter-trace-otlp-http": 0.38.0
     "@opentelemetry/resources": 1.12.0
     "@opentelemetry/sdk-trace-node": 1.12.0
     "@opentelemetry/semantic-conventions": 1.12.0
     "@redwoodjs/tui": 5.0.0
+    "@types/babel__core": 7.20.0
     chalk: 4.1.2
     check-node-version: 4.2.1
     ci-info: 3.8.0

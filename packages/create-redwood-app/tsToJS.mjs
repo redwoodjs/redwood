@@ -4,11 +4,9 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import * as esbuild from 'esbuild'
+import { transformFileSync } from '@babel/core'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
-
-// copy, then transform in place...
 
 const TS_TEMPLATE = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -32,22 +30,28 @@ const filePaths = fg.sync('{api,web,scripts}/src/**/*.{ts,tsx}', {
   absolute: true,
 })
 
-/**
- * @type {string[]}
- */
-let warnings = []
-
 // Transform every file in turn.
 for (const filePath of filePaths) {
   console.log('Transforming', filePath)
 
-  const tsCode = fs.readFileSync(filePath, 'utf8')
-
-  const result = await esbuild.transform(tsCode, {
-    loader: path.extname(filePath).replace('.', ''),
+  const result = transformFileSync(filePath, {
+    cwd: TS_TEMPLATE,
+    configFile: false,
+    plugins: [
+      [
+        '@babel/plugin-transform-typescript',
+        {
+          isTSX: true,
+          allExtensions: true,
+        },
+      ],
+    ],
+    retainLines: true,
   })
 
-  warnings = [...warnings, ...result.warnings]
+  if (!result) {
+    throw new Error(`Babel transform for ${filePath} failed`)
+  }
 
   fs.writeFileSync(
     filePath.replace('.tsx', '.js').replace('.ts', '.js'),
@@ -56,11 +60,6 @@ for (const filePath of filePaths) {
   )
 
   fs.rmSync(filePath)
-}
-
-if (warnings.length > 0) {
-  console.warn('Warnings')
-  console.warn(warnings.join('\n'))
 }
 
 console.groupEnd()

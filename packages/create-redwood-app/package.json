@@ -39,6 +39,9 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
+    "@babel/core": "7.21.5",
+    "@babel/plugin-transform-typescript": "7.21.3",
+    "@types/babel__core": "7.20.0",
     "esbuild": "0.17.18",
     "jest": "29.5.0",
     "klaw-sync": "6.0.0"
