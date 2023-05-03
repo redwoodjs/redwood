@@ -386,6 +386,15 @@ async function releaseMajorOrMinor({ semver, nextVersion }) {
   }
   console.log()
 
+  await updateCreateRedwoodAppTemplates()
+  // await $`git push`
+  // await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
+  // console.log()
+
+  // if (!isYes(await question(`Diff look ok? [Y/n] > `))) {
+  //   process.exit(1)
+  // }
+
   await cleanInstallUpdate(nextVersion)
   await confirmPackageVersions()
 
@@ -555,6 +564,15 @@ async function releasePatch({ currentVersion, nextVersion }) {
     }
   }
 
+  await updateCreateRedwoodAppTemplates()
+  await $`git push`
+  await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
+  console.log()
+
+  if (!isYes(await question(`Diff look ok? [Y/n] > `))) {
+    process.exit(1)
+  }
+
   await cleanInstallUpdate(nextVersion)
   await confirmPackageVersions()
   await commitTagQA(nextVersion)
@@ -706,9 +724,25 @@ function closeMilestone(number) {
   )
 }
 
-function tsToJS() {
-  // cd into packages/create-rdwood-app.js
-  // run script there...
-}
+async function updateCreateRedwoodAppTemplates() {
+  if (
+    !isYes(
+      await question('Ok to update create-redwood-app templates? [Y/n] > ')
+    )
+  ) {
+    process.exit(1)
+  }
+  console.log()
 
-function yarnLock() {}
+  cd('./packages/create-redwood-app/templates/ts')
+  await $`touch yarn.lock`
+  await $`yarn install`
+
+  cd('../..')
+  await $`yarn ts-to-js`
+
+  await $`git add .`
+  await $`git commit -am "chore: update create-redwood-app templates"`
+
+  cd('../')
+}
