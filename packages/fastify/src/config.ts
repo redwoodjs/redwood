@@ -1,11 +1,11 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import type { FastifyServerOptions } from 'fastify'
+import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
-import { FastifySideConfigFn } from './types'
+import { FastifySideConfigFn, FastifySideConfigFnOptions } from './types'
 
 /**
  * This is the default Fastify Server settings used by the
@@ -45,6 +45,22 @@ let serverConfigFile: {
 }
 
 export function loadFastifyConfig() {
+  const serverFileExists =
+    fs.existsSync(path.join(getPaths().api.src, 'server.js')) ||
+    fs.existsSync(path.join(getPaths().api.src, 'server.ts'))
+  if (serverFileExists) {
+    console.log(
+      "Using 'api/src/server.(js|ts)' for Fastify config instead of 'api/src/server.config.(js|ts)'"
+    )
+    return {
+      config: {},
+      configureFastify: async (
+        fastify: FastifyInstance,
+        _options: FastifySideConfigFnOptions
+      ) => fastify,
+    }
+  }
+
   // @TODO use require.resolve to find the config file
   // do we need to babel first?
   const serverConfigPath = path.join(
