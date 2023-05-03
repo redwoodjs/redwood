@@ -26,9 +26,9 @@ jest.mock('@redwoodjs/project-config', () => {
 jest.mock('fs', () => {
   return {
     ...jest.requireActual('fs'),
-    existsSync: (path) => {
-      // Don't detect the experimental server file
-      if (path === '/mocked/project/api/dist/server.ts') {
+    existsSync: (p) => {
+      // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
+      if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.ts') {
         return false
       }
       return true
