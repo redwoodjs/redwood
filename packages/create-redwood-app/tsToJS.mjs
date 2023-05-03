@@ -18,18 +18,25 @@ const { default: prettierConfig } = await import(
   new URL('./templates/ts/prettier.config.js', import.meta.url)
 )
 
+console.log('Cleaning JS template')
+fs.rmSync(JS_TEMPLATE_FILEPATH, { recursive: true })
+
+console.log('Copying TS template to JS template')
 fs.copySync(TS_TEMPLATE_FILEPATH, JS_TEMPLATE_FILEPATH)
 
-console.group('Transforming TS files to TS')
-
-// Get all TS files in the template.
-const filePaths = fg.sync('{api,web,scripts}/src/**/*.{ts,tsx}', {
+const apiWebFilePaths = fg.sync('{api,web}/src/**/*.{ts,tsx}', {
   cwd: JS_TEMPLATE_FILEPATH,
   absolute: true,
 })
 
-// Transform every file in turn.
-for (const filePath of filePaths) {
+const scriptFilePaths = fg.sync('scripts/**/*.ts', {
+  cwd: JS_TEMPLATE_FILEPATH,
+  absolute: true,
+})
+
+console.group('Transforming TS files in JS template to JS')
+
+for (const filePath of [...apiWebFilePaths, ...scriptFilePaths]) {
   console.log('Transforming', filePath)
 
   const result = transformFileSync(filePath, {
@@ -66,17 +73,15 @@ for (const filePath of filePaths) {
 }
 
 console.groupEnd()
-console.log()
 
 console.group('Transforming tsconfig files to jsconfig')
 
-// Handle config files.
-const TSConfigFilePaths = fg.sync('{api,web,scripts}/**/tsconfig.json', {
+const tsConfigFilePaths = fg.sync('{api,web,scripts}/**/tsconfig.json', {
   cwd: JS_TEMPLATE_FILEPATH,
   absolute: true,
 })
 
-for (const tsConfigFilePath of TSConfigFilePaths) {
+for (const tsConfigFilePath of tsConfigFilePaths) {
   console.log('Transforming', tsConfigFilePath)
 
   const jsConfigFilePath = path.join(
