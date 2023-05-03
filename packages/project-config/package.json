@@ -4,7 +4,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/config"
+    "directory": "packages/project-config"
   },
   "license": "MIT",
   "exports": {
