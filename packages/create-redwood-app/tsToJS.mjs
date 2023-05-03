@@ -87,7 +87,7 @@ for (const tsConfigFilePath of TSConfigFilePaths) {
   fs.renameSync(tsConfigFilePath, jsConfigFilePath)
 
   const jsConfig = fs.readJSONSync(jsConfigFilePath)
-  delete jsConfig.allowJs
+  delete jsConfig.compilerOptions.allowJs
 
   fs.writeJSONSync(jsConfigFilePath, jsConfig, { spaces: 2 })
 }
