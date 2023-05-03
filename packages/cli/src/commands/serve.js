@@ -45,7 +45,7 @@ export const builder = async (yargs) => {
               '------------------------------------------------------------------'
             )}\n`
           )
-          await execa('node', [path.join('dist', serverFileName)], {
+          await execa('yarn', ['node', path.join('dist', serverFileName)], {
             cwd: getPaths().api.base,
             stdio: 'inherit',
             shell: true,
