@@ -33,7 +33,7 @@ async function serve() {
   const redwoodConfig = getConfig()
 
   const apiRootPath = coerceRootPath(redwoodConfig.web.apiUrl)
-  const port = redwoodConfig.api.port
+  const port = redwoodConfig.web.port
 
   await fastify.register(redwoodFastifyWeb)
 
