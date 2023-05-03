@@ -5,7 +5,24 @@ description: "Learn how to build dashboards fast using the termor React library 
 
 # Build Dashboards Fast with Tremor
 
-## Using RedwoodJS
+[Tremor](https://www.tremor.so) is a React library to build dashboards fast. Its modular components are fully open-source, made by data scientists and software engineers with a sweet spot for design.
+
+In this how to, you'll learn how to
+
+* setup tremor in a new or existing RedwoodJS app
+* use tremor components to layout a ne dashboard
+* use a chart and card component to visualize static data
+* access a GitHub repo to make your dashboard dynamic using an [example RedwoodJS app](https://github.com/redwoodjs/redwoodjs-tremor-dashboard-demo))
+
+### Live Demo
+
+Let's fist, see what's possible with a [dynamic dashboard live demo](https://tremor-redwood-dashboard-demo.netlify.app) build with RedwoodJS and Tremor.
+
+Cool, right?
+
+Let's get started!
+
+## Create a New RedwoodJS Project
 
 
 In our terminal, we create a new RedwoodJS project:
@@ -390,5 +407,7 @@ Now that you have a Dashboard
 1. Explore the other [components](https://www.tremor.so/components) and [blocks](https://www.tremor.so/blocks) that you can use to showcase your data
 
 2. Learn how to make a [dynamic dashboard using RedwoodJS cells](https://github.com/redwoodjs/redwoodjs-tremor-dashboard-demo) to fetch data from a Prisma-backed database using GraphQL.
+
+3. See a [dynamic dashboard live demo](https://tremor-redwood-dashboard-demo.netlify.app)!
 
 
