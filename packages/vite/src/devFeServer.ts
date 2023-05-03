@@ -116,7 +116,9 @@ async function createServer() {
         path.join(__dirname, '../inject', 'reactRefresh.js'),
       ]
 
-      if (currentRoute?.renderMode !== 'html') {
+      const pageWithJs = currentRoute?.renderMode !== 'html'
+
+      if (pageWithJs) {
         bootstrapModules.push(rwPaths.web.entryClient)
       }
 
@@ -128,12 +130,14 @@ async function createServer() {
           meta: metaTags,
         }),
         {
-          bootstrapScriptContent: `window.__loadServerData = function() { return ${serialisedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
-            {
-              css: FIXME_HardcodedIndexCss,
-              meta: metaTags,
-            }
-          )} }`,
+          bootstrapScriptContent: pageWithJs
+            ? `window.__loadServerData = function() { return ${serialisedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
+                {
+                  css: FIXME_HardcodedIndexCss,
+                  meta: metaTags,
+                }
+              )} }`
+            : undefined,
           bootstrapModules,
           onShellReady() {
             res.setHeader('content-type', 'text/html; charset=utf-8')

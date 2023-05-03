@@ -9,5 +9,6 @@
   "include": ["src/**/*", "./ambient.d.ts"],
   "references": [
     { "path": "../internal" },
+    { "path": "../web" },
   ]
 }

@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 /** CSS is a specialised metatag */
 export const Css = ({ css = [] }: { css: string[] }) => {
   return (
@@ -84,13 +85,17 @@ export const Meta = ({ tags = [] }: MetaProps) => {
           return null
         }
 
-        if (_isTitleTag(tag)) {
-          // @TODO think about whether we should add the og tags from the title
-          return <title key={`meta-${index}`}>{tag.title}</title>
+        if (isTitleTag(tag)) {
+          return (
+            <Fragment key="title">
+              <title>{tag.title}</title>
+              <meta property="og:title" content={tag.title} />
+            </Fragment>
+          )
         }
 
         // @TODO add validate tag function
-        if (_otherTag(tag)) {
+        if (otherTag(tag)) {
           const { tagType: TagName, ...rest } = tag
           return <TagName key={`meta-${index}`} {...rest} />
         }
@@ -101,11 +106,11 @@ export const Meta = ({ tags = [] }: MetaProps) => {
   )
 }
 
-const _isTitleTag = (tag: TagDescriptor): tag is Title => {
+const isTitleTag = (tag: TagDescriptor): tag is Title => {
   return 'title' in tag
 }
 
 // Not a "<meta>" tag
-const _otherTag = (tag: TagDescriptor): tag is Other => {
+const otherTag = (tag: TagDescriptor): tag is Other => {
   return 'tagType' in tag
 }

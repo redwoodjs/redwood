@@ -7,6 +7,6 @@ export const {
   Consumer: ServerContextConsumer,
 } = ServerContext
 
-export const useServerData = () => {
-  return React.useContext(ServerContext)
+export const useServerData = <T,>() => {
+  return React.useContext(ServerContext) as T
 }

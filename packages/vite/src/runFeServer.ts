@@ -8,7 +8,7 @@ import isbot from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { getPaths, getConfig } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
@@ -168,9 +168,13 @@ export async function runFeServer() {
           prodAppRouteHookPath
         )
 
+        const routeHookPath = currentRoute.routeHooks
+          ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks || '')
+          : undefined
+
         // B. Trigger current route RH
         const currentRouteHookOutput = await runProdRouteHooks(
-          path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks || ''),
+          routeHookPath,
           currentRoute.hasParams
             ? matchPath(currentRoute.pathDefinition, currentPathName).params
             : undefined,
@@ -189,12 +193,12 @@ export async function runFeServer() {
       // Serialize route context so it can be passed to the client entry
       const serializedRouteContext = JSON.stringify(serverData)
 
+      const pageWithJs = currentRoute.renderMode !== 'html'
       // @NOTE have to add slash so subpaths still pick up the right file
       // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
-      const bootstrapModules =
-        currentRoute.renderMode !== 'html'
-          ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
-          : undefined
+      const bootstrapModules = pageWithJs
+        ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
+        : undefined
 
       const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
 
@@ -207,9 +211,11 @@ export async function runFeServer() {
           meta: metaTags,
         }),
         {
-          bootstrapScriptContent: `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
-            { css: indexEntry.css, meta: metaTags }
-          )} }`,
+          bootstrapScriptContent: pageWithJs
+            ? `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
+                { css: indexEntry.css, meta: metaTags }
+              )} }`
+            : undefined,
           bootstrapModules,
           onShellReady() {
             if (!isSeoCrawler) {
