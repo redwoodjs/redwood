@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url'
 import { transformFileSync } from '@babel/core'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
+import { format } from 'prettier'
 
 const TS_TEMPLATE = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -18,6 +19,10 @@ const JS_TEMPLATE = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
   './templates',
   'js'
+)
+
+const { default: prettierConfig } = await import(
+  new URL('./templates/ts/prettier.config.js', import.meta.url)
 )
 
 fs.copySync(TS_TEMPLATE, JS_TEMPLATE)
@@ -53,9 +58,14 @@ for (const filePath of filePaths) {
     throw new Error(`Babel transform for ${filePath} failed`)
   }
 
+  const formattedCode = format(result.code, {
+    ...prettierConfig,
+    parser: 'babel',
+  })
+
   fs.writeFileSync(
     filePath.replace('.tsx', '.js').replace('.ts', '.js'),
-    result.code,
+    formattedCode,
     'utf-8'
   )
 
