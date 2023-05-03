@@ -107,12 +107,6 @@ async function checkAndUpdateCustomWebIndex(taskContext: TaskInnerAPI) {
   )
 }
 
-export {
-  checkAndTransformReactRoot,
-  upgradeReactDepsTo18,
-  checkAndUpdateCustomWebIndex,
-}
-
 const customWebIndexTemplate = `\
 import { hydrateRoot, createRoot } from 'react-dom/client'
 
@@ -132,3 +126,9 @@ if (redwoodAppElement.children?.length > 0) {
   root.render(<App />)
 }
 `
+
+export {
+  checkAndTransformReactRoot,
+  upgradeReactDepsTo18,
+  checkAndUpdateCustomWebIndex,
+}
