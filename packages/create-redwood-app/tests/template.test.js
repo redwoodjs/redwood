@@ -91,15 +91,17 @@ describe('template', () => {
 function getDirectoryStructure(dir) {
   let fileStructure = klawSync(dir)
 
-  return (fileStructure = fileStructure
-    // This handles an edge case in CI.
-    //
-    // We run `yarn lint` before `yarn test` in CI.
-    // Running `yarn lint` leads to a call to `getPaths` from `@redwoodjs/internal` which creates the `.redwood` directory.
-    // That directory and its contents aren't part of the template,
-    // but will be picked up by this test and lead to a false negative without this filter.
-    .filter((file) => file.includes('.redwood'))
-    .map((fileStructure) =>
-      fileStructure.path.replace(dir, '').split(path.sep).join(path.posix.sep)
-    ))
+  return (
+    fileStructure
+      // This filter handles an edge case in CI.
+      //
+      // We run `yarn lint` before `yarn test` in CI.
+      // Running `yarn lint` leads to a call to `getPaths` from `@redwoodjs/internal` which creates the `.redwood` directory.
+      // That directory and its contents aren't part of the template,
+      // but will be picked up by this test and lead to a false negative without this.
+      .filter((file) => !file.path.includes('.redwood'))
+      .map((file) =>
+        file.path.replace(dir, '').split(path.sep).join(path.posix.sep)
+      )
+  )
 }
