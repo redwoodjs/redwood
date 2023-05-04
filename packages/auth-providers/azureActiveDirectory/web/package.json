@@ -4,7 +4,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/auth-providers/authActiveDirectory/web"
+    "directory": "packages/auth-providers/azureActiveDirectory/web"
   },
   "license": "MIT",
   "main": "./dist/index.js",
