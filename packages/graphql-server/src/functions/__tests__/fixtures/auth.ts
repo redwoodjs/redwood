@@ -34,9 +34,9 @@ type RedwoodUser = Record<string, unknown> & { roles?: string[] }
  */
 export const getCurrentUser = async (
   decoded,
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   { token, type },
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   req?: { event: APIGatewayEvent, context: Context }
 ): Promise<RedwoodUser | null> => {
   if (!decoded) {

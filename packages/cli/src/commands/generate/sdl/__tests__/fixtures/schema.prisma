@@ -38,7 +38,7 @@ model UserProfile {
 
 /// A shoe worn by a user.
 model Shoe {
-  /// The underlaying ID
+  /// The underlying ID
   id    Int   @id @default(autoincrement())
   /// Shoe color
   color Color
@@ -46,7 +46,7 @@ model Shoe {
 
 /// A photograph taken by a user.
 model Photo {
-  /// The underlaying ID
+  /// The underlying ID
   id       Int    @id @default(autoincrement())
   /// The name of the Photo
   name     String

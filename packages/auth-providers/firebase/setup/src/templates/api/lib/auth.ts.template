@@ -2,7 +2,7 @@ import admin from 'firebase-admin'
 
 import { AuthenticationError } from '@redwoodjs/graphql-server'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const adminApp = admin.initializeApp({
   projectId: process.env.FIREBASE_PROJECT_ID,
 })
@@ -25,9 +25,9 @@ const adminApp = admin.initializeApp({
  */
 export const getCurrentUser = async (
   decoded,
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   { token, type },
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   { event, context }
 ) => {
   return decoded

@@ -2,6 +2,7 @@
 
 import { fork } from 'child_process'
 import type { ChildProcess } from 'child_process'
+import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
@@ -12,9 +13,8 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
-import { getConfig } from '@redwoodjs/internal/dist/config'
-import { getPaths, ensurePosixPath } from '@redwoodjs/internal/dist/paths'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
+import { getPaths, ensurePosixPath, getConfig } from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
   .option('debug-port', {
@@ -75,6 +75,27 @@ const rebuildApiServer = () => {
     const forkOpts = {
       execArgv: process.execArgv,
     }
+
+    // OpenTelemetry SDK Setup
+    if (getConfig().experimental.opentelemetry.enabled) {
+      const opentelemetrySDKScriptPath =
+        getConfig().experimental.opentelemetry.apiSdk
+      if (opentelemetrySDKScriptPath) {
+        console.log(
+          `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPath}`
+        )
+        if (fs.existsSync(opentelemetrySDKScriptPath)) {
+          forkOpts.execArgv = forkOpts.execArgv.concat([
+            `--require=${opentelemetrySDKScriptPath}`,
+          ])
+        } else {
+          console.error(
+            `OpenTelemetry setup file does not exist at ${opentelemetrySDKScriptPath}`
+          )
+        }
+      }
+    }
+
     const debugPort = argv['debug-port']
     if (debugPort) {
       forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])

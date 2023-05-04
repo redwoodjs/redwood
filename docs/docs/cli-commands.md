@@ -399,6 +399,29 @@ You can pass any flags to the command and use them within your script:
 
 See [this how to](how-to/background-worker.md) for an example of using exec to run a background worker.
 
+## experimental
+
+Set up and run experimental features.
+
+Some caveats:
+- these features do not follow SemVer (may be breaking changes in minor and patch releases)
+- these features may be deprecated or removed (anytime)
+- your feedback is wanted and necessary!
+
+For more information, including details about specific features, see this Redwood Forum category:
+[Experimental Features](https://community.redwoodjs.com/c/experimental-features/25)
+
+**Available Experimental Features**
+View all that can be _set up_:
+```
+yarn redwood experimental setup --help
+```
+
+View all that can be _run_:
+```
+yarn redwood experimental --help
+```
+
 ## generate (alias g)
 
 Save time by generating boilerplate code.
@@ -2136,7 +2159,7 @@ A canary release is published to npm every time a PR is merged to the `main` bra
 | Option          | Description                                                                                                                                                                                                        |
 | :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--dry-run, -d` | Check for outdated packages without upgrading                                                                                                                                                                      |
-| `--tag, -t`     | Choices are "canary", "rc", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary" and "rc", which will force upgrade packages to the most recent release of the specified tag. |
+| `--tag, -t`     | Choices are "rc", "canary", "latest", "next", "experimental", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary", "rc", "next", and "experimental". And "canary" releases include breaking changes often requiring codemods if upgrading a project. |
 
 **Example**
 

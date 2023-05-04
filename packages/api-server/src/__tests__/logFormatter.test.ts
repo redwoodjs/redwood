@@ -4,63 +4,63 @@ const logFormatter = LogFormatter()
 
 describe('LogFormatter', () => {
   describe('Formats log levels as emoji', () => {
-    test('Formats Trace level', () => {
+    it('Formats Trace level', () => {
       expect(logFormatter({ level: 10 })).toMatch('🧵')
     })
 
-    test('Formats Debug level', () => {
+    it('Formats Debug level', () => {
       expect(logFormatter({ level: 20 })).toMatch('🐛')
     })
 
-    test('Formats Info level', () => {
+    it('Formats Info level', () => {
       expect(logFormatter({ level: 30 })).toMatch('🌲')
     })
 
-    test('Formats Warn level', () => {
+    it('Formats Warn level', () => {
       expect(logFormatter({ level: 40 })).toMatch('🚦')
     })
 
-    test('Formats Error level', () => {
+    it('Formats Error level', () => {
       expect(logFormatter({ level: 50 })).toMatch('🚨')
     })
   })
 
   describe('Formats log messages', () => {
-    test('Formats newline-delimited json data with a message', () => {
+    it('Formats newline-delimited json data with a message', () => {
       expect(
         logFormatter({ level: 10, message: 'Message in a bottle' })
       ).toMatch('Message in a bottle')
     })
 
-    test('Formats newline-delimited json data with a msg', () => {
+    it('Formats newline-delimited json data with a msg', () => {
       expect(logFormatter({ level: 10, msg: 'Message in a bottle' })).toMatch(
         'Message in a bottle'
       )
     })
 
-    test('Formats a text message', () => {
+    it('Formats a text message', () => {
       expect(logFormatter('Handles text data')).toMatch('Handles text data')
     })
 
-    test('Formats Get Method and Status Code', () => {
+    it('Formats Get Method and Status Code', () => {
       const logData = { level: 10, method: 'GET', statusCode: 200 }
       expect(logFormatter(logData)).toMatch('GET')
       expect(logFormatter(logData)).toMatch('200')
     })
 
-    test('Formats Post Method and Status Code', () => {
+    it('Formats Post Method and Status Code', () => {
       const logData = { level: 10, method: 'POST', statusCode: 200 }
       expect(logFormatter(logData)).toMatch('POST')
       expect(logFormatter(logData)).toMatch('200')
     })
 
-    test('Should not format Status Code without a Method', () => {
+    it('Should not format Status Code without a Method', () => {
       expect(logFormatter({ level: 10, statusCode: 200 })).not.toMatch('200')
     })
   })
 
   describe('Formats GraphQL injected log data from useRedwoodLogger plugin', () => {
-    test('Handles query', () => {
+    it('Handles query', () => {
       expect(
         logFormatter({
           level: 10,
@@ -71,13 +71,13 @@ describe('LogFormatter', () => {
       ).toMatch('"id": 1')
     })
 
-    test('Handles operation name', () => {
+    it('Handles operation name', () => {
       expect(
         logFormatter({ level: 10, operationName: 'GET_BLOG_POST_BY_ID' })
       ).toMatch('GET_BLOG_POST_BY_ID')
     })
 
-    test('Handles GraphQL data', () => {
+    it('Handles GraphQL data', () => {
       expect(
         logFormatter({
           level: 10,
@@ -86,7 +86,7 @@ describe('LogFormatter', () => {
       ).toMatch('My Blog Post')
     })
 
-    test('Handles browser user agent', () => {
+    it('Handles browser user agent', () => {
       const userAgent =
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15'
       expect(
@@ -98,19 +98,8 @@ describe('LogFormatter', () => {
     })
   })
 
-  describe('Unknown log data', () => {
-    test('Should not include an unknown log data attribute', () => {
-      expect(
-        logFormatter({
-          level: 10,
-          unknown: 'I should not see this',
-        })
-      ).not.toMatch('I should not see this')
-    })
-  })
-
   describe('Custom log data', () => {
-    test('Should include the custom log attribute text', () => {
+    it('Should include the custom log attribute text', () => {
       expect(
         logFormatter({
           level: 10,
@@ -119,7 +108,7 @@ describe('LogFormatter', () => {
       ).toMatch('I should see this')
     })
 
-    test('Should include the custom log attribute info a custom emoji and label', () => {
+    it('Should include the custom log attribute info a custom emoji and label', () => {
       expect(
         logFormatter({
           level: 10,
@@ -128,7 +117,7 @@ describe('LogFormatter', () => {
       ).toMatch('🗒 Custom')
     })
 
-    test('Should include the custom log attribute info with nested text message', () => {
+    it('Should include the custom log attribute info with nested text message', () => {
       expect(
         logFormatter({
           level: 10,
@@ -140,7 +129,7 @@ describe('LogFormatter', () => {
     })
   })
 
-  test('Should include the custom log attribute info with a number attribute', () => {
+  it('Should include the custom log attribute info with a number attribute', () => {
     expect(
       logFormatter({
         level: 10,
@@ -152,7 +141,7 @@ describe('LogFormatter', () => {
     ).toMatch('100')
   })
 
-  test('Should include the custom log attribute info with a nested object attribute', () => {
+  it('Should include the custom log attribute info with a nested object attribute', () => {
     expect(
       logFormatter({
         level: 10,
@@ -164,7 +153,7 @@ describe('LogFormatter', () => {
     ).toMatch('"foo": "bar"')
   })
 
-  test('Should include the custom log attribute info with a nested object attribute', () => {
+  it('Should include the custom log attribute info with a nested object attribute', () => {
     expect(
       logFormatter({
         level: 10,
@@ -176,7 +165,7 @@ describe('LogFormatter', () => {
     ).toMatch('"foo": "bar"')
   })
 
-  test('Should format error stack traces', () => {
+  it('Should format error stack traces', () => {
     expect(
       logFormatter({
         level: 50,
@@ -189,7 +178,7 @@ describe('LogFormatter', () => {
     ).toMatch(/at some line number/)
   })
 
-  test('Should format error and include the error type', () => {
+  it('Should format error and include the error type', () => {
     expect(
       logFormatter({
         level: 50,
@@ -201,5 +190,73 @@ describe('LogFormatter', () => {
         },
       })
     ).toMatch(/GraphQL Error Info/)
+  })
+
+  describe('When there are additional options', () => {
+    it('Should format and include additional options without custom tag', () => {
+      expect(
+        logFormatter({
+          level: 10,
+          apiVersion: '4.2.1',
+          environment: 'staging',
+        })
+      ).toMatch('"apiVersion": "4.2.1"')
+
+      expect(
+        logFormatter({
+          level: 10,
+          apiVersion: '4.2.1',
+          environment: 'staging',
+        })
+      ).toMatch('"environment": "staging"')
+    })
+
+    it('Should format and include additional nested options without custom tag', () => {
+      expect(
+        logFormatter({
+          level: 10,
+          deploy: {
+            environment: 'staging',
+            version: '4.2.1',
+          },
+        })
+      ).toMatch('"deploy"')
+
+      expect(
+        logFormatter({
+          level: 10,
+          deploy: {
+            environment: 'staging',
+            version: '4.2.1',
+          },
+        })
+      ).toMatch('"environment": "staging"')
+
+      logFormatter({
+        level: 10,
+        deploy: {
+          environment: 'staging',
+          version: '4.2.1',
+        },
+      }) // ?
+
+      expect(
+        logFormatter({
+          level: 10,
+          deploy: {
+            environment: 'staging',
+            version: '4.2.1',
+          },
+        })
+      ).toMatch('"version": "4.2.1"')
+    })
+  })
+
+  it('Should not have any undefined ns, name, or message', () => {
+    expect(
+      logFormatter({
+        level: 10,
+      })
+    ).not.toContain('undefined')
   })
 })

@@ -47,4 +47,9 @@ export interface AuthImplementation<
    * ```
    */
   getUserMetadata(): Promise<TUser | null>
+
+  /**
+   * Set "loading" to true while the auth provider is reauthenticating.
+   */
+  loadWhileReauthenticating?: boolean
 }

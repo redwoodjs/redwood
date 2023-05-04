@@ -13,10 +13,12 @@ const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
 const {
-  getConfig,
-  getPaths,
   getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal')
+} = require('@redwoodjs/internal/dist/build/babel/web')
+const {
+  ChunkReferencesPlugin,
+} = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
+const { getConfig, getPaths } = require('@redwoodjs/project-config')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -233,11 +235,6 @@ module.exports = (webpackEnv) => {
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
-        templateParameters: {
-          prerenderPlaceholder: isEnvProduction
-            ? '<server-markup></server-markup>'
-            : '<!-- Prerender placeholder -->',
-        },
         scriptLoading: 'defer',
         inject: true,
         chunks: 'all',
@@ -269,6 +266,7 @@ module.exports = (webpackEnv) => {
         new WebpackManifestPlugin({
           fileName: 'build-manifest.json',
         }),
+      isEnvProduction && new ChunkReferencesPlugin(),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {

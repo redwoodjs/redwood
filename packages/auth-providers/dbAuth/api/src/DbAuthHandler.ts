@@ -1,15 +1,15 @@
 import type { PrismaClient } from '@prisma/client'
 import type {
-  GenerateRegistrationOptionsOpts,
   GenerateAuthenticationOptionsOpts,
-  VerifyRegistrationResponseOpts,
-  VerifyAuthenticationResponseOpts,
-  VerifiedRegistrationResponse,
+  GenerateRegistrationOptionsOpts,
   VerifiedAuthenticationResponse,
+  VerifiedRegistrationResponse,
+  VerifyAuthenticationResponseOpts,
+  VerifyRegistrationResponseOpts,
 } from '@simplewebauthn/server'
 import type {
-  AuthenticationCredentialJSON,
-  RegistrationCredentialJSON,
+  AuthenticationResponseJSON,
+  RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types'
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import base64url from 'base64url'
@@ -31,6 +31,7 @@ import {
   extractCookie,
   getSession,
   hashPassword,
+  hashToken,
   webAuthnSession,
 } from './shared'
 
@@ -67,6 +68,11 @@ interface SignupFlowOptions {
     usernameTaken?: string
     flowNotEnabled?: string
   }
+
+  /**
+   * Allows the user to define if the UserCheck for their selected db provider should use case insensitive
+   */
+  usernameMatch?: string
 }
 
 interface ForgotPasswordFlowOptions<TUser = Record<string | number, any>> {
@@ -234,8 +240,8 @@ export type AuthMethodNames =
   | 'webAuthnAuthOptions'
   | 'webAuthnAuthenticate'
 
-type Params = AuthenticationCredentialJSON &
-  RegistrationCredentialJSON & {
+type Params = AuthenticationResponseJSON &
+  RegistrationResponseJSON & {
     username?: string
     password?: string
     method: AuthMethodNames
@@ -486,6 +492,9 @@ export class DbAuthHandler<
       const buffer = Buffer.from(token)
       token = buffer.toString('base64').replace('=', '').substring(0, 16)
 
+      // Store the token hash in the database so we can verify it later
+      const tokenHash = hashToken(token)
+
       try {
         // set token and expires time
         user = await this.dbAccessor.update({
@@ -493,7 +502,7 @@ export class DbAuthHandler<
             [this.options.authFields.id]: user[this.options.authFields.id],
           },
           data: {
-            [this.options.authFields.resetToken]: token,
+            [this.options.authFields.resetToken]: tokenHash,
             [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
           },
         })
@@ -501,6 +510,9 @@ export class DbAuthHandler<
         throw new DbAuthError.GenericError()
       }
 
+      // Temporarily set the token on the user back to the raw token so it's
+      // available to the handler.
+      user.resetToken = token
       // call user-defined handler in their functions/auth.js
       const response = await (
         this.options.forgotPassword as ForgotPasswordFlowOptions
@@ -722,7 +734,7 @@ export class DbAuthHandler<
     let verification: VerifiedAuthenticationResponse
     try {
       const opts: VerifyAuthenticationResponseOpts = {
-        credential: this.params,
+        response: this.params,
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: webAuthnOptions.origin,
         expectedRPID: webAuthnOptions.domain,
@@ -899,7 +911,7 @@ export class DbAuthHandler<
     let verification: VerifiedRegistrationResponse
     try {
       const options: VerifyRegistrationResponseOpts = {
-        credential: this.params,
+        response: this.params,
         expectedChallenge: user[this.options.authFields.challenge as string],
         expectedOrigin: this.options.webAuthn.origin,
         expectedRPID: this.options.webAuthn.domain,
@@ -915,7 +927,7 @@ export class DbAuthHandler<
 
     if (verified && registrationInfo) {
       const { credentialPublicKey, credentialID, counter } = registrationInfo
-      plainCredentialId = base64url.encode(credentialID)
+      plainCredentialId = base64url.encode(Buffer.from(credentialID))
 
       const existingDevice = await this.dbCredentialAccessor.findFirst({
         where: {
@@ -931,7 +943,7 @@ export class DbAuthHandler<
             [this.options.webAuthn.credentialFields.userId]:
               user[this.options.authFields.id],
             [this.options.webAuthn.credentialFields.publicKey]:
-              credentialPublicKey,
+              Buffer.from(credentialPublicKey),
             [this.options.webAuthn.credentialFields.transports]: this.params
               .transports
               ? JSON.stringify(this.params.transports)
@@ -1145,9 +1157,11 @@ export class DbAuthHandler<
         (this.options.forgotPassword as ForgotPasswordFlowOptions).expires
     )
 
+    const tokenHash = hashToken(token)
+
     const user = await this.dbAccessor.findFirst({
       where: {
-        [this.options.authFields.resetToken]: token,
+        [this.options.authFields.resetToken]: tokenHash,
       },
     })
 
@@ -1282,8 +1296,22 @@ export class DbAuthHandler<
       this._validateField('username', username) &&
       this._validateField('password', password)
     ) {
-      const user = await this.dbAccessor.findUnique({
-        where: { [this.options.authFields.username]: username },
+      // Each db provider has it owns rules for case insensitive comparison.
+      // We are checking if you have defined one for your db choice here
+      // https://www.prisma.io/docs/concepts/components/prisma-client/case-sensitivity
+      const usernameMatchFlowOption = (this.options.signup as SignupFlowOptions)
+        ?.usernameMatch
+      const findUniqueUserMatchCriteriaOptions = !usernameMatchFlowOption
+        ? { [this.options.authFields.username]: username }
+        : {
+            [this.options.authFields.username]: {
+              equals: username,
+              mode: usernameMatchFlowOption,
+            },
+          }
+
+      const user = await this.dbAccessor.findFirst({
+        where: findUniqueUserMatchCriteriaOptions,
       })
       if (user) {
         throw new DbAuthError.DuplicateUsernameError(
@@ -1324,9 +1352,9 @@ export class DbAuthHandler<
   }
 
   // checks that a single field meets validation requirements and
-  // currently checks for presense only
+  // currently checks for presence only
   _validateField(name: string, value: string | undefined): value is string {
-    // check for presense
+    // check for presence
     if (!value || value.trim() === '') {
       throw new DbAuthError.FieldRequiredError(
         name,

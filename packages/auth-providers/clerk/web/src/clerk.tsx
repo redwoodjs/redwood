@@ -11,18 +11,27 @@ import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 
 type Clerk = ClerkClient | undefined | null
 
-export function createAuth(customProviderHooks?: {
-  useCurrentUser?: () => Promise<CurrentUser>
-  useHasRole?: (
-    currentUser: CurrentUser | null
-  ) => (rolesToCheck: string | string[]) => boolean
-}) {
-  const authImplementation = createAuthImplementation()
+type AuthImplementationOptions = {
+  defaultGetTokenOptions?: GetTokenOptions
+}
+
+export function createAuth(
+  customProviderHooks?: {
+    useCurrentUser?: () => Promise<CurrentUser>
+    useHasRole?: (
+      currentUser: CurrentUser | null
+    ) => (rolesToCheck: string | string[]) => boolean
+  },
+  authImplementationOptions?: AuthImplementationOptions
+) {
+  const authImplementation = createAuthImplementation(authImplementationOptions)
 
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
-function createAuthImplementation() {
+function createAuthImplementation({
+  defaultGetTokenOptions = {},
+}: AuthImplementationOptions = {}) {
   return {
     type: 'clerk',
     // Using a getter here to make sure we're always returning a fresh value
@@ -53,7 +62,10 @@ function createAuthImplementation() {
       let token
 
       try {
-        token = await clerk?.session?.getToken(options)
+        token = await clerk?.session?.getToken({
+          ...defaultGetTokenOptions,
+          ...options,
+        })
       } catch {
         token = null
       }
@@ -67,5 +79,6 @@ function createAuthImplementation() {
     clientHasLoaded: () => {
       return (window as any).Clerk !== undefined
     },
+    loadWhileReauthenticating: true,
   }
 }
