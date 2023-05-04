@@ -28,12 +28,12 @@ if (hasCRWA_OkLabel) {
     )
   } else {
     // If it doesn't, does it need to be rebuilt? If not, no problem. Otherwise, throw.
-    const shouldRebuildJSTemplate = changedFiles.some(
+    const shouldRebuildJS_Template = changedFiles.some(
       (file) =>
         file.startsWith('packages/create-redwood-app/templates/ts')
     )
 
-    if (!shouldRebuildJSTemplate) {
+    if (!shouldRebuildJS_Template) {
       console.log(['', "The create redwood app JS template doesn't need to be rebuilt"].join('\n'))
     } else {
       console.log(
