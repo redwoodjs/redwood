@@ -121,7 +121,7 @@ export const formatMessage = (logData: any) => {
 }
 
 export const formatMethod = (method: string) => {
-  return chalk.white(method)
+  return method && chalk.white(method)
 }
 
 export const formatRequestId = (requestId: string) => {
@@ -129,14 +129,18 @@ export const formatRequestId = (requestId: string) => {
 }
 
 export const formatNs = (ns: string) => {
-  return chalk.cyan(ns)
+  return ns && chalk.cyan(ns)
 }
 
 export const formatName = (name: string) => {
-  return chalk.blue(name)
+  return name && chalk.blue(name)
 }
 
 export const formatMessageName = (message: string) => {
+  if (message === undefined) {
+    return ''
+  }
+
   if (message === 'request') {
     return '<--'
   }
