@@ -4885,9 +4885,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.8":
-  version: 6.2.8
-  resolution: "@npmcli/arborist@npm:6.2.8"
+"@npmcli/arborist@npm:6.2.9":
+  version: 6.2.9
+  resolution: "@npmcli/arborist@npm:6.2.9"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
@@ -4905,7 +4905,7 @@ __metadata:
     hosted-git-info: ^6.1.1
     json-parse-even-better-errors: ^3.0.0
     json-stringify-nice: ^1.1.4
-    minimatch: ^7.4.2
+    minimatch: ^9.0.0
     nopt: ^7.0.0
     npm-install-checks: ^6.0.0
     npm-package-arg: ^10.1.0
@@ -4924,7 +4924,7 @@ __metadata:
     walk-up-path: ^3.0.1
   bin:
     arborist: bin/index.js
-  checksum: 5703eeca35e2a9f658b91f5e37fe987800deb883eb188eeb71736011e945f78f6ae4b5abac9487c9769f40645cd9e4f12554c2fc443008bc6996d0d75b96bd24
+  checksum: b5f6bfcd62be19f3fb9449bf357a7bccf3f49de2dab3e97f6316f2d368fbd28037eb298841c1d987a793ba1a5403d206a6f916966009628939f084cae9656c5f
   languageName: node
   linkType: hard
 
@@ -23522,7 +23522,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^7.4.1, minimatch@npm:^7.4.2":
+"minimatch@npm:^7.4.1":
   version: 7.4.3
   resolution: "minimatch@npm:7.4.3"
   dependencies:
@@ -28303,7 +28303,7 @@ __metadata:
     "@babel/preset-typescript": 7.21.5
     "@babel/runtime-corejs3": 7.21.5
     "@faker-js/faker": 7.6.0
-    "@npmcli/arborist": 6.2.8
+    "@npmcli/arborist": 6.2.9
     "@nrwl/nx-cloud": 16.0.5
     "@playwright/test": 1.33.0
     "@replayio/playwright": 0.3.28
