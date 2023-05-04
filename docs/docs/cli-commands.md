@@ -1957,7 +1957,7 @@ export const getCurrentUser = async (...) => {
 }
 ```
 
-Below we set the current user on the web-side from within a [layout](#generate-layout).
+Below we set the current user on the web-side from within a [layout](#generate-layout). Note that the `useEffect` dependency array may vary depending on where you place `Sentry.setUser` in your own application.
 
 ```ts title="web/src/layouts/SentryLayout/SentryLayout.{jsx|tsx}"
 import { useEffect } from 'react'
