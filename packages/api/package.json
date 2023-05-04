@@ -38,7 +38,7 @@
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.0",
     "pascalcase": "1.0.0",
-    "pino": "8.12.0",
+    "pino": "8.12.1",
     "title-case": "3.0.3"
   },
   "devDependencies": {
