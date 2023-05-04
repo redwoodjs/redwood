@@ -6933,7 +6933,7 @@ __metadata:
     core-js: 3.30.1
     execa: 5.1.1
     jest: 29.5.0
-    listr2: 6.4.1
+    listr2: 6.4.2
     lodash.memoize: 4.1.2
     pascalcase: 1.0.0
     prettier: 2.8.8
@@ -6980,7 +6980,7 @@ __metadata:
     humanize-string: 2.1.0
     jest: 29.5.0
     latest-version: 5.1.0
-    listr2: 6.4.1
+    listr2: 6.4.2
     lodash: 4.17.21
     param-case: 3.0.4
     pascalcase: 1.0.0
@@ -16900,10 +16900,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "eventemitter3@npm:5.0.0"
-  checksum: 5ed89fec1c52b56576d765ef0c14bc157599c4cb936d6df97c1b17e096bb7d70647569d4ecf5f0a36016dc304ac1e36c7c7c85c66d8ae64c044a1e4e7da4ed12
+"eventemitter3@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "eventemitter3@npm:5.0.1"
+  checksum: 4ba5c00c506e6c786b4d6262cfbce90ddc14c10d4667e5c83ae993c9de88aa856033994dd2b35b83e8dc1170e224e66a319fa80adc4c32adcd2379bbc75da814
   languageName: node
   linkType: hard
 
@@ -22317,13 +22317,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"listr2@npm:6.4.1":
-  version: 6.4.1
-  resolution: "listr2@npm:6.4.1"
+"listr2@npm:6.4.2":
+  version: 6.4.2
+  resolution: "listr2@npm:6.4.2"
   dependencies:
     cli-truncate: ^3.1.0
     colorette: ^2.0.20
-    eventemitter3: ^5.0.0
+    eventemitter3: ^5.0.1
     log-update: ^5.0.1
     rfdc: ^1.3.0
     wrap-ansi: ^8.1.0
@@ -22332,7 +22332,7 @@ __metadata:
   peerDependenciesMeta:
     enquirer:
       optional: true
-  checksum: cd067fed91c9a07e51ff62c061c5c652edee63a60b06bcfbbc9a96eb5eeaa395dbeb70e9f72ac222da8313e586e0c9e6cca335f3161df0c10a774dac2b312a2c
+  checksum: 7c732f9860c13b3642a9c058b46092c171a33b3d765c0dbba7b2e09c3c02cf0857eba1557b93c28b8b60e10c3dc5bc2849c70a99b7cc012bf32da3f33510926d
   languageName: node
   linkType: hard
 
@@ -28334,7 +28334,7 @@ __metadata:
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.14.0
     lerna: 6.6.1
-    listr2: 6.4.1
+    listr2: 6.4.2
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
     msw: 1.2.1
