@@ -80,4 +80,55 @@ async function upgradeReactDepsTo18() {
   })
 }
 
-export { checkAndTransformReactRoot, upgradeReactDepsTo18 }
+async function checkAndUpdateCustomWebIndex(taskContext: TaskInnerAPI) {
+  // First check if the custom web index exists. If it doesn't, this is a no-op.
+  const redwoodProjectPaths = getRWPaths()
+
+  const bundlerToCustomWebIndex = {
+    vite: path.join(redwoodProjectPaths.web.src, 'entry-client.jsx'),
+    webpack: path.join(redwoodProjectPaths.web.src, 'index.js'),
+  }
+
+  const customWebIndexFound = Object.entries(bundlerToCustomWebIndex).find(
+    ([, filepath]) => fs.existsSync(filepath)
+  )
+
+  if (!customWebIndexFound) {
+    return
+  }
+
+  fs.writeFileSync(customWebIndexFound[1], customWebIndexTemplate)
+
+  taskContext.setWarning(
+    [
+      `We updated the custom web index for you at ${customWebIndexFound[1]}.`,
+      "  If you made manual changes to this file, you'll have to copy them over manually from the diff.",
+    ].join('\n')
+  )
+}
+
+const customWebIndexTemplate = `\
+import { hydrateRoot, createRoot } from 'react-dom/client'
+
+import App from './App'
+/**
+ * When \`#redwood-app\` isn't empty then it's very likely that you're using
+ * prerendering. So React attaches event listeners to the existing markup
+ * rather than replacing it.
+ * https://reactjs.org/docs/react-dom-client.html#hydrateroot
+ */
+const redwoodAppElement = document.getElementById('redwood-app')
+
+if (redwoodAppElement.children?.length > 0) {
+  hydrateRoot(redwoodAppElement, <App />)
+} else {
+  const root = createRoot(redwoodAppElement)
+  root.render(<App />)
+}
+`
+
+export {
+  checkAndTransformReactRoot,
+  upgradeReactDepsTo18,
+  checkAndUpdateCustomWebIndex,
+}

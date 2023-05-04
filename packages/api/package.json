@@ -38,13 +38,13 @@
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.0",
     "pascalcase": "1.0.0",
-    "pino": "8.11.0",
+    "pino": "8.12.1",
     "title-case": "3.0.3"
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.5",
-    "@types/aws-lambda": "8.10.114",
+    "@babel/core": "7.21.8",
+    "@types/aws-lambda": "8.10.115",
     "@types/jsonwebtoken": "9.0.2",
     "@types/memjs": "1",
     "@types/pascalcase": "1.0.1",
