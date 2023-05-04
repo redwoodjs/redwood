@@ -103,5 +103,6 @@ function getDirectoryStructure(dir) {
       .map((file) =>
         file.path.replace(dir, '').split(path.sep).join(path.posix.sep)
       )
+      .sort()
   )
 }
