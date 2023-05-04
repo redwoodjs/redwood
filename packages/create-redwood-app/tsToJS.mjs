@@ -92,6 +92,8 @@ for (const tsConfigFilePath of tsConfigFilePaths) {
   fs.renameSync(tsConfigFilePath, jsConfigFilePath)
 
   const jsConfig = fs.readJSONSync(jsConfigFilePath)
+
+  // This property has no meaning in JS projects.
   delete jsConfig.compilerOptions.allowJs
 
   fs.writeJSONSync(jsConfigFilePath, jsConfig, { spaces: 2 })
