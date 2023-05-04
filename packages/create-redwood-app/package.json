@@ -15,7 +15,8 @@
   "scripts": {
     "build": "yarn node ./build.mjs",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build"
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "yarn run jest tests"
   },
   "dependencies": {
     "@opentelemetry/api": "1.4.1",
@@ -37,7 +38,9 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "esbuild": "0.17.18"
+    "esbuild": "0.17.18",
+    "jest": "29.5.0",
+    "klaw-sync": "6.0.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
