@@ -66,9 +66,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.13":
-  version: 3.7.13
-  resolution: "@apollo/client@npm:3.7.13"
+"@apollo/client@npm:3.7.14":
+  version: 3.7.14
+  resolution: "@apollo/client@npm:3.7.14"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
@@ -98,7 +98,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: a6ff44b91356f21edd9fdf08be4fb34f4bf87df9f6bdf64a66e101dbbd6ba45f9d40ff1c58fe760726233fa278b5c438ac922673402e372d68bb547d305e6ee5
+  checksum: fb5169b68f60413f790cdc6c5d31adf23dfdc0ca5b1a0b21cdf2df28cea5847a65ad4bd421be1e26ff7a1e0ea205202deab1699e1b0b83d13d1d9a339e352bee
   languageName: node
   linkType: hard
 
@@ -7550,7 +7550,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.7.13
+    "@apollo/client": 3.7.14
     "@babel/cli": 7.21.5
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
