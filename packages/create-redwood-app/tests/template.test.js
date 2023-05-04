@@ -1,12 +1,12 @@
 import path from 'path'
 
-const klawSync = require('klaw-sync')
+import klawSync from 'klaw-sync'
 
 const TS_TEMPLATE_DIR = path.join(__dirname, '../templates', 'ts')
 
-describe('TS template', () => {
+describe('template', () => {
   it('files should not have changed unintentionally', () => {
-    expect(getFileStructure(TS_TEMPLATE_DIR)).toMatchInlineSnapshot(`
+    expect(getDirectoryStructure(TS_TEMPLATE_DIR)).toMatchInlineSnapshot(`
       [
         "/.editorconfig",
         "/.env",
@@ -19,7 +19,7 @@ describe('TS template', () => {
         "/.vscode/settings.json",
         "/.yarn",
         "/.yarn/releases",
-        "/.yarn/releases/yarn-3.5.0.cjs",
+        "/.yarn/releases/yarn-3.5.1.cjs",
         "/.yarnrc.yml",
         "/README.md",
         "/api",
@@ -88,7 +88,7 @@ const JS_TEMPLATE_DIR = path.join(__dirname, '../templates', 'js')
 
 describe('JS template', () => {
   it('files should not have changed unintentionally', () => {
-    expect(getFileStructure(JS_TEMPLATE_DIR)).toMatchInlineSnapshot(`
+    expect(getDirectoryStructure(JS_TEMPLATE_DIR)).toMatchInlineSnapshot(`
       [
         "/.editorconfig",
         "/.env",
@@ -101,7 +101,6 @@ describe('JS template', () => {
         "/.vscode/settings.json",
         "/.yarn",
         "/.yarn/releases",
-        "/.yarn/releases/yarn-3.5.0.cjs",
         "/.yarn/releases/yarn-3.5.1.cjs",
         "/.yarnrc.yml",
         "/README.md",
@@ -139,7 +138,7 @@ describe('JS template', () => {
         "/scripts",
         "/scripts/.keep",
         "/scripts/jsconfig.json",
-        "/scripts/seed.ts",
+        "/scripts/seed.js",
         "/web",
         "/web/jest.config.js",
         "/web/jsconfig.json",
@@ -171,10 +170,21 @@ describe('JS template', () => {
  * @param {string} dir
  * @returns string[]
  */
-function getFileStructure(dir) {
+function getDirectoryStructure(dir) {
   let fileStructure = klawSync(dir)
 
-  return (fileStructure = fileStructure.map((fileStructure) =>
-    fileStructure.path.replace(dir, '').split(path.sep).join(path.posix.sep)
-  ))
+  return (
+    fileStructure
+      // This filter handles an edge case in CI.
+      //
+      // We run `yarn lint` before `yarn test` in CI.
+      // Running `yarn lint` leads to a call to `getPaths` from `@redwoodjs/internal` which creates the `.redwood` directory.
+      // That directory and its contents aren't part of the template,
+      // but will be picked up by this test and lead to a false negative without this.
+      .filter((file) => !file.path.includes('.redwood'))
+      .map((file) =>
+        file.path.replace(dir, '').split(path.sep).join(path.posix.sep)
+      )
+      .sort()
+  )
 }
