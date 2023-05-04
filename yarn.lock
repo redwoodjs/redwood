@@ -5263,76 +5263,76 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nrwl/tao@npm:16.0.2"
+"@nrwl/tao@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nrwl/tao@npm:16.0.3"
   dependencies:
-    nx: 16.0.2
+    nx: 16.0.3
   bin:
     tao: index.js
-  checksum: 7a5256a3d07acd54ab27202d092eb51e91c9c59872243c06375e8905d4d73a2513423e8b65ee1c302491c985c983d6adeb8188056d8fb392e1692f46acabba86
+  checksum: 73671fd0fc402abf74435ae03adf976c1d45a630ee48946c07e11687a8ba999df233f63318adcf8ea0084c7f06aeaa008134f294dbe74072039d9bee105a2c3d
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-arm64@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-darwin-arm64@npm:16.0.2"
+"@nx/nx-darwin-arm64@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-darwin-arm64@npm:16.0.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-x64@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-darwin-x64@npm:16.0.2"
+"@nx/nx-darwin-x64@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-darwin-x64@npm:16.0.3"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm-gnueabihf@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.0.2"
+"@nx/nx-linux-arm-gnueabihf@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.0.3"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-gnu@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-linux-arm64-gnu@npm:16.0.2"
+"@nx/nx-linux-arm64-gnu@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-linux-arm64-gnu@npm:16.0.3"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-musl@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-linux-arm64-musl@npm:16.0.2"
+"@nx/nx-linux-arm64-musl@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-linux-arm64-musl@npm:16.0.3"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-gnu@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-linux-x64-gnu@npm:16.0.2"
+"@nx/nx-linux-x64-gnu@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-linux-x64-gnu@npm:16.0.3"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-musl@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-linux-x64-musl@npm:16.0.2"
+"@nx/nx-linux-x64-musl@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-linux-x64-musl@npm:16.0.3"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-arm64-msvc@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-win32-arm64-msvc@npm:16.0.2"
+"@nx/nx-win32-arm64-msvc@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-win32-arm64-msvc@npm:16.0.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-x64-msvc@npm:16.0.2":
-  version: 16.0.2
-  resolution: "@nx/nx-win32-x64-msvc@npm:16.0.2"
+"@nx/nx-win32-x64-msvc@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@nx/nx-win32-x64-msvc@npm:16.0.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -6395,7 +6395,7 @@ __metadata:
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.0.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
     "@types/split2": 4.2.0
@@ -6431,7 +6431,7 @@ __metadata:
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@prisma/client": 4.13.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     "@types/jsonwebtoken": 9.0.2
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
@@ -6443,7 +6443,7 @@ __metadata:
     jsonwebtoken: 9.0.0
     memjs: 1.3.1
     pascalcase: 1.0.0
-    pino: 8.12.0
+    pino: 8.12.1
     redis: 4.6.6
     split2: 4.2.0
     title-case: 3.0.3
@@ -6524,7 +6524,7 @@ __metadata:
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.30.1
     jest: 29.5.0
@@ -6578,7 +6578,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.5
     "@clerk/clerk-sdk-node": 4.8.6
     "@redwoodjs/api": 5.0.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     core-js: 3.30.1
     jest: 29.5.0
     typescript: 5.0.4
@@ -6704,7 +6704,7 @@ __metadata:
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     core-js: 3.30.1
     firebase-admin: 10.3.0
     jest: 29.5.0
@@ -6754,7 +6754,7 @@ __metadata:
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.30.1
     jest: 29.5.0
@@ -6805,7 +6805,7 @@ __metadata:
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@redwoodjs/api": 5.0.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.30.1
     jest: 29.5.0
@@ -6893,10 +6893,10 @@ __metadata:
     core-js: 3.30.1
     jest: 29.5.0
     react: 18.2.0
-    supertokens-auth-react: 0.31.5
+    supertokens-auth-react: 0.32.1
     typescript: 5.0.4
   peerDependencies:
-    supertokens-auth-react: 0.31.5
+    supertokens-auth-react: 0.32.1
   languageName: unknown
   linkType: soft
 
@@ -6933,7 +6933,7 @@ __metadata:
     core-js: 3.30.1
     execa: 5.1.1
     jest: 29.5.0
-    listr2: 6.4.1
+    listr2: 6.4.2
     lodash.memoize: 4.1.2
     pascalcase: 1.0.0
     prettier: 2.8.8
@@ -6980,7 +6980,7 @@ __metadata:
     humanize-string: 2.1.0
     jest: 29.5.0
     latest-version: 5.1.0
-    listr2: 6.4.1
+    listr2: 6.4.2
     lodash: 4.17.21
     param-case: 3.0.4
     pascalcase: 1.0.0
@@ -7410,7 +7410,7 @@ __metadata:
     "@fastify/url-data": 5.3.1
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/project-config": 5.0.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 9.0.2
     "@types/lodash.escape": 4.0.7
@@ -7489,7 +7489,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     "@types/babel-core": 6.25.7
     "@types/jest": 29.5.1
     "@types/node": 18.16.1
@@ -9192,10 +9192,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.114, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.114
-  resolution: "@types/aws-lambda@npm:8.10.114"
-  checksum: b82c9ba399a9d10514bd6578c4a05126ff71d5529e84c8ba970e3b533cc0ae866c1dc16f74534330d148776b5c7504533bd1543880d0f31c9e3647da207dabb1
+"@types/aws-lambda@npm:8.10.115, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.115
+  resolution: "@types/aws-lambda@npm:8.10.115"
+  checksum: 4e01363d9412cbfa1922b6de873ca85db683eb05ae5f618df01a4115e228d5e438b9054f28ba4051ae053116fe35514f8b777b284dbd8f8d7df7af3d811db2a1
   languageName: node
   linkType: hard
 
@@ -16902,10 +16902,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "eventemitter3@npm:5.0.0"
-  checksum: 5ed89fec1c52b56576d765ef0c14bc157599c4cb936d6df97c1b17e096bb7d70647569d4ecf5f0a36016dc304ac1e36c7c7c85c66d8ae64c044a1e4e7da4ed12
+"eventemitter3@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "eventemitter3@npm:5.0.1"
+  checksum: 4ba5c00c506e6c786b4d6262cfbce90ddc14c10d4667e5c83ae993c9de88aa856033994dd2b35b83e8dc1170e224e66a319fa80adc4c32adcd2379bbc75da814
   languageName: node
   linkType: hard
 
@@ -22328,13 +22328,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"listr2@npm:6.4.1":
-  version: 6.4.1
-  resolution: "listr2@npm:6.4.1"
+"listr2@npm:6.4.2":
+  version: 6.4.2
+  resolution: "listr2@npm:6.4.2"
   dependencies:
     cli-truncate: ^3.1.0
     colorette: ^2.0.20
-    eventemitter3: ^5.0.0
+    eventemitter3: ^5.0.1
     log-update: ^5.0.1
     rfdc: ^1.3.0
     wrap-ansi: ^8.1.0
@@ -22343,7 +22343,7 @@ __metadata:
   peerDependenciesMeta:
     enquirer:
       optional: true
-  checksum: cd067fed91c9a07e51ff62c061c5c652edee63a60b06bcfbbc9a96eb5eeaa395dbeb70e9f72ac222da8313e586e0c9e6cca335f3161df0c10a774dac2b312a2c
+  checksum: 7c732f9860c13b3642a9c058b46092c171a33b3d765c0dbba7b2e09c3c02cf0857eba1557b93c28b8b60e10c3dc5bc2849c70a99b7cc012bf32da3f33510926d
   languageName: node
   linkType: hard
 
@@ -24765,20 +24765,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:16.0.2":
-  version: 16.0.2
-  resolution: "nx@npm:16.0.2"
+"nx@npm:16.0.3":
+  version: 16.0.3
+  resolution: "nx@npm:16.0.3"
   dependencies:
-    "@nrwl/tao": 16.0.2
-    "@nx/nx-darwin-arm64": 16.0.2
-    "@nx/nx-darwin-x64": 16.0.2
-    "@nx/nx-linux-arm-gnueabihf": 16.0.2
-    "@nx/nx-linux-arm64-gnu": 16.0.2
-    "@nx/nx-linux-arm64-musl": 16.0.2
-    "@nx/nx-linux-x64-gnu": 16.0.2
-    "@nx/nx-linux-x64-musl": 16.0.2
-    "@nx/nx-win32-arm64-msvc": 16.0.2
-    "@nx/nx-win32-x64-msvc": 16.0.2
+    "@nrwl/tao": 16.0.3
+    "@nx/nx-darwin-arm64": 16.0.3
+    "@nx/nx-darwin-x64": 16.0.3
+    "@nx/nx-linux-arm-gnueabihf": 16.0.3
+    "@nx/nx-linux-arm64-gnu": 16.0.3
+    "@nx/nx-linux-arm64-musl": 16.0.3
+    "@nx/nx-linux-x64-gnu": 16.0.3
+    "@nx/nx-linux-x64-musl": 16.0.3
+    "@nx/nx-win32-arm64-msvc": 16.0.3
+    "@nx/nx-win32-x64-msvc": 16.0.3
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24841,7 +24841,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 9de70ad21043dcc5a92295b2ab593cc90fad21e30367afca66356f49f73b8c35dd1ba594e3e91135a0936b2ea14a61b8e71b35926edfb22404c3f840cea36396
+  checksum: 4758908730be4783fab368ace992b3d61c82977dee5be9779b291decf222de59cf31443ea27d241f0a25c80ae2306c1c231eb5ebd625728b7ad7f066493f7bc0
   languageName: node
   linkType: hard
 
@@ -25946,9 +25946,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:8.12.0, pino@npm:^8.5.0":
-  version: 8.12.0
-  resolution: "pino@npm:8.12.0"
+"pino@npm:8.12.1, pino@npm:^8.5.0":
+  version: 8.12.1
+  resolution: "pino@npm:8.12.1"
   dependencies:
     atomic-sleep: ^1.0.0
     fast-redact: ^3.1.1
@@ -25963,7 +25963,7 @@ __metadata:
     thread-stream: ^2.0.0
   bin:
     pino: bin.js
-  checksum: 7d468f84703a714c4999f56c8d2a4a425fba8ec47a0a349277d83d6ca1cb5917e250f58820e9e004730e5512c76cd20173154fb58ad91256a0180c6d2e599e37
+  checksum: dc44b471e38590552c1bba36a9344b36a84d65408563d47a07add1ae8cd1528ce81b3159d88b9837bd94d86a42f76a62de5a674082c71ece25cf47fc9e74b17e
   languageName: node
   linkType: hard
 
@@ -28345,14 +28345,14 @@ __metadata:
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.14.0
     lerna: 6.6.1
-    listr2: 6.4.1
+    listr2: 6.4.2
     lodash.template: 4.5.0
     make-dir-cli: 3.0.0
     msw: 1.2.1
     ncp: 2.0.0
     nodemon: 2.0.22
     npm-packlist: 7.0.4
-    nx: 16.0.2
+    nx: 16.0.3
     octokit: 2.0.14
     ora: 5.4.1
     prompts: 2.4.2
@@ -29971,9 +29971,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.31.5":
-  version: 0.31.5
-  resolution: "supertokens-auth-react@npm:0.31.5"
+"supertokens-auth-react@npm:0.32.1":
+  version: 0.32.1
+  resolution: "supertokens-auth-react@npm:0.32.1"
   dependencies:
     intl-tel-input: ^17.0.19
     prop-types: "*"
@@ -29982,7 +29982,7 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
     supertokens-web-js: ^0.5.0
-  checksum: 3d8929c041a26368c741622293549b1fd80f406696d8ecbf43fa058b60836a56d38d0df469bc0250a0b6324b3e2374c457306933fd0ab5092b8e02117b9f443f
+  checksum: 6c58389c5afddac1d3b9f04267963d113f9824370b1c618da0cb21d3162e8267b01ca827e65d6e43d359f5d8916beb9bdde556e2cdc4798e74f8101e9fb2fdc9
   languageName: node
   linkType: hard
 
