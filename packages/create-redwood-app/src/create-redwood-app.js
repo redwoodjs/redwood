@@ -79,13 +79,19 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
 
     if (
       foundNodeVersionIsLessThanRequired ||
-      foundNodeVersionIsLessThanRequired
+      foundYarnVersionIsLessThanRequired
     ) {
       const errorMessages = [
-        { type: 'node', ok: foundNodeVersionIsLessThanRequired },
-        { type: 'yarn', ok: foundYarnVersionIsLessThanRequired },
+        {
+          type: 'node',
+          failedCompatibilityCheck: foundNodeVersionIsLessThanRequired,
+        },
+        {
+          type: 'yarn',
+          failedCompatibilityCheck: foundYarnVersionIsLessThanRequired,
+        },
       ]
-        .filter(({ ok }) => !ok)
+        .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
         .map(
           ({ type }) =>
             `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
