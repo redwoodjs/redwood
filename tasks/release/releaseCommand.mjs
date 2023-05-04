@@ -6,7 +6,6 @@ import { cd, chalk, question, $ } from 'zx'
 
 import { handler as generateReleaseNotes } from './generateReleaseNotesCommand.mjs'
 import {
-  // getCurrentBranch,
   getLatestRelease,
   getMilestone,
   logSection,
@@ -26,16 +25,6 @@ export async function handler() {
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
   // ------------------------
-  // logSection("Making sure that we're on next\n")
-
-  // const currentBranch = await getCurrentBranch()
-
-  // if (currentBranch !== 'next') {
-  //   console.log('Start from the next branch')
-  //   process.exit(1)
-  // }
-
-  // ------------------------
   logSection('Asking for the semver\n')
 
   const { semver } = await prompts({
@@ -52,15 +41,9 @@ export async function handler() {
   const currentVersion = await getLatestRelease()
   console.log()
 
-  if (
-    !isYes(
-      await question(
-        `The latest release is ${chalk.magenta(currentVersion)}? [Y/n] > `
-      )
-    )
-  ) {
-    process.exit(1)
-  }
+  exitIfNo(
+    question(`The latest release is ${chalk.magenta(currentVersion)}? [Y/n] > `)
+  )
 
   // ------------------------
   logSection('Confirming the next release\n')
@@ -85,15 +68,9 @@ export async function handler() {
     }
   }
 
-  if (
-    !isYes(
-      await question(
-        `The next release is ${chalk.magenta(nextVersion)}? [Y/n] > `
-      )
-    )
-  ) {
-    process.exit(1)
-  }
+  exitIfNo(
+    question(`The next release is ${chalk.magenta(nextVersion)}? [Y/n] > `)
+  )
 
   let milestone = await getMilestone.call({ octokit }, nextVersion)
 
@@ -131,17 +108,13 @@ export async function handler() {
   }
 
   if (semver === 'patch') {
-    if (
-      !isYes(
-        await question(
-          `Did you update the milestones of the PRs you plan to include in the patch to ${chalk.magenta(
-            'next-release-patch'
-          )}? [Y/n] > `
-        )
+    exitIfNo(
+      question(
+        `Did you update the milestones of the PRs you plan to include in the patch to ${chalk.magenta(
+          'next-release-patch'
+        )}? [Y/n] > `
       )
-    ) {
-      process.exit(1)
-    }
+    )
   } else {
     const {
       search: { nodes: prs },
@@ -230,6 +203,10 @@ export async function handler() {
       break
   }
 }
+
+// ------------------------
+// Helpers
+// ------------------------
 
 /**
  * Take the output from `git describe --abbrev=0` (which is something like `'v0.42.1'`),
@@ -358,32 +335,25 @@ async function releaseMajorOrMinor({ semver, nextVersion }) {
     await $`git checkout ${releaseBranch}`
     console.log()
   } else {
-    if (
-      !isYes(
-        await question(
-          `Ok to checkout new branch ${chalk.magenta(
-            releaseBranch
-          )} from ${chalk.magenta(checkoutFromBranch)}? [Y/n] > `
-        )
+    exitIfNo(
+      question(
+        `Ok to checkout new branch ${chalk.magenta(
+          releaseBranch
+        )} from ${chalk.magenta(checkoutFromBranch)}? [Y/n] > `
       )
-    ) {
-      process.exit(1)
-    }
+    )
     console.log()
 
     await $`git checkout -b ${releaseBranch} ${checkoutFromBranch}`
     console.log()
   }
 
-  if (
-    !isYes(
-      await question(
-        `Ok to continue to publish, or do you want to stop here so that you can push this branch to GitHub to create an RC? [Y/n] > `
-      )
-    )
-  ) {
-    process.exit(0)
-  }
+  exitIfNo(
+    question(
+      `Ok to continue to publish, or do you want to stop here so that you can push this branch to GitHub to create an RC? [Y/n] > `
+    ),
+    { code: 0 }
+  )
   console.log()
 
   await updateCreateRedwoodAppTemplates()
@@ -482,17 +452,13 @@ async function releasePatch({ currentVersion, nextVersion }) {
     await $`git checkout ${releaseBranch}`
     console.log()
   } else {
-    if (
-      !isYes(
-        await question(
-          `Ok to checkout new branch ${chalk.magenta(
-            releaseBranch
-          )} from ${chalk.magenta(currentVersion)} tag? [Y/n] > `
-        )
+    exitIfNo(
+      question(
+        `Ok to checkout new branch ${chalk.magenta(
+          releaseBranch
+        )} from ${chalk.magenta(currentVersion)} tag? [Y/n] > `
       )
-    ) {
-      process.exit(1)
-    }
+    )
     console.log()
 
     await $`git checkout -b ${releaseBranch} ${currentVersion}`
@@ -502,17 +468,13 @@ async function releasePatch({ currentVersion, nextVersion }) {
   if (!(await branchExistsOnOrigin(releaseBranch))) {
     logSection('Pushing to redwoodjs/redwood\n')
 
-    if (
-      !isYes(
-        await question(
-          `Ok to push new branch ${chalk.magenta(
-            releaseBranch
-          )} to GitHub and open diff? [Y/n] > `
-        )
+    exitIfNo(
+      question(
+        `Ok to push new branch ${chalk.magenta(
+          releaseBranch
+        )} to GitHub and open diff? [Y/n] > `
       )
-    ) {
-      process.exit(1)
-    }
+    )
     console.log()
 
     await $`git push -u origin ${releaseBranch}`
@@ -521,9 +483,7 @@ async function releasePatch({ currentVersion, nextVersion }) {
     await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
     console.log()
 
-    if (!isYes(await question('Diff look ok? [Y/n] > '))) {
-      process.exit(1)
-    }
+    exitIfNo(question('Diff look ok? [Y/n] > '))
 
     // ------------------------
     logSection('Cherry picking PRs\n')
@@ -537,22 +497,16 @@ async function releasePatch({ currentVersion, nextVersion }) {
       ].join('\n')
     )
 
-    if (!isYes(await question(`Done cherry picking? [Y/n] > `))) {
-      process.exit(1)
-    }
+    exitIfNo(question(`Done cherry picking? [Y/n] > `))
     console.log()
 
-    if (
-      !isYes(
-        await question(
-          `Ok to push new branch ${chalk.magenta(
-            releaseBranch
-          )} to GitHub and open diff? [Y/n] > `
-        )
+    exitIfNo(
+      question(
+        `Ok to push new branch ${chalk.magenta(
+          releaseBranch
+        )} to GitHub and open diff? [Y/n] > `
       )
-    ) {
-      process.exit(1)
-    }
+    )
     console.log()
 
     await $`git push`
@@ -561,35 +515,28 @@ async function releasePatch({ currentVersion, nextVersion }) {
     await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
     console.log()
 
-    if (!isYes(await question(`Diff look ok? [Y/n] > `))) {
-      process.exit(1)
-    }
+    exitIfNo(question(`Diff look ok? [Y/n] > `))
   }
 
   await updateCreateRedwoodAppTemplates()
+
   await $`git push`
   console.log()
 
   await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
   console.log()
 
-  if (!isYes(await question(`Diff look ok? [Y/n] > `))) {
-    process.exit(1)
-  }
+  exitIfNo(question(`Diff look ok? [Y/n] > `))
 
   await cleanInstallUpdate(nextVersion)
   await confirmPackageVersions()
   await commitTagQA(nextVersion)
 
-  if (
-    !isYes(
-      await question(
-        `Everything passed local QA. Ok to push to GitHub and publish to NPM? [Y/n] > `
-      )
+  exitIfNo(
+    question(
+      `Everything passed local QA. Ok to push to GitHub and publish to NPM? [Y/n] > `
     )
-  ) {
-    process.exit(1)
-  }
+  )
   console.log()
 
   await $`git push`
@@ -736,7 +683,7 @@ async function updateCreateRedwoodAppTemplates() {
       await question('Ok to update create-redwood-app templates? [Y/n] > ')
     )
   ) {
-    process.exit(1)
+    return
   }
   console.log()
 
@@ -751,4 +698,10 @@ async function updateCreateRedwoodAppTemplates() {
   await $`git commit -am "chore: update create-redwood-app templates"`
 
   cd('../')
+}
+
+async function exitIfNo(question, { code } = { code: 1 }) {
+  if (!isYes(await question)) {
+    process.exit(code)
+  }
 }
