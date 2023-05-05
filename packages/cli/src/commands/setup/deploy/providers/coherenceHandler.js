@@ -164,7 +164,8 @@ web:
     command: ["yarn", "rw", "serve", "web"]
   dev:
     command: ["yarn", "rw", "dev", "web", "--fwd=\"--allowed-hosts all\""]
-  build: ["yarn", "rw", "build", "web", "--no-prerender"]
+  # TODO: add comment about prerender here
+  build: ["yarn", "rw", "build", "web"]
   local_packages: ["node_modules"]
 
   system:
