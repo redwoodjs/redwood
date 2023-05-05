@@ -1,6 +1,6 @@
 export const command = 'jobs-inngest-function <name>'
 
-export const description = 'Setup Inngest function flavorings'
+export const description = 'Setup Inngest function for job orchestration'
 
 export const builder = (yargs) => {
   yargs
@@ -36,7 +36,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  console.debug('inngestFunction.js handler() options:', options)
   const { handler } = await import('./inngestFunctionHandler')
   return handler(options)
 }

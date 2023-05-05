@@ -17,13 +17,15 @@ export const handler = async ({ force }) => {
       },
     },
     {
-      title: `Configuring Inngest plugin ...`,
       task: async () => {
         const pluginCommands = ['inngest-setup-redwoodjs', 'plugin']
+
         if (force) {
           pluginCommands.push('--force')
         }
-        await execa('yarn', ...pluginCommands, {
+
+        await execa('yarn', [...pluginCommands], {
+          stdout: 'inherit',
           cwd: getPaths().base,
         })
       },

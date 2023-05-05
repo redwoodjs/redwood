@@ -6,42 +6,42 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import { getPaths } from '../../../../lib'
 import c from '../../../../lib/colors'
 
+const formatFlags = (flags) => {
+  let formattedFlags = ''
+
+  for (const key in flags) {
+    const value = flags[key]
+
+    if (value !== undefined) {
+      formattedFlags += `--${key}=${value} `
+    }
+  }
+
+  return formattedFlags.trim()
+}
+
 export const handler = async (options) => {
   const tasks = new Listr([
-    // {
-    //   title: `Adding Inngest setup packages ...`,
-    //   task: async () => {
-    //     await execa('yarn', ['add', '-D', 'inngest-setup-redwoodjs'], {
-    //       cwd: getPaths().base,
-    //     })
-    //   },
-    // },
+    // check if inngest-setup-redwoodjs installed and exit if not and warn
     {
-      title: `Setting up a function ...`,
       task: async () => {
-        console.debug('inngestFunctionHandler.js handler() options:', options)
+        const flags = {
+          eventName: options.eventName,
+          type: options.type,
+          graphql: options.graphql,
+          force: options.force,
+          operationType: undefined,
+        }
 
-        const pluginCommands = [
-          'inngest-setup-redwoodjs',
-          'function',
+        await execa.command(
+          `yarn inngest-setup-redwoodjs function ${options.name} ${formatFlags(
+            flags
+          )}`,
           {
-            name: options.name,
-            eventName: options.eventName,
-            graphql: options.graphql,
-            force: options.force,
-          },
-        ]
-
-        console.debug(
-          'inngestFunctionHandler.js handler() pluginCommands:',
-          pluginCommands
+            cwd: getPaths().base,
+            stdio: 'inherit',
+          }
         )
-
-        await execa('yarn', ...pluginCommands, {
-          cwd: getPaths().base,
-          shell: true,
-          stdio: 'inherit',
-        })
       },
     },
   ])
