@@ -23,8 +23,8 @@ __metadata:
   linkType: hard
 
 "@apollo/client@npm:^3.7.8":
-  version: 3.7.13
-  resolution: "@apollo/client@npm:3.7.13"
+  version: 3.7.14
+  resolution: "@apollo/client@npm:3.7.14"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
@@ -54,7 +54,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: a6ff44b91356f21edd9fdf08be4fb34f4bf87df9f6bdf64a66e101dbbd6ba45f9d40ff1c58fe760726233fa278b5c438ac922673402e372d68bb547d305e6ee5
+  checksum: fb5169b68f60413f790cdc6c5d31adf23dfdc0ca5b1a0b21cdf2df28cea5847a65ad4bd421be1e26ff7a1e0ea205202deab1699e1b0b83d13d1d9a339e352bee
   languageName: node
   linkType: hard
 
@@ -924,22 +924,22 @@ __metadata:
   linkType: hard
 
 "@types/react-dom@npm:^18.0.10":
-  version: 18.2.2
-  resolution: "@types/react-dom@npm:18.2.2"
+  version: 18.2.3
+  resolution: "@types/react-dom@npm:18.2.3"
   dependencies:
     "@types/react": "*"
-  checksum: f2aacd7e444fbc6905606236bf8c00ff183cd7182a630f000e969fdca9ee147bd906f7f87aaebf0a0899c2b3e276d1d3221063879d29e94cc4a10a3367a5d998
+  checksum: ce7f8daadea0c9ab3aa78a919db96d1c2ea3b6307cc88f8d105169c6392389e284542345f5796e904ab5de76240f2c1bde83c004538f99a5482a0f56854e45f1
   languageName: node
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:^18.0.27":
-  version: 18.2.1
-  resolution: "@types/react@npm:18.2.1"
+  version: 18.2.5
+  resolution: "@types/react@npm:18.2.5"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: b8bef5cc01d72e41b49f726b3a9c5d0a32a57f4289f5892916411aacd4d7e6fe25349932eabcb38f630190307b38ca283de93ad207c72ad0129ae3ae0b6b5987
+  checksum: 94aa73f74b45efdb2c790ec49ade0feb1871e8c83f3b3f81775fe8dd415ea85364f569003d48a87fe2889a610dba95f3c599a6696f1dc543115ef437314f7652
   languageName: node
   linkType: hard
 
@@ -3368,8 +3368,8 @@ __metadata:
   linkType: hard
 
 "vite@npm:^4.1.0":
-  version: 4.3.4
-  resolution: "vite@npm:4.3.4"
+  version: 4.3.5
+  resolution: "vite@npm:4.3.5"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
@@ -3400,7 +3400,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 05cbff29d9379a4441845a2b6c6c6770a35a858408f3e17f56c86e01d88dc7eda60f41aff7b15b99382b64c198b892a76f9a16505a62a2b0d53ec38e454d5948
+  checksum: 56c5de4c6a4cb383492302173372be71c4e55a9eabc7268b6036152880800b7a85ee19be3d4c9f2cdd7af33df53c0153c58e6db402b08e8f6299a7b15fd53b88
   languageName: node
   linkType: hard
 

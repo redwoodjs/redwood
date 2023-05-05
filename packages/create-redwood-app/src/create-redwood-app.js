@@ -79,13 +79,19 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
 
     if (
       foundNodeVersionIsLessThanRequired ||
-      foundNodeVersionIsLessThanRequired
+      foundYarnVersionIsLessThanRequired
     ) {
       const errorMessages = [
-        { type: 'node', ok: foundNodeVersionIsLessThanRequired },
-        { type: 'yarn', ok: foundYarnVersionIsLessThanRequired },
+        {
+          type: 'node',
+          failedCompatibilityCheck: foundNodeVersionIsLessThanRequired,
+        },
+        {
+          type: 'yarn',
+          failedCompatibilityCheck: foundYarnVersionIsLessThanRequired,
+        },
       ]
-        .filter(({ ok }) => !ok)
+        .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
         .map(
           ({ type }) =>
             `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
@@ -100,7 +106,11 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
           `  Please use tools like nvm or corepack to change to a compatible version.`,
           `  See: ${terminalLink(
             'Tutorial - Prerequisites',
-            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            {
+              fallback: () =>
+                'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            }
           )}`,
         ].join('\n')
       )
@@ -119,7 +129,11 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
         `  This may make your project incompatible with some deploy targets, especially those using AWS Lambdas.`,
         `  See: ${terminalLink(
           'Tutorial - Prerequisites',
-          'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+          'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+          {
+            fallback: () =>
+              'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+          }
         )}`,
       ].join('\n')
     )
