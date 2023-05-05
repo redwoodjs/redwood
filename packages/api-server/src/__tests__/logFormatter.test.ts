@@ -232,6 +232,14 @@ describe('LogFormatter', () => {
         })
       ).toMatch('"environment": "staging"')
 
+      logFormatter({
+        level: 10,
+        deploy: {
+          environment: 'staging',
+          version: '4.2.1',
+        },
+      }) // ?
+
       expect(
         logFormatter({
           level: 10,
@@ -242,5 +250,13 @@ describe('LogFormatter', () => {
         })
       ).toMatch('"version": "4.2.1"')
     })
+  })
+
+  it('Should not have any undefined ns, name, or message', () => {
+    expect(
+      logFormatter({
+        level: 10,
+      })
+    ).not.toContain('undefined')
   })
 })

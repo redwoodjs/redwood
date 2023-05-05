@@ -1,0 +1,28 @@
+name: Check create-redwood-app
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+# Cancel in-progress runs of this workflow.
+# See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-create-redwood-app:
+    name: Check create redwood app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: yarn install
+        working-directory: ./.github/actions/check_create_redwood_app
+
+      - name: Check create redwood app
+        uses: ./.github/actions/check_create_redwood_app
+        with:
+          labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'
