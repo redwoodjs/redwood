@@ -138,9 +138,9 @@ api:
   type: backend
   url_path: "/api"
   prod:
-    command: ["yarn", "rw", "build", "api", "&&", "yarn", "rw", "serve", "api"]
+    command: ["yarn", "rw", "build", "api", "&&", "yarn", "rw", "serve", "api", "--apiRootPath=/api"]
   dev:
-    command: ["yarn", "rw", "build", "api", "&&", "yarn", "rw", "dev", "api"]
+    command: ["yarn", "rw", "build", "api", "&&", "yarn", "rw", "dev", "api", "--apiRootPath=/api"]
   local_packages: ["node_modules"]
 
   system:
@@ -153,6 +153,9 @@ api:
       engine: ${db}
       version: 13
       type: database
+      # adapter: postgresql
+
+  migration: ["yarn", "rw", "prisma", "migrate", "deploy"]
 
 web:
   type: frontend
@@ -160,8 +163,8 @@ web:
   prod:
     command: ["yarn", "rw", "serve", "web"]
   dev:
-    command: ["yarn", "rw", "dev", "web", "--fwd=\\"--allowed-hosts all\\""]
-  build: ["yarn", "rw", "build", "web"]
+    command: ["yarn", "rw", "dev", "web", "--fwd=\"--allowed-hosts all\""]
+  build: ["yarn", "rw", "build", "web", "--no-prerender"]
   local_packages: ["node_modules"]
 
   system:
