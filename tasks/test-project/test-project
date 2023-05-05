@@ -9,7 +9,7 @@ const chalk = require('chalk')
 const execa = require('execa')
 const fse = require('fs-extra')
 const Listr = require('listr2').Listr
-const rimraf = require('rimraf')
+const { rimraf } = require('rimraf')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
 
@@ -63,11 +63,6 @@ const args = yargs(hideBin(process.argv))
     type: 'boolean',
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
-  })
-  .option('yarn1', {
-    default: false,
-    type: 'boolean',
-    describe: 'Use yarn 1 instead of yarn 3',
   })
   .help()
   .parseSync()
@@ -144,12 +139,17 @@ const createProject = async () => {
     await rimraf(OUTPUT_PROJECT_PATH)
   }
 
-  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
+  let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
   // We create a ts project and convert using ts-to-js at the end if typescript flag is false
   return execa(
     cmd,
-    ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
+    [
+      '--no-yarn-install',
+      `--typescript ${typescript}`,
+      '--overwrite',
+      '--no-git',
+    ],
     getExecaOptions(RW_FRAMEWORKPATH)
   )
 }
@@ -222,25 +222,9 @@ const globalTasks = () =>
         enabled: () => link || rebuildFixture,
       },
       {
-        title: 'Setting yarn version to 1',
-        task: async () => {
-          await execa(
-            'yarn set version classic',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
-        },
-        enabled: () => yarn1,
-      },
-      {
         title: 'Installing node_modules',
         task: async () => {
-          return execa(
-            'yarn install',
-            yarn1 &&
-              ['--non-interactive', !verbose && '--silent'].filter(Boolean), // pass flags if using Yarn v1
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
+          return execa('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
         },
       },
       {
@@ -323,7 +307,7 @@ const globalTasks = () =>
         task: async () => {
           const { stdout: dbAuthSecret } = await execa(
             'yarn',
-            [yarn1 && '--silent', 'rw', 'g', 'secret', '--raw'].filter(Boolean),
+            ['rw', 'g', 'secret', '--raw'],
             {
               ...getExecaOptions(OUTPUT_PROJECT_PATH),
               stdio: 'pipe',
@@ -346,21 +330,6 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-      },
-      {
-        title: 'Convert to JS',
-        task: async (_ctx, task) => {
-          if (!rebuildFixture) {
-            return execa(
-              'yarn rw ts-to-js',
-              [],
-              getExecaOptions(OUTPUT_PROJECT_PATH)
-            )
-          } else {
-            task.output = 'Rebuilding Fixture: skip ts-to-js'
-          }
-        },
-        enabled: () => !typescript,
       },
       {
         title: 'Lint --fix all the things',
@@ -433,7 +402,7 @@ const globalTasks = () =>
     {
       exitOnError: true,
       renderer: verbose && 'verbose',
-      renderOptions: { collapse: false },
+      renderOptions: { collapseSubtasks: false },
     }
   )
 

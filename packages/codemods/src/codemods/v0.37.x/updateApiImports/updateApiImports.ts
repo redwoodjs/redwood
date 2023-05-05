@@ -20,7 +20,7 @@ export default function transform(file: FileInfo, api: API) {
   const graphqlServerSpecifiers = new Set()
 
   // Find all named import statements from '@redwoodjs/api'.
-  // Seprate their specifiers.
+  // Separate their specifiers.
   ast
     .find(j.ImportDeclaration, { source: { value: '@redwoodjs/api' } })
     .forEach((importDeclaration) => {

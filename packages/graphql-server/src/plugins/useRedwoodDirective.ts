@@ -69,7 +69,7 @@ export declare type TransformArgs<
  * Transformer directives run **after** resolving the value
  *
  * - You can also throw an error, if you want to stop executing, but note that the value has already been resolved
- * - Transformer directives **must** be synchonous, and return a value
+ * - Transformer directives **must** be synchronous, and return a value
  *
  * You have to pass in the type of directiveArgs, and the resolverValue (i.e. the type of the field you are transforming)
  * @example TransformerDirectiveFunc<Post, { allowedRoles: string[] }>

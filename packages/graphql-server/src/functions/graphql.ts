@@ -19,6 +19,7 @@ import {
   useRedwoodDirective,
   useRedwoodError,
   useRedwoodGlobalContextSetter,
+  useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
 } from '../plugins'
@@ -54,6 +55,7 @@ export const createGraphQLHandler = ({
   directives = [],
   armorConfig,
   allowedOperations,
+  allowIntrospection,
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
@@ -93,7 +95,10 @@ export const createGraphQLHandler = ({
 
   const plugins: Array<Plugin<any>> = []
 
-  if (!isDevEnv) {
+  if (
+    (allowIntrospection == null && !isDevEnv) ||
+    allowIntrospection === false
+  ) {
     plugins.push(useDisableIntrospection())
   }
 
@@ -107,6 +112,9 @@ export const createGraphQLHandler = ({
 
   // Custom Redwood plugins
   plugins.push(...redwoodDirectivePlugins)
+
+  // Custom Redwood OpenTelemetry plugin
+  plugins.push(useRedwoodOpenTelemetry())
 
   // Secure the GraphQL server
   plugins.push(useArmor(logger, armorConfig))

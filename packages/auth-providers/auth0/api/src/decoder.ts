@@ -17,8 +17,8 @@ import { Decoder } from '@redwoodjs/api'
  * }
  * ```
  *
- * You can use `sub` as a stable reference to your user, but  if you want the email
- * addres you can set a context object[^0] in rules[^1]:
+ * You can use `sub` as a stable reference to your user, but if you want the email
+ * address you can set a context object[^0] in rules[^1]:
  *
  * ^0: https://auth0.com/docs/rules/references/context-object
  * ^1: https://manage.auth0.com/#/rules/new

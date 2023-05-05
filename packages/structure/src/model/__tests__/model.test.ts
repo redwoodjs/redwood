@@ -26,7 +26,9 @@ describe('Redwood Project Model', () => {
       page.basenameNoExt
       page.route?.id
     }
-    expect(project.sdls.map((s) => s.name)).toEqual(['currentUser', 'todos'])
+    expect(
+      project.sdls.map((s) => s.name).sort((a, b) => (a < b ? -1 : 1))
+    ).toEqual(['currentUser', 'todos'])
 
     for (const c of project.components) {
       c.basenameNoExt

@@ -1,17 +1,24 @@
-import task, { TaskInnerAPI } from 'tasuku'
+import task from 'tasuku'
 
-import detectEmptyCells from './detectEmptyCells'
+import { detectEmptyCells } from './detectEmptyCells'
 
 export const command = 'detect-empty-cells'
-export const description = '(v4.x.x->v5.0.0) Detects empty cells and warns'
+
+export const description =
+  '(v4.x.x->v5.x.x) Detects Cells susceptible to the new Empty behavior'
 
 export const handler = () => {
-  task('detectEmptyCells', async ({ setError }: TaskInnerAPI) => {
-    try {
-      await detectEmptyCells()
-      console.log()
-    } catch (e: any) {
-      setError('Failed to detect empty cells in your project \n' + e?.message)
+  task(
+    'Detecting Cells susceptible to the new Empty behavior',
+    async (taskContext) => {
+      try {
+        await detectEmptyCells(taskContext)
+      } catch (e: any) {
+        taskContext.setError(
+          'Failed to detect cells susceptible to the new Empty behavior in your project \n' +
+            e?.message
+        )
+      }
     }
-  })
+  )
 }

@@ -8,7 +8,7 @@ import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import { matchPath } from '@redwoodjs/router/dist/util'
 import type { QueryInfo } from '@redwoodjs/web'
@@ -22,6 +22,13 @@ import {
 } from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
+
+interface ChunkReference {
+  name?: string
+  id: string | number
+  files: Array<string>
+  referencedChunks: Array<string | number>
+}
 
 async function recursivelyRender(
   App: React.ElementType,
@@ -135,7 +142,8 @@ async function recursivelyRender(
 
 function insertChunkLoadingScript(
   indexHtmlTree: CheerioAPI,
-  renderPath: string
+  renderPath: string,
+  vite: boolean
 ) {
   const prerenderRoutes = detectPrerenderRoutes()
 
@@ -147,26 +155,120 @@ function insertChunkLoadingScript(
     throw new Error('Could not find a Route matching ' + renderPath)
   }
 
-  // The code for `/` is already included in app.<hash>.js and won't have a
-  // separate chunk
-  if (renderPath !== '/') {
-    const buildManifest = JSON.parse(
-      fs.readFileSync(
-        path.join(getPaths().web.dist, 'build-manifest.json'),
-        'utf-8'
-      )
-    )
-
-    const chunkPath = buildManifest[`${route?.pageIdentifier}.js`]
-
-    if (!chunkPath) {
-      throw new Error('Could not found chunk for ' + route?.pageIdentifier)
-    }
-
-    indexHtmlTree('head').prepend(
-      `<script defer="defer" src="${chunkPath}"></script>`
-    )
+  if (!route.pageIdentifier) {
+    throw new Error(`Route for ${renderPath} has no pageIdentifier`)
   }
+
+  const buildManifest = JSON.parse(
+    fs.readFileSync(
+      path.join(getPaths().web.dist, 'build-manifest.json'),
+      'utf-8'
+    )
+  )
+
+  const chunkPaths: Array<string> = []
+
+  if (!vite) {
+    // Webpack
+
+    const pageChunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+
+    if (pageChunkPath) {
+      chunkPaths.push(pageChunkPath)
+
+      const chunkReferencesJson: Array<ChunkReference> = JSON.parse(
+        fs.readFileSync(
+          path.join(getPaths().web.dist, 'chunk-references.json'),
+          'utf-8'
+        )
+      )
+
+      const chunkReferences = chunkReferencesJson.find((chunkRef) => {
+        return chunkRef.name === route?.pageIdentifier
+      })
+
+      if (chunkReferences?.referencedChunks) {
+        chunkReferences.referencedChunks.forEach((chunkId) => {
+          const chunkRef = chunkReferencesJson.find((chunkRef) => {
+            return chunkRef.id === chunkId
+          })
+
+          // Some chunks also produces css files, and maybe other files as well
+          // We're only interested in the .js files
+          const chunkRefJsFiles: string[] =
+            chunkRef?.files.filter((file) => {
+              return file.endsWith('.js')
+            }) || []
+
+          chunkRefJsFiles.forEach((file) => {
+            chunkPaths.push(file)
+          })
+
+          const chunkPath = buildManifest[`${chunkId}.js`]
+
+          if (chunkPath) {
+            chunkPaths.push(chunkPath)
+          }
+        })
+      }
+    }
+  } else if (vite && route?.filePath) {
+    // TODO: Make sure this works on Windows
+    const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
+    const pagePath = route.filePath.slice(pagesIndex)
+    const pageChunkPath = buildManifest[pagePath]?.file
+
+    if (pageChunkPath) {
+      // The / is needed, otherwise the path is relative to the current page
+      // so for example prerendering /userExamples/new wouldn't work
+      chunkPaths.push('/' + pageChunkPath)
+    }
+  }
+
+  if (chunkPaths.length === 0) {
+    // This happens when the page is manually imported in Routes.tsx
+    // (as opposed to being auto-imported)
+    // It also happens for the page at '/' with Webpack
+    // It could also be that Webpack or Vite for some reason didn't create a
+    // chunk for this page. In that case it'd be nice to throw an error, but
+    // there's no easy way to differentiate between the two cases.
+    return
+  }
+
+  chunkPaths.forEach((chunkPath) => {
+    indexHtmlTree('head').prepend(
+      `<script defer="defer" src="${chunkPath}" ${
+        vite ? 'type="module"' : ''
+      }></script>`
+    )
+  })
+
+  if (!vite) {
+    return
+  }
+
+  // This is not needed for WebPack
+
+  chunkPaths.forEach((chunkPath) => {
+    const fullChunkPath = path.join(getPaths().web.dist, chunkPath)
+    const jsChunk = fs.readFileSync(fullChunkPath, 'utf-8')
+
+    // The chunk will end with something like this: ,{});export{y as default};
+    // We need to extract the variable name (y) so that we can expose it on
+    // `globalThis` as `<PageName>Page`
+    const matches = jsChunk.match(/export\s*\{\s*\w+ as default\s*\}/g) || []
+    const lastIndex = jsChunk.lastIndexOf(matches[matches.length - 1])
+    const varNameMatch = jsChunk
+      .slice(lastIndex)
+      .match(/export\s*\{\s*(\w+) as default\s*\}/)
+
+    fs.writeFileSync(
+      fullChunkPath,
+      jsChunk +
+        'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
+        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
+    )
+  })
 }
 
 interface PrerenderParams {
@@ -214,10 +316,12 @@ export const runPrerender = async ({
   })
 
   const gqlHandler = await getGqlHandler()
+  const vite = getConfig().web.bundler === 'vite'
 
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
+    forVite: vite,
     overrides: [
       {
         plugins: [
@@ -267,7 +371,7 @@ export const runPrerender = async ({
     }
   }
 
-  insertChunkLoadingScript(indexHtmlTree, renderPath)
+  insertChunkLoadingScript(indexHtmlTree, renderPath, vite)
 
   indexHtmlTree('#redwood-app').append(componentAsHtml)
 

@@ -95,7 +95,7 @@ export const handler = async ({ force, install }) => {
                 },
               },
             ],
-            { rendererOptions: { collapse: false } }
+            { rendererOptions: { collapseSubtasks: false } }
           )
         },
       },
@@ -118,7 +118,7 @@ export const handler = async ({ force, install }) => {
                 },
               },
             ],
-            { rendererOptions: { collapse: false } }
+            { rendererOptions: { collapseSubtasks: false } }
           )
         },
       },
@@ -305,7 +305,7 @@ export const handler = async ({ force, install }) => {
         },
       },
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

@@ -12,7 +12,12 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
-const { getWebSideDefaultBabelConfig } = require('@redwoodjs/internal')
+const {
+  getWebSideDefaultBabelConfig,
+} = require('@redwoodjs/internal/dist/build/babel/web')
+const {
+  ChunkReferencesPlugin,
+} = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
 const { getConfig, getPaths } = require('@redwoodjs/project-config')
 
 const redwoodConfig = getConfig()
@@ -261,6 +266,7 @@ module.exports = (webpackEnv) => {
         new WebpackManifestPlugin({
           fileName: 'build-manifest.json',
         }),
+      isEnvProduction && new ChunkReferencesPlugin(),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {

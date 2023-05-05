@@ -174,7 +174,9 @@ const updateDbAuth = () => {
     `)
         return
       }
-      authContent[sameSiteLineIndex] = `      SameSite: 'None',`
+      authContent[
+        sameSiteLineIndex
+      ] = `      SameSite: process.env.NODE_ENV === 'development' ? 'Strict' : 'None',`
 
       const dbHandlerIndex = authContent.findIndex((line) =>
         line.includes('new DbAuthHandler(')
@@ -320,7 +322,7 @@ export const handler = async ({ force, database }) => {
       addToDotEnvDefaultTask(),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {
