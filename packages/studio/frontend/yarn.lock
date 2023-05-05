@@ -933,13 +933,13 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:^18.0.27":
-  version: 18.2.4
-  resolution: "@types/react@npm:18.2.4"
+  version: 18.2.5
+  resolution: "@types/react@npm:18.2.5"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 53bfc9e675863f63f37146732518258c49d430be2b5f03ebbd65a4e0a5762933fb62d68d477c194b0d8364ddaaea01378b93b562072d9f173e500b25242f66f3
+  checksum: 94aa73f74b45efdb2c790ec49ade0feb1871e8c83f3b3f81775fe8dd415ea85364f569003d48a87fe2889a610dba95f3c599a6696f1dc543115ef437314f7652
   languageName: node
   linkType: hard
 
