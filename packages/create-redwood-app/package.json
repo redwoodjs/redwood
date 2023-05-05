@@ -10,13 +10,14 @@
   "bin": "./dist/create-redwood-app.js",
   "files": [
     "dist",
-    "template"
+    "templates"
   ],
   "scripts": {
     "build": "yarn node ./build.mjs",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "yarn run jest tests"
+    "test": "yarn run jest tests",
+    "ts-to-js": "yarn node ./tsToJS.mjs"
   },
   "dependencies": {
     "@opentelemetry/api": "1.4.1",
@@ -38,6 +39,9 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
+    "@babel/core": "7.21.8",
+    "@babel/plugin-transform-typescript": "7.21.3",
+    "@types/babel__core": "7.20.0",
     "esbuild": "0.17.18",
     "jest": "29.5.0",
     "klaw-sync": "6.0.0"
