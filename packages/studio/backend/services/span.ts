@@ -28,15 +28,13 @@ export async function retypeSpan(_parent: unknown, { id }: { id: number }) {
 
   let lastID = undefined
 
-  // substr(json_extract(attributes, '$.\"http.method\"') || ' ' || json_extract(attributes, '$.\"http.method\"'), 0, 255)
-
   // HTTP Requests
   lastID = (
     await db.run(
       `
     UPDATE span SET
       type = 'http',
-      brief = 'http'
+      brief = substr(json_extract(attributes, '$.\"http.method\"') || ' ' || json_extract(attributes, '$.\"http.url\"'), 0, 255)
     WHERE
       json_extract(attributes, '$.\"http.method\"') IS NOT NULL AND
       id = ?;

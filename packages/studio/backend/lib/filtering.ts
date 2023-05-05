@@ -21,6 +21,9 @@ function renameColumn(column: string) {
   if (column === 'duration') {
     return 'duration_nano'
   }
+  if (column === 'status') {
+    return 'status_code'
+  }
   return column
 }
 
@@ -63,6 +66,20 @@ export function extractFiltersFromString(filterString: string) {
     })
   }
   filters.sorts = sorts
+
+  // Specific filters
+  const whereKeys = ['name', 'type', 'id', 'trace', 'parent', 'status']
+  filters.where = {}
+  for (const whereKey of whereKeys) {
+    const whereFilters = searchFilters.filter((filter) =>
+      filter.startsWith(`${whereKey}:`)
+    )
+    if (whereFilters.length > 1) {
+      throw new Error(`Cannot contain more than one ${whereKey} filter`)
+    } else if (whereFilters.length === 1) {
+      filters.where[renameColumn(whereKey)] = whereFilters[0].split(':')[1]
+    }
+  }
 
   return filters
 }

@@ -18,12 +18,25 @@ export function generateSelectWithFilters(
   // Parameters must be prefixed with `$` for sqlite
   const sqlFilters: any = {}
   Object.keys(filters).forEach((key) => {
-    sqlFilters[`$${key}`] = filters[key]
+    if (filters[key]) {
+      sqlFilters[`$${key}`] = filters[key]
+    }
   })
+
+  const where = Object.keys(sqlFilters.$where)
+    .map((key) => {
+      const value = sqlFilters.$where[key]
+      if (value.includes('%') || value.includes('_')) {
+        return `${key} LIKE '${value}'`
+      }
+      return `${key} = '${value}'`
+    })
+    .join(' AND ')
+  delete sqlFilters.$where
 
   // Return the SQL and the filters for execution with .all or .get etc
   return [
-    `SELECT ${select} FROM ${table} ${
+    `SELECT ${select} FROM ${table} ${where ? `WHERE ${where}` : ''} ${
       sorts.length > 0
         ? `ORDER BY ${sorts
             .map((sort) => {

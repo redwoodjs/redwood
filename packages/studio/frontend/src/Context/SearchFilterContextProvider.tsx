@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react'
 
 const initialState = {
   spansFilter: 'limit:128 sort:start:desc',
-  tracesFilter: 'limit:32',
+  tracesFilter: '',
 }
 
 const actions = {

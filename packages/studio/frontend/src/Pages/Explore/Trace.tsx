@@ -23,6 +23,7 @@ const GET_TRACE_SPANS = gql`
         id
         type
         name
+        brief
         parent
         kind
         statusCode

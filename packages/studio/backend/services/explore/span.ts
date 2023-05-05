@@ -32,7 +32,7 @@ export const spans = async (
   const [sql, sqlFilters] = generateSelectWithFilters('*', 'span', filters)
 
   // To debug uncomment the following line
-  console.log('spans', sql, { ...sqlFilters })
+  // console.log('spans', sql, { ...sqlFilters })
 
   const result = await db.all(sql, { ...sqlFilters })
   return result.map(restructureSpan)
