@@ -21,21 +21,31 @@ interface SensitiveArgPositions {
     positions: Array<number>
     options?: never
     redactWith: Array<string>
+    allowOnly: Array<string>
   }
   g: {
     positions: Array<number>
     options?: never
     redactWith: Array<string>
+    allowOnly?: Array<string>
   }
   generate: {
     positions: Array<number>
     options?: never
     redactWith: Array<string>
+    allowOnly?: Array<string>
   }
   prisma: {
     positions?: never
     options: Array<string>
     redactWith: Array<string>
+    allowOnly?: Array<string>
+  }
+  lint: {
+    positions?: Array<number>
+    options?: never
+    redactWith: Array<string>
+    allowOnly: Array<string>
   }
 }
 
@@ -45,6 +55,7 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   exec: {
     positions: [1],
     redactWith: ['[script]'],
+    allowOnly: ['exec'],
   },
   g: {
     positions: [2, 3],
@@ -57,6 +68,10 @@ const SENSITIVE_ARG_POSITIONS: SensitiveArgPositions = {
   prisma: {
     options: ['--name'],
     redactWith: ['[name]'],
+  },
+  lint: {
+    allowOnly: ['lint', '--fix'],
+    redactWith: ['[path]'],
   },
 }
 
@@ -146,6 +161,18 @@ export const sanitizeArgv = (
         const argIndex = args.indexOf(option)
         if (argIndex !== -1) {
           args[argIndex + 1] = sensitiveCommand.redactWith[index]
+        }
+      })
+    }
+
+    // allow only clause
+    if (sensitiveCommand.allowOnly) {
+      args.forEach((arg: string, index: number) => {
+        if (
+          !sensitiveCommand.allowOnly?.includes(arg) &&
+          !sensitiveCommand.redactWith.includes(arg)
+        ) {
+          args[index] = sensitiveCommand.redactWith[0]
         }
       })
     }
