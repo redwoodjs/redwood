@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "noEmit": true,
-    "allowJs": true,
     "esModuleInterop": true,
     "target": "esnext",
     "module": "esnext",
@@ -21,13 +20,26 @@
         "../api/src/*",
         "../.redwood/types/mirror/api/src/*"
       ],
-      "$api/*": [ "../api/*" ],
-      "types/*": ["./types/*", "../types/*"],
-      "@redwoodjs/testing": ["../node_modules/@redwoodjs/testing/web"]
+      "$api/*": [
+        "../api/*"
+      ],
+      "types/*": [
+        "./types/*",
+        "../types/*"
+      ],
+      "@redwoodjs/testing": [
+        "../node_modules/@redwoodjs/testing/web"
+      ]
     },
-    "typeRoots": ["../node_modules/@types", "./node_modules/@types"],
-    "types": ["jest", "@testing-library/jest-dom"],
-    "jsx": "preserve",
+    "typeRoots": [
+      "../node_modules/@types",
+      "./node_modules/@types"
+    ],
+    "types": [
+      "jest",
+      "@testing-library/jest-dom"
+    ],
+    "jsx": "preserve"
   },
   "include": [
     "src",
