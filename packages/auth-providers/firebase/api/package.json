@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-firebase-api",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@babel/cli": "7.21.0",
     "@babel/core": "7.21.4",
-    "@redwoodjs/api": "5.0.5",
+    "@redwoodjs/api": "5.0.6",
     "@types/aws-lambda": "8.10.114",
     "jest": "29.5.0",
     "typescript": "5.0.4"
