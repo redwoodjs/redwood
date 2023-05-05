@@ -111,6 +111,8 @@ cd packages/cli
 yarn dev <command>
 ```
 
+> **Note:** If you are implementing a command and wish to run via `yarn dev <command>` be sure to `yarn build:clean-dist` beforehand to run the latest version.
+
 ### Best Practices
 
 There's a few best practices we follow that you should be aware of:
