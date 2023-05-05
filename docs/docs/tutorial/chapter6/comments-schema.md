@@ -898,7 +898,7 @@ in case we wanted to allow both ways – which Prisma generally allows, however 
 
 :::
 
-We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the Javascript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right *now*, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
+We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the JavaScript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right *now*, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
 
 :::info What's up with the names for scenario data? `posts.bark`? Really?
 

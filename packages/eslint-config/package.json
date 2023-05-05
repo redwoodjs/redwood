@@ -12,13 +12,13 @@
     "build": "echo 'Nothing to build..'"
   },
   "dependencies": {
-    "@babel/core": "7.21.4",
-    "@babel/eslint-parser": "7.21.3",
+    "@babel/core": "7.21.8",
+    "@babel/eslint-parser": "7.21.8",
     "@babel/eslint-plugin": "7.19.1",
     "@redwoodjs/internal": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
-    "@typescript-eslint/eslint-plugin": "5.59.1",
-    "@typescript-eslint/parser": "5.59.1",
+    "@typescript-eslint/eslint-plugin": "5.59.2",
+    "@typescript-eslint/parser": "5.59.2",
     "eslint": "8.39.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-import-resolver-babel-module": "5.3.2",
@@ -32,7 +32,7 @@
     "prettier": "2.8.8"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.0",
+    "@babel/cli": "7.21.5",
     "jest": "29.5.0",
     "typescript": "5.0.4"
   },

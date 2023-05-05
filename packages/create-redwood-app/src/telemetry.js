@@ -14,6 +14,7 @@ import ci from 'ci-info'
 import envinfo from 'envinfo'
 import fs from 'fs-extra'
 import system from 'systeminformation'
+import { v4 as uuidv4 } from 'uuid'
 
 // JSON modules aren't stable yet, but if they were we could use them instead.
 // See https://nodejs.org/dist/latest-v18.x/docs/api/esm.html#json-modules.
@@ -35,6 +36,8 @@ let traceProcessor
  * @type OTLPTraceExporter
  */
 let traceExporter
+
+export const UID = uuidv4()
 
 export async function startTelemetry() {
   diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
@@ -78,7 +81,7 @@ export async function startTelemetry() {
       'env.node_env': process.env.NODE_ENV || null,
       'ci.redwood': !!process.env.REDWOOD_CI,
       'ci.isci': ci.isCI,
-      fingerprint: undefined, // We don't provide a fingerprint here because it needs a fully setup project
+      uid: UID,
     })
   )
 
@@ -87,10 +90,9 @@ export async function startTelemetry() {
     resource: resource,
   })
   traceExporter = new OTLPTraceExporter({
-    // TODO: Point this to somewhere permanent
     url:
       process.env.REDWOOD_REDIRECT_TELEMETRY ||
-      'https://master-axolotl.telemetry-analytics-jgmw.c66.me/v1/traces',
+      'https://quark.quantumparticle.io/v1/traces',
   })
   traceProcessor = new BatchSpanProcessor(traceExporter)
   traceProvider.addSpanProcessor(traceProcessor)

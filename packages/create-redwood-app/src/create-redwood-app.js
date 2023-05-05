@@ -18,6 +18,7 @@ import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 // In ESM, for relative paths, the extension is important.
 // See https://nodejs.org/dist/latest-v18.x/docs/api/esm.html#mandatory-file-extensions.
 import {
+  UID,
   startTelemetry,
   shutdownTelemetry,
   recordErrorViaTelemetry,
@@ -87,13 +88,19 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
 
     if (
       foundNodeVersionIsLessThanRequired ||
-      foundNodeVersionIsLessThanRequired
+      foundYarnVersionIsLessThanRequired
     ) {
       const errorMessages = [
-        { type: 'node', ok: foundNodeVersionIsLessThanRequired },
-        { type: 'yarn', ok: foundYarnVersionIsLessThanRequired },
+        {
+          type: 'node',
+          failedCompatibilityCheck: foundNodeVersionIsLessThanRequired,
+        },
+        {
+          type: 'yarn',
+          failedCompatibilityCheck: foundYarnVersionIsLessThanRequired,
+        },
       ]
-        .filter(({ ok }) => !ok)
+        .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
         .map(
           ({ type }) =>
             `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
@@ -108,7 +115,11 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
           `  Please use tools like nvm or corepack to change to a compatible version.`,
           `  See: ${terminalLink(
             'Tutorial - Prerequisites',
-            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            {
+              fallback: () =>
+                'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            }
           )}`,
         ].join('\n')
       )
@@ -127,7 +138,11 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
         `  This may make your project incompatible with some deploy targets, especially those using AWS Lambdas.`,
         `  See: ${terminalLink(
           'Tutorial - Prerequisites',
-          'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites'
+          'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+          {
+            fallback: () =>
+              'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+          }
         )}`,
       ].join('\n')
     )
@@ -212,6 +227,9 @@ async function createProjectFiles(newAppDir, overwrite, yarn1) {
     path.join(newAppDir, 'gitignore.template'),
     path.join(newAppDir, '.gitignore')
   )
+
+  // Write the uid
+  fs.ensureFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
 
   // We need to update some files when the user selects to use yarn v1
   if (yarn1) {

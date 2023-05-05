@@ -27,7 +27,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.21.0",
+    "@babel/runtime-corejs3": "7.21.5",
     "@redwoodjs/auth": "5.0.0",
     "@redwoodjs/graphql-server": "5.0.0",
     "@redwoodjs/internal": "5.0.0",
@@ -43,12 +43,12 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
-    "@types/aws-lambda": "8.10.114",
+    "@types/aws-lambda": "8.10.115",
     "@types/babel-core": "6.25.7",
     "@types/jest": "29.5.1",
     "@types/node": "18.16.1",
-    "@types/react": "18.2.0",
-    "@types/react-dom": "18.2.1",
+    "@types/react": "18.2.4",
+    "@types/react-dom": "18.2.3",
     "@types/webpack": "5.28.1",
     "babel-jest": "29.5.0",
     "babel-plugin-inline-react-svg": "2.0.2",
@@ -62,8 +62,8 @@
     "whatwg-fetch": "3.6.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.4",
+    "@babel/cli": "7.21.5",
+    "@babel/core": "7.21.8",
     "typescript": "5.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

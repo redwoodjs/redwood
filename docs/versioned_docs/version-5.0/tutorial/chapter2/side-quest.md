@@ -12,7 +12,7 @@ Normally you would write a [resolver map](https://www.graphql-tools.com/docs/res
 
 Redwood has a better way! Remember the `api/src/services` directory? Redwood will automatically import and map resolvers from the corresponding **services** file onto your SDL. At the same time, it allows you to write those resolvers in a way that makes them easy to call as regular functions from other resolvers or services. That's a lot of awesomeness to contemplate, so let's show an example.
 
-Consider the following SDL Javascript snippet:
+Consider the following SDL JavaScript snippet:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
@@ -181,7 +181,7 @@ Yoga/Envelop assumes these functions return promises, which `db` (an instance of
 
 You may be wondering why we call these implementation files "services". While this example blog doesn't get complex enough to show it off, services are intended to be an abstraction **above** single database tables. For example, a more complex app may have a "billing" service that uses both a `transactions` table and a `subscriptions` table. Some of the functionality of this service may be exposed via GraphQL, but only as much as you like.
 
-You don't have to make each function in your service available via GraphQL—leave it out of your `Query` and `Mutation` types and it won't exist as far as GraphQL is concerned. But you could still use it yourself—services are just Javascript functions so you can use them anywhere you'd like:
+You don't have to make each function in your service available via GraphQL—leave it out of your `Query` and `Mutation` types and it won't exist as far as GraphQL is concerned. But you could still use it yourself—services are just JavaScript functions so you can use them anywhere you'd like:
 
 - From another service
 - In a custom lambda function
