@@ -13,44 +13,30 @@ All without you having to write a single line of imperative code!
 
 ## Generating a Cell
 
-You can generate a Cell with Redwood's Cell generator:
+You can generate a Cell with the Cell generator:
 
 ```bash
 yarn rw generate cell <name>
 ```
 
-This creates a directory named `<name>Cell` in `web/src/components` with four files:
-
-```bash
-~/redwood-app$ yarn rw generate cell user
-yarn run v1.22.4
-$ /redwood-app/node_modules/.bin/rw g cell user
-  ✔ Generating cell files...
-    ✔ Writing `./web/src/components/UserCell/UserCell.mock.js`...
-    ✔ Writing `./web/src/components/UserCell/UserCell.stories.js`...
-    ✔ Writing `./web/src/components/UserCell/UserCell.test.js`...
-    ✔ Writing `./web/src/components/UserCell/UserCell.js`...
-Done in 1.07s.
-```
+This creates a directory named `<name>Cell` in `web/src/components` with four files,`<name>Cell.js`, `<name>Cell.test.js`, `<name>Cell.stories.js`, `<name>Cell.mock.js`.
 
 ### Single Item Cell vs List Cell
 
-Sometimes you want a Cell that renders a single item, like the example above, and other times you want a Cell that renders a list.
+Sometimes you want a Cell that renders a single item and other times you want a Cell that renders a list.
 Redwood's Cell generator can do both.
 
 First, it detects if `<name>` is singular or plural.
 For example, to generate a Cell that renders a list of users, run `yarn rw generate cell users`.
-Second, for **irregular words** whose singular and plural are identical, such as *equipment* or *pokemon*, you can specify the `--list` flag to tell Redwood to generate a list Cell explicitly:
+Second, for irregular words whose singular and plural are identical, such as 'equipment' or 'pokemon', you can specify the `--list` flag to tell Redwood to generate a list Cell explicitly:
 
-```
+```bash
 yarn rw generate cell equipment --list
 ```
 
 ## Cells in-depth
 
-We'll go over each of these files in detail. But know that the file appended with just `.js` (in the example above, `UserCell.js`) contains all your Cell's logic.
-
-Off the bat, this file exports five constants: `QUERY`, `Loading` , `Empty` , `Failure`  and `Success`. The root query in `QUERY` is the same as `<name>` so that, if you're generating a cell based on a model in your `schema.prisma`, you can get something out of the database right away. But there's a good chance you won't generate your Cell this way, so if you need to, make sure to change the root query. See the [Cells](tutorial/chapter2/cells.md#our-first-cell) section of the Tutorial for a great example of this.
+Cells exports five constants: `QUERY`, `Loading` , `Empty` , `Failure`  and `Success`. The root query in `QUERY` is the same as `<name>` so that, if you're generating a cell based on a model in your `schema.prisma`, you can get something out of the database right away. But there's a good chance you won't generate your Cell this way, so if you need to, make sure to change the root query. See the [Cells](tutorial/chapter2/cells.md#our-first-cell) section of the Tutorial for a great example of this.
 
 ## Usage
 
@@ -69,21 +55,15 @@ With Cells, you have a total of seven exports to work with:
 
 Only `QUERY` and `Success` are required. If you don't export `Empty`, empty results are sent to `Success`, and if you don't export `Failure`, error is output to the console.
 
-In addition to displaying the right component, Cells also make sure to funnel the right props to the right component.  `Loading`, `Empty`, `Failure`, and `Success` all have access to the props passed down from the Cell in good ol' React fashion, and most of `useQuery`'s return (more on that below). In addition to all those props, `Empty` and `Success` also get the `data` returned from the query and an `updating` boolean prop saying whether the Cell is currently fetching new data or not. `Failure` also gets `updating` and exclusive access to `error` and `errorCode`.
+In addition to displaying the right component, Cells also make sure to funnel the right props to the right component. `Loading`, `Empty`, `Failure`, and `Success` all have access to the props passed down from the Cell in good ol' React fashion, and most of the `useQuery` hook's return as a prop called `queryResult`. In addition to all those props, `Empty` and `Success` also get the `data` returned from the query and an `updating` prop saying whether the Cell is currently fetching new data. `Failure` also gets `updating` and exclusive access to `error` and `errorCode`.
 
-With this many props coming in, there's a risk of name clashing. A couple things to look out for are:
-
-- Your Cell has a prop with the same name as root-level data returned by your query.
-  - In this case, the root-level data overrides your prop. But since props double as query variables, you can destructure the `variables` prop that `useQuery` returns to retrieve it. Or you can just rename the prop on the Cell!
-
-- Your Cell has props or query results with the same name as any of `useQuery`'s returns.
-  - In this case, `useQuery`'s returns overwrite the props and results.
-
-We mentioned above that Cells receive "most" of what's returned from `useQuery`. You can see exactly what `useQuery` returns in Apollo Client's [API reference](https://www.apollographql.com/docs/react/api/react/hooks/#result). Note that, as we just mentioned, `error` and `data` get some special treatment.
+We mentioned above that Cells receive "most" of what's returned from the `useQuery` hook. You can see exactly what `useQuery` returns in Apollo Client's [API reference](https://www.apollographql.com/docs/react/api/react/hooks/#result). Note that, as we just mentioned, `error` and `data` get some special treatment.
 
 ### QUERY
 
-`QUERY` can be a string or a function. Note that it's totally more than ok to have more than one root query. Here's an example of that:
+`QUERY` can be a string or a function. If `QUERY` is a function, it has to return a valid GraphQL document.
+
+It's more-than ok to have more than one root query. Here's an example:
 
 ```jsx {7-10}
 export const QUERY = gql`{
@@ -104,15 +84,11 @@ So in this case, both `posts` and `authors` would be available to `Success`:
 
 ```jsx
 export const Success = ({ posts, authors }) => {
-  // render logic with posts and authors
+  // ...
 }
 ```
 
-If `QUERY` is a function, it has to return a valid GraphQL document.
-Use a function if your queries need to be more dynamic:
-
-<!-- Source: https://community.redwoodjs.com/t/custom-github-jwt-auth-with-redwood-auth-advice-needed/610 -->
-But what about variables? Well, Cells are setup to use any props they receive from their parent as variables (things are setup this way in `beforeQuery`). For example, here `BlogPostCell` takes a prop, `numberToShow`, so `numberToShow` is just available to your `QUERY`:
+Normally queries have variables. Cells are setup to use any props they receive from their parent as variables (things are setup this way in `beforeQuery`). For example, here `BlogPostCell` takes a prop, `numberToShow`, so `numberToShow` is just available to your `QUERY`:
 
 ```jsx {7}
 import BlogPostsCell from 'src/components/BlogPostsCell'
@@ -144,9 +120,9 @@ This means you can think backwards about your Cell's props from your SDL: whatev
 
 ### beforeQuery
 
-`beforeQuery` is a lifecycle hook. The best way to think about it is as an API for configuring Apollo Client's `Query` component (so you might want to check out Apollo's [docs](https://www.apollographql.com/docs/react/api/react-components/#query) for it).
+`beforeQuery` is a lifecycle hook. The best way to think about it is as a chance to configure [Apollo Client's `useQuery` hook](https://www.apollographql.com/docs/react/api/react/hooks#options).
 
-By default, `beforeQuery` gives any props passed from the parent component to `Query` so that they're available as variables for `QUERY`. It'll also set the fetch policy to `'cache-and-network'` since we felt it matched the behavior users want most of the time.
+By default, `beforeQuery` gives any props passed from the parent component to `QUERY` so that they're available as variables for it. It'll also set the fetch policy to `'cache-and-network'` since we felt it matched the behavior users want most of the time:
 
 ```jsx
 export const beforeQuery = (props) => {
@@ -159,7 +135,6 @@ export const beforeQuery = (props) => {
 
 For example, if you wanted to turn on Apollo's polling option, and prevent caching, you could export something like this (see Apollo's docs on [polling](https://www.apollographql.com/docs/react/data/queries/#polling) and [caching](https://www.apollographql.com/docs/react/data/queries/#setting-a-fetch-policy))
 
-<!-- Source: https://github.com/redwoodjs/redwood/issues/717 -->
 ```jsx
 export const beforeQuery = (props) => {
   return { variables: props, fetchPolicy: 'no-cache', pollInterval: 2500 }
@@ -190,13 +165,14 @@ export const beforeQuery = ({ word }: { word: string }) => {
 
 ### isEmpty
 
-`isEmpty` is an optional lifecycle hook. It returns a boolean to indicate if Cell is empty. Use it to override the [default check](#empty).
+`isEmpty` is an optional lifecycle hook. It returns a boolean to indicate if the Cell should render empty. Use it to override the default check, which checks if the Cell's root fields are null or empty arrays.
 
-It receives the `data`, and the default check reference `isDataEmpty`, so it's possible to extend the default check with custom logic.
+It receives two parameters: 1) the `data`, and 2) an object that has the default `isEmpty` function, named `isDataEmpty`, so that you can extend the default:
 
 ```jsx
-export const isEmpty = (data, { isDataEmpty }) =>
-  isDataEmpty(data) || data?.blog?.status === 'hidden'
+export const isEmpty = (data, { isDataEmpty }) => {
+  return isDataEmpty(data) || data?.blog?.status === 'hidden'
+}
 ```
 
 ### afterQuery
@@ -206,15 +182,9 @@ Use it to sanitize data returned from `QUERY` before it gets there.
 
 By default, `afterQuery` just returns the data as it is:
 
-```jsx
-export const afterQuery = (data) => ({...data})
-```
-
 ### Loading
 
 If there's no cached data and the request is in flight, a Cell renders `Loading`.
-
-<!-- For a production example, navigate to [predictcovid.com](https://predictcovid.com), the first site made with Redwood. Usually, when you first navigate there, you'll see most of the dashboard spinning. Those are `Loading` components in action! -->
 
 When you're developing locally, you can catch your Cell waiting to hear back for a moment if set your speed in the Inspector's **Network** tab to something like "Slow 3G".
 
@@ -223,31 +193,11 @@ But why bother with Slow 3G when Redwood comes with Storybook? Storybook makes d
 ### Empty
 
 A Cell renders this component if there's no data.
-
-What do we mean by no data? We mean if the response is 1) `null` or 2) an empty array (`[]`). There's actually four functions in [createCell.tsx](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/components/createCell.tsx) dedicated just to figuring this out:
-
-```jsx title="createCell.tsx"
-const isDataNull = (data: DataObject) => {
-  return dataField(data) === null
-}
-
-const isDataEmptyArray = (data: DataObject) => {
-  const field = dataField(data)
-  return Array.isArray(field) && field.length === 0
-}
-
-const dataField = (data: DataObject) => {
-  return data[Object.keys(data)[0]]
-}
-
-const isEmpty = (data: DataObject) => {
-  return isDataNull(data) || isDataEmptyArray(data)
-}
-```
+By no data, we mean if the response is 1) `null` or 2) an empty array (`[]`).
 
 ### Failure
 
-A Cell renders this component if something went wrong. You can quickly see this in action (it's easy to break things) if you add a nonsense field to your `QUERY`:
+A Cell renders this component if something went wrong. You can quickly see this in action if you add an untyped field to your `QUERY`:
 
 ```jsx {6}
 const QUERY = gql`
@@ -255,7 +205,7 @@ const QUERY = gql`
     posts {
       id
       title
-      nonsense
+      unTypedField
     }
   }
 `
@@ -283,7 +233,7 @@ export const Failure = ({ error, errorCode }: CellFailureProps) => {
 
 If everything went well, a Cell renders `Success`.
 
-As mentioned, Success gets exclusive access to the `data` prop. But if you try to destructure it from props, you'll notice that it doesn't exist. This is because Redwood adds another layer of convenience: in [createCell.tsx](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/components/createCell.tsx#L149), Redwood spreads `data` (using the spread operator, `...`) into `Success` so that you can just destructure whatever data you were expecting from your `QUERY` directly.
+As mentioned, Success gets exclusive access to the `data` prop. But if you try to destructure it from `props`, you'll notice that it doesn't exist. This is because Redwood adds a layer of convenience: Redwood spreads `data` into `Success` so that you can just destructure whatever data you were expecting from your `QUERY` directly.
 
 So, if you're querying for `posts` and `authors`, instead of doing:
 
@@ -291,26 +241,23 @@ So, if you're querying for `posts` and `authors`, instead of doing:
 export const Success = ({ data }) => {
   const { posts, authors } = data
 
-  // render logic with posts and authors
-  ...
+  // ...
 }
 ```
 
-Redwood does:
+Redwood lets you do:
 
 ```jsx
 export const Success = ({ posts, authors }) => {
-  // render logic with posts and authors
-  ...
+  // ...
 }
 ```
 
-Note that you can still pass any other props to `Success`. After all, it's still just a React component.
-
+Note that you can still pass any other props to `Success`. After all, it's just a React component.
 
 :::tip
 
-Looking for info on how TypeScript works with Cells? Check out the [Utility Types](typescript/utility-types.md#cell) doc
+Looking for info on how TypeScript works with Cells? Check out the [Utility Types](typescript/utility-types.md#cells) doc.
 
 :::
 
