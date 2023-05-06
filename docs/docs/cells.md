@@ -19,7 +19,14 @@ You can generate a Cell with the Cell generator:
 yarn rw generate cell <name>
 ```
 
-This creates a directory named `<name>Cell` in `web/src/components` with four files,`<name>Cell.js`, `<name>Cell.test.js`, `<name>Cell.stories.js`, `<name>Cell.mock.js`.
+This creates a directory named `<name>Cell` in `web/src/components` with four files:
+
+| File                    | Description                                             |
+| :---------------------- | :------------------------------------------------------ |
+| `<name>Cell.js`         | The actual Cell                                         |
+| `<name>Cell.test.js`    | Jest tests for each state of the Cell                   |
+| `<name>Cell.stories.js` | Storybook stories for each state of the Cell            |
+| `<name>Cell.mock.js`    | Mock data for both the Jest tests and Storybook stories |
 
 ### Single Item Cell vs List Cell
 
