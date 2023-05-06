@@ -485,20 +485,20 @@ __metadata:
   linkType: hard
 
 "@graphiql/plugin-explorer@npm:^0.1.14":
-  version: 0.1.15
-  resolution: "@graphiql/plugin-explorer@npm:0.1.15"
+  version: 0.1.16
+  resolution: "@graphiql/plugin-explorer@npm:0.1.16"
   dependencies:
-    "@graphiql/react": ^0.17.1
+    "@graphiql/react": ^0.17.2
     graphiql-explorer: ^0.9.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 4064657c55f75d1aa0b2aa57c8b35187c85260024ae7bb0f7c4eec6ac239b6358e2be84463bbaea37350aea8284ac6db7573a1cd47803651e29a00afbd1ba8c1
+  checksum: c90c88a5a5ed451f82591b60895192c41d897ad184fd7232f7ea89ae22b8cba091951313f095d25fa7ccf145cbffbf028870f7b218b458bd4ab706b89e02a7ff
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.1, @graphiql/react@npm:^0.17.2":
+"@graphiql/react@npm:^0.17.2":
   version: 0.17.2
   resolution: "@graphiql/react@npm:0.17.2"
   dependencies:
