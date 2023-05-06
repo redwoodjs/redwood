@@ -13,7 +13,7 @@ All without you having to write a single line of imperative code!
 
 ## Generating a Cell
 
-You can generate a Cell with the Cell generator:
+You can generate a Cell with Redwood's Cell generator:
 
 ```bash
 yarn rw generate cell <name>
