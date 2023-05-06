@@ -35,7 +35,7 @@ Redwood's Cell generator can do both.
 
 First, it detects if `<name>` is singular or plural.
 For example, to generate a Cell that renders a list of users, run `yarn rw generate cell users`.
-Second, for irregular words whose singular and plural are identical, such as 'equipment' or 'pokemon', you can specify the `--list` flag to tell Redwood to generate a list Cell explicitly:
+Second, for irregular words whose singular and plural are the same, such as "equipment" or "pokemon", you can pass `--list` to tell Redwood to generate a list Cell explicitly:
 
 ```bash
 yarn rw generate cell equipment --list
@@ -49,22 +49,22 @@ Cells exports five constants: `QUERY`, `Loading` , `Empty` , `Failure`  and `Suc
 
 With Cells, you have a total of seven exports to work with:
 
-| Name          | Type               | Description                                                  |
-| :------------ | :----------------- | :----------------------------------------------------------- |
-| `QUERY`       | `string\|function` | The query to execute                                         |
-| `beforeQuery` | `function`         | Lifecycle hook; prepares variables and options for the query |
-| `isEmpty`     | `function`         | Lifecycle hook; decides if Cell should render Empty          |
-| `afterQuery`  | `function`         | Lifecycle hook; sanitizes data returned from the query       |
-| `Loading`     | `component`        | If the request is in flight, render this component           |
-| `Empty`       | `component`        | If there's no data (`null` or `[]`), render this component   |
-| `Failure`     | `component`        | If something went wrong, render this component               |
-| `Success`     | `component`        | If the data has loaded, render this component                |
+| Name          | Type              | Description                                                  |
+| :------------ | :---------------- | :----------------------------------------------------------- |
+| `QUERY`       | `string,function` | The query to execute                                         |
+| `beforeQuery` | `function`        | Lifecycle hook; prepares variables and options for the query |
+| `isEmpty`     | `function`        | Lifecycle hook; decides if the Cell should render Empty      |
+| `afterQuery`  | `function`        | Lifecycle hook; sanitizes data returned from the query       |
+| `Loading`     | `component`       | If the request is in flight, render this component           |
+| `Empty`       | `component`       | If there's no data (`null` or `[]`), render this component   |
+| `Failure`     | `component`       | If something went wrong, render this component               |
+| `Success`     | `component`       | If the data has loaded, render this component                |
 
 Only `QUERY` and `Success` are required. If you don't export `Empty`, empty results are sent to `Success`, and if you don't export `Failure`, error is output to the console.
 
-In addition to displaying the right component, Cells also make sure to funnel the right props to the right component. `Loading`, `Empty`, `Failure`, and `Success` all have access to the props passed down from the Cell in good ol' React fashion, and most of the `useQuery` hook's return as a prop called `queryResult`. In addition to all those props, `Empty` and `Success` also get the `data` returned from the query and an `updating` prop saying whether the Cell is currently fetching new data. `Failure` also gets `updating` and exclusive access to `error` and `errorCode`.
+In addition to displaying the right component at the right time, Cells also funnel the right props to the right component. `Loading`, `Empty`, `Failure`, and `Success` all have access to the props passed down from the Cell in good ol' React fashion, and most of the `useQuery` hook's return as a prop called `queryResult`. In addition to all those props, `Empty` and `Success` also get the `data` returned from the query and an `updating` prop indicating whether the Cell is currently fetching new data. `Failure` also gets `updating` and exclusive access to `error` and `errorCode`.
 
-We mentioned above that Cells receive "most" of what's returned from the `useQuery` hook. You can see exactly what `useQuery` returns in Apollo Client's [API reference](https://www.apollographql.com/docs/react/api/react/hooks/#result). Note that, as we just mentioned, `error` and `data` get some special treatment.
+We mentioned above that Cells receive "most" of what's returned from the `useQuery` hook. You can see exactly what `useQuery` returns in Apollo Client's [API reference](https://www.apollographql.com/docs/react/api/react/hooks/#result). Again note that `error` and `data` get some special treatment.
 
 ### QUERY
 
