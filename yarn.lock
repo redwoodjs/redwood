@@ -2321,6 +2321,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@esbuild-kit/cjs-loader@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "@esbuild-kit/cjs-loader@npm:2.4.2"
+  dependencies:
+    "@esbuild-kit/core-utils": ^3.0.0
+    get-tsconfig: ^4.4.0
+  checksum: 44502097eb9287dc4f25d5c34acdbf5462228a91a348d08fe315939f14ac29fa47704cdcee9f6fca3db4ace93ed63825f06187325e45381a78ecbf3a65eaf759
+  languageName: node
+  linkType: hard
+
+"@esbuild-kit/core-utils@npm:^3.0.0":
+  version: 3.1.0
+  resolution: "@esbuild-kit/core-utils@npm:3.1.0"
+  dependencies:
+    esbuild: ~0.17.6
+    source-map-support: ^0.5.21
+  checksum: ab48dc117c179c553589be517abeaa8d242515ad985c63f4d57646f49cbd38043bcc29191ad116d6714152bb5e620a85cf5ff94bb1216c803adb2979646d7c2d
+  languageName: node
+  linkType: hard
+
+"@esbuild-kit/esm-loader@npm:^2.5.5":
+  version: 2.5.5
+  resolution: "@esbuild-kit/esm-loader@npm:2.5.5"
+  dependencies:
+    "@esbuild-kit/core-utils": ^3.0.0
+    get-tsconfig: ^4.4.0
+  checksum: 6133f784322e617cac5649e9489c580047e7095cd9ad9e693b03b1cd3df9809e02e224d488d93c1a889441d01e4210c66d01adf53383eefbbe9a585dcbccacc2
+  languageName: node
+  linkType: hard
+
 "@esbuild/android-arm64@npm:0.17.18":
   version: 0.17.18
   resolution: "@esbuild/android-arm64@npm:0.17.18"
@@ -7220,6 +7250,7 @@ __metadata:
     systeminformation: 5.17.12
     terminal-link: 2.1.1
     ts-node: 10.9.1
+    tsx: 3.12.6
     typescript: 5.0.4
   bin:
     rw-gen: ./dist/generate/generate.js
@@ -7493,6 +7524,8 @@ __metadata:
     "@vitejs/plugin-react": 4.0.0
     buffer: 6.0.3
     core-js: 3.30.1
+    glob: 10.2.2
+    jest: 29.5.0
     typescript: 5.0.4
     vite: 4.3.5
     vite-plugin-commonjs: 0.7.0
@@ -16354,7 +16387,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.17.18, esbuild@npm:^0.17.5":
+"esbuild@npm:0.17.18, esbuild@npm:^0.17.5, esbuild@npm:~0.17.6":
   version: 0.17.18
   resolution: "esbuild@npm:0.17.18"
   dependencies:
@@ -18360,6 +18393,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"get-tsconfig@npm:^4.4.0":
+  version: 4.5.0
+  resolution: "get-tsconfig@npm:4.5.0"
+  checksum: 0ff157b0f6cd9f92e4112b24522aa74c23b3207cb8ae7f491c2cac99fd65b811e955f61aace805121478b23619da2dbfc4cac3135f584e80038be86d16c5121a
+  languageName: node
+  linkType: hard
+
 "get-value@npm:^2.0.3, get-value@npm:^2.0.6":
   version: 2.0.6
   resolution: "get-value@npm:2.0.6"
@@ -18510,6 +18550,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:10.2.2, glob@npm:^10.0.0":
+  version: 10.2.2
+  resolution: "glob@npm:10.2.2"
+  dependencies:
+    foreground-child: ^3.1.0
+    jackspeak: ^2.0.3
+    minimatch: ^9.0.0
+    minipass: ^5.0.0
+    path-scurry: ^1.7.0
+  bin:
+    glob: dist/cjs/src/bin.js
+  checksum: 24238fc36ea34f4874e858eeda7d94ae2de6dbdd40d8a75dc707dc20853357394a12e9340b3e46f9e50231bf904b15e5dec15d2de63631bb1d2e8d4920c04996
+  languageName: node
+  linkType: hard
+
 "glob@npm:7.1.4":
   version: 7.1.4
   resolution: "glob@npm:7.1.4"
@@ -18535,21 +18590,6 @@ __metadata:
     once: ^1.3.0
     path-is-absolute: ^1.0.0
   checksum: 478b40e38be5a3d514e64950e1e07e0ac120585add6a37c98d0ed24d72d9127d734d2a125786073c8deb687096e84ae82b641c441a869ada3a9cc91b68978632
-  languageName: node
-  linkType: hard
-
-"glob@npm:^10.0.0":
-  version: 10.2.2
-  resolution: "glob@npm:10.2.2"
-  dependencies:
-    foreground-child: ^3.1.0
-    jackspeak: ^2.0.3
-    minimatch: ^9.0.0
-    minipass: ^5.0.0
-    path-scurry: ^1.7.0
-  bin:
-    glob: dist/cjs/src/bin.js
-  checksum: 24238fc36ea34f4874e858eeda7d94ae2de6dbdd40d8a75dc707dc20853357394a12e9340b3e46f9e50231bf904b15e5dec15d2de63631bb1d2e8d4920c04996
   languageName: node
   linkType: hard
 
@@ -29155,7 +29195,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-support@npm:^0.5.16, source-map-support@npm:~0.5.12, source-map-support@npm:~0.5.20":
+"source-map-support@npm:^0.5.16, source-map-support@npm:^0.5.21, source-map-support@npm:~0.5.12, source-map-support@npm:~0.5.20":
   version: 0.5.21
   resolution: "source-map-support@npm:0.5.21"
   dependencies:
@@ -30837,6 +30877,23 @@ __metadata:
   peerDependencies:
     typescript: ">=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta"
   checksum: 02f19e458ec78ead8fffbf711f834ad8ecd2cc6ade4ec0320790713dccc0a412b99e7fd907c4cda2a1dc602c75db6f12e0108e87a5afad4b2f9e90a24cabd5a2
+  languageName: node
+  linkType: hard
+
+"tsx@npm:3.12.6":
+  version: 3.12.6
+  resolution: "tsx@npm:3.12.6"
+  dependencies:
+    "@esbuild-kit/cjs-loader": ^2.4.2
+    "@esbuild-kit/core-utils": ^3.0.0
+    "@esbuild-kit/esm-loader": ^2.5.5
+    fsevents: ~2.3.2
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    tsx: dist/cli.js
+  checksum: f323cc668338476295d86f851f253397663e2a1642d1ea0fbedc18f3bc1d12005b93a314d8f88b859cd398b382b7132060723f350f9d92a5e189efe6ef9fa359
   languageName: node
   linkType: hard
 
