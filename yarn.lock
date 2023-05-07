@@ -7250,7 +7250,7 @@ __metadata:
     systeminformation: 5.17.12
     terminal-link: 2.1.1
     ts-node: 10.9.1
-    tsx: 3.12.6
+    tsx: 3.12.7
     typescript: 5.0.4
   bin:
     rw-gen: ./dist/generate/generate.js
@@ -30880,9 +30880,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsx@npm:3.12.6":
-  version: 3.12.6
-  resolution: "tsx@npm:3.12.6"
+"tsx@npm:3.12.7":
+  version: 3.12.7
+  resolution: "tsx@npm:3.12.7"
   dependencies:
     "@esbuild-kit/cjs-loader": ^2.4.2
     "@esbuild-kit/core-utils": ^3.0.0
@@ -30893,7 +30893,7 @@ __metadata:
       optional: true
   bin:
     tsx: dist/cli.js
-  checksum: f323cc668338476295d86f851f253397663e2a1642d1ea0fbedc18f3bc1d12005b93a314d8f88b859cd398b382b7132060723f350f9d92a5e189efe6ef9fa359
+  checksum: fe25121ecc05637be0b38912c1629c968277cda41855947bc57333bb02016d77610d7289ea5f32b7589a800d6b071635ce6797ff425470e1afc60ca6986f73b4
   languageName: node
   linkType: hard
 
