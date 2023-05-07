@@ -2620,27 +2620,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@eslint/eslintrc@npm:2.0.2"
+"@eslint/eslintrc@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@eslint/eslintrc@npm:2.0.3"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
-    espree: ^9.5.1
+    espree: ^9.5.2
     globals: ^13.19.0
     ignore: ^5.2.0
     import-fresh: ^3.2.1
     js-yaml: ^4.1.0
     minimatch: ^3.1.2
     strip-json-comments: ^3.1.1
-  checksum: 6ae7360f4e45fbfa6f66ba92be506860d15f070847bdad4542c97eda98b16c1f4f5be4a8807ccb284224691eb4125bbffc51e8933f6cb186d6cf23a8e668eb5b
+  checksum: 46291c33bf580ab12101fb7f20adabaa60326a7de094409ab4a5ca4611552ab2325f8d677d6c1d2d9f45f83f93360b115a0b4488bc48180cca0d0f386804d829
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.39.0":
-  version: 8.39.0
-  resolution: "@eslint/js@npm:8.39.0"
-  checksum: bb7ed9c22b998e8c765d87b12225ae046ae4c571c5c88d1012908c3ae1ae28e6248ebc98aed66b08334a8a9e43420bcc31a0e7f80173dafa6cc97f59735512e6
+"@eslint/js@npm:8.40.0":
+  version: 8.40.0
+  resolution: "@eslint/js@npm:8.40.0"
+  checksum: 0a7253c6aa5d14bda570cde5aff627fc338ca3b6e6226e2cbe7008a095ff244109f7edd1c340465d0aab3cea695ea7eb10bff96e6e9cab60cdd3226ac010041b
   languageName: node
   linkType: hard
 
@@ -7088,7 +7088,7 @@ __metadata:
     "@redwoodjs/project-config": 5.0.6
     "@typescript-eslint/eslint-plugin": 5.59.2
     "@typescript-eslint/parser": 5.59.2
-    eslint: 8.39.0
+    eslint: 8.40.0
     eslint-config-prettier: 8.8.0
     eslint-import-resolver-babel-module: 5.3.2
     eslint-plugin-babel: 5.3.1
@@ -16700,21 +16700,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-visitor-keys@npm:^3.3.0, eslint-visitor-keys@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "eslint-visitor-keys@npm:3.4.0"
-  checksum: 8b8cc611219b8864952a7485540482763e33289d734161bd6fe00cb6c1fc98af6bd8fe5c1d02d6d2b2657ff5cc52d30828fd52606ed50924412953a3e7d95cb7
+"eslint-visitor-keys@npm:^3.3.0, eslint-visitor-keys@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "eslint-visitor-keys@npm:3.4.1"
+  checksum: b4ebd35aed5426cd81b1fb92487825f1acf47a31e91d76597a3ee0664d69627140c4dafaf9b319cfeb1f48c1113a393e21a734c669e6565a72e6fcc311bd9911
   languageName: node
   linkType: hard
 
-"eslint@npm:8.39.0":
-  version: 8.39.0
-  resolution: "eslint@npm:8.39.0"
+"eslint@npm:8.40.0":
+  version: 8.40.0
+  resolution: "eslint@npm:8.40.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.4.0
-    "@eslint/eslintrc": ^2.0.2
-    "@eslint/js": 8.39.0
+    "@eslint/eslintrc": ^2.0.3
+    "@eslint/js": 8.40.0
     "@humanwhocodes/config-array": ^0.11.8
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
@@ -16725,8 +16725,8 @@ __metadata:
     doctrine: ^3.0.0
     escape-string-regexp: ^4.0.0
     eslint-scope: ^7.2.0
-    eslint-visitor-keys: ^3.4.0
-    espree: ^9.5.1
+    eslint-visitor-keys: ^3.4.1
+    espree: ^9.5.2
     esquery: ^1.4.2
     esutils: ^2.0.2
     fast-deep-equal: ^3.1.3
@@ -16753,18 +16753,18 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 34679da06fbc9ee75d13de57864589537e7460408c923510029b87cdf9f52fec2eb7f85cebbbff7ed15de0b37b7b14969efb036804f774aa4455809c9ccea2cb
+  checksum: dfd4dbb5e2771d7c81852f29cec658fd9d29a0f252b6e962505ee8cd8b9c2c50707ebd7379333836b04514375268e7c09927372601d08354a151fe5db7d760a8
   languageName: node
   linkType: hard
 
-"espree@npm:^9.5.1":
-  version: 9.5.1
-  resolution: "espree@npm:9.5.1"
+"espree@npm:^9.5.2":
+  version: 9.5.2
+  resolution: "espree@npm:9.5.2"
   dependencies:
     acorn: ^8.8.0
     acorn-jsx: ^5.3.2
-    eslint-visitor-keys: ^3.4.0
-  checksum: a67a1551895aa25c59c182a58e45d31a34cbeffb4a3731812db0a859fa0373cd9921af22a8aae15f42c3bf22c75a1dbd2304cdeb6530a5e7f672af87a9f9ef5f
+    eslint-visitor-keys: ^3.4.1
+  checksum: 6885e57b3dcea3f65211403a10077a80a57f03e6c8b45c1e1db4bc5958e0fdb5c358819c88898ea67655d25fb646836182f688156e124a05610e714d3fcb6822
   languageName: node
   linkType: hard
 
@@ -28264,7 +28264,7 @@ __metadata:
     core-js: 3.30.1
     cypress: 12.11.0
     cypress-wait-until: 1.7.2
-    eslint: 8.39.0
+    eslint: 8.40.0
     fast-glob: 3.2.12
     fs-extra: 11.1.1
     is-port-reachable: 3.1.0
