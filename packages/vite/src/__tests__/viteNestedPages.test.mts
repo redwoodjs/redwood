@@ -1,16 +1,61 @@
 import assert from 'node:assert/strict'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
+import { test, after, before, beforeEach, describe, it } from 'node:test'
 import { fileURLToPath } from 'url'
 
-import { after, before, beforeEach, describe, it } from 'node:test'
+import { transformWithEsbuild } from 'vite'
 
+import * as babel from '@babel/core'
 import projectConfig from '@redwoodjs/project-config'
-import { vitePrebuildWebFile } from '@redwoodjs/vite'
+
+import {
+  Flags,
+  getWebSideDefaultBabelConfig,
+} from '@redwoodjs/internal/dist/build/babel/web'
+
+async function vitePrebuildWebFile(
+  srcPath: string,
+  flags: Flags = {}
+) {
+  const code = await transform(srcPath)
+  const config = getWebSideDefaultBabelConfig(flags)
+  const result = babel.transform(code, {
+    ...config,
+    cwd: getPaths().web.base,
+    filename: srcPath,
+  })
+
+  return result
+}
+
+async function transform(srcPath: string) {
+  const code = fs.readFileSync(srcPath, 'utf-8')
+
+  const transformed = await transformWithEsbuild(code, srcPath, {
+    loader: 'jsx',
+  })
+
+  return transformed.code
+}
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const FIXTURE_PATH = path.join(__dirname, 'fixtures/nestedPages')
 const { getPaths } = projectConfig
+
+test('transform', async (t) => {
+  t.mock.method(fs, 'readFileSync', () => {
+    return '<Router><Route path="/" page={HomePage} name="home" /></Router>'
+  })
+
+  t.mock.method(fs, 'existsSync', () => true)
+
+  assert.equal(
+    await transform('Router.jsx'),
+    '/* @__PURE__ */ React.createElement(Router, null, /* @__PURE__ */ React.createElement(Route, { path: "/", page: HomePage, name: "home" }));\n'
+  )
+})
 
 describe('User specified imports, with static imports', () => {
   let outputWithStaticImports: string | null | undefined

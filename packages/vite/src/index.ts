@@ -1,8 +1,7 @@
-import { existsSync, readFile as fsReadFile, readFileSync } from 'fs'
+import { existsSync, readFile as fsReadFile } from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 
-import * as babel from '@babel/core'
 import react from '@vitejs/plugin-react'
 import {
   normalizePath,
@@ -13,10 +12,7 @@ import {
 import EnvironmentPlugin from 'vite-plugin-environment'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
-import {
-  Flags,
-  getWebSideDefaultBabelConfig,
-} from '@redwoodjs/internal/dist/build/babel/web'
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 const readFile = promisify(fsReadFile)
@@ -26,7 +22,6 @@ const commonjs = require('vite-plugin-commonjs')
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
- *
  */
 export default function redwoodPluginVite() {
   const redwoodPaths = getPaths()
@@ -228,31 +223,4 @@ const applyOn = (apply: 'build' | 'serve') => {
       apply,
     }
   }
-}
-
-// @MARK
-// Currently only used in testing
-export const vitePrebuildWebFile = async (
-  srcPath: string,
-  flags: Flags = {}
-) => {
-  const code = await transform(srcPath)
-  const config = getWebSideDefaultBabelConfig(flags)
-  const result = babel.transform(code, {
-    ...config,
-    cwd: getPaths().web.base,
-    filename: srcPath,
-  })
-
-  return result
-}
-
-export const transform = async (srcPath: string) => {
-  const code = readFileSync(srcPath, 'utf-8')
-
-  const transformed = await transformWithEsbuild(code, srcPath, {
-    loader: 'jsx',
-  })
-
-  return transformed.code
 }
