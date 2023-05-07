@@ -902,7 +902,7 @@ describe('paths', () => {
 
         const pages = processPagesDir(pagesDir)
 
-        expect(pages.length).toEqual(20)
+        expect(pages.length).toEqual(21)
 
         const pageNames = [
           'AboutPage',

@@ -36,8 +36,7 @@ type SuccessProps = CellSuccessProps<FindBlogPostQuery, FindBlogPostQueryVariabl
 
 export const Success = ({
   blogPost, // From the query. This is typed of course
-  refetch, // 👈 From Apollo Client. This is typed too!
-  fetchMore
+  queryResult // 👈 From Apollo Client. This is typed too!
 // highlight-next-line
 }: SuccessProps) => {
   // ...
