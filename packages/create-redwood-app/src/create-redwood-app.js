@@ -602,9 +602,6 @@ async function createRedwoodApp() {
     commitMessage = await handleCommitMessagePreference(commitMessageFlag)
   }
 
-  /**
-   * @type {boolean?}
-   */
   let yarnInstall = false
 
   if (!_isYarnBerryOrNewer) {
