@@ -113,6 +113,8 @@ yarn dev <command>
 
 > **Note:** If you are implementing a command and wish to run via `yarn dev <command>` be sure to `yarn build:clean-dist` beforehand to run the latest version.
 
+> **Important:** If your command alters the `example-todo-main` project (adds a package, modifies redwood.toml, etc) be sure not to commit and push those changes as part of your PR.
+
 ### Best Practices
 
 There's a few best practices we follow that you should be aware of:

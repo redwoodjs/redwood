@@ -3,8 +3,11 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../lib/'
+import { getPaths } from '../../lib'
 import c from '../../lib/colors'
+
+import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupInngest'
+import { getTaskEpilogue } from './util'
 
 export const handler = async ({ force }) => {
   const tasks = new Listr([
@@ -28,6 +31,11 @@ export const handler = async ({ force }) => {
           stdout: 'inherit',
           cwd: getPaths().base,
         })
+      },
+    },
+    {
+      task: () => {
+        getTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
       },
     },
   ])
