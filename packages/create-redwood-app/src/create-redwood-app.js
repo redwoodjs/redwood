@@ -244,6 +244,10 @@ async function installNodeModules(newAppDir) {
   const yarnInstallSubprocess = execa('yarn install', {
     shell: true,
     cwd: newAppDir,
+    // For yarn 3 users, so that esbuild's postinstall script doesn't fail.
+    env: {
+      YARN_NODE_LINKER: 'node-modules',
+    },
   })
 
   try {
