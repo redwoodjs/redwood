@@ -7291,12 +7291,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
-    "@babel/cli": 7.21.5
-    "@babel/core": 7.21.8
-    "@babel/runtime-corejs3": 7.21.5
     "@iarna/toml": 2.2.5
     "@types/findup-sync": 4.0.2
-    core-js: 3.30.2
     deepmerge: 4.3.1
     dependency-cruiser: 12.12.1
     fast-glob: 3.2.12
