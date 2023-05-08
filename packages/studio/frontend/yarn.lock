@@ -485,22 +485,22 @@ __metadata:
   linkType: hard
 
 "@graphiql/plugin-explorer@npm:^0.1.14":
-  version: 0.1.16
-  resolution: "@graphiql/plugin-explorer@npm:0.1.16"
+  version: 0.1.17
+  resolution: "@graphiql/plugin-explorer@npm:0.1.17"
   dependencies:
-    "@graphiql/react": ^0.17.2
+    "@graphiql/react": ^0.17.3
     graphiql-explorer: ^0.9.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: c90c88a5a5ed451f82591b60895192c41d897ad184fd7232f7ea89ae22b8cba091951313f095d25fa7ccf145cbffbf028870f7b218b458bd4ab706b89e02a7ff
+  checksum: 787ca2697dbfc6d15805d661a62d0f6bc0a5de055e8c00a772cf57794ba779015eb5de3f52982e21769f635622adc48074a3bcc13d6a1338f01034d5475fedd1
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.2":
-  version: 0.17.2
-  resolution: "@graphiql/react@npm:0.17.2"
+"@graphiql/react@npm:^0.17.2, @graphiql/react@npm:^0.17.3":
+  version: 0.17.3
+  resolution: "@graphiql/react@npm:0.17.3"
   dependencies:
     "@graphiql/toolkit": ^0.8.4
     "@reach/combobox": ^0.17.0
@@ -511,16 +511,16 @@ __metadata:
     "@reach/visually-hidden": ^0.17.0
     clsx: ^1.2.1
     codemirror: ^5.65.3
-    codemirror-graphql: ^2.0.6
+    codemirror-graphql: ^2.0.7
     copy-to-clipboard: ^3.2.0
-    graphql-language-service: ^5.1.4
+    graphql-language-service: ^5.1.5
     markdown-it: ^12.2.0
     set-value: ^4.1.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: dec2e74b38b92845460e94fd3b2ded5a480e95e259dd95ed708d508517a395dc32cf5ddee660027092ae23f90e405c08ca9f792b8e1cd2abfc64a46216b1be0f
+  checksum: 392d8a7963fa7c0aecb3f5a8805cf1aeb369a4a46ee442d8dae446290c86bffcf609fc063c192a4a4ac44bd5707b789304688e3f998e61c3ff10ae2c783a0ffc
   languageName: node
   linkType: hard
 
@@ -1271,16 +1271,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror-graphql@npm:^2.0.6":
-  version: 2.0.6
-  resolution: "codemirror-graphql@npm:2.0.6"
+"codemirror-graphql@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "codemirror-graphql@npm:2.0.7"
   dependencies:
-    graphql-language-service: 5.1.4
+    graphql-language-service: 5.1.5
   peerDependencies:
     "@codemirror/language": 6.0.0
     codemirror: ^5.65.3
     graphql: ^15.5.0 || ^16.0.0
-  checksum: 9f01c88d28326cf0e8b6674f952a8191d2a789d70d0087f486167a15e90258bf526ff2aeb7f8f5927aa72dce20ef61400e72cef5e47b86894c4262ee8504ee3c
+  checksum: 641859012e0a32c55f68016de7114bef290058b7ebf249617aec70cea8f8ceb4852f97d884037617f254500d21c6c8bf12ea50df9ead1e11876e39ddb3284ed6
   languageName: node
   linkType: hard
 
@@ -1800,9 +1800,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:5.1.4, graphql-language-service@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "graphql-language-service@npm:5.1.4"
+"graphql-language-service@npm:5.1.5, graphql-language-service@npm:^5.1.4, graphql-language-service@npm:^5.1.5":
+  version: 5.1.5
+  resolution: "graphql-language-service@npm:5.1.5"
   dependencies:
     nullthrows: ^1.0.0
     vscode-languageserver-types: ^3.17.1
@@ -1810,7 +1810,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
   bin:
     graphql: dist/temp-bin.js
-  checksum: 9f9466683009bef80071b94a284f8b80aa2e484b7409b3a85220dc2cc51c6e0000c6f9d6d81f5331d33f3f941ba82a7a6346a22fab228e1ec36cfec738bdabbe
+  checksum: 3578e14b75a210b3e5132e0a0b2591c2a3fe97808909691491824736924bc9452e5ac5ce80ba91e9be9d3682c1fb945508ba3da7c37d02ab5de3c04b1873dd26
   languageName: node
   linkType: hard
 
