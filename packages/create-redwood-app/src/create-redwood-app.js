@@ -319,10 +319,10 @@ async function generateTypes(newAppDir) {
   tui.stopReactive()
 }
 
-async function initialiseGit(newAppDir, commitMessage) {
+async function initializeGit(newAppDir, commitMessage) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
-    content: 'Initialising a git repo',
+    content: 'Initializing a git repo',
     spinner: {
       enabled: true,
     },
@@ -342,9 +342,9 @@ async function initialiseGit(newAppDir, commitMessage) {
   } catch (error) {
     tui.stopReactive(true)
     tui.displayError(
-      "Couldn't initialise a git repo",
+      "Couldn't initialize a git repo",
       [
-        `We could not initialise a git repo using ${RedwoodStyling.info(
+        `We could not initialize a git repo using ${RedwoodStyling.info(
           'git init && git add . && git commit -m "Initial commit"'
         )}. Please see below for the full error message.`,
         '',
@@ -359,7 +359,7 @@ async function initialiseGit(newAppDir, commitMessage) {
   tuiContent.update({
     content: `${RedwoodStyling.green(
       '✔'
-    )} Initialised a git repo with commit message "${commitMessage}"`,
+    )} Initialized a git repo with commit message "${commitMessage}"`,
     spinner: {
       enabled: false,
     },
@@ -401,7 +401,7 @@ async function handleGitPreference(gitInitFlag) {
     tui.drawText(
       `${RedwoodStyling.green('✔')} ${
         gitInitFlag ? 'Will' : 'Will not'
-      } initialise a git repo based on command line flag`
+      } initialize a git repo based on command line flag`
     )
     return gitInitFlag
   }
@@ -611,9 +611,9 @@ async function createRedwoodApp() {
   // Create project files
   await createProjectFiles(newAppDir, { templateDir, overwrite })
 
-  // Initialise git repo
+  // Initialize git repo
   if (useGit) {
-    await initialiseGit(newAppDir, commitMessage)
+    await initializeGit(newAppDir, commitMessage)
   }
 
   // Install the node packages
