@@ -9,7 +9,7 @@ import c from '../../../../lib/colors'
 export const handler = async ({ force }) => {
   const tasks = new Listr([
     {
-      title: `Adding Inngest setup packages ...`,
+      title: `Adding Inngest setup packages for RedwoodJS ...`,
       task: async () => {
         await execa('yarn', ['add', '-D', 'inngest-setup-redwoodjs'], {
           cwd: getPaths().base,

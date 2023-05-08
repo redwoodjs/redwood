@@ -1,6 +1,7 @@
 export const command = 'inngest'
 
-export const description = 'Setup Inngest plugin for job orchestration'
+export const description =
+  'Setup Inngest for background, scheduled, delayed, multi-step, and fan-out jobs'
 
 export const builder = (yargs) => {
   yargs.option('force', {
