@@ -23,15 +23,15 @@ export const handler = async ({ force, verbose }) => {
 
   // TODO: Consider extracting these from the templates? Consider version pinning?
   const opentelemetryPackages = [
-    // '@opentelemetry/api',
-    // '@opentelemetry/instrumentation',
-    // '@opentelemetry/exporter-trace-otlp-http',
-    // '@opentelemetry/resources',
-    // '@opentelemetry/sdk-node',
-    // '@opentelemetry/semantic-conventions',
-    // '@opentelemetry/instrumentation-http',
-    // '@opentelemetry/instrumentation-fastify',
-    // '@prisma/instrumentation',
+    '@opentelemetry/api',
+    '@opentelemetry/instrumentation',
+    '@opentelemetry/exporter-trace-otlp-http',
+    '@opentelemetry/resources',
+    '@opentelemetry/sdk-node',
+    '@opentelemetry/semantic-conventions',
+    '@opentelemetry/instrumentation-http',
+    '@opentelemetry/instrumentation-fastify',
+    '@prisma/instrumentation',
   ]
 
   const opentelemetryTasks = [
