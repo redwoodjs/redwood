@@ -44,7 +44,9 @@ try {
       break
     case 'cli':
       exitCode = await exec(
-        `cd ../project-for-telemetry && yarn install`
+        `yarn install`, null, {
+          cwd: path.join(process.cwd(), '../project-for-telemetry')
+        }
       )
       if (exitCode) {
         process.exit(1)
