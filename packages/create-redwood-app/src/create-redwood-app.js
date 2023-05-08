@@ -254,7 +254,7 @@ async function installNodeModules(newAppDir) {
     tui.displayError(
       "Couldn't install node modules",
       [
-        `We could not install node modules via ${RedwoodStyling.info(
+        `We couldn't install node modules via ${RedwoodStyling.info(
           "'yarn install'"
         )}. Please see below for the full error message.`,
         '',
@@ -268,7 +268,7 @@ async function installNodeModules(newAppDir) {
 
   tuiContent.update({
     header: '',
-    content: `${RedwoodStyling.green('✔')} Node modules successfully installed`,
+    content: `${RedwoodStyling.green('✔')} Installed node modules`,
     spinner: {
       enabled: false,
     },
@@ -384,7 +384,7 @@ async function handleTypescriptPreference(typescriptFlag) {
       type: 'Select',
       name: 'language',
       choices: ['TypeScript', 'JavaScript'],
-      message: 'Select your preferred coding language',
+      message: 'Select your preferred language',
       initial: 'TypeScript',
     })
     return response.language === 'TypeScript'
