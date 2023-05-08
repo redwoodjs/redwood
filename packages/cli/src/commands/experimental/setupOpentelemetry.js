@@ -1,6 +1,6 @@
-export const command = 'opentelemetry'
+export const command = 'setup-opentelemetry'
 
-export const description = 'Setup OpenTelemetry within the api side'
+export const description = 'Setup OpenTelemetry within the API side'
 
 export const builder = (yargs) => {
   yargs.option('force', {
@@ -18,6 +18,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./opentelemetryHandler')
+  const { handler } = await import('./setupOpentelemetryHandler')
   return handler(options)
 }
