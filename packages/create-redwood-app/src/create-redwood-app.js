@@ -625,11 +625,7 @@ async function createRedwoodApp() {
       ?.setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
   } else {
     if (!_isYarnBerryOrNewer) {
-      tui.drawText(
-        `${RedwoodStyling.warning(
-          '⚠'
-        )} Skipped yarn install step based on command line flag`
-      )
+      tui.drawText(`${RedwoodStyling.info('ℹ')} Skipped yarn install step`)
     }
   }
 
