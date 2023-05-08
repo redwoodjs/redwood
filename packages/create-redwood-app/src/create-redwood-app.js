@@ -342,7 +342,9 @@ async function initialiseGit(newAppDir, commitMessage) {
   }
 
   tuiContent.update({
-    content: `${RedwoodStyling.green('✔')} Initialised a git repo`,
+    content: `${RedwoodStyling.green(
+      '✔'
+    )} Initialised a git repo with commit message "${commitMessage}"`,
     spinner: {
       enabled: false,
     },
