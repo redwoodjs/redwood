@@ -498,7 +498,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.2, @graphiql/react@npm:^0.17.3":
+"@graphiql/react@npm:^0.17.3":
   version: 0.17.3
   resolution: "@graphiql/react@npm:0.17.3"
   dependencies:
@@ -1785,22 +1785,22 @@ __metadata:
   linkType: hard
 
 "graphiql@npm:^2.4.0":
-  version: 2.4.2
-  resolution: "graphiql@npm:2.4.2"
+  version: 2.4.3
+  resolution: "graphiql@npm:2.4.3"
   dependencies:
-    "@graphiql/react": ^0.17.2
+    "@graphiql/react": ^0.17.3
     "@graphiql/toolkit": ^0.8.4
-    graphql-language-service: ^5.1.4
+    graphql-language-service: ^5.1.5
     markdown-it: ^12.2.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 8cdfe56ec3fd0e2389451e9da0dd94c643188d083bc0f6f01f39a5a5b85a23adae2105c14b4ca758633c091f82fb9432a4e213b27b4eabcad6f368480ed39ecf
+  checksum: 13f35f3468ad97f7e122538a4e726fc1a77d479bfe8cc03e3175301c5b9b49e12b3c4ca0245b8767f1b36fe2d5cbb84cfb514a51d290edbc8476968984b3bff7
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:5.1.5, graphql-language-service@npm:^5.1.4, graphql-language-service@npm:^5.1.5":
+"graphql-language-service@npm:5.1.5, graphql-language-service@npm:^5.1.5":
   version: 5.1.5
   resolution: "graphql-language-service@npm:5.1.5"
   dependencies:
