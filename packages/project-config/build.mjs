@@ -12,6 +12,8 @@ const result = await esbuild.build({
   target: ['node18'],
   packages: 'external',
 
+  logLevel: 'info',
+
   // For visualizing the bundle.
   // See https://esbuild.github.io/api/#metafile and https://esbuild.github.io/analyze/.
   metafile: true,
