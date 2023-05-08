@@ -661,10 +661,18 @@ async function createRedwoodApp() {
       '',
       `${RedwoodStyling.header(`Fire it up!`)} 🚀`,
       '',
-      `${RedwoodStyling.redwood(
-        ` > ${RedwoodStyling.green(`cd ${targetDir}`)}`
-      )}`,
-      `${RedwoodStyling.redwood(` > ${RedwoodStyling.green(`yarn rw dev`)}`)}`,
+      ...[
+        `${RedwoodStyling.redwood(
+          ` > ${RedwoodStyling.green(`cd ${targetDir}`)}`
+        )}`,
+        !yarnInstall &&
+          `${RedwoodStyling.redwood(
+            ` > ${RedwoodStyling.green(`yarn install`)}`
+          )}`,
+        `${RedwoodStyling.redwood(
+          ` > ${RedwoodStyling.green(`yarn rw dev`)}`
+        )}`,
+      ].filter(Boolean),
       '',
     ].join('\n')
   )
