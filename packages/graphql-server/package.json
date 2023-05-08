@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.21.0",
+    "@babel/runtime-corejs3": "7.21.5",
     "@envelop/core": "3.0.6",
     "@envelop/depth-limit": "2.0.6",
     "@envelop/disable-introspection": "4.0.6",
@@ -33,8 +33,9 @@
     "@graphql-tools/schema": "9.0.19",
     "@graphql-tools/utils": "9.2.1",
     "@opentelemetry/api": "1.4.1",
-    "@redwoodjs/api": "4.0.0",
-    "core-js": "3.30.1",
+    "@redwoodjs/api": "5.0.0",
+    "@redwoodjs/project-config": "5.0.0",
+    "core-js": "3.30.2",
     "graphql": "16.6.0",
     "graphql-scalars": "1.21.3",
     "graphql-tag": "2.12.6",
@@ -44,11 +45,11 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.0",
-    "@babel/core": "7.21.4",
+    "@babel/cli": "7.21.5",
+    "@babel/core": "7.21.8",
     "@envelop/testing": "5.0.6",
     "@envelop/types": "3.0.2",
-    "@types/jsonwebtoken": "9.0.1",
+    "@types/jsonwebtoken": "9.0.2",
     "@types/lodash.merge": "4.6.7",
     "@types/lodash.omitby": "4.6.7",
     "@types/uuid": "9.0.1",

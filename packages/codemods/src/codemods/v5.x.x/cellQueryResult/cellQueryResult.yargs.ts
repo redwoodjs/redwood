@@ -7,7 +7,7 @@ import runTransform from '../../../lib/runTransform'
 
 export const command = 'cell-query-result'
 export const description =
-  '(v4.x.x->v5.x.x) Updates cells to use the queryResult property'
+  '(v4.x.x->v5.x.x) Updates cells to use the `queryResult` property'
 
 export const handler = () => {
   task('cellQueryResult', async ({ setOutput }) => {

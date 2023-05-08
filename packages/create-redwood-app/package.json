@@ -1,6 +1,6 @@
 {
   "name": "create-redwood-app",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -10,12 +10,14 @@
   "bin": "./dist/create-redwood-app.js",
   "files": [
     "dist",
-    "template"
+    "templates"
   ],
   "scripts": {
     "build": "yarn node ./build.mjs",
     "build:watch": "nodemon --watch src --ignore dist,template --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build"
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "yarn run jest tests",
+    "ts-to-js": "yarn node ./tsToJS.mjs"
   },
   "dependencies": {
     "@opentelemetry/api": "1.4.1",
@@ -23,7 +25,7 @@
     "@opentelemetry/resources": "1.12.0",
     "@opentelemetry/sdk-trace-node": "1.12.0",
     "@opentelemetry/semantic-conventions": "1.12.0",
-    "@redwoodjs/tui": "4.0.0",
+    "@redwoodjs/tui": "5.0.0",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
     "ci-info": "3.8.0",
@@ -33,10 +35,16 @@
     "semver": "7.3.8",
     "systeminformation": "5.17.12",
     "terminal-link": "2.1.1",
-    "yargs": "17.7.1"
+    "uuid": "9.0.0",
+    "yargs": "17.7.2"
   },
   "devDependencies": {
-    "esbuild": "0.17.18"
+    "@babel/core": "7.21.8",
+    "@babel/plugin-transform-typescript": "7.21.3",
+    "@types/babel__core": "7.20.0",
+    "esbuild": "0.17.18",
+    "jest": "29.5.0",
+    "klaw-sync": "6.0.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -1,0 +1,9 @@
+name: Check create redwood app
+description: Determines if the create redwood app JS template should be rebuilt
+runs:
+  # `node18` isn't supported yet
+  using: node16
+  main: check_create_redwood_app.mjs
+inputs:
+  labels:
+    required: true
