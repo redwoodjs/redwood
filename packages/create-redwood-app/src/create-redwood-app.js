@@ -621,44 +621,6 @@ async function createRedwoodApp() {
         'Get up and running fast with this Quick Start guide'
       )}: https://redwoodjs.com/docs/quick-start`,
       '',
-      RedwoodStyling.header('Join the Community'),
-      '',
-      `${RedwoodStyling.redwood(
-        ' ❖ Join our Forums'
-      )}: https://community.redwoodjs.com`,
-      `${RedwoodStyling.redwood(
-        ' ❖ Join our Chat'
-      )}: https://discord.gg/redwoodjs`,
-      '',
-      RedwoodStyling.header('Get some help'),
-      '',
-      `${RedwoodStyling.redwood(
-        ' ❖ Get started with the Tutorial'
-      )}: https://redwoodjs.com/docs/tutorial`,
-      `${RedwoodStyling.redwood(
-        ' ❖ Read the Documentation'
-      )}: https://redwoodjs.com/docs`,
-      '',
-      RedwoodStyling.header('Stay updated'),
-      '',
-      `${RedwoodStyling.redwood(
-        ' ❖ Sign up for our Newsletter'
-      )}: https://www.redwoodjs.com/newsletter`,
-      `${RedwoodStyling.redwood(
-        ' ❖ Follow us on Twitter'
-      )}: https://twitter.com/redwoodjs`,
-      '',
-      `${RedwoodStyling.header(`Become a Contributor`)} ${RedwoodStyling.love(
-        '❤'
-      )}`,
-      '',
-      `${RedwoodStyling.redwood(
-        ' ❖ Learn how to get started'
-      )}: https://redwoodjs.com/docs/contributing`,
-      `${RedwoodStyling.redwood(
-        ' ❖ Find a Good First Issue'
-      )}: https://redwoodjs.com/good-first-issue`,
-      '',
       `${RedwoodStyling.header(`Fire it up!`)} 🚀`,
       '',
       ...[
