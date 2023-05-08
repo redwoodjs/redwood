@@ -4,10 +4,12 @@ description: Redwood quick start
 
 # Quick Start
 
-> **Prerequisites**
->
-> - Redwood requires [Node.js](https://nodejs.org/en/) (>=16.19 <=18.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
-> - Are you on Windows? For best results, follow our [Windows development setup](how-to/windows-development-setup.md) guide
+:::info Prerequisites
+
+- Redwood requires [Node.js](https://nodejs.org/en/) (=18.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
+- Are you on Windows? For best results, follow our [Windows development setup](how-to/windows-development-setup.md) guide
+
+:::
 
 Create a Redwood project with `yarn create redwood-app`:
 
@@ -15,36 +17,37 @@ Create a Redwood project with `yarn create redwood-app`:
 yarn create redwood-app my-redwood-project
 ```
 
-> **Prefer TypeScript?**
->
-> Redwood comes with full TypeScript support from the get-go:
->
-> ```
-> yarn create redwood-app my-redwood-project --typescript
-> ```
+:::tip Prefer TypeScript?
 
-Then change into that directory and start the development server:
+Redwood comes with full TypeScript support from the get-go:
+
+```
+yarn create redwood-app my-redwood-project --typescript
+```
+
+:::
+
+Then change into that directory, yarn install, and start the development server:
 
 ```
 cd my-redwood-project
+yarn install
 yarn redwood dev
 ```
 
-Your browser should automatically open to [http://localhost:8910](http://localhost:8910) where you'll see the Welcome Page, which links out to a ton of great resources:
+Your browser should automatically open to [http://localhost:8910](http://localhost:8910) where you'll see the Welcome Page, which links out to many great resources:
 
 <img data-mode="light" src="https://user-images.githubusercontent.com/300/145314717-431cdb7a-1c45-4aca-9bbc-74df4f05cc3b.png" alt="Redwood Welcome Page" style={{ marginBottom: 20 }} />
 
 <img data-mode="dark" src="https://user-images.githubusercontent.com/32992335/161387013-2fc6702c-dfd8-4afe-aa2f-9b06d575ba82.png" alt="Redwood Welcome Page" style={{ marginBottom: 20 }} />
 
-> **The Redwood CLI**
->
-> Congratulations on running your first Redwood CLI command!
-> From dev to deploy, the CLI is with you the whole way.
-> And there's quite a few commands at your disposal:
-> ```
-> yarn redwood --help
-> ```
-> For all the details, see the [CLI reference](cli-commands.md).
+Congratulations on running your first Redwood CLI command!
+From dev to deploy, the CLI is with you the whole way.
+And there's quite a few commands at your disposal:
+```
+yarn redwood --help
+```
+For all the details, see the [CLI reference](cli-commands.md).
 
 ## Prisma and the database
 
@@ -69,7 +72,11 @@ yarn rw prisma migrate dev
 ? Enter a name for the new migration: › create posts
 ```
 
-> `rw` is short for `redwood`
+:::tip
+
+`rw` is short for `redwood`
+
+:::
 
 You'll be prompted for the name of your migration. `create posts` will do.
 
