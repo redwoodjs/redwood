@@ -49,17 +49,16 @@ const buildRedwoodFramework = () => {
   }
 }
 
-const createRedwoodJSApp = ({ yarn1 }) => {
+const createRedwoodJSApp = ({ typescript }) => {
   try {
     execa.sync(
       'yarn node dist/create-redwood-app.js',
       [
         REDWOOD_PROJECT_DIRECTORY,
         '--no-yarn-install',
-        '--typescript',
+        `--typescript ${typescript}`,
         '--no-telemetry',
         '--no-git',
-        yarn1 && '--yarn1',
       ].filter(Boolean),
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
@@ -154,23 +153,6 @@ const runYarnInstall = () => {
   }
 }
 
-const convertProjectToJavaScript = () => {
-  try {
-    execa.sync('yarn rw ts-to-js', {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-      env: { REDWOOD_CI: '1' },
-      stdio: 'inherit',
-    })
-  } catch (e) {
-    if (e.signal !== 'SIGINT') {
-      console.error('Could not convert the TypeScript app to JavaScript')
-      console.error(e)
-    }
-    process.exit(1)
-  }
-}
-
 const runDevServerInBackground = () => {
   try {
     console.log('Starting RedwoodJS dev server...')
@@ -249,7 +231,6 @@ const args = yargs(hideBin(process.argv))
   .option('copy-framework', { default: true, type: 'boolean', alias: 'copy' })
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
-  .option('yarn1', { default: false, type: 'boolean' })
   .option('clean-files', { default: true, type: 'boolean' })
   .scriptName('run-e2e')
   .example('run-e2e')
@@ -280,16 +261,14 @@ let {
   createProject,
   typescript,
   autoStart,
-  yarn1,
   cleanFiles,
 } = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
-  createProject && (() => createRedwoodJSApp({ yarn1 })),
+  createProject && (() => createRedwoodJSApp({ typescript })),
   copyFramework && addFrameworkDepsToProject,
   copyFramework && runYarnInstall,
   copyFramework && copyFrameworkPackages,
-  !typescript && convertProjectToJavaScript,
   autoStart && runDevServerInBackground,
   autoStart && initGit,
   autoStart && runCypress,
