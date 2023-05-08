@@ -83,14 +83,14 @@ You'll be prompted for the name of your migration. `create posts` will do.
 Now let's generate everything we need to perform all the CRUD (Create, Retrieve, Update, Delete) actions on our `Post` model:
 
 ```
-yarn redwood g scaffold post
+yarn redwood generate scaffold post
 ```
 
 Navigate to [http://localhost:8910/posts/new](http://localhost:8910/posts/new), fill in the title and body, and click "Save":
 
 <img src="https://user-images.githubusercontent.com/300/73028004-72262c00-3de9-11ea-8924-66d1cc1fceb6.png" alt="Create a new post" />
 
-Did we just create a post in the database? Yup! With `yarn rw g scaffold <model>`, Redwood created all the pages, components, and services necessary to perform all CRUD actions on our posts table.
+Did we just create a post in the database? Yup! With `yarn rw generate scaffold <model>`, Redwood created all the pages, components, and services necessary to perform all CRUD actions on our posts table.
 
 ## Frontend first with Storybook
 
@@ -111,7 +111,7 @@ yarn rw setup ui --help
 ## Testing with Jest
 
 It'd be hard to scale from side project to startup without a few tests.
-Redwood fully integrates Jest with both the front and backends, and makes it easy to keep your whole app covered by generating test files with all your components and services:
+Redwood fully integrates Jest with both the front- and back-ends, and makes it easy to keep your whole app covered by generating test files with all your components and services:
 
 ```
 yarn rw test
@@ -128,7 +128,7 @@ yarn rw setup deploy --help
 ```
 
 Don't go live without auth!
-Lock down your front and backends with Redwood's built-in, database-backed authentication system ([dbAuth](authentication.md#self-hosted-auth-installation-and-setup)), or integrate with nearly a dozen third party auth providers:
+Lock down your app with Redwood's built-in, database-backed authentication system ([dbAuth](authentication.md#self-hosted-auth-installation-and-setup)), or integrate with nearly a dozen third-party auth providers:
 
 ```
 yarn rw setup auth --help
