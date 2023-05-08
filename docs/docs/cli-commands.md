@@ -399,7 +399,7 @@ You can pass any flags to the command and use them within your script:
 
 See [this how to](how-to/background-worker.md) for an example of using exec to run a background worker.
 
-## experimental
+## experimental (alias exp)
 
 Set up and run experimental features.
 
