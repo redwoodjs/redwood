@@ -79,7 +79,6 @@ describe('template', () => {
         "/web/src/pages/NotFoundPage",
         "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
         "/web/tsconfig.json",
-        "/yarn.lock",
       ]
     `)
   })
@@ -162,7 +161,6 @@ describe('JS template', () => {
         "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
         "/web/src/pages/NotFoundPage",
         "/web/src/pages/NotFoundPage/NotFoundPage.js",
-        "/yarn.lock",
       ]
     `)
   })
