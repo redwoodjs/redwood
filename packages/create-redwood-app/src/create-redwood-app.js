@@ -536,8 +536,7 @@ async function createRedwoodApp() {
     cli.option('yarn-install', {
       default: null,
       type: 'boolean',
-      describe:
-        'Skip yarn install with --no-yarn-install. Also skips version requirements check.',
+      describe: 'Install node modules. Skip via --no-yarn-install.',
     })
   }
 
