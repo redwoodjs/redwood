@@ -414,11 +414,6 @@ For more information, including details about specific features, see this Redwoo
 **Available Experimental Features**
 View all that can be _set up_:
 ```
-yarn redwood experimental setup --help
-```
-
-View all that can be _run_:
-```
 yarn redwood experimental --help
 ```
 
@@ -1462,7 +1457,7 @@ yarn redwood lint
 
 ## prisma
 
-Run Prisma CLI with experimental features.
+Run Prisma CLI within the context of a Redwood project.
 
 ```
 yarn redwood prisma
@@ -1474,7 +1469,7 @@ Redwood's `prisma` command is a lightweight wrapper around the Prisma CLI. It's 
 >
 > By lightweight wrapper, we mean that we're handling some flags under the hood for you.
 > You can use the Prisma CLI directly (`yarn prisma`), but letting Redwood act as a proxy (`yarn redwood prisma`) saves you a lot of keystrokes.
-> For example, Redwood adds the `--preview-feature` and `--schema=api/db/schema.prisma` flags automatically.
+> For example, Redwood adds the `--schema=api/db/schema.prisma` flags automatically.
 >
 > If you want to know exactly what `yarn redwood prisma <command>` runs, which flags it's passing, etc., it's right at the top:
 >

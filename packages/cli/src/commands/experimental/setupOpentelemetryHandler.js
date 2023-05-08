@@ -9,9 +9,9 @@ import { addApiPackages } from '@redwoodjs/cli-helpers'
 import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFile } from '../../../../lib'
-import c from '../../../../lib/colors'
-import { isTypeScriptProject } from '../../../../lib/project'
+import { getPaths, transformTSToJS, writeFile } from '../../lib'
+import c from '../../lib/colors'
+import { isTypeScriptProject } from '../../lib/project'
 
 export const handler = async ({ force, verbose }) => {
   const ts = isTypeScriptProject()
@@ -23,15 +23,15 @@ export const handler = async ({ force, verbose }) => {
 
   // TODO: Consider extracting these from the templates? Consider version pinning?
   const opentelemetryPackages = [
-    '@opentelemetry/api',
-    '@opentelemetry/instrumentation',
-    '@opentelemetry/exporter-trace-otlp-http',
-    '@opentelemetry/resources',
-    '@opentelemetry/sdk-node',
-    '@opentelemetry/semantic-conventions',
-    '@opentelemetry/instrumentation-http',
-    '@opentelemetry/instrumentation-fastify',
-    '@prisma/instrumentation',
+    // '@opentelemetry/api',
+    // '@opentelemetry/instrumentation',
+    // '@opentelemetry/exporter-trace-otlp-http',
+    // '@opentelemetry/resources',
+    // '@opentelemetry/sdk-node',
+    // '@opentelemetry/semantic-conventions',
+    // '@opentelemetry/instrumentation-http',
+    // '@opentelemetry/instrumentation-fastify',
+    // '@prisma/instrumentation',
   ]
 
   const opentelemetryTasks = [
