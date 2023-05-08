@@ -652,7 +652,9 @@ async function createRedwoodApp() {
       '',
       ...[
         `${RedwoodStyling.redwood(
-          ` > ${RedwoodStyling.green(`cd ${targetDir}`)}`
+          ` > ${RedwoodStyling.green(
+            `cd ${path.relative(process.cwd(), targetDir)}`
+          )}`
         )}`,
         !yarnInstall &&
           `${RedwoodStyling.redwood(
