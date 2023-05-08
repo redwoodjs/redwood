@@ -4,10 +4,12 @@ import * as esbuild from 'esbuild'
 
 const result = await esbuild.build({
   entryPoints: ['src/index.ts'],
+  outdir: 'dist',
+
   bundle: true,
+
   platform: 'node',
   target: ['node18'],
-  outfile: 'dist/index.js',
   packages: 'external',
 
   // For visualizing the bundle.
