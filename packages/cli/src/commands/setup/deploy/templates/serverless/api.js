@@ -19,7 +19,7 @@ useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   region: us-east-1 # AWS region where the service will be deployed, defaults to N. Virginia
   httpApi:          # HTTP API is used by default. To learn about the available options in API Gateway, see https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html
     cors:
@@ -35,13 +35,11 @@ provider:
         - X-Amz-Security-Token
         - X-Amz-User-Agent
     payload: '1.0'
-    useProviderTags: true # https://www.serverless.com/framework/docs/deprecations/#AWS_HTTP_API_USE_PROVIDER_TAGS
   stackTags:
     source: serverless
     name: Redwood Lambda API with HTTP API Gateway
   tags:
     name: Redwood Lambda API with HTTP API Gateway
-  lambdaHashingVersion: 20201221 # https://www.serverless.com/framework/docs/deprecations/#LAMBDA_HASHING_VERSION_V2
   environment:
     # Add environment variables here, either in the form
     # VARIABLE_NAME: \${env:VARIABLE_NAME} for vars in your local environment, or
