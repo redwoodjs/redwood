@@ -30,10 +30,10 @@ const tui = new RedwoodTUI()
 
 // Credit to esbuild: https://github.com/rtsao/esbuild/blob/c35a4cebf037237559213abc684504658966f9d6/lib/install.ts#L190-L199
 function isYarnBerryOrNewer() {
-  const { npm_config_user_agent } = process.env
+  const { npm_config_user_agent: npmConfigUserAgent } = process.env
 
-  if (npm_config_user_agent) {
-    const match = npm_config_user_agent.match(/yarn\/(\d+)/)
+  if (npmConfigUserAgent) {
+    const match = npmConfigUserAgent.match(/yarn\/(\d+)/)
 
     if (match && match[1]) {
       return parseInt(match[1], 10) >= 2
