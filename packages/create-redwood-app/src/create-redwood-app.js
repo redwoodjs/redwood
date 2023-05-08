@@ -28,7 +28,7 @@ const { telemetry } = Parser(hideBin(process.argv))
 
 const tui = new RedwoodTUI()
 
-async function executeCompatibilityCheck(templateDir, yarnInstall) {
+async function executeCompatibilityCheck(templateDir) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
     content: 'Checking node and yarn compatibility',
@@ -37,20 +37,6 @@ async function executeCompatibilityCheck(templateDir, yarnInstall) {
     },
   })
   tui.startReactive(tuiContent)
-
-  if (!yarnInstall) {
-    tuiContent.update({
-      spinner: {
-        enabled: false,
-      },
-      content: `${RedwoodStyling.warning(
-        '⚠'
-      )} Skipped compatibility check because yarn install was skipped via command line flag`,
-    })
-    tui.stopReactive()
-
-    return
-  }
 
   const [checksPassed, checksData] = await checkNodeAndYarnVersion(templateDir)
 
@@ -244,10 +230,6 @@ async function installNodeModules(newAppDir) {
   const yarnInstallSubprocess = execa('yarn install', {
     shell: true,
     cwd: newAppDir,
-    // For yarn 3 users, so that esbuild's postinstall script doesn't fail.
-    env: {
-      YARN_NODE_LINKER: 'node-modules',
-    },
   })
 
   try {
@@ -322,7 +304,7 @@ async function generateTypes(newAppDir) {
   tui.stopReactive()
 }
 
-async function initialiseGit(newAppDir) {
+async function initialiseGit(newAppDir, commitMessage) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
     content: 'Initialising a git repo',
@@ -333,7 +315,7 @@ async function initialiseGit(newAppDir) {
   tui.startReactive(tuiContent)
 
   const gitSubprocess = execa(
-    'git init && git add . && git commit -m "Initial commit"',
+    `git init && git add . && git commit -m "${commitMessage}"`,
     {
       shell: true,
       cwd: newAppDir,
@@ -360,7 +342,9 @@ async function initialiseGit(newAppDir) {
   }
 
   tuiContent.update({
-    content: `${RedwoodStyling.green('✔')} Initialised a git repo`,
+    content: `${RedwoodStyling.green(
+      '✔'
+    )} Initialised a git repo with commit message "${commitMessage}"`,
     spinner: {
       enabled: false,
     },
@@ -426,6 +410,58 @@ async function handleGitPreference(gitInitFlag) {
 }
 
 /**
+ * @param {string?} commitMessageFlag
+ */
+async function handleCommitMessagePreference(commitMessageFlag) {
+  // Handle case where flag is set
+  if (commitMessageFlag !== null) {
+    return commitMessageFlag
+  }
+
+  // Prompt user for preference
+  try {
+    const response = await tui.prompt({
+      type: 'input',
+      name: 'commitMessage',
+      message: 'Enter a commit message',
+      initial: 'Initial commit',
+    })
+    return response.commitMessage
+  } catch (_error) {
+    recordErrorViaTelemetry('User cancelled install at commit message prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+}
+
+/**
+ * @param {boolean?} yarnInstallFlag
+ */
+async function handleYarnInstallPreference(yarnInstallFlag) {
+  // Handle case where flag is set
+  if (yarnInstallFlag !== null) {
+    return yarnInstallFlag
+  }
+
+  // Prompt user for preference
+  try {
+    const response = await tui.prompt({
+      type: 'Toggle',
+      name: 'yarnInstall',
+      message: 'Do you want to run yarn install?',
+      enabled: 'Yes',
+      disabled: 'no',
+      initial: 'Yes',
+    })
+    return response.yarnInstall
+  } catch (_error) {
+    recordErrorViaTelemetry('User cancelled install at yarn install prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+}
+
+/**
  * This function creates a new RedwoodJS app.
  *
  * It performs the following actions:
@@ -447,17 +483,18 @@ async function createRedwoodApp() {
   // TODO: Make all flags have the 'flag' suffix
   const {
     _: args,
-    'yarn-install': yarnInstall,
+    'yarn-install': yarnInstallFlag,
     typescript: typescriptFlag,
     overwrite,
     // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
     'git-init': gitInitFlag,
+    'commit-message': commitMessageFlag,
   } = yargs(hideBin(process.argv))
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
     .example('$0 newapp')
     .option('yarn-install', {
-      default: true,
+      default: null,
       type: 'boolean',
       describe:
         'Skip yarn install with --no-yarn-install. Also skips version requirements check.',
@@ -485,11 +522,17 @@ async function createRedwoodApp() {
       type: 'boolean',
       describe: 'Initialize a git repository.',
     })
+    .option('commit-message', {
+      alias: 'm',
+      default: null,
+      type: 'string',
+      describe: 'Commit message for the initial commit.',
+    })
     .version(version)
     .parse()
 
   // Record some of the arguments for telemetry
-  trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstall)
+  trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstallFlag)
   trace.getActiveSpan()?.setAttribute('overwrite', overwrite)
 
   // Get the directory for installation from the args
@@ -520,7 +563,7 @@ async function createRedwoodApp() {
   const templatesDir = path.resolve(__dirname, '../templates')
 
   // Engine check
-  await executeCompatibilityCheck(path.join(templatesDir, 'ts'), yarnInstall)
+  await executeCompatibilityCheck(path.join(templatesDir, 'ts'))
 
   // Determine ts/js preference
   const useTypescript = await handleTypescriptPreference(typescriptFlag)
@@ -532,8 +575,21 @@ async function createRedwoodApp() {
   const useGit = await handleGitPreference(gitInitFlag)
   trace.getActiveSpan()?.setAttribute('git', useGit)
 
+  /** @type {string} */
+  let commitMessage
+  if (useGit) {
+    commitMessage = await handleCommitMessagePreference(commitMessageFlag)
+  }
+
+  const yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
+
   // Create project files
   await createProjectFiles(newAppDir, { templateDir, overwrite })
+
+  // Initialise git repo
+  if (useGit) {
+    await initialiseGit(newAppDir, commitMessage)
+  }
 
   // Install the node packages
   if (yarnInstall) {
@@ -553,11 +609,6 @@ async function createRedwoodApp() {
   // Generate types
   if (yarnInstall) {
     await generateTypes(newAppDir)
-  }
-
-  // Initialise git repo
-  if (useGit) {
-    await initialiseGit(newAppDir)
   }
 
   // Post install message
@@ -610,10 +661,18 @@ async function createRedwoodApp() {
       '',
       `${RedwoodStyling.header(`Fire it up!`)} 🚀`,
       '',
-      `${RedwoodStyling.redwood(
-        ` > ${RedwoodStyling.green(`cd ${targetDir}`)}`
-      )}`,
-      `${RedwoodStyling.redwood(` > ${RedwoodStyling.green(`yarn rw dev`)}`)}`,
+      ...[
+        `${RedwoodStyling.redwood(
+          ` > ${RedwoodStyling.green(`cd ${targetDir}`)}`
+        )}`,
+        !yarnInstall &&
+          `${RedwoodStyling.redwood(
+            ` > ${RedwoodStyling.green(`yarn install`)}`
+          )}`,
+        `${RedwoodStyling.redwood(
+          ` > ${RedwoodStyling.green(`yarn rw dev`)}`
+        )}`,
+      ].filter(Boolean),
       '',
     ].join('\n')
   )
