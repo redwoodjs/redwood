@@ -18,6 +18,16 @@ const { default: prettierConfig } = await import(
   new URL('./templates/ts/prettier.config.js', import.meta.url)
 )
 
+const tsTemplateNodeModulesPath = path.join(
+  TS_TEMPLATE_FILEPATH,
+  'node_modules'
+)
+
+if (fs.existsSync(tsTemplateNodeModulesPath)) {
+  console.log('Removing node modules in TS template')
+  fs.rmSync(tsTemplateNodeModulesPath, { recursive: true })
+}
+
 console.log('Cleaning JS template')
 fs.rmSync(JS_TEMPLATE_FILEPATH, { recursive: true })
 
