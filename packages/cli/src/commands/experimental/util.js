@@ -21,7 +21,7 @@ export const getEpilogue = (
     isTerminal
   )}`
 
-export const getTaskEpilogue = (command, description, topicId) => {
+export const printTaskEpilogue = (command, description, topicId) => {
   console.log(
     `${chalk.hex('#ff845e')(
       `------------------------------------------------------------------\n 🧪 ${chalk.green(
