@@ -67,16 +67,8 @@ const args = yargs(hideBin(process.argv))
   .help()
   .parseSync()
 
-const {
-  typescript,
-  canary,
-  link,
-  verbose,
-  clean,
-  copyFromFixture,
-  rebuildFixture,
-  yarn1,
-} = args
+const { canary, link, verbose, clean, copyFromFixture, rebuildFixture } = args
+const typescript = args.rebuildFixture || args.typescript
 
 // Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
@@ -290,6 +282,7 @@ const globalTasks = () =>
           webTasks(OUTPUT_PROJECT_PATH, {
             verbose,
             linkWithLatestFwBuild: link || rebuildFixture,
+            typescript,
           }),
         enabled: () => !copyFromFixture || rebuildFixture,
       },
@@ -299,6 +292,7 @@ const globalTasks = () =>
           apiTasks(OUTPUT_PROJECT_PATH, {
             verbose,
             linkWithLatestFwBuild: link || rebuildFixture,
+            typescript,
           }),
         enabled: () => !copyFromFixture || rebuildFixture,
       },
@@ -370,7 +364,7 @@ const globalTasks = () =>
           fs.copyFileSync(
             path.join(
               __dirname,
-              '../../packages/create-redwood-app/template/package.json'
+              '../../packages/create-redwood-app/templates/ts/package.json'
             ),
             path.join(OUTPUT_PROJECT_PATH, 'package.json')
           )

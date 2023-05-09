@@ -15,20 +15,28 @@ const {
 // and is set when webTasks or apiTasks are called
 let OUTPUT_PATH
 
-function fullPath(name, { addExtension } = { addExtension: true }) {
+function fullPath(name, { addExtension = true, typescript }) {
+  const ext = typescript ? '.ts' : '.js'
+  const extX = typescript ? '.tsx' : '.js'
+
   if (addExtension) {
     if (name.startsWith('api')) {
-      name += '.ts'
+      name += ext
     } else if (name.startsWith('web')) {
-      name += '.tsx'
+      name += extX
     }
   }
 
   return path.join(OUTPUT_PATH, name)
 }
 
-async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
+async function webTasks(
+  outputPath,
+  { linkWithLatestFwBuild, verbose, typescript }
+) {
   OUTPUT_PATH = outputPath
+
+  const ext = typescript ? 'ts' : 'js'
 
   const execaOptions = getExecaOptions(outputPath)
 
@@ -53,7 +61,9 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
           return applyCodemod(
             'homePage.js',
-            fullPath('web/src/pages/HomePage/HomePage')
+            fullPath('web/src/pages/HomePage/HomePage', {
+              typescript,
+            })
           )
         },
       },
@@ -64,7 +74,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
           return applyCodemod(
             'aboutPage.js',
-            fullPath('web/src/pages/AboutPage/AboutPage')
+            fullPath('web/src/pages/AboutPage/AboutPage', { typescript })
           )
         },
       },
@@ -75,7 +85,9 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
           return applyCodemod(
             'contactUsPage.js',
-            fullPath('web/src/pages/ContactUsPage/ContactUsPage')
+            fullPath('web/src/pages/ContactUsPage/ContactUsPage', {
+              typescript,
+            })
           )
         },
       },
@@ -86,7 +98,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
           return applyCodemod(
             'blogPostPage.js',
-            fullPath('web/src/pages/BlogPostPage/BlogPostPage')
+            fullPath('web/src/pages/BlogPostPage/BlogPostPage', { typescript })
           )
         },
       },
@@ -120,13 +132,15 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           `
 
           fs.writeFileSync(
-            fullPath('web/src/pages/ProfilePage/ProfilePage.test'),
+            fullPath('web/src/pages/ProfilePage/ProfilePage.test', {
+              typescript,
+            }),
             testFileContent
           )
 
           return applyCodemod(
             'profilePage.js',
-            fullPath('web/src/pages/ProfilePage/ProfilePage')
+            fullPath('web/src/pages/ProfilePage/ProfilePage', { typescript })
           )
         },
       },
@@ -138,7 +152,10 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
           )
 
           fs.writeFileSync(
-            fullPath('web/src/Redwood.stories.mdx', { addExtension: false }),
+            fullPath('web/src/Redwood.stories.mdx', {
+              addExtension: false,
+              typescript,
+            }),
             redwoodMdxStoryContent
           )
 
@@ -152,7 +169,9 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
           await applyCodemod(
             'waterfallPage.js',
-            fullPath('web/src/pages/WaterfallPage/WaterfallPage')
+            fullPath('web/src/pages/WaterfallPage/WaterfallPage', {
+              typescript,
+            })
           )
         },
       },
@@ -166,7 +185,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     return applyCodemod(
       'blogLayout.js',
-      fullPath('web/src/layouts/BlogLayout/BlogLayout')
+      fullPath('web/src/layouts/BlogLayout/BlogLayout', { typescript })
     )
   }
 
@@ -177,24 +196,24 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     await applyCodemod(
       'blogPost.js',
-      fullPath('web/src/components/BlogPost/BlogPost')
+      fullPath('web/src/components/BlogPost/BlogPost', { typescript })
     )
 
     await createComponent('author')
 
     await applyCodemod(
       'author.js',
-      fullPath('web/src/components/Author/Author')
+      fullPath('web/src/components/Author/Author', { typescript })
     )
 
     await applyCodemod(
       'updateAuthorStories.js',
-      fullPath('web/src/components/Author/Author.stories')
+      fullPath('web/src/components/Author/Author.stories', { typescript })
     )
 
     await applyCodemod(
       'updateAuthorTest.js',
-      fullPath('web/src/components/Author/Author.test')
+      fullPath('web/src/components/Author/Author.test', { typescript })
     )
   }
 
@@ -205,49 +224,52 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
 
     await applyCodemod(
       'blogPostsCell.js',
-      fullPath('web/src/components/BlogPostsCell/BlogPostsCell')
+      fullPath('web/src/components/BlogPostsCell/BlogPostsCell', { typescript })
     )
 
     await createCell('blogPost')
 
     await applyCodemod(
       'blogPostCell.js',
-      fullPath('web/src/components/BlogPostCell/BlogPostCell')
+      fullPath('web/src/components/BlogPostCell/BlogPostCell', { typescript })
     )
 
     await createCell('author')
 
     await applyCodemod(
       'authorCell.js',
-      fullPath('web/src/components/AuthorCell/AuthorCell')
+      fullPath('web/src/components/AuthorCell/AuthorCell', { typescript })
     )
 
     await createCell('waterfallBlogPost')
 
     return applyCodemod(
       'waterfallBlogPostCell.js',
-      fullPath('web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell')
+      fullPath(
+        'web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell',
+        { typescript }
+      )
     )
   }
 
   const updateCellMocks = async () => {
     await applyCodemod(
       'updateBlogPostMocks.js',
-      fullPath('web/src/components/BlogPostCell/BlogPostCell.mock.ts', {
+      fullPath(`web/src/components/BlogPostCell/BlogPostCell.mock.${ext}`, {
         addExtension: false,
       })
     )
 
     await applyCodemod(
       'updateBlogPostMocks.js',
-      fullPath('web/src/components/BlogPostsCell/BlogPostsCell.mock.ts', {
+      fullPath(`web/src/components/BlogPostsCell/BlogPostsCell.mock.${ext}`, {
         addExtension: false,
       })
     )
 
     await applyCodemod(
       'updateAuthorCellMock.js',
-      fullPath('web/src/components/AuthorCell/AuthorCell.mock.ts', {
+      fullPath(`web/src/components/AuthorCell/AuthorCell.mock.${ext}`, {
         addExtension: false,
       })
     )
@@ -255,7 +277,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     return applyCodemod(
       'updateWaterfallBlogPostMocks.js',
       fullPath(
-        'web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.mock.ts',
+        `web/src/components/WaterfallBlogPostCell/WaterfallBlogPostCell.mock.${ext}`,
         {
           addExtension: false,
         }
@@ -287,7 +309,8 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       },
       {
         title: 'Changing routes',
-        task: () => applyCodemod('routes.js', fullPath('web/src/Routes')),
+        task: () =>
+          applyCodemod('routes.js', fullPath('web/src/Routes', { typescript })),
       },
 
       // ====== NOTE: rufus needs this workaround for tailwind =======
@@ -339,10 +362,15 @@ async function addModel(schema) {
   fs.writeFileSync(path, `${current}\n\n${schema}`)
 }
 
-async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
+async function apiTasks(
+  outputPath,
+  { verbose, linkWithLatestFwBuild, typescript }
+) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
+  const ext = typescript ? 'ts' : 'js'
+  const extX = typescript ? 'tsx' : 'js'
 
   const createBuilder = (cmd) => {
     return async function createItem(positionals) {
@@ -402,8 +430,8 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       execaOptions
     )
 
-    // update directive in contacts.sdl.ts
-    const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
+    // update directive in contacts.sdl.{js,ts}
+    const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.${ext}`
     const contentContactsSdl = fs.readFileSync(pathContactsSdl, 'utf-8')
     const resultsContactsSdl = contentContactsSdl
       .replace(
@@ -416,8 +444,8 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       ) // make deleting contacts admin only
     fs.writeFileSync(pathContactsSdl, resultsContactsSdl)
 
-    // update directive in posts.sdl.ts
-    const pathPostsSdl = `${OUTPUT_PATH}/api/src/graphql/posts.sdl.ts`
+    // update directive in posts.sdl.{js,ts}
+    const pathPostsSdl = `${OUTPUT_PATH}/api/src/graphql/posts.sdl.${ext}`
     const contentPostsSdl = fs.readFileSync(pathPostsSdl, 'utf-8')
     const resultsPostsSdl = contentPostsSdl.replace(
       /posts: \[Post!\]! @requireAuth([^}]*)@requireAuth/,
@@ -428,7 +456,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     fs.writeFileSync(pathPostsSdl, resultsPostsSdl)
 
     // Update src/lib/auth to return roles, so tsc doesn't complain
-    const libAuthPath = `${OUTPUT_PATH}/api/src/lib/auth.ts`
+    const libAuthPath = `${OUTPUT_PATH}/api/src/lib/auth.${ext}`
     const libAuthContent = fs.readFileSync(libAuthPath, 'utf-8')
 
     const newLibAuthContent = libAuthContent
@@ -443,7 +471,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     fs.writeFileSync(libAuthPath, newLibAuthContent)
 
     // update requireAuth test
-    const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.ts`
+    const pathRequireAuth = `${OUTPUT_PATH}/api/src/directives/requireAuth/requireAuth.test.${ext}`
     const contentRequireAuth = fs.readFileSync(pathRequireAuth).toString()
     const resultsRequireAuth = contentRequireAuth.replace(
       /const mockExecution([^}]*){} }\)/,
@@ -454,7 +482,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     fs.writeFileSync(pathRequireAuth, resultsRequireAuth)
 
     // add fullName input to signup form
-    const pathSignupPageTs = `${OUTPUT_PATH}/web/src/pages/SignupPage/SignupPage.tsx`
+    const pathSignupPageTs = `${OUTPUT_PATH}/web/src/pages/SignupPage/SignupPage.${extX}`
     const contentSignupPageTs = fs.readFileSync(pathSignupPageTs, 'utf-8')
     const usernameFields = contentSignupPageTs.match(
       /\s*<Label[\s\S]*?name="username"[\s\S]*?"rw-field-error" \/>/
@@ -479,7 +507,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
 
     // set fullName when signing up
-    const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
+    const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.${ext}`
     const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
     const resultsAuthTs = contentAuthTs.replace(
       '// name: userAttributes.name',
@@ -527,7 +555,7 @@ const DoublePage = () => {
 export default DoublePage`
 
           fs.writeFileSync(
-            fullPath('web/src/pages/DoublePage/DoublePage'),
+            fullPath('web/src/pages/DoublePage/DoublePage', { typescript }),
             doublePageContent
           )
         },
@@ -535,7 +563,7 @@ export default DoublePage`
       {
         title: 'Update Routes.tsx',
         task: () => {
-          const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
+          const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.${extX}`
           const contentRoutes = fs.readFileSync(pathRoutes).toString()
           const resultsRoutesAbout = contentRoutes.replace(
             /name="about"/,
@@ -573,14 +601,14 @@ export default DoublePage`
         return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
       }
       `.replaceAll(/ {6}/g, '')
-          const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
+          const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.${ext}`
           fs.writeFileSync(blogPostRouteHooksPath, blogPostRouteHooks)
 
           const waterfallRouteHooks = `export async function routeParameters() {
         return [{ id: 2 }]
       }
       `.replaceAll(/ {6}/g, '')
-          const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.ts`
+          const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.${ext}`
           fs.writeFileSync(waterfallRouteHooksPath, waterfallRouteHooks)
         },
       },
@@ -615,7 +643,7 @@ export default DoublePage`
           // Replace the random numbers in the scenario with consistent values
           await applyCodemod(
             'scenarioValueSuffix.js',
-            fullPath('api/src/services/posts/posts.scenarios')
+            fullPath('api/src/services/posts/posts.scenarios', { typescript })
           )
 
           await execa(`yarn rwfw project:copy`, [], execaOptions)
@@ -626,7 +654,7 @@ export default DoublePage`
         task: async () => {
           await applyCodemod(
             'seed.js',
-            fullPath('scripts/seed.ts', { addExtension: false })
+            fullPath(`scripts/seed.${ext}`, { addExtension: false, typescript })
           )
         },
       },
@@ -701,18 +729,18 @@ export default DoublePage`
 
           await applyCodemod(
             'usersSdl.js',
-            fullPath('api/src/graphql/users.sdl')
+            fullPath('api/src/graphql/users.sdl', { typescript })
           )
 
           await applyCodemod(
             'usersService.js',
-            fullPath('api/src/services/users/users')
+            fullPath('api/src/services/users/users', { typescript })
           )
 
           // Replace the random numbers in the scenario with consistent values
           await applyCodemod(
             'scenarioValueSuffix.js',
-            fullPath('api/src/services/users/users.scenarios')
+            fullPath('api/src/services/users/users.scenarios', { typescript })
           )
 
           const test = `import { user } from './users'
@@ -726,7 +754,10 @@ export default DoublePage`
               })
             })`.replaceAll(/ {12}/g, '')
 
-          fs.writeFileSync(fullPath('api/src/services/users/users.test'), test)
+          fs.writeFileSync(
+            fullPath('api/src/services/users/users.test', { typescript }),
+            test
+          )
 
           return createBuilder('yarn redwood g types')()
         },
