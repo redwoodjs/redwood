@@ -7118,7 +7118,7 @@ __metadata:
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.0.0
-    "@types/aws-lambda": 8.10.114
+    "@types/aws-lambda": 8.10.115
     ansi-colors: 4.1.3
     esbuild: 0.17.18
     fast-glob: 3.2.12
@@ -9185,13 +9185,6 @@ __metadata:
   version: 5.0.1
   resolution: "@types/aria-query@npm:5.0.1"
   checksum: bc9e40ce37bd3a1654948778c7829bd55aea1bc5f2cd06fcf6cd650b07bb388995799e9aab6e2d93a6cf55dcba3b85c155f7ba93adefcc7c2e152fc6057061b5
-  languageName: node
-  linkType: hard
-
-"@types/aws-lambda@npm:8.10.114":
-  version: 8.10.114
-  resolution: "@types/aws-lambda@npm:8.10.114"
-  checksum: b82c9ba399a9d10514bd6578c4a05126ff71d5529e84c8ba970e3b533cc0ae866c1dc16f74534330d148776b5c7504533bd1543880d0f31c9e3647da207dabb1
   languageName: node
   linkType: hard
 
