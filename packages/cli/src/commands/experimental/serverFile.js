@@ -1,6 +1,10 @@
+import { getEpilogue } from './util'
+
 export const command = 'server-file'
 
 export const description = 'Setup the experimental server file'
+
+export const EXPERIMENTAL_TOPIC_ID = 4851
 
 export const builder = (yargs) => {
   yargs
@@ -16,6 +20,7 @@ export const builder = (yargs) => {
       description: 'Print more logs',
       type: 'boolean',
     })
+    .epilogue(getEpilogue(command, description, EXPERIMENTAL_TOPIC_ID, true))
 }
 
 export const handler = async (options) => {
