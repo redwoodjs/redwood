@@ -106,7 +106,7 @@ export const useRedwoodOpenTelemetry = (): Plugin<PluginContext> => {
             executionSpan.end()
             // eslint-disable-next-line no-console
             console.warn(
-              `Plugin "newrelic" encountered a AsyncIterator which is not supported yet, so tracing data is not available for the operation.`
+              `Plugin "RedwoodOpenTelemetry" encountered a AsyncIterator which is not supported yet, so tracing data is not available for the operation.`
             )
             return
           }
