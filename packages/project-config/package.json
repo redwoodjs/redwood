@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/project-config",
-  "version": "5.0.6",
+  "version": "5.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
