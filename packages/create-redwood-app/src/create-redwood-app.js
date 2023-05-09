@@ -28,6 +28,21 @@ const { telemetry } = Parser(hideBin(process.argv))
 
 const tui = new RedwoodTUI()
 
+// Credit to esbuild: https://github.com/rtsao/esbuild/blob/c35a4cebf037237559213abc684504658966f9d6/lib/install.ts#L190-L199
+function isYarnBerryOrNewer() {
+  const { npm_config_user_agent: npmConfigUserAgent } = process.env
+
+  if (npmConfigUserAgent) {
+    const match = npmConfigUserAgent.match(/yarn\/(\d+)/)
+
+    if (match && match[1]) {
+      return parseInt(match[1], 10) >= 2
+    }
+  }
+
+  return false
+}
+
 async function executeCompatibilityCheck(templateDir) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
@@ -239,7 +254,7 @@ async function installNodeModules(newAppDir) {
     tui.displayError(
       "Couldn't install node modules",
       [
-        `We could not install node modules via ${RedwoodStyling.info(
+        `We couldn't install node modules via ${RedwoodStyling.info(
           "'yarn install'"
         )}. Please see below for the full error message.`,
         '',
@@ -253,7 +268,7 @@ async function installNodeModules(newAppDir) {
 
   tuiContent.update({
     header: '',
-    content: `${RedwoodStyling.green('✔')} Node modules successfully installed`,
+    content: `${RedwoodStyling.green('✔')} Installed node modules`,
     spinner: {
       enabled: false,
     },
@@ -304,10 +319,10 @@ async function generateTypes(newAppDir) {
   tui.stopReactive()
 }
 
-async function initialiseGit(newAppDir, commitMessage) {
+async function initializeGit(newAppDir, commitMessage) {
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
-    content: 'Initialising a git repo',
+    content: 'Initializing a git repo',
     spinner: {
       enabled: true,
     },
@@ -327,9 +342,9 @@ async function initialiseGit(newAppDir, commitMessage) {
   } catch (error) {
     tui.stopReactive(true)
     tui.displayError(
-      "Couldn't initialise a git repo",
+      "Couldn't initialize a git repo",
       [
-        `We could not initialise a git repo using ${RedwoodStyling.info(
+        `We could not initialize a git repo using ${RedwoodStyling.info(
           'git init && git add . && git commit -m "Initial commit"'
         )}. Please see below for the full error message.`,
         '',
@@ -344,7 +359,7 @@ async function initialiseGit(newAppDir, commitMessage) {
   tuiContent.update({
     content: `${RedwoodStyling.green(
       '✔'
-    )} Initialised a git repo with commit message "${commitMessage}"`,
+    )} Initialized a git repo with commit message "${commitMessage}"`,
     spinner: {
       enabled: false,
     },
@@ -369,7 +384,7 @@ async function handleTypescriptPreference(typescriptFlag) {
       type: 'Select',
       name: 'language',
       choices: ['TypeScript', 'JavaScript'],
-      message: 'Select your preferred coding language',
+      message: 'Select your preferred language',
       initial: 'TypeScript',
     })
     return response.language === 'TypeScript'
@@ -386,7 +401,7 @@ async function handleGitPreference(gitInitFlag) {
     tui.drawText(
       `${RedwoodStyling.green('✔')} ${
         gitInitFlag ? 'Will' : 'Will not'
-      } initialise a git repo based on command line flag`
+      } initialize a git repo based on command line flag`
     )
     return gitInitFlag
   }
@@ -479,26 +494,10 @@ async function createRedwoodApp() {
     ].join('\n')
   )
 
-  // Extract the args as provided by the user in the command line
-  // TODO: Make all flags have the 'flag' suffix
-  const {
-    _: args,
-    'yarn-install': yarnInstallFlag,
-    typescript: typescriptFlag,
-    overwrite,
-    // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
-    'git-init': gitInitFlag,
-    'commit-message': commitMessageFlag,
-  } = yargs(hideBin(process.argv))
+  const cli = yargs(hideBin(process.argv))
     .scriptName(name)
     .usage('Usage: $0 <project directory> [option]')
     .example('$0 newapp')
-    .option('yarn-install', {
-      default: null,
-      type: 'boolean',
-      describe:
-        'Skip yarn install with --no-yarn-install. Also skips version requirements check.',
-    })
     .option('typescript', {
       alias: 'ts',
       default: null,
@@ -529,7 +528,29 @@ async function createRedwoodApp() {
       describe: 'Commit message for the initial commit.',
     })
     .version(version)
-    .parse()
+
+  const _isYarnBerryOrNewer = isYarnBerryOrNewer()
+
+  // Only permit the yarn install flag on yarn 1.
+  if (!_isYarnBerryOrNewer) {
+    cli.option('yarn-install', {
+      default: null,
+      type: 'boolean',
+      describe: 'Install node modules. Skip via --no-yarn-install.',
+    })
+  }
+
+  // Extract the args as provided by the user in the command line
+  // TODO: Make all flags have the 'flag' suffix
+  const {
+    _: args,
+    'yarn-install': yarnInstallFlag,
+    typescript: typescriptFlag,
+    overwrite,
+    // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
+    'git-init': gitInitFlag,
+    'commit-message': commitMessageFlag,
+  } = cli.parse()
 
   // Record some of the arguments for telemetry
   trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstallFlag)
@@ -581,14 +602,18 @@ async function createRedwoodApp() {
     commitMessage = await handleCommitMessagePreference(commitMessageFlag)
   }
 
-  const yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
+  let yarnInstall = false
+
+  if (!_isYarnBerryOrNewer) {
+    yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
+  }
 
   // Create project files
   await createProjectFiles(newAppDir, { templateDir, overwrite })
 
-  // Initialise git repo
+  // Initialize git repo
   if (useGit) {
-    await initialiseGit(newAppDir, commitMessage)
+    await initializeGit(newAppDir, commitMessage)
   }
 
   // Install the node packages
@@ -599,11 +624,9 @@ async function createRedwoodApp() {
       .getActiveSpan()
       ?.setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
   } else {
-    tui.drawText(
-      `${RedwoodStyling.warning(
-        '⚠'
-      )} Skipped yarn install step based on command line flag`
-    )
+    if (!_isYarnBerryOrNewer) {
+      tui.drawText(`${RedwoodStyling.info('ℹ')} Skipped yarn install step`)
+    }
   }
 
   // Generate types
@@ -619,51 +642,15 @@ async function createRedwoodApp() {
       '',
       ` ⚡️ ${RedwoodStyling.redwood(
         'Get up and running fast with this Quick Start guide'
-      )}: https://redwoodjs.com/docs/quick-start`,
-      '',
-      RedwoodStyling.header('Join the Community'),
-      '',
-      `${RedwoodStyling.redwood(
-        ' ❖ Join our Forums'
-      )}: https://community.redwoodjs.com`,
-      `${RedwoodStyling.redwood(
-        ' ❖ Join our Chat'
-      )}: https://discord.gg/redwoodjs`,
-      '',
-      RedwoodStyling.header('Get some help'),
-      '',
-      `${RedwoodStyling.redwood(
-        ' ❖ Get started with the Tutorial'
-      )}: https://redwoodjs.com/docs/tutorial`,
-      `${RedwoodStyling.redwood(
-        ' ❖ Read the Documentation'
-      )}: https://redwoodjs.com/docs`,
-      '',
-      RedwoodStyling.header('Stay updated'),
-      '',
-      `${RedwoodStyling.redwood(
-        ' ❖ Sign up for our Newsletter'
-      )}: https://www.redwoodjs.com/newsletter`,
-      `${RedwoodStyling.redwood(
-        ' ❖ Follow us on Twitter'
-      )}: https://twitter.com/redwoodjs`,
-      '',
-      `${RedwoodStyling.header(`Become a Contributor`)} ${RedwoodStyling.love(
-        '❤'
-      )}`,
-      '',
-      `${RedwoodStyling.redwood(
-        ' ❖ Learn how to get started'
-      )}: https://redwoodjs.com/docs/contributing`,
-      `${RedwoodStyling.redwood(
-        ' ❖ Find a Good First Issue'
-      )}: https://redwoodjs.com/good-first-issue`,
+      )}: https://redwoodjs.com/quick-start`,
       '',
       `${RedwoodStyling.header(`Fire it up!`)} 🚀`,
       '',
       ...[
         `${RedwoodStyling.redwood(
-          ` > ${RedwoodStyling.green(`cd ${targetDir}`)}`
+          ` > ${RedwoodStyling.green(
+            `cd ${path.relative(process.cwd(), targetDir)}`
+          )}`
         )}`,
         !yarnInstall &&
           `${RedwoodStyling.redwood(
