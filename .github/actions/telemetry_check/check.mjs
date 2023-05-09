@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 import http from 'http'
+import path from 'path'
 
 import { exec } from '@actions/exec'
 
@@ -36,13 +37,21 @@ try {
   switch (mode) {
     case 'crwa':
       exitCode = await exec(
-        `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ../project-for-telemetry --typescript true --git false --yarn-install true`
+        `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ../project-for-telemetry --typescript true --git false`
       )
       if (exitCode) {
         process.exit(1)
       }
       break
     case 'cli':
+      exitCode = await exec(
+        `yarn install`, null, {
+          cwd: path.join(process.cwd(), '../project-for-telemetry')
+        }
+      )
+      if (exitCode) {
+        process.exit(1)
+      }
       exitCode = await exec(
         `yarn --cwd ../project-for-telemetry node ../redwood/packages/cli/dist/index.js info`
       )
