@@ -2,6 +2,8 @@ export const command = 'setup-opentelemetry'
 
 export const description = 'Setup OpenTelemetry within the API side'
 
+export const EXPERIMENTAL_TOPIC_ID = 4772
+
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
