@@ -7495,7 +7495,7 @@ __metadata:
     "@vitejs/plugin-react": 4.0.0
     buffer: 6.0.3
     core-js: 3.30.2
-    glob: 10.2.2
+    glob: 10.2.3
     jest: 29.5.0
     typescript: 5.0.4
     vite: 4.3.5
@@ -18540,9 +18540,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.2.2, glob@npm:^10.0.0":
-  version: 10.2.2
-  resolution: "glob@npm:10.2.2"
+"glob@npm:10.2.3, glob@npm:^10.0.0":
+  version: 10.2.3
+  resolution: "glob@npm:10.2.3"
   dependencies:
     foreground-child: ^3.1.0
     jackspeak: ^2.0.3
@@ -18551,7 +18551,7 @@ __metadata:
     path-scurry: ^1.7.0
   bin:
     glob: dist/cjs/src/bin.js
-  checksum: 24238fc36ea34f4874e858eeda7d94ae2de6dbdd40d8a75dc707dc20853357394a12e9340b3e46f9e50231bf904b15e5dec15d2de63631bb1d2e8d4920c04996
+  checksum: d1d598557ca6c54d86db6febea108eaae3df408c3eb8a41059e96edbd418f7db95cd089c55242f8dbb72712ceb12eebd3d77969de5c05379954e48a06823039b
   languageName: node
   linkType: hard
 
