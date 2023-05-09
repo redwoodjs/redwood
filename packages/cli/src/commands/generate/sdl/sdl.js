@@ -123,6 +123,19 @@ const idType = (model, crud) => {
   return idField.type
 }
 
+const idName = (model, crud) => {
+  if (!crud) {
+    return undefined
+  }
+
+  const idField = model.fields.find((field) => field.isId)
+  if (!idField) {
+    missingIdConsoleMessage()
+    throw new Error('Failed: Could not generate SDL')
+  }
+  return idField.name
+}
+
 const sdlFromSchemaModel = async (name, crud, docs = false) => {
   const model = await getSchema(name)
 
@@ -161,6 +174,7 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
     createInput: createInputSDL(model, types, docs).join('\n    '),
     updateInput: updateInputSDL(model, types, docs).join('\n    '),
     idType: idType(model, crud),
+    idName: idName(model, crud),
     relations: relationsForModel(model),
     enums,
   }
@@ -180,6 +194,7 @@ export const files = async ({
     createInput,
     updateInput,
     idType,
+    idName,
     relations,
     enums,
   } = await sdlFromSchemaModel(name, crud, docs)
@@ -200,6 +215,7 @@ export const files = async ({
     createInput,
     updateInput,
     idType,
+    idName,
     enums,
   })
 
