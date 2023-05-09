@@ -338,8 +338,6 @@ async function releaseMajorOrMinor() {
   const releaseBranchExists = await branchExists(releaseBranch)
   console.log()
 
-  const checkoutFromBranch = semver === 'major' ? 'main' : 'next'
-
   if (releaseBranchExists) {
     console.log(
       `Checking out existing release branch ${chalk.magenta(releaseBranch)}\n`
@@ -348,6 +346,8 @@ async function releaseMajorOrMinor() {
     await $`git checkout ${releaseBranch}`
     console.log()
   } else {
+    const checkoutFromBranch = semver === 'major' ? 'main' : 'next'
+
     exitIfNo(
       await question(
         `Ok to checkout new branch ${chalk.magenta(
@@ -404,7 +404,6 @@ async function releaseMajorOrMinor() {
     [
       'Only a few more things to do:',
       '',
-      '  - Remove the yarn.lock files in the create-redwood-app templates',
       '  - Merge the release branch into next (updating yarn.lock if necessary) and push',
       '  - Once the docs are done deploying (check here https://app.netlify.com/sites/redwoodjs-docs/overview), start the algolia crawler at https://crawler.algolia.com/admin',
       '  - Delete the release branch locally and on https://github.com/redwoodjs/redwood/branches',
@@ -447,9 +446,27 @@ async function releasePatch() {
 
   if (!(await branchExistsOnOrigin(releaseBranch))) {
     logSection('Pushing to redwoodjs/redwood\n')
-    await pushAndDiff()
 
+    exitIfNo(
+      await question(
+        `Ok to push new branch ${chalk.magenta(
+          releaseBranch
+        )} to GitHub and open diff? [Y/n] > `
+      )
+    )
+    console.log()
+
+    await $`git push -u origin ${releaseBranch}`
+    console.log()
+
+    await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
+    console.log()
+
+    exitIfNo(await question('Diff look ok? [Y/n] > '))
+
+    // ------------------------
     logSection('Cherry picking PRs\n')
+
     console.log(
       [
         "Remember to cherry pick PRs _in the same order as they were merged_. And after you're done, run:",
@@ -469,6 +486,8 @@ async function releasePatch() {
   await pushAndDiff()
 
   await cleanInstallUpdate()
+  await pushAndDiff()
+
   await commitTagQA()
 
   exitIfNo(
@@ -500,7 +519,6 @@ async function releasePatch() {
     [
       'Only a few more things to do:',
       '',
-      '  - Remove the yarn.lock files in the create-redwood-app templates',
       '  - Merge the release branch into next (updating yarn.lock if necessary)',
       '  - Push',
       '  - Delete the release branch locally and on https://github.com/redwoodjs/redwood/branches',
@@ -538,6 +556,9 @@ async function cleanInstallUpdate() {
       `The package versions have been updated. Everything look ok? [Y/n] > `
     )
   )
+  console.log()
+
+  await $`git commit -am "chore: update package versions to ${nextVersion}"`
 }
 
 async function commitTagQA() {
@@ -607,16 +628,9 @@ async function updateCreateRedwoodAppTemplates() {
   }
   console.log()
 
-  cd('./packages/create-redwood-app/templates/ts')
-  await $`touch yarn.lock`
-  await $`yarn install`
-
-  cd('../..')
+  cd('./packages/create-redwood-app')
   await $`yarn ts-to-js`
-
-  await $`git add .`
   await $`git commit -am "chore: update create-redwood-app templates"`
-
   cd('../..')
 }
 
@@ -667,7 +681,6 @@ async function versionDocs() {
   await $`yarn`
   await $`yarn clear`
   await $`yarn docusaurus docs:version ${nextDocsVersion}`
-  await $`git add .`
-  await $`git commit -m "Version docs to ${nextDocsVersion}"`
+  await $`git commit -am "Version docs to ${nextDocsVersion}"`
   await cd('../')
 }

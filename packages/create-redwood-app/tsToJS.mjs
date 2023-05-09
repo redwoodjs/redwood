@@ -18,7 +18,6 @@ const { default: prettierConfig } = await import(
   new URL('./templates/ts/prettier.config.js', import.meta.url)
 )
 
-// Handle node_modules, .yarn/install-state.gz.
 const tsTemplateNodeModulesPath = path.join(
   TS_TEMPLATE_FILEPATH,
   'node_modules'
@@ -29,25 +28,12 @@ if (fs.existsSync(tsTemplateNodeModulesPath)) {
   fs.rmSync(tsTemplateNodeModulesPath, { recursive: true })
 }
 
-const tsTemplateYarnInstallState = path.join(
-  TS_TEMPLATE_FILEPATH,
-  '.yarn',
-  'install-state.gz'
-)
-
-if (fs.existsSync(tsTemplateYarnInstallState)) {
-  console.log('Removing .yarn/install-state.gz in TS template')
-  fs.rmSync(tsTemplateYarnInstallState, { recursive: true })
-}
-
-// Clean and copy the TS template to the JS template.
 console.log('Cleaning JS template')
 fs.rmSync(JS_TEMPLATE_FILEPATH, { recursive: true })
 
 console.log('Copying TS template to JS template')
 fs.copySync(TS_TEMPLATE_FILEPATH, JS_TEMPLATE_FILEPATH)
 
-// Find files and transform.
 const apiWebFilePaths = fg.sync('{api,web}/src/**/*.{ts,tsx}', {
   cwd: JS_TEMPLATE_FILEPATH,
   absolute: true,
