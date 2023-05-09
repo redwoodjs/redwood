@@ -1,6 +1,6 @@
 ---
 
-description: "Learn how to build dashboards fast using the termor React library of data visualization components."
+description: "Learn how to build dashboards fast using the Tremor React library of data visualization components."
 ---
 
 # Build Dashboards Fast with Tremor
