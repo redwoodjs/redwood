@@ -15062,9 +15062,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:12.11.0":
-  version: 12.11.0
-  resolution: "cypress@npm:12.11.0"
+"cypress@npm:12.12.0":
+  version: 12.12.0
+  resolution: "cypress@npm:12.12.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -15110,7 +15110,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 6fddfd1198212c1b05cfe50ae19da409d98295fdfa06e53aec933d9b5737272b26da56d2244818307bd45cbfe84e6aee4602eb6c8e2b4ac865910806e29299b0
+  checksum: 526c5704b783b02b55a97e5adea536959704639dc80869dc2fec123dc4bcfba519245517f022b8c7b7daabb68d367ab57d9fa9244d86c7fa78b32fcc81937f31
   languageName: node
   linkType: hard
 
@@ -28305,7 +28305,7 @@ __metadata:
     babel-plugin-remove-code: 0.0.6
     boxen: 5.1.2
     core-js: 3.30.2
-    cypress: 12.11.0
+    cypress: 12.12.0
     cypress-wait-until: 1.7.2
     eslint: 8.40.0
     fast-glob: 3.2.12
