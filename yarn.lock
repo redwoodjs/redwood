@@ -7059,7 +7059,7 @@ __metadata:
     style-loader: 3.3.2
     typescript: 5.0.4
     url-loader: 4.1.1
-    webpack: 5.82.0
+    webpack: 5.82.1
     webpack-bundle-analyzer: 4.8.0
     webpack-cli: 5.1.1
     webpack-dev-server: 4.15.0
@@ -16119,7 +16119,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.13.0, enhanced-resolve@npm:^5.13.0, enhanced-resolve@npm:^5.7.0":
+"enhanced-resolve@npm:5.13.0":
   version: 5.13.0
   resolution: "enhanced-resolve@npm:5.13.0"
   dependencies:
@@ -16137,6 +16137,16 @@ __metadata:
     memory-fs: ^0.5.0
     tapable: ^1.0.0
   checksum: d95fc630606ea35bed21c4a029bbb1681919571a2d1d2011c7fc42a26a9e48ed3d74a89949ce331e1fd3229850a303e3218b887b92951330f16bdfbb93a10e64
+  languageName: node
+  linkType: hard
+
+"enhanced-resolve@npm:^5.14.0, enhanced-resolve@npm:^5.7.0":
+  version: 5.14.0
+  resolution: "enhanced-resolve@npm:5.14.0"
+  dependencies:
+    graceful-fs: ^4.2.4
+    tapable: ^2.2.0
+  checksum: 33e68715860246929e30db0128e60bfd2d351987fa2b39a1052f7e555656992c87e856b67083019a6212841c36b1efdde9394961e7cf9dffff400b80848d341c
   languageName: node
   linkType: hard
 
@@ -32412,9 +32422,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.82.0, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
-  version: 5.82.0
-  resolution: "webpack@npm:5.82.0"
+"webpack@npm:5.82.1, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
+  version: 5.82.1
+  resolution: "webpack@npm:5.82.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -32425,7 +32435,7 @@ __metadata:
     acorn-import-assertions: ^1.7.6
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.13.0
+    enhanced-resolve: ^5.14.0
     es-module-lexer: ^1.2.1
     eslint-scope: 5.1.1
     events: ^3.2.0
@@ -32445,7 +32455,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 74d612335f0c18ad5e3e00cee5df11ac79d836a1a57623078218d41887c3ecb273ada9886a8999e4c657f2189c3a653524ec81e4e27080883b10fb1e9046e769
+  checksum: 8583c71f30af348d16b63b8c2112653445063351b8bebd6033451a3bcf89176c1aec45fcd0f5a048e429e78004b79bb76d1a19f6e166d5bd802306a2df19b725
   languageName: node
   linkType: hard
 
