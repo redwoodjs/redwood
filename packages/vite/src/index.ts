@@ -9,6 +9,7 @@ import {
   transformWithEsbuild,
   UserConfig,
 } from 'vite'
+import commonjs from 'vite-plugin-commonjs'
 import EnvironmentPlugin from 'vite-plugin-environment'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
@@ -18,7 +19,6 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 const readFile = promisify(fsReadFile)
 
 // Using require, because plugin has TS errors
-const { default: commonjs } = require('vite-plugin-commonjs')
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
