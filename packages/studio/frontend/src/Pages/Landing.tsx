@@ -1,76 +1,25 @@
 import React from 'react'
 
-import { useQuery, gql } from '@apollo/client'
-import {
-  CircleStackIcon,
-  CodeBracketIcon,
-  RadioIcon,
-  ShareIcon,
-} from '@heroicons/react/24/outline'
+import SpanTypeBarChart from '../Charts/SpanTypeBarChart'
 
-import CountCard from '../Components/CountCard'
-
-const QUERY_GET_SPAN_COUNTS = gql`
-  query GetSpanCount {
-    graphQLSpanCount
-    sqlCount
-    traceCount
-  }
-`
-
-function App() {
-  const { loading, error, data } = useQuery(QUERY_GET_SPAN_COUNTS, {
-    pollInterval: 1000,
-  })
-
+export default function App() {
   return (
-    <div className="mx-auto py-6 px-4 max-w-[95%] md:max-w-[80%] sm:px-6 lg:px-8">
-      <div>
-        <h3 className="text-base font-semibold leading-6 text-gray-900">
-          Development Studio
-        </h3>
+    <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8">
+      <div className="flex flex-col gap-4">
+        {/* Header  */}
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto">
+            <h1 className="text-base font-semibold leading-6 text-slate-100 px-4 pt-2 pb-2 bg-rich-black rounded-md">
+              RedwoodJS Studio
+            </h1>
+          </div>
+        </div>
 
-        <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <CountCard
-            title="OpenTelemetry Traces"
-            colouring="bg-emerald-500"
-            icon={RadioIcon}
-            link="/tracing"
-            loading={loading}
-            error={error}
-            value={data?.traceCount}
-          ></CountCard>
-          <CountCard
-            title="Service Function Calls"
-            colouring="bg-fuchsia-600"
-            icon={CodeBracketIcon}
-            link="/coming-soon"
-            loading={false}
-            error={undefined}
-            value={undefined}
-          ></CountCard>
-          <CountCard
-            title="SQL Queries"
-            colouring="bg-cyan-600"
-            icon={CircleStackIcon}
-            link="/sql"
-            loading={loading}
-            error={error}
-            value={data?.sqlCount}
-          ></CountCard>
-          <CountCard
-            title="GraphQL Resolutions"
-            colouring="bg-orange-600"
-            icon={ShareIcon}
-            link="/coming-soon"
-            loading={loading}
-            error={error}
-            value={data?.graphQLSpanCount}
-          ></CountCard>
-        </dl>
+        {/* SpanTypeTimeline Chart */}
+        <div className="overflow-hidden bg-white shadow rounded-md border border-white flex flex-row justify-between">
+          <SpanTypeBarChart timeLimit={60 * 2} timeBucket={5} />
+        </div>
       </div>
     </div>
   )
 }
-
-export default App

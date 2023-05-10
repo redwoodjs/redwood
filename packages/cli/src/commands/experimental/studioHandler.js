@@ -8,7 +8,7 @@ import { isModuleInstalled, installRedwoodModule } from '../../lib/packages'
 import { command, description, EXPERIMENTAL_TOPIC_ID } from './studio'
 import { printTaskEpilogue } from './util'
 
-export const handler = async () => {
+export const handler = async (options) => {
   printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
   try {
     // Check the module is installed
@@ -41,7 +41,7 @@ export const handler = async () => {
 
     // Import studio and start it
     const { start } = await import('@redwoodjs/studio')
-    await start()
+    await start({ open: options.open })
   } catch (e) {
     console.log('Cannot start the development studio')
     console.log(e)
