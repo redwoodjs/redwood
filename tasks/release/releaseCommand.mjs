@@ -1,8 +1,10 @@
 /* eslint-env node */
 
+import { fileURLToPath } from 'node:url'
+
 import boxen from 'boxen'
 import { Octokit } from 'octokit'
-import { cd, chalk, question, $ } from 'zx'
+import { cd, chalk, question, $, fs, path } from 'zx'
 
 import { handler as generateReleaseNotes } from './generateReleaseNotesCommand.mjs'
 import {
@@ -447,8 +449,25 @@ async function releasePatch() {
 
   if (!(await branchExistsOnOrigin(releaseBranch))) {
     logSection('Pushing to redwoodjs/redwood\n')
-    await pushAndDiff()
 
+    exitIfNo(
+      await question(
+        `Ok to push new branch ${chalk.magenta(
+          releaseBranch
+        )} to GitHub and open diff? [Y/n] > `
+      )
+    )
+    console.log()
+
+    await $`git push -u origin ${releaseBranch}`
+    console.log()
+
+    await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
+    console.log()
+
+    exitIfNo(await question('Diff look ok? [Y/n] > '))
+
+    // ------------------------
     logSection('Cherry picking PRs\n')
     console.log(
       [
@@ -465,22 +484,61 @@ async function releasePatch() {
     await pushAndDiff()
   }
 
-  await updateCreateRedwoodAppTemplates()
-  await pushAndDiff()
-
   await cleanInstallUpdate()
-  await commitTagQA()
+  console.log()
+
+  await runQA()
+  console.log()
 
   exitIfNo(
-    await question(
-      `Everything passed local QA. Ok to push to GitHub and publish to NPM? [Y/n] > `
-    )
+    await question(`Everything passed local QA. Ok to publish to NPM? [Y/n] > `)
   )
   console.log()
 
+  // Temporarily remove `"packages/create-redwood-app"` from the workspaces field
+  // so that we can publish it separately later.
+  //  ------------------------
+  const frameworkPackageConfigPath = fileURLToPath(
+    new URL('../../package.json', import.meta.url)
+  )
+
+  const frameworkPackageConfig = fs.readJSONSync(frameworkPackageConfigPath)
+
+  const packagePaths = (await $`yarn workspaces list --json`).stdout
+    .trim()
+    .split('\n')
+    .map(JSON.parse)
+    .filter(({ name }) => name)
+    .map(({ location }) => location)
+
+  frameworkPackageConfig.workspaces = packagePaths.filter(
+    (packagePath) => packagePath !== 'packages/create-redwood-app'
+  )
+
+  fs.writeJSONSync(frameworkPackageConfigPath, frameworkPackageConfig, {
+    spaces: 2,
+  })
+
+  await $`git commit -am "chore: temporary update to workspaces"`
+  console.log()
+
+  //  ------------------------
+  await $`yarn lerna publish from-package`
+  console.log()
+
+  exitIfNo(await question(`Revert the workspace change [Y/n] > `))
+  console.log()
+
+  //  ------------------------
+  await updateCreateRedwoodAppTemplates()
+  console.log()
+
+  await $`yarn lerna publish from-package`
+  console.log()
+
+  await $`git tag -am ${nextVersion} "${nextVersion}"`
   await $`git push`
   await $`git push --tags`
-  await $`yarn lerna publish from-package`
 
   console.log(rocketBoxen(`Released ${chalk.green(nextVersion)}`))
 
@@ -538,18 +596,17 @@ async function cleanInstallUpdate() {
       `The package versions have been updated. Everything look ok? [Y/n] > `
     )
   )
-}
-
-async function commitTagQA() {
-  logSection('Committing, tagging, and running QA\n')
-
-  exitIfNo(
-    await question(`Ok to commit, tag, and run through local QA? [Y/n] > `)
-  )
   console.log()
 
-  await $`git commit -am "${nextVersion}"`
-  await $`git tag -am ${nextVersion} "${nextVersion}"`
+  await $`git commit -am "chore: update package versions to ${nextVersion}"`
+}
+
+async function runQA() {
+  logSection('Running QA\n')
+
+  exitIfNo(await question(`Ok to run local QA? [Y/n] > `))
+  console.log()
+
   await $`yarn build`
   await $`yarn lint`
   await $`yarn test`
@@ -613,10 +670,7 @@ async function updateCreateRedwoodAppTemplates() {
 
   cd('../..')
   await $`yarn ts-to-js`
-
-  await $`git add .`
   await $`git commit -am "chore: update create-redwood-app templates"`
-
   cd('../..')
 }
 
@@ -667,7 +721,6 @@ async function versionDocs() {
   await $`yarn`
   await $`yarn clear`
   await $`yarn docusaurus docs:version ${nextDocsVersion}`
-  await $`git add .`
-  await $`git commit -m "Version docs to ${nextDocsVersion}"`
+  await $`git commit -am "Version docs to ${nextDocsVersion}"`
   await cd('../')
 }
