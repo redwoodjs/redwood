@@ -3,7 +3,11 @@ import { JSONDefinition, JSONResolver } from 'graphql-scalars'
 import { createYoga, createSchema } from 'graphql-yoga'
 
 import { authProvider, generateAuthHeaders } from '../services/auth'
-import { spanTypeTimeline, spanTreeMapData } from '../services/charts'
+import {
+  spanTypeTimeline,
+  spanTreeMapData,
+  spanTypeTimeSeriesData,
+} from '../services/charts'
 import { studioConfig, webConfig } from '../services/config'
 import { span, spans } from '../services/explore/span'
 import { traces, trace, traceCount } from '../services/explore/trace'
@@ -68,6 +72,17 @@ export const setupYoga = (fastify: FastifyInstance) => {
         legend: JSON
         axisLeft: JSON
         axisBottom: JSON
+      }
+
+      type TimeSeriesType {
+        ts: String!
+        generic: Float
+        graphql: Float
+        http: Float
+        prisma: Float
+        redwoodfunction: Float
+        redwoodservice: Float
+        sql: Float
       }
 
       type PrismaQuerySpan {
@@ -149,6 +164,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         ): SpanTypeTimelineData
 
         spanTreeMapData(spanId: String): JSON
+        spanTypeTimeSeriesData(timeLimit: Int!): [TimeSeriesType]
       }
 
       type Mutation {
@@ -178,6 +194,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         // Charts
         spanTypeTimeline,
         spanTreeMapData,
+        spanTypeTimeSeriesData,
       },
       Span: {
         descendantSpans: async (span, _args, _ctx) => {
@@ -201,6 +218,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
       warn: (...args) => args.forEach((arg) => fastify.log.warn(arg)),
       error: (...args) => args.forEach((arg) => fastify.log.error(arg)),
     },
+    graphiql: true,
   })
 
   return yoga

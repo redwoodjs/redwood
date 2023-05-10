@@ -1,6 +1,7 @@
 import React from 'react'
 
 import SpanTypeBarChart from '../Charts/SpanTypeBarChart'
+import SpanTypeTimeSeriesChart from '../Charts/SpanTypeTimeSeriesChart'
 
 export default function App() {
   return (
@@ -18,6 +19,9 @@ export default function App() {
         {/* SpanTypeTimeline Chart */}
         <div className="overflow-hidden bg-white shadow rounded-md border border-white flex flex-row justify-between">
           <SpanTypeBarChart timeLimit={60 * 2} timeBucket={5} />
+        </div>
+        <div className="overflow-hidden bg-white shadow rounded-md border border-white flex flex-row justify-between">
+          <SpanTypeTimeSeriesChart timeLimit={60 * 2} />
         </div>
       </div>
     </div>
