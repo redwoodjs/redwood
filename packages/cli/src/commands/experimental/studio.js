@@ -1,4 +1,4 @@
-import terminalLink from 'terminal-link'
+import { getEpilogue } from './util'
 
 export const command = 'studio'
 export const description = 'Run the Redwood development studio'
@@ -11,12 +11,7 @@ export function builder(yargs) {
       default: true,
       description: 'Open the studio in your browser',
     })
-    .epilogue(
-      `Also see the ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#studio'
-      )}`
-    )
+    .epilogue(getEpilogue(command, description, EXPERIMENTAL_TOPIC_ID, true))
 }
 
 export async function handler(options) {
