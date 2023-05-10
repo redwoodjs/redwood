@@ -28,6 +28,7 @@ const QUERY_GET_ALL_TRACES = gql`
         id
         type
         name
+        brief
         parent
         statusCode
         startNano
@@ -36,6 +37,16 @@ const QUERY_GET_ALL_TRACES = gql`
     }
   }
 `
+
+function getBrief(spans: any[]) {
+  const graphQLSpan = spans.find(
+    (span) => span.type === 'graphql' && span.brief !== 'Anonymous Operation'
+  )
+  if (graphQLSpan) {
+    return graphQLSpan.brief
+  }
+  return traceRootSpan(spans)?.brief
+}
 
 function TraceListComponent({ traces }: { traces: any[] }) {
   if (traces.length === 0) {
@@ -61,9 +72,7 @@ function TraceListComponent({ traces }: { traces: any[] }) {
               className="flex-1 flex-col items-start min-w-0"
             >
               <Flex>
-                <Title className="flex-1 truncate">
-                  {getTraceName(row.spans)}
-                </Title>
+                <Title className="flex-1 truncate">{getBrief(row.spans)}</Title>
                 <Badge
                   size="lg"
                   className="px-3.5 py-0.5"
@@ -73,7 +82,9 @@ function TraceListComponent({ traces }: { traces: any[] }) {
                 </Badge>
               </Flex>
               <Flex className="border-b border-gray-200 pb-2 mb-2">
-                <Text>{row.id}</Text>
+                <Text>
+                  {row.id} | {getTraceName(row.spans)}
+                </Text>
               </Flex>
               <Flex className="justify-start flex-wrap">
                 {Array.from(typeCountMap.keys())

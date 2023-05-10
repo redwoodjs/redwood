@@ -49,7 +49,7 @@ export async function retypeSpan(_parent: unknown, { id }: { id: number }) {
       `
     UPDATE span SET
       type = 'graphql',
-      brief = NULL
+      brief = substr(COALESCE(json_extract(attributes, '$.\"graphql.operation.name\"'), json_extract(attributes, '$.\"graphql.execute.operationName\"')), 0, 255)
     WHERE
       (
         json_extract(attributes, '$.\"graphql.operation.type\"') IS NOT NULL OR
@@ -103,7 +103,12 @@ export async function retypeSpan(_parent: unknown, { id }: { id: number }) {
       `
     UPDATE span SET
       type = 'redwood-service',
-      brief = NULL
+      brief = substr(
+        SUBSTR(
+          json_extract(attributes, '$.\"code.filepath\"'),
+          INSTR(json_extract(attributes, '$.\"code.filepath\"'), '/services/')
+          + LENGTH('/services/')
+        ), 0, 255)
     WHERE
       name LIKE 'redwoodjs:api:services%' AND
       id = ?;
@@ -118,7 +123,12 @@ export async function retypeSpan(_parent: unknown, { id }: { id: number }) {
       `
     UPDATE span SET
       type = 'redwood-function',
-      brief = NULL
+      brief = substr(
+        SUBSTR(
+          json_extract(attributes, '$.\"code.filepath\"'),
+          INSTR(json_extract(attributes, '$.\"code.filepath\"'), '/functions/')
+          + LENGTH('/functions/')
+        ), 0, 255)
     WHERE
       name LIKE 'redwoodjs:api:functions%' AND
       id = ?;
@@ -146,7 +156,7 @@ export async function retypeSpans(_parent: unknown) {
   await db.run(`
     UPDATE span SET
       type = 'graphql',
-      brief = NULL
+      brief = substr(COALESCE(json_extract(attributes, '$.\"graphql.operation.name\"'), json_extract(attributes, '$.\"graphql.execute.operationName\"')), 0, 255)
     WHERE (
       json_extract(attributes, '$.\"graphql.operation.type\"') IS NOT NULL OR
       json_extract(attributes, '$.\"graphql.operation.name\"') IS NOT NULL OR
@@ -181,7 +191,12 @@ export async function retypeSpans(_parent: unknown) {
   await db.run(`
     UPDATE span SET
       type = 'redwood-service',
-      brief = NULL
+      brief = substr(
+        SUBSTR(
+          json_extract(attributes, '$.\"code.filepath\"'),
+          INSTR(json_extract(attributes, '$.\"code.filepath\"'), '/services/')
+          + LENGTH('/services/')
+        ), 0, 255)
     WHERE
       name LIKE 'redwoodjs:api:services%';
   `)
@@ -190,7 +205,12 @@ export async function retypeSpans(_parent: unknown) {
   await db.run(`
     UPDATE span SET
       type = 'redwood-function',
-      brief = NULL
+      brief = substr(
+        SUBSTR(
+          json_extract(attributes, '$.\"code.filepath\"'),
+          INSTR(json_extract(attributes, '$.\"code.filepath\"'), '/functions/')
+          + LENGTH('/functions/')
+        ), 0, 255)
     WHERE
       name LIKE 'redwoodjs:api:functions%';
   `)

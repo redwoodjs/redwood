@@ -97,7 +97,7 @@ export default function SpanTreeMap() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-slate-100 px-4 pt-2 pb-2 bg-rich-black rounded-md">
-            Tree View
+            Tree Map: What happened in this span?
           </h1>
         </div>
       </div>
