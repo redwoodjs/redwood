@@ -21,19 +21,6 @@ export const handler = async ({ force, verbose, addPackage }) => {
   const tasks = new Listr(
     [
       {
-        title: 'Confirmation',
-        task: async (_ctx, task) => {
-          const confirmation = await task.prompt({
-            type: 'Confirm',
-            message: 'Vite support is experimental. Continue?',
-          })
-
-          if (!confirmation) {
-            throw new Error('User aborted')
-          }
-        },
-      },
-      {
         title: 'Adding vite.config.js...',
         task: () => {
           const viteConfigPath = `${getPaths().web.base}/vite.config.${
@@ -55,19 +42,14 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: 'Adding Vite bundler flag to redwood.toml...',
+        title: "Checking bundler isn't set to webpack...",
         task: (_ctx, task) => {
           const redwoodTomlPath = getConfigPath()
           const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-          if (!configContent.includes('bundler = "vite"')) {
-            // Use string replace to preserve comments and formatting
-            writeFile(
-              redwoodTomlPath,
-              configContent.replace('[web]', '[web]\n  bundler = "vite"'),
-              {
-                overwriteExisting: true, // redwood.toml always exists
-              }
+          if (!configContent.includes('bundler = "webpack"')) {
+            throw new Error(
+              'You have the bundler set to webpack in your redwood.toml. Remove this line, or change it to "vite" and try again.'
             )
           } else {
             task.skip('Vite bundler flag already set in redwood.toml')
