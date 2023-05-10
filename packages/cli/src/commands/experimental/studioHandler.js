@@ -5,7 +5,11 @@ import { getConfigPath } from '@redwoodjs/project-config'
 import { writeFile } from '../../lib'
 import { isModuleInstalled, installRedwoodModule } from '../../lib/packages'
 
-export const handler = async (options) => {
+import { command, description, EXPERIMENTAL_TOPIC_ID } from './studio'
+import { printTaskEpilogue } from './util'
+
+export const handler = async () => {
+  printTaskEpilogue(command, description, EXPERIMENTAL_TOPIC_ID)
   try {
     // Check the module is installed
     if (!isModuleInstalled('@redwoodjs/studio')) {

@@ -611,6 +611,10 @@ export async function openCherryPickPRs() {
   await $`open https://github.com/redwoodjs/redwood/pulls?q=is%3Apr+is%3Aopen+label%3Acherry-pick`
 }
 
+/**
+ * @param {string} title
+ * @returns {Promise<{ title: string, id: string, number: number }>}
+ */
 export async function getMilestone(title) {
   const {
     repository: {

@@ -19,7 +19,7 @@ export const updateDevFatalErrorPage = async () => {
   const dirs = {
     [webFatalErrorPagesDir]: {
       [path.join(webFatalErrorPagesDir, 'FatalErrorPage')]:
-        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/web/src/pages/FatalErrorPage/FatalErrorPage.tsx',
+        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/web/src/pages/FatalErrorPage/FatalErrorPage.tsx',
     },
   }
 
