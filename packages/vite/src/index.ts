@@ -18,7 +18,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 const readFile = promisify(fsReadFile)
 
 // Using require, because plugin has TS errors
-const commonjs = require('vite-plugin-commonjs')
+const { default: commonjs } = require('vite-plugin-commonjs')
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
