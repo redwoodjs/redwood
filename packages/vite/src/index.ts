@@ -18,8 +18,6 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 const readFile = promisify(fsReadFile)
 
-// Using require, because plugin has TS errors
-
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
  */
