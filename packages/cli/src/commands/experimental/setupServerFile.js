@@ -1,6 +1,6 @@
 import { getEpilogue } from './util'
 
-export const command = 'server-file'
+export const command = 'setup-server-file'
 
 export const description = 'Setup the experimental server file'
 
@@ -24,6 +24,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./serverFileHandler')
+  const { handler } = await import('./setupServerFileHandler')
   return handler(options)
 }
