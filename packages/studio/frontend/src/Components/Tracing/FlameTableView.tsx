@@ -37,6 +37,11 @@ function FlameTableView({ trace }: { trace: any }) {
     new Set(spanStats.map((span) => span.name))
   )
 
+  const numberFormatter = new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
+  })
+
   const spanFlameData = uniqueSpanNames
     .map((spanName: string) => {
       const spansOfInterest = spanStats.filter((span) => span.name === spanName)
@@ -47,142 +52,134 @@ function FlameTableView({ trace }: { trace: any }) {
       const sum = durations.reduce((acc, duration) => acc + duration, 0)
       const middle = Math.floor(durations.length / 2)
 
-      return {
-        name: spanName,
-        count: spansOfInterest.length,
-        mean: sum / spansOfInterest.length,
-        min: Math.min(...durations),
-        median:
-          durations.length % 2 === 0
-            ? (durations[middle - 1] + durations[middle]) / 2
-            : durations[middle],
-        max: Math.max(...durations),
-        p90: percentile(durations, 0.9),
-        p95: percentile(durations, 0.95),
-        sum,
-      }
+      return spansOfInterest.length === 1
+        ? {
+            name: spanName,
+            count: spansOfInterest.length,
+            mean: numberFormatter.format(sum / 1e6),
+            min: '-',
+            median: '-',
+            max: '-',
+            p90: '-',
+            p95: '-',
+            sum: '-',
+          }
+        : {
+            name: spanName,
+            count: spansOfInterest.length,
+            mean: numberFormatter.format(sum / spansOfInterest.length / 1e6),
+            min: numberFormatter.format(Math.min(...durations) / 1e6),
+            median: numberFormatter.format(
+              (durations.length % 2 === 0
+                ? (durations[middle - 1] + durations[middle]) / 2
+                : durations[middle]) / 1e6
+            ),
+            max: numberFormatter.format(Math.max(...durations) / 1e6),
+            p90: numberFormatter.format(percentile(durations, 0.9) / 1e6),
+            p95: numberFormatter.format(percentile(durations, 0.95) / 1e6),
+            sum: numberFormatter.format(sum / 1e6),
+          }
     })
-    .sort((a, b) => (a.p90 > b.p90 ? 1 : b.p90 > a.p90 ? -1 : 0))
-
-  const numberFormatter = new Intl.NumberFormat(undefined, {
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3,
-  })
+    .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center -mx-4 sm:-mx-6 lg:-mx-8">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Flame Table
-          </h1>
-          <p className="mt-2 text-sm text-gray-700">
-            A list of all the spans grouped by name. The values below are
-            calculated based on the total duration of a span which includes the
-            durations of any child spans.
-          </p>
-        </div>
-      </div>
-      <div className="mt-4 flow-root">
-        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
-                  >
-                    Span Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Quantity
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    Mean (ms)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    Min (ms)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    Median (ms)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    Max (ms)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    p(90) (ms)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                  >
-                    p(95) (ms)
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 pr-4 sm:pr-6 lg:pr-8"
-                  >
-                    Sum (ms)
-                  </th>
+    <div className="overflow-x-auto">
+      <div className="inline-block min-w-full align-middle">
+        <table className="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th
+                scope="col"
+                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
+              >
+                Span Name
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Quantity
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+              >
+                Mean (ms)
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+              >
+                Min (ms)
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+              >
+                Median (ms)
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+              >
+                Max (ms)
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+              >
+                p(90) (ms)
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+              >
+                p(95) (ms)
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 pr-4 sm:pr-6 lg:pr-8"
+              >
+                Sum (ms)
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {spanFlameData
+              .sort((a: any, b: any) => (a.self < b.self ? 1 : -1))
+              .map((row: any) => (
+                <tr key={row.id}>
+                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+                    {row.name}
+                  </td>
+                  <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                    {row.count}
+                  </td>
+                  <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                    {row.mean}
+                  </td>
+                  <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                    {row.min}
+                  </td>
+                  <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                    {row.median}
+                  </td>
+                  <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                    {row.max}
+                  </td>
+                  <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                    {row.p90}
+                  </td>
+                  <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                    {row.p95}
+                  </td>
+                  <td className="whitespace-pre-wrap py-4 px-3 text-sm text-gray-500 flex-wrap sm:pr-6 lg:pr-8 text-right">
+                    {row.sum}
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {spanFlameData
-                  .sort((a: any, b: any) => (a.self < b.self ? 1 : -1))
-                  .map((row: any) => (
-                    <tr key={row.id}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                        {row.name}
-                      </td>
-                      <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                        {row.count}
-                      </td>
-                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                        {numberFormatter.format(row.mean / 1e6)}
-                      </td>
-                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                        {numberFormatter.format(row.min / 1e6)}
-                      </td>
-                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                        {numberFormatter.format(row.median / 1e6)}
-                      </td>
-                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                        {numberFormatter.format(row.max / 1e6)}
-                      </td>
-                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                        {numberFormatter.format(row.p90 / 1e6)}
-                      </td>
-                      <td className="text-right whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                        {numberFormatter.format(row.p95 / 1e6)}
-                      </td>
-                      <td className="whitespace-pre-wrap py-4 px-3 text-sm text-gray-500 flex-wrap sm:pr-6 lg:pr-8 text-right">
-                        {numberFormatter.format(row.sum / 1e6)}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              ))}
+          </tbody>
+        </table>
       </div>
     </div>
   )

@@ -6,12 +6,17 @@ export const description = 'Run the Redwood development studio'
 export const EXPERIMENTAL_TOPIC_ID = 4771
 
 export function builder(yargs) {
-  yargs.epilogue(
-    `Also see the ${terminalLink(
-      'Redwood CLI Reference',
-      'https://redwoodjs.com/docs/cli-commands#studio'
-    )}`
-  )
+  yargs
+    .option('open', {
+      default: true,
+      description: 'Open the studio in your browser',
+    })
+    .epilogue(
+      `Also see the ${terminalLink(
+        'Redwood CLI Reference',
+        'https://redwoodjs.com/docs/cli-commands#studio'
+      )}`
+    )
 }
 
 export async function handler(options) {
