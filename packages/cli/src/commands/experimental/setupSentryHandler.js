@@ -13,7 +13,10 @@ import {
   prettify,
   writeFilesTask,
 } from '@redwoodjs/cli-helpers'
+import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
+
+import { writeFile } from '../../lib'
 
 const PATHS = getPaths()
 
@@ -40,10 +43,14 @@ export const handler = async ({ force }) => {
         writeFilesTask(
           {
             [path.join(PATHS.api.lib, `sentry.${extension}`)]: fs
-              .readFileSync(path.join(__dirname, 'templates/api.ts.template'))
+              .readFileSync(
+                path.join(__dirname, 'templates/sentryApi.ts.template')
+              )
               .toString(),
             [path.join(PATHS.web.src, 'lib', `sentry.${extension}`)]: fs
-              .readFileSync(path.join(__dirname, 'templates/web.ts.template'))
+              .readFileSync(
+                path.join(__dirname, 'templates/sentryWeb.ts.template')
+              )
               .toString(),
           },
           { existingFiles: force ? 'OVERWRITE' : 'SKIP' }
@@ -135,6 +142,27 @@ export const handler = async ({ force }) => {
           PATHS.web.app,
           prettify('App.tsx', contentLines.join('\n'))
         )
+      },
+    },
+    {
+      title: 'Adding config to redwood.toml...',
+      task: (_ctx, task) => {
+        const redwoodTomlPath = getConfigPath()
+        const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+        if (!configContent.includes('[experimental.sentry]')) {
+          // Use string replace to preserve comments and formatting
+          writeFile(
+            redwoodTomlPath,
+            configContent.concat(`\n[experimental.sentry]\n\tenabled = true\n`),
+            {
+              overwriteExisting: true, // redwood.toml always exists
+            }
+          )
+        } else {
+          task.skip(
+            `The [experimental.sentry] config block already exists in your 'redwood.toml' file.`
+          )
+        }
       },
     },
     {
