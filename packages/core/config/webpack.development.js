@@ -86,6 +86,8 @@ const baseConfig = merge(webpackConfig('development'), {
     // `runtimeErrors` became true by default in webpack-dev-server v4.15.0 and interferes with <FormError />.
     client: {
       overlay: {
+        errors: true,
+        warnings: false,
         runtimeErrors: false,
       },
     },
