@@ -81,7 +81,6 @@ export default function SpanTypeBarChart({
         }}
         legends={[data.spanTypeTimeline.legend]}
       />
-      {JSON.stringify(data.spanTypeTimeline, null, 2)}
     </div>
   )
 }

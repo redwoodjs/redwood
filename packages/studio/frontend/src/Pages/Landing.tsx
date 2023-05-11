@@ -2,18 +2,28 @@ import React from 'react'
 
 import { Title, Grid, Col } from '@tremor/react'
 
-import SpanTypeBarChart from '../Charts/SpanTypeBarChart'
+import SpanTypeTimeSeriesBarChart from '../Charts/SpanTypeTimeSeriesBarChart'
 import SpanTypeTimeSeriesChart from '../Charts/SpanTypeTimeSeriesChart'
 
 export default function App() {
   return (
     <div className="bg-slate-50 p-6 sm:p-10 h-full">
-      <Title>RedwoodJS Studio</Title>
-      <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-2">
-        <Col numColSpan={1} numColSpanLg={3}>
-          <SpanTypeBarChart timeLimit={60 * 2} timeBucket={5} />
+      <Title className="mb-4">RedwoodJS Studio</Title>
+      <Grid numCols={1} numColsSm={2} numColsLg={2} className="gap-2">
+        <Col numColSpan={1} numColSpanLg={2}>
+          <SpanTypeTimeSeriesBarChart
+            name="All Spans"
+            timeLimit={60 * 2}
+            showHttp={true}
+            showRedwoodFunction={true}
+            showRedwoodService={true}
+            showSql={true}
+            showPrisma={true}
+            showGraphql={true}
+            showGeneric={true}
+          />
         </Col>
-        <Col numColSpan={1} numColSpanLg={3}>
+        <Col numColSpan={1} numColSpanLg={2}>
           <SpanTypeTimeSeriesChart
             name="All Types"
             timeLimit={60 * 2}
@@ -23,7 +33,7 @@ export default function App() {
             showSql={true}
             showPrisma={true}
             showGraphql={true}
-            showGeneric={true}
+            showGeneric={false}
           />
         </Col>
         <Col>

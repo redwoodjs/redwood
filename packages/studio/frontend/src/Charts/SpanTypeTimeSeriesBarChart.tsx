@@ -7,7 +7,7 @@ import {
   Dropdown,
   DropdownItem,
   Flex,
-  LineChart,
+  BarChart,
   Title,
 } from '@tremor/react'
 
@@ -39,8 +39,8 @@ const QUERY_GET_SPAN_TYPE_TIMESERIES = gql`
   }
 `
 
-export default function SpanTypeTimeSeriesChart({
-  name = 'Time Series Chart',
+export default function SpanTypeTimeSeriesBarChart({
+  name = 'Time Series Bar Chart',
   timeLimit,
   showGeneric = false,
   showGraphql = false,
@@ -101,6 +101,8 @@ export default function SpanTypeTimeSeriesChart({
   const categories = []
   const colors = [] as Color[]
 
+  const agos = [30, 60, 120, 240, 480]
+
   if (showGeneric) {
     categories.push('generic')
     colors.push('amber')
@@ -130,11 +132,8 @@ export default function SpanTypeTimeSeriesChart({
     colors.push('purple')
   }
 
-  const agos = [30, 60, 120, 240, 480]
-
   return (
     <Card>
-      {' '}
       <Flex className="space-x-4" justifyContent="start" alignItems="center">
         <Title>{name}</Title>
         <Dropdown
@@ -151,7 +150,7 @@ export default function SpanTypeTimeSeriesChart({
           ))}
         </Dropdown>
       </Flex>
-      <LineChart
+      <BarChart
         className="mt-6"
         data={data.spanTypeTimeSeriesData}
         index="ts"
@@ -159,7 +158,6 @@ export default function SpanTypeTimeSeriesChart({
         colors={colors}
         // valueFormatter={dataFormatter}
         yAxisWidth={48}
-        connectNulls={true}
         showAnimation={false}
       />
     </Card>

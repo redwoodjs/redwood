@@ -33,14 +33,14 @@ export async function spanTypeTimeSeriesData(
       start_nano ASC,
       series_type)
   WHERE
-    ts >= datetime ('now', ?)
+    ts >= datetime ('now', ?, 'utc')
   GROUP BY
     ts
   ORDER BY
     ts ASC;
   `)
 
-  const result = await stmt.all(`${timeLimit} seconds`)
+  const result = await stmt.all(`-${timeLimit} seconds`)
   await stmt.finalize()
   const chartData = result.map((row) => JSON.parse(row['chartdata']))
 
@@ -145,8 +145,6 @@ export async function spanTypeTimeline(
     legendPosition: 'middle',
     legendOffset: 32,
   }
-
-  console.log({ data, keys, index, legend, axisLeft, axisBottom })
 
   return {
     data,
