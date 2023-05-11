@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/graphql-server",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -33,8 +33,8 @@
     "@graphql-tools/schema": "9.0.19",
     "@graphql-tools/utils": "9.2.1",
     "@opentelemetry/api": "1.4.1",
-    "@redwoodjs/api": "5.1.2",
-    "@redwoodjs/project-config": "5.1.2",
+    "@redwoodjs/api": "5.1.3",
+    "@redwoodjs/project-config": "5.1.3",
     "core-js": "3.30.2",
     "graphql": "16.6.0",
     "graphql-scalars": "1.21.3",
