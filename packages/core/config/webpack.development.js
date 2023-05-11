@@ -83,6 +83,12 @@ const getProxyConfig = () => {
 /** @type {import('webpack').Configuration} */
 const baseConfig = merge(webpackConfig('development'), {
   devServer: {
+    // `runtimeErrors` became true by default in webpack-dev-server v4.15.0 and interferes with <FormError />.
+    client: {
+      overlay: {
+        runtimeErrors: false,
+      },
+    },
     // https://webpack.js.org/configuration/dev-server/
     // note: docs not yet updated for webpack-dev-server v4
     devMiddleware: {
