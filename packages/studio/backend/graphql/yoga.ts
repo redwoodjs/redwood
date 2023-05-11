@@ -3,10 +3,15 @@ import { JSONDefinition, JSONResolver } from 'graphql-scalars'
 import { createYoga, createSchema } from 'graphql-yoga'
 
 import { authProvider, generateAuthHeaders } from '../services/auth'
-import { spanTypeTimeline, spanTreeMapData } from '../services/charts'
+import {
+  spanTypeTimeline,
+  spanTreeMapData,
+  spanTypeTimeSeriesData,
+} from '../services/charts'
 import { studioConfig, webConfig } from '../services/config'
 import { span, spans } from '../services/explore/span'
 import { traces, trace, traceCount } from '../services/explore/trace'
+import { seriesTypeBarList } from '../services/lists'
 import { prismaQuerySpans } from '../services/prismaSpans'
 import { retypeSpans, truncateSpans } from '../services/span'
 import { getAncestorSpans, getDescendantSpans } from '../services/util'
@@ -68,6 +73,25 @@ export const setupYoga = (fastify: FastifyInstance) => {
         legend: JSON
         axisLeft: JSON
         axisBottom: JSON
+      }
+
+      # Charts - Line Time Series
+      type TimeSeriesType {
+        ts: String!
+        generic: Float
+        graphql: Float
+        http: Float
+        prisma: Float
+        redwoodfunction: Float
+        redwoodservice: Float
+        sql: Float
+      }
+
+      # Lists - Series Type Lists
+      type SeriesTypeList {
+        series_type: String!
+        series_name: String
+        quantity: Int!
       }
 
       type PrismaQuerySpan {
@@ -147,7 +171,12 @@ export const setupYoga = (fastify: FastifyInstance) => {
           timeLimit: Int!
           timeBucket: Int!
         ): SpanTypeTimelineData
+        spanTypeTimeSeriesData(timeLimit: Int!): [TimeSeriesType]
 
+        # Lists
+        seriesTypeBarList(timeLimit: Int!): [SeriesTypeList]
+
+        # Maps
         spanTreeMapData(spanId: String): JSON
       }
 
@@ -177,6 +206,10 @@ export const setupYoga = (fastify: FastifyInstance) => {
         spans,
         // Charts
         spanTypeTimeline,
+        spanTypeTimeSeriesData,
+        // Lists
+        seriesTypeBarList,
+        // Maps
         spanTreeMapData,
       },
       Span: {
@@ -201,6 +234,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
       warn: (...args) => args.forEach((arg) => fastify.log.warn(arg)),
       error: (...args) => args.forEach((arg) => fastify.log.error(arg)),
     },
+    graphiql: true,
   })
 
   return yoga

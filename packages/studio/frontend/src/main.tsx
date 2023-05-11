@@ -17,9 +17,10 @@ import SpanTreeMap from './Pages/Explore/SpanTreeMap'
 import Trace from './Pages/Explore/Trace'
 import TraceList from './Pages/Explore/TraceList'
 import GraphiQL from './Pages/GraphiQL'
-import Landing from './Pages/Landing'
 import MapLanding from './Pages/MapLanding'
 import NotFound from './Pages/NotFound'
+import Overview from './Pages/Overview'
+import Performance from './Pages/Performance'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4318/graphql',
@@ -39,7 +40,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <HashRouter>
         <Routes>
           <Route element={<MasterLayout />}>
-            <Route index element={<Landing />} />
+            <Route index element={<Overview />} />
 
             {/* Explore */}
             <Route path="/explorer">
@@ -54,7 +55,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
             {/* Monitor */}
             <Route path="/monitor">
-              <Route path="performance" element={<ComingSoon />} />
+              <Route path="performance" element={<Performance />} />
               <Route path="error" element={<ComingSoon />} />
             </Route>
 
