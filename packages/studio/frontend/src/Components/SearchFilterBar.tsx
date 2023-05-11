@@ -6,22 +6,18 @@ import { useLocation } from 'react-router-dom'
 import { SearchFilterContext } from '../Context/SearchFilterContextProvider'
 
 export default function SearchFilterBar() {
+  const location = useLocation()
   const [searchFilters, dispatcher] = useContext(SearchFilterContext)
 
-  const location = useLocation()
-  const [filterValue, setFilterValue] = useState(
-    location.pathname.startsWith('/explorer/span')
-      ? searchFilters.spansFilter
-      : searchFilters.tracesFilter
-  )
+  const relevantFilters = location.pathname.startsWith('/explorer/span')
+    ? searchFilters.spansFilter
+    : searchFilters.tracesFilter
+
+  const [filterValue, setFilterValue] = useState(relevantFilters)
 
   useEffect(() => {
-    setFilterValue(
-      location.pathname.startsWith('/explorer/span')
-        ? searchFilters.spansFilter
-        : searchFilters.tracesFilter
-    )
-  }, [location])
+    setFilterValue(relevantFilters)
+  }, [location, relevantFilters])
 
   const updateSearchFilter = () => {
     if (location.pathname.startsWith('/explorer/span')) {
