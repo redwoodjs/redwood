@@ -17,6 +17,12 @@ const GET_AUTH = gql`
   }
 `
 
+const DEFAULT_QUERY = `{
+  redwood {
+    version
+  }
+}`
+
 function GraphiQL() {
   const { data } = useQuery(GET_AUTH)
   let headers = undefined as undefined | Record<string, string>
@@ -46,11 +52,17 @@ function GraphiQL() {
         <RedwoodGraphiQL
           headers={JSON.stringify(headers)}
           endpoint="http://localhost:4318/proxies/graphql"
+          defaultQuery={DEFAULT_QUERY}
         />
       )
     }
 
-    return <RedwoodGraphiQL endpoint="http://localhost:4318/proxies/graphql" />
+    return (
+      <RedwoodGraphiQL
+        endpoint="http://localhost:4318/proxies/graphql"
+        defaultQuery={DEFAULT_QUERY}
+      />
+    )
   }
 
   return <div>Loading...</div>

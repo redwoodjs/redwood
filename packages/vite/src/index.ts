@@ -22,7 +22,6 @@ const commonjs = require('vite-plugin-commonjs')
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
- *
  */
 export default function redwoodPluginVite() {
   const redwoodPaths = getPaths()

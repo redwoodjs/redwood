@@ -26,12 +26,6 @@ const {
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
-  .option('typescript', {
-    alias: 'ts',
-    default: false,
-    type: 'boolean',
-    describe: 'Generate a TypeScript project. JavaScript by default.',
-  })
   .option('link', {
     default: false,
     type: 'boolean',
@@ -67,16 +61,7 @@ const args = yargs(hideBin(process.argv))
   .help()
   .parseSync()
 
-const {
-  typescript,
-  canary,
-  link,
-  verbose,
-  clean,
-  copyFromFixture,
-  rebuildFixture,
-  yarn1,
-} = args
+const { canary, link, verbose, clean, copyFromFixture, rebuildFixture } = args
 
 // Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
@@ -144,12 +129,7 @@ const createProject = async () => {
   // We create a ts project and convert using ts-to-js at the end if typescript flag is false
   return execa(
     cmd,
-    [
-      '--no-yarn-install',
-      `--typescript ${typescript}`,
-      '--overwrite',
-      '--no-git',
-    ],
+    ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
     getExecaOptions(RW_FRAMEWORKPATH)
   )
 }
@@ -370,7 +350,7 @@ const globalTasks = () =>
           fs.copyFileSync(
             path.join(
               __dirname,
-              '../../packages/create-redwood-app/template/package.json'
+              '../../packages/create-redwood-app/templates/ts/package.json'
             ),
             path.join(OUTPUT_PROJECT_PATH, 'package.json')
           )

@@ -1,6 +1,5 @@
-import type { ApiConfig, StudioConfig, WebConfig } from 'backend/types'
-
 import { getApiConfig, getStudioConfig, getWebConfig } from '../lib/config'
+import type { ApiConfig, StudioConfig, WebConfig } from '../types'
 
 export const apiConfig = async (_parent: unknown): Promise<ApiConfig> => {
   return getApiConfig()
