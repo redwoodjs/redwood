@@ -6873,10 +6873,10 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
-    supertokens-auth-react: 0.32.1
+    supertokens-auth-react: 0.32.3
     typescript: 5.0.4
   peerDependencies:
-    supertokens-auth-react: 0.32.1
+    supertokens-auth-react: 0.32.3
   languageName: unknown
   linkType: soft
 
@@ -29970,9 +29970,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.32.1":
-  version: 0.32.1
-  resolution: "supertokens-auth-react@npm:0.32.1"
+"supertokens-auth-react@npm:0.32.3":
+  version: 0.32.3
+  resolution: "supertokens-auth-react@npm:0.32.3"
   dependencies:
     intl-tel-input: ^17.0.19
     prop-types: "*"
@@ -29981,7 +29981,7 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
     supertokens-web-js: ^0.5.0
-  checksum: 6c58389c5afddac1d3b9f04267963d113f9824370b1c618da0cb21d3162e8267b01ca827e65d6e43d359f5d8916beb9bdde556e2cdc4798e74f8101e9fb2fdc9
+  checksum: 89f122ebc6bce6eccedd229bb88439f73645a26bdd54b2fcd160e3c0396bb92cb66968e5cef6614d332f4d27e993ba4e935ae34240c6dcb670fa405a93abb573
   languageName: node
   linkType: hard
 
