@@ -140,10 +140,13 @@ export function RedwoodGraphiQL(
     false
   )
 
-  const [query, setQuery] = useState(params.query?.toString())
+  const [query, setQuery] = useState(
+    params.query?.toString() || props.defaultQuery || ''
+  )
   const explorerPlugin = useExplorerPlugin({
     query,
     onEdit: setQuery,
+    showAttribution: false,
   })
 
   return (

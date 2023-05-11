@@ -1,22 +1,23 @@
-import chalk from 'chalk'
 import Fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 import open from 'open'
 
-import { setupTables, setupViews } from './database'
 import withApiProxy from './fastify/plugins/withApiProxy'
 import reactRoutes from './fastify/react'
 import spanRoutes from './fastify/spanIngester'
 import yogaRoutes from './fastify/yoga'
 import { setupYoga } from './graphql/yoga'
 import { getWebConfig } from './lib/config'
+import { runMigrations } from './migrations'
 
 const HOST = 'localhost'
 const PORT = 4318
 
 let fastify: FastifyInstance
 
-export const start = async () => {
+export const start = async (
+  { open: autoOpen }: { open: boolean } = { open: false }
+) => {
   process.on('SIGTERM', async () => {
     await stop()
   })
@@ -28,8 +29,7 @@ export const start = async () => {
   })
 
   // DB Setup
-  await setupTables()
-  await setupViews()
+  await runMigrations()
 
   // Fasitfy Setup
   fastify = Fastify({
@@ -64,23 +64,11 @@ export const start = async () => {
 
   fastify.listen({ port: PORT, host: HOST })
   fastify.ready(() => {
-    console.log(
-      `${chalk.hex('#ff845e')(
-        `------------------------------------------------------------------\n 🧪 ${chalk.green(
-          'Experimental Feature'
-        )} 🧪\n------------------------------------------------------------------`
-      )}`
-    )
-    console.log(
-      `Studio is an experimental feature, please find documentation and links to provide feedback at:\n -> https://community.redwoodjs.com/t/redwood-studio-experimental/4771`
-    )
-    console.log(
-      `${chalk.hex('#ff845e')(
-        '------------------------------------------------------------------'
-      )}\n`
-    )
     console.log(`Studio API listening on ${HOST}:${PORT}`)
-    open(`http://${HOST}:${PORT}`)
+
+    if (autoOpen) {
+      open(`http://${HOST}:${PORT}`)
+    }
   })
 }
 
