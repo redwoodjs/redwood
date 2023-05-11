@@ -11,7 +11,7 @@ export const startServer = ({
   socket,
   fastify,
 }: HttpServerParams) => {
-  const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
+  const host = 'localhost'
   const serverPort = socket ? parseInt(socket) : port
 
   fastify.listen({ port: serverPort, host })
