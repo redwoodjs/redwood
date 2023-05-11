@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 import boxen from 'boxen'
 import { Octokit } from 'octokit'
-import { cd, chalk, question, $, fs, path } from 'zx'
+import { cd, chalk, question, $, fs } from 'zx'
 
 import { handler as generateReleaseNotes } from './generateReleaseNotesCommand.mjs'
 import {
@@ -375,7 +375,7 @@ async function releaseMajorOrMinor() {
   console.log()
 
   await cleanInstallUpdate()
-  await commitTagQA(nextVersion)
+  await runQA(nextVersion)
 
   exitIfNo(
     await question(
@@ -393,7 +393,7 @@ async function releaseMajorOrMinor() {
   // ------------------------
   logSection('Generating release notes\n')
 
-  await generateReleaseNotes(milestone?.title ?? nextVersion)
+  await generateReleaseNotes({ milestone: milestone?.title ?? nextVersion })
 
   if (milestone) {
     await closeMilestone.call({ octokit }, milestone.number)
@@ -526,7 +526,7 @@ async function releasePatch() {
   await $`yarn lerna publish from-package`
   console.log()
 
-  exitIfNo(await question(`Revert the workspace change [Y/n] > `))
+  await $`git reset --hard HEAD~1`
   console.log()
 
   //  ------------------------
@@ -536,6 +536,8 @@ async function releasePatch() {
   await $`yarn lerna publish from-package`
   console.log()
 
+  await $`git reset --soft HEAD~2`
+  await $`git commit -m "${nextVersion}"`
   await $`git tag -am ${nextVersion} "${nextVersion}"`
   await $`git push`
   await $`git push --tags`
@@ -545,7 +547,7 @@ async function releasePatch() {
   // ------------------------
   logSection('Generating release notes\n')
 
-  await generateReleaseNotes(milestone?.title ?? nextVersion)
+  await generateReleaseNotes({ milestone: milestone?.title ?? nextVersion })
 
   if (milestone) {
     await closeMilestone.call({ octokit }, milestone.number)
