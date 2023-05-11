@@ -13,33 +13,37 @@ export async function spanTypeTimeSeriesData(
   const db = await getDatabase()
   const stmt = await db.prepare(`
   SELECT
-	json_patch (json_object('ts', ts),
-		json_group_object (series_type,
-			duration_msec)) AS chartdata
-FROM (
-	SELECT
-		datetime (start_nano / 1000000000,
-			'unixepoch',
-			'utc') AS ts,
-    replace(coalesce(TYPE, 'generic'), '-', '') AS series_type,
-		sum(duration_nano / 1000000.0) AS duration_msec
-	FROM
-		span
-  WHERE start_nano >= ?
-	GROUP BY
-		ts,
-		series_type
-	ORDER BY
-		start_nano ASC,
-		series_type)
-GROUP BY
-	ts;
+    ts,
+    json_patch (json_object('ts', ts),
+      json_group_object (series_type,
+        duration_msec)) AS chartdata
+  FROM (
+    SELECT
+      datetime (start_nano / 1000000000,
+        'unixepoch',
+        'utc') AS ts,
+      replace(coalesce(TYPE, 'generic'), '-', '') AS series_type,
+      sum(duration_nano / 1000000.0) AS duration_msec
+    FROM
+      span
+    GROUP BY
+      ts,
+      series_type
+    ORDER BY
+      start_nano ASC,
+      series_type)
+  WHERE
+    ts >= datetime ('now', ?)
+  GROUP BY
+    ts
+  ORDER BY
+    ts ASC;
   `)
 
-  const result = await stmt.all(Date.now() - timeLimit * 1e9)
+  const result = await stmt.all(`${timeLimit} seconds`)
   await stmt.finalize()
   const chartData = result.map((row) => JSON.parse(row['chartdata']))
-  console.log(chartData)
+
   return chartData
 }
 
@@ -141,6 +145,8 @@ export async function spanTypeTimeline(
     legendPosition: 'middle',
     legendOffset: 32,
   }
+
+  console.log({ data, keys, index, legend, axisLeft, axisBottom })
 
   return {
     data,
