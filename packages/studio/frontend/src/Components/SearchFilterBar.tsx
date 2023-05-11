@@ -21,7 +21,7 @@ export default function SearchFilterBar() {
         ? searchFilters.spansFilter
         : searchFilters.tracesFilter
     )
-  }, [location])
+  }, [location, searchFilters.spansFilter, searchFilters.tracesFilter])
 
   const updateSearchFilter = () => {
     if (location.pathname.startsWith('/explorer/span')) {
