@@ -8,7 +8,7 @@ import SpanTypeTimeSeriesChart from '../Charts/SpanTypeTimeSeriesChart'
 export default function App() {
   return (
     <div className="bg-slate-50 p-6 sm:p-10 h-full">
-      <Title className="mb-4">RedwoodJS Studio</Title>
+      <Title className="mb-4">Performance</Title>
       <Grid numCols={1} numColsSm={2} numColsLg={2} className="gap-2">
         <Col numColSpan={1} numColSpanLg={2}>
           <SpanTypeTimeSeriesBarChart
@@ -23,7 +23,7 @@ export default function App() {
             showGeneric={true}
           />
         </Col>
-        <Col numColSpan={1} numColSpanLg={2}>
+        <Col>
           <SpanTypeTimeSeriesChart
             name="All Types"
             timeLimit={60 * 2}

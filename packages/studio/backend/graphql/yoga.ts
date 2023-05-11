@@ -11,6 +11,7 @@ import {
 import { studioConfig, webConfig } from '../services/config'
 import { span, spans } from '../services/explore/span'
 import { traces, trace, traceCount } from '../services/explore/trace'
+import { seriesTypeBarList } from '../services/lists'
 import { prismaQuerySpans } from '../services/prismaSpans'
 import { retypeSpans, truncateSpans } from '../services/span'
 import { getAncestorSpans, getDescendantSpans } from '../services/util'
@@ -74,6 +75,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         axisBottom: JSON
       }
 
+      # Charts - Line Time Series
       type TimeSeriesType {
         ts: String!
         generic: Float
@@ -83,6 +85,13 @@ export const setupYoga = (fastify: FastifyInstance) => {
         redwoodfunction: Float
         redwoodservice: Float
         sql: Float
+      }
+
+      # Lists - Series Type Lists
+      type SeriesTypeList {
+        series_type: String!
+        series_name: String
+        quantity: Int!
       }
 
       type PrismaQuerySpan {
@@ -162,9 +171,13 @@ export const setupYoga = (fastify: FastifyInstance) => {
           timeLimit: Int!
           timeBucket: Int!
         ): SpanTypeTimelineData
-
-        spanTreeMapData(spanId: String): JSON
         spanTypeTimeSeriesData(timeLimit: Int!): [TimeSeriesType]
+
+        # Lists
+        seriesTypeBarList(timeLimit: Int!): [SeriesTypeList]
+
+        # Maps
+        spanTreeMapData(spanId: String): JSON
       }
 
       type Mutation {
@@ -193,8 +206,11 @@ export const setupYoga = (fastify: FastifyInstance) => {
         spans,
         // Charts
         spanTypeTimeline,
-        spanTreeMapData,
         spanTypeTimeSeriesData,
+        // Lists
+        seriesTypeBarList,
+        // Maps
+        spanTreeMapData,
       },
       Span: {
         descendantSpans: async (span, _args, _ctx) => {

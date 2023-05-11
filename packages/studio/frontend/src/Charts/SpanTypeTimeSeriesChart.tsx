@@ -134,7 +134,6 @@ export default function SpanTypeTimeSeriesChart({
 
   return (
     <Card>
-      {' '}
       <Flex className="space-x-4" justifyContent="start" alignItems="center">
         <Title>{name}</Title>
         <Dropdown
