@@ -26,12 +26,6 @@ const {
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
-  .option('typescript', {
-    alias: 'ts',
-    default: false,
-    type: 'boolean',
-    describe: 'Generate a TypeScript project. JavaScript by default.',
-  })
   .option('link', {
     default: false,
     type: 'boolean',
@@ -64,24 +58,10 @@ const args = yargs(hideBin(process.argv))
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
-  .option('yarn1', {
-    default: false,
-    type: 'boolean',
-    describe: 'Use yarn 1 instead of yarn 3',
-  })
   .help()
   .parseSync()
 
-const {
-  typescript,
-  canary,
-  link,
-  verbose,
-  clean,
-  copyFromFixture,
-  rebuildFixture,
-  yarn1,
-} = args
+const { canary, link, verbose, clean, copyFromFixture, rebuildFixture } = args
 
 // Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
@@ -144,7 +124,7 @@ const createProject = async () => {
     await rimraf(OUTPUT_PROJECT_PATH)
   }
 
-  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
+  let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
   // We create a ts project and convert using ts-to-js at the end if typescript flag is false
   return execa(
@@ -222,25 +202,9 @@ const globalTasks = () =>
         enabled: () => link || rebuildFixture,
       },
       {
-        title: 'Setting yarn version to 1',
-        task: async () => {
-          await execa(
-            'yarn set version classic',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
-        },
-        enabled: () => yarn1,
-      },
-      {
         title: 'Installing node_modules',
         task: async () => {
-          return execa(
-            'yarn install',
-            yarn1 &&
-              ['--non-interactive', !verbose && '--silent'].filter(Boolean), // pass flags if using Yarn v1
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
+          return execa('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
         },
       },
       {
@@ -323,7 +287,7 @@ const globalTasks = () =>
         task: async () => {
           const { stdout: dbAuthSecret } = await execa(
             'yarn',
-            [yarn1 && '--silent', 'rw', 'g', 'secret', '--raw'].filter(Boolean),
+            ['rw', 'g', 'secret', '--raw'],
             {
               ...getExecaOptions(OUTPUT_PROJECT_PATH),
               stdio: 'pipe',
@@ -346,21 +310,6 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-      },
-      {
-        title: 'Convert to JS',
-        task: async (_ctx, task) => {
-          if (!rebuildFixture) {
-            return execa(
-              'yarn rw ts-to-js',
-              [],
-              getExecaOptions(OUTPUT_PROJECT_PATH)
-            )
-          } else {
-            task.output = 'Rebuilding Fixture: skip ts-to-js'
-          }
-        },
-        enabled: () => !typescript,
       },
       {
         title: 'Lint --fix all the things',
@@ -401,7 +350,7 @@ const globalTasks = () =>
           fs.copyFileSync(
             path.join(
               __dirname,
-              '../../packages/create-redwood-app/template/package.json'
+              '../../packages/create-redwood-app/templates/ts/package.json'
             ),
             path.join(OUTPUT_PROJECT_PATH, 'package.json')
           )

@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: '../dist-frontend',
+    chunkSizeWarningLimit: 1750,
   },
   server: {
     port: 4318,

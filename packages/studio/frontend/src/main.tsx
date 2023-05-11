@@ -3,22 +3,34 @@ import React from 'react'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import ReactDOM from 'react-dom/client'
 import { HashRouter, Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
+import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 
 import MasterLayout from './Layouts/MasterLayout'
 import ComingSoon from './Pages/ComingSoon'
 import Config from './Pages/Config'
+import Span from './Pages/Explore/Span'
+import SpanList from './Pages/Explore/SpanList'
+import SpanTreeMap from './Pages/Explore/SpanTreeMap'
+import Trace from './Pages/Explore/Trace'
+import TraceList from './Pages/Explore/TraceList'
 import GraphiQL from './Pages/GraphiQL'
 import Landing from './Pages/Landing'
+import MapLanding from './Pages/MapLanding'
 import NotFound from './Pages/NotFound'
-import SQL from './Pages/SQL'
-import Trace from './Pages/Tracing/Trace'
-import Tracing from './Pages/Tracing/Tracing'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4318/graphql',
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Span: {
+        keyFields: ['id', 'type'],
+      },
+    },
+  }),
+  connectToDevTools: true,
 })
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -29,15 +41,25 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <Route element={<MasterLayout />}>
             <Route index element={<Landing />} />
 
-            {/* Tracing */}
-            <Route path="/tracing" element={<Tracing />} />
-            <Route path="/tracing/:traceId" element={<Trace />} />
+            {/* Explore */}
+            <Route path="/explorer">
+              {/* OpenTelemetry tracing */}
+              <Route path="trace" element={<TraceList />} />
+              <Route path="trace/:traceId" element={<Trace />} />
+              <Route path="span" element={<SpanList />} />
+              <Route path="span/:spanId" element={<Span />} />
+              <Route path="map" element={<MapLanding />} />
+              <Route path="map/:spanId" element={<SpanTreeMap />} />
+            </Route>
+
+            {/* Monitor */}
+            <Route path="/monitor">
+              <Route path="performance" element={<ComingSoon />} />
+              <Route path="error" element={<ComingSoon />} />
+            </Route>
 
             {/* GraphiQL */}
             <Route path="/graphiql" element={<GraphiQL />} />
-
-            {/* SQL */}
-            <Route path="/sql" element={<SQL />} />
 
             {/* Config */}
             <Route path="/config" element={<Config />} />
@@ -51,5 +73,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </Routes>
       </HashRouter>
     </ApolloProvider>
+    <ToastContainer position="bottom-right" autoClose={5_000} />
   </React.StrictMode>
 )
