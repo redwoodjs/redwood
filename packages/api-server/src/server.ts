@@ -11,9 +11,10 @@ export const startServer = ({
   socket,
   fastify,
 }: HttpServerParams) => {
+  const host = 'localhost'
   const serverPort = socket ? parseInt(socket) : port
 
-  fastify.listen({ port: serverPort })
+  fastify.listen({ port: serverPort, host })
 
   fastify.ready(() => {
     fastify.log.debug(
