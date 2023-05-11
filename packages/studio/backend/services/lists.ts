@@ -12,7 +12,12 @@ export async function seriesTypeBarList(
   const stmt = await db.prepare(`
   SELECT
     TYPE AS series_type,
-    substr(brief, 0, 255) AS series_name,
+    CASE
+      WHEN instr(brief, '/*') > 0 THEN
+        substr(substr(brief, 1, instr(brief, '/*') - 1), 0, 255)
+        ELSE
+          brief
+    END AS series_name,
     count(brief) AS quantity
   FROM
     span
