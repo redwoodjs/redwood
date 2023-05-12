@@ -14,6 +14,10 @@ import { isTypeScriptProject } from '../../lib/project'
 import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupServerFile'
 import { printTaskEpilogue } from './util'
 
+const { version } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, '../../../package.json'), 'utf-8')
+)
+
 export async function handler({ force, verbose }) {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
@@ -83,8 +87,8 @@ export async function handler({ force, verbose }) {
       addApiPackages([
         'fastify',
         'chalk@4.1.2',
-        '@redwoodjs/fastify@canary',
-        '@redwoodjs/project-config',
+        `@redwoodjs/fastify@${version}`,
+        `@redwoodjs/project-config@${version}`,
       ]),
       {
         task: () => {
