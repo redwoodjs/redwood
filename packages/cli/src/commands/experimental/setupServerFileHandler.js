@@ -11,7 +11,7 @@ import { getPaths, transformTSToJS, writeFile } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
 
-import { command, description, EXPERIMENTAL_TOPIC_ID } from './serverFile'
+import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupServerFile'
 import { printTaskEpilogue } from './util'
 
 export async function handler({ force, verbose }) {
