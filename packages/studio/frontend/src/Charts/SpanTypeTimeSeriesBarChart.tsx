@@ -134,12 +134,12 @@ export default function SpanTypeTimeSeriesBarChart({
 
   return (
     <Card>
-      <Flex className="space-x-4" justifyContent="start" alignItems="center">
+      <Flex className="space-x-4" justifyContent="between" alignItems="stretch">
         <Title>{name}</Title>
         <Dropdown
           onValueChange={(value) => setRefreshSecondsAgo(parseInt(value))}
           placeholder="120 seconds ago"
-          className="max-w-xs"
+          className="max-w-xs w-64"
         >
           {agos.map((ago) => (
             <DropdownItem
@@ -159,6 +159,8 @@ export default function SpanTypeTimeSeriesBarChart({
         // valueFormatter={dataFormatter}
         yAxisWidth={48}
         showAnimation={false}
+        stack={true}
+        relative={true}
       />
     </Card>
   )
