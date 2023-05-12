@@ -3953,15 +3953,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.4.1, @graphql-tools/merge@npm:^8.2.6, @graphql-tools/merge@npm:^8.4.1":
-  version: 8.4.1
-  resolution: "@graphql-tools/merge@npm:8.4.1"
+"@graphql-tools/merge@npm:8.4.2, @graphql-tools/merge@npm:^8.2.6, @graphql-tools/merge@npm:^8.4.1":
+  version: 8.4.2
+  resolution: "@graphql-tools/merge@npm:8.4.2"
   dependencies:
     "@graphql-tools/utils": ^9.2.1
     tslib: ^2.4.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 9d6b8d2b70903442f4ccadc586fc853d1e53aa429fbe09e48aad62d929ec2fb053e457e5074aa9e91a9147672c86719f069e872cb87c0c6fff07cbea9706fd20
+  checksum: 2df55222b48e010e683572f456cf265aabae5748c59f7c1260c66dec9794b7a076d3706f04da969b77f0a32c7ccb4551fee30125931d3fe9c98a8806aae9a3f4
   languageName: node
   linkType: hard
 
@@ -7171,7 +7171,7 @@ __metadata:
     "@envelop/testing": 5.0.6
     "@envelop/types": 3.0.2
     "@escape.tech/graphql-armor": 1.8.2
-    "@graphql-tools/merge": 8.4.1
+    "@graphql-tools/merge": 8.4.2
     "@graphql-tools/schema": 9.0.19
     "@graphql-tools/utils": 9.2.1
     "@opentelemetry/api": 1.4.1
