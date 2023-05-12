@@ -14,26 +14,7 @@ import { getPaths } from '@redwoodjs/project-config'
 import { loadFastifyConfig } from './config'
 import { RedwoodFastifyWebOptions } from './types'
 
-/**
- * NOTE: Copied from @redwoodjs/internal/dist/files because I don't want to depend on @redwoodjs/internal
- */
-// import { findPrerenderedHtml } from '@redwoodjs/internal/dist/files'
-export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
-  fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
-
-export const getFallbackIndexPath = () => {
-  const prerenderIndexPath = path.join(getPaths().web.dist, '/200.html')
-
-  // If 200 exists: project has been prerendered
-  // If 200 doesn't exist: fallback to default index.html
-  if (fs.existsSync(prerenderIndexPath)) {
-    return '200.html'
-  } else {
-    return 'index.html'
-  }
-}
-
-async function redwoodFastifyWeb(
+export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
   opts: RedwoodFastifyWebOptions,
   done: HookHandlerDoneFunction
@@ -73,4 +54,20 @@ async function redwoodFastifyWeb(
   done()
 }
 
-export { redwoodFastifyWeb }
+// NOTE: This function was copied from @redwoodjs/internal/dist/files to avoid depending on @redwoodjs/internal.
+// import { findPrerenderedHtml } from '@redwoodjs/internal/dist/files'
+function findPrerenderedHtml(cwd = getPaths().web.dist) {
+  return fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
+}
+
+function getFallbackIndexPath() {
+  const prerenderIndexPath = path.join(getPaths().web.dist, '/200.html')
+
+  // If 200 exists: the project has been prerendered.
+  // If 200 doesn't exist: fallback to the default, index.html.
+  if (fs.existsSync(prerenderIndexPath)) {
+    return '200.html'
+  } else {
+    return 'index.html'
+  }
+}

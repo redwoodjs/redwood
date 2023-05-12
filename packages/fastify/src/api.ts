@@ -6,7 +6,7 @@ import { loadFastifyConfig } from './config'
 import { lambdaRequestHandler, loadFunctionsFromDist } from './lambda'
 import type { RedwoodFastifyAPIOptions } from './types'
 
-async function redwoodFastifyAPI(
+export async function redwoodFastifyAPI(
   fastify: FastifyInstance,
   opts: RedwoodFastifyAPIOptions,
   done: HookHandlerDoneFunction
@@ -35,5 +35,3 @@ async function redwoodFastifyAPI(
 
   done()
 }
-
-export { redwoodFastifyAPI }

@@ -13,11 +13,9 @@ import qs from 'qs'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-/**
- * NOTE: Copied from @redwoodjs/internal/dist/files because I don't want to depend on @redwoodjs/internal
- */
+// NOTE: Copied from @redwoodjs/internal/dist/files to avoid depending on @redwoodjs/internal.
 // import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
-export const findApiDistFunctions = (cwd: string = getPaths().api.base) => {
+function findApiDistFunctions(cwd: string = getPaths().api.base) {
   return fg.sync('dist/functions/**/*.{ts,js}', {
     cwd,
     deep: 2, // We don't support deeply nested api functions, to maximise compatibility with deployment providers
@@ -28,8 +26,9 @@ export const findApiDistFunctions = (cwd: string = getPaths().api.base) => {
 export type Lambdas = Record<string, Handler>
 export const LAMBDA_FUNCTIONS: Lambdas = {}
 
-// Import the API functions and add them to the LAMBDA_FUNCTIONS object
-
+/**
+ * Imports the API functions and add them to the LAMBDA_FUNCTIONS object.
+ */
 export const setLambdaFunctions = async (foundFunctions: string[]) => {
   const tsImport = Date.now()
   console.log(c.italic(c.dim('Importing Server Functions... ')))
@@ -82,14 +81,13 @@ interface LambdaHandlerRequest extends RequestGenericInterface {
 }
 
 /**
- This will take a fastify request
- Then convert it to a lambdaEvent, and pass it to the the appropriate handler for the routeName
- The LAMBDA_FUNCTIONS lookup has been populated already by this point
+ * This converts a Fastify request to a lambdaEvent, and passes it to the the appropriate handler for the routeName.
+ * At this point, the LAMBDA_FUNCTIONS lookup has been populated.
  **/
-export const lambdaRequestHandler = async (
+export async function lambdaRequestHandler(
   req: FastifyRequest<LambdaHandlerRequest>,
   reply: FastifyReply
-) => {
+) {
   const { routeName } = req.params
 
   if (!LAMBDA_FUNCTIONS[routeName]) {
@@ -112,9 +110,9 @@ export const lambdaRequestHandler = async (
   return requestHandler(req, reply, LAMBDA_FUNCTIONS[routeName])
 }
 
-const lambdaEventForFastifyRequest = (
+function lambdaEventForFastifyRequest(
   request: FastifyRequest
-): APIGatewayProxyEvent => {
+): APIGatewayProxyEvent {
   return {
     httpMethod: request.method,
     headers: request.headers,
@@ -130,10 +128,10 @@ const lambdaEventForFastifyRequest = (
   } as APIGatewayProxyEvent
 }
 
-const fastifyResponseForLambdaResult = (
+function fastifyResponseForLambdaResult(
   reply: FastifyReply,
   lambdaResult: APIGatewayProxyResult
-) => {
+) {
   const {
     statusCode = 200,
     headers,
@@ -164,11 +162,11 @@ const fastifyResponseForLambdaError = (
   reply.status(500).send()
 }
 
-export const requestHandler = async (
+export async function requestHandler(
   req: FastifyRequest,
   reply: FastifyReply,
   handler: Handler
-) => {
+) {
   // We take the fastify request object and convert it into a lambda function event.
   const event = lambdaEventForFastifyRequest(req)
 
@@ -219,7 +217,7 @@ type FastifyLambdaHeaders = FastifyRequestHeader | undefined
 
 type FastifyLambdaMultiValueHeaders = FastifyMergedHeaders | undefined
 
-export const parseBody = (rawBody: string | Buffer): ParseBodyResult => {
+export function parseBody(rawBody: string | Buffer): ParseBodyResult {
   if (typeof rawBody === 'string') {
     return { body: rawBody, isBase64Encoded: false }
   }
@@ -238,10 +236,10 @@ export const parseBody = (rawBody: string | Buffer): ParseBodyResult => {
  * reply.header(). See
  * https://www.fastify.io/docs/latest/Reference/Reply/#set-cookie
  */
-export const mergeMultiValueHeaders = (
+export function mergeMultiValueHeaders(
   headers: FastifyLambdaHeaders,
   multiValueHeaders: FastifyLambdaMultiValueHeaders
-) => {
+) {
   const mergedHeaders = Object.entries(
     headers || {}
   ).reduce<FastifyMergedHeaders>((acc, [name, value]) => {

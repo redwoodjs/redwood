@@ -7,19 +7,6 @@ import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { FastifySideConfigFn, FastifySideConfigFnOptions } from './types'
 
-/**
- * This is the default Fastify Server settings used by the
- * RedwoodJS dev server.
- *
- * It also applies when running RedwoodJS with `yarn rw serve`.
- *
- * For the Fastify server options that you can set, see:
- * https://www.fastify.io/docs/latest/Reference/Server/#factory
- *
- * Examples include: logger settings, timeouts, maximum payload limits, and more.
- *
- * Note: This configuration does not apply in a serverless deploy.
- */
 export const DEFAULT_REDWOOD_FASTIFY_CONFIG: FastifyServerOptions = {
   requestTimeout: 15_000,
   logger: {
@@ -30,6 +17,7 @@ export const DEFAULT_REDWOOD_FASTIFY_CONFIG: FastifyServerOptions = {
 }
 
 let isServerConfigLoaded = false
+
 let serverConfigFile: {
   config: FastifyServerOptions
   configureFastify: FastifySideConfigFn
@@ -53,6 +41,7 @@ export function loadFastifyConfig() {
     console.log(
       "Ignoring Fastify config inside 'api/src/server.config.(js|ts)'"
     )
+
     return {
       config: {},
       configureFastify: async (
@@ -62,15 +51,13 @@ export function loadFastifyConfig() {
     }
   }
 
-  // @TODO use require.resolve to find the config file
-  // do we need to babel first?
+  // TODO: Use `require.resolve` to find the config file. Do we need to babel first?
   const serverConfigPath = path.join(
     getPaths().base,
     getConfig().api.serverConfig
   )
 
-  // If a server.config.js is not found, use the default
-  // options set in packages/api-server/src/app.ts
+  // If a server.config.js is not found, use the default options.
   if (!fs.existsSync(serverConfigPath)) {
     return serverConfigFile
   }
