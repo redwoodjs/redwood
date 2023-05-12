@@ -1,12 +1,12 @@
 import { getEpilogue } from './util'
 
+export const EXPERIMENTAL_TOPIC_ID = 4851
+
 export const command = 'setup-server-file'
 
 export const description = 'Setup the experimental server file'
 
-export const EXPERIMENTAL_TOPIC_ID = 4851
-
-export const builder = (yargs) => {
+export function builder(yargs) {
   yargs
     .option('force', {
       alias: 'f',
@@ -23,7 +23,7 @@ export const builder = (yargs) => {
     .epilogue(getEpilogue(command, description, EXPERIMENTAL_TOPIC_ID, true))
 }
 
-export const handler = async (options) => {
+export async function handler(options) {
   const { handler } = await import('./setupServerFileHandler')
   return handler(options)
 }
