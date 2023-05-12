@@ -16,6 +16,7 @@
     "@redwoodjs/auth-dbauth-web": "5.0.0",
     "@redwoodjs/forms": "5.0.0",
     "@redwoodjs/router": "5.0.0",
+    "@redwoodjs/vite": "5.0.0",
     "@redwoodjs/web": "5.0.0",
     "humanize-string": "2.1.0",
     "prop-types": "15.8.1",
