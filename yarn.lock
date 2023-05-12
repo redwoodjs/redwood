@@ -582,6 +582,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-define-polyfill-provider@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@babel/helper-define-polyfill-provider@npm:0.4.0"
+  dependencies:
+    "@babel/helper-compilation-targets": ^7.17.7
+    "@babel/helper-plugin-utils": ^7.16.7
+    debug: ^4.1.1
+    lodash.debounce: ^4.0.8
+    resolve: ^1.14.2
+    semver: ^6.1.2
+  peerDependencies:
+    "@babel/core": ^7.4.0-0
+  checksum: 953c6ebda6871f2aa093f002f5e085ecbefe684580543fc7c309fe9aa5ce626758e02697a51cd25acf5cab56b1028a789fd38674d5872de74927a58049fbdc19
+  languageName: node
+  linkType: hard
+
 "@babel/helper-environment-visitor@npm:^7.18.9, @babel/helper-environment-visitor@npm:^7.21.5":
   version: 7.21.5
   resolution: "@babel/helper-environment-visitor@npm:7.21.5"
@@ -2674,10 +2690,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@faker-js/faker@npm:7.6.0":
-  version: 7.6.0
-  resolution: "@faker-js/faker@npm:7.6.0"
-  checksum: 8f0e0588b1327563aba3bf71d859eb52575c6e34f9d259f63dfa3c3ba7eea910588395399f2531753f1b7b730c06e0ef79336634361b2e69445ed69123e019eb
+"@faker-js/faker@npm:8.0.0":
+  version: 8.0.0
+  resolution: "@faker-js/faker@npm:8.0.0"
+  checksum: c6d68a9c4cad7c5f1a315a9169387d7c683a2f2674a454dd6aef991514dd2b56ba6c7bd425d3e34c5f3884fad7171de05fb93812a01f54d6add815d6ef810a27
   languageName: node
   linkType: hard
 
@@ -3937,15 +3953,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:8.4.1, @graphql-tools/merge@npm:^8.2.6, @graphql-tools/merge@npm:^8.4.1":
-  version: 8.4.1
-  resolution: "@graphql-tools/merge@npm:8.4.1"
+"@graphql-tools/merge@npm:8.4.2, @graphql-tools/merge@npm:^8.2.6, @graphql-tools/merge@npm:^8.4.1":
+  version: 8.4.2
+  resolution: "@graphql-tools/merge@npm:8.4.2"
   dependencies:
     "@graphql-tools/utils": ^9.2.1
     tslib: ^2.4.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 9d6b8d2b70903442f4ccadc586fc853d1e53aa429fbe09e48aad62d929ec2fb053e457e5074aa9e91a9147672c86719f069e872cb87c0c6fff07cbea9706fd20
+  checksum: 2df55222b48e010e683572f456cf265aabae5748c59f7c1260c66dec9794b7a076d3706f04da969b77f0a32c7ccb4551fee30125931d3fe9c98a8806aae9a3f4
   languageName: node
   linkType: hard
 
@@ -6857,10 +6873,10 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
-    supertokens-auth-react: 0.32.1
+    supertokens-auth-react: 0.32.3
     typescript: 5.0.4
   peerDependencies:
-    supertokens-auth-react: 0.32.1
+    supertokens-auth-react: 0.32.3
   languageName: unknown
   linkType: soft
 
@@ -7059,7 +7075,7 @@ __metadata:
     style-loader: 3.3.2
     typescript: 5.0.4
     url-loader: 4.1.1
-    webpack: 5.82.0
+    webpack: 5.82.1
     webpack-bundle-analyzer: 4.8.0
     webpack-cli: 5.1.1
     webpack-dev-server: 4.15.0
@@ -7177,7 +7193,7 @@ __metadata:
     "@envelop/testing": 5.0.6
     "@envelop/types": 3.0.2
     "@escape.tech/graphql-armor": 1.8.2
-    "@graphql-tools/merge": 8.4.1
+    "@graphql-tools/merge": 8.4.2
     "@graphql-tools/schema": 9.0.19
     "@graphql-tools/utils": 9.2.1
     "@opentelemetry/api": 1.4.1
@@ -7229,7 +7245,7 @@ __metadata:
     "@types/findup-sync": 4.0.2
     "@types/fs-extra": 11.0.1
     babel-plugin-graphql-tag: 3.3.0
-    babel-plugin-polyfill-corejs3: 0.7.1
+    babel-plugin-polyfill-corejs3: 0.8.1
     babel-plugin-tester: 11.0.4
     chalk: 4.1.2
     core-js: 3.30.2
@@ -7584,24 +7600,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.28":
-  version: 0.3.28
-  resolution: "@replayio/playwright@npm:0.3.28"
+"@replayio/playwright@npm:0.3.30":
+  version: 0.3.30
+  resolution: "@replayio/playwright@npm:0.3.30"
   dependencies:
-    "@replayio/replay": ^0.12.8
-    "@replayio/test-utils": ^0.5.7
+    "@replayio/replay": ^0.12.10
+    "@replayio/test-utils": ^0.5.9
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: aaa0069c362fd62dcf431b7699e00e8173dc76ac38a8cd6bb9f782b349024ed37923831aa75e10c6771d020b308eaecc495a895ed4a466a1057541919e2673a9
+  checksum: f5b94afbdda8512ce3c0cb209a59659ae60f86d34a4222aad682969275fe0b87def9e8dd4a159f13d4a17cef0d645580cf9174a1e1453c8677d33fbb33f60587
   languageName: node
   linkType: hard
 
-"@replayio/replay@npm:^0.12.8":
-  version: 0.12.8
-  resolution: "@replayio/replay@npm:0.12.8"
+"@replayio/replay@npm:^0.12.10":
+  version: 0.12.10
+  resolution: "@replayio/replay@npm:0.12.10"
   dependencies:
     "@replayio/sourcemap-upload": ^1.0.7
     commander: ^7.2.0
@@ -7615,7 +7631,7 @@ __metadata:
     ws: ^7.5.0
   bin:
     replay: bin/replay.js
-  checksum: 8f618ab4f955fd20d9b5d97a3969c58680480fd4ee610f58cb5703d4afda2f51e648d09235fdb886f4d08e5b5f7c7973badc390c627dcb57b3f4bfb172df1e84
+  checksum: 72115f820248cbaae6089634f86591adcb62e1e09751ba0a15248e9123794d7700e6268246d1f8bfc977dea8ff1a62a8c6e155c826e3c1635479718241470eeb
   languageName: node
   linkType: hard
 
@@ -7632,16 +7648,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.5.7":
-  version: 0.5.7
-  resolution: "@replayio/test-utils@npm:0.5.7"
+"@replayio/test-utils@npm:^0.5.9":
+  version: 0.5.9
+  resolution: "@replayio/test-utils@npm:0.5.9"
   dependencies:
-    "@replayio/replay": ^0.12.8
+    "@replayio/replay": ^0.12.10
     "@types/node-fetch": ^2.6.2
     debug: ^4.3.4
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: ed8df660efd67776d7f5d82cc27f16abcac7c6726bb360e8c6ade6722099b80e8785bed27b41f16d63e3f8e7d20d92c2e27fdbb68d6d28f7f7605e0d3d6b9d3e
+  checksum: 627f3ca0cd190244b8efd0ed39e04b795e83c966557ae18ea845de580a96fbbce387ab609a790ea64fdb2de163dbf06eac31faa22c9afd08b0c45f6a9f8e100a
   languageName: node
   linkType: hard
 
@@ -12224,15 +12240,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs3@npm:0.7.1":
-  version: 0.7.1
-  resolution: "babel-plugin-polyfill-corejs3@npm:0.7.1"
+"babel-plugin-polyfill-corejs3@npm:0.8.1":
+  version: 0.8.1
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.8.1"
   dependencies:
-    "@babel/helper-define-polyfill-provider": ^0.3.3
-    core-js-compat: ^3.29.0
+    "@babel/helper-define-polyfill-provider": ^0.4.0
+    core-js-compat: ^3.30.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: ecf010cbed20b3ac6cc3256fe9b9a470458b8091c721a0cc410eac527f5b83a1a7876739c1b2ef917a0de0b9d17398db85aef3059ffb0d059382264ae8439e0a
+  checksum: 90320f5e5a27bcaf9a370d86ff3a9c72fd28618e51f83a7c1e31e34f9a2d671f5ca446b1c4af806cdee6388a6868da38299b3167dd860985981feeda3f2bf1c3
   languageName: node
   linkType: hard
 
@@ -14441,12 +14457,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.25.1, core-js-compat@npm:^3.29.0, core-js-compat@npm:^3.8.1":
-  version: 3.29.0
-  resolution: "core-js-compat@npm:3.29.0"
+"core-js-compat@npm:^3.25.1, core-js-compat@npm:^3.30.1, core-js-compat@npm:^3.8.1":
+  version: 3.30.2
+  resolution: "core-js-compat@npm:3.30.2"
   dependencies:
     browserslist: ^4.21.5
-  checksum: 2f596222b50b30b3051fbe412bf152c355580fa73aa1d5d2263b6de98703d4e2154eac95fdd0fd38877a4b45d00698dffa8da37694c0c33f4541d4f81e68801b
+  checksum: 7cb984fc6bcdd2f28c2f2f19fc8fc874a303adf7f835720b9937f0b1d40793819ed744dc14dff28ddb7735404b02a43f08493c3e2f227b27090cd6d64d28c5f9
   languageName: node
   linkType: hard
 
@@ -16141,7 +16157,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.13.0, enhanced-resolve@npm:^5.13.0, enhanced-resolve@npm:^5.7.0":
+"enhanced-resolve@npm:5.13.0":
   version: 5.13.0
   resolution: "enhanced-resolve@npm:5.13.0"
   dependencies:
@@ -16159,6 +16175,16 @@ __metadata:
     memory-fs: ^0.5.0
     tapable: ^1.0.0
   checksum: d95fc630606ea35bed21c4a029bbb1681919571a2d1d2011c7fc42a26a9e48ed3d74a89949ce331e1fd3229850a303e3218b887b92951330f16bdfbb93a10e64
+  languageName: node
+  linkType: hard
+
+"enhanced-resolve@npm:^5.14.0, enhanced-resolve@npm:^5.7.0":
+  version: 5.14.0
+  resolution: "enhanced-resolve@npm:5.14.0"
+  dependencies:
+    graceful-fs: ^4.2.4
+    tapable: ^2.2.0
+  checksum: 33e68715860246929e30db0128e60bfd2d351987fa2b39a1052f7e555656992c87e856b67083019a6212841c36b1efdde9394961e7cf9dffff400b80848d341c
   languageName: node
   linkType: hard
 
@@ -28307,10 +28333,10 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.21.5
     "@babel/runtime-corejs3": 7.21.5
-    "@faker-js/faker": 7.6.0
+    "@faker-js/faker": 8.0.0
     "@npmcli/arborist": 6.2.9
     "@playwright/test": 1.33.0
-    "@replayio/playwright": 0.3.28
+    "@replayio/playwright": 0.3.30
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
@@ -29966,9 +29992,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supertokens-auth-react@npm:0.32.1":
-  version: 0.32.1
-  resolution: "supertokens-auth-react@npm:0.32.1"
+"supertokens-auth-react@npm:0.32.3":
+  version: 0.32.3
+  resolution: "supertokens-auth-react@npm:0.32.3"
   dependencies:
     intl-tel-input: ^17.0.19
     prop-types: "*"
@@ -29977,7 +30003,7 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
     supertokens-web-js: ^0.5.0
-  checksum: 6c58389c5afddac1d3b9f04267963d113f9824370b1c618da0cb21d3162e8267b01ca827e65d6e43d359f5d8916beb9bdde556e2cdc4798e74f8101e9fb2fdc9
+  checksum: 89f122ebc6bce6eccedd229bb88439f73645a26bdd54b2fcd160e3c0396bb92cb66968e5cef6614d332f4d27e993ba4e935ae34240c6dcb670fa405a93abb573
   languageName: node
   linkType: hard
 
@@ -32434,9 +32460,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.82.0, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
-  version: 5.82.0
-  resolution: "webpack@npm:5.82.0"
+"webpack@npm:5.82.1, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
+  version: 5.82.1
+  resolution: "webpack@npm:5.82.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -32447,7 +32473,7 @@ __metadata:
     acorn-import-assertions: ^1.7.6
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.13.0
+    enhanced-resolve: ^5.14.0
     es-module-lexer: ^1.2.1
     eslint-scope: 5.1.1
     events: ^3.2.0
@@ -32467,7 +32493,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 74d612335f0c18ad5e3e00cee5df11ac79d836a1a57623078218d41887c3ecb273ada9886a8999e4c657f2189c3a653524ec81e4e27080883b10fb1e9046e769
+  checksum: 8583c71f30af348d16b63b8c2112653445063351b8bebd6033451a3bcf89176c1aec45fcd0f5a048e429e78004b79bb76d1a19f6e166d5bd802306a2df19b725
   languageName: node
   linkType: hard
 

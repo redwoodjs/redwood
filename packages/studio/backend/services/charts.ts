@@ -2,6 +2,51 @@ import { getDatabase } from '../database'
 
 import { getDescendantSpans, getSpan } from './util'
 
+export async function spanTypeTimeSeriesData(
+  _parent: unknown,
+  {
+    timeLimit,
+  }: {
+    timeLimit: number
+  }
+) {
+  const db = await getDatabase()
+  const stmt = await db.prepare(`
+  SELECT
+    ts,
+    json_patch (json_object('ts', ts),
+      json_group_object (series_type,
+        duration_msec)) AS chartdata
+  FROM (
+    SELECT
+      datetime (start_nano / 1000000000,
+        'unixepoch',
+        'utc') AS ts,
+      replace(coalesce(TYPE, 'generic'), '-', '') AS series_type,
+      sum(duration_nano / 1000000.0) AS duration_msec
+    FROM
+      span
+    GROUP BY
+      ts,
+      series_type
+    ORDER BY
+      start_nano ASC,
+      series_type)
+  WHERE
+    ts >= datetime ('now', ?, 'utc')
+  GROUP BY
+    ts
+  ORDER BY
+    ts ASC;
+  `)
+
+  const result = await stmt.all(`-${timeLimit} seconds`)
+  await stmt.finalize()
+  const chartData = result.map((row) => JSON.parse(row['chartdata']))
+
+  return chartData
+}
+
 export async function spanTypeTimeline(
   _parent: unknown,
   {
