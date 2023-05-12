@@ -2,14 +2,6 @@ import Fastify, { FastifyServerOptions } from 'fastify'
 
 import { loadFastifyConfig, DEFAULT_REDWOOD_FASTIFY_CONFIG } from './config.js'
 
-// For now, we're trying...
-//
-// ```js
-// const fastify = Fastify({
-//   ...DEFAULT_REDWOOD_FASTIFY_CONFIG,
-// })
-// ```
-
 // NOTE: Needed for backwards compatibility in CLI handlers
 export function createFastifyInstance(options?: FastifyServerOptions) {
   const { config } = loadFastifyConfig()
