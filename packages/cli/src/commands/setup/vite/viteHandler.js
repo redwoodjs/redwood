@@ -47,7 +47,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
           const redwoodTomlPath = getConfigPath()
           const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-          if (!configContent.includes('bundler = "webpack"')) {
+          if (configContent.includes('bundler = "webpack"')) {
             throw new Error(
               'You have the bundler set to webpack in your redwood.toml. Remove this line, or change it to "vite" and try again.'
             )

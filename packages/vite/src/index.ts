@@ -1,12 +1,10 @@
-import { existsSync, readFile as fsReadFile } from 'fs'
+import { existsSync } from 'fs'
 import path from 'path'
-import { promisify } from 'util'
 
 import react from '@vitejs/plugin-react'
 import {
   ConfigEnv,
   normalizePath,
-  PluginOption,
   transformWithEsbuild,
   UserConfig,
 } from 'vite'
@@ -15,8 +13,6 @@ import EnvironmentPlugin from 'vite-plugin-environment'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-
-const readFile = promisify(fsReadFile)
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
@@ -49,6 +45,7 @@ export default function redwoodPluginVite() {
             clientEntryPath
           )
           // Check dis 👇
+          // @TODO no slash in front, its going to break windows!!! ⚠️
           console.log(
             `👉 \n ~ file: index.ts:53 ~ relativeEntryPath:`,
             relativeEntryPath
@@ -185,13 +182,11 @@ export default function redwoodPluginVite() {
       // @MARK Adding this custom plugin to support jsx files with .js extensions
       // This is the default in Redwood JS projects. We can remove this once Vite is stable,
       // and have a codtemod to convert all JSX files to .jsx extensions
-      name: 'load-js-files-as-jsx',
-      async load(id: string) {
+      name: 'transform-js-files-as-jsx',
+      async transform(code: string, id: string) {
         if (!id.match(/src\/.*\.js$/)) {
           return
         }
-
-        const code = await readFile(id, 'utf-8')
 
         // Use the exposed transform from vite, instead of directly
         // transforming with esbuild
@@ -218,13 +213,4 @@ export default function redwoodPluginVite() {
       },
     }),
   ]
-}
-
-const applyOn = (apply: 'build' | 'serve') => {
-  return (plugin: PluginOption) => {
-    return {
-      ...plugin,
-      apply,
-    }
-  }
 }
