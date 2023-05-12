@@ -1992,16 +1992,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:7.21.0":
-  version: 7.21.0
-  resolution: "@babel/runtime-corejs3@npm:7.21.0"
-  dependencies:
-    core-js-pure: ^3.25.1
-    regenerator-runtime: ^0.13.11
-  checksum: b46896f9a774eeb0e8d2597a0a43a87ede27eebec650b3e17719c14a502289ece95029fe5bc8be84798fb1879b69d54efc1f42c3127f1afaf7778d3b8bb692b5
-  languageName: node
-  linkType: hard
-
 "@babel/runtime-corejs3@npm:7.21.5":
   version: 7.21.5
   resolution: "@babel/runtime-corejs3@npm:7.21.5"
@@ -7167,7 +7157,7 @@ __metadata:
     "@fastify/http-proxy": 9.1.0
     "@fastify/static": 6.10.1
     "@fastify/url-data": 5.3.1
-    "@redwoodjs/project-config": 5.0.0
+    "@redwoodjs/project-config": 5.1.4
     "@types/aws-lambda": 8.10.115
     "@types/lodash.escape": 4.0.7
     "@types/qs": 6.9.7
@@ -7351,21 +7341,6 @@ __metadata:
     typescript: 5.0.4
   languageName: unknown
   linkType: soft
-
-"@redwoodjs/project-config@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@redwoodjs/project-config@npm:5.0.0"
-  dependencies:
-    "@babel/runtime-corejs3": 7.21.0
-    "@iarna/toml": 2.2.5
-    core-js: 3.30.1
-    deepmerge: 4.3.1
-    fast-glob: 3.2.12
-    findup-sync: 5.0.0
-    string-env-interpolation: 1.0.1
-  checksum: 1e4728d87ffdbd27dba2c2d2ffecc72262f45aebfd19d9342e83383b8cbfb52368791005cc4730a03123145475e5591371bdef379f4beb976a3091f68f1a1063
-  languageName: node
-  linkType: hard
 
 "@redwoodjs/record@workspace:packages/record":
   version: 0.0.0-use.local
@@ -14519,13 +14494,6 @@ __metadata:
   version: 3.29.0
   resolution: "core-js-pure@npm:3.29.0"
   checksum: 40ae3acecd21ba63ef6fa7cc3294d6255a2a767b50f893c29d35cad48b331b3d0e01089771d7460612a2ff3b96472b747657a3a56f0f722635099e49f56f27b8
-  languageName: node
-  linkType: hard
-
-"core-js@npm:3.30.1":
-  version: 3.30.1
-  resolution: "core-js@npm:3.30.1"
-  checksum: 7b3b8ba85aca888d9780ad93a02f3d3a8c0c93b51cb48ef98a5e0909cbfd2f694d17ebf5084e043bd762d2953eff52b869cd01d3b0a5acd2b1edd9d687ccb684
   languageName: node
   linkType: hard
 
