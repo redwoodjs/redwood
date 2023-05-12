@@ -20,32 +20,33 @@ export async function redwoodFastifyWeb(
   done: HookHandlerDoneFunction
 ) {
   const prerenderedFiles = findPrerenderedHtml()
-  const indexPath = getFallbackIndexPath()
 
-  // Serve prerendered HTML directly, instead of the index
+  // Serve prerendered HTML directly, instead of the index.
   prerenderedFiles
     .filter((filePath) => filePath !== 'index.html') // remove index.html
     .forEach((filePath) => {
-      const pathName = filePath.split('.html')[0]
+      const [pathName] = filePath.split('.html')
+
       fastify.get(`/${pathName}`, (_, reply: FastifyReply) => {
         reply.header('Content-Type', 'text/html; charset=UTF-8')
         reply.sendFile(filePath)
       })
     })
 
-  // NOTE: We should deprecate this config loading when we move to a `server.js|ts` file
+  // NOTE: Deprecate this when we move to a `server.ts` file.
   const { configureFastify } = loadFastifyConfig()
   if (configureFastify) {
     await configureFastify(fastify, { side: 'web', ...opts })
   }
 
-  // Serve other non-html assets
+  // Serve other non-html assets.
   fastify.register(fastifyStatic, {
     root: getPaths().web.dist,
   })
 
-  // For SPA routing fallback on unmatched routes
-  // And let JS routing take over
+  const indexPath = getFallbackIndexPath()
+
+  // For SPA routing, fallback on unmatched routes and let client-side routing take over.
   fastify.setNotFoundHandler({}, function (_, reply: FastifyReply) {
     reply.header('Content-Type', 'text/html; charset=UTF-8')
     reply.sendFile(indexPath)
