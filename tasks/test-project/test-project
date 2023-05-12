@@ -26,12 +26,6 @@ const {
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
-  .option('typescript', {
-    alias: 'ts',
-    default: false,
-    type: 'boolean',
-    describe: 'Generate a TypeScript project. JavaScript by default.',
-  })
   .option('link', {
     default: false,
     type: 'boolean',
@@ -68,7 +62,6 @@ const args = yargs(hideBin(process.argv))
   .parseSync()
 
 const { canary, link, verbose, clean, copyFromFixture, rebuildFixture } = args
-const typescript = args.rebuildFixture || args.typescript
 
 // Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
@@ -136,12 +129,7 @@ const createProject = async () => {
   // We create a ts project and convert using ts-to-js at the end if typescript flag is false
   return execa(
     cmd,
-    [
-      '--no-yarn-install',
-      `--typescript ${typescript}`,
-      '--overwrite',
-      '--no-git',
-    ],
+    ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
     getExecaOptions(RW_FRAMEWORKPATH)
   )
 }
@@ -282,7 +270,6 @@ const globalTasks = () =>
           webTasks(OUTPUT_PROJECT_PATH, {
             verbose,
             linkWithLatestFwBuild: link || rebuildFixture,
-            typescript,
           }),
         enabled: () => !copyFromFixture || rebuildFixture,
       },
@@ -292,7 +279,6 @@ const globalTasks = () =>
           apiTasks(OUTPUT_PROJECT_PATH, {
             verbose,
             linkWithLatestFwBuild: link || rebuildFixture,
-            typescript,
           }),
         enabled: () => !copyFromFixture || rebuildFixture,
       },
