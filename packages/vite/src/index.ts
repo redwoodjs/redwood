@@ -2,23 +2,21 @@ import { existsSync } from 'fs'
 import path from 'path'
 
 import react from '@vitejs/plugin-react'
-import {
-  ConfigEnv,
-  normalizePath,
-  transformWithEsbuild,
-  UserConfig,
-} from 'vite'
+import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
+import { normalizePath } from 'vite'
 import commonjs from 'vite-plugin-commonjs'
 import EnvironmentPlugin from 'vite-plugin-environment'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { handleJsAsJsx } from './vite-plugin-jsx-loader'
+
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
  *
  */
-export default function redwoodPluginVite() {
+export default function redwoodPluginVite(): PluginOption[] {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
@@ -30,6 +28,8 @@ export default function redwoodPluginVite() {
     )
   }
 
+  const relativeEntryPath = path.relative(rwPaths.web.src, clientEntryPath)
+
   return [
     {
       name: 'redwood-plugin-vite',
@@ -40,22 +40,13 @@ export default function redwoodPluginVite() {
         order: 'pre',
         handler: (html: string) => {
           // So we inject the entrypoint with the correct extension .tsx vs .jsx
-          const relativeEntryPath = path.relative(
-            rwPaths.web.src,
-            clientEntryPath
-          )
-          // Check dis 👇
-          // @TODO no slash in front, its going to break windows!!! ⚠️
-          console.log(
-            `👉 \n ~ file: index.ts:53 ~ relativeEntryPath:`,
-            relativeEntryPath
-          )
 
           // And then inject the entry
           if (existsSync(clientEntryPath)) {
             return html.replace(
               '</head>',
-              `<script type="module" src="${relativeEntryPath}"></script>
+              // @NOTE the slash in front, for windows compatibility and for pages in subdirectories
+              `<script type="module" src="/${relativeEntryPath}"></script>
         </head>`
             )
           } else {
@@ -73,8 +64,7 @@ export default function redwoodPluginVite() {
           return {
             code: code.replace(
               '</head>',
-              // Note that this is always JSX, because this runs for DIST, not src
-              `<script type="module" src="/entry-client.jsx"></script>
+              `<script type="module" src="/${relativeEntryPath}"></script>
         </head>`
             ),
             map: null,
@@ -178,23 +168,7 @@ export default function redwoodPluginVite() {
       }
     ),
     // -----------------
-    {
-      // @MARK Adding this custom plugin to support jsx files with .js extensions
-      // This is the default in Redwood JS projects. We can remove this once Vite is stable,
-      // and have a codtemod to convert all JSX files to .jsx extensions
-      name: 'transform-js-files-as-jsx',
-      async transform(code: string, id: string) {
-        if (!id.match(/src\/.*\.js$/)) {
-          return
-        }
-
-        // Use the exposed transform from vite, instead of directly
-        // transforming with esbuild
-        return transformWithEsbuild(code, id, {
-          loader: 'jsx',
-        })
-      },
-    },
+    handleJsAsJsx(),
     react({
       babel: {
         ...getWebSideDefaultBabelConfig({
