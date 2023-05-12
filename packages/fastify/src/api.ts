@@ -12,7 +12,6 @@ export async function redwoodFastifyAPI(
   done: HookHandlerDoneFunction
 ) {
   fastify.register(fastifyUrlData)
-
   await fastify.register(fastifyRawBody)
 
   fastify.addContentTypeParser(
@@ -21,13 +20,12 @@ export async function redwoodFastifyAPI(
     fastify.defaultTextParser
   )
 
-  // NOTE: We should deprecate this config loading when we move to a `server.js|ts` file
+  // NOTE: Deprecate this when we move to a `server.ts` file.
   const { configureFastify } = loadFastifyConfig()
   if (configureFastify) {
     await configureFastify(fastify, { side: 'api', ...opts })
   }
 
-  // Lambda handler
   const apiRootPath = opts.redwood?.apiRootPath || '/'
   fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
