@@ -217,7 +217,7 @@ export default function SeriesTypeBarList({
           <Bold>Type</Bold>
         </Text>
         <Text>
-          <Bold>Quantity</Bold>
+          <Bold>Count</Bold>
         </Text>
       </Flex>
       <BarList data={barListData} className="mt-2" />

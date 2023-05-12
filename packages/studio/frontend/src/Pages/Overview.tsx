@@ -12,7 +12,7 @@ export default function App() {
       <Grid numCols={1} numColsSm={2} numColsLg={2} className="gap-2">
         <Col numColSpan={1}>
           <SeriesTypeBarList
-            name="Recent Spans Counts"
+            name="Recent Spans"
             timeLimit={2 * 60}
           ></SeriesTypeBarList>
         </Col>
