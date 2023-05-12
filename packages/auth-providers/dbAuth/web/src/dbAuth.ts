@@ -92,10 +92,11 @@ export function createDbAuthClient({
         .then((response) => response.text())
         .then((tokenText) => {
           lastTokenCheckAt = new Date()
-          getTokenPromise = null
           cachedToken = tokenText.length === 0 ? null : tokenText
-
           return cachedToken
+        })
+        .finally(() => {
+          getTokenPromise = null
         })
 
       return getTokenPromise
