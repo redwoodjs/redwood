@@ -132,14 +132,17 @@ export default function SpanTypeTimeSeriesChart({
 
   const agos = [30, 60, 120, 240, 480]
 
+  const dataFormatter = (number: number) =>
+    `${Intl.NumberFormat('us').format(number).toString()} ms`
+
   return (
     <Card>
-      <Flex className="space-x-4" justifyContent="start" alignItems="center">
+      <Flex className="space-x-4" justifyContent="between" alignItems="stretch">
         <Title>{name}</Title>
         <Dropdown
           onValueChange={(value) => setRefreshSecondsAgo(parseInt(value))}
           placeholder="120 seconds ago"
-          className="max-w-xs"
+          className="max-w-xs w-64"
         >
           {agos.map((ago) => (
             <DropdownItem
@@ -156,7 +159,7 @@ export default function SpanTypeTimeSeriesChart({
         index="ts"
         categories={categories}
         colors={colors}
-        // valueFormatter={dataFormatter}
+        valueFormatter={dataFormatter}
         yAxisWidth={48}
         connectNulls={true}
         showAnimation={false}

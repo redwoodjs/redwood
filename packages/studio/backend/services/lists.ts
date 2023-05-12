@@ -36,3 +36,32 @@ export async function seriesTypeBarList(
 
   return result
 }
+
+export async function modelsAccessedList(
+  _parent: unknown,
+  {
+    timeLimit,
+  }: {
+    timeLimit: number
+  }
+) {
+  const db = await getDatabase()
+  const stmt = await db.prepare(`
+  SELECT
+    model,
+    count(model) AS model_count
+  FROM
+    prisma_queries
+  WHERE
+    datetime (start_nano / 1000000000, 'unixepoch', 'utc') >= datetime ('now', ?, 'utc')
+  GROUP BY
+    model
+  ORDER BY
+    model_count DESC, model ASC;
+  `)
+
+  const result = await stmt.all(`-${timeLimit} seconds`)
+  await stmt.finalize()
+
+  return result
+}
