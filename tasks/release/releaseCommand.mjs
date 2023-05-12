@@ -523,7 +523,15 @@ async function releasePatch() {
   console.log()
 
   //  ------------------------
-  await $`yarn lerna publish from-package`
+  try {
+    await $`yarn lerna publish from-package`
+  } catch (_error) {
+    exitIfNo(
+      await question(
+        'Publishing failed. You can usually recover from this by running `yarn lerna publish from-package` again. Continue? [Y/n] > '
+      )
+    )
+  }
   console.log()
 
   await $`git reset --hard HEAD~1`
