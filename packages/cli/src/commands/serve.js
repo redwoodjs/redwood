@@ -7,18 +7,9 @@ import terminalLink from 'terminal-link'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
-import { isTypeScriptProject } from '../lib/project'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
-
-export function coerceRootPath(path) {
-  // Make sure that we create a root path that starts and ends with a slash (/)
-  const prefix = path.charAt(0) !== '/' ? '/' : ''
-  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
-
-  return `${prefix}${path}${suffix}`
-}
 
 export const builder = async (yargs) => {
   yargs
@@ -27,29 +18,25 @@ export const builder = async (yargs) => {
       command: '$0',
       descriptions: 'Run both api and web servers',
       handler: async (argv) => {
-        const serverFileName = `server.${isTypeScriptProject() ? 'ts' : 'js'}`
-        const serverFilePath = path.join(getPaths().api.dist, serverFileName)
+        const serverFilePath = path.join(getPaths().api.dist, 'server.js')
+
         if (fs.existsSync(serverFilePath)) {
           console.log(
-            `${chalk.hex('#ff845e')(
-              `------------------------------------------------------------------\n 🧪 ${chalk.green(
-                'Experimental Feature'
-              )} 🧪\n------------------------------------------------------------------`
-            )}`
+            [
+              separator,
+              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+              separator,
+              'Using the experimental API server file at api/dist/server.js',
+              separator,
+            ].join('\n')
           )
-          console.log(
-            `Using the experimental API server file: 'api/dist/${serverFileName}'.`
-          )
-          console.log(
-            `${chalk.hex('#ff845e')(
-              '------------------------------------------------------------------'
-            )}\n`
-          )
-          await execa('yarn', ['node', path.join('dist', serverFileName)], {
+
+          await execa('yarn', ['node', path.join('dist', 'server.js')], {
             cwd: getPaths().api.base,
             stdio: 'inherit',
             shell: true,
           })
+
           return
         }
 
@@ -165,4 +152,16 @@ export const builder = async (yargs) => {
         'https://redwoodjs.com/docs/cli-commands#serve'
       )}`
     )
+}
+
+const separator = chalk.hex('#ff845e')(
+  '------------------------------------------------------------------'
+)
+
+export function coerceRootPath(path) {
+  // Make sure that we create a root path that starts and ends with a slash (/)
+  const prefix = path.charAt(0) !== '/' ? '/' : ''
+  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
+
+  return `${prefix}${path}${suffix}`
 }
