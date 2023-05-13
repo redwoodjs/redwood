@@ -127,7 +127,7 @@ export const schema = gql`
     deleteUser(id: Int!): User! @requireAuth
     generateToken(email: String!): userTokenResponse! @skipAuth
   }
-`
+```
 
 ### 4. Modify the auth function
 
@@ -620,7 +620,7 @@ You should see the changes and it should look like this!
 ![image](https://user-images.githubusercontent.com/638764/220204883-800829ab-e037-41e1-a2da-d47923c4d20c.png)
 
 
-### 7. Updating the routes
+### 9. Updating the routes
 The last thing we need to to do is update the routes to use the new page.
 
 ```jsx  title="/web/src/Routes.js"
