@@ -11260,9 +11260,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"all-contributors-cli@npm:6.25.0":
-  version: 6.25.0
-  resolution: "all-contributors-cli@npm:6.25.0"
+"all-contributors-cli@npm:6.25.1":
+  version: 6.25.1
+  resolution: "all-contributors-cli@npm:6.25.1"
   dependencies:
     "@babel/runtime": ^7.7.6
     async: ^3.1.0
@@ -11276,7 +11276,7 @@ __metadata:
     yargs: ^15.0.1
   bin:
     all-contributors: dist/cli.js
-  checksum: 06c29c14931a95d221d67251fb951757d557e9bf70a3848b4048292e092b1daed27039ba1e1f6cb969ab5f3781a4e8de8ecb1837590953e3e56ab70162b44e13
+  checksum: 60a27249a8b8724a9c507a565190c79163c6cd6d0f81a1f27608162ffac0c2ee4770552dbd6c8d404cf3798767885a5ad99be4d2732f28d14f3671b814e0aabb
   languageName: node
   linkType: hard
 
@@ -28372,7 +28372,7 @@ __metadata:
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.4
-    all-contributors-cli: 6.25.0
+    all-contributors-cli: 6.25.1
     babel-jest: 29.5.0
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
