@@ -1,4 +1,4 @@
-import findUp from 'findup-sync'
+import { lookItUpSync } from 'look-it-up'
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 
@@ -8,11 +8,13 @@ const CONFIG_FILE_NAME = 'redwood.toml'
 export const getConfigPath = (
   cwd: string = process.env.RWJS_CWD ?? process.cwd()
 ): string => {
-  const configPath = findUp(CONFIG_FILE_NAME, { cwd })
+  const configPath = lookItUpSync(CONFIG_FILE_NAME, cwd)
+
   if (!configPath) {
     throw new Error(
       `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`
     )
   }
+
   return configPath
 }

@@ -7330,13 +7330,12 @@ __metadata:
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
     "@iarna/toml": 2.2.5
-    "@types/findup-sync": 4.0.2
     deepmerge: 4.3.1
     dependency-cruiser: 12.12.1
+    esbuild: 0.17.18
     fast-glob: 3.2.12
-    findup-sync: 5.0.0
     jest: 29.5.0
-    rimraf: 5.0.0
+    look-it-up: 2.1.0
     string-env-interpolation: 1.0.1
     typescript: 5.0.4
   languageName: unknown
@@ -22867,6 +22866,13 @@ __metadata:
   version: 5.2.1
   resolution: "long@npm:5.2.1"
   checksum: 8252ef50b567aa062059d056dab5077c7bfaf8bd4598bcf96ccb61a27ebc0e879d267137f1c5d293dc259d658033013322931793a9de3f3388e4cda1fb91f79d
+  languageName: node
+  linkType: hard
+
+"look-it-up@npm:2.1.0":
+  version: 2.1.0
+  resolution: "look-it-up@npm:2.1.0"
+  checksum: de4aaed4d8b1d1967cfa7809d6e3414da1d45eaace9cf5a65428e3f967da676932ffb4cc59a9d0efbf1c1de26a14b10f5f66220bf276ad8803220c4f8f9ee3b4
   languageName: node
   linkType: hard
 
