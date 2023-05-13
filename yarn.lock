@@ -7332,7 +7332,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     "@types/findup-sync": 4.0.2
     deepmerge: 4.3.1
-    dependency-cruiser: 12.12.1
+    dependency-cruiser: 12.12.2
     fast-glob: 3.2.12
     findup-sync: 5.0.0
     jest: 29.5.0
@@ -15550,9 +15550,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dependency-cruiser@npm:12.12.1":
-  version: 12.12.1
-  resolution: "dependency-cruiser@npm:12.12.1"
+"dependency-cruiser@npm:12.12.2":
+  version: 12.12.2
+  resolution: "dependency-cruiser@npm:12.12.2"
   dependencies:
     acorn: 8.8.2
     acorn-jsx: 5.3.2
@@ -15562,7 +15562,7 @@ __metadata:
     ajv: 8.12.0
     chalk: ^4.1.2
     commander: 10.0.1
-    enhanced-resolve: 5.13.0
+    enhanced-resolve: 5.14.0
     figures: ^3.2.0
     get-stream: ^6.0.1
     glob: 7.2.0
@@ -15589,7 +15589,7 @@ __metadata:
     depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.js
     dependency-cruise: bin/dependency-cruise.js
     dependency-cruiser: bin/dependency-cruise.js
-  checksum: 928680e69fa1064333ef0fdf3c8b145f551d527b9bca55c1849e920b166dbbc65168bed4d71abdb46917fde94f5c2819ff435ddb08b91f4d3a8ad2b08f11a5e2
+  checksum: 205d5ed363eb126f1a5405590a583f639ca6d60f220e56d1bdcb08f9c275ac51a2cef1eb7a88210535ff4305d18d34668a8e756af97e859aa831d32375470e78
   languageName: node
   linkType: hard
 
@@ -16181,13 +16181,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.13.0":
-  version: 5.13.0
-  resolution: "enhanced-resolve@npm:5.13.0"
+"enhanced-resolve@npm:5.14.0, enhanced-resolve@npm:^5.14.0, enhanced-resolve@npm:^5.7.0":
+  version: 5.14.0
+  resolution: "enhanced-resolve@npm:5.14.0"
   dependencies:
     graceful-fs: ^4.2.4
     tapable: ^2.2.0
-  checksum: 9aa28d0aeb5b6a5bc2340884ac9f90a3fa96e5514ad3f5fb318089843668581a96bdeddfd743fbd8b9407d16e82dd60cf6151fc1af8dd17a43490e0f9093950c
+  checksum: 33e68715860246929e30db0128e60bfd2d351987fa2b39a1052f7e555656992c87e856b67083019a6212841c36b1efdde9394961e7cf9dffff400b80848d341c
   languageName: node
   linkType: hard
 
@@ -16199,16 +16199,6 @@ __metadata:
     memory-fs: ^0.5.0
     tapable: ^1.0.0
   checksum: d95fc630606ea35bed21c4a029bbb1681919571a2d1d2011c7fc42a26a9e48ed3d74a89949ce331e1fd3229850a303e3218b887b92951330f16bdfbb93a10e64
-  languageName: node
-  linkType: hard
-
-"enhanced-resolve@npm:^5.14.0, enhanced-resolve@npm:^5.7.0":
-  version: 5.14.0
-  resolution: "enhanced-resolve@npm:5.14.0"
-  dependencies:
-    graceful-fs: ^4.2.4
-    tapable: ^2.2.0
-  checksum: 33e68715860246929e30db0128e60bfd2d351987fa2b39a1052f7e555656992c87e856b67083019a6212841c36b1efdde9394961e7cf9dffff400b80848d341c
   languageName: node
   linkType: hard
 
