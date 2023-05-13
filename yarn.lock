@@ -28305,6 +28305,7 @@ __metadata:
     lerna: 6.6.2
     listr2: 6.4.2
     lodash.template: 4.5.0
+    look-it-up: 2.1.0
     make-dir-cli: 3.0.0
     msw: 1.2.1
     ncp: 2.0.0
