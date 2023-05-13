@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { config } from 'dotenv-defaults'
-import findup from 'findup-sync'
+import { lookItUpSync } from 'look-it-up'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -71,7 +71,7 @@ try {
     // `cwd` wasn't set. Odds are they're in a Redwood project,
     // but they could be in ./api or ./web, so we have to find up to be sure.
 
-    const redwoodTOMLPath = findup('redwood.toml', { cwd: process.cwd() })
+    const redwoodTOMLPath = lookItUpSync('redwood.toml', process.cwd())
 
     if (!redwoodTOMLPath) {
       throw new Error(
