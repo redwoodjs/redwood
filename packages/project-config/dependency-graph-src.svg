@@ -69,15 +69,15 @@
 </a>
 </g>
 </g>
-<!-- node_modules/findup&#45;sync -->
+<!-- node_modules/look&#45;it&#45;up -->
 <g id="node5" class="node">
-<title>node_modules/findup&#45;sync</title>
-<g id="a_node5"><a xlink:href="node_modules/findup-sync" xlink:title="findup&#45;sync">
-<polygon fill="#c40b0a" fill-opacity="0.101961" stroke="black" points="459.5,-206 397.5,-206 395.5,-204 395.5,-188 457.5,-188 459.5,-190 459.5,-206"/>
-<polyline fill="none" stroke="black" points="457.5,-204 395.5,-204"/>
-<polyline fill="none" stroke="black" points="457.5,-204 457.5,-188"/>
-<polyline fill="none" stroke="black" points="457.5,-204 459.5,-206"/>
-<text text-anchor="start" x="403.5" y="-194.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#c40b0a">findup&#45;sync</text>
+<title>node_modules/look&#45;it&#45;up</title>
+<g id="a_node5"><a xlink:href="node_modules/look-it-up" xlink:title="look&#45;it&#45;up">
+<polygon fill="#c40b0a" fill-opacity="0.101961" stroke="black" points="455,-206 402,-206 400,-204 400,-188 453,-188 455,-190 455,-206"/>
+<polyline fill="none" stroke="black" points="453,-204 400,-204"/>
+<polyline fill="none" stroke="black" points="453,-204 453,-188"/>
+<polyline fill="none" stroke="black" points="453,-204 455,-206"/>
+<text text-anchor="start" x="408" y="-194.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#c40b0a">look&#45;it&#45;up</text>
 </a>
 </g>
 </g>
@@ -152,11 +152,11 @@
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M244.63,-154.48C251.16,-156.53 258.14,-158.73 264.94,-160.87"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="264.16,-162.82 270.51,-162.62 265.42,-158.82 264.16,-162.82"/>
 </g>
-<!-- src/configPath.ts&#45;&gt;node_modules/findup&#45;sync -->
+<!-- src/configPath.ts&#45;&gt;node_modules/look&#45;it&#45;up -->
 <g id="edge6" class="edge">
-<title>src/configPath.ts&#45;&gt;node_modules/findup&#45;sync</title>
-<path fill="none" stroke="#000000" stroke-opacity="0.200000" d="M348.16,-181.46C361.13,-184.03 375.3,-186.84 387.98,-189.36"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="387.47,-191.4 393.76,-190.51 388.29,-187.28 387.47,-191.4"/>
+<title>src/configPath.ts&#45;&gt;node_modules/look&#45;it&#45;up</title>
+<path fill="none" stroke="#000000" stroke-opacity="0.200000" d="M348.16,-181.46C362.63,-184.33 378.59,-187.5 392.31,-190.22"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="391.9,-192.28 398.19,-191.39 392.72,-188.16 391.9,-192.28"/>
 </g>
 <!-- src/index.ts -->
 <g id="node10" class="node">
