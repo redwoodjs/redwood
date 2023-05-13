@@ -1,11 +1,4 @@
-import admin from 'firebase-admin'
-
 import { AuthenticationError } from '@redwoodjs/graphql-server'
-
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-const adminApp = admin.initializeApp({
-  projectId: process.env.FIREBASE_PROJECT_ID,
-})
 
 /**
  * getCurrentUser returns the user information from the decoded JWT
