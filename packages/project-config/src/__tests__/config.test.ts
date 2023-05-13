@@ -42,6 +42,10 @@ describe('getConfig', () => {
         "browser": {
           "open": false,
         },
+        "cli": {
+          "autoInstall": false,
+          "plugins": [],
+        },
         "experimental": {
           "opentelemetry": {
             "apiSdk": undefined,
