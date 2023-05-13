@@ -3,7 +3,7 @@ import path from 'path'
 
 import toml from '@iarna/toml'
 import merge from 'deepmerge'
-import findUp from 'findup-sync'
+import { lookItUpSync } from 'look-it-up'
 
 enum TargetEnum {
   NODE = 'node',
@@ -180,7 +180,7 @@ const PATH_WEB_DIR_DIST = 'web/dist'
 const getConfigPath = (
   cwd: string = process.env.RWJS_CWD ?? process.cwd()
 ): string => {
-  const configPath = findUp(CONFIG_FILE_NAME, { cwd })
+  const configPath = lookItUpSync(CONFIG_FILE_NAME, cwd)
   if (!configPath) {
     throw new Error(
       `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`
