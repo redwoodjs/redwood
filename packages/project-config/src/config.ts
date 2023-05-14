@@ -99,10 +99,10 @@ export interface Config {
       apiSdk?: string
     }
     studio: StudioConfig
-  }
-  cli: {
-    autoInstall: boolean
-    plugins: CLIPlugin[]
+    cli: {
+      autoInstall: boolean
+      plugins: CLIPlugin[]
+    }
   }
 }
 
@@ -167,10 +167,10 @@ const DEFAULT_CONFIG: Config = {
         },
       },
     },
-  },
-  cli: {
-    autoInstall: false,
-    plugins: [],
+    cli: {
+      autoInstall: false,
+      plugins: [],
+    },
   },
 }
 
