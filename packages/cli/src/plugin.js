@@ -6,50 +6,17 @@ import chalk from 'chalk'
 import { getConfig, getPaths } from './lib'
 import { installModule } from './lib/packages'
 
+/**
+ * The file inside .redwood which will contain cached plugin command mappings
+ */
 const PLUGIN_CACHE_FILENAME = 'command-cache.json'
 
-function checkPluginListAndWarn(plugins) {
-  // Plugins must define a package and version
-  for (const plugin of plugins) {
-    if (!plugin.package) {
-      console.warn(
-        chalk.yellow(
-          `⚠️  A plugin is missing a package name, it cannot be loaded.`
-        )
-      )
-    }
-    if (!plugin.version) {
-      console.warn(
-        chalk.yellow(
-          `⚠️  Plugin "${plugin.package}" is missing a version, it cannot be loaded.`
-        )
-      )
-    }
-  }
-
-  // Plugins should only occur once in the list
-  const pluginNames = plugins.map((p) => p.package)
-  if (plugins.length !== new Set(pluginNames).size) {
-    console.warn(
-      chalk.yellow(
-        '⚠️  Duplicate plugin names found in redwood.toml, duplicates will be ignored.'
-      )
-    )
-  }
-
-  // Plugins should be published to npm under a scope which is used as the namespace
-  const namespaces = plugins.map((p) => p.package.split('/')[0])
-  namespaces.forEach((ns) => {
-    if (!ns.startsWith('@')) {
-      console.warn(
-        chalk.yellow(
-          `⚠️  Plugin "${ns}" is missing a scope/namespace, it will not be loaded.`
-        )
-      )
-    }
-  })
-}
-
+/**
+ * Attempts to load all CLI plugins as defined in the redwood.toml file
+ *
+ * @param {*} yargs A yargs instance
+ * @returns The yargs instance with plugins loaded
+ */
 export async function loadPlugins(yargs) {
   const { plugins, autoInstall } = getConfig().experimental.cli
 
@@ -76,13 +43,13 @@ export async function loadPlugins(yargs) {
     }
   }
 
-  // Order alphabetically but with @redwoodjs packages first
+  // Order alphabetically but with @redwoodjs namespace first
   const namespaces = Array.from(
-    redwoodPackages.map((p) => p.split('/')[0])
+    thirdPartyPackages.map((p) => p.split('/')[0])
   ).sort()
-  namespaces.push(
-    ...Array.from(thirdPartyPackages.map((p) => p.split('/')[0])).sort()
-  )
+  if (redwoodPackages.size > 0) {
+    namespaces.unshift('@redwoodjs')
+  }
 
   // If the user is running a help command or no command was given
   // we want to load all plugins for observability in the help output
@@ -146,46 +113,41 @@ export async function loadPlugins(yargs) {
       continue
     }
 
-    // Load plugins for this namespace
-    const namespaceCommands = []
-    for (const namespacePlugin of namespacePlugins) {
-      // Check the cache to see if we can skip loading this plugin
-      // If this plugin doesn't have a command that matches the first word we can skip loading it
+    const namespacePluginsToLoad = []
+    if (showNamespaceHelp) {
       // If we're showing the namespace help we want to load all plugins for observability
-      const cacheEntry = pluginCommandCache[namespacePlugin.package]
-      if (!showNamespaceHelp && cacheEntry && !cacheEntry.includes(firstWord)) {
-        continue
-      }
-
-      let plugin
-      try {
-        plugin = await import(namespacePlugin.package)
-      } catch (error) {
-        // TODO: Batch all missing plugins and install them in one go
-        if (error.code === 'MODULE_NOT_FOUND') {
-          if (!autoInstall) {
-            console.warn(
-              chalk.yellow(
-                `⚠️  Plugin "${namespacePlugin.package}" cannot be loaded because it is not installed and "autoInstall" is disabled.`
-              )
-            )
-            continue
-          }
-          console.log(
-            chalk.green(`Installing plugin "${namespacePlugin.package}"...`)
-          )
-          // Install the plugin
-          await installModule(
-            namespacePlugin.package,
-            namespacePlugin.version,
-            true
-          )
-          plugin = await import(namespacePlugin.package)
+      namespacePluginsToLoad.push(...namespacePlugins)
+    } else {
+      // Attempt to find a plugin that matches the first word
+      for (const namespacePlugin of namespacePlugins) {
+        const cacheEntry = pluginCommandCache[namespacePlugin.package]
+        if (cacheEntry !== undefined && cacheEntry.includes(firstWord)) {
+          namespacePluginsToLoad.push(namespacePlugin)
+          // Only one plugin can match the first word so we break here
+          break
         }
       }
+    }
 
+    // If we didn't find any plugins to satify the first word we load all plugins so yargs can give
+    // an appropriate help message
+    if (namespacePluginsToLoad.length === 0) {
+      namespacePluginsToLoad.push(...namespacePlugins)
+    }
+
+    // Load plugins for this namespace
+    const namespaceCommands = []
+    for (const namespacePlugin of namespacePluginsToLoad) {
+      // Attempt to load the plugin
+      const plugin = await loadPluginPackage(
+        namespacePlugin.package,
+        namespacePlugin.version,
+        autoInstall
+      )
+
+      // Show an error if the plugin failed to load
       if (!plugin) {
-        console.log(
+        console.error(
           chalk.red(`❌  Plugin "${namespacePlugin.package}" failed to load.`)
         )
         continue
@@ -208,34 +170,16 @@ export async function loadPlugins(yargs) {
       namespaceCommands.push(...plugin.commands)
     }
 
-    // If we didn't load any commands for this namespace we can skip registering it
-    // unless we're loading all namespaces for the help output
-    // E.g. if we filtered out all commands using the cache
-    if (namespaceCommands.length === 0 && !showRootHelp) {
-      // TODO: Maybe we should just go back and load all plugins so yargs can show its
-      // help output for the command the user is trying to run?
-      process.on('exit', () => {
-        console.warn(
-          chalk.yellow(
-            `⚠️  No CLI plugins could provide that command. Please try "yarn rw ${
-              namespace === '@redwoodjs' ? '' : namespace
-            } --help" for more specific help.`
-          )
-        )
-      })
-      continue
-    }
-
     // Register all commands we loaded for this namespace
     // If the namespace is @redwoodjs, we don't need to nest the commands under a namespace
     if (namespace === '@redwoodjs') {
-      yargs.command(namespaceCommands)
+      yargs.command(namespaceCommands).demandCommand()
     } else {
       yargs.command({
         command: `${namespace} <command>`,
         describe: `${namespace} plugin commands`,
         builder: (yargs) => {
-          yargs.command(namespaceCommands)
+          yargs.command(namespaceCommands).demandCommand()
         },
         handler: () => {},
       })
@@ -253,4 +197,106 @@ export async function loadPlugins(yargs) {
   }
 
   return yargs
+}
+
+/**
+ * Logs warnings for any plugins that have invalid definitions in the redwood.toml file
+ *
+ * @param {any[]} plugins An array of plugin objects read from the redwood.toml file
+ */
+function checkPluginListAndWarn(plugins) {
+  // Plugins must define a package and version
+  for (const plugin of plugins) {
+    if (!plugin.package) {
+      console.warn(
+        chalk.yellow(`⚠️  A plugin is missing a package, it cannot be loaded.`)
+      )
+    }
+    if (!plugin.version) {
+      console.warn(
+        chalk.yellow(
+          `⚠️  Plugin "${plugin.package}" is missing a version, it cannot be loaded.`
+        )
+      )
+    }
+  }
+
+  // Plugins should only occur once in the list
+  const pluginPackages = plugins
+    .map((p) => p.package)
+    .filter((p) => p !== undefined)
+  if (pluginPackages.length !== new Set(pluginPackages).size) {
+    console.warn(
+      chalk.yellow(
+        '⚠️  Duplicate plugin packages found in redwood.toml, duplicates will be ignored.'
+      )
+    )
+  }
+
+  // Plugins should be published to npm under a scope which is used as the namespace
+  const namespaces = plugins.map((p) => p.package?.split('/')[0])
+  namespaces.forEach((ns) => {
+    if (ns !== undefined && !ns.startsWith('@')) {
+      console.warn(
+        chalk.yellow(
+          `⚠️  Plugin "${ns}" is missing a scope/namespace, it will not be loaded.`
+        )
+      )
+    }
+  })
+}
+
+/**
+ * Attempts to load a plugin package and return it. Returns null if the plugin failed to load.
+ *
+ * @param {string} packageName The npm package name of the plugin
+ * @param {string} packageVersion The npm package version of the plugin
+ * @param {boolean} autoInstall Whether to automatically install the plugin package if it is not installed already
+ * @returns The plugin package or null if it failed to load
+ */
+async function loadPluginPackage(packageName, packageVersion, autoInstall) {
+  try {
+    return await import(packageName)
+  } catch (error) {
+    // TODO: Batch all missing plugins and install them in one go
+    if (error.code === 'MODULE_NOT_FOUND') {
+      if (!autoInstall) {
+        console.warn(
+          chalk.yellow(
+            `⚠️  Plugin "${packageName}" cannot be loaded because it is not installed and "autoInstall" is disabled.`
+          )
+        )
+      } else {
+        // Install the plugin
+        console.log(chalk.green(`Installing plugin "${packageName}"...`))
+        const installed = await installPluginPackage(
+          packageName,
+          packageVersion
+        )
+        if (installed) {
+          return await import(packageName)
+        }
+      }
+    } else {
+      console.error(error)
+    }
+  }
+  return null
+}
+
+/**
+ * Attempts to install a plugin package. Installs the package as a dev dependency.
+ *
+ * @param {string} packageName The npm package name of the plugin
+ * @param {string} packageVersion The npm package version of the plugin
+ * @returns True if the plugin was installed successfully, false otherwise
+ */
+async function installPluginPackage(packageName, packageVersion) {
+  try {
+    await installModule(packageName, packageVersion, true)
+    return true
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }
