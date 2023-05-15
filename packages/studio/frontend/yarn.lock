@@ -3711,14 +3711,14 @@ __metadata:
   linkType: hard
 
 "react-toastify@npm:^9.1.2":
-  version: 9.1.2
-  resolution: "react-toastify@npm:9.1.2"
+  version: 9.1.3
+  resolution: "react-toastify@npm:9.1.3"
   dependencies:
     clsx: ^1.1.1
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 904ba15171d3b45751fdec077ca19e9b4010005c75161ddaa805b4c0abd0342fbcd25976b8871de01a2867600dcd902f6b80cf1bfda470ca83d8a514c0d67530
+  checksum: 51de1e51e9357a24773fbcd45a4db18bf74b8ec40d86a2bfb4a4fee23ca4f9fffdac5dfb7a3c21baea39971f72f72dfcdc79403a6de006f74d69e7bc12f8b3e0
   languageName: node
   linkType: hard
 
