@@ -1206,8 +1206,8 @@ __metadata:
   linkType: hard
 
 "@tremor/react@npm:^2.2.0":
-  version: 2.4.1
-  resolution: "@tremor/react@npm:2.4.1"
+  version: 2.6.1
+  resolution: "@tremor/react@npm:2.6.1"
   dependencies:
     "@floating-ui/react": ^0.19.1
     date-fns: ^2.28.0
@@ -1217,7 +1217,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ">=16.6.0"
-  checksum: 3ed10f18d9f530c12a52474a6ab1a57abeff839c1178b9ebaf3114a5f47f129441f1e1d1d7398901294eae86e5c02faa5935d589ee38c241ccb7cad63decd085
+  checksum: 9411584ef562f487c739a18db1904f3944d0082595631d673333feef012aa4a4ea6de08d04296ac6d8a6ba209108d66fe5bc75579f90173166695baee0fb6bbd
   languageName: node
   linkType: hard
 
@@ -3711,14 +3711,14 @@ __metadata:
   linkType: hard
 
 "react-toastify@npm:^9.1.2":
-  version: 9.1.2
-  resolution: "react-toastify@npm:9.1.2"
+  version: 9.1.3
+  resolution: "react-toastify@npm:9.1.3"
   dependencies:
     clsx: ^1.1.1
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 904ba15171d3b45751fdec077ca19e9b4010005c75161ddaa805b4c0abd0342fbcd25976b8871de01a2867600dcd902f6b80cf1bfda470ca83d8a514c0d67530
+  checksum: 51de1e51e9357a24773fbcd45a4db18bf74b8ec40d86a2bfb4a4fee23ca4f9fffdac5dfb7a3c21baea39971f72f72dfcdc79403a6de006f74d69e7bc12f8b3e0
   languageName: node
   linkType: hard
 
