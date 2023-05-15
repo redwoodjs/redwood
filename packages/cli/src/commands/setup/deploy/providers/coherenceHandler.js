@@ -42,6 +42,9 @@ export async function handler({ force }) {
 // Tasks and helpers
 // ------------------------
 
+/**
+ * Adds a health check file and a coherence.yml file by introspecting the prisma schema.
+ */
 async function getAddCoherenceFilesTask(force) {
   const files = [
     {
@@ -66,13 +69,11 @@ async function getAddCoherenceFilesTask(force) {
 }
 
 const notes = [
-  "You're ready to deploy to Coherence!\n",
+  "You're ready to deploy to Coherence! ✨\n",
   'Go to https://app.withcoherence.com to create your account and setup your cloud or GitHub connections.',
   'Check out the deployment docs at https://docs.withcoherence.com for detailed instructions and more information.\n',
   "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
 ]
-
-const SUPPORTED_DATABASES = ['mysql', 'postgresql']
 
 /**
  * Check the value of `provider` in the datasource block in `schema.prisma`:
@@ -92,7 +93,9 @@ async function getCoherenceConfigFileContent() {
 
   if (!SUPPORTED_DATABASES.includes(db)) {
     notes.unshift(
-      '⚠️  Warning: only mysql and postgresql prisma databases are supported on Coherence at this time.\n'
+      c.warning(
+        '⚠️  Only mysql and postgresql prisma databases are supported on Coherence at this time.\n'
+      )
     )
   }
 
@@ -102,6 +105,8 @@ async function getCoherenceConfigFileContent() {
 
   return coherenceFiles.yamlTemplate(db)
 }
+
+const SUPPORTED_DATABASES = ['mysql', 'postgresql']
 
 /**
  * Updates the ports in redwood.toml to use an environment variable.
@@ -153,7 +158,7 @@ api:
       engine: ${db}
       version: 13
       type: database
-      # adapter: postgresql
+      ${db === 'postgres' ? 'adapter: postgresql' : ''}
 
   migration: ["yarn", "rw", "prisma", "migrate", "deploy"]
 
@@ -164,8 +169,10 @@ web:
     command: ["yarn", "rw", "serve", "web"]
   dev:
     command: ["yarn", "rw", "dev", "web", "--fwd=\"--allowed-hosts all\""]
-  # TODO: add comment about prerender here
-  build: ["yarn", "rw", "build", "web"]
+
+  # Heads up: Redwood's prerender doesn't work with Coherence yet.
+  # For current status and updates, see https://github.com/redwoodjs/redwood/issues/8333.
+  build: ["yarn", "rw", "build", "web", "--no-prerender"]
   local_packages: ["node_modules"]
 
   system:
