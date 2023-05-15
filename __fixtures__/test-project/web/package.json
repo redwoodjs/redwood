@@ -16,7 +16,6 @@
     "@redwoodjs/auth-dbauth-web": "5.0.0",
     "@redwoodjs/forms": "5.0.0",
     "@redwoodjs/router": "5.0.0",
-    "@redwoodjs/vite": "5.0.0",
     "@redwoodjs/web": "5.0.0",
     "humanize-string": "2.1.0",
     "prop-types": "15.8.1",
@@ -24,6 +23,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@redwoodjs/vite": "5.0.0",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
     "postcss-loader": "^7.3.0",
