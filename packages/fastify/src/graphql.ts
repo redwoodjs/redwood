@@ -12,19 +12,7 @@ export async function redwoodFastifyGraphQLServer(
   options: GraphQLYogaOptions
 ) {
   try {
-    const { yoga } = createGraphQLYoga({
-      loggerConfig: {
-        logger: options.loggerConfig.logger,
-        options: { query: true, data: true, level: 'trace' },
-      },
-
-      services: options.services,
-      // schemaOptions: liveSchema,
-      sdls: options.sdls,
-      directives: options.directives,
-      graphiQLEndpoint: '/yoga',
-      allowIntrospection: true,
-    })
+    const { yoga } = createGraphQLYoga(options)
 
     fastify.route({
       url: yoga.graphqlEndpoint,
