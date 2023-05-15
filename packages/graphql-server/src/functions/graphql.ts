@@ -9,6 +9,8 @@ import type {
 import { GraphQLSchema, OperationTypeNode } from 'graphql'
 import { Plugin, useReadinessCheck, createYoga } from 'graphql-yoga'
 
+import { getConfig } from '@redwoodjs/project-config'
+
 import { mapRwCorsOptionsToYoga } from '../cors'
 import { makeDirectivesForPlugin } from '../directives/makeDirectives'
 import { getAsyncStoreInstance } from '../globalContext'
@@ -114,7 +116,16 @@ export const createGraphQLHandler = ({
   plugins.push(...redwoodDirectivePlugins)
 
   // Custom Redwood OpenTelemetry plugin
-  plugins.push(useRedwoodOpenTelemetry())
+  let openTelemetryPluginEnabled = false
+  try {
+    openTelemetryPluginEnabled = getConfig().experimental.opentelemetry.enabled
+  } catch (_error) {
+    // Swallow this error for the time being as we don't always have access to the
+    // config toml depending on the deploy environment
+  }
+  if (openTelemetryPluginEnabled) {
+    plugins.push(useRedwoodOpenTelemetry())
+  }
 
   // Secure the GraphQL server
   plugins.push(useArmor(logger, armorConfig))
