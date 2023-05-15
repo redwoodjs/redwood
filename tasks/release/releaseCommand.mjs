@@ -1,8 +1,10 @@
 /* eslint-env node */
 
+import { fileURLToPath } from 'node:url'
+
 import boxen from 'boxen'
 import { Octokit } from 'octokit'
-import { cd, chalk, question, $ } from 'zx'
+import { cd, chalk, question, $, fs } from 'zx'
 
 import { handler as generateReleaseNotes } from './generateReleaseNotesCommand.mjs'
 import {
@@ -13,21 +15,32 @@ import {
   isYes,
 } from './releaseLib.mjs'
 
+let octokit
+let semver
+let currentVersion
+let nextVersion
+let milestone
+let releaseBranch
+
+const compareURL = 'https://github.com/redwoodjs/redwood/compare'
+
 export const command = 'release'
 export const description = 'Release a major, minor, or patch'
 
 export async function handler() {
-  if (!process.env.GITHUB_TOKEN) {
+  if (process.env.GITHUB_TOKEN === undefined) {
     console.log('You have to set the GITHUB_TOKEN env var')
-    process.exit(1)
+
+    process.exitCode = 1
+    return
   }
 
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+  octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
   // ------------------------
   logSection('Asking for the semver\n')
 
-  const { semver } = await prompts({
+  const semverPromptResponse = await prompts({
     name: 'semver',
     type: 'select',
     message: 'Which semver are you releasing?',
@@ -35,20 +48,22 @@ export async function handler() {
     initial: 2,
   })
 
+  semver = semverPromptResponse.semver
+
   // ------------------------
   logSection('Getting the latest release\n')
 
-  const currentVersion = await getLatestRelease()
+  currentVersion = await getLatestRelease()
   console.log()
 
   exitIfNo(
-    question(`The latest release is ${chalk.magenta(currentVersion)}? [Y/n] > `)
+    await question(
+      `The latest release is ${chalk.magenta(currentVersion)}? [Y/n] > `
+    )
   )
 
   // ------------------------
   logSection('Confirming the next release\n')
-
-  let nextVersion
 
   switch (semver) {
     case 'major': {
@@ -69,10 +84,12 @@ export async function handler() {
   }
 
   exitIfNo(
-    question(`The next release is ${chalk.magenta(nextVersion)}? [Y/n] > `)
+    await question(
+      `The next release is ${chalk.magenta(nextVersion)}? [Y/n] > `
+    )
   )
 
-  let milestone = await getMilestone.call({ octokit }, nextVersion)
+  milestone = await getMilestone.call({ octokit }, nextVersion)
 
   // ------------------------
   logSection("Checking that the git tag doesn't already exist\n")
@@ -83,7 +100,9 @@ export async function handler() {
         nextVersion
       )} already exists locally. You have to fix this before continuing`
     )
-    process.exit(1)
+
+    process.exitCode = 1
+    return
   }
 
   // ------------------------
@@ -91,7 +110,7 @@ export async function handler() {
 
   const {
     search: { nodes: prs },
-  } = await octokit.graphql(getPRsisMergedNoMilestone)
+  } = await octokit.graphql(getPRsisMergedNoMilestoneQuery)
 
   if (prs.length) {
     console.log(
@@ -109,7 +128,7 @@ export async function handler() {
 
   if (semver === 'patch') {
     exitIfNo(
-      question(
+      await question(
         `Did you update the milestones of the PRs you plan to include in the patch to ${chalk.magenta(
           'next-release-patch'
         )}? [Y/n] > `
@@ -118,7 +137,7 @@ export async function handler() {
   } else {
     const {
       search: { nodes: prs },
-    } = await octokit.graphql(getPRsisMergedMilestoneNextReleasePatch)
+    } = await octokit.graphql(getPRsisMergedMilestoneNextReleasePatchQuery)
 
     if (prs.length) {
       console.log(
@@ -190,16 +209,10 @@ export async function handler() {
   switch (semver) {
     case 'major':
     case 'minor':
-      await releaseMajorOrMinor.call(
-        { octokit, milestone },
-        { semver, nextVersion }
-      )
+      await releaseMajorOrMinor()
       break
     case 'patch':
-      await releasePatch.call(
-        { octokit, milestone },
-        { currentVersion, nextVersion }
-      )
+      await releasePatch()
       break
   }
 }
@@ -223,12 +236,13 @@ function parseGitTag(version) {
   return version.split('.').map(Number)
 }
 
+/** @param {string} tag */
 async function doesGitTagExist(tag) {
   return (await $`git tag -l ${tag}`).stdout.trim()
 }
 
-const getPRsisMergedNoMilestone = `
-  query GetPRsisMergedNoMilestone {
+const getPRsisMergedNoMilestoneQuery = `
+  query GetPRsisMergedNoMilestoneQuery {
     search(
       query: "repo:redwoodjs/redwood is:pr is:merged no:milestone"
       first: 5
@@ -243,8 +257,8 @@ const getPRsisMergedNoMilestone = `
   }
 `
 
-const getPRsisMergedMilestoneNextReleasePatch = `
-  query GetPRsisMergedMilestoneNextReleasePatch {
+const getPRsisMergedMilestoneNextReleasePatchQuery = `
+  query GetPRsisMergedMilestoneNextReleasePatchQuery {
     search(
       query: "repo:redwoodjs/redwood is:pr is:merged milestone:next-release-patch"
       first: 5
@@ -318,10 +332,11 @@ const updatePRMilestoneMutation = `
   }
 `
 
-async function releaseMajorOrMinor({ semver, nextVersion }) {
+async function releaseMajorOrMinor() {
   logSection('Checking if the release branch exists\n')
 
-  const releaseBranch = ['release', semver, nextVersion].join('/')
+  releaseBranch = ['release', semver, nextVersion].join('/')
+
   const releaseBranchExists = await branchExists(releaseBranch)
   console.log()
 
@@ -336,7 +351,7 @@ async function releaseMajorOrMinor({ semver, nextVersion }) {
     console.log()
   } else {
     exitIfNo(
-      question(
+      await question(
         `Ok to checkout new branch ${chalk.magenta(
           releaseBranch
         )} from ${chalk.magenta(checkoutFromBranch)}? [Y/n] > `
@@ -348,62 +363,25 @@ async function releaseMajorOrMinor({ semver, nextVersion }) {
     console.log()
   }
 
+  await updateCreateRedwoodAppTemplates()
+  await versionDocs()
+
   exitIfNo(
-    question(
-      `Ok to continue to publish, or do you want to stop here so that you can push this branch to GitHub to create an RC? [Y/n] > `
+    await question(
+      `Ok to continue to publish? (Say no here if you want to push this branch to GitHub to create an RC) [Y/n] > `
     ),
     { code: 0 }
   )
   console.log()
 
-  await updateCreateRedwoodAppTemplates()
-  // await $`git push`
-  // await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
-  // console.log()
+  await cleanInstallUpdate()
+  await runQA(nextVersion)
 
-  // if (!isYes(await question(`Diff look ok? [Y/n] > `))) {
-  //   process.exit(1)
-  // }
-
-  await cleanInstallUpdate(nextVersion)
-  await confirmPackageVersions()
-
-  // ------------------------
-  logSection('Versioning docs\n')
-
-  if (
-    !isYes(
-      await question(
-        `Ok to version docs to ${chalk.magenta(nextVersion)}? [Y/n] > `
-      )
+  exitIfNo(
+    await question(
+      `Everything passed local QA. Ok to push to GitHub and publish to NPM? [Y/n] > `
     )
-  ) {
-    process.exit(1)
-  }
-  console.log()
-
-  const nextDocsVersion = nextVersion.slice(1, -2)
-
-  await cd('./docs')
-  await $`yarn`
-  await $`yarn clear`
-  await $`yarn docusaurus docs:version ${nextDocsVersion}`
-  await $`git add .`
-  await $`git commit -m "Version docs to ${nextDocsVersion}"`
-  await cd('../')
-
-  // ------------------------
-  await commitTagQA(nextVersion)
-
-  if (
-    !isYes(
-      await question(
-        `Everything passed local QA. Ok to push to GitHub and publish to NPM? [Y/n] > `
-      )
-    )
-  ) {
-    process.exit(1)
-  }
+  )
   console.log()
 
   await $`git push -u origin ${releaseBranch}`
@@ -415,9 +393,11 @@ async function releaseMajorOrMinor({ semver, nextVersion }) {
   // ------------------------
   logSection('Generating release notes\n')
 
-  await generateReleaseNotes(this.milestone.title)
+  await generateReleaseNotes({ milestone: milestone?.title ?? nextVersion })
 
-  await closeMilestone.call({ octokit: this.octokit }, this.milestone.number)
+  if (milestone) {
+    await closeMilestone.call({ octokit }, milestone.number)
+  }
 
   // ------------------------
   logSection('Showing remaining steps\n')
@@ -426,6 +406,7 @@ async function releaseMajorOrMinor({ semver, nextVersion }) {
     [
       'Only a few more things to do:',
       '',
+      '  - Remove the yarn.lock files in the create-redwood-app templates',
       '  - Merge the release branch into next (updating yarn.lock if necessary) and push',
       '  - Once the docs are done deploying (check here https://app.netlify.com/sites/redwoodjs-docs/overview), start the algolia crawler at https://crawler.algolia.com/admin',
       '  - Delete the release branch locally and on https://github.com/redwoodjs/redwood/branches',
@@ -437,10 +418,11 @@ async function releaseMajorOrMinor({ semver, nextVersion }) {
 /**
  * @param {string} nextVersion
  */
-async function releasePatch({ currentVersion, nextVersion }) {
+async function releasePatch() {
   logSection('Checking if the release branch exists\n')
 
-  const releaseBranch = ['release', 'patch', nextVersion].join('/')
+  releaseBranch = ['release', 'patch', nextVersion].join('/')
+
   const releaseBranchExists = await branchExists(releaseBranch)
   console.log()
 
@@ -453,7 +435,7 @@ async function releasePatch({ currentVersion, nextVersion }) {
     console.log()
   } else {
     exitIfNo(
-      question(
+      await question(
         `Ok to checkout new branch ${chalk.magenta(
           releaseBranch
         )} from ${chalk.magenta(currentVersion)} tag? [Y/n] > `
@@ -469,7 +451,7 @@ async function releasePatch({ currentVersion, nextVersion }) {
     logSection('Pushing to redwoodjs/redwood\n')
 
     exitIfNo(
-      question(
+      await question(
         `Ok to push new branch ${chalk.magenta(
           releaseBranch
         )} to GitHub and open diff? [Y/n] > `
@@ -483,11 +465,10 @@ async function releasePatch({ currentVersion, nextVersion }) {
     await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
     console.log()
 
-    exitIfNo(question('Diff look ok? [Y/n] > '))
+    exitIfNo(await question('Diff look ok? [Y/n] > '))
 
     // ------------------------
     logSection('Cherry picking PRs\n')
-
     console.log(
       [
         "Remember to cherry pick PRs _in the same order as they were merged_. And after you're done, run:",
@@ -497,60 +478,88 @@ async function releasePatch({ currentVersion, nextVersion }) {
       ].join('\n')
     )
 
-    exitIfNo(question(`Done cherry picking? [Y/n] > `))
+    exitIfNo(await question(`Done cherry picking? [Y/n] > `))
     console.log()
 
-    exitIfNo(
-      question(
-        `Ok to push new branch ${chalk.magenta(
-          releaseBranch
-        )} to GitHub and open diff? [Y/n] > `
-      )
-    )
-    console.log()
-
-    await $`git push`
-    console.log()
-
-    await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
-    console.log()
-
-    exitIfNo(question(`Diff look ok? [Y/n] > `))
+    await pushAndDiff()
   }
 
-  await updateCreateRedwoodAppTemplates()
-
-  await $`git push`
+  await cleanInstallUpdate()
   console.log()
 
-  await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
+  await runQA()
   console.log()
-
-  exitIfNo(question(`Diff look ok? [Y/n] > `))
-
-  await cleanInstallUpdate(nextVersion)
-  await confirmPackageVersions()
-  await commitTagQA(nextVersion)
 
   exitIfNo(
-    question(
-      `Everything passed local QA. Ok to push to GitHub and publish to NPM? [Y/n] > `
-    )
+    await question(`Everything passed local QA. Ok to publish to NPM? [Y/n] > `)
   )
   console.log()
 
+  // Temporarily remove `"packages/create-redwood-app"` from the workspaces field
+  // so that we can publish it separately later.
+  //  ------------------------
+  const frameworkPackageConfigPath = fileURLToPath(
+    new URL('../../package.json', import.meta.url)
+  )
+
+  const frameworkPackageConfig = fs.readJSONSync(frameworkPackageConfigPath)
+
+  const packagePaths = (await $`yarn workspaces list --json`).stdout
+    .trim()
+    .split('\n')
+    .map(JSON.parse)
+    .filter(({ name }) => name)
+    .map(({ location }) => location)
+
+  frameworkPackageConfig.workspaces = packagePaths.filter(
+    (packagePath) => packagePath !== 'packages/create-redwood-app'
+  )
+
+  fs.writeJSONSync(frameworkPackageConfigPath, frameworkPackageConfig, {
+    spaces: 2,
+  })
+
+  await $`git commit -am "chore: temporary update to workspaces"`
+  console.log()
+
+  //  ------------------------
+  try {
+    await $`yarn lerna publish from-package`
+  } catch (_error) {
+    exitIfNo(
+      await question(
+        'Publishing failed. You can usually recover from this by running `yarn lerna publish from-package` again. Continue? [Y/n] > '
+      )
+    )
+  }
+  console.log()
+
+  await $`git reset --hard HEAD~1`
+  console.log()
+
+  //  ------------------------
+  await updateCreateRedwoodAppTemplates()
+  console.log()
+
+  await $`yarn lerna publish from-package`
+  console.log()
+
+  await $`git reset --soft HEAD~2`
+  await $`git commit -m "${nextVersion}"`
+  await $`git tag -am ${nextVersion} "${nextVersion}"`
   await $`git push`
   await $`git push --tags`
-  await $`yarn lerna publish from-package`
 
   console.log(rocketBoxen(`Released ${chalk.green(nextVersion)}`))
 
   // ------------------------
   logSection('Generating release notes\n')
 
-  await generateReleaseNotes(this.milestone.title)
+  await generateReleaseNotes({ milestone: milestone?.title ?? nextVersion })
 
-  await closeMilestone.call({ octokit: this.octokit }, this.milestone.number)
+  if (milestone) {
+    await closeMilestone.call({ octokit }, milestone.number)
+  }
 
   // ------------------------
   logSection('Showing remaining steps\n')
@@ -559,6 +568,7 @@ async function releasePatch({ currentVersion, nextVersion }) {
     [
       'Only a few more things to do:',
       '',
+      '  - Remove the yarn.lock files in the create-redwood-app templates',
       '  - Merge the release branch into next (updating yarn.lock if necessary)',
       '  - Push',
       '  - Delete the release branch locally and on https://github.com/redwoodjs/redwood/branches',
@@ -574,60 +584,39 @@ async function branchExists(branch) {
   return !!(await $`git branch -l ${branch}`).stdout.trim()
 }
 
-/**
- * @param {string} nextVersion
- */
-async function cleanInstallUpdate(nextVersion) {
+async function cleanInstallUpdate() {
   logSection('Cleaning, installing, and updating package versions\n')
 
-  if (
-    !isYes(
-      await question(
-        `Ok to clean, install, and update package versions? [Y/n] > `
-      )
+  exitIfNo(
+    await question(
+      `Ok to clean, install, and update package versions? [Y/n] > `
     )
-  ) {
-    process.exit(1)
-  }
+  )
   console.log()
 
   await $`git clean -fxd`
   await $`yarn install`
   await $`./tasks/update-package-versions ${nextVersion}`
   await $`yarn install`
-}
 
-async function confirmPackageVersions() {
   logSection('Confirming package versions\n')
 
-  if (
-    !isYes(
-      await question(
-        `The package versions have been updated. Everything look ok? [Y/n] > `
-      )
+  exitIfNo(
+    await question(
+      `The package versions have been updated. Everything look ok? [Y/n] > `
     )
-  ) {
-    process.exit(1)
-  }
-}
-
-/**
- * @param {string} nextVersion
- */
-async function commitTagQA(nextVersion) {
-  logSection('Committing, tagging, and running QA\n')
-
-  if (
-    !isYes(
-      await question(`Ok to commit, tag, and run through local QA? [Y/n] > `)
-    )
-  ) {
-    process.exit(1)
-  }
+  )
   console.log()
 
-  await $`git commit -am "${nextVersion}"`
-  await $`git tag -am ${nextVersion} "${nextVersion}"`
+  await $`git commit -am "chore: update package versions to ${nextVersion}"`
+}
+
+async function runQA() {
+  logSection('Running QA\n')
+
+  exitIfNo(await question(`Ok to run local QA? [Y/n] > `))
+  console.log()
+
   await $`yarn build`
   await $`yarn lint`
   await $`yarn test`
@@ -660,8 +649,6 @@ function rocketBoxen(message) {
   })
 }
 
-const compareURL = 'https://github.com/redwoodjs/redwood/compare'
-
 function closeMilestone(number) {
   return this.octokit.request(
     'POST /repos/{owner}/{repo}/milestones/{milestone_number}',
@@ -693,15 +680,57 @@ async function updateCreateRedwoodAppTemplates() {
 
   cd('../..')
   await $`yarn ts-to-js`
-
-  await $`git add .`
   await $`git commit -am "chore: update create-redwood-app templates"`
-
-  cd('../')
+  cd('../..')
 }
 
 async function exitIfNo(question, { code } = { code: 1 }) {
-  if (!isYes(await question)) {
-    process.exit(code)
+  if (isYes(question)) {
+    return
   }
+
+  process.exit(code)
+}
+
+async function pushAndDiff() {
+  exitIfNo(
+    await question(
+      `Ok to push branch ${chalk.magenta(
+        releaseBranch
+      )} to GitHub and open diff? [Y/n] > `
+    )
+  )
+  console.log()
+
+  await $`git push`
+  console.log()
+
+  await $`open ${compareURL}/${currentVersion}...${releaseBranch}`
+  console.log()
+
+  exitIfNo(await question(`Diff look ok? [Y/n] > `))
+}
+
+async function versionDocs() {
+  logSection('Versioning docs\n')
+
+  if (
+    !isYes(
+      await question(
+        `Ok to version docs to ${chalk.magenta(nextVersion)}? [Y/n] > `
+      )
+    )
+  ) {
+    return
+  }
+  console.log()
+
+  const nextDocsVersion = nextVersion.slice(1, -2)
+
+  await cd('./docs')
+  await $`yarn`
+  await $`yarn clear`
+  await $`yarn docusaurus docs:version ${nextDocsVersion}`
+  await $`git commit -am "Version docs to ${nextDocsVersion}"`
+  await cd('../')
 }

@@ -151,14 +151,6 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
                 `   ❖ You may want to update your redwood.toml config so that \`notifications.versionUpdates\` includes "${tag}"\n`
               )
             }
-            // Notify about React17/18 issue on the current canary
-            if (tag === 'canary') {
-              additionalMessages.push(
-                `   ❖ If you just upgraded a new project then it may be broken.\n    ${c.info(
-                  `->`
-                )} To fix this you have to manually update your web/package.json to use React 18 and then run \`yarn install\`\n`
-              )
-            }
             // Append additional messages with a header
             if (additionalMessages.length > 0) {
               messageSections.push(

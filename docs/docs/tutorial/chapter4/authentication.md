@@ -490,7 +490,7 @@ And after clicking "Signup" you should end up back on the homepage, where everyt
 
 ![Posts admin](https://user-images.githubusercontent.com/300/146465485-c169a4b8-f398-47ec-8412-4fc15a666976.png)
 
-Awesome! Signing up will automatically log you in (although this behavior [can be changed](../../authentication.md#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
+Awesome! Signing up will automatically log you in (although this behavior [can be changed](../../auth/dbauth.md#signuphandler)) and if you look in the code for the `SignupPage` you'll see where the redirect to the homepage takes place (hint: check out line 21).
 
 ## Add a Logout Link
 

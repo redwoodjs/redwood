@@ -2,10 +2,20 @@ import React, { useState } from 'react'
 
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 
+import { traceEnd, traceStart } from '../../util/trace'
+
 const numberFormatter = new Intl.NumberFormat(undefined, {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 })
+
+const convertValueToStringOrJSON = (value: any) => {
+  try {
+    return <pre>{JSON.stringify(JSON.parse(value), undefined, 2)}</pre>
+  } catch (error) {
+    return value
+  }
+}
 
 function SpanSegment({
   trace,
@@ -49,7 +59,7 @@ function SpanSegment({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex flex-row bg-slate-50 py-2 px-1 rounded-md shadow-sm">
+      <div className="flex flex-row py-2 px-1 rounded-md border border-gray-200">
         <div
           className="basis-2/5 flex flex-row gap-2"
           style={{ paddingLeft: depth * 16 + (children.length > 0 ? -2 : 26) }}
@@ -85,7 +95,7 @@ function SpanSegment({
               {durationTextAtStart ? durationText : '⠀'}
             </div>
             <div
-              className="bg-gradient-to-r from-slate-600 to-slate-400 rounded-md pl-2 text-white text-md shadow-md"
+              className="bg-gradient-to-r from-rich-black to-slate-400 rounded-md pl-2 text-white text-md shadow-md"
               style={{
                 flexBasis: `${duringBasis.toFixed(3)}%`,
               }}
@@ -93,7 +103,7 @@ function SpanSegment({
               {durationTextAtDuring ? durationText : '⠀'}
             </div>
             <div
-              className="ml-2 text-md text-slate-400"
+              className="ml-2 text-md"
               style={{
                 flexBasis: `${endBasis.toFixed(3)}%`,
               }}
@@ -104,26 +114,36 @@ function SpanSegment({
         </div>
       </div>
       {showDetails && (
-        <div className="flex flex-col gap-1 bg-slate-50 mx-6 border border-neutral-400 p-2 rounded-md shadow-md">
+        <div className="flex flex-col gap-1 mx-2 border border-neutral-400 p-4 rounded-md">
           <details>
             <summary>Attributes</summary>
             <div className="flex flex-col gap-1">
-              {Object.entries(JSON.parse(span.attributes)).map(
-                ([key, value]) => {
-                  return (
-                    <div key={key} className="flex flex-row gap-2">
-                      <div className="font-bold">{key}</div>
-                      <div className="grow">{JSON.stringify(value)}</div>
-                    </div>
-                  )
-                }
-              )}
+              <div className="overflow-x-auto">
+                <div className="inline-block min-w-full align-middle ">
+                  <table className="min-w-full divide-y divide-gray-300">
+                    <tbody className="divide-y divide-gray-200">
+                      {Object.entries(span.attributes as JSON).map(
+                        ([key, value]) => (
+                          <tr key={key}>
+                            <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                              {key}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
+                              {convertValueToStringOrJSON(value)}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </details>
           <details>
             <summary>Events</summary>
             <div className="flex flex-col gap-1">
-              {Object.entries(JSON.parse(span.events)).map(([key, value]) => {
+              {Object.entries(span.events).map(([key, value]) => {
                 return (
                   <div key={key} className="flex flex-row gap-2">
                     <div className="font-bold">{key}</div>
@@ -136,22 +156,40 @@ function SpanSegment({
           <details>
             <summary>Resources</summary>
             <div className="flex flex-col gap-1">
-              {Object.entries(JSON.parse(span.resources)).map(
-                ([key, value]) => {
-                  return (
-                    <div key={key} className="flex flex-row gap-2">
-                      <div className="font-bold">{key}</div>
-                      <div className="grow">{JSON.stringify(value)}</div>
-                    </div>
-                  )
-                }
-              )}
+              <div className="overflow-x-auto">
+                <div className="inline-block min-w-full align-middle ">
+                  <table className="min-w-full divide-y divide-gray-300">
+                    <tbody className="divide-y divide-gray-200">
+                      {Object.entries(span.resources as JSON).map(
+                        ([key, value]) => (
+                          <tr key={key}>
+                            <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                              {key}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
+                              {convertValueToStringOrJSON(value)}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {/* {=> {
+                return (
+                  <div key={key} className="flex flex-row gap-2">
+                    <div className="font-bold">{key}</div>
+                    <div className="grow">{JSON.stringify(value)}</div>
+                  </div>
+                )
+              })} */}
             </div>
           </details>
         </div>
       )}
       {isExpanded && (
-        <div>
+        <>
           {children.map((child: any) => (
             <SpanSegment
               key={child.id}
@@ -162,7 +200,7 @@ function SpanSegment({
               traceEndNano={traceEndNano}
             />
           ))}
-        </div>
+        </>
       )}
     </div>
   )
@@ -175,13 +213,8 @@ function TimelineView({ trace }: { trace: any }) {
       a.startNano > b.startNano ? 1 : b.startNano > a.startNano ? -1 : 0
     )
 
-  const traceStartNano = trace.spans
-    .map((span: any) => span.startNano)
-    .sort((a: any, b: any) => (a > b ? 1 : b > a ? -1 : 0))[0]
-
-  const traceEndNano = trace.spans
-    .map((span: any) => span.endNano)
-    .sort((a: any, b: any) => (a > b ? -1 : b > a ? 1 : 0))[0]
+  const traceStartNano = traceStart(trace.spans)
+  const traceEndNano = traceEnd(trace.spans)
 
   return (
     <div className="flex flex-col gap-1">

@@ -38,10 +38,22 @@ async function run() {
 
   // Updates create-redwood-app template
   console.log('Updating CRWA template...')
-  const templatePath = path.join(cwd, 'packages/create-redwood-app/template')
-  updateRWJSPkgsVersion(templatePath, version)
-  updateRWJSPkgsVersion(path.join(templatePath, 'api'), version)
-  updateRWJSPkgsVersion(path.join(templatePath, 'web'), version)
+  const tsTemplatePath = path.join(
+    cwd,
+    'packages/create-redwood-app/templates/ts'
+  )
+  updateRWJSPkgsVersion(tsTemplatePath, version)
+  updateRWJSPkgsVersion(path.join(tsTemplatePath, 'api'), version)
+  updateRWJSPkgsVersion(path.join(tsTemplatePath, 'web'), version)
+  console.log()
+
+  const jsTemplatePath = path.join(
+    cwd,
+    'packages/create-redwood-app/templates/js'
+  )
+  updateRWJSPkgsVersion(jsTemplatePath, version)
+  updateRWJSPkgsVersion(path.join(jsTemplatePath, 'api'), version)
+  updateRWJSPkgsVersion(path.join(jsTemplatePath, 'web'), version)
   console.log()
 
   // Updates __fixtures__/test-project packages
