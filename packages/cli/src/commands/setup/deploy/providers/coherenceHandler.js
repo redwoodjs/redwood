@@ -168,7 +168,7 @@ web:
   prod:
     command: ["yarn", "rw", "serve", "web"]
   dev:
-    command: ["yarn", "rw", "dev", "web", "--fwd=\"--allowed-hosts all\""]
+    command: ["yarn", "rw", "dev", "web", "--fwd=\\"--allowed-hosts all\\""]
 
   # Heads up: Redwood's prerender doesn't work with Coherence yet.
   # For current status and updates, see https://github.com/redwoodjs/redwood/issues/8333.
