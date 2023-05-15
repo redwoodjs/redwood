@@ -18,14 +18,14 @@ import omitBy from 'lodash.omitby'
 
 import { getConfig } from '@redwoodjs/project-config'
 
-import type { RedwoodDirective } from '../plugins/useRedwoodDirective'
-import * as rootGqlSchema from '../rootSchema'
+import type { RedwoodDirective } from './plugins/useRedwoodDirective'
+import * as rootGqlSchema from './rootSchema'
 import {
   Services,
   ServicesGlobImports,
   GraphQLTypeWithFields,
   SdlGlobImports,
-} from '../types'
+} from './types'
 
 const wrapWithOpenTelemetry = async (
   func: any,

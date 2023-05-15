@@ -29,3 +29,10 @@ export interface MakeServicesInterface {
 export type MakeServices = (args: MakeServicesInterface) => ServicesGlobImports
 
 export type GraphQLTypeWithFields = GraphQLObjectType | GraphQLInterfaceType
+
+import type {
+  useRedwoodDirectiveReturn,
+  DirectivePluginOptions,
+} from './plugins/useRedwoodDirective'
+
+export type { useRedwoodDirectiveReturn, DirectivePluginOptions }
