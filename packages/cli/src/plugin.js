@@ -129,7 +129,7 @@ export async function loadPlugins(yargs) {
       }
     }
 
-    // If we didn't find any plugins to satify the first word we load all plugins so yargs can give
+    // If we didn't find any plugins to satisfy the first word we load all plugins so yargs can give
     // an appropriate help message
     if (namespacePluginsToLoad.length === 0) {
       namespacePluginsToLoad.push(...namespacePlugins)
