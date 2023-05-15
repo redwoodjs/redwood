@@ -288,6 +288,10 @@ module.exports = (webpackEnv) => {
                 filename: 'static/media/[name].[contenthash:8][ext]',
               },
             },
+            {
+              test: /\.svg$/,
+              type: 'asset/inline',
+            },
             // (1)
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
