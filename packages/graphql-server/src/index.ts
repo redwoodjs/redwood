@@ -7,6 +7,7 @@ export * from './errors'
 export * from './functions/graphql'
 export * from './functions/useRequireAuth'
 export * from './makeMergedSchema'
+export * from './createGraphQLYoga'
 export * from './types'
 
 export {
