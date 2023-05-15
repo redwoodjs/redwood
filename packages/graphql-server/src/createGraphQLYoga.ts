@@ -178,7 +178,8 @@ redwood {
 }`,
             headerEditorEnabled: true,
           }
-        : false,
+        : // : false,
+          true,
       cors: (request: Request) => {
         const requestOrigin = request.headers.get('origin')
         return mapRwCorsOptionsToYoga(cors, requestOrigin)
