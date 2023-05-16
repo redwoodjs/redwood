@@ -64,8 +64,7 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
 }
 
 export const getApiSideBabelPlugins = (
-  { forJest, openTelemetry } = {
-    forJest: false,
+  { openTelemetry } = {
     openTelemetry: false,
   }
 ) => {
@@ -110,8 +109,7 @@ export const getApiSideBabelPlugins = (
      *
      */
     ['@babel/plugin-transform-runtime', BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS],
-    // // still needed for jest.mock
-    forJest && [
+    [
       'babel-plugin-module-resolver',
       {
         alias: {
