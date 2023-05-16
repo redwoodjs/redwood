@@ -4,6 +4,8 @@ import path from 'path'
 import * as babel from '@babel/core'
 import compat from 'core-js-compat'
 
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
+
 import { cleanApiBuild, prebuildApiFiles } from '../build/api'
 import {
   getApiSideBabelConfigPath,
@@ -13,7 +15,6 @@ import {
   TARGETS_NODE,
 } from '../build/babel/api'
 import { findApiFiles } from '../files'
-import { ensurePosixPath, getPaths } from '../paths'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
@@ -517,7 +518,6 @@ test('core-js polyfill list', () => {
   expect(list).toMatchInlineSnapshot(`
     [
       "es.regexp.flags",
-      "es.typed-array.set",
       "esnext.array.last-index",
       "esnext.array.last-item",
       "esnext.composite-key",

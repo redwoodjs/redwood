@@ -36,6 +36,7 @@
     "@redwoodjs/graphql-server",
     "@redwoodjs/internal",
     "@redwoodjs/prerender",
+    "@redwoodjs/project-config",
     "@redwoodjs/record",
     "@redwoodjs/router",
     "@redwoodjs/structure",

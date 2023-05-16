@@ -13,8 +13,7 @@ import EnvironmentPlugin from 'vite-plugin-environment'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
-import { getConfig } from '@redwoodjs/internal/dist/config'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 const readFile = promisify(fsReadFile)
 
@@ -23,7 +22,6 @@ const commonjs = require('vite-plugin-commonjs')
 
 /**
  * Preconfigured vite plugin, with required config for Redwood apps.
- *
  */
 export default function redwoodPluginVite() {
   const redwoodPaths = getPaths()
@@ -142,7 +140,7 @@ export default function redwoodPluginVite() {
                 '.js': 'jsx',
               },
               // Node.js global to browser globalThis
-              // @MARK unsure why we need this, but required for DevFatalErrorPage atleast
+              // @MARK unsure why we need this, but required for DevFatalErrorPage at least
               define: {
                 global: 'globalThis',
               },

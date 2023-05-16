@@ -1,23 +1,20 @@
 globalThis.__dirname = __dirname
 
 // We mock these to skip the check for web/dist and api/dist
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
         api: {
+          base: '/mocked/project/api',
           dist: '/mocked/project/api/dist',
         },
         web: {
+          base: '/mocked/project/web',
           dist: '/mocked/project/web/dist',
         },
       }
     },
-  }
-})
-
-jest.mock('@redwoodjs/internal/dist/config', () => {
-  return {
     getConfig: () => {
       return {
         api: {},
@@ -29,13 +26,19 @@ jest.mock('@redwoodjs/internal/dist/config', () => {
 jest.mock('fs', () => {
   return {
     ...jest.requireActual('fs'),
-    existsSync: () => true,
+    existsSync: (p) => {
+      // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
+      if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.js') {
+        return false
+      }
+      return true
+    },
   }
 })
 
-jest.mock('@redwoodjs/api-server', () => {
+jest.mock('../serveHandler', () => {
   return {
-    ...jest.requireActual('@redwoodjs/api-server'),
+    ...jest.requireActual('../serveHandler'),
     apiServerHandler: jest.fn(),
     webServerHandler: jest.fn(),
     bothServerHandler: jest.fn(),
@@ -44,13 +47,12 @@ jest.mock('@redwoodjs/api-server', () => {
 
 import yargs from 'yargs'
 
+import { builder } from '../serve'
 import {
   apiServerHandler,
   bothServerHandler,
   webServerHandler,
-} from '@redwoodjs/api-server'
-
-import { builder } from '../serve'
+} from '../serveHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {

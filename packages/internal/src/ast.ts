@@ -6,8 +6,9 @@ import { parse as babelParse, ParserPlugin } from '@babel/parser'
 import traverse from '@babel/traverse'
 import chalk from 'chalk'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import { isFileInsideFolder } from './files'
-import { getPaths } from './paths'
 
 export const fileToAst = (filePath: string): types.Node => {
   const code = fs.readFileSync(filePath, 'utf-8')

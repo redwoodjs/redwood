@@ -12,7 +12,7 @@ export interface Auth0User {}
 export function createAuth(
   auth0Client: Auth0Client,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean

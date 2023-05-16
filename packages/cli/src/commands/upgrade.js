@@ -6,7 +6,7 @@ import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
@@ -30,7 +30,7 @@ export const builder = (yargs) => {
     .option('tag', {
       alias: 't',
       description:
-        '[choices: "canary", "rc", or specific-version (see example below)] WARNING: "canary" and "rc" tags are unstable releases!',
+        '[choices: "latest", "rc", "next", "canary", "experimental", or a specific-version (see example below)] WARNING: "canary", "rc" and "experimental" are unstable releases! And "canary" releases include breaking changes often requiring codemods if upgrading a project.',
       requiresArg: true,
       type: 'string',
       coerce: validateTag,
@@ -65,18 +65,23 @@ export const builder = (yargs) => {
 // Used in yargs builder to coerce tag AND to parse yarn version
 const SEMVER_REGEX =
   /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i
+
+const isValidSemver = (string) => {
+  return SEMVER_REGEX.test(string)
+}
+
+const isValidRedwoodJSTag = (tag) => {
+  return ['rc', 'canary', 'latest', 'next', 'experimental'].includes(tag)
+}
+
 export const validateTag = (tag) => {
-  const isTagValid =
-    tag === 'rc' ||
-    tag === 'canary' ||
-    tag === 'latest' ||
-    SEMVER_REGEX.test(tag)
+  const isTagValid = isValidSemver(tag) || isValidRedwoodJSTag(tag)
 
   if (!isTagValid) {
     // Stop execution
     throw new Error(
       c.error(
-        'Invalid tag supplied. Supported values: rc, canary, latest, or valid semver version\n'
+        "Invalid tag supplied. Supported values: 'rc', 'canary', 'latest', 'next', 'experimental', or a valid semver version\n"
       )
     )
   }
@@ -138,17 +143,12 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
           if (tag) {
             const additionalMessages = []
             // Reminder to update the `notifications.versionUpdates` TOML option
-            if (!getConfig().notifications.versionUpdates.includes(tag)) {
+            if (
+              !getConfig().notifications.versionUpdates.includes(tag) &&
+              isValidRedwoodJSTag(tag)
+            ) {
               additionalMessages.push(
                 `   ❖ You may want to update your redwood.toml config so that \`notifications.versionUpdates\` includes "${tag}"\n`
-              )
-            }
-            // Notify about React17/18 issue on the current canary
-            if (tag === 'canary') {
-              additionalMessages.push(
-                `   ❖ If you just upgraded a new project then it may be broken.\n    ${c.info(
-                  `->`
-                )} To fix this you have to manually update your web/package.json to use React 18 and then run \`yarn install\`\n`
               )
             }
             // Append additional messages with a header
@@ -163,7 +163,10 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         },
       },
     ],
-    { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
+    {
+      renderer: verbose && 'verbose',
+      rendererOptions: { collapseSubtasks: false },
+    }
   )
 
   try {
@@ -190,7 +193,7 @@ async function yarnInstall({ verbose }) {
     )
   } catch (e) {
     throw new Error(
-      'Could not finish installation. Please run `yarn install --force`, before continuing'
+      'Could not finish installation. Please run `yarn install` and then `yarn dedupe`, before continuing'
     )
   }
 }

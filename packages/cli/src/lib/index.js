@@ -14,11 +14,11 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
 
-import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
+  getConfig as getRedwoodConfig,
   getPaths as getRedwoodPaths,
   resolveFile as internalResolveFile,
-} from '@redwoodjs/internal/dist/paths'
+} from '@redwoodjs/project-config'
 
 import c from './colors'
 import { addFileToRollback } from './rollback'
@@ -62,15 +62,20 @@ export const nameVariants = (name) => {
 }
 
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
-  const template = lodash.template(readFile(templateFilename).toString())
+  try {
+    const template = lodash.template(readFile(templateFilename).toString())
 
-  const renderedTemplate = template({
-    name,
-    ...nameVariants(name),
-    ...rest,
-  })
+    const renderedTemplate = template({
+      name,
+      ...nameVariants(name),
+      ...rest,
+    })
 
-  return prettify(templateFilename, renderedTemplate)
+    return prettify(templateFilename, renderedTemplate)
+  } catch (error) {
+    error.message = `Error applying template at ${templateFilename} for ${name}: ${error.message}`
+    throw error
+  }
 }
 
 export const prettify = (templateFilename, renderedTemplate) => {
@@ -80,7 +85,9 @@ export const prettify = (templateFilename, renderedTemplate) => {
   const parser = {
     '.css': 'css',
     '.js': 'babel',
+    '.jsx': 'babel',
     '.ts': 'babel-ts',
+    '.tsx': 'babel-ts',
   }[path.extname(templateFilename.replace('.template', ''))]
 
   if (typeof parser === 'undefined') {
@@ -295,7 +302,7 @@ export const deleteFilesTask = (files) => {
 
 /**
  * @param files - {[filepath]: contents}
- * Deletes any empty directrories that are more than three levels deep below the base directory
+ * Deletes any empty directories that are more than three levels deep below the base directory
  * i.e. any directory below /web/src/components
  */
 export const cleanupEmptyDirsTask = (files) => {
@@ -535,7 +542,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     })),
     {
       renderer: verbose && 'verbose',
-      rendererOptions: { collapse: false, dateFormat: false },
+      rendererOptions: { collapseSubtasks: false, dateFormat: false },
     }
   )
 
@@ -565,7 +572,7 @@ export const getDefaultArgs = (builder) => {
 /**
  * Check if user is using VS Code
  *
- * i.e. check for the existance of .vscode folder in root project directory
+ * i.e. check for the existence of .vscode folder in root project directory
  */
 export const usingVSCode = () => {
   const redwoodPaths = getPaths()

@@ -17,9 +17,9 @@ import { logger } from 'src/lib/logger'
  */
 export const getCurrentUser = async (
   decoded,
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   { token, type },
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  /* eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars */
   { event, context }
 ) => {
   if (!decoded) {

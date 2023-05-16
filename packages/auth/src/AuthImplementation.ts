@@ -1,10 +1,14 @@
 export interface AuthImplementation<
   TUser = unknown,
   TRestoreAuth = unknown,
+  TLogInOptions = unknown,
   TLogIn = unknown,
+  TLogOutOptions = unknown,
   TLogOut = unknown,
+  TSignUpOptions = unknown,
   TSignUp = unknown,
   TForgotPassword = unknown,
+  TResetPasswordOptions = unknown,
   TResetPassword = unknown,
   TValidateResetToken = unknown,
   TClient = unknown
@@ -13,12 +17,12 @@ export interface AuthImplementation<
   client?: TClient
 
   restoreAuthState?(): Promise<TRestoreAuth>
-  login(options?: unknown): Promise<TLogIn>
-  logout(options?: unknown): Promise<TLogOut>
-  signup(options?: unknown): Promise<TSignUp>
-  getToken(options?: unknown): Promise<string | null>
+  login(options?: TLogInOptions): Promise<TLogIn>
+  logout(options?: TLogOutOptions): Promise<TLogOut>
+  signup(options?: TSignUpOptions): Promise<TSignUp>
+  getToken(): Promise<string | null>
   forgotPassword?(username: string): Promise<TForgotPassword>
-  resetPassword?(options?: unknown): Promise<TResetPassword>
+  resetPassword?(options?: TResetPasswordOptions): Promise<TResetPassword>
   validateResetToken?(token: string | null): Promise<TValidateResetToken>
   clientHasLoaded?(): boolean
 
@@ -43,4 +47,9 @@ export interface AuthImplementation<
    * ```
    */
   getUserMetadata(): Promise<TUser | null>
+
+  /**
+   * Set "loading" to true while the auth provider is reauthenticating.
+   */
+  loadWhileReauthenticating?: boolean
 }

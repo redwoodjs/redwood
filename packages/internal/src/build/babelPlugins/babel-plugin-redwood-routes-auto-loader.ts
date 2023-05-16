@@ -8,10 +8,11 @@ import {
   getPaths,
   PagesDependency,
   ensurePosixPath,
-} from '../../paths'
+} from '@redwoodjs/project-config'
 
 interface PluginOptions {
-  useStaticImports?: boolean
+  prerender?: boolean
+  vite?: boolean
 }
 
 /**
@@ -37,7 +38,7 @@ const withRelativeImports = (page: PagesDependency) => {
 
 export default function (
   { types: t }: { types: typeof types },
-  { useStaticImports = false }: PluginOptions
+  { prerender = false, vite = false }: PluginOptions
 ): PluginObj {
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
@@ -62,10 +63,17 @@ export default function (
         )[0]
 
         // Remove Page imports in prerender mode (see babel-preset)
-        // This is to make sure that all the imported "Page modules" are normal imports
-        // and not asynchronous ones.
-        // But note that jest in a user's project does not enter this block, but our tests do
-        if (useStaticImports) {
+        // The removed imports will be replaced further down in this file
+        // with declarations like these:
+        // const HomePage = {
+        //   name: "HomePage",
+        //   loader: () => import("./pages/HomePage/HomePage")
+        //   prerenderLoader: () => require("./pages/HomePage/HomePage")
+        // };
+        // This is to make sure that all the imported "Page modules" are normal
+        // imports and not asynchronous ones.
+        // Note that jest in a user's project does not enter this block, but our tests do
+        if (prerender) {
           // Match import paths, const name could be different
 
           const pageThatUserImported = pages.find((page) => {
@@ -108,7 +116,20 @@ export default function (
           const nodes = []
           // Prepend all imports to the top of the file
           for (const { importName, relativeImport } of pages) {
-            // + const <importName> = { name: <importName>, loader: () => import(<relativeImportPath>) }
+            // + const <importName> = {
+            //     name: <importName>,
+            //     loader: () => import(/* webpackChunkName: "<importName>" */ <relativeImportPath>)
+            //     prerenderLoader: (name) => prerenderLoaderImpl
+            //   }
+
+            const importArgument = t.stringLiteral(relativeImport)
+
+            importArgument.leadingComments = [
+              {
+                type: 'CommentBlock',
+                value: ` webpackChunkName: "${importName}" `,
+              },
+            ]
 
             nodes.push(
               t.variableDeclaration('const', [
@@ -119,18 +140,25 @@ export default function (
                       t.identifier('name'),
                       t.stringLiteral(importName)
                     ),
+                    // loader for dynamic imports (browser)
+                    // loader: () => import(<importArgument>)
                     t.objectProperty(
                       t.identifier('loader'),
                       t.arrowFunctionExpression(
                         [],
-                        t.callExpression(
-                          // If useStaticImports, do a synchronous import with require (ssr/prerender)
-                          // otherwise do a dynamic import (browser)
-                          useStaticImports
-                            ? t.identifier('require')
-                            : t.identifier('import'),
-                          [t.stringLiteral(relativeImport)]
-                        )
+                        t.callExpression(t.identifier('import'), [
+                          importArgument,
+                        ])
+                      )
+                    ),
+                    // prerenderLoader for ssr/prerender and first load of
+                    // prerendered pages in browser (csr)
+                    // prerenderLoader: (name) => { prerenderLoaderImpl }
+                    t.objectProperty(
+                      t.identifier('prerenderLoader'),
+                      t.arrowFunctionExpression(
+                        [t.identifier('name')],
+                        prerenderLoaderImpl(prerender, vite, relativeImport, t)
                       )
                     ),
                   ])
@@ -138,10 +166,54 @@ export default function (
               ])
             )
           }
+
           // Insert at the top of the file
           p.node.body.unshift(...nodes)
         },
       },
     },
   }
+}
+
+function prerenderLoaderImpl(
+  prerender: boolean,
+  vite: boolean,
+  relativeImport: string,
+  t: typeof types
+) {
+  if (prerender) {
+    // This works for both vite and webpack
+    return t.callExpression(t.identifier('require'), [
+      t.stringLiteral(relativeImport),
+    ])
+  }
+
+  // This code will be output when building the web side (i.e. not when
+  // prerendering)
+  // active-route-loader will use this code for auto-imported pages, for the
+  // first load of a prerendered page
+  // Manually imported pages will be bundled in the main bundle and will be
+  // loaded by the code in `normalizePage` in util.ts
+  let implForBuild
+  if (vite) {
+    implForBuild = t.objectExpression([
+      t.objectProperty(
+        t.identifier('default'),
+        t.memberExpression(
+          t.identifier('globalThis.__REDWOOD__PRERENDER_PAGES'),
+          t.identifier('name'),
+          true
+        )
+      ),
+    ])
+  } else {
+    // Use __webpack_require__ otherwise all pages will be bundled
+    implForBuild = t.callExpression(t.identifier('__webpack_require__'), [
+      t.callExpression(t.identifier('require.resolveWeak'), [
+        t.stringLiteral(relativeImport),
+      ]),
+    ])
+  }
+
+  return implForBuild
 }

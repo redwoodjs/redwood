@@ -9,7 +9,7 @@ const chalk = require('chalk')
 const execa = require('execa')
 const fse = require('fs-extra')
 const Listr = require('listr2').Listr
-const rimraf = require('rimraf')
+const { rimraf } = require('rimraf')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
 
@@ -26,12 +26,6 @@ const {
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
-  .option('typescript', {
-    alias: 'ts',
-    default: false,
-    type: 'boolean',
-    describe: 'Generate a TypeScript project. JavaScript by default.',
-  })
   .option('link', {
     default: false,
     type: 'boolean',
@@ -64,24 +58,10 @@ const args = yargs(hideBin(process.argv))
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
-  .option('yarn1', {
-    default: false,
-    type: 'boolean',
-    describe: 'Use yarn 1 instead of yarn 3',
-  })
   .help()
   .parseSync()
 
-const {
-  typescript,
-  canary,
-  link,
-  verbose,
-  clean,
-  copyFromFixture,
-  rebuildFixture,
-  yarn1,
-} = args
+const { canary, link, verbose, clean, copyFromFixture, rebuildFixture } = args
 
 // Do not use demandCommand because rebuildFixture doesn't require <project directory>
 // Require 1 and only 1 arg if not rebuildFixture
@@ -141,10 +121,10 @@ if (
 
 const createProject = async () => {
   if (clean) {
-    rimraf.sync(OUTPUT_PROJECT_PATH)
+    await rimraf(OUTPUT_PROJECT_PATH)
   }
 
-  let cmd = `yarn babel-node packages/create-redwood-app/src/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
+  let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
   // We create a ts project and convert using ts-to-js at the end if typescript flag is false
   return execa(
@@ -156,7 +136,7 @@ const createProject = async () => {
 
 const copyProject = async () => {
   if (clean && !rebuildFixture) {
-    rimraf.sync(OUTPUT_PROJECT_PATH)
+    await rimraf(OUTPUT_PROJECT_PATH)
   }
 
   const FIXTURE_TESTPROJ_PATH = path.join(
@@ -166,11 +146,11 @@ const copyProject = async () => {
 
   if (rebuildFixture) {
     // remove existing Fixture
-    rimraf.sync(FIXTURE_TESTPROJ_PATH)
+    await rimraf(FIXTURE_TESTPROJ_PATH)
     // copy from tempDir to Fixture dir
     await fse.copy(OUTPUT_PROJECT_PATH, FIXTURE_TESTPROJ_PATH)
     // cleanup after ourselves
-    rimraf.sync(OUTPUT_PROJECT_PATH)
+    await rimraf(OUTPUT_PROJECT_PATH)
   } else {
     // copying existing Fixture to new Project
     await fse.copy(FIXTURE_TESTPROJ_PATH, OUTPUT_PROJECT_PATH)
@@ -222,25 +202,9 @@ const globalTasks = () =>
         enabled: () => link || rebuildFixture,
       },
       {
-        title: 'Setting yarn version to 1',
-        task: async () => {
-          await execa(
-            'yarn set version classic',
-            [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
-        },
-        enabled: () => yarn1,
-      },
-      {
         title: 'Installing node_modules',
         task: async () => {
-          return execa(
-            'yarn install',
-            yarn1 &&
-              ['--non-interactive', !verbose && '--silent'].filter(Boolean), // pass flags if using Yarn v1
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
+          return execa('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
         },
       },
       {
@@ -323,7 +287,7 @@ const globalTasks = () =>
         task: async () => {
           const { stdout: dbAuthSecret } = await execa(
             'yarn',
-            [yarn1 && '--silent', 'rw', 'g', 'secret', '--raw'].filter(Boolean),
+            ['rw', 'g', 'secret', '--raw'],
             {
               ...getExecaOptions(OUTPUT_PROJECT_PATH),
               stdio: 'pipe',
@@ -346,21 +310,6 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH)
           )
         },
-      },
-      {
-        title: 'Convert to JS',
-        task: async (_ctx, task) => {
-          if (!rebuildFixture) {
-            return execa(
-              'yarn rw ts-to-js',
-              [],
-              getExecaOptions(OUTPUT_PROJECT_PATH)
-            )
-          } else {
-            task.output = 'Rebuilding Fixture: skip ts-to-js'
-          }
-        },
-        enabled: () => !typescript,
       },
       {
         title: 'Lint --fix all the things',
@@ -386,22 +335,22 @@ const globalTasks = () =>
         task: async () => {
           // @TODO: This only works on UNIX, we should use path.join everywhere
           // remove all .gitignore
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/.redwood`)
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/db/dev.db-journal`)
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/api/dist`)
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/node_modules`)
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/web/node_modules`)
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/.env`)
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/.redwood`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db-journal`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/api/dist`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/node_modules`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/web/node_modules`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/.env`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
 
           // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
           // that we added in "Adding framework dependencies to project"
-          rimraf.sync(`${OUTPUT_PROJECT_PATH}/package.json`)
+          await rimraf(`${OUTPUT_PROJECT_PATH}/package.json`)
           fs.copyFileSync(
             path.join(
               __dirname,
-              '../../packages/create-redwood-app/template/package.json'
+              '../../packages/create-redwood-app/templates/ts/package.json'
             ),
             path.join(OUTPUT_PROJECT_PATH, 'package.json')
           )
@@ -433,7 +382,7 @@ const globalTasks = () =>
     {
       exitOnError: true,
       renderer: verbose && 'verbose',
-      renderOptions: { collapse: false },
+      renderOptions: { collapseSubtasks: false },
     }
   )
 

@@ -26,13 +26,13 @@ jest.mock('../../../../lib/schemaHelpers', () => {
   }
 })
 
-describe('rw destory sdl', () => {
+describe('rw destroy sdl', () => {
   afterEach(() => {
     fs.__setMockFiles({})
     jest.spyOn(fs, 'unlinkSync').mockClear()
   })
 
-  describe('for javascipt files', () => {
+  describe('for javascript files', () => {
     beforeEach(async () => {
       fs.__setMockFiles(
         await files({ ...getDefaultArgs(builder), name: 'Post' })

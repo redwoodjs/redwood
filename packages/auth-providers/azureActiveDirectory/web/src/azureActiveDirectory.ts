@@ -11,7 +11,7 @@ import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
 export function createAuth(
   azureActiveDirectoryClient: AzureActiveDirectoryClient,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean

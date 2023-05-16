@@ -5,7 +5,7 @@ import { transform } from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 import type { PluginItem } from '@babel/core'
 
-import { getPaths } from '../../paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 import {
   registerBabel,
@@ -17,7 +17,7 @@ import {
   getPathsFromConfig,
 } from './common'
 
-export const TARGETS_NODE = '16.19'
+export const TARGETS_NODE = '18.16'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
@@ -63,10 +63,15 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
   version: RUNTIME_CORE_JS_VERSION,
 }
 
-export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
+export const getApiSideBabelPlugins = (
+  { forJest, openTelemetry } = {
+    forJest: false,
+    openTelemetry: false,
+  }
+) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
-  // a custom "name" is supplied so that user's do not accidently overwrite
+  // a custom "name" is supplied so that user's do not accidentally overwrite
   // Redwood's own plugins when they specify their own.
 
   // const corejsMajorMinorVersion = pkgJson.dependencies['core-js']
@@ -157,6 +162,11 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       require('../babelPlugins/babel-plugin-redwood-import-dir').default,
       undefined,
       'rwjs-babel-glob-import-dir',
+    ],
+    openTelemetry && [
+      require('../babelPlugins/babel-plugin-redwood-otel-wrapping').default,
+      undefined,
+      'rwjs-babel-otel-wrapping',
     ],
   ].filter(Boolean) as PluginItem[]
 

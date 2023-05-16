@@ -1,7 +1,7 @@
 import {
-  platformAuthenticatorIsAvailable,
   startRegistration,
   startAuthentication,
+  browserSupportsWebAuthn,
 } from '@simplewebauthn/browser'
 
 class WebAuthnRegistrationError extends Error {
@@ -55,7 +55,7 @@ export default class WebAuthnClient {
   }
 
   async isSupported() {
-    return await platformAuthenticatorIsAvailable()
+    return await browserSupportsWebAuthn()
   }
 
   isEnabled() {

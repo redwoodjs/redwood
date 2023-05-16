@@ -4,8 +4,8 @@ import camelcase from 'camelcase'
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -253,7 +253,7 @@ export const handler = async ({
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

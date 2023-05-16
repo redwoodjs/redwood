@@ -65,7 +65,7 @@ import FormError from './FormError'
  *
  * @see {@link https://react-hook-form.com/api/useform/register}
  */
-interface RedwoodRegisterOptions extends RegisterOptions {
+type RedwoodRegisterOptions = RegisterOptions & {
   valueAsBoolean?: boolean
   valueAsJSON?: boolean
 }
@@ -363,7 +363,7 @@ const setCoercion = (
   { type, name, emptyAs }: SetCoersionProps
 ) => {
   if (validation.setValueAs) {
-    // Note, this case could overide other props
+    // Note, this case could override other props
     return
   }
   let valueAs: ValueAsType

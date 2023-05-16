@@ -1,5 +1,6 @@
-import type { ComponentProps, JSXElementConstructor } from 'react'
+import { ComponentProps, JSXElementConstructor, Suspense } from 'react'
 
+import { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
@@ -45,27 +46,30 @@ export type CellProps<
   Omit<
     ComponentProps<CellSuccess>,
     | keyof CellPropsVariables<CellType, GQLVariables>
-    | keyof QueryOperationResult
     | keyof GQLResult
     | 'updating'
+    | 'queryResult'
   > &
     CellPropsVariables<CellType, GQLVariables>
 >
 
-export type CellLoadingProps<TVariables = any> = Partial<
-  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
->
+export type CellLoadingProps<TVariables extends OperationVariables = any> = {
+  queryResult?: Partial<
+    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
+  >
+}
 
-export type CellFailureProps<TVariables = any> = Partial<
-  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'> & {
-    error: QueryOperationResult['error'] | Error // for tests and storybook
-    /**
-     * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
-     */
-    errorCode: string
-    updating: boolean
-  }
->
+export type CellFailureProps<TVariables extends OperationVariables = any> = {
+  queryResult?: Partial<
+    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
+  >
+  error?: QueryOperationResult['error'] | Error // for tests and storybook
+  /**
+   * @see {@link https://www.apollographql.com/docs/apollo-server/data/errors/#error-codes}
+   */
+  errorCode?: string
+  updating?: boolean
+}
 
 // aka guarantee that all properties in T exist
 // This is necessary for Cells, because if it doesn't exist it'll go to Empty or Failure
@@ -95,15 +99,15 @@ export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
  * `updating` is just `loading` renamed; since Cells default to stale-while-refetch,
  * this prop lets users render something like a spinner to show that a request is in-flight.
  */
-export type CellSuccessProps<TData = any, TVariables = any> = Partial<
-  Omit<
-    QueryOperationResult<TData, TVariables>,
-    'loading' | 'error' | 'data'
-  > & {
-    updating: boolean
-  }
-> &
-  A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
+export type CellSuccessProps<
+  TData = any,
+  TVariables extends OperationVariables = any
+> = {
+  queryResult?: Partial<
+    Omit<QueryOperationResult<TData, TVariables>, 'loading' | 'error' | 'data'>
+  >
+  updating?: boolean
+} & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
 
 /**
  * A coarse type for the `data` prop returned by `useQuery`.
@@ -391,5 +395,13 @@ export function createCell<
 
   NamedCell.displayName = displayName
 
-  return NamedCell
+  return (props: CellProps) => {
+    return (
+      // Cells don't suspend, so the fallback won't render. We only use
+      // <Suspense> for cell prerender rehydration support
+      <Suspense fallback={null}>
+        <NamedCell {...props} />
+      </Suspense>
+    )
+  }
 }
