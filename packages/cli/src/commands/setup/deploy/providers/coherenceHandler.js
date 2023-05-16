@@ -89,10 +89,9 @@ async function getCoherenceConfigFileContent() {
   let db = prismaConfig.datasources[0].activeProvider
 
   if (!SUPPORTED_DATABASES.includes(db)) {
-    notes.unshift(
-      c.warning(
-        '⚠️  Only mysql and postgresql prisma databases are supported on Coherence at this time.\n'
-      )
+    throw new Error(
+      'Coherence does not support this database. Please switch to one of the following: ' +
+        SUPPORTED_DATABASES.join(', ')
     )
   }
 
@@ -153,7 +152,9 @@ function updateRedwoodTOMLTask() {
       redwoodTOMLContent = redwoodTOMLContent.replace(
         API_URL_REGEXP,
         (match, spaceBeforeAssign, spaceAfterAssign) =>
-          ['apiUrl', spaceBeforeAssign, '=', spaceAfterAssign, '/api'].join('')
+          ['apiUrl', spaceBeforeAssign, '=', spaceAfterAssign, '"/api"'].join(
+            ''
+          )
       )
 
       // Replace the web and api ports.
