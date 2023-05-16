@@ -27,7 +27,7 @@
     "fastify": "4.17.0",
     "fastify-raw-body": "4.2.0",
     "lodash.escape": "4.0.1",
-    "qs": "6.11.1"
+    "qs": "6.11.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.115",

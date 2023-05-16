@@ -6416,7 +6416,7 @@ __metadata:
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
     pretty-ms: 7.0.1
-    qs: 6.11.1
+    qs: 6.11.2
     split2: 4.2.0
     typescript: 5.0.4
     yargs: 17.7.2
@@ -7168,7 +7168,7 @@ __metadata:
     fastify: 4.17.0
     fastify-raw-body: 4.2.0
     lodash.escape: 4.0.1
-    qs: 6.11.1
+    qs: 6.11.2
     typescript: 5.0.4
   languageName: unknown
   linkType: soft
@@ -7458,7 +7458,7 @@ __metadata:
     jsonwebtoken: 9.0.0
     lodash.escape: 4.0.1
     pretty-bytes: 5.6.0
-    qs: 6.11.1
+    qs: 6.11.2
     split2: 4.2.0
     sqlite: 4.2.0
     sqlite3: 5.1.6
@@ -27101,12 +27101,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.11.1, qs@npm:^6.10.0":
-  version: 6.11.1
-  resolution: "qs@npm:6.11.1"
+"qs@npm:6.11.2, qs@npm:^6.10.0":
+  version: 6.11.2
+  resolution: "qs@npm:6.11.2"
   dependencies:
     side-channel: ^1.0.4
-  checksum: 7ec57d3d62334c6313346b54f2b588b28c983793bf73981b77d769396fbb04fec911fa4e8a085528c3ebe7c04cfc9c9130410b277b3328da91087ae8ca728437
+  checksum: 4f95d4ff18ed480befcafa3390022817ffd3087fc65f146cceb40fc5edb9fa96cb31f648cae2fa96ca23818f0798bd63ad4ca369a0e22702fcd41379b3ab6571
   languageName: node
   linkType: hard
 
