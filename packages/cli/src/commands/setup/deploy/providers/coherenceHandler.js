@@ -19,23 +19,23 @@ const redwoodProjectPaths = getPaths()
 const EXTENSION = isTypeScriptProject ? 'ts' : 'js'
 
 export async function handler({ force }) {
-  const addCoherenceFilesTask = await getAddCoherenceFilesTask(force)
-
-  const tasks = new Listr(
-    [
-      addCoherenceFilesTask,
-      updateRedwoodTOMLTask(),
-      printSetupNotes([
-        "You're ready to deploy to Coherence! ✨\n",
-        'Go to https://app.withcoherence.com to create your account and setup your cloud or GitHub connections.',
-        'Check out the deployment docs at https://docs.withcoherence.com for detailed instructions and more information.\n',
-        "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
-      ]),
-    ],
-    { rendererOptions: { collapse: false } }
-  )
-
   try {
+    const addCoherenceFilesTask = await getAddCoherenceFilesTask(force)
+
+    const tasks = new Listr(
+      [
+        addCoherenceFilesTask,
+        updateRedwoodTOMLTask(),
+        printSetupNotes([
+          "You're ready to deploy to Coherence! ✨\n",
+          'Go to https://app.withcoherence.com to create your account and setup your cloud or GitHub connections.',
+          'Check out the deployment docs at https://docs.withcoherence.com for detailed instructions and more information.\n',
+          "Reach out to redwood@withcoherence.com with any questions! We're here to support you.",
+        ]),
+      ],
+      { rendererOptions: { collapse: false } }
+    )
+
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
@@ -92,7 +92,7 @@ async function getCoherenceConfigFileContent() {
 
   if (!SUPPORTED_DATABASES.includes(db)) {
     throw new Error(
-      'Coherence does not support this database. Please switch to one of the following: ' +
+      `Coherence doesn't support the "${db}" provider. To proceed, switch to one of the following: ` +
         SUPPORTED_DATABASES.join(', ')
     )
   }
