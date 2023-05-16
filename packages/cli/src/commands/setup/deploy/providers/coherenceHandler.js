@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import toml from '@iarna/toml'
 import { getSchema, getConfig } from '@prisma/internals'
 import { Listr } from 'listr2'
 
@@ -21,11 +22,7 @@ export async function handler({ force }) {
   const addCoherenceFilesTask = await getAddCoherenceFilesTask(force)
 
   const tasks = new Listr(
-    [
-      addCoherenceFilesTask,
-      updateRedwoodTOMLPortsTask(),
-      printSetupNotes(notes),
-    ],
+    [addCoherenceFilesTask, updateRedwoodTOMLTask(), printSetupNotes(notes)],
     { rendererOptions: { collapse: false } }
   )
 
@@ -109,28 +106,77 @@ async function getCoherenceConfigFileContent() {
 const SUPPORTED_DATABASES = ['mysql', 'postgresql']
 
 /**
+ * should probably parse toml at this point...
+ * if host, set host
  * Updates the ports in redwood.toml to use an environment variable.
  */
-function updateRedwoodTOMLPortsTask() {
+function updateRedwoodTOMLTask() {
   return {
-    title: 'Updating ports in redwood.toml...',
+    title: 'Updating redwood.toml...',
     task: () => {
       const redwoodTOMLPath = path.join(
         redwoodProjectPaths.base,
         'redwood.toml'
       )
-
       let redwoodTOMLContent = fs.readFileSync(redwoodTOMLPath, 'utf-8')
+      const redwoodTOMLObject = toml.parse(redwoodTOMLContent)
 
+      // Replace or add the host
+      // How to handle matching one vs the other...
+      if (!redwoodTOMLObject.web.host) {
+        const [beforeWeb, afterWeb] = redwoodTOMLContent.split(/\[web\]\s/)
+        redwoodTOMLContent = [
+          beforeWeb,
+          '[web]\n  host = "0.0.0.0"\n',
+          afterWeb,
+        ].join('')
+      }
+
+      if (!redwoodTOMLObject.api.host) {
+        const [beforeApi, afterApi] = redwoodTOMLContent.split(/\[api\]\s/)
+        redwoodTOMLContent = [
+          beforeApi,
+          '[api]\n  host = "0.0.0.0"\n',
+          afterApi,
+        ].join('')
+      }
+
+      redwoodTOMLContent = redwoodTOMLContent.replaceAll(
+        HOST_REGEXP,
+        (match, spaceBeforeAssign, spaceAfterAssign) =>
+          ['host', spaceBeforeAssign, '=', spaceAfterAssign, '"0.0.0.0"'].join(
+            ''
+          )
+      )
+
+      // Replace the apiUrl
       redwoodTOMLContent = redwoodTOMLContent.replace(
-        /port.*?\n/m,
-        'port = "${PORT}"\n'
+        API_URL_REGEXP,
+        (match, spaceBeforeAssign, spaceAfterAssign) =>
+          ['apiUrl', spaceBeforeAssign, '=', spaceAfterAssign, '/api'].join('')
+      )
+
+      // Replace the web and api ports.
+      redwoodTOMLContent = redwoodTOMLContent.replaceAll(
+        PORT_REGEXP,
+        (_match, spaceBeforeAssign, spaceAfterAssign, port) =>
+          [
+            'port',
+            spaceBeforeAssign,
+            '=',
+            spaceAfterAssign,
+            `"\${PORT:${port}}"`,
+          ].join('')
       )
 
       fs.writeFileSync(redwoodTOMLPath, redwoodTOMLContent)
     },
   }
 }
+
+const HOST_REGEXP = /host(\s*)=(\s*)\".+\"/g
+const API_URL_REGEXP = /apiUrl(\s*)=(\s*)\".+\"/
+const PORT_REGEXP = /port(\s*)=(\s*)(?<port>\d{4})/g
 
 // ------------------------
 // Files
