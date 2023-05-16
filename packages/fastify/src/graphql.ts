@@ -22,12 +22,12 @@ export async function redwoodFastifyGraphQLServer(
           req,
           reply,
         })
+
         for (const [name, value] of response.headers) {
           reply.header(name, value)
         }
 
         reply.status(response.status)
-
         reply.send(response.body)
 
         return reply

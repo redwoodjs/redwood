@@ -39,6 +39,7 @@ export const createGraphQLYoga = ({
   armorConfig,
   allowedOperations,
   allowIntrospection,
+  allowGraphiQL,
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
@@ -77,14 +78,50 @@ export const createGraphQLYoga = ({
   try {
     // Important: Plugins are executed in order of their usage, and inject functionality serially,
     // so the order here matters
-    const isDevEnv = process.env.NODE_ENV === 'development'
-
     const plugins: Array<Plugin<any>> = []
 
-    if (
-      (allowIntrospection == null && !isDevEnv) ||
-      allowIntrospection === false
-    ) {
+    const isDevEnv = process.env.NODE_ENV === 'development'
+    const disableIntrospection =
+      (allowIntrospection === null && !isDevEnv) || allowIntrospection === false
+    const disableGraphQL =
+      (allowGraphiQL === null && !isDevEnv) || allowGraphiQL === false
+
+    const defaultQuery = `query Redwood {
+    redwood {
+    version
+    }
+  }`
+
+    // TODO: Once Studio is not experimental, can remove these generateGraphiQLHeaders
+    const authHeader = `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiQL-headers on how to auto generate auth headers"}`
+
+    const graphiql = !disableGraphQL
+      ? {
+          title: 'Redwood GraphQL Playground',
+          headers: generateGraphiQLHeader
+            ? generateGraphiQLHeader()
+            : authHeader,
+          defaultQuery,
+          headerEditorEnabled: true,
+        }
+      : false
+
+    logger.debug(
+      {
+        healthCheckId,
+        allowedOperations,
+        allowIntrospection,
+        defaultError,
+        disableIntrospection,
+        disableGraphQL,
+        allowGraphiQL,
+        graphiql,
+        graphiQLEndpoint,
+      },
+      'GraphiQL and Introspection Config'
+    )
+
+    if (disableIntrospection) {
       plugins.push(useDisableIntrospection())
     }
 
@@ -165,21 +202,7 @@ export const createGraphQLYoga = ({
       logging: logger,
       healthCheckEndpoint: graphiQLEndpoint + '/health',
       graphqlEndpoint: graphiQLEndpoint,
-      graphiql: isDevEnv
-        ? {
-            title: 'Redwood GraphQL Playground',
-            headers: generateGraphiQLHeader
-              ? generateGraphiQLHeader()
-              : `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiQL-headers on how to auto generate auth headers"}`,
-            defaultQuery: `query Redwood {
-redwood {
-  version
-}
-}`,
-            headerEditorEnabled: true,
-          }
-        : // : false,
-          true,
+      graphiql,
       cors: (request: Request) => {
         const requestOrigin = request.headers.get('origin')
         return mapRwCorsOptionsToYoga(cors, requestOrigin)

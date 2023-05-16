@@ -1452,9 +1452,9 @@ The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is
 
 > Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **, by default, only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
 
-However, there may be cases where you want to enable introspection. You can enable introspection by setting the `allowIntrospection` option to `true`.
+However, there may be cases where you want to enable introspection as well as the GraphQL PLaygrouns. You can enable introspection by setting the `allowIntrospection` option to `true` and enable GraphiQL by setting `allowGraphiQL` to `true`.
 
-Here is an example of `createGraphQLHandler` function with the `allowIntrospection` option set to `true`:
+Here is an example of `createGraphQLHandler` function with the `allowIntrospection` and `allowGraphiQL` options set to `true`:
 ```ts {8}
 export const handler = createGraphQLHandler({
   authDecoder,
@@ -1464,6 +1464,7 @@ export const handler = createGraphQLHandler({
   sdls,
   services,
   allowIntrospection: true, // 👈 enable introspection in all environments
+  allowGraphiQL: true, // 👈 enable introspection in all environments
   onException: () => {
     // Disconnect from your database with an unhandled exception.
     db.$disconnect()
@@ -1475,7 +1476,12 @@ export const handler = createGraphQLHandler({
 
 Enabling introspection in production may pose a security risk, as it allows users to access information about your schema, queries, and mutations. Use this option with caution and make sure to secure your GraphQL API properly.
 
+The may be cases where one wants to allow introspection, but not GraphiQL.
+
+Or, you may want to enable GraphiQL, but not allow introspection; for example, to try out known queries, but not to share the entire set of possible operations and types.
+
 :::
+
 
 ### GraphQL Armor Configuration
 

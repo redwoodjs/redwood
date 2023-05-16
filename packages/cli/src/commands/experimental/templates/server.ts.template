@@ -61,6 +61,7 @@ async function serve() {
     services,
     directives,
     allowIntrospection: true,
+    allowGraphiQL: true,
   })
 
   // Start

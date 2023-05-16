@@ -189,6 +189,12 @@ export interface GraphQLYogaOptions {
   graphiQLEndpoint?: string
 
   /**
+   * @description Allow GraphiQL playground.
+   * By default, GraphiQL playground is disabled in production. Explicitly set this to true or false to override in all environments.
+   */
+  allowGraphiQL?: boolean
+
+  /**
    * @description Allow schema introspection.
    * By default, schema introspection is disabled in production. Explicitly set this to true or false to override in all environments.
    */
