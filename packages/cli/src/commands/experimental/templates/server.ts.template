@@ -56,7 +56,6 @@ async function serve() {
       logger: logger,
       options: { query: true, data: true, level: 'trace' },
     },
-
     graphiQLEndpoint: '/yoga',
     sdls,
     services,
