@@ -53,7 +53,7 @@
     "@types/lodash.merge": "4.6.7",
     "@types/lodash.omitby": "4.6.7",
     "@types/uuid": "9.0.1",
-    "@whatwg-node/fetch": "0.8.8",
+    "@whatwg-node/fetch": "0.9.0",
     "aws-lambda": "1.0.7",
     "jest": "29.5.0",
     "jsonwebtoken": "9.0.0",
