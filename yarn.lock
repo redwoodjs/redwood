@@ -32535,7 +32535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.83.1":
+"webpack@npm:5.83.1, webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
   version: 5.83.1
   resolution: "webpack@npm:5.83.1"
   dependencies:
@@ -32569,43 +32569,6 @@ __metadata:
   bin:
     webpack: bin/webpack.js
   checksum: 5a3b12776dd4fbc73c757762d100781c97e2edf70b574a29653613a3b89b447d55ec534419c52bc6aeb78a77c432f5106f01af5742fbc2fe9cd8533bcffcedcd
-  languageName: node
-  linkType: hard
-
-"webpack@npm:>=4.43.0 <6.0.0, webpack@npm:^5, webpack@npm:^5.9.0":
-  version: 5.83.0
-  resolution: "webpack@npm:5.83.0"
-  dependencies:
-    "@types/eslint-scope": ^3.7.3
-    "@types/estree": ^1.0.0
-    "@webassemblyjs/ast": ^1.11.5
-    "@webassemblyjs/wasm-edit": ^1.11.5
-    "@webassemblyjs/wasm-parser": ^1.11.5
-    acorn: ^8.7.1
-    acorn-import-assertions: ^1.7.6
-    browserslist: ^4.14.5
-    chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.14.0
-    es-module-lexer: ^1.2.1
-    eslint-scope: 5.1.1
-    events: ^3.2.0
-    glob-to-regexp: ^0.4.1
-    graceful-fs: ^4.2.9
-    json-parse-even-better-errors: ^2.3.1
-    loader-runner: ^4.2.0
-    mime-types: ^2.1.27
-    neo-async: ^2.6.2
-    schema-utils: ^3.1.2
-    tapable: ^2.1.1
-    terser-webpack-plugin: ^5.3.7
-    watchpack: ^2.4.0
-    webpack-sources: ^3.2.3
-  peerDependenciesMeta:
-    webpack-cli:
-      optional: true
-  bin:
-    webpack: bin/webpack.js
-  checksum: d9ed9a9088cec01589e146c3dcc4b0fa2a9aebe46fc8898d70896bdcda6d07f0dab5527f83a25c9340e3fc56c4762d4e3e101b92c9493eac435693abf427aeb7
   languageName: node
   linkType: hard
 
