@@ -20,10 +20,10 @@ tasks:
       export RWFW_PATH="/workspace/redwood"
       export REDWOOD_DISABLE_TELEMETRY=1
     init: |
-      apt-get install xdg-utils # so vite open does not error
       cd /workspace/redwood
       yarn install
       yarn run build:test-project ../rw-test-app --typescript --link --verbose
+      cd /workspace/rw-test-app && sed -i '' "s/\(open *= *\).*/\1false/" redwood.toml
     command: |
       cd /workspace/rw-test-app
       yarn rw dev
