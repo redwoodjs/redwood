@@ -190,18 +190,16 @@ export default function Trace() {
       </div>
 
       {/* Trace Details */}
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        <div className="bg-white shadow overflow-hidden rounded-md col-span-1">
-          <div className="px-4 py-5 sm:p-6 flex flex-col gap-2">
-            <TraceDetails trace={data.trace} />
-          </div>
-        </div>
+      <div className="grid lg:grid-cols-2 gap-4 mt-4">
+        <TraceDetails trace={data.trace} />
         <TraceFeatureList
-          features={data.trace.spans.map((span: any) => ({
-            id: span.id,
-            type: span.type,
-            brief: span.brief,
-          }))}
+          features={data.trace.spans
+            .filter((span: any) => span.type !== null)
+            .map((span: any) => ({
+              id: span.id,
+              type: span.type,
+              brief: span.brief,
+            }))}
         />
       </div>
     </div>

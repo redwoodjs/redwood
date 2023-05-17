@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useQuery, gql } from '@apollo/client'
+import { Bold, Card, Flex, Text, Title } from '@tremor/react'
 
 import AncestorFeatureList from '../../Components/Feature/AncestorFeatureList'
 import DescendantFeatureList from '../../Components/Feature/DescendantFeatureList'
@@ -10,6 +11,7 @@ import EventList from '../../Components/Span/EventList'
 import ResourceList from '../../Components/Span/ResourceList'
 import SpanDetails from '../../Components/Span/SpanDetails'
 import { ITEM_POLLING_INTERVAL } from '../../util/polling'
+import { displayTextOrJSON } from '../../util/ui'
 
 const GET_SPAN_DATA = gql`
   query GetSpanData($spanId: String!) {
@@ -42,18 +44,6 @@ const GET_SPAN_DATA = gql`
   }
 `
 
-const attemptJSONDisplay = (value: any) => {
-  try {
-    return (
-      <pre className="overflow-auto">
-        {JSON.stringify(JSON.parse(value), null, 2)}
-      </pre>
-    )
-  } catch {
-    return value
-  }
-}
-
 export default function SpanGeneric({ id: spanId }: { id: string }) {
   const { loading, error, data } = useQuery(GET_SPAN_DATA, {
     variables: { spanId },
@@ -75,52 +65,45 @@ export default function SpanGeneric({ id: spanId }: { id: string }) {
   return (
     <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8">
       {/* Header  */}
-      <div className="sm:flex sm:items-center" key="header">
-        <div className="sm:flex-auto">
-          <div className="text-base font-semibold leading-6 text-slate-100 px-4 pt-2 pb-2 bg-rich-black rounded-md flex justify-between">
-            <div>Generic Span</div>
-            <div>({spanId})</div>
-          </div>
-        </div>
-      </div>
+      <Card className="min-w-full bg-rich-black py-2 px-6">
+        <Flex>
+          <Title className="text-slate-100">Generic Span</Title>
+          <Title className="text-slate-100 font-mono">[{spanId}]</Title>
+        </Flex>
+      </Card>
 
-      <div className="mt-4 grid md:grid-cols-3 grid-cols-1 gap-2 md:gap-4">
-        <div className="overflow-hidden bg-white row-span-2 md:col-span-2 shadow rounded-md">
-          <div className="px-4 py-5 sm:p-6 flex flex-col gap-2">
-            <div className="text-base font-semibold">Span Attributes</div>
-            <div>
-              {Object.keys(data.span.attributes).map((key: any) => (
-                <div key={key} className="flex flex-col gap-0 pb-2">
-                  <div className="text-sm font-semibold">{key}</div>
-                  <div className="text-sm">
-                    <code>{attemptJSONDisplay(data.span.attributes[key])}</code>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+      {/* Span data (TODO: Make this the specific type dependant panel) */}
+      <div className="mt-4 grid lg:grid-cols-3 grid-cols-1 gap-2 lg:gap-4">
+        <Card className="min-w-full lg:col-span-2 row-span-2">
+          <Flex className="flex-col items-start overflow-auto">
+            <Title className="mb-2">Span Attributes</Title>
+            {Object.keys(data.span.attributes).map((key: any) => (
+              <Flex key={key} className="flex-col items-start">
+                <Text>
+                  <Bold>{key}</Bold>
+                </Text>
+                {displayTextOrJSON(data.span.attributes[key])}
+              </Flex>
+            ))}
+          </Flex>
+        </Card>
 
         {/* Feature lists */}
-        <DescendantFeatureList features={data.span.descendantSpans} />
-        <AncestorFeatureList features={data.span.ancestorSpans} />
+        <AncestorFeatureList
+          features={data.span.ancestorSpans.filter(
+            (span: any) => span.type !== null
+          )}
+        />
+        <DescendantFeatureList
+          features={data.span.descendantSpans.filter(
+            (span: any) => span.type !== null
+          )}
+        />
 
         {/* Other span data */}
-        <div className="overflow-hidden bg-white shadow rounded-md">
-          <div className="px-4 py-5 sm:p-6 flex flex-col gap-2">
-            <SpanDetails span={data.span} />
-          </div>
-        </div>
-        <div className="overflow-hidden bg-white shadow rounded-md">
-          <div className="px-4 py-5 sm:p-6 flex flex-col gap-2">
-            <ResourceList resources={data.span.resources} />
-          </div>
-        </div>
-        <div className="overflow-hidden bg-white shadow rounded-md">
-          <div className="px-4 py-5 sm:p-6 flex flex-col gap-2">
-            <EventList events={data.span.events} />
-          </div>
-        </div>
+        <SpanDetails span={data.span} />
+        <ResourceList resources={data.span.resources} />
+        <EventList events={data.span.events} spanId={data.span.id} />
       </div>
     </div>
   )

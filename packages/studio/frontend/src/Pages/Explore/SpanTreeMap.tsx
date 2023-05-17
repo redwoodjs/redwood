@@ -123,7 +123,7 @@ export default function SpanTreeMap() {
         ))}
       </div>
 
-      <div className="overflow-hidden bg-white shadow rounded-md mt-2 p-3">
+      <div className="mt-4">
         <SpanDetails span={data.span} />
       </div>
     </div>

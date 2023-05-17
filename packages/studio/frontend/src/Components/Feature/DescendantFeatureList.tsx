@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { BarsArrowDownIcon } from '@heroicons/react/20/solid'
+import { Card, Flex, Title, Italic, Text } from '@tremor/react'
 
 import FeatureLink from './FeatureLink'
 
@@ -10,14 +11,16 @@ export default function DescendantFeatureList({
   features: any[]
 }) {
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-      <div className="px-4 py-5 sm:p-6 flex flex-col gap-2">
-        <div className="text-base font-semibold flex flex-row items-center gap-1">
-          <BarsArrowDownIcon className="flex h-5 w-5" />
-          <div className="flex-1">Descendant Features</div>
-        </div>
+    <Card className="min-w-full">
+      <Flex className="flex-col gap-2 items-start">
+        <Flex>
+          <BarsArrowDownIcon className="flex h-5 w-5 mr-2" />
+          <Title className="flex-1">Descendant Features</Title>
+        </Flex>
         {features.length === 0 ? (
-          <div className="italic text-gray-500">None found...</div>
+          <Text>
+            <Italic>None found...</Italic>
+          </Text>
         ) : (
           <>
             {features.map((feature: any) => (
@@ -25,7 +28,7 @@ export default function DescendantFeatureList({
             ))}
           </>
         )}
-      </div>
-    </div>
+      </Flex>
+    </Card>
   )
 }
