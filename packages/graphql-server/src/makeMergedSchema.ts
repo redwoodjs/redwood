@@ -343,21 +343,24 @@ const mergeResolversWithSubscriptions = ({
   resolverValidationOptions?: IResolverValidationOptions | undefined
   inheritResolversFromInterfaces?: boolean | undefined
 }) => {
-  const subscriptionResolvers = { Subscription: {} } as IResolvers
+  if (subscriptions && subscriptions.length > 0) {
+    const subscriptionResolvers = { Subscription: {} } as IResolvers
 
-  subscriptions?.forEach((subscription) => {
-    subscriptionResolvers['Subscription'] = {
-      ...subscriptionResolvers['Subscription'],
-      ...subscription.resolvers,
-    }
-  })
+    subscriptions?.forEach((subscription) => {
+      subscriptionResolvers['Subscription'] = {
+        ...subscriptionResolvers['Subscription'],
+        ...subscription.resolvers,
+      }
+    })
 
-  return addResolversToSchema({
-    schema,
-    resolvers: subscriptionResolvers,
-    resolverValidationOptions,
-    inheritResolversFromInterfaces,
-  })
+    return addResolversToSchema({
+      schema,
+      resolvers: subscriptionResolvers,
+      resolverValidationOptions,
+      inheritResolversFromInterfaces,
+    })
+  }
+  return schema
 }
 
 export const makeMergedSchema = ({

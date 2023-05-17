@@ -138,6 +138,7 @@ describe('makeMergedSchema', () => {
   const schema = makeMergedSchema({
     sdls,
     services,
+    subscriptions: [],
     directives: makeDirectivesForPlugin(directiveFiles),
   })
 
