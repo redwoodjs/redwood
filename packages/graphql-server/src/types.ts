@@ -9,6 +9,7 @@ import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import { CorsConfig } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
+import type { SubscriptionGlobImports } from 'src/subscriptions/makeSubscriptions'
 
 import type {
   useRedwoodDirectiveReturn,
@@ -129,6 +130,12 @@ export interface GraphQLYogaOptions {
    * import directives from 'src/directives/**\/*.{js,ts}'
    */
   directives?: DirectiveGlobImports
+
+  /**
+   * @description Subscriptions passed from the glob import:
+   * import subscriptions from 'src/subscriptions/**\/*.{js,ts}'
+   */
+  subscriptions?: SubscriptionGlobImports
 
   /**
    * @description A list of options passed to [makeExecutableSchema]

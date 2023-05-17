@@ -21,6 +21,7 @@ import type {
   useRedwoodDirectiveReturn,
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
+import { makeSubscriptions } from './subscriptions/makeSubscriptions'
 import type { GraphQLYogaOptions } from './types'
 
 export const createGraphQLYoga = ({
@@ -36,6 +37,7 @@ export const createGraphQLYoga = ({
   services,
   sdls,
   directives = [],
+  subscriptions = [],
   armorConfig,
   allowedOperations,
   allowIntrospection,
@@ -59,10 +61,14 @@ export const createGraphQLYoga = ({
         )
     }
 
+    // @NOTE: Subscriptions are optional and only work in the context of a  server
+    const projectSubscriptions = makeSubscriptions(subscriptions)
+
     schema = makeMergedSchema({
       sdls,
       services,
       directives: projectDirectives,
+      subscriptions: projectSubscriptions,
       schemaOptions,
     })
   } catch (e) {

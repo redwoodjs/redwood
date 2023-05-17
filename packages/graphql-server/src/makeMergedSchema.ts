@@ -4,7 +4,7 @@ import {
   makeExecutableSchema,
   IExecutableSchemaDefinition,
 } from '@graphql-tools/schema'
-import { IResolvers } from '@graphql-tools/utils'
+import { IResolvers, IResolverValidationOptions } from '@graphql-tools/utils'
 import * as opentelemetry from '@opentelemetry/api'
 import type {
   GraphQLSchema,
@@ -20,6 +20,8 @@ import { getConfig } from '@redwoodjs/project-config'
 
 import type { RedwoodDirective } from './plugins/useRedwoodDirective'
 import * as rootGqlSchema from './rootSchema'
+import type { RedwoodSubscription } from './subscriptions/makeSubscriptions'
+// import { makeSubscriptions } from './subscriptions/makeSubscriptions'
 import {
   Services,
   ServicesGlobImports,
@@ -239,7 +241,7 @@ const mergeResolversWithServices = ({
     // after the type.
     // Example: export const MyType = { field: () => {} }
     let servicesForType = mergedServices
-    if (!['Query', 'Mutation'].includes(type.name)) {
+    if (!['Query', 'Mutation', 'Subscription'].includes(type.name)) {
       servicesForType = mergedServices?.[type.name]
     }
 
@@ -330,15 +332,45 @@ const mergeTypes = (
   })
 }
 
+const mergeResolversWithSubscriptions = ({
+  schema,
+  subscriptions,
+  resolverValidationOptions,
+  inheritResolversFromInterfaces,
+}: {
+  schema: GraphQLSchema
+  subscriptions: RedwoodSubscription[]
+  resolverValidationOptions?: IResolverValidationOptions | undefined
+  inheritResolversFromInterfaces?: boolean | undefined
+}) => {
+  const subscriptionResolvers = { Subscription: {} } as IResolvers
+
+  subscriptions?.forEach((subscription) => {
+    subscriptionResolvers['Subscription'] = {
+      ...subscriptionResolvers['Subscription'],
+      ...subscription.resolvers,
+    }
+  })
+
+  return addResolversToSchema({
+    schema,
+    resolvers: subscriptionResolvers,
+    resolverValidationOptions,
+    inheritResolversFromInterfaces,
+  })
+}
+
 export const makeMergedSchema = ({
   sdls,
   services,
   schemaOptions = {},
   directives,
+  subscriptions = [],
 }: {
   sdls: SdlGlobImports
   services: ServicesGlobImports
   directives: RedwoodDirective[]
+  subscriptions: RedwoodSubscription[]
 
   /**
    * A list of options passed to [makeExecutableSchema](https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
@@ -351,6 +383,7 @@ export const makeMergedSchema = ({
     [
       rootGqlSchema.schema,
       ...directives.map((directive) => directive.schema), // pick out schemas from directives
+      ...subscriptions.map((subscription) => subscription.schema), // pick out schemas from subscriptions
       ...sdlSchemas, // pick out the schemas from sdls
     ],
     { all: true }
@@ -369,11 +402,16 @@ export const makeMergedSchema = ({
     services,
   })
 
+  const schemaWithSubscriptions = mergeResolversWithSubscriptions({
+    schema,
+    subscriptions,
+  })
+
   const { resolverValidationOptions, inheritResolversFromInterfaces } =
     schemaOptions || {}
 
   return addResolversToSchema({
-    schema,
+    schema: schemaWithSubscriptions,
     resolvers,
     resolverValidationOptions,
     inheritResolversFromInterfaces,
