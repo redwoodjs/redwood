@@ -23,7 +23,7 @@ tasks:
       cd /workspace/redwood
       yarn install
       yarn run build:test-project ../rw-test-app --typescript --link --verbose
-      cd /workspace/rw-test-app && sed -i '' "s/\(open *= *\).*/\1false/" redwood.toml
+      cd /workspace/rw-test-app && sed -i "s/\(open *= *\).*/\1false/" redwood.toml
     command: |
       cd /workspace/rw-test-app
       yarn rw dev
