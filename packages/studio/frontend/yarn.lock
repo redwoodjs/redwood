@@ -1206,8 +1206,8 @@ __metadata:
   linkType: hard
 
 "@tremor/react@npm:^2.2.0":
-  version: 2.6.1
-  resolution: "@tremor/react@npm:2.6.1"
+  version: 2.6.2
+  resolution: "@tremor/react@npm:2.6.2"
   dependencies:
     "@floating-ui/react": ^0.19.1
     date-fns: ^2.28.0
@@ -1217,7 +1217,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ">=16.6.0"
-  checksum: 9411584ef562f487c739a18db1904f3944d0082595631d673333feef012aa4a4ea6de08d04296ac6d8a6ba209108d66fe5bc75579f90173166695baee0fb6bbd
+  checksum: 5fbbe28c06a0d6416a49d005bb33b9c7a706da37c3c45977c6e5718ed3e884f97a02208739021394fefef51f5a5dd7f103f4520264542564136334c8cb044ab0
   languageName: node
   linkType: hard
 
@@ -4368,8 +4368,8 @@ __metadata:
   linkType: hard
 
 "vite@npm:^4.1.0":
-  version: 4.3.5
-  resolution: "vite@npm:4.3.5"
+  version: 4.3.7
+  resolution: "vite@npm:4.3.7"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
@@ -4400,7 +4400,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 56c5de4c6a4cb383492302173372be71c4e55a9eabc7268b6036152880800b7a85ee19be3d4c9f2cdd7af33df53c0153c58e6db402b08e8f6299a7b15fd53b88
+  checksum: 7d148052419840dfc2b650309924f841d333dfcf5da10d839c9af715da45b1313a771dbb0356145db4aa827e86eb9f7673daffeca9a90d24eade2d4f70d5dad6
   languageName: node
   linkType: hard
 
