@@ -2164,21 +2164,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.36.0":
-  version: 3.36.0
-  resolution: "@clerk/types@npm:3.36.0"
+"@clerk/types@npm:3.38.0, @clerk/types@npm:^3.37.1":
+  version: 3.38.0
+  resolution: "@clerk/types@npm:3.38.0"
   dependencies:
     csstype: 3.1.1
-  checksum: 365fe33449ef0d3f124f76b96cfa97b08d5621809f7cc829092511aa04c739e737c15bf9741edb23709dadca91348327c269186812039f68ea2d1ec159ec0d5c
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^3.37.1":
-  version: 3.37.1
-  resolution: "@clerk/types@npm:3.37.1"
-  dependencies:
-    csstype: 3.1.1
-  checksum: 6ecf745a26c3f816ec92c03c9435d08fb3db73ecf234e91cbcd8c5ebd3935133bd8b9b8aa70dd6f7365e5808a6aba3b9acfab5a17b1e26ee97b97b35a26d4e05
+  checksum: 7611703cd9dbfe2bc03fbc97ca1470c807d4cd8fff4ed3bc7af8cb9ff3f6b83ea578b24ba94fff16107c9e250399cceec5370e6969c2d19489a7b7549675bc7a
   languageName: node
   linkType: hard
 
@@ -5278,76 +5269,76 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nrwl/tao@npm:16.1.4"
+"@nrwl/tao@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nrwl/tao@npm:16.2.1"
   dependencies:
-    nx: 16.1.4
+    nx: 16.2.1
   bin:
     tao: index.js
-  checksum: 6ab1acd633b1bf1c53a9e7580f4a1bd9e91e651fe15b8e2823b338dab346a508e427f025b086b478d53120552aac4c59c59636b877dd0c0f7fd5f0d8d2e939d1
+  checksum: a11a1da116a776df20c9eb784310f9d3e48b4edcd1e46482c73b64d7653a92f65833eaf3626fb500518f3bae66610aa15b1ee3bcb16def3170dcb98594cc4c3f
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-arm64@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-darwin-arm64@npm:16.1.4"
+"@nx/nx-darwin-arm64@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-darwin-arm64@npm:16.2.1"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-x64@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-darwin-x64@npm:16.1.4"
+"@nx/nx-darwin-x64@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-darwin-x64@npm:16.2.1"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm-gnueabihf@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.1.4"
+"@nx/nx-linux-arm-gnueabihf@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.2.1"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-gnu@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-linux-arm64-gnu@npm:16.1.4"
+"@nx/nx-linux-arm64-gnu@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-linux-arm64-gnu@npm:16.2.1"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-musl@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-linux-arm64-musl@npm:16.1.4"
+"@nx/nx-linux-arm64-musl@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-linux-arm64-musl@npm:16.2.1"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-gnu@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-linux-x64-gnu@npm:16.1.4"
+"@nx/nx-linux-x64-gnu@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-linux-x64-gnu@npm:16.2.1"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-musl@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-linux-x64-musl@npm:16.1.4"
+"@nx/nx-linux-x64-musl@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-linux-x64-musl@npm:16.2.1"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-arm64-msvc@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-win32-arm64-msvc@npm:16.1.4"
+"@nx/nx-win32-arm64-msvc@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-win32-arm64-msvc@npm:16.2.1"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-x64-msvc@npm:16.1.4":
-  version: 16.1.4
-  resolution: "@nx/nx-win32-x64-msvc@npm:16.1.4"
+"@nx/nx-win32-x64-msvc@npm:16.2.1":
+  version: 16.2.1
+  resolution: "@nx/nx-win32-x64-msvc@npm:16.2.1"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -6451,7 +6442,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 4.2.0
-    "@whatwg-node/fetch": 0.8.8
+    "@whatwg-node/fetch": 0.9.0
     core-js: 3.30.2
     humanize-string: 2.1.0
     jest: 29.5.0
@@ -6623,7 +6614,7 @@ __metadata:
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@clerk/clerk-react": 4.16.1
-    "@clerk/types": 3.36.0
+    "@clerk/types": 3.38.0
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.6
     core-js: 3.30.2
@@ -7040,7 +7031,7 @@ __metadata:
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.24
     "@vscode/ripgrep": 1.15.3
-    "@whatwg-node/fetch": 0.8.8
+    "@whatwg-node/fetch": 0.9.0
     cheerio: 1.0.0-rc.12
     core-js: 3.30.2
     deepmerge: 4.3.1
@@ -7239,7 +7230,7 @@ __metadata:
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 9.0.1
-    "@whatwg-node/fetch": 0.8.8
+    "@whatwg-node/fetch": 0.9.0
     aws-lambda: 1.0.7
     core-js: 3.30.2
     graphql: 16.6.0
@@ -7322,7 +7313,7 @@ __metadata:
     "@redwoodjs/structure": 5.0.0
     "@redwoodjs/web": 5.0.0
     "@types/mime-types": 2.1.1
-    "@whatwg-node/fetch": 0.8.8
+    "@whatwg-node/fetch": 0.9.0
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 11.0.4
     cheerio: 1.0.0-rc.12
@@ -7491,7 +7482,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.1
     "@types/yargs": 17.0.24
-    "@whatwg-node/fetch": 0.8.8
+    "@whatwg-node/fetch": 0.9.0
     ci-info: 3.8.0
     core-js: 3.30.2
     envinfo: 7.8.1
@@ -10873,7 +10864,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.8.8, @whatwg-node/fetch@npm:^0.8.0, @whatwg-node/fetch@npm:^0.8.1, @whatwg-node/fetch@npm:^0.8.2, @whatwg-node/fetch@npm:^0.8.4":
+"@whatwg-node/events@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@whatwg-node/events@npm:0.1.0"
+  checksum: 6fbd1ce0d08fb61193390654d77ddc728cf955f664858d87d1de6bbb8ce8ca3bd424575d6979d864831a89790087a8521f403fa8ec3a81360e3c335f663b4e32
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/fetch@npm:0.9.0":
+  version: 0.9.0
+  resolution: "@whatwg-node/fetch@npm:0.9.0"
+  dependencies:
+    "@whatwg-node/node-fetch": ^0.4.0
+    urlpattern-polyfill: ^8.0.0
+  checksum: ca050f1f8e24e88ad37d84f7307fe116cf973ecc4691707490214b7b8d17355cd4dc0c02811255d015ce57381f0505443647dd12e800dd46f8205c84ac5487bc
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/fetch@npm:^0.8.0, @whatwg-node/fetch@npm:^0.8.1, @whatwg-node/fetch@npm:^0.8.2, @whatwg-node/fetch@npm:^0.8.4":
   version: 0.8.8
   resolution: "@whatwg-node/fetch@npm:0.8.8"
   dependencies:
@@ -10896,6 +10904,19 @@ __metadata:
     fast-url-parser: ^1.1.3
     tslib: ^2.3.1
   checksum: 49e4fd5e682d1fa1229b2c13c06074c6a633eddbe61be162fd213ddb85d6d27d51554b3cced5f6b7f3be1722a64cca7f5ffe0722d08b3285fe2f289d8d5a045d
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/node-fetch@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@whatwg-node/node-fetch@npm:0.4.0"
+  dependencies:
+    "@whatwg-node/events": ^0.1.0
+    busboy: ^1.6.0
+    fast-querystring: ^1.1.1
+    fast-url-parser: ^1.1.3
+    tslib: ^2.3.1
+  checksum: d08bbd46fcaf505e22782acfca12d68ce7d3edd7bb3b268851070fff98d7e3c5377a5ec47dd00fe2136141f21a8978ceee99c8cc7e2ba992521f10199ca550f9
   languageName: node
   linkType: hard
 
@@ -24848,20 +24869,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:16.1.4":
-  version: 16.1.4
-  resolution: "nx@npm:16.1.4"
+"nx@npm:16.2.1":
+  version: 16.2.1
+  resolution: "nx@npm:16.2.1"
   dependencies:
-    "@nrwl/tao": 16.1.4
-    "@nx/nx-darwin-arm64": 16.1.4
-    "@nx/nx-darwin-x64": 16.1.4
-    "@nx/nx-linux-arm-gnueabihf": 16.1.4
-    "@nx/nx-linux-arm64-gnu": 16.1.4
-    "@nx/nx-linux-arm64-musl": 16.1.4
-    "@nx/nx-linux-x64-gnu": 16.1.4
-    "@nx/nx-linux-x64-musl": 16.1.4
-    "@nx/nx-win32-arm64-msvc": 16.1.4
-    "@nx/nx-win32-x64-msvc": 16.1.4
+    "@nrwl/tao": 16.2.1
+    "@nx/nx-darwin-arm64": 16.2.1
+    "@nx/nx-darwin-x64": 16.2.1
+    "@nx/nx-linux-arm-gnueabihf": 16.2.1
+    "@nx/nx-linux-arm64-gnu": 16.2.1
+    "@nx/nx-linux-arm64-musl": 16.2.1
+    "@nx/nx-linux-x64-gnu": 16.2.1
+    "@nx/nx-linux-x64-musl": 16.2.1
+    "@nx/nx-win32-arm64-msvc": 16.2.1
+    "@nx/nx-win32-x64-msvc": 16.2.1
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24924,7 +24945,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 2c291bbf771de5a3c98bbe1707f699ca58fad109ed29a7f96a61ce415acd024f37a723a98894c6517e3bf17f9b476973fbce51fff9f3b494cbf72dd821827270
+  checksum: a6d78686dea2cb72d84d06dc1feed0dc0e07080c607c78939c1083b7a05cc9d30514016aa79dc584fd54dffa0612c7051666ddb7fb1ddf4e7373f0515f7ed6f6
   languageName: node
   linkType: hard
 
@@ -28404,7 +28425,7 @@ __metadata:
     ncp: 2.0.0
     nodemon: 2.0.22
     npm-packlist: 7.0.4
-    nx: 16.1.4
+    nx: 16.2.1
     nx-cloud: 16.0.5
     octokit: 2.0.14
     ora: 5.4.1
