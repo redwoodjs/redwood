@@ -11,7 +11,7 @@ import {
 import { studioConfig, webConfig } from '../services/config'
 import { span, spans } from '../services/explore/span'
 import { traces, trace, traceCount } from '../services/explore/trace'
-import { seriesTypeBarList } from '../services/lists'
+import { seriesTypeBarList, modelsAccessedList } from '../services/lists'
 import { prismaQuerySpans } from '../services/prismaSpans'
 import { retypeSpans, truncateSpans } from '../services/span'
 import { getAncestorSpans, getDescendantSpans } from '../services/util'
@@ -92,6 +92,11 @@ export const setupYoga = (fastify: FastifyInstance) => {
         series_type: String!
         series_name: String
         quantity: Int!
+      }
+
+      type ModelsAccessedList {
+        model: String!
+        model_count: Int!
       }
 
       type PrismaQuerySpan {
@@ -175,6 +180,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
 
         # Lists
         seriesTypeBarList(timeLimit: Int!): [SeriesTypeList]
+        modelsAccessedList(timeLimit: Int!): [ModelsAccessedList]
 
         # Maps
         spanTreeMapData(spanId: String): JSON
@@ -208,6 +214,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
         spanTypeTimeline,
         spanTypeTimeSeriesData,
         // Lists
+        modelsAccessedList,
         seriesTypeBarList,
         // Maps
         spanTreeMapData,

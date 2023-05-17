@@ -196,12 +196,12 @@ export default function SeriesTypeBarList({
 
   return (
     <Card>
-      <Flex className="space-x-4" justifyContent="start" alignItems="center">
+      <Flex className="space-x-4" justifyContent="between" alignItems="stretch">
         <Title>{name}</Title>
         <Dropdown
           onValueChange={(value) => setRefreshSecondsAgo(parseInt(value))}
           placeholder="120 seconds ago"
-          className="max-w-xs"
+          className="max-w-xs w-64"
         >
           {agos.map((ago) => (
             <DropdownItem
@@ -217,7 +217,7 @@ export default function SeriesTypeBarList({
           <Bold>Type</Bold>
         </Text>
         <Text>
-          <Bold>Quantity</Bold>
+          <Bold>Count</Bold>
         </Text>
       </Flex>
       <BarList data={barListData} className="mt-2" />
