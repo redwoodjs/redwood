@@ -7,6 +7,7 @@ const config: PlaywrightTestConfig = {
   expect: {
     timeout: 10 * 1000,
   },
+  workers: 1, // do not run things in parallel
 
   // Leaving this here to make debugging easier, by uncommenting
   // use: {
