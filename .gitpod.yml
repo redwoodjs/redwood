@@ -20,12 +20,13 @@ tasks:
       export RWFW_PATH="/workspace/redwood"
       export REDWOOD_DISABLE_TELEMETRY=1
     init: |
+      apt-get install xdg-utils # so vite open does not error
       cd /workspace/redwood
       yarn install
       yarn run build:test-project ../rw-test-app --typescript --link --verbose
     command: |
       cd /workspace/rw-test-app
-      yarn rw dev --fwd="--client-web-socket-url=ws$(gp url 8910 | cut -c 5-)/ws"
+      yarn rw dev
 
 
 ports:
