@@ -7335,7 +7335,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     "@types/findup-sync": 4.0.2
     deepmerge: 4.3.1
-    dependency-cruiser: 12.12.2
+    dependency-cruiser: 13.0.1
     fast-glob: 3.2.12
     findup-sync: 5.0.0
     jest: 29.5.0
@@ -13419,6 +13419,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:5.2.0, chalk@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "chalk@npm:5.2.0"
+  checksum: 8a519b35c239f96e041b7f1ed8fdd79d3ca2332a8366cb957378b8a1b8a4cdfb740d19628e8bf74654d4c0917aa10cf39c20752e177a1304eac29a1168a740e9
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^2.0.0, chalk@npm:^2.4.1":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
@@ -13437,13 +13444,6 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: ee650b0a065b3d7a6fda258e75d3a86fc8e4effa55871da730a9e42ccb035bf5fd203525e5a1ef45ec2582ecc4f65b47eb11357c526b84dd29a14fb162c414d2
-  languageName: node
-  linkType: hard
-
-"chalk@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "chalk@npm:5.2.0"
-  checksum: 8a519b35c239f96e041b7f1ed8fdd79d3ca2332a8366cb957378b8a1b8a4cdfb740d19628e8bf74654d4c0917aa10cf39c20752e177a1304eac29a1168a740e9
   languageName: node
   linkType: hard
 
@@ -15583,9 +15583,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dependency-cruiser@npm:12.12.2":
-  version: 12.12.2
-  resolution: "dependency-cruiser@npm:12.12.2"
+"dependency-cruiser@npm:13.0.1":
+  version: 13.0.1
+  resolution: "dependency-cruiser@npm:13.0.1"
   dependencies:
     acorn: 8.8.2
     acorn-jsx: 5.3.2
@@ -15593,15 +15593,15 @@ __metadata:
     acorn-loose: 8.3.0
     acorn-walk: 8.2.0
     ajv: 8.12.0
-    chalk: ^4.1.2
+    chalk: 5.2.0
     commander: 10.0.1
     enhanced-resolve: 5.14.0
-    figures: ^3.2.0
+    figures: 5.0.0
     get-stream: ^6.0.1
-    glob: 7.2.0
+    glob: 10.2.4
     handlebars: 4.7.7
     ignore: 5.2.4
-    indent-string: ^4.0.0
+    indent-string: 5.0.0
     interpret: ^3.1.1
     is-installed-globally: 0.4.0
     json5: 2.2.3
@@ -15609,20 +15609,20 @@ __metadata:
     prompts: 2.4.2
     rechoir: ^0.8.0
     safe-regex: 2.1.1
-    semver: ^7.3.7
+    semver: ^7.5.1
     semver-try-require: 6.2.2
     teamcity-service-messages: 0.1.14
     tsconfig-paths-webpack-plugin: 4.0.1
-    watskeburt: 0.11.1
-    wrap-ansi: ^7.0.0
+    watskeburt: 0.11.2
+    wrap-ansi: 8.1.0
   bin:
-    depcruise: bin/dependency-cruise.js
-    depcruise-baseline: bin/depcruise-baseline.js
-    depcruise-fmt: bin/depcruise-fmt.js
-    depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.js
-    dependency-cruise: bin/dependency-cruise.js
-    dependency-cruiser: bin/dependency-cruise.js
-  checksum: 205d5ed363eb126f1a5405590a583f639ca6d60f220e56d1bdcb08f9c275ac51a2cef1eb7a88210535ff4305d18d34668a8e756af97e859aa831d32375470e78
+    depcruise: bin/dependency-cruise.mjs
+    depcruise-baseline: bin/depcruise-baseline.mjs
+    depcruise-fmt: bin/depcruise-fmt.mjs
+    depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.mjs
+    dependency-cruise: bin/dependency-cruise.mjs
+    dependency-cruiser: bin/dependency-cruise.mjs
+  checksum: 3b0765d0f4825ce8d5d8e30e30b5ca62bac32af4ed023002979259e6a463fc52e9d1353fd5d366fb4ba59b00ada0a5535c395b49383bc5553d469fe7751b3310
   languageName: node
   linkType: hard
 
@@ -16582,6 +16582,13 @@ __metadata:
   version: 2.0.0
   resolution: "escape-string-regexp@npm:2.0.0"
   checksum: 2530479fe8db57eace5e8646c9c2a9c80fa279614986d16dcc6bcaceb63ae77f05a851ba6c43756d816c61d7f4534baf56e3c705e3e0d884818a46808811c507
+  languageName: node
+  linkType: hard
+
+"escape-string-regexp@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "escape-string-regexp@npm:5.0.0"
+  checksum: 6366f474c6f37a802800a435232395e04e9885919873e382b157ab7e8f0feb8fed71497f84a6f6a81a49aab41815522f5839112bd38026d203aea0c91622df95
   languageName: node
   linkType: hard
 
@@ -17587,6 +17594,16 @@ __metadata:
   dependencies:
     escape-string-regexp: ^1.0.5
   checksum: 9c421646ede432829a50bc4e55c7a4eb4bcb7cc07b5bab2f471ef1ab9a344595bbebb6c5c21470093fbb730cd81bbca119624c40473a125293f656f49cb47629
+  languageName: node
+  linkType: hard
+
+"figures@npm:5.0.0":
+  version: 5.0.0
+  resolution: "figures@npm:5.0.0"
+  dependencies:
+    escape-string-regexp: ^5.0.0
+    is-unicode-supported: ^1.2.0
+  checksum: ce0f17d4ea8b0fc429c5207c343534a2f5284ecfb22aa08607da7dc84ed9e1cf754f5b97760e8dcb98d3c9d1a1e4d3d578fe3b5b99c426f05d0f06c7ba618e16
   languageName: node
   linkType: hard
 
@@ -18662,20 +18679,6 @@ __metadata:
     once: ^1.3.0
     path-is-absolute: ^1.0.0
   checksum: 7f6fcbf600eb2298cce34c65f6d8bbe6933ddd4f88aa5b38a9c6feec82b615bb33b63b120725303e89c4b50284413c21d2ff883414717a5c7d0c9f7cd7a0e5fe
-  languageName: node
-  linkType: hard
-
-"glob@npm:7.2.0":
-  version: 7.2.0
-  resolution: "glob@npm:7.2.0"
-  dependencies:
-    fs.realpath: ^1.0.0
-    inflight: ^1.0.4
-    inherits: 2
-    minimatch: ^3.0.4
-    once: ^1.3.0
-    path-is-absolute: ^1.0.0
-  checksum: 478b40e38be5a3d514e64950e1e07e0ac120585add6a37c98d0ed24d72d9127d734d2a125786073c8deb687096e84ae82b641c441a869ada3a9cc91b68978632
   languageName: node
   linkType: hard
 
@@ -19884,19 +19887,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"indent-string@npm:5.0.0, indent-string@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "indent-string@npm:5.0.0"
+  checksum: 8ee77b57d92e71745e133f6f444d6fa3ed503ad0e1bcd7e80c8da08b42375c07117128d670589725ed07b1978065803fa86318c309ba45415b7fe13e7f170220
+  languageName: node
+  linkType: hard
+
 "indent-string@npm:^2.1.0":
   version: 2.1.0
   resolution: "indent-string@npm:2.1.0"
   dependencies:
     repeating: ^2.0.0
   checksum: d38e04bbd9b0e1843164d06e9ac1e106ead5a6f7b5714c94ecebc2555b2d3af075b3ddc4d6f92ac87d5319c0935df60d571d3f45f17a6f0ec707be65f26ae924
-  languageName: node
-  linkType: hard
-
-"indent-string@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "indent-string@npm:5.0.0"
-  checksum: 8ee77b57d92e71745e133f6f444d6fa3ed503ad0e1bcd7e80c8da08b42375c07117128d670589725ed07b1978065803fa86318c309ba45415b7fe13e7f170220
   languageName: node
   linkType: hard
 
@@ -20746,6 +20749,13 @@ __metadata:
   version: 0.1.0
   resolution: "is-unicode-supported@npm:0.1.0"
   checksum: 00cbe3455c3756be68d2542c416cab888aebd5012781d6819749fefb15162ff23e38501fe681b3d751c73e8ff561ac09a5293eba6f58fdf0178462ce6dcb3453
+  languageName: node
+  linkType: hard
+
+"is-unicode-supported@npm:^1.2.0":
+  version: 1.3.0
+  resolution: "is-unicode-supported@npm:1.3.0"
+  checksum: b8674ea95d869f6faabddc6a484767207058b91aea0250803cbf1221345cb0c56f466d4ecea375dc77f6633d248d33c47bd296fb8f4cdba0b4edba8917e83d8a
   languageName: node
   linkType: hard
 
@@ -28753,7 +28763,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.5.1, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8":
+"semver@npm:7.5.1, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.1":
   version: 7.5.1
   resolution: "semver@npm:7.5.1"
   dependencies:
@@ -32153,14 +32163,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watskeburt@npm:0.11.1":
-  version: 0.11.1
-  resolution: "watskeburt@npm:0.11.1"
+"watskeburt@npm:0.11.2":
+  version: 0.11.2
+  resolution: "watskeburt@npm:0.11.2"
   dependencies:
     commander: 10.0.1
   bin:
     watskeburt: bin/cli.js
-  checksum: f5c1e454cfeb04407e4c112710f70f2b6affc5ef848365de49b2dc7d3d9743aa2c86bb07c7d8f13d59ac6107fffbd905a4d11d25347ebf43a956029dbeac95cc
+  checksum: 4001673995b52fd9009301f3a5b65c15328fda4e12c5e1f8a18b71595ad30ca277cc3a081817af9a9c0ffe2c06cc200641cc1caaeed1dd18b156c92916908b37
   languageName: node
   linkType: hard
 
@@ -32782,6 +32792,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wrap-ansi@npm:8.1.0, wrap-ansi@npm:^8.0.1, wrap-ansi@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "wrap-ansi@npm:8.1.0"
+  dependencies:
+    ansi-styles: ^6.1.0
+    string-width: ^5.0.1
+    strip-ansi: ^7.0.1
+  checksum: 138ff58a41d2f877eae87e3282c0630fc2789012fc1af4d6bd626eeb9a2f9a65ca92005e6e69a75c7b85a68479fe7443c7dbe1eb8fbaa681a4491364b7c55c60
+  languageName: node
+  linkType: hard
+
 "wrap-ansi@npm:^6.2.0":
   version: 6.2.0
   resolution: "wrap-ansi@npm:6.2.0"
@@ -32801,17 +32822,6 @@ __metadata:
     string-width: ^4.1.0
     strip-ansi: ^6.0.0
   checksum: d15fc12c11e4cbc4044a552129ebc75ee3f57aa9c1958373a4db0292d72282f54373b536103987a4a7594db1ef6a4f10acf92978f79b98c49306a4b58c77d4da
-  languageName: node
-  linkType: hard
-
-"wrap-ansi@npm:^8.0.1, wrap-ansi@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "wrap-ansi@npm:8.1.0"
-  dependencies:
-    ansi-styles: ^6.1.0
-    string-width: ^5.0.1
-    strip-ansi: ^7.0.1
-  checksum: 138ff58a41d2f877eae87e3282c0630fc2789012fc1af4d6bd626eeb9a2f9a65ca92005e6e69a75c7b85a68479fe7443c7dbe1eb8fbaa681a4491364b7c55c60
   languageName: node
   linkType: hard
 
