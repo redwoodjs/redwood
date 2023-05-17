@@ -30,7 +30,7 @@
     "@babel/traverse": "7.21.5",
     "@iarna/toml": "2.2.5",
     "@vscode/ripgrep": "1.15.3",
-    "@whatwg-node/fetch": "0.8.8",
+    "@whatwg-node/fetch": "0.9.0",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.30.2",
     "deepmerge": "4.3.1",
