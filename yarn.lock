@@ -2162,21 +2162,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.36.0":
-  version: 3.36.0
-  resolution: "@clerk/types@npm:3.36.0"
+"@clerk/types@npm:3.38.0, @clerk/types@npm:^3.36.0, @clerk/types@npm:^3.37.1":
+  version: 3.38.0
+  resolution: "@clerk/types@npm:3.38.0"
   dependencies:
     csstype: 3.1.1
-  checksum: 365fe33449ef0d3f124f76b96cfa97b08d5621809f7cc829092511aa04c739e737c15bf9741edb23709dadca91348327c269186812039f68ea2d1ec159ec0d5c
-  languageName: node
-  linkType: hard
-
-"@clerk/types@npm:^3.36.0, @clerk/types@npm:^3.37.1":
-  version: 3.37.1
-  resolution: "@clerk/types@npm:3.37.1"
-  dependencies:
-    csstype: 3.1.1
-  checksum: 6ecf745a26c3f816ec92c03c9435d08fb3db73ecf234e91cbcd8c5ebd3935133bd8b9b8aa70dd6f7365e5808a6aba3b9acfab5a17b1e26ee97b97b35a26d4e05
+  checksum: 7611703cd9dbfe2bc03fbc97ca1470c807d4cd8fff4ed3bc7af8cb9ff3f6b83ea578b24ba94fff16107c9e250399cceec5370e6969c2d19489a7b7549675bc7a
   languageName: node
   linkType: hard
 
@@ -6621,7 +6612,7 @@ __metadata:
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
     "@clerk/clerk-react": 4.15.4
-    "@clerk/types": 3.36.0
+    "@clerk/types": 3.38.0
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.6
     core-js: 3.30.2
