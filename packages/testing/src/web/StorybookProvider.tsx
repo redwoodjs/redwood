@@ -5,6 +5,7 @@ import { MockProviders } from './MockProviders'
 import { setupRequestHandlers, startMSW, mockCurrentUser } from './mockRequests'
 
 export const MockingLoader = async () => {
+  // @ts-expect-error not sure why this is happening yet
   const reqs = require.context(
     '~__REDWOOD__USER_WEB_SRC',
     true,

@@ -10,13 +10,12 @@
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "build-storybook": "./dist/bins/build-storybook.js",
     "cross-env": "./dist/bins/cross-env.js",
     "msw": "./dist/bins/msw.js",
     "redwood": "./dist/bins/redwood.js",
     "rw": "./dist/bins/redwood.js",
     "rwfw": "./dist/bins/rwfw.js",
-    "start-storybook": "./dist/bins/start-storybook.js",
+    "storybook": "./dist/bins/storybook.js",
     "tsc": "./dist/bins/tsc.js",
     "webpack": "./dist/bins/webpack.js"
   },
