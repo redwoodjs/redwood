@@ -277,7 +277,7 @@ module.exports = (webpackEnv) => {
           oneOf: [
             // (0)
             {
-              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
               type: 'asset',
               parser: {
                 dataUrlCondition: {
@@ -287,10 +287,6 @@ module.exports = (webpackEnv) => {
               generator: {
                 filename: 'static/media/[name].[contenthash:8][ext]',
               },
-            },
-            {
-              test: /\.svg$/,
-              type: 'asset/inline',
             },
             // (1)
             {
