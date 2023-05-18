@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-auth0-api",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/cli": "7.21.5",
     "@babel/core": "7.21.8",
-    "@redwoodjs/api": "5.2.0",
+    "@redwoodjs/api": "5.2.1",
     "@types/jsonwebtoken": "9.0.2",
     "jest": "29.5.0",
     "typescript": "5.0.4"
