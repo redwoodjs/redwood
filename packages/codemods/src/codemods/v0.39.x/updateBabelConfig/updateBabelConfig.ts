@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { getPaths } from '@redwoodjs/project-config'
+
 import prettify from '../../../lib/prettify'
 
 export const removeBabelConfig = async () => {

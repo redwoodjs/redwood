@@ -4,6 +4,7 @@ import path from 'path'
 import task from 'tasuku'
 
 import { getPaths } from '@redwoodjs/project-config'
+
 import isTSProject from '../../../lib/isTSProject'
 import runTransform from '../../../lib/runTransform'
 

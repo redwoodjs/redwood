@@ -6,6 +6,7 @@ import fg from 'fast-glob'
 import task from 'tasuku'
 
 import { getPaths } from '@redwoodjs/project-config'
+
 import prettify from '../../../lib/prettify'
 import runTransform from '../../../lib/runTransform'
 

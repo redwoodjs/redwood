@@ -4,6 +4,7 @@ import fg from 'fast-glob'
 import task from 'tasuku'
 
 import { getPaths } from '@redwoodjs/project-config'
+
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-scenarios'

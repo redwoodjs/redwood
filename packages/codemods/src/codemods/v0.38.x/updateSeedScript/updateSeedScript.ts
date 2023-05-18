@@ -3,8 +3,9 @@ import path from 'path'
 
 import { fetch } from '@whatwg-node/fetch'
 
-import getRootPackageJson from '../../../lib/getRootPackageJSON'
 import { getPaths } from '@redwoodjs/project-config'
+
+import getRootPackageJson from '../../../lib/getRootPackageJSON'
 import isTSProject from '../../../lib/isTSProject'
 import ts2js from '../../../lib/ts2js'
 

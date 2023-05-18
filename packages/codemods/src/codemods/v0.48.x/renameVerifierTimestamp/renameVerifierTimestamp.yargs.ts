@@ -5,6 +5,7 @@ import task from 'tasuku'
 import { TaskInnerAPI } from 'tasuku'
 
 import { getPaths } from '@redwoodjs/project-config'
+
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'rename-verifier-timestamp'

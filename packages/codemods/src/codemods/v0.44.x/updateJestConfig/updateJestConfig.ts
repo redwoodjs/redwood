@@ -4,8 +4,9 @@
 import fs from 'fs'
 import path from 'path'
 
-import fetchFileFromTemplate from '../../../lib/fetchFileFromTemplate'
 import { getPaths } from '@redwoodjs/project-config'
+
+import fetchFileFromTemplate from '../../../lib/fetchFileFromTemplate'
 import runTransform from '../../../lib/runTransform'
 
 export default async function updateJestConfig() {

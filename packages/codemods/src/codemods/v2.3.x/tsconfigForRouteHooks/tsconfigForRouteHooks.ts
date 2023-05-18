@@ -1,4 +1,5 @@
 import { getPaths } from '@redwoodjs/project-config'
+
 import prettify from '../../../lib/prettify'
 
 export default async function addApiAliasToTsConfig() {

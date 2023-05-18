@@ -2,8 +2,9 @@ import path from 'path'
 
 import task from 'tasuku'
 
-import getFilesWithPattern from '../../../lib/getFilesWithPattern'
 import { getPaths } from '@redwoodjs/project-config'
+
+import getFilesWithPattern from '../../../lib/getFilesWithPattern'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'rename-validate-with'

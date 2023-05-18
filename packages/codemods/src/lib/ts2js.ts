@@ -1,6 +1,7 @@
 import { transform } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/project-config'
+
 import prettify from './prettify'
 
 const ts2js = (file: string) => {
