@@ -82,7 +82,7 @@ async function serve() {
     console.log(`API serving from ${apiServer}`)
     console.log(`API listening on ${on}`)
     const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL serverless function endpoint at ${graphqlEnd}`)
+    console.log(`GraphQL function endpoint at ${graphqlEnd}`)
   })
 
   process.on('exit', () => {
