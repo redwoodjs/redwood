@@ -16,11 +16,10 @@
   ],
   "scripts": {
     "build": "yarn node ./build.mjs && run build:types",
-    "build:clean-dist": "rimraf 'dist/**/__tests__' --glob",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "deps:dist": "depcruise dist --config --output-type dot | dot -T svg > dependency-graph-dist.svg",
-    "deps:src": "depcruise src --config --exclude \"^src/__tests__\" --output-type dot | dot -T svg > dependency-graph-src.svg",
+    "deps:dist": "depcruise dist --output-type dot | dot -T svg > dependency-graph-dist.svg",
+    "deps:src": "depcruise src --exclude \"^src/__tests__\" --output-type dot | dot -T svg > dependency-graph-src.svg",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",
     "test:watch": "run test --watch"
@@ -29,12 +28,11 @@
     "@iarna/toml": "2.2.5",
     "deepmerge": "4.3.1",
     "fast-glob": "3.2.12",
-    "findup-sync": "5.0.0",
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {
-    "@types/findup-sync": "4.0.2",
     "dependency-cruiser": "13.0.1",
+    "esbuild": "0.17.19",
     "jest": "29.5.0",
     "rimraf": "5.0.1",
     "typescript": "5.0.4"
