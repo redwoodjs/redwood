@@ -5,7 +5,7 @@ const { findUp } = require('@redwoodjs/project-config')
 // Framework Babel config is monorepo root ./babel.config.js
 // `yarn lint` runs for each workspace, which needs findUp for path to root
 const findBabelConfig = (cwd = process.cwd()) => {
-  const configPath = findUp('babel.config.js')
+  const configPath = findUp('babel.config.js', cwd)
   if (!configPath) {
     throw new Error(`Eslint-parser could not find a "babel.config.js" file`)
   }
