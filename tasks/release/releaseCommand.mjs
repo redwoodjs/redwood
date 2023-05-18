@@ -731,7 +731,8 @@ async function updateCreateRedwoodAppTemplates() {
 
   cd('../..')
   await $`yarn ts-to-js`
-  await $`git commit -am "chore: update create-redwood-app templates"`
+  await $`git add .`
+  await $`git commit -m "chore: update create-redwood-app templates"`
   cd('../..')
 }
 
@@ -782,6 +783,7 @@ async function versionDocs() {
   await $`yarn`
   await $`yarn clear`
   await $`yarn docusaurus docs:version ${nextDocsVersion}`
-  await $`git commit -am "Version docs to ${nextDocsVersion}"`
+  await $`git add .`
+  await $`git commit -m "Version docs to ${nextDocsVersion}"`
   await cd('../')
 }
