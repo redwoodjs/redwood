@@ -7561,7 +7561,7 @@ __metadata:
     "@vitejs/plugin-react": 4.0.0
     buffer: 6.0.3
     core-js: 3.30.2
-    glob: 10.2.4
+    glob: 10.2.5
     jest: 29.5.0
     typescript: 5.0.4
     vite: 4.3.7
@@ -18665,6 +18665,21 @@ __metadata:
   bin:
     glob: dist/cjs/src/bin.js
   checksum: c7714ad2394dcbbbd87468fc9bbfe1b17beff1d71bdb874e4dc02c36a6e6257fb26c0fb6d053f2e15edbc25cf42670dce9f3b7a0d970960f96010149d60f1a8e
+  languageName: node
+  linkType: hard
+
+"glob@npm:10.2.5, glob@npm:^10.0.0":
+  version: 10.2.5
+  resolution: "glob@npm:10.2.5"
+  dependencies:
+    foreground-child: ^3.1.0
+    jackspeak: ^2.0.3
+    minimatch: ^9.0.0
+    minipass: ^5.0.0 || ^6.0.2
+    path-scurry: ^1.7.0
+  bin:
+    glob: dist/cjs/src/bin.js
+  checksum: 7c3cdf44fd4a1f85c91ce948a0a94b0bac248bc3ee0bcce7ea95646e8f290acf5da7305a37cbfefb5286cd3365eaa3c94f2c5f43c2d2cdb5c818cdd978514c1b
   languageName: node
   linkType: hard
 
