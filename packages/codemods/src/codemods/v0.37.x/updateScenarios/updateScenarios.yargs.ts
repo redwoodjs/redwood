@@ -3,7 +3,7 @@ import path from 'path'
 import fg from 'fast-glob'
 import task from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-scenarios'
@@ -28,7 +28,7 @@ export const handler = () => {
     await runTransform({
       transformPath: path.join(__dirname, 'updateScenarios.js'),
       targetPaths: fg.sync('api/src/services/**/*.scenarios.{js,ts}', {
-        cwd: getRWPaths().base,
+        cwd: getPaths().base,
         absolute: true,
       }),
     })

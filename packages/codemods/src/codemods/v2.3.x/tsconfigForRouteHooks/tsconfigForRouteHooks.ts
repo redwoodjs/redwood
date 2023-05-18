@@ -1,4 +1,4 @@
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import prettify from '../../../lib/prettify'
 
 export default async function addApiAliasToTsConfig() {
@@ -6,7 +6,7 @@ export default async function addApiAliasToTsConfig() {
   const ts = await import('typescript')
 
   const webConfigPath = ts.findConfigFile(
-    getRWPaths().web.base,
+    getPaths().web.base,
     ts.sys.fileExists
   )
 

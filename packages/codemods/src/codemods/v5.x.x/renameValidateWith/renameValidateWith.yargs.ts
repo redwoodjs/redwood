@@ -3,7 +3,7 @@ import path from 'path'
 import task from 'tasuku'
 
 import getFilesWithPattern from '../../../lib/getFilesWithPattern'
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'rename-validate-with'
@@ -15,7 +15,7 @@ export const handler = () => {
   task(
     'Renaming `validateWith` to `validateWithSync`',
     async ({ setOutput }) => {
-      const redwoodProjectPaths = getRWPaths()
+      const redwoodProjectPaths = getPaths()
 
       const files = getFilesWithPattern({
         pattern: 'validateWith',

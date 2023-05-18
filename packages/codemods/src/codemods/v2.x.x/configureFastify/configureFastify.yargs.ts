@@ -5,7 +5,7 @@ import { fetch } from '@whatwg-node/fetch'
 import fg from 'fast-glob'
 import task from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import prettify from '../../../lib/prettify'
 import runTransform from '../../../lib/runTransform'
 
@@ -16,7 +16,7 @@ export const description =
 export const handler = () => {
   task('Configure Fastify', async ({ setOutput }) => {
     const [API_SERVER_CONFIG_PATH] = fg.sync('server.config.{js,ts}', {
-      cwd: getRWPaths().api.base,
+      cwd: getPaths().api.base,
       absolute: true,
     })
 
@@ -46,7 +46,7 @@ export const handler = () => {
       const text = await res.text()
 
       const NEW_API_SERVER_CONFIG_PATH = path.join(
-        getRWPaths().api.base,
+        getPaths().api.base,
         'server.config.js'
       )
 

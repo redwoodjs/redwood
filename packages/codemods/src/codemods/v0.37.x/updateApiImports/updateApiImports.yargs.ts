@@ -3,7 +3,7 @@ import path from 'path'
 import task from 'tasuku'
 
 import getFilesWithPattern from '../../../lib/getFilesWithPattern'
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-api-imports'
@@ -14,7 +14,7 @@ export const handler = () => {
   task(
     'Updating @redwoodjs/api imports',
     async ({ setWarning }: { setWarning: any }) => {
-      const rwPaths = getRWPaths()
+      const rwPaths = getPaths()
 
       const files = getFilesWithPattern({
         pattern: `from '@redwoodjs/api'`,

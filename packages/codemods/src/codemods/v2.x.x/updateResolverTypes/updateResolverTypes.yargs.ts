@@ -3,7 +3,7 @@ import path from 'path'
 import fg from 'fast-glob'
 import task, { TaskInnerAPI } from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-resolver-types'
@@ -16,7 +16,7 @@ export const handler = () => {
       transformPath: path.join(__dirname, 'updateResolverTypes.js'),
       // Target services written in TS only
       targetPaths: fg.sync('**/*.ts', {
-        cwd: getRWPaths().api.services,
+        cwd: getPaths().api.services,
         ignore: ['**/node_modules/**', '**/*.test.ts', '**/*.scenarios.ts'],
         absolute: true,
       }),

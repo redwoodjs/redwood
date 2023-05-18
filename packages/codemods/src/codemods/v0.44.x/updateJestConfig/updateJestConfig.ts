@@ -5,11 +5,11 @@ import fs from 'fs'
 import path from 'path'
 
 import fetchFileFromTemplate from '../../../lib/fetchFileFromTemplate'
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import runTransform from '../../../lib/runTransform'
 
 export default async function updateJestConfig() {
-  const rwPaths = getRWPaths()
+  const rwPaths = getPaths()
 
   /**
    * @type JestConfigPaths

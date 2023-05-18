@@ -4,7 +4,7 @@ import fg from 'fast-glob'
 import task from 'tasuku'
 import { TaskInnerAPI } from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'rename-verifier-timestamp'
@@ -37,7 +37,7 @@ export const handler = () => {
         await runTransform({
           transformPath: path.join(__dirname, 'renameVerifierTimestamp.js'),
           targetPaths: fg.sync('/**/*.{js,ts}', {
-            cwd: getRWPaths().api.functions,
+            cwd: getPaths().api.functions,
             absolute: true,
           }),
         })

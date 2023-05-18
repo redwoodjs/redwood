@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import prettify from '../../../lib/prettify'
 
 export const removeBabelConfig = async () => {
-  const rootBabelConfigPath = path.join(getRWPaths().base, 'babel.config.js')
-  const webBabelRcPath = path.join(getRWPaths().web.base, '.babelrc.js')
+  const rootBabelConfigPath = path.join(getPaths().base, 'babel.config.js')
+  const webBabelRcPath = path.join(getPaths().web.base, '.babelrc.js')
 
-  const webBabelConfigPath = path.join(getRWPaths().web.base, 'babel.config.js')
+  const webBabelConfigPath = path.join(getPaths().web.base, 'babel.config.js')
 
   // Remove root babel config
   if (fs.existsSync(rootBabelConfigPath)) {
