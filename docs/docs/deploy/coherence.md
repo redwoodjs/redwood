@@ -13,7 +13,7 @@ description: Serverful deploys on GCP or AWS via Coherence's full-lifecycle envi
 
 ## Coherence Prerequisites
 
-To deploy to Coherence, your Redwood project needs to be hosted on GitHub and you must have an [AWS](tbd) or [GCP](tbd) account.
+To deploy to Coherence, your Redwood project needs to be hosted on GitHub and you must have an [AWS](https://docs.withcoherence.com/docs/overview/aws-deep-dive) or [GCP](https://docs.withcoherence.com/docs/overview/gcp-deep-dive) account.
 
 ## Coherence Deploy
 
