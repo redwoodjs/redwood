@@ -87,7 +87,7 @@
     "npm-packlist": "7.0.4",
     "nx": "16.2.1",
     "nx-cloud": "16.0.5",
-    "octokit": "2.0.14",
+    "octokit": "2.0.15",
     "ora": "5.4.1",
     "prompts": "2.4.2",
     "rimraf": "5.0.1",
