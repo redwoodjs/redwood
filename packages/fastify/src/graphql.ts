@@ -1,4 +1,4 @@
-import type { FastifyInstance } from 'fastify'
+import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 
 import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
 import { createGraphQLYoga } from '@redwoodjs/graphql-server'
@@ -9,7 +9,8 @@ import { createGraphQLYoga } from '@redwoodjs/graphql-server'
  */
 export async function redwoodFastifyGraphQLServer(
   fastify: FastifyInstance,
-  options: GraphQLYogaOptions
+  options: GraphQLYogaOptions,
+  done: HookHandlerDoneFunction
 ) {
   try {
     const { yoga } = createGraphQLYoga(options)
@@ -37,6 +38,8 @@ export async function redwoodFastifyGraphQLServer(
     fastify.ready(() => {
       console.log(`GraphQL Yoga Server endpoint at ${yoga.graphqlEndpoint}`)
     })
+
+    done()
   } catch (e) {
     console.log(e)
   }
