@@ -6,7 +6,6 @@ import {
   Decoder,
 } from '@redwoodjs/api'
 
-// import { AuthenticationError } from '../errors'
 import { RedwoodGraphQLContext, GraphQLHandlerOptions } from '../types'
 
 /**

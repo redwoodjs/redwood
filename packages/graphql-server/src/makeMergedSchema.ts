@@ -21,7 +21,6 @@ import { getConfig } from '@redwoodjs/project-config'
 import type { RedwoodDirective } from './plugins/useRedwoodDirective'
 import * as rootGqlSchema from './rootSchema'
 import type { RedwoodSubscription } from './subscriptions/makeSubscriptions'
-// import { makeSubscriptions } from './subscriptions/makeSubscriptions'
 import {
   Services,
   ServicesGlobImports,
