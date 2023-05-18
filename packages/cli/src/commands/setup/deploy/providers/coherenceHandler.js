@@ -92,8 +92,12 @@ async function getCoherenceConfigFileContent() {
 
   if (!SUPPORTED_DATABASES.includes(db)) {
     throw new Error(
-      `Coherence doesn't support the "${db}" provider. To proceed, switch to one of the following: ` +
-        SUPPORTED_DATABASES.join(', ')
+      [
+        `Coherence doesn't support the "${db}" provider in your Prisma schema.`,
+        `To proceed, switch to one of the following: ${SUPPORTED_DATABASES.join(
+          ', '
+        )}.`,
+      ].join('\n')
     )
   }
 
@@ -209,7 +213,8 @@ api:
       type: database
       ${db === 'postgres' ? 'adapter: postgresql' : ''}
 
-  # If you use data migrations, add "&&", "yarn", "rw" "data-migrate" "up".
+  # If you use data migrations, use the following instead:
+  # migration: ["yarn", "rw", "prisma", "migrate", "deploy", "&&", "yarn", "rw", "data-migrate", "up"]
   migration: ["yarn", "rw", "prisma", "migrate", "deploy"]
 
 web:
