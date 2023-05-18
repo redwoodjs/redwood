@@ -1464,7 +1464,7 @@ export const handler = createGraphQLHandler({
   sdls,
   services,
   allowIntrospection: true, // 👈 enable introspection in all environments
-  allowGraphiQL: true, // 👈 enable introspection in all environments
+  allowGraphiQL: true, // 👈 enable GraphiQL Playground in all environments
   onException: () => {
     // Disconnect from your database with an unhandled exception.
     db.$disconnect()
