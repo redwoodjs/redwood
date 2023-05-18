@@ -92,8 +92,12 @@ async function getCoherenceConfigFileContent() {
 
   if (!SUPPORTED_DATABASES.includes(db)) {
     throw new Error(
-      `Coherence doesn't support the "${db}" provider. To proceed, switch to one of the following: ` +
-        SUPPORTED_DATABASES.join(', ')
+      [
+        `Coherence doesn't support the "${db}" provider in your Prisma schema.`,
+        `To proceed, switch to one of the following: ${SUPPORTED_DATABASES.join(
+          ', '
+        )}.`,
+      ].join('\n')
     )
   }
 
