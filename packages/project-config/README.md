@@ -9,9 +9,9 @@ This package offers functionality to parse Redwood's configuration file, redwood
 
 ## Package size
 
-| Publish | Install |
-| :------ | :------ |
-| 96.6 kB | 809 kB  |
+| Version                                                                            | Publish | Install |
+| :--------------------------------------------------------------------------------- | :------ | :------ |
+| [v5.2.1](https://packagephobia.com/result?p=%40redwoodjs%2Fproject-config%405.2.1) | 96.6 kB | 809 kB  |
 
 ## Dependency graphs
 

@@ -3,7 +3,7 @@ const path = require('path')
 const { findUp } = require('@redwoodjs/project-config')
 
 // Framework Babel config is monorepo root ./babel.config.js
-// `yarn lint` runs for each workspace, which needs lookItUpSync for path to root
+// `yarn lint` runs for each workspace, which needs findUp for path to root
 const findBabelConfig = (cwd = process.cwd()) => {
   const configPath = findUp('babel.config.js')
   if (!configPath) {
