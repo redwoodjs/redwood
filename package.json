@@ -78,7 +78,7 @@
     "jest-runner-tsd": "5.0.0",
     "jscodeshift": "0.15.0",
     "lerna": "6.6.2",
-    "listr2": "6.5.0",
+    "listr2": "6.6.0",
     "lodash.template": "4.5.0",
     "make-dir-cli": "3.0.0",
     "msw": "1.2.1",
@@ -90,7 +90,7 @@
     "octokit": "2.0.14",
     "ora": "5.4.1",
     "prompts": "2.4.2",
-    "rimraf": "5.0.0",
+    "rimraf": "5.0.1",
     "typescript": "5.0.4",
     "yargs": "17.7.2",
     "zx": "7.2.2"
