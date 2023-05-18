@@ -165,7 +165,7 @@ All of Redwood's form helpers need the `register` function to do what they do. B
 
 ### Using `formMethods`
 
-There's some functions that `useForm` returns that it'd be nice to have access to.
+There are some functions that `useForm` returns that it'd be nice to have access to.
 For example, `useForm` returns a function `reset`, which resets the form's fields.
 To access it, you have to call `useForm` yourself.
 But you still need to pass `useForm`'s return to the `<FormProvider>` so that Redwood's helpers can register themselves:
