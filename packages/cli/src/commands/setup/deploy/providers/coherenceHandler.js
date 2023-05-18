@@ -209,9 +209,9 @@ api:
       type: database
       ${db === 'postgres' ? 'adapter: postgresql' : ''}
 
-  migration: ["yarn", "rw", "prisma", "migrate", "deploy"]
-  # If you use data migrations, swap the above for the following:
+  # If you use data migrations, use the following instead:
   # migration: ["yarn", "rw", "prisma", "migrate", "deploy", "&&", "yarn", "rw", "data-migrate", "up"]
+  migration: ["yarn", "rw", "prisma", "migrate", "deploy"]
 
 web:
   type: frontend
