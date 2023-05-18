@@ -1,20 +1,35 @@
 import path from 'path'
 
+// import { useLiveQuery } from '@envelop/live-query'
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
+import { OperationTypeNode } from 'graphql'
 
 import {
   coerceRootPath,
   redwoodFastifyWeb,
   redwoodFastifyAPI,
+  redwoodFastifyGraphQLServer,
   DEFAULT_REDWOOD_FASTIFY_CONFIG,
 } from '@redwoodjs/fastify'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
+import directives from 'src/directives/**/*.{js,ts}'
+import sdls from 'src/graphql/**/*.sdl.{js,ts}'
+import services from 'src/services/**/*.{js,ts}'
+
+import { logger } from './lib/logger'
+
 async function serve() {
   // Load .env files
   const redwoodProjectPaths = getPaths()
+  const redwoodConfig = getConfig()
+
+  const apiRootPath = coerceRootPath(redwoodConfig.web.apiUrl)
+  const port = redwoodConfig.web.port
+
+  const tsServer = Date.now()
 
   config({
     path: path.join(redwoodProjectPaths.base, '.env'),
@@ -22,7 +37,6 @@ async function serve() {
     multiline: true,
   })
 
-  const tsServer = Date.now()
   console.log(chalk.italic.dim('Starting API and Web Servers...'))
 
   // Configure Fastify
@@ -30,17 +44,30 @@ async function serve() {
     ...DEFAULT_REDWOOD_FASTIFY_CONFIG,
   })
 
-  const redwoodConfig = getConfig()
-
-  const apiRootPath = coerceRootPath(redwoodConfig.web.apiUrl)
-  const port = redwoodConfig.web.port
-
   await fastify.register(redwoodFastifyWeb)
 
   await fastify.register(redwoodFastifyAPI, {
     redwood: {
       apiRootPath,
     },
+  })
+
+  await fastify.register(redwoodFastifyGraphQLServer, {
+    loggerConfig: {
+      logger: logger,
+      options: { query: true, data: true, level: 'trace' },
+    },
+    graphiQLEndpoint: '/yoga',
+    sdls,
+    services,
+    directives,
+    allowIntrospection: true,
+    allowGraphiQL: true,
+    allowedOperations: [
+      OperationTypeNode.SUBSCRIPTION,
+      OperationTypeNode.QUERY,
+      OperationTypeNode.MUTATION,
+    ],
   })
 
   // Start
@@ -55,7 +82,7 @@ async function serve() {
     console.log(`API serving from ${apiServer}`)
     console.log(`API listening on ${on}`)
     const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL endpoint at ${graphqlEnd}`)
+    console.log(`GraphQL function endpoint at ${graphqlEnd}`)
   })
 
   process.on('exit', () => {
