@@ -11,10 +11,6 @@ declare global {
   const PropTypes: typeof _PropTypes
   const gql: typeof _gql
 
-  // Override the global types so that the server-side
-  // `GlobalContext` type is not hinted on the client
-  const context: never
-
   interface Window {
     /** URL or absolute path to the GraphQL serverless function */
     RWJS_API_GRAPHQL_URL: string
