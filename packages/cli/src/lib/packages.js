@@ -6,6 +6,29 @@ import fs from 'fs-extra'
 import { getPaths } from './index'
 
 /**
+ *  Installs a module into a user's project. If the module is already installed,
+ *  this function does nothing.
+ *
+ * @param {string} name The name of the module to install
+ * @param {string} version The version of the module to install
+ * @param {boolean} isDevDependency Whether to install as a devDependency or not
+ * @returns Whether the module was installed or not
+ */
+export async function installModule(name, version, isDevDependency = true) {
+  if (isModuleInstalled(name)) {
+    return false
+  }
+  await execa.command(
+    `yarn add ${isDevDependency ? '-D' : ''} ${name}@${version}`,
+    {
+      stdio: 'inherit',
+      cwd: getPaths().base,
+    }
+  )
+  return true
+}
+
+/**
  * Installs a Redwood module into a user's project keeping the version consistent with that of \@redwoodjs/cli.
  * If the module is already installed, this function does nothing.
  * If no remote version can not be found which matches the local cli version then the latest canary version will be used.
