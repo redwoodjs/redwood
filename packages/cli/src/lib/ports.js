@@ -2,9 +2,9 @@ import portfinder from 'portfinder'
 
 /**
  * Finds a free port
- * @param  {[number]}   requestedPort Port to start searching from
- * @param  {[number[]]} excludePorts  Array of port numbers to exclude
- * @return {[number]}                 A free port equal or higher than requestedPort but not within excludePorts. If no port can be found then returns -1
+ * @param  {number}   requestedPort Port to start searching from
+ * @param  {number[]} excludePorts  Array of port numbers to exclude
+ * @return {Promise<number>}                 A free port equal or higher than requestedPort but not within excludePorts. If no port can be found then returns -1
  */
 export async function getFreePort(requestedPort, excludePorts = []) {
   try {

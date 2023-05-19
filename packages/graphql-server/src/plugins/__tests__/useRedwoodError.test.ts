@@ -5,7 +5,7 @@ import { createLogger } from '@redwoodjs/api/logger'
 
 import { createGraphQLHandler } from '../../functions/graphql'
 
-jest.mock('../../makeMergedSchema/makeMergedSchema', () => {
+jest.mock('../../makeMergedSchema', () => {
   const { makeExecutableSchema } = require('@graphql-tools/schema')
   const { ForbiddenError } = require('@redwoodjs/graphql-server/dist/errors')
   const { EmailValidationError, RedwoodError } = require('@redwoodjs/api')
