@@ -60,8 +60,7 @@ export async function handler({ strategy }) {
   const counters = { run: 0, skipped: 0, error: 0 }
 
   const dataMigrationTasks = pendingDataMigrations.map((dataMigration) => {
-    const [version, dataMigrationFilePath] = Object.values(dataMigration)
-    const dataMigrationName = path.basename(dataMigrationFilePath, '.js')
+    const dataMigrationName = path.basename(dataMigration.path, '.js')
 
     return {
       title: dataMigrationName,
@@ -79,11 +78,11 @@ export async function handler({ strategy }) {
         try {
           const { startedAt, finishedAt } = await runDataMigration(
             db,
-            dataMigrationFilePath
+            dataMigration.path
           )
           counters.run++
           await recordDataMigration(db, {
-            version,
+            version: dataMigration.version,
             name: dataMigrationName,
             startedAt,
             finishedAt,
@@ -130,7 +129,7 @@ export async function handler({ strategy }) {
 async function getPendingDataMigrations(db) {
   const dataMigrationsPath = redwoodProjectPaths.api.dataMigrations
 
-  const dataMigrationVersionsToFileNames = fs
+  const dataMigrations = fs
     .readdirSync(dataMigrationsPath)
     // There may be a `.keep` file in the data migrations directory.
     .filter((dataMigrationFileName) =>
@@ -142,7 +141,8 @@ async function getPendingDataMigrations(db) {
       const [version] = dataMigrationFileName.split('-')
 
       return {
-        [version]: path.join(dataMigrationsPath, dataMigrationFileName),
+        version,
+        path: path.join(dataMigrationsPath, dataMigrationFileName),
       }
     })
 
@@ -153,7 +153,7 @@ async function getPendingDataMigrations(db) {
     dataMigration.version.toString()
   )
 
-  const pendingDataMigrations = dataMigrationVersionsToFileNames
+  const pendingDataMigrations = dataMigrations
     .filter(({ version }) => {
       return !ranDataMigrationVersions.includes(version)
     })
