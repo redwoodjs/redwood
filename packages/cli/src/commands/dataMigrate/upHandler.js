@@ -2,8 +2,8 @@ import fs from 'fs'
 import path from 'path'
 
 import { Listr } from 'listr2'
-import { registerApiSideBabelHook } from 'redwoodjs/internal/dist/build/babel/api'
 
+import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../lib'
