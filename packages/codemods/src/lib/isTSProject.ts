@@ -1,9 +1,9 @@
 import fg from 'fast-glob'
 
-import getRWPaths from './getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
 const isTSProject =
-  fg.sync(`${getRWPaths().base}/**/tsconfig.json`, {
+  fg.sync(`${getPaths().base}/**/tsconfig.json`, {
     ignore: ['**/node_modules/**'],
   }).length > 0
 

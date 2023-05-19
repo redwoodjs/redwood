@@ -3,7 +3,8 @@ import path from 'path'
 
 import task from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
+
 import isTSProject from '../../../lib/isTSProject'
 import runTransform from '../../../lib/runTransform'
 
@@ -14,7 +15,7 @@ export const handler = () => {
   task(
     'Updating Routes.{tsx|js}',
     async ({ setWarning }: { setWarning: any }) => {
-      const rwPaths = getRWPaths()
+      const rwPaths = getPaths()
 
       const extns = isTSProject ? 'tsx' : 'js'
       const routesFilePath = path.join(rwPaths.web.src, `Routes.${extns}`)
