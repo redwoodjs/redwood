@@ -5,13 +5,13 @@ import {
   makeDirectivesForPlugin,
   createTransformerDirective,
   createValidatorDirective,
-} from '../../directives/makeDirectives'
+} from '../directives/makeDirectives'
+import { makeMergedSchema } from '../makeMergedSchema'
 import {
   GraphQLTypeWithFields,
   ServicesGlobImports,
   SdlGlobImports,
-} from '../../types'
-import { makeMergedSchema } from '../makeMergedSchema'
+} from '../types'
 
 jest.mock('@redwoodjs/project-config', () => {
   return {
@@ -138,6 +138,7 @@ describe('makeMergedSchema', () => {
   const schema = makeMergedSchema({
     sdls,
     services,
+    subscriptions: [],
     directives: makeDirectivesForPlugin(directiveFiles),
   })
 

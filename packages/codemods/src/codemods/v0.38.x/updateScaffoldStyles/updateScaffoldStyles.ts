@@ -1,10 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
 export const updateScaffoldStyles = () => {
-  const scaffoldCSSPath = path.join(getRWPaths().web.src, 'scaffold.css')
+  const scaffoldCSSPath = path.join(getPaths().web.src, 'scaffold.css')
 
   if (fs.existsSync(scaffoldCSSPath)) {
     let scaffoldCSS = fs.readFileSync(scaffoldCSSPath, 'utf8')
