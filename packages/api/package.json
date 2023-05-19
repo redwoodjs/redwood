@@ -32,13 +32,13 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.5",
-    "@prisma/client": "4.13.0",
-    "@whatwg-node/fetch": "0.8.8",
-    "core-js": "3.30.1",
+    "@prisma/client": "4.14.1",
+    "@whatwg-node/fetch": "0.9.0",
+    "core-js": "3.30.2",
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.0",
     "pascalcase": "1.0.0",
-    "pino": "8.12.1",
+    "pino": "8.14.1",
     "title-case": "3.0.3"
   },
   "devDependencies": {

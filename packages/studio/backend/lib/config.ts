@@ -1,6 +1,6 @@
-import type { ApiConfig, StudioConfig, WebConfig } from 'backend/types'
-
 import { getConfig } from '@redwoodjs/project-config'
+
+import type { ApiConfig, StudioConfig, WebConfig } from '../types'
 
 export const getApiConfig = (): ApiConfig => {
   return getConfig().api

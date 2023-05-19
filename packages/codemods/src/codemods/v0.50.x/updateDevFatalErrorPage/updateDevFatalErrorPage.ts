@@ -3,10 +3,10 @@ import path from 'path'
 
 import { fetch } from '@whatwg-node/fetch'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
 export const updateDevFatalErrorPage = async () => {
-  const rwPaths = getRWPaths()
+  const rwPaths = getPaths()
 
   /**
    * An object where the keys are resolved filenames and the values are (for the most part) URLs to fetch.
@@ -19,7 +19,7 @@ export const updateDevFatalErrorPage = async () => {
   const dirs = {
     [webFatalErrorPagesDir]: {
       [path.join(webFatalErrorPagesDir, 'FatalErrorPage')]:
-        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/template/web/src/pages/FatalErrorPage/FatalErrorPage.tsx',
+        'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/web/src/pages/FatalErrorPage/FatalErrorPage.tsx',
     },
   }
 

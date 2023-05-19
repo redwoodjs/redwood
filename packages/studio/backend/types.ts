@@ -129,3 +129,11 @@ export interface StudioConfig {
   inMemory: boolean
   graphiql?: GraphiQLStudioConfig
 }
+
+export type SpanType =
+  | 'http'
+  | 'sql'
+  | 'graphql'
+  | 'prisma'
+  | 'redwood-service'
+  | null

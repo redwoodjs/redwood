@@ -3,10 +3,10 @@ import path from 'path'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { apiServerHandler } from '@redwoodjs/api-server'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../lib'
+import { apiServerHandler } from '../serveHandler'
 
 export const command = 'render <side>'
 export const description = 'Build, Migrate, and Serve command for Render deploy'
