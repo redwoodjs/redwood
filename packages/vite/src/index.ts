@@ -81,6 +81,7 @@ export default function redwoodPluginVite(): PluginOption[] {
       config: (options: UserConfig, env: ConfigEnv): UserConfig => {
         return {
           root: rwPaths.web.src,
+          // Disabling for now, let babel handle this for consistency
           // resolve: {
           //   alias: [
           //     {

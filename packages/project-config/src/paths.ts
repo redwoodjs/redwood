@@ -218,32 +218,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 }
 
 /**
- * Returns the route hook for the supplied page path.
- * Note that the page name doesn't have to match
- *
- * @param pagePath
- * @returns string
- */
-export const getRouteHookForPage = (pagePath: string | undefined | null) => {
-  if (!pagePath) {
-    return null
-  }
-
-  // We just use fg, so if they make typos in the routeHook file name,
-  // it's all good, we'll still find it
-  return fg
-    .sync('*.routeHooks.{js,ts,tsx,jsx}', {
-      absolute: true,
-      cwd: path.dirname(pagePath), // the page's folder
-    })
-    .at(0)
-}
-
-export const getAppRouteHook = () => {
-  return resolveFile(path.join(getPaths().web.src, 'App.routeHooks'))
-}
-
-/**
  * Process the pages directory and return information useful for automated imports.
  *
  * Note: glob.sync returns posix style paths on Windows machines
