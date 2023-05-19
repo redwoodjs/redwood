@@ -31,7 +31,7 @@ const startDevServer = async () => {
       force: forceOptimize,
     },
     server: forwardedServerArgs,
-    logLevel: debug ? 'debug' : undefined,
+    logLevel: debug ? 'info' : undefined,
   })
 
   await devServer.listen()
