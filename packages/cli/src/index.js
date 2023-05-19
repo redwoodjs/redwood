@@ -9,7 +9,7 @@ import yargs from 'yargs/yargs'
 
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
-import * as buildCommand from './commands/build'
+// import * as buildCommand from './commands/build'
 import * as checkCommand from './commands/check'
 import * as consoleCommand from './commands/console'
 import * as dataMigrateCommand from './commands/data-migrate'
@@ -125,7 +125,7 @@ async function runYargs() {
     .strict()
 
     // Commands (Built in or pre-plugin support)
-    .command(buildCommand)
+    // .command(buildCommand)
     .command(checkCommand)
     .command(consoleCommand)
     .command(dataMigrateCommand)
@@ -152,7 +152,7 @@ async function runYargs() {
   await loadPlugins(yarg)
 
   // Run
-  yarg.parse()
+  await yarg.parse()
 }
 
 runYargs()

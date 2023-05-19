@@ -32,6 +32,7 @@
     "@iarna/toml": "2.2.5",
     "@prisma/internals": "4.14.1",
     "@redwoodjs/api-server": "5.0.0",
+    "@redwoodjs/cli-build": "5.0.0",
     "@redwoodjs/cli-helpers": "5.0.0",
     "@redwoodjs/fastify": "5.0.0",
     "@redwoodjs/internal": "5.0.0",

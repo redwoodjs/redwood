@@ -169,7 +169,12 @@ const DEFAULT_CONFIG: Config = {
     },
     cli: {
       autoInstall: false,
-      plugins: [],
+      plugins: [
+        {
+          package: '@redwoodjs/cli-build',
+          version: '5.0.0',
+        },
+      ],
     },
   },
 }
