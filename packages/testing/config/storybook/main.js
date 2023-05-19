@@ -35,6 +35,11 @@ const baseConfig = {
     redwoodProjectConfig.web.a11y && '@storybook/addon-a11y',
   ].filter(Boolean),
 
+  // Only set staticDirs when running Storybook process; will fail if set for SB --build
+  ...(process.env.NODE_ENV !== 'production' && {
+    staticDirs: [path.join(redwoodProjectPaths.web.base, 'public')],
+  }),
+
   // See https://storybook.js.org/docs/react/builders/webpack.
   webpackFinal: (sbConfig, { configType }) => {
     const isEnvProduction =
@@ -164,11 +169,6 @@ const baseConfig = {
 
     return sbConfig
   },
-
-  // only set staticDirs when running Storybook process; will fail if set for SB --build
-  ...(process.env.NODE_ENV !== 'production' && {
-    staticDirs: [path.join(redwoodProjectPaths.web.base, 'public')],
-  }),
 }
 
 function mergeProjectStorybookConfig(baseConfig) {
