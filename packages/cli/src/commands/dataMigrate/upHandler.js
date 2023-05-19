@@ -129,6 +129,10 @@ export async function handler({ strategy }) {
 async function getPendingDataMigrations(db) {
   const dataMigrationsPath = redwoodProjectPaths.api.dataMigrations
 
+  if (!fs.existsSync(dataMigrationsPath)) {
+    return []
+  }
+
   const dataMigrations = fs
     .readdirSync(dataMigrationsPath)
     // There may be a `.keep` file in the data migrations directory.
