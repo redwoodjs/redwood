@@ -6,10 +6,13 @@ import type { Decoded } from './parseJWT'
 export type { Decoded }
 
 // This is shared by `@redwoodjs/web`
-const AUTH_PROVIDER_HEADER = 'auth-provider'
+const AUTH_PROVIDER_HEADER = 'Auth-Provider'
 
 export const getAuthProviderHeader = (event: APIGatewayProxyEvent) => {
-  return event?.headers[AUTH_PROVIDER_HEADER]
+  return (
+    event?.headers[AUTH_PROVIDER_HEADER] ??
+    event?.headers[AUTH_PROVIDER_HEADER.toLowerCase()]
+  )
 }
 
 export interface AuthorizationHeader {
