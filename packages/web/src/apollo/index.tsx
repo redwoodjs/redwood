@@ -16,6 +16,7 @@ const {
   InMemoryCache,
   useQuery,
   useMutation,
+  useSubscription,
   setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
@@ -294,7 +295,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
         useAuth={useAuth}
         logLevel={logLevel}
       >
-        <GraphQLHooksProvider useQuery={useQuery} useMutation={useMutation}>
+        <GraphQLHooksProvider useQuery={useQuery} useMutation={useMutation} useSubscription={useSubscription}>
           {children}
         </GraphQLHooksProvider>
       </ApolloProviderWithFetchConfig>
