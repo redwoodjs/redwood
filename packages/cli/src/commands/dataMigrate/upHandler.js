@@ -60,7 +60,7 @@ export async function handler({ strategy }) {
   const counters = { run: 0, skipped: 0, error: 0 }
 
   const dataMigrationTasks = pendingDataMigrations.map((dataMigration) => {
-    const [version, dataMigrationFilePath] = Object.entries(dataMigration)
+    const [version, dataMigrationFilePath] = Object.values(dataMigration)
     const dataMigrationName = path.basename(dataMigrationFilePath, '.js')
 
     return {
@@ -132,6 +132,12 @@ async function getPendingDataMigrations(db) {
 
   const dataMigrationVersionsToFileNames = fs
     .readdirSync(dataMigrationsPath)
+    // There may be a `.keep` file in the data migrations directory.
+    .filter((dataMigrationFileName) =>
+      ['js', '.ts'].some((extension) =>
+        dataMigrationFileName.endsWith(extension)
+      )
+    )
     .map((dataMigrationFileName) => {
       const [version] = dataMigrationFileName.split('-')
 
