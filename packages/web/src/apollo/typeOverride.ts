@@ -32,7 +32,6 @@ declare global {
   interface GraphQLMutationHookOptions<TData, TVariables>
     extends MutationHookOptions<TData, TVariables> {}
 
-
   interface GraphQLSubscriptionHookOptions<
     TData,
     TVariables extends OperationVariables
