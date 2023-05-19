@@ -1992,16 +1992,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:7.21.0":
-  version: 7.21.0
-  resolution: "@babel/runtime-corejs3@npm:7.21.0"
-  dependencies:
-    core-js-pure: ^3.25.1
-    regenerator-runtime: ^0.13.11
-  checksum: b46896f9a774eeb0e8d2597a0a43a87ede27eebec650b3e17719c14a502289ece95029fe5bc8be84798fb1879b69d54efc1f42c3127f1afaf7778d3b8bb692b5
-  languageName: node
-  linkType: hard
-
 "@babel/runtime-corejs3@npm:7.21.5":
   version: 7.21.5
   resolution: "@babel/runtime-corejs3@npm:7.21.5"
@@ -2117,18 +2107,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:^0.19.1":
-  version: 0.19.1
-  resolution: "@clerk/backend@npm:0.19.1"
+"@clerk/backend@npm:^0.19.2":
+  version: 0.19.2
+  resolution: "@clerk/backend@npm:0.19.2"
   dependencies:
-    "@clerk/types": ^3.37.1
+    "@clerk/types": ^3.38.1
     "@peculiar/webcrypto": 1.4.1
     "@types/node": 16.18.6
     deepmerge: 4.2.2
     node-fetch-native: 1.0.1
     snakecase-keys: 5.4.4
     tslib: 2.4.1
-  checksum: 945dd6435117c3b5a9c891954f995de9fe2f4702b4cf291a7d61f4e4480b8f570a118467d33c21d75336dacaaeacf8fd40115c7e27e99b3c9ca292577b3fc222
+  checksum: 0b91f8c0e1483915e952861855b061615f414d648ec02fe4bb5c3c8264d4c561d15fe244b44d958e760dcd208e793f8224d8a21b595f3e42deca3c09a761f481
   languageName: node
   linkType: hard
 
@@ -2146,12 +2136,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.9.1":
-  version: 4.9.1
-  resolution: "@clerk/clerk-sdk-node@npm:4.9.1"
+"@clerk/clerk-sdk-node@npm:4.9.2":
+  version: 4.9.2
+  resolution: "@clerk/clerk-sdk-node@npm:4.9.2"
   dependencies:
-    "@clerk/backend": ^0.19.1
-    "@clerk/types": ^3.37.1
+    "@clerk/backend": ^0.19.2
+    "@clerk/types": ^3.38.1
     "@types/cookies": 0.7.7
     "@types/express": 4.17.14
     "@types/node-fetch": 2.6.2
@@ -2159,7 +2149,7 @@ __metadata:
     cookie: 0.5.0
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: 4ea96b2ee8360669ab4fbed41e8a296d6beea904c3368ea7ff4ab0ede3d557b3561e9c580b69eec431863a5ffc713f287b7fa64f2d9454bf6ef388de7e5d4ab5
+  checksum: fc9bffb4e75b9f733bfe386c0fe7624bee5103da2173154f0a280f7be2532ccf870a1315a69985a08ab4b07ab1d38d126b1ff0ad808752123c453a1d094da136
   languageName: node
   linkType: hard
 
@@ -2174,7 +2164,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.38.1, @clerk/types@npm:^3.37.1, @clerk/types@npm:^3.38.1":
+"@clerk/types@npm:3.38.1, @clerk/types@npm:^3.38.1":
   version: 3.38.1
   resolution: "@clerk/types@npm:3.38.1"
   dependencies:
@@ -6592,7 +6582,7 @@ __metadata:
     "@babel/cli": 7.21.5
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
-    "@clerk/clerk-sdk-node": 4.9.1
+    "@clerk/clerk-sdk-node": 4.9.2
     "@redwoodjs/api": 5.2.1
     "@types/aws-lambda": 8.10.115
     core-js: 3.30.2
@@ -7032,7 +7022,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.21.5
     "@babel/traverse": 7.21.5
     "@iarna/toml": 2.2.5
-    "@redwoodjs/project-config": 5.0.0
+    "@redwoodjs/project-config": 5.2.1
     "@types/babel__core": 7.20.0
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
@@ -7350,21 +7340,6 @@ __metadata:
     typescript: 5.0.4
   languageName: unknown
   linkType: soft
-
-"@redwoodjs/project-config@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@redwoodjs/project-config@npm:5.0.0"
-  dependencies:
-    "@babel/runtime-corejs3": 7.21.0
-    "@iarna/toml": 2.2.5
-    core-js: 3.30.1
-    deepmerge: 4.3.1
-    fast-glob: 3.2.12
-    findup-sync: 5.0.0
-    string-env-interpolation: 1.0.1
-  checksum: 1e4728d87ffdbd27dba2c2d2ffecc72262f45aebfd19d9342e83383b8cbfb52368791005cc4730a03123145475e5591371bdef379f4beb976a3091f68f1a1063
-  languageName: node
-  linkType: hard
 
 "@redwoodjs/record@workspace:packages/record":
   version: 0.0.0-use.local
@@ -14525,13 +14500,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.30.1":
-  version: 3.30.1
-  resolution: "core-js@npm:3.30.1"
-  checksum: 7b3b8ba85aca888d9780ad93a02f3d3a8c0c93b51cb48ef98a5e0909cbfd2f694d17ebf5084e043bd762d2953eff52b869cd01d3b0a5acd2b1edd9d687ccb684
-  languageName: node
-  linkType: hard
-
 "core-js@npm:3.30.2, core-js@npm:^3.0.4, core-js@npm:^3.26.0, core-js@npm:^3.27.2, core-js@npm:^3.6.5, core-js@npm:^3.8.2":
   version: 3.30.2
   resolution: "core-js@npm:3.30.2"
@@ -15665,13 +15633,6 @@ __metadata:
   dependencies:
     repeat-string: ^1.5.4
   checksum: 969c7f5a04fc3f8c52eb3b9db2fd4ba20b9b9ce56c5659ebf4cf93ba6c1be68b651665d053affbe99e76733cf7d134546cdd6be038af368f8365f42a646d5fb8
-  languageName: node
-  linkType: hard
-
-"detect-file@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "detect-file@npm:1.0.0"
-  checksum: c782a5f992047944c39d337c82f5d1d21d65d1378986d46c354df9d9ec6d5f356bca0182969c11b08b9b8a7af8727b3c2d5a9fad0b022be4a3bf4c216f63ed07
   languageName: node
   linkType: hard
 
@@ -17142,15 +17103,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expand-tilde@npm:^2.0.0, expand-tilde@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "expand-tilde@npm:2.0.2"
-  dependencies:
-    homedir-polyfill: ^1.0.1
-  checksum: 205a60497422746d1c3acbc1d65bd609b945066f239a2b785e69a7a651ac4cbeb4e08555b1ea0023abbe855e6fcb5bbf27d0b371367fdccd303d4fb2b4d66845
-  languageName: node
-  linkType: hard
-
 "expect@npm:^29.0.0, expect@npm:^29.5.0":
   version: 29.5.0
   resolution: "expect@npm:29.5.0"
@@ -17807,18 +17759,6 @@ __metadata:
     locate-path: ^5.0.0
     path-exists: ^4.0.0
   checksum: 0406ee89ebeefa2d507feb07ec366bebd8a6167ae74aa4e34fb4c4abd06cf782a3ce26ae4194d70706f72182841733f00551c209fe575cb00bd92104056e78c1
-  languageName: node
-  linkType: hard
-
-"findup-sync@npm:5.0.0":
-  version: 5.0.0
-  resolution: "findup-sync@npm:5.0.0"
-  dependencies:
-    detect-file: ^1.0.0
-    is-glob: ^4.0.3
-    micromatch: ^4.0.4
-    resolve-dir: ^1.0.1
-  checksum: bbdb8af8c86a0bde4445e2f738003b92e4cd2a4539a5b45199d0252f2f504aeaf19aeca1fac776c3632c60657b2659151e72c8ead29a79617459a57419a0920b
   languageName: node
   linkType: hard
 
@@ -18744,30 +18684,6 @@ __metadata:
   dependencies:
     ini: 2.0.0
   checksum: ef65e2241a47ff978f7006a641302bc7f4c03dfb98783d42bf7224c136e3a06df046e70ee3a010cf30214114755e46c9eb5eb1513838812fbbe0d92b14c25080
-  languageName: node
-  linkType: hard
-
-"global-modules@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "global-modules@npm:1.0.0"
-  dependencies:
-    global-prefix: ^1.0.1
-    is-windows: ^1.0.1
-    resolve-dir: ^1.0.0
-  checksum: 7d91ecf78d4fcbc966b2d89c1400df273afea795bc8cadf39857ee1684e442065621fd79413ff5fcd9e90c6f1b2dc0123e644fa0b7811f987fd54c6b9afad858
-  languageName: node
-  linkType: hard
-
-"global-prefix@npm:^1.0.1":
-  version: 1.0.2
-  resolution: "global-prefix@npm:1.0.2"
-  dependencies:
-    expand-tilde: ^2.0.2
-    homedir-polyfill: ^1.0.1
-    ini: ^1.3.4
-    is-windows: ^1.0.1
-    which: ^1.2.14
-  checksum: d8037e300f1dc04d5d410d16afa662e71bfad22dcceba6c9727bb55cc273b8988ca940b3402f62e5392fd261dd9924a9a73a865ef2000219461f31f3fc86be06
   languageName: node
   linkType: hard
 
@@ -28137,16 +28053,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve-dir@npm:^1.0.0, resolve-dir@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "resolve-dir@npm:1.0.1"
-  dependencies:
-    expand-tilde: ^2.0.0
-    global-modules: ^1.0.0
-  checksum: 8197ed13e4a51d9cd786ef6a09fc83450db016abe7ef3311ca39389b3e508d77c26fe0cf0483a9b407b8caa2764bb5ccc52cf6a017ded91492a416475a56066f
-  languageName: node
-  linkType: hard
-
 "resolve-from@npm:5.0.0, resolve-from@npm:^5.0.0":
   version: 5.0.0
   resolution: "resolve-from@npm:5.0.0"
@@ -32719,7 +32625,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"which@npm:^1.2.14, which@npm:^1.2.9":
+"which@npm:^1.2.9":
   version: 1.3.1
   resolution: "which@npm:1.3.1"
   dependencies:
