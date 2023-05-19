@@ -5,7 +5,11 @@ const path = require('path')
 const execa = require('execa')
 const Listr = require('listr2').Listr
 
-const { getExecaOptions, applyCodemod } = require('./util')
+const {
+  getExecaOptions,
+  applyCodemod,
+  updatePkgJsonScripts,
+} = require('./util')
 
 // This variable gets used in other functions
 // and is set when webTasks or apiTasks are called
@@ -259,49 +263,6 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
     )
   }
 
-  // add prerender to some routes
-  const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
-  const addPrerender = async () => {
-    const contentRoutes = fs.readFileSync(pathRoutes).toString()
-    const resultsRoutesAbout = contentRoutes.replace(
-      /name="about"/,
-      `name="about" prerender`
-    )
-    const resultsRoutesHome = resultsRoutesAbout.replace(
-      /name="home"/,
-      `name="home" prerender`
-    )
-    const resultsRoutesBlogPost = resultsRoutesHome.replace(
-      /name="blogPost"/,
-      `name="blogPost" prerender`
-    )
-    const resultsRoutesNotFound = resultsRoutesBlogPost.replace(
-      /page={NotFoundPage}/,
-      `page={NotFoundPage} prerender`
-    )
-    const resultsRoutesWaterfall = resultsRoutesNotFound.replace(
-      /page={WaterfallPage}/,
-      `page={WaterfallPage} prerender`
-    )
-    fs.writeFileSync(pathRoutes, resultsRoutesWaterfall)
-
-    const blogPostRouteHooks = `import { db } from '$api/src/lib/db'
-
-      export async function routeParameters() {
-        return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
-      }
-      `.replaceAll(/ {6}/g, '')
-    const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
-    fs.writeFileSync(blogPostRouteHooksPath, blogPostRouteHooks)
-
-    const waterfallRouteHooks = `export async function routeParameters() {
-        return [{ id: 2 }]
-      }
-      `.replaceAll(/ {6}/g, '')
-    const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.ts`
-    fs.writeFileSync(waterfallRouteHooksPath, waterfallRouteHooks)
-  }
-
   return new Listr(
     [
       {
@@ -327,10 +288,6 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
       {
         title: 'Changing routes',
         task: () => applyCodemod('routes.js', fullPath('web/src/Routes')),
-      },
-      {
-        title: 'Add Prerender to Routes',
-        task: () => addPrerender(),
       },
 
       // ====== NOTE: rufus needs this workaround for tailwind =======
@@ -398,17 +355,52 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
   }
 
   const addDbAuth = async () => {
+    // Temporarily disable postinstall script
+    updatePkgJsonScripts({
+      projectPath: outputPath,
+      scripts: {
+        postinstall: '',
+      },
+    })
+
+    const dbAuthSetupPath = path.join(
+      outputPath,
+      'node_modules',
+      '@redwoodjs',
+      'auth-dbauth-setup'
+    )
+
+    // At an earlier step we run `yarn rwfw project:copy` which gives us
+    // auth-dbauth-setup@3.2.0 currently. We need that version to be a canary
+    // version for auth-dbauth-api and auth-dbauth-web package installations
+    // to work. So we remove the current version and add a canary version
+    // instead.
+
+    fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
+
     await execa(
-      'yarn rw setup auth dbAuth --force --no-webauthn --no-warn',
+      'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       execaOptions
     )
+
+    // Restore postinstall script
+    updatePkgJsonScripts({
+      projectPath: outputPath,
+      scripts: {
+        postinstall: 'yarn rwfw project:copy',
+      },
+    })
 
     if (linkWithLatestFwBuild) {
       await execa('yarn rwfw project:copy', [], execaOptions)
     }
 
-    await execa('yarn rw g dbAuth --no-webauthn', [], execaOptions)
+    await execa(
+      'yarn rw g dbAuth --no-webauthn --username-label=username --password-label=password',
+      [],
+      execaOptions
+    )
 
     // update directive in contacts.sdl.ts
     const pathContactsSdl = `${OUTPUT_PATH}/api/src/graphql/contacts.sdl.ts`
@@ -472,11 +464,17 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
       .replaceAll('username', 'full-name')
       .replaceAll('Username', 'Full Name')
 
-    const newContentSignupPageTs = contentSignupPageTs.replace(
-      '<FieldError name="password" className="rw-field-error" />',
-      '<FieldError name="password" className="rw-field-error" />\n' +
-        fullNameFields
-    )
+    const newContentSignupPageTs = contentSignupPageTs
+      .replace(
+        '<FieldError name="password" className="rw-field-error" />',
+        '<FieldError name="password" className="rw-field-error" />\n' +
+          fullNameFields
+      )
+      // include full-name in the data we pass to `signUp()`
+      .replace(
+        'password: data.password',
+        "password: data.password, 'full-name': data['full-name']"
+      )
 
     fs.writeFileSync(pathSignupPageTs, newContentSignupPageTs)
 
@@ -489,6 +487,104 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     )
 
     fs.writeFileSync(pathAuthTs, resultsAuthTs)
+  }
+
+  // add prerender to some routes
+  const addPrerender = async () => {
+    return new Listr([
+      {
+        // We need to do this here, and not where we create the other pages, to
+        // keep it outside of BlogLayout
+        title: 'Creating double rendering test page',
+        task: async () => {
+          const createPage = createBuilder('yarn redwood g page')
+          await createPage('double')
+
+          const doublePageContent = `import { MetaTags } from '@redwoodjs/web'
+
+const DoublePage = () => {
+  return (
+    <>
+      <MetaTags title="Double" description="Double page" />
+
+      <h1 className="mb-1 mt-2 text-xl font-semibold">DoublePage</h1>
+      <p>
+        This page exists to make sure we don&apos;t regress on{' '}
+        <a
+          href="https://github.com/redwoodjs/redwood/issues/7757"
+          className="text-blue-600 underline visited:text-purple-600 hover:text-blue-800"
+          target="_blank"
+          rel="noreferrer"
+        >
+          #7757
+        </a>
+      </p>
+      <p>It needs to be a page that is not wrapped in a Set</p>
+    </>
+  )
+}
+
+export default DoublePage`
+
+          fs.writeFileSync(
+            fullPath('web/src/pages/DoublePage/DoublePage'),
+            doublePageContent
+          )
+        },
+      },
+      {
+        title: 'Update Routes.tsx',
+        task: () => {
+          const pathRoutes = `${OUTPUT_PATH}/web/src/Routes.tsx`
+          const contentRoutes = fs.readFileSync(pathRoutes).toString()
+          const resultsRoutesAbout = contentRoutes.replace(
+            /name="about"/,
+            `name="about" prerender`
+          )
+          const resultsRoutesHome = resultsRoutesAbout.replace(
+            /name="home"/,
+            `name="home" prerender`
+          )
+          const resultsRoutesBlogPost = resultsRoutesHome.replace(
+            /name="blogPost"/,
+            `name="blogPost" prerender`
+          )
+          const resultsRoutesNotFound = resultsRoutesBlogPost.replace(
+            /page={NotFoundPage}/,
+            `page={NotFoundPage} prerender`
+          )
+          const resultsRoutesWaterfall = resultsRoutesNotFound.replace(
+            /page={WaterfallPage}/,
+            `page={WaterfallPage} prerender`
+          )
+          const resultsRoutesDouble = resultsRoutesWaterfall.replace(
+            'name="double"',
+            'name="double" prerender'
+          )
+          const resultsRoutesNewContact = resultsRoutesDouble.replace(
+            'name="newContact"',
+            'name="newContact" prerender'
+          )
+          fs.writeFileSync(pathRoutes, resultsRoutesNewContact)
+
+          const blogPostRouteHooks = `import { db } from '$api/src/lib/db'
+
+      export async function routeParameters() {
+        return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
+      }
+      `.replaceAll(/ {6}/g, '')
+          const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
+          fs.writeFileSync(blogPostRouteHooksPath, blogPostRouteHooks)
+
+          const waterfallRouteHooks = `export async function routeParameters() {
+        return [{ id: 2 }]
+      }
+      `.replaceAll(/ {6}/g, '')
+          const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.ts`
+          fs.writeFileSync(waterfallRouteHooksPath, waterfallRouteHooks)
+        },
+      },
+    ])
   }
 
   const generateScaffold = createBuilder('yarn rw g scaffold')
@@ -515,6 +611,13 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
         title: 'Scaffolding post',
         task: async () => {
           await generateScaffold('post')
+
+          // Replace the random numbers in the scenario with consistent values
+          await applyCodemod(
+            'scenarioValueSuffix.js',
+            fullPath('api/src/services/posts/posts.scenarios')
+          )
+
           await execa(`yarn rwfw project:copy`, [], execaOptions)
         },
       },
@@ -540,7 +643,49 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
             execaOptions
           )
 
-          return generateScaffold('contacts')
+          await generateScaffold('contacts')
+        },
+      },
+      {
+        // This task renames the migration folders so that we don't have to deal with duplicates/conflicts when committing to the repo
+        title: 'Adjust dates within migration folder names',
+        task: () => {
+          const migrationsFolderPath = path.join(
+            OUTPUT_PATH,
+            'api',
+            'db',
+            'migrations'
+          )
+          // Migration folders are folders which start with 14 digits because they have a yyyymmddhhmmss
+          const migrationFolders = fs
+            .readdirSync(migrationsFolderPath)
+            .filter((name) => {
+              return (
+                name.match(/\d{14}.+/) &&
+                fs
+                  .lstatSync(path.join(migrationsFolderPath, name))
+                  .isDirectory()
+              )
+            })
+            .sort()
+          const datetime = new Date('2022-01-01T12:00:00.000Z')
+          migrationFolders.forEach((name) => {
+            const datetimeInCorrectFormat =
+              datetime.getFullYear() +
+              ('0' + (datetime.getMonth() + 1)).slice(-2) +
+              ('0' + datetime.getDate()).slice(-2) +
+              ('0' + datetime.getHours()).slice(-2) +
+              ('0' + datetime.getMinutes()).slice(-2) +
+              ('0' + datetime.getSeconds()).slice(-2)
+            fs.renameSync(
+              path.join(migrationsFolderPath, name),
+              path.join(
+                migrationsFolderPath,
+                `${datetimeInCorrectFormat}${name.substring(14)}`
+              )
+            )
+            datetime.setDate(datetime.getDate() + 1)
+          })
         },
       },
       {
@@ -564,6 +709,12 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
             fullPath('api/src/services/users/users')
           )
 
+          // Replace the random numbers in the scenario with consistent values
+          await applyCodemod(
+            'scenarioValueSuffix.js',
+            fullPath('api/src/services/users/users.scenarios')
+          )
+
           const test = `import { user } from './users'
             import type { StandardScenario } from './users.scenarios'
 
@@ -580,11 +731,19 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           return createBuilder('yarn redwood g types')()
         },
       },
+      {
+        // This is probably more of a web side task really, but the scaffolded
+        // pages aren't generated until we get here to the api side tasks. So
+        // instead of doing some up in the web side tasks, and then the rest
+        // here I decided to move all of them here
+        title: 'Add Prerender to Routes',
+        task: () => addPrerender(),
+      },
     ],
     {
       exitOnError: true,
       renderer: verbose && 'verbose',
-      renderOptions: { collapse: false },
+      renderOptions: { collapseSubtasks: false },
     }
   )
 }

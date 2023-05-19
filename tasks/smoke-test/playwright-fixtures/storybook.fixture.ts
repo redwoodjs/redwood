@@ -1,4 +1,6 @@
 /* eslint-disable no-empty-pattern */
+import { Transform } from 'stream'
+
 import { test as base } from '@playwright/test'
 import execa from 'execa'
 import isPortReachable from 'is-port-reachable'
@@ -43,7 +45,7 @@ const test = base.extend<any, StorybookFixture>({
           port,
         })
       } else {
-        // Don't wait for this to finish, because it doens't
+        // Don't wait for this to finish, because it doesn't
         const serverHandler = execa(
           `yarn rw storybook`,
           ['--port', port, '--no-open', '--ci'],
@@ -71,10 +73,17 @@ const test = base.extend<any, StorybookFixture>({
           }
         })
 
+        // Quick transform stream to prevent webpack output flooding the logs
+        const removeWebpackOutput = new Transform({
+          transform(chunk, encoding, callback) {
+            callback(null, '')
+          },
+        })
+
         // @NOTE: For some reason we need to do this
         // Because otherwise the server doesn't launch correctly
-        serverHandler.stdout.pipe(process.stdout)
-        serverHandler.stderr.pipe(process.stderr)
+        serverHandler.stdout.pipe(removeWebpackOutput).pipe(process.stdout)
+        serverHandler.stderr.pipe(removeWebpackOutput).pipe(process.stderr)
 
         console.log('Waiting for server.....')
         await waitForSbServer

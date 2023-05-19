@@ -1,6 +1,6 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
-global.mockFs = false
+globalThis.mockFs = false
 
 jest.mock('fs', () => {
   const actual = jest.requireActual('fs')
@@ -8,14 +8,14 @@ jest.mock('fs', () => {
   return {
     ...actual,
     mkdirSync: (...args) => {
-      if (global.mockFs) {
+      if (globalThis.mockFs) {
         return
       }
 
       return actual.mkdirSync.apply(null, args)
     },
     writeFileSync: (target, contents) => {
-      if (global.mockFs) {
+      if (globalThis.mockFs) {
         return
       }
 
@@ -32,7 +32,7 @@ import prompts from 'prompts'
 // Load mocks
 import '../../../../lib/test'
 
-import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
+import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { getDefaultArgs } from '../../../../lib'
 import * as sdl from '../sdl'
@@ -287,7 +287,7 @@ describe('handler', () => {
     test(`can be called with ${letterCase} model name`, async () => {
       const spy = jest.spyOn(fs, 'writeFileSync')
 
-      global.mockFs = true
+      globalThis.mockFs = true
 
       await sdl.handler({
         model,
@@ -310,7 +310,7 @@ describe('handler', () => {
         expect(testOutput).toMatchSnapshot()
       })
 
-      global.mockFs = false
+      globalThis.mockFs = false
       spy.mockRestore()
     })
   }

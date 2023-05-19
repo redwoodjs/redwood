@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/telemetry",
-  "version": "3.2.0",
+  "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -26,24 +26,24 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.1",
-    "@redwoodjs/internal": "3.2.0",
-    "@redwoodjs/structure": "3.2.0",
-    "ci-info": "3.5.0",
-    "core-js": "3.26.1",
-    "cross-undici-fetch": "0.4.14",
+    "@babel/runtime-corejs3": "7.21.5",
+    "@redwoodjs/project-config": "5.0.0",
+    "@redwoodjs/structure": "5.0.0",
+    "@whatwg-node/fetch": "0.9.0",
+    "ci-info": "3.8.0",
+    "core-js": "3.30.2",
     "envinfo": "7.8.1",
-    "systeminformation": "5.12.14",
+    "systeminformation": "5.17.12",
     "uuid": "9.0.0",
-    "yargs": "17.6.2"
+    "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.19.3",
-    "@babel/core": "7.20.2",
+    "@babel/cli": "7.21.5",
+    "@babel/core": "7.21.8",
     "@types/envinfo": "7.8.1",
-    "@types/uuid": "8.3.4",
-    "@types/yargs": "17.0.13",
-    "jest": "29.3.1"
+    "@types/uuid": "9.0.1",
+    "@types/yargs": "17.0.24",
+    "jest": "29.5.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

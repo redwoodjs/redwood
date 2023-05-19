@@ -21,3 +21,6 @@ blog-test-project/*
 .pnp.*
 *.code-workspace
 .nova
+
+# For esbuild.
+**/meta.json

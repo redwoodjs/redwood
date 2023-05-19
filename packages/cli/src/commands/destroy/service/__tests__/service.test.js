@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 import fs from 'fs'
 
 import '../../../../lib/test'
@@ -21,11 +21,11 @@ jest.mock('../../../../lib/schemaHelpers', () => {
   return {
     ...jest.requireActual('../../../../lib/schemaHelpers'),
     getSchema: () =>
-      require(path.join(global.__dirname, 'fixtures', 'post.json')),
+      require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
   }
 })
 
-describe('rw destory service', () => {
+describe('rw destroy service', () => {
   beforeEach(() => {
     jest.spyOn(console, 'info').mockImplementation(() => {})
     jest.spyOn(console, 'log').mockImplementation(() => {})

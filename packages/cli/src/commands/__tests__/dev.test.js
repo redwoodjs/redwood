@@ -18,20 +18,15 @@ jest.mock('fs', () => {
   }
 })
 
-jest.mock('@redwoodjs/internal/dist/config', () => {
-  return {
-    getConfig: jest.fn(),
-  }
-})
-
 jest.mock('@redwoodjs/internal/dist/dev', () => {
   return {
     shutdownPort: jest.fn(),
   }
 })
 
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
+    getConfig: jest.fn(),
     getConfigPath: () => '/mocked/project/redwood.toml',
     getPaths: () => {
       return {
@@ -67,7 +62,7 @@ jest.mock('../../lib/ports', () => {
 import concurrently from 'concurrently'
 import { find } from 'lodash'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/project-config'
 
 import { generatePrismaClient } from '../../lib/generatePrismaClient'
 import { handler } from '../dev'
@@ -156,5 +151,29 @@ describe('yarn rw dev', () => {
     const apiCommand = find(concurrentlyArgs, { name: 'api' })
 
     expect(apiCommand.command).not.toContain('--debug-port')
+  })
+
+  it('Will run vite, via rw-vite-dev bin if config has bundler set to Vite', async () => {
+    getConfig.mockReturnValue({
+      web: {
+        port: 8910,
+        bundler: 'vite', // <-- enable vite mode
+      },
+      api: {
+        port: 8911,
+      },
+    })
+
+    await handler({
+      side: ['web'],
+    })
+
+    const concurrentlyArgs = concurrently.mock.lastCall[0]
+
+    const webCommand = find(concurrentlyArgs, { name: 'web' })
+
+    expect(webCommand.command).toContain(
+      'yarn cross-env NODE_ENV=development rw-vite-dev'
+    )
   })
 })

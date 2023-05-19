@@ -116,13 +116,14 @@ export const handler = async (args) => {
           })
         } catch (e) {
           console.error(c.error(`Error in script: ${e.message}`))
+          throw e
         }
       },
     },
   ]
 
   const tasks = new Listr(scriptTasks, {
-    rendererOptions: { collapse: false },
+    rendererOptions: { collapseSubtasks: false },
     renderer: 'verbose',
   })
 

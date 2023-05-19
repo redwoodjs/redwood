@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { getPaths } = require('@redwoodjs/internal/dist/paths')
+const { getPaths } = require('@redwoodjs/project-config')
 
 const rwjsPaths = getPaths()
 const NODE_MODULES_PATH = path.join(rwjsPaths.base, 'node_modules')
@@ -17,10 +17,12 @@ module.exports = {
     name: 'web',
   },
   globals: {
-    __REDWOOD_API_URL: '',
-    __REDWOOD_API_GRAPHQL_SERVER_PATH: '/',
-    __REDWOOD__APP_TITLE: 'Redwood App',
     __RWJS_TESTROOT_DIR: path.join(rwjsPaths.web.src), // used in jest setup to load mocks
+    RWJS_ENV: {
+      RWJS_API_URL: '',
+      RWJS_API_GRAPHQL_URL: '/',
+      __REDWOOD__APP_TITLE: 'Redwood App',
+    },
   },
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',

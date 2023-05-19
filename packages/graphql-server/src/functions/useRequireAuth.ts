@@ -6,11 +6,10 @@ import {
   getAsyncStoreInstance,
   context as globalContext,
 } from '../globalContext'
-
-import type { GetCurrentUser } from './types'
+import type { GetCurrentUser } from '../types'
 
 interface Args {
-  authDecoder: Decoder
+  authDecoder?: Decoder | Decoder[]
   handlerFn: (
     event: APIGatewayEvent,
     context: LambdaContext,

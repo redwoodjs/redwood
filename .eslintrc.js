@@ -1,11 +1,11 @@
 const path = require('path')
 
-const findUp = require('findup-sync')
+const { findUp } = require('@redwoodjs/project-config')
 
 // Framework Babel config is monorepo root ./babel.config.js
-// `yarn lint` runs for each workspace, which needs findup for path to root
+// `yarn lint` runs for each workspace, which needs findUp for path to root
 const findBabelConfig = (cwd = process.cwd()) => {
-  const configPath = findUp('babel.config.js', { cwd })
+  const configPath = findUp('babel.config.js', cwd)
   if (!configPath) {
     throw new Error(`Eslint-parser could not find a "babel.config.js" file`)
   }
@@ -27,6 +27,7 @@ module.exports = {
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
+    'packages/studio/dist-*/**/*',
   ],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
@@ -80,6 +81,7 @@ module.exports = {
         'packages/api/src/**',
         'packages/graphql-server/src/**',
         'packages/record/src/**',
+        'packages/project-config/src/**',
       ],
       rules: {
         'no-restricted-imports': [
@@ -127,6 +129,7 @@ module.exports = {
         'packages/eslint-config/*.js',
         'packages/record/src/**',
         'packages/telemetry/src/**',
+        'packages/vite/bins/**',
       ],
       env: {
         node: true,

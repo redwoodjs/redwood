@@ -1,4 +1,13 @@
-import { formatCacheKey } from '../index'
+import { createCache, formatCacheKey, InMemoryClient } from '../index'
+
+describe('exports', () => {
+  it('exports the client that was passed in', () => {
+    const client = new InMemoryClient()
+    const { cacheClient } = createCache(client)
+
+    expect(cacheClient).toEqual(client)
+  })
+})
 
 describe('formatCacheKey', () => {
   it('creates a key from a string', () => {
@@ -17,7 +26,7 @@ describe('formatCacheKey', () => {
     expect(formatCacheKey(['bar', 'baz'], 'foo')).toEqual('foo-bar-baz')
   })
 
-  it('does not appent the prefix more than once', () => {
+  it('does not append the prefix more than once', () => {
     expect(formatCacheKey('foo-bar', 'foo')).toEqual('foo-bar')
     expect(formatCacheKey(['foo', 'bar'], 'foo')).toEqual('foo-bar')
     // needs a - to match against the prefix

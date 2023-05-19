@@ -6,10 +6,14 @@ import { createUseAuth } from './useAuth'
 export function createAuthentication<
   TUser,
   TRestoreAuth,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
   TClient
@@ -17,16 +21,20 @@ export function createAuthentication<
   authImplementation: AuthImplementation<
     TUser,
     TRestoreAuth,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
     TValidateResetToken,
     TClient
   >,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
@@ -34,10 +42,14 @@ export function createAuthentication<
 ) {
   const AuthContext = createAuthContext<
     TUser,
+    TLogInOptions,
     TLogIn,
+    TLogOutOptions,
     TLogOut,
+    TSignUpOptions,
     TSignUp,
     TForgotPassword,
+    TResetPasswordOptions,
     TResetPassword,
     TValidateResetToken,
     TClient

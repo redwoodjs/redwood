@@ -1,4 +1,3 @@
-import { Plugin } from '@envelop/types'
 import { mapSchema, MapperKind } from '@graphql-tools/utils'
 import {
   defaultFieldResolver,
@@ -10,6 +9,7 @@ import {
   GraphQLResolveInfo,
   GraphQLSchema,
 } from 'graphql'
+import { Plugin } from 'graphql-yoga'
 
 import { GlobalContext } from '../index'
 
@@ -69,7 +69,7 @@ export declare type TransformArgs<
  * Transformer directives run **after** resolving the value
  *
  * - You can also throw an error, if you want to stop executing, but note that the value has already been resolved
- * - Transformer directives **must** be synchonous, and return a value
+ * - Transformer directives **must** be synchronous, and return a value
  *
  * You have to pass in the type of directiveArgs, and the resolverValue (i.e. the type of the field you are transforming)
  * @example TransformerDirectiveFunc<Post, { allowedRoles: string[] }>
@@ -241,7 +241,6 @@ export const useRedwoodDirective = (
        * We are using symbols as each useRedwoodDirective plugin instance should use its own unique symbol.
        */
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error See https://github.com/graphql/graphql-js/pull/3511 - remove this comments once merged
       if (schema.extensions?.[didMapSchemaSymbol] === true) {
         return
       }

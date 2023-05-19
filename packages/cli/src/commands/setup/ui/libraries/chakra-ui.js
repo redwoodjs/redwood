@@ -36,10 +36,10 @@ export async function handler({ force, install }) {
   const rwPaths = getPaths()
 
   const packages = [
-    '@chakra-ui/react@^1',
+    '@chakra-ui/react@^2',
     '@emotion/react@^11',
     '@emotion/styled@^11',
-    'framer-motion@^6',
+    'framer-motion@^9',
   ]
 
   const tasks = new Listr(
@@ -57,7 +57,7 @@ export async function handler({ force, install }) {
                 },
               },
             ],
-            { rendererOptions: { collapse: false } }
+            { rendererOptions: { collapseSubtasks: false } }
           )
         },
       },
@@ -104,7 +104,7 @@ export async function handler({ force, install }) {
           ),
       },
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

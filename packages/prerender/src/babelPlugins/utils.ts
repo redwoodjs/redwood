@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import mime from 'mime-types'
 
-// These functions are in a seprate file so that they can be mocked with jest
+// These functions are in a separate file so that they can be mocked with jest
 
 // Its possible for sourceRoot to be undefined in the tests..
 // Not sure if possible in actually running builds

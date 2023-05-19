@@ -139,7 +139,7 @@ Launch an interactive Redwood shell (experimental):
 yarn redwood console
 ```
 
-Right now, you can only use the Redwood console to interact with your database:
+Right now, you can only use the Redwood console to interact with your database (always with `await`):
 
 **Example**
 
@@ -399,6 +399,24 @@ You can pass any flags to the command and use them within your script:
 
 See [this how to](how-to/background-worker.md) for an example of using exec to run a background worker.
 
+## experimental (alias exp)
+
+Set up and run experimental features.
+
+Some caveats:
+- these features do not follow SemVer (may be breaking changes in minor and patch releases)
+- these features may be deprecated or removed (anytime)
+- your feedback is wanted and necessary!
+
+For more information, including details about specific features, see this Redwood Forum category:
+[Experimental Features](https://community.redwoodjs.com/c/experimental-features/25)
+
+**Available Experimental Features**
+View all that can be _set up_:
+```
+yarn redwood experimental --help
+```
+
 ## generate (alias g)
 
 Save time by generating boilerplate code.
@@ -453,6 +471,7 @@ Cells are signature to Redwood. We think they provide a simpler and more declara
 | `--list`             | Use this flag to generate a list cell. This flag is needed when dealing with irregular words whose plural and singular is identical such as equipment or pokemon |
 | `--tests`            | Generate test files [default: true]                                                                                                                              |
 | `--stories`          | Generate Storybook files [default: true]                                                                                                                         |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                              |
 
 **Usage**
 
@@ -519,6 +538,7 @@ Redwood loves function components and makes extensive use of React Hooks, which 
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 | `--tests`            | Generate test files [default: true]                                                  |
 | `--stories`          | Generate Storybook files [default: true]                                             |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Destroying**
 
@@ -568,6 +588,7 @@ Creates a data migration script in `api/db/dataMigrations`.
 | Arguments & Options | Description                                                              |
 | :------------------ | :----------------------------------------------------------------------- |
 | `name`              | Name of the data migration, prefixed with a timestamp at generation time |
+| `--rollback`        | Rollback changes if an error occurs [default: true]                      |
 
 **Usage**
 
@@ -585,9 +606,12 @@ Generate log in, sign up, forgot password and password reset pages for dbAuth
 yarn redwood generate dbAuth
 ```
 
-| Arguments & Options | Description                                                                                      |
-| ------------------- | ------------------------------------------------------------------------------------------------ |
-| `--webAuthn`        | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted |
+| Arguments & Options | Description                                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `--username-label`  | The label to give the username field on the auth forms, e.g. "Email". Defaults to "Username". If not specified you will be prompted  |
+| `--password-label`  | The label to give the password field on the auth forms, e.g. "Secret". Defaults to "Password". If not specified you will be prompted |
+| `--webAuthn`        | Whether or not to add webAuthn support to the log in page. If not specified you will be prompted                                     |
+| `--rollback`        | Rollback changes if an error occurs [default: true]                                                                                  |
 
 If you don't want to create your own log in, sign up, forgot password and
 password reset pages from scratch you can use this generator. The pages will be
@@ -613,6 +637,7 @@ yarn redwood generate directive <name>
 | `--force, -f`        | Overwrite existing files                                              |
 | `--typescript, --ts` | Generate TypeScript files (defaults to your projects language target) |
 | `--type`             | Directive type [Choices: "validator", "transformer"]                  |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                   |
 
 **Usage**
 
@@ -651,6 +676,7 @@ Not to be confused with Javascript functions, Capital-F Functions are meant to b
 | `name`               | Name of the function                                                                 |
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Usage**
 
@@ -720,6 +746,7 @@ Layouts wrap pages and help you stay DRY.
 | `--tests`            | Generate test files [default: true]                                                  |
 | `--stories`          | Generate Storybook files [default: true]                                             |
 | `--skipLink`         | Generate a layout with a skip link [default: false]                                  |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Usage**
 
@@ -763,10 +790,11 @@ Generate a RedwoodRecord model.
 yarn redwood generate model <name>
 ```
 
-| Arguments & Options | Description                          |
-| ------------------- | ------------------------------------ |
-| `name`              | Name of the model (in schema.prisma) |
-| `--force, -f`       | Overwrite existing files             |
+| Arguments & Options | Description                                         |
+| ------------------- | --------------------------------------------------- |
+| `name`              | Name of the model (in schema.prisma)                |
+| `--force, -f`       | Overwrite existing files                            |
+| `--rollback`        | Rollback changes if an error occurs [default: true] |
 
 **Usage**
 
@@ -814,6 +842,7 @@ This also updates `Routes.js` in `./web/src`.
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 | `--tests`            | Generate test files [default: true]                                                  |
 | `--stories`          | Generate Storybook files [default: true]                                             |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Destroying**
 
@@ -939,6 +968,7 @@ The content of the generated components is different from what you'd get by runn
 | `--force, -f`        | Overwrite existing files                                                                                                                                                                              |
 | `--tailwind`         | Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)                                                                                               |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                  |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                                                                   |
 
 **Usage**
 
@@ -1075,6 +1105,7 @@ Generates an arbitrary Node.js script in `./scripts/<name>` that can be used wit
 | -------------------- | ------------------------------------------------------------------------------------ |
 | `name`               | Name of the service                                                                  |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 Scripts have access to services and libraries used in your project. Some examples of how this can be useful:
 
@@ -1120,6 +1151,7 @@ https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-
 | `--force, -f`        | Overwrite existing files                                                                                                                                                                               |
 | `--tests`            | Generate service test and scenario [default: true]                                                                                                                                                     |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript                                                                                                                   |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                                                                                                                                    |
 
 > **Note:** The generated sdl will include the `@requireAuth` directive by default to ensure queries and mutations are secure. If your app's queries and mutations are all public, you can set up a custom SDL generator template to apply `@skipAuth` (or a custom validator directive) to suit you application's needs.
 
@@ -1303,6 +1335,7 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 | `--force, -f`        | Overwrite existing files                                                             |
 | `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
 | `--tests`            | Generate test and scenario files [default: true]                                     |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 
 **Destroying**
@@ -1424,7 +1457,7 @@ yarn redwood lint
 
 ## prisma
 
-Run Prisma CLI with experimental features.
+Run Prisma CLI within the context of a Redwood project.
 
 ```
 yarn redwood prisma
@@ -1436,7 +1469,7 @@ Redwood's `prisma` command is a lightweight wrapper around the Prisma CLI. It's 
 >
 > By lightweight wrapper, we mean that we're handling some flags under the hood for you.
 > You can use the Prisma CLI directly (`yarn prisma`), but letting Redwood act as a proxy (`yarn redwood prisma`) saves you a lot of keystrokes.
-> For example, Redwood adds the `--preview-feature` and `--schema=api/db/schema.prisma` flags automatically.
+> For example, Redwood adds the `--schema=api/db/schema.prisma` flags automatically.
 >
 > If you want to know exactly what `yarn redwood prisma <command>` runs, which flags it's passing, etc., it's right at the top:
 >
@@ -1738,10 +1771,10 @@ This command creates a setup file in `api/src/lib/cache.{ts|js}` for connecting 
 yarn redwood setup cache <client>
 ```
 
-| Arguments & Options | Description              |
-| :------------------ | :----------------------- |
+| Arguments & Options | Description                                             |
+| :------------------ | :------------------------------------------------------ |
 | `client`            | Name of the client to configure, `memcached` or `redis` |
-| `--force, -f`       | Overwrite existing files |
+| `--force, -f`       | Overwrite existing files                                |
 
 ### setup custom-web-index
 
@@ -2028,7 +2061,7 @@ A canary release is published to npm every time a PR is merged to the `main` bra
 | Option          | Description                                                                                                                                                                                                        |
 | :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--dry-run, -d` | Check for outdated packages without upgrading                                                                                                                                                                      |
-| `--tag, -t`     | Choices are "canary", "rc", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary" and "rc", which will force upgrade packages to the most recent release of the specified tag. |
+| `--tag, -t`     | Choices are "rc", "canary", "latest", "next", "experimental", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary", "rc", "next", and "experimental". And "canary" releases include breaking changes often requiring codemods if upgrading a project. |
 
 **Example**
 
@@ -2043,3 +2076,15 @@ Upgrade to a specific version:
 ```bash
 yarn redwood upgrade -t 0.19.3
 ```
+
+## Background checks
+
+The CLI can check for things in the background, like new versions of the framework, while you dev.
+
+Right now it can only check for new versions.
+If you'd like it to do so, set `notifications.versionUpdates` in the `redwood.toml` file to include an array of the tags you're interested in hearing about.
+(The former has priority.)
+
+By default, the CLI won't check for upgrades—you have to opt into it.
+
+You'll see this notification once a day at most. And the CLI will check for it once a day at most. So, nothing heavy-handed going on here.

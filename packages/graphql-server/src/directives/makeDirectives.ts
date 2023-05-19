@@ -24,7 +24,7 @@ export const makeDirectivesForPlugin = (
 ): RedwoodDirective[] => {
   return Object.entries(directiveGlobs).flatMap(
     ([importedGlobName, exports]) => {
-      // Incase the directives get nested, their name comes as nested_directory_filename_directive
+      // In case the directives get nested, their name comes as nested_directory_filename_directive
 
       // directiveName is the filename without the directive extension
       // slice gives us ['fileName', 'directive'], so we take the first one

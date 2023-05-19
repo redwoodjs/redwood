@@ -2,8 +2,9 @@ import path from 'path'
 
 import fg from 'fast-glob'
 
+import { getPaths } from '@redwoodjs/project-config'
+
 import { getNamedExports, hasDefaultExport, fileToAst } from './ast'
-import { getPaths } from './paths'
 
 export const findCells = (cwd: string = getPaths().web.src) => {
   const modules = fg.sync('**/*Cell.{js,jsx,ts,tsx}', {
@@ -52,7 +53,7 @@ const ignoreApiFiles = [
 ]
 
 export const findApiFiles = (cwd: string = getPaths().api.src) => {
-  const files = fg.sync('**/*.{js,ts}', {
+  const files = fg.sync('**/*.{js,ts,jsx,tsx}', {
     cwd,
     absolute: true,
     ignore: ignoreApiFiles,

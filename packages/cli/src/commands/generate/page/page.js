@@ -4,8 +4,8 @@ import camelcase from 'camelcase'
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import {
@@ -15,11 +15,16 @@ import {
 } from '../../../lib'
 import c from '../../../lib/colors'
 import {
+  prepareForRollback,
+  addFunctionToRollback,
+} from '../../../lib/rollback'
+import {
   createYargsForComponentGeneration,
   pathName,
   templateForComponentFile,
   mapRouteParamTypeToTsType,
   removeGeneratorName,
+  validateName,
 } from '../helpers'
 
 const COMPONENT_SUFFIX = 'Page'
@@ -165,8 +170,10 @@ export const handler = async ({
   tests,
   stories,
   typescript = false,
+  rollback,
 }) => {
   const pageName = removeGeneratorName(name, 'page')
+  validateName(pageName)
 
   if (tests === undefined) {
     tests = getConfig().generate.tests
@@ -228,7 +235,10 @@ export const handler = async ({
       },
       {
         title: `Generating types...`,
-        task: generateTypes,
+        task: async () => {
+          await generateTypes()
+          addFunctionToRollback(generateTypes, true)
+        },
       },
       {
         title: 'One more thing...',
@@ -243,10 +253,13 @@ export const handler = async ({
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {
+    if (rollback && !force) {
+      prepareForRollback(tasks)
+    }
     await tasks.run()
   } catch (e) {
     errorTelemetry(process.argv, e.message)

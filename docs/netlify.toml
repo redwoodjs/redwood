@@ -2,7 +2,7 @@
   base = "docs"
   publish = "build"
   command = "yarn build"
-  ignore = "node ignore_build.js"
+  ignore = "node ignore_build.mjs"
 
 [[redirects]]
   from = "/docs"
@@ -212,4 +212,70 @@
 [[redirects]]
   from = "/dbauth"
   to = "/docs/authentication#self-hosted-auth-installation-and-setup"
+  status = 301
+
+# v1.0-v1.5 redirects (to v1.x)
+
+[[redirects]]
+  from = "/docs/1.0/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.1/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.2/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.3/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.4/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/1.5/*"
+  to = "/docs/1.x/:splat"
+  status = 301
+
+# v2.0-v2.2 redirects (to v2.x)
+
+[[redirects]]
+  from = "/docs/2.0/*"
+  to = "/docs/2.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/2.1/*"
+  to = "/docs/2.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/2.2/*"
+  to = "/docs/2.x/:splat"
+  status = 301
+
+# v3.0-v3.2 redirects (to v3.x)
+
+[[redirects]]
+  from = "/docs/3.0/*"
+  to = "/docs/3.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/3.1/*"
+  to = "/docs/3.x/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/docs/3.2/*"
+  to = "/docs/3.x/:splat"
   status = 301

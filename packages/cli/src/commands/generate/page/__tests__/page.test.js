@@ -1,6 +1,6 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
-global.mockFs = false
+globalThis.mockFs = false
 let mockFiles = {}
 
 jest.mock('fs', () => {
@@ -9,23 +9,23 @@ jest.mock('fs', () => {
   return {
     ...actual,
     existsSync: (...args) => {
-      if (!global.mockFs) {
+      if (!globalThis.mockFs) {
         return actual.existsSync.apply(null, args)
       }
       return false
     },
     mkdirSync: (...args) => {
-      if (!global.mockFs) {
+      if (!globalThis.mockFs) {
         return actual.mkdirSync.apply(null, args)
       }
     },
     writeFileSync: (target, contents) => {
-      if (!global.mockFs) {
+      if (!globalThis.mockFs) {
         return actual.writeFileSync.call(null, target, contents)
       }
     },
     readFileSync: (path) => {
-      if (!global.mockFs) {
+      if (!globalThis.mockFs) {
         return actual.readFileSync.call(null, path)
       }
 
@@ -42,7 +42,7 @@ import path from 'path'
 // Load mocks
 import '../../../../lib/test'
 
-import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
+import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
@@ -367,7 +367,7 @@ describe('handler', () => {
 
     const spy = jest.spyOn(fs, 'writeFileSync')
 
-    global.mockFs = true
+    globalThis.mockFs = true
 
     await page.handler({
       name: 'HomePage', // 'Page' should be trimmed from name
@@ -388,7 +388,7 @@ describe('handler', () => {
       expect(testOutput).toMatchSnapshot()
     })
 
-    global.mockFs = false
+    globalThis.mockFs = false
     spy.mockRestore()
   })
 
@@ -411,7 +411,7 @@ describe('handler', () => {
     }
 
     const spy = jest.spyOn(fs, 'writeFileSync')
-    global.mockFs = true
+    globalThis.mockFs = true
 
     await page.handler({
       name: 'post',
@@ -431,7 +431,7 @@ describe('handler', () => {
       expect(testOutput).toMatchSnapshot()
     })
 
-    global.mockFs = false
+    globalThis.mockFs = false
     spy.mockRestore()
   })
 })

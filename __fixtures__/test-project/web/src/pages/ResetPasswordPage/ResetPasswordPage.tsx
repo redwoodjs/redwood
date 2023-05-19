@@ -35,7 +35,7 @@ const ResetPasswordPage = ({ resetToken }: { resetToken: string }) => {
       }
     }
     validateToken()
-  }, [])
+  }, [resetToken, validateResetToken])
 
   const passwordRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
@@ -92,7 +92,7 @@ const ResetPasswordPage = ({ resetToken }: { resetToken: string }) => {
                       validation={{
                         required: {
                           value: true,
-                          message: 'Password is required',
+                          message: 'New Password is required',
                         },
                       }}
                     />

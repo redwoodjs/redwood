@@ -1,4 +1,4 @@
-import { Headers } from 'cross-undici-fetch'
+import { Headers } from '@whatwg-node/fetch'
 
 import type { Request } from './transforms'
 

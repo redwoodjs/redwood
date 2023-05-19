@@ -4,7 +4,7 @@ import path from 'path'
 import * as babel from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 
-import { getPaths } from '../../paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 import {
   CORE_JS_VERSION,
@@ -14,12 +14,14 @@ import {
 } from './common'
 
 export const getWebSideBabelPlugins = (
-  { forJest }: Flags = { forJest: false }
+  { forJest, forVite }: Flags = { forJest: false, forVite: false }
 ) => {
   const rwjsPaths = getPaths()
 
-  const plugins: TransformOptions['plugins'] = [
-    ...getCommonPlugins(),
+  // Vite does not need these plugins
+  const commonPlugins = forVite ? [] : getCommonPlugins()
+  const plugins = [
+    ...commonPlugins,
     // === Import path handling
     [
       'babel-plugin-module-resolver',
@@ -99,25 +101,27 @@ export const getWebSideBabelPlugins = (
 }
 
 export const getWebSideOverrides = (
-  { staticImports }: Flags = {
-    staticImports: false,
+  { prerender, forVite }: Flags = {
+    prerender: false,
+    forVite: false,
   }
 ) => {
   const overrides = [
     {
-      test: /.+Cell.(js|tsx)$/,
+      test: /.+Cell.(js|tsx|jsx)$/,
       plugins: [require('../babelPlugins/babel-plugin-redwood-cell').default],
     },
     // Automatically import files in `./web/src/pages/*` in to
     // the `./web/src/Routes.[ts|jsx]` file.
     {
-      test: /Routes.(js|tsx)$/,
+      test: /Routes.(js|tsx|jsx)$/,
       plugins: [
         [
           require('../babelPlugins/babel-plugin-redwood-routes-auto-loader')
             .default,
           {
-            useStaticImports: staticImports,
+            prerender,
+            vite: forVite,
           },
         ],
       ],
@@ -136,7 +140,11 @@ export const getWebSideOverrides = (
   return overrides as TransformOptions[]
 }
 
-export const getWebSideBabelPresets = () => {
+export const getWebSideBabelPresets = (options: Flags) => {
+  if (options.forVite) {
+    return []
+  }
+
   let reactPresetConfig = undefined
 
   // This is a special case, where @babel/preset-react needs config
@@ -160,7 +168,6 @@ export const getWebSideBabelPresets = () => {
   }
   return [
     ['@babel/preset-react', reactPresetConfig],
-    ['@babel/preset-typescript', undefined, 'rwjs-babel-preset-typescript'],
     [
       '@babel/preset-env',
       {
@@ -179,6 +186,7 @@ export const getWebSideBabelPresets = () => {
       },
       'rwjs-babel-preset-env',
     ],
+    ['@babel/preset-typescript', undefined, 'rwjs-babel-preset-typescript'],
   ]
 }
 
@@ -194,7 +202,8 @@ export const getWebSideBabelConfigPath = () => {
 // These flags toggle on/off certain features
 export interface Flags {
   forJest?: boolean // will change the alias for module-resolver plugin
-  staticImports?: boolean // will use require instead of import for routes-auto-loader plugin
+  prerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
+  forVite?: boolean
 }
 
 export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
@@ -203,7 +212,7 @@ export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
   // and merge them because we have specified the filename property, unless babelrc = false
 
   return {
-    presets: getWebSideBabelPresets(),
+    presets: getWebSideBabelPresets(options),
     plugins: getWebSideBabelPlugins(options),
     overrides: getWebSideOverrides(options),
     extends: getWebSideBabelConfigPath(),
@@ -214,9 +223,10 @@ export const getWebSideDefaultBabelConfig = (options: Flags = {}) => {
 
 // Used in prerender only currently
 export const registerWebSideBabelHook = ({
+  forVite = false,
   plugins = [],
   overrides = [],
-}: RegisterHookOptions = {}) => {
+}: RegisterHookOptions & { forVite?: boolean } = {}) => {
   const defaultOptions = getWebSideDefaultBabelConfig()
   registerBabel({
     ...defaultOptions,
@@ -226,7 +236,10 @@ export const registerWebSideBabelHook = ({
     cache: false,
     // We only register for prerender currently
     // Static importing pages makes sense
-    overrides: [...getWebSideOverrides({ staticImports: true }), ...overrides],
+    overrides: [
+      ...getWebSideOverrides({ prerender: true, forVite }),
+      ...overrides,
+    ],
   })
 }
 

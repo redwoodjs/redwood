@@ -1,4 +1,4 @@
-global.__dirname = __dirname
+globalThis.__dirname = __dirname
 
 import fs from 'fs'
 
@@ -22,17 +22,17 @@ jest.mock('../../../../lib/schemaHelpers', () => {
   return {
     ...jest.requireActual('../../../../lib/schemaHelpers'),
     getSchema: () =>
-      require(path.join(global.__dirname, 'fixtures', 'post.json')),
+      require(path.join(globalThis.__dirname, 'fixtures', 'post.json')),
   }
 })
 
-describe('rw destory sdl', () => {
+describe('rw destroy sdl', () => {
   afterEach(() => {
     fs.__setMockFiles({})
     jest.spyOn(fs, 'unlinkSync').mockClear()
   })
 
-  describe('for javascipt files', () => {
+  describe('for javascript files', () => {
     beforeEach(async () => {
       fs.__setMockFiles(
         await files({ ...getDefaultArgs(builder), name: 'Post' })

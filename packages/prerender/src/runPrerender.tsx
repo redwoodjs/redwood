@@ -3,20 +3,18 @@ import path from 'path'
 
 import React from 'react'
 
-import cheerio from 'cheerio'
+import { CheerioAPI, load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
-import {
-  CellCacheContextProvider,
-  getOperationName,
-  QueryInfo,
-} from '@redwoodjs/web'
+import { matchPath } from '@redwoodjs/router/dist/util'
+import type { QueryInfo } from '@redwoodjs/web'
 
 import mediaImportsPlugin from './babelPlugins/babel-plugin-redwood-prerender-media-imports'
+import { detectPrerenderRoutes } from './detection'
 import {
   GqlHandlerImportError,
   JSONParseError,
@@ -25,12 +23,25 @@ import {
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
 
+interface ChunkReference {
+  name?: string
+  id: string | number
+  files: Array<string>
+  referencedChunks: Array<string | number>
+}
+
 async function recursivelyRender(
   App: React.ElementType,
   renderPath: string,
   gqlHandler: any,
   queryCache: Record<string, QueryInfo>
 ): Promise<string> {
+  // Load this async, to prevent rwjs/web being loaded before shims
+  const {
+    CellCacheContextProvider,
+    getOperationName,
+  } = require('@redwoodjs/web')
+
   let shouldShowGraphqlHandlerNotFoundWarn = false
   // Execute all gql queries we haven't already fetched
   await Promise.all(
@@ -129,6 +140,137 @@ async function recursivelyRender(
   }
 }
 
+function insertChunkLoadingScript(
+  indexHtmlTree: CheerioAPI,
+  renderPath: string,
+  vite: boolean
+) {
+  const prerenderRoutes = detectPrerenderRoutes()
+
+  const route = prerenderRoutes.find((route: any) => {
+    return matchPath(route.routePath, renderPath).match
+  })
+
+  if (!route) {
+    throw new Error('Could not find a Route matching ' + renderPath)
+  }
+
+  if (!route.pageIdentifier) {
+    throw new Error(`Route for ${renderPath} has no pageIdentifier`)
+  }
+
+  const buildManifest = JSON.parse(
+    fs.readFileSync(
+      path.join(getPaths().web.dist, 'build-manifest.json'),
+      'utf-8'
+    )
+  )
+
+  const chunkPaths: Array<string> = []
+
+  if (!vite) {
+    // Webpack
+
+    const pageChunkPath = buildManifest[`${route?.pageIdentifier}.js`]
+
+    if (pageChunkPath) {
+      chunkPaths.push(pageChunkPath)
+
+      const chunkReferencesJson: Array<ChunkReference> = JSON.parse(
+        fs.readFileSync(
+          path.join(getPaths().web.dist, 'chunk-references.json'),
+          'utf-8'
+        )
+      )
+
+      const chunkReferences = chunkReferencesJson.find((chunkRef) => {
+        return chunkRef.name === route?.pageIdentifier
+      })
+
+      if (chunkReferences?.referencedChunks) {
+        chunkReferences.referencedChunks.forEach((chunkId) => {
+          const chunkRef = chunkReferencesJson.find((chunkRef) => {
+            return chunkRef.id === chunkId
+          })
+
+          // Some chunks also produces css files, and maybe other files as well
+          // We're only interested in the .js files
+          const chunkRefJsFiles: string[] =
+            chunkRef?.files.filter((file) => {
+              return file.endsWith('.js')
+            }) || []
+
+          chunkRefJsFiles.forEach((file) => {
+            chunkPaths.push(file)
+          })
+
+          const chunkPath = buildManifest[`${chunkId}.js`]
+
+          if (chunkPath) {
+            chunkPaths.push(chunkPath)
+          }
+        })
+      }
+    }
+  } else if (vite && route?.filePath) {
+    // TODO: Make sure this works on Windows
+    const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
+    const pagePath = route.filePath.slice(pagesIndex)
+    const pageChunkPath = buildManifest[pagePath]?.file
+
+    if (pageChunkPath) {
+      // The / is needed, otherwise the path is relative to the current page
+      // so for example prerendering /userExamples/new wouldn't work
+      chunkPaths.push('/' + pageChunkPath)
+    }
+  }
+
+  if (chunkPaths.length === 0) {
+    // This happens when the page is manually imported in Routes.tsx
+    // (as opposed to being auto-imported)
+    // It also happens for the page at '/' with Webpack
+    // It could also be that Webpack or Vite for some reason didn't create a
+    // chunk for this page. In that case it'd be nice to throw an error, but
+    // there's no easy way to differentiate between the two cases.
+    return
+  }
+
+  chunkPaths.forEach((chunkPath) => {
+    indexHtmlTree('head').prepend(
+      `<script defer="defer" src="${chunkPath}" ${
+        vite ? 'type="module"' : ''
+      }></script>`
+    )
+  })
+
+  if (!vite) {
+    return
+  }
+
+  // This is not needed for WebPack
+
+  chunkPaths.forEach((chunkPath) => {
+    const fullChunkPath = path.join(getPaths().web.dist, chunkPath)
+    const jsChunk = fs.readFileSync(fullChunkPath, 'utf-8')
+
+    // The chunk will end with something like this: ,{});export{y as default};
+    // We need to extract the variable name (y) so that we can expose it on
+    // `globalThis` as `<PageName>Page`
+    const matches = jsChunk.match(/export\s*\{\s*\w+ as default\s*\}/g) || []
+    const lastIndex = jsChunk.lastIndexOf(matches[matches.length - 1])
+    const varNameMatch = jsChunk
+      .slice(lastIndex)
+      .match(/export\s*\{\s*(\w+) as default\s*\}/)
+
+    fs.writeFileSync(
+      fullChunkPath,
+      jsChunk +
+        'globalThis.__REDWOOD__PRERENDER_PAGES = globalThis.__REDWOOD__PRERENDER_PAGES || {};\n' +
+        `globalThis.__REDWOOD__PRERENDER_PAGES.${route?.pageIdentifier}=${varNameMatch?.[1]};\n`
+    )
+  })
+}
+
 interface PrerenderParams {
   queryCache: Record<string, QueryInfo>
   renderPath: string // The path (url) to render e.g. /about, /dashboard/me, /blog-post/3
@@ -138,6 +280,7 @@ export const runPrerender = async ({
   queryCache,
   renderPath,
 }: PrerenderParams): Promise<string | void> => {
+  registerShims(renderPath)
   // registerApiSideBabelHook already includes the default api side babel
   // config. So what we define here is additions to the default config
   registerApiSideBabelHook({
@@ -173,10 +316,12 @@ export const runPrerender = async ({
   })
 
   const gqlHandler = await getGqlHandler()
+  const vite = getConfig().web.bundler === 'vite'
 
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
+    forVite: vite,
     overrides: [
       {
         plugins: [
@@ -186,8 +331,6 @@ export const runPrerender = async ({
       },
     ],
   })
-
-  registerShims(renderPath)
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
   const { default: App } = await import(getPaths().web.app)
@@ -199,9 +342,9 @@ export const runPrerender = async ({
     queryCache
   )
 
-  const { helmet } = global.__REDWOOD__HELMET_CONTEXT
+  const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
 
-  const indexHtmlTree = cheerio.load(indexContent)
+  const indexHtmlTree = loadHtml(indexContent)
 
   if (helmet) {
     const helmetElements = `
@@ -214,14 +357,23 @@ export const runPrerender = async ({
     // Add all head elements
     indexHtmlTree('head').prepend(helmetElements)
 
-    // Only change the title, if its not empty
-    if (cheerio.load(helmet?.title.toString())('title').text() !== '') {
-      indexHtmlTree('title').replaceWith(helmet?.title.toString())
+    const titleHtmlTag = helmet.title.toString() // toString from helmet returns HTML, not the same as cherrio!
+
+    // 1. Check if title is set in the helmet context first...
+    if (loadHtml(titleHtmlTag)('title').text() !== '') {
+      // 2. Check if html already had a title
+      if (indexHtmlTree('title').text().length === 0) {
+        // If no title defined in the index.html
+        indexHtmlTree('head').prepend(titleHtmlTag)
+      } else {
+        indexHtmlTree('title').replaceWith(titleHtmlTag)
+      }
     }
   }
 
-  // This is set by webpack by the html plugin
-  indexHtmlTree('server-markup').replaceWith(componentAsHtml)
+  insertChunkLoadingScript(indexHtmlTree, renderPath, vite)
+
+  indexHtmlTree('#redwood-app').append(componentAsHtml)
 
   const renderOutput = indexHtmlTree.html()
 

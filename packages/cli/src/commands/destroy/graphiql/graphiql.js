@@ -8,7 +8,7 @@ import {
   getGraphqlPath,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { getOutputPath } from '../../setup/graphiql/graphiql'
+import { getOutputPath } from '../../setup/graphiql/graphiqlHelpers'
 
 const removeGraphiqlFromGraphqlHandler = () => {
   const graphqlPath = getGraphqlPath()
@@ -46,7 +46,7 @@ export const handler = () => {
         task: removeGraphiqlFromGraphqlHandler,
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
   try {
     tasks.run()

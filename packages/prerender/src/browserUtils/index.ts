@@ -4,14 +4,14 @@ import { useMemo } from 'react'
 /* Web side prerender utils, to be used on the browser */
 
 export const isPrerendering = (): boolean => {
-  return global.__REDWOOD__PRERENDERING ?? false
+  return globalThis.__REDWOOD__PRERENDERING ?? false
 }
 
 export const isBrowser = !isPrerendering()
 
 export const useIsBrowser = () => {
   return useMemo(() => {
-    return !global?.__REDWOOD__PRERENDERING
+    return !globalThis?.__REDWOOD__PRERENDERING
   }, [])
 }
 

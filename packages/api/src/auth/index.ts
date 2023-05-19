@@ -60,7 +60,7 @@ export const getAuthenticationContext = async ({
   event,
   context,
 }: {
-  authDecoder?: Decoder
+  authDecoder?: Decoder | Decoder[]
   event: APIGatewayProxyEvent
   context: LambdaContext
 }): Promise<undefined | AuthContextPayload> => {
@@ -68,11 +68,27 @@ export const getAuthenticationContext = async ({
 
   // No `auth-provider` header means that the user is logged out,
   // and none of this auth malarky is required.
-  if (!type || !authDecoder) {
+  if (!type) {
     return undefined
   }
 
   const { schema, token } = parseAuthorizationHeader(event)
-  const decoded = await authDecoder(token, type, { event, context })
+
+  let authDecoders: Array<Decoder> = []
+
+  if (Array.isArray(authDecoder)) {
+    authDecoders = authDecoder
+  } else if (authDecoder) {
+    authDecoders = [authDecoder]
+  }
+
+  let decoded = null
+
+  let i = 0
+  while (!decoded && i < authDecoders.length) {
+    decoded = await authDecoders[i](token, type, { event, context })
+    i++
+  }
+
   return [decoded, { type, schema, token }, { event, context }]
 }

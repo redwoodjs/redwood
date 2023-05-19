@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli-helpers",
-  "version": "3.2.0",
+  "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -22,18 +22,27 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.20.1",
-    "@redwoodjs/telemetry": "3.2.0",
-    "core-js": "3.26.1",
-    "listr2": "5.0.5"
+    "@babel/core": "7.21.8",
+    "@babel/runtime-corejs3": "7.21.5",
+    "@redwoodjs/project-config": "5.0.0",
+    "@redwoodjs/telemetry": "5.0.0",
+    "chalk": "4.1.2",
+    "core-js": "3.30.2",
+    "execa": "5.1.1",
+    "listr2": "6.6.0",
+    "lodash.memoize": "4.1.2",
+    "pascalcase": "1.0.0",
+    "prettier": "2.8.8",
+    "prompts": "2.4.2",
+    "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.19.3",
-    "@babel/core": "7.20.2",
-    "@types/react": "17.0.50",
-    "jest": "29.3.1",
-    "react": "17.0.2",
-    "typescript": "4.7.4"
+    "@babel/cli": "7.21.5",
+    "@types/lodash.memoize": "4.1.7",
+    "@types/pascalcase": "1.0.1",
+    "@types/yargs": "17.0.24",
+    "jest": "29.5.0",
+    "typescript": "5.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

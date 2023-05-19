@@ -1,16 +1,19 @@
 import React from 'react'
 
 export interface CurrentUser {
-  roles?: Array<string> | string
   [key: string]: unknown
 }
 
 export interface AuthContextInterface<
   TUser,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
   TClient
@@ -41,9 +44,9 @@ export interface AuthContextInterface<
    * ```
    */
   userMetadata: null | TUser
-  logIn(options?: unknown): Promise<TLogIn>
-  logOut(options?: unknown): Promise<TLogOut>
-  signUp(options?: unknown): Promise<TSignUp>
+  logIn(options?: TLogInOptions): Promise<TLogIn>
+  logOut(options?: TLogOutOptions): Promise<TLogOut>
+  signUp(options?: TSignUpOptions): Promise<TSignUp>
   /**
    * Clients should always return null or string
    * It is expected that they catch any errors internally
@@ -66,7 +69,7 @@ export interface AuthContextInterface<
    */
   reauthenticate(): Promise<void>
   forgotPassword(username: string): Promise<TForgotPassword>
-  resetPassword(options?: unknown): Promise<TResetPassword>
+  resetPassword(options?: TResetPasswordOptions): Promise<TResetPassword>
   validateResetToken(resetToken: string | null): Promise<TValidateResetToken>
   /**
    * A reference to auth service provider sdk "client", which is useful if we
@@ -80,10 +83,14 @@ export interface AuthContextInterface<
 
 export function createAuthContext<
   TUser,
+  TLogInOptions,
   TLogIn,
+  TLogOutOptions,
   TLogOut,
+  TSignUpOptions,
   TSignUp,
   TForgotPassword,
+  TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
   TClient
@@ -91,10 +98,14 @@ export function createAuthContext<
   return React.createContext<
     | AuthContextInterface<
         TUser,
+        TLogInOptions,
         TLogIn,
+        TLogOutOptions,
         TLogOut,
+        TSignUpOptions,
         TSignUp,
         TForgotPassword,
+        TResetPasswordOptions,
         TResetPassword,
         TValidateResetToken,
         TClient

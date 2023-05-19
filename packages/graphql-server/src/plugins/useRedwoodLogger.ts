@@ -1,14 +1,16 @@
 import {
-  Plugin,
-  handleStreamOrSingleExecutionResult,
-} from '@graphql-yoga/common'
-import { ExecutionResult, Kind, OperationDefinitionNode } from 'graphql'
+  DefinitionNode,
+  ExecutionResult,
+  Kind,
+  OperationDefinitionNode,
+} from 'graphql'
+import { Plugin, handleStreamOrSingleExecutionResult } from 'graphql-yoga'
 import { v4 as uuidv4 } from 'uuid'
 
 import type { Logger, LevelWithSilent } from '@redwoodjs/api/logger'
 
 import { AuthenticationError, ForbiddenError } from '../errors'
-import { RedwoodGraphQLContext } from '../functions/types'
+import { RedwoodGraphQLContext } from '../types'
 
 /**
  * Options for request and response information to include in the log statements
@@ -83,7 +85,7 @@ type GraphQLLoggerOptions = {
   /**
    * @description Include the tracing and timing information.
    *
-   * This will log various performance timings withing the GraphQL event lifecycle (parsing, validating, executing, etc).
+   * This will log various performance timings within the GraphQL event lifecycle (parsing, validating, executing, etc).
    */
   tracing?: boolean
 
@@ -244,7 +246,7 @@ export const useRedwoodLogger = (
     onExecute({ args }) {
       const options = {} as any
       const rootOperation = args.document.definitions.find(
-        (o) => o.kind === Kind.OPERATION_DEFINITION
+        (o: DefinitionNode) => o.kind === Kind.OPERATION_DEFINITION
       ) as OperationDefinitionNode
 
       const operationName =

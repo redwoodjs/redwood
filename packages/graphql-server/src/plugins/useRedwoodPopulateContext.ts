@@ -1,9 +1,7 @@
-import { Plugin } from '@graphql-yoga/common'
+import { Plugin } from 'graphql-yoga'
 
-import {
-  RedwoodGraphQLContext,
-  GraphQLHandlerOptions,
-} from '../functions/types'
+import { RedwoodGraphQLContext, GraphQLHandlerOptions } from '../types'
+
 /**
  * This Envelop plugin enriches the context on a per-request basis
  * by populating it with the results of a custom function

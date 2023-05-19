@@ -12,6 +12,11 @@ import execa from 'execa'
 import rwServeTest from '../playwright-fixtures/rwServe.fixture'
 import type { ServeFixture } from '../playwright-fixtures/rwServe.fixture'
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
+
 let noJsBrowser: BrowserContext
 rwServeTest.beforeAll(async ({ browser }: PlaywrightWorkerArgs) => {
   noJsBrowser = await browser.newContext({
@@ -26,9 +31,9 @@ rwServeTest(
     await pageWithoutJs.goto(`http://localhost:${port}/`)
 
     const cellSuccessState = await pageWithoutJs.locator('main').innerHTML()
-    expect(cellSuccessState).toMatch('Welcome to the blog!')
-    expect(cellSuccessState).toMatch('A little more about me')
-    expect(cellSuccessState).toMatch('What is the meaning of life?')
+    expect(cellSuccessState).toMatch(/Welcome to the blog!/)
+    expect(cellSuccessState).toMatch(/A little more about me/)
+    expect(cellSuccessState).toMatch(/What is the meaning of life\?/)
 
     const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
     expect(navTitle).toBe('Redwood Blog')
@@ -42,6 +47,130 @@ rwServeTest(
     ])
 
     pageWithoutJs.close()
+  }
+)
+
+rwServeTest(
+  'Check that rehydration works for page not wrapped in Set',
+  async ({ port, page }: ServeFixture & PlaywrightTestArgs) => {
+    const errors: string[] = []
+
+    page.on('pageerror', (err) => {
+      errors.push(err.message)
+    })
+
+    page.on('console', (message) => {
+      if (message.type() === 'error') {
+        errors.push(message.text())
+      }
+    })
+
+    await page.goto(`http://localhost:${port}/double`)
+
+    // Wait for page to have been rehydrated before getting page content.
+    // We know the page has been rehydrated when it sends an auth request
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/auth')
+    )
+
+    await page.locator('h1').first().waitFor()
+    const headerCount = await page
+      .locator('h1', { hasText: 'DoublePage' })
+      .count()
+    expect(headerCount).toEqual(1)
+
+    const bodyText = await page.locator('body').innerText()
+    expect(bodyText.match(/#7757/g)).toHaveLength(1)
+
+    const title = await page.locator('title').innerText()
+    expect(title).toBe('Double | Redwood App')
+
+    expect(errors).toMatchObject([])
+
+    page.close()
+  }
+)
+
+rwServeTest(
+  'Check that rehydration works for page with Cell in Set',
+  async ({ port, page, context }: ServeFixture & PlaywrightTestArgs) => {
+    const errors: string[] = []
+
+    page.on('pageerror', (err) => {
+      errors.push(err.message)
+    })
+
+    page.on('console', (message) => {
+      if (message.type() === 'error') {
+        errors.push(message.text())
+      }
+    })
+
+    await page.goto(`http://localhost:${port}/`)
+
+    // Wait for page to have been rehydrated and cells have fetched their data
+    // before getting page content.
+    // We know cells have started fetching data when we see graphql requests
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/graphql')
+    )
+
+    await page.locator('h2').first().waitFor()
+    const mainText = await page.locator('main').innerText()
+    expect(mainText.match(/Welcome to the blog!/g)).toHaveLength(1)
+    expect(mainText.match(/A little more about me/g)).toHaveLength(1)
+
+    // Something strange is going on here. Sometimes React generates errors,
+    // sometimes it doesn't.
+    // The problem is we have a Cell with prerendered content. Then when the
+    // page is rehydrated JS kicks in and the cell fetches data from the
+    // server. While it's getting the data "Loading..." is shown. This doesn't
+    // match up with the content that was prerendered, so React complains.
+    // We have a <Suspense> around the Cell, so React will stop at the
+    // suspense boundary and do full CSR of the cell content (instead of
+    // throwing away the entire page and do a CSR of the whole thing as it
+    // would have done without the <Suspense>).
+    // Until we fully understand why we only get the errors sometimes we can't
+    // have this `expect` enabled
+    // expect(errors).toMatchObject([])
+
+    page.close()
+  }
+)
+
+rwServeTest(
+  'Check that rehydration works for page with code split chunks',
+  async ({ port, page }: ServeFixture & PlaywrightTestArgs) => {
+    const errors: string[] = []
+
+    page.on('pageerror', (err) => {
+      errors.push(err.message)
+    })
+
+    page.on('console', (message) => {
+      if (message.type() === 'error') {
+        errors.push(message.text())
+      }
+    })
+
+    // This page uses Redwood Forms, and so does /posts/new. Webpack splits rw
+    // forms out into a separate chunk. We need to make sure our prerender
+    // code can handle that
+    await page.goto(`http://localhost:${port}/contacts/new`)
+
+    // Wait for page to have been rehydrated before getting page content.
+    // We know the page has been rehydrated when it sends an auth request
+    await page.waitForResponse((response) =>
+      response.url().includes('/.redwood/functions/auth')
+    )
+
+    await expect(page.getByLabel('Name')).toBeVisible()
+    await expect(page.getByLabel('Email')).toBeVisible()
+    await expect(page.getByLabel('Message')).toBeVisible()
+
+    expect(errors).toMatchObject([])
+
+    page.close()
   }
 )
 
@@ -61,11 +190,11 @@ rwServeTest(
     await pageWithoutJs.goto(`http://localhost:${port}${meaningOfLifeHref}`)
 
     const mainContent = await pageWithoutJs.locator('main').innerHTML()
-    expect(mainContent).toMatch('What is the meaning of life?')
+    expect(mainContent).toMatch(/What is the meaning of life\?/)
     // Test that nested cell content is also rendered
-    expect(mainContent).toMatch('user.two@example.com')
-    expect(mainContent).not.toMatch('Welcome to the blog!')
-    expect(mainContent).not.toMatch('A little more about me')
+    expect(mainContent).toMatch(/user\.two@example\.com/)
+    expect(mainContent).not.toMatch(/Welcome to the blog!/)
+    expect(mainContent).not.toMatch(/A little more about me/)
 
     const navTitle = await pageWithoutJs.locator('header >> h1').innerText()
     expect(navTitle).toBe('Redwood Blog')
@@ -83,15 +212,40 @@ rwServeTest(
 )
 
 rwServeTest(
+  'Check that meta-tags are rendering the correct dynamic data',
+  async ({ port }: ServeFixture & PlaywrightTestArgs) => {
+    const pageWithoutJs = await noJsBrowser.newPage()
+
+    await pageWithoutJs.goto(`http://localhost:${port}/blog-post/1`)
+
+    const metaDescription = await pageWithoutJs.locator(
+      'meta[name="description"]'
+    )
+
+    const ogDescription = await pageWithoutJs.locator(
+      'meta[property="og:description"]'
+    )
+    await expect(metaDescription).toHaveAttribute('content', 'Description 1')
+    await expect(ogDescription).toHaveAttribute('content', 'Description 1')
+
+    const title = await pageWithoutJs.locator('title').innerHTML()
+    await expect(title).toBe('Post 1 | Redwood App')
+
+    const ogTitle = await pageWithoutJs.locator('meta[property="og:title"]')
+    await expect(ogTitle).toHaveAttribute('content', 'Post 1')
+  }
+)
+
+rwServeTest(
   'Check that you can navigate from home page to specific blog post',
   async ({ port }: ServeFixture & PlaywrightTestArgs) => {
     const pageWithoutJs = await noJsBrowser.newPage()
     await pageWithoutJs.goto(`http://localhost:${port}`)
 
     let mainContent = await pageWithoutJs.locator('main').innerHTML()
-    expect(mainContent).toMatch('Welcome to the blog!')
-    expect(mainContent).toMatch('A little more about me')
-    expect(mainContent).toMatch('What is the meaning of life?')
+    expect(mainContent).toMatch(/Welcome to the blog!/)
+    expect(mainContent).toMatch(/A little more about me/)
+    expect(mainContent).toMatch(/What is the meaning of life\?/)
 
     await pageWithoutJs.goto(`http://localhost:${port}/`)
     const aboutMeAnchor = await pageWithoutJs.locator(
@@ -104,10 +258,12 @@ rwServeTest(
     expect(aboutMeAnchorHref).not.toEqual('')
 
     mainContent = await pageWithoutJs.locator('main').innerHTML()
-    expect(mainContent).toMatch('A little more about me')
-    expect(mainContent).not.toMatch('Welcome to the blog!')
-    expect(mainContent).not.toMatch('What is the meaning of life?')
-    expect(pageWithoutJs.url()).toMatch(aboutMeAnchorHref)
+    expect(mainContent).toMatch(/A little more about me/)
+    expect(mainContent).not.toMatch(/Welcome to the blog!/)
+    expect(mainContent).not.toMatch(/What is the meaning of life\?/)
+    expect(pageWithoutJs.url()).toMatch(
+      new RegExp(escapeRegExp(aboutMeAnchorHref))
+    )
 
     pageWithoutJs.close()
   }
@@ -156,7 +312,7 @@ rwServeTest('prerender with broken gql query', async () => {
     })
   } catch (e) {
     expect(e.message).toMatch(
-      'GQL error: Cannot query field "timestamp" on type "Post".'
+      /GQL error: Cannot query field "timestamp" on type "Post"\./
     )
   }
 
@@ -183,7 +339,7 @@ rwServeTest(
     const mainContent = await pageWithoutJs.locator('main').innerHTML()
     expect(mainContent).toMatch(/<header.*<h2.*>[\w\s?!]+<\/h2><\/header>/)
     // Test that nested cell content is also rendered
-    expect(mainContent).toMatch('class="author-cell"')
+    expect(mainContent).toMatch(/class="author-cell"/)
     expect(mainContent).toMatch(/user.(one|two)@example.com/)
 
     pageWithoutJs.close()

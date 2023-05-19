@@ -1,5 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
+import chalk from 'chalk'
 import execa from 'execa'
 
 import { projectNeedsBuilding, waitForServer } from '../util'
@@ -58,14 +59,17 @@ const test = base.extend<any, ServeFixture>({
 
       // Pipe out logs so we can debug, when required
       serverHandler.stdout?.on('data', (data) => {
+        console.log('[rw-serve-fixture]', Buffer.from(data, 'utf-8').toString())
+      })
+      serverHandler.stderr?.on('data', (data) => {
         console.log(
-          '[rw-serve-fixture] ',
+          chalk.bgRed('[rw-serve-fixture]'),
           Buffer.from(data, 'utf-8').toString()
         )
       })
 
       console.log('Waiting for server.....')
-      await waitForServer(port, 1000)
+      await waitForServer(port, { host: '127.0.0.1' })
 
       console.log('Starting tests!')
       await use()
