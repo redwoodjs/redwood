@@ -106,7 +106,7 @@ describe('QueryHooksProvider', () => {
     )
   })
 
-  test('useSubscriptionnHook returns the correct result', async () => {
+  test('useSubscriptionHook returns the correct result', async () => {
     const myUseSubscriptionHook = () => {
       return { loading: false, data: { answer: 42 } }
     }
