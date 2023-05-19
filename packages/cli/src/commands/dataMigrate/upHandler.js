@@ -30,7 +30,8 @@ export async function handler({ strategy }) {
         return
       }
 
-      db = await import(path.join(redwoodProjectPaths.api.dist, 'lib', 'db')).db
+      db = (await import(path.join(redwoodProjectPaths.api.dist, 'lib', 'db')))
+        .db
 
       break
     }
@@ -40,7 +41,7 @@ export async function handler({ strategy }) {
       registerApiSideBabelHook()
       requireHookRegistered = true
 
-      db = await import(path.join(redwoodProjectPaths.api.dist, 'src', 'db')).db
+      db = (await import(path.join(redwoodProjectPaths.api.lib, 'db'))).db
 
       break
     }
