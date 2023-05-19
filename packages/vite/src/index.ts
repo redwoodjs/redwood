@@ -119,11 +119,10 @@ export default function redwoodPluginVite(): PluginOption[] {
             port: rwConfig.web.port,
             host: rwConfig.web.host,
             proxy: {
-              //@TODO we need to do a check for absolute urls here
               [rwConfig.web.apiUrl]: {
-                target: `http://localhost:${rwConfig.api.port}`,
+                target: `http://${rwConfig.api.host}:${rwConfig.api.port}`,
                 changeOrigin: true,
-                // @MARK might be better to use a regex maybe
+                // Remove the `.redwood/functions` part, but leave the `/graphql`
                 rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),
               },
             },
@@ -179,12 +178,12 @@ export default function redwoodPluginVite(): PluginOption[] {
     }),
     // End HTML transform------------------
 
-    // @MARK We add this as a temporary workaround for DevFatalErrorPage being required
+    // @TODO We add this as a temporary workaround for DevFatalErrorPage being required
     // Note that it only transforms commonjs in dev, which is exactly what we want!
     // and is limited to the default FatalErrorPage (by name)
     commonjs({
       filter: (id: string) => {
-        return id.includes('FatalErrorPage') || id.includes('Routes')
+        return id.includes('FatalErrorPage')
       },
     }),
   ]
