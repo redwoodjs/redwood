@@ -36,7 +36,7 @@ export async function handler() {
       },
       {
         title: 'Creating the database migration...',
-        async task() {
+        task() {
           return execa.command(
             'yarn rw prisma migrate dev --name create_data_migrations --create-only',
             {
