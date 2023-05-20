@@ -76,7 +76,7 @@
     "null-loader": "4.0.1",
     "react-refresh": "0.14.0",
     "rimraf": "5.0.1",
-    "style-loader": "3.3.2",
+    "style-loader": "3.3.3",
     "typescript": "5.0.4",
     "url-loader": "4.1.1",
     "webpack": "5.83.1",
