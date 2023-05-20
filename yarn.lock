@@ -7081,7 +7081,7 @@ __metadata:
     babel-timing: 0.9.1
     copy-webpack-plugin: 11.0.0
     core-js: 3.30.2
-    css-loader: 6.7.3
+    css-loader: 6.7.4
     css-minimizer-webpack-plugin: 5.0.0
     dotenv-webpack: 8.0.1
     esbuild: 0.17.19
@@ -14828,21 +14828,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:6.7.3":
-  version: 6.7.3
-  resolution: "css-loader@npm:6.7.3"
+"css-loader@npm:6.7.4":
+  version: 6.7.4
+  resolution: "css-loader@npm:6.7.4"
   dependencies:
     icss-utils: ^5.1.0
-    postcss: ^8.4.19
+    postcss: ^8.4.21
     postcss-modules-extract-imports: ^3.0.0
-    postcss-modules-local-by-default: ^4.0.0
+    postcss-modules-local-by-default: ^4.0.1
     postcss-modules-scope: ^3.0.0
     postcss-modules-values: ^4.0.0
     postcss-value-parser: ^4.2.0
     semver: ^7.3.8
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 20f435f73d6d776ade4b8dd6c83e7eee65a139f510b2c7575e45d7500ce1b72618b408f4841afc7f34e1aaeef25603ddd10fd4920461907483e1e1e4472bff1f
+  checksum: 8dde268a3ae2014a6abd9ad2167b8c153ac06394171b335a00f53ed9eebe5b1f11c3942bba830e5e28d0f940a67ce0ebb2cf0c394cbad84dd271529ff09e4fcf
   languageName: node
   linkType: hard
 
@@ -26281,16 +26281,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-modules-local-by-default@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "postcss-modules-local-by-default@npm:4.0.0"
+"postcss-modules-local-by-default@npm:^4.0.0, postcss-modules-local-by-default@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "postcss-modules-local-by-default@npm:4.0.1"
   dependencies:
     icss-utils: ^5.0.0
     postcss-selector-parser: ^6.0.2
     postcss-value-parser: ^4.1.0
   peerDependencies:
     postcss: ^8.1.0
-  checksum: 8ee9c0d9918fd838854d434731371874b25c412dde135df981cc28d37d0660496389b0f8653dbcdbb6ee81f2bec90cb5b14668f6208f6f517400ac064e234c5a
+  checksum: b8ed23dc36cca4701deb924b700e5d023efb7d79e39c64160e60ea1e3e147397eeb290b90f451a4a6e09aad7ca82c16f2656b6fe6ec32eb33837cd9a7a700a5d
   languageName: node
   linkType: hard
 
@@ -26519,7 +26519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.15, postcss@npm:^8.4.19, postcss@npm:^8.4.21, postcss@npm:^8.4.23":
+"postcss@npm:^8.2.15, postcss@npm:^8.4.21, postcss@npm:^8.4.23":
   version: 8.4.23
   resolution: "postcss@npm:8.4.23"
   dependencies:
