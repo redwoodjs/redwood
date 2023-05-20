@@ -13,7 +13,6 @@ const {
 const redwoodProjectConfig = getConfig()
 const redwoodProjectPaths = getPaths()
 
-// Storybook docs on this file: https://storybook.js.org/docs/react/configure/overview.
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const baseConfig = {
   framework: {
@@ -22,7 +21,6 @@ const baseConfig = {
     options: {},
   },
 
-  // Storybook uses picomatch for globbing; see https://github.com/micromatch/picomatch#globbing-features.
   stories: [
     `${importStatementPath(
       redwoodProjectPaths.web.src
@@ -40,7 +38,6 @@ const baseConfig = {
     staticDirs: [path.join(redwoodProjectPaths.web.base, 'public')],
   }),
 
-  // See https://storybook.js.org/docs/react/builders/webpack.
   webpackFinal(sbConfig, { configType }) {
     const isEnvProduction =
       configType && configType.toLowerCase() === 'production'
@@ -86,7 +83,6 @@ const baseConfig = {
       userPreviewPath
 
     sbConfig.resolve.extensions = rwConfig.resolve.extensions
-
     sbConfig.resolve.plugins = rwConfig.resolve.plugins // Directory Named Plugin
 
     // Webpack v5 does not include polyfills. Will error without these:
@@ -102,11 +98,13 @@ const baseConfig = {
       path: false,
     }
 
+    // ** PLUGINS **
     sbConfig.plugins = [
       ...sbConfig.plugins,
       ...getSharedPlugins(isEnvProduction),
     ]
 
+    // ** LOADERS **
     const sbMdxRule = sbConfig.module.rules.find(
       (rule) => rule.test.toString() === /(stories|story)\.mdx$/.toString()
     )
@@ -118,6 +116,8 @@ const baseConfig = {
     // See https://community.redwoodjs.com/t/mocking-node-modules-on-the-web-side-with-webpack-config-in-storybook/1392.
     sbConfig.node = rwConfig.node
 
+    // Performance Improvements:
+    // https://webpack.js.org/guides/build-performance/#avoid-extra-optimization-steps
     sbConfig.optimization = {
       removeAvailableModules: false,
       removeEmptyChunks: false,
