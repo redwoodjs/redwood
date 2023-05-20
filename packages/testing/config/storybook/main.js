@@ -41,7 +41,7 @@ const baseConfig = {
   }),
 
   // See https://storybook.js.org/docs/react/builders/webpack.
-  webpackFinal: (sbConfig, { configType }) => {
+  webpackFinal(sbConfig, { configType }) {
     const isEnvProduction =
       configType && configType.toLowerCase() === 'production'
 
@@ -49,12 +49,12 @@ const baseConfig = {
       ? require('@redwoodjs/core/config/webpack.production')
       : require('@redwoodjs/core/config/webpack.development')
 
-    // Replace imports to "@redwoodjs/router" with our own implementation.
+    // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
     sbConfig.resolve.alias['@redwoodjs/router$'] = require.resolve(
       '@redwoodjs/testing/dist/web/MockRouter.js'
     )
-    // This lets us mock `createAuthentication`, which is used by auth clients,
-    // which in turn lets us mock `useAuth`.
+    // This allows us to mock `createAuthentication` which is used by auth
+    // clients, which in turn lets us mock `useAuth` in tests
     sbConfig.resolve.alias['@redwoodjs/auth$'] = require.resolve(
       '@redwoodjs/testing/dist/web/mockAuth.js'
     )
@@ -69,10 +69,8 @@ const baseConfig = {
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_DEFAULT_CSS'] = false
 
     const supportedStyleIndexFiles = ['index.scss', 'index.sass', 'index.css']
-
     for (const file of supportedStyleIndexFiles) {
       const filePath = path.join(redwoodProjectPaths.web.src, file)
-
       if (fs.existsSync(filePath)) {
         sbConfig.resolve.alias['~__REDWOOD__USER_WEB_DEFAULT_CSS'] = filePath
         break
@@ -87,46 +85,10 @@ const baseConfig = {
     sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] =
       userPreviewPath
 
-    // sb
-    // "extensions": [
-    //   ".mjs",
-    //   ".js",
-    //   ".jsx",
-    //   ".ts",
-    //   ".tsx",
-    //   ".json",
-    //   ".cjs"
-    // ],
-    //
-    // rw
-    // "extensions": [
-    //   ".wasm",
-    //   ".mjs",
-    //   ".js",
-    //   ".jsx",
-    //   ".ts",
-    //   ".tsx",
-    //   ".json"
-    // ],
-    //
-    // diff
-    // "extensions": [
-    //   ".wasm",
-    //   ".cjs",
-    // ],
     sbConfig.resolve.extensions = rwConfig.resolve.extensions
 
-    // sb doesn't have any resolve plugins, and neither do we...
     sbConfig.resolve.plugins = rwConfig.resolve.plugins // Directory Named Plugin
 
-    // sb
-    // "fallback": {
-    //   "crypto": false,
-    //   "assert": "/Users/dom/prjcts/redwood/redwood-app/node_modules/browser-assert/lib/assert.js",
-    //   "path": "/Users/dom/prjcts/redwood/redwood-app/node_modules/path-browserify/index.js",
-    //   "util": "util"
-    // },
-    //
     // Webpack v5 does not include polyfills. Will error without these:
     sbConfig.resolve.fallback = {
       http: false,
@@ -140,13 +102,11 @@ const baseConfig = {
       path: false,
     }
 
-    // ** PLUGINS **
     sbConfig.plugins = [
       ...sbConfig.plugins,
       ...getSharedPlugins(isEnvProduction),
     ]
 
-    // ** LOADERS **
     const sbMdxRule = sbConfig.module.rules.find(
       (rule) => rule.test.toString() === /(stories|story)\.mdx$/.toString()
     )
@@ -163,15 +123,14 @@ const baseConfig = {
       removeEmptyChunks: false,
       splitChunks: false,
     }
-
     // https://webpack.js.org/guides/build-performance/#output-without-path-info
-    // sbConfig.output.pathinfo = false
+    sbConfig.output.pathinfo = false
 
     return sbConfig
   },
 }
 
-function mergeProjectStorybookConfig(baseConfig) {
+function mergeUserStorybookConfig(baseConfig) {
   const hasCustomConfig = fs.existsSync(redwoodProjectPaths.web.storybookConfig)
 
   if (!hasCustomConfig) {
@@ -240,4 +199,4 @@ function moveKeyToFrontOfArray(configs, key) {
 }
 
 /** @returns {import('webpack').Configuration} Webpack Configuration with storybook config */
-module.exports = mergeProjectStorybookConfig(baseConfig)
+module.exports = mergeUserStorybookConfig(baseConfig)

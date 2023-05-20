@@ -23,6 +23,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "storybook": "7.0.12",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
     "postcss-loader": "^7.3.0",
