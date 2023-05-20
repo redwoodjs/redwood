@@ -7097,7 +7097,7 @@ __metadata:
     null-loader: 4.0.1
     react-refresh: 0.14.0
     rimraf: 5.0.1
-    style-loader: 3.3.2
+    style-loader: 3.3.3
     typescript: 5.0.4
     url-loader: 4.1.1
     webpack: 5.83.1
@@ -29929,12 +29929,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-loader@npm:3.3.2":
-  version: 3.3.2
-  resolution: "style-loader@npm:3.3.2"
+"style-loader@npm:3.3.3":
+  version: 3.3.3
+  resolution: "style-loader@npm:3.3.3"
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 8578cedcdcc3e2dc0d9dd3a241032817c33465ae0db5f7b62f99dada148a829abf1a391c517a4aeadfa59a9b7c6991271b0d60d57adab905bc7cfc725893ec16
+  checksum: 104bae8abd0627579dc14f3917cf65f1117e8098e3529872f09c26b5eee07933567b7be5c8ebf94d16e322b6e726dc569c5787111bf3786915850db4e351ef33
   languageName: node
   linkType: hard
 
