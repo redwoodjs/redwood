@@ -19,7 +19,7 @@
     "@redwoodjs/project-config": "5.2.1",
     "@typescript-eslint/eslint-plugin": "5.59.6",
     "@typescript-eslint/parser": "5.59.6",
-    "eslint": "8.40.0",
+    "eslint": "8.41.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-import-resolver-babel-module": "5.3.2",
     "eslint-plugin-babel": "5.3.1",
