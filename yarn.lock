@@ -2685,10 +2685,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.40.0":
-  version: 8.40.0
-  resolution: "@eslint/js@npm:8.40.0"
-  checksum: 0a7253c6aa5d14bda570cde5aff627fc338ca3b6e6226e2cbe7008a095ff244109f7edd1c340465d0aab3cea695ea7eb10bff96e6e9cab60cdd3226ac010041b
+"@eslint/js@npm:8.41.0":
+  version: 8.41.0
+  resolution: "@eslint/js@npm:8.41.0"
+  checksum: 41cf403ccebbc90315c7190bd901fa17975327022146b2db8c846ec5b11d04c56b33ccf9064b9da7349068e96bef8f322423fbcce700d815b4097fd808aaa4c6
   languageName: node
   linkType: hard
 
@@ -7135,7 +7135,7 @@ __metadata:
     "@redwoodjs/project-config": 5.0.0
     "@typescript-eslint/eslint-plugin": 5.59.6
     "@typescript-eslint/parser": 5.59.6
-    eslint: 8.40.0
+    eslint: 8.41.0
     eslint-config-prettier: 8.8.0
     eslint-import-resolver-babel-module: 5.3.2
     eslint-plugin-babel: 5.3.1
@@ -16796,14 +16796,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.40.0":
-  version: 8.40.0
-  resolution: "eslint@npm:8.40.0"
+"eslint@npm:8.41.0":
+  version: 8.41.0
+  resolution: "eslint@npm:8.41.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.4.0
     "@eslint/eslintrc": ^2.0.3
-    "@eslint/js": 8.40.0
+    "@eslint/js": 8.41.0
     "@humanwhocodes/config-array": ^0.11.8
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
@@ -16823,13 +16823,12 @@ __metadata:
     find-up: ^5.0.0
     glob-parent: ^6.0.2
     globals: ^13.19.0
-    grapheme-splitter: ^1.0.4
+    graphemer: ^1.4.0
     ignore: ^5.2.0
     import-fresh: ^3.0.0
     imurmurhash: ^0.1.4
     is-glob: ^4.0.0
     is-path-inside: ^3.0.3
-    js-sdsl: ^4.1.4
     js-yaml: ^4.1.0
     json-stable-stringify-without-jsonify: ^1.0.1
     levn: ^0.4.1
@@ -16842,7 +16841,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: dfd4dbb5e2771d7c81852f29cec658fd9d29a0f252b6e962505ee8cd8b9c2c50707ebd7379333836b04514375268e7c09927372601d08354a151fe5db7d760a8
+  checksum: d71832b235bebaa67c09019dee32bf8393c5e12155e91131c4606670eb9836fbff31e11364408258cb75e2bde8a4dfa0c042aa6145bb23cd800a42e63ca4a035
   languageName: node
   linkType: hard
 
@@ -18864,6 +18863,13 @@ __metadata:
   version: 1.0.4
   resolution: "grapheme-splitter@npm:1.0.4"
   checksum: 108415fb07ac913f17040dc336607772fcea68c7f495ef91887edddb0b0f5ff7bc1d1ab181b125ecb2f0505669ef12c9a178a3bbd2dd8e042d8c5f1d7c90331a
+  languageName: node
+  linkType: hard
+
+"graphemer@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "graphemer@npm:1.4.0"
+  checksum: e951259d8cd2e0d196c72ec711add7115d42eb9a8146c8eeda5b8d3ac91e5dd816b9cd68920726d9fd4490368e7ed86e9c423f40db87e2d8dfafa00fa17c3a31
   languageName: node
   linkType: hard
 
@@ -21578,13 +21584,6 @@ __metadata:
   version: 1.1.6
   resolution: "js-levenshtein@npm:1.1.6"
   checksum: 14045735325ea1fd87f434a74b11d8a14380f090f154747e613529c7cff68b5ee607f5230fa40665d5fb6125a3791f4c223f73b9feca754f989b059f5c05864f
-  languageName: node
-  linkType: hard
-
-"js-sdsl@npm:^4.1.4":
-  version: 4.3.0
-  resolution: "js-sdsl@npm:4.3.0"
-  checksum: cd3c342d08ed646d271bc59e5da12d732fee4a6fa32a30f6552d66cdf5c744b1fc5b61cddaff80702c1c6bb92add3b17ce0b6ff8a2cc7f9188df4065183aa7fb
   languageName: node
   linkType: hard
 
@@ -28341,7 +28340,7 @@ __metadata:
     core-js: 3.30.2
     cypress: 12.12.0
     cypress-wait-until: 1.7.2
-    eslint: 8.40.0
+    eslint: 8.41.0
     fast-glob: 3.2.12
     fs-extra: 11.1.1
     is-port-reachable: 3.1.0
