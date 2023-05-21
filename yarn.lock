@@ -7556,7 +7556,7 @@ __metadata:
     "@vitejs/plugin-react": 4.0.0
     buffer: 6.0.3
     core-js: 3.30.2
-    glob: 10.2.5
+    glob: 10.2.6
     jest: 29.5.0
     typescript: 5.0.4
     vite: 4.3.8
@@ -18610,18 +18610,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.2.5, glob@npm:^10.2.5":
-  version: 10.2.5
-  resolution: "glob@npm:10.2.5"
+"glob@npm:10.2.6, glob@npm:^10.2.5":
+  version: 10.2.6
+  resolution: "glob@npm:10.2.6"
   dependencies:
     foreground-child: ^3.1.0
     jackspeak: ^2.0.3
-    minimatch: ^9.0.0
+    minimatch: ^9.0.1
     minipass: ^5.0.0 || ^6.0.2
     path-scurry: ^1.7.0
   bin:
     glob: dist/cjs/src/bin.js
-  checksum: 7c3cdf44fd4a1f85c91ce948a0a94b0bac248bc3ee0bcce7ea95646e8f290acf5da7305a37cbfefb5286cd3365eaa3c94f2c5f43c2d2cdb5c818cdd978514c1b
+  checksum: 5c80777fd10ee780095ae428fe2c2e57ec81bddae2e3be0174e515360de77075c28061c47f3aab06c226f50ef13371dbb2b5ff02241abc511bed1f2d60f74edf
   languageName: node
   linkType: hard
 
@@ -23603,12 +23603,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "minimatch@npm:9.0.0"
+"minimatch@npm:^9.0.0, minimatch@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "minimatch@npm:9.0.1"
   dependencies:
     brace-expansion: ^2.0.1
-  checksum: d966656c280a994f89c3711e8cdac0c78d8703d028a26722d0229e3e92bf515a065165caa64cbccdd7ca89bb0338a3094920f8d42d36295c4d55922e19ae366e
+  checksum: aa043eb8822210b39888a5d0d28df0017b365af5add9bd522f180d2a6962de1cbbf1bdeacdb1b17f410dc3336bc8d76fb1d3e814cdc65d00c2f68e01f0010096
   languageName: node
   linkType: hard
 
