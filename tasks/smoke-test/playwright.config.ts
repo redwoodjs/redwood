@@ -16,27 +16,24 @@ const config: PlaywrightTestConfig = {
   //     headless: false,
   //   },
   // },
-  projects: process.env.CI // use replay browsers in CI
-    ? [
-        {
-          name: 'replay-firefox',
-          use: { ...(replayDevices['Replay Firefox'] as any) },
-        },
-        {
-          name: 'replay-chromium',
-          use: { ...(replayDevices['Replay Chromium'] as any) },
-        },
-      ]
-    : [
-        {
-          name: 'firefox',
-          use: { ...devices['Desktop Firefox'] },
-        },
-        {
-          name: 'chromium',
-          use: { ...devices['Desktop Chromium'] },
-        },
-      ],
+  projects: [
+    {
+      name: 'replay-firefox',
+      use: { ...(replayDevices['Replay Firefox'] as any) },
+    },
+    {
+      name: 'replay-chromium',
+      use: { ...(replayDevices['Replay Chromium'] as any) },
+    },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chromium'] },
+    },
+  ],
 }
 
 export default config

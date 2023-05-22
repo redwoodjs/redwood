@@ -85,7 +85,7 @@ const test = base.extend<any, DevServerFixtures>({
             WEB_DEV_PORT: webServerPort,
             API_DEV_PORT: apiServerPort,
           },
-          cleanup: false,
+          cleanup: true,
         }
       )
 
