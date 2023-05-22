@@ -7105,7 +7105,7 @@ __metadata:
     webpack-cli: 5.1.1
     webpack-dev-server: 4.15.0
     webpack-manifest-plugin: 5.0.0
-    webpack-merge: 5.8.0
+    webpack-merge: 5.9.0
     webpack-retry-chunk-load-plugin: 3.1.1
   bin:
     cross-env: ./dist/bins/cross-env.js
@@ -32338,13 +32338,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-merge@npm:5.8.0, webpack-merge@npm:^5.7.3":
-  version: 5.8.0
-  resolution: "webpack-merge@npm:5.8.0"
+"webpack-merge@npm:5.9.0, webpack-merge@npm:^5.7.3":
+  version: 5.9.0
+  resolution: "webpack-merge@npm:5.9.0"
   dependencies:
     clone-deep: ^4.0.1
     wildcard: ^2.0.0
-  checksum: 400eaaba69d2240d51dc7a4427dde37849a8f2fdf93731be6a8aad34d70d55bb38cb10c5001c7b339fc91f8c8547e782ecbd79eff24ad861e21e6a4c5dc959fb
+  checksum: 74935a4b03612ee65c0867ca1050788ccfec3efa6d17bb5acceacbd4fbbd0356a073997723eff7380deccd88f13a55c52cb004e80e34f3a67808ac455da6ad64
   languageName: node
   linkType: hard
 
