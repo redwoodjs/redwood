@@ -78,10 +78,11 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 }
 
 export const bothServerHandler = async (options: BothServerArgs) => {
+  const redwoodProjectConfig = getConfig()
   const { port, socket } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
-  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
+  const apiRootPath = coerceRootPath(redwoodProjectConfig.web.apiUrl)
 
   let fastify = createFastifyInstance()
 
@@ -89,7 +90,7 @@ export const bothServerHandler = async (options: BothServerArgs) => {
   fastify = await withWebServer(fastify, options)
   fastify = await withFunctions(fastify, { ...options, apiRootPath })
 
-  const host = getConfig().web.host || 'localhost'
+  const host = redwoodProjectConfig.web.host ?? 'localhost'
   startFastifyServer({
     port,
     host,
@@ -112,14 +113,15 @@ export const bothServerHandler = async (options: BothServerArgs) => {
 }
 
 export const webServerHandler = async (options: WebServerArgs) => {
+  const redwoodProjectConfig = getConfig()
   const { port, socket, apiHost } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
-  const apiUrl = getConfig().web.apiUrl
+  const apiUrl = redwoodProjectConfig.web.apiUrl
   // Construct the graphql url from apiUrl by default
   // But if apiGraphQLUrl is specified, use that instead
   const graphqlEndpoint = coerceRootPath(
-    getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
+    redwoodProjectConfig.web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
   let fastify = createFastifyInstance()
@@ -134,7 +136,7 @@ export const webServerHandler = async (options: WebServerArgs) => {
     fastify = await withApiProxy(fastify, { apiHost, apiUrl })
   }
 
-  const host = getConfig().web.host || 'localhost'
+  const host = redwoodProjectConfig.web.host ?? 'localhost'
   startFastifyServer({
     port: port,
     host,
