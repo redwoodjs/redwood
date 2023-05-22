@@ -55,8 +55,10 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
   // Import Server Functions.
   fastify = await withFunctions(fastify, options)
 
+  const host = getConfig().api.host || 'localhost'
   const http = startFastifyServer({
     port,
+    host,
     socket,
     fastify,
   }).ready(() => {
@@ -64,7 +66,7 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 
     const on = socket
       ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
+      : c.magenta(`http://${host}:${port}${apiRootPath}`)
     console.log(`API listening on ${on}`)
     const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
@@ -87,17 +89,19 @@ export const bothServerHandler = async (options: BothServerArgs) => {
   fastify = await withWebServer(fastify, options)
   fastify = await withFunctions(fastify, { ...options, apiRootPath })
 
+  const host = getConfig().web.host || 'localhost'
   startFastifyServer({
     port,
+    host,
     socket,
     fastify,
   }).ready(() => {
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
     const on = socket
       ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
-    const webServer = c.green(`http://localhost:${port}`)
-    const apiServer = c.magenta(`http://localhost:${port}`)
+      : c.magenta(`http://${host}:${port}${apiRootPath}`)
+    const webServer = c.green(`http://${host}:${port}`)
+    const apiServer = c.magenta(`http://${host}:${port}`)
     console.log(`Web server started on ${webServer}`)
     console.log(`API serving from ${apiServer}`)
     console.log(`API listening on ${on}`)
@@ -130,8 +134,10 @@ export const webServerHandler = async (options: WebServerArgs) => {
     fastify = await withApiProxy(fastify, { apiHost, apiUrl })
   }
 
+  const host = getConfig().web.host || 'localhost'
   startFastifyServer({
     port: port,
+    host,
     socket,
     fastify,
   }).ready(() => {
@@ -139,7 +145,7 @@ export const webServerHandler = async (options: WebServerArgs) => {
     if (socket) {
       console.log(`Listening on ` + c.magenta(`${socket}`))
     }
-    const webServer = c.green(`http://localhost:${port}`)
+    const webServer = c.green(`http://${host}:${port}`)
     console.log(`Web server started on ${webServer}`)
     console.log(`GraphQL endpoint is set to ` + c.magenta(`${graphqlEndpoint}`))
     sendProcessReady()
