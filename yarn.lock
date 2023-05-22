@@ -7331,7 +7331,7 @@ __metadata:
   dependencies:
     "@iarna/toml": 2.2.5
     deepmerge: 4.3.1
-    dependency-cruiser: 13.0.1
+    dependency-cruiser: 13.0.2
     esbuild: 0.17.19
     fast-glob: 3.2.12
     jest: 29.5.0
@@ -15553,9 +15553,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dependency-cruiser@npm:13.0.1":
-  version: 13.0.1
-  resolution: "dependency-cruiser@npm:13.0.1"
+"dependency-cruiser@npm:13.0.2":
+  version: 13.0.2
+  resolution: "dependency-cruiser@npm:13.0.2"
   dependencies:
     acorn: 8.8.2
     acorn-jsx: 5.3.2
@@ -15568,7 +15568,7 @@ __metadata:
     enhanced-resolve: 5.14.0
     figures: 5.0.0
     get-stream: ^6.0.1
-    glob: 10.2.4
+    glob: 10.2.6
     handlebars: 4.7.7
     ignore: 5.2.4
     indent-string: 5.0.0
@@ -15592,7 +15592,7 @@ __metadata:
     depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.mjs
     dependency-cruise: bin/dependency-cruise.mjs
     dependency-cruiser: bin/dependency-cruise.mjs
-  checksum: 3b0765d0f4825ce8d5d8e30e30b5ca62bac32af4ed023002979259e6a463fc52e9d1353fd5d366fb4ba59b00ada0a5535c395b49383bc5553d469fe7751b3310
+  checksum: 84583d7b92018c6e787965663bb0bdbbd337fcf9611fef3b6d91c2266e720265d9e743f566fbcfff532b171eff6da596f207c486acff12cbdf4597657d4f1885
   languageName: node
   linkType: hard
 
@@ -18591,21 +18591,6 @@ __metadata:
   version: 0.3.0
   resolution: "glob-to-regexp@npm:0.3.0"
   checksum: f7e8091288d88b397b715281560d86ba4998246c300cb0d51db483db0a4c68cb48b489af8da9c03262745e8aa5337ba596d82dee61ff9467c5d7c27d70b676aa
-  languageName: node
-  linkType: hard
-
-"glob@npm:10.2.4":
-  version: 10.2.4
-  resolution: "glob@npm:10.2.4"
-  dependencies:
-    foreground-child: ^3.1.0
-    jackspeak: ^2.0.3
-    minimatch: ^9.0.0
-    minipass: ^5.0.0 || ^6.0.0
-    path-scurry: ^1.7.0
-  bin:
-    glob: dist/cjs/src/bin.js
-  checksum: c7714ad2394dcbbbd87468fc9bbfe1b17beff1d71bdb874e4dc02c36a6e6257fb26c0fb6d053f2e15edbc25cf42670dce9f3b7a0d970960f96010149d60f1a8e
   languageName: node
   linkType: hard
 
@@ -23743,7 +23728,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minipass@npm:^5.0.0 || ^6.0.0, minipass@npm:^5.0.0 || ^6.0.2":
+"minipass@npm:^5.0.0 || ^6.0.2":
   version: 6.0.2
   resolution: "minipass@npm:6.0.2"
   checksum: 3878076578f44ef4078ceed10af2cfebbec1b6217bf9f7a3d8b940da8153769db29bf88498b2de0d1e0c12dfb7b634c5729b7ca03457f46435e801578add210a
