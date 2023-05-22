@@ -28,7 +28,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/parser": "7.21.8",
+    "@babel/parser": "7.21.9",
     "@babel/plugin-transform-typescript": "7.21.3",
     "@babel/register": "7.21.0",
     "@babel/runtime-corejs3": "7.21.5",
