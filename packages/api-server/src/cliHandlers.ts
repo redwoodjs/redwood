@@ -55,7 +55,7 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
   // Import Server Functions.
   fastify = await withFunctions(fastify, options)
 
-  const host = getConfig().api.host || 'localhost'
+  const host = getConfig().api.host ?? 'localhost'
   const http = startFastifyServer({
     port,
     host,
