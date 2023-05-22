@@ -60,11 +60,7 @@ const test = base.extend<any, DevServerFixtures>({
       ])
 
       if (serversUp.some((server) => server === true)) {
-        console.log('Killing previous servers')
-
-        // throw new Error(
-        //   'One or more servers are already up, please kill them first'
-        // )
+        console.log('Found previous instances of dev server. Killing!')
 
         shutdownPort(webServerPort)
         shutdownPort(apiServerPort)
@@ -75,19 +71,16 @@ const test = base.extend<any, DevServerFixtures>({
       console.log(`Launching dev server at ${projectPath}`)
 
       // Don't wait for this to finish, because it doesn't
-      devServerHandler = execa(
-        `yarn rw dev --no-generate --fwd="--open false"`,
-        {
-          cwd: projectPath,
-          shell: true,
-          detached: false,
-          env: {
-            WEB_DEV_PORT: webServerPort,
-            API_DEV_PORT: apiServerPort,
-          },
-          cleanup: true,
-        }
-      )
+      devServerHandler = execa(`yarn rw dev --no-generate --fwd="--no-open"`, {
+        cwd: projectPath,
+        shell: true,
+        detached: false,
+        env: {
+          WEB_DEV_PORT: webServerPort,
+          API_DEV_PORT: apiServerPort,
+        },
+        cleanup: true,
+      })
 
       // Pipe out logs so we can debug, when required
       devServerHandler.stdout?.on('data', (data) => {
@@ -119,7 +112,7 @@ const test = base.extend<any, DevServerFixtures>({
       // Re-using could be more efficient, but it seems to cause inconsistency
       // It seems our Vite server gets killed after a run, but the API server does not
       if (devServerHandler) {
-        console.log('Killing dev server')
+        console.log('Test complete. Killing dev server.')
         devServerHandler?.kill()
         shutdownPort(webServerPort)
         shutdownPort(apiServerPort)
