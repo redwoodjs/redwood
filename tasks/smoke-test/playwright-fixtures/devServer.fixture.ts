@@ -47,7 +47,7 @@ const test = base.extend<any, DevServerFixtures>({
         )
       }
 
-      const isServerAlreadyUp = await isPortReachable(webServerPort, {
+      const isServerAlreadyUp = await isPortReachable(apiServerPort, {
         timeout: 5000,
       })
 
@@ -63,19 +63,16 @@ const test = base.extend<any, DevServerFixtures>({
         console.log(`Launching dev server at ${projectPath}`)
 
         // Don't wait for this to finish, because it doesn't
-        devServerHandler = execa(
-          `yarn rw dev --fwd="--no-open" --no-generate`,
-          {
-            cwd: projectPath,
-            shell: true,
-            detached: false,
-            env: {
-              WEB_DEV_PORT: webServerPort,
-              API_DEV_PORT: apiServerPort,
-            },
-            cleanup: true,
-          }
-        )
+        devServerHandler = execa(`yarn rw dev --no-generate`, {
+          cwd: projectPath,
+          shell: true,
+          detached: false,
+          env: {
+            WEB_DEV_PORT: webServerPort,
+            API_DEV_PORT: apiServerPort,
+          },
+          cleanup: true,
+        })
 
         // Pipe out logs so we can debug, when required
         devServerHandler.stdout.on('data', (data) => {
@@ -93,7 +90,7 @@ const test = base.extend<any, DevServerFixtures>({
       }
 
       console.log('Waiting for dev servers.....')
-      await waitForServer(webServerPort)
+      // await waitForServer(webServerPort)
       await waitForServer(apiServerPort)
 
       console.log('Starting tests!')
