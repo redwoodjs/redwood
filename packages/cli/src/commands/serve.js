@@ -50,6 +50,10 @@ export const builder = async (yargs) => {
             type: 'number',
             alias: 'p',
           },
+          host: {
+            default: getConfig().web?.host || 'localhost',
+            type: 'string',
+          },
           socket: { type: 'string' },
         }),
     })
@@ -66,6 +70,10 @@ export const builder = async (yargs) => {
             default: getConfig().api?.port || 8911,
             type: 'number',
             alias: 'p',
+          },
+          host: {
+            default: getConfig().api?.host || 'localhost',
+            type: 'string',
           },
           socket: { type: 'string' },
           apiRootPath: {
@@ -90,6 +98,10 @@ export const builder = async (yargs) => {
             default: getConfig().web?.port || 8910,
             type: 'number',
             alias: 'p',
+          },
+          host: {
+            default: getConfig().web?.host || 'localhost',
+            type: 'string',
           },
           socket: { type: 'string' },
           apiHost: {

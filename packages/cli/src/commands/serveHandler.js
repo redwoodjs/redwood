@@ -10,7 +10,7 @@ import { withApiProxy } from '@redwoodjs/fastify/dist/plugins/withApiProxy'
 import { getConfig } from '@redwoodjs/project-config'
 
 export const apiServerHandler = async (options) => {
-  const { port, socket, apiRootPath } = options
+  const { port, host, socket, apiRootPath } = options
   const tsApiServer = Date.now()
 
   console.log(chalk.dim.italic('Starting API Server...'))
@@ -29,7 +29,7 @@ export const apiServerHandler = async (options) => {
 
   fastify.listen({
     port: socket ? parseInt(socket) : port,
-    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    host,
   })
 
   fastify.ready(() => {
@@ -42,7 +42,7 @@ export const apiServerHandler = async (options) => {
 
     const on = socket
       ? socket
-      : chalk.magenta(`http://localhost:${port}${apiRootPath}`)
+      : chalk.magenta(`http://${host}:${port}${apiRootPath}`)
 
     console.log(`API listening on ${on}`)
     const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)
@@ -53,7 +53,7 @@ export const apiServerHandler = async (options) => {
 }
 
 export const bothServerHandler = async (options) => {
-  const { port, socket } = options
+  const { port, host, socket } = options
   const tsServer = Date.now()
 
   console.log(chalk.italic.dim('Starting API and Web Servers...'))
@@ -81,7 +81,7 @@ export const bothServerHandler = async (options) => {
 
   fastify.listen({
     port: socket ? parseInt(socket) : port,
-    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    host,
   })
 
   fastify.ready(() => {
@@ -89,10 +89,10 @@ export const bothServerHandler = async (options) => {
 
     const on = socket
       ? socket
-      : chalk.magenta(`http://localhost:${port}${apiRootPath}`)
+      : chalk.magenta(`http://${host}:${port}${apiRootPath}`)
 
-    const webServer = chalk.green(`http://localhost:${port}`)
-    const apiServer = chalk.magenta(`http://localhost:${port}`)
+    const webServer = chalk.green(`http://${host}:${port}`)
+    const apiServer = chalk.magenta(`http://${host}:${port}`)
     console.log(`Web server started on ${webServer}`)
     console.log(`API serving from ${apiServer}`)
     console.log(`API listening on ${on}`)
@@ -104,7 +104,7 @@ export const bothServerHandler = async (options) => {
 }
 
 export const webServerHandler = async (options) => {
-  const { port, socket, apiHost } = options
+  const { port, host, socket, apiHost } = options
 
   const tsServer = Date.now()
   console.log(chalk.dim.italic('Starting Web Server...'))
@@ -138,7 +138,7 @@ export const webServerHandler = async (options) => {
 
   fastify.listen({
     port: socket ? parseInt(socket) : port,
-    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    host,
   })
 
   fastify.ready(() => {
@@ -148,7 +148,7 @@ export const webServerHandler = async (options) => {
       console.log(`Listening on ` + chalk.magenta(`${socket}`))
     }
 
-    const webServer = chalk.green(`http://localhost:${port}`)
+    const webServer = chalk.green(`http://${host}:${port}`)
     console.log(`Web server started on ${webServer}`)
     console.log(
       `GraphQL endpoint is set to ` + chalk.magenta(`${graphqlEndpoint}`)
