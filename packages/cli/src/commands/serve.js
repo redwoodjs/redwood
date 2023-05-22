@@ -11,14 +11,20 @@ import c from '../lib/colors'
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
-export const builder = async (yargs) => {
+export async function builder(yargs) {
+  const redwoodProjectPaths = getPaths()
+  const redwoodProjectConfig = getConfig()
+
   yargs
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
       descriptions: 'Run both api and web servers',
       handler: async (argv) => {
-        const serverFilePath = path.join(getPaths().api.dist, 'server.js')
+        const serverFilePath = path.join(
+          redwoodProjectPaths.api.dist,
+          'server.js'
+        )
 
         if (fs.existsSync(serverFilePath)) {
           console.log(
@@ -32,7 +38,7 @@ export const builder = async (yargs) => {
           )
 
           await execa('yarn', ['node', path.join('dist', 'server.js')], {
-            cwd: getPaths().api.base,
+            cwd: redwoodProjectPaths.api.base,
             stdio: 'inherit',
             shell: true,
           })
@@ -46,12 +52,12 @@ export const builder = async (yargs) => {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: getConfig().web?.port || 8910,
+            default: redwoodProjectConfig.web?.port || 8910,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: getConfig().web?.host || 'localhost',
+            default: redwoodProjectConfig.web?.host || 'localhost',
             type: 'string',
           },
           socket: { type: 'string' },
@@ -67,12 +73,12 @@ export const builder = async (yargs) => {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: getConfig().api?.port || 8911,
+            default: redwoodProjectConfig.api?.port || 8911,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: getConfig().api?.host || 'localhost',
+            default: redwoodProjectConfig.api?.host || 'localhost',
             type: 'string',
           },
           socket: { type: 'string' },
@@ -95,12 +101,12 @@ export const builder = async (yargs) => {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: getConfig().web?.port || 8910,
+            default: redwoodProjectConfig.web?.port || 8910,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: getConfig().web?.host || 'localhost',
+            default: redwoodProjectConfig.web?.host || 'localhost',
             type: 'string',
           },
           socket: { type: 'string' },
@@ -117,7 +123,7 @@ export const builder = async (yargs) => {
 
       if (
         positionalArgs.includes('web') &&
-        !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
+        !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html')
       ) {
         console.error(
           c.error(
@@ -129,7 +135,7 @@ export const builder = async (yargs) => {
 
       if (
         positionalArgs.includes('api') &&
-        !fs.existsSync(path.join(getPaths().api.dist))
+        !fs.existsSync(path.join(redwoodProjectPaths.api.dist))
       ) {
         console.error(
           c.error(
@@ -142,8 +148,8 @@ export const builder = async (yargs) => {
       if (
         // serve both
         positionalArgs.length === 1 &&
-        (!fs.existsSync(path.join(getPaths().api.dist)) ||
-          !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
+        (!fs.existsSync(path.join(redwoodProjectPaths.api.dist)) ||
+          !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html'))
       ) {
         console.error(
           c.error(
@@ -170,6 +176,9 @@ const separator = chalk.hex('#ff845e')(
   '------------------------------------------------------------------'
 )
 
+// We'll clean this up later, but for now note that this function is
+// duplicated between this package and @redwoodjs/fastify
+// to avoid importing @redwoodjs/fastify when the CLI starts.
 export function coerceRootPath(path) {
   // Make sure that we create a root path that starts and ends with a slash (/)
   const prefix = path.charAt(0) !== '/' ? '/' : ''
