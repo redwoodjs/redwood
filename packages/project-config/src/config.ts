@@ -99,7 +99,17 @@ export interface Config {
       apiSdk?: string
     }
     studio: StudioConfig
+    cli: {
+      autoInstall: boolean
+      plugins: CLIPlugin[]
+    }
   }
+}
+
+export interface CLIPlugin {
+  package: string
+  version: string
+  enabled?: boolean
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -156,6 +166,10 @@ const DEFAULT_CONFIG: Config = {
           jwtSecret: 'secret',
         },
       },
+    },
+    cli: {
+      autoInstall: false,
+      plugins: [],
     },
   },
 }
