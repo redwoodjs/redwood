@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-supabase-setup",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.21.5",
-    "@redwoodjs/cli-helpers": "5.2.1",
+    "@redwoodjs/cli-helpers": "5.2.2",
     "core-js": "3.30.2"
   },
   "devDependencies": {
