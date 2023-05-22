@@ -81,7 +81,7 @@ export const GraphQLHooksProvider = <
       value={{
         useQuery,
         useMutation,
-        useSubscription
+        useSubscription,
       }}
     >
       {children}
@@ -122,8 +122,8 @@ export function useSubscription<
   query: DocumentNode,
   options?: GraphQLSubscriptionHookOptions<TData, TVariables>
 ): SubscriptionOperationResult<TData, TVariables> {
-  return React.useContext(GraphQLHooksContext).useSubscription<TData, TVariables>(
-    query,
-    options
-  )
+  return React.useContext(GraphQLHooksContext).useSubscription<
+    TData,
+    TVariables
+  >(query, options)
 }

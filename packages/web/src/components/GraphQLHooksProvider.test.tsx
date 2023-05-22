@@ -9,7 +9,7 @@ import {
   GraphQLHooksProvider,
   useQuery,
   useMutation,
-  useSubscription
+  useSubscription,
 } from './GraphQLHooksProvider'
 
 const TestUseQueryHook: React.FunctionComponent = () => {
@@ -56,7 +56,11 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null} useSubscription={null}>
+      <GraphQLHooksProvider
+        useQuery={myUseQueryHook}
+        useMutation={null}
+        useSubscription={null}
+      >
         <TestUseQueryHook />
       </GraphQLHooksProvider>
     )
@@ -72,7 +76,11 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider useQuery={null} useMutation={myUseMutationHook} useSubscription={null}>
+      <GraphQLHooksProvider
+        useQuery={null}
+        useMutation={myUseMutationHook}
+        useSubscription={null}
+      >
         <TestUseMutationHook />
       </GraphQLHooksProvider>
     )
@@ -111,7 +119,11 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider useQuery={null} useMutation={null} useSubscription={myUseSubscriptionHook}>
+      <GraphQLHooksProvider
+        useQuery={null}
+        useMutation={null}
+        useSubscription={myUseSubscriptionHook}
+      >
         <TestUseSubscriptionHook />
       </GraphQLHooksProvider>
     )
