@@ -5,7 +5,7 @@ import { usePageLoadingContext } from './PageLoadingContext'
 import { routes as namedRoutes } from './router'
 import { useRouterState } from './router-context'
 
-type WrapperType<WTProps> = (
+export type WrapperType<WTProps> = (
   props: WTProps & { children: ReactNode }
 ) => ReactElement | null
 
@@ -161,5 +161,13 @@ export function Private<WrapperProps>(props: PrivateProps<WrapperProps>) {
     >
       {children}
     </Set>
+  )
+}
+
+export const isSetNode = (
+  node: ReactNode
+): node is ReactElement<SetProps<any>> => {
+  return (
+    React.isValidElement(node) && (node.type === Set || node.type === Private)
   )
 }

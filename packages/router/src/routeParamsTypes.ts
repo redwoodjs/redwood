@@ -87,7 +87,7 @@ type ParsedParams<PartialRoute> =
     : // last one with no type e.g. {d} - just a param
     PartialRoute extends `${string}{${infer Param}}${string}`
     ? JustParamNoType<Param>
-    : // if there's a non param
+    : // if theres a non param
     PartialRoute extends `${string}/${infer Rest}`
     ? ParsedParams<`${Rest}`>
     : // Fallback when doesn't match any of these

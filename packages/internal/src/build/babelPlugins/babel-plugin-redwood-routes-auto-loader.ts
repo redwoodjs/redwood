@@ -114,13 +114,36 @@ export default function (
             return
           }
           const nodes = []
+
+          // Add "import {lazy} from 'react'"
+          nodes.unshift(
+            t.importDeclaration(
+              [t.importSpecifier(t.identifier('lazy'), t.identifier('lazy'))],
+              t.stringLiteral('react')
+            )
+          )
+
           // Prepend all imports to the top of the file
           for (const { importName, relativeImport } of pages) {
-            // + const <importName> = {
+            //  const <importName> = {
             //     name: <importName>,
             //     loader: () => import(/* webpackChunkName: "<importName>" */ <relativeImportPath>)
             //     prerenderLoader: (name) => prerenderLoaderImpl
+            //     LazyComponent: lazy(() => import(<relativeImportPath>)
             //   }
+
+            /**
+             * Real example
+             * const LoginPage = {
+             *  name: "LoginPage",
+             *  loader: () => import(
+             *    /* webpackChunkName: "LoginPage" * /
+             *    "/pages/LoginPage/LoginPage.tsx"
+             *  ),
+             *  prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
+             *  LazyComponent: lazy(() => import("/pages/LoginPage/LoginPage.tsx"))
+             * }
+             */
 
             const importArgument = t.stringLiteral(relativeImport)
 
@@ -160,6 +183,17 @@ export default function (
                         [t.identifier('name')],
                         prerenderLoaderImpl(prerender, vite, relativeImport, t)
                       )
+                    ),
+                    t.objectProperty(
+                      t.identifier('LazyComponent'),
+                      t.callExpression(t.identifier('lazy'), [
+                        t.arrowFunctionExpression(
+                          [],
+                          t.callExpression(t.identifier('import'), [
+                            t.stringLiteral(relativeImport),
+                          ])
+                        ),
+                      ])
                     ),
                   ])
                 ),
