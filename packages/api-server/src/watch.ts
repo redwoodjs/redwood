@@ -40,10 +40,6 @@ const argv = yargs(hideBin(process.argv))
   })
   .parseSync()
 
-console.log({
-  argv,
-})
-
 dotenv.config({
   path: redwoodProjectPaths.base,
 })
