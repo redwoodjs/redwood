@@ -146,30 +146,32 @@ export const handler = async ({
           watchNodeModules ? '1' : ''
         } webpack serve --config "${webpackDevConfig}" ${forward}`
 
+  const apiCommand = [
+    'yarn',
+    'cross-env',
+    'NODE_ENV=development',
+    'NODE_OPTIONS=--enable-source-maps',
+    'yarn',
+    'nodemon',
+    '--quiet',
+    `--watch "${redwoodConfigPath}"`,
+    '--exec',
+    `"${[
+      'yarn',
+      'rw-api-server-watch',
+      `--port ${apiAvailablePort}`,
+      `--host ${redwoodProjectConfig.web.host}`,
+      getApiDebugFlag(),
+      '|',
+      'rw-log-formatter',
+    ].join(' ')}"`,
+  ].join(' ')
+
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: [
-        'yarn',
-        'cross-env',
-        'NODE_ENV=development',
-        'NODE_OPTIONS=--enable-source-maps',
-        'yarn',
-        'nodemon',
-        '--quiet',
-        `--watch "${redwoodConfigPath}"`,
-        '--exec',
-        `"${[
-          'yarn',
-          'rw-api-server-watch',
-          `--port ${apiAvailablePort}`,
-          `--host ${redwoodProjectConfig.web.host}`,
-          getApiDebugFlag(),
-          '|',
-          'rw-log-formatter',
-        ].join(' ')}"`,
-      ].join(' '),
+      command: apiCommand,
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(redwoodProjectPaths.api.src),
     },
