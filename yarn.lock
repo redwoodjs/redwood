@@ -25031,9 +25031,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"octokit@npm:2.0.16":
-  version: 2.0.16
-  resolution: "octokit@npm:2.0.16"
+"octokit@npm:2.0.18":
+  version: 2.0.18
+  resolution: "octokit@npm:2.0.18"
   dependencies:
     "@octokit/app": ^13.1.3
     "@octokit/core": ^4.2.1
@@ -25043,7 +25043,7 @@ __metadata:
     "@octokit/plugin-retry": ^4.1.3
     "@octokit/plugin-throttling": ^5.2.2
     "@octokit/types": ^9.2.2
-  checksum: 7e87ead10b655f70d400984539a1952da9ab892d0ce4b13425131a1c3306d0ec572492f70c10ecd108399edeedba75a74e764f2ad567336036fed6fb813d76cc
+  checksum: 0e8d47025e76f32c677e1b279257caa227b251dae7773470febfbbe68adca76c39ff02d7665b31495a2f0149e40ba5fd3760aff1a9896d4e0b2e9ca887460a69
   languageName: node
   linkType: hard
 
@@ -28342,7 +28342,7 @@ __metadata:
     npm-packlist: 7.0.4
     nx: 16.2.1
     nx-cloud: 16.0.5
-    octokit: 2.0.16
+    octokit: 2.0.18
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 5.0.1
