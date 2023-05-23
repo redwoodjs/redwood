@@ -23,12 +23,12 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port ?? 8910,
+            default: redwoodProjectConfig.web.port,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: redwoodProjectConfig.web.host ?? 'localhost',
+            default: redwoodProjectConfig.web.host,
             type: 'string',
             alias: 'h',
           },
@@ -70,12 +70,12 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.api.port ?? 8911,
+            default: redwoodProjectConfig.api.port,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: redwoodProjectConfig.api.host ?? 'localhost',
+            default: redwoodProjectConfig.api.host,
             type: 'string',
             alias: 'h',
           },
@@ -99,12 +99,12 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port ?? 8910,
+            default: redwoodProjectConfig.web.port,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: redwoodProjectConfig.web.host ?? 'localhost',
+            default: redwoodProjectConfig.web.host,
             type: 'string',
             alias: 'h',
           },
