@@ -27,6 +27,11 @@ const argv = yargs(hideBin(process.argv))
     description: 'Port',
     type: 'number',
   })
+  .option('host', {
+    alias: 'h',
+    description: 'Host',
+    type: 'string',
+  })
   .help()
   .alias('help', 'h')
   .parseSync()
@@ -102,11 +107,12 @@ const rebuildApiServer = () => {
     }
 
     const port = argv.port ?? getConfig().api.port
+    const host = argv.host ?? getConfig().api.host
 
     // Start API server
     httpServerProcess = fork(
       path.join(__dirname, 'index.js'),
-      ['api', '--port', port.toString()],
+      ['api', '--port', port.toString(), '--host', host],
       forkOpts
     )
   } catch (e) {
