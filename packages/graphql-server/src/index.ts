@@ -31,4 +31,6 @@ export {
   useRedwoodDirective,
 } from './plugins/useRedwoodDirective'
 
+export { useRedwoodLiveQuery } from './plugins/useRedwoodLiveQuery'
+
 export * as rootSchema from './rootSchema'
