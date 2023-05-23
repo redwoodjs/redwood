@@ -87,6 +87,7 @@ export const listQueryTypeFieldsInProject = async () => {
       [print(rootSchema.schema)]: {},
       'graphql/**/*.sdl.{js,ts}': {},
       'directives/**/*.{js,ts}': {},
+      'subscriptions/**/*.{js,ts}': {},
     }
 
     const mergedSchema = await loadSchema(schemaPointerMap, {
