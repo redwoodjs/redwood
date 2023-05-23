@@ -527,22 +527,22 @@ __metadata:
   linkType: hard
 
 "@graphiql/plugin-explorer@npm:^0.1.14":
-  version: 0.1.18
-  resolution: "@graphiql/plugin-explorer@npm:0.1.18"
+  version: 0.1.19
+  resolution: "@graphiql/plugin-explorer@npm:0.1.19"
   dependencies:
-    "@graphiql/react": ^0.17.4
+    "@graphiql/react": ^0.17.5
     graphiql-explorer: ^0.9.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 74435b5989e6e773500a81c6b921a56e52639a3bf8c53f9f04bdd31302aacef0d74ca5ba337986da5c3fd9c2a210014872edeb95de5a57e18d18a5b302f6695b
+  checksum: 82651223d79c534cdfc5719c299c75050f302bd6732f1cd5551423ffb5389be55bed7d278aff03a6cbf47ad0437e8dee69bf5d80d34c308c1840c6fab41f1c78
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.4":
-  version: 0.17.4
-  resolution: "@graphiql/react@npm:0.17.4"
+"@graphiql/react@npm:^0.17.4, @graphiql/react@npm:^0.17.5":
+  version: 0.17.5
+  resolution: "@graphiql/react@npm:0.17.5"
   dependencies:
     "@graphiql/toolkit": ^0.8.4
     "@reach/combobox": ^0.17.0
@@ -562,7 +562,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: b1de33644c169ac7664edbac0f26112b4b525f044ffc4242387d96cbcdb996ef75feba5e4dcecfc774ba4f9fb13f1934eaf2b99724b000abf75096888117a618
+  checksum: 0095b3e069f8fa83927da10495beef6a3edb726a1adadcda162efedc1ccfa8d4b6cd08a7400e174511817bcaa56a487617f73a59df12c9f485698f5c0320a333
   languageName: node
   linkType: hard
 
