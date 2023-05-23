@@ -24,10 +24,6 @@ const createHistory = () => {
         globalThis?.location?.search !== search ||
         globalThis?.location?.hash !== hash
       ) {
-        // @MARK Temporary!!!!!!!!!!!!!!!!!!!!!!
-        // @TODO @DONOTMERGE - this is for experimental release only
-        globalThis.location.pathname = to
-
         if (options?.replace) {
           globalThis.history.replaceState({}, '', to)
         } else {
