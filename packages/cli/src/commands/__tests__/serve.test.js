@@ -17,6 +17,7 @@ jest.mock('@redwoodjs/project-config', () => {
     },
     getConfig: () => {
       return {
+        web: {},
         api: {},
       }
     },
