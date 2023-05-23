@@ -208,10 +208,17 @@ export type GraphQLYogaOptions = {
    */
   generateGraphiQLHeader?: GenerateGraphiQLHeader
 
+  /**
+   * @description Configure RedwoodRealtime plugin with subscriptions and live queries
+   *
+   * Only supported in a swerver deploy and not allowed with GraphQLHandler config
+   */
   realtime?: RedwoodRealtimeOptions
 }
 
-export type GraphQLHandlerOptions = Omit<
-  GraphQLYogaOptions,
-  'subscriptions' | 'realtime'
->
+/**
+ * @description Configure GraphQLHandler with options
+ *
+ * Note: RedwoodRealtime is not supported
+ */
+export type GraphQLHandlerOptions = Omit<GraphQLYogaOptions, 'realtime'>

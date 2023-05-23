@@ -63,6 +63,7 @@ export const createGraphQLYoga = ({
         )
     }
 
+    // @NOTE: Subscriptions are optional and only work in the context of a server
     let projectSubscriptions = [] as RedwoodSubscription[]
 
     if (
@@ -70,7 +71,6 @@ export const createGraphQLYoga = ({
       realtime.subscriptions &&
       realtime.subscriptions.subscriptions
     ) {
-      // @NOTE: Subscriptions are optional and only work in the context of a  server
       projectSubscriptions = makeSubscriptions(
         realtime.subscriptions.subscriptions
       )
