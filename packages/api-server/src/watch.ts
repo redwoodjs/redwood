@@ -40,6 +40,7 @@ const argv = yargs(hideBin(process.argv))
   })
   .parseSync()
 
+// If this is run via the yarn rw dev command, this will have already been called.
 dotenv.config({
   path: redwoodProjectPaths.base,
 })
