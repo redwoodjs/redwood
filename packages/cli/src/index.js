@@ -4,7 +4,6 @@ import fs from 'fs'
 import path from 'path'
 
 import { config } from 'dotenv-defaults'
-import findup from 'findup-sync'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -32,8 +31,9 @@ import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
-import { getPaths } from './lib'
+import { getPaths, findUp } from './lib'
 import * as updateCheck from './lib/updateCheck'
+import { loadPlugins } from './plugin'
 
 // # Setting the CWD
 //
@@ -71,7 +71,7 @@ try {
     // `cwd` wasn't set. Odds are they're in a Redwood project,
     // but they could be in ./api or ./web, so we have to find up to be sure.
 
-    const redwoodTOMLPath = findup('redwood.toml', { cwd: process.cwd() })
+    const redwoodTOMLPath = findUp('redwood.toml')
 
     if (!redwoodTOMLPath) {
       throw new Error(
@@ -98,54 +98,61 @@ config({
   multiline: true,
 })
 
-// # Build the CLI and run it
-yargs(hideBin(process.argv))
-  // Config
-  .scriptName('rw')
-  .middleware(
-    [
-      // We've already handled `cwd` above, but it may still be in `argv`.
-      // We don't need it anymore so let's get rid of it.
-      (argv) => {
-        delete argv.cwd
-      },
-      telemetryMiddleware,
-      updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
-    ].filter(Boolean)
-  )
-  .option('cwd', {
-    describe: 'Working directory to use (where `redwood.toml` is located)',
-  })
-  .example(
-    'yarn rw g page home /',
-    "\"Create a page component named 'Home' at path '/'\""
-  )
-  .demandCommand()
-  .strict()
+async function runYargs() {
+  // # Build the CLI yargs instance
+  const yarg = yargs(hideBin(process.argv))
+    // Config
+    .scriptName('rw')
+    .middleware(
+      [
+        // We've already handled `cwd` above, but it may still be in `argv`.
+        // We don't need it anymore so let's get rid of it.
+        (argv) => {
+          delete argv.cwd
+        },
+        telemetryMiddleware,
+        updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
+      ].filter(Boolean)
+    )
+    .option('cwd', {
+      describe: 'Working directory to use (where `redwood.toml` is located)',
+    })
+    .example(
+      'yarn rw g page home /',
+      "\"Create a page component named 'Home' at path '/'\""
+    )
+    .demandCommand()
+    .strict()
 
-  // Commands
-  .command(buildCommand)
-  .command(checkCommand)
-  .command(consoleCommand)
-  .command(dataMigrateCommand)
-  .command(deployCommand)
-  .command(destroyCommand)
-  .command(devCommand)
-  .command(execCommand)
-  .command(experimentalCommand)
-  .command(generateCommand)
-  .command(infoCommand)
-  .command(lintCommand)
-  .command(prerenderCommand)
-  .command(prismaCommand)
-  .command(recordCommand)
-  .command(serveCommand)
-  .command(setupCommand)
-  .command(storybookCommand)
-  .command(testCommand)
-  .command(tstojsCommand)
-  .command(typeCheckCommand)
-  .command(upgradeCommand)
+    // Commands (Built in or pre-plugin support)
+    .command(buildCommand)
+    .command(checkCommand)
+    .command(consoleCommand)
+    .command(dataMigrateCommand)
+    .command(deployCommand)
+    .command(destroyCommand)
+    .command(devCommand)
+    .command(execCommand)
+    .command(experimentalCommand)
+    .command(generateCommand)
+    .command(infoCommand)
+    .command(lintCommand)
+    .command(prerenderCommand)
+    .command(prismaCommand)
+    .command(recordCommand)
+    .command(serveCommand)
+    .command(setupCommand)
+    .command(storybookCommand)
+    .command(testCommand)
+    .command(tstojsCommand)
+    .command(typeCheckCommand)
+    .command(upgradeCommand)
+
+  // Load any CLI plugins
+  await loadPlugins(yarg)
 
   // Run
-  .parse()
+  yarg.parse()
+}
+
+runYargs()

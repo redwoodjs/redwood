@@ -4,7 +4,7 @@ import { createLogger } from '@redwoodjs/api/logger'
 
 import { createGraphQLHandler } from '../functions/graphql'
 
-jest.mock('../makeMergedSchema/makeMergedSchema', () => {
+jest.mock('../makeMergedSchema', () => {
   const { makeExecutableSchema } = require('@graphql-tools/schema')
   // Return executable schema
   return {

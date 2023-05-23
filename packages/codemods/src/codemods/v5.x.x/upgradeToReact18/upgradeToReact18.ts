@@ -5,10 +5,10 @@ import { load } from 'cheerio'
 import execa from 'execa'
 import type { TaskInnerAPI } from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
 function checkAndTransformReactRoot(taskContext: TaskInnerAPI) {
-  const indexHTMLFilepath = path.join(getRWPaths().web.src, 'index.html')
+  const indexHTMLFilepath = path.join(getPaths().web.src, 'index.html')
 
   const indexHTML = load(fs.readFileSync(indexHTMLFilepath, 'utf-8'))
 
@@ -50,7 +50,7 @@ function checkAndTransformReactRoot(taskContext: TaskInnerAPI) {
 }
 
 async function upgradeReactDepsTo18() {
-  const redwoodProjectPaths = getRWPaths()
+  const redwoodProjectPaths = getPaths()
 
   const webPackageJSONPath = path.join(
     redwoodProjectPaths.web.base,
@@ -82,7 +82,7 @@ async function upgradeReactDepsTo18() {
 
 async function checkAndUpdateCustomWebIndex(taskContext: TaskInnerAPI) {
   // First check if the custom web index exists. If it doesn't, this is a no-op.
-  const redwoodProjectPaths = getRWPaths()
+  const redwoodProjectPaths = getPaths()
 
   const bundlerToCustomWebIndex = {
     vite: path.join(redwoodProjectPaths.web.src, 'entry-client.jsx'),
