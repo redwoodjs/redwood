@@ -199,6 +199,7 @@ export default function Trace() {
               id: span.id,
               type: span.type,
               brief: span.brief,
+              statusCode: span.statusCode,
             }))}
         />
       </div>

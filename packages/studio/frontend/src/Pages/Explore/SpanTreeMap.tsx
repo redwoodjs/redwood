@@ -77,7 +77,6 @@ export default function SpanTreeMap() {
     const parent = data.span.ancestorSpans.find(
       (span: any) => span.id === parentId
     )
-    console.log(parent, parentId)
     if (parent) {
       if (parent.parent) {
         parents.push(...getParents(parent.parent))
@@ -88,8 +87,6 @@ export default function SpanTreeMap() {
   }
 
   const breadcrumIds = [...getParents(data.span.parent), spanId]
-  console.log(data.span.ancestorSpans)
-  console.log(breadcrumIds)
 
   return (
     <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8">
