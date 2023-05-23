@@ -98,8 +98,8 @@ const baseConfig = merge(webpackConfig('development'), {
     historyApiFallback: {
       disableDotRule: true,
     },
-    host: redwoodConfig.web.host || 'localhost',
-    port: redwoodConfig.web.port,
+    host: redwoodConfig.web.host ?? 'localhost',
+    port: redwoodConfig.web.port ?? 8910,
     proxy: getProxyConfig(),
     open: redwoodConfig.browser.open,
   },
