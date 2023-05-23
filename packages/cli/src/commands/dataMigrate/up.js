@@ -1,5 +1,7 @@
 import terminalLink from 'terminal-link'
 
+import { getPaths } from '../../lib'
+
 export const command = 'up'
 export const description =
   'Run any outstanding Data Migrations against the database'
@@ -9,11 +11,18 @@ export const description =
  */
 export function builder(yargs) {
   yargs
-    .option('strategy', {
+    .option('import-strategy', {
       type: 'string',
       alias: 's',
+      description: 'The import strategy to use for the Prisma client',
       default: 'requireHook',
       choices: ['requireHook', 'dist'],
+    })
+    .option('dist-path', {
+      type: 'string',
+      alias: 'd',
+      description: 'Path to the api dist directory',
+      default: getPaths().api.dist,
     })
     .epilogue(
       `Also see the ${terminalLink(

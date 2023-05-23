@@ -17,21 +17,33 @@ let requireHookRegistered = false
  *   strategy: 'requireHook' | 'dist' = 'requireHook'
  * }} options
  */
-export async function handler({ strategy }) {
+export async function handler({ importStrategy, distPath }) {
   let db
 
-  switch (strategy) {
+  switch (importStrategy) {
     case 'dist': {
-      if (!fs.existsSync(redwoodProjectPaths.api.dist)) {
+      if (!fs.existsSync(distPath)) {
         console.warn(
-          `Can't find api dist. You may need to build first: yarn rw build api`
+          `Can't find api dist at ${distPath}. You may need to build first: yarn rw build api`
         )
         process.exitCode = 1
         return
       }
 
-      db = (await import(path.join(redwoodProjectPaths.api.dist, 'lib', 'db')))
-        .db
+      const distLibDbPath = path.join(distPath, 'lib', 'db.js')
+
+      if (!fs.existsSync(distLibDbPath)) {
+        console.error(
+          `Can't find db.js at ${distLibDbPath}. Redwood expects the db.js file to be in the ${path.join(
+            distPath,
+            'lib'
+          )} directory`
+        )
+        process.exitCode = 1
+        return
+      }
+
+      db = (await import(distLibDbPath)).db
 
       break
     }
