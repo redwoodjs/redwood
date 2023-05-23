@@ -106,11 +106,10 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 }
 
 export const bothServerHandler = async (options: BothServerArgs) => {
-  const redwoodProjectConfig = getConfig()
   const { port, host, socket } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
-  const apiRootPath = coerceRootPath(redwoodProjectConfig.web.apiUrl)
+  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
   let fastify = createFastifyInstance()
 
