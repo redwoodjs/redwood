@@ -15,7 +15,7 @@ describe('useRedwoodRealtime', () => {
 
   it('should support a @live query directive', async () => {
     const testkit = createTestkit(
-      [useRedwoodRealtime({ liveQueryStore })],
+      [useRedwoodRealtime({ liveQueries: { liveQueryStore } })],
       testLiveSchema
     )
 
@@ -40,7 +40,10 @@ describe('useRedwoodRealtime', () => {
     const spiedPlugin = createSpiedPlugin()
 
     const testkit = createTestkit(
-      [useRedwoodRealtime({ liveQueryStore }), spiedPlugin.plugin],
+      [
+        useRedwoodRealtime({ liveQueries: { liveQueryStore } }),
+        spiedPlugin.plugin,
+      ],
       testLiveSchema
     )
 
@@ -56,6 +59,6 @@ describe('useRedwoodRealtime', () => {
     //     "@deprecated",
     //     "@specifiedBy",
     //   ],
-    expect(spiedPlugin.plugin.onSchemaChange).toMatchSnapshot()
+    expect(spiedPlugin.spies.onSchemaChange).toMatchSnapshot()
   })
 })

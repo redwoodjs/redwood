@@ -25,20 +25,38 @@ export const liveDirectiveTypeDefs = print(
  * ```
  */
 
-export const useRedwoodRealtime = (options: UseLiveQueryOptions): Plugin => {
-  const liveQueryPlugin = useLiveQuery({
-    liveQueryStore: options.liveQueryStore,
-  })
+export type pubSubType = ReturnType<typeof createPubSub>
 
-  return {
-    onSchemaChange({ schema }) {
-      mergeSchemas({
-        schemas: [schema],
-        typeDefs: [liveDirectiveTypeDefs],
-      })
-    },
-    onPluginInit({ addPlugin }) {
-      addPlugin(liveQueryPlugin)
-    },
+export type RedwoodRealtimeOptions = {
+  liveQueries?: UseLiveQueryOptions
+  subscriptions?: { pubSub: pubSubType }
+}
+
+export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
+  if (options.liveQueries?.liveQueryStore) {
+    const liveQueryPlugin = useLiveQuery({
+      liveQueryStore: options.liveQueries.liveQueryStore,
+    })
+
+    return {
+      onSchemaChange({ schema }) {
+        mergeSchemas({
+          schemas: [schema],
+          typeDefs: [liveDirectiveTypeDefs],
+        })
+      },
+      onPluginInit({ addPlugin }) {
+        addPlugin(liveQueryPlugin)
+      },
+      onContextBuilding() {
+        return ({ extendContext }) => {
+          extendContext({
+            liveQueryStore: options.liveQueries?.liveQueryStore,
+            pubSub: options.subscriptions?.pubSub,
+          })
+        }
+      },
+    }
   }
+  return {}
 }

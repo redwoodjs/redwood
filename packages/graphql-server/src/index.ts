@@ -37,4 +37,5 @@ export {
   InMemoryLiveQueryStore,
 } from './plugins/useRedwoodRealtime'
 
+export type { pubSubType } from './plugins/useRedwoodRealtime'
 export * as rootSchema from './rootSchema'

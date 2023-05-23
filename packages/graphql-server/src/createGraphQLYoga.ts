@@ -63,7 +63,6 @@ export const createGraphQLYoga = ({
 
     // @NOTE: Subscriptions are optional and only work in the context of a  server
     const projectSubscriptions = makeSubscriptions(subscriptions)
-
     schema = makeMergedSchema({
       sdls,
       services,
@@ -112,21 +111,6 @@ export const createGraphQLYoga = ({
         }
       : false
 
-    logger.debug(
-      {
-        healthCheckId,
-        allowedOperations,
-        allowIntrospection,
-        defaultError,
-        disableIntrospection,
-        disableGraphQL,
-        allowGraphiQL,
-        graphiql,
-        graphiQLEndpoint,
-      },
-      'GraphiQL and Introspection Config'
-    )
-
     if (disableIntrospection) {
       plugins.push(useDisableIntrospection())
     }
@@ -149,13 +133,20 @@ export const createGraphQLYoga = ({
     plugins.push(useArmor(logger, armorConfig))
 
     // Only allow execution of specific operation types
+    const defaultAllowedOperations = [
+      OperationTypeNode.QUERY,
+      OperationTypeNode.MUTATION,
+    ]
+
+    // now allow subscriptions if using them (unless you override)
+    if (subscriptions) {
+      defaultAllowedOperations.push(OperationTypeNode.SUBSCRIPTION)
+    } else {
+      logger.warn('Subscriptions are disabled.')
+    }
+
     plugins.push(
-      useFilterAllowedOperations(
-        allowedOperations || [
-          OperationTypeNode.QUERY,
-          OperationTypeNode.MUTATION,
-        ]
-      )
+      useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
 
     // App-defined plugins
@@ -196,6 +187,21 @@ export const createGraphQLYoga = ({
     // so can process any data added to results and extensions
     plugins.push(useRedwoodLogger(loggerConfig))
 
+    logger.debug(
+      {
+        healthCheckId,
+        allowedOperations,
+        defaultAllowedOperations,
+        allowIntrospection,
+        defaultError,
+        disableIntrospection,
+        disableGraphQL,
+        allowGraphiQL,
+        graphiql,
+        graphiQLEndpoint,
+      },
+      'GraphiQL and Introspection Config'
+    )
     const yoga = createYoga({
       id: healthCheckId,
       landingPage: isDevEnv,
