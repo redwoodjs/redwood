@@ -19,7 +19,21 @@ export async function builder(yargs) {
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      descriptions: 'Run both api and web servers',
+      description: 'Run both api and web servers',
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: redwoodProjectConfig.web.port ?? 8910,
+            type: 'number',
+            alias: 'p',
+          },
+          host: {
+            default: redwoodProjectConfig.web.host ?? 'localhost',
+            type: 'string',
+            alias: 'h',
+          },
+          socket: { type: 'string' },
+        }),
       handler: async (argv) => {
         const serverFilePath = path.join(
           redwoodProjectPaths.api.dist,
@@ -49,65 +63,50 @@ export async function builder(yargs) {
         const { bothServerHandler } = await import('./serveHandler.js')
         await bothServerHandler(argv)
       },
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: redwoodProjectConfig.web?.port || 8910,
-            type: 'number',
-            alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web?.host || 'localhost',
-            type: 'string',
-          },
-          socket: { type: 'string' },
-        }),
     })
     .command({
       command: 'api',
       description: 'start server for serving only the api',
-      handler: async (argv) => {
-        const { apiServerHandler } = await import('./serveHandler.js')
-        await apiServerHandler(argv)
-      },
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.api?.port || 8911,
+            default: redwoodProjectConfig.api.port ?? 8911,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: redwoodProjectConfig.api?.host || 'localhost',
+            default: redwoodProjectConfig.api.host ?? 'localhost',
             type: 'string',
+            alias: 'h',
           },
           socket: { type: 'string' },
           apiRootPath: {
-            alias: ['rootPath', 'root-path'],
+            alias: ['api-root-path', 'rootPath', 'root-path'],
             default: '/',
             type: 'string',
             desc: 'Root path where your api functions are served',
             coerce: coerceRootPath,
           },
         }),
+      handler: async (argv) => {
+        const { apiServerHandler } = await import('./serveHandler.js')
+        await apiServerHandler(argv)
+      },
     })
     .command({
       command: 'web',
       description: 'start server for serving only the web side',
-      handler: async (argv) => {
-        const { webServerHandler } = await import('./serveHandler.js')
-        await webServerHandler(argv)
-      },
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web?.port || 8910,
+            default: redwoodProjectConfig.web.port ?? 8910,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: redwoodProjectConfig.web?.host || 'localhost',
+            default: redwoodProjectConfig.web.host ?? 'localhost',
             type: 'string',
+            alias: 'h',
           },
           socket: { type: 'string' },
           apiHost: {
@@ -116,6 +115,10 @@ export async function builder(yargs) {
             desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
           },
         }),
+      handler: async (argv) => {
+        const { webServerHandler } = await import('./serveHandler.js')
+        await webServerHandler(argv)
+      },
     })
     .middleware((argv) => {
       // Make sure the relevant side has been built, before serving
