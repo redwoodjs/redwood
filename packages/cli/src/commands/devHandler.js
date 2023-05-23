@@ -21,11 +21,12 @@ export const handler = async ({
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
   apiDebugPort,
 }) => {
-  const rwjsPaths = getPaths()
+  const redwoodProjectPaths = getPaths()
+  const redwoodProjectConfig = getConfig()
 
   // Starting values of ports from config (redwood.toml)
-  let apiPreferredPort = parseInt(getConfig().api.port)
-  let webPreferredPort = parseInt(getConfig().web.port)
+  let apiPreferredPort = parseInt(redwoodProjectConfig.api.port)
+  let webPreferredPort = parseInt(redwoodProjectConfig.web.port)
 
   // Assume we can have the ports we want
   let apiAvailablePort = apiPreferredPort
@@ -84,7 +85,7 @@ export const handler = async ({
       await generatePrismaClient({
         verbose: false,
         force: false,
-        schema: rwjsPaths.api.dbSchema,
+        schema: redwoodProjectPaths.api.dbSchema,
       })
     } catch (e) {
       errorTelemetry(
@@ -127,7 +128,7 @@ export const handler = async ({
       return `--debug-port ${defaultApiDebugPort}`
     }
 
-    const apiDebugPortInToml = getConfig().api.debugPort
+    const apiDebugPortInToml = redwoodProjectConfig.api.debugPort
     if (apiDebugPortInToml) {
       return `--debug-port ${apiDebugPortInToml}`
     }
@@ -139,7 +140,7 @@ export const handler = async ({
   const redwoodConfigPath = getConfigPath()
 
   const webCommand =
-    getConfig().web.bundler === 'vite' // @NOTE: can't use enums, not TS
+    redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
       ? `yarn cross-env NODE_ENV=development rw-vite-dev`
       : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
           watchNodeModules ? '1' : ''
@@ -149,18 +150,35 @@ export const handler = async ({
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} --host ${
-        getConfig().web.host ?? 'localhost'
-      } ${getApiDebugFlag()} | rw-log-formatter"`,
+      command: [
+        'yarn',
+        'cross-env',
+        'NODE_ENV=development',
+        'NODE_OPTIONS=--enable-source-maps',
+        'yarn',
+        'nodemon',
+        '--quiet',
+        `--watch "${redwoodConfigPath}"`,
+        '--exec',
+        `"${[
+          'yarn',
+          'rw-api-server-watch',
+          `--port ${apiAvailablePort}`,
+          `--host ${redwoodProjectConfig.web.host}`,
+          getApiDebugFlag(),
+          '|',
+          'rw-log-formatter',
+        ].join(' ')}"`,
+      ].join(' '),
       prefixColor: 'cyan',
-      runWhen: () => fs.existsSync(rwjsPaths.api.src),
+      runWhen: () => fs.existsSync(redwoodProjectPaths.api.src),
     },
     web: {
       name: 'web',
       command: webCommand,
       prefixColor: 'blue',
-      cwd: rwjsPaths.web.base,
-      runWhen: () => fs.existsSync(rwjsPaths.web.src),
+      cwd: redwoodProjectPaths.web.base,
+      runWhen: () => fs.existsSync(redwoodProjectPaths.web.src),
     },
     gen: {
       name: 'gen',
