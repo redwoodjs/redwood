@@ -9,13 +9,13 @@ import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import { CorsConfig } from '@redwoodjs/api'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
-import type { SubscriptionGlobImports } from 'src/subscriptions/makeSubscriptions'
 
 import type {
   useRedwoodDirectiveReturn,
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
 import { LoggerConfig } from './plugins/useRedwoodLogger'
+import type { RedwoodRealtimeOptions } from './plugins/useRedwoodRealtime'
 
 export type Resolver = (...args: unknown[]) => unknown
 export type Services = {
@@ -78,7 +78,7 @@ export interface RedwoodGraphQLContext {
 /**
  * GraphQLYogaOptions
  */
-export interface GraphQLYogaOptions {
+export type GraphQLYogaOptions = {
   /**
    * @description The identifier used in the GraphQL health check response.
    * It verifies readiness when sent as a header in the readiness check request.
@@ -130,12 +130,6 @@ export interface GraphQLYogaOptions {
    * import directives from 'src/directives/**\/*.{js,ts}'
    */
   directives?: DirectiveGlobImports
-
-  /**
-   * @description Subscriptions passed from the glob import:
-   * import subscriptions from 'src/subscriptions/**\/*.{js,ts}'
-   */
-  subscriptions?: SubscriptionGlobImports
 
   /**
    * @description A list of options passed to [makeExecutableSchema]
@@ -213,6 +207,11 @@ export interface GraphQLYogaOptions {
    * Headers must set auth-provider, Authorization and (if using dbAuth) the encrypted cookie.
    */
   generateGraphiQLHeader?: GenerateGraphiQLHeader
+
+  realtime?: RedwoodRealtimeOptions
 }
 
-export interface GraphQLHandlerOptions extends GraphQLYogaOptions {}
+export type GraphQLHandlerOptions = Omit<
+  GraphQLYogaOptions,
+  'subscriptions' | 'realtime'
+>

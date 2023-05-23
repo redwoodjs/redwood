@@ -3,10 +3,15 @@ import type { UseLiveQueryOptions } from '@envelop/live-query'
 import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
+import type { PubSub } from '@graphql-yoga/subscription'
 import { createPubSub } from '@graphql-yoga/subscription'
 import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
 import { InMemoryLiveQueryStore } from '@n1ru4l/in-memory-live-query-store'
 import { print } from 'graphql'
+
+import type { SubscriptionGlobImports } from 'src/subscriptions/makeSubscriptions'
+
+export type { PubSub }
 
 export { createPubSub, InMemoryLiveQueryStore }
 
@@ -14,22 +19,16 @@ export const liveDirectiveTypeDefs = print(
   astFromDirective(GraphQLLiveDirective)
 )
 
-/**
- * Example usage in a Redwood app
- *
- * ```ts
- * import { liveQueryStore } from 'src/lib/realtime'
- *
- * export const liveQueryPlugin = useRedwoodRealtime({ liveQueryStore })
- *
- * ```
- */
-
-export type pubSubType = ReturnType<typeof createPubSub>
-
 export type RedwoodRealtimeOptions = {
   liveQueries?: UseLiveQueryOptions
-  subscriptions?: { pubSub: pubSubType }
+  /**
+   * @description Subscriptions passed from the glob import:
+   * import subscriptions from 'src/subscriptions/**\/*.{js,ts}'
+   */
+  subscriptions?: {
+    subscriptions: SubscriptionGlobImports
+    pubSub: PubSub<NonNullable<unknown>>
+  }
 }
 
 export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {

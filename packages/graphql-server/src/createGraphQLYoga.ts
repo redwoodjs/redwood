@@ -16,12 +16,14 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
+  useRedwoodRealtime,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
 import { makeSubscriptions } from './subscriptions/makeSubscriptions'
+import type { RedwoodSubscription } from './subscriptions/makeSubscriptions'
 import type { GraphQLYogaOptions } from './types'
 
 export const createGraphQLYoga = ({
@@ -37,7 +39,6 @@ export const createGraphQLYoga = ({
   services,
   sdls,
   directives = [],
-  subscriptions = [],
   armorConfig,
   allowedOperations,
   allowIntrospection,
@@ -45,6 +46,7 @@ export const createGraphQLYoga = ({
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
+  realtime,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
@@ -61,8 +63,19 @@ export const createGraphQLYoga = ({
         )
     }
 
-    // @NOTE: Subscriptions are optional and only work in the context of a  server
-    const projectSubscriptions = makeSubscriptions(subscriptions)
+    let projectSubscriptions = [] as RedwoodSubscription[]
+
+    if (
+      realtime &&
+      realtime.subscriptions &&
+      realtime.subscriptions.subscriptions
+    ) {
+      // @NOTE: Subscriptions are optional and only work in the context of a  server
+      projectSubscriptions = makeSubscriptions(
+        realtime.subscriptions.subscriptions
+      )
+    }
+
     schema = makeMergedSchema({
       sdls,
       services,
@@ -139,15 +152,19 @@ export const createGraphQLYoga = ({
     ]
 
     // now allow subscriptions if using them (unless you override)
-    if (subscriptions) {
+    if (realtime?.subscriptions?.subscriptions) {
       defaultAllowedOperations.push(OperationTypeNode.SUBSCRIPTION)
     } else {
-      logger.warn('Subscriptions are disabled.')
+      logger.info('Subscriptions are disabled.')
     }
 
     plugins.push(
       useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
+
+    if (realtime) {
+      plugins.push(useRedwoodRealtime(realtime))
+    }
 
     // App-defined plugins
     if (extraPlugins && extraPlugins.length > 0) {
