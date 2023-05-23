@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`useRedwoodLiveQuery should update schema with live directive 1`] = `
+exports[`useRedwoodRealtime should update schema with live directive 1`] = `
 [MockFunction] {
   "calls": [
     [

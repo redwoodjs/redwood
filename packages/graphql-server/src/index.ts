@@ -32,8 +32,9 @@ export {
 } from './plugins/useRedwoodDirective'
 
 export {
-  useRedwoodLiveQuery,
+  useRedwoodRealtime,
+  createPubSub,
   InMemoryLiveQueryStore,
-} from './plugins/useRedwoodLiveQuery'
+} from './plugins/useRedwoodRealtime'
 
 export * as rootSchema from './rootSchema'

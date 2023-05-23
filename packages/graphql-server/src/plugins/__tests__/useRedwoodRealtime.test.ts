@@ -6,16 +6,16 @@ import {
 
 import { testLiveSchema, testLiveQuery } from '../__fixtures__/common'
 import {
-  useRedwoodLiveQuery,
+  useRedwoodRealtime,
   InMemoryLiveQueryStore,
-} from '../useRedwoodLiveQuery'
+} from '../useRedwoodRealtime'
 
-describe('useRedwoodLiveQuery', () => {
+describe('useRedwoodRealtime', () => {
   const liveQueryStore = new InMemoryLiveQueryStore()
 
   it('should support a @live query directive', async () => {
     const testkit = createTestkit(
-      [useRedwoodLiveQuery({ liveQueryStore })],
+      [useRedwoodRealtime({ liveQueryStore })],
       testLiveSchema
     )
 
@@ -40,7 +40,7 @@ describe('useRedwoodLiveQuery', () => {
     const spiedPlugin = createSpiedPlugin()
 
     const testkit = createTestkit(
-      [useRedwoodLiveQuery({ liveQueryStore }), spiedPlugin.plugin],
+      [useRedwoodRealtime({ liveQueryStore }), spiedPlugin.plugin],
       testLiveSchema
     )
 
