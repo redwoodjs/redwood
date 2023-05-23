@@ -7,7 +7,7 @@ import {
   isValidRoute,
 } from './route-validators'
 import { PageType } from './router'
-import { isSetNode } from './Set'
+import { isPrivateNode, isSetNode } from './Set'
 
 import { AvailableRoutes } from './'
 
@@ -477,7 +477,7 @@ export function analyzeRoutes(
     nodes,
     whileLoadingPageFromSet,
     wrappersFromSet = [],
-    propsFromSet = {},
+    propsFromSet: previousSetProps = {},
   }: RecurseParams) => {
     nodes.forEach((node) => {
       if (isValidRoute(node)) {
@@ -519,7 +519,7 @@ export function analyzeRoutes(
             path,
             page: null, // Redirects don't need pages. We set this to null for consistency
             wrappers: wrappersFromSet,
-            setProps: propsFromSet,
+            setProps: previousSetProps,
           }
 
           if (name) {
@@ -550,7 +550,7 @@ export function analyzeRoutes(
               route.props.whileLoadingPage || whileLoadingPageFromSet,
             page: page,
             wrappers: wrappersFromSet,
-            setProps: propsFromSet,
+            setProps: previousSetProps,
           }
 
           // e.g. namedRoutesMap.homePage = () => '/home'
@@ -560,7 +560,11 @@ export function analyzeRoutes(
 
       // @NOTE: A <Private> is also a Set
       if (isSetNode(node)) {
-        // TODO: Need to fix the types here. Everything is just `any` right now
+        console.log(`👉 \n ~ file: util.ts:563 ~ node:`, node)
+        console.log(
+          `👉 \n ~ file: util.ts:563 ~ isPrivateNode:`,
+          isPrivateNode(node)
+        )
         const {
           children,
           whileLoadingPage: whileLoadingPageFromCurrentSet,
@@ -575,6 +579,14 @@ export function analyzeRoutes(
             : [wrapFromCurrentSet]
         }
 
+        // @MARK note unintuitive, but intentional
+        // You cannot make a nested set public if the parent is private
+        // i.e. the private prop cannot be overriden by a child Set
+        const privateProps =
+          isPrivateNode(node) || previousSetProps.private
+            ? { private: true }
+            : {}
+
         if (children) {
           recurseThroughRouter({
             nodes: Children.toArray(children),
@@ -584,9 +596,13 @@ export function analyzeRoutes(
             whileLoadingPageFromSet:
               whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
             wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
-            propsFromSet: { ...propsFromSet, ...otherPropsFromCurrentSet }, // Current one takes precedence
-            // @TODO pass this in
-            // otherPropsFromSet: otherSetProps,
+            propsFromSet: {
+              ...previousSetProps,
+              // Current one takes precedence
+              ...otherPropsFromCurrentSet,
+              // See comment at definiion, intenionally at the end
+              ...privateProps,
+            },
           })
         }
       }

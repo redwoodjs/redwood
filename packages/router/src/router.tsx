@@ -1,6 +1,7 @@
 import React, { ReactNode, ReactElement, useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
+import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { Redirect } from './links'
 import { LocationProvider, useLocation } from './location'
 import { ParamsProvider } from './params'
@@ -202,8 +203,28 @@ interface WrappedPageProps {
   setProps: Record<any, any>
 }
 
+/**
+ * This is effectively a Set (without auth-related code)
+ *
+ * This means that the <Set> and <Private> components become "virtual"
+ * i.e. they are never actually Rendered, but their props are extracted by the
+ * analyze routes function.
+ *
+ * This is so that we can have all the information up front in the routes-manifest
+ * for SSR, but also so that we only do one loop of all the Routes.
+ */
 const WrappedPage = memo(
   ({ wrappers, routeLoaderElement, setProps }: WrappedPageProps) => {
+    if (setProps.private) {
+      if (!setProps.unauthenticated) {
+        throw new Error(
+          'You must specify an `unauthenticated` route when marking a Route as private'
+        )
+      }
+
+      wrappers.push(AuthenticatedRoute as any)
+    }
+
     if (wrappers.length > 0) {
       // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a>
       return wrappers.reduceRight((acc, wrapper) => {
