@@ -18,13 +18,33 @@ const sendProcessReady = () => {
   return process.send && process.send('ready')
 }
 
+const redwoodProjectConfig = getConfig()
+
 export const commonOptions = {
-  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
+  port: {
+    default: redwoodProjectConfig.web.port ?? 8910,
+    type: 'number',
+    alias: 'p',
+  },
+  host: {
+    default: redwoodProjectConfig.web.host ?? 'localhost',
+    type: 'string',
+    alias: 'h',
+  },
   socket: { type: 'string' },
 } as const
 
 export const apiCliOptions = {
-  port: { default: getConfig().api?.port || 8911, type: 'number', alias: 'p' },
+  port: {
+    default: redwoodProjectConfig.api?.port ?? 8911,
+    type: 'number',
+    alias: 'p',
+  },
+  host: {
+    default: redwoodProjectConfig.api.host ?? 'localhost',
+    type: 'string',
+    alias: 'h',
+  },
   socket: { type: 'string' },
   apiRootPath: {
     alias: ['rootPath', 'root-path'],
@@ -36,7 +56,16 @@ export const apiCliOptions = {
 } as const
 
 export const webCliOptions = {
-  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
+  port: {
+    default: redwoodProjectConfig.web.port ?? 8910,
+    type: 'number',
+    alias: 'p',
+  },
+  host: {
+    default: redwoodProjectConfig.web.host ?? 'localhost',
+    type: 'string',
+    alias: 'h',
+  },
   socket: { type: 'string' },
   apiHost: {
     alias: 'api-host',
@@ -46,7 +75,7 @@ export const webCliOptions = {
 } as const
 
 export const apiServerHandler = async (options: ApiServerArgs) => {
-  const { port, socket, apiRootPath } = options
+  const { port, host, socket, apiRootPath } = options
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
 
@@ -55,7 +84,6 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
   // Import Server Functions.
   fastify = await withFunctions(fastify, options)
 
-  const host = getConfig().api.host ?? 'localhost'
   const http = startFastifyServer({
     port,
     host,
@@ -79,7 +107,7 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 
 export const bothServerHandler = async (options: BothServerArgs) => {
   const redwoodProjectConfig = getConfig()
-  const { port, socket } = options
+  const { port, host, socket } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
   const apiRootPath = coerceRootPath(redwoodProjectConfig.web.apiUrl)
@@ -90,7 +118,6 @@ export const bothServerHandler = async (options: BothServerArgs) => {
   fastify = await withWebServer(fastify, options)
   fastify = await withFunctions(fastify, { ...options, apiRootPath })
 
-  const host = redwoodProjectConfig.web.host ?? 'localhost'
   startFastifyServer({
     port,
     host,
@@ -114,7 +141,7 @@ export const bothServerHandler = async (options: BothServerArgs) => {
 
 export const webServerHandler = async (options: WebServerArgs) => {
   const redwoodProjectConfig = getConfig()
-  const { port, socket, apiHost } = options
+  const { port, host, socket, apiHost } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
   const apiUrl = redwoodProjectConfig.web.apiUrl
@@ -136,7 +163,6 @@ export const webServerHandler = async (options: WebServerArgs) => {
     fastify = await withApiProxy(fastify, { apiHost, apiUrl })
   }
 
-  const host = redwoodProjectConfig.web.host ?? 'localhost'
   startFastifyServer({
     port: port,
     host,
