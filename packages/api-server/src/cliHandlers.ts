@@ -36,7 +36,7 @@ export const commonOptions = {
 
 export const apiCliOptions = {
   port: {
-    default: redwoodProjectConfig.api?.port ?? 8911,
+    default: redwoodProjectConfig.api.port ?? 8911,
     type: 'number',
     alias: 'p',
   },
