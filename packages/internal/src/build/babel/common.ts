@@ -73,7 +73,7 @@ export const getCommonPlugins = () => {
  * Finds, reads and parses the [ts|js]config.json file
  * @returns The config object
  */
-export const parseConfigFiles = () => {
+export const parseTypeScriptConfigFiles = () => {
   const rwPaths = getPaths()
 
   const parseConfigFile = (basePath: string) => {

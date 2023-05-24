@@ -13,7 +13,7 @@ import {
   CORE_JS_VERSION,
   RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,
-  parseConfigFiles,
+  parseTypeScriptConfigFiles,
   getPathsFromConfig,
 } from './common'
 
@@ -78,8 +78,8 @@ export const getApiSideBabelPlugins = (
   //   .splice(0, 2)
   //   .join('.') // Gives '3.16' instead of '3.16.12'
 
-  //get the config object from the file
-  const config = parseConfigFiles()
+  // get the config object from the file
+  const tsConfig = parseTypeScriptConfigFiles()
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
@@ -115,7 +115,7 @@ export const getApiSideBabelPlugins = (
         alias: {
           src: './src',
           // adds the paths from [ts|js]config.json to the module resolver
-          ...getPathsFromConfig(config.api),
+          ...getPathsFromConfig(tsConfig.api),
         },
         root: [rwjsPaths.api.base],
         cwd: 'packagejson',
