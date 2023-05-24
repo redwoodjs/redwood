@@ -11,12 +11,11 @@ export const description =
  */
 export function builder(yargs) {
   yargs
-    .option('import-strategy', {
-      type: 'string',
-      alias: 's',
-      description: 'The import strategy to use for the Prisma client',
-      default: 'requireHook',
-      choices: ['requireHook', 'dist'],
+    .option('import-db-client-from-dist', {
+      type: 'boolean',
+      alias: ['db-from-dist'],
+      description: 'Import the db client from dist',
+      default: false,
     })
     .option('dist-path', {
       type: 'string',

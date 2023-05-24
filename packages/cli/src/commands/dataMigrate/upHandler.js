@@ -14,49 +14,41 @@ let requireHookRegistered = false
 
 /**
  * @param {{
- *   strategy: 'requireHook' | 'dist' = 'requireHook'
+ *   importDbClientFromDist: boolean
+ *   distPath: string
  * }} options
  */
-export async function handler({ importStrategy, distPath }) {
+export async function handler({ importDbClientFromDist, distPath }) {
   let db
 
-  switch (importStrategy) {
-    case 'dist': {
-      if (!fs.existsSync(distPath)) {
-        console.warn(
-          `Can't find api dist at ${distPath}. You may need to build first: yarn rw build api`
-        )
-        process.exitCode = 1
-        return
-      }
-
-      const distLibDbPath = path.join(distPath, 'lib', 'db.js')
-
-      if (!fs.existsSync(distLibDbPath)) {
-        console.error(
-          `Can't find db.js at ${distLibDbPath}. Redwood expects the db.js file to be in the ${path.join(
-            distPath,
-            'lib'
-          )} directory`
-        )
-        process.exitCode = 1
-        return
-      }
-
-      db = (await import(distLibDbPath)).db
-
-      break
+  if (importDbClientFromDist) {
+    if (!fs.existsSync(distPath)) {
+      console.warn(
+        `Can't find api dist at ${distPath}. You may need to build first: yarn rw build api`
+      )
+      process.exitCode = 1
+      return
     }
 
-    case 'requireHook':
-    default: {
-      registerApiSideBabelHook()
-      requireHookRegistered = true
+    const distLibDbPath = path.join(distPath, 'lib', 'db.js')
 
-      db = (await import(path.join(redwoodProjectPaths.api.lib, 'db'))).db
-
-      break
+    if (!fs.existsSync(distLibDbPath)) {
+      console.error(
+        `Can't find db.js at ${distLibDbPath}. Redwood expects the db.js file to be in the ${path.join(
+          distPath,
+          'lib'
+        )} directory`
+      )
+      process.exitCode = 1
+      return
     }
+
+    db = (await import(distLibDbPath)).db
+  } else {
+    registerApiSideBabelHook()
+    requireHookRegistered = true
+
+    db = (await import(path.join(redwoodProjectPaths.api.lib, 'db'))).db
   }
 
   const pendingDataMigrations = await getPendingDataMigrations(db)
