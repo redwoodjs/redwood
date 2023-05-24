@@ -17,6 +17,7 @@ export const generateGraphQLSchema = async () => {
     [print(rootSchema.schema)]: {},
     'graphql/**/*.sdl.{js,ts}': {},
     'directives/**/*.{js,ts}': {},
+    'subscriptions/**/*.{js,ts}': {},
   }
 
   const loadSchemaConfig: LoadSchemaOptions = {
