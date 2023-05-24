@@ -1,6 +1,16 @@
 import React from 'react'
 
 import { LinkIcon } from '@heroicons/react/20/solid'
+import {
+  Card,
+  Flex,
+  Italic,
+  List,
+  ListItem,
+  Subtitle,
+  Text,
+  Title,
+} from '@tremor/react'
 import { Link } from 'react-router-dom'
 
 const getSpanKindName = (kind: string | number) => {
@@ -37,91 +47,91 @@ export default function SpanDetails({ span }: { span: any }) {
   const data = [
     {
       name: 'Span ID',
-      value: span.id,
+      value: (
+        <Flex className="justify-end">
+          <Link to={`/explorer/span/${span.id}`} className="pr-2">
+            <LinkIcon className="h-5 w-5 text-cyan-400" />
+          </Link>
+          <Text>{span.id}</Text>
+        </Flex>
+      ),
     },
     {
       name: 'Trace ID',
       value: (
-        <div className="flex flex-row">
+        <Flex className="justify-end">
           <Link to={`/explorer/trace/${span.trace}`} className="pr-2">
             <LinkIcon className="h-5 w-5 text-cyan-400" />
           </Link>
-          <span>{span.trace}</span>
-        </div>
+          <Text>{span.trace}</Text>
+        </Flex>
       ),
     },
     {
       name: 'Parent ID',
       value: span.parent ? (
-        span.parent
+        <Flex className="justify-end">
+          <Link to={`/explorer/span/${span.parent}`} className="pr-2">
+            <LinkIcon className="h-5 w-5 text-cyan-400" />
+          </Link>
+          <Text>{span.parent}</Text>
+        </Flex>
       ) : (
-        <span className="italic">No parent</span>
+        <Text>
+          <Italic>No parent</Italic>
+        </Text>
       ),
     },
     {
       name: 'Name',
-      value: span.name,
+      value: <Text>{span.name}</Text>,
     },
     {
       name: 'Kind',
-      value: getSpanKindName(span.kind),
+      value: <Text>{getSpanKindName(span.kind)}</Text>,
     },
     {
       name: 'Status Code',
-      value: getSpanStatusCodeName(span.statusCode),
+      value: <Text>{getSpanStatusCodeName(span.statusCode)}</Text>,
     },
     {
       name: 'Status Message',
       value: span.statusMessage ? (
-        span.statusMessage
+        <Text>{span.statusMessage}</Text>
       ) : (
-        <span className="italic">No message</span>
+        <Text>
+          <Italic>No message</Italic>
+        </Text>
       ),
     },
     {
       name: 'Start (ns)',
-      value: span.startNano,
+      value: <Text>{span.startNano}</Text>,
     },
     {
       name: 'End (ns)',
-      value: span.endNano,
+      value: <Text>{span.endNano}</Text>,
     },
     {
       name: 'Duration (ns)',
-      value: span.durationNano,
+      value: <Text>{span.durationNano}</Text>,
     },
   ]
 
   return (
-    <>
-      <div>
-        <div className="px-4 sm:px-0">
-          <h3 className="text-base font-semibold leading-7 text-gray-900">
-            Span Information
-          </h3>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500 border-b border-gray-200 pb-3">
-            All the metadata associated with the span.
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <div className="inline-block min-w-full align-middle ">
-            <table className="min-w-full divide-y divide-gray-300 border-b border-gray-200">
-              <tbody className="divide-y divide-gray-200">
-                {data.map((d) => (
-                  <tr key={d.name}>
-                    <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {d.name}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
-                      {d.value}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </>
+    <Card className="min-w-full">
+      <Flex className="flex-col items-start">
+        <Title>Span Metadata</Title>
+        <Subtitle>OpenTelemetry metadata associated with this span</Subtitle>
+        <List className="mt-2">
+          {data.map((d) => (
+            <ListItem key={d.name}>
+              <Text>{d.name}</Text>
+              {d.value}
+            </ListItem>
+          ))}
+        </List>
+      </Flex>
+    </Card>
   )
 }
