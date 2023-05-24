@@ -2602,7 +2602,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/live-query@npm:^6.0.0":
+"@envelop/live-query@npm:6.0.0":
   version: 6.0.0
   resolution: "@envelop/live-query@npm:6.0.0"
   dependencies:
@@ -7542,7 +7542,7 @@ __metadata:
     "@envelop/depth-limit": 3.0.0
     "@envelop/disable-introspection": 4.0.6
     "@envelop/filter-operation-type": 4.0.6
-    "@envelop/live-query": ^6.0.0
+    "@envelop/live-query": 6.0.0
     "@envelop/on-resolve": 2.0.6
     "@envelop/testing": 6.0.0
     "@envelop/types": 3.0.2
