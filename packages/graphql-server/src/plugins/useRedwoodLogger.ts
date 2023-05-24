@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 import type { Logger, LevelWithSilent } from '@redwoodjs/api/logger'
 
 import { AuthenticationError, ForbiddenError } from '../errors'
-import { RedwoodGraphQLContext } from '../functions/types'
+import { RedwoodGraphQLContext } from '../types'
 
 /**
  * Options for request and response information to include in the log statements
