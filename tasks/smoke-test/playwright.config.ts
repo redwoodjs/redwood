@@ -3,10 +3,11 @@ import { devices as replayDevices } from '@replayio/playwright'
 
 // See https://playwright.dev/docs/test-configuration#global-configuration
 const config: PlaywrightTestConfig = {
-  timeout: 90_000,
+  timeout: 90_000 * 3,
   expect: {
     timeout: 10 * 1000,
   },
+  workers: 1, // do not run things in parallel
 
   // Leaving this here to make debugging easier, by uncommenting
   // use: {

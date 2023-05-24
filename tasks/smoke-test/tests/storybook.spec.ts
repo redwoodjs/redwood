@@ -20,12 +20,12 @@ storybookTest(
     await page.locator('text=/\\bBlogPostCell\\b/').click()
 
     await expect(page).toHaveURL(
-      `http://localhost:${port}/?path=/story/cells-blogpostcell--empty`
+      `http://localhost:${port}/?path=/story/cells-blogpostcell--loading`
     )
 
     await expect(
       page.frameLocator('#storybook-preview-iframe').locator('body')
-    ).toContainText('Empty')
+    ).toContainText('Loading...')
 
     // Click text=Failure
     await page.locator('text=Failure').click()
@@ -38,14 +38,14 @@ storybookTest(
     ).toContainText('Error: Oh no')
 
     // Check Loading
-    await page.locator('text=Loading').click()
+    await page.locator('text=Empty').click()
     await expect(page).toHaveURL(
-      `http://localhost:${port}/?path=/story/cells-blogpostcell--loading`
+      `http://localhost:${port}/?path=/story/cells-blogpostcell--empty`
     )
 
     await expect(
       page.frameLocator('#storybook-preview-iframe').locator('body')
-    ).toContainText('Loading...')
+    ).toContainText('Empty')
 
     // Check Success
     // And make sure MSW Cell mocks are loaded as expected
@@ -172,10 +172,10 @@ storybookTest(
     await page.goto(STORYBOOK_URL)
 
     // Click Redwood link in left nav
-    await page.locator('id=redwood--page').click()
+    await page.locator('id=redwood--docs').click()
 
     await expect(page).toHaveURL(
-      `http://localhost:${port}/?path=/story/redwood--page`
+      `http://localhost:${port}/?path=/docs/redwood--docs`
     )
 
     await expect(
