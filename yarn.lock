@@ -5269,76 +5269,76 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nrwl/tao@npm:16.2.1"
+"@nrwl/tao@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nrwl/tao@npm:16.2.2"
   dependencies:
-    nx: 16.2.1
+    nx: 16.2.2
   bin:
     tao: index.js
-  checksum: a11a1da116a776df20c9eb784310f9d3e48b4edcd1e46482c73b64d7653a92f65833eaf3626fb500518f3bae66610aa15b1ee3bcb16def3170dcb98594cc4c3f
+  checksum: ff152438d130b799ba043dd363cf06e4e95b4ecec81bfd4886c780138d8bd3ef903b5cb490f21be2beaed2ca1ff359f90bacc742df384153fd2d198205036d25
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-arm64@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-darwin-arm64@npm:16.2.1"
+"@nx/nx-darwin-arm64@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-darwin-arm64@npm:16.2.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-x64@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-darwin-x64@npm:16.2.1"
+"@nx/nx-darwin-x64@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-darwin-x64@npm:16.2.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm-gnueabihf@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.2.1"
+"@nx/nx-linux-arm-gnueabihf@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.2.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-gnu@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-linux-arm64-gnu@npm:16.2.1"
+"@nx/nx-linux-arm64-gnu@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-linux-arm64-gnu@npm:16.2.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-musl@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-linux-arm64-musl@npm:16.2.1"
+"@nx/nx-linux-arm64-musl@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-linux-arm64-musl@npm:16.2.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-gnu@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-linux-x64-gnu@npm:16.2.1"
+"@nx/nx-linux-x64-gnu@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-linux-x64-gnu@npm:16.2.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-musl@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-linux-x64-musl@npm:16.2.1"
+"@nx/nx-linux-x64-musl@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-linux-x64-musl@npm:16.2.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-arm64-msvc@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-win32-arm64-msvc@npm:16.2.1"
+"@nx/nx-win32-arm64-msvc@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-win32-arm64-msvc@npm:16.2.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-x64-msvc@npm:16.2.1":
-  version: 16.2.1
-  resolution: "@nx/nx-win32-x64-msvc@npm:16.2.1"
+"@nx/nx-win32-x64-msvc@npm:16.2.2":
+  version: 16.2.2
+  resolution: "@nx/nx-win32-x64-msvc@npm:16.2.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -24796,20 +24796,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:16.2.1":
-  version: 16.2.1
-  resolution: "nx@npm:16.2.1"
+"nx@npm:16.2.2":
+  version: 16.2.2
+  resolution: "nx@npm:16.2.2"
   dependencies:
-    "@nrwl/tao": 16.2.1
-    "@nx/nx-darwin-arm64": 16.2.1
-    "@nx/nx-darwin-x64": 16.2.1
-    "@nx/nx-linux-arm-gnueabihf": 16.2.1
-    "@nx/nx-linux-arm64-gnu": 16.2.1
-    "@nx/nx-linux-arm64-musl": 16.2.1
-    "@nx/nx-linux-x64-gnu": 16.2.1
-    "@nx/nx-linux-x64-musl": 16.2.1
-    "@nx/nx-win32-arm64-msvc": 16.2.1
-    "@nx/nx-win32-x64-msvc": 16.2.1
+    "@nrwl/tao": 16.2.2
+    "@nx/nx-darwin-arm64": 16.2.2
+    "@nx/nx-darwin-x64": 16.2.2
+    "@nx/nx-linux-arm-gnueabihf": 16.2.2
+    "@nx/nx-linux-arm64-gnu": 16.2.2
+    "@nx/nx-linux-arm64-musl": 16.2.2
+    "@nx/nx-linux-x64-gnu": 16.2.2
+    "@nx/nx-linux-x64-musl": 16.2.2
+    "@nx/nx-win32-arm64-msvc": 16.2.2
+    "@nx/nx-win32-x64-msvc": 16.2.2
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24872,7 +24872,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: a6d78686dea2cb72d84d06dc1feed0dc0e07080c607c78939c1083b7a05cc9d30514016aa79dc584fd54dffa0612c7051666ddb7fb1ddf4e7373f0515f7ed6f6
+  checksum: 884a46439764e684795ec6223f07d89c0bd47c8d2ccf7ca56a8cef911c18172a38743e116fff555e9dbc2578e603e2d613e200ca35c03d9c314d9961b23cfbea
   languageName: node
   linkType: hard
 
@@ -28340,7 +28340,7 @@ __metadata:
     ncp: 2.0.0
     nodemon: 2.0.22
     npm-packlist: 7.0.4
-    nx: 16.2.1
+    nx: 16.2.2
     nx-cloud: 16.0.5
     octokit: 2.0.18
     ora: 5.4.1
