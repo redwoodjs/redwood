@@ -17,7 +17,12 @@ jest.mock('@redwoodjs/project-config', () => {
     },
     getConfig: () => {
       return {
-        api: {},
+        web: {
+          host: 'localhost',
+        },
+        api: {
+          host: 'localhost',
+        },
       }
     },
   }
@@ -67,6 +72,7 @@ describe('yarn rw serve', () => {
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
+        host: 'localhost',
         apiRootPath: expect.stringMatching(/^\/?funkyFunctions\/?$/),
       })
     )
@@ -82,6 +88,7 @@ describe('yarn rw serve', () => {
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
+        host: 'localhost',
         rootPath: expect.stringMatching(/^\/?funkyFunctions\/nested\/$/),
       })
     )
@@ -97,6 +104,7 @@ describe('yarn rw serve', () => {
     expect(webServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 9898,
+        host: 'localhost',
         socket: 'abc',
         apiHost: 'https://myapi.redwood/api',
       })
@@ -111,6 +119,7 @@ describe('yarn rw serve', () => {
     expect(bothServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 9898,
+        host: 'localhost',
         socket: 'abc',
       })
     )

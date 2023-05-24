@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// This script is called by the `yarn rw dev` command. Specifically, it's the api command.
 
 import { fork } from 'child_process'
 import type { ChildProcess } from 'child_process'
@@ -16,6 +17,9 @@ import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { getPaths, ensurePosixPath, getConfig } from '@redwoodjs/project-config'
 
+const redwoodProjectPaths = getPaths()
+const redwoodProjectConfig = getConfig()
+
 const argv = yargs(hideBin(process.argv))
   .option('debug-port', {
     alias: 'dp',
@@ -26,15 +30,19 @@ const argv = yargs(hideBin(process.argv))
     alias: 'p',
     description: 'Port',
     type: 'number',
+    default: redwoodProjectConfig.api.port,
   })
-  .help()
-  .alias('help', 'h')
+  .option('host', {
+    alias: 'h',
+    description: 'Host',
+    type: 'string',
+    default: redwoodProjectConfig.api.host,
+  })
   .parseSync()
 
-const rwjsPaths = getPaths()
-
+// If this is run via the yarn rw dev command, this will have already been called.
 dotenv.config({
-  path: rwjsPaths.base,
+  path: redwoodProjectPaths.base,
 })
 
 // TODO:
@@ -77,9 +85,9 @@ const rebuildApiServer = () => {
     }
 
     // OpenTelemetry SDK Setup
-    if (getConfig().experimental.opentelemetry.enabled) {
+    if (redwoodProjectConfig.experimental.opentelemetry.enabled) {
       const opentelemetrySDKScriptPath =
-        getConfig().experimental.opentelemetry.apiSdk
+        redwoodProjectConfig.experimental.opentelemetry.apiSdk
       if (opentelemetrySDKScriptPath) {
         console.log(
           `Setting up OpenTelemetry using the setup file: ${opentelemetrySDKScriptPath}`
@@ -101,12 +109,10 @@ const rebuildApiServer = () => {
       forkOpts.execArgv = forkOpts.execArgv.concat([`--inspect=${debugPort}`])
     }
 
-    const port = argv.port ?? getConfig().api.port
-
     // Start API server
     httpServerProcess = fork(
       path.join(__dirname, 'index.js'),
-      ['api', '--port', port.toString()],
+      ['api', '--port', argv.port.toString(), '--host', `${argv.host}`],
       forkOpts
     )
   } catch (e) {
@@ -126,16 +132,16 @@ const delayRestartServer = debounce(
 )
 
 // NOTE: the file comes through as a unix path, even on windows
-// So we need to convert the rwjsPaths
+// So we need to convert the redwoodProjectPaths
 
 const IGNORED_API_PATHS = [
-  'api/dist', // use this, because using rwjsPaths.api.dist seems to not ignore on first build
-  rwjsPaths.api.types,
-  rwjsPaths.api.db,
+  'api/dist', // use this, because using redwoodProjectPaths.api.dist seems to not ignore on first build
+  redwoodProjectPaths.api.types,
+  redwoodProjectPaths.api.db,
 ].map((path) => ensurePosixPath(path))
 
 chokidar
-  .watch(rwjsPaths.api.base, {
+  .watch(redwoodProjectPaths.api.base, {
     persistent: true,
     ignoreInitial: true,
     ignored: (file: string) => {
@@ -174,7 +180,9 @@ chokidar
     }
 
     console.log(
-      c.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`)
+      c.dim(
+        `[${eventName}] ${filePath.replace(redwoodProjectPaths.api.base, '')}`
+      )
     )
     delayRestartServer.cancel()
     delayRestartServer()

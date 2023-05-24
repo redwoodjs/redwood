@@ -204,7 +204,7 @@ api:
   system:
     cpu: 2
     memory: 2G
-    health_check: "/health"
+    health_check: "/api/health"
 
   resources:
     - name: ${path.basename(redwoodProjectPaths.base)}-db
