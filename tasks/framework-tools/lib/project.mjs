@@ -5,7 +5,7 @@ import path from 'node:path'
 
 import execa from 'execa'
 import ora from 'ora'
-import { rimraf } from 'rimraf'
+import rimraf from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import {
@@ -117,7 +117,7 @@ export async function copyFrameworkFilesToProject(
       files.length,
       'files'
     )
-    await rimraf(packageDstPath)
+    rimraf.sync(packageDstPath)
 
     for (const file of files) {
       const src = path.join(packageNamesToPaths[packageName], file)
