@@ -2,9 +2,9 @@
 import { createRequire } from 'module'
 
 const requireFromStorybook = createRequire(
-  require.resolve('@storybook/react/package.json')
+  require.resolve('storybook/package.json')
 )
 
 const bins = requireFromStorybook('./package.json')['bin']
 
-requireFromStorybook(bins['start-storybook'])
+requireFromStorybook(bins['storybook'])

@@ -18,13 +18,33 @@ const sendProcessReady = () => {
   return process.send && process.send('ready')
 }
 
+const redwoodProjectConfig = getConfig()
+
 export const commonOptions = {
-  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
+  port: {
+    default: redwoodProjectConfig.web.port,
+    type: 'number',
+    alias: 'p',
+  },
+  host: {
+    default: redwoodProjectConfig.web.host,
+    type: 'string',
+    alias: 'h',
+  },
   socket: { type: 'string' },
 } as const
 
 export const apiCliOptions = {
-  port: { default: getConfig().api?.port || 8911, type: 'number', alias: 'p' },
+  port: {
+    default: redwoodProjectConfig.api.port,
+    type: 'number',
+    alias: 'p',
+  },
+  host: {
+    default: redwoodProjectConfig.api.host,
+    type: 'string',
+    alias: 'h',
+  },
   socket: { type: 'string' },
   apiRootPath: {
     alias: ['rootPath', 'root-path'],
@@ -36,7 +56,16 @@ export const apiCliOptions = {
 } as const
 
 export const webCliOptions = {
-  port: { default: getConfig().web?.port || 8910, type: 'number', alias: 'p' },
+  port: {
+    default: redwoodProjectConfig.web.port,
+    type: 'number',
+    alias: 'p',
+  },
+  host: {
+    default: redwoodProjectConfig.web.host,
+    type: 'string',
+    alias: 'h',
+  },
   socket: { type: 'string' },
   apiHost: {
     alias: 'api-host',
@@ -46,7 +75,7 @@ export const webCliOptions = {
 } as const
 
 export const apiServerHandler = async (options: ApiServerArgs) => {
-  const { port, socket, apiRootPath } = options
+  const { port, host, socket, apiRootPath } = options
   const tsApiServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
 
@@ -57,6 +86,7 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 
   const http = startFastifyServer({
     port,
+    host,
     socket,
     fastify,
   }).ready(() => {
@@ -64,7 +94,7 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 
     const on = socket
       ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
+      : c.magenta(`http://${host}:${port}${apiRootPath}`)
     console.log(`API listening on ${on}`)
     const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
@@ -76,10 +106,10 @@ export const apiServerHandler = async (options: ApiServerArgs) => {
 }
 
 export const bothServerHandler = async (options: BothServerArgs) => {
-  const { port, socket } = options
+  const { port, host, socket } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
-  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
+  const apiRootPath = coerceRootPath(redwoodProjectConfig.web.apiUrl)
 
   let fastify = createFastifyInstance()
 
@@ -89,15 +119,16 @@ export const bothServerHandler = async (options: BothServerArgs) => {
 
   startFastifyServer({
     port,
+    host,
     socket,
     fastify,
   }).ready(() => {
     console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
     const on = socket
       ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
-    const webServer = c.green(`http://localhost:${port}`)
-    const apiServer = c.magenta(`http://localhost:${port}`)
+      : c.magenta(`http://${host}:${port}${apiRootPath}`)
+    const webServer = c.green(`http://${host}:${port}`)
+    const apiServer = c.magenta(`http://${host}:${port}`)
     console.log(`Web server started on ${webServer}`)
     console.log(`API serving from ${apiServer}`)
     console.log(`API listening on ${on}`)
@@ -108,14 +139,14 @@ export const bothServerHandler = async (options: BothServerArgs) => {
 }
 
 export const webServerHandler = async (options: WebServerArgs) => {
-  const { port, socket, apiHost } = options
+  const { port, host, socket, apiHost } = options
   const tsServer = Date.now()
   process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
-  const apiUrl = getConfig().web.apiUrl
+  const apiUrl = redwoodProjectConfig.web.apiUrl
   // Construct the graphql url from apiUrl by default
   // But if apiGraphQLUrl is specified, use that instead
   const graphqlEndpoint = coerceRootPath(
-    getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
+    redwoodProjectConfig.web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
   let fastify = createFastifyInstance()
@@ -131,7 +162,8 @@ export const webServerHandler = async (options: WebServerArgs) => {
   }
 
   startFastifyServer({
-    port: port,
+    port,
+    host,
     socket,
     fastify,
   }).ready(() => {
@@ -139,7 +171,7 @@ export const webServerHandler = async (options: WebServerArgs) => {
     if (socket) {
       console.log(`Listening on ` + c.magenta(`${socket}`))
     }
-    const webServer = c.green(`http://localhost:${port}`)
+    const webServer = c.green(`http://${host}:${port}`)
     console.log(`Web server started on ${webServer}`)
     console.log(`GraphQL endpoint is set to ` + c.magenta(`${graphqlEndpoint}`))
     sendProcessReady()
