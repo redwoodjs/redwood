@@ -75,7 +75,7 @@ export async function getDescendantSpans(spanId: string): Promise<any[]> {
   )
   const result = await stmt.all(...descendantSpanIDs)
   await stmt.finalize()
-  return result
+  return result.map((span) => restructureSpan(span))
 }
 
 export async function getChildSpans(spanId: string): Promise<any[]> {
