@@ -27,7 +27,7 @@ export type RedwoodRealtimeOptions = {
    */
   subscriptions?: {
     subscriptions: SubscriptionGlobImports
-    pubSub: PubSub<NonNullable<unknown>>
+    pubSub: ReturnType<typeof createPubSub>
   }
 }
 
@@ -51,7 +51,9 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
         return ({ extendContext }) => {
           extendContext({
             liveQueryStore: options.liveQueries?.liveQueryStore,
-            pubSub: options.subscriptions?.pubSub,
+            pubSub: options.subscriptions?.pubSub as ReturnType<
+              typeof createPubSub
+            >,
           })
         }
       },
