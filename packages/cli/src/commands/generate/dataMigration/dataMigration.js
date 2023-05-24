@@ -35,7 +35,8 @@ export const files = ({ name, typescript }) => {
   }
 }
 
-export const command = 'dataMigration <name>'
+export const command = 'data-migration <name>'
+export const aliases = ['dataMigration', 'dm']
 export const description = 'Generate a data migration'
 export const builder = (yargs) => {
   yargs
