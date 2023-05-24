@@ -1993,6 +1993,7 @@ yarn redwood serve [side]
 | ------------------- | ------------------------------------------------------------------------------ |
 | `side`              | Which side(s) to run. Choices are `api` and `web`. Defaults to `api` and `web` |
 | `--port`            | What port should the server run on [default: 8911]                             |
+| `--host`            | What host should the server run on. This defaults to the value of `web.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
 | `--socket`          | The socket the server should run. This takes precedence over port              |
 
 ### serve api
@@ -2008,6 +2009,7 @@ This command uses `apiUrl` in your `redwood.toml`. Use this command if you want 
 | Arguments & Options | Description                                                       |
 | ------------------- | ----------------------------------------------------------------- |
 | `--port`            | What port should the server run on [default: 8911]                |
+| `--host`            | What host should the server run on. This defaults to the value of `api.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
 | `--socket`          | The socket the server should run. This takes precedence over port |
 | `--apiRootPath`     | The root path where your api functions are served                 |
 
@@ -2035,6 +2037,7 @@ This command serves the contents in `web/dist`. Use this command if you're debug
 | Arguments & Options | Description                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------- |
 | `--port`            | What port should the server run on [default: 8911]                                    |
+| `--host`            | What host should the server run on. This defaults to the value of `web.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
 | `--socket`          | The socket the server should run. This takes precedence over port                     |
 | `--apiHost`         | Forwards requests from the `apiUrl` (defined in `redwood.toml`) to the specified host |
 
