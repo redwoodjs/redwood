@@ -16,9 +16,7 @@ const getProxyConfig = () => {
     // Redwood only proxies absolute paths.
     return {
       [apiUrl]: {
-        target: `${
-          process.env.RWJS_DEV_API_URL ?? `http://${redwoodConfig.web.host}`
-        }:${port}`,
+        target: `${process.env.RWJS_DEV_API_URL ?? 'http://localhost'}:${port}`,
         pathRewrite: {
           // Eg: Rewrite `/.netlify/functions/graphql` to `/graphql`, which the api-server expects
           [`^${escapeRegExp(apiUrl)}`]: '',

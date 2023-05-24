@@ -160,7 +160,7 @@ export const handler = async ({
       'yarn',
       'rw-api-server-watch',
       `--port ${apiAvailablePort}`,
-      `--host ${redwoodProjectConfig.web.host}`,
+      `--host '::'`,
       getApiDebugFlag(),
       '|',
       'rw-log-formatter',
