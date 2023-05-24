@@ -377,6 +377,7 @@ export function flattenSearchParams(
 export interface Spec {
   name: string
   loader: () => Promise<{ default: React.ComponentType<unknown> }>
+  prerenderLoader: (name?: string) => { default: React.ComponentType<unknown> }
   LazyComponent:
     | React.LazyExoticComponent<React.ComponentType<unknown>>
     | React.ComponentType<unknown>
@@ -417,6 +418,7 @@ export function normalizePage(
   return {
     name: specOrPage.name,
     loader: async () => ({ default: specOrPage }),
+    prerenderLoader: () => ({ default: specOrPage }),
     LazyComponent: specOrPage,
   }
 }
@@ -560,11 +562,6 @@ export function analyzeRoutes(
 
       // @NOTE: A <Private> is also a Set
       if (isSetNode(node)) {
-        console.log(`👉 \n ~ file: util.ts:563 ~ node:`, node)
-        console.log(
-          `👉 \n ~ file: util.ts:563 ~ isPrivateNode:`,
-          isPrivateNode(node)
-        )
         const {
           children,
           whileLoadingPage: whileLoadingPageFromCurrentSet,

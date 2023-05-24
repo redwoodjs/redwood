@@ -12,13 +12,31 @@ interface Props {
   children?: React.ReactNode
 }
 
+let isPrerendered = false
+
+if (typeof window !== 'undefined') {
+  const redwoodAppElement = document.getElementById('redwood-app')
+
+  if (redwoodAppElement && redwoodAppElement.children.length > 0) {
+    isPrerendered = true
+  }
+}
+
+const firstLoad = true
+
 export const ActiveRouteLoader = ({
   spec,
   params,
   whileLoadingPage,
 }: Props) => {
   const announcementRef = useRef<HTMLDivElement>(null)
-  const LazyRouteComponent = spec.LazyComponent
+
+  const usePrerenderLoader =
+    globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad)
+
+  const LazyRouteComponent = usePrerenderLoader
+    ? spec.prerenderLoader(spec.name).default
+    : spec.LazyComponent
 
   useEffect(() => {
     // Make this hook a no-op if we're rendering in an iframe.
