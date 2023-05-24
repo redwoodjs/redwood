@@ -19,7 +19,7 @@ export async function builder(yargs) {
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      description: 'Run both api and web servers',
+      description: 'Run both api and web servers. Uses the web port and host',
       builder: (yargs) =>
         yargs.options({
           port: {
@@ -66,7 +66,7 @@ export async function builder(yargs) {
     })
     .command({
       command: 'api',
-      description: 'start server for serving only the api',
+      description: 'Start server for serving only the api',
       builder: (yargs) =>
         yargs.options({
           port: {
@@ -95,7 +95,7 @@ export async function builder(yargs) {
     })
     .command({
       command: 'web',
-      description: 'start server for serving only the web side',
+      description: 'Start server for serving only the web side',
       builder: (yargs) =>
         yargs.options({
           port: {

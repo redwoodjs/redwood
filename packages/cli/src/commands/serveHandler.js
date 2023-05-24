@@ -104,16 +104,17 @@ export const bothServerHandler = async (options) => {
 }
 
 export const webServerHandler = async (options) => {
+  const redwoodProjectConfig = getConfig()
   const { port, host, socket, apiHost } = options
 
   const tsServer = Date.now()
   console.log(chalk.dim.italic('Starting Web Server...'))
-  const apiUrl = getConfig().web.apiUrl
+  const apiUrl = redwoodProjectConfig.web.apiUrl
 
   // Construct the GraphQL URL from apiUrl by default.
   // But if apiGraphQLUrl is specified, use that instead.
   const graphqlEndpoint = coerceRootPath(
-    getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
+    redwoodProjectConfig.web.apiGraphQLUrl ?? `${apiUrl}/graphql`
   )
 
   const fastify = createFastifyInstance()

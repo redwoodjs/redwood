@@ -162,7 +162,7 @@ export const webServerHandler = async (options: WebServerArgs) => {
   }
 
   startFastifyServer({
-    port: port,
+    port,
     host,
     socket,
     fastify,
