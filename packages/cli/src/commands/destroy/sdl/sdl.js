@@ -27,7 +27,7 @@ export const tasks = ({ model }) =>
         },
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
 
 export const handler = async ({ model }) => {

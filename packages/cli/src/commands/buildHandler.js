@@ -3,7 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 import { Listr } from 'listr2'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
@@ -72,8 +72,8 @@ export const handler = async ({
     },
     side.includes('api') && {
       title: 'Building API...',
-      task: async () => {
-        const { errors, warnings } = await buildApi()
+      task: () => {
+        const { errors, warnings } = buildApi()
 
         if (errors.length) {
           console.error(errors)

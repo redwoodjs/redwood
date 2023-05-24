@@ -229,7 +229,7 @@ export const createYargsForComponentGeneration = ({
             ...includeAdditionalTasks(options),
           ],
           {
-            rendererOptions: { collapse: false },
+            rendererOptions: { collapseSubtasks: false },
             exitOnError: true,
             renderer: options.verbose && 'verbose',
           }

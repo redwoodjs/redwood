@@ -2,6 +2,7 @@ import CryptoJS from 'crypto-js'
 
 import { DbAuthHandler } from '../DbAuthHandler'
 import * as dbAuthError from '../errors'
+import { hashToken } from '../shared'
 
 // mock prisma db client
 const DbMock = class {
@@ -759,8 +760,8 @@ describe('dbAuth', () => {
       })
 
       expect(resetUser.resetToken).not.toEqual(undefined)
-      // base64 characters only, except =
-      expect(resetUser.resetToken).toMatch(/^\w{16}$/)
+      // Should be a 64 character hex string for a 256 bit token hash (sha256)
+      expect(resetUser.resetToken).toMatch(/^\w{64}$/)
       expect(resetUser.resetTokenExpiresAt instanceof Date).toEqual(true)
 
       // response contains data returned from the handler
@@ -792,6 +793,21 @@ describe('dbAuth', () => {
       })
       options.forgotPassword.handler = (handlerUser) => {
         expect(handlerUser.id).toEqual(user.id)
+      }
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth.forgotPassword()
+      expect.assertions(1)
+    })
+
+    it('invokes forgotPassword.handler() with the raw resetToken', async () => {
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: user.email,
+      })
+      options.forgotPassword.handler = (handlerUser) => {
+        // user should have the raw resetToken NOT the hash
+        // resetToken consists of 16 base64 characters
+        expect(handlerUser.resetToken).toMatch(/^\w{16}$/)
       }
       const dbAuth = new DbAuthHandler(event, context, options)
       await dbAuth.forgotPassword()
@@ -1123,7 +1139,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires - 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1144,7 +1160,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires - 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1172,7 +1188,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1194,7 +1210,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
 
@@ -1214,7 +1230,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1240,7 +1256,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1265,7 +1281,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       const user = await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1287,7 +1303,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -1308,7 +1324,7 @@ describe('dbAuth', () => {
         tokenExpires.getSeconds() - options.forgotPassword.expires + 1
       )
       await createDbUser({
-        resetToken: '1234',
+        resetToken: hashToken('1234'),
         resetTokenExpiresAt: tokenExpires,
       })
       event.body = JSON.stringify({
@@ -2338,6 +2354,55 @@ describe('dbAuth', () => {
         expect(e.message).toEqual(`${dbUser.email} taken`)
       })
       expect.assertions(2)
+    })
+
+    it('createUser db check is called with insensitive string when user has provided one in SignupFlowOptions', async () => {
+      const spy = jest.spyOn(db.user, 'findFirst')
+      options.signup.usernameMatch = 'insensitive'
+
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      await dbAuth._createUser()
+      expect(spy).toHaveBeenCalled()
+      return expect(spy).toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
+    })
+
+    it('createUser db check is not called with insensitive string when user has not provided one in SignupFlowOptions', async () => {
+      jest.resetAllMocks()
+      jest.clearAllMocks()
+
+      const defaultMessage = options.signup.errors.usernameTaken
+      const spy = jest.spyOn(db.user, 'findFirst')
+      delete options.signup.usernameMatch
+
+      const dbUser = await createDbUser()
+      event.body = JSON.stringify({
+        username: dbUser.email,
+        password: 'password',
+      })
+      const dbAuth = new DbAuthHandler(event, context, options)
+      await dbAuth._createUser().catch((e) => {
+        expect(e).toBeInstanceOf(dbAuthError.DuplicateUsernameError)
+        expect(e.message).toEqual(
+          defaultMessage.replace(/\$\{username\}/, dbUser.email)
+        )
+      })
+
+      expect(spy).toHaveBeenCalled()
+      return expect(spy).not.toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
     })
 
     it('throws a default error message if username is missing', async () => {

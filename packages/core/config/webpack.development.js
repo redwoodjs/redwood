@@ -16,7 +16,7 @@ const getProxyConfig = () => {
     // Redwood only proxies absolute paths.
     return {
       [apiUrl]: {
-        target: `${process.env.RWJS_DEV_API_URL ?? 'http://[::1]'}:${port}`,
+        target: `${process.env.RWJS_DEV_API_URL ?? 'http://localhost'}:${port}`,
         pathRewrite: {
           // Eg: Rewrite `/.netlify/functions/graphql` to `/graphql`, which the api-server expects
           [`^${escapeRegExp(apiUrl)}`]: '',
@@ -83,6 +83,12 @@ const getProxyConfig = () => {
 /** @type {import('webpack').Configuration} */
 const baseConfig = merge(webpackConfig('development'), {
   devServer: {
+    // `runtimeErrors` became true by default in webpack-dev-server v4.15.0 and interferes with <FormError />.
+    client: {
+      overlay: {
+        runtimeErrors: false,
+      },
+    },
     // https://webpack.js.org/configuration/dev-server/
     // note: docs not yet updated for webpack-dev-server v4
     devMiddleware: {
@@ -92,7 +98,7 @@ const baseConfig = merge(webpackConfig('development'), {
     historyApiFallback: {
       disableDotRule: true,
     },
-    host: redwoodConfig.web.host || 'localhost',
+    host: redwoodConfig.web.host,
     port: redwoodConfig.web.port,
     proxy: getProxyConfig(),
     open: redwoodConfig.browser.open,

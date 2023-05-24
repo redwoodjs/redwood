@@ -43,11 +43,11 @@ export default function transform(file: FileInfo, api: API) {
           if (firstParameter.type === 'ObjectPattern') {
             const previouslySpreadPropertiesInUse =
               firstParameter.properties.filter((property: Property) => {
-                if (property.key.type !== 'Identifier') {
-                  throw new Error(
-                    'Unable to process a parameter within the cell function'
-                  )
+                // skip rest params
+                if (property.type === 'RestElement') {
+                  return false
                 }
+
                 return nonSpreadVariables.includes(property.key.name)
               })
             if (previouslySpreadPropertiesInUse.length > 0) {

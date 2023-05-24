@@ -5,7 +5,7 @@ import path from 'node:path'
 
 import execa from 'execa'
 import ora from 'ora'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import {

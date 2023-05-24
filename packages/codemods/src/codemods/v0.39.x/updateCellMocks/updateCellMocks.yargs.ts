@@ -4,7 +4,8 @@ import fg from 'fast-glob'
 import task from 'tasuku'
 import type { TaskInnerAPI } from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
+
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'update-cell-mocks'
@@ -12,7 +13,7 @@ export const description =
   '(v0.38->v0.39) Updates standard cell mocks to export functions, instead of objects'
 
 export const handler = () => {
-  const rwPaths = getRWPaths()
+  const rwPaths = getPaths()
 
   const cellMocks = fg.sync('**/*.mock.{js,ts}', {
     cwd: rwPaths.web.src,

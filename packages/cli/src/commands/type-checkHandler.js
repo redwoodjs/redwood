@@ -69,7 +69,10 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
               }),
           },
         ],
-        { renderer: verbose && 'verbose', rendererOptions: { collapse: false } }
+        {
+          renderer: verbose && 'verbose',
+          rendererOptions: { collapseSubtasks: false },
+        }
       ).run()
     }
 

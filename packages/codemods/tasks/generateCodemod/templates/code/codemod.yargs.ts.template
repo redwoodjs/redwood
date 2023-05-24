@@ -2,7 +2,7 @@ import path from 'path'
 
 import task, { TaskInnerAPI } from 'tasuku'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 import runTransform from '../../../lib/runTransform'
 
 export const command = '${kebabName}'
@@ -17,7 +17,7 @@ export const handler = () => {
         // Here we know exactly which file we need to transform, but often times you won't.
         // If you need to transform files based on their name, location, etc, use `fast-glob`.
         // If you need to transform files based on their contents, use `getFilesWithPattern`.
-        targetPaths: [path.join(getRWPaths().base, 'redwood.toml')],
+        targetPaths: [path.join(getPaths().base, 'redwood.toml')],
       })
 
       setOutput('All done! Run `yarn rw lint --fix` to prettify your code')

@@ -2,7 +2,7 @@
   base = "docs"
   publish = "build"
   command = "yarn build"
-  ignore = "node ignore_build.js"
+  ignore = "node ignore_build.mjs"
 
 [[redirects]]
   from = "/docs"
@@ -245,7 +245,7 @@
   from = "/docs/1.5/*"
   to = "/docs/1.x/:splat"
   status = 301
-    
+
 # v2.0-v2.2 redirects (to v2.x)
 
 [[redirects]]

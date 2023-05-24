@@ -179,7 +179,7 @@ export const handler = async (args) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

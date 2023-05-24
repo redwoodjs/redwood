@@ -5,7 +5,6 @@
  * @see prisma/codemods {@link https://github.com/prisma/codemods/blob/main/utils/runner.ts}
  * @see react-codemod {@link https://github.com/reactjs/react-codemod/blob/master/bin/cli.js}
  */
-
 import * as jscodeshift from 'jscodeshift/src/Runner'
 
 const defaultJscodeshiftOpts = {

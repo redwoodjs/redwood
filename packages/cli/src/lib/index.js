@@ -18,11 +18,14 @@ import {
   getConfig as getRedwoodConfig,
   getPaths as getRedwoodPaths,
   resolveFile as internalResolveFile,
+  findUp,
 } from '@redwoodjs/project-config'
 
 import c from './colors'
 import { addFileToRollback } from './rollback'
 import { pluralize, singularize } from './rwPluralize'
+
+export { findUp }
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -302,7 +305,7 @@ export const deleteFilesTask = (files) => {
 
 /**
  * @param files - {[filepath]: contents}
- * Deletes any empty directrories that are more than three levels deep below the base directory
+ * Deletes any empty directories that are more than three levels deep below the base directory
  * i.e. any directory below /web/src/components
  */
 export const cleanupEmptyDirsTask = (files) => {
@@ -542,7 +545,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     })),
     {
       renderer: verbose && 'verbose',
-      rendererOptions: { collapse: false, dateFormat: false },
+      rendererOptions: { collapseSubtasks: false, dateFormat: false },
     }
   )
 
@@ -572,7 +575,7 @@ export const getDefaultArgs = (builder) => {
 /**
  * Check if user is using VS Code
  *
- * i.e. check for the existance of .vscode folder in root project directory
+ * i.e. check for the existence of .vscode folder in root project directory
  */
 export const usingVSCode = () => {
   const redwoodPaths = getPaths()

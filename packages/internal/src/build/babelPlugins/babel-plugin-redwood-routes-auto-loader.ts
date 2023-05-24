@@ -11,7 +11,8 @@ import {
 } from '@redwoodjs/project-config'
 
 interface PluginOptions {
-  useStaticImports?: boolean
+  prerender?: boolean
+  vite?: boolean
 }
 
 /**
@@ -37,7 +38,7 @@ const withRelativeImports = (page: PagesDependency) => {
 
 export default function (
   { types: t }: { types: typeof types },
-  { useStaticImports = false }: PluginOptions
+  { prerender = false, vite = false }: PluginOptions
 ): PluginObj {
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
@@ -72,7 +73,7 @@ export default function (
         // This is to make sure that all the imported "Page modules" are normal
         // imports and not asynchronous ones.
         // Note that jest in a user's project does not enter this block, but our tests do
-        if (useStaticImports) {
+        if (prerender) {
           // Match import paths, const name could be different
 
           const pageThatUserImported = pages.find((page) => {
@@ -126,10 +127,7 @@ export default function (
             // + const <importName> = {
             //     name: <importName>,
             //     loader: () => import(/* webpackChunkName: "<importName>" */ <relativeImportPath>)
-            //     // prerender
-            //     prerenderLoader: () => require(<relativeImportPath>)
-            //     // crs
-            //     prerenderLoader: () => __webpack_require__(require.resolveWeak(<relativeImportPath>))
+            //     prerenderLoader: (name) => prerenderLoaderImpl
             //   }
 
             const importArgument = t.stringLiteral(relativeImport)
@@ -151,6 +149,7 @@ export default function (
                       t.stringLiteral(importName)
                     ),
                     // loader for dynamic imports (browser)
+                    // loader: () => import(<importArgument>)
                     t.objectProperty(
                       t.identifier('loader'),
                       t.arrowFunctionExpression(
@@ -162,27 +161,12 @@ export default function (
                     ),
                     // prerenderLoader for ssr/prerender and first load of
                     // prerendered pages in browser (csr)
+                    // prerenderLoader: (name) => { prerenderLoaderImpl }
                     t.objectProperty(
                       t.identifier('prerenderLoader'),
                       t.arrowFunctionExpression(
-                        [],
-                        useStaticImports
-                          ? t.callExpression(t.identifier('require'), [
-                              t.stringLiteral(relativeImport),
-                            ])
-                          : t.callExpression(
-                              t.identifier(
-                                // Use __webpack_require__ otherwise all pages will
-                                // be bundled
-                                '__webpack_require__'
-                              ),
-                              [
-                                t.callExpression(
-                                  t.identifier('require.resolveWeak'),
-                                  [t.stringLiteral(relativeImport)]
-                                ),
-                              ]
-                            )
+                        [t.identifier('name')],
+                        prerenderLoaderImpl(prerender, vite, relativeImport, t)
                       )
                     ),
                     t.objectProperty(
@@ -201,10 +185,54 @@ export default function (
               ])
             )
           }
+
           // Insert at the top of the file
           p.node.body.unshift(...nodes)
         },
       },
     },
   }
+}
+
+function prerenderLoaderImpl(
+  prerender: boolean,
+  vite: boolean,
+  relativeImport: string,
+  t: typeof types
+) {
+  if (prerender) {
+    // This works for both vite and webpack
+    return t.callExpression(t.identifier('require'), [
+      t.stringLiteral(relativeImport),
+    ])
+  }
+
+  // This code will be output when building the web side (i.e. not when
+  // prerendering)
+  // active-route-loader will use this code for auto-imported pages, for the
+  // first load of a prerendered page
+  // Manually imported pages will be bundled in the main bundle and will be
+  // loaded by the code in `normalizePage` in util.ts
+  let implForBuild
+  if (vite) {
+    implForBuild = t.objectExpression([
+      t.objectProperty(
+        t.identifier('default'),
+        t.memberExpression(
+          t.identifier('globalThis.__REDWOOD__PRERENDER_PAGES'),
+          t.identifier('name'),
+          true
+        )
+      ),
+    ])
+  } else {
+    // Use __webpack_require__ otherwise all pages will be bundled
+    implForBuild = t.callExpression(t.identifier('__webpack_require__'), [
+      t.callExpression(t.identifier('require.resolveWeak'), [
+        t.stringLiteral(relativeImport),
+      ]),
+    ])
+  }
+
+  return implForBuild
 }

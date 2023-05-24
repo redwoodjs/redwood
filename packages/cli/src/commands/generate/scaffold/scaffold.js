@@ -344,6 +344,8 @@ const modelRelatedVariables = (model) => {
     },
   }
 
+  const relations = relationsForModel(model).map((relation) => relation)
+
   const columns = model.fields
     .filter((field) => field.kind !== 'object')
     .map((column) => {
@@ -359,6 +361,10 @@ const modelRelatedVariables = (model) => {
           : null
       }
 
+      const isRelationalField =
+        column.name.endsWith('Id') &&
+        relations.some((relation) => column.name.includes(relation))
+      const isRequired = column.isRequired
       const isEnum = column.kind === 'enum'
       const isList = column.isList
       const enumType = isEnum && isList ? 'EnumList' : 'Enum'
@@ -386,6 +392,8 @@ const modelRelatedVariables = (model) => {
         values: column.enumValues || [],
         isList,
         isEnum,
+        isRequired,
+        isRelationalField,
       }
     })
   const editableColumns = columns
@@ -820,7 +828,7 @@ export const tasks = ({
         },
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
 }
 
