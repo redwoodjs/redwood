@@ -1,19 +1,48 @@
 import React from 'react'
 
 import { useQuery, gql } from '@apollo/client'
+import { Bold, Card, Flex, Text, Title } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 
+import AncestorFeatureList from '../../Components/Feature/AncestorFeatureList'
+import DescendantFeatureList from '../../Components/Feature/DescendantFeatureList'
 import LoadingSpinner from '../../Components/LoadingSpinner'
 import ErrorPanel from '../../Components/Panels/ErrorPanel'
-import WarningPanel from '../../Components/Panels/WarningPanel'
+import EventList from '../../Components/Span/EventList'
+import ResourceList from '../../Components/Span/ResourceList'
+import SpanDetails from '../../Components/Span/SpanDetails'
+import { ITEM_POLLING_INTERVAL } from '../../util/polling'
+import { displayTextOrJSON } from '../../util/ui'
 
-import SpanGeneric from './SpanGeneric'
-
-const GET_SPAN_TYPE = gql`
-  query GetSpanType($spanId: String!) {
+const GET_SPAN_DATA = gql`
+  query GetSpanData($spanId: String!) {
     span(spanId: $spanId) {
       id
       type
+      trace
+      parent
+      name
+      kind
+      statusCode
+      statusMessage
+      startNano
+      endNano
+      durationNano
+      attributes
+      events
+      resources
+      descendantSpans {
+        id
+        type
+        brief
+        statusCode
+      }
+      ancestorSpans {
+        id
+        type
+        brief
+        statusCode
+      }
     }
   }
 `
@@ -21,17 +50,13 @@ const GET_SPAN_TYPE = gql`
 export default function Span() {
   const { spanId } = useParams()
 
-  const { loading, error, data } = useQuery(GET_SPAN_TYPE, {
+  const { loading, error, data } = useQuery(GET_SPAN_DATA, {
     variables: { spanId },
-    pollInterval: 5_000,
+    pollInterval: ITEM_POLLING_INTERVAL,
   })
 
   if (error) {
-    return (
-      <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8 flex justify-center">
-        <ErrorPanel error={error} />
-      </div>
-    )
+    return <ErrorPanel error={error} />
   }
 
   if (loading) {
@@ -42,25 +67,49 @@ export default function Span() {
     )
   }
 
-  if (data.span == null) {
-    return (
-      <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8 flex justify-center">
-        <WarningPanel
-          warning={{
-            spanId,
-            message: `Unable to find any data for this span.`,
-          }}
+  return (
+    <div className="mx-auto py-6 px-4 max-w-[97.5%] md:max-w-[90%] sm:px-6 lg:px-8">
+      {/* Header  */}
+      <Card className="min-w-full bg-rich-black py-2 px-6">
+        <Flex>
+          <Title className="text-slate-100">Generic Span</Title>
+          <Title className="text-slate-100 font-mono">[{spanId}]</Title>
+        </Flex>
+      </Card>
+
+      {/* Span data (TODO: Make this the specific type dependant panel) */}
+      <div className="mt-4 grid lg:grid-cols-3 grid-cols-1 gap-2 lg:gap-4">
+        <Card className="min-w-full lg:col-span-2 row-span-2">
+          <Flex className="flex-col items-start overflow-auto">
+            <Title className="mb-2">Span Attributes</Title>
+            {Object.keys(data.span.attributes).map((key: any) => (
+              <Flex key={key} className="flex-col items-start">
+                <Text>
+                  <Bold>{key}</Bold>
+                </Text>
+                {displayTextOrJSON(data.span.attributes[key])}
+              </Flex>
+            ))}
+          </Flex>
+        </Card>
+
+        {/* Feature lists */}
+        <AncestorFeatureList
+          features={data.span.ancestorSpans.filter(
+            (span: any) => span.type !== null
+          )}
         />
+        <DescendantFeatureList
+          features={data.span.descendantSpans.filter(
+            (span: any) => span.type !== null
+          )}
+        />
+
+        {/* Other span data */}
+        <SpanDetails span={data.span} />
+        <ResourceList resources={data.span.resources} />
+        <EventList events={data.span.events} spanId={data.span.id} />
       </div>
-    )
-  }
-
-  switch (data.span.type) {
-    // case 'http':
-    //   return <SpanHTTP id={data.span.id}></SpanHTTP>
-    default:
-      return <SpanGeneric id={data.span.id}></SpanGeneric>
-  }
-
-  // return <>{spanId}</>
+    </div>
+  )
 }

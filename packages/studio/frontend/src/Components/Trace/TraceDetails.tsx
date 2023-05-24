@@ -1,5 +1,17 @@
 import React from 'react'
 
+import { LinkIcon } from '@heroicons/react/20/solid'
+import {
+  Card,
+  Flex,
+  Title,
+  Subtitle,
+  List,
+  ListItem,
+  Text,
+} from '@tremor/react'
+import { Link } from 'react-router-dom'
+
 import {
   getTraceName,
   traceDuration,
@@ -11,64 +23,59 @@ export default function TraceDetails({ trace }: { trace: any }) {
   const data = [
     {
       name: 'Trace ID',
-      value: trace.id,
+      value: (
+        <Flex className="justify-end">
+          <Link to={`/explorer/trace/${trace.id}`} className="pr-2">
+            <LinkIcon className="h-5 w-5 text-cyan-400" />
+          </Link>
+          <Text>{trace.id}</Text>
+        </Flex>
+      ),
     },
     {
       name: 'Span Count',
-      value: trace.spans.length,
+      value: <Text>{trace.spans.length}</Text>,
     },
     {
       name: 'Root Span Count',
-      value: trace.spans.filter((span: any) => span.parent == null).length,
+      value: (
+        <Text>
+          {trace.spans.filter((span: any) => span.parent == null).length}
+        </Text>
+      ),
     },
     {
       name: 'Root Span Names',
-      value: getTraceName(trace.spans),
+      value: <Text>{getTraceName(trace.spans)}</Text>,
     },
     {
       name: 'Start (ns)',
-      value: traceStart(trace.spans),
+      value: <Text>{traceStart(trace.spans)}</Text>,
     },
     {
       name: 'End (ns)',
-      value: traceEnd(trace.spans),
+      value: <Text>{traceEnd(trace.spans)}</Text>,
     },
     {
       name: 'Duration (ns)',
-      value: traceDuration(trace.spans),
+      value: <Text>{traceDuration(trace.spans)}</Text>,
     },
   ]
 
   return (
-    <>
-      <div>
-        <div className="px-4 sm:px-0">
-          <h3 className="text-base font-semibold leading-7 text-gray-900">
-            Span Information
-          </h3>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500 border-b border-gray-200 pb-3">
-            All the metadata associated with the span.
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <div className="inline-block min-w-full align-middle ">
-            <table className="min-w-full divide-y divide-gray-300">
-              <tbody className="divide-y divide-gray-200">
-                {data.map((d) => (
-                  <tr key={d.name}>
-                    <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {d.name}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
-                      {d.value}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </>
+    <Card className="min-w-full">
+      <Flex className="flex-col items-start">
+        <Title>Trace Metadata</Title>
+        <Subtitle>Metadata associated with this trace</Subtitle>
+        <List className="mt-2">
+          {data.map((d) => (
+            <ListItem key={d.name}>
+              <Text>{d.name}</Text>
+              {d.value}
+            </ListItem>
+          ))}
+        </List>
+      </Flex>
+    </Card>
   )
 }
