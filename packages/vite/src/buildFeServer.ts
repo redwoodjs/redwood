@@ -4,7 +4,6 @@ import path from 'path'
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
 import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
@@ -12,6 +11,7 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
 import { RWRouteManifest } from './types'
+import { getRouteHookBabelPlugins } from '@redwoodjs/internal/src/build/babel/common'
 
 interface BuildOptions {
   verbose?: boolean

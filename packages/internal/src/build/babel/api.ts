@@ -62,10 +62,7 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
 }
 
 export const getApiSideBabelPlugins = (
-  { forJest, openTelemetry } = {
-    forJest: false,
-    openTelemetry: false,
-  }
+  { openTelemetry } = { openTelemetry: false }
 ) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
@@ -214,6 +211,28 @@ export const prebuildApiFile = (
     // we set the sourceFile (for the sourcemap) as a correct, relative path
     // this is why this function (prebuildFile) must know about the dstPath
     sourceFileName: path.relative(path.dirname(dstPath), srcPath),
+    // we need inline sourcemaps at this level
+    // because this file will eventually be fed to esbuild
+    // when esbuild finds an inline sourcemap, it tries to "combine" it
+    // so the final sourcemap (the one that esbuild generates) combines both mappings
+    sourceMaps: 'inline',
+    plugins,
+  })
+  return result
+}
+
+// Temp impl. Should use whatever comes out of https://github.com/redwoodjs/redwood/pull/7672
+export const transformWithBabel = (
+  srcPath: string,
+  plugins: TransformOptions['plugins']
+) => {
+  const code = fs.readFileSync(srcPath, 'utf-8')
+  const defaultOptions = getApiSideDefaultBabelConfig()
+
+  const result = transform(code, {
+    ...defaultOptions,
+    cwd: getPaths().api.base,
+    filename: srcPath,
     // we need inline sourcemaps at this level
     // because this file will eventually be fed to esbuild
     // when esbuild finds an inline sourcemap, it tries to "combine" it
