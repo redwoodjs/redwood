@@ -11,34 +11,14 @@ import c from '../lib/colors'
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
-export async function builder(yargs) {
-  const redwoodProjectPaths = getPaths()
-  const redwoodProjectConfig = getConfig()
-
+export const builder = async (yargs) => {
   yargs
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      description: 'Run both api and web servers. Uses the web port and host',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: redwoodProjectConfig.web.port,
-            type: 'number',
-            alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
-            alias: 'h',
-          },
-          socket: { type: 'string' },
-        }),
+      descriptions: 'Run both api and web servers',
       handler: async (argv) => {
-        const serverFilePath = path.join(
-          redwoodProjectPaths.api.dist,
-          'server.js'
-        )
+        const serverFilePath = path.join(getPaths().api.dist, 'server.js')
 
         if (fs.existsSync(serverFilePath)) {
           console.log(
@@ -52,7 +32,7 @@ export async function builder(yargs) {
           )
 
           await execa('yarn', ['node', path.join('dist', 'server.js')], {
-            cwd: redwoodProjectPaths.api.base,
+            cwd: getPaths().api.base,
             stdio: 'inherit',
             shell: true,
           })
@@ -63,50 +43,53 @@ export async function builder(yargs) {
         const { bothServerHandler } = await import('./serveHandler.js')
         await bothServerHandler(argv)
       },
-    })
-    .command({
-      command: 'api',
-      description: 'Start server for serving only the api',
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.api.port,
+            default: getConfig().web?.port || 8910,
             type: 'number',
             alias: 'p',
           },
-          host: {
-            default: redwoodProjectConfig.api.host,
-            type: 'string',
-            alias: 'h',
+          socket: { type: 'string' },
+        }),
+    })
+    .command({
+      command: 'api',
+      description: 'start server for serving only the api',
+      handler: async (argv) => {
+        const { apiServerHandler } = await import('./serveHandler.js')
+        await apiServerHandler(argv)
+      },
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: getConfig().api?.port || 8911,
+            type: 'number',
+            alias: 'p',
           },
           socket: { type: 'string' },
           apiRootPath: {
-            alias: ['api-root-path', 'rootPath', 'root-path'],
+            alias: ['rootPath', 'root-path'],
             default: '/',
             type: 'string',
             desc: 'Root path where your api functions are served',
             coerce: coerceRootPath,
           },
         }),
-      handler: async (argv) => {
-        const { apiServerHandler } = await import('./serveHandler.js')
-        await apiServerHandler(argv)
-      },
     })
     .command({
       command: 'web',
-      description: 'Start server for serving only the web side',
+      description: 'start server for serving only the web side',
+      handler: async (argv) => {
+        const { webServerHandler } = await import('./serveHandler.js')
+        await webServerHandler(argv)
+      },
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port,
+            default: getConfig().web?.port || 8910,
             type: 'number',
             alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
-            alias: 'h',
           },
           socket: { type: 'string' },
           apiHost: {
@@ -115,10 +98,6 @@ export async function builder(yargs) {
             desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
           },
         }),
-      handler: async (argv) => {
-        const { webServerHandler } = await import('./serveHandler.js')
-        await webServerHandler(argv)
-      },
     })
     .middleware((argv) => {
       // Make sure the relevant side has been built, before serving
@@ -126,7 +105,7 @@ export async function builder(yargs) {
 
       if (
         positionalArgs.includes('web') &&
-        !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html')
+        !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
       ) {
         console.error(
           c.error(
@@ -138,7 +117,7 @@ export async function builder(yargs) {
 
       if (
         positionalArgs.includes('api') &&
-        !fs.existsSync(path.join(redwoodProjectPaths.api.dist))
+        !fs.existsSync(path.join(getPaths().api.dist))
       ) {
         console.error(
           c.error(
@@ -151,8 +130,8 @@ export async function builder(yargs) {
       if (
         // serve both
         positionalArgs.length === 1 &&
-        (!fs.existsSync(path.join(redwoodProjectPaths.api.dist)) ||
-          !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html'))
+        (!fs.existsSync(path.join(getPaths().api.dist)) ||
+          !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
       ) {
         console.error(
           c.error(
@@ -179,9 +158,6 @@ const separator = chalk.hex('#ff845e')(
   '------------------------------------------------------------------'
 )
 
-// We'll clean this up later, but for now note that this function is
-// duplicated between this package and @redwoodjs/fastify
-// to avoid importing @redwoodjs/fastify when the CLI starts.
 export function coerceRootPath(path) {
   // Make sure that we create a root path that starts and ends with a slash (/)
   const prefix = path.charAt(0) !== '/' ? '/' : ''
