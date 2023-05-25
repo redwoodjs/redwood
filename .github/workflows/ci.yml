@@ -205,12 +205,12 @@ jobs:
 
       - name: Run smoke tests on 'rw dev', 'rw serve', 'rw storybook'
         working-directory: ./tasks/smoke-test
-        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }} --reporter @replayio/playwright/reporter,line
+        run: npx playwright test --project 'chromium' --reporter line
         env:
           PROJECT_PATH: ${{ steps.setup_test_project.outputs.test_project_path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          RECORD_REPLAY_METADATA_TEST_RUN_TITLE: Smoke test / ${{ matrix.os }} / node 18 latest
-          RECORD_REPLAY_TEST_METRICS: 1
+          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: Smoke test / ${{ matrix.os }} / node 18 latest
+          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: Run `rw info`
         run: |
@@ -296,11 +296,11 @@ jobs:
         working-directory: ${{ steps.setup_test_project.outputs.test_project_path }}
         continue-on-error: true
 
-      - name: Upload Replays
-        if: always()
-        uses: replayio/action-upload@v0.4.7
-        with:
-          api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
+      # - name: Upload Replays
+      #   if: always()
+      #   uses: replayio/action-upload@v0.4.7
+      #   with:
+      #     api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
 
   smoke-test-docs:
     needs: only-doc-changes
