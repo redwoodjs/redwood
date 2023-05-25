@@ -48,7 +48,7 @@
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "@types/webpack": "5.28.1",
-    "@types/webpack-env": "1.18.0",
+    "@types/webpack-env": "1.18.1",
     "babel-jest": "29.5.0",
     "babel-plugin-inline-react-svg": "2.0.2",
     "core-js": "3.30.2",
