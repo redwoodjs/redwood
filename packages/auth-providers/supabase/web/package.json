@@ -29,7 +29,7 @@
     "@babel/cli": "7.21.5",
     "@babel/core": "7.21.8",
     "@supabase/supabase-js": "2.22.0",
-    "@types/react": "18.2.6",
+    "@types/react": "18.2.7",
     "jest": "29.5.0",
     "react": "18.2.0",
     "typescript": "5.0.4"
