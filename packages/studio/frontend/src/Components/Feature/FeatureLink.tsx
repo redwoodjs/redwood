@@ -10,7 +10,11 @@ import { featureDisplayNames, featureIcons, featureColours } from './features'
 export default function FeatureLink({ feature }: { feature: any }) {
   const Icon = featureIcons.get(feature.type) || QuestionMarkCircleIcon
   return (
-    <Card className="min-w-full px-4 py-2" decoration={feature.statusCode === 2 ? 'left' : undefined} decorationColor='red'>
+    <Card
+      className="min-w-full px-4 py-2"
+      decoration={feature.statusCode === 2 ? 'left' : undefined}
+      decorationColor="red"
+    >
       <Flex className="space-x-3">
         <Icon
           className={`h-5 w-5 ${featureColours.get(feature.type)}`}
