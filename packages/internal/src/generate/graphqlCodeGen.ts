@@ -14,21 +14,27 @@ import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
+import { runFullCodegen } from '@sdl-codegen/node'
 import execa from 'execa'
 import { DocumentNode } from 'graphql'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { getTsConfigs } from '../project'
 
 import * as rwTypescriptResolvers from './plugins/rw-typescript-resolvers'
-
 enum CodegenSide {
   API,
   WEB,
 }
 
 export const generateTypeDefGraphQLApi = async () => {
+  const config = getConfig()
+  if (config.experimental.useSDLCodeGenForGraphQLTypes) {
+    generateGraphQLTypeDefsUsingSDLCodegen()
+    return ['[paths todo]']
+  }
+
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
   const prismaModels = getPrismaModels()
   const prismaImports = Object.keys(prismaModels).map((key) => {
@@ -348,4 +354,9 @@ function getCodegenOptions(
   }
 
   return options
+}
+
+const generateGraphQLTypeDefsUsingSDLCodegen = () => {
+  const paths = getPaths()
+  runFullCodegen('redwood', { paths })
 }
