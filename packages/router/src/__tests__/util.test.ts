@@ -240,67 +240,72 @@ describe('matchPath', () => {
 })
 
 describe('validatePath', () => {
-  it.each(['invalid/route', '{id}/invalid/route', ' /invalid/route'])(
+  it.each([
+    { path: 'invalid/route', routeName: 'isInvalid' },
+    { path: '{id}/invalid/route', routeName: 'isInvalid' },
+    { path: ' /invalid/route', routeName: 'isInvalid' }
+  ])(
     'rejects "%s" path that does not begin with a slash',
-    (path) => {
-      expect(validatePath.bind(null, path)).toThrowError(
-        `Route path does not begin with a slash: "${path}"`
+    ({ path, routeName }) => {
+      expect(() => validatePath(path, routeName)).toThrowError(
+        `Route path for ${routeName} does not begin with a slash: "${path}"`
       )
     }
   )
 
   it.each([
-    '/path/to/user profile',
-    '/path/ to/userprofile',
-    '/path/to /userprofile',
-    '/path/to/users/{id: Int}',
-    '/path/to/users/{id :Int}',
-    '/path/to/users/{id : Int}',
-    '/path/to/users/{ id:Int}',
-    '/path/to/users/{id:Int }',
-    '/path/to/users/{ id:Int }',
-    '/path/to/users/{ id : Int }',
-  ])('rejects paths with spaces: "%s"', (path) => {
-    expect(validatePath.bind(null, path)).toThrowError(
-      `Route path contains spaces: "${path}"`
+    { path: '/path/to/user profile', routeName: 'hasSpaces'},
+    { path: '/path/ to/userprofile', routeName: 'hasSpaces'},
+    { path: '/path/to /userprofile', routeName: 'hasSpaces'},
+    { path:  '/path/to/users/{id: Int}', routeName: 'hasSpaces'},
+    { path: '/path/to/users/{id :Int}', routeName: 'hasSpaces'},
+    { path:  '/path/to/users/{id : Int}', routeName: 'hasSpaces'},
+    { path: '/path/to/users/{ id:Int}', routeName: 'hasSpaces'},
+    { path: '/path/to/users/{id:Int }', routeName: 'hasSpaces'},
+    { path:  '/path/to/users/{ id:Int }', routeName: 'hasSpaces'},
+    { path: '/path/to/users/{ id : Int }', routeName: 'hasSpaces'},
+  ])('rejects paths with spaces: "%s"', ({ path, routeName }) => {
+    expect(() => validatePath(path, routeName)).toThrowError(
+      `Route path for ${routeName} contains spaces: "${path}"`
     )
   })
 
   it.each([
-    '/users/{id}/photos/{id}',
-    '/users/{id}/photos/{id:Int}',
-    '/users/{id:Int}/photos/{id}',
-    '/users/{id:Int}/photos/{id:Int}',
-  ])('rejects path "%s" with duplicate params', (path) => {
-    expect(validatePath.bind(null, path)).toThrowError(
+    { path: '/users/{id}/photos/{id}', routeName: "hasDuplicateParams"},
+    { path: '/users/{id}/photos/{id:Int}', routeName: "hasDuplicateParams"},
+    { path: '/users/{id:Int}/photos/{id}', routeName: "hasDuplicateParams"},
+    { path: '/users/{id:Int}/photos/{id:Int}', routeName: "hasDuplicateParams"},
+  ])('rejects path "%s" with duplicate params', ({ path, routeName }) => {
+    expect(() => validatePath(path, routeName)).toThrowError(
       `Route path contains duplicate parameter: "${path}"`
     )
   })
 
   it.each([
-    '/users/{id:Int}/photos/{photo_id:Int}',
-    '/users/{id}/photos/{photo_id}',
-    '/users/{id}/photos/{photo_id}?format=jpg&w=400&h=400',
-    '/',
-    '/404',
-    '/about',
-    '/about/redwood',
-  ])('validates correct path "%s"', (path) => {
-    expect(validatePath.bind(null, path)).not.toThrow()
+    { path: '/users/{id:Int}/photos/{photo_id:Int}', routeName: "validCorrectPath" },
+    { path: '/users/{id}/photos/{photo_id}', routeName: "validCorrectPath" },
+    { path: '/users/{id}/photos/{photo_id}?format=jpg&w=400&h=400', routeName: "validCorrectPath" },
+    { path: '/', routeName: "validCorrectPath" },
+    { path: '/404', routeName: "validCorrectPath" },
+    { path: '/about', routeName: "validCorrectPath" },
+    { path: '/about/redwood', routeName: "validCorrectPath" },
+  ])('validates correct path "%s"', ({ path, routeName }) => {
+    expect(() => validatePath(path, routeName)).not.toThrow()
   })
 
   it.each([
-    '/path/{ref}',
-    '/path/{ref}/bazinga',
-    '/path/{ref:Int}',
-    '/path/{ref:Int}/bazinga',
-    '/path/{key}',
-    '/path/{key}/bazinga',
-    '/path/{key:Int}',
-  ])('rejects paths with ref or key as path parameters: "%s"', (path) => {
-    expect(validatePath.bind(null, path)).toThrowError(
+    { path: '/path/{ref}', routeName: "ref" },
+    { path: '/path/{ref}/bazinga', routeName: "ref" },
+    { path: '/path/{ref:Int}', routeName: "ref" },
+    { path: '/path/{ref:Int}/bazinga', routeName: "ref" },
+    { path: '/path/{key}', routeName: "key" },
+    { path: '/path/{key}/bazinga', routeName: "key" },
+    { path: '/path/{key:Int}', routeName: "key" },
+    { path: '/path/{key:Int}/bazinga', routeName: "key" }
+  ])('rejects paths with ref or key as path parameters: "%s"', ({ path, routeName }) => {
+    expect(() => validatePath(path, routeName)).toThrowError(
       [
-        `Route contains ref or key as a path parameter: "${path}"`,
+        `Route for ${routeName} contains ref or key as a path parameter: "${path}"`,
         "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
         'You can fix this by renaming the path parameter.',
       ].join('\n')
@@ -308,17 +313,17 @@ describe('validatePath', () => {
   })
 
   it.each([
-    '/path/{reff}',
-    '/path/{reff:Int}',
-    '/path/{reff}/bazinga',
-    '/path/{keys}',
-    '/path/{keys:Int}',
-    '/path/key',
-    '/path/key/bazinga',
+    { path: '/path/{reff}', routeName: "validRefKeyVariations" },
+    { path: '/path/{reff:Int}', routeName: "validRefKeyVariations" },
+    { path: '/path/{reff}/bazinga', routeName: "validRefKeyVariations" },
+    { path: '/path/{keys}', routeName: "validRefKeyVariations" },
+    { path: '/path/{keys:Int}', routeName: "validRefKeyVariations" },
+    { path: '/path/key', routeName: "validRefKeyVariations" },
+    { path: '/path/key/bazinga', routeName: "validRefKeyVariations" },
   ])(
     `doesn't reject paths with variations on ref or key as path parameters: "%s"`,
-    (path) => {
-      expect(validatePath.bind(null, path)).not.toThrowError()
+    ({ path, routeName }) => {
+      expect(() => validatePath(path, routeName)).not.toThrowError()
     }
   )
 })
