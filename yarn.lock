@@ -7368,7 +7368,7 @@ __metadata:
     "@types/react": 18.2.7
     "@types/react-dom": 18.2.4
     "@types/webpack": 5.28.1
-    "@types/webpack-env": 1.18.0
+    "@types/webpack-env": 1.18.1
     babel-jest: 29.5.0
     babel-plugin-inline-react-svg: 2.0.2
     core-js: 3.30.2
@@ -9825,10 +9825,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/webpack-env@npm:1.18.0":
-  version: 1.18.0
-  resolution: "@types/webpack-env@npm:1.18.0"
-  checksum: ac2e91b025ea31b98b0271ccb40da789c5b54693c1efb18265a54c03b303b750501f080a44e99d7ce0a5422d68d535e600e851df4b8f2240444eca7ac3159719
+"@types/webpack-env@npm:1.18.1":
+  version: 1.18.1
+  resolution: "@types/webpack-env@npm:1.18.1"
+  checksum: 7b7cb8d22fe85fb3f87f592cb5ba2fb3b1057d1d5ce8d770b28728095879f5921085fae97f5bc479bdca55f2cb3111bd9148dc36cd641a5694dfbe001c5fc2f7
   languageName: node
   linkType: hard
 
