@@ -6,7 +6,7 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
   },
-  "include": ["src/**/*", "./ambient.d.ts"],
+  "include": ["src/**/*", "./ambient.d.ts", "types.d.ts"],
   "references": [
     { "path": "../internal" },
     { "path": "../project-config" },
