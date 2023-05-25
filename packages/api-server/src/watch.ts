@@ -33,7 +33,6 @@ const argv = yargs(hideBin(process.argv))
     default: redwoodProjectConfig.api.port,
   })
   .option('host', {
-    alias: 'h',
     description: 'Host',
     type: 'string',
     default: redwoodProjectConfig.api.host,

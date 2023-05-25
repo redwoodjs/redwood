@@ -56,7 +56,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             {/* Monitor */}
             <Route path="/monitor">
               <Route path="performance" element={<Performance />} />
-              <Route path="error" element={<ComingSoon />} />
+              <Route path="error">
+                <Route index element={<ComingSoon />} />
+                <Route path=":spanId" element={<ComingSoon />} />
+                <Route path=":spanId/:errorTime" element={<ComingSoon />} />
+              </Route>
             </Route>
 
             {/* GraphiQL */}

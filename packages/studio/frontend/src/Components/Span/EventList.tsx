@@ -1,41 +1,47 @@
 import React from 'react'
 
-export default function EventList({ events }: { events: JSON }) {
-  const data = Object.entries(events).map(([name, value]) => ({
-    name,
-    value,
-  }))
+import { Card, Flex, Italic, Subtitle, Text, Title } from '@tremor/react'
+
+import ErrorEventLink from '../Event/ErrorEventLink'
+import EventModal from '../Event/EventModal'
+
+export default function EventList({
+  events,
+  spanId,
+}: {
+  events: any[]
+  spanId: string
+}) {
+  const data = events?.sort((a, b) =>
+    a.time < b.time ? -1 : a.time > b.time ? 1 : 0
+  )
 
   return (
-    <>
-      <div>
-        <div className="px-4 sm:px-0">
-          <h3 className="text-base font-semibold leading-7 text-gray-900">
-            Span Events
-          </h3>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500 border-b border-gray-200 pb-3">
-            All events recorded during this span.
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <div className="inline-block min-w-full align-middle ">
-            <table className="min-w-full divide-y divide-gray-300 border-b border-gray-200">
-              <tbody className="divide-y divide-gray-200">
-                {data.map((d) => (
-                  <tr key={d.name}>
-                    <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {d.name}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
-                      {d.value}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </>
+    <Card className="min-w-full">
+      <Flex className="flex-col items-start gap-2">
+        <Title>Span Events</Title>
+        <Subtitle>OpenTelemetry events recorded</Subtitle>
+        {data.length === 0 ? (
+          <Text className="mt-2">
+            <Italic>No events recorded...</Italic>
+          </Text>
+        ) : (
+          data.map((event) => {
+            if (event.name === 'exception') {
+              return (
+                <ErrorEventLink
+                  key={`${event.name}-${event.time}`}
+                  event={event}
+                  spanId={spanId}
+                />
+              )
+            }
+            return (
+              <EventModal key={`${event.name}-${event.time}`} event={event} />
+            )
+          })
+        )}
+      </Flex>
+    </Card>
   )
 }
