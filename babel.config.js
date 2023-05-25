@@ -34,7 +34,7 @@ module.exports = {
           // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
           proposals: true,
         },
-        exclude: ['es.error.cause'],
+        exclude: ['es.error.cause', 'proposal-dynamic-import'],
       },
     ],
     '@babel/preset-react',

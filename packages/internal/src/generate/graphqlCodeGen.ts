@@ -14,7 +14,6 @@ import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
-import { runFullCodegen } from '@sdl-codegen/node'
 import execa from 'execa'
 import { DocumentNode } from 'graphql'
 
@@ -31,8 +30,10 @@ enum CodegenSide {
 export const generateTypeDefGraphQLApi = async () => {
   const config = getConfig()
   if (config.experimental.useSDLCodeGenForGraphQLTypes) {
-    generateGraphQLTypeDefsUsingSDLCodegen()
-    return ['[paths todo]']
+    const paths = getPaths()
+    const sdlCodegen = await import('@sdl-codegen/node')
+    const dtsFiles = sdlCodegen.runFullCodegen('redwood', { paths })
+    return dtsFiles.paths
   }
 
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
@@ -354,9 +355,4 @@ function getCodegenOptions(
   }
 
   return options
-}
-
-const generateGraphQLTypeDefsUsingSDLCodegen = () => {
-  const paths = getPaths()
-  runFullCodegen('redwood', { paths })
 }

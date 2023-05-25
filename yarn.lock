@@ -7163,7 +7163,7 @@ __metadata:
     "@graphql-codegen/typescript-resolvers": 3.2.1
     "@redwoodjs/graphql-server": 5.0.0
     "@redwoodjs/project-config": 5.0.0
-    "@sdl-codegen/node": 0.0.4
+    "@sdl-codegen/node": 0.0.9
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.20.0
     "@types/fs-extra": 11.0.1
@@ -7590,16 +7590,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sdl-codegen/node@npm:0.0.4":
-  version: 0.0.4
-  resolution: "@sdl-codegen/node@npm:0.0.4"
+"@sdl-codegen/node@npm:0.0.9":
+  version: 0.0.9
+  resolution: "@sdl-codegen/node@npm:0.0.9"
   dependencies:
     "@mrleebo/prisma-ast": ^0.5.2
     ts-morph: ^18.0.0
   peerDependencies:
     graphql: "*"
     typescript: "*"
-  checksum: 72b990c12c94792b937991bc2d2467ceb0d640ae95f80d6aad4b53d269401d45fe179b4a2738c9c56966c708c1f77d5313b1d5b85828d21c0743d0eda5f85a0e
+  checksum: d297180138e1a2f71301ad71575a9562033d28fe4f6ce2abc727208dd82ccd43104510a3ca2912c12e792e69b111045fe9bb17aba18cb123c3eccc74f15b88bd
   languageName: node
   linkType: hard
 
