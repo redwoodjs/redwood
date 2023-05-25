@@ -5,14 +5,14 @@ import path from 'node:path'
 import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
-import { configFileConfig, resolveConfig } from './config.js'
+import { configFileConfig, resolveConfig } from './config'
 import {
   shutdown,
   setClientEntries,
   getCustomModulesRSC,
   buildRSC,
-} from './rsc-handler.js'
-import { rscIndexPlugin, rscAnalyzePlugin } from './vite-plugin-rsc.js'
+} from './rsc-handler'
+import { rscIndexPlugin, rscAnalyzePlugin } from './vite-plugin-rsc'
 
 export async function build() {
   const config = await resolveConfig('build')

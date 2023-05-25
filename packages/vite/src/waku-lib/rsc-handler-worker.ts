@@ -8,13 +8,13 @@ import { createElement } from 'react'
 import RSDWServer from 'react-server-dom-webpack/server'
 import { createServer } from 'vite'
 
-import { defineEntries } from '../waku-server.js'
-import type { unstable_GetCustomModules } from '../waku-server.js'
+import { defineEntries } from '../waku-server'
+import type { unstable_GetCustomModules } from '../waku-server'
 
-import { configFileConfig, resolveConfig } from './config.js'
-import type { RenderInput, MessageReq, MessageRes } from './rsc-handler.js'
-import { transformRsfId, generatePrefetchCode } from './rsc-utils.js'
-import { rscTransformPlugin, rscReloadPlugin } from './vite-plugin-rsc.js'
+import { configFileConfig, resolveConfig } from './config'
+import type { RenderInput, MessageReq, MessageRes } from './rsc-handler'
+import { transformRsfId, generatePrefetchCode } from './rsc-utils'
+import { rscTransformPlugin, rscReloadPlugin } from './vite-plugin-rsc'
 
 const { renderToPipeableStream } = RSDWServer
 

@@ -1,17 +1,21 @@
 import fs from 'fs/promises'
 import path from 'path'
 
+import react from '@vitejs/plugin-react'
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
 import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
+import { getRouteHookBabelPlugins } from '@redwoodjs/internal/dist/build/babel/common'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
 import { RWRouteManifest } from './types'
+import { configFileConfig } from './waku-lib/config'
+import { rscAnalyzePlugin } from './waku-lib/vite-plugin-rsc'
 
 interface BuildOptions {
   verbose?: boolean
@@ -35,13 +39,71 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     )
   }
 
-  // Step 1A: Generate the client bundle
-  await buildWeb({ verbose })
-
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
   // so we can switch to a regular import
   // @NOTE: Using dynamic import, because vite is still opt-in
   const { build } = await import('vite')
+
+  // RSC build
+  const clientEntryFileSet = new Set<string>()
+  const serverEntryFileSet = new Set<string>()
+
+  await viteBuild({
+    ...configFileConfig,
+    plugins: [
+      react(),
+      rscAnalyzePlugin(
+        (id) => clientEntryFileSet.add(id),
+        (id) => serverEntryFileSet.add(id)
+      ),
+    ],
+    ssr: {
+      // FIXME Without this, waku/router isn't considered to have client
+      // entries, and "No client entry" error occurs.
+      // Unless we fix this, RSC-capable packages aren't supported.
+      // This also seems to cause problems with pnpm.
+      // noExternal: ['@redwoodjs/web', '@redwoodjs/router'],
+    },
+    build: {
+      write: false,
+      ssr: true,
+      rollupOptions: {
+        input: {
+          entries: rwPaths.web.entryServer,
+        },
+      },
+    },
+    logLevel: 'info',
+    // legacy: {
+    //   buildSsrCjsExternalHeuristics: true,
+    // },
+    optimizeDeps: {
+      esbuildOptions: {
+        // @MARK this is because JS projects in Redwood don't have .jsx extensions
+        loader: {
+          '.js': 'jsx',
+        },
+        // Node.js global to browser globalThis
+        // @MARK unsure why we need this, but required for DevFatalErrorPage at least
+        define: {
+          global: 'globalThis',
+        },
+      },
+    },
+  })
+
+  const clientEntryFiles = Object.fromEntries(
+    Array.from(clientEntryFileSet).map((filename, i) => [`rsc${i}`, filename])
+  )
+  const serverEntryFiles = Object.fromEntries(
+    Array.from(serverEntryFileSet).map((filename, i) => [`rsf${i}`, filename])
+  )
+
+  console.log('clientEntryFiles', clientEntryFiles)
+  console.log('serverEntryFiles', serverEntryFiles)
+
+  // Step 1A: Generate the client bundle
+  await buildWeb({ verbose })
 
   // Step 1B: Generate the server output
   await build({

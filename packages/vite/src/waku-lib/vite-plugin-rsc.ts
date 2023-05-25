@@ -1,7 +1,6 @@
 import path from 'node:path'
 
 import * as swc from '@swc/core'
-import * as RSDWNodeLoader from 'react-server-dom-webpack/node-loader'
 import type { Plugin } from 'vite'
 
 import { codeToInject } from './rsc-utils.js'
@@ -78,6 +77,10 @@ export function rscTransformPlugin(): Plugin {
         )
         return { format: 'module', source }
       }
+
+      const RSDWNodeLoader = await import(
+        'react-server-dom-webpack/node-loader'
+      )
 
       RSDWNodeLoader.resolve(
         '',
