@@ -28,7 +28,9 @@ export default function redwoodPluginVite(): PluginOption[] {
     )
   }
 
-  const relativeEntryPath = path.relative(rwPaths.web.src, clientEntryPath)
+  const relativeEntryPath = normalizePath(
+    path.relative(rwPaths.web.src, clientEntryPath)
+  )
 
   return [
     {
