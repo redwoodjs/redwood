@@ -58,6 +58,7 @@ export const ActiveRouteLoader = ({
     }
   }, [spec, params])
 
+  // Delete params ref & key so that they are not spread on to the component
   if (params) {
     delete params['ref']
     delete params['key']
