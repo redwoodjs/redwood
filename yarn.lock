@@ -7023,7 +7023,7 @@ __metadata:
     "@babel/traverse": 7.21.5
     "@iarna/toml": 2.2.5
     "@redwoodjs/project-config": 5.2.3
-    "@types/babel__core": 7.20.0
+    "@types/babel__core": 7.20.1
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/jscodeshift": 0.11.6
@@ -7267,7 +7267,7 @@ __metadata:
     "@redwoodjs/graphql-server": 5.2.3
     "@redwoodjs/project-config": 5.2.3
     "@types/babel-plugin-tester": 9.0.5
-    "@types/babel__core": 7.20.0
+    "@types/babel__core": 7.20.1
     "@types/fs-extra": 11.0.1
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-polyfill-corejs3: 0.8.1
@@ -9295,16 +9295,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:7.20.0, @types/babel__core@npm:^7.1.14":
-  version: 7.20.0
-  resolution: "@types/babel__core@npm:7.20.0"
+"@types/babel__core@npm:*, @types/babel__core@npm:7.20.1, @types/babel__core@npm:^7.1.14":
+  version: 7.20.1
+  resolution: "@types/babel__core@npm:7.20.1"
   dependencies:
     "@babel/parser": ^7.20.7
     "@babel/types": ^7.20.7
     "@types/babel__generator": "*"
     "@types/babel__template": "*"
     "@types/babel__traverse": "*"
-  checksum: 75dcd39258bc008b6fd4db7de2c8bfeb29b5cd2c726f54407f70243ddea1d8ce9e7082281557614c4a5f9f30d478387ca6ab6cc576fc829cebeb159bfaa8799f
+  checksum: c83402fc7ef8abd1f94ffe350b8bde9a35ccb6c3624bc8e39b6a7e1a675d112f6b70ac1b05391a579ca3b126baffe66b0b94f954edef086c4482b97d293c3659
   languageName: node
   linkType: hard
 
@@ -14700,7 +14700,7 @@ __metadata:
     "@opentelemetry/sdk-trace-node": 1.13.0
     "@opentelemetry/semantic-conventions": 1.13.0
     "@redwoodjs/tui": 5.2.3
-    "@types/babel__core": 7.20.0
+    "@types/babel__core": 7.20.1
     chalk: 4.1.2
     check-node-version: 4.2.1
     ci-info: 3.8.0
