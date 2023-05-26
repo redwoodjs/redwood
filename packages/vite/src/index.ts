@@ -46,7 +46,7 @@ export default function redwoodPluginVite(): PluginOption[] {
             return html.replace(
               '</head>',
               // @NOTE the slash in front, for windows compatibility and for pages in subdirectories
-              `<script type="module" src="${relativeEntryPath}"></script>
+              `<script type="module" src="/${relativeEntryPath}"></script>
         </head>`
             )
           } else {
