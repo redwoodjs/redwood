@@ -1,8 +1,12 @@
-import { extname, basename, join } from 'path'
+import { extname, basename, join, relative, dirname } from 'path'
 
 import type { PluginObj, types, NodePath } from '@babel/core'
 
-import { getPaths } from '@redwoodjs/project-config'
+import {
+  BundlerEnum,
+  ensurePosixPath,
+  getPaths,
+} from '@redwoodjs/project-config'
 
 import { convertToDataUrl } from './utils'
 
@@ -35,9 +39,12 @@ function getVariableName(p: NodePath<types.ImportDeclaration>) {
   return null
 }
 
-export default function ({ types: t }: { types: typeof types }): PluginObj {
+export default function (
+  { types: t }: { types: typeof types },
+  { bundler }: { bundler: BundlerEnum }
+): PluginObj {
   const manifestPath = join(getPaths().web.dist, 'build-manifest.json')
-  const webpackManifest = require(manifestPath)
+  const buildManifest = require(manifestPath)
 
   return {
     name: 'babel-plugin-redwood-prerender-media-imports',
@@ -52,11 +59,28 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
         if (ext && options.extensions.includes(ext)) {
           const importConstName = getVariableName(p)
-          const webpackManifestKey = `static/media/${basename(
-            p.node.source.value
-          )}`
+          let copiedAssetPath
 
-          const copiedAssetPath = webpackManifest[webpackManifestKey]
+          if (bundler === BundlerEnum.VITE) {
+            if (state.filename === undefined) {
+              return
+            }
+            const absPath = join(dirname(state.filename), p.node.source.value)
+            const viteManifestKey = ensurePosixPath(
+              relative(getPaths().web.src, absPath)
+            )
+            // TODO: We should add types to the vite build manifest
+            // Note: The entry will not exist if vite has inlined a small asset
+            copiedAssetPath = buildManifest[viteManifestKey]?.file
+          } else if (bundler === BundlerEnum.WEBPACK) {
+            const webpackManifestKey = `static/media/${basename(
+              p.node.source.value
+            )}`
+            copiedAssetPath = buildManifest[webpackManifestKey]
+          } else {
+            // We really shouldn't get here, but just in case
+            throw new Error(`Unknown bundler used: ${bundler}`)
+          }
 
           // If webpack has copied it over, use the path from the asset manifest
           // Otherwise convert it to a base64 encoded data uri
