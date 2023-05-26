@@ -155,6 +155,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     whileLoadingPage,
     wrappers = [],
     setProps,
+    setId,
   } = pathRouteMap[activeRoutePath]
 
   if (!path) {
@@ -178,6 +179,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
         {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
         {!redirect && page && (
           <WrappedPage
+            key={setId}
             wrappers={wrappers}
             routeLoaderElement={
               <ActiveRouteLoader

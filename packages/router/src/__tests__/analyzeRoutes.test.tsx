@@ -275,6 +275,7 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
       whileLoadingPage: undefined,
       page: FakePage,
       wrappers: [],
+      setId: 1,
       setProps: {
         private: true,
         unauthenticated: 'home',

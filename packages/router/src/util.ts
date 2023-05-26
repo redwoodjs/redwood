@@ -455,6 +455,7 @@ interface AnalyzedRoute {
   redirect: string | null
   wrappers: ReactNode[]
   setProps: Record<any, any>
+  setId: number
 }
 
 export function analyzeRoutes(
@@ -473,7 +474,24 @@ export function analyzeRoutes(
     wrappersFromSet?: ReactNode[]
     // we don't know, or care about, what props users are passing down
     propsFromSet?: Record<string, unknown>
+    setId?: number
   }
+
+  // Track the number of sets found.
+  // Because Sets are virtually rendered we can use this setId as a key to properly manage re-rendering
+  // When a some uses the same wrapper Component for different Sets
+  // Example:
+  //   <Router>
+  //   <Set wrap={SetContextProvider}>
+  //     <Route path="/" page={HomePage} name="home" />
+  //     <Route path="/ctx-1-page" page={Ctx1Page} name="ctx1" />
+  //     <Route path="/ctx-2-page" page={Ctx2Page} name="ctx2" />
+  //   </Set>
+  //   <Set wrap={SetContextProvider}>
+  //     <Route path="/ctx-3-page" page={Ctx3Page} name="ctx3" />
+  //   </Set>
+  // </Router>
+  let setId = 0
 
   const recurseThroughRouter = ({
     nodes,
@@ -523,6 +541,7 @@ export function analyzeRoutes(
             page: null, // Redirects don't need pages. We set this to null for consistency
             wrappers: wrappersFromSet,
             setProps: previousSetProps,
+            setId,
           }
 
           if (name) {
@@ -555,6 +574,7 @@ export function analyzeRoutes(
             page: page,
             wrappers: wrappersFromSet,
             setProps: previousSetProps,
+            setId,
           }
 
           // e.g. namedRoutesMap.homePage = () => '/home'
@@ -564,6 +584,7 @@ export function analyzeRoutes(
 
       // @NOTE: A <Private> is also a Set
       if (isSetNode(node)) {
+        setId = setId + 1 // increase the Set id for each Set found
         const {
           children,
           whileLoadingPage: whileLoadingPageFromCurrentSet,
@@ -594,6 +615,7 @@ export function analyzeRoutes(
             // will always take precedence over the parent's
             whileLoadingPageFromSet:
               whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
+            setId,
             wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
             propsFromSet: {
               ...previousSetProps,
