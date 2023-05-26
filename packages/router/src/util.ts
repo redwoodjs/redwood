@@ -510,7 +510,8 @@ export function analyzeRoutes(
             userParamTypes,
           })
 
-          if (match) {
+          // Check if we already have an active path to only return the first match
+          if (match && !activeRoutePath) {
             activeRoutePath = path
           }
 
@@ -538,7 +539,8 @@ export function analyzeRoutes(
             userParamTypes,
           })
 
-          if (match) {
+          // Check if we already have an active path to only return the first match
+          if (match && !activeRoutePath) {
             activeRoutePath = path
           }
 

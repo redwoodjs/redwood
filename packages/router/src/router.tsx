@@ -222,7 +222,7 @@ const WrappedPage = memo(
         )
       }
 
-      wrappers.push(AuthenticatedRoute as any)
+      wrappers.unshift(AuthenticatedRoute as any)
     }
 
     if (wrappers.length > 0) {
