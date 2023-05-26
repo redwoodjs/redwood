@@ -7244,7 +7244,7 @@ __metadata:
     "@redwoodjs/project-config": 5.0.0
     "@types/fs-extra": 11.0.1
     "@types/line-column": 1.0.0
-    "@types/lodash": 4.14.194
+    "@types/lodash": 4.14.195
     "@types/lru-cache": 5.1.1
     "@types/node": 18.16.1
     "@types/vscode": 1.78.0
@@ -9420,10 +9420,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:*, @types/lodash@npm:4.14.194, @types/lodash@npm:^4.14.167":
-  version: 4.14.194
-  resolution: "@types/lodash@npm:4.14.194"
-  checksum: 2d1ecf21a356bf089d3b5de2e8ddb1376526f0c75456fea61c03c14d276898f29a8ff75d290a32865dc74933617c9eed4ecdec048257031569df927a2c053c0e
+"@types/lodash@npm:*, @types/lodash@npm:4.14.195, @types/lodash@npm:^4.14.167":
+  version: 4.14.195
+  resolution: "@types/lodash@npm:4.14.195"
+  checksum: 6d733276df592614a0943a0053056140398b3c263cdf2557d4301b3a47b07ff561926cb9339a4725acbc7d8766f91ded218df11e0a4288cee369eafb5141d94d
   languageName: node
   linkType: hard
 
