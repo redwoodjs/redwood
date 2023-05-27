@@ -1,3 +1,4 @@
+import { existsSync } from 'fs'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -14,7 +15,9 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
 import { RWRouteManifest } from './types'
+import { serverBuild } from './waku-lib/build-server'
 import { configFileConfig } from './waku-lib/config'
+// import { rscAnalyzePlugin, rscIndexPlugin } from './waku-lib/vite-plugin-rsc'
 import { rscAnalyzePlugin } from './waku-lib/vite-plugin-rsc'
 
 interface BuildOptions {
@@ -23,73 +26,95 @@ interface BuildOptions {
 
 export const buildFeServer = async ({ verbose }: BuildOptions) => {
   const rwPaths = getPaths()
-  const viteConfig = rwPaths.web.viteConfig
+  // const viteConfig = rwPaths.web.viteConfig
 
-  if (!viteConfig) {
-    throw new Error(
-      'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`'
-    )
-  }
+  // if (!viteConfig) {
+  //   throw new Error(
+  //     'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`'
+  //   )
+  // }
 
-  if (!rwPaths.web.entryServer || !rwPaths.web.entryClient) {
-    throw new Error(
-      'Vite entry points not found. Please check that your project has an ' +
-        'entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in the ' +
-        'web/src directory.'
-    )
-  }
+  // if (!rwPaths.web.entryServer || !rwPaths.web.entryClient) {
+  //   throw new Error(
+  //     'Vite entry points not found. Please check that your project has an ' +
+  //       'entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in the ' +
+  //       'web/src directory.'
+  //   )
+  // }
 
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
   // so we can switch to a regular import
   // @NOTE: Using dynamic import, because vite is still opt-in
-  const { build } = await import('vite')
+  const { build, normalizePath } = await import('vite')
+  // const { build, resolveConfig } = await import('vite')
 
   // RSC build
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
 
+  console.log('configFileConfig', configFileConfig)
+  console.log('root', rwPaths.base)
+
+  // const config = await resolveConfig({}, 'build')
+  // console.log('config', config)
+
+  if (!rwPaths.web.entryServer) {
+    throw new Error('No server entry')
+  }
+
   await viteBuild({
-    ...configFileConfig,
+    // ...configFileConfig,
+    root: rwPaths.base,
     plugins: [
-      react(),
+      // react(), // Not needed with "jsx: 'react-jsx'" in tsconfig.json
+      {
+        name: 'rsc-test-plugin',
+        transform(_code, id) {
+          console.log('rsc-test-plugin id', id)
+          // console.log("id", id);
+          // console.log("code", code);
+          // console.log("---------------");
+        },
+      },
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id)
       ),
     ],
-    ssr: {
-      // FIXME Without this, waku/router isn't considered to have client
-      // entries, and "No client entry" error occurs.
-      // Unless we fix this, RSC-capable packages aren't supported.
-      // This also seems to cause problems with pnpm.
-      // noExternal: ['@redwoodjs/web', '@redwoodjs/router'],
-    },
+    // ssr: {
+    //   // FIXME Without this, waku/router isn't considered to have client
+    //   // entries, and "No client entry" error occurs.
+    //   // Unless we fix this, RSC-capable packages aren't supported.
+    //   // This also seems to cause problems with pnpm.
+    //   // noExternal: ['@redwoodjs/web', '@redwoodjs/router'],
+    // },
     build: {
       write: false,
       ssr: true,
       rollupOptions: {
         input: {
           entries: rwPaths.web.entryServer,
+          // entries: '/Users/tobbe/tmp/rw-rsc-counter/web/src/App.tsx', // rwPaths.web.entryServer,
         },
       },
     },
-    logLevel: 'info',
+    // logLevel: 'info',
     // legacy: {
     //   buildSsrCjsExternalHeuristics: true,
     // },
-    optimizeDeps: {
-      esbuildOptions: {
-        // @MARK this is because JS projects in Redwood don't have .jsx extensions
-        loader: {
-          '.js': 'jsx',
-        },
-        // Node.js global to browser globalThis
-        // @MARK unsure why we need this, but required for DevFatalErrorPage at least
-        define: {
-          global: 'globalThis',
-        },
-      },
-    },
+    // optimizeDeps: {
+    //   esbuildOptions: {
+    //     // @MARK this is because JS projects in Redwood don't have .jsx extensions
+    //     loader: {
+    //       '.js': 'jsx',
+    //     },
+    //     // Node.js global to browser globalThis
+    //     // @MARK unsure why we need this, but required for DevFatalErrorPage at least
+    //     define: {
+    //       global: 'globalThis',
+    //     },
+    //   },
+    // },
   })
 
   const clientEntryFiles = Object.fromEntries(
@@ -99,19 +124,178 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     Array.from(serverEntryFileSet).map((filename, i) => [`rsf${i}`, filename])
   )
 
+  console.log('clientEntryFileSet', Array.from(clientEntryFileSet))
+  console.log('serverEntryFileSet', Array.from(serverEntryFileSet))
   console.log('clientEntryFiles', clientEntryFiles)
   console.log('serverEntryFiles', serverEntryFiles)
+
+  const clientEntryPath = rwPaths.web.entryClient
+
+  if (!clientEntryPath) {
+    throw new Error(
+      'Vite client entry point not found. Please check that your project ' +
+        'has an entry.client.{jsx,tsx} file in the web/src directory.'
+    )
+  }
+
+  const clientBuildOutput = await viteBuild({
+    // ...configFileConfig,
+    // TODO (RSC)
+    // If you have web.src here the files in dist end up in the correct place,
+    // but because we're writing to web/dist, which is outside of web/src vite
+    // won't clear the output dir, which we want it to do so we don't end up
+    // with old files lying around.
+    // If we change it to web.base then vite will clear the output dir, but
+    // the files end up in web/dist/web/src/... which is not what we want.
+    // One solution to this is to move index.html to web.base/index.html
+    // instead of web.src/index.html. But I'm not sure what downstream effects
+    // that has.
+    root: rwPaths.web.src,
+    plugins: [
+      {
+        name: 'redwood-plugin-vite',
+
+        // ---------- Bundle injection ----------
+        // Used by rollup during build to inject the entrypoint
+        // but note index.html does not come through as an id during dev
+        transform: (code: string, id: string) => {
+          console.log('transform', id)
+          if (
+            // TODO (RSC) Is this even needed? We throw if we can't find it above
+            // TODO (RSC) Consider making this async (if we do need it)
+            existsSync(clientEntryPath) &&
+            normalizePath(id) === normalizePath(rwPaths.web.html)
+          ) {
+            console.log('transforming index.html')
+            console.log('code', code)
+            const newCode = code.replace(
+              '</head>',
+              `  <script type="module" src="/entry-client.jsx"></script>
+</head>`
+            )
+            console.log('newCode', newCode)
+            return {
+              code: newCode,
+              map: null,
+            }
+          } else {
+            return {
+              code,
+              map: null, // Returning null here preserves the original sourcemap
+            }
+          }
+        },
+      },
+      react(),
+      // rscIndexPlugin(),
+    ],
+    build: {
+      outDir: rwPaths.web.dist,
+      rollupOptions: {
+        input: {
+          main: rwPaths.web.html,
+          ...clientEntryFiles,
+        },
+        preserveEntrySignatures: 'exports-only',
+      },
+    },
+    esbuild: {
+      logLevel: 'debug',
+    },
+  })
+
+  if (!('output' in clientBuildOutput)) {
+    throw new Error('Unexpected vite client build output')
+  }
+
+  const serverBuildOutput = await serverBuild(
+    rwPaths.web.entryServer,
+    // '/Users/tobbe/tmp/rw-rsc-counter/web/src/App.tsx', // rwPaths.web.entryServer,
+    clientEntryFiles,
+    serverEntryFiles,
+    {}
+  )
+
+  if (Math.random() < 5) {
+    throw new Error('stop')
+  }
+
+  console.log('serverBuildOutput', serverBuildOutput)
 
   // Step 1A: Generate the client bundle
   await buildWeb({ verbose })
 
+  const rollupInput = {
+    entries: rwPaths.web.entryServer,
+    ...clientEntryFiles,
+    ...serverEntryFiles,
+  }
+
+  console.log('rollupInput', rollupInput)
+
   // Step 1B: Generate the server output
   await build({
-    configFile: viteConfig,
+    // TODO (RSC) I had this marked as 'FIXME'. I guess I just need to make
+    // sure we still include it, or at least make it possible for users to pass
+    // in their own config
+    // configFile: viteConfig,
+    ssr: {
+      noExternal: Array.from(clientEntryFileSet).map(
+        // TODO (RSC) I think the comment below is from waku. We don't care
+        // about pnpm, do we? Does it also affect yarn?
+        // FIXME this might not work with pnpm
+        // TODO (RSC) No idea what's going on here
+        (filename) => {
+          const nodeModulesPath = path.join(rwPaths.base, 'node_modules')
+          console.log('nodeModulesPath', nodeModulesPath)
+          const relativePath = path.relative(nodeModulesPath, filename)
+          console.log('relativePath', relativePath)
+          console.log('first split', relativePath.split('/')[0])
+
+          return relativePath.split('/')[0]
+        }
+      ),
+    },
     build: {
       // Because we configure the root to be web/src, we need to go up one level
       outDir: rwPaths.web.distServer,
-      ssr: rwPaths.web.entryServer,
+      // TODO (RSC) ssr: rwPaths.web.entryServer,
+      rollupOptions: {
+        input: {
+          // TODO (RSC) entries: rwPaths.web.entryServer,
+          ...clientEntryFiles,
+          ...serverEntryFiles,
+        },
+        output: {
+          banner: (chunk) => {
+            console.log('chunk', chunk)
+
+            // HACK to bring directives to the front
+            let code = ''
+
+            if (chunk.moduleIds.some((id) => clientEntryFileSet.has(id))) {
+              code += '"use client";'
+            }
+
+            if (chunk.moduleIds.some((id) => serverEntryFileSet.has(id))) {
+              code += '"use server";'
+            }
+
+            console.log('code', code)
+            return code
+          },
+          entryFileNames: (chunkInfo) => {
+            console.log('chunkInfo', chunkInfo)
+
+            // TODO (RSC) Don't hardcode 'entry.server'
+            if (chunkInfo.name === 'entry.server') {
+              return '[name].js'
+            }
+
+            return 'assets/[name].js'
+          },
+        },
+      },
     },
     envFile: false,
     logLevel: verbose ? 'info' : 'warn',
@@ -223,4 +407,9 @@ const FIXME_constructRouteHookPath = (rhSrcPath: string | null | undefined) => {
       .relative(path.join(rwPaths.web.src, 'pages'), rhSrcPath)
       .replace('.ts', '.js')
   }
+}
+
+if (require.main === module) {
+  const verbose = process.argv.includes('--verbose')
+  buildFeServer({ verbose })
 }
