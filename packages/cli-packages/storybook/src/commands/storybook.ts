@@ -1,47 +1,59 @@
 import terminalLink from 'terminal-link'
 
 import c from '../lib/colors'
+import { StorybookYargsOptions } from '../types'
 
 export const command = 'storybook'
 export const aliases = ['sb']
-
 export const description =
-  'Launch Storybook: a tool for building UI components in isolation'
+  'Launch Storybook: a tool for building UI components and pages in isolation'
 
-export function builder(yargs) {
+export const defaultOptions: StorybookYargsOptions = {
+  open: true,
+  build: false,
+  ci: false,
+  port: 7910,
+  buildDirectory: 'public/storybook',
+  managerCache: true,
+  smokeTest: false,
+}
+
+// TODO: Provide a type for the `yargs` argument
+export const builder = (yargs: any) => {
   yargs
     .option('build', {
       describe: 'Build Storybook',
       type: 'boolean',
-      default: false,
+      default: defaultOptions.build,
     })
     .option('build-directory', {
       describe: 'Directory in web/ to store static files',
       type: 'string',
-      default: 'public/storybook',
+      default: defaultOptions.buildDirectory,
     })
     .option('ci', {
       describe: 'Start server in CI mode, with no interactive prompts',
       type: 'boolean',
-      default: false,
+      default: defaultOptions.ci,
     })
     .option('open', {
       describe: 'Open storybook in your browser on start',
       type: 'boolean',
-      default: true,
+      default: defaultOptions.open,
     })
     .option('port', {
       describe: 'Which port to run storybook on',
       type: 'integer',
-      default: 7910,
+      default: defaultOptions.port,
     })
     .option('smoke-test', {
       describe:
         "CI mode plus smoke-test (skip prompts; don't open browser; exit after successful start)",
       type: 'boolean',
-      default: false,
+      default: defaultOptions.smokeTest,
     })
-    .check((argv) => {
+    // TODO: Provide a type for the `argv` argument
+    .check((argv: any) => {
       if (argv.build && argv.smokeTest) {
         throw new Error('Can not provide both "--build" and "--smoke-test"')
       }
@@ -64,7 +76,10 @@ export function builder(yargs) {
     )
 }
 
-export async function handler(options) {
-  const { handler } = await import('./storybookHandler')
-  await handler(options)
+export const handler = async (options: StorybookYargsOptions) => {
+  // NOTE: We should provide some visual output before the import to increase
+  // the perceived performance of the command as there will be delay while we
+  // load the handler.
+  const { handler: storybookHandler } = await import('./storybookHandler.js')
+  await storybookHandler(options)
 }

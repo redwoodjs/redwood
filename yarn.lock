@@ -6801,6 +6801,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/cli-storybook@workspace:packages/cli-packages/storybook":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/cli-storybook@workspace:packages/cli-packages/storybook"
+  dependencies:
+    "@redwoodjs/project-config": 5.0.0
+    "@redwoodjs/telemetry": 5.0.0
+    chalk: 4.1.2
+    esbuild: 0.17.19
+    execa: 5.1.1
+    fast-glob: 3.2.12
+    jest: 29.5.0
+    lodash.memoize: 4.1.2
+    terminal-link: 2.1.1
+    typescript: 5.0.4
+    yargs: 17.7.2
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/cli@5.0.0, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
