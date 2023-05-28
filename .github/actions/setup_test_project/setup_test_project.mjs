@@ -1,15 +1,20 @@
-import os from 'node:os'
+// import os from 'node:os'
 import path from 'node:path'
 import fs from 'fs-extra'
 
 import { exec } from '@actions/exec'
 import * as core from '@actions/core'
 
+// const test_project_path = path.join(
+//   os.tmpdir(),
+//   'test-project',
+//   // ":" is problematic with paths
+//   new Date().toISOString().split(':').join('-')
+// )
+
 const test_project_path = path.join(
-  os.tmpdir(),
-  'test-project',
-  // ":" is problematic with paths
-  new Date().toISOString().split(':').join('-')
+  path.dirname(process.cwd()),
+  'test-project'
 )
 
 console.log({
