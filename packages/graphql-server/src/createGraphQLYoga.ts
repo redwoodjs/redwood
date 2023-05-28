@@ -99,7 +99,7 @@ export const createGraphQLYoga = ({
   }`
 
     // TODO: Once Studio is not experimental, can remove these generateGraphiQLHeaders
-    const authHeader = `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiqL-headers on how to auto generate auth headers"}`
+    const authHeader = `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiql-headers on how to auto generate auth headers"}`
 
     const graphiql = !disableGraphQL
       ? {
