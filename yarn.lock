@@ -7080,7 +7080,7 @@ __metadata:
     babel-timing: 0.9.1
     copy-webpack-plugin: 11.0.0
     core-js: 3.30.2
-    css-loader: 6.7.4
+    css-loader: 6.8.1
     css-minimizer-webpack-plugin: 5.0.0
     dotenv-webpack: 8.0.1
     esbuild: 0.17.19
@@ -14827,21 +14827,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:6.7.4":
-  version: 6.7.4
-  resolution: "css-loader@npm:6.7.4"
+"css-loader@npm:6.8.1":
+  version: 6.8.1
+  resolution: "css-loader@npm:6.8.1"
   dependencies:
     icss-utils: ^5.1.0
     postcss: ^8.4.21
     postcss-modules-extract-imports: ^3.0.0
-    postcss-modules-local-by-default: ^4.0.1
+    postcss-modules-local-by-default: ^4.0.3
     postcss-modules-scope: ^3.0.0
     postcss-modules-values: ^4.0.0
     postcss-value-parser: ^4.2.0
     semver: ^7.3.8
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 8dde268a3ae2014a6abd9ad2167b8c153ac06394171b335a00f53ed9eebe5b1f11c3942bba830e5e28d0f940a67ce0ebb2cf0c394cbad84dd271529ff09e4fcf
+  checksum: a6e23de4ec1d2832f10b8ca3cfec6b6097a97ca3c73f64338ae5cd110ac270f1b218ff0273d39f677a7a561f1a9d9b0d332274664d0991bcfafaae162c2669c4
   languageName: node
   linkType: hard
 
@@ -26264,7 +26264,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-modules-local-by-default@npm:^4.0.0, postcss-modules-local-by-default@npm:^4.0.1":
+"postcss-modules-local-by-default@npm:^4.0.0":
   version: 4.0.1
   resolution: "postcss-modules-local-by-default@npm:4.0.1"
   dependencies:
@@ -26274,6 +26274,19 @@ __metadata:
   peerDependencies:
     postcss: ^8.1.0
   checksum: b8ed23dc36cca4701deb924b700e5d023efb7d79e39c64160e60ea1e3e147397eeb290b90f451a4a6e09aad7ca82c16f2656b6fe6ec32eb33837cd9a7a700a5d
+  languageName: node
+  linkType: hard
+
+"postcss-modules-local-by-default@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "postcss-modules-local-by-default@npm:4.0.3"
+  dependencies:
+    icss-utils: ^5.0.0
+    postcss-selector-parser: ^6.0.2
+    postcss-value-parser: ^4.1.0
+  peerDependencies:
+    postcss: ^8.1.0
+  checksum: be49b86efbfb921f42287e227584aac91af9826fc1083db04958ae283dfe215ca539421bfba71f9da0f0b10651f28e95a64b5faca7166f578a1933b8646051f7
   languageName: node
   linkType: hard
 
