@@ -192,7 +192,7 @@ export const createGraphQLHandler = ({
           title: 'Redwood GraphQL Playground',
           headers: generateGraphiQLHeader
             ? generateGraphiQLHeader()
-            : `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiQL-headers on how to auto generate auth headers"}`,
+            : `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiql-headers on how to auto generate auth headers"}`,
           defaultQuery: `query Redwood {
   redwood {
     version
