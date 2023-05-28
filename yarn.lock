@@ -2692,10 +2692,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@faker-js/faker@npm:8.0.1":
-  version: 8.0.1
-  resolution: "@faker-js/faker@npm:8.0.1"
-  checksum: a1ac63f9cecd162bf4bee89075cdb5045f896df4e933400ac1442c0eb067df8dd151d332fa4e5a516a440b1caa3cd3f0301dae6d7af7677ebb2111da86512d4c
+"@faker-js/faker@npm:8.0.2":
+  version: 8.0.2
+  resolution: "@faker-js/faker@npm:8.0.2"
+  checksum: a7851d4abfcd93c8c9d40ca7f1a7ad2218b9dcac1b11afe9dcf0fe38f5c1d91610e56bcedf5193a5b178dc10e052baab35977853342e84ec12b1fb27b425b356
   languageName: node
   linkType: hard
 
@@ -28303,7 +28303,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.21.5
     "@babel/runtime-corejs3": 7.21.5
-    "@faker-js/faker": 8.0.1
+    "@faker-js/faker": 8.0.2
     "@npmcli/arborist": 6.2.9
     "@playwright/test": 1.34.3
     "@replayio/playwright": 0.3.30
