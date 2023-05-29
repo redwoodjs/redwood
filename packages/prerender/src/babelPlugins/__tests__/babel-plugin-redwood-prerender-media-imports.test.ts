@@ -69,7 +69,6 @@ describe('Webpack bundler', () => {
         },
         {
           title: 'Handle pdfs',
-
           code: `import pdfDoc from './terms.pdf'`,
           output: `const pdfDoc = '/static/media/terms.pdf'`,
         },
@@ -151,6 +150,11 @@ describe('Vite bundler', () => {
           title: 'Handle bmps',
           code: `import img4 from './image4.bmp'`,
           output: `const img4 = 'assets/image4-hash.bmp'`,
+        },
+        {
+          title: 'Handle pdfs',
+          code: `import pdfDoc from '../../pdf/invoice.pdf'`,
+          output: `const pdfDoc = 'assets/invoice-7d64ed28.pdf'`,
         },
         {
           title: 'Handle gifs',

@@ -51,5 +51,9 @@
   "pages/HomePage/funny.gif": {
     "file": "assets/funny-hash.gif",
     "src": "pages/HomePage/funny.gif"
+  },
+  "pdf/invoice.pdf": {
+    "file": "assets/invoice-7d64ed28.pdf",
+    "src": "pdf/invoice.pdf"
   }
 }
