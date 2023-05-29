@@ -4,7 +4,7 @@ import path from 'path'
 import chalk from 'chalk'
 
 import { getConfig, getPaths } from './lib'
-import { installModule } from './lib/packages'
+import { installRedwoodModule } from './lib/packages'
 
 /**
  * The file inside .redwood which will contain cached plugin command mappings
@@ -20,7 +20,9 @@ const PLUGIN_CACHE_FILENAME = 'command-cache.json'
 export async function loadPlugins(yargs) {
   const { plugins, autoInstall } = getConfig().experimental.cli
 
-  const enabledPlugins = plugins.filter((p) => p.enabled ?? true)
+  const enabledPlugins = plugins.filter(
+    (p) => p.package !== undefined && (p.enabled ?? true)
+  )
 
   // Print warnings about invalid plugins
   checkPluginListAndWarn(enabledPlugins)
@@ -29,7 +31,7 @@ export async function loadPlugins(yargs) {
   const thirdPartyPackages = new Set()
   for (const plugin of enabledPlugins) {
     // Skip invalid plugins
-    if (!plugin.package || !plugin.version) {
+    if (!plugin.package) {
       continue
     }
     // Skip non-scoped packages
@@ -141,7 +143,6 @@ export async function loadPlugins(yargs) {
       // Attempt to load the plugin
       const plugin = await loadPluginPackage(
         namespacePlugin.package,
-        namespacePlugin.version,
         autoInstall
       )
 
@@ -205,18 +206,11 @@ export async function loadPlugins(yargs) {
  * @param {any[]} plugins An array of plugin objects read from the redwood.toml file
  */
 function checkPluginListAndWarn(plugins) {
-  // Plugins must define a package and version
+  // Plugins must define a package
   for (const plugin of plugins) {
     if (!plugin.package) {
       console.warn(
         chalk.yellow(`⚠️  A plugin is missing a package, it cannot be loaded.`)
-      )
-    }
-    if (!plugin.version) {
-      console.warn(
-        chalk.yellow(
-          `⚠️  Plugin "${plugin.package}" is missing a version, it cannot be loaded.`
-        )
       )
     }
   }
@@ -250,11 +244,10 @@ function checkPluginListAndWarn(plugins) {
  * Attempts to load a plugin package and return it. Returns null if the plugin failed to load.
  *
  * @param {string} packageName The npm package name of the plugin
- * @param {string} packageVersion The npm package version of the plugin
  * @param {boolean} autoInstall Whether to automatically install the plugin package if it is not installed already
  * @returns The plugin package or null if it failed to load
  */
-async function loadPluginPackage(packageName, packageVersion, autoInstall) {
+async function loadPluginPackage(packageName, autoInstall) {
   try {
     return await import(packageName)
   } catch (error) {
@@ -269,10 +262,7 @@ async function loadPluginPackage(packageName, packageVersion, autoInstall) {
       } else {
         // Install the plugin
         console.log(chalk.green(`Installing plugin "${packageName}"...`))
-        const installed = await installPluginPackage(
-          packageName,
-          packageVersion
-        )
+        const installed = await installPluginPackage(packageName)
         if (installed) {
           return await import(packageName)
         }
@@ -288,12 +278,11 @@ async function loadPluginPackage(packageName, packageVersion, autoInstall) {
  * Attempts to install a plugin package. Installs the package as a dev dependency.
  *
  * @param {string} packageName The npm package name of the plugin
- * @param {string} packageVersion The npm package version of the plugin
  * @returns True if the plugin was installed successfully, false otherwise
  */
-async function installPluginPackage(packageName, packageVersion) {
+async function installPluginPackage(packageName) {
   try {
-    await installModule(packageName, packageVersion, true)
+    await installRedwoodModule(packageName)
     return true
   } catch (error) {
     console.error(error)
