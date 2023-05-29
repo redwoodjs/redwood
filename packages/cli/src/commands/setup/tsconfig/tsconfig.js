@@ -12,6 +12,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./tsconfigHandler')
+  const { handler } = await import('./tsconfigHandler.js')
   return handler(options)
 }
