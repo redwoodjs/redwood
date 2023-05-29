@@ -2604,10 +2604,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@faker-js/faker@npm:8.0.1":
-  version: 8.0.1
-  resolution: "@faker-js/faker@npm:8.0.1"
-  checksum: a1ac63f9cecd162bf4bee89075cdb5045f896df4e933400ac1442c0eb067df8dd151d332fa4e5a516a440b1caa3cd3f0301dae6d7af7677ebb2111da86512d4c
+"@faker-js/faker@npm:8.0.2":
+  version: 8.0.2
+  resolution: "@faker-js/faker@npm:8.0.2"
+  checksum: a7851d4abfcd93c8c9d40ca7f1a7ad2218b9dcac1b11afe9dcf0fe38f5c1d91610e56bcedf5193a5b178dc10e052baab35977853342e84ec12b1fb27b425b356
   languageName: node
   linkType: hard
 
@@ -6694,14 +6694,14 @@ __metadata:
     "@babel/cli": 7.21.5
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
-    "@supabase/supabase-js": 2.22.0
+    "@supabase/supabase-js": 2.23.0
     "@types/react": 18.2.7
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
     typescript: 5.0.4
   peerDependencies:
-    "@supabase/supabase-js": 2.22.0
+    "@supabase/supabase-js": 2.23.0
   languageName: unknown
   linkType: soft
 
@@ -6932,7 +6932,7 @@ __metadata:
     babel-timing: 0.9.1
     copy-webpack-plugin: 11.0.0
     core-js: 3.30.2
-    css-loader: 6.7.4
+    css-loader: 6.8.1
     css-minimizer-webpack-plugin: 5.0.0
     dotenv-webpack: 8.0.1
     esbuild: 0.17.19
@@ -6951,7 +6951,7 @@ __metadata:
     style-loader: 3.3.3
     typescript: 5.0.4
     url-loader: 4.1.1
-    webpack: 5.83.1
+    webpack: 5.84.1
     webpack-bundle-analyzer: 4.8.0
     webpack-cli: 5.1.1
     webpack-dev-server: 4.15.0
@@ -7047,7 +7047,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 18.2.0
     react-dom: 18.2.0
-    react-hook-form: 7.43.9
+    react-hook-form: 7.44.1
     typescript: 5.0.4
   peerDependencies:
     graphql: 16.6.0
@@ -8644,12 +8644,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/postgrest-js@npm:^1.1.1":
-  version: 1.4.1
-  resolution: "@supabase/postgrest-js@npm:1.4.1"
+"@supabase/postgrest-js@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@supabase/postgrest-js@npm:1.7.0"
   dependencies:
     cross-fetch: ^3.1.5
-  checksum: 51a898e0309c2c64de0b24b7e6326714763d921cf5a71541ed174331e42a8521badad68272a36563f6823098408dae7485a8cf297efd8b5350d8e12f00ba13ac
+  checksum: dff68d516f4c54d7425941fa41579f4cfc0f95b490f299ab9a0fe96a01946c7e6a3622f174c0013770e5de2066f8d5c09e54fe8977d74b19687511fe4fc3f663
   languageName: node
   linkType: hard
 
@@ -8673,17 +8673,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:2.22.0":
-  version: 2.22.0
-  resolution: "@supabase/supabase-js@npm:2.22.0"
+"@supabase/supabase-js@npm:2.23.0":
+  version: 2.23.0
+  resolution: "@supabase/supabase-js@npm:2.23.0"
   dependencies:
     "@supabase/functions-js": ^2.1.0
     "@supabase/gotrue-js": ^2.26.0
-    "@supabase/postgrest-js": ^1.1.1
+    "@supabase/postgrest-js": ^1.7.0
     "@supabase/realtime-js": ^2.7.2
     "@supabase/storage-js": ^2.5.1
     cross-fetch: ^3.1.5
-  checksum: cac2085a5aec4a0a04db1d0e11aee0b416d160b0f4d37a2df05de53e1d9252680d6d4020fb16dc005de888356a7768425ce7113d28c821f8e022eb7641e9cdd7
+  checksum: f6649ebb5d984248b1ac58186db63e145f2132d57271a6f619ea0e056d0685650d5aabae98e5e8c8cec3e25b6ddbbf64d966799c2184533923c79b13a3bb0a7e
   languageName: node
   linkType: hard
 
@@ -10629,12 +10629,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn-import-assertions@npm:^1.7.6":
-  version: 1.8.0
-  resolution: "acorn-import-assertions@npm:1.8.0"
+"acorn-import-assertions@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "acorn-import-assertions@npm:1.9.0"
   peerDependencies:
     acorn: ^8
-  checksum: ad8e177a177dcda35a91cca2dc54a7cf6958211c14af2b48e4685a5e752d4782779d367e1d5e275700ad5767834d0063edf2ba85aeafb98d7398f8ebf957e7f5
+  checksum: 3b4a194e128efdc9b86c2b1544f623aba4c1aa70d638f8ab7dc3971a5b4aa4c57bd62f99af6e5325bb5973c55863b4112e708a6f408bad7a138647ca72283afe
   languageName: node
   linkType: hard
 
@@ -14101,21 +14101,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:6.7.4, css-loader@npm:^6.7.1":
-  version: 6.7.4
-  resolution: "css-loader@npm:6.7.4"
+"css-loader@npm:6.8.1, css-loader@npm:^6.7.1":
+  version: 6.8.1
+  resolution: "css-loader@npm:6.8.1"
   dependencies:
     icss-utils: ^5.1.0
     postcss: ^8.4.21
     postcss-modules-extract-imports: ^3.0.0
-    postcss-modules-local-by-default: ^4.0.1
+    postcss-modules-local-by-default: ^4.0.3
     postcss-modules-scope: ^3.0.0
     postcss-modules-values: ^4.0.0
     postcss-value-parser: ^4.2.0
     semver: ^7.3.8
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 8dde268a3ae2014a6abd9ad2167b8c153ac06394171b335a00f53ed9eebe5b1f11c3942bba830e5e28d0f940a67ce0ebb2cf0c394cbad84dd271529ff09e4fcf
+  checksum: a6e23de4ec1d2832f10b8ca3cfec6b6097a97ca3c73f64338ae5cd110ac270f1b218ff0273d39f677a7a561f1a9d9b0d332274664d0991bcfafaae162c2669c4
   languageName: node
   linkType: hard
 
@@ -15349,7 +15349,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.14.0, enhanced-resolve@npm:^5.14.0, enhanced-resolve@npm:^5.7.0":
+"enhanced-resolve@npm:5.14.0":
   version: 5.14.0
   resolution: "enhanced-resolve@npm:5.14.0"
   dependencies:
@@ -15367,6 +15367,16 @@ __metadata:
     memory-fs: ^0.5.0
     tapable: ^1.0.0
   checksum: d95fc630606ea35bed21c4a029bbb1681919571a2d1d2011c7fc42a26a9e48ed3d74a89949ce331e1fd3229850a303e3218b887b92951330f16bdfbb93a10e64
+  languageName: node
+  linkType: hard
+
+"enhanced-resolve@npm:^5.14.1, enhanced-resolve@npm:^5.7.0":
+  version: 5.14.1
+  resolution: "enhanced-resolve@npm:5.14.1"
+  dependencies:
+    graceful-fs: ^4.2.4
+    tapable: ^2.2.0
+  checksum: 65edb495492817fcdc2f8755f911835c4a5ea706377e9a57bbdacace14167c1413ad4d12630d23b850e80e2671b9a46603e562b9321546d1eca664ac24170906
   languageName: node
   linkType: hard
 
@@ -24752,16 +24762,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-modules-local-by-default@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "postcss-modules-local-by-default@npm:4.0.1"
+"postcss-modules-local-by-default@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "postcss-modules-local-by-default@npm:4.0.3"
   dependencies:
     icss-utils: ^5.0.0
     postcss-selector-parser: ^6.0.2
     postcss-value-parser: ^4.1.0
   peerDependencies:
     postcss: ^8.1.0
-  checksum: b8ed23dc36cca4701deb924b700e5d023efb7d79e39c64160e60ea1e3e147397eeb290b90f451a4a6e09aad7ca82c16f2656b6fe6ec32eb33837cd9a7a700a5d
+  checksum: be49b86efbfb921f42287e227584aac91af9826fc1083db04958ae283dfe215ca539421bfba71f9da0f0b10651f28e95a64b5faca7166f578a1933b8646051f7
   languageName: node
   linkType: hard
 
@@ -25708,12 +25718,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.43.9":
-  version: 7.43.9
-  resolution: "react-hook-form@npm:7.43.9"
+"react-hook-form@npm:7.44.1":
+  version: 7.44.1
+  resolution: "react-hook-form@npm:7.44.1"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 5aab031ae15b32daffb45abe32e00c9d66c511348b68589d4faa6c2309db54b9d2f738b400319b0c2ea87dfd5d85f3760393feafe2bf7a97d608aa736934151f
+  checksum: 6d74d6556d885dc05ecb6fae42c32b77320345721ca78ec3e97fbc7cd58066f8554a46a659fd5c8b2e9d1d74e6b3ea484bd5e61b64c288fde50c6a22b7f37fc9
   languageName: node
   linkType: hard
 
@@ -26665,7 +26675,7 @@ __metadata:
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.21.5
     "@babel/runtime-corejs3": 7.21.5
-    "@faker-js/faker": 8.0.1
+    "@faker-js/faker": 8.0.2
     "@npmcli/arborist": 6.2.9
     "@playwright/test": 1.34.3
     "@replayio/playwright": 0.3.30
@@ -30344,9 +30354,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5, webpack@npm:5.83.1, webpack@npm:^5":
-  version: 5.83.1
-  resolution: "webpack@npm:5.83.1"
+"webpack@npm:5, webpack@npm:5.84.1, webpack@npm:^5":
+  version: 5.84.1
+  resolution: "webpack@npm:5.84.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -30354,10 +30364,10 @@ __metadata:
     "@webassemblyjs/wasm-edit": ^1.11.5
     "@webassemblyjs/wasm-parser": ^1.11.5
     acorn: ^8.7.1
-    acorn-import-assertions: ^1.7.6
+    acorn-import-assertions: ^1.9.0
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.14.0
+    enhanced-resolve: ^5.14.1
     es-module-lexer: ^1.2.1
     eslint-scope: 5.1.1
     events: ^3.2.0
@@ -30377,7 +30387,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 5a3b12776dd4fbc73c757762d100781c97e2edf70b574a29653613a3b89b447d55ec534419c52bc6aeb78a77c432f5106f01af5742fbc2fe9cd8533bcffcedcd
+  checksum: e2a794997fb843889f09aa82be72dd07945a63cb9f4af7dbb8c486eb8d0fd3595db5adcc0e67936733cd766cc81127fe1563fd98f85134924cc584cea8a08959
   languageName: node
   linkType: hard
 
