@@ -326,7 +326,7 @@ export const runPrerender = async ({
       {
         plugins: [
           ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
-          [mediaImportsPlugin],
+          [mediaImportsPlugin, { bundler: getConfig().web.bundler }],
         ],
       },
     ],
