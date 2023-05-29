@@ -22,7 +22,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
-const firstLoad = true
+let firstLoad = true
 
 export const ActiveRouteLoader = ({
   spec,
@@ -37,6 +37,11 @@ export const ActiveRouteLoader = ({
   const LazyRouteComponent = usePrerenderLoader
     ? spec.prerenderLoader(spec.name).default
     : spec.LazyComponent
+
+  // After first load set to false to switch to client side fetching
+  if (firstLoad) {
+    firstLoad = false
+  }
 
   useEffect(() => {
     // Make this hook a no-op if we're rendering in an iframe.
