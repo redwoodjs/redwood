@@ -183,62 +183,64 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                               t.identifier('span'),
                               t.identifier('setStatus')
                             ),
-                            [t.objectExpression([
-                              t.objectProperty(
-                                t.identifier('code'),
-                                t.numericLiteral(2),
-                              ),
-                              t.objectProperty(
-                                t.identifier('message'),
-                                t.logicalExpression(
-                                  '??',
-                                  t.optionalMemberExpression(
-                                    t.optionalCallExpression(
-                                      t.optionalMemberExpression(
+                            [
+                              t.objectExpression([
+                                t.objectProperty(
+                                  t.identifier('code'),
+                                  t.numericLiteral(2)
+                                ),
+                                t.objectProperty(
+                                  t.identifier('message'),
+                                  t.logicalExpression(
+                                    '??',
+                                    t.optionalMemberExpression(
+                                      t.optionalCallExpression(
                                         t.optionalMemberExpression(
-                                          t.identifier('error'),
-                                          t.identifier('message'),
-                                          false,
-                                          true
-                                        ),
-                                        t.identifier('split'),
-                                        false,
-                                        true
-                                      ),
-                                      [t.stringLiteral('\n')],
-                                      false
-                                    ),
-                                    t.numericLiteral(0),
-                                    true,
-                                    false
-                                  ),
-                                  t.optionalMemberExpression(
-                                    t.optionalCallExpression(
-                                      t.optionalMemberExpression(
-                                        t.optionalCallExpression(
                                           t.optionalMemberExpression(
                                             t.identifier('error'),
-                                            t.identifier('toString'),
+                                            t.identifier('message'),
                                             false,
                                             true
                                           ),
-                                          [],
-                                          false
+                                          t.identifier('split'),
+                                          false,
+                                          true
                                         ),
-                                        t.identifier('split'),
-                                        false,
-                                        true
+                                        [t.stringLiteral('\n')],
+                                        false
                                       ),
-                                      [t.stringLiteral('\n')],
+                                      t.numericLiteral(0),
+                                      true,
                                       false
                                     ),
-                                    t.numericLiteral(0),
-                                    true,
-                                    false
-                                  ),
-                                )
-                              ),
-                            ])]
+                                    t.optionalMemberExpression(
+                                      t.optionalCallExpression(
+                                        t.optionalMemberExpression(
+                                          t.optionalCallExpression(
+                                            t.optionalMemberExpression(
+                                              t.identifier('error'),
+                                              t.identifier('toString'),
+                                              false,
+                                              true
+                                            ),
+                                            [],
+                                            false
+                                          ),
+                                          t.identifier('split'),
+                                          false,
+                                          true
+                                        ),
+                                        [t.stringLiteral('\n')],
+                                        false
+                                      ),
+                                      t.numericLiteral(0),
+                                      true,
+                                      false
+                                    )
+                                  )
+                                ),
+                              ]),
+                            ]
                           )
                         ),
                         t.expressionStatement(

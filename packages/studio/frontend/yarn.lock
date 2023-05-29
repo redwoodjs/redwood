@@ -527,22 +527,22 @@ __metadata:
   linkType: hard
 
 "@graphiql/plugin-explorer@npm:^0.1.14":
-  version: 0.1.19
-  resolution: "@graphiql/plugin-explorer@npm:0.1.19"
+  version: 0.1.20
+  resolution: "@graphiql/plugin-explorer@npm:0.1.20"
   dependencies:
-    "@graphiql/react": ^0.17.5
+    "@graphiql/react": ^0.17.6
     graphiql-explorer: ^0.9.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 82651223d79c534cdfc5719c299c75050f302bd6732f1cd5551423ffb5389be55bed7d278aff03a6cbf47ad0437e8dee69bf5d80d34c308c1840c6fab41f1c78
+  checksum: bf0f3892e27833b8dd11f1baf8c90d37e2bf769f35d5bd5dfd097e50ccec6072f5b07108b9f6c75387f28a87ce86764fbf87bfc2cee3b9dc4978a8440bb712fa
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.5":
-  version: 0.17.5
-  resolution: "@graphiql/react@npm:0.17.5"
+"@graphiql/react@npm:^0.17.6":
+  version: 0.17.6
+  resolution: "@graphiql/react@npm:0.17.6"
   dependencies:
     "@graphiql/toolkit": ^0.8.4
     "@reach/combobox": ^0.17.0
@@ -562,7 +562,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 0095b3e069f8fa83927da10495beef6a3edb726a1adadcda162efedc1ccfa8d4b6cd08a7400e174511817bcaa56a487617f73a59df12c9f485698f5c0320a333
+  checksum: 247990aee2d78ea4e888f54deb7b4c7d7fffc8b4664305ff6c386be91763c8f0f3456f2d5380c1d10165799a66c0ef1d2c0cce478a7b3bfc3266c228db973555
   languageName: node
   linkType: hard
 
@@ -1206,8 +1206,8 @@ __metadata:
   linkType: hard
 
 "@tremor/react@npm:^2.2.0":
-  version: 2.8.2
-  resolution: "@tremor/react@npm:2.8.2"
+  version: 2.9.1
+  resolution: "@tremor/react@npm:2.9.1"
   dependencies:
     "@floating-ui/react": ^0.19.1
     date-fns: ^2.28.0
@@ -1217,7 +1217,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ">=16.6.0"
-  checksum: 353db534ab6cb06a4e6fd5db140b54a9a359f0cd8bd4926e53e481c2171109a651dfa76d23fa5c505908c0a372ecc38dd21e3aa3ab470fe66a40519c3953e63d
+  checksum: d1ba73cd5d0b76daf255d74fbae6388d638844d06313730aebd4961bb36069141b08569584dc0ff0eeec00ada314e9eab76dc41a84f24392d6d00a575f301a93
   languageName: node
   linkType: hard
 
@@ -2543,10 +2543,10 @@ __metadata:
   linkType: hard
 
 "graphiql@npm:^2.4.0":
-  version: 2.4.5
-  resolution: "graphiql@npm:2.4.5"
+  version: 2.4.7
+  resolution: "graphiql@npm:2.4.7"
   dependencies:
-    "@graphiql/react": ^0.17.5
+    "@graphiql/react": ^0.17.6
     "@graphiql/toolkit": ^0.8.4
     graphql-language-service: ^5.1.6
     markdown-it: ^12.2.0
@@ -2554,7 +2554,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 30be5f21e2c23684d68fee74cd2712cdfe5771edaa28d7ecea7b61297679a27d76470bd6e2be3ec722ddb3fcd15d0c54ad527bde9bd778654dc67314ba4f388a
+  checksum: 00cc84c24529849b7c9870ee2f4eaf4a2142df8aa767328160f74a9e0a00d3949cb3ec5c8765f08e380366850f15518f42f0f1d6ad6095e731f882faea06dd31
   languageName: node
   linkType: hard
 
@@ -3415,13 +3415,13 @@ __metadata:
   linkType: hard
 
 "postcss@npm:^8.4.21, postcss@npm:^8.4.23":
-  version: 8.4.23
-  resolution: "postcss@npm:8.4.23"
+  version: 8.4.24
+  resolution: "postcss@npm:8.4.24"
   dependencies:
     nanoid: ^3.3.6
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: 35c2e26496be286a63706a0b8240fc4d2075a746466df530989208f60ea33cbc80c89420221cffb7d4fdd605afc385993f5f60302447e3047a7c0a8756b6471d
+  checksum: 37704ee03a2cbdebf2c99a76d399d6e0250742b5f6c699a12d475c84cedfcbeb26e180d9c780e0219dd2ad70cac963ceaf1d6763a1aec3e63d0c19fceb0eab23
   languageName: node
   linkType: hard
 
@@ -3506,13 +3506,13 @@ __metadata:
   linkType: hard
 
 "react-error-boundary@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "react-error-boundary@npm:4.0.4"
+  version: 4.0.7
+  resolution: "react-error-boundary@npm:4.0.7"
   dependencies:
     "@babel/runtime": ^7.12.5
   peerDependencies:
     react: ">=16.13.1"
-  checksum: 23020323992d0d0355a29e8282e1d2774d95fdee48597b22ac87df75e7fbf36ce795b7ebf84ebbf89322985993e018c37d3848ac948e0e9b420fb2613682e96b
+  checksum: 0e7eb75012edec8e73d76a6030a9f06e14b62c64cb900527ab8a66d1566c6d7f4daa01125bb3e9f512f8164813d8d8dfad193d3b27c2174652137940620fee48
   languageName: node
   linkType: hard
 
@@ -4368,8 +4368,8 @@ __metadata:
   linkType: hard
 
 "vite@npm:^4.1.0":
-  version: 4.3.8
-  resolution: "vite@npm:4.3.8"
+  version: 4.3.9
+  resolution: "vite@npm:4.3.9"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
@@ -4400,7 +4400,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 7eb7e28b8485ee30ceb2a758ad816d741d21a0e377ca7cc98d1db0a8686076e6bf3e620767afe4d9c497fc4d5fa1fe5f95a422c24c61fd92ac5368a78af43b31
+  checksum: 9eb1c99f16992e1b29e3eea76df312983f2e59915c369fede0f1e6716b80827857f88cfc75092aac807d20c73033c65be82a315a14ab312a52d22a9bdad1ca82
   languageName: node
   linkType: hard
 
