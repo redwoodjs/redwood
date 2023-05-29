@@ -1,6 +1,7 @@
 import { extname, basename, join, relative, dirname } from 'path'
 
 import type { PluginObj, types, NodePath } from '@babel/core'
+import type { ManifestChunk as ViteManifestChunk } from 'vite'
 
 import {
   BundlerEnum,
@@ -31,6 +32,8 @@ const defaultOptions = {
     '.bmp',
   ],
 }
+
+type ViteManifest = Record<string, ViteManifestChunk>
 
 function getVariableName(p: NodePath<types.ImportDeclaration>) {
   if (p.node.specifiers?.[0] && p.node.specifiers[0].local) {
@@ -69,9 +72,10 @@ export default function (
             const viteManifestKey = ensurePosixPath(
               relative(getPaths().web.src, absPath)
             )
-            // TODO: We should add types to the vite build manifest
+
             // Note: The entry will not exist if vite has inlined a small asset
-            copiedAssetPath = buildManifest[viteManifestKey]?.file
+            copiedAssetPath = (buildManifest as ViteManifest)[viteManifestKey]
+              ?.file
           } else if (bundler === BundlerEnum.WEBPACK) {
             const webpackManifestKey = `static/media/${basename(
               p.node.source.value
