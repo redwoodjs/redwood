@@ -34,10 +34,6 @@
     "@redwoodjs/project-config": "5.0.0",
     "@redwoodjs/router": "5.0.0",
     "@redwoodjs/web": "5.0.0",
-    "@storybook/addon-a11y": "7.0.17",
-    "@storybook/addon-docs": "7.0.17",
-    "@storybook/addon-essentials": "7.0.17",
-    "@storybook/react-webpack5": "7.0.17",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
@@ -57,7 +53,6 @@
     "jest-environment-jsdom": "29.5.0",
     "jest-watch-typeahead": "2.2.2",
     "msw": "1.2.1",
-    "storybook": "7.0.17",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },
