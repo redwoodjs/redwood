@@ -1,9 +1,10 @@
-import { existsSync } from 'fs'
+
 import fs from 'fs/promises'
 import path from 'path'
 
 import react from '@vitejs/plugin-react'
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
+import { build as viteBuild } from 'vite'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
@@ -18,7 +19,7 @@ import { RWRouteManifest } from './types'
 import { serverBuild } from './waku-lib/build-server'
 import { configFileConfig } from './waku-lib/config'
 // import { rscAnalyzePlugin, rscIndexPlugin } from './waku-lib/vite-plugin-rsc'
-import { rscAnalyzePlugin } from './waku-lib/vite-plugin-rsc'
+import { rscAnalyzePlugin, rscIndexPlugin } from './waku-lib/vite-plugin-rsc'
 
 interface BuildOptions {
   verbose?: boolean
@@ -45,7 +46,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
   // so we can switch to a regular import
   // @NOTE: Using dynamic import, because vite is still opt-in
-  const { build, normalizePath } = await import('vite')
+  const { build } = await import('vite')
   // const { build, resolveConfig } = await import('vite')
 
   // RSC build
@@ -140,57 +141,41 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
 
   const clientBuildOutput = await viteBuild({
     // ...configFileConfig,
-    // TODO (RSC)
-    // If you have web.src here the files in dist end up in the correct place,
-    // but because we're writing to web/dist, which is outside of web/src vite
-    // won't clear the output dir, which we want it to do so we don't end up
-    // with old files lying around.
-    // If we change it to web.base then vite will clear the output dir, but
-    // the files end up in web/dist/web/src/... which is not what we want.
-    // One solution to this is to move index.html to web.base/index.html
-    // instead of web.src/index.html. But I'm not sure what downstream effects
-    // that has.
     root: rwPaths.web.src,
     plugins: [
-      {
-        name: 'redwood-plugin-vite',
+      // TODO (RSC) Update index.html to include the entry.client.js script
+      // TODO (RSC) Do the above in the exp-rsc setup command
+      // {
+      //   name: 'redwood-plugin-vite',
 
-        // ---------- Bundle injection ----------
-        // Used by rollup during build to inject the entrypoint
-        // but note index.html does not come through as an id during dev
-        transform: (code: string, id: string) => {
-          console.log('transform', id)
-          if (
-            // TODO (RSC) Is this even needed? We throw if we can't find it above
-            // TODO (RSC) Consider making this async (if we do need it)
-            existsSync(clientEntryPath) &&
-            normalizePath(id) === normalizePath(rwPaths.web.html)
-          ) {
-            console.log('transforming index.html')
-            console.log('code', code)
-            const newCode = code.replace(
-              '</head>',
-              `  <script type="module" src="/entry-client.jsx"></script>
-</head>`
-            )
-            console.log('newCode', newCode)
-            return {
-              code: newCode,
-              map: null,
-            }
-          } else {
-            return {
-              code,
-              map: null, // Returning null here preserves the original sourcemap
-            }
-          }
-        },
-      },
+      //   // ---------- Bundle injection ----------
+      //   // Used by rollup during build to inject the entrypoint
+      //   // but note index.html does not come through as an id during dev
+      //   transform: (code: string, id: string) => {
+      //     if (
+      //       existsSync(clientEntryPath) &&
+      //       // TODO (RSC) Is this even needed? We throw if we can't find it above
+      //       // TODO (RSC) Consider making this async (if we do need it)
+      //       normalizePath(id) === normalizePath(rwPaths.web.html)
+      //     ) {
+      //       const newCode = code.replace(
+      //         '</head>',
+      //         '<script type="module" src="entry.client.jsx"></script></head>'
+      //       )
+      //
+      //       return { code: newCode, map: null }
+      //     } else {
+      //       // Returning null as the map preserves the original sourcemap
+      //       return { code, map: null }
+      //     }
+      //   },
+      // },
       react(),
-      // rscIndexPlugin(),
+      rscIndexPlugin(),
     ],
     build: {
       outDir: rwPaths.web.dist,
+      emptyOutDir: true, // Needed because `outDir` is not inside `root`
       rollupOptions: {
         input: {
           main: rwPaths.web.html,
@@ -259,7 +244,9 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     build: {
       // Because we configure the root to be web/src, we need to go up one level
       outDir: rwPaths.web.distServer,
-      // TODO (RSC) ssr: rwPaths.web.entryServer,
+      // TODO (RSC) Maybe we should re-enable this. I can't remember anymore)
+      // What does 'ssr' even mean?
+      // ssr: rwPaths.web.entryServer,
       rollupOptions: {
         input: {
           // TODO (RSC) entries: rwPaths.web.entryServer,
