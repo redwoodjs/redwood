@@ -47,7 +47,7 @@ test('Generate gql typedefs web', async () => {
       }
     )
 
-  const webPaths = await generateTypeDefGraphQLWeb()
+  const { typeDefs: webPaths } = await generateTypeDefGraphQLWeb()
 
   expect(webPaths).toHaveLength(1)
   expect(webPaths[0]).toMatch(path.join('web', 'types', 'graphql.d.ts'))
@@ -69,7 +69,7 @@ test('Generate gql typedefs api', async () => {
       }
     )
 
-  const apiPaths = await generateTypeDefGraphQLApi()
+  const { typeDefs: apiPaths } = await generateTypeDefGraphQLApi()
 
   expect(apiPaths).toHaveLength(1)
   expect(apiPaths[0]).toMatch(path.join('api', 'types', 'graphql.d.ts'))
@@ -114,7 +114,9 @@ test('respects user provided codegen config', async () => {
   // test fails
   try {
     await generateGraphQLSchema()
-    const [outputPath] = await generateTypeDefGraphQLWeb()
+    const {
+      typeDefs: [outputPath],
+    } = await generateTypeDefGraphQLWeb()
 
     const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
 
@@ -164,22 +166,11 @@ describe("Doesn't swallow legit errors", () => {
       './fixtures/graphqlCodeGen/invalidQueryType'
     )
     process.env.RWJS_CWD = fixturePath
-    const oldConsoleError = console.error
-    console.error = jest.fn()
 
-    await generateTypeDefGraphQLWeb()
+    const { errors } = await generateTypeDefGraphQLWeb()
+    expect(errors[0].error.toString()).toMatch(/field.*softKitten.*Query/)
 
-    try {
-      expect(console.error).toHaveBeenNthCalledWith(
-        3,
-        expect.objectContaining({
-          message: expect.stringMatching(/field.*softKitten.*Query/),
-        })
-      )
-    } finally {
-      console.error = oldConsoleError
-      delete process.env.RWJS_CWD
-    }
+    delete process.env.RWJS_CWD
   })
 
   test('missingType', async () => {
@@ -188,22 +179,11 @@ describe("Doesn't swallow legit errors", () => {
       './fixtures/graphqlCodeGen/missingType'
     )
     process.env.RWJS_CWD = fixturePath
-    const oldConsoleError = console.error
-    console.error = jest.fn()
 
-    await generateTypeDefGraphQLWeb()
+    const { errors } = await generateTypeDefGraphQLWeb()
+    expect(errors[0].error.toString()).toMatch(/Unknown type.*Todo/)
 
-    try {
-      expect(console.error).toHaveBeenNthCalledWith(
-        3,
-        expect.objectContaining({
-          message: expect.stringMatching(/Unknown type.*Todo/),
-        })
-      )
-    } finally {
-      console.error = oldConsoleError
-      delete process.env.RWJS_CWD
-    }
+    delete process.env.RWJS_CWD
   })
 
   test('nonExistingField', async () => {
@@ -212,21 +192,10 @@ describe("Doesn't swallow legit errors", () => {
       './fixtures/graphqlCodeGen/nonExistingField'
     )
     process.env.RWJS_CWD = fixturePath
-    const oldConsoleError = console.error
-    console.error = jest.fn()
 
-    await generateTypeDefGraphQLWeb()
+    const { errors } = await generateTypeDefGraphQLWeb()
+    expect(errors[0].error.toString()).toMatch(/field.*done.*Todo/)
 
-    try {
-      expect(console.error).toHaveBeenNthCalledWith(
-        3,
-        expect.objectContaining({
-          message: expect.stringMatching(/field.*done.*Todo/),
-        })
-      )
-    } finally {
-      console.error = oldConsoleError
-      delete process.env.RWJS_CWD
-    }
+    delete process.env.RWJS_CWD
   })
 })

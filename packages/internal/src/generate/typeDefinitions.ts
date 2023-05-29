@@ -38,21 +38,36 @@ import { writeTemplate } from './templates'
  */
 export const generateTypeDefs = async () => {
   // Return all the paths so they can be printed
-  const gqlApi = await generateTypeDefGraphQLApi()
-  const gqlWeb = await generateTypeDefGraphQLWeb()
-  return [
-    ...generateMirrorDirectoryNamedModules(),
-    ...generateMirrorCells(),
-    ...generateTypeDefRouterPages(),
-    ...generateTypeDefCurrentUser(),
-    ...generateTypeDefRouterRoutes(),
-    ...generateTypeDefGlobImports(),
-    ...generateTypeDefGlobalContext(),
-    ...generateTypeDefScenarios(),
-    ...generateTypeDefTestMocks(),
-    ...gqlApi,
-    ...gqlWeb,
-  ]
+  const { typeDefs: gqlApi, errors: apiErrors } =
+    await generateTypeDefGraphQLApi()
+  const generateTypeDefGraphQLWebReturn = await generateTypeDefGraphQLWeb()
+
+  let gqlWeb
+  let webErrors: { message: string; error: unknown }[] = []
+
+  if (Array.isArray(generateTypeDefGraphQLWebReturn)) {
+    gqlWeb = generateTypeDefGraphQLWebReturn
+  } else {
+    gqlWeb = generateTypeDefGraphQLWebReturn.typeDefs
+    webErrors = generateTypeDefGraphQLWebReturn.errors
+  }
+
+  return {
+    typeDefs: [
+      ...generateMirrorDirectoryNamedModules(),
+      ...generateMirrorCells(),
+      ...generateTypeDefRouterPages(),
+      ...generateTypeDefCurrentUser(),
+      ...generateTypeDefRouterRoutes(),
+      ...generateTypeDefGlobImports(),
+      ...generateTypeDefGlobalContext(),
+      ...generateTypeDefScenarios(),
+      ...generateTypeDefTestMocks(),
+      ...gqlApi,
+      ...gqlWeb,
+    ],
+    errors: [...apiErrors, ...webErrors],
+  }
 }
 
 export const generateMirrorDirectoryNamedModules = () => {

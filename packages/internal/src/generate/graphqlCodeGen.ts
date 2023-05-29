@@ -60,15 +60,28 @@ export const generateTypeDefGraphQLApi = async () => {
     },
   ]
 
-  try {
-    return await runCodegenGraphQL([], extraPlugins, filename, CodegenSide.API)
-  } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (api)')
-    console.error(e)
-    console.error()
+  const errors: { message: string; error: unknown }[] = []
 
-    return []
+  try {
+    return {
+      typeDefs: await runCodegenGraphQL(
+        [],
+        extraPlugins,
+        filename,
+        CodegenSide.API
+      ),
+      errors,
+    }
+  } catch (e) {
+    errors.push({
+      message: 'Error: Could not generate GraphQL type definitions (api)',
+      error: e,
+    })
+
+    return {
+      typeDefs: [],
+      errors,
+    }
   }
 }
 
@@ -102,20 +115,28 @@ export const generateTypeDefGraphQLWeb = async () => {
     },
   ]
 
-  try {
-    return await runCodegenGraphQL(
-      documents,
-      extraPlugins,
-      filename,
-      CodegenSide.WEB
-    )
-  } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (web)')
-    console.error(e)
-    console.error()
+  const errors: { message: string; error: unknown }[] = []
 
-    return []
+  try {
+    return {
+      typeDefs: await runCodegenGraphQL(
+        documents,
+        extraPlugins,
+        filename,
+        CodegenSide.WEB
+      ),
+      errors,
+    }
+  } catch (e) {
+    errors.push({
+      message: 'Error: Could not generate GraphQL type definitions (web)',
+      error: e,
+    })
+
+    return {
+      typeDefs: [],
+      errors,
+    }
   }
 }
 

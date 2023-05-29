@@ -59,9 +59,20 @@ process.stdin.on('data', async (data) => {
 watcher
   .on('ready', async () => {
     console.log('Generating TypeScript definitions and GraphQL schemas...')
-    const files = await generate()
+    const { files, errors } = await generate()
     console.log(files.length, 'files generated')
+
+    if (errors.length > 0) {
+      // dos some parsing...
+      for (const { message, error } of errors) {
+        console.error(message)
+        console.error(error)
+        console.log()
+      }
+    }
+
     routesWarningMessage = warningForDuplicateRoutes()
+
     if (routesWarningMessage) {
       console.warn(routesWarningMessage)
     }
