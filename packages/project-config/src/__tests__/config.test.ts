@@ -64,6 +64,7 @@ describe('getConfig', () => {
             },
             "inMemory": false,
           },
+          "useSDLCodeGenForGraphQLTypes": false,
         },
         "generate": {
           "nestScaffoldByModel": true,
