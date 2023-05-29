@@ -1,0 +1,59 @@
+{
+  "components/Post/Posts/image1.jpg": {
+    "file": "assets/image1-hash.jpg",
+    "src": "components/Post/Posts/image1.jpg"
+  },
+  "index.css": {
+    "file": "assets/index-3f5e7a04.css",
+    "src": "index.css"
+  },
+  "index.html": {
+    "assets": [
+      "assets/image1-hash.jpg",
+      "assets/image2-hash.jpeg",
+      "assets/image3-hash.png",
+      "assets/image4-hash.bmp",
+      "assets/doc-hash.pdf",
+      "assets/funny-hash.gif"
+    ],
+    "css": [
+      "assets/index-3f5e7a04.css"
+    ],
+    "dynamicImports": [
+      "pages/AboutPage/AboutPage.tsx",
+      "pages/BlogPostPage/BlogPostPage.tsx",
+      "pages/ContactUsPage/ContactUsPage.tsx",
+      "pages/DoublePage/DoublePage.tsx",
+      "pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
+      "pages/Post/PostPage/PostPage.tsx",
+      "pages/Post/PostsPage/PostsPage.tsx"
+    ],
+    "file": "assets/index-abef5d50.js",
+    "isEntry": true,
+    "src": "index.html"
+  },
+  "pages/HomePage/image1.jpg": {
+    "file": "assets/image1-hash.jpg",
+    "src": "components/Post/Posts/image1.jpg"
+  },
+  "pages/HomePage/image2.jpeg": {
+    "file": "assets/image2-hash.jpeg",
+    "src": "pages/HomePage/image2.jpeg"
+  },
+  "pages/HomePage/image3.png": {
+    "file": "assets/image3-hash.png",
+    "src": "pages/HomePage/image3.png"
+  },
+  "pages/HomePage/image4.bmp": {
+    "file": "assets/image4-hash.bmp",
+    "src": "pages/HomePage/image4.bmp"
+  },
+  "pages/HomePage/funny.gif": {
+    "file": "assets/funny-hash.gif",
+    "src": "pages/HomePage/funny.gif"
+  },
+  "pdf/invoice.pdf": {
+    "file": "assets/invoice-7d64ed28.pdf",
+    "src": "pdf/invoice.pdf"
+  }
+}
