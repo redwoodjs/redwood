@@ -21,7 +21,7 @@ const TEST_PROJECT_PATH = path.join(
   'test-project'
 )
 
-core.setOutput('TEST_PROJECT_PATH ', TEST_PROJECT_PATH)
+core.setOutput('test-project-path', TEST_PROJECT_PATH)
 
 const {
   dependenciesKey,

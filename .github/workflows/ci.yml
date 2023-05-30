@@ -165,7 +165,7 @@ jobs:
     steps:
       - run: echo "Only doc changes"
 
-  smoke-test:
+  smoke-tests:
     needs: check
 
     strategy:
@@ -214,7 +214,7 @@ jobs:
         working-directory: ./tasks/smoke-tests/dev
         run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
-          REDWOOD_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}'
+          REDWOOD_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
           RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
           RECORD_REPLAY_TEST_METRICS: 1
@@ -223,7 +223,7 @@ jobs:
         working-directory: ./tasks/smoke-tests/auth
         run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
-          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
           RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
           RECORD_REPLAY_TEST_METRICS: 1
@@ -231,18 +231,18 @@ jobs:
       - name: Run `rw build --no-prerender`
         run: |
           yarn rw build --no-prerender
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run `rw prerender`
         run: |
           yarn rw prerender --verbose
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: 🖥️ Run serve smoke tests
         working-directory: tasks/smoke-tests/serve
         run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
-          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
           RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
           RECORD_REPLAY_TEST_METRICS: 1
@@ -251,7 +251,7 @@ jobs:
         working-directory: tasks/smoke-tests/prerender
         run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
-          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
           RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
           RECORD_REPLAY_TEST_METRICS: 1
@@ -260,7 +260,7 @@ jobs:
         working-directory: tasks/smoke-tests/storybook
         run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
-          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
           RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
           RECORD_REPLAY_TEST_METRICS: 1
@@ -268,85 +268,85 @@ jobs:
       - name: Run `rw info`
         run: |
           yarn rw info
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run `rw lint`
         run: |
           yarn rw lint ./api/src --fix
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw test api"
         run: |
           yarn rw test api --no-watch
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw test web"
         run: |
           yarn rw test web --no-watch
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw check"
         run: |
           yarn rw check
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw storybook"
         run: |
           yarn rw sb --smoke-test
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw exec"
         run: |
           yarn rw g script testScript && yarn rw exec testScript
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "prisma generate"
         run: |
           yarn rw prisma generate
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw data-migrate"
         run: |
           yarn rw dataMigrate up
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "data-migrate install"
         run: |
           yarn rw data-migrate install
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "prisma migrate"
         run: |
           yarn rw prisma migrate dev --name ci-test
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run `rw deploy --help`
         run: yarn rw setup deploy --help && yarn rw deploy --help
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run `rw setup ui --help`
         run: yarn rw setup --help && yarn rw setup ui --help
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "g page"
         run: |
           yarn rw g page ciTest
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "g sdl"
         run: |
           yarn rw g sdl userExample
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Run "rw type-check"
         run: |
           yarn rw type-check
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
 
       - name: Throw Error | Run `rw g sdl <model>`
         run: |
           yarn rw g sdl DoesNotExist
-        working-directory: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
+        working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
         continue-on-error: true
 
       - name: Upload Replays
@@ -355,7 +355,7 @@ jobs:
         with:
           api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
 
-  smoke-test-docs:
+  smoke-tests-docs:
     needs: only-doc-changes
     if: needs.only-doc-changes.outputs.only-doc-changes == 'true'
     strategy:
