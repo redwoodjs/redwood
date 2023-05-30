@@ -12,7 +12,17 @@
     "dist",
     "inject"
   ],
-  "main": "dist/index.js",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    }
+  },
   "bin": {
     "rw-dev-fe": "./dist/devFeServer.js",
     "rw-serve-fe": "./dist/runFeServer.js",
