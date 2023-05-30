@@ -262,7 +262,7 @@ async function setClientEntries(
   )
 }
 
-async function renderRSC(input: RenderInput): Promise<PipeableStream> {
+export async function renderRSC(input: RenderInput): Promise<PipeableStream> {
   const config = await configPromise
   const bundlerConfig = new Proxy(
     {},

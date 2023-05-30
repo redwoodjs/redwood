@@ -9025,6 +9025,8 @@ __metadata:
     vite: 4.3.9
     vite-plugin-environment: 1.1.3
     yargs-parser: 21.1.1
+  peerDependencies:
+    "@redwoodjs/web": 0.0.0-experimental-streaming.8
   bin:
     rw-dev-fe: ./dist/devFeServer.js
     rw-serve-fe: ./dist/runFeServer.js

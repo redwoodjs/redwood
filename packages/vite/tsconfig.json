@@ -4,12 +4,9 @@
     "baseUrl": ".",
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "outDir": "dist",
+    "outDir": "dist"
   },
-  "include": ["src/**/*", "./ambient.d.ts", "types.d.ts"],
-  "references": [
-    { "path": "../internal" },
+  "include": ["./ambient.d.ts", "./modules.d.ts", "src/**/*"],
+  "references": [{ "path": "../internal" }, { "path": "../web" }]
     { "path": "../project-config" },
-    { "path": "../web" },
-  ]
 }

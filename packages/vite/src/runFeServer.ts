@@ -11,16 +11,17 @@ import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import isbot from 'isbot'
-import { renderToPipeableStream } from 'react-dom/server'
+// import { renderToPipeableStream } from 'react-dom/server'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-import { matchPath } from '@redwoodjs/router'
-import type { TagDescriptor } from '@redwoodjs/web'
+// import { matchPath } from '@redwoodjs/router'
+// import type { TagDescriptor } from '@redwoodjs/web'
 
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
-import { RWRouteManifest } from './types'
-import { stripQueryStringAndHashFromPath } from './utils'
+// import { loadAndRunRouteHooks } from './triggerRouteHooks'
+// import { RWRouteManifest } from './types'
+// import { stripQueryStringAndHashFromPath } from './utils'
+import { renderRSC } from './waku-lib/rsc-handler-worker'
 
 globalThis.RWJS_ENV = {}
 
@@ -104,167 +105,262 @@ export async function runFeServer() {
     })
   )
 
+  app.use(async (req, res) => {
+    const basePath = '/RSC/'
+    console.log('basePath', basePath)
+    console.log('req.url', req.url)
+    console.log('req.headers.host', req.headers.host)
+    const url = new URL(req.url || '', 'http://' + req.headers.host)
+    let rscId: string | undefined
+    let props = {}
+    let rsfId: string | undefined
+    const args: unknown[] = []
+
+    console.log('url.pathname', url.pathname)
+    if (url.pathname.startsWith(basePath)) {
+      const index = url.pathname.lastIndexOf('/')
+      rscId = url.pathname.slice(basePath.length, index)
+      console.log('rscId', rscId)
+      const params = new URLSearchParams(url.pathname.slice(index + 1))
+      if (rscId && rscId !== '_') {
+        res.setHeader('Content-Type', 'text/x-component')
+        props = JSON.parse(params.get('props') || '{}')
+      } else {
+        rscId = undefined
+      }
+      rsfId = params.get('action_id') || undefined
+      if (rsfId) {
+        console.warn('RSF is not supported yet')
+        console.warn('RSF is not supported yet')
+        console.warn('RSF is not supported yet')
+        // if (req.headers["content-type"]?.startsWith("multipart/form-data")) {
+        //   const bb = busboy({ headers: req.headers });
+        //   const reply = decodeReplyFromBusboy(bb);
+        //   req.pipe(bb);
+        //   args = await reply;
+        // } else {
+        //   let body = "";
+        //   for await (const chunk of req) {
+        //     body += chunk;
+        //   }
+        //   if (body) {
+        //     args = await decodeReply(body);
+        //   }
+        // }
+      }
+    }
+
+    if (rscId || rsfId) {
+      const pipeable = await renderRSC({ rscId, props, rsfId, args })
+
+      // TODO: handle errors
+
+      // pipeable.on('error', (err) => {
+      //   console.info('Cannot render RSC', err)
+      //   res.statusCode = 500
+      //   if (options.mode === 'development') {
+      //     res.end(String(err))
+      //   } else {
+      //     res.end()
+      //   }
+      // })
+      pipeable.pipe(res)
+      return
+    }
+  })
+
   // 👉 3. Handle all other requests with the server entry
   // This is where we match the url to the correct route, and render it
   // We also call the relevant routeHooks here
-  app.use('*', async (req, res) => {
-    const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
+  // app.use('rw_*', async (req, res) => {
+  //   const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
 
-    try {
-      const { ServerEntry } = await import(rwPaths.web.distEntryServer)
+  //   try {
+  //     const { ServerEntry } = await import(rwPaths.web.distEntryServer)
 
-      // TODO (STREAMING) should we generate individual express Routes for each Route?
-      // This would make handling 404s and favicons / public assets etc. easier
-      const currentRoute = Object.values(routeManifest).find((route) => {
-        if (!route.matchRegexString) {
-          // This is the 404/NotFoundPage case
-          return false
-        }
+  //     // TODO (STREAMING) should we generate individual express Routes for each Route?
+  //     // This would make handling 404s and favicons / public assets etc. easier
+  //     const currentRoute = Object.values(routeManifest).find((route) => {
+  //       if (!route.matchRegexString) {
+  //         // This is the 404/NotFoundPage case
+  //         return false
+  //       }
 
-        const matches = [
-          ...currentPathName.matchAll(new RegExp(route.matchRegexString, 'g')),
-        ]
-        return matches.length > 0
-      })
+  //       const matches = [
+  //         ...currentPathName.matchAll(new RegExp(route.matchRegexString, 'g')),
+  //       ]
+  //       return matches.length > 0
+  //     })
 
-      // Doesn't match any of the defined Routes
-      // Render 404 page, and send back 404 status
-      if (!currentRoute) {
-        // TODO (STREAMING) should we CONST it?
-        const fourOhFourRoute = routeManifest['notfound']
+  //     // Doesn't match any of the defined Routes
+  //     // Render 404 page, and send back 404 status
+  //     if (!currentRoute) {
+  //       // TODO (STREAMING) should we CONST it?
+  //       const fourOhFourRoute = routeManifest['notfound']
 
-        if (!fourOhFourRoute) {
-          return res.sendStatus(404)
-        }
+  //       if (!fourOhFourRoute) {
+  //         return res.sendStatus(404)
+  //       }
 
-        const assetMap = JSON.stringify({ css: indexEntry.css })
+  //       const assetMap = JSON.stringify({ css: indexEntry.css })
 
-        const { pipe } = renderToPipeableStream(
-          ServerEntry({
-            url: currentPathName,
-            routeContext: null,
-            css: indexEntry.css,
-          }),
-          {
-            bootstrapScriptContent: `window.__assetMap = function() { return ${assetMap} }`,
-            // @NOTE have to add slash so subpaths still pick up the right file
-            // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
-            bootstrapModules: [
-              '/' + indexEntry.file,
-              '/' + fourOhFourRoute.bundle,
-            ],
-            onShellReady() {
-              res.setHeader('content-type', 'text/html')
-              res.status(404)
-              pipe(res)
-            },
-          }
-        )
+  //       const { pipe } = renderToPipeableStream(
+  //         ServerEntry({
+  //           url: currentPathName,
+  //           routeContext: null,
+  //           css: indexEntry.css,
+  //         }),
+  //         {
+  //           bootstrapScriptContent: `window.__assetMap = function() { return ${assetMap} }`,
+  //           bootstrapModules: [
+  //             '/' + indexEntry.file,
+  //             '/' + fourOhFourRoute.bundle,
+  //           ],
+  //           onShellReady() {
+  //             res.setHeader('content-type', 'text/html')
+  //             res.status(404)
+  //             pipe(res)
+  //           },
+  //         }
+  //       )
 
-        return
-      }
+  //       return
+  //     }
 
-      let metaTags: TagDescriptor[] = []
+  //     let metaTags: TagDescriptor[] = []
 
-      if (currentRoute?.redirect) {
-        // TODO (STREAMING) deal with permanent/temp
-        // Short-circuit, and return a 301 or 302
-        return res.redirect(currentRoute.redirect.to)
-      }
+  //     if (currentRoute?.redirect) {
+  //       // TODO (STREAMING) deal with permanent/temp
+  //       // Short-circuit, and return a 301 or 302
+  //       return res.redirect(currentRoute.redirect.to)
+  //     }
 
-      if (currentRoute) {
-        // TODO (STREAMING) hardcoded JS file, watchout if we switch to ESM!
-        const appRouteHooksPath = path.join(
-          rwPaths.web.distRouteHooks,
-          'App.routeHooks.js'
-        )
+  //     if (currentRoute) {
+  //       // TODO (STREAMING) hardcoded JS file, watchout if we switch to ESM!
+  //       const appRouteHooksPath = path.join(
+  //         rwPaths.web.distRouteHooks,
+  //         'App.routeHooks.js'
+  //       )
 
-        let appRouteHooksExists = false
-        try {
-          appRouteHooksExists = (await fs.stat(appRouteHooksPath)).isFile()
-        } catch {
-          // noop
-        }
+  //       let appRouteHooksExists = false
+  //       try {
+  //         appRouteHooksExists = (await fs.stat(appRouteHooksPath)).isFile()
+  //       } catch {
+  //         // noop
+  //       }
 
-        // Make sure we access the dist routeHooks!
-        const routeHookPaths = [
-          appRouteHooksExists ? appRouteHooksPath : null,
-          currentRoute.routeHooks
-            ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
-            : null,
-        ]
+  //       // Make sure we access the dist routeHooks!
+  //       const routeHookPaths = [
+  //         appRouteHooksExists ? appRouteHooksPath : null,
+  //         currentRoute.routeHooks
+  //           ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
+  //           : null,
+  //       ]
 
-        const parsedParams = currentRoute.hasParams
-          ? matchPath(currentRoute.pathDefinition, currentPathName).params
-          : undefined
+  //       const parsedParams = currentRoute.hasParams
+  //         ? matchPath(currentRoute.pathDefinition, currentPathName).params
+  //         : undefined
 
-        const routeHookOutput = await loadAndRunRouteHooks({
-          paths: routeHookPaths,
-          reqMeta: {
-            req,
-            parsedParams,
-          },
-        })
+  //       const routeHookOutput = await loadAndRunRouteHooks({
+  //          paths: routeHookPaths,
+  //          reqMeta: {
+  //            req,
+  //            parsedParams,
+  //         },
+  //       })
 
-        metaTags = routeHookOutput.meta
-      }
+  //       metaTags = routeHookOutput.meta
+  //     }
 
-      const pageWithJs = currentRoute.renderMode !== 'html'
-      // @NOTE have to add slash so subpaths still pick up the right file
-      // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
-      const bootstrapModules = pageWithJs
-        ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
-        : undefined
+  //     const pageWithJs = currentRoute.renderMode !== 'html'
+  //     // @NOTE have to add slash so subpaths still pick up the right file
+  //     // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
+  //     const bootstrapModules = pageWithJs
+  //       ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
+  //       : undefined
 
-      const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
+  //     const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
 
-      const { pipe, abort } = renderToPipeableStream(
-        // we should use the same shape as Remix or Next for the meta object
-        ServerEntry({
-          url: currentPathName,
-          css: indexEntry.css,
-          meta: metaTags,
-        }),
-        {
-          bootstrapScriptContent: pageWithJs
-            ? `window.__assetMap = function() { return ${JSON.stringify({
-                css: indexEntry.css,
-                meta: metaTags,
-              })} }`
-            : undefined,
-          bootstrapModules,
-          onShellReady() {
-            if (!isSeoCrawler) {
-              res.setHeader('content-type', 'text/html; charset=utf-8')
-              pipe(res)
-            }
-          },
-          onAllReady() {
-            if (isSeoCrawler) {
-              res.setHeader('content-type', 'text/html; charset=utf-8')
-              pipe(res)
-            }
-          },
-          onError(error) {
-            console.error(error)
-          },
-        }
-      )
+  //     const { pipe, abort } = renderToPipeableStream(
+  //       // we should use the same shape as Remix or Next for the meta object
+  //       ServerEntry({
+  //         url: currentPathName,
+  //         css: indexEntry.css,
+  //         meta: metaTags,
+  //       }),
+  //       {
+  //         bootstrapScriptContent: pageWithJs
+  //           ? `window.__assetMap = function() { return ${JSON.stringify({
+  //               css: indexEntry.css,
+  //               meta: metaTags,
+  //             })} }`
+  //         bootstrapModules,
+  //         onShellReady() {
+  //           if (!isSeoCrawler) {
+  //             res.setHeader('content-type', 'text/html; charset=utf-8')
+  //             pipe(res)
+  //           }
+  //         },
+  //         onAllReady() {
+  //           if (isSeoCrawler) {
+  //             res.setHeader('content-type', 'text/html; charset=utf-8')
+  //             pipe(res)
+  //           }
+  //         },
+  //         onError(error) {
+  //           console.error(error)
+  //         },
+  //       }
+  //     )
 
-      // TODO (STREAMING) make the timeout configurable
-      setTimeout(() => {
-        abort()
-      }, 10_000)
-    } catch (e) {
-      console.error(e)
+  //     // TODO (STREAMING) make the timeout configurable
+  //     setTimeout(() => {
+  //       abort()
+  //     }, 10_000)
+  //   } catch (e) {
+  //     console.error(e)
 
-      // streaming no longer requires us to send back a blank page
-      // React will automatically switch to client rendering on error
-      return res.sendStatus(500)
-    }
+  //     // streaming no longer requires us to send back a blank page
+  //     // React will automatically switch to client rendering on error
+  //     return res.sendStatus(500)
+  //   }
 
-    return
-  })
+  //   // TODO (RSC) Tobbe added this back in here. Should it stay? Or has it
+  //   // been moved someplace else?
+  //   // Refactor this
+  //   // WE are repeating code a lot between runFeServer and devFeServer
+  //   async function runProdRouteHooks(
+  //     routeHookPath: string | null | undefined,
+  //     parsedParams?: Record<string, any>,
+  //     appRouteHookOutput?: { meta: TagDescriptor[]; serverData: any }
+  //   ) {
+  //     if (routeHookPath) {
+  //       try {
+  //         const routeHooks = await import(routeHookPath)
+
+  //         const output = await triggerRouteHooks({
+  //           routeHooks,
+  //           req,
+  //           parsedParams,
+  //           appRouteHookOutput,
+  //         })
+
+  //         return {
+  //           serverData: output.serverData,
+  //           meta: output.meta,
+  //         }
+  //       } catch (e) {
+  //         console.error(`Error running route hooks in ${routeHookPath}}`)
+  //         console.error(e)
+  //       }
+  //     }
+
+  //     // Empty values if error, or no routeHookPath
+  //     return { serverData: {}, meta: [] }
+  //   }
+
+  //   return
+  // })
 
   app.listen(rwConfig.web.port)
   console.log(

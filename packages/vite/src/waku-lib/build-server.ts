@@ -17,7 +17,7 @@ export async function serverBuild(
   // );
   //
   const input = {
-    ['entry.server']: entriesFile,
+    entries: entriesFile,
     ...clientEntryFiles,
     ...serverEntryFiles,
     ...customModules,
@@ -35,6 +35,8 @@ export async function serverBuild(
     },
     build: {
       ssr: true,
+      // TODO: Change output dir to just dist. We should be "server first".
+      //       Client components are the "special case" and should be output to dist/client
       outDir: rwPaths.web.distServer,
       rollupOptions: {
         input,
@@ -54,11 +56,8 @@ export async function serverBuild(
             return code
           },
           entryFileNames: (chunkInfo) => {
-            if (
-              // TODO (RSC) Don't hardcode 'entry.server' here
-              chunkInfo.name === 'entry.server' ||
-              customModules[chunkInfo.name]
-            ) {
+            // TODO (RSC) Probably don't want 'entries'. And definitely don't want it hardcoded
+            if (chunkInfo.name === 'entries' || customModules[chunkInfo.name]) {
               return '[name].js'
             }
             return 'assets/[name].js'
