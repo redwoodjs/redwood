@@ -116,7 +116,7 @@ async function createNewPost({ webUrl, page }) {
   // Or get the error
   await Promise.all([
     Promise.race([
-      page.waitForNavigation({ url: '**/' }),
+      page.waitForURL('**/'),
       permissionError.waitFor({ timeout: 5000 }),
     ]),
     await page.click('text=SAVE'),

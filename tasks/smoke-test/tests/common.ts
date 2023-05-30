@@ -64,7 +64,7 @@ export const signUpTestUser = async ({
   // Or get the username already registered error, either way is fine!
   await Promise.all([
     Promise.race([
-      page.waitForNavigation({ url: '**/' }),
+      page.waitForURL('**/'),
       alreadyRegisteredErr.waitFor({ timeout: 5000 }),
     ]),
     page.locator('text=Sign Up').click(),
@@ -92,7 +92,7 @@ export const loginAsTestUser = async ({
 
   // Click button:has-text("Login")
   await Promise.all([
-    page.waitForNavigation({ url: '**/' }),
+    page.waitForURL('**/'),
     page.locator('button:has-text("Login")').click(),
   ])
 }

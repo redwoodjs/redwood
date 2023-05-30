@@ -4,6 +4,8 @@ import chalk from 'chalk'
 import execa, { ExecaChildProcess } from 'execa'
 import isPortReachable from 'is-port-reachable'
 
+import { shutdownPort } from '@redwoodjs/internal/dist/dev'
+
 import { waitForServer } from '../util'
 
 // Declare worker fixtures.
@@ -47,50 +49,55 @@ const test = base.extend<any, DevServerFixtures>({
         )
       }
 
-      const isServerAlreadyUp = await isPortReachable(webServerPort, {
-        timeout: 5000,
+      const serversUp = await Promise.all([
+        isPortReachable(webServerPort, {
+          timeout: 5000,
+        }),
+        isPortReachable(apiServerPort, {
+          timeout: 5000,
+        }),
+      ])
+
+      if (serversUp.some((server) => server === true)) {
+        console.log('Found previous instances of dev server. Killing 🪓!')
+
+        shutdownPort(webServerPort)
+        shutdownPort(apiServerPort)
+      }
+
+      let devServerHandler: ExecaChildProcess | null = null
+
+      console.log(`Launching dev server at ${projectPath}`)
+
+      // Don't wait for this to finish, because it doesn't
+      devServerHandler = execa(`yarn rw dev --no-generate --fwd="--no-open"`, {
+        cwd: projectPath,
+        shell: true,
+        detached: false,
+        env: {
+          WEB_DEV_PORT: webServerPort,
+          API_DEV_PORT: apiServerPort,
+        },
+        cleanup: true,
       })
 
-      let devServerHandler: ExecaChildProcess
-
-      if (isServerAlreadyUp) {
-        console.log('Reusing server....')
-        console.log({
-          webServerPort,
-          apiServerPort,
-        })
-      } else {
-        console.log(`Launching dev server at ${projectPath}`)
-
-        // Don't wait for this to finish, because it doesn't
-        devServerHandler = execa(
-          `yarn rw dev --fwd="--no-open" --no-generate`,
-          {
-            cwd: projectPath,
-            shell: true,
-            detached: false,
-            env: {
-              WEB_DEV_PORT: webServerPort,
-              API_DEV_PORT: apiServerPort,
-            },
-            cleanup: true,
-          }
+      // Pipe out logs so we can debug, when required
+      devServerHandler.stdout?.on('data', (data) => {
+        console.log(
+          '[devServer-fixture]',
+          Buffer.from(data, 'utf-8').toString()
+        )
+      })
+      devServerHandler.stderr?.on('data', (data) => {
+        console.log(
+          chalk.bgRed('[devServer-fixture]'),
+          Buffer.from(data, 'utf-8').toString()
         )
 
-        // Pipe out logs so we can debug, when required
-        devServerHandler.stdout.on('data', (data) => {
-          console.log(
-            '[devServer-fixture]',
-            Buffer.from(data, 'utf-8').toString()
-          )
-        })
-        devServerHandler.stderr.on('data', (data) => {
-          console.log(
-            chalk.bgRed('[devServer-fixture]'),
-            Buffer.from(data, 'utf-8').toString()
-          )
-        })
-      }
+        throw new Error(
+          `Error starting server: ${Buffer.from(data, 'utf-8').toString()}`
+        )
+      })
 
       console.log('Waiting for dev servers.....')
       await waitForServer(webServerPort)
@@ -99,6 +106,16 @@ const test = base.extend<any, DevServerFixtures>({
       console.log('Starting tests!')
 
       await use()
+
+      // Make sure the dev server is killed after all tests are done.
+      // Re-using could be more efficient, but it seems to cause inconsistency
+      // It seems our Vite server gets killed after a run, but the API server does not
+      if (devServerHandler) {
+        console.log('Test complete. Killing dev servers 🪓')
+        devServerHandler?.kill()
+        shutdownPort(webServerPort)
+        shutdownPort(apiServerPort)
+      }
     },
     { scope: 'worker', auto: true },
   ],

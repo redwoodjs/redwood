@@ -170,7 +170,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-      fail-fast: true
+      fail-fast: false
     name: 👀 Smoke test / ${{ matrix.os }} / node 18 latest
     runs-on: ${{ matrix.os }}
     env:
