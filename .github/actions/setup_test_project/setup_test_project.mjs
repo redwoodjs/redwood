@@ -1,25 +1,17 @@
-// import os from 'node:os'
 import path from 'node:path'
 import fs from 'fs-extra'
 
 import { exec } from '@actions/exec'
 import * as core from '@actions/core'
 
-// const test_project_path = path.join(
-//   os.tmpdir(),
-//   'test-project',
-//   // ":" is problematic with paths
-//   new Date().toISOString().split(':').join('-')
-// )
-
+// @NOTE: do not use os.tmpdir()
+// Vite does not play well in the smoke tests with the temp dir
 const test_project_path = path.join(
   path.dirname(process.cwd()),
   'test-project'
 )
 
-console.log({
-  test_project_path
-})
+console.log(`Creating test project at ${test_project_path}....`)
 
 core.setOutput('test_project_path', test_project_path)
 

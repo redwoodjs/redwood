@@ -15,13 +15,14 @@ const startDevServer = async () => {
   // Tries to maintain the same options as vite's dev cli
   // See here: https://github.com/vitejs/vite/blob/main/packages/vite/src/node/cli.ts#L103
   // e.g. yarn rw dev web --fwd="--force"
-  const { force: forceOptimize, forwardedServerArgs, debug } = yargsParser(
-    process.argv.slice(2),
-    {
-      boolean: ['https', 'open', 'strictPort', 'force', 'cors', 'debug'],
-      number: ['port'],
-    }
-  )
+  const {
+    force: forceOptimize,
+    forwardedServerArgs,
+    debug,
+  } = yargsParser(process.argv.slice(2), {
+    boolean: ['https', 'open', 'strictPort', 'force', 'cors', 'debug'],
+    number: ['port'],
+  })
 
   const devServer = await createServer({
     configFile,
@@ -45,7 +46,7 @@ const startDevServer = async () => {
 
   devServer.printUrls()
 
-  if(debug) {
+  if (debug) {
     console.log('~~~ Vite Server Config ~~~')
     console.log(JSON.stringify(devServer.config, ' ', 2))
     console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~')

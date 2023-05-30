@@ -49,7 +49,6 @@ const test = base.extend<any, DevServerFixtures>({
         )
       }
 
-      // @MARK: On second run, Web server is off, but api server is on. Why?!
       const serversUp = await Promise.all([
         isPortReachable(webServerPort, {
           timeout: 5000,
@@ -60,7 +59,7 @@ const test = base.extend<any, DevServerFixtures>({
       ])
 
       if (serversUp.some((server) => server === true)) {
-        console.log('Found previous instances of dev server. Killing!')
+        console.log('Found previous instances of dev server. Killing 🪓!')
 
         shutdownPort(webServerPort)
         shutdownPort(apiServerPort)
@@ -112,7 +111,7 @@ const test = base.extend<any, DevServerFixtures>({
       // Re-using could be more efficient, but it seems to cause inconsistency
       // It seems our Vite server gets killed after a run, but the API server does not
       if (devServerHandler) {
-        console.log('Test complete. Killing dev server.')
+        console.log('Test complete. Killing dev servers 🪓')
         devServerHandler?.kill()
         shutdownPort(webServerPort)
         shutdownPort(apiServerPort)
