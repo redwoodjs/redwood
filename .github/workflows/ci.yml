@@ -212,7 +212,7 @@ jobs:
 
       - name: 🧑‍💻 Run dev smoke tests
         working-directory: ./tasks/smoke-tests/dev
-        run: npx playwright test
+        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}'
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -221,7 +221,7 @@ jobs:
 
       - name: 🔐 Run auth smoke tests
         working-directory: ./tasks/smoke-tests/auth
-        run: npx playwright test
+        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -240,7 +240,7 @@ jobs:
 
       - name: 🖥️ Run serve smoke tests
         working-directory: tasks/smoke-tests/serve
-        run: npx playwright test
+        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -249,7 +249,7 @@ jobs:
 
       - name: 📄 Run prerender smoke tests
         working-directory: tasks/smoke-tests/prerender
-        run: npx playwright test
+        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -258,7 +258,7 @@ jobs:
 
       - name: 📕 Run Storybook smoke tests
         working-directory: tasks/smoke-tests/storybook
-        run: npx playwright test
+        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.TEST_PROJECT_PATH }}
           REDWOOD_DISABLE_TELEMETRY: 1
