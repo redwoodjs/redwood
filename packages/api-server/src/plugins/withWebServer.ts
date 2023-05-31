@@ -2,9 +2,9 @@ import fs from 'fs'
 import path from 'path'
 
 import fastifyStatic from '@fastify/static'
+import fg from 'fast-glob'
 import { FastifyInstance, FastifyReply } from 'fastify'
 
-import { findPrerenderedHtml } from '@redwoodjs/internal/dist/files'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { loadFastifyConfig } from '../fastify'
@@ -59,6 +59,12 @@ const withWebServer = async (
   })
 
   return fastify
+}
+
+// NOTE: This function was copied from @redwoodjs/internal/dist/files to avoid depending on @redwoodjs/internal.
+// import { findPrerenderedHtml } from '@redwoodjs/internal/dist/files'
+function findPrerenderedHtml(cwd = getPaths().web.dist) {
+  return fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
 }
 
 export default withWebServer
