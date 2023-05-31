@@ -69,6 +69,7 @@ describe('template', () => {
         "/web/src/Routes.tsx",
         "/web/src/components",
         "/web/src/components/.keep",
+        "/web/src/entry-client.tsx",
         "/web/src/index.css",
         "/web/src/index.html",
         "/web/src/layouts",
@@ -79,6 +80,7 @@ describe('template', () => {
         "/web/src/pages/NotFoundPage",
         "/web/src/pages/NotFoundPage/NotFoundPage.tsx",
         "/web/tsconfig.json",
+        "/web/vite.config.ts",
       ]
     `)
   })
@@ -152,6 +154,7 @@ describe('JS template', () => {
         "/web/src/Routes.js",
         "/web/src/components",
         "/web/src/components/.keep",
+        "/web/src/entry-client.jsx",
         "/web/src/index.css",
         "/web/src/index.html",
         "/web/src/layouts",
@@ -161,6 +164,7 @@ describe('JS template', () => {
         "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
         "/web/src/pages/NotFoundPage",
         "/web/src/pages/NotFoundPage/NotFoundPage.js",
+        "/web/vite.config.js",
       ]
     `)
   })

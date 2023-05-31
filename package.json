@@ -21,7 +21,7 @@
     "project:deps": "node ./tasks/framework-tools/frameworkDepsToProject.mjs",
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs",
     "release": "node ./tasks/release/releaseCLI.mjs",
-    "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test",
+    "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test --project=chromium",
     "test": "lerna run test --concurrency 2 -- --colors --maxWorkers=4",
     "test-ci": "lerna run test --concurrency 2 -- --colors --maxWorkers"
   },
@@ -48,7 +48,7 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.21.5",
     "@babel/runtime-corejs3": "7.21.5",
-    "@faker-js/faker": "8.0.1",
+    "@faker-js/faker": "8.0.2",
     "@npmcli/arborist": "6.2.9",
     "@playwright/test": "1.34.3",
     "@replayio/playwright": "0.3.30",
