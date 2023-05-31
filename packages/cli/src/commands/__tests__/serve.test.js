@@ -50,7 +50,7 @@ jest.mock('../serveHandler', () => {
   }
 })
 
-import yargs from 'yargs'
+import * as yargs from 'yargs'
 
 import { builder } from '../serve'
 import {

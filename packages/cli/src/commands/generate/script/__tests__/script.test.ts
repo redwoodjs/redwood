@@ -4,7 +4,7 @@ import '../../../../lib/test'
 
 import path from 'path'
 
-import yargs from 'yargs'
+import * as yargs from 'yargs'
 
 import * as script from '../script'
 

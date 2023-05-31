@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import yargs from 'yargs'
+import * as yargs from 'yargs'
 
 // eslint-disable-next-line no-unused-expressions
 yargs
