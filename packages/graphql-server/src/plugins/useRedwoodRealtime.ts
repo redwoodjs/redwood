@@ -37,14 +37,31 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       liveQueryStore: options.liveQueries.liveQueryStore,
     })
 
+    /**
+     * This symbol is added to the schema extensions for checking whether the live query was added to the schema only once.
+     */
+    const wasLiveQueryAdded = Symbol.for('useRedwoodRealtime.wasLiveQueryAdded')
+
     return {
-      onSchemaChange({ schema }) {
-        mergeSchemas({
+      onSchemaChange({ replaceSchema, schema }) {
+        if (schema.extensions?.[wasLiveQueryAdded] === true) {
+          return
+        }
+
+        const liveSchema = mergeSchemas({
           schemas: [schema],
           typeDefs: [liveDirectiveTypeDefs],
         })
+
+        liveSchema.extensions = {
+          ...schema.extensions,
+          [wasLiveQueryAdded]: true,
+        }
+
+        replaceSchema(liveSchema)
       },
       onPluginInit({ addPlugin }) {
+        console.debug('liveQueryPlugin', 'onPluginInit')
         addPlugin(liveQueryPlugin)
       },
       onContextBuilding() {
