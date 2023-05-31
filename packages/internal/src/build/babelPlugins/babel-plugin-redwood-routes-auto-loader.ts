@@ -127,7 +127,6 @@ export default function (
           for (const { importName, relativeImport } of pages) {
             //  const <importName> = {
             //     name: <importName>,
-            //     loader: () => import(/* webpackChunkName: "<importName>" */ <relativeImportPath>)
             //     prerenderLoader: (name) => prerenderLoaderImpl
             //     LazyComponent: lazy(() => import(<relativeImportPath>)
             //   }
@@ -136,10 +135,6 @@ export default function (
              * Real example
              * const LoginPage = {
              *  name: "LoginPage",
-             *  loader: () => import(
-             *    /* webpackChunkName: "LoginPage" * /
-             *    "/pages/LoginPage/LoginPage.tsx"
-             *  ),
              *  prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
              *  LazyComponent: lazy(() => import("/pages/LoginPage/LoginPage.tsx"))
              * }
@@ -162,17 +157,6 @@ export default function (
                     t.objectProperty(
                       t.identifier('name'),
                       t.stringLiteral(importName)
-                    ),
-                    // loader for dynamic imports (browser)
-                    // loader: () => import(<importArgument>)
-                    t.objectProperty(
-                      t.identifier('loader'),
-                      t.arrowFunctionExpression(
-                        [],
-                        t.callExpression(t.identifier('import'), [
-                          importArgument,
-                        ])
-                      )
                     ),
                     // prerenderLoader for ssr/prerender and first load of
                     // prerendered pages in browser (csr)

@@ -26,7 +26,7 @@ describe('User specified imports, with static imports', () => {
     outputWithStaticImports = prebuildWebFile(routesFile, {
       prerender: true,
       forJest: true,
-    })?.code
+    })?.code //?
 
     outputNoStaticImports = prebuildWebFile(routesFile, {
       forJest: true,
@@ -56,17 +56,17 @@ describe('User specified imports, with static imports', () => {
         expect(outputWithStaticImports).toContain(
           `const LoginPage = {
   name: "LoginPage",
-  loader: () => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"),
-  prerenderLoader: name => require("./pages/LoginPage/LoginPage")
+  prerenderLoader: name => require("./pages/LoginPage/LoginPage"),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/LoginPage/LoginPage"))
 }`
         )
 
         expect(outputWithStaticImports).toContain(
           `const HomePage = {
   name: "HomePage",
-  loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
-  prerenderLoader: name => require("./pages/HomePage/HomePage")
-}`
+  prerenderLoader: name => require("./pages/HomePage/HomePage"),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/HomePage/HomePage"))
+};`
         )
       })
     })
@@ -76,16 +76,16 @@ describe('User specified imports, with static imports', () => {
         expect(outputNoStaticImports).toContain(
           `const LoginPage = {
   name: "LoginPage",
-  loader: () => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"),
-  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage"))
+  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/LoginPage/LoginPage"))
 }`
         )
 
         expect(outputNoStaticImports).toContain(
           `const HomePage = {
   name: "HomePage",
-  loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
-  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage"))
+  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/HomePage/HomePage"))
 }`
         )
       })
@@ -99,8 +99,8 @@ describe('User specified imports, with static imports', () => {
         expect(outputWithStaticImports).toContain(
           `const NewJobPage = {
   name: "NewJobPage",
-  loader: () => import( /* webpackChunkName: "NewJobPage" */"./pages/Jobs/NewJobPage/NewJobPage"),
-  prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage")
+  prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage"),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/Jobs/NewJobPage/NewJobPage"))
 }`
         )
       })
@@ -110,8 +110,8 @@ describe('User specified imports, with static imports', () => {
         expect(outputWithStaticImports).toContain(
           `const BazingaJobProfilePageWithFunnyName = {
   name: "BazingaJobProfilePageWithFunnyName",
-  loader: () => import( /* webpackChunkName: "BazingaJobProfilePageWithFunnyName" */"./pages/Jobs/JobProfilePage/JobProfilePage"),
-  prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage")
+  prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage"),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/Jobs/JobProfilePage/JobProfilePage"))
 }`
         )
       })
@@ -152,8 +152,8 @@ describe('User specified imports, with static imports', () => {
       it("Uses the loader for a page that isn't imported", () => {
         expect(outputNoStaticImports).toContain(`const HomePage = {
   name: "HomePage",
-  loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
-  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage"))
+  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/HomePage/HomePage"))
 }`)
         expect(outputNoStaticImports).toContain(`.createElement(_router.Route, {
     path: "/",
@@ -187,8 +187,8 @@ describe('User specified imports, with static imports', () => {
 
     expect(outputWithStaticImports).toContain(`const EditJobPage = {
   name: "EditJobPage",
-  loader: () => import( /* webpackChunkName: "EditJobPage" */"./pages/Jobs/EditJobPage/EditJobPage"),
-  prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage")
+  prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage"),
+  LazyComponent: (0, _react.lazy)(() => import("./pages/Jobs/EditJobPage/EditJobPage"))
 }`)
 
     expect(outputNoStaticImports).toContain(
