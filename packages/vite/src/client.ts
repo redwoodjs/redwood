@@ -9,6 +9,8 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
   ) => () => void
   const fetchRSC = cache(
     (serializedProps: string): readonly [React.ReactElement, SetRerender] => {
+      console.log('fetchRSC serializedProps', serializedProps)
+
       let rerender: ((next: [ReactElement, string]) => void) | undefined
       const setRerender: SetRerender = (fn) => {
         rerender = fn
@@ -16,8 +18,10 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
           rerender = undefined
         }
       }
+
       const searchParams = new URLSearchParams()
       searchParams.set('props', serializedProps)
+
       const options = {
         async callServer(rsfId: string, args: unknown[]) {
           const isMutating = !!mutationMode
@@ -41,29 +45,41 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
           return data
         },
       }
+
       const prefetched = (globalThis as any).__WAKU_PREFETCHED__?.[rscId]?.[
         serializedProps
       ]
+
+      console.log(
+        'fetchRSC before createFromFetch',
+        basePath + rscId + '/' + searchParams
+      )
       const data = createFromFetch(
         prefetched || fetch(basePath + rscId + '/' + searchParams),
         options
       )
+      console.log('fetchRSC after createFromFetch. data:', data)
       return [data, setRerender]
     }
   )
+
+  // Create temporary client component that wraps the ServerComponent returned
+  // by the `createFromFetch` call.
   const ServerComponent = (props: Props) => {
+    console.log('ServerComponent props', props)
+
     // FIXME we blindly expect JSON.stringify usage is deterministic
-    const serializedProps = JSON.stringify(props)
+    const serializedProps = JSON.stringify(props || {})
     const [data, setRerender] = fetchRSC(serializedProps)
     const [state, setState] = useState<
       [dataToOverride: ReactElement, lastSerializedProps: string] | undefined
     >()
 
     // MARK Should this be useLayoutEffect?
-    // MARK TOBBE: I added [setRerender]. Did this break stuff?
     useEffect(() => setRerender(setState), [setRerender])
 
     let dataToReturn = data
+
     if (state) {
       if (state[1] === serializedProps) {
         dataToReturn = state[0]
@@ -71,6 +87,7 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
         setState(undefined)
       }
     }
+
     // FIXME The type error
     // "Cannot read properties of null (reading 'alternate')"
     // is caused with startTransition.
@@ -78,6 +95,7 @@ export function serve<Props>(rscId: string, basePath = '/RSC/') {
     // For now, using `use` seems to fix it. Is it a correct fix?
     return use(dataToReturn as any) as typeof dataToReturn
   }
+
   return ServerComponent
 }
 

@@ -7,6 +7,9 @@
     "outDir": "dist"
   },
   "include": ["./ambient.d.ts", "./modules.d.ts", "src/**/*"],
-  "references": [{ "path": "../internal" }, { "path": "../web" }]
-    { "path": "../project-config" },
+  "references": [
+    { "path": "../internal" },
+    { "path": "../web" },
+    { "path": "../project-config" }
+  ]
 }

@@ -44,8 +44,11 @@ export async function serverBuild(
           banner: (chunk) => {
             // HACK to bring directives to the front
             let code = ''
-            const clientKeys = Object.keys(clientEntryFiles)
-            if (chunk.moduleIds.some((id) => clientKeys.includes(id))) {
+            const clientValues = Object.values(clientEntryFiles)
+            console.log('chunk.moduleIds', chunk.moduleIds)
+            console.log('clientValues', clientValues)
+            if (chunk.moduleIds.some((id) => clientValues.includes(id))) {
+              console.log('adding "use client" to', chunk.fileName)
               code += '"use client";'
             }
 

@@ -1,10 +1,8 @@
-
 import { Request } from 'express'
 import { ViteDevServer } from 'vite'
 
 import type {
   MetaHook,
-  ServerDataHook,
   TagDescriptor,
   RouteHookEvent,
   RouteHookOutput,

@@ -6,7 +6,6 @@ import { build as esbuildBuild, PluginBuild } from 'esbuild'
 import { build as viteBuild } from 'vite'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
 import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
 import { getRouteHookBabelPlugins } from '@redwoodjs/internal/dist/build/babel/common'
 // import { buildWeb } from '@redwoodjs/internal/dist/build/web'
@@ -216,9 +215,8 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     `export const clientEntries=${JSON.stringify(clientEntries)};`
   )
 
-  console.log('serverBuildOutput', serverBuildOutput)
-
   if (Math.random() > 5) {
+    console.log('serverBuildOutput', serverBuildOutput)
     // throw new Error('stop')
   }
 

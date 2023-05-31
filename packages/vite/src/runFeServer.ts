@@ -21,7 +21,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 // import { loadAndRunRouteHooks } from './triggerRouteHooks'
 // import { RWRouteManifest } from './types'
 // import { stripQueryStringAndHashFromPath } from './utils'
-import { renderRSC } from './waku-lib/rsc-handler-worker'
+import { renderRSC, setClientEntries } from './waku-lib/rsc-handler-worker'
 
 globalThis.RWJS_ENV = {}
 
@@ -51,6 +51,8 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
+  await setClientEntries('load')
+
   // TODO When https://github.com/tc39/proposal-import-attributes and
   // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
   // should try to do this instead:
@@ -66,17 +68,23 @@ export async function runFeServer() {
   //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
   //    code compiled and ran properly, but Jest tests failed, complaining
   //    about the syntax.
-  const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
-  const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
+  // const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
+  // const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
   // TODO See above about using `import { with: { type: 'json' } }` instead
   const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
-  const indexEntry = Object.values(buildManifest).find((manifestItem) => {
-    return manifestItem.isEntry
-  })
+  console.log('='.repeat(80))
+  console.log('buildManifest', buildManifest.default)
+  console.log('='.repeat(80))
+
+  const indexEntry = Object.values(buildManifest.default).find(
+    (manifestItem) => {
+      return manifestItem.isEntry
+    }
+  )
 
   if (!indexEntry) {
     throw new Error('Could not find index.html in build manifest')
@@ -105,12 +113,18 @@ export async function runFeServer() {
     })
   )
 
-  app.use(async (req, res) => {
+  app.use((req, _res, next) => {
+    console.log('req.url', req.url)
+    next()
+  })
+
+  // Mounting middleware at /RSC will strip /RSC from req.url
+  app.use('/RSC', async (req, res) => {
     const basePath = '/RSC/'
     console.log('basePath', basePath)
-    console.log('req.url', req.url)
+    console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
     console.log('req.headers.host', req.headers.host)
-    const url = new URL(req.url || '', 'http://' + req.headers.host)
+    const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
     let props = {}
     let rsfId: string | undefined
@@ -153,7 +167,7 @@ export async function runFeServer() {
     if (rscId || rsfId) {
       const pipeable = await renderRSC({ rscId, props, rsfId, args })
 
-      // TODO: handle errors
+      // TODO handle errors
 
       // pipeable.on('error', (err) => {
       //   console.info('Cannot render RSC', err)
@@ -168,6 +182,8 @@ export async function runFeServer() {
       return
     }
   })
+
+  app.use(express.static(rwPaths.web.dist))
 
   // 👉 3. Handle all other requests with the server entry
   // This is where we match the url to the correct route, and render it
