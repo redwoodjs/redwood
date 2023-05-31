@@ -4,7 +4,7 @@ import path from 'path'
 import chalk from 'chalk'
 
 import { getConfig, getPaths } from './lib'
-import { installRedwoodModule } from './lib/packages'
+import { installModule } from './lib/packages'
 
 /**
  * The file inside .redwood which will contain cached plugin command mappings
@@ -143,6 +143,7 @@ export async function loadPlugins(yargs) {
       // Attempt to load the plugin
       const plugin = await loadPluginPackage(
         namespacePlugin.package,
+        namespacePlugin.version,
         autoInstall
       )
 
@@ -244,10 +245,12 @@ function checkPluginListAndWarn(plugins) {
  * Attempts to load a plugin package and return it. Returns null if the plugin failed to load.
  *
  * @param {string} packageName The npm package name of the plugin
+ * @param {string | undefined} packageVersion The npm package version of the plugin, defaults to loading the plugin at the
+ * same version as the cli
  * @param {boolean} autoInstall Whether to automatically install the plugin package if it is not installed already
  * @returns The plugin package or null if it failed to load
  */
-async function loadPluginPackage(packageName, autoInstall) {
+async function loadPluginPackage(packageName, packageVersion, autoInstall) {
   try {
     return await import(packageName)
   } catch (error) {
@@ -262,7 +265,10 @@ async function loadPluginPackage(packageName, autoInstall) {
       } else {
         // Install the plugin
         console.log(chalk.green(`Installing plugin "${packageName}"...`))
-        const installed = await installPluginPackage(packageName)
+        const installed = await installPluginPackage(
+          packageName,
+          packageVersion
+        )
         if (installed) {
           return await import(packageName)
         }
@@ -278,11 +284,13 @@ async function loadPluginPackage(packageName, autoInstall) {
  * Attempts to install a plugin package. Installs the package as a dev dependency.
  *
  * @param {string} packageName The npm package name of the plugin
+ * @param {string} packageVersion The npm package version of the plugin to install or undefined
+ * to install the same version as the cli
  * @returns True if the plugin was installed successfully, false otherwise
  */
-async function installPluginPackage(packageName) {
+async function installPluginPackage(packageName, packageVersion) {
   try {
-    await installRedwoodModule(packageName)
+    await installModule(packageName, packageVersion)
     return true
   } catch (error) {
     console.error(error)
