@@ -35,7 +35,7 @@
     "chokidar": "3.5.3",
     "core-js": "3.30.2",
     "crypto-js": "4.1.1",
-    "dotenv": "16.0.3",
+    "dotenv": "16.1.1",
     "fast-json-parse": "1.0.3",
     "fastify": "4.17.0",
     "fastify-raw-body": "4.2.0",
