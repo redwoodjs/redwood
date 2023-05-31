@@ -2244,7 +2244,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/core@npm:3.0.6, @envelop/core@npm:^3.0.0, @envelop/core@npm:^3.0.4":
+"@envelop/core@npm:4.0.0":
+  version: 4.0.0
+  resolution: "@envelop/core@npm:4.0.0"
+  dependencies:
+    "@envelop/types": 4.0.0
+    tslib: ^2.5.0
+  checksum: 2745008b823b64ac49a6b099b401a2809d8cf323a7a704163d4ca9bdade6551c2d94f76d345e35a70d9940f150d431c74daf2073f18feaddfd583a935a7e0918
+  languageName: node
+  linkType: hard
+
+"@envelop/core@npm:^3.0.0, @envelop/core@npm:^3.0.4":
   version: 3.0.6
   resolution: "@envelop/core@npm:3.0.6"
   dependencies:
@@ -2321,6 +2331,15 @@ __metadata:
   dependencies:
     tslib: ^2.5.0
   checksum: 1e71237bdb0d65256136760227402306e9d5aec1306f9e437085de2a1a0d8ea007be9302e9e397f96fd455f65da33cb3fe5822757af680ade9cecf218ce42a7c
+  languageName: node
+  linkType: hard
+
+"@envelop/types@npm:4.0.0":
+  version: 4.0.0
+  resolution: "@envelop/types@npm:4.0.0"
+  dependencies:
+    tslib: ^2.5.0
+  checksum: e81fe3a1873686f04d24f4093dacfd55c6504f654eeb5cb700341335fc6922f48d90b34bc664affac6d9cacc3cdba9f5fb2d9a140a0f1f503db062b65c69a88f
   languageName: node
   linkType: hard
 
@@ -7210,7 +7229,7 @@ __metadata:
     "@babel/cli": 7.21.5
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
-    "@envelop/core": 3.0.6
+    "@envelop/core": 4.0.0
     "@envelop/depth-limit": 2.0.6
     "@envelop/disable-introspection": 4.0.6
     "@envelop/filter-operation-type": 4.0.6
