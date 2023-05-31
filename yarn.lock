@@ -333,10 +333,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-spa-js@npm:2.0.5":
-  version: 2.0.5
-  resolution: "@auth0/auth0-spa-js@npm:2.0.5"
-  checksum: 9a65e06fd826cb81a67da69e10a574a045b2d744a99d060fe4373df2197538a9525ccb00f69ebf30227656101443b01eec6bd88bdf5721146e77467f970961dc
+"@auth0/auth0-spa-js@npm:2.0.6":
+  version: 2.0.6
+  resolution: "@auth0/auth0-spa-js@npm:2.0.6"
+  checksum: 249fbfc64eebc91c510e64c952a2b8626d51f378959e3d8d037b6c59c199537d5dc27b546a789c9c83ae856934f24daf0492751b1566299886149ddc544e958e
   languageName: node
   linkType: hard
 
@@ -6506,7 +6506,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-auth0-web@workspace:packages/auth-providers/auth0/web"
   dependencies:
-    "@auth0/auth0-spa-js": 2.0.5
+    "@auth0/auth0-spa-js": 2.0.6
     "@babel/cli": 7.21.5
     "@babel/core": 7.21.8
     "@babel/runtime-corejs3": 7.21.5
@@ -6517,7 +6517,7 @@ __metadata:
     react: 18.2.0
     typescript: 5.0.4
   peerDependencies:
-    "@auth0/auth0-spa-js": 2.0.5
+    "@auth0/auth0-spa-js": 2.0.6
   languageName: unknown
   linkType: soft
 
