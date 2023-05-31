@@ -61,7 +61,6 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
         replaceSchema(liveSchema)
       },
       onPluginInit({ addPlugin }) {
-        console.debug('liveQueryPlugin', 'onPluginInit')
         addPlugin(liveQueryPlugin)
       },
       onContextBuilding() {
