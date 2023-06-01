@@ -6622,7 +6622,7 @@ __metadata:
     pretty-ms: 7.0.1
     qs: 6.11.2
     split2: 4.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
     yargs: 17.7.2
   bin:
     rw-api-server-watch: ./dist/watch.js
@@ -6656,7 +6656,7 @@ __metadata:
     split2: 4.2.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     memjs: 1.3.1
     redis: 4.6.7
@@ -6686,7 +6686,7 @@ __metadata:
     jest: 29.5.0
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6701,7 +6701,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6718,7 +6718,7 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     "@auth0/auth0-spa-js": 2.0.6
   languageName: unknown
@@ -6738,7 +6738,7 @@ __metadata:
     jest: 29.5.0
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6753,7 +6753,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6771,7 +6771,7 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     "@azure/msal-browser": 2.37.0
   languageName: unknown
@@ -6789,7 +6789,7 @@ __metadata:
     "@types/aws-lambda": 8.10.115
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6804,7 +6804,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6822,7 +6822,7 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     "@clerk/clerk-react": 4.17.0
   languageName: unknown
@@ -6839,7 +6839,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6860,7 +6860,7 @@ __metadata:
     crypto-js: 4.1.1
     jest: 29.5.0
     md5: 2.3.0
-    typescript: 5.0.4
+    typescript: 5.1.3
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -6882,7 +6882,7 @@ __metadata:
     prompts: 2.4.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6900,7 +6900,7 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6916,7 +6916,7 @@ __metadata:
     core-js: 3.30.2
     firebase-admin: 10.3.0
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6931,7 +6931,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6948,7 +6948,7 @@ __metadata:
     firebase: 9.22.1
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     firebase: 9.22.1
   languageName: unknown
@@ -6967,7 +6967,7 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     jsonwebtoken: 9.0.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6982,7 +6982,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -6999,7 +6999,7 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     netlify-identity-widget: 1.9.2
   languageName: unknown
@@ -7018,7 +7018,7 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     jsonwebtoken: 9.0.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7033,7 +7033,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7049,7 +7049,7 @@ __metadata:
     core-js: 3.30.2
     jest: 29.5.0
     react: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     "@supabase/supabase-js": 2.24.0
   languageName: unknown
@@ -7068,7 +7068,7 @@ __metadata:
     jest: 29.5.0
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     supertokens-node: 13.6.0
   languageName: unknown
@@ -7085,7 +7085,7 @@ __metadata:
     "@types/yargs": 17.0.24
     core-js: 3.30.2
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7102,7 +7102,7 @@ __metadata:
     jest: 29.5.0
     react: 18.2.0
     supertokens-auth-react: 0.32.4
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     supertokens-auth-react: 0.32.4
   languageName: unknown
@@ -7121,7 +7121,7 @@ __metadata:
     jest: 29.5.0
     msw: 1.2.1
     react: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7147,7 +7147,7 @@ __metadata:
     prettier: 2.8.8
     prompts: 2.4.2
     terminal-link: 2.1.1
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7203,7 +7203,7 @@ __metadata:
     string-env-interpolation: 1.0.1
     terminal-link: 2.1.1
     title-case: 3.0.3
-    typescript: 5.0.4
+    typescript: 5.1.3
     uuid: 9.0.0
     yargs: 17.7.2
   bin:
@@ -7245,7 +7245,7 @@ __metadata:
     prettier: 2.8.8
     tasuku: 2.0.1
     tempy: 1.0.1
-    typescript: 5.0.4
+    typescript: 5.1.3
     yargs: 17.7.2
   bin:
     codemods: ./dist/codemods.js
@@ -7300,7 +7300,7 @@ __metadata:
     react-refresh: 0.14.0
     rimraf: 5.0.1
     style-loader: 3.3.3
-    typescript: 5.0.4
+    typescript: 5.1.3
     url-loader: 4.1.1
     webpack: 5.85.0
     webpack-bundle-analyzer: 4.8.0
@@ -7349,7 +7349,7 @@ __metadata:
     eslint-plugin-react-hooks: 4.6.0
     jest: 29.5.0
     prettier: 2.8.8
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7372,7 +7372,7 @@ __metadata:
     fastify-raw-body: 4.2.0
     lodash.escape: 4.0.1
     qs: 6.11.2
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7399,7 +7399,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: 7.44.2
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     graphql: 16.6.0
     react: 18.2.0
@@ -7446,7 +7446,7 @@ __metadata:
     jsonwebtoken: 9.0.0
     lodash.merge: 4.6.2
     lodash.omitby: 4.6.0
-    typescript: 5.0.4
+    typescript: 5.1.3
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -7495,7 +7495,7 @@ __metadata:
     terminal-link: 2.1.1
     ts-node: 10.9.1
     tsx: 3.12.7
-    typescript: 5.0.4
+    typescript: 5.1.3
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -7524,7 +7524,7 @@ __metadata:
     graphql: 16.6.0
     jest: 29.5.0
     mime-types: 2.1.35
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     react: 18.2.0
     react-dom: 18.2.0
@@ -7543,7 +7543,7 @@ __metadata:
     jest: 29.5.0
     rimraf: 5.0.1
     string-env-interpolation: 1.0.1
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7578,7 +7578,7 @@ __metadata:
     jest: 29.5.0
     react: 18.2.0
     react-dom: 18.2.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     react: 18.2.0
     react-dom: 18.2.0
@@ -7616,7 +7616,7 @@ __metadata:
     lru-cache: 6.0.0
     proxyquire: 2.1.3
     ts-morph: 15.1.0
-    typescript: 5.0.4
+    typescript: 5.1.3
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.8
     vscode-languageserver-types: 3.17.3
@@ -7665,7 +7665,7 @@ __metadata:
     split2: 4.2.0
     sqlite: 4.2.1
     sqlite3: 5.1.6
-    typescript: 5.0.4
+    typescript: 5.1.3
     uuid: 9.0.0
     yargs: 17.7.2
   languageName: unknown
@@ -7732,7 +7732,7 @@ __metadata:
     jest-watch-typeahead: 2.2.2
     msw: 1.2.1
     ts-toolbelt: 9.6.0
-    typescript: 5.0.4
+    typescript: 5.1.3
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -7747,7 +7747,7 @@ __metadata:
     esbuild: 0.17.19
     jest: 29.5.0
     stdout-update: 1.6.8
-    typescript: 5.0.4
+    typescript: 5.1.3
   languageName: unknown
   linkType: soft
 
@@ -7764,7 +7764,7 @@ __metadata:
     core-js: 3.30.2
     glob: 10.2.6
     jest: 29.5.0
-    typescript: 5.0.4
+    typescript: 5.1.3
     vite: 4.3.9
     vite-plugin-commonjs: 0.6.2
     vite-plugin-environment: 1.1.3
@@ -7803,7 +7803,7 @@ __metadata:
     react-hot-toast: 2.4.1
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    typescript: 5.0.4
+    typescript: 5.1.3
   peerDependencies:
     prop-types: 15.8.1
     react: 18.2.0
@@ -28571,7 +28571,7 @@ __metadata:
     ora: 5.4.1
     prompts: 2.4.2
     rimraf: 5.0.1
-    typescript: 5.0.4
+    typescript: 5.1.3
     yargs: 17.7.2
     zx: 7.2.2
   languageName: unknown
@@ -31341,13 +31341,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.0.4":
-  version: 5.0.4
-  resolution: "typescript@npm:5.0.4"
+"typescript@npm:5.1.3":
+  version: 5.1.3
+  resolution: "typescript@npm:5.1.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 2f5bd1cead194905957cb34e220b1d6ff1662399adef8ec1864f74620922d860ee35b6e50eafb3b636ea6fd437195e454e1146cb630a4236b5095ed7617395c2
+  checksum: 1faba8d5ffd4717864ddce767613c5ab77c1c8510c1ce21dc9b112a4c662357b9338dc0a6121615266d3a44ebec699f115ef2dabf18d9d7341ea1675692b9b24
   languageName: node
   linkType: hard
 
@@ -31361,13 +31361,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.0.4#~builtin<compat/typescript>":
-  version: 5.0.4
-  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"
+"typescript@patch:typescript@5.1.3#~builtin<compat/typescript>":
+  version: 5.1.3
+  resolution: "typescript@patch:typescript@npm%3A5.1.3#~builtin<compat/typescript>::version=5.1.3&hash=77c9e2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: c3f7b80577bddf6fab202a7925131ac733bfc414aec298c2404afcddc7a6f242cfa8395cf2d48192265052e11a7577c27f6e5fac8d8fe6a6602023c83d6b3292
+  checksum: 6219383250b585b201c9ea10576164c9d5760c7a167bc761b118692c9fb8e88610f37730c0a1169d96ac19b29ed80418048763d0c1ff00ce48e051abbc213a9b
   languageName: node
   linkType: hard
 
