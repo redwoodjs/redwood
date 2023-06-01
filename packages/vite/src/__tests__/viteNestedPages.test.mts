@@ -102,16 +102,16 @@ describe('User specified imports, with static imports', () => {
         expect(outputWithStaticImports).toContain(
           `const LoginPage = {
   name: "LoginPage",
-  loader: () => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"),
-  prerenderLoader: name => require("./pages/LoginPage/LoginPage")
+  prerenderLoader: name => require("./pages/LoginPage/LoginPage"),
+  LazyComponent: lazy(() => import("./pages/LoginPage/LoginPage"))
 }`
         )
 
         expect(outputWithStaticImports).toContain(
           `const HomePage = {
   name: "HomePage",
-  loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
-  prerenderLoader: name => require("./pages/HomePage/HomePage")
+  prerenderLoader: name => require("./pages/HomePage/HomePage"),
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 }`
         )
       })
@@ -122,20 +122,20 @@ describe('User specified imports, with static imports', () => {
         expect(outputNoStaticImports).toContain(
           `const LoginPage = {
   name: "LoginPage",
-  loader: () => import( /* webpackChunkName: "LoginPage" */"./pages/LoginPage/LoginPage"),
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
-  })
+  }),
+  LazyComponent: lazy(() => import("./pages/LoginPage/LoginPage"))
 }`
         )
 
         expect(outputNoStaticImports).toContain(
           `const HomePage = {
   name: "HomePage",
-  loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
-  })
+  }),
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 }`
         )
       })
@@ -149,8 +149,8 @@ describe('User specified imports, with static imports', () => {
         expect(outputWithStaticImports).toContain(
           `const NewJobPage = {
   name: "NewJobPage",
-  loader: () => import( /* webpackChunkName: "NewJobPage" */"./pages/Jobs/NewJobPage/NewJobPage"),
-  prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage")
+  prerenderLoader: name => require("./pages/Jobs/NewJobPage/NewJobPage"),
+  LazyComponent: lazy(() => import("./pages/Jobs/NewJobPage/NewJobPage"))
 }`
         )
       })
@@ -160,8 +160,8 @@ describe('User specified imports, with static imports', () => {
         expect(outputWithStaticImports).toContain(
           `const BazingaJobProfilePageWithFunnyName = {
   name: "BazingaJobProfilePageWithFunnyName",
-  loader: () => import( /* webpackChunkName: "BazingaJobProfilePageWithFunnyName" */"./pages/Jobs/JobProfilePage/JobProfilePage"),
-  prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage")
+  prerenderLoader: name => require("./pages/Jobs/JobProfilePage/JobProfilePage"),
+  LazyComponent: lazy(() => import("./pages/Jobs/JobProfilePage/JobProfilePage"))
 }`
         )
       })
@@ -199,13 +199,13 @@ describe('User specified imports, with static imports', () => {
   })`)
       })
 
-      it("Uses the loader for a page that isn't imported", () => {
+      it("Uses the LazyComponent for a page that isn't imported", () => {
         expect(outputNoStaticImports).toContain(`const HomePage = {
   name: "HomePage",
-  loader: () => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"),
   prerenderLoader: name => ({
     default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
-  })
+  }),
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 }`)
         expect(outputNoStaticImports).toContain(`React.createElement(Route, {
     path: "/",
@@ -214,14 +214,12 @@ describe('User specified imports, with static imports', () => {
   })`)
       })
 
-      it('Should NOT add a loader for pages that have been explicitly loaded', () => {
+      it('Should NOT add a LazyComponent for pages that have been explicitly loaded', () => {
         expect(outputNoStaticImports).not.toContain(`const JobsJobPage = {
-  name: "JobsJobPage",
-  loader: () => import`)
+  name: "JobsJobPage"`)
 
         expect(outputNoStaticImports).not.toContain(`const JobsNewJobPage = {
-  name: "JobsNewJobPage",
-  loader: () => import`)
+  name: "JobsNewJobPage"`)
 
         expect(outputNoStaticImports).toContain(`React.createElement(Route, {
     path: "/jobs",
@@ -233,16 +231,16 @@ describe('User specified imports, with static imports', () => {
   })
 
   it('Handles when imports from a page include non-default imports too', () => {
-    // Because we import import EditJobPage, 👉 { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
+     // Because we import import EditJobPage, 👉 { NonDefaultExport } from 'src/pages/Jobs/EditJobPage'
 
-    expect(outputWithStaticImports).toContain(
+     expect(outputWithStaticImports).toContain(
       'import { NonDefaultExport } from "'
     )
 
     expect(outputWithStaticImports).toContain(`const EditJobPage = {
   name: "EditJobPage",
-  loader: () => import( /* webpackChunkName: "EditJobPage" */"./pages/Jobs/EditJobPage/EditJobPage"),
-  prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage")
+  prerenderLoader: name => require("./pages/Jobs/EditJobPage/EditJobPage"),
+  LazyComponent: lazy(() => import("./pages/Jobs/EditJobPage/EditJobPage"))
 }`)
 
     expect(outputNoStaticImports).toContain(
@@ -256,7 +254,7 @@ describe('User specified imports, with static imports', () => {
 
     // Should not generate a loader, because page was explicitly imported
     expect(outputNoStaticImports).not.toMatch(
-      /loader: \(\) => import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/
+      /import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/
     )
   })
 })

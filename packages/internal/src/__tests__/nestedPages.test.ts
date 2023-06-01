@@ -149,7 +149,7 @@ describe('User specified imports, with static imports', () => {
   })`)
       })
 
-      it("Uses the loader for a page that isn't imported", () => {
+      it("Uses the LazyComponent for a page that isn't imported", () => {
         expect(outputNoStaticImports).toContain(`const HomePage = {
   name: "HomePage",
   prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
@@ -162,7 +162,7 @@ describe('User specified imports, with static imports', () => {
   })`)
       })
 
-      it('Should NOT add a loader for pages that have been explicitly loaded', () => {
+      it('Should NOT add a LazyComponent for pages that have been explicitly loaded', () => {
         expect(outputNoStaticImports).not.toContain(`const JobsJobPage = {
   name: "JobsJobPage"`)
 
