@@ -2578,27 +2578,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/disable-introspection@npm:4.0.6":
-  version: 4.0.6
-  resolution: "@envelop/disable-introspection@npm:4.0.6"
+"@envelop/disable-introspection@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@envelop/disable-introspection@npm:5.0.0"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^3.0.6
+    "@envelop/core": ^4.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: e52b82ecbfdefe0ea25854eb42ad4d1c66ef4d343a4aac64b389c2227a4a35cbe187f94ee17b2ea543b5ba2df169c18df8691af64f4f31a18c4132b0b88e910d
+  checksum: 99fd4a4986057db2839c433d7ad1efbf37b9e7b5b200b99129b01040711f0f54051696fa13da9bdfe8fec4c74e4998ec8b45fa4f9800f6d35f8311b1e372e9de
   languageName: node
   linkType: hard
 
-"@envelop/filter-operation-type@npm:4.0.6":
-  version: 4.0.6
-  resolution: "@envelop/filter-operation-type@npm:4.0.6"
+"@envelop/filter-operation-type@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@envelop/filter-operation-type@npm:5.0.0"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^3.0.6
+    "@envelop/core": ^4.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: dc607b8e588a7f6c92b290c41edfcc594e0e5407310eba8f3b8599a4b249f0f3622b2951cafcde8ab2824c8d4ddb4091397546bdea7af08907af08d6126e1eae
+  checksum: a38133727098c1c3c1350937cc9fbe83b7e92ac03f7856f81204900f515d06e87b2e7a427ff8c87554bc2d8725eb4f1b2e493b0cc2961e39c0b3a38f40ab547b
   languageName: node
   linkType: hard
 
@@ -7300,7 +7300,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    concurrently: 8.0.1
+    concurrently: 8.1.0
     configstore: 3.1.5
     core-js: 3.30.2
     cross-env: 7.0.3
@@ -7429,7 +7429,7 @@ __metadata:
     typescript: 5.1.3
     url-loader: 4.1.1
     webpack: 5.85.0
-    webpack-bundle-analyzer: 4.8.0
+    webpack-bundle-analyzer: 4.9.0
     webpack-cli: 5.1.1
     webpack-dev-server: 4.15.0
     webpack-manifest-plugin: 5.0.0
@@ -7541,8 +7541,8 @@ __metadata:
     "@babel/runtime-corejs3": 7.22.3
     "@envelop/core": 4.0.0
     "@envelop/depth-limit": 3.0.0
-    "@envelop/disable-introspection": 4.0.6
-    "@envelop/filter-operation-type": 4.0.6
+    "@envelop/disable-introspection": 5.0.0
+    "@envelop/filter-operation-type": 5.0.0
     "@envelop/live-query": 6.0.0
     "@envelop/on-resolve": 3.0.0
     "@envelop/testing": 6.0.0
@@ -14043,9 +14043,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:8.0.1":
-  version: 8.0.1
-  resolution: "concurrently@npm:8.0.1"
+"concurrently@npm:8.1.0":
+  version: 8.1.0
+  resolution: "concurrently@npm:8.1.0"
   dependencies:
     chalk: ^4.1.2
     date-fns: ^2.29.3
@@ -14059,7 +14059,7 @@ __metadata:
   bin:
     conc: dist/bin/concurrently.js
     concurrently: dist/bin/concurrently.js
-  checksum: a2c7937073d3ee9980ce504d12bc7af7a19598258320015fdbb7c5e164f96aa5969df8b0da8a900e983544eb15f19984b30c9ad4403428a22793064af5fec9b3
+  checksum: 0141c8d72dc3352330cbaa395cb2e62240262c6a35604e1b14248538eebb8f1644fe1172df69a454d0e880d370200f44d747763535ac8e47fdf3e0daa5030983
   languageName: node
   linkType: hard
 
@@ -30690,9 +30690,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:4.8.0":
-  version: 4.8.0
-  resolution: "webpack-bundle-analyzer@npm:4.8.0"
+"webpack-bundle-analyzer@npm:4.9.0":
+  version: 4.9.0
+  resolution: "webpack-bundle-analyzer@npm:4.9.0"
   dependencies:
     "@discoveryjs/json-ext": 0.5.7
     acorn: ^8.0.4
@@ -30706,7 +30706,7 @@ __metadata:
     ws: ^7.3.1
   bin:
     webpack-bundle-analyzer: lib/bin/analyzer.js
-  checksum: 52f2b1442ff01742d6fd7b143487f872449700a2b3b212ec54ce149d2c4e7ab04a34ee2d7d9a54e59749c9f585bc25c923e78fef7946a51e8b64797b967fd0c9
+  checksum: fe7ab4fd129bf9e3291345c8e9db889b10df36cbc3bb58add5bddef078429336d1066395a605e6948bd7af91f604ae229de9ef2dcd4aa95e5ab3d49934d67368
   languageName: node
   linkType: hard
 
