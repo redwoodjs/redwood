@@ -1,39 +1,43 @@
-import path from 'path'
+import path from 'node:path'
 
 import execa from 'execa'
 
-import { getPaths } from '@redwoodjs/project-config'
+// Allow import of untyped package
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
+import { getPaths } from '../lib/project'
+import { StorybookYargsOptions } from '../types'
 
-const redwoodProjectPaths = getPaths()
-
-export const handler = ({
+export const handler = async ({
   build,
   buildDirectory,
   ci,
   open,
   port,
   smokeTest,
-}) => {
-  const cwd = redwoodProjectPaths.web.base
+}: StorybookYargsOptions) => {
+  const cwd = getPaths().web.base
   const staticAssetsFolder = path.join(cwd, 'public')
-  const execaOptions = {
+  const execaOptions: Partial<execa.Options> = {
     stdio: 'inherit',
     shell: true,
     cwd,
   }
 
   // Create the `MockServiceWorker.js` file. See https://mswjs.io/docs/cli/init.
-  execa.command(`yarn msw init "${staticAssetsFolder}" --no-save`, execaOptions)
+  await execa.command(
+    `yarn msw init "${staticAssetsFolder}" --no-save`,
+    execaOptions
+  )
 
   const storybookConfigPath = path.dirname(
     require.resolve('@redwoodjs/testing/config/storybook/main.js')
   )
 
-  /** @type {string?} */
-  let command
+  let command = ''
   const flags = [`--config-dir "${storybookConfigPath}"`]
 
   if (build) {
@@ -66,10 +70,10 @@ export const handler = ({
   }
 
   try {
-    execa.command(command, execaOptions)
+    await execa.command(command, execaOptions)
   } catch (e) {
-    console.log(c.error(e.message))
-    errorTelemetry(process.argv, e.message)
+    console.log(c.error((e as Error).message))
+    errorTelemetry(process.argv, (e as Error).message)
     process.exit(1)
   }
 }
