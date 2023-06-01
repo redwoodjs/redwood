@@ -1,10 +1,7 @@
 import path from 'path'
-
-// import { useLiveQuery } from '@envelop/live-query'
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
-import { OperationTypeNode } from 'graphql'
 
 import {
   coerceRootPath,
@@ -55,7 +52,6 @@ async function serve() {
   await fastify.register(redwoodFastifyGraphQLServer, {
     loggerConfig: {
       logger: logger,
-      options: { query: true, data: true, level: 'trace' },
     },
     graphiQLEndpoint: '/.redwood/functions/graphql',
     sdls,
