@@ -2612,17 +2612,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/testing@npm:5.0.6":
-  version: 5.0.6
-  resolution: "@envelop/testing@npm:5.0.6"
+"@envelop/testing@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@envelop/testing@npm:6.0.0"
   dependencies:
-    "@graphql-tools/utils": ^8.8.0
+    "@graphql-tools/utils": ^10.0.0
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^3.0.6
-    "@envelop/types": ^3.0.2
+    "@envelop/core": ^4.0.0
+    "@envelop/types": ^4.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 7e7985c7043f17e56474c0b9bdcf493c51de6a35cca5bb9620b6b53ac83ddf683e5e2bd930c55cbbdf2b510e7f7dd9b52ee9f8acabd999bcad2675626be2369a
+  checksum: d9ec383c48ac5fa8410fa5f1b003a6a5410101f66323abcaddf9dc65278aac2047196e796c2859c3e2ac00771fcc89571fb8e18dbba1a1e5489e0f01ad0e3196
   languageName: node
   linkType: hard
 
@@ -4407,6 +4407,18 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 37a7bd7e14d28ff1bacc007dca84bc6cef2d7d7af9a547b5dbe52fcd134afddd6d4a7b2148cfbaff5ddba91a868453d597da77bd0457fb0be15928f916901606
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/utils@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@graphql-tools/utils@npm:10.0.0"
+  dependencies:
+    "@graphql-typed-document-node/core": ^3.1.1
+    tslib: ^2.4.0
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: b1666ade8fc289df6072a1725ebb4e7b925a1a85ca6832d53a4ada6d273248cc08bf035c35478cb8fd377d7e6ea1ad5b9060c98b380b5f37ce6d1ad3dff460b6
   languageName: node
   linkType: hard
 
@@ -7294,7 +7306,7 @@ __metadata:
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.1
     "@types/jscodeshift": 0.11.6
-    "@types/prettier": 2.7.2
+    "@types/prettier": 2.7.3
     "@types/yargs": 17.0.24
     "@vscode/ripgrep": 1.15.3
     "@whatwg-node/fetch": 0.9.0
@@ -7482,7 +7494,7 @@ __metadata:
     "@envelop/disable-introspection": 4.0.6
     "@envelop/filter-operation-type": 4.0.6
     "@envelop/on-resolve": 2.0.6
-    "@envelop/testing": 5.0.6
+    "@envelop/testing": 6.0.0
     "@envelop/types": 3.0.2
     "@escape.tech/graphql-armor": 1.8.2
     "@graphql-tools/merge": 8.4.2
@@ -7710,7 +7722,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.30.2
     crypto-js: 4.1.1
-    dotenv: 16.1.1
+    dotenv: 16.1.3
     fast-json-parse: 1.0.3
     fastify: 4.17.0
     fastify-raw-body: 4.2.0
@@ -10003,10 +10015,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:*, @types/prettier@npm:2.7.2, @types/prettier@npm:^2.1.5":
-  version: 2.7.2
-  resolution: "@types/prettier@npm:2.7.2"
-  checksum: 16ffbd1135c10027f118517d3b12aaaf3936be1f3c6e4c6c9c03d26d82077c2d86bf0dcad545417896f29e7d90faf058aae5c9db2e868be64298c644492ea29e
+"@types/prettier@npm:*, @types/prettier@npm:2.7.3, @types/prettier@npm:^2.1.5":
+  version: 2.7.3
+  resolution: "@types/prettier@npm:2.7.3"
+  checksum: 0960b5c1115bb25e979009d0b44c42cf3d792accf24085e4bfce15aef5794ea042e04e70c2139a2c3387f781f18c89b5706f000ddb089e9a4a2ccb7536a2c5f0
   languageName: node
   linkType: hard
 
@@ -15601,10 +15613,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.1.1, dotenv@npm:^16.0.0":
-  version: 16.1.1
-  resolution: "dotenv@npm:16.1.1"
-  checksum: 78baf9d2600559b9e8a1d8c5573400a5cb524495ec2734525d6b9007ba4321c5db9e3408f5d670407a75e64b7598c25448165be0360828a9b20f3da76f14677b
+"dotenv@npm:16.1.3, dotenv@npm:^16.0.0":
+  version: 16.1.3
+  resolution: "dotenv@npm:16.1.3"
+  checksum: d80483222c5f129c6e5bc4ce46be563497eb39a7aa034245408e570f09fa770d73da3e019454394c197593535ecb908b0f5699ce721f5313ffd06ee44bcab85f
   languageName: node
   linkType: hard
 
