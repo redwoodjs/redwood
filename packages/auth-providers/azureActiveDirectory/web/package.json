@@ -22,14 +22,14 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.21.5",
+    "@babel/runtime-corejs3": "7.22.3",
     "@redwoodjs/auth": "5.0.0",
     "core-js": "3.30.2"
   },
   "devDependencies": {
     "@azure/msal-browser": "2.37.0",
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.8",
+    "@babel/core": "7.22.1",
     "@types/netlify-identity-widget": "1.9.3",
     "@types/react": "18.2.7",
     "jest": "29.5.0",
