@@ -57,17 +57,12 @@ async function serve() {
       logger: logger,
       options: { query: true, data: true, level: 'trace' },
     },
-    graphiQLEndpoint: '/yoga',
+    graphiQLEndpoint: '/.redwood/functions/graphql',
     sdls,
     services,
     directives,
     allowIntrospection: true,
     allowGraphiQL: true,
-    allowedOperations: [
-      OperationTypeNode.SUBSCRIPTION,
-      OperationTypeNode.QUERY,
-      OperationTypeNode.MUTATION,
-    ],
   })
 
   // Start
