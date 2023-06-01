@@ -233,22 +233,23 @@ export const useRedwoodDirective = (
   /**
    * This symbol is added to the schema extensions for checking whether the transform got already applied.
    */
-  const didMapSchemaSymbol = Symbol('useRedwoodDirective.didMapSchemaSymbol')
+  const wasDirectiveApplied = Symbol.for(`useRedwoodDirective.${options.name}}`)
+
   return {
     onSchemaChange({ schema, replaceSchema }) {
       /**
        * Currently graphql-js extensions typings are limited to string keys.
        * We are using symbols as each useRedwoodDirective plugin instance should use its own unique symbol.
        */
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      if (schema.extensions?.[didMapSchemaSymbol] === true) {
+      if (schema.extensions?.[wasDirectiveApplied] === true) {
         return
       }
       const transformedSchema = wrapAffectedResolvers(schema, options)
       transformedSchema.extensions = {
         ...schema.extensions,
-        [didMapSchemaSymbol]: true,
+        [wasDirectiveApplied]: true,
       }
+
       replaceSchema(transformedSchema)
     },
   }

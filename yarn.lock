@@ -2602,6 +2602,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@envelop/live-query@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@envelop/live-query@npm:6.0.0"
+  dependencies:
+    "@graphql-tools/utils": ^10.0.0
+    "@n1ru4l/graphql-live-query": ^0.10.0
+    "@n1ru4l/graphql-live-query-patch": ^0.7.0
+    "@n1ru4l/in-memory-live-query-store": ^0.10.0
+    tslib: ^2.5.0
+  peerDependencies:
+    "@envelop/core": ^4.0.0
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 3a3a741c454abc09ea51308ebc7f1b78306647957cfa75b8323db2cae35139a8515c1a2760ccb4d19604ea3da768db5ed55b1d5dc9576986b37a3db1d771abfd
+  languageName: node
+  linkType: hard
+
 "@envelop/on-resolve@npm:2.0.6":
   version: 2.0.6
   resolution: "@envelop/on-resolve@npm:2.0.6"
@@ -4422,7 +4438,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:^8.8.0":
+"@graphql-tools/utils@npm:^8.5.2, @graphql-tools/utils@npm:^8.8.0":
   version: 8.13.1
   resolution: "@graphql-tools/utils@npm:8.13.1"
   dependencies:
@@ -4475,7 +4491,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/subscription@npm:^3.1.0":
+"@graphql-yoga/subscription@npm:3.1.0, @graphql-yoga/subscription@npm:^3.1.0":
   version: 3.1.0
   resolution: "@graphql-yoga/subscription@npm:3.1.0"
   dependencies:
@@ -5106,6 +5122,39 @@ __metadata:
     strict-event-emitter: ^0.2.4
     web-encoding: ^1.1.5
   checksum: d99b4f54587ae60d323e1f65a1e7417521553a4431250f600740baa5c8caeb8a5d972952be027fb04d99624004456d80e62d1f0e5328fda49fd8508ab88afe86
+  languageName: node
+  linkType: hard
+
+"@n1ru4l/graphql-live-query-patch@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@n1ru4l/graphql-live-query-patch@npm:0.7.0"
+  dependencies:
+    "@repeaterjs/repeater": ^3.0.4
+  peerDependencies:
+    graphql: ^15.4.0 || ^16.0.0
+  checksum: a7ee5825a277e5240a1908cf830c3d55f114a6d8fec520dc155081f170241c50b92309169a6cc79f66087b97f0aaad8895573b2c346fd7671402c6ce3dd81452
+  languageName: node
+  linkType: hard
+
+"@n1ru4l/graphql-live-query@npm:0.10.0, @n1ru4l/graphql-live-query@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "@n1ru4l/graphql-live-query@npm:0.10.0"
+  peerDependencies:
+    graphql: ^15.4.0 || ^16.0.0
+  checksum: 972bea6d6e4dcc443e15c19f2da373fc01f7e6c8d366569075dc89dc94e55da5a4029d0e8cff289d208c43edcca5e112fe286c6601717ab42d428fc3d5c2dfae
+  languageName: node
+  linkType: hard
+
+"@n1ru4l/in-memory-live-query-store@npm:0.10.0, @n1ru4l/in-memory-live-query-store@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "@n1ru4l/in-memory-live-query-store@npm:0.10.0"
+  dependencies:
+    "@graphql-tools/utils": ^8.5.2
+    "@n1ru4l/graphql-live-query": 0.10.0
+    "@repeaterjs/repeater": ^3.0.4
+  peerDependencies:
+    graphql: ^15.4.0 || ^16.0.0
+  checksum: c2b4c1c09fa68ac7bd776166a86d361ac6e2659028391e7c3cca25943e966d1d035271141e28d0a519d50409cc07728df163d01ee26cacf403f59a6dcf2d4243
   languageName: node
   linkType: hard
 
@@ -7493,6 +7542,7 @@ __metadata:
     "@envelop/depth-limit": 3.0.0
     "@envelop/disable-introspection": 4.0.6
     "@envelop/filter-operation-type": 4.0.6
+    "@envelop/live-query": 6.0.0
     "@envelop/on-resolve": 2.0.6
     "@envelop/testing": 6.0.0
     "@envelop/types": 3.0.2
@@ -7500,6 +7550,9 @@ __metadata:
     "@graphql-tools/merge": 8.4.2
     "@graphql-tools/schema": 9.0.19
     "@graphql-tools/utils": 9.2.1
+    "@graphql-yoga/subscription": 3.1.0
+    "@n1ru4l/graphql-live-query": 0.10.0
+    "@n1ru4l/in-memory-live-query-store": 0.10.0
     "@opentelemetry/api": 1.4.1
     "@redwoodjs/api": 5.0.0
     "@redwoodjs/project-config": 5.0.0
