@@ -1,4 +1,5 @@
 import path from 'path'
+
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
