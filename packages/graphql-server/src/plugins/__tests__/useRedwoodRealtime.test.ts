@@ -4,7 +4,7 @@ import {
   assertStreamExecutionValue,
 } from '@envelop/testing'
 
-import { testLiveSchema, testLiveQuery } from '../__fixtures__/common'
+import { testLiveQuery, testSchema } from '../__fixtures__/common'
 import {
   useRedwoodRealtime,
   InMemoryLiveQueryStore,
@@ -16,7 +16,7 @@ describe('useRedwoodRealtime', () => {
   it('should support a @live query directive', async () => {
     const testkit = createTestkit(
       [useRedwoodRealtime({ liveQueries: { liveQueryStore } })],
-      testLiveSchema
+      testSchema
     )
 
     const result = await testkit.execute(testLiveQuery, {}, {})
@@ -39,26 +39,24 @@ describe('useRedwoodRealtime', () => {
   it('should update schema with live directive', async () => {
     const spiedPlugin = createSpiedPlugin()
 
-    const testkit = createTestkit(
+    // the original schema should not have the live directive before the useRedwoodRealtime plugin is applied
+    expect(testSchema.getDirective('live')).toBeUndefined()
+
+    createTestkit(
       [
         useRedwoodRealtime({ liveQueries: { liveQueryStore } }),
         spiedPlugin.plugin,
       ],
-      testLiveSchema
+      testSchema
     )
 
-    await testkit.execute(testLiveQuery, {}, {})
+    // the replaced schema should have the live directive afterwards
+    const replacedSchema =
+      spiedPlugin.spies.onSchemaChange.mock.calls[0][0].schema
 
-    // the schema should have been updated with the live directive
-    // "schema": GraphQLSchema {
-    //   "__validationErrors": [],
-    //   "_directives": [
-    //     "@live",
-    //     "@include",
-    //     "@skip",
-    //     "@deprecated",
-    //     "@specifiedBy",
-    //   ],
-    expect(spiedPlugin.spies.onSchemaChange).toMatchSnapshot()
+    const liveDirectiveOnSchema = replacedSchema.getDirective('live')
+
+    expect(liveDirectiveOnSchema.name).toEqual('live')
+    expect(replacedSchema.getDirective('live')).toMatchSnapshot()
   })
 })
