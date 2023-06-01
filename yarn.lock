@@ -7173,7 +7173,7 @@ __metadata:
     boxen: 5.1.2
     camelcase: 6.3.0
     chalk: 4.1.2
-    concurrently: 8.0.1
+    concurrently: 8.1.0
     configstore: 3.1.5
     core-js: 3.30.2
     cross-env: 7.0.3
@@ -14390,9 +14390,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:8.0.1":
-  version: 8.0.1
-  resolution: "concurrently@npm:8.0.1"
+"concurrently@npm:8.1.0":
+  version: 8.1.0
+  resolution: "concurrently@npm:8.1.0"
   dependencies:
     chalk: ^4.1.2
     date-fns: ^2.29.3
@@ -14406,7 +14406,7 @@ __metadata:
   bin:
     conc: dist/bin/concurrently.js
     concurrently: dist/bin/concurrently.js
-  checksum: a2c7937073d3ee9980ce504d12bc7af7a19598258320015fdbb7c5e164f96aa5969df8b0da8a900e983544eb15f19984b30c9ad4403428a22793064af5fec9b3
+  checksum: 0141c8d72dc3352330cbaa395cb2e62240262c6a35604e1b14248538eebb8f1644fe1172df69a454d0e880d370200f44d747763535ac8e47fdf3e0daa5030983
   languageName: node
   linkType: hard
 
