@@ -22,13 +22,13 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.21.5",
+    "@babel/runtime-corejs3": "7.22.3",
     "core-js": "3.30.2",
     "firebase-admin": "10.3.0"
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.8",
+    "@babel/core": "7.22.1",
     "@redwoodjs/api": "5.2.3",
     "@types/aws-lambda": "8.10.115",
     "jest": "29.5.0",

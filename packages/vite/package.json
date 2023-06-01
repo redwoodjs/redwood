@@ -25,7 +25,7 @@
     "test:watch": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test --watch'"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.21.5",
+    "@babel/runtime-corejs3": "7.22.3",
     "@redwoodjs/internal": "5.2.3",
     "@redwoodjs/project-config": "5.2.3",
     "@vitejs/plugin-react": "4.0.0",
