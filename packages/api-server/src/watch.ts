@@ -15,7 +15,12 @@ import yargs from 'yargs/yargs'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
-import { getPaths, ensurePosixPath, getConfig } from '@redwoodjs/project-config'
+import {
+  getPaths,
+  ensurePosixPath,
+  getConfig,
+  resolveFile,
+} from '@redwoodjs/project-config'
 
 const redwoodProjectPaths = getPaths()
 const redwoodProjectConfig = getConfig()
@@ -109,11 +114,18 @@ const rebuildApiServer = () => {
     }
 
     // Start API server
-    httpServerProcess = fork(
-      path.join(__dirname, 'index.js'),
-      ['api', '--port', argv.port.toString(), '--host', `${argv.host}`],
-      forkOpts
-    )
+
+    // Check if experimental server file exists (Note: in dist folder)
+    const serverFile = resolveFile(`${redwoodProjectPaths.api.dist}/server`)
+    if (serverFile) {
+      httpServerProcess = fork(serverFile, ['api'], forkOpts)
+    } else {
+      httpServerProcess = fork(
+        path.join(__dirname, 'index.js'),
+        ['api', '--port', argv.port.toString(), '--host', `${argv.host}`],
+        forkOpts
+      )
+    }
   } catch (e) {
     console.error(e)
   }
