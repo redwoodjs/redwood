@@ -11478,9 +11478,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"all-contributors-cli@npm:6.25.1":
-  version: 6.25.1
-  resolution: "all-contributors-cli@npm:6.25.1"
+"all-contributors-cli@npm:6.26.0":
+  version: 6.26.0
+  resolution: "all-contributors-cli@npm:6.26.0"
   dependencies:
     "@babel/runtime": ^7.7.6
     async: ^3.1.0
@@ -11491,10 +11491,14 @@ __metadata:
     lodash: ^4.11.2
     node-fetch: ^2.6.0
     pify: ^5.0.0
+    prettier: ^2
     yargs: ^15.0.1
+  dependenciesMeta:
+    prettier:
+      optional: true
   bin:
     all-contributors: dist/cli.js
-  checksum: 60a27249a8b8724a9c507a565190c79163c6cd6d0f81a1f27608162ffac0c2ee4770552dbd6c8d404cf3798767885a5ad99be4d2732f28d14f3671b814e0aabb
+  checksum: f66e68017f9b91c6bbf6c5f45c585909ff7e97f434c42a2f48028d25f4e1e1ad6f81426d5ff4669535c69d406ea2eb49df0461e54242701bc716149e4f34eb6b
   languageName: node
   linkType: hard
 
@@ -26767,7 +26771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.8.8, prettier@npm:^2.6.2, prettier@npm:^2.8.3":
+"prettier@npm:2.8.8, prettier@npm:^2, prettier@npm:^2.6.2, prettier@npm:^2.8.3":
   version: 2.8.8
   resolution: "prettier@npm:2.8.8"
   bin:
@@ -28542,7 +28546,7 @@ __metadata:
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.4
-    all-contributors-cli: 6.25.1
+    all-contributors-cli: 6.26.0
     babel-jest: 29.5.0
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
