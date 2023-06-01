@@ -52,7 +52,7 @@
     "@babel/cli": "7.21.5",
     "@babel/core": "7.22.1",
     "@envelop/testing": "6.0.0",
-    "@envelop/types": "3.0.2",
+    "@envelop/types": "4.0.0",
     "@types/jsonwebtoken": "9.0.2",
     "@types/lodash.merge": "4.6.7",
     "@types/lodash.omitby": "4.6.7",
