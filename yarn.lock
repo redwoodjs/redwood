@@ -7285,7 +7285,7 @@ __metadata:
     "@redwoodjs/project-config": 5.0.0
     "@types/babel__core": 7.20.1
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.5.1
+    "@types/jest": 29.5.2
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.2
     "@types/yargs": 17.0.24
@@ -7769,7 +7769,7 @@ __metadata:
     "@testing-library/user-event": 14.4.3
     "@types/aws-lambda": 8.10.115
     "@types/babel-core": 6.25.7
-    "@types/jest": 29.5.1
+    "@types/jest": 29.5.2
     "@types/node": 18.16.1
     "@types/react": 18.2.7
     "@types/react-dom": 18.2.4
@@ -9653,13 +9653,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.5.1":
-  version: 29.5.1
-  resolution: "@types/jest@npm:29.5.1"
+"@types/jest@npm:*, @types/jest@npm:29.5.2":
+  version: 29.5.2
+  resolution: "@types/jest@npm:29.5.2"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: ba9df58fa0c813e1dda529e34bcec2d0e0bbac2d3e921a86c8e10d77fc5165bd8e5324eeb7071bfe0490e7d1055db34ef80d57e05bd967edae00df4158097ec6
+  checksum: e85525fe83a0792632a31ca32968b33a0014d617442e9a515357d2aa8890052ef622b1f6fd25d48f4f1a3ab806bed94e6d9b056dea23a897464e0e35957ff654
   languageName: node
   linkType: hard
 
@@ -27133,7 +27133,7 @@ __metadata:
     "@tsd/typescript": 5.0.4
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.5.1
+    "@types/jest": 29.5.2
     "@types/jscodeshift": 0.11.6
     "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
