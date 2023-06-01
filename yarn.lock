@@ -2432,13 +2432,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/on-resolve@npm:2.0.6":
-  version: 2.0.6
-  resolution: "@envelop/on-resolve@npm:2.0.6"
+"@envelop/on-resolve@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@envelop/on-resolve@npm:3.0.0"
   peerDependencies:
-    "@envelop/core": ^3.0.6
+    "@envelop/core": ^4.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: fd194ed2c5941cd23cd8ef2c2666ae2811cc2e68d74030e50f7a6273f8888ffb5430d4a30e2f46acf626cb92b174e31ba690b034edaaa2ff290f2cdb73072f84
+  checksum: eac2bc3c322d1f7eeb101e28c2d35bf33da39fd1cbbf98a669dc1a80998385671bae869432cce86cd0146717b3adb0b403da15caa82f1476002e207669f3d394
   languageName: node
   linkType: hard
 
@@ -7418,7 +7418,7 @@ __metadata:
     "@envelop/disable-introspection": 4.0.6
     "@envelop/filter-operation-type": 4.0.6
     "@envelop/live-query": 6.0.0
-    "@envelop/on-resolve": 2.0.6
+    "@envelop/on-resolve": 3.0.0
     "@envelop/testing": 6.0.0
     "@envelop/types": 3.0.2
     "@escape.tech/graphql-armor": 1.8.2
