@@ -1,0 +1,21 @@
+datasource sqlite {
+  url      = "file:./dev.sqlite"
+  provider = "sqlite"
+}
+
+generator photonjs {
+  provider = "prisma-client-js"
+}
+
+model Book {
+  id      Int    @id @default(autoincrement())
+  title   String @unique
+  Shelf   Shelf? @relation(fields: [shelfId], references: [id])
+  shelfId Int?
+}
+
+model Shelf {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  books Book[]
+}
