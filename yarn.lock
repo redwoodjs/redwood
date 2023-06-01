@@ -7546,7 +7546,7 @@ __metadata:
     "@envelop/live-query": 6.0.0
     "@envelop/on-resolve": 3.0.0
     "@envelop/testing": 6.0.0
-    "@envelop/types": 3.0.2
+    "@envelop/types": 4.0.0
     "@escape.tech/graphql-armor": 1.8.2
     "@graphql-tools/merge": 8.4.2
     "@graphql-tools/schema": 9.0.19
