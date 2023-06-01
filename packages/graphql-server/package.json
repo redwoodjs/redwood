@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.21.5",
+    "@babel/runtime-corejs3": "7.22.3",
     "@envelop/core": "4.0.0",
     "@envelop/depth-limit": "2.0.6",
     "@envelop/disable-introspection": "4.0.6",
@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
-    "@babel/core": "7.21.8",
+    "@babel/core": "7.22.1",
     "@envelop/testing": "5.0.6",
     "@envelop/types": "3.0.2",
     "@types/jsonwebtoken": "9.0.2",
