@@ -6739,6 +6739,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.3
     core-js: 3.30.2
+    fast-glob: 3.2.12
     fast-json-parse: 1.0.3
     fastify: 4.17.0
     fastify-raw-body: 4.2.0
