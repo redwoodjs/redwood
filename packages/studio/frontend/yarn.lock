@@ -23,13 +23,13 @@ __metadata:
   linkType: hard
 
 "@apollo/client@npm:^3.7.8":
-  version: 3.7.14
-  resolution: "@apollo/client@npm:3.7.14"
+  version: 3.7.15
+  resolution: "@apollo/client@npm:3.7.15"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
     "@wry/equality": ^0.5.0
-    "@wry/trie": ^0.3.0
+    "@wry/trie": ^0.4.0
     graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
     optimism: ^0.16.2
@@ -54,7 +54,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: fb5169b68f60413f790cdc6c5d31adf23dfdc0ca5b1a0b21cdf2df28cea5847a65ad4bd421be1e26ff7a1e0ea205202deab1699e1b0b83d13d1d9a339e352bee
+  checksum: b7daba0b7e9b5d96357d55f7cca9bb45cb8b799a7f779aa158721fbe2730559a9709a74f95e22270d9ade74ebdc70d1cc9d6dad80fe98494ece17b0dbabf3e51
   languageName: node
   linkType: hard
 
@@ -592,14 +592,14 @@ __metadata:
   linkType: hard
 
 "@headlessui/react@npm:^1.7.14":
-  version: 1.7.14
-  resolution: "@headlessui/react@npm:1.7.14"
+  version: 1.7.15
+  resolution: "@headlessui/react@npm:1.7.15"
   dependencies:
     client-only: ^0.0.1
   peerDependencies:
     react: ^16 || ^17 || ^18
     react-dom: ^16 || ^17 || ^18
-  checksum: 42170548641b7a58fc16d11c9100ff67961cb800cd8f4012ab0077c0aa254d680106166127aaf33548dae0c7ae5ed036ab4caec23a3ed745926a1e87ec6ea198
+  checksum: d93fd4be3d134467fe2c904e65ff28ec8218a78a3aa590bdc52a097ed9092bae200b6bf0ed79f12cd9850a1744dd95015fbc08b5b71f17bac7d63d2f6197a7b8
   languageName: node
   linkType: hard
 
@@ -1461,6 +1461,15 @@ __metadata:
   dependencies:
     tslib: ^2.3.0
   checksum: c27a46592c4c418ad9de596b4f53bcac748585db8b4deab262bf5ab71ec15b9ea09d522e765c4fa05e831176cea1b94220151315b4c542abee40541a26aaf7c0
+  languageName: node
+  linkType: hard
+
+"@wry/trie@npm:^0.4.0":
+  version: 0.4.3
+  resolution: "@wry/trie@npm:0.4.3"
+  dependencies:
+    tslib: ^2.3.0
+  checksum: 1a14edba595b1967d0cf38208c2660b2952a8e8a649bb669b67907df48f602c7f2acbe16c1e1b115afa7d7effb9f1a4dbde38eef16ee92e7521a511262a53281
   languageName: node
   linkType: hard
 
@@ -2573,13 +2582,13 @@ __metadata:
   linkType: hard
 
 "graphql-scalars@npm:^1.21.3":
-  version: 1.22.0
-  resolution: "graphql-scalars@npm:1.22.0"
+  version: 1.22.1
+  resolution: "graphql-scalars@npm:1.22.1"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 3abf354aa0f9801af27a2b4a9b5fd07cd24c0329b4deff29e5a9bbbe963cf89ad9df34d471d4c4d128dbf25a31beec1a1401f61c2d876d462bf7940fb349080a
+  checksum: 61906f5d13938642f728820802c0ebbaf6163b4bb0d69bdde4b372769638e48c516a3b4116fb3e5cfbbed0d973e652cb4c660f117012dafac93c3e0a17862442
   languageName: node
   linkType: hard
 
