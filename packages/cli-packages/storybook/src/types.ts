@@ -4,6 +4,5 @@ export interface StorybookYargsOptions {
   ci: boolean
   port: number
   buildDirectory: string
-  managerCache: boolean
   smokeTest: boolean
 }

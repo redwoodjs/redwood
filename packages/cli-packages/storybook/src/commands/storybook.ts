@@ -14,7 +14,6 @@ export const defaultOptions: StorybookYargsOptions = {
   ci: false,
   port: 7910,
   buildDirectory: 'public/storybook',
-  managerCache: true,
   smokeTest: false,
 }
 
