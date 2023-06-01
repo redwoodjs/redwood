@@ -26,7 +26,6 @@ import * as prismaCommand from './commands/prisma'
 import * as recordCommand from './commands/record'
 import * as serveCommand from './commands/serve'
 import * as setupCommand from './commands/setup'
-import * as storybookCommand from './commands/storybook'
 import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
@@ -142,7 +141,6 @@ async function runYargs() {
     .command(recordCommand)
     .command(serveCommand)
     .command(setupCommand)
-    .command(storybookCommand)
     .command(testCommand)
     .command(tstojsCommand)
     .command(typeCheckCommand)
