@@ -78,7 +78,7 @@
     "style-loader": "3.3.3",
     "typescript": "5.0.4",
     "url-loader": "4.1.1",
-    "webpack": "5.84.1",
+    "webpack": "5.85.0",
     "webpack-bundle-analyzer": "4.8.0",
     "webpack-cli": "5.1.1",
     "webpack-dev-server": "4.15.0",
