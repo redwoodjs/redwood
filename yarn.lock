@@ -66,14 +66,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.14":
-  version: 3.7.14
-  resolution: "@apollo/client@npm:3.7.14"
+"@apollo/client@npm:3.7.15":
+  version: 3.7.15
+  resolution: "@apollo/client@npm:3.7.15"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
     "@wry/equality": ^0.5.0
-    "@wry/trie": ^0.3.0
+    "@wry/trie": ^0.4.0
     graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
     optimism: ^0.16.2
@@ -98,7 +98,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: fb5169b68f60413f790cdc6c5d31adf23dfdc0ca5b1a0b21cdf2df28cea5847a65ad4bd421be1e26ff7a1e0ea205202deab1699e1b0b83d13d1d9a339e352bee
+  checksum: b7daba0b7e9b5d96357d55f7cca9bb45cb8b799a7f779aa158721fbe2730559a9709a74f95e22270d9ade74ebdc70d1cc9d6dad80fe98494ece17b0dbabf3e51
   languageName: node
   linkType: hard
 
@@ -2565,16 +2565,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@envelop/depth-limit@npm:2.0.6":
-  version: 2.0.6
-  resolution: "@envelop/depth-limit@npm:2.0.6"
+"@envelop/depth-limit@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@envelop/depth-limit@npm:3.0.0"
   dependencies:
     graphql-depth-limit: ^1.1.0
     tslib: ^2.5.0
   peerDependencies:
-    "@envelop/core": ^3.0.6
+    "@envelop/core": ^4.0.0
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 0bb598213850426e0f7a3b911d62281c9d67711fb7bf37bde33e400964f4ab96b16825b91e61f8237e7e416df3bc382144bbfd94bac673e34472592ab06596e8
+  checksum: b0121ad4233f6a4a18bd742012c15acbbc20ae343b969f0c7f9efc32897499a5354d87bbfbf75440dd3c684ea702f7dbf2d64d20c3220a1e0044040c630f75ca
   languageName: node
   linkType: hard
 
@@ -7471,7 +7471,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
     "@envelop/core": 4.0.0
-    "@envelop/depth-limit": 2.0.6
+    "@envelop/depth-limit": 3.0.0
     "@envelop/disable-introspection": 4.0.6
     "@envelop/filter-operation-type": 4.0.6
     "@envelop/on-resolve": 2.0.6
@@ -7830,7 +7830,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.7.14
+    "@apollo/client": 3.7.15
     "@babel/cli": 7.21.5
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
@@ -10898,6 +10898,15 @@ __metadata:
   dependencies:
     tslib: ^2.3.0
   checksum: c27a46592c4c418ad9de596b4f53bcac748585db8b4deab262bf5ab71ec15b9ea09d522e765c4fa05e831176cea1b94220151315b4c542abee40541a26aaf7c0
+  languageName: node
+  linkType: hard
+
+"@wry/trie@npm:^0.4.0":
+  version: 0.4.3
+  resolution: "@wry/trie@npm:0.4.3"
+  dependencies:
+    tslib: ^2.3.0
+  checksum: 1a14edba595b1967d0cf38208c2660b2952a8e8a649bb669b67907df48f602c7f2acbe16c1e1b115afa7d7effb9f1a4dbde38eef16ee92e7521a511262a53281
   languageName: node
   linkType: hard
 

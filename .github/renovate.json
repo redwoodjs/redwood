@@ -49,6 +49,7 @@
     "is-port-reachable",
     "pretty-ms",
     "camelcase",
-    "sort-package-json"
+    "sort-package-json",
+    "@redwoodjs/vite"
   ]
 }
