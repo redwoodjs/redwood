@@ -376,7 +376,6 @@ export function flattenSearchParams(
 
 export interface Spec {
   name: string
-  loader: () => Promise<{ default: React.ComponentType<unknown> }>
   prerenderLoader: (name?: string) => { default: React.ComponentType<unknown> }
   LazyComponent:
     | React.LazyExoticComponent<React.ComponentType<unknown>>
@@ -386,7 +385,7 @@ export interface Spec {
 export function isSpec(
   specOrPage: Spec | React.ComponentType
 ): specOrPage is Spec {
-  return (specOrPage as Spec).loader !== undefined
+  return (specOrPage as Spec).LazyComponent !== undefined
 }
 
 /**
@@ -395,7 +394,8 @@ export function isSpec(
  *
  *   const WhateverPage = {
  *     name: 'WhateverPage',
- *     loader: () => import('src/pages/WhateverPage')
+ *     LazyComponent: lazy(() => import('src/pages/WhateverPage'))
+ *     prerenderLoader: ...
  *   }
  *
  * Manual imports simply load the page:
@@ -417,7 +417,6 @@ export function normalizePage(
   // an async module import.
   return {
     name: specOrPage.name,
-    loader: async () => ({ default: specOrPage }),
     prerenderLoader: () => ({ default: specOrPage }),
     LazyComponent: specOrPage,
   }

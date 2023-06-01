@@ -7,10 +7,6 @@ jest.mock('../util', () => {
     ...actualUtil,
     normalizePage: (specOrPage: Spec | React.ComponentType<unknown>) => ({
       name: specOrPage.name,
-      loader: () =>
-        new Promise((resolve) =>
-          setTimeout(() => resolve({ default: specOrPage }), mockDelay)
-        ),
       prerenderLoader: () => ({ default: specOrPage }),
       LazyComponent: lazy(
         () =>

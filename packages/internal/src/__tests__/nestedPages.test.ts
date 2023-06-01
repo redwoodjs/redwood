@@ -164,12 +164,10 @@ describe('User specified imports, with static imports', () => {
 
       it('Should NOT add a loader for pages that have been explicitly loaded', () => {
         expect(outputNoStaticImports).not.toContain(`const JobsJobPage = {
-  name: "JobsJobPage",
-  loader: () => import( /* webpackChunkName: "JobsJobPage" */"./pages/Jobs/JobsPage/JobsPage")`)
+  name: "JobsJobPage"`)
 
         expect(outputNoStaticImports).not.toContain(`const JobsNewJobPage = {
-  name: "JobsNewJobPage",
-  loader: () => import( /* webpackChunkName: "JobsNewJobPage" */"./pages/Jobs/NewJobPage/NewJobPage")`)
+  name: "JobsNewJobPage"`)
 
         expect(outputNoStaticImports).toContain(`.createElement(_router.Route, {
     path: "/jobs",
@@ -202,7 +200,7 @@ describe('User specified imports, with static imports', () => {
 
     // Should not generate a loader, because page was explicitly imported
     expect(outputNoStaticImports).not.toMatch(
-      /loader: \(\) => import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/
+      /import\(.*"\.\/pages\/Jobs\/EditJobPage\/EditJobPage"\)/
     )
   })
 })
