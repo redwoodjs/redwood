@@ -48,9 +48,9 @@
   "devDependencies": {
     "@types/babel__core": "7.20.1",
     "@types/fs-extra": "11.0.1",
-    "@types/jest": "29.5.1",
+    "@types/jest": "29.5.2",
     "@types/jscodeshift": "0.11.6",
-    "@types/prettier": "2.7.2",
+    "@types/prettier": "2.7.3",
     "@types/yargs": "17.0.24",
     "fs-extra": "11.1.1",
     "tempy": "1.0.1"
