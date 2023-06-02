@@ -4,7 +4,7 @@ import path from 'path'
 import chalk from 'chalk'
 
 import { getConfig, getPaths } from './lib'
-import { installModule } from './lib/packages'
+import { installModule, isModuleInstalled } from './lib/packages'
 
 /**
  * The file inside .redwood which will contain cached plugin command mappings
@@ -14,6 +14,7 @@ const PLUGIN_CACHE_FILENAME = 'command-cache.json'
 const PLUGIN_CACHE_DEFAULT = {
   '@redwoodjs/cli-storybook': ['storybook', 'sb'],
 }
+
 const PLUGIN_CACHE_BUILTIN = [
   'build',
   'check',
@@ -303,31 +304,25 @@ function checkPluginListAndWarn(plugins) {
  * @returns The plugin package or null if it failed to load
  */
 async function loadPluginPackage(packageName, packageVersion, autoInstall) {
-  try {
+  // NOTE: This likely does not handle mismatch versions between what is installed and what is requested
+  if (isModuleInstalled(packageName)) {
     return await import(packageName)
-  } catch (error) {
-    // TODO: Batch all missing plugins and install them in one go
-    if (error.code === 'MODULE_NOT_FOUND') {
-      if (!autoInstall) {
-        console.warn(
-          chalk.yellow(
-            `⚠️  Plugin "${packageName}" cannot be loaded because it is not installed and "autoInstall" is disabled.`
-          )
-        )
-      } else {
-        // Install the plugin
-        console.log(chalk.green(`Installing plugin "${packageName}"...`))
-        const installed = await installPluginPackage(
-          packageName,
-          packageVersion
-        )
-        if (installed) {
-          return await import(packageName)
-        }
-      }
-    } else {
-      console.error(error)
-    }
+  }
+
+  if (!autoInstall) {
+    console.warn(
+      chalk.yellow(
+        `⚠️  Plugin "${packageName}" cannot be loaded because it is not installed and "autoInstall" is disabled.`
+      )
+    )
+    return null
+  }
+
+  // Attempt to install the plugin
+  console.log(chalk.green(`Installing plugin "${packageName}"...`))
+  const installed = await installPluginPackage(packageName, packageVersion)
+  if (installed) {
+    return await import(packageName)
   }
   return null
 }
