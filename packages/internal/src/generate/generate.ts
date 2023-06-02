@@ -10,8 +10,17 @@ export const generate = async () => {
     await generateGraphQLSchema()
   const { typeDefFiles, errors: generateTypeDefsErrors } =
     await generateTypeDefs()
+
+  let files = []
+
+  if (schemaPath !== '') {
+    files.push(schemaPath)
+  }
+
+  files = [...files, ...typeDefFiles].filter((x) => typeof x === 'string')
+
   return {
-    files: [schemaPath, ...typeDefFiles].filter((x) => typeof x === 'string'),
+    files,
     errors: [...generateGraphQLSchemaErrors, ...generateTypeDefsErrors],
   }
 }
@@ -35,9 +44,11 @@ export const run = async () => {
   }
 
   console.log('... done with errors.')
+  console.log()
 
   for (const { message, error } of errors) {
     console.error(message)
+    console.log()
     console.error(error)
     console.log()
   }
