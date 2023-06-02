@@ -100,7 +100,7 @@ export const handler = async ({
           // because we want the process.cwd to be the web directory, not the root of the project
           // This is important for postcss/tailwind to work correctly
           await execa(
-            `yarn cross-env NODE_ENV=production vite build --config ${rwjsPaths.web.viteConfig} --debug ${verbose}`,
+            `yarn cross-env NODE_ENV=production vite build --config "${rwjsPaths.web.viteConfig}" --debug ${verbose}`,
             {
               stdio: verbose ? 'inherit' : 'pipe',
               shell: true,
