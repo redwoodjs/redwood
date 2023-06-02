@@ -77,25 +77,8 @@ export const getWebSideBabelPlugins = (
       'rwjs-web-auto-import',
     ],
     ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
-    [
-      'inline-react-svg',
-      {
-        svgo: {
-          plugins: [
-            {
-              name: 'removeAttrs',
-              params: { attrs: '(data-name)' },
-            },
-            // Otherwise having style="xxx" breaks
-            'convertStyleToAttrs',
-          ],
-        },
-      },
-      'rwjs-inline-svg',
-    ],
-
     // === Handling redwood "magic"
-  ].filter(Boolean)
+  ].filter(Boolean) as TransformOptions[]
 
   return plugins
 }

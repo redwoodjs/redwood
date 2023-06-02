@@ -277,7 +277,7 @@ module.exports = (webpackEnv) => {
           oneOf: [
             // (0)
             {
-              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
               type: 'asset',
               parser: {
                 dataUrlCondition: {

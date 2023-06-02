@@ -23,9 +23,10 @@ tasks:
       cd /workspace/redwood
       yarn install
       yarn run build:test-project ../rw-test-app --typescript --link --verbose
+      cd /workspace/rw-test-app && sed -i "s/\(open *= *\).*/\1false/" redwood.toml
     command: |
       cd /workspace/rw-test-app
-      yarn rw dev --fwd="--client-web-socket-url=ws$(gp url 8910 | cut -c 5-)/ws"
+      yarn rw dev
 
 
 ports:
