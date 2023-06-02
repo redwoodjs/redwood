@@ -167,7 +167,7 @@ export const handler = async (args) => {
             })
           }, true)
           return execa('yarn rw-gen', [], {
-            stdio: 'pipe',
+            stdio: 'inherit',
             shell: true,
           })
         },

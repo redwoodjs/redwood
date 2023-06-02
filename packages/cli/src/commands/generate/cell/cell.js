@@ -185,7 +185,15 @@ export const { command, description, builder, handler } =
             )
 
             if (projectHasSdl) {
-              await generateTypes()
+              const { errors } = await generateTypes()
+
+              for (const { message, error } of errors) {
+                console.error(message)
+                console.log()
+                console.error(error)
+                console.log()
+              }
+
               addFunctionToRollback(generateTypes, true)
             } else {
               task.skip(
