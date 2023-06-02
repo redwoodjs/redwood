@@ -16,6 +16,7 @@ const DEFAULT_COMMAND_CACHE = {
   _builtin: [
     'build',
     'check',
+    'diagnostics',
     'console',
     'c',
     'data-migrate',
