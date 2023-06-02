@@ -31,6 +31,35 @@ import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
+export type RwLinkName =
+  | 'withToken'
+  | 'authMiddleware'
+  | 'updateDataApolloLink'
+  | 'httpLink'
+
+export type RwLink<
+  Name extends RwLinkName,
+  Link extends apolloClient.ApolloLink = apolloClient.ApolloLink
+> = Link & {
+  __rwLinkName: Name
+}
+
+function decorateLinkWithLinkName<
+  Name extends RwLinkName,
+  Link extends apolloClient.ApolloLink
+>(name: Name, link: Link): RwLink<Name, Link> {
+  const res = link as RwLink<Name, Link>
+  res.__rwLinkName = name
+  return res
+}
+
+export type RwLinks = [
+  RwLink<'withToken'>,
+  RwLink<'authMiddleware'>,
+  RwLink<'updateDataApolloLink'>,
+  RwLink<'httpLink', apolloClient.HttpLink>
+]
+
 export type GraphQLClientConfigProp = Omit<
   ApolloClientOptions<unknown>,
   'cache' | 'link'
@@ -78,14 +107,7 @@ export type GraphQLClientConfigProp = Omit<
    */
   link?:
     | apolloClient.ApolloLink
-    | ((
-        rwLinks: [
-          apolloClient.ApolloLink,
-          apolloClient.ApolloLink,
-          apolloClient.ApolloLink,
-          apolloClient.HttpLink
-        ]
-      ) => apolloClient.ApolloLink)
+    | ((rwLinks: RwLinks) => apolloClient.ApolloLink)
 }
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -181,16 +203,11 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   /**
    * The order here is important. The last link *must* be a terminating link like HttpLink.
    */
-  const rwLinks = [
-    withToken,
-    authMiddleware,
-    updateDataApolloLink,
-    httpLink,
-  ] as [
-    apolloClient.ApolloLink,
-    apolloClient.ApolloLink,
-    apolloClient.ApolloLink,
-    apolloClient.HttpLink
+  const rwLinks: RwLinks = [
+    decorateLinkWithLinkName('withToken', withToken),
+    decorateLinkWithLinkName('authMiddleware', authMiddleware),
+    decorateLinkWithLinkName('updateDataApolloLink', updateDataApolloLink),
+    decorateLinkWithLinkName('httpLink', httpLink),
   ]
 
   /**
