@@ -63,7 +63,6 @@ watcher
     console.log(files.length, 'files generated')
 
     if (errors.length > 0) {
-      // dos some parsing...
       for (const { message, error } of errors) {
         console.error(message)
         console.error(error)

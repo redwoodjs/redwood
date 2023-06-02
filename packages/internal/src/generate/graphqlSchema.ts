@@ -41,7 +41,7 @@ export const generateGraphQLSchema = async () => {
   }
 
   let loadedSchema
-  const errors = []
+  const errors: { message: string; error: unknown }[] = []
 
   try {
     loadedSchema = await loadSchema(schemaPointerMap, loadSchemaConfig)
@@ -83,7 +83,6 @@ export const generateGraphQLSchema = async () => {
               'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators'
             )} section in our docs for more help.`
           ),
-          '',
         ].join('\n')
       }
     }

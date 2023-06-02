@@ -38,22 +38,22 @@ import { writeTemplate } from './templates'
  */
 export const generateTypeDefs = async () => {
   // Return all the paths so they can be printed
-  const { typeDefs: gqlApi, errors: apiErrors } =
+  const { typeDefFiles: gqlApiTypeDefFiles, errors: apiErrors } =
     await generateTypeDefGraphQLApi()
   const generateTypeDefGraphQLWebReturn = await generateTypeDefGraphQLWeb()
 
-  let gqlWeb
+  let gqlWebTypeDefFiles
   let webErrors: { message: string; error: unknown }[] = []
 
   if (Array.isArray(generateTypeDefGraphQLWebReturn)) {
-    gqlWeb = generateTypeDefGraphQLWebReturn
+    gqlWebTypeDefFiles = generateTypeDefGraphQLWebReturn
   } else {
-    gqlWeb = generateTypeDefGraphQLWebReturn.typeDefs
+    gqlWebTypeDefFiles = generateTypeDefGraphQLWebReturn.typeDefFiles
     webErrors = generateTypeDefGraphQLWebReturn.errors
   }
 
   return {
-    typeDefs: [
+    typeDefFiles: [
       ...generateMirrorDirectoryNamedModules(),
       ...generateMirrorCells(),
       ...generateTypeDefRouterPages(),
@@ -63,8 +63,8 @@ export const generateTypeDefs = async () => {
       ...generateTypeDefGlobalContext(),
       ...generateTypeDefScenarios(),
       ...generateTypeDefTestMocks(),
-      ...gqlApi,
-      ...gqlWeb,
+      ...gqlApiTypeDefFiles,
+      ...gqlWebTypeDefFiles,
     ],
     errors: [...apiErrors, ...webErrors],
   }

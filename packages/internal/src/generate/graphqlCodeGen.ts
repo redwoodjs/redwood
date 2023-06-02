@@ -64,7 +64,7 @@ export const generateTypeDefGraphQLApi = async () => {
 
   try {
     return {
-      typeDefs: await runCodegenGraphQL(
+      typeDefFiles: await runCodegenGraphQL(
         [],
         extraPlugins,
         filename,
@@ -79,7 +79,7 @@ export const generateTypeDefGraphQLApi = async () => {
     })
 
     return {
-      typeDefs: [],
+      typeDefFiles: [],
       errors,
     }
   }
@@ -119,7 +119,7 @@ export const generateTypeDefGraphQLWeb = async () => {
 
   try {
     return {
-      typeDefs: await runCodegenGraphQL(
+      typeDefFiles: await runCodegenGraphQL(
         documents,
         extraPlugins,
         filename,
@@ -134,7 +134,7 @@ export const generateTypeDefGraphQLWeb = async () => {
     })
 
     return {
-      typeDefs: [],
+      typeDefFiles: [],
       errors,
     }
   }
