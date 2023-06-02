@@ -11,42 +11,42 @@ import { installModule } from './lib/packages'
  */
 const PLUGIN_CACHE_FILENAME = 'command-cache.json'
 
-const DEFAULT_COMMAND_CACHE = {
+const PLUGIN_CACHE_DEFAULT = {
   '@redwoodjs/cli-storybook': ['storybook', 'sb'],
-  _builtin: [
-    'build',
-    'check',
-    'diagnostics',
-    'console',
-    'c',
-    'data-migrate',
-    'dm',
-    'dataMigrate',
-    'deploy',
-    'destroy',
-    'd',
-    'dev',
-    'exec',
-    'experimental',
-    'exp',
-    'generate',
-    'g',
-    'info',
-    'lint',
-    'prerender',
-    'render',
-    'prisma',
-    'record',
-    'serve',
-    'setup',
-    'test',
-    'ts-to-js',
-    'type-check',
-    'tsc',
-    'tc',
-    'upgrade',
-  ],
 }
+const PLUGIN_CACHE_BUILTIN = [
+  'build',
+  'check',
+  'diagnostics',
+  'console',
+  'c',
+  'data-migrate',
+  'dm',
+  'dataMigrate',
+  'deploy',
+  'destroy',
+  'd',
+  'dev',
+  'exec',
+  'experimental',
+  'exp',
+  'generate',
+  'g',
+  'info',
+  'lint',
+  'prerender',
+  'render',
+  'prisma',
+  'record',
+  'serve',
+  'setup',
+  'test',
+  'ts-to-js',
+  'type-check',
+  'tsc',
+  'tc',
+  'upgrade',
+]
 
 /**
  * Attempts to load all CLI plugins as defined in the redwood.toml file
@@ -69,7 +69,7 @@ export async function loadPlugins(yargs) {
 
   // TODO: We should have some mechanism to fetch the cache from an online or precomputed
   // source this will allow us to have a cache hit on the first run of a command
-  let pluginCommandCache = DEFAULT_COMMAND_CACHE
+  let pluginCommandCache = PLUGIN_CACHE_DEFAULT
   try {
     pluginCommandCache = JSON.parse(
       fs.readFileSync(
@@ -82,9 +82,10 @@ export async function loadPlugins(yargs) {
       console.error(error)
     }
   }
+  pluginCommandCache._builtin = PLUGIN_CACHE_BUILTIN
 
   // Check if the command is built in to the base CLI package
-  if (pluginCommandCache?._builtin?.includes(firstWord)) {
+  if (pluginCommandCache._builtin.includes(firstWord)) {
     // If the command is built in we don't need to load any plugins
     return yargs
   }
