@@ -61,7 +61,7 @@ test('Includes live query directive if serverful and realtime ', async () => {
   await generateGraphQLSchema()
 })
 
-test('Prints error message when schema loading fails', async () => {
+test('Returns error message when schema loading fails', async () => {
   const fixturePath = path.resolve(
     __dirname,
     './fixtures/graphqlCodeGen/bookshelf'
