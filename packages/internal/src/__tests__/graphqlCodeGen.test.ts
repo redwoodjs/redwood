@@ -47,10 +47,10 @@ test('Generate gql typedefs web', async () => {
       }
     )
 
-  const { typeDefs: webPaths } = await generateTypeDefGraphQLWeb()
+  const { typeDefFiles } = await generateTypeDefGraphQLWeb()
 
-  expect(webPaths).toHaveLength(1)
-  expect(webPaths[0]).toMatch(path.join('web', 'types', 'graphql.d.ts'))
+  expect(typeDefFiles).toHaveLength(1)
+  expect(typeDefFiles[0]).toMatch(path.join('web', 'types', 'graphql.d.ts'))
 })
 
 test('Generate gql typedefs api', async () => {
@@ -69,10 +69,10 @@ test('Generate gql typedefs api', async () => {
       }
     )
 
-  const { typeDefs: apiPaths } = await generateTypeDefGraphQLApi()
+  const { typeDefFiles } = await generateTypeDefGraphQLApi()
 
-  expect(apiPaths).toHaveLength(1)
-  expect(apiPaths[0]).toMatch(path.join('api', 'types', 'graphql.d.ts'))
+  expect(typeDefFiles).toHaveLength(1)
+  expect(typeDefFiles[0]).toMatch(path.join('api', 'types', 'graphql.d.ts'))
 
   const { file, data } = codegenOutput
 
@@ -115,7 +115,7 @@ test('respects user provided codegen config', async () => {
   try {
     await generateGraphQLSchema()
     const {
-      typeDefs: [outputPath],
+      typeDefFiles: [outputPath],
     } = await generateTypeDefGraphQLWeb()
 
     const gqlTypesOutput = fs.readFileSync(outputPath, 'utf-8')
@@ -168,7 +168,9 @@ describe("Doesn't swallow legit errors", () => {
     process.env.RWJS_CWD = fixturePath
 
     const { errors } = await generateTypeDefGraphQLWeb()
-    expect(errors[0].error.toString()).toMatch(/field.*softKitten.*Query/)
+    expect((errors[0].error as Error).toString()).toMatch(
+      /field.*softKitten.*Query/
+    )
 
     delete process.env.RWJS_CWD
   })
@@ -181,7 +183,7 @@ describe("Doesn't swallow legit errors", () => {
     process.env.RWJS_CWD = fixturePath
 
     const { errors } = await generateTypeDefGraphQLWeb()
-    expect(errors[0].error.toString()).toMatch(/Unknown type.*Todo/)
+    expect((errors[0].error as Error).toString()).toMatch(/Unknown type.*Todo/)
 
     delete process.env.RWJS_CWD
   })
@@ -194,7 +196,7 @@ describe("Doesn't swallow legit errors", () => {
     process.env.RWJS_CWD = fixturePath
 
     const { errors } = await generateTypeDefGraphQLWeb()
-    expect(errors[0].error.toString()).toMatch(/field.*done.*Todo/)
+    expect((errors[0].error as Error).toString()).toMatch(/field.*done.*Todo/)
 
     delete process.env.RWJS_CWD
   })
