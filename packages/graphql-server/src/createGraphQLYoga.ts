@@ -16,12 +16,14 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
+  useRedwoodRealtime,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
 import { makeSubscriptions } from './subscriptions/makeSubscriptions'
+import type { RedwoodSubscription } from './subscriptions/makeSubscriptions'
 import type { GraphQLYogaOptions } from './types'
 
 export const createGraphQLYoga = ({
@@ -37,7 +39,6 @@ export const createGraphQLYoga = ({
   services,
   sdls,
   directives = [],
-  subscriptions = [],
   armorConfig,
   allowedOperations,
   allowIntrospection,
@@ -45,6 +46,7 @@ export const createGraphQLYoga = ({
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
+  realtime,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
@@ -61,8 +63,14 @@ export const createGraphQLYoga = ({
         )
     }
 
-    // @NOTE: Subscriptions are optional and only work in the context of a  server
-    const projectSubscriptions = makeSubscriptions(subscriptions)
+    // @NOTE: Subscriptions are optional and only work in the context of a server
+    let projectSubscriptions = [] as RedwoodSubscription[]
+
+    if (realtime?.subscriptions?.subscriptions) {
+      projectSubscriptions = makeSubscriptions(
+        realtime.subscriptions.subscriptions
+      )
+    }
 
     schema = makeMergedSchema({
       sdls,
@@ -99,7 +107,7 @@ export const createGraphQLYoga = ({
   }`
 
     // TODO: Once Studio is not experimental, can remove these generateGraphiQLHeaders
-    const authHeader = `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiQL-headers on how to auto generate auth headers"}`
+    const authHeader = `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiql-headers on how to auto generate auth headers"}`
 
     const graphiql = !disableGraphQL
       ? {
@@ -111,21 +119,6 @@ export const createGraphQLYoga = ({
           headerEditorEnabled: true,
         }
       : false
-
-    logger.debug(
-      {
-        healthCheckId,
-        allowedOperations,
-        allowIntrospection,
-        defaultError,
-        disableIntrospection,
-        disableGraphQL,
-        allowGraphiQL,
-        graphiql,
-        graphiQLEndpoint,
-      },
-      'GraphiQL and Introspection Config'
-    )
 
     if (disableIntrospection) {
       plugins.push(useDisableIntrospection())
@@ -149,14 +142,25 @@ export const createGraphQLYoga = ({
     plugins.push(useArmor(logger, armorConfig))
 
     // Only allow execution of specific operation types
+    const defaultAllowedOperations = [
+      OperationTypeNode.QUERY,
+      OperationTypeNode.MUTATION,
+    ]
+
+    // now allow subscriptions if using them (unless you override)
+    if (realtime?.subscriptions?.subscriptions) {
+      defaultAllowedOperations.push(OperationTypeNode.SUBSCRIPTION)
+    } else {
+      logger.info('Subscriptions are disabled.')
+    }
+
     plugins.push(
-      useFilterAllowedOperations(
-        allowedOperations || [
-          OperationTypeNode.QUERY,
-          OperationTypeNode.MUTATION,
-        ]
-      )
+      useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
+
+    if (realtime) {
+      plugins.push(useRedwoodRealtime(realtime))
+    }
 
     // App-defined plugins
     if (extraPlugins && extraPlugins.length > 0) {
@@ -196,6 +200,21 @@ export const createGraphQLYoga = ({
     // so can process any data added to results and extensions
     plugins.push(useRedwoodLogger(loggerConfig))
 
+    logger.debug(
+      {
+        healthCheckId,
+        allowedOperations,
+        defaultAllowedOperations,
+        allowIntrospection,
+        defaultError,
+        disableIntrospection,
+        disableGraphQL,
+        allowGraphiQL,
+        graphiql,
+        graphiQLEndpoint,
+      },
+      'GraphiQL and Introspection Config'
+    )
     const yoga = createYoga({
       id: healthCheckId,
       landingPage: isDevEnv,
