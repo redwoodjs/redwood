@@ -40,17 +40,8 @@ export const generateTypeDefs = async () => {
   // Return all the paths so they can be printed
   const { typeDefFiles: gqlApiTypeDefFiles, errors: apiErrors } =
     await generateTypeDefGraphQLApi()
-  const generateTypeDefGraphQLWebReturn = await generateTypeDefGraphQLWeb()
-
-  let gqlWebTypeDefFiles
-  let webErrors: { message: string; error: unknown }[] = []
-
-  if (Array.isArray(generateTypeDefGraphQLWebReturn)) {
-    gqlWebTypeDefFiles = generateTypeDefGraphQLWebReturn
-  } else {
-    gqlWebTypeDefFiles = generateTypeDefGraphQLWebReturn.typeDefFiles
-    webErrors = generateTypeDefGraphQLWebReturn.errors
-  }
+  const { typeDefFiles: gqlWebTypeDefFiles, errors: webErrors } =
+    await generateTypeDefGraphQLWeb()
 
   return {
     typeDefFiles: [

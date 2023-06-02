@@ -96,7 +96,10 @@ export const generateTypeDefGraphQLWeb = async () => {
     documents = await loadDocuments([documentsGlob], options)
   } catch {
     // No GraphQL documents present, no need to try to run codegen
-    return []
+    return {
+      typeDefFiles: [],
+      errors: [],
+    }
   }
 
   const extraPlugins: CombinedPluginConfig[] = [
