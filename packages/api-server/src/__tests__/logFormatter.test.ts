@@ -122,68 +122,47 @@ describe('LogFormatter', () => {
         logFormatter({
           level: 10,
           custom: {
-            string: 'I should see this custom message in the log',
+            msg: 'I should see this custom message in the log',
           },
         })
       ).toMatch('I should see this custom message in the log')
     })
+  })
 
-    it('Should include the custom log attribute info with a number attribute', () => {
-      expect(
-        logFormatter({
-          level: 10,
-          custom: {
-            string: 'I should see this custom message and number in the log',
-            number: 100,
-          },
-        })
-      ).toMatch('100')
-    })
+  it('Should include the custom log attribute info with a number attribute', () => {
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom message and number in the log',
+          number: 100,
+        },
+      })
+    ).toMatch('100')
+  })
 
-    it('Should include the custom log attribute info with a nested object attribute', () => {
-      expect(
-        logFormatter({
-          level: 10,
-          custom: {
-            string: 'I should see this custom object in the log',
-            obj: { foo: 'bar' },
-          },
-        })
-      ).toMatch('"foo": "bar"')
-    })
+  it('Should include the custom log attribute info with a nested object attribute', () => {
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom object in the log',
+          obj: { foo: 'bar' },
+        },
+      })
+    ).toMatch('"foo": "bar"')
+  })
 
-    it('Should include the custom log attribute info with a nested object attribute', () => {
-      expect(
-        logFormatter({
-          level: 10,
-          custom: {
-            string: 'I should see this custom object in the log',
-            obj: { foo: 'bar' },
-          },
-        })
-      ).toMatch('"foo": "bar"')
-    })
-
-    it('Should filter out overly verbose custom log attributes', () => {
-      expect(
-        logFormatter({
-          level: 10,
-          custom: {
-            time: 1,
-            pid: 1,
-            hostname: 'should not appear',
-            reqId: 'should not appear',
-            req: {
-              method: 'should not appear',
-              url: 'should not appear',
-              hostname: 'should not appear',
-              remoteAddress: 'should not appear',
-              remotePort: 1,
-            },
-          },
-        })
-      ).not.toMatch('should not appear')
-    })
+  it('Should include the custom log attribute info with a nested object attribute', () => {
+    expect(
+      logFormatter({
+        level: 10,
+        custom: {
+          msg: 'I should see this custom object in the log',
+          obj: { foo: 'bar' },
+        },
+      })
+    ).toMatch('"foo": "bar"')
   })
 
   it('Should format error stack traces', () => {

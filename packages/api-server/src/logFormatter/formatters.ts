@@ -13,17 +13,6 @@ export const emojiLog: Record<string, string> = {
   trace: '🧵',
 }
 
-export const ignoredCustomData: Array<string> = [
-  'time',
-  'pid',
-  'hostname',
-  'msg',
-  'res',
-  'req',
-  'reqId',
-  'responseTime',
-]
-
 export const isObject = (object?: Record<string, unknown>) => {
   return object && Object.prototype.toString.apply(object) === '[object Object]'
 }
@@ -47,14 +36,6 @@ export const formatBundleSize = (bundle: string) => {
 }
 
 export const formatCustom = (query?: Record<string, unknown>) => {
-  if (!query) {
-    return
-  }
-
-  ignoredCustomData.forEach((key) => {
-    delete query[key]
-  })
-
   if (!isEmptyObject(query)) {
     return chalk.white(
       NEWLINE + '🗒 Custom' + NEWLINE + JSON.stringify(query, null, 2)
