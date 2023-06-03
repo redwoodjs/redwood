@@ -3172,10 +3172,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.41.0":
-  version: 8.41.0
-  resolution: "@eslint/js@npm:8.41.0"
-  checksum: 41cf403ccebbc90315c7190bd901fa17975327022146b2db8c846ec5b11d04c56b33ccf9064b9da7349068e96bef8f322423fbcce700d815b4097fd808aaa4c6
+"@eslint/js@npm:8.42.0":
+  version: 8.42.0
+  resolution: "@eslint/js@npm:8.42.0"
+  checksum: 4ae46df1f32095cf9527d1f6a8a30512151f8eb66dd883a226face17c9e7cfdd2dcb3d4e3124fb67ac5801e0a776b1d7bba368276cfb1e1e4eefb047e38b41d6
   languageName: node
   linkType: hard
 
@@ -4687,14 +4687,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@humanwhocodes/config-array@npm:^0.11.8":
-  version: 0.11.8
-  resolution: "@humanwhocodes/config-array@npm:0.11.8"
+"@humanwhocodes/config-array@npm:^0.11.10":
+  version: 0.11.10
+  resolution: "@humanwhocodes/config-array@npm:0.11.10"
   dependencies:
     "@humanwhocodes/object-schema": ^1.2.1
     debug: ^4.1.1
     minimatch: ^3.0.5
-  checksum: 441223496cc5ae3ae443e11e2ba05f03f6418d1e0233e3d160b027dda742d7a957fa9e1d56125d5829079419c797c13e1ae8ffe3454f268901ac18f68e0198f1
+  checksum: 9e307a49a5baa28beb243d2c14c145f288fccd6885f4c92a9055707057ec40980242256b2a07c976cfa6c75f7081da111a40a9844d1ca8daeff2302f8b640e76
   languageName: node
   linkType: hard
 
@@ -7632,7 +7632,7 @@ __metadata:
     "@redwoodjs/project-config": 5.0.0
     "@typescript-eslint/eslint-plugin": 5.59.8
     "@typescript-eslint/parser": 5.59.8
-    eslint: 8.41.0
+    eslint: 8.42.0
     eslint-config-prettier: 8.8.0
     eslint-import-resolver-babel-module: 5.3.2
     eslint-plugin-babel: 5.3.1
@@ -16753,15 +16753,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.41.0":
-  version: 8.41.0
-  resolution: "eslint@npm:8.41.0"
+"eslint@npm:8.42.0":
+  version: 8.42.0
+  resolution: "eslint@npm:8.42.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.4.0
     "@eslint/eslintrc": ^2.0.3
-    "@eslint/js": 8.41.0
-    "@humanwhocodes/config-array": ^0.11.8
+    "@eslint/js": 8.42.0
+    "@humanwhocodes/config-array": ^0.11.10
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
     ajv: ^6.10.0
@@ -16798,7 +16798,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: d71832b235bebaa67c09019dee32bf8393c5e12155e91131c4606670eb9836fbff31e11364408258cb75e2bde8a4dfa0c042aa6145bb23cd800a42e63ca4a035
+  checksum: 8ab5a3c1619008c946497a16b88a811b1f6c49a750a9bd0f81085dff4166418b9da4e46108b09d920877ab2f5981e3613332653b7f5e3917d8088bc4b8d40b5a
   languageName: node
   linkType: hard
 
@@ -27575,7 +27575,7 @@ __metadata:
     core-js: 3.30.2
     cypress: 12.13.0
     cypress-wait-until: 1.7.2
-    eslint: 8.41.0
+    eslint: 8.42.0
     fast-glob: 3.2.12
     fs-extra: 11.1.1
     is-port-reachable: 3.1.0
