@@ -5,7 +5,25 @@ __metadata:
   version: 6
   cacheKey: 8c0
 
-"@actions/core@npm:1.10.0":
+"@actions/cache@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@actions/cache@npm:3.2.1"
+  dependencies:
+    "@actions/core": ^1.10.0
+    "@actions/exec": ^1.0.1
+    "@actions/glob": ^0.1.0
+    "@actions/http-client": ^2.0.1
+    "@actions/io": ^1.0.1
+    "@azure/abort-controller": ^1.1.0
+    "@azure/ms-rest-js": ^2.6.0
+    "@azure/storage-blob": ^12.13.0
+    semver: ^6.1.0
+    uuid: ^3.3.3
+  checksum: eae40199a2b32abc72803143fbb9aa81077098bcd15b027b9b9485ccbea59fc03585f6b75068bf6f5becac3c63da9131138f13e6566bfe678372f433dcb72b79
+  languageName: node
+  linkType: hard
+
+"@actions/core@npm:1.10.0, @actions/core@npm:^1.10.0, @actions/core@npm:^1.2.6, @actions/core@npm:^1.9.1":
   version: 1.10.0
   resolution: "@actions/core@npm:1.10.0"
   dependencies:
@@ -15,12 +33,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:1.1.1":
+"@actions/exec@npm:1.1.1, @actions/exec@npm:^1.0.1":
   version: 1.1.1
   resolution: "@actions/exec@npm:1.1.1"
   dependencies:
     "@actions/io": ^1.0.1
   checksum: 4a09f6bdbe50ce68b5cf8a7254d176230d6a74bccf6ecc3857feee209a8c950ba9adec87cc5ecceb04110182d1c17117234e45557d72fde6229b7fd3a395322a
+  languageName: node
+  linkType: hard
+
+"@actions/glob@npm:0.4.0":
+  version: 0.4.0
+  resolution: "@actions/glob@npm:0.4.0"
+  dependencies:
+    "@actions/core": ^1.9.1
+    minimatch: ^3.0.4
+  checksum: f50f029244b216676184ec00034508594cc750ed7efc2ebff490eb407352526424e1280cbf7fef95a75247f54a1732277ef6c007ce193aeca8430e7f4d356d33
+  languageName: node
+  linkType: hard
+
+"@actions/glob@npm:^0.1.0":
+  version: 0.1.2
+  resolution: "@actions/glob@npm:0.1.2"
+  dependencies:
+    "@actions/core": ^1.2.6
+    minimatch: ^3.0.4
+  checksum: 7431cb85da7df2bab8dac54885410cbd695ae70b516a70b642d59df3e444030e4bbc8b103226e8c98130ee81f024739aefbec3bf20dff8a280724c4fae8be492
   languageName: node
   linkType: hard
 
@@ -351,6 +389,114 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure/abort-controller@npm:^1.0.0, @azure/abort-controller@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@azure/abort-controller@npm:1.1.0"
+  dependencies:
+    tslib: ^2.2.0
+  checksum: bb79f0faaa9e9c1ae3c4ec2523ea23ee0879cc491abb4b3ac2dd56c2cc2dfe4b7e8522ffa866d39c7145c0dd61387711368afe0d4eb6534daba7b67ed0a2a730
+  languageName: node
+  linkType: hard
+
+"@azure/core-auth@npm:^1.1.4, @azure/core-auth@npm:^1.3.0":
+  version: 1.4.0
+  resolution: "@azure/core-auth@npm:1.4.0"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    tslib: ^2.2.0
+  checksum: c139da4a439703bc3d456dbdc8e84f430d9e5245442e9991830613825de10e218cf92d6bfbf1431ebef789565c33e440cc9cf8dd0134025b841937c512621588
+  languageName: node
+  linkType: hard
+
+"@azure/core-http@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "@azure/core-http@npm:3.0.1"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    "@azure/core-auth": ^1.3.0
+    "@azure/core-tracing": 1.0.0-preview.13
+    "@azure/core-util": ^1.1.1
+    "@azure/logger": ^1.0.0
+    "@types/node-fetch": ^2.5.0
+    "@types/tunnel": ^0.0.3
+    form-data: ^4.0.0
+    node-fetch: ^2.6.7
+    process: ^0.11.10
+    tslib: ^2.2.0
+    tunnel: ^0.0.6
+    uuid: ^8.3.0
+    xml2js: ^0.5.0
+  checksum: 3e74fa4f7aab2b5f3fe2256b0e922f331c21f1367f3e1e069802126d3e3ef3235f9df07180919acd82b9ea5869d42ea55cd73ee31cf0fcf9db4a2c5fa3607b6a
+  languageName: node
+  linkType: hard
+
+"@azure/core-lro@npm:^2.2.0":
+  version: 2.5.3
+  resolution: "@azure/core-lro@npm:2.5.3"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    "@azure/core-util": ^1.2.0
+    "@azure/logger": ^1.0.0
+    tslib: ^2.2.0
+  checksum: 3f0acd7bf9f601661b0d226a13edf4048f08b9217d91ae6e2d35764ff80b05d5530e6dfd87a6e4b99937df22bb720363f9edb5be61c62d4eaffd3020c6618c8b
+  languageName: node
+  linkType: hard
+
+"@azure/core-paging@npm:^1.1.1":
+  version: 1.5.0
+  resolution: "@azure/core-paging@npm:1.5.0"
+  dependencies:
+    tslib: ^2.2.0
+  checksum: 634a1c6540d16cf047035f19d8866b561e8036059aec2ce0304d77999404e95458f47c33a3f523d20cefa329bad33ccc6bf7450efa8f7d77ceb3419d519b1c48
+  languageName: node
+  linkType: hard
+
+"@azure/core-tracing@npm:1.0.0-preview.13":
+  version: 1.0.0-preview.13
+  resolution: "@azure/core-tracing@npm:1.0.0-preview.13"
+  dependencies:
+    "@opentelemetry/api": ^1.0.1
+    tslib: ^2.2.0
+  checksum: 0977479165deefe1dcabbd68d18e44742ad18fa4bd0200b9d8b6647510c200800e8b47f8039a249086de9ff7eda37ea3f2beb85fa4878a08dd0251a71ea0cbe3
+  languageName: node
+  linkType: hard
+
+"@azure/core-util@npm:^1.1.1, @azure/core-util@npm:^1.2.0":
+  version: 1.3.2
+  resolution: "@azure/core-util@npm:1.3.2"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    tslib: ^2.2.0
+  checksum: bfe97fc99cb4fac5633f0fbd5a459233672f050083883bbd4b260aa3b82c7143efef0e05846d787c5864ca59825be0fb14699daa8a32b318efc1373345c0e5ee
+  languageName: node
+  linkType: hard
+
+"@azure/logger@npm:^1.0.0":
+  version: 1.0.4
+  resolution: "@azure/logger@npm:1.0.4"
+  dependencies:
+    tslib: ^2.2.0
+  checksum: 15af549d8dbf027e7520fc65432577d52c73b5a30bce2c218f97ab7104b037ae6c31d9a5bfa6bc9c7873c05693261ab8d7f5b95c65db6b1a7c8624c7b655afc6
+  languageName: node
+  linkType: hard
+
+"@azure/ms-rest-js@npm:^2.6.0":
+  version: 2.6.6
+  resolution: "@azure/ms-rest-js@npm:2.6.6"
+  dependencies:
+    "@azure/core-auth": ^1.1.4
+    abort-controller: ^3.0.0
+    form-data: ^2.5.0
+    node-fetch: ^2.6.7
+    tough-cookie: ^3.0.1
+    tslib: ^1.10.0
+    tunnel: 0.0.6
+    uuid: ^8.3.2
+    xml2js: ^0.5.0
+  checksum: 251f33a7746ca1f0a684a6956978f7285de259653d5ebb62d397a8a30b797baf475981b84cf9772066008537a9cc61231c32456a380cc6cf9d1e5f2424c11fdf
+  languageName: node
+  linkType: hard
+
 "@azure/msal-browser@npm:2.37.0":
   version: 2.37.0
   resolution: "@azure/msal-browser@npm:2.37.0"
@@ -364,6 +510,22 @@ __metadata:
   version: 13.0.0
   resolution: "@azure/msal-common@npm:13.0.0"
   checksum: 954daaee0c96c8874ce3b9809bcdbaa0ad677a40d1ee0cb5995897bb0d5e5e9ce9223e58e1d4f89d09bf7687ca9b58d17989c0fd0430c299dee22835cd15f463
+  languageName: node
+  linkType: hard
+
+"@azure/storage-blob@npm:^12.13.0":
+  version: 12.14.0
+  resolution: "@azure/storage-blob@npm:12.14.0"
+  dependencies:
+    "@azure/abort-controller": ^1.0.0
+    "@azure/core-http": ^3.0.0
+    "@azure/core-lro": ^2.2.0
+    "@azure/core-paging": ^1.1.1
+    "@azure/core-tracing": 1.0.0-preview.13
+    "@azure/logger": ^1.0.0
+    events: ^3.0.0
+    tslib: ^2.2.0
+  checksum: 5a97148cc20fa906d335a960a9cf71e13d4fda3e128db74738e957965dd977db0dab4ca4401bfc57b9c5f3db5d3b8c736e6a0f83950d4da437a61c3403217d89
   languageName: node
   linkType: hard
 
@@ -6033,7 +6195,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/api@npm:1.4.1, @opentelemetry/api@npm:^1.0.0":
+"@opentelemetry/api@npm:1.4.1, @opentelemetry/api@npm:^1.0.0, @opentelemetry/api@npm:^1.0.1":
   version: 1.4.1
   resolution: "@opentelemetry/api@npm:1.4.1"
   checksum: 5ee641d3d64c91e87ee328fc22251fc70c809a3c744e51e595ca77c0bd3cad933b77a79beb4dac66b811e5068941cef9da58c1ec217c0748a01f598e08a7ae66
@@ -10018,7 +10180,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:^2.5.7, @types/node-fetch@npm:^2.6.1, @types/node-fetch@npm:^2.6.2":
+"@types/node-fetch@npm:^2.5.0, @types/node-fetch@npm:^2.5.7, @types/node-fetch@npm:^2.6.1, @types/node-fetch@npm:^2.6.2":
   version: 2.6.4
   resolution: "@types/node-fetch@npm:2.6.4"
   dependencies:
@@ -10304,6 +10466,15 @@ __metadata:
   version: 4.0.2
   resolution: "@types/tough-cookie@npm:4.0.2"
   checksum: 38d01fc79a9a87166253b8c548bb401599424c57a818bea1b47a68be6dcd37fc3bff381f978354e00221f284937d5066bb92d58bf79952f9d21deb934e8ec9a7
+  languageName: node
+  linkType: hard
+
+"@types/tunnel@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@types/tunnel@npm:0.0.3"
+  dependencies:
+    "@types/node": "*"
+  checksum: 6d479136e541bc080ae8c71ff794b97c513d2787116e0dffb6ffdfb69f2257422e928a585fe84b3ae3a997e99d712b65d0c3fabf43a0980a483e83a042644ace
   languageName: node
   linkType: hard
 
@@ -17681,6 +17852,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"form-data@npm:^2.5.0":
+  version: 2.5.1
+  resolution: "form-data@npm:2.5.1"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.6
+    mime-types: ^2.1.12
+  checksum: 7e8fb913b84a7ac04074781a18d0f94735bbe82815ff35348803331f6480956ff0035db5bcf15826edee09fe01e665cfac664678f1526646a6374ee13f960e56
+  languageName: node
+  linkType: hard
+
 "form-data@npm:^3.0.0":
   version: 3.0.1
   resolution: "form-data@npm:3.0.1"
@@ -19608,6 +19790,13 @@ __metadata:
   dependencies:
     loose-envify: ^1.0.0
   checksum: 5af133a917c0bcf65e84e7f23e779e7abc1cd49cb7fdc62d00d1de74b0d8c1b5ee74ac7766099fb3be1b05b26dfc67bab76a17030d2fe7ea2eef867434362dfc
+  languageName: node
+  linkType: hard
+
+"ip-regex@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "ip-regex@npm:2.1.0"
+  checksum: 3ce2d8307fa0373ca357eba7504e66e73b8121805fd9eba6a343aeb077c64c30659fa876b11ac7a75635b7529d2ce87723f208a5b9d51571513b5c68c0cc1541
   languageName: node
   linkType: hard
 
@@ -27345,8 +27534,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@actions/cache": 3.2.1
     "@actions/core": 1.10.0
     "@actions/exec": 1.1.1
+    "@actions/glob": 0.4.0
     "@babel/cli": 7.21.5
     "@babel/core": 7.22.1
     "@babel/generator": 7.22.3
@@ -27713,7 +27904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^6.0.0, semver@npm:^6.1.1, semver@npm:^6.1.2, semver@npm:^6.2.0, semver@npm:^6.3.0":
+"semver@npm:^6.0.0, semver@npm:^6.1.0, semver@npm:^6.1.1, semver@npm:^6.1.2, semver@npm:^6.2.0, semver@npm:^6.3.0":
   version: 6.3.0
   resolution: "semver@npm:6.3.0"
   bin:
@@ -29523,6 +29714,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tough-cookie@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "tough-cookie@npm:3.0.1"
+  dependencies:
+    ip-regex: ^2.1.0
+    psl: ^1.1.28
+    punycode: ^2.1.1
+  checksum: 312fdfd169c719494529990d0bb774cd5082de7da6e36869af4d0aa58fa2a973d82ba1f06b3e232e797ddfdd4f7843d6406e1886bd81b7ab003c6b5de8f08d18
+  languageName: node
+  linkType: hard
+
 "tough-cookie@npm:^4.1.2":
   version: 4.1.2
   resolution: "tough-cookie@npm:4.1.2"
@@ -29726,14 +29928,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.2":
+"tslib@npm:^1.10.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.2":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: 69ae09c49eea644bc5ebe1bca4fa4cc2c82b7b3e02f43b84bd891504edf66dbc6b2ec0eef31a957042de2269139e4acff911e6d186a258fb14069cd7f6febce2
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:^2.5.0, tslib@npm:~2.5.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:^2.5.0, tslib@npm:~2.5.0":
   version: 2.5.2
   resolution: "tslib@npm:2.5.2"
   checksum: 34fa100454708fa8acb7afc2b07d80e0332081e2075ddd912ba959af3b24f969663dac6d602961e57371dc05683badb83b3186ada92c4631ec777e02e3aab608
@@ -29795,7 +29997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tunnel@npm:^0.0.6":
+"tunnel@npm:0.0.6, tunnel@npm:^0.0.6":
   version: 0.0.6
   resolution: "tunnel@npm:0.0.6"
   checksum: e27e7e896f2426c1c747325b5f54efebc1a004647d853fad892b46d64e37591ccd0b97439470795e5262b5c0748d22beb4489a04a0a448029636670bfd801b75
@@ -30494,7 +30696,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:8.3.2, uuid@npm:^8.0.0, uuid@npm:^8.3.2":
+"uuid@npm:8.3.2, uuid@npm:^8.0.0, uuid@npm:^8.3.0, uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
@@ -30512,7 +30714,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^3.3.2":
+"uuid@npm:^3.3.2, uuid@npm:^3.3.3":
   version: 3.4.0
   resolution: "uuid@npm:3.4.0"
   bin:
@@ -31510,7 +31712,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xml2js@npm:0.5.0":
+"xml2js@npm:0.5.0, xml2js@npm:^0.5.0":
   version: 0.5.0
   resolution: "xml2js@npm:0.5.0"
   dependencies:
