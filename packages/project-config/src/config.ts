@@ -108,7 +108,7 @@ export interface Config {
 
 export interface CLIPlugin {
   package: string
-  version: string
+  version?: string
   enabled?: boolean
 }
 
@@ -168,8 +168,12 @@ const DEFAULT_CONFIG: Config = {
       },
     },
     cli: {
-      autoInstall: false,
-      plugins: [],
+      autoInstall: true,
+      plugins: [
+        {
+          package: '@redwoodjs/cli-storybook',
+        },
+      ],
     },
   },
 }
