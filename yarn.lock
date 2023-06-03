@@ -6755,7 +6755,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 4.2.0
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     core-js: 3.30.2
     humanize-string: 2.1.0
     jest: 29.5.0
@@ -7366,7 +7366,7 @@ __metadata:
     "@types/prettier": 2.7.3
     "@types/yargs": 17.0.24
     "@vscode/ripgrep": 1.15.3
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     cheerio: 1.0.0-rc.12
     core-js: 3.30.2
     deepmerge: 4.3.1
@@ -7568,7 +7568,7 @@ __metadata:
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 9.0.1
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     aws-lambda: 1.0.7
     core-js: 3.30.2
     graphql: 16.6.0
@@ -7649,7 +7649,7 @@ __metadata:
     "@redwoodjs/structure": 5.0.0
     "@redwoodjs/web": 5.0.0
     "@types/mime-types": 2.1.1
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 11.0.4
     cheerio: 1.0.0-rc.12
@@ -7816,7 +7816,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.1
     "@types/yargs": 17.0.24
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     ci-info: 3.8.0
     core-js: 3.30.2
     envinfo: 7.8.1
@@ -10934,13 +10934,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.1":
-  version: 0.9.1
-  resolution: "@whatwg-node/fetch@npm:0.9.1"
+"@whatwg-node/fetch@npm:0.9.2":
+  version: 0.9.2
+  resolution: "@whatwg-node/fetch@npm:0.9.2"
   dependencies:
     "@whatwg-node/node-fetch": ^0.4.1
-    urlpattern-polyfill: ^8.0.0
-  checksum: cf9d16c132abe2c6f0e6bf4a19be6503539b30fc2c0e0deaf8f5d64817ad37d95aff31c50734c962b03de4b41644888379aa89d1c428d45f96df11aed5eb1082
+    urlpattern-polyfill: ^9.0.0
+  checksum: c57ad3fd32cddb2046a4945cc3244104aa5fb300cbf85a3ea3e8d66fc30a879536180da684c010ff45a2067e01994345e1acd59059e6c433834613bf4243f89c
   languageName: node
   linkType: hard
 
@@ -30394,6 +30394,13 @@ __metadata:
   version: 8.0.2
   resolution: "urlpattern-polyfill@npm:8.0.2"
   checksum: 5388bbe8459dbd8861ee7cb97904be915dd863a9789c2191c528056f16adad7836ec22762ed002fed44e8995d0f98bdfb75a606466b77233e70d0f61b969aaf9
+  languageName: node
+  linkType: hard
+
+"urlpattern-polyfill@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "urlpattern-polyfill@npm:9.0.0"
+  checksum: 1fecb4a7695ad7917b02193896ec7b5773bb730ee3fbbb583cfaf134cc99da054c18560a35e7e901ad4e2f7a6035b6754313a2bb84126a7f118201427d465185
   languageName: node
   linkType: hard
 
