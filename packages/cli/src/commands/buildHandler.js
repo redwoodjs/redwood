@@ -99,14 +99,11 @@ export const handler = async ({
           // @NOTE: we're using the vite build command here, instead of the buildWeb function
           // because we want the process.cwd to be the web directory, not the root of the project
           // This is important for postcss/tailwind to work correctly
-          await execa(
-            `yarn cross-env NODE_ENV=production vite build --config "${rwjsPaths.web.viteConfig}" --debug ${verbose}`,
-            {
-              stdio: verbose ? 'inherit' : 'pipe',
-              shell: true,
-              cwd: rwjsPaths.web.base, // <-- important for postcss/tailwind
-            }
-          )
+          await execa(`yarn rw-vite-build`, {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+            cwd: rwjsPaths.web.base, // <-- important for postcss/tailwind
+          })
         } else {
           await execa(
             `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
