@@ -5727,83 +5727,83 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nrwl/tao@npm:16.3.1"
+"@nrwl/tao@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nrwl/tao@npm:16.3.2"
   dependencies:
-    nx: 16.3.1
+    nx: 16.3.2
   bin:
     tao: index.js
-  checksum: a3cfba6d779abaf72731b419e8bbe3cb8602099fb291fe58ac9ded1cde1bb848e9f7d7d639cff5ba542cec59a067f83943122f459e1d77ab13e884bff7e4c838
+  checksum: 679170bc183b6dcaf19aa9d72fd250060ffd89c44168d4ea7813521325da31a020144a533c8290d906c086754da1b939e1789d5b1a621e7b01c8e1ce51cdcb6e
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-arm64@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-darwin-arm64@npm:16.3.1"
+"@nx/nx-darwin-arm64@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-darwin-arm64@npm:16.3.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-x64@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-darwin-x64@npm:16.3.1"
+"@nx/nx-darwin-x64@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-darwin-x64@npm:16.3.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-freebsd-x64@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-freebsd-x64@npm:16.3.1"
+"@nx/nx-freebsd-x64@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-freebsd-x64@npm:16.3.2"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm-gnueabihf@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.3.1"
+"@nx/nx-linux-arm-gnueabihf@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.3.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-gnu@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-linux-arm64-gnu@npm:16.3.1"
+"@nx/nx-linux-arm64-gnu@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-linux-arm64-gnu@npm:16.3.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-musl@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-linux-arm64-musl@npm:16.3.1"
+"@nx/nx-linux-arm64-musl@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-linux-arm64-musl@npm:16.3.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-gnu@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-linux-x64-gnu@npm:16.3.1"
+"@nx/nx-linux-x64-gnu@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-linux-x64-gnu@npm:16.3.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-musl@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-linux-x64-musl@npm:16.3.1"
+"@nx/nx-linux-x64-musl@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-linux-x64-musl@npm:16.3.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-arm64-msvc@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-win32-arm64-msvc@npm:16.3.1"
+"@nx/nx-win32-arm64-msvc@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-win32-arm64-msvc@npm:16.3.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-x64-msvc@npm:16.3.1":
-  version: 16.3.1
-  resolution: "@nx/nx-win32-x64-msvc@npm:16.3.1"
+"@nx/nx-win32-x64-msvc@npm:16.3.2":
+  version: 16.3.2
+  resolution: "@nx/nx-win32-x64-msvc@npm:16.3.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -6917,7 +6917,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 4.2.0
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     core-js: 3.30.2
     humanize-string: 2.1.0
     jest: 29.5.0
@@ -7528,7 +7528,7 @@ __metadata:
     "@types/prettier": 2.7.3
     "@types/yargs": 17.0.24
     "@vscode/ripgrep": 1.15.3
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     cheerio: 1.0.0-rc.12
     core-js: 3.30.2
     deepmerge: 4.3.1
@@ -7730,7 +7730,7 @@ __metadata:
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 9.0.1
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     aws-lambda: 1.0.7
     core-js: 3.30.2
     graphql: 16.6.0
@@ -7811,7 +7811,7 @@ __metadata:
     "@redwoodjs/structure": 5.0.0
     "@redwoodjs/web": 5.0.0
     "@types/mime-types": 2.1.1
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 11.0.4
     cheerio: 1.0.0-rc.12
@@ -7978,7 +7978,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.1
     "@types/yargs": 17.0.24
-    "@whatwg-node/fetch": 0.9.1
+    "@whatwg-node/fetch": 0.9.2
     ci-info: 3.8.0
     core-js: 3.30.2
     envinfo: 7.8.1
@@ -11105,13 +11105,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.1":
-  version: 0.9.1
-  resolution: "@whatwg-node/fetch@npm:0.9.1"
+"@whatwg-node/fetch@npm:0.9.2":
+  version: 0.9.2
+  resolution: "@whatwg-node/fetch@npm:0.9.2"
   dependencies:
     "@whatwg-node/node-fetch": ^0.4.1
-    urlpattern-polyfill: ^8.0.0
-  checksum: cf9d16c132abe2c6f0e6bf4a19be6503539b30fc2c0e0deaf8f5d64817ad37d95aff31c50734c962b03de4b41644888379aa89d1c428d45f96df11aed5eb1082
+    urlpattern-polyfill: ^9.0.0
+  checksum: c57ad3fd32cddb2046a4945cc3244104aa5fb300cbf85a3ea3e8d66fc30a879536180da684c010ff45a2067e01994345e1acd59059e6c433834613bf4243f89c
   languageName: node
   linkType: hard
 
@@ -24287,21 +24287,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:16.3.1":
-  version: 16.3.1
-  resolution: "nx@npm:16.3.1"
+"nx@npm:16.3.2":
+  version: 16.3.2
+  resolution: "nx@npm:16.3.2"
   dependencies:
-    "@nrwl/tao": 16.3.1
-    "@nx/nx-darwin-arm64": 16.3.1
-    "@nx/nx-darwin-x64": 16.3.1
-    "@nx/nx-freebsd-x64": 16.3.1
-    "@nx/nx-linux-arm-gnueabihf": 16.3.1
-    "@nx/nx-linux-arm64-gnu": 16.3.1
-    "@nx/nx-linux-arm64-musl": 16.3.1
-    "@nx/nx-linux-x64-gnu": 16.3.1
-    "@nx/nx-linux-x64-musl": 16.3.1
-    "@nx/nx-win32-arm64-msvc": 16.3.1
-    "@nx/nx-win32-x64-msvc": 16.3.1
+    "@nrwl/tao": 16.3.2
+    "@nx/nx-darwin-arm64": 16.3.2
+    "@nx/nx-darwin-x64": 16.3.2
+    "@nx/nx-freebsd-x64": 16.3.2
+    "@nx/nx-linux-arm-gnueabihf": 16.3.2
+    "@nx/nx-linux-arm64-gnu": 16.3.2
+    "@nx/nx-linux-arm64-musl": 16.3.2
+    "@nx/nx-linux-x64-gnu": 16.3.2
+    "@nx/nx-linux-x64-musl": 16.3.2
+    "@nx/nx-win32-arm64-msvc": 16.3.2
+    "@nx/nx-win32-x64-msvc": 16.3.2
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": ^3.0.0-rc.18
@@ -24366,7 +24366,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: 54c89023a31a4bab73d2f03de29078230d5fab3ff1a1040d366d3e67987c980171adee9838739b106f0541b7628ebb363d359d858e8c948d20b4c3ddbec5d743
+  checksum: e764c6f7a7583d2883f876b31e511cefb084ad450dd09258df2ecf2cf8304dd62cd9b0c4c40229cd5b230acf1ad4191e312c5e22db4fd0f1332c30508cd961da
   languageName: node
   linkType: hard
 
@@ -27590,7 +27590,7 @@ __metadata:
     ncp: 2.0.0
     nodemon: 2.0.22
     npm-packlist: 7.0.4
-    nx: 16.3.1
+    nx: 16.3.2
     nx-cloud: 16.0.5
     octokit: 2.0.19
     ora: 5.4.1
@@ -30596,6 +30596,13 @@ __metadata:
   version: 8.0.2
   resolution: "urlpattern-polyfill@npm:8.0.2"
   checksum: 5388bbe8459dbd8861ee7cb97904be915dd863a9789c2191c528056f16adad7836ec22762ed002fed44e8995d0f98bdfb75a606466b77233e70d0f61b969aaf9
+  languageName: node
+  linkType: hard
+
+"urlpattern-polyfill@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "urlpattern-polyfill@npm:9.0.0"
+  checksum: 1fecb4a7695ad7917b02193896ec7b5773bb730ee3fbbb583cfaf134cc99da054c18560a35e7e901ad4e2f7a6035b6754313a2bb84126a7f118201427d465185
   languageName: node
   linkType: hard
 
