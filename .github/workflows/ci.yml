@@ -22,12 +22,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - run: yarn install
+      - name: 🐈 Yarn install
         working-directory: ./.github/actions/only_doc_changes
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: 📖 Only doc changes?
         id: only-doc-changes
@@ -40,11 +44,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 18
-      - run: yarn install
+
+      - name: 🐈 Yarn install
         working-directory: ./tasks/check
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: ✅ Check constraints, dependencies, and package.json's
         uses: ./tasks/check
@@ -71,8 +81,19 @@ jobs:
         run: echo "echo "::remove-matcher owner=tsc::""
 
       - uses: actions/checkout@v3
-      - name: 🧶 Set up job
-        uses: ./.github/actions/set-up-job
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: 🔨 Build
         run: yarn build
@@ -109,8 +130,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Set up job
-        uses: ./.github/actions/set-up-job
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: 📁 Create a temporary directory
         id: createpath
@@ -378,8 +410,19 @@ jobs:
       REDWOOD_REDIRECT_TELEMETRY: "http://127.0.0.1:48619" # Random port
     steps:
       - uses: actions/checkout@v3
-      - name: 🧶 Set up job
-        uses: ./.github/actions/set-up-job
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: 🔨 Build
         run: yarn build
