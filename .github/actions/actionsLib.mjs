@@ -67,6 +67,8 @@ export async function createCacheKeys(prefix) {
   const baseKey = [
     prefix,
     process.env.RUNNER_OS,
+    // @ts-expect-error not sure how to change the lib compiler option to es2021+ here.
+    process.env.GITHUB_REF.replaceAll('/', '-'),
   ].join('-')
 
   const dependenciesKey = [
