@@ -44,8 +44,12 @@ describe('getConfig', () => {
         },
         "experimental": {
           "cli": {
-            "autoInstall": false,
-            "plugins": [],
+            "autoInstall": true,
+            "plugins": [
+              {
+                "package": "@redwoodjs/cli-storybook",
+              },
+            ],
           },
           "opentelemetry": {
             "apiSdk": undefined,

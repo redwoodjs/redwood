@@ -34,18 +34,14 @@
     "@redwoodjs/project-config": "5.0.0",
     "@redwoodjs/router": "5.0.0",
     "@redwoodjs/web": "5.0.0",
-    "@storybook/addon-a11y": "7.0.18",
-    "@storybook/addon-docs": "7.0.18",
-    "@storybook/addon-essentials": "7.0.18",
-    "@storybook/react-webpack5": "7.0.18",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
     "@types/aws-lambda": "8.10.115",
     "@types/babel-core": "6.25.7",
-    "@types/jest": "29.5.1",
+    "@types/jest": "29.5.2",
     "@types/node": "18.16.1",
-    "@types/react": "18.2.7",
+    "@types/react": "18.2.8",
     "@types/react-dom": "18.2.4",
     "@types/webpack": "5.28.1",
     "@types/webpack-env": "1.18.1",
@@ -56,14 +52,13 @@
     "jest-environment-jsdom": "29.5.0",
     "jest-watch-typeahead": "2.2.2",
     "msw": "1.2.1",
-    "storybook": "7.0.18",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.2"
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
     "@babel/core": "7.22.1",
-    "typescript": "5.0.4"
+    "typescript": "5.1.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

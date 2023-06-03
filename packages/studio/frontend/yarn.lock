@@ -592,14 +592,14 @@ __metadata:
   linkType: hard
 
 "@headlessui/react@npm:^1.7.14":
-  version: 1.7.14
-  resolution: "@headlessui/react@npm:1.7.14"
+  version: 1.7.15
+  resolution: "@headlessui/react@npm:1.7.15"
   dependencies:
     client-only: ^0.0.1
   peerDependencies:
     react: ^16 || ^17 || ^18
     react-dom: ^16 || ^17 || ^18
-  checksum: 42170548641b7a58fc16d11c9100ff67961cb800cd8f4012ab0077c0aa254d680106166127aaf33548dae0c7ae5ed036ab4caec23a3ed745926a1e87ec6ea198
+  checksum: d93fd4be3d134467fe2c904e65ff28ec8218a78a3aa590bdc52a097ed9092bae200b6bf0ed79f12cd9850a1744dd95015fbc08b5b71f17bac7d63d2f6197a7b8
   languageName: node
   linkType: hard
 
@@ -1406,13 +1406,13 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:^18.0.27":
-  version: 18.2.7
-  resolution: "@types/react@npm:18.2.7"
+  version: 18.2.8
+  resolution: "@types/react@npm:18.2.8"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 5ec33ea64f3abc1da2a676809a16db2914465457154ecafc4f2db486e35d9e93fdfd661763396580eb489d7e131eaa86d8e58326719048bbcc2935f8ef0825fb
+  checksum: 4ed72e0cb9974f7002ebdd27bdb55beb7e715f18e1f537748f3a64ddd5b11ac25f61287d146feb4e2dd876eb615c49eead8cae65d75d5a4584572c00ab2093c5
   languageName: node
   linkType: hard
 
@@ -2582,13 +2582,13 @@ __metadata:
   linkType: hard
 
 "graphql-scalars@npm:^1.21.3":
-  version: 1.22.0
-  resolution: "graphql-scalars@npm:1.22.0"
+  version: 1.22.1
+  resolution: "graphql-scalars@npm:1.22.1"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 3abf354aa0f9801af27a2b4a9b5fd07cd24c0329b4deff29e5a9bbbe963cf89ad9df34d471d4c4d128dbf25a31beec1a1401f61c2d876d462bf7940fb349080a
+  checksum: 61906f5d13938642f728820802c0ebbaf6163b4bb0d69bdde4b372769638e48c516a3b4116fb3e5cfbbed0d973e652cb4c660f117012dafac93c3e0a17862442
   languageName: node
   linkType: hard
 
@@ -3515,13 +3515,13 @@ __metadata:
   linkType: hard
 
 "react-error-boundary@npm:^4.0.4":
-  version: 4.0.7
-  resolution: "react-error-boundary@npm:4.0.7"
+  version: 4.0.9
+  resolution: "react-error-boundary@npm:4.0.9"
   dependencies:
     "@babel/runtime": ^7.12.5
   peerDependencies:
     react: ">=16.13.1"
-  checksum: 0e7eb75012edec8e73d76a6030a9f06e14b62c64cb900527ab8a66d1566c6d7f4daa01125bb3e9f512f8164813d8d8dfad193d3b27c2174652137940620fee48
+  checksum: 8add651a1ea823cd1eb94b446cbd3955c0c46eae6b8e455fa506002c5f9c24e5fb1eb0c65af2785856867a4b0daee9a34181e2973ea407aac3969822c6de5e71
   languageName: node
   linkType: hard
 
@@ -4249,22 +4249,22 @@ __metadata:
   linkType: hard
 
 "typescript@npm:^5.0.0":
-  version: 5.0.4
-  resolution: "typescript@npm:5.0.4"
+  version: 5.1.3
+  resolution: "typescript@npm:5.1.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 2f5bd1cead194905957cb34e220b1d6ff1662399adef8ec1864f74620922d860ee35b6e50eafb3b636ea6fd437195e454e1146cb630a4236b5095ed7617395c2
+  checksum: 1faba8d5ffd4717864ddce767613c5ab77c1c8510c1ce21dc9b112a4c662357b9338dc0a6121615266d3a44ebec699f115ef2dabf18d9d7341ea1675692b9b24
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^5.0.0#~builtin<compat/typescript>":
-  version: 5.0.4
-  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"
+  version: 5.1.3
+  resolution: "typescript@patch:typescript@npm%3A5.1.3#~builtin<compat/typescript>::version=5.1.3&hash=77c9e2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: c3f7b80577bddf6fab202a7925131ac733bfc414aec298c2404afcddc7a6f242cfa8395cf2d48192265052e11a7577c27f6e5fac8d8fe6a6602023c83d6b3292
+  checksum: 6219383250b585b201c9ea10576164c9d5760c7a167bc761b118692c9fb8e88610f37730c0a1169d96ac19b29ed80418048763d0c1ff00ce48e051abbc213a9b
   languageName: node
   linkType: hard
 
