@@ -7840,6 +7840,7 @@ __metadata:
     vite-plugin-commonjs: 0.6.2
     vite-plugin-environment: 1.1.3
   bin:
+    rw-vite-build: ./bins/rw-vite-build.mjs
     rw-vite-dev: ./bins/rw-vite-dev.mjs
     vite: ./bins/vite.mjs
   languageName: unknown
