@@ -1,0 +1,494 @@
+#!/usr/bin/env node
+/* eslint-env node, es6*/
+//@ts-check
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
+const stream = require('stream')
+
+const chalk = require('chalk')
+const execa = require('execa')
+const fse = require('fs-extra')
+const { rimraf } = require('rimraf')
+const { hideBin } = require('yargs/helpers')
+const yargs = require('yargs/yargs')
+
+const {
+  RedwoodTUI,
+  ReactiveTUIContent,
+  RedwoodStyling,
+} = require('@redwoodjs/tui')
+
+const {
+  addFrameworkDepsToProject,
+  copyFrameworkPackages,
+} = require('./frameworkLinking')
+const { webTasks, apiTasks } = require('./tasks')
+const {
+  getExecaOptions: utilGetExecaOptions,
+  updatePkgJsonScripts,
+} = require('./util')
+
+/*** @typedef Thenable */
+/**
+ * @typedef ExecaResult
+ * @type {object}
+ * @property {string} stdout
+ * @property {string} stderr
+ * @property {number} exitCode
+ */
+
+/**
+ * @param {Promise<ExecaResult | void> | void} promise
+ * @return {promise is Promise<ExecaResult | void>}
+ */
+function isPromise(promise) {
+  return (
+    typeof promise !== 'undefined' &&
+    'then' in /** @type Promise<ExecaResult | void> */ (promise)
+  )
+}
+
+/**
+ * @param {ExecaResult|void} result
+ * @return {result is ExecaResult}
+ */
+function isExecaResult(result) {
+  return typeof result === 'object' && 'exitCode' in result
+}
+
+/** @type {(string) => import('execa').Options} */
+function getExecaOptions(cwd) {
+  return { ...utilGetExecaOptions(cwd), stdio: 'pipe' }
+}
+
+/**
+ * @param {number} step
+ */
+function beginStep(step) {
+  fs.mkdirSync(OUTPUT_PROJECT_PATH, { recursive: true })
+  fs.writeFileSync(path.join(OUTPUT_PROJECT_PATH, 'step.txt'), '' + step)
+}
+
+/**
+ * @typedef TaskDef
+ * @type {object}
+ * @property {number} step 0 based step number.
+ * @property {string} title Title of this task.
+ * @property {string=} content Reactive content.
+ * @property {() => string|boolean=} skip Function that returns a string to
+ *   show when skipping this task, or just true|false to indicate whether the
+ *   task should be skipped or not.
+ * @property {() => Promise<ExecaResult> | Promise<void> | void} task
+ *   The task to run.
+ *
+ * @param {TaskDef} taskDef
+ */
+async function tuiTask({ step, title, content, skip: skipFn, task }) {
+  let skip = skipFn?.()
+
+  if (skip) {
+    if (typeof skip === 'boolean' && skip) {
+      // if skip is just `true`, then we use the default skip message
+      skip = 'Skipping...'
+    }
+
+    tui.drawText(RedwoodStyling.info(skip))
+  }
+
+  const tuiContent = new ReactiveTUIContent({
+    mode: 'text',
+    header: `${step}. ${title}`,
+    content,
+    spinner: {
+      enabled: true,
+    },
+  })
+
+  tui.startReactive(tuiContent)
+
+  beginStep(step)
+
+  const promise = task()
+
+  if (isPromise(promise)) {
+    const result = await promise
+
+    if (isExecaResult(result)) {
+      const { stdout, stderr, exitCode } = result
+
+      if (exitCode !== 0) {
+        tui.stopReactive(true)
+        tui.displayError(
+          'Failed ' + title.toLowerCase().replace('...', ''),
+          'stdout:\n' + stdout + '\n\n' + 'stderr:\n' + stderr
+        )
+
+        process.exit(1)
+      }
+    }
+  }
+
+  tuiContent.update({
+    spinner: {
+      enabled: false,
+    },
+    header: `${RedwoodStyling.green('✔')} ${step}. ${title}`,
+    content: '',
+  })
+
+  tui.stopReactive()
+}
+
+/**
+ * @param {number} startStep
+ * @param {number} step
+ */
+function skipStep(startStep, step) {
+  return () => {
+    if (startStep > step) {
+      return 'Skipping... Resuming from step ' + startStep
+    }
+
+    return false
+  }
+}
+
+const tui = new RedwoodTUI()
+
+const args = yargs(hideBin(process.argv))
+  .usage('Usage: $0 [option]')
+  .option('verbose', {
+    default: false,
+    type: 'boolean',
+    describe: 'Verbose output',
+  })
+  .option('resume', {
+    default: false,
+    type: 'boolean',
+    describe: 'Resume rebuild of the latest unfinished test-project',
+  })
+  .option('resumePath', {
+    type: 'string',
+    describe: 'Resume rebuild given the specified test-project path',
+  })
+  .option('resumeStep', {
+    type: 'number',
+    describe: 'Resume rebuild from the given step',
+  })
+  .help()
+  .parseSync()
+
+const { verbose, resume, resumePath, resumeStep } = args
+
+if (resume) {
+  console.error(
+    chalk.red.bold(
+      '\n`resume` option is not supported yet. ' +
+        'Please use `resumePath` instead.\n'
+    )
+  )
+
+  process.exit(1)
+}
+
+if (resumePath && !fs.existsSync(path.join(resumePath, 'redwood.toml'))) {
+  console.error(
+    chalk.red.bold(
+      `
+      No redwood.toml file found at the given path: ${resumePath}
+      `
+    )
+  )
+  process.exit(1)
+}
+
+const OUTPUT_PROJECT_PATH = resumePath
+  ? /* path.resolve(String(resumePath)) */ resumePath
+  : path.join(
+      os.tmpdir(),
+      'redwood-test-project',
+      // ":" is problematic with paths
+      new Date().toISOString().split(':').join('-')
+    )
+
+const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
+
+const createProject = () => {
+  let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
+
+  // We create a ts project and convert using ts-to-js at the end if typescript flag is false
+  const subprocess = execa(
+    cmd,
+    ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
+    getExecaOptions(RW_FRAMEWORKPATH)
+  )
+
+  const writableStream = new stream.Writable()
+  writableStream._write = (_chunk, _encoding, next) => {
+    next()
+  }
+
+  subprocess.stdout?.pipe(writableStream)
+  subprocess.stderr?.pipe(writableStream)
+
+  return subprocess
+}
+
+const copyProject = async () => {
+  const FIXTURE_TESTPROJ_PATH = path.join(
+    RW_FRAMEWORKPATH,
+    '__fixtures__/test-project'
+  )
+
+  // remove existing Fixture
+  await rimraf(FIXTURE_TESTPROJ_PATH)
+  // copy from tempDir to Fixture dir
+  await fse.copy(OUTPUT_PROJECT_PATH, FIXTURE_TESTPROJ_PATH)
+  // cleanup after ourselves
+  await rimraf(OUTPUT_PROJECT_PATH)
+}
+
+let startStep = resumeStep || 0
+
+if (!startStep) {
+  // Figure out what step to restart the rebuild from
+  try {
+    const stepTxtNumber = parseInt(
+      fs.readFileSync(path.join(OUTPUT_PROJECT_PATH, 'step.txt'), 'utf-8'),
+      10
+    )
+
+    if (!Number.isNaN(stepTxtNumber)) {
+      startStep = stepTxtNumber
+    }
+  } catch {
+    // No step.txt file found, start from the beginning
+  }
+}
+
+async function runCommand() {
+  await tuiTask({
+    step: 0,
+    title: 'Creating project',
+    content: 'Building test-project from scratch...',
+    task: createProject,
+    skip: skipStep(startStep, 0),
+  })
+
+  await tuiTask({
+    step: 1,
+    title: 'Temporary (v6): add storybook to web dependencies',
+    content:
+      'Adding storybook to web dependencies...\n' +
+      '  ⏱  This could take a while...',
+    task: () => {
+      return execa.command(
+        'yarn workspace web add -D storybook',
+        getExecaOptions(OUTPUT_PROJECT_PATH)
+      )
+    },
+    skip: skipStep(startStep, 1),
+  })
+
+  await tuiTask({
+    step: 2,
+    title: '[link] Building Redwood framework',
+    content: 'yarn build:clean && yarn build',
+    task: async () => {
+      return execa(
+        'yarn build:clean && yarn build',
+        [],
+        getExecaOptions(RW_FRAMEWORKPATH)
+      )
+    },
+    skip: skipStep(startStep, 2),
+  })
+
+  await tuiTask({
+    step: 3,
+    title: '[link] Adding framework dependencies to project',
+    content: 'Adding framework dependencies to project...',
+    task: () => {
+      return addFrameworkDepsToProject(
+        RW_FRAMEWORKPATH,
+        OUTPUT_PROJECT_PATH,
+        'pipe'
+      )
+    },
+    skip: skipStep(startStep, 3),
+  })
+
+  await tuiTask({
+    step: 4,
+    title: 'Installing node_modules',
+    content: 'yarn install',
+    task: () => {
+      return execa('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
+    },
+    skip: skipStep(startStep, 4),
+  })
+
+  await tuiTask({
+    step: 5,
+    title: 'Updating ports in redwood.toml...',
+    task: () => {
+      // We do this, to make it easier to run multiple test projects in parallel
+      // But on different ports. If API_DEV_PORT or WEB_DEV_PORT aren't supplied,
+      // It just defaults to 8910 and 8911
+      // This is helpful in playwright smoke tests to allow us to parallelize
+      const REDWOOD_TOML_PATH = path.join(OUTPUT_PROJECT_PATH, 'redwood.toml')
+      const redwoodToml = fs.readFileSync(REDWOOD_TOML_PATH).toString()
+      let newRedwoodToml = redwoodToml
+
+      newRedwoodToml = newRedwoodToml.replace(
+        /\port = 8910/,
+        'port = "${WEB_DEV_PORT:8910}"'
+      )
+
+      newRedwoodToml = newRedwoodToml.replace(
+        /\port = 8911/,
+        'port = "${API_DEV_PORT:8911}"'
+      )
+
+      fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
+    },
+    skip: skipStep(startStep, 5),
+  })
+
+  await tuiTask({
+    step: 6,
+    title: '[link] Copying framework packages to project',
+    task: () => {
+      return copyFrameworkPackages(
+        RW_FRAMEWORKPATH,
+        OUTPUT_PROJECT_PATH,
+        'pipe'
+      )
+    },
+    skip: skipStep(startStep, 6),
+  })
+
+  // Note that we undo this at the end
+  await tuiTask({
+    step: 7,
+    title: '[link] Add rwfw project:copy postinstall',
+    task: () => {
+      return updatePkgJsonScripts({
+        projectPath: OUTPUT_PROJECT_PATH,
+        scripts: {
+          postinstall: 'yarn rwfw project:copy',
+        },
+      })
+    },
+    skip: skipStep(startStep, 7),
+  })
+
+  await tuiTask({
+    step: 8,
+    title: 'Apply web codemods',
+    task: () => {
+      webTasks(OUTPUT_PROJECT_PATH, {
+        verbose,
+        linkWithLatestFwBuild: true,
+      })
+    },
+    skip: skipStep(startStep, 8),
+  })
+
+  await tuiTask({
+    step: 9,
+    title: 'Apply api codemods',
+    task: () => {
+      apiTasks(OUTPUT_PROJECT_PATH, {
+        verbose,
+        linkWithLatestFwBuild: true,
+      })
+    },
+    skip: skipStep(startStep, 9),
+  })
+
+  await tuiTask({
+    step: 10,
+    title: 'Running prisma migrate reset',
+    task: () => {
+      return execa(
+        'yarn rw prisma migrate reset',
+        ['--force'],
+        getExecaOptions(OUTPUT_PROJECT_PATH)
+      )
+    },
+    skip: skipStep(startStep, 10),
+  })
+
+  await tuiTask({
+    step: 11,
+    title: 'Lint --fix all the things',
+    task: () => {
+      return execa('yarn rw lint --fix', [], {
+        shell: true,
+        stdio: 'ignore',
+        cleanup: true,
+        cwd: OUTPUT_PROJECT_PATH,
+        env: {
+          RW_PATH: path.join(__dirname, '../../'),
+        },
+      })
+    },
+    skip: skipStep(startStep, 11),
+  })
+
+  await tuiTask({
+    step: 12,
+    title: 'Replace and Cleanup Fixture',
+    task: async () => {
+      // @TODO: This only works on UNIX, we should use path.join everywhere
+      // remove all .gitignore
+      await rimraf(`${OUTPUT_PROJECT_PATH}/.redwood`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db-journal`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/api/dist`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/node_modules`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/web/node_modules`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/.env`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
+
+      // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
+      // that we added in "Adding framework dependencies to project"
+      await rimraf(`${OUTPUT_PROJECT_PATH}/package.json`)
+      fs.copyFileSync(
+        path.join(
+          __dirname,
+          '../../packages/create-redwood-app/templates/ts/package.json'
+        ),
+        path.join(OUTPUT_PROJECT_PATH, 'package.json')
+      )
+
+      // removes existing Fixture and replaces with newly built project,
+      // then removes new Project temp directory
+      copyProject()
+    },
+    skip: skipStep(startStep, 12),
+  })
+
+  await tuiTask({
+    step: 13,
+    title: 'All done!',
+    task: () => {
+      if (verbose) {
+        // Without verbose these logs aren't visible anyway
+        console.log()
+        console.log('-'.repeat(30))
+        console.log()
+        console.log('✅ Success your project has been generated at:')
+        console.log(OUTPUT_PROJECT_PATH)
+        console.log()
+        console.log('-'.repeat(30))
+      } else {
+        console.log(`Generated project at ${OUTPUT_PROJECT_PATH}`)
+      }
+    },
+  })
+}
+
+runCommand()

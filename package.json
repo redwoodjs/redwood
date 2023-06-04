@@ -11,6 +11,7 @@
     "build:clean": "yarn clean:prisma && rimraf \"packages/**/dist\" --glob",
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project",
+    "build:test-project-rebuild": "node ./tasks/test-project/test-project-rebuild",
     "build:watch": "lerna run build:watch --parallel; tsc --build",
     "check": "yarn node ./tasks/check/check.mjs",
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
