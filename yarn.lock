@@ -7786,7 +7786,7 @@ __metadata:
     prettier: 2.8.8
     rimraf: 5.0.1
     string-env-interpolation: 1.0.1
-    systeminformation: 5.17.16
+    systeminformation: 5.17.17
     terminal-link: 2.1.1
     ts-node: 10.9.1
     tsx: 3.12.7
@@ -7983,7 +7983,7 @@ __metadata:
     core-js: 3.30.2
     envinfo: 7.8.1
     jest: 29.5.0
-    systeminformation: 5.17.16
+    systeminformation: 5.17.17
     uuid: 9.0.0
     yargs: 17.7.2
   languageName: unknown
@@ -14741,7 +14741,7 @@ __metadata:
     jest: 29.5.0
     klaw-sync: 6.0.0
     semver: 7.5.1
-    systeminformation: 5.17.16
+    systeminformation: 5.17.17
     terminal-link: 2.1.1
     uuid: 9.0.0
     yargs: 17.7.2
@@ -29194,12 +29194,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.17.16":
-  version: 5.17.16
-  resolution: "systeminformation@npm:5.17.16"
+"systeminformation@npm:5.17.17":
+  version: 5.17.17
+  resolution: "systeminformation@npm:5.17.17"
   bin:
     systeminformation: lib/cli.js
-  checksum: b90b7c3bb308a3d5c298acea19ca733bb2f057e5a3c5e196619124708cb19398e1c14827a1b4e51903cea50e4fc6b07a54fe6cae604f182c73f67328df79340a
+  checksum: c9dff60acaffaebbcbbee4a9ad58318d3da5fbc854a4d555c7a9f7467c02801dc82c8ff3278cf4f7fda7542e89fc7fcc8a2505f8a8f85a6b9427d74579a3a7a8
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
