@@ -13,7 +13,7 @@ export async function runScriptFunction({
   const returnValue = await script[functionName](args)
 
   try {
-    const { db } = await import(path.join(getPaths().api.lib, 'db.js'))
+    const { db } = await import(path.join(getPaths().api.lib, 'db'))
     db.$disconnect()
   } catch (e) {
     // silence
