@@ -373,7 +373,7 @@ export const emailUser = async ({ id }: Prisma.UserWhereUniqueInput) => {
 
   await sendTestEmail(user.email)
   await createAudit({
-    input: { user: { connect: { id } }, log: 'Admin sent test email to user' },
+    input: { userId: id, log: 'Admin sent test email to user' },
   })
 
   // ...
