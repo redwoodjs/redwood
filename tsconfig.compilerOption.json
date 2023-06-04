@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "module": "esnext",
     "declarationMap": true,
     "emitDeclarationOnly": true,
