@@ -32,6 +32,6 @@ export interface Args {
 }
 
 export const handler = async (options: Args) => {
-  const { handler } = await import('./setupHandler')
+  const { handler } = await import('./setupHandler.js')
   return handler(options)
 }

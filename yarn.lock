@@ -10417,7 +10417,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:^0.8.0, @whatwg-node/fetch@npm:^0.8.1, @whatwg-node/fetch@npm:^0.8.2, @whatwg-node/fetch@npm:^0.8.4":
+"@whatwg-node/fetch@npm:^0.8.0, @whatwg-node/fetch@npm:^0.8.1, @whatwg-node/fetch@npm:^0.8.3, @whatwg-node/fetch@npm:^0.8.4":
   version: 0.8.8
   resolution: "@whatwg-node/fetch@npm:0.8.8"
   dependencies:
@@ -10457,12 +10457,12 @@ __metadata:
   linkType: hard
 
 "@whatwg-node/server@npm:^0.7.3":
-  version: 0.7.4
-  resolution: "@whatwg-node/server@npm:0.7.4"
+  version: 0.7.7
+  resolution: "@whatwg-node/server@npm:0.7.7"
   dependencies:
-    "@whatwg-node/fetch": ^0.8.2
+    "@whatwg-node/fetch": ^0.8.3
     tslib: ^2.3.1
-  checksum: 2ab62575242db005f2b913874a011086ab60ac18e66e6c0582f2fdde45050ec8e63d0a9fb40ec4d04e40e87b4f59eb7ad445ad5156457e46567cfaefc5ee9ef7
+  checksum: 5bd10ac9414bad7b703088f3fd8539c7dd0fb8ceb252b1e501a7206545ccc2dda8ec9de9e495dd43197c97bc840d7b3d12e06f26ef3f449655f196f6d5c25143
   languageName: node
   linkType: hard
 

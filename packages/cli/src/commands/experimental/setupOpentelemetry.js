@@ -24,6 +24,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./setupOpentelemetryHandler')
+  const { handler } = await import('./setupOpentelemetryHandler.js')
   return handler(options)
 }
