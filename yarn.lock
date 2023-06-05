@@ -1189,9 +1189,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-private-property-in-object@npm:7.21.0, @babel/plugin-proposal-private-property-in-object@npm:^7.21.0":
-  version: 7.21.0
-  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.0"
+"@babel/plugin-proposal-private-property-in-object@npm:7.21.10, @babel/plugin-proposal-private-property-in-object@npm:^7.21.0":
+  version: 7.21.10
+  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.10"
   dependencies:
     "@babel/helper-annotate-as-pure": ^7.18.6
     "@babel/helper-create-class-features-plugin": ^7.21.0
@@ -1199,7 +1199,7 @@ __metadata:
     "@babel/plugin-syntax-private-property-in-object": ^7.14.5
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 576ec99964c50435a81dfe4178d064df9aa86628090d69bae8759332b9a2b5a0a8575a6f51db915c3751949cd29990b8b3a80c6afc228a0664f4237b7b60d667
+  checksum: 3e93f2f6e53290172c69b086f08d6fcc928222d440242bec9202ca5cebfccb5c32eba17b0dd232ff4b167b5acaa43d323472dd8b07e456cb07edf3e3f0679887
   languageName: node
   linkType: hard
 
@@ -7559,7 +7559,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": 7.18.6
     "@babel/plugin-proposal-decorators": 7.22.3
     "@babel/plugin-proposal-private-methods": 7.18.6
-    "@babel/plugin-proposal-private-property-in-object": 7.21.0
+    "@babel/plugin-proposal-private-property-in-object": 7.21.10
     "@babel/plugin-transform-runtime": 7.22.4
     "@babel/preset-env": 7.22.4
     "@babel/preset-react": 7.22.3
@@ -7599,7 +7599,7 @@ __metadata:
     url-loader: 4.1.1
     webpack: 5.85.0
     webpack-bundle-analyzer: 4.9.0
-    webpack-cli: 5.1.1
+    webpack-cli: 5.1.3
     webpack-dev-server: 4.15.0
     webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.9.0
@@ -7786,7 +7786,7 @@ __metadata:
     prettier: 2.8.8
     rimraf: 5.0.1
     string-env-interpolation: 1.0.1
-    systeminformation: 5.17.16
+    systeminformation: 5.17.17
     terminal-link: 2.1.1
     ts-node: 10.9.1
     tsx: 3.12.7
@@ -7832,7 +7832,7 @@ __metadata:
   dependencies:
     "@iarna/toml": 2.2.5
     deepmerge: 4.3.1
-    dependency-cruiser: 13.0.2
+    dependency-cruiser: 13.0.3
     esbuild: 0.17.19
     fast-glob: 3.2.12
     jest: 29.5.0
@@ -7945,7 +7945,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.30.2
     crypto-js: 4.1.1
-    dotenv: 16.1.3
+    dotenv: 16.1.4
     fast-json-parse: 1.0.3
     fastify: 4.17.0
     fastify-raw-body: 4.2.0
@@ -7983,7 +7983,7 @@ __metadata:
     core-js: 3.30.2
     envinfo: 7.8.1
     jest: 29.5.0
-    systeminformation: 5.17.16
+    systeminformation: 5.17.17
     uuid: 9.0.0
     yargs: 17.7.2
   languageName: unknown
@@ -11043,36 +11043,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webpack-cli/configtest@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@webpack-cli/configtest@npm:2.1.0"
+"@webpack-cli/configtest@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@webpack-cli/configtest@npm:2.1.1"
   peerDependencies:
     webpack: 5.x.x
     webpack-cli: 5.x.x
-  checksum: 49680a67b83a37bcfd57c4ab35b7a8b4be19880aba26d39582a3f82bc7ddddc226a9fc3ec277f7152d29cce1d6c3d097347df9d1f2d5b40c325c79dda744b384
+  checksum: a8da1f15702cb289807da99235ed95326ed7dabeb1a36ca59bd3a5dbe6adcc946a9a2767936050fc4d5ed14efab0e5b5a641dfe8e3d862c36caa5791ac12759d
   languageName: node
   linkType: hard
 
-"@webpack-cli/info@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@webpack-cli/info@npm:2.0.1"
+"@webpack-cli/info@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@webpack-cli/info@npm:2.0.2"
   peerDependencies:
     webpack: 5.x.x
     webpack-cli: 5.x.x
-  checksum: c782617bc32462da81c5dc0dbe7fd087c341fc4bfe9cc88eb69966c18dc214dacb0f4d37853009bfa91de3b885eb9edb680be37410edeff81d7af53794ba4d7a
+  checksum: ca88a35604dc9aedac7c26e8f6793c5039dc1eea2b12a85fbfd669a5f21ecf9cf169d7fd157ea366a62666e3fa05b776306a96742ac61a9868f44fdce6b40f7d
   languageName: node
   linkType: hard
 
-"@webpack-cli/serve@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "@webpack-cli/serve@npm:2.0.4"
+"@webpack-cli/serve@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "@webpack-cli/serve@npm:2.0.5"
   peerDependencies:
     webpack: 5.x.x
     webpack-cli: 5.x.x
   peerDependenciesMeta:
     webpack-dev-server:
       optional: true
-  checksum: 9e6c222cf98c060ab7e76879d60308486451f16e270d834aa3de11a72fab3c1857d78231935f52867d2300c72c6b61f6d62d77cbe673fbb3d95c7d5862b3fcc4
+  checksum: 36079d34971ff99a58b66b13f4184dcdd8617853c48cccdbc3f9ab7ea9e5d4fcf504e873c298ea7aa15e0b51ad2c4aee4d7a70bd7d9364e60f57b0eb93ca15fc
   languageName: node
   linkType: hard
 
@@ -14742,7 +14742,7 @@ __metadata:
     jest: 29.5.0
     klaw-sync: 6.0.0
     semver: 7.5.1
-    systeminformation: 5.17.16
+    systeminformation: 5.17.17
     terminal-link: 2.1.1
     uuid: 9.0.0
     yargs: 17.7.2
@@ -15514,9 +15514,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dependency-cruiser@npm:13.0.2":
-  version: 13.0.2
-  resolution: "dependency-cruiser@npm:13.0.2"
+"dependency-cruiser@npm:13.0.3":
+  version: 13.0.3
+  resolution: "dependency-cruiser@npm:13.0.3"
   dependencies:
     acorn: 8.8.2
     acorn-jsx: 5.3.2
@@ -15526,9 +15526,8 @@ __metadata:
     ajv: 8.12.0
     chalk: 5.2.0
     commander: 10.0.1
-    enhanced-resolve: 5.14.0
+    enhanced-resolve: 5.14.1
     figures: 5.0.0
-    get-stream: ^6.0.1
     glob: 10.2.6
     handlebars: 4.7.7
     ignore: 5.2.4
@@ -15544,7 +15543,7 @@ __metadata:
     semver-try-require: 6.2.2
     teamcity-service-messages: 0.1.14
     tsconfig-paths-webpack-plugin: 4.0.1
-    watskeburt: 0.11.2
+    watskeburt: 0.11.3
     wrap-ansi: 8.1.0
   bin:
     depcruise: bin/dependency-cruise.mjs
@@ -15553,7 +15552,7 @@ __metadata:
     depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.mjs
     dependency-cruise: bin/dependency-cruise.mjs
     dependency-cruiser: bin/dependency-cruise.mjs
-  checksum: 84583d7b92018c6e787965663bb0bdbbd337fcf9611fef3b6d91c2266e720265d9e743f566fbcfff532b171eff6da596f207c486acff12cbdf4597657d4f1885
+  checksum: 7d2f1f83eca7f30a1718f666928eb378c75fb70fa9b82fde44e16872c9a5f5cb97526044bd8e27fec412b962bf589f4c7dba9a51d1d846e7448de273377c2f57
   languageName: node
   linkType: hard
 
@@ -15908,10 +15907,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.1.3, dotenv@npm:^16.0.0":
-  version: 16.1.3
-  resolution: "dotenv@npm:16.1.3"
-  checksum: d80483222c5f129c6e5bc4ce46be563497eb39a7aa034245408e570f09fa770d73da3e019454394c197593535ecb908b0f5699ce721f5313ffd06ee44bcab85f
+"dotenv@npm:16.1.4, dotenv@npm:^16.0.0":
+  version: 16.1.4
+  resolution: "dotenv@npm:16.1.4"
+  checksum: 47cf5ce136bf2a5e8402fc9855d95848973cfee423fe0adf1a7cd565c842c51e5b8c95889b075140c26b092b74dd2a319970ff496cd7159ab3f1fc58edfc0ede
   languageName: node
   linkType: hard
 
@@ -16111,13 +16110,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.14.0":
-  version: 5.14.0
-  resolution: "enhanced-resolve@npm:5.14.0"
+"enhanced-resolve@npm:5.14.1, enhanced-resolve@npm:^5.14.1, enhanced-resolve@npm:^5.7.0":
+  version: 5.14.1
+  resolution: "enhanced-resolve@npm:5.14.1"
   dependencies:
     graceful-fs: ^4.2.4
     tapable: ^2.2.0
-  checksum: 33e68715860246929e30db0128e60bfd2d351987fa2b39a1052f7e555656992c87e856b67083019a6212841c36b1efdde9394961e7cf9dffff400b80848d341c
+  checksum: 65edb495492817fcdc2f8755f911835c4a5ea706377e9a57bbdacace14167c1413ad4d12630d23b850e80e2671b9a46603e562b9321546d1eca664ac24170906
   languageName: node
   linkType: hard
 
@@ -16129,16 +16128,6 @@ __metadata:
     memory-fs: ^0.5.0
     tapable: ^1.0.0
   checksum: d95fc630606ea35bed21c4a029bbb1681919571a2d1d2011c7fc42a26a9e48ed3d74a89949ce331e1fd3229850a303e3218b887b92951330f16bdfbb93a10e64
-  languageName: node
-  linkType: hard
-
-"enhanced-resolve@npm:^5.14.1, enhanced-resolve@npm:^5.7.0":
-  version: 5.14.1
-  resolution: "enhanced-resolve@npm:5.14.1"
-  dependencies:
-    graceful-fs: ^4.2.4
-    tapable: ^2.2.0
-  checksum: 65edb495492817fcdc2f8755f911835c4a5ea706377e9a57bbdacace14167c1413ad4d12630d23b850e80e2671b9a46603e562b9321546d1eca664ac24170906
   languageName: node
   linkType: hard
 
@@ -18309,7 +18298,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-stream@npm:^6.0.0, get-stream@npm:^6.0.1":
+"get-stream@npm:^6.0.0":
   version: 6.0.1
   resolution: "get-stream@npm:6.0.1"
   checksum: 49825d57d3fd6964228e6200a58169464b8e8970489b3acdc24906c782fb7f01f9f56f8e6653c4a50713771d6658f7cfe051e5eb8c12e334138c9c918b296341
@@ -27524,7 +27513,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": 7.22.3
     "@babel/plugin-proposal-nullish-coalescing-operator": 7.18.6
     "@babel/plugin-proposal-private-methods": 7.18.6
-    "@babel/plugin-proposal-private-property-in-object": 7.21.0
+    "@babel/plugin-proposal-private-property-in-object": 7.21.10
     "@babel/plugin-transform-runtime": 7.22.4
     "@babel/preset-env": 7.22.4
     "@babel/preset-react": 7.22.3
@@ -29195,12 +29184,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.17.16":
-  version: 5.17.16
-  resolution: "systeminformation@npm:5.17.16"
+"systeminformation@npm:5.17.17":
+  version: 5.17.17
+  resolution: "systeminformation@npm:5.17.17"
   bin:
     systeminformation: lib/cli.js
-  checksum: b90b7c3bb308a3d5c298acea19ca733bb2f057e5a3c5e196619124708cb19398e1c14827a1b4e51903cea50e4fc6b07a54fe6cae604f182c73f67328df79340a
+  checksum: c9dff60acaffaebbcbbee4a9ad58318d3da5fbc854a4d555c7a9f7467c02801dc82c8ff3278cf4f7fda7542e89fc7fcc8a2505f8a8f85a6b9427d74579a3a7a8
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
@@ -30969,14 +30958,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watskeburt@npm:0.11.2":
-  version: 0.11.2
-  resolution: "watskeburt@npm:0.11.2"
-  dependencies:
-    commander: 10.0.1
+"watskeburt@npm:0.11.3":
+  version: 0.11.3
+  resolution: "watskeburt@npm:0.11.3"
   bin:
     watskeburt: bin/cli.js
-  checksum: 4001673995b52fd9009301f3a5b65c15328fda4e12c5e1f8a18b71595ad30ca277cc3a081817af9a9c0ffe2c06cc200641cc1caaeed1dd18b156c92916908b37
+  checksum: d0ce7da01e81ec3bba0063494ba1694bcd66b6279d8b1b48b8c02214d9a9dc41f9e44e4045e56341b863f491c0b6b6916a8130d2a995c2121b0dbe1b5dc8dc03
   languageName: node
   linkType: hard
 
@@ -31065,14 +31052,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:5.1.1":
-  version: 5.1.1
-  resolution: "webpack-cli@npm:5.1.1"
+"webpack-cli@npm:5.1.3":
+  version: 5.1.3
+  resolution: "webpack-cli@npm:5.1.3"
   dependencies:
     "@discoveryjs/json-ext": ^0.5.0
-    "@webpack-cli/configtest": ^2.1.0
-    "@webpack-cli/info": ^2.0.1
-    "@webpack-cli/serve": ^2.0.4
+    "@webpack-cli/configtest": ^2.1.1
+    "@webpack-cli/info": ^2.0.2
+    "@webpack-cli/serve": ^2.0.5
     colorette: ^2.0.14
     commander: ^10.0.1
     cross-spawn: ^7.0.3
@@ -31093,7 +31080,7 @@ __metadata:
       optional: true
   bin:
     webpack-cli: bin/cli.js
-  checksum: a1530874f431a8c0d95f5ec0e545df1934f10ef95eca4b0532af1c1668f7008b24694d3c022a7fcc6a7a6f67db22e668defbd6256b263e766289f9b0b0f6db0a
+  checksum: f5c49fc1cdaf5a694d2bbab5a42a19b6e5ca7dde7e5c29d3b434122d071d47241aee439bf6dfe2c7a30ce722b08605b24b3dbb85778c68cca472660e93905547
   languageName: node
   linkType: hard
 
