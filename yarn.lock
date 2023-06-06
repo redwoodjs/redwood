@@ -941,9 +941,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-private-property-in-object@npm:7.21.10, @babel/plugin-proposal-private-property-in-object@npm:^7.12.1, @babel/plugin-proposal-private-property-in-object@npm:^7.21.0":
-  version: 7.21.10
-  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.10"
+"@babel/plugin-proposal-private-property-in-object@npm:7.21.11, @babel/plugin-proposal-private-property-in-object@npm:^7.12.1, @babel/plugin-proposal-private-property-in-object@npm:^7.21.0":
+  version: 7.21.11
+  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.11"
   dependencies:
     "@babel/helper-annotate-as-pure": ^7.18.6
     "@babel/helper-create-class-features-plugin": ^7.21.0
@@ -951,7 +951,7 @@ __metadata:
     "@babel/plugin-syntax-private-property-in-object": ^7.14.5
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 3e93f2f6e53290172c69b086f08d6fcc928222d440242bec9202ca5cebfccb5c32eba17b0dd232ff4b167b5acaa43d323472dd8b07e456cb07edf3e3f0679887
+  checksum: 3c8c9ea175101b1cbb2b0e8fee20fcbdd03eb0700d3581aa826ac3573c9b002f39b1512c2af9fd1903ff921bcc864da95ad3cdeba53c9fbcfb3dc23916eacf47
   languageName: node
   linkType: hard
 
@@ -7214,7 +7214,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": 7.18.6
     "@babel/plugin-proposal-decorators": 7.22.3
     "@babel/plugin-proposal-private-methods": 7.18.6
-    "@babel/plugin-proposal-private-property-in-object": 7.21.10
+    "@babel/plugin-proposal-private-property-in-object": 7.21.11
     "@babel/plugin-transform-runtime": 7.22.4
     "@babel/preset-env": 7.22.4
     "@babel/preset-react": 7.22.3
@@ -28460,7 +28460,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": 7.22.3
     "@babel/plugin-proposal-nullish-coalescing-operator": 7.18.6
     "@babel/plugin-proposal-private-methods": 7.18.6
-    "@babel/plugin-proposal-private-property-in-object": 7.21.10
+    "@babel/plugin-proposal-private-property-in-object": 7.21.11
     "@babel/plugin-transform-runtime": 7.22.4
     "@babel/preset-env": 7.22.4
     "@babel/preset-react": 7.22.3
