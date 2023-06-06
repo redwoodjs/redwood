@@ -7360,7 +7360,6 @@ __metadata:
     "@fastify/http-proxy": 9.1.0
     "@fastify/static": 6.10.2
     "@fastify/url-data": 5.3.1
-    "@redwoodjs/graphql-server": 5.2.4
     "@redwoodjs/project-config": 5.2.4
     "@types/aws-lambda": 8.10.115
     "@types/lodash.escape": 4.0.7

@@ -7,7 +7,7 @@ import {
 import { RedwoodError } from '@redwoodjs/api'
 import type { Logger } from '@redwoodjs/api/logger'
 
-import { RedwoodGraphQLContext } from '../types'
+import { RedwoodGraphQLContext } from '../functions/types'
 
 /**
  * Converts RedwoodErrors to GraphQLErrors

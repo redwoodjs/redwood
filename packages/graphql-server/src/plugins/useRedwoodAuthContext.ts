@@ -6,7 +6,11 @@ import {
   Decoder,
 } from '@redwoodjs/api'
 
-import { RedwoodGraphQLContext, GraphQLHandlerOptions } from '../types'
+// import { AuthenticationError } from '../errors'
+import {
+  RedwoodGraphQLContext,
+  GraphQLHandlerOptions,
+} from '../functions/types'
 
 /**
  * Envelop plugin for injecting the current user into the GraphQL Context,

@@ -10,7 +10,6 @@ export function createFastifyInstance(options?: FastifyServerOptions) {
 
 export { redwoodFastifyAPI } from './api.js'
 export { redwoodFastifyWeb } from './web.js'
-export { redwoodFastifyGraphQLServer } from './graphql.js'
 
 export type * from './types.js'
 
