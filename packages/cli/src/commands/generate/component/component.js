@@ -7,7 +7,7 @@ import {
 const REDWOOD_WEB_PATH_NAME = 'components'
 
 export const files = ({ name, typescript = false, ...options }) => {
-  const extension = typescript ? '.tsx' : '.js'
+  const extension = typescript ? '.tsx' : '.jsx'
   const componentFile = templateForComponentFile({
     name,
     webPathSection: REDWOOD_WEB_PATH_NAME,
