@@ -41,7 +41,7 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
     const code = transformTSToJS(f)
     if (code) {
       fs.writeFileSync(
-        path.join(cwd, f.replace('.tsx', '.js').replace('.ts', '.js')),
+        path.join(cwd, f.replace('.tsx', '.jsx').replace('.ts', '.js')),
         code,
         'utf8'
       )
