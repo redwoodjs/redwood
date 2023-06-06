@@ -1,11 +1,10 @@
 import { expect, PlaywrightTestArgs } from '@playwright/test'
 
-export const smokeTest = async ({ page, webServerPort }) => {
-  // Go to http://localhost:8910/
-  await page.goto(`http://localhost:${webServerPort}/`)
+export async function smokeTest({ page }: PlaywrightTestArgs) {
+  await page.goto('/')
 
-  // Check that the blog posts are being loaded
-  // Avoid checking titles, because we edit them in other tests
+  // Check that the blog posts are being loaded.
+  // Avoid checking titles because we edit them in other tests.
   await page.textContent('text=Meh waistcoat succulents umami')
   await page.textContent('text=Raclette shoreditch before they sold out lyft.')
   await page.textContent(
@@ -15,22 +14,21 @@ export const smokeTest = async ({ page, webServerPort }) => {
   // Click text=About
   await page.click('text=About')
 
-  expect(page.url()).toBe(`http://localhost:${webServerPort}/about`)
+  expect(page.url()).toBe('http://localhost:8910/about')
 
   await page.textContent(
     'text=This site was created to demonstrate my mastery of Redwood: Look on my works, ye'
   )
   // Click text=Contact
   await page.click('text=Contact')
-  expect(page.url()).toBe(`http://localhost:${webServerPort}/contact`)
+  expect(page.url()).toBe('http://localhost:8910/contact')
 
   // Click text=Admin
   await page.click('text=Admin')
-  expect(page.url()).toBe(`http://localhost:${webServerPort}/posts`)
+  expect(page.url()).toBe('http://localhost:8910/posts')
 }
 
 interface AuthUtilsParams {
-  webUrl: string
   email?: string
   password?: string
   fullName?: string
@@ -38,13 +36,12 @@ interface AuthUtilsParams {
 }
 
 export const signUpTestUser = async ({
-  webUrl,
   page,
   email = 'testuser@bazinga.com',
   password = 'test123',
   fullName = 'Test User',
 }: AuthUtilsParams) => {
-  await page.goto(`${webUrl}/signup`)
+  await page.goto('/signup')
 
   await page.locator('input[name="username"]').click()
   // Fill input[name="username"]
@@ -74,12 +71,11 @@ export const signUpTestUser = async ({
 }
 
 export const loginAsTestUser = async ({
-  webUrl,
   page,
   email = 'testuser@bazinga.com',
   password = 'test123',
 }: AuthUtilsParams) => {
-  await page.goto(`${webUrl}/login`)
+  await page.goto('/login')
 
   // Click input[name="username"]
   await page.locator('input[name="username"]').click()
