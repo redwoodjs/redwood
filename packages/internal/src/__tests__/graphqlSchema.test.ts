@@ -40,27 +40,6 @@ test('Generates GraphQL schema', async () => {
   expect(schemaPath).toMatch(expectedPath)
 })
 
-test('Includes live query directive if serverful and realtime ', async () => {
-  const fixturePath = path.resolve(
-    __dirname,
-    './fixtures/graphqlCodeGen/realtime'
-  )
-  process.env.RWJS_CWD = fixturePath
-
-  const expectedPath = path.join(fixturePath, '.redwood', 'schema.graphql')
-
-  jest
-    .spyOn(fs, 'writeFileSync')
-    .mockImplementation(
-      (file: fs.PathOrFileDescriptor, data: string | ArrayBufferView) => {
-        expect(file).toMatch(expectedPath)
-        expect(data).toMatchSnapshot()
-      }
-    )
-
-  await generateGraphQLSchema()
-})
-
 test('Prints error message when schema loading fails', async () => {
   const fixturePath = path.resolve(
     __dirname,

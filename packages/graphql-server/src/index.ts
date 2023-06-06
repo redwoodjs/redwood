@@ -28,12 +28,4 @@ export {
   TransformArgs,
 } from './plugins/useRedwoodDirective'
 
-export {
-  useRedwoodRealtime,
-  createPubSub,
-  InMemoryLiveQueryStore,
-  liveDirectiveTypeDefs,
-} from './plugins/useRedwoodRealtime'
-
-export type { PubSub } from './plugins/useRedwoodRealtime'
 export * as rootSchema from './rootSchema'
