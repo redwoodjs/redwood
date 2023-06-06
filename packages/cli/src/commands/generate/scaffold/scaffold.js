@@ -449,7 +449,7 @@ const layoutFiles = (name, force, generateTypescript, templateStrings) => {
   layouts.forEach((layout) => {
     const outputLayoutName = layout.replace(
       /\.tsx\.template/,
-      generateTypescript ? '.tsx' : '.js'
+      generateTypescript ? '.tsx' : '.jsx'
     )
 
     const outputPath = path.join(
@@ -510,11 +510,11 @@ const pageFiles = async (
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.jsx')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
-      outputPageName.replace(/\.(js|tsx?)/, '')
+      outputPageName.replace(/\.[jt]sx?/, '')
 
     const outputPath = path.join(
       getPaths().web.pages,
@@ -571,11 +571,11 @@ const componentFiles = async (
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
-      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.js')
+      .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.jsx')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
-      outputComponentName.replace(/\.(js|tsx?)/, '')
+      outputComponentName.replace(/\.[jt]sx?/, '')
 
     const outputPath = path.join(
       getPaths().web.components,
