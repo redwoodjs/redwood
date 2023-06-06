@@ -1,12 +1,12 @@
 import React, { Suspense, useEffect, useRef } from 'react'
 
 import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
+import { usePageLoadingContext } from './PageLoadingContext'
 import { inIframe, Spec } from './util'
 
 interface Props {
   path: string
   spec: Spec
-  delay?: number
   params?: Record<string, string>
   whileLoadingPage?: () => React.ReactNode | null
   children?: React.ReactNode
@@ -23,6 +23,22 @@ if (typeof window !== 'undefined') {
 }
 
 let firstLoad = true
+
+const Fallback = ({ children }: { children: React.ReactNode }) => {
+  const { loading, setPageLoadingContext, delay } = usePageLoadingContext()
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPageLoadingContext(true)
+    }, delay)
+    return () => {
+      clearTimeout(timer)
+      setPageLoadingContext(false)
+    }
+  }, [delay, setPageLoadingContext])
+
+  return <>{loading ? children : null}</>
+}
 
 export const ActiveRouteLoader = ({
   spec,
@@ -69,12 +85,9 @@ export const ActiveRouteLoader = ({
     delete params['key']
   }
 
-  // @TODO whileLoadingPage is undefined, why?
   return (
-    <Suspense fallback={whileLoadingPage?.()}>
+    <Suspense fallback={<Fallback>{whileLoadingPage?.()}</Fallback>}>
       <LazyRouteComponent {...params} />
-      {/* @TODO why do we need activePageContext in InternalRoute??? */}
-      {/* @TODO adding announcer causes hydration warnings */}
       <div
         id="redwood-announcer"
         style={{

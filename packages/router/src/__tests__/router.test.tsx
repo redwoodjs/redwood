@@ -493,7 +493,7 @@ describe('slow imports', () => {
   )
 
   // TODO: Page loading delay not implemented
-  test.skip(
+  test(
     'usePageLoadingContext',
     async () => {
       // We want to show a loading indicator if loading pages is taking a long

@@ -4,6 +4,7 @@ import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
 import { Redirect } from './links'
 import { LocationProvider, useLocation } from './location'
+import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
 import {
   isValidRoute,
@@ -134,11 +135,12 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
       return (
         <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
           <ParamsProvider>
-            <ActiveRouteLoader
-              spec={normalizePage(NotFoundPage)}
-              delay={pageLoadingDelay}
-              path={location.pathname}
-            />
+            <PageLoadingContextProvider delay={pageLoadingDelay}>
+              <ActiveRouteLoader
+                spec={normalizePage(NotFoundPage)}
+                path={location.pathname}
+              />
+            </PageLoadingContextProvider>
           </ParamsProvider>
         </RouterContextProvider>
       )
@@ -176,24 +178,25 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   return (
     <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
       <ParamsProvider allParams={allParams}>
-        {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
-        {!redirect && page && (
-          <WrappedPage
-            key={setId}
-            wrappers={wrappers}
-            routeLoaderElement={
-              <ActiveRouteLoader
-                path={path}
-                spec={normalizePage(page as any)}
-                delay={pageLoadingDelay}
-                params={allParams}
-                whileLoadingPage={whileLoadingPage as any}
-                {...setProps}
-              />
-            }
-            setProps={setProps}
-          />
-        )}
+        <PageLoadingContextProvider delay={pageLoadingDelay}>
+          {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
+          {!redirect && page && (
+            <WrappedPage
+              key={setId}
+              wrappers={wrappers}
+              routeLoaderElement={
+                <ActiveRouteLoader
+                  path={path}
+                  spec={normalizePage(page as any)}
+                  params={allParams}
+                  whileLoadingPage={whileLoadingPage as any}
+                  {...setProps}
+                />
+              }
+              setProps={setProps}
+            />
+          )}
+        </PageLoadingContextProvider>
       </ParamsProvider>
     </RouterContextProvider>
   )
