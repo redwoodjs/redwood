@@ -106,7 +106,7 @@ export const prettify = (templateFilename, renderedTemplate) => {
 export const readFile = (target) =>
   fs.readFileSync(target, { encoding: 'utf8' })
 
-const SUPPORTED_EXTENSIONS = ['.js', '.ts', '.tsx']
+const SUPPORTED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx']
 
 export const deleteFile = (file) => {
   const extension = path.extname(file)
