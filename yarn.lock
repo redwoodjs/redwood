@@ -1189,9 +1189,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-private-property-in-object@npm:7.21.10, @babel/plugin-proposal-private-property-in-object@npm:^7.21.0":
-  version: 7.21.10
-  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.10"
+"@babel/plugin-proposal-private-property-in-object@npm:7.21.11, @babel/plugin-proposal-private-property-in-object@npm:^7.21.0":
+  version: 7.21.11
+  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.11"
   dependencies:
     "@babel/helper-annotate-as-pure": ^7.18.6
     "@babel/helper-create-class-features-plugin": ^7.21.0
@@ -1199,7 +1199,7 @@ __metadata:
     "@babel/plugin-syntax-private-property-in-object": ^7.14.5
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 3e93f2f6e53290172c69b086f08d6fcc928222d440242bec9202ca5cebfccb5c32eba17b0dd232ff4b167b5acaa43d323472dd8b07e456cb07edf3e3f0679887
+  checksum: 3c8c9ea175101b1cbb2b0e8fee20fcbdd03eb0700d3581aa826ac3573c9b002f39b1512c2af9fd1903ff921bcc864da95ad3cdeba53c9fbcfb3dc23916eacf47
   languageName: node
   linkType: hard
 
@@ -2563,18 +2563,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:^0.20.1":
-  version: 0.20.1
-  resolution: "@clerk/backend@npm:0.20.1"
+"@clerk/backend@npm:^0.21.0":
+  version: 0.21.0
+  resolution: "@clerk/backend@npm:0.21.0"
   dependencies:
-    "@clerk/types": ^3.40.0
+    "@clerk/types": ^3.41.0
     "@peculiar/webcrypto": 1.4.1
     "@types/node": 16.18.6
     deepmerge: 4.2.2
     node-fetch-native: 1.0.1
     snakecase-keys: 5.4.4
     tslib: 2.4.1
-  checksum: 12cdde55548a8793d3186d015b2ea458b63372bb385d477b087f6b75bebff43c4a8e4ff982101b105fdad53e2d554291d9ae8bb5e639bba0c6c35d3f3f313e1d
+  checksum: 4347c32962318d79c69c6f11123fa28802c8c9be4d345ae90c8544f2113ec6331d3e2c954bb2688a33b957fb0c744531d88db743e9c59004bedb5dd5fff23ec1
   languageName: node
   linkType: hard
 
@@ -2592,12 +2592,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.10.2":
-  version: 4.10.2
-  resolution: "@clerk/clerk-sdk-node@npm:4.10.2"
+"@clerk/clerk-sdk-node@npm:4.10.3":
+  version: 4.10.3
+  resolution: "@clerk/clerk-sdk-node@npm:4.10.3"
   dependencies:
-    "@clerk/backend": ^0.20.1
-    "@clerk/types": ^3.40.0
+    "@clerk/backend": ^0.21.0
+    "@clerk/types": ^3.41.0
     "@types/cookies": 0.7.7
     "@types/express": 4.17.14
     "@types/node-fetch": 2.6.2
@@ -2605,7 +2605,7 @@ __metadata:
     cookie: 0.5.0
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: 54b1eb4de1ab8619edf4be1db4aa3c2b21aa42d9613e07827acf09ca431d6a7430b96bb3025c65254179296ff69f4d10e8f8573705c6b538f37492d5c723fb78
+  checksum: 9fb9970725b8c569abc322de0dd18ea02c2d2b8206890a9482685c72a80e0d16dc32a5fce9b00f88c0a1f199fc7f67a281a1693017b8b0fe31ccf992948e09ca
   languageName: node
   linkType: hard
 
@@ -2620,12 +2620,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.40.0, @clerk/types@npm:^3.40.0":
+"@clerk/types@npm:3.40.0":
   version: 3.40.0
   resolution: "@clerk/types@npm:3.40.0"
   dependencies:
     csstype: 3.1.1
   checksum: a8b3250b1539fb3a5c2b2b13c22597d14f0cbfe1bb4125ed444d4bb2d119548133b1d29a2e353aa3513e9516cad38eeec70304ca4b4c49aa2d49d0176238a7ab
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^3.40.0, @clerk/types@npm:^3.41.0":
+  version: 3.41.0
+  resolution: "@clerk/types@npm:3.41.0"
+  dependencies:
+    csstype: 3.1.1
+  checksum: e9201848b5afbd0338e1b01952dab42f9a5966e041d7e31bb7987440675de08d5b0dab63dbdb43086c5402a275c81c16fd93d2cd7f84bc783fa9e01e9c5e1b6b
   languageName: node
   linkType: hard
 
@@ -6917,7 +6926,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 4.2.0
-    "@whatwg-node/fetch": 0.9.2
+    "@whatwg-node/fetch": 0.9.3
     core-js: 3.30.2
     humanize-string: 2.1.0
     jest: 29.5.0
@@ -7057,7 +7066,7 @@ __metadata:
     "@babel/cli": 7.21.5
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
-    "@clerk/clerk-sdk-node": 4.10.2
+    "@clerk/clerk-sdk-node": 4.10.3
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.115
     core-js: 3.30.2
@@ -7528,7 +7537,7 @@ __metadata:
     "@types/prettier": 2.7.3
     "@types/yargs": 17.0.24
     "@vscode/ripgrep": 1.15.3
-    "@whatwg-node/fetch": 0.9.2
+    "@whatwg-node/fetch": 0.9.3
     cheerio: 1.0.0-rc.12
     core-js: 3.30.2
     deepmerge: 4.3.1
@@ -7559,7 +7568,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": 7.18.6
     "@babel/plugin-proposal-decorators": 7.22.3
     "@babel/plugin-proposal-private-methods": 7.18.6
-    "@babel/plugin-proposal-private-property-in-object": 7.21.10
+    "@babel/plugin-proposal-private-property-in-object": 7.21.11
     "@babel/plugin-transform-runtime": 7.22.4
     "@babel/preset-env": 7.22.4
     "@babel/preset-react": 7.22.3
@@ -7597,7 +7606,7 @@ __metadata:
     style-loader: 3.3.3
     typescript: 5.1.3
     url-loader: 4.1.1
-    webpack: 5.85.0
+    webpack: 5.85.1
     webpack-bundle-analyzer: 4.9.0
     webpack-cli: 5.1.3
     webpack-dev-server: 4.15.0
@@ -7730,7 +7739,7 @@ __metadata:
     "@types/lodash.merge": 4.6.7
     "@types/lodash.omitby": 4.6.7
     "@types/uuid": 9.0.1
-    "@whatwg-node/fetch": 0.9.2
+    "@whatwg-node/fetch": 0.9.3
     aws-lambda: 1.0.7
     core-js: 3.30.2
     graphql: 16.6.0
@@ -7811,7 +7820,7 @@ __metadata:
     "@redwoodjs/structure": 5.0.0
     "@redwoodjs/web": 5.0.0
     "@types/mime-types": 2.1.1
-    "@whatwg-node/fetch": 0.9.2
+    "@whatwg-node/fetch": 0.9.3
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 11.0.4
     cheerio: 1.0.0-rc.12
@@ -7978,7 +7987,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.1
     "@types/yargs": 17.0.24
-    "@whatwg-node/fetch": 0.9.2
+    "@whatwg-node/fetch": 0.9.3
     ci-info: 3.8.0
     core-js: 3.30.2
     envinfo: 7.8.1
@@ -8051,7 +8060,7 @@ __metadata:
     "@vitejs/plugin-react": 4.0.0
     buffer: 6.0.3
     core-js: 3.30.2
-    glob: 10.2.6
+    glob: 10.2.7
     jest: 29.5.0
     typescript: 5.1.3
     vite: 4.3.9
@@ -8116,24 +8125,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.30":
-  version: 0.3.30
-  resolution: "@replayio/playwright@npm:0.3.30"
+"@replayio/playwright@npm:0.3.31":
+  version: 0.3.31
+  resolution: "@replayio/playwright@npm:0.3.31"
   dependencies:
-    "@replayio/replay": ^0.12.10
-    "@replayio/test-utils": ^0.5.9
+    "@replayio/replay": ^0.12.11
+    "@replayio/test-utils": ^0.5.10
     uuid: ^8.3.2
   peerDependencies:
     "@playwright/test": 1.19.x
   bin:
     replayio-playwright: bin/replayio-playwright.js
-  checksum: f5b94afbdda8512ce3c0cb209a59659ae60f86d34a4222aad682969275fe0b87def9e8dd4a159f13d4a17cef0d645580cf9174a1e1453c8677d33fbb33f60587
+  checksum: 80a04eb3d8cb39367ea31c81ed0e67a761510ef05905bcc2c6aab3f35a4aa1a40e51c2bd0a230b5d1be02ee0310a05d79a2aeee2a4ecca72190517d2eb67a0ba
   languageName: node
   linkType: hard
 
-"@replayio/replay@npm:^0.12.10":
-  version: 0.12.10
-  resolution: "@replayio/replay@npm:0.12.10"
+"@replayio/replay@npm:^0.12.11":
+  version: 0.12.11
+  resolution: "@replayio/replay@npm:0.12.11"
   dependencies:
     "@replayio/sourcemap-upload": ^1.0.7
     commander: ^7.2.0
@@ -8147,7 +8156,7 @@ __metadata:
     ws: ^7.5.0
   bin:
     replay: bin/replay.js
-  checksum: 72115f820248cbaae6089634f86591adcb62e1e09751ba0a15248e9123794d7700e6268246d1f8bfc977dea8ff1a62a8c6e155c826e3c1635479718241470eeb
+  checksum: 6314b4d193a86d7e4fd973304dff81dd979939a03e28f6d1e911982913521ae781682ebcc2d1da83734746d6960eb3a9363217a63cec3fa6c09218448e33cc4b
   languageName: node
   linkType: hard
 
@@ -8164,16 +8173,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/test-utils@npm:^0.5.9":
-  version: 0.5.9
-  resolution: "@replayio/test-utils@npm:0.5.9"
+"@replayio/test-utils@npm:^0.5.10":
+  version: 0.5.10
+  resolution: "@replayio/test-utils@npm:0.5.10"
   dependencies:
-    "@replayio/replay": ^0.12.10
+    "@replayio/replay": ^0.12.11
     "@types/node-fetch": ^2.6.2
     debug: ^4.3.4
     node-fetch: ^2.6.7
     uuid: ^8.3.2
-  checksum: 627f3ca0cd190244b8efd0ed39e04b795e83c966557ae18ea845de580a96fbbce387ab609a790ea64fdb2de163dbf06eac31faa22c9afd08b0c45f6a9f8e100a
+  checksum: 40872d499d6f82c9c756cf615e9c1c6ef099ef5e5b8170dffc278f03058f67380875b0f74c94610338a1b1aeec7f712363ab6b078e2e4d7425a879fbeb77284b
   languageName: node
   linkType: hard
 
@@ -11097,13 +11106,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.2":
-  version: 0.9.2
-  resolution: "@whatwg-node/fetch@npm:0.9.2"
+"@whatwg-node/fetch@npm:0.9.3":
+  version: 0.9.3
+  resolution: "@whatwg-node/fetch@npm:0.9.3"
   dependencies:
-    "@whatwg-node/node-fetch": ^0.4.1
+    "@whatwg-node/node-fetch": ^0.4.2
     urlpattern-polyfill: ^9.0.0
-  checksum: c57ad3fd32cddb2046a4945cc3244104aa5fb300cbf85a3ea3e8d66fc30a879536180da684c010ff45a2067e01994345e1acd59059e6c433834613bf4243f89c
+  checksum: 8dce996b713f171751249453fff8f686382cc2810a32064b3242dce42dc14c39ba7b4ffe89c1e14389e68ca737ecab75ee91a5e58e1c7f4d2bb0175f20cb56b9
   languageName: node
   linkType: hard
 
@@ -11133,16 +11142,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/node-fetch@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "@whatwg-node/node-fetch@npm:0.4.1"
+"@whatwg-node/node-fetch@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "@whatwg-node/node-fetch@npm:0.4.2"
   dependencies:
     "@whatwg-node/events": ^0.1.0
     busboy: ^1.6.0
     fast-querystring: ^1.1.1
     fast-url-parser: ^1.1.3
     tslib: ^2.3.1
-  checksum: 4ec8633a8c3b5845fa94b2190323639c11c973f594b9bc311465871b3dd4c4efb56d4d6c4ed0fcb6fd113ad33685023dcb8a9672e4052d94bf331ea8df65be4b
+  checksum: dcaf22cae745edcdbfedbecd1ee6250af95b96081878863c2032bb58aa9ebcff4415e54d809cf101a62f074a399ccdf7c765af21e514cf281b515a77c66328f7
   languageName: node
   linkType: hard
 
@@ -18491,7 +18500,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:10.2.6, glob@npm:^10.2.2, glob@npm:^10.2.5":
+"glob@npm:10.2.6":
   version: 10.2.6
   resolution: "glob@npm:10.2.6"
   dependencies:
@@ -18503,6 +18512,21 @@ __metadata:
   bin:
     glob: dist/cjs/src/bin.js
   checksum: 5c80777fd10ee780095ae428fe2c2e57ec81bddae2e3be0174e515360de77075c28061c47f3aab06c226f50ef13371dbb2b5ff02241abc511bed1f2d60f74edf
+  languageName: node
+  linkType: hard
+
+"glob@npm:10.2.7, glob@npm:^10.2.2, glob@npm:^10.2.5":
+  version: 10.2.7
+  resolution: "glob@npm:10.2.7"
+  dependencies:
+    foreground-child: ^3.1.0
+    jackspeak: ^2.0.3
+    minimatch: ^9.0.1
+    minipass: ^5.0.0 || ^6.0.2
+    path-scurry: ^1.7.0
+  bin:
+    glob: dist/cjs/src/bin.js
+  checksum: 15b742f933c4302cca278527a720c1300ba67b92975005e54e0fb85fee85aff1c45e71fbac386a2e190e64b7b17897b5ae1bc6cbd2cdd96a62c0dc55c8fb076f
   languageName: node
   linkType: hard
 
@@ -27513,7 +27537,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": 7.22.3
     "@babel/plugin-proposal-nullish-coalescing-operator": 7.18.6
     "@babel/plugin-proposal-private-methods": 7.18.6
-    "@babel/plugin-proposal-private-property-in-object": 7.21.10
+    "@babel/plugin-proposal-private-property-in-object": 7.21.11
     "@babel/plugin-transform-runtime": 7.22.4
     "@babel/preset-env": 7.22.4
     "@babel/preset-react": 7.22.3
@@ -27522,7 +27546,7 @@ __metadata:
     "@faker-js/faker": 8.0.2
     "@npmcli/arborist": 6.2.9
     "@playwright/test": 1.34.3
-    "@replayio/playwright": 0.3.30
+    "@replayio/playwright": 0.3.31
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
@@ -31224,9 +31248,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5, webpack@npm:5.85.0, webpack@npm:^5":
-  version: 5.85.0
-  resolution: "webpack@npm:5.85.0"
+"webpack@npm:5, webpack@npm:5.85.1, webpack@npm:^5":
+  version: 5.85.1
+  resolution: "webpack@npm:5.85.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -31257,7 +31281,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 93552ef4ac0ff69651bd4b681e93c4676be1ff8f2723148c5134f4e215da76179513585d24ae46eb01c839ff208f7758b7618eb09f4820ee33cf7184fae08412
+  checksum: 9a518f2ae249aa93a40325e1cf0a03fbae56a3d068a94c689e80bb490523eca45d7133bbe2dca57b29a50c44003a55a260e8ea760f6f5bf1e4472bf136a288bb
   languageName: node
   linkType: hard
 
