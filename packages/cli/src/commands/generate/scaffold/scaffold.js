@@ -657,9 +657,9 @@ const addLayoutImport = () => {
     )
     writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-    return 'Added layout import to Routes.{js,tsx}'
+    return 'Added layout import to Routes.{jsx,tsx}'
   } else {
-    return 'Layout import already exists in Routes.{js,tsx}'
+    return 'Layout import already exists in Routes.{jsx,tsx}'
   }
 }
 
@@ -691,7 +691,7 @@ const addSetImport = (task) => {
 
   if (!redwoodRouterImport) {
     task.skip(
-      "Couldn't add Set import from @redwoodjs/router to Routes.{js,tsx}"
+      "Couldn't add Set import from @redwoodjs/router to Routes.{jsx,tsx}"
     )
     return undefined
   }
@@ -713,7 +713,7 @@ const addSetImport = (task) => {
 
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Added Set import to Routes.{js,tsx}'
+  return 'Added Set import to Routes.{jsx,tsx}'
 }
 
 const addScaffoldSetToRouter = async (model, path) => {
