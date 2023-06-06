@@ -216,7 +216,7 @@ const updateApp = () => {
         appPath = appJsPath
       } else {
         // TODO this should never happen. Throw instead?
-        console.log(`Skipping, did not detect web/src/App.js|tsx`)
+        console.log(`Skipping, did not detect web/src/App.jsx|tsx`)
         return
       }
 
