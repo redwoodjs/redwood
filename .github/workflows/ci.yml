@@ -169,6 +169,9 @@ jobs:
         run: yarn rw dev --no-generate --fwd="--no-open" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
+      - name: 🌲 Install Cypress
+        run: yarn run cypress install
+
       - name: 🌲 Run cypress
         uses: cypress-io/github-action@v5
         env:
@@ -244,21 +247,21 @@ jobs:
 
       - name: 🧑‍💻 Run dev smoke tests
         working-directory: ./tasks/smoke-tests/dev
-        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
-          RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
-          RECORD_REPLAY_TEST_METRICS: 1
+          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
+          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: 🔐 Run auth smoke tests
         working-directory: ./tasks/smoke-tests/auth
-        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
-          RECORD_REPLAY_TEST_METRICS: 1
+          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
+          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: Run `rw build --no-prerender`
         run: |
@@ -272,30 +275,30 @@ jobs:
 
       - name: 🖥️ Run serve smoke tests
         working-directory: tasks/smoke-tests/serve
-        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
-          RECORD_REPLAY_TEST_METRICS: 1
+          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
+          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: 📄 Run prerender smoke tests
         working-directory: tasks/smoke-tests/prerender
-        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
-          RECORD_REPLAY_TEST_METRICS: 1
+          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
+          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: 📕 Run Storybook smoke tests
         working-directory: tasks/smoke-tests/storybook
-        run: npx playwright test --project ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
-          RECORD_REPLAY_TEST_METRICS: 1
+          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
+          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: Run `rw info`
         run: |
@@ -381,11 +384,11 @@ jobs:
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
         continue-on-error: true
 
-      - name: Upload Replays
-        if: always()
-        uses: replayio/action-upload@v0.5.0
-        with:
-          api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
+      # - name: Upload Replays
+      #   if: always()
+      #   uses: replayio/action-upload@v0.5.0
+      #   with:
+      #     api-key: rwk_cZn4WLe8106j6tC5ygNQxDpxAwCLpFo5oLQftiRN7OP
 
   smoke-tests-docs:
     needs: only-doc-changes
