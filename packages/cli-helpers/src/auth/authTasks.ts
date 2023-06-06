@@ -286,7 +286,7 @@ const addUseAuthHook = (componentName: string, content: string) => {
 }
 
 /**
- * Actually inserts the required config lines into App.{js,tsx}
+ * Actually inserts the required config lines into App.{jsx,tsx}
  * Exported for testing
  */
 export const addConfigToWebApp = <
@@ -298,7 +298,7 @@ export const addConfigToWebApp = <
       const webAppPath = getWebAppPath()
 
       if (!fs.existsSync(webAppPath)) {
-        const ext = isTypeScriptProject() ? 'tsx' : 'js'
+        const ext = isTypeScriptProject() ? 'tsx' : 'jsx'
         throw new Error(`Could not find root App.${ext}`)
       }
 
