@@ -117,7 +117,7 @@ beforeEach(() => {
 })
 
 describe('authTasks', () => {
-  it('Should update App.{js,tsx}, Routes.{jsx,tsx} and add auth.ts (Auth0)', () => {
+  it('Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Auth0)', () => {
     const templatePath = path.join(
       getPaths().base,
       platformPath('/templates/web/auth.ts.template')

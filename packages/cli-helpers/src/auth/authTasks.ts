@@ -219,7 +219,7 @@ export const removeAuthProvider = (content: string) => {
     .join('\n')
 }
 
-/** returns the content of App.{js,tsx} with <AuthProvider> added */
+/** returns the content of App.{jsx,tsx} with <AuthProvider> added */
 const addAuthProviderToApp = (content: string, setupMode: AuthSetupMode) => {
   if (setupMode === 'FORCE' || setupMode === 'REPLACE') {
     content = removeAuthProvider(content)
@@ -230,7 +230,7 @@ const addAuthProviderToApp = (content: string, setupMode: AuthSetupMode) => {
   )
 
   if (!match) {
-    throw new Error('Could not find <RedwoodProvider> in App.{js,tsx}')
+    throw new Error('Could not find <RedwoodProvider> in App.{jsx,tsx}')
   }
 
   // If Auth.tsx already contains exactly what we're trying to add there's no
