@@ -70,7 +70,6 @@ export async function createCacheKeys(prefix) {
     process.env.RUNNER_OS,
     // @ts-expect-error not sure how to change the lib compiler option to es2021+ here.
     process.env.GITHUB_REF.replaceAll('/', '-'),
-    'test-project',
     await hashFiles(path.join('__fixtures__', 'test-project'))
   ].join('-')
 
