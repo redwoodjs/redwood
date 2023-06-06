@@ -2,6 +2,7 @@
 // @ts-check
 
 import { fileURLToPath } from 'node:url'
+import path from 'node:path'
 
 import { getExecOutput } from '@actions/exec'
 import { hashFiles } from '@actions/glob'
@@ -69,6 +70,7 @@ export async function createCacheKeys(prefix) {
     process.env.RUNNER_OS,
     // @ts-expect-error not sure how to change the lib compiler option to es2021+ here.
     process.env.GITHUB_REF.replaceAll('/', '-'),
+    await hashFiles(path.join('__fixtures__', 'test-project')),
   ].join('-')
 
   const dependenciesKey = [
