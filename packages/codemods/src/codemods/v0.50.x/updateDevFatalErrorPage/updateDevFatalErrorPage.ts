@@ -36,7 +36,7 @@ export const updateDevFatalErrorPage = async () => {
 
       const text = await res.text()
 
-      const newFatalErrorPage = `${filename}.${isTSPage ? 'tsx' : 'js'}`
+      const newFatalErrorPage = `${filename}.${isTSPage ? 'tsx' : 'jsx'}`
 
       fs.writeFileSync(newFatalErrorPage, text)
     }
