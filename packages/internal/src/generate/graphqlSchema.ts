@@ -17,7 +17,6 @@ export const generateGraphQLSchema = async () => {
     [print(rootSchema.schema)]: {},
     'graphql/**/*.sdl.{js,ts}': {},
     'directives/**/*.{js,ts}': {},
-    'subscriptions/**/*.{js,ts}': {},
   }
 
   // If we are serverful, we need to include the live directive for realtime support

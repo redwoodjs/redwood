@@ -11,7 +11,6 @@ export {
   GraphQLHooksProvider,
   useQuery,
   useMutation,
-  useSubscription,
 } from './components/GraphQLHooksProvider'
 
 export * from './components/CellCacheContext'

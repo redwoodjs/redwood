@@ -9,7 +9,6 @@ import {
   GraphQLHooksProvider,
   useQuery,
   useMutation,
-  useSubscription,
 } from './GraphQLHooksProvider'
 
 const TestUseQueryHook: React.FunctionComponent = () => {
@@ -34,17 +33,6 @@ const TestUseMutationHook: React.FunctionComponent = () => {
   return <>{JSON.stringify(result)}</>
 }
 
-const TestUseSubscriptionHook: React.FunctionComponent = () => {
-  // @ts-expect-error - Purposefully not passing in a DocumentNode type here.
-  const result = useSubscription('subscription TestQuery { answer }', {
-    variables: {
-      question: 'What is the answer to life, the universe and everything?',
-    },
-  })
-
-  return <>{JSON.stringify(result)}</>
-}
-
 describe('QueryHooksProvider', () => {
   test('useQueryHook is called with the correct query and arguments', (done) => {
     const myUseQueryHook = (query, options) => {
@@ -56,11 +44,7 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider
-        useQuery={myUseQueryHook}
-        useMutation={null}
-        useSubscription={null}
-      >
+      <GraphQLHooksProvider useQuery={myUseQueryHook} useMutation={null}>
         <TestUseQueryHook />
       </GraphQLHooksProvider>
     )
@@ -76,11 +60,7 @@ describe('QueryHooksProvider', () => {
       return { loading: false, data: { answer: 42 } }
     }
     render(
-      <GraphQLHooksProvider
-        useQuery={null}
-        useMutation={myUseMutationHook}
-        useSubscription={null}
-      >
+      <GraphQLHooksProvider useQuery={null} useMutation={myUseMutationHook}>
         <TestUseMutationHook />
       </GraphQLHooksProvider>
     )
@@ -107,24 +87,6 @@ describe('QueryHooksProvider', () => {
     render(
       <GraphQLHooksProvider useQuery={null} useMutation={myUseMutationHook}>
         <TestUseMutationHook />
-      </GraphQLHooksProvider>
-    )
-    await waitFor(() =>
-      screen.getByText('{"loading":false,"data":{"answer":42}}')
-    )
-  })
-
-  test('useSubscriptionHook returns the correct result', async () => {
-    const myUseSubscriptionHook = () => {
-      return { loading: false, data: { answer: 42 } }
-    }
-    render(
-      <GraphQLHooksProvider
-        useQuery={null}
-        useMutation={null}
-        useSubscription={myUseSubscriptionHook}
-      >
-        <TestUseSubscriptionHook />
       </GraphQLHooksProvider>
     )
     await waitFor(() =>
