@@ -174,7 +174,7 @@ export default function (
                         t.arrowFunctionExpression(
                           [],
                           t.callExpression(t.identifier('import'), [
-                            t.stringLiteral(relativeImport),
+                            importArgument,
                           ])
                         ),
                       ])

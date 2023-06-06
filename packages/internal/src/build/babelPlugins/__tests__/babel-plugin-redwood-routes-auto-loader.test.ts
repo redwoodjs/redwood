@@ -37,7 +37,7 @@ describe('page auto loader correctly imports pages', () => {
     expect(result?.code).toContain(`const HomePage = {
   name: "HomePage",
   prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
-  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
+  LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
 `)
   })
 
