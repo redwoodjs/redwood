@@ -169,6 +169,9 @@ jobs:
         run: yarn rw dev --no-generate --fwd="--no-open" &
         working-directory: ${{ steps.createpath.outputs.project_path }}
 
+      - name: 🌲 Install Cypress
+        run: yarn run cypress install
+
       - name: 🌲 Run cypress
         uses: cypress-io/github-action@v5
         env:
