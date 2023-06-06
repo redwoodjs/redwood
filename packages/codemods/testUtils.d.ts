@@ -8,7 +8,7 @@ declare module 'jscodeshift/dist/testUtils' {
     options?: Options | null,
     testFilePrefix?: string | null,
     testOptions?: {
-      parser: 'ts' | 'tsx' | 'js' | Parser
+      parser: 'ts' | 'tsx' | 'js' | 'jsx' | Parser
     }
   ): () => any
 
