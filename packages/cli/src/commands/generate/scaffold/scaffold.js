@@ -241,12 +241,12 @@ const formatters = async (name, isTypescript) => {
   const outputPath = path.join(
     getPaths().web.src,
     'lib',
-    isTypescript ? 'formatters.tsx' : 'formatters.js'
+    isTypescript ? 'formatters.tsx' : 'formatters.jsx'
   )
   const outputPathTest = path.join(
     getPaths().web.src,
     'lib',
-    isTypescript ? 'formatters.test.tsx' : 'formatters.test.js'
+    isTypescript ? 'formatters.test.tsx' : 'formatters.test.jsx'
   )
 
   // skip files that already exist on disk, never worry about overwriting
