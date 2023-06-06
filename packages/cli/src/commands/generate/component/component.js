@@ -29,7 +29,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     generator: 'component',
     // Using two different template files here because we have a TS-specific
     // information in a comment in the .tsx template
-    templatePath: typescript ? 'stories.tsx.template' : 'stories.js.template',
+    templatePath: typescript ? 'stories.tsx.template' : 'stories.jsx.template',
   })
 
   const files = [componentFile]
