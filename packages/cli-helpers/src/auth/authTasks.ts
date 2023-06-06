@@ -293,7 +293,7 @@ export const addConfigToWebApp = <
   Renderer extends typeof ListrRenderer
 >(): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
-    title: 'Updating web/src/App.{js,tsx}',
+    title: 'Updating web/src/App.{jsx,tsx}',
     task: (ctx, task) => {
       const webAppPath = getWebAppPath()
 
@@ -351,8 +351,11 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
 
   const isTSProject = isTypeScriptProject()
 
-  // ext will be tsx, ts or js
-  const ext = isTypeScriptProject() ? templateExtension : 'js'
+  // ext will be tsx, ts or jsx, js
+  let ext = templateExtension
+  if (!isTypeScriptProject()) {
+    ext = ext?.replace('ts', 'js')
+  }
 
   return {
     title: `Creating web/src/auth.${ext}`,
