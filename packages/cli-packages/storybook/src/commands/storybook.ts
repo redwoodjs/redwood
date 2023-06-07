@@ -3,6 +3,8 @@ import terminalLink from 'terminal-link'
 import c from '../lib/colors'
 import { StorybookYargsOptions } from '../types'
 
+import type { Argv } from 'yargs'
+
 export const command = 'storybook'
 export const aliases = ['sb']
 export const description =
@@ -18,8 +20,8 @@ export const defaultOptions: StorybookYargsOptions = {
 }
 
 // TODO: Provide a type for the `yargs` argument
-export const builder = (yargs: any) => {
-  yargs
+export function builder(yargs: Argv<StorybookYargsOptions>): Argv<StorybookYargsOptions> {
+  return yargs
     .option('build', {
       describe: 'Build Storybook',
       type: 'boolean',
@@ -42,7 +44,7 @@ export const builder = (yargs: any) => {
     })
     .option('port', {
       describe: 'Which port to run storybook on',
-      type: 'integer',
+      type: 'number',
       default: defaultOptions.port,
     })
     .option('smoke-test', {
@@ -51,8 +53,8 @@ export const builder = (yargs: any) => {
       type: 'boolean',
       default: defaultOptions.smokeTest,
     })
-    // TODO: Provide a type for the `argv` argument
-    .check((argv: any) => {
+
+    .check((argv) => {
       if (argv.build && argv.smokeTest) {
         throw new Error('Can not provide both "--build" and "--smoke-test"')
       }
@@ -67,6 +69,7 @@ export const builder = (yargs: any) => {
 
       return true
     })
+
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -75,7 +78,7 @@ export const builder = (yargs: any) => {
     )
 }
 
-export const handler = async (options: StorybookYargsOptions) => {
+export async function handler(options: StorybookYargsOptions): Promise<void> {
   // NOTE: We should provide some visual output before the import to increase
   // the perceived performance of the command as there will be delay while we
   // load the handler.

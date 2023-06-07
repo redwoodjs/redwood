@@ -7434,6 +7434,7 @@ __metadata:
     "@storybook/addon-docs": 7.0.18
     "@storybook/addon-essentials": 7.0.18
     "@storybook/react-webpack5": 7.0.18
+    "@types/yargs": 17.0.24
     chalk: 4.1.2
     esbuild: 0.17.19
     execa: 5.1.1
