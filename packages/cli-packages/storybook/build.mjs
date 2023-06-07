@@ -9,10 +9,12 @@ const sourceFiles = fg.sync(['./src/**/*.ts'])
 // Build general source files
 const result = await esbuild.build({
   entryPoints: sourceFiles,
+  outdir: 'dist',
+
   format: 'cjs',
   platform: 'node',
   target: ['node18'],
-  outdir: 'dist',
+
   logLevel: 'info',
 
   // For visualizing the bundle.
@@ -20,4 +22,4 @@ const result = await esbuild.build({
   metafile: true,
 })
 
-fs.writeFileSync('meta.json', JSON.stringify(result.metafile))
+fs.writeFileSync('meta.json', JSON.stringify(result.metafile, null, 2))

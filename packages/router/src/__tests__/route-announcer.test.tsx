@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
@@ -48,7 +50,7 @@ const EmptyH1Page = () => (
 )
 
 beforeEach(() => {
-  window.history.pushState({}, null, '/')
+  window.history.pushState({}, '', '/')
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 
