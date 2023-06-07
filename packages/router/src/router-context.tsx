@@ -34,6 +34,13 @@ const RouterSetContext = createContext<
   React.Dispatch<Partial<RouterState>> | undefined
 >(undefined)
 
+/***
+ *
+ * This file splits the context into getter and setter contexts.
+ * This was originally meant to optimize the number of redraws
+ * See https://kentcdodds.com/blog/how-to-optimize-your-context-value
+ *
+ */
 export interface RouterContextProviderProps
   extends Omit<RouterState, 'useAuth'> {
   useAuth?: UseAuth
@@ -69,18 +76,6 @@ export const useRouterState = () => {
   if (context === undefined) {
     throw new Error(
       'useRouterState must be used within a RouterContextProvider'
-    )
-  }
-
-  return context
-}
-
-export const useRouterStateSetter = () => {
-  const context = useContext(RouterSetContext)
-
-  if (context === undefined) {
-    throw new Error(
-      'useRouterStateSetter must be used within a RouterContextProvider'
     )
   }
 
