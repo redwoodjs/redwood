@@ -44,6 +44,7 @@ export const files = async ({
 
   // needed for the singular cell GQL query find by id case
   try {
+    // todo should pull from graphql schema rather than prisma!
     model = await getSchema(pascalcase(singularize(cellName)))
     idType = getIdType(model)
     mockIdValues =
