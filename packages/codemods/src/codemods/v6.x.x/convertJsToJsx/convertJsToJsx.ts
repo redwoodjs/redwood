@@ -6,31 +6,19 @@ export default function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
   const ast = j(file.source)
 
-  // Check if this file contains any JSX and rename it to .jsx if it does
+  const containsJSX =
+    ast.find(j.JSXElement).length !== 0 ||
+    ast.find(j.JSXFragment).length !== 0 ||
+    ast.find(j.JSXText).length !== 0
 
-  if (ast.find(j.JSXElement).length !== 0) {
+  if (containsJSX) {
     fs.renameSync(
       file.path,
       file.path.substring(0, file.path.lastIndexOf('.')) + '.jsx'
     )
-    return ast.toSource()
   }
 
-  if (ast.find(j.JSXFragment).length !== 0) {
-    fs.renameSync(
-      file.path,
-      file.path.substring(0, file.path.lastIndexOf('.')) + '.jsx'
-    )
-    return ast.toSource()
-  }
-
-  if (ast.find(j.JSXText).length !== 0) {
-    fs.renameSync(
-      file.path,
-      file.path.substring(0, file.path.lastIndexOf('.')) + '.jsx'
-    )
-    return ast.toSource()
-  }
-
-  return ast.toSource()
+  // NOTE:
+  // We deliberately don't return a value here, as we do not want to transform the source
+  // See more here: https://github.com/facebook/jscodeshift
 }
