@@ -19,9 +19,9 @@
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\"",
+    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
     "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",
