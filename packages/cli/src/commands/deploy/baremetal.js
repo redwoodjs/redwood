@@ -112,7 +112,13 @@ export const builder = (yargs) => {
     describe: 'Add/remove the maintenance page',
     help: 'Rollback [count] number of releases',
   })
-
+  
+  yargs.option('verbose', {
+    describe: 'Verbose mode, for debugging purposes',
+    default: false,
+    type: 'boolean'
+  });
+  
   // TODO: Allow option to pass --sides and only deploy select sides instead of all, always
 
   yargs.epilogue(
