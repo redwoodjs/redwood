@@ -6802,7 +6802,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
     "@redwoodjs/api": 5.2.4
-    "@simplewebauthn/server": 7.2.0
+    "@simplewebauthn/server": 7.3.0
     "@types/crypto-js": 4.1.1
     "@types/md5": 2.3.2
     "@types/uuid": 9.0.1
@@ -7871,9 +7871,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@simplewebauthn/server@npm:7.2.0":
-  version: 7.2.0
-  resolution: "@simplewebauthn/server@npm:7.2.0"
+"@simplewebauthn/server@npm:7.3.0":
+  version: 7.3.0
+  resolution: "@simplewebauthn/server@npm:7.3.0"
   dependencies:
     "@hexagon/base64": ^1.1.25
     "@peculiar/asn1-android": ^2.3.3
@@ -7888,7 +7888,7 @@ __metadata:
     cbor-x: ^1.4.1
     cross-fetch: ^3.1.5
     debug: ^4.3.2
-  checksum: adc9ed9af73d008f58ec80b78f01e3619835121adae484b2c3a5ca656c6d3e152b3630469c8ee5188a1f526d520b238ecc057648f7a8792ec1bc144d21e71fa3
+  checksum: ace267331cf8e0186ccf4a96901d883f2a7a26f872e9fca68bf934b4c96e409b48d2631c561a8e30a117d7a003d53fce26ab2601f98cb583c7e0d7673f0d20ad
   languageName: node
   linkType: hard
 
