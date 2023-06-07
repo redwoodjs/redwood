@@ -36,9 +36,15 @@ export const updateDevFatalErrorPage = async () => {
 
       const text = await res.text()
 
-      const newFatalErrorPage = `${filename}.${isTSPage ? 'tsx' : 'jsx'}`
-
-      fs.writeFileSync(newFatalErrorPage, text)
+      if (isTSPage) {
+        fs.writeFileSync(`${filename}.tsx`, text)
+      } else {
+        // Keep only the '.jsx' version if we upgraded from an existing '.js'
+        fs.writeFileSync(`${filename}.jsx`, text)
+        if (fs.existsSync(`${filename}.js`)) {
+          fs.rmSync(`${filename}.js`)
+        }
+      }
     }
   }
 }
