@@ -83,7 +83,9 @@ test('creates a single word component test', () => {
 test('creates a single word component story', () => {
   expect(
     singleWordDefaultFiles[
-      path.normalize('/path/to/project/web/src/components/User/User.stories.jsx')
+      path.normalize(
+        '/path/to/project/web/src/components/User/User.stories.jsx'
+      )
     ]
   ).toMatchSnapshot()
 })
