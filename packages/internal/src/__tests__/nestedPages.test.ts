@@ -53,7 +53,6 @@ describe('User specified imports, with static imports', () => {
   describe('pages without explicit import', () => {
     describe('static prerender imports', () => {
       it('Adds loaders for non-nested pages', () => {
-        outputWithStaticImports //?
         expect(outputWithStaticImports).toContain(
           `const LoginPage = {
   name: "LoginPage",
