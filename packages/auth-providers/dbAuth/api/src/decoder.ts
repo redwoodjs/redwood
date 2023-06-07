@@ -9,9 +9,6 @@ export const authDecoder: Decoder = async (
   type: string,
   req: { event: APIGatewayProxyEvent }
 ) => {
-  console.debug('authHeaderValue', authHeaderValue)
-  console.debug('req', req)
-  console.debug('type', type)
   if (type !== 'dbAuth') {
     return null
   }

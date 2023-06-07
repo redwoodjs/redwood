@@ -35,7 +35,6 @@ export const extractCookie = (event: APIGatewayProxyEvent) => {
 
 // decrypts the session cookie and returns an array: [data, csrf]
 export const decryptSession = (text: string | null) => {
-  console.debug('decryptSession', text)
   if (!text || text.trim() === '') {
     return []
   }
@@ -69,6 +68,8 @@ export const getSession = (text?: string) => {
     return null
   }
 
+  console.debug('getSession', sessionCookie)
+
   return sessionCookie.split('=')[1].trim()
 }
 
@@ -79,7 +80,6 @@ export const dbAuthSession = (event: APIGatewayProxyEvent) => {
     const [session, _csrfToken] = decryptSession(
       getSession(extractCookie(event))
     )
-    console.debug({ session, _csrfToken }, 'session, _csrfToken')
     return session
   } else {
     return null

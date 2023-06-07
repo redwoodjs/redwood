@@ -56,7 +56,6 @@ const lambdaEventForFastifyRequest = (
     headers,
     path,
     queryStringParameters,
-    // this is different than the lambda context i believe
     requestContext: {
       requestId: request.id,
       identity: {
@@ -90,12 +89,9 @@ export async function redwoodFastifyGraphQLServer(
         const response = await yoga.handleNodeRequest(req, {
           req,
           reply,
-          event, // lambda event -> APIGatewayProxyEvent
+          event,
           // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html
-          requestContext: {
-            awsRequestId: 'myReqId',
-            clientContext: { Custom: req.context }, // ?
-          } as LambdaContext,
+          requestContext: {} as LambdaContext,
         })
 
         for (const [name, value] of response.headers) {

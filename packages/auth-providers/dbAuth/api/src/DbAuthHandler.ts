@@ -383,8 +383,6 @@ export class DbAuthHandler<
       const [session, csrfToken] = decryptSession(getSession(this.cookie))
       this.session = session
       this.sessionCsrfToken = csrfToken
-      console.debug('session', session)
-      console.debug('csrfToken', csrfToken)
     } catch (e) {
       // if session can't be decrypted, keep track so we can log them out when
       // the auth method is called
