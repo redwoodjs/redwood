@@ -54,6 +54,17 @@ interface BrowserTargetConfig {
    */
   apiGraphQLUrl?: string
 
+  /**
+   * Optional: Location of graphql schema for codegen. This can be a local path
+   * or a URL. Useful if you are talking to a third-party graphql API, or
+   * otherwise not using redwood to build your graphql server.
+   *
+   * @see https://the-guild.dev/graphql/codegen/docs/config-reference/schema-field
+   *
+   * Example: `./my/custom/schema.graphql` or `https://api.redwoodjs.com/graphql`
+   */
+  graphQLSchema?: string
+
   fastRefresh: boolean
   a11y: boolean
   sourceMap: boolean
