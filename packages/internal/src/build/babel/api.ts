@@ -124,13 +124,6 @@ export const getApiSideBabelPlugins = (
       'rwjs-api-module-resolver',
     ],
     [
-      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
-      {
-        srcAbsPath: rwjsPaths.api.src,
-      },
-      'rwjs-babel-src-alias',
-    ],
-    [
       require('../babelPlugins/babel-plugin-redwood-directory-named-import')
         .default,
       undefined,

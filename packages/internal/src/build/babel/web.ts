@@ -45,13 +45,6 @@ export const getWebSideBabelPlugins = (
       'rwjs-module-resolver',
     ],
     [
-      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
-      {
-        srcAbsPath: rwjsPaths.web.src,
-      },
-      'rwjs-babel-src-alias',
-    ],
-    [
       require('../babelPlugins/babel-plugin-redwood-directory-named-import')
         .default,
       undefined,
