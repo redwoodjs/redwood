@@ -128,7 +128,7 @@ export default function (
             //  const <importName> = {
             //     name: <importName>,
             //     prerenderLoader: (name) => prerenderLoaderImpl
-            //     LazyComponent: lazy(() => import(<relativeImportPath>)
+            //     LazyComponent: lazy(() => import(/* webpackChunkName: "..." */ <relativeImportPath>)
             //   }
 
             /**
@@ -136,7 +136,7 @@ export default function (
              * const LoginPage = {
              *  name: "LoginPage",
              *  prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
-             *  LazyComponent: lazy(() => import("/pages/LoginPage/LoginPage.tsx"))
+             *  LazyComponent: lazy(() => import("/* webpackChunkName: "LoginPage" */ /pages/LoginPage/LoginPage.tsx"))
              * }
              */
 
