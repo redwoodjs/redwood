@@ -341,7 +341,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ article }) => {
-  return JSON.stringify(article)
+  return <div>{JSON.stringify(article)}</div>
 }
 ```
 
@@ -375,7 +375,7 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => {
-  return JSON.stringify(article)
+  return <div>{JSON.stringify(article)}</div>
 }
 ```
 

@@ -20,6 +20,7 @@ const defaultOptions = {
     '.jpeg',
     '.png',
     '.gif',
+    '.svg',
     '.eot',
     '.otf',
     '.webp',

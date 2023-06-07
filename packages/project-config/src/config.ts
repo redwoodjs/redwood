@@ -108,7 +108,7 @@ export interface Config {
 
 export interface CLIPlugin {
   package: string
-  version: string
+  version?: string
   enabled?: boolean
 }
 
@@ -121,7 +121,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    bundler: BundlerEnum.WEBPACK,
+    bundler: BundlerEnum.VITE,
     includeEnvironmentVariables: [],
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
@@ -168,8 +168,12 @@ const DEFAULT_CONFIG: Config = {
       },
     },
     cli: {
-      autoInstall: false,
-      plugins: [],
+      autoInstall: true,
+      plugins: [
+        {
+          package: '@redwoodjs/cli-storybook',
+        },
+      ],
     },
   },
 }

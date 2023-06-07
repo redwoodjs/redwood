@@ -9,8 +9,8 @@ import chalk from 'chalk'
 import { DocumentNode, print } from 'graphql'
 import terminalLink from 'terminal-link'
 
-import { rootSchema } from '@redwoodjs/graphql-server'
-import { getPaths } from '@redwoodjs/project-config'
+import { rootSchema, liveDirectiveTypeDefs } from '@redwoodjs/graphql-server'
+import { getPaths, resolveFile } from '@redwoodjs/project-config'
 
 export const generateGraphQLSchema = async () => {
   const schemaPointerMap = {
@@ -18,6 +18,11 @@ export const generateGraphQLSchema = async () => {
     'graphql/**/*.sdl.{js,ts}': {},
     'directives/**/*.{js,ts}': {},
     'subscriptions/**/*.{js,ts}': {},
+  }
+
+  // If we are serverful, we need to include the live directive for realtime support
+  if (resolveFile(`${getPaths().api.src}/server`)) {
+    schemaPointerMap[liveDirectiveTypeDefs] = {}
   }
 
   const loadSchemaConfig: LoadSchemaOptions = {
