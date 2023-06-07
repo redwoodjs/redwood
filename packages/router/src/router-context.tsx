@@ -30,20 +30,23 @@ export interface RouterSetContextProps {
   setState: (newState: Partial<RouterState>) => void
 }
 
-// TODO what is this SetContext for???
-// Possibly redundant code
 const RouterSetContext = createContext<
   React.Dispatch<Partial<RouterState>> | undefined
 >(undefined)
 
+/***
+ *
+ * This file splits the context into getter and setter contexts.
+ * This was originally meant to optimize the number of redraws
+ * See https://kentcdodds.com/blog/how-to-optimize-your-context-value
+ *
+ */
 export interface RouterContextProviderProps
   extends Omit<RouterState, 'useAuth'> {
   useAuth?: UseAuth
   children: React.ReactNode
 }
 
-// @TODO this doesn't do anything?
-// Is it just so we're creating a new object?
 function stateReducer(state: RouterState, newState: Partial<RouterState>) {
   return { ...state, ...newState }
 }
