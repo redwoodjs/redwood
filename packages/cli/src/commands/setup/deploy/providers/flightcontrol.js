@@ -203,11 +203,11 @@ const updateDbAuth = () => {
 
 const updateApp = () => {
   return {
-    title: 'Updating App.js fetch config...',
+    title: 'Updating App.jsx fetch config...',
     task: (_ctx) => {
       // TODO Can improve in the future with RW getPaths()
       const appTsPath = path.join(getPaths().base, 'web/src/App.tsx')
-      const appJsPath = path.join(getPaths().base, 'web/src/App.js')
+      const appJsPath = path.join(getPaths().base, 'web/src/App.jsx')
 
       let appPath
       if (fs.existsSync(appTsPath)) {
