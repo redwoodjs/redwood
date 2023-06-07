@@ -41,13 +41,12 @@ export async function redwoodFastifyGraphQLServer(
       url: yoga.graphqlEndpoint,
       method: ['GET', 'POST', 'OPTIONS'],
       handler: async (req, reply) => {
-        const event = transformToRedwoodGraphQLContextEvent(
-          req
-        ) as RedwoodGraphQLContext['event']
         const response = await yoga.handleNodeRequest(req, {
           req,
           reply,
-          event,
+          event: transformToRedwoodGraphQLContextEvent(
+            req
+          ) as RedwoodGraphQLContext['event'],
           requestContext: {} as RedwoodGraphQLContext['requestContext'],
         })
 
