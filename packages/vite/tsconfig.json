@@ -9,5 +9,6 @@
   "include": ["src/**/*", "./ambient.d.ts", "./vite-plugin-commonjs.d.ts"],
   "references": [
     { "path": "../internal" },
+    { "path": "../web" },
   ]
 }

@@ -3,15 +3,15 @@ import path from 'path'
 
 import execa from 'execa'
 import { Listr } from 'listr2'
-import { rimraf } from 'rimraf'
-import terminalLink from 'terminal-link'
+import rimraf from 'rimraf'
 
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
-import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
+import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
+import { buildFeServer } from '@redwoodjs/vite'
 
-import { getPaths, getConfig } from '../lib'
+import { getConfig, getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
@@ -72,8 +72,8 @@ export const handler = async ({
     },
     side.includes('api') && {
       title: 'Building API...',
-      task: () => {
-        const { errors, warnings } = buildApi()
+      task: async () => {
+        const { errors, warnings } = await buildApi()
 
         if (errors.length) {
           console.error(errors)
@@ -96,13 +96,8 @@ export const handler = async ({
       title: 'Building Web...',
       task: async () => {
         if (getConfig().web.bundler === 'vite') {
-          // @NOTE: we're using the vite build command here, instead of the buildWeb function
-          // because we want the process.cwd to be the web directory, not the root of the project
-          // This is important for postcss/tailwind to work correctly
-          await execa(`yarn rw-vite-build`, {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: rwjsPaths.web.base, // <-- important for postcss/tailwind
+          await buildFeServer({
+            verbose,
           })
         } else {
           await execa(
@@ -129,25 +124,6 @@ export const handler = async ({
     },
   ].filter(Boolean)
 
-  const triggerPrerender = async () => {
-    console.log('Starting prerendering...')
-    if (prerenderRoutes.length === 0) {
-      console.log(
-        `You have not marked any routes to "prerender" in your ${terminalLink(
-          'Routes',
-          'file://' + rwjsPaths.web.routes
-        )}.`
-      )
-    }
-    // Running a separate process here, otherwise it wouldn't pick up the
-    // generated Prisma Client due to require module caching
-    await execa('yarn rw prerender', {
-      stdio: 'inherit',
-      shell: true,
-      cwd: rwjsPaths.web.base,
-    })
-  }
-
   const jobs = new Listr(tasks, {
     renderer: verbose && 'verbose',
   })
@@ -156,10 +132,11 @@ export const handler = async ({
     await timedTelemetry(process.argv, { type: 'build' }, async () => {
       await jobs.run()
 
-      if (side.includes('web') && prerender) {
-        // This step is outside Listr so that it prints clearer, complete messages
-        await triggerPrerender()
-      }
+      // Removing prerender for streaming setup
+      // if (side.includes('web') && prerender) {
+      //   // This step is outside Listr so that it prints clearer, complete messages
+      //   await triggerPrerender()
+      // }
     })
   } catch (e) {
     console.log(c.error(e.message))
