@@ -1,9 +1,8 @@
 import terminalLink from 'terminal-link'
+import type { Argv } from 'yargs'
 
 import c from '../lib/colors'
 import { StorybookYargsOptions } from '../types'
-
-import type { Argv } from 'yargs'
 
 export const command = 'storybook'
 export const aliases = ['sb']
@@ -20,7 +19,9 @@ export const defaultOptions: StorybookYargsOptions = {
 }
 
 // TODO: Provide a type for the `yargs` argument
-export function builder(yargs: Argv<StorybookYargsOptions>): Argv<StorybookYargsOptions> {
+export function builder(
+  yargs: Argv<StorybookYargsOptions>
+): Argv<StorybookYargsOptions> {
   return yargs
     .option('build', {
       describe: 'Build Storybook',
