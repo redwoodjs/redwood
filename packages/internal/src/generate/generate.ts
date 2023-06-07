@@ -7,7 +7,7 @@ import { generateTypeDefs } from './typeDefinitions'
 
 export const generate = async () => {
   let schemaPath: string
-  const remoteSchema = getConfig().web.graphQlSchema
+  const remoteSchema = getConfig().web.graphQLSchema
   if (remoteSchema) {
     schemaPath = remoteSchema
   } else {

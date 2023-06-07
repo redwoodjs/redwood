@@ -63,7 +63,7 @@ interface BrowserTargetConfig {
    *
    * Example: `./my/custom/schema.graphql` or `https://api.redwoodjs.com/graphql`
    */
-  graphQlSchema?: string
+  graphQLSchema?: string
 
   fastRefresh: boolean
   a11y: boolean

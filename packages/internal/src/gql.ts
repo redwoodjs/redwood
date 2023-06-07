@@ -88,7 +88,7 @@ export const listQueryTypeFieldsInProject = async () => {
   try {
     let schema: GraphQLSchema
 
-    const remoteSchema = getConfig().web.graphQlSchema
+    const remoteSchema = getConfig().web.graphQLSchema
     if (remoteSchema) {
       schema = await loadSchema(remoteSchema, {
         loaders: [new UrlLoader(), new GraphQLFileLoader()],

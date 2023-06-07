@@ -4463,6 +4463,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-tools/graphql-file-loader@npm:8.0.0":
+  version: 8.0.0
+  resolution: "@graphql-tools/graphql-file-loader@npm:8.0.0"
+  dependencies:
+    "@graphql-tools/import": 7.0.0
+    "@graphql-tools/utils": ^10.0.0
+    globby: ^11.0.3
+    tslib: ^2.4.0
+    unixify: ^1.0.0
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: a0727a2f35d80512f77c738f2602362421e753762b69845e75c11aec96ee71b52c7818dc71652dddac83fbce720bac33dfb885c2202917883c6751ed808f95f4
+  languageName: node
+  linkType: hard
+
 "@graphql-tools/graphql-file-loader@npm:^7.3.7, @graphql-tools/graphql-file-loader@npm:^7.5.0":
   version: 7.5.17
   resolution: "@graphql-tools/graphql-file-loader@npm:7.5.17"
@@ -4475,21 +4490,6 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: f737f14357731ad01da57755e1cf26ce375b475209d6ab7e4b656b56191a8979d2ab7dd5d1c54a1f11e04374f7a373fa95ea5ec6a001d0cef913ea208fadc65b
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/graphql-file-loader@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@graphql-tools/graphql-file-loader@npm:8.0.0"
-  dependencies:
-    "@graphql-tools/import": 7.0.0
-    "@graphql-tools/utils": ^10.0.0
-    globby: ^11.0.3
-    tslib: ^2.4.0
-    unixify: ^1.0.0
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: a0727a2f35d80512f77c738f2602362421e753762b69845e75c11aec96ee71b52c7818dc71652dddac83fbce720bac33dfb885c2202917883c6751ed808f95f4
   languageName: node
   linkType: hard
 
@@ -4667,6 +4667,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-tools/url-loader@npm:8.0.0":
+  version: 8.0.0
+  resolution: "@graphql-tools/url-loader@npm:8.0.0"
+  dependencies:
+    "@ardatan/sync-fetch": ^0.0.1
+    "@graphql-tools/delegate": ^10.0.0
+    "@graphql-tools/executor-graphql-ws": ^1.0.0
+    "@graphql-tools/executor-http": ^1.0.0
+    "@graphql-tools/executor-legacy-ws": ^1.0.0
+    "@graphql-tools/utils": ^10.0.0
+    "@graphql-tools/wrap": ^10.0.0
+    "@types/ws": ^8.0.0
+    "@whatwg-node/fetch": ^0.9.0
+    isomorphic-ws: ^5.0.0
+    tslib: ^2.4.0
+    value-or-promise: ^1.0.11
+    ws: ^8.12.0
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 8dae6eecd5c51b38fad2edc6e1d9df3ce638d009f35e1afa7418a1c8a379390cfc58d1e534599ea9bcffbbe1e9b24ab5ef0da7025d6371ccbe85c770f4df8b33
+  languageName: node
+  linkType: hard
+
 "@graphql-tools/url-loader@npm:^7.13.2, @graphql-tools/url-loader@npm:^7.17.18, @graphql-tools/url-loader@npm:^7.9.7":
   version: 7.17.18
   resolution: "@graphql-tools/url-loader@npm:7.17.18"
@@ -4687,29 +4710,6 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 963153fde3389f3e44de63c8bca3ce43c85c6ef0f9c5feb56b24d9146f4bf4fef84bebe44a961acc0e0aa0a48081add24684404b83b84bbb9f5e3fcdbc131cae
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/url-loader@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@graphql-tools/url-loader@npm:8.0.0"
-  dependencies:
-    "@ardatan/sync-fetch": ^0.0.1
-    "@graphql-tools/delegate": ^10.0.0
-    "@graphql-tools/executor-graphql-ws": ^1.0.0
-    "@graphql-tools/executor-http": ^1.0.0
-    "@graphql-tools/executor-legacy-ws": ^1.0.0
-    "@graphql-tools/utils": ^10.0.0
-    "@graphql-tools/wrap": ^10.0.0
-    "@types/ws": ^8.0.0
-    "@whatwg-node/fetch": ^0.9.0
-    isomorphic-ws: ^5.0.0
-    tslib: ^2.4.0
-    value-or-promise: ^1.0.11
-    ws: ^8.12.0
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 8dae6eecd5c51b38fad2edc6e1d9df3ce638d009f35e1afa7418a1c8a379390cfc58d1e534599ea9bcffbbe1e9b24ab5ef0da7025d6371ccbe85c770f4df8b33
   languageName: node
   linkType: hard
 
@@ -7953,8 +7953,8 @@ __metadata:
     "@graphql-codegen/typescript-operations": 3.0.4
     "@graphql-codegen/typescript-react-apollo": 3.3.7
     "@graphql-codegen/typescript-resolvers": 3.2.1
-    "@graphql-tools/graphql-file-loader": ^8.0.0
-    "@graphql-tools/url-loader": ^8.0.0
+    "@graphql-tools/graphql-file-loader": 8.0.0
+    "@graphql-tools/url-loader": 8.0.0
     "@redwoodjs/graphql-server": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     "@types/babel-plugin-tester": 9.0.5

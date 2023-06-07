@@ -327,7 +327,7 @@ async function getCodegenOptions(
 
   let schemaAst: GraphQLSchema
 
-  const remoteSchema = getConfig().web.graphQlSchema
+  const remoteSchema = getConfig().web.graphQLSchema
   if (remoteSchema) {
     schemaAst = await loadSchema(remoteSchema, {
       loaders: [new UrlLoader(), new GraphQLFileLoader()],
