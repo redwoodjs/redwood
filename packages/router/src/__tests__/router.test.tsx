@@ -492,7 +492,6 @@ describe('slow imports', () => {
     timeoutForFlakeyAsyncTests
   )
 
-  // TODO: Page loading delay not implemented
   test(
     'usePageLoadingContext',
     async () => {
@@ -1058,7 +1057,7 @@ test('renders first matching route only', async () => {
   await waitFor(() => screen.getByText(/Home Page/))
 
   // go to about page, and make sure that's the only page rendered
-  act(() => navigate(routes.about())) //?
+  act(() => navigate(routes.about()))
 
   await waitFor(() => screen.getByText('About Page'))
   expect(screen.queryByText(/param/)).not.toBeInTheDocument()

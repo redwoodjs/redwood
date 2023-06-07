@@ -26,7 +26,7 @@ describe('User specified imports, with static imports', () => {
     outputWithStaticImports = prebuildWebFile(routesFile, {
       prerender: true,
       forJest: true,
-    })?.code //?
+    })?.code
 
     outputNoStaticImports = prebuildWebFile(routesFile, {
       forJest: true,
