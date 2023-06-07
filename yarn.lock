@@ -3243,14 +3243,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/http-proxy@npm:9.1.0":
-  version: 9.1.0
-  resolution: "@fastify/http-proxy@npm:9.1.0"
+"@fastify/http-proxy@npm:9.2.0":
+  version: 9.2.0
+  resolution: "@fastify/http-proxy@npm:9.2.0"
   dependencies:
     "@fastify/reply-from": ^9.0.0
     fastify-plugin: ^4.5.0
     ws: ^8.4.2
-  checksum: 247dad3b504b69a9c24b8b7f194bb4057a0f50b06395067d7e58c5eb424bc54b41e936d46a345927888749bc2c300f6d7330d8a445c2f7828bd9c8bc7797bc26
+  checksum: 36c8d9fe0746e84ece8639bda75c38661b4cb2c9f532cd41540f7ea11c71fbf9e9ee45d3025a50f0365f1e911e85507b6311c7385fbd54808df055c643fff94a
   languageName: node
   linkType: hard
 
@@ -6871,7 +6871,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/plugin-transform-runtime": 7.22.4
     "@babel/runtime-corejs3": 7.22.3
-    "@fastify/http-proxy": 9.1.0
+    "@fastify/http-proxy": 9.2.0
     "@fastify/static": 6.10.2
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.0.0
@@ -7652,7 +7652,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify@workspace:packages/fastify"
   dependencies:
-    "@fastify/http-proxy": 9.1.0
+    "@fastify/http-proxy": 9.2.0
     "@fastify/static": 6.10.2
     "@fastify/url-data": 5.3.1
     "@redwoodjs/graphql-server": 5.0.0
@@ -7927,7 +7927,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/plugin-transform-runtime": 7.22.4
     "@babel/runtime-corejs3": 7.22.3
-    "@fastify/http-proxy": 9.1.0
+    "@fastify/http-proxy": 9.2.0
     "@fastify/static": 6.10.2
     "@fastify/url-data": 5.3.1
     "@redwoodjs/internal": 5.0.0
