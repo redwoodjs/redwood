@@ -1,12 +1,34 @@
-import React, { Children, isValidElement, ReactNode } from 'react'
+import React, { Children, isValidElement, ReactElement, ReactNode } from 'react'
+
+import {
+  isNotFoundRoute,
+  isRedirectRoute,
+  isStandardRoute,
+  isValidRoute,
+} from './route-validators'
+import { PageType } from './router'
+import { isPrivateNode, isSetNode } from './Set'
+
+import { AvailableRoutes } from './'
 
 /** Create a React Context with the given name. */
-export const createNamedContext = <T>(name: string, defaultValue?: T) => {
+export function createNamedContext<T>(name: string, defaultValue?: T) {
   const Ctx = React.createContext<T | undefined>(defaultValue)
   Ctx.displayName = name
   return Ctx
 }
 
+export function flattenAll(children: ReactNode): ReactNode[] {
+  const childrenArray = Children.toArray(children)
+
+  return childrenArray.flatMap((child) => {
+    if (isValidElement(child) && child.props.children) {
+      return [child, ...flattenAll(child.props.children)]
+    }
+
+    return [child]
+  })
+}
 /**
  * Get param name, type, and match for a route.
  *
@@ -20,7 +42,7 @@ export const createNamedContext = <T>(name: string, defaultValue?: T) => {
  *
  * Only exported to be able to test it
  */
-export const paramsForRoute = (route: string) => {
+export function paramsForRoute(route: string) {
   // Match the strings between `{` and `}`.
   const params = [...route.matchAll(/\{([^}]+)\}/g)]
 
@@ -101,37 +123,27 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  matchPath('/post/1', '/post/', { matchSubPaths: true })
  *  => { match: true, params: {} }
  */
-export const matchPath = (
+export function matchPath(
   route: string,
   pathname: string,
   {
-    paramTypes,
+    userParamTypes,
     matchSubPaths,
   }: {
-    paramTypes?: Record<string, ParamType>
+    userParamTypes?: Record<string, ParamType>
     matchSubPaths?: boolean
-  } = {}
-) => {
-  // Get the names and the transform types for the given route.
-  const routeParams = paramsForRoute(route)
-  const allParamTypes = { ...coreParamTypes, ...paramTypes }
-  let typeMatchingRoute = route
-
-  // Map all params from the route to their type `match` regexp to create a
-  // "type-matching route" regexp
-  for (const [_name, type, match] of routeParams) {
-    // `undefined` matcher if `type` is not supported
-    const matcher = allParamTypes[type as SupportedRouterParamTypes]?.match
-
-    // Get the regex as a string, or default regexp if `match` is not specified
-    const typeRegexp = matcher?.source || '[^/]+'
-
-    typeMatchingRoute = typeMatchingRoute.replace(match, `(${typeRegexp})`)
+  } = {
+    userParamTypes: {},
+    matchSubPaths: false,
   }
+) {
+  // Get the names and the transform types for the given route.
+  const allParamTypes = { ...coreParamTypes, ...userParamTypes }
 
-  const matchRegex = matchSubPaths
-    ? new RegExp(`^${typeMatchingRoute}(?:/.*)?$`, 'g')
-    : new RegExp(`^${typeMatchingRoute}$`, 'g')
+  const { matchRegex, routeParams } = getRouteRegexAndParams(route, {
+    matchSubPaths,
+    allParamTypes,
+  })
 
   // Does the `pathname` match the route?
   const matches = [...pathname.matchAll(matchRegex)]
@@ -166,6 +178,55 @@ export const matchPath = (
   return { match: true }
 }
 
+interface GetRouteRegexOptions {
+  matchSubPaths?: boolean
+  allParamTypes?: Record<string, ParamType> // Pass in paramTypes to match, if user has custom param types
+}
+/**
+ *  This function will return a regex for each route path i.e. /blog/{year}/{month}/{day}
+ *  will return a regex like /blog/([^/$1*]+)/([^/$1*]+)/([^/$1*]+)
+ *
+ * @returns
+ */
+
+export function getRouteRegexAndParams(
+  route: string,
+  {
+    matchSubPaths = false,
+    allParamTypes = coreParamTypes,
+  }: GetRouteRegexOptions | undefined = {}
+) {
+  let typeMatchingRoute = route
+  const routeParams = paramsForRoute(route)
+
+  // Map all params from the route to their type `match` regexp to create a
+  // "type-matching route" regexp
+  // /recipe/{id} -> /recipe/([^/$1*]+)
+  for (const [_name, type, match] of routeParams) {
+    // `undefined` matcher if `type` is not supported
+    const matcher = allParamTypes[type as SupportedRouterParamTypes]?.match
+
+    // Get the regex as a string, or default regexp if `match` is not specified
+    const typeRegexp = matcher?.source || '[^/]+'
+
+    typeMatchingRoute = typeMatchingRoute.replace(match, `(${typeRegexp})`)
+  }
+
+  const matchRegex = matchSubPaths
+    ? new RegExp(`^${typeMatchingRoute}(?:/.*)?$`, 'g')
+    : new RegExp(`^${typeMatchingRoute}$`, 'g')
+
+  const matchRegexString = matchSubPaths
+    ? `^${typeMatchingRoute}(?:/.*)?$`
+    : `^${typeMatchingRoute}$`
+
+  return {
+    matchRegex,
+    routeParams,
+    matchRegexString,
+  }
+}
+
 /**
  * Parse the given search string into key/value pairs and return them in an
  * object.
@@ -178,14 +239,14 @@ export const matchPath = (
  * @fixme
  * This utility ignores keys with multiple values such as `?foo=1&foo=2`.
  */
-export const parseSearch = (
+export function parseSearch(
   search:
     | string
     | string[][]
     | Record<string, string>
     | URLSearchParams
     | undefined
-) => {
+) {
   const searchParams = new URLSearchParams(search)
 
   return [...searchParams.keys()].reduce(
@@ -202,20 +263,22 @@ export const parseSearch = (
  * are found, a descriptive Error will be thrown, as problems with routes are
  * critical enough to be considered fatal.
  */
-export const validatePath = (path: string) => {
+export function validatePath(path: string, routeName: string) {
   // Check that path begins with a slash.
   if (!path.startsWith('/')) {
-    throw new Error(`Route path does not begin with a slash: "${path}"`)
+    throw new Error(
+      `Route path for ${routeName} does not begin with a slash: "${path}"`
+    )
   }
 
   if (path.indexOf(' ') >= 0) {
-    throw new Error(`Route path contains spaces: "${path}"`)
+    throw new Error(`Route path for ${routeName} contains spaces: "${path}"`)
   }
 
   if (/{(?:ref|key)(?::|})/.test(path)) {
     throw new Error(
       [
-        `Route contains ref or key as a path parameter: "${path}"`,
+        `Route for ${routeName} contains ref or key as a path parameter: "${path}"`,
         "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
         'You can fix this by renaming the path parameter.',
       ].join('\n')
@@ -246,10 +309,10 @@ export const validatePath = (path: string) => {
  *   replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
  *   => '/tags/code?extra=foo
  */
-export const replaceParams = (
+export function replaceParams(
   route: string,
   args: Record<string, unknown> = {}
-) => {
+) {
   const params = paramsForRoute(route)
   let path = route
 
@@ -283,18 +346,6 @@ export const replaceParams = (
   return path
 }
 
-export function flattenAll(children: ReactNode): ReactNode[] {
-  const childrenArray = Children.toArray(children)
-
-  return childrenArray.flatMap((child) => {
-    if (isValidElement(child) && child.props.children) {
-      return [child, ...flattenAll(child.props.children)]
-    }
-
-    return [child]
-  })
-}
-
 /**
  *
  * @param {string} queryString
@@ -325,14 +376,16 @@ export function flattenSearchParams(
 
 export interface Spec {
   name: string
-  loader: () => Promise<{ default: React.ComponentType<unknown> }>
   prerenderLoader: (name?: string) => { default: React.ComponentType<unknown> }
+  LazyComponent:
+    | React.LazyExoticComponent<React.ComponentType<unknown>>
+    | React.ComponentType<unknown>
 }
 
 export function isSpec(
   specOrPage: Spec | React.ComponentType
 ): specOrPage is Spec {
-  return (specOrPage as Spec).loader !== undefined
+  return (specOrPage as Spec).LazyComponent !== undefined
 }
 
 /**
@@ -341,7 +394,8 @@ export function isSpec(
  *
  *   const WhateverPage = {
  *     name: 'WhateverPage',
- *     loader: () => import('src/pages/WhateverPage')
+ *     LazyComponent: lazy(() => import('src/pages/WhateverPage'))
+ *     prerenderLoader: ...
  *   }
  *
  * Manual imports simply load the page:
@@ -361,11 +415,10 @@ export function normalizePage(
 
   // Wrap the Page in a fresh spec, and put it in a promise to emulate
   // an async module import.
-  // Also provide a synchronous version of the loader for prerendered pages.
   return {
     name: specOrPage.name,
-    loader: async () => ({ default: specOrPage }),
     prerenderLoader: () => ({ default: specOrPage }),
+    LazyComponent: specOrPage,
   }
 }
 
@@ -379,5 +432,210 @@ export function inIframe() {
     return global?.self !== global?.top
   } catch (e) {
     return true
+  }
+}
+interface AnayzeRoutesOptions {
+  currentPathName: string
+  userParamTypes?: Record<string, ParamType>
+}
+
+// This is essentially the same as RouteProps
+// but it allows for page and redirect to be null or undefined
+// Keeping the shape consistent makes it easier to use
+
+type WhileLoadingPage = () => ReactElement | null
+
+type RoutePath = string
+interface AnalyzedRoute {
+  path: RoutePath
+  name: string | null
+  whileLoadingPage?: WhileLoadingPage
+  page: PageType | null
+  redirect: string | null
+  wrappers: ReactNode[]
+  setProps: Record<any, any>
+  setId: number
+}
+
+export function analyzeRoutes(
+  children: ReactNode,
+  { currentPathName, userParamTypes }: AnayzeRoutesOptions
+) {
+  const pathRouteMap: Record<RoutePath, AnalyzedRoute> = {}
+  const namedRoutesMap: AvailableRoutes = {}
+  let hasHomeRoute = false
+  let NotFoundPage: PageType | undefined
+  let activeRoutePath: string | undefined
+
+  interface RecurseParams {
+    nodes: ReturnType<typeof Children.toArray>
+    whileLoadingPageFromSet?: WhileLoadingPage
+    wrappersFromSet?: ReactNode[]
+    // we don't know, or care about, what props users are passing down
+    propsFromSet?: Record<string, unknown>
+    setId?: number
+  }
+
+  // Track the number of sets found.
+  // Because Sets are virtually rendered we can use this setId as a key to properly manage re-rendering
+  // When a some uses the same wrapper Component for different Sets
+  // Example:
+  //   <Router>
+  //   <Set wrap={SetContextProvider}>
+  //     <Route path="/" page={HomePage} name="home" />
+  //     <Route path="/ctx-1-page" page={Ctx1Page} name="ctx1" />
+  //     <Route path="/ctx-2-page" page={Ctx2Page} name="ctx2" />
+  //   </Set>
+  //   <Set wrap={SetContextProvider}>
+  //     <Route path="/ctx-3-page" page={Ctx3Page} name="ctx3" />
+  //   </Set>
+  // </Router>
+  let setId = 0
+
+  const recurseThroughRouter = ({
+    nodes,
+    whileLoadingPageFromSet,
+    wrappersFromSet = [],
+    propsFromSet: previousSetProps = {},
+  }: RecurseParams) => {
+    nodes.forEach((node) => {
+      if (isValidRoute(node)) {
+        // Just for readability
+        const route = node
+
+        // We don't add not found pages to our list of named routes
+        if (isNotFoundRoute(route)) {
+          NotFoundPage = route.props.page
+          // Dont add notFound routes to the maps, and exit early
+          // @TODO: We may need to add it to the map, because you can in
+          // theory wrap a notfound page in a Set wrapper
+          return
+        }
+
+        // Used to decide whether to display SplashPage
+        if (route.props.path === '/') {
+          hasHomeRoute = true
+        }
+
+        if (isRedirectRoute(route)) {
+          const { name, redirect, path } = route.props
+
+          // The name is just for showing a human-readable error message
+          validatePath(path, name || path)
+
+          const { match } = matchPath(path, currentPathName, {
+            userParamTypes,
+          })
+
+          // Check if we already have an active path to only return the first match
+          if (match && !activeRoutePath) {
+            activeRoutePath = path
+          }
+
+          // If the redirect route doesn't have a name, no need to add it to the map
+          pathRouteMap[path] = {
+            redirect,
+            name: name || null,
+            path,
+            page: null, // Redirects don't need pages. We set this to null for consistency
+            wrappers: wrappersFromSet,
+            setProps: previousSetProps,
+            setId,
+          }
+
+          if (name) {
+            namedRoutesMap[name] = (args = {}) => replaceParams(path, args)
+          }
+        }
+
+        if (isStandardRoute(route)) {
+          const { name, path, page } = route.props
+          // Will throw if invalid path
+          validatePath(path, name)
+
+          const { match } = matchPath(path, currentPathName, {
+            userParamTypes,
+          })
+
+          // Check if we already have an active path to only return the first match
+          if (match && !activeRoutePath) {
+            activeRoutePath = path
+          }
+
+          // e.g. namePathMap['homePage'] = { name: 'homePage', path: '/home', ...}
+          // We always set all the keys, even if their values are null/undefined for consistency
+          pathRouteMap[path] = {
+            redirect: null,
+            name,
+            path,
+            whileLoadingPage:
+              route.props.whileLoadingPage || whileLoadingPageFromSet,
+            page: page,
+            wrappers: wrappersFromSet,
+            setProps: previousSetProps,
+            setId,
+          }
+
+          // e.g. namedRoutesMap.homePage = () => '/home'
+          namedRoutesMap[name] = (args = {}) => replaceParams(path, args)
+        }
+      }
+
+      // @NOTE: A <Private> is also a Set
+      if (isSetNode(node)) {
+        setId = setId + 1 // increase the Set id for each Set found
+        const {
+          children,
+          whileLoadingPage: whileLoadingPageFromCurrentSet,
+          wrap: wrapFromCurrentSet,
+          ...otherPropsFromCurrentSet
+        } = node.props
+
+        let wrapperComponentsArray = []
+        if (wrapFromCurrentSet) {
+          wrapperComponentsArray = Array.isArray(wrapFromCurrentSet)
+            ? wrapFromCurrentSet
+            : [wrapFromCurrentSet]
+        }
+
+        // @MARK note unintuitive, but intentional
+        // You cannot make a nested set public if the parent is private
+        // i.e. the private prop cannot be overriden by a child Set
+        const privateProps =
+          isPrivateNode(node) || previousSetProps.private
+            ? { private: true }
+            : {}
+
+        if (children) {
+          recurseThroughRouter({
+            nodes: Children.toArray(children),
+            // When there's a whileLoadingPage prop on a Set, we pass it down to all its children
+            // If the parent node was also a Set with whileLoadingPage, we pass it down. The child's whileLoadingPage
+            // will always take precedence over the parent's
+            whileLoadingPageFromSet:
+              whileLoadingPageFromCurrentSet || whileLoadingPageFromSet,
+            setId,
+            wrappersFromSet: [...wrappersFromSet, ...wrapperComponentsArray],
+            propsFromSet: {
+              ...previousSetProps,
+              // Current one takes precedence
+              ...otherPropsFromCurrentSet,
+              // See comment at definiion, intenionally at the end
+              ...privateProps,
+            },
+          })
+        }
+      }
+    })
+  }
+
+  recurseThroughRouter({ nodes: Children.toArray(children) })
+
+  return {
+    pathRouteMap,
+    namedRoutesMap,
+    hasHomeRoute,
+    NotFoundPage,
+    activeRoutePath,
   }
 }
