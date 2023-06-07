@@ -68,8 +68,6 @@ export const getSession = (text?: string) => {
     return null
   }
 
-  console.debug('getSession', sessionCookie)
-
   return sessionCookie.split('=')[1].trim()
 }
 

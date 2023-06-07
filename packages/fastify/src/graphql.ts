@@ -1,75 +1,33 @@
-import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import * as fastUri from 'fast-uri'
-import type {
-  FastifyInstance,
-  HookHandlerDoneFunction,
-  FastifyRequest,
-} from 'fastify'
-import qs from 'qs'
+import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 
-import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
 import { createGraphQLYoga } from '@redwoodjs/graphql-server'
-
-type ParseBodyResult = {
-  body: string
-  isBase64Encoded: boolean
-}
-
-const parseBody = (rawBody: string | Buffer): ParseBodyResult => {
-  if (typeof rawBody === 'string') {
-    return { body: rawBody, isBase64Encoded: false }
-  }
-  if (rawBody instanceof Buffer) {
-    return { body: rawBody.toString('base64'), isBase64Encoded: true }
-  }
-  return { body: '', isBase64Encoded: false }
-}
-
-const parseRequest = (request: FastifyRequest) => {
-  const scheme = request.headers[':scheme']
-    ? request.headers[':scheme']
-    : request.protocol
-  const host = request.hostname
-  const requestPath = request.headers[':path'] || request.raw.url
-  const path = fastUri.parse(scheme + '://' + host + requestPath).path
-  const queryStringParameters = qs.parse(request.url.split(/\?(.+)/)[1])
-  const httpMethod = request.method
-  const headers = request.headers
-  return {
-    headers,
-    httpMethod,
-    scheme,
-    host,
-    requestPath,
-    path,
-    queryStringParameters,
-  }
-}
-
-const lambdaEventForFastifyRequest = (
-  request: FastifyRequest
-): APIGatewayProxyEvent => {
-  const { headers, httpMethod, path, queryStringParameters } =
-    parseRequest(request)
-  return {
-    httpMethod,
-    headers,
-    path,
-    queryStringParameters,
-    requestContext: {
-      requestId: request.id,
-      identity: {
-        sourceIp: request.ip,
-      },
-    },
-    ...parseBody(request.rawBody || ''), // adds `body` and `isBase64Encoded`
-  } as APIGatewayProxyEvent
-}
+import type {
+  GraphQLYogaOptions,
+  RedwoodGraphQLContext,
+} from '@redwoodjs/graphql-server'
 
 /**
- * Encapsulates the routes
+ * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
+ * which is based on the AWS Lambda event
+ */
+import { lambdaEventForFastifyRequest as transformToRedwoodGraphQLContextEvent } from './lambda/index'
+
+/**
+ * Redwood GraphQL Server Fastify plugin based on GraphQL Yoga
+ *
+ * Important: Need to set DISABLE_CONTEXT_ISOLATION = 1 in environment variables
+ * so that global context is populated correctly and features such as authentication
+ * works properly.
+ *
+ * It is critical to set shouldUseLocalStorageContext correctly so that the `setContext` function
+ * in the `useRedwoodPopulateContext` plugin sets the global context correctly with any
+ * extended GraphQL context as is done with `useRedwoodAuthContext` that sets
+ * the `currentUser` in the context when used to authenticate a user.
+ *
+ * See: packages/graphql-server/src/globalContext.ts
+ *
  * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
- * @param {Object} options plugin options, refer to https://www.fastify.io/docs/latest/Reference/Plugins/#plugin-options
+ * @param {GraphQLYogaOptions} options GraphQLYogaOptions options used to configure the GraphQL Yoga Server
  */
 export async function redwoodFastifyGraphQLServer(
   fastify: FastifyInstance,
@@ -83,15 +41,14 @@ export async function redwoodFastifyGraphQLServer(
       url: yoga.graphqlEndpoint,
       method: ['GET', 'POST', 'OPTIONS'],
       handler: async (req, reply) => {
-        const event = lambdaEventForFastifyRequest(req)
-        console.debug('event', event)
-
+        const event = transformToRedwoodGraphQLContextEvent(
+          req
+        ) as RedwoodGraphQLContext['event']
         const response = await yoga.handleNodeRequest(req, {
           req,
           reply,
           event,
-          // https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html
-          requestContext: {} as LambdaContext,
+          requestContext: {} as RedwoodGraphQLContext['requestContext'],
         })
 
         for (const [name, value] of response.headers) {
