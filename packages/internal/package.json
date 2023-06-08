@@ -41,6 +41,8 @@
     "@graphql-codegen/typescript-operations": "3.0.4",
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-codegen/typescript-resolvers": "3.2.1",
+    "@graphql-tools/graphql-file-loader": "8.0.0",
+    "@graphql-tools/url-loader": "8.0.0",
     "@redwoodjs/graphql-server": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
     "babel-plugin-graphql-tag": "3.3.0",

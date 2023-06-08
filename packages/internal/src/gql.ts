@@ -1,8 +1,11 @@
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadSchema } from '@graphql-tools/load'
+import { UrlLoader } from '@graphql-tools/url-loader'
 import {
   DocumentNode,
   FieldNode,
+  GraphQLSchema,
   InlineFragmentNode,
   OperationDefinitionNode,
   OperationTypeNode,
@@ -12,7 +15,7 @@ import {
 } from 'graphql'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 interface Operation {
   operation: OperationTypeNode
@@ -83,27 +86,36 @@ const getFields = (field: FieldNode): any => {
 
 export const listQueryTypeFieldsInProject = async () => {
   try {
-    const schemaPointerMap = {
-      [print(rootSchema.schema)]: {},
-      'graphql/**/*.sdl.{js,ts}': {},
-      'directives/**/*.{js,ts}': {},
-      'subscriptions/**/*.{js,ts}': {},
+    let schema: GraphQLSchema
+
+    const remoteSchema = getConfig().web.graphQLSchema
+    if (remoteSchema) {
+      schema = await loadSchema(remoteSchema, {
+        loaders: [new UrlLoader(), new GraphQLFileLoader()],
+      })
+    } else {
+      const schemaPointerMap = {
+        [print(rootSchema.schema)]: {},
+        'graphql/**/*.sdl.{js,ts}': {},
+        'directives/**/*.{js,ts}': {},
+        'subscriptions/**/*.{js,ts}': {},
+      }
+
+      schema = await loadSchema(schemaPointerMap, {
+        loaders: [
+          new CodeFileLoader({
+            noRequire: true,
+            pluckConfig: {
+              globalGqlIdentifierName: 'gql',
+            },
+          }),
+        ],
+        cwd: getPaths().api.src,
+        assumeValidSDL: true,
+      })
     }
 
-    const mergedSchema = await loadSchema(schemaPointerMap, {
-      loaders: [
-        new CodeFileLoader({
-          noRequire: true,
-          pluckConfig: {
-            globalGqlIdentifierName: 'gql',
-          },
-        }),
-      ],
-      cwd: getPaths().api.src,
-      assumeValidSDL: true,
-    })
-
-    const queryTypeFields = mergedSchema.getQueryType()?.getFields()
+    const queryTypeFields = schema.getQueryType()?.getFields()
 
     // Return empty array if no schema found
     return Object.keys(queryTypeFields ?? {})
