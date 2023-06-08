@@ -2,8 +2,8 @@ import type { ${operationName}, ${operationName}Variables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query ${operationName}($id: ${idType}!) {
-    ${camelName}: ${camelName}(id: $id) {
+  query ${operationName}${operationVariables} {
+    ${camelName}: ${camelName}${resolverInput} {
       id
     }
   }

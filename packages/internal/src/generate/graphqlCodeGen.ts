@@ -307,6 +307,20 @@ const printMappedModelsPlugin: CodegenPlugin = {
   },
 }
 
+async function getGeneratedGraphQLSchema(): Promise<GraphQLSchema> {
+  const remoteSchema = getConfig().web.graphQLSchema
+  if (remoteSchema) {
+    return loadSchema(remoteSchema, {
+      loaders: [new UrlLoader(), new GraphQLFileLoader()],
+    })
+  }
+
+  return loadSchema(getPaths().generated.schema, {
+    loaders: [new GraphQLFileLoader()],
+    sort: true,
+  })
+}
+
 async function getCodegenOptions(
   documents: CodegenTypes.DocumentFile[],
   config: CodegenTypes.PluginConfig,
@@ -325,19 +339,7 @@ async function getCodegenOptions(
     ),
   }
 
-  let schemaAst: GraphQLSchema
-
-  const remoteSchema = getConfig().web.graphQLSchema
-  if (remoteSchema) {
-    schemaAst = await loadSchema(remoteSchema, {
-      loaders: [new UrlLoader(), new GraphQLFileLoader()],
-    })
-  } else {
-    schemaAst = await loadSchema(getPaths().generated.schema, {
-      loaders: [new GraphQLFileLoader()],
-      sort: true,
-    })
-  }
+  const schemaAst = await getGeneratedGraphQLSchema()
 
   const options: CodegenTypes.GenerateOptions = {
     // The typescript plugin returns a string instead of writing to a file, so
@@ -357,10 +359,7 @@ async function getCodegenOptions(
     plugins,
     pluginMap,
     pluginContext: {},
-    // Since we use prisma to find the type of Id field, the default "Int"
-    // will not necessarily work when using a remote schema. This shouldn't
-    // cause failing validation
-    skipDocumentsValidation: !!remoteSchema,
+    skipDocumentsValidation: false,
   }
 
   return options

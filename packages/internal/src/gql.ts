@@ -7,6 +7,7 @@ import {
   FieldNode,
   GraphQLSchema,
   InlineFragmentNode,
+  InputValueDefinitionNode,
   OperationDefinitionNode,
   OperationTypeNode,
   parse,
@@ -84,36 +85,57 @@ const getFields = (field: FieldNode): any => {
   }
 }
 
+export async function getGraphQLSchema(): Promise<GraphQLSchema> {
+  const remoteSchema = getConfig().web.graphQLSchema
+  if (remoteSchema) {
+    return loadSchema(remoteSchema, {
+      loaders: [new UrlLoader(), new GraphQLFileLoader()],
+    })
+  }
+
+  const schemaPointerMap = {
+    [print(rootSchema.schema)]: {},
+    'graphql/**/*.sdl.{js,ts}': {},
+    'directives/**/*.{js,ts}': {},
+    'subscriptions/**/*.{js,ts}': {},
+  }
+
+  return loadSchema(schemaPointerMap, {
+    loaders: [
+      new CodeFileLoader({
+        noRequire: true,
+        pluckConfig: {
+          globalGqlIdentifierName: 'gql',
+        },
+      }),
+    ],
+    cwd: getPaths().api.src,
+    assumeValidSDL: true,
+  })
+}
+
+/**
+ * Returns the GraphQL arguments (names & printed types) for a given queryName
+ * example: [{name: 'id', type: 'String!'}]
+ */
+export const getQueryArguments = async (queryName: string) => {
+  const schema = await getGraphQLSchema()
+
+  const query = schema.getQueryType()?.getFields()[queryName]
+
+  return (
+    query?.args?.map((a) => ({
+      name: a.name,
+      type: print(a.astNode as InputValueDefinitionNode).split(
+        `${a.name}: `
+      )[1],
+    })) ?? []
+  )
+}
+
 export const listQueryTypeFieldsInProject = async () => {
   try {
-    let schema: GraphQLSchema
-
-    const remoteSchema = getConfig().web.graphQLSchema
-    if (remoteSchema) {
-      schema = await loadSchema(remoteSchema, {
-        loaders: [new UrlLoader(), new GraphQLFileLoader()],
-      })
-    } else {
-      const schemaPointerMap = {
-        [print(rootSchema.schema)]: {},
-        'graphql/**/*.sdl.{js,ts}': {},
-        'directives/**/*.{js,ts}': {},
-        'subscriptions/**/*.{js,ts}': {},
-      }
-
-      schema = await loadSchema(schemaPointerMap, {
-        loaders: [
-          new CodeFileLoader({
-            noRequire: true,
-            pluckConfig: {
-              globalGqlIdentifierName: 'gql',
-            },
-          }),
-        ],
-        cwd: getPaths().api.src,
-        assumeValidSDL: true,
-      })
-    }
+    const schema = await getGraphQLSchema()
 
     const queryTypeFields = schema.getQueryType()?.getFields()
 
