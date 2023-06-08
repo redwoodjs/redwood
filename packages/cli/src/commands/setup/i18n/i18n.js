@@ -10,6 +10,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./i18nHandler')
+  const { handler } = await import('./i18nHandler.js')
   return handler(options)
 }
