@@ -104,7 +104,6 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
-          viteConfig: null, // no vite file in empty-project fixture
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -131,6 +130,9 @@ describe('paths', () => {
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          // Vite paths ~ not configured in empty-project
+          viteConfig: null,
+          entryClient: null,
         },
       }
 
@@ -334,7 +336,7 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
-          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
+
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -361,6 +363,9 @@ describe('paths', () => {
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          // New Vite paths
+          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
+          entryClient: null, // doesnt exist in example-todo-main
         },
       }
 
@@ -635,6 +640,7 @@ describe('paths', () => {
             'config',
             'storybook.manager.js'
           ),
+          entryClient: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
         },
@@ -846,7 +852,6 @@ describe('paths', () => {
             'config',
             'webpack.config.js'
           ),
-          viteConfig: null, // no vite configured in test-project fixture
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -873,6 +878,9 @@ describe('paths', () => {
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
+          // Vite paths
+          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
+          entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry-client.tsx'),
         },
       }
 

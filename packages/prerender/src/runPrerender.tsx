@@ -8,7 +8,7 @@ import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths, ensurePosixPath } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import { matchPath } from '@redwoodjs/router/dist/util'
 import type { QueryInfo } from '@redwoodjs/web'
@@ -213,9 +213,9 @@ function insertChunkLoadingScript(
       }
     }
   } else if (vite && route?.filePath) {
-    // TODO: Make sure this works on Windows
-    const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
-    const pagePath = route.filePath.slice(pagesIndex)
+    const pagesIndex =
+      route.filePath.indexOf(path.join('web', 'src', 'pages')) + 8
+    const pagePath = ensurePosixPath(route.filePath.slice(pagesIndex))
     const pageChunkPath = buildManifest[pagePath]?.file
 
     if (pageChunkPath) {
@@ -333,7 +333,7 @@ export const runPrerender = async ({
   })
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
-  const { default: App } = await import(getPaths().web.app)
+  const { default: App } = require(getPaths().web.app)
 
   const componentAsHtml = await recursivelyRender(
     App,

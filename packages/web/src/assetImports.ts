@@ -7,9 +7,8 @@
 // These declarations are the most common types
 
 declare module '*.svg' {
-  import React = require('react')
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>
-  export default ReactComponent
+  const content: string
+  export default content
 }
 
 declare module '*.png' {

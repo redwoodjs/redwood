@@ -4,12 +4,50 @@ import path from 'path'
 import chalk from 'chalk'
 
 import { getConfig, getPaths } from './lib'
-import { installModule } from './lib/packages'
+import { installModule, isModuleInstalled } from './lib/packages'
 
 /**
  * The file inside .redwood which will contain cached plugin command mappings
  */
 const PLUGIN_CACHE_FILENAME = 'command-cache.json'
+
+const PLUGIN_CACHE_DEFAULT = {
+  '@redwoodjs/cli-storybook': ['storybook', 'sb'],
+}
+
+const PLUGIN_CACHE_BUILTIN = [
+  'build',
+  'check',
+  'diagnostics',
+  'console',
+  'c',
+  'data-migrate',
+  'dm',
+  'dataMigrate',
+  'deploy',
+  'destroy',
+  'd',
+  'dev',
+  'exec',
+  'experimental',
+  'exp',
+  'generate',
+  'g',
+  'info',
+  'lint',
+  'prerender',
+  'render',
+  'prisma',
+  'record',
+  'serve',
+  'setup',
+  'test',
+  'ts-to-js',
+  'type-check',
+  'tsc',
+  'tc',
+  'upgrade',
+]
 
 /**
  * Attempts to load all CLI plugins as defined in the redwood.toml file
@@ -18,9 +56,46 @@ const PLUGIN_CACHE_FILENAME = 'command-cache.json'
  * @returns The yargs instance with plugins loaded
  */
 export async function loadPlugins(yargs) {
+  // We filter plugins based on the first word which depends on if a namespace is in use
+  const firstWord = process.argv[2]?.startsWith('@')
+    ? process.argv[3]
+    : process.argv[2]
+
+  // Check for possible early exit for `yarn rw --version`
+  const showRootVersion = firstWord === '--version'
+  if (showRootVersion) {
+    // We don't need to load any plugins in this case
+    return yargs
+  }
+
+  // TODO: We should have some mechanism to fetch the cache from an online or precomputed
+  // source this will allow us to have a cache hit on the first run of a command
+  let pluginCommandCache = PLUGIN_CACHE_DEFAULT
+  try {
+    pluginCommandCache = JSON.parse(
+      fs.readFileSync(
+        path.join(getPaths().generated.base, PLUGIN_CACHE_FILENAME)
+      )
+    )
+  } catch (error) {
+    // If the cache file doesn't exist we can just ignore it and continue
+    if (error.code !== 'ENOENT') {
+      console.error(error)
+    }
+  }
+  pluginCommandCache._builtin = PLUGIN_CACHE_BUILTIN
+
+  // Check if the command is built in to the base CLI package
+  if (pluginCommandCache._builtin.includes(firstWord)) {
+    // If the command is built in we don't need to load any plugins
+    return yargs
+  }
+
   const { plugins, autoInstall } = getConfig().experimental.cli
 
-  const enabledPlugins = plugins.filter((p) => p.enabled ?? true)
+  const enabledPlugins = plugins.filter(
+    (p) => p.package !== undefined && (p.enabled ?? true)
+  )
 
   // Print warnings about invalid plugins
   checkPluginListAndWarn(enabledPlugins)
@@ -29,7 +104,7 @@ export async function loadPlugins(yargs) {
   const thirdPartyPackages = new Set()
   for (const plugin of enabledPlugins) {
     // Skip invalid plugins
-    if (!plugin.package || !plugin.version) {
+    if (!plugin.package) {
       continue
     }
     // Skip non-scoped packages
@@ -68,26 +143,6 @@ export async function loadPlugins(yargs) {
     namespacesInUse.push('@redwoodjs')
   }
 
-  // TODO: We should have some mechanism to fetch the cache from an online or precomputed
-  // source this will allow us to have a cache hit on the first run of a command
-  let pluginCommandCache = {}
-  try {
-    pluginCommandCache = JSON.parse(
-      fs.readFileSync(
-        path.join(getPaths().generated.base, PLUGIN_CACHE_FILENAME)
-      )
-    )
-  } catch (error) {
-    // If the cache file doesn't exist we can just ignore it and continue
-    if (error.code !== 'ENOENT') {
-      console.error(error)
-    }
-  }
-
-  // We filter plugins based on the first word which depends on if a namespace is in use
-  const firstWord = process.argv[2]?.includes('@')
-    ? process.argv[3]
-    : process.argv[2]
   const showNamespaceHelp =
     firstWord === '--help' || firstWord === '-h' || firstWord === undefined
 
@@ -205,18 +260,11 @@ export async function loadPlugins(yargs) {
  * @param {any[]} plugins An array of plugin objects read from the redwood.toml file
  */
 function checkPluginListAndWarn(plugins) {
-  // Plugins must define a package and version
+  // Plugins must define a package
   for (const plugin of plugins) {
     if (!plugin.package) {
       console.warn(
         chalk.yellow(`⚠️  A plugin is missing a package, it cannot be loaded.`)
-      )
-    }
-    if (!plugin.version) {
-      console.warn(
-        chalk.yellow(
-          `⚠️  Plugin "${plugin.package}" is missing a version, it cannot be loaded.`
-        )
       )
     }
   }
@@ -250,36 +298,31 @@ function checkPluginListAndWarn(plugins) {
  * Attempts to load a plugin package and return it. Returns null if the plugin failed to load.
  *
  * @param {string} packageName The npm package name of the plugin
- * @param {string} packageVersion The npm package version of the plugin
+ * @param {string | undefined} packageVersion The npm package version of the plugin, defaults to loading the plugin at the
+ * same version as the cli
  * @param {boolean} autoInstall Whether to automatically install the plugin package if it is not installed already
  * @returns The plugin package or null if it failed to load
  */
 async function loadPluginPackage(packageName, packageVersion, autoInstall) {
-  try {
+  // NOTE: This likely does not handle mismatch versions between what is installed and what is requested
+  if (isModuleInstalled(packageName)) {
     return await import(packageName)
-  } catch (error) {
-    // TODO: Batch all missing plugins and install them in one go
-    if (error.code === 'MODULE_NOT_FOUND') {
-      if (!autoInstall) {
-        console.warn(
-          chalk.yellow(
-            `⚠️  Plugin "${packageName}" cannot be loaded because it is not installed and "autoInstall" is disabled.`
-          )
-        )
-      } else {
-        // Install the plugin
-        console.log(chalk.green(`Installing plugin "${packageName}"...`))
-        const installed = await installPluginPackage(
-          packageName,
-          packageVersion
-        )
-        if (installed) {
-          return await import(packageName)
-        }
-      }
-    } else {
-      console.error(error)
-    }
+  }
+
+  if (!autoInstall) {
+    console.warn(
+      chalk.yellow(
+        `⚠️  Plugin "${packageName}" cannot be loaded because it is not installed and "autoInstall" is disabled.`
+      )
+    )
+    return null
+  }
+
+  // Attempt to install the plugin
+  console.log(chalk.green(`Installing plugin "${packageName}"...`))
+  const installed = await installPluginPackage(packageName, packageVersion)
+  if (installed) {
+    return await import(packageName)
   }
   return null
 }
@@ -288,12 +331,13 @@ async function loadPluginPackage(packageName, packageVersion, autoInstall) {
  * Attempts to install a plugin package. Installs the package as a dev dependency.
  *
  * @param {string} packageName The npm package name of the plugin
- * @param {string} packageVersion The npm package version of the plugin
+ * @param {string} packageVersion The npm package version of the plugin to install or undefined
+ * to install the same version as the cli
  * @returns True if the plugin was installed successfully, false otherwise
  */
 async function installPluginPackage(packageName, packageVersion) {
   try {
-    await installModule(packageName, packageVersion, true)
+    await installModule(packageName, packageVersion)
     return true
   } catch (error) {
     console.error(error)
