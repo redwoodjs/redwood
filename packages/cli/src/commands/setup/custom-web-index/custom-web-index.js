@@ -13,6 +13,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./custom-web-index-handler')
+  const { handler } = await import('./custom-web-index-handler.js')
   return handler(options)
 }

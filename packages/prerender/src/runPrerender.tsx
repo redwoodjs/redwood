@@ -333,7 +333,7 @@ export const runPrerender = async ({
   })
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
-  const { default: App } = await import(getPaths().web.app)
+  const { default: App } = require(getPaths().web.app)
 
   const componentAsHtml = await recursivelyRender(
     App,

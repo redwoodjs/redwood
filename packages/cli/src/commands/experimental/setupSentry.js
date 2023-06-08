@@ -18,6 +18,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./setupSentryHandler')
+  const { handler } = await import('./setupSentryHandler.js')
   return handler(options)
 }

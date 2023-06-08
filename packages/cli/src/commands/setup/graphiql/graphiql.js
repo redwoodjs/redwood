@@ -43,6 +43,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./graphiqlHandler')
+  const { handler } = await import('./graphiqlHandler.js')
   return handler(options)
 }
