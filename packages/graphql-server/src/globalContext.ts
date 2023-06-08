@@ -19,6 +19,23 @@ export interface GlobalContext extends Record<string, unknown> {}
 let GLOBAL_CONTEXT: GlobalContext = {}
 let PER_REQUEST_CONTEXT: AsyncLocalStorage<Map<string, GlobalContext>>
 
+/**
+ *
+ * You must have shouldUseLocalStorageContext return true
+ * when you're self-hosting RedwoodJS.
+ *
+ * It is critical to set this correctly so that the `setContext` function
+ * in the `useRedwoodPopulateContext` plugin sets the global context
+ * correctly with any extended GraphQL context as is done with
+ * `useRedwoodAuthContext` that sets the `currentUser` in the context when
+ * used to authenticate a user.
+ *
+ * This will ensure that the GraphQLHandler will use the per-request context.
+ *
+ * You do not need to use LocalStorageContext for AWS (Netlify/Vercel)
+ * because each Lambda request is handled individually.
+ *
+ */
 export const shouldUseLocalStorageContext = () =>
   process.env.DISABLE_CONTEXT_ISOLATION !== '1'
 
