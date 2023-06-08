@@ -39,7 +39,8 @@ export const matchTransformSnapshot = async (
     targetPaths: [tempFilePath],
     parser,
     options: {
-      verbose: true,
+      verbose: 1,
+      print: true,
     },
   })
 
