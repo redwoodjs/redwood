@@ -6,8 +6,6 @@ import { parseConfigFileTextToJson } from 'typescript'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getPaths } from '@redwoodjs/project-config'
-
 import { getWebSideBabelPlugins } from './web'
 
 const pkgJson = require('../../../package.json')
