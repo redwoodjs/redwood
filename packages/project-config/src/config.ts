@@ -102,7 +102,7 @@ export interface Config {
     cli: {
       autoInstall: boolean
       plugins: CLIPlugin[]
-    },
+    }
     useSDLCodeGenForGraphQLTypes: boolean
   }
 }
@@ -176,7 +176,7 @@ const DEFAULT_CONFIG: Config = {
         },
       ],
     },
-    useSDLCodeGenForGraphQLTypes: false
+    useSDLCodeGenForGraphQLTypes: false,
   },
 }
 
