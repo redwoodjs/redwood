@@ -1,16 +1,24 @@
 import fs from 'fs'
 import path from 'path'
 
+import type { PrismaClient } from '@prisma/client'
 import { Listr } from 'listr2'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../lib'
-import c from '../../lib/colors'
+import c from '../lib/colors'
+import { getPaths } from '../lib/project'
+import { DataMigrateUpYargsOptions } from '../types'
 
 const redwoodProjectPaths = getPaths()
-let requireHookRegistered = false
+
+type DataMigration = {
+  version: string
+  name: string
+  startedAt: Date
+  finishedAt: Date
+}
 
 /**
  * @param {{
@@ -18,8 +26,12 @@ let requireHookRegistered = false
  *   distPath: string
  * }} options
  */
-export async function handler({ importDbClientFromDist, distPath }) {
-  let db
+export async function handler({
+  importDbClientFromDist,
+  distPath,
+}: DataMigrateUpYargsOptions) {
+  let db: any
+  let requireHookRegistered = false
 
   if (importDbClientFromDist) {
     if (!fs.existsSync(distPath)) {
@@ -72,6 +84,8 @@ export async function handler({ importDbClientFromDist, distPath }) {
         if (counters.error > 0) {
           counters.skipped++
           return true
+        } else {
+          return false
         }
       },
       async task() {
@@ -93,7 +107,9 @@ export async function handler({ importDbClientFromDist, distPath }) {
           })
         } catch (e) {
           counters.error++
-          console.error(c.error(`Error in data migration: ${e.message}`))
+          console.error(
+            c.error(`Error in data migration: ${(e as Error).message}`)
+          )
         }
       },
     }
@@ -116,21 +132,21 @@ export async function handler({ importDbClientFromDist, distPath }) {
       process.exitCode = 1
     }
   } catch (e) {
+    process.exitCode = 1
     await db.$disconnect()
 
     console.log()
     reportDataMigrations(counters)
     console.log()
 
-    errorTelemetry(process.argv, e.message)
-    process.exitCode = e?.exitCode ?? 1
+    errorTelemetry(process.argv, (e as Error).message)
   }
 }
 
 /**
  * Return the list of migrations that haven't run against the database yet
  */
-async function getPendingDataMigrations(db) {
+async function getPendingDataMigrations(db: PrismaClient) {
   const dataMigrationsPath = redwoodProjectPaths.api.dataMigrations
 
   if (!fs.existsSync(dataMigrationsPath)) {
@@ -154,9 +170,11 @@ async function getPendingDataMigrations(db) {
       }
     })
 
-  const ranDataMigrations = await db.rW_DataMigration.findMany({
-    orderBy: { version: 'asc' },
-  })
+  const ranDataMigrations: DataMigration[] = await db.rW_DataMigration.findMany(
+    {
+      orderBy: { version: 'asc' },
+    }
+  )
   const ranDataMigrationVersions = ranDataMigrations.map((dataMigration) =>
     dataMigration.version.toString()
   )
@@ -173,7 +191,10 @@ async function getPendingDataMigrations(db) {
 /**
  * Sorts migrations by date, oldest first
  */
-function sortDataMigrationsByVersion(dataMigrationA, dataMigrationB) {
+function sortDataMigrationsByVersion(
+  dataMigrationA: { version: string },
+  dataMigrationB: { version: string }
+) {
   const aVersion = parseInt(dataMigrationA.version)
   const bVersion = parseInt(dataMigrationB.version)
 
@@ -186,7 +207,7 @@ function sortDataMigrationsByVersion(dataMigrationA, dataMigrationB) {
   return 0
 }
 
-async function runDataMigration(db, dataMigrationPath) {
+async function runDataMigration(db: PrismaClient, dataMigrationPath: string) {
   const dataMigration = require(dataMigrationPath)
 
   const startedAt = new Date()
@@ -200,8 +221,8 @@ async function runDataMigration(db, dataMigrationPath) {
  * Adds data for completed migrations to the DB
  */
 async function recordDataMigration(
-  db,
-  { version, name, startedAt, finishedAt }
+  db: PrismaClient,
+  { version, name, startedAt, finishedAt }: DataMigration
 ) {
   await db.rW_DataMigration.create({
     data: { version, name, startedAt, finishedAt },
@@ -211,7 +232,11 @@ async function recordDataMigration(
 /**
  * Output run status to the console
  */
-function reportDataMigrations(counters) {
+function reportDataMigrations(counters: {
+  run: number
+  skipped: number
+  error: number
+}) {
   if (counters.run) {
     console.info(
       c.green(`${counters.run} data migration(s) completed successfully.`)

@@ -1,10 +1,11 @@
 import terminalLink from 'terminal-link'
+import type { Argv } from 'yargs'
 
 export const command = 'install'
 export const description = 'Add the RW_DataMigration model to your schema'
 
-export function builder(yargs) {
-  yargs.epilogue(
+export function builder(yargs: Argv): Argv {
+  return yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
       'https://redwoodjs.com/docs/cli-commands#install'
@@ -12,7 +13,9 @@ export function builder(yargs) {
   )
 }
 
-export async function handler(options) {
-  const { handler } = await import('./installHandler.js')
-  return handler(options)
+export async function handler(): Promise<void> {
+  const { handler: dataMigrateInstallHandler } = await import(
+    './installHandler.js'
+  )
+  await dataMigrateInstallHandler
 }
