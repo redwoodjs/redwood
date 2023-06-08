@@ -187,7 +187,7 @@ function sortDataMigrationsByVersion(dataMigrationA, dataMigrationB) {
 }
 
 async function runDataMigration(db, dataMigrationPath) {
-  const dataMigration = await import(dataMigrationPath)
+  const dataMigration = require(dataMigrationPath)
 
   const startedAt = new Date()
   await dataMigration.default({ db })
