@@ -39,14 +39,9 @@ export const operationNameIsUnique = async (operationName) => {
   return !cellOperationNames.includes(operationName)
 }
 
-export const getIdType = (model) => {
-  return model.fields.find((field) => field.isId)?.type
-}
-
 /**
  *
- * This function checks the project for the field name supplied,
- * assuming the schema file has been generated in .redwood/schema.graphql
+ * This function checks the graphQL schema for the field name supplied
  * @example
  * checkProjectForQueryField('blogPost') => true/false
  * checkProjectForQueryField('redwood') => true

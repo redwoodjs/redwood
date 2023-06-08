@@ -1,9 +1,13 @@
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadSchema } from '@graphql-tools/load'
+import { UrlLoader } from '@graphql-tools/url-loader'
 import {
   DocumentNode,
   FieldNode,
+  GraphQLSchema,
   InlineFragmentNode,
+  InputValueDefinitionNode,
   OperationDefinitionNode,
   OperationTypeNode,
   parse,
@@ -12,7 +16,7 @@ import {
 } from 'graphql'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 interface Operation {
   operation: OperationTypeNode
@@ -81,29 +85,59 @@ const getFields = (field: FieldNode): any => {
   }
 }
 
+export async function getGraphQLSchema(): Promise<GraphQLSchema> {
+  const remoteSchema = getConfig().web.graphQLSchema
+  if (remoteSchema) {
+    return loadSchema(remoteSchema, {
+      loaders: [new UrlLoader(), new GraphQLFileLoader()],
+    })
+  }
+
+  const schemaPointerMap = {
+    [print(rootSchema.schema)]: {},
+    'graphql/**/*.sdl.{js,ts}': {},
+    'directives/**/*.{js,ts}': {},
+    'subscriptions/**/*.{js,ts}': {},
+  }
+
+  return loadSchema(schemaPointerMap, {
+    loaders: [
+      new CodeFileLoader({
+        noRequire: true,
+        pluckConfig: {
+          globalGqlIdentifierName: 'gql',
+        },
+      }),
+    ],
+    cwd: getPaths().api.src,
+    assumeValidSDL: true,
+  })
+}
+
+/**
+ * Returns the GraphQL arguments (names & printed types) for a given queryName
+ * example: [{name: 'id', type: 'String!'}]
+ */
+export const getQueryArguments = async (queryName: string) => {
+  const schema = await getGraphQLSchema()
+
+  const query = schema.getQueryType()?.getFields()[queryName]
+
+  return (
+    query?.args?.map((a) => ({
+      name: a.name,
+      type: print(a.astNode as InputValueDefinitionNode).split(
+        `${a.name}: `
+      )[1],
+    })) ?? []
+  )
+}
+
 export const listQueryTypeFieldsInProject = async () => {
   try {
-    const schemaPointerMap = {
-      [print(rootSchema.schema)]: {},
-      'graphql/**/*.sdl.{js,ts}': {},
-      'directives/**/*.{js,ts}': {},
-      'subscriptions/**/*.{js,ts}': {},
-    }
+    const schema = await getGraphQLSchema()
 
-    const mergedSchema = await loadSchema(schemaPointerMap, {
-      loaders: [
-        new CodeFileLoader({
-          noRequire: true,
-          pluckConfig: {
-            globalGqlIdentifierName: 'gql',
-          },
-        }),
-      ],
-      cwd: getPaths().api.src,
-      assumeValidSDL: true,
-    })
-
-    const queryTypeFields = mergedSchema.getQueryType()?.getFields()
+    const queryTypeFields = schema.getQueryType()?.getFields()
 
     // Return empty array if no schema found
     return Object.keys(queryTypeFields ?? {})

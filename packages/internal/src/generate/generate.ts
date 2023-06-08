@@ -1,12 +1,18 @@
 #!/usr/bin/env node
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { generateGraphQLSchema } from './graphqlSchema'
 import { generateTypeDefs } from './typeDefinitions'
 
 export const generate = async () => {
-  const schemaPath = await generateGraphQLSchema()
+  let schemaPath: string
+  const remoteSchema = getConfig().web.graphQLSchema
+  if (remoteSchema) {
+    schemaPath = remoteSchema
+  } else {
+    schemaPath = await generateGraphQLSchema()
+  }
   const typeDefsPaths = await generateTypeDefs()
   return [schemaPath, ...typeDefsPaths].filter((x) => typeof x === 'string')
 }

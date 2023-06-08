@@ -12,12 +12,13 @@ import * as typescriptPlugin from '@graphql-codegen/typescript'
 import * as typescriptOperations from '@graphql-codegen/typescript-operations'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
-import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
+import { loadDocuments, loadSchema } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
+import { UrlLoader } from '@graphql-tools/url-loader'
 import execa from 'execa'
-import { DocumentNode } from 'graphql'
+import { DocumentNode, GraphQLSchema } from 'graphql'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { getTsConfigs } from '../project'
 
@@ -141,7 +142,7 @@ async function runCodegenGraphQL(
     ...userCodegenConfig?.config?.config,
   }
 
-  const options = getCodegenOptions(documents, mergedConfig, extraPlugins)
+  const options = await getCodegenOptions(documents, mergedConfig, extraPlugins)
   const output = await codegen(options)
 
   fs.mkdirSync(path.dirname(filename), { recursive: true })
@@ -306,7 +307,21 @@ const printMappedModelsPlugin: CodegenPlugin = {
   },
 }
 
-function getCodegenOptions(
+async function getGeneratedGraphQLSchema(): Promise<GraphQLSchema> {
+  const remoteSchema = getConfig().web.graphQLSchema
+  if (remoteSchema) {
+    return loadSchema(remoteSchema, {
+      loaders: [new UrlLoader(), new GraphQLFileLoader()],
+    })
+  }
+
+  return loadSchema(getPaths().generated.schema, {
+    loaders: [new GraphQLFileLoader()],
+    sort: true,
+  })
+}
+
+async function getCodegenOptions(
   documents: CodegenTypes.DocumentFile[],
   config: CodegenTypes.PluginConfig,
   extraPlugins: CombinedPluginConfig[]
@@ -324,6 +339,8 @@ function getCodegenOptions(
     ),
   }
 
+  const schemaAst = await getGeneratedGraphQLSchema()
+
   const options: CodegenTypes.GenerateOptions = {
     // The typescript plugin returns a string instead of writing to a file, so
     // `filename` is not used
@@ -336,15 +353,13 @@ function getCodegenOptions(
     // When that happens we'll have have to remove our `schema` line, and
     // rename `schemaAst` to `schema`
     schema: undefined as unknown as DocumentNode,
-    schemaAst: loadSchemaSync(getPaths().generated.schema, {
-      loaders: [new GraphQLFileLoader()],
-      sort: true,
-    }),
+    schemaAst,
     documents,
     config,
     plugins,
     pluginMap,
     pluginContext: {},
+    skipDocumentsValidation: false,
   }
 
   return options

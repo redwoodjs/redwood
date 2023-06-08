@@ -1,12 +1,10 @@
-import pascalcase from 'pascalcase'
-
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
+import { getQueryArguments } from '@redwoodjs/internal/dist/gql'
 
 import { nameVariants, transformTSToJS } from '../../../lib'
 import { isWordPluralizable } from '../../../lib/pluralHelpers'
 import { addFunctionToRollback } from '../../../lib/rollback'
-import { isPlural, singularize } from '../../../lib/rwPluralize'
-import { getSchema } from '../../../lib/schemaHelpers'
+import { isPlural, pluralize } from '../../../lib/rwPluralize'
 import { yargsDefaults } from '../helpers'
 import {
   templateForComponentFile,
@@ -17,7 +15,6 @@ import {
 
 import {
   checkProjectForQueryField,
-  getIdType,
   operationNameIsUnique,
   uniqueOperationName,
 } from './utils/utils'
@@ -31,31 +28,41 @@ export const files = async ({
   ...options
 }) => {
   let cellName = removeGeneratorName(name, 'cell')
-  let idType,
+  let queryArgs,
     mockIdValues = [42, 43, 44],
-    model = null
+    isSingleIdArgument
   let templateNameSuffix = ''
 
   // Create a unique operation name.
 
   const shouldGenerateList =
-    (isWordPluralizable(cellName) ? isPlural(cellName) : options.list) ||
-    options.list
+    options.list || (isWordPluralizable(cellName) && isPlural(cellName))
 
   // needed for the singular cell GQL query find by id case
   try {
-    model = await getSchema(pascalcase(singularize(cellName)))
-    idType = getIdType(model)
+    const queryName = shouldGenerateList ? pluralize(cellName) : cellName
+
+    queryArgs = await getQueryArguments(queryName)
+
+    isSingleIdArgument = queryArgs.length === 1 && queryArgs[0].name === 'id'
+
+    // todo support more complex mocks
     mockIdValues =
-      idType === 'String'
+      isSingleIdArgument && queryArgs[0].type === 'String!'
         ? mockIdValues.map((value) => `'${value}'`)
         : mockIdValues
-  } catch {
+  } catch (e) {
     // Eat error so that the destroy cell generator doesn't raise an error
     // when trying to find prisma query engine in test runs.
 
     // Assume id will be Int, otherwise generated cell will keep throwing
-    idType = 'Int'
+    queryArgs = [{ name: 'id', type: 'Int!' }]
+    isSingleIdArgument = true
+  }
+
+  let idType
+  if (isSingleIdArgument) {
+    idType = queryArgs[0].type
   }
 
   if (shouldGenerateList) {
@@ -78,6 +85,23 @@ export const files = async ({
     })
   }
 
+  let operationVariables, resolverInput
+  if (isSingleIdArgument) {
+    operationVariables = `$id: ${idType}`
+    resolverInput = 'id: $id'
+  } else {
+    operationVariables = queryArgs
+      .map((a) => `$${a.name}: ${a.type}`)
+      .join(', ')
+    resolverInput = queryArgs.map((a) => `${a.name}: $${a.name}`)
+  }
+
+  // support queries with no inputs
+  if (operationVariables) {
+    operationVariables = `(${operationVariables})`
+    resolverInput = `(${resolverInput})`
+  }
+
   const cellFile = templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
@@ -87,7 +111,10 @@ export const files = async ({
     templatePath: `cell${templateNameSuffix}.tsx.template`,
     templateVars: {
       operationName,
+      // @deprecated use operationVariables & resolverInput instead
       idType,
+      operationVariables,
+      resolverInput,
     },
   })
 
