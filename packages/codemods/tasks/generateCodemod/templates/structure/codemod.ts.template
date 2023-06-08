@@ -1,11 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
-import getRWPaths from '../../../lib/getRWPaths'
+import { getPaths } from '@redwoodjs/project-config'
 
 async function ${name}() {
   const fileThatShouldntBeThereAnymore = path.join(
-    getRWPaths().base,
+    getPaths().base,
     'babel.config.js'
   )
   fs.rmSync(fileThatShouldntBeThereAnymore)

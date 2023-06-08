@@ -6,11 +6,37 @@ import fs from 'fs-extra'
 import { getPaths } from './index'
 
 /**
+ *  Installs a module into a user's project. If the module is already installed,
+ *  this function does nothing. If no version is specified, the version will be assumed
+ *  to be the same as that of \@redwoodjs/cli.
+ *
+ * @param {string} name The name of the module to install
+ * @param {string} version The version of the module to install, otherwise the same as that of \@redwoodjs/cli
+ * @param {boolean} isDevDependency Whether to install as a devDependency or not
+ * @returns Whether the module was installed or not
+ */
+export async function installModule(name, version = undefined) {
+  if (isModuleInstalled(name)) {
+    return false
+  }
+  if (version === undefined) {
+    return await installRedwoodModule(name)
+  } else {
+    await execa.command(`yarn add -D ${name}@${version}`, {
+      stdio: 'inherit',
+      cwd: getPaths().base,
+    })
+  }
+  return true
+}
+
+/**
  * Installs a Redwood module into a user's project keeping the version consistent with that of \@redwoodjs/cli.
  * If the module is already installed, this function does nothing.
  * If no remote version can not be found which matches the local cli version then the latest canary version will be used.
  *
  * @param {string} module A redwoodjs module, e.g. \@redwoodjs/web
+ * @returns {boolean} Whether the module was installed or not
  */
 export async function installRedwoodModule(module) {
   const packageJsonPath = require.resolve('@redwoodjs/cli/package.json')
@@ -40,7 +66,9 @@ export async function installRedwoodModule(module) {
       stdio: 'inherit',
       cwd: getPaths().base,
     })
+    return true
   }
+  return false
 }
 
 /**

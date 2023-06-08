@@ -43,6 +43,14 @@ describe('getConfig', () => {
           "open": false,
         },
         "experimental": {
+          "cli": {
+            "autoInstall": true,
+            "plugins": [
+              {
+                "package": "@redwoodjs/cli-storybook",
+              },
+            ],
+          },
           "opentelemetry": {
             "apiSdk": undefined,
             "enabled": false,
@@ -72,7 +80,7 @@ describe('getConfig', () => {
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
-          "bundler": "webpack",
+          "bundler": "vite",
           "fastRefresh": true,
           "host": "localhost",
           "includeEnvironmentVariables": [],

@@ -18,11 +18,14 @@ import {
   getConfig as getRedwoodConfig,
   getPaths as getRedwoodPaths,
   resolveFile as internalResolveFile,
+  findUp,
 } from '@redwoodjs/project-config'
 
 import c from './colors'
 import { addFileToRollback } from './rollback'
 import { pluralize, singularize } from './rwPluralize'
+
+export { findUp }
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {

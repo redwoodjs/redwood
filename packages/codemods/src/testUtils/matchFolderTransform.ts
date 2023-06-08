@@ -42,7 +42,7 @@ export const matchFolderTransform = async (
   const GLOB_CONFIG = {
     absolute: false,
     dot: true,
-    ignore: ['redwood.toml', '**/*.DS_Store'], // ignore the fake redwood.toml added for getRWPaths
+    ignore: ['redwood.toml', '**/*.DS_Store'], // ignore the fake redwood.toml added for getPaths
   }
   const transformedPaths = fg.sync('**/*', { ...GLOB_CONFIG, cwd: tempDir })
 
