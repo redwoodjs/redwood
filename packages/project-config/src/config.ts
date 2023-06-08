@@ -99,6 +99,7 @@ export interface Config {
       apiSdk?: string
     }
     studio: StudioConfig
+    useSDLCodeGenForGraphQLTypes: boolean
   }
 }
 
@@ -157,6 +158,7 @@ const DEFAULT_CONFIG: Config = {
         },
       },
     },
+    useSDLCodeGenForGraphQLTypes: false,
   },
 }
 
