@@ -3,10 +3,7 @@ import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
 import { createGraphQLYoga } from '@redwoodjs/graphql-server'
-import type {
-  GraphQLYogaOptions,
-  RedwoodGraphQLContext,
-} from '@redwoodjs/graphql-server'
+import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
 
 /**
  * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
@@ -52,10 +49,8 @@ export async function redwoodFastifyGraphQLServer(
         const response = await yoga.handleNodeRequest(req, {
           req,
           reply,
-          event: transformToRedwoodGraphQLContextEvent(
-            req
-          ) as RedwoodGraphQLContext['event'],
-          requestContext: {} as RedwoodGraphQLContext['requestContext'],
+          event: transformToRedwoodGraphQLContextEvent(req),
+          requestContext: {},
         })
 
         for (const [name, value] of response.headers) {
