@@ -76,3 +76,59 @@ yarn rw type-check
 ```
 
 This runs `tsc` on your project and ensures that all the necessary generated types are generated first. Checkout the [CLI reference for type-check](cli-commands.md#type-check)
+
+### Using Alias Paths
+
+Alias paths are a mechanism that allows you to define custom shortcuts or aliases for import statements in your code. Instead of using relative or absolute paths to import modules or files, you can use these aliases to make your imports cleaner and more concise.
+
+Redwood comes with a great starting point by aliasing the `src` directory, but you can take this further by configuring your `tsconfig.json` file, your import paths could go from:
+
+```ts
+// this really long path
+import { CustomModal } from 'src/components/modules/admin/common/ui/CustomModal'
+
+// to this nicer one!
+import { CustomModal } from '@adminUI/CustomModal'
+```
+
+Add you custom `@adminUI` alias to your `tsconfig.json` file:
+
+```json
+{
+  "compilerOptions": {
+...
+    "paths": {
+      "src/*": ["./src/*", "../.redwood/types/mirror/api/src/*"],
+
+      "@adminUI/*": [
+        "./src/components/modules/admin/common/ui/*",
+        "../.redwood/types/mirror/web/src/components/modules/admin/common/ui/*"
+      ],
+
+      "types/*": ["./types/*", "../types/*"],
+      "@redwoodjs/testing": ["../node_modules/@redwoodjs/testing/api"]
+    }
+  }
+...
+}
+```
+
+You might have noticed the `"../.redwood/types/mirror/web/src/components/modules/admin/common/ui/*"` path. I'm glad you did!
+
+When you build your project redwood will create a set of directories or a virtual directory called`.redwood`, [read more about this typescript feature here](https://www.typescriptlang.org/docs/handbook/module-resolution.html#virtual-directories-with-rootdirs). This directory contains types for te Cells, so there is no need for us to  specify an index file.
+
+When you combine those two paths `.src/...` and `./.redwood/...` under an alias you can have shorter and cleaner import paths:
+
+```ts
+// Instead of this 🥵
+import { CustomModal } from 'src/components/modules/admin/common/ui/CustomModal/CustomModal'
+
+// they could look like this ✨
+import { CustomModal } from '@adminUI/CustomModal'
+```
+
+#### Some benefits of using alias paths are
+
+1. **Improved code readability**, by abstracting complex directory hierarchies, and having meaningful names for your imports.
+1. **Code maintainability**,  aliases allow you to decouple your code from the file structure and more easily move files around, as they are not tied to the longer path.
+1. **Reduce boilerplate**, no more `../../src/components/modules/admin/common/ui/` 😮‍💨

@@ -13,6 +13,8 @@ import {
   CORE_JS_VERSION,
   RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,
+  parseTypeScriptConfigFiles,
+  getPathsFromConfig,
 } from './common'
 
 export const TARGETS_NODE = '18.16'
@@ -62,8 +64,7 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
 }
 
 export const getApiSideBabelPlugins = (
-  { forJest, openTelemetry } = {
-    forJest: false,
+  { openTelemetry } = {
     openTelemetry: false,
   }
 ) => {
@@ -76,6 +77,9 @@ export const getApiSideBabelPlugins = (
   //   .split('.')
   //   .splice(0, 2)
   //   .join('.') // Gives '3.16' instead of '3.16.12'
+
+  // get the config object from the file
+  const tsConfig = parseTypeScriptConfigFiles()
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
@@ -105,25 +109,19 @@ export const getApiSideBabelPlugins = (
      *
      */
     ['@babel/plugin-transform-runtime', BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS],
-    // // still needed for jest.mock
-    forJest && [
+    [
       'babel-plugin-module-resolver',
       {
         alias: {
           src: './src',
+          // adds the paths from [ts|js]config.json to the module resolver
+          ...getPathsFromConfig(tsConfig.api),
         },
         root: [rwjsPaths.api.base],
         cwd: 'packagejson',
         loglevel: 'silent', // to silence the unnecessary warnings
       },
       'rwjs-api-module-resolver',
-    ],
-    [
-      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
-      {
-        srcAbsPath: rwjsPaths.api.src,
-      },
-      'rwjs-babel-src-alias',
     ],
     [
       require('../babelPlugins/babel-plugin-redwood-directory-named-import')
