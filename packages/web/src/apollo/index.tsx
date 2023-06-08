@@ -118,7 +118,7 @@ export type GraphQLClientConfigProp = Omit<
    * To extend Redwood's Apollo Link, provide a function—it'll get passed an array of Redwood's Apollo Links:
    *
    * ```js
-   * const link = (rwLinks) => {
+   * const linkFactory = (rwLinks) => {
    *   const consoleLink = new ApolloLink((operation, forward) => {
    *     console.log(operation.operationName)
    *     return forward(operation)
