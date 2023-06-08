@@ -18,7 +18,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@fastify/http-proxy": "9.1.0",
+    "@fastify/http-proxy": "9.2.0",
     "@fastify/static": "6.10.2",
     "@fastify/url-data": "5.3.1",
     "@redwoodjs/graphql-server": "5.0.0",
@@ -31,7 +31,7 @@
     "qs": "6.11.2"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.115",
+    "@types/aws-lambda": "8.10.116",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",
     "esbuild": "0.17.19",
