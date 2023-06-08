@@ -39,7 +39,7 @@ export async function getGqlHandler() {
   const gqlPath = path.join(getPaths().api.functions, 'graphql')
 
   try {
-    const { handler } = await import(gqlPath)
+    const { handler } = require(gqlPath)
 
     return async (operation: Record<string, unknown>) => {
       return await handler(buildApiEvent(operation), buildContext())

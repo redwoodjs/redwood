@@ -13,6 +13,6 @@ export function builder(yargs) {
 }
 
 export async function handler(options) {
-  const { handler } = await import('./installHandler')
+  const { handler } = await import('./installHandler.js')
   return handler(options)
 }

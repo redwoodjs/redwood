@@ -11,12 +11,16 @@ import {
   getCommonPlugins,
   registerBabel,
   RegisterHookOptions,
+  parseTypeScriptConfigFiles,
+  getPathsFromConfig,
 } from './common'
 
 export const getWebSideBabelPlugins = (
   { forJest, forVite }: Flags = { forJest: false, forVite: false }
 ) => {
   const rwjsPaths = getPaths()
+  // Get the TS configs in the api and web sides as an object
+  const tsConfigs = parseTypeScriptConfigFiles()
 
   // Vite does not need these plugins
   const commonPlugins = forVite ? [] : getCommonPlugins()
@@ -31,19 +35,14 @@ export const getWebSideBabelPlugins = (
             // Jest monorepo and multi project runner is not correctly determining
             // the `cwd`: https://github.com/facebook/jest/issues/7359
             forJest ? rwjsPaths.web.src : './src',
+          // adds the paths from [ts|js]config.json to the module resolver
+          ...getPathsFromConfig(tsConfigs.web),
         },
         root: [rwjsPaths.web.base],
         cwd: 'packagejson',
         loglevel: 'silent', // to silence the unnecessary warnings
       },
       'rwjs-module-resolver',
-    ],
-    [
-      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
-      {
-        srcAbsPath: rwjsPaths.web.src,
-      },
-      'rwjs-babel-src-alias',
     ],
     [
       require('../babelPlugins/babel-plugin-redwood-directory-named-import')

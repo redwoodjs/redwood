@@ -43,6 +43,7 @@
     "@graphql-codegen/typescript-resolvers": "3.2.1",
     "@redwoodjs/graphql-server": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
+    "@sdl-codegen/node": "0.0.9",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.8.1",
     "chalk": "4.1.2",
@@ -56,7 +57,7 @@
     "prettier": "2.8.8",
     "rimraf": "5.0.1",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.17.16",
+    "systeminformation": "5.18.2",
     "terminal-link": "2.1.1",
     "ts-node": "10.9.1",
     "typescript": "5.1.3"
