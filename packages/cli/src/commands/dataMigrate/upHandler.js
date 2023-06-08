@@ -48,7 +48,7 @@ export async function handler({ importDbClientFromDist, distPath }) {
     registerApiSideBabelHook()
     requireHookRegistered = true
 
-    db = (await import(path.join(redwoodProjectPaths.api.lib, 'db'))).db
+    db = require(path.join(redwoodProjectPaths.api.lib, 'db')).db
   }
 
   const pendingDataMigrations = await getPendingDataMigrations(db)
