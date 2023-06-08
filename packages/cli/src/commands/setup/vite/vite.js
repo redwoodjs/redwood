@@ -25,6 +25,6 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./viteHandler')
+  const { handler } = await import('./viteHandler.js')
   return handler(options)
 }
