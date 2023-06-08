@@ -1,4 +1,6 @@
+import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
+import fastifyRawBody from 'fastify-raw-body'
 
 import { createGraphQLYoga } from '@redwoodjs/graphql-server'
 import type {
@@ -34,6 +36,12 @@ export async function redwoodFastifyGraphQLServer(
   options: GraphQLYogaOptions,
   done: HookHandlerDoneFunction
 ) {
+  // These two plugins are needed to transform a Fastify Request to a Lambda event
+  // which is used by the RedwoodGraphQLContext and mimics the behavior of the
+  // api-server withFunction plugin
+  fastify.register(fastifyUrlData)
+  await fastify.register(fastifyRawBody)
+
   try {
     const { yoga } = createGraphQLYoga(options)
 
