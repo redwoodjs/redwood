@@ -2,8 +2,14 @@ import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
-import { createGraphQLYoga } from '@redwoodjs/graphql-server'
-import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
+import {
+  createGraphQLYoga,
+  getAsyncStoreInstance,
+} from '@redwoodjs/graphql-server'
+import type {
+  GlobalContext,
+  GraphQLYogaOptions,
+} from '@redwoodjs/graphql-server'
 
 /**
  * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
@@ -41,6 +47,11 @@ export async function redwoodFastifyGraphQLServer(
 
   try {
     const { yoga } = createGraphQLYoga(options)
+
+    // Ensure that each request has a unique global context
+    fastify.addHook('onRequest', (_req, _reply, done) => {
+      getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
+    })
 
     fastify.route({
       url: yoga.graphqlEndpoint,
