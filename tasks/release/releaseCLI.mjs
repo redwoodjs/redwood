@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-env node */
 
-import * as yargs from 'yargs'
+import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
 import * as generateReleaseNotesCommand from './generateReleaseNotesCommand.mjs'

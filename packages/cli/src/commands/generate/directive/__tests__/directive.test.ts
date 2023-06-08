@@ -4,7 +4,7 @@ import '../../../../lib/test'
 
 import path from 'path'
 
-import * as yargs from 'yargs'
+import yargs from 'yargs'
 
 import * as directive from '../directive'
 

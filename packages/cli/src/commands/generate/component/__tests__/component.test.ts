@@ -1,7 +1,7 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
-import * as yargs from 'yargs'
+import yargs from 'yargs'
 
 // Shared mocks for paths, etc.
 import '../../../../lib/test'
