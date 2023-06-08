@@ -392,7 +392,7 @@ export const runPrerender = async ({
     )}</script>`
   )
 
-  // Reset the cache after the apollo stat is appended into the head
+  // Reset the cache after the apollo state is appended into the head
   // If we don't call this all the data will be cached but you can run into issues with the cache being too large
   // or possible cache merge conflicts
   prerenderApolloClient.resetStore()
