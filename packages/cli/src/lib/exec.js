@@ -9,11 +9,11 @@ export async function runScriptFunction({
   functionName,
   args,
 }) {
-  const script = await import(scriptPath)
+  const script = require(scriptPath)
   const returnValue = await script[functionName](args)
 
   try {
-    const { db } = await import(path.join(getPaths().api.lib, 'db'))
+    const { db } = require(path.join(getPaths().api.lib, 'db'))
     db.$disconnect()
   } catch (e) {
     // silence
