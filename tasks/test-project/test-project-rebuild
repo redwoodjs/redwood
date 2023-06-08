@@ -2,6 +2,7 @@
 /* eslint-env node, es6*/
 //@ts-check
 const fs = require('fs')
+const { isPromise } = require('node:util/types')
 const os = require('os')
 const path = require('path')
 const stream = require('stream')
@@ -24,38 +25,11 @@ const {
   copyFrameworkPackages,
 } = require('./frameworkLinking')
 const { webTasks, apiTasks } = require('./tasks')
+const { isExecaResult } = require('./typing')
 const {
   getExecaOptions: utilGetExecaOptions,
   updatePkgJsonScripts,
 } = require('./util')
-
-/*** @typedef Thenable */
-/**
- * @typedef ExecaResult
- * @type {object}
- * @property {string} stdout
- * @property {string} stderr
- * @property {number} exitCode
- */
-
-/**
- * @param {Promise<ExecaResult | void> | void} promise
- * @return {promise is Promise<ExecaResult | void>}
- */
-function isPromise(promise) {
-  return (
-    typeof promise !== 'undefined' &&
-    'then' in /** @type Promise<ExecaResult | void> */ (promise)
-  )
-}
-
-/**
- * @param {ExecaResult|void} result
- * @return {result is ExecaResult}
- */
-function isExecaResult(result) {
-  return typeof result === 'object' && 'exitCode' in result
-}
 
 /** @type {(string) => import('execa').Options} */
 function getExecaOptions(cwd) {
@@ -71,18 +45,7 @@ function beginStep(step) {
 }
 
 /**
- * @typedef TaskDef
- * @type {object}
- * @property {number} step 0 based step number.
- * @property {string} title Title of this task.
- * @property {string=} content Reactive content.
- * @property {() => string|boolean=} skip Function that returns a string to
- *   show when skipping this task, or just true|false to indicate whether the
- *   task should be skipped or not.
- * @property {() => Promise<ExecaResult> | Promise<void> | void} task
- *   The task to run.
- *
- * @param {TaskDef} taskDef
+ * @param {import('./typing').TuiTaskDef} taskDef
  */
 async function tuiTask({ step, title, content, skip: skipFn, task }) {
   let skip = skipFn?.()
@@ -125,6 +88,12 @@ async function tuiTask({ step, title, content, skip: skipFn, task }) {
         )
 
         process.exit(1)
+      }
+    } else if (Array.isArray(result)) {
+      const tuiTaskList = result
+      for (let i = 0; i < tuiTaskList.length; i++) {
+        // Recurse through all tasks
+        await tuiTask({ step: i, ...tuiTaskList[i] })
       }
     }
   }
@@ -268,6 +237,12 @@ if (!startStep) {
 }
 
 async function runCommand() {
+  // Maybe we could add all of the tasks to an array and infer the `step` from
+  // the array index?
+  // I'd also want to be able to skip sub-tasks. Like both the "web" step and
+  // the "api" step both have a bunch of sub-tasks. So maybe the step.txt file
+  // should contain something like "9.2" to mean the third sub-task of the
+  // "api" step? And --resume-step would also accept stuff like "9.2"?
   await tuiTask({
     step: 0,
     title: 'Creating project',
