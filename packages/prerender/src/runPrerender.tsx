@@ -3,6 +3,7 @@ import path from 'path'
 
 import React from 'react'
 
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { CheerioAPI, load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
@@ -29,6 +30,9 @@ interface ChunkReference {
   files: Array<string>
   referencedChunks: Array<string | number>
 }
+
+// Create an apollo client that we can use to prepopulate the cache and restore it client-side
+const prerenderApolloClient = new ApolloClient({ cache: new InMemoryCache() })
 
 async function recursivelyRender(
   App: React.ElementType,
@@ -344,6 +348,17 @@ export const runPrerender = async ({
 
   const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
 
+  // Loop over ther queryCache and write the queries to the apollo client cache this will normalize the data
+  // and make it available to the app when it hydrates
+  Object.keys(queryCache).forEach((queryKey) => {
+    const { query, variables, data } = queryCache[queryKey]
+    prerenderApolloClient.writeQuery({
+      query,
+      variables,
+      data,
+    })
+  })
+
   const indexHtmlTree = loadHtml(indexContent)
 
   if (helmet) {
@@ -370,6 +385,17 @@ export const runPrerender = async ({
       }
     }
   }
+
+  indexHtmlTree('head').append(
+    `<script> globalThis.__REDWOOD__APOLLO_STATE = ${JSON.stringify(
+      prerenderApolloClient.extract()
+    )}</script>`
+  )
+
+  // Reset the cache after the apollo stat is appended into the head
+  // If we don't call this all the data will be cached but you can run into issues with the cache being too large
+  // or possible cache merge conflicts
+  prerenderApolloClient.resetStore()
 
   insertChunkLoadingScript(indexHtmlTree, renderPath, vite)
 

@@ -286,7 +286,9 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
    */
   const { cacheConfig, ...config } = graphQLClientConfig ?? {}
 
-  const cache = new InMemoryCache(cacheConfig)
+  const cache = new InMemoryCache(cacheConfig).restore(
+    globalThis?.__REDWOOD__APOLLO_STATE ?? {}
+  )
 
   return (
     <FetchConfigProvider useAuth={useAuth}>
