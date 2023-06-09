@@ -24,7 +24,7 @@ const {
   addFrameworkDepsToProject,
   copyFrameworkPackages,
 } = require('./frameworkLinking')
-const { webTasks, apiTasks } = require('./tasks')
+const { webTasks, apiTasks } = require('./tui-tasks')
 const { isExecaResult } = require('./typing')
 const {
   getExecaOptions: utilGetExecaOptions,

@@ -27,20 +27,13 @@
  */
 
 /**
- * @param {Promise<ExecaResult | TuiTaskList | void> | void} promise
- * @return {promise is Promise<ExecaResult | TuiTaskList | void>}
- */
-export function isPromise(promise) {
-  return (
-    typeof promise !== 'undefined' &&
-    'then' in /** @type Promise<ExecaResult | void> */ (promise)
-  )
-}
-
-/**
  * @param {ExecaResult|TuiTaskList|void} result
  * @return {result is ExecaResult}
  */
-export function isExecaResult(result) {
+function isExecaResult(result) {
   return typeof result === 'object' && 'exitCode' in result
+}
+
+module.exports = {
+  isExecaResult,
 }
