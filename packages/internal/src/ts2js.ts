@@ -38,7 +38,7 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
     console.log('No TypeScript files found to convert to JS in this project.')
   }
   for (const f of files) {
-    const code = transformTSToJS(f)
+    const code = transformTSToJS(cwd, f)
     if (code) {
       fs.writeFileSync(
         path.join(cwd, f.replace('.tsx', '.jsx').replace('.ts', '.js')),
@@ -91,9 +91,10 @@ export const typeScriptSourceFiles = (
  *
  * @param {string} file - The path to the TypeScript file.
  */
-export const transformTSToJS = (file: string) => {
-  const tsCode = fs.readFileSync(file, 'utf8')
-  const filename = path.basename(file)
+export const transformTSToJS = (cwd: string, file: string) => {
+  const filePath = path.join(cwd, file)
+  const tsCode = fs.readFileSync(filePath, 'utf8')
+  const filename = path.basename(filePath)
 
   const result = transform(tsCode, {
     filename,
