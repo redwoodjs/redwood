@@ -363,8 +363,7 @@ async function runCommand() {
     step: 8,
     title: 'Apply web codemods',
     task: () => {
-      webTasks(OUTPUT_PROJECT_PATH, {
-        verbose,
+      return webTasks(OUTPUT_PROJECT_PATH, {
         linkWithLatestFwBuild: true,
       })
     },
@@ -375,8 +374,7 @@ async function runCommand() {
     step: 9,
     title: 'Apply api codemods',
     task: () => {
-      apiTasks(OUTPUT_PROJECT_PATH, {
-        verbose,
+      return apiTasks(OUTPUT_PROJECT_PATH, {
         linkWithLatestFwBuild: true,
       })
     },
