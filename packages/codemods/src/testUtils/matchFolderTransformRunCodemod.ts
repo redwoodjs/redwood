@@ -9,9 +9,17 @@ import { createProjectMock } from './index'
 
 export const matchFolderTransformRunCodemod = async (
   transformName: string,
-  targetPathsGenerator: (cwd: string) => string[],
   fixtureName: string,
-  { removeWhitespace } = { removeWhitespace: false }
+  {
+    removeWhitespace,
+    targetPathsGenerator,
+  }: {
+    removeWhitespace: boolean
+    targetPathsGenerator?: (cwd: string) => string[]
+  } = {
+    removeWhitespace: false,
+    targetPathsGenerator: undefined,
+  }
 ) => {
   const tempDir = createProjectMock()
 
@@ -39,23 +47,28 @@ export const matchFolderTransformRunCodemod = async (
     overwrite: true,
   })
 
-  // Step 2: Run transform against temp dir
-  const transformPath = require.resolve(
-    path.join(testPath, '../../', transformName)
-  )
-  const targetPaths = targetPathsGenerator(tempDir).map((p) =>
-    path.join(tempDir, p)
-  )
-  await runTransform({
-    transformPath,
-    targetPaths,
-  })
-
   const GLOB_CONFIG = {
     absolute: false,
     dot: true,
     ignore: ['redwood.toml', '**/*.DS_Store'], // ignore the fake redwood.toml added for getPaths
   }
+
+  // Step 2: Run transform against temp dir
+  const transformPath = require.resolve(
+    path.join(testPath, '../../', transformName)
+  )
+  const targetPaths = []
+  if (targetPathsGenerator) {
+    targetPaths.push(...targetPathsGenerator(tempDir))
+  } else {
+    targetPaths.push(...fg.sync('**/*', { ...GLOB_CONFIG, cwd: tempDir }))
+  }
+
+  await runTransform({
+    transformPath,
+    targetPaths: targetPaths.map((p) => path.join(tempDir, p)),
+  })
+
   const transformedPaths = fg.sync('**/*', { ...GLOB_CONFIG, cwd: tempDir })
 
   const expectedPaths = fg.sync('**/*', {
