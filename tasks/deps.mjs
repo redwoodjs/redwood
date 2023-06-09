@@ -35,7 +35,7 @@ function main() {
     '--config',
     configPath,
     '--output-type dot',
-    '--exclude "^src/__tests__" ',
+    '--exclude "src/__tests__"',
   ].join(' ')
 
   const outputPath = path.join(packageDir, `./dependencyGraph.${base}.svg`)
