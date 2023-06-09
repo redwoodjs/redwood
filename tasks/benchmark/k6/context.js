@@ -35,7 +35,7 @@ export default function () {
     })
   }
 
-  const url = 'http://localhost:8910/.redwood/functions/graphql'
+  const url = 'http://localhost:8911/graphql'
   const params = {
     headers: {
       'Content-Type': 'application/json',

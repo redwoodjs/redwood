@@ -303,14 +303,14 @@ async function main() {
       console.log('Running test: ', test)
 
       // Build the app
-      await execa('yarn', ['rw', 'build'], {
+      await execa('yarn', ['rw', 'build', 'api'], {
         cwd: REDWOOD_PROJECT_DIRECTORY,
         // shell: true,
         // stdio: 'inherit',
       })
 
       // Start the serve
-      const serverExeca = execa('yarn', ['rw', 'serve'], {
+      const serverExeca = execa('yarn', ['rw', 'serve', 'api'], {
         cwd: REDWOOD_PROJECT_DIRECTORY,
         // shell: true,
         stdio: 'pipe',
@@ -330,21 +330,25 @@ async function main() {
       }
 
       // Run k6 test
-      await execa(
-        'k6',
-        ['run', '--out', 'json=k6_output.json', path.join(testsDir, test)],
-        {
-          cwd: REDWOOD_PROJECT_DIRECTORY,
-          // shell: true,
-          stdio: 'inherit',
-        }
-      )
+      try {
+        await execa(
+          'k6',
+          ['run', '--out', 'json=k6_output.json', path.join(testsDir, test)],
+          {
+            cwd: REDWOOD_PROJECT_DIRECTORY,
+            // shell: true,
+            stdio: 'inherit',
+          }
+        )
+
+        // Collect the results
+        // TODO: Collect the results
+      } catch (_error) {
+        console.warn('The k6 test failed')
+      }
 
       // Stop the serve
       serverExeca.kill()
-
-      // Collect the results
-      // TODO: Collect the results
     }
   }
 }
