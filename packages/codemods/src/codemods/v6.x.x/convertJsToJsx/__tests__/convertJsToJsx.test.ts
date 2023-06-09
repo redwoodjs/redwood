@@ -4,7 +4,7 @@ describe('convertJsToJsx', () => {
   it('Converts an example project correctly', async () => {
     await matchFolderTransformRunCodemod('convertJsToJsx', 'example', {
       targetPathsGenerator: (cwd: string) =>
-        fg.sync('**/*.js', {
+        fg.sync('web/src/**/*.js', {
           cwd,
         }),
     })
