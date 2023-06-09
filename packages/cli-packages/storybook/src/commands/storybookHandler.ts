@@ -11,14 +11,14 @@ import c from '../lib/colors'
 import { getPaths } from '../lib/project'
 import { StorybookYargsOptions } from '../types'
 
-export const handler = async ({
+export async function handler({
   build,
   buildDirectory,
   ci,
   open,
   port,
   smokeTest,
-}: StorybookYargsOptions) => {
+}: StorybookYargsOptions) {
   const cwd = getPaths().web.base
   const staticAssetsFolder = path.join(cwd, 'public')
   const execaOptions: Partial<execa.Options> = {

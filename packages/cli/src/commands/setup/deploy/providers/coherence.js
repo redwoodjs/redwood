@@ -11,6 +11,6 @@ export function builder(yargs) {
 }
 
 export async function handler(options) {
-  const { handler } = await import('./coherenceHandler')
+  const { handler } = await import('./coherenceHandler.js')
   return handler(options)
 }

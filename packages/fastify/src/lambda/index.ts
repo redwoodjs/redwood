@@ -110,7 +110,7 @@ export async function lambdaRequestHandler(
   return requestHandler(req, reply, LAMBDA_FUNCTIONS[routeName])
 }
 
-function lambdaEventForFastifyRequest(
+export function lambdaEventForFastifyRequest(
   request: FastifyRequest
 ): APIGatewayProxyEvent {
   return {
