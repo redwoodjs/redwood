@@ -7,5 +7,8 @@
   },
   "[prisma]": {
     "editor.formatOnSave": true
+  },
+  "files.readonlyInclude": {
+    ".redwood/**": true
   }
 }
