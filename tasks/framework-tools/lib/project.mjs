@@ -1,26 +1,27 @@
 /* eslint-env node */
 
-import fs from 'node:fs'
 import path from 'node:path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import ora from 'ora'
 import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import {
-  frameworkDependencies,
-  frameworkPkgJsonFiles,
-  frameworkPackagesFiles,
-  frameworkPackagesBins,
-  packageJsonName,
+  getFrameworkDependencies,
+  getFrameworkPackageJsonPaths,
+  getFrameworkPackagesFiles,
+  getFrameworkPackagesBins,
+  getPackageJsonName,
 } from './framework.mjs'
 
 /**
  * Sets binaries as executable and creates symlinks to `node_modules/.bin` if they do not exist.
  */
 export function fixProjectBinaries(projectPath) {
-  const bins = frameworkPackagesBins()
+  const bins = getFrameworkPackagesBins()
+
   for (let [binName, binPath] of Object.entries(bins)) {
     // if the binPath doesn't exist, create it.
     const binSymlink = path.join(projectPath, 'node_modules/.bin', binName)
@@ -38,46 +39,49 @@ export function fixProjectBinaries(projectPath) {
 }
 
 /**
- * Append all the `@redwoodjs` dependencies to the root `package.json` in a Redwood Project.
+ * Add all the `@redwoodjs` packages' dependencies to the root `package.json` in a Redwood Project.
+ *
+ * @param {string} packageJsonPath - The path to the root `package.json` in a Redwood Project.
+ * @param {{ [key: string]: string }?} dependencies - A map of package names to versions.
+ *
+ * @returns {void}
  */
 export function addDependenciesToPackageJson(
   packageJsonPath,
-  dependencies = frameworkDependencies()
+  dependencies = getFrameworkDependencies()
 ) {
-  if (!fs.existsSync(packageJsonPath)) {
-    console.log(
-      `Error: The package.json path: ${packageJsonPath} does not exist.`
-    )
-    process.exit(1)
-  }
-
   const packageJsonLink = terminalLink(
     'package.json',
     'file://' + packageJsonPath
   )
 
-  const numOfDeps = Object.keys(dependencies).length
+  const numberOfDependencies = Object.keys(dependencies).length
 
   const spinner = ora(
-    `Adding ${numOfDeps} framework dependencies to ${packageJsonLink}...`
+    `Adding ${numberOfDependencies} framework dependencies to ${packageJsonLink}...`
   ).start()
 
-  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
+  const packageJson = fs.readJSONSync(packageJsonPath)
+
   packageJson.dependencies = {
-    ...(packageJson.dependencies || {}),
+    ...packageJson.dependencies,
     ...dependencies,
   }
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2))
+
+  fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 })
+
   spinner.succeed(
-    `Added ${numOfDeps} framework dependencies to ${packageJsonLink}`
+    `Added ${numberOfDependencies} framework dependencies to ${packageJsonLink}`
   )
 }
 
 export function installProjectPackages(projectPath) {
   const spinner = ora("Running 'yarn install'...")
+
   spinner.start()
+
   try {
-    execa.sync('yarn install', {
+    execa.commandSync('yarn install', {
       cwd: projectPath,
       shell: true,
     })
@@ -89,21 +93,22 @@ export function installProjectPackages(projectPath) {
         'file://' + path.join(projectPath, 'yarn-error.log')
       )} for more information.`
     )
+
     console.log('-'.repeat(80))
   }
 }
 
 export async function copyFrameworkFilesToProject(
   projectPath,
-  packages = frameworkPkgJsonFiles()
+  packageJsonPaths = getFrameworkPackageJsonPaths()
 ) {
   // Loop over every package, delete all existing files, copy over the new files,
   // and fix binaries.
-  const packagesFiles = await frameworkPackagesFiles(packages)
+  const packagesFiles = await getFrameworkPackagesFiles(packageJsonPaths)
 
-  const packageNamesToPaths = packages.reduce(
+  const packageNamesToPaths = packageJsonPaths.reduce(
     (packageNamesToPaths, packagePath) => {
-      packageNamesToPaths[packageJsonName(packagePath)] =
+      packageNamesToPaths[getPackageJsonName(packagePath)] =
         path.dirname(packagePath)
       return packageNamesToPaths
     },
