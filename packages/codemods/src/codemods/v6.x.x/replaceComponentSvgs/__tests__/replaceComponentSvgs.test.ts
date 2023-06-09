@@ -6,4 +6,8 @@ describe('replaceComponentSvgs', () => {
   it('Carries over other attrs', async () => {
     await matchTransformSnapshot('replaceComponentSvgs', 'otherAttrs')
   })
+
+  it('Handles svgs used as render props', async () => {
+    await matchTransformSnapshot('replaceComponentSvgs', 'renderProp')
+  })
 })

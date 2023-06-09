@@ -19,7 +19,8 @@ export const handler = () => {
         // If you need to transform files based on their contents, use `getFilesWithPattern`.
         targetPaths: fg.sync('**/*.{js,jsx,tsx}', {
           cwd: getPaths().web.src,
-        }),,
+          absolute: true,
+        }),
       })
 
       setOutput('All done! Run `yarn rw lint --fix` to prettify your code')

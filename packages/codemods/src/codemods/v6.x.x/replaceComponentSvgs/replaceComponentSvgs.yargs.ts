@@ -17,6 +17,7 @@ export const handler = () => {
       // Here we know exactly which file we need to transform, but often times you won't.
       targetPaths: fg.sync('**/*.{js,jsx,tsx}', {
         cwd: getPaths().web.src,
+        absolute: true,
       }),
     })
 

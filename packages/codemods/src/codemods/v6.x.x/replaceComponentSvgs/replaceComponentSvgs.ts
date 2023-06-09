@@ -1,4 +1,9 @@
-import type { FileInfo, API } from 'jscodeshift'
+import type {
+  FileInfo,
+  API,
+  JSXAttribute,
+  JSXSpreadAttribute,
+} from 'jscodeshift'
 
 function pascalToCamel(pascalString: string) {
   const firstChar = pascalString.charAt(0).toLowerCase()
@@ -17,6 +22,24 @@ export default function transform(file: FileInfo, api: API) {
     return importPath.includes('.svg')
   })
 
+  function createImgTag(
+    src: string,
+    attributes?: (JSXAttribute | JSXSpreadAttribute)[] = []
+  ) {
+    return j.jsxElement(
+      j.jsxOpeningElement(j.jsxIdentifier('img'), [
+        j.jsxAttribute(
+          j.jsxIdentifier('src'),
+          j.jsxExpressionContainer(j.identifier(src))
+        ),
+        // make sure to preserve any other attributes
+        ...attributes,
+      ]),
+      j.jsxClosingElement(j.jsxIdentifier('img')),
+      []
+    )
+  }
+
   // Process each import declaration
   svgImports.forEach((importDeclaration) => {
     const importSpecifiers = importDeclaration.node.specifiers
@@ -31,29 +54,37 @@ export default function transform(file: FileInfo, api: API) {
         const originalImportedName = importSpecifier.local.name
         const camelCasedName = pascalToCamel(originalImportedName)
 
-        // Update the import specifier to use the correct name
-        importSpecifier.local.name = camelCasedName
-
         // Find the JSX elements that use the default import specifier
         const svgsUsedAsComponent = root.findJSXElements(originalImportedName)
 
         // Replace the JSX elements with the <img> tags
         svgsUsedAsComponent.forEach((svgComponent) => {
-          const newImgTag = j.jsxElement(
-            j.jsxOpeningElement(j.jsxIdentifier('img'), [
-              j.jsxAttribute(
-                j.jsxIdentifier('src'),
-                j.jsxExpressionContainer(j.identifier(camelCasedName))
-              ),
-              // make sure to preserve any other attributes
-              ...(svgComponent.node.openingElement.attributes || []),
-            ]),
-            j.jsxClosingElement(j.jsxIdentifier('img')),
-            []
+          const newImgTag = createImgTag(
+            camelCasedName,
+            svgComponent.node.openingElement.attributes
           )
 
           svgComponent.replace(newImgTag)
         })
+
+        const svgsUsedAsRenderProp = root.find(j.JSXExpressionContainer, {
+          expression: {
+            type: 'Identifier',
+            name: originalImportedName,
+          },
+        })
+
+        svgsUsedAsRenderProp.forEach((svgRenderPropExpression) => {
+          svgRenderPropExpression.replace(
+            j.jsxExpressionContainer(createImgTag(camelCasedName))
+          )
+        })
+
+        if (svgsUsedAsRenderProp.length > 0 || svgsUsedAsComponent.length > 0) {
+          // Update the import specifier to use the correct name,
+          // but only if it's used somewhere
+          importSpecifier.local.name = camelCasedName
+        }
       }
     })
   })
