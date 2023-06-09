@@ -8,6 +8,7 @@ import path from 'node:path'
 import c from 'ansi-colors'
 import chokidar from 'chokidar'
 import fs from 'fs-extra'
+import { rimraf } from 'rimraf'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -237,13 +238,7 @@ async function main() {
 
     try {
       logStatus(`Cleaning ${c.magenta(packageName)}...`)
-      execSync(
-        `yarn rimraf ${path.join(path.dirname(packageJsonPath), 'dist')}`,
-        {
-          stdio: options.verbose ? 'inherit' : 'pipe',
-          cwd: REDWOOD_FRAMEWORK_PATH,
-        }
-      )
+      await rimraf(path.join(path.dirname(packageJsonPath), 'dist'))
 
       logStatus(`Building ${c.magenta(packageName)}...`)
       execSync('yarn build', {

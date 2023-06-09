@@ -5,7 +5,6 @@ import path from 'node:path'
 import url from 'node:url'
 
 import Arborist from '@npmcli/arborist'
-import execa from 'execa'
 import fs from 'fs-extra'
 import packlist from 'npm-packlist'
 

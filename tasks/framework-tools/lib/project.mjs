@@ -26,12 +26,14 @@ export function fixProjectBinaries(projectPath) {
     // if the binPath doesn't exist, create it.
     const binSymlink = path.join(projectPath, 'node_modules/.bin', binName)
     binPath = path.join(projectPath, 'node_modules', binPath)
+
     if (!fs.existsSync(binSymlink)) {
       fs.mkdirSync(path.dirname(binSymlink), {
         recursive: true,
       })
       fs.symlinkSync(binPath, binSymlink)
     }
+
     console.log('chmod +x', terminalLink(binName, binPath))
     fs.chmodSync(binSymlink, '755')
     fs.chmodSync(binPath, '755')
