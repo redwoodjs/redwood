@@ -47,7 +47,9 @@ function beginStep(step) {
 /**
  * @param {import('./typing').TuiTaskDef} taskDef
  */
-async function tuiTask({ step, title, content, skip: skipFn, task }) {
+async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
+  const stepId = (parent ? parent + '.' : '') + step
+
   let skip = skipFn?.()
 
   if (skip) {
@@ -61,7 +63,7 @@ async function tuiTask({ step, title, content, skip: skipFn, task }) {
 
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
-    header: `${step}. ${title}`,
+    header: `${stepId}: ${title}`,
     content,
     spinner: {
       enabled: true,
@@ -93,7 +95,11 @@ async function tuiTask({ step, title, content, skip: skipFn, task }) {
       const tuiTaskList = result
       for (let i = 0; i < tuiTaskList.length; i++) {
         // Recurse through all tasks
-        await tuiTask({ step: i, ...tuiTaskList[i] })
+        await tuiTask({
+          step: i,
+          ...tuiTaskList[i],
+          parent: stepId,
+        })
       }
     }
   }

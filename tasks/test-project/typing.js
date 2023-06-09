@@ -10,6 +10,7 @@
  * @typedef TuiTaskDef
  * @type {object}
  * @property {number} step 0 based step number.
+ * @property {string=} parent The parent task to this task.
  * @property {string} title Title of this task.
  * @property {string=} content Reactive content.
  * @property {() => string|boolean=} skip Function that returns a string to

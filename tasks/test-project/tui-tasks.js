@@ -2,6 +2,7 @@
 //@ts-check
 const fs = require('fs')
 const path = require('path')
+const stream = require('stream')
 
 const execa = require('execa')
 
@@ -33,10 +34,12 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
   const execaOptions = getExecaOptions(outputPath)
 
   const createBuilder = (cmd) => {
-    return async function createItem(positionals) {
+    return async function createItem(positionalArguments) {
       await execa(
         cmd,
-        Array.isArray(positionals) ? positionals : [positionals],
+        Array.isArray(positionalArguments)
+          ? positionalArguments
+          : [positionalArguments],
         execaOptions
       )
     }
@@ -50,8 +53,34 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       {
         title: 'Creating home page',
         task: async () => {
-          await createPage('home /')
+          // await createPage('home /')
+          const execaOptions = getExecaOptions(outputPath)
+          console.log('execaOptions', execaOptions)
 
+          const subprocess = execa(
+            'yarn',
+            ['redwood', 'g', 'page', 'home', '/'],
+            { ...execaOptions, stdio: 'pipe' }
+          )
+
+          const writableStream = new stream.Writable()
+          writableStream._write = (_chunk, _encoding, next) => {
+            next()
+          }
+
+          subprocess.stdout?.pipe(writableStream)
+          subprocess.stderr?.pipe(writableStream)
+
+          const result = await subprocess
+          const { stdout, stderr, exitCode } = result
+          if (exitCode !== 0) {
+            console.log('stdout', stdout)
+            console.log('stderr', stderr)
+            process.exit(exitCode)
+          }
+          // await execa('yarn redwood g page', ['home /'], execaOptions)
+
+          console.log('About to apply codemod for home page')
           return applyCodemod(
             'homePage.js',
             fullPath('web/src/pages/HomePage/HomePage')
