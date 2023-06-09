@@ -55,7 +55,7 @@
   "devDependencies": {
     "@babel/cli": "7.21.5",
     "@babel/core": "7.22.1",
-    "@types/aws-lambda": "8.10.116",
+    "@types/aws-lambda": "8.10.117",
     "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "9.0.2",
     "@types/lodash.escape": "4.0.7",

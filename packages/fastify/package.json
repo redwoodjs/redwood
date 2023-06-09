@@ -30,7 +30,7 @@
     "qs": "6.11.2"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.116",
+    "@types/aws-lambda": "8.10.117",
     "@types/lodash.escape": "4.0.7",
     "@types/qs": "6.9.7",
     "esbuild": "0.17.19",
