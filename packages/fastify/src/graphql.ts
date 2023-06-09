@@ -3,13 +3,13 @@ import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 import type { Plugin } from 'graphql-yoga'
 
-import type {
-  GraphQLYogaOptions,
-  GlobalContext,
-} from '@redwoodjs/graphql-server'
 import {
   createGraphQLYoga,
   getAsyncStoreInstance,
+} from '@redwoodjs/graphql-server'
+import type {
+  GlobalContext,
+  GraphQLYogaOptions,
 } from '@redwoodjs/graphql-server'
 
 /**
@@ -52,7 +52,6 @@ export async function redwoodFastifyGraphQLServer(
 
     const { yoga } = createGraphQLYoga(options)
 
-    // TODO: This should be refactored to only be defined once and it might not live here
     // Ensure that each request has a unique global context
     fastify.addHook('onRequest', (_req, _reply, done) => {
       getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
