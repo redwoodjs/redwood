@@ -16,8 +16,6 @@
     "build": "yarn node ./build.mjs && yarn build:types",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "depsDist": "yarn deps:dist",
-    "depsSrc": "yarn deps:src",
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "jest": {
