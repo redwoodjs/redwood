@@ -12,6 +12,7 @@ import { telemetryMiddleware } from '@redwoodjs/telemetry'
 import * as buildCommand from './commands/build'
 import * as checkCommand from './commands/check'
 import * as consoleCommand from './commands/console'
+import * as dataMigrateCommand from './commands/dataMigrate'
 import * as deployCommand from './commands/deploy'
 import * as destroyCommand from './commands/destroy'
 import * as devCommand from './commands/dev'
@@ -126,6 +127,7 @@ async function runYargs() {
     .command(buildCommand)
     .command(checkCommand)
     .command(consoleCommand)
+    .command(dataMigrateCommand)
     .command(deployCommand)
     .command(destroyCommand)
     .command(devCommand)

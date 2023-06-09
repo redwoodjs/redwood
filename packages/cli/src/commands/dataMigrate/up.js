@@ -1,15 +1,16 @@
 import terminalLink from 'terminal-link'
-import type { Argv } from 'yargs'
 
-import { getPaths } from '../lib/project'
-import { DataMigrateUpYargsOptions } from '../types'
+import { getPaths } from '../../lib'
 
 export const command = 'up'
 export const description =
   'Run any outstanding Data Migrations against the database'
 
-export function builder(yargs: Argv): Argv {
-  return yargs
+/**
+ * @param {import('@types/yargs').Argv} yargs
+ */
+export function builder(yargs) {
+  yargs
     .option('import-db-client-from-dist', {
       type: 'boolean',
       alias: ['db-from-dist'],
@@ -30,7 +31,7 @@ export function builder(yargs: Argv): Argv {
     )
 }
 
-export async function handler(options: DataMigrateUpYargsOptions) {
-  const { handler: dataMigrateUpHandler } = await import('./upHandler.js')
-  return dataMigrateUpHandler(options)
+export async function handler(options) {
+  const { handler } = await import('./upHandler.js')
+  return handler(options)
 }

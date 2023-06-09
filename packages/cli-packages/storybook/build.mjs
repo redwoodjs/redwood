@@ -4,7 +4,7 @@ import * as esbuild from 'esbuild'
 import fg from 'fast-glob'
 
 // Get source files
-const sourceFiles = fg.sync(['./src/**/*.ts'], { ignore: ['./src/types.ts'] })
+const sourceFiles = fg.sync(['./src/**/*.ts'])
 
 // Build general source files
 const result = await esbuild.build({

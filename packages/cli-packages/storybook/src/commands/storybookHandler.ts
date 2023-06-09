@@ -72,8 +72,8 @@ export async function handler({
   try {
     await execa.command(command, execaOptions)
   } catch (e) {
-    process.exitCode = 1
-    console.error(c.error((e as Error).message))
+    console.log(c.error((e as Error).message))
     errorTelemetry(process.argv, (e as Error).message)
+    process.exit(1)
   }
 }

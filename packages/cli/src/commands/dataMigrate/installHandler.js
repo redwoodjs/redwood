@@ -6,12 +6,12 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import c from '../lib/colors'
-import { getPaths } from '../lib/project'
+import { getPaths } from '../../lib'
+import c from '../../lib/colors'
+
+const redwoodProjectPaths = getPaths()
 
 export async function handler() {
-  const redwoodProjectPaths = getPaths()
-
   const tasks = new Listr(
     [
       {
@@ -64,9 +64,9 @@ export async function handler() {
   try {
     await tasks.run()
   } catch (e) {
-    process.exitCode = 1
-    console.error(c.error((e as Error).message))
-    errorTelemetry(process.argv, (e as Error).message)
+    errorTelemetry(process.argv, e.message)
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }
 
