@@ -427,7 +427,7 @@ export const addScaffoldImport = () => {
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
-  return 'Added scaffold import to App.{js,tsx}'
+  return 'Added scaffold import to App.{jsx,tsx}'
 }
 
 const removeEmtpySet = (routesContent, layout) => {
