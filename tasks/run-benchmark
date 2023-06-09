@@ -1,0 +1,351 @@
+#!/usr/bin/env node
+/* eslint-env node, es6*/
+
+const os = require('os')
+const path = require('path')
+
+const execa = require('execa')
+const fg = require('fast-glob')
+const fs = require('fs-extra')
+const { hideBin } = require('yargs/helpers')
+const yargs = require('yargs/yargs')
+
+// Parse input
+const args = yargs(hideBin(process.argv))
+  .option('setup', { default: [], type: 'array', alias: 's' })
+  .option('test', { default: [], type: 'array', alias: 't' })
+  .option('clean-up', { default: true, type: 'boolean' })
+  .scriptName('run-benchmark')
+  .example('run-benchmark')
+  .example('run-benchmark /tmp/redwood-app --setup serverFile --test context')
+  .help()
+  .parse()
+
+const REDWOODJS_FRAMEWORK_PATH = path.resolve(__dirname, '..')
+const REDWOOD_PROJECT_DIRECTORY =
+  args._?.[0] ||
+  path.join(
+    os.tmpdir(),
+    'redwood-benchmark',
+    // ":" is problematic with paths
+    new Date().toISOString().split(':').join('-')
+  )
+
+function buildRedwoodFramework() {
+  try {
+    const files = fg.sync('packages/**/dist', {
+      onlyDirectories: true,
+    })
+
+    execa.sync(
+      [files.length && 'yarn build:clean', 'yarn build']
+        .filter(Boolean)
+        .join('&&'),
+      {
+        cwd: REDWOODJS_FRAMEWORK_PATH,
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error('Error: Could not build Redwood Framework')
+      console.error(e)
+    }
+    process.exit(1)
+  }
+}
+
+function createRedwoodJSApp({ typescript }) {
+  try {
+    execa.sync(
+      'yarn node dist/create-redwood-app.js',
+      [
+        REDWOOD_PROJECT_DIRECTORY,
+        '--no-yarn-install',
+        `--typescript ${typescript}`,
+        '--no-telemetry',
+        '--no-git',
+      ].filter(Boolean),
+      {
+        cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
+        env: { REDWOOD_CI: '1' },
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+
+    // Add prisma resolutions
+    const packageJSONPath = path.join(REDWOOD_PROJECT_DIRECTORY, 'package.json')
+    const packageJSON = fs.readJSONSync(packageJSONPath)
+
+    const getVersionFrmRwPkg = (dep, pkg) => {
+      return fs.readJSONSync(
+        path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json')
+      ).dependencies[dep]
+    }
+
+    packageJSON.resolutions = {
+      prisma: getVersionFrmRwPkg('prisma', 'cli'),
+      '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
+      '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
+      'graphql-yoga': getVersionFrmRwPkg('graphql-yoga', 'graphql-server'),
+    }
+
+    fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error('Error: Could not create Redwood Project')
+      console.error(e)
+    }
+    process.exit(1)
+  }
+}
+
+function addFrameworkDepsToProject() {
+  try {
+    execa.sync('yarn project:deps', {
+      cwd: REDWOODJS_FRAMEWORK_PATH,
+      shell: true,
+      stdio: 'inherit',
+      env: {
+        RWFW_PATH: REDWOODJS_FRAMEWORK_PATH,
+        RWJS_CWD: REDWOOD_PROJECT_DIRECTORY,
+      },
+    })
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error(
+        'Error: Could not add Redwood Framework dependencies to project'
+      )
+      console.error(e)
+    }
+    process.exit(1)
+  }
+}
+
+function copyFrameworkPackages() {
+  try {
+    execa.sync('yarn project:copy', {
+      cwd: REDWOODJS_FRAMEWORK_PATH,
+      shell: true,
+      stdio: 'inherit',
+      env: {
+        RWFW_PATH: REDWOODJS_FRAMEWORK_PATH,
+        RWJS_CWD: REDWOOD_PROJECT_DIRECTORY,
+      },
+    })
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error('Error: We could not copy Redwood Framework packages')
+      console.error(e)
+    }
+    process.exit(1)
+  }
+}
+
+function runYarnInstall() {
+  try {
+    execa.sync('yarn install', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error('Error: Could not run `yarn install`')
+      console.error(e)
+    }
+    process.exit(1)
+  }
+}
+
+function initGit() {
+  try {
+    console.log('Initializing Git')
+    execa.sync('git init --initial-branch main && git add .', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+    execa.sync('git commit -a --message=init', {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+  } catch (e) {
+    if (e.signal !== 'SIGINT') {
+      console.error(
+        'There was an error with the `git init` or `git commit` step:'
+      )
+      console.error(e)
+    }
+    process.exit(1)
+  }
+}
+
+function cleanUp() {
+  console.log('')
+  console.log('-'.repeat(80))
+  console.log('Cleaning up benchmark resources...')
+  console.log(' - Cleaning up files (may take a few seconds)...')
+  if (fs.existsSync(REDWOOD_PROJECT_DIRECTORY)) {
+    fs.rmSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true, force: true })
+  }
+  console.log('Clean up complete')
+}
+
+async function main() {
+  // Setup the project
+  // Git commit to the clean state
+  // Get the setups or all of them
+  // Get the tests or all of them
+  // For each setup
+  //  - Run each test
+  //  - Collect the results
+  //  - Git reset to the clean state
+
+  if (args.cleanUp) {
+    process.on('SIGINT', () => {
+      cleanUp()
+    })
+    process.on('exit', () => {
+      cleanUp()
+    })
+  }
+
+  console.log()
+  console.log('-'.repeat(80))
+  console.log()
+  console.log(REDWOOD_PROJECT_DIRECTORY)
+  console.log()
+  console.log('-'.repeat(80))
+
+  fs.mkdirSync(REDWOOD_PROJECT_DIRECTORY, { recursive: true })
+
+  const setupsDir = path.join(__dirname, 'benchmark', 'setups')
+  const testsDir = path.join(__dirname, 'benchmark', 'k6')
+
+  // Get all the setups
+  const setups = fg
+    .sync('*', {
+      onlyDirectories: true,
+      cwd: setupsDir,
+    })
+    .filter((setupDir) => {
+      return (
+        args.setup.length === 0 ||
+        args.setup.some((setup) => setupDir.includes(setup))
+      )
+    })
+
+  if (setups.length === 0) {
+    console.error('No setups found')
+    process.exit(1)
+  }
+
+  // Get all the tests
+  const tests = fg
+    .sync('*.js', {
+      onlyFiles: true,
+      cwd: testsDir,
+    })
+    .filter((testFile) => {
+      return (
+        args.test.length === 0 ||
+        args.test.some((test) => testFile.includes(test))
+      )
+    })
+
+  if (tests.length === 0) {
+    console.error('No tests found')
+    process.exit(1)
+  }
+
+  buildRedwoodFramework()
+  createRedwoodJSApp({ typescript: true })
+  addFrameworkDepsToProject()
+  runYarnInstall()
+  copyFrameworkPackages()
+  initGit()
+
+  for (const setup of setups) {
+    console.log('Setting up setup: ', setup)
+
+    // Clean up the project state
+    await execa('git', ['reset', '--hard'], {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+    await execa('git', ['clean', '-fd'], {
+      cwd: REDWOOD_PROJECT_DIRECTORY,
+      shell: true,
+      stdio: 'inherit',
+    })
+
+    // Run the setup
+    await execa(
+      'node',
+      [
+        path.join(__dirname, 'benchmark/setups', setup, 'setup.js'),
+        REDWOOD_PROJECT_DIRECTORY,
+      ],
+      {
+        cwd: path.join(__dirname, 'benchmark', 'setups', setup),
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+
+    // Perform the setup
+    for (const test of tests) {
+      console.log('Running test: ', test)
+
+      // Build the app
+      await execa('yarn', ['rw', 'build'], {
+        cwd: REDWOOD_PROJECT_DIRECTORY,
+        // shell: true,
+        // stdio: 'inherit',
+      })
+
+      // Start the serve
+      const serverExeca = execa('yarn', ['rw', 'serve'], {
+        cwd: REDWOOD_PROJECT_DIRECTORY,
+        // shell: true,
+        stdio: 'pipe',
+        all: true,
+      })
+
+      // Wait for the server to be ready
+      let ready = false
+      serverExeca.all.on('data', (data) => {
+        const text = Buffer.from(data).toString()
+        if (text.includes('API listening on')) {
+          ready = true
+        }
+      })
+      while (!ready) {
+        await new Promise((resolve) => setTimeout(resolve, 100))
+      }
+
+      // Run k6 test
+      await execa(
+        'k6',
+        ['run', '--out', 'json=k6_output.json', path.join(testsDir, test)],
+        {
+          cwd: REDWOOD_PROJECT_DIRECTORY,
+          // shell: true,
+          stdio: 'inherit',
+        }
+      )
+
+      // Stop the serve
+      serverExeca.kill()
+
+      // Collect the results
+      // TODO: Collect the results
+    }
+  }
+}
+main()
