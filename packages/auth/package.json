@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "5.2.4",
+  "version": "5.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
