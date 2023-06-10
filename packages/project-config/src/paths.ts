@@ -215,9 +215,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
     },
   }
 
-  // We don't want paths to be mutated
-  Object.freeze(paths)
-
   fs.mkdirSync(paths.generated.types.includes, { recursive: true })
   fs.mkdirSync(paths.generated.types.mirror, { recursive: true })
 
