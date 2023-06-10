@@ -13,7 +13,7 @@ import {
   getFrameworkPackageJsonPaths,
   getFrameworkPackagesFiles,
   getFrameworkPackagesBins,
-  getPackageJsonName,
+  getPackageName,
 } from './framework.mjs'
 
 /**
@@ -110,7 +110,7 @@ export async function copyFrameworkFilesToProject(
 
   const packageNamesToPaths = packageJsonPaths.reduce(
     (packageNamesToPaths, packagePath) => {
-      packageNamesToPaths[getPackageJsonName(packagePath)] =
+      packageNamesToPaths[getPackageName(packagePath)] =
         path.dirname(packagePath)
       return packageNamesToPaths
     },
@@ -118,22 +118,23 @@ export async function copyFrameworkFilesToProject(
   )
 
   for (const [packageName, files] of Object.entries(packagesFiles)) {
-    const packageDstPath = path.join(projectPath, 'node_modules', packageName)
+    const packageDistPath = path.join(projectPath, 'node_modules', packageName)
+
     console.log(
-      terminalLink(packageName, 'file://' + packageDstPath),
+      terminalLink(packageName, 'file://' + packageDistPath),
       files.length,
       'files'
     )
-    await rimraf(packageDstPath)
+
+    await rimraf(packageDistPath)
 
     for (const file of files) {
       const src = path.join(packageNamesToPaths[packageName], file)
-      const dst = path.join(packageDstPath, file)
-      fs.mkdirSync(path.dirname(dst), { recursive: true })
-      fs.copyFileSync(src, dst)
+      const dest = path.join(packageDistPath, file)
+      fs.mkdirSync(path.dirname(dest), { recursive: true })
+      fs.copyFileSync(src, dest)
     }
   }
 
   console.log()
-  fixProjectBinaries(projectPath)
 }

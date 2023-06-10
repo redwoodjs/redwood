@@ -1,4 +1,5 @@
 /* eslint-env node */
+// @ts-check
 
 import { execSync } from 'node:child_process'
 import path from 'node:path'
@@ -19,6 +20,42 @@ export const REDWOOD_PACKAGES_PATH = path.join(
 
 const IGNORE_PACKAGES = ['@redwoodjs/codemods', 'create-redwood-app']
 
+const cache = new Map()
+
+/**
+ * @returns {{ location: string, name: string, packageJsonPath: string }[]}
+ */
+function getFrameworkPackagesData() {
+  if (cache.has('frameworkPackagesData')) {
+    return cache.get('frameworkPackagesData')
+  }
+
+  const output = execSync('yarn workspaces list --json', {
+    encoding: 'utf-8',
+  })
+
+  const frameworkPackagesData = output
+    .trim()
+    .split('\n')
+    .map(JSON.parse)
+    // Fliter out the root package.
+    .filter(({ location }) => location !== '.')
+    // Some packages we won't bother copying into Redwood projects.
+    .filter(({ name }) => !IGNORE_PACKAGES.includes(name))
+
+  for (const frameworkPackage of frameworkPackagesData) {
+    frameworkPackage.packageJsonPath = path.join(
+      REDWOOD_FRAMEWORK_PATH,
+      frameworkPackage.location,
+      'package.json'
+    )
+  }
+
+  cache.set('frameworkPackagesData', frameworkPackagesData)
+
+  return frameworkPackagesData
+}
+
 /**
  * Returns a list of the `@redwoodjs` package.json files that are published to npm
  * and installed into a Redwood Project.
@@ -29,24 +66,15 @@ const IGNORE_PACKAGES = ['@redwoodjs/codemods', 'create-redwood-app']
  * @returns {string[]} A list of package.json file paths.
  */
 export function getFrameworkPackageJsonPaths() {
-  let output = execSync('yarn workspaces list --json', {
-    encoding: 'utf-8',
-  })
+  if (cache.has('frameworkPackageJsonPaths')) {
+    return cache.get('frameworkPackageJsonPaths')
+  }
 
-  const packageLocationsAndNames = output
-    .trim()
-    .split('\n')
-    .map(JSON.parse)
-    // Fliter out the root package.
-    .filter(({ location }) => location !== '.')
-    // Some packages we won't bother copying into Redwood projects.
-    .filter(({ name }) => !IGNORE_PACKAGES.includes(name))
-
-  const frameworkPackageJsonPaths = packageLocationsAndNames.map(
-    ({ location }) => {
-      return path.join(REDWOOD_FRAMEWORK_PATH, location, 'package.json')
-    }
+  const frameworkPackageJsonPaths = getFrameworkPackagesData().map(
+    ({ packageJsonPath }) => packageJsonPath
   )
+
+  cache.set('frameworkPackagesData', frameworkPackageJsonPaths)
 
   return frameworkPackageJsonPaths
 }
@@ -90,7 +118,7 @@ export function getFrameworkDependencies(
  * The files included in `@redwoodjs` packages.
  * Note: The packages must be built.
  *
- * @returns {{ [key: string]: string[] }} A map of package names to files.
+ * @returns {Promise<{ [key: string]: string[] }>} A map of package names to files.
  */
 export async function getFrameworkPackagesFiles(
   packageJsonPaths = getFrameworkPackageJsonPaths()
@@ -111,22 +139,12 @@ export async function getFrameworkPackagesFiles(
  * Returns execute files for `@redwoodjs` packages.
  **/
 export function getFrameworkPackagesBins(
-  packages = getFrameworkPackageJsonPaths()
+  packageJsonPaths = getFrameworkPackageJsonPaths()
 ) {
   let bins = {}
 
-  for (const packageFile of packages) {
-    let packageJson
-
-    try {
-      packageJson = JSON.parse(fs.readFileSync(packageFile))
-    } catch (e) {
-      throw new Error(packageFile + ' is not a valid package.json file.')
-    }
-
-    if (!packageJson.name) {
-      continue
-    }
+  for (const packageJsonPath of packageJsonPaths) {
+    const packageJson = fs.readJSONSync(packageJsonPath)
 
     if (!packageJson.bin) {
       continue
@@ -138,24 +156,58 @@ export function getFrameworkPackagesBins(
       bins[binName] = path.join(packageJson.name, binPath)
     }
   }
+
   return bins
 }
 
 /**
  * Determine base package directory for any filename in it's path.
+ *
+ * @param {string} filePath
+ * @returns {string} The package.json path
  **/
-export function resolvePackageJsonPath(filePath) {
-  const [packageName] = path
-    .relative(REDWOOD_PACKAGES_PATH, filePath)
-    .split(path.sep)
+export function resolvePackageJsonPathFromFilePath(filePath) {
+  const packageJsonPath = findUp('package.json', path.dirname(filePath))
 
-  return path.join(REDWOOD_PACKAGES_PATH, packageName, 'package.json')
+  const frameworkPackageJsonPaths = getFrameworkPackageJsonPaths()
+
+  if (frameworkPackageJsonPaths.includes(packageJsonPath)) {
+    return packageJsonPath
+  }
+
+  // There's some directories that have their own package.json, but aren't published to npm,
+  // like @redwoodjs/web/apollo. We want the path to @redwoodjs/web's package.json, not @redwoodjs/web/apollo's.
+  return findUp('package.json', path.dirname(filePath))
 }
 
 /**
  * @param {string} packageJsonPath
  * @returns {string} The package name if it has one
  */
-export function getPackageJsonName(packageJsonPath) {
+export function getPackageName(packageJsonPath) {
   return fs.readJSONSync(packageJsonPath).name
+}
+
+/**
+ * Find a file by walking up parent directories. Taken from @redwoodjs/project-config.
+ *
+ * @param {string} file The file to find.
+ * @param {string} startingDirectory The directory to start searching from.
+ * @returns {string | null} The path to the file, or null if it can't be found.
+ */
+export function findUp(file, startingDirectory = process.cwd()) {
+  const possibleFilepath = path.join(startingDirectory, file)
+
+  if (fs.existsSync(possibleFilepath)) {
+    return possibleFilepath
+  }
+
+  const parentDirectory = path.dirname(startingDirectory)
+
+  // If we've reached the root directory, there's no file to be found.
+  if (parentDirectory === startingDirectory) {
+    return null
+  }
+
+  return findUp(file, parentDirectory)
 }

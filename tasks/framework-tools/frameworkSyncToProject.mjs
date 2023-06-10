@@ -13,14 +13,15 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import {
-  getPackageJsonName,
-  resolvePackageJsonPath,
+  getPackageName,
+  resolvePackageJsonPathFromFilePath,
   REDWOOD_FRAMEWORK_PATH,
   REDWOOD_PACKAGES_PATH,
 } from './lib/framework.mjs'
 import {
   addDependenciesToPackageJson,
   copyFrameworkFilesToProject,
+  fixProjectBinaries,
 } from './lib/project.mjs'
 
 const IGNORE_EXTENSIONS = ['.DS_Store']
@@ -50,47 +51,25 @@ const separator = '-'.repeat(process.stdout.columns)
 
 async function main() {
   const { _: positionals, ...options } = yargs(hideBin(process.argv))
-    .options({
-      cleanFramework: {
-        description:
-          'Clean any built framework packages before watching for changes',
-        type: 'boolean',
-        default: true,
-      },
-      buildFramework: {
-        description:
-          'Build all the framework packages before watching for changes',
-        type: 'boolean',
-        default: true,
-      },
-      addDependencies: {
-        description:
-          "Add the framework's dependencies to the project and yarn install before watching for changes",
-        type: 'boolean',
-        default: true,
-      },
-      copyFiles: {
-        description:
-          "Copy the framework packages' files to the project's node_modules before watching for changes",
-        type: 'boolean',
-        default: true,
-      },
-      cleanUp: {
-        description:
-          "Restore the project's package.json when this process exits",
-        type: 'boolean',
-        default: true,
-      },
-      watch: {
-        description: 'Watch for changes to the framework packages',
-        type: 'boolean',
-        default: true,
-      },
-      verbose: {
-        description: 'Print more',
-        type: 'boolean',
-        default: true,
-      },
+    .option('setUpForWatch', {
+      description: 'Set up the project for watching for framework changes',
+      type: 'boolean',
+      default: true,
+    })
+    .option('watch', {
+      description: 'Watch for changes to the framework packages',
+      type: 'boolean',
+      default: true,
+    })
+    .option('cleanUp', {
+      description: 'Clean up the Redwood project on SIGINT or process exit',
+      type: 'boolean',
+      default: true,
+    })
+    .option('verbose', {
+      description: 'Print more',
+      type: 'boolean',
+      default: true,
     })
     .parseSync()
 
@@ -106,7 +85,7 @@ async function main() {
     return
   }
 
-  if (options.cleanFramework) {
+  if (options.setUpForWatch) {
     logStatus('Cleaning the Redwood framework...')
     execSync('yarn build:clean', {
       stdio: options.verbose ? 'inherit' : 'pipe',
@@ -114,7 +93,7 @@ async function main() {
     })
   }
 
-  if (options.buildFramework) {
+  if (options.setUpForWatch) {
     try {
       logStatus('Building the Redwood framework...')
       execSync('yarn build', {
@@ -143,7 +122,7 @@ async function main() {
     console.log()
   })
 
-  if (options.addDependencies) {
+  if (options.setUpForWatch) {
     // Save the project's package.json so that we can restore it when this process exits.
     const redwoodProjectPackageJsonPath = path.join(
       redwoodProjectPath,
@@ -182,9 +161,15 @@ async function main() {
     }
   }
 
-  if (options.copyFiles) {
+  if (options.setUpForWatch) {
     logStatus('Copying the Redwood framework files...')
     await copyFrameworkFilesToProject(redwoodProjectPath)
+    console.log()
+  }
+
+  if (options.setUpForWatch) {
+    logStatus("Fixing the project's binaries...")
+    fixProjectBinaries(redwoodProjectPath)
     console.log()
   }
 
@@ -218,8 +203,8 @@ async function main() {
   process.on('SIGINT', closeWatcher)
   process.on('exit', closeWatcher)
 
-  watcher.on('all', async (_event, filePath) => {
-    logStatus(`${filePath} changed`)
+  watcher.on('all', async (event, filePath) => {
+    logStatus(`${event}: ${filePath}`)
 
     if (filePath.endsWith('package.json')) {
       logStatus(
@@ -231,8 +216,8 @@ async function main() {
       )
     }
 
-    const packageJsonPath = resolvePackageJsonPath(filePath)
-    const packageName = getPackageJsonName(packageJsonPath)
+    const packageJsonPath = resolvePackageJsonPathFromFilePath(filePath)
+    const packageName = getPackageName(packageJsonPath)
 
     let errored = false
 
