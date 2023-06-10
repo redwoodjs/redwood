@@ -2,10 +2,8 @@
 /* eslint-env node, es6*/
 //@ts-check
 const fs = require('fs')
-const { isPromise } = require('node:util/types')
 const os = require('os')
 const path = require('path')
-const stream = require('stream')
 
 const chalk = require('chalk')
 const execa = require('execa')
@@ -25,10 +23,11 @@ const {
   copyFrameworkPackages,
 } = require('./frameworkLinking')
 const { webTasks, apiTasks } = require('./tui-tasks')
-const { isExecaResult } = require('./typing')
+const { isExecaResult, isAwaitable } = require('./typing')
 const {
   getExecaOptions: utilGetExecaOptions,
   updatePkgJsonScripts,
+  nullStream,
 } = require('./util')
 
 /** @type {(string) => import('execa').Options} */
@@ -50,17 +49,6 @@ function beginStep(step) {
 async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
   const stepId = (parent ? parent + '.' : '') + step
 
-  let skip = skipFn?.()
-
-  if (skip) {
-    if (typeof skip === 'boolean' && skip) {
-      // if skip is just `true`, then we use the default skip message
-      skip = 'Skipping...'
-    }
-
-    tui.drawText(RedwoodStyling.info(skip))
-  }
-
   const tuiContent = new ReactiveTUIContent({
     mode: 'text',
     header: `${stepId}: ${title}`,
@@ -72,11 +60,36 @@ async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
 
   tui.startReactive(tuiContent)
 
-  beginStep(step)
+  // In the future you should be able to resume from subtasks too, but for now
+  // we only support main level tasks
+  if (!parent) {
+    beginStep(step)
+  }
+
+  let skip = skipFn?.()
+
+  if (skip) {
+    if (typeof skip === 'boolean' && skip) {
+      // if skip is just `true`, then we use the default skip message
+      skip = 'Skipping...'
+    }
+
+    tuiContent.update({
+      spinner: {
+        enabled: false,
+      },
+      header: `${RedwoodStyling.green('✔')} ${step}. ${title}`,
+      content: ' '.repeat(stepId.length + 4) + RedwoodStyling.info(skip) + '\n',
+    })
+
+    tui.stopReactive()
+
+    return
+  }
 
   const promise = task()
 
-  if (isPromise(promise)) {
+  if (isAwaitable(promise)) {
     const result = await promise
 
     if (isExecaResult(result)) {
@@ -192,20 +205,15 @@ const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
 const createProject = () => {
   let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
-  // We create a ts project and convert using ts-to-js at the end if typescript flag is false
   const subprocess = execa(
     cmd,
+    // We create a ts project and convert using ts-to-js at the end if typescript flag is false
     ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
     getExecaOptions(RW_FRAMEWORKPATH)
   )
 
-  const writableStream = new stream.Writable()
-  writableStream._write = (_chunk, _encoding, next) => {
-    next()
-  }
-
-  subprocess.stdout?.pipe(writableStream)
-  subprocess.stderr?.pipe(writableStream)
+  subprocess.stdout?.pipe(nullStream)
+  subprocess.stderr?.pipe(nullStream)
 
   return subprocess
 }
@@ -283,7 +291,7 @@ async function runCommand() {
         getExecaOptions(RW_FRAMEWORKPATH)
       )
     },
-    skip: skipStep(startStep, 2),
+    skip: () => true, // skipStep(startStep, 2),
   })
 
   await tuiTask({
@@ -294,7 +302,7 @@ async function runCommand() {
       return addFrameworkDepsToProject(
         RW_FRAMEWORKPATH,
         OUTPUT_PROJECT_PATH,
-        'pipe'
+        'pipe' // TODO: Remove this when everything is using @rwjs/tui
       )
     },
     skip: skipStep(startStep, 3),

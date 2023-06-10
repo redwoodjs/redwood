@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const stream = require('stream')
 
 const execa = require('execa')
 const prompts = require('prompts')
@@ -75,9 +76,15 @@ async function confirmNoFixtureNoLink(copyFromFixtureOption, linkOption) {
   }
 }
 
+const nullStream = new stream.Writable()
+nullStream._write = (_chunk, _encoding, next) => {
+  next()
+}
+
 module.exports = {
   getExecaOptions,
   applyCodemod,
   updatePkgJsonScripts,
   confirmNoFixtureNoLink,
+  nullStream,
 }

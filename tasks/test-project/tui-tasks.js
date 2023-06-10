@@ -2,15 +2,20 @@
 //@ts-check
 const fs = require('fs')
 const path = require('path')
-const stream = require('stream')
 
 const execa = require('execa')
 
 const {
-  getExecaOptions,
-  applyCodemod,
+  getExecaOptions: utilGetExecaOptions,
+  // applyCodemod,
   updatePkgJsonScripts,
+  nullStream,
 } = require('./util')
+
+/** @type {(string) => import('execa').Options} */
+function getExecaOptions(cwd) {
+  return { ...utilGetExecaOptions(cwd), stdio: 'pipe' }
+}
 
 // This variable gets used in other functions
 // and is set when webTasks or apiTasks are called
@@ -28,24 +33,65 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
   return path.join(OUTPUT_PATH, name)
 }
 
+// TODO: Import from ./util.js when everything is using @rwjs/tui
+async function applyCodemod(codemod, target) {
+  const args = [
+    '--fail-on-error',
+    '-t',
+    `${path.resolve(__dirname, 'codemods', codemod)} ${target}`,
+    '--parser',
+    'tsx',
+    '--verbose=2',
+  ]
+
+  args.push()
+
+  const subprocess = execa(
+    'yarn jscodeshift',
+    args,
+    getExecaOptions(path.resolve(__dirname))
+  )
+
+  subprocess.stdout?.pipe(nullStream)
+  subprocess.stderr?.pipe(nullStream)
+
+  return subprocess
+}
+
+/**
+ * @param {string} cmd The command to run
+ * @returns {(positionalArguments: string | string[]) => import('execa').ExecaChildProcess<string>}
+ */
+const createBuilder = (cmd) => {
+  console.log('createBuilder', cmd)
+  const execaOptions = getExecaOptions(OUTPUT_PATH)
+
+  return function (positionalArguments) {
+    console.log('calling createBuilder', cmd, positionalArguments)
+    console.log('calling createBuilder', cmd, positionalArguments)
+    console.log('calling createBuilder', cmd, positionalArguments)
+    const subprocess = execa(
+      cmd,
+      Array.isArray(positionalArguments)
+        ? positionalArguments
+        : [positionalArguments],
+      execaOptions
+    )
+
+    subprocess.stdout?.pipe(nullStream)
+    subprocess.stderr?.pipe(nullStream)
+
+    return subprocess
+  }
+}
+
 async function webTasks(outputPath, { linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
 
-  const createBuilder = (cmd) => {
-    return async function createItem(positionalArguments) {
-      await execa(
-        cmd,
-        Array.isArray(positionalArguments)
-          ? positionalArguments
-          : [positionalArguments],
-        execaOptions
-      )
-    }
-  }
-
   const createPages = async () => {
+    console.log('createPages')
     const createPage = createBuilder('yarn redwood g page')
 
     /** @type import('./typing').TuiTaskList */
@@ -53,32 +99,15 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       {
         title: 'Creating home page',
         task: async () => {
-          // await createPage('home /')
-          const execaOptions = getExecaOptions(outputPath)
-          console.log('execaOptions', execaOptions)
-
-          const subprocess = execa(
-            'yarn',
-            ['redwood', 'g', 'page', 'home', '/'],
-            { ...execaOptions, stdio: 'pipe' }
-          )
-
-          const writableStream = new stream.Writable()
-          writableStream._write = (_chunk, _encoding, next) => {
-            next()
-          }
-
-          subprocess.stdout?.pipe(writableStream)
-          subprocess.stderr?.pipe(writableStream)
-
-          const result = await subprocess
-          const { stdout, stderr, exitCode } = result
-          if (exitCode !== 0) {
-            console.log('stdout', stdout)
-            console.log('stderr', stderr)
-            process.exit(exitCode)
-          }
-          // await execa('yarn redwood g page', ['home /'], execaOptions)
+          console.log('inside async task')
+          console.log('inside async task')
+          console.log('inside async task')
+          // TODO: Somehow I want to return this for error reporting if/when it
+          // fails
+          const { stdout, stderr, exitCode } = await createPage('home /')
+          console.log('stdout', stdout)
+          console.log('stderr', stderr)
+          console.log('exitCode', exitCode)
 
           console.log('About to apply codemod for home page')
           return applyCodemod(
@@ -374,16 +403,6 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
-
-  const createBuilder = (cmd) => {
-    return async function createItem(positionals) {
-      await execa(
-        cmd,
-        Array.isArray(positionals) ? positionals : [positionals],
-        execaOptions
-      )
-    }
-  }
 
   const addDbAuth = async () => {
     // Temporarily disable postinstall script

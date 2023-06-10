@@ -28,6 +28,17 @@
  */
 
 /**
+ * @param {Promise<ExecaResult | TuiTaskList | void> | void} promise
+ * @return {promise is Promise<ExecaResult | TuiTaskList | void>}
+ */
+function isAwaitable(promise) {
+  return (
+    typeof promise !== 'undefined' &&
+    'then' in /** @type Promise<ExecaResult | void> */ (promise)
+  )
+}
+
+/**
  * @param {ExecaResult|TuiTaskList|void} result
  * @return {result is ExecaResult}
  */
@@ -36,5 +47,6 @@ function isExecaResult(result) {
 }
 
 module.exports = {
+  isAwaitable,
   isExecaResult,
 }
