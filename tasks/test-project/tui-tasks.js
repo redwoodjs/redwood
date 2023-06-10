@@ -3,13 +3,11 @@
 const fs = require('fs')
 const path = require('path')
 
-const execa = require('execa')
-
 const {
   getExecaOptions: utilGetExecaOptions,
   // applyCodemod,
   updatePkgJsonScripts,
-  nullStream,
+  execa,
 } = require('./util')
 
 /** @type {(string) => import('execa').Options} */
@@ -52,24 +50,18 @@ async function applyCodemod(codemod, target) {
     getExecaOptions(path.resolve(__dirname))
   )
 
-  subprocess.stdout?.pipe(nullStream)
-  subprocess.stderr?.pipe(nullStream)
-
   return subprocess
 }
 
 /**
  * @param {string} cmd The command to run
- * @returns {(positionalArguments: string | string[]) => import('execa').ExecaChildProcess<string>}
+ * @returns {((positionalArguments: string | string[]) => import('execa').ExecaChildProcess<string>)
+ *           & (() => import('execa').ExecaChildProcess<string>)}
  */
 const createBuilder = (cmd) => {
-  console.log('createBuilder', cmd)
   const execaOptions = getExecaOptions(OUTPUT_PATH)
 
   return function (positionalArguments) {
-    console.log('calling createBuilder', cmd, positionalArguments)
-    console.log('calling createBuilder', cmd, positionalArguments)
-    console.log('calling createBuilder', cmd, positionalArguments)
     const subprocess = execa(
       cmd,
       Array.isArray(positionalArguments)
@@ -77,9 +69,6 @@ const createBuilder = (cmd) => {
         : [positionalArguments],
       execaOptions
     )
-
-    subprocess.stdout?.pipe(nullStream)
-    subprocess.stderr?.pipe(nullStream)
 
     return subprocess
   }
@@ -91,7 +80,6 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
   const execaOptions = getExecaOptions(outputPath)
 
   const createPages = async () => {
-    console.log('createPages')
     const createPage = createBuilder('yarn redwood g page')
 
     /** @type import('./typing').TuiTaskList */
@@ -99,18 +87,9 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       {
         title: 'Creating home page',
         task: async () => {
-          console.log('inside async task')
-          console.log('inside async task')
-          console.log('inside async task')
-          // TODO: Somehow I want to return this for error reporting if/when it
-          // fails
-          const { stdout, stderr, exitCode } = await createPage('home /')
-          console.log('stdout', stdout)
-          console.log('stderr', stderr)
-          console.log('exitCode', exitCode)
+          await createPage('home /')
 
-          console.log('About to apply codemod for home page')
-          return applyCodemod(
+          await applyCodemod(
             'homePage.js',
             fullPath('web/src/pages/HomePage/HomePage')
           )
@@ -121,7 +100,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
         task: async () => {
           await createPage('about')
 
-          return applyCodemod(
+          await applyCodemod(
             'aboutPage.js',
             fullPath('web/src/pages/AboutPage/AboutPage')
           )
@@ -132,7 +111,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
         task: async () => {
           await createPage('contactUs /contact')
 
-          return applyCodemod(
+          await applyCodemod(
             'contactUsPage.js',
             fullPath('web/src/pages/ContactUsPage/ContactUsPage')
           )
@@ -356,26 +335,28 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
     {
       title: 'Install tailwind dependencies',
       // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
-      task: () =>
-        execa(
+      task: async () => {
+        await execa(
           'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss',
           [],
           getExecaOptions(outputPath)
-        ),
+        )
+      },
       enabled: () => linkWithLatestFwBuild,
     },
     {
       title: '[link] Copy local framework files again',
       // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
-      task: () =>
-        execa('yarn rwfw project:copy', [], getExecaOptions(outputPath)),
+      task: async () => {
+        await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
+      },
       enabled: () => linkWithLatestFwBuild,
     },
     // =========
     {
       title: 'Adding Tailwind',
-      task: () => {
-        return execa(
+      task: async () => {
+        await execa(
           'yarn rw setup ui tailwindcss',
           ['--force', linkWithLatestFwBuild && '--no-install'].filter(Boolean),
           execaOptions

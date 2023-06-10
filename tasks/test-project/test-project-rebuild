@@ -6,7 +6,6 @@ const os = require('os')
 const path = require('path')
 
 const chalk = require('chalk')
-const execa = require('execa')
 const fse = require('fs-extra')
 const { rimraf } = require('rimraf')
 const { hideBin } = require('yargs/helpers')
@@ -23,12 +22,51 @@ const {
   copyFrameworkPackages,
 } = require('./frameworkLinking')
 const { webTasks, apiTasks } = require('./tui-tasks')
-const { isExecaResult, isAwaitable } = require('./typing')
+const { isAwaitable } = require('./typing')
 const {
   getExecaOptions: utilGetExecaOptions,
   updatePkgJsonScripts,
-  nullStream,
+  ExecaError,
+  execa,
 } = require('./util')
+
+const args = yargs(hideBin(process.argv))
+  .usage('Usage: $0 [option]')
+  .option('verbose', {
+    default: false,
+    type: 'boolean',
+    describe: 'Verbose output',
+  })
+  .option('resume', {
+    default: false,
+    type: 'boolean',
+    describe: 'Resume rebuild of the latest unfinished test-project',
+  })
+  .option('resumePath', {
+    type: 'string',
+    describe: 'Resume rebuild given the specified test-project path',
+  })
+  .option('resumeStep', {
+    type: 'number',
+    describe: 'Resume rebuild from the given step',
+  })
+  .help()
+  .parseSync()
+
+const { verbose, resume, resumePath, resumeStep } = args
+
+const OUTPUT_PROJECT_PATH = resumePath
+  ? /* path.resolve(String(resumePath)) */ resumePath
+  : path.join(
+      os.tmpdir(),
+      'redwood-test-project',
+      // ":" is problematic with paths
+      new Date().toISOString().split(':').join('-')
+    )
+
+const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
+
+const tui = new RedwoodTUI()
 
 /** @type {(string) => import('execa').Options} */
 function getExecaOptions(cwd) {
@@ -87,24 +125,26 @@ async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
     return
   }
 
-  const promise = task()
+  let promise
+
+  try {
+    promise = task(tui)
+  } catch (e) {
+    if (e instanceof ExecaError) {
+      tui.stopReactive(true)
+      tui.displayError(
+        'Failed ' + title.toLowerCase().replace('...', ''),
+        'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr
+      )
+
+      process.exit(e.exitCode)
+    }
+  }
 
   if (isAwaitable(promise)) {
     const result = await promise
 
-    if (isExecaResult(result)) {
-      const { stdout, stderr, exitCode } = result
-
-      if (exitCode !== 0) {
-        tui.stopReactive(true)
-        tui.displayError(
-          'Failed ' + title.toLowerCase().replace('...', ''),
-          'stdout:\n' + stdout + '\n\n' + 'stderr:\n' + stderr
-        )
-
-        process.exit(1)
-      }
-    } else if (Array.isArray(result)) {
+    if (Array.isArray(result)) {
       const tuiTaskList = result
       for (let i = 0; i < tuiTaskList.length; i++) {
         // Recurse through all tasks
@@ -121,7 +161,7 @@ async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
     spinner: {
       enabled: false,
     },
-    header: `${RedwoodStyling.green('✔')} ${step}. ${title}`,
+    header: `${RedwoodStyling.green('✔')} ${stepId}. ${title}`,
     content: '',
   })
 
@@ -141,33 +181,6 @@ function skipStep(startStep, step) {
     return false
   }
 }
-
-const tui = new RedwoodTUI()
-
-const args = yargs(hideBin(process.argv))
-  .usage('Usage: $0 [option]')
-  .option('verbose', {
-    default: false,
-    type: 'boolean',
-    describe: 'Verbose output',
-  })
-  .option('resume', {
-    default: false,
-    type: 'boolean',
-    describe: 'Resume rebuild of the latest unfinished test-project',
-  })
-  .option('resumePath', {
-    type: 'string',
-    describe: 'Resume rebuild given the specified test-project path',
-  })
-  .option('resumeStep', {
-    type: 'number',
-    describe: 'Resume rebuild from the given step',
-  })
-  .help()
-  .parseSync()
-
-const { verbose, resume, resumePath, resumeStep } = args
 
 if (resume) {
   console.error(
@@ -191,17 +204,6 @@ if (resumePath && !fs.existsSync(path.join(resumePath, 'redwood.toml'))) {
   process.exit(1)
 }
 
-const OUTPUT_PROJECT_PATH = resumePath
-  ? /* path.resolve(String(resumePath)) */ resumePath
-  : path.join(
-      os.tmpdir(),
-      'redwood-test-project',
-      // ":" is problematic with paths
-      new Date().toISOString().split(':').join('-')
-    )
-
-const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
-
 const createProject = () => {
   let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
@@ -211,9 +213,6 @@ const createProject = () => {
     ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
     getExecaOptions(RW_FRAMEWORKPATH)
   )
-
-  subprocess.stdout?.pipe(nullStream)
-  subprocess.stderr?.pipe(nullStream)
 
   return subprocess
 }
@@ -272,8 +271,9 @@ async function runCommand() {
       'Adding storybook to web dependencies...\n' +
       '  ⏱  This could take a while...',
     task: () => {
-      return execa.command(
-        'yarn workspace web add -D storybook',
+      return execa(
+        'yarn',
+        ['workspace web add -D storybook'],
         getExecaOptions(OUTPUT_PROJECT_PATH)
       )
     },
@@ -291,7 +291,7 @@ async function runCommand() {
         getExecaOptions(RW_FRAMEWORKPATH)
       )
     },
-    skip: () => true, // skipStep(startStep, 2),
+    skip: () => 'Manually skipping this step', // skipStep(startStep, 2),
   })
 
   await tuiTask({

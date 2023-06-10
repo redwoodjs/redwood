@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const stream = require('stream')
 
-const execa = require('execa')
+const originalExeca = require('execa')
 const prompts = require('prompts')
 
 async function applyCodemod(codemod, target) {
@@ -19,7 +19,7 @@ async function applyCodemod(codemod, target) {
 
   args.push()
 
-  await execa(
+  await originalExeca(
     'yarn jscodeshift',
     args,
     getExecaOptions(path.resolve(__dirname))
@@ -81,10 +81,31 @@ nullStream._write = (_chunk, _encoding, next) => {
   next()
 }
 
+class ExecaError extends Error {
+  constructor({ stdout, stderr, exitCode }) {
+    super(`execa failed with exit code ${exitCode}`)
+    this.stdout = stdout
+    this.stderr = stderr
+    this.exitCode = exitCode
+  }
+}
+
+function execa(...args) {
+  const subprocess = originalExeca(...args)
+  subprocess.then(({ stdout, stderr, exitCode }) => {
+    if (exitCode !== 0) {
+      throw new ExecaError({ stdout, stderr, exitCode })
+    }
+  })
+  return subprocess
+}
+
 module.exports = {
   getExecaOptions,
   applyCodemod,
   updatePkgJsonScripts,
   confirmNoFixtureNoLink,
   nullStream,
+  ExecaError,
+  execa,
 }

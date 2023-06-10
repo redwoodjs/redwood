@@ -18,8 +18,9 @@
  *   task should be skipped or not.
  * @property {() => boolean=} enabled Whether this task is enabled or not.
  *   Disabled tasks don't show up in the list.
- * @property {() => Promise<ExecaResult> | Promise<TuiTaskList> | Promise<void> | void} task
- *   The task to run.
+ * // TODO: Add proper types for the `tui` argument.
+ * @property {(tui) => Promise<unknown> | void} task
+ *   The task to run. Will be passed an instance of TUI when called.
  */
 
 /**
@@ -28,13 +29,13 @@
  */
 
 /**
- * @param {Promise<ExecaResult | TuiTaskList | void> | void} promise
- * @return {promise is Promise<ExecaResult | TuiTaskList | void>}
+ * @param {Promise<unknown> | void} promise
+ * @return {promise is Promise<unknown>}
  */
 function isAwaitable(promise) {
   return (
     typeof promise !== 'undefined' &&
-    'then' in /** @type Promise<ExecaResult | void> */ (promise)
+    'then' in /** @type Promise<unknown> */ (promise)
   )
 }
 
@@ -42,11 +43,11 @@ function isAwaitable(promise) {
  * @param {ExecaResult|TuiTaskList|void} result
  * @return {result is ExecaResult}
  */
-function isExecaResult(result) {
-  return typeof result === 'object' && 'exitCode' in result
-}
+// function isExecaResult(result) {
+//   return typeof result === 'object' && 'exitCode' in result
+// }
 
 module.exports = {
   isAwaitable,
-  isExecaResult,
+  // isExecaResult,
 }
