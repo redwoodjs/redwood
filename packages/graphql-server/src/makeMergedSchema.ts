@@ -13,8 +13,8 @@ import type {
   GraphQLUnionType,
   GraphQLObjectType,
 } from 'graphql'
-import merge from 'lodash.merge'
-import omitBy from 'lodash.omitby'
+import merge from 'lodash/merge'
+import omitBy from 'lodash/omitby'
 
 import { getConfig } from '@redwoodjs/project-config'
 

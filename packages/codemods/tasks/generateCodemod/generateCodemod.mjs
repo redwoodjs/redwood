@@ -1,10 +1,10 @@
 /* eslint-env node, es2021 */
-// import fs from 'node:fs'
-import c from 'ansi-colors'
-import fse from 'fs-extra'
-import template from 'lodash.template'
 import fs from 'node:fs'
 import url from 'node:url'
+
+import c from 'ansi-colors'
+import fse from 'fs-extra'
+import template from 'lodash/template'
 import prompts from 'prompts'
 
 const questions = [
