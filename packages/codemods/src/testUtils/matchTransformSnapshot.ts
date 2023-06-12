@@ -7,10 +7,14 @@ import runTransform from '../lib/runTransform'
 
 import { formatCode } from './index'
 
-export const matchTransformSnapshot = async (
-  transformName: string,
-  fixtureName: string = transformName,
-  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
+export interface MatchTransformSnapshotFunction {
+  (transformName: string, fixtureName?: string, parser?: 'ts' | 'tsx'): void
+}
+
+export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
+  transformName,
+  fixtureName,
+  parser
 ) => {
   const tempFilePath = tempy.file()
 
