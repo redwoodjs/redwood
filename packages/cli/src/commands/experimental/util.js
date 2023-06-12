@@ -1,5 +1,11 @@
+import fs from 'fs'
+import path from 'path'
+
 import chalk from 'chalk'
 import terminalLink from 'terminal-link'
+
+import { getPaths } from '../../lib'
+import { isTypeScriptProject } from '../../lib/project'
 
 const link = (topicId, isTerminal = false) => {
   const communityLink = `https://community.redwoodjs.com/t/${topicId}`
@@ -36,4 +42,19 @@ export const printTaskEpilogue = (command, description, topicId) => {
       '------------------------------------------------------------------'
     )}\n`
   )
+}
+
+export const isServerFileSetup = () => {
+  const serverFilePath = path.join(
+    getPaths().api.src,
+    `server.${isTypeScriptProject() ? 'ts' : 'js'}`
+  )
+
+  if (!fs.existsSync(serverFilePath)) {
+    throw new Error(
+      'RedwoodJS Realtime requires a serverful environment. Please run `yarn rw exp setup-server-file` first.'
+    )
+  }
+
+  return true
 }
