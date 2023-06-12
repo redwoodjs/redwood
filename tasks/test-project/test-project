@@ -13,8 +13,6 @@ const { rimraf } = require('rimraf')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
 
-const { convertTsProjectToJs } = require('../../packages/internal/dist/ts2js')
-
 const {
   addFrameworkDepsToProject,
   copyFrameworkPackages,
@@ -269,7 +267,11 @@ const globalTasks = () =>
       {
         title: 'Converting to Javascript',
         task: () => {
-          convertTsProjectToJs(OUTPUT_PROJECT_PATH)
+          return execa(
+            'yarn rw ts-to-js',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
         },
         enabled: () => javascript,
       },
