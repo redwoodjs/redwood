@@ -151,11 +151,11 @@ This configuration does **not** apply in a serverless deploy.
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side')
+    fastify.log.trace({ custom: { options } }, 'Configuring api side')
   }
 
   if (options.side === 'web') {
-    fastify.log.info({ custom: { options } }, 'Configuring web side')
+    fastify.log.trace({ custom: { options } }, 'Configuring web side')
   }
 
   return fastify
@@ -184,7 +184,7 @@ yarn workspace api add @fastify/rate-limit @fastify/compress
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side')
+    fastify.log.trace({ custom: { options } }, 'Configuring api side')
 
     await fastify.register(import('@fastify/compress'), {
       global: true,
@@ -217,7 +217,7 @@ This may seem counter-intuitive, since you're configuring the `web` side, but th
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'web') {
-    fastify.log.info({ custom: { options } }, 'Configuring web side')
+    fastify.log.trace({ custom: { options } }, 'Configuring web side')
 
     fastify.register(import('@fastify/etag'))
   }
@@ -257,7 +257,7 @@ For example, to support image file uploads you'd tell Fastify to allow `/^image\
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side')
+    fastify.log.trace({ custom: { options } }, 'Configuring api side')
 
     fastify.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
       payload.on('end', () => {
