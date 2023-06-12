@@ -3,6 +3,7 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/*.test.[jt]s?(x)'],
   testPathIgnorePatterns: [
     '__fixtures__',
+    '__testfixtures__',
     '__tests__/utils/*',
     '.d.ts',
     'dist',
