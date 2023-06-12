@@ -13,7 +13,7 @@ const newMessage = {
     subscribe: (_, { roomId }, { pubSub }) => {
       logger.debug({ roomId }, 'newMessage subscription')
 
-      return pubSub.subscribe(roomId)
+      return pubSub.subscribe(`newMessage:${roomId}`)
     },
     resolve: (payload) => {
       logger.debug({ payload }, 'newMessage subscription resolve')

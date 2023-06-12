@@ -10,7 +10,7 @@ export const send = async (
 
   const { roomId, ...newMessage } = input
 
-  context.pubSub.publish(roomId, newMessage)
+  context.pubSub.publish(`newMessage:${roomId}`, newMessage)
 
   return input
 }
