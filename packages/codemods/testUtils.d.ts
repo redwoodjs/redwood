@@ -42,7 +42,15 @@ type MatchTransformSnapshotFunction = (
 type MatchFolderTransformFunction = (
   transformFunctionOrName: (() => any) | string,
   fixtureName: string,
-  options?: Options
+  options?: {
+    removeWhitespace?: boolean
+    targetPathsGlob?: string
+    /**
+     * Use this option, when you want to run a codemod that uses jscodeshift
+     * as well as modifies file names. e.g. convertJsToJsx
+     */
+    useJsCodeshift?: boolean
+  }
 ) => Promise<void>
 
 type MatchInlineTransformSnapshotFunction = (
