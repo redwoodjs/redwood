@@ -23,7 +23,7 @@ const mapRouterPathToHtml = (routerPath) => {
 
 function getRouteHooksFilePath(routeFilePath) {
   const routeHooksFilePathTs = routeFilePath.replace(
-    /\.[jt]sx$/,
+    /\.[jt]sx?$/,
     '.routeHooks.ts'
   )
 
@@ -32,7 +32,7 @@ function getRouteHooksFilePath(routeFilePath) {
   }
 
   const routeHooksFilePathJs = routeFilePath.replace(
-    /\.[jt]sx$/,
+    /\.[jt]sx?$/,
     '.routeHooks.js'
   )
 
