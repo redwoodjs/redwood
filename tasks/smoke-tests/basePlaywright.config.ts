@@ -43,5 +43,6 @@ export const basePlaywrightConfig: PlaywrightTestConfig = {
   ],
 
   // Use the Replay.io reporter in CI for debugging.
-  reporter: process.env.CI ? '@replayio/playwright/reporter' : 'list',
+  // reporter: process.env.CI ? '@replayio/playwright/reporter' : 'list',
+  reporter: 'list',
 }
