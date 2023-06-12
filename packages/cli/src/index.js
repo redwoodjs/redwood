@@ -3,6 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import { trace, SpanStatusCode } from '@opentelemetry/api'
 import { config } from 'dotenv-defaults'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -33,6 +34,11 @@ import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
 import * as updateCheck from './lib/updateCheck'
 import { loadPlugins } from './plugin'
+import {
+  startTelemetry,
+  shutdownTelemetry,
+  // recordErrorViaTelemetry,
+} from './telemetry'
 
 // # Setting the CWD
 //
@@ -56,7 +62,7 @@ import { loadPlugins } from './plugin'
 // yarn rw info
 // ```
 
-let { cwd } = Parser(hideBin(process.argv))
+let { cwd, telemetry } = Parser(hideBin(process.argv))
 cwd ??= process.env.RWJS_CWD
 
 try {
@@ -96,6 +102,39 @@ config({
   defaults: path.join(getPaths().base, '.env.defaults'),
   multiline: true,
 })
+
+async function main() {
+  // Start telemetry if it hasn't been disabled
+  if (telemetry !== 'false' && !process.env.REDWOOD_DISABLE_TELEMETRY) {
+    try {
+      await startTelemetry()
+    } catch (error) {
+      console.error('Telemetry startup error')
+      console.error(error)
+    }
+  }
+
+  // Execute CLI within a span
+  const tracer = trace.getTracer('redwoodjs')
+  await tracer.startActiveSpan('cli', async (span) => {
+    // Run the command via yargs
+    await runYargs()
+    // TODO: Capture errors and send them to telemetry
+    // TODO: Consider prompting the user for additional context about the error
+
+    // Span housekeeping
+    span?.setStatus({ code: SpanStatusCode.OK })
+    span?.end()
+  })
+
+  // Shutdown telemetry, ensures data is sent before the process exits
+  try {
+    await shutdownTelemetry()
+  } catch (error) {
+    console.error('Telemetry shutdown error')
+    console.error(error)
+  }
+}
 
 async function runYargs() {
   // # Build the CLI yargs instance
@@ -150,7 +189,7 @@ async function runYargs() {
   await loadPlugins(yarg)
 
   // Run
-  yarg.parse()
+  await yarg.parse()
 }
 
-runYargs()
+main()
