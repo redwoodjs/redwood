@@ -1,6 +1,6 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from '@playwright/test'
-// import { devices as replayDevices } from '@replayio/playwright'
+import { devices as replayDevices } from '@replayio/playwright'
 
 // See https://playwright.dev/docs/test-configuration#global-configuration
 export const basePlaywrightConfig: PlaywrightTestConfig = {
@@ -16,10 +16,10 @@ export const basePlaywrightConfig: PlaywrightTestConfig = {
   workers: process.env.CI ? 1 : undefined,
 
   projects: [
-    // {
-    //   name: 'replay-chromium',
-    //   use: { ...(replayDevices['Replay Chromium'] as any) },
-    // },
+    {
+      name: 'replay-chromium',
+      use: { ...(replayDevices['Replay Chromium'] as any) },
+    },
 
     {
       name: 'chromium',
@@ -43,6 +43,5 @@ export const basePlaywrightConfig: PlaywrightTestConfig = {
   ],
 
   // Use the Replay.io reporter in CI for debugging.
-  // reporter: process.env.CI ? '@replayio/playwright/reporter' : 'list',
-  reporter: 'list',
+  reporter: process.env.CI ? '@replayio/playwright/reporter' : 'list',
 }
