@@ -244,7 +244,7 @@ export const test_routing_params = () =>
     cy.writeFile(
       path.join(
         BASE_DIR,
-        'web/src/components/BlogPostsCell/BlogPostsCell.mock.jsx'
+        'web/src/components/BlogPostsCell/BlogPostsCell.mock.js'
       ),
       Step6_5_BlogPostsCellMock
     )
