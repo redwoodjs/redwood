@@ -3,6 +3,8 @@
 import envinfo from 'envinfo'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'info'
 export const description = 'Print your system environment information'
 export const builder = (yargs) => {
@@ -14,6 +16,9 @@ export const builder = (yargs) => {
   )
 }
 export const handler = async () => {
+  recordTelemetryAttributes({
+    command: 'info',
+  })
   try {
     const output = await envinfo.run({
       System: ['OS', 'Shell'],
