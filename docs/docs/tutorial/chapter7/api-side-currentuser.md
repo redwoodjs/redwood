@@ -704,7 +704,7 @@ const verifyOwnership = async ({ id }) => {
 
 export const updatePost = async ({ id, input }) => {
   // highlight-next-line
-  await verifyOwnership(id)
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -720,7 +720,7 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 
-const validateOwnership = async ({ id }) => {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -745,7 +745,7 @@ export const createPost = ({ input }) => {
 }
 
 export const updatePost = async ({ id, input }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -754,7 +754,7 @@ export const updatePost = async ({ id, input }) => {
 }
 
 export const deletePost = async ({ id }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.delete({
     where: { id },
