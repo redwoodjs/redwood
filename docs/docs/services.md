@@ -782,7 +782,7 @@ In our example above you could cache the GraphQL query for the most popular prod
 
 As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it! Instructions for getting started with the code are [below](#creating-your-own-client).
 
-::: info
+:::info
 
 If you need to access functionality in your cache client that the `cache()` and `cacheFindMany()` functions do not handle, you can always get access to the underlying raw client library and use it however you want:
 
