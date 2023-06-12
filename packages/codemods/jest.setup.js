@@ -7,8 +7,6 @@ globalThis.matchInlineTransformSnapshot =
   require('./src/testUtils/matchInlineTransformSnapshot').matchInlineTransformSnapshot
 globalThis.matchFolderTransform =
   require('./src/testUtils/matchFolderTransform').matchFolderTransform
-globalThis.matchFolderTransformRunCodemod =
-  require('./src/testUtils/matchFolderTransformRunCodemod').matchFolderTransformRunCodemod
 
 // Custom matcher for checking fixtures using paths
 // e.g. expect(transformedPath).toMatchFileContents(expectedPath)

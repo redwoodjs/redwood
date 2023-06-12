@@ -1,20 +1,19 @@
-import fg from 'fast-glob'
-
 describe('convertJsToJsx', () => {
   it('Converts an example project correctly', async () => {
-    await matchFolderTransformRunCodemod('convertJsToJsx', 'example', {
-      targetPathsGenerator: (cwd: string) =>
-        fg.sync('web/src/**/*.js', {
-          cwd,
-        }),
+    await matchFolderTransform('convertJsToJsx', 'example', {
+      useJsCodeshift: true,
     })
   })
 
   it('Converts a js file containing jsx', async () => {
-    await matchFolderTransformRunCodemod('convertJsToJsx', 'withJSX')
+    await matchFolderTransform('convertJsToJsx', 'withJSX', {
+      useJsCodeshift: true,
+    })
   })
 
   it('Ignores a js file not containing jsx', async () => {
-    await matchFolderTransformRunCodemod('convertJsToJsx', 'withoutJSX')
+    await matchFolderTransform('convertJsToJsx', 'withoutJSX', {
+      useJsCodeshift: true,
+    })
   })
 })
