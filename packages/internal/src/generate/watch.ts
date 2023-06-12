@@ -52,10 +52,18 @@ const action = {
 
 let routesWarningMessage = ''
 
+process.stdin.on('data', async (data) => {
+  const str = data.toString().trim().toLowerCase()
+  if (str === 'g' || str === 'rs') {
+    cliLogger('Re-creating TypeScript definitions and GraphQL schemas')
+    await generate()
+  }
+})
+
 watcher
   .on('ready', async () => {
     const start = Date.now()
-    cliLogger('Generating full TypeScript definitions and GraphQL schemas.')
+    cliLogger('Generating full TypeScript definitions and GraphQL schemas')
     const files = await generate()
     cliLogger(`Done.`)
     cliLogger.debug(`\nCreated ${files.length} in ${Date.now() - start} ms`)
