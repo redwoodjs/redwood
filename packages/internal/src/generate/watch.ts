@@ -3,9 +3,13 @@
 import fs from 'fs'
 import path from 'path'
 
+import c from 'ansi-colors'
 import chokidar from 'chokidar'
 
+import { defaultLoggerOptions } from '@redwoodjs/api/src/logger'
 import { getPaths } from '@redwoodjs/project-config'
+
+import { cliLogger } from 'src/cliLogger'
 
 import {
   isCellFile,
@@ -48,31 +52,36 @@ const action = {
 
 let routesWarningMessage = ''
 
-process.stdin.on('data', async (data) => {
-  const str = data.toString().trim().toLowerCase()
-  if (str === 'g' || str === 'rs') {
-    console.log('Regenerating types and schemas....')
-    await generate()
-  }
-})
-
 watcher
   .on('ready', async () => {
-    console.log('Generating TypeScript definitions and GraphQL schemas...')
+    const start = Date.now()
+    cliLogger('Generating full TypeScript definitions and GraphQL schemas.')
     const files = await generate()
-    console.log(files.length, 'files generated')
+    cliLogger(`Done.`)
+    cliLogger.debug(`\nCreated ${files.length} in ${Date.now() - start} ms`)
+
     routesWarningMessage = warningForDuplicateRoutes()
     if (routesWarningMessage) {
       console.warn(routesWarningMessage)
     }
   })
   .on('all', async (eventName, p) => {
+    cliLogger.trace(`File system change: ${c.magenta(eventName)} ${c.dim(p)}`)
     if (!['add', 'change', 'unlink'].includes(eventName)) {
       return
     }
-    eventName = eventName as 'add' | 'change' | 'unlink'
-
+    const eventTigger = eventName as 'add' | 'change' | 'unlink'
     const absPath = path.join(rwjsPaths.base, p)
+
+    // Track the time in debug
+    const start = Date.now()
+    const finished = (type: string) =>
+      cliLogger.debug(
+        action[eventTigger],
+        type + ':',
+        c.dim(p),
+        c.italic(c.dim(Date.now() - start + ' ms'))
+      )
 
     if (absPath.indexOf('Cell') !== -1 && isCellFile(absPath)) {
       await generateTypeDefGraphQLWeb()
@@ -81,32 +90,25 @@ watcher
       } else {
         generateMirrorCell(absPath, rwjsPaths)
       }
-
-      console.log(action[eventName], 'Cell:', '\x1b[2m', p, '\x1b[0m')
+      finished('Cell')
     } else if (absPath === rwjsPaths.web.routes) {
       generateTypeDefRouterRoutes()
       routesWarningMessage = warningForDuplicateRoutes()
-      console.log(action[eventName], 'Routes:', '\x1b[2m', p, '\x1b[0m')
+      finished('Routes')
     } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
       generateTypeDefRouterPages()
-      console.log(action[eventName], 'Page:', '\x1b[2m', p, '\x1b[0m')
+      finished('Page')
     } else if (isDirectoryNamedModuleFile(absPath)) {
       if (eventName === 'unlink') {
         fs.unlinkSync(mirrorPathForDirectoryNamedModules(absPath, rwjsPaths)[0])
       } else {
         generateMirrorDirectoryNamedModule(absPath, rwjsPaths)
       }
-      console.log(
-        action[eventName],
-        'Directory named module:',
-        '\x1b[2m',
-        p,
-        '\x1b[0m'
-      )
+      finished('Directory named module')
     } else if (isGraphQLSchemaFile(absPath)) {
       await generateGraphQLSchema()
       await generateTypeDefGraphQLApi()
-      console.log(action[eventName], 'GraphQL Schema:', '\x1b[2m', p, '\x1b[0m')
+      finished('GraphQL Schema')
     }
 
     if (routesWarningMessage) {
