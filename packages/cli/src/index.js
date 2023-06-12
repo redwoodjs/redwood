@@ -8,6 +8,7 @@ import { config } from 'dotenv-defaults'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
+import { recordTelemetryError } from '@redwoodjs/cli-helpers'
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
@@ -34,11 +35,7 @@ import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
 import * as updateCheck from './lib/updateCheck'
 import { loadPlugins } from './plugin'
-import {
-  startTelemetry,
-  shutdownTelemetry,
-  // recordErrorViaTelemetry,
-} from './telemetry'
+import { startTelemetry, shutdownTelemetry } from './telemetry'
 
 // # Setting the CWD
 //
@@ -118,13 +115,24 @@ async function main() {
   const tracer = trace.getTracer('redwoodjs')
   await tracer.startActiveSpan('cli', async (span) => {
     // Run the command via yargs
-    await runYargs()
-    // TODO: Capture errors and send them to telemetry
-    // TODO: Consider prompting the user for additional context about the error
+    try {
+      await runYargs()
 
-    // Span housekeeping
-    span?.setStatus({ code: SpanStatusCode.OK })
-    span?.end()
+      // Span housekeeping
+      span?.setStatus({ code: SpanStatusCode.OK })
+      span?.end()
+    } catch (error) {
+      // TODO: Make the error log a little more pretty?
+      console.error(error)
+      // TODO: Consider prompting the user for additional context about the error
+      // recordTelemetryAttributes({
+      //   errorContext: '...', // some input from the user
+      // })
+
+      recordTelemetryError(error, span)
+      span?.end()
+      process.exitCode = 1
+    }
   })
 
   // Shutdown telemetry, ensures data is sent before the process exits
@@ -161,6 +169,7 @@ async function runYargs() {
     )
     .demandCommand()
     .strict()
+    .exitProcess(false)
 
     // Commands (Built in or pre-plugin support)
     .command(buildCommand)
@@ -189,7 +198,10 @@ async function runYargs() {
   await loadPlugins(yarg)
 
   // Run
-  await yarg.parse()
+  await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
+    // Show the output that yargs was going to if there was no callback provided
+    console.log(output)
+  })
 }
 
 main()
