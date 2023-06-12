@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { getConfig } from '@testing-library/react'
+
 import {
   generateTypeDefGraphQLApi,
   generateTypeDefGraphQLWeb,
@@ -32,6 +34,14 @@ jest.mock('@prisma/client', () => {
       Post: 'Post',
       Todo: 'Todo',
     },
+  }
+})
+
+jest.mock('@redwoodjs/project-config', () => {
+  return {
+    getConfig: jest.fn(() => ({
+      web: { codegen: { createOperationTypes: true } },
+    })),
   }
 })
 
@@ -229,4 +239,13 @@ describe("Doesn't swallow legit errors", () => {
       delete process.env.RWJS_CWD
     }
   })
+})
+
+test('NOOPs if createOperationTypes is set', async () => {
+  ;(getConfig as any).mockReturnValue({
+    web: { createOperationTypes: false },
+  })
+
+  const files = await generateTypeDefGraphQLWeb()
+  expect(files).toHaveLength(0)
 })
