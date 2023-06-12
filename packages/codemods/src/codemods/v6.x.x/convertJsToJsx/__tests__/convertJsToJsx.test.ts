@@ -2,6 +2,7 @@ describe('convertJsToJsx', () => {
   it('Converts an example project correctly', async () => {
     await matchFolderTransform('convertJsToJsx', 'example', {
       useJsCodeshift: true,
+      targetPathsGlob: 'web/src/**/*.js',
     })
   })
 
