@@ -399,13 +399,13 @@ describe('in javascript (default) mode', () => {
 
   test('creates a formatters function file', () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/lib/formatters.js')]
+      files[path.normalize('/path/to/project/web/src/lib/formatters.jsx')]
     ).toMatchSnapshot()
   })
 
   test('creates a formatters function test file', () => {
     expect(
-      files[path.normalize('/path/to/project/web/src/lib/formatters.test.js')]
+      files[path.normalize('/path/to/project/web/src/lib/formatters.test.jsx')]
     ).toMatchSnapshot()
   })
 })
