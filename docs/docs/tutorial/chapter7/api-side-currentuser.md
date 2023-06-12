@@ -693,7 +693,7 @@ This works, but we'll need to do the same thing in `deletePost`. Let's extract t
 
 ```javascript
 // highlight-start
-const verifyOwnership = async (id) {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
