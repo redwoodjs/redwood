@@ -1,3 +1,6 @@
+// Update db during dev, creates no migration files: yarn rw prisma db push
+// When you're ready to commit: yarn rw prisma migrate dev
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
