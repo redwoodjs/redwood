@@ -16,7 +16,7 @@
 const config = {
   requestTimeout: 15_000,
   logger: {
-    // Note: If running locally using `yarn rw serve` you may want to adust
+    // Note: If running locally using `yarn rw serve` you may want to adjust
     // the default non-development level to `info`
     level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
   },
