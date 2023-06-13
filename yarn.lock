@@ -2655,12 +2655,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.41.0, @clerk/types@npm:^3.41.0":
-  version: 3.41.0
-  resolution: "@clerk/types@npm:3.41.0"
+"@clerk/types@npm:3.42.0, @clerk/types@npm:^3.41.0":
+  version: 3.42.0
+  resolution: "@clerk/types@npm:3.42.0"
   dependencies:
     csstype: 3.1.1
-  checksum: e9201848b5afbd0338e1b01952dab42f9a5966e041d7e31bb7987440675de08d5b0dab63dbdb43086c5402a275c81c16fd93d2cd7f84bc783fa9e01e9c5e1b6b
+  checksum: fbdec075867d19ccbe13b656bd5bfa4a26b45d766fa7d879472852b63ef5fad46b13eaaafcc314575dc14d091e55496d2dc632e75f2da0d183e349bc13a4c6da
   languageName: node
   linkType: hard
 
@@ -7133,7 +7133,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
     "@clerk/clerk-react": 4.18.0
-    "@clerk/types": 3.41.0
+    "@clerk/types": 3.42.0
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.9
     core-js: 3.30.2
@@ -7812,7 +7812,7 @@ __metadata:
     "@graphql-codegen/typescript-resolvers": 3.2.1
     "@redwoodjs/graphql-server": 5.0.0
     "@redwoodjs/project-config": 5.0.0
-    "@sdl-codegen/node": 0.0.9
+    "@sdl-codegen/node": 0.0.10
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.20.1
     "@types/fs-extra": 11.0.1
@@ -8223,16 +8223,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sdl-codegen/node@npm:0.0.9":
-  version: 0.0.9
-  resolution: "@sdl-codegen/node@npm:0.0.9"
+"@sdl-codegen/node@npm:0.0.10":
+  version: 0.0.10
+  resolution: "@sdl-codegen/node@npm:0.0.10"
   dependencies:
     "@mrleebo/prisma-ast": ^0.5.2
     ts-morph: ^18.0.0
   peerDependencies:
     graphql: "*"
+    prettier: ^2
     typescript: "*"
-  checksum: d297180138e1a2f71301ad71575a9562033d28fe4f6ce2abc727208dd82ccd43104510a3ca2912c12e792e69b111045fe9bb17aba18cb123c3eccc74f15b88bd
+  peerDependenciesMeta:
+    prettier:
+      optional: true
+  checksum: 275247e686cc999d91623d67ce09171f9ed17764616bb7941877439ce44b1cba305ac049e91981660cd8690f18d797cd27cecdf26cf436eb81895093e0223f42
   languageName: node
   linkType: hard
 
