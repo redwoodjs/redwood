@@ -35,7 +35,8 @@ import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
 import * as updateCheck from './lib/updateCheck'
 import { loadPlugins } from './plugin'
-import { startTelemetry, shutdownTelemetry } from './telemetry'
+import { telemetryBackgroundCompute } from './telemetry/computeMiddleware'
+import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
 // # Setting the CWD
 //
@@ -100,9 +101,12 @@ config({
   multiline: true,
 })
 
+const TELEMETRY_ENABLED =
+  telemetry !== 'false' && !process.env.REDWOOD_DISABLE_TELEMETRY
+
 async function main() {
   // Start telemetry if it hasn't been disabled
-  if (telemetry !== 'false' && !process.env.REDWOOD_DISABLE_TELEMETRY) {
+  if (TELEMETRY_ENABLED) {
     try {
       await startTelemetry()
     } catch (error) {
@@ -157,6 +161,7 @@ async function runYargs() {
           delete argv.cwd
         },
         telemetryMiddleware,
+        TELEMETRY_ENABLED && telemetryBackgroundCompute,
         updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
       ].filter(Boolean)
     )
