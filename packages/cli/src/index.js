@@ -36,7 +36,11 @@ import { getPaths, findUp } from './lib'
 import * as updateCheck from './lib/updateCheck'
 import { loadPlugins } from './plugin'
 import { telemetryBackgroundCompute } from './telemetry/computeMiddleware'
-import { startTelemetry, shutdownTelemetry } from './telemetry/index'
+import {
+  startTelemetry,
+  shutdownTelemetry,
+  addBackgroundTelemetry,
+} from './telemetry/index'
 
 // # Setting the CWD
 //
@@ -115,16 +119,15 @@ async function main() {
     }
   }
 
-  // Execute CLI within a span
+  // Execute CLI within a span, this will be the root span
   const tracer = trace.getTracer('redwoodjs')
   await tracer.startActiveSpan('cli', async (span) => {
-    // Run the command via yargs
     try {
+      // Run the command via yargs
       await runYargs()
 
       // Span housekeeping
       span?.setStatus({ code: SpanStatusCode.OK })
-      span?.end()
     } catch (error) {
       // TODO: Make the error log a little more pretty?
       console.error(error)
@@ -133,10 +136,15 @@ async function main() {
       //   errorContext: '...', // some input from the user
       // })
 
-      recordTelemetryError(error, span)
-      span?.end()
+      recordTelemetryError(error)
       process.exitCode = 1
     }
+
+    // Add the telemetry "resources" we computed in the background
+    await addBackgroundTelemetry({
+      hadError: process.exitCode !== undefined && process.exitCode !== 0,
+    })
+    span?.end()
   })
 
   // Shutdown telemetry, ensures data is sent before the process exits

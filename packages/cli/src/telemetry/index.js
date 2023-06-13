@@ -65,38 +65,39 @@ export async function startTelemetry() {
   })
 }
 
+export async function addBackgroundTelemetry(
+  { hadError } = { hadError: false }
+) {
+  const telemetryComputeFile = path.join(
+    getPaths().generated.base,
+    'telemetryCompute.json'
+  )
+
+  // TODO: Should we do something more sophisticated here?
+  // Wait if the telemetry compute hasn't finished yet, wait for
+  // 400ms or 2s if there was an error
+  const pausePeriod = 20
+  const maxPauses = hadError ? 100 : 20
+  let pauses = 0
+  while (isLockSet('TELEMETRY_COMPUTE') && pauses < maxPauses) {
+    await new Promise((r) => setTimeout(r, pausePeriod))
+    pauses += 1
+  }
+  unsetLock('TELEMETRY_COMPUTE')
+
+  try {
+    const data = JSON.parse(
+      fs.readFileSync(telemetryComputeFile, { encoding: 'utf8' })
+    )
+    recordTelemetryAttributes(data)
+  } catch (_error) {
+    // TODO: Consider handling this error
+    // console.error(_error)
+  }
+}
+
 export async function shutdownTelemetry() {
   try {
-    // Add the "resources" we computed in the background
-    const telemetryComputeFile = path.join(
-      getPaths().generated.base,
-      'telemetryCompute.json'
-    )
-
-    // TODO: Should we do something more sophisticated here?
-    // Wait up to 1s for the results
-    const pausePeriod = 50
-    const maxPauses = 20
-    let pauses = 0
-    while (isLockSet('TELEMETRY_COMPUTE') && pauses < maxPauses) {
-      await new Promise((r) => setTimeout(r, pausePeriod))
-      pauses += 1
-    }
-    unsetLock('TELEMETRY_COMPUTE')
-
-    try {
-      const data = JSON.parse(
-        fs.readFileSync(telemetryComputeFile, { encoding: 'utf8' })
-      )
-      console.log({ data })
-      recordTelemetryAttributes(data)
-    } catch (_error) {
-      console.error(_error)
-      // TODO: Consider handling this error
-    }
-
-    console.log(opentelemetry.trace.getActiveSpan())
-
     opentelemetry.trace.getActiveSpan()?.end()
     await traceProvider?.shutdown()
     await traceProcessor?.shutdown()
