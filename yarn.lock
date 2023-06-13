@@ -6598,7 +6598,7 @@ __metadata:
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.3.1
     "@types/aws-lambda": 8.10.117
-    "@types/lodash.escape": 4.0.7
+    "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     "@types/split2": 4.2.0
     "@types/yargs": 17.0.24
@@ -6612,7 +6612,7 @@ __metadata:
     fastify: 4.17.0
     fastify-raw-body: 4.2.0
     jest: 29.5.0
-    lodash.escape: 4.0.1
+    lodash: 4.17.21
     pretty-bytes: 5.6.0
     pretty-ms: 7.0.1
     qs: 6.11.2
@@ -7129,7 +7129,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.22.3
     "@redwoodjs/project-config": 5.3.1
     "@redwoodjs/telemetry": 5.3.1
-    "@types/lodash.memoize": 4.1.7
+    "@types/lodash": 4.14.195
     "@types/pascalcase": 1.0.1
     "@types/yargs": 17.0.24
     chalk: 4.1.2
@@ -7137,7 +7137,7 @@ __metadata:
     execa: 5.1.1
     jest: 29.5.0
     listr2: 6.6.0
-    lodash.memoize: 4.1.2
+    lodash: 4.17.21
     pascalcase: 1.0.0
     prettier: 2.8.8
     prompts: 2.4.2
@@ -7270,6 +7270,7 @@ __metadata:
     "@redwoodjs/internal": 5.3.1
     "@redwoodjs/project-config": 5.3.1
     "@redwoodjs/testing": 5.3.1
+    "@types/lodash": 4.14.195
     babel-loader: 9.1.2
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -7288,7 +7289,7 @@ __metadata:
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.1
     jest: 29.5.0
-    lodash.escaperegexp: 4.1.2
+    lodash: 4.17.21
     mini-css-extract-plugin: 2.7.6
     nodemon: 2.0.22
     null-loader: 4.0.1
@@ -7357,14 +7358,14 @@ __metadata:
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.3.1
     "@types/aws-lambda": 8.10.117
-    "@types/lodash.escape": 4.0.7
+    "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     ansi-colors: 4.1.3
     esbuild: 0.17.19
     fast-glob: 3.2.12
     fastify: 4.17.0
     fastify-raw-body: 4.2.0
-    lodash.escape: 4.0.1
+    lodash: 4.17.21
     qs: 6.11.2
     typescript: 5.1.3
   languageName: unknown
@@ -7422,8 +7423,7 @@ __metadata:
     "@redwoodjs/api": 5.3.1
     "@redwoodjs/project-config": 5.3.1
     "@types/jsonwebtoken": 9.0.2
-    "@types/lodash.merge": 4.6.7
-    "@types/lodash.omitby": 4.6.7
+    "@types/lodash": 4.14.195
     "@types/uuid": 9.0.2
     "@whatwg-node/fetch": 0.9.4
     aws-lambda: 1.0.7
@@ -7434,8 +7434,7 @@ __metadata:
     graphql-yoga: 3.9.1
     jest: 29.5.0
     jsonwebtoken: 9.0.0
-    lodash.merge: 4.6.2
-    lodash.omitby: 4.6.0
+    lodash: 4.17.21
     typescript: 5.1.3
     uuid: 9.0.0
   languageName: unknown
@@ -7631,7 +7630,7 @@ __metadata:
     "@types/aws-lambda": 8.10.117
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 9.0.2
-    "@types/lodash.escape": 4.0.7
+    "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     "@types/split2": 4.2.0
     "@types/uuid": 9.0.2
@@ -7650,7 +7649,7 @@ __metadata:
     graphql-yoga: 3.9.1
     jest: 29.5.0
     jsonwebtoken: 9.0.0
-    lodash.escape: 4.0.1
+    lodash: 4.17.21
     pretty-bytes: 5.6.0
     qs: 6.11.2
     split2: 4.2.0
@@ -9955,52 +9954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.escape@npm:4.0.7":
-  version: 4.0.7
-  resolution: "@types/lodash.escape@npm:4.0.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: cc980619559a3e67f40d078e76da67d110eecec7f774987bf595349e4642ce3110ec61a787a98ab89ea6d5c9dc5b1b16b47ceb878e678e3b7dc30e5d6b22fc97
-  languageName: node
-  linkType: hard
-
-"@types/lodash.memoize@npm:4.1.7":
-  version: 4.1.7
-  resolution: "@types/lodash.memoize@npm:4.1.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 979a59dbbae968a03834fdb544dc5ddd34620a2912d5030c997a1aa919326425a900c93bc69554b2a873cf54f09b4dd2752b3a1c29ab4bffac5983113c58b1b5
-  languageName: node
-  linkType: hard
-
-"@types/lodash.merge@npm:4.6.7":
-  version: 4.6.7
-  resolution: "@types/lodash.merge@npm:4.6.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 38e7bb0926e3be19dc27bb62118519d3a10d1e890e83c5916418b16fb390d892c75c36b5cb434c51835d88425475b02fc3b46111d01c85fcc4340d7c84d4e8c9
-  languageName: node
-  linkType: hard
-
-"@types/lodash.omitby@npm:4.6.7":
-  version: 4.6.7
-  resolution: "@types/lodash.omitby@npm:4.6.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 18d7f820b529f62def3bec2fb979b59ad2f390a20f4268131b4a045a2f1c3b7b3b4b4ba8eb3c2bdb0df881193b39756368eedac33081b39a88597e938808dbac
-  languageName: node
-  linkType: hard
-
-"@types/lodash.template@npm:4.5.1":
-  version: 4.5.1
-  resolution: "@types/lodash.template@npm:4.5.1"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: b9f094d9620b8c3a711810c72668962693b89313405474dac0067f90be4b003b34b3768318f02f20ad0c55bbff023c370e5b59462f0e0aa00e2dde586f1a92c1
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*, @types/lodash@npm:4.14.195, @types/lodash@npm:^4.14.167":
+"@types/lodash@npm:4.14.195, @types/lodash@npm:^4.14.167":
   version: 4.14.195
   resolution: "@types/lodash@npm:4.14.195"
   checksum: 6d733276df592614a0943a0053056140398b3c263cdf2557d4301b3a47b07ff561926cb9339a4725acbc7d8766f91ded218df11e0a4288cee369eafb5141d94d
@@ -22845,13 +22799,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash._reinterpolate@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "lodash._reinterpolate@npm:3.0.0"
-  checksum: cdf592374b5e9eb6d6290a9a07c7d90f6e632cca4949da2a26ae9897ab13f138f3294fd5e81de3e5d997717f6e26c06747a9ad3413c043fd36c0d87504d97da6
-  languageName: node
-  linkType: hard
-
 "lodash.camelcase@npm:^4.3.0":
   version: 4.3.0
   resolution: "lodash.camelcase@npm:4.3.0"
@@ -22891,20 +22838,6 @@ __metadata:
   version: 4.5.0
   resolution: "lodash.difference@npm:4.5.0"
   checksum: 5d52859218a7df427547ff1fadbc397879709fe6c788b037df7d6d92b676122c92bd35ec85d364edb596b65dfc6573132f420c9b4ee22bb6b9600cd454c90637
-  languageName: node
-  linkType: hard
-
-"lodash.escape@npm:4.0.1":
-  version: 4.0.1
-  resolution: "lodash.escape@npm:4.0.1"
-  checksum: 90ade409cec05b6869090476952fdfb84d4d87b1ff4a0e03ebd590f980d9a1248d93ba14579f10d80c6429e4d6af13ba137c28db64cae6dadb71442e54a3ad2b
-  languageName: node
-  linkType: hard
-
-"lodash.escaperegexp@npm:4.1.2":
-  version: 4.1.2
-  resolution: "lodash.escaperegexp@npm:4.1.2"
-  checksum: 484ad4067fa9119bb0f7c19a36ab143d0173a081314993fe977bd00cf2a3c6a487ce417a10f6bac598d968364f992153315f0dbe25c9e38e3eb7581dd333e087
   languageName: node
   linkType: hard
 
@@ -22964,7 +22897,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:4.1.2, lodash.memoize@npm:^4.1.2":
+"lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
   checksum: c8713e51eccc650422716a14cece1809cfe34bc5ab5e242b7f8b4e2241c2483697b971a604252807689b9dd69bfe3a98852e19a5b89d506b000b4187a1285df8
@@ -22985,13 +22918,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.omitby@npm:4.6.0":
-  version: 4.6.0
-  resolution: "lodash.omitby@npm:4.6.0"
-  checksum: 4608b1d8c4063b63349a3462852465fbe74781d737fbb26a0a7f00b0e65f6ccbc13fa490a38f9380103d93fc398e3873983038efadfafc67ccafbb25d9bc7bf4
-  languageName: node
-  linkType: hard
-
 "lodash.once@npm:^4.0.0, lodash.once@npm:^4.1.1":
   version: 4.1.1
   resolution: "lodash.once@npm:4.1.1"
@@ -23003,25 +22929,6 @@ __metadata:
   version: 4.7.0
   resolution: "lodash.sortby@npm:4.7.0"
   checksum: fc48fb54ff7669f33bb32997cab9460757ee99fafaf72400b261c3e10fde21538e47d8cfcbe6a25a31bcb5b7b727c27d52626386fc2de24eb059a6d64a89cdf5
-  languageName: node
-  linkType: hard
-
-"lodash.template@npm:4.5.0":
-  version: 4.5.0
-  resolution: "lodash.template@npm:4.5.0"
-  dependencies:
-    lodash._reinterpolate: ^3.0.0
-    lodash.templatesettings: ^4.0.0
-  checksum: 62a02b397f72542fa9a989d9fc1a94fc1cb94ced8009fa5c37956746c0cf460279e844126c2abfbf7e235fe27e8b7ee8e6efbf6eac247a06aa05b05457fda817
-  languageName: node
-  linkType: hard
-
-"lodash.templatesettings@npm:^4.0.0":
-  version: 4.2.0
-  resolution: "lodash.templatesettings@npm:4.2.0"
-  dependencies:
-    lodash._reinterpolate: ^3.0.0
-  checksum: 2609fea36ed061114dfed701666540efc978b069b2106cd819b415759ed281419893d40f85825240197f1a38a98e846f2452e2d31c6d5ccee1e006c9de820622
   languageName: node
   linkType: hard
 
@@ -28624,7 +28531,6 @@ __metadata:
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.2
     "@types/jscodeshift": 0.11.6
-    "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.4
     all-contributors-cli: 6.26.0
@@ -28644,7 +28550,6 @@ __metadata:
     jscodeshift: 0.15.0
     lerna: 6.6.2
     listr2: 6.6.0
-    lodash.template: 4.5.0
     make-dir-cli: 3.0.0
     msw: 1.2.1
     ncp: 2.0.0
