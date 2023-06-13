@@ -219,8 +219,6 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
-      # This makes sure that playwright dependencies are cached in node_modules.
-      PLAYWRIGHT_BROWSERS_PATH: 0
 
     steps:
       - uses: actions/checkout@v3
@@ -255,21 +253,17 @@ jobs:
 
       - name: 🧑‍💻 Run dev smoke tests
         working-directory: ./tasks/smoke-tests/dev
-        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test
         env:
           REDWOOD_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
-          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
-          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: 🔐 Run auth smoke tests
         working-directory: ./tasks/smoke-tests/auth
-        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
-          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: Run `rw build --no-prerender`
         run: |
@@ -283,30 +277,24 @@ jobs:
 
       - name: 🖥️ Run serve smoke tests
         working-directory: tasks/smoke-tests/serve
-        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
-          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: 📄 Run prerender smoke tests
         working-directory: tasks/smoke-tests/prerender
-        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
-          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: 📕 Run Storybook smoke tests
         working-directory: tasks/smoke-tests/storybook
-        run: npx playwright test --project chromium # ${{ matrix.os == 'ubuntu-latest' && 'replay-chromium' || 'chromium' }}
+        run: npx playwright test
         env:
           REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
-          # RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
-          # RECORD_REPLAY_TEST_METRICS: 1
 
       - name: Run `rw info`
         run: |
@@ -392,6 +380,15 @@ jobs:
         working-directory: ${{ steps.set-up-test-project.outputs.test-project-path }}
         continue-on-error: true
 
+      # We've disabled Replay for now but may add it back. When we do,
+      # we need to add this to all the smoke tests steps' env:
+      #
+      # ```
+      # env:
+      #   RECORD_REPLAY_METADATA_TEST_RUN_TITLE: 🔄  Smoke tests / ${{ matrix.os }} / node 18 latest
+      #   RECORD_REPLAY_TEST_METRICS: 1
+      # ```
+      #
       # - name: Upload Replays
       #   if: always()
       #   uses: replayio/action-upload@v0.5.0

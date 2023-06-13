@@ -8162,67 +8162,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replayio/playwright@npm:0.3.31":
-  version: 0.3.31
-  resolution: "@replayio/playwright@npm:0.3.31"
-  dependencies:
-    "@replayio/replay": ^0.12.11
-    "@replayio/test-utils": ^0.5.10
-    uuid: ^8.3.2
-  peerDependencies:
-    "@playwright/test": 1.19.x
-  bin:
-    replayio-playwright: bin/replayio-playwright.js
-  checksum: 80a04eb3d8cb39367ea31c81ed0e67a761510ef05905bcc2c6aab3f35a4aa1a40e51c2bd0a230b5d1be02ee0310a05d79a2aeee2a4ecca72190517d2eb67a0ba
-  languageName: node
-  linkType: hard
-
-"@replayio/replay@npm:^0.12.11":
-  version: 0.12.11
-  resolution: "@replayio/replay@npm:0.12.11"
-  dependencies:
-    "@replayio/sourcemap-upload": ^1.0.7
-    commander: ^7.2.0
-    debug: ^4.3.4
-    is-uuid: ^1.0.2
-    jsonata: ^1.8.6
-    node-fetch: ^2.6.8
-    p-map: ^4.0.0
-    superstruct: ^0.15.4
-    text-table: ^0.2.0
-    ws: ^7.5.0
-  bin:
-    replay: bin/replay.js
-  checksum: 6314b4d193a86d7e4fd973304dff81dd979939a03e28f6d1e911982913521ae781682ebcc2d1da83734746d6960eb3a9363217a63cec3fa6c09218448e33cc4b
-  languageName: node
-  linkType: hard
-
-"@replayio/sourcemap-upload@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "@replayio/sourcemap-upload@npm:1.0.7"
-  dependencies:
-    commander: ^7.2.0
-    debug: ^4.3.1
-    glob: ^7.1.6
-    node-fetch: ^2.6.1
-    string.prototype.matchall: ^4.0.5
-  checksum: 861b4089d934c1d63147b1af8db42ec60a1e5582025f38bf3d37eba3517eb1e04be381fd6a15930896ebc14252dcb1c6f56b0181749978fd5c98b4340030fe7c
-  languageName: node
-  linkType: hard
-
-"@replayio/test-utils@npm:^0.5.10":
-  version: 0.5.10
-  resolution: "@replayio/test-utils@npm:0.5.10"
-  dependencies:
-    "@replayio/replay": ^0.12.11
-    "@types/node-fetch": ^2.6.2
-    debug: ^4.3.4
-    node-fetch: ^2.6.7
-    uuid: ^8.3.2
-  checksum: 40872d499d6f82c9c756cf615e9c1c6ef099ef5e5b8170dffc278f03058f67380875b0f74c94610338a1b1aeec7f712363ab6b078e2e4d7425a879fbeb77284b
-  languageName: node
-  linkType: hard
-
 "@sdl-codegen/node@npm:0.0.10":
   version: 0.0.10
   resolution: "@sdl-codegen/node@npm:0.0.10"
@@ -10202,7 +10141,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:^2.5.0, @types/node-fetch@npm:^2.5.7, @types/node-fetch@npm:^2.6.1, @types/node-fetch@npm:^2.6.2":
+"@types/node-fetch@npm:^2.5.0, @types/node-fetch@npm:^2.5.7, @types/node-fetch@npm:^2.6.1":
   version: 2.6.4
   resolution: "@types/node-fetch@npm:2.6.4"
   dependencies:
@@ -20468,13 +20407,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-uuid@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "is-uuid@npm:1.0.2"
-  checksum: 9e39508b97c724668da7011f77c2f53485784b84a7b9c54fadb6369ebff236caf1912324e3390d0a0495fcddf5f19caa7a55e6cdd0f5b528a1e3210d51d8bd54
-  languageName: node
-  linkType: hard
-
 "is-weakmap@npm:^2.0.1":
   version: 2.0.1
   resolution: "is-weakmap@npm:2.0.1"
@@ -21513,13 +21445,6 @@ __metadata:
   bin:
     json5: lib/cli.js
   checksum: 9ee316bf21f000b00752e6c2a3b79ecf5324515a5c60ee88983a1910a45426b643a4f3461657586e8aeca87aaf96f0a519b0516d2ae527a6c3e7eed80f68717f
-  languageName: node
-  linkType: hard
-
-"jsonata@npm:^1.8.6":
-  version: 1.8.6
-  resolution: "jsonata@npm:1.8.6"
-  checksum: 27577a8fbc80063a468d06f2b3cfd96685aac3cf1ad8c4aeb1d12b0c9bdcb2d9a21a39ed4f69e2ef1d3853dddd45a27bdec9173fc4efccdbb42296b3b3db890b
   languageName: node
   linkType: hard
 
@@ -23629,7 +23554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.11, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.11, node-fetch@npm:^2.6.7, node-fetch@npm:^2.6.8":
+"node-fetch@npm:2.6.11, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.11, node-fetch@npm:^2.6.7":
   version: 2.6.11
   resolution: "node-fetch@npm:2.6.11"
   dependencies:
@@ -27566,7 +27491,6 @@ __metadata:
     "@faker-js/faker": 8.0.2
     "@npmcli/arborist": 6.2.9
     "@playwright/test": 1.34.3
-    "@replayio/playwright": 0.3.31
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
@@ -28919,7 +28843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string.prototype.matchall@npm:^4.0.5, string.prototype.matchall@npm:^4.0.8":
+"string.prototype.matchall@npm:^4.0.8":
   version: 4.0.8
   resolution: "string.prototype.matchall@npm:4.0.8"
   dependencies:
@@ -29095,13 +29019,6 @@ __metadata:
   peerDependencies:
     postcss: ^8.2.15
   checksum: 6ce277c816dd826fdc765258d612a160bad03dae52ab51ef1676efae07e96923ebeb6880d6522eefc50d2e81cb90b632615120c73aed190f345e8d836def67b6
-  languageName: node
-  linkType: hard
-
-"superstruct@npm:^0.15.4":
-  version: 0.15.5
-  resolution: "superstruct@npm:0.15.5"
-  checksum: 73ae2043443dcc7868da6e8b4e4895410c79a88e021b514c665161199675ee920d5eadd85bb9dee5a9f515817e62f4b65a67ccb82d29f73259d012afcbcd3ce4
   languageName: node
   linkType: hard
 
@@ -31693,7 +31610,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^7.3.1, ws@npm:^7.5.0":
+"ws@npm:^7.3.1":
   version: 7.5.9
   resolution: "ws@npm:7.5.9"
   peerDependencies:
