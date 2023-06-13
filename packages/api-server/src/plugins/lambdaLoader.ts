@@ -4,7 +4,7 @@ import c from 'ansi-colors'
 import type { Handler } from 'aws-lambda'
 import fg from 'fast-glob'
 import { FastifyReply, FastifyRequest, RequestGenericInterface } from 'fastify'
-import escape from 'lodash.escape'
+import { escape } from 'lodash'
 
 import { getPaths } from '@redwoodjs/project-config'
 
