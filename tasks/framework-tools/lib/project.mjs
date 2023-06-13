@@ -31,7 +31,18 @@ export function fixProjectBinaries(projectPath) {
       fs.mkdirSync(path.dirname(binSymlink), {
         recursive: true,
       })
-      fs.unlinkSync(binSymlink)
+
+      // `fs.existsSync` checks if the target of the symlink exists, not the symlink. If the symlink exists,
+      // we have to remove it before we can fix it. As far as I can tell, there's no way to check if a symlink exists but not its target,
+      // so we try-catch removing it so that we cover both cases.
+      try {
+        fs.unlinkSync(binSymlink)
+      } catch (e) {
+        if (e.code !== 'ENOENT') {
+          throw new Error(e)
+        }
+      }
+
       fs.symlinkSync(binPath, binSymlink)
     }
 
