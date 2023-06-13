@@ -18,8 +18,7 @@
  *   task should be skipped or not.
  * @property {() => boolean=} enabled Whether this task is enabled or not.
  *   Disabled tasks don't show up in the list.
- * // TODO: Add proper types for the `tui` argument.
- * @property {(tui) => Promise<unknown> | void} task
+ * @property {() => Promise<unknown> | void} task
  *   The task to run. Will be passed an instance of TUI when called.
  */
 
@@ -39,15 +38,6 @@ function isAwaitable(promise) {
   )
 }
 
-/**
- * @param {ExecaResult|TuiTaskList|void} result
- * @return {result is ExecaResult}
- */
-// function isExecaResult(result) {
-//   return typeof result === 'object' && 'exitCode' in result
-// }
-
 module.exports = {
   isAwaitable,
-  // isExecaResult,
 }

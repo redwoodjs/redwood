@@ -7,7 +7,7 @@ const {
   getExecaOptions: utilGetExecaOptions,
   // applyCodemod,
   updatePkgJsonScripts,
-  execa,
+  exec,
 } = require('./util')
 
 /** @type {(string) => import('execa').Options} */
@@ -44,7 +44,7 @@ async function applyCodemod(codemod, target) {
 
   args.push()
 
-  const subprocess = execa(
+  const subprocess = exec(
     'yarn jscodeshift',
     args,
     getExecaOptions(path.resolve(__dirname))
@@ -62,7 +62,7 @@ const createBuilder = (cmd) => {
   const execaOptions = getExecaOptions(OUTPUT_PATH)
 
   return function (positionalArguments) {
-    const subprocess = execa(
+    const subprocess = exec(
       cmd,
       Array.isArray(positionalArguments)
         ? positionalArguments
@@ -336,7 +336,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       title: 'Install tailwind dependencies',
       // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
       task: async () => {
-        await execa(
+        await exec(
           'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss',
           [],
           getExecaOptions(outputPath)
@@ -348,7 +348,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       title: '[link] Copy local framework files again',
       // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
       task: async () => {
-        await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
+        await exec('yarn rwfw project:copy', [], getExecaOptions(outputPath))
       },
       enabled: () => linkWithLatestFwBuild,
     },
@@ -356,7 +356,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
     {
       title: 'Adding Tailwind',
       task: async () => {
-        await execa(
+        await exec(
           'yarn rw setup ui tailwindcss',
           ['--force', linkWithLatestFwBuild && '--no-install'].filter(Boolean),
           execaOptions
@@ -364,6 +364,8 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
       },
     },
   ] //,
+  // TODO: Figure out what to do with this. It's from Listr, but TUI doesn't
+  //       have anything like it (yet?)
   // {
   //   exitOnError: true,
   //   renderer: verbose && 'verbose',
@@ -409,7 +411,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
 
     fs.rmSync(dbAuthSetupPath, { recursive: true, force: true })
 
-    await execa(
+    await exec(
       'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
       execaOptions
@@ -424,10 +426,10 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     })
 
     if (linkWithLatestFwBuild) {
-      await execa('yarn rwfw project:copy', [], execaOptions)
+      await exec('yarn rwfw project:copy', [], execaOptions)
     }
 
-    await execa(
+    await exec(
       'yarn rw g dbAuth --no-webauthn --username-label=username --password-label=password',
       [],
       execaOptions
@@ -492,7 +494,6 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
     )?.[0]
     const fullNameFields = usernameFields
       ?.replace(/\s*ref=\{usernameRef}/, '')
-      // @ts-expect-error - replaceAll does exist
       ?.replaceAll('username', 'full-name')
       ?.replaceAll('Username', 'Full Name')
 
@@ -605,18 +606,14 @@ export default DoublePage`
       export async function routeParameters() {
         return (await db.post.findMany({ take: 7 })).map((post) => ({ id: post.id }))
       }
-      `
-            // @ts-expect-error - replaceAll does exist
-            .replaceAll(/ {6}/g, '')
+      `.replaceAll(/ {6}/g, '')
           const blogPostRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/BlogPostPage/BlogPostPage.routeHooks.ts`
           fs.writeFileSync(blogPostRouteHooksPath, blogPostRouteHooks)
 
           const waterfallRouteHooks = `export async function routeParameters() {
         return [{ id: 2 }]
       }
-      `
-            // @ts-expect-error - replaceAll does exist
-            .replaceAll(/ {6}/g, '')
+      `.replaceAll(/ {6}/g, '')
           const waterfallRouteHooksPath = `${OUTPUT_PATH}/web/src/pages/WaterfallPage/WaterfallPage.routeHooks.ts`
           fs.writeFileSync(waterfallRouteHooksPath, waterfallRouteHooks)
         },
@@ -639,7 +636,7 @@ export default DoublePage`
         addModel(post)
         addModel(user)
 
-        return execa(
+        return exec(
           `yarn rw prisma migrate dev --name create_post_user`,
           [],
           execaOptions
@@ -657,7 +654,7 @@ export default DoublePage`
           fullPath('api/src/services/posts/posts.scenarios')
         )
 
-        await execa(`yarn rwfw project:copy`, [], execaOptions)
+        await exec(`yarn rwfw project:copy`, [], execaOptions)
       },
     },
     {
@@ -676,7 +673,7 @@ export default DoublePage`
 
         addModel(contact)
 
-        await execa(
+        await exec(
           `yarn rw prisma migrate dev --name create_contact`,
           [],
           execaOptions
@@ -758,9 +755,7 @@ export default DoublePage`
 
                 expect(result).toEqual(scenario.user.one)
               })
-            })`
-          // @ts-expect-error - replaceAll does exist
-          .replaceAll(/ {12}/g, '')
+            })`.replaceAll(/ {12}/g, '')
 
         fs.writeFileSync(fullPath('api/src/services/users/users.test'), test)
 
@@ -777,6 +772,8 @@ export default DoublePage`
     },
   ]
   // ],
+  // TODO: Figure out what to do with this. It's from Listr, but TUI doesn't
+  //       have anything like it (yet?)
   // {
   //   exitOnError: true,
   //   renderer: verbose && 'verbose',

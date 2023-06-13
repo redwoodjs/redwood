@@ -27,7 +27,7 @@ const {
   getExecaOptions: utilGetExecaOptions,
   updatePkgJsonScripts,
   ExecaError,
-  execa,
+  exec,
 } = require('./util')
 
 const args = yargs(hideBin(process.argv))
@@ -128,21 +128,47 @@ async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
   let promise
 
   try {
-    promise = task(tui)
+    promise = task()
   } catch (e) {
+    // This code handles errors from synchronous tasks
+
+    tui.stopReactive(true)
+
     if (e instanceof ExecaError) {
-      tui.stopReactive(true)
       tui.displayError(
         'Failed ' + title.toLowerCase().replace('...', ''),
         'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr
       )
-
-      process.exit(e.exitCode)
+    } else {
+      tui.displayError(
+        'Failed ' + title.toLowerCase().replace('...', ''),
+        e.message
+      )
     }
+
+    process.exit(e.exitCode)
   }
 
   if (isAwaitable(promise)) {
-    const result = await promise
+    const result = await promise.catch((e) => {
+      // This code handles errors from asynchronous tasks
+
+      tui.stopReactive(true)
+
+      if (e instanceof ExecaError) {
+        tui.displayError(
+          'Failed ' + title.toLowerCase().replace('...', ''),
+          'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr
+        )
+      } else {
+        tui.displayError(
+          'Failed ' + title.toLowerCase().replace('...', ''),
+          e.message
+        )
+      }
+
+      process.exit(e.exitCode)
+    })
 
     if (Array.isArray(result)) {
       const tuiTaskList = result
@@ -207,7 +233,7 @@ if (resumePath && !fs.existsSync(path.join(resumePath, 'redwood.toml'))) {
 const createProject = () => {
   let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
 
-  const subprocess = execa(
+  const subprocess = exec(
     cmd,
     // We create a ts project and convert using ts-to-js at the end if typescript flag is false
     ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
@@ -271,7 +297,7 @@ async function runCommand() {
       'Adding storybook to web dependencies...\n' +
       '  ⏱  This could take a while...',
     task: () => {
-      return execa(
+      return exec(
         'yarn',
         ['workspace web add -D storybook'],
         getExecaOptions(OUTPUT_PROJECT_PATH)
@@ -285,13 +311,13 @@ async function runCommand() {
     title: '[link] Building Redwood framework',
     content: 'yarn build:clean && yarn build',
     task: async () => {
-      return execa(
+      return exec(
         'yarn build:clean && yarn build',
         [],
         getExecaOptions(RW_FRAMEWORKPATH)
       )
     },
-    skip: () => 'Manually skipping this step', // skipStep(startStep, 2),
+    skip: skipStep(startStep, 2),
   })
 
   await tuiTask({
@@ -313,7 +339,7 @@ async function runCommand() {
     title: 'Installing node_modules',
     content: 'yarn install',
     task: () => {
-      return execa('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
+      return exec('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
     },
     skip: skipStep(startStep, 4),
   })
@@ -399,7 +425,7 @@ async function runCommand() {
     step: 10,
     title: 'Running prisma migrate reset',
     task: () => {
-      return execa(
+      return exec(
         'yarn rw prisma migrate reset',
         ['--force'],
         getExecaOptions(OUTPUT_PROJECT_PATH)
@@ -412,9 +438,9 @@ async function runCommand() {
     step: 11,
     title: 'Lint --fix all the things',
     task: () => {
-      return execa('yarn rw lint --fix', [], {
+      return exec('yarn rw lint --fix', [], {
         shell: true,
-        stdio: 'ignore',
+        stdio: 'pipe',
         cleanup: true,
         cwd: OUTPUT_PROJECT_PATH,
         env: {
