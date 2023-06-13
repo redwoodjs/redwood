@@ -31,6 +31,7 @@ export function fixProjectBinaries(projectPath) {
       fs.mkdirSync(path.dirname(binSymlink), {
         recursive: true,
       })
+      fs.unlinkSync(binSymlink)
       fs.symlinkSync(binPath, binSymlink)
     }
 
