@@ -4,7 +4,7 @@ import url from 'node:url'
 
 import c from 'ansi-colors'
 import fse from 'fs-extra'
-import template from 'lodash/template'
+import { template } from 'lodash'
 import prompts from 'prompts'
 
 const questions = [
