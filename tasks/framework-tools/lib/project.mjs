@@ -147,6 +147,4 @@ export async function copyFrameworkFilesToProject(
       fs.copyFileSync(src, dest)
     }
   }
-
-  console.log()
 }
