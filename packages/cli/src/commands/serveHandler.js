@@ -33,11 +33,11 @@ export const apiServerHandler = async (options) => {
   })
 
   fastify.ready(() => {
-    fastify.log.trace(
+    fastify.log.debug(
       { custom: { ...fastify.initialConfig } },
       'Fastify server configuration'
     )
-    fastify.log.trace(`Registered plugins \n${fastify.printPlugins()}`)
+    fastify.log.debug(`Registered plugins \n${fastify.printPlugins()}`)
     console.log(chalk.italic.dim('Took ' + (Date.now() - tsApiServer) + ' ms'))
 
     const on = socket

@@ -27,7 +27,7 @@ let serverConfigFile: {
 } = {
   config: DEFAULT_REDWOOD_FASTIFY_CONFIG,
   configureFastify: async (fastify, options) => {
-    fastify.log.trace(
+    fastify.log.info(
       options,
       `In configureFastify hook for side: ${options?.side}`
     )
