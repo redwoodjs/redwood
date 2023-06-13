@@ -206,8 +206,9 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
+        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / node 18 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 18 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -238,6 +239,8 @@ jobs:
       - name: 🌲 Set up test project
         id: set-up-test-project
         uses: ./.github/actions/set-up-test-project
+        with:
+          bundler: ${{ matrix.bundler }}
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
