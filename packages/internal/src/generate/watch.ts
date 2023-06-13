@@ -6,11 +6,9 @@ import path from 'path'
 import c from 'ansi-colors'
 import chokidar from 'chokidar'
 
-import { defaultLoggerOptions } from '@redwoodjs/api/src/logger'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { cliLogger } from '../cliLogger'
-
 import {
   isCellFile,
   isPageFile,
