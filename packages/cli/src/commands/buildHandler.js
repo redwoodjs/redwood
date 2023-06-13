@@ -96,6 +96,16 @@ export const handler = async ({
       title: 'Building Web...',
       task: async () => {
         if (getConfig().web.bundler === 'vite') {
+          // @WARN DO NOT MERGE TEMPORARY HACK
+          // @WARN DO NOT MERGE TEMPORARY HACK
+          // @WARN DO NOT MERGE TEMPORARY HACK
+          // @WARN DO NOT MERGE TEMPORARY HACK
+          // @WARN DO NOT MERGE TEMPORARY HACK
+          // @WARN DO NOT MERGE TEMPORARY HACK
+          // @WARN DO NOT MERGE TEMPORARY HACK
+          process.chdir(rwjsPaths.web.base)
+
+          // @TODO: we need to use a binary here, so the the cwd is correct
           await buildFeServer({
             verbose,
           })

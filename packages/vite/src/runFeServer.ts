@@ -12,7 +12,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { triggerRouteHooks } from './triggerRouteHooks'
+import { loadAndRunRouteHooks } from './triggerRouteHooks'
 import { RWRouteManifest } from './types'
 import { stripQueryStringAndHashFromPath } from './utils'
 
@@ -44,15 +44,19 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
-  const routeManifest: RWRouteManifest = await import(
-    rwPaths.web.dist + '/server/route-manifest.json',
-    { assert: { type: 'json' } }
-  )
+  // @TODO @MARK figure out why we're having to do default here
+  const routeManifest: RWRouteManifest = (
+    await import(rwPaths.web.dist + '/server/route-manifest.json', {
+      assert: { type: 'json' },
+    })
+  ).default
 
-  const buildManifest: ViteManifest = await import(
-    rwPaths.web.dist + '/build-manifest.json',
-    { assert: { type: 'json' } }
-  )
+  // @TODO @MARK figure out why we're having to do default here
+  const buildManifest: ViteManifest = (
+    await import(rwPaths.web.dist + '/build-manifest.json', {
+      assert: { type: 'json' },
+    })
+  ).default
 
   const indexEntry = Object.values(buildManifest).find((manifestItem) => {
     return manifestItem.isEntry
@@ -157,37 +161,29 @@ export async function runFeServer() {
       }
 
       if (currentRoute) {
-        // @TODO hardcoded JS file, watchout if we switch to ESM!
-        const prodAppRouteHookPath = path.join(
-          rwPaths.web.distRouteHooks,
-          'App.routeHooks.js'
-        )
+        // Make sure we access the dist routeHooks!
+        const routeHookPaths = [
+          // @TODO hardcoded JS file, watchout if we switch to ESM!
+          path.join(rwPaths.web.distRouteHooks, 'App.routeHooks.js'),
+          currentRoute.routeHooks
+            ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
+            : null,
+        ]
 
-        // A. Trigger app route hook
-        const rootRouteHookOutput = await runProdRouteHooks(
-          prodAppRouteHookPath
-        )
-
-        const routeHookPath = currentRoute.routeHooks
-          ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks || '')
+        const parsedParams = currentRoute.hasParams
+          ? matchPath(currentRoute.pathDefinition, currentPathName).params
           : undefined
 
-        // B. Trigger current route RH
-        const currentRouteHookOutput = await runProdRouteHooks(
-          routeHookPath,
-          currentRoute.hasParams
-            ? matchPath(currentRoute.pathDefinition, currentPathName).params
-            : undefined,
-          rootRouteHookOutput
-        )
+        const routeHookOutput = await loadAndRunRouteHooks({
+          paths: routeHookPaths,
+          reqMeta: {
+            req,
+            parsedParams,
+          },
+        })
 
-        // Compose the appRH output and RH output
-        serverData = {
-          ...rootRouteHookOutput.serverData,
-          ...currentRouteHookOutput.serverData,
-        }
-
-        metaTags = [...rootRouteHookOutput.meta, ...currentRouteHookOutput.meta]
+        serverData = routeHookOutput.serverData
+        metaTags = routeHookOutput.meta
       }
 
       // Serialize route context so it can be passed to the client entry
@@ -245,38 +241,6 @@ export async function runFeServer() {
       // streaming no longer requires us to send back a blank page
       // React will automatically switch to client rendering on error
       return res.sendStatus(500)
-    }
-
-    // @TODO Refactor this
-    // WE are repeating code a lot between runFeServer and devFeServer
-    async function runProdRouteHooks(
-      routeHookPath: string | null | undefined,
-      parsedParams?: Record<string, any>,
-      appRouteHookOutput?: { meta: TagDescriptor[]; serverData: any }
-    ) {
-      if (routeHookPath) {
-        try {
-          const routeHooks = await import(routeHookPath)
-
-          const output = await triggerRouteHooks({
-            routeHooks,
-            req,
-            parsedParams,
-            appRouteHookOutput,
-          })
-
-          return {
-            serverData: output.serverData,
-            meta: output.meta,
-          }
-        } catch (e) {
-          console.error(`Error running route hooks in ${routeHookPath}}`)
-          console.error(e)
-        }
-      }
-
-      // Empty values if error, or no routeHookPath
-      return { serverData: {}, meta: [] }
     }
 
     return

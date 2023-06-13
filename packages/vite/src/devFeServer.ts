@@ -9,7 +9,7 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { triggerRouteHooks } from './triggerRouteHooks'
+import { loadAndRunRouteHooks } from './triggerRouteHooks'
 import { stripQueryStringAndHashFromPath } from './utils'
 
 // These values are defined in the vite.config.ts
@@ -72,25 +72,21 @@ async function createServer() {
       }
 
       if (currentRoute) {
-        // A. Trigger app route hook
-        const rootRouteHookOutput = await runDevRouteHooks(getAppRouteHook())
+        const parsedParams = currentRoute.hasParams
+          ? matchPath(currentRoute.path, currentPathName).params
+          : undefined
 
-        // B. Trigger current route RH
-        const currentRouteHookOutput = await runDevRouteHooks(
-          currentRoute.routeHooks,
-          currentRoute.hasParams
-            ? matchPath(currentRoute.path, currentPathName).params
-            : undefined,
-          rootRouteHookOutput
-        )
+        const routeHookOutput = await loadAndRunRouteHooks({
+          paths: [getAppRouteHook(), currentRoute.routeHooks],
+          reqMeta: {
+            req,
+            parsedParams,
+          },
+          viteDevServer: vite, // because its dev
+        })
 
-        // Compose the appRH output and RH output
-        serverData = {
-          ...rootRouteHookOutput.serverData,
-          ...currentRouteHookOutput.serverData,
-        }
-
-        metaTags = [...rootRouteHookOutput.meta, ...currentRouteHookOutput.meta]
+        serverData = routeHookOutput.serverData
+        metaTags = routeHookOutput.meta
       }
 
       if (!currentRoute) {
@@ -156,38 +152,6 @@ async function createServer() {
       // your actual source code.
       vite.ssrFixStacktrace(e as any)
       next(e)
-    }
-
-    // @TODO Refactor this
-    // WE are repeating code a lot between runFeServer and devFeServer
-    async function runDevRouteHooks(
-      routeHookPath: string | null | undefined,
-      parsedParams?: Record<string, any>,
-      appRouteHookOutput?: { meta: TagDescriptor[]; serverData: any }
-    ) {
-      if (routeHookPath) {
-        try {
-          const routeHooks = await vite.ssrLoadModule(routeHookPath)
-
-          const output = await triggerRouteHooks({
-            routeHooks,
-            req,
-            parsedParams,
-            appRouteHookOutput,
-          })
-
-          return {
-            serverData: output.serverData,
-            meta: output.meta,
-          }
-        } catch (e) {
-          console.error(`Error running route hooks in ${routeHookPath}}`)
-          console.error(e)
-        }
-      }
-
-      // Empty values if error, or no routeHookPath
-      return { serverData: {}, meta: [] }
     }
   })
 
