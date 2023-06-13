@@ -1,6 +1,6 @@
 import { getEpilogue } from './util'
 
-export const EXPERIMENTAL_TOPIC_ID = 4851 // to write
+export const EXPERIMENTAL_TOPIC_ID = 5002
 
 export const command = 'setup-realtime'
 
