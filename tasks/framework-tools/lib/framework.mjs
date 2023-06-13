@@ -157,7 +157,7 @@ export function resolvePackageJsonPathFromFilePath(filePath) {
 
   // There's some directories that have their own package.json, but aren't published to npm,
   // like @redwoodjs/web/apollo. We want the path to @redwoodjs/web's package.json, not @redwoodjs/web/apollo's.
-  return findUp('package.json', path.dirname(filePath))
+  return findUp('package.json', path.resolve(filePath, '../../'))
 }
 
 /**

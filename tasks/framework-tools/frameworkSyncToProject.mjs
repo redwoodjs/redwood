@@ -31,6 +31,9 @@ const IGNORE_EXTENSIONS = ['.DS_Store']
 const ignored = [
   /node_modules/,
 
+  /packages\/codemods/,
+  /packages\/create-redwood-app/,
+
   /dist/,
 
   /__fixtures__/,
