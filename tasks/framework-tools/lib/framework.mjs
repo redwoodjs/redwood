@@ -20,16 +20,10 @@ export const REDWOOD_PACKAGES_PATH = path.join(
 
 const IGNORE_PACKAGES = ['@redwoodjs/codemods', 'create-redwood-app']
 
-const cache = new Map()
-
 /**
  * @returns {{ location: string, name: string, packageJsonPath: string }[]}
  */
 function getFrameworkPackagesData() {
-  if (cache.has('frameworkPackagesData')) {
-    return cache.get('frameworkPackagesData')
-  }
-
   const output = execSync('yarn workspaces list --json', {
     encoding: 'utf-8',
   })
@@ -51,8 +45,6 @@ function getFrameworkPackagesData() {
     )
   }
 
-  cache.set('frameworkPackagesData', frameworkPackagesData)
-
   return frameworkPackagesData
 }
 
@@ -66,17 +58,9 @@ function getFrameworkPackagesData() {
  * @returns {string[]} A list of package.json file paths.
  */
 export function getFrameworkPackageJsonPaths() {
-  if (cache.has('frameworkPackageJsonPaths')) {
-    return cache.get('frameworkPackageJsonPaths')
-  }
-
-  const frameworkPackageJsonPaths = getFrameworkPackagesData().map(
+  return getFrameworkPackagesData().map(
     ({ packageJsonPath }) => packageJsonPath
   )
-
-  cache.set('frameworkPackagesData', frameworkPackageJsonPaths)
-
-  return frameworkPackageJsonPaths
 }
 
 /**
