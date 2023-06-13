@@ -122,12 +122,14 @@ jobs:
 
   tutorial-e2e:
     needs: check
+
     strategy:
       matrix:
-        os: [ubuntu-latest]
-      fail-fast: true
-    name: 🌲 Tutorial E2E / ${{ matrix.os }} / node 18 latest
-    runs-on: ${{ matrix.os }}
+        bundler: [vite, webpack]
+
+    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 18 latest
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
@@ -153,7 +155,10 @@ jobs:
           echo "::set-output name=framework_path::$framework_path"
 
       - name: 🌲 Create a Redwood App
-        run: ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} --no-start
+        run: |
+          ./tasks/run-e2e ${{ steps.createpath.outputs.project_path }} \
+            --no-start \
+            --bundler ${{ matrix.bundler }}
         env:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
