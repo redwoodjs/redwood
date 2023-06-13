@@ -72,6 +72,13 @@ module.exports = {
       },
     },
     {
+      files: ['api/src/services/**/*.ts'],
+      plugins: ['@redwoodjs/eslint-plugin-redwood'],
+      rules: {
+        '@redwoodjs/redwood/service-type-annotations': 'off',
+      },
+    },
+    {
       files: ['api/db/seed.js', 'scripts/**'],
       env: {
         node: true,

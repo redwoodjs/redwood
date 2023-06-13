@@ -1,0 +1,12 @@
+{
+  "name": "@redwoodjs/eslint-plugin-redwood",
+  "version": "5.0.0",
+  "description": "eslint plugin for Redwood rules.",
+  "main": "index.js",
+  "repository": "https://github.com/redwoodjs/redwood",
+  "license": "MIT",
+  "dependencies": {
+    "@typescript-eslint/type-utils": "*"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}
