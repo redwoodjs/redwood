@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import chalk from 'chalk'
 import { Listr } from 'listr2'
 
 import { addWebPackages } from '@redwoodjs/cli-helpers'
