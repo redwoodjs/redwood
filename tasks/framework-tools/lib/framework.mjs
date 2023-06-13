@@ -21,6 +21,8 @@ export const REDWOOD_PACKAGES_PATH = path.join(
 const IGNORE_PACKAGES = ['@redwoodjs/codemods', 'create-redwood-app']
 
 /**
+ * Get the names, locations, and absolute package.json file paths of all the packages we publish to NPM.
+ *
  * @returns {{ location: string, name: string, packageJsonPath: string }[]}
  */
 function getFrameworkPackagesData() {
@@ -49,13 +51,7 @@ function getFrameworkPackagesData() {
 }
 
 /**
- * Returns a list of the `@redwoodjs` package.json files that are published to npm
- * and installed into a Redwood Project.
- *
- * The reason there's more logic here than seems necessary is because we have package.json files
- * like packages/web/toast/package.json that aren't real packages, but just entry points.
- *
- * @returns {string[]} A list of package.json file paths.
+ * @returns {string[]} A list of absolute package.json file paths.
  */
 export function getFrameworkPackageJsonPaths() {
   return getFrameworkPackagesData().map(
@@ -99,8 +95,8 @@ export function getFrameworkDependencies(
 }
 
 /**
- * The files included in `@redwoodjs` packages.
- * Note: The packages must be built.
+ * The files included in all the `@redwoodjs` packages.
+ * The packages must be built for this to work.
  *
  * @returns {Promise<{ [key: string]: string[] }>} A map of package names to files.
  */
