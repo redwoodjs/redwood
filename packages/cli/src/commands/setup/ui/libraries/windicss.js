@@ -22,7 +22,6 @@ export const notes = [
   '',
   'Windi CSS is sunsetting. For more information:',
   'https://windicss.org/posts/sunsetting.html',
-  '',
 ]
 
 export const builder = (yargs) => {
