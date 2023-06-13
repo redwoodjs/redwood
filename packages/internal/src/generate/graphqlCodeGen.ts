@@ -252,7 +252,7 @@ function getPluginConfig(side: CodegenSide) {
       // Look at type or source https://shrtm.nu/2BA0 for possible config, not well documented
       resolvers: true,
     },
-    contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
+    contextType: `@redwoodjs/graphql-server/dist/types#RedwoodGraphQLContext`,
   }
 
   return pluginConfig
