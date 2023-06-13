@@ -1,4 +1,4 @@
-import { defaultLoggerOptions } from '@redwoodjs/api/src/logger'
+import { defaultLoggerOptions } from '@redwoodjs/api/logger'
 
 // Can't use color in the createLogger logger - so use a simpler set of log fns
 const logLevel = defaultLoggerOptions.level
@@ -12,7 +12,7 @@ export const cliLogger: CLog & {
   trace: CLog
   debug: CLog
 } = function (...data: any[]) {
-  console.log(data)
+  console.log(...data)
 }
 
 cliLogger.trace =
