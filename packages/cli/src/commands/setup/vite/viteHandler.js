@@ -58,7 +58,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: 'Creating new entry point in `web/src/entry.client.jsx`...',
+        title: 'Creating new entry point in `web/src/entry.client.{jt}sx`...',
         task: () => {
           const entryPointFile = path.join(
             getPaths().web.src,
@@ -82,8 +82,9 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        ...addWebPackages([`@redwoodjs/vite@${version}`]),
-        title: 'Adding @redwoodjs/vite dependency...',
+        // @NOTE: make sure its added as a dev package.
+        ...addWebPackages(['-D', `@redwoodjs/vite@${version}`]),
+        title: 'Adding @redwoodjs/vite dev dependency to web side...',
         skip: () => {
           if (!addPackage) {
             return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dev-dependency on the web workspace'
