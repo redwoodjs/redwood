@@ -20,17 +20,6 @@ import { lambdaEventForFastifyRequest as transformToRedwoodGraphQLContextEvent }
 /**
  * Redwood GraphQL Server Fastify plugin based on GraphQL Yoga
  *
- * Important: Need to set DISABLE_CONTEXT_ISOLATION = 1 in environment variables
- * so that global context is populated correctly and features such as authentication
- * works properly.
- *
- * It is critical to set shouldUseLocalStorageContext correctly so that the `setContext` function
- * in the `useRedwoodPopulateContext` plugin sets the global context correctly with any
- * extended GraphQL context as is done with `useRedwoodAuthContext` that sets
- * the `currentUser` in the context when used to authenticate a user.
- *
- * See: packages/graphql-server/src/globalContext.ts
- *
  * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
  * @param {GraphQLYogaOptions} options GraphQLYogaOptions options used to configure the GraphQL Yoga Server
  */
