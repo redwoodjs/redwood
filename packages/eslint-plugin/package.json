@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/eslint-plugin-redwood",
+  "name": "@redwoodjs/eslint-plugin",
   "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/eslint-plugins/process-env-computed"
+    "directory": "packages/eslint-plugin"
   },
   "license": "MIT",
   "main": "src/index.js",
