@@ -48,7 +48,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['web/src/Routes.js', 'web/src/Routes.tsx'],
+      files: ['web/src/Routes.js', 'web/src/Routes.jsx', 'web/src/Routes.tsx'],
       rules: {
         'no-undef': 'off',
         'jsx-a11y/aria-role': [

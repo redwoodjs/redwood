@@ -2598,18 +2598,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/backend@npm:^0.21.0":
-  version: 0.21.0
-  resolution: "@clerk/backend@npm:0.21.0"
+"@clerk/backend@npm:^0.23.0":
+  version: 0.23.0
+  resolution: "@clerk/backend@npm:0.23.0"
   dependencies:
-    "@clerk/types": ^3.41.0
+    "@clerk/types": ^3.42.0
     "@peculiar/webcrypto": 1.4.1
     "@types/node": 16.18.6
     deepmerge: 4.2.2
     node-fetch-native: 1.0.1
     snakecase-keys: 5.4.4
     tslib: 2.4.1
-  checksum: 4347c32962318d79c69c6f11123fa28802c8c9be4d345ae90c8544f2113ec6331d3e2c954bb2688a33b957fb0c744531d88db743e9c59004bedb5dd5fff23ec1
+  checksum: 928b3000b9fb3221caf1208c6f2e9247a00cc124bc979345e3b315042f293375dc9f671e7c810f946f82e49559611275bf8185a17261663589a3a699ef0ad3a4
   languageName: node
   linkType: hard
 
@@ -2627,12 +2627,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-sdk-node@npm:4.10.3":
-  version: 4.10.3
-  resolution: "@clerk/clerk-sdk-node@npm:4.10.3"
+"@clerk/clerk-sdk-node@npm:4.10.6":
+  version: 4.10.6
+  resolution: "@clerk/clerk-sdk-node@npm:4.10.6"
   dependencies:
-    "@clerk/backend": ^0.21.0
-    "@clerk/types": ^3.41.0
+    "@clerk/backend": ^0.23.0
+    "@clerk/types": ^3.42.0
     "@types/cookies": 0.7.7
     "@types/express": 4.17.14
     "@types/node-fetch": 2.6.2
@@ -2640,7 +2640,7 @@ __metadata:
     cookie: 0.5.0
     snakecase-keys: 3.2.1
     tslib: 2.4.1
-  checksum: 9fb9970725b8c569abc322de0dd18ea02c2d2b8206890a9482685c72a80e0d16dc32a5fce9b00f88c0a1f199fc7f67a281a1693017b8b0fe31ccf992948e09ca
+  checksum: 084054afa79c36b165bab48ffc7cb0a16afb3857351075d206fd6f7372fee55af613c8cc89573602b730fa0b050c35b3cdd7290ec23afc3f0cda7c00fe00374a
   languageName: node
   linkType: hard
 
@@ -2655,7 +2655,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.42.0, @clerk/types@npm:^3.41.0":
+"@clerk/types@npm:3.42.0, @clerk/types@npm:^3.41.0, @clerk/types@npm:^3.42.0":
   version: 3.42.0
   resolution: "@clerk/types@npm:3.42.0"
   dependencies:
@@ -6920,7 +6920,7 @@ __metadata:
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.0.0
     "@types/aws-lambda": 8.10.117
-    "@types/lodash.escape": 4.0.7
+    "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     "@types/split2": 4.2.0
     "@types/yargs": 17.0.24
@@ -6934,7 +6934,7 @@ __metadata:
     fastify: 4.17.0
     fastify-raw-body: 4.2.0
     jest: 29.5.0
-    lodash.escape: 4.0.1
+    lodash: 4.17.21
     pretty-bytes: 5.6.0
     pretty-ms: 7.0.1
     qs: 6.11.2
@@ -6961,7 +6961,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 4.2.0
-    "@whatwg-node/fetch": 0.9.4
+    "@whatwg-node/fetch": 0.9.6
     core-js: 3.30.2
     humanize-string: 2.1.0
     jest: 29.5.0
@@ -7101,7 +7101,7 @@ __metadata:
     "@babel/cli": 7.21.5
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
-    "@clerk/clerk-sdk-node": 4.10.3
+    "@clerk/clerk-sdk-node": 4.10.6
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.117
     core-js: 3.30.2
@@ -7451,7 +7451,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.22.3
     "@redwoodjs/project-config": 5.0.0
     "@redwoodjs/telemetry": 5.0.0
-    "@types/lodash.memoize": 4.1.7
+    "@types/lodash": 4.14.195
     "@types/pascalcase": 1.0.1
     "@types/yargs": 17.0.24
     chalk: 4.1.2
@@ -7459,7 +7459,7 @@ __metadata:
     execa: 5.1.1
     jest: 29.5.0
     listr2: 6.6.0
-    lodash.memoize: 4.1.2
+    lodash: 4.17.21
     pascalcase: 1.0.0
     prettier: 2.8.8
     prompts: 2.4.2
@@ -7478,13 +7478,14 @@ __metadata:
     "@storybook/addon-docs": 7.0.20
     "@storybook/addon-essentials": 7.0.20
     "@storybook/react-webpack5": 7.0.20
+    "@types/lodash": 4.14.195
     "@types/yargs": 17.0.24
     chalk: 4.1.2
     esbuild: 0.17.19
     execa: 5.1.1
     fast-glob: 3.2.12
     jest: 29.5.0
-    lodash.memoize: 4.1.2
+    lodash: 4.17.21
     storybook: 7.0.20
     terminal-link: 2.1.1
     typescript: 5.1.3
@@ -7573,7 +7574,7 @@ __metadata:
     "@types/prettier": 2.7.3
     "@types/yargs": 17.0.24
     "@vscode/ripgrep": 1.15.4
-    "@whatwg-node/fetch": 0.9.4
+    "@whatwg-node/fetch": 0.9.6
     cheerio: 1.0.0-rc.12
     core-js: 3.30.2
     deepmerge: 4.3.1
@@ -7616,6 +7617,7 @@ __metadata:
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     "@redwoodjs/testing": 5.0.0
+    "@types/lodash": 4.14.195
     babel-loader: 9.1.2
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -7633,7 +7635,7 @@ __metadata:
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.1
     jest: 29.5.0
-    lodash.escaperegexp: 4.1.2
+    lodash: 4.17.21
     mini-css-extract-plugin: 2.7.6
     nodemon: 2.0.22
     null-loader: 4.0.1
@@ -7703,14 +7705,14 @@ __metadata:
     "@redwoodjs/graphql-server": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     "@types/aws-lambda": 8.10.117
-    "@types/lodash.escape": 4.0.7
+    "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     ansi-colors: 4.1.3
     esbuild: 0.17.19
     fast-glob: 3.2.12
     fastify: 4.17.0
     fastify-raw-body: 4.2.0
-    lodash.escape: 4.0.1
+    lodash: 4.17.21
     qs: 6.11.2
     typescript: 5.1.3
   languageName: unknown
@@ -7772,10 +7774,9 @@ __metadata:
     "@redwoodjs/api": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     "@types/jsonwebtoken": 9.0.2
-    "@types/lodash.merge": 4.6.7
-    "@types/lodash.omitby": 4.6.7
+    "@types/lodash": 4.14.195
     "@types/uuid": 9.0.2
-    "@whatwg-node/fetch": 0.9.4
+    "@whatwg-node/fetch": 0.9.6
     aws-lambda: 1.0.7
     core-js: 3.30.2
     graphql: 16.6.0
@@ -7784,8 +7785,7 @@ __metadata:
     graphql-yoga: 3.9.1
     jest: 29.5.0
     jsonwebtoken: 9.0.0
-    lodash.merge: 4.6.2
-    lodash.omitby: 4.6.0
+    lodash: 4.17.21
     typescript: 5.1.3
     uuid: 9.0.0
   languageName: unknown
@@ -7857,7 +7857,7 @@ __metadata:
     "@redwoodjs/structure": 5.0.0
     "@redwoodjs/web": 5.0.0
     "@types/mime-types": 2.1.1
-    "@whatwg-node/fetch": 0.9.4
+    "@whatwg-node/fetch": 0.9.6
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 11.0.4
     cheerio: 1.0.0-rc.12
@@ -7981,7 +7981,7 @@ __metadata:
     "@types/aws-lambda": 8.10.117
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 9.0.2
-    "@types/lodash.escape": 4.0.7
+    "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     "@types/split2": 4.2.0
     "@types/uuid": 9.0.2
@@ -8000,7 +8000,7 @@ __metadata:
     graphql-yoga: 3.9.1
     jest: 29.5.0
     jsonwebtoken: 9.0.0
-    lodash.escape: 4.0.1
+    lodash: 4.17.21
     pretty-bytes: 5.6.0
     qs: 6.11.2
     split2: 4.2.0
@@ -8024,7 +8024,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.2
     "@types/yargs": 17.0.24
-    "@whatwg-node/fetch": 0.9.4
+    "@whatwg-node/fetch": 0.9.6
     ci-info: 3.8.0
     core-js: 3.30.2
     envinfo: 7.8.1
@@ -8159,67 +8159,6 @@ __metadata:
   version: 3.0.4
   resolution: "@repeaterjs/repeater@npm:3.0.4"
   checksum: 9a2928d70f2be4a8f72857f8f7553810015ac970f174b4b20f07289644379af57fa68947601d67e557c1a7c33ddf805e787cf2a1d5e9037ba485d24075a81b6b
-  languageName: node
-  linkType: hard
-
-"@replayio/playwright@npm:0.3.31":
-  version: 0.3.31
-  resolution: "@replayio/playwright@npm:0.3.31"
-  dependencies:
-    "@replayio/replay": ^0.12.11
-    "@replayio/test-utils": ^0.5.10
-    uuid: ^8.3.2
-  peerDependencies:
-    "@playwright/test": 1.19.x
-  bin:
-    replayio-playwright: bin/replayio-playwright.js
-  checksum: 80a04eb3d8cb39367ea31c81ed0e67a761510ef05905bcc2c6aab3f35a4aa1a40e51c2bd0a230b5d1be02ee0310a05d79a2aeee2a4ecca72190517d2eb67a0ba
-  languageName: node
-  linkType: hard
-
-"@replayio/replay@npm:^0.12.11":
-  version: 0.12.11
-  resolution: "@replayio/replay@npm:0.12.11"
-  dependencies:
-    "@replayio/sourcemap-upload": ^1.0.7
-    commander: ^7.2.0
-    debug: ^4.3.4
-    is-uuid: ^1.0.2
-    jsonata: ^1.8.6
-    node-fetch: ^2.6.8
-    p-map: ^4.0.0
-    superstruct: ^0.15.4
-    text-table: ^0.2.0
-    ws: ^7.5.0
-  bin:
-    replay: bin/replay.js
-  checksum: 6314b4d193a86d7e4fd973304dff81dd979939a03e28f6d1e911982913521ae781682ebcc2d1da83734746d6960eb3a9363217a63cec3fa6c09218448e33cc4b
-  languageName: node
-  linkType: hard
-
-"@replayio/sourcemap-upload@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "@replayio/sourcemap-upload@npm:1.0.7"
-  dependencies:
-    commander: ^7.2.0
-    debug: ^4.3.1
-    glob: ^7.1.6
-    node-fetch: ^2.6.1
-    string.prototype.matchall: ^4.0.5
-  checksum: 861b4089d934c1d63147b1af8db42ec60a1e5582025f38bf3d37eba3517eb1e04be381fd6a15930896ebc14252dcb1c6f56b0181749978fd5c98b4340030fe7c
-  languageName: node
-  linkType: hard
-
-"@replayio/test-utils@npm:^0.5.10":
-  version: 0.5.10
-  resolution: "@replayio/test-utils@npm:0.5.10"
-  dependencies:
-    "@replayio/replay": ^0.12.11
-    "@types/node-fetch": ^2.6.2
-    debug: ^4.3.4
-    node-fetch: ^2.6.7
-    uuid: ^8.3.2
-  checksum: 40872d499d6f82c9c756cf615e9c1c6ef099ef5e5b8170dffc278f03058f67380875b0f74c94610338a1b1aeec7f712363ab6b078e2e4d7425a879fbeb77284b
   languageName: node
   linkType: hard
 
@@ -10083,52 +10022,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.escape@npm:4.0.7":
-  version: 4.0.7
-  resolution: "@types/lodash.escape@npm:4.0.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: cc980619559a3e67f40d078e76da67d110eecec7f774987bf595349e4642ce3110ec61a787a98ab89ea6d5c9dc5b1b16b47ceb878e678e3b7dc30e5d6b22fc97
-  languageName: node
-  linkType: hard
-
-"@types/lodash.memoize@npm:4.1.7":
-  version: 4.1.7
-  resolution: "@types/lodash.memoize@npm:4.1.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 979a59dbbae968a03834fdb544dc5ddd34620a2912d5030c997a1aa919326425a900c93bc69554b2a873cf54f09b4dd2752b3a1c29ab4bffac5983113c58b1b5
-  languageName: node
-  linkType: hard
-
-"@types/lodash.merge@npm:4.6.7":
-  version: 4.6.7
-  resolution: "@types/lodash.merge@npm:4.6.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 38e7bb0926e3be19dc27bb62118519d3a10d1e890e83c5916418b16fb390d892c75c36b5cb434c51835d88425475b02fc3b46111d01c85fcc4340d7c84d4e8c9
-  languageName: node
-  linkType: hard
-
-"@types/lodash.omitby@npm:4.6.7":
-  version: 4.6.7
-  resolution: "@types/lodash.omitby@npm:4.6.7"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 18d7f820b529f62def3bec2fb979b59ad2f390a20f4268131b4a045a2f1c3b7b3b4b4ba8eb3c2bdb0df881193b39756368eedac33081b39a88597e938808dbac
-  languageName: node
-  linkType: hard
-
-"@types/lodash.template@npm:4.5.1":
-  version: 4.5.1
-  resolution: "@types/lodash.template@npm:4.5.1"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: b9f094d9620b8c3a711810c72668962693b89313405474dac0067f90be4b003b34b3768318f02f20ad0c55bbff023c370e5b59462f0e0aa00e2dde586f1a92c1
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*, @types/lodash@npm:4.14.195, @types/lodash@npm:^4.14.167":
+"@types/lodash@npm:4.14.195, @types/lodash@npm:^4.14.167":
   version: 4.14.195
   resolution: "@types/lodash@npm:4.14.195"
   checksum: 6d733276df592614a0943a0053056140398b3c263cdf2557d4301b3a47b07ff561926cb9339a4725acbc7d8766f91ded218df11e0a4288cee369eafb5141d94d
@@ -10247,7 +10141,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:^2.5.0, @types/node-fetch@npm:^2.5.7, @types/node-fetch@npm:^2.6.1, @types/node-fetch@npm:^2.6.2":
+"@types/node-fetch@npm:^2.5.0, @types/node-fetch@npm:^2.5.7, @types/node-fetch@npm:^2.6.1":
   version: 2.6.4
   resolution: "@types/node-fetch@npm:2.6.4"
   dependencies:
@@ -11172,13 +11066,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.4":
-  version: 0.9.4
-  resolution: "@whatwg-node/fetch@npm:0.9.4"
+"@whatwg-node/fetch@npm:0.9.6":
+  version: 0.9.6
+  resolution: "@whatwg-node/fetch@npm:0.9.6"
   dependencies:
-    "@whatwg-node/node-fetch": ^0.4.3
+    "@whatwg-node/node-fetch": ^0.4.5
     urlpattern-polyfill: ^9.0.0
-  checksum: 1def15a28453fcd7a54ccf1a188f2e47ed77007ce30296a9ef8584283a0d3bee706ee16df6ba9ceb2f0b00e22e69f49d2bbcefcd998582ebc1d8b3f7ba73e065
+  checksum: f383954ece5ab00a233368d77eaa40844e0889e65bca75fed215b928cf001b79dd35e5cba32c95b90f09402c36997a2e6c203a49be99ab4d211817d5fada389b
   languageName: node
   linkType: hard
 
@@ -11208,16 +11102,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/node-fetch@npm:^0.4.3":
-  version: 0.4.3
-  resolution: "@whatwg-node/node-fetch@npm:0.4.3"
+"@whatwg-node/node-fetch@npm:^0.4.5":
+  version: 0.4.5
+  resolution: "@whatwg-node/node-fetch@npm:0.4.5"
   dependencies:
     "@whatwg-node/events": ^0.1.0
     busboy: ^1.6.0
     fast-querystring: ^1.1.1
     fast-url-parser: ^1.1.3
     tslib: ^2.3.1
-  checksum: d66f53178d863b66382b45ba5c94e9d2e3d2a39be2bfd12c5fab98df101c9c3a0df63dd13e8816423e7b9e3fe02a84b2bc81366a13e7fe446edc406070ed4057
+  checksum: 5767a5650e1ac435cfff9bb54acd673068d964f5bab9ee78cdb9f4f5558f1ecd8e29f2ae8e9744194f309e36dac59db9b729f51d86f312b8523b8d9c62bc0a8d
   languageName: node
   linkType: hard
 
@@ -20513,13 +20407,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-uuid@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "is-uuid@npm:1.0.2"
-  checksum: 9e39508b97c724668da7011f77c2f53485784b84a7b9c54fadb6369ebff236caf1912324e3390d0a0495fcddf5f19caa7a55e6cdd0f5b528a1e3210d51d8bd54
-  languageName: node
-  linkType: hard
-
 "is-weakmap@npm:^2.0.1":
   version: 2.0.1
   resolution: "is-weakmap@npm:2.0.1"
@@ -21561,13 +21448,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonata@npm:^1.8.6":
-  version: 1.8.6
-  resolution: "jsonata@npm:1.8.6"
-  checksum: 27577a8fbc80063a468d06f2b3cfd96685aac3cf1ad8c4aeb1d12b0c9bdcb2d9a21a39ed4f69e2ef1d3853dddd45a27bdec9173fc4efccdbb42296b3b3db890b
-  languageName: node
-  linkType: hard
-
 "jsonc-parser@npm:3.2.0":
   version: 3.2.0
   resolution: "jsonc-parser@npm:3.2.0"
@@ -22243,13 +22123,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash._reinterpolate@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "lodash._reinterpolate@npm:3.0.0"
-  checksum: cdf592374b5e9eb6d6290a9a07c7d90f6e632cca4949da2a26ae9897ab13f138f3294fd5e81de3e5d997717f6e26c06747a9ad3413c043fd36c0d87504d97da6
-  languageName: node
-  linkType: hard
-
 "lodash.camelcase@npm:^4.3.0":
   version: 4.3.0
   resolution: "lodash.camelcase@npm:4.3.0"
@@ -22289,20 +22162,6 @@ __metadata:
   version: 4.5.0
   resolution: "lodash.difference@npm:4.5.0"
   checksum: 5d52859218a7df427547ff1fadbc397879709fe6c788b037df7d6d92b676122c92bd35ec85d364edb596b65dfc6573132f420c9b4ee22bb6b9600cd454c90637
-  languageName: node
-  linkType: hard
-
-"lodash.escape@npm:4.0.1":
-  version: 4.0.1
-  resolution: "lodash.escape@npm:4.0.1"
-  checksum: 90ade409cec05b6869090476952fdfb84d4d87b1ff4a0e03ebd590f980d9a1248d93ba14579f10d80c6429e4d6af13ba137c28db64cae6dadb71442e54a3ad2b
-  languageName: node
-  linkType: hard
-
-"lodash.escaperegexp@npm:4.1.2":
-  version: 4.1.2
-  resolution: "lodash.escaperegexp@npm:4.1.2"
-  checksum: 484ad4067fa9119bb0f7c19a36ab143d0173a081314993fe977bd00cf2a3c6a487ce417a10f6bac598d968364f992153315f0dbe25c9e38e3eb7581dd333e087
   languageName: node
   linkType: hard
 
@@ -22362,7 +22221,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:4.1.2, lodash.memoize@npm:^4.1.2":
+"lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
   checksum: c8713e51eccc650422716a14cece1809cfe34bc5ab5e242b7f8b4e2241c2483697b971a604252807689b9dd69bfe3a98852e19a5b89d506b000b4187a1285df8
@@ -22383,13 +22242,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.omitby@npm:4.6.0":
-  version: 4.6.0
-  resolution: "lodash.omitby@npm:4.6.0"
-  checksum: 4608b1d8c4063b63349a3462852465fbe74781d737fbb26a0a7f00b0e65f6ccbc13fa490a38f9380103d93fc398e3873983038efadfafc67ccafbb25d9bc7bf4
-  languageName: node
-  linkType: hard
-
 "lodash.once@npm:^4.0.0, lodash.once@npm:^4.1.1":
   version: 4.1.1
   resolution: "lodash.once@npm:4.1.1"
@@ -22401,25 +22253,6 @@ __metadata:
   version: 4.7.0
   resolution: "lodash.sortby@npm:4.7.0"
   checksum: fc48fb54ff7669f33bb32997cab9460757ee99fafaf72400b261c3e10fde21538e47d8cfcbe6a25a31bcb5b7b727c27d52626386fc2de24eb059a6d64a89cdf5
-  languageName: node
-  linkType: hard
-
-"lodash.template@npm:4.5.0":
-  version: 4.5.0
-  resolution: "lodash.template@npm:4.5.0"
-  dependencies:
-    lodash._reinterpolate: ^3.0.0
-    lodash.templatesettings: ^4.0.0
-  checksum: 62a02b397f72542fa9a989d9fc1a94fc1cb94ced8009fa5c37956746c0cf460279e844126c2abfbf7e235fe27e8b7ee8e6efbf6eac247a06aa05b05457fda817
-  languageName: node
-  linkType: hard
-
-"lodash.templatesettings@npm:^4.0.0":
-  version: 4.2.0
-  resolution: "lodash.templatesettings@npm:4.2.0"
-  dependencies:
-    lodash._reinterpolate: ^3.0.0
-  checksum: 2609fea36ed061114dfed701666540efc978b069b2106cd819b415759ed281419893d40f85825240197f1a38a98e846f2452e2d31c6d5ccee1e006c9de820622
   languageName: node
   linkType: hard
 
@@ -23721,7 +23554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.11, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.11, node-fetch@npm:^2.6.7, node-fetch@npm:^2.6.8":
+"node-fetch@npm:2.6.11, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.11, node-fetch@npm:^2.6.7":
   version: 2.6.11
   resolution: "node-fetch@npm:2.6.11"
   dependencies:
@@ -27658,7 +27491,6 @@ __metadata:
     "@faker-js/faker": 8.0.2
     "@npmcli/arborist": 6.2.9
     "@playwright/test": 1.34.3
-    "@replayio/playwright": 0.3.31
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
@@ -27667,7 +27499,6 @@ __metadata:
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.2
     "@types/jscodeshift": 0.11.6
-    "@types/lodash.template": 4.5.1
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.4
     all-contributors-cli: 6.26.0
@@ -27687,7 +27518,6 @@ __metadata:
     jscodeshift: 0.15.0
     lerna: 6.6.2
     listr2: 6.6.0
-    lodash.template: 4.5.0
     make-dir-cli: 3.0.0
     msw: 1.2.1
     ncp: 2.0.0
@@ -29013,7 +28843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string.prototype.matchall@npm:^4.0.5, string.prototype.matchall@npm:^4.0.8":
+"string.prototype.matchall@npm:^4.0.8":
   version: 4.0.8
   resolution: "string.prototype.matchall@npm:4.0.8"
   dependencies:
@@ -29189,13 +29019,6 @@ __metadata:
   peerDependencies:
     postcss: ^8.2.15
   checksum: 6ce277c816dd826fdc765258d612a160bad03dae52ab51ef1676efae07e96923ebeb6880d6522eefc50d2e81cb90b632615120c73aed190f345e8d836def67b6
-  languageName: node
-  linkType: hard
-
-"superstruct@npm:^0.15.4":
-  version: 0.15.5
-  resolution: "superstruct@npm:0.15.5"
-  checksum: 73ae2043443dcc7868da6e8b4e4895410c79a88e021b514c665161199675ee920d5eadd85bb9dee5a9f515817e62f4b65a67ccb82d29f73259d012afcbcd3ce4
   languageName: node
   linkType: hard
 
@@ -31787,7 +31610,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^7.3.1, ws@npm:^7.5.0":
+"ws@npm:^7.3.1":
   version: 7.5.9
   resolution: "ws@npm:7.5.9"
   peerDependencies:

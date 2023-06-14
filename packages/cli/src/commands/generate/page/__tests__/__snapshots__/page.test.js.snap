@@ -11,7 +11,7 @@ const CatsPage = () => {
 
       <h1>CatsPage</h1>
       <p>
-        Find me in <code>./web/src/pages/CatsPage/CatsPage.js</code>
+        Find me in <code>./web/src/pages/CatsPage/CatsPage.jsx</code>
       </p>
       <p>
         My default route is named <code>cats</code>, link to me with \`
@@ -36,7 +36,7 @@ const HomePage = () => {
 
       <h1>HomePage</h1>
       <p>
-        Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
+        Find me in <code>./web/src/pages/HomePage/HomePage.jsx</code>
       </p>
       <p>
         My default route is named <code>home</code>, link to me with \`
@@ -222,7 +222,7 @@ export default {
   component: HomePage,
 }
 ",
-  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.stories.js",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.stories.jsx",
 }
 `;
 
@@ -243,7 +243,7 @@ describe('HomePage', () => {
   })
 })
 ",
-  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.test.js",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.test.jsx",
 }
 `;
 
@@ -259,7 +259,7 @@ const HomePage = () => {
 
       <h1>HomePage</h1>
       <p>
-        Find me in <code>./web/src/pages/HomePage/HomePage.js</code>
+        Find me in <code>./web/src/pages/HomePage/HomePage.jsx</code>
       </p>
       <p>
         My default route is named <code>home</code>, link to me with \`
@@ -271,7 +271,7 @@ const HomePage = () => {
 
 export default HomePage
 ",
-  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.js",
+  "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.jsx",
 }
 `;
 
@@ -307,7 +307,7 @@ export default {
   component: PostPage,
 }
 ",
-  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.stories.js",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.stories.jsx",
 }
 `;
 
@@ -328,7 +328,7 @@ describe('PostPage', () => {
   })
 })
 ",
-  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.test.js",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.test.jsx",
 }
 `;
 
@@ -344,7 +344,7 @@ const PostPage = ({ id }) => {
 
       <h1>PostPage</h1>
       <p>
-        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
+        Find me in <code>./web/src/pages/PostPage/PostPage.jsx</code>
       </p>
       <p>
         My default route is named <code>post</code>, link to me with \`
@@ -357,7 +357,7 @@ const PostPage = ({ id }) => {
 
 export default PostPage
 ",
-  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.js",
+  "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.jsx",
 }
 `;
 
@@ -391,7 +391,7 @@ const ContactUsPage = () => {
 
       <h1>ContactUsPage</h1>
       <p>
-        Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.js</code>
+        Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.jsx</code>
       </p>
       <p>
         My default route is named <code>contactUs</code>, link to me with \`
@@ -448,7 +448,7 @@ const PostPage = ({ id }) => {
 
       <h1>PostPage</h1>
       <p>
-        Find me in <code>./web/src/pages/PostPage/PostPage.js</code>
+        Find me in <code>./web/src/pages/PostPage/PostPage.jsx</code>
       </p>
       <p>
         My default route is named <code>post</code>, link to me with \`

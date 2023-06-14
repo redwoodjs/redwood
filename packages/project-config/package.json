@@ -17,7 +17,7 @@
   "scripts": {
     "build": "yarn node ./build.mjs && run build:types",
     "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "deps:dist": "depcruise dist --output-type dot | dot -T svg > dependency-graph-dist.svg",
     "deps:src": "depcruise src --exclude \"^src/__tests__\" --output-type dot | dot -T svg > dependency-graph-src.svg",
     "prepublishOnly": "NODE_ENV=production yarn build",

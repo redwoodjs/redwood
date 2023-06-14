@@ -67,7 +67,7 @@ test('keeps Component in name', () => {
 test('creates a single word component', () => {
   expect(
     singleWordDefaultFiles[
-      path.normalize('/path/to/project/web/src/components/User/User.js')
+      path.normalize('/path/to/project/web/src/components/User/User.jsx')
     ]
   ).toMatchSnapshot()
 })
@@ -75,7 +75,7 @@ test('creates a single word component', () => {
 test('creates a single word component test', () => {
   expect(
     singleWordDefaultFiles[
-      path.normalize('/path/to/project/web/src/components/User/User.test.js')
+      path.normalize('/path/to/project/web/src/components/User/User.test.jsx')
     ]
   ).toMatchSnapshot()
 })
@@ -83,7 +83,9 @@ test('creates a single word component test', () => {
 test('creates a single word component story', () => {
   expect(
     singleWordDefaultFiles[
-      path.normalize('/path/to/project/web/src/components/User/User.stories.js')
+      path.normalize(
+        '/path/to/project/web/src/components/User/User.stories.jsx'
+      )
     ]
   ).toMatchSnapshot()
 })
@@ -92,7 +94,7 @@ test('creates a multi word component', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/components/UserProfile/UserProfile.js'
+        '/path/to/project/web/src/components/UserProfile/UserProfile.jsx'
       )
     ]
   ).toMatchSnapshot()
@@ -119,7 +121,7 @@ test('creates a multi word component test', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/components/UserProfile/UserProfile.test.js'
+        '/path/to/project/web/src/components/UserProfile/UserProfile.test.jsx'
       )
     ]
   ).toMatchSnapshot()
@@ -129,7 +131,7 @@ test('creates a multi word component story', () => {
   expect(
     multiWordDefaultFiles[
       path.normalize(
-        '/path/to/project/web/src/components/UserProfile/UserProfile.stories.js'
+        '/path/to/project/web/src/components/UserProfile/UserProfile.stories.jsx'
       )
     ]
   ).toMatchSnapshot()
@@ -139,14 +141,14 @@ test('creates JS component files if typescript = false', () => {
   expect(
     javascriptFiles[
       path.normalize(
-        '/path/to/project/web/src/components/JavascriptUser/JavascriptUser.js'
+        '/path/to/project/web/src/components/JavascriptUser/JavascriptUser.jsx'
       )
     ]
   ).not.toBeUndefined()
   expect(
     javascriptFiles[
       path.normalize(
-        '/path/to/project/web/src/components/JavascriptUser/JavascriptUser.test.js'
+        '/path/to/project/web/src/components/JavascriptUser/JavascriptUser.test.jsx'
       )
     ]
   ).not.toBeUndefined()
@@ -172,10 +174,10 @@ test('creates TS component files if typescript = true', () => {
 test("doesn't include storybook file when --stories is set to false", () => {
   expect(Object.keys(withoutStoryFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/components/WithoutStories/WithoutStories.test.js'
+      '/path/to/project/web/src/components/WithoutStories/WithoutStories.test.jsx'
     ),
     path.normalize(
-      '/path/to/project/web/src/components/WithoutStories/WithoutStories.js'
+      '/path/to/project/web/src/components/WithoutStories/WithoutStories.jsx'
     ),
   ])
 })
@@ -183,10 +185,10 @@ test("doesn't include storybook file when --stories is set to false", () => {
 test("doesn't include test file when --tests is set to false", () => {
   expect(Object.keys(withoutTestFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/components/WithoutTests/WithoutTests.stories.js'
+      '/path/to/project/web/src/components/WithoutTests/WithoutTests.stories.jsx'
     ),
     path.normalize(
-      '/path/to/project/web/src/components/WithoutTests/WithoutTests.js'
+      '/path/to/project/web/src/components/WithoutTests/WithoutTests.jsx'
     ),
   ])
 })

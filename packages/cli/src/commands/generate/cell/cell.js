@@ -25,11 +25,7 @@ import {
 const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-export const files = async ({
-  name,
-  typescript: generateTypescript,
-  ...options
-}) => {
+export const files = async ({ name, typescript, ...options }) => {
   let cellName = removeGeneratorName(name, 'cell')
   let idType,
     mockIdValues = [42, 43, 44],
@@ -78,10 +74,11 @@ export const files = async ({
     })
   }
 
+  const extension = typescript ? '.tsx' : '.jsx'
   const cellFile = templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.tsx' : '.js',
+    extension,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: `cell${templateNameSuffix}.tsx.template`,
@@ -94,7 +91,7 @@ export const files = async ({
   const testFile = templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.test.tsx' : '.test.js',
+    extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'test.js.template',
@@ -103,7 +100,7 @@ export const files = async ({
   const storiesFile = templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.stories.tsx' : '.stories.js',
+    extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'stories.js.template',
@@ -112,7 +109,7 @@ export const files = async ({
   const mockFile = templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.mock.ts' : '.mock.js',
+    extension: typescript ? '.mock.ts' : '.mock.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: `mock${templateNameSuffix}.js.template`,
@@ -141,9 +138,7 @@ export const files = async ({
   //    "path/to/fileB": "<<<template>>>",
   // }
   return files.reduce((acc, [outputPath, content]) => {
-    const template = generateTypescript
-      ? content
-      : transformTSToJS(outputPath, content)
+    const template = typescript ? content : transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
