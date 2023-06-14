@@ -57,7 +57,7 @@ You can create a Redwood Project that contains a lot of functionality in just a 
 
 1. installs using the `create-redwood-app` template in the current branch of your Redwood Framework
 2. with the current `canary` version of Redwood Packages (with the option to use the `latest` stable version)
-3. with a JavaScript language target (with the option for TypeScript)
+3. with a TypeScript language target (with the option for JavaScript)
 4. then applies code mods from the [Redwood tutorial](https://redwoodjs.com/tutorial) to add functionality and styling
 5. and initializes a Prisma DB migration for SQLite
 
@@ -68,7 +68,7 @@ Run `yarn run build:test-project <project path>` from the root of your local cop
 > | Arguments & Options   | Description                                                                           |
 > |-----------------------|---------------------------------------------------------------------------------------|
 > | `<project directory>` | Directory to build test project [default: "./blog-test-project"] |
-> | `--typescript, --ts`  | Generate a TypeScript project [default: javascript] |
+> | `--javascript`        | Generate a JavaScript project [default: false] |
 > | `--link`              | Copy Framework dependencies and packages into Test-project [default: false]  |
 > | `--verbose`           | Verbose output [default: false]                                                       |
 > | `--clean`             | Delete existing directory and recreate Test-project [default: false] |
@@ -78,7 +78,7 @@ Run `yarn run build:test-project <project path>` from the root of your local cop
 > **Example:**
 > ```terminal
 > cd redwood/
-> yarn run build:test-project ~/my-repos/redwood-project --typescript --link
+> yarn run build:test-project ~/my-repos/redwood-project --javascript --link
 > ```
 
 Unless you've already got a project with a lot of functionality, it'd take quite some effort to add all of this yourself. Moreover, testing your changes in a project that has a lot of functionality will increase your confidence in the changes you're making.

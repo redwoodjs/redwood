@@ -150,8 +150,8 @@ describe('JS template', () => {
         "/web/public/favicon.png",
         "/web/public/robots.txt",
         "/web/src",
-        "/web/src/App.js",
-        "/web/src/Routes.js",
+        "/web/src/App.jsx",
+        "/web/src/Routes.jsx",
         "/web/src/components",
         "/web/src/components/.keep",
         "/web/src/entry.client.jsx",
@@ -161,9 +161,9 @@ describe('JS template', () => {
         "/web/src/layouts/.keep",
         "/web/src/pages",
         "/web/src/pages/FatalErrorPage",
-        "/web/src/pages/FatalErrorPage/FatalErrorPage.js",
+        "/web/src/pages/FatalErrorPage/FatalErrorPage.jsx",
         "/web/src/pages/NotFoundPage",
-        "/web/src/pages/NotFoundPage/NotFoundPage.js",
+        "/web/src/pages/NotFoundPage/NotFoundPage.jsx",
         "/web/vite.config.js",
       ]
     `)

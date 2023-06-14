@@ -16,9 +16,9 @@
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx,.jsx\"",
+    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx,.jsx\"",
     "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "yarn build",
     "test": "jest src",
     "test:watch": "yarn test --watch"

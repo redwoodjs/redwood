@@ -24,7 +24,7 @@ describe('editable columns', () => {
     form =
       files[
         path.normalize(
-          '/path/to/project/web/src/components/ExcludeDefault/ExcludeDefaultForm/ExcludeDefaultForm.js'
+          '/path/to/project/web/src/components/ExcludeDefault/ExcludeDefaultForm/ExcludeDefaultForm.jsx'
         )
       ]
   })
