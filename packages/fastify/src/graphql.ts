@@ -2,13 +2,13 @@ import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
+import type {
+  GraphQLYogaOptions,
+  GlobalContext,
+} from '@redwoodjs/graphql-server'
 import {
   createGraphQLYoga,
   getAsyncStoreInstance,
-} from '@redwoodjs/graphql-server'
-import type {
-  GlobalContext,
-  GraphQLYogaOptions,
 } from '@redwoodjs/graphql-server'
 
 /**
