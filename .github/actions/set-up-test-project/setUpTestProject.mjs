@@ -25,6 +25,12 @@ core.setOutput('test-project-path', TEST_PROJECT_PATH)
 
 const bundler = core.getInput('bundler')
 
+console.log({
+  bundler,
+})
+
+console.log()
+
 const {
   dependenciesKey,
   distKey
@@ -91,6 +97,9 @@ const execInProject = createExecWithEnvInCwd(TEST_PROJECT_PATH)
 async function sharedTasks({ bundler } = { bundler: 'vite' }) {
   console.log('Copying framework packages to project')
   await projectCopy(TEST_PROJECT_PATH)
+  console.log()
+
+  console.log({ bundler })
   console.log()
 
   if (bundler === 'webpack') {
