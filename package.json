@@ -20,7 +20,7 @@
     "project:copy": "node ./tasks/framework-tools/frameworkFilesToProject.mjs",
     "project:deps": "node ./tasks/framework-tools/frameworkDepsToProject.mjs",
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs",
-    "rebuild-test-project-fixture": "node ./tasks/test-project/rebuild-test-project-fixture",
+    "rebuild-test-project-fixture": "node ./tasks/test-project/rebuild-test-project-fixture.js",
     "release": "node ./tasks/release/releaseCLI.mjs",
     "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test --project=chromium",
     "test": "lerna run test --concurrency 2 -- --colors --maxWorkers=4",

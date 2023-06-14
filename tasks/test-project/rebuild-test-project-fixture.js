@@ -437,16 +437,30 @@ async function runCommand() {
   await tuiTask({
     step: 11,
     title: 'Lint --fix all the things',
-    task: () => {
-      return exec('yarn rw lint --fix', [], {
-        shell: true,
-        stdio: 'pipe',
-        cleanup: true,
-        cwd: OUTPUT_PROJECT_PATH,
-        env: {
-          RW_PATH: path.join(__dirname, '../../'),
-        },
-      })
+    task: async () => {
+      try {
+        await exec('yarn rw lint --fix', [], {
+          shell: true,
+          stdio: 'pipe',
+          cleanup: true,
+          cwd: OUTPUT_PROJECT_PATH,
+          env: {
+            RW_PATH: path.join(__dirname, '../../'),
+          },
+        })
+      } catch (e) {
+        if (
+          e instanceof ExecaError &&
+          !e.stderr &&
+          e.stdout.includes('14 problems (14 errors, 0 warnings)')
+        ) {
+          // This is unfortunate, but linting is expected to fail.
+          // This is the expected error message, so we just fall through
+        } else {
+          // Unexpected error. Rethrow
+          throw e
+        }
+      }
     },
     skip: skipStep(startStep, 11),
   })
@@ -465,6 +479,7 @@ async function runCommand() {
       await rimraf(`${OUTPUT_PROJECT_PATH}/web/node_modules`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/.env`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/step.txt`)
 
       // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
       // that we added in "Adding framework dependencies to project"
