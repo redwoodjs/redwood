@@ -80,9 +80,569 @@ One more ENV var, this is the same callback URL we told GitHub about. This is us
 GITHUB_OAUTH_CLIENT_ID=41a08ae238b5aee4121d
 GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
 GITHUB_OAUTH_SCOPES="read:user user:email"
-GITHUB_OAUTH_REDIRECT_URI="http://localhost:8910/api/oauth/callback"
+GITHUB_OAUTH_REDIRECT_URI="http://localhost:8910/.redwood/functions/oauth/callback"
 ```
 
 That's it for GitHub! From here on out we'll just be making changes to our app.
 
 ## The Login Button
+
+This part is pretty easy, we're just going to add a link/button to go directly to GitHub to begin the OAuth process:
+
+```jsx title=/web/src/pages/LoginPage/LoginPage.jsx
+<a href={`https://github.com/login/oauth/authorize?client_id=${
+    process.env.GITHUB_OAUTH_CLIENT_ID
+  }&redirect_uri=${
+    process.env.GITHUB_OAUTH_REDIRECT_URI
+  }&scope=${process.env.GITHUB_OAUTH_SCOPES.split(' ').join('+')}`}
+  className="mx-auto block w-48 rounded bg-gray-800 px-4 py-2 text-center text-xs font-semibold uppercase tracking-wide text-white">
+  Login with GitHub
+</a>
+```
+
+:::info
+This example uses Tailwind to style the link to match the rest of the default dbAuth login page
+:::
+
+You can put this same link on your signup page as well, since using the OAuth flow will be dual-purpose: it will log the user in if a local user already exists, or it will create the user and then log them in.
+
+We're using several of our new ENV vars here, and need to tell Redwood to make them available to the web side during the build process. Add them to the `includeEnvironmentVariables` key in `redwood.toml`:
+
+```diff title=/redwood.toml
+[web]
+  title = "Redwood App"
+  port = "${WEB_DEV_PORT:8910}"
+  apiUrl = "/.redwood/functions"
++ includeEnvironmentVariables = ["GITHUB_OAUTH_CLIENT_ID", "GITHUB_OAUTH_REDIRECT_URI", "GITHUB_OAUTH_SCOPES"]
+[api]
+  port = "${API_DEV_PORT:8911}"
+[browser]
+  open = true
+[notifications]
+  versionUpdates = ["latest"]
+```
+
+Restart your dev server to pick up the new TOML settings, and your link should appear:
+
+![Login button](https://user-images.githubusercontent.com/300/245899085-0b946a14-cd7c-402a-9d86-b6527fd89c7f.png)
+
+Go ahead and click it, and you should be taken to GitHub to authorize your GitHub login to work with your app. You'll see the scopes we requested listed under the **Personal User Data** heading:
+
+![GitHub Oauth Access Page](https://user-images.githubusercontent.com/300/245899872-8ddd7e69-dbfa-4544-ab6f-78fd4ff02da8.png)
+
+:::caution
+
+If you get an error here that says "The redirect_uri MUST match the registered callback URL for this application" verify that the redirect URL you entered on GitHub and the one you put into the `GITHUB_OAUTH_REDIRECT_URL` ENV var are identical!
+
+:::
+
+Go ahead and authorize, and you'll get an error:
+
+![/oauth function not found](https://user-images.githubusercontent.com/300/245900327-b21a178e-5539-4c6d-a5d6-9bb736100940.png)
+
+That's coming from our app because we haven't created the `oauth` function that GitHub redirects to. But you'll see a `code` in the URL, which means GitHub is  happy with our flow so far. Now we need to trade that `code` for an `access_token`. We'll do that in our `/oauth` function.
+
+## The /oauth Function
+
+We can have Redwood generate a shell of our new function for us:
+
+```bash
+yarn rw g function oauth
+```
+
+That will create the function at `/api/src/functions/oauth/oauth.js`. If we retry the "Login with GitHub" button now, we'll see the output of that function instead of the error:
+
+![Oauth function responding](https://user-images.githubusercontent.com/300/245903068-760596fa-4139-4d11-b3b3-a90edfbbf496.png)
+
+Now let's start filling out this function with the code we need to get the `access_token`.
+
+### Fetching the `access_token`
+
+We told GitHub to redirect to `/oauth/callback` which *appears* like it would be a subdirectory, or child route of our `oauth` function, but in reality everything after `/oauth` just gets shoved into a `path` variable that we'll need to inspect to make sure it has the proper parts (like `/callback`). We can  do that in the `hander()`:
+
+```js title=/api/src/functions/oauth/oauth.js
+export const handler = async (event, _context) => {
+  switch (event.path) {
+    case '/oauth/callback':
+      return await callback(event)
+    default:
+      // Whatever this is, it's not correct, so return "Not Found"
+      return {
+        statusCode: 404,
+      }
+  }
+}
+
+const callback = async (event) => {
+  return { body: 'ok' }
+}
+```
+
+The `callback()` function is where we'll actually define the rest of our flow. We can verify this is working by trying a couple of different URLs in the browser and see that `/oauth/callback` returns a 200 and "ok" in the body of the page, but anything else returns a 404.
+
+Now we need to make a request to GitHub to trade the `code` for an `access_token`. This is handled by a `fetch`:
+
+```js title=/api/src/functions/oauth/oauth.js
+const callback = async (event) => {
+  const { code } = event.queryStringParameters
+
+  const response = await fetch(`https://github.com/login/oauth/access_token`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: process.env.GITHUB_OAUTH_CLIENT_ID,
+      client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+      redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
+      code,
+    }),
+  })
+
+  const { access_token, scope, error } = JSON.parse(await response.text())
+
+  if (error) {
+    return { statuscode: 400, body: error }
+  }
+
+  return {
+    body: JSON.stringify({ access_token, scope, error })
+  }
+}
+```
+
+First we get the `code` out of the query string variables, then make a POST `fetch()` to GitHub, setting the required JSON body to various ENV vars we've set, including the `code`. Then we parse the response JSON and just return it in the browser to make sure it worked. If something went wrong (`error` is not `undefined`) then we'll output the error message in the body of the page.
+
+Let's try it: go back to the login page, click the **Login with GitHub** button and see what happens:
+
+![GitHub OAuth access_token granted](https://user-images.githubusercontent.com/300/245906529-d08f9d6e-4947-4d14-9377-def3645d9c68.png)
+
+You can also verify that the error response works by, for example, removing the `code` key from the `fetch()`, and see GitHub complain:
+
+![GitHub OAuth error](https://user-images.githubusercontent.com/300/245906827-703a4a21-b279-428c-be1c-b73c559a72b3.png)
+
+Great, GitHub has authorized us and now we can get details about the actual user from GitHub.
+
+### Retrieving GitHub User Details
+
+We need some unique identifier to tie a user in GitHub to a user in our database. The `access_token` we retrieved allows us to make requests to GitHub's API and return data for the user that the `access_token` is attached to, up to the limits of the `scopes` we requested. GitHub has a unique user `id` that we can use to tie the two together. Let's request that data and dump it to the browser so we can see that the request works.
+
+To keep things straight in our heads, let's call our local user `user` and the GitHub user the `providerUser` (since GitHub is "providing" the OAuth credentials).
+
+Let's make the API call to GitHub's user info endpoint and dump the result to the browser:
+
+```js title=/api/src/functions/oauth/oauth.js
+const callback = async (event) => {
+  const { code } = event.queryStringParameters
+
+  const response = await fetch(`https://github.com/login/oauth/access_token`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: process.env.GITHUB_OAUTH_CLIENT_ID,
+      client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+      redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
+      code,
+    }),
+  })
+
+  const { access_token, scope, error } = JSON.parse(await response.text())
+
+  if (error) {
+    return { statuscode: 400, body: error }
+  }
+
+  // highlight-start
+  try {
+    const providerUser = await getProviderUser(access_token)
+    return {
+      body: JSON.stringify(providerUser)
+    }
+  } catch (e) {
+    return { statuscode: 500, body: e.message }
+  }
+  // highlight-end
+}
+
+// highlight-start
+const getProviderUser = async (token) => {
+  const response = await fetch('https://api.github.com/user', {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  const body = JSON.parse(await response.text())
+
+  return body
+}
+// highlight-end
+```
+
+If all went well you should get a ton of juicy data:
+
+![GitHub user output](https://user-images.githubusercontent.com/300/245909925-c984eeb4-f172-46f6-8102-297b72e26bbd.png)
+
+If something went wrong with the fetch you should get a 500 and the error message output in the body. Try setting the `token` in the `Authorization` header to something like `foobar` to verify:
+
+![GitHub API error](https://user-images.githubusercontent.com/300/245910198-2975e90e-9af1-49b1-a41a-81b9269ff71d.png)
+
+Great, we've got the user data, now what do we do with it?
+
+### Database Updates
+
+We've got a bunch of user data that we can use to create a `User` in our own database. But we'll want to look up that same user in the future when they log back in. We have a couple of ways we can go about doing this:
+
+1. Keep our `User` model as-is and create the user in our local database. When the user logs in again, look them by their email address stored in GitHub. **Cons:** If the user changes their email in GitHub we won't be able to find them the next time they log in, and we would create a new user.
+2. Keep the `User` model as-is but create the user with the same `id` as the one we get from GitHub. **Cons:** If we keep username/password login, we would need to create new users with an `id` that won't ever clash with the ones from GitHub.
+2. Add a column to `User` like `githubId` that stores the GitHub `id` so that we can find the user again the next time they come to login. **Cons:** If we add more providers in the future we'll need to keep adding new `*Id` columns for each.
+3. Create a new one-to-many relationship model that stores the GitHub `id` as a single row, tied to the `userId` of the `User` table, and a new row for each ID of any future providers. **Cons:** More complex data structure.
+
+Option #4 will be the most flexible going forward if we ever decide to add more OAuth providers. And if my experience is any indication, everyone always wants more login providers.
+
+So let's create a new `Identity` table that stores the name of the provider and the ID in that system. Logically it will look like this:
+
+```
+┌───────────┐       ┌────────────┐
+│   User    │       │  Identity  │
+├───────────┤       ├────────────┤
+│ id        │•──┐   │ id         │
+│ name      │   └──<│ userId     │
+│ email     │       │ provider   │
+│ ...       │       │ uid        │
+└───────────┘       │ ...        │
+                    └────────────┘
+```
+
+For now `provider` will always be `github` and the `uid` will be the GitHub's unique ID. `uid` should be `String`, because although GitHub's ID's are integers, not every OAuth provider is guaranteed to use ints.
+
+#### Prisma Schema Updates
+
+Here's the `Identity` model definition:
+
+```prisma title=/api/db/schema.prisma
+model Identity {
+  id                  Int       @id @default(autoincrement())
+  provider            String
+  uid                 String
+  userId              Int
+  user                User      @relation(fields: [userId], references: [id])
+  accessToken         String?
+  scope               String?
+  lastLoginAt         DateTime  @default(now())
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@unique([provider, uid])
+  @@index(userId)
+}
+```
+
+We're also storing the `access_token` and `scope` that we got back from the last time we retrived them from GitHub, as well as a timstamp for the last time the user logged in. Storing the `scope` is useful because if you ever change them, you may want to notify users that have the previous scope definition to re-login so the new scopes can be authorized.
+
+We'll also need to add an `identities` relation to the `User` model, and make the previously required `hashedPassword` and `salt` fields optional:
+
+
+```prisma title=/api/db/schema.prisma
+model User {
+  id                  Int       @id @default(autoincrement())
+  email               String    @unique
+  // highlight-start
+  hashedPassword      String?
+  salt                String?
+  identities          Identity[]
+  // highlight-end
+  ...
+}
+```
+
+Save these as a migration and apply them to the database:
+
+```bash
+yarn rw prisma migrate dev
+```
+
+Give it a name like "create identity". That's it for the database. Let's return to the `/oauth` function and start working with our new `Identity` model.
+
+### Creating Users and Identities
+
+On a successful GitHub OAuth login we'll want to first check and see if a user already exists with the provider info. If so, we can go ahead and log them in. If not, we'll need to create it first, then log them in.
+
+Let's add some code that returns the user if found, otherwise it creates the user *and* returns it, so that the rest of our code doesn't have to care.
+
+:::info
+Be to import `db` at the top of the file if you haven't already!
+:::
+
+
+```js title=/api/src/functions/oauth/oauth.js
+// highlight-next-line
+import { db } from 'src/lib/db'
+
+const callback = async (event) => {
+  const { code } = event.queryStringParameters
+
+  const response = await fetch(`https://github.com/login/oauth/access_token`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: process.env.GITHUB_OAUTH_CLIENT_ID,
+      client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+      redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
+      code,
+    }),
+  })
+
+  const { access_token, scope, error } = JSON.parse(await response.text())
+
+  if (error) {
+    return { statuscode: 400, body: error }
+  }
+
+  try {
+    const providerUser = await getProviderUser(access_token)
+    // highlight-start
+    const user = await getUser({ providerUser, accessToken: access_token, scope })
+    return {
+      body: JSON.stringify(user)
+    }
+    // highlight-end
+  } catch (e) {
+    return { statuscode: 500, body: e.message }
+  }
+}
+
+// highlight-start
+const getUser = async ({ providerUser, accessToken, scope }) => {
+  const { user, identity } = await findOrCreateUser(providerUser)
+
+  await db.identity.update({
+    where: { id: identity.id },
+    data: { accessToken, scope, lastLoginAt: new Date() },
+  })
+
+  return user
+}
+// highlight-end
+
+// highlight-start
+const findOrCreateUser = async (providerUser) => {
+  const identity = await db.identity.findFirst({
+    where: { provider: 'github', uid: providerUser.id }
+  })
+
+  if (identity) {
+    // identity exists, return the user
+    const user = await db.user.findUnique({ where: { id: identity.userId }})
+    return { user, identity }
+  }
+
+  // identity not found, need to create it and the user
+  return await db.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: {
+        email: providerUser.email,
+        fullName: providerUser.name,
+      },
+    }
+
+    const identity = await tx.identity.create({
+      data: {
+        userId: user.id,
+        provider: 'github',
+        uid: providerUser.id
+      }
+    })
+
+    return { user, identity }
+  })
+}
+// highlight-end
+```
+
+Let's break that down by sections:
+
+
+```js
+const providerUser = await getProviderUser(access_token)
+const user = await getUser({ providerUser, accessToken: access_token, scope })
+return {
+  body: JSON.stringify(user)
+}
+```
+
+After getting the `providerUser` we're going to find our local `user`, and then dump the user to the browser to verify.
+
+```js
+const getUser = async ({ providerUser, accessToken, scope }) => {
+  const { user, identity } = await getOrCreateUser(providerUser)
+
+  await db.identity.update({
+    where: { id: identity.id },
+    data: { accessToken, scope, lastLoginAt: new Date() },
+  })
+
+  return user
+}
+```
+
+The `getUser()` function is going to return the user, whether it had to be created or not. Either way, the attached identity is updated with the current value for the `access_token` (note the case change, try not to get confused!), as well as the `scope` and `lastLoginAt` timestamp. `getOrCreateUser()` is going to do the heavy lifting:
+
+```js
+const getOrCreateUser = async (providerUser) => {
+  const identity = await db.identity.findFirst({
+    where: { provider: 'github', uid: providerUser.id }
+  })
+
+  if (identity) {
+    // identity exists, return the user
+    const user = await db.user.findUnique({ where: { id: identity.userId }})
+    return { user, identity }
+  }
+
+  // ...
+}
+```
+
+If the user already exists, great! Return it, and the attached `identity` so that we can update the details. If the user doesn't exist already:
+
+```js
+return await db.$transaction(async (tx) => {
+  const user = await tx.user.create({
+    data: {
+      email: providerUser.email,
+      fullName: providerUser.name,
+    },
+  }
+
+  const identity = await tx.identity.create({
+    data: {
+      userId: user.id,
+      provider: 'github',
+      uid: providerUser.id
+    }
+  })
+
+  return { user, identity }
+})
+```
+
+We create the `user` and the `identity` records inside a transaction so that if something goes wrong, both records fail to create. (The Redwood test project has a required `fullName` field that we fill with the `name` attribute from GitHub.)
+
+If everything worked then on clicking **Login with GitHub** we should now see a dump of the User from our local database:
+
+![User details](https://user-images.githubusercontent.com/300/245922971-caaeb3ed-9231-4edf-aac5-9ea76b488824.png)
+
+You can take a look in the database and verify that the User and Identity were created. Start up the [Prisma Studio](https://www.prisma.io/studio) (which is already included with Redwood):
+
+```bash
+yarn rw prisma studio
+```
+
+![Inspecting the Identity record](https://user-images.githubusercontent.com/300/245923393-d61233cc-52d2-4568-858e-9059dfe31bfc.png)
+
+Great! But, if you go back to your homepage, you'll find that you're not actually logged in. That's because we're not setting the cookie that dbAuth expects to see to consider you logged in. Let's do that, and then our login will be (almost) complete!
+
+### Setting the Login Cookie
+
+In order to let dbAuth do the work of actually considering us logged in (and handling stuff like reauthentication and logout) we'll just set the same cookie that the username/password login system would have.
+
+Setting a cookie in the browser is a matter of returning a specific header (`Set-Cookie`) in the response from the server. We've been responding with a dump of the user object, but now we'll do a real return, including the cookie and a `Location` header to redirect us back to the site.
+
+Don't forget the new `CryptoJS` import at the top!
+
+```js title=/api/src/functions/oauth/oauth.js
+// highlight-next-line
+import CryptoJS from 'crypto-js'
+
+const callback = async (event) => {
+  const { code } = event.queryStringParameters
+
+  const response = await fetch(`https://github.com/login/oauth/access_token`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: process.env.GITHUB_OAUTH_CLIENT_ID,
+      client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+      redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
+      code,
+    }),
+  })
+
+  const { access_token, scope, error } = JSON.parse(await response.text())
+
+  if (error) {
+    return { statuscode: 400, body: error }
+  }
+
+  try {
+    const providerUser = await getProviderUser(access_token)
+    const user = await getUser({
+      providerUser,
+      accessToken: access_token,
+      scope,
+    })
+    // highlight-start
+    const cookie = secureCookie(user)
+
+    return {
+      statusCode: 302,
+      headers: {
+        'Set-Cookie': cookie,
+        Location: '/',
+      },
+    }
+    // highlight-end
+  } catch (e) {
+    return { statuscode: 500, body: e.message }
+  }
+}
+
+// highlight-start
+const secureCookie = (user) => {
+  const expires = new Date()
+  expires.setFullYear(expires.getFullYear() + 1)
+
+  const cookieAttrs = [
+    `Expires=${expires.toUTCString()}`,
+    'HttpOnly=true',
+    'Path=/',
+    'SameSite=Strict',
+    `Secure=${process.env.NODE_ENV !== 'development'}`,
+  ]
+  const data = JSON.stringify({ id: user.id })
+
+  const encrypted = CryptoJS.AES.encrypt(
+    data,
+    process.env.SESSION_SECRET
+  ).toString()
+
+  return [`session=${encrypted}`, ...cookieAttrs].join('; ')
+}
+// highlight-end
+```
+
+`secureCookie()` takes care of creating the cookie that matches the one set by dbAuth. The attributes that we're setting are actually a copy of the ones set in the `authHandler` in `/api/src/functions/auth.js` and you could remove some duplication between the two by exporting the `cookie` object from `auth.js` and then importing it and using it here. We've set the cookie to expire in a year because, let's admit it, no one likes having to log back in again.
+
+And then at the end of `callback()` we set the `Set-Cookie` and `Location` headers to send the browser back to the homepage.
+
+Try it out, and as long as you have an indication on your site that user is logged in, you should see it! In the case of the test project, you'll see "Log Out" at the right side of the top nav instead of "Log In". Try logging out and then back again to test the whole flow from scratch.
+
+## Next Steps
+
+### More Providers
+
+How can you extend what we've built? You may have noticed that we hardcoded "github" as the provider in a couple of places, as well as hardcoding GitHub's API endpoint for fetching user data. That obviously limits this implementation to only support GitHub.
+
+A more flexible version could include the provider as part of the callback URL, and then our code can see that and choose which provider to set and how to get user details. Maybe the OAuth redirect is `/oauth/github/callback` and `/oauth/twitter/callback`. Then parse that out and delegate to a different function altogether, or implement each provider's specific info into separate files and `import` them into the `/oauth` function, invoking each as needed.
+
+### Changing User Details
+
+Right now we just copy the user details from GitHub right into our new User object. Maybe we want to give the user a chance to update those details first, or add additional information before saving to the database. One solution could be to create the `Identity` record, but redirect to your real Signup page with the info from GitHub (and the `accessToken`) and prefill the signup fields, giving the user a chance to change or enhance them, adding the `accessToken` to a hidden field. Then when the user submits that form, if the `accessToken` is part of the form, get the user details from GitHub again (so we can get their GitHub `id`) and then create the `Identity` and `User` record as before.
