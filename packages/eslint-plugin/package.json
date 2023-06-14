@@ -23,8 +23,8 @@
   },
   "devDependencies": {
     "@babel/cli": "7.21.5",
-    "@types/eslint": "^8",
-    "@types/estree": "^1.0.1",
+    "@types/eslint": "8",
+    "@types/estree": "1.0.1",
     "jest": "29.5.0",
     "prettier": "2.8.8",
     "typescript": "5.1.3"
