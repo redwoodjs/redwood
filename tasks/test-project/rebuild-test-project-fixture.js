@@ -456,6 +456,8 @@ async function runCommand() {
         ) {
           // This is unfortunate, but linting is expected to fail.
           // This is the expected error message, so we just fall through
+          // If the expected error message changes you'll have to update the
+          // `includes` check above
         } else {
           // Unexpected error. Rethrow
           throw e
