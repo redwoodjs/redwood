@@ -67,7 +67,7 @@ if (rebuildFixture) {
   console.log(
     chalk.red.bold(
       `
-      --rebuildFixture is deprecated. Please run \`yarn build:test-project-rebuild\` instead.
+      --rebuildFixture is deprecated. Please run \`yarn rebuild-test-project-fixture\` instead.
       `
     )
   )
