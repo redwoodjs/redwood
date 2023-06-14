@@ -20,8 +20,12 @@ function hasName(node, name) {
   return isIdentifier(node) && node.name === name
 }
 
-function isComputed(node) {
-  return isMemberExpression(node) && node.computed
+function isProcessEnv(node) {
+  return (
+    isMemberExpression(node) &&
+    hasName(node.object, 'process') &&
+    hasName(node.property, 'env')
+  )
 }
 
 /** @type import('eslint').Rule.RuleModule */
@@ -37,11 +41,7 @@ const rule = {
   create(context) {
     return {
       MemberExpression: function (node) {
-        if (
-          hasName(node.object, 'process') &&
-          hasName(node.property, 'env') &&
-          isComputed(node.parent)
-        ) {
+        if (isProcessEnv(node.object) && node.computed) {
           context.report({
             message: 'Computed member access on process.env is not allowed.',
             node,

@@ -7695,9 +7695,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/eslint-plugin-redwood@workspace:packages/eslint-plugin-redwood":
+"@redwoodjs/eslint-plugin@workspace:packages/eslint-plugin":
   version: 0.0.0-use.local
-  resolution: "@redwoodjs/eslint-plugin-redwood@workspace:packages/eslint-plugin-redwood"
+  resolution: "@redwoodjs/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
     "@babel/cli": 7.21.5
     "@types/eslint": ^8
