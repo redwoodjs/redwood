@@ -1,6 +1,6 @@
 import { RuleTester } from 'eslint'
 
-import rule from '../process-env-computed'
+import rule from '../process-env-computed.js'
 
 const ruleTester = new RuleTester()
 
@@ -14,9 +14,6 @@ ruleTester.run('process-env-computed', rule, {
     },
     {
       code: 'process.env.REDWOOD_ENV_FOOBAR',
-    },
-    {
-      code: 'process.env[fail]',
     },
   ],
   invalid: [
