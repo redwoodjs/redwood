@@ -22,14 +22,14 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.3",
+    "@babel/runtime-corejs3": "7.22.5",
     "core-js": "3.30.2",
     "jsonwebtoken": "9.0.0",
     "jwks-rsa": "3.0.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.5",
-    "@babel/core": "7.22.1",
+    "@babel/cli": "7.22.5",
+    "@babel/core": "7.22.5",
     "@redwoodjs/api": "5.0.0",
     "@types/jsonwebtoken": "9.0.2",
     "jest": "29.5.0",
