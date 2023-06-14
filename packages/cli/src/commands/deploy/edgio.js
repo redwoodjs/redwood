@@ -2,7 +2,7 @@ import path from 'path'
 
 import execa from 'execa'
 import fs from 'fs-extra'
-import omit from 'lodash/omit'
+import { omit } from 'lodash'
 import terminalLink from 'terminal-link'
 
 import { getPaths } from '@redwoodjs/project-config'

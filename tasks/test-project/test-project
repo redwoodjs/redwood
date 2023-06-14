@@ -58,10 +58,23 @@ const args = yargs(hideBin(process.argv))
     describe:
       'Upgrade project to latest canary version. NOT compatible with --link.',
   })
+  .option('javascript', {
+    default: false,
+    type: 'boolean',
+    describe: 'Build a Javascript project.',
+  })
   .help()
   .parseSync()
 
-const { canary, link, verbose, clean, copyFromFixture, rebuildFixture } = args
+const {
+  canary,
+  link,
+  verbose,
+  clean,
+  copyFromFixture,
+  rebuildFixture,
+  javascript,
+} = args
 
 if (rebuildFixture) {
   console.log(
@@ -216,6 +229,17 @@ const globalTasks = () =>
         task: () =>
           copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
         enabled: () => link,
+      },
+      {
+        title: 'Converting to Javascript',
+        task: () => {
+          return execa(
+            'yarn rw ts-to-js',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+        },
+        enabled: () => javascript,
       },
       {
         title: '[link] Add rwfw project:copy postinstall',

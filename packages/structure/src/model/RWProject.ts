@@ -130,7 +130,7 @@ export class RWProject extends BaseNode {
 
   // TODO: move to path helper
   @lazy() get defaultNotFoundPageFilePath() {
-    const ext = this.isTypeScriptProject ? '.tsx' : '.js' // or jsx?
+    const ext = this.isTypeScriptProject ? '.tsx' : '.jsx'
     return join(this.pathHelper.web.pages, 'NotFoundPage', 'NotFoundPage' + ext)
   }
 
