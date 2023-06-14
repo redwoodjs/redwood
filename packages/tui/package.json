@@ -15,7 +15,7 @@
   "scripts": {
     "build": "yarn node ./build.mjs && yarn build:types",
     "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",
     "test:watch": "yarn test --watch"
@@ -35,6 +35,6 @@
   "devDependencies": {
     "esbuild": "0.17.19",
     "jest": "29.5.0",
-    "typescript": "5.0.4"
+    "typescript": "5.1.3"
   }
 }

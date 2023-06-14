@@ -44,8 +44,12 @@ describe('getConfig', () => {
         },
         "experimental": {
           "cli": {
-            "autoInstall": false,
-            "plugins": [],
+            "autoInstall": true,
+            "plugins": [
+              {
+                "package": "@redwoodjs/cli-storybook",
+              },
+            ],
           },
           "opentelemetry": {
             "apiSdk": undefined,
@@ -64,6 +68,7 @@ describe('getConfig', () => {
             },
             "inMemory": false,
           },
+          "useSDLCodeGenForGraphQLTypes": false,
         },
         "generate": {
           "nestScaffoldByModel": true,

@@ -103,12 +103,13 @@ export interface Config {
       autoInstall: boolean
       plugins: CLIPlugin[]
     }
+    useSDLCodeGenForGraphQLTypes: boolean
   }
 }
 
 export interface CLIPlugin {
   package: string
-  version: string
+  version?: string
   enabled?: boolean
 }
 
@@ -168,9 +169,14 @@ const DEFAULT_CONFIG: Config = {
       },
     },
     cli: {
-      autoInstall: false,
-      plugins: [],
+      autoInstall: true,
+      plugins: [
+        {
+          package: '@redwoodjs/cli-storybook',
+        },
+      ],
     },
+    useSDLCodeGenForGraphQLTypes: false,
   },
 }
 

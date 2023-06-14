@@ -17,18 +17,25 @@ import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import execa from 'execa'
 import { DocumentNode } from 'graphql'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { getTsConfigs } from '../project'
 
 import * as rwTypescriptResolvers from './plugins/rw-typescript-resolvers'
-
 enum CodegenSide {
   API,
   WEB,
 }
 
 export const generateTypeDefGraphQLApi = async () => {
+  const config = getConfig()
+  if (config.experimental.useSDLCodeGenForGraphQLTypes) {
+    const paths = getPaths()
+    const sdlCodegen = await import('@sdl-codegen/node')
+    const dtsFiles = sdlCodegen.runFullCodegen('redwood', { paths })
+    return dtsFiles.paths
+  }
+
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
   const prismaModels = getPrismaModels()
   const prismaImports = Object.keys(prismaModels).map((key) => {
@@ -245,7 +252,7 @@ function getPluginConfig(side: CodegenSide) {
       // Look at type or source https://shrtm.nu/2BA0 for possible config, not well documented
       resolvers: true,
     },
-    contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
+    contextType: `@redwoodjs/graphql-server/dist/types#RedwoodGraphQLContext`,
   }
 
   return pluginConfig

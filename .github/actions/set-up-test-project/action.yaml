@@ -1,0 +1,16 @@
+name: Set up test project
+description: Sets up the test project fixture in CI for smoke tests and CLI checks
+
+runs:
+  # `node18` isn't supported yet
+  using: node16
+  main: 'setUpTestProject.mjs'
+
+inputs:
+  bundler:
+    description: The bundler to use (vite or webpack)
+    default: vite
+
+outputs:
+  test-project-path:
+    description: Path to the test project
