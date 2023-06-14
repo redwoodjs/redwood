@@ -22,7 +22,11 @@ export const handler = async ({ force, verbose, addPackage }) => {
       {
         title: 'Adding vite.config.js...',
         task: () => {
-          const viteConfigPath = getPaths().web.viteConfig
+          // @NOTE: do not use getPaths().viteConfig because it'll come through as null
+          // this is because we do a check for the file's existence in getPaths()
+          const viteConfigPath = `${getPaths().web.base}/vite.config.${
+            ts ? 'ts' : 'js'
+          }`
 
           const templateContent = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'vite.config.ts.template'),
@@ -54,9 +58,12 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: 'Creating new entry point in `web/src/entry.client.jsx`...',
+        title: 'Creating new entry point in `web/src/entry.client.{jt}sx`...',
         task: () => {
-          const entryPointFile = getPaths().web.entryClient
+          const entryPointFile = path.join(
+            getPaths().web.src,
+            `entry.client.${ts ? 'tsx' : 'jsx'}`
+          )
 
           const content = fs
             .readFileSync(
@@ -75,8 +82,9 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        ...addWebPackages([`@redwoodjs/vite@${version}`]),
-        title: 'Adding @redwoodjs/vite dependency...',
+        // @NOTE: make sure its added as a dev package.
+        ...addWebPackages(['-D', `@redwoodjs/vite@${version}`]),
+        title: 'Adding @redwoodjs/vite dev dependency to web side...',
         skip: () => {
           if (!addPackage) {
             return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dev-dependency on the web workspace'
