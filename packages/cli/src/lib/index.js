@@ -8,8 +8,7 @@ import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
 import { Listr } from 'listr2'
-import { memoize } from 'lodash'
-import lodash from 'lodash/string'
+import { memoize, template } from 'lodash'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
@@ -66,9 +65,9 @@ export const nameVariants = (name) => {
 
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
   try {
-    const template = lodash.template(readFile(templateFilename).toString())
+    const templateFn = template(readFile(templateFilename).toString())
 
-    const renderedTemplate = template({
+    const renderedTemplate = templateFn({
       name,
       ...nameVariants(name),
       ...rest,
