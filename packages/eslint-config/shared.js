@@ -30,6 +30,7 @@ module.exports = {
     'react',
     'react-hooks',
     'jest-dom',
+    'redwood',
   ],
   ignorePatterns: ['node_modules', 'dist'],
   settings: {
@@ -45,6 +46,7 @@ module.exports = {
     'import/internal-regex': '^src/',
   },
   rules: {
+    'redwood/process-env-computed': 'error',
     'prettier/prettier': 'warn',
     'no-console': 'off',
     'prefer-object-spread': 'warn',
