@@ -31,7 +31,7 @@
     "@iarna/toml": "2.2.5",
     "@redwoodjs/project-config": "5.3.1",
     "@vscode/ripgrep": "1.15.4",
-    "@whatwg-node/fetch": "0.9.4",
+    "@whatwg-node/fetch": "0.9.6",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.30.2",
     "deepmerge": "4.3.1",

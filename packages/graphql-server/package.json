@@ -51,7 +51,7 @@
     "@types/jsonwebtoken": "9.0.2",
     "@types/lodash": "4.14.195",
     "@types/uuid": "9.0.2",
-    "@whatwg-node/fetch": "0.9.4",
+    "@whatwg-node/fetch": "0.9.6",
     "aws-lambda": "1.0.7",
     "jest": "29.5.0",
     "jsonwebtoken": "9.0.0",
