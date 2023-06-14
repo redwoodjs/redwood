@@ -2,7 +2,7 @@ import { describe, it } from 'node:test'
 
 import { RuleTester } from 'eslint'
 
-import rule from '../process-env-computed.js'
+import { processEnvComputedRule } from '../process-env-computed.js'
 
 // @ts-expect-error - Types are wrong
 RuleTester.describe = describe
@@ -11,7 +11,7 @@ RuleTester.it = it
 
 const ruleTester = new RuleTester()
 
-ruleTester.run('process-env-computed', rule, {
+ruleTester.run('process-env-computed', processEnvComputedRule, {
   valid: [
     {
       code: 'process.env.foo',

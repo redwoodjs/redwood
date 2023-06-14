@@ -1,7 +1,5 @@
-import processEnvComputed from './process-env-computed.js'
+import { processEnvComputedRule } from './process-env-computed.js'
 
-export default {
-  rules: {
-    'process-env-computed': processEnvComputed,
-  },
+export const rules = {
+  'process-env-computed': processEnvComputedRule,
 }

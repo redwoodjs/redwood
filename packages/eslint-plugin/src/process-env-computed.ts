@@ -26,7 +26,7 @@ function hasName(node: unknown, name: string) {
   return isIdentifier(node) && node.name === name
 }
 
-const rule: Rule.RuleModule = {
+export const processEnvComputedRule: Rule.RuleModule = {
   meta: {
     type: 'problem',
     docs: {
@@ -49,5 +49,3 @@ const rule: Rule.RuleModule = {
     }
   },
 }
-
-export default rule
