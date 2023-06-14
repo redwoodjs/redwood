@@ -1,5 +1,29 @@
 // @ts-check
 
+/**
+ * @param {any} node AST node to check
+ * @return {node is import('estree').Identifier}
+ */
+function isIdentifier(node) {
+  return node.type === 'Identifier'
+}
+
+/**
+ * @param {any} node AST node to check
+ * @return {node is import('estree').MemberExpression}
+ */
+function isMemberExpression(node) {
+  return node.type === 'MemberExpression'
+}
+
+function hasName(node, name) {
+  return isIdentifier(node) && node.name === name
+}
+
+function isComputed(node) {
+  return isMemberExpression(node) && node.computed
+}
+
 /** @type import('eslint').Rule.RuleModule */
 const rule = {
   meta: {
@@ -13,16 +37,13 @@ const rule = {
   create(context) {
     return {
       MemberExpression: function (node) {
-        const objectName = node.object.name
-        const propertyName = node.property.name
-
         if (
-          objectName === 'process' &&
-          propertyName === 'env' &&
-          node.computed
+          hasName(node.object, 'process') &&
+          hasName(node.property, 'env') &&
+          isComputed(node.parent)
         ) {
           context.report({
-            message: 'Computed member access for process.env is not allowed.',
+            message: 'Computed member access on process.env is not allowed.',
             node,
             // fix(fixer) {},
           })
@@ -32,4 +53,4 @@ const rule = {
   },
 }
 
-export default rule
+module.exports = rule

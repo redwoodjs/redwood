@@ -7701,6 +7701,7 @@ __metadata:
   dependencies:
     "@babel/cli": 7.21.5
     "@types/eslint": ^8
+    "@types/estree": ^1.0.1
     eslint: 8.42.0
     jest: 29.5.0
     prettier: 2.8.8
@@ -9802,7 +9803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/estree@npm:*, @types/estree@npm:^1.0.0":
+"@types/estree@npm:*, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.1":
   version: 1.0.1
   resolution: "@types/estree@npm:1.0.1"
   checksum: b4022067f834d86766f23074a1a7ac6c460e823b00cd8fe94c997bc491e7794615facd3e1520a934c42bd8c0689dbff81e5c643b01f1dee143fc758cac19669e
