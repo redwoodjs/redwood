@@ -4,6 +4,7 @@ import https from 'https'
 import path from 'path'
 
 import * as babel from '@babel/core'
+import boxen from 'boxen'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
@@ -580,4 +581,17 @@ export const usingVSCode = () => {
   const redwoodPaths = getPaths()
   const VS_CODE_PATH = path.join(redwoodPaths.base, '.vscode')
   return fs.existsSync(VS_CODE_PATH)
+}
+
+export const printSetupNotes = (notes) => {
+  return {
+    title: 'One more thing...',
+    task: (_ctx, task) => {
+      task.title = `One more thing...\n\n ${boxen(notes.join('\n'), {
+        padding: { top: 1, bottom: 1, right: 1, left: 1 },
+        margin: 1,
+        borderColour: 'gray',
+      })}  \n`
+    },
+  }
 }

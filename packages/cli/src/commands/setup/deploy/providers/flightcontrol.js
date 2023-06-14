@@ -8,9 +8,9 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
+import { getPaths, writeFilesTask, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { printSetupNotes, updateApiURLTask } from '../helpers'
+import { updateApiURLTask } from '../helpers'
 import {
   flightcontrolConfig,
   databaseEnvVariables,
