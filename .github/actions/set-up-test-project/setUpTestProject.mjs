@@ -51,7 +51,7 @@ async function main() {
 
   if (dependenciesCacheKey) {
     console.log(`Cache restored from key: ${dependenciesKey}`)
-    await sharedTasks({ bundler })
+    await sharedTasks()
   } else {
     console.log(`Cache not found for input keys: ${distKey}, ${dependenciesKey}`)
     await setUpTestProject()
@@ -94,7 +94,7 @@ const execInProject = createExecWithEnvInCwd(TEST_PROJECT_PATH)
 /**
  * @returns {Promise<void>}
  */
-async function sharedTasks({ bundler } = { bundler: 'vite' }) {
+async function sharedTasks() {
   console.log('Copying framework packages to project')
   await projectCopy(TEST_PROJECT_PATH)
   console.log()
@@ -111,8 +111,8 @@ async function sharedTasks({ bundler } = { bundler: 'vite' }) {
     const redwoodTOMLWithWebpack = redwoodTOML.replace('[web]\n', '[web]\n  bundler = "webpack"\n')
     fs.writeFileSync(redwoodTOMLPath, redwoodTOMLWithWebpack)
 
+    // There's an empty line at the end of the redwood.toml file, so no need to console.log after.
     console.log(fs.readFileSync(redwoodTOMLPath, 'utf-8'))
-    console.log()
   }
 
   console.log('Generating dbAuth secret')
