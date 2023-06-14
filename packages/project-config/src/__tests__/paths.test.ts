@@ -880,7 +880,7 @@ describe('paths', () => {
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
           // Vite paths
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
-          entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry-client.tsx'),
+          entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),
         },
       }
 
