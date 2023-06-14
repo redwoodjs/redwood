@@ -32,8 +32,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.3",
-    "@prisma/client": "4.14.1",
-    "@whatwg-node/fetch": "0.9.2",
+    "@prisma/client": "4.15.0",
+    "@whatwg-node/fetch": "0.9.4",
     "core-js": "3.30.2",
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.0",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@babel/cli": "7.21.5",
     "@babel/core": "7.22.1",
-    "@types/aws-lambda": "8.10.115",
+    "@types/aws-lambda": "8.10.117",
     "@types/jsonwebtoken": "9.0.2",
     "@types/memjs": "1",
     "@types/pascalcase": "1.0.1",
