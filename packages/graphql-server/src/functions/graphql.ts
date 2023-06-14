@@ -106,6 +106,7 @@ export const createGraphQLHandler = ({
       // If you specify values for both headers and multiValueHeaders, API Gateway merges them into a single list.
       const responseHeaders: Record<string, string> = {}
 
+      // @ts-expect-error - https://github.com/ardatan/whatwg-node/issues/574
       response.headers.forEach((value, name) => {
         responseHeaders[name] = value
       })

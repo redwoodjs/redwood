@@ -1169,7 +1169,7 @@ describe('comments', () => {
     })
     expect(comment.id).toEqual(scenario.comment.jane.id)
 
-    const result = await comments({ postId: scenario.comment.jane.id })
+    const result = await comments({ postId: scenario.comment.jane.postId })
     expect(result.length).toEqual(0)
   })
 
@@ -1263,7 +1263,7 @@ describe('comments', () => {
       })
       expect(comment.id).toEqual(scenario.comment.jane.id)
 
-      const result = await comments({ postId: scenario.comment.jane.id })
+      const result = await comments({ postId: scenario.comment.jane.postId })
       expect(result.length).toEqual(0)
     }
   )

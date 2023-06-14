@@ -4,12 +4,12 @@ import https from 'https'
 import path from 'path'
 
 import * as babel from '@babel/core'
+import boxen from 'boxen'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
 import { Listr } from 'listr2'
-import { memoize } from 'lodash'
-import lodash from 'lodash/string'
+import { memoize, template } from 'lodash'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
@@ -66,9 +66,9 @@ export const nameVariants = (name) => {
 
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
   try {
-    const template = lodash.template(readFile(templateFilename).toString())
+    const templateFn = template(readFile(templateFilename).toString())
 
-    const renderedTemplate = template({
+    const renderedTemplate = templateFn({
       name,
       ...nameVariants(name),
       ...rest,
@@ -106,7 +106,7 @@ export const prettify = (templateFilename, renderedTemplate) => {
 export const readFile = (target) =>
   fs.readFileSync(target, { encoding: 'utf8' })
 
-const SUPPORTED_EXTENSIONS = ['.js', '.ts', '.tsx']
+const SUPPORTED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx']
 
 export const deleteFile = (file) => {
   const extension = path.extname(file)
@@ -259,7 +259,7 @@ export const transformTSToJS = (filename, content) => {
     retainLines: true,
   })
 
-  return prettify(filename.replace(/\.tsx?$/, '.js'), code)
+  return prettify(filename.replace(/\.ts(x)?$/, '.js$1'), code)
 }
 
 /**
@@ -427,7 +427,7 @@ export const addScaffoldImport = () => {
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
-  return 'Added scaffold import to App.{js,tsx}'
+  return 'Added scaffold import to App.{jsx,tsx}'
 }
 
 const removeEmtpySet = (routesContent, layout) => {
@@ -581,4 +581,17 @@ export const usingVSCode = () => {
   const redwoodPaths = getPaths()
   const VS_CODE_PATH = path.join(redwoodPaths.base, '.vscode')
   return fs.existsSync(VS_CODE_PATH)
+}
+
+export const printSetupNotes = (notes) => {
+  return {
+    title: 'One more thing...',
+    task: (_ctx, task) => {
+      task.title = `One more thing...\n\n ${boxen(notes.join('\n'), {
+        padding: { top: 1, bottom: 1, right: 1, left: 1 },
+        margin: 1,
+        borderColour: 'gray',
+      })}  \n`
+    },
+  }
 }

@@ -19,9 +19,9 @@
   "scripts": {
     "build": "yarn build:js && yarn build:types",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__' --glob",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
+    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest src",
@@ -43,6 +43,7 @@
     "@graphql-codegen/typescript-resolvers": "3.2.1",
     "@redwoodjs/graphql-server": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
+    "@sdl-codegen/node": "0.0.10",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.8.1",
     "chalk": "4.1.2",
@@ -56,7 +57,7 @@
     "prettier": "2.8.8",
     "rimraf": "5.0.1",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.17.17",
+    "systeminformation": "5.18.3",
     "terminal-link": "2.1.1",
     "ts-node": "10.9.1",
     "typescript": "5.1.3"

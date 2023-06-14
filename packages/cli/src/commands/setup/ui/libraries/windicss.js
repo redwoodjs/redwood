@@ -6,12 +6,24 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
+import { getPaths, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
 
 export const command = 'windicss'
 export const aliases = ['windi']
-export const description = 'Set up WindiCSS'
+export const description =
+  '[DEPRECATED]\n' +
+  'Set up WindiCSS\n' +
+  'For more information:\n' +
+  'https://windicss.org/posts/sunsetting.html'
+
+export const notes = [
+  c.error('DEPRECATED option not officially supported'),
+  '',
+  'Windi CSS is sunsetting. For more information:',
+  'https://windicss.org/posts/sunsetting.html',
+]
+
 export const builder = (yargs) => {
   yargs.option('force', {
     alias: 'f',
@@ -140,6 +152,7 @@ export const handler = async ({ force, install }) => {
           }
         },
       },
+      printSetupNotes(notes),
     ],
     { rendererOptions: { collapseSubtasks: false } }
   )

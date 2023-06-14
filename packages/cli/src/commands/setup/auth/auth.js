@@ -192,9 +192,9 @@ async function getAuthHandler(module) {
     })
   }
 
-  const { handler } = await import(module)
+  const setupModule = await import(module)
 
-  return handler
+  return setupModule.default.handler
 }
 
 /**
