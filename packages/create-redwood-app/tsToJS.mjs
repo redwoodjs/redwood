@@ -88,7 +88,7 @@ for (const filePath of [...apiWebFilePaths, ...scriptFilePaths]) {
   })
 
   fs.writeFileSync(
-    filePath.replace('.tsx', '.js').replace('.ts', '.js'),
+    filePath.replace('.tsx', '.jsx').replace('.ts', '.js'),
     formattedCode,
     'utf-8'
   )
