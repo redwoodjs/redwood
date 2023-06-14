@@ -6597,7 +6597,7 @@ __metadata:
     "@fastify/static": 6.10.2
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.3.1
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     "@types/split2": 4.2.0
@@ -6634,7 +6634,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
     "@prisma/client": 4.15.0
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     "@types/jsonwebtoken": 9.0.2
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
@@ -6727,7 +6727,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
     "@redwoodjs/api": 5.3.1
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.30.2
     jest: 29.5.0
@@ -6781,7 +6781,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.22.3
     "@clerk/clerk-sdk-node": 4.10.6
     "@redwoodjs/api": 5.3.1
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     core-js: 3.30.2
     jest: 29.5.0
     typescript: 5.1.3
@@ -6907,7 +6907,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
     "@redwoodjs/api": 5.3.1
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     core-js: 3.30.2
     firebase-admin: 10.3.0
     jest: 29.5.0
@@ -6957,7 +6957,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
     "@redwoodjs/api": 5.3.1
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.30.2
     jest: 29.5.0
@@ -7008,7 +7008,7 @@ __metadata:
     "@babel/core": 7.22.1
     "@babel/runtime-corejs3": 7.22.3
     "@redwoodjs/api": 5.3.1
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.30.2
     jest: 29.5.0
@@ -7357,7 +7357,7 @@ __metadata:
     "@fastify/static": 6.10.2
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.3.1
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     ansi-colors: 4.1.3
@@ -7627,7 +7627,7 @@ __metadata:
     "@fastify/url-data": 5.3.1
     "@redwoodjs/internal": 5.3.1
     "@redwoodjs/project-config": 5.3.1
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     "@types/crypto-js": 4.1.1
     "@types/jsonwebtoken": 9.0.2
     "@types/lodash": 4.14.195
@@ -7706,7 +7706,7 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
-    "@types/aws-lambda": 8.10.117
+    "@types/aws-lambda": 8.10.118
     "@types/babel-core": 6.25.7
     "@types/jest": 29.5.2
     "@types/node": 18.16.1
@@ -9455,10 +9455,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.117, @types/aws-lambda@npm:^8.10.83":
-  version: 8.10.117
-  resolution: "@types/aws-lambda@npm:8.10.117"
-  checksum: 434df32065388838ec5b0025db2d4cc15fa34eaafabf8260f169a3bc1ca2545b807d266f4e02dece4ab0e047213dce3b38eb51a73f49ca00411d172fba122db7
+"@types/aws-lambda@npm:8.10.118, @types/aws-lambda@npm:^8.10.83":
+  version: 8.10.118
+  resolution: "@types/aws-lambda@npm:8.10.118"
+  checksum: ae4f30ad4c85cfe6c41093df21035a049eb943d0ef5947ee7753062d692d585c8e77e91869f79c778ffee15fa2c75cf486ea15ff3b87e1b1b614fc8ddc96398b
   languageName: node
   linkType: hard
 
