@@ -115,10 +115,10 @@ const rebuildApiServer = () => {
 
     // Start API server
 
-    // Check if experimental server file exists (Note: in dist folder)
+    // Check if experimental server file exists
     const serverFile = resolveFile(`${redwoodProjectPaths.api.dist}/server`)
     if (serverFile) {
-      httpServerProcess = fork(serverFile, ['api'], forkOpts)
+      httpServerProcess = fork(serverFile, [], forkOpts)
     } else {
       httpServerProcess = fork(
         path.join(__dirname, 'index.js'),
