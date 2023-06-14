@@ -9786,17 +9786,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*":
-  version: 8.40.0
-  resolution: "@types/eslint@npm:8.40.0"
-  dependencies:
-    "@types/estree": "*"
-    "@types/json-schema": "*"
-  checksum: 9b9ea412985339cab15339a751c3249634bb52d9e29b35688395ee32b46e2fa0609ec3b092772909af6d4b9d267bd0eafc69f39cc3a08dac4dc8911b0fc93c95
-  languageName: node
-  linkType: hard
-
-"@types/eslint@npm:8":
+"@types/eslint@npm:*, @types/eslint@npm:8":
   version: 8.40.2
   resolution: "@types/eslint@npm:8.40.2"
   dependencies:
