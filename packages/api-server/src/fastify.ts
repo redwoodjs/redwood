@@ -21,7 +21,7 @@ let serverConfigFile: {
 } = {
   config: DEFAULT_OPTIONS,
   configureFastify: async (fastify, options) => {
-    fastify.log.info(
+    fastify.log.trace(
       options,
       `In configureFastify hook for side: ${options?.side}`
     )
