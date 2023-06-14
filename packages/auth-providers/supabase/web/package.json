@@ -22,12 +22,12 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.3",
+    "@babel/runtime-corejs3": "7.22.5",
     "core-js": "3.30.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.5",
-    "@babel/core": "7.22.1",
+    "@babel/cli": "7.22.5",
+    "@babel/core": "7.22.5",
     "@supabase/supabase-js": "2.24.0",
     "@types/react": "18.2.12",
     "jest": "29.5.0",

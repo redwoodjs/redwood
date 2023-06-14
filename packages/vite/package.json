@@ -25,7 +25,7 @@
     "test:watch": "glob './src/**/__tests__/*.test.mts' --cmd='node --loader tsx --no-warnings --test --watch'"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.3",
+    "@babel/runtime-corejs3": "7.22.5",
     "@redwoodjs/internal": "5.3.1",
     "@redwoodjs/project-config": "5.3.1",
     "@vitejs/plugin-react": "4.0.0",
@@ -37,7 +37,7 @@
     "vite-plugin-html": "3.2.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.5",
+    "@babel/cli": "7.22.5",
     "glob": "10.2.7",
     "jest": "29.5.0",
     "typescript": "5.1.3"
