@@ -5,7 +5,7 @@ module.exports = {
       displayName: 'code',
       testEnvironment: 'jest-environment-jsdom',
       testMatch: [
-        '**/*.test.+(ts|tsx|js)',
+        '**/*.test.+(ts|tsx|js|jsx)',
         '!**/__typetests__/*.+(ts|tsx|js|jsx)',
       ],
     },

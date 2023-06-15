@@ -22,7 +22,7 @@ describe('relational form field', () => {
     })
 
     const tagFormPath =
-      '/path/to/project/web/src/components/Tag/TagForm/TagForm.js'
+      '/path/to/project/web/src/components/Tag/TagForm/TagForm.jsx'
     form = files[path.normalize(tagFormPath)]
   })
 
