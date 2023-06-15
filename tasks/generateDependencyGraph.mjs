@@ -22,7 +22,7 @@ function main() {
     options: {
       open: {
         type: 'boolean',
-        alias: 'o',
+        short: 'o',
         default: false,
       },
     },
