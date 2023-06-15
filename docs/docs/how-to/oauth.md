@@ -653,6 +653,145 @@ At the end of `callback()` we set the `Set-Cookie` and `Location` headers to sen
 
 Try it out, and as long as you have an indication on your site that a user is logged in, you should see it! In the case of the test project, you'll see "Log Out" at the right side of the top nav instead of "Log In". Try logging out and then back again to test the whole flow from scratch.
 
+## The Complete `/oauth` Function
+
+Here's the `oauth` function in its entirety:
+
+```jsx title=/api/src/functions/oauth/oauth.js
+import CryptoJS from 'crypto-js'
+
+import { db } from 'src/lib/db'
+
+export const handler = async (event, _context) => {
+  switch (event.path) {
+    case '/oauth/callback':
+      return await callback(event)
+    default:
+      // Whatever this is, it's not correct, so return "Not Found"
+      return {
+        statusCode: 404,
+      }
+  }
+}
+
+const callback = async (event) => {
+  const { code } = event.queryStringParameters
+
+  const response = await fetch(`https://github.com/login/oauth/access_token`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: process.env.GITHUB_OAUTH_CLIENT_ID,
+      client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+      redirect_uri: process.env.GITHUB_OAUTH_REDIRECT_URI,
+      code,
+    }),
+  })
+
+  const { access_token, scope, error } = JSON.parse(await response.text())
+
+  if (error) {
+    return { statuscode: 400, body: error }
+  }
+
+  try {
+    const providerUser = await getProviderUser(access_token)
+    const user = await getUser({
+      providerUser,
+      accessToken: access_token,
+      scope,
+    })
+    const cookie = secureCookie(user)
+
+    return {
+      statusCode: 302,
+      headers: {
+        'Set-Cookie': cookie,
+        Location: '/',
+      },
+    }
+  } catch (e) {
+    return { statuscode: 500, body: e.message }
+  }
+}
+
+const secureCookie = (user) => {
+  const expires = new Date()
+  expires.setFullYear(expires.getFullYear() + 1)
+
+  const cookieAttrs = [
+    `Expires=${expires.toUTCString()}`,
+    'HttpOnly=true',
+    'Path=/',
+    'SameSite=Strict',
+    `Secure=${process.env.NODE_ENV !== 'development'}`,
+  ]
+  const data = JSON.stringify({ id: user.id })
+
+  const encrypted = CryptoJS.AES.encrypt(
+    data,
+    process.env.SESSION_SECRET
+  ).toString()
+
+  return [`session=${encrypted}`, ...cookieAttrs].join('; ')
+}
+
+const getProviderUser = async (token) => {
+  const response = await fetch('https://api.github.com/user', {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  const body = JSON.parse(await response.text())
+
+  return body
+}
+
+const getUser = async ({ providerUser, accessToken, scope }) => {
+  const { user, identity } = await findOrCreateUser(providerUser)
+
+  await db.identity.update({
+    where: { id: identity.id },
+    data: { accessToken, scope, lastLoginAt: new Date() },
+  })
+
+  return user
+}
+
+const findOrCreateUser = async (providerUser) => {
+  const identity = await db.identity.findFirst({
+    where: { provider: 'github', uid: providerUser.id.toString() },
+  })
+
+  if (identity) {
+    // identity exists, return the user
+    const user = await db.user.findUnique({ where: { id: identity.userId } })
+    return { user, identity }
+  }
+
+  // identity not found, need to create it and the user
+  return await db.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: {
+        email: providerUser.email,
+        fullName: providerUser.name,
+      },
+    })
+
+    const identity = await tx.identity.create({
+      data: {
+        userId: user.id,
+        provider: 'github',
+        uid: providerUser.id.toString(),
+      },
+    })
+
+    return { user, identity }
+  })
+}
+```
+
 ## Enhancements
 
 This is barebones implementation of a single OAuth provider. What can we do to make it better?
