@@ -1,7 +1,7 @@
 import { parse, traverse } from '@babel/core'
 import generate from '@babel/generator'
 import { VISITOR_KEYS } from '@babel/types'
-import { _ } from 'lodash'
+import { partition, forEachRight } from 'lodash'
 import prettier from 'prettier'
 
 import { forEachFunctionOn, nodeIs } from './algorithms'
@@ -192,13 +192,13 @@ function mergeAST(baseAST, extAST, strategy = {}) {
   traverse(baseAST, baseVisitor)
 
   const baseProgram = getProgramPath(baseAST)
-  const [imports, others] = _.partition(
+  const [imports, others] = partition(
     getProgramPath(extAST).get('body'),
     nodeIs('ImportDeclaration')
   )
 
   imports.forEach((exp) => insertAfterLastImport(exp, baseProgram))
-  _.forEachRight(others, (exp) => insertBeforeFirstUsage(exp, baseProgram))
+  forEachRight(others, (exp) => insertBeforeFirstUsage(exp, baseProgram))
 }
 
 /**

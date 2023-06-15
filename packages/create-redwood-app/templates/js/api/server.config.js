@@ -36,11 +36,11 @@ const config = {
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
-    fastify.trace.info({ custom: { options } }, 'Configuring api side')
+    fastify.log.trace({ custom: { options } }, 'Configuring api side')
   }
 
   if (options.side === 'web') {
-    fastify.trace.info({ custom: { options } }, 'Configuring web side')
+    fastify.log.trace({ custom: { options } }, 'Configuring web side')
   }
 
   return fastify

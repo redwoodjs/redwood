@@ -1,0 +1,35 @@
+{
+  "name": "@redwoodjs/eslint-plugin",
+  "version": "5.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/eslint-plugin"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn node ./build.mjs && yarn build:types",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "glob './src/**/__tests__/*.test.ts' --cmd='node --loader tsx --no-warnings --test' && echo",
+    "test:watch": "glob './src/**/__tests__/*.test.ts' --cmd='node --loader tsx --no-warnings --test --watch'"
+  },
+  "dependencies": {
+    "eslint": "8.42.0"
+  },
+  "devDependencies": {
+    "@types/eslint": "8",
+    "@types/estree": "1.0.1",
+    "esbuild": "0.18.2",
+    "fast-glob": "3.2.12",
+    "glob": "10.2.7",
+    "typescript": "5.1.3"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

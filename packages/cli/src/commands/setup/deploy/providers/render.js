@@ -7,9 +7,9 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
+import { getPaths, writeFilesTask, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { addFilesTask, printSetupNotes, updateApiURLTask } from '../helpers'
+import { addFilesTask, updateApiURLTask } from '../helpers'
 import {
   POSTGRES_YAML,
   RENDER_HEALTH_CHECK,
