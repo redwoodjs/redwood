@@ -36,7 +36,7 @@ async function serve() {
   const redwoodProjectPaths = getPaths()
   const redwoodConfig = getConfig()
 
-  const apiRootPath = coerceRootPath(redwoodConfig.web.apiUrl)
+  const apiRootPath = enableWeb ? coerceRootPath(redwoodConfig.web.apiUrl) : ''
   const port = enableWeb ? redwoodConfig.web.port : redwoodConfig.api.port
 
   const tsServer = Date.now()
@@ -68,7 +68,7 @@ async function serve() {
     loggerConfig: {
       logger: logger,
     },
-    graphiQLEndpoint: '/.redwood/functions/graphql',
+    graphiQLEndpoint: enableWeb ? '/.redwood/functions/graphql' : '/graphql',
     sdls,
     services,
     directives,
