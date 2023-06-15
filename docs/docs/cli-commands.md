@@ -1754,6 +1754,8 @@ A `generateGraphiQLHeader` file will be created in your `api/lib` folder and inc
 yarn redwood setup graphiql <provider>
 ```
 
+If you're using `dbAuth`, make sure the `-i` id you provided is not logged in from the web app.
+
 | Arguments & Options | Description                                                                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase`                                                                           |
