@@ -7865,7 +7865,7 @@ __metadata:
   dependencies:
     "@types/eslint": 8
     "@types/estree": 1.0.1
-    esbuild: 0.17.19
+    esbuild: 0.18.2
     eslint: 8.42.0
     fast-glob: 3.2.12
     glob: 10.2.7
