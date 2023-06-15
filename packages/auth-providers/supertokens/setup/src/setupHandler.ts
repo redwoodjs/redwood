@@ -7,7 +7,7 @@ import { Args } from './setup'
 
 // exported for testing
 export const extraTask = {
-  title: `Adding SuperTokens routing component to Routes.{js,tsx}...`,
+  title: `Adding SuperTokens routing component to Routes.{jsx,tsx}...`,
   task: () => {
     const webRoutesPath = getPaths().web.routes
 

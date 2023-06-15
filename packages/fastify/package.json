@@ -25,16 +25,16 @@
     "@redwoodjs/project-config": "5.0.0",
     "ansi-colors": "4.1.3",
     "fast-glob": "3.2.12",
-    "fastify": "4.17.0",
+    "fastify": "4.18.0",
     "fastify-raw-body": "4.2.0",
-    "lodash.escape": "4.0.1",
+    "lodash": "4.17.21",
     "qs": "6.11.2"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.116",
-    "@types/lodash.escape": "4.0.7",
+    "@types/aws-lambda": "8.10.118",
+    "@types/lodash": "4.14.195",
     "@types/qs": "6.9.7",
-    "esbuild": "0.17.19",
+    "esbuild": "0.18.2",
     "typescript": "5.1.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

@@ -16,22 +16,22 @@
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.ts,.tsx,.jsx\"",
+    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx,.jsx\"",
     "build:types": "tsc --build --verbose",
-    "build:watch": "nodemon --watch src --ext \"js,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "yarn build",
     "test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.3",
+    "@babel/runtime-corejs3": "7.22.5",
     "@redwoodjs/auth": "5.0.0",
     "@redwoodjs/internal": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
     "@redwoodjs/router": "5.0.0",
     "@redwoodjs/structure": "5.0.0",
     "@redwoodjs/web": "5.0.0",
-    "@whatwg-node/fetch": "0.9.3",
+    "@whatwg-node/fetch": "0.9.6",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.30.2",
@@ -39,8 +39,8 @@
     "mime-types": "2.1.35"
   },
   "devDependencies": {
-    "@babel/cli": "7.21.5",
-    "@babel/core": "7.22.1",
+    "@babel/cli": "7.22.5",
+    "@babel/core": "7.22.5",
     "@types/mime-types": "2.1.1",
     "babel-plugin-tester": "11.0.4",
     "jest": "29.5.0",

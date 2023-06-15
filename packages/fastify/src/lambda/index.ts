@@ -8,7 +8,7 @@ import type {
 } from 'aws-lambda'
 import fg from 'fast-glob'
 import { FastifyReply, FastifyRequest, RequestGenericInterface } from 'fastify'
-import escape from 'lodash.escape'
+import { escape } from 'lodash'
 import qs from 'qs'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -110,7 +110,7 @@ export async function lambdaRequestHandler(
   return requestHandler(req, reply, LAMBDA_FUNCTIONS[routeName])
 }
 
-function lambdaEventForFastifyRequest(
+export function lambdaEventForFastifyRequest(
   request: FastifyRequest
 ): APIGatewayProxyEvent {
   return {

@@ -21,7 +21,7 @@ describe('Single Word default files', () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.js'
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -31,7 +31,7 @@ describe('Single Word default files', () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.js'
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -41,7 +41,7 @@ describe('Single Word default files', () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.js'
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -59,7 +59,7 @@ describe('Multi word default files', () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.js'
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -69,7 +69,7 @@ describe('Multi word default files', () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.js'
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -79,7 +79,7 @@ describe('Multi word default files', () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.js'
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -98,14 +98,14 @@ describe('JS Files', () => {
     expect(
       javascriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.js'
+          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.jsx'
         )
       ]
     ).not.toBeUndefined()
     expect(
       javascriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.test.js'
+          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.test.jsx'
         )
       ]
     ).not.toBeUndefined()
@@ -122,7 +122,7 @@ test('trims Layout from end of name', () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.js'
+        '/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.jsx'
       )
     ]
 
@@ -142,7 +142,7 @@ test('Does not trim Layout from beginning of name', () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.js'
+        '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.jsx'
       )
     ]
 
@@ -162,7 +162,7 @@ test('Does not trim Layout from middle of name', () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.js'
+        '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.jsx'
       )
     ]
 
@@ -182,7 +182,7 @@ test('Only trims Layout once', () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.js'
+        '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.jsx'
       )
     ]
 
@@ -228,10 +228,10 @@ test("doesn't include storybook file when --stories is set to false", () => {
 
   expect(Object.keys(withoutStoryFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.test.js'
+      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.test.jsx'
     ),
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.js'
+      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.jsx'
     ),
   ])
 })
@@ -245,10 +245,10 @@ test("doesn't include test file when --tests is set to false", () => {
 
   expect(Object.keys(withoutTestFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.stories.js'
+      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.stories.jsx'
     ),
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.js'
+      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.jsx'
     ),
   ])
 })
@@ -262,7 +262,7 @@ test('JavaScript: includes skip link when --skipLink is set to true', () => {
   expect(
     withSkipLinkFilesJS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.js'
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.jsx'
       )
     ]
   ).toMatchSnapshot()
