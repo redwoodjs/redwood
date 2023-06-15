@@ -18,7 +18,6 @@ export const defaultOptions: StorybookYargsOptions = {
   smokeTest: false,
 }
 
-// TODO: Provide a type for the `yargs` argument
 export function builder(
   yargs: Argv<StorybookYargsOptions>
 ): Argv<StorybookYargsOptions> {

@@ -139,8 +139,12 @@ export const resolveFile = (
 /**
  * Path constants that are relevant to a Redwood project.
  */
-// TODO: Make this a proxy and make it lazy.
+const getPathsCache = new Map<string, Paths>()
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
+  if (getPathsCache.has(BASE_DIR)) {
+    return getPathsCache.get(BASE_DIR) as Paths
+  }
+
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
@@ -214,6 +218,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   fs.mkdirSync(paths.generated.types.includes, { recursive: true })
   fs.mkdirSync(paths.generated.types.mirror, { recursive: true })
 
+  getPathsCache.set(BASE_DIR, paths)
   return paths
 }
 
