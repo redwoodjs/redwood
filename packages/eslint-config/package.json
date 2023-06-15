@@ -15,6 +15,7 @@
     "@babel/core": "7.22.5",
     "@babel/eslint-parser": "7.22.5",
     "@babel/eslint-plugin": "7.22.5",
+    "@redwoodjs/eslint-plugin": "5.0.0",
     "@redwoodjs/internal": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
     "@typescript-eslint/eslint-plugin": "5.59.9",
