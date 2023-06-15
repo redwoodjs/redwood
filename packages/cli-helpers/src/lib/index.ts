@@ -46,7 +46,7 @@ export const transformTSToJS = (filename: string, content: string) => {
     process.exit(1)
   }
 
-  return prettify(filename.replace(/\.tsx?$/, '.js'), babelFileResult.code)
+  return prettify(filename.replace(/\.ts(x)?$/, '.js$1'), babelFileResult.code)
 }
 
 /**

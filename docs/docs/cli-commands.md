@@ -1855,7 +1855,7 @@ yarn redwood setup deploy <provider>
 
 | Arguments & Options | Description                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------- |
-| `provider`          | Deploy provider to configure. Choices are `aws-serverless`, `netlify`, `render`, or `vercel`          |
+| `provider`          | Deploy provider to configure. Choices are `baremetal`, `coherence`, `edgio`, `flightcontrol`, `netlify`, `render`, `vercel`, or `aws-serverless [deprecated]`,          |
 | `--database, -d`    | Database deployment for Render only [choices: "none", "postgresql", "sqlite"] [default: "postgresql"] |
 | `--force, -f`       | Overwrite existing configuration [default: false]                                                     |
 
@@ -1909,7 +1909,7 @@ yarn redwood setup tsconfig
 
 ### setup ui
 
-Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), [Mantine UI](https://ui.mantine.dev/) and [WindiCSS](https://windicss.org/).
+Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), and [Mantine UI](https://ui.mantine.dev/).
 
 ```
 yarn rw setup ui <library>
@@ -1917,7 +1917,7 @@ yarn rw setup ui <library>
 
 | Arguments & Options | Description                                                                             |
 | :------------------ | :-------------------------------------------------------------------------------------- |
-| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, `mantine`, and `windicss` |
+| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, and `mantine` |
 | `--force, -f`       | Overwrite existing configuration                                                        |
 
 ## storybook

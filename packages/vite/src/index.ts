@@ -24,7 +24,7 @@ export default function redwoodPluginVite(): PluginOption[] {
 
   if (!clientEntryPath) {
     throw new Error(
-      'Vite client entry point not found. Please check that your project has an entry-client.{jsx,tsx} file in the web/src directory.'
+      'Vite client entry point not found. Please check that your project has an entry.client.{jsx,tsx} file in the web/src directory.'
     )
   }
 
