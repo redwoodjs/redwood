@@ -60,7 +60,7 @@
     "babel-plugin-module-resolver": "5.0.0",
     "babel-timing": "0.9.1",
     "copy-webpack-plugin": "11.0.0",
-    "core-js": "3.30.2",
+    "core-js": "3.31.0",
     "css-loader": "6.8.1",
     "css-minimizer-webpack-plugin": "5.0.0",
     "dotenv-webpack": "8.0.1",

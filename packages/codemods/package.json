@@ -33,7 +33,7 @@
     "@vscode/ripgrep": "1.15.4",
     "@whatwg-node/fetch": "0.9.6",
     "cheerio": "1.0.0-rc.12",
-    "core-js": "3.30.2",
+    "core-js": "3.31.0",
     "deepmerge": "4.3.1",
     "execa": "5.1.1",
     "fast-glob": "3.2.12",
