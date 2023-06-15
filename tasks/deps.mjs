@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-env node */
 // @ts-check
 
@@ -6,10 +7,10 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const DependencyCruiserConfigFile = '.dependency-cruiser.mjs'
+const DEPENDENCY_CRUISER_CONFIG_FILE = '.dependency-cruiser.mjs'
 
 const globalConfigPath = fileURLToPath(
-  new URL(`../${DependencyCruiserConfigFile}`, import.meta.url)
+  new URL(`../${DEPENDENCY_CRUISER_CONFIG_FILE}`, import.meta.url)
 )
 
 function main() {
@@ -22,7 +23,7 @@ function main() {
   }
 
   const { dir: packageDir, base } = path.parse(targetDir)
-  const localConfigPath = path.join(packageDir, DependencyCruiserConfigFile)
+  const localConfigPath = path.join(packageDir, DEPENDENCY_CRUISER_CONFIG_FILE)
   let configPath = globalConfigPath
 
   if (fs.existsSync(localConfigPath)) {
