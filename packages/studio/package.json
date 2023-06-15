@@ -37,7 +37,7 @@
     "crypto-js": "4.1.1",
     "dotenv": "16.1.4",
     "fast-json-parse": "1.0.3",
-    "fastify": "4.17.0",
+    "fastify": "4.18.0",
     "fastify-raw-body": "4.2.0",
     "graphql": "16.6.0",
     "graphql-scalars": "1.22.2",
