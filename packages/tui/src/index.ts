@@ -7,6 +7,8 @@ import chalk from 'chalk'
 import { prompt as enquirerPrompt } from 'enquirer'
 import { UpdateManager } from 'stdout-update'
 
+import { TUITask, TUITaskDefinition } from './tasks'
+
 /**
  * A default set of styling for the TUI, designed for a cohesive look and feel around the Redwood CLI, CRWA and vairous plugins
  */
@@ -193,6 +195,105 @@ export class RedwoodTUI {
     process.on('exit', () => {
       this.stopReactive()
     })
+  }
+
+  async runTasks(definitions: TUITaskDefinition[]) {
+    // build the tasks
+    let majorIndex = 1
+    let minorIndex = 0
+
+    const tasks: TUITask[] = []
+    for (const definition of definitions) {
+      if (Array.isArray(definition.task)) {
+        tasks.push(new TUITask(definition, `${majorIndex}.x`))
+        for (const nestedDefinition of definition.task) {
+          if (Array.isArray(nestedDefinition.task)) {
+            throw new Error(
+              'Nested task definitions can only be one level deep'
+            )
+          }
+          tasks.push(
+            new TUITask(nestedDefinition, `${majorIndex}.${minorIndex}`, true)
+          )
+          minorIndex += 1
+        }
+      } else {
+        tasks.push(new TUITask(definition, `${majorIndex}.${minorIndex}`))
+      }
+      majorIndex += 1
+      minorIndex = 0
+    }
+
+    // initial pass of the enabled/skipped flags
+    for (const task of tasks) {
+      task.enabled =
+        typeof task.enable === 'function'
+          ? await task.enable(task)
+          : task.enable
+      task.skipped =
+        typeof task.skip === 'function' ? await task.skip(task) : task.skip
+    }
+
+    // start rendering the tasks
+    this.timerId = setInterval(() => {
+      this.drawTasks(tasks)
+    }, 80)
+
+    // run the tasks
+    for (const task of tasks) {
+      task.enabled =
+        typeof task.enable === 'function'
+          ? await task.enable(task)
+          : task.enable
+      if (!task.enabled) {
+        continue
+      }
+
+      task.skipped =
+        typeof task.skip === 'function' ? await task.skip(task) : task.skip
+      if (task.skipped) {
+        task.state = 'skipped'
+        continue
+      }
+
+      try {
+        if (typeof task.task === 'function') {
+          task.state = 'running'
+          await task.task(task)
+          task.completed = true
+          task.state = 'completed'
+        }
+      } catch (error) {
+        task.errored = true
+        task.state = 'errored'
+        await task.onError(task, error as Error)
+      }
+    }
+
+    // stop rendering the tasks
+    clearInterval(this.timerId)
+    this.drawTasks(tasks)
+  }
+
+  private drawTasks(tasks: TUITask[]) {
+    // TODO: Don't rerender tasks that have no chance of changing
+    const taskContents = []
+    for (const task of tasks) {
+      if (task.enabled) {
+        taskContents.push({
+          content: task.renderTitleToString(),
+          active: task.state === 'running',
+          index: task.index,
+        })
+      }
+    }
+
+    // TODO: Need to account for terminal height and attempt to keep the active tasks in view
+    const allLines = taskContents
+      .map((c) => c.content)
+      .join('\n')
+      .split('\n')
+    this.manager.update(allLines)
   }
 
   /**

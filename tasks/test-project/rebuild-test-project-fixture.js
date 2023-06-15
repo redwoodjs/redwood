@@ -230,17 +230,15 @@ if (resumePath && !fs.existsSync(path.join(resumePath, 'redwood.toml'))) {
   process.exit(1)
 }
 
-const createProject = () => {
-  let cmd = `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`
-
-  const subprocess = exec(
-    cmd,
-    // We create a ts project and convert using ts-to-js at the end if typescript flag is false
+const createProject = async (task) => {
+  await task.runExeca(
+    `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ${OUTPUT_PROJECT_PATH}`,
     ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
-    getExecaOptions(RW_FRAMEWORKPATH)
+    {
+      ...getExecaOptions(RW_FRAMEWORKPATH),
+      stdio: 'inherit',
+    }
   )
-
-  return subprocess
 }
 
 const copyProject = async () => {
@@ -276,6 +274,20 @@ if (!startStep) {
 }
 
 async function runCommand() {
+  console.log('Generating project at ' + OUTPUT_PROJECT_PATH)
+
+  await tui.runTasks([
+    {
+      title: 'Creating project',
+      task: createProject,
+      skip: startStep > 0,
+    },
+  ])
+
+  if (Math.random() < 2.0) {
+    return
+  }
+
   // Maybe we could add all of the tasks to an array and infer the `step` from
   // the array index?
   // I'd also want to be able to skip sub-tasks. Like both the "web" step and
