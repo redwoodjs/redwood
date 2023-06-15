@@ -28,7 +28,8 @@ ruleTester.run('process-env-computed', processEnvComputedRule, {
       code: 'process.env[foo]',
       errors: [
         {
-          message: 'Computed member access on process.env is not allowed.',
+          message:
+            'Computed member access on process.env does not work in production environments.',
         },
       ],
     },
@@ -36,7 +37,8 @@ ruleTester.run('process-env-computed', processEnvComputedRule, {
       code: "process.env['BAR']",
       errors: [
         {
-          message: 'Computed member access on process.env is not allowed.',
+          message:
+            'Computed member access on process.env does not work in production environments.',
         },
       ],
     },

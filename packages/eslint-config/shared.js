@@ -46,7 +46,7 @@ module.exports = {
     'import/internal-regex': '^src/',
   },
   rules: {
-    '@redwoodjs/process-env-computed': 'error',
+    '@redwoodjs/process-env-computed': 'warn',
     'prettier/prettier': 'warn',
     'no-console': 'off',
     'prefer-object-spread': 'warn',

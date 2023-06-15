@@ -30,7 +30,7 @@ export const processEnvComputedRule: Rule.RuleModule = {
   meta: {
     type: 'problem',
     docs: {
-      description: 'Disallow computed member access on process.env',
+      description: 'Find computed member access on process.env',
     },
     // fixable: 'code',
     schema: [], // No additional configuration needed
@@ -39,8 +39,10 @@ export const processEnvComputedRule: Rule.RuleModule = {
     return {
       MemberExpression: function (node) {
         if (isProcessEnv(node.object) && node.computed) {
+          console.log('eslint rule filename', context.filename)
           context.report({
-            message: 'Computed member access on process.env is not allowed.',
+            message:
+              'Computed member access on process.env does not work in production environments.',
             node,
             // fix(fixer) {},
           })
