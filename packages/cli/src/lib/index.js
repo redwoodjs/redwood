@@ -106,7 +106,7 @@ export const prettify = (templateFilename, renderedTemplate) => {
 export const readFile = (target) =>
   fs.readFileSync(target, { encoding: 'utf8' })
 
-const SUPPORTED_EXTENSIONS = ['.js', '.ts', '.tsx']
+const SUPPORTED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx']
 
 export const deleteFile = (file) => {
   const extension = path.extname(file)
@@ -259,7 +259,7 @@ export const transformTSToJS = (filename, content) => {
     retainLines: true,
   })
 
-  return prettify(filename.replace(/\.tsx?$/, '.js'), code)
+  return prettify(filename.replace(/\.ts(x)?$/, '.js$1'), code)
 }
 
 /**
@@ -427,7 +427,7 @@ export const addScaffoldImport = () => {
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
-  return 'Added scaffold import to App.{js,tsx}'
+  return 'Added scaffold import to App.{jsx,tsx}'
 }
 
 const removeEmtpySet = (routesContent, layout) => {
