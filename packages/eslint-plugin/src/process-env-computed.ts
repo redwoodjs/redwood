@@ -26,6 +26,26 @@ function hasName(node: unknown, name: string) {
   return isIdentifier(node) && node.name === name
 }
 
+function isTestFile(filename: string) {
+  return (
+    filename.endsWith('.test.ts') ||
+    filename.endsWith('.test.js') ||
+    filename.endsWith('.test.tsx') ||
+    filename.endsWith('.test.jsx') ||
+    filename.endsWith('.test.mts') ||
+    filename.endsWith('.test.mjs') ||
+    filename.endsWith('.test.cjs') ||
+    filename.endsWith('.spec.ts') ||
+    filename.endsWith('.spec.js') ||
+    filename.endsWith('.spec.tsx') ||
+    filename.endsWith('.spec.jsx') ||
+    filename.endsWith('.spec.mts') ||
+    filename.endsWith('.spec.mjs') ||
+    filename.endsWith('.spec.cjs') ||
+    filename.includes('/__tests__/')
+  )
+}
+
 export const processEnvComputedRule: Rule.RuleModule = {
   meta: {
     type: 'problem',
@@ -38,8 +58,11 @@ export const processEnvComputedRule: Rule.RuleModule = {
   create(context) {
     return {
       MemberExpression: function (node) {
-        if (isProcessEnv(node.object) && node.computed) {
-          console.log('eslint rule filename', context.filename)
+        if (
+          isProcessEnv(node.object) &&
+          node.computed &&
+          !isTestFile(context.filename)
+        ) {
           context.report({
             message:
               'Computed member access on process.env does not work in production environments.',
