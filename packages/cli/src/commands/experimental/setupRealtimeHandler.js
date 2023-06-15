@@ -135,7 +135,7 @@ export async function handler({ force, verbose }) {
           const serviceFile = path.join(
             redwoodPaths.api.services,
             'rooms',
-            `rooms.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `rooms.${isTypeScriptProject() ? 'ts' : 'js'}`
           )
 
           const serviceContent = ts
