@@ -7,6 +7,9 @@ export const schema = gql`
     newMessage(roomId: ID!): Message!
   }
 `
+export type NewMessageChannel<T extends string> = {
+  [Key in `newMessage:${T}`]: [payload: { from: string; body: string }]
+}
 
 const newMessage = {
   newMessage: {

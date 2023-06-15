@@ -1,16 +1,19 @@
+import type { SendMessageInput } from 'types/graphql'
+
 import { logger } from 'src/lib/logger'
+import type { PubSubChannelsType } from 'src/lib/realtime'
 
 export const room = ({ id }) => [id]
 
 export const send = async (
-  { input }: { input: { roomId: string; from: string; to: string } },
-  { context }: { context: { pubSub } }
+  { input }: { input: SendMessageInput },
+  { context }: { context: { pubSub: PubSubChannelsType } }
 ) => {
   logger.debug({ input }, 'sending message ....')
 
-  const { roomId, ...newMessage } = input
+  const { roomId, from, body } = input
 
-  context.pubSub.publish(`newMessage:${roomId}`, newMessage)
+  context.pubSub.publish(`newMessage:${roomId}`, { from, body })
 
   return input
 }
