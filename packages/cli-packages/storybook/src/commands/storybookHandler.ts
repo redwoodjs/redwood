@@ -2,13 +2,11 @@ import path from 'node:path'
 
 import execa from 'execa'
 
-// Allow import of untyped package
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+import { getPaths } from '@redwoodjs/project-config'
+// @ts-expect-error Allow the import of an untyped package.
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
-import { getPaths } from '../lib/project'
 import { StorybookYargsOptions } from '../types'
 
 export async function handler({
