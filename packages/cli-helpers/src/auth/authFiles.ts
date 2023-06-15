@@ -41,7 +41,6 @@ export const apiSideFiles = ({ basedir, webAuthn }: FilesArgs) => {
           )
         })
         .map((fileName) => {
-
           // remove "template" from the end, and change from {ts,tsx} to {js,jsx} for
           // JavaScript projects
           let outputFileName = fileName.replace(/\.template$/, '')

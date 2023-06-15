@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const stream = require('stream')
 
 const execa = require('execa')
 const prompts = require('prompts')
@@ -18,11 +19,7 @@ async function applyCodemod(codemod, target) {
 
   args.push()
 
-  await execa(
-    'yarn jscodeshift',
-    args,
-    getExecaOptions(path.resolve(__dirname))
-  )
+  await exec('yarn jscodeshift', args, getExecaOptions(path.resolve(__dirname)))
 }
 
 /** @type {(string) => import('execa').Options} */
@@ -75,9 +72,44 @@ async function confirmNoFixtureNoLink(copyFromFixtureOption, linkOption) {
   }
 }
 
+const nullStream = new stream.Writable()
+nullStream._write = (_chunk, _encoding, next) => {
+  next()
+}
+
+class ExecaError extends Error {
+  constructor({ stdout, stderr, exitCode }) {
+    super(`execa failed with exit code ${exitCode}`)
+    this.stdout = stdout
+    this.stderr = stderr
+    this.exitCode = exitCode
+  }
+}
+
+function exec(...args) {
+  return execa(...args)
+    .then(({ stdout, stderr, exitCode }) => {
+      if (exitCode !== 0) {
+        throw new ExecaError({ stdout, stderr, exitCode })
+      }
+    })
+    .catch((error) => {
+      if (error instanceof ExecaError) {
+        // Rethrow ExecaError
+        throw error
+      } else {
+        const { stdout, stderr, exitCode } = error
+        throw new ExecaError({ stdout, stderr, exitCode })
+      }
+    })
+}
+
 module.exports = {
   getExecaOptions,
   applyCodemod,
   updatePkgJsonScripts,
   confirmNoFixtureNoLink,
+  nullStream,
+  ExecaError,
+  exec,
 }
