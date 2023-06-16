@@ -1,5 +1,6 @@
 import path from 'path'
 
+import fg from 'fast-glob'
 import task, { TaskInnerAPI } from 'tasuku'
 
 import { getPaths } from '@redwoodjs/project-config'
