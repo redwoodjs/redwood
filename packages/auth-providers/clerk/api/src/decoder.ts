@@ -66,6 +66,7 @@ export const jwtAuthDecoder: Decoder = async (token: string, type: string) => {
 
     return {
       ...jwtPayload,
+      id: jwtPayload.sub,
       roles: roles,
     }
   } catch (error) {
