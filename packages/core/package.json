@@ -69,7 +69,7 @@
     "file-loader": "6.2.0",
     "graphql": "16.6.0",
     "graphql-tag": "2.12.6",
-    "html-webpack-plugin": "5.5.1",
+    "html-webpack-plugin": "5.5.3",
     "lodash": "4.17.21",
     "mini-css-extract-plugin": "2.7.6",
     "nodemon": "2.0.22",
