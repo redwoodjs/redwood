@@ -33,7 +33,7 @@ ruleTester.run('process-env-computed', processEnvComputedRule, {
       errors: [
         {
           message:
-            'Computed member access on process.env does not work in production environments.',
+            'Accessing process.env via array syntax will break in production. Use dot notation e.g. process.env.MY_ENV_VAR instead',
         },
       ],
     },
@@ -42,7 +42,7 @@ ruleTester.run('process-env-computed', processEnvComputedRule, {
       errors: [
         {
           message:
-            'Computed member access on process.env does not work in production environments.',
+            'Accessing process.env via array syntax will break in production. Use dot notation e.g. process.env.MY_ENV_VAR instead',
         },
       ],
     },
