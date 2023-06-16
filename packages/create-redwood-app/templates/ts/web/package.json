@@ -7,9 +7,7 @@
       "last 1 version"
     ],
     "production": [
-      "defaults",
-      "not IE 11",
-      "not IE_Mob 11"
+      "defaults"
     ]
   },
   "dependencies": {
