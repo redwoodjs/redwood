@@ -3,6 +3,7 @@ import path from 'path'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../lib'
@@ -44,6 +45,13 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ side, serve, prisma, dm: dataMigrate }) => {
+  recordTelemetryAttributes({
+    command: ['deploy', 'flightcontrol'].join(' '),
+    side,
+    prisma,
+    dataMigrate,
+    serve,
+  })
   const rwjsPaths = getPaths()
 
   const execaConfig = {

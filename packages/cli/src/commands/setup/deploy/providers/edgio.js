@@ -2,6 +2,7 @@ import fs from 'fs'
 
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { addPackagesTask, getPaths } from '../../../../lib'
@@ -36,6 +37,9 @@ const prismaBinaryTargetAdditions = () => {
 }
 
 export const handler = async () => {
+  recordTelemetryAttributes({
+    command: ['setup', 'deploy', 'edgio'].join(' '),
+  })
   const tasks = new Listr(
     [
       addPackagesTask({

@@ -4,6 +4,7 @@ import path from 'path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../../../lib'
@@ -31,6 +32,11 @@ export const builder = (yargs) => {
 const windiImportsExist = (appFile) => appFile.match(/^import 'windi\.css'$/m)
 
 export const handler = async ({ force, install }) => {
+  recordTelemetryAttributes({
+    command: ['setup', 'ui', 'windicss'].join(' '),
+    force,
+    install,
+  })
   const rwPaths = getPaths()
 
   const packages = ['windicss-webpack-plugin', 'windicss']

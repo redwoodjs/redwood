@@ -2,9 +2,12 @@ import fs from 'fs'
 import path from 'path'
 import repl from 'repl'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 
 import { getPaths } from '../lib'
+
+import { command } from './console'
 
 const paths = getPaths()
 
@@ -35,6 +38,10 @@ const loadConsoleHistory = async (r) => {
 }
 
 export const handler = () => {
+  recordTelemetryAttributes({
+    command,
+  })
+
   // Transpile on the fly
   registerApiSideBabelHook({
     plugins: [

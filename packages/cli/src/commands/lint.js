@@ -3,6 +3,8 @@ import fs from 'fs'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 
@@ -29,6 +31,10 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ path, fix }) => {
+  recordTelemetryAttributes({
+    command,
+    fix,
+  })
   try {
     const pathString = path?.join(' ')
     const result = await execa(

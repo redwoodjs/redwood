@@ -3,6 +3,7 @@ import { argv } from 'process'
 
 import concurrently from 'concurrently'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -11,6 +12,8 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
+
+import { command } from './dev'
 
 const defaultApiDebugPort = 18911
 
@@ -21,6 +24,15 @@ export const handler = async ({
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
   apiDebugPort,
 }) => {
+  recordTelemetryAttributes({
+    command,
+    side: JSON.stringify(side),
+    // forward, // TODO: Should we record this?
+    generate,
+    watchNodeModules,
+    apiDebugPort,
+  })
+
   const redwoodProjectPaths = getPaths()
   const redwoodProjectConfig = getConfig()
 

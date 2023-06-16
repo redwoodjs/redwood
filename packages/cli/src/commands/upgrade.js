@@ -6,6 +6,7 @@ import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -90,6 +91,14 @@ export const validateTag = (tag) => {
 }
 
 export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
+  recordTelemetryAttributes({
+    command,
+    dryRun,
+    tag,
+    verbose,
+    dedupe,
+  })
+
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [

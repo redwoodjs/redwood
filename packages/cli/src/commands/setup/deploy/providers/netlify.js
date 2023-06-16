@@ -3,6 +3,7 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../../../../lib'
@@ -26,6 +27,10 @@ const notes = [
 ]
 
 export const handler = async ({ force }) => {
+  recordTelemetryAttributes({
+    command: ['setup', 'deploy', 'netlify'].join(' '),
+    force,
+  })
   const tasks = new Listr(
     [
       updateApiURLTask('/.netlify/functions'),

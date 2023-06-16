@@ -6,6 +6,7 @@ import { Listr } from 'listr2'
 import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
@@ -15,6 +16,8 @@ import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
+import { command } from './build'
+
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
@@ -23,6 +26,15 @@ export const handler = async ({
   prisma = true,
   prerender,
 }) => {
+  recordTelemetryAttributes({
+    command,
+    side: JSON.stringify(side),
+    verbose,
+    performance,
+    stats,
+    prisma,
+    prerender,
+  })
   const rwjsPaths = getPaths()
 
   if (performance) {

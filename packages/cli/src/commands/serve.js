@@ -5,6 +5,8 @@ import chalk from 'chalk'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
 
@@ -34,6 +36,13 @@ export async function builder(yargs) {
           socket: { type: 'string' },
         }),
       handler: async (argv) => {
+        recordTelemetryAttributes({
+          command,
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+        })
+
         const serverFilePath = path.join(
           redwoodProjectPaths.api.dist,
           'server.js'
@@ -87,6 +96,14 @@ export async function builder(yargs) {
           },
         }),
       handler: async (argv) => {
+        recordTelemetryAttributes({
+          command,
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiRootPath: argv.apiRootPath,
+        })
+
         const { apiServerHandler } = await import('./serveHandler.js')
         await apiServerHandler(argv)
       },
@@ -113,6 +130,14 @@ export async function builder(yargs) {
           },
         }),
       handler: async (argv) => {
+        recordTelemetryAttributes({
+          command,
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiHost: argv.apiHost,
+        })
+
         const { webServerHandler } = await import('./serveHandler.js')
         await webServerHandler(argv)
       },

@@ -3,12 +3,15 @@ import path from 'path'
 
 import execa from 'execa'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import * as project from '../lib/project'
+
+import { command } from './test'
 
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
@@ -61,6 +64,13 @@ export const handler = async ({
   dbPush = true,
   ...others
 }) => {
+  recordTelemetryAttributes({
+    command,
+    // TODO: filter (likely needs sanitised),
+    watch,
+    collectCoverage,
+    dbPush,
+  })
   const rwjsPaths = getPaths()
   const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
     if (

@@ -4,6 +4,7 @@ import camelcase from 'camelcase'
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -181,6 +182,16 @@ export const handler = async ({
   if (stories === undefined) {
     stories = getConfig().generate.stories
   }
+
+  recordTelemetryAttributes({
+    command: ['generate', 'page'].join(' '),
+    force,
+    tests,
+    stories,
+    typescript,
+    rollback,
+  })
+
   if (process.platform === 'win32') {
     // running `yarn rw g page home /` on Windows using GitBash
     // POSIX-to-Windows path conversion will kick in.

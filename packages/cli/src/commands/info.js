@@ -17,7 +17,7 @@ export const builder = (yargs) => {
 }
 export const handler = async () => {
   recordTelemetryAttributes({
-    command: 'info',
+    command,
   })
   try {
     const output = await envinfo.run({

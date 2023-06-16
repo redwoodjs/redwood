@@ -4,6 +4,7 @@ import concurrently from 'concurrently'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getCmdMajorVersion } from '../commands/upgrade'
@@ -11,7 +12,17 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
+import { command } from './type-check'
+
 export const handler = async ({ sides, verbose, prisma, generate }) => {
+  recordTelemetryAttributes({
+    command,
+    sides: JSON.stringify(sides),
+    verbose,
+    prisma,
+    generate,
+  })
+
   /**
    * Check types for the project directory : [web, api]
    */

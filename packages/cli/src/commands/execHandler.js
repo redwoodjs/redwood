@@ -2,6 +2,7 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { findScripts } from '@redwoodjs/internal/dist/files'
@@ -10,6 +11,8 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { runScriptFunction } from '../lib/exec'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
+
+import { command } from './exec'
 
 const printAvailableScriptsToConsole = () => {
   console.log('Available scripts:')
@@ -21,6 +24,12 @@ const printAvailableScriptsToConsole = () => {
 }
 
 export const handler = async (args) => {
+  recordTelemetryAttributes({
+    command,
+    prisma: args.prisma,
+    list: args.list,
+  })
+
   const { name, prisma, list, ...scriptArgs } = args
   if (list || !name) {
     printAvailableScriptsToConsole()
