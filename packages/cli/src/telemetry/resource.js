@@ -9,7 +9,9 @@ import { v4 as uuidv4, validate as validateUUID } from 'uuid'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-export async function computeTelemetryInfo() {
+import { name as packageName, version as packageVersion } from '../../package'
+
+export async function getResources() {
   // Read the UUID from the file within .redwood or generate a new one if it doesn't exist
   // or if it is too old
   let UID = uuidv4()
@@ -30,9 +32,7 @@ export async function computeTelemetryInfo() {
       }
     }
   } catch (_error) {
-    // TODO: Consider this error
-    //   console.error('Telemetry error')
-    //   console.error(error)
+    // We can ignore any errors here, we'll just use the generated UID in this case
   }
 
   const info = JSON.parse(
@@ -57,7 +57,11 @@ export async function computeTelemetryInfo() {
   const cpu = await system.cpu()
   const mem = await system.mem()
 
+  // TODO: Add the complexity metrics
+
   return {
+    [SemanticResourceAttributes.SERVICE_NAME]: packageName,
+    [SemanticResourceAttributes.SERVICE_VERSION]: packageVersion,
     [SemanticResourceAttributes.OS_TYPE]: info.System?.OS?.split(' ')[0],
     [SemanticResourceAttributes.OS_VERSION]: info.System?.OS?.split(' ')[1],
     'shell.name': info.System?.Shell?.name,

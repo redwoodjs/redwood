@@ -76,3 +76,18 @@ export function clearLocks(identifiers = []) {
     }
   }
 }
+
+/**
+ * Gets the age of a lock in milliseconds
+ *
+ * @param {string} identifier ID of the lock
+ * @returns The age of the lock in milliseconds
+ */
+export function getLockAge(identifier) {
+  ensureLockDirectoryExists()
+  const lockPath = path.join(getPaths().generated.base, 'locks', identifier)
+  if (!fs.existsSync(lockPath)) {
+    throw new Error(`Lock "${identifier}" does not exist`)
+  }
+  return fs.statSync(lockPath).mtimeMs
+}

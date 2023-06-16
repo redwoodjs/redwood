@@ -4,11 +4,14 @@ import fs from 'fs'
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
+import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
+import { v4 as uuidv4 } from 'uuid'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import { recordTelemetryError } from '@redwoodjs/cli-helpers'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
@@ -35,12 +38,7 @@ import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
 import * as updateCheck from './lib/updateCheck'
 import { loadPlugins } from './plugin'
-import { telemetryBackgroundCompute } from './telemetry/computeMiddleware'
-import {
-  startTelemetry,
-  shutdownTelemetry,
-  addBackgroundTelemetry,
-} from './telemetry/index'
+import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
 // # Setting the CWD
 //
@@ -140,10 +138,6 @@ async function main() {
       process.exitCode = 1
     }
 
-    // Add the telemetry "resources" we computed in the background
-    await addBackgroundTelemetry({
-      hadError: process.exitCode !== undefined && process.exitCode !== 0,
-    })
     span?.end()
   })
 
@@ -168,8 +162,7 @@ async function runYargs() {
         (argv) => {
           delete argv.cwd
         },
-        telemetryMiddleware,
-        TELEMETRY_ENABLED && telemetryBackgroundCompute,
+        // telemetryMiddleware, // TODO: Re-enable this
         updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
       ].filter(Boolean)
     )
@@ -214,6 +207,18 @@ async function runYargs() {
   await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
     // Show the output that yargs was going to if there was no callback provided
     console.log(output)
+    if (process.exitCode !== 0 && process.exitCode !== undefined) {
+      const errorRef = uuidv4()
+      recordTelemetryAttributes({ errorRef })
+      // TODO: Make this error log a little more pretty?
+      const message = [
+        'Looks like something went wrong...',
+        '  - Check our forums for general help',
+        "  - Open an issue on GitHub if you think you've found a bug",
+        `  - You can use the following reference code to help us track down the issue if you'd like: ${errorRef}`,
+      ]
+      console.log(chalk.red(message.join('\n')))
+    }
   })
 }
 
