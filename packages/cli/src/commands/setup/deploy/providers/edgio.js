@@ -4,13 +4,13 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { addPackagesTask, getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
 import {
   ERR_MESSAGE_MISSING_CLI,
   ERR_MESSAGE_NOT_INITIALIZED,
 } from '../../../deploy/edgio'
-import { preRequisiteCheckTask, printSetupNotes } from '../helpers'
+import { preRequisiteCheckTask } from '../helpers'
 
 export const command = 'edgio'
 export const description = 'Setup Edgio deploy'

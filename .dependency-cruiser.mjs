@@ -127,20 +127,6 @@ export default {
 
     /* rules you might want to tweak for your specific situation: */
     {
-      name: 'not-to-test',
-      comment:
-        "This module depends on code within a folder that should only contain tests. As tests don't " +
-        "implement functionality this is odd. Either you're writing a test outside the test folder " +
-        "or there's something in the test folder that isn't a test.",
-      severity: 'error',
-      from: {
-        pathNot: '^(src/__tests__)'
-      },
-      to: {
-        path: '^(src/__tests__)'
-      }
-    },
-    {
       name: 'not-to-spec',
       comment:
         'This module depends on a spec (test) file. The sole responsibility of a spec file is to test code. ' +
@@ -206,7 +192,7 @@ export default {
 
     /* conditions specifying which files not to follow further when encountered:
        - path: a regular expression to match
-       - dependencyTypes: see https://github.com/sverweij/dependency-cruiser/blob/master/doc/rules-reference.md#dependencytypes-and-dependencytypesnot
+       - dependencyTypes: see https://github.com/sverweij/dependency-cruiser/blob/main/doc/rules-reference.md#dependencytypes-and-dependencytypesnot
        for a complete list
     */
     doNotFollow: {
@@ -283,14 +269,14 @@ export default {
        to dependency-cruiser's current working directory. When not provided defaults
        to './webpack.conf.js'.
 
-       The (optional) `env` and `args` attributes contain the parameters to be passed if
+       The (optional) `env` and `arguments` attributes contain the parameters to be passed if
        your webpack config is a function and takes them (see webpack documentation
        for details)
      */
     // webpackConfig: {
     //  fileName: './webpack.config.js',
     //  env: {},
-    //  args: {},
+    //  arguments: {},
     // },
 
     /* Babel config ('.babelrc', '.babelrc.json', '.babelrc.json5', ...) to use
@@ -366,7 +352,7 @@ export default {
         collapsePattern: 'node_modules/(@[^/]+/[^/]+|[^/]+)',
 
         /* Options to tweak the appearance of your graph.See
-           https://github.com/sverweij/dependency-cruiser/blob/master/doc/options-reference.md#reporteroptions
+           https://github.com/sverweij/dependency-cruiser/blob/main/doc/options-reference.md#reporteroptions
            for details and some examples. If you don't specify a theme
            don't worry - dependency-cruiser will fall back to the default one.
         */
@@ -447,7 +433,7 @@ export default {
         collapsePattern: '^(packages|src|lib|app|bin|test(s?)|spec(s?))/[^/]+|node_modules/(@[^/]+/[^/]+|[^/]+)',
 
         /* Options to tweak the appearance of your graph.See
-           https://github.com/sverweij/dependency-cruiser/blob/master/doc/options-reference.md#reporteroptions
+           https://github.com/sverweij/dependency-cruiser/blob/main/doc/options-reference.md#reporteroptions
            for details and some examples. If you don't specify a theme
            for 'archi' dependency-cruiser will use the one specified in the
            dot section (see above), if any, and otherwise use the default one.
@@ -461,4 +447,4 @@ export default {
     }
   }
 };
-// generated: dependency-cruiser@12.11.0 on 2023-03-23T23:57:13.098Z
+// generated: dependency-cruiser@13.0.3 on 2023-06-08T22:17:09.126Z
