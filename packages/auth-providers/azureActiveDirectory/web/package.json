@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.5",
     "@redwoodjs/auth": "5.0.0",
-    "core-js": "3.30.2"
+    "core-js": "3.31.0"
   },
   "devDependencies": {
     "@azure/msal-browser": "2.37.1",
