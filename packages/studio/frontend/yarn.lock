@@ -603,6 +603,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@headlessui/tailwindcss@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@headlessui/tailwindcss@npm:0.1.3"
+  peerDependencies:
+    tailwindcss: ^3.0
+  checksum: 55e1d8528fe995d13afafdb07d86f11dd367d6c7ba1a9780872495a8392170f2aa7c908be450a4c533b33b840849ed6399f6ff23243ea7df6eb4651340855609
+  languageName: node
+  linkType: hard
+
 "@heroicons/react@npm:^2.0.17":
   version: 2.0.18
   resolution: "@heroicons/react@npm:2.0.18"
@@ -1205,19 +1214,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tremor/react@npm:^2.2.0":
-  version: 2.11.0
-  resolution: "@tremor/react@npm:2.11.0"
+"@tremor/react@npm:^3.0.0":
+  version: 3.2.1
+  resolution: "@tremor/react@npm:3.2.1"
   dependencies:
     "@floating-ui/react": ^0.19.1
+    "@headlessui/react": ^1.7.14
+    "@headlessui/tailwindcss": ^0.1.3
     date-fns: ^2.28.0
+    react-day-picker: ^8.7.1
     react-transition-group: ^4.4.5
-    recharts: ^2.3.2
+    recharts: ^2.7.1
     tailwind-merge: ^1.9.1
   peerDependencies:
     react: ^18.0.0
     react-dom: ">=16.6.0"
-  checksum: 2ffc353b99e679bbe967cbc65ae0737270b98ce8eb287dd5558dbe2cb53b2a61d68b03cab8f46d5a138d9cde84544348975c5e287f8016d82e4ea8c4ddf99f68
+  checksum: a7d93aa8937b87e1a910defd1ba4d16add36b982417a4e3dcdef298cd866b60ae445536e7d058d15c71dbfe4c4201bf4eeb8378510637a4bada337e122d9aa0b
   languageName: node
   linkType: hard
 
@@ -2369,7 +2381,7 @@ __metadata:
     "@nivo/tooltip": ^0.83.0
     "@nivo/treemap": ^0.83.0
     "@tailwindcss/forms": ^0.5.3
-    "@tremor/react": ^2.2.0
+    "@tremor/react": ^3.0.0
     "@types/react": ^18.0.27
     "@types/react-dom": ^18.0.10
     "@types/react-grid-layout": ^1
@@ -3489,6 +3501,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-day-picker@npm:^8.7.1":
+  version: 8.7.1
+  resolution: "react-day-picker@npm:8.7.1"
+  peerDependencies:
+    date-fns: ^2.28.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 393e12b8d3122570075b3a7a8f3dd275347f8526990a9474f269c913461153936a06ea32aa06302ca4cd2dcb1e57772d8f8b7ca31b3b1e48e71d63438d448d70
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:^18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
@@ -3808,9 +3830,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"recharts@npm:^2.3.2":
-  version: 2.6.0
-  resolution: "recharts@npm:2.6.0"
+"recharts@npm:^2.7.1":
+  version: 2.7.1
+  resolution: "recharts@npm:2.7.1"
   dependencies:
     classnames: ^2.2.5
     eventemitter3: ^4.0.1
@@ -3825,7 +3847,7 @@ __metadata:
     prop-types: ^15.6.0
     react: ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: b8df69345d5b58ec73df675c427d8ee1df64a7885c590e399808fb348fbf9627c724bca8faa23715fbc8f3fd8670b61ab5c63ac56d02aaf3656a65933ea07764
+  checksum: 9546944b490788ceedfff36bc3911e3a2062c5aea7355ed95a125e8179445f5254bc9367552fac9ce002b40735d8f4a1abcc1524f9a1c70c7a4e9922eef37f4b
   languageName: node
   linkType: hard
 

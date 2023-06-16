@@ -20,7 +20,7 @@
     "@nivo/tooltip": "^0.83.0",
     "@nivo/treemap": "^0.83.0",
     "@tailwindcss/forms": "^0.5.3",
-    "@tremor/react": "^2.2.0",
+    "@tremor/react": "^3.0.0",
     "graphiql": "^2.4.0",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.21.3",
