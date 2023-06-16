@@ -5292,22 +5292,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/child-process@npm:7.0.1":
-  version: 7.0.1
-  resolution: "@lerna/child-process@npm:7.0.1"
+"@lerna/child-process@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@lerna/child-process@npm:7.0.2"
   dependencies:
     chalk: ^4.1.0
     execa: ^5.0.0
     strong-log-transformer: ^2.1.0
-  checksum: a7d9e7b64101455df8347b57b24904a7775dde7d72dad002aa4b1ca63304d92b9ba2bbfe1a5a08cfc8420b0b4287e65a525beacdc8cd5ab5c9e8078a1a093e33
+  checksum: 471f7d7ee7d2fed0b62fc4be4f98fc9325c037943580df36046326858acf50925d5683e442f7f20150b9762e6df12aef74137e2c280f19868712e8ba7a4dc9eb
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:7.0.1":
-  version: 7.0.1
-  resolution: "@lerna/create@npm:7.0.1"
+"@lerna/create@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@lerna/create@npm:7.0.2"
   dependencies:
-    "@lerna/child-process": 7.0.1
+    "@lerna/child-process": 7.0.2
     dedent: 0.7.0
     fs-extra: ^11.1.1
     init-package-json: 5.0.0
@@ -5320,7 +5320,7 @@ __metadata:
     validate-npm-package-license: ^3.0.4
     validate-npm-package-name: 5.0.0
     yargs-parser: 20.2.4
-  checksum: a45ccab888144329324afc9bd64e32c6a6dda0b3076e7bbc6b9c2f1888e1183daaf87c9640700840d272246738f002520b359b5850863dfd50ddae9e7883693a
+  checksum: bdde26add9b4adf7079f3d5d16b643cd05c382f0a396daef5e8878c396f3abec07c977bea20bbb5810ee3c73170fd935c04a54fb28a808b4e90cc2ef0d2b2858
   languageName: node
   linkType: hard
 
@@ -21649,12 +21649,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:7.0.1":
-  version: 7.0.1
-  resolution: "lerna@npm:7.0.1"
+"lerna@npm:7.0.2":
+  version: 7.0.2
+  resolution: "lerna@npm:7.0.2"
   dependencies:
-    "@lerna/child-process": 7.0.1
-    "@lerna/create": 7.0.1
+    "@lerna/child-process": 7.0.2
+    "@lerna/create": 7.0.2
     "@npmcli/run-script": 6.0.2
     "@nx/devkit": ">=16.1.3 < 17"
     "@octokit/plugin-enterprise-rest": 6.0.1
@@ -21729,7 +21729,7 @@ __metadata:
     yargs-parser: 20.2.4
   bin:
     lerna: dist/cli.js
-  checksum: 04084773b63fca129b2b3d2b65df80562acc6e3b7277272ae33fa8ab47c23e65d0042a9db80448cf790f858f9c11429e02cc526c0258508a3143c848152ed74d
+  checksum: 84190301ae42b4e5d6fd1aed3cc95b65670a778f70aabf85310e1615e728013e428aba7dddee185bb433c9dcf560587db06678de846e098fbd9be0ac79254ab0
   languageName: node
   linkType: hard
 
@@ -27150,7 +27150,7 @@ __metadata:
     jest: 29.5.0
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.15.0
-    lerna: 7.0.1
+    lerna: 7.0.2
     listr2: 6.6.0
     make-dir-cli: 3.0.0
     msw: 1.2.1
