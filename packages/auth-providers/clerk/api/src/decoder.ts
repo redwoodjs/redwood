@@ -61,7 +61,7 @@ export const jwtAuthDecoder: Decoder = async (token: string, type: string) => {
       return Promise.reject(new Error('Session invalid'))
     }
 
-    // @ts-expect-error need to to type this
+    // @ts-expect-error need to type this
     const roles = jwtPayload.sessionClaims.publicMetadata['roles'] ?? []
 
     return {
