@@ -27,16 +27,12 @@ export const getCurrentUser = async (
     return null
   }
 
-  const { roles } = parseJWT({ decoded })
+  const { roles, ...user } = parseJWT({ decoded })
 
-  // Remove privateMetadata property from CurrentUser as it should not be accessible on the web
-  const { privateMetadata, ...userWithoutPrivateMetadata } = decoded
-
-  if (roles) {
-    return { ...userWithoutPrivateMetadata, roles }
+  return {
+    ...user,
+    ...(roles && { roles })
   }
-
-  return { ...userWithoutPrivateMetadata }
 }
 
 /**

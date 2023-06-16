@@ -1,1 +1,1 @@
-export { authDecoder } from './decoder'
+export { authDecoder, jwtAuthDecoder } from './decoder'

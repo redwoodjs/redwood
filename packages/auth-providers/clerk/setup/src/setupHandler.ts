@@ -13,7 +13,7 @@ export const handler = async ({ force: forceArg }: Args) => {
   standardAuthHandler({
     basedir: __dirname,
     forceArg,
-    authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-clerk-api'`,
+    authDecoderImport: `import { jwtAuthDecoder as authDecoder } from '@redwoodjs/auth-clerk-api'`,
     provider: 'clerk',
     webPackages: [
       '@clerk/clerk-react@^4',
@@ -26,9 +26,6 @@ export const handler = async ({ force: forceArg }: Args) => {
       '```title=".env"',
       'CLERK_PUBLISHABLE_KEY="..."',
       'CLERK_SECRET_KEY="..."',
-      'CLERK_JWT_KEY="-----BEGIN PUBLIC KEY-----',
-      '...',
-      '-----END PUBLIC KEY-----"',
       '```',
       '',
       `You can find their values under "API Keys" on your Clerk app's dashboard.`,
@@ -36,7 +33,7 @@ export const handler = async ({ force: forceArg }: Args) => {
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
-      '  "CLERK_PUBLISHABLE_KEY"',
+      '  "CLERK_PUBLISHABLE_KEY,"',
       ']',
       '```',
       '',
