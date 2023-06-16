@@ -13,7 +13,7 @@ export default defineConfig({
   // Run your local dev server before starting the tests
   webServer: {
     command: 'yarn redwood serve',
-    cwd: process.env.REDWOOD_PROJECT_PATH,
+    cwd: process.env.REDWOOD_TEST_PROJECT_PATH,
     url: 'http://localhost:8910',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',

@@ -23,7 +23,7 @@
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs",
     "rebuild-test-project-fixture": "node ./tasks/test-project/rebuild-test-project-fixture.js",
     "release": "node ./tasks/release/releaseCLI.mjs",
-    "smoke-test": "cd ./tasks/smoke-test && npx playwright install && npx playwright test --project=chromium",
+    "smoke-test": "node ./tasks/smoke-tests/smoke-tests.mjs",
     "test": "lerna run test --concurrency 2 -- --colors --maxWorkers=4",
     "test-ci": "lerna run test --concurrency 2 -- --colors --maxWorkers"
   },
