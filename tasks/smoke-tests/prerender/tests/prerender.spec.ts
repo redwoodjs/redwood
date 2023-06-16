@@ -280,7 +280,7 @@ test('prerender with broken gql query', async () => {
     'BlogPostsCell'
   )
 
-  const cellPathJs = path.join(cellBasePath, 'BlogPostsCell.js')
+  const cellPathJs = path.join(cellBasePath, 'BlogPostsCell.jsx')
   const cellPathTs = path.join(cellBasePath, 'BlogPostsCell.tsx')
   const cellPath = fs.existsSync(cellPathTs) ? cellPathTs : cellPathJs
 

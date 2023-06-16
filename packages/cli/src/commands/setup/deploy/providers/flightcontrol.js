@@ -8,9 +8,9 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
+import { getPaths, writeFilesTask, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { printSetupNotes, updateApiURLTask } from '../helpers'
+import { updateApiURLTask } from '../helpers'
 import {
   flightcontrolConfig,
   databaseEnvVariables,
@@ -203,11 +203,11 @@ const updateDbAuth = () => {
 
 const updateApp = () => {
   return {
-    title: 'Updating App.js fetch config...',
+    title: 'Updating App.jsx fetch config...',
     task: (_ctx) => {
       // TODO Can improve in the future with RW getPaths()
       const appTsPath = path.join(getPaths().base, 'web/src/App.tsx')
-      const appJsPath = path.join(getPaths().base, 'web/src/App.js')
+      const appJsPath = path.join(getPaths().base, 'web/src/App.jsx')
 
       let appPath
       if (fs.existsSync(appTsPath)) {
@@ -216,7 +216,7 @@ const updateApp = () => {
         appPath = appJsPath
       } else {
         // TODO this should never happen. Throw instead?
-        console.log(`Skipping, did not detect web/src/App.js|tsx`)
+        console.log(`Skipping, did not detect web/src/App.jsx|tsx`)
         return
       }
 

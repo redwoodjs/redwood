@@ -63,7 +63,7 @@ describe('Single world files', () => {
   it('creates a page component', () => {
     expect(
       singleWordFiles[
-        path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
+        path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.jsx')
       ]
     ).toMatchSnapshot()
   })
@@ -72,7 +72,7 @@ describe('Single world files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/HomePage/HomePage.test.js'
+          '/path/to/project/web/src/pages/HomePage/HomePage.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -82,7 +82,7 @@ describe('Single world files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/HomePage/HomePage.stories.js'
+          '/path/to/project/web/src/pages/HomePage/HomePage.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -101,7 +101,7 @@ describe('multiWorldFiles', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.js'
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -111,7 +111,7 @@ describe('multiWorldFiles', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.js'
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -121,7 +121,7 @@ describe('multiWorldFiles', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.js'
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -139,7 +139,7 @@ describe('Plural word files', () => {
   test('creates a page component with a plural word for name', () => {
     expect(
       pluralWordFiles[
-        path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.js')
+        path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.jsx')
       ]
     ).toMatchSnapshot()
   })
@@ -156,7 +156,7 @@ describe('paramFiles', () => {
   it('creates a page component with params', () => {
     expect(
       paramFiles[
-        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
+        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.jsx')
       ]
     ).toMatchSnapshot()
   })
@@ -165,7 +165,7 @@ describe('paramFiles', () => {
     expect(
       paramFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/PostPage/PostPage.test.js'
+          '/path/to/project/web/src/pages/PostPage/PostPage.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -183,10 +183,10 @@ describe('No test files', () => {
   it('doesnt create a test for page component when tests=false', () => {
     expect(Object.keys(noTestsFiles)).toEqual([
       path.normalize(
-        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.js'
+        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.jsx'
       ),
       path.normalize(
-        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.js'
+        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.jsx'
       ),
     ])
   })
@@ -203,10 +203,10 @@ describe('No stories files', () => {
   it('doesnt create a story for page component when stories=false', () => {
     expect(Object.keys(noStoriesFiles)).toEqual([
       path.normalize(
-        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.js'
+        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.jsx'
       ),
       path.normalize(
-        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.js'
+        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.jsx'
       ),
     ])
   })
