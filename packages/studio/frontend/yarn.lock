@@ -3515,13 +3515,13 @@ __metadata:
   linkType: hard
 
 "react-error-boundary@npm:^4.0.4":
-  version: 4.0.9
-  resolution: "react-error-boundary@npm:4.0.9"
+  version: 4.0.10
+  resolution: "react-error-boundary@npm:4.0.10"
   dependencies:
     "@babel/runtime": ^7.12.5
   peerDependencies:
     react: ">=16.13.1"
-  checksum: 8add651a1ea823cd1eb94b446cbd3955c0c46eae6b8e455fa506002c5f9c24e5fb1eb0c65af2785856867a4b0daee9a34181e2973ea407aac3969822c6de5e71
+  checksum: d61cc2f4770459e03b8d58c971ee626b6ec95fd6fdf168a001ea028fd7b429013007d5084a99367b0d0effc823862eea3c49a3b22c64f6376aaba2da51c8773a
   languageName: node
   linkType: hard
 
