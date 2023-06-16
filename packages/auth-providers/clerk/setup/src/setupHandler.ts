@@ -21,7 +21,7 @@ export const handler = async ({ force: forceArg }: Args) => {
     ],
     apiPackages: [`@redwoodjs/auth-clerk-api@${version}`],
     notes: [
-      "You'll need to add three env vars to your .env file:",
+      "You'll need to add two env vars to your .env file:",
       '',
       '```title=".env"',
       'CLERK_PUBLISHABLE_KEY="..."',
