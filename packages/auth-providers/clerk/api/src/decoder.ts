@@ -45,11 +45,21 @@ export const jwtAuthDecoder: Decoder = async (token: string, type: string) => {
 
   const { verifyToken } = await import('@clerk/clerk-sdk-node')
 
+  // We expect the user to have customized the JWT payload to include the
+  // `roles` claim. If they haven't, we'll just return an empty array.
+  type RedwoodJwtPayload = Awaited<ReturnType<typeof verifyToken>> & {
+    sessionClaims?: {
+      publicMetadata?: {
+        roles?: string[]
+      }
+    }
+  }
+
   try {
     const issuer = (iss: string) =>
       iss.startsWith('https://clerk.') || iss.includes('.clerk.accounts')
 
-    const jwtPayload = await verifyToken(token, {
+    const jwtPayload: RedwoodJwtPayload = await verifyToken(token, {
       issuer,
       apiUrl: process.env.CLERK_API_URL || 'https://api.clerk.dev',
       jwtKey: process.env.CLERK_JWT_KEY,
@@ -61,8 +71,7 @@ export const jwtAuthDecoder: Decoder = async (token: string, type: string) => {
       return Promise.reject(new Error('Session invalid'))
     }
 
-    // @ts-expect-error need to type this
-    const roles = jwtPayload.sessionClaims.publicMetadata['roles'] ?? []
+    const roles = jwtPayload.sessionClaims?.publicMetadata?.['roles'] ?? []
 
     return {
       ...jwtPayload,
