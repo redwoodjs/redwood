@@ -1,8 +1,8 @@
-const { basename } = require('path')
+import { basename } from 'path'
 
 // Provides a high level wrapper for ESLint with
 // TypeScript support: https://typescript-eslint.io/custom-rules/#utils-package
-const { ESLintUtils } = require('@typescript-eslint/utils')
+import { ESLintUtils } from '@typescript-eslint/utils'
 
 // In the future add a docs page?
 // const createRule = ESLintUtils.RuleCreator(
@@ -13,7 +13,7 @@ const { ESLintUtils } = require('@typescript-eslint/utils')
 // TS prefixes in the AST lookups.
 const createRule = ESLintUtils.RuleCreator.withoutDocs
 
-module.exports = createRule({
+export const serviceTypeAnnotations = createRule({
   create(context) {
     const thisFilename = basename(context.getFilename())
     const thisFileCorrespondingImport = `types/${thisFilename.replace(
