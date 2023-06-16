@@ -65,7 +65,7 @@ export const processEnvComputedRule: Rule.RuleModule = {
         ) {
           context.report({
             message:
-              'Computed member access on process.env does not work in production environments.',
+              'Accessing process.env via array syntax will break in production. Use dot notation e.g. process.env.MY_ENV_VAR instead',
             node,
             // fix(fixer) {},
           })
