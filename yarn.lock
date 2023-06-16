@@ -7539,7 +7539,7 @@ __metadata:
     file-loader: 6.2.0
     graphql: 16.6.0
     graphql-tag: 2.12.6
-    html-webpack-plugin: 5.5.1
+    html-webpack-plugin: 5.5.3
     jest: 29.5.0
     lodash: 4.17.21
     mini-css-extract-plugin: 2.7.6
@@ -19147,9 +19147,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-webpack-plugin@npm:5.5.1, html-webpack-plugin@npm:^5.5.0":
-  version: 5.5.1
-  resolution: "html-webpack-plugin@npm:5.5.1"
+"html-webpack-plugin@npm:5.5.3, html-webpack-plugin@npm:^5.5.0":
+  version: 5.5.3
+  resolution: "html-webpack-plugin@npm:5.5.3"
   dependencies:
     "@types/html-minifier-terser": ^6.0.0
     html-minifier-terser: ^6.0.2
@@ -19158,7 +19158,7 @@ __metadata:
     tapable: ^2.0.0
   peerDependencies:
     webpack: ^5.20.0
-  checksum: d36511f213d4fed6dc1f4eaba42c1541ce3c1ca9c424ab002d1daf3fbd6b3722009dab34fbe2ae2d3ab986d64c786522c673cb35ab3586a5f6e311e3383c461f
+  checksum: 7ba0d0f87d08f5c4c51f821842d736ec1762940bc39798932528adaec1e9cca8f52944987b88789007f5706d15110edbdfa30df445d61c6628b02ebe163c4f42
   languageName: node
   linkType: hard
 
