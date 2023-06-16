@@ -17,7 +17,7 @@ const result = await esbuild.build({
 
   logLevel: 'info',
 
-  // For visualizing the bundle.
+  // For visualizing dist.
   // See https://esbuild.github.io/api/#metafile and https://esbuild.github.io/analyze/.
   metafile: true,
 })

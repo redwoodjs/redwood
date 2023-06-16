@@ -62,19 +62,16 @@ export function projectCopy(redwoodProjectCwd) {
 }
 
 /**
- * @param {string} prefix
+ * @param {{ baseKeyPrefix: string, distKeyPrefix: string }} options
  */
-export async function createCacheKeys(prefix) {
+export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix }) {
   const baseKey = [
-    prefix,
+    baseKeyPrefix,
     process.env.RUNNER_OS,
     // @ts-expect-error not sure how to change the lib compiler option to es2021+ here.
     process.env.GITHUB_REF.replaceAll('/', '-'),
     await hashFiles(path.join('__fixtures__', 'test-project'))
   ].join('-')
-
-  // const testProjectKey = [
-  // ]
 
   const dependenciesKey = [
     baseKey,
@@ -84,6 +81,7 @@ export async function createCacheKeys(prefix) {
 
   const distKey = [
     dependenciesKey,
+    distKeyPrefix,
     'dist',
     await hashFiles([
       'package.json',

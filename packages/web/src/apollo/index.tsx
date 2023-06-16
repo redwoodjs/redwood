@@ -31,6 +31,29 @@ import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
+export type RwLinkName =
+  | 'withToken'
+  | 'authMiddleware'
+  | 'updateDataApolloLink'
+  | 'httpLink'
+
+export type RwLink<
+  Name extends RwLinkName,
+  Link extends apolloClient.ApolloLink = apolloClient.ApolloLink
+> = {
+  name: Name
+  link: Link
+}
+
+export type RwLinks = [
+  RwLink<'withToken'>,
+  RwLink<'authMiddleware'>,
+  RwLink<'updateDataApolloLink'>,
+  RwLink<'httpLink', apolloClient.HttpLink>
+]
+
+export type RwLinkFactory = (links: RwLinks) => apolloClient.ApolloLink
+
 export type GraphQLClientConfigProp = Omit<
   ApolloClientOptions<unknown>,
   'cache' | 'link'
@@ -55,6 +78,8 @@ export type GraphQLClientConfigProp = Omit<
    */
   httpLinkConfig?: apolloClient.HttpOptions
   /**
+   * @deprecated
+   * @see linkFactory
    * Extend or overwrite `RedwoodApolloProvider`'s Apollo Link.
    *
    * To overwrite Redwood's Apollo Link, just provide your own `ApolloLink`.
@@ -86,6 +111,28 @@ export type GraphQLClientConfigProp = Omit<
           apolloClient.HttpLink
         ]
       ) => apolloClient.ApolloLink)
+
+  /**
+   * Extend or overwrite `RedwoodApolloProvider`'s Apollo Link.
+   *
+   * To extend Redwood's Apollo Link, provide a function—it'll get passed an array of Redwood's Apollo Links:
+   *
+   * ```js
+   * const linkFactory = (rwLinks) => {
+   *   const consoleLink = new ApolloLink((operation, forward) => {
+   *     console.log(operation.operationName)
+   *     return forward(operation)
+   *   })
+   *
+   *   return ApolloLink.from([consoleLink, ...rwLinks.map(({ link }) => link)])
+   * }
+   * ```
+   *
+   * If you do this, there's several things you should keep in mind:
+   * - your function should return a single link (e.g., using `ApolloLink.from`; see https://www.apollographql.com/docs/react/api/link/introduction/#additive-composition)
+   * - the `HttpLink` should come last (https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link)
+   */
+  linkFactory?: RwLinkFactory
 }
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -174,37 +221,48 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    *
    * @see {@link https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link}
    */
-  const { httpLinkConfig, link: userLink, ...rest } = config ?? {}
+  const {
+    httpLinkConfig,
+    link: deprecatedUserLink,
+    linkFactory,
+    ...rest
+  } = config ?? {}
 
   const httpLink = new HttpLink({ uri, ...httpLinkConfig })
 
   /**
    * The order here is important. The last link *must* be a terminating link like HttpLink.
    */
-  const rwLinks = [
-    withToken,
-    authMiddleware,
-    updateDataApolloLink,
-    httpLink,
-  ] as [
-    apolloClient.ApolloLink,
-    apolloClient.ApolloLink,
-    apolloClient.ApolloLink,
-    apolloClient.HttpLink
+  const rwLinks: RwLinks = [
+    { name: 'withToken', link: withToken },
+    { name: 'authMiddleware', link: authMiddleware },
+    { name: 'updateDataApolloLink', link: updateDataApolloLink },
+    { name: 'httpLink', link: httpLink },
   ]
 
   /**
-   * If the user provides a link that's a function,
-   * we want to call it with our link.
+   * If the user provides a linkFactory, use it.
    *
-   * If it's not, we just want to use it.
-   *
-   * And if they don't provide it, we just want to use ours.
+   * Otherwise support the legacy "link" parameter, and if neither are
+   * provided, we just want to use ours.
    */
-  let link = ApolloLink.from(rwLinks)
-
-  if (userLink) {
-    link = typeof userLink === 'function' ? userLink(rwLinks) : userLink
+  let link: apolloClient.ApolloLink
+  if (linkFactory) {
+    link = linkFactory(rwLinks)
+  } else if (deprecatedUserLink) {
+    link =
+      typeof deprecatedUserLink === 'function'
+        ? deprecatedUserLink(
+            rwLinks.map((l) => l.link) as [
+              apolloClient.ApolloLink,
+              apolloClient.ApolloLink,
+              apolloClient.ApolloLink,
+              apolloClient.HttpLink
+            ]
+          )
+        : deprecatedUserLink
+  } else {
+    link = ApolloLink.from(rwLinks.map((l) => l.link))
   }
 
   const client = new ApolloClient({
