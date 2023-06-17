@@ -18,7 +18,9 @@ async function main() {
 
   // Compute all the resource information
   const customResourceData = await getResources()
+  console.log(customResourceData)
   const resource = Resource.default().merge(new Resource(customResourceData))
+  console.log(resource)
 
   const traceExporter = new OTLPTraceExporter({
     url:
@@ -26,7 +28,7 @@ async function main() {
       'https://quark.quantumparticle.io/v1/traces',
   })
 
-  // Go through all new telemetry files and send the spans to the telemetry collector
+  // Go through all telemetry files and send the new spans to the telemetry collector
   for (const [index, file] of telemetryFiles.entries()) {
     // '_' denotes a file that has already been sent
     if (file.startsWith('_')) {
@@ -39,8 +41,8 @@ async function main() {
     )
 
     /**
-     * We have to fix some of the span properties because we serialize the span
-     * to JSON and then deserialize it. This means that some of the properties that
+     * We have to fix some of the span properties because we serialized the span
+     * to JSON and then deserialized it. This means that some of the properties that
      * were functions are now just objects and that some of the properties were
      * renamed.
      */
@@ -55,18 +57,23 @@ async function main() {
       // we would probably want visibility into this
     })
 
-    // Mark the file as sent by renaming it with a '_' prefix
-    fs.renameSync(
-      path.join(telemetryDir, file),
-      path.join(telemetryDir, `_${file}`)
+    /**
+     * We have to rewrite the file because we recomputed the resource information
+     * and we also denote that the spans have been sent by adding a '_' prefix to
+     * the file name.
+     */
+    fs.writeFileSync(
+      path.join(telemetryDir, `_${file}`),
+      JSON.stringify(spans, undefined, 2)
     )
+    fs.unlinkSync(path.join(telemetryDir, file))
     telemetryFiles[index] = `_${file}`
   }
 
   // Shutdown to ensure all spans are sent
   traceExporter.shutdown()
 
-  // Verbose now means we keep the last 5 telemetry files
+  // Verbose means we keep the last 8 telemetry files as a log otherwise we delete all of them
   if (process.env.REDWOOD_VERBOSE_TELEMETRY) {
     const sortedTelemetryFiles = telemetryFiles.sort((a, b) => {
       return (
@@ -74,7 +81,7 @@ async function main() {
         parseInt(a.split('.')[0].replace('_', ''))
       )
     })
-    for (let i = 5; i < sortedTelemetryFiles.length; i++) {
+    for (let i = 8; i < sortedTelemetryFiles.length; i++) {
       fs.unlinkSync(path.join(telemetryDir, sortedTelemetryFiles[i]))
     }
   } else {

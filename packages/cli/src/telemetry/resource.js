@@ -7,9 +7,14 @@ import fs from 'fs-extra'
 import system from 'systeminformation'
 import { v4 as uuidv4, validate as validateUUID } from 'uuid'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, getConfig, getRawConfig } from '@redwoodjs/project-config'
 
 import { name as packageName, version as packageVersion } from '../../package'
+
+// circular dependency when trying to import @redwoodjs/structure so lets do it
+// the old fashioned way
+const { DefaultHost } = require('@redwoodjs/structure/dist/hosts')
+const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
 
 export async function getResources() {
   // Read the UUID from the file within .redwood or generate a new one if it doesn't exist
@@ -57,7 +62,35 @@ export async function getResources() {
   const cpu = await system.cpu()
   const mem = await system.mem()
 
-  // TODO: Add the complexity metrics
+  // Must only call getConfig() once the project is setup - so not within telemetry for CRWA
+  // Default to 'webpack' for new projects
+  const webBundler = getConfig().web.bundler
+
+  // Returns a list of all enabled experiments
+  // This detects all top level [experimental.X] and returns all X's, ignoring all Y's for any [experimental.X.Y]
+  const experiments = Object.keys(getRawConfig()['experimental'] || {})
+
+  // NOTE: Added this way to avoid the need to disturb the existing toml structure
+  if (webBundler !== 'webpack') {
+    experiments.push(webBundler)
+  }
+
+  // Project complexity metric
+  const project = new RWProject({
+    host: new DefaultHost(),
+    projectRoot: getPaths().base,
+  })
+
+  const routes = project.getRouter().routes
+  const prerenderedRoutes = routes.filter((route) => route.hasPrerender)
+  const complexity = [
+    routes.length,
+    prerenderedRoutes.length,
+    project.services.length,
+    project.cells.length,
+    project.pages.length,
+  ].join('.')
+  const sides = project.sides.join(',')
 
   return {
     [SemanticResourceAttributes.SERVICE_NAME]: packageName,
@@ -74,6 +107,8 @@ export async function getResources() {
     'env.node_env': process.env.NODE_ENV || null,
     'ci.redwood': !!process.env.REDWOOD_CI,
     'ci.isci': ci.isCI,
+    complexity,
+    sides,
     uid: UID,
   }
 }
