@@ -5270,7 +5270,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.3.12, @jridgewell/trace-mapping@npm:^0.3.15, @jridgewell/trace-mapping@npm:^0.3.17, @jridgewell/trace-mapping@npm:^0.3.9":
+"@jridgewell/trace-mapping@npm:^0.3.12, @jridgewell/trace-mapping@npm:^0.3.15, @jridgewell/trace-mapping@npm:^0.3.17, @jridgewell/trace-mapping@npm:^0.3.18, @jridgewell/trace-mapping@npm:^0.3.9":
   version: 0.3.18
   resolution: "@jridgewell/trace-mapping@npm:0.3.18"
   dependencies:
@@ -7534,7 +7534,7 @@ __metadata:
     copy-webpack-plugin: 11.0.0
     core-js: 3.31.0
     css-loader: 6.8.1
-    css-minimizer-webpack-plugin: 5.0.0
+    css-minimizer-webpack-plugin: 5.0.1
     dotenv-webpack: 8.0.1
     esbuild: 0.18.4
     fast-glob: 3.2.12
@@ -14733,16 +14733,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-minimizer-webpack-plugin@npm:5.0.0":
-  version: 5.0.0
-  resolution: "css-minimizer-webpack-plugin@npm:5.0.0"
+"css-minimizer-webpack-plugin@npm:5.0.1":
+  version: 5.0.1
+  resolution: "css-minimizer-webpack-plugin@npm:5.0.1"
   dependencies:
-    cssnano: ^6.0.0
+    "@jridgewell/trace-mapping": ^0.3.18
+    cssnano: ^6.0.1
     jest-worker: ^29.4.3
-    postcss: ^8.4.21
-    schema-utils: ^4.0.0
+    postcss: ^8.4.24
+    schema-utils: ^4.0.1
     serialize-javascript: ^6.0.1
-    source-map: ^0.6.1
   peerDependencies:
     webpack: ^5.0.0
   peerDependenciesMeta:
@@ -14758,7 +14758,7 @@ __metadata:
       optional: true
     lightningcss:
       optional: true
-  checksum: 2a43f7aa23edf56f544af850e26c418afcd5900c5adb8cacb128fba5111e5471a7b244ad56a668f33de31eca08e38a1a3b4c92c39f16f40b12b397af27b089b6
+  checksum: 1792259e18f7c5ee25b6bbf60b38b64201747add83d1f751c8c654159b46ebacd0d1103d35f17d97197033e21e02d2ba4a4e9aa14c9c0d067b7c7653c721814e
   languageName: node
   linkType: hard
 
@@ -14879,7 +14879,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano@npm:^6.0.0":
+"cssnano@npm:^6.0.1":
   version: 6.0.1
   resolution: "cssnano@npm:6.0.1"
   dependencies:
@@ -25482,7 +25482,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.21, postcss@npm:^8.4.23":
+"postcss@npm:^8.4.21, postcss@npm:^8.4.23, postcss@npm:^8.4.24":
   version: 8.4.24
   resolution: "postcss@npm:8.4.24"
   dependencies:
@@ -27371,15 +27371,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^4.0.0":
-  version: 4.0.1
-  resolution: "schema-utils@npm:4.0.1"
+"schema-utils@npm:^4.0.0, schema-utils@npm:^4.0.1":
+  version: 4.2.0
+  resolution: "schema-utils@npm:4.2.0"
   dependencies:
     "@types/json-schema": ^7.0.9
     ajv: ^8.9.0
     ajv-formats: ^2.1.1
     ajv-keywords: ^5.1.0
-  checksum: 946298a2efc7ae1cdf084bae8cd9927c25f8396cf0e848603f12554d3f8e962d375fbe337e60d7ed7e27dc69969f014e9b945a87ce32c6f9259a9d61c9d4fa28
+  checksum: 8dab7e7800316387fd8569870b4b668cfcecf95ac551e369ea799bbcbfb63fb0365366d4b59f64822c9f7904d8c5afcfaf5a6124a4b08783e558cd25f299a6b4
   languageName: node
   linkType: hard
 
