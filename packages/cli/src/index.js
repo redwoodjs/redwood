@@ -15,7 +15,7 @@ import {
   recordTelemetryError,
   recordTelemetryAttributes,
 } from '@redwoodjs/cli-helpers'
-import { telemetryMiddleware } from '@redwoodjs/telemetry'
+import { telemetryMiddleware, errorTelemetry } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
 import * as checkCommand from './commands/check'
@@ -159,6 +159,9 @@ async function main() {
       recordTelemetryError(error)
       recordTelemetryAttributes({ errorReferenceCode })
       process.exitCode = 1
+
+      // Legacy telemetry
+      errorTelemetry(process.argv, error.message)
     }
 
     span?.end()
