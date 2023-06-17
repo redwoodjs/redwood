@@ -3514,17 +3514,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.18.0":
-  version: 4.18.0
-  resolution: "@clerk/clerk-react@npm:4.18.0"
+"@clerk/clerk-react@npm:4.20.1":
+  version: 4.20.1
+  resolution: "@clerk/clerk-react@npm:4.20.1"
   dependencies:
-    "@clerk/shared": ^0.17.2
-    "@clerk/types": ^3.41.0
+    "@clerk/shared": ^0.19.1
+    "@clerk/types": ^3.42.0
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: cd9f06ca784293e8a9dde24b79b3055f59a032022637f4f424b4a4fef47e992bb202a8bdec1d7c2359bd3272c5edbacb8289c38322f5c42bad9ba41ad80a84b0
+  checksum: f9b11421d2976a8525161bf07852907a32ed455ea65c6691ac9b1d70edf6c41c163a48f001cc55c29e0696b2bd9f64ada4a2674a7c112da22b9d54cb8d992a4b
   languageName: node
   linkType: hard
 
@@ -3545,18 +3545,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/shared@npm:^0.17.2":
-  version: 0.17.2
-  resolution: "@clerk/shared@npm:0.17.2"
+"@clerk/shared@npm:^0.19.1":
+  version: 0.19.1
+  resolution: "@clerk/shared@npm:0.19.1"
   dependencies:
     glob-to-regexp: 0.4.1
+    js-cookie: 3.0.1
+    swr: 1.3.0
   peerDependencies:
     react: ">=16"
-  checksum: c0bd6b6b9319c2f696b07d1a944cf169f397c4e28327626f552afe4f10b9bee0b8ee9a73497a24c9fa64e6a1d72a71da3aa89714e85abe8b714682a76b44d20c
+  checksum: 576766ff15f7bd49f1ec0e591a6a54af888050f8f0bb54cbf35470c273f3f9d5a20c34efac1b5d2d70749d8f9b4c500df8bea37aed9235b69e1b8f59130aa8b0
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.42.0, @clerk/types@npm:^3.41.0, @clerk/types@npm:^3.42.0":
+"@clerk/types@npm:3.42.0, @clerk/types@npm:^3.42.0":
   version: 3.42.0
   resolution: "@clerk/types@npm:3.42.0"
   dependencies:
@@ -7838,7 +7840,7 @@ __metadata:
     "@babel/cli": 7.22.5
     "@babel/core": 7.22.5
     "@babel/runtime-corejs3": 7.22.5
-    "@clerk/clerk-react": 4.18.0
+    "@clerk/clerk-react": 4.20.1
     "@clerk/types": 3.42.0
     "@redwoodjs/auth": 5.3.1
     "@types/react": 18.2.12
@@ -7847,7 +7849,7 @@ __metadata:
     react: 18.2.0
     typescript: 5.1.3
   peerDependencies:
-    "@clerk/clerk-react": 4.18.0
+    "@clerk/clerk-react": 4.20.1
   languageName: unknown
   linkType: soft
 
@@ -22810,6 +22812,13 @@ __metadata:
   version: 4.13.1
   resolution: "jose@npm:4.13.1"
   checksum: b517a38ca06601aaadcdce0ab5231b0a5969bbb9f99f37f4120e608aafb34e1a941179893d4ecedd295d122f37dac74e08f73fc723c523d7a2530928f10d3a2d
+  languageName: node
+  linkType: hard
+
+"js-cookie@npm:3.0.1":
+  version: 3.0.1
+  resolution: "js-cookie@npm:3.0.1"
+  checksum: a7dab91286c49610fb198bcc0d78fbafe9be869cf3cea6f7eaea515abdfdc9d347982fe22316e34666b479a0701119482d46faa3a350a3a3404eb954405edf72
   languageName: node
   linkType: hard
 
