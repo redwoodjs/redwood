@@ -19,19 +19,13 @@ export const handler = async () => {
   recordTelemetryAttributes({
     command,
   })
-  try {
-    const output = await envinfo.run({
-      System: ['OS', 'Shell'],
-      Binaries: ['Node', 'Yarn'],
-      Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
-      // yarn workspaces not supported :-/
-      npmPackages: '@redwoodjs/*',
-      Databases: ['SQLite'],
-    })
-    console.log(output)
-  } catch (e) {
-    console.log('Error: Cannot access environment info')
-    console.log(e)
-    process.exit(1)
-  }
+  const output = await envinfo.run({
+    System: ['OS', 'Shell'],
+    Binaries: ['Node', 'Yarn'],
+    Browsers: ['Chrome', 'Edge', 'Firefox', 'Safari'],
+    // yarn workspaces not supported :-/
+    npmPackages: '@redwoodjs/*',
+    Databases: ['SQLite'],
+  })
+  console.log(output)
 }

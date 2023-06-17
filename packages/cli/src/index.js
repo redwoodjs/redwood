@@ -4,11 +4,17 @@ import fs from 'fs'
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
+import boxen from 'boxen'
 import { config } from 'dotenv-defaults'
+import terminalLink from 'terminal-link'
+import { v4 as uuidv4 } from 'uuid'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { recordTelemetryError } from '@redwoodjs/cli-helpers'
+import {
+  recordTelemetryError,
+  recordTelemetryAttributes,
+} from '@redwoodjs/cli-helpers'
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
@@ -124,14 +130,34 @@ async function main() {
       // Span housekeeping
       span?.setStatus({ code: SpanStatusCode.OK })
     } catch (error) {
-      // TODO: Make the error log a little more pretty?
-      console.error(error)
-      // TODO: Consider prompting the user for additional context about the error
-      // recordTelemetryAttributes({
-      //   errorContext: '...', // some input from the user
-      // })
+      const errorReferenceCode = uuidv4()
+      const errorMessage = [
+        error.stack ?? error.toString(),
+        '',
+        '-'.repeat(process.stdout.columns - 8),
+        '',
+        'Need help?',
+        ` - Not sure about something or need advice? Reach out on our ${terminalLink(
+          'Forum',
+          'https://community.redwoodjs.com/'
+        )}`,
+        ` - Think you've found a bug? Open an issue on our ${terminalLink(
+          'GitHub',
+          'https://github.com/redwoodjs/redwood'
+        )}`,
+        ` - Here's your unique error reference: '${errorReferenceCode}'`,
+      ].join('\n')
+      console.error(
+        boxen(errorMessage, {
+          padding: 1,
+          borderColor: 'red',
+          title: `Unexpected Error`,
+          titleAlignment: 'left',
+        })
+      )
 
       recordTelemetryError(error)
+      recordTelemetryAttributes({ errorReferenceCode })
       process.exitCode = 1
     }
 
@@ -203,7 +229,9 @@ async function runYargs() {
   // Run
   await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
     // Show the output that yargs was going to if there was no callback provided
-    console.log(output)
+    if (output) {
+      console.log(output)
+    }
   })
 }
 
