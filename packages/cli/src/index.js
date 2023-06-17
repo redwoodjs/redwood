@@ -158,7 +158,7 @@ async function main() {
 
       recordTelemetryError(error)
       recordTelemetryAttributes({ errorReferenceCode })
-      process.exitCode = 1
+      process.exitCode = error.exitCode ?? 1
 
       // Legacy telemetry
       errorTelemetry(process.argv, error.message)
