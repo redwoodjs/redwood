@@ -8,7 +8,6 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
-import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
@@ -178,13 +177,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
     }
   )
 
-  try {
-    await tasks.run()
-  } catch (e) {
-    errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
-    process.exit(e?.exitCode || 1)
-  }
+  await tasks.run()
 }
 async function yarnInstall({ verbose }) {
   const yarnVersion = await getCmdMajorVersion('yarn')

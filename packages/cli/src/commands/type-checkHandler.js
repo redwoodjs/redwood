@@ -5,11 +5,9 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getCmdMajorVersion } from '../commands/upgrade'
 import { getPaths } from '../lib'
-import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 import { command } from './type-check'
@@ -61,37 +59,33 @@ export const handler = async ({ sides, verbose, prisma, generate }) => {
     return conclusiveExitCode
   }
 
-  try {
-    if (generate && prisma) {
-      await generatePrismaClient({
-        verbose: verbose,
-        schema: getPaths().api.dbSchema,
-      })
-    }
-    if (generate) {
-      await new Listr(
-        [
-          {
-            title: 'Generating types',
-            task: () =>
-              execa('yarn rw-gen', {
-                shell: true,
-                stdio: verbose ? 'inherit' : 'ignore',
-              }),
-          },
-        ],
+  if (generate && prisma) {
+    await generatePrismaClient({
+      verbose: verbose,
+      schema: getPaths().api.dbSchema,
+    })
+  }
+  if (generate) {
+    await new Listr(
+      [
         {
-          renderer: verbose && 'verbose',
-          rendererOptions: { collapseSubtasks: false },
-        }
-      ).run()
-    }
+          title: 'Generating types',
+          task: () =>
+            execa('yarn rw-gen', {
+              shell: true,
+              stdio: verbose ? 'inherit' : 'ignore',
+            }),
+        },
+      ],
+      {
+        renderer: verbose && 'verbose',
+        rendererOptions: { collapseSubtasks: false },
+      }
+    ).run()
+  }
 
-    const exitCode = await typeCheck()
-    exitCode > 0 && process.exit(exitCode)
-  } catch (e) {
-    errorTelemetry(process.argv, e.message)
-    console.log(c.error(e.message))
-    process.exit(e?.exitCode || 1)
+  const exitCode = await typeCheck()
+  if (exitCode > 0) {
+    process.exitCode = exitCode
   }
 }

@@ -136,10 +136,5 @@ export const handler = async (args) => {
     renderer: 'verbose',
   })
 
-  try {
-    await tasks.run()
-  } catch (e) {
-    console.error(c.error(`The script exited with errors.`))
-    process.exit(e?.exitCode || 1)
-  }
+  await tasks.run()
 }

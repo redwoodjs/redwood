@@ -164,18 +164,12 @@ export const handler = async ({
     renderer: verbose && 'verbose',
   })
 
-  try {
-    await timedTelemetry(process.argv, { type: 'build' }, async () => {
-      await jobs.run()
+  await timedTelemetry(process.argv, { type: 'build' }, async () => {
+    await jobs.run()
 
-      if (side.includes('web') && prerender) {
-        // This step is outside Listr so that it prints clearer, complete messages
-        await triggerPrerender()
-      }
-    })
-  } catch (e) {
-    console.log(c.error(e.message))
-    errorTelemetry(process.argv, e.message)
-    process.exit(1)
-  }
+    if (side.includes('web') && prerender) {
+      // This step is outside Listr so that it prints clearer, complete messages
+      await triggerPrerender()
+    }
+  })
 }

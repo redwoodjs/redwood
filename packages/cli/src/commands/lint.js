@@ -6,7 +6,6 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../lib'
-import c from '../lib/colors'
 
 export const command = 'lint [path..]'
 export const description = 'Lint your files'
@@ -35,27 +34,23 @@ export const handler = async ({ path, fix }) => {
     command,
     fix,
   })
-  try {
-    const pathString = path?.join(' ')
-    const result = await execa(
-      'yarn eslint',
-      [
-        fix && '--fix',
-        !pathString && fs.existsSync(getPaths().web.src) && 'web/src',
-        !pathString && fs.existsSync(getPaths().web.config) && 'web/config',
-        !pathString && fs.existsSync(getPaths().scripts) && 'scripts',
-        !pathString && fs.existsSync(getPaths().api.src) && 'api/src',
-        pathString,
-      ].filter(Boolean),
-      {
-        cwd: getPaths().base,
-        shell: true,
-        stdio: 'inherit',
-      }
-    )
-    process.exit(result.exitCode)
-  } catch (e) {
-    console.log(c.error(e.message))
-    process.exit(e?.exitCode || 1)
-  }
+
+  const pathString = path?.join(' ')
+  const result = await execa(
+    'yarn eslint',
+    [
+      fix && '--fix',
+      !pathString && fs.existsSync(getPaths().web.src) && 'web/src',
+      !pathString && fs.existsSync(getPaths().web.config) && 'web/config',
+      !pathString && fs.existsSync(getPaths().scripts) && 'scripts',
+      !pathString && fs.existsSync(getPaths().api.src) && 'api/src',
+      pathString,
+    ].filter(Boolean),
+    {
+      cwd: getPaths().base,
+      shell: true,
+      stdio: 'inherit',
+    }
+  )
+  process.exitCode = result.exitCode
 }
