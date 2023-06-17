@@ -18,9 +18,7 @@ async function main() {
 
   // Compute all the resource information
   const customResourceData = await getResources()
-  console.log(customResourceData)
   const resource = Resource.default().merge(new Resource(customResourceData))
-  console.log(resource)
 
   const traceExporter = new OTLPTraceExporter({
     url:
@@ -50,11 +48,15 @@ async function main() {
       span.resource = resource
       span.attributes ??= span._attributes ?? {}
       span.spanContext = () => span._spanContext
+
+      // This is only for visibility - we current do not record any events on the backend anyway.
+      // We do this for the time being because we don't want unsanitized error messages to be sent
+      span.events = []
     }
 
     traceExporter.export(spans, ({ code: _code }) => {
-      // code will be non-zero if there was an error exporting
-      // we would probably want visibility into this
+      // 'code' will be non-zero if there was an error exporting
+      // TODO: We would probably want visibility into this?
     })
 
     /**
