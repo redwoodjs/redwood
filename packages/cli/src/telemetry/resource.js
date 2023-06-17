@@ -109,6 +109,8 @@ export async function getResources() {
     'ci.isci': ci.isCI,
     complexity,
     sides,
+    experiments: JSON.stringify(experiments),
+    webBundler,
     uid: UID,
   }
 }
