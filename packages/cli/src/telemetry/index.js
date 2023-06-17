@@ -4,8 +4,6 @@ import path from 'path'
 
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import opentelemetry from '@opentelemetry/api'
-// import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
-import { Resource } from '@opentelemetry/resources'
 import {
   NodeTracerProvider,
   BatchSpanProcessor,
@@ -31,18 +29,8 @@ let traceExporter
 export async function startTelemetry() {
   diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
 
-  // Minimal resources
-  const resource = Resource.default().merge(new Resource({}))
-
   // Tracing
-  traceProvider = new NodeTracerProvider({
-    resource: resource,
-  })
-  // traceExporter = new OTLPTraceExporter({
-  //   url:
-  //     process.env.REDWOOD_REDIRECT_TELEMETRY ||
-  //     'https://quark.quantumparticle.io/v1/traces',
-  // })
+  traceProvider = new NodeTracerProvider()
   traceExporter = new CustomFileExporter()
   traceProcessor = new BatchSpanProcessor(traceExporter)
   traceProvider.addSpanProcessor(traceProcessor)
