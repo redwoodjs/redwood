@@ -4,7 +4,6 @@ import path from 'path'
 import react from '@vitejs/plugin-react'
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
 import { normalizePath } from 'vite'
-import commonjs from 'vite-plugin-commonjs'
 import EnvironmentPlugin from 'vite-plugin-environment'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -174,16 +173,6 @@ export default function redwoodPluginVite(): PluginOption[] {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
         }),
-      },
-    }),
-    // End HTML transform------------------
-
-    // @TODO We add this as a temporary workaround for DevFatalErrorPage being required
-    // Note that it only transforms commonjs in dev, which is exactly what we want!
-    // and is limited to the default FatalErrorPage (by name)
-    commonjs({
-      filter: (id: string) => {
-        return id.includes('FatalErrorPage')
       },
     }),
   ]
