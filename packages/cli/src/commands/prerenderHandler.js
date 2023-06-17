@@ -26,7 +26,7 @@ const mapRouterPathToHtml = (routerPath) => {
 
 function getRouteHooksFilePath(routeFilePath) {
   const routeHooksFilePathTs = routeFilePath.replace(
-    /\.(js|tsx)$/,
+    /\.[jt]sx?$/,
     '.routeHooks.ts'
   )
 
@@ -35,7 +35,7 @@ function getRouteHooksFilePath(routeFilePath) {
   }
 
   const routeHooksFilePathJs = routeFilePath.replace(
-    /\.(js|tsx)$/,
+    /\.[jt]sx?$/,
     '.routeHooks.js'
   )
 
@@ -126,7 +126,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     console.log('\nSkipping prerender...')
     console.log(
       c.warning(
-        'You have not marked any routes with a path as `prerender` in `Routes.{js,tsx}` \n'
+        'You have not marked any routes with a path as `prerender` in `Routes.{jsx,tsx}` \n'
       )
     )
 

@@ -155,7 +155,7 @@ export const files = ({
       templateForComponentFile({
         name: 'ForgotPassword',
         suffix: 'Page',
-        extension: typescript ? '.tsx' : '.js',
+        extension: typescript ? '.tsx' : '.jsx',
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'forgotPassword.tsx.template',
@@ -169,7 +169,7 @@ export const files = ({
       templateForComponentFile({
         name: 'Login',
         suffix: 'Page',
-        extension: typescript ? '.tsx' : '.js',
+        extension: typescript ? '.tsx' : '.jsx',
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: webauthn
@@ -185,7 +185,7 @@ export const files = ({
       templateForComponentFile({
         name: 'ResetPassword',
         suffix: 'Page',
-        extension: typescript ? '.tsx' : '.js',
+        extension: typescript ? '.tsx' : '.jsx',
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'resetPassword.tsx.template',
@@ -199,7 +199,7 @@ export const files = ({
       templateForComponentFile({
         name: 'Signup',
         suffix: 'Page',
-        extension: typescript ? '.tsx' : '.js',
+        extension: typescript ? '.tsx' : '.jsx',
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'signup.tsx.template',

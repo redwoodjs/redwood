@@ -33,7 +33,7 @@ describe('Single word files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserCell/UserCell.js'
+          '/path/to/project/web/src/components/UserCell/UserCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -43,7 +43,7 @@ describe('Single word files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+          '/path/to/project/web/src/components/UserCell/UserCell.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -53,7 +53,7 @@ describe('Single word files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
+          '/path/to/project/web/src/components/UserCell/UserCell.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -82,7 +82,7 @@ test('trims Cell from end of name', async () => {
   const cellCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/components/BazingaCell/BazingaCell.js'
+        '/path/to/project/web/src/components/BazingaCell/BazingaCell.jsx'
       )
     ]
 
@@ -109,7 +109,7 @@ describe('Multiword files', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -119,7 +119,7 @@ describe('Multiword files', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -129,7 +129,7 @@ describe('Multiword files', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -163,7 +163,7 @@ describe('Snake case words', () => {
     expect(
       snakeCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -173,7 +173,7 @@ describe('Snake case words', () => {
     expect(
       snakeCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -183,7 +183,7 @@ describe('Snake case words', () => {
     expect(
       snakeCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -216,7 +216,7 @@ describe('Kebab case words', () => {
     expect(
       kebabCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -226,7 +226,7 @@ describe('Kebab case words', () => {
     expect(
       kebabCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -236,7 +236,7 @@ describe('Kebab case words', () => {
     expect(
       kebabCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -270,7 +270,7 @@ describe('camelCase words', () => {
     expect(
       camelCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -280,7 +280,7 @@ describe('camelCase words', () => {
     expect(
       camelCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -290,7 +290,7 @@ describe('camelCase words', () => {
     expect(
       camelCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.jsx'
         )
       ]
     ).toMatchSnapshot()
@@ -320,9 +320,9 @@ test("doesn't include test file when --tests is set to false", async () => {
       '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
     ),
     path.normalize(
-      '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
+      '/path/to/project/web/src/components/UserCell/UserCell.stories.jsx'
     ),
-    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.jsx'),
   ])
 })
 
@@ -339,9 +339,9 @@ test("doesn't include storybook file when --stories is set to false", async () =
       '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
     ),
     path.normalize(
-      '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+      '/path/to/project/web/src/components/UserCell/UserCell.test.jsx'
     ),
-    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.jsx'),
   ])
 })
 
@@ -354,7 +354,7 @@ test("doesn't include storybook and test files when --stories and --tests is set
   })
 
   expect(Object.keys(withoutTestAndStoryFiles)).toEqual([
-    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.jsx'),
   ])
 })
 
@@ -367,15 +367,15 @@ test('generates list cells if list flag passed in', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.jsx'
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.test.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.jsx'
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.jsx'
   )
 
   const MOCK_PATH = path.normalize(
@@ -405,15 +405,15 @@ test('generates list cells if name is plural', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.jsx'
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.test.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.jsx'
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.jsx'
   )
 
   const MOCK_PATH = path.normalize(
@@ -516,15 +516,15 @@ test('"equipment" with list flag', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.jsx'
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.test.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.test.jsx'
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.stories.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.stories.jsx'
   )
 
   const MOCK_PATH = path.normalize(
@@ -552,15 +552,15 @@ test('"equipment" withOUT list flag should find equipment by id', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.js'
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.jsx'
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.test.js'
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.test.jsx'
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.stories.js'
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.stories.jsx'
   )
 
   const MOCK_PATH = path.normalize(
@@ -588,15 +588,15 @@ test('generates a cell with a string primary id key', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressCell/AddressCell.js'
+    '/path/to/project/web/src/components/AddressCell/AddressCell.jsx'
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressCell/AddressCell.test.js'
+    '/path/to/project/web/src/components/AddressCell/AddressCell.test.jsx'
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressCell/AddressCell.stories.js'
+    '/path/to/project/web/src/components/AddressCell/AddressCell.stories.jsx'
   )
 
   const MOCK_PATH = path.normalize(
@@ -627,15 +627,15 @@ test('generates list a cell with a string primary id keys', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressesCell/AddressesCell.js'
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.jsx'
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressesCell/AddressesCell.test.js'
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.test.jsx'
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressesCell/AddressesCell.stories.js'
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.stories.jsx'
   )
 
   const MOCK_PATH = path.normalize(
@@ -667,7 +667,7 @@ describe('Custom query names', () => {
     })
 
     const CELL_PATH = path.normalize(
-      '/path/to/project/web/src/components/CluesCell/CluesCell.js'
+      '/path/to/project/web/src/components/CluesCell/CluesCell.jsx'
     )
 
     expect(generatedFiles[CELL_PATH]).toContain('query FindBluesClues {')

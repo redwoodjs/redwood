@@ -6,9 +6,9 @@ import { Listr } from 'listr2'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../../../../lib'
+import { getPaths, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { addFilesTask, printSetupNotes, updateApiURLTask } from '../helpers'
+import { addFilesTask, updateApiURLTask } from '../helpers'
 import { NETLIFY_TOML } from '../templates/netlify'
 
 export const command = 'netlify'

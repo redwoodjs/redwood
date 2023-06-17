@@ -35,7 +35,7 @@ const removeSetImport = () => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
   if (routesContent.match('<Set')) {
-    return 'Skipping removal of Set import in Routes.{js,tsx}'
+    return 'Skipping removal of Set import in Routes.{jsx,tsx}'
   }
 
   const [redwoodRouterImport] = routesContent.match(
@@ -48,7 +48,7 @@ const removeSetImport = () => {
   )
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Removed Set import in Routes.{js,tsx}'
+  return 'Removed Set import in Routes.{jsx,tsx}'
 }
 
 const removeLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
@@ -69,7 +69,7 @@ const removeLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
 
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Removed layout import from Routes.{js,tsx}'
+  return 'Removed layout import from Routes.{jsx,tsx}'
 }
 
 export const builder = (yargs) => {
@@ -91,6 +91,7 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
             tests,
             nestScaffoldByModel,
           })
+
           return deleteFilesTask(f)
         },
       },

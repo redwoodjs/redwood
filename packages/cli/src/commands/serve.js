@@ -13,6 +13,11 @@ import c from '../lib/colors'
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
+function hasExperimentalServerFile() {
+  const serverFilePath = path.join(getPaths().api.dist, 'server.js')
+  return fs.existsSync(serverFilePath)
+}
+
 export async function builder(yargs) {
   const redwoodProjectPaths = getPaths()
   const redwoodProjectConfig = getConfig()
@@ -43,12 +48,8 @@ export async function builder(yargs) {
           socket: argv.socket,
         })
 
-        const serverFilePath = path.join(
-          redwoodProjectPaths.api.dist,
-          'server.js'
-        )
-
-        if (fs.existsSync(serverFilePath)) {
+        // Run the experimental server file, if it exists, with web side also
+        if (hasExperimentalServerFile()) {
           console.log(
             [
               separator,
@@ -58,13 +59,15 @@ export async function builder(yargs) {
               separator,
             ].join('\n')
           )
-
-          await execa('yarn', ['node', path.join('dist', 'server.js')], {
-            cwd: redwoodProjectPaths.api.base,
-            stdio: 'inherit',
-            shell: true,
-          })
-
+          await execa(
+            'yarn',
+            ['node', path.join('dist', 'server.js'), '--enable-web'],
+            {
+              cwd: redwoodProjectPaths.api.base,
+              stdio: 'inherit',
+              shell: true,
+            }
+          )
           return
         }
 
@@ -103,6 +106,25 @@ export async function builder(yargs) {
           socket: argv.socket,
           apiRootPath: argv.apiRootPath,
         })
+
+        // Run the experimental server file, if it exists, api side only
+        if (hasExperimentalServerFile()) {
+          console.log(
+            [
+              separator,
+              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+              separator,
+              'Using the experimental API server file at api/dist/server.js',
+              separator,
+            ].join('\n')
+          )
+          await execa('yarn', ['node', path.join('dist', 'server.js')], {
+            cwd: redwoodProjectPaths.api.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+          return
+        }
 
         const { apiServerHandler } = await import('./serveHandler.js')
         await apiServerHandler(argv)
