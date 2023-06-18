@@ -512,7 +512,7 @@ async function runCommand() {
     task: () => {
       console.log('-'.repeat(30))
       console.log()
-      console.log('✅ Success the test project fixture has been rebuilt!')
+      console.log('✅ Success! The test project fixture has been rebuilt')
       console.log()
       console.log('-'.repeat(30))
     },
