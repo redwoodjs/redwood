@@ -292,14 +292,15 @@ async function runCommand() {
 
   await tuiTask({
     step: 1,
-    title: 'Temporary (v6): add storybook to web dependencies',
+    title: 'Temporary (v6): Add storybook and vite canary to web dependencies',
     content:
-      'Adding storybook to web dependencies...\n' +
+      'Adding storybook and @redwoodjs/vite@6.0.0-canary.450\n' +
+      'to web dependencies...\n' +
       '  ⏱  This could take a while...',
     task: () => {
       return exec(
         'yarn',
-        ['workspace web add -D storybook'],
+        ['workspace web add -D storybook @redwoodjs/vite@6.0.0-canary.450'],
         getExecaOptions(OUTPUT_PROJECT_PATH)
       )
     },
