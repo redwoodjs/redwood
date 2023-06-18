@@ -187,7 +187,7 @@ async function tuiTask({ step, title, content, skip: skipFn, task, parent }) {
     spinner: {
       enabled: false,
     },
-    header: `${RedwoodStyling.green('✔')} ${stepId}. ${title}`,
+    header: `${RedwoodStyling.green('✔')} ${stepId}: ${title}`,
     content: '',
   })
 
@@ -276,6 +276,11 @@ if (!startStep) {
 }
 
 async function runCommand() {
+  console.log()
+  console.log('Rebuilding test project fixture...')
+  console.log('Using temporary directory:', OUTPUT_PROJECT_PATH)
+  console.log()
+
   // Maybe we could add all of the tasks to an array and infer the `step` from
   // the array index?
   // I'd also want to be able to skip sub-tasks. Like both the "web" step and
@@ -295,7 +300,6 @@ async function runCommand() {
     title: 'Temporary (v6): Add storybook and vite canary to web dependencies',
     content:
       'Adding storybook and @redwoodjs/vite@6.0.0-canary.450\n' +
-      'to web dependencies...\n' +
       '  ⏱  This could take a while...',
     task: () => {
       return exec(
@@ -506,19 +510,13 @@ async function runCommand() {
     step: 13,
     title: 'All done!',
     task: () => {
-      if (verbose) {
-        // Without verbose these logs aren't visible anyway
-        console.log()
-        console.log('-'.repeat(30))
-        console.log()
-        console.log('✅ Success your project has been generated at:')
-        console.log(OUTPUT_PROJECT_PATH)
-        console.log()
-        console.log('-'.repeat(30))
-      } else {
-        console.log(`Generated project at ${OUTPUT_PROJECT_PATH}`)
-      }
+      console.log('-'.repeat(30))
+      console.log()
+      console.log('✅ Success! The test project fixture has been rebuilt')
+      console.log()
+      console.log('-'.repeat(30))
     },
+    enabled: verbose,
   })
 }
 
