@@ -6,8 +6,6 @@ declare global {
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
   var __REDWOOD__APP_TITLE: string
 
-  var RWJS_WEB_BUNDLER: 'vite' | 'webpack'
-
   // Provided by Vite.config, or Webpack in the user's project
   var RWJS_ENV: {
     RWJS_API_GRAPHQL_URL: string
