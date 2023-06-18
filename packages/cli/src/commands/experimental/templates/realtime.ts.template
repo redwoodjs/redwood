@@ -1,10 +1,15 @@
 import { createPubSub, InMemoryLiveQueryStore } from '@redwoodjs/graphql-server'
 
+import type { NewMessageChannel } from 'src/subscriptions/newMessage/newMessage'
+
 export const liveQueryStore = new InMemoryLiveQueryStore()
 
-// Define your subscription types
-export type PubSubChannels = {
-  newMessage: [payload: { from: string; body: string }]
+export type OldMessageChannel = {
+  oldMessage: [payload: { name: string }]
 }
 
+export type PubSubChannels = NewMessageChannel<string> & OldMessageChannel
+
 export const pubSub = createPubSub<PubSubChannels>()
+
+export type PubSubChannelsType = typeof pubSub
