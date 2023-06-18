@@ -14,7 +14,7 @@ export class ChunkReferencesPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.emit.tap('ChunkReferencesPlugin', (compilation) => {
       const output: Array<{
-        name: string
+        name: string | undefined
         id: string | number
         files: Array<string>
         referencedChunks: Array<string | number>
