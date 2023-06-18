@@ -92,7 +92,6 @@ export default function redwoodPluginVite(): PluginOption[] {
           envPrefix: 'REDWOOD_ENV_',
           publicDir: path.join(rwPaths.web.base, 'public'),
           define: {
-            RWJS_WEB_BUNDLER: JSON.stringify('vite'),
             RWJS_ENV: {
               // @NOTE we're avoiding process.env here, unlike webpack
               RWJS_API_GRAPHQL_URL:
