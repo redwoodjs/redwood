@@ -708,7 +708,7 @@ export default DoublePage`
             datetime.getFullYear() +
             ('0' + (datetime.getMonth() + 1)).slice(-2) +
             ('0' + datetime.getDate()).slice(-2) +
-            '120000' // Hardcoded time to 12:00:00 to limit TZ issues
+            '120000' // Time hardcoded to 12:00:00 to limit TZ issues
           fs.renameSync(
             path.join(migrationsFolderPath, name),
             path.join(
