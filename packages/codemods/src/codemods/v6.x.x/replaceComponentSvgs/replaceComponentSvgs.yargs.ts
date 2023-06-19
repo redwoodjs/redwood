@@ -8,7 +8,8 @@ import { getPaths } from '@redwoodjs/project-config'
 import runTransform from '../../../lib/runTransform'
 
 export const command = 'replace-component-svgs'
-export const description = '(v6.x.x->v6.x.x) Converts world to bazinga'
+export const description =
+  '(v5.x.x->v6.x.x) Converts SVGs used as components to <img> tags'
 
 export const handler = () => {
   task('Replace Component Svgs', async ({ setOutput }: TaskInnerAPI) => {
