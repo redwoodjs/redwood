@@ -117,7 +117,7 @@ export class ReactiveTUIContent {
   setOutStream(out: stream.Readable) {
     this.outStream = new stream.Writable({
       write: (chunk: Buffer, _encoding, next) => {
-        if (this.content === 'stream') {
+        if (this.mode === 'stream') {
           this.content += chunk.toString('utf-8')
         }
         next()
@@ -128,12 +128,7 @@ export class ReactiveTUIContent {
   }
 
   renderToString(): string {
-    // Stream based content
-    if (this.mode === 'stream') {
-      return 'Not implemented yet'
-    }
-
-    // Text based content
+    // Text content
     let renderedString = this.content
 
     // Add the header if it exists
@@ -152,6 +147,11 @@ export class ReactiveTUIContent {
       if (this.spinnerIndex >= this.spinner.characters.length) {
         this.spinnerIndex = 0
       }
+    }
+
+    // Boxen
+    if (this.boxen) {
+      renderedString = boxen(renderedString, this.boxen)
     }
 
     return renderedString
@@ -199,29 +199,9 @@ export class RedwoodTUI {
 
   async runTasks(definitions: TUITaskDefinition[]) {
     // build the tasks
-    let majorIndex = 1
-    let minorIndex = 0
-
     const tasks: TUITask[] = []
-    for (const definition of definitions) {
-      if (Array.isArray(definition.task)) {
-        tasks.push(new TUITask(definition, `${majorIndex}.x`))
-        for (const nestedDefinition of definition.task) {
-          if (Array.isArray(nestedDefinition.task)) {
-            throw new Error(
-              'Nested task definitions can only be one level deep'
-            )
-          }
-          tasks.push(
-            new TUITask(nestedDefinition, `${majorIndex}.${minorIndex}`, true)
-          )
-          minorIndex += 1
-        }
-      } else {
-        tasks.push(new TUITask(definition, `${majorIndex}.${minorIndex}`))
-      }
-      majorIndex += 1
-      minorIndex = 0
+    for (let i = 0; i < definitions.length; i++) {
+      tasks.push(new TUITask(definitions[i], `${i + 1}`))
     }
 
     // initial pass of the enabled/skipped flags
@@ -237,36 +217,14 @@ export class RedwoodTUI {
     // start rendering the tasks
     this.timerId = setInterval(() => {
       this.drawTasks(tasks)
-    }, 80)
+    }, parseInt(process.env.REDWOOD_TUI_INTERVAL ?? '80'))
 
     // run the tasks
+    // const context = {} // TODO: Implement task context
     for (const task of tasks) {
-      task.enabled =
-        typeof task.enable === 'function'
-          ? await task.enable(task)
-          : task.enable
-      if (!task.enabled) {
-        continue
-      }
-
-      task.skipped =
-        typeof task.skip === 'function' ? await task.skip(task) : task.skip
-      if (task.skipped) {
-        task.state = 'skipped'
-        continue
-      }
-
-      try {
-        if (typeof task.task === 'function') {
-          task.state = 'running'
-          await task.task(task)
-          task.completed = true
-          task.state = 'completed'
-        }
-      } catch (error) {
-        task.errored = true
-        task.state = 'errored'
-        await task.onError(task, error as Error)
+      // Break if a task fails
+      if (!(await task.run())) {
+        break
       }
     }
 
@@ -281,7 +239,7 @@ export class RedwoodTUI {
     for (const task of tasks) {
       if (task.enabled) {
         taskContents.push({
-          content: task.renderTitleToString(),
+          content: task.renderToString(),
           active: task.state === 'running',
           index: task.index,
         })

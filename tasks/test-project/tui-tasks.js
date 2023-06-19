@@ -74,7 +74,7 @@ const createBuilder = (cmd) => {
   }
 }
 
-async function webTasks(outputPath, { linkWithLatestFwBuild }) {
+function webTasks(outputPath, { linkWithLatestFwBuild }) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
