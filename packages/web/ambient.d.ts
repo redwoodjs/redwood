@@ -1,10 +1,12 @@
 /* eslint-disable no-var */
+import type { NormalizedCacheObject } from '@apollo/client'
 import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {
   var __REDWOOD__PRERENDERING: boolean
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
   var __REDWOOD__APP_TITLE: string
+  var __REDWOOD__APOLLO_STATE: NormalizedCacheObject
 
   var RWJS_WEB_BUNDLER: 'vite' | 'webpack'
 
@@ -15,6 +17,7 @@ declare global {
     RWJS_API_URL: string
 
     __REDWOOD__APP_TITLE: string
+    __REDWOOD__APOLLO_STATE: NormalizedCacheObject
   }
 
   var RWJS_DEBUG_ENV: {
@@ -39,6 +42,7 @@ declare global {
       __REDWOOD__PRERENDERING: boolean
       __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
       __REDWOOD__APP_TITLE: string
+      __REDWOOD__APOLLO_STATE: NormalizedCacheObject
 
       /** URL or absolute path to the GraphQL serverless function */
       RWJS_API_GRAPHQL_URL: string
