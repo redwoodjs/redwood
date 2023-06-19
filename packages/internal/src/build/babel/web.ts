@@ -76,7 +76,12 @@ export const getWebSideBabelPlugins = (
       'rwjs-web-auto-import',
     ],
     ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
-    // === Handling redwood "magic"
+    process.env.NODE_ENV !== 'development' && [
+      require('../babelPlugins/babel-plugin-redwood-remove-dev-fatal-error-page')
+        .default,
+      undefined,
+      'rwjs-remove-dev-fatal-error-page',
+    ],
   ].filter(Boolean) as TransformOptions[]
 
   return plugins
