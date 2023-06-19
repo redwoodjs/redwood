@@ -4,7 +4,6 @@ import path from 'path'
 import react from '@vitejs/plugin-react'
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
 import { normalizePath } from 'vite'
-import commonjs from 'vite-plugin-commonjs'
 import EnvironmentPlugin from 'vite-plugin-environment'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -93,7 +92,6 @@ export default function redwoodPluginVite(): PluginOption[] {
           envPrefix: 'REDWOOD_ENV_',
           publicDir: path.join(rwPaths.web.base, 'public'),
           define: {
-            RWJS_WEB_BUNDLER: JSON.stringify('vite'),
             RWJS_ENV: {
               // @NOTE we're avoiding process.env here, unlike webpack
               RWJS_API_GRAPHQL_URL:
@@ -174,16 +172,6 @@ export default function redwoodPluginVite(): PluginOption[] {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
         }),
-      },
-    }),
-    // End HTML transform------------------
-
-    // @TODO We add this as a temporary workaround for DevFatalErrorPage being required
-    // Note that it only transforms commonjs in dev, which is exactly what we want!
-    // and is limited to the default FatalErrorPage (by name)
-    commonjs({
-      filter: (id: string) => {
-        return id.includes('FatalErrorPage')
       },
     }),
   ]
