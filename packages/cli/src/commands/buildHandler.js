@@ -10,10 +10,9 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
-import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
+import { timedTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, getConfig } from '../lib'
-import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
 import { command } from './build'
