@@ -85,7 +85,7 @@ test('RBAC: Should not be able to delete contact as non-admin user', async ({
 test('RBAC: Admin user should be able to delete contacts', async ({ page }) => {
   fs.writeFileSync(
     path.join(
-      process.env.REDWOOD_PROJECT_PATH as string,
+      process.env.REDWOOD_TEST_PROJECT_PATH as string,
       'scripts/makeAdmin.ts'
     ),
     `\
@@ -107,7 +107,7 @@ export default async ({ args }) => {
 
   console.log(`Giving ${adminEmail} ADMIN role....`)
   await execa(`yarn rw exec makeAdmin --email ${adminEmail}`, {
-    cwd: process.env.REDWOOD_PROJECT_PATH,
+    cwd: process.env.REDWOOD_TEST_PROJECT_PATH,
     stdio: 'inherit',
     shell: true,
   })
