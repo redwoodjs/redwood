@@ -13,14 +13,14 @@ export const description =
 
 export const handler = () => {
   task('Update Theme Config', async ({ setOutput }: TaskInnerAPI) => {
-    const targetPaths =  fg.sync('{chakra,mantine}.config.{js,jsx,tsx,ts}', {
+    const targetPaths = fg.sync('{chakra,mantine}.config.{js,jsx,tsx,ts}', {
       cwd: getPaths().web.config,
       absolute: true,
     })
 
     await runTransform({
       transformPath: path.join(__dirname, 'updateThemeConfig.js'),
-      targetPaths
+      targetPaths,
     })
 
     setOutput('All done! Run `yarn rw lint --fix` to prettify your code')
