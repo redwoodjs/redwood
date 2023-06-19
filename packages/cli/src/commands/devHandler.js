@@ -13,8 +13,6 @@ import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
 
-import { command } from './dev'
-
 const defaultApiDebugPort = 18911
 
 export const handler = async ({
@@ -25,7 +23,7 @@ export const handler = async ({
   apiDebugPort,
 }) => {
   recordTelemetryAttributes({
-    command,
+    command: 'dev',
     side: JSON.stringify(side),
     // forward, // TODO: Should we record this?
     generate,

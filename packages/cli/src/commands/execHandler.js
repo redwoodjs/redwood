@@ -12,8 +12,6 @@ import c from '../lib/colors'
 import { runScriptFunction } from '../lib/exec'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
-import { command } from './exec'
-
 const printAvailableScriptsToConsole = () => {
   console.log('Available scripts:')
   findScripts().forEach((scriptPath) => {
@@ -25,7 +23,7 @@ const printAvailableScriptsToConsole = () => {
 
 export const handler = async (args) => {
   recordTelemetryAttributes({
-    command,
+    command: 'exec',
     prisma: args.prisma,
     list: args.list,
   })

@@ -11,8 +11,6 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import * as project from '../lib/project'
 
-import { command } from './test'
-
 // https://github.com/facebook/create-react-app/blob/cbad256a4aacfc3084be7ccf91aad87899c63564/packages/react-scripts/scripts/test.js#L39
 function isInGitRepository() {
   try {
@@ -65,7 +63,7 @@ export const handler = async ({
   ...others
 }) => {
   recordTelemetryAttributes({
-    command,
+    command: 'test',
     // TODO: filter (likely needs sanitised),
     watch,
     collectCoverage,

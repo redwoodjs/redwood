@@ -10,11 +10,9 @@ import { getCmdMajorVersion } from '../commands/upgrade'
 import { getPaths } from '../lib'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
-import { command } from './type-check'
-
 export const handler = async ({ sides, verbose, prisma, generate }) => {
   recordTelemetryAttributes({
-    command,
+    command: 'type-check',
     sides: JSON.stringify(sides),
     verbose,
     prisma,

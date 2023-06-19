@@ -12,8 +12,6 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import c from '../lib/colors'
 import { configureBabel, runScriptFunction } from '../lib/exec'
 
-import { command } from './prerender'
-
 class PathParamError extends Error {}
 
 const mapRouterPathToHtml = (routerPath) => {
@@ -278,7 +276,7 @@ const diagnosticCheck = () => {
 
 export const handler = async ({ path: routerPath, dryRun, verbose }) => {
   recordTelemetryAttributes({
-    command,
+    command: 'prerender',
     dryRun,
     verbose,
   })

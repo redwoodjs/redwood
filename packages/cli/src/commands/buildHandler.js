@@ -15,8 +15,6 @@ import { timedTelemetry } from '@redwoodjs/telemetry'
 import { getPaths, getConfig } from '../lib'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
-import { command } from './build'
-
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
@@ -26,7 +24,7 @@ export const handler = async ({
   prerender,
 }) => {
   recordTelemetryAttributes({
-    command,
+    command: 'build',
     side: JSON.stringify(side),
     verbose,
     performance,

@@ -9,12 +9,10 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import c from '../lib/colors'
 import { getPaths } from '../lib/index'
 
-import { command } from './prisma'
-
 // eslint-disable-next-line no-unused-vars
 export const handler = async ({ _, $0, commands = [], ...options }) => {
   recordTelemetryAttributes({
-    command,
+    command: 'prisma',
     // TODO: Consider needing more here?
   })
 

@@ -7,8 +7,6 @@ import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/a
 
 import { getPaths } from '../lib'
 
-import { command } from './console'
-
 const paths = getPaths()
 
 const loadPrismaClient = (replContext) => {
@@ -39,7 +37,7 @@ const loadConsoleHistory = async (r) => {
 
 export const handler = () => {
   recordTelemetryAttributes({
-    command,
+    command: 'console',
   })
 
   // Transpile on the fly
