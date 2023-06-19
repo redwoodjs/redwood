@@ -35,22 +35,26 @@ export const handler = async ({ path, fix }) => {
     fix,
   })
 
-  const pathString = path?.join(' ')
-  const result = await execa(
-    'yarn eslint',
-    [
-      fix && '--fix',
-      !pathString && fs.existsSync(getPaths().web.src) && 'web/src',
-      !pathString && fs.existsSync(getPaths().web.config) && 'web/config',
-      !pathString && fs.existsSync(getPaths().scripts) && 'scripts',
-      !pathString && fs.existsSync(getPaths().api.src) && 'api/src',
-      pathString,
-    ].filter(Boolean),
-    {
-      cwd: getPaths().base,
-      shell: true,
-      stdio: 'inherit',
-    }
-  )
-  process.exitCode = result.exitCode
+  try {
+    const pathString = path?.join(' ')
+    const result = await execa(
+      'yarn eslint',
+      [
+        fix && '--fix',
+        !pathString && fs.existsSync(getPaths().web.src) && 'web/src',
+        !pathString && fs.existsSync(getPaths().web.config) && 'web/config',
+        !pathString && fs.existsSync(getPaths().scripts) && 'scripts',
+        !pathString && fs.existsSync(getPaths().api.src) && 'api/src',
+        pathString,
+      ].filter(Boolean),
+      {
+        cwd: getPaths().base,
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+    process.exitCode = result.exitCode
+  } catch (error) {
+    process.exitCode = error.exitCode ?? 1
+  }
 }
