@@ -93,8 +93,8 @@ async function serve() {
     console.log(`GraphQL function endpoint at ${graphqlEnd}`)
   })
 
-  process.on('exit', () => {
-    fastify.close()
+  process.on('exit', async () => {
+    await fastify.close()
   })
 }
 
