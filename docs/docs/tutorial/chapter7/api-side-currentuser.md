@@ -674,16 +674,13 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 // highlight-start
 export const updatePost = async ({ id, input }) => {
   if (await adminPost({ id })) {
-    return true
+    return db.post.update({
+      data: input,
+      where: { id },
+    })
   } else {
     throw new ForbiddenError("You don't have access to this post")
   }
-  // highlight-end
-
-  return db.post.update({
-    data: input,
-    where: { id },
-  })
 }
 ```
 
@@ -693,7 +690,7 @@ This works, but we'll need to do the same thing in `deletePost`. Let's extract t
 
 ```javascript
 // highlight-start
-const verifyOwnership = async (id) {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -704,7 +701,7 @@ const verifyOwnership = async (id) {
 
 export const updatePost = async ({ id, input }) => {
   // highlight-next-line
-  await verifyOwnership(id)
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -720,7 +717,7 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 
-const validateOwnership = async ({ id }) => {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -745,7 +742,7 @@ export const createPost = ({ input }) => {
 }
 
 export const updatePost = async ({ id, input }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -754,7 +751,7 @@ export const updatePost = async ({ id, input }) => {
 }
 
 export const deletePost = async ({ id }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.delete({
     where: { id },
