@@ -10,8 +10,6 @@ declare global {
     __REDWOOD__APP_TITLE: string
   }
 
-  var RWJS_WEB_BUNDLER: 'webpack' | 'vite'
-
   var RWJS_DEBUG_ENV: {
     RWJS_SRC_ROOT: string
     REDWOOD_ENV_EDITOR?: string
