@@ -35,7 +35,7 @@
     "chokidar": "3.5.3",
     "core-js": "3.31.0",
     "crypto-js": "4.1.1",
-    "dotenv": "16.1.4",
+    "dotenv": "16.3.1",
     "fast-json-parse": "1.0.3",
     "fastify": "4.18.0",
     "fastify-raw-body": "4.2.0",
@@ -55,7 +55,7 @@
   "devDependencies": {
     "@babel/cli": "7.22.5",
     "@babel/core": "7.22.5",
-    "@types/aws-lambda": "8.10.118",
+    "@types/aws-lambda": "8.10.119",
     "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "9.0.2",
     "@types/lodash": "4.14.195",
