@@ -2622,17 +2622,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.20.1":
-  version: 4.20.1
-  resolution: "@clerk/clerk-react@npm:4.20.1"
+"@clerk/clerk-react@npm:4.20.4":
+  version: 4.20.4
+  resolution: "@clerk/clerk-react@npm:4.20.4"
   dependencies:
     "@clerk/shared": ^0.19.1
-    "@clerk/types": ^3.42.0
+    "@clerk/types": ^3.45.0
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: f9b11421d2976a8525161bf07852907a32ed455ea65c6691ac9b1d70edf6c41c163a48f001cc55c29e0696b2bd9f64ada4a2674a7c112da22b9d54cb8d992a4b
+  checksum: 4542be6ae497082f812e2953a31b796755ebefac8383b8d52e4dd7229b6fd89c8e7629d673b2dbf92d05933985aedf9ff06ece084e850be4a061630d4742d6a9
   languageName: node
   linkType: hard
 
@@ -2666,12 +2666,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.42.0, @clerk/types@npm:^3.42.0":
+"@clerk/types@npm:3.42.0":
   version: 3.42.0
   resolution: "@clerk/types@npm:3.42.0"
   dependencies:
     csstype: 3.1.1
   checksum: fbdec075867d19ccbe13b656bd5bfa4a26b45d766fa7d879472852b63ef5fad46b13eaaafcc314575dc14d091e55496d2dc632e75f2da0d183e349bc13a4c6da
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^3.42.0, @clerk/types@npm:^3.45.0":
+  version: 3.45.0
+  resolution: "@clerk/types@npm:3.45.0"
+  dependencies:
+    csstype: 3.1.1
+  checksum: 87c849560ffec9f4639d621592486914f053dfc023458834193b02746ad45fae12bfb666bb2deee7190393ab581c827d72964b1ac2f1ff4a0ddf4638d7448cdf
   languageName: node
   linkType: hard
 
@@ -7042,7 +7051,7 @@ __metadata:
     "@babel/cli": 7.22.5
     "@babel/core": 7.22.5
     "@babel/runtime-corejs3": 7.22.5
-    "@clerk/clerk-react": 4.20.1
+    "@clerk/clerk-react": 4.20.4
     "@clerk/types": 3.42.0
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.12
@@ -7051,7 +7060,7 @@ __metadata:
     react: 18.2.0
     typescript: 5.1.3
   peerDependencies:
-    "@clerk/clerk-react": 4.20.1
+    "@clerk/clerk-react": 4.20.4
   languageName: unknown
   linkType: soft
 
