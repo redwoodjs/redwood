@@ -2622,17 +2622,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.20.1":
-  version: 4.20.1
-  resolution: "@clerk/clerk-react@npm:4.20.1"
+"@clerk/clerk-react@npm:4.20.4":
+  version: 4.20.4
+  resolution: "@clerk/clerk-react@npm:4.20.4"
   dependencies:
     "@clerk/shared": ^0.19.1
-    "@clerk/types": ^3.42.0
+    "@clerk/types": ^3.45.0
     swr: 1.3.0
     tslib: 2.4.1
   peerDependencies:
     react: ">=16"
-  checksum: f9b11421d2976a8525161bf07852907a32ed455ea65c6691ac9b1d70edf6c41c163a48f001cc55c29e0696b2bd9f64ada4a2674a7c112da22b9d54cb8d992a4b
+  checksum: 4542be6ae497082f812e2953a31b796755ebefac8383b8d52e4dd7229b6fd89c8e7629d673b2dbf92d05933985aedf9ff06ece084e850be4a061630d4742d6a9
   languageName: node
   linkType: hard
 
@@ -2666,12 +2666,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/types@npm:3.42.0, @clerk/types@npm:^3.42.0":
+"@clerk/types@npm:3.42.0":
   version: 3.42.0
   resolution: "@clerk/types@npm:3.42.0"
   dependencies:
     csstype: 3.1.1
   checksum: fbdec075867d19ccbe13b656bd5bfa4a26b45d766fa7d879472852b63ef5fad46b13eaaafcc314575dc14d091e55496d2dc632e75f2da0d183e349bc13a4c6da
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:^3.42.0, @clerk/types@npm:^3.45.0":
+  version: 3.45.0
+  resolution: "@clerk/types@npm:3.45.0"
+  dependencies:
+    csstype: 3.1.1
+  checksum: 87c849560ffec9f4639d621592486914f053dfc023458834193b02746ad45fae12bfb666bb2deee7190393ab581c827d72964b1ac2f1ff4a0ddf4638d7448cdf
   languageName: node
   linkType: hard
 
@@ -7042,7 +7051,7 @@ __metadata:
     "@babel/cli": 7.22.5
     "@babel/core": 7.22.5
     "@babel/runtime-corejs3": 7.22.5
-    "@clerk/clerk-react": 4.20.1
+    "@clerk/clerk-react": 4.20.4
     "@clerk/types": 3.42.0
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.12
@@ -7051,7 +7060,7 @@ __metadata:
     react: 18.2.0
     typescript: 5.1.3
   peerDependencies:
-    "@clerk/clerk-react": 4.20.1
+    "@clerk/clerk-react": 4.20.4
   languageName: unknown
   linkType: soft
 
@@ -7552,7 +7561,7 @@ __metadata:
     style-loader: 3.3.3
     typescript: 5.1.3
     url-loader: 4.1.1
-    webpack: 5.85.1
+    webpack: 5.87.0
     webpack-bundle-analyzer: 4.9.0
     webpack-cli: 5.1.4
     webpack-dev-server: 4.15.1
@@ -7663,7 +7672,7 @@ __metadata:
     pascalcase: 1.0.0
     react: 18.2.0
     react-dom: 18.2.0
-    react-hook-form: 7.44.3
+    react-hook-form: 7.45.0
     typescript: 5.1.3
   peerDependencies:
     graphql: 16.6.0
@@ -7913,7 +7922,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.31.0
     crypto-js: 4.1.1
-    dotenv: 16.1.4
+    dotenv: 16.3.1
     fast-json-parse: 1.0.3
     fastify: 4.18.0
     fastify-raw-body: 4.2.0
@@ -15767,10 +15776,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.1.4, dotenv@npm:^16.0.0":
-  version: 16.1.4
-  resolution: "dotenv@npm:16.1.4"
-  checksum: 47cf5ce136bf2a5e8402fc9855d95848973cfee423fe0adf1a7cd565c842c51e5b8c95889b075140c26b092b74dd2a319970ff496cd7159ab3f1fc58edfc0ede
+"dotenv@npm:16.3.1, dotenv@npm:^16.0.0":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
   languageName: node
   linkType: hard
 
@@ -15970,7 +15979,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.14.1, enhanced-resolve@npm:^5.14.1, enhanced-resolve@npm:^5.7.0":
+"enhanced-resolve@npm:5.14.1":
   version: 5.14.1
   resolution: "enhanced-resolve@npm:5.14.1"
   dependencies:
@@ -15988,6 +15997,16 @@ __metadata:
     memory-fs: ^0.5.0
     tapable: ^1.0.0
   checksum: d95fc630606ea35bed21c4a029bbb1681919571a2d1d2011c7fc42a26a9e48ed3d74a89949ce331e1fd3229850a303e3218b887b92951330f16bdfbb93a10e64
+  languageName: node
+  linkType: hard
+
+"enhanced-resolve@npm:^5.15.0, enhanced-resolve@npm:^5.7.0":
+  version: 5.15.0
+  resolution: "enhanced-resolve@npm:5.15.0"
+  dependencies:
+    graceful-fs: ^4.2.4
+    tapable: ^2.2.0
+  checksum: 69984a7990913948b4150855aed26a84afb4cb1c5a94fb8e3a65bd00729a73fc2eaff6871fb8e345377f294831afe349615c93560f2f54d61b43cdfdf668f19a
   languageName: node
   linkType: hard
 
@@ -26198,12 +26217,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.44.3":
-  version: 7.44.3
-  resolution: "react-hook-form@npm:7.44.3"
+"react-hook-form@npm:7.45.0":
+  version: 7.45.0
+  resolution: "react-hook-form@npm:7.45.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 9ab45fd98b4a18896aba446f49e0a4975b80b514a9a959cb6e247ea3871e1384ce19a60d8fab8d9a83f547bab33c0629d548e85fba0e4c7b61b14a3ebaf59b2c
+  checksum: 8ca35a221ce47ecccc016cb84b748c47101a6ae8bffd0cf3a6aa7fac954cc621d6214b519b35b0d5a67c909a925ce9312d920c4663af899b908dcdd01ceab781
   languageName: node
   linkType: hard
 
@@ -27360,14 +27379,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^3.0.0, schema-utils@npm:^3.1.1, schema-utils@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "schema-utils@npm:3.1.2"
+"schema-utils@npm:^3.0.0, schema-utils@npm:^3.1.1, schema-utils@npm:^3.2.0":
+  version: 3.3.0
+  resolution: "schema-utils@npm:3.3.0"
   dependencies:
     "@types/json-schema": ^7.0.8
     ajv: ^6.12.5
     ajv-keywords: ^3.5.2
-  checksum: 33fa502462d0f957b6fb7097f15ba72aa19a14b0313fc7815c591ba47d8607b193055fa1d2ed928a53fd6c1ae8bdc429af2fd4a9e7fae7403014a6bb90763977
+  checksum: fafdbde91ad8aa1316bc543d4b61e65ea86970aebbfb750bfb6d8a6c287a23e415e0e926c2498696b242f63af1aab8e585252637fabe811fd37b604351da6500
   languageName: node
   linkType: hard
 
@@ -30767,9 +30786,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5, webpack@npm:5.85.1, webpack@npm:^5":
-  version: 5.85.1
-  resolution: "webpack@npm:5.85.1"
+"webpack@npm:5, webpack@npm:5.87.0, webpack@npm:^5":
+  version: 5.87.0
+  resolution: "webpack@npm:5.87.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -30780,7 +30799,7 @@ __metadata:
     acorn-import-assertions: ^1.9.0
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.14.1
+    enhanced-resolve: ^5.15.0
     es-module-lexer: ^1.2.1
     eslint-scope: 5.1.1
     events: ^3.2.0
@@ -30790,7 +30809,7 @@ __metadata:
     loader-runner: ^4.2.0
     mime-types: ^2.1.27
     neo-async: ^2.6.2
-    schema-utils: ^3.1.2
+    schema-utils: ^3.2.0
     tapable: ^2.1.1
     terser-webpack-plugin: ^5.3.7
     watchpack: ^2.4.0
@@ -30800,7 +30819,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 9a518f2ae249aa93a40325e1cf0a03fbae56a3d068a94c689e80bb490523eca45d7133bbe2dca57b29a50c44003a55a260e8ea760f6f5bf1e4472bf136a288bb
+  checksum: 47209597b7f6bd64fdbaa61817cef6c397cb233dd78c33c958c03db61cf09b9f75a48a25342f05f78cf078b76f8eb680aeda6d76565339a935ea9884928c49e4
   languageName: node
   linkType: hard
 
