@@ -674,16 +674,13 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 // highlight-start
 export const updatePost = async ({ id, input }) => {
   if (await adminPost({ id })) {
-    return true
+    return db.post.update({
+      data: input,
+      where: { id },
+    })
   } else {
     throw new ForbiddenError("You don't have access to this post")
   }
-  // highlight-end
-
-  return db.post.update({
-    data: input,
-    where: { id },
-  })
 }
 ```
 
