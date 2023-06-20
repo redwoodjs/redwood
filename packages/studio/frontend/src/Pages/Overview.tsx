@@ -9,7 +9,7 @@ export default function App() {
   return (
     <div className="p-6 h-full">
       <Title className="mb-4">RedwoodJS Studio</Title>
-      <Grid numCols={1} numColsSm={2} numColsLg={2} className="gap-2">
+      <Grid numItems={1} numItemsSm={2} numItemsLg={2} className="gap-2">
         <Col numColSpan={1}>
           <SeriesTypeBarList
             name="Recent Spans"
