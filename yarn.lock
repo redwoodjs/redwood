@@ -7922,7 +7922,7 @@ __metadata:
     chokidar: 3.5.3
     core-js: 3.31.0
     crypto-js: 4.1.1
-    dotenv: 16.1.4
+    dotenv: 16.3.1
     fast-json-parse: 1.0.3
     fastify: 4.18.0
     fastify-raw-body: 4.2.0
@@ -15776,10 +15776,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.1.4, dotenv@npm:^16.0.0":
-  version: 16.1.4
-  resolution: "dotenv@npm:16.1.4"
-  checksum: 47cf5ce136bf2a5e8402fc9855d95848973cfee423fe0adf1a7cd565c842c51e5b8c95889b075140c26b092b74dd2a319970ff496cd7159ab3f1fc58edfc0ede
+"dotenv@npm:16.3.1, dotenv@npm:^16.0.0":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
   languageName: node
   linkType: hard
 
