@@ -8,11 +8,10 @@ import system from 'systeminformation'
 import { v4 as uuidv4, validate as validateUUID } from 'uuid'
 
 import { getPaths, getConfig, getRawConfig } from '@redwoodjs/project-config'
+import { DefaultHost } from '@redwoodjs/structure/dist/hosts'
+import { RWProject } from '@redwoodjs/structure/dist/model/RWProject'
 
 import { name as packageName, version as packageVersion } from '../../package'
-
-import { DefaultHost } from "@redwoodjs/structure/dist/hosts"
-import { RWProject } from "@redwoodjs/structure/dist/model/RWProject"
 
 export async function getResources() {
   // Read the UUID from the file within .redwood or generate a new one if it doesn't exist
