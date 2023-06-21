@@ -17,14 +17,18 @@ async function main() {
   )
 
   // Compute all the resource information
+  console.time('Computed resource information')
   const customResourceData = await getResources()
+  console.timeEnd('Computed resource information')
   const resource = Resource.default().merge(new Resource(customResourceData))
 
+  const url =
+    process.env.REDWOOD_REDIRECT_TELEMETRY ||
+    'https://quark.quantumparticle.io/v1/traces'
   const traceExporter = new OTLPTraceExporter({
-    url:
-      process.env.REDWOOD_REDIRECT_TELEMETRY ||
-      'https://quark.quantumparticle.io/v1/traces',
+    url,
   })
+  console.log(`Sending telemetry data to '${url}'`)
 
   // Go through all telemetry files and send the new spans to the telemetry collector
   for (const [index, file] of telemetryFiles.entries()) {
@@ -32,6 +36,7 @@ async function main() {
     if (file.startsWith('_')) {
       continue
     }
+    console.log(`Sending data from telemetry file '${file}'`)
 
     // Read the saved spans
     const spans = fs.readJSONSync(path.join(telemetryDir, file))
@@ -52,9 +57,13 @@ async function main() {
       span.events = []
     }
 
-    traceExporter.export(spans, ({ code: _code }) => {
-      // 'code' will be non-zero if there was an error exporting
-      // TODO: We would probably want visibility into this?
+    traceExporter.export(spans, ({ code, error }) => {
+      if (code !== 0) {
+        console.error('Encountered:')
+        console.error(error)
+        console.error('while exporting the following spans:')
+        console.error(spans)
+      }
     })
 
     /**
@@ -72,6 +81,9 @@ async function main() {
 
   // Verbose means we keep the last 8 telemetry files as a log otherwise we delete all of them
   if (process.env.REDWOOD_VERBOSE_TELEMETRY) {
+    console.log(
+      "Keeping only the last 8 telemetry files for inspection because 'REDWOOD_VERBOSE_TELEMETRY' is set."
+    )
     const sortedTelemetryFiles = telemetryFiles.sort((a, b) => {
       return (
         parseInt(b.split('.')[0].replace('_', '')) -
@@ -79,10 +91,15 @@ async function main() {
       )
     })
     for (let i = 8; i < sortedTelemetryFiles.length; i++) {
+      console.log(`Removing telemetry file '${sortedTelemetryFiles[i]}'`)
       fs.unlinkSync(path.join(telemetryDir, sortedTelemetryFiles[i]))
     }
   } else {
+    console.log(
+      "Removing telemetry files, set 'REDWOOD_VERBOSE_TELEMETRY' to keep the last 8 telemetry files for inspection."
+    )
     telemetryFiles.forEach((file) => {
+      console.log(`Removing telemetry file '${file}'`)
       fs.unlinkSync(path.join(telemetryDir, file))
     })
   }

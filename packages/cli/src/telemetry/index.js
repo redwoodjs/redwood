@@ -1,5 +1,3 @@
-import { spawn } from 'child_process'
-import os from 'os'
 import path from 'path'
 
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
@@ -8,6 +6,8 @@ import {
   NodeTracerProvider,
   BatchSpanProcessor,
 } from '@opentelemetry/sdk-trace-node'
+
+import { spawnBackgroundProcess } from '../lib/background'
 
 import { CustomFileExporter } from './exporter'
 
@@ -53,27 +53,10 @@ export async function shutdownTelemetry() {
     traceExporter?.shutdown()
 
     // Send the telemetry in a background process, so we don't block the CLI
-    // We must account for some platform specific behaviour when spawning the process
-    const spawnOptions =
-      os.type() === 'Windows_NT'
-        ? {
-            // The following options run the process in the background without a console window, even though they don't look like they would.
-            // See https://github.com/nodejs/node/issues/21825#issuecomment-503766781 for information
-            detached: false,
-            windowsHide: false,
-            shell: true,
-            stdio: 'inherit',
-          }
-        : {
-            detached: true,
-            stdio: 'inherit',
-          }
-    const child = spawn(
-      'yarn',
-      ['node', path.join(__dirname, 'send.js')],
-      spawnOptions
-    )
-    child.unref()
+    spawnBackgroundProcess('telemetry', 'yarn', [
+      'node',
+      path.join(__dirname, 'send.js'),
+    ])
   } catch (error) {
     console.error('Telemetry error')
     console.error(error)
