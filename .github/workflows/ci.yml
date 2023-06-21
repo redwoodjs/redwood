@@ -255,14 +255,14 @@ jobs:
         working-directory: ./tasks/smoke-tests/dev
         run: npx playwright test
         env:
-          REDWOOD_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
+          REDWOOD_TEST_PROJECT_PATH: '${{ steps.set-up-test-project.outputs.test-project-path }}'
           REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: 🔐 Run auth smoke tests
         working-directory: ./tasks/smoke-tests/auth
         run: npx playwright test
         env:
-          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: Run `rw build --no-prerender`
@@ -279,21 +279,21 @@ jobs:
         working-directory: tasks/smoke-tests/serve
         run: npx playwright test
         env:
-          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: 📄 Run prerender smoke tests
         working-directory: tasks/smoke-tests/prerender
         run: npx playwright test
         env:
-          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: 📕 Run Storybook smoke tests
         working-directory: tasks/smoke-tests/storybook
         run: npx playwright test
         env:
-          REDWOOD_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
+          REDWOOD_TEST_PROJECT_PATH: ${{ steps.set-up-test-project.outputs.test-project-path }}
           REDWOOD_DISABLE_TELEMETRY: 1
 
       - name: Run `rw info`

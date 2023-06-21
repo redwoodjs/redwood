@@ -185,7 +185,7 @@ const HomePage = () => {
 
   const onSubmit = (data) => {
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?zip={data.zip},us&appid=YOUR_API_KEY`
+      `https://api.openweathermap.org/data/2.5/weather?zip=${data.zip},us&appid=YOUR_API_KEY`
     )
       .then((response) => response.json())
       .then((json) => setWeather(json))
