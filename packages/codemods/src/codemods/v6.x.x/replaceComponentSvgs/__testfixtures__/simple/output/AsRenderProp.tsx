@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import Button from '../Button/Button'
 
-import Icon from "./BazingaSVG.js"
+import Icon from "./BazingaSVG.jsx"
 
 const IconButton = ({
   classes = '',

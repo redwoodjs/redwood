@@ -7,7 +7,7 @@ async function convertSvgToReactComponent(
   svgFilePath: string,
   outputPath: string
 ) {
-  const svgrCommand = `npx --yes @svgr/cli ${svgFilePath} > ${outputPath}`
+  const svgrCommand = `npx --yes @svgr/cli --no-runtime-config ${svgFilePath} > ${outputPath}`
 
   await execa(svgrCommand, {
     shell: true,
@@ -77,9 +77,7 @@ export default async function transform(file: FileInfo, api: API) {
     })
   })
 
-  if (svgsToConvert.length === 0) {
-    console.log('Did not find any SVGs used as components! All good :)')
-  } else {
+  if (svgsToConvert.length > 0) {
     // if there are any svgs used as components, or render props, convert the svg to a react component
     await Promise.all(
       svgsToConvert.map(async ({ filePath, importSourcePath }) => {
@@ -90,7 +88,7 @@ export default async function transform(file: FileInfo, api: API) {
 
         const newFileName = `${svgFileNameWithoutExtension
           .charAt(0)
-          .toUpperCase()}${svgFileNameWithoutExtension.slice(1)}SVG.js`
+          .toUpperCase()}${svgFileNameWithoutExtension.slice(1)}SVG.jsx`
 
         // The absolute path to the new file
         const outputPath = path.join(path.dirname(filePath), newFileName)
