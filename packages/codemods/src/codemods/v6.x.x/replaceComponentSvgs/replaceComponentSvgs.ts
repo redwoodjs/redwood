@@ -53,7 +53,6 @@ export default async function transform(file: FileInfo, api: API) {
         // Find the JSX elements that use the default import specifier
         const svgsUsedAsComponent = root.findJSXElements(importName)
 
-        // Replace the JSX elements with the <img> tags
         svgsUsedAsComponent.forEach(() => {
           svgsToConvert.push({
             filePath: pathToSvgFile,
