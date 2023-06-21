@@ -1632,12 +1632,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:10.4.13":
-  version: 10.4.13
-  resolution: "autoprefixer@npm:10.4.13"
+"autoprefixer@npm:10.4.14":
+  version: 10.4.14
+  resolution: "autoprefixer@npm:10.4.14"
   dependencies:
-    browserslist: ^4.21.4
-    caniuse-lite: ^1.0.30001426
+    browserslist: ^4.21.5
+    caniuse-lite: ^1.0.30001464
     fraction.js: ^4.2.0
     normalize-range: ^0.1.2
     picocolors: ^1.0.0
@@ -1646,7 +1646,7 @@ __metadata:
     postcss: ^8.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: 55ef1feb555516f68c740b3a0050d89b663c4a806a52ff23b184869ddf511b561fa56d66b2adb533bfef3798aee87b31132474582968d84fa59da133f837a230
+  checksum: 66ce961b86acd2a46e05ac1eece8657b3d9edfd2ee3abddd6cfcb32755e6865409f57acf11fe05990d6f166afda85a603678435916267a09652265cfff7b5706
   languageName: node
   linkType: hard
 
@@ -1692,7 +1692,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.21.3, browserslist@npm:^4.21.4":
+"browserslist@npm:^4.21.3, browserslist@npm:^4.21.5":
   version: 4.21.9
   resolution: "browserslist@npm:4.21.9"
   dependencies:
@@ -1739,10 +1739,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001426, caniuse-lite@npm:^1.0.30001503":
-  version: 1.0.30001504
-  resolution: "caniuse-lite@npm:1.0.30001504"
-  checksum: 5835cee144ec6c996f1771e885ad57fcb2897b9d840f1918fa5eb6557c9c366cfb340316306d3f95867c1a9296dc07eef3ac48023970691b7c0ad9a53f3c39ef
+"caniuse-lite@npm:^1.0.30001464, caniuse-lite@npm:^1.0.30001503":
+  version: 1.0.30001505
+  resolution: "caniuse-lite@npm:1.0.30001505"
+  checksum: 675f9f56424ceb7efcba1d8c1bf91b88abe0f445b19d8bed68e12d23ad8a2f9b05aec5ba5d41f3cd64f21a2fc3aafe64b45ae76737cac330d2e0881d4fe8312c
   languageName: node
   linkType: hard
 
@@ -2423,7 +2423,7 @@ __metadata:
     "@types/react-dom": 18.0.10
     "@types/react-grid-layout": 1
     "@vitejs/plugin-react": 4.0.0
-    autoprefixer: 10.4.13
+    autoprefixer: 10.4.14
     graphiql: 2.4.0
     graphql: 16.6.0
     graphql-scalars: 1.21.3
