@@ -11,10 +11,8 @@ import { getPaths, getConfig, getRawConfig } from '@redwoodjs/project-config'
 
 import { name as packageName, version as packageVersion } from '../../package'
 
-// circular dependency when trying to import @redwoodjs/structure so lets do it
-// the old fashioned way
-const { DefaultHost } = require('@redwoodjs/structure/dist/hosts')
-const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
+import { DefaultHost } from "@redwoodjs/structure/dist/hosts"
+import { RWProject } from "@redwoodjs/structure/dist/model/RWProject"
 
 export async function getResources() {
   // Read the UUID from the file within .redwood or generate a new one if it doesn't exist
