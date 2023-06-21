@@ -9,7 +9,7 @@ export default function App() {
   return (
     <div className="bg-slate-50 p-6 h-full">
       <Title className="mb-4">Performance</Title>
-      <Grid numCols={1} numColsSm={2} numColsLg={2} className="gap-2">
+      <Grid numItems={1} numItemsSm={2} numItemsLg={2} className="gap-2">
         <Col numColSpan={1} numColSpanLg={2}>
           <SpanTypeTimeSeriesBarChart
             name="All Spans"
