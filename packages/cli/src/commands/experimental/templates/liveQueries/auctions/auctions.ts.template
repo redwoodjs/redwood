@@ -3,7 +3,11 @@
 import { logger } from 'src/lib/logger'
 
 const auctions = [
-  { id: '1', title: 'Digital-only PS5', bids: [{ amount: 100 }] },
+  { id: '1', title: 'RedwoodJS Logo Shirt', bids: [{ amount: 20 }] },
+  { id: '2', title: 'RedwoodJS Lapel Pin', bids: [{ amount: 5 }] },
+  { id: '3', title: 'RedwoodJS Beanie', bids: [{ amount: 15 }] },
+  { id: '4', title: 'RedwoodJS Dad Hat', bids: [{ amount: 20 }] },
+  { id: '5', title: 'RedwoodJS Skater Hat', bids: [{ amount: 20 }] },
 ]
 
 /**
@@ -30,7 +34,6 @@ const auctions = [
  *   }
  * }
  */
-
 export const auction = async ({ id }) => {
   const foundAuction = auctions.find((a) => a.id === id)
   logger.debug({ id, auction: foundAuction }, 'auction')
