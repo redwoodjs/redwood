@@ -11,6 +11,26 @@ export type NewMessageChannel<T extends string> = {
   [Key in `newMessage:${T}`]: [payload: { from: string; body: string }]
 }
 
+/**
+ * To test this NewMessage subscription, run the following in one GraphQL Playground to subscribe:
+ *
+ * subscription ListenForNewMessagesInRoom {
+ *   newMessage(roomId: "1") {
+ *     body
+ *     from
+ *   }
+ * }
+ *
+ *
+ * And run the following in another GraphQL Playground to publish and send a message to the room:
+ *
+ * mutation SendMessageToRoom {
+ *   send(input: {roomId: "1", from: "hello", body: "bob"}) {
+ *     body
+ *     from
+ *   }
+ * }
+ */
 const newMessage = {
   newMessage: {
     subscribe: (_, { roomId }, { pubSub }) => {

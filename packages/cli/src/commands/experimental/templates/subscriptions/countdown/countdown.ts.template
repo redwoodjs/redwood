@@ -6,6 +6,13 @@ export const schema = gql`
   }
 `
 
+/**
+ * To test this Countdown subscription, run the following in the GraphQL Playground:
+ *
+ * subscription CountdownFromInterval {
+ *   countdown(from: 10, interval: 100)
+ * }
+ */
 const countdown = {
   countdown: {
     async *subscribe(_, { from, interval }) {

@@ -6,6 +6,31 @@ const auctions = [
   { id: '1', title: 'Digital-only PS5', bids: [{ amount: 100 }] },
 ]
 
+/**
+ * To test this live query, run the following in the GraphQL Playground:
+ *
+ * query GetCurrentAuctionBids @live {
+ *  auction(id: "1") {
+ *    bids {
+ *      amount
+ *    }
+ *    highestBid {
+ *      amount
+ *    }
+ *    id
+ *    title
+ *   }
+ * }
+ *
+ * And then make a bid with the following mutation:
+ *
+ * mutation MakeBid {
+ *   bid(input: {auctionId: "1", amount: 10}) {
+ *     amount
+ *   }
+ * }
+ */
+
 export const auction = async ({ id }) => {
   const foundAuction = auctions.find((a) => a.id === id)
   logger.debug({ id, auction: foundAuction }, 'auction')
