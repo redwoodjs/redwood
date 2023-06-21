@@ -3,6 +3,7 @@ import path from 'path'
 
 import execa from 'execa'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
 
@@ -61,6 +62,13 @@ export const handler = async ({
   dbPush = true,
   ...others
 }) => {
+  recordTelemetryAttributes({
+    command: 'test',
+    // TODO: filter (likely needs sanitised),
+    watch,
+    collectCoverage,
+    dbPush,
+  })
   const rwjsPaths = getPaths()
   const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
     if (
@@ -125,40 +133,32 @@ export const handler = async ({
   //checking if Jest config files exists in each of the sides
   isJestConfigFile(sides)
 
-  try {
-    const cacheDirDb = `file:${ensurePosixPath(
-      rwjsPaths.generated.base
-    )}/test.db`
-    const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
+  const cacheDirDb = `file:${ensurePosixPath(rwjsPaths.generated.base)}/test.db`
+  const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
-    if (sides.includes('api') && !dbPush) {
-      // @NOTE
-      // DB push code now lives in packages/testing/config/jest/api/jest-preset.js
-      process.env.SKIP_DB_PUSH = '1'
-    }
+  if (sides.includes('api') && !dbPush) {
+    // @NOTE
+    // DB push code now lives in packages/testing/config/jest/api/jest-preset.js
+    process.env.SKIP_DB_PUSH = '1'
+  }
 
-    // **NOTE** There is no official way to run Jest programmatically,
-    // so we're running it via execa, since `jest.run()` is a bit unstable.
-    // https://github.com/facebook/jest/issues/5048
-    const runCommand = async () => {
-      await execa('yarn jest', jestArgs, {
-        cwd: rwjsPaths.base,
-        shell: true,
-        stdio: 'inherit',
-        env: { DATABASE_URL },
-      })
-    }
+  // **NOTE** There is no official way to run Jest programmatically,
+  // so we're running it via execa, since `jest.run()` is a bit unstable.
+  // https://github.com/facebook/jest/issues/5048
+  const runCommand = async () => {
+    await execa('yarn jest', jestArgs, {
+      cwd: rwjsPaths.base,
+      shell: true,
+      stdio: 'inherit',
+      env: { DATABASE_URL },
+    })
+  }
 
-    if (watch) {
+  if (watch) {
+    await runCommand()
+  } else {
+    await timedTelemetry(process.argv, { type: 'test' }, async () => {
       await runCommand()
-    } else {
-      await timedTelemetry(process.argv, { type: 'test' }, async () => {
-        await runCommand()
-      })
-    }
-  } catch (e) {
-    // Errors already shown from execa inherited stderr
-    errorTelemetry(process.argv, e.message)
-    process.exit(e?.exitCode || 1)
+    })
   }
 }

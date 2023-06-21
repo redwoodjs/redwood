@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 
@@ -7,6 +9,9 @@ export const description =
   'Get structural diagnostics for a Redwood project (experimental)'
 
 export const handler = () => {
+  recordTelemetryAttributes({
+    command,
+  })
   // Deep dive
   //
   // It seems like we have to use `require` here instead of `await import`

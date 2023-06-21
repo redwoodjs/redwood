@@ -3,8 +3,9 @@ import fs from 'fs'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths } from '../lib'
-import c from '../lib/colors'
 
 export const command = 'lint [path..]'
 export const description = 'Lint your files'
@@ -29,6 +30,11 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ path, fix }) => {
+  recordTelemetryAttributes({
+    command,
+    fix,
+  })
+
   try {
     const pathString = path?.join(' ')
     const result = await execa(
@@ -47,9 +53,9 @@ export const handler = async ({ path, fix }) => {
         stdio: 'inherit',
       }
     )
-    process.exit(result.exitCode)
-  } catch (e) {
-    console.log(c.error(e.message))
-    process.exit(e?.exitCode || 1)
+
+    process.exitCode = result.exitCode
+  } catch (error) {
+    process.exitCode = error.exitCode ?? 1
   }
 }
