@@ -4,7 +4,7 @@ export const EXPERIMENTAL_TOPIC_ID = 5002
 
 export const command = 'setup-realtime'
 
-export const description = 'Setup the experimental server file'
+export const description = 'Setup the experimental RedwoodJS Realtime feature'
 
 export function builder(yargs) {
   yargs
