@@ -5495,9 +5495,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/arborist@npm:6.2.9":
-  version: 6.2.9
-  resolution: "@npmcli/arborist@npm:6.2.9"
+"@npmcli/arborist@npm:6.2.10":
+  version: 6.2.10
+  resolution: "@npmcli/arborist@npm:6.2.10"
   dependencies:
     "@isaacs/string-locale-compare": ^1.1.0
     "@npmcli/fs": ^3.1.0
@@ -5534,7 +5534,7 @@ __metadata:
     walk-up-path: ^3.0.1
   bin:
     arborist: bin/index.js
-  checksum: b5f6bfcd62be19f3fb9449bf357a7bccf3f49de2dab3e97f6316f2d368fbd28037eb298841c1d987a793ba1a5403d206a6f916966009628939f084cae9656c5f
+  checksum: 2bd713fa742e72cdad62307a92c5bba61bfb6de910d61b9b94dd21d67bbd917257ff127eeb11d9231af7dd7fc3700b46142e06fb782c6ebb3b4e163df0d0698f
   languageName: node
   linkType: hard
 
@@ -27140,7 +27140,7 @@ __metadata:
     "@babel/preset-typescript": 7.22.5
     "@babel/runtime-corejs3": 7.22.5
     "@faker-js/faker": 8.0.2
-    "@npmcli/arborist": 6.2.9
+    "@npmcli/arborist": 6.2.10
     "@playwright/test": 1.34.3
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
