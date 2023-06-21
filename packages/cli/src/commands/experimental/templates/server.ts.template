@@ -17,6 +17,8 @@ import { getPaths, getConfig } from '@redwoodjs/project-config'
 import directives from 'src/directives/**/*.{js,ts}'
 import sdls from 'src/graphql/**/*.sdl.{js,ts}'
 import services from 'src/services/**/*.{js,ts}'
+// Import if using RedwoodJS Realtime and subscriptions
+// import subscriptions from 'src/subscriptions/**/*.{js,ts}'
 
 import { logger } from './lib/logger'
 // Import if using RedwoodJS Realtime via `yarn rw exp setup-realtime`
