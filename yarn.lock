@@ -7484,8 +7484,8 @@ __metadata:
     "@babel/traverse": 7.22.5
     "@iarna/toml": 2.2.5
     "@redwoodjs/project-config": 5.0.0
-    "@svgr/core": ^8.0.0
-    "@svgr/plugin-jsx": ^8.0.1
+    "@svgr/core": 8.0.0
+    "@svgr/plugin-jsx": 8.0.1
     "@types/babel__core": 7.20.1
     "@types/fs-extra": 11.0.1
     "@types/jest": 29.5.2
@@ -9358,7 +9358,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@svgr/core@npm:^8.0.0":
+"@svgr/core@npm:8.0.0":
   version: 8.0.0
   resolution: "@svgr/core@npm:8.0.0"
   dependencies:
@@ -9381,7 +9381,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@svgr/plugin-jsx@npm:^8.0.1":
+"@svgr/plugin-jsx@npm:8.0.1":
   version: 8.0.1
   resolution: "@svgr/plugin-jsx@npm:8.0.1"
   dependencies:
