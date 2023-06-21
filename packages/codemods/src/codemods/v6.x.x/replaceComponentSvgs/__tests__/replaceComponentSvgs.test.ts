@@ -12,8 +12,4 @@ describe('replaceComponentSvgs', () => {
       targetPathsGlob: '**/*.{js,jsx,tsx}',
     })
   })
-
-  // it('Handles svgs used as render props', async () => {
-  //   await matchTransformSnapshot('replaceComponentSvgs', 'renderProp')
-  // })
 })
