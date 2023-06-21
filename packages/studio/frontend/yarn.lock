@@ -22,17 +22,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^3.7.8":
-  version: 3.7.15
-  resolution: "@apollo/client@npm:3.7.15"
+"@apollo/client@npm:3.7.8":
+  version: 3.7.8
+  resolution: "@apollo/client@npm:3.7.8"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
     "@wry/equality": ^0.5.0
-    "@wry/trie": ^0.4.0
+    "@wry/trie": ^0.3.0
     graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
-    optimism: ^0.16.2
+    optimism: ^0.16.1
     prop-types: ^15.7.2
     response-iterator: ^0.2.6
     symbol-observable: ^4.0.0
@@ -54,7 +54,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: b7daba0b7e9b5d96357d55f7cca9bb45cb8b799a7f779aa158721fbe2730559a9709a74f95e22270d9ade74ebdc70d1cc9d6dad80fe98494ece17b0dbabf3e51
+  checksum: 58fcfe06b2a22345443f4ff32fc28f24ea218fe2f23f0d7944c365228d5f12a4fca9c0d40cd59d1928248d07197102b1d3eeb1b29b5c95735991580edd93644c
   languageName: node
   linkType: hard
 
@@ -323,156 +323,156 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@esbuild/android-arm64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/android-arm64@npm:0.17.18"
+"@esbuild/android-arm64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/android-arm64@npm:0.16.17"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"@esbuild/android-arm@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/android-arm@npm:0.17.18"
+"@esbuild/android-arm@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/android-arm@npm:0.16.17"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
 
-"@esbuild/android-x64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/android-x64@npm:0.17.18"
+"@esbuild/android-x64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/android-x64@npm:0.16.17"
   conditions: os=android & cpu=x64
   languageName: node
   linkType: hard
 
-"@esbuild/darwin-arm64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/darwin-arm64@npm:0.17.18"
+"@esbuild/darwin-arm64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/darwin-arm64@npm:0.16.17"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@esbuild/darwin-x64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/darwin-x64@npm:0.17.18"
+"@esbuild/darwin-x64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/darwin-x64@npm:0.16.17"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@esbuild/freebsd-arm64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/freebsd-arm64@npm:0.17.18"
+"@esbuild/freebsd-arm64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/freebsd-arm64@npm:0.16.17"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"@esbuild/freebsd-x64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/freebsd-x64@npm:0.17.18"
+"@esbuild/freebsd-x64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/freebsd-x64@npm:0.16.17"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@esbuild/linux-arm64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-arm64@npm:0.17.18"
+"@esbuild/linux-arm64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-arm64@npm:0.16.17"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@esbuild/linux-arm@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-arm@npm:0.17.18"
+"@esbuild/linux-arm@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-arm@npm:0.16.17"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@esbuild/linux-ia32@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-ia32@npm:0.17.18"
+"@esbuild/linux-ia32@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-ia32@npm:0.16.17"
   conditions: os=linux & cpu=ia32
   languageName: node
   linkType: hard
 
-"@esbuild/linux-loong64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-loong64@npm:0.17.18"
+"@esbuild/linux-loong64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-loong64@npm:0.16.17"
   conditions: os=linux & cpu=loong64
   languageName: node
   linkType: hard
 
-"@esbuild/linux-mips64el@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-mips64el@npm:0.17.18"
+"@esbuild/linux-mips64el@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-mips64el@npm:0.16.17"
   conditions: os=linux & cpu=mips64el
   languageName: node
   linkType: hard
 
-"@esbuild/linux-ppc64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-ppc64@npm:0.17.18"
+"@esbuild/linux-ppc64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-ppc64@npm:0.16.17"
   conditions: os=linux & cpu=ppc64
   languageName: node
   linkType: hard
 
-"@esbuild/linux-riscv64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-riscv64@npm:0.17.18"
+"@esbuild/linux-riscv64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-riscv64@npm:0.16.17"
   conditions: os=linux & cpu=riscv64
   languageName: node
   linkType: hard
 
-"@esbuild/linux-s390x@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-s390x@npm:0.17.18"
+"@esbuild/linux-s390x@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-s390x@npm:0.16.17"
   conditions: os=linux & cpu=s390x
   languageName: node
   linkType: hard
 
-"@esbuild/linux-x64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/linux-x64@npm:0.17.18"
+"@esbuild/linux-x64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/linux-x64@npm:0.16.17"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@esbuild/netbsd-x64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/netbsd-x64@npm:0.17.18"
+"@esbuild/netbsd-x64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/netbsd-x64@npm:0.16.17"
   conditions: os=netbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@esbuild/openbsd-x64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/openbsd-x64@npm:0.17.18"
+"@esbuild/openbsd-x64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/openbsd-x64@npm:0.16.17"
   conditions: os=openbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@esbuild/sunos-x64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/sunos-x64@npm:0.17.18"
+"@esbuild/sunos-x64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/sunos-x64@npm:0.16.17"
   conditions: os=sunos & cpu=x64
   languageName: node
   linkType: hard
 
-"@esbuild/win32-arm64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/win32-arm64@npm:0.17.18"
+"@esbuild/win32-arm64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/win32-arm64@npm:0.16.17"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@esbuild/win32-ia32@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/win32-ia32@npm:0.17.18"
+"@esbuild/win32-ia32@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/win32-ia32@npm:0.16.17"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@esbuild/win32-x64@npm:0.17.18":
-  version: 0.17.18
-  resolution: "@esbuild/win32-x64@npm:0.17.18"
+"@esbuild/win32-x64@npm:0.16.17":
+  version: 0.16.17
+  resolution: "@esbuild/win32-x64@npm:0.16.17"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -526,21 +526,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/plugin-explorer@npm:^0.1.14":
-  version: 0.1.20
-  resolution: "@graphiql/plugin-explorer@npm:0.1.20"
+"@graphiql/plugin-explorer@npm:0.1.14":
+  version: 0.1.14
+  resolution: "@graphiql/plugin-explorer@npm:0.1.14"
   dependencies:
-    "@graphiql/react": ^0.17.6
+    "@graphiql/react": ^0.17.0
     graphiql-explorer: ^0.9.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: bf0f3892e27833b8dd11f1baf8c90d37e2bf769f35d5bd5dfd097e50ccec6072f5b07108b9f6c75387f28a87ce86764fbf87bfc2cee3b9dc4978a8440bb712fa
+  checksum: 8c8308b4a5a14437bce5cb882955185049e7bcc2870146b8309f3fb8cbe5c70fbf6f8f1b60a796e326ba989f0b3a19f26d8df46a2f4c89954fafa3e2919354ea
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.6":
+"@graphiql/react@npm:^0.17.0":
   version: 0.17.6
   resolution: "@graphiql/react@npm:0.17.6"
   dependencies:
@@ -563,6 +563,22 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 247990aee2d78ea4e888f54deb7b4c7d7fffc8b4664305ff6c386be91763c8f0f3456f2d5380c1d10165799a66c0ef1d2c0cce478a7b3bfc3266c228db973555
+  languageName: node
+  linkType: hard
+
+"@graphiql/toolkit@npm:0.8.2":
+  version: 0.8.2
+  resolution: "@graphiql/toolkit@npm:0.8.2"
+  dependencies:
+    "@n1ru4l/push-pull-async-iterable-iterator": ^3.1.0
+    meros: ^1.1.4
+  peerDependencies:
+    graphql: ^15.5.0 || ^16.0.0
+    graphql-ws: ">= 4.5.0"
+  peerDependenciesMeta:
+    graphql-ws:
+      optional: true
+  checksum: c07bcf27356da73dc99cb8eb4372e75b0ea15cd98b82d46ed221b390172aecfefaf3cb3773425fd8e8ca067540752440a55bc46eaa92311e5d16d270d5b8f1da
   languageName: node
   linkType: hard
 
@@ -591,6 +607,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@headlessui/react@npm:1.7.14":
+  version: 1.7.14
+  resolution: "@headlessui/react@npm:1.7.14"
+  dependencies:
+    client-only: ^0.0.1
+  peerDependencies:
+    react: ^16 || ^17 || ^18
+    react-dom: ^16 || ^17 || ^18
+  checksum: 42170548641b7a58fc16d11c9100ff67961cb800cd8f4012ab0077c0aa254d680106166127aaf33548dae0c7ae5ed036ab4caec23a3ed745926a1e87ec6ea198
+  languageName: node
+  linkType: hard
+
 "@headlessui/react@npm:^1.7.14":
   version: 1.7.15
   resolution: "@headlessui/react@npm:1.7.15"
@@ -603,12 +631,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@heroicons/react@npm:^2.0.17":
-  version: 2.0.18
-  resolution: "@heroicons/react@npm:2.0.18"
+"@headlessui/tailwindcss@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@headlessui/tailwindcss@npm:0.1.3"
+  peerDependencies:
+    tailwindcss: ^3.0
+  checksum: 55e1d8528fe995d13afafdb07d86f11dd367d6c7ba1a9780872495a8392170f2aa7c908be450a4c533b33b840849ed6399f6ff23243ea7df6eb4651340855609
+  languageName: node
+  linkType: hard
+
+"@heroicons/react@npm:2.0.17":
+  version: 2.0.17
+  resolution: "@heroicons/react@npm:2.0.17"
   peerDependencies:
     react: ">= 16"
-  checksum: 3cef7f67c65f8b00dc4f23788e468e661a24bd805f80e3b5514a986d69c91ef05407cf50078691573eced47147db87a9bd00cc165e4fecd2a9657cbaf3eaafb5
+  checksum: 34f1b13989ccdbea439c9f0555d7806c803be045da7753ab0167fa8ad317b13b193cec58b324f242d7b2123cd1d1d092d45708febb25304eecf19a301bfd564c
   languageName: node
   linkType: hard
 
@@ -703,7 +740,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nivo/bar@npm:^0.83.0":
+"@nivo/bar@npm:0.83.0":
   version: 0.83.0
   resolution: "@nivo/bar@npm:0.83.0"
   dependencies:
@@ -746,7 +783,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nivo/core@npm:0.83.0, @nivo/core@npm:^0.83.0":
+"@nivo/core@npm:0.83.0":
   version: 0.83.0
   resolution: "@nivo/core@npm:0.83.0"
   dependencies:
@@ -814,7 +851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nivo/tooltip@npm:0.83.0, @nivo/tooltip@npm:^0.83.0":
+"@nivo/tooltip@npm:0.83.0":
   version: 0.83.0
   resolution: "@nivo/tooltip@npm:0.83.0"
   dependencies:
@@ -824,7 +861,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nivo/treemap@npm:^0.83.0":
+"@nivo/treemap@npm:0.83.0":
   version: 0.83.0
   resolution: "@nivo/treemap@npm:0.83.0"
   dependencies:
@@ -1180,14 +1217,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@remix-run/router@npm:1.6.3":
-  version: 1.6.3
-  resolution: "@remix-run/router@npm:1.6.3"
-  checksum: d419fab24288123d8564a051c4a0e8cf46fb0f8fb7285701a819efb7f30b67785d0b63d21900a781485dea2d27271d78f2c56cb8b4b3fdb2ad72b61483989bd3
+"@remix-run/router@npm:1.3.2":
+  version: 1.3.2
+  resolution: "@remix-run/router@npm:1.3.2"
+  checksum: 0c2113e9dfd327391c498d8fe5dae5fba801099e87dc6f2df1421a8722c7c3f82df809950efdcf9258b4886237393b59b4c31d229585a68d495379c09a58cce7
   languageName: node
   linkType: hard
 
-"@tailwindcss/forms@npm:^0.5.3":
+"@tailwindcss/forms@npm:0.5.3":
   version: 0.5.3
   resolution: "@tailwindcss/forms@npm:0.5.3"
   dependencies:
@@ -1205,19 +1242,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tremor/react@npm:^2.2.0":
-  version: 2.11.0
-  resolution: "@tremor/react@npm:2.11.0"
+"@tremor/react@npm:3.2.2":
+  version: 3.2.2
+  resolution: "@tremor/react@npm:3.2.2"
   dependencies:
     "@floating-ui/react": ^0.19.1
+    "@headlessui/react": ^1.7.14
+    "@headlessui/tailwindcss": ^0.1.3
     date-fns: ^2.28.0
+    react-day-picker: ^8.7.1
     react-transition-group: ^4.4.5
-    recharts: ^2.3.2
+    recharts: ^2.7.1
     tailwind-merge: ^1.9.1
   peerDependencies:
     react: ^18.0.0
     react-dom: ">=16.6.0"
-  checksum: 2ffc353b99e679bbe967cbc65ae0737270b98ce8eb287dd5558dbe2cb53b2a61d68b03cab8f46d5a138d9cde84544348975c5e287f8016d82e4ea8c4ddf99f68
+  checksum: 411ffbd012578f53145253b9555790469c7b52b9faa6df746a2e30181056a4608949e918423aef9b6885f1222e4e5cb66d17ca4f248f7d81dc00450276c5df16
   languageName: node
   linkType: hard
 
@@ -1378,16 +1418,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.10":
-  version: 18.2.5
-  resolution: "@types/react-dom@npm:18.2.5"
+"@types/react-dom@npm:18.2.6":
+  version: 18.2.6
+  resolution: "@types/react-dom@npm:18.2.6"
   dependencies:
     "@types/react": "*"
-  checksum: 7f438f695c91735ff16e6465573a4378fabad6709d99dd08bee4932967ca7e4ccc26dc248f4b88569529885bbca9b1aca0075bee7b833bfa932a558c49d2a066
+  checksum: bd734ca04c52b3c96891a7f9c1139486807dac7a2449fb72e8f8e23018bc6eeeb87a490a105cb39d05ccb7ddf80ed7a441e5bd3e5866c6f6ae8870cd723599e8
   languageName: node
   linkType: hard
 
-"@types/react-grid-layout@npm:^1":
+"@types/react-grid-layout@npm:1":
   version: 1.3.2
   resolution: "@types/react-grid-layout@npm:1.3.2"
   dependencies:
@@ -1405,14 +1445,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.0.27":
-  version: 18.2.12
-  resolution: "@types/react@npm:18.2.12"
+"@types/react@npm:*, @types/react@npm:18.2.13":
+  version: 18.2.13
+  resolution: "@types/react@npm:18.2.13"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: dbaefc7732f77cd0c2bdf6e704ab4ee0f611540777c0b9506d972f165144b6fd6883a29dad61f6965c974c040264852aa8def1e3866b5775b3965a4e67bf92f9
+  checksum: 59b434ab9f2cf4874c8715a3d848d7cfd257419af8c0e486e2af5b6760c99aab62a511cb3456a3044d8250c93539016ca84fbd23eaac988e74987e268df2eef2
   languageName: node
   linkType: hard
 
@@ -1423,7 +1463,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^4.0.0":
+"@vitejs/plugin-react@npm:4.0.0":
   version: 4.0.0
   resolution: "@vitejs/plugin-react@npm:4.0.0"
   dependencies:
@@ -1461,15 +1501,6 @@ __metadata:
   dependencies:
     tslib: ^2.3.0
   checksum: c27a46592c4c418ad9de596b4f53bcac748585db8b4deab262bf5ab71ec15b9ea09d522e765c4fa05e831176cea1b94220151315b4c542abee40541a26aaf7c0
-  languageName: node
-  linkType: hard
-
-"@wry/trie@npm:^0.4.0":
-  version: 0.4.3
-  resolution: "@wry/trie@npm:0.4.3"
-  dependencies:
-    tslib: ^2.3.0
-  checksum: 1a14edba595b1967d0cf38208c2660b2952a8e8a649bb669b67907df48f602c7f2acbe16c1e1b115afa7d7effb9f1a4dbde38eef16ee92e7521a511262a53281
   languageName: node
   linkType: hard
 
@@ -1590,7 +1621,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.4.13":
+"autoprefixer@npm:10.4.14":
   version: 10.4.14
   resolution: "autoprefixer@npm:10.4.14"
   dependencies:
@@ -1651,16 +1682,16 @@ __metadata:
   linkType: hard
 
 "browserslist@npm:^4.21.3, browserslist@npm:^4.21.5":
-  version: 4.21.5
-  resolution: "browserslist@npm:4.21.5"
+  version: 4.21.9
+  resolution: "browserslist@npm:4.21.9"
   dependencies:
-    caniuse-lite: ^1.0.30001449
-    electron-to-chromium: ^1.4.284
-    node-releases: ^2.0.8
-    update-browserslist-db: ^1.0.10
+    caniuse-lite: ^1.0.30001503
+    electron-to-chromium: ^1.4.431
+    node-releases: ^2.0.12
+    update-browserslist-db: ^1.0.11
   bin:
     browserslist: cli.js
-  checksum: 903040d2c45b733e1177c288b4f146ff21d45e8a44ccc87d1d7fc2f6a8d021c7ee54b514fd7722529c282381969382a54bd2ab4263f5b6c8981a856b457ea162
+  checksum: 903189787141f645f47ec46ec482dc85985d1297948062690dc2ea8480eb98fd6213507234eb17177825acaae49c53888445910f1af984abce5373fb65c270b8
   languageName: node
   linkType: hard
 
@@ -1697,10 +1728,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001449, caniuse-lite@npm:^1.0.30001464":
-  version: 1.0.30001486
-  resolution: "caniuse-lite@npm:1.0.30001486"
-  checksum: 092090e547d1052e486584c23be0e242e0afe14ddab4c44490f746a6b113a8d3627e9dd58cd52004351598e070216c40c6f862c08b2cb43a4eb4363e5ae4f829
+"caniuse-lite@npm:^1.0.30001464, caniuse-lite@npm:^1.0.30001503":
+  version: 1.0.30001505
+  resolution: "caniuse-lite@npm:1.0.30001505"
+  checksum: 675f9f56424ceb7efcba1d8c1bf91b88abe0f445b19d8bed68e12d23ad8a2f9b05aec5ba5d41f3cd64f21a2fc3aafe64b45ae76737cac330d2e0881d4fe8312c
   languageName: node
   linkType: hard
 
@@ -2159,10 +2190,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:^1.4.284":
-  version: 1.4.388
-  resolution: "electron-to-chromium@npm:1.4.388"
-  checksum: 9a29490681071077274c3170471119ce30fc6b27fc53e16e91f4a4e253da0d3231f4efd4d86810deeb852da4fccfe6c161b66f70caf01b9544d04606a0cc0a24
+"electron-to-chromium@npm:^1.4.431":
+  version: 1.4.433
+  resolution: "electron-to-chromium@npm:1.4.433"
+  checksum: c6a6dce29d5f9d0c13a7d7c668acafba4769e6481c34c15131b8c3c5d91707d38d43d66f1c825d513a3abaa79a7cb12997c6422a62ed9d07af3041476bac6b33
   languageName: node
   linkType: hard
 
@@ -2179,6 +2210,13 @@ __metadata:
   dependencies:
     iconv-lite: ^0.6.2
   checksum: 36d938712ff00fe1f4bac88b43bcffb5930c1efa57bbcdca9d67e1d9d6c57cfb1200fb01efe0f3109b2ce99b231f90779532814a81370a1bd3274a0f58585039
+  languageName: node
+  linkType: hard
+
+"entities@npm:^2.0.0":
+  version: 2.2.0
+  resolution: "entities@npm:2.2.0"
+  checksum: 7fba6af1f116300d2ba1c5673fc218af1961b20908638391b4e1e6d5850314ee2ac3ec22d741b3a8060479911c99305164aed19b6254bde75e7e6b1b2c3f3aa3
   languageName: node
   linkType: hard
 
@@ -2203,32 +2241,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.17.5":
-  version: 0.17.18
-  resolution: "esbuild@npm:0.17.18"
+"esbuild@npm:^0.16.14":
+  version: 0.16.17
+  resolution: "esbuild@npm:0.16.17"
   dependencies:
-    "@esbuild/android-arm": 0.17.18
-    "@esbuild/android-arm64": 0.17.18
-    "@esbuild/android-x64": 0.17.18
-    "@esbuild/darwin-arm64": 0.17.18
-    "@esbuild/darwin-x64": 0.17.18
-    "@esbuild/freebsd-arm64": 0.17.18
-    "@esbuild/freebsd-x64": 0.17.18
-    "@esbuild/linux-arm": 0.17.18
-    "@esbuild/linux-arm64": 0.17.18
-    "@esbuild/linux-ia32": 0.17.18
-    "@esbuild/linux-loong64": 0.17.18
-    "@esbuild/linux-mips64el": 0.17.18
-    "@esbuild/linux-ppc64": 0.17.18
-    "@esbuild/linux-riscv64": 0.17.18
-    "@esbuild/linux-s390x": 0.17.18
-    "@esbuild/linux-x64": 0.17.18
-    "@esbuild/netbsd-x64": 0.17.18
-    "@esbuild/openbsd-x64": 0.17.18
-    "@esbuild/sunos-x64": 0.17.18
-    "@esbuild/win32-arm64": 0.17.18
-    "@esbuild/win32-ia32": 0.17.18
-    "@esbuild/win32-x64": 0.17.18
+    "@esbuild/android-arm": 0.16.17
+    "@esbuild/android-arm64": 0.16.17
+    "@esbuild/android-x64": 0.16.17
+    "@esbuild/darwin-arm64": 0.16.17
+    "@esbuild/darwin-x64": 0.16.17
+    "@esbuild/freebsd-arm64": 0.16.17
+    "@esbuild/freebsd-x64": 0.16.17
+    "@esbuild/linux-arm": 0.16.17
+    "@esbuild/linux-arm64": 0.16.17
+    "@esbuild/linux-ia32": 0.16.17
+    "@esbuild/linux-loong64": 0.16.17
+    "@esbuild/linux-mips64el": 0.16.17
+    "@esbuild/linux-ppc64": 0.16.17
+    "@esbuild/linux-riscv64": 0.16.17
+    "@esbuild/linux-s390x": 0.16.17
+    "@esbuild/linux-x64": 0.16.17
+    "@esbuild/netbsd-x64": 0.16.17
+    "@esbuild/openbsd-x64": 0.16.17
+    "@esbuild/sunos-x64": 0.16.17
+    "@esbuild/win32-arm64": 0.16.17
+    "@esbuild/win32-ia32": 0.16.17
+    "@esbuild/win32-x64": 0.16.17
   dependenciesMeta:
     "@esbuild/android-arm":
       optional: true
@@ -2276,7 +2314,7 @@ __metadata:
       optional: true
   bin:
     esbuild: bin/esbuild
-  checksum: 85e6380e38e4a52581028308b27a536bd9ce7e8eb6257d1395b164dbc40cf73ac20f4e6178ecf3cff8ce7908e3cb097112082f96ae7e6d124ea15f4b0789b383
+  checksum: c2aaef0d2369349b2ef40c0115c2d2030ed7d7341cc91d26af3e243218ecec972f8f1243d5ce8e9a4c80b29439b89dff44c658e57c696d3b07e9074a77878b49
   languageName: node
   linkType: hard
 
@@ -2359,39 +2397,39 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend@workspace:."
   dependencies:
-    "@apollo/client": ^3.7.8
-    "@graphiql/plugin-explorer": ^0.1.14
-    "@graphiql/toolkit": ^0.8.2
-    "@headlessui/react": ^1.7.14
-    "@heroicons/react": ^2.0.17
-    "@nivo/bar": ^0.83.0
-    "@nivo/core": ^0.83.0
-    "@nivo/tooltip": ^0.83.0
-    "@nivo/treemap": ^0.83.0
-    "@tailwindcss/forms": ^0.5.3
-    "@tremor/react": ^2.2.0
-    "@types/react": ^18.0.27
-    "@types/react-dom": ^18.0.10
-    "@types/react-grid-layout": ^1
-    "@vitejs/plugin-react": ^4.0.0
-    autoprefixer: ^10.4.13
-    graphiql: ^2.4.0
-    graphql: ^16.6.0
-    graphql-scalars: ^1.21.3
-    json-bigint-patch: ^0.0.8
-    postcss: ^8.4.21
-    pretty-ms: ^7.0.0
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-error-boundary: ^4.0.4
-    react-grid-layout: ^1.3.4
-    react-router-dom: ^6.8.1
-    react-split-pane: ^0.1.92
-    react-toastify: ^9.1.2
-    tailwindcss: ^3.3.2
-    typescript: ^5.0.0
-    use-url-search-params: ^2.5.1
-    vite: ^4.1.0
+    "@apollo/client": 3.7.8
+    "@graphiql/plugin-explorer": 0.1.14
+    "@graphiql/toolkit": 0.8.2
+    "@headlessui/react": 1.7.14
+    "@heroicons/react": 2.0.17
+    "@nivo/bar": 0.83.0
+    "@nivo/core": 0.83.0
+    "@nivo/tooltip": 0.83.0
+    "@nivo/treemap": 0.83.0
+    "@tailwindcss/forms": 0.5.3
+    "@tremor/react": 3.2.2
+    "@types/react": 18.2.13
+    "@types/react-dom": 18.2.6
+    "@types/react-grid-layout": 1
+    "@vitejs/plugin-react": 4.0.0
+    autoprefixer: 10.4.14
+    graphiql: 2.4.0
+    graphql: 16.6.0
+    graphql-scalars: 1.21.3
+    json-bigint-patch: 0.0.8
+    postcss: 8.4.24
+    pretty-ms: 7.0.0
+    react: 18.2.0
+    react-dom: 18.2.0
+    react-error-boundary: 4.0.4
+    react-grid-layout: 1.3.4
+    react-router-dom: 6.8.1
+    react-split-pane: 0.1.92
+    react-toastify: 9.1.2
+    tailwindcss: 3.3.2
+    typescript: 5.1.3
+    use-url-search-params: 2.5.1
+    vite: 4.1.5
   languageName: unknown
   linkType: soft
 
@@ -2551,23 +2589,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:^2.4.0":
-  version: 2.4.7
-  resolution: "graphiql@npm:2.4.7"
+"graphiql@npm:2.4.0":
+  version: 2.4.0
+  resolution: "graphiql@npm:2.4.0"
   dependencies:
-    "@graphiql/react": ^0.17.6
-    "@graphiql/toolkit": ^0.8.4
-    graphql-language-service: ^5.1.6
+    "@graphiql/react": ^0.17.0
+    "@graphiql/toolkit": ^0.8.2
+    entities: ^2.0.0
+    graphql-language-service: ^5.1.2
     markdown-it: ^12.2.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 00cc84c24529849b7c9870ee2f4eaf4a2142df8aa767328160f74a9e0a00d3949cb3ec5c8765f08e380366850f15518f42f0f1d6ad6095e731f882faea06dd31
+  checksum: 839df9db40db3ced93271853aceb8009e0a924fe7020c106e8343d307bfa8da97df7f12cf537d002ec2214942495097a000c67ef2e5e1aae1f2a1770dd7c6621
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:5.1.6, graphql-language-service@npm:^5.1.6":
+"graphql-language-service@npm:5.1.6, graphql-language-service@npm:^5.1.2, graphql-language-service@npm:^5.1.6":
   version: 5.1.6
   resolution: "graphql-language-service@npm:5.1.6"
   dependencies:
@@ -2581,14 +2620,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-scalars@npm:^1.21.3":
-  version: 1.22.2
-  resolution: "graphql-scalars@npm:1.22.2"
+"graphql-scalars@npm:1.21.3":
+  version: 1.21.3
+  resolution: "graphql-scalars@npm:1.21.3"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 8ba7e0e2ea90a0067cdbffcd67a8ff486ce4accceabe15a5b9bc7749204ea3ce31630619d9069153147661a885118e93983582b3914c982fa48f09c18edacdad
+  checksum: f9b29d403f02f98c29b4eb6505b0099b54c093d7a34d7028e310c4ed4991abedca4e05a6fdb67f820b10b0e09992244aefc3fc183e3d19cf73643183fc20d4d9
   languageName: node
   linkType: hard
 
@@ -2603,7 +2642,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.6.0":
+"graphql@npm:16.6.0":
   version: 16.6.0
   resolution: "graphql@npm:16.6.0"
   checksum: 3a2c15ff58b69d017618d2b224fa6f3c4a7937e1f711c3a5e0948db536b4931e6e649560b53de7cc26735e027ceea6e2d0a6bb7c29fc4639b290313e3aa71618
@@ -2866,7 +2905,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-bigint-patch@npm:^0.0.8":
+"json-bigint-patch@npm:0.0.8":
   version: 0.0.8
   resolution: "json-bigint-patch@npm:0.0.8"
   checksum: f2ee19607c4927d1b0f1fda2f3c3cdba1162d1a7f6a40ae5e3e034363cddd437a0ef48d975e1e572dc514a7396ab2247b443113444004f1e64af47ba298687b9
@@ -3204,10 +3243,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-releases@npm:^2.0.8":
-  version: 2.0.10
-  resolution: "node-releases@npm:2.0.10"
-  checksum: 90947653e8e3d85bda4bcbf28d019693ccfb5d5947838ca64e91208b51d7bfc13ba930b8216389a4faffbad8145b2c616bf1f7a09c97a1a9ac57fd6ef6d01c5c
+"node-releases@npm:^2.0.12":
+  version: 2.0.12
+  resolution: "node-releases@npm:2.0.12"
+  checksum: 01f9a7c135be5c8bc989b6c10b9840a7aee09040d46ba4e64b5ea0174fb8891f1277514aef75033ce42031f6cb72a04d4a7e99c70ca25488ad63ad6fc5a5b6a0
   languageName: node
   linkType: hard
 
@@ -3278,7 +3317,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.16.2":
+"optimism@npm:^0.16.1":
   version: 0.16.2
   resolution: "optimism@npm:0.16.2"
   dependencies:
@@ -3423,7 +3462,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.21, postcss@npm:^8.4.23":
+"postcss@npm:8.4.24, postcss@npm:^8.4.21, postcss@npm:^8.4.23":
   version: 8.4.24
   resolution: "postcss@npm:8.4.24"
   dependencies:
@@ -3434,12 +3473,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-ms@npm:^7.0.0":
-  version: 7.0.1
-  resolution: "pretty-ms@npm:7.0.1"
+"pretty-ms@npm:7.0.0":
+  version: 7.0.0
+  resolution: "pretty-ms@npm:7.0.0"
   dependencies:
     parse-ms: ^2.1.0
-  checksum: 069aec9d939e7903846b3db53b020bed92e3dc5909e0fef09ec8ab104a0b7f9a846605a1633c60af900d288582fb333f6f30469e59d6487a2330301fad35a89c
+  checksum: c5159f67d0e329d77a567fef6cc6574582eebd825afb161e214992c7264eb2cb3caa5b34a080487e823f5f01a5294e4bdf9ccf50b67641211b44c9de54e35905
   languageName: node
   linkType: hard
 
@@ -3489,7 +3528,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.2.0":
+"react-day-picker@npm:^8.7.1":
+  version: 8.7.1
+  resolution: "react-day-picker@npm:8.7.1"
+  peerDependencies:
+    date-fns: ^2.28.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 393e12b8d3122570075b3a7a8f3dd275347f8526990a9474f269c913461153936a06ea32aa06302ca4cd2dcb1e57772d8f8b7ca31b3b1e48e71d63438d448d70
+  languageName: node
+  linkType: hard
+
+"react-dom@npm:18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
   dependencies:
@@ -3514,14 +3563,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-error-boundary@npm:^4.0.4":
-  version: 4.0.10
-  resolution: "react-error-boundary@npm:4.0.10"
+"react-error-boundary@npm:4.0.4":
+  version: 4.0.4
+  resolution: "react-error-boundary@npm:4.0.4"
   dependencies:
     "@babel/runtime": ^7.12.5
   peerDependencies:
     react: ">=16.13.1"
-  checksum: d61cc2f4770459e03b8d58c971ee626b6ec95fd6fdf168a001ea028fd7b429013007d5084a99367b0d0effc823862eea3c49a3b22c64f6376aaba2da51c8773a
+  checksum: 23020323992d0d0355a29e8282e1d2774d95fdee48597b22ac87df75e7fbf36ce795b7ebf84ebbf89322985993e018c37d3848ac948e0e9b420fb2613682e96b
   languageName: node
   linkType: hard
 
@@ -3545,7 +3594,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-grid-layout@npm:^1.3.4":
+"react-grid-layout@npm:1.3.4":
   version: 1.3.4
   resolution: "react-grid-layout@npm:1.3.4"
   dependencies:
@@ -3641,27 +3690,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.8.1":
-  version: 6.12.1
-  resolution: "react-router-dom@npm:6.12.1"
+"react-router-dom@npm:6.8.1":
+  version: 6.8.1
+  resolution: "react-router-dom@npm:6.8.1"
   dependencies:
-    "@remix-run/router": 1.6.3
-    react-router: 6.12.1
+    "@remix-run/router": 1.3.2
+    react-router: 6.8.1
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 4de0d4159a9dd2de0477d7608e9055262ebdd5dc41fc918b44b38170cc8ed407fa7dbb73bdb85e9469614502ad4772523b8a7f32c2609e62973feb41b70d871b
+  checksum: ce2a756b8deeacf375166d2f009b344560dc45f34ddba213b48caf3089d4035563068beda2bff091904d2a1544b78135cbb9a5fa2f1cd645b7429f2b740defd5
   languageName: node
   linkType: hard
 
-"react-router@npm:6.12.1":
-  version: 6.12.1
-  resolution: "react-router@npm:6.12.1"
+"react-router@npm:6.8.1":
+  version: 6.8.1
+  resolution: "react-router@npm:6.8.1"
   dependencies:
-    "@remix-run/router": 1.6.3
+    "@remix-run/router": 1.3.2
   peerDependencies:
     react: ">=16.8"
-  checksum: 33a39eca122f3519f1aa91d8e6585fab669b3b06b621aa624f7db1ffda6b84676facd57028652f2fba7325a208abef906a5ba6c91d55d5a5d29993583d82dd61
+  checksum: ff37445433394f3468c67fb3fb14d3e5c303cd4a9937da31b663818952b0241af3c2de822123e7d06231131e757ce2c72dd08da7e23964b52e6416588112e02e
   languageName: node
   linkType: hard
 
@@ -3679,7 +3728,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-split-pane@npm:^0.1.92":
+"react-split-pane@npm:0.1.92":
   version: 0.1.92
   resolution: "react-split-pane@npm:0.1.92"
   dependencies:
@@ -3719,15 +3768,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-toastify@npm:^9.1.2":
-  version: 9.1.3
-  resolution: "react-toastify@npm:9.1.3"
+"react-toastify@npm:9.1.2":
+  version: 9.1.2
+  resolution: "react-toastify@npm:9.1.2"
   dependencies:
     clsx: ^1.1.1
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 51de1e51e9357a24773fbcd45a4db18bf74b8ec40d86a2bfb4a4fee23ca4f9fffdac5dfb7a3c21baea39971f72f72dfcdc79403a6de006f74d69e7bc12f8b3e0
+  checksum: 904ba15171d3b45751fdec077ca19e9b4010005c75161ddaa805b4c0abd0342fbcd25976b8871de01a2867600dcd902f6b80cf1bfda470ca83d8a514c0d67530
   languageName: node
   linkType: hard
 
@@ -3761,7 +3810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
+"react@npm:18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
@@ -3808,9 +3857,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"recharts@npm:^2.3.2":
-  version: 2.6.0
-  resolution: "recharts@npm:2.6.0"
+"recharts@npm:^2.7.1":
+  version: 2.7.1
+  resolution: "recharts@npm:2.7.1"
   dependencies:
     classnames: ^2.2.5
     eventemitter3: ^4.0.1
@@ -3825,7 +3874,7 @@ __metadata:
     prop-types: ^15.6.0
     react: ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: b8df69345d5b58ec73df675c427d8ee1df64a7885c590e399808fb348fbf9627c724bca8faa23715fbc8f3fd8670b61ab5c63ac56d02aaf3656a65933ea07764
+  checksum: 9546944b490788ceedfff36bc3911e3a2062c5aea7355ed95a125e8179445f5254bc9367552fac9ce002b40735d8f4a1abcc1524f9a1c70c7a4e9922eef37f4b
   languageName: node
   linkType: hard
 
@@ -3846,7 +3895,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.1.7, resolve@npm:^1.22.2":
+"resolve@npm:^1.1.7, resolve@npm:^1.22.1, resolve@npm:^1.22.2":
   version: 1.22.3
   resolution: "resolve@npm:1.22.3"
   dependencies:
@@ -3859,7 +3908,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.2#~builtin<compat/resolve>":
+"resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.2#~builtin<compat/resolve>":
   version: 1.22.3
   resolution: "resolve@patch:resolve@npm%3A1.22.3#~builtin<compat/resolve>::version=1.22.3&hash=c3c19d"
   dependencies:
@@ -3904,9 +3953,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.21.0":
-  version: 3.21.6
-  resolution: "rollup@npm:3.21.6"
+"rollup@npm:^3.10.0":
+  version: 3.25.1
+  resolution: "rollup@npm:3.25.1"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -3914,7 +3963,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: ace3ff259ac64597b8e4af15bc5fc0773e1f3d4d860d4f4a863d562457533c1103f336fabd50b1c2386163d01d26b4b145c2bb630b4f1e31bd2ef46b70be2b3b
+  checksum: 52ac7b8ae9dc2d47a08c7bba99b2f79a66906a8db3fce5eccc96c91315f2fb8fc2555ef212299854b463d04c0afd8cb84481e847e19d01f198c69be0261e4cbd
   languageName: node
   linkType: hard
 
@@ -4129,7 +4178,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^3.3.2":
+"tailwindcss@npm:3.3.2":
   version: 3.3.2
   resolution: "tailwindcss@npm:3.3.2"
   dependencies:
@@ -4248,7 +4297,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.0.0":
+"typescript@npm:5.1.3":
   version: 5.1.3
   resolution: "typescript@npm:5.1.3"
   bin:
@@ -4258,7 +4307,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.0.0#~builtin<compat/typescript>":
+"typescript@patch:typescript@5.1.3#~builtin<compat/typescript>":
   version: 5.1.3
   resolution: "typescript@patch:typescript@npm%3A5.1.3#~builtin<compat/typescript>::version=5.1.3&hash=5da071"
   bin:
@@ -4293,7 +4342,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"update-browserslist-db@npm:^1.0.10":
+"update-browserslist-db@npm:^1.0.11":
   version: 1.0.11
   resolution: "update-browserslist-db@npm:1.0.11"
   dependencies:
@@ -4338,7 +4387,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-url-search-params@npm:^2.5.1":
+"use-url-search-params@npm:2.5.1":
   version: 2.5.1
   resolution: "use-url-search-params@npm:2.5.1"
   peerDependencies:
@@ -4376,14 +4425,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^4.1.0":
-  version: 4.3.9
-  resolution: "vite@npm:4.3.9"
+"vite@npm:4.1.5":
+  version: 4.1.5
+  resolution: "vite@npm:4.1.5"
   dependencies:
-    esbuild: ^0.17.5
+    esbuild: ^0.16.14
     fsevents: ~2.3.2
-    postcss: ^8.4.23
-    rollup: ^3.21.0
+    postcss: ^8.4.21
+    resolve: ^1.22.1
+    rollup: ^3.10.0
   peerDependencies:
     "@types/node": ">= 14"
     less: "*"
@@ -4409,7 +4459,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 9eb1c99f16992e1b29e3eea76df312983f2e59915c369fede0f1e6716b80827857f88cfc75092aac807d20c73033c65be82a315a14ab312a52d22a9bdad1ca82
+  checksum: 5dcc3c1ede757245ccaa7d8b4c2faf0cc3fac8d359daf71019e46fd7c9d89fd32f9d935f35ab210aad6527db8cd3c6753a6198433e699a47fb3c9222a7f61021
   languageName: node
   linkType: hard
 
