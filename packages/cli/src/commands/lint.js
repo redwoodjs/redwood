@@ -53,6 +53,7 @@ export const handler = async ({ path, fix }) => {
         stdio: 'inherit',
       }
     )
+
     process.exitCode = result.exitCode
   } catch (error) {
     process.exitCode = error.exitCode ?? 1

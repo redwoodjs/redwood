@@ -65,7 +65,17 @@ import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 // yarn rw info
 // ```
 
-let { cwd, telemetry } = Parser(hideBin(process.argv))
+// Telemetry is enabled by default, but can be disabled in two ways
+// - by passing a `--telemetry false` option
+// - by setting a `REDWOOD_DISABLE_TELEMETRY` env var
+let { cwd, telemetry } = Parser(hideBin(process.argv), {
+  boolean: ['telemetry'],
+  default: {
+    telemetry:
+      process.env.REDWOOD_DISABLE_TELEMETRY === undefined ||
+      process.env.REDWOOD_DISABLE_TELEMETRY === '',
+  },
+})
 cwd ??= process.env.RWJS_CWD
 
 try {
@@ -106,15 +116,9 @@ config({
   multiline: true,
 })
 
-// Telemetry is enabled by default, but can be disabled in two ways
-// - by passing a `--telemetry false` option
-// - by setting a `REDWOOD_DISABLE_TELEMETRY` env var
-const TELEMETRY_ENABLED =
-  telemetry !== 'false' && !process.env.REDWOOD_DISABLE_TELEMETRY
-
 async function main() {
   // Start telemetry if it hasn't been disabled
-  if (TELEMETRY_ENABLED) {
+  if (telemetry) {
     try {
       await startTelemetry()
     } catch (error) {
@@ -193,7 +197,7 @@ async function runYargs() {
           delete argv.cwd
           delete argv.telemetry
         },
-        TELEMETRY_ENABLED && telemetryMiddleware,
+        telemetry && telemetryMiddleware,
         updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
       ].filter(Boolean)
     )
@@ -203,6 +207,7 @@ async function runYargs() {
     .option('telemetry', {
       describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
       boolean: true,
+      // hidden: true,
     })
     .example(
       'yarn rw g page home /',
