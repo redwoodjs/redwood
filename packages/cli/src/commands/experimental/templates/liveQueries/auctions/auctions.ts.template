@@ -1,0 +1,41 @@
+// api/src/services/auctions/auctions.ts
+
+import { logger } from 'src/lib/logger'
+
+const auctions = [
+  { id: '1', title: 'Digital-only PS5', bids: [{ amount: 100 }] },
+]
+
+export const auction = async ({ id }) => {
+  const foundAuction = auctions.find((a) => a.id === id)
+  logger.debug({ id, auction: foundAuction }, 'auction')
+  return foundAuction
+}
+
+export const bid = async ({ input }, { context }) => {
+  const { auctionId, amount } = input
+
+  const index = auctions.findIndex((a) => a.id === auctionId)
+
+  const bid = { amount }
+
+  auctions[index].bids.push(bid)
+  logger.debug({ auctionId, bid }, 'Added bid to auction')
+
+  const key = `Auction:${auctionId}`
+  context.liveQueryStore.invalidate(key)
+
+  logger.debug({ key }, 'Invalidated auction key in liveQueryStore')
+
+  return bid
+}
+
+export const Auction = {
+  highestBid: (obj, { root }) => {
+    const [max] = root.bids.sort((a, b) => b.amount - a.amount)
+
+    logger.debug({ obj, root }, 'highestBid')
+
+    return max
+  },
+}

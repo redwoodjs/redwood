@@ -180,6 +180,64 @@ export async function handler({ force, verbose }) {
         },
       },
       {
+        title: 'Adding Auctions example live query ...',
+        task: () => {
+          // sdl
+
+          const exampleSdlTemplateContent = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'liveQueries',
+              'auctions',
+              `auctions.sdl.ts.template`
+            ),
+            'utf-8'
+          )
+
+          const sdlFile = path.join(
+            redwoodPaths.api.graphql,
+            `auctions.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+          )
+
+          const sdlContent = ts
+            ? exampleSdlTemplateContent
+            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+
+          // service
+
+          const exampleServiceTemplateContent = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'liveQueries',
+              'auctions',
+              `auctions.ts.template`
+            ),
+            'utf-8'
+          )
+          const serviceFile = path.join(
+            redwoodPaths.api.services,
+            'auctions',
+            `auctions.${isTypeScriptProject() ? 'ts' : 'js'}`
+          )
+
+          const serviceContent = ts
+            ? exampleServiceTemplateContent
+            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+
+          // write all files
+          return [
+            writeFile(sdlFile, sdlContent, {
+              overwriteExisting: force,
+            }),
+            writeFile(serviceFile, serviceContent, {
+              overwriteExisting: force,
+            }),
+          ]
+        },
+      },
+      {
         title: 'Adding config to redwood.toml...',
         task: (_ctx, task) => {
           const redwoodTomlPath = getConfigPath()
