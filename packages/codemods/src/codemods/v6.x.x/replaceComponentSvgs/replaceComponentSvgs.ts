@@ -1,17 +1,23 @@
-import type {
-  FileInfo,
-  API,
-  JSXAttribute,
-  JSXSpreadAttribute,
-} from 'jscodeshift'
+import path from 'path'
 
-function pascalToCamel(pascalString: string) {
-  const firstChar = pascalString.charAt(0).toLowerCase()
-  const restOfString = pascalString.slice(1)
-  return `${firstChar}${restOfString}`
+import execa from 'execa'
+import type { API, FileInfo, StringLiteral } from 'jscodeshift'
+
+async function convertSvgToReactComponent(
+  svgFilePath: string,
+  outputPath: string
+) {
+  const svgrCommand = `npx --yes @svgr/cli ${svgFilePath} > ${outputPath}`
+
+  await execa(svgrCommand, {
+    shell: true,
+    stdio: 'inherit',
+  })
+
+  console.log(`SVG converted to React component: ${outputPath}`)
 }
 
-export default function transform(file: FileInfo, api: API) {
+export default async function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
   const root = j(file.source)
@@ -22,24 +28,10 @@ export default function transform(file: FileInfo, api: API) {
     return importPath.includes('.svg')
   })
 
-  function createImgTag(
-    src: string,
-    attributes?: (JSXAttribute | JSXSpreadAttribute)[] = []
-  ) {
-    return j.jsxElement(
-      j.jsxOpeningElement(j.jsxIdentifier('img'), [
-        j.jsxAttribute(
-          j.jsxIdentifier('src'),
-          j.jsxExpressionContainer(j.identifier(src))
-        ),
-        // make sure to preserve any other attributes
-        ...attributes,
-      ]),
-      j.jsxClosingElement(j.jsxIdentifier('img')),
-      []
-    )
-  }
-
+  const svgsToConvert: Array<{
+    filePath: string
+    importSourcePath: StringLiteral
+  }> = []
   // Process each import declaration
   svgImports.forEach((importDeclaration) => {
     const importSpecifiers = importDeclaration.node.specifiers
@@ -48,46 +40,94 @@ export default function transform(file: FileInfo, api: API) {
     importSpecifiers?.forEach((importSpecifier) => {
       if (importSpecifier.type === 'ImportDefaultSpecifier') {
         if (!importSpecifier.local) {
-          // Un-freaking-likely
+          // Un-freaking-likely, skip if it happens
           return
         }
-        const originalImportedName = importSpecifier.local.name
-        const camelCasedName = pascalToCamel(originalImportedName)
+
+        const importName = importSpecifier.local.name
+
+        const importPath = importDeclaration.node.source.value as string
+        const currentFolder = path.dirname(file.path)
+        const pathToSvgFile = path.resolve(currentFolder, importPath)
 
         // Find the JSX elements that use the default import specifier
-        const svgsUsedAsComponent = root.findJSXElements(originalImportedName)
+        const svgsUsedAsComponent = root.findJSXElements(importName)
 
         // Replace the JSX elements with the <img> tags
-        svgsUsedAsComponent.forEach((svgComponent) => {
-          const newImgTag = createImgTag(
-            camelCasedName,
-            svgComponent.node.openingElement.attributes
-          )
-
-          svgComponent.replace(newImgTag)
+        svgsUsedAsComponent.forEach(() => {
+          svgsToConvert.push({
+            filePath: pathToSvgFile,
+            importSourcePath: importDeclaration.node.source as StringLiteral, // imports are all strings in this case
+          })
         })
 
         const svgsUsedAsRenderProp = root.find(j.JSXExpressionContainer, {
           expression: {
             type: 'Identifier',
-            name: originalImportedName,
+            name: importName,
           },
         })
 
-        svgsUsedAsRenderProp.forEach((svgRenderPropExpression) => {
-          svgRenderPropExpression.replace(
-            j.jsxExpressionContainer(createImgTag(camelCasedName))
-          )
+        svgsUsedAsRenderProp.forEach(() => {
+          svgsToConvert.push({
+            filePath: pathToSvgFile,
+            importSourcePath: importDeclaration.node.source as StringLiteral, // imports are all strings in this case
+          })
         })
-
-        if (svgsUsedAsRenderProp.length > 0 || svgsUsedAsComponent.length > 0) {
-          // Update the import specifier to use the correct name,
-          // but only if it's used somewhere
-          importSpecifier.local.name = camelCasedName
-        }
       }
     })
   })
+
+  if (svgsToConvert.length === 0) {
+    console.log('Did not find any SVGs used as components! All good :)')
+  } else {
+    // if there are any svgs used as components, or render props, convert the svg to a react component
+    await Promise.all(
+      svgsToConvert.map(async ({ filePath, importSourcePath }) => {
+        const svgFileNameWithoutExtension = path.basename(
+          filePath,
+          path.extname(filePath)
+        )
+
+        const newFileName = `${svgFileNameWithoutExtension
+          .charAt(0)
+          .toUpperCase()}${svgFileNameWithoutExtension.slice(1)}.js`
+
+        // The absolute path to the new file
+        const outputPath = path.join(path.dirname(filePath), newFileName)
+
+        try {
+          await convertSvgToReactComponent(filePath, outputPath)
+        } catch (error: any) {
+          console.error(
+            `Error converting ${filePath} to React component: ${error.message}`
+          )
+
+          // Don't proceed if SVGr fails
+          return
+        }
+
+        // If SVGr is succesful, change the import path
+        // '../../bazinga.svg' -> '../../Bazinga.js'
+        importSourcePath.value = importSourcePath.value
+          .replace(`${svgFileNameWithoutExtension}.svg`, newFileName)
+          .replace(`${svgFileNameWithoutExtension}.SVG`, newFileName) // incase they capitalised the extension
+
+        console.log(
+          `👉 \n ~ file: replaceComponentSvgs.ts:127 ~ importSourcePath.value:`,
+          importSourcePath.value
+        )
+        console.log(
+          `👉 \n ~ file: replaceComponentSvgs.ts:127 ~ importSourcePath.value:`,
+          importSourcePath.value
+        )
+        console.log(
+          `👉 \n ~ file: replaceComponentSvgs.ts:127 ~ importSourcePath.value:`,
+          importSourcePath.value
+        )
+      })
+    )
+  }
 
   return root.toSource()
 }
