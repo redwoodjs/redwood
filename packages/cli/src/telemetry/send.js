@@ -34,9 +34,7 @@ async function main() {
     }
 
     // Read the saved spans
-    const spans = JSON.parse(
-      fs.readFileSync(path.join(telemetryDir, file), { encoding: 'utf8' })
-    )
+    const spans = fs.readJSONSync(path.join(telemetryDir, file))
 
     /**
      * We have to fix some of the span properties because we serialized the span
@@ -64,10 +62,7 @@ async function main() {
      * and we also denote that the spans have been sent by adding a '_' prefix to
      * the file name.
      */
-    fs.writeFileSync(
-      path.join(telemetryDir, `_${file}`),
-      JSON.stringify(spans, undefined, 2)
-    )
+    fs.writeJSONSync(path.join(telemetryDir, `_${file}`), spans, { spaces: 2 })
     fs.unlinkSync(path.join(telemetryDir, file))
     telemetryFiles[index] = `_${file}`
   }
