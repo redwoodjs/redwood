@@ -106,6 +106,9 @@ config({
   multiline: true,
 })
 
+// Telemetry is enabled by default, but can be disabled in two ways
+// - by passing a `--telemetry false` option
+// - by setting a `REDWOOD_DISABLE_TELEMETRY` env var
 const TELEMETRY_ENABLED =
   telemetry !== 'false' && !process.env.REDWOOD_DISABLE_TELEMETRY
 
@@ -185,15 +188,21 @@ async function runYargs() {
       [
         // We've already handled `cwd` above, but it may still be in `argv`.
         // We don't need it anymore so let's get rid of it.
+        // Likewise for `telemetry`.
         (argv) => {
           delete argv.cwd
+          delete argv.telemetry
         },
-        telemetryMiddleware,
+        TELEMETRY_ENABLED && telemetryMiddleware,
         updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
       ].filter(Boolean)
     )
     .option('cwd', {
       describe: 'Working directory to use (where `redwood.toml` is located)',
+    })
+    .option('telemetry', {
+      describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
+      boolean: true,
     })
     .example(
       'yarn rw g page home /',
