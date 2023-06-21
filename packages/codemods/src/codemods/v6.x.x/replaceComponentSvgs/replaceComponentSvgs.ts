@@ -1,18 +1,28 @@
+import fs from 'fs/promises'
 import path from 'path'
 
-import execa from 'execa'
+import { transform as svgrTransform } from '@svgr/core'
 import type { API, FileInfo, StringLiteral } from 'jscodeshift'
 
 async function convertSvgToReactComponent(
   svgFilePath: string,
-  outputPath: string
+  outputPath: string,
+  componentName: string
 ) {
-  const svgrCommand = `npx --yes @svgr/cli --no-runtime-config ${svgFilePath} > ${outputPath}`
+  const svgContents = await fs.readFile(svgFilePath, 'utf-8')
 
-  await execa(svgrCommand, {
-    shell: true,
-    stdio: 'inherit',
-  })
+  const jsCode = await svgrTransform(
+    svgContents,
+    {
+      jsxRuntime: 'automatic',
+      plugins: ['@svgr/plugin-jsx'],
+    },
+    {
+      componentName: componentName,
+    }
+  )
+
+  await fs.writeFile(outputPath, jsCode)
 
   console.log(`SVG converted to React component: ${outputPath}`)
 }
@@ -86,15 +96,20 @@ export default async function transform(file: FileInfo, api: API) {
           path.extname(filePath)
         )
 
-        const newFileName = `${svgFileNameWithoutExtension
-          .charAt(0)
-          .toUpperCase()}${svgFileNameWithoutExtension.slice(1)}SVG.jsx`
+        const componentName =
+          svgFileNameWithoutExtension.charAt(0).toUpperCase() +
+          svgFileNameWithoutExtension.slice(1)
+
+        const newFileName = `${componentName}SVG`
 
         // The absolute path to the new file
-        const outputPath = path.join(path.dirname(filePath), newFileName)
+        const outputPath = path.join(
+          path.dirname(filePath),
+          `${newFileName}.jsx`
+        )
 
         try {
-          await convertSvgToReactComponent(filePath, outputPath)
+          await convertSvgToReactComponent(filePath, outputPath, componentName)
         } catch (error: any) {
           console.error(
             `Error converting ${filePath} to React component: ${error.message}`

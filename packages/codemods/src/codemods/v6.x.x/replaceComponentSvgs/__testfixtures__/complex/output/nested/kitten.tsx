@@ -1,5 +1,5 @@
-import Logo from "../mySvgs/LogoSVG.jsx"
-import Kitten from "../mySvgs/Kitten1SVG.jsx"
+import Logo from "../mySvgs/LogoSVG"
+import Kitten from "../mySvgs/Kitten1SVG"
 
 export default (props) => <>
 <Logo {...props} />

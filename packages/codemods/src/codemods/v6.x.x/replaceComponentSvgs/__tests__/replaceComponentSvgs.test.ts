@@ -3,6 +3,7 @@ describe('replaceComponentSvgs', () => {
     await matchFolderTransform('replaceComponentSvgs', 'simple', {
       useJsCodeshift: true,
       targetPathsGlob: '**/*.{js,jsx,tsx}',
+      removeWhitespace: true, // needed for matching
     })
   })
 
@@ -10,6 +11,7 @@ describe('replaceComponentSvgs', () => {
     await matchFolderTransform('replaceComponentSvgs', 'complex', {
       useJsCodeshift: true,
       targetPathsGlob: '**/*.{js,jsx,tsx}',
+      removeWhitespace: true, // needed for matching
     })
   })
 })

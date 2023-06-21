@@ -1,4 +1,4 @@
-import BazingaSvg from "./BazingaSVG.jsx"
+import BazingaSvg from "./BazingaSVG"
 
 const MyComponent = () => {
  return <BazingaSvg/>

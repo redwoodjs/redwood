@@ -30,6 +30,8 @@
     "@babel/traverse": "7.22.5",
     "@iarna/toml": "2.2.5",
     "@redwoodjs/project-config": "5.0.0",
+    "@svgr/core": "8.0.0",
+    "@svgr/plugin-jsx": "8.0.1",
     "@vscode/ripgrep": "1.15.4",
     "@whatwg-node/fetch": "0.9.6",
     "cheerio": "1.0.0-rc.12",
