@@ -91,7 +91,7 @@ export default async function transform(file: FileInfo, api: API) {
 
         const newFileName = `${svgFileNameWithoutExtension
           .charAt(0)
-          .toUpperCase()}${svgFileNameWithoutExtension.slice(1)}.js`
+          .toUpperCase()}${svgFileNameWithoutExtension.slice(1)}SVG.js`
 
         // The absolute path to the new file
         const outputPath = path.join(path.dirname(filePath), newFileName)
@@ -109,21 +109,10 @@ export default async function transform(file: FileInfo, api: API) {
 
         // If SVGr is succesful, change the import path
         // '../../bazinga.svg' -> '../../Bazinga.js'
-        importSourcePath.value = importSourcePath.value
-          .replace(`${svgFileNameWithoutExtension}.svg`, newFileName)
-          .replace(`${svgFileNameWithoutExtension}.SVG`, newFileName) // incase they capitalised the extension
-
-        console.log(
-          `👉 \n ~ file: replaceComponentSvgs.ts:127 ~ importSourcePath.value:`,
-          importSourcePath.value
-        )
-        console.log(
-          `👉 \n ~ file: replaceComponentSvgs.ts:127 ~ importSourcePath.value:`,
-          importSourcePath.value
-        )
-        console.log(
-          `👉 \n ~ file: replaceComponentSvgs.ts:127 ~ importSourcePath.value:`,
-          importSourcePath.value
+        // Use extname, incase ext casing does not match
+        importSourcePath.value = importSourcePath.value.replace(
+          `${svgFileNameWithoutExtension}${path.extname(filePath)}`,
+          newFileName
         )
       })
     )

@@ -6,9 +6,12 @@ describe('replaceComponentSvgs', () => {
     })
   })
 
-  // it('Carries over other attrs', async () => {
-  //   await matchTransformSnapshot('replaceComponentSvgs', 'otherAttrs')
-  // })
+  it('Preserves attrs & deals with nesting', async () => {
+    await matchFolderTransform('replaceComponentSvgs', 'complex', {
+      useJsCodeshift: true,
+      targetPathsGlob: '**/*.{js,jsx,tsx}',
+    })
+  })
 
   // it('Handles svgs used as render props', async () => {
   //   await matchTransformSnapshot('replaceComponentSvgs', 'renderProp')
