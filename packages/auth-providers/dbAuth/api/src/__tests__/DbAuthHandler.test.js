@@ -1026,6 +1026,56 @@ describe('dbAuth', () => {
 
       expectLoggedInResponse(response)
     })
+
+    it('login db check is called with insensitive string when user has provided one in LoginFlowOptions', async () => {
+      const spy = jest.spyOn(db.user, 'findFirst')
+
+      options.signup.usernameMatch = 'insensitive'
+      options.login.usernameMatch = 'insensitive'
+
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const response = await dbAuth.login()
+
+      expect(response[0]).toEqual({ id: user.id })
+
+      return expect(spy).toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
+    })
+
+    it('login db check is not called with insensitive string when user has not provided one in LoginFlowOptions', async () => {
+      const spy = jest.spyOn(db.user, 'findFirst')
+      
+      delete options.signup.usernameMatch;
+      delete options.login.usernameMatch;
+
+      const user = await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+      
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      const response = await dbAuth.login()
+
+      expect(response[0]).toEqual({ id: user.id })
+
+      return expect(spy).not.toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
+    })
   })
 
   describe('logout', () => {
