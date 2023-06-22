@@ -29,11 +29,14 @@ const DEFAULT_ERROR_EPILOGUE = DEFAULT_WARNING_EPILOGUE
 
 export async function exitWithError(
   error,
-  { exitCode, message, epilogue, includeEpilogue, includeReferenceCode } = {
-    includeEpilogue: true,
-    includeReferenceCode: true,
-  }
+  { exitCode, message, epilogue, includeEpilogue, includeReferenceCode } = {}
 ) {
+  // Set the default values
+  exitCode ??= error?.exitCode ?? 1
+  epilogue ??= DEFAULT_ERROR_EPILOGUE
+  includeEpilogue ??= true
+  includeReferenceCode ??= true
+
   // Determine the correct error message
   const errorMessage =
     message ?? error.stack ?? (error.toString() || 'Unknown error')
@@ -46,12 +49,13 @@ export async function exitWithError(
   const content = [
     errorMessage,
     includeEpilogue && `\n${'-'.repeat(process.stderr.columns - 8)}\n`,
-    includeEpilogue && (epilogue ?? DEFAULT_ERROR_EPILOGUE),
+    includeEpilogue && epilogue,
     includeReferenceCode &&
-      ` - Here's your unique error reference: '${errorReferenceCode}'`,
+      ` - Here's your unique error reference to quote: '${errorReferenceCode}'`,
   ]
     .filter(Boolean)
     .join('\n')
+
   console.error(
     boxen(content, {
       padding: 1,
@@ -69,5 +73,5 @@ export async function exitWithError(
   // Legacy telemetry
   errorTelemetry(process.argv, error?.message)
 
-  process.exit(exitCode ?? error?.exitCode ?? 1)
+  process.exit(exitCode)
 }
