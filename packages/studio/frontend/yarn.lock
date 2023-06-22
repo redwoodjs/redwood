@@ -22,17 +22,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.8":
-  version: 3.7.8
-  resolution: "@apollo/client@npm:3.7.8"
+"@apollo/client@npm:3.7.16":
+  version: 3.7.16
+  resolution: "@apollo/client@npm:3.7.16"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
     "@wry/equality": ^0.5.0
-    "@wry/trie": ^0.3.0
+    "@wry/trie": ^0.4.0
     graphql-tag: ^2.12.6
     hoist-non-react-statics: ^3.3.2
-    optimism: ^0.16.1
+    optimism: ^0.16.2
     prop-types: ^15.7.2
     response-iterator: ^0.2.6
     symbol-observable: ^4.0.0
@@ -54,7 +54,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 58fcfe06b2a22345443f4ff32fc28f24ea218fe2f23f0d7944c365228d5f12a4fca9c0d40cd59d1928248d07197102b1d3eeb1b29b5c95735991580edd93644c
+  checksum: 0fb9cfdb2b6d764f7dee16dad03eb02b844c0ec3d983a091745bc7b8685b73323ce19e5ed24ea7cae586b016afca14348ba948c02e0091610f6a425f7a2ece22
   languageName: node
   linkType: hard
 
@@ -1504,6 +1504,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wry/trie@npm:^0.4.0":
+  version: 0.4.3
+  resolution: "@wry/trie@npm:0.4.3"
+  dependencies:
+    tslib: ^2.3.0
+  checksum: 1a14edba595b1967d0cf38208c2660b2952a8e8a649bb669b67907df48f602c7f2acbe16c1e1b115afa7d7effb9f1a4dbde38eef16ee92e7521a511262a53281
+  languageName: node
+  linkType: hard
+
 "@xstate/fsm@npm:1.4.0":
   version: 1.4.0
   resolution: "@xstate/fsm@npm:1.4.0"
@@ -2397,7 +2406,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend@workspace:."
   dependencies:
-    "@apollo/client": 3.7.8
+    "@apollo/client": 3.7.16
     "@graphiql/plugin-explorer": 0.1.14
     "@graphiql/toolkit": 0.8.2
     "@headlessui/react": 1.7.14
@@ -3317,7 +3326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.16.1":
+"optimism@npm:^0.16.2":
   version: 0.16.2
   resolution: "optimism@npm:0.16.2"
   dependencies:
