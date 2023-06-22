@@ -8007,6 +8007,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/tui@workspace:packages/tui"
   dependencies:
+    ansi-escapes: 4.3.2
     boxen: 5.1.2
     chalk: 4.1.2
     enquirer: 2.3.6
@@ -11477,7 +11478,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.0, ansi-escapes@npm:^4.3.2":
+"ansi-escapes@npm:4.3.2, ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.0, ansi-escapes@npm:^4.3.2":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
   dependencies:

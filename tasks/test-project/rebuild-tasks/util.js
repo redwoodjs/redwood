@@ -64,7 +64,7 @@ async function execAndStreamCodemod(task, codemod, target) {
       'jscodeshift',
       '--fail-on-error',
       '-t',
-      `${path.resolve(__dirname, 'codemods', codemod)} ${target}`,
+      `${path.resolve(__dirname, '..', 'codemods', codemod)} ${target}`,
       '--parser',
       'tsx',
       '--verbose=2',

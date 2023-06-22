@@ -11,7 +11,7 @@ const { rimraf } = require('rimraf')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
 
-const { RedwoodTUI } = require('@redwoodjs/tui')
+const { TUITask } = require('@redwoodjs/tui/dist/tasks')
 
 const {
   addFrameworkDepsToProject,
@@ -33,7 +33,30 @@ const {
 } = require('./rebuild-tasks/util')
 const { updatePkgJsonScripts } = require('./util')
 
-const args = yargs(hideBin(process.argv))
+// Try to get the last temporary directory that was used so we can automatically
+// know the folder to resume with
+const cacheFile = path.join(os.tmpdir(), 'redwood-test-project', 'resume.txt')
+let lastTemporaryDirectory
+try {
+  if (fs.existsSync(cacheFile)) {
+    lastTemporaryDirectory = fs
+      .readFileSync(cacheFile, {
+        encoding: 'utf-8',
+        flag: 'r',
+      })
+      .trim()
+
+    // Make sure the directory actually exists
+    if (!fs.existsSync(lastTemporaryDirectory)) {
+      lastTemporaryDirectory = undefined
+    }
+  }
+} catch (_error) {
+  // We don't care if this fails, this is just for convenience
+}
+
+// Parse the CLI arguments
+const { verbose, resume, resumePath, resumeStep } = yargs(hideBin(process.argv))
   .usage('Usage: $0 [option]')
   .option('verbose', {
     default: false,
@@ -48,116 +71,154 @@ const args = yargs(hideBin(process.argv))
   .option('resumePath', {
     type: 'string',
     describe: 'Resume rebuild given the specified test-project path',
+    default: lastTemporaryDirectory,
   })
   .option('resumeStep', {
-    type: 'number',
+    type: 'string',
     describe: 'Resume rebuild from the given step',
   })
   .help()
   .parseSync()
 
-const { verbose, resume, resumePath, resumeStep } = args
+if (resume && resumePath === undefined) {
+  console.error(
+    'Could not resume test-project rebuild without a "resumePath" argument. No previous test-project found automatically.'
+  )
+  process.exit(1)
+}
 
-const OUTPUT_PROJECT_PATH = resumePath
-  ? /* path.resolve(String(resumePath)) */ resumePath
+const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
+const OUTPUT_PROJECT_PATH = resume
+  ? resumePath ?? '' // This ?? is just to make the typing happy it'll never be undefined given the check above
   : path.join(
       os.tmpdir(),
       'redwood-test-project',
       // ":" is problematic with paths
       new Date().toISOString().split(':').join('-')
     )
+if (!fs.existsSync(OUTPUT_PROJECT_PATH)) {
+  fs.mkdirSync(OUTPUT_PROJECT_PATH, { recursive: true })
+  execa.sync('git', ['init'], {
+    cwd: OUTPUT_PROJECT_PATH,
+    stdio: 'ignore',
+  })
+  fs.writeFileSync(cacheFile, OUTPUT_PROJECT_PATH)
+}
 
-const RW_FRAMEWORKPATH = path.join(__dirname, '../../')
+// Check for existing indices from previously committed steps
+const existingIndices = []
+let resumeFromIndex = resumeStep
 
-const tui = new RedwoodTUI()
-
-// /** @type {(string) => import('execa').Options} */
-// function getExecaOptions(cwd) {
-//   return {
-//     ...utilGetExecaOptions(cwd),
-//     stdio: 'pipe',
-//   }
-// }
-
-// /**
-//  * @param {number} step
-//  */
-// function beginStep(step) {
-//   fs.mkdirSync(OUTPUT_PROJECT_PATH, { recursive: true })
-//   fs.writeFileSync(path.join(OUTPUT_PROJECT_PATH, 'step.txt'), '' + step)
-// }
-
-// /**
-//  * @param {number} startStep
-//  * @param {number} step
-//  */
-// function skipStep(startStep, step) {
-//   return () => {
-//     if (startStep > step) {
-//       return 'Skipping... Resuming from step ' + startStep
-//     }
-
-//     return false
-//   }
-// }
-
-// if (resume) {
-//   console.error(
-//     chalk.red.bold(
-//       '\n`resume` option is not supported yet. ' +
-//         'Please use `resumePath` instead.\n'
-//     )
-//   )
-
-//   process.exit(1)
-// }
-
-// if (resumePath && !fs.existsSync(path.join(resumePath, 'redwood.toml'))) {
-//   console.error(
-//     chalk.red.bold(
-//       `
-//       No redwood.toml file found at the given path: ${resumePath}
-//       `
-//     )
-//   )
-//   process.exit(1)
-// }
-
-let startStep = resumeStep || 0
-
-if (!startStep) {
-  // Figure out what step to restart the rebuild from
+if (resume) {
   try {
-    const stepTxtNumber = parseInt(
-      fs.readFileSync(path.join(OUTPUT_PROJECT_PATH, 'step.txt'), 'utf-8'),
-      10
-    )
+    const subprocess = execa.sync('git', ['log', '--oneline'], {
+      cwd: OUTPUT_PROJECT_PATH,
+      stdio: 'pipe',
+    })
+    subprocess.stdout.split('\n').forEach((line) => {
+      const parts = line.split(' ')
+      existingIndices.push(parts[parts.length - 1])
+    })
+  } catch (error) {
+    console.error('Failed to get git log')
+    console.error(error)
+    process.exit(1)
+  }
 
-    if (!Number.isNaN(stepTxtNumber)) {
-      startStep = stepTxtNumber
+  // Start from the last index if no step is given
+  if (resumeStep === undefined) {
+    // git log will be sorted by time so that index 0 should be the latest commit and hence the last step
+    resumeFromIndex = existingIndices[0]
+  }
+}
+
+function indexIsLower(index, comparisonIndex) {
+  const levels1 = index.split('.')
+  const levels2 = comparisonIndex.split('.')
+  // Loop through the levels until one index is exhausted
+  for (let i = 0; i < Math.max(levels1.length, levels2.length); i++) {
+    const level1 = parseInt(levels1[i]) || 0 // Use 0 if level is undefined or NaN
+    const level2 = parseInt(levels2[i]) || 0 // Use 0 if level is undefined or NaN
+    if (level1 < level2) {
+      return true // index1 is less than index2
+    } else if (level1 > level2) {
+      return false // index1 is greater than index2
     }
-  } catch {
-    // No step.txt file found, start from the beginning
+    // Continue to the next level
+  }
+  return false // index1 and index2 are equal
+}
+
+function insertSkipByIndex(tasks, startIndex) {
+  for (const task of tasks) {
+    if (typeof task.task !== 'function') {
+      insertSkipByIndex(task.task, startIndex)
+      // Continue because we only want to skip the leaf tasks
+      continue
+    }
+    task.skip = (task) => {
+      return indexIsLower(task.index, startIndex) || task.index === startIndex
+    }
+  }
+}
+
+function insertCommitOnComplete(tasks) {
+  for (const task of tasks) {
+    if (typeof task.task !== 'function') {
+      insertCommitOnComplete(task.task)
+      // Continue because we only want to commit the leaf tasks
+      continue
+    }
+    task.onComplete = async (task) => {
+      await execa('git', ['add', '.'], {
+        cwd: OUTPUT_PROJECT_PATH,
+        stdio: 'pipe',
+      })
+      await execa(
+        'git',
+        ['commit', '-m', task.index, '--no-gpg-sign', '--allow-empty'],
+        {
+          cwd: OUTPUT_PROJECT_PATH,
+          stdio: 'pipe',
+        }
+      )
+    }
   }
 }
 
 async function runCommand() {
-  console.log('Generating project at ' + OUTPUT_PROJECT_PATH)
-
-  /**
-   * TODO:
-   * Check to see if the directory already exists and has a git repo in it.
-   *
-   * If it does, find the last commited task and resume from there.
-   *   If a step is given as an argument, resume from that step.
-   *   If the step given is before the last commited step, rollback to that commit and resume from there.
-   *
-   * If the folder exists but the git repo is not initialized. Throw an error.
-   * If the folder doesn't exist and the git repo is not initialized, initialize it and start from the beginning.
-   *
-   */
+  console.log("\nRebuilding 'test-project' fixture")
+  console.log(
+    `${resume ? 'Resuming' : 'Generating'} project at ${OUTPUT_PROJECT_PATH}`
+  )
+  console.log()
 
   const tasks = [
+    {
+      title: 'Preparing to resume',
+      task: async (task) => {
+        let subprocess = execa(
+          `git`,
+          ['clean', '-fd'],
+          getExecaOptions(OUTPUT_PROJECT_PATH)
+        )
+        task.streamFromExeca(subprocess, {
+          boxen: { title: 'git clean -fd' },
+        })
+        await subprocess
+
+        subprocess = execa(
+          `git`,
+          ['reset', '--hard'],
+          getExecaOptions(OUTPUT_PROJECT_PATH)
+        )
+        task.streamFromExeca(subprocess, {
+          boxen: { title: 'git reset --hard' },
+        })
+        await subprocess
+      },
+      skip: resume,
+    },
     {
       title: 'Creating project',
       task: async (task) => {
@@ -171,22 +232,24 @@ async function runCommand() {
         })
         await subprocess
       },
-      skip: startStep > 0,
     },
     {
-      title: 'Temporary (v6): add storybook to web dependencies',
+      title:
+        'Temporary (v6): Add storybook and vite canary to web dependencies',
       task: async (task) => {
         const subprocess = execa(
           'yarn',
-          ['workspace web add -D storybook'],
+          ['workspace web add -D storybook @redwoodjs/vite@6.0.0-canary.450'],
           getExecaOptions(OUTPUT_PROJECT_PATH)
         )
         task.streamFromExeca(subprocess, {
-          boxen: { title: 'yarn workspace web add -D storybook' },
+          boxen: {
+            title:
+              'yarn workspace web add -D storybook @redwoodjs/vite@6.0.0-canary.450',
+          },
         })
         await subprocess
       },
-      skip: startStep > 1,
     },
     {
       title: '[link] Building Redwood framework',
@@ -201,7 +264,6 @@ async function runCommand() {
         })
         await subprocess
       },
-      skip: startStep > 2,
     },
     {
       title: '[link] Adding framework dependencies to project',
@@ -216,7 +278,6 @@ async function runCommand() {
         })
         await subprocess
       },
-      skip: startStep > 3,
     },
     {
       title: 'Installing node_modules',
@@ -231,7 +292,6 @@ async function runCommand() {
         })
         await subprocess
       },
-      skip: startStep > 4,
     },
     {
       title: 'Updating ports in redwood.toml...',
@@ -256,7 +316,6 @@ async function runCommand() {
 
         fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
       },
-      skip: startStep > 5,
     },
     {
       title: '[link] Copying framework packages to project',
@@ -271,7 +330,6 @@ async function runCommand() {
         })
         await subprocess
       },
-      skip: startStep > 6,
     },
     {
       title: '[link] Add rwfw project:copy postinstall',
@@ -283,7 +341,6 @@ async function runCommand() {
           },
         })
       },
-      skip: startStep > 7,
     },
     {
       title: 'Apply web codemods',
@@ -367,7 +424,6 @@ async function runCommand() {
           },
         },
       ],
-      skip: startStep > 8,
     },
     {
       title: 'Apply api codemods',
@@ -547,7 +603,6 @@ async function runCommand() {
           },
         },
       ],
-      skip: startStep > 9,
     },
     {
       title: 'Enabling prerender on routes',
@@ -566,22 +621,35 @@ async function runCommand() {
         })
         await subprocess
       },
-      skip: startStep > 10,
     },
     {
       title: 'Lint --fix all the things',
       task: async (task) => {
-        const subprocess = execa(
-          'yarn',
-          ['rw', 'lint', '--fix'],
-          getExecaOptions(OUTPUT_PROJECT_PATH)
-        )
-        task.streamFromExeca(subprocess, {
-          boxen: { title: 'yarn rw lint --fix' },
-        })
-        await subprocess
+        try {
+          const subprocess = execa(
+            'yarn',
+            ['rw', 'lint', '--fix'],
+            getExecaOptions(OUTPUT_PROJECT_PATH)
+          )
+          task.streamFromExeca(subprocess, {
+            boxen: { title: 'yarn rw lint --fix' },
+          })
+          await subprocess
+        } catch (error) {
+          if (
+            !error.stderr &&
+            error.stdout.includes('14 problems (14 errors, 0 warnings)')
+          ) {
+            // This is unfortunate, but linting is expected to fail.
+            // This is the expected error message, so we just fall through
+            // If the expected error message changes you'll have to update the
+            // `includes` check above
+          } else {
+            // Unexpected error. Rethrow
+            throw error
+          }
+        }
       },
-      skip: startStep > 11,
     },
     {
       title: 'Replace and Cleanup Fixture',
@@ -625,23 +693,38 @@ async function runCommand() {
     },
     {
       title: 'All done!',
-      task: (task) => {
-        task.content = verbose
-          ? [
-              '',
-              '-'.repeat(30),
-              '',
-              '✅ Success your project has been generated at:',
-              OUTPUT_PROJECT_PATH,
-              '',
-              '-'.repeat(30),
-            ].join('\n')
-          : `Generated project at ${OUTPUT_PROJECT_PATH}`
+      task: async () => {
+        process.on('exit', () => {
+          console.log()
+          console.log(
+            verbose
+              ? [
+                  '-'.repeat(30),
+                  '',
+                  '✅ Success your project has been generated at:',
+                  OUTPUT_PROJECT_PATH,
+                  '',
+                  '-'.repeat(30),
+                ].join('\n')
+              : `Generated project at ${OUTPUT_PROJECT_PATH}`
+          )
+        })
       },
     },
   ]
 
-  await tui.runTasks(tasks)
+  // Insert skip conditions
+  if (resume && resumeFromIndex) {
+    insertSkipByIndex(tasks, resumeFromIndex)
+  }
+
+  // Insert onComplete to commit that step
+  insertCommitOnComplete(tasks)
+  // Remove the commit onComplete from the last 2 tasks
+  tasks[tasks.length - 2].onComplete = undefined
+  tasks[tasks.length - 1].onComplete = undefined
+
+  await TUITask.run(tasks)
 }
 
 runCommand()

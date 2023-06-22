@@ -7,8 +7,6 @@ import chalk from 'chalk'
 import { prompt as enquirerPrompt } from 'enquirer'
 import { UpdateManager } from 'stdout-update'
 
-import { TUITask, TUITaskDefinition } from './tasks'
-
 /**
  * A default set of styling for the TUI, designed for a cohesive look and feel around the Redwood CLI, CRWA and vairous plugins
  */
@@ -195,63 +193,6 @@ export class RedwoodTUI {
     process.on('exit', () => {
       this.stopReactive()
     })
-  }
-
-  async runTasks(definitions: TUITaskDefinition[]) {
-    // build the tasks
-    const tasks: TUITask[] = []
-    for (let i = 0; i < definitions.length; i++) {
-      tasks.push(new TUITask(definitions[i], `${i + 1}`))
-    }
-
-    // initial pass of the enabled/skipped flags
-    for (const task of tasks) {
-      task.enabled =
-        typeof task.enable === 'function'
-          ? await task.enable(task)
-          : task.enable
-      task.skipped =
-        typeof task.skip === 'function' ? await task.skip(task) : task.skip
-    }
-
-    // start rendering the tasks
-    this.timerId = setInterval(() => {
-      this.drawTasks(tasks)
-    }, parseInt(process.env.REDWOOD_TUI_INTERVAL ?? '80'))
-
-    // run the tasks
-    // const context = {} // TODO: Implement task context
-    for (const task of tasks) {
-      // Break if a task fails
-      if (!(await task.run())) {
-        break
-      }
-    }
-
-    // stop rendering the tasks
-    clearInterval(this.timerId)
-    this.drawTasks(tasks)
-  }
-
-  private drawTasks(tasks: TUITask[]) {
-    // TODO: Don't rerender tasks that have no chance of changing
-    const taskContents = []
-    for (const task of tasks) {
-      if (task.enabled) {
-        taskContents.push({
-          content: task.renderToString(),
-          active: task.state === 'running',
-          index: task.index,
-        })
-      }
-    }
-
-    // TODO: Need to account for terminal height and attempt to keep the active tasks in view
-    const allLines = taskContents
-      .map((c) => c.content)
-      .join('\n')
-      .split('\n')
-    this.manager.update(allLines)
   }
 
   /**
