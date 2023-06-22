@@ -101,7 +101,7 @@ export class ReactiveTUIContent {
       this.spinner = { ...this.spinner, ...options.spinner }
     }
     if (options.boxen) {
-      this.boxen = { ...this.boxen, ...options.boxen }
+      this.boxen = { ...options.boxen }
     }
     if (options.outStream) {
       this.setOutStream(options.outStream)
@@ -148,7 +148,7 @@ export class ReactiveTUIContent {
     }
 
     // Boxen
-    if (this.boxen) {
+    if (Object.keys(this.boxen).length > 0) {
       renderedString = boxen(renderedString, this.boxen)
     }
 
