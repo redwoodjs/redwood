@@ -526,21 +526,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/plugin-explorer@npm:0.1.14":
-  version: 0.1.14
-  resolution: "@graphiql/plugin-explorer@npm:0.1.14"
+"@graphiql/plugin-explorer@npm:0.1.20":
+  version: 0.1.20
+  resolution: "@graphiql/plugin-explorer@npm:0.1.20"
   dependencies:
-    "@graphiql/react": ^0.17.0
+    "@graphiql/react": ^0.17.6
     graphiql-explorer: ^0.9.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 8c8308b4a5a14437bce5cb882955185049e7bcc2870146b8309f3fb8cbe5c70fbf6f8f1b60a796e326ba989f0b3a19f26d8df46a2f4c89954fafa3e2919354ea
+  checksum: bf0f3892e27833b8dd11f1baf8c90d37e2bf769f35d5bd5dfd097e50ccec6072f5b07108b9f6c75387f28a87ce86764fbf87bfc2cee3b9dc4978a8440bb712fa
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.0":
+"@graphiql/react@npm:^0.17.0, @graphiql/react@npm:^0.17.6":
   version: 0.17.6
   resolution: "@graphiql/react@npm:0.17.6"
   dependencies:
@@ -2407,7 +2407,7 @@ __metadata:
   resolution: "frontend@workspace:."
   dependencies:
     "@apollo/client": 3.7.16
-    "@graphiql/plugin-explorer": 0.1.14
+    "@graphiql/plugin-explorer": 0.1.20
     "@graphiql/toolkit": 0.8.2
     "@headlessui/react": 1.7.14
     "@heroicons/react": 2.0.17
