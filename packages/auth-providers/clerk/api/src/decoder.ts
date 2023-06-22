@@ -1,7 +1,7 @@
 import { Decoder } from '@redwoodjs/api'
 
 /**
- * @deprecated This function will be removed; it uses a rate-limited API. Use `jwtAuthDecoder` instead.
+ * @deprecated This function will be removed; it uses a rate-limited API. Use `clerkAuthDecoder` instead.
  */
 export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'clerk') {
@@ -38,7 +38,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
   }
 }
 
-export const jwtAuthDecoder: Decoder = async (token: string, type: string) => {
+export const clerkAuthDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'clerk') {
     return null
   }

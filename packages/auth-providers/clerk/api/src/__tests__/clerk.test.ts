@@ -1,6 +1,6 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 
-import { authDecoder, jwtAuthDecoder } from '../decoder'
+import { authDecoder, clerkAuthDecoder } from '../decoder'
 
 const req = {
   event: {} as APIGatewayProxyEvent,
@@ -32,9 +32,9 @@ describe('deprecated authDecoder', () => {
   })
 })
 
-describe('jwtAuthDecoder', () => {
+describe('clerkAuthDecoder', () => {
   test('returns null for unsupported type', async () => {
-    const decoded = await jwtAuthDecoder('token', 'netlify', req)
+    const decoded = await clerkAuthDecoder('token', 'netlify', req)
 
     expect(decoded).toBe(null)
   })
@@ -43,7 +43,7 @@ describe('jwtAuthDecoder', () => {
     process.env.CLERK_JWT_KEY = 'jwt-key'
 
     await expect(
-      jwtAuthDecoder('invalid-token', 'clerk', req)
+      clerkAuthDecoder('invalid-token', 'clerk', req)
     ).rejects.toThrow()
   })
 })
