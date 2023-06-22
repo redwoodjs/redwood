@@ -34,9 +34,17 @@ export async function exitWithError(
     includeReferenceCode: true,
   }
 ) {
+  // Determine the correct error message
+  const errorMessage =
+    message ?? error.stack ?? (error.toString() || 'Unknown error')
+
+  // Generate a unique reference code for the error which can be used to look up
+  // the error in telemetry if needed and if the user chooses to share it
   const errorReferenceCode = uuidv4()
+
+  // Generate and print a nice message to the user
   const content = [
-    message ?? error.stack ?? (error.toString() || 'Unknown error'),
+    errorMessage,
     includeEpilogue && `\n${'-'.repeat(process.stderr.columns - 8)}\n`,
     includeEpilogue && (epilogue ?? DEFAULT_ERROR_EPILOGUE),
     includeReferenceCode &&
@@ -44,7 +52,6 @@ export async function exitWithError(
   ]
     .filter(Boolean)
     .join('\n')
-
   console.error(
     boxen(content, {
       padding: 1,
@@ -54,12 +61,13 @@ export async function exitWithError(
     })
   )
 
-  recordTelemetryError(error)
+  // Record the error in telemetry
+  recordTelemetryError(error ?? new Error(errorMessage))
   recordTelemetryAttributes({ errorReferenceCode })
   await shutdownTelemetry()
 
   // Legacy telemetry
-  errorTelemetry(process.argv, error.message)
+  errorTelemetry(process.argv, error?.message)
 
-  process.exit(exitCode ?? 1)
+  process.exit(exitCode ?? error?.exitCode ?? 1)
 }
