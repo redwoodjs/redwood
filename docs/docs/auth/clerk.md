@@ -6,10 +6,10 @@ sidebar_label: Clerk
 
 :::caution Did you set up Clerk a while ago?
 
-If you set up Clerk a while ago, you may be using a deprecated authDecoder that's subject to rate limiting.
+If you set up Clerk a while ago, you may be using a deprecated `authDecoder` that's subject to rate limiting.
 This decoder will be removed in the next major.
-There's a new decoder you can use now.
-See the migration guide for how to upgrade now.
+There's a new decoder you can use right now!
+See the [migration guide](https://github.com/redwoodjs/redwood/releases/tag/v5.3.2) for how to upgrade.
 
 :::
 
@@ -87,7 +87,7 @@ After you sign up, you should see `{"isAuthenticated":true}` on the page.
 There's not a lot to the default session token.
 Besides the standard claims, the only thing it really has is the user's `id`.
 Eventually, you'll want to customize it so that you can get back more information from Clerk.
-You can do so by navigating to the "Sessions" section in the nav on the left, then clicking on "Customize session token":
+You can do so by navigating to the "Sessions" section in the nav on the left, then clicking on "Edit" in the "Customize session token" box:
 
 ![clerk_customize_session_token](https://github.com/redwoodjs/redwood/assets/32992335/6d30c616-b4d2-4b44-971b-8addf3b79e5a)
 
@@ -112,10 +112,10 @@ This means that there's some duplication between the features in the SDK and the
 For example, the SDK ha a `SignedOut` component that redirects a user away from a private page—very much like wrapping a route with Redwood's `Private` component.
 We recommend you use Redwood's way of doing things as much as possible since it's much more likely to get along with the rest of the framework.
 
-## Deep dive: the ClerkStatusUpdater component
+## Deep dive: the `ClerkStatusUpdater` component
 
-For Clerk, there's a bit more going on in the `web/src/auth.tsx` file than other auth providers.
+With Clerk, there's a bit more going on in the `web/src/auth.tsx` file than other auth providers.
 This is because Clerk is a bit unlike the other auth providers Redwood integrates with in that it puts an instance of its client SDK on the browser's `window` object.
 That means Redwood has to wait for it to be ready.
-With other providers, Redwood instantiate their client SDK in `web/src/auth.ts{x}`, then passes it to `createAuth`.
+With other providers, Redwood instantiates their client SDK in `web/src/auth.ts{x}`, then passes it to `createAuth`.
 With Clerk, instead Redwood uses Clerk components and hooks, like `ClerkLoaded` and `useUser`, to update Redwood's auth context with the client when it's ready.
