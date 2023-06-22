@@ -1242,9 +1242,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tremor/react@npm:3.2.2":
-  version: 3.2.2
-  resolution: "@tremor/react@npm:3.2.2"
+"@tremor/react@npm:3.2.3":
+  version: 3.2.3
+  resolution: "@tremor/react@npm:3.2.3"
   dependencies:
     "@floating-ui/react": ^0.19.1
     "@headlessui/react": ^1.7.14
@@ -1257,7 +1257,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ">=16.6.0"
-  checksum: 411ffbd012578f53145253b9555790469c7b52b9faa6df746a2e30181056a4608949e918423aef9b6885f1222e4e5cb66d17ca4f248f7d81dc00450276c5df16
+  checksum: 7bcee5207a6c3f7655552bf74015fc4bac0e012760ca08089a8f4d9da58087b2f0255a422c98439d1891d13abfbc4368be2a9dd317c4678db4280ad59808ff4e
   languageName: node
   linkType: hard
 
@@ -1418,12 +1418,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.0.10":
-  version: 18.0.10
-  resolution: "@types/react-dom@npm:18.0.10"
+"@types/react-dom@npm:18.2.6":
+  version: 18.2.6
+  resolution: "@types/react-dom@npm:18.2.6"
   dependencies:
     "@types/react": "*"
-  checksum: a07b900a2d5559830f88b3e525cf279f9f04b4893f4d17e64f5adb08d8abe0e3151e0d3c0ea17d836104ae47594be577529a004265600e4304a43a93b0d5d61e
+  checksum: bd734ca04c52b3c96891a7f9c1139486807dac7a2449fb72e8f8e23018bc6eeeb87a490a105cb39d05ccb7ddf80ed7a441e5bd3e5866c6f6ae8870cd723599e8
   languageName: node
   linkType: hard
 
@@ -1445,25 +1445,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
-  version: 18.2.12
-  resolution: "@types/react@npm:18.2.12"
+"@types/react@npm:*, @types/react@npm:18.2.13":
+  version: 18.2.13
+  resolution: "@types/react@npm:18.2.13"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: dbaefc7732f77cd0c2bdf6e704ab4ee0f611540777c0b9506d972f165144b6fd6883a29dad61f6965c974c040264852aa8def1e3866b5775b3965a4e67bf92f9
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:18.0.27":
-  version: 18.0.27
-  resolution: "@types/react@npm:18.0.27"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 87711931b14cdca07c4149531b4c96e7a56609ed2d010c52bf6bde14b417ac128c326924b14b25667fdaeddacfe98c31fa9625a95af52dae45061df8e30b46a3
+  checksum: 59b434ab9f2cf4874c8715a3d848d7cfd257419af8c0e486e2af5b6760c99aab62a511cb3456a3044d8250c93539016ca84fbd23eaac988e74987e268df2eef2
   languageName: node
   linkType: hard
 
@@ -1632,12 +1621,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:10.4.13":
-  version: 10.4.13
-  resolution: "autoprefixer@npm:10.4.13"
+"autoprefixer@npm:10.4.14":
+  version: 10.4.14
+  resolution: "autoprefixer@npm:10.4.14"
   dependencies:
-    browserslist: ^4.21.4
-    caniuse-lite: ^1.0.30001426
+    browserslist: ^4.21.5
+    caniuse-lite: ^1.0.30001464
     fraction.js: ^4.2.0
     normalize-range: ^0.1.2
     picocolors: ^1.0.0
@@ -1646,7 +1635,7 @@ __metadata:
     postcss: ^8.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: 55ef1feb555516f68c740b3a0050d89b663c4a806a52ff23b184869ddf511b561fa56d66b2adb533bfef3798aee87b31132474582968d84fa59da133f837a230
+  checksum: 66ce961b86acd2a46e05ac1eece8657b3d9edfd2ee3abddd6cfcb32755e6865409f57acf11fe05990d6f166afda85a603678435916267a09652265cfff7b5706
   languageName: node
   linkType: hard
 
@@ -1692,21 +1681,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.21.3":
-  version: 4.21.5
-  resolution: "browserslist@npm:4.21.5"
-  dependencies:
-    caniuse-lite: ^1.0.30001449
-    electron-to-chromium: ^1.4.284
-    node-releases: ^2.0.8
-    update-browserslist-db: ^1.0.10
-  bin:
-    browserslist: cli.js
-  checksum: 903040d2c45b733e1177c288b4f146ff21d45e8a44ccc87d1d7fc2f6a8d021c7ee54b514fd7722529c282381969382a54bd2ab4263f5b6c8981a856b457ea162
-  languageName: node
-  linkType: hard
-
-"browserslist@npm:^4.21.4":
+"browserslist@npm:^4.21.3, browserslist@npm:^4.21.5":
   version: 4.21.9
   resolution: "browserslist@npm:4.21.9"
   dependencies:
@@ -1753,17 +1728,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001426, caniuse-lite@npm:^1.0.30001503":
-  version: 1.0.30001504
-  resolution: "caniuse-lite@npm:1.0.30001504"
-  checksum: 5835cee144ec6c996f1771e885ad57fcb2897b9d840f1918fa5eb6557c9c366cfb340316306d3f95867c1a9296dc07eef3ac48023970691b7c0ad9a53f3c39ef
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001449":
-  version: 1.0.30001486
-  resolution: "caniuse-lite@npm:1.0.30001486"
-  checksum: 092090e547d1052e486584c23be0e242e0afe14ddab4c44490f746a6b113a8d3627e9dd58cd52004351598e070216c40c6f862c08b2cb43a4eb4363e5ae4f829
+"caniuse-lite@npm:^1.0.30001464, caniuse-lite@npm:^1.0.30001503":
+  version: 1.0.30001505
+  resolution: "caniuse-lite@npm:1.0.30001505"
+  checksum: 675f9f56424ceb7efcba1d8c1bf91b88abe0f445b19d8bed68e12d23ad8a2f9b05aec5ba5d41f3cd64f21a2fc3aafe64b45ae76737cac330d2e0881d4fe8312c
   languageName: node
   linkType: hard
 
@@ -2222,13 +2190,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:^1.4.284":
-  version: 1.4.388
-  resolution: "electron-to-chromium@npm:1.4.388"
-  checksum: 9a29490681071077274c3170471119ce30fc6b27fc53e16e91f4a4e253da0d3231f4efd4d86810deeb852da4fccfe6c161b66f70caf01b9544d04606a0cc0a24
-  languageName: node
-  linkType: hard
-
 "electron-to-chromium@npm:^1.4.431":
   version: 1.4.433
   resolution: "electron-to-chromium@npm:1.4.433"
@@ -2446,17 +2407,17 @@ __metadata:
     "@nivo/tooltip": 0.83.0
     "@nivo/treemap": 0.83.0
     "@tailwindcss/forms": 0.5.3
-    "@tremor/react": 3.2.2
-    "@types/react": 18.0.27
-    "@types/react-dom": 18.0.10
+    "@tremor/react": 3.2.3
+    "@types/react": 18.2.13
+    "@types/react-dom": 18.2.6
     "@types/react-grid-layout": 1
     "@vitejs/plugin-react": 4.0.0
-    autoprefixer: 10.4.13
+    autoprefixer: 10.4.14
     graphiql: 2.4.0
     graphql: 16.6.0
     graphql-scalars: 1.21.3
     json-bigint-patch: 0.0.8
-    postcss: 8.4.21
+    postcss: 8.4.24
     pretty-ms: 7.0.0
     react: 18.2.0
     react-dom: 18.2.0
@@ -2468,7 +2429,7 @@ __metadata:
     tailwindcss: 3.3.2
     typescript: 5.1.3
     use-url-search-params: 2.5.1
-    vite: 4.1.0
+    vite: 4.1.5
   languageName: unknown
   linkType: soft
 
@@ -3246,7 +3207,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.4, nanoid@npm:^3.3.6":
+"nanoid@npm:^3.3.6":
   version: 3.3.6
   resolution: "nanoid@npm:3.3.6"
   bin:
@@ -3286,13 +3247,6 @@ __metadata:
   version: 2.0.12
   resolution: "node-releases@npm:2.0.12"
   checksum: 01f9a7c135be5c8bc989b6c10b9840a7aee09040d46ba4e64b5ea0174fb8891f1277514aef75033ce42031f6cb72a04d4a7e99c70ca25488ad63ad6fc5a5b6a0
-  languageName: node
-  linkType: hard
-
-"node-releases@npm:^2.0.8":
-  version: 2.0.10
-  resolution: "node-releases@npm:2.0.10"
-  checksum: 90947653e8e3d85bda4bcbf28d019693ccfb5d5947838ca64e91208b51d7bfc13ba930b8216389a4faffbad8145b2c616bf1f7a09c97a1a9ac57fd6ef6d01c5c
   languageName: node
   linkType: hard
 
@@ -3508,18 +3462,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.21":
-  version: 8.4.21
-  resolution: "postcss@npm:8.4.21"
-  dependencies:
-    nanoid: ^3.3.4
-    picocolors: ^1.0.0
-    source-map-js: ^1.0.2
-  checksum: a26e7cc86a1807d624d9965914c26c20faa3f237184cbd69db537387f6a4f62df97347549144284d47e9e8e27e7c60e797cb3b92ad36cb2f4c3c9cb3b73f9758
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.4.21, postcss@npm:^8.4.23":
+"postcss@npm:8.4.24, postcss@npm:^8.4.21, postcss@npm:^8.4.23":
   version: 8.4.24
   resolution: "postcss@npm:8.4.24"
   dependencies:
@@ -4399,7 +4342,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"update-browserslist-db@npm:^1.0.10, update-browserslist-db@npm:^1.0.11":
+"update-browserslist-db@npm:^1.0.11":
   version: 1.0.11
   resolution: "update-browserslist-db@npm:1.0.11"
   dependencies:
@@ -4482,9 +4425,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.1.0":
-  version: 4.1.0
-  resolution: "vite@npm:4.1.0"
+"vite@npm:4.1.5":
+  version: 4.1.5
+  resolution: "vite@npm:4.1.5"
   dependencies:
     esbuild: ^0.16.14
     fsevents: ~2.3.2
@@ -4516,7 +4459,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 3bd18d0919a57ee815a3108932e718bf2b80e96a650444ed462d76399f9e2c59a15b7dac12e4f04cc9ac1a10652a1ef5d2fe49c8a6a25ca047fe38f1afa93a6c
+  checksum: 5dcc3c1ede757245ccaa7d8b4c2faf0cc3fac8d359daf71019e46fd7c9d89fd32f9d935f35ab210aad6527db8cd3c6753a6198433e699a47fb3c9222a7f61021
   languageName: node
   linkType: hard
 

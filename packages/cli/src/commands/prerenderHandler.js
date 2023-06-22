@@ -3,6 +3,7 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { getPaths } from '@redwoodjs/project-config'
@@ -274,6 +275,12 @@ const diagnosticCheck = () => {
 }
 
 export const handler = async ({ path: routerPath, dryRun, verbose }) => {
+  recordTelemetryAttributes({
+    command: 'prerender',
+    dryRun,
+    verbose,
+  })
+
   const listrTasks = await getTasks(dryRun, routerPath)
 
   const tasks = new Listr(listrTasks, {

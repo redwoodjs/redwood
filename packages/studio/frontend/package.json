@@ -20,7 +20,7 @@
     "@nivo/tooltip": "0.83.0",
     "@nivo/treemap": "0.83.0",
     "@tailwindcss/forms": "0.5.3",
-    "@tremor/react": "3.2.2",
+    "@tremor/react": "3.2.3",
     "graphiql": "2.4.0",
     "graphql": "16.6.0",
     "graphql-scalars": "1.21.3",
@@ -36,14 +36,14 @@
     "use-url-search-params": "2.5.1"
   },
   "devDependencies": {
-    "@types/react": "18.0.27",
-    "@types/react-dom": "18.0.10",
+    "@types/react": "18.2.13",
+    "@types/react-dom": "18.2.6",
     "@types/react-grid-layout": "1",
     "@vitejs/plugin-react": "4.0.0",
-    "autoprefixer": "10.4.13",
-    "postcss": "8.4.21",
+    "autoprefixer": "10.4.14",
+    "postcss": "8.4.24",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.3",
-    "vite": "4.1.0"
+    "vite": "4.1.5"
   }
 }
