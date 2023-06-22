@@ -26,13 +26,13 @@
   "dependencies": {
     "@redwoodjs/project-config": "5.0.0",
     "@redwoodjs/telemetry": "5.0.0",
-    "@storybook/addon-a11y": "7.0.22",
-    "@storybook/addon-docs": "7.0.22",
-    "@storybook/addon-essentials": "7.0.22",
-    "@storybook/react-webpack5": "7.0.22",
+    "@storybook/addon-a11y": "7.0.23",
+    "@storybook/addon-docs": "7.0.23",
+    "@storybook/addon-essentials": "7.0.23",
+    "@storybook/react-webpack5": "7.0.23",
     "chalk": "4.1.2",
     "execa": "5.1.1",
-    "storybook": "7.0.22",
+    "storybook": "7.0.23",
     "terminal-link": "2.1.1",
     "yargs": "17.7.2"
   },
