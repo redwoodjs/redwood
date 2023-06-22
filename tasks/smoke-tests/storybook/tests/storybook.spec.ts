@@ -80,7 +80,7 @@ test('Mocks current user, and updates UI while dev server is running', async ({
   page,
 }: PlaywrightTestArgs) => {
   const profileStoryPath = path.join(
-    process.env.REDWOOD_PROJECT_PATH as string,
+    process.env.REDWOOD_TEST_PROJECT_PATH as string,
     'web/src/pages/ProfilePage/ProfilePage.stories.tsx'
   )
 
