@@ -566,23 +566,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.8.2":
-  version: 0.8.2
-  resolution: "@graphiql/toolkit@npm:0.8.2"
-  dependencies:
-    "@n1ru4l/push-pull-async-iterable-iterator": ^3.1.0
-    meros: ^1.1.4
-  peerDependencies:
-    graphql: ^15.5.0 || ^16.0.0
-    graphql-ws: ">= 4.5.0"
-  peerDependenciesMeta:
-    graphql-ws:
-      optional: true
-  checksum: c07bcf27356da73dc99cb8eb4372e75b0ea15cd98b82d46ed221b390172aecfefaf3cb3773425fd8e8ca067540752440a55bc46eaa92311e5d16d270d5b8f1da
-  languageName: node
-  linkType: hard
-
-"@graphiql/toolkit@npm:^0.8.2, @graphiql/toolkit@npm:^0.8.4":
+"@graphiql/toolkit@npm:0.8.4, @graphiql/toolkit@npm:^0.8.2, @graphiql/toolkit@npm:^0.8.4":
   version: 0.8.4
   resolution: "@graphiql/toolkit@npm:0.8.4"
   dependencies:
@@ -2408,7 +2392,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.7.16
     "@graphiql/plugin-explorer": 0.1.20
-    "@graphiql/toolkit": 0.8.2
+    "@graphiql/toolkit": 0.8.4
     "@headlessui/react": 1.7.14
     "@heroicons/react": 2.0.17
     "@nivo/bar": 0.83.0
