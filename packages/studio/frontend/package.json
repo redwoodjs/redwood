@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@apollo/client": "3.7.8",
+    "@apollo/client": "3.7.16",
     "@graphiql/plugin-explorer": "0.1.14",
     "@graphiql/toolkit": "0.8.2",
     "@headlessui/react": "1.7.14",
