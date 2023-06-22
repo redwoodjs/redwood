@@ -1,0 +1,27 @@
+// api/src/graphql/auctions.sdl.ts
+
+export const schema = gql`
+  type Query {
+    ${name}(id: ID!): ${name} @skipAuth
+  }
+
+  type ${name} {
+    id: ID!
+    title: String!
+    highestBid: Bid
+    bids: [Bid!]!
+  }
+
+  type Bid {
+    amount: Int!
+  }
+
+  type Mutation {
+    bid(input: BidInput!): Bid @skipAuth
+  }
+
+  input BidInput {
+    ${name}Id: ID!
+    amount: Int!
+  }
+`

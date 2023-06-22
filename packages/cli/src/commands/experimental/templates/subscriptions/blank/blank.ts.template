@@ -1,0 +1,37 @@
+import gql from 'graphql-tag'
+
+import { logger } from 'src/lib/logger'
+
+export const schema = gql`
+  type Subscription {
+    ${name}(id: ID!): Message!
+  }
+`
+export type New${name}Channel<T extends string> = {
+  [Key in `${name}:<%= '$' %>{T}`]: [payload: { from: string; body: string }]
+}
+
+/**
+ * To test this ${name} subscription, run the following in one GraphQL Playground to subscribe:
+ *
+ *
+ *
+ * And run the following in another GraphQL Playground to publish and send a ${name} to the room:
+ *
+ */
+const ${name} = {
+  ${name}: {
+    subscribe: (_, { id }, { pubSub }) => {
+      logger.debug({ id }, '${name} subscription')
+
+      return pubSub.subscribe(`${name}:<%= '$' %>{id}`)
+    },
+    resolve: (payload) => {
+      logger.debug({ payload }, '${name} subscription resolve')
+
+      return payload
+    },
+  },
+}
+
+export default ${name}

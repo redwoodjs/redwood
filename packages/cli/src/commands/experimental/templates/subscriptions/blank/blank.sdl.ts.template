@@ -1,0 +1,20 @@
+export const schema = gql`
+  type ${name} {
+    from: String
+    body: String
+  }
+
+  type Query {
+    room(id: ID!): [${name}!]! @skipAuth
+  }
+
+  input Send${name}Input {
+    id: ID!
+    from: String!
+    body: String!
+  }
+
+  type Mutation {
+    send(input: Send${name}Input!): ${name}! @skipAuth
+  }
+`

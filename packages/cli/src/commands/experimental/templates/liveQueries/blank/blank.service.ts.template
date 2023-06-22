@@ -1,0 +1,52 @@
+// api/src/services/${name}s/${name}s.ts
+
+import { logger } from 'src/lib/logger'
+
+const ${name}s = [
+  { id: '1', title: 'RedwoodJS Logo Shirt', bids: [{ amount: 20 }] },
+  { id: '2', title: 'RedwoodJS Lapel Pin', bids: [{ amount: 5 }] },
+  { id: '3', title: 'RedwoodJS Beanie', bids: [{ amount: 15 }] },
+  { id: '4', title: 'RedwoodJS Dad Hat', bids: [{ amount: 20 }] },
+  { id: '5', title: 'RedwoodJS Skater Hat', bids: [{ amount: 20 }] },
+]
+
+/**
+ * To test this live query, run the following in the GraphQL Playground:
+ *
+ *
+ * And then make a bid with the following mutation:
+ *
+ */
+export const ${name} = async ({ id }) => {
+  const found${name} = ${name}s.find((a) => a.id === id)
+  logger.debug({ id, ${name}: found${name} }, '${name}')
+  return found${name}
+}
+
+export const bid = async ({ input }, { context }) => {
+  const { id, amount } = input
+
+  const index = ${name}s.findIndex((a) => a.id === id)
+
+  const bid = { amount }
+
+  ${name}s[index].bids.push(bid)
+  logger.debug({ id, bid }, 'Added bid to ${name}')
+
+  const key = `${name}:<%= '$' %>{id}`
+  context.liveQueryStore.invalidate(key)
+
+  logger.debug({ key }, 'Invalidated ${name} key in liveQueryStore')
+
+  return bid
+}
+
+export const ${name} = {
+  highestBid: (obj, { root }) => {
+    const [max] = root.bids.sort((a, b) => b.amount - a.amount)
+
+    logger.debug({ obj, root }, 'highestBid')
+
+    return max
+  },
+}

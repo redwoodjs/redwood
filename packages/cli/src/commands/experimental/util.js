@@ -58,3 +58,18 @@ export const isServerFileSetup = () => {
 
   return true
 }
+
+export const isRealtimeSetup = () => {
+  const realtimePath = path.join(
+    getPaths().api.lib,
+    `realtime.${isTypeScriptProject() ? 'ts' : 'js'}`
+  )
+
+  if (!fs.existsSync(realtimePath)) {
+    throw new Error(
+      'Adding realtime events to requires that RedwoodJS Realtime be setup. Please run `yarn rw exp setup-realtime` first.'
+    )
+  }
+
+  return true
+}
