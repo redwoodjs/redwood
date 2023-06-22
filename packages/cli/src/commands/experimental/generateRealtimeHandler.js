@@ -1,6 +1,9 @@
 import path from 'path'
 
+import camelcase from 'camelcase'
 import { Listr } from 'listr2'
+import pascalcase from 'pascalcase'
+import pluralize from 'pluralize'
 import prompts from 'prompts'
 
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
@@ -18,11 +21,24 @@ import { isTypeScriptProject } from '../../lib/project'
 import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRealtime'
 import { printTaskEpilogue, isServerFileSetup, isRealtimeSetup } from './util'
 
+const templateVariables = (name) => {
+  return {
+    name,
+    pluralName: pluralize(name),
+    functionName: camelcase(name),
+    queryName: camelcase(name),
+    subscriptionName: camelcase(name),
+    modelName: pascalcase(name),
+    typeName: pascalcase(name),
+  }
+}
+
 export async function handler({ name, type, force, verbose }) {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
 
   let functionType = type
+  name = name.toLowerCase()
 
   // Prompt to select what type if not specified
   if (!functionType) {
@@ -133,15 +149,23 @@ export async function handler({ name, type, force, verbose }) {
 
           // write all files
           return [
-            writeFile(sdlFile, generateTemplate(sdlContent, { name }), {
-              overwriteExisting: force,
-            }),
-            writeFile(serviceFile, generateTemplate(serviceContent, { name }), {
-              overwriteExisting: force,
-            }),
+            writeFile(
+              sdlFile,
+              generateTemplate(sdlContent, templateVariables(name)),
+              {
+                overwriteExisting: force,
+              }
+            ),
+            writeFile(
+              serviceFile,
+              generateTemplate(serviceContent, templateVariables(name)),
+              {
+                overwriteExisting: force,
+              }
+            ),
             writeFile(
               exampleFile,
-              generateTemplate(setupScriptContent, { name }),
+              generateTemplate(setupScriptContent, templateVariables(name)),
               {
                 overwriteExisting: force,
               }
@@ -189,12 +213,20 @@ export async function handler({ name, type, force, verbose }) {
 
           // write all files
           return [
-            writeFile(sdlFile, generateTemplate(sdlContent, { name }), {
-              overwriteExisting: force,
-            }),
-            writeFile(serviceFile, generateTemplate(serviceContent, { name }), {
-              overwriteExisting: force,
-            }),
+            writeFile(
+              sdlFile,
+              generateTemplate(sdlContent, templateVariables(name)),
+              {
+                overwriteExisting: force,
+              }
+            ),
+            writeFile(
+              serviceFile,
+              generateTemplate(serviceContent, templateVariables(name)),
+              {
+                overwriteExisting: force,
+              }
+            ),
           ]
         },
       },

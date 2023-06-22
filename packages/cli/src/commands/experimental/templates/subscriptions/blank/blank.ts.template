@@ -4,10 +4,12 @@ import { logger } from 'src/lib/logger'
 
 export const schema = gql`
   type Subscription {
-    ${name}(id: ID!): Message!
+    ${subscriptionName}(id: ID!): ${typeName}!
   }
 `
-export type New${name}Channel<T extends string> = {
+// Be sure to import this type and then in `api/src/lib/realtime.ts` extend PubSubChannels:
+// export type PubSubChannels = ExistingChannel<string> & New${typeName}Channel<string
+export type New${typeName}Channel<T extends string> = {
   [Key in `${name}:<%= '$' %>{T}`]: [payload: { from: string; body: string }]
 }
 
@@ -19,12 +21,12 @@ export type New${name}Channel<T extends string> = {
  * And run the following in another GraphQL Playground to publish and send a ${name} to the room:
  *
  */
-const ${name} = {
-  ${name}: {
+const ${typeName} = {
+  ${typeName}: {
     subscribe: (_, { id }, { pubSub }) => {
       logger.debug({ id }, '${name} subscription')
 
-      return pubSub.subscribe(`${name}:<%= '$' %>{id}`)
+      return pubSub.subscribe(`${typeName}:<%= '$' %>{id}`)
     },
     resolve: (payload) => {
       logger.debug({ payload }, '${name} subscription resolve')

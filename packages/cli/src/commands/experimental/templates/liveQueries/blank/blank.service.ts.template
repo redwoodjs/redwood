@@ -2,7 +2,7 @@
 
 import { logger } from 'src/lib/logger'
 
-const ${name}s = [
+const ${pluralName} = [
   { id: '1', title: 'RedwoodJS Logo Shirt', bids: [{ amount: 20 }] },
   { id: '2', title: 'RedwoodJS Lapel Pin', bids: [{ amount: 5 }] },
   { id: '3', title: 'RedwoodJS Beanie', bids: [{ amount: 15 }] },
@@ -41,7 +41,7 @@ export const bid = async ({ input }, { context }) => {
   return bid
 }
 
-export const ${name} = {
+export const ${modelName} = {
   highestBid: (obj, { root }) => {
     const [max] = root.bids.sort((a, b) => b.amount - a.amount)
 

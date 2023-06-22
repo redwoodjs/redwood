@@ -2,10 +2,10 @@
 
 export const schema = gql`
   type Query {
-    ${name}(id: ID!): ${name} @skipAuth
+    ${queryName}(id: ID!): ${typeName} @skipAuth
   }
 
-  type ${name} {
+  type ${typeName} {
     id: ID!
     title: String!
     highestBid: Bid
