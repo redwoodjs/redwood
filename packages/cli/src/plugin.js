@@ -9,7 +9,7 @@ import { installModule, isModuleInstalled } from './lib/packages'
 /**
  * The file inside .redwood which will contain cached plugin command mappings
  */
-const PLUGIN_CACHE_FILENAME = 'command-cache.json'
+const PLUGIN_CACHE_FILENAME = 'commandCache.json'
 
 const PLUGIN_CACHE_DEFAULT = {
   '@redwoodjs/cli-storybook': ['storybook', 'sb'],
