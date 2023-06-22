@@ -112,7 +112,7 @@ export class TUITask {
 
     this.onError =
       definition.onError ??
-      (async (task, error) => {
+      ((task, error) => {
         task.mode = 'text'
         task.header = ''
         task.content = error.stack ?? error.message ?? error.toString()
@@ -286,11 +286,13 @@ export class TUITask {
     renderedString = renderedString.trimEnd()
 
     // Enforce a limit on the number of lines
-    const lines = renderedString.split('\n')
-    if (lines.length > this.limit) {
-      renderedString = lines
-        .slice(lines.length - this.limit, lines.length)
-        .join('\n')
+    if (this.limit > 0) {
+      const lines = renderedString.split('\n')
+      if (lines.length > this.limit) {
+        renderedString = lines
+          .slice(lines.length - this.limit, lines.length)
+          .join('\n')
+      }
     }
 
     // Add the boxen if enabled
@@ -358,6 +360,7 @@ export class TUITask {
         await childTask.run()
         if (childTask.state === 'errored') {
           this.state = 'errored'
+          return
         }
       }
       this.state = 'completed'
@@ -368,6 +371,7 @@ export class TUITask {
       } catch (error) {
         this.state = 'errored'
         await this.onError(this, error as Error)
+        return
       }
     }
     if (this.state === 'completed') {
@@ -474,6 +478,9 @@ export class TUITask {
     // Run the tasks
     for (const task of tasks) {
       await task.run()
+      if (task.state === 'errored') {
+        break
+      }
     }
 
     // Stop rendering the tasks
