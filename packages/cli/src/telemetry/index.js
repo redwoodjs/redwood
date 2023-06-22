@@ -27,27 +27,37 @@ let traceProcessor
 let traceExporter
 
 export async function startTelemetry() {
-  diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
+  try {
+    diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
 
-  // Tracing
-  traceProvider = new NodeTracerProvider()
-  traceExporter = new CustomFileExporter()
-  traceProcessor = new BatchSpanProcessor(traceExporter)
-  traceProvider.addSpanProcessor(traceProcessor)
-  traceProvider.register()
+    // Tracing
+    traceProvider = new NodeTracerProvider()
+    traceExporter = new CustomFileExporter()
+    traceProcessor = new BatchSpanProcessor(traceExporter)
+    traceProvider.addSpanProcessor(traceProcessor)
+    traceProvider.register()
 
-  process.on('SIGTERM', async () => {
-    await shutdownTelemetry()
-  })
-  process.on('SIGINT', async () => {
-    // TODO: Should we record a SIGINT as a telemetry event?
-    await shutdownTelemetry()
-  })
+    process.on('SIGTERM', async () => {
+      await shutdownTelemetry()
+    })
+    process.on('SIGINT', async () => {
+      // TODO: Should we record a SIGINT as a telemetry event?
+      await shutdownTelemetry()
+    })
+  } catch (error) {
+    console.error('Telemetry error')
+    console.error(error)
+  }
 }
 
 export async function shutdownTelemetry() {
   try {
-    opentelemetry.trace.getActiveSpan()?.end()
+    // End the active spans
+    while (opentelemetry.trace.getActiveSpan()?.isRecording()) {
+      opentelemetry.trace.getActiveSpan()?.end()
+    }
+
+    // Shutdown OTel to ensure all data is flushed
     await traceProvider?.shutdown()
     await traceProcessor?.shutdown()
     traceExporter?.shutdown()
