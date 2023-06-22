@@ -6,7 +6,6 @@ import {
   recordTelemetryAttributes,
   recordTelemetryError,
 } from '@redwoodjs/cli-helpers'
-import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { shutdownTelemetry } from '../telemetry'
 
@@ -69,9 +68,6 @@ export async function exitWithError(
   recordTelemetryError(error ?? new Error(errorMessage))
   recordTelemetryAttributes({ errorReferenceCode })
   await shutdownTelemetry()
-
-  // Legacy telemetry
-  errorTelemetry(process.argv, error?.message)
 
   process.exit(exitCode)
 }
