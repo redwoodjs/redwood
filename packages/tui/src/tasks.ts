@@ -385,7 +385,6 @@ export class TUITask {
     // Stdout
     this.outStream = new stream.Writable({
       write: (chunk: Buffer, _encoding, next) => {
-        console.log(_encoding)
         if (this.mode === 'stream') {
           this.outContent += chunk.toString('utf-8')
         }
