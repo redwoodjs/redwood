@@ -1,4 +1,4 @@
-// @Note: not sure why we have to do these weird imports!
+// @Note: babel is cjs modules, so we need to do these strange imports
 import babelGenerate from '@babel/generator'
 const generate = babelGenerate.default
 import * as babelParser from '@babel/parser'
@@ -7,7 +7,7 @@ const traverse = babelTraverse.default
 import * as babelTypes from '@babel/types'
 
 /**
- * This function will take contents of vite.config.js/ts and add exclude property to the defineConfig object
+ * This function will take contents of vite.config.js/ts and add optimizeDeps.force property to the viteConfig object
  *
  * @param {string} code
  * @param {string[]} excludeValue
