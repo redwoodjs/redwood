@@ -29,7 +29,7 @@
     "@babel/runtime-corejs3": "7.22.5",
     "@redwoodjs/internal": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
-    "@vitejs/plugin-react": "4.0.0",
+    "@vitejs/plugin-react": "4.0.1",
     "buffer": "6.0.3",
     "core-js": "3.31.0",
     "vite": "4.3.9",
