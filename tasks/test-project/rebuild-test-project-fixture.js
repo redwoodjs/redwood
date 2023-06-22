@@ -128,7 +128,7 @@ if (resume) {
   // Start from the last index if no step is given
   if (resumeStep === undefined) {
     // git log will be sorted by time so that index 0 should be the latest commit and hence the last step
-    resumeFromIndex = existingIndices[0]
+    resumeFromIndex = existingIndices[0].replace('x', '')
   }
 }
 
@@ -176,7 +176,7 @@ function insertCommitOnComplete(tasks) {
       })
       await execa(
         'git',
-        ['commit', '-m', task.index, '--no-gpg-sign', '--allow-empty'],
+        ['commit', '-m', `${task.index}x`, '--no-gpg-sign', '--allow-empty'],
         {
           cwd: OUTPUT_PROJECT_PATH,
           stdio: 'pipe',
@@ -209,7 +209,7 @@ async function runCommand() {
 
         subprocess = execa(
           `git`,
-          ['reset', '--hard'],
+          ['reset', '--hard', `:/${resumeFromIndex}x`],
           getExecaOptions(OUTPUT_PROJECT_PATH)
         )
         task.streamFromExeca(subprocess, {
@@ -217,7 +217,6 @@ async function runCommand() {
         })
         await subprocess
       },
-      skip: resume,
     },
     {
       title: 'Creating project',
@@ -717,10 +716,11 @@ async function runCommand() {
   if (resume && resumeFromIndex) {
     insertSkipByIndex(tasks, resumeFromIndex)
   }
+  tasks[0].skip = !resume
 
   // Insert onComplete to commit that step
   insertCommitOnComplete(tasks)
-  // Remove the commit onComplete from the last 2 tasks
+  tasks[0].onComplete = undefined
   tasks[tasks.length - 2].onComplete = undefined
   tasks[tasks.length - 1].onComplete = undefined
 
