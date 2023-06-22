@@ -1242,9 +1242,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tremor/react@npm:3.2.2":
-  version: 3.2.2
-  resolution: "@tremor/react@npm:3.2.2"
+"@tremor/react@npm:3.2.3":
+  version: 3.2.3
+  resolution: "@tremor/react@npm:3.2.3"
   dependencies:
     "@floating-ui/react": ^0.19.1
     "@headlessui/react": ^1.7.14
@@ -1257,7 +1257,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ">=16.6.0"
-  checksum: 411ffbd012578f53145253b9555790469c7b52b9faa6df746a2e30181056a4608949e918423aef9b6885f1222e4e5cb66d17ca4f248f7d81dc00450276c5df16
+  checksum: 7bcee5207a6c3f7655552bf74015fc4bac0e012760ca08089a8f4d9da58087b2f0255a422c98439d1891d13abfbc4368be2a9dd317c4678db4280ad59808ff4e
   languageName: node
   linkType: hard
 
@@ -2407,7 +2407,7 @@ __metadata:
     "@nivo/tooltip": 0.83.0
     "@nivo/treemap": 0.83.0
     "@tailwindcss/forms": 0.5.3
-    "@tremor/react": 3.2.2
+    "@tremor/react": 3.2.3
     "@types/react": 18.2.13
     "@types/react-dom": 18.2.6
     "@types/react-grid-layout": 1
