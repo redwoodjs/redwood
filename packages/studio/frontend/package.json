@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.7.16",
-    "@graphiql/plugin-explorer": "0.1.14",
+    "@graphiql/plugin-explorer": "0.1.20",
     "@graphiql/toolkit": "0.8.2",
     "@headlessui/react": "1.7.14",
     "@heroicons/react": "2.0.17",
@@ -32,7 +32,7 @@
     "react-grid-layout": "1.3.4",
     "react-router-dom": "6.8.1",
     "react-split-pane": "0.1.92",
-    "react-toastify": "9.1.2",
+    "react-toastify": "9.1.3",
     "use-url-search-params": "2.5.1"
   },
   "devDependencies": {
