@@ -8,8 +8,8 @@ export const schema = gql`
   }
 `
 // Be sure to import this type and then in `api/src/lib/realtime.ts` extend PubSubChannels:
-// export type PubSubChannels = ExistingChannel<string> & New${typeName}Channel<string
-export type New${typeName}Channel<T extends string> = {
+// export type PubSubChannels = ExistingChannel<string> & Publish${typeName}Channel<string
+export type Publish${typeName}Channel<T extends string> = {
   [Key in `${name}:<%= '$' %>{T}`]: [payload: { from: string; body: string }]
 }
 

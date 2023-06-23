@@ -12,7 +12,8 @@ export function builder(yargs) {
     // .scriptName('rw exp generate-realtime')
     .positional('name', {
       type: 'string',
-      description: 'Name of the realtime event to setup',
+      description:
+        'Name of the realtime event to setup. This should be a type or model name like: Widget, Sprocket, etc.',
       demandOption: true,
     })
     .option('type', {

@@ -2,26 +2,26 @@
 
 export const schema = gql`
   type Query {
-    ${queryName}(id: ID!): ${typeName} @skipAuth
+    ${liveQueryName}(id: ID!): ${typeName} @skipAuth
   }
 
   type ${typeName} {
     id: ID!
     title: String!
-    highestBid: Bid
-    bids: [Bid!]!
+    largest${typeName}Item: ${typeName}Item
+    items: [${typeName}Item!]!
   }
 
-  type Bid {
+  type ${typeName}Item {
     amount: Int!
   }
 
   type Mutation {
-    bid(input: BidInput!): Bid @skipAuth
+    create${typeName}Item(input: ${typeName}ItemInput!): ${typeName}Item @skipAuth
   }
 
-  input BidInput {
-    ${name}Id: ID!
+  input ${typeName}ItemInput {
+    ${camelName}Id: ID!
     amount: Int!
   }
 `

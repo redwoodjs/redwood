@@ -3,7 +3,7 @@ import path from 'path'
 import camelcase from 'camelcase'
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
-import pluralize from 'pluralize'
+import pluralize, { singular } from 'pluralize'
 import prompts from 'prompts'
 
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
@@ -22,23 +22,30 @@ import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRealtime'
 import { printTaskEpilogue, isServerFileSetup, isRealtimeSetup } from './util'
 
 const templateVariables = (name) => {
+  name = singular(name.toLowerCase())
+
   return {
     name,
+    collectionName: pluralize(name),
     pluralName: pluralize(name),
+    pluralPascalName: pascalcase(pluralize(name)),
+    camelName: camelcase(name),
     functionName: camelcase(name),
-    queryName: camelcase(name),
+    liveQueryName: `recent${pascalcase(pluralize(name))}`,
     subscriptionName: camelcase(name),
     modelName: pascalcase(name),
     typeName: pascalcase(name),
+    subscriptionInputType: `Publish${pascalcase(name)}Input`,
+    subscriptionServiceResolver: `publish${pascalcase(name)}`,
   }
 }
 
 export async function handler({ name, type, force, verbose }) {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
+  name = singular(name.toLowerCase())
 
   let functionType = type
-  name = name.toLowerCase()
 
   // Prompt to select what type if not specified
   if (!functionType) {
