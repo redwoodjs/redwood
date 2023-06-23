@@ -131,11 +131,13 @@ The easiest way to achieve this, is to make your SVGs a React component. Open up
 ```tsx title="web/src/components/icons/CarIcon.tsx"
 import type { SVGProps } from "react"
 
-export const Car = (props: SVGProps) => {
+export const CarIcon = (props: SVGProps) => {
   return (
 // 👇 content of your SVG file
     <svg
+      // highlight-next-line
       className="fill-blue-500" // 👈 you can use classes, like with tailwind
+      // highlight-next-line
       stroke={props.strokeColor} // or adjust properties directly
     // ...
 ```
@@ -155,6 +157,7 @@ There's many different ways to peel this potato - it's all a search away - but i
 @font-face {
     font-family: 'Redwood Neue';
     /* 👇 it's a relative path */
+    // highlight-next-line
     src: url('../../public/fonts/RedwoodNeue.woff2')
       format('woff2');
     font-weight: 300;
