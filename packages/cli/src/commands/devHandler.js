@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { argv } from 'process'
+import fg from 'fast-glob'
 
 import concurrently from 'concurrently'
 
@@ -12,7 +13,6 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
-import fg from 'fast-glob'
 
 const defaultApiDebugPort = 18911
 
