@@ -4,7 +4,7 @@ import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import opentelemetry from '@opentelemetry/api'
 import {
   NodeTracerProvider,
-  BatchSpanProcessor,
+  SimpleSpanProcessor,
 } from '@opentelemetry/sdk-trace-node'
 
 import { spawnBackgroundProcess } from '../lib/background'
@@ -17,7 +17,7 @@ import { CustomFileExporter } from './exporter'
 let traceProvider
 
 /**
- * @type BatchSpanProcessor
+ * @type SimpleSpanProcessor
  */
 let traceProcessor
 
@@ -26,6 +26,11 @@ let traceProcessor
  */
 let traceExporter
 
+/**
+ * @type boolean
+ */
+let isShutdown = false
+
 export async function startTelemetry() {
   try {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
@@ -33,16 +38,12 @@ export async function startTelemetry() {
     // Tracing
     traceProvider = new NodeTracerProvider()
     traceExporter = new CustomFileExporter()
-    traceProcessor = new BatchSpanProcessor(traceExporter)
+    traceProcessor = new SimpleSpanProcessor(traceExporter)
     traceProvider.addSpanProcessor(traceProcessor)
     traceProvider.register()
 
-    process.on('SIGTERM', async () => {
-      await shutdownTelemetry()
-    })
-    process.on('SIGINT', async () => {
-      // TODO: Should we record a SIGINT as a telemetry event?
-      await shutdownTelemetry()
+    process.on('exit', () => {
+      shutdownTelemetry()
     })
   } catch (error) {
     console.error('Telemetry error')
@@ -50,16 +51,19 @@ export async function startTelemetry() {
   }
 }
 
-export async function shutdownTelemetry() {
+export function shutdownTelemetry() {
+  if (isShutdown) {
+    return
+  }
+  isShutdown = true
+
   try {
     // End the active spans
     while (opentelemetry.trace.getActiveSpan()?.isRecording()) {
       opentelemetry.trace.getActiveSpan()?.end()
     }
 
-    // Shutdown OTel to ensure all data is flushed
-    await traceProvider?.shutdown()
-    await traceProcessor?.shutdown()
+    // Shutdown exporter to ensure all data is flushed
     traceExporter?.shutdown()
 
     // Send the telemetry in a background process, so we don't block the CLI

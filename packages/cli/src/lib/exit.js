@@ -7,9 +7,7 @@ import {
   recordTelemetryError,
 } from '@redwoodjs/cli-helpers'
 
-import { shutdownTelemetry } from '../telemetry'
-
-const DEFAULT_WARNING_EPILOGUE = [
+const DEFAULT_ERROR_EPILOGUE = [
   'Need help?',
   ` - Not sure about something or need advice? Reach out on our ${terminalLink(
     'Forum',
@@ -21,12 +19,7 @@ const DEFAULT_WARNING_EPILOGUE = [
   )}`,
 ].join('\n')
 
-const DEFAULT_ERROR_EPILOGUE = DEFAULT_WARNING_EPILOGUE
-
-// export async function exitWithMessage(message, options) { }
-// export async function exitWithWarning(warning, options) { }
-
-export async function exitWithError(
+export function exitWithError(
   error,
   { exitCode, message, epilogue, includeEpilogue, includeReferenceCode } = {}
 ) {
@@ -67,7 +60,6 @@ export async function exitWithError(
   // Record the error in telemetry
   recordTelemetryError(error ?? new Error(errorMessage))
   recordTelemetryAttributes({ errorReferenceCode })
-  await shutdownTelemetry()
 
   process.exit(exitCode)
 }

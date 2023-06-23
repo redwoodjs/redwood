@@ -113,7 +113,7 @@ config({
 async function main() {
   // Start telemetry if it hasn't been disabled
   if (telemetry) {
-    await startTelemetry()
+    startTelemetry()
   }
 
   // Execute CLI within a span, this will be the root span
@@ -126,7 +126,7 @@ async function main() {
       // Span housekeeping
       span?.setStatus({ code: SpanStatusCode.OK })
     } catch (error) {
-      await exitWithError(error)
+      exitWithError(error)
     } finally {
       span?.end()
     }
@@ -134,7 +134,7 @@ async function main() {
 
   // Shutdown telemetry, ensures data is sent before the process exits
   if (telemetry) {
-    await shutdownTelemetry()
+    shutdownTelemetry()
   }
 }
 
