@@ -10,7 +10,8 @@ There are two ways to add an asset to your Redwood app:
 2. add it to the `web/public` directory and reference it relative to your site's root
 
 Where possible, prefer the first strategy.
-It lets webpack include the asset in the bundle, opting-in to all of webpack's benefits.
+
+It lets Vite include the asset in the bundle when the file is small enough.
 
 ### Co-locating and Importing Assets
 
@@ -45,7 +46,7 @@ const Header = () => {
 export default Header
 ```
 
-If you're curious how this works, see the webpack docs on [asset management](https://webpack.js.org/guides/asset-management/).
+If you're curious how this works, see the Vite docs on [static asset handling](https://vitejs.dev/guide/assets.html).
 
 ## Adding to the `web/public` Directory
 
@@ -54,7 +55,7 @@ During dev and build, Redwood copies `web/public`'s contents into `web/dist`.
 
 > Changes to `web/public` don't hot-reload.
 
-Again, because assets in this directory don't go through webpack, **use this strategy sparingly**, and mainly for assets like favicons, manifests, `robots.txt`, libraries incompatible with webpack—etc.
+Again, because assets in this directory don't go through Vite, **use this strategy sparingly**, and mainly for assets like favicons, manifests, `robots.txt`, libraries incompatible with Vite, etc.
 
 ### Example: Adding Your Logo and Favicon to `web/public`
 
