@@ -32,11 +32,13 @@ const templateVariables = (name) => {
     camelName: camelcase(name),
     functionName: camelcase(name),
     liveQueryName: `recent${pascalcase(pluralize(name))}`,
-    subscriptionName: camelcase(name),
+    subscriptionQueryName: `recent${pascalcase(pluralize(name))}`,
+    subscriptionName: `listenTo${pascalcase(name)}Channel`,
     modelName: pascalcase(name),
     typeName: pascalcase(name),
+    channelName: `${pascalcase(name)}Channel`,
     subscriptionInputType: `Publish${pascalcase(name)}Input`,
-    subscriptionServiceResolver: `publish${pascalcase(name)}`,
+    subscriptionServiceResolver: `publishTo${pascalcase(name)}Channel`,
   }
 }
 
