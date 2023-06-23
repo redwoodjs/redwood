@@ -3,6 +3,7 @@ import { argv } from 'process'
 
 import concurrently from 'concurrently'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -21,6 +22,15 @@ export const handler = async ({
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
   apiDebugPort,
 }) => {
+  recordTelemetryAttributes({
+    command: 'dev',
+    side: JSON.stringify(side),
+    // forward, // TODO: Should we record this?
+    generate,
+    watchNodeModules,
+    apiDebugPort,
+  })
+
   const redwoodProjectPaths = getPaths()
   const redwoodProjectConfig = getConfig()
 
