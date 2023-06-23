@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'vite'
 
 export const description =
@@ -25,6 +27,12 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
+  recordTelemetryAttributes({
+    command: ['setup', 'vite'].join(' '),
+    force: options.force,
+    verbose: options.verbose,
+    addPackage: options.addPackage,
+  })
   const { handler } = await import('./viteHandler.js')
   return handler(options)
 }

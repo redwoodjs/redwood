@@ -4,13 +4,18 @@ import path from 'path'
 import boxen from 'boxen'
 import execa from 'execa'
 
-import { errorTelemetry } from '@redwoodjs/telemetry'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import c from '../lib/colors'
 import { getPaths } from '../lib/index'
 
 // eslint-disable-next-line no-unused-vars
 export const handler = async ({ _, $0, commands = [], ...options }) => {
+  recordTelemetryAttributes({
+    command: 'prisma',
+    // TODO: Consider needing more here?
+  })
+
   const rwjsPaths = getPaths()
 
   // Prisma only supports '--help', but Redwood CLI supports `prisma <command> help`
@@ -60,24 +65,19 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   console.log(c.underline('$ yarn prisma ' + args.join(' ')))
   console.log()
 
-  try {
-    execa.sync(
-      `"${path.join(rwjsPaths.base, 'node_modules/.bin/prisma')}"`,
-      args,
-      {
-        shell: true,
-        cwd: rwjsPaths.base,
-        stdio: 'inherit',
-        cleanup: true,
-      }
-    )
-
-    if (hasHelpOption || commands.length === 0) {
-      printWrapInfo()
+  execa.sync(
+    `"${path.join(rwjsPaths.base, 'node_modules/.bin/prisma')}"`,
+    args,
+    {
+      shell: true,
+      cwd: rwjsPaths.base,
+      stdio: 'inherit',
+      cleanup: true,
     }
-  } catch (e) {
-    errorTelemetry(process.argv, `Error generating prisma client: ${e.message}`)
-    process.exit(e?.exitCode || 1)
+  )
+
+  if (hasHelpOption || commands.length === 0) {
+    printWrapInfo()
   }
 }
 
