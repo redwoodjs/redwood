@@ -14,7 +14,7 @@
     "@graphiql/plugin-explorer": "0.1.20",
     "@graphiql/toolkit": "0.8.4",
     "@headlessui/react": "1.7.15",
-    "@heroicons/react": "2.0.17",
+    "@heroicons/react": "2.0.18",
     "@nivo/bar": "0.83.0",
     "@nivo/core": "0.83.0",
     "@nivo/tooltip": "0.83.0",
