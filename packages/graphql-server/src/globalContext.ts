@@ -4,7 +4,7 @@ import { AsyncLocalStorage } from 'async_hooks'
 
 export interface GlobalContext extends Record<string, unknown> {}
 
-let GLOBAL_CONTEXT: GlobalContext = {}
+// TODO: Why isn't this defined here as a const?
 let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
 
 /**
@@ -12,13 +12,13 @@ let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
  */
 export const getAsyncStoreInstance = () => {
   if (!CONTEXT_STORAGE) {
-    CONTEXT_STORAGE = new AsyncLocalStorage()
+    CONTEXT_STORAGE = new AsyncLocalStorage<Map<string, GlobalContext>>()
   }
   return CONTEXT_STORAGE as AsyncLocalStorage<Map<string, GlobalContext>>
 }
 
-export const createContextProxy = () => {
-  return new Proxy<GlobalContext>(GLOBAL_CONTEXT, {
+export const createContextProxy = (target: GlobalContext) => {
+  return new Proxy<GlobalContext>(target, {
     get: (_target, property: string) => {
       const store = getAsyncStoreInstance().getStore()
       const ctx = store?.get('context') || {}
@@ -34,7 +34,7 @@ export const createContextProxy = () => {
   })
 }
 
-export let context: GlobalContext = createContextProxy()
+export let context: GlobalContext = createContextProxy({})
 
 /**
  * Set the contents of the global context object.
@@ -45,9 +45,14 @@ export let context: GlobalContext = createContextProxy()
  * such as `context.magicNumber = 1`, or `setContext({ ...context, magicNumber: 1 })`
  */
 export const setContext = (newContext: GlobalContext): GlobalContext => {
-  GLOBAL_CONTEXT = newContext
-  context = createContextProxy()
+  // re-init the proxy against the new context object,
+  // so things like `console.log(context)` is the actual object,
+  // not one initialized earlier.
+  context = createContextProxy(newContext)
+
+  // Replace the value of context stored in the current async store
   const store = getAsyncStoreInstance().getStore()
-  store?.set('context', GLOBAL_CONTEXT)
+  store?.set('context', newContext)
+
   return context
 }
