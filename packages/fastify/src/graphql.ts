@@ -37,6 +37,7 @@ export async function redwoodFastifyGraphQLServer(
   try {
     const { yoga } = createGraphQLYoga(options)
 
+    // TODO: This should be refactored to only be defined once and it might not live here
     // Ensure that each request has a unique global context
     fastify.addHook('onRequest', (_req, _reply, done) => {
       getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)

@@ -4,7 +4,6 @@ import { AsyncLocalStorage } from 'async_hooks'
 
 export interface GlobalContext extends Record<string, unknown> {}
 
-// TODO: Why isn't this defined here as a const?
 let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
 
 /**
