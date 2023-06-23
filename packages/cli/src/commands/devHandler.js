@@ -12,8 +12,38 @@ import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
+import fg from 'fast-glob'
 
 const defaultApiDebugPort = 18911
+
+// @TODO Remove as of Redwood 7.0.0
+const jsDeprecationNotice = () => {
+  if (process.env.REDWOOD_DISABLE_JS_DEPRECATION_NOTICE) {
+    return
+  }
+
+  // There may be actual legitimate JS-only files on the web side, so don't
+  // search ALL files, just the main ones like App, Routes, pages and components
+  const matches = fg.sync(
+    [
+      'web/src/App.js',
+      'web/src/Routes.js',
+      'web/src/components/**/*.js',
+      'web/src/pages/**/*.js',
+    ],
+    { ignore: ['web/src/**/*.mock.js', 'web/src/**/*.routeHooks.js'] }
+  )
+
+  if (matches.length) {
+    console.warn(
+      c.warning(
+        `DEPRECATION NOTICE: When using Vite as your bundler, file extensions for JS files containing JSX must be named \`.jsx\`:\n\n  ${matches.join(
+          '\n  '
+        )}\n\nSupport for \`.js\` files containing JSX will be dropped in Redwood 7.0.0.\n* Hide this notice by setting the ENV variable REDWOOD_DISABLE_JS_DEPRECATION_NOTICE=1`
+      )
+    )
+  }
+}
 
 export const handler = async ({
   side = ['api', 'web'],
@@ -33,6 +63,9 @@ export const handler = async ({
 
   const redwoodProjectPaths = getPaths()
   const redwoodProjectConfig = getConfig()
+
+  // Which bundler are we using?
+  const isVite = redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
 
   // Starting values of ports from config (redwood.toml)
   let apiPreferredPort = parseInt(redwoodProjectConfig.api.port)
@@ -116,6 +149,9 @@ export const handler = async ({
   }
 
   if (side.includes('web')) {
+    // @TODO Remove as of Redwood 7.0.0
+    jsDeprecationNotice()
+
     try {
       await shutdownPort(webAvailablePort)
     } catch (e) {
@@ -149,12 +185,11 @@ export const handler = async ({
 
   const redwoodConfigPath = getConfigPath()
 
-  const webCommand =
-    redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
-      ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
-      : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
-          watchNodeModules ? '1' : ''
-        } webpack serve --config "${webpackDevConfig}" ${forward}`
+  const webCommand = isVite
+    ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
+    : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
+        watchNodeModules ? '1' : ''
+      } webpack serve --config "${webpackDevConfig}" ${forward}`
 
   const apiCommand = [
     'yarn',
