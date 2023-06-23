@@ -612,12 +612,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@heroicons/react@npm:2.0.17":
-  version: 2.0.17
-  resolution: "@heroicons/react@npm:2.0.17"
+"@heroicons/react@npm:2.0.18":
+  version: 2.0.18
+  resolution: "@heroicons/react@npm:2.0.18"
   peerDependencies:
     react: ">= 16"
-  checksum: 34f1b13989ccdbea439c9f0555d7806c803be045da7753ab0167fa8ad317b13b193cec58b324f242d7b2123cd1d1d092d45708febb25304eecf19a301bfd564c
+  checksum: 3cef7f67c65f8b00dc4f23788e468e661a24bd805f80e3b5514a986d69c91ef05407cf50078691573eced47147db87a9bd00cc165e4fecd2a9657cbaf3eaafb5
   languageName: node
   linkType: hard
 
@@ -2382,7 +2382,7 @@ __metadata:
     "@graphiql/plugin-explorer": 0.1.20
     "@graphiql/toolkit": 0.8.4
     "@headlessui/react": 1.7.15
-    "@heroicons/react": 2.0.17
+    "@heroicons/react": 2.0.18
     "@nivo/bar": 0.83.0
     "@nivo/core": 0.83.0
     "@nivo/tooltip": 0.83.0
