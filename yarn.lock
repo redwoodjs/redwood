@@ -6957,7 +6957,7 @@ __metadata:
     prompts: 2.4.2
     rimraf: 5.0.1
     secure-random-password: 0.2.3
-    semver: 7.5.2
+    semver: 7.5.3
     string-env-interpolation: 1.0.1
     terminal-link: 2.1.1
     title-case: 3.0.3
@@ -14658,7 +14658,7 @@ __metadata:
     fs-extra: 11.1.1
     jest: 29.5.0
     klaw-sync: 6.0.0
-    semver: 7.5.2
+    semver: 7.5.3
     systeminformation: 5.18.3
     terminal-link: 2.1.1
     uuid: 9.0.0
@@ -28377,14 +28377,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.5.2, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.0, semver@npm:^7.5.2":
-  version: 7.5.2
-  resolution: "semver@npm:7.5.2"
+"semver@npm:7.5.3, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.0, semver@npm:^7.5.2":
+  version: 7.5.3
+  resolution: "semver@npm:7.5.3"
   dependencies:
     lru-cache: ^6.0.0
   bin:
     semver: bin/semver.js
-  checksum: d151207ab762a8067f6302076edc04e5b8da2362eb9e3f21c2567ceadfd415064936d215b4aae7791da118c230649d29089be979ffa49c5b56a6bcf82147efdd
+  checksum: 4cf3bab7e8cf8c2ae521fc4bcc50a4d6912a836360796b23b9f1c26f45d27a73f870e47664df4770bde0dd60dc4d4781a05fd49fe91d72376ea5519b9e791459
   languageName: node
   linkType: hard
 

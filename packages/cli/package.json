@@ -68,7 +68,7 @@
     "prompts": "2.4.2",
     "rimraf": "5.0.1",
     "secure-random-password": "0.2.3",
-    "semver": "7.5.2",
+    "semver": "7.5.3",
     "string-env-interpolation": "1.0.1",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
