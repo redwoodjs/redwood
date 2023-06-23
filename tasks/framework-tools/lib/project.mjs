@@ -148,3 +148,21 @@ export async function copyFrameworkFilesToProject(
     }
   }
 }
+
+/**
+ *
+ * @param {string} projectPath
+ * @returns {string | null}
+ */
+export function resolveViteConfigPath(projectPath) {
+  const jsViteConfigPath = path.join(projectPath, 'web/vite.config.js')
+  const tsViteConfigPath = path.join(projectPath, 'web/vite.config.ts')
+
+  if (fs.existsSync(jsViteConfigPath)) {
+    return jsViteConfigPath
+  } else if (fs.existsSync(tsViteConfigPath)) {
+    return tsViteConfigPath
+  } else {
+    return null
+  }
+}

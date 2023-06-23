@@ -4,6 +4,7 @@ import camelcase from 'camelcase'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
@@ -122,6 +123,12 @@ export const builder = (yargs) => {
 // This could be built using createYargsForComponentGeneration;
 // however, we need to add a message after generating the function files
 export const handler = async ({ name, force, ...rest }) => {
+  recordTelemetryAttributes({
+    command: ['generate', 'function'].join(' '),
+    force,
+    rollback: rest.rollback,
+  })
+
   validateName(name)
 
   const tasks = new Listr(

@@ -4,6 +4,7 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { addPackagesTask, getPaths, printSetupNotes } from '../../../../lib'
@@ -95,6 +96,10 @@ const updateRedwoodTomlTask = () => {
 }
 
 export const handler = async ({ force }) => {
+  recordTelemetryAttributes({
+    command: ['setup', 'deploy', 'serverless'].join(' '),
+    force,
+  })
   const [serverless, serverlessLift, ...rest] = projectDevPackages
 
   const tasks = new Listr(
