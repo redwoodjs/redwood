@@ -132,7 +132,7 @@ export default function redwoodPluginVite(): PluginOption[] {
                     waitingForApiServer = false
                   }, 2500)
 
-                  proxy.on('error', (err, _req, _res) => {
+                  proxy.on('error', (err, _req, res) => {
                     if (
                       waitingForApiServer &&
                       err.message.includes('ECONNREFUSED')
@@ -140,6 +140,21 @@ export default function redwoodPluginVite(): PluginOption[] {
                       err.stack =
                         '⌛ API Server launching, please refresh your page...'
                     }
+                    const msg = {
+                      errors: [
+                        {
+                          message:
+                            'The RedwoodJS API server is not available or is currently reloading. Please refresh.',
+                        },
+                      ],
+                    }
+
+                    res.writeHead(203, {
+                      'Content-Type': 'application/json',
+                      'Cache-Control': 'no-cache',
+                    })
+                    res.write(JSON.stringify(msg))
+                    res.end()
                   })
                 },
               },
