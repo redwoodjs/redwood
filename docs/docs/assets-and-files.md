@@ -129,13 +129,19 @@ Sometimes however, you might want more control over styling your SVGs - maybe yo
 The easiest way to achieve this, is to make your SVGs a React component. Open up your SVG file, and drop in it's contents into a component - for example:
 
 ```tsx title="web/src/components/icons/CarIcon.tsx"
-export const Car = ({ colour = colours.black, ...props }: IconProps) => {
+import type { SVGProps } from "react"
+
+export const Car = (props: SVGProps) => {
   return (
 // 👇 content of your SVG file
     <svg
-      {...props}
+      className="fill-blue-500" // 👈 you can use classes, like with tailwind
+      stroke={props.strokeColor} // or adjust properties directly
     // ...
 ```
 
-If you needed to convert a whole library of SVGs into stylable components, one easy way would be to use the [SVGR cli](https://react-svgr.com/docs/cli/)
+If you needed to convert a whole library of SVGs into stylable (or animatable!) components, one easy way would be to use the [SVGR cli](https://react-svgr.com/docs/cli/)
+
+
+
 
