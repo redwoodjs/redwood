@@ -64,9 +64,6 @@ export const handler = async ({
   const redwoodProjectPaths = getPaths()
   const redwoodProjectConfig = getConfig()
 
-  // Which bundler are we using?
-  const isVite = redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
-
   // Starting values of ports from config (redwood.toml)
   let apiPreferredPort = parseInt(redwoodProjectConfig.api.port)
   let webPreferredPort = parseInt(redwoodProjectConfig.web.port)
@@ -185,11 +182,12 @@ export const handler = async ({
 
   const redwoodConfigPath = getConfigPath()
 
-  const webCommand = isVite
-    ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
-    : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
-        watchNodeModules ? '1' : ''
-      } webpack serve --config "${webpackDevConfig}" ${forward}`
+  const webCommand =
+    redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
+      ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
+      : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
+          watchNodeModules ? '1' : ''
+        } webpack serve --config "${webpackDevConfig}" ${forward}`
 
   const apiCommand = [
     'yarn',
