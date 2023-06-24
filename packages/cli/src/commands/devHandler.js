@@ -26,10 +26,8 @@ export const handler = async ({
   recordTelemetryAttributes({
     command: 'dev',
     side: JSON.stringify(side),
-    // forward, // TODO: Should we record this?
     generate,
     watchNodeModules,
-    apiDebugPort,
   })
 
   const redwoodProjectPaths = getPaths()
