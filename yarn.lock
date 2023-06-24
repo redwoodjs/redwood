@@ -6461,19 +6461,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.34.3":
-  version: 1.34.3
-  resolution: "@playwright/test@npm:1.34.3"
+"@playwright/test@npm:1.35.1":
+  version: 1.35.1
+  resolution: "@playwright/test@npm:1.35.1"
   dependencies:
     "@types/node": "*"
     fsevents: 2.3.2
-    playwright-core: 1.34.3
+    playwright-core: 1.35.1
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: b87b3666568378997e6e300c28a5062d099377f66894c2d30855ef0b574a0874f5e4e6e7d25d93f1db1e5e402ccc1a254a1c24ec829a64ec47b4c8071082c9a7
+  checksum: 5b28eece322645d05d2da286a2a023f99830df4ab8779ed15229c36fa0fdd7351fb2bc067446e0b1d8c719b60793658bad247308e3460c8dac9177d724a22dc3
   languageName: node
   linkType: hard
 
@@ -7466,7 +7466,7 @@ __metadata:
     secure-random-password: 0.2.3
     semver: 7.5.3
     string-env-interpolation: 1.0.1
-    systeminformation: 5.18.3
+    systeminformation: 5.18.4
     terminal-link: 2.1.1
     title-case: 3.0.3
     typescript: 5.1.3
@@ -7771,7 +7771,7 @@ __metadata:
     prettier: 2.8.8
     rimraf: 5.0.1
     string-env-interpolation: 1.0.1
-    systeminformation: 5.18.3
+    systeminformation: 5.18.4
     terminal-link: 2.1.1
     ts-node: 10.9.1
     tsx: 3.12.7
@@ -7967,7 +7967,7 @@ __metadata:
     core-js: 3.31.0
     envinfo: 7.8.1
     jest: 29.5.0
-    systeminformation: 5.18.3
+    systeminformation: 5.18.4
     uuid: 9.0.0
     yargs: 17.7.2
   languageName: unknown
@@ -14627,7 +14627,7 @@ __metadata:
     jest: 29.5.0
     klaw-sync: 6.0.0
     semver: 7.5.3
-    systeminformation: 5.18.3
+    systeminformation: 5.18.4
     terminal-link: 2.1.1
     uuid: 9.0.0
     yargs: 17.7.2
@@ -25095,12 +25095,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.34.3":
-  version: 1.34.3
-  resolution: "playwright-core@npm:1.34.3"
+"playwright-core@npm:1.35.1":
+  version: 1.35.1
+  resolution: "playwright-core@npm:1.35.1"
   bin:
     playwright-core: cli.js
-  checksum: 2e3ec8394b69bcd55db3a01a0a2cf63ee4b924bd79852c237d3eb045273f056b5784ab2147f60a7bb2db7998b8f7c5ec34d8554dd7648cc77d5affc9d91a85c8
+  checksum: 378caaf452546554b01993006abf556fb2f35369355ff6cf462148ed154a177ff1cdcf7f90035c3e7cef3522435602fd4517f2f1a0a75eef92c4db4efdc24b02
   languageName: node
   linkType: hard
 
@@ -27153,7 +27153,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.22.5
     "@faker-js/faker": 8.0.2
     "@npmcli/arborist": 6.2.10
-    "@playwright/test": 1.34.3
+    "@playwright/test": 1.35.1
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
@@ -28796,12 +28796,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.18.3":
-  version: 5.18.3
-  resolution: "systeminformation@npm:5.18.3"
+"systeminformation@npm:5.18.4":
+  version: 5.18.4
+  resolution: "systeminformation@npm:5.18.4"
   bin:
     systeminformation: lib/cli.js
-  checksum: dac4d0b92c102d4f5766692ea275c54bf234012a989e3383e43511ada7193957843e5ad391df3dfea89d3579ae0d9f9e7ca1e555b48f30c173374dcb8f645ce3
+  checksum: 35115fff6a0f17010ae0fbf4823ca4a2a74a83b5c747a3bf95f230f768675f12f1dd6def497de795e31820ad9dfc0142968672ad12122afb3c9bde2f80075099
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
