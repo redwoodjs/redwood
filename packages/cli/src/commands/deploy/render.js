@@ -46,7 +46,7 @@ if (process.argv.slice(2).includes('api')) {
 
 export const handler = async ({ side, prisma, dm: dataMigrate }) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'render'].join(' '),
+    command: 'deploy render',
     side,
     prisma,
     dataMigrate,
