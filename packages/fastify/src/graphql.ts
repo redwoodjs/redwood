@@ -2,8 +2,14 @@ import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
-import { createGraphQLYoga } from '@redwoodjs/graphql-server'
-import type { GraphQLYogaOptions } from '@redwoodjs/graphql-server'
+import type {
+  GraphQLYogaOptions,
+  GlobalContext,
+} from '@redwoodjs/graphql-server'
+import {
+  createGraphQLYoga,
+  getAsyncStoreInstance,
+} from '@redwoodjs/graphql-server'
 
 /**
  * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
@@ -13,17 +19,6 @@ import { lambdaEventForFastifyRequest as transformToRedwoodGraphQLContextEvent }
 
 /**
  * Redwood GraphQL Server Fastify plugin based on GraphQL Yoga
- *
- * Important: Need to set DISABLE_CONTEXT_ISOLATION = 1 in environment variables
- * so that global context is populated correctly and features such as authentication
- * works properly.
- *
- * It is critical to set shouldUseLocalStorageContext correctly so that the `setContext` function
- * in the `useRedwoodPopulateContext` plugin sets the global context correctly with any
- * extended GraphQL context as is done with `useRedwoodAuthContext` that sets
- * the `currentUser` in the context when used to authenticate a user.
- *
- * See: packages/graphql-server/src/globalContext.ts
  *
  * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
  * @param {GraphQLYogaOptions} options GraphQLYogaOptions options used to configure the GraphQL Yoga Server
@@ -41,6 +36,12 @@ export async function redwoodFastifyGraphQLServer(
 
   try {
     const { yoga } = createGraphQLYoga(options)
+
+    // TODO: This should be refactored to only be defined once and it might not live here
+    // Ensure that each request has a unique global context
+    fastify.addHook('onRequest', (_req, _reply, done) => {
+      getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
+    })
 
     fastify.route({
       url: yoga.graphqlEndpoint,
