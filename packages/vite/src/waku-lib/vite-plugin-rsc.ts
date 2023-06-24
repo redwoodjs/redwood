@@ -3,6 +3,9 @@ import path from 'node:path'
 import * as swc from '@swc/core'
 import type { Plugin } from 'vite'
 
+import * as RSDWNodeLoader from '../react-server-dom-webpack/node-loader'
+import type { ResolveFunction } from '../react-server-dom-webpack/node-loader'
+
 import { codeToInject } from './rsc-utils.js'
 
 export function rscIndexPlugin(): Plugin {
@@ -43,17 +46,21 @@ export function rscTransformPlugin(): Plugin {
       return undefined
     },
     async transform(code, id) {
-      const resolve = async (
+      const resolve: ResolveFunction = async (
         specifier: string,
-        { parentURL }: { parentURL: string }
+        { parentURL }: { parentURL: string | void; conditions: Array<string> }
       ) => {
         if (!specifier) {
           return { url: '' }
         }
 
-        const resolved = await this.resolve(specifier, parentURL, {
-          skipSelf: true,
-        })
+        let resolved: Awaited<ReturnType<typeof this.resolve>> | undefined
+
+        if (parentURL) {
+          resolved = await this.resolve(specifier, parentURL, {
+            skipSelf: true,
+          })
+        }
 
         if (!resolved) {
           throw new Error(`Failed to resolve ${specifier}`)
@@ -77,10 +84,6 @@ export function rscTransformPlugin(): Plugin {
         )
         return { format: 'module', source }
       }
-
-      const RSDWNodeLoader = await import(
-        'react-server-dom-webpack/node-loader'
-      )
 
       RSDWNodeLoader.resolve(
         '',
