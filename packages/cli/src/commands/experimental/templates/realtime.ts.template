@@ -4,11 +4,7 @@ import type { NewMessageChannel } from 'src/subscriptions/newMessage/newMessage'
 
 export const liveQueryStore = new InMemoryLiveQueryStore()
 
-export type OldMessageChannel = {
-  oldMessage: [payload: { name: string }]
-}
-
-export type PubSubChannels = NewMessageChannel<string> & OldMessageChannel
+export type PubSubChannels = NewMessageChannel<string>
 
 export const pubSub = createPubSub<PubSubChannels>()
 
