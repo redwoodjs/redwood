@@ -38,6 +38,7 @@ For certain options, instead of having to deal with build tools like webpack dir
 | `apiGraphQLUrl`               | The path or URL to your GraphQL function                   | `"${apiUrl}/graphql"`   |
 | `apiDbAuthUrl`                | The path or URL to your dbAuth function                    | `"${apiUrl}/auth"`      |
 | `a11y`                        | Enable storybook `addon-a11y` and `eslint-plugin-jsx-a11y` | `true`                  |
+| `createOperationTypes`        | Create the types for the GraphQL schema + Apollo documents | `true`                  |
 | `fastRefresh`                 | Enable webpack's fast refresh                              | `true`                  |
 | `host`                        | Hostname to listen on                                      | `"localhost"`           |
 | `includeEnvironmentVariables` | Environment variables to include                           | `[]`                    |

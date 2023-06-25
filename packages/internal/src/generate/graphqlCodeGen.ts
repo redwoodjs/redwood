@@ -80,6 +80,11 @@ export const generateTypeDefGraphQLApi = async () => {
 }
 
 export const generateTypeDefGraphQLWeb = async () => {
+  const config = getConfig()
+  if (!config.web.createOperationTypes) {
+    return []
+  }
+
   const filename = path.join(getPaths().web.types, 'graphql.d.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'

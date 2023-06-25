@@ -57,6 +57,7 @@ interface BrowserTargetConfig {
   fastRefresh: boolean
   a11y: boolean
   sourceMap: boolean
+  createOperationTypes: boolean
 }
 
 interface GraphiQLStudioConfig {
@@ -128,6 +129,7 @@ const DEFAULT_CONFIG: Config = {
     fastRefresh: true,
     a11y: true,
     sourceMap: false,
+    createOperationTypes: true,
   },
   api: {
     title: 'Redwood App',

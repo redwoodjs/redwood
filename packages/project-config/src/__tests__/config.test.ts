@@ -82,6 +82,7 @@ describe('getConfig', () => {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
           "bundler": "vite",
+          "createOperationTypes": true,
           "fastRefresh": true,
           "host": "localhost",
           "includeEnvironmentVariables": [],
