@@ -96,7 +96,7 @@ export async function handler({ name, type, force, verbose }) {
       },
       {
         title: `Adding ${name} example subscription ...`,
-        skip: () => functionType !== 'subscription',
+        enabled: () => functionType === 'subscription',
         task: () => {
           // sdl
 
@@ -184,7 +184,7 @@ export async function handler({ name, type, force, verbose }) {
       },
       {
         title: `Adding ${name} example live query ...`,
-        skip: () => functionType !== 'liveQuery',
+        enabled: () => functionType === 'liveQuery',
         task: () => {
           // sdl
           const exampleSdlTemplateContent = path.resolve(
