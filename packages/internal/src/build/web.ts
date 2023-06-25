@@ -51,24 +51,25 @@ interface BuildOptions {
 /**
  *
  * @WARN: This is currently only used in testing
- * Builds the web side with Vite, but not used in the buildHandler currently
- * because we want to set the process.cwd to web.base
+ * Builds the web side with Vite
  *
  */
 export const buildWeb = async ({ verbose }: BuildOptions) => {
   // @NOTE: Using dynamic import, because vite is still opt-in
+  // TODO: Make this a regular import for RW v7 where Vite'll be the only option
   const { build } = await import('vite')
-  const viteConfig = getPaths().web.viteConfig
+  const rwPaths = getPaths()
 
-  if (process.cwd() !== getPaths().web.base) {
-    throw new Error(
-      'Looks like you are running the command from the wrong dir, this can lead to unintended consequences on CSS processing'
-    )
-  }
+  const viteConfig = rwPaths.web.viteConfig
 
   if (!viteConfig) {
     throw new Error('Could not locate your web/vite.config.{js,ts} file')
   }
+
+  // @NOTE: necessary for keeping the cwd correct for CSS processing, i.e.
+  // postcss and tailwind
+  process.chdir(rwPaths.web.base)
+  process.env.NODE_ENV = 'production'
 
   return build({
     configFile: viteConfig,

@@ -13,7 +13,6 @@
   ],
   "main": "dist/index.js",
   "bin": {
-    "rw-vite-build": "./bins/rw-vite-build.mjs",
     "rw-vite-dev": "./bins/rw-vite-dev.mjs",
     "vite": "./bins/vite.mjs"
   },
