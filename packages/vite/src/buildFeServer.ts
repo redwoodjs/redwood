@@ -2,7 +2,7 @@ import fs from 'fs/promises'
 import path from 'path'
 
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
-import type { ViteManifest } from 'vite'
+import type { Manifest as ViteManifest } from 'vite'
 
 import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
 import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'

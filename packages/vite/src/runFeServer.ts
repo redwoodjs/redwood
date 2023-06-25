@@ -6,7 +6,7 @@ import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import isbot from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
-import type { ViteManifest } from 'vite'
+import type { Manifest as ViteManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
