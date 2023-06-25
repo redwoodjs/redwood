@@ -7446,7 +7446,7 @@ __metadata:
     decamelize: 5.0.0
     dotenv-defaults: 5.0.2
     enquirer: 2.3.6
-    envinfo: 7.8.1
+    envinfo: 7.9.0
     execa: 5.1.1
     fast-glob: 3.2.12
     fs-extra: 11.1.1
@@ -7965,7 +7965,7 @@ __metadata:
     "@whatwg-node/fetch": 0.9.7
     ci-info: 3.8.0
     core-js: 3.31.0
-    envinfo: 7.8.1
+    envinfo: 7.9.0
     jest: 29.5.0
     systeminformation: 5.18.4
     uuid: 9.0.0
@@ -14620,7 +14620,7 @@ __metadata:
     chalk: 4.1.2
     check-node-version: 4.2.1
     ci-info: 3.8.0
-    envinfo: 7.8.1
+    envinfo: 7.9.0
     esbuild: 0.18.7
     execa: 5.1.1
     fs-extra: 11.1.1
@@ -16044,12 +16044,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"envinfo@npm:7.8.1, envinfo@npm:^7.7.3":
+"envinfo@npm:7.8.1":
   version: 7.8.1
   resolution: "envinfo@npm:7.8.1"
   bin:
     envinfo: dist/cli.js
   checksum: 01efe7fcf55d4b84a146bc638ef89a89a70b610957db64636ac7cc4247d627eeb1c808ed79d3cfbe3d4fed5e8ba3d61db79c1ca1a3fea9f38639561eefd68733
+  languageName: node
+  linkType: hard
+
+"envinfo@npm:7.9.0, envinfo@npm:^7.7.3":
+  version: 7.9.0
+  resolution: "envinfo@npm:7.9.0"
+  bin:
+    envinfo: dist/cli.js
+  checksum: b77bca09a6d57400d1be35c13885a0488e6341cce79b5806570e12aca6290a0694ca7a8708558b062024aeb67e345d4d6f95234c8dd051e4c74b5ab2ffa858f1
   languageName: node
   linkType: hard
 
