@@ -3,7 +3,8 @@ import path from 'path'
 
 import execa from 'execa'
 import { Listr } from 'listr2'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
+import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
@@ -12,7 +13,7 @@ import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry } from '@redwoodjs/telemetry'
 import { buildFeServer } from '@redwoodjs/vite'
 
-import { getConfig, getPaths } from '../lib'
+import { getPaths, getConfig } from '../lib'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
 export const handler = async ({

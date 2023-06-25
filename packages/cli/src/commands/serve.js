@@ -118,7 +118,7 @@ export const builder = async (yargs) => {
 
       if (
         positionalArgs.includes('web') &&
-        !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
+        !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html')
       ) {
         console.error(
           c.error(
@@ -130,7 +130,7 @@ export const builder = async (yargs) => {
 
       if (
         positionalArgs.includes('api') &&
-        !fs.existsSync(path.join(getPaths().api.dist))
+        !fs.existsSync(path.join(redwoodProjectPaths.api.dist))
       ) {
         console.error(
           c.error(
@@ -143,8 +143,8 @@ export const builder = async (yargs) => {
       if (
         // serve both
         positionalArgs.length === 1 &&
-        (!fs.existsSync(path.join(getPaths().api.dist)) ||
-          !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
+        (!fs.existsSync(path.join(redwoodProjectPaths.api.dist)) ||
+          !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html'))
       ) {
         console.error(
           c.error(

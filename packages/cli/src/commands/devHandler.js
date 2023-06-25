@@ -63,7 +63,6 @@ export const handler = async ({
     if (forwardedPortMatches.length) {
       webPreferredPort = parseInt(forwardedPortMatches.pop().groups.port)
     }
-
     webAvailablePort = await getFreePort(webPreferredPort, [
       apiPreferredPort,
       apiAvailablePort,
