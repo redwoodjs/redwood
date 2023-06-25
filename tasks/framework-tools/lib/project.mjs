@@ -23,15 +23,14 @@ export function fixProjectBinaries(projectPath) {
   const bins = getFrameworkPackagesBins()
 
   for (let [binName, binPath] of Object.entries(bins)) {
-    try {
-      // if the binPath doesn't exist, create it.
-      const binSymlink = path.join(projectPath, 'node_modules/.bin', binName)
-      binPath = path.join(projectPath, 'node_modules', binPath)
+    // if the binPath doesn't exist, create it.
+    const binSymlink = path.join(projectPath, 'node_modules/.bin', binName)
+    binPath = path.join(projectPath, 'node_modules', binPath)
 
-      if (!fs.existsSync(binSymlink)) {
-        fs.mkdirSync(path.dirname(binSymlink), {
-          recursive: true,
-        })
+    if (!fs.existsSync(binSymlink)) {
+      fs.mkdirSync(path.dirname(binSymlink), {
+        recursive: true,
+      })
 
       // `fs.existsSync` checks if the target of the symlink exists, not the symlink. If the symlink exists,
       // we have to remove it before we can fix it. As far as I can tell, there's no way to check if a symlink exists but not its target,
@@ -44,15 +43,12 @@ export function fixProjectBinaries(projectPath) {
         }
       }
 
-        fs.symlinkSync(binPath, binSymlink)
-      }
-
-      console.log('chmod +x', terminalLink(binName, binPath))
-      fs.chmodSync(binSymlink, '755')
-      fs.chmodSync(binPath, '755')
-    } catch (e) {
-      console.error(e)
+      fs.symlinkSync(binPath, binSymlink)
     }
+
+    console.log('chmod +x', terminalLink(binName, binPath))
+    fs.chmodSync(binSymlink, '755')
+    fs.chmodSync(binPath, '755')
   }
 }
 
