@@ -124,6 +124,8 @@ export async function runFeServer() {
           return res.sendStatus(404)
         }
 
+        const assetMap = JSON.stringify({ css: indexEntry.css })
+
         const { pipe } = renderToPipeableStream(
           serverEntry({
             url: currentPathName,
@@ -131,9 +133,7 @@ export async function runFeServer() {
             css: indexEntry.css,
           }),
           {
-            bootstrapScriptContent: `window.__assetMap = function() { return ${JSON.stringify(
-              { css: indexEntry.css }
-            )} }`,
+            bootstrapScriptContent: `window.__assetMap = function() { return ${assetMap} }`,
             // @NOTE have to add slash so subpaths still pick up the right file
             // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
             bootstrapModules: [

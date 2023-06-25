@@ -105,11 +105,16 @@ async function createServer() {
       const { serverEntry } = await vite.ssrLoadModule(rwPaths.web.entryServer)
 
       // Serialize route context so it can be passed to the client entry
-      const serialisedRouteContext = JSON.stringify(serverData)
+      const serializedRouteContext = JSON.stringify(serverData)
 
       // @TODO CSS is handled by Vite in dev mode, we don't need to worry about it in dev
       // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
       const FIXME_HardcodedIndexCss = ['index.css']
+
+      const assetMap = JSON.stringify({
+        css: FIXME_HardcodedIndexCss,
+        meta: metaTags,
+      })
 
       const bootstrapModules = [
         path.join(__dirname, '../inject', 'reactRefresh.js'),
@@ -130,12 +135,7 @@ async function createServer() {
         }),
         {
           bootstrapScriptContent: pageWithJs
-            ? `window.__loadServerData = function() { return ${serialisedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
-                {
-                  css: FIXME_HardcodedIndexCss,
-                  meta: metaTags,
-                }
-              )} }`
+            ? `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${assetMap} }`
             : undefined,
           bootstrapModules,
           onShellReady() {
