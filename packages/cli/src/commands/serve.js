@@ -34,20 +34,39 @@ const streamServerErrorHandler = () => {
   )
 }
 
-export const builder = async (yargs) => {
+export async function builder(yargs) {
   const redwoodProjectPaths = getPaths()
   const redwoodProjectConfig = getConfig()
-
-  const { apiCliOptions, webCliOptions, commonOptions, apiServerHandler } =
-    await import('@redwoodjs/api-server')
 
   yargs
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      descriptions: 'Run both api and web servers',
-      handler: streamServerErrorHandler,
-      builder: (yargs) => yargs.options(commonOptions),
+      descriptions: 'Run both api and web servers. Uses the web port and host',
+      handler: (argv) => {
+        recordTelemetryAttributes({
+          command,
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiHost: argv.apiHost,
+        })
+
+        streamServerErrorHandler()
+      },
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: redwoodProjectConfig.web.port,
+            type: 'number',
+            alias: 'p',
+          },
+          host: {
+            default: redwoodProjectConfig.web.host,
+            type: 'string',
+          },
+          socket: { type: 'string' },
+        }),
     })
     .command({
       command: 'both',
@@ -102,15 +121,91 @@ export const builder = async (yargs) => {
     })
     .command({
       command: 'api',
-      description: 'start server for serving only the api',
-      handler: apiServerHandler,
-      builder: (yargs) => yargs.options(apiCliOptions),
+      description: 'Start server for serving only the api',
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: redwoodProjectConfig.api.port,
+            type: 'number',
+            alias: 'p',
+          },
+          host: {
+            default: redwoodProjectConfig.api.host,
+            type: 'string',
+          },
+          socket: { type: 'string' },
+          apiRootPath: {
+            alias: ['api-root-path', 'rootPath', 'root-path'],
+            default: '/',
+            type: 'string',
+            desc: 'Root path where your api functions are served',
+            coerce: coerceRootPath,
+          },
+        }),
+      handler: async (argv) => {
+        recordTelemetryAttributes({
+          command,
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiRootPath: argv.apiRootPath,
+        })
+
+        // Run the experimental server file, if it exists, api side only
+        if (hasExperimentalServerFile()) {
+          console.log(
+            [
+              separator,
+              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+              separator,
+              'Using the experimental API server file at api/dist/server.js',
+              separator,
+            ].join('\n')
+          )
+          await execa('yarn', ['node', path.join('dist', 'server.js')], {
+            cwd: redwoodProjectPaths.api.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+          return
+        }
+
+        const { apiServerHandler } = await import('./serveHandler.js')
+        await apiServerHandler(argv)
+      },
     })
     .command({
       command: 'web',
-      description: 'start server for serving only the web side',
-      handler: streamServerErrorHandler,
-      builder: (yargs) => yargs.options(webCliOptions),
+      description: 'Start server for serving only the web side',
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: redwoodProjectConfig.web.port,
+            type: 'number',
+            alias: 'p',
+          },
+          host: {
+            default: redwoodProjectConfig.web.host,
+            type: 'string',
+          },
+          socket: { type: 'string' },
+          apiHost: {
+            alias: 'api-host',
+            type: 'string',
+            desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
+          },
+        }),
+      handler: async (argv) => {
+        recordTelemetryAttributes({
+          command,
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiHost: argv.apiHost,
+        })
+
+        streamServerErrorHandler()
+      },
     })
     .middleware((argv) => {
       // Make sure the relevant side has been built, before serving
