@@ -5,7 +5,7 @@ import type { PubSubChannelsType } from 'src/lib/realtime'
 
 export const room = ({ id }) => [id]
 
-export const send = async (
+export const sendMessage = async (
   { input }: { input: SendMessageInput },
   { context }: { context: { pubSub: PubSubChannelsType } }
 ) => {
