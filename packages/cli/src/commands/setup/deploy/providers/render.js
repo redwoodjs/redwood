@@ -5,11 +5,12 @@ import path from 'path'
 import { getSchema, getConfig } from '@prisma/internals'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
+import { getPaths, writeFilesTask, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { addFilesTask, printSetupNotes, updateApiURLTask } from '../helpers'
+import { addFilesTask, updateApiURLTask } from '../helpers'
 import {
   POSTGRES_YAML,
   RENDER_HEALTH_CHECK,
@@ -89,6 +90,11 @@ const additionalFiles = [
 ]
 
 export const handler = async ({ force, database }) => {
+  recordTelemetryAttributes({
+    command: ['setup', 'deploy', 'render'].join(' '),
+    force,
+    database,
+  })
   const tasks = new Listr(
     [
       {

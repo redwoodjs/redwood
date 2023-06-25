@@ -4,8 +4,8 @@ import { useQuery, gql } from '@apollo/client'
 import {
   Color,
   Card,
-  Dropdown,
-  DropdownItem,
+  Select,
+  SelectItem,
   Flex,
   LineChart,
   Title,
@@ -139,19 +139,18 @@ export default function SpanTypeTimeSeriesChart({
     <Card>
       <Flex className="space-x-4" justifyContent="between" alignItems="stretch">
         <Title>{name}</Title>
-        <Dropdown
+        <Select
           onValueChange={(value) => setRefreshSecondsAgo(parseInt(value))}
           placeholder="120 seconds ago"
           className="max-w-xs w-64"
         >
           {agos.map((ago) => (
-            <DropdownItem
+            <SelectItem
               key={`ago-${ago}`}
               value={`${ago}`}
-              text={`${ago} seconds ago`}
-            />
+            >{`${ago} seconds ago`}</SelectItem>
           ))}
-        </Dropdown>
+        </Select>
       </Flex>
       <LineChart
         className="mt-6"

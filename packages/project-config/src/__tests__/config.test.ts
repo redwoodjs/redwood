@@ -178,7 +178,7 @@ describe('getConfig', () => {
     expect(config.web.apiUrl).toBe('/bazinga')
     expect(config.web.title).toBe('App running on staging')
 
-    delete process.env['API_URL']
-    delete process.env['APP_ENV']
+    delete process.env.API_URL
+    delete process.env.APP_ENV
   })
 })

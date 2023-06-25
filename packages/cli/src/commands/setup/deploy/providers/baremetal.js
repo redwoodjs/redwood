@@ -3,11 +3,12 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { addPackagesTask, getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { addFilesTask, printSetupNotes } from '../helpers'
+import { addFilesTask } from '../helpers'
 import { DEPLOY, ECOSYSTEM, MAINTENANCE } from '../templates/baremetal'
 
 export const command = 'baremetal'
@@ -37,6 +38,10 @@ const notes = [
 ]
 
 export const handler = async ({ force }) => {
+  recordTelemetryAttributes({
+    command: ['setup', 'deploy', 'baremetal'].join(' '),
+    force,
+  })
   const tasks = new Listr(
     [
       addPackagesTask({

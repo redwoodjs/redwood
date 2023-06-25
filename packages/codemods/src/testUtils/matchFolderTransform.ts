@@ -116,5 +116,5 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
     expect(actualPath).toMatchFileContents(expectedPath, { removeWhitespace })
   })
 
-  delete process.env['RWJS_CWD']
+  delete process.env.RWJS_CWD
 }

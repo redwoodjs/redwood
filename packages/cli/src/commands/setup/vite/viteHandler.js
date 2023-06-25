@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import chalk from 'chalk'
 import { Listr } from 'listr2'
 
 import { addWebPackages } from '@redwoodjs/cli-helpers'
@@ -23,6 +22,8 @@ export const handler = async ({ force, verbose, addPackage }) => {
       {
         title: 'Adding vite.config.js...',
         task: () => {
+          // @NOTE: do not use getPaths().viteConfig because it'll come through as null
+          // this is because we do a check for the file's existence in getPaths()
           const viteConfigPath = `${getPaths().web.base}/vite.config.${
             ts ? 'ts' : 'js'
           }`
@@ -57,13 +58,13 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: 'Creating new entry point in `web/src/entry-client.jsx`...',
+        title: 'Creating new entry point in `web/src/entry.client.{jt}sx`...',
         task: () => {
-          // Keep it as JSX for now
           const entryPointFile = path.join(
             getPaths().web.src,
-            `entry-client.jsx`
+            `entry.client.${ts ? 'tsx' : 'jsx'}`
           )
+
           const content = fs
             .readFileSync(
               path.join(
@@ -81,24 +82,13 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        ...addWebPackages([`@redwoodjs/vite@${version}`]),
-        title: 'Adding @redwoodjs/vite dependency...',
+        // @NOTE: make sure its added as a dev package.
+        ...addWebPackages(['-D', `@redwoodjs/vite@${version}`]),
+        title: 'Adding @redwoodjs/vite dev dependency to web side...',
         skip: () => {
           if (!addPackage) {
-            return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dependency on the web workspace'
+            return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dev-dependency on the web workspace'
           }
-        },
-      },
-      {
-        title: 'One more thing...',
-        task: (_ctx, task) => {
-          task.title = `One more thing...\n
-          ${c.green('Vite Support is still experimental!')}
-          ${c.green('Please let us know if you find bugs or quirks.')}
-          ${chalk.hex('#e8e8e8')(
-            'https://github.com/redwoodjs/redwood/issues/new'
-          )}
-        `
         },
       },
     ],

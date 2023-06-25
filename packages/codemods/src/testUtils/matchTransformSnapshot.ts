@@ -25,7 +25,7 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
     throw new Error('Could not find test path')
   }
 
-  // Use require.resolve, so we can pass in ts/js/tsx without specifying
+  // Use require.resolve, so we can pass in ts/js/tsx/jsx without specifying
   const fixturePath = require.resolve(
     path.join(testPath, '../../__testfixtures__', `${fixtureName}.input`)
   )
@@ -43,7 +43,8 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
     targetPaths: [tempFilePath],
     parser,
     options: {
-      verbose: true,
+      verbose: 1,
+      print: true,
     },
   })
 

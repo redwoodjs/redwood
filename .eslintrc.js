@@ -171,5 +171,16 @@ module.exports = {
         ],
       },
     },
+    // Allow computed member access on process.env in NodeJS contexts and tests
+    {
+      files: [
+        'packages/core/config/webpack.common.js',
+        'packages/testing/**',
+        'packages/vite/src/index.ts',
+      ],
+      rules: {
+        '@redwoodjs/process-env-computed': 'off',
+      },
+    },
   ],
 }

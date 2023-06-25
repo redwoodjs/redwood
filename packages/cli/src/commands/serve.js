@@ -1,13 +1,22 @@
 import fs from 'fs'
 import path from 'path'
 
+import chalk from 'chalk'
+import execa from 'execa'
 import terminalLink from 'terminal-link'
 
-import { getPaths } from '../lib'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
+import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
+
+function hasExperimentalServerFile() {
+  const serverFilePath = path.join(getPaths().api.dist, 'server.js')
+  return fs.existsSync(serverFilePath)
+}
 
 const streamServerErrorHandler = () => {
   console.error('⚠️  Experimental Render Mode ~ Cannot serve the web side ⚠️')
@@ -26,6 +35,9 @@ const streamServerErrorHandler = () => {
 }
 
 export const builder = async (yargs) => {
+  const redwoodProjectPaths = getPaths()
+  const redwoodProjectConfig = getConfig()
+
   const { apiCliOptions, webCliOptions, commonOptions, apiServerHandler } =
     await import('@redwoodjs/api-server')
 
@@ -36,6 +48,57 @@ export const builder = async (yargs) => {
       descriptions: 'Run both api and web servers',
       handler: streamServerErrorHandler,
       builder: (yargs) => yargs.options(commonOptions),
+    })
+    .command({
+      command: 'both',
+      description: 'Run both api and web servers. Uses the web port and host',
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: redwoodProjectConfig.web.port,
+            type: 'number',
+            alias: 'p',
+          },
+          host: {
+            default: redwoodProjectConfig.web.host,
+            type: 'string',
+          },
+          socket: { type: 'string' },
+        }),
+      handler: async (argv) => {
+        recordTelemetryAttributes({
+          command,
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+        })
+
+        // Run the experimental server file, if it exists, with web side also
+        if (hasExperimentalServerFile()) {
+          console.log(
+            [
+              separator,
+              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+              separator,
+              'Using the experimental API server file at api/dist/server.js',
+              separator,
+            ].join('\n')
+          )
+          await execa(
+            'yarn',
+            ['node', path.join('dist', 'server.js'), '--enable-web'],
+            {
+              cwd: redwoodProjectPaths.api.base,
+              stdio: 'inherit',
+              shell: true,
+            }
+          )
+          return
+        }
+
+        const { bothServerHandler } = await import('./serveHandler.js')
+        await bothServerHandler(argv)
+      },
     })
     .command({
       command: 'api',
@@ -102,4 +165,19 @@ export const builder = async (yargs) => {
         'https://redwoodjs.com/docs/cli-commands#serve'
       )}`
     )
+}
+
+const separator = chalk.hex('#ff845e')(
+  '------------------------------------------------------------------'
+)
+
+// We'll clean this up later, but for now note that this function is
+// duplicated between this package and @redwoodjs/fastify
+// to avoid importing @redwoodjs/fastify when the CLI starts.
+export function coerceRootPath(path) {
+  // Make sure that we create a root path that starts and ends with a slash (/)
+  const prefix = path.charAt(0) !== '/' ? '/' : ''
+  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
+
+  return `${prefix}${path}${suffix}`
 }

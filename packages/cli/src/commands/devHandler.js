@@ -3,6 +3,7 @@ import { argv } from 'process'
 
 import concurrently from 'concurrently'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -21,11 +22,21 @@ export const handler = async ({
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
   apiDebugPort,
 }) => {
-  const rwjsPaths = getPaths()
+  recordTelemetryAttributes({
+    command: 'dev',
+    side: JSON.stringify(side),
+    // forward, // TODO: Should we record this?
+    generate,
+    watchNodeModules,
+    apiDebugPort,
+  })
+
+  const redwoodProjectPaths = getPaths()
+  const redwoodProjectConfig = getConfig()
 
   // Starting values of ports from config (redwood.toml)
-  let apiPreferredPort = parseInt(getConfig().api.port)
-  let webPreferredPort = parseInt(getConfig().web.port)
+  let apiPreferredPort = parseInt(redwoodProjectConfig.api.port)
+  let webPreferredPort = parseInt(redwoodProjectConfig.web.port)
 
   // Assume we can have the ports we want
   let apiAvailablePort = apiPreferredPort
@@ -50,7 +61,7 @@ export const handler = async ({
       ...forward.matchAll(/\-\-port(\=|\s)(?<port>[^\s]*)/g),
     ]
     if (forwardedPortMatches.length) {
-      webPreferredPort = forwardedPortMatches.pop().groups.port
+      webPreferredPort = parseInt(forwardedPortMatches.pop().groups.port)
     }
 
     webAvailablePort = await getFreePort(webPreferredPort, [
@@ -85,7 +96,7 @@ export const handler = async ({
       await generatePrismaClient({
         verbose: false,
         force: false,
-        schema: rwjsPaths.api.dbSchema,
+        schema: redwoodProjectPaths.api.dbSchema,
       })
     } catch (e) {
       errorTelemetry(
@@ -128,7 +139,7 @@ export const handler = async ({
       return `--debug-port ${defaultApiDebugPort}`
     }
 
-    const apiDebugPortInToml = getConfig().api.debugPort
+    const apiDebugPortInToml = redwoodProjectConfig.api.debugPort
     if (apiDebugPortInToml) {
       return `--debug-port ${apiDebugPortInToml}`
     }
@@ -140,26 +151,47 @@ export const handler = async ({
   const redwoodConfigPath = getConfigPath()
 
   const webCommand =
-    getConfig().web.bundler === 'vite' // @NOTE: can't use enums, not TS
-      ? `yarn cross-env NODE_ENV=development rw-dev-fe`
+    redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
+      ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
       : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
           watchNodeModules ? '1' : ''
         } webpack serve --config "${webpackDevConfig}" ${forward}`
+
+  const apiCommand = [
+    'yarn',
+    'cross-env',
+    'NODE_ENV=development',
+    'NODE_OPTIONS=--enable-source-maps',
+    'yarn',
+    'nodemon',
+    '--quiet',
+    `--watch "${redwoodConfigPath}"`,
+    '--exec',
+    `"${[
+      'yarn',
+      'rw-api-server-watch',
+      `--port ${apiAvailablePort}`,
+      `--host '::'`,
+      getApiDebugFlag(),
+      '|',
+      'rw-log-formatter',
+    ].join(' ')}"`,
+  ].join(' ')
 
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} ${getApiDebugFlag()} | rw-log-formatter"`,
+      command: apiCommand,
       prefixColor: 'cyan',
-      runWhen: () => fs.existsSync(rwjsPaths.api.src),
+      runWhen: () => fs.existsSync(redwoodProjectPaths.api.src),
     },
     web: {
       name: 'web',
       command: webCommand,
       prefixColor: 'blue',
-      cwd: rwjsPaths.web.base,
-      runWhen: () => fs.existsSync(rwjsPaths.web.src),
+      cwd: redwoodProjectPaths.web.base,
+      runWhen: () => fs.existsSync(redwoodProjectPaths.web.src),
     },
     gen: {
       name: 'gen',

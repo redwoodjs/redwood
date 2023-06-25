@@ -8,6 +8,8 @@ import { env as envInterpolation } from 'string-env-interpolation'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 
@@ -684,6 +686,20 @@ export const commands = (yargs, ssh) => {
 }
 
 export const handler = async (yargs) => {
+  recordTelemetryAttributes({
+    command: ['deploy', 'baremetal'].join(' '),
+    firstRun: yargs.firstRun,
+    update: yargs.update,
+    install: yargs.install,
+    migrate: yargs.migrate,
+    build: yargs.build,
+    restart: yargs.restart,
+    cleanup: yargs.cleanup,
+    maintenance: yargs.maintenance,
+    rollback: yargs.rollback,
+    verbose: yargs.verbose,
+  })
+
   const { NodeSSH } = require('node-ssh')
   const ssh = new NodeSSH()
 

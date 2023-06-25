@@ -5,14 +5,14 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 import rimraf from 'rimraf'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
-import { errorTelemetry, timedTelemetry } from '@redwoodjs/telemetry'
+import { timedTelemetry } from '@redwoodjs/telemetry'
 import { buildFeServer } from '@redwoodjs/vite'
 
 import { getConfig, getPaths } from '../lib'
-import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
 export const handler = async ({
@@ -23,6 +23,15 @@ export const handler = async ({
   prisma = true,
   prerender,
 }) => {
+  recordTelemetryAttributes({
+    command: 'build',
+    side: JSON.stringify(side),
+    verbose,
+    performance,
+    stats,
+    prisma,
+    prerender,
+  })
   const rwjsPaths = getPaths()
 
   if (performance) {
@@ -134,23 +143,35 @@ export const handler = async ({
     },
   ].filter(Boolean)
 
+  const triggerPrerender = async () => {
+    console.log('Starting prerendering...')
+    if (prerenderRoutes.length === 0) {
+      console.log(
+        `You have not marked any routes to "prerender" in your ${terminalLink(
+          'Routes',
+          'file://' + rwjsPaths.web.routes
+        )}.`
+      )
+    }
+    // Running a separate process here, otherwise it wouldn't pick up the
+    // generated Prisma Client due to require module caching
+    await execa('yarn rw prerender', {
+      stdio: 'inherit',
+      shell: true,
+      cwd: rwjsPaths.web.base,
+    })
+  }
+
   const jobs = new Listr(tasks, {
     renderer: verbose && 'verbose',
   })
 
-  try {
-    await timedTelemetry(process.argv, { type: 'build' }, async () => {
-      await jobs.run()
+  await timedTelemetry(process.argv, { type: 'build' }, async () => {
+    await jobs.run()
 
-      // Removing prerender for streaming setup
-      // if (side.includes('web') && prerender) {
-      //   // This step is outside Listr so that it prints clearer, complete messages
-      //   await triggerPrerender()
-      // }
-    })
-  } catch (e) {
-    console.log(c.error(e.message))
-    errorTelemetry(process.argv, e.message)
-    process.exit(1)
-  }
+    if (side.includes('web') && prerender) {
+      // This step is outside Listr so that it prints clearer, complete messages
+      await triggerPrerender()
+    }
+  })
 }

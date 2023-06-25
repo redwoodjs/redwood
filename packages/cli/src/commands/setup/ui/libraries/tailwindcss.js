@@ -5,6 +5,7 @@ import execa from 'execa'
 import { outputFileSync } from 'fs-extra'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, usingVSCode } from '../../../../lib'
@@ -57,6 +58,11 @@ const tailwindImportsAndNotes = [
 ]
 
 export const handler = async ({ force, install }) => {
+  recordTelemetryAttributes({
+    command: ['setup', 'ui', 'tailwindcss'].join(' '),
+    force,
+    install,
+  })
   const rwPaths = getPaths()
 
   const projectPackages = ['prettier-plugin-tailwindcss']
