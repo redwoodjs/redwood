@@ -270,6 +270,9 @@ test('Check that about is prerendered', async () => {
 // `rwServeTest()` does that. If we try to add project building to this test as
 // well we will build twice, and we don't want that. Hence we use rwServeTest.
 test('prerender with broken gql query', async () => {
+  // Running the prerender command twice takes much longer than typical tests should
+  test.slow()
+
   const redwoodProjectPath = process.env.REDWOOD_TEST_PROJECT_PATH || ''
 
   const cellBasePath = path.join(

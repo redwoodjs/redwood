@@ -8,3 +8,5 @@ export * from './lib/project'
 export * from './auth/setupHelpers'
 
 export * from './lib/installHelpers'
+
+export * from './telemetry/index'

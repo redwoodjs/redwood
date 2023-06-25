@@ -3,6 +3,8 @@ import path from 'path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
@@ -54,6 +56,13 @@ export function builder(yargs) {
 }
 
 export async function handler({ force, install, packages }) {
+  recordTelemetryAttributes({
+    command: ['setup', 'ui', 'mantine'].join(' '),
+    force,
+    install,
+    packages,
+  })
+
   const rwPaths = getPaths()
   const configFilePath = path.join(rwPaths.web.config, 'mantine.config.js')
 
