@@ -22,7 +22,7 @@
     "@tailwindcss/forms": "0.5.3",
     "@tremor/react": "3.2.3",
     "graphiql": "2.4.7",
-    "graphql": "16.6.0",
+    "graphql": "16.7.1",
     "graphql-scalars": "1.21.3",
     "json-bigint-patch": "0.0.8",
     "pretty-ms": "7.0.0",

@@ -65,7 +65,7 @@
     "esbuild": "0.18.10",
     "fast-glob": "3.2.12",
     "file-loader": "6.2.0",
-    "graphql": "16.6.0",
+    "graphql": "16.7.1",
     "graphql-tag": "2.12.6",
     "html-webpack-plugin": "5.5.3",
     "lodash": "4.17.21",
