@@ -3,6 +3,7 @@ import path from 'path'
 
 import { transform as svgrTransform } from '@svgr/core'
 import type { API, FileInfo, StringLiteral } from 'jscodeshift'
+import pascalcase from 'pascalcase'
 
 async function convertSvgToReactComponent(
   svgFilePath: string,
@@ -96,10 +97,7 @@ export default async function transform(file: FileInfo, api: API) {
           path.extname(filePath)
         )
 
-        const componentName =
-          svgFileNameWithoutExtension.charAt(0).toUpperCase() +
-          svgFileNameWithoutExtension.slice(1)
-
+        const componentName = pascalcase(svgFileNameWithoutExtension)
         const newFileName = `${componentName}SVG`
 
         // The absolute path to the new file
@@ -119,8 +117,8 @@ export default async function transform(file: FileInfo, api: API) {
           return
         }
 
-        // If SVGr is succesful, change the import path
-        // '../../bazinga.svg' -> '../../Bazinga.js'
+        // If SVGr is successful, change the import path
+        // '../../bazinga.svg' -> '../../BazingaSVG'
         // Use extname, incase ext casing does not match
         importSourcePath.value = importSourcePath.value.replace(
           `${svgFileNameWithoutExtension}${path.extname(filePath)}`,
