@@ -14,4 +14,12 @@ describe('replaceComponentSvgs', () => {
       removeWhitespace: true, // needed for matching
     })
   })
+
+  it('Deals with src alias & casing in filenames', async () => {
+    await matchFolderTransform('replaceComponentSvgs', 'srcAlias', {
+      useJsCodeshift: true,
+      targetPathsGlob: '**/*.{js,jsx,tsx}',
+      removeWhitespace: true, // needed for matching
+    })
+  })
 })

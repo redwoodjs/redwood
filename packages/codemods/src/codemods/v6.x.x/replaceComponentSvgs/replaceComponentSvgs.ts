@@ -27,10 +27,34 @@ async function convertSvgToReactComponent(
   console.log(`SVG converted to React component: ${outputPath}`)
 }
 
+function convertToCapitalCase(string: string) {
+  let words
+  // Check if string contains hyphen (snake-case)
+  if (string.includes('-')) {
+    // Split the string into individual words
+    words = string.split('-')
+  } else {
+    // Split the string into individual words based on whitespace
+    words = string.split(' ')
+  }
+
+  // Capitalize each word and join them together
+  const capitalizedWords = words.map((word: string) => {
+    return word.charAt(0).toUpperCase() + word.slice(1)
+  })
+
+  const capitalCaseString = capitalizedWords.join('')
+
+  return capitalCaseString
+}
+
 export default async function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
 
   const root = j(file.source)
+
+  // Do this lazily
+  const { getPaths } = await import('@redwoodjs/project-config')
 
   // Find all import declarations with "*.svg" import
   const svgImports = root.find(j.ImportDeclaration).filter((path) => {
@@ -58,7 +82,13 @@ export default async function transform(file: FileInfo, api: API) {
 
         const importPath = importDeclaration.node.source.value as string
         const currentFolder = path.dirname(file.path)
-        const pathToSvgFile = path.resolve(currentFolder, importPath)
+
+        let pathToSvgFile = path.resolve(currentFolder, importPath)
+
+        // @TODO if has src/x alias, replace with abs path
+        if (importPath.startsWith('src/')) {
+          pathToSvgFile = importPath.replace('src/', getPaths().web.src + '/')
+        }
 
         // Find the JSX elements that use the default import specifier
         const svgsUsedAsComponent = root.findJSXElements(importName)
@@ -96,9 +126,7 @@ export default async function transform(file: FileInfo, api: API) {
           path.extname(filePath)
         )
 
-        const componentName =
-          svgFileNameWithoutExtension.charAt(0).toUpperCase() +
-          svgFileNameWithoutExtension.slice(1)
+        const componentName = convertToCapitalCase(svgFileNameWithoutExtension)
 
         const newFileName = `${componentName}SVG`
 

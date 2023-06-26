@@ -15,7 +15,6 @@ export const handler = () => {
   task('Replace Component Svgs', async ({ setOutput }: TaskInnerAPI) => {
     await runTransform({
       transformPath: path.join(__dirname, 'replaceComponentSvgs.js'),
-      // Here we know exactly which file we need to transform, but often times you won't.
       targetPaths: fg.sync('**/*.{js,jsx,tsx}', {
         cwd: getPaths().web.src,
         absolute: true,

@@ -1,5 +1,5 @@
-import Logo from 'src/mySvgs/LogoSVG'
-import Kitten from 'src/mySvgs/Kitten1WithDashesSVG'
+import Logo from "src/mySvgs/LogoSVG"
+import Kitten from "src/mySvgs/Kitten1WithDashesSVG"
 
 export default (props) => <>
 <Logo {...props} />
