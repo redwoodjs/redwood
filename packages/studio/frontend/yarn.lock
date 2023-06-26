@@ -526,21 +526,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/plugin-explorer@npm:0.1.20":
-  version: 0.1.20
-  resolution: "@graphiql/plugin-explorer@npm:0.1.20"
+"@graphiql/plugin-explorer@npm:0.1.21":
+  version: 0.1.21
+  resolution: "@graphiql/plugin-explorer@npm:0.1.21"
   dependencies:
-    "@graphiql/react": ^0.17.6
     graphiql-explorer: ^0.9.0
   peerDependencies:
+    "@graphiql/react": ^0.18.0
     graphql: ^15.5.0 || ^16.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: bf0f3892e27833b8dd11f1baf8c90d37e2bf769f35d5bd5dfd097e50ccec6072f5b07108b9f6c75387f28a87ce86764fbf87bfc2cee3b9dc4978a8440bb712fa
+    react: ^16.8.0 || ^17 || ^18
+    react-dom: ^16.8.0 || ^17 || ^18
+  checksum: 5c2c76d3921adcd37003f966ef8fe2c308cbc7b42f06809e161b1c48d7044a3164aa6f4c1c67872ed76060a57e7b4385bdf938ec5890e65e8b59c6ba580f08bc
   languageName: node
   linkType: hard
 
-"@graphiql/react@npm:^0.17.0, @graphiql/react@npm:^0.17.6":
+"@graphiql/react@npm:^0.17.6":
   version: 0.17.6
   resolution: "@graphiql/react@npm:0.17.6"
   dependencies:
@@ -566,7 +566,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/toolkit@npm:0.8.4, @graphiql/toolkit@npm:^0.8.2, @graphiql/toolkit@npm:^0.8.4":
+"@graphiql/toolkit@npm:0.8.4, @graphiql/toolkit@npm:^0.8.4":
   version: 0.8.4
   resolution: "@graphiql/toolkit@npm:0.8.4"
   dependencies:
@@ -1417,14 +1417,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.2.13":
-  version: 18.2.13
-  resolution: "@types/react@npm:18.2.13"
+"@types/react@npm:*, @types/react@npm:18.2.14":
+  version: 18.2.14
+  resolution: "@types/react@npm:18.2.14"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 59b434ab9f2cf4874c8715a3d848d7cfd257419af8c0e486e2af5b6760c99aab62a511cb3456a3044d8250c93539016ca84fbd23eaac988e74987e268df2eef2
+  checksum: a728a90e242fb41c233729fa46885cc47aca7df2035ed803f83bf0b582dde81143d465ecbf04a056bc6404f0f746f219d7043245ebd99baf83a178bbbb856c76
   languageName: node
   linkType: hard
 
@@ -2194,13 +2194,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:^2.0.0":
-  version: 2.2.0
-  resolution: "entities@npm:2.2.0"
-  checksum: 7fba6af1f116300d2ba1c5673fc218af1961b20908638391b4e1e6d5850314ee2ac3ec22d741b3a8060479911c99305164aed19b6254bde75e7e6b1b2c3f3aa3
-  languageName: node
-  linkType: hard
-
 "entities@npm:~2.1.0":
   version: 2.1.0
   resolution: "entities@npm:2.1.0"
@@ -2379,7 +2372,7 @@ __metadata:
   resolution: "frontend@workspace:."
   dependencies:
     "@apollo/client": 3.7.16
-    "@graphiql/plugin-explorer": 0.1.20
+    "@graphiql/plugin-explorer": 0.1.21
     "@graphiql/toolkit": 0.8.4
     "@headlessui/react": 1.7.15
     "@heroicons/react": 2.0.18
@@ -2389,12 +2382,12 @@ __metadata:
     "@nivo/treemap": 0.83.0
     "@tailwindcss/forms": 0.5.3
     "@tremor/react": 3.2.3
-    "@types/react": 18.2.13
+    "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     "@types/react-grid-layout": 1
     "@vitejs/plugin-react": 4.0.1
     autoprefixer: 10.4.14
-    graphiql: 2.4.0
+    graphiql: 2.4.7
     graphql: 16.6.0
     graphql-scalars: 1.21.3
     json-bigint-patch: 0.0.8
@@ -2570,24 +2563,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphiql@npm:2.4.0":
-  version: 2.4.0
-  resolution: "graphiql@npm:2.4.0"
+"graphiql@npm:2.4.7":
+  version: 2.4.7
+  resolution: "graphiql@npm:2.4.7"
   dependencies:
-    "@graphiql/react": ^0.17.0
-    "@graphiql/toolkit": ^0.8.2
-    entities: ^2.0.0
-    graphql-language-service: ^5.1.2
+    "@graphiql/react": ^0.17.6
+    "@graphiql/toolkit": ^0.8.4
+    graphql-language-service: ^5.1.6
     markdown-it: ^12.2.0
   peerDependencies:
     graphql: ^15.5.0 || ^16.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 839df9db40db3ced93271853aceb8009e0a924fe7020c106e8343d307bfa8da97df7f12cf537d002ec2214942495097a000c67ef2e5e1aae1f2a1770dd7c6621
+  checksum: 00cc84c24529849b7c9870ee2f4eaf4a2142df8aa767328160f74a9e0a00d3949cb3ec5c8765f08e380366850f15518f42f0f1d6ad6095e731f882faea06dd31
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:5.1.6, graphql-language-service@npm:^5.1.2, graphql-language-service@npm:^5.1.6":
+"graphql-language-service@npm:5.1.6, graphql-language-service@npm:^5.1.6":
   version: 5.1.6
   resolution: "graphql-language-service@npm:5.1.6"
   dependencies:

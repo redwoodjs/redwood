@@ -320,7 +320,7 @@ export const runPrerender = async ({
   })
 
   const gqlHandler = await getGqlHandler()
-  const vite = getConfig().web.bundler === 'vite'
+  const vite = getConfig().web.bundler !== 'webpack'
 
   // Prerender specific configuration
   // extends projects web/babelConfig
