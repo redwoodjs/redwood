@@ -47,7 +47,7 @@ export const handler = async ({
   if (side.includes('api')) {
     apiAvailablePort = await getFreePort(apiPreferredPort)
     if (apiAvailablePort === -1) {
-      await exitWithError(undefined, {
+      exitWithError(undefined, {
         message: `Could not determine a free port for the api server`,
       })
     }
@@ -68,7 +68,7 @@ export const handler = async ({
       apiAvailablePort,
     ])
     if (webAvailablePort === -1) {
-      await exitWithError(undefined, {
+      exitWithError(undefined, {
         message: `Could not determine a free port for the web server`,
       })
     }
@@ -85,7 +85,7 @@ export const handler = async ({
       ? `  - Web to use port ${webAvailablePort} instead of your currently configured ${webPreferredPort}\n`
       : ``
     message += `\nCannot run the development server until your configured ports are changed or become available.`
-    await exitWithError(undefined, {
+    exitWithError(undefined, {
       message,
     })
   }
@@ -215,13 +215,13 @@ export const handler = async ({
       handleInput: true,
     }
   )
-  result.catch(async (e) => {
+  result.catch((e) => {
     if (typeof e?.message !== 'undefined') {
       errorTelemetry(
         process.argv,
         `Error concurrently starting sides: ${e.message}`
       )
-      await exitWithError(e)
+      exitWithError(e)
     }
   })
 }
