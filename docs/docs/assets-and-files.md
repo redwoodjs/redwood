@@ -108,7 +108,7 @@ export default Header
 
 By default you can import and use SVG images like any other image asset.
 
-```jsx title="web/src/components/Example.js"
+```jsx title="web/src/components/Example.jsx"
 // highlight-next-line
 import svgIconSrc from '../mySvg.svg'
 
