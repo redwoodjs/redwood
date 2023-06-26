@@ -81,6 +81,12 @@ describe('paths', () => {
           config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
           services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
           directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
+          subscriptions: path.join(
+            FIXTURE_BASEDIR,
+            'api',
+            'src',
+            'subscriptions'
+          ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
@@ -313,6 +319,12 @@ describe('paths', () => {
           config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
           services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
           directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
+          subscriptions: path.join(
+            FIXTURE_BASEDIR,
+            'api',
+            'src',
+            'subscriptions'
+          ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
@@ -592,6 +604,12 @@ describe('paths', () => {
           config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
           services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
           directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
+          subscriptions: path.join(
+            FIXTURE_BASEDIR,
+            'api',
+            'src',
+            'subscriptions'
+          ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
@@ -829,6 +847,12 @@ describe('paths', () => {
           config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
           services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
           directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
+          subscriptions: path.join(
+            FIXTURE_BASEDIR,
+            'api',
+            'src',
+            'subscriptions'
+          ),
           src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
