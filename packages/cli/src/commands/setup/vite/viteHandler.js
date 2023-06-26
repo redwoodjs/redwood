@@ -53,7 +53,7 @@ export const handler = async ({ force, verbose, addPackage }) => {
               'You have the bundler set to webpack in your redwood.toml. Remove this line, or change it to "vite" and try again.'
             )
           } else {
-            task.skip('Vite already configured as bundler')
+            task.skip('Vite already configured as the bundler')
           }
         },
       },
