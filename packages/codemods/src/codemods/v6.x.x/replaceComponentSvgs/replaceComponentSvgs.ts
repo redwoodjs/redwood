@@ -3,6 +3,7 @@ import path from 'path'
 
 import { transform as svgrTransform } from '@svgr/core'
 import type { API, FileInfo, StringLiteral } from 'jscodeshift'
+import pascalcase from 'pascalcase'
 
 async function convertSvgToReactComponent(
   svgFilePath: string,
@@ -25,27 +26,6 @@ async function convertSvgToReactComponent(
   await fs.writeFile(outputPath, jsCode)
 
   console.log(`SVG converted to React component: ${outputPath}`)
-}
-
-function convertToCapitalCase(string: string) {
-  let words
-  // Check if string contains hyphen (snake-case)
-  if (string.includes('-')) {
-    // Split the string into individual words
-    words = string.split('-')
-  } else {
-    // Split the string into individual words based on whitespace
-    words = string.split(' ')
-  }
-
-  // Capitalize each word and join them together
-  const capitalizedWords = words.map((word: string) => {
-    return word.charAt(0).toUpperCase() + word.slice(1)
-  })
-
-  const capitalCaseString = capitalizedWords.join('')
-
-  return capitalCaseString
 }
 
 export default async function transform(file: FileInfo, api: API) {
@@ -85,7 +65,6 @@ export default async function transform(file: FileInfo, api: API) {
 
         let pathToSvgFile = path.resolve(currentFolder, importPath)
 
-        // @TODO if has src/x alias, replace with abs path
         if (importPath.startsWith('src/')) {
           pathToSvgFile = importPath.replace('src/', getPaths().web.src + '/')
         }
@@ -126,7 +105,7 @@ export default async function transform(file: FileInfo, api: API) {
           path.extname(filePath)
         )
 
-        const componentName = convertToCapitalCase(svgFileNameWithoutExtension)
+        const componentName = pascalcase(svgFileNameWithoutExtension)
 
         const newFileName = `${componentName}SVG`
 
