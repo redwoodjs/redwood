@@ -126,7 +126,7 @@ export default Example
 
 Sometimes however, you might want more control over styling your SVGs - maybe you want to modify the `stroke-width` or `fill` color.
 
-The easiest way to achieve this, is to make your SVGs a React component. Open up your SVG file, and drop in it's contents into a component - for example:
+The easiest way to achieve this, is to make your SVGs a React component. Open up your SVG file, and drop in its contents into a component – for example:
 
 ```tsx title="web/src/components/icons/CarIcon.tsx"
 import type { SVGProps } from "react"
