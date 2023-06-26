@@ -7,7 +7,7 @@ description: If you have to configure Vite, here's how
 Redwood uses Vite. One of Redwood's tenets is convention over configuration.
 
 Vite is an awesome build tool, but we don't want it to be something that you have to be familiar with to be productive.
-So it's worth repeating that you don't have to do any of this, because we configure everything you will need out of the box with a Redwood vite plugin.
+So it's worth repeating that you don't have to do any of this, because we configure everything you will need out of the box with a Redwood Vite plugin.
 
 Regardless, there'll probably come a time when you have to configure Vite. All the Vite configuration for your web side sits in `web/vite.config.{js,ts}`, and can be configured the same as any other Vite project. Let's take a peek!
 
@@ -20,7 +20,7 @@ dns.setDefaultResultOrder('verbatim');
 
 const viteConfig = {
   plugins: [
-    // 👇 this is the RedwoodJS vite plugin, that houses all the default configuration
+    // 👇 this is the RedwoodJS Vite plugin, that houses all the default configuration
     redwood()
     // ... add any custom Vite plugins you would like here
   ],
