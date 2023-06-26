@@ -147,8 +147,8 @@ export default async function transform(file: FileInfo, api: API) {
           return
         }
 
-        // If SVGr is succesful, change the import path
-        // '../../bazinga.svg' -> '../../Bazinga.js'
+        // If SVGr is successful, change the import path
+        // '../../bazinga.svg' -> '../../BazingaSVG'
         // Use extname, incase ext casing does not match
         importSourcePath.value = importSourcePath.value.replace(
           `${svgFileNameWithoutExtension}${path.extname(filePath)}`,
