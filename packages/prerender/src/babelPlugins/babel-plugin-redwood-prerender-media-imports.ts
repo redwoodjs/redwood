@@ -65,7 +65,7 @@ export default function (
           const importConstName = getVariableName(p)
           let copiedAssetPath
 
-          if (bundler === BundlerEnum.VITE) {
+          if (bundler !== BundlerEnum.WEBPACK) {
             if (state.filename === undefined) {
               return
             }
