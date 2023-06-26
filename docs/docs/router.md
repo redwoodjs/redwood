@@ -510,11 +510,11 @@ In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This 
 
 ## Code-splitting
 
-By default, the router will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, the router will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
+By default, the router will code-split on every Page, creating a separate lazy-loaded bundle for each. When navigating from page to page, the router will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
 
 ## Not code splitting
 
-If you'd like to override the default lazy-loading behavior and include certain Pages in the main webpack bundle, you can simply add the import statement to the `Routes.js` file:
+If you'd like to override the default lazy-loading behavior and include certain Pages in the main bundle, you can simply add the import statement to the `Routes.js` file:
 
 ```jsx title="Routes.js"
 import HomePage from 'src/pages/HomePage'

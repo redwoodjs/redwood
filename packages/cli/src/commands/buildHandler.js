@@ -105,7 +105,7 @@ export const handler = async ({
     side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
-        if (getConfig().web.bundler === 'vite') {
+        if (getConfig().web.bundler !== 'webpack') {
           // @WARN DO NOT MERGE TEMPORARY HACK
           // @WARN DO NOT MERGE TEMPORARY HACK
           // @WARN DO NOT MERGE TEMPORARY HACK
