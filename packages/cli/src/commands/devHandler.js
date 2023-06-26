@@ -37,7 +37,7 @@ const jsDeprecationNotice = () => {
   if (matches.length) {
     console.warn(
       c.warning(
-        `DEPRECATION NOTICE: When using Vite as your bundler, file extensions for JS files containing JSX must be named \`.jsx\`:\n\n  ${matches.join(
+        `DEPRECATION NOTICE: File extensions for JS files containing JSX must be named \`.jsx\`:\n\n  ${matches.join(
           '\n  '
         )}\n\nSupport for \`.js\` files containing JSX will be dropped in Redwood 7.0.0.\n* Hide this notice by setting the ENV variable REDWOOD_DISABLE_JS_DEPRECATION_NOTICE=1`
       )
