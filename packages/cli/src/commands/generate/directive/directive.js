@@ -104,7 +104,7 @@ export const { command, description, builder } =
 
 export const handler = async (args) => {
   recordTelemetryAttributes({
-    command: ['generate', 'directive'].join(' '),
+    command: 'generate directive',
     type: args.type,
     force: args.force,
     rollback: args.rollback,
