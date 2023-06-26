@@ -25,13 +25,18 @@ const jsDeprecationNotice = () => {
   // There may be actual legitimate JS-only files on the web side, so don't
   // search ALL files, just the main ones like App, Routes, pages and components
   const matches = fg.sync(
-    [
-      'web/src/App.js',
-      'web/src/Routes.js',
-      'web/src/components/**/*.js',
-      'web/src/pages/**/*.js',
-    ],
-    { ignore: ['web/src/**/*.mock.js', 'web/src/**/*.routeHooks.js'] }
+    ['App.js', 'Routes.js', 'components/**/*.js', 'pages/**/*.js'],
+    { cwd: getPaths().web.src },
+    {
+      ignore: [
+        '**/.*.js',
+        '**/*.fixtures.js',
+        '**/*.mock.js',
+        '**/*.routeHooks.js',
+        '**/*.test.js',
+        '**/*.spec.js',
+      ],
+    }
   )
 
   if (matches.length) {
