@@ -52,7 +52,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['setup', 'generator'].join(' '),
+    command: 'setup generator',
     name: options.name,
     force: options.force,
   })
