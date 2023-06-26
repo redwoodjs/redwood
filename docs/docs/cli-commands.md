@@ -74,7 +74,6 @@ We use Babel to transpile the api side into `./api/dist` and Webpack to package 
 | Arguments & Options | Description                                                                                                                                                                 |
 | :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `side`              | Which side(s) to build. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                            |
-| `--stats`           | Use [Webpack Bundle Analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) to visualize the size of Webpack output files via an interactive zoomable treemap |
 | `--verbose, -v`     | Print more information while building                                                                                                                                       |
 
 **Usage**
@@ -196,7 +195,7 @@ yarn redwood dev [side..]
 | Argument           | Description                                                                                                                                                                                 |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                      |
-| `--forward, --fwd` | String of one or more Webpack Dev Server config options. See example usage below. See the [Redwood Webpack Doc](webpack-configuration.md#webpack-dev-server) for more details and examples. |
+| `--forward, --fwd` | String of one or more Vite Dev Server config options. See example usage below |
 
 **Usage**
 
