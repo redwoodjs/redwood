@@ -42,7 +42,7 @@ const templateVariables = (name) => {
   }
 }
 
-export async function handler({ name, type, includeExamples, force, verbose }) {
+export async function handler({ name, type, force, verbose }) {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
   name = singular(name.toLowerCase())
@@ -96,7 +96,7 @@ export async function handler({ name, type, includeExamples, force, verbose }) {
       },
       {
         title: `Adding ${name} example subscription ...`,
-        enabled: () => includeExamples && functionType === 'subscription',
+        enabled: () => functionType === 'subscription',
         task: () => {
           // sdl
 
@@ -184,7 +184,7 @@ export async function handler({ name, type, includeExamples, force, verbose }) {
       },
       {
         title: `Adding ${name} example live query ...`,
-        enabled: () => includeExamples && functionType === 'liveQuery',
+        enabled: () => functionType === 'liveQuery',
         task: () => {
           // sdl
           const exampleSdlTemplateContent = path.resolve(

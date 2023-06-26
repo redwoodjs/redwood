@@ -22,13 +22,6 @@ export function builder(yargs) {
       choices: ['liveQuery', 'subscription'],
       description: 'Type of realtime event to setup',
     })
-    .option('includeExamples', {
-      alias: ['e', 'examples'],
-      default: true,
-      description:
-        'Include examples how to implement liveQueries and subscriptions',
-      type: 'boolean',
-    })
     .option('force', {
       alias: 'f',
       default: false,

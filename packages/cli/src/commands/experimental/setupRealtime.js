@@ -8,6 +8,13 @@ export const description = 'Setup the experimental RedwoodJS Realtime feature'
 
 export function builder(yargs) {
   yargs
+    .option('includeExamples', {
+      alias: ['e', 'examples'],
+      default: true,
+      description:
+        'Include examples how to implement liveQueries and subscriptions',
+      type: 'boolean',
+    })
     .option('force', {
       alias: 'f',
       default: false,

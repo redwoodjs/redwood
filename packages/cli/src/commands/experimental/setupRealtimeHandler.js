@@ -14,7 +14,7 @@ import { isTypeScriptProject } from '../../lib/project'
 import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRealtime'
 import { printTaskEpilogue, isServerFileSetup } from './util'
 
-export async function handler({ force, verbose }) {
+export async function handler({ force, includeExamples, verbose }) {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
 
@@ -66,6 +66,7 @@ export async function handler({ force, verbose }) {
       },
       {
         title: 'Adding Countdown example subscription ...',
+        enabled: () => includeExamples,
         task: () => {
           const exampleSubscriptionTemplateContent = fs.readFileSync(
             path.resolve(
@@ -97,6 +98,7 @@ export async function handler({ force, verbose }) {
       },
       {
         title: 'Adding NewMessage example subscription ...',
+        enabled: () => includeExamples,
         task: () => {
           // sdl
 
@@ -181,6 +183,7 @@ export async function handler({ force, verbose }) {
       },
       {
         title: 'Adding Auctions example live query ...',
+        enabled: () => includeExamples,
         task: () => {
           // sdl
 
