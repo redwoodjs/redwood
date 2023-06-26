@@ -26,8 +26,8 @@ const jsDeprecationNotice = () => {
   // search ALL files, just the main ones like App, Routes, pages and components
   const matches = fg.sync(
     ['App.js', 'Routes.js', 'components/**/*.js', 'pages/**/*.js'],
-    { cwd: getPaths().web.src },
     {
+      cwd: getPaths().web.src,
       ignore: [
         '**/.*.js',
         '**/*.fixtures.js',
