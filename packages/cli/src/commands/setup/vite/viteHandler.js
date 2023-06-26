@@ -53,12 +53,13 @@ export const handler = async ({ force, verbose, addPackage }) => {
               'You have the bundler set to webpack in your redwood.toml. Remove this line, or change it to "vite" and try again.'
             )
           } else {
-            task.skip('Vite bundler flag already set in redwood.toml')
+            task.skip('Vite already configured as bundler')
           }
         },
       },
       {
-        title: 'Creating new entry point in `web/src/entry.client.{jt}sx`...',
+        title:
+          'Creating new entry point in `web/src/entry.client.{jsx,tsx}`...',
         task: () => {
           const entryPointFile = path.join(
             getPaths().web.src,
