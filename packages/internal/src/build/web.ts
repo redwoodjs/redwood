@@ -49,11 +49,8 @@ interface BuildOptions {
 }
 
 /**
- *
- * @WARN: This is currently only used in testing
  * Builds the web side with Vite, but not used in the buildHandler currently
  * because we want to set the process.cwd to web.base
- *
  */
 export const buildWeb = async ({ verbose }: BuildOptions) => {
   // @NOTE: Using dynamic import, because vite is still opt-in

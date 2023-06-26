@@ -4,11 +4,12 @@ import type {
   DirectiveParams,
   ValidatorDirective,
   TransformerDirective,
+  GlobalContext,
 } from '@redwoodjs/graphql-server'
 import {
-  context as globalContext,
   setContext,
   DirectiveType,
+  getAsyncStoreInstance,
 } from '@redwoodjs/graphql-server'
 
 export { getDirectiveName } from '@redwoodjs/graphql-server'
@@ -75,45 +76,52 @@ export const mockRedwoodDirective: DirectiveMocker = (
 ) => {
   const { directiveArgs, context, ...others } = executionMock
 
-  if (context) {
-    setContext(context || {})
-  }
-
   if (directive.onResolvedValue.constructor.name === 'AsyncFunction') {
     return async () => {
-      if (directive.type === DirectiveType.TRANSFORMER) {
-        const { mockedResolvedValue } = others as TransformerMock
-        return directive.onResolvedValue({
-          resolvedValue: mockedResolvedValue,
-          context: globalContext,
-          directiveArgs: directiveArgs || {},
-          ...others,
-        } as DirectiveParams)
-      } else {
-        await directive.onResolvedValue({
-          context: globalContext,
-          directiveArgs: directiveArgs || {},
-          ...others,
-        } as DirectiveParams)
-      }
+      return getAsyncStoreInstance().run(
+        new Map<string, GlobalContext>(),
+        async () => {
+          if (context) {
+            setContext(context || {})
+          }
+
+          if (directive.type === DirectiveType.TRANSFORMER) {
+            const { mockedResolvedValue } = others as TransformerMock
+            return directive.onResolvedValue({
+              resolvedValue: mockedResolvedValue,
+              directiveArgs: directiveArgs || {},
+              ...others,
+            } as DirectiveParams)
+          } else {
+            await directive.onResolvedValue({
+              directiveArgs: directiveArgs || {},
+              ...others,
+            } as DirectiveParams)
+          }
+        }
+      )
     }
   }
 
   return () => {
-    if (directive.type === DirectiveType.TRANSFORMER) {
-      const { mockedResolvedValue } = others as TransformerMock
-      return directive.onResolvedValue({
-        resolvedValue: mockedResolvedValue,
-        context: globalContext,
-        directiveArgs: directiveArgs || {},
-        ...others,
-      } as DirectiveParams)
-    } else {
-      directive.onResolvedValue({
-        context: globalContext,
-        directiveArgs: directiveArgs || {},
-        ...others,
-      } as DirectiveParams)
-    }
+    return getAsyncStoreInstance().run(new Map<string, GlobalContext>(), () => {
+      if (context) {
+        setContext(context || {})
+      }
+
+      if (directive.type === DirectiveType.TRANSFORMER) {
+        const { mockedResolvedValue } = others as TransformerMock
+        return directive.onResolvedValue({
+          resolvedValue: mockedResolvedValue,
+          directiveArgs: directiveArgs || {},
+          ...others,
+        } as DirectiveParams)
+      } else {
+        directive.onResolvedValue({
+          directiveArgs: directiveArgs || {},
+          ...others,
+        } as DirectiveParams)
+      }
+    })
   }
 }
