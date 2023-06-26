@@ -18,7 +18,7 @@ const notes = [
 
 export const handler = async () => {
   recordTelemetryAttributes({
-    command: ['setup', 'deploy', 'vercel'].join(' '),
+    command: 'setup deploy vercel',
   })
   const tasks = new Listr([updateApiURLTask('/api'), printSetupNotes(notes)], {
     rendererOptions: { collapseSubtasks: false },
