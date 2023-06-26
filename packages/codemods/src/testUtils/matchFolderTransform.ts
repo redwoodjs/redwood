@@ -81,6 +81,10 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
       cwd: tempDir,
     })
 
+    // So that the transform can use getPaths() utility func
+    // This is used inside the runTransform function
+    process.env.RWJS_CWD = tempDir
+
     await runTransform({
       transformPath,
       targetPaths: targetPaths.map((p) => path.join(tempDir, p)),
