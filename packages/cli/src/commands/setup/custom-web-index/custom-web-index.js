@@ -16,7 +16,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['setup', 'custom-web-index'].join(' '),
+    command: 'setup custom-web-index',
     force: options.force,
   })
   const { handler } = await import('./custom-web-index-handler.js')
