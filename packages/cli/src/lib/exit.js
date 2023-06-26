@@ -30,7 +30,7 @@ export function exitWithError(
   includeReferenceCode ??= true
 
   // Determine the correct error message
-  message ??= error.message ?? (error.toString() || 'Unknown error')
+  message ??= error.stack ?? (error.toString() || 'Unknown error')
 
   // Generate a unique reference code for the error which can be used to look up
   // the error in telemetry if needed and if the user chooses to share it
