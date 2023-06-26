@@ -526,17 +526,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphiql/plugin-explorer@npm:0.1.20":
-  version: 0.1.20
-  resolution: "@graphiql/plugin-explorer@npm:0.1.20"
+"@graphiql/plugin-explorer@npm:0.1.22":
+  version: 0.1.22
+  resolution: "@graphiql/plugin-explorer@npm:0.1.22"
   dependencies:
-    "@graphiql/react": ^0.17.6
     graphiql-explorer: ^0.9.0
   peerDependencies:
+    "@graphiql/react": ^0.18.0
     graphql: ^15.5.0 || ^16.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: bf0f3892e27833b8dd11f1baf8c90d37e2bf769f35d5bd5dfd097e50ccec6072f5b07108b9f6c75387f28a87ce86764fbf87bfc2cee3b9dc4978a8440bb712fa
+    react: ^16.8.0 || ^17 || ^18
+    react-dom: ^16.8.0 || ^17 || ^18
+  checksum: 35c0e5ecd7c432b0177df4e09f7954e9cc0cac26424a7322ad21176b64ea4f180a3b4eaaf20a178242b4cf4e8727cd98620477318699a9242a2cb42b968de811
   languageName: node
   linkType: hard
 
@@ -1417,14 +1417,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.2.13":
-  version: 18.2.13
-  resolution: "@types/react@npm:18.2.13"
+"@types/react@npm:*, @types/react@npm:18.2.14":
+  version: 18.2.14
+  resolution: "@types/react@npm:18.2.14"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 59b434ab9f2cf4874c8715a3d848d7cfd257419af8c0e486e2af5b6760c99aab62a511cb3456a3044d8250c93539016ca84fbd23eaac988e74987e268df2eef2
+  checksum: a728a90e242fb41c233729fa46885cc47aca7df2035ed803f83bf0b582dde81143d465ecbf04a056bc6404f0f746f219d7043245ebd99baf83a178bbbb856c76
   languageName: node
   linkType: hard
 
@@ -2372,7 +2372,7 @@ __metadata:
   resolution: "frontend@workspace:."
   dependencies:
     "@apollo/client": 3.7.16
-    "@graphiql/plugin-explorer": 0.1.20
+    "@graphiql/plugin-explorer": 0.1.22
     "@graphiql/toolkit": 0.8.4
     "@headlessui/react": 1.7.15
     "@heroicons/react": 2.0.18
@@ -2382,7 +2382,7 @@ __metadata:
     "@nivo/treemap": 0.83.0
     "@tailwindcss/forms": 0.5.3
     "@tremor/react": 3.2.3
-    "@types/react": 18.2.13
+    "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     "@types/react-grid-layout": 1
     "@vitejs/plugin-react": 4.0.1

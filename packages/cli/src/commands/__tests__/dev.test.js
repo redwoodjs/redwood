@@ -97,7 +97,7 @@ describe('yarn rw dev', () => {
 
     // Uses absolute path, so not doing a snapshot
     expect(webCommand.command).toContain(
-      'yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES= webpack serve'
+      'yarn cross-env NODE_ENV=development rw-vite-dev'
     )
 
     expect(apiCommand.command).toMatchInlineSnapshot(

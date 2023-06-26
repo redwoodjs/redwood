@@ -188,7 +188,7 @@ export const handler = async ({
   const redwoodConfigPath = getConfigPath()
 
   const webCommand =
-    redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
+    redwoodProjectConfig.web.bundler !== 'webpack' // @NOTE: can't use enums, not TS
       ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
       : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
           watchNodeModules ? '1' : ''
