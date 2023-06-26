@@ -10,8 +10,6 @@ const buildWebSide = async () => {
     throw new Error('Could not locate your web/vite.config.{js,ts} file')
   }
 
-  // @NOTE: necessary for keeping the cwd correct for postcss/tailwind
-  process.chdir(rwPaths.web.base)
   process.env.NODE_ENV = 'production'
 
   // Right now, the buildWeb function looks up the config file from project-config
