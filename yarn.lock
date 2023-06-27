@@ -8042,7 +8042,6 @@ __metadata:
     jest: 29.5.0
     typescript: 5.1.3
     vite: 4.3.9
-    vite-plugin-commonjs: 0.6.2
     vite-plugin-environment: 1.1.3
   bin:
     rw-vite-build: ./bins/rw-vite-build.mjs
@@ -17297,7 +17296,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:3.2.12, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:~3.2.11":
+"fast-glob@npm:3.2.12, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9":
   version: 3.2.12
   resolution: "fast-glob@npm:3.2.12"
   dependencies:
@@ -30516,15 +30515,6 @@ __metadata:
     core-util-is: 1.0.2
     extsprintf: ^1.2.0
   checksum: 37ccdf8542b5863c525128908ac80f2b476eed36a32cb944de930ca1e2e78584cc435c4b9b4c68d0fc13a47b45ff364b4be43aa74f8804f9050140f660fb660d
-  languageName: node
-  linkType: hard
-
-"vite-plugin-commonjs@npm:0.6.2":
-  version: 0.6.2
-  resolution: "vite-plugin-commonjs@npm:0.6.2"
-  dependencies:
-    fast-glob: ~3.2.11
-  checksum: 498623f609702fc36afdb08ec1261f8bc6acb5eb80746671229301fd1db3b9409aeab8465df3bfc4f12c1c0da6f15d38711d3265577db3017352d31d58e08bd4
   languageName: node
   linkType: hard
 
