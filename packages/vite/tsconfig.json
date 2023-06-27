@@ -6,7 +6,7 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
   },
-  "include": ["src/**/*", "./ambient.d.ts", "./vite-plugin-commonjs.d.ts"],
+  "include": ["src/**/*", "./ambient.d.ts"],
   "references": [
     { "path": "../internal" },
   ]
