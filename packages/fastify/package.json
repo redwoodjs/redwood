@@ -34,7 +34,7 @@
     "@types/aws-lambda": "8.10.119",
     "@types/lodash": "4.14.195",
     "@types/qs": "6.9.7",
-    "esbuild": "0.18.9",
+    "esbuild": "0.18.10",
     "typescript": "5.1.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
