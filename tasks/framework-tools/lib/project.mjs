@@ -49,6 +49,24 @@ export function fixProjectBinaries(projectPath) {
     console.log('chmod +x', terminalLink(binName, binPath))
     fs.chmodSync(binSymlink, '755')
     fs.chmodSync(binPath, '755')
+
+    // Finally we need to add all bins as scripts to the project's package.json
+    // otherwise newly added bins won't work.
+    //
+    // From a yarn maintainer:
+    // > The node_modules/.bin folder is pretty much unused by Yarn, and is
+    // > only there for compatibility purpose with the tools that expect it to
+    // > exist.
+    // https://github.com/yarnpkg/berry/issues/2416#issuecomment-768271751
+    //
+    // Adding them as scripts works around this issue
+    const packageJsonPath = path.join(projectPath, 'package.json')
+    const packageJson = fs.readJSONSync(packageJsonPath)
+    packageJson.scripts = {
+      ...(packageJson.scripts || {}),
+      [binName]: `node ${binPath}`,
+    }
+    fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 })
   }
 }
 
