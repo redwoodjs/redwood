@@ -114,10 +114,9 @@ export const handler = async ({
           // it could affect other things that run in parallel while building.
           // We don't have any parallel tasks right now, but someone might add
           // one in the future as a performance optimization.
-          await execa(`yarn rw-vite-build`, {
+          await execa(`yarn rw-vite-build --webDir="${rwjsPaths.web.base}"`, {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
-            cwd: rwjsPaths.web.base, // <-- important for postcss/tailwind
           })
         } else {
           await execa(
