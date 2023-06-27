@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 import boxen from 'boxen'
 import { Octokit } from 'octokit'
+import { rimraf } from 'rimraf'
 import { cd, chalk, question, $, fs } from 'zx'
 
 import { handler as generateReleaseNotes } from './generateReleaseNotesCommand.mjs'
@@ -363,9 +364,6 @@ async function releaseMajorOrMinor() {
     console.log()
   }
 
-  await updateCreateRedwoodAppTemplates()
-  await versionDocs()
-
   exitIfNo(
     await question(
       `Ok to continue to publish? (Say no here if you want to push this branch to GitHub to create an RC) [Y/n] > `
@@ -374,8 +372,12 @@ async function releaseMajorOrMinor() {
   )
   console.log()
 
+  await versionDocs()
+  console.log()
   await cleanInstallUpdate()
+  console.log()
   await runQA(nextVersion)
+  console.log()
 
   exitIfNo(
     await question(
@@ -384,9 +386,61 @@ async function releaseMajorOrMinor() {
   )
   console.log()
 
-  await $`git push -u origin ${releaseBranch}`
-  await $`git push --tags`
+  // Temporarily remove `"packages/create-redwood-app"` from the workspaces field
+  // so that we can publish it separately later.
+  //  ------------------------
+  const frameworkPackageConfigPath = fileURLToPath(
+    new URL('../../package.json', import.meta.url)
+  )
+
+  const frameworkPackageConfig = fs.readJSONSync(frameworkPackageConfigPath)
+
+  const packagePaths = (await $`yarn workspaces list --json`).stdout
+    .trim()
+    .split('\n')
+    .map(JSON.parse)
+    .filter(({ name }) => name)
+    .map(({ location }) => location)
+
+  frameworkPackageConfig.workspaces = packagePaths.filter(
+    (packagePath) => packagePath !== 'packages/create-redwood-app'
+  )
+
+  fs.writeJSONSync(frameworkPackageConfigPath, frameworkPackageConfig, {
+    spaces: 2,
+  })
+
+  await $`git commit -am "chore: temporary update to workspaces"`
+  console.log()
+
+  await removeTSConfigTSBuildInfo()
+
+  //  ------------------------
+  try {
+    await $`yarn lerna publish from-package`
+  } catch (_error) {
+    exitIfNo(
+      await question(
+        'Publishing failed. You can usually recover from this by running `yarn lerna publish from-package` again. Continue? [Y/n] > '
+      )
+    )
+  }
+  console.log()
+
+  await $`git reset --hard HEAD~1`
+  console.log()
+
+  //  ------------------------
+  await updateCreateRedwoodAppTemplates()
+  console.log()
+
   await $`yarn lerna publish from-package`
+  console.log()
+
+  await $`git reset --soft HEAD~2`
+  await $`git commit -m "${nextVersion}"`
+  await $`git tag -am ${nextVersion} "${nextVersion}"`
+  await $`git push --tags`
 
   console.log(rocketBoxen(`Released ${chalk.green(nextVersion)}`))
 
@@ -521,6 +575,8 @@ async function releasePatch() {
 
   await $`git commit -am "chore: temporary update to workspaces"`
   console.log()
+
+  await removeTSConfigTSBuildInfo()
 
   //  ------------------------
   try {
@@ -680,7 +736,8 @@ async function updateCreateRedwoodAppTemplates() {
 
   cd('../..')
   await $`yarn ts-to-js`
-  await $`git commit -am "chore: update create-redwood-app templates"`
+  await $`git add .`
+  await $`git commit -m "chore: update create-redwood-app templates"`
   cd('../..')
 }
 
@@ -731,6 +788,11 @@ async function versionDocs() {
   await $`yarn`
   await $`yarn clear`
   await $`yarn docusaurus docs:version ${nextDocsVersion}`
-  await $`git commit -am "Version docs to ${nextDocsVersion}"`
+  await $`git add .`
+  await $`git commit -m "Version docs to ${nextDocsVersion}"`
   await cd('../')
+}
+
+async function removeTSConfigTSBuildInfo() {
+  await rimraf('packages/**/dist/tsconfig.tsbuildinfo')
 }

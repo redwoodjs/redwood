@@ -7,9 +7,7 @@
       "last 1 version"
     ],
     "production": [
-      "defaults",
-      "not IE 11",
-      "not IE_Mob 11"
+      "defaults"
     ]
   },
   "dependencies": {
@@ -19,5 +17,8 @@
     "prop-types": "15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@redwoodjs/vite": "5.0.0"
   }
 }

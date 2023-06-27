@@ -3,6 +3,7 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { runPrerender, writePrerenderedHtmlFile } from '@redwoodjs/prerender'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { getPaths } from '@redwoodjs/project-config'
@@ -23,7 +24,7 @@ const mapRouterPathToHtml = (routerPath) => {
 
 function getRouteHooksFilePath(routeFilePath) {
   const routeHooksFilePathTs = routeFilePath.replace(
-    /\.(js|tsx)$/,
+    /\.[jt]sx?$/,
     '.routeHooks.ts'
   )
 
@@ -32,7 +33,7 @@ function getRouteHooksFilePath(routeFilePath) {
   }
 
   const routeHooksFilePathJs = routeFilePath.replace(
-    /\.(js|tsx)$/,
+    /\.[jt]sx?$/,
     '.routeHooks.js'
   )
 
@@ -123,7 +124,7 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     console.log('\nSkipping prerender...')
     console.log(
       c.warning(
-        'You have not marked any routes with a path as `prerender` in `Routes.{js,tsx}` \n'
+        'You have not marked any routes with a path as `prerender` in `Routes.{jsx,tsx}` \n'
       )
     )
 
@@ -274,6 +275,12 @@ const diagnosticCheck = () => {
 }
 
 export const handler = async ({ path: routerPath, dryRun, verbose }) => {
+  recordTelemetryAttributes({
+    command: 'prerender',
+    dryRun,
+    verbose,
+  })
+
   const listrTasks = await getTasks(dryRun, routerPath)
 
   const tasks = new Listr(listrTasks, {

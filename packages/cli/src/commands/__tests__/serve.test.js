@@ -6,16 +6,23 @@ jest.mock('@redwoodjs/project-config', () => {
     getPaths: () => {
       return {
         api: {
+          base: '/mocked/project/api',
           dist: '/mocked/project/api/dist',
         },
         web: {
+          base: '/mocked/project/web',
           dist: '/mocked/project/web/dist',
         },
       }
     },
     getConfig: () => {
       return {
-        api: {},
+        web: {
+          host: 'localhost',
+        },
+        api: {
+          host: 'localhost',
+        },
       }
     },
   }
@@ -24,13 +31,19 @@ jest.mock('@redwoodjs/project-config', () => {
 jest.mock('fs', () => {
   return {
     ...jest.requireActual('fs'),
-    existsSync: () => true,
+    existsSync: (p) => {
+      // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
+      if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.js') {
+        return false
+      }
+      return true
+    },
   }
 })
 
-jest.mock('@redwoodjs/api-server', () => {
+jest.mock('../serveHandler', () => {
   return {
-    ...jest.requireActual('@redwoodjs/api-server'),
+    ...jest.requireActual('../serveHandler'),
     apiServerHandler: jest.fn(),
     webServerHandler: jest.fn(),
     bothServerHandler: jest.fn(),
@@ -39,13 +52,12 @@ jest.mock('@redwoodjs/api-server', () => {
 
 import yargs from 'yargs'
 
+import { builder } from '../serve'
 import {
   apiServerHandler,
   bothServerHandler,
   webServerHandler,
-} from '@redwoodjs/api-server'
-
-import { builder } from '../serve'
+} from '../serveHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {
@@ -60,6 +72,7 @@ describe('yarn rw serve', () => {
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
+        host: 'localhost',
         apiRootPath: expect.stringMatching(/^\/?funkyFunctions\/?$/),
       })
     )
@@ -75,6 +88,7 @@ describe('yarn rw serve', () => {
     expect(apiServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 5555,
+        host: 'localhost',
         rootPath: expect.stringMatching(/^\/?funkyFunctions\/nested\/$/),
       })
     )
@@ -90,6 +104,7 @@ describe('yarn rw serve', () => {
     expect(webServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 9898,
+        host: 'localhost',
         socket: 'abc',
         apiHost: 'https://myapi.redwood/api',
       })
@@ -104,6 +119,7 @@ describe('yarn rw serve', () => {
     expect(bothServerHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         port: 9898,
+        host: 'localhost',
         socket: 'abc',
       })
     )

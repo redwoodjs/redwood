@@ -3,12 +3,13 @@ import path from 'path'
 
 import React from 'react'
 
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { CheerioAPI, load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths, ensurePosixPath } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import { matchPath } from '@redwoodjs/router/dist/util'
 import type { QueryInfo } from '@redwoodjs/web'
@@ -29,6 +30,9 @@ interface ChunkReference {
   files: Array<string>
   referencedChunks: Array<string | number>
 }
+
+// Create an apollo client that we can use to prepopulate the cache and restore it client-side
+const prerenderApolloClient = new ApolloClient({ cache: new InMemoryCache() })
 
 async function recursivelyRender(
   App: React.ElementType,
@@ -213,9 +217,9 @@ function insertChunkLoadingScript(
       }
     }
   } else if (vite && route?.filePath) {
-    // TODO: Make sure this works on Windows
-    const pagesIndex = route.filePath.indexOf('web/src/pages') + 8
-    const pagePath = route.filePath.slice(pagesIndex)
+    const pagesIndex =
+      route.filePath.indexOf(path.join('web', 'src', 'pages')) + 8
+    const pagePath = ensurePosixPath(route.filePath.slice(pagesIndex))
     const pageChunkPath = buildManifest[pagePath]?.file
 
     if (pageChunkPath) {
@@ -316,7 +320,7 @@ export const runPrerender = async ({
   })
 
   const gqlHandler = await getGqlHandler()
-  const vite = getConfig().web.bundler === 'vite'
+  const vite = getConfig().web.bundler !== 'webpack'
 
   // Prerender specific configuration
   // extends projects web/babelConfig
@@ -326,14 +330,14 @@ export const runPrerender = async ({
       {
         plugins: [
           ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
-          [mediaImportsPlugin],
+          [mediaImportsPlugin, { bundler: getConfig().web.bundler }],
         ],
       },
     ],
   })
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
-  const { default: App } = await import(getPaths().web.app)
+  const { default: App } = require(getPaths().web.app)
 
   const componentAsHtml = await recursivelyRender(
     App,
@@ -343,6 +347,17 @@ export const runPrerender = async ({
   )
 
   const { helmet } = globalThis.__REDWOOD__HELMET_CONTEXT
+
+  // Loop over ther queryCache and write the queries to the apollo client cache this will normalize the data
+  // and make it available to the app when it hydrates
+  Object.keys(queryCache).forEach((queryKey) => {
+    const { query, variables, data } = queryCache[queryKey]
+    prerenderApolloClient.writeQuery({
+      query,
+      variables,
+      data,
+    })
+  })
 
   const indexHtmlTree = loadHtml(indexContent)
 
@@ -370,6 +385,17 @@ export const runPrerender = async ({
       }
     }
   }
+
+  indexHtmlTree('head').append(
+    `<script> globalThis.__REDWOOD__APOLLO_STATE = ${JSON.stringify(
+      prerenderApolloClient.extract()
+    )}</script>`
+  )
+
+  // Reset the cache after the apollo state is appended into the head
+  // If we don't call this all the data will be cached but you can run into issues with the cache being too large
+  // or possible cache merge conflicts
+  prerenderApolloClient.resetStore()
 
   insertChunkLoadingScript(indexHtmlTree, renderPath, vite)
 

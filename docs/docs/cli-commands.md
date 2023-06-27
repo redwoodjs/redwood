@@ -74,7 +74,6 @@ We use Babel to transpile the api side into `./api/dist` and Webpack to package 
 | Arguments & Options | Description                                                                                                                                                                 |
 | :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `side`              | Which side(s) to build. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                            |
-| `--stats`           | Use [Webpack Bundle Analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) to visualize the size of Webpack output files via an interactive zoomable treemap |
 | `--verbose, -v`     | Print more information while building                                                                                                                                       |
 
 **Usage**
@@ -196,7 +195,7 @@ yarn redwood dev [side..]
 | Argument           | Description                                                                                                                                                                                 |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                      |
-| `--forward, --fwd` | String of one or more Webpack Dev Server config options. See example usage below. See the [Redwood Webpack Doc](webpack-configuration.md#webpack-dev-server) for more details and examples. |
+| `--forward, --fwd` | String of one or more Vite Dev Server config options. See example usage below |
 
 **Usage**
 
@@ -1754,6 +1753,8 @@ A `generateGraphiQLHeader` file will be created in your `api/lib` folder and inc
 yarn redwood setup graphiql <provider>
 ```
 
+If you're using `dbAuth`, make sure the `-i` id you provided is not logged in from the web app.
+
 | Arguments & Options | Description                                                                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase`                                                                           |
@@ -1855,7 +1856,7 @@ yarn redwood setup deploy <provider>
 
 | Arguments & Options | Description                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------- |
-| `provider`          | Deploy provider to configure. Choices are `aws-serverless`, `netlify`, `render`, or `vercel`          |
+| `provider`          | Deploy provider to configure. Choices are `baremetal`, `coherence`, `edgio`, `flightcontrol`, `netlify`, `render`, `vercel`, or `aws-serverless [deprecated]`,          |
 | `--database, -d`    | Database deployment for Render only [choices: "none", "postgresql", "sqlite"] [default: "postgresql"] |
 | `--force, -f`       | Overwrite existing configuration [default: false]                                                     |
 
@@ -1909,7 +1910,7 @@ yarn redwood setup tsconfig
 
 ### setup ui
 
-Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), [Mantine UI](https://ui.mantine.dev/) and [WindiCSS](https://windicss.org/).
+Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), and [Mantine UI](https://ui.mantine.dev/).
 
 ```
 yarn rw setup ui <library>
@@ -1917,7 +1918,7 @@ yarn rw setup ui <library>
 
 | Arguments & Options | Description                                                                             |
 | :------------------ | :-------------------------------------------------------------------------------------- |
-| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, `mantine`, and `windicss` |
+| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, and `mantine` |
 | `--force, -f`       | Overwrite existing configuration                                                        |
 
 ## storybook
@@ -1989,11 +1990,12 @@ yarn redwood serve [side]
 
 `yarn rw serve` is useful for debugging locally or for self-hosting—deploying a single server into a serverful environment. Since both the api and the web sides run in the same server, CORS isn't a problem.
 
-| Arguments & Options | Description                                                                    |
-| ------------------- | ------------------------------------------------------------------------------ |
-| `side`              | Which side(s) to run. Choices are `api` and `web`. Defaults to `api` and `web` |
-| `--port`            | What port should the server run on [default: 8911]                             |
-| `--socket`          | The socket the server should run. This takes precedence over port              |
+| Arguments & Options | Description                                                                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `side`              | Which side(s) to run. Choices are `api` and `web`. Defaults to `api` and `web`                                                                  |
+| `--port`            | What port should the server run on [default: 8911]                                                                                              |
+| `--host`            | What host should the server run on. This defaults to the value of `web.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
+| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
 
 ### serve api
 
@@ -2005,11 +2007,12 @@ yarn rw serve api
 
 This command uses `apiUrl` in your `redwood.toml`. Use this command if you want to run just the api side on a server (e.g. running on Render).
 
-| Arguments & Options | Description                                                       |
-| ------------------- | ----------------------------------------------------------------- |
-| `--port`            | What port should the server run on [default: 8911]                |
-| `--socket`          | The socket the server should run. This takes precedence over port |
-| `--apiRootPath`     | The root path where your api functions are served                 |
+| Arguments & Options | Description                                                                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--port`            | What port should the server run on [default: 8911]                                                                                              |
+| `--host`            | What host should the server run on. This defaults to the value of `api.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
+| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
+| `--apiRootPath`     | The root path where your api functions are served                                                                                               |
 
 For the full list of Server Configuration settings, see [this documentation](app-configuration-redwood-toml.md#api).
 If you want to format your log output, you can pipe the command to the Redwood LogFormatter:
@@ -2032,11 +2035,12 @@ This command serves the contents in `web/dist`. Use this command if you're debug
 >
 > Probably, but it can be a challenge to setup when you just want something running quickly!
 
-| Arguments & Options | Description                                                                           |
-| ------------------- | ------------------------------------------------------------------------------------- |
-| `--port`            | What port should the server run on [default: 8911]                                    |
-| `--socket`          | The socket the server should run. This takes precedence over port                     |
-| `--apiHost`         | Forwards requests from the `apiUrl` (defined in `redwood.toml`) to the specified host |
+| Arguments & Options | Description                                                                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--port`            | What port should the server run on [default: 8911]                                                                                              |
+| `--host`            | What host should the server run on. This defaults to the value of `web.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
+| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
+| `--apiHost`         | Forwards requests from the `apiUrl` (defined in `redwood.toml`) to the specified host                                                           |
 
 If you want to format your log output, you can pipe the command to the Redwood LogFormatter:
 

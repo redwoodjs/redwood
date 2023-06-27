@@ -43,6 +43,14 @@ describe('getConfig', () => {
           "open": false,
         },
         "experimental": {
+          "cli": {
+            "autoInstall": true,
+            "plugins": [
+              {
+                "package": "@redwoodjs/cli-storybook",
+              },
+            ],
+          },
           "opentelemetry": {
             "apiSdk": undefined,
             "enabled": false,
@@ -60,6 +68,7 @@ describe('getConfig', () => {
             },
             "inMemory": false,
           },
+          "useSDLCodeGenForGraphQLTypes": false,
         },
         "generate": {
           "nestScaffoldByModel": true,
@@ -72,7 +81,7 @@ describe('getConfig', () => {
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
-          "bundler": "webpack",
+          "bundler": "vite",
           "fastRefresh": true,
           "host": "localhost",
           "includeEnvironmentVariables": [],
@@ -169,7 +178,7 @@ describe('getConfig', () => {
     expect(config.web.apiUrl).toBe('/bazinga')
     expect(config.web.title).toBe('App running on staging')
 
-    delete process.env['API_URL']
-    delete process.env['APP_ENV']
+    delete process.env.API_URL
+    delete process.env.APP_ENV
   })
 })

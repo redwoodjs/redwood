@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getEpilogue } from './util'
 
 export const command = 'studio'
@@ -15,6 +17,10 @@ export function builder(yargs) {
 }
 
 export async function handler(options) {
-  const { handler } = await import('./studioHandler')
+  recordTelemetryAttributes({
+    command: ['experimental', command].join(' '),
+    open: options.open,
+  })
+  const { handler } = await import('./studioHandler.js')
   return handler(options)
 }

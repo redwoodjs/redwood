@@ -116,6 +116,11 @@ module.exports = {
             { type: 'doc', label: 'Baremetal', id: 'deploy/baremetal' },
             {
               type: 'doc',
+              label: 'GCP or AWS via Coherence',
+              id: 'deploy/coherence',
+            },
+            {
+              type: 'doc',
               label: 'AWS via Flightcontrol',
               id: 'deploy/flightcontrol',
             },
@@ -180,7 +185,7 @@ module.exports = {
           ],
         },
         'webhooks',
-        'webpack-configuration',
+        'vite-configuration',
       ],
     },
     {

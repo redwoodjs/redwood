@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getEpilogue } from './util'
 
 export const command = 'setup-sentry'
@@ -18,6 +20,10 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./setupSentryHandler')
+  recordTelemetryAttributes({
+    command: ['experimental', 'setup-sentry'].join(' '),
+    force: options.force,
+  })
+  const { handler } = await import('./setupSentryHandler.js')
   return handler(options)
 }

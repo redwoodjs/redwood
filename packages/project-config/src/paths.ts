@@ -24,7 +24,7 @@ export interface NodeTargetPaths {
   models: string
 }
 
-export interface BrowserTargetPaths {
+export interface WebPaths {
   base: string
   src: string
   app: string
@@ -38,6 +38,7 @@ export interface BrowserTargetPaths {
   config: string
   webpack: string
   viteConfig: string | null // because vite is opt-in only
+  entryClient: string | null
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string
@@ -57,7 +58,7 @@ export interface Paths {
     }
     prebuild: string
   }
-  web: BrowserTargetPaths
+  web: WebPaths
   api: NodeTargetPaths
   scripts: string
 }
@@ -85,19 +86,22 @@ const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_GENERATORS = 'api/generators'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_DIRECTIVES = 'api/src/directives'
+const PATH_API_DIR_SUBSCRIPTIONS = 'api/src/subscriptions'
 const PATH_API_DIR_SRC = 'api/src'
-const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
+const PATH_WEB_ROUTES = 'web/src/Routes' // .jsx|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
-const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
+const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .jsx|.tsx
 const PATH_WEB_INDEX_HTML = 'web/src/index.html'
 const PATH_WEB_DIR_GENERATORS = 'web/generators'
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
+const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
+
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
@@ -136,8 +140,12 @@ export const resolveFile = (
 /**
  * Path constants that are relevant to a Redwood project.
  */
-// TODO: Make this a proxy and make it lazy.
+const getPathsCache = new Map<string, Paths>()
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
+  if (getPathsCache.has(BASE_DIR)) {
+    return getPathsCache.get(BASE_DIR) as Paths
+  }
+
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
@@ -169,6 +177,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       directives: path.join(BASE_DIR, PATH_API_DIR_DIRECTIVES),
+      subscriptions: path.join(BASE_DIR, PATH_API_DIR_SUBSCRIPTIONS),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),
@@ -184,7 +193,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
       generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
-      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)),
+      index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
       config: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG),
       webpack: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_WEBPACK),
@@ -204,12 +213,14 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       types: path.join(BASE_DIR, 'web/types'),
+      entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
     },
   }
 
   fs.mkdirSync(paths.generated.types.includes, { recursive: true })
   fs.mkdirSync(paths.generated.types.mirror, { recursive: true })
 
+  getPathsCache.set(BASE_DIR, paths)
   return paths
 }
 
@@ -217,7 +228,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
  * Process the pages directory and return information useful for automated imports.
  *
  * Note: glob.sync returns posix style paths on Windows machines
- * @deprecated I will write a separate method that use `getFiles` instead. This
+ * @deprecated I will write a seperate method that use `getFiles` instead. This
  * is used by structure, babel auto-importer and the eslint plugin.
  */
 export const processPagesDir = (

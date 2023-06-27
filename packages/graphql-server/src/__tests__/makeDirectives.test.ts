@@ -18,7 +18,7 @@ const bazingaSchema = gql`
 const barSchema = gql`
   directive @bar on FIELD_DEFINITION
 `
-test('Should map globs to defined structure correctly', async () => {
+test('Should map directives globs to defined structure correctly', async () => {
   // Mocking what our import-dir plugin would do
   const directiveFiles = {
     foo_directive: {

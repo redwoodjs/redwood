@@ -7,6 +7,8 @@ import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import {
   addRoutesToRouterTask,
   addScaffoldImport,
@@ -153,7 +155,7 @@ export const files = ({
       templateForComponentFile({
         name: 'ForgotPassword',
         suffix: 'Page',
-        extension: typescript ? '.tsx' : '.js',
+        extension: typescript ? '.tsx' : '.jsx',
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'forgotPassword.tsx.template',
@@ -167,7 +169,7 @@ export const files = ({
       templateForComponentFile({
         name: 'Login',
         suffix: 'Page',
-        extension: typescript ? '.tsx' : '.js',
+        extension: typescript ? '.tsx' : '.jsx',
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: webauthn
@@ -183,7 +185,7 @@ export const files = ({
       templateForComponentFile({
         name: 'ResetPassword',
         suffix: 'Page',
-        extension: typescript ? '.tsx' : '.js',
+        extension: typescript ? '.tsx' : '.jsx',
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'resetPassword.tsx.template',
@@ -197,7 +199,7 @@ export const files = ({
       templateForComponentFile({
         name: 'Signup',
         suffix: 'Page',
-        extension: typescript ? '.tsx' : '.js',
+        extension: typescript ? '.tsx' : '.jsx',
         webPathSection: 'pages',
         generator: 'dbAuth',
         templatePath: 'signup.tsx.template',
@@ -372,6 +374,16 @@ const tasks = ({
 }
 
 export const handler = async (yargs) => {
+  recordTelemetryAttributes({
+    command: ['generate', 'dbAuth'].join(' '),
+    skipForgot: yargs.skipForgot,
+    skipLogin: yargs.skipLogin,
+    skipReset: yargs.skipReset,
+    skipSignup: yargs.skipSignup,
+    webauthn: yargs.webauthn,
+    force: yargs.force,
+    rollback: yargs.rollback,
+  })
   const t = tasks({ ...yargs })
 
   try {

@@ -4,9 +4,8 @@ const packageJSON = require(path.join(__dirname, 'package.json'))
 
 const TARGETS_NODE = '18.16'
 
-// Run `npx browserslist "defaults, not IE 11, not IE_Mob 11"` to see a list
-// of target browsers.
-const TARGETS_BROWSERS = ['defaults', 'not IE 11', 'not IE_Mob 11']
+// Run `npx browserslist "defaults"` to see a list of target browsers.
+const TARGETS_BROWSERS = ['defaults']
 
 // Warning! Recommended to specify used minor core-js version, like corejs: '3.6',
 // instead of corejs: '3', since with '3' it will not be injected modules
@@ -34,7 +33,10 @@ module.exports = {
           // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
           proposals: true,
         },
-        exclude: ['es.error.cause'],
+        exclude: [
+          'es.error.cause',
+          process.env.NODE_ENV !== 'test' && 'proposal-dynamic-import',
+        ].filter(Boolean),
       },
     ],
     '@babel/preset-react',

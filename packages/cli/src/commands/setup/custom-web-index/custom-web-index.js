@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'custom-web-index'
 
 export const description =
@@ -13,6 +15,10 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./custom-web-index-handler')
+  recordTelemetryAttributes({
+    command: ['setup', 'custom-web-index'].join(' '),
+    force: options.force,
+  })
+  const { handler } = await import('./custom-web-index-handler.js')
   return handler(options)
 }

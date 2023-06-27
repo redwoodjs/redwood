@@ -57,7 +57,7 @@ const printHeaders = async () => {
     )
   }
 
-  const script = await import(srcPath)
+  const script = require(srcPath)
   await script.default()
 }
 

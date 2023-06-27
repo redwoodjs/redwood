@@ -219,7 +219,7 @@ export const removeAuthProvider = (content: string) => {
     .join('\n')
 }
 
-/** returns the content of App.{js,tsx} with <AuthProvider> added */
+/** returns the content of App.{jsx,tsx} with <AuthProvider> added */
 const addAuthProviderToApp = (content: string, setupMode: AuthSetupMode) => {
   if (setupMode === 'FORCE' || setupMode === 'REPLACE') {
     content = removeAuthProvider(content)
@@ -230,7 +230,7 @@ const addAuthProviderToApp = (content: string, setupMode: AuthSetupMode) => {
   )
 
   if (!match) {
-    throw new Error('Could not find <RedwoodProvider> in App.{js,tsx}')
+    throw new Error('Could not find <RedwoodProvider> in App.{jsx,tsx}')
   }
 
   // If Auth.tsx already contains exactly what we're trying to add there's no
@@ -286,19 +286,19 @@ const addUseAuthHook = (componentName: string, content: string) => {
 }
 
 /**
- * Actually inserts the required config lines into App.{js,tsx}
+ * Actually inserts the required config lines into App.{jsx,tsx}
  * Exported for testing
  */
 export const addConfigToWebApp = <
   Renderer extends typeof ListrRenderer
 >(): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
-    title: 'Updating web/src/App.{js,tsx}',
+    title: 'Updating web/src/App.{jsx,tsx}',
     task: (ctx, task) => {
       const webAppPath = getWebAppPath()
 
       if (!fs.existsSync(webAppPath)) {
-        const ext = isTypeScriptProject() ? 'tsx' : 'js'
+        const ext = isTypeScriptProject() ? 'tsx' : 'jsx'
         throw new Error(`Could not find root App.${ext}`)
       }
 
@@ -351,8 +351,11 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
 
   const isTSProject = isTypeScriptProject()
 
-  // ext will be tsx, ts or js
-  const ext = isTypeScriptProject() ? templateExtension : 'js'
+  // ext will be tsx, ts or jsx, js
+  let ext = templateExtension
+  if (!isTypeScriptProject()) {
+    ext = ext?.replace('ts', 'js')
+  }
 
   return {
     title: `Creating web/src/auth.${ext}`,

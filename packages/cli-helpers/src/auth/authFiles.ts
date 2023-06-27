@@ -41,13 +41,12 @@ export const apiSideFiles = ({ basedir, webAuthn }: FilesArgs) => {
           )
         })
         .map((fileName) => {
-          // remove "template" from the end, and change from {ts,tsx} to js for
+          // remove "template" from the end, and change from {ts,tsx} to {js,jsx} for
           // JavaScript projects
-          const fileNameParts = fileName.split('.')
-          const outputFileName = [
-            ...fileNameParts.slice(0, -2),
-            isTypeScriptProject() ? fileNameParts.at(-2) : 'js',
-          ].join('.')
+          let outputFileName = fileName.replace(/\.template$/, '')
+          if (!isTypeScriptProject()) {
+            outputFileName = outputFileName.replace(/\.ts(x?)$/, '.js$1')
+          }
 
           if (!webAuthn) {
             return { templateFileName: fileName, outputFileName }

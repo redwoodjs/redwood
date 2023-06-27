@@ -159,7 +159,6 @@ const getSharedPlugins = (isEnvProduction) => {
     // The define plugin will replace these keys with their values during build
     // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
-      ['RWJS_WEB_BUNDLER']: JSON.stringify('webpack'),
       ['RWJS_ENV']: JSON.stringify({
         RWJS_API_GRAPHQL_URL:
           redwoodConfig.web.apiGraphQLUrl ??
@@ -277,7 +276,7 @@ module.exports = (webpackEnv) => {
           oneOf: [
             // (0)
             {
-              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
               type: 'asset',
               parser: {
                 dataUrlCondition: {

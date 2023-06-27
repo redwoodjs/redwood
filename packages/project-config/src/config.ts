@@ -99,7 +99,18 @@ export interface Config {
       apiSdk?: string
     }
     studio: StudioConfig
+    cli: {
+      autoInstall: boolean
+      plugins: CLIPlugin[]
+    }
+    useSDLCodeGenForGraphQLTypes: boolean
   }
+}
+
+export interface CLIPlugin {
+  package: string
+  version?: string
+  enabled?: boolean
 }
 
 // Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
@@ -111,7 +122,7 @@ const DEFAULT_CONFIG: Config = {
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    bundler: BundlerEnum.WEBPACK,
+    bundler: BundlerEnum.VITE,
     includeEnvironmentVariables: [],
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
@@ -157,6 +168,15 @@ const DEFAULT_CONFIG: Config = {
         },
       },
     },
+    cli: {
+      autoInstall: true,
+      plugins: [
+        {
+          package: '@redwoodjs/cli-storybook',
+        },
+      ],
+    },
+    useSDLCodeGenForGraphQLTypes: false,
   },
 }
 

@@ -1,5 +1,7 @@
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'cache <client>'
 
 export const description = 'Sets up an init file for service caching'
@@ -27,6 +29,11 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./cacheHandler')
+  recordTelemetryAttributes({
+    command: ['setup', 'cache'].join(' '),
+    client: options.client,
+    force: options.force,
+  })
+  const { handler } = await import('./cacheHandler.js')
   return handler(options)
 }

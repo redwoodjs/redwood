@@ -5,8 +5,8 @@ import {
   BarList,
   Card,
   // Color,
-  Dropdown,
-  DropdownItem,
+  Select,
+  SelectItem,
   Title,
   Bold,
   Flex,
@@ -196,28 +196,27 @@ export default function SeriesTypeBarList({
 
   return (
     <Card>
-      <Flex className="space-x-4" justifyContent="start" alignItems="center">
+      <Flex className="space-x-4" justifyContent="between" alignItems="stretch">
         <Title>{name}</Title>
-        <Dropdown
+        <Select
           onValueChange={(value) => setRefreshSecondsAgo(parseInt(value))}
           placeholder="120 seconds ago"
-          className="max-w-xs"
+          className="max-w-xs w-64"
         >
           {agos.map((ago) => (
-            <DropdownItem
+            <SelectItem
               key={`ago-${ago}`}
               value={`${ago}`}
-              text={`${ago} seconds ago`}
-            />
+            >{`${ago} seconds ago`}</SelectItem>
           ))}
-        </Dropdown>
+        </Select>
       </Flex>
       <Flex className="mt-4">
         <Text>
           <Bold>Type</Bold>
         </Text>
         <Text>
-          <Bold>Quantity</Bold>
+          <Bold>Count</Bold>
         </Text>
       </Flex>
       <BarList data={barListData} className="mt-2" />
