@@ -71,7 +71,8 @@ export const getCommonPlugins = () => {
   ]
 }
 
-// @TODO double check this, think about it more carefully please!
+// TODO (STREAMING) double check this, think about it more carefully please!
+// It's related to yarn workspaces to be or not to be
 export const getRouteHookBabelPlugins = () => {
   return [
     ...getWebSideBabelPlugins({
