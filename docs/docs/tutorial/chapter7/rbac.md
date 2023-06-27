@@ -161,7 +161,7 @@ The easiest way to prevent access to an entire URL is via the Router. The `<Priv
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 // highlight-next-line
 <Private unauthenticated="home" roles="admin">
   <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
@@ -279,7 +279,7 @@ Redwood provides a `hasRole()` function you can get from the `useAuth()` hook (y
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.js"
+```jsx title="web/src/components/Comment/Comment.jsx"
 // highlight-next-line
 import { useAuth } from 'src/auth'
 
@@ -400,7 +400,7 @@ And due to the nice encapsulation of our **Comment** component we can make all t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.js"
+```jsx title="web/src/components/Comment/Comment.jsx"
 // highlight-next-line
 import { useMutation } from '@redwoodjs/web'
 
@@ -565,7 +565,7 @@ We'll also need to update the `CommentsQuery` we're importing from `CommentsCell
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.jsx"
 import Comment from 'src/components/Comment'
 
 export const QUERY = gql`
@@ -613,12 +613,12 @@ Ideally we'd have both versions of this component (with and without the "Delete"
 
 Similar to how we can mock GraphQL calls in Storybook, we can mock user authentication and authorization functionality in a story.
 
-In `Comment.stories.{js,tsx}` let's add a second story for the moderator view of the component (and rename the existing one for clarity):
+In `Comment.stories.{jsx,tsx}` let's add a second story for the moderator view of the component (and rename the existing one for clarity):
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.stories.js"
+```jsx title="web/src/components/Comment/Comment.stories.jsx"
 import Comment from './Comment'
 
 // highlight-next-line
@@ -705,7 +705,7 @@ The **moderatorView** story needs to have a user available that has the moderato
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.stories.js"
+```jsx title="web/src/components/Comment/Comment.stories.jsx"
 export const moderatorView = () => {
   // highlight-start
   mockCurrentUser({
@@ -778,7 +778,7 @@ We can use the same `mockCurrentUser()` function in our Jest tests as well. Let'
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.test.js"
+```jsx title="web/src/components/Comment/Comment.test.jsx"
 // highlight-next-line
 import { render, screen, waitFor } from '@redwoodjs/testing'
 
