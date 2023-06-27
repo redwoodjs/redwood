@@ -36,6 +36,8 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   // Step 1A: Generate the client bundle
   await buildWeb({ verbose })
 
+  // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
+  // so we can switch to a regular import
   // @NOTE: Using dynamic import, because vite is still opt-in
   const { build } = await import('vite')
 
@@ -58,7 +60,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     setup(build: PluginBuild) {
       build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
         // Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
-        // @TODO: We need the new transformWithBabel function in https://github.com/redwoodjs/redwood/pull/7672/files
+        // TODO (STREAMING) We need the new transformWithBabel function in https://github.com/redwoodjs/redwood/pull/7672/files
         const transformedCode = transformWithBabel(args.path, [
           ...getRouteHookBabelPlugins(),
         ])
@@ -80,7 +82,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     entryPoints: allRouteHooks,
     platform: 'node',
     target: 'node16',
-    // @MARK Disable splitting and esm, because Redwood web modules dont support esm yet
+    // @MARK Disable splitting and esm, because Redwood web modules don't support esm yet
     // outExtension: { '.js': '.mjs' },
     // format: 'esm',
     // splitting: true,
@@ -92,7 +94,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   })
 
   // Step 3: Generate route-manifest.json
-  // @TODO double check why we need to do .default here
+  // TODO (STREAMING) double check why we need to do .default here
   // Its related to the babel import assertion plugin most likely
   const clientBuildManifest: ViteManifest = (
     await import(path.join(getPaths().web.dist, 'build-manifest.json'), {
@@ -110,6 +112,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
         : null,
       matchRegexString: route.matchRegexString,
       // @NOTE this is the path definition, not the actual path
+      // E.g. /blog/post/{id:Int}
       pathDefinition: route.path,
       hasParams: route.hasParams,
       routeHooks: FIXME_constructRouteHookPath(route.routeHooks),
@@ -127,7 +130,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   await fs.writeFile(rwPaths.web.routeManifest, JSON.stringify(routeManifest))
 }
 
-// @TODO @MARK Hacky work around because when you don't have a App.routeHook, esbuild doesn't create
+// TODO (STREAMING) Hacky work around because when you don't have a App.routeHook, esbuild doesn't create
 // the pages folder in the dist/server/routeHooks directory.
 // @MARK need to change to .mjs here if we use esm
 const FIXME_constructRouteHookPath = (rhSrcPath: string | null | undefined) => {

@@ -8,8 +8,8 @@ export interface RouteHookEvent {
   params: Record<string, string> // this has to be provided from RW router
   headers: Record<string, string | string[] | undefined>
   query: Record<string, string | string[] | undefined>
-  // cookies: Record<string, string> @TODO pass in parsed cookies
-  // @MARK @TODO: this is the previous output, but we call it appRouteHook, we should rename it
+  // cookies: Record<string, string> TODO (STREAMING) pass in parsed cookies
+  // TODO (STREAMING) this is the previous output, but we call it appRouteHook, we should rename it
   appRouteHook?: RouteHookOutput
 }
 

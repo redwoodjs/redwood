@@ -58,8 +58,8 @@ interface Other extends Custom {
   tagType: string // link, script, etc
 }
 
-// @MARK Maintaining the similar format to Remix's V2_MetaDescriptor
-// 1. because I like it
+// @MARK Maintaining a similar format to Remix's V2_MetaDescriptor
+// 1. because I (Danny) like it
 // 2. because it'll feel consistent to people who are familiar with Remix
 // I've modified it a little bit, but we need to decide wether we want the
 // remix style DIY meta tags, or the more opinionated approach in MetaTags.tsx
@@ -94,7 +94,7 @@ export const Meta = ({ tags = [] }: MetaProps) => {
           )
         }
 
-        // @TODO add validate tag function
+        // TODO (STREAMING) add validate tag function
         if (otherTag(tag)) {
           const { tagType: TagName, ...rest } = tag
           return <TagName key={`meta-${index}`} {...rest} />

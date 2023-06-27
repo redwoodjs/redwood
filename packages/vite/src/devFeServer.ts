@@ -1,3 +1,4 @@
+// TODO (STREAMING) Merge with runFeServer so we only have one file
 import path from 'path'
 
 import express from 'express'
@@ -15,13 +16,16 @@ import { stripQueryStringAndHashFromPath } from './utils'
 // These values are defined in the vite.config.ts
 globalThis.RWJS_ENV = {}
 
-// @MARK, @TODO Just so it doesn't error out. Not sure how to handle this.
+// TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
 async function createServer() {
   const app = express()
   const rwPaths = getPaths()
 
+  // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
+  // and this file should always exist. So the error message needs to change
+  // (or be removed perhaps)
   // @MARK: Vite is still experimental, and opt-in
   if (!rwPaths.web.viteConfig) {
     throw new Error(
@@ -90,7 +94,7 @@ async function createServer() {
       }
 
       if (!currentRoute) {
-        // @TODO do something
+        // TODO (STREAMING) do something
       }
 
       if (!rwPaths.web.entryServer || !rwPaths.web.entryClient) {
@@ -107,7 +111,7 @@ async function createServer() {
       // Serialize route context so it can be passed to the client entry
       const serializedRouteContext = JSON.stringify(serverData)
 
-      // @TODO CSS is handled by Vite in dev mode, we don't need to worry about it in dev
+      // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to worry about it in dev
       // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
       const FIXME_HardcodedIndexCss = ['index.css']
 
@@ -145,6 +149,7 @@ async function createServer() {
         }
       )
     } catch (e) {
+      // TODO (STREAMING) Is this what we want to do?
       // send back a SPA page
       // res.status(200).set({ 'Content-Type': 'text/html' }).end(template)
 

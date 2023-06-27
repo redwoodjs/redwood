@@ -14,7 +14,7 @@ interface Props {
 
 const isPrerendered = false
 
-// @MARK @TODO
+// TODO (STREAMING)
 // SSR and streaming changes how we mount the React app (we render the whole page, including head and body)
 // This logic is no longer valid and needs to be rethought
 

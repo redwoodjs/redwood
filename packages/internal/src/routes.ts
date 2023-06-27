@@ -104,7 +104,7 @@ export const getProjectRoutes = (): RouteSpec[] => {
       renderMode: route.renderMode,
       matchRegexString: matchRegexString,
       paramNames: routeParams,
-      // @TODO deal with permanent/temp later
+      // TODO (STREAMING) deal with permanent/temp later
       redirect: route.redirect
         ? { to: route.redirect, permanent: false }
         : null,

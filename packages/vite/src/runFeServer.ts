@@ -19,7 +19,7 @@ import { stripQueryStringAndHashFromPath } from './utils'
 globalThis.RWJS_ENV = {}
 
 /**
- * @MARK @TODO
+ * TODO (STREAMING)
  * We have this server in the vite package only temporarily.
  * We will need to decide where to put it, so that rwjs/internal and other heavy dependencies
  * can be removed from the final docker image
@@ -44,14 +44,14 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
-  // @TODO @MARK figure out why we're having to do default here
+  // TODO (STREAMING) figure out why we're having to do default here
   const routeManifest: RWRouteManifest = (
     await import(rwPaths.web.dist + '/server/route-manifest.json', {
       assert: { type: 'json' },
     })
   ).default
 
-  // @TODO @MARK figure out why we're having to do default here
+  // TODO (STREAMING) figure out why we're having to do default here
   const buildManifest: ViteManifest = (
     await import(rwPaths.web.dist + '/build-manifest.json', {
       assert: { type: 'json' },
@@ -71,7 +71,7 @@ export async function runFeServer() {
   app.use('/assets', express.static(rwPaths.web.dist + '/assets'))
 
   // 👉 2. Proxy the api server
-  // @TODO we need to be able to specify whether proxying is required or not
+  // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
   // Also be careful of differences between v2 and v3 of the server
   app.use(
@@ -100,7 +100,7 @@ export async function runFeServer() {
         path.join(rwPaths.web.distServer, '/entry-server.js')
       )
 
-      // @MARK should we generate individual express Routes for each Route?
+      // TODO (STREAMING) should we generate individual express Routes for each Route?
       // This would make handling 404s and favicons / public assets etc. easier
       const currentRoute = Object.values(routeManifest).find((route) => {
         if (!route.matchRegexString) {
@@ -117,7 +117,7 @@ export async function runFeServer() {
       // Doesn't match any of the defined Routes
       // Render 404 page, and send back 404 status
       if (!currentRoute) {
-        // @MARK should we CONST it?
+        // TODO (STREAMING) should we CONST it?
         const fourOhFourRoute = routeManifest['notfound']
 
         if (!fourOhFourRoute) {
@@ -155,7 +155,7 @@ export async function runFeServer() {
       let metaTags: TagDescriptor[] = []
 
       if (currentRoute?.redirect) {
-        // @TODO deal with permanent/temp
+        // TODO (STREAMING) deal with permanent/temp
         // Short-circuit, and return a 301 or 302
         return res.redirect(currentRoute.redirect.to)
       }
@@ -163,7 +163,7 @@ export async function runFeServer() {
       if (currentRoute) {
         // Make sure we access the dist routeHooks!
         const routeHookPaths = [
-          // @TODO hardcoded JS file, watchout if we switch to ESM!
+          // TODO (STREAMING) hardcoded JS file, watchout if we switch to ESM!
           path.join(rwPaths.web.distRouteHooks, 'App.routeHooks.js'),
           currentRoute.routeHooks
             ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
@@ -231,7 +231,7 @@ export async function runFeServer() {
         }
       )
 
-      // @TODO make the timeout configurable
+      // TODO (STREAMING) make the timeout configurable
       setTimeout(() => {
         abort()
       }, 10_000)

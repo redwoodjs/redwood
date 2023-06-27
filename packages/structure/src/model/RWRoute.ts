@@ -144,6 +144,7 @@ export class RWRoute extends BaseNode {
     return this.getBoolAttr('prerender')
   }
 
+  // TODO (STREAMING) Remove this once we're sure we don't want to do Render Modes
   @lazy() get renderMode(): string | undefined {
     return this.getStringAttr('renderMode') || 'stream'
   }

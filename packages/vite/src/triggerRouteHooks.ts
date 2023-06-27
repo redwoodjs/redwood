@@ -27,9 +27,9 @@ export const triggerRouteHooks = async ({
   const event: RouteHookEvent = {
     params: parsedParams,
     headers: req.headers || {},
-    query: req.query as any, // @TODO we should parse query parameters the same way as RW router
-    // cookies: req.cookies || {}, // @TODO we probably need some sort of cookie parser
-    // @TODO called app routeHook, but its just the previous output
+    query: req.query as any, // TODO (STREAMING) we should parse query parameters the same way as RW router
+    // cookies: req.cookies || {}, // TODO (STREAMING) we probably need some sort of cookie parser
+    // TODO (STREAMING) called app routeHook, but its just the previous output
     appRouteHook: previousOutput,
   }
 
