@@ -44,7 +44,7 @@ const jsDeprecationNotice = () => {
       c.warning(
         `DEPRECATION NOTICE: File extensions for JS files containing JSX must be named \`.jsx\`:\n\n  ${matches.join(
           '\n  '
-        )}\n\nSupport for \`.js\` files containing JSX will be dropped in Redwood 7.0.0.\nThere is a codemod available to update these extensions for you:\n\n  npx @redwoodjs/codemods update-js-to-jsx\n\n* Hide this notice by setting the ENV variable REDWOOD_DISABLE_JS_DEPRECATION_NOTICE=1`
+        )}\n\nSupport for \`.js\` files containing JSX will be dropped in Redwood 7.0.0.\nThere is a codemod available to update these extensions for you:\n\n  npx @redwoodjs/codemods convert-js-to-jsx\n\n* Hide this notice by setting the ENV variable REDWOOD_DISABLE_JS_DEPRECATION_NOTICE=1`
       )
     )
   }
