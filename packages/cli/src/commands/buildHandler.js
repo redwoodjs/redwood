@@ -104,7 +104,7 @@ export const handler = async ({
     side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
-        if (getConfig().web.bundler === 'vite') {
+        if (getConfig().web.bundler !== 'webpack') {
           // @NOTE: we're using the vite build command here, instead of the buildWeb function
           // because we want the process.cwd to be the web directory, not the root of the project
           // This is important for postcss/tailwind to work correctly

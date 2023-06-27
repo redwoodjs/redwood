@@ -185,7 +185,7 @@ module.exports = {
           ],
         },
         'webhooks',
-        'webpack-configuration',
+        'vite-configuration',
       ],
     },
     {
