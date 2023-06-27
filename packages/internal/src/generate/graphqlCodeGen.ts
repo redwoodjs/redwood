@@ -27,13 +27,37 @@ enum CodegenSide {
   WEB,
 }
 
-export const generateTypeDefGraphQLApi = async () => {
+type TypeDefResult = {
+  typeDefFiles: string[]
+  errors: { message: string; error: unknown }[]
+}
+
+export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
   const config = getConfig()
+  const errors: { message: string; error: unknown }[] = []
+
   if (config.experimental.useSDLCodeGenForGraphQLTypes) {
     const paths = getPaths()
     const sdlCodegen = await import('@sdl-codegen/node')
-    const dtsFiles = sdlCodegen.runFullCodegen('redwood', { paths })
-    return dtsFiles.paths
+
+    const dtsFiles: string[] = []
+
+    try {
+      const output = sdlCodegen.runFullCodegen('redwood', { paths })
+      dtsFiles.concat(output.paths)
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        errors.push({
+          message: e.message,
+          error: e,
+        })
+      }
+    }
+
+    return {
+      typeDefFiles: dtsFiles,
+      errors,
+    }
   }
 
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
@@ -67,8 +91,6 @@ export const generateTypeDefGraphQLApi = async () => {
     },
   ]
 
-  const errors: { message: string; error: unknown }[] = []
-
   try {
     return {
       typeDefFiles: await runCodegenGraphQL(
@@ -92,7 +114,7 @@ export const generateTypeDefGraphQLApi = async () => {
   }
 }
 
-export const generateTypeDefGraphQLWeb = async () => {
+export const generateTypeDefGraphQLWeb = async (): Promise<TypeDefResult> => {
   const filename = path.join(getPaths().web.types, 'graphql.d.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
