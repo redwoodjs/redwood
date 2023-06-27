@@ -7,6 +7,7 @@ import fs from 'fs'
 import path from 'path'
 
 import c from 'ansi-colors'
+import chalk from 'chalk'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 import { debounce } from 'lodash'
@@ -118,6 +119,18 @@ const rebuildApiServer = () => {
     // Check if experimental server file exists
     const serverFile = resolveFile(`${redwoodProjectPaths.api.dist}/server`)
     if (serverFile) {
+      const separator = chalk.hex('#ff845e')(
+        '------------------------------------------------------------------'
+      )
+      console.log(
+        [
+          separator,
+          `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+          separator,
+          'Using the experimental API server file at api/dist/server.js',
+          separator,
+        ].join('\n')
+      )
       httpServerProcess = fork(serverFile, [], forkOpts)
     } else {
       httpServerProcess = fork(
