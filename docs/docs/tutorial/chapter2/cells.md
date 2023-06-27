@@ -120,12 +120,12 @@ As you'll see repeatedly going forward, Redwood has a generator for this feature
 yarn rw g cell Articles
 ```
 
-This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{js,tsx}` (and `test.{js,tsx}` `mock.{js,ts}` and `stories.{js,tsx}` files—more on those in [chapter 5 of the tutorial](../chapter5/storybook.md)!). This file will contain some boilerplate to get you started:
+This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{jsx,tsx}` (and `test.{jsx,tsx}` `mock.{js,ts}` and `stories.{jsx,tsx}` files—more on those in [chapter 5 of the tutorial](../chapter5/storybook.md)!). This file will contain some boilerplate to get you started:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     articles {
@@ -192,7 +192,7 @@ export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
 
 :::info Indicating Multiplicity to the Cell Generator
 
-When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.{js,tsx}`):
+When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.{jsx,tsx}`):
 
 ```bash
 yarn rw g cell blog_articles
@@ -203,7 +203,7 @@ yarn rw g cell BlogArticles
 
 You will need _some_ kind of indication that you're using more than one word: either snake_case (`blog_articles`), kebab-case (`blog-articles`), camelCase (`blogArticles`) or PascalCase (`BlogArticles`).
 
-Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.{js,tsx}`.
+Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.{jsx,tsx}`.
 
 :::
 
@@ -212,7 +212,7 @@ To get you off and running as quickly as possible the generator assumes you've g
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -247,7 +247,7 @@ We'll have to rename them to `posts` in both the query name and in the prop name
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -341,7 +341,7 @@ Let's plug this cell into our `HomePage` and see what happens:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.jsx"
 import { MetaTags } from '@redwoodjs/web'
 
 // highlight-next-line
@@ -485,7 +485,7 @@ In fact, let's use the aforementioned alias so that the name of our cell, and th
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -558,7 +558,7 @@ In addition to the `id` that was added to the `query` by the generator, let's ge
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```javascript title="web/src/components/ArticlesCell/ArticlesCell.js"
+```javascript title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     articles: posts {
@@ -603,7 +603,7 @@ Now we're in the realm of good ol' React components, so just build out the `Succ
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const Success = ({ articles }) => {
   return (
     // highlight-start
