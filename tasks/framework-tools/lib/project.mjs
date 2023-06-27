@@ -22,6 +22,11 @@ import {
 export function fixProjectBinaries(projectPath) {
   const bins = getFrameworkPackagesBins()
 
+  // Read the existing package.json scripts
+  const packageJsonPath = path.join(projectPath, 'package.json')
+  const packageJson = fs.readJSONSync(packageJsonPath)
+  const scripts = packageJson.scripts ?? {}
+
   for (let [binName, binPath] of Object.entries(bins)) {
     // if the binPath doesn't exist, create it.
     const binSymlink = path.join(projectPath, 'node_modules/.bin', binName)
@@ -60,14 +65,12 @@ export function fixProjectBinaries(projectPath) {
     // https://github.com/yarnpkg/berry/issues/2416#issuecomment-768271751
     //
     // Adding them as scripts works around this issue
-    const packageJsonPath = path.join(projectPath, 'package.json')
-    const packageJson = fs.readJSONSync(packageJsonPath)
-    packageJson.scripts = {
-      ...(packageJson.scripts || {}),
-      [binName]: `node ${binPath}`,
-    }
-    fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 })
+    scripts[binName] = `node ${binPath}`
   }
+
+  // Write the updated project.json which includes the full list of scripts.
+  packageJson.scripts = scripts
+  fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 })
 }
 
 /**
