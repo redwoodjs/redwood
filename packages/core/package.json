@@ -8,20 +8,6 @@
     "directory": "packages/core"
   },
   "license": "MIT",
-  "bin": {
-    "cross-env": "./dist/bins/cross-env.js",
-    "eslint": "./dist/bins/eslint.js",
-    "jest": "./dist/bins/jest.js",
-    "nodemon": "./dist/bins/nodemon.js",
-    "redwood": "./dist/bins/redwood.js",
-    "rimraf": "./dist/bins/rimraf.js",
-    "rw": "./dist/bins/redwood.js",
-    "rw-api-server-watch": "./dist/bins/rw-api-server-watch.js",
-    "rw-gen": "./dist/bins/rw-gen.js",
-    "rw-gen-watch": "./dist/bins/rw-gen-watch.js",
-    "rw-log-formatter": "./dist/bins/rw-log-formatter.js",
-    "rwfw": "./dist/bins/rwfw.js"
-  },
   "files": [
     "config",
     "dist"
