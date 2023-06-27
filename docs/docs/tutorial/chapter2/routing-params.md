@@ -11,7 +11,7 @@ Now let's link the title of the post on the homepage to the detail page (and inc
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 // highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
@@ -78,7 +78,7 @@ But what we really need is to specify _which_ post we want to view on this page.
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 <Route path="/article/{id}" page={ArticlePage} name="article" />
 ```
 
@@ -97,7 +97,7 @@ Notice the `{id}`. Redwood calls these _route parameters_. They say "whatever va
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 import { Router, Route, Set } from '@redwoodjs/router'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -164,7 +164,7 @@ Cool, cool, cool. Now we need to construct a link that has the ID of a post in i
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 <h2>
   <Link to={routes.article({ id: article.id })}>{article.title}</Link>
 </h2>
@@ -268,7 +268,7 @@ And then we'll use that cell in `ArticlePage`:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ArticlePage/ArticlePage.js"
+```jsx title="web/src/pages/ArticlePage/ArticlePage.jsx"
 import { MetaTags } from '@redwoodjs/web'
 // highlight-next-line
 import ArticleCell from 'src/components/ArticleCell'
@@ -317,7 +317,7 @@ Now over to the cell, we need access to that `{id}` route param so we can look u
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticleCell/ArticleCell.js"
+```jsx title="web/src/components/ArticleCell/ArticleCell.jsx"
 export const QUERY = gql`
   query ArticleQuery($id: Int!) {
     // highlight-next-line
@@ -387,7 +387,7 @@ Okay, we're getting closer. Still, where will that `$id` come from? Redwood has 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ArticlePage/ArticlePage.js"
+```jsx title="web/src/pages/ArticlePage/ArticlePage.jsx"
 import { MetaTags } from '@redwoodjs/web'
 import ArticleCell from 'src/components/ArticleCell'
 
@@ -462,7 +462,7 @@ What if you could request the conversion right in the route's path? Introducing 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 <Route path="/article/{id:Int}" page={ArticlePage} name="article" />
 ```
 
@@ -539,17 +539,17 @@ Now let's display the actual post instead of just dumping the query result. We c
 yarn rw g component Article
 ```
 
-Which creates `web/src/components/Article/Article.{js,tsx}` (and corresponding test and more!) as a super simple React component:
+Which creates `web/src/components/Article/Article.{jsx,tsx}` (and corresponding test and more!) as a super simple React component:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 const Article = () => {
   return (
     <div>
       <h2>{'Article'}</h2>
-      <p>{'Find me in ./web/src/components/Article/Article.js'}</p>
+      <p>{'Find me in ./web/src/components/Article/Article.jsx'}</p>
     </div>
   )
 }
@@ -587,7 +587,7 @@ Let's copy the `<article>` section from `ArticlesCell` and put it here instead, 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 // highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
@@ -655,7 +655,7 @@ And update `ArticlesCell` to use this new component instead:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 // highlight-next-line
 import Article from 'src/components/Article'
 
@@ -739,7 +739,7 @@ Last but not least we can update the `ArticleCell` to properly display our blog 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticleCell/ArticleCell.js"
+```jsx title="web/src/components/ArticleCell/ArticleCell.jsx"
 // highlight-next-line
 import Article from 'src/components/Article'
 
