@@ -134,8 +134,7 @@ export async function copyFrameworkFilesToProject(
   projectPath,
   packageJsonPaths = getFrameworkPackageJsonPaths()
 ) {
-  // Loop over every package, delete all existing files, copy over the new files,
-  // and fix binaries.
+  // Loop over every package, delete all existing files and copy over the new files
   const packagesFiles = await getFrameworkPackagesFiles(packageJsonPaths)
 
   const packageNamesToPaths = packageJsonPaths.reduce(
