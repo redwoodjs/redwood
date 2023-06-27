@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "yarn build:js",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build:js": "echo",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "jest",
     "test:watch": "yarn test --watch"
