@@ -9,6 +9,7 @@
   "scripts": {
     "build": "lerna run build",
     "build:clean": "yarn clean:prisma && rimraf \"packages/**/dist\" --glob",
+    "super:clean": "git clean -fdx && yarn && yarn build",
     "build:link": "node ./tasks/build-and-copy",
     "build:test-project": "node ./tasks/test-project/test-project",
     "build:watch": "lerna run build:watch --parallel; tsc --build",
