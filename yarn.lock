@@ -7410,6 +7410,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/cli-x@5.0.0, @redwoodjs/cli-x@workspace:packages/cli-x":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/cli-x@workspace:packages/cli-x"
+  dependencies:
+    esbuild: 0.18.9
+    fs-extra: 11.1.1
+    tsx: 3.12.7
+    typescript: 5.1.3
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/cli@5.0.0, @redwoodjs/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
@@ -7426,6 +7437,7 @@ __metadata:
     "@prisma/internals": 4.16.1
     "@redwoodjs/api-server": 5.0.0
     "@redwoodjs/cli-helpers": 5.0.0
+    "@redwoodjs/cli-x": 5.0.0
     "@redwoodjs/fastify": 5.0.0
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/prerender": 5.0.0

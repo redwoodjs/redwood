@@ -9,38 +9,44 @@ import { config } from 'dotenv-defaults'
 import terminalLink from 'terminal-link'
 import { v4 as uuidv4 } from 'uuid'
 import { hideBin, Parser } from 'yargs/helpers'
-import yargs from 'yargs/yargs'
+// import yargs from 'yargs/yargs'
 
 import {
   recordTelemetryError,
   recordTelemetryAttributes,
 } from '@redwoodjs/cli-helpers'
-import { telemetryMiddleware, errorTelemetry } from '@redwoodjs/telemetry'
+import { CLIManager } from '@redwoodjs/cli-x'
+import {
+  DispatchTreeBuilder,
+  DispatchTreeIO,
+} from '@redwoodjs/cli-x/dist/builder'
+import { errorTelemetry } from '@redwoodjs/telemetry'
+// import { telemetryMiddleware, errorTelemetry } from '@redwoodjs/telemetry'
 
-import * as buildCommand from './commands/build'
-import * as checkCommand from './commands/check'
-import * as consoleCommand from './commands/console'
-import * as dataMigrateCommand from './commands/dataMigrate'
-import * as deployCommand from './commands/deploy'
-import * as destroyCommand from './commands/destroy'
-import * as devCommand from './commands/dev'
-import * as execCommand from './commands/exec'
-import * as experimentalCommand from './commands/experimental'
-import * as generateCommand from './commands/generate'
-import * as infoCommand from './commands/info'
-import * as lintCommand from './commands/lint'
-import * as prerenderCommand from './commands/prerender'
-import * as prismaCommand from './commands/prisma'
-import * as recordCommand from './commands/record'
-import * as serveCommand from './commands/serve'
-import * as setupCommand from './commands/setup'
-import * as testCommand from './commands/test'
-import * as tstojsCommand from './commands/ts-to-js'
-import * as typeCheckCommand from './commands/type-check'
-import * as upgradeCommand from './commands/upgrade'
+// import * as buildCommand from './commands/build'
+// import * as checkCommand from './commands/check'
+// import * as consoleCommand from './commands/console'
+// import * as dataMigrateCommand from './commands/dataMigrate'
+// import * as deployCommand from './commands/deploy'
+// import * as destroyCommand from './commands/destroy'
+// import * as devCommand from './commands/dev'
+// import * as execCommand from './commands/exec'
+// import * as experimentalCommand from './commands/experimental'
+// import * as generateCommand from './commands/generate'
+// import * as infoCommand from './commands/info'
+// import * as lintCommand from './commands/lint'
+// import * as prerenderCommand from './commands/prerender'
+// import * as prismaCommand from './commands/prisma'
+// import * as recordCommand from './commands/record'
+// import * as serveCommand from './commands/serve'
+// import * as setupCommand from './commands/setup'
+// import * as testCommand from './commands/test'
+// import * as tstojsCommand from './commands/ts-to-js'
+// import * as typeCheckCommand from './commands/type-check'
+// import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
-import * as updateCheck from './lib/updateCheck'
-import { loadPlugins } from './plugin'
+// import * as updateCheck from './lib/updateCheck'
+// import { loadPlugins } from './plugin'
 import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
 // # Setting the CWD
@@ -184,72 +190,133 @@ async function main() {
 }
 
 async function runYargs() {
-  // # Build the CLI yargs instance
-  const yarg = yargs(hideBin(process.argv))
-    // Config
-    .scriptName('rw')
-    .middleware(
-      [
-        // We've already handled `cwd` above, but it may still be in `argv`.
-        // We don't need it anymore so let's get rid of it.
-        // Likewise for `telemetry`.
-        (argv) => {
-          delete argv.cwd
-          delete argv.telemetry
+  // We can cache the dispatch tree, so we don't need to build it everytime
+  // I haven't done any deatiled performance testing, but I'm guessing it'll be faster
+  // to load a cached dispatch tree than to build it everytime
+  const cachePath = path.join(
+    getPaths().generated.base,
+    'cli',
+    'dispatch-tree.json'
+  )
+  fs.mkdirSync(path.dirname(cachePath), { recursive: true })
+
+  // TODO: This should be built from the CLI version, enabled plugins name+verson, etc. for now
+  // lets just have it be invalidated every time
+  const cacheKey = `${Date.now()}`
+
+  // Try to read the dispatch tree from the cache
+  let dispatchTree
+  try {
+    dispatchTree = DispatchTreeIO.load(cachePath)
+  } catch (_error) {
+    // who cares...
+  }
+
+  // Build the dispatch tree
+  if (dispatchTree === undefined || dispatchTree.meta.key !== cacheKey) {
+    const builder = DispatchTreeBuilder.startBuilding()
+    builder.setKey(cacheKey)
+    builder.setVersion('0.0.0')
+
+    // load directly from object
+    builder.addCommandFromDefinition({
+      trigger: 'info',
+      description: 'Just another example command',
+      positionalArguments: [
+        {
+          name: 'pos',
+          description: 'A positional argument',
+          required: false,
+          variadic: false,
         },
-        telemetry && telemetryMiddleware,
-        updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
-      ].filter(Boolean)
-    )
-    .option('cwd', {
-      describe: 'Working directory to use (where `redwood.toml` is located)',
+      ],
+      keywordArguments: [
+        {
+          name: 'keyword',
+          description: 'A keyword argument',
+          required: false,
+          variadic: true,
+        },
+      ],
+      execute: path.join(__dirname, 'exampleExe.js'),
     })
-    .option('telemetry', {
-      describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
-      boolean: true,
-      // hidden: true,
-    })
-    .example(
-      'yarn rw g page home /',
-      "\"Create a page component named 'Home' at path '/'\""
-    )
-    .demandCommand()
-    .strict()
-    .exitProcess(false)
 
-    // Commands (Built in or pre-plugin support)
-    .command(buildCommand)
-    .command(checkCommand)
-    .command(consoleCommand)
-    .command(dataMigrateCommand)
-    .command(deployCommand)
-    .command(destroyCommand)
-    .command(devCommand)
-    .command(execCommand)
-    .command(experimentalCommand)
-    .command(generateCommand)
-    .command(infoCommand)
-    .command(lintCommand)
-    .command(prerenderCommand)
-    .command(prismaCommand)
-    .command(recordCommand)
-    .command(serveCommand)
-    .command(setupCommand)
-    .command(testCommand)
-    .command(tstojsCommand)
-    .command(typeCheckCommand)
-    .command(upgradeCommand)
+    // load from file
+    await builder.addCommandFromFile(path.join(__dirname, 'exampleDef.js'))
 
-  // Load any CLI plugins
-  await loadPlugins(yarg)
+    dispatchTree = builder.finishBuilding()
 
-  // Run
-  await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
-    // Show the output that yargs was going to if there was no callback provided
-    if (output) {
-      console.log(output)
-    }
-  })
+    // save the dispatch tree to the cache
+    DispatchTreeIO.save(cachePath, dispatchTree)
+  }
+
+  // Dispatch to the command
+  const cliManager = new CLIManager(dispatchTree)
+  await cliManager.dispatch(process.argv.slice(2))
+
+  // # Build the CLI yargs instance
+  // const yarg = yargs(hideBin(process.argv))
+  //   // Config
+  //   .scriptName('rw')
+  //   .middleware(
+  //     [
+  //       // We've already handled `cwd` above, but it may still be in `argv`.
+  //       // We don't need it anymore so let's get rid of it.
+  //       // Likewise for `telemetry`.
+  //       (argv) => {
+  //         delete argv.cwd
+  //         delete argv.telemetry
+  //       },
+  //       telemetry && telemetryMiddleware,
+  //       updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
+  //     ].filter(Boolean)
+  //   )
+  //   .option('cwd', {
+  //     describe: 'Working directory to use (where `redwood.toml` is located)',
+  //   })
+  //   .option('telemetry', {
+  //     describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
+  //     boolean: true,
+  //     // hidden: true,
+  //   })
+  //   .example(
+  //     'yarn rw g page home /',
+  //     "\"Create a page component named 'Home' at path '/'\""
+  //   )
+  //   .demandCommand()
+  //   .strict()
+  //   .exitProcess(false)
+  //   // Commands (Built in or pre-plugin support)
+  //   .command(buildCommand)
+  //   .command(checkCommand)
+  //   .command(consoleCommand)
+  //   .command(dataMigrateCommand)
+  //   .command(deployCommand)
+  //   .command(destroyCommand)
+  //   .command(devCommand)
+  //   .command(execCommand)
+  //   .command(experimentalCommand)
+  //   .command(generateCommand)
+  //   .command(infoCommand)
+  //   .command(lintCommand)
+  //   .command(prerenderCommand)
+  //   .command(prismaCommand)
+  //   .command(recordCommand)
+  //   .command(serveCommand)
+  //   .command(setupCommand)
+  //   .command(testCommand)
+  //   .command(tstojsCommand)
+  //   .command(typeCheckCommand)
+  //   .command(upgradeCommand)
+  // // Load any CLI plugins
+  // await loadPlugins(yarg)
+  // // Run
+  // await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
+  //   // Show the output that yargs was going to if there was no callback provided
+  //   if (output) {
+  //     console.log(output)
+  //   }
+  // })
 }
 
 main()
