@@ -2,10 +2,6 @@ import admin from 'firebase-admin'
 
 import { Decoder } from '@redwoodjs/api'
 
-admin.initializeApp({
-  projectId: process.env.FIREBASE_PROJECT_ID,
-})
-
 export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'firebase') {
     return null
