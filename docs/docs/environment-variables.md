@@ -17,7 +17,7 @@ For a reference on dotenv syntax, see the dotenv README's [Rules](https://github
 
 <!-- also in a Redwood app's base directory. -->
 
-Redwood also configures Webpack with `dotenv-webpack`, so that all references to `process.env` vars on the Web side will be replaced with the variable's actual value at build-time. More on this in [Web](#Web).
+Redwood also configures Vite, so that all references to `process.env` vars on the Web side will be replaced with the variable's actual value at build-time. More on this in [Web](#Web).
 
 ## Web
 
