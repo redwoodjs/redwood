@@ -118,7 +118,7 @@ async function sharedTasks() {
   console.log('Generating dbAuth secret')
   const { stdout } = await execInProject(
     'yarn rw g secret --raw',
-    { silent: true }
+    { silent: false }
   )
   fs.appendFileSync(
     path.join(TEST_PROJECT_PATH, '.env'),
