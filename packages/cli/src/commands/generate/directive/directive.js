@@ -5,6 +5,7 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 import prompts from 'prompts'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
@@ -102,6 +103,13 @@ export const { command, description, builder } =
   })
 
 export const handler = async (args) => {
+  recordTelemetryAttributes({
+    command: ['generate', 'directive'].join(' '),
+    type: args.type,
+    force: args.force,
+    rollback: args.rollback,
+  })
+
   const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
     'After modifying your directive, you can add it to your SDLs e.g.:'
   )}

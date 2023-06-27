@@ -44,7 +44,7 @@ export default async () => {
     //     { name: 'jane', email: 'jane@example.com', password: 'secret2' }
     //   ]
     //
-    //   for (user of users) {
+    //   for (const user of users) {
     //     const [hashedPassword, salt] = hashPassword(user.password)
     //     await db.user.create({
     //       data: {

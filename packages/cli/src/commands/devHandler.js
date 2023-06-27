@@ -3,6 +3,7 @@ import { argv } from 'process'
 
 import concurrently from 'concurrently'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -21,6 +22,15 @@ export const handler = async ({
   watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
   apiDebugPort,
 }) => {
+  recordTelemetryAttributes({
+    command: 'dev',
+    side: JSON.stringify(side),
+    // forward, // TODO: Should we record this?
+    generate,
+    watchNodeModules,
+    apiDebugPort,
+  })
+
   const redwoodProjectPaths = getPaths()
   const redwoodProjectConfig = getConfig()
 
@@ -140,7 +150,7 @@ export const handler = async ({
   const redwoodConfigPath = getConfigPath()
 
   const webCommand =
-    redwoodProjectConfig.web.bundler === 'vite' // @NOTE: can't use enums, not TS
+    redwoodProjectConfig.web.bundler !== 'webpack' // @NOTE: can't use enums, not TS
       ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
       : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
           watchNodeModules ? '1' : ''
