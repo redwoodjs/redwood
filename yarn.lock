@@ -7491,19 +7491,6 @@ __metadata:
     webpack-manifest-plugin: 5.0.0
     webpack-merge: 5.9.0
     webpack-retry-chunk-load-plugin: 3.1.1
-  bin:
-    cross-env: ./dist/bins/cross-env.js
-    eslint: ./dist/bins/eslint.js
-    jest: ./dist/bins/jest.js
-    nodemon: ./dist/bins/nodemon.js
-    redwood: ./dist/bins/redwood.js
-    rimraf: ./dist/bins/rimraf.js
-    rw: ./dist/bins/redwood.js
-    rw-api-server-watch: ./dist/bins/rw-api-server-watch.js
-    rw-gen: ./dist/bins/rw-gen.js
-    rw-gen-watch: ./dist/bins/rw-gen-watch.js
-    rw-log-formatter: ./dist/bins/rw-log-formatter.js
-    rwfw: ./dist/bins/rwfw.js
   languageName: unknown
   linkType: soft
 
