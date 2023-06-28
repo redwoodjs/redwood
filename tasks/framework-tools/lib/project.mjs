@@ -65,7 +65,16 @@ export function fixProjectBinaries(projectPath) {
     // https://github.com/yarnpkg/berry/issues/2416#issuecomment-768271751
     //
     // Adding them as scripts works around this issue
-    scripts[binName] = `node ${binPath.replaceAll('\\', '/')}`
+
+    let posixPath = binPath
+
+    // When writing windows paths to package.json, we need to convert them to
+    // posix paths (or double-escape them).
+    if (process.platform === 'win32') {
+      posixPath = posixPath.replace(/\\/g, '/')
+    }
+
+    scripts[binName] = `node ${posixPath}`
   }
 
   // Write the updated project.json which includes the full list of scripts.
