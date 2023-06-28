@@ -2,17 +2,16 @@ import { FastifyInstance } from 'fastify'
 
 export interface HttpServerParams {
   port: number
-  host?: string
   socket?: string
   fastify: FastifyInstance
 }
 
 export const startServer = ({
   port = 8911,
-  host = 'localhost',
   socket,
   fastify,
 }: HttpServerParams) => {
+  const host = 'localhost'
   const serverPort = socket ? parseInt(socket) : port
 
   fastify.listen({ port: serverPort, host })
