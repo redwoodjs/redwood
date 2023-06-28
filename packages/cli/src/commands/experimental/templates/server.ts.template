@@ -1,3 +1,4 @@
+import { parseArgs } from 'node:util'
 import path from 'path'
 
 import chalk from 'chalk'
@@ -17,15 +18,35 @@ import directives from 'src/directives/**/*.{js,ts}'
 import sdls from 'src/graphql/**/*.sdl.{js,ts}'
 import services from 'src/services/**/*.{js,ts}'
 
+// Import if using RedwoodJS Realtime and subscriptions
+// import subscriptions from 'src/subscriptions/**/*.{js,ts}'
+
+// Import if using RedwoodJS authentication
+// import { authDecoder } from '@redwoodjs/<your-auth-provider>'
+// import { getCurrentUser } from 'src/lib/auth'
 import { logger } from './lib/logger'
 
+// Import if using RedwoodJS Realtime via `yarn rw exp setup-realtime`
+// import { pubSub, liveQueryStore } from './lib/realtime'
+
 async function serve() {
+  // Parse server file args
+  const { values: args } = parseArgs({
+    options: {
+      ['enable-web']: {
+        type: 'boolean',
+        default: false,
+      },
+    },
+  })
+  const { ['enable-web']: enableWeb } = args
+
   // Load .env files
   const redwoodProjectPaths = getPaths()
   const redwoodConfig = getConfig()
 
-  const apiRootPath = coerceRootPath(redwoodConfig.web.apiUrl)
-  const port = redwoodConfig.web.port
+  const apiRootPath = enableWeb ? coerceRootPath(redwoodConfig.web.apiUrl) : ''
+  const port = enableWeb ? redwoodConfig.web.port : redwoodConfig.api.port
 
   const tsServer = Date.now()
 
@@ -42,7 +63,9 @@ async function serve() {
     ...DEFAULT_REDWOOD_FASTIFY_CONFIG,
   })
 
-  await fastify.register(redwoodFastifyWeb)
+  if (enableWeb) {
+    await fastify.register(redwoodFastifyWeb)
+  }
 
   await fastify.register(redwoodFastifyAPI, {
     redwood: {
@@ -51,15 +74,23 @@ async function serve() {
   })
 
   await fastify.register(redwoodFastifyGraphQLServer, {
+    // If authenticating, be sure to import and add in
+    // authDecoder,
+    // getCurrentUser,
     loggerConfig: {
       logger: logger,
     },
-    graphiQLEndpoint: '/.redwood/functions/graphql',
+    graphiQLEndpoint: enableWeb ? '/.redwood/functions/graphql' : '/graphql',
     sdls,
     services,
     directives,
     allowIntrospection: true,
     allowGraphiQL: true,
+    // Configure if using RedwoodJS Realtime via `yarn rw exp setup-realtime`
+    // realtime: {
+    //   subscriptions: { subscriptions, pubSub },
+    //   liveQueries: { liveQueryStore },
+    // },
   })
 
   // Start
@@ -68,9 +99,11 @@ async function serve() {
   fastify.ready(() => {
     console.log(chalk.italic.dim('Took ' + (Date.now() - tsServer) + ' ms'))
     const on = chalk.magenta(`http://localhost:${port}${apiRootPath}`)
-    const webServer = chalk.green(`http://localhost:${port}`)
+    if (enableWeb) {
+      const webServer = chalk.green(`http://localhost:${port}`)
+      console.log(`Web server started on ${webServer}`)
+    }
     const apiServer = chalk.magenta(`http://localhost:${port}`)
-    console.log(`Web server started on ${webServer}`)
     console.log(`API serving from ${apiServer}`)
     console.log(`API listening on ${on}`)
     const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)

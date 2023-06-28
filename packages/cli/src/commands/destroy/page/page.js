@@ -1,6 +1,8 @@
 import camelcase from 'camelcase'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { deleteFilesTask, removeRoutesFromRouterTask } from '../../../lib'
 import c from '../../../lib/colors'
 import { pathName } from '../../generate/helpers'
@@ -48,6 +50,9 @@ export const tasks = ({ name, path }) =>
   )
 
 export const handler = async ({ name, path }) => {
+  recordTelemetryAttributes({
+    command: ['destory', 'page'].join(' '),
+  })
   const t = tasks({ name, path })
   try {
     await t.run()

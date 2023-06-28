@@ -1,6 +1,8 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'generate <type>'
 export const aliases = ['g']
 export const description = 'Generate boilerplate code and type definitions'
@@ -8,6 +10,9 @@ export const description = 'Generate boilerplate code and type definitions'
 export const builder = (yargs) =>
   yargs
     .command('types', 'Generate supplementary code', {}, () => {
+      recordTelemetryAttributes({
+        command: ['generate', 'types'].join(' '),
+      })
       execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
     })
     .commandDir('./generate', {

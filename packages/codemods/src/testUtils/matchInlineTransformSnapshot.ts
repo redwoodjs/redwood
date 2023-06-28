@@ -33,6 +33,9 @@ export const matchInlineTransformSnapshot = async (
   await runTransform({
     transformPath,
     targetPaths: [tempFilePath],
+    options: {
+      verbose: 1,
+    },
     parser,
   })
 

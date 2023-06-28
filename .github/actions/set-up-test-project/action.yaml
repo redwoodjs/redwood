@@ -6,6 +6,11 @@ runs:
   using: node16
   main: 'setUpTestProject.mjs'
 
+inputs:
+  bundler:
+    description: The bundler to use (vite or webpack)
+    default: vite
+
 outputs:
   test-project-path:
     description: Path to the test project

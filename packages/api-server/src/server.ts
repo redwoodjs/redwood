@@ -18,11 +18,11 @@ export const startServer = ({
   fastify.listen({ port: serverPort, host })
 
   fastify.ready(() => {
-    fastify.log.debug(
+    fastify.log.trace(
       { custom: { ...fastify.initialConfig } },
       'Fastify server configuration'
     )
-    fastify.log.debug(`Registered plugins \n${fastify.printPlugins()}`)
+    fastify.log.trace(`Registered plugins \n${fastify.printPlugins()}`)
   })
 
   return fastify

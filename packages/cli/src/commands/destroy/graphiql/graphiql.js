@@ -1,5 +1,7 @@
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import {
   existsAnyExtensionSync,
   deleteFile,
@@ -33,6 +35,9 @@ export const command = 'graphiql'
 export const description = 'Destroy graphiql header'
 
 export const handler = () => {
+  recordTelemetryAttributes({
+    command: ['destory', 'graphiql'].join(' '),
+  })
   const path = getOutputPath()
   const tasks = new Listr(
     [

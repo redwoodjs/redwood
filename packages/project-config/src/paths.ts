@@ -86,20 +86,21 @@ const PATH_API_DIR_LIB = 'api/src/lib'
 const PATH_API_DIR_GENERATORS = 'api/generators'
 const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_DIRECTIVES = 'api/src/directives'
+const PATH_API_DIR_SUBSCRIPTIONS = 'api/src/subscriptions'
 const PATH_API_DIR_SRC = 'api/src'
-const PATH_WEB_ROUTES = 'web/src/Routes' // .js|.tsx
+const PATH_WEB_ROUTES = 'web/src/Routes' // .jsx|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
-const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .js|.tsx
+const PATH_WEB_DIR_SRC_INDEX = 'web/src/index' // .jsx|.tsx
 const PATH_WEB_INDEX_HTML = 'web/src/index.html'
 const PATH_WEB_DIR_GENERATORS = 'web/generators'
 const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
-const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry-client' // .jsx,.tsx
+const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
@@ -139,8 +140,12 @@ export const resolveFile = (
 /**
  * Path constants that are relevant to a Redwood project.
  */
-// TODO: Make this a proxy and make it lazy.
+const getPathsCache = new Map<string, Paths>()
 export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
+  if (getPathsCache.has(BASE_DIR)) {
+    return getPathsCache.get(BASE_DIR) as Paths
+  }
+
   const routes = resolveFile(path.join(BASE_DIR, PATH_WEB_ROUTES)) as string
   const { schemaPath } = getConfig(getConfigPath(BASE_DIR)).api
   const schemaDir = path.dirname(schemaPath)
@@ -172,6 +177,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
       directives: path.join(BASE_DIR, PATH_API_DIR_DIRECTIVES),
+      subscriptions: path.join(BASE_DIR, PATH_API_DIR_SUBSCRIPTIONS),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),
@@ -214,6 +220,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
   fs.mkdirSync(paths.generated.types.includes, { recursive: true })
   fs.mkdirSync(paths.generated.types.mirror, { recursive: true })
 
+  getPathsCache.set(BASE_DIR, paths)
   return paths
 }
 

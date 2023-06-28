@@ -71,7 +71,7 @@ We'll comment out the sensitive fields of our GraphQL User type so there's no ch
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="api/src/graphql/users.sdl.js"
+```js title="api/src/graphql/users.sdl.js"
   type User {
     ...
     # hashedPassword: String!
@@ -84,7 +84,7 @@ We'll comment out the sensitive fields of our GraphQL User type so there's no ch
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title="api/src/graphql/users.sdl.tsx"
+```ts title="api/src/graphql/users.sdl.ts"
   type User {
     ...
     # hashedPassword: String!
@@ -674,16 +674,13 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 // highlight-start
 export const updatePost = async ({ id, input }) => {
   if (await adminPost({ id })) {
-    return true
+    return db.post.update({
+      data: input,
+      where: { id },
+    })
   } else {
     throw new ForbiddenError("You don't have access to this post")
   }
-  // highlight-end
-
-  return db.post.update({
-    data: input,
-    where: { id },
-  })
 }
 ```
 
@@ -693,7 +690,7 @@ This works, but we'll need to do the same thing in `deletePost`. Let's extract t
 
 ```javascript
 // highlight-start
-const verifyOwnership = async (id) {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -704,7 +701,7 @@ const verifyOwnership = async (id) {
 
 export const updatePost = async ({ id, input }) => {
   // highlight-next-line
-  await verifyOwnership(id)
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -720,7 +717,7 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 
-const validateOwnership = async ({ id }) => {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -745,7 +742,7 @@ export const createPost = ({ input }) => {
 }
 
 export const updatePost = async ({ id, input }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -754,7 +751,7 @@ export const updatePost = async ({ id, input }) => {
 }
 
 export const deletePost = async ({ id }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.delete({
     where: { id },

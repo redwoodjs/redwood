@@ -5,7 +5,7 @@ exports[`Generate gql typedefs api 1`] = `
 import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'
 import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/functions/types';
+import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/types';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };

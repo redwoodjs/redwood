@@ -28,7 +28,7 @@ Let's think about what we want to ask users for and then display in a comment. H
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.js"
+```jsx title="web/src/components/Comment/Comment.jsx"
 // highlight-next-line
 const Comment = ({ comment }) => {
   return (
@@ -88,7 +88,7 @@ We need to update the story to include that comment object and pass it as a prop
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.stories.js"
+```jsx title="web/src/components/Comment/Comment.stories.jsx"
 import Comment from './Comment'
 
 export const generated = () => {
@@ -155,7 +155,7 @@ Let's add a little bit of styling and date conversion to get this **Comment** co
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment/Comment.js"
+```jsx title="web/src/components/Comment/Comment.jsx"
 // highlight-start
 const formattedDate = (datetime) => {
   const parsedDate = new Date(datetime)
@@ -241,7 +241,7 @@ Let's add a sample comment to the test and check that the various parts are bein
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Comment.test.js"
+```jsx title="web/src/components/Comment.test.jsx"
 // highlight-next-line
 import { render, screen } from '@redwoodjs/testing'
 

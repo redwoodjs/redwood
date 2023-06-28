@@ -28,7 +28,7 @@ The options and their structure are based on Redwood's notion of sides and targe
 > For the difference between a side and a target, see [Redwood File Structure](tutorial/chapter1/file-structure.md).
 
 You can think of `redwood.toml` as a frontend for configuring Redwood's build tools.
-For certain options, instead of having to deal with build tools like webpack directly, there's quick access via `redwood.toml`.
+For certain options, instead of having to deal with build tools configuration directly, there's quick access via `redwood.toml`.
 
 ## [web]
 
@@ -38,7 +38,6 @@ For certain options, instead of having to deal with build tools like webpack dir
 | `apiGraphQLUrl`               | The path or URL to your GraphQL function                   | `"${apiUrl}/graphql"`   |
 | `apiDbAuthUrl`                | The path or URL to your dbAuth function                    | `"${apiUrl}/auth"`      |
 | `a11y`                        | Enable storybook `addon-a11y` and `eslint-plugin-jsx-a11y` | `true`                  |
-| `fastRefresh`                 | Enable webpack's fast refresh                              | `true`                  |
 | `host`                        | Hostname to listen on                                      | `"localhost"`           |
 | `includeEnvironmentVariables` | Environment variables to include                           | `[]`                    |
 | `path`                        | Path to the web side                                       | `"./web"`               |
@@ -151,11 +150,11 @@ This configuration does **not** apply in a serverless deploy.
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side')
+    fastify.log.trace({ custom: { options } }, 'Configuring api side')
   }
 
   if (options.side === 'web') {
-    fastify.log.info({ custom: { options } }, 'Configuring web side')
+    fastify.log.trace({ custom: { options } }, 'Configuring web side')
   }
 
   return fastify
@@ -184,7 +183,7 @@ yarn workspace api add @fastify/rate-limit @fastify/compress
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side')
+    fastify.log.trace({ custom: { options } }, 'Configuring api side')
 
     await fastify.register(import('@fastify/compress'), {
       global: true,
@@ -217,7 +216,7 @@ This may seem counter-intuitive, since you're configuring the `web` side, but th
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'web') {
-    fastify.log.info({ custom: { options } }, 'Configuring web side')
+    fastify.log.trace({ custom: { options } }, 'Configuring web side')
 
     fastify.register(import('@fastify/etag'))
   }
@@ -257,7 +256,7 @@ For example, to support image file uploads you'd tell Fastify to allow `/^image\
 /** @type {import('@redwoodjs/api-server/dist/fastify').FastifySideConfigFn} */
 const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
-    fastify.log.info({ custom: { options } }, 'Configuring api side')
+    fastify.log.trace({ custom: { options } }, 'Configuring api side')
 
     fastify.addContentTypeParser(/^image\/.*/, (req, payload, done) => {
       payload.on('end', () => {
@@ -309,7 +308,7 @@ Setting `open` to `true` opens your browser to `${host}:${port}` (by default, `l
 If you want your browser to stop opening when you `yarn rw dev`, set this to false.
 (Or just remove it entirely.)
 
-There's actually a lot more you can do here. For more, see webpack's docs on [devServer.open](https://webpack.js.org/configuration/dev-server/#devserveropen).
+There's actually a lot more you can do here. For more, see Vite's docs on [preview.open](https://vitejs.dev/config/preview-options.html#preview-open).
 
 ## [generate]
 
