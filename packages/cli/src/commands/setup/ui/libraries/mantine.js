@@ -57,7 +57,7 @@ export function builder(yargs) {
 
 export async function handler({ force, install, packages }) {
   recordTelemetryAttributes({
-    command: ['setup', 'ui', 'mantine'].join(' '),
+    command: 'setup ui mantine',
     force,
     install,
     packages,

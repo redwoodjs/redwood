@@ -11,6 +11,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
+import { exitWithError } from '../lib/exit'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
 
@@ -60,10 +61,8 @@ export const handler = async ({
   recordTelemetryAttributes({
     command: 'dev',
     side: JSON.stringify(side),
-    // forward, // TODO: Should we record this?
     generate,
     watchNodeModules,
-    apiDebugPort,
   })
 
   const redwoodProjectPaths = getPaths()
@@ -83,8 +82,9 @@ export const handler = async ({
   if (side.includes('api')) {
     apiAvailablePort = await getFreePort(apiPreferredPort)
     if (apiAvailablePort === -1) {
-      console.error(`Error could not determine a free port for the api server`)
-      process.exit(1)
+      exitWithError(undefined, {
+        message: `Could not determine a free port for the api server`,
+      })
     }
     apiPortChangeNeeded = apiAvailablePort !== apiPreferredPort
   }
@@ -103,8 +103,9 @@ export const handler = async ({
       apiAvailablePort,
     ])
     if (webAvailablePort === -1) {
-      console.error(`Error could not determine a free port for the web server`)
-      process.exit(1)
+      exitWithError(undefined, {
+        message: `Could not determine a free port for the web server`,
+      })
     }
     webPortChangeNeeded = webAvailablePort !== webPreferredPort
   }
@@ -118,11 +119,10 @@ export const handler = async ({
     message += webPortChangeNeeded
       ? `  - Web to use port ${webAvailablePort} instead of your currently configured ${webPreferredPort}\n`
       : ``
-    console.error(message)
-    console.error(
-      `Cannot run the development server until your configured ports are changed or become available.`
-    )
-    process.exit(1)
+    message += `\nCannot run the development server until your configured ports are changed or become available.`
+    exitWithError(undefined, {
+      message,
+    })
   }
 
   if (side.includes('api')) {
@@ -259,8 +259,7 @@ export const handler = async ({
         process.argv,
         `Error concurrently starting sides: ${e.message}`
       )
-      console.error(c.error(e.message))
-      process.exit(1)
+      exitWithError(e)
     }
   })
 }
