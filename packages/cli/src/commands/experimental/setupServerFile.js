@@ -27,7 +27,7 @@ export function builder(yargs) {
 
 export async function handler(options) {
   recordTelemetryAttributes({
-    command: ['experimental', command].join(' '),
+    command: 'experimental setup-server-file',
     force: options.force,
     verbose: options.verbose,
   })

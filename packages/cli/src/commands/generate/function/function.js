@@ -124,7 +124,7 @@ export const builder = (yargs) => {
 // however, we need to add a message after generating the function files
 export const handler = async ({ name, force, ...rest }) => {
   recordTelemetryAttributes({
-    command: ['generate', 'function'].join(' '),
+    command: 'generate function',
     force,
     rollback: rest.rollback,
   })

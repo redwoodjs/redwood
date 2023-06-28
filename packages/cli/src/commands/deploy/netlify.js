@@ -9,7 +9,10 @@ export const builder = (yargs) => deployBuilder(yargs)
 
 export const handler = (yargs) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'netlify'].join(' '),
+    command: 'deploy netlify',
+    build: yargs.build,
+    prisma: yargs.prisma,
+    dataMigrate: yargs.dataMigrate,
   })
   deployHandler(yargs)
 }
