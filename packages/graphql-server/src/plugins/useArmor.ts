@@ -44,7 +44,6 @@ export const useArmor = (logger: Logger, config?: ArmorConfig) => {
     },
     maxTokens: {
       ...config?.maxTokens,
-      flattenFragments: true,
       onReject: [logRejection],
     },
   })
