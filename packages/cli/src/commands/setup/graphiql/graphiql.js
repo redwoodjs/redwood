@@ -46,7 +46,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['setup', 'graphiql'].join(' '),
+    command: 'setup graphiql',
     provider: options.provider,
     view: options.view,
   })

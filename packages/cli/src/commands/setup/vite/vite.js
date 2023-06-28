@@ -28,7 +28,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['setup', 'vite'].join(' '),
+    command: 'setup vite',
     force: options.force,
     verbose: options.verbose,
     addPackage: options.addPackage,

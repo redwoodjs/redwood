@@ -27,7 +27,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['experimental', command].join(' '),
+    command: 'experimental setup-opentelemetry',
     force: options.force,
     verbose: options.verbose,
   })

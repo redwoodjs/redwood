@@ -39,7 +39,7 @@ const notes = [
 
 export const handler = async ({ force }) => {
   recordTelemetryAttributes({
-    command: ['setup', 'deploy', 'baremetal'].join(' '),
+    command: 'setup deploy baremetal',
     force,
   })
   const tasks = new Listr(
