@@ -2,6 +2,7 @@ import fs from 'fs'
 import { argv } from 'process'
 
 import concurrently from 'concurrently'
+import fg from 'fast-glob'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
@@ -14,6 +15,40 @@ import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
 
 const defaultApiDebugPort = 18911
+
+// @TODO Remove as of Redwood 7.0.0
+const jsDeprecationNotice = () => {
+  if (process.env.REDWOOD_DISABLE_JS_DEPRECATION_NOTICE) {
+    return
+  }
+
+  // There may be actual legitimate JS-only files on the web side, so don't
+  // search ALL files, just the main ones like App, Routes, pages and components
+  const matches = fg.sync(
+    ['App.js', 'Routes.js', 'components/**/*.js', 'pages/**/*.js'],
+    {
+      cwd: getPaths().web.src,
+      ignore: [
+        '**/.*.js',
+        '**/*.fixtures.js',
+        '**/*.mock.js',
+        '**/*.routeHooks.js',
+        '**/*.test.js',
+        '**/*.spec.js',
+      ],
+    }
+  )
+
+  if (matches.length) {
+    console.warn(
+      c.warning(
+        `DEPRECATION NOTICE: File extensions for JS files containing JSX must be named \`.jsx\`:\n\n  ${matches.join(
+          '\n  '
+        )}\n\nSupport for \`.js\` files containing JSX will be dropped in Redwood 7.0.0.\nThere is a codemod available to update these extensions for you:\n\n  npx @redwoodjs/codemods convert-js-to-jsx\n\n* Hide this notice by setting the ENV variable REDWOOD_DISABLE_JS_DEPRECATION_NOTICE=1`
+      )
+    )
+  }
+}
 
 export const handler = async ({
   side = ['api', 'web'],
@@ -116,6 +151,9 @@ export const handler = async ({
   }
 
   if (side.includes('web')) {
+    // @TODO Remove as of Redwood 7.0.0
+    jsDeprecationNotice()
+
     try {
       await shutdownPort(webAvailablePort)
     } catch (e) {

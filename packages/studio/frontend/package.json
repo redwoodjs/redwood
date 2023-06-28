@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.7.16",
-    "@graphiql/plugin-explorer": "0.1.21",
+    "@graphiql/plugin-explorer": "0.1.22",
     "@graphiql/toolkit": "0.8.4",
     "@headlessui/react": "1.7.15",
     "@heroicons/react": "2.0.18",
