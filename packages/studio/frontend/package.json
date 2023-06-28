@@ -23,7 +23,7 @@
     "@tremor/react": "3.2.3",
     "graphiql": "2.4.7",
     "graphql": "16.7.1",
-    "graphql-scalars": "1.21.3",
+    "graphql-scalars": "1.22.2",
     "json-bigint-patch": "0.0.8",
     "pretty-ms": "7.0.0",
     "react": "18.2.0",
