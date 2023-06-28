@@ -190,8 +190,9 @@ And there you have it.
 </tr>
 <tr>
     <td align="center" valign="top" width="20%"><a href="https://github.com/keithtelliott"><img src="https://avatars.githubusercontent.com/u/43206213?v=4" width="100px;" alt=""/><br /><sub><b>Keith T Elliot</b></sub></a><br /><sub>community</sub></td>
-    <td align="center" valign="top" width="20%"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>BBurnworth</b></sub></a><br /><sub>community</sub></td>
-    <td align="center" valign="top" width="20%"><a href="https://github.com/Josh-Walker-GM"><img src="https://avatars.githubusercontent.com/u/56300765?v=4" width="100px;" alt=""/><br /><sub><b>Josh GM Walker</b></sub></a><br /><sub>maintainer</sub></td>
+    <td align="center" valign="top" width="20%"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>Barrett Burnworth</b></sub></a><br /><sub>community</sub></td>
+    <td align="center" valign="top" width="20%"><a href="https://github.com/Josh-Walker-GM"><img src="https://avatars.githubusercontent.com/u/56300765?v=4" width="100px;" alt=""/><br /><sub><b>Josh Walker</b></sub></a><br /><sub>maintainer</sub></td>
+    <td align="center" valign="top" width="20%"><a href="https://github.com/ahaywood"><img src="https://avatars.githubusercontent.com/u/212300?v=4" width="100px;" alt=""/><br /><sub><b>Amy Haywood Dutton</b></sub></a><br /><sub>maintainer</sub></td>
 </tr>
 </table>
 
