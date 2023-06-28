@@ -49,8 +49,7 @@ export const useRedwoodOpenTelemetry = (
                 context[tracingSpanSymbol]
               )
               const { fieldName, returnType, parentType } = info
-
-              const resolverSpan = tracer.startSpan(
+              return tracer.startActiveSpan(
                 `${parentType.name}.${fieldName}`,
                 {
                   attributes: {
@@ -60,18 +59,21 @@ export const useRedwoodOpenTelemetry = (
                     [AttributeName.RESOLVER_ARGS]: JSON.stringify(args || {}),
                   },
                 },
-                ctx
-              )
+                ctx,
+                (resolverSpan) => {
+                  resolverSpan.spanContext()
 
-              return ({ result }) => {
-                if (result instanceof Error) {
-                  resolverSpan.recordException({
-                    name: AttributeName.RESOLVER_EXCEPTION,
-                    message: JSON.stringify(result),
-                  })
+                  return ({ result }: { result: unknown }) => {
+                    if (result instanceof Error) {
+                      resolverSpan.recordException({
+                        name: AttributeName.RESOLVER_EXCEPTION,
+                        message: JSON.stringify(result),
+                      })
+                    }
+                    resolverSpan.end()
+                  }
                 }
-                resolverSpan.end()
-              }
+              )
             }
             return () => {}
           })
@@ -79,7 +81,7 @@ export const useRedwoodOpenTelemetry = (
       }
     },
     onExecute({ args, extendContext }) {
-      const executionSpan = tracer.startSpan(
+      return tracer.startActiveSpan(
         `${args.operationName || 'Anonymous Operation'}`,
         {
           kind: spanKind,
@@ -96,44 +98,46 @@ export const useRedwoodOpenTelemetry = (
                 }
               : {}),
           },
-        }
-      )
-      const resultCbs: OnExecuteHookResult<PluginContext> = {
-        onExecuteDone({ result }) {
-          if (isAsyncIterable(result)) {
-            executionSpan.end()
-            // eslint-disable-next-line no-console
-            console.warn(
-              `Plugin "RedwoodOpenTelemetry" encountered an AsyncIterator which is not supported yet, so tracing data is not available for the operation.`
-            )
-            return
+        },
+        (executionSpan) => {
+          const resultCbs: OnExecuteHookResult<PluginContext> = {
+            onExecuteDone({ result }) {
+              if (isAsyncIterable(result)) {
+                executionSpan.end()
+                // eslint-disable-next-line no-console
+                console.warn(
+                  `Plugin "RedwoodOpenTelemetry" encountered an AsyncIterator which is not supported yet, so tracing data is not available for the operation.`
+                )
+                return
+              }
+
+              if (result.data && options.result) {
+                executionSpan.setAttribute(
+                  AttributeName.EXECUTION_RESULT,
+                  JSON.stringify(result)
+                )
+              }
+
+              if (result.errors && result.errors.length > 0) {
+                executionSpan.recordException({
+                  name: AttributeName.EXECUTION_ERROR,
+                  message: JSON.stringify(result.errors),
+                })
+              }
+
+              executionSpan.end()
+            },
           }
 
-          if (result.data && options.result) {
-            executionSpan.setAttribute(
-              AttributeName.EXECUTION_RESULT,
-              JSON.stringify(result)
-            )
-          }
-
-          if (result.errors && result.errors.length > 0) {
-            executionSpan.recordException({
-              name: AttributeName.EXECUTION_ERROR,
-              message: JSON.stringify(result.errors),
+          if (options.resolvers) {
+            extendContext({
+              [tracingSpanSymbol]: executionSpan,
             })
           }
 
-          executionSpan.end()
-        },
-      }
-
-      if (options.resolvers) {
-        extendContext({
-          [tracingSpanSymbol]: executionSpan,
-        })
-      }
-
-      return resultCbs
+          return resultCbs
+        }
+      )
     },
   }
 }
