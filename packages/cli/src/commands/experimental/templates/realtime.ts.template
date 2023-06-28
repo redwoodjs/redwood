@@ -6,8 +6,8 @@ export const liveQueryStore = new InMemoryLiveQueryStore()
 // Note: If you did not setup examples, please replace with your current subscriptions
 import type { NewMessageChannel } from 'src/subscriptions/newMessage/newMessage'
 
-// then use merge the types by intersecting each like: `NewMessageChannel<string> & OtherChannel`
-export type PubSubChannels = NewMessageChannel<string>
+// then use merge the types by intersecting each like: `NewMessageChannel & OtherChannel`
+export type PubSubChannels = NewMessageChannel
 
 export const pubSub = createPubSub<PubSubChannels>()
 
