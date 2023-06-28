@@ -29,9 +29,19 @@ let traceExporter
 /**
  * @type boolean
  */
+let isStarted = false
+
+/**
+ * @type boolean
+ */
 let isShutdown = false
 
 export async function startTelemetry() {
+  if (isStarted) {
+    return
+  }
+  isStarted = true
+
   try {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
 
@@ -52,7 +62,7 @@ export async function startTelemetry() {
 }
 
 export function shutdownTelemetry() {
-  if (isShutdown) {
+  if (isShutdown || !isStarted) {
     return
   }
   isShutdown = true
