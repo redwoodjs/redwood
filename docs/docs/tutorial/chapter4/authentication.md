@@ -7,7 +7,7 @@ Having the admin screens at `/admin` is a reasonable thing to do. Let's update t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 import { Router, Route, Set } from '@redwoodjs/router'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -200,7 +200,7 @@ Going to the admin section now prevents a non-logged in user from seeing posts, 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 // highlight-next-line
 import { Private, Router, Route, Set } from '@redwoodjs/router'
 
@@ -501,7 +501,7 @@ Redwood provides a [hook](../../authentication.md#destructuring-the-useauth-hook
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 // highlight-next-line
@@ -598,7 +598,7 @@ At the top right of the page, let's show the email address of the user (if they'
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 import { useAuth } from 'src/auth'
