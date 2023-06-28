@@ -116,6 +116,9 @@ export const handler = async ({
           // We don't have any parallel tasks right now, but someone might add
           // one in the future as a performance optimization.
           await execa(`yarn rw-vite-build --webDir="${rwjsPaths.web.base}"`, {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+          })
 
           // @WARN DO NOT MERGE TEMPORARY HACK
           // @WARN DO NOT MERGE TEMPORARY HACK
@@ -126,7 +129,7 @@ export const handler = async ({
           // @WARN DO NOT MERGE TEMPORARY HACK
           process.chdir(rwjsPaths.web.base)
 
-          // @TODO: we need to use a binary here, so the the cwd is correct
+          // TODO (STREAMING) we need to use a binary here, so the the cwd is correct
           await buildFeServer({
             verbose,
           })
