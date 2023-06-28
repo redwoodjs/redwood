@@ -4,6 +4,8 @@ import { Attributes, SpanKind } from '@opentelemetry/api'
 import * as opentelemetry from '@opentelemetry/api'
 import { print } from 'graphql'
 
+import { RedwoodOpenTelemetryConfig } from 'src/types'
+
 export enum AttributeName {
   EXECUTION_ERROR = 'graphql.execute.error',
   EXECUTION_RESULT = 'graphql.execute.result',
@@ -24,15 +26,11 @@ type PluginContext = {
   [tracingSpanSymbol]: opentelemetry.Span
 }
 
-export const useRedwoodOpenTelemetry = (): Plugin<PluginContext> => {
+export const useRedwoodOpenTelemetry = (
+  options: RedwoodOpenTelemetryConfig
+): Plugin<PluginContext> => {
   const spanKind: SpanKind = SpanKind.SERVER
   const spanAdditionalAttributes: Attributes = {}
-
-  const options = {
-    resolvers: true,
-    result: true,
-    variables: true,
-  }
 
   const tracer = opentelemetry.trace.getTracer('redwoodjs')
 

@@ -75,6 +75,12 @@ export interface RedwoodGraphQLContext {
   [index: string]: unknown
 }
 
+export interface RedwoodOpenTelemetryConfig {
+  resolvers: boolean
+  variables: boolean
+  result: boolean
+}
+
 /**
  * GraphQLYogaOptions
  */
@@ -214,6 +220,11 @@ export type GraphQLYogaOptions = {
    * Only supported in a swerver deploy and not allowed with GraphQLHandler config
    */
   realtime?: RedwoodRealtimeOptions
+
+  /**
+   * @description Configure OpenTelemetry plugin behaviour
+   */
+  openTelemetryOptions?: RedwoodOpenTelemetryConfig
 }
 
 /**
