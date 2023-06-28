@@ -29,6 +29,7 @@ export const commonOptions = {
   host: {
     default: redwoodProjectConfig.web.host,
     type: 'string',
+    alias: 'h',
   },
   socket: { type: 'string' },
 } as const
@@ -42,6 +43,7 @@ export const apiCliOptions = {
   host: {
     default: redwoodProjectConfig.api.host,
     type: 'string',
+    alias: 'h',
   },
   socket: { type: 'string' },
   apiRootPath: {
@@ -62,6 +64,7 @@ export const webCliOptions = {
   host: {
     default: redwoodProjectConfig.web.host,
     type: 'string',
+    alias: 'h',
   },
   socket: { type: 'string' },
   apiHost: {

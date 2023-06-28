@@ -37,6 +37,7 @@ export async function builder(yargs) {
           host: {
             default: redwoodProjectConfig.web.host,
             type: 'string',
+            alias: 'h',
           },
           socket: { type: 'string' },
         }),
@@ -88,6 +89,7 @@ export async function builder(yargs) {
           host: {
             default: redwoodProjectConfig.api.host,
             type: 'string',
+            alias: 'h',
           },
           socket: { type: 'string' },
           apiRootPath: {
@@ -143,6 +145,7 @@ export async function builder(yargs) {
           host: {
             default: redwoodProjectConfig.web.host,
             type: 'string',
+            alias: 'h',
           },
           socket: { type: 'string' },
           apiHost: {
