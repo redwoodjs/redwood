@@ -16,10 +16,7 @@ import {
   REDWOOD_FRAMEWORK_PATH,
 } from '../actionsLib.mjs'
 
-const TEST_PROJECT_PATH = path.join(
-  path.dirname(process.cwd()),
-  'test-project'
-)
+const TEST_PROJECT_PATH = path.join(path.dirname(process.cwd()), 'test-project')
 
 core.setOutput('test-project-path', TEST_PROJECT_PATH)
 
@@ -31,13 +28,10 @@ console.log({
 
 console.log()
 
-const packageJson = fs.readJsonSync(path.join(TEST_PROJECT_PATH, 'package.json'))
-console.log('package.json', packageJson)
-
-const {
-  dependenciesKey,
-  distKey
-} = await createCacheKeys({ baseKeyPrefix: 'test-project', distKeyPrefix: bundler })
+const { dependenciesKey, distKey } = await createCacheKeys({
+  baseKeyPrefix: 'test-project',
+  distKeyPrefix: bundler,
+})
 
 /**
  * @returns {Promise<void>}
@@ -50,13 +44,18 @@ async function main() {
     return
   }
 
-  const dependenciesCacheKey = await cache.restoreCache([TEST_PROJECT_PATH], dependenciesKey)
+  const dependenciesCacheKey = await cache.restoreCache(
+    [TEST_PROJECT_PATH],
+    dependenciesKey
+  )
 
   if (dependenciesCacheKey) {
     console.log(`Cache restored from key: ${dependenciesKey}`)
     await sharedTasks()
   } else {
-    console.log(`Cache not found for input keys: ${distKey}, ${dependenciesKey}`)
+    console.log(
+      `Cache not found for input keys: ${distKey}, ${dependenciesKey}`
+    )
     await setUpTestProject()
   }
 
@@ -102,6 +101,11 @@ async function sharedTasks() {
   await projectCopy(TEST_PROJECT_PATH)
   console.log()
 
+  const packageJson = fs.readJsonSync(
+    path.join(TEST_PROJECT_PATH, 'package.json')
+  )
+  console.log('package.json', packageJson)
+
   console.log({ bundler })
   console.log()
 
@@ -111,7 +115,10 @@ async function sharedTasks() {
 
     const redwoodTOMLPath = path.join(TEST_PROJECT_PATH, 'redwood.toml')
     const redwoodTOML = fs.readFileSync(redwoodTOMLPath, 'utf-8')
-    const redwoodTOMLWithWebpack = redwoodTOML.replace('[web]\n', '[web]\n  bundler = "webpack"\n')
+    const redwoodTOMLWithWebpack = redwoodTOML.replace(
+      '[web]\n',
+      '[web]\n  bundler = "webpack"\n'
+    )
     fs.writeFileSync(redwoodTOMLPath, redwoodTOMLWithWebpack)
 
     // There's an empty line at the end of the redwood.toml file, so no need to console.log after.
@@ -119,10 +126,9 @@ async function sharedTasks() {
   }
 
   console.log('Generating dbAuth secret')
-  const { stdout } = await execInProject(
-    'yarn rw g secret --raw',
-    { silent: false }
-  )
+  const { stdout } = await execInProject('yarn rw g secret --raw', {
+    silent: false,
+  })
   fs.appendFileSync(
     path.join(TEST_PROJECT_PATH, '.env'),
     `SESSION_SECRET='${stdout}'`
@@ -130,9 +136,7 @@ async function sharedTasks() {
   console.log()
 
   console.log('Running prisma migrate reset')
-  await execInProject(
-    'yarn rw prisma migrate reset --force',
-  )
+  await execInProject('yarn rw prisma migrate reset --force')
 }
 
 main()
