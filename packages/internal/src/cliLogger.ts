@@ -15,6 +15,6 @@ export const cliLogger: CLog & {
   console.log(...data)
 }
 
-cliLogger.trace =
+cliLogger.trace = logLevel === 'trace' ? console.log : () => {}
+cliLogger.debug =
   logLevel === 'trace' || logLevel === 'debug' ? console.log : () => {}
-cliLogger.debug = logLevel === 'debug' ? console.log : () => {}
