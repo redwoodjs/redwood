@@ -15,8 +15,7 @@
   "bin": {
     "rw-vite-build": "./bins/rw-vite-build.mjs",
     "rw-vite-dev": "./bins/rw-vite-dev.mjs",
-    "vite": "./bins/vite.mjs",
-    "rw-tobbe": "./bins/rw-tobbe.mjs"
+    "vite": "./bins/vite.mjs"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:types",
