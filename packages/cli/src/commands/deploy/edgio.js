@@ -47,7 +47,7 @@ const execaOptions = {
 
 export const handler = async (args) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'edgio'].join(' '),
+    command: 'deploy edgio',
     skipInit: args.skipInit,
     build: args.build,
     prisma: args.prisma,

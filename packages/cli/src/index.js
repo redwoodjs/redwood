@@ -4,18 +4,11 @@ import fs from 'fs'
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
-import boxen from 'boxen'
 import { config } from 'dotenv-defaults'
-import terminalLink from 'terminal-link'
-import { v4 as uuidv4 } from 'uuid'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import {
-  recordTelemetryError,
-  recordTelemetryAttributes,
-} from '@redwoodjs/cli-helpers'
-import { telemetryMiddleware, errorTelemetry } from '@redwoodjs/telemetry'
+import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
 import * as checkCommand from './commands/check'
@@ -39,6 +32,7 @@ import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
+import { exitWithError } from './lib/exit'
 import * as updateCheck from './lib/updateCheck'
 import { loadPlugins } from './plugin'
 import { startTelemetry, shutdownTelemetry } from './telemetry/index'
@@ -119,12 +113,7 @@ config({
 async function main() {
   // Start telemetry if it hasn't been disabled
   if (telemetry) {
-    try {
-      await startTelemetry()
-    } catch (error) {
-      console.error('Telemetry startup error')
-      console.error(error)
-    }
+    startTelemetry()
   }
 
   // Execute CLI within a span, this will be the root span
@@ -137,49 +126,15 @@ async function main() {
       // Span housekeeping
       span?.setStatus({ code: SpanStatusCode.OK })
     } catch (error) {
-      const errorReferenceCode = uuidv4()
-      const errorMessage = [
-        error.stack ?? error.toString(),
-        '',
-        '-'.repeat(process.stdout.columns - 8),
-        '',
-        'Need help?',
-        ` - Not sure about something or need advice? Reach out on our ${terminalLink(
-          'Forum',
-          'https://community.redwoodjs.com/'
-        )}`,
-        ` - Think you've found a bug? Open an issue on our ${terminalLink(
-          'GitHub',
-          'https://github.com/redwoodjs/redwood'
-        )}`,
-        ` - Here's your unique error reference: '${errorReferenceCode}'`,
-      ].join('\n')
-      console.error(
-        boxen(errorMessage, {
-          padding: 1,
-          borderColor: 'red',
-          title: `Unexpected Error`,
-          titleAlignment: 'left',
-        })
-      )
-
-      recordTelemetryError(error)
-      recordTelemetryAttributes({ errorReferenceCode })
-      process.exitCode = error.exitCode ?? 1
-
-      // Legacy telemetry
-      errorTelemetry(process.argv, error.message)
+      exitWithError(error)
+    } finally {
+      span?.end()
     }
-
-    span?.end()
   })
 
   // Shutdown telemetry, ensures data is sent before the process exits
-  try {
-    await shutdownTelemetry()
-  } catch (error) {
-    console.error('Telemetry shutdown error')
-    console.error(error)
+  if (telemetry) {
+    shutdownTelemetry()
   }
 }
 

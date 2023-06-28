@@ -64,7 +64,6 @@ export const handler = async ({
 }) => {
   recordTelemetryAttributes({
     command: 'test',
-    // TODO: filter (likely needs sanitised),
     watch,
     collectCoverage,
     dbPush,

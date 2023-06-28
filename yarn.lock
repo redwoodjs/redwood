@@ -7497,7 +7497,6 @@ __metadata:
     jest: ./dist/bins/jest.js
     nodemon: ./dist/bins/nodemon.js
     redwood: ./dist/bins/redwood.js
-    rimraf: ./dist/bins/rimraf.js
     rw: ./dist/bins/redwood.js
     rw-api-server-watch: ./dist/bins/rw-api-server-watch.js
     rw-gen: ./dist/bins/rw-gen.js
@@ -7948,6 +7947,7 @@ __metadata:
     "@babel/runtime-corejs3": 7.22.5
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/project-config": 5.0.0
+    "@types/yargs-parser": 21.0.0
     "@vitejs/plugin-react": 4.0.1
     buffer: 6.0.3
     core-js: 3.31.0
@@ -7956,6 +7956,7 @@ __metadata:
     typescript: 5.1.3
     vite: 4.3.9
     vite-plugin-environment: 1.1.3
+    yargs-parser: 21.1.1
   bin:
     rw-vite-build: ./bins/rw-vite-build.mjs
     rw-vite-dev: ./bins/rw-vite-dev.mjs
@@ -10501,7 +10502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs-parser@npm:*":
+"@types/yargs-parser@npm:*, @types/yargs-parser@npm:21.0.0":
   version: 21.0.0
   resolution: "@types/yargs-parser@npm:21.0.0"
   checksum: cb89f3bb2e8002f1479a65a934e825be4cc18c50b350bbc656405d41cf90b8a299b105e7da497d7eb1aa460472a07d1e5a389f3af0862f1d1252279cfcdd017c

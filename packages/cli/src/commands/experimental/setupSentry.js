@@ -21,7 +21,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['experimental', 'setup-sentry'].join(' '),
+    command: 'experimental setup-sentry',
     force: options.force,
   })
   const { handler } = await import('./setupSentryHandler.js')
