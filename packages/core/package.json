@@ -14,7 +14,6 @@
     "jest": "./dist/bins/jest.js",
     "nodemon": "./dist/bins/nodemon.js",
     "redwood": "./dist/bins/redwood.js",
-    "rimraf": "./dist/bins/rimraf.js",
     "rw": "./dist/bins/redwood.js",
     "rw-api-server-watch": "./dist/bins/rw-api-server-watch.js",
     "rw-gen": "./dist/bins/rw-gen.js",
