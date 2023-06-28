@@ -2,7 +2,7 @@ import path from 'path'
 
 import fg from 'fast-glob'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { getNamedExports, hasDefaultExport, fileToAst } from './ast'
 
@@ -26,10 +26,12 @@ export const findPages = (cwd: string = getPaths().web.pages) => {
 }
 
 export const findDirectoryNamedModules = (cwd: string = getPaths().base) => {
+  const config = getConfig()
+
   const modules = fg.sync('**/src/**/*.{ts,js,jsx,tsx}', {
     cwd,
     absolute: true,
-    ignore: ['node_modules'],
+    ignore: config.cli.ignoreScanDirs,
   })
 
   // Cell's also follow use the directory-named-module pattern,

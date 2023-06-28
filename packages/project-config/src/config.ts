@@ -105,6 +105,7 @@ export interface Config {
     }
     useSDLCodeGenForGraphQLTypes: boolean
   }
+  cli: { ignoreScanDirs: string[] }
 }
 
 export interface CLIPlugin {
@@ -177,6 +178,9 @@ const DEFAULT_CONFIG: Config = {
       ],
     },
     useSDLCodeGenForGraphQLTypes: false,
+  },
+  cli: {
+    ignoreScanDirs: ['node_modules'],
   },
 }
 
