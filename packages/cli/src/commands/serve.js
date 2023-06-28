@@ -42,7 +42,7 @@ export async function builder(yargs) {
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
@@ -100,7 +100,7 @@ export async function builder(yargs) {
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
@@ -153,7 +153,7 @@ export async function builder(yargs) {
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
@@ -165,6 +165,10 @@ export async function builder(yargs) {
       },
     })
     .middleware((argv) => {
+      recordTelemetryAttributes({
+        command: 'serve',
+      })
+
       // Make sure the relevant side has been built, before serving
       const positionalArgs = argv._
 

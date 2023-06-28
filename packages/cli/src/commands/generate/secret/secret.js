@@ -39,7 +39,7 @@ export const builder = (yargs) =>
 
 export const handler = ({ length, raw }) => {
   recordTelemetryAttributes({
-    command: ['generate', 'secret'].join(' '),
+    command: 'generate secret',
     length,
     raw,
   })

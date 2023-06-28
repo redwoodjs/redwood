@@ -48,7 +48,7 @@ export const builder = (yargs) => {
 
 export const handler = async ({ force, ...args }) => {
   recordTelemetryAttributes({
-    command: ['generate', 'model'].join(' '),
+    command: 'generate model',
     force,
     rollback: args.rollback,
   })

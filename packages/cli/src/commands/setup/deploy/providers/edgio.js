@@ -38,7 +38,7 @@ const prismaBinaryTargetAdditions = () => {
 
 export const handler = async () => {
   recordTelemetryAttributes({
-    command: ['setup', 'deploy', 'edgio'].join(' '),
+    command: 'setup deploy edgio',
   })
   const tasks = new Listr(
     [
