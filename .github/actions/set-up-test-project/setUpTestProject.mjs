@@ -31,6 +31,9 @@ console.log({
 
 console.log()
 
+const packageJson = fs.readJsonSync(path.join(TEST_PROJECT_PATH, 'package.json'))
+console.log('package.json', packageJson)
+
 const {
   dependenciesKey,
   distKey
