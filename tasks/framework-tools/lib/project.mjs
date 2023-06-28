@@ -65,7 +65,7 @@ export function fixProjectBinaries(projectPath) {
     // https://github.com/yarnpkg/berry/issues/2416#issuecomment-768271751
     //
     // Adding them as scripts works around this issue
-    scripts[binName] = `node ${binPath}`
+    scripts[binName] = `node ${binPath.replaceAll('\\', '/')}`
   }
 
   // Write the updated project.json which includes the full list of scripts.
