@@ -30,7 +30,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['setup', 'cache'].join(' '),
+    command: 'setup cache',
     client: options.client,
     force: options.force,
   })

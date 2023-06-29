@@ -9,7 +9,7 @@ export const builder = (yargs) => deployBuilder(yargs)
 
 export const handler = (yargs) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'vercel'].join(' '),
+    command: 'deploy vercel',
     build: yargs.build,
     prisma: yargs.prisma,
     dataMigrate: yargs.dataMigrate,

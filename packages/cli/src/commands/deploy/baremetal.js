@@ -687,7 +687,7 @@ export const commands = (yargs, ssh) => {
 
 export const handler = async (yargs) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'baremetal'].join(' '),
+    command: 'deploy baremetal',
     firstRun: yargs.firstRun,
     update: yargs.update,
     install: yargs.install,

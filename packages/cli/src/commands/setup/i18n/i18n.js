@@ -13,7 +13,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['setup', 'i18n'].join(' '),
+    command: 'setup i18n',
     force: options.force,
   })
   const { handler } = await import('./i18nHandler.js')

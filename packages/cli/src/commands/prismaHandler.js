@@ -13,7 +13,6 @@ import { getPaths } from '../lib/index'
 export const handler = async ({ _, $0, commands = [], ...options }) => {
   recordTelemetryAttributes({
     command: 'prisma',
-    // TODO: Consider needing more here?
   })
 
   const rwjsPaths = getPaths()

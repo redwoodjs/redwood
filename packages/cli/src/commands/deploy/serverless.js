@@ -130,7 +130,7 @@ const loadDotEnvForStage = (dotEnvPath) => {
 
 export const handler = async (yargs) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'serverless'].join(' '),
+    command: 'deploy serverless',
     sides: JSON.stringify(yargs.sides),
     verbose: yargs.verbose,
     packOnly: yargs.packOnly,
