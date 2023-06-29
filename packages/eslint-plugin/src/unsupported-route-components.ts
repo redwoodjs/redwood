@@ -9,10 +9,10 @@ function isAllowedElement(name: string) {
 
 export const unsupportedRouteComponents = createRule({
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     docs: {
       description: 'Find unsupported route components',
-      recommended: 'warn',
+      recommended: 'error',
     },
     messages: {
       unexpected:
