@@ -27,13 +27,37 @@ enum CodegenSide {
   WEB,
 }
 
-export const generateTypeDefGraphQLApi = async () => {
+type TypeDefResult = {
+  typeDefFiles: string[]
+  errors: { message: string; error: unknown }[]
+}
+
+export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
   const config = getConfig()
+  const errors: { message: string; error: unknown }[] = []
+
   if (config.experimental.useSDLCodeGenForGraphQLTypes) {
     const paths = getPaths()
     const sdlCodegen = await import('@sdl-codegen/node')
-    const dtsFiles = sdlCodegen.runFullCodegen('redwood', { paths })
-    return dtsFiles.paths
+
+    const dtsFiles: string[] = []
+
+    try {
+      const output = sdlCodegen.runFullCodegen('redwood', { paths })
+      dtsFiles.concat(output.paths)
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        errors.push({
+          message: e.message,
+          error: e,
+        })
+      }
+    }
+
+    return {
+      typeDefFiles: dtsFiles,
+      errors,
+    }
   }
 
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
@@ -68,18 +92,29 @@ export const generateTypeDefGraphQLApi = async () => {
   ]
 
   try {
-    return await runCodegenGraphQL([], extraPlugins, filename, CodegenSide.API)
+    return {
+      typeDefFiles: await runCodegenGraphQL(
+        [],
+        extraPlugins,
+        filename,
+        CodegenSide.API
+      ),
+      errors,
+    }
   } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (api)')
-    console.error(e)
-    console.error()
+    errors.push({
+      message: 'Error: Could not generate GraphQL type definitions (api)',
+      error: e,
+    })
 
-    return []
+    return {
+      typeDefFiles: [],
+      errors,
+    }
   }
 }
 
-export const generateTypeDefGraphQLWeb = async () => {
+export const generateTypeDefGraphQLWeb = async (): Promise<TypeDefResult> => {
   const filename = path.join(getPaths().web.types, 'graphql.d.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
@@ -90,7 +125,10 @@ export const generateTypeDefGraphQLWeb = async () => {
     documents = await loadDocuments([documentsGlob], options)
   } catch {
     // No GraphQL documents present, no need to try to run codegen
-    return []
+    return {
+      typeDefFiles: [],
+      errors: [],
+    }
   }
 
   const extraPlugins: CombinedPluginConfig[] = [
@@ -109,20 +147,28 @@ export const generateTypeDefGraphQLWeb = async () => {
     },
   ]
 
-  try {
-    return await runCodegenGraphQL(
-      documents,
-      extraPlugins,
-      filename,
-      CodegenSide.WEB
-    )
-  } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (web)')
-    console.error(e)
-    console.error()
+  const errors: { message: string; error: unknown }[] = []
 
-    return []
+  try {
+    return {
+      typeDefFiles: await runCodegenGraphQL(
+        documents,
+        extraPlugins,
+        filename,
+        CodegenSide.WEB
+      ),
+      errors,
+    }
+  } catch (e) {
+    errors.push({
+      message: 'Error: Could not generate GraphQL type definitions (web)',
+      error: e,
+    })
+
+    return {
+      typeDefFiles: [],
+      errors,
+    }
   }
 }
 
