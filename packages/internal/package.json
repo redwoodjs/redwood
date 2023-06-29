@@ -52,7 +52,7 @@
     "esbuild": "0.18.10",
     "fast-glob": "3.2.12",
     "fs-extra": "11.1.1",
-    "graphql": "16.6.0",
+    "graphql": "16.7.1",
     "kill-port": "1.6.1",
     "prettier": "2.8.8",
     "rimraf": "5.0.1",
