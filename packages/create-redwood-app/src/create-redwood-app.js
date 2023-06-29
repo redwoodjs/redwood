@@ -78,18 +78,11 @@ async function executeCompatibilityCheck(templateDir) {
       semver.minVersion(checksData.yarn.wanted.raw)
     )
 
-    if (
-      foundNodeVersionIsLessThanRequired ||
-      foundYarnVersionIsLessThanRequired
-    ) {
+    if (foundNodeVersionIsLessThanRequired) {
       const errorMessages = [
         {
           type: 'node',
           failedCompatibilityCheck: foundNodeVersionIsLessThanRequired,
-        },
-        {
-          type: 'yarn',
-          failedCompatibilityCheck: foundYarnVersionIsLessThanRequired,
         },
       ]
         .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
@@ -107,11 +100,56 @@ async function executeCompatibilityCheck(templateDir) {
           '',
           `  Please use tools like nvm or corepack to change to a compatible version.`,
           `  See: ${terminalLink(
-            'How to - Use nvm',
+            'How to - Using nvm',
             'https://redwoodjs.com/docs/how-to/using-nvm',
             {
               fallback: () =>
-                'How to - Use nvm https://redwoodjs.com/docs/how-to/using-nvm',
+                'How to - Using nvm https://redwoodjs.com/docs/how-to/using-nvm',
+            }
+          )}`,
+          `  See: ${terminalLink(
+            'Tutorial - Prerequisites',
+            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            {
+              fallback: () =>
+                'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            }
+          )}`,
+        ].join('\n')
+      )
+
+      recordErrorViaTelemetry('Compatibility checks failed')
+      await shutdownTelemetry()
+      process.exit(1)
+    }
+
+    if (foundYarnVersionIsLessThanRequired) {
+      const errorMessages = [
+        {
+          type: 'yarn',
+          failedCompatibilityCheck: foundYarnVersionIsLessThanRequired,
+        },
+      ]
+        .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
+        .map(
+          ({ type }) =>
+            `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
+        )
+
+      tui.stopReactive(true)
+      tui.displayError(
+        'Compatibility checks failed',
+        [
+          `  You need to upgrade the version of yarn you're using.`,
+          `  You're using ${checksData.yarn.version.version} and we currently support node ${checksData.yarn.wanted.range}.`,
+          '',
+          `  Please use tools like corepack to change to a compatible version.`,
+          `  See: ${terminalLink(
+            'How to - Using Yarn',
+            'https://redwoodjs.com/docs/how-to/using-yarn',
+            {
+              fallback: () =>
+                'How to - Using Yarn https://redwoodjs.com/docs/how-to/using-yarn',
             }
           )}`,
           `  See: ${terminalLink(
