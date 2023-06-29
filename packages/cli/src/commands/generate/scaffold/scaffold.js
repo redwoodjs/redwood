@@ -9,6 +9,7 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfig } from '@redwoodjs/project-config'
 
@@ -844,6 +845,16 @@ export const handler = async ({
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
+  recordTelemetryAttributes({
+    command: 'generate scaffold',
+    force,
+    tests,
+    typescript,
+    tailwind,
+    docs,
+    rollback,
+  })
+
   const { model, path } = splitPathAndModel(modelArg)
 
   tailwind = shouldUseTailwindCSS(tailwind)

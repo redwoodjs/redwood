@@ -21,12 +21,12 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "6.0.0-canary.344",
+    "@redwoodjs/vite": "6.0.0-canary.450",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",
     "postcss-loader": "^7.3.3",
     "prettier-plugin-tailwindcss": "^0.3.0",
-    "storybook": "^7.0.20",
+    "storybook": "^7.0.24",
     "tailwindcss": "^3.3.2"
   }
 }

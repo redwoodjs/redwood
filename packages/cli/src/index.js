@@ -3,6 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import { trace, SpanStatusCode } from '@opentelemetry/api'
 import { config } from 'dotenv-defaults'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -31,8 +32,10 @@ import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
+import { exitWithError } from './lib/exit'
 import * as updateCheck from './lib/updateCheck'
 import { loadPlugins } from './plugin'
+import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
 // # Setting the CWD
 //
@@ -56,7 +59,17 @@ import { loadPlugins } from './plugin'
 // yarn rw info
 // ```
 
-let { cwd } = Parser(hideBin(process.argv))
+// Telemetry is enabled by default, but can be disabled in two ways
+// - by passing a `--telemetry false` option
+// - by setting a `REDWOOD_DISABLE_TELEMETRY` env var
+let { cwd, telemetry } = Parser(hideBin(process.argv), {
+  boolean: ['telemetry'],
+  default: {
+    telemetry:
+      process.env.REDWOOD_DISABLE_TELEMETRY === undefined ||
+      process.env.REDWOOD_DISABLE_TELEMETRY === '',
+  },
+})
 cwd ??= process.env.RWJS_CWD
 
 try {
@@ -97,6 +110,34 @@ config({
   multiline: true,
 })
 
+async function main() {
+  // Start telemetry if it hasn't been disabled
+  if (telemetry) {
+    startTelemetry()
+  }
+
+  // Execute CLI within a span, this will be the root span
+  const tracer = trace.getTracer('redwoodjs')
+  await tracer.startActiveSpan('cli', async (span) => {
+    try {
+      // Run the command via yargs
+      await runYargs()
+
+      // Span housekeeping
+      span?.setStatus({ code: SpanStatusCode.OK })
+    } catch (error) {
+      exitWithError(error)
+    } finally {
+      span?.end()
+    }
+  })
+
+  // Shutdown telemetry, ensures data is sent before the process exits
+  if (telemetry) {
+    shutdownTelemetry()
+  }
+}
+
 async function runYargs() {
   // # Build the CLI yargs instance
   const yarg = yargs(hideBin(process.argv))
@@ -106,15 +147,22 @@ async function runYargs() {
       [
         // We've already handled `cwd` above, but it may still be in `argv`.
         // We don't need it anymore so let's get rid of it.
+        // Likewise for `telemetry`.
         (argv) => {
           delete argv.cwd
+          delete argv.telemetry
         },
-        telemetryMiddleware,
+        telemetry && telemetryMiddleware,
         updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
       ].filter(Boolean)
     )
     .option('cwd', {
       describe: 'Working directory to use (where `redwood.toml` is located)',
+    })
+    .option('telemetry', {
+      describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
+      boolean: true,
+      // hidden: true,
     })
     .example(
       'yarn rw g page home /',
@@ -122,6 +170,7 @@ async function runYargs() {
     )
     .demandCommand()
     .strict()
+    .exitProcess(false)
 
     // Commands (Built in or pre-plugin support)
     .command(buildCommand)
@@ -150,7 +199,12 @@ async function runYargs() {
   await loadPlugins(yarg)
 
   // Run
-  yarg.parse()
+  await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
+    // Show the output that yargs was going to if there was no callback provided
+    if (output) {
+      console.log(output)
+    }
+  })
 }
 
-runYargs()
+main()

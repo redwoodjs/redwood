@@ -3,6 +3,8 @@ import path from 'path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
@@ -28,7 +30,8 @@ const ALL_MANTINE_PACKAGES = [
 const MANTINE_THEME_AND_COMMENTS = `\
 // This object will be used to override Mantine theme defaults.
 // See https://mantine.dev/theming/mantine-provider/#theme-object for theming options
-module.exports = {}
+const theme = {}
+export default theme
 `
 
 export function builder(yargs) {
@@ -53,6 +56,13 @@ export function builder(yargs) {
 }
 
 export async function handler({ force, install, packages }) {
+  recordTelemetryAttributes({
+    command: 'setup ui mantine',
+    force,
+    install,
+    packages,
+  })
+
   const rwPaths = getPaths()
   const configFilePath = path.join(rwPaths.web.config, 'mantine.config.js')
 

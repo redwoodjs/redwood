@@ -7,7 +7,7 @@ import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { print } from 'graphql/language/printer'
 
-// Note: Importing directly from `apollo/client` does not work properly in Storybook.
+// Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
 const {
   ApolloProvider,
   ApolloClient,
@@ -31,28 +31,30 @@ import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
-export type RwLinkName =
+export type RedwoodApolloLinkName =
   | 'withToken'
   | 'authMiddleware'
   | 'updateDataApolloLink'
   | 'httpLink'
 
-export type RwLink<
-  Name extends RwLinkName,
+export type RedwoodApolloLink<
+  Name extends RedwoodApolloLinkName,
   Link extends apolloClient.ApolloLink = apolloClient.ApolloLink
 > = {
   name: Name
   link: Link
 }
 
-export type RwLinks = [
-  RwLink<'withToken'>,
-  RwLink<'authMiddleware'>,
-  RwLink<'updateDataApolloLink'>,
-  RwLink<'httpLink', apolloClient.HttpLink>
+export type RedwoodApolloLinks = [
+  RedwoodApolloLink<'withToken'>,
+  RedwoodApolloLink<'authMiddleware'>,
+  RedwoodApolloLink<'updateDataApolloLink'>,
+  RedwoodApolloLink<'httpLink', apolloClient.HttpLink>
 ]
 
-export type RwLinkFactory = (links: RwLinks) => apolloClient.ApolloLink
+export type RedwoodApolloLinkFactory = (
+  links: RedwoodApolloLinks
+) => apolloClient.ApolloLink
 
 export type GraphQLClientConfigProp = Omit<
   ApolloClientOptions<unknown>,
@@ -78,61 +80,29 @@ export type GraphQLClientConfigProp = Omit<
    */
   httpLinkConfig?: apolloClient.HttpOptions
   /**
-   * @deprecated
-   * @see linkFactory
    * Extend or overwrite `RedwoodApolloProvider`'s Apollo Link.
    *
    * To overwrite Redwood's Apollo Link, just provide your own `ApolloLink`.
    *
-   * To extend Redwood's Apollo Link, provide a function—it'll get passed an array of Redwood's Apollo Links:
+   * To extend Redwood's Apollo Link, provide a function—it'll get passed an array of Redwood's Apollo Links
+   * which are objects with a name and link property:
    *
    * ```js
-   * const link = (rwLinks) => {
+   * const link = (redwoodApolloLinks) => {
    *   const consoleLink = new ApolloLink((operation, forward) => {
    *     console.log(operation.operationName)
    *     return forward(operation)
    *   })
    *
-   *   return ApolloLink.from([consoleLink, ...rwLinks])
+   *   return ApolloLink.from([consoleLink, ...redwoodApolloLinks.map(({ link }) => link)])
    * }
    * ```
    *
-   * If you do this, there's several things you should keep in mind:
+   * If you do this, there's a few things you should keep in mind:
    * - your function should return a single link (e.g., using `ApolloLink.from`; see https://www.apollographql.com/docs/react/api/link/introduction/#additive-composition)
    * - the `HttpLink` should come last (https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link)
    */
-  link?:
-    | apolloClient.ApolloLink
-    | ((
-        rwLinks: [
-          apolloClient.ApolloLink,
-          apolloClient.ApolloLink,
-          apolloClient.ApolloLink,
-          apolloClient.HttpLink
-        ]
-      ) => apolloClient.ApolloLink)
-
-  /**
-   * Extend or overwrite `RedwoodApolloProvider`'s Apollo Link.
-   *
-   * To extend Redwood's Apollo Link, provide a function—it'll get passed an array of Redwood's Apollo Links:
-   *
-   * ```js
-   * const linkFactory = (rwLinks) => {
-   *   const consoleLink = new ApolloLink((operation, forward) => {
-   *     console.log(operation.operationName)
-   *     return forward(operation)
-   *   })
-   *
-   *   return ApolloLink.from([consoleLink, ...rwLinks.map(({ link }) => link)])
-   * }
-   * ```
-   *
-   * If you do this, there's several things you should keep in mind:
-   * - your function should return a single link (e.g., using `ApolloLink.from`; see https://www.apollographql.com/docs/react/api/link/introduction/#additive-composition)
-   * - the `HttpLink` should come last (https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link)
-   */
-  linkFactory?: RwLinkFactory
+  link?: apolloClient.ApolloLink | RedwoodApolloLinkFactory
 }
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -143,26 +113,19 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   logLevel: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
 }> = ({ config, children, useAuth = useNoAuth, logLevel }) => {
-  /**
-   * Should they run into it,
-   * this helps users with the "Cannot render cell; GraphQL success but data is null" error.
-   *
-   * @see {@link https://github.com/redwoodjs/redwood/issues/2473}
-   */
+  // Should they run into it, this helps users with the "Cannot render cell; GraphQL success but data is null" error.
+  // See https://github.com/redwoodjs/redwood/issues/2473.
   apolloSetLogVerbosity(logLevel)
 
-  /**
-   * Here we're using Apollo Link to customize Apollo Client's data flow.
-   *
-   * Although we're sending conventional HTTP-based requests and could just pass `uri` instead of `link`,
-   * we need to fetch a new token on every request, making middleware a good fit for this.
-   *
-   * @see {@link https://www.apollographql.com/docs/react/api/link/introduction/}
-   */
+  // Here we're using Apollo Link to customize Apollo Client's data flow.
+  // Although we're sending conventional HTTP-based requests and could just pass `uri` instead of `link`,
+  // we need to fetch a new token on every request, making middleware a good fit for this.
+  //
+  // See https://www.apollographql.com/docs/react/api/link/introduction.
   const { getToken, type: authProviderType } = useAuth()
 
-  // updateDataApolloLink keeps track of the most recent req/res data so they can be passed into
-  // any errors passed up to a error boundary.
+  // `updateDataApolloLink` keeps track of the most recent req/res data so they can be passed to
+  // any errors passed up to an error boundary.
   const data = {
     mostRecentRequest: undefined,
     mostRecentResponse: undefined,
@@ -195,8 +158,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const authMiddleware = new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
 
-    // Only add auth headers when token is present
-    // Token is null, when !isAuthenticated
+    // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
     const authHeaders = token
       ? {
           'auth-provider': authProviderType,
@@ -208,85 +170,50 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
       headers: {
         ...operation.getContext().headers,
         ...headers,
-        // Duped auth headers, because we may remove FetchContext at a later date
+        // Duped auth headers, because we may remove the `FetchConfigProvider` at a later date.
         ...authHeaders,
       },
     }))
+
     return forward(operation)
   })
 
-  /**
-   * A terminating link.
-   * Apollo Client uses this to send GraphQL operations to a server over HTTP.
-   *
-   * @see {@link https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link}
-   */
-  const {
-    httpLinkConfig,
-    link: deprecatedUserLink,
-    linkFactory,
-    ...rest
-  } = config ?? {}
+  const { httpLinkConfig, link: redwoodApolloLink, ...rest } = config ?? {}
 
+  // A terminating link. Apollo Client uses this to send GraphQL operations to a server over HTTP.
+  // See https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link.
   const httpLink = new HttpLink({ uri, ...httpLinkConfig })
 
-  /**
-   * The order here is important. The last link *must* be a terminating link like HttpLink.
-   */
-  const rwLinks: RwLinks = [
+  // The order here is important. The last link *must* be a terminating link like HttpLink.
+  const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
     { name: 'httpLink', link: httpLink },
   ]
 
-  /**
-   * If the user provides a linkFactory, use it.
-   *
-   * Otherwise support the legacy "link" parameter, and if neither are
-   * provided, we just want to use ours.
-   */
-  let link: apolloClient.ApolloLink
-  if (linkFactory) {
-    link = linkFactory(rwLinks)
-  } else if (deprecatedUserLink) {
-    link =
-      typeof deprecatedUserLink === 'function'
-        ? deprecatedUserLink(
-            rwLinks.map((l) => l.link) as [
-              apolloClient.ApolloLink,
-              apolloClient.ApolloLink,
-              apolloClient.ApolloLink,
-              apolloClient.HttpLink
-            ]
-          )
-        : deprecatedUserLink
-  } else {
-    link = ApolloLink.from(rwLinks.map((l) => l.link))
+  let link = redwoodApolloLink
+
+  link ??= ApolloLink.from(redwoodApolloLinks.map((l) => l.link))
+
+  if (typeof link === 'function') {
+    link = link(redwoodApolloLinks)
   }
 
   const client = new ApolloClient({
-    /**
-     * Default options for every Cell.
-     * Better to specify them here than in `beforeQuery`
-     * where it's too easy to overwrite them.
-     *
-     * @see {@link https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object}
-     */
+    // Default options for every Cell. Better to specify them here than in `beforeQuery` where it's too easy to overwrite them.
+    // See https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object.
     defaultOptions: {
       watchQuery: {
-        /**
-         * The `fetchPolicy` we expect:
-         *
-         * > Apollo Client executes the full query against both the cache and your GraphQL server.
-         * > The query automatically updates if the result of the server-side query modifies cached fields.
-         *
-         * @see {@link https://www.apollographql.com/docs/react/data/queries/#cache-and-network}
-         */
+        // The `fetchPolicy` we expect:
+        //
+        // > Apollo Client executes the full query against both the cache and your GraphQL server.
+        // > The query automatically updates if the result of the server-side query modifies cached fields.
+        //
+        // See https://www.apollographql.com/docs/react/data/queries/#cache-and-network.
         fetchPolicy: 'cache-and-network',
-        /**
-         * So that Cells rerender when refetching: {@link https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states}
-         */
+        // So that Cells rerender when refetching.
+        // See https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states.
         notifyOnNetworkStatusChange: true,
       },
     },
@@ -337,19 +264,18 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   logLevel = 'debug',
   children,
 }) => {
-  /**
-   * Since Apollo Client gets re-instantiated on auth changes,
-   * we have to instantiate `InMemoryCache` here,
-   * so that it doesn't get wiped.
-   */
+  // Since Apollo Client gets re-instantiated on auth changes,
+  // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
   const { cacheConfig, ...config } = graphQLClientConfig ?? {}
 
-  const cache = new InMemoryCache(cacheConfig)
+  const cache = new InMemoryCache(cacheConfig).restore(
+    globalThis?.__REDWOOD__APOLLO_STATE ?? {}
+  )
 
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
-        // This order so that the user can still completely overwrite the cache
+        // This order so that the user can still completely overwrite the cache.
         config={{ cache, ...config }}
         useAuth={useAuth}
         logLevel={logLevel}

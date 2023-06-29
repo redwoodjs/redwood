@@ -17,9 +17,6 @@ declare global {
     /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
     __REDWOOD__APP_TITLE: string
-
-    // Used by FatalErrorPage to determine how to import the DevFatalErrorPage
-    RWJS_WEB_BUNDLER: string
   }
 
   type GraphQLOperationVariables = Record<string, any>

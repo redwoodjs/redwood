@@ -6,6 +6,7 @@ import chalk from 'chalk'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -283,6 +284,16 @@ export const handler = async ({
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
+
+  recordTelemetryAttributes({
+    command: 'generate sdl',
+    crud,
+    force,
+    tests,
+    typescript,
+    docs,
+    rollback,
+  })
 
   try {
     const { name } = await verifyModelName({ name: model })

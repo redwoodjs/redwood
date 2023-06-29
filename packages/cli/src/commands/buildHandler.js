@@ -6,13 +6,13 @@ import { Listr } from 'listr2'
 import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
-import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
+import { timedTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, getConfig } from '../lib'
-import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
 export const handler = async ({
@@ -23,6 +23,15 @@ export const handler = async ({
   prisma = true,
   prerender,
 }) => {
+  recordTelemetryAttributes({
+    command: 'build',
+    side: JSON.stringify(side),
+    verbose,
+    performance,
+    stats,
+    prisma,
+    prerender,
+  })
   const rwjsPaths = getPaths()
 
   if (performance) {
@@ -95,14 +104,19 @@ export const handler = async ({
     side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
-        if (getConfig().web.bundler === 'vite') {
-          // @NOTE: we're using the vite build command here, instead of the buildWeb function
-          // because we want the process.cwd to be the web directory, not the root of the project
+        if (getConfig().web.bundler !== 'webpack') {
+          // @NOTE: we're using the vite build command here, instead of the
+          // buildWeb function directly because we want the process.cwd to be
+          // the web directory, not the root of the project.
           // This is important for postcss/tailwind to work correctly
-          await execa(`yarn rw-vite-build`, {
+          // Having a separate binary lets us contain the change of cwd to that
+          // process only. If we changed cwd here, or in the buildWeb function,
+          // it could affect other things that run in parallel while building.
+          // We don't have any parallel tasks right now, but someone might add
+          // one in the future as a performance optimization.
+          await execa(`yarn rw-vite-build --webDir="${rwjsPaths.web.base}"`, {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
-            cwd: rwjsPaths.web.base, // <-- important for postcss/tailwind
           })
         } else {
           await execa(
@@ -152,18 +166,12 @@ export const handler = async ({
     renderer: verbose && 'verbose',
   })
 
-  try {
-    await timedTelemetry(process.argv, { type: 'build' }, async () => {
-      await jobs.run()
+  await timedTelemetry(process.argv, { type: 'build' }, async () => {
+    await jobs.run()
 
-      if (side.includes('web') && prerender) {
-        // This step is outside Listr so that it prints clearer, complete messages
-        await triggerPrerender()
-      }
-    })
-  } catch (e) {
-    console.log(c.error(e.message))
-    errorTelemetry(process.argv, e.message)
-    process.exit(1)
-  }
+    if (side.includes('web') && prerender) {
+      // This step is outside Listr so that it prints clearer, complete messages
+      await triggerPrerender()
+    }
+  })
 }

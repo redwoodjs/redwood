@@ -1,6 +1,4 @@
-import { spawn } from 'child_process'
 import fs from 'fs'
-import os from 'os'
 import path from 'path'
 
 import boxen from 'boxen'
@@ -10,6 +8,7 @@ import semver from 'semver'
 
 import { getConfig } from '@redwoodjs/project-config'
 
+import { spawnBackgroundProcess } from './background'
 import { setLock, unsetLock } from './locking'
 
 import { getPaths } from './index'
@@ -68,6 +67,7 @@ function getPersistenceDirectory() {
  */
 export async function check() {
   try {
+    console.time('Update Check')
     setLock(LOCK_IDENTIFIER)
 
     // Read package.json and extract the @redwood/core version
@@ -80,9 +80,11 @@ export async function check() {
     while (!/\d/.test(localVersion.charAt(0))) {
       localVersion = localVersion.substring(1)
     }
+    console.log(`Detected the current version of RedwoodJS: '${localVersion}'`)
 
     const remoteVersions = new Map()
     for (const tag of getConfig().notifications.versionUpdates) {
+      console.log(`Checking for new versions for npm tag: '${tag}'`)
       try {
         remoteVersions.set(
           tag,
@@ -90,11 +92,15 @@ export async function check() {
         )
       } catch (error) {
         // This error may result as the ability of the user to specify arbitrary tags within their config file
+        console.error(`Couldn't find a version for tag: '${tag}'`)
         console.error(error)
       }
     }
+    console.log(`Detected the latest versions of RedwoodJS as:`)
+    console.log(JSON.stringify([...remoteVersions.entries()], undefined, 2))
 
     // Save the latest update information
+    console.log('Saving updated version information for future checks...')
     updateUpdateDataFile({
       localVersion,
       remoteVersions,
@@ -102,6 +108,7 @@ export async function check() {
     })
   } finally {
     unsetLock(LOCK_IDENTIFIER)
+    console.timeEnd('Update Check')
   }
 }
 
@@ -268,40 +275,9 @@ export function updateCheckMiddleware(argv) {
   }
 
   if (shouldCheck()) {
-    if (!fs.existsSync(getPersistenceDirectory())) {
-      fs.mkdirSync(getPersistenceDirectory())
-    }
-
-    const stdout = fs.openSync(
-      path.join(getPersistenceDirectory(), 'stdout.log'),
-      'w'
-    )
-
-    const stderr = fs.openSync(
-      path.join(getPersistenceDirectory(), 'stderr.log'),
-      'w'
-    )
-
-    // We must account for some platform specific behaviour on windows.
-    const spawnOptions =
-      os.type() === 'Windows_NT'
-        ? {
-            // The following options run the process in the background without a console window, even though they don't look like they would.
-            // See https://github.com/nodejs/node/issues/21825#issuecomment-503766781 for information
-            detached: false,
-            windowsHide: false,
-            shell: true,
-            stdio: ['ignore', stdout, stderr],
-          }
-        : {
-            detached: true,
-            stdio: ['ignore', stdout, stderr],
-          }
-    const child = spawn(
-      'yarn',
-      ['node', path.join(__dirname, 'updateCheckExecute.js')],
-      spawnOptions
-    )
-    child.unref()
+    spawnBackgroundProcess('updateCheck', 'yarn', [
+      'node',
+      path.join(__dirname, 'updateCheckExecute.js'),
+    ])
   }
 }

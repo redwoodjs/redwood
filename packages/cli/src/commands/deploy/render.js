@@ -3,6 +3,7 @@ import path from 'path'
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../lib'
@@ -44,6 +45,13 @@ if (process.argv.slice(2).includes('api')) {
 }
 
 export const handler = async ({ side, prisma, dm: dataMigrate }) => {
+  recordTelemetryAttributes({
+    command: 'deploy render',
+    side,
+    prisma,
+    dataMigrate,
+  })
+
   const rwjsPaths = getPaths()
 
   const execaConfig = {

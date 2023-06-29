@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "7.22.5",
     "@babel/runtime-corejs3": "7.22.5",
-    "@fastify/http-proxy": "9.2.0",
+    "@fastify/http-proxy": "9.2.1",
     "@fastify/static": "6.10.2",
     "@fastify/url-data": "5.3.1",
     "@redwoodjs/project-config": "5.0.0",
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@babel/cli": "7.22.5",
     "@babel/core": "7.22.5",
-    "@types/aws-lambda": "8.10.118",
+    "@types/aws-lambda": "8.10.119",
     "@types/lodash": "4.14.195",
     "@types/qs": "6.9.7",
     "@types/split2": "4.2.0",

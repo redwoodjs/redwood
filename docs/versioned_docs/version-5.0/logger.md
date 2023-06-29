@@ -80,7 +80,7 @@ In addition to the rich [features](https://github.com/pinojs/pino/blob/master/do
 
 One of 'fatal', 'error', 'warn', 'info', 'debug', 'trace' or 'silent'.
 
-The logger detects you current environment and will default to a sensible minimum log level.
+The logger detects your current environment and will default to a sensible minimum log level.
 
 > **_NOTE:_** In Development, the default is `trace` while in Production, the default is `warn`.
 > This means that output in your dev server can be verbose, but when you deploy you won't miss out on critical issues.

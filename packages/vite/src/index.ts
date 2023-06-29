@@ -4,7 +4,6 @@ import path from 'path'
 import react from '@vitejs/plugin-react'
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
 import { normalizePath } from 'vite'
-import commonjs from 'vite-plugin-commonjs'
 import EnvironmentPlugin from 'vite-plugin-environment'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
@@ -93,7 +92,6 @@ export default function redwoodPluginVite(): PluginOption[] {
           envPrefix: 'REDWOOD_ENV_',
           publicDir: path.join(rwPaths.web.base, 'public'),
           define: {
-            RWJS_WEB_BUNDLER: JSON.stringify('vite'),
             RWJS_ENV: {
               // @NOTE we're avoiding process.env here, unlike webpack
               RWJS_API_GRAPHQL_URL:
@@ -101,6 +99,9 @@ export default function redwoodPluginVite(): PluginOption[] {
               RWJS_API_URL: rwConfig.web.apiUrl,
               __REDWOOD__APP_TITLE:
                 rwConfig.web.title || path.basename(rwPaths.base),
+              RWJS_EXP_STREAMING_SSR:
+                rwConfig.experimental.streamingSsr &&
+                rwConfig.experimental.streamingSsr.enabled,
             },
             RWJS_DEBUG_ENV: {
               RWJS_SRC_ROOT: rwPaths.web.src,
@@ -124,6 +125,41 @@ export default function redwoodPluginVite(): PluginOption[] {
                 changeOrigin: true,
                 // Remove the `.redwood/functions` part, but leave the `/graphql`
                 rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),
+                configure: (proxy) => {
+                  // @MARK: this is a hack to prevent showing confusing proxy errors on startup
+                  // because Vite launches so much faster than the API server.
+                  let waitingForApiServer = true
+
+                  // Wait for 2.5s, then restore regular proxy error logging
+                  setTimeout(() => {
+                    waitingForApiServer = false
+                  }, 2500)
+
+                  proxy.on('error', (err, _req, res) => {
+                    if (
+                      waitingForApiServer &&
+                      err.message.includes('ECONNREFUSED')
+                    ) {
+                      err.stack =
+                        '⌛ API Server launching, please refresh your page...'
+                    }
+                    const msg = {
+                      errors: [
+                        {
+                          message:
+                            'The RedwoodJS API server is not available or is currently reloading. Please refresh.',
+                        },
+                      ],
+                    }
+
+                    res.writeHead(203, {
+                      'Content-Type': 'application/json',
+                      'Cache-Control': 'no-cache',
+                    })
+                    res.write(JSON.stringify(msg))
+                    res.end()
+                  })
+                },
               },
             },
           },
@@ -174,16 +210,6 @@ export default function redwoodPluginVite(): PluginOption[] {
         ...getWebSideDefaultBabelConfig({
           forVite: true,
         }),
-      },
-    }),
-    // End HTML transform------------------
-
-    // @TODO We add this as a temporary workaround for DevFatalErrorPage being required
-    // Note that it only transforms commonjs in dev, which is exactly what we want!
-    // and is limited to the default FatalErrorPage (by name)
-    commonjs({
-      filter: (id: string) => {
-        return id.includes('FatalErrorPage')
       },
     }),
   ]

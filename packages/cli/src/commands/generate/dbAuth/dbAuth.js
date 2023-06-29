@@ -7,6 +7,8 @@ import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import {
   addRoutesToRouterTask,
   addScaffoldImport,
@@ -372,6 +374,16 @@ const tasks = ({
 }
 
 export const handler = async (yargs) => {
+  recordTelemetryAttributes({
+    command: 'generate dbAuth',
+    skipForgot: yargs.skipForgot,
+    skipLogin: yargs.skipLogin,
+    skipReset: yargs.skipReset,
+    skipSignup: yargs.skipSignup,
+    webauthn: yargs.webauthn,
+    force: yargs.force,
+    rollback: yargs.rollback,
+  })
   const t = tasks({ ...yargs })
 
   try {
