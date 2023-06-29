@@ -34,9 +34,7 @@ const streamServerErrorHandler = () => {
   )
 }
 
-export async function builder(yargs) {
-  const redwoodProjectConfig = getConfig()
-
+export const builder = async (yargs) => {
   yargs
     .usage('usage: $0 <side>')
     .command({
@@ -68,12 +66,12 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port,
+            default: getConfig().web.port,
             type: 'number',
             alias: 'p',
           },
           host: {
-            default: redwoodProjectConfig.web.host,
+            default: getConfig().web.host,
             type: 'string',
           },
           socket: { type: 'string' },
