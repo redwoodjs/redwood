@@ -46,6 +46,9 @@ module.exports = {
     requireConfigFile: false,
     babelOptions: getProjectBabelOptions(),
   },
+  rules: {
+    '@redwoodjs/unsupported-route-components': 'warn',
+  },
   overrides: [
     {
       files: ['web/src/Routes.js', 'web/src/Routes.jsx', 'web/src/Routes.tsx'],
