@@ -104,6 +104,9 @@ export interface Config {
       plugins: CLIPlugin[]
     }
     useSDLCodeGenForGraphQLTypes: boolean
+    streamingSsr: {
+      enabled: boolean
+    }
   }
 }
 
@@ -177,6 +180,9 @@ const DEFAULT_CONFIG: Config = {
       ],
     },
     useSDLCodeGenForGraphQLTypes: false,
+    streamingSsr: {
+      enabled: false,
+    },
   },
 }
 
