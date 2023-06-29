@@ -35,6 +35,7 @@ export const useArmor = (logger: Logger, config?: ArmorConfig) => {
     },
     maxDepth: {
       ...config?.maxDepth,
+      flattenFragments: true,
       onReject: [logRejection],
     },
     maxDirectives: {
