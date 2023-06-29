@@ -29,7 +29,7 @@
     "@envelop/filter-operation-type": "5.0.0",
     "@envelop/live-query": "6.0.0",
     "@envelop/on-resolve": "3.0.0",
-    "@escape.tech/graphql-armor": "2.0.0",
+    "@escape.tech/graphql-armor": "2.2.0",
     "@graphql-tools/merge": "8.4.2",
     "@graphql-tools/schema": "9.0.19",
     "@graphql-tools/utils": "9.2.1",
