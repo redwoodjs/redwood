@@ -45,6 +45,10 @@ Reference the [nvm-windows](https://github.com/coreybutler/nvm-windows) repo.
 - Now, you should have a file called **nvm-setup.exe**. Double click on it to run the installer.
 - Follow the instructions in the installer
 
+:::info
+We have a specific doc for [Windows Development Setup.](/docs/how-to/windows-development-setup)
+:::
+
 ## How to use nvm
 
 To confirm that `nvm` was installed correctly, run the following command in your terminal:
