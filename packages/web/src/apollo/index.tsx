@@ -183,7 +183,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // A terminating link. Apollo Client uses this to send GraphQL operations to a server over HTTP.
   // See https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link.
-  const httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
+  let httpLink = new HttpLink({ uri, ...httpLinkConfig })
+  if (globalThis.RWJS_EXP_STREAMING_SSR) {
+    httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
+  }
 
   // The order here is important. The last link *must* be a terminating link like HttpLink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
