@@ -1,10 +1,9 @@
-import { TSESTree } from '@typescript-eslint/types'
 import { ESLintUtils } from '@typescript-eslint/utils'
 
 const createRule = ESLintUtils.RuleCreator.withoutDocs
 
 function isAllowedElement(name: string) {
-  const allowedElements = ['Router', 'Route', 'Set']
+  const allowedElements = ['Router', 'Route', 'Set', 'Private']
   return allowedElements.includes(name)
 }
 
@@ -17,7 +16,7 @@ export const unsupportedRouteComponents = createRule({
     },
     messages: {
       unexpected:
-        'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, or <Set> are allowed in Router files.',
+        'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, <Set> and <Private> are allowed in Router files.',
     },
     schema: [], // No additional configuration needed
   },
@@ -28,7 +27,7 @@ export const unsupportedRouteComponents = createRule({
     }
 
     return {
-      JSXOpeningElement: function (node: TSESTree.JSXOpeningElement) {
+      JSXOpeningElement: function (node) {
         let name = ''
 
         if (node.name.type === 'JSXIdentifier') {
