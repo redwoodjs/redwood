@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/eslint": "8",
     "@types/estree": "1.0.1",
+    "@typescript-eslint/parser": "5.60.1",
     "esbuild": "0.18.10",
     "fast-glob": "3.2.12",
     "glob": "10.3.0",
