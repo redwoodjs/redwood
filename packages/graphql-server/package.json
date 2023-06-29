@@ -33,7 +33,7 @@
     "@graphql-tools/merge": "8.4.2",
     "@graphql-tools/schema": "9.0.19",
     "@graphql-tools/utils": "9.2.1",
-    "@graphql-yoga/subscription": "3.1.0",
+    "@graphql-yoga/subscription": "4.0.0",
     "@n1ru4l/graphql-live-query": "0.10.0",
     "@n1ru4l/in-memory-live-query-store": "0.10.0",
     "@opentelemetry/api": "1.4.1",
