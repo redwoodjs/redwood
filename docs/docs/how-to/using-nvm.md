@@ -78,11 +78,17 @@ nvm ls-remote
 ```
 
 :::caution
-You'll need to [install yarn](https://classic.yarnpkg.com/lang/en/docs/install/) for each version of Node that you install:
+You'll need to [install yarn](https://yarnpkg.com/getting-started/install) **for each version of Node that you install.**
+
+> "The preferred way to manage Yarn is through [Corepack](https://nodejs.org/dist/latest/docs/api/corepack.html), a new binary shipped with all Node.js releases starting from 16.10." <br />-[From the Yarn documentation](https://yarnpkg.com/getting-started/install)
+
+Corepack is included with all Node.js >=16.10 installs, but you must opt-in. To enable it, run the following command:
 
 ```bash
-npm install -g yarn
+corepack enable
 ```
+
+We also have a doc specifically for [working with yarn](/docs/how-to/using-yarn).
 :::
 
 ### To use a specific version of Node.js
