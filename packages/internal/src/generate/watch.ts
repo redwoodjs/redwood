@@ -62,11 +62,20 @@ watcher
   .on('ready', async () => {
     const start = Date.now()
     cliLogger('Generating full TypeScript definitions and GraphQL schemas')
-    const files = await generate()
+    const { files, errors } = await generate()
     cliLogger(`Done.`)
     cliLogger.debug(`\nCreated ${files.length} in ${Date.now() - start} ms`)
 
+    if (errors.length > 0) {
+      for (const { message, error } of errors) {
+        console.error(message)
+        console.error(error)
+        console.log()
+      }
+    }
+
     routesWarningMessage = warningForDuplicateRoutes()
+
     if (routesWarningMessage) {
       console.warn(routesWarningMessage)
     }
