@@ -41,6 +41,7 @@ export const unsupportedRouteComponents = createRule({
           context.report({
             node,
             messageId: 'unexpected',
+            data: { name },
           })
         }
       },

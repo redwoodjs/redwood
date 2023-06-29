@@ -77,7 +77,7 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
       errors: [
         {
           message:
-            'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, or <Set> are allowed in Router files.',
+            'Unexpected JSX element <div>. Only <Router>, <Route>, or <Set> are allowed in Router files.',
         },
       ],
     },
@@ -104,7 +104,7 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
       errors: [
         {
           message:
-            'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, or <Set> are allowed in Router files.',
+            'Unexpected JSX element <CustomElement>. Only <Router>, <Route>, or <Set> are allowed in Router files.',
         },
       ],
     },
