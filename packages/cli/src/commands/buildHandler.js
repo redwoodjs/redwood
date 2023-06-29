@@ -3,7 +3,6 @@ import path from 'path'
 
 import execa from 'execa'
 import { Listr } from 'listr2'
-import { get } from 'lodash'
 import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
@@ -107,8 +106,7 @@ export const handler = async ({
       title: 'Building Web...',
       task: async () => {
         const streamingSsrEnabled =
-          getConfig().experimental?.streamingSsr &&
-          getConfig().experimental?.streamingSsr.enabled
+          !!getConfig().experimental?.streamingSsr?.enabled
 
         if (getConfig().web.bundler !== 'webpack') {
           if (!streamingSsrEnabled) {

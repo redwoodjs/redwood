@@ -48,34 +48,6 @@ export const builder = async (yargs) => {
             alias: 'p',
           },
         }),
-      handler: (argv) => {
-        recordTelemetryAttributes({
-          command: 'serve',
-          port: argv.port,
-          host: argv.host,
-          socket: argv.socket,
-          apiHost: argv.apiHost,
-        })
-
-        streamServerErrorHandler()
-      },
-    })
-    .command({
-      command: 'both',
-      description: 'Run both api and web servers. Uses the web port and host',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: getConfig().web.port,
-            type: 'number',
-            alias: 'p',
-          },
-          host: {
-            default: getConfig().web.host,
-            type: 'string',
-          },
-          socket: { type: 'string' },
-        }),
       handler: async (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
@@ -83,6 +55,11 @@ export const builder = async (yargs) => {
           host: argv.host,
           socket: argv.socket,
         })
+
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          streamServerErrorHandler()
+          return
+        }
 
         // Run the experimental server file, if it exists, with web side also
         if (hasExperimentalServerFile()) {
@@ -188,7 +165,13 @@ export const builder = async (yargs) => {
           apiHost: argv.apiHost,
         })
 
-        streamServerErrorHandler()
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          streamServerErrorHandler()
+          return
+        } else {
+          const { webServerHandler } = await import('./serveHandler.js')
+          await webServerHandler(argv)
+        }
       },
     })
     .middleware((argv) => {
