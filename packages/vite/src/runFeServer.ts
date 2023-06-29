@@ -1,3 +1,8 @@
+// TODO (STREAMING) Move this to a new package called @redwoodjs/fe-server (goes
+// well in naming with with @redwoodjs/api-server)
+// Only things used during dev can be in @redwoodjs/vite. Everything else has
+// to go in fe-server
+
 import path from 'path'
 
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
