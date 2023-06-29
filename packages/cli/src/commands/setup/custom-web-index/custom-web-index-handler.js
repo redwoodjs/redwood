@@ -11,7 +11,9 @@ import c from '../../../lib/colors'
 
 export const handler = async ({ force }) => {
   if (getPaths().web.viteConfig) {
-    console.log('This command only applies to projects using webpack')
+    console.warn(
+      c.warning('Warning: This command only applies to projects using webpack')
+    )
     return
   }
 
