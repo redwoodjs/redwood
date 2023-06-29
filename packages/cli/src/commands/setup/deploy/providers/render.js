@@ -91,7 +91,7 @@ const additionalFiles = [
 
 export const handler = async ({ force, database }) => {
   recordTelemetryAttributes({
-    command: ['setup', 'deploy', 'render'].join(' '),
+    command: 'setup deploy render',
     force,
     database,
   })

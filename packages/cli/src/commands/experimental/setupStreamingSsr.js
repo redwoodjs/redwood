@@ -2,12 +2,12 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getEpilogue } from './util'
 
-export const command = 'setup-inngest'
+export const command = 'setup-streaming-ssr'
 
 export const description =
-  'Setup Inngest for background, scheduled, delayed, multi-step, and fan-out jobs'
+  'Enable React Streaming and Server Side Rendering (SSR)'
 
-export const EXPERIMENTAL_TOPIC_ID = 4866
+export const EXPERIMENTAL_TOPIC_ID = 5052
 
 export const builder = (yargs) => {
   yargs
@@ -22,9 +22,9 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: 'experimental setup-inngest',
+    command: ['experimental', command].join(' '),
     force: options.force,
   })
-  const { handler } = await import('./setupInngestHandler.js')
+  const { handler } = await import('./setupStreamingSsrHandler.js')
   return handler(options)
 }

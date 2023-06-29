@@ -36,7 +36,7 @@ export const description = 'Destroy graphiql header'
 
 export const handler = () => {
   recordTelemetryAttributes({
-    command: ['destory', 'graphiql'].join(' '),
+    command: 'destory graphiql',
   })
   const path = getOutputPath()
   const tasks = new Listr(

@@ -10,7 +10,7 @@ export const description =
 
 export const handler = () => {
   recordTelemetryAttributes({
-    command,
+    command: 'check',
   })
   // Deep dive
   //

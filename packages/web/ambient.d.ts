@@ -13,6 +13,7 @@ declare global {
     RWJS_API_GRAPHQL_URL: string
     /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
+    RWJS_EXP_STREAMING_SSR: boolean
 
     __REDWOOD__APP_TITLE: string
     __REDWOOD__APOLLO_STATE: NormalizedCacheObject
@@ -31,6 +32,8 @@ declare global {
   var RWJS_API_URL: string
   /** Path to Redwood app source used by Development Error page to resolve source code paths */
   var RWJS_SRC_ROOT: string
+  /** Flag for experimental Streaming and SSR support */
+  var RWJS_EXP_STREAMING_SSR: boolean
 
   namespace NodeJS {
     interface Global {
