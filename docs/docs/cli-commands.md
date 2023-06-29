@@ -1779,6 +1779,13 @@ yarn redwood setup cache <client>
 
 ### setup custom-web-index
 
+:::caution This command only applies to projects using Webpack
+
+As of v6, all Redwood projects use Vite by default.
+When switching projects to Vite, we made the decision to add the the entry file, `web/src/entry.client.{jsx,tsx}`, back to projects.
+
+:::
+
 Redwood automatically mounts your `<App />` to the DOM, but if you want to customize how that happens, you can use this setup command to generate an `index.js` file in `web/src`.
 
 ```

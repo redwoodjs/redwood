@@ -10,6 +10,11 @@ import { getPaths, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 
 export const handler = async ({ force }) => {
+  if (getPaths().web.viteConfig) {
+    console.log('This command only applies to projects using webpack')
+    return
+  }
+
   const tasks = new Listr(
     [
       {
