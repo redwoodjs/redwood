@@ -7542,7 +7542,7 @@ __metadata:
     "@types/eslint": 8
     "@types/estree": 1.0.1
     "@typescript-eslint/parser": 5.60.1
-    "@typescript-eslint/utils": ^5.60.1
+    "@typescript-eslint/utils": 5.60.1
     esbuild: 0.18.10
     eslint: 8.43.0
     fast-glob: 3.2.12
@@ -10629,7 +10629,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:5.60.1, @typescript-eslint/utils@npm:^5.60.1":
+"@typescript-eslint/utils@npm:5.60.1":
   version: 5.60.1
   resolution: "@typescript-eslint/utils@npm:5.60.1"
   dependencies:
