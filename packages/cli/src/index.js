@@ -123,6 +123,8 @@ async function main() {
       // Run the command via yargs
       await runYargs()
 
+      span?.setAttribute('argv', JSON.stringify(process.argv))
+
       // Span housekeeping
       span?.setStatus({ code: SpanStatusCode.OK })
     } catch (error) {
