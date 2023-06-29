@@ -65,7 +65,7 @@ interface Other extends Custom {
 // remix style DIY meta tags, or the more opinionated approach in MetaTags.tsx
 export type TagDescriptor =
   | Title
-  // Not sure why we need these, maybe just for ease of use
+  // TODO (STREAMING) Not sure why we need these, maybe just for ease of use
   | NameContent
   | OpenGraph
   | HttpEquiv

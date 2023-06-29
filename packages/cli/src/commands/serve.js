@@ -47,6 +47,7 @@ export const builder = async (yargs) => {
             type: 'number',
             alias: 'p',
           },
+          socket: { type: 'string' },
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
@@ -168,10 +169,10 @@ export const builder = async (yargs) => {
         if (getConfig().experimental?.streamingSsr?.enabled) {
           streamServerErrorHandler()
           return
-        } else {
-          const { webServerHandler } = await import('./serveHandler.js')
-          await webServerHandler(argv)
         }
+
+        const { webServerHandler } = await import('./serveHandler.js')
+        await webServerHandler(argv)
       },
     })
     .middleware((argv) => {

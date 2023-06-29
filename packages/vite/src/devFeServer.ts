@@ -113,6 +113,8 @@ async function createServer() {
 
       // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to worry about it in dev
       // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
+      // We believe we saw a fix for this somewhere in the Waku sources. And
+      // also in the Vite issues.
       const FIXME_HardcodedIndexCss = ['index.css']
 
       const assetMap = JSON.stringify({
