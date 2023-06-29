@@ -5,6 +5,12 @@ description:
 
 # Create Redwood App
 
+To get up and running with Redwood, you can use the Create Redwood App:
+
+```terminal
+yarn create redwood-app <your-app-name>
+```
+
 ## Set up for success
 Redwood requires that you're running Node version 18.0.0 or higher.
 
