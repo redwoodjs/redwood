@@ -1,31 +1,27 @@
-import { useContext, useState } from 'react'
+import { useContext, useMemo } from 'react'
 
 import { createNamedContext } from './util'
 
 export interface PageLoadingContextInterface {
   loading: boolean
-  setPageLoadingContext: (loading: boolean) => void
-  delay?: number
 }
 
 const PageLoadingContext =
   createNamedContext<PageLoadingContextInterface>('PageLoading')
 
 interface Props {
+  value: PageLoadingContextInterface
   children: React.ReactNode
-  delay?: number
 }
 
 export const PageLoadingContextProvider: React.FC<Props> = ({
+  value,
   children,
-  delay = 1000,
 }) => {
-  const [loading, setPageLoadingContext] = useState(false)
+  const memoValue = useMemo(() => ({ loading: value.loading }), [value.loading])
 
   return (
-    <PageLoadingContext.Provider
-      value={{ loading, setPageLoadingContext, delay }}
-    >
+    <PageLoadingContext.Provider value={memoValue}>
       {children}
     </PageLoadingContext.Provider>
   )

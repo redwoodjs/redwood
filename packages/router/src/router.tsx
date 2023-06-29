@@ -1,67 +1,137 @@
-import React, { ReactNode, ReactElement, useMemo, memo } from 'react'
+import React, { isValidElement } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
-import { AuthenticatedRoute } from './AuthenticatedRoute'
+import { useActivePageContext } from './ActivePageContext'
 import { Redirect } from './links'
-import { LocationProvider, useLocation } from './location'
-import { PageLoadingContextProvider } from './PageLoadingContext'
+import { useLocation, LocationProvider } from './location'
 import { ParamsProvider } from './params'
-import {
-  isValidRoute,
-  NotFoundRouteProps,
-  PageType,
-  RedirectRouteProps,
-  RenderMode,
-} from './route-validators'
 import {
   RouterContextProvider,
   RouterContextProviderProps,
+  useRouterState,
 } from './router-context'
 import { SplashPage } from './splash-page'
 import {
-  analyzeRoutes,
-  matchPath,
-  normalizePage,
+  flattenAll,
   parseSearch,
   replaceParams,
-  TrailingSlashesTypes,
+  matchPath,
   validatePath,
+  TrailingSlashesTypes,
+  ParamType,
+  Spec,
+  normalizePage,
 } from './util'
 
 import type { AvailableRoutes } from './index'
 
 // namedRoutes is populated at run-time by iterating over the `<Route />`
 // components, and appending them to this object.
-// Has to be `const`, or there'll be a race condition with imports in users'
-// projects
 const namedRoutes: AvailableRoutes = {}
 
-export interface RouteProps {
+type PageType = Spec | React.ComponentType<any> | ((props: any) => JSX.Element)
+
+interface RouteProps {
   path: string
   page: PageType
   name: string
   prerender?: boolean
-  renderMode?: RenderMode
-  whileLoadingPage?: () => ReactElement | null
+  whileLoadingPage?: () => React.ReactElement | null
 }
 
-/**
- *
- * Route is now a "virtual" component
- * it is actually never rendered. All the page loading logic happens in active-route-loader
- * and all the validation happens within utlity functions called from the Router
- */
+interface RedirectRouteProps {
+  path: string
+  redirect: string
+}
+
+interface NotFoundRouteProps {
+  notfound: boolean
+  page: PageType
+  prerender?: boolean
+}
+
+export type InternalRouteProps = Partial<
+  RouteProps & RedirectRouteProps & NotFoundRouteProps
+>
+
 function Route(props: RouteProps): JSX.Element
 function Route(props: RedirectRouteProps): JSX.Element
 function Route(props: NotFoundRouteProps): JSX.Element
-function Route(_props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
-  return <></>
+function Route(props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
+  return <InternalRoute {...props} />
+}
+
+const InternalRoute = ({
+  path,
+  page,
+  name,
+  redirect,
+  notfound,
+}: InternalRouteProps) => {
+  const routerState = useRouterState()
+  const activePageContext = useActivePageContext()
+
+  if (notfound) {
+    // The "notfound" route is handled by <NotFoundChecker>
+    return null
+  }
+
+  if (!path) {
+    throw new Error(`Route "${name}" needs to specify a path`)
+  }
+
+  // Check for issues with the path.
+  validatePath(path)
+
+  const location = activePageContext.loadingState[path]?.location
+
+  if (!location) {
+    throw new Error(`No location for route "${name}"`)
+  }
+
+  const { params: pathParams } = matchPath(path, location.pathname, {
+    paramTypes: routerState.paramTypes,
+  })
+
+  const searchParams = parseSearch(location.search)
+  const allParams: Record<string, string> = { ...searchParams, ...pathParams }
+
+  if (redirect) {
+    const newPath = replaceParams(redirect, allParams)
+    return <Redirect to={newPath} />
+  }
+
+  if (!page || !name) {
+    throw new Error(
+      "A route that's not a redirect or notfound route needs to specify " +
+        'both a `page` and a `name`'
+    )
+  }
+
+  const Page = activePageContext.loadingState[path]?.page || (() => null)
+
+  // There are two special props in React: `ref` and `key`. (See https://reactjs.org/warnings/special-props.html.)
+  // It's very possible that the URL has `ref` as a search param (e.g. https://redwoodjs.com/?ref=producthunt).
+  // Since we pass URL params to the page, we have to be careful not to pass `ref` or `key`, otherwise the page will break.
+  // (The page won't actually break if `key` is passed, but it feels unclean.)
+  // If users want to access them, they can use `useParams`.
+  delete allParams['ref']
+  delete allParams['key']
+
+  // Level 3/3 (InternalRoute)
+  return <Page {...allParams} />
+}
+
+function isRoute(
+  node: React.ReactNode
+): node is React.ReactElement<InternalRouteProps> {
+  return isValidElement(node) && node.type === Route
 }
 
 export interface RouterProps extends RouterContextProviderProps {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
-  children: ReactNode
+  children: React.ReactNode
 }
 
 const Router: React.FC<RouterProps> = ({
@@ -70,21 +140,18 @@ const Router: React.FC<RouterProps> = ({
   pageLoadingDelay,
   trailingSlashes = 'never',
   children,
-}) => {
-  return (
-    // Level 1/3 (outer-most)
-    // Wrap it in the provider so that useLocation can be used
-    <LocationProvider trailingSlashes={trailingSlashes}>
-      <LocationAwareRouter
-        useAuth={useAuth}
-        paramTypes={paramTypes}
-        pageLoadingDelay={pageLoadingDelay}
-      >
-        {children}
-      </LocationAwareRouter>
-    </LocationProvider>
-  )
-}
+}) => (
+  // Level 1/3 (outer-most)
+  <LocationProvider trailingSlashes={trailingSlashes}>
+    <LocationAwareRouter
+      useAuth={useAuth}
+      paramTypes={paramTypes}
+      pageLoadingDelay={pageLoadingDelay}
+    >
+      {children}
+    </LocationAwareRouter>
+  </LocationProvider>
+)
 
 const LocationAwareRouter: React.FC<RouterProps> = ({
   useAuth,
@@ -93,54 +160,68 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   children,
 }) => {
   const location = useLocation()
+  const flatChildArray = flattenAll(children)
 
-  const {
-    pathRouteMap,
-    hasHomeRoute,
-    namedRoutesMap,
-    NotFoundPage,
-    activeRoutePath,
-  } = useMemo(() => {
-    return analyzeRoutes(children, {
-      currentPathName: location.pathname,
-      // @TODO We haven't handled this with SSR/Streaming yet.
-      // May need a babel plugin to extract userParamTypes from Routes.tsx
-      userParamTypes: paramTypes,
-    })
-  }, [location.pathname, children, paramTypes])
+  const hasHomeRoute = flatChildArray.some((child) => {
+    if (isRoute(child)) {
+      return child.props.path === '/'
+    }
 
-  // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
-  // Note that the value changes at runtime
-  Object.assign(namedRoutes, namedRoutesMap)
+    return false
+  })
 
-  // The user has not generated routes if the only route that exists is the
-  // not found page, and that page is not part of the namedRoutes object
-  const hasGeneratedRoutes = Object.keys(namedRoutes).length > 0
+  // The user has not generated routes
+  // if the only route that exists is
+  // is the not found page
+  const hasGeneratedRoutes = !(
+    flatChildArray.length === 1 &&
+    isRoute(flatChildArray[0]) &&
+    flatChildArray[0].props.notfound
+  )
 
   const shouldShowSplash =
     (!hasHomeRoute && location.pathname === '/') || !hasGeneratedRoutes
+
+  flatChildArray.forEach((child) => {
+    if (isRoute(child)) {
+      const { name, path } = child.props
+
+      if (path) {
+        // Check for issues with the path.
+        validatePath(path)
+
+        if (name && path) {
+          namedRoutes[name] = (args = {}) => replaceParams(path, args)
+        }
+      }
+    }
+  })
 
   if (shouldShowSplash && typeof SplashPage !== 'undefined') {
     return (
       <SplashPage
         hasGeneratedRoutes={hasGeneratedRoutes}
-        allStandardRoutes={pathRouteMap}
+        routes={flatChildArray}
       />
     )
   }
 
-  // Render 404 page if no route matches
-  if (!activeRoutePath) {
+  const { root, activeRoute, NotFoundPage } = analyzeRouterTree(
+    children,
+    location.pathname,
+    paramTypes
+  )
+
+  if (!activeRoute) {
     if (NotFoundPage) {
       return (
         <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
           <ParamsProvider>
-            <PageLoadingContextProvider delay={pageLoadingDelay}>
-              <ActiveRouteLoader
-                spec={normalizePage(NotFoundPage)}
-                path={location.pathname}
-              />
-            </PageLoadingContextProvider>
+            <ActiveRouteLoader
+              spec={normalizePage(NotFoundPage)}
+              delay={pageLoadingDelay}
+              path={location.pathname}
+            />
           </ParamsProvider>
         </RouterContextProvider>
       )
@@ -149,26 +230,17 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
     return null
   }
 
-  const {
-    path,
-    page,
-    name,
-    redirect,
-    whileLoadingPage,
-    wrappers = [],
-    setProps,
-    setId,
-  } = pathRouteMap[activeRoutePath]
+  const { path, page, name, redirect, whileLoadingPage } = activeRoute.props
 
   if (!path) {
     throw new Error(`Route "${name}" needs to specify a path`)
   }
 
   // Check for issues with the path.
-  validatePath(path, name || path)
+  validatePath(path)
 
   const { params: pathParams } = matchPath(path, location.pathname, {
-    userParamTypes: paramTypes,
+    paramTypes,
   })
 
   const searchParams = parseSearch(location.search)
@@ -177,80 +249,109 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   // Level 2/3 (LocationAwareRouter)
   return (
     <RouterContextProvider useAuth={useAuth} paramTypes={paramTypes}>
-      <ParamsProvider allParams={allParams}>
-        <PageLoadingContextProvider delay={pageLoadingDelay}>
-          {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
-          {!redirect && page && (
-            <WrappedPage
-              key={setId}
-              wrappers={wrappers}
-              routeLoaderElement={
-                <ActiveRouteLoader
-                  path={path}
-                  spec={normalizePage(page as any)}
-                  params={allParams}
-                  whileLoadingPage={whileLoadingPage as any}
-                  {...setProps}
-                />
-              }
-              setProps={setProps}
-            />
-          )}
-        </PageLoadingContextProvider>
-      </ParamsProvider>
+      {redirect && <Redirect to={replaceParams(redirect, allParams)} />}
+      {!redirect && page && (
+        <ActiveRouteLoader
+          path={path}
+          spec={normalizePage(page)}
+          delay={pageLoadingDelay}
+          params={allParams}
+          whileLoadingPage={whileLoadingPage}
+        >
+          {root}
+        </ActiveRouteLoader>
+      )}
     </RouterContextProvider>
   )
 }
 
-interface WrappedPageProps {
-  wrappers: ReactNode[]
-  routeLoaderElement: ReactNode
-  setProps: Record<any, any>
-}
-
 /**
- * This is effectively a Set (without auth-related code)
- *
- * This means that the <Set> and <Private> components become "virtual"
- * i.e. they are never actually Rendered, but their props are extracted by the
- * analyze routes function.
- *
- * This is so that we can have all the information up front in the routes-manifest
- * for SSR, but also so that we only do one loop of all the Routes.
+ * This function analyzes the routes and returns info pertaining to what to
+ * render.
+ *  - root: The element to render, i.e. the active route or the <Set>(s)
+ *    wrapping it
+ *  - activeRoute: The route we should render (same as root for flat routes)
+ *  - NotFoundPage: The NotFoundPage, if we find any. Even if there is a
+ *    NotFoundPage specified we might not find it, but only if we first find
+ *    the active route, and in that case we don't need the NotFoundPage, so it
+ *    doesn't matter.
  */
-const WrappedPage = memo(
-  ({ wrappers, routeLoaderElement, setProps }: WrappedPageProps) => {
-    if (setProps.private) {
-      if (!setProps.unauthenticated) {
-        throw new Error(
-          'You must specify an `unauthenticated` route when marking a Route as private'
-        )
+function analyzeRouterTree(
+  children: React.ReactNode,
+  pathname: string,
+  paramTypes?: Record<string, ParamType>
+): {
+  root: React.ReactElement | undefined
+  activeRoute: React.ReactElement<InternalRouteProps> | undefined
+  NotFoundPage: PageType | undefined
+} {
+  let NotFoundPage: PageType | undefined = undefined
+  let activeRoute: React.ReactElement | undefined = undefined
+
+  function isActiveRoute(route: React.ReactElement<InternalRouteProps>) {
+    if (route.props.path) {
+      const { match } = matchPath(route.props.path, pathname, { paramTypes })
+
+      if (match) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  function analyzeRouterTreeInternal(
+    children: React.ReactNode
+  ): React.ReactElement | undefined {
+    return React.Children.toArray(children).reduce<
+      React.ReactElement | undefined
+    >((previousValue, child) => {
+      if (previousValue) {
+        return previousValue
       }
 
-      wrappers.unshift(AuthenticatedRoute as any)
-    }
+      if (isRoute(child)) {
+        if (child.props.notfound && child.props.page) {
+          NotFoundPage = child.props.page
+        }
 
-    if (wrappers.length > 0) {
-      // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a>
-      return wrappers.reduceRight((acc, wrapper) => {
-        return React.createElement(
-          wrapper as any,
-          {
-            ...setProps,
-          },
-          acc ? acc : routeLoaderElement
-        )
-      }, undefined) as any
-    }
+        // We have a <Route ...> element, let's check if it's the one we should
+        // render (i.e. the active route)
+        if (isActiveRoute(child)) {
+          // All <Route>s have a key that React has generated for them.
+          // Something like '.1', '.2', etc
+          // But we know we'll only ever render one <Route>, so we can give
+          // all of them the same key. This will make React re-use the element
+          // between renders, which helps get rid of "white flashes" when
+          // navigating between pages. (The other half of that equation is in
+          // PageLoader)
+          const childWithKey = React.cloneElement(child, {
+            ...child.props,
+            key: '.rw-route',
+          })
 
-    return routeLoaderElement
+          activeRoute = childWithKey
+
+          return childWithKey
+        }
+      } else if (isValidElement(child) && child.props.children) {
+        // We have a child element that's not a <Route ...>, and that has
+        // children. It's probably a <Set>. Recurse down one level
+        const nestedActive = analyzeRouterTreeInternal(child.props.children)
+
+        if (nestedActive) {
+          // We found something we wanted to keep. So let's return it
+          return React.cloneElement(child, child.props, nestedActive)
+        }
+      }
+
+      return previousValue
+    }, undefined)
   }
-)
 
-export {
-  Router,
-  Route,
-  namedRoutes as routes,
-  isValidRoute as isRoute,
-  PageType,
+  const root = analyzeRouterTreeInternal(children)
+
+  return { root, activeRoute, NotFoundPage }
 }
+
+export { Router, Route, namedRoutes as routes, isRoute, PageType }
