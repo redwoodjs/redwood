@@ -4,7 +4,7 @@ import { ESLintUtils } from '@typescript-eslint/utils'
 const createRule = ESLintUtils.RuleCreator.withoutDocs
 
 function isAllowedElement(name: string) {
-  const allowedElements = ['Routes', 'Route', 'Set']
+  const allowedElements = ['Router', 'Route', 'Set']
   return allowedElements.includes(name)
 }
 

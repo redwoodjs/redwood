@@ -16,7 +16,7 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
   valid: [
     {
       filename: '/web/src/Routes.tsx',
-      code: 'const routes = () => <Routes></Routes>',
+      code: 'const Routes = () => <Router></Router>',
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: {
@@ -26,7 +26,7 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
     },
     {
       filename: '/web/src/Routes.jsx',
-      code: 'const routes = () => <Routes><Route path="/" page={HomePage} name="home" /></Routes>',
+      code: 'const Routes = () => <Router><Route path="/" page={HomePage} name="home" /></Router>',
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: {
@@ -36,7 +36,7 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
     },
     {
       filename: '/web/src/Routes.js',
-      code: 'const routes = () => <Routes><Set><Route path="/contacts" page={ContactsPage} name="contacts" /></Set></Routes>',
+      code: 'const Routes = () => <Router><Set><Route path="/contacts" page={ContactsPage} name="contacts" /></Set></Router>',
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: {
@@ -47,13 +47,13 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
     {
       filename: '/web/src/Routes.tsx',
       code: `
-        const routes = () => {
+        const Routes = () => {
           return (
-            <Routes>
+            <Router>
               <Set>
                 <Route path="/contacts" page={ContactsPage} name="contacts" />
               </Set>
-            </Routes>
+            </Router>
           )
         }`.replace(/ +/g, ' '),
       parserOptions: {
@@ -67,7 +67,7 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
   invalid: [
     {
       filename: '/web/src/Routes.tsx',
-      code: 'const routes = () => <Routes><div><Route path="/" page={HomePage} name="home" /></div></Routes>',
+      code: 'const Routes = () => <Router><div><Route path="/" page={HomePage} name="home" /></div></Router>',
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: {
@@ -84,15 +84,15 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
     {
       filename: '/web/src/Routes.tsx',
       code: `
-        const routes = () => {
+        const Routes = () => {
           return (
-            <Routes>
+            <Router>
               <Set>
                 <CustomElement>
                   <Route path="/contacts" page={ContactsPage} name="contacts" />
                 </CustomElement>
               </Set>
-            </Routes>
+            </Router>
           )
         }`.replace(/ +/g, ' '),
       parserOptions: {
