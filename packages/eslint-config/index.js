@@ -75,6 +75,13 @@ module.exports = {
       },
     },
     {
+      files: ['api/src/services/**/*.ts'],
+      plugins: ['@redwoodjs'],
+      rules: {
+        '@redwoodjs/service-type-annotations': 'off',
+      },
+    },
+    {
       files: ['api/db/seed.js', 'scripts/**'],
       env: {
         node: true,
