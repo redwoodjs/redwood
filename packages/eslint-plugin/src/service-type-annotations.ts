@@ -1,45 +1,34 @@
 import { basename } from 'path'
 
-// Provides a high level wrapper for ESLint with
-// TypeScript support: https://typescript-eslint.io/custom-rules/#utils-package
-import { ESLintUtils } from '@typescript-eslint/utils'
+import type { Identifier } from '@typescript-eslint/types/dist/generated/ast-spec'
+import { Rule } from 'eslint'
+import { Declaration, ImportDeclaration, VariableDeclaration } from 'estree'
 
-// In the future add a docs page?
-// const createRule = ESLintUtils.RuleCreator(
-//   (name) => `https://orta.io/rule/noop/${name}`
-// )
-
-// TODO: This, and the above dep, might be optional, as we don't use any
-// TS prefixes in the AST lookups.
-const createRule = ESLintUtils.RuleCreator.withoutDocs
-
-export const serviceTypeAnnotations = createRule({
+export const serviceTypeAnnotations: Rule.RuleModule = {
   create(context) {
-    const thisFilename = basename(context.getFilename())
-    const thisFileCorrespondingImport = `types/${thisFilename.replace(
-      '.ts',
-      ''
-    )}`
+    const thisFilename = basename(context.filename)
+    const sansTS = thisFilename.replace('.ts', '')
+    const thisFileCorrespondingImport = `types/${sansTS}`
 
-    /** @type {import("@typescript-eslint/types/dist/generated/ast-spec").ImportDeclaration} */
-    let importForThisFile = null
+    let importForThisFile: ImportDeclaration | null = null
     return {
+      // Make sure we have a reference to the import for the relative file
+      // which includes definitions for this service
       ImportDeclaration(node) {
         importForThisFile ||=
           node.source.value === thisFileCorrespondingImport ? node : null
       },
 
+      // Then start looking at every exported fn/const
       ExportNamedDeclaration(node) {
-        if (!node.declaration) {
-          return
-        }
-        if (!node.declaration.declarations) {
+        if (!node.declaration || !isVariableDeclaration(node.declaration)) {
           return
         }
 
         node.declaration.declarations.forEach((vd) => {
           // VariableDeclarator means an `export const abcThing =`
           if (vd.type === 'VariableDeclarator' && vd.id.type === 'Identifier') {
+            // Don't add types to functions that start with _
             if (vd.id.name.startsWith('_')) {
               return
             }
@@ -52,7 +41,7 @@ export const serviceTypeAnnotations = createRule({
               : 'TypeResolvers'
             const typeName = capitalizeFirstLetter(vd.id.name) + suffix
 
-            // Only run for lowercase  arrow funcs ATM
+            // Only run for lowercase arrow funcs ATM
             if (
               isGlobalOrMutationResolver &&
               vd.init?.type !== 'ArrowFunctionExpression'
@@ -60,8 +49,11 @@ export const serviceTypeAnnotations = createRule({
               return
             }
 
+            // Switch from the estree type to the typescript-eslint type
+            const tsID = vd.id as Identifier
+
             // If there's no type annotation, then we should add one
-            if (!vd.id.typeAnnotation) {
+            if (!tsID.typeAnnotation) {
               context.report({
                 messageId: 'needsType',
                 node: vd.id,
@@ -70,11 +62,14 @@ export const serviceTypeAnnotations = createRule({
                   typeName,
                 },
                 *fix(fixer) {
+                  // Add the type after the fixer
                   yield fixer.insertTextAfter(vd.id, `: ${typeName}`)
+
+                  // Ensure that the module is imported at the top
                   if (!importForThisFile) {
                     yield fixer.insertTextBeforeRange(
                       [0, 0],
-                      `import { ${typeName} } from "${thisFileCorrespondingImport}"\n`
+                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`
                     )
                   } else {
                     const lastImportSpecifier =
@@ -93,12 +88,17 @@ export const serviceTypeAnnotations = createRule({
             }
 
             // If there is one and it's wrong, edit it
-            if (vd.id.typeAnnotation.typeAnnotation) {
-              const type = vd.id.typeAnnotation.typeAnnotation
-              // E.g. not Thing but could be kinda anything else, which we should switch
-              const isIdentifier = type.typeName?.type === 'Identifier'
+            if (tsID.typeAnnotation.typeAnnotation) {
+              const type = tsID.typeAnnotation.typeAnnotation
+              // This is unexpected type code, skip
+              if (!('typeName' in type)) {
+                return
+              }
+
               const isCorrectType =
-                isIdentifier && type.typeName.name === typeName
+                type.typeName?.type === 'Identifier' &&
+                type.typeName?.name === typeName
+
               if (isCorrectType) {
                 return
               }
@@ -118,7 +118,7 @@ export const serviceTypeAnnotations = createRule({
                   if (!importForThisFile) {
                     yield fixer.insertTextBeforeRange(
                       [0, 0],
-                      `import { ${typeName} } from "${thisFileCorrespondingImport}"\n`
+                      `import type { ${typeName} } from "${thisFileCorrespondingImport}"\n`
                     )
                   } else {
                     const lastImportSpecifier =
@@ -138,12 +138,11 @@ export const serviceTypeAnnotations = createRule({
       },
     }
   },
-  name: 'service-type-annotations',
   meta: {
     docs: {
       description:
         'Sets the types on a query/mutation resolver function to the correct type',
-      recommended: 'warn',
+      recommended: false,
     },
     messages: {
       needsType:
@@ -153,8 +152,12 @@ export const serviceTypeAnnotations = createRule({
     type: 'suggestion',
     schema: [],
   },
-  defaultOptions: [],
-})
+}
 
-const capitalizeFirstLetter = (str) =>
+const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
+
+const isVariableDeclaration = (
+  node: Declaration
+): node is VariableDeclaration =>
+  typeof node !== 'undefined' && 'declarations' in node
