@@ -1,8 +1,12 @@
 import { basename } from 'path'
 
 import type { Identifier } from '@typescript-eslint/types/dist/generated/ast-spec'
-import { Rule } from 'eslint'
-import { Declaration, ImportDeclaration, VariableDeclaration } from 'estree'
+import type { Rule } from 'eslint'
+import type {
+  Declaration,
+  ImportDeclaration,
+  VariableDeclaration,
+} from 'estree'
 
 export const serviceTypeAnnotations: Rule.RuleModule = {
   create(context) {
@@ -150,7 +154,6 @@ export const serviceTypeAnnotations: Rule.RuleModule = {
     },
     fixable: 'code',
     type: 'suggestion',
-    schema: [],
   },
 }
 

@@ -4,16 +4,12 @@ import { RuleTester } from 'eslint'
 
 import { serviceTypeAnnotations } from '../service-type-annotations.js'
 
-// // @ts-expect-error - Types are wrong
-// RuleTester.describe = describe
-// // @ts-expect-error - Types are wrong
-// RuleTester.it = it
+// @ts-expect-error - Types are wrong
+RuleTester.describe = describe
+// @ts-expect-error - Types are wrong
+RuleTester.it = it
 
 const ruleTester = new RuleTester({
-  // parserOptions: {
-  //   ecmaVersion: 'latest',
-  //   sourceType: 'module',
-  // },
   parser: require.resolve('@typescript-eslint/parser'),
 })
 
