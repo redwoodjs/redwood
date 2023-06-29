@@ -110,12 +110,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/cache-control-types@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@apollo/cache-control-types@npm:1.0.2"
+"@apollo/cache-control-types@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@apollo/cache-control-types@npm:1.0.3"
   peerDependencies:
     graphql: 14.x || 15.x || 16.x
-  checksum: 685b29a3f68d4690fd6e7fd277a5dc4b26f4b65843a67e66b9c012981db9b979e690169acd04eb5196770cebc0c0ac7f987aee25f0b73f9e527b47bf6455fcea
+  checksum: b49a9e99c7d5af6dfe12b775eb6374c8a54894e17ffa882b3d85f4501ca19ee413bdcc1a787a4b44dcc2903ce2c28f19b69116f338f88670c4f6f2e10a0bc498
   languageName: node
   linkType: hard
 
@@ -178,33 +178,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/server-gateway-interface@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@apollo/server-gateway-interface@npm:1.1.0"
+"@apollo/server-gateway-interface@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@apollo/server-gateway-interface@npm:1.1.1"
   dependencies:
-    "@apollo/usage-reporting-protobuf": ^4.0.0
+    "@apollo/usage-reporting-protobuf": ^4.1.1
     "@apollo/utils.fetcher": ^2.0.0
     "@apollo/utils.keyvaluecache": ^2.1.0
     "@apollo/utils.logger": ^2.0.0
   peerDependencies:
     graphql: 14.x || 15.x || 16.x
-  checksum: 27745253bed0b65e532eec95b184c1b10df0238c51b4975f98d18de1365e1e55003a37d544bc58a1807653710c030a1b98a99fb7cf55a6529151136b3ce7ef90
+  checksum: 2787b2954028f5aff55846df98b3967f38f40df4c5e4c9df0da56ac16d4323ba0aeabd76d4b134fedc9f6fe7d63e6fd9e9a133eb5d209408eac34c0e25cbe7dd
   languageName: node
   linkType: hard
 
 "@apollo/server@npm:^4.0.0":
-  version: 4.7.1
-  resolution: "@apollo/server@npm:4.7.1"
+  version: 4.7.5
+  resolution: "@apollo/server@npm:4.7.5"
   dependencies:
-    "@apollo/cache-control-types": ^1.0.2
-    "@apollo/server-gateway-interface": ^1.1.0
-    "@apollo/usage-reporting-protobuf": ^4.1.0
+    "@apollo/cache-control-types": ^1.0.3
+    "@apollo/server-gateway-interface": ^1.1.1
+    "@apollo/usage-reporting-protobuf": ^4.1.1
     "@apollo/utils.createhash": ^2.0.0
     "@apollo/utils.fetcher": ^2.0.0
     "@apollo/utils.isnodelike": ^2.0.0
     "@apollo/utils.keyvaluecache": ^2.1.0
     "@apollo/utils.logger": ^2.0.0
-    "@apollo/utils.usagereporting": ^2.0.0
+    "@apollo/utils.usagereporting": ^2.1.0
     "@apollo/utils.withrequired": ^2.0.0
     "@graphql-tools/schema": ^9.0.0
     "@josephg/resolvable": ^1.0.0
@@ -224,16 +224,25 @@ __metadata:
     whatwg-mimetype: ^3.0.0
   peerDependencies:
     graphql: ^16.6.0
-  checksum: 804087b462bf4b00f8e5b51b4450197e12621da5b96a7507634632e4fa591eeffc49f12125d331c67824cc27bcf5fd72187dcd67350abf4ae78af752b4d68d11
+  checksum: 6a260d000866945b83ddccf5eed4bd64a77514a2fab73c4bff6935608083824fa2e140b13fd83edd74f34f7351ecd6bad92c8c853f82acc298f3d8e3eeaf351f
   languageName: node
   linkType: hard
 
-"@apollo/usage-reporting-protobuf@npm:^4.0.0, @apollo/usage-reporting-protobuf@npm:^4.1.0":
+"@apollo/usage-reporting-protobuf@npm:^4.1.0":
   version: 4.1.0
   resolution: "@apollo/usage-reporting-protobuf@npm:4.1.0"
   dependencies:
     "@apollo/protobufjs": 1.2.7
   checksum: 58772a2d679130ca0cb2b4700ed6a3175dbc501ca1af08b2907afd90ca6cf758981619cc0bc85ffc2e686647c56edd4a80d9ef394318a196c50c04e66fb822c8
+  languageName: node
+  linkType: hard
+
+"@apollo/usage-reporting-protobuf@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@apollo/usage-reporting-protobuf@npm:4.1.1"
+  dependencies:
+    "@apollo/protobufjs": 1.2.7
+  checksum: 45f0167a87d4ae8a12124831ebb29905122d28afdbfa23a4f25f4570189d5ddaa6f2829ef97923f5909b9753e39dbd28f810ca2a93ad9fcd60b2baf5669f5223
   languageName: node
   linkType: hard
 
@@ -325,11 +334,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/utils.usagereporting@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "@apollo/utils.usagereporting@npm:2.0.1"
+"@apollo/utils.usagereporting@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@apollo/utils.usagereporting@npm:2.1.0"
   dependencies:
-    "@apollo/usage-reporting-protobuf": ^4.0.0
+    "@apollo/usage-reporting-protobuf": ^4.1.0
     "@apollo/utils.dropunuseddefinitions": ^2.0.1
     "@apollo/utils.printwithreducedwhitespace": ^2.0.1
     "@apollo/utils.removealiases": 2.0.1
@@ -337,7 +346,7 @@ __metadata:
     "@apollo/utils.stripsensitiveliterals": ^2.0.1
   peerDependencies:
     graphql: 14.x || 15.x || 16.x
-  checksum: eac3ce29a29fcd109a588f2ce1d367ec0b13d138087835f2d054a06683fff13270ddfcc903fa614abc7f3c0e2ce5fd7a4c8eec5413412762074274d29d8959d2
+  checksum: 5c2b06a14c5094d0ee8eab7ff78449da1efff3bb4c82ef311b2bb90190437c6c59f2783702a428775f394f12455a53a9723e625e53e18e47b423df8cb9eb26d8
   languageName: node
   linkType: hard
 
