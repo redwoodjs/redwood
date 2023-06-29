@@ -35,14 +35,13 @@ const streamServerErrorHandler = () => {
 }
 
 export async function builder(yargs) {
-  const redwoodProjectPaths = getPaths()
   const redwoodProjectConfig = getConfig()
 
   yargs
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      description: 'Run both api and web servers. Uses the web port and host',
+      description: 'Run both api and web servers',
       handler: (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
@@ -57,15 +56,10 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port,
+            default: getConfig().web?.port || 8910,
             type: 'number',
             alias: 'p',
           },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
-          },
-          socket: { type: 'string' },
         }),
     })
     .command({
