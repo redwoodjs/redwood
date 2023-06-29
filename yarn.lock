@@ -7613,6 +7613,8 @@ __metadata:
   dependencies:
     "@types/eslint": 8
     "@types/estree": 1.0.1
+    "@typescript-eslint/parser": 5.60.1
+    "@typescript-eslint/utils": 5.60.1
     esbuild: 0.18.10
     eslint: 8.43.0
     fast-glob: 3.2.12
