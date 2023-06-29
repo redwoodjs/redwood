@@ -7304,6 +7304,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-storybook@workspace:packages/cli-packages/storybook"
   dependencies:
+    "@redwoodjs/cli-helpers": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     "@redwoodjs/telemetry": 5.0.0
     "@storybook/addon-a11y": 7.0.24

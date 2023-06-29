@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import execa from 'execa'
+import execa, { ExecaError } from 'execa'
 
 import { getPaths } from '@redwoodjs/project-config'
 // Allow import of untyped package
@@ -72,8 +72,10 @@ export async function handler({
   try {
     await execa.command(command, execaOptions)
   } catch (e) {
-    console.log(c.error((e as Error).message))
-    errorTelemetry(process.argv, (e as Error).message)
-    process.exit(1)
+    if ((e as ExecaError).signal !== 'SIGINT') {
+      console.log(c.error((e as Error).message))
+      errorTelemetry(process.argv, (e as Error).message)
+    }
+    process.exit((e as ExecaError).exitCode ?? 1)
   }
 }

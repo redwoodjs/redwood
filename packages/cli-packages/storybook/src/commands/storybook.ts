@@ -1,6 +1,8 @@
 import terminalLink from 'terminal-link'
 import type { Argv } from 'yargs'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import c from '../lib/colors'
 import { StorybookYargsOptions } from '../types'
 
@@ -53,7 +55,11 @@ export function builder(
       type: 'boolean',
       default: defaultOptions.smokeTest,
     })
-
+    .middleware(() => {
+      recordTelemetryAttributes({
+        command: 'storybook',
+      })
+    })
     .check((argv) => {
       if (argv.build && argv.smokeTest) {
         throw new Error('Can not provide both "--build" and "--smoke-test"')
@@ -82,6 +88,14 @@ export async function handler(options: StorybookYargsOptions): Promise<void> {
   // NOTE: We should provide some visual output before the import to increase
   // the perceived performance of the command as there will be delay while we
   // load the handler.
+  recordTelemetryAttributes({
+    command: 'storybook',
+    build: options.build,
+    ci: options.ci,
+    open: options.open,
+    smokeTest: options.smokeTest,
+  })
+
   const { handler: storybookHandler } = await import('./storybookHandler.js')
   await storybookHandler(options)
 }

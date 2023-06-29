@@ -52,6 +52,7 @@ export async function startTelemetry() {
     traceProvider.addSpanProcessor(traceProcessor)
     traceProvider.register()
 
+    process.on('SIGINT', () => {})
     process.on('exit', () => {
       shutdownTelemetry()
     })
