@@ -21,6 +21,7 @@
     "test:watch": "glob './src/**/__tests__/*.test.ts' --cmd='node --loader tsx --no-warnings --test --watch'"
   },
   "dependencies": {
+    "@typescript-eslint/utils": "^5.60.1",
     "eslint": "8.43.0"
   },
   "devDependencies": {
