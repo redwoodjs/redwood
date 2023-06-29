@@ -132,32 +132,40 @@ export const handler = async ({
   //checking if Jest config files exists in each of the sides
   isJestConfigFile(sides)
 
-  const cacheDirDb = `file:${ensurePosixPath(rwjsPaths.generated.base)}/test.db`
-  const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
+  try {
+    const cacheDirDb = `file:${ensurePosixPath(
+      rwjsPaths.generated.base
+    )}/test.db`
+    const DATABASE_URL = process.env.TEST_DATABASE_URL || cacheDirDb
 
-  if (sides.includes('api') && !dbPush) {
-    // @NOTE
-    // DB push code now lives in packages/testing/config/jest/api/jest-preset.js
-    process.env.SKIP_DB_PUSH = '1'
-  }
+    if (sides.includes('api') && !dbPush) {
+      // @NOTE
+      // DB push code now lives in packages/testing/config/jest/api/jest-preset.js
+      process.env.SKIP_DB_PUSH = '1'
+    }
 
-  // **NOTE** There is no official way to run Jest programmatically,
-  // so we're running it via execa, since `jest.run()` is a bit unstable.
-  // https://github.com/facebook/jest/issues/5048
-  const runCommand = async () => {
-    await execa('yarn jest', jestArgs, {
-      cwd: rwjsPaths.base,
-      shell: true,
-      stdio: 'inherit',
-      env: { DATABASE_URL },
-    })
-  }
+    // **NOTE** There is no official way to run Jest programmatically,
+    // so we're running it via execa, since `jest.run()` is a bit unstable.
+    // https://github.com/facebook/jest/issues/5048
+    const runCommand = async () => {
+      await execa('yarn jest', jestArgs, {
+        cwd: rwjsPaths.base,
+        shell: true,
+        stdio: 'inherit',
+        env: { DATABASE_URL },
+      })
+    }
 
-  if (watch) {
-    await runCommand()
-  } else {
-    await timedTelemetry(process.argv, { type: 'test' }, async () => {
+    if (watch) {
       await runCommand()
-    })
+    } else {
+      await timedTelemetry(process.argv, { type: 'test' }, async () => {
+        await runCommand()
+      })
+    }
+  } catch (e) {
+    // Errors already shown from execa inherited stderr
+    errorTelemetry(process.argv, e.message)
+    process.exit(e?.exitCode || 1)
   }
 }
