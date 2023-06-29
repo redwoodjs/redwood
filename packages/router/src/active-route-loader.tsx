@@ -12,19 +12,15 @@ interface Props {
   children?: React.ReactNode
 }
 
-const isPrerendered = false
+let isPrerendered = false
 
-// TODO (STREAMING)
-// SSR and streaming changes how we mount the React app (we render the whole page, including head and body)
-// This logic is no longer valid and needs to be rethought
+if (typeof window !== 'undefined') {
+  const redwoodAppElement = document.getElementById('redwood-app')
 
-// if (typeof window !== 'undefined') {
-//   const redwoodAppElement = document.getElementById('redwood-app')
-
-//   if (redwoodAppElement && redwoodAppElement.children.length > 0) {
-//     isPrerendered = true
-//   }
-// }
+  if (redwoodAppElement && redwoodAppElement.children.length > 0) {
+    isPrerendered = true
+  }
+}
 
 let firstLoad = true
 
