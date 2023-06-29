@@ -40,6 +40,14 @@ export const builder = async (yargs) => {
     .command({
       command: '$0',
       description: 'Run both api and web servers',
+      builder: (yargs) =>
+        yargs.options({
+          port: {
+            default: getConfig().web?.port || 8910,
+            type: 'number',
+            alias: 'p',
+          },
+        }),
       handler: (argv) => {
         recordTelemetryAttributes({
           command: 'serve',
@@ -51,14 +59,6 @@ export const builder = async (yargs) => {
 
         streamServerErrorHandler()
       },
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: getConfig().web?.port || 8910,
-            type: 'number',
-            alias: 'p',
-          },
-        }),
     })
     .command({
       command: 'both',
