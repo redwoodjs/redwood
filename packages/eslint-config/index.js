@@ -47,7 +47,7 @@ module.exports = {
     babelOptions: getProjectBabelOptions(),
   },
   rules: {
-    '@redwoodjs/unsupported-route-components': 'warn',
+    '@redwoodjs/unsupported-route-components': 'error',
   },
   overrides: [
     {
