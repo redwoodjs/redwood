@@ -2388,7 +2388,7 @@ __metadata:
     "@vitejs/plugin-react": 4.0.1
     autoprefixer: 10.4.14
     graphiql: 2.4.7
-    graphql: 16.6.0
+    graphql: 16.7.1
     graphql-scalars: 1.21.3
     json-bigint-patch: 0.0.8
     postcss: 8.4.24
@@ -2615,10 +2615,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.6.0":
-  version: 16.6.0
-  resolution: "graphql@npm:16.6.0"
-  checksum: 3a2c15ff58b69d017618d2b224fa6f3c4a7937e1f711c3a5e0948db536b4931e6e649560b53de7cc26735e027ceea6e2d0a6bb7c29fc4639b290313e3aa71618
+"graphql@npm:16.7.1":
+  version: 16.7.1
+  resolution: "graphql@npm:16.7.1"
+  checksum: 0b4e83382bf3cb9c82ddf61a51aab382c4de50c34025173285c580135fe8646aa281c264fcf0c2214ae92ea925742d86999fe5e2ad842b6f3b54a9ffb0b299d2
   languageName: node
   linkType: hard
 

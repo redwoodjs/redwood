@@ -40,7 +40,7 @@
     "@redwoodjs/api": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
     "core-js": "3.31.0",
-    "graphql": "16.6.0",
+    "graphql": "16.7.1",
     "graphql-scalars": "1.22.2",
     "graphql-tag": "2.12.6",
     "graphql-yoga": "3.9.1",
