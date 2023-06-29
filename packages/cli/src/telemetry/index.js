@@ -4,7 +4,7 @@ import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import opentelemetry from '@opentelemetry/api'
 import {
   NodeTracerProvider,
-  BatchSpanProcessor,
+  SimpleSpanProcessor,
 } from '@opentelemetry/sdk-trace-node'
 
 import { spawnBackgroundProcess } from '../lib/background'
@@ -17,7 +17,7 @@ import { CustomFileExporter } from './exporter'
 let traceProvider
 
 /**
- * @type BatchSpanProcessor
+ * @type SimpleSpanProcessor
  */
 let traceProcessor
 
@@ -26,30 +26,54 @@ let traceProcessor
  */
 let traceExporter
 
+/**
+ * @type boolean
+ */
+let isStarted = false
+
+/**
+ * @type boolean
+ */
+let isShutdown = false
+
 export async function startTelemetry() {
-  diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
+  if (isStarted) {
+    return
+  }
+  isStarted = true
 
-  // Tracing
-  traceProvider = new NodeTracerProvider()
-  traceExporter = new CustomFileExporter()
-  traceProcessor = new BatchSpanProcessor(traceExporter)
-  traceProvider.addSpanProcessor(traceProcessor)
-  traceProvider.register()
+  try {
+    diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
 
-  process.on('SIGTERM', async () => {
-    await shutdownTelemetry()
-  })
-  process.on('SIGINT', async () => {
-    // TODO: Should we record a SIGINT as a telemetry event?
-    await shutdownTelemetry()
-  })
+    // Tracing
+    traceProvider = new NodeTracerProvider()
+    traceExporter = new CustomFileExporter()
+    traceProcessor = new SimpleSpanProcessor(traceExporter)
+    traceProvider.addSpanProcessor(traceProcessor)
+    traceProvider.register()
+
+    process.on('exit', () => {
+      shutdownTelemetry()
+    })
+  } catch (error) {
+    console.error('Telemetry error')
+    console.error(error)
+  }
 }
 
-export async function shutdownTelemetry() {
+export function shutdownTelemetry() {
+  if (isShutdown || !isStarted) {
+    return
+  }
+  isShutdown = true
+
   try {
-    opentelemetry.trace.getActiveSpan()?.end()
-    await traceProvider?.shutdown()
-    await traceProcessor?.shutdown()
+    // End the active spans
+    while (opentelemetry.trace.getActiveSpan()?.isRecording()) {
+      opentelemetry.trace.getActiveSpan()?.end()
+    }
+
+    // Shutdown exporter to ensure all data is flushed
     traceExporter?.shutdown()
 
     // Send the telemetry in a background process, so we don't block the CLI

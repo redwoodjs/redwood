@@ -185,7 +185,7 @@ export const handler = async ({
   }
 
   recordTelemetryAttributes({
-    command: ['generate', 'page'].join(' '),
+    command: 'generate page',
     force,
     tests,
     stories,

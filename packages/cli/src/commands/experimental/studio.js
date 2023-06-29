@@ -18,7 +18,7 @@ export function builder(yargs) {
 
 export async function handler(options) {
   recordTelemetryAttributes({
-    command: ['experimental', command].join(' '),
+    command: 'experimental studio',
     open: options.open,
   })
   const { handler } = await import('./studioHandler.js')

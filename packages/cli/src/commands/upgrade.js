@@ -91,7 +91,7 @@ export const validateTag = (tag) => {
 
 export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
   recordTelemetryAttributes({
-    command,
+    command: 'upgrade',
     dryRun,
     tag,
     verbose,

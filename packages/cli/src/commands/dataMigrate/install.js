@@ -16,7 +16,7 @@ export function builder(yargs) {
 
 export async function handler(options) {
   recordTelemetryAttributes({
-    command: ['data-migrate', command].join(' '),
+    command: 'data-migrate install',
   })
   const { handler } = await import('./installHandler.js')
   return handler(options)

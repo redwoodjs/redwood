@@ -854,7 +854,7 @@ export const handler = async ({
     tests = getConfig().generate.tests
   }
   recordTelemetryAttributes({
-    command: ['generate', 'scaffold'].join(' '),
+    command: 'generate scaffold',
     force,
     tests,
     typescript,

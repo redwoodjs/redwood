@@ -286,7 +286,7 @@ export const handler = async ({
   }
 
   recordTelemetryAttributes({
-    command: ['generate', 'sdl'].join(' '),
+    command: 'generate sdl',
     crud,
     force,
     tests,
