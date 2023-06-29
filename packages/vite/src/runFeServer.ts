@@ -151,7 +151,6 @@ export async function runFeServer() {
         return
       }
 
-      let serverData = {}
       let metaTags: TagDescriptor[] = []
 
       if (currentRoute?.redirect) {
@@ -182,12 +181,8 @@ export async function runFeServer() {
           },
         })
 
-        serverData = routeHookOutput.serverData
         metaTags = routeHookOutput.meta
       }
-
-      // Serialize route context so it can be passed to the client entry
-      const serializedRouteContext = JSON.stringify(serverData)
 
       const pageWithJs = currentRoute.renderMode !== 'html'
       // @NOTE have to add slash so subpaths still pick up the right file
@@ -202,15 +197,15 @@ export async function runFeServer() {
         // we should use the same shape as Remix or Next for the meta object
         serverEntry({
           url: currentPathName,
-          routeContext: serverData,
           css: indexEntry.css,
           meta: metaTags,
         }),
         {
           bootstrapScriptContent: pageWithJs
-            ? `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${JSON.stringify(
-                { css: indexEntry.css, meta: metaTags }
-              )} }`
+            ? `window.__assetMap = function() { return ${JSON.stringify({
+                css: indexEntry.css,
+                meta: metaTags,
+              })} }`
             : undefined,
           bootstrapModules,
           onShellReady() {

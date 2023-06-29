@@ -1,14 +1,11 @@
-/// <reference types="vite/client" />
-
 import { Request } from 'express'
 import { ViteDevServer } from 'vite'
 
-import { MetaHook, ServerDataHook, TagDescriptor } from '@redwoodjs/web'
+import { MetaHook, TagDescriptor } from '@redwoodjs/web'
 import type { RouteHookEvent, RouteHookOutput } from '@redwoodjs/web'
 
 interface RouteHooks {
-  serverData?: ServerDataHook
-  meta?: MetaHook<any>
+  meta?: MetaHook
 }
 
 interface TriggerRouteHooksParam {
@@ -33,21 +30,10 @@ export const triggerRouteHooks = async ({
     appRouteHook: previousOutput,
   }
 
-  let serverData = {}
   let meta: TagDescriptor[] = previousOutput?.meta || []
 
   try {
-    serverData = {
-      ...previousOutput?.serverData,
-      ...((await routeHooks?.serverData?.(event)) || {}),
-    }
-  } catch (e: any) {
-    throw new Error(`Error in serverData hook: ${e.message}`)
-  }
-
-  try {
-    const metaRouteHookOutput =
-      (await routeHooks?.meta?.({ ...event, serverData })) || []
+    const metaRouteHookOutput = (await routeHooks?.meta?.(event)) || []
 
     // Convert it to an array, if it's not already
     const currentMeta = Array.isArray(metaRouteHookOutput)
@@ -60,7 +46,6 @@ export const triggerRouteHooks = async ({
   }
 
   return {
-    serverData,
     meta,
   }
 }
@@ -77,7 +62,6 @@ interface LoadAndRunRouteHooks {
 
 const defaultRouteHookOutput = {
   meta: [],
-  serverData: {},
 }
 
 export const loadAndRunRouteHooks = async ({

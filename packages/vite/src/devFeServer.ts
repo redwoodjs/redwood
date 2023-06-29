@@ -68,7 +68,6 @@ async function createServer() {
         return matches.length > 0
       })
 
-      let serverData = {}
       let metaTags: TagDescriptor[] = []
 
       if (currentRoute?.redirect) {
@@ -89,7 +88,6 @@ async function createServer() {
           viteDevServer: vite, // because its dev
         })
 
-        serverData = routeHookOutput.serverData
         metaTags = routeHookOutput.meta
       }
 
@@ -108,13 +106,12 @@ async function createServer() {
       //    required, and provides efficient invalidation similar to HMR.
       const { serverEntry } = await vite.ssrLoadModule(rwPaths.web.entryServer)
 
-      // Serialize route context so it can be passed to the client entry
-      const serializedRouteContext = JSON.stringify(serverData)
-
-      // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to worry about it in dev
-      // but..... it causes a flash of unstyled content. For now I'm just injecting index css here
-      // We believe we saw a fix for this somewhere in the Waku sources. And
-      // also in the Vite issues.
+      // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
+      // worry about it in dev but..... it causes a flash of unstyled content.
+      // For now I'm just injecting index css here
+      // We believe we saw a fix for this somewhere in the Waku sources. Maybe
+      // it was called something like "Capture Css". And it's also mentioned
+      // in the Vite issues on GitHub
       const FIXME_HardcodedIndexCss = ['index.css']
 
       const assetMap = JSON.stringify({
@@ -135,13 +132,12 @@ async function createServer() {
       const { pipe } = renderToPipeableStream(
         serverEntry({
           url: currentPathName,
-          routeContext: serverData,
           css: FIXME_HardcodedIndexCss,
           meta: metaTags,
         }),
         {
           bootstrapScriptContent: pageWithJs
-            ? `window.__loadServerData = function() { return ${serializedRouteContext} }; window.__assetMap = function() { return ${assetMap} }`
+            ? `window.__assetMap = function() { return ${assetMap} }`
             : undefined,
           bootstrapModules,
           onShellReady() {
