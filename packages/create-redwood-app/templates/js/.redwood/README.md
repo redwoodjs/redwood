@@ -17,7 +17,7 @@ You don't need to commit any other contents of this directory to your version co
 | Name              | Description |
 | :---------------- | :------- |
 | commandCache.json | This file contains mappings to assist the Redwood CLI in efficiently executing commands. |
-| schema.graphql    |  |
+| schema.graphql    | This is the GraphQL schema which has been automatically generated from your Redwood project. |
 | studio.db         | The sqlite database used by the experimental `rw exp studio` feature. |
 | telemetry.txt     | Contains a unique ID used for telemetry. This value is rotated every 24 hours to protect your project's anonymity. |
 | test.db           | The sqlite database used when running tests |
