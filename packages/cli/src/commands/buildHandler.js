@@ -117,6 +117,10 @@ export const handler = async ({
           await execa(`yarn rw-vite-build --webDir="${rwjsPaths.web.base}"`, {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
+            // This is needed for yarn to find the rw-vite-build binary
+            // It won't change process.cwd for anything else here, in this
+            // process
+            cwd: rwjsPaths.web.base,
           })
         } else {
           await execa(
