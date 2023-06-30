@@ -58,6 +58,14 @@ async function main() {
       continue
     }
 
+    if (!Array.isArray(spans)) {
+      console.error(
+        `Telemetry file '${file}' does not contain an array of spans. Deleting this file to prevent further errors.`
+      )
+      fs.unlinkSync(path.join(telemetryDir, file))
+      continue
+    }
+
     /**
      * We have to fix some of the span properties because we serialized the span
      * to JSON and then deserialized it. This means that some of the properties that
