@@ -20,23 +20,18 @@ const ruleTester = new ESLintUtils.RuleTester({
 ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
   valid: [
     {
-      filename: '/web/src/Routes.tsx',
       code: 'const Routes = () => <Router></Router>',
     },
     {
-      filename: '/web/src/Routes.jsx',
       code: 'const Routes = () => <Router><Route path="/" page={HomePage} name="home" /></Router>',
     },
     {
-      filename: '/web/src/Routes.js',
       code: 'const Routes = () => <Router><Set><Route path="/contacts" page={ContactsPage} name="contacts" /></Set></Router>',
     },
     {
-      filename: '/web/src/Routes.js',
       code: 'const Routes = () => <Router><Private><Route path="/contacts" page={ContactsPage} name="contacts" /></Private></Router>',
     },
     {
-      filename: '/web/src/Routes.tsx',
       code: `
         const Routes = () => {
           return (
@@ -51,12 +46,10 @@ ruleTester.run('unsupported-route-components', unsupportedRouteComponents, {
   ],
   invalid: [
     {
-      filename: '/web/src/Routes.tsx',
       code: 'const Routes = () => <Router><div><Route path="/" page={HomePage} name="home" /></div></Router>',
       errors: [{ messageId: 'unexpected' }],
     },
     {
-      filename: '/web/src/Routes.tsx',
       code: `
         const Routes = () => {
           return (
