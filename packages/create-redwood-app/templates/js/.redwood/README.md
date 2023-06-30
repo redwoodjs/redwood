@@ -8,7 +8,7 @@ Redwood uses this `.redwood` directory to store transitory data that aids in the
 
 No. You shouldn't have to create, edit or delete anything in this directory in your day-to-day work with Redwood.
 
-You don't need to commit any other contents of this directory to your version control system. It is ignored by default.
+You don't need to commit any other contents of this directory to your version control system. It's ignored by default.
 
 ## What's in this directory?
 
@@ -20,7 +20,7 @@ You don't need to commit any other contents of this directory to your version co
 | schema.graphql    | This is the GraphQL schema which has been automatically generated from your Redwood project. |
 | studio.db         | The sqlite database used by the experimental `rw exp studio` feature. |
 | telemetry.txt     | Contains a unique ID used for telemetry. This value is rotated every 24 hours to protect your project's anonymity. |
-| test.db           | The sqlite database used when running tests |
+| test.db           | The sqlite database used when running tests. |
 
 ### Directories
 
@@ -37,7 +37,7 @@ We try to keep this README up to date but you may, from time to time, find other
 
 ### Telemetry
 
-RedwoodJS collects completely anonymous telemetry data about general usage. For transparency, that data is viewable in the respective directories and files. To learn more and manage your project's settings, visit [telemetry.redwoodjs.com](https://telemetry.redwoodjs.com)
+RedwoodJS collects completely anonymous telemetry data about general usage. For transparency, that data is viewable in the respective directories and files. To learn more and manage your project's settings, visit [telemetry.redwoodjs.com](https://telemetry.redwoodjs.com).
 
 ### Have any questions?
 
