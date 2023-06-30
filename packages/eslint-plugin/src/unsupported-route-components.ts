@@ -16,7 +16,7 @@ export const unsupportedRouteComponents = createRule({
     },
     messages: {
       unexpected:
-        'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, <Set> and <Private> are allowed in Router files.',
+        'Unexpected JSX element <{{name}}>. Only <Router>, <Route>, <Set> and <Private> are allowed in the Routes file.',
     },
     schema: [], // No additional configuration needed
   },
