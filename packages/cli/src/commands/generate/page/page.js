@@ -185,7 +185,7 @@ export const handler = async ({
   }
 
   recordTelemetryAttributes({
-    command: ['generate', 'page'].join(' '),
+    command: 'generate page',
     force,
     tests,
     stories,
@@ -248,7 +248,14 @@ export const handler = async ({
       {
         title: `Generating types...`,
         task: async () => {
-          await generateTypes()
+          const { errors } = await generateTypes()
+
+          for (const { message, error } of errors) {
+            console.error(message)
+            console.log()
+            console.error(error)
+            console.log()
+          }
           addFunctionToRollback(generateTypes, true)
         },
       },

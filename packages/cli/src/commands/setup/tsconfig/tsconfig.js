@@ -15,7 +15,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['setup', 'tsconfig'].join(' '),
+    command: 'setup tsconfig',
     force: options.force,
   })
   const { handler } = await import('./tsconfigHandler.js')

@@ -14,7 +14,7 @@ export function builder(yargs) {
 
 export async function handler(options) {
   recordTelemetryAttributes({
-    command: ['setup', 'deploy', 'coherence'].join(' '),
+    command: 'setup deploy coherence',
     force: options.force,
   })
   const { handler } = await import('./coherenceHandler.js')

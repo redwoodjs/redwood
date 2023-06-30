@@ -28,7 +28,7 @@ const notes = [
 
 export const handler = async ({ force }) => {
   recordTelemetryAttributes({
-    command: ['setup', 'deploy', 'netlify'].join(' '),
+    command: 'setup deploy netlify',
     force,
   })
   const tasks = new Listr(

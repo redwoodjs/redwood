@@ -824,7 +824,15 @@ export const tasks = ({
       {
         title: `Generating types ...`,
         task: async () => {
-          await generateTypes()
+          const { errors } = await generateTypes()
+
+          for (const { message, error } of errors) {
+            console.error(message)
+            console.log()
+            console.error(error)
+            console.log()
+          }
+
           addFunctionToRollback(generateTypes, true)
         },
       },
@@ -846,7 +854,7 @@ export const handler = async ({
     tests = getConfig().generate.tests
   }
   recordTelemetryAttributes({
-    command: ['generate', 'scaffold'].join(' '),
+    command: 'generate scaffold',
     force,
     tests,
     typescript,
