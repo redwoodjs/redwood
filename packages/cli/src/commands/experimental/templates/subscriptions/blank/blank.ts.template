@@ -8,9 +8,9 @@ export const schema = gql`
   }
 `
 // Be sure to import this type and then in `api/src/lib/realtime.ts` extend PubSubChannels:
-// export type PubSubChannels = ExistingChannel<string> & Publish${typeName}Channel<string>
-export type Publish${typeName}Channel<T extends string> = {
-  [Key in `${typeName}:<%= '$' %>{T}`]: [payload: { from: string; body: string }]
+// export type PubSubChannels = ExistingChannel<string> & Publish${typeName}Channel
+export type Publish${typeName}Channel = {
+  ${typeName}: [id: string, payload: { from: string; body: string }]
 }
 
 /**
@@ -38,7 +38,7 @@ const ${subscriptionName}Subscription = {
     subscribe: (_, { id }, { pubSub }) => {
       logger.debug({ id }, '${name} subscription')
 
-      return pubSub.subscribe(`${typeName}:<%= '$' %>{id}`)
+      return pubSub.subscribe('${typeName}', id)
     },
     resolve: (payload) => {
       logger.debug({ payload }, '${name} subscription resolve')
