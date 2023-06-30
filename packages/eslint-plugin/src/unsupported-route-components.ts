@@ -22,10 +22,6 @@ export const unsupportedRouteComponents = createRule({
   },
   defaultOptions: [],
   create(context) {
-    if (!/\bweb\/src\/Routes\.(tsx|jsx|js)$/.test(context.getFilename())) {
-      return {}
-    }
-
     return {
       JSXOpeningElement: function (node) {
         let name = ''
