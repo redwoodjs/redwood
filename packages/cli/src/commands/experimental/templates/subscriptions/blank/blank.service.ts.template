@@ -13,7 +13,7 @@ export const ${subscriptionServiceResolver} = async (
 
   const { id, from, body } = input
 
-  context.pubSub.publish(`${typeName}:<%= '$' %>{id}`, { from, body })
+context.pubSub.publish('${typeName}', id, { from, body })
 
   return input
 }
