@@ -8,6 +8,7 @@ import { config } from 'dotenv-defaults'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
@@ -59,10 +60,10 @@ import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 // yarn rw info
 // ```
 
-// Telemetry is enabled by default, but can be disabled in two ways
-// - by passing a `--telemetry false` option
-// - by setting a `REDWOOD_DISABLE_TELEMETRY` env var
-let { cwd, telemetry } = Parser(hideBin(process.argv), {
+let { cwd, telemetry, help, version } = Parser(hideBin(process.argv), {
+  // Telemetry is enabled by default, but can be disabled in two ways
+  // - by passing a `--telemetry false` option
+  // - by setting a `REDWOOD_DISABLE_TELEMETRY` env var
   boolean: ['telemetry'],
   default: {
     telemetry:
@@ -123,6 +124,14 @@ async function main() {
     const timeoutTimer = setTimeout(() => {
       shutdownTelemetry()
     }, 300000)
+
+    // Record if --help or --version were given because we will never hit a handler which will specify the command
+    if (version) {
+      recordTelemetryAttributes({ command: '--version' })
+    }
+    if (help) {
+      recordTelemetryAttributes({ command: '--help' })
+    }
 
     try {
       // Run the command via yargs
