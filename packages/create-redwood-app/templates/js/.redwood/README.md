@@ -36,6 +36,7 @@ You don't need to commit any other contents of this directory to your version co
 We try to keep this README up to date but you may, from time to time, find other files or directories in this `.redwood` directory that have not yet been documented here. This is likely nothing to worry about but feel free to let us know and we'll update this list.
 
 ### Telemetry
+
 RedwoodJS collects completely anonymous telemetry data about general usage. For transparency, that data is viewable in the respective directories and files. To learn more and manage your project's settings, visit [telemetry.redwoodjs.com](https://telemetry.redwoodjs.com)
 
 ### Have any questions?
