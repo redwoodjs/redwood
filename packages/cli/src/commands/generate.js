@@ -11,7 +11,7 @@ export const builder = (yargs) =>
   yargs
     .command('types', 'Generate supplementary code', {}, () => {
       recordTelemetryAttributes({
-        command: ['generate', 'types'].join(' '),
+        command: 'generate types',
       })
       execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
     })

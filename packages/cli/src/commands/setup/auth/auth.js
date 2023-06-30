@@ -37,7 +37,7 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'auth0'].join(' '),
+          command: 'setup auth auth0',
           force: args.force,
           verbose: args.verbose,
         })
@@ -52,7 +52,7 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'azure-active-directory'].join(' '),
+          command: 'setup auth azure-active-directory',
           force: args.force,
           verbose: args.verbose,
         })
@@ -69,7 +69,7 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'clerk'].join(' '),
+          command: 'setup auth clerk',
           force: args.force,
           verbose: args.verbose,
         })
@@ -84,7 +84,7 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'custom'].join(' '),
+          command: 'setup auth custom',
           force: args.force,
           verbose: args.verbose,
         })
@@ -106,7 +106,7 @@ export async function builder(yargs) {
       },
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'dbAuth'].join(' '),
+          command: 'setup auth dbAuth',
           force: args.force,
           verbose: args.verbose,
           webauthn: args.webauthn,
@@ -122,7 +122,7 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'firebase'].join(' '),
+          command: 'setup auth firebase',
           force: args.force,
           verbose: args.verbose,
         })
@@ -137,7 +137,7 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'netlify'].join(' '),
+          command: 'setup auth netlify',
           force: args.force,
           verbose: args.verbose,
         })
@@ -152,7 +152,7 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'supabase'].join(' '),
+          command: 'setup auth supabase',
           force: args.force,
           verbose: args.verbose,
         })
@@ -167,7 +167,7 @@ export async function builder(yargs) {
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
         recordTelemetryAttributes({
-          command: ['setup', 'auth', 'supertokens'].join(' '),
+          command: 'setup auth supertokens',
           force: args.force,
           verbose: args.verbose,
         })
@@ -191,7 +191,7 @@ function redirectCommand(provider) {
     () => {},
     () => {
       recordTelemetryAttributes({
-        command: ['setup', 'auth', provider].join(' '),
+        command: `setup auth ${provider}`,
       })
       console.log(getRedirectMessage(provider))
     },

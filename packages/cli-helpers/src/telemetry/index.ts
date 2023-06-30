@@ -38,9 +38,14 @@ export function recordTelemetryError(error: any, span?: Span) {
   if (spanToRecord === undefined) {
     return
   }
+  const message = error?.message ?? error?.toString() ?? 'Unknown error'
+
+  // Some errors had the full stack trace in the message, so we only want the first line
+  const firstLineOfError = message.split('\n')[0]
+
   spanToRecord.setStatus({
     code: SpanStatusCode.ERROR,
-    message: error.toString().split('\n')[0],
+    message: firstLineOfError,
   })
-  spanToRecord.recordException(error)
+  spanToRecord.recordException(error ?? new Error(firstLineOfError))
 }

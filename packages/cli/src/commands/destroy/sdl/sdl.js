@@ -34,7 +34,7 @@ export const tasks = ({ model }) =>
 
 export const handler = async ({ model }) => {
   recordTelemetryAttributes({
-    command: ['destory', 'sdl'].join(' '),
+    command: 'destory sdl',
   })
   try {
     const { name } = await verifyModelName({ name: model, isDestroyer: true })

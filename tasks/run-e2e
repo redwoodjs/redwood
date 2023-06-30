@@ -83,6 +83,7 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
       '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
       '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
       'graphql-yoga': getVersionFrmRwPkg('graphql-yoga', 'graphql-server'),
+      graphql: getVersionFrmRwPkg('graphql', 'graphql-server'),
     }
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
