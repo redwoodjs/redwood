@@ -76,8 +76,19 @@ export interface RedwoodGraphQLContext {
 }
 
 export interface RedwoodOpenTelemetryConfig {
+  /**
+   * @description Enables the creation of a span for each resolver execution.
+   */
   resolvers: boolean
+
+  /**
+   * @description Includes the execution result in the span attributes.
+   */
   variables: boolean
+
+  /**
+   * @description Includes the variables in the span attributes.
+   */
   result: boolean
 }
 
