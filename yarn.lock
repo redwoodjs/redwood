@@ -7083,6 +7083,7 @@ __metadata:
     "@babel/core": 7.22.5
     "@babel/eslint-parser": 7.22.5
     "@babel/eslint-plugin": 7.22.5
+    "@redwoodjs/eslint-plugin": 5.4.0
     "@redwoodjs/internal": 5.4.0
     "@redwoodjs/project-config": 5.4.0
     "@typescript-eslint/eslint-plugin": 5.60.1
@@ -7103,7 +7104,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/eslint-plugin@workspace:packages/eslint-plugin":
+"@redwoodjs/eslint-plugin@5.4.0, @redwoodjs/eslint-plugin@workspace:packages/eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
