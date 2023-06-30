@@ -4791,6 +4791,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-yoga/redis-event-target@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@graphql-yoga/redis-event-target@npm:2.0.0"
+  dependencies:
+    "@graphql-yoga/typed-event-target": ^2.0.0
+    "@whatwg-node/events": ^0.1.0
+  peerDependencies:
+    ioredis: ^5.0.6
+  checksum: e7c015be8eb122648ed17a82d2b87171b91d66673b6fbbf1f5f66ec55ca59ef84efaf739f1d90b4024b2164091475126db16fc1ac8b2316a0e67a91208cc85b2
+  languageName: node
+  linkType: hard
+
 "@graphql-yoga/subscription@npm:4.0.0, @graphql-yoga/subscription@npm:^4.0.0":
   version: 4.0.0
   resolution: "@graphql-yoga/subscription@npm:4.0.0"
@@ -7756,6 +7768,7 @@ __metadata:
     "@graphql-tools/merge": 9.0.0
     "@graphql-tools/schema": 10.0.0
     "@graphql-tools/utils": 10.0.1
+    "@graphql-yoga/redis-event-target": 2.0.0
     "@graphql-yoga/subscription": 4.0.0
     "@n1ru4l/graphql-live-query": 0.10.0
     "@n1ru4l/in-memory-live-query-store": 0.10.0

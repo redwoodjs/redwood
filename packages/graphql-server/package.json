@@ -33,6 +33,7 @@
     "@graphql-tools/merge": "9.0.0",
     "@graphql-tools/schema": "10.0.0",
     "@graphql-tools/utils": "10.0.1",
+    "@graphql-yoga/redis-event-target": "2.0.0",
     "@graphql-yoga/subscription": "4.0.0",
     "@n1ru4l/graphql-live-query": "0.10.0",
     "@n1ru4l/in-memory-live-query-store": "0.10.0",

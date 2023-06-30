@@ -5,17 +5,12 @@ import {
 } from '@envelop/testing'
 
 import { testLiveQuery, testSchema } from '../__fixtures__/common'
-import {
-  useRedwoodRealtime,
-  InMemoryLiveQueryStore,
-} from '../useRedwoodRealtime'
+import { useRedwoodRealtime } from '../useRedwoodRealtime'
 
 describe('useRedwoodRealtime', () => {
-  const liveQueryStore = new InMemoryLiveQueryStore()
-
   it('should support a @live query directive', async () => {
     const testkit = createTestkit(
-      [useRedwoodRealtime({ liveQueries: { liveQueryStore } })],
+      [useRedwoodRealtime({ liveQueries: { store: 'in-memory' } })],
       testSchema
     )
 
@@ -44,7 +39,7 @@ describe('useRedwoodRealtime', () => {
 
     createTestkit(
       [
-        useRedwoodRealtime({ liveQueries: { liveQueryStore } }),
+        useRedwoodRealtime({ liveQueries: { store: 'in-memory' } }),
         spiedPlugin.plugin,
       ],
       testSchema
