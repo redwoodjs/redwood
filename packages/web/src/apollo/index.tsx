@@ -5,6 +5,7 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
 
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
@@ -182,7 +183,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // A terminating link. Apollo Client uses this to send GraphQL operations to a server over HTTP.
   // See https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link.
-  const httpLink = new HttpLink({ uri, ...httpLinkConfig })
+  let httpLink = new HttpLink({ uri, ...httpLinkConfig })
+  if (globalThis.RWJS_EXP_STREAMING_SSR) {
+    httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
+  }
 
   // The order here is important. The last link *must* be a terminating link like HttpLink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
