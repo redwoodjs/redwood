@@ -5,7 +5,7 @@ import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/project-config'
+import { getConfigPath, resolveFile } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../lib'
@@ -81,6 +81,52 @@ export const handler = async ({ force, verbose }) => {
           )
         }
       },
+    },
+    {
+      title: 'Notice: GraphQL function update...',
+      enabled: () => {
+        return fs.existsSync(
+          resolveFile(path.join(getPaths().api.functions, 'graphql'))
+        )
+      },
+      task: (_ctx, task) => {
+        task.output = [
+          "Please add the following to your 'createGraphQLHandler' function options to enable OTel for your graphql",
+          'openTelemetryOptions: {',
+          '  resolvers: true,',
+          '  result: true,',
+          '  variables: true,',
+          '}',
+          '',
+          `Which can found at ${c.info(
+            path.join(getPaths().api.functions, 'graphql')
+          )}`,
+        ].join('\n')
+      },
+      options: { persistentOutput: true },
+    },
+    {
+      title: 'Notice: GraphQL function update (server file)...',
+      enabled: () => {
+        return fs.existsSync(
+          resolveFile(path.join(getPaths().api.src, 'server'))
+        )
+      },
+      task: (_ctx, task) => {
+        task.output = [
+          "Please add the following to your 'redwoodFastifyGraphQLServer' plugin options to enable OTel for your graphql",
+          'openTelemetryOptions: {',
+          '  resolvers: true,',
+          '  result: true,',
+          '  variables: true,',
+          '}',
+          '',
+          `Which can found at ${c.info(
+            path.join(getPaths().api.src, 'server')
+          )}`,
+        ].join('\n')
+      },
+      options: { persistentOutput: true },
     },
     addApiPackages(opentelemetryPackages),
   ]
