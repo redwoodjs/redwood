@@ -119,17 +119,26 @@ async function main() {
   // Execute CLI within a span, this will be the root span
   const tracer = trace.getTracer('redwoodjs')
   await tracer.startActiveSpan('cli', async (span) => {
+    // Ensure telemetry ends after a maximum of 5 minutes
+    const timeoutTimer = setTimeout(() => {
+      shutdownTelemetry()
+    }, 300000)
+
     try {
       // Run the command via yargs
       await runYargs()
-
-      // Span housekeeping
-      span?.setStatus({ code: SpanStatusCode.OK })
     } catch (error) {
       exitWithError(error)
-    } finally {
+    }
+
+    // Span housekeeping
+    if (span?.isRecording()) {
+      span?.setStatus({ code: SpanStatusCode.OK })
       span?.end()
     }
+
+    // Clear the timeout timer since we haven't timed out
+    clearTimeout(timeoutTimer)
   })
 
   // Shutdown telemetry, ensures data is sent before the process exits
