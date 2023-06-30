@@ -88,29 +88,19 @@ async function main() {
   // Shutdown to ensure all spans are sent
   traceExporter.shutdown()
 
-  // Verbose means we keep the last 8 telemetry files as a log otherwise we delete all of them
-  if (process.env.REDWOOD_VERBOSE_TELEMETRY) {
-    console.log(
-      "Keeping only the last 8 telemetry files for inspection because 'REDWOOD_VERBOSE_TELEMETRY' is set."
+  // We keep the last 8 telemetry files for visibility/transparency
+  console.log(
+    'Keeping the lastest 8 telemetry files for visibility/transparency.'
+  )
+  const sortedTelemetryFiles = telemetryFiles.sort((a, b) => {
+    return (
+      parseInt(b.split('.')[0].replace('_', '')) -
+      parseInt(a.split('.')[0].replace('_', ''))
     )
-    const sortedTelemetryFiles = telemetryFiles.sort((a, b) => {
-      return (
-        parseInt(b.split('.')[0].replace('_', '')) -
-        parseInt(a.split('.')[0].replace('_', ''))
-      )
-    })
-    for (let i = 8; i < sortedTelemetryFiles.length; i++) {
-      console.log(`Removing telemetry file '${sortedTelemetryFiles[i]}'`)
-      fs.unlinkSync(path.join(telemetryDir, sortedTelemetryFiles[i]))
-    }
-  } else {
-    console.log(
-      "Removing telemetry files, set 'REDWOOD_VERBOSE_TELEMETRY' to keep the last 8 telemetry files for inspection."
-    )
-    telemetryFiles.forEach((file) => {
-      console.log(`Removing telemetry file '${file}'`)
-      fs.unlinkSync(path.join(telemetryDir, file))
-    })
+  })
+  for (let i = 8; i < sortedTelemetryFiles.length; i++) {
+    console.log(`Removing telemetry file '${sortedTelemetryFiles[i]}'`)
+    fs.unlinkSync(path.join(telemetryDir, sortedTelemetryFiles[i]))
   }
 }
 
