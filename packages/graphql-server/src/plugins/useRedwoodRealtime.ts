@@ -155,7 +155,6 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
     if (options.subscriptions.store === 'in-memory') {
       subscriptionsEnabled = true
 
-      // needs type PubSubChannels
       pubSub = createPubSub()
     } else if (options.subscriptions.store.redis) {
       subscriptionsEnabled = true
@@ -165,7 +164,6 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
         subscribeClient: options.subscriptions.store.redis.subscribeClient,
       })
 
-      // needs type PubSubChannels
       pubSub = createPubSub({ eventTarget })
     }
   }

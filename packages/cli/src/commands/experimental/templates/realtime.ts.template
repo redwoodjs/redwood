@@ -1,14 +1,4 @@
-import { createPubSub, InMemoryLiveQueryStore } from '@redwoodjs/graphql-server'
+import { Redis } from 'ioredis'
 
-export const liveQueryStore = new InMemoryLiveQueryStore()
-
-// Import each subscription type from 'src/subscriptions/**/*'
-// Note: If you did not setup examples, please replace with your current subscriptions
-import type { NewMessageChannel } from 'src/subscriptions/newMessage/newMessage'
-
-// then use merge the types by intersecting each like: `NewMessageChannel & OtherChannel`
-export type PubSubChannels = NewMessageChannel
-
-export const pubSub = createPubSub<PubSubChannels>()
-
-export type PubSubChannelsType = typeof pubSub
+export const publishClient = new Redis()
+export const subscribeClient = new Redis()
