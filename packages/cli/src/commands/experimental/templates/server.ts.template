@@ -26,8 +26,8 @@ import services from 'src/services/**/*.{js,ts}'
 // import { getCurrentUser } from 'src/lib/auth'
 import { logger } from './lib/logger'
 
-// Import if using RedwoodJS Realtime via `yarn rw exp setup-realtime`
-// import { pubSub, liveQueryStore } from './lib/realtime'
+// Import if using RedwoodJS Realtime via `yarn rw exp setup-realtime` and a persisted Redis store
+// import { publishClient, subscribeClient } from './lib/realtime'
 
 async function serve() {
   // Parse server file args
@@ -88,8 +88,17 @@ async function serve() {
     allowGraphiQL: true,
     // Configure if using RedwoodJS Realtime via `yarn rw exp setup-realtime`
     // realtime: {
-    //   subscriptions: { subscriptions, pubSub },
-    //   liveQueries: { liveQueryStore },
+    //   subscriptions: {
+    //     subscriptions,
+    //     store: 'in-memory',
+    //     // if using a persisted store
+    //     // store: { redis: { publishClient, subscribeClient } },
+    //   },
+    //   liveQueries: {
+    //     store: 'in-memory',
+    //     // if using a persisted store
+    //     // store: { redis: { publishClient, subscribeClient } },
+    //   },
     // },
   })
 
