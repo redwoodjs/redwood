@@ -595,3 +595,23 @@ export const printSetupNotes = (notes) => {
     },
   }
 }
+
+export function ensureDotRedwoodReadmeExists() {
+  // Do this at the end of the process, it shouldn't take long
+  process.on('exit', () => {
+    // Check if the readme already exists
+    const readmeLocation = path.join(getPaths().base, '.redwood', 'README.md')
+    if (fs.existsSync(readmeLocation)) {
+      return
+    }
+
+    // Create the README from the template
+    const readmeContent = fs.readFileSync(
+      path.join(__dirname, 'templates', 'dotredwood.md.template')
+    )
+    if (!fs.existsSync(path.dirname(readmeLocation))) {
+      fs.mkdirSync(path.dirname(readmeLocation), { recursive: true })
+    }
+    fs.writeFileSync(readmeLocation, readmeContent)
+  })
+}

@@ -1,0 +1,37 @@
+# .redwood
+
+## What is this directory?
+Redwood uses this `.redwood` directory to store transitory data that aids in the smooth and convienent operation of your Redwood project.
+
+## Do I need to do anything with this directory?
+No. You shouldn't have to create, edit or delete anything in this directory in your day-to-day work with Redwood.
+
+You not need to commit this directory to your version control system. It is ignored by default.
+
+## What should be in this directory?
+
+### Files
+
+| Name              | Description |
+| :---------------- | :------- |
+| commandCache.json | This file contains mappings to assit the redwood CLI in efficently executing commands. |
+| schema.graphql    |  |
+| studio.db         | The sqlite database used by the experimental `rw exp studio` feature. |
+| telemetry.txt     | Contains a unique ID used for telemetry. This value is rotated every 24 hours to protect your project's anonymity. |
+| test.db           | An sqlite database used when running tests |
+
+### Directories
+
+| Name        | Description |
+| :---------- | :------- |
+| locks       | Stores temporary files that redwood uses to keep track of the execution of async/background tasks between processes.  |
+| logs        | Stores log files for background tasks such as update checking. |
+| prebuild    | Stores transpiled Javascript that is generated as part of redwoods build process. |
+| telemetry   | Stores the recent telemetry that the redwood CLI has generated. You may inspect these files to see everything redwood is anonymously collecting. |
+| types       | Stores the results of type generation. |
+| updateCheck | Stores a file which contains the results of checking for redwood updates. |
+
+We try to keep this README up to date but you may, from time to time, find other files or directories within this `.redwood` directory that have not yet been documented here. This is likely nothing to worry about but feel free to let us know and we'll update this list.
+
+### Have any questions?
+Feel free to reach out to us in the [RedwoodJS Community](https://community.redwoodjs.com/) forum if you have any questions.
