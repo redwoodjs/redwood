@@ -1,8 +1,8 @@
 import type { Plugin } from '@envelop/core'
-// import type { UseLiveQueryOptions } from '@envelop/live-query'
 import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
+import { createRedisEventTarget } from '@graphql-yoga/redis-event-target'
 import type { PubSub } from '@graphql-yoga/subscription'
 import { createPubSub } from '@graphql-yoga/subscription'
 import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
@@ -24,7 +24,6 @@ export type LiveQueryStorageMechanism =
   | InMemoryLiveQueryStore
 
 export type RedwoodRealtimeOptions = {
-  // liveQueries: { store: RedisLiveQueryStore | InMemoryLiveQueryStore }
   liveQueries: {
     store:
       | 'in-memory'
@@ -40,9 +39,16 @@ export type RedwoodRealtimeOptions = {
    * @description Subscriptions passed from the glob import:
    * import subscriptions from 'src/subscriptions/**\/*.{js,ts}'
    */
-  subscriptions?: {
+  subscriptions: {
     subscriptions: SubscriptionGlobImports
-    pubSub: ReturnType<typeof createPubSub>
+    store:
+      | 'in-memory'
+      | {
+          redis: {
+            publishClient: LiveQueryRedisClient
+            subscribeClient: LiveQueryRedisClient
+          }
+        }
   }
 }
 
@@ -106,11 +112,11 @@ export class RedisLiveQueryStore {
 }
 
 export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
-  if (options.liveQueries && options.liveQueries.store) {
-    let liveQueryPlugin = {} as Plugin
-    let liveQueryStorageMechanism = {} as LiveQueryStorageMechanism
-    const inMemoryLiveQueryStore = new InMemoryLiveQueryStore()
+  let liveQueryPlugin = {} as Plugin
+  let liveQueryStorageMechanism = {} as LiveQueryStorageMechanism
+  const inMemoryLiveQueryStore = new InMemoryLiveQueryStore()
 
+  if (options.liveQueries && options.liveQueries.store) {
     if (options.liveQueries.store === 'in-memory') {
       liveQueryStorageMechanism = inMemoryLiveQueryStore
       liveQueryPlugin = useLiveQuery({
@@ -129,44 +135,59 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
     } else {
       throw new Error('Invalid live query store configuration.')
     }
-
-    /**
-     * This symbol is added to the schema extensions for checking whether the live query was added to the schema only once.
-     */
-    const wasLiveQueryAdded = Symbol.for('useRedwoodRealtime.wasLiveQueryAdded')
-
-    return {
-      onSchemaChange({ replaceSchema, schema }) {
-        if (schema.extensions?.[wasLiveQueryAdded] === true) {
-          return
-        }
-
-        const liveSchema = mergeSchemas({
-          schemas: [schema],
-          typeDefs: [liveDirectiveTypeDefs],
-        })
-
-        liveSchema.extensions = {
-          ...schema.extensions,
-          [wasLiveQueryAdded]: true,
-        }
-
-        replaceSchema(liveSchema)
-      },
-      onPluginInit({ addPlugin }) {
-        addPlugin(liveQueryPlugin)
-      },
-      onContextBuilding() {
-        return ({ extendContext }) => {
-          extendContext({
-            liveQueryStore: liveQueryStorageMechanism,
-            pubSub: options.subscriptions?.pubSub as ReturnType<
-              typeof createPubSub
-            >,
-          })
-        }
-      },
-    }
   }
+
+  /**
+   * This symbol is added to the schema extensions for checking whether the live query was added to the schema only once.
+   */
+  const wasLiveQueryAdded = Symbol.for('useRedwoodRealtime.wasLiveQueryAdded')
+
+  let pubSub = {} as ReturnType<typeof createPubSub>
+
+  if (options.subscriptions.store !== 'in-memory') {
+    pubSub = createPubSub()
+  } else if (options.subscriptions.store === 'in-memory') {
+    const eventTarget = createRedisEventTarget({
+      publishClient: options.subscriptions.store.redis.publishClient,
+      subscribeClient: options.subscriptions.store.redis.subscribeClient,
+    })
+
+    // needs type PubSubChannels
+    pubSub = createPubSub({ eventTarget })
+  }
+
+  // ReturnType<typeof createPubSub>
+
+  return {
+    onSchemaChange({ replaceSchema, schema }) {
+      if (schema.extensions?.[wasLiveQueryAdded] === true) {
+        return
+      }
+
+      const liveSchema = mergeSchemas({
+        schemas: [schema],
+        typeDefs: [liveDirectiveTypeDefs],
+      })
+
+      liveSchema.extensions = {
+        ...schema.extensions,
+        [wasLiveQueryAdded]: true,
+      }
+
+      replaceSchema(liveSchema)
+    },
+    onPluginInit({ addPlugin }) {
+      addPlugin(liveQueryPlugin)
+    },
+    onContextBuilding() {
+      return ({ extendContext }) => {
+        extendContext({
+          liveQueryStore: liveQueryStorageMechanism,
+          pubSub,
+        })
+      }
+    },
+  }
+
   return {}
 }
