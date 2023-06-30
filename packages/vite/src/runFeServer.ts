@@ -3,6 +3,7 @@
 // Only things used during dev can be in @redwoodjs/vite. Everything else has
 // to go in fe-server
 
+import fs from 'fs/promises'
 import path from 'path'
 
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
@@ -49,19 +50,12 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
-  // TODO (STREAMING) figure out why we're having to do default here
-  const routeManifest: RWRouteManifest = (
-    await import(rwPaths.web.dist + '/server/route-manifest.json', {
-      assert: { type: 'json' },
-    })
-  ).default
+  const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
+  const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
-  // TODO (STREAMING) figure out why we're having to do default here
-  const buildManifest: ViteManifest = (
-    await import(rwPaths.web.dist + '/build-manifest.json', {
-      assert: { type: 'json' },
-    })
-  ).default
+  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
+  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
+  const buildManifest: ViteManifest = JSON.parse(buildManifestStr)
 
   const indexEntry = Object.values(buildManifest).find((manifestItem) => {
     return manifestItem.isEntry

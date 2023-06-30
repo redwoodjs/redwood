@@ -126,9 +126,7 @@ export const handler = async ({
 
             // TODO (STREAMING) we need to use a binary here, so the the cwd is correct
             // Should merge this with the existing rw-vite-build binary
-            await buildFeServer({
-              verbose,
-            })
+            await buildFeServer({ verbose })
           }
         } else {
           await execa(

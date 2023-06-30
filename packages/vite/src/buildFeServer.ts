@@ -94,13 +94,9 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   })
 
   // Step 3: Generate route-manifest.json
-  // TODO (STREAMING) double check why we need to do .default here
-  // Its related to the babel import assertion plugin most likely
-  const clientBuildManifest: ViteManifest = (
-    await import(path.join(getPaths().web.dist, 'build-manifest.json'), {
-      assert: { type: 'json' },
-    })
-  ).default
+  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
+  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
+  const clientBuildManifest: ViteManifest = JSON.parse(buildManifestStr)
 
   const routesList = getProjectRoutes()
 

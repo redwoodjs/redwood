@@ -1,4 +1,1 @@
-module.exports = {
-  extends: '../../babel.config.js',
-  plugins: ['@babel/plugin-syntax-import-assertions'],
-}
+module.exports = { extends: '../../babel.config.js' }
