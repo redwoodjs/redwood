@@ -144,6 +144,11 @@ export class RWRoute extends BaseNode {
     return this.getBoolAttr('prerender')
   }
 
+  // TODO (STREAMING) Remove this once we're sure we don't want to do Render Modes
+  @lazy() get renderMode(): string | undefined {
+    return this.getStringAttr('renderMode') || 'stream'
+  }
+
   @lazy() get path_literal_node() {
     const a = this.jsxNode.getAttribute('path')
     if (!a) {
@@ -160,6 +165,10 @@ export class RWRoute extends BaseNode {
 
   @lazy() get isNotFound(): boolean {
     return typeof this.jsxNode.getAttribute('notfound') !== 'undefined'
+  }
+
+  @lazy() get redirect() {
+    return this.getStringAttr('redirect')
   }
 
   *diagnostics() {

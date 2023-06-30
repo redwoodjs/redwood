@@ -16,9 +16,12 @@
     "redwood": "./dist/bins/redwood.js",
     "rw": "./dist/bins/redwood.js",
     "rw-api-server-watch": "./dist/bins/rw-api-server-watch.js",
+    "rw-dev-fe": "./dist/bins/rw-dev-fe.js",
     "rw-gen": "./dist/bins/rw-gen.js",
     "rw-gen-watch": "./dist/bins/rw-gen-watch.js",
     "rw-log-formatter": "./dist/bins/rw-log-formatter.js",
+    "rw-serve-api": "./dist/bins/rw-serve-api.js",
+    "rw-serve-fe": "./dist/bins/rw-serve-fe.js",
     "rwfw": "./dist/bins/rwfw.js"
   },
   "files": [
