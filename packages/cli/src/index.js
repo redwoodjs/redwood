@@ -31,7 +31,7 @@ import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
-import { getPaths, findUp, ensureDotRedwoodReadmeExists } from './lib'
+import { getPaths, findUp } from './lib'
 import { exitWithError } from './lib/exit'
 import * as updateCheck from './lib/updateCheck'
 import { loadPlugins } from './plugin'
@@ -154,7 +154,6 @@ async function runYargs() {
         },
         telemetry && telemetryMiddleware,
         updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
-        ensureDotRedwoodReadmeExists,
       ].filter(Boolean)
     )
     .option('cwd', {
