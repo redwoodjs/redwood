@@ -44,6 +44,10 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
         birthtimeMs: Date.now(),
       }
     })
+
+    // Prevent console output during tests
+    console.log = jest.fn()
+    console.time = jest.fn()
   })
 
   afterAll(() => {
@@ -103,9 +107,7 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
 
   it('Respects the lock', async () => {
     setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.CHECK_LOCK_IDENTIFIER}" is already set`
-    )
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })
 
@@ -184,9 +186,7 @@ describe('Update is available (1.0.0 -> 2.0.0)', () => {
 
   it('Respects the lock', async () => {
     setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.CHECK_LOCK_IDENTIFIER}" is already set`
-    )
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })
 
@@ -265,8 +265,6 @@ describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
 
   it('Respects the lock', async () => {
     setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.CHECK_LOCK_IDENTIFIER}" is already set`
-    )
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })

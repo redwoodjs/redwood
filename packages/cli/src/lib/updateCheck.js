@@ -214,7 +214,7 @@ function getUpdateMessage() {
 export function readUpdateDataFile() {
   try {
     if (!fs.existsSync(getPersistenceDirectory())) {
-      fs.mkdirSync(getPersistenceDirectory())
+      fs.mkdirSync(getPersistenceDirectory(), { recursive: true })
     }
     const persistedData = JSON.parse(
       fs.readFileSync(path.join(getPersistenceDirectory(), 'data.json'))
