@@ -29,7 +29,9 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
 
   if (!rwPaths.web.entryServer || !rwPaths.web.entryClient) {
     throw new Error(
-      'Vite entry points not found. Please check that your project has an entry-client.{jsx,tsx} and entry-server.{jsx,tsx} file in the web/src directory.'
+      'Vite entry points not found. Please check that your project has an ' +
+        'entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in the ' +
+        'web/src directory.'
     )
   }
 
