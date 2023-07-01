@@ -275,9 +275,7 @@ const diagnosticCheck = () => {
 }
 
 export const handler = async ({ path: routerPath, dryRun, verbose }) => {
-  const rwConfig = getConfig()
-
-  if (rwConfig.experimental.streamingSsr) {
+  if (getConfig().experimental?.streamingSsr?.enabled) {
     console.log(
       c.warning(
         'Prerendering is not yet supported with Streaming SSR. Skipping prerender...'
