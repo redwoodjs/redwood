@@ -73,7 +73,6 @@ function getPersistenceDirectory() {
 export async function check() {
   try {
     console.time('Update Check')
-    setLock(CHECK_LOCK_IDENTIFIER)
 
     // Read package.json and extract the @redwood/core version
     const packageJson = JSON.parse(
@@ -130,6 +129,12 @@ export function isEnabled() {
  * @see {@link CHECK_PERIOD} for the time between notifications
  */
 export function shouldCheck() {
+  // We don't want to check if a different process is already checking
+  if (isLockSet(CHECK_LOCK_IDENTIFIER)) {
+    return false
+  }
+
+  // Check if we haven't checked recently
   const data = readUpdateDataFile()
   return data.checkedAt < new Date().getTime() - CHECK_PERIOD
 }
@@ -140,6 +145,12 @@ export function shouldCheck() {
  * @see {@link SHOW_PERIOD} for the time between notifications
  */
 export function shouldShow() {
+  // We don't want to show if a different process is already about to
+  if (isLockSet(SHOW_LOCK_IDENTIFIER)) {
+    return false
+  }
+
+  // Check there is a new version and we haven't shown the user recently
   const data = readUpdateDataFile()
   let newerVersion = false
   data.remoteVersions.forEach((version) => {
@@ -273,7 +284,7 @@ export function updateCheckMiddleware(argv) {
     return
   }
 
-  if (shouldShow() && !isLockSet(SHOW_LOCK_IDENTIFIER)) {
+  if (shouldShow()) {
     setLock(SHOW_LOCK_IDENTIFIER)
     process.on('exit', () => {
       showUpdateMessage()
@@ -282,6 +293,7 @@ export function updateCheckMiddleware(argv) {
   }
 
   if (shouldCheck()) {
+    setLock(CHECK_LOCK_IDENTIFIER)
     spawnBackgroundProcess('updateCheck', 'yarn', [
       'node',
       path.join(__dirname, 'updateCheckExecute.js'),
