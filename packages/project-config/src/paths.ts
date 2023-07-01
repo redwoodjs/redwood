@@ -46,6 +46,7 @@ export interface WebPaths {
   storybookManagerConfig: string
   dist: string
   distServer: string
+  distEntryServer: string
   distRouteHooks: string
   routeManifest: string
   types: string
@@ -105,7 +106,7 @@ const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
-const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry-server' // .jsx,.tsx
+const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
@@ -114,6 +115,7 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
+const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
 const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
 
@@ -221,6 +223,10 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
       distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
+      distEntryServer: path.join(
+        BASE_DIR,
+        PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER
+      ),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
       types: path.join(BASE_DIR, 'web/types'),
