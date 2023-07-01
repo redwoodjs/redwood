@@ -9,7 +9,7 @@ import semver from 'semver'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { spawnBackgroundProcess } from './background'
-import { setLock, unsetLock } from './locking'
+import { isLockSet, setLock, unsetLock } from './locking'
 
 import { getPaths } from './index'
 
@@ -40,7 +40,12 @@ export const DEFAULT_DATETIME_MS = 946684800000
 /**
  * @const {string} The identifier used for the lock within the check function
  */
-export const LOCK_IDENTIFIER = 'UPDATE_CHECK'
+export const CHECK_LOCK_IDENTIFIER = 'UPDATE_CHECK'
+
+/**
+ * @const {string} The identifier used for the lock when showing an update message
+ */
+export const SHOW_LOCK_IDENTIFIER = 'UPDATE_CHECK_SHOW'
 
 /**
  * @const {string[]} The name of commands which should NOT execute the update checker
@@ -68,7 +73,7 @@ function getPersistenceDirectory() {
 export async function check() {
   try {
     console.time('Update Check')
-    setLock(LOCK_IDENTIFIER)
+    setLock(CHECK_LOCK_IDENTIFIER)
 
     // Read package.json and extract the @redwood/core version
     const packageJson = JSON.parse(
@@ -107,7 +112,7 @@ export async function check() {
       checkedAt: new Date().getTime(),
     })
   } finally {
-    unsetLock(LOCK_IDENTIFIER)
+    unsetLock(CHECK_LOCK_IDENTIFIER)
     console.timeEnd('Update Check')
   }
 }
@@ -268,9 +273,11 @@ export function updateCheckMiddleware(argv) {
     return
   }
 
-  if (shouldShow()) {
+  if (shouldShow() && !isLockSet(SHOW_LOCK_IDENTIFIER)) {
+    setLock(SHOW_LOCK_IDENTIFIER)
     process.on('exit', () => {
       showUpdateMessage()
+      unsetLock(SHOW_LOCK_IDENTIFIER)
     })
   }
 
