@@ -94,6 +94,13 @@ describe('paths', () => {
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
+          routeManifest: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'route-manifest.json'
+          ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
@@ -135,10 +142,19 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distRouteHooks: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'routeHooks'
+          ),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
           // Vite paths ~ not configured in empty-project
           viteConfig: null,
           entryClient: null,
+          entryServer: null,
         },
       }
 
@@ -332,6 +348,13 @@ describe('paths', () => {
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
+          routeManifest: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'route-manifest.json'
+          ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
@@ -374,10 +397,19 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distRouteHooks: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'routeHooks'
+          ),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
           // New Vite paths
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
-          entryClient: null, // doesnt exist in example-todo-main
+          entryClient: null, // doesn't exist in example-todo-main
+          entryServer: null, // doesn't exist in example-todo-main
         },
       }
 
@@ -617,6 +649,13 @@ describe('paths', () => {
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
+          routeManifest: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'route-manifest.json'
+          ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
@@ -659,7 +698,16 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           entryClient: null,
+          entryServer: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distRouteHooks: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'routeHooks'
+          ),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
         },
       }
@@ -860,6 +908,13 @@ describe('paths', () => {
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
+          routeManifest: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'route-manifest.json'
+          ),
           base: path.join(FIXTURE_BASEDIR, 'web'),
           pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
           components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
@@ -901,10 +956,19 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distRouteHooks: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'routeHooks'
+          ),
+          distServer: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'server'),
           types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
           // Vite paths
           viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
           entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),
+          entryServer: null,
         },
       }
 

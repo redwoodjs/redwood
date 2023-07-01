@@ -18,6 +18,22 @@ function hasExperimentalServerFile() {
   return fs.existsSync(serverFilePath)
 }
 
+const streamServerErrorHandler = () => {
+  console.error('⚠️  Experimental Render Mode ~ Cannot serve the web side ⚠️')
+  console.log('~'.repeat(50))
+  console.log()
+  console.log()
+  console.log('You can run the new frontend server with: `yarn rw-serve-fe`')
+  console.log('You can run the api server with: yarn rw serve api')
+  console.log()
+  console.log()
+  console.log('~'.repeat(50))
+
+  throw new Error(
+    'You will need to run the FE server and API server separately.'
+  )
+}
+
 export const builder = async (yargs) => {
   yargs
     .usage('usage: $0 <side>')
@@ -40,6 +56,11 @@ export const builder = async (yargs) => {
           host: argv.host,
           socket: argv.socket,
         })
+
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          streamServerErrorHandler()
+          return
+        }
 
         // Run the experimental server file, if it exists, with web side also
         if (hasExperimentalServerFile()) {
@@ -144,6 +165,11 @@ export const builder = async (yargs) => {
           socket: argv.socket,
           apiHost: argv.apiHost,
         })
+
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          streamServerErrorHandler()
+          return
+        }
 
         const { webServerHandler } = await import('./serveHandler.js')
         await webServerHandler(argv)

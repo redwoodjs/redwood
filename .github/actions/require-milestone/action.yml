@@ -1,0 +1,7 @@
+name: Require milestone
+description: Ensures that a PR has a valid milestone
+
+runs:
+  # `node18` isn't supported yet
+  using: node16
+  main: requireMilestone.mjs

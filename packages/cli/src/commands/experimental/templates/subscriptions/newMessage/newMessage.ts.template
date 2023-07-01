@@ -7,8 +7,8 @@ export const schema = gql`
     newMessage(roomId: ID!): Message!
   }
 `
-export type NewMessageChannel<T extends string> = {
-  [Key in `newMessage:${T}`]: [payload: { from: string; body: string }]
+export type NewMessageChannel = {
+  newMessage: [roomId: string, payload: { from: string; body: string }]
 }
 
 /**
@@ -36,7 +36,7 @@ const newMessage = {
     subscribe: (_, { roomId }, { pubSub }) => {
       logger.debug({ roomId }, 'newMessage subscription')
 
-      return pubSub.subscribe(`newMessage:${roomId}`)
+      return pubSub.subscribe('newMessage', roomId)
     },
     resolve: (payload) => {
       logger.debug({ payload }, 'newMessage subscription resolve')

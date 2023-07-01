@@ -99,6 +99,9 @@ export default function redwoodPluginVite(): PluginOption[] {
               RWJS_API_URL: rwConfig.web.apiUrl,
               __REDWOOD__APP_TITLE:
                 rwConfig.web.title || path.basename(rwPaths.base),
+              RWJS_EXP_STREAMING_SSR:
+                rwConfig.experimental.streamingSsr &&
+                rwConfig.experimental.streamingSsr.enabled,
             },
             RWJS_DEBUG_ENV: {
               RWJS_SRC_ROOT: rwPaths.web.src,
@@ -211,3 +214,5 @@ export default function redwoodPluginVite(): PluginOption[] {
     }),
   ]
 }
+
+export { buildFeServer } from './buildFeServer'
