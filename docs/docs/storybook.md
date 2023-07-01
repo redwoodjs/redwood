@@ -27,19 +27,18 @@ This spins up Storybook on port `7910`.
 
 You only have to configure Storybook if you want to extend Redwood's default configuration, which handles things like how to find stories, configuring Webpack, starting Mock Service Worker, etc.
 
-There are three files you can add to your project's `web/config` directory to configure Storybook: `storybook.config.js`, `storybook.manager.js`, and `storybook.preview.js`. Note that you may have to create the `web/config` directory:
+There are two files you can add to your project's `web/config` directory to configure Storybook: `storybook.config.js` and `storybook.preview.js`. Note that you may have to create the `web/config` directory:
 
 ```
 cd redwood-project/web
 mkdir config
-touch config/storybook.config.js config/storybook.manager.js config/storybook.preview.js
+touch config/storybook.config.js config/storybook.preview.js
 ```
 
-`storybook.config.js` configures Storybook's server, `storybook.manager.js` configures Storybook's UI, and `storybook.preview.js` configures the way stories render.
+`storybook.config.js` configures Storybook's server and `storybook.preview.js` configures the way stories render.
 All of these files get merged with Redwood's default configurations, which you can find in the `@redwoodjs/testing` package:
 
 - [main.js](https://github.com/redwoodjs/redwood/blob/main/packages/testing/config/storybook/main.js)—gets merged with your project's `storybook.config.js`
-- [manager.js](https://github.com/redwoodjs/redwood/blob/main/packages/testing/config/storybook/manager.js)—gets merged with your project's `storybook.manager.js`
 - [preview.js](https://github.com/redwoodjs/redwood/blob/main/packages/testing/config/storybook/preview.js)—gets merged with your project's `storybook.preview.js`
 
 ### Configuring the Server with `storybook.config.js`
@@ -78,33 +77,3 @@ export const decorators = [
 ```
 
 For more, see the Storybook docs on [configuring how stories render](https://storybook.js.org/docs/react/configure/overview#configure-story-rendering).
-
-### Configuring the UI with `storybook.manager.js`
-
-> Note that some of the changes you make to Storybook's UI require refreshing its cache.
-> The easiest way to do so is when starting Storybook:
->
-> ```
-> yarn rw storybook --no-manager-cache
-> ```
-
-You can [theme Storybook's UI](https://storybook.js.org/docs/react/configure/theming) by installing two packages and making a few changes to Redwood's initial configuration.
-
-From the root of your RedwoodJS project:
-
-```
-yarn workspace web add -D @storybook/addons @storybook/theming
-```
-
-Then, we'll configure our theme by creating a `storybook.manager.js` file. Below we're enabling Storybook's dark theme.
-
-```javascript title="web/config/storybook.manager.js"
-import { addons } from '@storybook/addons'
-import { themes } from '@storybook/theming'
-
-addons.setConfig({
-  theme: themes.dark,
-})
-```
-
-Check out [Storybook's theming quickstart](https://storybook.js.org/docs/react/configure/theming#create-a-theme-quickstart) for a guide on creating your own theme. You may also want to export your theme to [re-use it with Storybook Docs](https://storybook.js.org/docs/react/configure/theming#theming-docs).
