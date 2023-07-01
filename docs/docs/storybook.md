@@ -21,7 +21,9 @@ You can start Storybook with `yarn rw storybook`:
 yarn rw storybook
 ```
 
-This spins up Storybook on port `7910`.
+If this is your first time running Storybook, the Redwood CLI will install it.
+From then on, you can run it straightaway.
+Once Storybook is installed, it'll spin up on port `7910`.
 
 ## Configuring Storybook
 
@@ -43,7 +45,11 @@ All of these files get merged with Redwood's default configurations, which you c
 
 ### Configuring the Server with `storybook.config.js`
 
-> Since `storybook.config.js` configures Storybook's server, note that any changes you make require restarting Storybook.
+:::tip You may have to restart Storybook
+
+Since `storybook.config.js` configures Storybook's server, changes you make may require restarting Storybook.
+
+:::
 
 While you can configure [any of Storybook server's available options](https://storybook.js.org/docs/react/configure/overview#configure-your-storybook-project) in `storybook.config.js`, you'll probably only want to configure `addons`:
 
@@ -61,7 +67,7 @@ module.exports = {
 ### Configuring Rendering with `storybook.preview.js`
 
 Sometimes you want to change the way all your stories render.
-It'd be mixing concerns to add that logic to your actual components, and it'd get old fast to add it to every single `.stories.js` file.
+It'd be mixing concerns to add that logic to your actual components, and it'd get old fast to add it to every single `.stories.{jsx,tsx}` file.
 Instead decorate all your stories with any custom rendering logic you want in `storybook.preview.js`.
 
 For example, something you may want to do is add some margin to all your stories so that they're not glued to the top left corner:
