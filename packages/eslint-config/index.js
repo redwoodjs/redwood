@@ -57,6 +57,7 @@ module.exports = {
             ignoreNonDOM: true,
           },
         ],
+        '@redwoodjs/unsupported-route-components': 'error',
       },
     },
     // `api` side
