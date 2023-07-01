@@ -18,16 +18,15 @@ import directives from 'src/directives/**/*.{js,ts}'
 import sdls from 'src/graphql/**/*.sdl.{js,ts}'
 import services from 'src/services/**/*.{js,ts}'
 
-// Import if using RedwoodJS Realtime and subscriptions
-// import subscriptions from 'src/subscriptions/**/*.{js,ts}'
-
 // Import if using RedwoodJS authentication
 // import { authDecoder } from '@redwoodjs/<your-auth-provider>'
 // import { getCurrentUser } from 'src/lib/auth'
+
+// Import if using RedwoodJS Realtime via `yarn rw exp setup-realtime`
+// import { realtime } from 'src/lib/realtime'
+
 import { logger } from './lib/logger'
 
-// Import if using RedwoodJS Realtime via `yarn rw exp setup-realtime` and a persisted Redis store
-// import { publishClient, subscribeClient } from './lib/realtime'
 
 async function serve() {
   // Parse server file args
@@ -86,20 +85,8 @@ async function serve() {
     directives,
     allowIntrospection: true,
     allowGraphiQL: true,
-    // Configure if using RedwoodJS Realtime via `yarn rw exp setup-realtime`
-    // realtime: {
-    //   subscriptions: {
-    //     subscriptions,
-    //     store: 'in-memory',
-    //     // if using a persisted store
-    //     // store: { redis: { publishClient, subscribeClient } },
-    //   },
-    //   liveQueries: {
-    //     store: 'in-memory',
-    //     // if using a persisted store
-    //     // store: { redis: { publishClient, subscribeClient } },
-    //   },
-    // },
+    // Configure if using RedwoodJS Realtime
+    // realtime
   })
 
   // Start

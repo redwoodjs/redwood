@@ -37,6 +37,7 @@ export {
   InMemoryLiveQueryStore,
   liveDirectiveTypeDefs,
   RedisLiveQueryStore,
+  RedwoodRealtimeOptions,
 } from './plugins/useRedwoodRealtime'
 
 export type { PubSub } from './plugins/useRedwoodRealtime'
