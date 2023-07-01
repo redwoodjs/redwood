@@ -95,9 +95,7 @@ export async function runFeServer() {
     const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
 
     try {
-      const { serverEntry } = await import(
-        path.join(rwPaths.web.distServer, '/entry-server.js')
-      )
+      const { serverEntry } = await import(rwPaths.web.distEntryServer)
 
       // TODO (STREAMING) should we generate individual express Routes for each Route?
       // This would make handling 404s and favicons / public assets etc. easier
