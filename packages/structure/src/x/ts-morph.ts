@@ -32,7 +32,7 @@ export function createTSMSourceFile(a1: string, a2?: string): tsm.SourceFile {
   }).createSourceFile(filePath, src)
 }
 
-const getCache = memoize(() => new LRU<string, tsm.SourceFile>(200))
+const getCache = memoize(() => new LRU<string, tsm.SourceFile>({ max: 200 }))
 
 /**
  * warning: do NOT modify this file. treat it as immutable
