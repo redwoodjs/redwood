@@ -100,7 +100,7 @@ export const handler = async ({
       task: () => {
         return rimraf(rwjsPaths.web.dist)
       },
-      enabled: getConfig().web.bundler !== 'vite',
+      enabled: getConfig().web.bundler === 'webpack',
     },
     side.includes('web') && {
       title: 'Building Web...',
