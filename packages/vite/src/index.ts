@@ -214,5 +214,3 @@ export default function redwoodPluginVite(): PluginOption[] {
     }),
   ]
 }
-
-export { buildFeServer } from './buildFeServer'

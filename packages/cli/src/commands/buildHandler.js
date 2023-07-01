@@ -11,7 +11,6 @@ import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry } from '@redwoodjs/telemetry'
-import { buildFeServer } from '@redwoodjs/vite'
 
 import { getPaths, getConfig } from '../lib'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
@@ -106,32 +105,26 @@ export const handler = async ({
       title: 'Building Web...',
       task: async () => {
         if (getConfig().web.bundler !== 'webpack') {
-          if (!getConfig().experimental?.streamingSsr?.enabled) {
-            // @NOTE: we're using the vite build command here, instead of the
-            // buildWeb function directly because we want the process.cwd to be
-            // the web directory, not the root of the project.
-            // This is important for postcss/tailwind to work correctly
-            // Having a separate binary lets us contain the change of cwd to that
-            // process only. If we changed cwd here, or in the buildWeb function,
-            // it could affect other things that run in parallel while building.
-            // We don't have any parallel tasks right now, but someone might add
-            // one in the future as a performance optimization.
-            await execa(`yarn rw-vite-build --webDir="${rwjsPaths.web.base}"`, {
+          // @NOTE: we're using the vite build command here, instead of the
+          // buildWeb function directly because we want the process.cwd to be
+          // the web directory, not the root of the project.
+          // This is important for postcss/tailwind to work correctly
+          // Having a separate binary lets us contain the change of cwd to that
+          // process only. If we changed cwd here, or in the buildWeb function,
+          // it could affect other things that run in parallel while building.
+          // We don't have any parallel tasks right now, but someone might add
+          // one in the future as a performance optimization.
+          await execa(
+            `yarn rw-vite-build --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
+            {
               stdio: verbose ? 'inherit' : 'pipe',
               shell: true,
-              // This is needed for yarn to find the rw-vite-build binary
+              // `cwd` is needed for yarn to find the rw-vite-build binary
               // It won't change process.cwd for anything else here, in this
               // process
               cwd: rwjsPaths.web.base,
-            })
-          } else {
-            // TODO (STREAMING) we need to contain this in a separate binary
-            process.chdir(rwjsPaths.web.base)
-
-            // TODO (STREAMING) we need to use a binary here, so the the cwd is correct
-            // Should merge this with the existing rw-vite-build binary
-            await buildFeServer({ verbose })
-          }
+            }
+          )
         } else {
           await execa(
             `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
