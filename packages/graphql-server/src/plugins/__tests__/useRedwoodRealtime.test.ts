@@ -4,8 +4,11 @@ import {
   assertStreamExecutionValue,
 } from '@envelop/testing'
 
-import { testLiveQuery, testSchema } from '../__fixtures__/common'
-import { useRedwoodRealtime } from '../useRedwoodRealtime'
+import { testQuery, testLiveQuery, testSchema } from '../__fixtures__/common'
+import {
+  useRedwoodRealtime,
+  InMemoryLiveQueryStore,
+} from '../useRedwoodRealtime'
 
 describe('useRedwoodRealtime', () => {
   it('should support a @live query directive', async () => {
@@ -53,5 +56,68 @@ describe('useRedwoodRealtime', () => {
 
     expect(liveDirectiveOnSchema.name).toEqual('live')
     expect(replacedSchema.getDirective('live')).toMatchSnapshot()
+  })
+
+  it('with live directives, it should extend the graphQL context with a store', async () => {
+    const spiedPlugin = createSpiedPlugin()
+
+    const testkit = createTestkit(
+      [
+        useRedwoodRealtime({ liveQueries: { store: 'in-memory' } }),
+        spiedPlugin.plugin,
+      ],
+      testSchema
+    )
+
+    await testkit.execute(testQuery)
+
+    expect(spiedPlugin.spies.beforeContextBuilding).toHaveBeenCalledTimes(1)
+    expect(spiedPlugin.spies.beforeContextBuilding).toHaveBeenCalledWith({
+      context: expect.any(Object),
+      extendContext: expect.any(Function),
+      breakContextBuilding: expect.any(Function),
+    })
+
+    expect(spiedPlugin.spies.afterContextBuilding).toHaveBeenCalledTimes(1)
+    expect(spiedPlugin.spies.afterContextBuilding).toHaveBeenCalledWith({
+      context: expect.objectContaining({
+        liveQueryStore: expect.any(InMemoryLiveQueryStore),
+      }),
+      extendContext: expect.any(Function),
+    })
+  })
+
+  it('with subscriptions, it should extend the GraphQL context with pubSub transport', async () => {
+    const spiedPlugin = createSpiedPlugin()
+
+    const testkit = createTestkit(
+      [
+        useRedwoodRealtime({
+          subscriptions: { store: 'in-memory', subscriptions: [] },
+        }),
+        spiedPlugin.plugin,
+      ],
+      testSchema
+    )
+
+    await testkit.execute(testQuery)
+
+    expect(spiedPlugin.spies.beforeContextBuilding).toHaveBeenCalledTimes(1)
+    expect(spiedPlugin.spies.beforeContextBuilding).toHaveBeenCalledWith({
+      context: expect.any(Object),
+      extendContext: expect.any(Function),
+      breakContextBuilding: expect.any(Function),
+    })
+
+    expect(spiedPlugin.spies.afterContextBuilding).toHaveBeenCalledTimes(1)
+    expect(spiedPlugin.spies.afterContextBuilding).toHaveBeenCalledWith({
+      context: expect.objectContaining({
+        pubSub: expect.objectContaining({
+          publish: expect.any(Function),
+          subscribe: expect.any(Function),
+        }),
+      }),
+      extendContext: expect.any(Function),
+    })
   })
 })

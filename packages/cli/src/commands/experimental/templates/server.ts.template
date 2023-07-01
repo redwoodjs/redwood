@@ -86,7 +86,7 @@ async function serve() {
     allowIntrospection: true,
     allowGraphiQL: true,
     // Configure if using RedwoodJS Realtime
-    // realtime
+    // realtime,
   })
 
   // Start
