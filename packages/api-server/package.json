@@ -40,7 +40,7 @@
     "core-js": "3.31.0",
     "fast-glob": "3.2.12",
     "fast-json-parse": "1.0.3",
-    "fastify": "4.18.0",
+    "fastify": "4.19.0",
     "fastify-raw-body": "4.2.0",
     "lodash": "4.17.21",
     "pretty-bytes": "5.6.0",
