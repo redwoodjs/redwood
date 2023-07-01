@@ -142,6 +142,13 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.js'
+          ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -397,6 +404,13 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.js'
+          ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -700,6 +714,13 @@ describe('paths', () => {
           entryClient: null,
           entryServer: null,
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.js'
+          ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -956,6 +977,13 @@ describe('paths', () => {
             'storybook.manager.js'
           ),
           dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
+          distEntryServer: path.join(
+            FIXTURE_BASEDIR,
+            'web',
+            'dist',
+            'server',
+            'entry.server.js'
+          ),
           distRouteHooks: path.join(
             FIXTURE_BASEDIR,
             'web',
