@@ -21,7 +21,8 @@ export async function smokeTest({ page }: PlaywrightTestArgs) {
   const textBlue400 = 'rgb(96, 165, 250)'
   expect(
     await page
-      .locator('text=Redwood Blog')
+      .locator('header a')
+      .filter({ hasText: 'Redwood Blog' })
       .evaluate((e) => window.getComputedStyle(e).color)
   ).toBe(textBlue400)
 
