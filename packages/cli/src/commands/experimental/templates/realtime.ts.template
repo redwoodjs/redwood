@@ -12,18 +12,17 @@ import subscriptions from 'src/subscriptions/**/*.{js,ts}'
  *
  * See https://redwoodjs.com/docs/realtime
  *
- * RedwoodJS Realtime supports Live Queries and Subscriptions over GraphQL SSE.
+ * Realtime supports Live Queries and Subscriptions over GraphQL SSE.
  *
  * Live Queries are GraphQL queries that are automatically re-run when the data they depend on changes.
  *
  * Subscriptions are GraphQL queries that are run when a client subscribes to a channel.
  *
- * Realtime uses a publish/subscribe model to broadcast data to clients.
+ * Redwood Realtime
+ *  - uses a publish/subscribe model to broadcast data to clients.
+ *  - uses a store to persist Live Query and Subscription data.
  *
- * Realtime uses a store to persist Live Query and Subscription data.
- *
- * Realtime supports in-memory and Redis stores.
- *
+ * Redwood Realtime supports in-memory and Redis stores:
  * - In-memory stores are useful for development and testing.
  * - Redis stores are useful for production.
  *
