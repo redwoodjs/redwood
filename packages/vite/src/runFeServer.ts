@@ -95,7 +95,7 @@ export async function runFeServer() {
     const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
 
     try {
-      const { serverEntry } = await import(rwPaths.web.distEntryServer)
+      const { ServerEntry } = await import(rwPaths.web.distEntryServer)
 
       // TODO (STREAMING) should we generate individual express Routes for each Route?
       // This would make handling 404s and favicons / public assets etc. easier
@@ -124,7 +124,7 @@ export async function runFeServer() {
         const assetMap = JSON.stringify({ css: indexEntry.css })
 
         const { pipe } = renderToPipeableStream(
-          serverEntry({
+          ServerEntry({
             url: currentPathName,
             routeContext: null,
             css: indexEntry.css,
@@ -157,10 +157,22 @@ export async function runFeServer() {
       }
 
       if (currentRoute) {
+        // TODO (STREAMING) hardcoded JS file, watchout if we switch to ESM!
+        const appRouteHooksPath = path.join(
+          rwPaths.web.distRouteHooks,
+          'App.routeHooks.js'
+        )
+
+        let appRouteHooksExists = false
+        try {
+          appRouteHooksExists = (await fs.stat(appRouteHooksPath)).isFile()
+        } catch {
+          // noop
+        }
+
         // Make sure we access the dist routeHooks!
         const routeHookPaths = [
-          // TODO (STREAMING) hardcoded JS file, watchout if we switch to ESM!
-          path.join(rwPaths.web.distRouteHooks, 'App.routeHooks.js'),
+          appRouteHooksExists ? appRouteHooksPath : null,
           currentRoute.routeHooks
             ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
             : null,
@@ -192,7 +204,7 @@ export async function runFeServer() {
 
       const { pipe, abort } = renderToPipeableStream(
         // we should use the same shape as Remix or Next for the meta object
-        serverEntry({
+        ServerEntry({
           url: currentPathName,
           css: indexEntry.css,
           meta: metaTags,

@@ -106,7 +106,7 @@ async function createServer() {
       // 3. Load the server entry. vite.ssrLoadModule automatically transforms
       //    your ESM source code to be usable in Node.js! There is no bundling
       //    required, and provides efficient invalidation similar to HMR.
-      const { serverEntry } = await vite.ssrLoadModule(rwPaths.web.entryServer)
+      const { ServerEntry } = await vite.ssrLoadModule(rwPaths.web.entryServer)
 
       // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
       // worry about it in dev but..... it causes a flash of unstyled content.
@@ -132,7 +132,7 @@ async function createServer() {
       }
 
       const { pipe } = renderToPipeableStream(
-        serverEntry({
+        ServerEntry({
           url: currentPathName,
           css: FIXME_HardcodedIndexCss,
           meta: metaTags,
