@@ -38,6 +38,8 @@ export {
   liveDirectiveTypeDefs,
   RedisLiveQueryStore,
   RedwoodRealtimeOptions,
+  PublishClientType,
+  SubscribeClientType,
 } from './plugins/useRedwoodRealtime'
 
 export type { PubSub } from './plugins/useRedwoodRealtime'

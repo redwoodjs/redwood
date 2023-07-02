@@ -3,6 +3,7 @@ import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
 import { createRedisEventTarget } from '@graphql-yoga/redis-event-target'
+import type { CreateRedisEventTargetArgs } from '@graphql-yoga/redis-event-target'
 import type { PubSub } from '@graphql-yoga/subscription'
 import { createPubSub } from '@graphql-yoga/subscription'
 import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
@@ -23,6 +24,9 @@ export type LiveQueryStorageMechanism =
   | RedisLiveQueryStore
   | InMemoryLiveQueryStore
 
+export type PublishClientType = CreateRedisEventTargetArgs['publishClient']
+export type SubscribeClientType = CreateRedisEventTargetArgs['subscribeClient']
+
 export type RedwoodRealtimeOptions = {
   liveQueries?: {
     store:
@@ -30,8 +34,8 @@ export type RedwoodRealtimeOptions = {
       | {
           redis: {
             channel?: string
-            publishClient: LiveQueryRedisClient
-            subscribeClient: LiveQueryRedisClient
+            publishClient: PublishClientType
+            subscribeClient: SubscribeClientType
           }
         }
   }
@@ -44,38 +48,23 @@ export type RedwoodRealtimeOptions = {
       | 'in-memory'
       | {
           redis: {
-            publishClient: LiveQueryRedisClient
-            subscribeClient: LiveQueryRedisClient
+            publishClient: PublishClientType
+            subscribeClient: SubscribeClientType
           }
         }
     subscriptions: SubscriptionGlobImports
   }
 }
 
-export interface LiveQueryRedisClient {
-  connect(): Promise<void>
-  set(key: string, value: string): Promise<void | string>
-  get(key: string): Promise<string | null>
-  publish(channel: string, message: string): Promise<number>
-  subscribe(
-    channel: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    callback: (...args: any[]) => void
-  ): Promise<void | unknown>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  on(event: string, callback: (...args: any[]) => void): void
-  // Add other methods that you need
-}
-
 export class RedisLiveQueryStore {
-  pub: LiveQueryRedisClient
-  sub: LiveQueryRedisClient
+  pub: PublishClientType
+  sub: SubscribeClientType
   channel: string
   liveQueryStore: InMemoryLiveQueryStore
 
   constructor(
-    pub: LiveQueryRedisClient,
-    sub: LiveQueryRedisClient,
+    pub: PublishClientType,
+    sub: SubscribeClientType,
     channel: string,
     liveQueryStore: InMemoryLiveQueryStore
   ) {
