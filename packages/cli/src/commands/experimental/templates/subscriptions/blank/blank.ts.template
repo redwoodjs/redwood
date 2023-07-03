@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import type { PubSub } from '@redwoodjs/graphql-server'
+
 import { logger } from 'src/lib/logger'
 
 export const schema = gql`
@@ -7,11 +9,12 @@ export const schema = gql`
     ${subscriptionName}(id: ID!): ${typeName}!
   }
 `
-// Be sure to import this type and then in `api/src/lib/realtime.ts` extend PubSubChannels:
-// export type PubSubChannels = ExistingChannel<string> & Publish${typeName}Channel
+
 export type Publish${typeName}Channel = {
   ${typeName}: [id: string, payload: { from: string; body: string }]
 }
+
+export type Publish${typeName}ChannelType = PubSub<Publish${typeName}Channel>
 
 /**
  * To test this ${typeName} subscription, run the following in one GraphQL Playground to subscribe:
@@ -35,7 +38,11 @@ export type Publish${typeName}Channel = {
  */
 const ${subscriptionName}Subscription = {
   ${subscriptionName}: {
-    subscribe: (_, { id }, { pubSub }) => {
+    subscribe: (
+      _,
+      { id },
+      { pubSub }: { pubSub: Publish${typeName}ChannelType }
+    ) => {
       logger.debug({ id }, '${name} subscription')
 
       return pubSub.subscribe('${typeName}', id)
