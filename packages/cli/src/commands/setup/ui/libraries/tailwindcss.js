@@ -59,7 +59,7 @@ const tailwindImportsAndNotes = [
 
 export const handler = async ({ force, install }) => {
   recordTelemetryAttributes({
-    command: ['setup', 'ui', 'tailwindcss'].join(' '),
+    command: 'setup ui tailwindcss',
     force,
     install,
   })

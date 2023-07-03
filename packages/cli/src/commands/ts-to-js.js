@@ -11,7 +11,7 @@ export const description =
 
 export const handler = () => {
   recordTelemetryAttributes({
-    command,
+    command: 'ts-to-js',
   })
   convertTsProjectToJs(getPaths().base)
   convertTsScriptsToJs(getPaths().base)

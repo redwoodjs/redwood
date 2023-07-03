@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import type { PubSub } from '@redwoodjs/graphql-server'
+
 import { logger } from 'src/lib/logger'
 
 export const schema = gql`
@@ -7,9 +9,11 @@ export const schema = gql`
     newMessage(roomId: ID!): Message!
   }
 `
-export type NewMessageChannel<T extends string> = {
-  [Key in `newMessage:${T}`]: [payload: { from: string; body: string }]
+export type NewMessageChannel = {
+  newMessage: [roomId: string, payload: { from: string; body: string }]
 }
+
+export type NewMessageChannelType = PubSub<NewMessageChannel>
 
 /**
  * To test this NewMessage subscription, run the following in one GraphQL Playground to subscribe:
@@ -33,10 +37,14 @@ export type NewMessageChannel<T extends string> = {
  */
 const newMessage = {
   newMessage: {
-    subscribe: (_, { roomId }, { pubSub }) => {
+    subscribe: (
+      _,
+      { roomId },
+      { pubSub }: { pubSub: NewMessageChannelType }
+    ) => {
       logger.debug({ roomId }, 'newMessage subscription')
 
-      return pubSub.subscribe(`newMessage:${roomId}`)
+      return pubSub.subscribe('newMessage', roomId)
     },
     resolve: (payload) => {
       logger.debug({ payload }, 'newMessage subscription resolve')

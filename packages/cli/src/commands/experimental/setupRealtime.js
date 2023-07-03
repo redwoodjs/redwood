@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getEpilogue } from './util'
 
 export const EXPERIMENTAL_TOPIC_ID = 5002
@@ -31,6 +33,12 @@ export function builder(yargs) {
 }
 
 export async function handler(options) {
+  recordTelemetryAttributes({
+    command: 'experimental setup-realtime',
+    includeExamples: options.includeExamples,
+    force: options.force,
+    verbose: options.verbose,
+  })
   const { handler } = await import('./setupRealtimeHandler.js')
   return handler(options)
 }

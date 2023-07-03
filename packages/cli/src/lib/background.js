@@ -20,14 +20,27 @@ export function spawnBackgroundProcess(name, cmd, args) {
 
   const safeName = name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
 
+  const logHeader = [
+    `Starting log:`,
+    ` - Time: ${new Date().toISOString()}`,
+    ` - Name: ${name} (${safeName})`,
+    ` - Command: ${cmd}`,
+    ` - Arguments: ${args.join(' ')}`,
+    '',
+    '',
+  ].join('\n')
+
   const stdout = fs.openSync(
     path.join(logDirectory, `${safeName}.out.log`),
     'w'
   )
+  fs.writeSync(stdout, logHeader)
+
   const stderr = fs.openSync(
     path.join(logDirectory, `${safeName}.err.log`),
     'w'
   )
+  fs.writeSync(stderr, logHeader)
 
   // We must account for some platform specific behaviour
   const spawnOptions =

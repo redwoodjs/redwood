@@ -22,6 +22,11 @@ import {
 export function fixProjectBinaries(projectPath) {
   const bins = getFrameworkPackagesBins()
 
+  // Read the existing package.json scripts
+  const packageJsonPath = path.join(projectPath, 'package.json')
+  const packageJson = fs.readJSONSync(packageJsonPath)
+  const scripts = packageJson.scripts ?? {}
+
   for (let [binName, binPath] of Object.entries(bins)) {
     // if the binPath doesn't exist, create it.
     const binSymlink = path.join(projectPath, 'node_modules/.bin', binName)
@@ -49,7 +54,32 @@ export function fixProjectBinaries(projectPath) {
     console.log('chmod +x', terminalLink(binName, binPath))
     fs.chmodSync(binSymlink, '755')
     fs.chmodSync(binPath, '755')
+
+    // Finally we need to add all bins as scripts to the project's package.json
+    // otherwise newly added bins won't work.
+    //
+    // From a yarn maintainer:
+    // > The node_modules/.bin folder is pretty much unused by Yarn, and is
+    // > only there for compatibility purpose with the tools that expect it to
+    // > exist.
+    // https://github.com/yarnpkg/berry/issues/2416#issuecomment-768271751
+    //
+    // Adding them as scripts works around this issue
+
+    let posixPath = binPath
+
+    // When writing windows paths to package.json, we need to convert them to
+    // posix paths (or double-escape them).
+    if (process.platform === 'win32') {
+      posixPath = posixPath.replace(/\\/g, '/')
+    }
+
+    scripts[binName] = `node ${posixPath}`
   }
+
+  // Write the updated project.json which includes the full list of scripts.
+  packageJson.scripts = scripts
+  fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 })
 }
 
 /**
@@ -116,8 +146,7 @@ export async function copyFrameworkFilesToProject(
   projectPath,
   packageJsonPaths = getFrameworkPackageJsonPaths()
 ) {
-  // Loop over every package, delete all existing files, copy over the new files,
-  // and fix binaries.
+  // Loop over every package, delete all existing files and copy over the new files
   const packagesFiles = await getFrameworkPackagesFiles(packageJsonPaths)
 
   const packageNamesToPaths = packageJsonPaths.reduce(

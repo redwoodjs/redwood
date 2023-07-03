@@ -99,20 +99,32 @@ export const handler = async ({
       task: () => {
         return rimraf(rwjsPaths.web.dist)
       },
-      enabled: getConfig().web.bundler !== 'vite',
+      enabled: getConfig().web.bundler === 'webpack',
     },
     side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
         if (getConfig().web.bundler !== 'webpack') {
-          // @NOTE: we're using the vite build command here, instead of the buildWeb function
-          // because we want the process.cwd to be the web directory, not the root of the project
+          // @NOTE: we're using the vite build command here, instead of the
+          // buildWeb function directly because we want the process.cwd to be
+          // the web directory, not the root of the project.
           // This is important for postcss/tailwind to work correctly
-          await execa(`yarn rw-vite-build`, {
-            stdio: verbose ? 'inherit' : 'pipe',
-            shell: true,
-            cwd: rwjsPaths.web.base, // <-- important for postcss/tailwind
-          })
+          // Having a separate binary lets us contain the change of cwd to that
+          // process only. If we changed cwd here, or in the buildWeb function,
+          // it could affect other things that run in parallel while building.
+          // We don't have any parallel tasks right now, but someone might add
+          // one in the future as a performance optimization.
+          await execa(
+            `yarn rw-vite-build --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
+            {
+              stdio: verbose ? 'inherit' : 'pipe',
+              shell: true,
+              // `cwd` is needed for yarn to find the rw-vite-build binary
+              // It won't change process.cwd for anything else here, in this
+              // process
+              cwd: rwjsPaths.web.base,
+            }
+          )
         } else {
           await execa(
             `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(

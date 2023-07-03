@@ -104,7 +104,7 @@ export const { command, description, builder } =
 
 export const handler = async (args) => {
   recordTelemetryAttributes({
-    command: ['generate', 'directive'].join(' '),
+    command: 'generate directive',
     type: args.type,
     force: args.force,
     rollback: args.rollback,
@@ -175,7 +175,7 @@ export const handler = async (args) => {
             })
           }, true)
           return execa('yarn rw-gen', [], {
-            stdio: 'pipe',
+            stdio: 'inherit',
             shell: true,
           })
         },

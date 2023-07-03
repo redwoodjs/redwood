@@ -39,6 +39,7 @@ export const createGraphQLHandler = ({
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
+  openTelemetryOptions,
 }: GraphQLHandlerOptions) => {
   const handlerFn = async (
     event: APIGatewayProxyEvent,
@@ -69,6 +70,7 @@ export const createGraphQLHandler = ({
       defaultError,
       graphiQLEndpoint,
       schemaOptions,
+      openTelemetryOptions,
     })
 
     try {

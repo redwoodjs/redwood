@@ -14,7 +14,7 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: ['setup', 'webpack'].join(' '),
+    command: 'setup webpack',
     force: options.force,
   })
   const { handler } = await import('./webpackHandler.js')

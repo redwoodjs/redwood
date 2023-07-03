@@ -39,7 +39,16 @@ async function main() {
     console.log(`Sending data from telemetry file '${file}'`)
 
     // Read the saved spans
-    const spans = fs.readJSONSync(path.join(telemetryDir, file))
+    let spans = []
+    try {
+      spans = fs.readJSONSync(path.join(telemetryDir, file))
+    } catch (error) {
+      console.error(`Error reading telemetry file '${file}'`)
+      console.error(error)
+      console.error('Deleting this file to prevent further errors')
+      fs.unlinkSync(path.join(telemetryDir, file))
+      continue
+    }
 
     /**
      * We have to fix some of the span properties because we serialized the span
@@ -104,4 +113,5 @@ async function main() {
     })
   }
 }
+
 main()

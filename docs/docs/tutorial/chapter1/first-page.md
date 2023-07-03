@@ -8,10 +8,10 @@ yarn redwood generate page home /
 
 The command above does four things:
 
-- Creates `web/src/pages/HomePage/HomePage.{js,tsx}`. Redwood takes the name you specified as the first argument after `page` and [PascalCases](https://techterms.com/definition/pascalcase) it, then appends "Page" to construct your new page component. So "home" becomes "HomePage".
-- Creates a test file to go along with this new page component at `web/src/pages/HomePage/HomePage.test.{js,tsx}` with a single, passing test. You _do_ write tests for your components, _don't you??_
-- Creates a Storybook file for this component at `web/src/pages/HomePage/HomePage.stories.{js,tsx}`. Storybook is a wonderful tool for efficiently developing and organizing UI components. (If you want to take a peek ahead, we learn about Storybook in [chapter 5 of the tutorial](../chapter5/storybook.md)).
-- Adds a `<Route>` in `web/src/Routes.{js,tsx}` that maps the path `/` to the new _HomePage_ page.
+- Creates `web/src/pages/HomePage/HomePage.{jsx,tsx}`. Redwood takes the name you specified as the first argument after `page` and [PascalCases](https://techterms.com/definition/pascalcase) it, then appends "Page" to construct your new page component. So "home" becomes "HomePage".
+- Creates a test file to go along with this new page component at `web/src/pages/HomePage/HomePage.test.{jsx,tsx}` with a single, passing test. You _do_ write tests for your components, _don't you??_
+- Creates a Storybook file for this component at `web/src/pages/HomePage/HomePage.stories.{jsx,tsx}`. Storybook is a wonderful tool for efficiently developing and organizing UI components. (If you want to take a peek ahead, we learn about Storybook in [chapter 5 of the tutorial](../chapter5/storybook.md)).
+- Adds a `<Route>` in `web/src/Routes.{jsx,tsx}` that maps the path `/` to the new _HomePage_ page.
 
 :::info Automatic import of pages in the Routes file
 
@@ -27,12 +27,12 @@ It's not pretty, but it's a start! Open the page in your editor, change some tex
 
 ### Routing
 
-Open up `web/src/Routes.{js,tsx}` and take a look at the route that was created:
+Open up `web/src/Routes.{jsx,tsx}` and take a look at the route that was created:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 import { Router, Route } from '@redwoodjs/router'
 
 const Routes = () => {
