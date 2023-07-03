@@ -6,7 +6,7 @@ import { logger } from 'src/lib/logger'
 
 export const schema = gql`
   type Subscription {
-    ${subscriptionName}(id: ID!): ${typeName}!
+    ${subscriptionName}(id: ID!): ${typeName}! @requireAuth
   }
 `
 
