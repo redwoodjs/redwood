@@ -113,7 +113,7 @@ const rebuildApiServer = () => {
 
     // Check if experimental server file exists
     const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
-    if (serverFile) {
+    if (serverFile && getConfig().experimental?.serverFile?.enabled) {
       const separator = chalk.hex('#ff845e')(
         '------------------------------------------------------------------'
       )

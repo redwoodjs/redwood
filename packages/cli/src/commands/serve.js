@@ -63,7 +63,10 @@ export const builder = async (yargs) => {
         }
 
         // Run the experimental server file, if it exists, with web side also
-        if (hasExperimentalServerFile()) {
+        if (
+          hasExperimentalServerFile() &&
+          getConfig().experimental?.serverFile?.enabled
+        ) {
           console.log(
             [
               separator,
@@ -118,7 +121,10 @@ export const builder = async (yargs) => {
         })
 
         // Run the experimental server file, if it exists, api side only
-        if (hasExperimentalServerFile()) {
+        if (
+          hasExperimentalServerFile() &&
+          getConfig().experimental?.serverFile?.enabled
+        ) {
           console.log(
             [
               separator,

@@ -107,6 +107,9 @@ export interface Config {
     streamingSsr: {
       enabled: boolean
     }
+    serverFile: {
+      enabled: boolean
+    }
   }
 }
 
@@ -181,6 +184,9 @@ const DEFAULT_CONFIG: Config = {
     },
     useSDLCodeGenForGraphQLTypes: false,
     streamingSsr: {
+      enabled: false,
+    },
+    serverFile: {
       enabled: false,
     },
   },
