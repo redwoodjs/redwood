@@ -43,13 +43,13 @@ Don't worry about trying to memorize this directory structure right now, it's ju
         ├── layouts
         ├── pages
         │   ├── FatalErrorPage
-        │   │   └── FatalErrorPage.js
+        │   │   └── FatalErrorPage.jsx
         │   └── NotFoundPage
-        │       └── NotFoundPage.js
-        ├── App.js
+        │       └── NotFoundPage.jsx
+        ├── App.jsx
         ├── index.css
         ├── index.html
-        └── Routes.js
+        └── Routes.jsx
 ```
 
 </TabItem>
@@ -141,11 +141,11 @@ That's it for the backend.
   - `components` contains your traditional React components as well as Redwood _Cells_ (more about those soon).
   - `layouts` contain HTML/components that wrap your content and are shared across _Pages_.
   - `pages` contain components and are optionally wrapped inside _Layouts_ and are the "landing page" for a given URL (a URL like `/articles/hello-world` will map to one page and `/contact-us` will map to another). There are two pages included in a new app:
-    - `NotFoundPage.{js,tsx}` will be served when no other route is found (see `Routes.{js,tsx}` below).
-    - `FatalErrorPage.{js,tsx}` will be rendered when there is an uncaught error that can't be recovered from and would otherwise cause our application to really blow up (normally rendering a blank page).
-  - `App.{js,tsx}` the bootstrapping code to get our Redwood app up and running.
+    - `NotFoundPage.{jsx,tsx}` will be served when no other route is found (see `Routes.{jsx,tsx}` below).
+    - `FatalErrorPage.{jsx,tsx}` will be rendered when there is an uncaught error that can't be recovered from and would otherwise cause our application to really blow up (normally rendering a blank page).
+  - `App.{jsx,tsx}` the bootstrapping code to get our Redwood app up and running.
   - `index.css` is a good starting place for custom CSS, but there are many options (we like [TailwindCSS](https://tailwindcss.com/) which, believe it or not, may not require you to write any custom CSS for the life of your app!)
   - `index.html` is the standard React starting point for our app.
-  - `Routes.{js,tsx}` the route definitions for our app which map a URL to a _Page_.
+  - `Routes.{jsx,tsx}` the route definitions for our app which map a URL to a _Page_.
 
 We'll dip in and out of these directories and files (and create some new ones) as we work through the tutorial.

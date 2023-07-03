@@ -18,7 +18,7 @@ export async function handler({ force: forceArg }: Args) {
       "import { authDecoder } from '@redwoodjs/auth-firebase-api'",
     webPackages: ['firebase@^9', `@redwoodjs/auth-firebase-web@${version}`],
     apiPackages: [
-      'firebase-admin@^10',
+      'firebase-admin@11.9.0',
       `@redwoodjs/auth-firebase-api@${version}`,
     ],
     notes: [
@@ -35,7 +35,7 @@ export async function handler({ force: forceArg }: Args) {
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
-      '  "FIREBASE_API_KEY"',
+      '  "FIREBASE_API_KEY",',
       '  "FIREBASE_AUTH_DOMAIN"',
       ']',
       '```',

@@ -375,7 +375,7 @@ const tasks = ({
 
 export const handler = async (yargs) => {
   recordTelemetryAttributes({
-    command: ['generate', 'dbAuth'].join(' '),
+    command: 'generate dbAuth',
     skipForgot: yargs.skipForgot,
     skipLogin: yargs.skipLogin,
     skipReset: yargs.skipReset,

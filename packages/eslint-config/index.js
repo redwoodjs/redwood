@@ -57,6 +57,7 @@ module.exports = {
             ignoreNonDOM: true,
           },
         ],
+        '@redwoodjs/unsupported-route-components': 'error',
       },
     },
     // `api` side
@@ -69,6 +70,13 @@ module.exports = {
       globals: {
         gql: 'readonly',
         context: 'readonly',
+      },
+    },
+    {
+      files: ['api/src/services/**/*.ts'],
+      plugins: ['@redwoodjs'],
+      rules: {
+        '@redwoodjs/service-type-annotations': 'off',
       },
     },
     {

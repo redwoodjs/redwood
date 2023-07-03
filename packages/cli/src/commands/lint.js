@@ -31,7 +31,7 @@ export const builder = (yargs) => {
 
 export const handler = async ({ path, fix }) => {
   recordTelemetryAttributes({
-    command,
+    command: 'lint',
     fix,
   })
 

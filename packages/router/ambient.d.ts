@@ -14,6 +14,11 @@ declare global {
    **/
   var RWJS_API_URL: string
 
+  /**
+   * Is the experimental Streaming/SSR feature enabled?
+   */
+  var RWJS_EXP_STREAMING_SSR: boolean
+
   namespace NodeJS {
     interface Global {
       /**

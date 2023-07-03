@@ -18,31 +18,24 @@ function hasExperimentalServerFile() {
   return fs.existsSync(serverFilePath)
 }
 
-export async function builder(yargs) {
-  const redwoodProjectPaths = getPaths()
-  const redwoodProjectConfig = getConfig()
-
+export const builder = async (yargs) => {
   yargs
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      description: 'Run both api and web servers. Uses the web port and host',
+      description: 'Run both api and web servers',
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port,
+            default: getConfig().web?.port || 8910,
             type: 'number',
             alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
           },
           socket: { type: 'string' },
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
@@ -59,20 +52,52 @@ export async function builder(yargs) {
               separator,
             ].join('\n')
           )
-          await execa(
-            'yarn',
-            ['node', path.join('dist', 'server.js'), '--enable-web'],
-            {
-              cwd: redwoodProjectPaths.api.base,
+          if (getConfig().experimental?.streamingSsr?.enabled) {
+            console.warn('')
+            console.warn('⚠️ Skipping Fastify web server ⚠️')
+            console.warn('⚠️ Using new Streaming FE server instead ⚠️')
+            console.warn('')
+            await execa('yarn', ['rw-serve-fe'], {
+              cwd: getPaths().web.base,
               stdio: 'inherit',
               shell: true,
-            }
-          )
+            })
+          } else {
+            await execa(
+              'yarn',
+              ['node', path.join('dist', 'server.js'), '--enable-web'],
+              {
+                cwd: getPaths().api.base,
+                stdio: 'inherit',
+                shell: true,
+              }
+            )
+          }
           return
         }
 
-        const { bothServerHandler } = await import('./serveHandler.js')
-        await bothServerHandler(argv)
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          const { apiServerHandler } = await import('./serveHandler.js')
+          // TODO (STREAMING) Allow specifying port, socket and apiRootPath
+          const apiPromise = apiServerHandler({
+            ...argv,
+            port: 8911,
+            apiRootPath: '/',
+          })
+
+          // TODO (STREAMING) More gracefully handle Ctrl-C
+          // Right now you get a big red error box when you kill the process
+          const fePromise = execa('yarn', ['rw-serve-fe'], {
+            cwd: getPaths().web.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+
+          await Promise.all([apiPromise, fePromise])
+        } else {
+          const { bothServerHandler } = await import('./serveHandler.js')
+          await bothServerHandler(argv)
+        }
       },
     })
     .command({
@@ -81,13 +106,9 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.api.port,
+            default: getConfig().api?.port || 8911,
             type: 'number',
             alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.api.host,
-            type: 'string',
           },
           socket: { type: 'string' },
           apiRootPath: {
@@ -100,7 +121,7 @@ export async function builder(yargs) {
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
@@ -119,7 +140,7 @@ export async function builder(yargs) {
             ].join('\n')
           )
           await execa('yarn', ['node', path.join('dist', 'server.js')], {
-            cwd: redwoodProjectPaths.api.base,
+            cwd: getPaths().api.base,
             stdio: 'inherit',
             shell: true,
           })
@@ -136,13 +157,9 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port,
+            default: getConfig().web?.port || 8910,
             type: 'number',
             alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
           },
           socket: { type: 'string' },
           apiHost: {
@@ -153,24 +170,36 @@ export async function builder(yargs) {
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
           apiHost: argv.apiHost,
         })
 
-        const { webServerHandler } = await import('./serveHandler.js')
-        await webServerHandler(argv)
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          await execa('yarn', ['rw-serve-fe'], {
+            cwd: getPaths().web.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+        } else {
+          const { webServerHandler } = await import('./serveHandler.js')
+          await webServerHandler(argv)
+        }
       },
     })
     .middleware((argv) => {
+      recordTelemetryAttributes({
+        command: 'serve',
+      })
+
       // Make sure the relevant side has been built, before serving
       const positionalArgs = argv._
 
       if (
         positionalArgs.includes('web') &&
-        !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html')
+        !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
       ) {
         console.error(
           c.error(
@@ -182,7 +211,7 @@ export async function builder(yargs) {
 
       if (
         positionalArgs.includes('api') &&
-        !fs.existsSync(path.join(redwoodProjectPaths.api.dist))
+        !fs.existsSync(path.join(getPaths().api.dist))
       ) {
         console.error(
           c.error(
@@ -195,8 +224,8 @@ export async function builder(yargs) {
       if (
         // serve both
         positionalArgs.length === 1 &&
-        (!fs.existsSync(path.join(redwoodProjectPaths.api.dist)) ||
-          !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html'))
+        (!fs.existsSync(path.join(getPaths().api.dist)) ||
+          !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
       ) {
         console.error(
           c.error(

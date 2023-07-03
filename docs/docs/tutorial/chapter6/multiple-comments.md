@@ -41,7 +41,7 @@ Let's update the `Success` component to use the `Comment` component created earl
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.jsx"
 // highlight-next-line
 import Comment from 'src/components/Comment'
 
@@ -196,7 +196,7 @@ Since `CommentsCell` is the one responsible for drawing multiple comments, it ma
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.jsx"
 export const Success = ({ comments }) => {
   return (
     // highlight-next-line
@@ -241,7 +241,7 @@ Looking good! Let's add our CommentsCell to the actual blog post display page:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 import { Link, routes } from '@redwoodjs/router'
 // highlight-next-line
 import CommentsCell from 'src/components/CommentsCell'
@@ -329,7 +329,7 @@ Let's add a gap between the two:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 const Article = ({ article, summary = false }) => {
   return (
     <article>
@@ -404,12 +404,12 @@ The actual `Comment` component does most of the work so there's no need to test 
 * Has a failure message
 * When it renders successfully, it outputs as many comments as were returned by the `QUERY` (*what* is rendered we'll leave to the `Comment` tests)
 
-The default `CommentsCell.test.{js,tsx}` actually tests every state for us, albeit at an absolute minimum level—it makes sure no errors are thrown:
+The default `CommentsCell.test.{jsx,tsx}` actually tests every state for us, albeit at an absolute minimum level—it makes sure no errors are thrown:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.test.jsx"
 import { render } from '@redwoodjs/testing/web'
 
 import { Loading, Empty, Failure, Success } from './CommentsCell'
@@ -488,7 +488,7 @@ But in this case we can do a little more to make sure `CommentsCell` is doing wh
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.test.jsx"
 // highlight-next-line
 import { render, screen } from '@redwoodjs/testing/web'
 
@@ -585,7 +585,7 @@ Let's add two additional tests for our new functionality:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.test.js"
+```jsx title="web/src/components/Article/Article.test.jsx"
 // highlight-start
 import { render, screen, waitFor } from '@redwoodjs/testing'
 
