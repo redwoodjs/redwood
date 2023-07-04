@@ -12,7 +12,7 @@ import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import isbot from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
-import type { Manifest as ViteManifest } from 'vite'
+import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
@@ -50,12 +50,28 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
+  // TODO When https://github.com/tc39/proposal-import-attributes and
+  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
+  // should try to do this instead:
+  // const routeManifest: RWRouteManifest = await import(
+  //   rwPaths.web.routeManifest, { with: { type: 'json' } }
+  // )
+  // NOTES:
+  //  * There's a related babel plugin here
+  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
+  //     * Included in `preset-env` if you set `shippedProposals: true`
+  //  * We had this before, but with `assert` instead of `with`. We really
+  //    should be using `with`. See motivation in issues linked above.
+  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
+  //    code compiled and ran properly, but Jest tests failed, complaining
+  //    about the syntax.
   const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
   const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
+  // TODO See above about using `import { with: { type: 'json' } }` instead
   const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const buildManifest: ViteManifest = JSON.parse(buildManifestStr)
+  const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
   const indexEntry = Object.values(buildManifest).find((manifestItem) => {
     return manifestItem.isEntry
