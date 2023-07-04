@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-/// <reference types="react/next" />
+/// <reference types="react/canary" />
 
 declare global {
   var RWJS_ENV: {
