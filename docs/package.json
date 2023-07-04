@@ -30,8 +30,8 @@
     "@docusaurus/theme-common": "2.4.1",
     "@mdx-js/react": "1.6.22",
     "clsx": "1.2.1",
-    "react": "18.3.0-canary-535c038d1-20230522",
-    "react-dom": "18.3.0-canary-535c038d1-20230522",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-player": "2.12.0"
   },
   "devDependencies": {
