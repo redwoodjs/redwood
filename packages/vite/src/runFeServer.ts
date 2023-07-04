@@ -50,9 +50,25 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
+  // TODO When https://github.com/tc39/proposal-import-attributes and
+  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
+  // should try to do this instead:
+  // const routeManifest: RWRouteManifest = await import(
+  //   rwPaths.web.routeManifest, { with: { type: 'json' } }
+  // )
+  // NOTES:
+  //  * There's a related babel plugin here
+  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
+  //     * Included in `preset-env` if you set `shippedProposals: true`
+  //  * We had this before, but with `assert` instead of `with`. We really
+  //    should be using `with`. See motivation in issues linked above.
+  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
+  //    code compiled and ran properly, but Jest tests failed, complaining
+  //    about the syntax.
   const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
   const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
+  // TODO See above about using `import { with: { type: 'json' } }` instead
   const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const buildManifest: ViteManifest = JSON.parse(buildManifestStr)
