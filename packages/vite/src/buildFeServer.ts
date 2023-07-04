@@ -2,7 +2,7 @@ import fs from 'fs/promises'
 import path from 'path'
 
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
-import type { Manifest as ViteManifest } from 'vite'
+import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
 import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
@@ -29,7 +29,9 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
 
   if (!rwPaths.web.entryServer || !rwPaths.web.entryClient) {
     throw new Error(
-      'Vite entry points not found. Please check that your project has an entry-client.{jsx,tsx} and entry-server.{jsx,tsx} file in the web/src directory.'
+      'Vite entry points not found. Please check that your project has an ' +
+        'entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in the ' +
+        'web/src directory.'
     )
   }
 
@@ -94,9 +96,26 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   })
 
   // Step 3: Generate route-manifest.json
+
+  // TODO When https://github.com/tc39/proposal-import-attributes and
+  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
+  // should try to do this instead:
+  // const clientBuildManifest: ViteBuildManifest = await import(
+  //   path.join(getPaths().web.dist, 'build-manifest.json'),
+  //   { with: { type: 'json' } }
+  // )
+  // NOTES:
+  //  * There's a related babel plugin here
+  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
+  //     * Included in `preset-env` if you set `shippedProposals: true`
+  //  * We had this before, but with `assert` instead of `with`. We really
+  //    should be using `with`. See motivation in issues linked above.
+  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
+  //    code compiled and ran properly, but Jest tests failed, complaining
+  //    about the syntax.
   const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const clientBuildManifest: ViteManifest = JSON.parse(buildManifestStr)
+  const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
   const routesList = getProjectRoutes()
 
