@@ -1214,9 +1214,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tremor/react@npm:3.2.3":
-  version: 3.2.3
-  resolution: "@tremor/react@npm:3.2.3"
+"@tremor/react@npm:3.4.1":
+  version: 3.4.1
+  resolution: "@tremor/react@npm:3.4.1"
   dependencies:
     "@floating-ui/react": ^0.19.1
     "@headlessui/react": ^1.7.14
@@ -1229,7 +1229,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ">=16.6.0"
-  checksum: 7bcee5207a6c3f7655552bf74015fc4bac0e012760ca08089a8f4d9da58087b2f0255a422c98439d1891d13abfbc4368be2a9dd317c4678db4280ad59808ff4e
+  checksum: 127b6b19ca22ad830aae153b0f3ef7f34962d7e29e85201ac9b6a4cecf8049da5ede53a8a050718e3b2ccb7e54f259ed54dc95f99c37a291ff5b50fb1ef1f98f
   languageName: node
   linkType: hard
 
@@ -2381,15 +2381,15 @@ __metadata:
     "@nivo/tooltip": 0.83.0
     "@nivo/treemap": 0.83.0
     "@tailwindcss/forms": 0.5.3
-    "@tremor/react": 3.2.3
+    "@tremor/react": 3.4.1
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     "@types/react-grid-layout": 1
     "@vitejs/plugin-react": 4.0.1
     autoprefixer: 10.4.14
     graphiql: 2.4.7
-    graphql: 16.6.0
-    graphql-scalars: 1.21.3
+    graphql: 16.7.1
+    graphql-scalars: 1.22.2
     json-bigint-patch: 0.0.8
     postcss: 8.4.24
     pretty-ms: 7.0.0
@@ -2593,14 +2593,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-scalars@npm:1.21.3":
-  version: 1.21.3
-  resolution: "graphql-scalars@npm:1.21.3"
+"graphql-scalars@npm:1.22.2":
+  version: 1.22.2
+  resolution: "graphql-scalars@npm:1.22.2"
   dependencies:
     tslib: ^2.5.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: f9b29d403f02f98c29b4eb6505b0099b54c093d7a34d7028e310c4ed4991abedca4e05a6fdb67f820b10b0e09992244aefc3fc183e3d19cf73643183fc20d4d9
+  checksum: 8ba7e0e2ea90a0067cdbffcd67a8ff486ce4accceabe15a5b9bc7749204ea3ce31630619d9069153147661a885118e93983582b3914c982fa48f09c18edacdad
   languageName: node
   linkType: hard
 
@@ -2615,10 +2615,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.6.0":
-  version: 16.6.0
-  resolution: "graphql@npm:16.6.0"
-  checksum: 3a2c15ff58b69d017618d2b224fa6f3c4a7937e1f711c3a5e0948db536b4931e6e649560b53de7cc26735e027ceea6e2d0a6bb7c29fc4639b290313e3aa71618
+"graphql@npm:16.7.1":
+  version: 16.7.1
+  resolution: "graphql@npm:16.7.1"
+  checksum: 0b4e83382bf3cb9c82ddf61a51aab382c4de50c34025173285c580135fe8646aa281c264fcf0c2214ae92ea925742d86999fe5e2ad842b6f3b54a9ffb0b299d2
   languageName: node
   linkType: hard
 
