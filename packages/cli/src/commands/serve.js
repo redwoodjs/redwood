@@ -9,14 +9,10 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
+import { isUsingExperimentalServerFile } from '../lib/experimental'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
-
-function hasExperimentalServerFile() {
-  const serverFilePath = path.join(getPaths().api.dist, 'server.js')
-  return fs.existsSync(serverFilePath)
-}
 
 const streamServerErrorHandler = () => {
   console.error('⚠️  Experimental Render Mode ~ Cannot serve the web side ⚠️')
@@ -63,10 +59,7 @@ export const builder = async (yargs) => {
         }
 
         // Run the experimental server file, if it exists, with web side also
-        if (
-          hasExperimentalServerFile() &&
-          getConfig().experimental?.serverFile?.enabled
-        ) {
+        if (isUsingExperimentalServerFile()) {
           console.log(
             [
               separator,
@@ -121,10 +114,7 @@ export const builder = async (yargs) => {
         })
 
         // Run the experimental server file, if it exists, api side only
-        if (
-          hasExperimentalServerFile() &&
-          getConfig().experimental?.serverFile?.enabled
-        ) {
+        if (isUsingExperimentalServerFile()) {
           console.log(
             [
               separator,
