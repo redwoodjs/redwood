@@ -12,7 +12,7 @@ import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import isbot from 'isbot'
 import { renderToPipeableStream } from 'react-dom/server'
-import type { Manifest as ViteManifest } from 'vite'
+import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
@@ -71,7 +71,7 @@ export async function runFeServer() {
   // TODO See above about using `import { with: { type: 'json' } }` instead
   const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const buildManifest: ViteManifest = JSON.parse(buildManifestStr)
+  const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
   const indexEntry = Object.values(buildManifest).find((manifestItem) => {
     return manifestItem.isEntry

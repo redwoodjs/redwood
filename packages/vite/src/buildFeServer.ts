@@ -2,7 +2,7 @@ import fs from 'fs/promises'
 import path from 'path'
 
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
-import type { Manifest as ViteManifest } from 'vite'
+import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
 import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
@@ -115,7 +115,7 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   //    about the syntax.
   const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const clientBuildManifest: ViteManifest = JSON.parse(buildManifestStr)
+  const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
   const routesList = getProjectRoutes()
 
