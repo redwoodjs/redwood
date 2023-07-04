@@ -34,8 +34,9 @@ export {
 export {
   useRedwoodRealtime,
   createPubSub,
-  InMemoryLiveQueryStore,
   liveDirectiveTypeDefs,
+  InMemoryLiveQueryStore,
+  LiveQueryStorageMechanism,
   RedisLiveQueryStore,
   RedwoodRealtimeOptions,
   PublishClientType,
