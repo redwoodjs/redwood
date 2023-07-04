@@ -77,14 +77,12 @@ export async function runFeServer() {
   const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
   console.log('='.repeat(80))
-  console.log('buildManifest', buildManifest.default)
+  console.log('buildManifest', buildManifest)
   console.log('='.repeat(80))
 
-  const indexEntry = Object.values(buildManifest.default).find(
-    (manifestItem) => {
-      return manifestItem.isEntry
-    }
-  )
+  const indexEntry = Object.values(buildManifest).find((manifestItem) => {
+    return manifestItem.isEntry
+  })
 
   if (!indexEntry) {
     throw new Error('Could not find index.html in build manifest')
