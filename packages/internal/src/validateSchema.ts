@@ -13,7 +13,7 @@ export const DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE =
   'Please check that the requireAuth roles is a string or an array of strings.'
 export function validateSchemaForDirectives(
   schemaDocumentNode: DocumentNode,
-  typesToCheck: string[] = ['Query', 'Mutation']
+  typesToCheck: string[] = ['Query', 'Mutation', 'Subscription']
 ) {
   const validationOutput: string[] = []
   const directiveRoleValidationOutput: Record<string, any> = []
@@ -106,7 +106,11 @@ export function validateSchemaForDirectives(
 
 export const loadAndValidateSdls = async () => {
   const projectTypeSrc = await loadTypedefs(
-    ['graphql/**/*.sdl.{js,ts}', 'directives/**/*.{js,ts}'],
+    [
+      'graphql/**/*.sdl.{js,ts}',
+      'directives/**/*.{js,ts}',
+      'subscriptions/**/*.{js,ts}',
+    ],
     {
       loaders: [
         new CodeFileLoader({
