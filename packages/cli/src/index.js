@@ -121,11 +121,11 @@ async function main() {
   const tracer = trace.getTracer('redwoodjs')
   await tracer.startActiveSpan('cli', async (span) => {
     // Ensure telemetry ends after a maximum of 5 minutes
-    const timeoutTimer = setTimeout(() => {
+    const telemetryTimeoutTimer = setTimeout(() => {
       shutdownTelemetry()
-    }, 300000)
+    }, 5 * 60_000)
 
-    // Record if --help or --version were given because we will never hit a handler which will specify the command
+    // Record if --version or --help was given because we will never hit a handler which could specify the command
     if (version) {
       recordTelemetryAttributes({ command: '--version' })
     }
@@ -147,7 +147,7 @@ async function main() {
     }
 
     // Clear the timeout timer since we haven't timed out
-    clearTimeout(timeoutTimer)
+    clearTimeout(telemetryTimeoutTimer)
   })
 
   // Shutdown telemetry, ensures data is sent before the process exits
