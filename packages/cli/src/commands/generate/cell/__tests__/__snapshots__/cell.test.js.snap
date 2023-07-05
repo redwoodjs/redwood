@@ -96,14 +96,14 @@ const meta = {
 export default meta
 
 export const loading = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
@@ -210,14 +210,14 @@ const meta = {
 export default meta
 
 export const loading = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
@@ -324,14 +324,14 @@ const meta = {
 export default meta
 
 export const loading = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
@@ -438,14 +438,14 @@ const meta = {
 export default meta
 
 export const loading = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
@@ -589,21 +589,21 @@ exports[`TypeScript: generates list cells if list flag passed in 3`] = `
 import { Loading, Empty, Failure, Success } from './BazingaCell'
 import { standard } from './BazingaCell.mock'
 
-const meta: Meta<typeof Loading> = {
+const meta: Meta = {
   title: 'Cells/BazingaCell',
 }
 
 export default meta
 
 export const loading: StoryObj<typeof Loading> = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty: StoryObj<typeof Empty> = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
@@ -707,14 +707,14 @@ const meta = {
 export default meta
 
 export const loading = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
@@ -856,14 +856,14 @@ const meta = {
 export default meta
 
 export const loading = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
@@ -976,14 +976,14 @@ const meta = {
 export default meta
 
 export const loading = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
@@ -1094,14 +1094,14 @@ const meta = {
 export default meta
 
 export const loading = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   },
 }
 
