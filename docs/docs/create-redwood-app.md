@@ -1,11 +1,11 @@
 ---
 slug: create-redwood-app
-description:
+description: Instructions and usage examples for Create Redwood App
 ---
 
 # Create Redwood App
 
-To get up and running with Redwood, you can use the Create Redwood App:
+To get up and running with Redwood, you can use Create Redwood App:
 
 ```terminal
 yarn create redwood-app <your-app-name>
@@ -14,7 +14,7 @@ yarn create redwood-app <your-app-name>
 ## Set up for success
 Redwood requires that you're running Node version 18.0.0 or higher.
 
-If you're running Node version 19.0.0 or above, you can still use Create Redwood app, but it may make your project incompatible with some deploy targets, such as AWS Lambdas.
+If you're running Node version 19.0.0 or higher, you can still use Create Redwood App, but it may make your project incompatible with some deploy targets, such as AWS Lambdas.
 
 To see what version of Node you're running, you can run the following command in your terminal:
 
@@ -35,7 +35,7 @@ To upgrade your version of yarn, [you can refer to the yarn documentation](https
 ## What you can expect
 
 ### Select your preferred language
-Options: TypeScript or JavaScript
+Options: TypeScript (default) or JavaScript
 
 If you choose JavaScript, you can always [add TypeScript later](/docs/typescript/introduction#converting-a-javascript-project-to-typescript).
 
@@ -52,10 +52,12 @@ git add .
 git commit -m "Initial commit"
 ```
 
-If you're new to git, Amy Dutton has a great playlist on YouTube: [git for Beginners](https://www.youtube.com/playlist?list=PLrz61zkUHJJFmfTgOVL1mBw_NZcgGe882)
+If you're new to git, here's a recommended playlist on YouTube: [git for Beginners](https://www.youtube.com/playlist?list=PLrz61zkUHJJFmfTgOVL1mBw_NZcgGe882)
 
 ### Do you want to run `yarn install`?
 Options: yes (default) or no
+
+_NOTE: This prompt will only display if you're running yarn, version 1._
 
 This command will download all of your project's dependencies.
 
@@ -83,13 +85,13 @@ yarn rw dev
 ## Flags
 You can by pass these prompts by using the following flags:
 
-| Flag | What it does |
-| --- | --- |
-| `--yarn-install` | Run `yarn install` |
-| `--typescript` | Set TypeScript as the preferred language (default to JavaScript) |
-| `--overwrite` | What it does |
-| `--git-init` | Initializes a git repository |
-| `--commit-message "Initial commit"` | Specifies the initial git commit message |
+| Flag | Alias | What it does |
+| :--- | :--- | :--- |
+| `--yarn-install` | | Run `yarn install` |
+| `--typescript` | `ts` | Set TypeScript as the preferred language (default to JavaScript) |
+| `--overwrite` | | Overwrites the existing directory, if it has the same name |
+| `--git-init` | `git` | Initializes a git repository |
+| `--commit-message "Initial commit"` | `m` | Specifies the initial git commit message |
 
 For example, here's the project with all flags enabled:
 
