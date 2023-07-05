@@ -10,14 +10,14 @@ const meta: Meta = {
 export default meta
 
 export const loading: StoryObj<typeof Loading> = {
-  render: (args) => {
-    return Loading ? <Loading {...args} /> : <></>
+  render: () => {
+    return Loading ? <Loading /> : <></>
   },
 }
 
 export const empty: StoryObj<typeof Empty> = {
-  render: (args) => {
-    return Empty ? <Empty {...args} /> : <></>
+  render: () => {
+    return Empty ? <Empty /> : <></>
   }
 }
 
