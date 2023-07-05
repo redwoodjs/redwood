@@ -1,8 +1,12 @@
 import { Request } from 'express'
 import { ViteDevServer } from 'vite'
 
-import { MetaHook, TagDescriptor } from '@redwoodjs/web'
-import type { RouteHookEvent, RouteHookOutput } from '@redwoodjs/web'
+import type {
+  MetaHook,
+  RouteHookEvent,
+  RouteHookOutput,
+  TagDescriptor,
+} from '@redwoodjs/web'
 
 interface RouteHooks {
   meta?: MetaHook
