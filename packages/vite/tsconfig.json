@@ -6,10 +6,10 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist"
   },
-  "include": ["./ambient.d.ts", "./modules.d.ts", "src/**/*"],
+  "include": ["src/**/*", "./ambient.d.ts", "./modules.d.ts"],
   "references": [
     { "path": "../internal" },
-    { "path": "../web" },
-    { "path": "../project-config" }
+    { "path": "../project-config" },
+    { "path": "../web" }
   ]
 }
