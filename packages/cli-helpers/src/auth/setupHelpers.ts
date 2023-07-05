@@ -1,6 +1,6 @@
 import { Listr, ListrTask } from 'listr2'
 import terminalLink from 'terminal-link'
-import * as yargs from 'yargs'
+import yargs from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
