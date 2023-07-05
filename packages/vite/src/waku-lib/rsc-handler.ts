@@ -1,3 +1,4 @@
+// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 import { PassThrough } from 'node:stream'
 import type { Readable } from 'node:stream'
 import { Worker } from 'node:worker_threads'

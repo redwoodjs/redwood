@@ -1,3 +1,4 @@
+// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -35,8 +36,9 @@ export async function serverBuild(
     },
     build: {
       ssr: true,
-      // TODO: Change output dir to just dist. We should be "server first".
-      //       Client components are the "special case" and should be output to dist/client
+      // TODO (RSC) Change output dir to just dist. We should be "server
+      // first". Client components are the "special case" and should be output
+      // to dist/client
       outDir: rwPaths.web.distServer,
       rollupOptions: {
         input,

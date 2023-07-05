@@ -1,3 +1,4 @@
+// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'

@@ -1,3 +1,4 @@
+// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 import type { ConfigEnv, UserConfig } from 'vite'
 import { resolveConfig as viteResolveConfig } from 'vite'
 

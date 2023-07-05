@@ -1,3 +1,4 @@
+// TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 import path from 'node:path'
 
 import * as swc from '@swc/core'
