@@ -7014,7 +7014,7 @@ __metadata:
     "@types/react": 18.2.14
     core-js: 3.31.0
     jest: 29.5.0
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   peerDependencies:
     "@auth0/auth0-spa-js": 2.0.8
@@ -7067,7 +7067,7 @@ __metadata:
     "@types/react": 18.2.14
     core-js: 3.31.0
     jest: 29.5.0
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   peerDependencies:
     "@azure/msal-browser": 2.37.1
@@ -7118,7 +7118,7 @@ __metadata:
     "@types/react": 18.2.14
     core-js: 3.31.0
     jest: 29.5.0
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   peerDependencies:
     "@clerk/clerk-react": 4.20.5
@@ -7196,7 +7196,7 @@ __metadata:
     "@types/react": 18.2.14
     core-js: 3.31.0
     jest: 29.5.0
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   languageName: unknown
   linkType: soft
@@ -7244,7 +7244,7 @@ __metadata:
     core-js: 3.31.0
     firebase: 9.23.0
     jest: 29.5.0
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   peerDependencies:
     firebase: 9.23.0
@@ -7295,7 +7295,7 @@ __metadata:
     "@types/react": 18.2.14
     core-js: 3.31.0
     jest: 29.5.0
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   peerDependencies:
     netlify-identity-widget: 1.9.2
@@ -7345,7 +7345,7 @@ __metadata:
     "@types/react": 18.2.14
     core-js: 3.31.0
     jest: 29.5.0
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   peerDependencies:
     "@supabase/supabase-js": 2.26.0
@@ -7397,7 +7397,7 @@ __metadata:
     "@types/react": 18.2.14
     core-js: 3.31.0
     jest: 29.5.0
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     supertokens-auth-react: 0.33.1
     typescript: 5.1.3
   peerDependencies:
@@ -7417,7 +7417,7 @@ __metadata:
     core-js: 3.31.0
     jest: 29.5.0
     msw: 1.2.2
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   languageName: unknown
   linkType: soft
@@ -7746,13 +7746,13 @@ __metadata:
     jest: 29.5.0
     nodemon: 2.0.22
     pascalcase: 1.0.0
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
+    react-dom: 18.3.0-canary-035a41c4e-20230704
     react-hook-form: 7.45.1
     typescript: 5.1.3
   peerDependencies:
     graphql: 16.7.1
-    react: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
   languageName: unknown
   linkType: soft
 
@@ -7878,8 +7878,8 @@ __metadata:
     mime-types: 2.1.35
     typescript: 5.1.3
   peerDependencies:
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
+    react-dom: 18.3.0-canary-035a41c4e-20230704
   languageName: unknown
   linkType: soft
 
@@ -7927,12 +7927,12 @@ __metadata:
     "@types/react-dom": 18.2.6
     core-js: 3.31.0
     jest: 29.5.0
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
+    react-dom: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.3
   peerDependencies:
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
+    react-dom: 18.3.0-canary-035a41c4e-20230704
   languageName: unknown
   linkType: soft
 
@@ -8151,8 +8151,8 @@ __metadata:
     jest-runner-tsd: 5.0.0
     nodemon: 2.0.22
     prop-types: 15.8.1
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
+    react-dom: 18.3.0-canary-035a41c4e-20230704
     react-helmet-async: 1.3.0
     react-hot-toast: 2.4.1
     stacktracey: 2.1.8
@@ -8160,8 +8160,8 @@ __metadata:
     typescript: 5.1.3
   peerDependencies:
     prop-types: 15.8.1
-    react: 18.2.0
-    react-dom: 18.2.0
+    react: 18.3.0-canary-035a41c4e-20230704
+    react-dom: 18.3.0-canary-035a41c4e-20230704
   bin:
     cross-env: ./dist/bins/cross-env.js
     msw: ./dist/bins/msw.js
@@ -26664,15 +26664,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:18.2.0":
-  version: 18.2.0
-  resolution: "react-dom@npm:18.2.0"
+"react-dom@npm:18.3.0-canary-035a41c4e-20230704":
+  version: 18.3.0-canary-035a41c4e-20230704
+  resolution: "react-dom@npm:18.3.0-canary-035a41c4e-20230704"
   dependencies:
     loose-envify: ^1.1.0
-    scheduler: ^0.23.0
+    scheduler: 0.24.0-canary-035a41c4e-20230704
   peerDependencies:
-    react: ^18.2.0
-  checksum: 66dfc5f93e13d0674e78ef41f92ed21dfb80f9c4ac4ac25a4b51046d41d4d2186abc915b897f69d3d0ebbffe6184e7c5876f2af26bfa956f179225d921be713a
+    react: 18.3.0-canary-035a41c4e-20230704
+  checksum: 5fbc98baf3e9a9ac52a8160f5e4b5c90c6d339dfcc296b9d02e3df8d06d5b4938d825b6f660d401bfd6449ba9a70bbfc2f498b707621cdd4369f2faf2e7faff9
   languageName: node
   linkType: hard
 
@@ -26797,12 +26797,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.2.0":
-  version: 18.2.0
-  resolution: "react@npm:18.2.0"
+"react@npm:18.3.0-canary-035a41c4e-20230704":
+  version: 18.3.0-canary-035a41c4e-20230704
+  resolution: "react@npm:18.3.0-canary-035a41c4e-20230704"
   dependencies:
     loose-envify: ^1.1.0
-  checksum: b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
+  checksum: 01a8d9ccb5d636a789a68404ea428f9eabc7d6d8fa5759c30653eef04d9a251a5c3a9b5c2c0f7768b0827d6ce250cd37cab5825af31583756ee2a8af669a6d27
   languageName: node
   linkType: hard
 
@@ -27869,12 +27869,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "scheduler@npm:0.23.0"
+"scheduler@npm:0.24.0-canary-035a41c4e-20230704":
+  version: 0.24.0-canary-035a41c4e-20230704
+  resolution: "scheduler@npm:0.24.0-canary-035a41c4e-20230704"
   dependencies:
     loose-envify: ^1.1.0
-  checksum: b777f7ca0115e6d93e126ac490dbd82642d14983b3079f58f35519d992fa46260be7d6e6cede433a92db70306310c6f5f06e144f0e40c484199e09c1f7be53dd
+  checksum: aaaf1b219c01bc5dc579362a5486f3d28092407f711748bd8ed7cd57f1431ca07f8469c6e9b7c8c70c21ef6d40faf2c575fd3564dffac55a13443db08991282c
   languageName: node
   linkType: hard
 
