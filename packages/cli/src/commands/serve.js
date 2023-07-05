@@ -52,20 +52,52 @@ export const builder = async (yargs) => {
               separator,
             ].join('\n')
           )
-          await execa(
-            'yarn',
-            ['node', path.join('dist', 'server.js'), '--enable-web'],
-            {
-              cwd: getPaths().api.base,
+          if (getConfig().experimental?.streamingSsr?.enabled) {
+            console.warn('')
+            console.warn('⚠️ Skipping Fastify web server ⚠️')
+            console.warn('⚠️ Using new Streaming FE server instead ⚠️')
+            console.warn('')
+            await execa('yarn', ['rw-serve-fe'], {
+              cwd: getPaths().web.base,
               stdio: 'inherit',
               shell: true,
-            }
-          )
+            })
+          } else {
+            await execa(
+              'yarn',
+              ['node', path.join('dist', 'server.js'), '--enable-web'],
+              {
+                cwd: getPaths().api.base,
+                stdio: 'inherit',
+                shell: true,
+              }
+            )
+          }
           return
         }
 
-        const { bothServerHandler } = await import('./serveHandler.js')
-        await bothServerHandler(argv)
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          const { apiServerHandler } = await import('./serveHandler.js')
+          // TODO (STREAMING) Allow specifying port, socket and apiRootPath
+          const apiPromise = apiServerHandler({
+            ...argv,
+            port: 8911,
+            apiRootPath: '/',
+          })
+
+          // TODO (STREAMING) More gracefully handle Ctrl-C
+          // Right now you get a big red error box when you kill the process
+          const fePromise = execa('yarn', ['rw-serve-fe'], {
+            cwd: getPaths().web.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+
+          await Promise.all([apiPromise, fePromise])
+        } else {
+          const { bothServerHandler } = await import('./serveHandler.js')
+          await bothServerHandler(argv)
+        }
       },
     })
     .command({
@@ -145,8 +177,16 @@ export const builder = async (yargs) => {
           apiHost: argv.apiHost,
         })
 
-        const { webServerHandler } = await import('./serveHandler.js')
-        await webServerHandler(argv)
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          await execa('yarn', ['rw-serve-fe'], {
+            cwd: getPaths().web.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+        } else {
+          const { webServerHandler } = await import('./serveHandler.js')
+          await webServerHandler(argv)
+        }
       },
     })
     .middleware((argv) => {

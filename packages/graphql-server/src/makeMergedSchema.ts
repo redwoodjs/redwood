@@ -115,7 +115,11 @@ const mapFieldsToService = ({
             // Swallow the error for now
           }
 
-          if (experimentalOpenTelemetryEnabled) {
+          const captureResolvers =
+            // @ts-expect-error context is unknown
+            context && context['OPEN_TELEMETRY_GRAPHQL'] !== undefined
+
+          if (experimentalOpenTelemetryEnabled && captureResolvers) {
             return wrapWithOpenTelemetry(
               services[name],
               args,
