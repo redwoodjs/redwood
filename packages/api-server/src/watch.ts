@@ -20,6 +20,7 @@ import {
   ensurePosixPath,
   getConfig,
   resolveFile,
+  isUsingExperimentalServerFile,
 } from '@redwoodjs/project-config'
 
 const argv = yargs(hideBin(process.argv))
@@ -111,9 +112,9 @@ const rebuildApiServer = () => {
 
     // Start API server
 
-    // Check if experimental server file exists
-    const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`)
-    if (serverFile && getConfig().experimental?.serverFile?.enabled) {
+    if (isUsingExperimentalServerFile()) {
+      // The isUsingExperimentalServerFile returning true should ensure the file exists
+      const serverFile = resolveFile(`${rwjsPaths.api.dist}/server`) as string
       const separator = chalk.hex('#ff845e')(
         '------------------------------------------------------------------'
       )

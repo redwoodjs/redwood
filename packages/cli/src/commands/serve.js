@@ -6,10 +6,10 @@ import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import { isUsingExperimentalServerFile } from '@redwoodjs/project-config'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
-import { isUsingExperimentalServerFile } from '../lib/experimental'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
