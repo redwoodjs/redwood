@@ -2,7 +2,6 @@ import type { Plugin } from '@envelop/core'
 import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
-import { createRedisEventTarget } from '@graphql-yoga/redis-event-target'
 import type { CreateRedisEventTargetArgs } from '@graphql-yoga/redis-event-target'
 import type { PubSub } from '@graphql-yoga/subscription'
 import { createPubSub } from '@graphql-yoga/subscription'
@@ -131,6 +130,16 @@ export class RedisLiveQueryStore {
 }
 
 export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
+  // This try-catch is a hack to avoid creating a new package for realtime at the moment.
+  let createRedisEventTarget
+
+  try {
+    createRedisEventTarget =
+      require('@graphql-yoga/redis-event-target').createRedisEventTarget
+  } catch {
+    return {}
+  }
+
   let liveQueriesEnabled = false
   let subscriptionsEnabled = false
 
@@ -221,6 +230,4 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       }
     },
   }
-
-  return {}
 }
