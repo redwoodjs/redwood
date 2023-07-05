@@ -2,7 +2,7 @@
 
 ## What is Yarn?
 
-[Yarn](https://yarnpkg.com/) is a package manager for JavaScript. It is used to manage and install dependencies for JavaScript projects, particularly for Node.js applications. Yarn provides a faster and more reliable alternative to the npm package manager, offering features like parallel package installations and offline caching. Yarn uses a `yarn.lock` file to control and reproduce consistent installations of dependencies across different environments.
+[Yarn](https://yarnpkg.com/) is a package manager for JavaScript. It is used to manage and install dependencies for JavaScript projects, particularly for Node.js applications. Yarn offers features like parallel package installations and offline caching and uses a `yarn.lock` file to control and reproduce consistent installations of dependencies across different environments.
 
 ## Installing yarn
 
@@ -31,7 +31,7 @@ corepack prepare yarn@stable --activate
 ```
 
 :::info
-If this command fails, you may need to [uninstall the current version of Yarn first](/docs/how-to/using-yarn#uninstalling-yarn).
+If this command fails, you may need to [uninstall the current version of Yarn first](#uninstalling-yarn).
 
 ```terminal
 corepack disable

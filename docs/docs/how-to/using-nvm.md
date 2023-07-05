@@ -13,7 +13,7 @@ If you've already installed Node.js on your machine, uninstall Node.js before in
 You can uninstall by running the following command in your terminal:
 
 ```bash
-brew uninstal --force node
+brew uninstall --force node
 ```
 
 Once that's finished, run the following command to remove unused folders and dependencies:
@@ -68,7 +68,7 @@ nvm install latest
 ### To install a specific version of Node.js
 
 ```bash
-nvm install <<version number>>
+nvm install <version number>
 ```
 
 To see all the versions of Node that you can install, run the following command:
@@ -80,9 +80,7 @@ nvm ls-remote
 :::caution
 You'll need to [install yarn](https://yarnpkg.com/getting-started/install) **for each version of Node that you install.**
 
-> "The preferred way to manage Yarn is through [Corepack](https://nodejs.org/dist/latest/docs/api/corepack.html), a new binary shipped with all Node.js releases starting from 16.10." <br />-[From the Yarn documentation](https://yarnpkg.com/getting-started/install)
-
-Corepack is included with all Node.js >=16.10 installs, but you must opt-in. To enable it, run the following command:
+[Corepack](https://nodejs.org/dist/latest/docs/api/corepack.html) is included with all Node.js >=16.10 installs, but you must opt-in. To enable it, run the following command:
 
 ```bash
 corepack enable
@@ -94,7 +92,7 @@ We also have a doc specifically for [working with yarn](/docs/how-to/using-yarn)
 ### To use a specific version of Node.js
 
 ```bash
-nvm use <<version number>>
+nvm use <version number>
 ```
 
 :::info
