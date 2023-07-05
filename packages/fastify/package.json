@@ -25,7 +25,7 @@
     "@redwoodjs/project-config": "5.0.0",
     "ansi-colors": "4.1.3",
     "fast-glob": "3.2.12",
-    "fastify": "4.19.0",
+    "fastify": "4.19.2",
     "fastify-raw-body": "4.2.0",
     "lodash": "4.17.21",
     "qs": "6.11.2"
@@ -34,7 +34,7 @@
     "@types/aws-lambda": "8.10.119",
     "@types/lodash": "4.14.195",
     "@types/qs": "6.9.7",
-    "esbuild": "0.18.10",
+    "esbuild": "0.18.11",
     "typescript": "5.1.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

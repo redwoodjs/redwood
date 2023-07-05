@@ -14,22 +14,6 @@ import c from '../lib/colors'
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
 
-const streamServerErrorHandler = () => {
-  console.error('⚠️  Experimental Render Mode ~ Cannot serve the web side ⚠️')
-  console.log('~'.repeat(50))
-  console.log()
-  console.log()
-  console.log('You can run the new frontend server with: `yarn rw-serve-fe`')
-  console.log('You can run the api server with: yarn rw serve api')
-  console.log()
-  console.log()
-  console.log('~'.repeat(50))
-
-  throw new Error(
-    'You will need to run the FE server and API server separately.'
-  )
-}
-
 export const builder = async (yargs) => {
   yargs
     .usage('usage: $0 <side>')
@@ -53,11 +37,6 @@ export const builder = async (yargs) => {
           socket: argv.socket,
         })
 
-        if (getConfig().experimental?.streamingSsr?.enabled) {
-          streamServerErrorHandler()
-          return
-        }
-
         // Run the experimental server file, if it exists, with web side also
         if (isUsingExperimentalServerFile()) {
           console.log(
@@ -69,20 +48,52 @@ export const builder = async (yargs) => {
               separator,
             ].join('\n')
           )
-          await execa(
-            'yarn',
-            ['node', path.join('dist', 'server.js'), '--enable-web'],
-            {
-              cwd: getPaths().api.base,
+          if (getConfig().experimental?.streamingSsr?.enabled) {
+            console.warn('')
+            console.warn('⚠️ Skipping Fastify web server ⚠️')
+            console.warn('⚠️ Using new Streaming FE server instead ⚠️')
+            console.warn('')
+            await execa('yarn', ['rw-serve-fe'], {
+              cwd: getPaths().web.base,
               stdio: 'inherit',
               shell: true,
-            }
-          )
+            })
+          } else {
+            await execa(
+              'yarn',
+              ['node', path.join('dist', 'server.js'), '--enable-web'],
+              {
+                cwd: getPaths().api.base,
+                stdio: 'inherit',
+                shell: true,
+              }
+            )
+          }
           return
         }
 
-        const { bothServerHandler } = await import('./serveHandler.js')
-        await bothServerHandler(argv)
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          const { apiServerHandler } = await import('./serveHandler.js')
+          // TODO (STREAMING) Allow specifying port, socket and apiRootPath
+          const apiPromise = apiServerHandler({
+            ...argv,
+            port: 8911,
+            apiRootPath: '/',
+          })
+
+          // TODO (STREAMING) More gracefully handle Ctrl-C
+          // Right now you get a big red error box when you kill the process
+          const fePromise = execa('yarn', ['rw-serve-fe'], {
+            cwd: getPaths().web.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+
+          await Promise.all([apiPromise, fePromise])
+        } else {
+          const { bothServerHandler } = await import('./serveHandler.js')
+          await bothServerHandler(argv)
+        }
       },
     })
     .command({
@@ -163,12 +174,15 @@ export const builder = async (yargs) => {
         })
 
         if (getConfig().experimental?.streamingSsr?.enabled) {
-          streamServerErrorHandler()
-          return
+          await execa('yarn', ['rw-serve-fe'], {
+            cwd: getPaths().web.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+        } else {
+          const { webServerHandler } = await import('./serveHandler.js')
+          await webServerHandler(argv)
         }
-
-        const { webServerHandler } = await import('./serveHandler.js')
-        await webServerHandler(argv)
       },
     })
     .middleware((argv) => {
