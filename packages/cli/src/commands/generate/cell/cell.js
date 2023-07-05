@@ -103,7 +103,7 @@ export const files = async ({ name, typescript, ...options }) => {
     extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: 'stories.js.template',
+    templatePath: 'stories.tsx.template',
   })
 
   const mockFile = templateForComponentFile({
