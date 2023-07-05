@@ -178,7 +178,11 @@ export async function loadPlugins(yargs) {
         continue
       }
       const commands = Object.keys(cacheEntry)
-      if (commands.includes(firstWord)) {
+      const allTriggers = commands.flatMap((c) => [
+        c,
+        ...(cacheEntry[c].aliases ?? []),
+      ])
+      if (allTriggers.includes(firstWord)) {
         namespacePluginsToLoad.push(namespacePlugin)
         // Only one plugin can match the first word so we break here
         break
