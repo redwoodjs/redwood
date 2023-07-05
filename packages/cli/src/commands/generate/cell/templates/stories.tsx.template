@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
 import { standard } from './${pascalName}Cell.mock'
 
-const meta: Meta<typeof Loading> = {
+const meta: Meta = {
   title: 'Cells/${pascalName}Cell',
 }
 
