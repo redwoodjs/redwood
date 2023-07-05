@@ -27,7 +27,7 @@ import { yargsDefaults } from '../helpers'
 import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
-const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
+const DEFAULT_IGNORE_FIELDS_FOR_INPUT = ['createdAt', 'updatedAt']
 
 const missingIdConsoleMessage = () => {
   const line1 =
@@ -90,12 +90,17 @@ const querySDL = (model, docs = false) => {
 }
 
 const inputSDL = (model, required, types = {}, docs = false) => {
+  let ignoredFields = DEFAULT_IGNORE_FIELDS_FOR_INPUT
+
   return model.fields
     .filter((field) => {
-      return (
-        IGNORE_FIELDS_FOR_INPUT.indexOf(field.name) === -1 &&
-        field.kind !== 'object'
-      )
+      const idField = model.fields.find((field) => field.isId)
+
+      if (idField) {
+        ignoredFields.push(idField.name)
+      }
+
+      return ignoredFields.indexOf(field.name) === -1 && field.kind !== 'object'
     })
     .map((field) => modelFieldToSDL({ field, required, types, docs }))
 }
