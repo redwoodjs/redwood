@@ -13,4 +13,5 @@
 import ${pascalName} from './${pascalName}'
 
 export default { component: ${pascalName} }
+
 export const Primary = {}

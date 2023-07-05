@@ -16,9 +16,10 @@ import ${pascalName} from './${pascalName}'
 
 const meta: Meta<typeof ${pascalName}> = {
   component: ${pascalName},
-};
+}
 
 export default meta
+
 type Story = StoryObj<typeof ${pascalName}>
 
-export const Primary: Story = { }
+export const Primary: Story = {}

@@ -4,10 +4,10 @@ import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
 import { standard } from './${pascalName}Cell.mock'
 
 const meta: Meta<typeof Loading> = {
-  title: 'cells/${pascalName}Cell',
+  title: 'Cells/${pascalName}Cell',
 }
 
-export default meta;
+export default meta
 
 export const loading: StoryObj<typeof Loading> = {
   render: (args) => {
