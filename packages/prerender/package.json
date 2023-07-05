@@ -47,8 +47,8 @@
     "typescript": "5.1.3"
   },
   "peerDependencies": {
-    "react": "18.3.0-canary-535c038d1-20230522",
-    "react-dom": "18.3.0-canary-535c038d1-20230522"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "externals": {
     "react": "react",

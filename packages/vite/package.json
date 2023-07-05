@@ -52,7 +52,7 @@
     "express": "4.18.2",
     "http-proxy-middleware": "2.0.6",
     "isbot": "3.6.8",
-    "react": "18.3.0-canary-535c038d1-20230522",
+    "react": "18.2.0",
     "react-server-dom-webpack": "18.3.0-canary-535c038d1-20230522",
     "vite": "4.3.9",
     "vite-plugin-environment": "1.1.3",
