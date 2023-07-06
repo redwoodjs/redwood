@@ -1,30 +1,34 @@
-// When you've added props to your component,
-// pass Storybook's `args` through this story to control it from the addons panel:
+// Pass props to your component by passing an `args` object to your story
 //
-// ```tsx
-// import type { ComponentStory } from '@storybook/react'
-//
-// export const generated: ComponentStory<typeof Author> = (args) => {
-//   return <Author {...args} />
+// ```jsx
+// export const Primary: Story = {
+//  args: {
+//    propName: propValue
+//  }
 // }
 // ```
 //
 // See https://storybook.js.org/docs/react/writing-stories/args.
 
-import type { ComponentMeta } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import Author from './Author'
+
+const meta: Meta<typeof Author> = {
+  component: Author,
+}
+
+export default meta
+
+type Story = StoryObj<typeof Author>
 
 const author = {
   email: 'story.user@email.com',
   fullName: 'Story User',
 }
 
-export const generated = () => {
-  return <Author author={author} />
+export const Primary: Story = {
+  render: () => {
+    return <Author author={author} />
+  }
 }
-
-export default {
-  title: 'Components/Author',
-  component: Author,
-} as ComponentMeta<typeof Author>
