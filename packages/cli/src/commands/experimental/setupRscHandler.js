@@ -97,7 +97,7 @@ export const handler = async ({ force, verbose }) => {
         title: 'Updating App.tsx...',
         task: async () => {
           const appTemplate = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'src', 'App.tsx.template'),
+            path.resolve(__dirname, 'templates', 'rsc', 'App.tsx.template'),
             'utf-8'
           )
           const appPath = rwPaths.web.app
