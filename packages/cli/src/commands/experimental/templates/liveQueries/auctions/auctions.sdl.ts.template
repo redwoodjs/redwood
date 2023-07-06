@@ -2,7 +2,7 @@
 
 export const schema = gql`
   type Query {
-    auction(id: ID!): Auction @skipAuth
+    auction(id: ID!): Auction @requireAuth
   }
 
   type Auction {
@@ -17,7 +17,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    bid(input: BidInput!): Bid @skipAuth
+    bid(input: BidInput!): Bid @requireAuth
   }
 
   input BidInput {

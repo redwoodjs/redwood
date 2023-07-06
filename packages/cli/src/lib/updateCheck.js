@@ -9,7 +9,7 @@ import semver from 'semver'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { spawnBackgroundProcess } from './background'
-import { setLock, unsetLock } from './locking'
+import { isLockSet, setLock, unsetLock } from './locking'
 
 import { getPaths } from './index'
 
@@ -40,7 +40,12 @@ export const DEFAULT_DATETIME_MS = 946684800000
 /**
  * @const {string} The identifier used for the lock within the check function
  */
-export const LOCK_IDENTIFIER = 'UPDATE_CHECK'
+export const CHECK_LOCK_IDENTIFIER = 'UPDATE_CHECK'
+
+/**
+ * @const {string} The identifier used for the lock when showing an update message
+ */
+export const SHOW_LOCK_IDENTIFIER = 'UPDATE_CHECK_SHOW'
 
 /**
  * @const {string[]} The name of commands which should NOT execute the update checker
@@ -68,7 +73,6 @@ function getPersistenceDirectory() {
 export async function check() {
   try {
     console.time('Update Check')
-    setLock(LOCK_IDENTIFIER)
 
     // Read package.json and extract the @redwood/core version
     const packageJson = JSON.parse(
@@ -107,7 +111,7 @@ export async function check() {
       checkedAt: new Date().getTime(),
     })
   } finally {
-    unsetLock(LOCK_IDENTIFIER)
+    unsetLock(CHECK_LOCK_IDENTIFIER)
     console.timeEnd('Update Check')
   }
 }
@@ -125,6 +129,12 @@ export function isEnabled() {
  * @see {@link CHECK_PERIOD} for the time between notifications
  */
 export function shouldCheck() {
+  // We don't want to check if a different process is already checking
+  if (isLockSet(CHECK_LOCK_IDENTIFIER)) {
+    return false
+  }
+
+  // Check if we haven't checked recently
   const data = readUpdateDataFile()
   return data.checkedAt < new Date().getTime() - CHECK_PERIOD
 }
@@ -135,6 +145,12 @@ export function shouldCheck() {
  * @see {@link SHOW_PERIOD} for the time between notifications
  */
 export function shouldShow() {
+  // We don't want to show if a different process is already about to
+  if (isLockSet(SHOW_LOCK_IDENTIFIER)) {
+    return false
+  }
+
+  // Check there is a new version and we haven't shown the user recently
   const data = readUpdateDataFile()
   let newerVersion = false
   data.remoteVersions.forEach((version) => {
@@ -198,7 +214,7 @@ function getUpdateMessage() {
 export function readUpdateDataFile() {
   try {
     if (!fs.existsSync(getPersistenceDirectory())) {
-      fs.mkdirSync(getPersistenceDirectory())
+      fs.mkdirSync(getPersistenceDirectory(), { recursive: true })
     }
     const persistedData = JSON.parse(
       fs.readFileSync(path.join(getPersistenceDirectory(), 'data.json'))
@@ -269,12 +285,15 @@ export function updateCheckMiddleware(argv) {
   }
 
   if (shouldShow()) {
+    setLock(SHOW_LOCK_IDENTIFIER)
     process.on('exit', () => {
       showUpdateMessage()
+      unsetLock(SHOW_LOCK_IDENTIFIER)
     })
   }
 
   if (shouldCheck()) {
+    setLock(CHECK_LOCK_IDENTIFIER)
     spawnBackgroundProcess('updateCheck', 'yarn', [
       'node',
       path.join(__dirname, 'updateCheckExecute.js'),

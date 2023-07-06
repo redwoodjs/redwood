@@ -5,6 +5,7 @@ import boxen from 'boxen'
 import execa from 'execa'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
 import { getPaths } from '../lib/index'
@@ -64,19 +65,24 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   console.log(c.underline('$ yarn prisma ' + args.join(' ')))
   console.log()
 
-  execa.sync(
-    `"${path.join(rwjsPaths.base, 'node_modules/.bin/prisma')}"`,
-    args,
-    {
-      shell: true,
-      cwd: rwjsPaths.base,
-      stdio: 'inherit',
-      cleanup: true,
-    }
-  )
+  try {
+    execa.sync(
+      `"${path.join(rwjsPaths.base, 'node_modules/.bin/prisma')}"`,
+      args,
+      {
+        shell: true,
+        cwd: rwjsPaths.base,
+        stdio: 'inherit',
+        cleanup: true,
+      }
+    )
 
-  if (hasHelpOption || commands.length === 0) {
-    printWrapInfo()
+    if (hasHelpOption || commands.length === 0) {
+      printWrapInfo()
+    }
+  } catch (e) {
+    errorTelemetry(process.argv, `Error generating prisma client: ${e.message}`)
+    process.exit(e?.exitCode || 1)
   }
 }
 
