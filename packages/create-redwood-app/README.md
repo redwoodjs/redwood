@@ -99,7 +99,7 @@ yarn build
 
 _Note:_ You can also use `yarn build:watch` instead of `yarn build` to watch for changes and rebuild automatically.
 
-This will generate `create-redwood-app.js` file inside the `dist` directory.
+This will generate the `create-redwood-app.js` file inside the `dist` directory.
 
 To use the script, run `node` on that file (dist/create-redwood-app.js) and pass in the path to the new project:
 ```bash
