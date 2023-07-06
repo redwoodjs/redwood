@@ -884,6 +884,9 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
     it('throws an error if username is not found', async () => {
+      delete options.signup.usernameMatch
+      delete options.login.usernameMatch
+
       await createDbUser()
       event.body = JSON.stringify({
         username: 'missing@redwoodjs.com',
@@ -1025,6 +1028,58 @@ describe('dbAuth', () => {
       const response = await dbAuth.login()
 
       expectLoggedInResponse(response)
+    })
+
+    it('login db check is called with insensitive string when user has provided one in LoginFlowOptions', async () => {
+      jest.clearAllMocks()
+      const spy = jest.spyOn(db.user, 'findFirst')
+
+      options.signup.usernameMatch = 'insensitive'
+      options.login.usernameMatch = 'insensitive'
+
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      try {
+        await dbAuth.login()
+      } catch (e) {
+        expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+      }
+
+      return expect(spy).toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
+    })
+
+    it('login db check is not called with insensitive string when user has not provided one in LoginFlowOptions', async () => {
+      jest.clearAllMocks()
+      const spy = jest.spyOn(db.user, 'findFirst')
+
+      delete options.signup.usernameMatch
+      delete options.login.usernameMatch
+
+      await createDbUser()
+      event.body = JSON.stringify({
+        username: 'rob@redwoodjs.com',
+        password: 'password',
+      })
+
+      const dbAuth = new DbAuthHandler(event, context, options)
+
+      await dbAuth.login()
+
+      return expect(spy).not.toHaveBeenCalledWith({
+        where: {
+          email: expect.objectContaining({ mode: 'insensitive' }),
+        },
+      })
     })
   })
 
