@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from '@storybook/react'
 
-import WaterfallPage from "./WaterfallPage"
+import WaterfallPage from './WaterfallPage'
 
 const meta: Meta<typeof WaterfallPage> = {
   component: WaterfallPage,

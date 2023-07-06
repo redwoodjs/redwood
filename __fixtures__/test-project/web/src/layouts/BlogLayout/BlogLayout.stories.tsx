@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from '@storybook/react'
 
-import BlogLayout from "./BlogLayout"
+import BlogLayout from './BlogLayout'
 
 const meta: Meta<typeof BlogLayout> = {
   component: BlogLayout,

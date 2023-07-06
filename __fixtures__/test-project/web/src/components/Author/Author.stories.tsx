@@ -10,9 +10,9 @@
 //
 // See https://storybook.js.org/docs/react/writing-stories/args.
 
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from '@storybook/react'
 
-import Author from "./Author"
+import Author from './Author'
 
 const meta: Meta<typeof Author> = {
   component: Author,
@@ -28,7 +28,7 @@ const author = {
 }
 
 export const Primary: Story = {
-  render: (args) => {
+  render: () => {
     return <Author author={author} />
   }
 }

@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from '@storybook/react'
 
-import { Loading, Empty, Failure, Success } from "./BlogPostsCell"
-import { standard } from "./BlogPostsCell.mock"
+import { Loading, Empty, Failure, Success } from './BlogPostsCell'
+import { standard } from './BlogPostsCell.mock'
 
 const meta: Meta = {
-  title: "Cells/BlogPostsCell",
+  title: 'Cells/BlogPostsCell',
 }
 
 export default meta

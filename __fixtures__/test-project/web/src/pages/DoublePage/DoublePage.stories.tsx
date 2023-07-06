@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from '@storybook/react'
 
-import DoublePage from "./DoublePage"
+import DoublePage from './DoublePage'
 
 const meta: Meta<typeof DoublePage> = {
   component: DoublePage,

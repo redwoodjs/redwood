@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from '@storybook/react'
 
-import BlogPostPage from "./BlogPostPage"
+import BlogPostPage from './BlogPostPage'
 
 const meta: Meta<typeof BlogPostPage> = {
   component: BlogPostPage,
