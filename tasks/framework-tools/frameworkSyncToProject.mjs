@@ -22,7 +22,9 @@ import {
   addDependenciesToPackageJson,
   copyFrameworkFilesToProject,
   fixProjectBinaries,
+  resolveViteConfigPath,
 } from './lib/project.mjs'
+import modifyViteConfigToForceOptimize from './lib/viteConfig.mjs'
 
 const IGNORE_EXTENSIONS = ['.DS_Store']
 
@@ -136,12 +138,24 @@ async function main() {
       'utf-8'
     )
 
+    const viteConfigPath = resolveViteConfigPath(redwoodProjectPath)
+    let viteConfigContents
+
+    if (viteConfigPath) {
+      viteConfigContents = fs.readFileSync(viteConfigPath, 'utf-8')
+      const newViteConfig = modifyViteConfigToForceOptimize(viteConfigContents)
+
+      fs.writeFileSync(viteConfigPath, newViteConfig)
+    }
+
     if (options.cleanUp) {
       logStatus('Setting up clean up on SIGINT or process exit...')
 
       const cleanUp = createCleanUp({
         redwoodProjectPackageJsonPath,
         redwoodProjectPackageJson,
+        viteConfigPath,
+        viteConfigContents,
       })
 
       process.on('SIGINT', cleanUp)
@@ -267,6 +281,8 @@ function logError(m) {
 function createCleanUp({
   redwoodProjectPackageJsonPath,
   redwoodProjectPackageJson,
+  viteConfigPath,
+  viteConfigContents,
 }) {
   let cleanedUp = false
 
@@ -275,9 +291,13 @@ function createCleanUp({
       return
     }
 
-    logStatus("Restoring the Redwood project's package.json...")
+    logStatus("Restoring the Redwood project's package.json & vite config...")
 
     fs.writeFileSync(redwoodProjectPackageJsonPath, redwoodProjectPackageJson)
+
+    if (viteConfigPath && viteConfigContents) {
+      fs.writeFileSync(viteConfigPath, viteConfigContents)
+    }
 
     console.log(
       [

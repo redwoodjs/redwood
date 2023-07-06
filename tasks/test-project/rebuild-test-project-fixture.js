@@ -478,7 +478,11 @@ async function runCommand() {
     task: async () => {
       // @TODO: This only works on UNIX, we should use path.join everywhere
       // remove all .gitignore
-      await rimraf(`${OUTPUT_PROJECT_PATH}/.redwood`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/.redwood/**/*`, {
+        glob: {
+          ignore: `${OUTPUT_PROJECT_PATH}/.redwood/README.md`,
+        },
+      })
       await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db-journal`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/api/dist`)

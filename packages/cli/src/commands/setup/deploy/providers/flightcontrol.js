@@ -306,7 +306,7 @@ const notes = [
 
 export const handler = async ({ force, database }) => {
   recordTelemetryAttributes({
-    command: ['setup', 'deploy', 'flightcontrol'].join(' '),
+    command: 'setup deploy flightcontrol',
     force,
     database,
   })

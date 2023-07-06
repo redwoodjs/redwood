@@ -75,6 +75,23 @@ export interface RedwoodGraphQLContext {
   [index: string]: unknown
 }
 
+export interface RedwoodOpenTelemetryConfig {
+  /**
+   * @description Enables the creation of a span for each resolver execution.
+   */
+  resolvers: boolean
+
+  /**
+   * @description Includes the execution result in the span attributes.
+   */
+  variables: boolean
+
+  /**
+   * @description Includes the variables in the span attributes.
+   */
+  result: boolean
+}
+
 /**
  * GraphQLYogaOptions
  */
@@ -214,6 +231,11 @@ export type GraphQLYogaOptions = {
    * Only supported in a swerver deploy and not allowed with GraphQLHandler config
    */
   realtime?: RedwoodRealtimeOptions
+
+  /**
+   * @description Configure OpenTelemetry plugin behaviour
+   */
+  openTelemetryOptions?: RedwoodOpenTelemetryConfig
 }
 
 /**

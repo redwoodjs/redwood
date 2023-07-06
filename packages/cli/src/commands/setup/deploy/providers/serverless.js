@@ -97,7 +97,7 @@ const updateRedwoodTomlTask = () => {
 
 export const handler = async ({ force }) => {
   recordTelemetryAttributes({
-    command: ['setup', 'deploy', 'serverless'].join(' '),
+    command: 'setup deploy serverless',
     force,
   })
   const [serverless, serverlessLift, ...rest] = projectDevPackages

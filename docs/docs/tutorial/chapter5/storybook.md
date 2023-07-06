@@ -12,9 +12,9 @@ After some compiling you should get a message saying that Storybook has started 
 
 If you poke around at the file tree on the left you'll see all of the components, cells, layouts and pages we created during the tutorial. Where did they come from? You may recall that every time we generated a new page/cell/component we actually created at least *three* files:
 
-* `Article.{js,tsx}`
-* `Article.stories.{js,tsx}`
-* `Article.test.{js,ts}`
+* `Article.{jsx,tsx}`
+* `Article.stories.{jsx,tsx}`
+* `Article.test.{jsx,tsx}`
 
 :::info
 
@@ -22,18 +22,18 @@ If you generated a cell then you also got a `.mock.{js,ts}` file (more on those 
 
 :::
 
-Those `.stories.{js,tsx}` files are what makes the tree on the left side of the Storybook browser possible! From their [homepage](https://storybook.js.org/), Storybook describes itself as:
+Those `.stories.{jsx,tsx}` files are what makes the tree on the left side of the Storybook browser possible! From their [homepage](https://storybook.js.org/), Storybook describes itself as:
 
 *"...an open source tool for developing UI components in isolation for React, Vue, Angular, and more. It makes building stunning UIs organized and efficient."*
 
 So, the idea here is that you can build out your components/cells/pages in isolation, get them looking the way you want and displaying the correct data, then plug them into your full application.
 
-When Storybook opened it should have opened **Components > Article > Generated** which is the generated component we created to display a single blog post. If you open `web/src/components/Article/Article.stories.{js,tsx}` you'll see what it takes to explain this component to Storybook, and it isn't much:
+When Storybook opened it should have opened **Components > Article > Generated** which is the generated component we created to display a single blog post. If you open `web/src/components/Article/Article.stories.{jsx,tsx}` you'll see what it takes to explain this component to Storybook, and it isn't much:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.stories.js"
+```jsx title="web/src/components/Article/Article.stories.jsx"
 import Article from './Article'
 
 export const generated = () => {
