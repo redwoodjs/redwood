@@ -1,25 +1,25 @@
-// When you've added props to your component,
-// pass Storybook's `args` through this story to control it from the addons panel:
+// Pass props to your component by passing an `args` object to your story
 //
-// ```tsx
-// import type { ComponentStory } from '@storybook/react'
-//
-// export const generated: ComponentStory<typeof BlogPost> = (args) => {
-//   return <BlogPost {...args} />
+// ```jsx
+// export const Primary: Story = {
+//  args: {
+//    propName: propValue
+//  }
 // }
 // ```
 //
 // See https://storybook.js.org/docs/react/writing-stories/args.
 
-import type { ComponentMeta } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import BlogPost from './BlogPost'
 
-export const generated = () => {
-  return <BlogPost />
+const meta: Meta<typeof BlogPost> = {
+  component: BlogPost,
 }
 
-export default {
-  title: 'Components/BlogPost',
-  component: BlogPost,
-} as ComponentMeta<typeof BlogPost>
+export default meta
+
+type Story = StoryObj<typeof BlogPost>
+
+export const Primary: Story = {}

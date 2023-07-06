@@ -53,14 +53,13 @@ export default HomePage
 exports[`Single world files creates a page story 1`] = `
 "import HomePage from './HomePage'
 
-export const generated = () => {
-  return <HomePage />
-}
-
-export default {
-  title: 'Pages/HomePage',
+const meta = {
   component: HomePage,
 }
+
+export default meta
+
+export const Primary = {}
 "
 `;
 
@@ -176,18 +175,19 @@ export default TsFilesPage
 `;
 
 exports[`TS Files generates typescript pages 2`] = `
-"import type { ComponentMeta } from '@storybook/react'
+"import type { Meta, StoryObj } from '@storybook/react'
 
 import TsFilesPage from './TsFilesPage'
 
-export const generated = () => {
-  return <TsFilesPage />
+const meta: Meta<typeof TsFilesPage> = {
+  component: TsFilesPage,
 }
 
-export default {
-  title: 'Pages/TsFilesPage',
-  component: TsFilesPage,
-} as ComponentMeta<typeof TsFilesPage>
+export default meta
+
+type Story = StoryObj<typeof TsFilesPage>
+
+export const Primary: Story = {}
 "
 `;
 
@@ -213,14 +213,13 @@ exports[`handler file generation 1`] = `
 {
   "fileContent": "import HomePage from './HomePage'
 
-export const generated = () => {
-  return <HomePage />
-}
-
-export default {
-  title: 'Pages/HomePage',
+const meta = {
   component: HomePage,
 }
+
+export default meta
+
+export const Primary = {}
 ",
   "filePath": "/path/to/project/web/src/pages/HomePage/HomePage.stories.jsx",
 }
@@ -298,14 +297,13 @@ exports[`handler file generation with route params 1`] = `
 {
   "fileContent": "import PostPage from './PostPage'
 
-export const generated = (args) => {
-  return <PostPage id={'42'} {...args} />
-}
-
-export default {
-  title: 'Pages/PostPage',
+const meta = {
   component: PostPage,
 }
+
+export default meta
+
+export const Primary = {}
 ",
   "filePath": "/path/to/project/web/src/pages/PostPage/PostPage.stories.jsx",
 }
@@ -408,14 +406,13 @@ export default ContactUsPage
 exports[`multiWorldFiles creates a page story 1`] = `
 "import ContactUsPage from './ContactUsPage'
 
-export const generated = () => {
-  return <ContactUsPage />
-}
-
-export default {
-  title: 'Pages/ContactUsPage',
+const meta = {
   component: ContactUsPage,
 }
+
+export default meta
+
+export const Primary = {}
 "
 `;
 

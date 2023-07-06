@@ -1,12 +1,13 @@
-import type { ComponentMeta } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import ContactUsPage from './ContactUsPage'
 
-export const generated = () => {
-  return <ContactUsPage />
+const meta: Meta<typeof ContactUsPage> = {
+  component: ContactUsPage,
 }
 
-export default {
-  title: 'Pages/ContactUsPage',
-  component: ContactUsPage,
-} as ComponentMeta<typeof ContactUsPage>
+export default meta
+
+type Story = StoryObj<typeof ContactUsPage>
+
+export const Primary: Story = {}
