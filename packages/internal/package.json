@@ -29,6 +29,9 @@
   },
   "dependencies": {
     "@babel/parser": "7.22.5",
+    "@babel/plugin-transform-class-properties": "7.22.5",
+    "@babel/plugin-transform-private-methods": "7.22.5",
+    "@babel/plugin-transform-private-property-in-object": "7.22.5",
     "@babel/plugin-transform-typescript": "7.22.5",
     "@babel/register": "7.22.5",
     "@babel/runtime-corejs3": "7.22.5",
