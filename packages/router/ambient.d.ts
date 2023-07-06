@@ -19,6 +19,11 @@ declare global {
    */
   var RWJS_EXP_STREAMING_SSR: boolean
 
+  /**
+   * Is the experimental RSC feature enabled?
+   */
+  var RWJS_EXP_RSC: boolean
+
   namespace NodeJS {
     interface Global {
       /**

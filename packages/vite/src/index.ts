@@ -102,6 +102,7 @@ export default function redwoodPluginVite(): PluginOption[] {
               RWJS_EXP_STREAMING_SSR:
                 rwConfig.experimental.streamingSsr &&
                 rwConfig.experimental.streamingSsr.enabled,
+              RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
             },
             RWJS_DEBUG_ENV: {
               RWJS_SRC_ROOT: rwPaths.web.src,
