@@ -21,13 +21,13 @@
     "test:watch": "glob './src/**/__tests__/*.test.ts' --cmd='node --loader tsx --no-warnings --test --watch'"
   },
   "dependencies": {
-    "@typescript-eslint/utils": "5.60.1",
+    "@typescript-eslint/utils": "5.61.0",
     "eslint": "8.43.0"
   },
   "devDependencies": {
     "@types/eslint": "8",
     "@types/estree": "1.0.1",
-    "@typescript-eslint/parser": "5.60.1",
+    "@typescript-eslint/parser": "5.61.0",
     "esbuild": "0.18.11",
     "fast-glob": "3.2.12",
     "glob": "10.3.1",
