@@ -3,6 +3,7 @@ import path from 'path'
 
 import { Listr } from 'listr2'
 
+import { addApiPackages } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -45,6 +46,7 @@ export async function handler({ force, includeExamples, verbose }) {
           isServerFileSetup()
         },
       },
+      addApiPackages(['ioredis']),
       {
         title: 'Adding the realtime api lib ...',
         task: () => {

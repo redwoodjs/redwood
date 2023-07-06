@@ -154,7 +154,11 @@ function wrapAffectedResolvers(
       if (directiveNode && directive) {
         const directiveArgs =
           getDirectiveValues(directive, { directives: [directiveNode] }) || {}
+
         const originalResolve = fieldConfig.resolve ?? defaultFieldResolver
+        // Only validator directives handle a subscribe function
+        const originalSubscribe = fieldConfig.subscribe ?? defaultFieldResolver
+
         if (_isValidator(options)) {
           return {
             ...fieldConfig,
@@ -179,6 +183,28 @@ function wrapAffectedResolvers(
                 )
               }
               return originalResolve(root, args, context, info)
+            },
+            subscribe: function useRedwoodDirectiveValidatorResolver(
+              root,
+              args,
+              context,
+              info
+            ) {
+              const result = options.onResolvedValue({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+              })
+
+              if (isPromise(result)) {
+                return result.then(() =>
+                  originalSubscribe(root, args, context, info)
+                )
+              }
+              return originalSubscribe(root, args, context, info)
             },
           }
         }

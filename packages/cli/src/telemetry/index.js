@@ -5,6 +5,7 @@ import opentelemetry from '@opentelemetry/api'
 import {
   NodeTracerProvider,
   SimpleSpanProcessor,
+  SamplingDecision,
 } from '@opentelemetry/sdk-trace-node'
 
 import { spawnBackgroundProcess } from '../lib/background'
@@ -46,12 +47,26 @@ export async function startTelemetry() {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.ERROR)
 
     // Tracing
-    traceProvider = new NodeTracerProvider()
+    traceProvider = new NodeTracerProvider({
+      sampler: {
+        shouldSample: () => {
+          return {
+            decision: isShutdown
+              ? SamplingDecision.NOT_RECORD
+              : SamplingDecision.RECORD_AND_SAMPLED,
+          }
+        },
+        toString: () => {
+          return 'AlwaysSampleWhenNotShutdown'
+        },
+      },
+    })
     traceExporter = new CustomFileExporter()
     traceProcessor = new SimpleSpanProcessor(traceExporter)
     traceProvider.addSpanProcessor(traceProcessor)
     traceProvider.register()
 
+    // Ensure to shutdown telemetry when the process exits
     process.on('exit', () => {
       shutdownTelemetry()
     })
