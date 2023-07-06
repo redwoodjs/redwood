@@ -10,15 +10,17 @@ export const schema = gql`
  * To test this Countdown subscription, run the following in the GraphQL Playground:
  *
  * subscription CountdownFromInterval {
- *   countdown(from: 10, interval: 100)
+ *   countdown(from: 100, interval: 10)
  * }
  */
 const countdown = {
   countdown: {
-    async *subscribe(_, { from, interval }) {
-      for (let i = from; i >= 0; i--) {
-        await new Promise((resolve) => setTimeout(resolve, interval ?? 1000))
-        yield { countdown: i }
+    async *subscribe(_, { from = 100, interval = 10 }) {
+      while (from >= 0) {
+        yield { countdown: from }
+        // pause for 1/4 second
+        await new Promise((resolve) => setTimeout(resolve, 250))
+        from -= interval
       }
     },
   },
