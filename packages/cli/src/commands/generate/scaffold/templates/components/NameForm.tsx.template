@@ -7,7 +7,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
-import type { Edit${singularPascalName}ById, Update${singularPascalName}Input } from 'types/graphql'
+import type { Edit${singularPascalName}By${pascalIdName}, Update${singularPascalName}Input } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
 
 
@@ -19,10 +19,10 @@ const formatDatetime = (value) => {
 }
 <% } %>
 
-type Form${singularPascalName} = NonNullable<Edit${singularPascalName}ById['${singularCamelName}']>
+type Form${singularPascalName} = NonNullable<Edit${singularPascalName}By${pascalIdName}['${singularCamelName}']>
 
 interface ${singularPascalName}FormProps {
-  ${singularCamelName}?: Edit${singularPascalName}ById['${singularCamelName}']
+  ${singularCamelName}?: Edit${singularPascalName}By${pascalIdName}['${singularCamelName}']
   onSave: (data: Update${singularPascalName}Input, ${idName}?: Form${singularPascalName}['${idName}']) => void
   error: RWGqlError
   loading: boolean

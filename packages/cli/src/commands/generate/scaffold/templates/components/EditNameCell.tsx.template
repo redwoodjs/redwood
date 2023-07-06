@@ -1,4 +1,4 @@
-import type { Edit${singularPascalName}ById, Update${singularPascalName}Input } from 'types/graphql'
+import type { Edit${singularPascalName}By${pascalIdName}, Update${singularPascalName}Input } from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
@@ -8,7 +8,7 @@ import { toast } from '@redwoodjs/web/toast'
 import ${singularPascalName}Form from '${importComponentNameForm}'
 
 export const QUERY = gql`
-  query Edit${singularPascalName}ById($${idName}: ${idType}!) {
+  query Edit${singularPascalName}By${pascalIdName}($${idName}: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(${idName}: $${idName}) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
@@ -28,7 +28,7 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singularPascalName}ById>) => {
+export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singularPascalName}By${pascalIdName}>) => {
   const [update${singularPascalName}, { loading, error }] = useMutation(
     UPDATE_${singularConstantName}_MUTATION,
     {
@@ -44,7 +44,7 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
 
   const onSave = (
     input: Update${singularPascalName}Input,
-    id: Edit${singularPascalName}ById['${singularCamelName}']['id']
+    id: Edit${singularPascalName}By${pascalIdName}['${singularCamelName}']['id']
   ) => {
     update${singularPascalName}({ variables: { id, input } })
   }
