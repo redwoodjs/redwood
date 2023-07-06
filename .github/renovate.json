@@ -1,29 +1,32 @@
 {
   "extends": ["config:base"],
+
   "postUpdateOptions": ["yarnDedupeHighest"],
-  "assignees": ["@jtoar"],
-  "labels": ["release:chore"],
-  "packageRules": [
-    {
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true
-    }
+
+  "schedule": [
+    "on the first day of the month"
   ],
+
   "ignoreDeps": [
+    "@types/lru-cache",
     "boxen",
+    "camelcase",
+    "chalk",
     "configstore",
     "decamelize",
     "execa",
     "humanize-string",
+    "is-port-reachable",
     "latest-version",
+    "lru-cache",
     "ora",
-    "tempy",
-    "terminal-link",
-    "chalk",
     "pascalcase",
+    "pretty-bytes",
+    "pretty-ms",
+    "terminal-link",
+    "tempy",
+    "sort-package-json",
+
     "@redwoodjs/api",
     "@redwoodjs/api-server",
     "@redwoodjs/auth",
@@ -43,13 +46,6 @@
     "@redwoodjs/telemetry",
     "@redwoodjs/testing",
     "@redwoodjs/web",
-    "lru-cache",
-    "@types/lru-cache",
-    "pretty-bytes",
-    "is-port-reachable",
-    "pretty-ms",
-    "camelcase",
-    "sort-package-json",
     "@redwoodjs/vite"
   ]
 }
