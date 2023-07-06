@@ -74,7 +74,6 @@ We use Babel to transpile the api side into `./api/dist` and Webpack to package 
 | Arguments & Options | Description                                                                                                                                                                 |
 | :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `side`              | Which side(s) to build. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                            |
-| `--stats`           | Use [Webpack Bundle Analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) to visualize the size of Webpack output files via an interactive zoomable treemap |
 | `--verbose, -v`     | Print more information while building                                                                                                                                       |
 
 **Usage**
@@ -196,7 +195,7 @@ yarn redwood dev [side..]
 | Argument           | Description                                                                                                                                                                                 |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                      |
-| `--forward, --fwd` | String of one or more Webpack Dev Server config options. See example usage below. See the [Redwood Webpack Doc](webpack-configuration.md#webpack-dev-server) for more details and examples. |
+| `--forward, --fwd` | String of one or more Vite Dev Server config options. See example usage below |
 
 **Usage**
 
@@ -1780,6 +1779,13 @@ yarn redwood setup cache <client>
 
 ### setup custom-web-index
 
+:::caution This command only applies to projects using Webpack
+
+As of v6, all Redwood projects use Vite by default.
+When switching projects to Vite, we made the decision to add the the entry file, `web/src/entry.client.{jsx,tsx}`, back to projects.
+
+:::
+
 Redwood automatically mounts your `<App />` to the DOM, but if you want to customize how that happens, you can use this setup command to generate an `index.js` file in `web/src`.
 
 ```
@@ -1991,12 +1997,11 @@ yarn redwood serve [side]
 
 `yarn rw serve` is useful for debugging locally or for self-hosting—deploying a single server into a serverful environment. Since both the api and the web sides run in the same server, CORS isn't a problem.
 
-| Arguments & Options | Description                                                                                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `side`              | Which side(s) to run. Choices are `api` and `web`. Defaults to `api` and `web`                                                                  |
-| `--port`            | What port should the server run on [default: 8911]                                                                                              |
-| `--host`            | What host should the server run on. This defaults to the value of `web.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
-| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
+| Arguments & Options | Description                                                                    |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `side`              | Which side(s) to run. Choices are `api` and `web`. Defaults to `api` and `web` |
+| `--port`            | What port should the server run on [default: 8911]                             |
+| `--socket`          | The socket the server should run. This takes precedence over port              |
 
 ### serve api
 
@@ -2008,12 +2013,11 @@ yarn rw serve api
 
 This command uses `apiUrl` in your `redwood.toml`. Use this command if you want to run just the api side on a server (e.g. running on Render).
 
-| Arguments & Options | Description                                                                                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--port`            | What port should the server run on [default: 8911]                                                                                              |
-| `--host`            | What host should the server run on. This defaults to the value of `api.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
-| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
-| `--apiRootPath`     | The root path where your api functions are served                                                                                               |
+| Arguments & Options | Description                                                       |
+| ------------------- | ----------------------------------------------------------------- |
+| `--port`            | What port should the server run on [default: 8911]                |
+| `--socket`          | The socket the server should run. This takes precedence over port |
+| `--apiRootPath`     | The root path where your api functions are served                 |
 
 For the full list of Server Configuration settings, see [this documentation](app-configuration-redwood-toml.md#api).
 If you want to format your log output, you can pipe the command to the Redwood LogFormatter:
@@ -2036,12 +2040,11 @@ This command serves the contents in `web/dist`. Use this command if you're debug
 >
 > Probably, but it can be a challenge to setup when you just want something running quickly!
 
-| Arguments & Options | Description                                                                                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--port`            | What port should the server run on [default: 8911]                                                                                              |
-| `--host`            | What host should the server run on. This defaults to the value of `web.host` in the `redwood.toml` file which itself defaults to `'localhost'`. |
-| `--socket`          | The socket the server should run. This takes precedence over port                                                                               |
-| `--apiHost`         | Forwards requests from the `apiUrl` (defined in `redwood.toml`) to the specified host                                                           |
+| Arguments & Options | Description                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| `--port`            | What port should the server run on [default: 8911]                                    |
+| `--socket`          | The socket the server should run. This takes precedence over port                     |
+| `--apiHost`         | Forwards requests from the `apiUrl` (defined in `redwood.toml`) to the specified host |
 
 If you want to format your log output, you can pipe the command to the Redwood LogFormatter:
 

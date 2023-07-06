@@ -101,6 +101,7 @@ module.exports = {
         'contributing-overview',
         'contributing-walkthrough',
         'cors',
+        'create-redwood-app',
         'custom-web-index',
         'data-migrations',
         {
@@ -185,7 +186,7 @@ module.exports = {
           ],
         },
         'webhooks',
-        'webpack-configuration',
+        'vite-configuration',
       ],
     },
     {

@@ -45,8 +45,8 @@ export const getApiSideBabelPresets = (
         exclude: [
           // Remove class-properties from preset-env, and include separately with loose
           // https://github.com/webpack/webpack/issues/9708
-          '@babel/plugin-proposal-class-properties',
-          '@babel/plugin-proposal-private-methods',
+          '@babel/plugin-transform-class-properties',
+          '@babel/plugin-transform-private-methods',
         ],
       },
     ],
@@ -219,6 +219,30 @@ export const prebuildApiFile = (
     // we set the sourceFile (for the sourcemap) as a correct, relative path
     // this is why this function (prebuildFile) must know about the dstPath
     sourceFileName: path.relative(path.dirname(dstPath), srcPath),
+    // we need inline sourcemaps at this level
+    // because this file will eventually be fed to esbuild
+    // when esbuild finds an inline sourcemap, it tries to "combine" it
+    // so the final sourcemap (the one that esbuild generates) combines both mappings
+    sourceMaps: 'inline',
+    plugins,
+  })
+  return result
+}
+
+// TODO (STREAMING) I changed the prebuildApiFile function in https://github.com/redwoodjs/redwood/pull/7672/files
+// but we had to revert. For this branch temporarily, I'm going to add a new function
+// This is used in building routeHooks
+export const transformWithBabel = (
+  srcPath: string,
+  plugins: TransformOptions['plugins']
+) => {
+  const code = fs.readFileSync(srcPath, 'utf-8')
+  const defaultOptions = getApiSideDefaultBabelConfig()
+
+  const result = transform(code, {
+    ...defaultOptions,
+    cwd: getPaths().api.base,
+    filename: srcPath,
     // we need inline sourcemaps at this level
     // because this file will eventually be fed to esbuild
     // when esbuild finds an inline sourcemap, it tries to "combine" it

@@ -1,9 +1,10 @@
-// When you've added props to your component,
-// pass Storybook's `args` through this story to control it from the addons panel:
+// Pass props to your component by passing an `args` object to your story
 //
 // ```jsx
-// export const generated = (args) => {
-//   return <${pascalName} {...args} />
+// export const Primary = {
+//  args: {
+//    propName: propValue
+//  }
 // }
 // ```
 //
@@ -11,11 +12,6 @@
 
 import ${pascalName} from './${pascalName}'
 
-export const generated = () => {
-  return <${pascalName} />
-}
+export default { component: ${pascalName} }
 
-export default {
-  title: 'Components/${pascalName}',
-  component: ${pascalName},
-}
+export const Primary = {}

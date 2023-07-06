@@ -103,7 +103,7 @@ export const files = async ({ name, typescript, ...options }) => {
     extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: 'stories.js.template',
+    templatePath: 'stories.tsx.template',
   })
 
   const mockFile = templateForComponentFile({
@@ -180,7 +180,15 @@ export const { command, description, builder, handler } =
             )
 
             if (projectHasSdl) {
-              await generateTypes()
+              const { errors } = await generateTypes()
+
+              for (const { message, error } of errors) {
+                console.error(message)
+                console.log()
+                console.error(error)
+                console.log()
+              }
+
               addFunctionToRollback(generateTypes, true)
             } else {
               task.skip(

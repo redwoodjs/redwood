@@ -6,6 +6,7 @@ import path from 'path'
 import { getSchema, getConfig } from '@prisma/internals'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask, printSetupNotes } from '../../../../lib'
@@ -304,6 +305,11 @@ const notes = [
 ]
 
 export const handler = async ({ force, database }) => {
+  recordTelemetryAttributes({
+    command: 'setup deploy flightcontrol',
+    force,
+    database,
+  })
   const tasks = new Listr(
     [
       {

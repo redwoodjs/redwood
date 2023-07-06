@@ -1,6 +1,8 @@
 import password from 'secure-random-password'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 const DEFAULT_LENGTH = 64
 
 export const generateSecret = (length = DEFAULT_LENGTH) => {
@@ -36,6 +38,12 @@ export const builder = (yargs) =>
     )
 
 export const handler = ({ length, raw }) => {
+  recordTelemetryAttributes({
+    command: 'generate secret',
+    length,
+    raw,
+  })
+
   if (raw) {
     console.log(generateSecret(length))
     return

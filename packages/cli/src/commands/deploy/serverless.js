@@ -9,6 +9,8 @@ import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
 
@@ -127,6 +129,14 @@ const loadDotEnvForStage = (dotEnvPath) => {
 }
 
 export const handler = async (yargs) => {
+  recordTelemetryAttributes({
+    command: 'deploy serverless',
+    sides: JSON.stringify(yargs.sides),
+    verbose: yargs.verbose,
+    packOnly: yargs.packOnly,
+    firstRun: yargs.firstRun,
+  })
+
   const rwjsPaths = getPaths()
   const dotEnvPath = path.join(rwjsPaths.base, `.env.${yargs.stage}`)
 

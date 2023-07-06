@@ -3,6 +3,8 @@ import path from 'path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
@@ -34,6 +36,12 @@ export default theme
 `
 
 export async function handler({ force, install }) {
+  recordTelemetryAttributes({
+    command: 'setup ui chakra-ui',
+    force,
+    install,
+  })
+
   const rwPaths = getPaths()
 
   const packages = [

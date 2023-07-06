@@ -96,6 +96,13 @@ export const findApiDistFunctions = (cwd: string = getPaths().api.base) => {
   })
 }
 
+export const findRouteHooksSrc = (cwd: string = getPaths().web.src) => {
+  return fg.sync('**/*.routeHooks.{js,ts,tsx,jsx}', {
+    absolute: true,
+    cwd,
+  })
+}
+
 export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
   fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
 

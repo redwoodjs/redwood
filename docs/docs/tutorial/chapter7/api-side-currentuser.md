@@ -71,7 +71,7 @@ We'll comment out the sensitive fields of our GraphQL User type so there's no ch
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="api/src/graphql/users.sdl.js"
+```js title="api/src/graphql/users.sdl.js"
   type User {
     ...
     # hashedPassword: String!
@@ -84,7 +84,7 @@ We'll comment out the sensitive fields of our GraphQL User type so there's no ch
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title="api/src/graphql/users.sdl.tsx"
+```ts title="api/src/graphql/users.sdl.ts"
   type User {
     ...
     # hashedPassword: String!

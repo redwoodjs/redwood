@@ -1,6 +1,8 @@
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import {
   deleteFilesTask,
   getPaths,
@@ -111,6 +113,9 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
   )
 
 export const handler = async ({ model: modelArg }) => {
+  recordTelemetryAttributes({
+    command: 'destory scaffold',
+  })
   const { model, path } = splitPathAndModel(modelArg)
   try {
     const { name } = await verifyModelName({ name: model, isDestroyer: true })

@@ -7,7 +7,7 @@ First let's update the `Article` component to contain that functionality:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 // highlight-start
@@ -88,7 +88,7 @@ Now in the Storybook story let's create a `summary` story that uses the `Article
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/components/Article/Article.stories.js"
+```jsx title="web/components/Article/Article.stories.jsx"
 import Article from './Article'
 
 // highlight-start
@@ -157,7 +157,7 @@ Great! Now to complete the picture let's use the summary in our home page displa
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 import Article from 'src/components/Article'
 
 export const QUERY = gql`

@@ -76,7 +76,6 @@ describe('yarn rw dev', () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
-        host: 'localhost',
       },
       api: {
         port: 8911,
@@ -97,11 +96,11 @@ describe('yarn rw dev', () => {
 
     // Uses absolute path, so not doing a snapshot
     expect(webCommand.command).toContain(
-      'yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES= webpack serve'
+      'yarn cross-env NODE_ENV=development rw-vite-dev'
     )
 
     expect(apiCommand.command).toMatchInlineSnapshot(
-      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --host '::' --debug-port 18911 | rw-log-formatter""`
+      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
     )
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
@@ -111,7 +110,6 @@ describe('yarn rw dev', () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
-        host: 'localhost',
       },
       api: {
         port: 8911,
@@ -129,7 +127,7 @@ describe('yarn rw dev', () => {
     const apiCommand = find(concurrentlyArgs, { name: 'api' })
 
     expect(apiCommand.command).toContain(
-      "yarn rw-api-server-watch --port 8911 --host '::' --debug-port 90909090"
+      'yarn rw-api-server-watch --port 8911 --debug-port 90909090'
     )
   })
 
@@ -137,7 +135,6 @@ describe('yarn rw dev', () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
-        host: 'localhost',
       },
       api: {
         port: 8911,
@@ -160,7 +157,6 @@ describe('yarn rw dev', () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
-        host: 'localhost',
         bundler: 'vite', // <-- enable vite mode
       },
       api: {

@@ -5,7 +5,7 @@ import type {
 } from 'aws-lambda'
 
 import { createGraphQLYoga } from '../createGraphQLYoga'
-import { getAsyncStoreInstance } from '../globalContext'
+import { GlobalContext, getAsyncStoreInstance } from '../globalContext'
 import type { GraphQLHandlerOptions } from '../types'
 
 /**
@@ -39,6 +39,7 @@ export const createGraphQLHandler = ({
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
+  openTelemetryOptions,
 }: GraphQLHandlerOptions) => {
   const handlerFn = async (
     event: APIGatewayProxyEvent,
@@ -69,6 +70,7 @@ export const createGraphQLHandler = ({
       defaultError,
       graphiQLEndpoint,
       schemaOptions,
+      openTelemetryOptions,
     })
 
     try {
@@ -159,14 +161,6 @@ export const createGraphQLHandler = ({
         throw e
       }
     }
-
-    if (getAsyncStoreInstance()) {
-      // This must be used when you're self-hosting RedwoodJS.
-      return getAsyncStoreInstance().run(new Map(), execFn)
-    } else {
-      // This is OK for AWS (Netlify/Vercel) because each Lambda request
-      // is handled individually.
-      return execFn()
-    }
+    return getAsyncStoreInstance().run(new Map<string, GlobalContext>(), execFn)
   }
 }

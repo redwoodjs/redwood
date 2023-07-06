@@ -2,6 +2,9 @@ import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 
+import type { GlobalContext } from '@redwoodjs/graphql-server'
+import { getAsyncStoreInstance } from '@redwoodjs/graphql-server'
+
 import { loadFastifyConfig } from './config'
 import { lambdaRequestHandler, loadFunctionsFromDist } from './lambda'
 import type { RedwoodFastifyAPIOptions } from './types'
@@ -13,6 +16,12 @@ export async function redwoodFastifyAPI(
 ) {
   fastify.register(fastifyUrlData)
   await fastify.register(fastifyRawBody)
+
+  // TODO: This should be refactored to only be defined once and it might not live here
+  // Ensure that each request has a unique global context
+  fastify.addHook('onRequest', (_req, _reply, done) => {
+    getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
+  })
 
   fastify.addContentTypeParser(
     ['application/x-www-form-urlencoded', 'multipart/form-data'],

@@ -254,7 +254,8 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
   )
 
   // Write the uid
-  fs.ensureFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
+  fs.ensureDirSync(path.join(newAppDir, '.redwood'))
+  fs.writeFileSync(path.join(newAppDir, '.redwood', 'telemetry.txt'), UID)
 
   tuiContent.update({
     spinner: {

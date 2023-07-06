@@ -1,5 +1,7 @@
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths } from '../../lib'
 
 export const command = 'up'
@@ -32,6 +34,10 @@ export function builder(yargs) {
 }
 
 export async function handler(options) {
+  recordTelemetryAttributes({
+    command: 'data-migrate up',
+    dbFromDist: options.importDbClientFromDist,
+  })
   const { handler } = await import('./upHandler.js')
   return handler(options)
 }

@@ -1,5 +1,7 @@
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { supportedProviders } from './supportedProviders'
 
 export const command = 'graphiql <provider>'
@@ -43,6 +45,11 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
+  recordTelemetryAttributes({
+    command: 'setup graphiql',
+    provider: options.provider,
+    view: options.view,
+  })
   const { handler } = await import('./graphiqlHandler.js')
   return handler(options)
 }

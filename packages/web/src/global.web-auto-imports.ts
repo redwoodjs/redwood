@@ -7,9 +7,12 @@ import type _PropTypes from 'prop-types'
 // For "internal" global types see ambient.d.ts
 
 declare global {
-  const React: typeof _React
   const PropTypes: typeof _PropTypes
   const gql: typeof _gql
+
+  // Having this as a type instead of a const allows us to augment/override it
+  // in other packages
+  type React = typeof _React
 
   interface Window {
     /** URL or absolute path to the GraphQL serverless function */
