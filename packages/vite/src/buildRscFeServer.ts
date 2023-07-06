@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
+import { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
 import { RWRouteManifest } from './types'
@@ -272,8 +272,10 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 
-  const routesList = getProjectRoutes()
+  // TODO (RSC) We don't have support for a router yet, so skip all routes
+  const routesList = [] as RouteSpec[] // getProjectRoutes()
 
+  // This is all a no-op for now
   const routeManifest = routesList.reduce<RWRouteManifest>((acc, route) => {
     acc[route.path] = {
       name: route.name,
