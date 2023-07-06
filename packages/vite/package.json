@@ -21,6 +21,10 @@
     "./client": {
       "types": "./dist/client.d.ts",
       "default": "./dist/client.js"
+    },
+    "./buildFeServer": {
+      "types": "./dist/buildFeServer.d.ts",
+      "default": "./dist/buildFeServer.js"
     }
   },
   "bin": {

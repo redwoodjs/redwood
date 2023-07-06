@@ -4,7 +4,7 @@ import yargsParser from 'yargs-parser'
 
 import { buildWeb } from '@redwoodjs/internal/dist/build/web.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-import { buildFeServer } from '@redwoodjs/vite/dist/buildFeServer.js'
+import { buildFeServer } from '@redwoodjs/vite/buildFeServer'
 
 const rwPaths = getPaths()
 
