@@ -68,7 +68,6 @@ GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
 
 We also need to denote what data we want permission to read from GitHub once someone authorizes our app. We'll want the user's public info, and probably their email address. That's only two scopes, and we can add those as another ENV var:
 
-
 ```bash title=/.env
 GITHUB_OAUTH_CLIENT_ID=41a08ae238b5aee4121d
 GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
@@ -351,8 +350,13 @@ model Identity {
 
 We're also storing the `accessToken` and `scope` that we got back from the last time we retrived them from GitHub, as well as a timestamp for the last time the user logged in. Storing the `scope` is useful because if you ever change them, you may want to notify users that have the previous scope definition to re-login so the new scopes can be authorized.
 
-We'll also need to add an `identities` relation to the `User` model, and make the previously required `hashedPassword` and `salt` fields optional (since users may want to *only* authenticate via GitHub, they'll never get to enter a password):
+::: caution
 
+There's no GraphQL SDL tied to the Identity table, so it is not accessible via our API. But, if you ever did create an SDL and service, be sure that `accessToken` is not in the list of fields exposed publicly!
+
+:::
+
+We'll need to add an `identities` relation to the `User` model, and make the previously required `hashedPassword` and `salt` fields optional (since users may want to *only* authenticate via GitHub, they'll never get to enter a password):
 
 ```prisma title=/api/db/schema.prisma
 model User {
@@ -384,7 +388,6 @@ Let's add some code that returns the user if found, otherwise it creates the use
 :::info
 Be sure to import `db` at the top of the file if you haven't already!
 :::
-
 
 ```js title=/api/src/functions/oauth/oauth.js
 // highlight-next-line
@@ -475,7 +478,6 @@ const findOrCreateUser = async (providerUser) => {
 ```
 
 Let's break that down.
-
 
 ```js
 const providerUser = await getProviderUser(access_token)
