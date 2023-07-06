@@ -45,8 +45,8 @@ export const getApiSideBabelPresets = (
         exclude: [
           // Remove class-properties from preset-env, and include separately with loose
           // https://github.com/webpack/webpack/issues/9708
-          '@babel/plugin-proposal-class-properties',
-          '@babel/plugin-proposal-private-methods',
+          '@babel/plugin-transform-class-properties',
+          '@babel/plugin-transform-private-methods',
         ],
       },
     ],

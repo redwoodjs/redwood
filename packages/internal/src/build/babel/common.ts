@@ -60,12 +60,12 @@ if (!RUNTIME_CORE_JS_VERSION) {
 
 export const getCommonPlugins = () => {
   return [
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    ['@babel/plugin-transform-class-properties', { loose: true }],
     // Note: The private method loose mode configuration setting must be the
     // same as @babel/plugin-proposal class-properties.
     // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+    ['@babel/plugin-transform-private-methods', { loose: true }],
+    ['@babel/plugin-transform-private-property-in-object', { loose: true }],
   ]
 }
 
