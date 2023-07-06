@@ -15,7 +15,7 @@ export const schema = gql`
  */
 const countdown = {
   countdown: {
-    async *subscribe(_, { from = 10, interval = 100 }) {
+    async *subscribe(_, { from = 100, interval = 10 }) {
       while (from >= 0) {
         yield { countdown: from }
         // pause for 1/4 second
