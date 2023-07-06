@@ -1038,7 +1038,7 @@ describe('dbAuth', () => {
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      
+
       const dbAuth = new DbAuthHandler(event, context, options)
 
       const response = await dbAuth.login()
@@ -1054,16 +1054,16 @@ describe('dbAuth', () => {
 
     it('login db check is not called with insensitive string when user has not provided one in LoginFlowOptions', async () => {
       const spy = jest.spyOn(db.user, 'findFirst')
-      
-      delete options.signup.usernameMatch;
-      delete options.login.usernameMatch;
+
+      delete options.signup.usernameMatch
+      delete options.login.usernameMatch
 
       const user = await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
       })
-      
+
       const dbAuth = new DbAuthHandler(event, context, options)
 
       const response = await dbAuth.login()

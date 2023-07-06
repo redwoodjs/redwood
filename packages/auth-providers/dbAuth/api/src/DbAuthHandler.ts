@@ -117,7 +117,7 @@ interface LoginFlowOptions<TUser = Record<string | number, any>> {
    * How long a user will remain logged in, in seconds
    */
   expires: number
-  
+
   /**
    * Allows the user to define if the UserCheck for their selected db provider should use case insensitive
    */
@@ -1228,10 +1228,12 @@ export class DbAuthHandler<
       )
     }
 
-    const usernameMatchFlowOption = (this.options.login as LoginFlowOptions)?.usernameMatch
-    const findUniqueUserMatchCriteriaOptions = this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption);
+    const usernameMatchFlowOption = (this.options.login as LoginFlowOptions)
+      ?.usernameMatch
+    const findUniqueUserMatchCriteriaOptions =
+      this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption)
     let user
-    
+
     try {
       // does user exist?
       user = await this.dbAccessor.findFirst({
@@ -1304,9 +1306,10 @@ export class DbAuthHandler<
       this._validateField('username', username) &&
       this._validateField('password', password)
     ) {
-      
-      const usernameMatchFlowOption = (this.options.signup as SignupFlowOptions)?.usernameMatch
-      const findUniqueUserMatchCriteriaOptions = this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption);
+      const usernameMatchFlowOption = (this.options.signup as SignupFlowOptions)
+        ?.usernameMatch
+      const findUniqueUserMatchCriteriaOptions =
+        this._getUserMatchCriteriaOptions(username, usernameMatchFlowOption)
 
       const user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
@@ -1438,7 +1441,10 @@ export class DbAuthHandler<
     }
   }
 
-  _getUserMatchCriteriaOptions(username : string, usernameMatchFlowOption: string | undefined) {
+  _getUserMatchCriteriaOptions(
+    username: string,
+    usernameMatchFlowOption: string | undefined
+  ) {
     // Each db provider has it owns rules for case insensitive comparison.
     // We are checking if you have defined one for your db choice here
     // https://www.prisma.io/docs/concepts/components/prisma-client/case-sensitivity
