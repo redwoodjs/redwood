@@ -1,4 +1,5 @@
 // TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
+import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -34,6 +35,7 @@ export async function serverBuild(
     ssr: {
       noExternal: ['..'],
     },
+    plugins: [react()],
     build: {
       ssr: true,
       // TODO (RSC) Change output dir to just dist. We should be "server

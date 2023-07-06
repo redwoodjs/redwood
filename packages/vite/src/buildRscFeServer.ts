@@ -32,7 +32,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
     // ...configFileConfig,
     root: rwPaths.base,
     plugins: [
-      // react(), // Not needed with "jsx: 'react-jsx'" in the app's tsconfig.json
+      react(),
       {
         name: 'rsc-test-plugin',
         transform(_code, id) {
