@@ -7535,7 +7535,6 @@ __metadata:
     "@babel/node": 7.22.5
     "@babel/plugin-proposal-class-properties": 7.18.6
     "@babel/plugin-proposal-decorators": 7.22.5
-    "@babel/plugin-proposal-private-methods": 7.18.6
     "@babel/plugin-proposal-private-property-in-object": 7.21.11
     "@babel/plugin-transform-runtime": 7.22.5
     "@babel/preset-env": 7.22.5
@@ -7747,6 +7746,7 @@ __metadata:
     "@babel/cli": 7.22.5
     "@babel/core": 7.22.5
     "@babel/parser": 7.22.5
+    "@babel/plugin-proposal-private-methods": 7.18.6
     "@babel/plugin-transform-typescript": 7.22.5
     "@babel/register": 7.22.5
     "@babel/runtime-corejs3": 7.22.5
