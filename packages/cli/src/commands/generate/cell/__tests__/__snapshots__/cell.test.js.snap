@@ -89,23 +89,35 @@ exports[`Kebab case words creates a cell stories with a kebabCase word name 1`] 
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta = {
+  title: 'Cells/UserProfileCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/UserProfileCell' }
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 
@@ -191,23 +203,35 @@ exports[`Multiword files creates a cell stories with a multi word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta = {
+  title: 'Cells/UserProfileCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/UserProfileCell' }
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 
@@ -293,23 +317,35 @@ exports[`Single word files creates a cell stories with a single word name 1`] = 
 "import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta = {
+  title: 'Cells/UserCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/UserCell' }
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 
@@ -395,23 +431,35 @@ exports[`Snake case words creates a cell stories with a snakeCase word name 1`] 
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta = {
+  title: 'Cells/UserProfileCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/UserProfileCell' }
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 
@@ -536,28 +584,40 @@ describe('BazingaCell', () => {
 `;
 
 exports[`TypeScript: generates list cells if list flag passed in 3`] = `
-"import type { ComponentStory } from '@storybook/react'
+"import type { Meta, StoryObj } from '@storybook/react'
 
 import { Loading, Empty, Failure, Success } from './BazingaCell'
 import { standard } from './BazingaCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta: Meta = {
+  title: 'Cells/BazingaCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading: StoryObj<typeof Loading> = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure: ComponentStory<typeof Failure> = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty: StoryObj<typeof Empty> = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success: ComponentStory<typeof Success> = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure: StoryObj<typeof Failure> = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/BazingaCell' }
+export const success: StoryObj<typeof Success> = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 
@@ -640,23 +700,35 @@ exports[`camelCase words creates a cell stories with a camelCase word name 1`] =
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta = {
+  title: 'Cells/UserProfileCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/UserProfileCell' }
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 
@@ -777,23 +849,35 @@ exports[`generates a cell with a string primary id key 3`] = `
 "import { Loading, Empty, Failure, Success } from './AddressCell'
 import { standard } from './AddressCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta = {
+  title: 'Cells/AddressCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/AddressCell' }
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 
@@ -885,23 +969,35 @@ exports[`generates list a cell with a string primary id keys 3`] = `
 "import { Loading, Empty, Failure, Success } from './AddressesCell'
 import { standard } from './AddressesCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta = {
+  title: 'Cells/AddressesCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/AddressesCell' }
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 
@@ -991,23 +1087,35 @@ exports[`generates list cells if list flag passed in 3`] = `
 "import { Loading, Empty, Failure, Success } from './MembersCell'
 import { standard } from './MembersCell.mock'
 
-export const loading = () => {
-  return Loading ? <Loading /> : <></>
+const meta = {
+  title: 'Cells/MembersCell',
 }
 
-export const empty = () => {
-  return Empty ? <Empty /> : <></>
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
 }
 
-export const failure = (args) => {
-  return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
 }
 
-export const success = (args) => {
-  return Success ? <Success {...standard()} {...args} /> : <></>
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
 }
 
-export default { title: 'Cells/MembersCell' }
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
 "
 `;
 

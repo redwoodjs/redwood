@@ -208,7 +208,7 @@ export const createYargsForComponentGeneration = ({
     },
     handler: async (options) => {
       recordTelemetryAttributes({
-        command: ['generate', componentName].join(' '),
+        command: `generate ${componentName}`,
         tests: options.tests,
         stories: options.stories,
         verbose: options.verbose,

@@ -39,7 +39,7 @@
     "@babel/runtime-corejs3": "7.22.5",
     "@redwoodjs/auth": "5.0.0",
     "core-js": "3.31.0",
-    "graphql": "16.6.0",
+    "graphql": "16.7.1",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "1.3.0",
     "react-hot-toast": "2.4.1",
@@ -59,14 +59,14 @@
     "jest-runner-tsd": "5.0.0",
     "nodemon": "2.0.22",
     "prop-types": "15.8.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "18.3.0-canary-035a41c4e-20230704",
+    "react-dom": "18.3.0-canary-035a41c4e-20230704",
     "typescript": "5.1.3"
   },
   "peerDependencies": {
     "prop-types": "15.8.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.0-canary-035a41c4e-20230704",
+    "react-dom": "18.3.0-canary-035a41c4e-20230704"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

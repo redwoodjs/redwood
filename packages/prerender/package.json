@@ -35,7 +35,7 @@
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.31.0",
-    "graphql": "16.6.0",
+    "graphql": "16.7.1",
     "mime-types": "2.1.35"
   },
   "devDependencies": {
@@ -47,8 +47,8 @@
     "typescript": "5.1.3"
   },
   "peerDependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.0-canary-035a41c4e-20230704",
+    "react-dom": "18.3.0-canary-035a41c4e-20230704"
   },
   "externals": {
     "react": "react",

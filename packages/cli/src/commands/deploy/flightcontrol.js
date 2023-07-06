@@ -46,7 +46,7 @@ export const builder = (yargs) => {
 
 export const handler = async ({ side, serve, prisma, dm: dataMigrate }) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'flightcontrol'].join(' '),
+    command: 'deploy flightcontrol',
     side,
     prisma,
     dataMigrate,
