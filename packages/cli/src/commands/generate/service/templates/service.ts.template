@@ -6,9 +6,9 @@ export const ${pluralCamelName}: QueryResolvers['${pluralCamelName}'] = () => {
   return db.${singularCamelName}.findMany()
 }<% if (crud || relations.length) { %>
 
-export const ${singularCamelName}: QueryResolvers['${singularCamelName}'] = ({ id }) => {
+export const ${singularCamelName}: QueryResolvers['${singularCamelName}'] = ({ ${idName} }) => {
   return db.${singularCamelName}.findUnique({
-    where: { id },
+    where: { ${idName} },
   })
 }<% } %><% if (crud) { %>
 
@@ -18,21 +18,21 @@ export const create${singularPascalName}: MutationResolvers['create${singularPas
   })
 }
 
-export const update${singularPascalName}: MutationResolvers['update${singularPascalName}'] = ({ id, input }) => {
+export const update${singularPascalName}: MutationResolvers['update${singularPascalName}'] = ({ ${idName}, input }) => {
   return db.${singularCamelName}.update({
     data: input,
-    where: { id },
+    where: { ${idName} },
   })
 }
 
-export const delete${singularPascalName}: MutationResolvers['delete${singularPascalName}'] = ({ id }) => {
+export const delete${singularPascalName}: MutationResolvers['delete${singularPascalName}'] = ({ ${idName} }) => {
   return db.${singularCamelName}.delete({
-    where: { id },
+    where: { ${idName} },
   })
 }<% } %><% if (relations.length) { %>
 
 export const ${singularPascalName}: ${singularPascalName}RelationResolvers = {<% relations.forEach(relation => { %>
   ${relation}: (_obj, { root }) => {
-    return db.${singularCamelName}.findUnique({ where: { id: root?.id } }).${relation}()
+    return db.${singularCamelName}.findUnique({ where: { ${idName}: root?.${idName} } }).${relation}()
   },<% }) %>
 }<% } %>

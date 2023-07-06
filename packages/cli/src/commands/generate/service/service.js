@@ -277,6 +277,11 @@ export const fieldsToUpdate = async (model) => {
   return { [fieldName]: newValue }
 }
 
+const getIdName = async (model) => {
+  const schema = await getSchema(model)
+  return schema.fields.find((field) => field.isId)?.name
+}
+
 export const files = async ({
   name,
   tests,
@@ -286,6 +291,7 @@ export const files = async ({
 }) => {
   const componentName = camelcase(pluralize(name))
   const model = name
+  const idName = await getIdName(model)
   const extension = 'ts'
   const serviceFile = templateForComponentFile({
     name,
@@ -294,7 +300,7 @@ export const files = async ({
     apiPathSection: 'services',
     generator: 'service',
     templatePath: `service.${extension}.template`,
-    templateVars: { relations: relations || [], ...rest },
+    templateVars: { relations: relations || [], idName, ...rest },
   })
 
   const testFile = templateForComponentFile({
@@ -313,6 +319,7 @@ export const files = async ({
         (field) => field.type === 'Decimal'
       ),
       prismaModel: model,
+      idName,
       ...rest,
     },
   })
@@ -328,6 +335,7 @@ export const files = async ({
       scenario: await buildScenario(model),
       stringifiedScenario: await buildStringifiedScenario(model),
       prismaModel: model,
+      idName,
       ...rest,
     },
   })

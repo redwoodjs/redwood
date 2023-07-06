@@ -47,7 +47,7 @@ describe('${pluralCamelName}', () => {
   })<% if (crud) { %>
 
   scenario('returns a single ${singularCamelName}', async (scenario: StandardScenario) => {
-    const result = await ${singularCamelName}({ id: scenario.${singularCamelName}.one.id })
+    const result = await ${singularCamelName}({ ${idName}: scenario.${singularCamelName}.one.${idName} })
 
     expect(result).toEqual(scenario.${singularCamelName}.one)
   })
@@ -62,9 +62,9 @@ describe('${pluralCamelName}', () => {
   })<% } %>
 
   <% if (update) { %>scenario('updates a ${singularCamelName}', async (scenario: StandardScenario) => {<% rand = parseInt(Math.random() * 10000000) %>
-    const original = await (${singularCamelName}({ id: scenario.${singularCamelName}.one.id })) as ${prismaModel}
+    const original = await (${singularCamelName}({ ${idName}: scenario.${singularCamelName}.one.${idName} })) as ${prismaModel}
     const result = await update${singularPascalName}({
-      id: original.id,
+      ${idName}: original.${idName},
       input: ${transformValue(update)},
     })
 
@@ -73,8 +73,8 @@ describe('${pluralCamelName}', () => {
   })<% } %>
 
   scenario('deletes a ${singularCamelName}', async (scenario: StandardScenario) => {
-    const original = (await delete${singularPascalName}({ id: scenario.${singularCamelName}.one.id })) as ${prismaModel}
-    const result = await ${singularCamelName}({ id: original.id })
+    const original = (await delete${singularPascalName}({ ${idName}: scenario.${singularCamelName}.one.${idName} })) as ${prismaModel}
+    const result = await ${singularCamelName}({ ${idName}: original.${idName} })
 
     expect(result).toEqual(null)
   })<% } %>
