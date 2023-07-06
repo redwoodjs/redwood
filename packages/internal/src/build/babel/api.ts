@@ -42,12 +42,6 @@ export const getApiSideBabelPresets = (
           // List of supported proposals: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#ecmascript-proposals
           proposals: true,
         },
-        exclude: [
-          // Remove class-properties from preset-env, and include separately with loose
-          // https://github.com/webpack/webpack/issues/9708
-          '@babel/plugin-transform-class-properties',
-          '@babel/plugin-transform-private-methods',
-        ],
       },
     ],
   ].filter(Boolean) as TransformOptions['presets']
