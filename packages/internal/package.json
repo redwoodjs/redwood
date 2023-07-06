@@ -67,6 +67,7 @@
   "devDependencies": {
     "@babel/cli": "7.22.5",
     "@babel/core": "7.22.5",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@types/babel-plugin-tester": "9.0.5",
     "@types/babel__core": "7.20.1",
     "@types/fs-extra": "11.0.1",
