@@ -52,7 +52,17 @@ export async function startTelemetry() {
     traceProvider.addSpanProcessor(traceProcessor)
     traceProvider.register()
 
-    process.on('SIGINT', () => {})
+    // If these signals have no listeners, then nodejs will exit without triggering the
+    // process exit event, so we need to ensure we have at least one listener for each
+    for (const signal of ['SIGTERM', 'SIGINT', 'SIGHUP']) {
+      process.on(signal, () => {
+        if (process.listenerCount(signal) === 1) {
+          console.log(`Received ${signal} signal, exiting...`)
+          process.exit()
+        }
+      })
+    }
+
     process.on('exit', () => {
       shutdownTelemetry()
     })
