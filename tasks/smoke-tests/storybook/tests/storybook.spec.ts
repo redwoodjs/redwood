@@ -64,7 +64,7 @@ test('Loads Cell mocks when Cell is nested in another story', async ({
 
   // Click text=Empty
   await expect(page).toHaveURL(
-    `http://localhost:7910/?path=/story/pages-blogpostpage--generated`
+    `http://localhost:7910/?path=/story/pages-blogpostpage--primary`
   )
 
   await expect(
@@ -89,7 +89,7 @@ test('Mocks current user, and updates UI while dev server is running', async ({
 
   if (!profilePageStoryContent.includes('mockCurrentUser')) {
     const contentWithMockCurrentUser = profilePageStoryContent.replace(
-      'export const generated = () => {',
+      'export const Primary: Story = {}',
       MOCK_CURRENT_USER_CONTENT
     )
 
@@ -137,12 +137,17 @@ test('Mocks current user, and updates UI while dev server is running', async ({
 })
 
 const MOCK_CURRENT_USER_CONTENT = `\
-export const generated = () => {
-  mockCurrentUser({
-    email: 'ba@zinga.com',
-    id: 55,
-    roles: 'ADMIN',
-  })
+export const Primary: Story = {
+  render: () => {
+    mockCurrentUser({
+      email: 'ba@zinga.com',
+      id: 55,
+      roles: 'ADMIN',
+    })
+
+    return <ProfilePage />
+  }
+}
 `
 
 test('Loads MDX Stories', async ({ page }: PlaywrightTestArgs) => {

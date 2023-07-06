@@ -6,7 +6,7 @@ import { logger } from 'src/lib/logger'
 
 export const schema = gql`
   type Subscription {
-    newMessage(roomId: ID!): Message!
+    newMessage(roomId: ID!): Message! @requireAuth
   }
 `
 export type NewMessageChannel = {

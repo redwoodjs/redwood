@@ -253,10 +253,16 @@ This handler is invoked after the password has been successfully changed in the 
 
 ### usernameMatch
 
-This configuration allows you to perform a case insensitive check on a username at the point of user creation.
+This configuration allows you to perform a case insensitive check on a username at the point of db check. You will need to provide the configuration of your choice for both signup and login.
 
 ```javascript
 signup: {
+  usernameMatch: 'insensitive'
+}
+```
+
+```javascript
+login: {
   usernameMatch: 'insensitive'
 }
 ```
