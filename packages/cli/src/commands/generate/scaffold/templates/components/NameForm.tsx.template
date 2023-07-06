@@ -23,7 +23,7 @@ type Form${singularPascalName} = NonNullable<Edit${singularPascalName}ById['${si
 
 interface ${singularPascalName}FormProps {
   ${singularCamelName}?: Edit${singularPascalName}ById['${singularCamelName}']
-  onSave: (data: Update${singularPascalName}Input, id?: Form${singularPascalName}['id']) => void
+  onSave: (data: Update${singularPascalName}Input, ${idName}?: Form${singularPascalName}['${idName}']) => void
   error: RWGqlError
   loading: boolean
 }
@@ -42,7 +42,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
       }
     <% } %>
   <% }) %>
-    props.onSave(data, props?.${singularCamelName}?.id)
+    props.onSave(data, props?.${singularCamelName}?.${idName})
   }
 
   return (
@@ -66,7 +66,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
           <% if (!column.isRequired) { %>
           <div className="rw-check-radio-items">
             <${column.component}
-              id="${singularCamelName}-${column.name}-none"
+              ${idName}="${singularCamelName}-${column.name}-none"
               name="${column.name}"
               defaultValue=""
               ${column.defaultProp}={!props.spot?.spotType}
@@ -83,7 +83,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
             %>
         <div className="rw-check-radio-items">
           <${column.component}
-            id="${singularCamelName}-${column.name}-${i}"
+            ${idName}="${singularCamelName}-${column.name}-${i}"
             name="${columnComponentName}"
             defaultValue="${value.name}"
             ${column.defaultProp}={props.${singularCamelName}?.${column.name}?.includes('${value.name}')}

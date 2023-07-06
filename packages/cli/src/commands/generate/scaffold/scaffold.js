@@ -632,6 +632,7 @@ export const routes = async ({
   const nameVars = nameVariants(name)
   const model = await getSchema(nameVars.singularPascalName)
   const idRouteParam = getIdType(model) === 'Int' ? ':Int' : ''
+  const idName = getIdName(model)
 
   const paramScaffoldPath =
     scaffoldPath === ''
@@ -647,9 +648,9 @@ export const routes = async ({
     // new
     `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}/new" page={${pageRoot}New${nameVars.singularPascalName}Page} name="${templateNames.newRouteName}" />`,
     // edit
-    `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}/{id${idRouteParam}}/edit" page={${pageRoot}Edit${nameVars.singularPascalName}Page} name="${templateNames.editRouteName}" />`,
+    `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}/{${idName}${idRouteParam}}/edit" page={${pageRoot}Edit${nameVars.singularPascalName}Page} name="${templateNames.editRouteName}" />`,
     // singular
-    `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}/{id${idRouteParam}}" page={${pageRoot}${nameVars.singularPascalName}Page} name="${templateNames.singularRouteName}" />`,
+    `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}/{${idName}${idRouteParam}}" page={${pageRoot}${nameVars.singularPascalName}Page} name="${templateNames.singularRouteName}" />`,
     // plural
     `<Route path="/${paramScaffoldPath}${nameVars.pluralParamName}" page={${pageRoot}${nameVars.pluralPascalName}Page} name="${templateNames.pluralRouteName}" />`,
   ]

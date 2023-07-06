@@ -8,15 +8,15 @@ import { toast } from '@redwoodjs/web/toast'
 import ${singularPascalName}Form from '${importComponentNameForm}'
 
 export const QUERY = gql`
-  query Edit${singularPascalName}ById($id: ${idType}!) {
-    ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
+  query Edit${singularPascalName}ById($${idName}: ${idType}!) {
+    ${singularCamelName}: ${singularCamelName}(${idName}: $${idName}) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
   }
 `
 const UPDATE_${singularConstantName}_MUTATION = gql`
-  mutation Update${singularPascalName}Mutation($id: ${idType}!, $input: Update${singularPascalName}Input!) {
-    update${singularPascalName}(id: $id, input: $input) {<% columns.forEach(column => { %>
+  mutation Update${singularPascalName}Mutation($${idName}: ${idType}!, $input: Update${singularPascalName}Input!) {
+    update${singularPascalName}(${idName}: $${idName}, input: $input) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
   }

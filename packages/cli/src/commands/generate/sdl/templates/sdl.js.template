@@ -27,7 +27,7 @@ export const schema = gql`
     <% } %>${pluralCamelName}: [${singularPascalName}!]! @requireAuth<% if (crud) { %>
     <% if (docs) { %>
     "Fetch a ${singularPascalName} by id."
-    <% } %>${singularCamelName}(id: ${idType}!): ${singularPascalName} @requireAuth<% } %>
+    <% } %>${singularCamelName}(${idName}: ${idType}!): ${singularPascalName} @requireAuth<% } %>
   }
 
   <% if (docs) { %>
@@ -53,9 +53,9 @@ export const schema = gql`
     <% } %>create${singularPascalName}(input: Create${singularPascalName}Input!): ${singularPascalName}! @requireAuth
     <% if (docs) { %>
     "Updates an existing ${singularPascalName}."
-    <% } %>update${singularPascalName}(id: ${idType}!, input: Update${singularPascalName}Input!): ${singularPascalName}! @requireAuth
+    <% } %>update${singularPascalName}(${idName}: ${idType}!, input: Update${singularPascalName}Input!): ${singularPascalName}! @requireAuth
     <% if (docs) { %>
     "Deletes an existing ${singularPascalName}."
-    <% } %>delete${singularPascalName}(id: ${idType}!): ${singularPascalName}! @requireAuth
+    <% } %>delete${singularPascalName}(${idName}: ${idType}!): ${singularPascalName}! @requireAuth
   }<% } %>
 `
