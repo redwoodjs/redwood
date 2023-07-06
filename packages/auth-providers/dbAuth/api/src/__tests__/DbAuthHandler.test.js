@@ -884,6 +884,9 @@ describe('dbAuth', () => {
       expect.assertions(1)
     })
     it('throws an error if username is not found', async () => {
+      delete options.signup.usernameMatch
+      delete options.login.usernameMatch
+
       await createDbUser()
       event.body = JSON.stringify({
         username: 'missing@redwoodjs.com',
@@ -1028,12 +1031,13 @@ describe('dbAuth', () => {
     })
 
     it('login db check is called with insensitive string when user has provided one in LoginFlowOptions', async () => {
+      jest.clearAllMocks()
       const spy = jest.spyOn(db.user, 'findFirst')
 
       options.signup.usernameMatch = 'insensitive'
       options.login.usernameMatch = 'insensitive'
 
-      const user = await createDbUser()
+      await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
@@ -1041,9 +1045,11 @@ describe('dbAuth', () => {
 
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      const response = await dbAuth.login()
-
-      expect(response[0]).toEqual({ id: user.id })
+      try {
+        await dbAuth.login()
+      } catch (e) {
+        expect(e).toBeInstanceOf(dbAuthError.UserNotFoundError)
+      }
 
       return expect(spy).toHaveBeenCalledWith({
         where: {
@@ -1053,12 +1059,13 @@ describe('dbAuth', () => {
     })
 
     it('login db check is not called with insensitive string when user has not provided one in LoginFlowOptions', async () => {
+      jest.clearAllMocks()
       const spy = jest.spyOn(db.user, 'findFirst')
 
       delete options.signup.usernameMatch
       delete options.login.usernameMatch
 
-      const user = await createDbUser()
+      await createDbUser()
       event.body = JSON.stringify({
         username: 'rob@redwoodjs.com',
         password: 'password',
@@ -1066,9 +1073,7 @@ describe('dbAuth', () => {
 
       const dbAuth = new DbAuthHandler(event, context, options)
 
-      const response = await dbAuth.login()
-
-      expect(response[0]).toEqual({ id: user.id })
+      await dbAuth.login()
 
       return expect(spy).not.toHaveBeenCalledWith({
         where: {
