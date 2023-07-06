@@ -79,18 +79,6 @@ async function executeCompatibilityCheck(templateDir) {
     )
 
     if (foundNodeVersionIsLessThanRequired) {
-      const errorMessages = [
-        {
-          type: 'node',
-          failedCompatibilityCheck: foundNodeVersionIsLessThanRequired,
-        },
-      ]
-        .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
-        .map(
-          ({ type }) =>
-            `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
-        )
-
       tui.stopReactive(true)
       tui.displayError(
         'Compatibility checks failed',
@@ -124,18 +112,6 @@ async function executeCompatibilityCheck(templateDir) {
     }
 
     if (foundYarnVersionIsLessThanRequired) {
-      const errorMessages = [
-        {
-          type: 'yarn',
-          failedCompatibilityCheck: foundYarnVersionIsLessThanRequired,
-        },
-      ]
-        .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
-        .map(
-          ({ type }) =>
-            `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
-        )
-
       tui.stopReactive(true)
       tui.displayError(
         'Compatibility checks failed',
