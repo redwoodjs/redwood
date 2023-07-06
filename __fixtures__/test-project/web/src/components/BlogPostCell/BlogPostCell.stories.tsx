@@ -23,7 +23,7 @@ export const empty: StoryObj<typeof Empty> = {
 
 export const failure: StoryObj<typeof Failure> = {
   render: (args) => {
-    return Failure ? <Failure {...args} /> : <></>;
+    return Failure ? <Failure error={new Error("Oh no")} {...args} /> : <></>;
   },
 }
 
