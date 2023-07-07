@@ -30,13 +30,13 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.5",
+    "@babel/runtime-corejs3": "7.22.6",
     "@iarna/toml": "2.2.5",
     "@prisma/internals": "4.16.2",
     "@redwoodjs/project-config": "5.0.0",
     "@types/line-column": "1.0.0",
     "camelcase": "6.3.0",
-    "core-js": "3.31.0",
+    "core-js": "3.31.1",
     "deepmerge": "4.3.1",
     "dotenv-defaults": "5.0.2",
     "enquirer": "2.3.6",
@@ -55,8 +55,8 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.5",
-    "@babel/core": "7.22.5",
+    "@babel/cli": "7.22.6",
+    "@babel/core": "7.22.8",
     "@types/fs-extra": "11.0.1",
     "@types/lodash": "4.14.195",
     "@types/lru-cache": "5.1.1",

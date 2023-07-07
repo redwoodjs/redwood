@@ -22,14 +22,14 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.5",
-    "core-js": "3.31.0",
+    "@babel/runtime-corejs3": "7.22.6",
+    "core-js": "3.31.1",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.45.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.5",
-    "@babel/core": "7.22.5",
+    "@babel/cli": "7.22.6",
+    "@babel/core": "7.22.8",
     "@testing-library/dom": "9.3.1",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
