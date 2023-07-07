@@ -39,7 +39,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/core": "7.22.5",
+    "@babel/core": "7.22.8",
     "@babel/plugin-transform-typescript": "7.22.5",
     "@types/babel__core": "7.20.1",
     "esbuild": "0.18.11",

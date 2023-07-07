@@ -543,9 +543,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/cli@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/cli@npm:7.22.5"
+"@babel/cli@npm:7.22.6":
+  version: 7.22.6
+  resolution: "@babel/cli@npm:7.22.6"
   dependencies:
     "@jridgewell/trace-mapping": ^0.3.17
     "@nicolo-ribaudo/chokidar-2": 2.1.8-no-fsevents.3
@@ -566,7 +566,7 @@ __metadata:
   bin:
     babel: ./bin/babel.js
     babel-external-helpers: ./bin/babel-external-helpers.js
-  checksum: 3c3362ed4acb0d8bbaa3ca86a4b13486c22df3f92c036e2d9e1972a4622c6de602036b8693811284c693e46900a432a8e3e92111e78ce10af9fd197fca154283
+  checksum: a96a675e67b88369093329baa30cd4b8033737057d24f60f78a5103ae68a4206f869857b9fe3473937126de7b87618ab37315ec8b2de63bb6a26d9e63c89ccce
   languageName: node
   linkType: hard
 
@@ -579,33 +579,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@npm:^7.17.7, @babel/compat-data@npm:^7.20.5, @babel/compat-data@npm:^7.21.5, @babel/compat-data@npm:^7.22.5":
-  version: 7.22.5
-  resolution: "@babel/compat-data@npm:7.22.5"
-  checksum: 97f3c24a71b4e7d5f91c5807f6206a9cdb4123e595c51b34a19e9ea22b837003f969f732fde8819928d66e7b64047fd736c6717c8a1b96bf27fbfc30f6834aff
+"@babel/compat-data@npm:^7.17.7, @babel/compat-data@npm:^7.20.5, @babel/compat-data@npm:^7.21.5, @babel/compat-data@npm:^7.22.5, @babel/compat-data@npm:^7.22.6":
+  version: 7.22.6
+  resolution: "@babel/compat-data@npm:7.22.6"
+  checksum: 09971bda48c46e19d8f1d8c817ebd60ccca2ca30b90324ba6227cfa3765847a9ddd7730481ec81149a2270e2c90c2674e41ebbb73258e48c37922171ffe1e6dc
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.22.5, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.20.2, @babel/core@npm:^7.21.3, @babel/core@npm:^7.22.5, @babel/core@npm:^7.7.5":
-  version: 7.22.5
-  resolution: "@babel/core@npm:7.22.5"
+"@babel/core@npm:7.22.8, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.10, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.20.2, @babel/core@npm:^7.21.3, @babel/core@npm:^7.22.5, @babel/core@npm:^7.7.5":
+  version: 7.22.8
+  resolution: "@babel/core@npm:7.22.8"
   dependencies:
     "@ampproject/remapping": ^2.2.0
     "@babel/code-frame": ^7.22.5
-    "@babel/generator": ^7.22.5
-    "@babel/helper-compilation-targets": ^7.22.5
+    "@babel/generator": ^7.22.7
+    "@babel/helper-compilation-targets": ^7.22.6
     "@babel/helper-module-transforms": ^7.22.5
-    "@babel/helpers": ^7.22.5
-    "@babel/parser": ^7.22.5
+    "@babel/helpers": ^7.22.6
+    "@babel/parser": ^7.22.7
     "@babel/template": ^7.22.5
-    "@babel/traverse": ^7.22.5
+    "@babel/traverse": ^7.22.8
     "@babel/types": ^7.22.5
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
     json5: ^2.2.2
-    semver: ^6.3.0
-  checksum: c00e1474a41c18b669511dd1a1bd757d854cc8128218421a73c3b1c76b44fb22a57bbbd29a73b7a156cb1460af7a94602f81bed76b8d78c6ffae4de954b32a50
+  checksum: d506ac42eaf2f7c3c190cc91a1413bb9ae5c067e06268fa962cb5fd0e67fc0feb48c7fa51527da378e3cc3a92a13a3420bae877df89207d880c839b6bb73e662
   languageName: node
   linkType: hard
 
@@ -632,17 +632,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/eslint-parser@npm:7.22.5"
+"@babel/eslint-parser@npm:7.22.7":
+  version: 7.22.7
+  resolution: "@babel/eslint-parser@npm:7.22.7"
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals": 5.1.1-v1
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     eslint-visitor-keys: ^2.1.0
-    semver: ^6.3.0
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ^7.5.0 || ^8.0.0
-  checksum: 070de521c139f53b9cb10a94c9089834aba887ebfac136fc890bafc8e43effc6042e4161d8f379441f65db1042d04126b557403dad551912a94c717d14eafd74
+  checksum: 888de7fdc1cd8a4cd7a798828717bd4b4fa52bd8db7e16e55c17da68f516c0524d9bddbbe71132b34c61894cf65cb97b735b2525da1cbff7c36158d60a9c11f2
   languageName: node
   linkType: hard
 
@@ -658,19 +658,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/generator@npm:7.22.5"
-  dependencies:
-    "@babel/types": ^7.22.5
-    "@jridgewell/gen-mapping": ^0.3.2
-    "@jridgewell/trace-mapping": ^0.3.17
-    jsesc: ^2.5.1
-  checksum: 0613eddb4d1f7d82d88ad304e1acf48fddc3cdfb4c94bc3d2a9128cf0cdeedc0aa8d60301715c3b67537c00d9c9c9d50aad4339e7af1295c90def21893b17f7f
-  languageName: node
-  linkType: hard
-
-"@babel/generator@npm:^7.12.11, @babel/generator@npm:^7.14.0, @babel/generator@npm:^7.18.13, @babel/generator@npm:^7.21.5, @babel/generator@npm:^7.22.5, @babel/generator@npm:^7.7.2":
+"@babel/generator@npm:7.22.7, @babel/generator@npm:^7.12.11, @babel/generator@npm:^7.14.0, @babel/generator@npm:^7.18.13, @babel/generator@npm:^7.21.5, @babel/generator@npm:^7.22.7, @babel/generator@npm:^7.7.2":
   version: 7.22.7
   resolution: "@babel/generator@npm:7.22.7"
   dependencies:
@@ -712,24 +700,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-compilation-targets@npm:^7.17.7, @babel/helper-compilation-targets@npm:^7.20.7, @babel/helper-compilation-targets@npm:^7.21.5, @babel/helper-compilation-targets@npm:^7.22.5":
-  version: 7.22.5
-  resolution: "@babel/helper-compilation-targets@npm:7.22.5"
+"@babel/helper-compilation-targets@npm:^7.17.7, @babel/helper-compilation-targets@npm:^7.20.7, @babel/helper-compilation-targets@npm:^7.21.5, @babel/helper-compilation-targets@npm:^7.22.5, @babel/helper-compilation-targets@npm:^7.22.6":
+  version: 7.22.6
+  resolution: "@babel/helper-compilation-targets@npm:7.22.6"
   dependencies:
-    "@babel/compat-data": ^7.22.5
+    "@babel/compat-data": ^7.22.6
     "@babel/helper-validator-option": ^7.22.5
-    browserslist: ^4.21.3
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
+    browserslist: ^4.21.9
     lru-cache: ^5.1.1
-    semver: ^6.3.0
   peerDependencies:
     "@babel/core": ^7.0.0
-  checksum: f36a2f27d970fa61b32090840ec847f73c6ada50becf7222c8778dd7ae07661c56f83d57e4c18437160e221512f91c442e3b86703741b45fc1277a548a6fd819
+  checksum: a37ae986bbfc61bc1adebe05a415ac03e0e8100e4b1ccbfd6ed90ffe201947beae9d7bd2cebe562199e1326797f908153d7b544520786eecf99fccb9db3c0fa9
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@npm:^7.18.6, @babel/helper-create-class-features-plugin@npm:^7.21.0, @babel/helper-create-class-features-plugin@npm:^7.22.5":
-  version: 7.22.5
-  resolution: "@babel/helper-create-class-features-plugin@npm:7.22.5"
+"@babel/helper-create-class-features-plugin@npm:^7.18.6, @babel/helper-create-class-features-plugin@npm:^7.21.0, @babel/helper-create-class-features-plugin@npm:^7.22.5, @babel/helper-create-class-features-plugin@npm:^7.22.6":
+  version: 7.22.6
+  resolution: "@babel/helper-create-class-features-plugin@npm:7.22.6"
   dependencies:
     "@babel/helper-annotate-as-pure": ^7.22.5
     "@babel/helper-environment-visitor": ^7.22.5
@@ -738,11 +726,11 @@ __metadata:
     "@babel/helper-optimise-call-expression": ^7.22.5
     "@babel/helper-replace-supers": ^7.22.5
     "@babel/helper-skip-transparent-expression-wrappers": ^7.22.5
-    "@babel/helper-split-export-declaration": ^7.22.5
-    semver: ^6.3.0
+    "@babel/helper-split-export-declaration": ^7.22.6
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
   peerDependencies:
     "@babel/core": ^7.0.0
-  checksum: a7a98b73dde9c7b0820f5b56e2b8f4cdeaf1a23ec9ab5bb642a9b6cc7c24154e84d20f6de49761dbc34dc84a4797a87db328e8f4b86867bff004a5809fe9e3d5
+  checksum: 4411b40bad0b4f1927eaaabbedd0b75cb9a7c18d18c3c2139dcf66a59352092632d8e38fe462337206167f11a6d4a70459ecc06a0ae30400dcbe56773fe3617d
   languageName: node
   linkType: hard
 
@@ -775,19 +763,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-define-polyfill-provider@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@babel/helper-define-polyfill-provider@npm:0.4.0"
+"@babel/helper-define-polyfill-provider@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@babel/helper-define-polyfill-provider@npm:0.4.1"
   dependencies:
-    "@babel/helper-compilation-targets": ^7.17.7
-    "@babel/helper-plugin-utils": ^7.16.7
+    "@babel/helper-compilation-targets": ^7.22.6
+    "@babel/helper-plugin-utils": ^7.22.5
     debug: ^4.1.1
     lodash.debounce: ^4.0.8
     resolve: ^1.14.2
-    semver: ^6.1.2
   peerDependencies:
     "@babel/core": ^7.4.0-0
-  checksum: 953c6ebda6871f2aa093f002f5e085ecbefe684580543fc7c309fe9aa5ce626758e02697a51cd25acf5cab56b1028a789fd38674d5872de74927a58049fbdc19
+  checksum: 402a8ca29354f01640d7226587576479507093437239ec1ba283c190986442a8759e5043859df9795c07c43d9b99d0685ee36ff77974c5be9a0cbec36a8283af
   languageName: node
   linkType: hard
 
@@ -913,12 +900,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-split-export-declaration@npm:^7.18.6, @babel/helper-split-export-declaration@npm:^7.22.5":
-  version: 7.22.5
-  resolution: "@babel/helper-split-export-declaration@npm:7.22.5"
+"@babel/helper-split-export-declaration@npm:^7.18.6, @babel/helper-split-export-declaration@npm:^7.22.5, @babel/helper-split-export-declaration@npm:^7.22.6":
+  version: 7.22.6
+  resolution: "@babel/helper-split-export-declaration@npm:7.22.6"
   dependencies:
     "@babel/types": ^7.22.5
-  checksum: a1e463086f97778584c44129c5c37282d033bf97867b300ff42e64279df18d41fe0e56ebe6a1b27f907afa66ad2a313558db8d2e83e73384c5b22ac726c9c52a
+  checksum: d83e4b623eaa9622c267d3c83583b72f3aac567dc393dda18e559d79187961cb29ae9c57b2664137fc3d19508370b12ec6a81d28af73a50e0846819cb21c6e44
   languageName: node
   linkType: hard
 
@@ -955,14 +942,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@npm:^7.21.5, @babel/helpers@npm:^7.22.5":
-  version: 7.22.5
-  resolution: "@babel/helpers@npm:7.22.5"
+"@babel/helpers@npm:^7.21.5, @babel/helpers@npm:^7.22.6":
+  version: 7.22.6
+  resolution: "@babel/helpers@npm:7.22.6"
   dependencies:
     "@babel/template": ^7.22.5
-    "@babel/traverse": ^7.22.5
+    "@babel/traverse": ^7.22.6
     "@babel/types": ^7.22.5
-  checksum: efa2d0fc2107e270782a784af3a52e5e0b97187b7b34feeeeb00454bc322e802ff4007b22410c387c05580c793f517c4bafc8a6a3acfdb0e3a1b349728f270c4
+  checksum: 8c03c19802d0fcc78d00d1eaa9ddab28f97f0c78a5d570762800e86f08c6f41750ad61e20cdede977a56173edf85e7175f1fd804eb6ef817280f064d3a3ca514
   languageName: node
   linkType: hard
 
@@ -977,9 +964,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/node@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/node@npm:7.22.5"
+"@babel/node@npm:7.22.6":
+  version: 7.22.6
+  resolution: "@babel/node@npm:7.22.6"
   dependencies:
     "@babel/register": ^7.22.5
     commander: ^4.0.1
@@ -991,16 +978,16 @@ __metadata:
     "@babel/core": ^7.0.0-0
   bin:
     babel-node: ./bin/babel-node.js
-  checksum: 2b81150d2a0e313d3e281b7c87ec2d044e103ad149e4d4a54b5b0c6a2f816e460934bb47d54699ee57a544bcc34d8d2a497112c12137aef5b1431e62a2192d82
+  checksum: 3e78816623ae6ceb1e718b3d11c29c5b72149dd3d5b3255857b89d210314ae84143bac811f064cbe16825ec7c664e368a9b8dfb92ac6984b3e1702755afbf727
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:7.22.5, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.1.6, @babel/parser@npm:^7.13.16, @babel/parser@npm:^7.14.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.8, @babel/parser@npm:^7.20.15, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.21.5, @babel/parser@npm:^7.21.8, @babel/parser@npm:^7.22.5, @babel/parser@npm:^7.3.2":
-  version: 7.22.5
-  resolution: "@babel/parser@npm:7.22.5"
+"@babel/parser@npm:7.22.7, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.1.6, @babel/parser@npm:^7.13.16, @babel/parser@npm:^7.14.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.8, @babel/parser@npm:^7.20.15, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.21.5, @babel/parser@npm:^7.21.8, @babel/parser@npm:^7.22.5, @babel/parser@npm:^7.22.7, @babel/parser@npm:^7.3.2":
+  version: 7.22.7
+  resolution: "@babel/parser@npm:7.22.7"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: d6a1b1e1f375cf7f81263c57f0b6d41d67e9f498d75960ec7ab62a194d7c232a125a951009edc0c991cb7d6cc6b78b006b15e1e8fb83e0de3fe0ceb6bf3d95ef
+  checksum: d2bdf212644c39de58f1216540ec5aca4a05ffbec07c904eaaef8575dd9546b55345b91dcc0d306be4adbb717401ce321027bac7e2f7babfd66794c96243bb79
   languageName: node
   linkType: hard
 
@@ -1076,18 +1063,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-decorators@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/plugin-proposal-decorators@npm:7.22.5"
+"@babel/plugin-proposal-decorators@npm:7.22.7":
+  version: 7.22.7
+  resolution: "@babel/plugin-proposal-decorators@npm:7.22.7"
   dependencies:
-    "@babel/helper-create-class-features-plugin": ^7.22.5
+    "@babel/helper-create-class-features-plugin": ^7.22.6
     "@babel/helper-plugin-utils": ^7.22.5
     "@babel/helper-replace-supers": ^7.22.5
-    "@babel/helper-split-export-declaration": ^7.22.5
+    "@babel/helper-split-export-declaration": ^7.22.6
     "@babel/plugin-syntax-decorators": ^7.22.5
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 31930187a8b3fc58ea92b7b667c7947de70a31c4309122e223cdac7bddaab963f4ed0ca8aaeca730dd313521574f8c34e427c4fadc0ecb2d38522ddd5a7acb5f
+  checksum: 80a0db66b04fb09afb57abcc5dbde89659f076b4579656e4a0670510d9de7c68aa17fff7479f42078d42b00ada546228a55694a9bd6a050bc57997d1f7feb008
   languageName: node
   linkType: hard
 
@@ -1515,7 +1502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-async-generator-functions@npm:^7.22.5":
+"@babel/plugin-transform-async-generator-functions@npm:^7.22.7":
   version: 7.22.7
   resolution: "@babel/plugin-transform-async-generator-functions@npm:7.22.7"
   dependencies:
@@ -1589,22 +1576,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-classes@npm:^7.0.0, @babel/plugin-transform-classes@npm:^7.21.0, @babel/plugin-transform-classes@npm:^7.22.5":
-  version: 7.22.5
-  resolution: "@babel/plugin-transform-classes@npm:7.22.5"
+"@babel/plugin-transform-classes@npm:^7.0.0, @babel/plugin-transform-classes@npm:^7.21.0, @babel/plugin-transform-classes@npm:^7.22.6":
+  version: 7.22.6
+  resolution: "@babel/plugin-transform-classes@npm:7.22.6"
   dependencies:
     "@babel/helper-annotate-as-pure": ^7.22.5
-    "@babel/helper-compilation-targets": ^7.22.5
+    "@babel/helper-compilation-targets": ^7.22.6
     "@babel/helper-environment-visitor": ^7.22.5
     "@babel/helper-function-name": ^7.22.5
     "@babel/helper-optimise-call-expression": ^7.22.5
     "@babel/helper-plugin-utils": ^7.22.5
     "@babel/helper-replace-supers": ^7.22.5
-    "@babel/helper-split-export-declaration": ^7.22.5
+    "@babel/helper-split-export-declaration": ^7.22.6
     globals: ^11.1.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: c5ac4a3ea8bf7441246e963c35617c1fe8d6515c94a376ef0b724c6950fbb9e5481c51fc4ff13e5afd8949a6bfe1ef20ab937692054772e2376dfeae3b6b99b5
+  checksum: 915f1c0d3a0446a3ebfb099c4a5e714896f773322432b91572e6739d7af82e9743ae2874eb596ef1d26ed94472385eb814e1f33b033fc708155576d566e1f5ff
   languageName: node
   linkType: hard
 
@@ -1909,16 +1896,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-optional-chaining@npm:^7.22.5":
-  version: 7.22.5
-  resolution: "@babel/plugin-transform-optional-chaining@npm:7.22.5"
+"@babel/plugin-transform-optional-chaining@npm:^7.22.5, @babel/plugin-transform-optional-chaining@npm:^7.22.6":
+  version: 7.22.6
+  resolution: "@babel/plugin-transform-optional-chaining@npm:7.22.6"
   dependencies:
     "@babel/helper-plugin-utils": ^7.22.5
     "@babel/helper-skip-transparent-expression-wrappers": ^7.22.5
     "@babel/plugin-syntax-optional-chaining": ^7.8.3
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 73c62d707d47a8a483e81700beef9119e8af7290623b8ac2cf4918fadd7286a700c8fdb846e66b0fb795d4dc67c8e60b13dfed3fa2311129c67314bbe173b82a
+  checksum: bb8188df57ab46c4c708eea17eddd20238ef9106c0e82016b1eb9565f073746e385e0be0b6ee25148507f3dc849311147a43323109c97106f15e0e7ff3220fdf
   languageName: node
   linkType: hard
 
@@ -2064,19 +2051,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-runtime@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/plugin-transform-runtime@npm:7.22.5"
+"@babel/plugin-transform-runtime@npm:7.22.7":
+  version: 7.22.7
+  resolution: "@babel/plugin-transform-runtime@npm:7.22.7"
   dependencies:
     "@babel/helper-module-imports": ^7.22.5
     "@babel/helper-plugin-utils": ^7.22.5
-    babel-plugin-polyfill-corejs2: ^0.4.3
-    babel-plugin-polyfill-corejs3: ^0.8.1
-    babel-plugin-polyfill-regenerator: ^0.5.0
-    semver: ^6.3.0
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
+    babel-plugin-polyfill-corejs2: ^0.4.4
+    babel-plugin-polyfill-corejs3: ^0.8.2
+    babel-plugin-polyfill-regenerator: ^0.5.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 2dcd59bbf14622c2cc088a311a16073b777e34abe733a940c4df6d48fd58900fb7cb22aa2a4645939162cc717618f8e55e96c227ad61f9ae9bca098078aa7345
+  checksum: e0768cedf474c3744bedb28f073ef1630f7d1ac33467033ae8ead6a9586cdf007c9d0a63b5d1941c5f29dc95568d700ea0672e17bacb0eb21bf81a49f83346c8
   languageName: node
   linkType: hard
 
@@ -2197,12 +2184,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:7.22.5, @babel/preset-env@npm:^7.20.2":
-  version: 7.22.5
-  resolution: "@babel/preset-env@npm:7.22.5"
+"@babel/preset-env@npm:7.22.7, @babel/preset-env@npm:^7.20.2":
+  version: 7.22.7
+  resolution: "@babel/preset-env@npm:7.22.7"
   dependencies:
-    "@babel/compat-data": ^7.22.5
-    "@babel/helper-compilation-targets": ^7.22.5
+    "@babel/compat-data": ^7.22.6
+    "@babel/helper-compilation-targets": ^7.22.6
     "@babel/helper-plugin-utils": ^7.22.5
     "@babel/helper-validator-option": ^7.22.5
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": ^7.22.5
@@ -2227,13 +2214,13 @@ __metadata:
     "@babel/plugin-syntax-top-level-await": ^7.14.5
     "@babel/plugin-syntax-unicode-sets-regex": ^7.18.6
     "@babel/plugin-transform-arrow-functions": ^7.22.5
-    "@babel/plugin-transform-async-generator-functions": ^7.22.5
+    "@babel/plugin-transform-async-generator-functions": ^7.22.7
     "@babel/plugin-transform-async-to-generator": ^7.22.5
     "@babel/plugin-transform-block-scoped-functions": ^7.22.5
     "@babel/plugin-transform-block-scoping": ^7.22.5
     "@babel/plugin-transform-class-properties": ^7.22.5
     "@babel/plugin-transform-class-static-block": ^7.22.5
-    "@babel/plugin-transform-classes": ^7.22.5
+    "@babel/plugin-transform-classes": ^7.22.6
     "@babel/plugin-transform-computed-properties": ^7.22.5
     "@babel/plugin-transform-destructuring": ^7.22.5
     "@babel/plugin-transform-dotall-regex": ^7.22.5
@@ -2258,7 +2245,7 @@ __metadata:
     "@babel/plugin-transform-object-rest-spread": ^7.22.5
     "@babel/plugin-transform-object-super": ^7.22.5
     "@babel/plugin-transform-optional-catch-binding": ^7.22.5
-    "@babel/plugin-transform-optional-chaining": ^7.22.5
+    "@babel/plugin-transform-optional-chaining": ^7.22.6
     "@babel/plugin-transform-parameters": ^7.22.5
     "@babel/plugin-transform-private-methods": ^7.22.5
     "@babel/plugin-transform-private-property-in-object": ^7.22.5
@@ -2276,14 +2263,14 @@ __metadata:
     "@babel/plugin-transform-unicode-sets-regex": ^7.22.5
     "@babel/preset-modules": ^0.1.5
     "@babel/types": ^7.22.5
-    babel-plugin-polyfill-corejs2: ^0.4.3
-    babel-plugin-polyfill-corejs3: ^0.8.1
-    babel-plugin-polyfill-regenerator: ^0.5.0
-    core-js-compat: ^3.30.2
-    semver: ^6.3.0
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
+    babel-plugin-polyfill-corejs2: ^0.4.4
+    babel-plugin-polyfill-corejs3: ^0.8.2
+    babel-plugin-polyfill-regenerator: ^0.5.1
+    core-js-compat: ^3.31.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: dd2b70e96102fc2a64f57c3ab177abeb5aac3f71f47701787b6264d91d7d3ea3d38526d8e1133eb667ca88e87c997ed4a1b8d498ca8be2af07ae4995dfac1b83
+  checksum: 4463c50ccab7aa06a60dde5c1f6e94fdf18e425935b13a1bf168ece9b7bd29dcad015a788581a5c5297bae28a3adcea2472fc74d4e1296aa7195ce0a72a9cac5
   languageName: node
   linkType: hard
 
@@ -2454,13 +2441,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/runtime-corejs3@npm:7.22.5"
+"@babel/runtime-corejs3@npm:7.22.6":
+  version: 7.22.6
+  resolution: "@babel/runtime-corejs3@npm:7.22.6"
   dependencies:
     core-js-pure: ^3.30.2
     regenerator-runtime: ^0.13.11
-  checksum: efd5218f63707b569c01946dc2e88a7ce1f76b1d43bdae0a493b865c56b1d4aa09574463f281b9fc9a46e5abc9f2bea89b6a3e4d2af065931fe703f4daaf6490
+  checksum: 5a68532c614dfef051e155460d3090388533871c8180de770e926ee2e01fbc21ef92c0c56d6c5cb6448650068438f6d1eca0e5a5d3ae36269b0ce3b8d2a0f645
   languageName: node
   linkType: hard
 
@@ -2484,21 +2471,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:7.22.5, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.21.5, @babel/traverse@npm:^7.22.5, @babel/traverse@npm:^7.7.2":
-  version: 7.22.5
-  resolution: "@babel/traverse@npm:7.22.5"
+"@babel/traverse@npm:7.22.8, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.21.5, @babel/traverse@npm:^7.22.5, @babel/traverse@npm:^7.22.6, @babel/traverse@npm:^7.22.8, @babel/traverse@npm:^7.7.2":
+  version: 7.22.8
+  resolution: "@babel/traverse@npm:7.22.8"
   dependencies:
     "@babel/code-frame": ^7.22.5
-    "@babel/generator": ^7.22.5
+    "@babel/generator": ^7.22.7
     "@babel/helper-environment-visitor": ^7.22.5
     "@babel/helper-function-name": ^7.22.5
     "@babel/helper-hoist-variables": ^7.22.5
-    "@babel/helper-split-export-declaration": ^7.22.5
-    "@babel/parser": ^7.22.5
+    "@babel/helper-split-export-declaration": ^7.22.6
+    "@babel/parser": ^7.22.7
     "@babel/types": ^7.22.5
     debug: ^4.1.0
     globals: ^11.1.0
-  checksum: 0217ec5ece6e4e3b6fd39dc4a23903d2d8ec76a7163731ae51a8cca03a450fb592782d620b8525219a5df9268b22901f3328a23440646d5ec2db4e3952817121
+  checksum: 839014824c210388ed46f92bf5265522bd5bbb4a9a03c700f9d79b151bdd0aa077c2f6448a0cef41132188cc2bc6d8cdcad98a297ba59983401e882bdc256b1f
   languageName: node
   linkType: hard
 
@@ -5496,6 +5483,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nicolo-ribaudo/semver-v6@npm:^6.3.3":
+  version: 6.3.3
+  resolution: "@nicolo-ribaudo/semver-v6@npm:6.3.3"
+  bin:
+    semver: bin/semver.js
+  checksum: 9ef70305fa9b03709805128611c0d95beec479cdd6f6b608386d6cee7a3d36f61e6f749378b60f1e5fca19fc58da7b06fccfe3540c0dbc40719731827d4eb1df
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -6844,10 +6840,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/plugin-transform-runtime": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/plugin-transform-runtime": 7.22.7
+    "@babel/runtime-corejs3": 7.22.6
     "@fastify/http-proxy": 9.2.1
     "@fastify/static": 6.10.2
     "@fastify/url-data": 5.3.1
@@ -6885,9 +6881,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api@workspace:packages/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@prisma/client": 4.16.2
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
@@ -6927,9 +6923,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-auth0-api@workspace:packages/auth-providers/auth0/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/api": 5.0.0
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.31.0
@@ -6944,9 +6940,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-auth0-setup@workspace:packages/auth-providers/auth0/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.0
@@ -6960,9 +6956,9 @@ __metadata:
   resolution: "@redwoodjs/auth-auth0-web@workspace:packages/auth-providers/auth0/web"
   dependencies:
     "@auth0/auth0-spa-js": 2.0.8
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.14
     core-js: 3.31.0
@@ -6978,9 +6974,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-azure-active-directory-api@workspace:packages/auth-providers/azureActiveDirectory/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
@@ -6996,9 +6992,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-azure-active-directory-setup@workspace:packages/auth-providers/azureActiveDirectory/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.0
@@ -7012,9 +7008,9 @@ __metadata:
   resolution: "@redwoodjs/auth-azure-active-directory-web@workspace:packages/auth-providers/azureActiveDirectory/web"
   dependencies:
     "@azure/msal-browser": 2.37.1
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 18.2.14
@@ -7031,9 +7027,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-clerk-api@workspace:packages/auth-providers/clerk/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@clerk/clerk-sdk-node": 4.10.15
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.119
@@ -7047,9 +7043,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-clerk-setup@workspace:packages/auth-providers/clerk/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.0
@@ -7062,9 +7058,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-clerk-web@workspace:packages/auth-providers/clerk/web"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@clerk/clerk-react": 4.20.5
     "@clerk/types": 3.46.1
     "@redwoodjs/auth": 5.0.0
@@ -7082,9 +7078,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-custom-setup@workspace:packages/auth-providers/custom/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.0
@@ -7097,9 +7093,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/api": 5.0.0
     "@simplewebauthn/server": 7.3.1
     "@types/crypto-js": 4.1.1
@@ -7119,9 +7115,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-setup@workspace:packages/auth-providers/dbAuth/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
@@ -7140,9 +7136,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-web@workspace:packages/auth-providers/dbAuth/web"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@simplewebauthn/browser": 7.2.0
     "@simplewebauthn/typescript-types": 7.0.0
@@ -7158,9 +7154,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-firebase-api@workspace:packages/auth-providers/firebase/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.119
     core-js: 3.31.0
@@ -7174,9 +7170,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-firebase-setup@workspace:packages/auth-providers/firebase/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.0
@@ -7189,9 +7185,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-firebase-web@workspace:packages/auth-providers/firebase/web"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.14
     core-js: 3.31.0
@@ -7208,9 +7204,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-netlify-api@workspace:packages/auth-providers/netlify/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
@@ -7225,9 +7221,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-netlify-setup@workspace:packages/auth-providers/netlify/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.0
@@ -7240,9 +7236,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-netlify-web@workspace:packages/auth-providers/netlify/web"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 18.2.14
@@ -7259,9 +7255,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supabase-api@workspace:packages/auth-providers/supabase/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
@@ -7276,9 +7272,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supabase-setup@workspace:packages/auth-providers/supabase/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.0
@@ -7291,9 +7287,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supabase-web@workspace:packages/auth-providers/supabase/web"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@supabase/supabase-js": 2.26.0
     "@types/react": 18.2.14
     core-js: 3.31.0
@@ -7309,9 +7305,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supertokens-api@workspace:packages/auth-providers/supertokens/api"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/api": 5.0.0
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.31.0
@@ -7328,9 +7324,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supertokens-setup@workspace:packages/auth-providers/supertokens/setup"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.0
@@ -7343,9 +7339,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supertokens-web@workspace:packages/auth-providers/supertokens/web"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.14
     core-js: 3.31.0
@@ -7362,9 +7358,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     core-js: 3.31.0
@@ -7379,9 +7375,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@opentelemetry/api": 1.4.1
     "@redwoodjs/project-config": 5.0.0
     "@redwoodjs/telemetry": 5.0.0
@@ -7429,9 +7425,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@iarna/toml": 2.2.5
     "@opentelemetry/api": 1.4.1
     "@opentelemetry/exporter-trace-otlp-http": 0.40.0
@@ -7498,12 +7494,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/codemods@workspace:packages/codemods"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/parser": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/parser": 7.22.7
     "@babel/plugin-transform-typescript": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
-    "@babel/traverse": 7.22.5
+    "@babel/runtime-corejs3": 7.22.6
+    "@babel/traverse": 7.22.8
     "@iarna/toml": 2.2.5
     "@redwoodjs/project-config": 5.0.0
     "@svgr/core": 8.0.0
@@ -7540,16 +7536,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/core@workspace:packages/core"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
     "@babel/eslint-plugin": 7.22.5
-    "@babel/node": 7.22.5
-    "@babel/plugin-proposal-decorators": 7.22.5
-    "@babel/plugin-transform-runtime": 7.22.5
-    "@babel/preset-env": 7.22.5
+    "@babel/node": 7.22.6
+    "@babel/plugin-proposal-decorators": 7.22.7
+    "@babel/plugin-transform-runtime": 7.22.7
+    "@babel/preset-env": 7.22.7
     "@babel/preset-react": 7.22.5
     "@babel/preset-typescript": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/runtime-corejs3": 7.22.6
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.10
     "@redwoodjs/cli": 5.0.0
     "@redwoodjs/eslint-config": 5.0.0
@@ -7609,9 +7605,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/eslint-config@workspace:packages/eslint-config"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/eslint-parser": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/eslint-parser": 7.22.7
     "@babel/eslint-plugin": 7.22.5
     "@redwoodjs/eslint-plugin": 5.0.0
     "@redwoodjs/internal": 5.0.0
@@ -7677,9 +7673,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/forms@workspace:packages/forms"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@testing-library/dom": 9.3.1
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
@@ -7707,9 +7703,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@envelop/core": 4.0.0
     "@envelop/depth-limit": 3.0.0
     "@envelop/disable-introspection": 5.0.0
@@ -7752,16 +7748,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/parser": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/parser": 7.22.7
     "@babel/plugin-transform-class-properties": 7.22.5
     "@babel/plugin-transform-private-methods": 7.22.5
     "@babel/plugin-transform-private-property-in-object": 7.22.5
     "@babel/plugin-transform-typescript": 7.22.5
     "@babel/register": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
-    "@babel/traverse": 7.22.5
+    "@babel/runtime-corejs3": 7.22.6
+    "@babel/traverse": 7.22.8
     "@graphql-codegen/add": 4.0.1
     "@graphql-codegen/cli": 3.3.1
     "@graphql-codegen/core": 3.1.0
@@ -7777,7 +7773,7 @@ __metadata:
     "@types/babel__core": 7.20.1
     "@types/fs-extra": 11.0.1
     babel-plugin-graphql-tag: 3.3.0
-    babel-plugin-polyfill-corejs3: 0.8.1
+    babel-plugin-polyfill-corejs3: 0.8.2
     babel-plugin-tester: 11.0.4
     chalk: 4.1.2
     core-js: 3.31.0
@@ -7807,9 +7803,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/project-config": 5.0.0
@@ -7851,9 +7847,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/record@workspace:packages/record"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@prisma/client": 4.16.2
     "@prisma/internals": 4.16.2
     "@redwoodjs/project-config": 5.0.0
@@ -7867,9 +7863,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@reach/skip-nav": 0.18.0
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.14
@@ -7889,9 +7885,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@iarna/toml": 2.2.5
     "@prisma/internals": 4.16.2
     "@redwoodjs/project-config": 5.0.0
@@ -7928,10 +7924,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/studio@workspace:packages/studio"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/plugin-transform-runtime": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/plugin-transform-runtime": 7.22.7
+    "@babel/runtime-corejs3": 7.22.6
     "@fastify/http-proxy": 9.2.1
     "@fastify/static": 6.10.2
     "@fastify/url-data": 5.3.1
@@ -7975,9 +7971,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/project-config": 5.0.0
     "@redwoodjs/structure": 5.0.0
     "@types/envinfo": 7.8.1
@@ -7998,9 +7994,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/testing@workspace:packages/testing"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@redwoodjs/graphql-server": 5.0.0
     "@redwoodjs/internal": 5.0.0
@@ -8049,8 +8045,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
-    "@babel/cli": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     "@types/yargs-parser": 21.0.0
@@ -8075,9 +8071,9 @@ __metadata:
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
     "@apollo/client": 3.7.16
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/runtime-corejs3": 7.22.6
     "@redwoodjs/auth": 5.0.0
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
@@ -12539,28 +12535,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs2@npm:^0.4.3":
-  version: 0.4.3
-  resolution: "babel-plugin-polyfill-corejs2@npm:0.4.3"
+"babel-plugin-polyfill-corejs2@npm:^0.4.4":
+  version: 0.4.4
+  resolution: "babel-plugin-polyfill-corejs2@npm:0.4.4"
   dependencies:
-    "@babel/compat-data": ^7.17.7
-    "@babel/helper-define-polyfill-provider": ^0.4.0
-    semver: ^6.1.1
+    "@babel/compat-data": ^7.22.6
+    "@babel/helper-define-polyfill-provider": ^0.4.1
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 27e014ab6116704a201a71aefa2a377f26d0e5432d0dcb7f71930773ef0ddac7a693f3a6699721efa15ae4c83631a35dcc52cc8b3032878b2dadd0a33aeabc59
+  checksum: 4bb3056ae17002776e3003314068bdd7dd8e5d4b038ce1198db84346b953e73beb8d2b4445bff831c09ff217e533466eb28e771a80c3696decc2dae1347164e3
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs3@npm:0.8.1, babel-plugin-polyfill-corejs3@npm:^0.8.1":
-  version: 0.8.1
-  resolution: "babel-plugin-polyfill-corejs3@npm:0.8.1"
+"babel-plugin-polyfill-corejs3@npm:0.8.2, babel-plugin-polyfill-corejs3@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.8.2"
   dependencies:
-    "@babel/helper-define-polyfill-provider": ^0.4.0
-    core-js-compat: ^3.30.1
+    "@babel/helper-define-polyfill-provider": ^0.4.1
+    core-js-compat: ^3.31.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 90320f5e5a27bcaf9a370d86ff3a9c72fd28618e51f83a7c1e31e34f9a2d671f5ca446b1c4af806cdee6388a6868da38299b3167dd860985981feeda3f2bf1c3
+  checksum: de094cc9d703a3bf6518f4312491b6f033f2db45791825499c905173b2d7d0f8ab9b1919a607eb76833907c6533a2106c951108da7689c0929354d38c661f346
   languageName: node
   linkType: hard
 
@@ -12587,14 +12583,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-regenerator@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "babel-plugin-polyfill-regenerator@npm:0.5.0"
+"babel-plugin-polyfill-regenerator@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "babel-plugin-polyfill-regenerator@npm:0.5.1"
   dependencies:
-    "@babel/helper-define-polyfill-provider": ^0.4.0
+    "@babel/helper-define-polyfill-provider": ^0.4.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: d33f4e6f5b925754175d4058ede4d400ea92b9ad465f07a4211e4ad01a6cdb60e3a04428150eb9dd5fb7ba9c1d0cba9e22278206462b432d46d7d851b3c3cb19
+  checksum: 5ec9e2ab2f031028a36f8d611f3fc3bc8347e2842e4354a28ac303e81697968549ea0ebea79cf0c28658e1e09d3a55a2a2085bb5a53d00f28bd688daa301fd6b
   languageName: node
   linkType: hard
 
@@ -13131,17 +13127,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.14.5, browserslist@npm:^4.21.3, browserslist@npm:^4.21.4, browserslist@npm:^4.21.5":
-  version: 4.21.7
-  resolution: "browserslist@npm:4.21.7"
+"browserslist@npm:^4.0.0, browserslist@npm:^4.14.5, browserslist@npm:^4.21.4, browserslist@npm:^4.21.9":
+  version: 4.21.9
+  resolution: "browserslist@npm:4.21.9"
   dependencies:
-    caniuse-lite: ^1.0.30001489
-    electron-to-chromium: ^1.4.411
+    caniuse-lite: ^1.0.30001503
+    electron-to-chromium: ^1.4.431
     node-releases: ^2.0.12
     update-browserslist-db: ^1.0.11
   bin:
     browserslist: cli.js
-  checksum: c523a982ef5d4141907795bbb72d7e2c5df79b2c6e495ef8ff6405b6734a2f16529a7f54c86b113085cad8a3359ac2fc6a478e86ae715084ba7384b9344b2ef5
+  checksum: 903189787141f645f47ec46ec482dc85985d1297948062690dc2ea8480eb98fd6213507234eb17177825acaae49c53888445910f1af984abce5373fb65c270b8
   languageName: node
   linkType: hard
 
@@ -13515,10 +13511,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001489":
-  version: 1.0.30001492
-  resolution: "caniuse-lite@npm:1.0.30001492"
-  checksum: df7ad55d2475ff6561e84e2f21c8da45fe02ba539d493d5a77214aeaf264632cf74084a8eb13bfd2cb0c9fbde0ff6af4acbd923b8590eb6b2920ba44fcac9b2d
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001503":
+  version: 1.0.30001512
+  resolution: "caniuse-lite@npm:1.0.30001512"
+  checksum: 19287a85976152477cca0829249c6e357b66bf57f0366ff047db370f235f9f3ce8eee47cc10a66a4b84cef32e93259e30cd8471d9451eced99630d95949f900f
   languageName: node
   linkType: hard
 
@@ -14631,12 +14627,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.25.1, core-js-compat@npm:^3.30.1, core-js-compat@npm:^3.30.2":
-  version: 3.30.2
-  resolution: "core-js-compat@npm:3.30.2"
+"core-js-compat@npm:^3.25.1, core-js-compat@npm:^3.31.0":
+  version: 3.31.1
+  resolution: "core-js-compat@npm:3.31.1"
   dependencies:
-    browserslist: ^4.21.5
-  checksum: 7cb984fc6bcdd2f28c2f2f19fc8fc874a303adf7f835720b9937f0b1d40793819ed744dc14dff28ddb7735404b02a43f08493c3e2f227b27090cd6d64d28c5f9
+    browserslist: ^4.21.9
+  checksum: 2f05c5d5b04e8a69cf50f538ef3fb1932ab83bd7dc690c438c7b876049cb1515eb4ca9fa29400ed7cd5885f34c901bf6a26d9149dfff8665d8302cace7e96d72
   languageName: node
   linkType: hard
 
@@ -14803,7 +14799,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-redwood-app@workspace:packages/create-redwood-app"
   dependencies:
-    "@babel/core": 7.22.5
+    "@babel/core": 7.22.8
     "@babel/plugin-transform-typescript": 7.22.5
     "@opentelemetry/api": 1.4.1
     "@opentelemetry/exporter-trace-otlp-http": 0.40.0
@@ -16102,10 +16098,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:^1.4.411":
-  version: 1.4.414
-  resolution: "electron-to-chromium@npm:1.4.414"
-  checksum: bb8397bfbcf369d8a5dc307346b5b721720d8355c03cb312673a0fc283396eac1998db4fbb95c7eac74da22aff5c4f62324509036a23feda7904aa955afba636
+"electron-to-chromium@npm:^1.4.431":
+  version: 1.4.452
+  resolution: "electron-to-chromium@npm:1.4.452"
+  checksum: d812bc36c4a1b2ee12ec104948aaa3d539c9f42fa9a2a208a94bd1f9f4b6f9c76217b0da3eaa03044b703f47163dd0ccc8c903a51bfb0d1754c1632b8822f741
   languageName: node
   linkType: hard
 
@@ -27502,20 +27498,20 @@ __metadata:
     "@actions/core": 1.10.0
     "@actions/exec": 1.1.1
     "@actions/glob": 0.4.0
-    "@babel/cli": 7.22.5
-    "@babel/core": 7.22.5
-    "@babel/generator": 7.22.5
-    "@babel/node": 7.22.5
-    "@babel/plugin-proposal-decorators": 7.22.5
+    "@babel/cli": 7.22.6
+    "@babel/core": 7.22.8
+    "@babel/generator": 7.22.7
+    "@babel/node": 7.22.6
+    "@babel/plugin-proposal-decorators": 7.22.7
     "@babel/plugin-transform-class-properties": 7.22.5
     "@babel/plugin-transform-nullish-coalescing-operator": 7.22.5
     "@babel/plugin-transform-private-methods": 7.22.5
     "@babel/plugin-transform-private-property-in-object": 7.22.5
-    "@babel/plugin-transform-runtime": 7.22.5
-    "@babel/preset-env": 7.22.5
+    "@babel/plugin-transform-runtime": 7.22.7
+    "@babel/preset-env": 7.22.7
     "@babel/preset-react": 7.22.5
     "@babel/preset-typescript": 7.22.5
-    "@babel/runtime-corejs3": 7.22.5
+    "@babel/runtime-corejs3": 7.22.6
     "@faker-js/faker": 8.0.2
     "@npmcli/arborist": 6.2.10
     "@playwright/test": 1.35.1
