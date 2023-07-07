@@ -31,7 +31,7 @@
     "@redwoodjs/structure": "5.0.0",
     "@whatwg-node/fetch": "0.9.7",
     "ci-info": "3.8.0",
-    "core-js": "3.31.0",
+    "core-js": "3.31.1",
     "envinfo": "7.9.0",
     "systeminformation": "5.18.5",
     "uuid": "9.0.0",

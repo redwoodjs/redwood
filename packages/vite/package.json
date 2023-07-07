@@ -31,7 +31,7 @@
     "@redwoodjs/project-config": "5.0.0",
     "@vitejs/plugin-react": "4.0.1",
     "buffer": "6.0.3",
-    "core-js": "3.31.0",
+    "core-js": "3.31.1",
     "vite": "4.3.9",
     "vite-plugin-environment": "1.1.3",
     "yargs-parser": "21.1.1"
