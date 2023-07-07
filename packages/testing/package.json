@@ -46,7 +46,7 @@
     "@types/webpack": "5.28.1",
     "@types/webpack-env": "1.18.1",
     "babel-jest": "29.5.0",
-    "core-js": "3.31.0",
+    "core-js": "3.31.1",
     "fast-glob": "3.2.12",
     "jest": "29.5.0",
     "jest-environment-jsdom": "29.5.0",
