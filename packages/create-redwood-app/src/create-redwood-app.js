@@ -191,7 +191,7 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
     // Check if the directory contains files and show an error if it does
     if (fs.readdirSync(newAppDir).length > 0) {
       tui.stopReactive(true)
-      tui.displayError(
+      tui.displayWarning(
         'Project directory already contains files',
         [
           `'${RedwoodStyling.info(newAppDir)}' already exists and is not empty`,
@@ -201,9 +201,48 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
           )}' flag to create the project even if target directory isn't empty`,
         ].join('\n')
       )
-      recordErrorViaTelemetry(`Project directory already contains files`)
-      await shutdownTelemetry()
-      process.exit(1)
+      try {
+        const response = await tui.prompt({
+          type: 'select',
+          name: 'projectDirectoryAlreadyExists',
+          message: 'How would you like to proceed?',
+          choices: [
+            'Overwrite files and continue install',
+            'Specify a different directory',
+            'Quit install',
+          ],
+          initial: 0,
+        })
+        // overwrite the existing files
+        if (
+          response.projectDirectoryAlreadyExists ===
+          'Overwrite files and continue install'
+        ) {
+          // blow away the existing directory and create a new one
+          await fs.remove(newAppDir)
+        } // Specify a different directory
+        else if (
+          response.projectDirectoryAlreadyExists ===
+          'Specify a different directory'
+        ) {
+          const newDirectoryName = await handleNewDirectoryNamePreference()
+          newAppDir = path.resolve(process.cwd(), newDirectoryName)
+        } // Quit install and throw an error
+        else if (response.projectDirectoryAlreadyExists === 'Quit install') {
+          // quit and throw an error
+          recordErrorViaTelemetry(
+            'User quit after directory already exists error'
+          )
+          await shutdownTelemetry()
+          process.exit(1)
+        }
+      } catch (_error) {
+        recordErrorViaTelemetry(
+          `User cancelled install after directory already exists error`
+        )
+        await shutdownTelemetry()
+        process.exit(1)
+      }
     }
   }
 
@@ -230,6 +269,9 @@ async function createProjectFiles(newAppDir, { templateDir, overwrite }) {
     content: `${RedwoodStyling.green('✔')} Project files created`,
   })
   tui.stopReactive()
+
+  // return the new app directory in case we had to set a new one
+  return newAppDir
 }
 
 async function installNodeModules(newAppDir) {
@@ -425,6 +467,24 @@ async function handleGitPreference(gitInitFlag) {
   }
 }
 
+async function handleNewDirectoryNamePreference() {
+  try {
+    const response = await tui.prompt({
+      type: 'input',
+      name: 'targetDirectoryInput',
+      message: 'What directory would you like to create the app in?',
+      initial: 'my-redwood-app',
+    })
+    return response.targetDirectoryInput
+  } catch (_error) {
+    recordErrorViaTelemetry(
+      'User cancelled install at no specified directory prompt'
+    )
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+}
+
 /**
  * @param {string?} commitMessageFlag
  */
@@ -558,30 +618,28 @@ async function createRedwoodApp() {
   trace.getActiveSpan()?.setAttribute('overwrite', overwrite)
 
   // Get the directory for installation from the args
-  const targetDir = String(args).replace(/,/g, '-')
+  let targetDir = String(args).replace(/,/g, '-')
 
-  // Throw an error if there is no target directory specified
+  // if there is no target directory specified
   if (!targetDir) {
-    tui.displayError(
+    tui.displayWarning(
       'No target directory specified',
       [
         'Please specify the project directory',
-        `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
+        `  ${chalk.cyan('yarn create redwood-app')} ${chalk.red(
           '<project-directory>'
         )}`,
         '',
         'For example:',
-        `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
+        `  ${chalk.cyan('yarn create redwood-app')} ${chalk.red(
           'my-redwood-app'
         )}`,
       ].join('\n')
     )
-    recordErrorViaTelemetry('No target directory specified')
-    await shutdownTelemetry()
-    process.exit(1)
+    targetDir = await handleNewDirectoryNamePreference()
   }
 
-  const newAppDir = path.resolve(process.cwd(), targetDir)
+  let newAppDir = path.resolve(process.cwd(), targetDir)
   const templatesDir = path.resolve(__dirname, '../templates')
 
   // Engine check
@@ -610,7 +668,7 @@ async function createRedwoodApp() {
   }
 
   // Create project files
-  await createProjectFiles(newAppDir, { templateDir, overwrite })
+  newAppDir = await createProjectFiles(newAppDir, { templateDir, overwrite })
 
   // Initialize git repo
   if (useGit) {
