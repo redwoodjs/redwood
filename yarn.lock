@@ -8050,7 +8050,7 @@ __metadata:
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     "@types/yargs-parser": 21.0.0
-    "@vitejs/plugin-react": 4.0.1
+    "@vitejs/plugin-react": 4.0.2
     buffer: 6.0.3
     core-js: 3.31.1
     glob: 10.3.1
