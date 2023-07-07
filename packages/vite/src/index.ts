@@ -170,9 +170,10 @@ export default function redwoodPluginVite(): PluginOption[] {
             manifest: !env.ssrBuild ? 'build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
           },
-          // To produce a cjs bundle for SSR
           legacy: {
-            buildSsrCjsExternalHeuristics: env.ssrBuild,
+            buildSsrCjsExternalHeuristics: rwConfig.experimental?.rsc?.enabled
+              ? false
+              : env.ssrBuild,
           },
           optimizeDeps: {
             esbuildOptions: {
