@@ -10766,9 +10766,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:4.0.1":
-  version: 4.0.1
-  resolution: "@vitejs/plugin-react@npm:4.0.1"
+"@vitejs/plugin-react@npm:4.0.2":
+  version: 4.0.2
+  resolution: "@vitejs/plugin-react@npm:4.0.2"
   dependencies:
     "@babel/core": ^7.22.5
     "@babel/plugin-transform-react-jsx-self": ^7.22.5
@@ -10776,7 +10776,7 @@ __metadata:
     react-refresh: ^0.14.0
   peerDependencies:
     vite: ^4.2.0
-  checksum: 8d9676ead75d63474108dfd8b39f8664d883c8fe7a2d31ea5af2ca9d941e0a23f6e7288e99af83cf06d38784532df0008c0b310fba0d324f498f3ebefdcf75c5
+  checksum: 146d7f5f7311abc4acda00b2ae7ff9c945f1bb259f99c78533647ca0c70c3ee5b15c60497e44472f71281f5c00afa2fbd52008d97f574e0458a96801f8e437ca
   languageName: node
   linkType: hard
 
