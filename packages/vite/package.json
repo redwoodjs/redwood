@@ -51,7 +51,7 @@
     "@vitejs/plugin-react": "4.0.1",
     "acorn-loose": "^8.3.0",
     "buffer": "6.0.3",
-    "core-js": "3.31.0",
+    "core-js": "3.31.1",
     "dotenv-defaults": "5.0.2",
     "express": "4.18.2",
     "http-proxy-middleware": "2.0.6",

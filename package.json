@@ -71,7 +71,7 @@
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",
     "boxen": "5.1.2",
-    "core-js": "3.31.0",
+    "core-js": "3.31.1",
     "cypress": "12.15.0",
     "cypress-wait-until": "1.7.2",
     "dependency-cruiser": "13.0.4",
