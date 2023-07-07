@@ -94,7 +94,7 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Updating App.tsx...',
+        title: 'Overwriting App.tsx...',
         task: async () => {
           const appTemplate = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'rsc', 'App.tsx.template'),
@@ -131,6 +131,24 @@ export const handler = async ({ force, verbose }) => {
           )
 
           writeFile(rwPaths.web.html, indexHtml, {
+            overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: 'Overwrite entry.client.tsx...',
+        task: async () => {
+          const entryClientTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'entry.client.tsx.template'
+            ),
+            'utf-8'
+          )
+
+          writeFile(rwPaths.web.entryClient, entryClientTemplate, {
             overwriteExisting: true,
           })
         },
