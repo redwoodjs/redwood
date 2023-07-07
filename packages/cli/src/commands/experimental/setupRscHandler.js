@@ -136,41 +136,19 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Updating entry.client.tsx...',
+        title: 'Overwrite entry.client.tsx...',
         task: async () => {
-          let entryClientLines = fs
-            .readFileSync(rwPaths.web.entryClient, 'utf-8')
-            .split('\n')
-          let foundRootRender = false
-          entryClientLines = entryClientLines.reduce((acc, line) => {
-            if (foundRootRender) {
-              // skip (remove) this line
+          const entryClientTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'entry.client.tsx.template'
+            ),
+            'utf-8'
+          )
 
-              if (/^ {2}\)/.test(line)) {
-                // found ending ). Keeping rest of the file after this line
-                foundRootRender = false
-              }
-            } else if (line.includes('// TODO (STREAMING) This was marked')) {
-              acc.push("import { serve } from '@redwoodjs/vite/client'")
-              acc.push(line)
-            } else if (line.includes("import App from './App'")) {
-              // skip (remove) this line
-            } else if (line.includes('const redwoodAppElement')) {
-              acc.push(line)
-              acc.push('')
-              acc.push("const App = serve('App')")
-            } else if (line.includes('const root = createRoot(document)')) {
-              acc.push('  const root = createRoot(redwoodAppElement)')
-              acc.push('  root.render(<App name="Redwood RSCc" />)')
-              foundRootRender = true
-            } else {
-              acc.push(line)
-            }
-
-            return acc
-          }, [])
-
-          writeFile(rwPaths.web.entryClient, entryClientLines.join('\n'), {
+          writeFile(rwPaths.web.entryClient, entryClientTemplate, {
             overwriteExisting: true,
           })
         },
