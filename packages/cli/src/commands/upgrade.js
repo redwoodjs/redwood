@@ -48,17 +48,12 @@ export const builder = (yargs) => {
     })
     .epilogue(
       `Also see the ${terminalLink(
-        'Redwood CLI Reference',
+        'Redwood CLI Reference for the upgrade command',
         'https://redwoodjs.com/docs/cli-commands#upgrade'
-      )}`
-    )
-    // Just to make an empty line
-    .epilogue('')
-    .epilogue(
-      `We are < v1.0.0, so breaking changes occur frequently. For more information on the current release, see the ${terminalLink(
-        'release page',
+      )}.\nAnd the ${terminalLink(
+        'GitHub releases page',
         'https://github.com/redwoodjs/redwood/releases'
-      )}`
+      )} for more information on the current release.`
     )
 }
 
