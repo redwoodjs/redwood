@@ -50,7 +50,7 @@ export const builder = (yargs) => {
       `Also see the ${terminalLink(
         'Redwood CLI Reference for the upgrade command',
         'https://redwoodjs.com/docs/cli-commands#upgrade'
-      )} and the ${terminalLink(
+      )}.\nAnd the ${terminalLink(
         'GitHub releases page',
         'https://github.com/redwoodjs/redwood/releases'
       )} for more information on the current release.`
