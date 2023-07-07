@@ -101,9 +101,15 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         task: async (ctx) => setLatestVersionToContext(ctx, tag),
       },
       {
-        title: 'Updating your project package.json(s)',
+        title: 'Updating your Redwood version',
         task: (ctx) => updateRedwoodDepsForAllSides(ctx, { dryRun, verbose }),
         enabled: (ctx) => !!ctx.versionToUpgradeTo,
+      },
+      {
+        title: 'Updating other packages in your package.json(s)',
+        task: (ctx) =>
+          updatePackageVersionsFromTemplate(ctx, { dryRun, verbose }),
+        enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
       },
       {
         title: 'Running yarn install',
@@ -266,6 +272,83 @@ function updateRedwoodDepsForAllSides(ctx, options) {
         title: `Updating ${pkgJsonPath}`,
         task: () =>
           updatePackageJsonVersion(basePath, ctx.versionToUpgradeTo, options),
+        skip: () => !fs.existsSync(pkgJsonPath),
+      }
+    })
+  )
+}
+
+async function updatePackageVersionsFromTemplate(ctx, { dryRun, verbose }) {
+  if (!ctx.versionToUpgradeTo) {
+    throw new Error('Failed to upgrade')
+  }
+
+  const packageJsons = [
+    {
+      basePath: getPaths().base,
+      url: 'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/package.json',
+    },
+    {
+      basePath: getPaths().api.base,
+      url: 'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/api/package.json',
+    },
+    {
+      basePath: getPaths().web.base,
+      url: 'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/web/package.json',
+    },
+  ]
+
+  return new Listr(
+    packageJsons.map(({ basePath, url }) => {
+      const pkgJsonPath = path.join(basePath, 'package.json')
+
+      return {
+        title: `Updating ${pkgJsonPath}`,
+        task: async () => {
+          const res = await fetch(url)
+          const text = await res.text()
+          const templatePackageJson = JSON.parse(text)
+
+          const localPackageJsonText = fs.readFileSync(pkgJsonPath, 'utf-8')
+          const localPackageJson = JSON.parse(localPackageJsonText)
+
+          Object.entries(templatePackageJson.dependencies || {}).forEach(
+            ([depName, depVersion]) => {
+              // Redwood packages are handled in another task
+              if (!depName.startsWith('@redwoodjs/')) {
+                if (verbose || dryRun) {
+                  console.log(
+                    ` - ${depName}: ${localPackageJson.dependencies[depName]} => ${depVersion}`
+                  )
+                }
+
+                localPackageJson.dependencies[depName] = depVersion
+              }
+            }
+          )
+
+          Object.entries(templatePackageJson.devDependencies || {}).forEach(
+            ([depName, depVersion]) => {
+              // Redwood packages are handled in another task
+              if (!depName.startsWith('@redwoodjs/')) {
+                if (verbose || dryRun) {
+                  console.log(
+                    ` - ${depName}: ${localPackageJson.devDependencies[depName]} => ${depVersion}`
+                  )
+                }
+
+                localPackageJson.devDependencies[depName] = depVersion
+              }
+            }
+          )
+
+          if (!dryRun) {
+            fs.writeFileSync(
+              pkgJsonPath,
+              JSON.stringify(localPackageJson, null, 2)
+            )
+          }
+        },
         skip: () => !fs.existsSync(pkgJsonPath),
       }
     })
