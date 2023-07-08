@@ -2392,7 +2392,7 @@ __metadata:
     graphql-scalars: 1.22.2
     json-bigint-patch: 0.0.8
     postcss: 8.4.24
-    pretty-ms: 7.0.0
+    pretty-ms: 7.0.1
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
     react-error-boundary: 4.0.10
@@ -3446,12 +3446,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-ms@npm:7.0.0":
-  version: 7.0.0
-  resolution: "pretty-ms@npm:7.0.0"
+"pretty-ms@npm:7.0.1":
+  version: 7.0.1
+  resolution: "pretty-ms@npm:7.0.1"
   dependencies:
     parse-ms: ^2.1.0
-  checksum: c5159f67d0e329d77a567fef6cc6574582eebd825afb161e214992c7264eb2cb3caa5b34a080487e823f5f01a5294e4bdf9ccf50b67641211b44c9de54e35905
+  checksum: 069aec9d939e7903846b3db53b020bed92e3dc5909e0fef09ec8ab104a0b7f9a846605a1633c60af900d288582fb333f6f30469e59d6487a2330301fad35a89c
   languageName: node
   linkType: hard
 
