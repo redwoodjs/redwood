@@ -7629,7 +7629,7 @@ __metadata:
     core-js: 3.31.1
     cross-env: 7.0.3
     crypto-js: 4.1.1
-    decamelize: 5.0.0
+    decamelize: 5.0.1
     dotenv-defaults: 5.0.2
     enquirer: 2.3.6
     envinfo: 7.9.0
@@ -8073,7 +8073,7 @@ __metadata:
     "@types/fs-extra": 11.0.1
     "@types/line-column": 1.0.0
     "@types/lodash": 4.14.195
-    "@types/lru-cache": 5.1.1
+    "@types/lru-cache": 7.10.10
     "@types/node": 18.16.18
     "@types/vscode": 1.79.1
     camelcase: 6.3.0
@@ -10440,10 +10440,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lru-cache@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@types/lru-cache@npm:5.1.1"
-  checksum: 1f17ec9b202c01a89337cc5528198a690be6b61a6688242125fbfb7fa17770e453e00e4685021abf5ae605860ca0722209faac5c254b780d0104730bb0b9e354
+"@types/lru-cache@npm:7.10.10":
+  version: 7.10.10
+  resolution: "@types/lru-cache@npm:7.10.10"
+  dependencies:
+    lru-cache: "*"
+  checksum: ab85558867cb059bebd42074c1cd517eb41efb1db22b9d26dfdc58df01c83ff9c212a562b4ec3d5936418ffb03e626a0f30463026aa5fb5ced41e3b4b4af057f
   languageName: node
   linkType: hard
 
@@ -13232,6 +13234,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bl@npm:^5.0.0":
+  version: 5.1.0
+  resolution: "bl@npm:5.1.0"
+  dependencies:
+    buffer: ^6.0.3
+    inherits: ^2.0.4
+    readable-stream: ^3.4.0
+  checksum: 528a9c3d7d6b87af98c46f10a887654d027c28c503c7f7de87440e643f0056d7a2319a967762b8ec18150c64799d2825a277147a752a0570a7407c0b705b0d01
+  languageName: node
+  linkType: hard
+
 "blob-util@npm:^2.0.2":
   version: 2.0.2
   resolution: "blob-util@npm:2.0.2"
@@ -13993,7 +14006,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^5.2.0":
+"chalk@npm:^5.0.0, chalk@npm:^5.2.0":
   version: 5.3.0
   resolution: "chalk@npm:5.3.0"
   checksum: 8297d436b2c0f95801103ff2ef67268d362021b8210daf8ddbe349695333eb3610a71122172ff3b0272f1ef2cf7cc2c41fdaa4715f52e49ffe04c56340feed09
@@ -14312,7 +14325,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-spinners@npm:^2.5.0":
+"cli-spinners@npm:^2.5.0, cli-spinners@npm:^2.6.1":
   version: 2.9.0
   resolution: "cli-spinners@npm:2.9.0"
   checksum: c0d5437acc1ace7361b1c58a4fda3c92c2d8691ff3169ac658ce30faee71280b7aa706c072bcb6d0e380c232f3495f7d5ad4668c1391fe02c4d3a39d37798f44
@@ -15685,10 +15698,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decamelize@npm:5.0.0":
-  version: 5.0.0
-  resolution: "decamelize@npm:5.0.0"
-  checksum: cb9effe9806aa6ff9816f5d0553378f3c712ebca944e12586a2fccb05bf6bc3e13b0fb15fbce54b4995f94591b9cba78a9817b97858292799107e2e7477a9b5d
+"decamelize@npm:5.0.1, decamelize@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "decamelize@npm:5.0.1"
+  checksum: 3da71022bc1e85487810fa0833138effb599fa331ca21e179650e93a765d0c4dabeb1ecdd6ad1474fa0bacd2457953c63ea335afb6e53b35f2b4bf779514e2a3
   languageName: node
   linkType: hard
 
@@ -15705,13 +15718,6 @@ __metadata:
   dependencies:
     xregexp: 4.0.0
   checksum: 7908c37fa2e20022cfbf425c03aebdc8dee3c57b6c64135bbf23007f40528dd2463b4fb28755ee5dec7be3aca4b1d136de962bea6a886518b27c558b0f3a8bb5
-  languageName: node
-  linkType: hard
-
-"decamelize@npm:^5.0.0":
-  version: 5.0.1
-  resolution: "decamelize@npm:5.0.1"
-  checksum: 3da71022bc1e85487810fa0833138effb599fa331ca21e179650e93a765d0c4dabeb1ecdd6ad1474fa0bacd2457953c63ea335afb6e53b35f2b4bf779514e2a3
   languageName: node
   linkType: hard
 
@@ -20666,6 +20672,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-interactive@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "is-interactive@npm:2.0.0"
+  checksum: 801c8f6064f85199dc6bf99b5dd98db3282e930c3bc197b32f2c5b89313bb578a07d1b8a01365c4348c2927229234f3681eb861b9c2c92bee72ff397390fa600
+  languageName: node
+  linkType: hard
+
 "is-lambda@npm:^1.0.1":
   version: 1.0.1
   resolution: "is-lambda@npm:1.0.1"
@@ -20800,13 +20813,6 @@ __metadata:
   dependencies:
     isobject: ^3.0.1
   checksum: f050fdd5203d9c81e8c4df1b3ff461c4bc64e8b5ca383bcdde46131361d0a678e80bcf00b5257646f6c636197629644d53bd8e2375aea633de09a82d57e942f4
-  languageName: node
-  linkType: hard
-
-"is-port-reachable@npm:3.1.0":
-  version: 3.1.0
-  resolution: "is-port-reachable@npm:3.1.0"
-  checksum: 9063ffeedc984ab9c856cbf58805a0f45e5bfaa54a33da475d91c65dca80754ca5d4737a9d7a1a315f147db39e886f9a4082c6e3183412111e4a99e6cdc1bec1
   languageName: node
   linkType: hard
 
@@ -20945,7 +20951,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-unicode-supported@npm:^1.2.0":
+"is-unicode-supported@npm:^1.1.0, is-unicode-supported@npm:^1.2.0":
   version: 1.3.0
   resolution: "is-unicode-supported@npm:1.3.0"
   checksum: b8674ea95d869f6faabddc6a484767207058b91aea0250803cbf1221345cb0c56f466d4ecea375dc77f6633d248d33c47bd296fb8f4cdba0b4edba8917e83d8a
@@ -22846,6 +22852,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"log-symbols@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "log-symbols@npm:5.1.0"
+  dependencies:
+    chalk: ^5.0.0
+    is-unicode-supported: ^1.1.0
+  checksum: c14f8567c6618a7f96209c4c4b9fb3b794187116904712f7b526e465a5c9535728aec983735a5bef919247d0e54b9b72b6680a7fb9fc72d76b945dac4865e669
+  languageName: node
+  linkType: hard
+
 "log-update@npm:^4.0.0":
   version: 4.0.0
   resolution: "log-update@npm:4.0.0"
@@ -22942,17 +22958,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:*, lru-cache@npm:^10.0.0, lru-cache@npm:^9.1.1 || ^10.0.0":
+  version: 10.0.0
+  resolution: "lru-cache@npm:10.0.0"
+  checksum: 347b7b391091e9f91182b6f683ce04329932a542376a2d7d300637213b99f06c222a3bb0f0db59adf246dac6cef1bb509cab352451a96621d07c41b10a20495f
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:7.18.3, lru-cache@npm:^7.10.1, lru-cache@npm:^7.14.1, lru-cache@npm:^7.4.4, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1":
   version: 7.18.3
   resolution: "lru-cache@npm:7.18.3"
   checksum: b3a452b491433db885beed95041eb104c157ef7794b9c9b4d647be503be91769d11206bb573849a16b4cc0d03cbd15ffd22df7960997788b74c1d399ac7a4fed
-  languageName: node
-  linkType: hard
-
-"lru-cache@npm:^10.0.0, lru-cache@npm:^9.1.1 || ^10.0.0":
-  version: 10.0.0
-  resolution: "lru-cache@npm:10.0.0"
-  checksum: 347b7b391091e9f91182b6f683ce04329932a542376a2d7d300637213b99f06c222a3bb0f0db59adf246dac6cef1bb509cab352451a96621d07c41b10a20495f
   languageName: node
   linkType: hard
 
@@ -25108,7 +25124,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ora@npm:5.4.1, ora@npm:^5.4.1":
+"ora@npm:6.3.1":
+  version: 6.3.1
+  resolution: "ora@npm:6.3.1"
+  dependencies:
+    chalk: ^5.0.0
+    cli-cursor: ^4.0.0
+    cli-spinners: ^2.6.1
+    is-interactive: ^2.0.0
+    is-unicode-supported: ^1.1.0
+    log-symbols: ^5.1.0
+    stdin-discarder: ^0.1.0
+    strip-ansi: ^7.0.1
+    wcwidth: ^1.0.1
+  checksum: f8753e234c9967c86cfb73e7396e1a51ed8771c4921d539af8e8962b32c7928cefef7b3c4ce730a504be72b1437f91cc0523f468927b9fe322498c4edcc50203
+  languageName: node
+  linkType: hard
+
+"ora@npm:^5.4.1":
   version: 5.4.1
   resolution: "ora@npm:5.4.1"
   dependencies:
@@ -28013,7 +28046,6 @@ __metadata:
     eslint: 8.43.0
     fast-glob: 3.2.12
     fs-extra: 11.1.1
-    is-port-reachable: 3.1.0
     jest: 29.5.0
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.15.0
@@ -28027,7 +28059,7 @@ __metadata:
     nx: 16.4.1
     nx-cloud: 16.0.5
     octokit: 2.1.0
-    ora: 5.4.1
+    ora: 6.3.1
     prompts: 2.4.2
     rimraf: 5.0.1
     typescript: 5.1.3
@@ -29156,6 +29188,15 @@ __metadata:
   version: 1.5.0
   resolution: "statuses@npm:1.5.0"
   checksum: e433900956357b3efd79b1c547da4d291799ac836960c016d10a98f6a810b1b5c0dcc13b5a7aa609a58239b5190e1ea176ad9221c2157d2fd1c747393e6b2940
+  languageName: node
+  linkType: hard
+
+"stdin-discarder@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "stdin-discarder@npm:0.1.0"
+  dependencies:
+    bl: ^5.0.0
+  checksum: 3bbf7f8107e49c05b4a46bd739afdd34605cf1f06a038c8b2a33d034bf146344fc0ebc5149df1e6422510dd219971a220f25b1102413ef5128fe267683fbef9d
   languageName: node
   linkType: hard
 
