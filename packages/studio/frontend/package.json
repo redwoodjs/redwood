@@ -25,7 +25,7 @@
     "graphql": "16.7.1",
     "graphql-scalars": "1.22.2",
     "json-bigint-patch": "0.0.8",
-    "pretty-ms": "7.0.0",
+    "pretty-ms": "7.0.1",
     "react": "18.3.0-canary-035a41c4e-20230704",
     "react-dom": "18.3.0-canary-035a41c4e-20230704",
     "react-error-boundary": "4.0.10",
