@@ -36,7 +36,7 @@
     "typescript": "5.1.3"
   },
   "peerDependencies": {
-    "supertokens-node": "13.6.0"
+    "supertokens-node": "14.1.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
