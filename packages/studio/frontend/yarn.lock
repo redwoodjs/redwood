@@ -2391,7 +2391,7 @@ __metadata:
     graphql: 16.7.1
     graphql-scalars: 1.22.2
     json-bigint-patch: 0.0.8
-    postcss: 8.4.24
+    postcss: 8.4.25
     pretty-ms: 7.0.1
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
@@ -3435,14 +3435,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.24, postcss@npm:^8.4.23":
-  version: 8.4.24
-  resolution: "postcss@npm:8.4.24"
+"postcss@npm:8.4.25, postcss@npm:^8.4.23":
+  version: 8.4.25
+  resolution: "postcss@npm:8.4.25"
   dependencies:
     nanoid: ^3.3.6
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: 37704ee03a2cbdebf2c99a76d399d6e0250742b5f6c699a12d475c84cedfcbeb26e180d9c780e0219dd2ad70cac963ceaf1d6763a1aec3e63d0c19fceb0eab23
+  checksum: aa2143cb5ed6eef6cb1d38236f158c5fe11bfd1f338c930cf4901f09586874e05fa006e3fd329ca51c61202c7e90d0705379e6310251c9311116e65cb6a08c18
   languageName: node
   linkType: hard
 
