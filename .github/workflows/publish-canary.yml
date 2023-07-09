@@ -77,7 +77,17 @@ jobs:
             --no-git-reset
           )
 
-          echo 'n' | yarn lerna publish "${args[@]}" | grep '\-canary\.' | tail -n 1 | sed 's/.*=> //' | sed 's/\+.*//' > canary_version
+          # `echo 'n'` to answer "no" to the "Are you sure you want to publish
+          #   these packages?" prompt.
+          # `|&` to pipe both stdout and stderr to grep. Mostly do this keep
+          #   the github action output clean.
+          echo 'n' \
+            | yarn lerna publish "${args[@]}" \
+            |& grep '\-canary\.' \
+            | tail -n 1 \
+            | sed 's/.*=> //' \
+            | sed 's/\+.*//' \
+            > canary_version
 
           echo "Will publish:"
           echo "Canary version $(cat canary_version)"
