@@ -3,6 +3,7 @@ name: 🏷 Require release label
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
+  merge_group:
 
 # Cancel in-progress runs of this workflow.
 # See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
@@ -14,9 +15,19 @@ jobs:
   require-release-label:
     name: 🏷 Require release label
     runs-on: ubuntu-latest
+
     steps:
-      - uses: mheap/github-action-required-labels@v4
+      - name: 🏷 Require release label
+        if: github.event_name == 'pull_request'
+
+        uses: mheap/github-action-required-labels@v5
         with:
           mode: exactly
           count: 1
-          labels: "release:docs, release:chore, release:experiment, release:fix, release:feature, release:feature-breaking"
+          labels: |
+            release:chore
+            release:docs
+            release:experiment
+            release:feature
+            release:feature-breaking
+            release:fix

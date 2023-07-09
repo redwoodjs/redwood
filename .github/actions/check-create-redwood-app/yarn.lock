@@ -40,9 +40,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"only_doc_changes@workspace:.":
+"check-test-project-fixture@workspace:.":
   version: 0.0.0-use.local
-  resolution: "only_doc_changes@workspace:."
+  resolution: "check-test-project-fixture@workspace:."
   dependencies:
     "@actions/core": 1.10.0
     "@actions/exec": 1.1.1

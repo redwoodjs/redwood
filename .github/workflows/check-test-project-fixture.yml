@@ -1,8 +1,9 @@
-name: Check test project fixture
+name: ✅ Check test project fixture
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
+  merge_group:
 
 # Cancel in-progress runs of this workflow.
 # See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow.
@@ -12,17 +13,22 @@ concurrency:
 
 jobs:
   check-test-project-fixture:
-    name: Check test project fixture
+    name: ✅ Check test project fixture
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 18
-      - run: yarn install
-        working-directory: ./.github/actions/check_test_project_fixture
 
-      - name: Check test project fixture
-        uses: ./.github/actions/check_test_project_fixture
+      - name: 🐈 Yarn install
+        run: yarn install
+        working-directory: ./.github/actions/check-test-project-fixture
+
+      - name: ✅ Check test project fixture
+        uses: ./.github/actions/check-test-project-fixture
         with:
           labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'

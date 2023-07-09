@@ -2,6 +2,7 @@ name: ⚙️ CI
 
 on:
   pull_request:
+  merge_group:
   push:
     branches: ['next', 'release/**']
 
@@ -30,14 +31,14 @@ jobs:
           node-version: 18
 
       - name: 🐈 Yarn install
-        working-directory: ./.github/actions/only_doc_changes
+        working-directory: ./.github/actions/only-doc-changes
         run: yarn install --inline-builds
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: 📖 Only doc changes?
         id: only-doc-changes
-        uses: ./.github/actions/only_doc_changes
+        uses: ./.github/actions/only-doc-changes
 
   check:
     needs: only-doc-changes
@@ -438,10 +439,10 @@ jobs:
         run: yarn build
 
       - name: 📢 Listen for telemetry (CRWA)
-        run: node ./.github/actions/telemetry_check/check.mjs --mode crwa
+        run: node ./.github/actions/telemetry-check/telemetryCheck.mjs --mode crwa
 
       - name: 📢 Listen for telemetry (CLI)
-        run: node ./.github/actions/telemetry_check/check.mjs --mode cli
+        run: node ./.github/actions/telemetry-check/telemetryCheck.mjs --mode cli
         env:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 

@@ -1,6 +1,0 @@
-name: Update all contributors
-description: Updates all contributors
-runs:
-  # `node18` isn't supported yet
-  using: node16
-  main: update_all_contributors.mjs

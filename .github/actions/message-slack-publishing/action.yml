@@ -1,5 +1,6 @@
 name: 💬 Message Slack Package Publishing
 description: Send an npm publishing message to Slack
+
 inputs:
   title:
     description: title
@@ -13,6 +14,7 @@ inputs:
   slack-webhook-url:
     description: 'Slack webhook URL'
     required: true
+
 runs:
   using: composite
   steps:

@@ -1,5 +1,5 @@
 {
-  "name": "check_test_project_fixture",
+  "name": "check-test-project-fixture",
   "private": true,
   "dependencies": {
     "@actions/core": "1.10.0",
