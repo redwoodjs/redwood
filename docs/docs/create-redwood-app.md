@@ -22,7 +22,7 @@ To see what version of Node you're running, you can run the following command in
 node -v
 ```
 
-If you need to update your version of Node or run multiple versions of Node, we recommend installing nvm and have [documentation about how to get up and running.](/docs/how-to/using-nvm)
+If you need to update your version of Node or run multiple versions of Node, we recommend installing nvm and have [documentation about how to get up and running.](./how-to/using-nvm)
 
 You also need to have yarn version 1.15 or higher installed. To see what version of yarn you're running, you can run the following command in your terminal:
 
