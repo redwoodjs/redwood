@@ -75,9 +75,14 @@ jobs:
             --force-publish
             --loglevel verbose
             --no-git-reset
-            --yes
           )
 
+          echo 'n' | yarn lerna publish "${args[@]}" | grep '\-canary\.' | tail -n 1 | sed 's/.*=> //' | sed 's/\+.*//' > canary_version
+
+          echo "Will publish:"
+          echo "Canary version $(cat canary_version)"
+
+          args+=(--yes)
           yarn lerna publish "${args[@]}"
 
         env:
