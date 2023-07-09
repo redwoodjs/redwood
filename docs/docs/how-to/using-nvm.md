@@ -86,7 +86,7 @@ You'll need to [install yarn](https://yarnpkg.com/getting-started/install) **for
 corepack enable
 ```
 
-We also have a doc specifically for [working with yarn](/docs/how-to/using-yarn).
+We also have a doc specifically for [working with yarn](./using-yarn).
 :::
 
 ### To use a specific version of Node.js
