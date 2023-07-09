@@ -117,11 +117,15 @@ jobs:
           cat packages/create-redwood-app/templates/ts/web/package.json
           echo ""
 
+          git config user.name "GitHub Actions"
+          git config user.email "<>"
+
           git commit -am "Update create-redwood-app templates to use canary packages"
 
           git log --oneline -n 10
 
-          git push
+          echo "Pushing to $GITHUB_REF_NAME"
+          git push origin "$GITHUB_REF_NAME"
 
           args+=(--yes)
           yarn lerna publish "${args[@]}"
