@@ -92,6 +92,37 @@ jobs:
           echo "Will publish:"
           echo "Canary version $(cat canary_version)"
 
+          cat packages/create-redwood-app/templates/js/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/js/package.json
+          cat packages/create-redwood-app/templates/js/api/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/js/api/package.json
+          cat packages/create-redwood-app/templates/js/web/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/js/web/package.json
+
+          cat packages/create-redwood-app/templates/ts/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/ts/package.json
+          cat packages/create-redwood-app/templates/ts/api/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/ts/api/package.json
+          cat packages/create-redwood-app/templates/ts/web/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/ts/web/package.json
+
+          echo ""
+          echo "Updated ts web package.json:"
+          cat packages/create-redwood-app/templates/ts/web/package.json
+          echo ""
+
+          git commit -am "Update create-redwood-app templates to use canary packages"
+
+          git log --oneline -n 10
+
+          git push
+
           args+=(--yes)
           yarn lerna publish "${args[@]}"
 
