@@ -89,9 +89,6 @@ jobs:
             | sed 's/\+.*//' \
             > canary_version
 
-          echo "Will publish:"
-          echo "Canary version $(cat canary_version)"
-
           cat packages/create-redwood-app/templates/js/package.json \
             | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
             > packages/create-redwood-app/templates/js/package.json
@@ -112,20 +109,10 @@ jobs:
             | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
             > packages/create-redwood-app/templates/ts/web/package.json
 
-          echo ""
-          echo "Updated ts web package.json:"
-          cat packages/create-redwood-app/templates/ts/web/package.json
-          echo ""
-
           git config user.name "GitHub Actions"
           git config user.email "<>"
 
           git commit -am "Update create-redwood-app templates to use canary packages"
-
-          git log --oneline -n 10
-
-          echo "Pushing to $GITHUB_REF_NAME"
-          git push origin "$GITHUB_REF_NAME"
 
           args+=(--yes)
           yarn lerna publish "${args[@]}"
