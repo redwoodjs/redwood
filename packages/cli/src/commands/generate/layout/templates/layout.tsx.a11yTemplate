@@ -1,5 +1,5 @@
 import { SkipNavLink, SkipNavContent } from '@redwoodjs/router'
-import '@reach/skip-nav/styles.css'
+import '@redwoodjs/router/skip-nav.css'
 
 /**
  * since the main content isn't usually the first thing in the document,
