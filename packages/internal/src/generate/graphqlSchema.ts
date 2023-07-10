@@ -9,8 +9,9 @@ import chalk from 'chalk'
 import { DocumentNode, print } from 'graphql'
 import terminalLink from 'terminal-link'
 
-import { rootSchema, liveDirectiveTypeDefs } from '@redwoodjs/graphql-server'
+import { rootSchema } from '@redwoodjs/graphql-server'
 import { getPaths, resolveFile } from '@redwoodjs/project-config'
+import { liveDirectiveTypeDefs } from '@redwoodjs/realtime'
 
 export const generateGraphQLSchema = async () => {
   const redwoodProjectPaths = getPaths()

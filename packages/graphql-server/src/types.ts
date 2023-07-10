@@ -7,6 +7,7 @@ import type { Plugin } from 'graphql-yoga'
 
 import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import { CorsConfig } from '@redwoodjs/api'
+import type { RedwoodRealtimeOptions } from '@redwoodjs/realtime'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
@@ -15,7 +16,6 @@ import type {
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
 import { LoggerConfig } from './plugins/useRedwoodLogger'
-import type { RedwoodRealtimeOptions } from './plugins/useRedwoodRealtime'
 
 export type Resolver = (...args: unknown[]) => unknown
 export type Services = {

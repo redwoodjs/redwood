@@ -6,9 +6,5 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "outDir": "dist",
   },
-  "include": ["ambient.d.ts", "src/**/*"],
-  "references": [
-    { "path": "../api" },
-    { "path": "../realtime" },
-  ]
+  "include": ["src/**/*"],
 }

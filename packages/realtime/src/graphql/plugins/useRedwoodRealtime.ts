@@ -10,7 +10,7 @@ import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
 import { InMemoryLiveQueryStore } from '@n1ru4l/in-memory-live-query-store'
 import { execute as defaultExecute, print } from 'graphql'
 
-import type { SubscriptionGlobImports } from 'src/subscriptions/makeSubscriptions'
+// import type { SubscriptionGlobImports } from 'src/subscriptions/makeSubscriptions'
 
 export type { PubSub }
 
@@ -26,6 +26,8 @@ export type LiveQueryStorageMechanism =
 
 export type PublishClientType = CreateRedisEventTargetArgs['publishClient']
 export type SubscribeClientType = CreateRedisEventTargetArgs['subscribeClient']
+
+export type SubscriptionGlobImports = Record<string, any>
 
 /**
  * Configure RedwoodJS Realtime
