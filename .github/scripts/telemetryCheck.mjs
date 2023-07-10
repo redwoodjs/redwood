@@ -1,7 +1,7 @@
 /* eslint-env node */
 
-import http from 'http'
-import path from 'path'
+import http from 'node:http'
+import path from 'node:path'
 
 import { exec } from '@actions/exec'
 

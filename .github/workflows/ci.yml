@@ -439,10 +439,10 @@ jobs:
         run: yarn build
 
       - name: 📢 Listen for telemetry (CRWA)
-        run: node ./.github/actions/telemetry-check/telemetryCheck.mjs --mode crwa
+        run: node ./.github/scripts/telemetryCheck.mjs --mode crwa
 
       - name: 📢 Listen for telemetry (CLI)
-        run: node ./.github/actions/telemetry-check/telemetryCheck.mjs --mode cli
+        run: node ./.github/scripts/telemetryCheck.mjs --mode cli
         env:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
