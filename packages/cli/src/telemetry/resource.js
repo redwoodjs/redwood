@@ -90,7 +90,9 @@ export async function getResources() {
   const sides = project.sides.join(',')
 
   const isRedwoodCI = !!process.env.REDWOOD_CI
-  const redwoodPRNumber = isRedwoodCI ? process.env.REDWOOD_CI_PR_NUMBER : undefined
+  const redwoodPRNumber = isRedwoodCI
+    ? process.env.REDWOOD_CI_PR_NUMBER
+    : undefined
 
   return {
     [SemanticResourceAttributes.SERVICE_NAME]: packageName,

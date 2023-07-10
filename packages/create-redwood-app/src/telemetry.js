@@ -58,7 +58,9 @@ export async function startTelemetry() {
   const mem = await system.mem()
 
   const isRedwoodCI = !!process.env.REDWOOD_CI
-  const redwoodPRNumber = isRedwoodCI ? process.env.REDWOOD_CI_PR_NUMBER : undefined
+  const redwoodPRNumber = isRedwoodCI
+    ? process.env.REDWOOD_CI_PR_NUMBER
+    : undefined
 
   const resource = Resource.default().merge(
     new Resource({
