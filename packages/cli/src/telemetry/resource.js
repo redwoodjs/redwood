@@ -89,6 +89,9 @@ export async function getResources() {
   ].join('.')
   const sides = project.sides.join(',')
 
+  const isRedwoodCI = !!process.env.REDWOOD_CI
+  const redwoodPRNumber = isRedwoodCI ? process.env.REDWOOD_CI_PR_NUMBER : undefined
+
   return {
     [SemanticResourceAttributes.SERVICE_NAME]: packageName,
     [SemanticResourceAttributes.SERVICE_VERSION]: packageVersion,
@@ -102,7 +105,8 @@ export async function getResources() {
     'cpu.count': cpu.physicalCores,
     'memory.gb': Math.round(mem.total / 1073741824),
     'env.node_env': process.env.NODE_ENV || null,
-    'ci.redwood': !!process.env.REDWOOD_CI,
+    'ci.redwood': isRedwoodCI,
+    'ci.redwood.pr': redwoodPRNumber,
     'ci.isci': ci.isCI,
     complexity,
     sides,

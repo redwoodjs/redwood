@@ -57,6 +57,9 @@ export async function startTelemetry() {
   const cpu = await system.cpu()
   const mem = await system.mem()
 
+  const isRedwoodCI = !!process.env.REDWOOD_CI
+  const redwoodPRNumber = isRedwoodCI ? process.env.REDWOOD_CI_PR_NUMBER : undefined
+
   const resource = Resource.default().merge(
     new Resource({
       [SemanticResourceAttributes.SERVICE_NAME]: packageName,
@@ -71,7 +74,8 @@ export async function startTelemetry() {
       'cpu.count': cpu.physicalCores,
       'memory.gb': Math.round(mem.total / 1073741824),
       'env.node_env': process.env.NODE_ENV || null,
-      'ci.redwood': !!process.env.REDWOOD_CI,
+      'ci.redwood': isRedwoodCI,
+      'ci.redwood.pr': redwoodPRNumber,
       'ci.isci': ci.isCI,
       uid: UID,
     })

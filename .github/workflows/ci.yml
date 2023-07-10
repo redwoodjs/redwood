@@ -13,6 +13,7 @@ concurrency:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  REDWOOD_CI_PR_NUMBER: ${{ github.event.pull_request.number }}
 
 jobs:
   only-doc-changes:
