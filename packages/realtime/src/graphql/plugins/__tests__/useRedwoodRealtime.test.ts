@@ -8,7 +8,7 @@ import { testQuery, testLiveQuery, testSchema } from '../__fixtures__/common'
 import {
   useRedwoodRealtime,
   InMemoryLiveQueryStore,
-} from '../graphql/plugins/useRedwoodRealtime'
+} from '../useRedwoodRealtime'
 
 describe('useRedwoodRealtime', () => {
   it('should support a @live query directive', async () => {
