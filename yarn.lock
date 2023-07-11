@@ -8020,6 +8020,8 @@ __metadata:
   dependencies:
     "@envelop/core": 4.0.0
     "@envelop/live-query": 6.0.0
+    "@envelop/testing": 6.0.0
+    "@envelop/types": 4.0.0
     "@graphql-tools/schema": 10.0.0
     "@graphql-tools/utils": 10.0.1
     "@graphql-yoga/redis-event-target": 2.0.0
