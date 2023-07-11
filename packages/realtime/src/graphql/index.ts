@@ -4,7 +4,7 @@ export {
   liveDirectiveTypeDefs,
   InMemoryLiveQueryStore,
   RedisLiveQueryStore,
-} from './graphql'
+} from './plugins/useRedwoodRealtime'
 
 export type {
   LiveQueryStorageMechanism,
@@ -12,4 +12,4 @@ export type {
   PublishClientType,
   SubscribeClientType,
   RedwoodRealtimeOptions,
-} from './graphql'
+} from './plugins/useRedwoodRealtime'
