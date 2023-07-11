@@ -18,6 +18,11 @@ interface BuildOptions {
 
 export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
   const rwPaths = getPaths()
+  const viteConfig = rwPaths.web.viteConfig
+
+  if (!viteConfig) {
+    throw new Error('Vite config not found')
+  }
 
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
@@ -29,7 +34,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
    * Doesn't output any files, only collects a list of RSCs and RSFs
    */
   await viteBuild({
-    // ...configFileConfig,
+    configFile: viteConfig,
     root: rwPaths.base,
     plugins: [
       react(),
@@ -85,7 +90,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
   }
 
   const clientBuildOutput = await viteBuild({
-    // ...configFileConfig,
+    configFile: viteConfig,
     root: rwPaths.web.src,
     plugins: [
       // TODO (RSC) Update index.html to include the entry.client.js script
