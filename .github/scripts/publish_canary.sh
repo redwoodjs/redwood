@@ -24,14 +24,13 @@ args+=(
   --no-git-reset
 )
 
-# `echo 'n'` to answer "no" to the "Are you sure you want to publish
-#   these packages?" prompt.
-# `|&` to pipe both stdout and stderr to grep. Mostly do this keep
-#   the github action output clean.
-# At the end we use awk to increase the commit count by 1, because
-#   we'll commit updated package.jsons in the next step, which will
-#   increase increase the final number that lerna will use when
-#   publishing the canary packages.
+# `echo 'n'` to answer "no" to the "Are you sure you want to publish these
+#   packages?" prompt.
+# `|&` to pipe both stdout and stderr to grep. Mostly do this keep the github
+#   action output clean.
+# At the end we use awk to increase the commit count by 1, because we'll commit
+#   updated package.jsons in the next step, which will increase increase the
+#   final number that lerna will use when publishing the canary packages.
 echo 'n' \
   | yarn lerna publish "${args[@]}" \
   |& grep '\-canary\.' \
