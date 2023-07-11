@@ -75,9 +75,51 @@ jobs:
             --force-publish
             --loglevel verbose
             --no-git-reset
-            --yes
           )
 
+          # `echo 'n'` to answer "no" to the "Are you sure you want to publish
+          #   these packages?" prompt.
+          # `|&` to pipe both stdout and stderr to grep. Mostly do this keep
+          #   the github action output clean.
+          # At the end we use awk to increase the commit count by 1, because
+          #   we'll commit updated package.jsons in the next step, which will
+          #   increase increase the final number that lerna will use when
+          #   publishing the canary packages.
+          echo 'n' \
+            | yarn lerna publish "${args[@]}" \
+            |& grep '\-canary\.' \
+            | tail -n 1 \
+            | sed 's/.*=> //' \
+            | sed 's/\+.*//' \
+            | awk -F. '{ $NF = $NF + 1 } 1' OFS=. \
+            > canary_version
+
+          cat packages/create-redwood-app/templates/js/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/js/package.json
+          cat packages/create-redwood-app/templates/js/api/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/js/api/package.json
+          cat packages/create-redwood-app/templates/js/web/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/js/web/package.json
+
+          cat packages/create-redwood-app/templates/ts/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/ts/package.json
+          cat packages/create-redwood-app/templates/ts/api/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/ts/api/package.json
+          cat packages/create-redwood-app/templates/ts/web/package.json \
+            | sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
+            > packages/create-redwood-app/templates/ts/web/package.json
+
+          git config user.name "GitHub Actions"
+          git config user.email "<>"
+
+          git commit -am "Update create-redwood-app templates to use canary packages"
+
+          args+=(--yes)
           yarn lerna publish "${args[@]}"
 
         env:

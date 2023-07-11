@@ -2,7 +2,7 @@
 
 export const schema = gql`
   type Query {
-    ${liveQueryName}(id: ID!): ${typeName} @skipAuth
+    ${liveQueryName}(id: ID!): ${typeName} @requireAuth
   }
 
   type ${typeName} {
@@ -17,7 +17,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    create${typeName}Item(input: ${typeName}ItemInput!): ${typeName}Item @skipAuth
+    create${typeName}Item(input: ${typeName}ItemInput!): ${typeName}Item @requireAuth
   }
 
   input ${typeName}ItemInput {

@@ -1,8 +1,17 @@
 {
-  "extends": ["config:base"],
-  "postUpdateOptions": ["yarnDedupeHighest"],
-  "assignees": ["@jtoar"],
-  "labels": ["release:chore"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "configMigration": true,
+
+  "extends": [
+    "config:recommended"
+  ],
+
+  "postUpdateOptions": [
+    "yarnDedupeHighest"
+  ],
+  "prConcurrentLimit": 3,
+  "rebaseWhen": "conflicted",
+
   "packageRules": [
     {
       "matchUpdateTypes": [
@@ -10,46 +19,47 @@
         "patch"
       ],
       "automerge": true
+    },
+
+    {
+      "groupName": "ESM and @redwoodjs packages",
+      "enabled": false,
+
+      "matchPackageNames": [
+        "boxen",
+        "chalk",
+        "camelcase",
+        "configstore",
+        "decamelize",
+        "execa",
+        "humanize-string",
+        "latest-version",
+        "pascalcase",
+        "pretty-bytes",
+        "pretty-ms",
+        "stdout-update",
+        "tempy",
+        "terminal-link"
+      ],
+      "matchPackagePatterns": [
+        "^@redwoodjs/"
+      ]
+    },
+
+    {
+      "groupName": "chore",
+
+      "matchPackageNames": [
+        "all-contributors-cli",
+        "cypress",
+        "cypress-wait-until",
+        "dependency-cruiser",
+        "glob",
+        "mheap/github-action-required-labels action",
+        "nx",
+        "sort-package-json",
+        "zx"
+      ]
     }
-  ],
-  "ignoreDeps": [
-    "boxen",
-    "configstore",
-    "decamelize",
-    "execa",
-    "humanize-string",
-    "latest-version",
-    "ora",
-    "tempy",
-    "terminal-link",
-    "chalk",
-    "pascalcase",
-    "@redwoodjs/api",
-    "@redwoodjs/api-server",
-    "@redwoodjs/auth",
-    "@redwoodjs/cli",
-    "@redwoodjs/codemods",
-    "@redwoodjs/core",
-    "@redwoodjs/create-redwood-app",
-    "@redwoodjs/eslint-config",
-    "@redwoodjs/forms",
-    "@redwoodjs/graphql-server",
-    "@redwoodjs/internal",
-    "@redwoodjs/prerender",
-    "@redwoodjs/project-config",
-    "@redwoodjs/record",
-    "@redwoodjs/router",
-    "@redwoodjs/structure",
-    "@redwoodjs/telemetry",
-    "@redwoodjs/testing",
-    "@redwoodjs/web",
-    "lru-cache",
-    "@types/lru-cache",
-    "pretty-bytes",
-    "is-port-reachable",
-    "pretty-ms",
-    "camelcase",
-    "sort-package-json",
-    "@redwoodjs/vite"
   ]
 }

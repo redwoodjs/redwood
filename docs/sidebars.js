@@ -101,6 +101,7 @@ module.exports = {
         'contributing-overview',
         'contributing-walkthrough',
         'cors',
+        'create-redwood-app',
         'custom-web-index',
         'data-migrations',
         {
