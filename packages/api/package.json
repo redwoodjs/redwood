@@ -42,8 +42,8 @@
     "title-case": "3.0.3"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.6",
-    "@babel/core": "7.22.8",
+    "@babel/cli": "7.22.9",
+    "@babel/core": "7.22.9",
     "@types/aws-lambda": "8.10.119",
     "@types/jsonwebtoken": "9.0.2",
     "@types/memjs": "1",
