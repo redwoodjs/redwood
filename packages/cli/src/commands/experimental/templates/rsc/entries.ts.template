@@ -1,16 +1,4 @@
-export type GetEntry = (rscId: string) => Promise<
-  | React.FunctionComponent
-  | {
-      default: React.FunctionComponent
-    }
-  | null
->
-
-export function defineEntries(getEntry: GetEntry) {
-  return {
-    getEntry,
-  }
-}
+import { defineEntries } from '@redwoodjs/vite/entries'
 
 export default defineEntries(
   // getEntry
