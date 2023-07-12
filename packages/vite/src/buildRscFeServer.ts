@@ -24,6 +24,10 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
     throw new Error('Vite config not found')
   }
 
+  if (!rwPaths.web.entries) {
+    throw new Error('RSC entries file not found')
+  }
+
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
 
