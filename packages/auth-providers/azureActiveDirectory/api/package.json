@@ -28,8 +28,8 @@
     "jwks-rsa": "3.0.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.6",
-    "@babel/core": "7.22.8",
+    "@babel/cli": "7.22.9",
+    "@babel/core": "7.22.9",
     "@redwoodjs/api": "5.0.0",
     "@types/aws-lambda": "8.10.119",
     "@types/jsonwebtoken": "9.0.2",

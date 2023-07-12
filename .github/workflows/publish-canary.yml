@@ -54,32 +54,7 @@ jobs:
         run: yarn test
 
       - name: 🚢 Publish
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-
-          TAG='canary' && [[ "$GITHUB_REF_NAME" = 'next' ]] && TAG='next'
-          echo "Publishing $TAG"
-
-          args=()
-
-          if [[ "$GITHUB_REF_NAME" = 'main' ]]; then
-            args+=(premajor)
-          fi
-
-          args+=(
-            --include-merged-tags
-            --canary
-            --exact
-            --preid "$TAG"
-            --dist-tag "$TAG"
-            --force-publish
-            --loglevel verbose
-            --no-git-reset
-            --yes
-          )
-
-          yarn lerna publish "${args[@]}"
-
+        run: ./.github/scripts/publish_canary.sh
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 

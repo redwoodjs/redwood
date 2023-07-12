@@ -18,6 +18,15 @@ interface BuildOptions {
 
 export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
   const rwPaths = getPaths()
+  const viteConfig = rwPaths.web.viteConfig
+
+  if (!viteConfig) {
+    throw new Error('Vite config not found')
+  }
+
+  if (!rwPaths.web.entries) {
+    throw new Error('RSC entries file not found')
+  }
 
   const clientEntryFileSet = new Set<string>()
   const serverEntryFileSet = new Set<string>()
@@ -29,7 +38,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
    * Doesn't output any files, only collects a list of RSCs and RSFs
    */
   await viteBuild({
-    // ...configFileConfig,
+    configFile: viteConfig,
     root: rwPaths.base,
     plugins: [
       react(),
@@ -52,12 +61,12 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
     //   // noExternal: ['@redwoodjs/web', '@redwoodjs/router'],
     // },
     build: {
+      manifest: 'rsc-build-manifest.json',
       write: false,
       ssr: true,
       rollupOptions: {
         input: {
-          // entries: rwPaths.web.entryServer,
-          entries: path.join(rwPaths.web.src, 'entries.ts'),
+          entries: rwPaths.web.entries,
         },
       },
     },
@@ -85,7 +94,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
   }
 
   const clientBuildOutput = await viteBuild({
-    // ...configFileConfig,
+    configFile: viteConfig,
     root: rwPaths.web.src,
     plugins: [
       // TODO (RSC) Update index.html to include the entry.client.js script
@@ -130,7 +139,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
         },
         preserveEntrySignatures: 'exports-only',
       },
-      manifest: 'build-manifest.json',
+      manifest: 'client-build-manifest.json',
     },
     esbuild: {
       logLevel: 'debug',
@@ -142,11 +151,27 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
   }
 
   const serverBuildOutput = await serverBuild(
-    // rwPaths.web.entryServer,
-    path.join(rwPaths.web.src, 'entries.ts'),
+    rwPaths.web.entries,
     clientEntryFiles,
     serverEntryFiles,
     {}
+  )
+
+  // TODO (RSC) Some css is now duplicated in two files (i.e. for client
+  // components). Probably don't want that.
+  // Also not sure if this works on "soft" rerenders (i.e. not a full page
+  // load)
+  await Promise.all(
+    serverBuildOutput.output
+      .filter((item) => {
+        return item.type === 'asset' && item.fileName.endsWith('.css')
+      })
+      .map((cssAsset) => {
+        return fs.copyFile(
+          path.join(rwPaths.web.distServer, cssAsset.fileName),
+          path.join(rwPaths.web.dist, cssAsset.fileName)
+        )
+      })
   )
 
   const clientEntries: Record<string, string> = {}
@@ -154,6 +179,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
     const { name, fileName } = item
     const entryFile =
       name &&
+      // TODO (RSC) Can't we just compare the names? `item.name === name`
       serverBuildOutput.output.find(
         (item) =>
           'moduleIds' in item &&
@@ -268,9 +294,12 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
   //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
   //    code compiled and ran properly, but Jest tests failed, complaining
   //    about the syntax.
-  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
-  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
+  const manifestPath = path.join(
+    getPaths().web.dist,
+    'client-build-manifest.json'
+  )
+  const manifestStr = await fs.readFile(manifestPath, 'utf-8')
+  const clientBuildManifest: ViteBuildManifest = JSON.parse(manifestStr)
 
   // TODO (RSC) We don't have support for a router yet, so skip all routes
   const routesList = [] as RouteSpec[] // getProjectRoutes()

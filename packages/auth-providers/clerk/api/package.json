@@ -27,8 +27,8 @@
     "core-js": "3.31.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.6",
-    "@babel/core": "7.22.8",
+    "@babel/cli": "7.22.9",
+    "@babel/core": "7.22.9",
     "@redwoodjs/api": "5.0.0",
     "@types/aws-lambda": "8.10.119",
     "jest": "29.5.0",

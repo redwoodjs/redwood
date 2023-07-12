@@ -24,7 +24,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "7.22.7",
+    "@babel/plugin-transform-runtime": "7.22.9",
     "@babel/runtime-corejs3": "7.22.6",
     "@fastify/http-proxy": "9.2.1",
     "@fastify/static": "6.10.2",
@@ -53,8 +53,8 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.6",
-    "@babel/core": "7.22.8",
+    "@babel/cli": "7.22.9",
+    "@babel/core": "7.22.9",
     "@types/aws-lambda": "8.10.119",
     "@types/crypto-js": "4.1.1",
     "@types/jsonwebtoken": "9.0.2",
