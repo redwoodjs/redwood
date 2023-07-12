@@ -48,8 +48,8 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.6",
-    "@babel/core": "7.22.8",
+    "@babel/cli": "7.22.9",
+    "@babel/core": "7.22.9",
     "@envelop/testing": "6.0.0",
     "@envelop/types": "4.0.0",
     "@graphql-yoga/redis-event-target": "2.0.0",
