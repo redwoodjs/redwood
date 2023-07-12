@@ -46,10 +46,7 @@ export async function handler({ force, includeExamples, verbose }) {
           isServerFileSetup()
         },
       },
-      addApiPackages([
-        'ioredis',
-        //'@redwoodjs/realtime'
-      ]),
+      addApiPackages(['ioredis', '@redwoodjs/realtime']),
       {
         title: 'Adding the realtime api lib ...',
         task: () => {
