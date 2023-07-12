@@ -13,5 +13,4 @@ export type {
   SubscribeClientType,
   SubscriptionGlobImports,
   RedwoodRealtimeOptions,
-  RedwoodSubscription,
 } from './plugins/useRedwoodRealtime'

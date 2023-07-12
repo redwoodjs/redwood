@@ -1,7 +1,19 @@
-import type {
-  RedwoodSubscription,
-  SubscriptionGlobImports,
-} from '@redwoodjs/realtime'
+import { DocumentNode } from 'graphql'
+/*
+ We want SubscriptionsGlobs type to be an object with this shape:
+ But not fully supported in TS
+ {
+   schema: DocumentNode // <-- required
+   [string]: RedwoodSubscription
+ }
+ */
+export type SubscriptionGlobImports = Record<string, any>
+
+export type RedwoodSubscription = {
+  schema: DocumentNode
+  resolvers: any
+  name: string
+}
 
 export const makeSubscriptions = (
   SubscriptionGlobs: SubscriptionGlobImports
