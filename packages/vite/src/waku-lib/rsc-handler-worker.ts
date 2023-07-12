@@ -11,7 +11,7 @@ import { createServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { defineEntries } from '../waku-server'
+import { defineEntries } from '../entries'
 // import type { unstable_GetCustomModules } from '../waku-server'
 
 import { configFileConfig, resolveConfig } from './config'
