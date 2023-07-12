@@ -11,5 +11,7 @@ export type {
   PubSub,
   PublishClientType,
   SubscribeClientType,
+  SubscriptionGlobImports,
   RedwoodRealtimeOptions,
+  RedwoodSubscription,
 } from './plugins/useRedwoodRealtime'

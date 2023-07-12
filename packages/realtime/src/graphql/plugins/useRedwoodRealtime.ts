@@ -9,8 +9,23 @@ import { createPubSub } from '@graphql-yoga/subscription'
 import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
 import { InMemoryLiveQueryStore } from '@n1ru4l/in-memory-live-query-store'
 import { execute as defaultExecute, print } from 'graphql'
+import type { DocumentNode } from 'graphql'
+/*
+We want SubscriptionsGlobs type to be an object with this shape:
 
-type SubscriptionGlobImports = Record<string, any>
+But not fully supported in TS
+{
+  schema: DocumentNode // <-- required
+  [string]: RedwoodSubscription
+}
+*/
+export type SubscriptionGlobImports = Record<string, any>
+
+export type RedwoodSubscription = {
+  schema: DocumentNode
+  resolvers: any
+  name: string
+}
 
 export type { PubSub }
 
@@ -213,14 +228,7 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       }
     },
     onContextBuilding() {
-      console.debug('onContextBuilding')
       return ({ extendContext }) => {
-        console.debug(
-          'extendContext LQ',
-          liveQueriesEnabled,
-          liveQueryStorageMechanism
-        )
-        console.debug('extendContext SUB', subscriptionsEnabled, pubSub)
         extendContext({
           liveQueryStore: liveQueriesEnabled && liveQueryStorageMechanism,
           pubSub: subscriptionsEnabled && pubSub,
