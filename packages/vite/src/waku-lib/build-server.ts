@@ -38,10 +38,12 @@ export async function serverBuild(
     plugins: [react()],
     build: {
       ssr: true,
+      ssrEmitAssets: true,
       // TODO (RSC) Change output dir to just dist. We should be "server
       // first". Client components are the "special case" and should be output
       // to dist/client
       outDir: rwPaths.web.distServer,
+      manifest: 'server-build-manifest.json',
       rollupOptions: {
         input,
         output: {

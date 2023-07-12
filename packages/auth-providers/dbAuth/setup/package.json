@@ -31,8 +31,8 @@
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.6",
-    "@babel/core": "7.22.8",
+    "@babel/cli": "7.22.9",
+    "@babel/core": "7.22.9",
     "@simplewebauthn/typescript-types": "7.0.0",
     "@types/secure-random-password": "0.2.1",
     "@types/yargs": "17.0.24",
