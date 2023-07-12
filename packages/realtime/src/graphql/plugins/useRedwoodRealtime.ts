@@ -2,13 +2,15 @@ import type { Plugin } from '@envelop/core'
 import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
-import type { CreateRedisEventTargetArgs } from '@graphql-yoga/redis-event-target'
 import { createRedisEventTarget } from '@graphql-yoga/redis-event-target'
+import type { CreateRedisEventTargetArgs } from '@graphql-yoga/redis-event-target'
 import type { PubSub } from '@graphql-yoga/subscription'
 import { createPubSub } from '@graphql-yoga/subscription'
 import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
 import { InMemoryLiveQueryStore } from '@n1ru4l/in-memory-live-query-store'
 import { execute as defaultExecute, print } from 'graphql'
+
+type SubscriptionGlobImports = Record<string, any>
 
 export type { PubSub }
 
@@ -24,8 +26,6 @@ export type LiveQueryStorageMechanism =
 
 export type PublishClientType = CreateRedisEventTargetArgs['publishClient']
 export type SubscribeClientType = CreateRedisEventTargetArgs['subscribeClient']
-
-type SubscriptionGlobImports = Record<string, any>
 
 /**
  * Configure RedwoodJS Realtime
@@ -213,7 +213,14 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       }
     },
     onContextBuilding() {
+      console.debug('onContextBuilding')
       return ({ extendContext }) => {
+        console.debug(
+          'extendContext LQ',
+          liveQueriesEnabled,
+          liveQueryStorageMechanism
+        )
+        console.debug('extendContext SUB', subscriptionsEnabled, pubSub)
         extendContext({
           liveQueryStore: liveQueriesEnabled && liveQueryStorageMechanism,
           pubSub: subscriptionsEnabled && pubSub,
@@ -221,4 +228,6 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       }
     },
   }
+
+  return {}
 }

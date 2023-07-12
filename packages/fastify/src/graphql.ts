@@ -1,6 +1,7 @@
 import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
+import type { Plugin } from 'graphql-yoga'
 
 import type {
   GraphQLYogaOptions,
@@ -10,6 +11,7 @@ import {
   createGraphQLYoga,
   getAsyncStoreInstance,
 } from '@redwoodjs/graphql-server'
+import { useRedwoodRealtime } from '@redwoodjs/realtime'
 
 /**
  * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
@@ -35,6 +37,12 @@ export async function redwoodFastifyGraphQLServer(
   await fastify.register(fastifyRawBody)
 
   try {
+    if (options.realtime) {
+      const originalExtraPlugins: Array<Plugin<any>> =
+        options.extraPlugins || []
+      originalExtraPlugins.push(useRedwoodRealtime(options.realtime))
+      options.extraPlugins = originalExtraPlugins
+    }
     const { yoga } = createGraphQLYoga(options)
 
     // TODO: This should be refactored to only be defined once and it might not live here
