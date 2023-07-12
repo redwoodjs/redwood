@@ -62,8 +62,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
       ssr: true,
       rollupOptions: {
         input: {
-          // entries: rwPaths.web.entryServer,
-          entries: path.join(rwPaths.web.src, 'entries.ts'),
+          entries: rwPaths.web.entries,
         },
       },
     },
@@ -148,8 +147,7 @@ export const buildFeServer = async ({ verbose: _verbose }: BuildOptions) => {
   }
 
   const serverBuildOutput = await serverBuild(
-    // rwPaths.web.entryServer,
-    path.join(rwPaths.web.src, 'entries.ts'),
+    rwPaths.web.entries,
     clientEntryFiles,
     serverEntryFiles,
     {}

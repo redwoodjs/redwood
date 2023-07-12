@@ -40,6 +40,7 @@ export interface WebPaths {
   viteConfig: string | null // because vite is opt-in only
   entryClient: string | null
   entryServer: string | null
+  entries: string | null
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string
@@ -48,6 +49,7 @@ export interface WebPaths {
   distServer: string
   distEntryServer: string
   distRouteHooks: string
+  distServerEntries: string
   routeManifest: string
   types: string
 }
@@ -107,6 +109,7 @@ const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
+const PATH_WEB_DIR_ENTRIES = 'web/src/entries' // .jsx,.tsx
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
@@ -117,6 +120,7 @@ const PATH_WEB_DIR_DIST = 'web/dist'
 const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
 const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
 const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
+const PATH_WEB_DIR_DIST_SERVER_ENTRIES = 'web/dist/server/entries.js'
 const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
 
 /**
@@ -228,10 +232,12 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER
       ),
       distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
+      distServerEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
       entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),
+      entries: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRIES)),
     },
   }
 
