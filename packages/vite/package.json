@@ -18,9 +18,21 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./entries": {
+      "types": "./dist/entries.d.ts",
+      "default": "./dist/entries.js"
+    },
     "./client": {
       "types": "./dist/client.d.ts",
       "default": "./dist/client.js"
+    },
+    "./assets": {
+      "types": "./dist/fully-react/assets.d.ts",
+      "default": "./dist/fully-react/assets.js"
+    },
+    "./rwRscGlobal": {
+      "types": "./dist/fully-react/rwRscGlobal.d.ts",
+      "default": "./dist/fully-react/rwRscGlobal.js"
     },
     "./buildFeServer": {
       "types": "./dist/buildFeServer.d.ts",
@@ -63,7 +75,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.6",
+    "@babel/cli": "7.22.9",
     "@types/express": "4",
     "@types/react": "18.2.14",
     "@types/yargs-parser": "21.0.0",
