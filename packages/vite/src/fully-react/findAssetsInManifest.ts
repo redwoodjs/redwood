@@ -1,6 +1,4 @@
-import type { ModuleNode } from 'vite'
-
-import type { BuildManifest } from './rwRscGlobal'
+import type { Manifest as BuildManifest } from 'vite'
 
 /**
  * Traverses the module graph and collects assets for a given chunk
@@ -46,19 +44,4 @@ export const findAssetsInManifest = (
   }
 
   return traverse(id)
-}
-
-export const findAssetsInModuleNode = (moduleNode: ModuleNode) => {
-  const seen = new Set<string>()
-  function traverse(node: ModuleNode): Array<string> {
-    if (seen.has(node.url)) {
-      return []
-    }
-    seen.add(node.url)
-
-    const imports = [...node.importedModules].flatMap(traverse) || []
-    imports.push(node.url)
-    return Array.from(new Set(imports))
-  }
-  return traverse(moduleNode)
 }

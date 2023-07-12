@@ -211,7 +211,7 @@ const getEntriesFile = async (
     )
   }
 
-  // TODO: Don't hardcode the name of the entries file
+  // TODO (RSC) Don't hardcode the name of the entries file
   return path.join(rwPaths.web.distServer, 'entries.js') // path.join(config.root, config.framework.entriesJs)
 }
 
