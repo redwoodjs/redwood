@@ -34,7 +34,11 @@ yarn rw dev
 
 If you haven't been through the first tutorial, or maybe you went through it on an older version of Redwood (anything pre-0.41) you can clone [this repo](https://github.com/redwoodjs/redwood-tutorial) which contains everything built so far and also adds a little styling so it isn't quite so...tough to look at. The example repo includes [TailwindCSS](https://tailwindcss.com) to style things up and adds a `<div>` or two to give us some additional hooks to hang styling on.
 
-:::caution The Typescript version of the Example Repo is currently in progress. If you want to complete the tutorial in Typescript continue with your own repo, making any necessary edits. Don't worry, the remainder of the tutorial continues to offer both Typescript and JS example code changes.    
+:::caution The TypeScript version of the Example Repo is currently in progress
+
+If you want to complete the tutorial in TypeScript, continue with your own repo, making any necessary edits. Don't worry, the remainder of the tutorial continues to offer both TypeScript and JavaScript example code changes.    
+
+:::
 
 ```bash
 git clone https://github.com/redwoodjs/redwood-tutorial
