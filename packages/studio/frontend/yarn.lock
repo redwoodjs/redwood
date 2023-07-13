@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.16":
-  version: 3.7.16
-  resolution: "@apollo/client@npm:3.7.16"
+"@apollo/client@npm:3.7.17":
+  version: 3.7.17
+  resolution: "@apollo/client@npm:3.7.17"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
@@ -54,7 +54,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 0fb9cfdb2b6d764f7dee16dad03eb02b844c0ec3d983a091745bc7b8685b73323ce19e5ed24ea7cae586b016afca14348ba948c02e0091610f6a425f7a2ece22
+  checksum: 53c7aaa273a557d68f2931625565c24fc548f3e8852a1e6f1f7589f872218e561f3c0457bd582cb64fd6634dc02769ac66af0f3cca810616f5e49617fd92dd6d
   languageName: node
   linkType: hard
 
@@ -2371,7 +2371,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend@workspace:."
   dependencies:
-    "@apollo/client": 3.7.16
+    "@apollo/client": 3.7.17
     "@graphiql/plugin-explorer": 0.1.22
     "@graphiql/toolkit": 0.8.4
     "@headlessui/react": 1.7.15
