@@ -36,7 +36,7 @@ export const buildRscFeServer = async ({
   const { clientEntryFiles, serverEntryFiles } = await rscBuild(viteConfigPath)
 
   const clientBuildOutput = await viteBuild({
-    configFile: viteConfigPath,
+    // configFile: viteConfigPath,
     root: webSrc,
     plugins: [react(), rscIndexPlugin()],
     build: {
@@ -194,7 +194,7 @@ export const buildRscFeServer = async ({
   // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
   // should try to do this instead:
   // const clientBuildManifest: ViteBuildManifest = await import(
-  //   path.join(getPaths().web.dist, 'build-manifest.json'),
+  //   path.join(getPaths().web.dist, 'client-build-manifest.json'),
   //   { with: { type: 'json' } }
   // )
   // NOTES:

@@ -15,7 +15,7 @@ import { handleJsAsJsx } from './vite-plugin-jsx-loader'
  * Preconfigured vite plugin, with required config for Redwood apps.
  *
  */
-export default function redwoodPluginVite(): PluginOption[] {
+export function redwoodStreamingSSRPluginVite(): PluginOption[] {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
