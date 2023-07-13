@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "@types/lodash": "4.14.195",
-    "jest": "29.5.0"
+    "jest": "29.6.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
