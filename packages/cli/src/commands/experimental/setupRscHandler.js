@@ -87,7 +87,8 @@ export const handler = async ({ force, verbose }) => {
             'utf-8'
           )
 
-          writeFile(rwPaths.web.entries, entriesTemplate, {
+          // Can't use rwPaths.web.entries because it's not created yet
+          writeFile(path.join(rwPaths.web.src, 'entries.ts'), entriesTemplate, {
             overwriteExisting: force,
           })
         },
