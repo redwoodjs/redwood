@@ -86,9 +86,9 @@ export const handler = async ({ force, verbose }) => {
             path.resolve(__dirname, 'templates', 'rsc', 'entries.ts.template'),
             'utf-8'
           )
-          const entriesPath = path.join(rwPaths.web.src, 'entries.ts')
 
-          writeFile(entriesPath, entriesTemplate, {
+          // Can't use rwPaths.web.entries because it's not created yet
+          writeFile(path.join(rwPaths.web.src, 'entries.ts'), entriesTemplate, {
             overwriteExisting: force,
           })
         },
