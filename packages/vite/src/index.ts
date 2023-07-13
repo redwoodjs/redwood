@@ -12,8 +12,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { handleJsAsJsx } from './vite-plugin-jsx-loader'
 
 /**
- * Preconfigured vite plugin, with required config for Redwood apps.
- *
+ * Pre-configured vite plugin, with required config for Redwood apps.
  */
 export default function redwoodPluginVite(): PluginOption[] {
   const rwPaths = getPaths()
