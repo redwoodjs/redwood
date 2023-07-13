@@ -522,8 +522,8 @@ validate(input.debt, 'Debt', {
 * `message`: a custom message if validation fails. Some options can be used in string interpolation: `lessThan`, `lessThanOrEqual`, `greaterThan`, `greaterThanOrEqual`, `equal`, and `otherThan`
 
 ```jsx
-validate(input.floor, {
-  numericality: { otherThan: 13, 'You cannot go to floor ${otherThan}' }
+validate(input.floor, 'Floor', {
+  numericality: { otherThan: 13, message: 'You cannot go to floor ${otherThan}' }
 })
 ```
 
