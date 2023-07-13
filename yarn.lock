@@ -126,9 +126,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.7.16":
-  version: 3.7.16
-  resolution: "@apollo/client@npm:3.7.16"
+"@apollo/client@npm:3.7.17":
+  version: 3.7.17
+  resolution: "@apollo/client@npm:3.7.17"
   dependencies:
     "@graphql-typed-document-node/core": ^3.1.1
     "@wry/context": ^0.7.0
@@ -158,7 +158,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 0fb9cfdb2b6d764f7dee16dad03eb02b844c0ec3d983a091745bc7b8685b73323ce19e5ed24ea7cae586b016afca14348ba948c02e0091610f6a425f7a2ece22
+  checksum: 53c7aaa273a557d68f2931625565c24fc548f3e8852a1e6f1f7589f872218e561f3c0457bd582cb64fd6634dc02769ac66af0f3cca810616f5e49617fd92dd6d
   languageName: node
   linkType: hard
 
@@ -5014,7 +5014,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/core@npm:^29.5.0, @jest/core@npm:^29.6.1":
+"@jest/core@npm:^29.6.1":
   version: 29.6.1
   resolution: "@jest/core@npm:29.6.1"
   dependencies:
@@ -5055,7 +5055,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/environment@npm:^29.5.0, @jest/environment@npm:^29.6.1":
+"@jest/environment@npm:^29.6.1":
   version: 29.6.1
   resolution: "@jest/environment@npm:29.6.1"
   dependencies:
@@ -5086,7 +5086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/fake-timers@npm:^29.5.0, @jest/fake-timers@npm:^29.6.1":
+"@jest/fake-timers@npm:^29.6.1":
   version: 29.6.1
   resolution: "@jest/fake-timers@npm:29.6.1"
   dependencies:
@@ -5193,7 +5193,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/transform@npm:^29.3.1, @jest/transform@npm:^29.5.0, @jest/transform@npm:^29.6.1":
+"@jest/transform@npm:^29.3.1, @jest/transform@npm:^29.6.1":
   version: 29.6.1
   resolution: "@jest/transform@npm:29.6.1"
   dependencies:
@@ -5216,7 +5216,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/types@npm:^29.5.0, @jest/types@npm:^29.6.1":
+"@jest/types@npm:^29.6.1":
   version: 29.6.1
   resolution: "@jest/types@npm:29.6.1"
   dependencies:
@@ -6707,51 +6707,51 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:4.16.2":
-  version: 4.16.2
-  resolution: "@prisma/client@npm:4.16.2"
+"@prisma/client@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@prisma/client@npm:5.0.0"
   dependencies:
-    "@prisma/engines-version": 4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81
+    "@prisma/engines-version": 4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
   peerDependencies:
     prisma: "*"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: c8d9518150ff6e55a9b8e7ec84874a2d32cc88fb7b84396457046aac79a6ac21a58cf873bff1df7354e9ff4b61f108199979cce29dd29d314a9f895b3910e55a
+  checksum: 3a7398c329964de9935c5e35aea8539d29147d78c70511691f8f0e6203d446118381372536d1a3c7851d17347596b8b9fcf673e7456c865e27fd9f832574c61e
   languageName: node
   linkType: hard
 
-"@prisma/debug@npm:4.16.2":
-  version: 4.16.2
-  resolution: "@prisma/debug@npm:4.16.2"
+"@prisma/debug@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@prisma/debug@npm:5.0.0"
   dependencies:
     "@types/debug": 4.1.8
     debug: 4.3.4
     strip-ansi: 6.0.1
-  checksum: 27b60989109f226fd4ea02656cb8f4b69642ad27304e0d6b2787f1fae8327bc55d46b62176f0d9ce35a0827a938a914b9b0c46fbc757ee65ece026373bb53a11
+  checksum: 311aade51d9950c4751b39562e2e1ec88740b7c729da6a86e28dc662c8641fcc0002028a90f14790287dfaf24b318ee6a60cbf57bc01a135d3f8691c4ddaf615
   languageName: node
   linkType: hard
 
-"@prisma/engines-version@npm:4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81":
-  version: 4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81
-  resolution: "@prisma/engines-version@npm:4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81"
-  checksum: abbc2a14be5ca49d86306fd4087d89c65e2190c99012d54f797b48ff0c4e13ab27dd69aecdd2bf94c2c93f7b09b47dce301ec57ad32123344243118015b60d76
+"@prisma/engines-version@npm:4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584":
+  version: 4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
+  resolution: "@prisma/engines-version@npm:4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584"
+  checksum: 21ad9877ecd1d5a6763a33a354aeec9b41a0d7972679bd881fde7c2a3bf99269a4f6b41705c262fd2041d35045639150004d71eb4b4d95e864390e185c0b3756
   languageName: node
   linkType: hard
 
-"@prisma/engines@npm:4.16.2":
-  version: 4.16.2
-  resolution: "@prisma/engines@npm:4.16.2"
-  checksum: 4f854a0b989b4bbbae0067311d126b20451be35df3569171e0d309b7a87962e5bf98480ded2065720a9246696df0bcf5f146a20ace9d0d7a62d0b35cddf6ad18
+"@prisma/engines@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@prisma/engines@npm:5.0.0"
+  checksum: 97d21ddca460910e9405f8a7de12354b0576c974abe5cf422774d960c92a30e076614aaad91fd3026db728be28edadb321f9b8e530e6010b5d849405c47e083d
   languageName: node
   linkType: hard
 
-"@prisma/fetch-engine@npm:4.16.2":
-  version: 4.16.2
-  resolution: "@prisma/fetch-engine@npm:4.16.2"
+"@prisma/fetch-engine@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@prisma/fetch-engine@npm:5.0.0"
   dependencies:
-    "@prisma/debug": 4.16.2
-    "@prisma/get-platform": 4.16.2
+    "@prisma/debug": 5.0.0
+    "@prisma/get-platform": 5.0.0
     execa: 5.1.1
     find-cache-dir: 3.3.2
     fs-extra: 11.1.1
@@ -6759,7 +6759,7 @@ __metadata:
     http-proxy-agent: 7.0.0
     https-proxy-agent: 7.0.0
     kleur: 4.1.5
-    node-fetch: 2.6.11
+    node-fetch: 2.6.12
     p-filter: 2.1.0
     p-map: 4.0.0
     p-retry: 4.6.2
@@ -6767,27 +6767,27 @@ __metadata:
     rimraf: 3.0.2
     temp-dir: 2.0.0
     tempy: 1.0.1
-  checksum: a1b4694df8b5ded6045fd03d6395f89277313b53b928c326e561a8d8ca8f1d1098f1c7e505a6268f7220356f7c6cb213bf46e349bf8a9a5031dc0afcfe7207ba
+  checksum: 1e405a1d71d2ce014c8247a4dcd60ad4cfc705033eff2a7cd11846ad7f1b667a65f2d0d4e9f89782fd3408c77374f5c822b8ee5b616567aec85dad6be08db1bc
   languageName: node
   linkType: hard
 
-"@prisma/generator-helper@npm:4.16.2":
-  version: 4.16.2
-  resolution: "@prisma/generator-helper@npm:4.16.2"
+"@prisma/generator-helper@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@prisma/generator-helper@npm:5.0.0"
   dependencies:
-    "@prisma/debug": 4.16.2
+    "@prisma/debug": 5.0.0
     "@types/cross-spawn": 6.0.2
     cross-spawn: 7.0.3
     kleur: 4.1.5
-  checksum: f9d67dcdf0c52d1987c753ccc9a3a3eb8c586d0733e27345b8d7dbcda23257a4df644d52b6520da1ce17c8a21879481508366805192c594b13414abe4ea98249
+  checksum: 6283443d434ce7a323e6350459ec97d1749fb80a599c09a2127e464187a57f8eafc05ee2fb0dacb548e462abdb240fb4627a532762576ae49cc6ed8e4568b3c0
   languageName: node
   linkType: hard
 
-"@prisma/get-platform@npm:4.16.2":
-  version: 4.16.2
-  resolution: "@prisma/get-platform@npm:4.16.2"
+"@prisma/get-platform@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@prisma/get-platform@npm:5.0.0"
   dependencies:
-    "@prisma/debug": 4.16.2
+    "@prisma/debug": 5.0.0
     escape-string-regexp: 4.0.0
     execa: 5.1.1
     fs-jetpack: 5.1.0
@@ -6797,22 +6797,22 @@ __metadata:
     tempy: 1.0.1
     terminal-link: 2.1.1
     ts-pattern: 4.3.0
-  checksum: c89a6160b7ac9ca659833c96511ce959c6f471cd1b26d8e2179dd6d9a32f92f486e3c981553cc10a2fe3a3a40478d2f285a411d70e40c214ef360cecfe8d5e25
+  checksum: ec3b0edb5b3c29c18ef57ddc7b1d2126f00192a2e0bea3435fd0ae7e2936a381787f9d1ae9d9c1cb1b3bc92078987a2998ad244a6202ef87889604af12ab2f03
   languageName: node
   linkType: hard
 
-"@prisma/internals@npm:4.16.2":
-  version: 4.16.2
-  resolution: "@prisma/internals@npm:4.16.2"
+"@prisma/internals@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@prisma/internals@npm:5.0.0"
   dependencies:
     "@antfu/ni": 0.21.4
     "@opentelemetry/api": 1.4.1
-    "@prisma/debug": 4.16.2
-    "@prisma/engines": 4.16.2
-    "@prisma/fetch-engine": 4.16.2
-    "@prisma/generator-helper": 4.16.2
-    "@prisma/get-platform": 4.16.2
-    "@prisma/prisma-fmt-wasm": 4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81
+    "@prisma/debug": 5.0.0
+    "@prisma/engines": 5.0.0
+    "@prisma/fetch-engine": 5.0.0
+    "@prisma/generator-helper": 5.0.0
+    "@prisma/get-platform": 5.0.0
+    "@prisma/prisma-schema-wasm": 4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
     archiver: 5.3.1
     arg: 5.0.2
     checkpoint-client: 1.1.24
@@ -6831,7 +6831,7 @@ __metadata:
     is-wsl: 2.2.0
     kleur: 4.1.5
     new-github-issue-url: 0.2.1
-    node-fetch: 2.6.11
+    node-fetch: 2.6.12
     npm-packlist: 5.1.3
     open: 7.4.2
     p-map: 4.0.0
@@ -6848,14 +6848,14 @@ __metadata:
     terminal-link: 2.1.1
     tmp: 0.2.1
     ts-pattern: 4.3.0
-  checksum: f808d08aa8740ea9d8a9e31a5df8e8da3fd4a1c6fb78dd8470bd16237d8f971404f566a972453a18eff991db88b8a0959f2637f7c95c233367b55cf0ed0d8329
+  checksum: 6046553337c4dac017c5935211eea2f66342a8187f37ba77e32f321d85b90e10e873851d997bf2167d2e50052a33e3bbc8ff3632ad8c6a7f29ee31992d34d6b3
   languageName: node
   linkType: hard
 
-"@prisma/prisma-fmt-wasm@npm:4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81":
-  version: 4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81
-  resolution: "@prisma/prisma-fmt-wasm@npm:4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81"
-  checksum: e603949032bc44341371a9a99799e0a91e41285c39588cbb0d445a0a0f1155199dcb74af5a94ae7c724d58d0097621cd9f77ea265cd1c562ab923677cf22415c
+"@prisma/prisma-schema-wasm@npm:4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584":
+  version: 4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
+  resolution: "@prisma/prisma-schema-wasm@npm:4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584"
+  checksum: 42792448e9b0ed687a828e9dc76d614aa67f6ccf62a822033f5e8fb206656f49b8e9a1a709cda27ecb597a2dfead58eaf779e175e059eb95a64dd0ab4a31d53d
   languageName: node
   linkType: hard
 
@@ -7035,13 +7035,13 @@ __metadata:
     fast-json-parse: 1.0.3
     fastify: 4.19.2
     fastify-raw-body: 4.2.0
-    jest: 29.5.0
+    jest: 29.6.1
     lodash: 4.17.21
     pretty-bytes: 5.6.0
     pretty-ms: 7.0.1
     qs: 6.11.2
     split2: 4.2.0
-    typescript: 5.1.3
+    typescript: 5.1.6
     yargs: 17.7.2
   bin:
     rw-api-server-watch: ./dist/watch.js
@@ -7057,7 +7057,7 @@ __metadata:
     "@babel/cli": 7.22.9
     "@babel/core": 7.22.9
     "@babel/runtime-corejs3": 7.22.6
-    "@prisma/client": 4.16.2
+    "@prisma/client": 5.0.0
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
     "@types/memjs": 1
@@ -7066,7 +7066,7 @@ __metadata:
     "@whatwg-node/fetch": 0.9.7
     core-js: 3.31.1
     humanize-string: 2.1.0
-    jest: 29.5.0
+    jest: 29.6.1
     jsonwebtoken: 9.0.0
     memjs: 1.3.1
     pascalcase: 1.0.0
@@ -7075,7 +7075,7 @@ __metadata:
     split2: 4.2.0
     title-case: 3.0.3
     ts-toolbelt: 9.6.0
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     memjs: 1.3.1
     redis: 4.6.7
@@ -7102,10 +7102,10 @@ __metadata:
     "@redwoodjs/api": 5.0.0
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7119,8 +7119,8 @@ __metadata:
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7135,9 +7135,9 @@ __metadata:
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.14
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     "@auth0/auth0-spa-js": 2.0.8
   languageName: unknown
@@ -7154,10 +7154,10 @@ __metadata:
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7171,8 +7171,8 @@ __metadata:
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7188,9 +7188,9 @@ __metadata:
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 18.2.14
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     "@azure/msal-browser": 2.37.1
   languageName: unknown
@@ -7207,8 +7207,8 @@ __metadata:
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.119
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7222,8 +7222,8 @@ __metadata:
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7239,9 +7239,9 @@ __metadata:
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.14
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     "@clerk/clerk-react": 4.20.5
   languageName: unknown
@@ -7257,8 +7257,8 @@ __metadata:
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7277,9 +7277,9 @@ __metadata:
     base64url: 3.0.1
     core-js: 3.31.1
     crypto-js: 4.1.1
-    jest: 29.5.0
+    jest: 29.6.1
     md5: 2.3.0
-    typescript: 5.1.3
+    typescript: 5.1.6
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -7297,11 +7297,11 @@ __metadata:
     "@types/secure-random-password": 0.2.1
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     prompts: 2.4.2
     secure-random-password: 0.2.3
     terminal-link: 2.1.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7317,9 +7317,9 @@ __metadata:
     "@simplewebauthn/typescript-types": 7.0.0
     "@types/react": 18.2.14
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7334,8 +7334,8 @@ __metadata:
     "@types/aws-lambda": 8.10.119
     core-js: 3.31.1
     firebase-admin: 11.9.0
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7349,8 +7349,8 @@ __metadata:
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7365,9 +7365,9 @@ __metadata:
     "@types/react": 18.2.14
     core-js: 3.31.1
     firebase: 9.23.0
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     firebase: 9.23.0
   languageName: unknown
@@ -7384,9 +7384,9 @@ __metadata:
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     jsonwebtoken: 9.0.0
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7400,8 +7400,8 @@ __metadata:
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7416,9 +7416,9 @@ __metadata:
     "@types/netlify-identity-widget": 1.9.3
     "@types/react": 18.2.14
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     netlify-identity-widget: 1.9.2
   languageName: unknown
@@ -7435,9 +7435,9 @@ __metadata:
     "@types/aws-lambda": 8.10.119
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     jsonwebtoken: 9.0.0
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7451,8 +7451,8 @@ __metadata:
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7466,9 +7466,9 @@ __metadata:
     "@supabase/supabase-js": 2.26.0
     "@types/react": 18.2.14
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     "@supabase/supabase-js": 2.26.0
   languageName: unknown
@@ -7484,10 +7484,10 @@ __metadata:
     "@redwoodjs/api": 5.0.0
     "@types/jsonwebtoken": 9.0.2
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     jsonwebtoken: 9.0.0
     jwks-rsa: 3.0.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     supertokens-node: 13.6.0
   languageName: unknown
@@ -7503,8 +7503,8 @@ __metadata:
     "@redwoodjs/cli-helpers": 5.0.0
     "@types/yargs": 17.0.24
     core-js: 3.31.1
-    jest: 29.5.0
-    typescript: 5.1.3
+    jest: 29.6.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7518,10 +7518,10 @@ __metadata:
     "@redwoodjs/auth": 5.0.0
     "@types/react": 18.2.14
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
     supertokens-auth-react: 0.33.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     supertokens-auth-react: 0.33.1
   languageName: unknown
@@ -7537,10 +7537,10 @@ __metadata:
     "@testing-library/jest-dom": 5.16.5
     "@testing-library/react": 14.0.0
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     msw: 1.2.2
     react: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7560,14 +7560,14 @@ __metadata:
     chalk: 4.1.2
     core-js: 3.31.1
     execa: 5.1.1
-    jest: 29.5.0
+    jest: 29.6.1
     listr2: 6.6.0
     lodash: 4.17.21
     pascalcase: 1.0.0
     prettier: 2.8.8
     prompts: 2.4.2
     terminal-link: 2.1.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7586,10 +7586,10 @@ __metadata:
     esbuild: 0.18.11
     execa: 5.1.1
     fast-glob: 3.2.12
-    jest: 29.5.0
+    jest: 29.6.1
     storybook: 7.0.26
     terminal-link: 2.1.1
-    typescript: 5.1.3
+    typescript: 5.1.6
     yargs: 17.7.2
   languageName: unknown
   linkType: soft
@@ -7607,7 +7607,7 @@ __metadata:
     "@opentelemetry/resources": 1.14.0
     "@opentelemetry/sdk-trace-node": 1.14.0
     "@opentelemetry/semantic-conventions": 1.14.0
-    "@prisma/internals": 4.16.2
+    "@prisma/internals": 5.0.0
     "@redwoodjs/api-server": 5.0.0
     "@redwoodjs/cli-helpers": 5.0.0
     "@redwoodjs/fastify": 5.0.0
@@ -7635,7 +7635,7 @@ __metadata:
     fast-glob: 3.2.12
     fs-extra: 11.1.1
     humanize-string: 2.1.0
-    jest: 29.5.0
+    jest: 29.6.1
     latest-version: 5.1.0
     listr2: 6.6.0
     lodash: 4.17.21
@@ -7644,7 +7644,7 @@ __metadata:
     pluralize: 8.0.0
     portfinder: 1.0.32
     prettier: 2.8.8
-    prisma: 4.16.2
+    prisma: 5.0.0
     prompts: 2.4.2
     rimraf: 5.0.1
     secure-random-password: 0.2.3
@@ -7653,7 +7653,7 @@ __metadata:
     systeminformation: 5.18.5
     terminal-link: 2.1.1
     title-case: 3.0.3
-    typescript: 5.1.3
+    typescript: 5.1.6
     uuid: 9.0.0
     yargs: 17.7.2
   bin:
@@ -7679,7 +7679,7 @@ __metadata:
     "@svgr/plugin-jsx": 8.0.1
     "@types/babel__core": 7.20.1
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.5.2
+    "@types/jest": 29.5.3
     "@types/jscodeshift": 0.11.6
     "@types/prettier": 2.7.3
     "@types/yargs": 17.0.24
@@ -7692,13 +7692,13 @@ __metadata:
     fast-glob: 3.2.12
     fs-extra: 11.1.1
     graphql: 16.7.1
-    jest: 29.5.0
+    jest: 29.6.1
     jscodeshift: 0.15.0
     pascalcase: 1.0.0
     prettier: 2.8.8
     tasuku: 2.0.1
     tempy: 1.0.1
-    typescript: 5.1.3
+    typescript: 5.1.6
     yargs: 17.7.2
   bin:
     codemods: ./dist/codemods.js
@@ -7742,7 +7742,7 @@ __metadata:
     graphql: 16.7.1
     graphql-tag: 2.12.6
     html-webpack-plugin: 5.5.3
-    jest: 29.5.0
+    jest: 29.6.1
     lodash: 4.17.21
     mini-css-extract-plugin: 2.7.6
     nodemon: 2.0.22
@@ -7750,7 +7750,7 @@ __metadata:
     react-refresh: 0.14.0
     rimraf: 5.0.1
     style-loader: 3.3.3
-    typescript: 5.1.3
+    typescript: 5.1.6
     url-loader: 4.1.1
     webpack: 5.88.1
     webpack-bundle-analyzer: 4.9.0
@@ -7800,9 +7800,9 @@ __metadata:
     eslint-plugin-prettier: 4.2.1
     eslint-plugin-react: 7.32.2
     eslint-plugin-react-hooks: 4.6.0
-    jest: 29.5.0
+    jest: 29.6.1
     prettier: 2.8.8
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7818,7 +7818,7 @@ __metadata:
     eslint: 8.43.0
     fast-glob: 3.2.12
     glob: 10.3.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7841,7 +7841,7 @@ __metadata:
     fastify-raw-body: 4.2.0
     lodash: 4.17.21
     qs: 6.11.2
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -7862,13 +7862,13 @@ __metadata:
     "@types/testing-library__jest-dom": 5.14.8
     core-js: 3.31.1
     graphql: 16.7.1
-    jest: 29.5.0
+    jest: 29.6.1
     nodemon: 2.0.22
     pascalcase: 1.0.0
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
     react-hook-form: 7.45.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     graphql: 16.7.1
     react: 18.3.0-canary-035a41c4e-20230704
@@ -7912,10 +7912,10 @@ __metadata:
     graphql-tag: 2.12.6
     graphql-yoga: 4.0.2
     ioredis: 5.3.2
-    jest: 29.5.0
+    jest: 29.6.1
     jsonwebtoken: 9.0.0
     lodash: 4.17.21
-    typescript: 5.1.3
+    typescript: 5.1.6
     uuid: 9.0.0
   languageName: unknown
   linkType: soft
@@ -7960,7 +7960,7 @@ __metadata:
     fs-extra: 11.1.1
     graphql: 16.7.1
     graphql-tag: 2.12.6
-    jest: 29.5.0
+    jest: 29.6.1
     kill-port: 1.6.1
     prettier: 2.8.8
     rimraf: 5.0.1
@@ -7969,7 +7969,7 @@ __metadata:
     terminal-link: 2.1.1
     ts-node: 10.9.1
     tsx: 3.12.7
-    typescript: 5.1.3
+    typescript: 5.1.6
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -7996,9 +7996,9 @@ __metadata:
     cheerio: 1.0.0-rc.12
     core-js: 3.31.1
     graphql: 16.7.1
-    jest: 29.5.0
+    jest: 29.6.1
     mime-types: 2.1.35
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
@@ -8013,10 +8013,10 @@ __metadata:
     deepmerge: 4.3.1
     esbuild: 0.18.11
     fast-glob: 3.2.12
-    jest: 29.5.0
+    jest: 29.6.1
     rimraf: 5.0.1
     string-env-interpolation: 1.0.1
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -8027,12 +8027,12 @@ __metadata:
     "@babel/cli": 7.22.9
     "@babel/core": 7.22.9
     "@babel/runtime-corejs3": 7.22.6
-    "@prisma/client": 4.16.2
-    "@prisma/internals": 4.16.2
+    "@prisma/client": 5.0.0
+    "@prisma/internals": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     core-js: 3.31.1
     esbuild: 0.18.11
-    jest: 29.5.0
+    jest: 29.6.1
   languageName: unknown
   linkType: soft
 
@@ -8048,10 +8048,10 @@ __metadata:
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     core-js: 3.31.1
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     react: 18.3.0-canary-035a41c4e-20230704
     react-dom: 18.3.0-canary-035a41c4e-20230704
@@ -8066,7 +8066,7 @@ __metadata:
     "@babel/core": 7.22.9
     "@babel/runtime-corejs3": 7.22.6
     "@iarna/toml": 2.2.5
-    "@prisma/internals": 4.16.2
+    "@prisma/internals": 5.0.0
     "@redwoodjs/project-config": 5.0.0
     "@types/fs-extra": 11.0.1
     "@types/line-column": 1.0.0
@@ -8081,7 +8081,7 @@ __metadata:
     enquirer: 2.3.6
     fast-glob: 3.2.12
     graphql: 16.7.1
-    jest: 29.5.0
+    jest: 29.6.1
     lazy-get-decorator: 2.2.1
     line-column: 1.0.2
     lodash: 4.17.21
@@ -8089,7 +8089,7 @@ __metadata:
     lru-cache: 7.18.3
     proxyquire: 2.1.3
     ts-morph: 15.1.0
-    typescript: 5.1.3
+    typescript: 5.1.6
     vscode-languageserver: 6.1.1
     vscode-languageserver-textdocument: 1.0.8
     vscode-languageserver-types: 3.17.3
@@ -8130,7 +8130,7 @@ __metadata:
     graphql: 16.7.1
     graphql-scalars: 1.22.2
     graphql-yoga: 3.9.1
-    jest: 29.5.0
+    jest: 29.6.1
     jsonwebtoken: 9.0.0
     lodash: 4.17.21
     pretty-bytes: 5.6.0
@@ -8138,7 +8138,7 @@ __metadata:
     split2: 4.2.0
     sqlite: 4.2.1
     sqlite3: 5.1.6
-    typescript: 5.1.3
+    typescript: 5.1.6
     uuid: 9.0.0
     yargs: 17.7.2
   languageName: unknown
@@ -8160,7 +8160,7 @@ __metadata:
     ci-info: 3.8.0
     core-js: 3.31.1
     envinfo: 7.9.0
-    jest: 29.5.0
+    jest: 29.6.1
     systeminformation: 5.18.5
     uuid: 9.0.0
     yargs: 17.7.2
@@ -8185,21 +8185,21 @@ __metadata:
     "@testing-library/user-event": 14.4.3
     "@types/aws-lambda": 8.10.119
     "@types/babel-core": 6.25.7
-    "@types/jest": 29.5.2
+    "@types/jest": 29.5.3
     "@types/node": 18.16.18
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     "@types/webpack": 5.28.1
     "@types/webpack-env": 1.18.1
-    babel-jest: 29.5.0
+    babel-jest: 29.6.1
     core-js: 3.31.1
     fast-glob: 3.2.12
-    jest: 29.5.0
-    jest-environment-jsdom: 29.5.0
+    jest: 29.6.1
+    jest-environment-jsdom: 29.6.1
     jest-watch-typeahead: 2.2.2
     msw: 1.2.2
     ts-toolbelt: 9.6.0
-    typescript: 5.1.3
+    typescript: 5.1.6
     whatwg-fetch: 3.6.2
   languageName: unknown
   linkType: soft
@@ -8212,9 +8212,9 @@ __metadata:
     chalk: 4.1.2
     enquirer: 2.3.6
     esbuild: 0.18.11
-    jest: 29.5.0
+    jest: 29.6.1
     stdout-update: 1.6.8
-    typescript: 5.1.3
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -8240,11 +8240,11 @@ __metadata:
     glob: 10.3.1
     http-proxy-middleware: 2.0.6
     isbot: 3.6.8
-    jest: 29.5.0
+    jest: 29.6.1
     react: 18.3.0-canary-035a41c4e-20230704
     react-server-dom-webpack: 18.3.0-canary-035a41c4e-20230704
-    typescript: 5.1.3
-    vite: 4.3.9
+    typescript: 5.1.6
+    vite: 4.4.3
     vite-plugin-environment: 1.1.3
     yargs-parser: 21.1.1
   bin:
@@ -8260,7 +8260,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
-    "@apollo/client": 3.7.16
+    "@apollo/client": 3.7.17
     "@babel/cli": 7.22.9
     "@babel/core": 7.22.9
     "@babel/runtime-corejs3": 7.22.6
@@ -8274,7 +8274,7 @@ __metadata:
     core-js: 3.31.1
     graphql: 16.7.1
     graphql-tag: 2.12.6
-    jest: 29.5.0
+    jest: 29.6.1
     jest-runner-tsd: 5.0.0
     nodemon: 2.0.22
     prop-types: 15.8.1
@@ -8284,7 +8284,7 @@ __metadata:
     react-hot-toast: 2.4.1
     stacktracey: 2.1.8
     ts-toolbelt: 9.6.0
-    typescript: 5.1.3
+    typescript: 5.1.6
   peerDependencies:
     prop-types: 15.8.1
     react: 18.3.0-canary-035a41c4e-20230704
@@ -10310,13 +10310,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.5.2":
-  version: 29.5.2
-  resolution: "@types/jest@npm:29.5.2"
+"@types/jest@npm:*, @types/jest@npm:29.5.3":
+  version: 29.5.3
+  resolution: "@types/jest@npm:29.5.3"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
-  checksum: e85525fe83a0792632a31ca32968b33a0014d617442e9a515357d2aa8890052ef622b1f6fd25d48f4f1a3ab806bed94e6d9b056dea23a897464e0e35957ff654
+  checksum: ba5a28569368db62eeff85ea53661c7dff79a5be739a59926c37868888cc69f8b7d0c7c6209139ecca5b83056843ba67fa764f7e7fc9c8d1c4e1f80351ede0f4
   languageName: node
   linkType: hard
 
@@ -12720,24 +12720,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-jest@npm:29.5.0":
-  version: 29.5.0
-  resolution: "babel-jest@npm:29.5.0"
-  dependencies:
-    "@jest/transform": ^29.5.0
-    "@types/babel__core": ^7.1.14
-    babel-plugin-istanbul: ^6.1.1
-    babel-preset-jest: ^29.5.0
-    chalk: ^4.0.0
-    graceful-fs: ^4.2.9
-    slash: ^3.0.0
-  peerDependencies:
-    "@babel/core": ^7.8.0
-  checksum: 1114d3935e0f62b72e155ac79916214c078e798561be3b03d12ddd862f2849becc8516f89046719161ec457bded35d2e1fd7ddfb207a6169dd18bbb2a67ee987
-  languageName: node
-  linkType: hard
-
-"babel-jest@npm:^29.6.1":
+"babel-jest@npm:29.6.1, babel-jest@npm:^29.6.1":
   version: 29.6.1
   resolution: "babel-jest@npm:29.6.1"
   dependencies:
@@ -15157,7 +15140,7 @@ __metadata:
     esbuild: 0.18.11
     execa: 5.1.1
     fs-extra: 11.1.1
-    jest: 29.5.0
+    jest: 29.6.1
     klaw-sync: 6.0.0
     semver: 7.5.3
     systeminformation: 5.18.5
@@ -16817,7 +16800,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.18.11":
+"esbuild@npm:0.18.11, esbuild@npm:^0.18.10":
   version: 0.18.11
   resolution: "esbuild@npm:0.18.11"
   dependencies:
@@ -16894,7 +16877,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.17.0, esbuild@npm:^0.17.5, esbuild@npm:~0.17.6":
+"esbuild@npm:^0.17.0, esbuild@npm:~0.17.6":
   version: 0.17.19
   resolution: "esbuild@npm:0.17.19"
   dependencies:
@@ -21192,7 +21175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-cli@npm:^29.5.0":
+"jest-cli@npm:^29.6.1":
   version: 29.6.1
   resolution: "jest-cli@npm:29.6.1"
   dependencies:
@@ -21291,24 +21274,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-jsdom@npm:29.5.0":
-  version: 29.5.0
-  resolution: "jest-environment-jsdom@npm:29.5.0"
+"jest-environment-jsdom@npm:29.6.1":
+  version: 29.6.1
+  resolution: "jest-environment-jsdom@npm:29.6.1"
   dependencies:
-    "@jest/environment": ^29.5.0
-    "@jest/fake-timers": ^29.5.0
-    "@jest/types": ^29.5.0
+    "@jest/environment": ^29.6.1
+    "@jest/fake-timers": ^29.6.1
+    "@jest/types": ^29.6.1
     "@types/jsdom": ^20.0.0
     "@types/node": "*"
-    jest-mock: ^29.5.0
-    jest-util: ^29.5.0
+    jest-mock: ^29.6.1
+    jest-util: ^29.6.1
     jsdom: ^20.0.0
   peerDependencies:
     canvas: ^2.5.0
   peerDependenciesMeta:
     canvas:
       optional: true
-  checksum: 972a1bdfb1d508a359951ec11ade5dfad7cfabea0ab9f7746737ba10e0c6381e34f2b4acb03c7e5eb623611813310dfb0775eb0607c5537b7618234d04aab2ac
+  checksum: 457ac6f78b9b98d1a86af944469fd2cce6d16d40afa748a8226c77850b98fd376d5bbcbf2b68a72ee3748091b95321fedc4044d3def45c47b139a9b57d4757be
   languageName: node
   linkType: hard
 
@@ -21395,7 +21378,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock@npm:^29.5.0, jest-mock@npm:^29.6.1":
+"jest-mock@npm:^29.6.1":
   version: 29.6.1
   resolution: "jest-mock@npm:29.6.1"
   dependencies:
@@ -21554,7 +21537,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-util@npm:^29.5.0, jest-util@npm:^29.6.1":
+"jest-util@npm:^29.6.1":
   version: 29.6.1
   resolution: "jest-util@npm:29.6.1"
   dependencies:
@@ -21638,14 +21621,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest@npm:29.5.0":
-  version: 29.5.0
-  resolution: "jest@npm:29.5.0"
+"jest@npm:29.6.1":
+  version: 29.6.1
+  resolution: "jest@npm:29.6.1"
   dependencies:
-    "@jest/core": ^29.5.0
-    "@jest/types": ^29.5.0
+    "@jest/core": ^29.6.1
+    "@jest/types": ^29.6.1
     import-local: ^3.0.2
-    jest-cli: ^29.5.0
+    jest-cli: ^29.6.1
   peerDependencies:
     node-notifier: ^8.0.1 || ^9.0.0 || ^10.0.0
   peerDependenciesMeta:
@@ -21653,7 +21636,7 @@ __metadata:
       optional: true
   bin:
     jest: bin/jest.js
-  checksum: 32e29cfa2373530ed323ea65dfb4fd5172026349be48ebb7a2dc5660adadd1c68f6b0fe2b67cc3ee723cc34e2d4552a852730ac787251b406cf58e37a90f6dac
+  checksum: 2c161c63cb502265805c4982b8b722307f6a7016afdcff267eab33e727b9b737baaf8c22e0a8fedfc19634e903421a0352f0c056d26a8f24b908aaed335283c8
   languageName: node
   linkType: hard
 
@@ -24137,6 +24120,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-fetch@npm:2.6.12, node-fetch@npm:^2.0.0, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.7, node-fetch@npm:^2.6.9":
+  version: 2.6.12
+  resolution: "node-fetch@npm:2.6.12"
+  dependencies:
+    whatwg-url: ^5.0.0
+  peerDependencies:
+    encoding: ^0.1.0
+  peerDependenciesMeta:
+    encoding:
+      optional: true
+  checksum: 10372e4b5ee07acadc15e6b2bc6fd8940582eea7b9b2a331f4e3665fdcd968498c1656f79f2fa572080ebb37ea80e1474a6478b3b36057ef901b63f4be8fd899
+  languageName: node
+  linkType: hard
+
 "node-fetch@npm:2.6.7":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
@@ -24159,20 +24156,6 @@ __metadata:
     fetch-blob: ^3.1.4
     formdata-polyfill: ^4.0.10
   checksum: 78671bffed741a2f3ccb15588a42fd7e9db2bdc9f99f9f584e0c749307f9603d961692f0877d853b28a4d1375ab2253b19978dd3bfc0c3189b42adc340bef927
-  languageName: node
-  linkType: hard
-
-"node-fetch@npm:^2.0.0, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.7, node-fetch@npm:^2.6.9":
-  version: 2.6.12
-  resolution: "node-fetch@npm:2.6.12"
-  dependencies:
-    whatwg-url: ^5.0.0
-  peerDependencies:
-    encoding: ^0.1.0
-  peerDependenciesMeta:
-    encoding:
-      optional: true
-  checksum: 10372e4b5ee07acadc15e6b2bc6fd8940582eea7b9b2a331f4e3665fdcd968498c1656f79f2fa572080ebb37ea80e1474a6478b3b36057ef901b63f4be8fd899
   languageName: node
   linkType: hard
 
@@ -26289,7 +26272,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.21, postcss@npm:^8.4.23, postcss@npm:^8.4.24":
+"postcss@npm:^8.4.21, postcss@npm:^8.4.24, postcss@npm:^8.4.25":
   version: 8.4.25
   resolution: "postcss@npm:8.4.25"
   dependencies:
@@ -26401,15 +26384,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:4.16.2":
-  version: 4.16.2
-  resolution: "prisma@npm:4.16.2"
+"prisma@npm:5.0.0":
+  version: 5.0.0
+  resolution: "prisma@npm:5.0.0"
   dependencies:
-    "@prisma/engines": 4.16.2
+    "@prisma/engines": 5.0.0
   bin:
     prisma: build/index.js
-    prisma2: build/index.js
-  checksum: 7568a9e6006eeba35e3a909bec3613fc70c2e1d2b7f40596eff36980532e8d4dec882feaa9d26e4a5746c4860dbe6592d5c82c32c189456acd3967265cfa2bf2
+  checksum: b3abfba634c86ac1d6be8b9d2ecce193d7e7224d94140902364e46cc5cc2309da225e5be21c17077c189f2a1fe7fb30aca461a164f18c9b43d7c5eba4f5c49c7
   languageName: node
   linkType: hard
 
@@ -27974,7 +27956,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.21.0":
+"rollup@npm:^3.25.2":
   version: 3.26.2
   resolution: "rollup@npm:3.26.2"
   dependencies:
@@ -28019,12 +28001,12 @@ __metadata:
     "@tsd/typescript": 5.1.6
     "@types/babel__generator": 7.6.4
     "@types/fs-extra": 11.0.1
-    "@types/jest": 29.5.2
+    "@types/jest": 29.5.3
     "@types/jscodeshift": 0.11.6
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.4
     all-contributors-cli: 6.26.0
-    babel-jest: 29.5.0
+    babel-jest: 29.6.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
     boxen: 5.1.2
@@ -28035,7 +28017,7 @@ __metadata:
     eslint: 8.43.0
     fast-glob: 3.2.12
     fs-extra: 11.1.1
-    jest: 29.5.0
+    jest: 29.6.1
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.15.0
     lerna: 7.1.1
@@ -28051,7 +28033,7 @@ __metadata:
     ora: 6.3.1
     prompts: 2.4.2
     rimraf: 5.0.1
-    typescript: 5.1.3
+    typescript: 5.1.6
     yargs: 17.7.2
     zx: 7.2.2
   languageName: unknown
@@ -30590,17 +30572,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.1.3":
-  version: 5.1.3
-  resolution: "typescript@npm:5.1.3"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 1faba8d5ffd4717864ddce767613c5ab77c1c8510c1ce21dc9b112a4c662357b9338dc0a6121615266d3a44ebec699f115ef2dabf18d9d7341ea1675692b9b24
-  languageName: node
-  linkType: hard
-
-"typescript@npm:>=3 < 6":
+"typescript@npm:5.1.6, typescript@npm:>=3 < 6":
   version: 5.1.6
   resolution: "typescript@npm:5.1.6"
   bin:
@@ -30610,17 +30582,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.1.3#~builtin<compat/typescript>":
-  version: 5.1.3
-  resolution: "typescript@patch:typescript@npm%3A5.1.3#~builtin<compat/typescript>::version=5.1.3&hash=5da071"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 769c5a11a9d5207ae5ce4c84b5c7a72ad92a28877a0061881ccfb326a43a1a1de79c4daff2f9d74720137744cfc9332fddbfbc4c3973c1e859b2f977f5d11b72
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@>=3 < 6#~builtin<compat/typescript>":
+"typescript@patch:typescript@5.1.6#~builtin<compat/typescript>, typescript@patch:typescript@>=3 < 6#~builtin<compat/typescript>":
   version: 5.1.6
   resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"
   bin:
@@ -31248,17 +31210,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.3.9":
-  version: 4.3.9
-  resolution: "vite@npm:4.3.9"
+"vite@npm:4.4.3":
+  version: 4.4.3
+  resolution: "vite@npm:4.4.3"
   dependencies:
-    esbuild: ^0.17.5
+    esbuild: ^0.18.10
     fsevents: ~2.3.2
-    postcss: ^8.4.23
-    rollup: ^3.21.0
+    postcss: ^8.4.25
+    rollup: ^3.25.2
   peerDependencies:
     "@types/node": ">= 14"
     less: "*"
+    lightningcss: ^1.21.0
     sass: "*"
     stylus: "*"
     sugarss: "*"
@@ -31271,6 +31234,8 @@ __metadata:
       optional: true
     less:
       optional: true
+    lightningcss:
+      optional: true
     sass:
       optional: true
     stylus:
@@ -31281,7 +31246,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 9eb1c99f16992e1b29e3eea76df312983f2e59915c369fede0f1e6716b80827857f88cfc75092aac807d20c73033c65be82a315a14ab312a52d22a9bdad1ca82
+  checksum: b92624b8a15629fa89778bb1841ece06cd78a704170d05fa49e1766f90a1ce75ece6d0b479f638047b4d2203057ec07ded935754d609bb90ab79870ab3485c14
   languageName: node
   linkType: hard
 
