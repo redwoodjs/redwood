@@ -32,7 +32,7 @@
     "@babel/core": "7.22.9",
     "@redwoodjs/api": "5.0.0",
     "@types/jsonwebtoken": "9.0.2",
-    "jest": "29.5.0",
+    "jest": "29.6.1",
     "typescript": "5.1.6"
   },
   "peerDependencies": {

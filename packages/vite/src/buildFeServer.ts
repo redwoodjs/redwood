@@ -9,21 +9,24 @@ import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
-import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { buildRscFeServer } from './buildRscFeServer'
 import { RWRouteManifest } from './types'
 
-interface BuildOptions {
+export interface BuildOptions {
   verbose?: boolean
 }
 
 export const buildFeServer = async ({ verbose }: BuildOptions) => {
   const rwPaths = getPaths()
-  const viteConfig = rwPaths.web.viteConfig
+  const rwConfig = getConfig()
+  const viteConfigPath = rwPaths.web.viteConfig
 
-  if (!viteConfig) {
+  if (!viteConfigPath) {
     throw new Error(
-      'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`'
+      'Vite config not found. You need to setup your project with Vite ' +
+        'using `yarn rw setup vite`'
     )
   }
 
@@ -35,17 +38,34 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     )
   }
 
+  if (rwConfig.experimental?.rsc?.enabled) {
+    if (!rwPaths.web.entries) {
+      throw new Error('RSC entries file not found')
+    }
+
+    return await buildRscFeServer({
+      viteConfigPath,
+      webSrc: rwPaths.web.src,
+      webHtml: rwPaths.web.html,
+      entries: rwPaths.web.entries,
+      webDist: rwPaths.web.dist,
+      webDistServer: rwPaths.web.distServer,
+      webDistEntries: rwPaths.web.distServerEntries,
+      webRouteManifest: rwPaths.web.routeManifest,
+    })
+  }
+
   // Step 1A: Generate the client bundle
   await buildWeb({ verbose })
 
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
   // so we can switch to a regular import
   // @NOTE: Using dynamic import, because vite is still opt-in
-  const { build } = await import('vite')
+  const { build: viteBuild } = await import('vite')
 
   // Step 1B: Generate the server output
-  await build({
-    configFile: viteConfig,
+  await viteBuild({
+    configFile: viteConfigPath,
     build: {
       // Because we configure the root to be web/src, we need to go up one level
       outDir: rwPaths.web.distServer,
