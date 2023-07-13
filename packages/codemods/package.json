@@ -45,7 +45,7 @@
     "pascalcase": "1.0.0",
     "prettier": "2.8.8",
     "tasuku": "2.0.1",
-    "typescript": "5.1.3",
+    "typescript": "5.1.6",
     "yargs": "17.7.2"
   },
   "devDependencies": {
