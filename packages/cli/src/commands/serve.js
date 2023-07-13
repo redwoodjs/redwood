@@ -52,7 +52,24 @@ export const builder = async (yargs) => {
               separator,
             ].join('\n')
           )
-          if (getConfig().experimental?.streamingSsr?.enabled) {
+          if (getConfig().experimental?.rsc?.enabled) {
+            console.warn('')
+            console.warn('⚠️ Skipping Fastify web server ⚠️')
+            console.warn('⚠️ Using new RSC server instead ⚠️')
+            console.warn('')
+            await execa(
+              'node',
+              [
+                '--conditions react-server',
+                './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
+              ],
+              {
+                cwd: getPaths().base,
+                stdio: 'inherit',
+                shell: true,
+              }
+            )
+          } else if (getConfig().experimental?.streamingSsr?.enabled) {
             console.warn('')
             console.warn('⚠️ Skipping Fastify web server ⚠️')
             console.warn('⚠️ Using new Streaming FE server instead ⚠️')
@@ -76,7 +93,31 @@ export const builder = async (yargs) => {
           return
         }
 
-        if (getConfig().experimental?.streamingSsr?.enabled) {
+        if (getConfig().experimental?.rsc?.enabled) {
+          const { apiServerHandler } = await import('./serveHandler.js')
+          // TODO (RSC) Allow specifying port, socket and apiRootPath
+          const apiPromise = apiServerHandler({
+            ...argv,
+            port: 8911,
+            apiRootPath: '/',
+          })
+
+          // TODO (RSC) More gracefully handle Ctrl-C
+          const fePromise = execa(
+            'node',
+            [
+              '--conditions react-server',
+              './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
+            ],
+            {
+              cwd: getPaths().base,
+              stdio: 'inherit',
+              shell: true,
+            }
+          )
+
+          await Promise.all([apiPromise, fePromise])
+        } else if (getConfig().experimental?.streamingSsr?.enabled) {
           const { apiServerHandler } = await import('./serveHandler.js')
           // TODO (STREAMING) Allow specifying port, socket and apiRootPath
           const apiPromise = apiServerHandler({
