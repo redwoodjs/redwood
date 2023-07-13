@@ -92,6 +92,7 @@ You can by pass these prompts by using the following flags:
 | `--overwrite` | | Overwrites the existing directory, if it has the same name |
 | `--git-init` | `git` | Initializes a git repository |
 | `--commit-message "Initial commit"` | `m` | Specifies the initial git commit message |
+| `--yes` | `y` | Automatically select all defaults |
 
 For example, here's the project with all flags enabled:
 
