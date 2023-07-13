@@ -43,7 +43,7 @@
     "graphql": "16.7.1",
     "graphql-scalars": "1.22.2",
     "graphql-tag": "2.12.6",
-    "graphql-yoga": "4.0.2",
+    "graphql-yoga": "4.0.3",
     "lodash": "4.17.21",
     "uuid": "9.0.0"
   },

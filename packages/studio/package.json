@@ -41,7 +41,7 @@
     "fastify-raw-body": "4.2.0",
     "graphql": "16.7.1",
     "graphql-scalars": "1.22.2",
-    "graphql-yoga": "3.9.1",
+    "graphql-yoga": "4.0.3",
     "jsonwebtoken": "9.0.0",
     "lodash": "4.17.21",
     "pretty-bytes": "5.6.0",
