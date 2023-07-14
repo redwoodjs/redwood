@@ -4,11 +4,9 @@ import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
 
-import {
-  redwoodFastifyWeb,
-  DEFAULT_REDWOOD_FASTIFY_CONFIG,
-} from '@redwoodjs/fastify'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
+
+import { redwoodFastifyWeb } from './web'
 
 export async function serve() {
   const redwoodProjectPaths = getPaths()
@@ -29,7 +27,15 @@ export async function serve() {
 
   // Configure Fastify
   const fastify = Fastify({
-    ...DEFAULT_REDWOOD_FASTIFY_CONFIG,
+    requestTimeout: 15_000,
+    logger: {
+      // Note: If running locally using `yarn rw serve` you may want to adust
+      // the default non-development level to `info`
+      level:
+        process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development'
+          ? 'debug'
+          : 'warn',
+    },
   })
 
   await fastify.register(redwoodFastifyWeb)
