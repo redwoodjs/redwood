@@ -35,6 +35,7 @@ import * as upgradeCommand from './commands/upgrade'
 import { getPaths, findUp } from './lib'
 import { exitWithError } from './lib/exit'
 import * as updateCheck from './lib/updateCheck'
+import { enforceNodeVersionConfig } from './middleware/enforceNodeVersionConfig'
 import { loadPlugins } from './plugin'
 import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
@@ -171,6 +172,7 @@ async function runYargs() {
           delete argv.telemetry
         },
         telemetry && telemetryMiddleware,
+        enforceNodeVersionConfig,
         updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
       ].filter(Boolean)
     )

@@ -93,6 +93,9 @@ export interface Config {
   notifications: {
     versionUpdates: string[]
   }
+  node: {
+    version?: string
+  }
   experimental: {
     opentelemetry: {
       enabled: boolean
@@ -155,6 +158,9 @@ const DEFAULT_CONFIG: Config = {
   },
   notifications: {
     versionUpdates: [],
+  },
+  node: {
+    version: undefined,
   },
   experimental: {
     opentelemetry: {

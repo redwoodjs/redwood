@@ -81,6 +81,9 @@ describe('getConfig', () => {
           "stories": true,
           "tests": true,
         },
+        "node": {
+          "version": undefined,
+        },
         "notifications": {
           "versionUpdates": [],
         },
