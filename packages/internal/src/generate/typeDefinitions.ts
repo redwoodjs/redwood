@@ -169,7 +169,8 @@ export const generateTypeDefRouterRoutes = () => {
     )
   })
 
-  return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', { routes })
+  const params = routes.map(paramsFromRouteElement)
+  return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', { routes,params })
 }
 
 export const generateTypeDefRouterPages = () => {
@@ -198,4 +199,37 @@ export const generateTypeDefGlobImports = () => {
 
 export const generateTypeDefGlobalContext = () => {
   return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
+}
+
+// <Route path="/jobs/{id:Int}" page={JobPage} name="job" />
+// -> { name: JobParams, params: ["id", "number"] }
+//
+const paramsFromRouteElement = (route: { props: Record<string, string>}) => {
+  const params = [] as  [key: string, type: string][]
+  const path = route.props.path as string | undefined
+  if (!path) return params
+
+  const paramStrings = path.split("{").slice(1).map((x) => x.split("}")[0])
+  paramStrings.sort().forEach((paramString) => {
+    const [key, type] = paramString.split(":")
+    // https://redwoodjs.com/docs/router#core-route-parameter-types
+    let tsType = type
+    if (!type) tsType = "string"
+    else if (type === "Int") tsType = "number"
+    else if (type === "Boolean") tsType = "boolean"
+    else if (type === "Float") tsType = "number"
+    // https://redwoodjs.com/docs/router#user-route-parameter-types
+    else tsType = "any[]"
+
+    // https://redwoodjs.com/docs/router#glob-type
+    let keyMod = key
+    if (key.endsWith("...")) keyMod = key.slice(0, -3)
+
+
+    params.push([keyMod, tsType ])
+  })
+
+  const name = route.props.name ?? "RouteWithoutName"
+  const pascalName = name.charAt(0).toUpperCase() + name.slice(1)
+  return { name: pascalName + "Params", params }
 }

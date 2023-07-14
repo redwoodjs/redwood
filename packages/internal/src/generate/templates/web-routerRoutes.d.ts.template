@@ -1,15 +1,16 @@
 import { RouteParams, QueryParams } from '@redwoodjs/router'
-import { A } from 'ts-toolbelt'
-
 
 declare module '@redwoodjs/router' {
+  // Only "<Route />" components with a "name" and "path" prop will be populated here.
   interface AvailableRoutes {
-    // Only "<Route />" components with a "name" and "path" prop will be populated here.
 ${routes.map(
   ({ props: { name, path }}) => {
-    return `    ${name}: (params?: RouteParams<"${path}"> & QueryParams) => "${path}"`
+    const paramPascalName = name.charAt(0).toUpperCase() + name.slice(1) + 'Params'
+
+    return `    ${name}: (params?: ${paramPascalName} & QueryParams) => "${path}"`
   }
 ).join('\n')}
   }
 }
 
+${params.map(p => `export type ${p.name} = {${p.params.length ? "\n" :""}${p.params.map(([key, type]) =>`  ${key}: ${type}` ).join("\n")}${p.params.length ? "\n" :""}}`).join('\n\n')}

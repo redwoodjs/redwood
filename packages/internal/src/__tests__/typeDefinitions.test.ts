@@ -133,12 +133,12 @@ test('generates the router routes', () => {
 
   const c = fs.readFileSync(paths[0], 'utf-8')
   expect(c).toContain(`
-    home: (params?: RouteParams<"/"> & QueryParams) => "/"
-    typescriptPage: (params?: RouteParams<"/typescript"> & QueryParams) => "/typescript"
-    someOtherPage: (params?: RouteParams<"/somewhereElse"> & QueryParams) => "/somewhereElse"
-    fooPage: (params?: RouteParams<"/foo"> & QueryParams) => "/foo"
-    barPage: (params?: RouteParams<"/bar"> & QueryParams) => "/bar"
-    privatePage: (params?: RouteParams<"/private-page"> & QueryParams) => "/private-page"
+    home: (params?: HomeParams & QueryParams) => "/"
+    typescriptPage: (params?: TypescriptPageParams & QueryParams) => "/typescript"
+    someOtherPage: (params?: SomeOtherPageParams & QueryParams) => "/somewhereElse"
+    fooPage: (params?: FooPageParams & QueryParams) => "/foo"
+    barPage: (params?: BarPageParams & QueryParams) => "/bar"
+    privatePage: (params?: PrivatePageParams & QueryParams) => "/private-page"
 `)
 })
 
