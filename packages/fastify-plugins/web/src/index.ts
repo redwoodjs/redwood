@@ -11,12 +11,9 @@ import type {
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { loadFastifyConfig } from './config'
-import { RedwoodFastifyWebOptions } from './types'
-
 export async function redwoodFastifyWeb(
   fastify: FastifyInstance,
-  opts: RedwoodFastifyWebOptions,
+  _opts: RedwoodFastifyWebOptions,
   done: HookHandlerDoneFunction
 ) {
   const prerenderedFiles = findPrerenderedHtml()
@@ -32,12 +29,6 @@ export async function redwoodFastifyWeb(
         reply.sendFile(filePath)
       })
     })
-
-  // NOTE: Deprecate this when we move to a `server.ts` file.
-  const { configureFastify } = loadFastifyConfig()
-  if (configureFastify) {
-    await configureFastify(fastify, { side: 'web', ...opts })
-  }
 
   // Serve other non-html assets.
   fastify.register(fastifyStatic, {
@@ -70,5 +61,11 @@ function getFallbackIndexPath() {
     return '200.html'
   } else {
     return 'index.html'
+  }
+}
+
+export interface RedwoodFastifyWebOptions {
+  redwood?: {
+    apiHost?: string
   }
 }

@@ -7626,7 +7626,6 @@ __metadata:
     "@prisma/internals": 5.0.0
     "@redwoodjs/api-server": 5.0.0
     "@redwoodjs/cli-helpers": 5.0.0
-    "@redwoodjs/fastify": 5.0.0
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/prerender": 5.0.0
     "@redwoodjs/project-config": 5.0.0
@@ -7838,9 +7837,48 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/fastify@5.0.0, @redwoodjs/fastify@workspace:packages/fastify":
+"@redwoodjs/fastify-functions@workspace:packages/fastify-plugins/functions":
   version: 0.0.0-use.local
-  resolution: "@redwoodjs/fastify@workspace:packages/fastify"
+  resolution: "@redwoodjs/fastify-functions@workspace:packages/fastify-plugins/functions"
+  dependencies:
+    "@fastify/url-data": 5.3.1
+    "@redwoodjs/graphql-server": 5.0.0
+    "@redwoodjs/project-config": 5.0.0
+    "@types/aws-lambda": 8.10.119
+    "@types/lodash": 4.14.195
+    "@types/qs": 6.9.7
+    esbuild: 0.18.12
+    fastify: 4.19.2
+    fastify-raw-body: 4.2.0
+    lodash: 4.17.21
+    qs: 6.11.2
+    typescript: 5.1.6
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/fastify-graphql@workspace:packages/fastify-plugins/graphql":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/fastify-graphql@workspace:packages/fastify-plugins/graphql"
+  dependencies:
+    "@fastify/url-data": 5.3.1
+    "@redwoodjs/graphql-server": 5.0.0
+    "@redwoodjs/project-config": 5.0.0
+    "@types/aws-lambda": 8.10.119
+    "@types/lodash": 4.14.195
+    "@types/qs": 6.9.7
+    ansi-colors: 4.1.3
+    esbuild: 0.18.12
+    fast-glob: 3.2.12
+    fastify: 4.19.2
+    lodash: 4.17.21
+    qs: 6.11.2
+    typescript: 5.1.6
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/fastify-shared@workspace:packages/fastify-plugins/shared":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/fastify-shared@workspace:packages/fastify-plugins/shared"
   dependencies:
     "@fastify/http-proxy": 9.2.1
     "@fastify/static": 6.10.2
@@ -7857,6 +7895,19 @@ __metadata:
     fastify-raw-body: 4.2.0
     lodash: 4.17.21
     qs: 6.11.2
+    typescript: 5.1.6
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/fastify-web@workspace:packages/fastify-plugins/web":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/fastify-web@workspace:packages/fastify-plugins/web"
+  dependencies:
+    "@fastify/static": 6.10.2
+    "@redwoodjs/project-config": 5.0.0
+    esbuild: 0.18.12
+    fast-glob: 3.2.12
+    fastify: 4.19.2
     typescript: 5.1.6
   languageName: unknown
   linkType: soft

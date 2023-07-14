@@ -5,9 +5,7 @@ import fastifyRawBody from 'fastify-raw-body'
 import type { GlobalContext } from '@redwoodjs/graphql-server'
 import { getAsyncStoreInstance } from '@redwoodjs/graphql-server'
 
-import { loadFastifyConfig } from './config'
 import { lambdaRequestHandler, loadFunctionsFromDist } from './lambda'
-import type { RedwoodFastifyAPIOptions } from './types'
 
 export async function redwoodFastifyAPI(
   fastify: FastifyInstance,
@@ -29,16 +27,16 @@ export async function redwoodFastifyAPI(
     fastify.defaultTextParser
   )
 
-  // NOTE: Deprecate this when we move to a `server.ts` file.
-  const { configureFastify } = loadFastifyConfig()
-  if (configureFastify) {
-    await configureFastify(fastify, { side: 'api', ...opts })
-  }
-
   const apiRootPath = opts.redwood?.apiRootPath || '/'
   fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
   await loadFunctionsFromDist()
 
   done()
+}
+
+export interface RedwoodFastifyAPIOptions {
+  redwood?: {
+    apiRootPath?: string
+  }
 }

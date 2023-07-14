@@ -4,7 +4,8 @@
   "workspaces": [
     "packages/*",
     "packages/auth-providers/*/*",
-    "packages/cli-packages/*"
+    "packages/cli-packages/*",
+    "packages/fastify-plugins/*"
   ],
   "scripts": {
     "build": "lerna run build",

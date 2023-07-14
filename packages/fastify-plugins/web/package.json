@@ -1,0 +1,31 @@
+{
+  "name": "@redwoodjs/fastify-web",
+  "version": "5.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/fastify"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn node ./build.mjs && yarn build:types",
+    "build:types": "tsc --build --verbose",
+    "prepublishOnly": "NODE_ENV=production yarn build"
+  },
+  "dependencies": {
+    "@fastify/static": "6.10.2",
+    "@redwoodjs/project-config": "5.0.0",
+    "fast-glob": "3.2.12",
+    "fastify": "4.19.2"
+  },
+  "devDependencies": {
+    "esbuild": "0.18.12",
+    "typescript": "5.1.6"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

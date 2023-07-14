@@ -38,7 +38,6 @@
     "@prisma/internals": "5.0.0",
     "@redwoodjs/api-server": "5.0.0",
     "@redwoodjs/cli-helpers": "5.0.0",
-    "@redwoodjs/fastify": "5.0.0",
     "@redwoodjs/internal": "5.0.0",
     "@redwoodjs/prerender": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",

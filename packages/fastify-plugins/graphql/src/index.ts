@@ -1,6 +1,9 @@
 import fastifyUrlData from '@fastify/url-data'
+import type { APIGatewayProxyEvent } from 'aws-lambda'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
+import type { FastifyRequest } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
+import qs from 'qs'
 
 import type {
   GraphQLYogaOptions,
@@ -10,12 +13,6 @@ import {
   createGraphQLYoga,
   getAsyncStoreInstance,
 } from '@redwoodjs/graphql-server'
-
-/**
- * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
- * which is based on the AWS Lambda event
- */
-import { lambdaEventForFastifyRequest as transformToRedwoodGraphQLContextEvent } from './lambda/index'
 
 /**
  * Redwood GraphQL Server Fastify plugin based on GraphQL Yoga
@@ -50,7 +47,7 @@ export async function redwoodFastifyGraphQLServer(
         const response = await yoga.handleNodeRequest(req, {
           req,
           reply,
-          event: transformToRedwoodGraphQLContextEvent(req),
+          event: lambdaEventForFastifyRequest(req),
           requestContext: {},
         })
 
@@ -73,4 +70,37 @@ export async function redwoodFastifyGraphQLServer(
   } catch (e) {
     console.log(e)
   }
+}
+
+function lambdaEventForFastifyRequest(
+  request: FastifyRequest
+): APIGatewayProxyEvent {
+  return {
+    httpMethod: request.method,
+    headers: request.headers,
+    path: request.urlData('path'),
+    queryStringParameters: qs.parse(request.url.split(/\?(.+)/)[1]),
+    requestContext: {
+      requestId: request.id,
+      identity: {
+        sourceIp: request.ip,
+      },
+    },
+    ...parseBody(request.rawBody || ''), // adds `body` and `isBase64Encoded`
+  } as APIGatewayProxyEvent
+}
+
+function parseBody(rawBody: string | Buffer): ParseBodyResult {
+  if (typeof rawBody === 'string') {
+    return { body: rawBody, isBase64Encoded: false }
+  }
+  if (rawBody instanceof Buffer) {
+    return { body: rawBody.toString('base64'), isBase64Encoded: true }
+  }
+  return { body: '', isBase64Encoded: false }
+}
+
+type ParseBodyResult = {
+  body: string
+  isBase64Encoded: boolean
 }
