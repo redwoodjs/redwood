@@ -10,11 +10,7 @@ import { getPaths, writeFile } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
 
-import {
-  command,
-  description,
-  EXPERIMENTAL_TOPIC_ID,
-} from './setupStreamingSsr'
+import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRsc'
 import { printTaskEpilogue } from './util'
 
 export const handler = async ({ force, verbose }) => {
