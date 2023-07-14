@@ -122,6 +122,41 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
+        title: 'Adding CSS files...',
+        task: async () => {
+          const files = [
+            {
+              template: 'Counter.css.template',
+              path: 'Counter.css',
+            },
+            {
+              template: 'Counter.module.css.template',
+              path: 'Counter.module.css',
+            },
+            {
+              template: 'App.css.template',
+              path: 'App.css',
+            },
+            {
+              template: 'App.module.css.template',
+              path: 'App.module.css',
+            },
+          ]
+
+          files.forEach((file) => {
+            const template = fs.readFileSync(
+              path.resolve(__dirname, 'templates', 'rsc', file.template),
+              'utf-8'
+            )
+            const filePath = path.join(rwPaths.web.src, file.path)
+
+            writeFile(filePath, template, {
+              overwriteExisting: force,
+            })
+          })
+        },
+      },
+      {
         title: 'Updating index.html...',
         task: async () => {
           let indexHtml = fs.readFileSync(rwPaths.web.html, 'utf-8')
