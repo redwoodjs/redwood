@@ -1435,9 +1435,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:4.0.2":
-  version: 4.0.2
-  resolution: "@vitejs/plugin-react@npm:4.0.2"
+"@vitejs/plugin-react@npm:4.0.3":
+  version: 4.0.3
+  resolution: "@vitejs/plugin-react@npm:4.0.3"
   dependencies:
     "@babel/core": ^7.22.5
     "@babel/plugin-transform-react-jsx-self": ^7.22.5
@@ -1445,7 +1445,7 @@ __metadata:
     react-refresh: ^0.14.0
   peerDependencies:
     vite: ^4.2.0
-  checksum: 146d7f5f7311abc4acda00b2ae7ff9c945f1bb259f99c78533647ca0c70c3ee5b15c60497e44472f71281f5c00afa2fbd52008d97f574e0458a96801f8e437ca
+  checksum: 3361a7725216ecb36ad9f84159964eb8918f7f6d7aa7559fed985a8d82fbb045f19f9a69ec92b950b865c822138fd7ca09aa0231186db1fe3d014e6fcc126064
   languageName: node
   linkType: hard
 
@@ -2385,7 +2385,7 @@ __metadata:
     "@types/react": 18.2.14
     "@types/react-dom": 18.2.6
     "@types/react-grid-layout": 1
-    "@vitejs/plugin-react": 4.0.2
+    "@vitejs/plugin-react": 4.0.3
     autoprefixer: 10.4.14
     graphiql: 2.4.7
     graphql: 16.7.1
