@@ -52,6 +52,7 @@ export const builder = async (yargs) => {
               separator,
             ].join('\n')
           )
+
           if (getConfig().experimental?.rsc?.enabled) {
             console.warn('')
             console.warn('⚠️ Skipping Fastify web server ⚠️')
@@ -136,8 +137,14 @@ export const builder = async (yargs) => {
 
           await Promise.all([apiPromise, fePromise])
         } else {
-          const { bothServerHandler } = await import('./serveHandler.js')
-          await bothServerHandler(argv)
+          await execa('yarn', ['rw-fe-server'], {
+            cwd: getPaths().base,
+            stdio: 'inherit',
+            shell: true,
+          })
+
+          // const { bothServerHandler } = await import('./serveHandler.js')
+          // await bothServerHandler(argv)
         }
       },
     })

@@ -7861,6 +7861,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/fe-server@workspace:packages/fe-server":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/fe-server@workspace:packages/fe-server"
+  dependencies:
+    "@redwoodjs/fastify": 5.0.0
+    "@redwoodjs/project-config": 5.0.0
+    chalk: 4.1.2
+    dotenv-defaults: 5.0.2
+    esbuild: 0.18.12
+    fast-glob: 3.2.12
+    fastify: 4.19.2
+    typescript: 5.1.6
+  bin:
+    rw-fe-server: ./dist/index.js
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/forms@workspace:packages/forms":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/forms@workspace:packages/forms"

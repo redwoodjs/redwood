@@ -16,6 +16,7 @@
     "redwood": "./dist/bins/redwood.js",
     "rw": "./dist/bins/redwood.js",
     "rw-api-server-watch": "./dist/bins/rw-api-server-watch.js",
+    "rw-fe-server": "./dist/bins/rw-fe-server.js",
     "rw-dev-fe": "./dist/bins/rw-dev-fe.js",
     "rw-gen": "./dist/bins/rw-gen.js",
     "rw-gen-watch": "./dist/bins/rw-gen-watch.js",
