@@ -12,9 +12,6 @@ import './App.css'
 
 globalThis.rwRscGlobal = new ProdRwRscServerGlobal()
 
-// Include <Assets /> component from fully-react here somewhere for now. Should be part of the router later
-// https://github.com/nksaraf/fully-react/blob/4f738132a17d94486c8da19d8729044c3998fc54/packages/fully-react/src/shared/assets.tsx#L64C19-L64C19
-
 const App = ({ name = 'Anonymous' }) => {
   return (
     <>
