@@ -1,8 +1,6 @@
 /* eslint-env jest */
 // @ts-check
 
-console.log('-> jest.setup.js [FILE]')
-
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
@@ -221,13 +219,9 @@ const wasDbUsed = () => {
 }
 
 beforeEach(() => {
-  console.log('-> beforeEach')
-
   // Attempt to emulate the request context isolation behavior
   const fakeContextStore = new Map()
-  fakeContextStore.set('context', {
-    fake: true,
-  })
+  fakeContextStore.set('context', {})
   jest
     .spyOn(
       require('@redwoodjs/graphql-server/dist/globalContextStore'),
@@ -235,10 +229,8 @@ beforeEach(() => {
     )
     // @ts-expect-error - we're not mocking the full functionality of the return type, we currently don't need to
     .mockImplementation(() => {
-      console.log('-> getAsyncStoreInstance (mocked)')
       return {
         getStore: () => {
-          console.log('  -> getStore (mocked)')
           return fakeContextStore
         },
       }
