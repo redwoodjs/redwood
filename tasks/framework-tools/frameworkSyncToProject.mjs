@@ -41,7 +41,7 @@ const ignored = [
   /__fixtures__/,
   /__mocks__/,
   /__tests__/,
-  /.test./,
+  /\.test(?!\/).*$/,
   /jest.config.{js,ts}/,
 
   /README.md/,
