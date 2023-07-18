@@ -119,13 +119,13 @@ export default function redwoodPluginVite(): PluginOption[] {
             ...Object.fromEntries(
               rwConfig.web.includeEnvironmentVariables.map((envName) => [
                 `import.meta.env.${envName}`,
-                process.env[envName],
+                JSON.stringify(process.env[envName]),
               ])
             ),
             ...Object.entries(process.env).reduce<Record<string, any>>(
               (acc, [key, value]) => {
                 if (key.startsWith('REDWOOD_ENV_')) {
-                  acc[`import.meta.env.${key}`] = value
+                  acc[`import.meta.env.${key}`] = JSON.stringify(value)
                 }
 
                 return acc
