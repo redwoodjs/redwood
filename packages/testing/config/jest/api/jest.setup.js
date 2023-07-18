@@ -1,6 +1,8 @@
 /* eslint-env jest */
 // @ts-check
 
+const { AsyncLocalStorage } = require('async_hooks')
+
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
@@ -218,6 +220,7 @@ const wasDbUsed = () => {
   }
 }
 
+const mockAsyncStore = new AsyncLocalStorage()
 beforeEach(() => {
   // Attempt to emulate the request context isolation behavior
   const fakeContextStore = new Map()
@@ -227,13 +230,12 @@ beforeEach(() => {
       require('@redwoodjs/graphql-server/dist/globalContextStore'),
       'getAsyncStoreInstance'
     )
-    // @ts-expect-error - we're not mocking the full functionality of the return type, we currently don't need to
     .mockImplementation(() => {
-      return {
-        getStore: () => {
-          return fakeContextStore
-        },
+      // Return a valid AsyncLocalStorage but with a fake store enforced
+      mockAsyncStore.getStore = () => {
+        return fakeContextStore
       }
+      return mockAsyncStore
     })
 })
 
