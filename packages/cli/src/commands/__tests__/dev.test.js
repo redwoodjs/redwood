@@ -122,7 +122,7 @@ describe('yarn rw dev', () => {
       },
       experimental: {
         streamingSsr: {
-          enabled: true,
+          enabled: true, // <-- enable SSR/Streaming
         },
       },
     })
@@ -189,6 +189,11 @@ describe('yarn rw dev', () => {
         port: 8911,
         debugPort: false,
       },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
+      },
     })
 
     await handler({
@@ -210,6 +215,11 @@ describe('yarn rw dev', () => {
       },
       api: {
         port: 8911,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
       },
     })
 
