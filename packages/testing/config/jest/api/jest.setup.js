@@ -1,8 +1,6 @@
 /* eslint-env jest */
 // @ts-check
 
-const { AsyncLocalStorage } = require('async_hooks')
-
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
