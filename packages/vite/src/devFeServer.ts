@@ -20,13 +20,26 @@ globalThis.RWJS_ENV = {}
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
 async function createServer() {
+  // Check CWD: make sure its the web/ directory
+  // Without this Postcss can misbehave, and its hard to trace why.
+  if (process.cwd() !== getPaths().web.base) {
+    console.error('⚠️  Warning: CWD is ', process.cwd())
+    console.warn('~'.repeat(50))
+    console.warn(
+      'The FE dev server cwd must be web/. Please use `yarn rw dev` or start the server from the web/ directory.'
+    )
+    console.log(`Changing cwd to ${getPaths().web.base}....`)
+    console.log()
+
+    process.chdir(getPaths().web.base)
+  }
+
   const app = express()
   const rwPaths = getPaths()
 
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
   // and this file should always exist. So the error message needs to change
   // (or be removed perhaps)
-  // @MARK: Vite is still experimental, and opt-in
   if (!rwPaths.web.viteConfig) {
     throw new Error(
       'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`'
@@ -45,7 +58,6 @@ async function createServer() {
   })
 
   // use vite's connect instance as middleware
-  // if you use your own express router (express.Router()), you should use router.use
   app.use(vite.middlewares)
 
   app.use('*', async (req, res, next) => {
