@@ -109,6 +109,13 @@ export default function redwoodPluginVite(): PluginOption[] {
                 process.env.REDWOOD_ENV_EDITOR
               ),
             },
+            // Vite can automatically expose environment variables, but we
+            // disable that in `buildFeServer.ts` by setting `envFile: false`
+            // because we want to use our own logic for loading .env,
+            // .env.defaults, etc
+            // The two object spreads below will expose all environment
+            // variables listed in redwood.toml and all environment variables
+            // prefixed with REDWOOD_ENV_
             ...Object.fromEntries(
               rwConfig.web.includeEnvironmentVariables.map((envName) => [
                 `import.meta.env.${envName}`,
