@@ -220,7 +220,6 @@ const wasDbUsed = () => {
   }
 }
 
-const mockAsyncStore = new AsyncLocalStorage()
 beforeEach(() => {
   // Attempt to emulate the request context isolation behavior
   const fakeContextStore = new Map()
@@ -230,12 +229,13 @@ beforeEach(() => {
       require('@redwoodjs/graphql-server/dist/globalContextStore'),
       'getAsyncStoreInstance'
     )
+    // @ts-expect-error - We are not providing the full functionality of the AsyncLocalStorage in this returned object
     .mockImplementation(() => {
-      // Return a valid AsyncLocalStorage but with a fake store enforced
-      mockAsyncStore.getStore = () => {
-        return fakeContextStore
+      return {
+        getStore: () => {
+          return fakeContextStore
+        },
       }
-      return mockAsyncStore
     })
 })
 
