@@ -109,6 +109,22 @@ export default function redwoodPluginVite(): PluginOption[] {
                 process.env.REDWOOD_ENV_EDITOR
               ),
             },
+            ...Object.fromEntries(
+              rwConfig.web.includeEnvironmentVariables.map((envName) => [
+                `import.meta.env.${envName}`,
+                process.env[envName],
+              ])
+            ),
+            ...Object.entries(process.env).reduce<Record<string, any>>(
+              (acc, [key, value]) => {
+                if (key.startsWith('REDWOOD_ENV_')) {
+                  acc[`import.meta.env.${key}`] = value
+                }
+
+                return acc
+              },
+              {}
+            ),
           },
           css: {
             // @NOTE config path is relative to where vite.config.js is if you use relative path
