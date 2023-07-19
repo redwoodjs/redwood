@@ -170,6 +170,7 @@ async function runYargs() {
     )
     .demandCommand()
     .strict()
+    .exitProcess(false)
 
     // Commands (Built in or pre-plugin support)
     .command(buildCommand)
@@ -198,7 +199,12 @@ async function runYargs() {
   await loadPlugins(yarg)
 
   // Run
-  await yarg.parse()
+  await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
+    // Show the output that yargs was going to if there was no callback provided
+    if (output) {
+      console.log(output)
+    }
+  })
 }
 
 main()
