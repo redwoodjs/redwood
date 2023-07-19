@@ -142,7 +142,10 @@ export const builder = async (yargs) => {
           let apiPromise
 
           if (argv.port) {
-            apiPromise = apiServerHandler({ ...argv, port: argv.port + 1 })
+            apiPromise = apiServerHandler({
+              ...argv,
+              port: parseInt(argv.port, 10) + 1,
+            })
           } else {
             apiPromise = apiServerHandler(argv)
           }
