@@ -54,11 +54,6 @@ export function builder(
       type: 'boolean',
       default: defaultOptions.smokeTest,
     })
-    .middleware(() => {
-      recordTelemetryAttributes({
-        command: 'storybook',
-      })
-    })
 
     .epilogue(
       `Also see the ${terminalLink(
