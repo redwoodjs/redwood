@@ -19,6 +19,19 @@ export async function handler({
   port,
   smokeTest,
 }: StorybookYargsOptions) {
+  // Check for conflicting options
+  if (build && smokeTest) {
+    throw new Error('Can not provide both "--build" and "--smoke-test"')
+  }
+
+  if (build && open) {
+    console.warn(
+      c.warning(
+        'Warning: --open option has no effect when running Storybook build'
+      )
+    )
+  }
+
   const cwd = getPaths().web.base
   const staticAssetsFolder = path.join(cwd, 'public')
   const execaOptions: Partial<execa.Options> = {

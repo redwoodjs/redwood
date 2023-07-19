@@ -3,7 +3,6 @@ import type { Argv } from 'yargs'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import c from '../lib/colors'
 import { StorybookYargsOptions } from '../types'
 
 export const command = 'storybook'
@@ -59,21 +58,6 @@ export function builder(
       recordTelemetryAttributes({
         command: 'storybook',
       })
-    })
-    .check((argv) => {
-      if (argv.build && argv.smokeTest) {
-        throw new Error('Can not provide both "--build" and "--smoke-test"')
-      }
-
-      if (argv.build && argv.open) {
-        console.warn(
-          c.warning(
-            'Warning: --open option has no effect when running Storybook build'
-          )
-        )
-      }
-
-      return true
     })
 
     .epilogue(
