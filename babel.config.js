@@ -39,7 +39,7 @@ module.exports = {
         ].filter(Boolean),
       },
     ],
-    '@babel/preset-react',
+    ['@babel/preset-react', { runtime: 'automatic' }],
     /**
      *  TODO(pc): w/ '@babel/plugin-transform-typescript' in plugins now, is '@babel/typescript' preset still needed?
      *
