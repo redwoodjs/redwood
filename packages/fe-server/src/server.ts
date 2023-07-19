@@ -46,7 +46,11 @@ export async function serve(options: Opts) {
     },
   })
 
-  await fastify.register(redwoodFastifyWeb)
+  await fastify.register(redwoodFastifyWeb, {
+    redwood: {
+      ...options,
+    },
+  })
 
   // TODO: Could this be folded into redwoodFastifyWeb?
   // If apiHost is supplied, it means the functions are running elsewhere, so we should just proxy requests.

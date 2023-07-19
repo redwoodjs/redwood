@@ -138,7 +138,14 @@ export const builder = async (yargs) => {
           await Promise.all([apiPromise, fePromise])
         } else {
           const { apiServerHandler } = await import('./serveHandler.js')
-          const apiPromise = apiServerHandler(argv)
+
+          let apiPromise
+
+          if (argv.port) {
+            apiPromise = apiServerHandler({ ...argv, port: argv.port + 1 })
+          } else {
+            apiPromise = apiServerHandler(argv)
+          }
 
           const fePromise = execa(
             'yarn',
@@ -159,9 +166,6 @@ export const builder = async (yargs) => {
           )
 
           await Promise.all([apiPromise, fePromise])
-
-          // const { bothServerHandler } = await import('./serveHandler.js')
-          // await bothServerHandler(argv)
         }
       },
     })

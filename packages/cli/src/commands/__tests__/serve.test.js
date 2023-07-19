@@ -41,7 +41,6 @@ jest.mock('../serveHandler', () => {
     ...jest.requireActual('../serveHandler'),
     apiServerHandler: jest.fn(),
     webServerHandler: jest.fn(),
-    bothServerHandler: jest.fn(),
   }
 })
 jest.mock('execa', () =>
