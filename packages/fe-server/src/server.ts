@@ -19,8 +19,7 @@ export async function serve(options: Opts) {
   const redwoodProjectPaths = getPaths()
   const redwoodConfig = getConfig()
 
-  const port =
-    options.port !== undefined ? parseInt(options.port) : redwoodConfig.web.port
+  const port = options.port ? parseInt(options.port) : redwoodConfig.web.port
   const apiUrl = redwoodConfig.web.apiUrl
 
   const tsServer = Date.now()
