@@ -7872,7 +7872,7 @@ __metadata:
     dotenv-defaults: 5.0.2
     esbuild: 0.18.12
     fast-glob: 3.2.12
-    fastify: 4.19.2
+    fastify: 4.20.0
     typescript: 5.1.6
   bin:
     rw-fe-server: ./dist/index.js
@@ -17907,30 +17907,6 @@ __metadata:
     raw-body: ^2.5.1
     secure-json-parse: ^2.4.0
   checksum: 7e71fe5dcffa2cf66afad2a884b5395e146f4ea6f566c428a8b501fbfb4665919fef18743b6ab80a66bedb644caf8580e2cf08f41494d00a172aa85607a1b27b
-  languageName: node
-  linkType: hard
-
-"fastify@npm:4.19.2":
-  version: 4.19.2
-  resolution: "fastify@npm:4.19.2"
-  dependencies:
-    "@fastify/ajv-compiler": ^3.5.0
-    "@fastify/error": ^3.2.0
-    "@fastify/fast-json-stringify-compiler": ^4.3.0
-    abstract-logging: ^2.0.1
-    avvio: ^8.2.1
-    fast-content-type-parse: ^1.0.0
-    fast-json-stringify: ^5.7.0
-    find-my-way: ^7.6.0
-    light-my-request: ^5.9.1
-    pino: ^8.12.0
-    process-warning: ^2.2.0
-    proxy-addr: ^2.0.7
-    rfdc: ^1.3.0
-    secure-json-parse: ^2.5.0
-    semver: ^7.5.0
-    tiny-lru: ^11.0.1
-  checksum: faf6f4d50770fe250c382ebb963d9907b8aec07f8e9031794c0ecf61863c27f46dd80f3ac150b2842445f1bb356fd3e46a86932c6e0d553531f4fad6f7cc7bca
   languageName: node
   linkType: hard
 
