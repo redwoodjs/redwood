@@ -7,12 +7,21 @@ import Fastify from 'fastify'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { redwoodFastifyWeb } from './web'
+import { withApiProxy } from './withApiProxy'
 
-export async function serve() {
+interface Opts {
+  socket?: string
+  port?: string
+  apiHost?: string
+}
+
+export async function serve(options: Opts) {
   const redwoodProjectPaths = getPaths()
   const redwoodConfig = getConfig()
 
-  const port = redwoodConfig.web.port
+  const port =
+    options.port !== undefined ? parseInt(options.port) : redwoodConfig.web.port
+  const apiUrl = redwoodConfig.web.apiUrl
 
   const tsServer = Date.now()
 
@@ -23,7 +32,7 @@ export async function serve() {
     multiline: true,
   })
 
-  console.log(chalk.italic.dim('Starting API and Web Servers...'))
+  console.log(chalk.italic.dim('Starting FE Server...'))
 
   // Configure Fastify
   const fastify = Fastify({
@@ -40,8 +49,19 @@ export async function serve() {
 
   await fastify.register(redwoodFastifyWeb)
 
+  // TODO: Could this be folded into redwoodFastifyWeb?
+  // If apiHost is supplied, it means the functions are running elsewhere, so we should just proxy requests.
+  if (options.apiHost) {
+    // Attach plugin for proxying
+    fastify.register(withApiProxy, { apiHost: options.apiHost, apiUrl })
+  }
+
   // Start
-  fastify.listen({ port })
+  fastify.listen({
+    port,
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    path: options.socket,
+  })
 
   fastify.ready(() => {
     console.log(chalk.italic.dim('Took ' + (Date.now() - tsServer) + ' ms'))
