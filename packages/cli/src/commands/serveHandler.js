@@ -28,8 +28,9 @@ export const apiServerHandler = async (options) => {
   })
 
   fastify.listen({
-    port: socket ? parseInt(socket) : port,
+    port,
     host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    path: socket,
   })
 
   fastify.ready(() => {
@@ -80,8 +81,9 @@ export const bothServerHandler = async (options) => {
   })
 
   fastify.listen({
-    port: socket ? parseInt(socket) : port,
+    port,
     host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    path: socket,
   })
 
   fastify.ready(() => {
