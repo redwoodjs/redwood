@@ -8078,7 +8078,6 @@ __metadata:
     jest: 29.6.1
     typescript: 5.1.6
     vite: 4.4.4
-    vite-plugin-environment: 1.1.3
     yargs-parser: 21.1.1
   bin:
     rw-vite-build: ./bins/rw-vite-build.mjs
@@ -30878,15 +30877,6 @@ __metadata:
     core-util-is: 1.0.2
     extsprintf: ^1.2.0
   checksum: 37ccdf8542b5863c525128908ac80f2b476eed36a32cb944de930ca1e2e78584cc435c4b9b4c68d0fc13a47b45ff364b4be43aa74f8804f9050140f660fb660d
-  languageName: node
-  linkType: hard
-
-"vite-plugin-environment@npm:1.1.3":
-  version: 1.1.3
-  resolution: "vite-plugin-environment@npm:1.1.3"
-  peerDependencies:
-    vite: ">= 2.7"
-  checksum: 225986450220bdc6b109be4d05deeb94013d41cc235fe3064bd6c5a1b33c047ba59cac3a34aa240ae735fee6a77ab9ce033053c5ab7c152497bd7136bd3f3a6d
   languageName: node
   linkType: hard
 
