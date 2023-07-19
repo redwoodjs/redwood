@@ -55,17 +55,23 @@ export async function serve(options: Opts) {
     fastify.register(withApiProxy, { apiHost: options.apiHost, apiUrl })
   }
 
-  // Start
-  fastify.listen({
-    port,
-    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
-    path: options.socket,
-  })
+  let listenOptions:
+    | { path: string; port?: never; host?: never }
+    | { path?: never; port?: number; host?: string }
 
-  fastify.ready(() => {
+  if (options.socket) {
+    listenOptions = { path: options.socket }
+  } else {
+    listenOptions = {
+      port,
+      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    }
+  }
+
+  // Start
+  fastify.listen(listenOptions).then((address) => {
     console.log(chalk.italic.dim('Took ' + (Date.now() - tsServer) + ' ms'))
-    const webServer = chalk.green(`http://localhost:${port}`)
-    console.log(`Web server started on ${webServer}`)
+    console.log(`Web server started on ${address}`)
   })
 
   process.on('exit', () => {
