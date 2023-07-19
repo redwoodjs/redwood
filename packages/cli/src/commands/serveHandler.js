@@ -29,8 +29,8 @@ export const apiServerHandler = async (options) => {
 
   let listenOptions
 
-  if (options.socket) {
-    listenOptions = { path: options.socket }
+  if (socket) {
+    listenOptions = { path: socket }
   } else {
     listenOptions = {
       port,
@@ -89,8 +89,8 @@ export const bothServerHandler = async (options) => {
 
   let listenOptions
 
-  if (options.socket) {
-    listenOptions = { path: options.socket }
+  if (socket) {
+    listenOptions = { path: socket }
   } else {
     listenOptions = {
       port,
@@ -154,8 +154,8 @@ export const webServerHandler = async (options) => {
 
   let listenOptions
 
-  if (options.socket) {
-    listenOptions = { path: options.socket }
+  if (socket) {
+    listenOptions = { path: socket }
   } else {
     listenOptions = {
       port,
