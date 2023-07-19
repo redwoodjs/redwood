@@ -137,11 +137,28 @@ export const builder = async (yargs) => {
 
           await Promise.all([apiPromise, fePromise])
         } else {
-          await execa('yarn', ['rw-fe-server'], {
-            cwd: getPaths().base,
-            stdio: 'inherit',
-            shell: true,
-          })
+          const { apiServerHandler } = await import('./serveHandler.js')
+          const apiPromise = apiServerHandler(argv)
+
+          const fePromise = execa(
+            'yarn',
+            [
+              'rw-fe-server',
+              '--port',
+              argv.port,
+              '--socket',
+              argv.socket,
+              '--api-host',
+              argv.apiHost,
+            ],
+            {
+              cwd: getPaths().base,
+              stdio: 'inherit',
+              shell: true,
+            }
+          )
+
+          await Promise.all([apiPromise, fePromise])
 
           // const { bothServerHandler } = await import('./serveHandler.js')
           // await bothServerHandler(argv)
@@ -232,8 +249,26 @@ export const builder = async (yargs) => {
             shell: true,
           })
         } else {
-          const { webServerHandler } = await import('./serveHandler.js')
-          await webServerHandler(argv)
+          await execa(
+            'yarn',
+            [
+              'rw-fe-server',
+              '--port',
+              argv.port,
+              '--socket',
+              argv.socket,
+              '--api-host',
+              argv.apiHost,
+            ],
+            {
+              cwd: getPaths().base,
+              stdio: 'inherit',
+              shell: true,
+            }
+          )
+
+          // const { webServerHandler } = await import('./serveHandler.js')
+          // await webServerHandler(argv)
         }
       },
     })

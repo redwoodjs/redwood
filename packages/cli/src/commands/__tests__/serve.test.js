@@ -44,15 +44,18 @@ jest.mock('../serveHandler', () => {
     bothServerHandler: jest.fn(),
   }
 })
+jest.mock('execa', () =>
+  jest.fn((cmd, params) => ({
+    cmd,
+    params,
+  }))
+)
 
+import execa from 'execa'
 import yargs from 'yargs'
 
 import { builder } from '../serve'
-import {
-  apiServerHandler,
-  bothServerHandler,
-  webServerHandler,
-} from '../serveHandler'
+import { apiServerHandler } from '../serveHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {
@@ -94,12 +97,18 @@ describe('yarn rw serve', () => {
       'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
     )
 
-    expect(webServerHandler).toHaveBeenCalledWith(
-      expect.objectContaining({
-        port: 9898,
-        socket: 'abc',
-        apiHost: 'https://myapi.redwood/api',
-      })
+    expect(execa).toHaveBeenCalledWith(
+      'yarn',
+      expect.arrayContaining([
+        'rw-fe-server',
+        '--port',
+        9898,
+        '--socket',
+        'abc',
+        '--api-host',
+        'https://myapi.redwood/api',
+      ]),
+      expect.anything()
     )
   })
 
@@ -108,11 +117,17 @@ describe('yarn rw serve', () => {
 
     await parser.parse('serve --port 9898 --socket abc')
 
-    expect(bothServerHandler).toHaveBeenCalledWith(
-      expect.objectContaining({
-        port: 9898,
-        socket: 'abc',
-      })
+    expect(execa).toHaveBeenCalledWith(
+      'yarn',
+      expect.arrayContaining([
+        'rw-fe-server',
+        '--port',
+        9898,
+        '--socket',
+        'abc',
+        '--api-host',
+      ]),
+      expect.anything()
     )
   })
 })
