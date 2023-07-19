@@ -7049,7 +7049,7 @@ __metadata:
     core-js: 3.31.1
     fast-glob: 3.2.12
     fast-json-parse: 1.0.3
-    fastify: 4.19.2
+    fastify: 4.20.0
     fastify-raw-body: 4.2.0
     jest: 29.6.1
     lodash: 4.17.21
@@ -7855,7 +7855,7 @@ __metadata:
     ansi-colors: 4.1.3
     esbuild: 0.18.12
     fast-glob: 3.2.12
-    fastify: 4.19.2
+    fastify: 4.20.0
     fastify-raw-body: 4.2.0
     lodash: 4.17.21
     qs: 6.11.2
@@ -8159,7 +8159,7 @@ __metadata:
     crypto-js: 4.1.1
     dotenv: 16.3.1
     fast-json-parse: 1.0.3
-    fastify: 4.19.2
+    fastify: 4.20.0
     fastify-raw-body: 4.2.0
     graphql: 16.7.1
     graphql-scalars: 1.22.2
@@ -8279,7 +8279,6 @@ __metadata:
     react-server-dom-webpack: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.6
     vite: 4.4.4
-    vite-plugin-environment: 1.1.3
     yargs-parser: 21.1.1
   bin:
     rw-dev-fe: ./dist/devFeServer.js
@@ -17911,9 +17910,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.19.2":
-  version: 4.19.2
-  resolution: "fastify@npm:4.19.2"
+"fastify@npm:4.20.0":
+  version: 4.20.0
+  resolution: "fastify@npm:4.20.0"
   dependencies:
     "@fastify/ajv-compiler": ^3.5.0
     "@fastify/error": ^3.2.0
@@ -17931,7 +17930,7 @@ __metadata:
     secure-json-parse: ^2.5.0
     semver: ^7.5.0
     tiny-lru: ^11.0.1
-  checksum: faf6f4d50770fe250c382ebb963d9907b8aec07f8e9031794c0ecf61863c27f46dd80f3ac150b2842445f1bb356fd3e46a86932c6e0d553531f4fad6f7cc7bca
+  checksum: 52058995cabbbe6235331f106c2eb532e3aabc5e5e2b6f952b1da6ad19010b35a345a0323f0876ad269476bb047f4c1be60feafdca1c5a1a15ffdfe67827fbd3
   languageName: node
   linkType: hard
 
@@ -31304,15 +31303,6 @@ __metadata:
     core-util-is: 1.0.2
     extsprintf: ^1.2.0
   checksum: 37ccdf8542b5863c525128908ac80f2b476eed36a32cb944de930ca1e2e78584cc435c4b9b4c68d0fc13a47b45ff364b4be43aa74f8804f9050140f660fb660d
-  languageName: node
-  linkType: hard
-
-"vite-plugin-environment@npm:1.1.3":
-  version: 1.1.3
-  resolution: "vite-plugin-environment@npm:1.1.3"
-  peerDependencies:
-    vite: ">= 2.7"
-  checksum: 225986450220bdc6b109be4d05deeb94013d41cc235fe3064bd6c5a1b33c047ba59cac3a34aa240ae735fee6a77ab9ce033053c5ab7c152497bd7136bd3f3a6d
   languageName: node
   linkType: hard
 
