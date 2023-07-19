@@ -2391,10 +2391,10 @@ __metadata:
     graphql: 16.7.1
     graphql-scalars: 1.22.2
     json-bigint-patch: 0.0.8
-    postcss: 8.4.25
+    postcss: 8.4.27
     pretty-ms: 7.0.1
-    react: 18.3.0-canary-035a41c4e-20230704
-    react-dom: 18.3.0-canary-035a41c4e-20230704
+    react: 18.2.0
+    react-dom: 18.2.0
     react-error-boundary: 4.0.10
     react-grid-layout: 1.3.4
     react-router-dom: 6.8.1
@@ -2403,7 +2403,7 @@ __metadata:
     tailwindcss: 3.3.2
     typescript: 5.1.6
     use-url-search-params: 2.5.1
-    vite: 4.4.4
+    vite: 4.4.7
   languageName: unknown
   linkType: soft
 
@@ -3435,7 +3435,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.25, postcss@npm:^8.4.23, postcss@npm:^8.4.25":
+"postcss@npm:8.4.27, postcss@npm:^8.4.26":
+  version: 8.4.27
+  resolution: "postcss@npm:8.4.27"
+  dependencies:
+    nanoid: ^3.3.6
+    picocolors: ^1.0.0
+    source-map-js: ^1.0.2
+  checksum: 41a0476e05cb97514ff8d75e4ff9fdcf778f22b2e0d25b7028f219cd408e01d3c4f50459d4a1cd9a430d8ef08202c881374a4fa4ea6009f4a135a07315d606e5
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.4.23":
   version: 8.4.25
   resolution: "postcss@npm:8.4.25"
   dependencies:
@@ -3511,15 +3522,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:18.3.0-canary-035a41c4e-20230704":
-  version: 18.3.0-canary-035a41c4e-20230704
-  resolution: "react-dom@npm:18.3.0-canary-035a41c4e-20230704"
+"react-dom@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react-dom@npm:18.2.0"
   dependencies:
     loose-envify: ^1.1.0
-    scheduler: 0.24.0-canary-035a41c4e-20230704
+    scheduler: ^0.23.0
   peerDependencies:
-    react: 18.3.0-canary-035a41c4e-20230704
-  checksum: 5fbc98baf3e9a9ac52a8160f5e4b5c90c6d339dfcc296b9d02e3df8d06d5b4938d825b6f660d401bfd6449ba9a70bbfc2f498b707621cdd4369f2faf2e7faff9
+    react: ^18.2.0
+  checksum: 66dfc5f93e13d0674e78ef41f92ed21dfb80f9c4ac4ac25a4b51046d41d4d2186abc915b897f69d3d0ebbffe6184e7c5876f2af26bfa956f179225d921be713a
   languageName: node
   linkType: hard
 
@@ -3783,12 +3794,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.3.0-canary-035a41c4e-20230704":
-  version: 18.3.0-canary-035a41c4e-20230704
-  resolution: "react@npm:18.3.0-canary-035a41c4e-20230704"
+"react@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react@npm:18.2.0"
   dependencies:
     loose-envify: ^1.1.0
-  checksum: 01a8d9ccb5d636a789a68404ea428f9eabc7d6d8fa5759c30653eef04d9a251a5c3a9b5c2c0f7768b0827d6ce250cd37cab5825af31583756ee2a8af669a6d27
+  checksum: b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
   languageName: node
   linkType: hard
 
@@ -3963,12 +3974,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.24.0-canary-035a41c4e-20230704":
-  version: 0.24.0-canary-035a41c4e-20230704
-  resolution: "scheduler@npm:0.24.0-canary-035a41c4e-20230704"
+"scheduler@npm:^0.23.0":
+  version: 0.23.0
+  resolution: "scheduler@npm:0.23.0"
   dependencies:
     loose-envify: ^1.1.0
-  checksum: aaaf1b219c01bc5dc579362a5486f3d28092407f711748bd8ed7cd57f1431ca07f8469c6e9b7c8c70c21ef6d40faf2c575fd3564dffac55a13443db08991282c
+  checksum: b777f7ca0115e6d93e126ac490dbd82642d14983b3079f58f35519d992fa46260be7d6e6cede433a92db70306310c6f5f06e144f0e40c484199e09c1f7be53dd
   languageName: node
   linkType: hard
 
@@ -4398,13 +4409,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.4.4":
-  version: 4.4.4
-  resolution: "vite@npm:4.4.4"
+"vite@npm:4.4.7":
+  version: 4.4.7
+  resolution: "vite@npm:4.4.7"
   dependencies:
     esbuild: ^0.18.10
     fsevents: ~2.3.2
-    postcss: ^8.4.25
+    postcss: ^8.4.26
     rollup: ^3.25.2
   peerDependencies:
     "@types/node": ">= 14"
@@ -4434,7 +4445,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 7030c008595eecaf03800292ca6ac626941b7d90b9c18e3ca0de62f8127cb6f7624c2c5e4e5528260fff807996e56e099a6d3bd069a7644eedc13c7df081d818
+  checksum: f0cd995ffd6d0311af98fa28a5ed8502c29d3aa4b3a12c812030e688f327ec17a95db0994e569bfddd6cfa602608b6892fc18d2944cbc1150d75c1ab3299bc5c
   languageName: node
   linkType: hard
 

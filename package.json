@@ -4,7 +4,9 @@
   "workspaces": [
     "packages/*",
     "packages/auth-providers/*/*",
-    "packages/cli-packages/*"
+    "packages/cli-packages/*",
+    "packages/mailer/core",
+    "packages/mailer/providers/*"
   ],
   "scripts": {
     "build": "lerna run build",
