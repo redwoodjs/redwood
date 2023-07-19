@@ -2,6 +2,7 @@ import './global.api-auto-imports'
 
 export * from './global.api-auto-imports'
 export * from './globalContext'
+export * from './globalContextStore'
 
 export * from './errors'
 export * from './functions/graphql'
