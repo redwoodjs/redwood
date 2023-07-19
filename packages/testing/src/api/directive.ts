@@ -4,13 +4,8 @@ import type {
   DirectiveParams,
   ValidatorDirective,
   TransformerDirective,
-  GlobalContext,
 } from '@redwoodjs/graphql-server'
-import {
-  setContext,
-  DirectiveType,
-  getAsyncStoreInstance,
-} from '@redwoodjs/graphql-server'
+import { setContext, DirectiveType } from '@redwoodjs/graphql-server'
 
 export { getDirectiveName } from '@redwoodjs/graphql-server'
 
@@ -78,33 +73,6 @@ export const mockRedwoodDirective: DirectiveMocker = (
 
   if (directive.onResolvedValue.constructor.name === 'AsyncFunction') {
     return async () => {
-      return getAsyncStoreInstance().run(
-        new Map<string, GlobalContext>(),
-        async () => {
-          if (context) {
-            setContext(context || {})
-          }
-
-          if (directive.type === DirectiveType.TRANSFORMER) {
-            const { mockedResolvedValue } = others as TransformerMock
-            return directive.onResolvedValue({
-              resolvedValue: mockedResolvedValue,
-              directiveArgs: directiveArgs || {},
-              ...others,
-            } as DirectiveParams)
-          } else {
-            await directive.onResolvedValue({
-              directiveArgs: directiveArgs || {},
-              ...others,
-            } as DirectiveParams)
-          }
-        }
-      )
-    }
-  }
-
-  return () => {
-    return getAsyncStoreInstance().run(new Map<string, GlobalContext>(), () => {
       if (context) {
         setContext(context || {})
       }
@@ -117,11 +85,31 @@ export const mockRedwoodDirective: DirectiveMocker = (
           ...others,
         } as DirectiveParams)
       } else {
-        directive.onResolvedValue({
+        await directive.onResolvedValue({
           directiveArgs: directiveArgs || {},
           ...others,
         } as DirectiveParams)
       }
-    })
+    }
+  }
+
+  return () => {
+    if (context) {
+      setContext(context || {})
+    }
+
+    if (directive.type === DirectiveType.TRANSFORMER) {
+      const { mockedResolvedValue } = others as TransformerMock
+      return directive.onResolvedValue({
+        resolvedValue: mockedResolvedValue,
+        directiveArgs: directiveArgs || {},
+        ...others,
+      } as DirectiveParams)
+    } else {
+      directive.onResolvedValue({
+        directiveArgs: directiveArgs || {},
+        ...others,
+      } as DirectiveParams)
+    }
   }
 }

@@ -2,11 +2,8 @@ import type { APIGatewayEvent, Context as LambdaContext } from 'aws-lambda'
 
 import { getAuthenticationContext, Decoder } from '@redwoodjs/api'
 
-import {
-  GlobalContext,
-  getAsyncStoreInstance,
-  context as globalContext,
-} from '../globalContext'
+import { GlobalContext, context as globalContext } from '../globalContext'
+import { getAsyncStoreInstance } from '../globalContextStore'
 import type { GetCurrentUser } from '../types'
 
 interface Args {
