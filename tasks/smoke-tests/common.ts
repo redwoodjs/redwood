@@ -11,6 +11,21 @@ export async function smokeTest({ page }: PlaywrightTestArgs) {
     'text=baby single- origin coffee kickstarter lo - fi paleo skateboard.'
   )
 
+  const bgBlue700 = 'rgb(29, 78, 216)'
+  expect(
+    await page
+      .locator('#redwood-app > header')
+      .evaluate((e) => window.getComputedStyle(e).backgroundColor)
+  ).toBe(bgBlue700)
+
+  const textBlue400 = 'rgb(96, 165, 250)'
+  expect(
+    await page
+      .locator('header a')
+      .filter({ hasText: 'Redwood Blog' })
+      .evaluate((e) => window.getComputedStyle(e).color)
+  ).toBe(textBlue400)
+
   // Click text=About
   await page.click('text=About')
 

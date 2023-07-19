@@ -39,7 +39,7 @@ module.exports = {
         ].filter(Boolean),
       },
     ],
-    '@babel/preset-react',
+    ['@babel/preset-react', { runtime: 'automatic' }],
     /**
      *  TODO(pc): w/ '@babel/plugin-transform-typescript' in plugins now, is '@babel/typescript' preset still needed?
      *
@@ -88,9 +88,9 @@ module.exports = {
      **/
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     // The "loose" option must be the same for all three of these plugins.
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+    ['@babel/plugin-transform-class-properties', { loose: true }],
+    ['@babel/plugin-transform-private-methods', { loose: true }],
+    ['@babel/plugin-transform-private-property-in-object', { loose: true }],
     [
       '@babel/plugin-transform-runtime',
       {
@@ -144,7 +144,7 @@ module.exports = {
         // normally provided through preset-env detecting TARGET_BROWSER
         // but webpack 4 has an issue with this
         // see https://github.com/PaulLeCam/react-leaflet/issues/883
-        ['@babel/plugin-proposal-nullish-coalescing-operator'],
+        ['@babel/plugin-transform-nullish-coalescing-operator'],
       ],
     },
   ],

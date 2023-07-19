@@ -23,6 +23,8 @@ import {
   recordErrorViaTelemetry,
 } from './telemetry'
 
+const INITIAL_COMMIT_MESSAGE = 'Initial commit'
+
 // Telemetry
 const { telemetry } = Parser(hideBin(process.argv))
 
@@ -78,33 +80,56 @@ async function executeCompatibilityCheck(templateDir) {
       semver.minVersion(checksData.yarn.wanted.raw)
     )
 
-    if (
-      foundNodeVersionIsLessThanRequired ||
-      foundYarnVersionIsLessThanRequired
-    ) {
-      const errorMessages = [
-        {
-          type: 'node',
-          failedCompatibilityCheck: foundNodeVersionIsLessThanRequired,
-        },
-        {
-          type: 'yarn',
-          failedCompatibilityCheck: foundYarnVersionIsLessThanRequired,
-        },
-      ]
-        .filter(({ failedCompatibilityCheck }) => failedCompatibilityCheck)
-        .map(
-          ({ type }) =>
-            `  ${type} ${checksData[type].wanted.range} required; found ${checksData[type].version.version}`
-        )
-
+    if (foundNodeVersionIsLessThanRequired) {
       tui.stopReactive(true)
       tui.displayError(
         'Compatibility checks failed',
         [
-          `  ${errorMessages.join('\n')}`,
+          `  You need to upgrade the version of node you're using.`,
+          `  You're using ${checksData.node.version.version} and we currently support node ${checksData.node.wanted.range}.`,
           '',
           `  Please use tools like nvm or corepack to change to a compatible version.`,
+          `  See: ${terminalLink(
+            'How to - Using nvm',
+            'https://redwoodjs.com/docs/how-to/using-nvm',
+            {
+              fallback: () =>
+                'How to - Using nvm https://redwoodjs.com/docs/how-to/using-nvm',
+            }
+          )}`,
+          `  See: ${terminalLink(
+            'Tutorial - Prerequisites',
+            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            {
+              fallback: () =>
+                'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
+            }
+          )}`,
+        ].join('\n')
+      )
+
+      recordErrorViaTelemetry('Compatibility checks failed')
+      await shutdownTelemetry()
+      process.exit(1)
+    }
+
+    if (foundYarnVersionIsLessThanRequired) {
+      tui.stopReactive(true)
+      tui.displayError(
+        'Compatibility checks failed',
+        [
+          `  You need to upgrade the version of yarn you're using.`,
+          `  You're using ${checksData.yarn.version.version} and we currently support node ${checksData.yarn.wanted.range}.`,
+          '',
+          `  Please use tools like corepack to change to a compatible version.`,
+          `  See: ${terminalLink(
+            'How to - Using Yarn',
+            'https://redwoodjs.com/docs/how-to/using-yarn',
+            {
+              fallback: () =>
+                'How to - Using Yarn https://redwoodjs.com/docs/how-to/using-yarn',
+            }
+          )}`,
           `  See: ${terminalLink(
             'Tutorial - Prerequisites',
             'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
@@ -125,9 +150,20 @@ async function executeCompatibilityCheck(templateDir) {
     tui.displayWarning(
       'Compatibility checks failed',
       [
-        `  node ${checksData.node.wanted.range} supported; found ${checksData.node.version.version}`,
+        `  You may want to downgrade the version of node you're using.`,
+        `  You're using ${checksData.node.version.version} and we currently support node ${checksData.node.wanted.range}.`,
         '',
         `  This may make your project incompatible with some deploy targets, especially those using AWS Lambdas.`,
+        '',
+        `  Please use tools like nvm or corepack to change to a compatible version.`,
+        `  See: ${terminalLink(
+          'How to - Use nvm',
+          'https://redwoodjs.com/docs/how-to/using-nvm',
+          {
+            fallback: () =>
+              'How to - Use nvm https://redwoodjs.com/docs/how-to/using-nvm',
+          }
+        )}`,
         `  See: ${terminalLink(
           'Tutorial - Prerequisites',
           'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
@@ -346,7 +382,7 @@ async function initializeGit(newAppDir, commitMessage) {
       "Couldn't initialize a git repo",
       [
         `We could not initialize a git repo using ${RedwoodStyling.info(
-          'git init && git add . && git commit -m "Initial commit"'
+          `git init && git add . && git commit -m "${commitMessage}"`
         )}. Please see below for the full error message.`,
         '',
         error,
@@ -440,7 +476,7 @@ async function handleCommitMessagePreference(commitMessageFlag) {
       type: 'input',
       name: 'commitMessage',
       message: 'Enter a commit message',
-      initial: 'Initial commit',
+      initial: INITIAL_COMMIT_MESSAGE,
     })
     return response.commitMessage
   } catch (_error) {
@@ -528,6 +564,12 @@ async function createRedwoodApp() {
       type: 'string',
       describe: 'Commit message for the initial commit.',
     })
+    .option('yes', {
+      alias: 'y',
+      default: null,
+      type: 'boolean',
+      describe: 'Skip prompts and use defaults.',
+    })
     .version(version)
 
   const _isYarnBerryOrNewer = isYarnBerryOrNewer()
@@ -541,17 +583,20 @@ async function createRedwoodApp() {
     })
   }
 
+  const parsedFlags = cli.parse()
+
   // Extract the args as provided by the user in the command line
   // TODO: Make all flags have the 'flag' suffix
-  const {
-    _: args,
-    'yarn-install': yarnInstallFlag,
-    typescript: typescriptFlag,
-    overwrite,
-    // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
-    'git-init': gitInitFlag,
-    'commit-message': commitMessageFlag,
-  } = cli.parse()
+  const args = parsedFlags._
+  const yarnInstallFlag =
+    parsedFlags['yarn-install'] ?? !_isYarnBerryOrNewer ? parsedFlags.yes : null
+  const typescriptFlag = parsedFlags.typescript ?? parsedFlags.yes
+  const overwrite = parsedFlags.overwrite
+  // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
+  const gitInitFlag = parsedFlags['git-init'] ?? parsedFlags.yes
+  const commitMessageFlag =
+    parsedFlags['commit-message'] ??
+    (parsedFlags.yes ? INITIAL_COMMIT_MESSAGE : null)
 
   // Record some of the arguments for telemetry
   trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstallFlag)

@@ -5,7 +5,8 @@ import type {
 } from 'aws-lambda'
 
 import { createGraphQLYoga } from '../createGraphQLYoga'
-import { GlobalContext, getAsyncStoreInstance } from '../globalContext'
+import { GlobalContext } from '../globalContext'
+import { getAsyncStoreInstance } from '../globalContextStore'
 import type { GraphQLHandlerOptions } from '../types'
 
 /**
@@ -39,6 +40,7 @@ export const createGraphQLHandler = ({
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
+  openTelemetryOptions,
 }: GraphQLHandlerOptions) => {
   const handlerFn = async (
     event: APIGatewayProxyEvent,
@@ -69,6 +71,7 @@ export const createGraphQLHandler = ({
       defaultError,
       graphiQLEndpoint,
       schemaOptions,
+      openTelemetryOptions,
     })
 
     try {

@@ -37,6 +37,7 @@ export const getWebSideBabelPlugins = (
             forJest ? rwjsPaths.web.src : './src',
           // adds the paths from [ts|js]config.json to the module resolver
           ...getPathsFromConfig(tsConfigs.web),
+          $api: rwjsPaths.api.base,
         },
         root: [rwjsPaths.web.base],
         cwd: 'packagejson',
@@ -132,7 +133,7 @@ export const getWebSideBabelPresets = (options: Flags) => {
     return []
   }
 
-  let reactPresetConfig = undefined
+  let reactPresetConfig: babel.PluginItem = { runtime: 'automatic' }
 
   // This is a special case, where @babel/preset-react needs config
   // And using extends doesn't work
@@ -167,8 +168,8 @@ export const getWebSideBabelPresets = (options: Flags) => {
         exclude: [
           // Remove class-properties from preset-env, and include separately
           // https://github.com/webpack/webpack/issues/9708
-          '@babel/plugin-proposal-class-properties',
-          '@babel/plugin-proposal-private-methods',
+          '@babel/plugin-transform-class-properties',
+          '@babel/plugin-transform-private-methods',
         ],
       },
       'rwjs-babel-preset-env',

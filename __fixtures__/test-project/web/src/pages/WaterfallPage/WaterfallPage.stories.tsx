@@ -1,12 +1,15 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 
 import WaterfallPage from './WaterfallPage'
 
-export const generated: ComponentStory<typeof WaterfallPage> = (args) => {
-  return <WaterfallPage id={42} {...args} />
+const meta: Meta<typeof WaterfallPage> = {
+  component: WaterfallPage,
 }
 
-export default {
-  title: 'Pages/WaterfallPage',
-  component: WaterfallPage,
-} as ComponentMeta<typeof WaterfallPage>
+export default meta
+
+type Story = StoryObj<typeof WaterfallPage>
+
+export const Primary: Story = {
+  render: (args) => <WaterfallPage id={42} {...args} />,
+}

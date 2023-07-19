@@ -1,8 +1,5 @@
-import {
-  context as globalContext,
-  getAsyncStoreInstance,
-  setContext,
-} from '../../globalContext'
+import { context as globalContext, setContext } from '../../globalContext'
+import { getAsyncStoreInstance } from '../../globalContextStore'
 
 describe('Global context with context isolation', () => {
   it('Should work when assigning directly into context', async () => {

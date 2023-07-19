@@ -12,7 +12,13 @@ import { installModule, isModuleInstalled } from './lib/packages'
 const PLUGIN_CACHE_FILENAME = 'commandCache.json'
 
 const PLUGIN_CACHE_DEFAULT = {
-  '@redwoodjs/cli-storybook': ['storybook', 'sb'],
+  '@redwoodjs/cli-storybook': {
+    storybook: {
+      aliases: ['sb'],
+      description:
+        'Launch Storybook: a tool for building UI components and pages in isolation',
+    },
+  },
 }
 
 const PLUGIN_CACHE_BUILTIN = [
@@ -72,11 +78,21 @@ export async function loadPlugins(yargs) {
   // source this will allow us to have a cache hit on the first run of a command
   let pluginCommandCache = PLUGIN_CACHE_DEFAULT
   try {
-    pluginCommandCache = JSON.parse(
+    const localCommandCache = JSON.parse(
       fs.readFileSync(
         path.join(getPaths().generated.base, PLUGIN_CACHE_FILENAME)
       )
     )
+    let valid = true
+    for (const [key, value] of Object.entries(localCommandCache)) {
+      if (key === '_builtin') {
+        continue
+      }
+      valid &&= !Array.isArray(value)
+    }
+    if (valid) {
+      pluginCommandCache = localCommandCache
+    }
   } catch (error) {
     // If the cache file doesn't exist we can just ignore it and continue
     if (error.code !== 'ENOENT') {
@@ -143,9 +159,6 @@ export async function loadPlugins(yargs) {
     namespacesInUse.push('@redwoodjs')
   }
 
-  const showNamespaceHelp =
-    firstWord === '--help' || firstWord === '-h' || firstWord === undefined
-
   for (const namespace of namespacesInUse) {
     // Get all the plugins for this namespace
     const namespacePlugins = new Set(
@@ -156,38 +169,58 @@ export async function loadPlugins(yargs) {
       continue
     }
 
-    // For help output we only show the root level commands which for third
-    // party plugins is just the namespace. No need to load the plugin for this.
-    if (showRootHelp && namespace !== '@redwoodjs') {
-      yargs.command({
-        command: `${namespace} <command>`,
-        describe: `${namespace} plugin commands`,
-        builder: () => {},
-        handler: () => {},
-      })
-      continue
-    }
-
     const namespacePluginsToLoad = []
-    if (showNamespaceHelp) {
-      // If we're showing the namespace help we want to load all plugins for observability
-      namespacePluginsToLoad.push(...namespacePlugins)
-    } else {
-      // Attempt to find a plugin that matches the first word
-      for (const namespacePlugin of namespacePlugins) {
-        const cacheEntry = pluginCommandCache[namespacePlugin.package]
-        if (cacheEntry !== undefined && cacheEntry.includes(firstWord)) {
-          namespacePluginsToLoad.push(namespacePlugin)
-          // Only one plugin can match the first word so we break here
-          break
-        }
+
+    // Attempt to find a plugin that matches the first word
+    for (const namespacePlugin of namespacePlugins) {
+      const cacheEntry = pluginCommandCache[namespacePlugin.package]
+      if (cacheEntry === undefined) {
+        continue
+      }
+      const commands = Object.keys(cacheEntry)
+      const allTriggers = commands.flatMap((c) => [
+        c,
+        ...(cacheEntry[c].aliases ?? []),
+      ])
+      if (allTriggers.includes(firstWord)) {
+        namespacePluginsToLoad.push(namespacePlugin)
+        // Only one plugin can match the first word so we break here
+        break
       }
     }
 
-    // If we didn't find any plugins to satisfy the first word we load all plugins so yargs can give
-    // an appropriate help message
-    if (namespacePluginsToLoad.length === 0) {
-      namespacePluginsToLoad.push(...namespacePlugins)
+    // For help output we only show the root level commands which for third
+    // party plugins is just the namespace. No need to load the plugin for this.
+    if (showRootHelp || namespacePluginsToLoad.length === 0) {
+      if (namespace !== '@redwoodjs') {
+        yargs.command({
+          command: `${namespace} <command>`,
+          describe: `${namespace} plugin commands`,
+          builder: () => {},
+          handler: () => {},
+        })
+      } else {
+        // For the @redwoodjs namespace we want to show all the commands for each package
+        for (const namespacePlugin of namespacePlugins) {
+          // We get the details from the cache so we don't have to install/load the plugin package
+          const cacheEntry = pluginCommandCache[namespacePlugin.package]
+          if (cacheEntry === undefined) {
+            // if we have the default cache entry set properly we should never end up here
+            continue
+          }
+          const commands = Object.keys(cacheEntry)
+          for (const command of commands) {
+            yargs.command({
+              command,
+              describe: cacheEntry[command].description,
+              aliases: cacheEntry[command].aliases,
+              builder: () => {},
+              handler: () => {},
+            })
+          }
+        }
+      }
+      continue
     }
 
     // Load plugins for this namespace
@@ -209,16 +242,12 @@ export async function loadPlugins(yargs) {
       }
 
       // Add the plugin to the cache entry
-      pluginCommandCache[namespacePlugin.package] = []
+      pluginCommandCache[namespacePlugin.package] = {}
       for (const command of plugin.commands) {
-        // Add the first word of the command to the cache entry
-        pluginCommandCache[namespacePlugin.package].push(
-          command.command.split(' ')[0]
-        )
-        // Add any aliases of the command to the cache entry
-        pluginCommandCache[namespacePlugin.package].push(
-          ...(command.aliases || [])
-        )
+        pluginCommandCache[namespacePlugin.package][command.command] = {
+          aliases: command.aliases,
+          description: command.description,
+        }
       }
 
       // Add these commands to the namespace list
@@ -245,7 +274,7 @@ export async function loadPlugins(yargs) {
   try {
     fs.writeFileSync(
       path.join(getPaths().generated.base, PLUGIN_CACHE_FILENAME),
-      JSON.stringify(pluginCommandCache)
+      JSON.stringify(pluginCommandCache, undefined, 2)
     )
   } catch (error) {
     console.error(error)
