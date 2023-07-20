@@ -1,16 +1,16 @@
 {
-  "name": "@redwoodjs/fe-server",
+  "name": "@redwoodjs/web-server",
   "version": "5.0.0",
-  "description": "Redwood's Front-end Server",
+  "description": "Redwood's server for the Web side",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/fe-server"
+    "directory": "packages/web-server"
   },
   "license": "MIT",
   "main": "./dist/server.js",
   "bin": {
-    "rw-fe-server": "./dist/server.js"
+    "rw-web-server": "./dist/server.js"
   },
   "files": [
     "dist"

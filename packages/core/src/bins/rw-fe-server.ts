@@ -2,9 +2,9 @@
 import { createRequire } from 'module'
 
 const requireFromFeServer = createRequire(
-  require.resolve('@redwoodjs/fe-server/package.json')
+  require.resolve('@redwoodjs/web-server/package.json')
 )
 
 const bins = requireFromFeServer('./package.json')['bin']
 
-requireFromFeServer(bins['rw-fe-server'])
+requireFromFeServer(bins['rw-web-server'])

@@ -46,7 +46,7 @@ export async function serve() {
     multiline: true,
   })
 
-  console.log(chalk.italic.dim('Starting FE Server...'))
+  console.log(chalk.italic.dim('Starting Web Server...'))
 
   // Configure Fastify
   const fastify = Fastify({

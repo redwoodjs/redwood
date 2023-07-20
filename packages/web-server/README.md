@@ -1,28 +1,23 @@
-# Redwood Front-end Server
+# Redwood's server for the Web side
 
 ## About
 
-This package contains code for Redwood's Fastify Front-end server:
+This package contains code for Redwood's Fastify Web side server:
 - Used when running `yarn rw serve web`
 - Used directly when doing Docker-based deploys
 
-#### TODO
-- add code structure walk-through
-- add package leads
-- add contributing related info
-
 ## package.json Server Binaries
 
-Used to run the Redwood Fastify Front-end Server programmatically
+Used to run the Redwood Fastify server for the Web side programmatically
 
 From package.json
 ```
 "bin": {
-  "rw-fe-server": "./dist/server.js"
+  "rw-web-server": "./dist/server.js"
 },
 ```
 
-### `rw-fe-server`
+### `rw-web-server`
 Intended for dev and Docker-based deploys.
 
 Not optimized for production use at scale on its own. Recommended to use CDN or

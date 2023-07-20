@@ -99,7 +99,7 @@ describe('yarn rw serve', () => {
     expect(execa).toHaveBeenCalledWith(
       'yarn',
       expect.arrayContaining([
-        'rw-fe-server',
+        'rw-web-server',
         '--port',
         9898,
         '--socket',
