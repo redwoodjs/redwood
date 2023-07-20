@@ -8,9 +8,9 @@
     "directory": "packages/fe-server"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
+  "main": "./dist/server.js",
   "bin": {
-    "rw-fe-server": "./dist/index.js"
+    "rw-fe-server": "./dist/server.js"
   },
   "files": [
     "dist"

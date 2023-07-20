@@ -1,8 +1,11 @@
+#!/usr/bin/env node
+
 import path from 'path'
 
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
+import yargsParser from 'yargs-parser'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
@@ -15,7 +18,19 @@ interface Opts {
   apiHost?: string
 }
 
-export async function serve(options: Opts) {
+export async function serve() {
+  // Parse server file args
+  const args = yargsParser(process.argv.slice(2), {
+    string: ['port', 'socket', 'apiHost'],
+    alias: { apiHost: ['api-host'], port: ['p'] },
+  })
+
+  const options: Opts = {
+    socket: args.socket,
+    port: args.port,
+    apiHost: args.apiHost,
+  }
+
   const redwoodProjectPaths = getPaths()
   const redwoodConfig = getConfig()
 
@@ -82,3 +97,5 @@ export async function serve(options: Opts) {
     fastify.close()
   })
 }
+
+serve()
