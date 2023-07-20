@@ -27,10 +27,18 @@ export const apiServerHandler = async (options) => {
     },
   })
 
-  fastify.listen({
-    port: socket ? parseInt(socket) : port,
-    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
-  })
+  let listenOptions
+
+  if (socket) {
+    listenOptions = { path: socket }
+  } else {
+    listenOptions = {
+      port,
+      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    }
+  }
+
+  fastify.listen(listenOptions)
 
   fastify.ready(() => {
     fastify.log.trace(
@@ -79,10 +87,18 @@ export const bothServerHandler = async (options) => {
     },
   })
 
-  fastify.listen({
-    port: socket ? parseInt(socket) : port,
-    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
-  })
+  let listenOptions
+
+  if (socket) {
+    listenOptions = { path: socket }
+  } else {
+    listenOptions = {
+      port,
+      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    }
+  }
+
+  fastify.listen(listenOptions)
 
   fastify.ready(() => {
     console.log(chalk.italic.dim('Took ' + (Date.now() - tsServer) + ' ms'))
@@ -136,10 +152,18 @@ export const webServerHandler = async (options) => {
     fastify.register(withApiProxy, { apiHost, apiUrl })
   }
 
-  fastify.listen({
-    port: socket ? parseInt(socket) : port,
-    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
-  })
+  let listenOptions
+
+  if (socket) {
+    listenOptions = { path: socket }
+  } else {
+    listenOptions = {
+      port,
+      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    }
+  }
+
+  fastify.listen(listenOptions)
 
   fastify.ready(() => {
     console.log(chalk.italic.dim('Took ' + (Date.now() - tsServer) + ' ms'))
