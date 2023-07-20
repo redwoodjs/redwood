@@ -4,7 +4,6 @@ import path from 'path'
 import react from '@vitejs/plugin-react'
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
 import { normalizePath } from 'vite'
-import EnvironmentPlugin from 'vite-plugin-environment'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
@@ -12,8 +11,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { handleJsAsJsx } from './vite-plugin-jsx-loader'
 
 /**
- * Preconfigured vite plugin, with required config for Redwood apps.
- *
+ * Pre-configured vite plugin, with required config for Redwood apps.
  */
 export default function redwoodPluginVite(): PluginOption[] {
   const rwPaths = getPaths()
@@ -30,6 +28,45 @@ export default function redwoodPluginVite(): PluginOption[] {
   const relativeEntryPath = path.relative(rwPaths.web.src, clientEntryPath)
 
   return [
+    {
+      name: 'redwood-plugin-vite-html-env',
+
+      // Vite can support replacing environment variables in index.html but
+      // there are currently two issues with that:
+      // 1. It requires the environment variables to be exposed on
+      //    `import.meta.env`, but we expose them on `process.env` in Redwood.
+      // 2. There's an open issue on Vite where it adds extra quotes around
+      //    the replaced values, which breaks trying to use environment
+      //    variables in src attributes for example.
+      // Until those issues are resolved, we'll do the replacement ourselves
+      // instead using transformIndexHtml. Doing it this was was also the
+      // recommended way until Vite added built-in support for it.
+      //
+      // Extra quotes issue: https://github.com/vitejs/vite/issues/13424
+      // transformIndexHtml being the recommended way:
+      //   https://github.com/vitejs/vite/issues/3105#issuecomment-1059975023
+      transformIndexHtml: {
+        // Setting order: 'pre' so that it runs before the built-in
+        // html env replacement.
+        order: 'pre',
+        handler: (html: string) => {
+          let newHtml = html
+
+          rwConfig.web.includeEnvironmentVariables.map((envName) => {
+            newHtml = newHtml.replaceAll(
+              `%${envName}%`,
+              process.env[envName] || ''
+            )
+          })
+
+          Object.entries(process.env).forEach(([envName, value]) => {
+            newHtml = newHtml.replaceAll(`%${envName}%`, value || '')
+          })
+
+          return newHtml
+        },
+      },
+    },
     {
       name: 'redwood-plugin-vite',
 
@@ -110,6 +147,36 @@ export default function redwoodPluginVite(): PluginOption[] {
                 process.env.REDWOOD_ENV_EDITOR
               ),
             },
+            // Vite can automatically expose environment variables, but we
+            // disable that in `buildFeServer.ts` by setting `envFile: false`
+            // because we want to use our own logic for loading .env,
+            // .env.defaults, etc
+            // The two object spreads below will expose all environment
+            // variables listed in redwood.toml and all environment variables
+            // prefixed with REDWOOD_ENV_
+            ...Object.fromEntries(
+              rwConfig.web.includeEnvironmentVariables.flatMap((envName) => [
+                [
+                  `import.meta.env.${envName}`,
+                  JSON.stringify(process.env[envName]),
+                ],
+                [
+                  `process.env.${envName}`,
+                  JSON.stringify(process.env[envName]),
+                ],
+              ])
+            ),
+            ...Object.entries(process.env).reduce<Record<string, any>>(
+              (acc, [key, value]) => {
+                if (key.startsWith('REDWOOD_ENV_')) {
+                  acc[`import.meta.env.${key}`] = JSON.stringify(value)
+                  acc[`process.env.${key}`] = JSON.stringify(value)
+                }
+
+                return acc
+              },
+              {}
+            ),
           },
           css: {
             // @NOTE config path is relative to where vite.config.js is if you use relative path
@@ -191,20 +258,6 @@ export default function redwoodPluginVite(): PluginOption[] {
         }
       },
     },
-    // Loading Environment Variables, to process.env in the browser
-    // This maintains compatibility with Webpack. We can choose to switch to import.meta.env at a later stage
-    EnvironmentPlugin('all', { prefix: 'REDWOOD_ENV_', loadEnvFiles: false }),
-    EnvironmentPlugin(
-      Object.fromEntries(
-        rwConfig.web.includeEnvironmentVariables.map((envName) => [
-          envName,
-          JSON.stringify(process.env[envName]),
-        ])
-      ),
-      {
-        loadEnvFiles: false, // to prevent vite from loading .env files
-      }
-    ),
     // -----------------
     handleJsAsJsx(),
     react({

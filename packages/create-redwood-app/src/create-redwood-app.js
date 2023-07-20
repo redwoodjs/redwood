@@ -23,6 +23,8 @@ import {
   recordErrorViaTelemetry,
 } from './telemetry'
 
+const INITIAL_COMMIT_MESSAGE = 'Initial commit'
+
 // Telemetry
 const { telemetry } = Parser(hideBin(process.argv))
 
@@ -380,7 +382,7 @@ async function initializeGit(newAppDir, commitMessage) {
       "Couldn't initialize a git repo",
       [
         `We could not initialize a git repo using ${RedwoodStyling.info(
-          'git init && git add . && git commit -m "Initial commit"'
+          `git init && git add . && git commit -m "${commitMessage}"`
         )}. Please see below for the full error message.`,
         '',
         error,
@@ -474,7 +476,7 @@ async function handleCommitMessagePreference(commitMessageFlag) {
       type: 'input',
       name: 'commitMessage',
       message: 'Enter a commit message',
-      initial: 'Initial commit',
+      initial: INITIAL_COMMIT_MESSAGE,
     })
     return response.commitMessage
   } catch (_error) {
@@ -562,6 +564,12 @@ async function createRedwoodApp() {
       type: 'string',
       describe: 'Commit message for the initial commit.',
     })
+    .option('yes', {
+      alias: 'y',
+      default: null,
+      type: 'boolean',
+      describe: 'Skip prompts and use defaults.',
+    })
     .version(version)
 
   const _isYarnBerryOrNewer = isYarnBerryOrNewer()
@@ -575,17 +583,20 @@ async function createRedwoodApp() {
     })
   }
 
+  const parsedFlags = cli.parse()
+
   // Extract the args as provided by the user in the command line
   // TODO: Make all flags have the 'flag' suffix
-  const {
-    _: args,
-    'yarn-install': yarnInstallFlag,
-    typescript: typescriptFlag,
-    overwrite,
-    // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
-    'git-init': gitInitFlag,
-    'commit-message': commitMessageFlag,
-  } = cli.parse()
+  const args = parsedFlags._
+  const yarnInstallFlag =
+    parsedFlags['yarn-install'] ?? !_isYarnBerryOrNewer ? parsedFlags.yes : null
+  const typescriptFlag = parsedFlags.typescript ?? parsedFlags.yes
+  const overwrite = parsedFlags.overwrite
+  // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
+  const gitInitFlag = parsedFlags['git-init'] ?? parsedFlags.yes
+  const commitMessageFlag =
+    parsedFlags['commit-message'] ??
+    (parsedFlags.yes ? INITIAL_COMMIT_MESSAGE : null)
 
   // Record some of the arguments for telemetry
   trace.getActiveSpan()?.setAttribute('yarn-install', yarnInstallFlag)

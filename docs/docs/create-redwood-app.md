@@ -42,11 +42,12 @@ If you choose JavaScript, you can always [add TypeScript later](/docs/typescript
 ### Do you want to initialize a git repo?
 Options: yes (default) or no
 
-If you mark "yes", then it will ask you to **Enter a commit message**. The default is message is "Initial commit."
+If you mark "yes", then it will ask you to **Enter a commit message**. The default message is "Initial commit."
 
 You can always initialize a git repo later and add a commit message by running the following commands in your terminal:
 
 ```terminal
+cd <your-app-name>
 git init
 git add .
 git commit -m "Initial commit"
@@ -74,7 +75,6 @@ Once the Create Redwood app has finished running, you can start your development
 
 ```terminal
 cd <your-app-name>
-yarn install
 yarn rw dev
 ```
 
@@ -88,10 +88,11 @@ You can by pass these prompts by using the following flags:
 | Flag | Alias | What it does |
 | :--- | :--- | :--- |
 | `--yarn-install` | | Run `yarn install` |
-| `--typescript` | `ts` | Set TypeScript as the preferred language (default to JavaScript) |
+| `--typescript` | `ts` | Set TypeScript as the preferred language (pass `--no-typescript` to use JavaScript) |
 | `--overwrite` | | Overwrites the existing directory, if it has the same name |
 | `--git-init` | `git` | Initializes a git repository |
 | `--commit-message "Initial commit"` | `m` | Specifies the initial git commit message |
+| `--yes` | `y` | Automatically select all defaults |
 
 For example, here's the project with all flags enabled:
 
