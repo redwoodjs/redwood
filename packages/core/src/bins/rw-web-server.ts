@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { createRequire } from 'module'
 
-const requireFromFeServer = createRequire(
+const requireFromWebServer = createRequire(
   require.resolve('@redwoodjs/web-server/package.json')
 )
 
-const bins = requireFromFeServer('./package.json')['bin']
+const bins = requireFromWebServer('./package.json')['bin']
 
-requireFromFeServer(bins['rw-web-server'])
+requireFromWebServer(bins['rw-web-server'])
