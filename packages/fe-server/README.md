@@ -33,4 +33,4 @@ Nginx as performant alternatives. Or, at least along with a tool like PM2
 - Command Options:
     - port (default 8910)
     - socket (optional, overrides port if specified)
-    - apiHost (default redwood.toml web.apiUrl)
+    - apiHost (should point to your api-side server)
