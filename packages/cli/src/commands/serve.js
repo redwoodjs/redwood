@@ -137,6 +137,13 @@ export const builder = async (yargs) => {
 
           await Promise.all([apiPromise, fePromise])
         } else {
+          // Wanted to use the new fe-server package here, but can't because of
+          // backwards compatibility reasons. With `bothServerHandler` both the
+          // web side and the api side run on the same server with the same
+          // port. If we use a separate fe server and api server we can't run
+          // them on the same port, and so we lose backwards compatibility.
+          // TODO: Use @redwoodjs/fe-server when we're ok with breaking
+          // backwards compatibility.
           const { bothServerHandler } = await import('./serveHandler.js')
           await bothServerHandler(argv)
         }
