@@ -52,6 +52,57 @@ export const apiServerHandler = async (options) => {
   })
 }
 
+export const bothServerHandler = async (options) => {
+  const { port, socket } = options
+  const tsServer = Date.now()
+
+  console.log(chalk.italic.dim('Starting API and Web Servers...'))
+
+  const fastify = createFastifyInstance()
+
+  process.on('exit', () => {
+    fastify?.close()
+  })
+
+  await fastify.register(redwoodFastifyWeb, {
+    redwood: {
+      ...options,
+    },
+  })
+
+  const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
+
+  await fastify.register(redwoodFastifyAPI, {
+    redwood: {
+      ...options,
+      apiRootPath,
+    },
+  })
+
+  fastify.listen({
+    port: socket ? parseInt(socket) : port,
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+  })
+
+  fastify.ready(() => {
+    console.log(chalk.italic.dim('Took ' + (Date.now() - tsServer) + ' ms'))
+
+    const on = socket
+      ? socket
+      : chalk.magenta(`http://localhost:${port}${apiRootPath}`)
+
+    const webServer = chalk.green(`http://localhost:${port}`)
+    const apiServer = chalk.magenta(`http://localhost:${port}`)
+    console.log(`Web server started on ${webServer}`)
+    console.log(`API serving from ${apiServer}`)
+    console.log(`API listening on ${on}`)
+    const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)
+    console.log(`GraphQL endpoint at ${graphqlEnd}`)
+
+    sendProcessReady()
+  })
+}
+
 export const webServerHandler = async (options) => {
   const { port, socket, apiHost } = options
 

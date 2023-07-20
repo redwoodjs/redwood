@@ -40,7 +40,7 @@ jest.mock('../serveHandler', () => {
   return {
     ...jest.requireActual('../serveHandler'),
     apiServerHandler: jest.fn(),
-    webServerHandler: jest.fn(),
+    bothServerHandler: jest.fn(),
   }
 })
 jest.mock('execa', () =>
@@ -54,7 +54,7 @@ import execa from 'execa'
 import yargs from 'yargs'
 
 import { builder } from '../serve'
-import { apiServerHandler } from '../serveHandler'
+import { apiServerHandler, bothServerHandler } from '../serveHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {
@@ -116,17 +116,11 @@ describe('yarn rw serve', () => {
 
     await parser.parse('serve --port 9898 --socket abc')
 
-    expect(execa).toHaveBeenCalledWith(
-      'yarn',
-      expect.arrayContaining([
-        'rw-fe-server',
-        '--port',
-        9898,
-        '--socket',
-        'abc',
-        '--api-host',
-      ]),
-      expect.anything()
+    expect(bothServerHandler).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 9898,
+        socket: 'abc',
+      })
     )
   })
 })
