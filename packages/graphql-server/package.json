@@ -57,13 +57,5 @@
     "jsonwebtoken": "9.0.0",
     "typescript": "5.1.6"
   },
-  "peerDependencies": {
-    "@redwoodjs/realtime": "5.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@redwoodjs/realtime": {
-      "optional": true
-    }
-  },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

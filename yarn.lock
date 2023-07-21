@@ -7628,11 +7628,6 @@ __metadata:
     lodash: 4.17.21
     typescript: 5.1.6
     uuid: 9.0.0
-  peerDependencies:
-    "@redwoodjs/realtime": 5.0.0
-  peerDependenciesMeta:
-    "@redwoodjs/realtime":
-      optional: true
   languageName: unknown
   linkType: soft
 
