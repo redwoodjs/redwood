@@ -24,6 +24,7 @@
     ]
   },
   "dependencies": {
+    "@redwoodjs/cli-helpers": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
     "@redwoodjs/telemetry": "5.0.0",
     "@storybook/addon-a11y": "7.1.0",
@@ -38,7 +39,7 @@
   },
   "devDependencies": {
     "@types/yargs": "17.0.24",
-    "esbuild": "0.18.14",
+    "esbuild": "0.18.15",
     "fast-glob": "3.2.12",
     "jest": "29.6.1",
     "typescript": "5.1.6"
