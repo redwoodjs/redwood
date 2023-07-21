@@ -2,6 +2,7 @@ import type { Plugin } from '@envelop/core'
 import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
+import { createRedisEventTarget } from '@graphql-yoga/redis-event-target'
 import type { CreateRedisEventTargetArgs } from '@graphql-yoga/redis-event-target'
 import type { PubSub } from '@graphql-yoga/subscription'
 import { createPubSub } from '@graphql-yoga/subscription'
@@ -9,7 +10,19 @@ import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
 import { InMemoryLiveQueryStore } from '@n1ru4l/in-memory-live-query-store'
 import { execute as defaultExecute, print } from 'graphql'
 
-import type { SubscriptionGlobImports } from 'src/subscriptions/makeSubscriptions'
+/**
+ * We want SubscriptionsGlobs type to be an object with this shape:
+ *
+ * But not fully supported in TS
+ * {
+ *   schema: DocumentNode // <-- required
+ *   [string]: RedwoodSubscription
+ * }
+ *
+ * Note: This type is duplicated from packages/graphql-server/src/subscriptions/makeSubscriptions
+ * so there is no dependency on graphql-server from realtime and vice versa.
+ */
+export type SubscriptionGlobImports = Record<string, any>
 
 export type { PubSub }
 
@@ -130,16 +143,6 @@ export class RedisLiveQueryStore {
 }
 
 export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
-  // This try-catch is a hack to avoid creating a new package for realtime at the moment.
-  let createRedisEventTarget
-
-  try {
-    createRedisEventTarget =
-      require('@graphql-yoga/redis-event-target').createRedisEventTarget
-  } catch {
-    return {}
-  }
-
   let liveQueriesEnabled = false
   let subscriptionsEnabled = false
 
