@@ -233,6 +233,4 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
       }
     },
   }
-
-  return {}
 }
