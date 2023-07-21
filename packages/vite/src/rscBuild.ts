@@ -36,13 +36,13 @@ export async function rscBuild(viteConfigPath: string) {
         (id) => serverEntryFileSet.add(id)
       ),
     ],
-    // ssr: {
-    //   // FIXME Without this, waku/router isn't considered to have client
-    //   // entries, and "No client entry" error occurs.
-    //   // Unless we fix this, RSC-capable packages aren't supported.
-    //   // This also seems to cause problems with pnpm.
-    //   // noExternal: ['@redwoodjs/web', '@redwoodjs/router'],
-    // },
+    ssr: {
+      noExternal: /^(?!node:)/,
+      external: ['react', 'minimatch'],
+    },
+    resolve: {
+      conditions: ['react-server'],
+    },
     build: {
       manifest: 'rsc-build-manifest.json',
       write: false,
@@ -52,6 +52,9 @@ export async function rscBuild(viteConfigPath: string) {
           entries: rwPaths.web.entries,
         },
       },
+    },
+    legacy: {
+      buildSsrCjsExternalHeuristics: true,
     },
   })
 

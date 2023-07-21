@@ -33,9 +33,19 @@ export async function serverBuild(
     // ...configFileConfig,
     root: rwPaths.web.base,
     ssr: {
-      noExternal: ['..'],
+      noExternal: true,
+      // TODO (RSC): The code below is pretty much what waku does, but I don't
+      // understand it
+      // noExternal: Object.values(clientEntryFiles).map((fname) => {
+      //   return path
+      //     .relative(path.join(rwPaths.web.base, 'node_modules'), fname)
+      //     .split('/')[0]
+      // }),
     },
     plugins: [react()],
+    resolve: {
+      conditions: ['react-server'],
+    },
     build: {
       ssr: true,
       ssrEmitAssets: true,

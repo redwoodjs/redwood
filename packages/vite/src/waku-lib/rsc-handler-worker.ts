@@ -152,12 +152,12 @@ const vitePromise = createServer({
       parentPort.postMessage(mesg)
     }),
   ],
+  resolve: {
+    conditions: ['react-server'],
+  },
   ssr: {
-    // FIXME Without this, "use client" directive in waku/router/client
-    // is ignored, and some errors occur.
-    // Unless we fix this, RSC-capable packages aren't supported.
-    // This also seems to cause problems with pnpm.
-    noExternal: ['waku'],
+    noExternal: /^(?!node:)/,
+    external: ['react', 'minimatch', 'react-server-dom-webpack'],
   },
   appType: 'custom',
 })
