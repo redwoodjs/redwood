@@ -31,8 +31,7 @@
     "@graphql-yoga/subscription": "4.0.0",
     "@n1ru4l/graphql-live-query": "0.10.0",
     "@n1ru4l/in-memory-live-query-store": "0.10.0",
-    "graphql": "16.7.1",
-    "ioredis": "5.3.2"
+    "graphql": "16.7.1"
   },
   "devDependencies": {
     "@envelop/testing": "6.0.0",
@@ -41,6 +40,14 @@
     "jest": "29.6.1",
     "nodemon": "2.0.22",
     "typescript": "5.1.6"
+  },
+  "peerDependencies": {
+    "ioredis": "^5.3.2"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": true
+    }
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
