@@ -157,6 +157,8 @@ const vitePromise = createServer({
   },
   ssr: {
     noExternal: /^(?!node:)/,
+    // TODO (RSC): Figure out what the `external` list should be. Right
+    // now it's just copied from waku
     external: ['react', 'minimatch', 'react-server-dom-webpack'],
   },
   appType: 'custom',
