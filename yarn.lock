@@ -8005,7 +8005,7 @@ __metadata:
     "@types/yargs-parser": 21.0.0
     chalk: 4.1.2
     dotenv-defaults: 5.0.2
-    esbuild: 0.18.14
+    esbuild: 0.18.15
     fast-glob: 3.2.12
     fastify: 4.20.0
     typescript: 5.1.6
