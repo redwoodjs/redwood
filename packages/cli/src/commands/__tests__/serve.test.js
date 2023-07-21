@@ -40,19 +40,21 @@ jest.mock('../serveHandler', () => {
   return {
     ...jest.requireActual('../serveHandler'),
     apiServerHandler: jest.fn(),
-    webServerHandler: jest.fn(),
     bothServerHandler: jest.fn(),
   }
 })
+jest.mock('execa', () =>
+  jest.fn((cmd, params) => ({
+    cmd,
+    params,
+  }))
+)
 
+import execa from 'execa'
 import yargs from 'yargs'
 
 import { builder } from '../serve'
-import {
-  apiServerHandler,
-  bothServerHandler,
-  webServerHandler,
-} from '../serveHandler'
+import { apiServerHandler, bothServerHandler } from '../serveHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {
@@ -94,12 +96,18 @@ describe('yarn rw serve', () => {
       'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
     )
 
-    expect(webServerHandler).toHaveBeenCalledWith(
-      expect.objectContaining({
-        port: 9898,
-        socket: 'abc',
-        apiHost: 'https://myapi.redwood/api',
-      })
+    expect(execa).toHaveBeenCalledWith(
+      'yarn',
+      expect.arrayContaining([
+        'rw-web-server',
+        '--port',
+        9898,
+        '--socket',
+        'abc',
+        '--api-host',
+        'https://myapi.redwood/api',
+      ]),
+      expect.anything()
     )
   })
 
