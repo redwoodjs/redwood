@@ -7950,7 +7950,7 @@ __metadata:
     "@types/react": 18.2.14
     "@types/yargs-parser": 21.0.0
     "@vitejs/plugin-react": 4.0.3
-    acorn-loose: ^8.3.0
+    acorn-loose: 8.3.0
     buffer: 6.0.3
     core-js: 3.31.1
     dotenv-defaults: 5.0.2
