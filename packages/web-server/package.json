@@ -1,0 +1,41 @@
+{
+  "name": "@redwoodjs/web-server",
+  "version": "5.0.0",
+  "description": "Redwood's server for the Web side",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/web-server"
+  },
+  "license": "MIT",
+  "main": "./dist/server.js",
+  "bin": {
+    "rw-web-server": "./dist/server.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn node ./build.mjs && yarn build:types",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
+    "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "echo \"No tests yet\"",
+    "test:watch": "echo \"No tests yet\""
+  },
+  "dependencies": {
+    "@redwoodjs/project-config": "5.0.0",
+    "chalk": "4.1.2",
+    "dotenv-defaults": "5.0.2",
+    "fast-glob": "3.2.12",
+    "fastify": "4.20.0",
+    "yargs-parser": "21.1.1"
+  },
+  "devDependencies": {
+    "@types/yargs-parser": "21.0.0",
+    "esbuild": "0.18.15",
+    "typescript": "5.1.6"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

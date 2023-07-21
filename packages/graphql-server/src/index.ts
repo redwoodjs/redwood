@@ -32,17 +32,4 @@ export {
   useRedwoodDirective,
 } from './plugins/useRedwoodDirective'
 
-export {
-  useRedwoodRealtime,
-  createPubSub,
-  liveDirectiveTypeDefs,
-  InMemoryLiveQueryStore,
-  LiveQueryStorageMechanism,
-  RedisLiveQueryStore,
-  RedwoodRealtimeOptions,
-  PublishClientType,
-  SubscribeClientType,
-} from './plugins/useRedwoodRealtime'
-
-export type { PubSub } from './plugins/useRedwoodRealtime'
 export * as rootSchema from './rootSchema'

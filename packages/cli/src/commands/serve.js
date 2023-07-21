@@ -52,6 +52,7 @@ export const builder = async (yargs) => {
               separator,
             ].join('\n')
           )
+
           if (getConfig().experimental?.rsc?.enabled) {
             console.warn('')
             console.warn('⚠️ Skipping Fastify web server ⚠️')
@@ -136,6 +137,13 @@ export const builder = async (yargs) => {
 
           await Promise.all([apiPromise, fePromise])
         } else {
+          // Wanted to use the new web-server package here, but can't because
+          // of backwards compatibility reasons. With `bothServerHandler` both
+          // the web side and the api side run on the same server with the same
+          // port. If we use a separate fe server and api server we can't run
+          // them on the same port, and so we lose backwards compatibility.
+          // TODO: Use @redwoodjs/web-server when we're ok with breaking
+          // backwards compatibility.
           const { bothServerHandler } = await import('./serveHandler.js')
           await bothServerHandler(argv)
         }
@@ -225,8 +233,23 @@ export const builder = async (yargs) => {
             shell: true,
           })
         } else {
-          const { webServerHandler } = await import('./serveHandler.js')
-          await webServerHandler(argv)
+          await execa(
+            'yarn',
+            [
+              'rw-web-server',
+              '--port',
+              argv.port,
+              '--socket',
+              argv.socket,
+              '--api-host',
+              argv.apiHost,
+            ],
+            {
+              cwd: getPaths().base,
+              stdio: 'inherit',
+              shell: true,
+            }
+          )
         }
       },
     })
