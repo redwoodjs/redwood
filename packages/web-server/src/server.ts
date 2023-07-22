@@ -88,9 +88,13 @@ export async function serve() {
   }
 
   // Start
-  fastify.listen(listenOptions).then((address) => {
+  fastify.listen(listenOptions).then(() => {
     console.log(chalk.italic.dim('Took ' + (Date.now() - tsServer) + ' ms'))
-    console.log(`Web server started on ${address}`)
+    if (options.socket) {
+      console.log(`Web server started on ${options.socket}`)
+    } else {
+      console.log(`Web server started on http://localhost:${port}`)
+    }
   })
 
   process.on('exit', () => {
