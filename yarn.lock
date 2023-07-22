@@ -7987,7 +7987,7 @@ __metadata:
     react: 18.3.0-canary-035a41c4e-20230704
     react-server-dom-webpack: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.6
-    vite: 4.4.4
+    vite: 4.4.6
     yargs-parser: 21.1.1
   bin:
     rw-dev-fe: ./dist/devFeServer.js
@@ -26175,14 +26175,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.21, postcss@npm:^8.4.24, postcss@npm:^8.4.25":
-  version: 8.4.25
-  resolution: "postcss@npm:8.4.25"
+"postcss@npm:^8.4.21, postcss@npm:^8.4.24, postcss@npm:^8.4.26":
+  version: 8.4.26
+  resolution: "postcss@npm:8.4.26"
   dependencies:
     nanoid: ^3.3.6
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: aa2143cb5ed6eef6cb1d38236f158c5fe11bfd1f338c930cf4901f09586874e05fa006e3fd329ca51c61202c7e90d0705379e6310251c9311116e65cb6a08c18
+  checksum: 29c603d6b30b2f94bf971bc430600f271da76fa3ae38d4c6b255e957213051b8eeb02829e128ec4e9fa2a7bb710ba7992ebaf1997e3a9ace48caf49b48a10f6b
   languageName: node
   linkType: hard
 
@@ -31110,13 +31110,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.4.4":
-  version: 4.4.4
-  resolution: "vite@npm:4.4.4"
+"vite@npm:4.4.6":
+  version: 4.4.6
+  resolution: "vite@npm:4.4.6"
   dependencies:
     esbuild: ^0.18.10
     fsevents: ~2.3.2
-    postcss: ^8.4.25
+    postcss: ^8.4.26
     rollup: ^3.25.2
   peerDependencies:
     "@types/node": ">= 14"
@@ -31146,7 +31146,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 7030c008595eecaf03800292ca6ac626941b7d90b9c18e3ca0de62f8127cb6f7624c2c5e4e5528260fff807996e56e099a6d3bd069a7644eedc13c7df081d818
+  checksum: 121144e8e9f95a3ec159dde072fefddc076cbf516bcc2078032c63b4f5b9babe760cf0cbc0c4808e02e568e8e7b1d74b742fcf4546fe2e148c4a84fb42a9089a
   languageName: node
   linkType: hard
 
