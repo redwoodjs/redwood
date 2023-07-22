@@ -11,7 +11,6 @@ import {
   createGraphQLYoga,
   getAsyncStoreInstance,
 } from '@redwoodjs/graphql-server'
-import { useRedwoodRealtime } from '@redwoodjs/realtime'
 
 /**
  * Transform a Fastify Request to an event compatible with the RedwoodGraphQLContext's event
@@ -43,6 +42,8 @@ export async function redwoodFastifyGraphQLServer(
     //
     // These would be plugins that need a server instance such as Redwood Realtime
     if (options.realtime) {
+      const { useRedwoodRealtime } = await import('@redwoodjs/realtime')
+
       const originalExtraPlugins: Array<Plugin<any>> =
         options.extraPlugins || []
       originalExtraPlugins.push(useRedwoodRealtime(options.realtime))
