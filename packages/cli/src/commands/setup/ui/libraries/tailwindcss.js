@@ -88,12 +88,14 @@ async function recommendExtensionsToInstall() {
   if (recommendations.length > 0) {
     console.log()
     console.log(
-      'For the best experience we recommend you install the following ' +
-        (recommendations.length === 1 ? 'extension:' : 'extensions:')
+      c.info(
+        'For the best experience we recommend that you install the following ' +
+          (recommendations.length === 1 ? 'extension:' : 'extensions:')
+      )
     )
 
     recommendations.forEach((extension) => {
-      console.log('  ' + recommendationTexts[extension])
+      console.log(c.info('  ' + recommendationTexts[extension]))
     })
   }
 }
