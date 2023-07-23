@@ -79,11 +79,19 @@ async function recommendExtensionsToInstall() {
     return
   }
 
-  const { stdout } = await execa('code', ['--list-extensions'])
-  const installedExtensions = stdout.split('\n').map((ext) => ext.trim())
-  const recommendations = recommendedVSCodeExtensions.filter(
-    (ext) => !installedExtensions.includes(ext)
-  )
+  let recommendations = []
+
+  try {
+    const { stdout } = await execa('code', ['--list-extensions'])
+    const installedExtensions = stdout.split('\n').map((ext) => ext.trim())
+    recommendations = recommendedVSCodeExtensions.filter(
+      (ext) => !installedExtensions.includes(ext)
+    )
+  } catch {
+    // `code` probably not in PATH so can't check for installed extensions.
+    // We'll just recommend all extensions
+    recommendations = recommendedVSCodeExtensions
+  }
 
   if (recommendations.length > 0) {
     console.log()
