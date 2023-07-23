@@ -122,10 +122,20 @@ export type CellSuccessProps<
  */
 export type DataObject = { [key: string]: unknown }
 
+type BeforeQueryHook<
+  CellProps extends Record<string, unknown>,
+  CellVariables extends Record<string, unknown>
+> = (props: CellProps) => {
+  variables: CellVariables
+  fetchPolicy: 'cache-and-network' | 'no-cache'
+  notifyOnNetworkStatusChange: boolean
+}
+
+
 /**
  * The main interface.
  */
-export interface CreateCellProps<CellProps, CellVariables> {
+export interface CreateCellProps<CellProps extends Record<string, unknown>, CellVariables extends Record<string, unknown>> {
   /**
    * The GraphQL syntax tree to execute or function to call that returns it.
    * If `QUERY` is a function, it's called with the result of `beforeQuery`.
@@ -134,9 +144,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
   /**
    * Parse `props` into query variables. Most of the time `props` are appropriate variables as is.
    */
-  beforeQuery?:
-    | ((props: CellProps) => { variables: CellVariables })
-    | (() => { variables: CellVariables })
+  beforeQuery?: BeforeQueryHook<CellProps, CellVariables>
   /**
    * Sanitize the data returned from the query.
    */
@@ -244,7 +252,7 @@ export function createCell<
   CellVariables extends Record<string, unknown>
 >({
   QUERY,
-  beforeQuery = (props) => ({
+  beforeQuery = (props: CellProps) => ({
     // By default, we assume that the props are the gql-variables.
     variables: props as unknown as CellVariables,
     /**
