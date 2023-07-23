@@ -4,6 +4,7 @@ import path from 'path'
 import execa from 'execa'
 import { outputFileSync } from 'fs-extra'
 import { Listr } from 'listr2'
+import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -78,6 +79,21 @@ export const handler = async ({ force, install }) => {
     'csstools.postcss',
     'bradlc.vscode-tailwindcss',
   ]
+
+  const recommendationTexts = {
+    'csstools.postcss':
+      'We recommend that you install ' +
+      terminalLink(
+        'the PostCSS Language Support VSCode extension',
+        'https://marketplace.visualstudio.com/items?itemName=csstools.postcss'
+      ),
+    'bradlc.vscode-tailwindcss':
+      'We recommend that you install ' +
+      terminalLink(
+        'the Tailwind CSS IntelliSense VSCode extension',
+        'https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss'
+      ),
+  }
 
   const tasks = new Listr(
     [
@@ -200,7 +216,34 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
-        title: 'Adding recommended VS Code extensions...',
+        title: 'Recommending VS Code extensions to install...',
+        task: async (_ctx, task) => {
+          if (!usingVSCode()) {
+            task.skip("Looks like your're not using VS Code")
+            return
+          }
+
+          const { stdout } = await execa('code', ['--list-extensions'])
+
+          let foundRecommendation = false
+
+          recommendedVSCodeExtensions.forEach((extension) => {
+            if (!stdout.includes(extension)) {
+              foundRecommendation = true
+              task.output += recommendationTexts[extension] + '\n'
+            }
+          })
+
+          if (!foundRecommendation) {
+            task.skip('All recommended extensions are already installed')
+          }
+        },
+        options: {
+          persistentOutput: true,
+        },
+      },
+      {
+        title: 'Adding recommended VS Code extensions to project settings...',
         task: (_ctx, task) => {
           const VS_CODE_EXTENSIONS_PATH = path.join(
             rwPaths.base,
