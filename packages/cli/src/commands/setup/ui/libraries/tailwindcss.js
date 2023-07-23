@@ -60,7 +60,7 @@ const tailwindImportsAndNotes = [
 
 const recommendedVSCodeExtensions = [
   'csstools.postcss',
-  'radlc.vscode-tailwindcss',
+  'bradlc.vscode-tailwindcss',
 ]
 
 const recommendationTexts = {
@@ -68,7 +68,7 @@ const recommendationTexts = {
     'PostCSS Language Support',
     'https://marketplace.visualstudio.com/items?itemName=csstools.postcss'
   ),
-  'radlc.vscode-tailwindcss': terminalLink(
+  'bradlc.vscode-tailwindcss': terminalLink(
     'Tailwind CSS IntelliSense',
     'https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss'
   ),
