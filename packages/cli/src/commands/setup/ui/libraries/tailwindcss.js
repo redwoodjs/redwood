@@ -11,7 +11,6 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, usingVSCode } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { isTypeScriptProject } from '../../../../lib/project'
 
 export const command = 'tailwindcss'
 export const aliases = ['tailwind', 'tw']
@@ -224,9 +223,7 @@ export const handler = async ({ force, install }) => {
           const tailwindConfig = fs.readFileSync(tailwindConfigPath, 'utf-8')
           const newTailwindConfig = tailwindConfig.replace(
             'content: []',
-            isTypeScriptProject()
-              ? "content: ['src/**/*.{ts,tsx}']"
-              : "content: ['src/**/*.{js,jsx}']"
+            "content: ['src/**/*.{js,jsx,ts,tsx}']"
           )
           fs.writeFileSync(tailwindConfigPath, newTailwindConfig)
         },
