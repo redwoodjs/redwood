@@ -10,6 +10,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, usingVSCode } from '../../../../lib'
 import c from '../../../../lib/colors'
+import { isTypeScriptProject } from '../../../../lib/project'
 
 export const command = 'tailwindcss'
 export const aliases = ['tailwind', 'tw']
@@ -30,28 +31,27 @@ export const builder = (yargs) => {
   })
 }
 
-const tailwindImports = [
-  // using outer double quotes and inner single quotes here to generate code
-  // the way prettier wants it in the actual RW app where this will be used
-  "@import 'tailwindcss/base';",
-  "@import 'tailwindcss/components';",
-  "@import 'tailwindcss/utilities';",
+const tailwindDirectives = [
+  '@tailwind base;',
+  '@tailwind components;',
+  '@tailwind utilities;',
 ]
 
-const tailwindImportsExist = (indexCSS) =>
-  tailwindImports
-    .map((el) => new RegExp(el))
-    .every((tailwindDirective) => tailwindDirective.test(indexCSS))
+/** @param {string} indexCSS */
+const tailwindDirectivesExist = (indexCSS) =>
+  tailwindDirectives.every((tailwindDirective) =>
+    indexCSS.includes(tailwindDirective)
+  )
 
 const tailwindImportsAndNotes = [
   '/**',
   ' * START --- SETUP TAILWINDCSS EDIT',
   ' *',
-  ' * `yarn rw setup ui tailwindcss` placed these imports here',
+  ' * `yarn rw setup ui tailwindcss` placed these directives here',
   " * to inject Tailwind's styles into your CSS.",
-  ' * For more information, see: https://tailwindcss.com/docs/installation#include-tailwind-in-your-css',
+  ' * For more information, see: https://tailwindcss.com/docs/installation',
   ' */',
-  ...tailwindImports,
+  ...tailwindDirectives,
   '/**',
   ' * END --- SETUP TAILWINDCSS EDIT',
   ' */\n',
@@ -106,7 +106,7 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
-        title: 'Installing web workspace-wide packages...',
+        title: 'Installing web side packages...',
         skip: () => !install,
         task: () => {
           return new Listr(
@@ -161,7 +161,7 @@ export const handler = async ({ force, install }) => {
 
           if (fs.existsSync(tailwindConfigPath)) {
             if (force) {
-              // `yarn tailwindcss init` will fail these files already exists
+              // `yarn tailwindcss init` will fail if these files already exists
               fs.unlinkSync(tailwindConfigPath)
             } else {
               throw new Error(
@@ -178,19 +178,21 @@ export const handler = async ({ force, install }) => {
           const tailwindConfig = fs.readFileSync(tailwindConfigPath, 'utf-8')
           const newTailwindConfig = tailwindConfig.replace(
             'content: []',
-            "content: ['src/**/*.{js,jsx,ts,tsx}']"
+            isTypeScriptProject()
+              ? "content: ['src/**/*.{ts,tsx}']"
+              : "content: ['src/**/*.{js,jsx}']"
           )
           fs.writeFileSync(tailwindConfigPath, newTailwindConfig)
         },
       },
       {
-        title: 'Adding import to index.css...',
+        title: 'Adding directives to index.css...',
         task: (_ctx, task) => {
           const INDEX_CSS_PATH = path.join(rwPaths.web.src, 'index.css')
           const indexCSS = fs.readFileSync(INDEX_CSS_PATH, 'utf-8')
 
-          if (tailwindImportsExist(indexCSS)) {
-            task.skip('Imports already exist in index.css')
+          if (tailwindDirectivesExist(indexCSS)) {
+            task.skip('Directives already exist in index.css')
           } else {
             const newIndexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
             fs.writeFileSync(INDEX_CSS_PATH, newIndexCSS)
