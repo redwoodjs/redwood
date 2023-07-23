@@ -58,6 +58,46 @@ const tailwindImportsAndNotes = [
   ' */\n',
 ]
 
+const recommendedVSCodeExtensions = [
+  'csstools.postcss',
+  'radlc.vscode-tailwindcss',
+]
+
+const recommendationTexts = {
+  'csstools.postcss': terminalLink(
+    'PostCSS Language Support',
+    'https://marketplace.visualstudio.com/items?itemName=csstools.postcss'
+  ),
+  'radlc.vscode-tailwindcss': terminalLink(
+    'Tailwind CSS IntelliSense',
+    'https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss'
+  ),
+}
+
+async function recommendExtensionsToInstall() {
+  if (!usingVSCode()) {
+    return
+  }
+
+  const { stdout } = await execa('code', ['--list-extensions'])
+  const installedExtensions = stdout.split('\n').map((ext) => ext.trim())
+  const recommendations = recommendedVSCodeExtensions.filter(
+    (ext) => !installedExtensions.includes(ext)
+  )
+
+  if (recommendations.length > 0) {
+    console.log()
+    console.log(
+      'For the best experience we recommend you install the following ' +
+        (recommendations.length === 1 ? 'extension:' : 'extensions:')
+    )
+
+    recommendations.forEach((extension) => {
+      console.log('  ' + recommendationTexts[extension])
+    })
+  }
+}
+
 export const handler = async ({ force, install }) => {
   recordTelemetryAttributes({
     command: 'setup ui tailwindcss',
@@ -74,26 +114,6 @@ export const handler = async ({ force, install }) => {
     'tailwindcss',
     'autoprefixer',
   ]
-
-  const recommendedVSCodeExtensions = [
-    'csstools.postcss',
-    'bradlc.vscode-tailwindcss',
-  ]
-
-  const recommendationTexts = {
-    'csstools.postcss':
-      'We recommend that you install ' +
-      terminalLink(
-        'the PostCSS Language Support VSCode extension',
-        'https://marketplace.visualstudio.com/items?itemName=csstools.postcss'
-      ),
-    'bradlc.vscode-tailwindcss':
-      'We recommend that you install ' +
-      terminalLink(
-        'the Tailwind CSS IntelliSense VSCode extension',
-        'https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss'
-      ),
-  }
 
   const tasks = new Listr(
     [
@@ -216,33 +236,6 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
-        title: 'Recommending VS Code extensions to install...',
-        task: async (_ctx, task) => {
-          if (!usingVSCode()) {
-            task.skip("Looks like your're not using VS Code")
-            return
-          }
-
-          const { stdout } = await execa('code', ['--list-extensions'])
-
-          let foundRecommendation = false
-
-          recommendedVSCodeExtensions.forEach((extension) => {
-            if (!stdout.includes(extension)) {
-              foundRecommendation = true
-              task.output += recommendationTexts[extension] + '\n'
-            }
-          })
-
-          if (!foundRecommendation) {
-            task.skip('All recommended extensions are already installed')
-          }
-        },
-        options: {
-          persistentOutput: true,
-        },
-      },
-      {
         title: 'Adding recommended VS Code extensions to project settings...',
         task: (_ctx, task) => {
           const VS_CODE_EXTENSIONS_PATH = path.join(
@@ -361,6 +354,7 @@ export const handler = async ({ force, install }) => {
 
   try {
     await tasks.run()
+    await recommendExtensionsToInstall()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
