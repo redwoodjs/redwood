@@ -11,6 +11,21 @@ You'll see these helpers quite often if you use the generators, so let's walk th
 
 Cells created using the generators come with all the types your normally need, including the `CellSuccessProps`, `CellFailureProps`, and `CellLoadingProps` utility types.
 
+### `BeforeQueryHook<CellProps, CellVariables>`
+
+This is used to type the `beforeQuery` function with the prop types and return types.
+
+```ts title="web/src/component/BlogPostCell.tsx"
+import type { BeforeQueryHook > from "@redwoodjs/web"
+
+export const beforeQuery: BeforeQueryHook = (props) => {
+
+  return {
+    props,
+  }
+}
+```
+
 ### `CellSuccessProps<TData, TVariables>`
 
 This is used to type the props of your Cell's `Success` component.
