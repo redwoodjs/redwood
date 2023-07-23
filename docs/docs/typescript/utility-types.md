@@ -16,7 +16,7 @@ Cells created using the generators come with all the types your normally need, i
 This is used to type the `beforeQuery` function with the prop types and return types.
 
 ```ts title="web/src/component/BlogPostCell.tsx"
-import type { BeforeQueryHook > from "@redwoodjs/web"
+import type { BeforeQueryHook } from "@redwoodjs/web"
 
 export const beforeQuery: BeforeQueryHook = (props) => {
 
