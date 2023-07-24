@@ -29,15 +29,6 @@ export const bothExperimentalServerFileHandler = async () => {
         shell: true,
       }
     )
-    await execa(
-      'yarn',
-      ['node', path.join('dist', 'server.js'), '--enable-web'],
-      {
-        cwd: getPaths().api.base,
-        stdio: 'inherit',
-        shell: true,
-      }
-    )
   } else if (getConfig().experimental?.streamingSsr?.enabled) {
     logSkippingFastifyWebServer()
 
