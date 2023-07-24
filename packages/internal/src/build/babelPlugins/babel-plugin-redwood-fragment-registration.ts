@@ -1,10 +1,13 @@
-// const { gql } = require('graphql')
 import type { PluginObj, types } from '@babel/core'
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []
   let nodesToPrepend: any[] = []
   let nodesToAppend: any[] = []
+
+  const pascalCaseName = (value: string) => {
+    return value.replace(/(?:^|-)([a-z])/g, (_, letter) => letter.toUpperCase())
+  }
 
   return {
     name: 'babel-plugin-redwood-fragment-registration',
@@ -30,12 +33,10 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         exit(path) {
           for (const n of nodesToRemove) {
             n.remove()
-            // console.debug('n', n)
           }
           // Insert at the top of the file
           path.node.body.unshift(...nodesToAppend)
           path.node.body.unshift(...nodesToPrepend)
-          // path.replaceWithMultiple(nodesToInsert)
         },
       },
       AssignmentExpression(path) {
@@ -56,7 +57,10 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                   return {
                     fragmentName,
                     fragmentPrefix:
-                      prop.key.type === 'Identifier' ? prop.key.name : '',
+                      prop.key.type === 'Identifier'
+                        ? pascalCaseName(prop.key.name)
+                        : '',
+                    uid: path.scope.generateUidIdentifier('Fragment').name,
                     fragmentTaggedTemplate: prop.value,
                   }
                 }
@@ -66,13 +70,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
 
             if (fragmentAsts) {
               fragmentAsts.forEach((fragmentAst) => {
-                const fragmentIdentifier = `${fragmentAst?.['fragmentName']}_Fragment_${fragmentAst?.['fragmentPrefix']}`
-
-                console.debug('fragmentAsts', fragmentAsts)
-                console.debug('fragmentAsts', fragmentAsts[0])
-
-                console.debug('fragmentName', fragmentName)
-                console.debug('fragmentAst', fragmentAst)
+                const fragmentIdentifier = `${fragmentAst?.['fragmentName']}${fragmentAst?.['uid']}_${fragmentAst?.['fragmentPrefix']}`
 
                 const fragment = t.exportNamedDeclaration(
                   t.variableDeclaration('const', [

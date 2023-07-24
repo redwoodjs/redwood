@@ -1,5 +1,5 @@
 import { fragmentRegistry } from '@redwoodjs/web/apollo'
-export const VoteButtons_Fragment_entry = gql`
+export const VoteButtons_Fragment_Entry = gql`
   fragment VoteButtonsFragment on FeedEntry {
     score
     vote {
@@ -7,4 +7,4 @@ export const VoteButtons_Fragment_entry = gql`
     }
   }
 `
-fragmentRegistry.register(VoteButtons_Fragment_entry)
+fragmentRegistry.register(VoteButtons_Fragment_Entry)

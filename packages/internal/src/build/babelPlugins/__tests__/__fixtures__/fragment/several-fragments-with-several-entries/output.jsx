@@ -1,5 +1,5 @@
 import { fragmentRegistry } from '@redwoodjs/web/apollo'
-export const VoteButtons_Fragment_entry = gql`
+export const VoteButtons_Fragment_Entry = gql`
   fragment VoteButtonsFragment on FeedEntry {
     score
     vote {
@@ -7,8 +7,8 @@ export const VoteButtons_Fragment_entry = gql`
     }
   }
 `
-fragmentRegistry.register(VoteButtons_Fragment_entry)
-export const VoteButtons_Fragment_voter = gql`
+fragmentRegistry.register(VoteButtons_Fragment_Entry)
+export const VoteButtons_Fragment2_Voter = gql`
   fragment VoterFragment on FeedEntry {
     voter {
       id
@@ -16,8 +16,8 @@ export const VoteButtons_Fragment_voter = gql`
     }
   }
 `
-fragmentRegistry.register(VoteButtons_Fragment_voter)
-export const AnotherVoteButtons_Fragment_entry = gql`
+fragmentRegistry.register(VoteButtons_Fragment2_Voter)
+export const AnotherVoteButtons_Fragment3_Entry = gql`
   fragment AnotherVoteButtonsFragment on FeedEntry {
     score
     vote {
@@ -25,8 +25,8 @@ export const AnotherVoteButtons_Fragment_entry = gql`
     }
   }
 `
-fragmentRegistry.register(AnotherVoteButtons_Fragment_entry)
-export const AnotherVoteButtons_Fragment_voter = gql`
+fragmentRegistry.register(AnotherVoteButtons_Fragment3_Entry)
+export const AnotherVoteButtons_Fragment4_Voter = gql`
   fragment AnotherVoterFragment on FeedEntry {
     voter {
       id
@@ -34,4 +34,4 @@ export const AnotherVoteButtons_Fragment_voter = gql`
     }
   }
 `
-fragmentRegistry.register(AnotherVoteButtons_Fragment_voter)
+fragmentRegistry.register(AnotherVoteButtons_Fragment4_Voter)
