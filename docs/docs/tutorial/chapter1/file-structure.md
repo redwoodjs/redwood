@@ -16,10 +16,18 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 │   ├── db
 │   │   └── schema.prisma
 │   ├── dist
+│   ├── jest.config.js
+│   ├── jsconfig.json
+│   ├── package.json
+│   ├── server.config.js
 │   ├── src
 │   │   ├── directives
 │   │   │   ├── requireAuth
+│   │   │   │   ├── requireAuth.js
+│   │   │   │   └── requireAuth.test.js
 │   │   │   └── skipAuth
+│   │   │   │   ├── skipAuth.js
+│   │   │   │   └── skipAuth.test.js
 │   │   ├── functions
 │   │   │   └── graphql.js
 │   │   ├── graphql
@@ -29,11 +37,17 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 │   │   │   └── logger.js
 │   │   └── services
 │   └── types
+│       └── graphql.d.ts
 │
 ├── scripts
+│   ├── jsconfig.json
 │   └── seed.js
 │
 └── web
+│   ├── dist
+│   ├── jest.config.js
+│   ├── jsconfig.json
+│   ├── package.json
     ├── public
     │   ├── favicon.png
     │   ├── README.md
