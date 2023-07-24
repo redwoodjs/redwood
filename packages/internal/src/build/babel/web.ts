@@ -96,6 +96,13 @@ export const getWebSideOverrides = (
 ) => {
   const overrides = [
     {
+      test: /.+Fragment.(js|tsx|jsx)$/,
+      plugins: [
+        require('../babelPlugins/babel-plugin-redwood-fragment-registration')
+          .default,
+      ],
+    },
+    {
       test: /.+Cell.(js|tsx|jsx)$/,
       plugins: [require('../babelPlugins/babel-plugin-redwood-cell').default],
     },

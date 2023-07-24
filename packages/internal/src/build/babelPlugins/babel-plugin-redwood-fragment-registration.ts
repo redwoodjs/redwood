@@ -34,6 +34,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           for (const n of nodesToRemove) {
             n.remove()
           }
+
           // Insert at the top of the file
           path.node.body.unshift(...nodesToAppend)
           path.node.body.unshift(...nodesToPrepend)
