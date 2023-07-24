@@ -60,8 +60,7 @@ export const bothExperimentalServerFileHandler = async () => {
 }
 
 export const bothRscServerHandler = async (argv) => {
-  // TODO: update import
-  const { apiServerHandler } = await import('./serveHandler.js')
+  const { apiServerHandler } = await import('./serveApiHandler.js')
 
   // TODO (RSC) Allow specifying port, socket and apiRootPath
   const apiPromise = apiServerHandler({
@@ -88,7 +87,8 @@ export const bothRscServerHandler = async (argv) => {
 }
 
 export const bothSsrServerHandler = async (argv) => {
-  const { apiServerHandler } = await import('./serveHandler.js')
+  const { apiServerHandler } = await import('./serveApiHandler.js')
+
   // TODO (STREAMING) Allow specifying port, socket and apiRootPath
   const apiPromise = apiServerHandler({
     ...argv,
