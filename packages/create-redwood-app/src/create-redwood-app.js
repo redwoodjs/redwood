@@ -405,6 +405,12 @@ async function initializeGit(newAppDir, commitMessage) {
 
 async function handleTargetDirPreference(targetDir) {
   if (targetDir) {
+    tui.drawText(
+      `${RedwoodStyling.green(
+        '✔'
+      )} Creating your Redwood app in ${targetDir} based on command line argument`
+    )
+
     return targetDir
   }
 
