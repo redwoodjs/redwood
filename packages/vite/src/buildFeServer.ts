@@ -13,12 +13,16 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { buildRscFeServer } from './buildRscFeServer'
 import { RWRouteManifest } from './types'
+import { ensureProcessDirWeb } from './utils'
 
 export interface BuildOptions {
   verbose?: boolean
+  webDir?: string
 }
 
-export const buildFeServer = async ({ verbose }: BuildOptions) => {
+export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
+  ensureProcessDirWeb(webDir)
+
   const rwPaths = getPaths()
   const rwConfig = getConfig()
   const viteConfigPath = rwPaths.web.viteConfig

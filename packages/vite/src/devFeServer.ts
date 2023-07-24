@@ -11,7 +11,7 @@ import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
-import { stripQueryStringAndHashFromPath } from './utils'
+import { ensureProcessDirWeb, stripQueryStringAndHashFromPath } from './utils'
 
 // These values are defined in the vite.config.ts
 globalThis.RWJS_ENV = {}
@@ -20,19 +20,7 @@ globalThis.RWJS_ENV = {}
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
 async function createServer() {
-  // Check CWD: make sure its the web/ directory
-  // Without this Postcss can misbehave, and its hard to trace why.
-  if (process.cwd() !== getPaths().web.base) {
-    console.error('⚠️  Warning: CWD is ', process.cwd())
-    console.warn('~'.repeat(50))
-    console.warn(
-      'The FE dev server cwd must be web/. Please use `yarn rw dev` or start the server from the web/ directory.'
-    )
-    console.log(`Changing cwd to ${getPaths().web.base}....`)
-    console.log()
-
-    process.chdir(getPaths().web.base)
-  }
+  ensureProcessDirWeb()
 
   const app = express()
   const rwPaths = getPaths()
