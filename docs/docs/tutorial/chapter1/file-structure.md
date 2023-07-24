@@ -44,10 +44,10 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 │   └── seed.js
 │
 └── web
-│   ├── dist
-│   ├── jest.config.js
-│   ├── jsconfig.json
-│   ├── package.json
+    ├── dist
+    ├── jest.config.js
+    ├── jsconfig.json
+    ├── package.json
     ├── public
     │   ├── favicon.png
     │   ├── README.md
@@ -61,6 +61,7 @@ Don't worry about trying to memorize this directory structure right now, it's ju
         │   └── NotFoundPage
         │       └── NotFoundPage.jsx
         ├── App.jsx
+        ├── entry.client.jsx
         ├── index.css
         ├── index.html
         └── Routes.jsx
