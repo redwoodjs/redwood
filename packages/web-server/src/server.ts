@@ -7,10 +7,9 @@ import { config } from 'dotenv-defaults'
 import Fastify from 'fastify'
 import yargsParser from 'yargs-parser'
 
+import { withApiProxy } from '@redwoodjs/fastify-shared'
+import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
-
-import { redwoodFastifyWeb } from './web'
-import { withApiProxy } from './withApiProxy'
 
 interface Opts {
   socket?: string

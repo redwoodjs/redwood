@@ -25,6 +25,8 @@
     "test:watch": "echo \"No tests yet\""
   },
   "dependencies": {
+    "@redwoodjs/fastify-shared": "5.0.0",
+    "@redwoodjs/fastify-web": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
