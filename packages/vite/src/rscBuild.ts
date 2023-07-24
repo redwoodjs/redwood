@@ -25,18 +25,19 @@ export async function rscBuild(viteConfigPath: string) {
     root: rwPaths.base,
     plugins: [
       react(),
-      {
-        name: 'rsc-test-plugin',
-        transform(_code, id) {
-          console.log('rsc-test-plugin id', id)
-        },
-      },
+      // {
+      //   name: 'rsc-test-plugin',
+      //   transform(_code, id) {
+      //     console.log('rsc-test-plugin id', id)
+      //   },
+      // },
       rscAnalyzePlugin(
         (id) => clientEntryFileSet.add(id),
         (id) => serverEntryFileSet.add(id)
       ),
     ],
     ssr: {
+      // We can ignore everything that starts with `node:` because it's not going to be RSCs
       noExternal: /^(?!node:)/,
       // TODO (RSC): Figure out what the `external` list should be. Right
       // now it's just copied from waku
