@@ -5,6 +5,9 @@ import ThirdPartyEmailPassword, {
   Google,
   Apple,
 } from 'supertokens-auth-react/recipe/thirdpartyemailpassword'
+import {
+  ThirdPartyEmailPasswordPreBuiltUI,
+} from "supertokens-auth-react/recipe/thirdpartyemailpassword/prebuiltui";
 
 import { createAuth } from '@redwoodjs/auth-supertokens-web'
 import { isBrowser } from '@redwoodjs/prerender/browserUtils'
@@ -19,6 +22,8 @@ const superTokensClient = {
   sessionRecipe: Session,
   redirectToAuth: SuperTokens.redirectToAuth,
 }
+
+export const PreBultUI = [ThirdPartyEmailPasswordPreBuiltUI];
 
 isBrowser &&
   SuperTokens.init({

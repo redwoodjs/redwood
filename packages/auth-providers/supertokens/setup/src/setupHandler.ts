@@ -25,7 +25,9 @@ export const extraTask = {
             line.includes('import') &&
             line.includes('@redwoodjs')
           ) {
-            acc.push("import SuperTokens from 'supertokens-auth-react'")
+            acc.push("import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'")
+            acc.push('')
+            acc.push("import { PreBultUI } from './auth'")
             acc.push('')
 
             hasImportedSuperTokens = true
@@ -39,8 +41,8 @@ export const extraTask = {
         .replace(
           /const Routes = \(\) => \{\n/,
           'const Routes = () => {\n' +
-            '  if (SuperTokens.canHandleRoute()) {\n' +
-            '    return SuperTokens.getRoutingComponent()\n' +
+            '  if (canHandleRoute(PreBultUI)) {\n' +
+            '    return getRoutingComponent(PreBultUI)\n' +
             '  }\n\n'
         )
 
@@ -62,12 +64,12 @@ export async function handler({ force: forceArg }: Args) {
       "import { authDecoder } from '@redwoodjs/auth-supertokens-api'",
     apiPackages: [
       `@redwoodjs/auth-supertokens-api@${version}`,
-      'supertokens-node@^12',
+      'supertokens-node@^15',
     ],
     webPackages: [
       `@redwoodjs/auth-supertokens-web@${version}`,
-      'supertokens-auth-react@^0.30',
-      'supertokens-web-js@^0.4',
+      'supertokens-auth-react@^0.34',
+      'supertokens-web-js@^0.7',
     ],
     extraTask,
     notes: [

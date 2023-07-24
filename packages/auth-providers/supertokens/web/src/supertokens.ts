@@ -11,6 +11,7 @@ export type SessionRecipe = {
   signOut: () => Promise<void>
   doesSessionExist: () => Promise<boolean>
   getAccessTokenPayloadSecurely: () => Promise<any>
+  getAccessToken: () => Promise<any>
   getUserId: () => Promise<string>
 }
 
@@ -47,10 +48,7 @@ function createAuthImplementation(superTokens: SuperTokensAuth) {
     },
     getToken: async (): Promise<string | null> => {
       if (await superTokens.sessionRecipe.doesSessionExist()) {
-        const accessTokenPayload =
-          await superTokens.sessionRecipe.getAccessTokenPayloadSecurely()
-        const jwtPropertyName = accessTokenPayload['_jwtPName']
-        return accessTokenPayload[jwtPropertyName]
+        return await superTokens.sessionRecipe.getAccessToken()
       } else {
         return null
       }
