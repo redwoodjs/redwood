@@ -7328,6 +7328,9 @@ __metadata:
     "@prisma/internals": 5.0.0
     "@redwoodjs/api-server": 5.0.0
     "@redwoodjs/cli-helpers": 5.0.0
+    "@redwoodjs/fastify-functions": 5.0.0
+    "@redwoodjs/fastify-shared": 5.0.0
+    "@redwoodjs/fastify-web": 5.0.0
     "@redwoodjs/internal": 5.0.0
     "@redwoodjs/prerender": 5.0.0
     "@redwoodjs/project-config": 5.0.0
@@ -7350,6 +7353,7 @@ __metadata:
     envinfo: 7.9.0
     execa: 5.1.1
     fast-glob: 3.2.12
+    fastify: 4.20.0
     fs-extra: 11.1.1
     humanize-string: 2.1.0
     jest: 29.6.1
@@ -7541,7 +7545,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/fastify-functions@workspace:packages/fastify-plugins/functions":
+"@redwoodjs/fastify-functions@5.0.0, @redwoodjs/fastify-functions@workspace:packages/fastify-plugins/functions":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify-functions@workspace:packages/fastify-plugins/functions"
   dependencies:
@@ -7580,7 +7584,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/fastify-shared@workspace:packages/fastify-plugins/shared":
+"@redwoodjs/fastify-shared@5.0.0, @redwoodjs/fastify-shared@workspace:packages/fastify-plugins/shared":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify-shared@workspace:packages/fastify-plugins/shared"
   dependencies:
@@ -7603,7 +7607,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/fastify-web@workspace:packages/fastify-plugins/web":
+"@redwoodjs/fastify-web@5.0.0, @redwoodjs/fastify-web@workspace:packages/fastify-plugins/web":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify-web@workspace:packages/fastify-plugins/web"
   dependencies:

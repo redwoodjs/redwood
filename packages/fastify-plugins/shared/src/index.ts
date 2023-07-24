@@ -43,3 +43,5 @@ export async function withApiProxy(
   fastify.register(httpProxy, proxyOpts)
   return fastify
 }
+
+export * from './legacy'

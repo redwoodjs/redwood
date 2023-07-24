@@ -1,11 +1,11 @@
 import chalk from 'chalk'
 
+import { redwoodFastifyAPI } from '@redwoodjs/fastify-functions'
 import {
   coerceRootPath,
   createFastifyInstance,
-  redwoodFastifyAPI,
-  redwoodFastifyWeb,
-} from '@redwoodjs/fastify'
+} from '@redwoodjs/fastify-shared'
+import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
 import { getConfig } from '@redwoodjs/project-config'
 
 export const apiServerHandler = async (options) => {
