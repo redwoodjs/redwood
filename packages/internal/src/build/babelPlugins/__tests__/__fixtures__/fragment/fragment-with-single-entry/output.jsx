@@ -8,3 +8,7 @@ export const VoteButtons_Fragment_Entry = gql`
   }
 `
 fragmentRegistry.register(VoteButtons_Fragment_Entry)
+const VoteButtons = (props) => {
+  return <div>{JSON.stringify(props)}</div>
+}
+export default VoteButtons

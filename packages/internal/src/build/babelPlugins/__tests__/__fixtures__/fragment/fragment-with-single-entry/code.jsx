@@ -1,3 +1,9 @@
+const VoteButtons = (props) => {
+  return (
+    <div>{JSON.stringify(props)}</div>
+  )
+}
+
 VoteButtons.fragments = {
   entry: gql`
     fragment VoteButtonsFragment on FeedEntry {
@@ -8,3 +14,5 @@ VoteButtons.fragments = {
     }
   `,
 };
+
+export default VoteButtons
