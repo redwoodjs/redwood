@@ -16,10 +16,6 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 │   ├── db
 │   │   └── schema.prisma
 │   ├── dist
-│   ├── jest.config.js
-│   ├── jsconfig.json
-│   ├── package.json
-│   ├── server.config.js
 │   ├── src
 │   │   ├── directives
 │   │   │   ├── requireAuth
@@ -40,14 +36,10 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 │       └── graphql.d.ts
 │
 ├── scripts
-│   ├── jsconfig.json
 │   └── seed.js
 │
 └── web
     ├── dist
-    ├── jest.config.js
-    ├── jsconfig.json
-    ├── package.json
     ├── public
     │   ├── favicon.png
     │   ├── README.md
