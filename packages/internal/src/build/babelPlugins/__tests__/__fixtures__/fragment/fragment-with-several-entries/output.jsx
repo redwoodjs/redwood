@@ -1,0 +1,19 @@
+import { fragmentRegistry } from '@redwoodjs/web/apollo'
+export const VoteButtons_Fragment_entry = gql`
+  fragment VoteButtonsFragment on FeedEntry {
+    score
+    vote {
+      choice
+    }
+  }
+`
+fragmentRegistry.register(VoteButtons_Fragment_entry)
+export const VoteButtons_Fragment_voter = gql`
+  fragment VoterFragment on FeedEntry {
+    voter {
+      id
+      name
+    }
+  }
+`
+fragmentRegistry.register(VoteButtons_Fragment_voter)

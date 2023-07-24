@@ -4,6 +4,7 @@ import type {
   ApolloCache,
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
+import { createFragmentRegistry } from '@apollo/client/cache'
 import { setContext } from '@apollo/client/link/context'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
@@ -257,12 +258,16 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
   }
 }
 
+export const fragmentRegistry = createFragmentRegistry()
+
 export const RedwoodApolloProvider: React.FunctionComponent<{
+  fragments?: any
   graphQLClientConfig?: GraphQLClientConfigProp
   useAuth?: UseAuth
   logLevel?: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
 }> = ({
+  fragments,
   graphQLClientConfig,
   useAuth = useNoAuth,
   logLevel = 'debug',
@@ -272,9 +277,18 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
   const { cacheConfig, ...config } = graphQLClientConfig ?? {}
 
-  const cache = new InMemoryCache(cacheConfig).restore(
-    globalThis?.__REDWOOD__APOLLO_STATE ?? {}
-  )
+  console.debug('RedwoodApolloProvider: cacheConfig', cacheConfig)
+  console.debug('RedwoodApolloProvider: fragments', fragments)
+  console.debug('RedwoodApolloProvider: fragmentRegistry', fragments)
+  if (fragments) {
+    fragmentRegistry.register(fragments)
+  }
+  console.debug('RedwoodApolloProvider: add to InMemoryCache', fragments)
+
+  const cache = new InMemoryCache({
+    fragments: fragmentRegistry,
+    ...cacheConfig,
+  }).restore(globalThis?.__REDWOOD__APOLLO_STATE ?? {})
 
   return (
     <FetchConfigProvider useAuth={useAuth}>
