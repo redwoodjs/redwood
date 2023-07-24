@@ -21,8 +21,8 @@
     "@fastify/url-data": "5.3.1",
     "@redwoodjs/graphql-server": "5.0.0",
     "@redwoodjs/project-config": "5.0.0",
-    "fastify": "4.19.2",
-    "fastify-raw-body": "4.2.0",
+    "fastify": "4.20.0",
+    "fastify-raw-body": "4.2.1",
     "lodash": "4.17.21",
     "qs": "6.11.2"
   },
@@ -30,7 +30,7 @@
     "@types/aws-lambda": "8.10.119",
     "@types/lodash": "4.14.195",
     "@types/qs": "6.9.7",
-    "esbuild": "0.18.12",
+    "esbuild": "0.18.15",
     "typescript": "5.1.6"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
