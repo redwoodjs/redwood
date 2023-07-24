@@ -8,6 +8,7 @@ import execa from 'execa'
 import fs from 'fs-extra'
 import semver from 'semver'
 import terminalLink from 'terminal-link'
+import untildify from 'untildify'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -423,7 +424,7 @@ async function handleTargetDirPreference(targetDir) {
       initial: 'my-redwood-app',
     })
 
-    return response.targetDir
+    return untildify(response.targetDir)
   } catch {
     recordErrorViaTelemetry('User cancelled install at target dir prompt')
     await shutdownTelemetry()
