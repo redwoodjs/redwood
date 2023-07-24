@@ -424,6 +424,18 @@ async function handleTargetDirPreference(targetDir) {
       initial: 'my-redwood-app',
     })
 
+    if (/^~\w/.test(response.targetDir)) {
+      tui.stopReactive(true)
+      tui.displayError(
+        'The `~username` syntax is not supported here',
+        'Please use the full path or specify the target directory on the command line.'
+      )
+
+      recordErrorViaTelemetry('Target dir prompt path syntax not supported')
+      await shutdownTelemetry()
+      process.exit(1)
+    }
+
     return untildify(response.targetDir)
   } catch {
     recordErrorViaTelemetry('User cancelled install at target dir prompt')
