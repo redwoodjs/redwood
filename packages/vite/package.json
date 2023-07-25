@@ -37,6 +37,10 @@
     "./buildFeServer": {
       "types": "./dist/buildFeServer.d.ts",
       "default": "./dist/buildFeServer.js"
+    },
+    "./node-loader": {
+      "types": "./dist/waku-lib/node-loader.d.ts",
+      "default": "./dist/waku-lib/node-loader.js"
     }
   },
   "bin": {
