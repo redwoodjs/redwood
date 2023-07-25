@@ -47,6 +47,7 @@
     "@redwoodjs/project-config": "5.0.0",
     "@redwoodjs/structure": "5.0.0",
     "@redwoodjs/telemetry": "5.0.0",
+    "@redwoodjs/web-server": "5.0.0",
     "@types/secure-random-password": "0.2.1",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",

@@ -7336,6 +7336,7 @@ __metadata:
     "@redwoodjs/project-config": 5.0.0
     "@redwoodjs/structure": 5.0.0
     "@redwoodjs/telemetry": 5.0.0
+    "@redwoodjs/web-server": 5.0.0
     "@types/crypto-js": 4.1.1
     "@types/secure-random-password": 0.2.1
     boxen: 5.1.2
@@ -8060,14 +8061,13 @@ __metadata:
     "@redwoodjs/fastify-shared": 5.0.0
     "@redwoodjs/fastify-web": 5.0.0
     "@redwoodjs/project-config": 5.0.0
-    "@types/yargs-parser": 21.0.0
+    "@types/yargs": 17.0.24
     chalk: 4.1.2
     dotenv-defaults: 5.0.2
     esbuild: 0.18.15
     fast-glob: 3.2.12
-    fastify: 4.20.0
     typescript: 5.1.6
-    yargs-parser: 21.1.1
+    yargs: 17.7.2
   bin:
     rw-web-server: ./dist/server.js
   languageName: unknown

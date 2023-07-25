@@ -206,7 +206,7 @@ export const builder = async (yargs) => {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: getConfig().web?.port || 8910,
+            default: getConfig().web?.port ?? 8910,
             type: 'number',
             alias: 'p',
           },
@@ -233,23 +233,8 @@ export const builder = async (yargs) => {
             shell: true,
           })
         } else {
-          await execa(
-            'yarn',
-            [
-              'rw-web-server',
-              '--port',
-              argv.port,
-              '--socket',
-              argv.socket,
-              '--api-host',
-              argv.apiHost,
-            ],
-            {
-              cwd: getPaths().base,
-              stdio: 'inherit',
-              shell: true,
-            }
-          )
+          const { handler } = await import('@redwoodjs/web-server')
+          await handler(argv)
         }
       },
     })
