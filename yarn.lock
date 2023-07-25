@@ -7049,7 +7049,7 @@ __metadata:
     "@redwoodjs/api": 5.0.0
     "@types/aws-lambda": 8.10.119
     core-js: 3.31.1
-    firebase-admin: 11.9.0
+    firebase-admin: 11.10.1
     jest: 29.6.1
     typescript: 5.1.6
   languageName: unknown
@@ -18059,9 +18059,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-admin@npm:11.9.0":
-  version: 11.9.0
-  resolution: "firebase-admin@npm:11.9.0"
+"firebase-admin@npm:11.10.1":
+  version: 11.10.1
+  resolution: "firebase-admin@npm:11.10.1"
   dependencies:
     "@fastify/busboy": ^1.2.1
     "@firebase/database-compat": ^0.3.4
@@ -18078,7 +18078,7 @@ __metadata:
       optional: true
     "@google-cloud/storage":
       optional: true
-  checksum: e028d4ca524fbb9cc966ca00e3858823ca1ab320242d17f34dbd69e2678fb1e31ac27a214a939efae85e320513e31e1c43203690cd9d7265e4e5a2af72d0a3fb
+  checksum: 5b09ab7e5cd9f3aeabbdeca0faa6c703b45e63c450d5b77bcc49f82113145061df56ae4266a0c20a117c0d0d7094c5ac7aba0d43566459460ae1f94526f1bb03
   languageName: node
   linkType: hard
 
