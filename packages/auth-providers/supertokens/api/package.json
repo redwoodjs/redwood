@@ -37,6 +37,6 @@
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1",
   "peerDependencies": {
-    "supertokens-node": "^15.0.0"
+    "supertokens-node": "15.0.0"
   }
 }

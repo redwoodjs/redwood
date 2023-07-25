@@ -7205,7 +7205,7 @@ __metadata:
     jwks-rsa: 3.0.1
     typescript: 5.1.6
   peerDependencies:
-    supertokens-node: ^15.0.0
+    supertokens-node: 15.0.0
   languageName: unknown
   linkType: soft
 
