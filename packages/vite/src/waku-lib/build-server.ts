@@ -33,12 +33,17 @@ export async function serverBuild(
     // ...configFileConfig,
     root: rwPaths.web.base,
     ssr: {
-      noExternal: true,
-      // TODO (RSC): The code below is pretty much what waku does, but I don't
-      // understand it
+      // Externalize everything except files that have 'use client' in them
+      // (this includes packages in node_modules that you use that have
+      // 'use client' in them)
+      // Files included in `noExternal` are files we want Vite to analyze
+      noExternal: Object.values(clientEntryFiles),
+      // TODO (RSC) This is the original code from waku. I think we can simplify it as above
+      // The code below will for most basic cases just be `[ '..' ]`, which we
+      // believe to be overly broad
       // noExternal: Object.values(clientEntryFiles).map((fname) => {
       //   return path
-      //     .relative(path.join(rwPaths.web.base, 'node_modules'), fname)
+      //     .relative(path.join(rwPaths.base, 'node_modules'), fname)
       //     .split('/')[0]
       // }),
     },
