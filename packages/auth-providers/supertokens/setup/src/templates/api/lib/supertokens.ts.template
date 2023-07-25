@@ -7,8 +7,6 @@ const websiteDomain =
 const apiDomain = process.env.SUPERTOKENS_API_DOMAIN || websiteDomain
 const apiGatewayPath = process.env.SUPERTOKENS_API_GATEWAY_PATH || '/.redwood/functions'
 
-const jwksIssuerUrl = {}
-
 export const config: TypeInput = {
   framework: 'awsLambda',
   isInServerlessEnv: true,
@@ -67,7 +65,7 @@ export const config: TypeInput = {
     }),
     Session.init({
       getTokenTransferMethod: () => {
-        return "header";
+        return 'header'
       }
     }),
   ],

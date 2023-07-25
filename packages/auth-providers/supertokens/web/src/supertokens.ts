@@ -48,7 +48,7 @@ function createAuthImplementation(superTokens: SuperTokensAuth) {
     },
     getToken: async (): Promise<string | null> => {
       if (await superTokens.sessionRecipe.doesSessionExist()) {
-        return await superTokens.sessionRecipe.getAccessToken()
+        return superTokens.sessionRecipe.getAccessToken()
       } else {
         return null
       }

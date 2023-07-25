@@ -16,6 +16,11 @@ export const extraTask = {
     if (!/\n\s*if \(SuperTokens.canHandleRoute\(\)\) \{/.test(content)) {
       let hasImportedSuperTokens = false
 
+      content = content.replace(
+        "import { useAuth } from './auth'",
+        "import { useAuth, PreBuiltUI } from './auth'"
+      )
+
       content = content
         .split('\n')
         .reduce<string[]>((acc, line) => {
@@ -29,8 +34,6 @@ export const extraTask = {
               "import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'"
             )
             acc.push('')
-            acc.push("import { PreBuiltUI } from './auth'")
-            acc.push('')
 
             hasImportedSuperTokens = true
           }
@@ -43,8 +46,8 @@ export const extraTask = {
         .replace(
           /const Routes = \(\) => \{\n/,
           'const Routes = () => {\n' +
-            '  if (canHandleRoute(PreBultUI)) {\n' +
-            '    return getRoutingComponent(PreBultUI)\n' +
+            '  if (canHandleRoute(PreBuiltUI)) {\n' +
+            '    return getRoutingComponent(PreBuiltUI)\n' +
             '  }\n\n'
         )
 
@@ -70,8 +73,8 @@ export async function handler({ force: forceArg }: Args) {
     ],
     webPackages: [
       `@redwoodjs/auth-supertokens-web@${version}`,
-      'supertokens-auth-react@^0.34',
-      'supertokens-web-js@^0.7',
+      'supertokens-auth-react@~0.34.0',
+      'supertokens-web-js@~0.7.0',
     ],
     extraTask,
     notes: [
