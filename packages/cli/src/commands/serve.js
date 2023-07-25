@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import chalk from 'chalk'
-import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
+
+import { webServerHandler, webSsrServerHandler } from './serveWebHandler'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
@@ -43,99 +43,16 @@ export const builder = async (yargs) => {
 
         // Run the experimental server file, if it exists, with web side also
         if (hasExperimentalServerFile()) {
-          console.log(
-            [
-              separator,
-              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-              separator,
-              'Using the experimental API server file at api/dist/server.js',
-              separator,
-            ].join('\n')
+          const { bothExperimentalServerFileHandler } = await import(
+            './serveBothHandler.js'
           )
-
-          if (getConfig().experimental?.rsc?.enabled) {
-            console.warn('')
-            console.warn('⚠️ Skipping Fastify web server ⚠️')
-            console.warn('⚠️ Using new RSC server instead ⚠️')
-            console.warn('')
-            await execa(
-              'node',
-              [
-                '--conditions react-server',
-                './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
-              ],
-              {
-                cwd: getPaths().base,
-                stdio: 'inherit',
-                shell: true,
-              }
-            )
-          } else if (getConfig().experimental?.streamingSsr?.enabled) {
-            console.warn('')
-            console.warn('⚠️ Skipping Fastify web server ⚠️')
-            console.warn('⚠️ Using new Streaming FE server instead ⚠️')
-            console.warn('')
-            await execa('yarn', ['rw-serve-fe'], {
-              cwd: getPaths().web.base,
-              stdio: 'inherit',
-              shell: true,
-            })
-          } else {
-            await execa(
-              'yarn',
-              ['node', path.join('dist', 'server.js'), '--enable-web'],
-              {
-                cwd: getPaths().api.base,
-                stdio: 'inherit',
-                shell: true,
-              }
-            )
-          }
-          return
-        }
-
-        if (getConfig().experimental?.rsc?.enabled) {
-          const { apiServerHandler } = await import('./serveHandler.js')
-          // TODO (RSC) Allow specifying port, socket and apiRootPath
-          const apiPromise = apiServerHandler({
-            ...argv,
-            port: 8911,
-            apiRootPath: '/',
-          })
-
-          // TODO (RSC) More gracefully handle Ctrl-C
-          const fePromise = execa(
-            'node',
-            [
-              '--conditions react-server',
-              './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
-            ],
-            {
-              cwd: getPaths().base,
-              stdio: 'inherit',
-              shell: true,
-            }
-          )
-
-          await Promise.all([apiPromise, fePromise])
+          await bothExperimentalServerFileHandler()
+        } else if (getConfig().experimental?.rsc?.enabled) {
+          const { bothRscServerHandler } = await import('./serveBothHandler.js')
+          await bothRscServerHandler(argv)
         } else if (getConfig().experimental?.streamingSsr?.enabled) {
-          const { apiServerHandler } = await import('./serveHandler.js')
-          // TODO (STREAMING) Allow specifying port, socket and apiRootPath
-          const apiPromise = apiServerHandler({
-            ...argv,
-            port: 8911,
-            apiRootPath: '/',
-          })
-
-          // TODO (STREAMING) More gracefully handle Ctrl-C
-          // Right now you get a big red error box when you kill the process
-          const fePromise = execa('yarn', ['rw-serve-fe'], {
-            cwd: getPaths().web.base,
-            stdio: 'inherit',
-            shell: true,
-          })
-
-          await Promise.all([apiPromise, fePromise])
+          const { bothSsrServerHandler } = await import('./serveBothHandler.js')
+          await bothSsrServerHandler(argv)
         } else {
           // Wanted to use the new web-server package here, but can't because
           // of backwards compatibility reasons. With `bothServerHandler` both
@@ -144,7 +61,7 @@ export const builder = async (yargs) => {
           // them on the same port, and so we lose backwards compatibility.
           // TODO: Use @redwoodjs/web-server when we're ok with breaking
           // backwards compatibility.
-          const { bothServerHandler } = await import('./serveHandler.js')
+          const { bothServerHandler } = await import('./serveBothHandler.js')
           await bothServerHandler(argv)
         }
       },
@@ -179,25 +96,14 @@ export const builder = async (yargs) => {
 
         // Run the experimental server file, if it exists, api side only
         if (hasExperimentalServerFile()) {
-          console.log(
-            [
-              separator,
-              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-              separator,
-              'Using the experimental API server file at api/dist/server.js',
-              separator,
-            ].join('\n')
+          const { apiExperimentalServerFileHandler } = await import(
+            './serveApiHandler.js'
           )
-          await execa('yarn', ['node', path.join('dist', 'server.js')], {
-            cwd: getPaths().api.base,
-            stdio: 'inherit',
-            shell: true,
-          })
-          return
+          await apiExperimentalServerFileHandler()
+        } else {
+          const { apiServerHandler } = await import('./serveApiHandler.js')
+          await apiServerHandler(argv)
         }
-
-        const { apiServerHandler } = await import('./serveHandler.js')
-        await apiServerHandler(argv)
       },
     })
     .command({
@@ -227,29 +133,9 @@ export const builder = async (yargs) => {
         })
 
         if (getConfig().experimental?.streamingSsr?.enabled) {
-          await execa('yarn', ['rw-serve-fe'], {
-            cwd: getPaths().web.base,
-            stdio: 'inherit',
-            shell: true,
-          })
+          await webSsrServerHandler()
         } else {
-          await execa(
-            'yarn',
-            [
-              'rw-web-server',
-              '--port',
-              argv.port,
-              '--socket',
-              argv.socket,
-              '--api-host',
-              argv.apiHost,
-            ],
-            {
-              cwd: getPaths().base,
-              stdio: 'inherit',
-              shell: true,
-            }
-          )
+          await webServerHandler(argv)
         }
       },
     })
@@ -311,10 +197,6 @@ export const builder = async (yargs) => {
       )}`
     )
 }
-
-const separator = chalk.hex('#ff845e')(
-  '------------------------------------------------------------------'
-)
 
 // We'll clean this up later, but for now note that this function is
 // duplicated between this package and @redwoodjs/fastify

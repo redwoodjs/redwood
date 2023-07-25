@@ -679,11 +679,6 @@ async function createRedwoodApp() {
   // Create project files
   await createProjectFiles(newAppDir, { templateDir, overwrite })
 
-  // Initialize git repo
-  if (useGit) {
-    await initializeGit(newAppDir, commitMessage)
-  }
-
   // Install the node packages
   if (yarnInstall) {
     const yarnInstallStart = Date.now()
@@ -700,6 +695,11 @@ async function createRedwoodApp() {
   // Generate types
   if (yarnInstall) {
     await generateTypes(newAppDir)
+  }
+
+  // Initialize git repo
+  if (useGit) {
+    await initializeGit(newAppDir, commitMessage)
   }
 
   // Post install message
