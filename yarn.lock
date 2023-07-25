@@ -7987,7 +7987,7 @@ __metadata:
     react: 18.3.0-canary-035a41c4e-20230704
     react-server-dom-webpack: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.6
-    vite: 4.4.6
+    vite: 4.4.7
     yargs-parser: 21.1.1
   bin:
     rw-dev-fe: ./dist/devFeServer.js
@@ -31112,9 +31112,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.4.6":
-  version: 4.4.6
-  resolution: "vite@npm:4.4.6"
+"vite@npm:4.4.7":
+  version: 4.4.7
+  resolution: "vite@npm:4.4.7"
   dependencies:
     esbuild: ^0.18.10
     fsevents: ~2.3.2
@@ -31148,7 +31148,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 121144e8e9f95a3ec159dde072fefddc076cbf516bcc2078032c63b4f5b9babe760cf0cbc0c4808e02e568e8e7b1d74b742fcf4546fe2e148c4a84fb42a9089a
+  checksum: f0cd995ffd6d0311af98fa28a5ed8502c29d3aa4b3a12c812030e688f327ec17a95db0994e569bfddd6cfa602608b6892fc18d2944cbc1150d75c1ab3299bc5c
   languageName: node
   linkType: hard
 
