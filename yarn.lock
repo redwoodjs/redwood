@@ -5036,22 +5036,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/child-process@npm:7.1.1":
-  version: 7.1.1
-  resolution: "@lerna/child-process@npm:7.1.1"
+"@lerna/child-process@npm:7.1.4":
+  version: 7.1.4
+  resolution: "@lerna/child-process@npm:7.1.4"
   dependencies:
     chalk: ^4.1.0
     execa: ^5.0.0
     strong-log-transformer: ^2.1.0
-  checksum: cee8afd6f925a0969d4045072c9dbaebcac2fe84cfe21e9a23d1b41e6c986986b996247e153e2baa291de354e638118e5c0aba64023e4cf456d1dcaa79d1b1db
+  checksum: a3eccf27a54e9f9ef23ec99a50a4dda258225751c8dc57e7e45dd22999b7e742eeadda42a347700a2382f046182b1065ec995dc4cc56ecd2c9d1d96505c16f6b
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:7.1.1":
-  version: 7.1.1
-  resolution: "@lerna/create@npm:7.1.1"
+"@lerna/create@npm:7.1.4":
+  version: 7.1.4
+  resolution: "@lerna/create@npm:7.1.4"
   dependencies:
-    "@lerna/child-process": 7.1.1
+    "@lerna/child-process": 7.1.4
     dedent: 0.7.0
     fs-extra: ^11.1.1
     init-package-json: 5.0.0
@@ -5064,7 +5064,7 @@ __metadata:
     validate-npm-package-license: ^3.0.4
     validate-npm-package-name: 5.0.0
     yargs-parser: 20.2.4
-  checksum: a6006ad89f862cfda514c69bbb65eddb2241a656a2ee36d2514bb23302729ffaa37a85c8fa29c296c4183f6ae1e88d0e723dc070ddef0f9fe2d0d4dd47145ea6
+  checksum: 1c7dbf999029df91bee6867edc96f736b785067bef4d52227d3366ad18bbb448e467069d0e119909ac7aeb4365a2234ed923940a1592cb0f553cfb0c9e2085d5
   languageName: node
   linkType: hard
 
@@ -5420,12 +5420,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/devkit@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nrwl/devkit@npm:16.5.0"
+"@nrwl/devkit@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nrwl/devkit@npm:16.5.5"
   dependencies:
-    "@nx/devkit": 16.5.0
-  checksum: f89f38d8704f0e0dad25271f511b0767061efb641e2fadc8d75b647a609eddf6adbfaaf77b9e6676b633e94d1b32dd8a96790d5416b0c4fb3ad51511629cf31a
+    "@nx/devkit": 16.5.5
+  checksum: db5cd1193ab606db1ac3ffbebeb203cd070dadaa0a05b58b5731e2a20e9b5ee1c0bc45b9b6ce55b0676943d0989bb9d0a151210f9c7e5632bbd47978fc827f24
   languageName: node
   linkType: hard
 
@@ -5449,22 +5449,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nrwl/tao@npm:16.5.0"
+"@nrwl/tao@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nrwl/tao@npm:16.5.5"
   dependencies:
-    nx: 16.5.0
+    nx: 16.5.5
   bin:
     tao: index.js
-  checksum: 5c1a9b1ac262077af586c5b3cdef2f4289f3841040841bcbc844f2e3af4d3b780d3c277d5becba4a1595dc0599c740c0b975f749a79bc1feb24b0435adcb8b9d
+  checksum: d45fb88e3b128c8770e166cb54f6a8b9c4dc106f3bfda02fd035d598bf1406117c6769657574f0b3ea118b6bf66a7a0a9464173b59e35545caaf12535c81c614
   languageName: node
   linkType: hard
 
-"@nx/devkit@npm:16.5.0, @nx/devkit@npm:>=16.1.3 < 17":
-  version: 16.5.0
-  resolution: "@nx/devkit@npm:16.5.0"
+"@nx/devkit@npm:16.5.5, @nx/devkit@npm:>=16.5.1 < 17":
+  version: 16.5.5
+  resolution: "@nx/devkit@npm:16.5.5"
   dependencies:
-    "@nrwl/devkit": 16.5.0
+    "@nrwl/devkit": 16.5.5
     ejs: ^3.1.7
     ignore: ^5.0.4
     semver: 7.5.3
@@ -5472,7 +5472,7 @@ __metadata:
     tslib: ^2.3.0
   peerDependencies:
     nx: ">= 15 <= 17"
-  checksum: e90ffb6145e1bcece2933973dadd2895eff8e88ae55af523d84a36f3b4c9a6a00c1bf652e2a4f6fc3a84a940f1345ccf4e8a2b9d2d3eee83cdeddbdef90ad415
+  checksum: 646b98454fadf6b3245054a27adc5b7614ca7c0494d8a1a3e14df912df646f8e52e7fe83c5cdd004fb8a63c0fee90a77d1c462880d0600fcefc4ac521f3c34d2
   languageName: node
   linkType: hard
 
@@ -5483,9 +5483,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-arm64@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-darwin-arm64@npm:16.5.0"
+"@nx/nx-darwin-arm64@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-darwin-arm64@npm:16.5.5"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
@@ -5497,9 +5497,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-x64@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-darwin-x64@npm:16.5.0"
+"@nx/nx-darwin-x64@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-darwin-x64@npm:16.5.5"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
@@ -5511,9 +5511,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-freebsd-x64@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-freebsd-x64@npm:16.5.0"
+"@nx/nx-freebsd-x64@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-freebsd-x64@npm:16.5.5"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
@@ -5525,9 +5525,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm-gnueabihf@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.5.0"
+"@nx/nx-linux-arm-gnueabihf@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.5.5"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
@@ -5539,9 +5539,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-gnu@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-linux-arm64-gnu@npm:16.5.0"
+"@nx/nx-linux-arm64-gnu@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-linux-arm64-gnu@npm:16.5.5"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
@@ -5553,9 +5553,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-musl@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-linux-arm64-musl@npm:16.5.0"
+"@nx/nx-linux-arm64-musl@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-linux-arm64-musl@npm:16.5.5"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
@@ -5567,9 +5567,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-gnu@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-linux-x64-gnu@npm:16.5.0"
+"@nx/nx-linux-x64-gnu@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-linux-x64-gnu@npm:16.5.5"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -5581,9 +5581,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-musl@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-linux-x64-musl@npm:16.5.0"
+"@nx/nx-linux-x64-musl@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-linux-x64-musl@npm:16.5.5"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
@@ -5595,9 +5595,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-arm64-msvc@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-win32-arm64-msvc@npm:16.5.0"
+"@nx/nx-win32-arm64-msvc@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-win32-arm64-msvc@npm:16.5.5"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
@@ -5609,9 +5609,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-x64-msvc@npm:16.5.0":
-  version: 16.5.0
-  resolution: "@nx/nx-win32-x64-msvc@npm:16.5.0"
+"@nx/nx-win32-x64-msvc@npm:16.5.5":
+  version: 16.5.5
+  resolution: "@nx/nx-win32-x64-msvc@npm:16.5.5"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -22176,14 +22176,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:7.1.1":
-  version: 7.1.1
-  resolution: "lerna@npm:7.1.1"
+"lerna@npm:7.1.4":
+  version: 7.1.4
+  resolution: "lerna@npm:7.1.4"
   dependencies:
-    "@lerna/child-process": 7.1.1
-    "@lerna/create": 7.1.1
+    "@lerna/child-process": 7.1.4
+    "@lerna/create": 7.1.4
     "@npmcli/run-script": 6.0.2
-    "@nx/devkit": ">=16.1.3 < 17"
+    "@nx/devkit": ">=16.5.1 < 17"
     "@octokit/plugin-enterprise-rest": 6.0.1
     "@octokit/rest": 19.0.11
     byte-size: 8.1.1
@@ -22217,6 +22217,7 @@ __metadata:
     libnpmaccess: 7.0.2
     libnpmpublish: 7.3.0
     load-json-file: 6.2.0
+    lodash: ^4.17.21
     make-dir: 3.1.0
     minimatch: 3.0.5
     multimatch: 5.0.0
@@ -22225,7 +22226,7 @@ __metadata:
     npm-packlist: 5.1.1
     npm-registry-fetch: ^14.0.5
     npmlog: ^6.0.2
-    nx: ">=16.1.3 < 17"
+    nx: ">=16.5.1 < 17"
     p-map: 4.0.0
     p-map-series: 2.1.0
     p-pipe: 3.1.0
@@ -22256,7 +22257,7 @@ __metadata:
     yargs-parser: 20.2.4
   bin:
     lerna: dist/cli.js
-  checksum: 2ac9273878574ce49aba7668e7d8530f15a0e04346f07bf927af5c8186a711743cd8b643e9a18543fa3a1b8da0ec7c192da129db2ba3458437eb6472219054a0
+  checksum: 79e8b6d9f1b5633cfa77f66009c251efdf54025aafe6e10cefea0e1c5c92c17e82dfbde9f4c5dbf181200da562bc936bdf6617cb206c480443774faa85b2651e
   languageName: node
   linkType: hard
 
@@ -24600,21 +24601,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:16.5.0, nx@npm:>=16.1.3 < 17":
-  version: 16.5.0
-  resolution: "nx@npm:16.5.0"
+"nx@npm:16.5.5, nx@npm:>=16.5.1 < 17":
+  version: 16.5.5
+  resolution: "nx@npm:16.5.5"
   dependencies:
-    "@nrwl/tao": 16.5.0
-    "@nx/nx-darwin-arm64": 16.5.0
-    "@nx/nx-darwin-x64": 16.5.0
-    "@nx/nx-freebsd-x64": 16.5.0
-    "@nx/nx-linux-arm-gnueabihf": 16.5.0
-    "@nx/nx-linux-arm64-gnu": 16.5.0
-    "@nx/nx-linux-arm64-musl": 16.5.0
-    "@nx/nx-linux-x64-gnu": 16.5.0
-    "@nx/nx-linux-x64-musl": 16.5.0
-    "@nx/nx-win32-arm64-msvc": 16.5.0
-    "@nx/nx-win32-x64-msvc": 16.5.0
+    "@nrwl/tao": 16.5.5
+    "@nx/nx-darwin-arm64": 16.5.5
+    "@nx/nx-darwin-x64": 16.5.5
+    "@nx/nx-freebsd-x64": 16.5.5
+    "@nx/nx-linux-arm-gnueabihf": 16.5.5
+    "@nx/nx-linux-arm64-gnu": 16.5.5
+    "@nx/nx-linux-arm64-musl": 16.5.5
+    "@nx/nx-linux-x64-gnu": 16.5.5
+    "@nx/nx-linux-x64-musl": 16.5.5
+    "@nx/nx-win32-arm64-msvc": 16.5.5
+    "@nx/nx-win32-x64-msvc": 16.5.5
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": 3.0.0-rc.46
@@ -24679,7 +24680,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: f152a2b82cdb5cf7f6cb77841bccca0af0e7e4a22a3b95c100e9bd9537eaf20bc8625053070b102863d3816bd3433f3f7e458fc3edc549d295ee860119c1b45b
+  checksum: edf663646a68efa586a022d23965728c9ec1c4a8efa5ac01e01f6d3b79a4a5549773a9c243491934d2de51f6a1f7f08d2ea39112577b6990b3365982129b4e4b
   languageName: node
   linkType: hard
 
@@ -27914,7 +27915,7 @@ __metadata:
     jest: 29.6.1
     jest-runner-tsd: 5.0.0
     jscodeshift: 0.15.0
-    lerna: 7.1.1
+    lerna: 7.1.4
     listr2: 6.6.0
     make-dir-cli: 3.0.0
     msw: 1.2.2
