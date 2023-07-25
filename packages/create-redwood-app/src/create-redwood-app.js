@@ -3,12 +3,12 @@
 import path from 'path'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
-import chalk from 'chalk'
 import checkNodeVersionCb from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import semver from 'semver'
 import terminalLink from 'terminal-link'
+import untildify from 'untildify'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
@@ -404,6 +404,46 @@ async function initializeGit(newAppDir, commitMessage) {
   tui.stopReactive()
 }
 
+async function handleTargetDirPreference(targetDir) {
+  if (targetDir) {
+    tui.drawText(
+      `${RedwoodStyling.green(
+        '✔'
+      )} Creating your Redwood app in ${targetDir} based on command line argument`
+    )
+
+    return targetDir
+  }
+
+  // Prompt user for preference
+  try {
+    const response = await tui.prompt({
+      type: 'input',
+      name: 'targetDir',
+      message: 'Where would you like to create your Redwood app?',
+      initial: 'my-redwood-app',
+    })
+
+    if (/^~\w/.test(response.targetDir)) {
+      tui.stopReactive(true)
+      tui.displayError(
+        'The `~username` syntax is not supported here',
+        'Please use the full path or specify the target directory on the command line.'
+      )
+
+      recordErrorViaTelemetry('Target dir prompt path syntax not supported')
+      await shutdownTelemetry()
+      process.exit(1)
+    }
+
+    return untildify(response.targetDir)
+  } catch {
+    recordErrorViaTelemetry('User cancelled install at target dir prompt')
+    await shutdownTelemetry()
+    process.exit(1)
+  }
+}
+
 async function handleTypescriptPreference(typescriptFlag) {
   // Handle case where flag is set
   if (typescriptFlag !== null) {
@@ -603,34 +643,14 @@ async function createRedwoodApp() {
   trace.getActiveSpan()?.setAttribute('overwrite', overwrite)
 
   // Get the directory for installation from the args
-  const targetDir = String(args).replace(/,/g, '-')
+  let targetDir = String(args).replace(/,/g, '-')
 
-  // Throw an error if there is no target directory specified
-  if (!targetDir) {
-    tui.displayError(
-      'No target directory specified',
-      [
-        'Please specify the project directory',
-        `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
-          '<project-directory>'
-        )}`,
-        '',
-        'For example:',
-        `  ${chalk.cyan('yarn create redwood-app')} ${chalk.green(
-          'my-redwood-app'
-        )}`,
-      ].join('\n')
-    )
-    recordErrorViaTelemetry('No target directory specified')
-    await shutdownTelemetry()
-    process.exit(1)
-  }
-
-  const newAppDir = path.resolve(process.cwd(), targetDir)
   const templatesDir = path.resolve(__dirname, '../templates')
 
   // Engine check
   await executeCompatibilityCheck(path.join(templatesDir, 'ts'))
+
+  targetDir = await handleTargetDirPreference(targetDir)
 
   // Determine ts/js preference
   const useTypescript = await handleTypescriptPreference(typescriptFlag)
@@ -653,6 +673,8 @@ async function createRedwoodApp() {
   if (!_isYarnBerryOrNewer) {
     yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
   }
+
+  const newAppDir = path.resolve(process.cwd(), targetDir)
 
   // Create project files
   await createProjectFiles(newAppDir, { templateDir, overwrite })
