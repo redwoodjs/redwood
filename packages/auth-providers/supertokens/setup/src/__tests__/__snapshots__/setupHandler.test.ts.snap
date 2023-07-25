@@ -3,15 +3,15 @@
 exports[`extraTask 1`] = `
 "// In this file, all Page components from 'src/pages' are auto-imported.
 
-import SuperTokens from 'supertokens-auth-react'
+import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'
 
 import { Router, Route } from '@redwoodjs/router'
 
-import { useAuth } from './auth'
+import { useAuth, PreBuiltUI } from './auth'
 
 const Routes = () => {
-  if (SuperTokens.canHandleRoute()) {
-    return SuperTokens.getRoutingComponent()
+  if (canHandleRoute(PreBuiltUI)) {
+    return getRoutingComponent(PreBuiltUI)
   }
 
   return (
