@@ -23,7 +23,7 @@ const superTokensClient = {
   redirectToAuth: SuperTokens.redirectToAuth,
 }
 
-export const PreBultUI = [ThirdPartyEmailPasswordPreBuiltUI];
+export const PreBuiltUI = [ThirdPartyEmailPasswordPreBuiltUI];
 
 isBrowser &&
   SuperTokens.init({

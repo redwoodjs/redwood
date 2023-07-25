@@ -25,9 +25,11 @@ export const extraTask = {
             line.includes('import') &&
             line.includes('@redwoodjs')
           ) {
-            acc.push("import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'")
+            acc.push(
+              "import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'"
+            )
             acc.push('')
-            acc.push("import { PreBultUI } from './auth'")
+            acc.push("import { PreBuiltUI } from './auth'")
             acc.push('')
 
             hasImportedSuperTokens = true
