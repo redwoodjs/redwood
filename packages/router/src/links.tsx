@@ -36,7 +36,7 @@ type UseMatchOptions = {
  *
  *  Match parameter paths
  *  const match = useMatch('/post/{id:Int}') // works for all '/post/7', 'post/8' ...
- *  const match = useMatch(routes.post.path) // same as above. routes.post.path stores '/post/{id:Int}'
+ *  const match = useMatch(routes.post({id: RouteParams.LITERAL})) // same as above. RouteParams.LITERAL can be imported and equals: '/post/{id:Int}'
  *  const match = useMatch(routes.post({id: 7})) // works only for '/post/7'
  */
 const useMatch = (pathname: string, options?: UseMatchOptions) => {
@@ -190,4 +190,5 @@ const Redirect = ({ to, options }: RedirectProps) => {
   return null
 }
 
-export { Link, NavLink, useMatch, Redirect }
+export { Link, NavLink, Redirect, useMatch }
+

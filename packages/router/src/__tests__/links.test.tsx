@@ -6,9 +6,10 @@ import { act, render, waitFor } from '@testing-library/react'
 expect.extend({ toHaveClass, toHaveStyle })
 
 import { navigate, Route, Router, routes } from '../'
+
 import { Link, NavLink, useMatch } from '../links'
 import { LocationProvider } from '../location'
-import { flattenSearchParams } from '../util'
+import { flattenSearchParams, RouteParams } from '../util'
 
 function createDummyLocation(pathname: string, search = '') {
   return {
@@ -369,16 +370,34 @@ describe('useMatch', () => {
           path: '0',
         })
       )
-      const matchParameterPath = useMatch(routes.home.path)
+      const matchParameterPath = useMatch(
+        routes.home({
+          dynamic: RouteParams.LITERAL,
+          path: RouteParams.LITERAL
+        })
+      )
+      const matchPartialParameterPath = useMatch(
+        routes.home({
+          dynamic: RouteParams.LITERAL,
+          path: '1',
+        })
+      )
+      const matchWrongPartialParameterPath = useMatch(
+        routes.home({
+          dynamic: RouteParams.LITERAL,
+          path: '0',
+        })
+      )
       // const matchWrongParameterPath = useMatch(routes.anotherHome.path)
       return (
         <>
           {matchExactPath.match ? 'Exact Path true Match' : null}
           {matchWrongPath.match ? null : 'Wrong Path false Match'}
           {matchParameterPath.match ? 'Parameter Path true Match' : null}
-          {/* {matchWrongParameterPath.match
-            ? null
-            : 'Wrong Parameter Path false Match'} */}
+          {matchPartialParameterPath.match
+            ? 'Partial Parameter Path true Match'
+            : null}
+          {matchWrongPartialParameterPath.match ? null : 'Wrong Partial Parameter Path false Match'}
         </>
       )
     }
@@ -403,8 +422,11 @@ describe('useMatch', () => {
     await waitFor(() => expect(screen.getByText(/Exact Path true Match/)))
     await waitFor(() => expect(screen.getByText(/Wrong Path false Match/)))
     await waitFor(() => expect(screen.getByText(/Parameter Path true Match/)))
-    // await waitFor(() =>
-    //   expect(screen.getByText(/Wrong Parameter Path false Match/))
-    // )
+    await waitFor(() =>
+      expect(screen.getByText(/Partial Parameter Path true Match/))
+    )
+    await waitFor(() =>
+      expect(screen.getByText(/Wrong Partial Parameter Path false Match/))
+    )
   })
 })

@@ -299,15 +299,23 @@ export function validatePath(path: string, routeName: string) {
   }
 }
 
+
+export const RouteParams = {
+  LITERAL: Symbol('RouteParams.LITERAL')
+}
+
 /**
  * Take a given route path and replace any named parameters with those in the
  * given args object. Any extra params not used in the path will be appended
  * as key=value pairs in the search part.
  *
+ *
  * Examples:
  *
  *   replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
  *   => '/tags/code?extra=foo
+ *
+ * If RouteParams.LITERAL is used as a value { tag: RouteParams.LITERAL }, the param {tag} will be used
  */
 export function replaceParams(
   route: string,
@@ -320,8 +328,12 @@ export function replaceParams(
   params.forEach((param) => {
     const [name, _type, match] = param
     const value = args[name]
+
     if (value !== undefined) {
-      path = path.replace(match, value as string)
+      // replace {tag} with 'code' only if it is not RouteParams.Literal
+      if (value !== RouteParams.LITERAL) {
+        path = path.replace(match, value as string)
+      }
     } else {
       throw new Error(
         `Missing parameter '${name}' for route '${route}' when generating a navigation URL.`
