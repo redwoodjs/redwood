@@ -3,7 +3,7 @@ import { describe, it } from 'node:test'
 
 import * as vitePluginRemoveFromBundle from '../vite-plugin-remove-from-bundle.js'
 
-// @ts-expect-error We have to write it this way to appeas node:test, but TS doesn't seem to like it.
+// @ts-expect-error We have to write it this way to appease node:test, but TS doesn't seem to like it.
 const { getShouldExclude } = vitePluginRemoveFromBundle.default
 
 describe('excludeModule', () => {
