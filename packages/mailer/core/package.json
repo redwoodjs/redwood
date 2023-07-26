@@ -24,8 +24,7 @@
     ]
   },
   "dependencies": {
-    "@react-email/render": "0.0.7",
-    "@redwoodjs/project-config": "5.0.0"
+    "@react-email/render": "0.0.7"
   },
   "devDependencies": {
     "esbuild": "0.18.12",

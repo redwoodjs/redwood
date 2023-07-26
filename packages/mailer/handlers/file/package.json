@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/mailer-providers-postmark",
+  "name": "@redwoodjs/mailer-handler-file",
   "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/mailer/providers/postmark"
+    "directory": "packages/mailer/handlers/file"
   },
   "license": "MIT",
   "main": "./dist/index.js",
@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/project-config": "5.0.0"
+    "@redwoodjs/mailer-core": "5.0.0"
   },
   "devDependencies": {
     "esbuild": "0.18.12",

@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/mailer-providers-file",
+  "name": "@redwoodjs/mailer-handler-resend",
   "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/mailer/providers/file"
+    "directory": "packages/mailer/handlers/resend"
   },
   "license": "MIT",
   "main": "./dist/index.js",
@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "5.0.0",
-    "@redwoodjs/project-config": "5.0.0"
+    "@redwoodjs/project-config": "5.0.0",
+    "resend": "0.17.1"
   },
   "devDependencies": {
     "esbuild": "0.18.12",

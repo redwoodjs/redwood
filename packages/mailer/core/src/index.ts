@@ -1,4 +1,4 @@
 export * from './mailer'
-export * from './provider'
+export * from './handler'
 
 export type * from './types'
