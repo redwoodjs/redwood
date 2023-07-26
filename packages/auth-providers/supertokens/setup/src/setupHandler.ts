@@ -3,58 +3,7 @@ import path from 'path'
 
 import { getPaths, standardAuthHandler } from '@redwoodjs/cli-helpers'
 
-import { Args } from './setup'
-
-// exported for testing
-export const extraTask = {
-  title: `Adding SuperTokens routing component to Routes.{jsx,tsx}...`,
-  task: () => {
-    const webRoutesPath = getPaths().web.routes
-
-    let content = fs.readFileSync(webRoutesPath).toString()
-
-    if (!/\n\s*if \(SuperTokens.canHandleRoute\(\)\) \{/.test(content)) {
-      let hasImportedSuperTokens = false
-
-      content = content.replace(
-        "import { useAuth } from './auth'",
-        "import { useAuth, PreBuiltUI } from './auth'"
-      )
-
-      content = content
-        .split('\n')
-        .reduce<string[]>((acc, line) => {
-          // Add the SuperTokens import before the first import from @redwoodjs
-          if (
-            !hasImportedSuperTokens &&
-            line.includes('import') &&
-            line.includes('@redwoodjs')
-          ) {
-            acc.push(
-              "import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'"
-            )
-            acc.push('')
-
-            hasImportedSuperTokens = true
-          }
-
-          acc.push(line)
-
-          return acc
-        }, [])
-        .join('\n')
-        .replace(
-          /const Routes = \(\) => \{\n/,
-          'const Routes = () => {\n' +
-            '  if (canHandleRoute(PreBuiltUI)) {\n' +
-            '    return getRoutingComponent(PreBuiltUI)\n' +
-            '  }\n\n'
-        )
-
-      fs.writeFileSync(webRoutesPath, content)
-    }
-  },
-}
+import type { Args } from './setup'
 
 export async function handler({ force: forceArg }: Args) {
   const { version } = JSON.parse(
@@ -78,8 +27,67 @@ export async function handler({ force: forceArg }: Args) {
     ],
     extraTask,
     notes: [
-      "We've implemented some of SuperToken's recipes, but feel free",
-      'to switch to something that better fits your needs. See https://supertokens.com/docs/guides.',
+      "We've implemented SuperToken's EmailPassword with Social / Enterprise (OAuth 2.0, SAML) login recipe,",
+      'but feel free to switch to something that better fits your needs. See https://supertokens.com/docs/guides.',
+      '',
+      "To get things working, you'll need to add quite a few env vars to your .env file.",
+      'See https://redwoodjs.com/docs/auth/supertokens for a full walkthrough.',
     ],
   })
+}
+
+// Exported for testing.
+export const extraTask = {
+  title: `Adding SuperTokens routing logic to Routes.{jsx,tsx}...`,
+  task: () => {
+    const routesPath = getPaths().web.routes
+
+    let content = fs.readFileSync(routesPath, 'utf-8')
+
+    // Remove the old setup if it's there.
+    content = content
+      .replace("import SuperTokens from 'supertokens-auth-react'", '')
+      .replace(/if \(SuperTokens.canHandleRoute\(\)\) {[^}]+}/, '')
+
+    if (!/\s*if\s*\(canHandleRoute\(PreBuiltUI\)\)\s*\{/.test(content)) {
+      let hasImportedSuperTokensFunctions = false
+
+      content = content
+        .split('\n')
+        .reduce<string[]>((acc, line) => {
+          // Add the SuperTokens import before the first import from a RedwoodJS package.
+          if (
+            !hasImportedSuperTokensFunctions &&
+            line.includes('import') &&
+            line.includes('@redwoodjs')
+          ) {
+            acc.push(
+              "import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'"
+            )
+            acc.push('')
+
+            hasImportedSuperTokensFunctions = true
+          }
+
+          acc.push(line)
+
+          return acc
+        }, [])
+        .join('\n')
+      content = content.replace(
+        "import { useAuth } from './auth'",
+        "import { useAuth, PreBuiltUI } from './auth'"
+      )
+
+      content = content.replace(
+        /const Routes = \(\) => \{\n/,
+        'const Routes = () => {\n' +
+          '  if (canHandleRoute(PreBuiltUI)) {\n' +
+          '    return getRoutingComponent(PreBuiltUI)\n' +
+          '  }\n\n'
+      )
+
+      fs.writeFileSync(routesPath, content)
+    }
+  },
 }
