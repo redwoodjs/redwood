@@ -46,8 +46,8 @@ export const extraTask = {
 
     // Remove the old setup if it's there.
     content = content
-      .replace(/import\s*SuperTokens\s*from\s*'supertokens-auth-react'/, '')
-      .replace(/\s*if\s*\(SuperTokens.canHandleRoute\(\)\)\s*{[\S\s]*}/, '')
+      .replace("import SuperTokens from 'supertokens-auth-react'", '')
+      .replace(/if \(SuperTokens.canHandleRoute\(\)\) {[^}]+}/, '')
 
     if (!/\s*if\s*\(canHandleRoute\(PreBuiltUI\)\)\s*\{/.test(content)) {
       let hasImportedSuperTokensFunctions = false
@@ -74,17 +74,18 @@ export const extraTask = {
           return acc
         }, [])
         .join('\n')
-        .replace(
-          "import { useAuth } from './auth'",
-          "import { useAuth, PreBuiltUI } from './auth'"
-        )
-        .replace(
-          /const Routes = \(\) => \{\n/,
-          'const Routes = () => {\n' +
-            '  if (canHandleRoute(PreBuiltUI)) {\n' +
-            '    return getRoutingComponent(PreBuiltUI)\n' +
-            '  }\n\n'
-        )
+      content = content.replace(
+        "import { useAuth } from './auth'",
+        "import { useAuth, PreBuiltUI } from './auth'"
+      )
+
+      content = content.replace(
+        /const Routes = \(\) => \{\n/,
+        'const Routes = () => {\n' +
+          '  if (canHandleRoute(PreBuiltUI)) {\n' +
+          '    return getRoutingComponent(PreBuiltUI)\n' +
+          '  }\n\n'
+      )
 
       fs.writeFileSync(routesPath, content)
     }

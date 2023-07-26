@@ -60,31 +60,31 @@ export default Routes
     extraTask.task()
 
     expect(mockFS.readFileSync('Routes.tsx')).toMatchInlineSnapshot(`
-    "// In this file, all Page components from 'src/pages' are auto-imported.
+          "// In this file, all Page components from 'src/pages' are auto-imported.
 
-    import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'
+          import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'
 
-    import { Router, Route } from '@redwoodjs/router'
+          import { Router, Route } from '@redwoodjs/router'
 
-    import { useAuth, PreBuiltUI } from './auth'
+          import { useAuth, PreBuiltUI } from './auth'
 
-    const Routes = () => {
-      if (canHandleRoute(PreBuiltUI)) {
-        return getRoutingComponent(PreBuiltUI)
-      }
+          const Routes = () => {
+            if (canHandleRoute(PreBuiltUI)) {
+              return getRoutingComponent(PreBuiltUI)
+            }
 
-      return (
-        <Router useAuth={useAuth}>
-          <Route path="/login" page={LoginPage} name="login" />
-          <Route path="/signup" page={SignupPage} name="signup" />
-          <Route notfound page={NotFoundPage} />
-        </Router>
-      )
-    }
+            return (
+              <Router useAuth={useAuth}>
+                <Route path="/login" page={LoginPage} name="login" />
+                <Route path="/signup" page={SignupPage} name="signup" />
+                <Route notfound page={NotFoundPage} />
+              </Router>
+            )
+          }
 
-    export default Routes
-    "
-  `)
+          export default Routes
+          "
+      `)
   })
 
   it('handles a Routes.{jsx,tsx} file with a legacy setup', () => {
@@ -119,24 +119,34 @@ export default Routes
     extraTask.task()
 
     expect(mockFS.readFileSync('Routes.tsx')).toMatchInlineSnapshot(`
-    "// In this file, all Page components from 'src/pages' are auto-imported.
+      "// In this file, all Page components from 'src/pages' are auto-imported.
 
 
 
-    import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'
+      import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'
 
-    import { Router, Route } from '@redwoodjs/router'
+      import { Router, Route } from '@redwoodjs/router'
 
-    import { useAuth, PreBuiltUI } from './auth'
+      import { useAuth, PreBuiltUI } from './auth'
 
-    const Routes = () => {
-      if (canHandleRoute(PreBuiltUI)) {
-        return getRoutingComponent(PreBuiltUI)
+      const Routes = () => {
+        if (canHandleRoute(PreBuiltUI)) {
+          return getRoutingComponent(PreBuiltUI)
+        }
+
+        
+
+        return (
+          <Router useAuth={useAuth}>
+            <Route path="/login" page={LoginPage} name="login" />
+            <Route path="/signup" page={SignupPage} name="signup" />
+            <Route notfound page={NotFoundPage} />
+          </Router>
+        )
       }
 
-
-    export default Routes
-    "
-  `)
+      export default Routes
+      "
+    `)
   })
 })

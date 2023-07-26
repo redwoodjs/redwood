@@ -1,8 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
+import { resolveFile } from '@redwoodjs/project-config'
+
 import { colors } from './colors'
-import { getPaths, resolveFile } from './paths'
+import { getPaths } from './paths'
 
 export const getGraphqlPath = () => {
   return resolveFile(path.join(getPaths().api.functions, 'graphql'))
