@@ -1,17 +1,29 @@
-import c from 'ansi-colors'
+import chalk from 'chalk'
 
+import { redwoodFastifyAPI } from '@redwoodjs/fastify-functions'
+import {
+  createFastifyInstance,
+  coerceRootPath,
+  withApiProxy,
+} from '@redwoodjs/fastify-shared'
+import { redwoodFastifyWeb } from '@redwoodjs/fastify-web'
 import { getConfig } from '@redwoodjs/project-config'
 
-import createFastifyInstance from './fastify'
-import withApiProxy from './plugins/withApiProxy'
-import withFunctions from './plugins/withFunctions'
-import withWebServer from './plugins/withWebServer'
-import { startServer as startFastifyServer } from './server'
+// import createFastifyInstance from './fastify'
+// import withApiProxy from './plugins/withApiProxy'
+// import withFunctions from './plugins/withFunctions'
+// import withWebServer from './plugins/withWebServer'
+// import { startServer as startFastifyServer } from './server'
 import { BothServerArgs, WebServerArgs, ApiServerArgs } from './types'
 
 /*
  * This file has defines CLI handlers used by the redwood cli, for `rw serve`
  * Also used in index.ts for the api server
+ *
+ * Update - 2023/07/26 - JGMW
+ * This used to be true but we switched to using specific handlers exported from `@redwoodjs/web-server`
+ * and `@redwoodjs/api-server` which themselves import functionality from various fastify packages
+ * `@redwoodjs/fastify-...`
  */
 
 const sendProcessReady = () => {
@@ -46,110 +58,177 @@ export const webCliOptions = {
 } as const
 
 export const apiServerHandler = async (options: ApiServerArgs) => {
-  const { port, socket, apiRootPath } = options
-  const tsApiServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting API Server...\n')))
+  const startTime = Date.now()
 
-  let fastify = createFastifyInstance()
+  const { port, socket, apiRootPath } = options
+  console.log(chalk.dim.italic('Starting API Server...'))
+
+  const fastify = createFastifyInstance()
 
   // Import Server Functions.
-  fastify = await withFunctions(fastify, options)
+  await fastify.register(redwoodFastifyAPI, {
+    redwood: {
+      ...options,
+    },
+  })
 
-  const http = startFastifyServer({
-    port,
-    socket,
-    fastify,
-  }).ready(() => {
-    console.log(c.italic(c.dim('Took ' + (Date.now() - tsApiServer) + ' ms')))
+  let listenOptions
 
+  if (socket) {
+    listenOptions = { path: socket }
+  } else {
+    listenOptions = {
+      port,
+      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    }
+  }
+
+  fastify.listen(listenOptions)
+
+  fastify.ready(() => {
+    fastify.log.trace(
+      { custom: { ...fastify.initialConfig } },
+      'Fastify server configuration'
+    )
+    fastify.log.trace(`Registered plugins \n${fastify.printPlugins()}`)
+
+    console.log(chalk.italic.dim('Took ' + (Date.now() - startTime) + ' ms'))
     const on = socket
       ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
+      : chalk.magenta(`http://localhost:${port}${apiRootPath}`)
+
     console.log(`API listening on ${on}`)
-    const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
+    const graphqlEnd = chalk.magenta(`${apiRootPath}graphql`)
     console.log(`GraphQL endpoint at ${graphqlEnd}`)
+
     sendProcessReady()
-  })
-  process.on('exit', () => {
-    http?.close()
   })
 }
 
 export const bothServerHandler = async (options: BothServerArgs) => {
+  const startTime = Date.now()
+
   const { port, socket } = options
-  const tsServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting API and Web Servers...\n')))
+  console.log(chalk.dim.italic('Starting API and Web Servers...'))
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
-  let fastify = createFastifyInstance()
+  const fastify = createFastifyInstance()
 
   // Attach plugins
-  fastify = await withWebServer(fastify, options)
-  fastify = await withFunctions(fastify, { ...options, apiRootPath })
+  await fastify.register(redwoodFastifyWeb, {
+    redwood: {
+      // apiHost: Don't proxy requests because we're running the api server here too
+    },
+  })
+  await fastify.register(redwoodFastifyAPI, {
+    redwood: {
+      apiRootPath,
+    },
+  })
 
-  startFastifyServer({
-    port,
-    socket,
-    fastify,
-  }).ready(() => {
-    console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
-    const on = socket
-      ? socket
-      : c.magenta(`http://localhost:${port}${apiRootPath}`)
-    const webServer = c.green(`http://localhost:${port}`)
-    const apiServer = c.magenta(`http://localhost:${port}`)
-    console.log(`Web server started on ${webServer}`)
-    console.log(`API serving from ${apiServer}`)
-    console.log(`API listening on ${on}`)
-    const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
-    console.log(`GraphQL endpoint at ${graphqlEnd}`)
+  let listenOptions:
+    | { path: string; port?: never; host?: never }
+    | { path?: never; port?: number; host?: string }
+
+  if (socket) {
+    listenOptions = { path: socket }
+  } else {
+    listenOptions = {
+      port,
+      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
+    }
+  }
+
+  // Start
+  fastify.listen(listenOptions)
+
+  fastify.ready(() => {
+    fastify.log.trace(
+      { custom: { ...fastify.initialConfig } },
+      'Fastify server configuration'
+    )
+    fastify.log.trace(`Registered plugins \n${fastify.printPlugins()}`)
+
+    console.log(chalk.italic.dim('Took ' + (Date.now() - startTime) + ' ms'))
+    if (socket) {
+      console.log(`Web server started on ${socket}`)
+    } else {
+      console.log(`Web server started on http://localhost:${port}`)
+    }
+
+    // TODO: Do we need to restore this?
+    // console.log(`Web server started on ${webServer}`)
+    // console.log(`API serving from ${apiServer}`)
+    // console.log(`API listening on ${on}`)
+    // const graphqlEnd = c.magenta(`${apiRootPath}graphql`)
+    // console.log(`GraphQL endpoint at ${graphqlEnd}`)
+
     sendProcessReady()
   })
 }
 
 export const webServerHandler = async (options: WebServerArgs) => {
+  const startTime = Date.now()
+
   const { port, socket, apiHost } = options
-  const tsServer = Date.now()
-  process.stdout.write(c.dim(c.italic('Starting Web Server...\n')))
+  console.log(chalk.dim.italic('Starting Web Server...'))
   const apiUrl = getConfig().web.apiUrl
+
+  // TODO: Should we restore this?
   // Construct the graphql url from apiUrl by default
   // But if apiGraphQLUrl is specified, use that instead
-  const graphqlEndpoint = coerceRootPath(
-    getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
-  )
+  // const graphqlEndpoint = coerceRootPath(
+  //   getConfig().web.apiGraphQLUrl ?? `${apiUrl}/graphql`
+  // )
 
-  let fastify = createFastifyInstance()
+  const fastify = createFastifyInstance()
 
   // serve static files from "web/dist"
-  fastify = await withWebServer(fastify, options)
+  await fastify.register(redwoodFastifyWeb, {
+    redwood: {
+      ...options,
+    },
+  })
 
   // If apiHost is supplied, it means the functions are running elsewhere
   // So we should just proxy requests
   if (apiHost) {
     // Attach plugin for proxying
-    fastify = await withApiProxy(fastify, { apiHost, apiUrl })
+    fastify.register(withApiProxy, { apiHost, apiUrl })
   }
 
-  startFastifyServer({
-    port,
-    socket,
-    fastify,
-  }).ready(() => {
-    console.log(c.italic(c.dim('Took ' + (Date.now() - tsServer) + ' ms')))
-    if (socket) {
-      console.log(`Listening on ` + c.magenta(`${socket}`))
+  let listenOptions:
+    | { path: string; port?: never; host?: never }
+    | { path?: never; port?: number; host?: string }
+
+  if (socket) {
+    listenOptions = { path: socket }
+  } else {
+    listenOptions = {
+      port,
+      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::',
     }
-    const webServer = c.green(`http://localhost:${port}`)
-    console.log(`Web server started on ${webServer}`)
-    console.log(`GraphQL endpoint is set to ` + c.magenta(`${graphqlEndpoint}`))
+  }
+
+  fastify.listen(listenOptions)
+
+  fastify.ready(() => {
+    fastify.log.trace(
+      { custom: { ...fastify.initialConfig } },
+      'Fastify server configuration'
+    )
+    fastify.log.trace(`Registered plugins \n${fastify.printPlugins()}`)
+
+    console.log(chalk.italic.dim('Took ' + (Date.now() - startTime) + ' ms'))
+    if (socket) {
+      console.log(`Web server started on ${socket}`)
+    } else {
+      console.log(`Web server started on http://localhost:${port}`)
+    }
+
+    // TODO: Should we restore this log? I think it's a little weird
+    // console.log(`GraphQL endpoint is set to ` + c.magenta(`${graphqlEndpoint}`))
+
     sendProcessReady()
   })
-}
-
-function coerceRootPath(path: string) {
-  // Make sure that we create a root path that starts and ends with a slash (/)
-  const prefix = path.charAt(0) !== '/' ? '/' : ''
-  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
-
-  return `${prefix}${path}${suffix}`
 }

@@ -16,6 +16,7 @@ export const apiServerHandler = async (options) => {
 
   const fastify = createFastifyInstance()
 
+  // FIXME: This close is async and so should not be used in the exit event handler
   process.on('exit', () => {
     fastify?.close()
   })
@@ -67,6 +68,7 @@ export const bothServerHandler = async (options) => {
 
   const fastify = createFastifyInstance()
 
+  // FIXME: This close is async and so should not be used in the exit event handler
   process.on('exit', () => {
     fastify?.close()
   })

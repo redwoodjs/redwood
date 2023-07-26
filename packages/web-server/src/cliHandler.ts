@@ -50,7 +50,9 @@ export async function handler(options: Options) {
   }
 
   // Start
-  fastify.listen(listenOptions).then(() => {
+  fastify.listen(listenOptions)
+
+  fastify.ready(() => {
     console.log(chalk.italic.dim('Took ' + (Date.now() - startTime) + ' ms'))
     if (options.socket) {
       console.log(`Web server started on ${options.socket}`)
@@ -59,7 +61,10 @@ export async function handler(options: Options) {
     }
   })
 
+  // FIXME: No call to sendProcessReady() here when there should be
+
   process.on('exit', () => {
+    // FIXME: This returns a promise which is forbidden because the 'exit' event handlers can't be async
     fastify.close()
   })
 }

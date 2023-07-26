@@ -22,3 +22,9 @@ export type FastifySideConfigFn = (
   fastify: FastifyInstance,
   options?: FastifySideConfigFnOptions
 ) => Promise<FastifyInstance> | void
+
+export interface Options {
+  socket: string
+  port: number
+  apiRootPath: string
+}

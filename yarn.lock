@@ -6738,6 +6738,7 @@ __metadata:
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 5.0.0
     "@types/aws-lambda": 8.10.119
+    "@types/dotenv-defaults": 2.0.1
     "@types/lodash": 4.14.195
     "@types/qs": 6.9.7
     "@types/split2": 4.2.0
@@ -6747,6 +6748,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.3
     core-js: 3.31.1
+    dotenv-defaults: 5.0.2
     fast-glob: 3.2.12
     fast-json-parse: 1.0.3
     fastify: 4.20.0
@@ -10057,6 +10059,15 @@ __metadata:
   version: 0.0.3
   resolution: "@types/doctrine@npm:0.0.3"
   checksum: 566dcdc988c97ff01d14493ceb2223643347f07cf0a88c86cd7cb7c2821cfc837fd39295e6809a29614fdfdc6c4e981408155ca909b2e5da5d947af939b6c966
+  languageName: node
+  linkType: hard
+
+"@types/dotenv-defaults@npm:2.0.1":
+  version: 2.0.1
+  resolution: "@types/dotenv-defaults@npm:2.0.1"
+  dependencies:
+    dotenv: ^8.2.0
+  checksum: 1c9214b1d501aa8d64697fe986b1c041c245880594515e6d048c924bfef717a9b325cfef403edfc2ddcdf3a93a9ca6021477ff8d92d95d5704435db2684eb94e
   languageName: node
   linkType: hard
 
