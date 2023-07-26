@@ -2,18 +2,18 @@ import path from 'path'
 
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 export async function runScriptFunction({
   path: scriptPath,
   functionName,
   args,
 }) {
-  const script = await import(scriptPath)
+  const script = require(scriptPath)
   const returnValue = await script[functionName](args)
 
   try {
-    const { db } = await import(path.join(getPaths().api.lib, 'db'))
+    const { db } = require(path.join(getPaths().api.lib, 'db'))
     db.$disconnect()
   } catch (e) {
     // silence

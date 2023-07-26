@@ -17,6 +17,7 @@ export const authDecoder: Decoder = async (
   const authHeaderUserId = authHeaderValue
 
   if (session.id.toString() !== authHeaderUserId) {
+    console.error('Authorization header does not match decrypted user ID')
     throw new Error('Authorization header does not match decrypted user ID')
   }
 

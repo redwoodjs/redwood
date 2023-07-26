@@ -201,7 +201,7 @@ Now if you take a look back at the real app in the browser (not Storybook) you s
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.jsx"
 export const Empty = () => {
   // highlight-next-line
   return <div className="text-center text-gray-500">No comments yet</div>
@@ -228,7 +228,7 @@ That's better. Let's update the test that covers the Empty component render as w
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentsCell/CommentsCell.test.js"
+```jsx title="web/src/components/CommentsCell/CommentsCell.test.jsx"
 it('renders Empty successfully', async () => {
   // highlight-start
   render(<Empty />)
@@ -567,7 +567,7 @@ That being said, if you really wanted to you could use Jest's [mocking utilities
 
 Where does that data come from? Take a look at the `comments.scenarios.{js,ts}` file which is next door:
 
-<Tabs>
+<Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
 ```javascript title="api/src/services/comments.scenarios.js"
@@ -898,7 +898,7 @@ in case we wanted to allow both ways – which Prisma generally allows, however 
 
 :::
 
-We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the Javascript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right *now*, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
+We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the JavaScript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right *now*, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
 
 :::info What's up with the names for scenario data? `posts.bark`? Really?
 

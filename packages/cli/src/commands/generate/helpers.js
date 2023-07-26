@@ -6,8 +6,8 @@ import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
-import { ensurePosixPath } from '@redwoodjs/internal/dist/paths'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import { getConfig, ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
@@ -207,6 +207,16 @@ export const createYargsForComponentGeneration = ({
       })
     },
     handler: async (options) => {
+      recordTelemetryAttributes({
+        command: `generate ${componentName}`,
+        tests: options.tests,
+        stories: options.stories,
+        verbose: options.verbose,
+        rollback: options.rollback,
+        force: options.force,
+        // TODO: This does not cover the specific options that each generator might pass in
+      })
+
       if (options.tests === undefined) {
         options.tests = getConfig().generate.tests
       }
@@ -230,13 +240,13 @@ export const createYargsForComponentGeneration = ({
             ...includeAdditionalTasks(options),
           ],
           {
-            rendererOptions: { collapse: false },
+            rendererOptions: { collapseSubtasks: false },
             exitOnError: true,
             renderer: options.verbose && 'verbose',
           }
         )
 
-        if (options.rollback) {
+        if (options.rollback && !options.force) {
           prepareForRollback(tasks)
         }
         await tasks.run()

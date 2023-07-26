@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import boxen from 'boxen'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
@@ -36,7 +35,7 @@ export const updateApiURLTask = (apiUrl) => {
 }
 
 /**
- * Use this to create checks prior to runnning setup commands
+ * Use this to create checks prior to running setup commands
  * with a better error output
  *
  * @example preRequisiteCheckTask([
@@ -136,19 +135,6 @@ export const addToDotEnvTask = ({ lines }) => {
       }
 
       fs.appendFileSync(env, lines.join('\n'))
-    },
-  }
-}
-
-export const printSetupNotes = (notes) => {
-  return {
-    title: 'One more thing...',
-    task: (_ctx, task) => {
-      task.title = `One more thing...\n\n ${boxen(notes.join('\n'), {
-        padding: { top: 1, bottom: 1, right: 1, left: 1 },
-        margin: 1,
-        borderColour: 'gray',
-      })}  \n`
     },
   }
 }

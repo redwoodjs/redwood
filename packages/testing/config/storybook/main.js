@@ -4,43 +4,41 @@ const path = require('path')
 const { mergeWithCustomize } = require('webpack-merge')
 
 const { getSharedPlugins } = require('@redwoodjs/core/config/webpack.common.js')
-const { getConfig } = require('@redwoodjs/internal/dist/config')
 const {
+  getConfig,
   getPaths,
   importStatementPath,
-} = require('@redwoodjs/internal/dist/paths')
+} = require('@redwoodjs/project-config')
 
-const config = getConfig()
+const redwoodProjectConfig = getConfig()
+const redwoodProjectPaths = getPaths()
 
-const rwjsPaths = getPaths()
-
-const staticAssetsFolder = path.join(getPaths().web.base, 'public')
-
+/** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const baseConfig = {
-  core: {
-    builder: 'webpack5',
+  framework: {
+    name: '@storybook/react-webpack5',
+    // This empty object is actually necessary.
+    options: {},
   },
+
   stories: [
     `${importStatementPath(
-      rwjsPaths.web.src
+      redwoodProjectPaths.web.src
     )}/**/*.stories.@(js|jsx|ts|tsx|mdx)`,
   ],
+
+  // See https://storybook.js.org/docs/react/configure/storybook-addons.
   addons: [
     '@storybook/addon-essentials',
-    config.web.a11y && '@storybook/addon-a11y',
+    redwoodProjectConfig.web.a11y && '@storybook/addon-a11y',
   ].filter(Boolean),
-  // Storybook's UI uses a separate Webpack configuration
-  managerWebpack: (sbConfig) => {
-    const userManagerPath = fs.existsSync(rwjsPaths.web.storybookManagerConfig)
-      ? rwjsPaths.web.storybookManagerConfig
-      : './manager.example.js'
-    sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_MANAGER_CONFIG'] =
-      userManagerPath
 
-    return sbConfig
-  },
-  webpackFinal: (sbConfig, { configType }) => {
-    // configType is 'PRODUCTION' or 'DEVELOPMENT', why shout?
+  // Only set staticDirs when running Storybook process; will fail if set for SB --build
+  ...(process.env.NODE_ENV !== 'production' && {
+    staticDirs: [path.join(redwoodProjectPaths.web.base, 'public')],
+  }),
+
+  webpackFinal(sbConfig, { configType }) {
     const isEnvProduction =
       configType && configType.toLowerCase() === 'production'
 
@@ -58,8 +56,9 @@ const baseConfig = {
       '@redwoodjs/testing/dist/web/mockAuth.js'
     )
     sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] =
-      rwjsPaths.web.routes
-    sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] = rwjsPaths.web.src
+      redwoodProjectPaths.web.routes
+    sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] =
+      redwoodProjectPaths.web.src
 
     // Determine the default storybook style file to use.
     // If one isn't provided, set the alias to `false` to tell webpack to ignore it.
@@ -67,16 +66,18 @@ const baseConfig = {
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_DEFAULT_CSS'] = false
 
     const supportedStyleIndexFiles = ['index.scss', 'index.sass', 'index.css']
-    for (let file of supportedStyleIndexFiles) {
-      const filePath = path.join(rwjsPaths.web.src, file)
+    for (const file of supportedStyleIndexFiles) {
+      const filePath = path.join(redwoodProjectPaths.web.src, file)
       if (fs.existsSync(filePath)) {
         sbConfig.resolve.alias['~__REDWOOD__USER_WEB_DEFAULT_CSS'] = filePath
         break
       }
     }
 
-    const userPreviewPath = fs.existsSync(rwjsPaths.web.storybookPreviewConfig)
-      ? rwjsPaths.web.storybookPreviewConfig
+    const userPreviewPath = fs.existsSync(
+      redwoodProjectPaths.web.storybookPreviewConfig
+    )
+      ? redwoodProjectPaths.web.storybookPreviewConfig
       : './preview.example.js'
     sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] =
       userPreviewPath
@@ -112,7 +113,7 @@ const baseConfig = {
       Boolean
     )
 
-    // ** NODE **
+    // See https://community.redwoodjs.com/t/mocking-node-modules-on-the-web-side-with-webpack-config-in-storybook/1392.
     sbConfig.node = rwConfig.node
 
     // Performance Improvements:
@@ -127,21 +128,16 @@ const baseConfig = {
 
     return sbConfig
   },
-  // only set staticDirs when running Storybook process; will fail if set for SB --build
-  ...(process.env.NODE_ENV !== 'production' && {
-    staticDirs: [`${staticAssetsFolder}`],
-  }),
 }
 
-const mergeUserStorybookConfig = (baseConfig) => {
-  const redwoodPaths = getPaths()
+function mergeUserStorybookConfig(baseConfig) {
+  const hasCustomConfig = fs.existsSync(redwoodProjectPaths.web.storybookConfig)
 
-  const hasCustomConfig = fs.existsSync(redwoodPaths.web.storybookConfig)
   if (!hasCustomConfig) {
     return baseConfig
   }
 
-  const userStorybookConfig = require(redwoodPaths.web.storybookConfig)
+  const userStorybookConfig = require(redwoodProjectPaths.web.storybookConfig)
 
   const { webpackFinal: baseWebpackFinal, ...baseConfigRest } = baseConfig
 

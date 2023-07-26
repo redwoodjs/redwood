@@ -9,7 +9,13 @@ export type { Decoded }
 const AUTH_PROVIDER_HEADER = 'auth-provider'
 
 export const getAuthProviderHeader = (event: APIGatewayProxyEvent) => {
-  return event?.headers[AUTH_PROVIDER_HEADER]
+  const authProviderKey = Object.keys(event?.headers ?? {}).find(
+    (key) => key.toLowerCase() === AUTH_PROVIDER_HEADER
+  )
+  if (authProviderKey) {
+    return event?.headers[authProviderKey]
+  }
+  return undefined
 }
 
 export interface AuthorizationHeader {
@@ -65,13 +71,20 @@ export const getAuthenticationContext = async ({
 
   // No `auth-provider` header means that the user is logged out,
   // and none of this auth malarky is required.
-  if (!type || !authDecoder) {
+  if (!type) {
     return undefined
   }
 
   const { schema, token } = parseAuthorizationHeader(event)
 
-  const authDecoders = Array.isArray(authDecoder) ? authDecoder : [authDecoder]
+  let authDecoders: Array<Decoder> = []
+
+  if (Array.isArray(authDecoder)) {
+    authDecoders = authDecoder
+  } else if (authDecoder) {
+    authDecoders = [authDecoder]
+  }
+
   let decoded = null
 
   let i = 0

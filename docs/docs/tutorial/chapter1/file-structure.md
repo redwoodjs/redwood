@@ -43,13 +43,13 @@ Don't worry about trying to memorize this directory structure right now, it's ju
         ├── layouts
         ├── pages
         │   ├── FatalErrorPage
-        │   │   └── FatalErrorPage.js
+        │   │   └── FatalErrorPage.jsx
         │   └── NotFoundPage
-        │       └── NotFoundPage.js
-        ├── App.js
+        │       └── NotFoundPage.jsx
+        ├── App.jsx
         ├── index.css
         ├── index.html
-        └── Routes.js
+        └── Routes.jsx
 ```
 
 </TabItem>
@@ -99,7 +99,7 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 </TabItem>
 </Tabs>
 
-At the top level we have three directories, `api`, `scripts` and `web`. Redwood separates the backend (`api`) and frontend (`web`) concerns into their own paths in the codebase. ([Yarn refers to these as "workspaces"](https://yarnpkg.com/lang/en/docs/workspaces/). In Redwood, we refer to them as "sides.") When you add packages going forward you'll need to specify which workspace they should go in. For example (don't run these commands, we're just looking at the syntax):
+At the top level we have three directories, `api`, `scripts` and `web`. Redwood separates the backend (`api`) and frontend (`web`) concerns into their own paths in the codebase. ([Yarn refers to these as "workspaces"](https://yarnpkg.com/features/workspaces). In Redwood, we refer to them as "sides.") When you add packages going forward you'll need to specify which workspace they should go in. For example (**don't run these commands**, we're just looking at the syntax):
 
 ```bash
 yarn workspace web add marked
@@ -115,7 +115,7 @@ Within `api` there are four directories:
 - `db` contains the plumbing for the database:
   - `schema.prisma` contains the database schema (tables and columns)
 
-  After we add our first database table there will also be a SQLite database file named `dev.db` and a directory called `migrations` created for us. `migrations` contains the files that act as snapshots of the database schema changing over time.
+  After we add our first database table, there will also be a SQLite database file named `dev.db` and a directory called `migrations` created for us. `migrations` contains the files that act as snapshots of the database schema changing over time.
 
 - `dist` contains the compiled code for the api side and can be ignored when developing.
 
@@ -134,18 +134,18 @@ That's it for the backend.
 
 - `public` contains assets not used by React components (they will be copied over unmodified to the final app's root directory):
   - `favicon.png` is the icon that goes in a browser tab when your page is open (apps start with the RedwoodJS logo).
-  - `README.md` explains how, and when, to use the `public` folder for static assets. It also covers best practices for importing assets within components via Webpack. You can also [read this README.md file on GitHub](https://github.com/redwoodjs/create-redwood-app/tree/main/web/public).
+  - `README.md` explains how, and when, to use the `public` folder for static assets. It also covers best practices for importing assets within components via Vite. You can also [read this README.md file on GitHub](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/templates/ts/web/public).
   - `robots.txt` can be used to control what web indexers are [allowed to do](https://www.robotstxt.org/robotstxt.html).
 
 - `src` contains several subdirectories:
   - `components` contains your traditional React components as well as Redwood _Cells_ (more about those soon).
   - `layouts` contain HTML/components that wrap your content and are shared across _Pages_.
   - `pages` contain components and are optionally wrapped inside _Layouts_ and are the "landing page" for a given URL (a URL like `/articles/hello-world` will map to one page and `/contact-us` will map to another). There are two pages included in a new app:
-    - `NotFoundPage.{js,tsx}` will be served when no other route is found (see `Routes.{js,tsx}` below).
-    - `FatalErrorPage.{js,tsx}` will be rendered when there is an uncaught error that can't be recovered from and would otherwise cause our application to really blow up (normally rendering a blank page).
-  - `App.{js,tsx}` the bootstrapping code to get our Redwood app up and running.
+    - `NotFoundPage.{jsx,tsx}` will be served when no other route is found (see `Routes.{jsx,tsx}` below).
+    - `FatalErrorPage.{jsx,tsx}` will be rendered when there is an uncaught error that can't be recovered from and would otherwise cause our application to really blow up (normally rendering a blank page).
+  - `App.{jsx,tsx}` the bootstrapping code to get our Redwood app up and running.
   - `index.css` is a good starting place for custom CSS, but there are many options (we like [TailwindCSS](https://tailwindcss.com/) which, believe it or not, may not require you to write any custom CSS for the life of your app!)
   - `index.html` is the standard React starting point for our app.
-  - `Routes.{js,tsx}` the route definitions for our app which map a URL to a _Page_.
+  - `Routes.{jsx,tsx}` the route definitions for our app which map a URL to a _Page_.
 
 We'll dip in and out of these directories and files (and create some new ones) as we work through the tutorial.

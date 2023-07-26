@@ -1,10 +1,12 @@
 // import terminalLink from 'terminal-link'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import { printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { printSetupNotes, updateApiURLTask } from '../helpers'
+import { updateApiURLTask } from '../helpers'
 
 export const command = 'vercel'
 export const description = 'Setup Vercel deploy'
@@ -15,8 +17,11 @@ const notes = [
 ]
 
 export const handler = async () => {
+  recordTelemetryAttributes({
+    command: 'setup deploy vercel',
+  })
   const tasks = new Listr([updateApiURLTask('/api'), printSetupNotes(notes)], {
-    rendererOptions: { collapse: false },
+    rendererOptions: { collapseSubtasks: false },
   })
   try {
     await tasks.run()

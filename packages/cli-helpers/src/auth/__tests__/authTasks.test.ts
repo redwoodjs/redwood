@@ -22,8 +22,8 @@ jest.mock('../../lib/paths', () => {
   const path = require('path')
   const actualPaths = jest.requireActual('../../lib/paths')
   const basedir = '/mock/setup/path'
-  const app = mockIsTypeScriptProject ? 'App.tsx' : 'App.js'
-  const routes = mockIsTypeScriptProject ? 'Routes.tsx' : 'Routes.js'
+  const app = mockIsTypeScriptProject ? 'App.tsx' : 'App.jsx'
+  const routes = mockIsTypeScriptProject ? 'Routes.tsx' : 'Routes.jsx'
 
   return {
     resolveFile: actualPaths.resolveFile,
@@ -117,7 +117,7 @@ beforeEach(() => {
 })
 
 describe('authTasks', () => {
-  it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0)', () => {
+  it('Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Auth0)', () => {
     const templatePath = path.join(
       getPaths().base,
       platformPath('/templates/web/auth.ts.template')
@@ -144,7 +144,7 @@ describe('authTasks', () => {
     expect(fs.readFileSync(getPaths().web.routes)).toMatchSnapshot()
   })
 
-  it('Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk)', () => {
+  it('Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Clerk)', () => {
     const templatePath = path.join(
       getPaths().base,
       platformPath('/templates/web/auth.tsx.template')
@@ -430,6 +430,36 @@ describe('authTasks', () => {
       `)
     })
 
+    test('Legacy auth single line CRLF', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider client={netlifyIdentity} type="netlify">
+                <RedwoodApolloProvider>
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `.replace(/\n/g, '\r\n')
+
+      expect(removeAuthProvider(content)).toMatch(
+        `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider>
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `.replace(/\n/g, '\r\n')
+      )
+    })
+
     test('Legacy auth multi-line', () => {
       const content = `
         const App = () => (
@@ -470,6 +500,48 @@ describe('authTasks', () => {
       `)
     })
 
+    test('Legacy auth multi-line CRLF', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider
+                client={WebAuthnClient}
+                type="dbAuth"
+                config={{ fetchConfig: { credentials: 'include' } }}
+              >
+                <RedwoodApolloProvider
+                  graphQLClientConfig={{
+                    httpLinkConfig: { credentials: 'include' },
+                  }}
+                >
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `.replace(/\n/g, '\r\n')
+
+      expect(removeAuthProvider(content)).toMatch(
+        `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider
+                graphQLClientConfig={{
+                  httpLinkConfig: { credentials: 'include' },
+                }}
+              >
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `.replace(/\n/g, '\r\n')
+      )
+    })
+
     test('AuthProvider exists', () => {
       const content = `
         const App = () => (
@@ -496,6 +568,36 @@ describe('authTasks', () => {
           </FatalErrorBoundary>
         )
       `)
+    })
+
+    test('AuthProvider exists CRLF', () => {
+      const content = `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <AuthProvider>
+                <RedwoodApolloProvider useAuth={useAuth}>
+                  <Routes />
+                </RedwoodApolloProvider>
+              </AuthProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `.replace(/\n/g, '\r\n')
+
+      expect(removeAuthProvider(content)).toMatch(
+        `
+        const App = () => (
+          <FatalErrorBoundary page={FatalErrorPage}>
+            <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+              <RedwoodApolloProvider useAuth={useAuth}>
+                <Routes />
+              </RedwoodApolloProvider>
+            </RedwoodProvider>
+          </FatalErrorBoundary>
+        )
+      `.replace(/\n/g, '\r\n')
+      )
     })
 
     test("AuthProvider doesn't exist", () => {

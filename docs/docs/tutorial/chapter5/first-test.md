@@ -2,7 +2,7 @@
 
 So if Storybook is the first phase of creating/updating a component, phase two must be confirming the functionality with a test. Let's add a test for our new summary feature.
 
-If you've never done any kind of testing before this may be a little hard to follow. We've got a great document [all about testing](../../testing.md) (including some philosophy, for those so inclined) if you want a good overview of testing in general. We even build a super-simple test runner from scratch in plain Javascript to take some of the mystery out of how this all works!
+If you've never done any kind of testing before this may be a little hard to follow. We've got a great document [all about testing](../../testing.md) (including some philosophy, for those so inclined) if you want a good overview of testing in general. We even build a super-simple test runner from scratch in plain JavaScript to take some of the mystery out of how this all works!
 
 If you still have the test process running from the previous page then then you can just press `a` to run **a**ll tests. If you stopped your test process, you can start it again with:
 
@@ -21,7 +21,7 @@ Let's update the test so that it checks for the expected behavior instead. There
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell.test.js"
+```jsx title="web/src/components/ArticlesCell.test.jsx"
 test('Success renders successfully', async () => {
   const articles = standard().articles
   render(<Success articles={articles} />)
@@ -76,7 +76,7 @@ Okay, let's do this:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell.test.js"
+```jsx title="web/src/components/ArticlesCell.test.jsx"
 // highlight-next-line
 import { render, screen, within } from '@redwoodjs/testing'
 
@@ -223,7 +223,7 @@ Assert that the ellipsis is present.
 
 As soon as you saved that test file the test should have run and passed! Press `a` to run the whole suite if you want to make sure nothing else broke. Remember to press `o` to go back to only testing changes again. (There's nothing wrong with running the full test suite each time, but it will take longer than only testing the things that have changed since the last time you committed your code.)
 
-To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and the expectation in our test `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` fails because the full body *is* in the document! Make sure to put the `summary={true}` back before we continue.
+To double check that we're testing what we think we're testing, open up `ArticlesCell.jsx` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and the expectation in our test `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` fails because the full body *is* in the document! Make sure to put the `summary={true}` back before we continue.
 
 ### What's the Deal with Mocks?
 
@@ -320,7 +320,7 @@ So we can just spread the result of `standard()` in a story or test when using t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.js
+```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.jsx
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -355,7 +355,7 @@ Some folks find this syntax a little *too* succinct and would rather see the `<S
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.js
+```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.jsx
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -407,7 +407,7 @@ We'll move the sample article data in the test to a constant and then use it in 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.test.js"
+```jsx title="web/src/components/Article/Article.test.jsx"
 import { render, screen } from '@redwoodjs/testing'
 
 import Article from './Article'

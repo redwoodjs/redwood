@@ -4,7 +4,7 @@ import { createLogger } from '@redwoodjs/api/logger'
 
 import { createGraphQLHandler } from '../../functions/graphql'
 
-jest.mock('../../makeMergedSchema/makeMergedSchema', () => {
+jest.mock('../../makeMergedSchema', () => {
   const { makeExecutableSchema } = require('@graphql-tools/schema')
 
   // Return executable schema
@@ -471,11 +471,8 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
    *
    * Note: When reporting the number of found tokens as in
    *
-   * '"Syntax Error: Token limit of 2 exceeded, found 3."'
+   * '"Syntax Error: Token limit of 2 exceeded."'
    *
-   * The number found is not the total tokens, but the value when found that exceeded the limit.
-   *
-   * Therefore found would be n + 1.
    *
    */
   describe('when protecting against token complexity', () => {
@@ -491,7 +488,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Token limit of 2 exceeded, found 3."'
+          '"Syntax Error: Token limit of 2 exceeded."'
         )
       })
     })

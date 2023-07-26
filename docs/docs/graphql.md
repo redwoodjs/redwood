@@ -1012,7 +1012,7 @@ For a details on setting up GraphQL Security, see [Security](#security).
 
 Logging is essential in production apps to be alerted about critical errors and to be able to respond effectively to support issues. In staging and development environments, logging helps you debug queries, resolvers and cell requests.
 
-We want to make logging simple when using RedwoodJS and therefore have configured the api-side GraphQL handler to log common information about your queries and mutations. Log statements also be optionally enriched with [operation names](https://graphql.org/learn/queries/#operation-name), user agents, request ids, and performance timings to give you move visibility into your GraphQL api.
+We want to make logging simple when using RedwoodJS and therefore have configured the api-side GraphQL handler to log common information about your queries and mutations. Log statements also be optionally enriched with [operation names](https://graphql.org/learn/queries/#operation-name), user agents, request ids, and performance timings to give you more visibility into your GraphQL api.
 
 By configuring the GraphQL handler to use your api side [RedwoodJS logger](logger.md), any errors and other log statements about the [GraphQL execution](https://graphql.org/learn/execution/) will be logged to the [destination](logger.md#destination-aka-where-to-log) you've set up: to standard output, file, or transport stream.
 
@@ -1450,13 +1450,44 @@ Because it is often useful to ask a GraphQL schema for information about what qu
 
 The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is a way for you to interact with your schema and try out queries and mutations. It can show you the schema by inspecting it. You can find the GraphQL Playground at http://localhost:8911/graphql when your dev server is running.
 
-> Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
+> Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **, by default, only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
+
+However, there may be cases where you want to enable introspection as well as the GraphQL PLaygrouns. You can enable introspection by setting the `allowIntrospection` option to `true` and enable GraphiQL by setting `allowGraphiQL` to `true`.
+
+Here is an example of `createGraphQLHandler` function with the `allowIntrospection` and `allowGraphiQL` options set to `true`:
+```ts {8}
+export const handler = createGraphQLHandler({
+  authDecoder,
+  getCurrentUser,
+  loggerConfig: { logger, options: {} },
+  directives,
+  sdls,
+  services,
+  allowIntrospection: true, // 👈 enable introspection in all environments
+  allowGraphiQL: true, // 👈 enable GraphiQL Playground in all environments
+  onException: () => {
+    // Disconnect from your database with an unhandled exception.
+    db.$disconnect()
+  },
+})
+```
+
+:::caution
+
+Enabling introspection in production may pose a security risk, as it allows users to access information about your schema, queries, and mutations. Use this option with caution and make sure to secure your GraphQL API properly.
+
+The may be cases where one wants to allow introspection, but not GraphiQL.
+
+Or, you may want to enable GraphiQL, but not allow introspection; for example, to try out known queries, but not to share the entire set of possible operations and types.
+
+:::
+
 
 ### GraphQL Armor Configuration
 
 [GraphQL Armor](https://escape.tech/graphql-armor/) is a middleware that adds a security layer the RedwoodJS GraphQL endpoint configured with sensible defaults.
 
-You don't have to configure anything to enforce protection against alias, cost, depth, directive, tokens abuse in GraphQL operations as well as to block field suggestions or revealing error messages that might leak sensitive infomration.
+You don't have to configure anything to enforce protection against alias, cost, depth, directive, tokens abuse in GraphQL operations as well as to block field suggestions or revealing error messages that might leak sensitive information.
 
 But, if you need to enable, disable to modify the default settings, GraphQL Armor is fully configurable in a per-plugin fashion.
 
@@ -2168,7 +2199,14 @@ If your project uses [Docusaurus](https://docusaurus.io), the generated commente
 
 The following is some basic setup information, but please consult [Docusaurus](https://docusaurus.io) and the [graphql-markdown](https://graphql-markdown.github.io) for latest instructions.
 
-1. Add `docs` to your `workspaces` in the project's `package.json`:
+1. Install Docusaurus (if you have not done so already)
+
+```terminal
+npx create-docusaurus@latest docs classic
+```
+
+
+Add `docs` to your `workspaces` in the project's `package.json`:
 
 ```
   "workspaces": {
@@ -2181,19 +2219,30 @@ The following is some basic setup information, but please consult [Docusaurus](h
   },
 ```
 
-2. Create a `docs` directory at the root of your project
+2. Ensure a `docs` directory exists at the root of your project
 
 ```terminal
-mcd docs
-`
-
-3. Install the plugin
-
-```terminal
-yarn add @edno/docusaurus2-graphql-doc-generator graphql
+mkdir docs // if needed
 ```
 
-4. Update `docs/docusaurus.config.js` and configure the plugin and navbar
+3. Install the GraphQL Generators Plugin
+
+```terminal
+yarn workspace docs add @edno/docusaurus2-graphql-doc-generator graphql
+```
+
+4. Ensure a Directory for your GraphQL APi generated documentation resides in with the Docusaurus directory `/docs` structure
+
+```terminal
+// Change into the "docs" workspace
+
+cd docs
+
+// you should have the "docs" directory and within that a "graphql-api" directory
+mkdir docs/graphql-api // if needed
+```
+
+5. Update `docs/docusaurus.config.js` and configure the plugin and navbar
 
 ```
 // docs/docusaurus.config.js
@@ -2205,7 +2254,6 @@ yarn add @edno/docusaurus2-graphql-doc-generator graphql
         schema: '../.redwood/schema.graphql',
         rootPath: './docs',
         baseURL: 'graphql-api',
-        homepage: './docs/graphql-api/generated.md',
         linkRoot: '../..',
       },
     ],
@@ -2224,11 +2272,11 @@ themeConfig:
           {
             to: '/docs/graphql-api', // adjust the location depending on your baseURL (see configuration)
             label: 'GraphQL API', // change the label with yours
-            position: 'left',
+            position: 'right',
           },
 //...
 ```
-5. Update `docs/sidebars.js` to include the generated `graphql-api/sidebar-schema.js`
+6. Update `docs/sidebars.js` to include the generated `graphql-api/sidebar-schema.js`
 
 ```
 // docs/sidebars.js
@@ -2260,7 +2308,7 @@ const sidebars = {
 module.exports = sidebars
 ```
 
-6. Generate the docs
+7. Generate the docs
 
 `yarn docusaurus graphql-to-doc`
 
@@ -2270,7 +2318,7 @@ You can overwrite the generated docs and bypass the plugin's diffMethod use `--f
 ``yarn docusaurus graphql-to-doc --force`
 :::
 
-7. Start Docusaurus
+8. Start Docusaurus
 
 ```
 yarn start

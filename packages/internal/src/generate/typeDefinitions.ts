@@ -1,11 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
+import { getPaths, processPagesDir } from '@redwoodjs/project-config'
+
 import { getCellGqlQuery, fileToAst } from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
 import { parseGqlQueryToAst } from '../gql'
 import { getJsxElements } from '../jsx'
-import { getPaths, processPagesDir } from '../paths'
 
 import {
   generateTypeDefGraphQLApi,
@@ -37,21 +38,27 @@ import { writeTemplate } from './templates'
  */
 export const generateTypeDefs = async () => {
   // Return all the paths so they can be printed
-  const gqlApi = await generateTypeDefGraphQLApi()
-  const gqlWeb = await generateTypeDefGraphQLWeb()
-  return [
-    ...generateMirrorDirectoryNamedModules(),
-    ...generateMirrorCells(),
-    ...generateTypeDefRouterPages(),
-    ...generateTypeDefCurrentUser(),
-    ...generateTypeDefRouterRoutes(),
-    ...generateTypeDefGlobImports(),
-    ...generateTypeDefGlobalContext(),
-    ...generateTypeDefScenarios(),
-    ...generateTypeDefTestMocks(),
-    ...gqlApi,
-    ...gqlWeb,
-  ]
+  const { typeDefFiles: gqlApiTypeDefFiles, errors: apiErrors } =
+    await generateTypeDefGraphQLApi()
+  const { typeDefFiles: gqlWebTypeDefFiles, errors: webErrors } =
+    await generateTypeDefGraphQLWeb()
+
+  return {
+    typeDefFiles: [
+      ...generateMirrorDirectoryNamedModules(),
+      ...generateMirrorCells(),
+      ...generateTypeDefRouterPages(),
+      ...generateTypeDefCurrentUser(),
+      ...generateTypeDefRouterRoutes(),
+      ...generateTypeDefGlobImports(),
+      ...generateTypeDefGlobalContext(),
+      ...generateTypeDefScenarios(),
+      ...generateTypeDefTestMocks(),
+      ...gqlApiTypeDefFiles,
+      ...gqlWebTypeDefFiles,
+    ],
+    errors: [...apiErrors, ...webErrors],
+  }
 }
 
 export const generateMirrorDirectoryNamedModules = () => {

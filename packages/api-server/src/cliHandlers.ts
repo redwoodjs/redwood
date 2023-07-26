@@ -1,6 +1,6 @@
 import c from 'ansi-colors'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
+import { getConfig } from '@redwoodjs/project-config'
 
 import createFastifyInstance from './fastify'
 import withApiProxy from './plugins/withApiProxy'
@@ -131,7 +131,7 @@ export const webServerHandler = async (options: WebServerArgs) => {
   }
 
   startFastifyServer({
-    port: port,
+    port,
     socket,
     fastify,
   }).ready(() => {

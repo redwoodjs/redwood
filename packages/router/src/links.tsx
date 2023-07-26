@@ -183,7 +183,10 @@ interface RedirectProps {
  * A declarative way to redirect to a route name
  */
 const Redirect = ({ to, options }: RedirectProps) => {
-  useEffect(() => navigate(to, options), [to, options])
+  useEffect(() => {
+    navigate(to, options)
+  }, [to, options])
+
   return null
 }
 

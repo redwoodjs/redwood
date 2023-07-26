@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'i18n'
 export const description = 'Set up i18n'
 export const builder = (yargs) => {
@@ -10,6 +12,10 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./i18nHandler')
+  recordTelemetryAttributes({
+    command: 'setup i18n',
+    force: options.force,
+  })
+  const { handler } = await import('./i18nHandler.js')
   return handler(options)
 }

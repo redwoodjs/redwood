@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react'
 
+type PathDefinition = string
 interface SplashPageProps {
   hasGeneratedRoutes: boolean
-  routes: any[]
+  allStandardRoutes: Record<
+    PathDefinition,
+    { name: string | null; path: PathDefinition }
+  >
 }
 
-const SplashPage = ({ hasGeneratedRoutes, routes }: SplashPageProps) => {
+const SplashPage = ({
+  hasGeneratedRoutes,
+  allStandardRoutes: routesMap,
+}: SplashPageProps) => {
+  const routes = Object.values(routesMap)
+
   const version = useVersion()
   return (
     <>
@@ -325,22 +334,16 @@ const SplashPage = ({ hasGeneratedRoutes, routes }: SplashPageProps) => {
                         <p className="pages-title">List of Pages by path:</p>
                         <ul className="pages-list">
                           {routes.map((route, index) => {
-                            if (
-                              route.type.name !== 'Route' ||
-                              route.props.notfound
-                            ) {
-                              return
-                            }
                             return (
                               <li key={index} className="pages-item">
                                 <code>
-                                  {`${route.props.name} -> `}
+                                  {`${route.name} -> `}
                                   <a
-                                    href={route.props.path}
+                                    href={route.path}
                                     target="_blank"
                                     rel="noreferrer"
                                   >
-                                    {route.props.path}
+                                    {route.path}
                                   </a>
                                 </code>
                               </li>

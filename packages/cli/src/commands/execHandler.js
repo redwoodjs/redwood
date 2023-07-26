@@ -1,7 +1,10 @@
 import path from 'path'
 
+import { context } from '@opentelemetry/api'
+import { suppressTracing } from '@opentelemetry/core'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { findScripts } from '@redwoodjs/internal/dist/files'
@@ -21,6 +24,12 @@ const printAvailableScriptsToConsole = () => {
 }
 
 export const handler = async (args) => {
+  recordTelemetryAttributes({
+    command: 'exec',
+    prisma: args.prisma,
+    list: args.list,
+  })
+
   const { name, prisma, list, ...scriptArgs } = args
   if (list || !name) {
     printAvailableScriptsToConsole()
@@ -116,20 +125,19 @@ export const handler = async (args) => {
           })
         } catch (e) {
           console.error(c.error(`Error in script: ${e.message}`))
+          throw e
         }
       },
     },
   ]
 
   const tasks = new Listr(scriptTasks, {
-    rendererOptions: { collapse: false },
+    rendererOptions: { collapseSubtasks: false },
     renderer: 'verbose',
   })
 
-  try {
+  // Prevent user project telemetry from within the script from being recorded
+  await context.with(suppressTracing(context.active()), async () => {
     await tasks.run()
-  } catch (e) {
-    console.error(c.error(`The script exited with errors.`))
-    process.exit(e?.exitCode || 1)
-  }
+  })
 }

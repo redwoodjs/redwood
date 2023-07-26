@@ -1,5 +1,7 @@
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import {
   existsAnyExtensionSync,
   deleteFile,
@@ -8,7 +10,7 @@ import {
   getGraphqlPath,
 } from '../../../lib'
 import c from '../../../lib/colors'
-import { getOutputPath } from '../../setup/graphiql/graphiql'
+import { getOutputPath } from '../../setup/graphiql/graphiqlHelpers'
 
 const removeGraphiqlFromGraphqlHandler = () => {
   const graphqlPath = getGraphqlPath()
@@ -33,6 +35,9 @@ export const command = 'graphiql'
 export const description = 'Destroy graphiql header'
 
 export const handler = () => {
+  recordTelemetryAttributes({
+    command: 'destory graphiql',
+  })
   const path = getOutputPath()
   const tasks = new Listr(
     [
@@ -46,7 +51,7 @@ export const handler = () => {
         task: removeGraphiqlFromGraphqlHandler,
       },
     ],
-    { rendererOptions: { collapse: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
   )
   try {
     tasks.run()

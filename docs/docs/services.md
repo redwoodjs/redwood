@@ -44,20 +44,26 @@ Finally, Services can also be called from [serverless functions](serverless-func
 
 ## Service Validations
 
-Starting with `v0.38`, Redwood includes a feature we call Service Validations. These simplify an extremely common task: making sure that incoming data is formatted properly before continuing. These validations are meant to be included at the start of your Service function and will throw an error if conditions are not met:
+Redwood includes a feature we call Service Validations. These simplify an extremely common task: making sure that incoming data is formatted properly before continuing. These validations are meant to be included at the start of your Service function and will throw an error if conditions are not met:
 
 ```jsx
-import { validate, validateWith, validateUniqueness } from '@redwoodjs/api'
+import { validate, validateWith, validateWithSync, validateUniqueness } from '@redwoodjs/api'
 
 export const createUser = async ({ input }) => {
   validate(input.firstName, 'First name', {
     presence: true,
-    excludes: { in: ['Admin', 'Owner'], message: 'That name is reserved, sorry!' },
+    exclusion: { in: ['Admin', 'Owner'], message: 'That name is reserved, sorry!' },
     length: { min: 2, max: 255 }
   })
-  validateWith(() => {
+  validateWithSync(() => {
     if (input.role === 'Manager' && !context.currentUser.roles.includes('admin')) {
       throw 'Only Admins can create new Managers'
+    }
+  })
+  validateWith(async () => {
+    const inviteCount = await db.invites.count({ where: { userId: currentUser.id  } })
+    if (inviteCount >= 10) {
+      throw 'You have already invited your max of 10 users'
     }
   })
 
@@ -276,6 +282,7 @@ validate(input.name, 'Name', {
 ##### Options
 
 * `in`: the list of values that cannot be used
+* `caseSensitive`: toggles case sensitivity; default: `true`
 
 ```jsx
 validate(input.name, 'Name', {
@@ -339,6 +346,7 @@ validate(input.role, 'Role', {
 ##### Options
 
 * `in`: the list of values that can be used
+* `caseSensitive`: toggles case sensitivity; default: `true`
 
 ```jsx
 validate(input.role, 'Role', {
@@ -514,8 +522,8 @@ validate(input.debt, 'Debt', {
 * `message`: a custom message if validation fails. Some options can be used in string interpolation: `lessThan`, `lessThanOrEqual`, `greaterThan`, `greaterThanOrEqual`, `equal`, and `otherThan`
 
 ```jsx
-validate(input.floor, {
-  numericality: { otherThan: 13, 'You cannot go to floor ${otherThan}' }
+validate(input.floor, 'Floor', {
+  numericality: { otherThan: 13, message: 'You cannot go to floor ${otherThan}' }
 })
 ```
 
@@ -608,19 +616,18 @@ validate(input.value, 'Value', {
   }
 })
 ```
-
-### validateWith()
+### validateWithSync()
 
 `validateWith()` is simply given a function to execute. This function should throw with a message if there is a problem, otherwise do nothing.
 
 ```jsx
-validateWith(() => {
+validateWithSync(() => {
   if (input.name === 'Name') {
     throw "You'll have to be more creative than that"
   }
 })
 
-validateWith(() => {
+validateWithSync(() => {
   if (input.name === 'Name') {
     throw new Error("You'll have to be more creative than that")
   }
@@ -630,6 +637,18 @@ validateWith(() => {
 Either of these errors will be caught and re-thrown as a `ServiceValidationError` with your text as the `message` of the error (although technically you should always throw errors with `new Error()` like in the second example).
 
 You could just write your own function and throw whatever you like, without using `validateWith()`. But, when accessing your Service function through GraphQL, that error would be swallowed and the user would simply see "Something went wrong" for security reasons: error messages could reveal source code or other sensitive information so most are hidden. Errors thrown by Service Validations are considered "safe" and allowed to be shown to the client.
+
+### validateWithSync()
+
+The same behavior as `validateWithSync()` but works with Promises.
+
+```jsx
+validateWithSync(async () => {
+  if (await db.products.count() >= 100) {
+    throw "There can only be a maximum of 100 products in your store"
+  }
+})
+```
 
 ### validateUniqueness()
 
@@ -763,7 +782,7 @@ In our example above you could cache the GraphQL query for the most popular prod
 
 As of this writing, Redwood ships with clients for the two most popular cache backends: [Memcached](https://memcached.org/) and [Redis](https://redis.io/). Service caching wraps each of these in an adapter, which makes it easy to add more clients in the future. If you're interested in adding an adapter for your favorite cache client, [open a issue](https://github.com/redwoodjs/redwood/issues) and tell us about it! Instructions for getting started with the code are [below](#creating-your-own-client).
 
-::: info
+:::info
 
 If you need to access functionality in your cache client that the `cache()` and `cacheFindMany()` functions do not handle, you can always get access to the underlying raw client library and use it however you want:
 
@@ -835,7 +854,7 @@ cache(product, () => {
 
 One drawback to this key is in potentially responding to *too many* data changes, even ones we don't care about caching. Imagine that a product has a `views` field that tracks how many times it has been viewed in the browser. This number will be changing all the time, but if we don't display that count to the user then we're constantly re-creating the cache for the product even though no data the user will see is changing. There's no way to tell Prisma "set the `updatedAt` when the record changes, but not if the `views` column changes." This cache key is too variable. One solution would be to move the `views` column to another table with a `productId` pointing back to this record. Now the `product` is back to just containing data we care about caching.
 
-What if you want to expire a cache regardless of whether the data itself has changed? Maybe you make a UI change where you now show a product's SKU on the page where you didn't before. You weren't previously selecing the `sku` field out of the database, and so it hasn't been cached. But now that you're showing it you'll need to add it the list of fields to return from the service. One solution would be forceably update all of the `updatedAt` fields in the database. But a) Prisma won't easily let you do this since it think it controls that column, and b) every product is going to appear to have been edited at the same time, when in fact nothing changed—you just needed to bust the cache.
+What if you want to expire a cache regardless of whether the data itself has changed? Maybe you make a UI change where you now show a product's SKU on the page where you didn't before. You weren't previously selecting the `sku` field out of the database, and so it hasn't been cached. But now that you're showing it you'll need to add it the list of fields to return from the service. One solution would be forcibly update all of the `updatedAt` fields in the database. But a) Prisma won't easily let you do this since it think it controls that column, and b) every product is going to appear to have been edited at the same time, when in fact nothing changed—you just needed to bust the cache.
 
 An easier solution to this problem would be to add some kind of version number to your cache key that you are in control of and can change whenever you like. Something like appending a `v1` to the key: `v1-product-${id}-${updatedAt}`
 
@@ -1078,7 +1097,7 @@ const post = ({ id }) => {
 
 ### `deleteCacheKey()`
 
-There may be instances where you want to explictly remove something from the cache so that it gets re-created with the same cache key. A good example is caching a single user, using only their `id` as the cache key. By default, the cache would never bust because a user's `id` is not going to change, no matter how many other fields on user are updated. With `deleteCacheKey()` you can choose to delete the key, for example, when the `updateUser()` service is called. The next time `user()` is called, it will be re-cached with the same key, but it will now contain whatever data was updated.
+There may be instances where you want to explicitly remove something from the cache so that it gets re-created with the same cache key. A good example is caching a single user, using only their `id` as the cache key. By default, the cache would never bust because a user's `id` is not going to change, no matter how many other fields on user are updated. With `deleteCacheKey()` you can choose to delete the key, for example, when the `updateUser()` service is called. The next time `user()` is called, it will be re-cached with the same key, but it will now contain whatever data was updated.
 
 ```javascript
 import { cache, deleteCacheKey } from 'src/lib/cache'
@@ -1097,7 +1116,7 @@ const updateUser = async ({ id, input }) => {
 
 :::caution
 
-When explictly deleting cache keys like this you could find yourself going down a rabbit hole. What if there is another service somewhere that also updates user? Or another service that updates an organization, as well as all of its underlying child users at the same time? You'll need to be sure to call `deleteCacheKey()` in these places as well. As a general guideline, it's better to come up with a cache key that encapsulates any triggers for when the data has changed (like the `updatedAt` timestamp, which will change no matter who updates the user, anywhere in your codebase).
+When explicitly deleting cache keys like this you could find yourself going down a rabbit hole. What if there is another service somewhere that also updates user? Or another service that updates an organization, as well as all of its underlying child users at the same time? You'll need to be sure to call `deleteCacheKey()` in these places as well. As a general guideline, it's better to come up with a cache key that encapsulates any triggers for when the data has changed (like the `updatedAt` timestamp, which will change no matter who updates the user, anywhere in your codebase).
 
 Scenarios like this are what people are talking about when they say that caching is hard!
 

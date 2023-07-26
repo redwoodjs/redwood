@@ -4,25 +4,28 @@ import https from 'https'
 import path from 'path'
 
 import * as babel from '@babel/core'
+import boxen from 'boxen'
 import camelcase from 'camelcase'
 import decamelize from 'decamelize'
 import execa from 'execa'
 import { Listr } from 'listr2'
-import { memoize } from 'lodash'
-import lodash from 'lodash/string'
+import { memoize, template } from 'lodash'
 import { paramCase } from 'param-case'
 import pascalcase from 'pascalcase'
 import { format } from 'prettier'
 
-import { getConfig as getRedwoodConfig } from '@redwoodjs/internal/dist/config'
 import {
+  getConfig as getRedwoodConfig,
   getPaths as getRedwoodPaths,
   resolveFile as internalResolveFile,
-} from '@redwoodjs/internal/dist/paths'
+  findUp,
+} from '@redwoodjs/project-config'
 
 import c from './colors'
 import { addFileToRollback } from './rollback'
 import { pluralize, singularize } from './rwPluralize'
+
+export { findUp }
 
 export const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
@@ -62,15 +65,20 @@ export const nameVariants = (name) => {
 }
 
 export const generateTemplate = (templateFilename, { name, ...rest }) => {
-  const template = lodash.template(readFile(templateFilename).toString())
+  try {
+    const templateFn = template(readFile(templateFilename).toString())
 
-  const renderedTemplate = template({
-    name,
-    ...nameVariants(name),
-    ...rest,
-  })
+    const renderedTemplate = templateFn({
+      name,
+      ...nameVariants(name),
+      ...rest,
+    })
 
-  return prettify(templateFilename, renderedTemplate)
+    return prettify(templateFilename, renderedTemplate)
+  } catch (error) {
+    error.message = `Error applying template at ${templateFilename} for ${name}: ${error.message}`
+    throw error
+  }
 }
 
 export const prettify = (templateFilename, renderedTemplate) => {
@@ -80,7 +88,9 @@ export const prettify = (templateFilename, renderedTemplate) => {
   const parser = {
     '.css': 'css',
     '.js': 'babel',
+    '.jsx': 'babel',
     '.ts': 'babel-ts',
+    '.tsx': 'babel-ts',
   }[path.extname(templateFilename.replace('.template', ''))]
 
   if (typeof parser === 'undefined') {
@@ -96,7 +106,7 @@ export const prettify = (templateFilename, renderedTemplate) => {
 export const readFile = (target) =>
   fs.readFileSync(target, { encoding: 'utf8' })
 
-const SUPPORTED_EXTENSIONS = ['.js', '.ts', '.tsx']
+const SUPPORTED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx']
 
 export const deleteFile = (file) => {
   const extension = path.extname(file)
@@ -249,7 +259,7 @@ export const transformTSToJS = (filename, content) => {
     retainLines: true,
   })
 
-  return prettify(filename.replace(/\.tsx?$/, '.js'), code)
+  return prettify(filename.replace(/\.ts(x)?$/, '.js$1'), code)
 }
 
 /**
@@ -295,7 +305,7 @@ export const deleteFilesTask = (files) => {
 
 /**
  * @param files - {[filepath]: contents}
- * Deletes any empty directrories that are more than three levels deep below the base directory
+ * Deletes any empty directories that are more than three levels deep below the base directory
  * i.e. any directory below /web/src/components
  */
 export const cleanupEmptyDirsTask = (files) => {
@@ -370,7 +380,7 @@ export const addRoutesToRouterTask = (routes, layout, setProps = {}) => {
 
   if (newRoutes.length) {
     const [routerStart, routerParams, newLineAndIndent] = routesContent.match(
-      /\s*<Router(.*?)>(\s*)/
+      /\s*<Router(.*?)>(\s*)/s
     )
 
     if (/trailingSlashes={?(["'])always\1}?/.test(routerParams)) {
@@ -417,7 +427,7 @@ export const addScaffoldImport = () => {
   )
   writeFile(appJsPath, appJsContents, { overwriteExisting: true })
 
-  return 'Added scaffold import to App.{js,tsx}'
+  return 'Added scaffold import to App.{jsx,tsx}'
 }
 
 const removeEmtpySet = (routesContent, layout) => {
@@ -535,7 +545,7 @@ export const runCommandTask = async (commands, { verbose }) => {
     })),
     {
       renderer: verbose && 'verbose',
-      rendererOptions: { collapse: false, dateFormat: false },
+      rendererOptions: { collapseSubtasks: false, dateFormat: false },
     }
   )
 
@@ -565,10 +575,23 @@ export const getDefaultArgs = (builder) => {
 /**
  * Check if user is using VS Code
  *
- * i.e. check for the existance of .vscode folder in root project directory
+ * i.e. check for the existence of .vscode folder in root project directory
  */
 export const usingVSCode = () => {
   const redwoodPaths = getPaths()
   const VS_CODE_PATH = path.join(redwoodPaths.base, '.vscode')
   return fs.existsSync(VS_CODE_PATH)
+}
+
+export const printSetupNotes = (notes) => {
+  return {
+    title: 'One more thing...',
+    task: (_ctx, task) => {
+      task.title = `One more thing...\n\n ${boxen(notes.join('\n'), {
+        padding: { top: 1, bottom: 1, right: 1, left: 1 },
+        margin: 1,
+        borderColour: 'gray',
+      })}  \n`
+    },
+  }
 }

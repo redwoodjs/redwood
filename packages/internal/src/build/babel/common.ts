@@ -1,4 +1,12 @@
+import fs from 'fs'
+import path from 'path'
+
 import type { TransformOptions, PluginItem } from '@babel/core'
+import { parseConfigFileTextToJson } from 'typescript'
+
+import { getPaths } from '@redwoodjs/project-config'
+
+import { getWebSideBabelPlugins } from './web'
 
 const pkgJson = require('../../../package.json')
 
@@ -54,11 +62,95 @@ if (!RUNTIME_CORE_JS_VERSION) {
 
 export const getCommonPlugins = () => {
   return [
-    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    ['@babel/plugin-transform-class-properties', { loose: true }],
     // Note: The private method loose mode configuration setting must be the
     // same as @babel/plugin-proposal class-properties.
     // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
-    ['@babel/plugin-proposal-private-methods', { loose: true }],
-    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+    ['@babel/plugin-transform-private-methods', { loose: true }],
+    ['@babel/plugin-transform-private-property-in-object', { loose: true }],
   ]
+}
+
+// TODO (STREAMING) double check this, think about it more carefully please!
+// It's related to yarn workspaces to be or not to be
+export const getRouteHookBabelPlugins = () => {
+  return [
+    ...getWebSideBabelPlugins({
+      forVite: true,
+    }),
+    [
+      'babel-plugin-module-resolver',
+      {
+        alias: {
+          'api/src': './src',
+        },
+        root: [getPaths().api.base],
+        cwd: 'packagejson',
+        loglevel: 'silent', // to silence the unnecessary warnings
+      },
+      'rwjs-api-module-resolver',
+    ],
+  ]
+}
+
+/**
+ * Finds, reads and parses the [ts|js]config.json file
+ * @returns The config object
+ */
+export const parseTypeScriptConfigFiles = () => {
+  const rwPaths = getPaths()
+
+  const parseConfigFile = (basePath: string) => {
+    let configPath = path.join(basePath, 'tsconfig.json')
+    if (!fs.existsSync(configPath)) {
+      configPath = path.join(basePath, 'jsconfig.json')
+      if (!fs.existsSync(configPath)) {
+        return null
+      }
+    }
+    return parseConfigFileTextToJson(
+      configPath,
+      fs.readFileSync(configPath, 'utf-8')
+    )
+  }
+  const apiConfig = parseConfigFile(rwPaths.api.base)
+  const webConfig = parseConfigFile(rwPaths.web.base)
+
+  return {
+    api: apiConfig?.config ?? null,
+    web: webConfig?.config ?? null,
+  }
+}
+
+/**
+ * Extracts and formats the paths from the [ts|js]config.json file
+ * @param config The config object
+ * @returns {Record<string, string>} The paths object
+ */
+export const getPathsFromConfig = (config: {
+  compilerOptions: { baseUrl: string; paths: string }
+}): Record<string, string> => {
+  if (!config) {
+    return {}
+  }
+
+  const { baseUrl, paths } = config.compilerOptions
+  const pathsObj: Record<string, string> = {}
+  for (const [key, value] of Object.entries(paths)) {
+    // exclude the default paths that are included in the tsconfig.json file
+    // "src/*"
+    // "$api/*"
+    // "types/*"
+    // "@redwoodjs/testing"
+    if (key.match(/src\/|\$api\/\*|types\/\*|\@redwoodjs\/.*/g)) {
+      continue
+    }
+    const aliasKey = key.replace('/*', '')
+    const aliasValue = path.join(
+      baseUrl,
+      (value as string)[0].replace('/*', '')
+    )
+    pathsObj[aliasKey] = aliasValue
+  }
+  return pathsObj
 }

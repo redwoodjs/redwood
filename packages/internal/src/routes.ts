@@ -1,6 +1,9 @@
+import path from 'path'
+
 import chalk from 'chalk'
 
-import { getPaths } from './paths'
+import { getPaths, getRouteHookForPage } from '@redwoodjs/project-config'
+import { getRouteRegexAndParams } from '@redwoodjs/router'
 
 // Circular dependency when trying to use the standard import
 const { getProject } = require('@redwoodjs/structure/dist/index')
@@ -19,8 +22,12 @@ export function getDuplicateRoutes() {
   const duplicateRoutes: RouteInformation[] = []
   const allRoutes: (typeof RWRoute)[] = getProject(getPaths().base).router
     .routes
-  const uniquePathNames = new Set(allRoutes.map((route) => route.name))
-  uniquePathNames.forEach((name) => {
+  const uniqueNames = new Set(
+    allRoutes
+      .filter((route) => route.name !== undefined)
+      .map((route) => route.name)
+  )
+  uniqueNames.forEach((name) => {
     const routesWithName = allRoutes.filter((route) => {
       return route.name === name
     })
@@ -58,4 +65,49 @@ export function warningForDuplicateRoutes() {
     })
   }
   return message.trimEnd()
+}
+
+export interface RouteSpec {
+  name: string
+  path: string
+  hasParams: boolean
+  id: string
+  isNotFound: boolean
+  filePath: string | undefined
+  relativeFilePath: string | undefined
+  routeHooks: string | undefined | null
+  matchRegexString: string | null
+  redirect: { to: string; permanent: boolean } | null
+  renderMode: 'stream' | 'html'
+}
+
+export const getProjectRoutes = (): RouteSpec[] => {
+  const rwProject = getProject(getPaths().base)
+  const routes = rwProject.getRouter().routes
+
+  return routes.map((route: any) => {
+    const { matchRegexString, routeParams } = route.isNotFound
+      ? { matchRegexString: null, routeParams: null }
+      : getRouteRegexAndParams(route.path)
+
+    return {
+      name: route.isNotFound ? 'NotFoundPage' : route.name,
+      path: route.isNotFound ? 'notfound' : route.path,
+      hasParams: route.hasParameters,
+      id: route.id,
+      isNotFound: route.isNotFound,
+      filePath: route.page?.filePath,
+      relativeFilePath: route.page?.filePath
+        ? path.relative(getPaths().web.src, route.page?.filePath)
+        : undefined,
+      routeHooks: getRouteHookForPage(route.page?.filePath),
+      renderMode: route.renderMode,
+      matchRegexString: matchRegexString,
+      paramNames: routeParams,
+      // TODO (STREAMING) deal with permanent/temp later
+      redirect: route.redirect
+        ? { to: route.redirect, permanent: false }
+        : null,
+    }
+  })
 }

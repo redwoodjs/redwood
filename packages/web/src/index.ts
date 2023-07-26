@@ -11,6 +11,7 @@ export {
   GraphQLHooksProvider,
   useQuery,
   useMutation,
+  useSubscription,
 } from './components/GraphQLHooksProvider'
 
 export * from './components/CellCacheContext'
@@ -30,3 +31,6 @@ export * from './components/RedwoodProvider'
 
 export * from './components/MetaTags'
 export { Helmet as Head, Helmet } from 'react-helmet-async'
+
+export * from './components/htmlTags'
+export * from './routeHooks.types'

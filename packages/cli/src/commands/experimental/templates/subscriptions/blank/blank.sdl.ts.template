@@ -1,0 +1,20 @@
+export const schema = gql`
+  type ${typeName} {
+    from: String
+    body: String
+  }
+
+  type Query {
+    ${subscriptionQueryName}(id: ID!): [${typeName}!]! @skipAuth
+  }
+
+  input ${subscriptionInputType} {
+    id: ID!
+    from: String!
+    body: String!
+  }
+
+  type Mutation {
+    ${subscriptionServiceResolver}(input: ${subscriptionInputType}!): ${typeName}! @skipAuth
+  }
+`

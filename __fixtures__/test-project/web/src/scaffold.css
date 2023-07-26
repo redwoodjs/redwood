@@ -21,7 +21,7 @@
   @apply text-gray-500;
 }
 .rw-header {
-  @apply flex justify-between py-4 px-8;
+  @apply flex justify-between px-8 py-4;
 }
 .rw-main {
   @apply mx-4 pb-4;
@@ -34,13 +34,13 @@
   height: initial;
 }
 .rw-segment::-webkit-scrollbar-track {
-  @apply rounded-t-none rounded-b-[10px] border-0 border-t border-solid border-gray-200 bg-transparent p-[2px];
+  @apply rounded-b-[10px] rounded-t-none border-0 border-t border-solid border-gray-200 bg-transparent p-[2px];
 }
 .rw-segment::-webkit-scrollbar-thumb {
   @apply rounded-full border-[3px] border-solid border-transparent bg-zinc-400 bg-clip-content;
 }
 .rw-segment-header {
-  @apply bg-gray-200 py-3 px-4 text-gray-700;
+  @apply bg-gray-200 px-4 py-3 text-gray-700;
 }
 .rw-segment-main {
   @apply bg-gray-100 p-4;
@@ -89,13 +89,13 @@
   @apply mt-2 list-inside list-disc;
 }
 .rw-button {
-  @apply flex cursor-pointer justify-center rounded border-0 bg-gray-200 py-1 px-4 text-xs font-semibold uppercase leading-loose tracking-wide text-gray-500 no-underline transition duration-100;
+  @apply flex cursor-pointer justify-center rounded border-0 bg-gray-200 px-4 py-1 text-xs font-semibold uppercase leading-loose tracking-wide text-gray-500 no-underline transition duration-100;
 }
 .rw-button:hover {
   @apply bg-gray-500 text-white;
 }
 .rw-button.rw-button-small {
-  @apply rounded-sm py-1 px-2 text-xs;
+  @apply rounded-sm px-2 py-1 text-xs;
 }
 .rw-button.rw-button-green {
   @apply bg-green-500 text-white;
@@ -119,7 +119,7 @@
   @apply mr-1 text-xl leading-5;
 }
 .rw-button-group {
-  @apply my-3 mx-2 flex justify-center;
+  @apply mx-2 my-3 flex justify-center;
 }
 .rw-button-group .rw-button {
   @apply mx-1;

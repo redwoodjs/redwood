@@ -146,20 +146,6 @@ const getCurrentUserWithError = async (
 }
 
 describe('useRequireAuth', () => {
-  beforeAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '1'
-  })
-
-  afterAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '0'
-  })
-
-  afterEach(() => {
-    // Clean up after test cases
-    const globalContext = require('../../globalContext').context
-    delete globalContext.currentUser
-  })
-
   it('Updates context with output of current user', async () => {
     // @MARK
     // Because we use context inside useRequireAuth, we only want to import this function
@@ -171,11 +157,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
-      authDecoder: (
-        _token: string,
+      authDecoder: async (
+        token: string,
+        _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
-        return null
+        return { token }
       },
     })
 
@@ -204,8 +191,9 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
-      authDecoder: (
+      authDecoder: async (
         token: string,
+        _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
         return jwt.decode(token) as Record<string, any>
@@ -270,8 +258,9 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
-      authDecoder: (
+      authDecoder: async (
         _token: string,
+        _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
         return null
@@ -298,11 +287,12 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
-      authDecoder: (
-        _token: string,
+      authDecoder: async (
+        token: string,
+        _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
-        return null
+        return { token }
       },
     })
 
@@ -330,8 +320,9 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
       getCurrentUser,
-      authDecoder: (
+      authDecoder: async (
         token: string,
+        _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
         return jwt.decode(token) as Record<string, any>
@@ -488,8 +479,9 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handlerWithAuthChecks,
       getCurrentUser,
-      authDecoder: (
+      authDecoder: async (
         token: string,
+        _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
         return jwt.decode(token) as Record<string, any>
@@ -527,8 +519,9 @@ describe('useRequireAuth', () => {
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handlerWithAuthChecks,
       getCurrentUser,
-      authDecoder: (
+      authDecoder: async (
         token: string,
+        _type: string,
         _req: { event: APIGatewayEvent; context: Context }
       ) => {
         return jwt.decode(token) as Record<string, any>

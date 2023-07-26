@@ -3,7 +3,7 @@ name: 🦜 Publish Canary
 on:
   push:
     branches: [main, next]
-    # We don't want this to run when we publish a release
+    # We don't want this to run when we publish a release.
     tags-ignore: ['v**']
     # No need to run on docs-only changes
     paths-ignore: ['docs/**']
@@ -24,12 +24,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
-        #  This is required because lerna uses tags to determine the version
+        #  This is required because lerna uses tags to determine the version.
         with:
           fetch-depth: 0
 
-      - name: 🧶 Set up job
-        uses: ./.github/actions/set-up-job
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: ✅ Check constraints, dependencies, and package.json's
         uses: ./tasks/check
@@ -43,15 +53,8 @@ jobs:
       - name: 🧪 Test
         run: yarn test
 
-      - name: Get publish flags
-        id: get-publish-flags
-        uses: ./.github/actions/get_publish_flags
-
       - name: 🚢 Publish
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-
-          yarn lerna publish ${{ steps.get-publish-flags.outputs.flags }}
+        run: ./.github/scripts/publish_canary.sh
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 

@@ -4,11 +4,12 @@ import path from 'path'
 import fastifyStatic from '@fastify/static'
 import { FastifyInstance, FastifyReply } from 'fastify'
 
-import { findPrerenderedHtml } from '@redwoodjs/internal/dist/files'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 import { loadFastifyConfig } from '../fastify'
 import { WebServerArgs } from '../types'
+
+import { findPrerenderedHtml } from './findPrerenderedHtml'
 
 export const getFallbackIndexPath = () => {
   const prerenderIndexPath = path.join(getPaths().web.dist, '/200.html')

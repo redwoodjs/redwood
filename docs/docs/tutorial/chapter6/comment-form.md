@@ -23,7 +23,7 @@ Let's build a simple form to take the user's name and their comment and add some
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.jsx"
 import {
   Form,
   Label,
@@ -138,7 +138,7 @@ Submitting the form should use the `createComment` function we added to our serv
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.jsx"
 import {
   Form,
   // highlight-next-line
@@ -330,7 +330,7 @@ If you try to submit the form you'll get an error in the web console—Storybook
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.stories.js"
+```jsx title="web/src/components/CommentForm/CommentForm.stories.jsx"
 import CommentForm from './CommentForm'
 
 export const generated = () => {
@@ -425,7 +425,7 @@ So let's use `Article` as the cleaning house for where all these disparate parts
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 // highlight-next-line
@@ -540,7 +540,7 @@ First let's pass the post's ID as a prop to `CommentForm`:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 import { Link, routes } from '@redwoodjs/router'
 import CommentsCell from 'src/components/CommentsCell'
 import CommentForm from 'src/components/CommentForm'
@@ -623,7 +623,7 @@ And then we'll append that ID to the `input` object that's being passed to `crea
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.jsx"
 // highlight-next-line
 const CommentForm = ({ postId }) => {
   const [createComment, { loading, error }] = useMutation(CREATE)
@@ -682,7 +682,7 @@ Along with the variables you pass to a mutation function (`createComment` in our
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.jsx"
 import {
   Form,
   FormError,
@@ -749,7 +749,7 @@ We'll make use of good old fashioned React state to keep track of whether a comm
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.jsx"
 // highlight-next-line
 import { useState } from 'react'
 
@@ -960,7 +960,7 @@ We used `hidden` to just hide the form and "Leave a comment" title completely fr
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.jsx"
 import { Link, routes } from '@redwoodjs/router'
 // highlight-next-line
 import { Toaster } from '@redwoodjs/web/toast'
@@ -1304,7 +1304,7 @@ scenario('returns all comments', async (scenario: StandardScenario) => {
 </TabItem>
 </Tabs>
 
-When the test suite runs everything will still pass. Javascript won't care if you're passing an argument all of a sudden (although if you were using Typescript you will actually get an error at this point!). In TDD you generally want to get your test to fail before adding code to the thing you're testing which will then cause the test to pass. What's something in this test that will be different once we're only returning *some* comments? How about the number of comments expected to be returned?
+When the test suite runs everything will still pass. JavaScript won't care if you're passing an argument all of a sudden (although if you were using Typescript you will actually get an error at this point!). In TDD you generally want to get your test to fail before adding code to the thing you're testing which will then cause the test to pass. What's something in this test that will be different once we're only returning *some* comments? How about the number of comments expected to be returned?
 
 Let's take a look at the scenario we're using (remember, it's `standard()` by default):
 
@@ -1384,7 +1384,7 @@ Each scenario here is associated with its own post, so rather than counting all 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="api/src/services/comments/comments.test.js"
+```jsx title="api/src/services/comments/comments.test.jsx"
 import { comments, createComment } from './comments'
 // highlight-next-line
 import { db } from 'src/lib/db'
@@ -1568,7 +1568,7 @@ Open up `Article`:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 const Article = ({ article, summary = false }) => {
   return (
     <article>
@@ -1631,7 +1631,7 @@ And finally, we need to take that `postId` and pass it on to the `QUERY` in the 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```graphql title="web/src/components/CommentsCell/CommentsCell.js"
+```graphql title="web/src/components/CommentsCell/CommentsCell.jsx"
 export const QUERY = gql`
   // highlight-start
   query CommentsQuery($postId: Int!) {
@@ -1682,7 +1682,7 @@ Okay this is the last fix, promise!
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.js"
+```jsx title="web/src/components/CommentForm/CommentForm.jsx"
 const [createComment, { loading, error }] = useMutation(CREATE, {
   onCompleted: () => {
     setHasPosted(true)

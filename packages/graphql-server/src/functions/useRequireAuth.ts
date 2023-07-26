@@ -2,15 +2,12 @@ import type { APIGatewayEvent, Context as LambdaContext } from 'aws-lambda'
 
 import { getAuthenticationContext, Decoder } from '@redwoodjs/api'
 
-import {
-  getAsyncStoreInstance,
-  context as globalContext,
-} from '../globalContext'
-
-import type { GetCurrentUser } from './types'
+import { GlobalContext, context as globalContext } from '../globalContext'
+import { getAsyncStoreInstance } from '../globalContextStore'
+import type { GetCurrentUser } from '../types'
 
 interface Args {
-  authDecoder: Decoder | Decoder[]
+  authDecoder?: Decoder | Decoder[]
   handlerFn: (
     event: APIGatewayEvent,
     context: LambdaContext,
@@ -73,13 +70,10 @@ export const useRequireAuth: UseRequireAuth = ({
       return await handlerFn(event, context, ...rest)
     }
 
-    if (getAsyncStoreInstance()) {
-      // This must be used when you're self-hosting RedwoodJS.
-      return getAsyncStoreInstance().run(new Map(), authEnrichedFunction)
-    } else {
-      // This is OK for AWS (Netlify/Vercel) because each Lambda request
-      // is handled individually.
-      return await authEnrichedFunction()
-    }
+    // This ensures context is scoped to the lifetime of the request
+    return getAsyncStoreInstance().run(
+      new Map<string, GlobalContext>(),
+      authEnrichedFunction
+    )
   }
 }

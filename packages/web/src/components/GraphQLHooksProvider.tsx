@@ -1,8 +1,9 @@
+import { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 
 type DefaultUseQueryType = <
   TData = any,
-  TVariables = GraphQLOperationVariables
+  TVariables extends OperationVariables = GraphQLOperationVariables
 >(
   query: DocumentNode,
   options?: GraphQLQueryHookOptions<TData, TVariables>
@@ -15,12 +16,22 @@ type DefaultUseMutationType = <
   mutation: DocumentNode,
   options?: GraphQLMutationHookOptions<TData, TVariables>
 ) => MutationOperationResult<TData, TVariables>
+
+type DefaultUseSubscriptionType = <
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
+  subscription: DocumentNode,
+  options?: GraphQLSubscriptionHookOptions<TData, TVariables>
+) => SubscriptionOperationResult<TData, TVariables>
 export interface GraphQLHooks<
   TuseQuery = DefaultUseQueryType,
-  TuseMutation = DefaultUseMutationType
+  TuseMutation = DefaultUseMutationType,
+  TuseSubscription = DefaultUseSubscriptionType
 > {
   useQuery: TuseQuery
   useMutation: TuseMutation
+  useSubscription: TuseSubscription
 }
 
 export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
@@ -34,12 +45,18 @@ export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
       'You must register a useMutation hook via the `GraphQLHooksProvider`'
     )
   },
+  useSubscription: () => {
+    throw new Error(
+      'You must register a useSubscription hook via the `GraphQLHooksProvider`'
+    )
+  },
 })
 
 interface GraphQlHooksProviderProps<
   TuseQuery = DefaultUseQueryType,
-  TuseMutation = DefaultUseMutationType
-> extends GraphQLHooks<TuseQuery, TuseMutation> {
+  TuseMutation = DefaultUseMutationType,
+  TuseSubscription = DefaultUseSubscriptionType
+> extends GraphQLHooks<TuseQuery, TuseMutation, TuseSubscription> {
   children: React.ReactNode
 }
 
@@ -56,6 +73,7 @@ export const GraphQLHooksProvider = <
 >({
   useQuery,
   useMutation,
+  useSubscription,
   children,
 }: GraphQlHooksProviderProps<TuseQuery, TuseMutation>) => {
   return (
@@ -63,6 +81,7 @@ export const GraphQLHooksProvider = <
       value={{
         useQuery,
         useMutation,
+        useSubscription,
       }}
     >
       {children}
@@ -70,7 +89,10 @@ export const GraphQLHooksProvider = <
   )
 }
 
-export function useQuery<TData = any, TVariables = GraphQLOperationVariables>(
+export function useQuery<
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
   query: DocumentNode,
   options?: GraphQLQueryHookOptions<TData, TVariables>
 ): QueryOperationResult<TData, TVariables> {
@@ -91,4 +113,17 @@ export function useMutation<
     mutation,
     options
   )
+}
+
+export function useSubscription<
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
+  query: DocumentNode,
+  options?: GraphQLSubscriptionHookOptions<TData, TVariables>
+): SubscriptionOperationResult<TData, TVariables> {
+  return React.useContext(GraphQLHooksContext).useSubscription<
+    TData,
+    TVariables
+  >(query, options)
 }

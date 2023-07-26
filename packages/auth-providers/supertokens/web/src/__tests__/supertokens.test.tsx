@@ -5,7 +5,6 @@ import { CurrentUser } from '@redwoodjs/auth'
 import {
   createAuth,
   SuperTokensUser,
-  AuthRecipe,
   SessionRecipe,
   SuperTokensAuth,
 } from '../supertokens'
@@ -21,12 +20,6 @@ const adminUser: SuperTokensUser = {
 }
 
 let loggedInUser: SuperTokensUser | undefined
-
-const superTokensAuthRecipe: AuthRecipe = {
-  redirectToAuth: () => {
-    loggedInUser ||= user
-  },
-}
 
 const superTokensSessionRecipe: SessionRecipe = {
   signOut: async () => {
@@ -50,8 +43,10 @@ const superTokensSessionRecipe: SessionRecipe = {
 }
 
 const superTokensMockClient: SuperTokensAuth = {
-  authRecipe: superTokensAuthRecipe,
   sessionRecipe: superTokensSessionRecipe,
+  redirectToAuth: async () => {
+    loggedInUser ||= user
+  },
 }
 
 const fetchMock = jest.fn()
@@ -82,7 +77,7 @@ beforeEach(() => {
 })
 
 function getSuperTokensAuth(customProviderHooks?: {
-  useCurrentUser?: () => Promise<Record<string, unknown>>
+  useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
     currentUser: CurrentUser | null
   ) => (rolesToCheck: string | string[]) => boolean

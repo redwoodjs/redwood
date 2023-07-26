@@ -166,7 +166,7 @@ export default App
 "
 `;
 
-exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0) 1`] = `
+exports[`authTasks Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Auth0) 1`] = `
 "import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -193,7 +193,7 @@ export default App
 "
 `;
 
-exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0) 2`] = `
+exports[`authTasks Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Auth0) 2`] = `
 "import { Auth0Client } from '@auth0/auth0-spa-js'
 
 import { createAuth } from '@redwoodjs/auth-auth0-web'
@@ -221,7 +221,7 @@ export const { AuthProvider, useAuth } = createAuth(auth0)
 "
 `;
 
-exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Auth0) 3`] = `
+exports[`authTasks Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Auth0) 3`] = `
 "// In this file, all Page components from 'src/pages\` are auto-imported. Nested
 // directories are supported, and should be uppercase. Each subdirectory will be
 // prepended onto the component name.
@@ -247,7 +247,7 @@ export default Routes
 "
 `;
 
-exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk) 1`] = `
+exports[`authTasks Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Clerk) 1`] = `
 "import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
@@ -274,7 +274,7 @@ export default App
 "
 `;
 
-exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk) 2`] = `
+exports[`authTasks Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Clerk) 2`] = `
 "import React, { useEffect } from 'react'
 
 import { ClerkLoaded, ClerkProvider, useUser } from '@clerk/clerk-react'
@@ -327,7 +327,7 @@ export const AuthProvider = ({ children }: Props) => {
 "
 `;
 
-exports[`authTasks Should update App.{js,tsx}, Routes.{js,tsx} and add auth.ts (Clerk) 3`] = `
+exports[`authTasks Should update App.{jsx,tsx}, Routes.{jsx,tsx} and add auth.ts (Clerk) 3`] = `
 "// In this file, all Page components from 'src/pages\` are auto-imported. Nested
 // directories are supported, and should be uppercase. Each subdirectory will be
 // prepended onto the component name.

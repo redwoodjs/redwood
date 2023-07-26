@@ -28,7 +28,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - name: 🏷 Check git tags
         run: |
@@ -62,8 +62,18 @@ jobs:
           #  This is required because lerna uses tags to determine the version.
           fetch-depth: 0
 
-      - name: 🧶 Set up job
-        uses: ./.github/actions/set-up-job
+      - name: ⬢ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 🐈 Set up yarn cache
+        uses: ./.github/actions/set-up-yarn-cache
+
+      - name: 🐈 Yarn install
+        run: yarn install --inline-builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: ✅ Check constraints, dependencies, and package.json's
         uses: ./tasks/check
@@ -82,6 +92,7 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           SEMVER=$(basename $(dirname ${{ github.ref_name }}))
           yarn lerna publish pre$SEMVER --include-merged-tags \
+                                        --exact \
                                         --canary \
                                         --preid rc \
                                         --dist-tag rc \

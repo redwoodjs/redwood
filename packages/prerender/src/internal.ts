@@ -3,8 +3,7 @@ import path from 'path'
 
 import { fetch } from '@whatwg-node/fetch'
 
-import { getConfig } from '@redwoodjs/internal/dist/config'
-import { getPaths } from '@redwoodjs/internal/dist/paths'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 const INDEX_FILE = path.join(getPaths().web.dist, 'index.html')
 const DEFAULT_INDEX = path.join(getPaths().web.dist, '200.html')
@@ -30,9 +29,6 @@ export const registerShims = (routerPath: string) => {
   globalThis.RWJS_DEBUG_ENV = {
     RWJS_SRC_ROOT: getPaths().web.src,
   }
-
-  // For now set bundler to webpack for prerendering
-  globalThis.RWJS_WEB_BUNDLER = 'webpack'
 
   globalThis.__REDWOOD__PRERENDERING = true
 

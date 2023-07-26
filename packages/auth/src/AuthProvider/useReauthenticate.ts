@@ -12,7 +12,7 @@ const notAuthenticatedState = {
   userMetadata: null,
   loading: false,
   hasError: false,
-}
+} as const
 
 export const useReauthenticate = <TUser>(
   authImplementation: AuthImplementation<TUser>,
@@ -25,12 +25,31 @@ export const useReauthenticate = <TUser>(
   const getToken = useToken(authImplementation)
 
   return useCallback(async () => {
+    // Setting `loading` to `true` in the AuthProvider's state causes Set components to render their `whileLoadingAuthProp`,
+    // so it has to be used a bit carefully. But having a stale auth state can be worse, mainly in Clerk's case.
+    // It results in infinite redirects since Clerk thinks the user is authenticated, but the Router thinks otherwise.
+    // So Redwood's Clerk integration sets `loadWhileReauthenticating` to true. We may migrate more auth providers over in the future,
+    // but right now there's no known issues with them.
+    if (authImplementation.loadWhileReauthenticating) {
+      setAuthProviderState((oldState) => ({
+        ...oldState,
+        loading: true,
+      }))
+    }
+
     try {
       const userMetadata = await authImplementation.getUserMetadata()
 
       if (!userMetadata) {
+        let loading = false
+
+        if (authImplementation.clientHasLoaded) {
+          loading = !authImplementation.clientHasLoaded()
+        }
+
         setAuthProviderState({
           ...notAuthenticatedState,
+          loading,
           client: authImplementation.client,
         })
       } else {

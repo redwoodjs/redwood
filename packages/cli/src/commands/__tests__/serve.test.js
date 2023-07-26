@@ -1,23 +1,20 @@
 globalThis.__dirname = __dirname
 
 // We mock these to skip the check for web/dist and api/dist
-jest.mock('@redwoodjs/internal/dist/paths', () => {
+jest.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       return {
         api: {
+          base: '/mocked/project/api',
           dist: '/mocked/project/api/dist',
         },
         web: {
+          base: '/mocked/project/web',
           dist: '/mocked/project/web/dist',
         },
       }
     },
-  }
-})
-
-jest.mock('@redwoodjs/internal/dist/config', () => {
-  return {
     getConfig: () => {
       return {
         api: {},
@@ -29,28 +26,41 @@ jest.mock('@redwoodjs/internal/dist/config', () => {
 jest.mock('fs', () => {
   return {
     ...jest.requireActual('fs'),
-    existsSync: () => true,
+    existsSync: (p) => {
+      // Don't detect the experimental server file, can't use path.sep here so the replaceAll is used
+      if (p.replaceAll('\\', '/') === '/mocked/project/api/dist/server.js') {
+        return false
+      }
+      return true
+    },
   }
 })
 
-jest.mock('@redwoodjs/api-server', () => {
+jest.mock('../serveApiHandler', () => {
   return {
-    ...jest.requireActual('@redwoodjs/api-server'),
+    ...jest.requireActual('../serveApiHandler'),
     apiServerHandler: jest.fn(),
-    webServerHandler: jest.fn(),
+  }
+})
+jest.mock('../serveBothHandler', () => {
+  return {
+    ...jest.requireActual('../serveBothHandler'),
     bothServerHandler: jest.fn(),
   }
 })
+jest.mock('execa', () =>
+  jest.fn((cmd, params) => ({
+    cmd,
+    params,
+  }))
+)
 
+import execa from 'execa'
 import yargs from 'yargs'
 
-import {
-  apiServerHandler,
-  bothServerHandler,
-  webServerHandler,
-} from '@redwoodjs/api-server'
-
 import { builder } from '../serve'
+import { apiServerHandler } from '../serveApiHandler'
+import { bothServerHandler } from '../serveBothHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {
@@ -92,12 +102,18 @@ describe('yarn rw serve', () => {
       'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
     )
 
-    expect(webServerHandler).toHaveBeenCalledWith(
-      expect.objectContaining({
-        port: 9898,
-        socket: 'abc',
-        apiHost: 'https://myapi.redwood/api',
-      })
+    expect(execa).toHaveBeenCalledWith(
+      'yarn',
+      expect.arrayContaining([
+        'rw-web-server',
+        '--port',
+        9898,
+        '--socket',
+        'abc',
+        '--api-host',
+        'https://myapi.redwood/api',
+      ]),
+      expect.anything()
     )
   })
 

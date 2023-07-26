@@ -1,11 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
-import chalk from 'chalk'
 import { Listr } from 'listr2'
 
 import { addWebPackages } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/internal/dist/paths'
+import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
@@ -21,21 +20,10 @@ export const handler = async ({ force, verbose, addPackage }) => {
   const tasks = new Listr(
     [
       {
-        title: 'Confirmation',
-        task: async (_ctx, task) => {
-          const confirmation = await task.prompt({
-            type: 'Confirm',
-            message: 'Vite support is experimental. Continue?',
-          })
-
-          if (!confirmation) {
-            throw new Error('User aborted')
-          }
-        },
-      },
-      {
         title: 'Adding vite.config.js...',
         task: () => {
+          // @NOTE: do not use getPaths().viteConfig because it'll come through as null
+          // this is because we do a check for the file's existence in getPaths()
           const viteConfigPath = `${getPaths().web.base}/vite.config.${
             ts ? 'ts' : 'js'
           }`
@@ -55,33 +43,29 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: 'Adding Vite bundler flag to redwood.toml...',
+        title: "Checking bundler isn't set to webpack...",
         task: (_ctx, task) => {
           const redwoodTomlPath = getConfigPath()
           const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
-          if (!configContent.includes('bundler = "vite"')) {
-            // Use string replace to preserve comments and formatting
-            writeFile(
-              redwoodTomlPath,
-              configContent.replace('[web]', '[web]\n  bundler = "vite"'),
-              {
-                overwriteExisting: true, // redwood.toml always exists
-              }
+          if (configContent.includes('bundler = "webpack"')) {
+            throw new Error(
+              'You have the bundler set to webpack in your redwood.toml. Remove this line, or change it to "vite" and try again.'
             )
           } else {
-            task.skip('Vite bundler flag already set in redwood.toml')
+            task.skip('Vite already configured as the bundler')
           }
         },
       },
       {
-        title: 'Creating new entry point in `web/src/entry-client.jsx`...',
+        title:
+          'Creating new entry point in `web/src/entry.client.{jsx,tsx}`...',
         task: () => {
-          // Keep it as JSX for now
           const entryPointFile = path.join(
             getPaths().web.src,
-            `entry-client.jsx`
+            `entry.client.${ts ? 'tsx' : 'jsx'}`
           )
+
           const content = fs
             .readFileSync(
               path.join(
@@ -99,29 +83,18 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        ...addWebPackages([`@redwoodjs/vite@${version}`]),
-        title: 'Adding @redwoodjs/vite dependency...',
+        // @NOTE: make sure its added as a dev package.
+        ...addWebPackages(['-D', `@redwoodjs/vite@${version}`]),
+        title: 'Adding @redwoodjs/vite dev dependency to web side...',
         skip: () => {
           if (!addPackage) {
-            return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dependency on the web workspace'
+            return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dev-dependency on the web workspace'
           }
-        },
-      },
-      {
-        title: 'One more thing...',
-        task: (_ctx, task) => {
-          task.title = `One more thing...\n
-          ${c.green('Vite Support is still experimental!')}
-          ${c.green('Please let us know if you find bugs or quirks.')}
-          ${chalk.hex('#e8e8e8')(
-            'https://github.com/redwoodjs/redwood/issues/new'
-          )}
-        `
         },
       },
     ],
     {
-      rendererOptions: { collapse: false },
+      rendererOptions: { collapseSubtasks: false },
       renderer: verbose ? 'verbose' : 'default',
     }
   )

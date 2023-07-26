@@ -4,6 +4,6 @@
   "dependencies": {
     "@actions/core": "1.10.0",
     "@actions/exec": "1.1.1",
-    "sort-package-json": "1.57.0"
+    "sort-package-json": "2.5.0"
   }
 }

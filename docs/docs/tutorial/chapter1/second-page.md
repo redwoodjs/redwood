@@ -10,7 +10,7 @@ Notice that we didn't specify a route path this time. If you leave it off the `r
 
 :::info Code-splitting each page
 
-As you add more pages to your app, you may start to worry that more and more code has to be downloaded by the client on any initial page load. Fear not! Redwood will automatically code-split on each Page, which means that initial page loads can be blazingly fast, and you can create as many Pages as you want without having to worry about impacting overall webpack bundle size. If, however, you do want specific Pages to be included in the main bundle, you can [override the default behavior](../../router.md#not-code-splitting).
+As you add more pages to your app, you may start to worry that more and more code has to be downloaded by the client on any initial page load. Fear not! Redwood will automatically code-split on each Page, which means that initial page loads can be blazingly fast, and you can create as many Pages as you want without having to worry about impacting overall bundle size. If, however, you do want specific Pages to be included in the main bundle, you can [override the default behavior](../../router.md#not-code-splitting).
 
 :::
 
@@ -23,7 +23,7 @@ But no one's going to find it by manually changing the URL so let's add a link f
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.jsx"
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -89,12 +89,12 @@ export default HomePage
 
 Let's point out a few things here:
 
-- Redwood loves [Function Components](https://www.robinwieruch.de/react-function-component). We'll make extensive use of [React Hooks](https://reactjs.org/docs/hooks-intro.html) as we go and these are only enabled in function components. You're free to use class components, but we recommend avoiding them unless you need their special capabilities.
-- Redwood's `<Link>` tag, in its most basic usage, takes a single `to` attribute. That `to` attribute calls a [_named route function_](../../router.md#link-and-named-route-functions) in order to generate the correct URL. The function has the same name as the `name` attribute on the `<Route>`:
+- Redwood loves [Function Components](https://www.robinwieruch.de/react-function-component). We'll make extensive use of [React Hooks](https://react.dev/reference/react) as we go and these are only enabled in function components. Now that Redwood is on React 18, we discourage using class components since they won't be able to take advantage of React's concurrent rendering features.
+- Redwood's `<Link>` tag, in its most basic usage, takes a single `to` attribute. That `to` attribute calls a [_named route function_](../../router.md#link-and-named-route-functions) to generate the correct URL. The function has the same name as the `name` attribute on the `<Route>`:
 
   `<Route path="/about" page={AboutPage} name="about" />`
 
-  If you don't like the name or path that `redwood generate` created for your route, feel free to change it in `Routes.{js,tsx}`! Named routes are awesome because if you ever change the path associated with a route (like going from `/about` to `/about-us`), you need only change it in `Routes.{js,tsx}` and every link using a named route function (`routes.about()`) will still point to the correct place! You can also pass a string to the `to` prop (`to="/about"`), but now if your path ever changed you would need to find and replace every instance of `/about` to `/about-us`.
+  If you don't like the name or path that `redwood generate` created for your route, feel free to change it in `Routes.{jsx,tsx}`! Named routes are awesome because if you ever change the path associated with a route (like going from `/about` to `/about-us`), you need only change it in `Routes.{jsx,tsx}` and every link using a named route function (`routes.about()`) will still point to the correct place! You can also pass a string to the `to` prop (`to="/about"`), but now if your path ever changed you would need to find and replace every instance of `/about` to `/about-us`.
 
 ### Back Home
 
@@ -103,7 +103,7 @@ Once we get to the About page we don't have any way to get back so let's add a l
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/AboutPage/AboutPage.js"
+```jsx title="web/src/pages/AboutPage/AboutPage.jsx"
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -179,7 +179,7 @@ export default AboutPage
 </TabItem>
 </Tabs>
 
-Great! Try that out in the browser and verify you can get back and forth.
+Great! Try that out in the browser and verify that you can get back and forth.
 
 ![image](https://user-images.githubusercontent.com/300/145899850-2906c2e3-4ec1-4f8a-9c95-e43b0f7da73f.png)
 

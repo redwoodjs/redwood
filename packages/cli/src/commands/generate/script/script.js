@@ -4,6 +4,7 @@ import path from 'path'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, writeFilesTask } from '../../../lib'
@@ -61,6 +62,12 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force, ...args }) => {
+  recordTelemetryAttributes({
+    command: 'generate script',
+    force,
+    rollback: args.rollback,
+  })
+
   const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
     'After modifying your script, you can invoke it like:'
   )}
@@ -87,11 +94,11 @@ export const handler = async ({ force, ...args }) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {
-    if (args.rollback) {
+    if (args.rollback && !force) {
       prepareForRollback(tasks)
     }
     await tasks.run()

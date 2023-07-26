@@ -3,7 +3,7 @@ import type { GraphQLError, ValidationContext } from 'graphql'
 
 import type { Logger } from '@redwoodjs/api/logger'
 
-import { ArmorConfig } from '../functions/types'
+import { ArmorConfig } from '../types'
 
 const armorConfigDefaultOptions: ArmorConfig = {
   logContext: false,
@@ -35,6 +35,7 @@ export const useArmor = (logger: Logger, config?: ArmorConfig) => {
     },
     maxDepth: {
       ...config?.maxDepth,
+      flattenFragments: true,
       onReject: [logRejection],
     },
     maxDirectives: {

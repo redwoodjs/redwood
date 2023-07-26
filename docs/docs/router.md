@@ -134,8 +134,6 @@ becomes...
 
 Sets can take a `private` prop which makes all Routes inside that Set require authentication. When a user isn't authenticated and attempts to visit one of the Routes in the private Set, they'll be redirected to the Route passed as the Set's `unauthenticated` prop. The originally-requested Route's path is added to the query string as a `redirectTo` param. This lets you send the user to the page they originally requested once they're logged-in.
 
-For more fine-grained control, you can specify `roles` (which takes a string for a single role or an array of roles), and the router will check to see that the user is authorized before giving them access to the Route. If they're not, it'll redirect them in the same way as above.
-
 Here's an example of how you'd use a private set:
 
 ```jsx title="Routes.js"
@@ -157,6 +155,32 @@ Here's the same example again, but now using `<Private>`
   <Private unauthenticated="home">
     <Route path="/admin" page={AdminPage} name="admin" />
   </Private>
+</Router>
+```
+
+For more fine-grained control, you can specify `roles` (which takes a string for a single role or an array of roles), and the router will check to see that the current user is authorized before giving them access to the Route. If they're not, they will be redirected to the page specified in the `unauthenticated` prop, such as a "forbidden" page. Read more about Role-based Access Control in Redwood [here](how-to/role-based-access-control.md).
+
+To protect `Private` routes for access by a single role:
+
+```jsx title="Routes.js"
+<Router>
+  <Private unauthenticated="forbidden" roles="admin">
+    <Route path="/admin/users" page={UsersPage} name="users" />
+  </Private>
+
+  <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
+</Router>
+```
+
+To protect `Private` routes for access by multiple roles:
+
+```jsx title="Routes.js"
+<Router>
+  <Private unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
+    <Route path="/admin/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
+  </Private>
+
+  <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
 </Router>
 ```
 
@@ -486,11 +510,11 @@ In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This 
 
 ## Code-splitting
 
-By default, the router will code-split on every Page, creating a separate lazy-loaded webpack bundle for each. When navigating from page to page, the router will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
+By default, the router will code-split on every Page, creating a separate lazy-loaded bundle for each. When navigating from page to page, the router will wait until the new Page module is loaded before re-rendering, thus preventing the "white-flash" effect.
 
 ## Not code splitting
 
-If you'd like to override the default lazy-loading behavior and include certain Pages in the main webpack bundle, you can simply add the import statement to the `Routes.js` file:
+If you'd like to override the default lazy-loading behavior and include certain Pages in the main bundle, you can simply add the import statement to the `Routes.js` file:
 
 ```jsx title="Routes.js"
 import HomePage from 'src/pages/HomePage'

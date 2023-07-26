@@ -2,7 +2,7 @@
 
 One way to solve the duplication of the `<header>` would be to create a `<Header>` component and include it in both `HomePage` and `AboutPage`. That works, but is there a better solution? Ideally there should only be one reference to the `<header>` anywhere in our code.
 
-When you look at these two pages what do they really care about? They have some content they want to display. They really shouldn't have to care what comes before (like a `<header>`) or after (like a `<footer>`). That's where layouts come in: they wrap a page in a component that then renders the page as its child. The layout can contain any content that's outside of the page itself. Conceptually, the final rendered document will be structured something like:
+When you look at these two pages what do they really care about? They have some content they want to display. They really shouldn't have to care what comes before (like a `<header>`) or after (like a `<footer>`). That's where layouts come in: they wrap a page in a component that then renders the page as its child. The layout can contain any content that's outside the page itself. Conceptually, the final rendered document will be structured something like:
 
 <img src="https://user-images.githubusercontent.com/300/70486228-dc874500-1aa5-11ea-81d2-eab69eb96ec0.png" alt="Layouts structure diagram" width="300"/>
 
@@ -18,14 +18,14 @@ From now on we'll use the shorter `g` alias instead of `generate`
 
 :::
 
-That created `web/src/layouts/BlogLayout/BlogLayout.{js,tsx}` and associated test and stories files. We're calling this the "blog" layout because we may have other layouts at some point in the future (an "admin" layout, perhaps?).
+That created `web/src/layouts/BlogLayout/BlogLayout.{jsx,tsx}` and associated test and stories files. We're calling this the "blog" layout because we may have other layouts at some point in the future (an "admin" layout, perhaps?).
 
 Cut the `<header>` from both `HomePage` and `AboutPage` and paste it in the layout instead. Let's take out the duplicated `<main>` tag as well:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.jsx"
 // highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
@@ -92,7 +92,7 @@ export default BlogLayout
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/AboutPage/AboutPage.js"
+```jsx title="web/src/pages/AboutPage/AboutPage.jsx"
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
@@ -143,7 +143,7 @@ export default AboutPage
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/HomePage/HomePage.js"
+```jsx title="web/src/pages/HomePage/HomePage.jsx"
 import { MetaTags } from '@redwoodjs/web'
 
 const HomePage = () => {
@@ -179,14 +179,14 @@ export default HomePage
 </TabItem>
 </Tabs>
 
-In `BlogLayout.{js,tsx}`, `children` is where the magic will happen. Any page content given to the layout will be rendered here. And now the pages are back to focusing on the content they care about (we can remove the import for `Link` and `routes` from `HomePage` since those are in the Layout instead).
+In `BlogLayout.{jsx,tsx}`, `children` is where the magic will happen. Any page content given to the layout will be rendered here. And now the pages are back to focusing on the content they care about (we can remove the import for `Link` and `routes` from `HomePage` since those are in the Layout instead).
 
 To actually render our layout we'll need to make a change to our routes files. We'll wrap `HomePage` and `AboutPage` with the `BlogLayout`, using a `<Set>`. Unlike pages, we do actually need an `import` statement for layouts:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 // highlight-start
 import { Router, Route, Set } from '@redwoodjs/router'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -265,7 +265,7 @@ A couple more `<Link>`s: let's have the title/logo link back to the homepage, an
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }) => {
@@ -346,7 +346,7 @@ And then we can remove the extra "Return to Home" link (and Link/routes import) 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/AboutPage/AboutPage.js"
+```jsx title="web/src/pages/AboutPage/AboutPage.jsx"
 import { MetaTags } from '@redwoodjs/web'
 
 const AboutPage = () => {

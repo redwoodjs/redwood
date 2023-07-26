@@ -1,24 +1,25 @@
 #!/usr/bin/env node
 
-import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
+import { trace, SpanStatusCode } from '@opentelemetry/api'
 import { config } from 'dotenv-defaults'
-import findup from 'findup-sync'
 import { hideBin, Parser } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { telemetryMiddleware } from '@redwoodjs/telemetry'
 
 import * as buildCommand from './commands/build'
 import * as checkCommand from './commands/check'
 import * as consoleCommand from './commands/console'
-import * as dataMigrateCommand from './commands/data-migrate'
+import * as dataMigrateCommand from './commands/dataMigrate'
 import * as deployCommand from './commands/deploy'
 import * as destroyCommand from './commands/destroy'
 import * as devCommand from './commands/dev'
 import * as execCommand from './commands/exec'
+import * as experimentalCommand from './commands/experimental'
 import * as generateCommand from './commands/generate'
 import * as infoCommand from './commands/info'
 import * as lintCommand from './commands/lint'
@@ -27,13 +28,15 @@ import * as prismaCommand from './commands/prisma'
 import * as recordCommand from './commands/record'
 import * as serveCommand from './commands/serve'
 import * as setupCommand from './commands/setup'
-import * as storybookCommand from './commands/storybook'
 import * as testCommand from './commands/test'
 import * as tstojsCommand from './commands/ts-to-js'
 import * as typeCheckCommand from './commands/type-check'
 import * as upgradeCommand from './commands/upgrade'
-import { getPaths } from './lib'
-import * as upgradeCheck from './lib/upgradeCheck'
+import { getPaths, findUp } from './lib'
+import { exitWithError } from './lib/exit'
+import * as updateCheck from './lib/updateCheck'
+import { loadPlugins } from './plugin'
+import { startTelemetry, shutdownTelemetry } from './telemetry/index'
 
 // # Setting the CWD
 //
@@ -57,7 +60,17 @@ import * as upgradeCheck from './lib/upgradeCheck'
 // yarn rw info
 // ```
 
-let { cwd } = Parser(hideBin(process.argv))
+let { cwd, telemetry, help, version } = Parser(hideBin(process.argv), {
+  // Telemetry is enabled by default, but can be disabled in two ways
+  // - by passing a `--telemetry false` option
+  // - by setting a `REDWOOD_DISABLE_TELEMETRY` env var
+  boolean: ['telemetry'],
+  default: {
+    telemetry:
+      process.env.REDWOOD_DISABLE_TELEMETRY === undefined ||
+      process.env.REDWOOD_DISABLE_TELEMETRY === '',
+  },
+})
 cwd ??= process.env.RWJS_CWD
 
 try {
@@ -71,7 +84,7 @@ try {
     // `cwd` wasn't set. Odds are they're in a Redwood project,
     // but they could be in ./api or ./web, so we have to find up to be sure.
 
-    const redwoodTOMLPath = findup('redwood.toml', { cwd: process.cwd() })
+    const redwoodTOMLPath = findUp('redwood.toml')
 
     if (!redwoodTOMLPath) {
       throw new Error(
@@ -98,90 +111,118 @@ config({
   multiline: true,
 })
 
-// # Build the CLI and run it
-
-function upgradeCheckMiddleware(argv) {
-  if (upgradeCheck.EXCLUDED_COMMANDS.includes(argv._[0])) {
-    return
+async function main() {
+  // Start telemetry if it hasn't been disabled
+  if (telemetry) {
+    startTelemetry()
   }
 
-  if (upgradeCheck.shouldShow()) {
-    process.on('exit', () => {
-      upgradeCheck.showUpgradeMessage()
-    })
-  }
+  // Execute CLI within a span, this will be the root span
+  const tracer = trace.getTracer('redwoodjs')
+  await tracer.startActiveSpan('cli', async (span) => {
+    // Ensure telemetry ends after a maximum of 5 minutes
+    const telemetryTimeoutTimer = setTimeout(() => {
+      shutdownTelemetry()
+    }, 5 * 60_000)
 
-  if (upgradeCheck.shouldCheck()) {
-    const stdout = fs.openSync(
-      path.join(getPaths().generated.base, 'upgradeCheckStdout.log'),
-      'w'
-    )
+    // Record if --version or --help was given because we will never hit a handler which could specify the command
+    if (version) {
+      recordTelemetryAttributes({ command: '--version' })
+    }
+    if (help) {
+      recordTelemetryAttributes({ command: '--help' })
+    }
 
-    const stderr = fs.openSync(
-      path.join(getPaths().generated.base, 'upgradeCheckStderr.log'),
-      'w'
-    )
+    try {
+      // Run the command via yargs
+      await runYargs()
+    } catch (error) {
+      exitWithError(error)
+    }
 
-    const child = spawn(
-      'yarn',
-      ['node', path.join(__dirname, 'lib', 'runUpgradeCheck.js')],
-      {
-        detached: true,
-        stdio: ['ignore', stdout, stderr],
-        shell: process.platform === 'win32',
-      }
-    )
+    // Span housekeeping
+    if (span?.isRecording()) {
+      span?.setStatus({ code: SpanStatusCode.OK })
+      span?.end()
+    }
 
-    child.unref()
+    // Clear the timeout timer since we haven't timed out
+    clearTimeout(telemetryTimeoutTimer)
+  })
+
+  // Shutdown telemetry, ensures data is sent before the process exits
+  if (telemetry) {
+    shutdownTelemetry()
   }
 }
 
-yargs(hideBin(process.argv))
-  // Config
-  .scriptName('rw')
-  .middleware(
-    [
-      // We've already handled `cwd` above, but it may still be in `argv`.
-      // We don't need it anymore so let's get rid of it.
-      (argv) => {
-        delete argv.cwd
-      },
-      telemetryMiddleware,
-      upgradeCheck.isEnabled() && upgradeCheckMiddleware,
-    ].filter(Boolean)
-  )
-  .option('cwd', {
-    describe: 'Working directory to use (where `redwood.toml` is located)',
-  })
-  .example(
-    'yarn rw g page home /',
-    "\"Create a page component named 'Home' at path '/'\""
-  )
-  .demandCommand()
-  .strict()
+async function runYargs() {
+  // # Build the CLI yargs instance
+  const yarg = yargs(hideBin(process.argv))
+    // Config
+    .scriptName('rw')
+    .middleware(
+      [
+        // We've already handled `cwd` above, but it may still be in `argv`.
+        // We don't need it anymore so let's get rid of it.
+        // Likewise for `telemetry`.
+        (argv) => {
+          delete argv.cwd
+          delete argv.telemetry
+        },
+        telemetry && telemetryMiddleware,
+        updateCheck.isEnabled() && updateCheck.updateCheckMiddleware,
+      ].filter(Boolean)
+    )
+    .option('cwd', {
+      describe: 'Working directory to use (where `redwood.toml` is located)',
+    })
+    .option('telemetry', {
+      describe: 'Whether to send anonymous usage telemetry to RedwoodJS',
+      boolean: true,
+      // hidden: true,
+    })
+    .example(
+      'yarn rw g page home /',
+      "\"Create a page component named 'Home' at path '/'\""
+    )
+    .demandCommand()
+    .strict()
+    .exitProcess(false)
 
-  // Commands
-  .command(buildCommand)
-  .command(checkCommand)
-  .command(consoleCommand)
-  .command(dataMigrateCommand)
-  .command(deployCommand)
-  .command(destroyCommand)
-  .command(devCommand)
-  .command(execCommand)
-  .command(generateCommand)
-  .command(infoCommand)
-  .command(lintCommand)
-  .command(prerenderCommand)
-  .command(prismaCommand)
-  .command(recordCommand)
-  .command(serveCommand)
-  .command(setupCommand)
-  .command(storybookCommand)
-  .command(testCommand)
-  .command(tstojsCommand)
-  .command(typeCheckCommand)
-  .command(upgradeCommand)
+    // Commands (Built in or pre-plugin support)
+    .command(buildCommand)
+    .command(checkCommand)
+    .command(consoleCommand)
+    .command(dataMigrateCommand)
+    .command(deployCommand)
+    .command(destroyCommand)
+    .command(devCommand)
+    .command(execCommand)
+    .command(experimentalCommand)
+    .command(generateCommand)
+    .command(infoCommand)
+    .command(lintCommand)
+    .command(prerenderCommand)
+    .command(prismaCommand)
+    .command(recordCommand)
+    .command(serveCommand)
+    .command(setupCommand)
+    .command(testCommand)
+    .command(tstojsCommand)
+    .command(typeCheckCommand)
+    .command(upgradeCommand)
+
+  // Load any CLI plugins
+  await loadPlugins(yarg)
 
   // Run
-  .parse()
+  await yarg.parse(process.argv.slice(2), {}, (_err, _argv, output) => {
+    // Show the output that yargs was going to if there was no callback provided
+    if (output) {
+      console.log(output)
+    }
+  })
+}
+
+main()

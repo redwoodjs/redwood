@@ -1,7 +1,7 @@
 import {
-  platformAuthenticatorIsAvailable,
   startRegistration,
   startAuthentication,
+  browserSupportsWebAuthn,
 } from '@simplewebauthn/browser'
 
 class WebAuthnRegistrationError extends Error {
@@ -45,7 +45,7 @@ export default class WebAuthnClient {
   authApiUrl = ''
 
   private getAuthApiUrl() {
-    return this.authApiUrl || `${process.env.RWJS_API_URL}/auth`
+    return this.authApiUrl || `${RWJS_API_URL}/auth`
   }
 
   setAuthApiUrl(authApiUrl?: string) {
@@ -55,7 +55,7 @@ export default class WebAuthnClient {
   }
 
   async isSupported() {
-    return await platformAuthenticatorIsAvailable()
+    return await browserSupportsWebAuthn()
   }
 
   isEnabled() {

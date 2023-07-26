@@ -1,3 +1,5 @@
+import type SuperTokens from 'supertokens-auth-react'
+
 import { createAuthentication, CurrentUser } from '@redwoodjs/auth'
 
 export interface SuperTokensUser {
@@ -9,20 +11,14 @@ export type SessionRecipe = {
   signOut: () => Promise<void>
   doesSessionExist: () => Promise<boolean>
   getAccessTokenPayloadSecurely: () => Promise<any>
+  getAccessToken: () => Promise<any>
   getUserId: () => Promise<string>
 }
 
-export type AuthRecipe = {
-  redirectToAuth: (input: 'signin' | 'signup') => void
-}
-
 export function createAuth(
-  superTokens: {
-    authRecipe: AuthRecipe
-    sessionRecipe: SessionRecipe
-  },
+  superTokens: SuperTokensAuth,
   customProviderHooks?: {
-    useCurrentUser?: () => Promise<Record<string, unknown>>
+    useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
       currentUser: CurrentUser | null
     ) => (rolesToCheck: string | string[]) => boolean
@@ -34,25 +30,25 @@ export function createAuth(
 }
 
 export interface SuperTokensAuth {
-  authRecipe: AuthRecipe
   sessionRecipe: SessionRecipe
+  redirectToAuth: (typeof SuperTokens)['redirectToAuth']
 }
 
 function createAuthImplementation(superTokens: SuperTokensAuth) {
   return {
     type: 'supertokens',
-    login: async () => superTokens.authRecipe.redirectToAuth('signin'),
-
-    signup: async () => superTokens.authRecipe.redirectToAuth('signup'),
-
-    logout: async () => superTokens.sessionRecipe.signOut(),
-
+    login: () => {
+      return superTokens.redirectToAuth({ show: 'signin', redirectBack: true })
+    },
+    signup: () => {
+      return superTokens.redirectToAuth({ show: 'signup', redirectBack: true })
+    },
+    logout: () => {
+      return superTokens.sessionRecipe.signOut()
+    },
     getToken: async (): Promise<string | null> => {
       if (await superTokens.sessionRecipe.doesSessionExist()) {
-        const accessTokenPayload =
-          await superTokens.sessionRecipe.getAccessTokenPayloadSecurely()
-        const jwtPropertyName = accessTokenPayload['_jwtPName']
-        return accessTokenPayload[jwtPropertyName]
+        return superTokens.sessionRecipe.getAccessToken()
       } else {
         return null
       }

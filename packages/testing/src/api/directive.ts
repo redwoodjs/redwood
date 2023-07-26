@@ -5,11 +5,7 @@ import type {
   ValidatorDirective,
   TransformerDirective,
 } from '@redwoodjs/graphql-server'
-import {
-  context as globalContext,
-  setContext,
-  DirectiveType,
-} from '@redwoodjs/graphql-server'
+import { setContext, DirectiveType } from '@redwoodjs/graphql-server'
 
 export { getDirectiveName } from '@redwoodjs/graphql-server'
 
@@ -75,23 +71,21 @@ export const mockRedwoodDirective: DirectiveMocker = (
 ) => {
   const { directiveArgs, context, ...others } = executionMock
 
-  if (context) {
-    setContext(context || {})
-  }
-
   if (directive.onResolvedValue.constructor.name === 'AsyncFunction') {
     return async () => {
+      if (context) {
+        setContext(context || {})
+      }
+
       if (directive.type === DirectiveType.TRANSFORMER) {
         const { mockedResolvedValue } = others as TransformerMock
         return directive.onResolvedValue({
           resolvedValue: mockedResolvedValue,
-          context: globalContext,
           directiveArgs: directiveArgs || {},
           ...others,
         } as DirectiveParams)
       } else {
         await directive.onResolvedValue({
-          context: globalContext,
           directiveArgs: directiveArgs || {},
           ...others,
         } as DirectiveParams)
@@ -100,17 +94,19 @@ export const mockRedwoodDirective: DirectiveMocker = (
   }
 
   return () => {
+    if (context) {
+      setContext(context || {})
+    }
+
     if (directive.type === DirectiveType.TRANSFORMER) {
       const { mockedResolvedValue } = others as TransformerMock
       return directive.onResolvedValue({
         resolvedValue: mockedResolvedValue,
-        context: globalContext,
         directiveArgs: directiveArgs || {},
         ...others,
       } as DirectiveParams)
     } else {
       directive.onResolvedValue({
-        context: globalContext,
         directiveArgs: directiveArgs || {},
         ...others,
       } as DirectiveParams)

@@ -3,7 +3,7 @@ import { join } from 'path'
 import type { DMMF } from '@prisma/generator-helper'
 import { getDMMF } from '@prisma/internals'
 
-import { getPaths, processPagesDir } from '@redwoodjs/internal/dist/paths'
+import { getPaths, processPagesDir } from '@redwoodjs/project-config'
 
 import { Host } from '../hosts'
 import { BaseNode } from '../ide'
@@ -130,7 +130,7 @@ export class RWProject extends BaseNode {
 
   // TODO: move to path helper
   @lazy() get defaultNotFoundPageFilePath() {
-    const ext = this.isTypeScriptProject ? '.tsx' : '.js' // or jsx?
+    const ext = this.isTypeScriptProject ? '.tsx' : '.jsx'
     return join(this.pathHelper.web.pages, 'NotFoundPage', 'NotFoundPage' + ext)
   }
 

@@ -91,6 +91,7 @@ module.exports = {
             { type: 'doc', id: 'auth/firebase' },
             { type: 'doc', id: 'auth/netlify' },
             { type: 'doc', id: 'auth/supabase' },
+            { type: 'doc', id: 'auth/supertokens' },
           ],
         },
         'builds',
@@ -100,6 +101,7 @@ module.exports = {
         'contributing-overview',
         'contributing-walkthrough',
         'cors',
+        'create-redwood-app',
         'custom-web-index',
         'data-migrations',
         {
@@ -113,6 +115,11 @@ module.exports = {
           items: [
             { type: 'doc', label: 'Introduction', id: 'deploy/introduction' },
             { type: 'doc', label: 'Baremetal', id: 'deploy/baremetal' },
+            {
+              type: 'doc',
+              label: 'GCP or AWS via Coherence',
+              id: 'deploy/coherence',
+            },
             {
               type: 'doc',
               label: 'AWS via Flightcontrol',
@@ -179,7 +186,7 @@ module.exports = {
           ],
         },
         'webhooks',
-        'webpack-configuration',
+        'vite-configuration',
       ],
     },
     {

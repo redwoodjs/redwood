@@ -6,7 +6,7 @@
 
 Redwood is composed of several popular libraries to make full-stack web development easier. Unfortunately, we can't teach all of those technologies from scratch during this tutorial, so we're going to assume you are already familiar with a few core concepts:
 
-- [React](https://reactjs.org/)
+- [React](https://react.dev/)
 - [GraphQL](https://graphql.org/)
 - [Prisma](https://prisma.io/)
 - [Jamstack Deployment](https://jamstack.org/)
@@ -17,11 +17,11 @@ You could definitely learn them all at once, but it will be harder to determine 
 
 ### Redwood Versions
 
-You will want to be on at least version 1.0.0 to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
+You will want to be on at least version 5.0.0 to complete the tutorial. If this is your first time using Redwood then no worries: the latest version will be installed automatically when you create your app skeleton!
 
 If you have an existing site created with a prior version, you'll need to upgrade and (most likely) apply code modifications. Follow this two step process:
 
-1. For _each_ version included in your upgrade, follow the "Code Modifications" section of the specific version's Release Notes:
+1. For _each_ version included in your upgrade, follow the "Code Modifications" section or "Upgrade Guide" of the specific version's Release Notes:
    - [Redwood Releases](https://github.com/redwoodjs/redwood/releases)
 2. Then upgrade to the latest version. Run the command:
    - `yarn redwood upgrade`
@@ -30,10 +30,10 @@ If you have an existing site created with a prior version, you'll need to upgrad
 
 During installation, RedwoodJS checks if your system meets version requirements for Node and Yarn:
 
-- node: ">=14.19 <=16.x"
+- node: "=18.x"
 - yarn: ">=1.15"
 
-If your system versions do not meet both requirements, _the installation bootstrap will result in an ERROR._ To check, please run the following from your terminal command line:
+If you're using a version of Node or Yarn that's **less** than what's required, _the installation bootstrap will result in an ERROR_. To check, please run the following from your terminal command line:
 
 ```bash
 node --version
@@ -47,16 +47,17 @@ Please do upgrade accordingly. Then proceed to the Redwood installation when you
 There are many ways to install and manage both Node.js and Yarn. If you're installing for the first time, we recommend the following:
 
 **1. Yarn**
-We recommend following the [instructions via Yarnpkg.com](https://classic.yarnpkg.com/en/docs/install/).
+We recommend following the [instructions via Yarnpkg.com](https://yarnpkg.com/getting-started/install).
 
 **2. Node.js**
-Using the recommended [LTS version from Nodejs.org](https://nodejs.org/en/) is preferred, as the latest Current version isn't supported.
+Using the recommended [LTS version from Nodejs.org](https://nodejs.org/en/) is preferred.
 
-- `nvm` is a great tool for managing multiple versions of Node on one system. It takes a bit more effort to set up and learn, however. Follow the [nvm installation instructions](https://github.com/nvm-sh/nvm#installing-and-updating). (Windows users should go to [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)). For **Mac** users with Homebrew installed, you can alternatively use it to [install `nvm`](https://formulae.brew.sh/formula/nvm).
- **Windows:** Recommended Development Setup
+- `nvm` is a great tool for managing multiple versions of Node on one system. It takes a bit more effort to set up and learn, however. Follow the [nvm installation instructions](https://github.com/nvm-sh/nvm#installing-and-updating). (Windows users should go to [nvm-windows](https://github.com/coreybutler/nvm-windows/releases)). For **Mac** users with Homebrew installed, you can alternatively use it to [install `nvm`](https://formulae.brew.sh/formula/nvm). Or, refer to our how to guide [using nvm](../../how-to/using-nvm.md).
 
-JavaScript development on Windows has specific requirements in addition to Yarn and npm. Follow our simple setup guide:
+**Windows:** Recommended Development Setup
 
-- [Recommended Windows Development Setup](../../how-to/windows-development-setup.md)
+- JavaScript development on Windows has specific requirements in addition to Yarn and npm. Follow our simple setup guide:
+
+  [Recommended Windows Development Setup](../../how-to/windows-development-setup.md)
 
 :::

@@ -57,6 +57,47 @@ model User {
 }
 ```
 
+:::info User SDL
+We created a User model in Chapter 4 when we set up authentication for our blog. Redwood's `setup auth dbAuth` command generated two files for us that manage authentication: the `auth` file in `api/src/lib/`, and the `auth` file in `api/src/functions/`. Both of these files use our PrismaClient directly to work with the User model, so we didn't need to set up an SDL or services for the User model.
+
+If you followed our recommendation in the Intermission to use the Example repo, the User SDL and service is already added for you. If not, you'll need to add it yourself:
+
+```bash
+yarn rw g sdl User --no-crud
+```
+
+We'll comment out the sensitive fields of our GraphQL User type so there's no chance of them leaking:
+
+<Tabs groupId="js-ts">
+<TabItem value="js" label="JavaScript">
+
+```js title="api/src/graphql/users.sdl.js"
+  type User {
+    ...
+    # hashedPassword: String!
+    # salt: String!
+    # resetToken: String
+    # resetTokenExpiresAt: DateTime
+  }
+```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+```ts title="api/src/graphql/users.sdl.ts"
+  type User {
+    ...
+    # hashedPassword: String!
+    # salt: String!
+    # resetToken: String
+    # resetTokenExpiresAt: DateTime
+  }
+```
+
+</TabItem>
+</Tabs>
+:::
+
 ### Migrate the Database
 
 Next, migrate the database to apply the changes (when given the option, name the migration something like "add userId to post"):
@@ -223,7 +264,7 @@ post {   <- root
 }
 ```
 
-That post will already be retreived from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Now we know everything we need to to make a `findFirst()` query in Prisma, giving it the `id` of the record we already found, but returning the `user` associated to that record, rather than the `post` itself.
+That post will already be retrieved from the database, and so we know its `id`. `root` is that object, so can simply call `.id` on it to get that property. Now we know everything we need to to make a `findFirst()` query in Prisma, giving it the `id` of the record we already found, but returning the `user` associated to that record, rather than the `post` itself.
 
 We could also write this resolver as follows:
 
@@ -633,16 +674,13 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 // highlight-start
 export const updatePost = async ({ id, input }) => {
   if (await adminPost({ id })) {
-    return true
+    return db.post.update({
+      data: input,
+      where: { id },
+    })
   } else {
     throw new ForbiddenError("You don't have access to this post")
   }
-  // highlight-end
-
-  return db.post.update({
-    data: input,
-    where: { id },
-  })
 }
 ```
 
@@ -652,7 +690,7 @@ This works, but we'll need to do the same thing in `deletePost`. Let's extract t
 
 ```javascript
 // highlight-start
-const verifyOwnership = async (id) {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -663,7 +701,7 @@ const verifyOwnership = async (id) {
 
 export const updatePost = async ({ id, input }) => {
   // highlight-next-line
-  await verifyOwnership(id)
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -679,7 +717,7 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
 
-const validateOwnership = async ({ id }) => {
+const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
     return true
   } else {
@@ -704,7 +742,7 @@ export const createPost = ({ input }) => {
 }
 
 export const updatePost = async ({ id, input }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.update({
     data: input,
@@ -713,7 +751,7 @@ export const updatePost = async ({ id, input }) => {
 }
 
 export const deletePost = async ({ id }) => {
-  await validateOwnership({ id })
+  await verifyOwnership({ id })
 
   return db.post.delete({
     where: { id },

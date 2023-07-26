@@ -26,6 +26,6 @@ constructs:
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   region: us-east-1 # AWS region where the service will be deployed, defaults to N. Virgina
 `

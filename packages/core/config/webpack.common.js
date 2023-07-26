@@ -13,10 +13,12 @@ const { merge } = require('webpack-merge')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
 const {
-  getConfig,
-  getPaths,
   getWebSideDefaultBabelConfig,
-} = require('@redwoodjs/internal')
+} = require('@redwoodjs/internal/dist/build/babel/web')
+const {
+  ChunkReferencesPlugin,
+} = require('@redwoodjs/internal/dist/webpackPlugins/ChunkReferencesPlugin')
+const { getConfig, getPaths } = require('@redwoodjs/project-config')
 
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
@@ -157,7 +159,6 @@ const getSharedPlugins = (isEnvProduction) => {
     // The define plugin will replace these keys with their values during build
     // time. Note that they're used in packages/web/src/config.ts, and made available in globalThis
     new webpack.DefinePlugin({
-      ['RWJS_WEB_BUNDLER']: JSON.stringify('webpack'),
       ['RWJS_ENV']: JSON.stringify({
         RWJS_API_GRAPHQL_URL:
           redwoodConfig.web.apiGraphQLUrl ??
@@ -233,11 +234,6 @@ module.exports = (webpackEnv) => {
       !isEnvProduction && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(redwoodPaths.base, 'web/src/index.html'),
-        templateParameters: {
-          prerenderPlaceholder: isEnvProduction
-            ? '<server-markup></server-markup>'
-            : '<!-- Prerender placeholder -->',
-        },
         scriptLoading: 'defer',
         inject: true,
         chunks: 'all',
@@ -269,6 +265,7 @@ module.exports = (webpackEnv) => {
         new WebpackManifestPlugin({
           fileName: 'build-manifest.json',
         }),
+      isEnvProduction && new ChunkReferencesPlugin(),
       ...getSharedPlugins(isEnvProduction),
     ].filter(Boolean),
     module: {
@@ -279,7 +276,7 @@ module.exports = (webpackEnv) => {
           oneOf: [
             // (0)
             {
-              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
               type: 'asset',
               parser: {
                 dataUrlCondition: {

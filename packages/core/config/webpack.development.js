@@ -1,7 +1,7 @@
-const escapeRegExp = require('lodash.escaperegexp')
+const { escapeRegExp } = require('lodash')
 const { merge } = require('webpack-merge')
 
-const { getConfig } = require('@redwoodjs/internal')
+const { getConfig } = require('@redwoodjs/project-config')
 
 const webpackConfig = require('./webpack.common')
 
@@ -16,7 +16,7 @@ const getProxyConfig = () => {
     // Redwood only proxies absolute paths.
     return {
       [apiUrl]: {
-        target: `${process.env.RWJS_DEV_API_URL ?? 'http://[::1]'}:${port}`,
+        target: `${process.env.RWJS_DEV_API_URL ?? 'http://localhost'}:${port}`,
         pathRewrite: {
           // Eg: Rewrite `/.netlify/functions/graphql` to `/graphql`, which the api-server expects
           [`^${escapeRegExp(apiUrl)}`]: '',
@@ -83,6 +83,12 @@ const getProxyConfig = () => {
 /** @type {import('webpack').Configuration} */
 const baseConfig = merge(webpackConfig('development'), {
   devServer: {
+    // `runtimeErrors` became true by default in webpack-dev-server v4.15.0 and interferes with <FormError />.
+    client: {
+      overlay: {
+        runtimeErrors: false,
+      },
+    },
     // https://webpack.js.org/configuration/dev-server/
     // note: docs not yet updated for webpack-dev-server v4
     devMiddleware: {

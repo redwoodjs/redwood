@@ -6,11 +6,12 @@ import path from 'path'
 import { getSchema, getConfig } from '@prisma/internals'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
+import { getPaths, writeFilesTask, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { printSetupNotes, updateApiURLTask } from '../helpers'
+import { updateApiURLTask } from '../helpers'
 import {
   flightcontrolConfig,
   databaseEnvVariables,
@@ -174,7 +175,9 @@ const updateDbAuth = () => {
     `)
         return
       }
-      authContent[sameSiteLineIndex] = `      SameSite: 'None',`
+      authContent[
+        sameSiteLineIndex
+      ] = `      SameSite: process.env.NODE_ENV === 'development' ? 'Strict' : 'None',`
 
       const dbHandlerIndex = authContent.findIndex((line) =>
         line.includes('new DbAuthHandler(')
@@ -201,11 +204,11 @@ const updateDbAuth = () => {
 
 const updateApp = () => {
   return {
-    title: 'Updating App.js fetch config...',
+    title: 'Updating App.jsx fetch config...',
     task: (_ctx) => {
       // TODO Can improve in the future with RW getPaths()
       const appTsPath = path.join(getPaths().base, 'web/src/App.tsx')
-      const appJsPath = path.join(getPaths().base, 'web/src/App.js')
+      const appJsPath = path.join(getPaths().base, 'web/src/App.jsx')
 
       let appPath
       if (fs.existsSync(appTsPath)) {
@@ -214,7 +217,7 @@ const updateApp = () => {
         appPath = appJsPath
       } else {
         // TODO this should never happen. Throw instead?
-        console.log(`Skipping, did not detect web/src/App.js|tsx`)
+        console.log(`Skipping, did not detect web/src/App.jsx|tsx`)
         return
       }
 
@@ -302,6 +305,11 @@ const notes = [
 ]
 
 export const handler = async ({ force, database }) => {
+  recordTelemetryAttributes({
+    command: 'setup deploy flightcontrol',
+    force,
+    database,
+  })
   const tasks = new Listr(
     [
       {
@@ -320,7 +328,7 @@ export const handler = async ({ force, database }) => {
       addToDotEnvDefaultTask(),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {

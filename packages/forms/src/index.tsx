@@ -48,14 +48,12 @@
 import React, { useContext, forwardRef, ForwardedRef } from 'react'
 
 import pascalcase from 'pascalcase'
-import {
-  get,
-  useForm,
-  FormProvider,
-  useFormContext,
-  RegisterOptions,
+import { get, useForm, FormProvider, useFormContext } from 'react-hook-form'
+import type {
+  FieldValues,
   UseFormReturn,
   UseFormProps,
+  RegisterOptions,
 } from 'react-hook-form'
 
 import FormError from './FormError'
@@ -67,7 +65,7 @@ import FormError from './FormError'
  *
  * @see {@link https://react-hook-form.com/api/useform/register}
  */
-interface RedwoodRegisterOptions extends RegisterOptions {
+type RedwoodRegisterOptions = RegisterOptions & {
   valueAsBoolean?: boolean
   valueAsJSON?: boolean
 }
@@ -163,7 +161,7 @@ const isValueEmpty = (val: string): boolean => val === ''
  * the comments above the setCoercion function for more details)
  */
 
-type EmptyAsValue = null | 'undefined' | 0 | ''
+export type EmptyAsValue = null | 'undefined' | 0 | ''
 
 type ValueAsType =
   | 'valueAsDate'
@@ -365,7 +363,7 @@ const setCoercion = (
   { type, name, emptyAs }: SetCoersionProps
 ) => {
   if (validation.setValueAs) {
-    // Note, this case could overide other props
+    // Note, this case could override other props
     return
   }
   let valueAs: ValueAsType
@@ -484,7 +482,7 @@ interface ServerErrorsContextProps {
 
 const ServerErrorsContext = React.createContext({} as ServerErrorsContextProps)
 
-export interface FormProps<TFieldValues>
+export interface FormProps<TFieldValues extends FieldValues>
   extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
   error?: any
   /**
@@ -526,7 +524,7 @@ export interface FormProps<TFieldValues>
 /**
  * Renders a `<form>` with the required context.
  */
-function FormInner<TFieldValues>(
+function FormInner<TFieldValues extends FieldValues>(
   {
     config,
     error: errorProps,
@@ -569,7 +567,7 @@ function FormInner<TFieldValues>(
 // > To be honest, the forwardRef type is quite complex [...] I'd recommend
 // > that you cast the type
 // https://github.com/chakra-ui/chakra-ui/issues/4528#issuecomment-902566185
-const Form = forwardRef(FormInner) as <TFieldValues>(
+const Form = forwardRef(FormInner) as <TFieldValues extends FieldValues>(
   props: FormProps<TFieldValues> & React.RefAttributes<HTMLFormElement>
 ) => React.ReactElement | null
 

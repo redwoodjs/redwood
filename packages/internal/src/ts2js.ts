@@ -5,7 +5,7 @@ import { transform } from '@babel/core'
 import fg from 'fast-glob'
 import { format } from 'prettier'
 
-import { getPaths } from './paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 /**
  * Converts all the TypeScript files in the `api` and `web` sides to JavaScript.
@@ -41,7 +41,7 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
     const code = transformTSToJS(f)
     if (code) {
       fs.writeFileSync(
-        path.join(cwd, f.replace('.tsx', '.js').replace('.ts', '.js')),
+        path.join(cwd, f.replace('.tsx', '.jsx').replace('.ts', '.js')),
         code,
         'utf8'
       )

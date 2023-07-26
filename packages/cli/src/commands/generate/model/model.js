@@ -3,6 +3,8 @@ import path from 'path'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
 import { prepareForRollback } from '../../../lib/rollback'
@@ -45,6 +47,12 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force, ...args }) => {
+  recordTelemetryAttributes({
+    command: 'generate model',
+    force,
+    rollback: args.rollback,
+  })
+
   validateName(args.name)
 
   const tasks = new Listr(
@@ -63,12 +71,12 @@ export const handler = async ({ force, ...args }) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapse: false } }
+    { rendererOptions: { collapseSubtasks: false } }
   )
 
   try {
     await verifyModelName({ name: args.name })
-    if (args.rollback) {
+    if (args.rollback && !force) {
       prepareForRollback(tasks)
     }
     await tasks.run()

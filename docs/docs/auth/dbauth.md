@@ -23,6 +23,7 @@ However, we're following best practices for storing these credentials:
 1. Users' passwords are [salted and hashed](https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/) with PBKDF2 before being stored
 2. Plaintext passwords are never stored anywhere, and only transferred between client and server during the login/signup phase (and hopefully only over HTTPS)
 3. Our logger scrubs sensitive parameters (like `password`) before they are output
+4. We only store the hashes of reset tokens
 
 Even if you later decide you want to let someone else handle your user data for you, dbAuth is a great option for getting up and running quickly (we even have a generator for creating basic login and signup pages for you).
 
@@ -233,6 +234,8 @@ If you changed the path to the Reset Password page in your routes you'll need to
 
     https://example.com/reset-password?resetKey=${user.resetKey}
 
+> Note that although the user table contains a hash of `resetToken`, only for the handler, `user.resetToken` will contain the raw `resetToken` to use for generating a password reset link.
+
 ### resetPassword.enabled
 
 Allow users to reset their password via a code from a call to `forgotPassword`. Defaults to true. Needs to be explicitly set to false to disable the flow.
@@ -247,6 +250,33 @@ resetPassword: {
 ### resetPassword.handler()
 
 This handler is invoked after the password has been successfully changed in the database. Returning something truthy (like `return user`) will automatically log the user in after their password is changed. If you'd like to return them to the login page and make them log in manually, `return false` and redirect the user in the Reset Password page.
+
+### usernameMatch
+
+This configuration allows you to perform a case insensitive check on a username at the point of db check. You will need to provide the configuration of your choice for both signup and login.
+
+```javascript
+signup: {
+  usernameMatch: 'insensitive'
+}
+```
+
+```javascript
+login: {
+  usernameMatch: 'insensitive'
+}
+```
+
+By default no setting is required. This is because each db has its own rules for enabling this feature. To enable please see the table below and pick the correct 'userMatchString' for your db of choice.
+
+| DB | Default  | usernameMatchString  | notes |
+|---|---|---|---|
+| Postgres  | 'default'  | 'insensitive'  | |
+| MySQL  | 'case-insensitive'  | N/A  | turned on by default so no setting required |
+| MongoDB  | 'default'  | 'insensitive'  |
+| SQLite | N/A  | N/A  | [Not Supported] Insensitive checks can only be defined at a per column level |
+| Microsoft SQL Server | 'case-insensitive' | N/A | turned on by default so no setting required |
+
 
 ### Cookie config
 

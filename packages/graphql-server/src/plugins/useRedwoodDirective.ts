@@ -69,7 +69,7 @@ export declare type TransformArgs<
  * Transformer directives run **after** resolving the value
  *
  * - You can also throw an error, if you want to stop executing, but note that the value has already been resolved
- * - Transformer directives **must** be synchonous, and return a value
+ * - Transformer directives **must** be synchronous, and return a value
  *
  * You have to pass in the type of directiveArgs, and the resolverValue (i.e. the type of the field you are transforming)
  * @example TransformerDirectiveFunc<Post, { allowedRoles: string[] }>
@@ -154,7 +154,11 @@ function wrapAffectedResolvers(
       if (directiveNode && directive) {
         const directiveArgs =
           getDirectiveValues(directive, { directives: [directiveNode] }) || {}
+
         const originalResolve = fieldConfig.resolve ?? defaultFieldResolver
+        // Only validator directives handle a subscribe function
+        const originalSubscribe = fieldConfig.subscribe ?? defaultFieldResolver
+
         if (_isValidator(options)) {
           return {
             ...fieldConfig,
@@ -179,6 +183,28 @@ function wrapAffectedResolvers(
                 )
               }
               return originalResolve(root, args, context, info)
+            },
+            subscribe: function useRedwoodDirectiveValidatorResolver(
+              root,
+              args,
+              context,
+              info
+            ) {
+              const result = options.onResolvedValue({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+              })
+
+              if (isPromise(result)) {
+                return result.then(() =>
+                  originalSubscribe(root, args, context, info)
+                )
+              }
+              return originalSubscribe(root, args, context, info)
             },
           }
         }
@@ -233,22 +259,23 @@ export const useRedwoodDirective = (
   /**
    * This symbol is added to the schema extensions for checking whether the transform got already applied.
    */
-  const didMapSchemaSymbol = Symbol('useRedwoodDirective.didMapSchemaSymbol')
+  const wasDirectiveApplied = Symbol.for(`useRedwoodDirective.${options.name}}`)
+
   return {
     onSchemaChange({ schema, replaceSchema }) {
       /**
        * Currently graphql-js extensions typings are limited to string keys.
        * We are using symbols as each useRedwoodDirective plugin instance should use its own unique symbol.
        */
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      if (schema.extensions?.[didMapSchemaSymbol] === true) {
+      if (schema.extensions?.[wasDirectiveApplied] === true) {
         return
       }
       const transformedSchema = wrapAffectedResolvers(schema, options)
       transformedSchema.extensions = {
         ...schema.extensions,
-        [didMapSchemaSymbol]: true,
+        [wasDirectiveApplied]: true,
       }
+
       replaceSchema(transformedSchema)
     },
   }

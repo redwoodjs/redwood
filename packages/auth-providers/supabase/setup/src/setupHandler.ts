@@ -18,7 +18,7 @@ export const handler = async ({ force: forceArg }: Args) => {
     apiPackages: [`@redwoodjs/auth-supabase-api@${version}`],
     webPackages: [
       `@redwoodjs/auth-supabase-web@${version}`,
-      '@supabase/supabase-js@^1',
+      '@supabase/supabase-js@^2',
     ],
     notes: [
       "You'll need to add two env vars to your .env file:",
@@ -26,6 +26,7 @@ export const handler = async ({ force: forceArg }: Args) => {
       '```bash title=".env"',
       'SUPABASE_URL="..."',
       'SUPABASE_KEY="..."',
+      'SUPABASE_JWT_SECRET="..."',
       '```',
       '',
       "You can find their values on your Supabase app's dashboard.",

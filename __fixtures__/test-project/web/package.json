@@ -7,26 +7,26 @@
       "last 1 version"
     ],
     "production": [
-      "defaults",
-      "not IE 11",
-      "not IE_Mob 11"
+      "defaults"
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth-dbauth-web": "4.1.0-canary.581+27fc70f73",
-    "@redwoodjs/forms": "3.2.0",
-    "@redwoodjs/router": "3.2.0",
-    "@redwoodjs/web": "3.2.0",
+    "@redwoodjs/auth-dbauth-web": "5.0.0",
+    "@redwoodjs/forms": "5.0.0",
+    "@redwoodjs/router": "5.0.0",
+    "@redwoodjs/web": "5.0.0",
     "humanize-string": "2.1.0",
     "prop-types": "15.8.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.0-canary-035a41c4e-20230704",
+    "react-dom": "18.3.0-canary-035a41c4e-20230704"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.21",
-    "postcss-loader": "^7.0.2",
-    "prettier-plugin-tailwindcss": "^0.2.1",
-    "tailwindcss": "^3.2.4"
+    "@redwoodjs/vite": "6.0.0-canary.450",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.25",
+    "postcss-loader": "^7.3.3",
+    "prettier-plugin-tailwindcss": "^0.3.0",
+    "storybook": "^7.0.26",
+    "tailwindcss": "^3.3.2"
   }
 }

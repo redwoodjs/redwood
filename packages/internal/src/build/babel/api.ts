@@ -5,7 +5,7 @@ import { transform } from '@babel/core'
 import type { TransformOptions } from '@babel/core'
 import type { PluginItem } from '@babel/core'
 
-import { getPaths } from '../../paths'
+import { getPaths } from '@redwoodjs/project-config'
 
 import {
   registerBabel,
@@ -13,9 +13,11 @@ import {
   CORE_JS_VERSION,
   RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,
+  parseTypeScriptConfigFiles,
+  getPathsFromConfig,
 } from './common'
 
-export const TARGETS_NODE = '16.19'
+export const TARGETS_NODE = '18.16'
 // Warning! Use the minor core-js version: "corejs: '3.6'", instead of "corejs: 3",
 // because we want to include the features added in the minor version.
 // https://github.com/zloirock/core-js/blob/master/README.md#babelpreset-env
@@ -43,8 +45,8 @@ export const getApiSideBabelPresets = (
         exclude: [
           // Remove class-properties from preset-env, and include separately with loose
           // https://github.com/webpack/webpack/issues/9708
-          '@babel/plugin-proposal-class-properties',
-          '@babel/plugin-proposal-private-methods',
+          '@babel/plugin-transform-class-properties',
+          '@babel/plugin-transform-private-methods',
         ],
       },
     ],
@@ -61,16 +63,23 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
   version: RUNTIME_CORE_JS_VERSION,
 }
 
-export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
+export const getApiSideBabelPlugins = (
+  { openTelemetry } = {
+    openTelemetry: false,
+  }
+) => {
   const rwjsPaths = getPaths()
   // Plugin shape: [ ["Target", "Options", "name"] ],
-  // a custom "name" is supplied so that user's do not accidently overwrite
+  // a custom "name" is supplied so that user's do not accidentally overwrite
   // Redwood's own plugins when they specify their own.
 
   // const corejsMajorMinorVersion = pkgJson.dependencies['core-js']
   //   .split('.')
   //   .splice(0, 2)
   //   .join('.') // Gives '3.16' instead of '3.16.12'
+
+  // get the config object from the file
+  const tsConfig = parseTypeScriptConfigFiles()
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
@@ -100,25 +109,19 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
      *
      */
     ['@babel/plugin-transform-runtime', BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS],
-    // // still needed for jest.mock
-    forJest && [
+    [
       'babel-plugin-module-resolver',
       {
         alias: {
           src: './src',
+          // adds the paths from [ts|js]config.json to the module resolver
+          ...getPathsFromConfig(tsConfig.api),
         },
         root: [rwjsPaths.api.base],
         cwd: 'packagejson',
         loglevel: 'silent', // to silence the unnecessary warnings
       },
       'rwjs-api-module-resolver',
-    ],
-    [
-      require('../babelPlugins/babel-plugin-redwood-src-alias').default,
-      {
-        srcAbsPath: rwjsPaths.api.src,
-      },
-      'rwjs-babel-src-alias',
     ],
     [
       require('../babelPlugins/babel-plugin-redwood-directory-named-import')
@@ -150,6 +153,11 @@ export const getApiSideBabelPlugins = ({ forJest } = { forJest: false }) => {
       require('../babelPlugins/babel-plugin-redwood-import-dir').default,
       undefined,
       'rwjs-babel-glob-import-dir',
+    ],
+    openTelemetry && [
+      require('../babelPlugins/babel-plugin-redwood-otel-wrapping').default,
+      undefined,
+      'rwjs-babel-otel-wrapping',
     ],
   ].filter(Boolean) as PluginItem[]
 
@@ -211,6 +219,30 @@ export const prebuildApiFile = (
     // we set the sourceFile (for the sourcemap) as a correct, relative path
     // this is why this function (prebuildFile) must know about the dstPath
     sourceFileName: path.relative(path.dirname(dstPath), srcPath),
+    // we need inline sourcemaps at this level
+    // because this file will eventually be fed to esbuild
+    // when esbuild finds an inline sourcemap, it tries to "combine" it
+    // so the final sourcemap (the one that esbuild generates) combines both mappings
+    sourceMaps: 'inline',
+    plugins,
+  })
+  return result
+}
+
+// TODO (STREAMING) I changed the prebuildApiFile function in https://github.com/redwoodjs/redwood/pull/7672/files
+// but we had to revert. For this branch temporarily, I'm going to add a new function
+// This is used in building routeHooks
+export const transformWithBabel = (
+  srcPath: string,
+  plugins: TransformOptions['plugins']
+) => {
+  const code = fs.readFileSync(srcPath, 'utf-8')
+  const defaultOptions = getApiSideDefaultBabelConfig()
+
+  const result = transform(code, {
+    ...defaultOptions,
+    cwd: getPaths().api.base,
+    filename: srcPath,
     // we need inline sourcemaps at this level
     // because this file will eventually be fed to esbuild
     // when esbuild finds an inline sourcemap, it tries to "combine" it
