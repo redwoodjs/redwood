@@ -1,4 +1,7 @@
 // TODO (STREAMING) Merge with runFeServer so we only have one file
+
+// @ts-ignore fasdfg
+import { Writable } from 'node:stream'
 import path from 'path'
 
 import express from 'express'
@@ -80,11 +83,6 @@ async function createServer() {
           ? matchPath(currentRoute.path, currentPathName).params
           : undefined
 
-        console.log(
-          `👉 \n ~ file: devFeServer.ts:79 ~ parsedParams:`,
-          parsedParams
-        )
-
         const routeHookOutput = await loadAndRunRouteHooks({
           paths: [getAppRouteHook(), currentRoute.routeHooks],
           reqMeta: {
@@ -93,10 +91,6 @@ async function createServer() {
           },
           viteDevServer: vite, // because its dev
         })
-        console.log(
-          `👉 \n ~ file: devFeServer.ts:95 ~ routeHookOutput:`,
-          routeHookOutput
-        )
 
         metaTags = routeHookOutput.meta
       }
@@ -154,7 +148,6 @@ async function createServer() {
           bootstrapModules,
           onShellReady() {
             res.setHeader('content-type', 'text/html; charset=utf-8')
-            res.write(`<script>alert('boom')</script>`)
             pipe(res)
           },
         }

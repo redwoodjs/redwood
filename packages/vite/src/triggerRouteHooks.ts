@@ -74,7 +74,6 @@ export const loadAndRunRouteHooks = async ({
   viteDevServer,
   previousOutput = defaultRouteHookOutput,
 }: LoadAndRunRouteHooks): Promise<RouteHookOutput> => {
-  console.log(`👉 \n ~ file: triggerRouteHooks.ts:77 ~ paths:`, paths)
   // Step 1, load the route hooks
   const loadModule = async (path: string) => {
     return viteDevServer ? viteDevServer.ssrLoadModule(path) : import(path)
