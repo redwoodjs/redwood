@@ -43,15 +43,15 @@ jest.mock('../serveHandler', () => {
     bothServerHandler: jest.fn(),
   }
 })
-jest.mock('execa', () =>
-  jest.fn((cmd, params) => ({
-    cmd,
-    params,
-  }))
-)
+jest.mock('@redwoodjs/web-server', () => {
+  return {
+    handler: jest.fn(),
+  }
+})
 
-import execa from 'execa'
 import yargs from 'yargs'
+
+import { handler as webServerHandler } from '@redwoodjs/web-server'
 
 import { builder } from '../serve'
 import { apiServerHandler, bothServerHandler } from '../serveHandler'
@@ -91,23 +91,15 @@ describe('yarn rw serve', () => {
 
   it('Should proxy serve web with params to web server handler', async () => {
     const parser = yargs.command('serve [side]', false, builder)
-
     await parser.parse(
       'serve web --port 9898 --socket abc --apiHost https://myapi.redwood/api'
     )
-
-    expect(execa).toHaveBeenCalledWith(
-      'yarn',
-      expect.arrayContaining([
-        'rw-web-server',
-        '--port',
-        9898,
-        '--socket',
-        'abc',
-        '--api-host',
-        'https://myapi.redwood/api',
-      ]),
-      expect.anything()
+    expect(webServerHandler).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 9898,
+        socket: 'abc',
+        apiHost: 'https://myapi.redwood/api',
+      })
     )
   })
 
