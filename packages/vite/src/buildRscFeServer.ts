@@ -39,6 +39,9 @@ export const buildRscFeServer = async ({
     // configFile: viteConfigPath,
     root: webSrc,
     plugins: [react(), rscIndexPlugin()],
+    resolve: {
+      conditions: ['react-server'],
+    },
     build: {
       outDir: webDist,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
