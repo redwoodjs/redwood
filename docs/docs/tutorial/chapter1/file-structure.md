@@ -134,7 +134,7 @@ That's it for the backend.
 
 - `public` contains assets not used by React components (they will be copied over unmodified to the final app's root directory):
   - `favicon.png` is the icon that goes in a browser tab when your page is open (apps start with the RedwoodJS logo).
-  - `README.md` explains how, and when, to use the `public` folder for static assets. It also covers best practices for importing assets within components via Webpack. You can also [read this README.md file on GitHub](https://github.com/redwoodjs/create-redwood-app/tree/main/web/public).
+  - `README.md` explains how, and when, to use the `public` folder for static assets. It also covers best practices for importing assets within components via Vite. You can also [read this README.md file on GitHub](https://github.com/redwoodjs/redwood/blob/main/packages/create-redwood-app/templates/ts/web/public).
   - `robots.txt` can be used to control what web indexers are [allowed to do](https://www.robotstxt.org/robotstxt.html).
 
 - `src` contains several subdirectories:

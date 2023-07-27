@@ -36,10 +36,15 @@ jest.mock('fs', () => {
   }
 })
 
-jest.mock('../serveHandler', () => {
+jest.mock('../serveApiHandler', () => {
   return {
-    ...jest.requireActual('../serveHandler'),
+    ...jest.requireActual('../serveApiHandler'),
     apiServerHandler: jest.fn(),
+  }
+})
+jest.mock('../serveBothHandler', () => {
+  return {
+    ...jest.requireActual('../serveBothHandler'),
     bothServerHandler: jest.fn(),
   }
 })
@@ -54,7 +59,8 @@ import execa from 'execa'
 import yargs from 'yargs'
 
 import { builder } from '../serve'
-import { apiServerHandler, bothServerHandler } from '../serveHandler'
+import { apiServerHandler } from '../serveApiHandler'
+import { bothServerHandler } from '../serveBothHandler'
 
 describe('yarn rw serve', () => {
   afterEach(() => {

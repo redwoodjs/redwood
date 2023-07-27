@@ -16,9 +16,10 @@ export async function handler({ force: forceArg }: Args) {
     provider: 'firebase',
     authDecoderImport:
       "import { authDecoder } from '@redwoodjs/auth-firebase-api'",
-    webPackages: ['firebase@^9', `@redwoodjs/auth-firebase-web@${version}`],
+    webPackages: ['firebase@^10', `@redwoodjs/auth-firebase-web@${version}`],
     apiPackages: [
-      'firebase-admin@11.9.0',
+      // Note that the version of this package should be exactly the same as the version in `@redwoodjs/auth-firebase-api` .
+      'firebase-admin@11.10.1',
       `@redwoodjs/auth-firebase-api@${version}`,
     ],
     notes: [
