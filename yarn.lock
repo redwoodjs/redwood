@@ -7507,7 +7507,7 @@ __metadata:
     nodemon: 2.0.22
     null-loader: 4.0.1
     react-refresh: 0.14.0
-    resolve-url-loader: ^5.0.0
+    resolve-url-loader: 5.0.0
     rimraf: 5.0.1
     style-loader: 3.3.3
     typescript: 5.1.6
@@ -27693,7 +27693,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve-url-loader@npm:^5.0.0":
+"resolve-url-loader@npm:5.0.0":
   version: 5.0.0
   resolution: "resolve-url-loader@npm:5.0.0"
   dependencies:
