@@ -23,6 +23,8 @@ const { getConfig, getPaths } = require('@redwoodjs/project-config')
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+const isUsingVite = redwoodConfig.web.bundler !== 'webpack'
+
 /** @returns {{[key: string]: string}} Env vars */
 const getEnvVars = () => {
   const redwoodEnvPrefix = 'REDWOOD_ENV_'
@@ -108,7 +110,7 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForCSS),
-        resolveUrlLoader,
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
       ].filter(Boolean),
     },
@@ -117,7 +119,7 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForCSS),
-        resolveUrlLoader,
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
       ].filter(Boolean),
       sideEffects: true,
@@ -127,7 +129,7 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForSCSS),
-        resolveUrlLoader,
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
         sassLoader,
       ].filter(Boolean),
@@ -137,7 +139,7 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForSCSS),
-        resolveUrlLoader,
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
         sassLoader,
       ].filter(Boolean),
