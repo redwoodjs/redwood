@@ -55,7 +55,7 @@ const getStyleLoaders = (isEnvProduction) => {
     const loaderConfig = {
       loader: require.resolve('css-loader'),
       options: {
-        sourceMap: true, // resolve-url-loader needs source maps
+        sourceMap: !isEnvProduction,
         importLoaders,
       },
     }
@@ -87,7 +87,7 @@ const getStyleLoaders = (isEnvProduction) => {
           postcssOptions: {
             config: paths.web.postcss,
           },
-          sourceMap: true,
+          sourceMap: true, // required for resolve-url-loader
         },
       }
     : null
@@ -98,7 +98,7 @@ const getStyleLoaders = (isEnvProduction) => {
   const sassLoader = {
     loader: 'sass-loader',
     options: {
-      sourceMap: true,
+      sourceMap: true, // required for resolve-url-loader
     },
   }
 
