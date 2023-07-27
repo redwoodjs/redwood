@@ -64,6 +64,8 @@ export const bothRscServerHandler = async (argv) => {
   const fePromise = execa(
     'node',
     [
+      '--experimental-loader @redwoodjs/vite/node-loader',
+      '--experimental-loader @redwoodjs/vite/react-node-loader',
       '--conditions react-server',
       './node_modules/@redwoodjs/vite/dist/runRscFeServer.js',
     ],
