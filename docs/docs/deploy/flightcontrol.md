@@ -8,7 +8,7 @@ description: How to deploy a Redwood app to AWS via Flightcontrol
 
 ## Flightcontrol Deploy Setup
 
-1. In your project, run the command `yarn rw setup deploy flightcontrol`
+1. In your project, run the command `yarn rw setup deploy flightcontrol --database=YOUR_DB_TYPE` where YOUR_DB_TYPE is `mysql` or `postgresql`
 2. Commit the changes and push to github
 3. If you don't have an account, sign up at [app.flightcontrol.dev/signup](https://app.flightcontrol.dev/signup?ref=redwood)
 4. Create a new project from the onboarding screen or project list
