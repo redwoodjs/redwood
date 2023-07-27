@@ -15,31 +15,23 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 ├── api
 │   ├── db
 │   │   └── schema.prisma
-│   ├── dist
-│   ├── src
-│   │   ├── directives
-│   │   │   ├── requireAuth
-│   │   │   │   ├── requireAuth.js
-│   │   │   │   └── requireAuth.test.js
-│   │   │   └── skipAuth
-│   │   │   │   ├── skipAuth.js
-│   │   │   │   └── skipAuth.test.js
-│   │   ├── functions
-│   │   │   └── graphql.js
-│   │   ├── graphql
-│   │   ├── lib
-│   │   │   ├── auth.js
-│   │   │   ├── db.js
-│   │   │   └── logger.js
-│   │   └── services
-│   └── types
-│       └── graphql.d.ts
+│   └── src
+│       ├── directives
+│       │   ├── requireAuth
+│       │   └── skipAuth
+│       ├── functions
+│       │   └── graphql.js
+│       ├── graphql
+│       ├── lib
+│       │   ├── auth.js
+│       │   ├── db.js
+│       │   └── logger.js
+│       └── services
 │
 ├── scripts
 │   └── seed.js
 │
 └── web
-    ├── dist
     ├── public
     │   ├── favicon.png
     │   ├── README.md
@@ -66,20 +58,18 @@ Don't worry about trying to memorize this directory structure right now, it's ju
 ├── api
 │   ├── db
 │   │   └── schema.prisma
-│   ├── dist
-│   ├── src
-│   │   ├── directives
-│   │   │   ├── requireAuth
-│   │   │   └── skipAuth
-│   │   ├── functions
-│   │   │   └── graphql.ts
-│   │   ├── graphql
-│   │   ├── lib
-│   │   │   ├── auth.ts
-│   │   │   ├── db.ts
-│   │   │   └── logger.ts
-│   │   └── services
-│   └── types
+│   └── src
+│       ├── directives
+│       │   ├── requireAuth
+│       │   └── skipAuth
+│       ├── functions
+│       │   └── graphql.ts
+│       ├── graphql
+│       ├── lib
+│       │   ├── auth.ts
+│       │   ├── db.ts
+│       │   └── logger.ts
+│       └── services
 │
 ├── scripts
 │   └── seed.ts
@@ -98,6 +88,7 @@ Don't worry about trying to memorize this directory structure right now, it's ju
         │   └── NotFoundPage
         │       └── NotFoundPage.tsx
         ├── App.tsx
+        ├── entry.client.tsx
         ├── index.css
         ├── index.html
         └── Routes.tsx
