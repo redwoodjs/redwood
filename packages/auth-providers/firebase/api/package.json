@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.6",
     "core-js": "3.31.1",
-    "firebase-admin": "11.9.0"
+    "firebase-admin": "11.10.1"
   },
   "devDependencies": {
     "@babel/cli": "7.22.9",
