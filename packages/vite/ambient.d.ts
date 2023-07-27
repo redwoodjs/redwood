@@ -1,6 +1,5 @@
 /* eslint-disable no-var */
 /// <reference types="react/canary" />
-import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {
   var RWJS_ENV: {
@@ -12,8 +11,6 @@ declare global {
   }
 
   var __REDWOOD__PRERENDER_PAGES: any
-
-  var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
 }
 
 export {}

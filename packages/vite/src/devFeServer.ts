@@ -1,8 +1,8 @@
 // TODO (STREAMING) Merge with runFeServer so we only have one file
 
-// @ts-ignore fasdfg
-import { Writable } from 'node:stream'
 import path from 'path'
+
+import React from 'react'
 
 import express from 'express'
 import { renderToPipeableStream } from 'react-dom/server'
@@ -12,6 +12,10 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
+
+// @TODO (STREAMING): We can't directly import from web at the moment
+// The dist imports will go away once we can do ESM with exports
+import { ServerHtmlProvider } from '@redwoodjs/web/dist/components/ServerInject'
 
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
 import { ensureProcessDirWeb, stripQueryStringAndHashFromPath } from './utils'
@@ -115,9 +119,7 @@ async function createServer() {
       // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
       // worry about it in dev but..... it causes a flash of unstyled content.
       // For now I'm just injecting index css here
-      // We believe we saw a fix for this somewhere in the Waku sources. Maybe
-      // it was called something like "Capture Css". And it's also mentioned
-      // in the Vite issues on GitHub
+      // Looks at collectStyles in packages/vite/src/fully-react/find-styles.ts
       const FIXME_HardcodedIndexCss = ['index.css']
 
       const assetMap = JSON.stringify({
@@ -136,11 +138,15 @@ async function createServer() {
       }
 
       const { pipe } = renderToPipeableStream(
-        ServerEntry({
-          url: currentPathName,
-          css: FIXME_HardcodedIndexCss,
-          meta: metaTags,
-        }),
+        React.createElement(
+          ServerHtmlProvider,
+          {},
+          ServerEntry({
+            url: currentPathName,
+            css: FIXME_HardcodedIndexCss,
+            meta: metaTags,
+          })
+        ),
         {
           bootstrapScriptContent: pageWithJs
             ? `window.__assetMap = function() { return ${assetMap} }`
