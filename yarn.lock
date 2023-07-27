@@ -26245,7 +26245,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14":
+"postcss@npm:^8.2.14, postcss@npm:^8.4.21, postcss@npm:^8.4.24, postcss@npm:^8.4.26":
   version: 8.4.27
   resolution: "postcss@npm:8.4.27"
   dependencies:
@@ -26253,17 +26253,6 @@ __metadata:
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
   checksum: 41a0476e05cb97514ff8d75e4ff9fdcf778f22b2e0d25b7028f219cd408e01d3c4f50459d4a1cd9a430d8ef08202c881374a4fa4ea6009f4a135a07315d606e5
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.4.21, postcss@npm:^8.4.24, postcss@npm:^8.4.26":
-  version: 8.4.26
-  resolution: "postcss@npm:8.4.26"
-  dependencies:
-    nanoid: ^3.3.6
-    picocolors: ^1.0.0
-    source-map-js: ^1.0.2
-  checksum: 29c603d6b30b2f94bf971bc430600f271da76fa3ae38d4c6b255e957213051b8eeb02829e128ec4e9fa2a7bb710ba7992ebaf1997e3a9ace48caf49b48a10f6b
   languageName: node
   linkType: hard
 
