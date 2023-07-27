@@ -262,7 +262,11 @@ export default function redwoodPluginVite(): PluginOption[] {
     // -----------------
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
-    removeFromBundle([{ id: /splash-page/, parentId: /@redwoodjs\/router/ }]),
+    removeFromBundle([
+      {
+        id: /@redwoodjs\/router\/dist\/splash-page/,
+      },
+    ]),
     react({
       babel: {
         ...getWebSideDefaultBabelConfig({

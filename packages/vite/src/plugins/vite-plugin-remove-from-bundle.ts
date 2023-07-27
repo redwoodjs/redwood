@@ -1,10 +1,12 @@
 import type { PluginOption } from 'vite'
 
-type ModulesToExclude = Array<{ id: RegExp; parentId?: RegExp }>
+type ModulesToExclude = Array<{ id: RegExp }>
 
 /**
  *
  * This is a vite plugin to remove modules from the bundle.
+ *
+ * Only applies on build, not on dev.
  *
  */
 export default function removeFromBundle(
@@ -20,43 +22,24 @@ export default function removeFromBundle(
 
   return {
     name: 'remove-from-bundle',
-    config: () => {
-      return {
-        build: {
-          rollupOptions: {
-            external(id, parentId = '') {
-              const shouldExcludeModule = modulesToExclude.some((module) => {
-                return getShouldExclude({
-                  id,
-                  parentId,
-                  idToExclude: module.id,
-                  parentIdToExclude: module.parentId,
-                })
-              })
-
-              return shouldExcludeModule
-            },
-          },
-        },
-      }
+    apply: 'build', // <-- @MARK important
+    load: (id) => {
+      excludeOnMatch(modulesToExclude, id)
     },
   }
 }
 
-export function getShouldExclude({
-  id,
-  idToExclude,
-  parentId = '',
-  parentIdToExclude,
-}: {
-  id: string
-  idToExclude: RegExp
-  parentId?: string
-  parentIdToExclude?: RegExp
-}) {
-  if (parentIdToExclude) {
-    return idToExclude.test(id) && parentIdToExclude.test(parentId)
+// Currently configured for CJS only.
+const EMPTY_MODULE = {
+  code: `module.exports = null`,
+}
+
+export function excludeOnMatch(modulesToExclude: ModulesToExclude, id: string) {
+  if (modulesToExclude.some((module) => module.id.test(id))) {
+    // Return an empty module
+    return EMPTY_MODULE
   }
 
-  return idToExclude.test(id)
+  // Fallback to regular loaders
+  return null
 }
