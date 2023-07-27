@@ -12,9 +12,8 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
-
-// @TODO (STREAMING): We can't directly import from web at the moment
-// The dist imports will go away once we can do ESM with exports
+// @NOTE (STREAMING): We can't directly import from web at the moment
+// The dist imports will go away once we can do ESM with exports field
 import { ServerHtmlProvider } from '@redwoodjs/web/dist/components/ServerInject'
 
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
