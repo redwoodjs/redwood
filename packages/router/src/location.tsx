@@ -18,6 +18,7 @@ interface LocationProviderProps {
     hash?: string
   }
   trailingSlashes?: TrailingSlashesTypes
+  singleRouteMode?: boolean
   children?: React.ReactNode
 }
 
@@ -49,7 +50,7 @@ class LocationProvider extends React.Component<LocationProviderProps> {
         case 'never':
           if (pathname.endsWith('/')) {
             window.history.replaceState(
-              {},
+              window.history.state ?? {},
               '',
               pathname.substr(0, pathname.length - 1)
             )
@@ -58,7 +59,11 @@ class LocationProvider extends React.Component<LocationProviderProps> {
 
         case 'always':
           if (!pathname.endsWith('/')) {
-            window.history.replaceState({}, '', pathname + '/')
+            window.history.replaceState(
+              window.history.state ?? {},
+              '',
+              pathname + '/'
+            )
           }
           break
 
@@ -66,7 +71,12 @@ class LocationProvider extends React.Component<LocationProviderProps> {
           break
       }
 
-      windowLocation = window.location
+      windowLocation = this.props.singleRouteMode
+        ? {
+            ...window.location,
+            pathname: window.history.state?.to ?? pathname,
+          }
+        : window.location
     } else {
       windowLocation = {
         pathname: this.context?.pathname || '',
@@ -81,6 +91,9 @@ class LocationProvider extends React.Component<LocationProviderProps> {
   }
 
   componentDidMount() {
+    if (this.props.singleRouteMode) {
+      gHistory.setSingleRouteMode(true)
+    }
     this.HISTORY_LISTENER_ID = gHistory.listen(() => {
       this.setState(() => ({ context: this.getContext() }))
     })

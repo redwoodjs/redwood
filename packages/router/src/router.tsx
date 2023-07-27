@@ -61,6 +61,7 @@ function Route(_props: RouteProps | RedirectRouteProps | NotFoundRouteProps) {
 export interface RouterProps extends RouterContextProviderProps {
   trailingSlashes?: TrailingSlashesTypes
   pageLoadingDelay?: number
+  singleRouteMode?: boolean
   children: ReactNode
 }
 
@@ -69,12 +70,16 @@ const Router: React.FC<RouterProps> = ({
   paramTypes,
   pageLoadingDelay,
   trailingSlashes = 'never',
+  singleRouteMode = false,
   children,
 }) => {
   return (
     // Level 1/3 (outer-most)
     // Wrap it in the provider so that useLocation can be used
-    <LocationProvider trailingSlashes={trailingSlashes}>
+    <LocationProvider
+      trailingSlashes={trailingSlashes}
+      singleRouteMode={singleRouteMode}
+    >
       <LocationAwareRouter
         useAuth={useAuth}
         paramTypes={paramTypes}

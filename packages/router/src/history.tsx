@@ -6,8 +6,12 @@ const createHistory = () => {
   type Listener = (ev?: PopStateEvent) => any
 
   const listeners: Record<string, Listener> = {}
+  let disablePathChange = false
 
   return {
+    setSingleRouteMode: (singleRouteMode = true) => {
+      disablePathChange = singleRouteMode
+    },
     listen: (listener: Listener) => {
       const listenerId = 'RW_HISTORY_LISTENER_ID_' + Date.now()
       listeners[listenerId] = listener
@@ -25,9 +29,13 @@ const createHistory = () => {
         globalThis?.location?.hash !== hash
       ) {
         if (options?.replace) {
-          globalThis.history.replaceState({}, '', to)
+          globalThis.history.replaceState(
+            { to },
+            '',
+            disablePathChange ? '/' : to
+          )
         } else {
-          globalThis.history.pushState({}, '', to)
+          globalThis.history.pushState({ to }, '', disablePathChange ? '/' : to)
         }
       }
 
