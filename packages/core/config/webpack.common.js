@@ -55,7 +55,7 @@ const getStyleLoaders = (isEnvProduction) => {
     const loaderConfig = {
       loader: require.resolve('css-loader'),
       options: {
-        sourceMap: !isEnvProduction,
+        sourceMap: true, // resolve-url-loader needs source maps
         importLoaders,
       },
     }
@@ -66,6 +66,13 @@ const getStyleLoaders = (isEnvProduction) => {
     }
 
     return loaderConfig
+  }
+
+  const resolveUrlLoader = {
+    loader: require.resolve('resolve-url-loader'),
+    options: {
+      root: path.join(redwoodPaths.web.base, '/public'),
+    },
   }
 
   const paths = getPaths()
@@ -80,6 +87,7 @@ const getStyleLoaders = (isEnvProduction) => {
           postcssOptions: {
             config: paths.web.postcss,
           },
+          sourceMap: true,
         },
       }
     : null
@@ -87,12 +95,20 @@ const getStyleLoaders = (isEnvProduction) => {
   const numImportLoadersForCSS = hasPostCssConfig ? 1 : 0
   const numImportLoadersForSCSS = hasPostCssConfig ? 2 : 1
 
+  const sassLoader = {
+    loader: 'sass-loader',
+    options: {
+      sourceMap: true,
+    },
+  }
+
   return [
     {
       test: /\.module\.css$/,
       use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForCSS),
+        resolveUrlLoader,
         postCssLoader,
       ].filter(Boolean),
     },
@@ -101,6 +117,7 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForCSS),
+        resolveUrlLoader,
         postCssLoader,
       ].filter(Boolean),
       sideEffects: true,
@@ -110,8 +127,9 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForSCSS),
+        resolveUrlLoader,
         postCssLoader,
-        'sass-loader',
+        sassLoader,
       ].filter(Boolean),
     },
     {
@@ -119,8 +137,9 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForSCSS),
+        resolveUrlLoader,
         postCssLoader,
-        'sass-loader',
+        sassLoader,
       ].filter(Boolean),
       sideEffects: true,
     },
