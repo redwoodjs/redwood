@@ -24,7 +24,7 @@ export default function removeFromBundle(
     name: 'remove-from-bundle',
     apply: 'build', // <-- @MARK important
     load: (id) => {
-      excludeOnMatch(modulesToExclude, id)
+      return excludeOnMatch(modulesToExclude, id)
     },
   }
 }
