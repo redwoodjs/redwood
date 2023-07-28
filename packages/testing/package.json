@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/testing",
-  "version": "5.0.0",
+  "version": "6.0.1",
   "description": "Tools, wrappers and configuration for testing a Redwood project.",
   "repository": {
     "type": "git",
@@ -28,12 +28,12 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.6",
-    "@redwoodjs/auth": "5.0.0",
-    "@redwoodjs/graphql-server": "5.0.0",
-    "@redwoodjs/internal": "5.0.0",
-    "@redwoodjs/project-config": "5.0.0",
-    "@redwoodjs/router": "5.0.0",
-    "@redwoodjs/web": "5.0.0",
+    "@redwoodjs/auth": "6.0.1",
+    "@redwoodjs/graphql-server": "6.0.1",
+    "@redwoodjs/internal": "6.0.1",
+    "@redwoodjs/project-config": "6.0.1",
+    "@redwoodjs/router": "6.0.1",
+    "@redwoodjs/web": "6.0.1",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
@@ -51,7 +51,7 @@
     "jest": "29.6.1",
     "jest-environment-jsdom": "29.6.1",
     "jest-watch-typeahead": "2.2.2",
-    "msw": "1.2.2",
+    "msw": "1.2.3",
     "ts-toolbelt": "9.6.0",
     "whatwg-fetch": "3.6.17"
   },

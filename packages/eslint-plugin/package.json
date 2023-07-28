@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/eslint-plugin",
-  "version": "5.0.0",
+  "version": "6.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -28,7 +28,7 @@
     "@types/eslint": "8",
     "@types/estree": "1.0.1",
     "@typescript-eslint/parser": "5.61.0",
-    "esbuild": "0.18.15",
+    "esbuild": "0.18.16",
     "fast-glob": "3.2.12",
     "glob": "10.3.1",
     "typescript": "5.1.6"

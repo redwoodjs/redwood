@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { context } from '@opentelemetry/api'
+import { suppressTracing } from '@opentelemetry/core'
 import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
@@ -134,5 +136,8 @@ export const handler = async (args) => {
     renderer: 'verbose',
   })
 
-  await tasks.run()
+  // Prevent user project telemetry from within the script from being recorded
+  await context.with(suppressTracing(context.active()), async () => {
+    await tasks.run()
+  })
 }

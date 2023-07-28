@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth",
-  "version": "5.0.0",
+  "version": "6.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -32,7 +32,7 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "jest": "29.6.1",
-    "msw": "1.2.2",
+    "msw": "1.2.3",
     "typescript": "5.1.6"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

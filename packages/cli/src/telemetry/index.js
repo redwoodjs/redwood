@@ -7,6 +7,7 @@ import {
   SimpleSpanProcessor,
   SamplingDecision,
 } from '@opentelemetry/sdk-trace-node'
+import { hideBin } from 'yargs/helpers'
 
 import { spawnBackgroundProcess } from '../lib/background'
 
@@ -72,12 +73,19 @@ export async function startTelemetry() {
     // then we leave it to that handler to handle the signal.
     // See https://nodejs.org/dist/latest/docs/api/process.html#signal-events for more info on the
     // behaviour of nodejs for various signals.
-    for (const signal of ['SIGTERM', 'SIGINT', 'SIGHUP']) {
-      process.on(signal, () => {
-        if (process.listenerCount(signal) === 1) {
-          console.log(`Received ${signal} signal, exiting...`)
-          process.exit()
-        }
+    const cleanArgv = hideBin(process.argv)
+    if (!cleanArgv.includes('sb') && !cleanArgv.includes('storybook')) {
+      for (const signal of ['SIGTERM', 'SIGINT', 'SIGHUP']) {
+        process.on(signal, () => {
+          if (process.listenerCount(signal) === 1) {
+            console.log(`Received ${signal} signal, exiting...`)
+            process.exit()
+          }
+        })
+      }
+    } else {
+      process.on('shutdown-telemetry', () => {
+        shutdownTelemetry()
       })
     }
 
