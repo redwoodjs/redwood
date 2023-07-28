@@ -353,10 +353,11 @@ describe('useMatch', () => {
 
     expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
   })
+
   it('returns a match on the same pathname', async () => {
     Object.keys(routes).forEach((key) => delete routes[key])
 
-    const MyPage = () => {
+    const HomePage = () => {
       const matchExactPath = useMatch(
         routes.home({
           dynamic: 'dunder-mifflin',
@@ -387,24 +388,71 @@ describe('useMatch', () => {
           path: '0',
         })
       )
+
+      const matchHardcodedStringExact = useMatch('/dunder-mifflin/1')
+      const matchHardcodedStringPartialDefinition = useMatch(
+        '/dunder-mifflin/{path}'
+      )
+      const matchHardcodedStringDefinition = useMatch('/{dynamic}/{path}')
+      const matchWrongHardcodedStringDefinition = useMatch('/{another}/{path}')
+
+      const pathDefinition = routes.home({
+        dynamic: RouteParams.LITERAL,
+        path: RouteParams.LITERAL,
+      })
+
       // const matchWrongParameterPath = useMatch(routes.anotherHome.path)
       return (
         <>
-          {matchExactPath.match ? 'Exact Path true Match' : null}
-          {matchWrongPath.match ? null : 'Wrong Path false Match'}
-          {matchParameterPath.match ? 'Parameter Path true Match' : null}
-          {matchPartialParameterPath.match
-            ? 'Partial Parameter Path true Match'
-            : null}
-          {matchWrongPartialParameterPath.match
-            ? null
-            : 'Wrong Partial Parameter Path false Match'}
+          <h1>Tests</h1>
+          <ul>
+            <li>
+              Literal route path from route definition in the router:{' '}
+              {pathDefinition}
+            </li>
+            <li>
+              Matches exact path: {matchExactPath.match ? 'true' : 'false'}
+            </li>
+            <li>
+              Matches wrong exact path:{' '}
+              {matchWrongPath.match ? 'true' : 'false'}
+            </li>
+            <li>
+              Matches parameter path:{' '}
+              {matchParameterPath.match ? 'true' : 'false'}
+            </li>
+            <li>
+              Matches partial parameter path:{' '}
+              {matchPartialParameterPath.match ? 'true' : 'false'}
+            </li>
+            <li>
+              Matches wrong partial parameter path:{' '}
+              {matchWrongPartialParameterPath.match ? 'true' : 'false'}
+            </li>
+            <li>
+              Matches hardcoded string:{' '}
+              {matchHardcodedStringExact.match ? 'true' : 'false'}
+            </li>
+            <li>
+              Matches hardcoded string partial definition:{' '}
+              {matchHardcodedStringPartialDefinition.match ? 'true' : 'false'}
+            </li>
+            <li>
+              Matches hardcoded string definition:{' '}
+              {matchHardcodedStringDefinition.match ? 'true' : 'false'}
+            </li>
+            <li>
+              Matches wrong hardcoded string definition:{' '}
+              {matchWrongHardcodedStringDefinition.match ? 'true' : 'false'}
+            </li>
+          </ul>
         </>
       )
     }
+
     const TestRouter = () => (
       <Router>
-        <Route path="/{dynamic}/{path}" page={MyPage} name="home" />
+        <Route path="/{dynamic}/{path}" page={HomePage} name="home" />
         {/* <Route path="/{another}/{path}" page={MyPage} name="anotherHome" /> */}
       </Router>
     )
@@ -420,14 +468,41 @@ describe('useMatch', () => {
       )
     )
 
-    await waitFor(() => expect(screen.getByText(/Exact Path true Match/)))
-    await waitFor(() => expect(screen.getByText(/Wrong Path false Match/)))
-    await waitFor(() => expect(screen.getByText(/Parameter Path true Match/)))
     await waitFor(() =>
-      expect(screen.getByText(/Partial Parameter Path true Match/))
+      expect(
+        screen.getByText(
+          /Literal route path from route definition in the router:\s+\/\{dynamic\}\/\{path\}/
+        )
+      )
+    )
+    await waitFor(() => expect(screen.getByText(/Matches exact path: true/)))
+    await waitFor(() =>
+      expect(screen.getByText(/Matches wrong exact path: false/))
     )
     await waitFor(() =>
-      expect(screen.getByText(/Wrong Partial Parameter Path false Match/))
+      expect(screen.getByText(/Matches parameter path: true/))
+    )
+    await waitFor(() =>
+      expect(screen.getByText(/Matches partial parameter path: true/))
+    )
+    await waitFor(() =>
+      expect(screen.getByText(/Matches wrong partial parameter path: false/))
+    )
+    await waitFor(() =>
+      expect(screen.getByText(/Matches hardcoded string: true/))
+    )
+    await waitFor(() =>
+      expect(
+        screen.getByText(/Matches hardcoded string partial definition: true/)
+      )
+    )
+    await waitFor(() =>
+      expect(screen.getByText(/Matches hardcoded string definition: true/))
+    )
+    await waitFor(() =>
+      expect(
+        screen.getByText(/Matches wrong hardcoded string definition: false/)
+      )
     )
   })
 })
