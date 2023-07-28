@@ -4,9 +4,17 @@ import { Redirect } from './links'
 import { routes } from './router'
 import { useRouterState } from './router-context'
 
-export function AuthenticatedRoute(props: any) {
+interface AuthenticatedRouteProps {
+  children: React.ReactNode
+  roles?: string | string[]
+  unauthenticated?: keyof typeof routes
+  whileLoadingAuth?: () => React.ReactElement | null
+  private?: boolean
+}
+
+export function AuthenticatedRoute(props: AuthenticatedRouteProps) {
   const {
-    private: privateSet,
+    private: isPrivate,
     unauthenticated,
     roles,
     whileLoadingAuth,
@@ -24,7 +32,7 @@ export function AuthenticatedRoute(props: any) {
   }, [isAuthenticated, roles, hasRole])
 
   // Make sure `wrappers` is always an array with at least one wrapper component
-  if (privateSet && unauthorized()) {
+  if (isPrivate && unauthorized()) {
     if (!unauthenticated) {
       throw new Error(
         'Private Sets need to specify what route to redirect unauthorized ' +
