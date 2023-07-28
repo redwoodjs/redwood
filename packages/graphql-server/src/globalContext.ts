@@ -1,20 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { AsyncLocalStorage } from 'async_hooks'
+import { getAsyncStoreInstance } from './globalContextStore'
 
 export interface GlobalContext extends Record<string, unknown> {}
-
-let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
-
-/**
- * This returns a AsyncLocalStorage instance, not the actual store
- */
-export const getAsyncStoreInstance = () => {
-  if (!CONTEXT_STORAGE) {
-    CONTEXT_STORAGE = new AsyncLocalStorage<Map<string, GlobalContext>>()
-  }
-  return CONTEXT_STORAGE as AsyncLocalStorage<Map<string, GlobalContext>>
-}
 
 export const createContextProxy = (target: GlobalContext) => {
   return new Proxy<GlobalContext>(target, {

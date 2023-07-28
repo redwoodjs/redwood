@@ -457,7 +457,7 @@ async function runCommand() {
         if (
           e instanceof ExecaError &&
           !e.stderr &&
-          e.stdout.includes('14 problems (14 errors, 0 warnings)')
+          e.stdout.includes('15 problems (15 errors, 0 warnings)')
         ) {
           // This is unfortunate, but linting is expected to fail.
           // This is the expected error message, so we just fall through

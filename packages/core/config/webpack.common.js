@@ -23,6 +23,8 @@ const { getConfig, getPaths } = require('@redwoodjs/project-config')
 const redwoodConfig = getConfig()
 const redwoodPaths = getPaths()
 
+const isUsingVite = redwoodConfig.web.bundler !== 'webpack'
+
 /** @returns {{[key: string]: string}} Env vars */
 const getEnvVars = () => {
   const redwoodEnvPrefix = 'REDWOOD_ENV_'
@@ -68,6 +70,13 @@ const getStyleLoaders = (isEnvProduction) => {
     return loaderConfig
   }
 
+  const resolveUrlLoader = {
+    loader: require.resolve('resolve-url-loader'),
+    options: {
+      root: path.join(redwoodPaths.web.base, '/public'),
+    },
+  }
+
   const paths = getPaths()
   const hasPostCssConfig = fs.existsSync(paths.web.postcss)
 
@@ -80,6 +89,7 @@ const getStyleLoaders = (isEnvProduction) => {
           postcssOptions: {
             config: paths.web.postcss,
           },
+          sourceMap: true, // required for resolve-url-loader
         },
       }
     : null
@@ -87,12 +97,20 @@ const getStyleLoaders = (isEnvProduction) => {
   const numImportLoadersForCSS = hasPostCssConfig ? 1 : 0
   const numImportLoadersForSCSS = hasPostCssConfig ? 2 : 1
 
+  const sassLoader = {
+    loader: 'sass-loader',
+    options: {
+      sourceMap: true, // required for resolve-url-loader
+    },
+  }
+
   return [
     {
       test: /\.module\.css$/,
       use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForCSS),
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
       ].filter(Boolean),
     },
@@ -101,6 +119,7 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForCSS),
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
       ].filter(Boolean),
       sideEffects: true,
@@ -110,8 +129,9 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(true, numImportLoadersForSCSS),
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
-        'sass-loader',
+        sassLoader,
       ].filter(Boolean),
     },
     {
@@ -119,8 +139,9 @@ const getStyleLoaders = (isEnvProduction) => {
       use: [
         styleOrExtractLoader,
         cssLoader(false, numImportLoadersForSCSS),
+        isUsingVite && resolveUrlLoader,
         postCssLoader,
-        'sass-loader',
+        sassLoader,
       ].filter(Boolean),
       sideEffects: true,
     },
