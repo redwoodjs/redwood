@@ -150,7 +150,8 @@ If you needed to convert a whole library of SVGs into stylable (or animatable!) 
 There are many different ways to peel this potato – it's all a search away – but if you're using the CSS `@font-face` rule, we have a quick tip for you:
 
 1. Place your fonts in the public folder, so it gets carried across
-2. In your CSS, use root absolute paths to point to the font file (same as the [Vite docs](https://vitejs.dev/guide/assets.html#the-public-directory)), for example:
+2. In your CSS, use absolute paths - the public folder being your root - to point to the font file (same as the [Vite docs](https://vitejs.dev/guide/assets.html#the-public-directory)), for example:
+
 
 ```shell
 web/
