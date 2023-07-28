@@ -6,7 +6,6 @@ import { useRouterState } from './router-context'
 
 // We reassign the type like this, because AvailableRoutes is generated in the user's project
 type GeneratedRoutesMap = Record<string, () => string>
-const routesMap = routes as GeneratedRoutesMap
 
 interface AuthenticatedRouteProps {
   children: React.ReactNode
@@ -51,14 +50,14 @@ export function AuthenticatedRoute(props: AuthenticatedRouteProps) {
         globalThis.location.pathname +
         encodeURIComponent(globalThis.location.search)
 
-      if (!routesMap[unauthenticated]) {
+      if (!(routes as GeneratedRoutesMap)[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
 
       let unauthenticatedPath
 
       try {
-        unauthenticatedPath = routesMap[unauthenticated]()
+        unauthenticatedPath = (routes as GeneratedRoutesMap)[unauthenticated]()
       } catch (e) {
         if (
           e instanceof Error &&
