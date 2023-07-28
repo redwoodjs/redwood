@@ -399,7 +399,7 @@ You can pass any flags to the command and use them within your script:
 
 See [this how to](how-to/background-worker.md) for an example of using exec to run a background worker.
 
-## experimental
+## experimental (alias exp)
 
 Set up and run experimental features.
 
@@ -413,11 +413,6 @@ For more information, including details about specific features, see this Redwoo
 
 **Available Experimental Features**
 View all that can be _set up_:
-```
-yarn redwood experimental setup --help
-```
-
-View all that can be _run_:
 ```
 yarn redwood experimental --help
 ```
@@ -1462,7 +1457,7 @@ yarn redwood lint
 
 ## prisma
 
-Run Prisma CLI with experimental features.
+Run Prisma CLI within the context of a Redwood project.
 
 ```
 yarn redwood prisma
@@ -1474,7 +1469,7 @@ Redwood's `prisma` command is a lightweight wrapper around the Prisma CLI. It's 
 >
 > By lightweight wrapper, we mean that we're handling some flags under the hood for you.
 > You can use the Prisma CLI directly (`yarn prisma`), but letting Redwood act as a proxy (`yarn redwood prisma`) saves you a lot of keystrokes.
-> For example, Redwood adds the `--preview-feature` and `--schema=api/db/schema.prisma` flags automatically.
+> For example, Redwood adds the `--schema=api/db/schema.prisma` flags automatically.
 >
 > If you want to know exactly what `yarn redwood prisma <command>` runs, which flags it's passing, etc., it's right at the top:
 >
@@ -1759,6 +1754,8 @@ A `generateGraphiQLHeader` file will be created in your `api/lib` folder and inc
 yarn redwood setup graphiql <provider>
 ```
 
+If you're using `dbAuth`, make sure the `-i` id you provided is not logged in from the web app.
+
 | Arguments & Options | Description                                                                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase`                                                                           |
@@ -1860,7 +1857,7 @@ yarn redwood setup deploy <provider>
 
 | Arguments & Options | Description                                                                                           |
 | :------------------ | :---------------------------------------------------------------------------------------------------- |
-| `provider`          | Deploy provider to configure. Choices are `aws-serverless`, `netlify`, `render`, or `vercel`          |
+| `provider`          | Deploy provider to configure. Choices are `baremetal`, `coherence`, `edgio`, `flightcontrol`, `netlify`, `render`, `vercel`, or `aws-serverless [deprecated]`,          |
 | `--database, -d`    | Database deployment for Render only [choices: "none", "postgresql", "sqlite"] [default: "postgresql"] |
 | `--force, -f`       | Overwrite existing configuration [default: false]                                                     |
 
@@ -1914,7 +1911,7 @@ yarn redwood setup tsconfig
 
 ### setup ui
 
-Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), [Mantine UI](https://ui.mantine.dev/) and [WindiCSS](https://windicss.org/).
+Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), [Mantine UI](https://ui.mantine.dev/) and [deprecated] [WindiCSS](https://windicss.org/).
 
 ```
 yarn rw setup ui <library>
@@ -1922,7 +1919,7 @@ yarn rw setup ui <library>
 
 | Arguments & Options | Description                                                                             |
 | :------------------ | :-------------------------------------------------------------------------------------- |
-| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, `mantine`, and `windicss` |
+| `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, `mantine`, and `windicss [deprecated]` |
 | `--force, -f`       | Overwrite existing configuration                                                        |
 
 ## storybook

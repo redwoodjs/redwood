@@ -188,7 +188,7 @@ Cool, cool, cool. Now we need to construct a link that has the ID of a post in i
 
 When you have your dev server running, the Redwood CLI will watch your project and generate types. You can regenerate these types manually too, by running `yarn rw g types`.
 
-In this case, the path `/article/{id}` doesn't specify the type of `id` - so it defaults to `string` - where as our article id is actually a `number`. We'll tackle this in in the next few sections - so you can ignore the red squiggle for now, and power through!
+In this case, the path `/article/{id}` doesn't specify the type of `id` - so it defaults to `string` - where as our article id is actually a `number`. We'll tackle this in the next few sections - so you can ignore the red squiggle for now, and power through!
 :::
 
 </ShowForTs>
@@ -341,7 +341,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ article }) => {
-  return JSON.stringify(article)
+  return <div>{JSON.stringify(article)}</div>
 }
 ```
 
@@ -375,7 +375,7 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => {
-  return JSON.stringify(article)
+  return <div>{JSON.stringify(article)}</div>
 }
 ```
 

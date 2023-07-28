@@ -1,6 +1,6 @@
 # OAuth
 
-If you're using an auth provider like [Auth0](/docs/auth/auth0), OAuth login to third party services (GitHub, Google, Facebook) is usually just a setting you can toggle on in your provider's dashboard. But if you're using [dbAuth](/docs/auth/dbauth) you'll only have username/password login to start. But, adding one or more OAuth clients isn't hard. This recipe will walk you through it from scratch, adding OAuth login via GitHub.
+If you're using an auth provider like [Auth0](/docs/auth/auth0) OAuth login to third party services (GitHub, Google, Facebook) is usually just a setting you can toggle on in your provider's dashboard. But if you're using [dbAuth](/docs/auth/dbauth) you'll only have username/password login to start. But, adding one or more OAuth clients isn't hard. This recipe will walk you through it from scratch, adding OAuth login via GitHub.
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ Here's the logic flow we're going to implement:
 4. The browser is redirected back to our app, to a new function `/api/src/functions/oauth/oauth.js`.
 5. The function fetches the OAuth **access_token** with a call to GitHub, using the **code** that was included with the redirect from GitHub in the previous step.
 6. When the **access_token** is received, the function then requests the user data from GitHub via another fetch to GitHub's API.
-7. The function then checks our database for a user identified by GitHub's `id`. If no user is found, the `User` record is created using the info from the fetch in the previous step.
+7. The function the checks our database whether a user identified by GitHub's `id` already exists. If not, the `User` record is created using the info from the fetch in the previous step.
 8. The user data from our own database is used to create the same cookie that dbAuth creates on a successful login.
 9. The browser is redirected back to our site, and the user is now logged in.
 
@@ -68,6 +68,7 @@ GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
 
 We also need to denote what data we want permission to read from GitHub once someone authorizes our app. We'll want the user's public info, and probably their email address. That's only two scopes, and we can add those as another ENV var:
 
+
 ```bash title=/.env
 GITHUB_OAUTH_CLIENT_ID=41a08ae238b5aee4121d
 GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
@@ -75,7 +76,7 @@ GITHUB_OAUTH_CLIENT_SECRET=92e8662e9c562aca8356d45562911542d89450e1
 GITHUB_OAUTH_SCOPES="read:user user:email"
 ```
 
-If you wanted access to more GitHub data, you can specify [additional scopes](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps) here and they'll be listed to the user when they go to authorize your app. You can also change this list in the future, but you'll need to log the user out and the next time they click **Login with GitHub** they'll be asked to authorize your app again, with a new list of requested scopes.
+If you wanted access to more GitHub data, you can specify additional scopes here and they'll be listed to the user when they go to authorize your app. You can also change this list in the future, but you'll need to log the user out and the next time they click **Login with GitHub** they'll be asked to authorize your app again, with a new list of requested scopes.
 
 One more ENV var, this is the same callback URL we told GitHub about. This is used in the link in the **Login with GitHub** button and gives GitHub another chance to verify that you're who you say you are: you're proving that you know where you're supposed to redirect back to:
 
@@ -165,7 +166,7 @@ Now let's start filling out this function with the code we need to get the `acce
 
 ### Fetching the `access_token`
 
-We told GitHub to redirect to `/oauth/callback` which *appears* like it would be a subdirectory, or child route of our `oauth` function, but in reality everything after `/oauth` just gets shoved into an `event.path` variable that we'll need to inspect to make sure it has the proper parts (like `/callback`). We can  do that in the `hander()`:
+We told GitHub to redirect to `/oauth/callback` which *appears* like it would be a subdirectory, or child route of our `oauth` function, but in reality everything after `/oauth` just gets shoved into a `path` variable that we'll need to inspect to make sure it has the proper parts (like `/callback`). We can  do that in the `hander()`:
 
 ```js title=/api/src/functions/oauth/oauth.js
 export const handler = async (event, _context) => {
@@ -350,13 +351,8 @@ model Identity {
 
 We're also storing the `accessToken` and `scope` that we got back from the last time we retrived them from GitHub, as well as a timestamp for the last time the user logged in. Storing the `scope` is useful because if you ever change them, you may want to notify users that have the previous scope definition to re-login so the new scopes can be authorized.
 
-::: caution
+We'll also need to add an `identities` relation to the `User` model, and make the previously required `hashedPassword` and `salt` fields optional (since users may want to *only* authenticate via GitHub, they'll never get to enter a password):
 
-There's no GraphQL SDL tied to the Identity table, so it is not accessible via our API. But, if you ever did create an SDL and service, be sure that `accessToken` is not in the list of fields exposed publicly!
-
-:::
-
-We'll need to add an `identities` relation to the `User` model, and make the previously required `hashedPassword` and `salt` fields optional (since users may want to *only* authenticate via GitHub, they'll never get to enter a password):
 
 ```prisma title=/api/db/schema.prisma
 model User {
@@ -386,8 +382,9 @@ On a successful GitHub OAuth login we'll want to first check and see if a user a
 Let's add some code that returns the user if found, otherwise it creates the user *and* returns it, so that the rest of our code doesn't have to care.
 
 :::info
-Be sure to import `db` at the top of the file if you haven't already!
+Be to import `db` at the top of the file if you haven't already!
 :::
+
 
 ```js title=/api/src/functions/oauth/oauth.js
 // highlight-next-line
@@ -478,6 +475,7 @@ const findOrCreateUser = async (providerUser) => {
 ```
 
 Let's break that down.
+
 
 ```js
 const providerUser = await getProviderUser(access_token)
@@ -810,7 +808,7 @@ Right now we just copy the user details from GitHub right into our new User obje
 
 ### Better Error Handling
 
-Right now if an error occurs in the OAuth flow, the browser just stays on the `/oauth/callback` function and sees a plain text error message. A better experience would be to redirect the user back to the login page, with the error message in a query string variable, something like `http://localhost:8910/login?error=Application+not+authorized` Then in the LoginPage, add a `useParams()` to pull out the query variables, and show a toast message if an error is present:
+Right now if an error occurs in the OAuth flow, the browser just stays on the `/oauth/callback` function and sees a plain text error message. A better experience would be to redirect the user back to the login page, with the error message in a query string variable, something like `http://localhost:8910/login?error=Application+not+authorized` Then in the LoginPage, add a `useParams()` to pull out they query variables, and show a toast message if an error is present:
 
 ```jsx
 import { useParams } from '@redwoodjs/router'
