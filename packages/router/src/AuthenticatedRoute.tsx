@@ -4,10 +4,14 @@ import { Redirect } from './links'
 import { routes } from './router'
 import { useRouterState } from './router-context'
 
+// We reassign the type like this, because AvailableRoutes is generated in the user's project
+type GeneratedRoutesMap = Record<string, () => string>
+const routesMap = routes as GeneratedRoutesMap
+
 interface AuthenticatedRouteProps {
   children: React.ReactNode
   roles?: string | string[]
-  unauthenticated?: keyof typeof routes
+  unauthenticated?: keyof GeneratedRoutesMap
   whileLoadingAuth?: () => React.ReactElement | null
   private?: boolean
 }
@@ -47,14 +51,14 @@ export function AuthenticatedRoute(props: AuthenticatedRouteProps) {
         globalThis.location.pathname +
         encodeURIComponent(globalThis.location.search)
 
-      if (!routes[unauthenticated]) {
+      if (!routesMap[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
 
       let unauthenticatedPath
 
       try {
-        unauthenticatedPath = routes[unauthenticated]()
+        unauthenticatedPath = routesMap[unauthenticated]()
       } catch (e) {
         if (
           e instanceof Error &&
