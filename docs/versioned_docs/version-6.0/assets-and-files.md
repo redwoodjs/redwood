@@ -168,7 +168,7 @@ web/
 ```
 
 ```css
-/* in e.g. index.css file you are loading in your project */
+/* in e.g. index.css */
 @font-face {
   font-family: 'Redwood Neue';
   /* 👇 it's a relative path */
