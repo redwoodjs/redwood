@@ -49,6 +49,12 @@ const MUTATION_TRUNCATE_SPANS = gql`
   }
 `
 
+const MUTATION_TRUNCATE_MAILS = gql`
+  mutation truncateMails {
+    truncateMails
+  }
+`
+
 function Config() {
   const getConfigQuery = useQuery(QUERY_GET_CONFIG, {
     pollInterval: ITEM_POLLING_INTERVAL,
@@ -87,6 +93,26 @@ function Config() {
       }
     } catch (error) {
       toast.error('Failed to truncate spans!')
+      console.error(error)
+    }
+  }
+
+  const [executeTruncateMailsMutation, truncateMailsMutation] = useMutation(
+    MUTATION_TRUNCATE_MAILS
+  )
+  async function handleTruncateMails() {
+    if (!confirm("This action can't be undone! Are you sure?")) {
+      return
+    }
+    try {
+      const success = await executeTruncateMailsMutation()
+      if (success) {
+        toast.success('Successfully truncated mails.')
+      } else {
+        toast.error('Failed to truncate mails!')
+      }
+    } catch (error) {
+      toast.error('Failed to truncate mails!')
       console.error(error)
     }
   }
@@ -174,6 +200,22 @@ function Config() {
             loadingText="Running..."
             onClick={() => {
               handleTruncateSpans()
+            }}
+            color="red"
+          >
+            Execute
+          </Button>
+        </Flex>
+        <Divider />
+        <Flex className="mt-4">
+          <Text>
+            Truncate Mails <Bold>[Irreversible action!]</Bold>
+          </Text>
+          <Button
+            loading={truncateMailsMutation.loading}
+            loadingText="Running..."
+            onClick={() => {
+              handleTruncateMails()
             }}
             color="red"
           >

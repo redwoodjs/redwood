@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/mailer-core",
+  "name": "@redwoodjs/mailer-handler-studio",
   "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/mailer/core"
+    "directory": "packages/mailer/handlers/studio"
   },
   "license": "MIT",
   "main": "./dist/index.js",
@@ -24,10 +24,11 @@
     ]
   },
   "dependencies": {
-    "@react-email/render": "0.0.7"
+    "@redwoodjs/mailer-core": "5.0.0",
+    "@redwoodjs/mailer-handler-nodemailer": "5.0.0"
   },
   "devDependencies": {
-    "@redwoodjs/api": "5.0.0",
+    "@types/nodemailer": "^6",
     "esbuild": "0.18.12",
     "fast-glob": "3.2.12",
     "jest": "29.6.1",

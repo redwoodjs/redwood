@@ -8,6 +8,10 @@ import spanRoutes from './fastify/spanIngester'
 import yogaRoutes from './fastify/yoga'
 import { setupYoga } from './graphql/yoga'
 import { getWebConfig } from './lib/config'
+import {
+  startServer as startMailServer,
+  stopServer as stopMailServer,
+} from './mail'
 import { runMigrations } from './migrations'
 
 const HOST = 'localhost'
@@ -70,8 +74,13 @@ export const start = async (
       open(`http://${HOST}:${PORT}`)
     }
   })
+
+  // SMTP Server
+  console.log("Starting Studio's SMTP Server...")
+  await startMailServer()
 }
 
 const stop = async () => {
   await fastify?.close()
+  await stopMailServer()
 }

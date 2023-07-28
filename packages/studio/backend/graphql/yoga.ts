@@ -12,6 +12,12 @@ import { studioConfig, webConfig } from '../services/config'
 import { span, spans } from '../services/explore/span'
 import { traces, trace, traceCount } from '../services/explore/trace'
 import { seriesTypeBarList, modelsAccessedList } from '../services/lists'
+import {
+  mails,
+  truncate as truncateMails,
+  templateFiles as mailTemplateFiles,
+  templateFileExports as mailTemplateFileExports,
+} from '../services/mail'
 import { prismaQuerySpans } from '../services/prismaSpans'
 import { retypeSpans, truncateSpans } from '../services/span'
 import { getAncestorSpans, getDescendantSpans } from '../services/util'
@@ -155,6 +161,18 @@ export const setupYoga = (fastify: FastifyInstance) => {
         authorization: String
       }
 
+      # Mail
+      type Mail {
+        id: String
+        data: JSON
+        envelope: JSON
+        created_at: Int
+      }
+      type MailTemplate {
+        name: String
+        path: String
+      }
+
       type Query {
         prismaQueries(id: String!): [PrismaQuerySpan]!
         authProvider: String
@@ -184,11 +202,17 @@ export const setupYoga = (fastify: FastifyInstance) => {
 
         # Maps
         spanTreeMapData(spanId: String): JSON
+
+        # Mail
+        mails: [Mail]
+        mailTemplateFiles: [MailTemplate]
+        mailTemplateFileExports(templatePath: String!): [String]
       }
 
       type Mutation {
         retypeSpans: Boolean!
         truncateSpans: Boolean!
+        truncateMails: Boolean!
       }
     `,
     resolvers: {
@@ -196,6 +220,7 @@ export const setupYoga = (fastify: FastifyInstance) => {
       Mutation: {
         retypeSpans,
         truncateSpans,
+        truncateMails,
       },
       Query: {
         studioConfig,
@@ -218,6 +243,10 @@ export const setupYoga = (fastify: FastifyInstance) => {
         seriesTypeBarList,
         // Maps
         spanTreeMapData,
+        // Mail
+        mails,
+        mailTemplateFiles,
+        mailTemplateFileExports,
       },
       Span: {
         descendantSpans: async (span, _args, _ctx) => {

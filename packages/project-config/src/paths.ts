@@ -22,6 +22,7 @@ export interface NodeTargetPaths {
   dist: string
   types: string
   models: string
+  mail: string
 }
 
 export interface WebPaths {

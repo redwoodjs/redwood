@@ -17,6 +17,8 @@ import SpanTreeMap from './Pages/Explore/SpanTreeMap'
 import Trace from './Pages/Explore/Trace'
 import TraceList from './Pages/Explore/TraceList'
 import GraphiQL from './Pages/GraphiQL'
+import MailPreview from './Pages/Mail/Preview'
+import MailSink from './Pages/Mail/Sink'
 import MapLanding from './Pages/MapLanding'
 import NotFound from './Pages/NotFound'
 import Overview from './Pages/Overview'
@@ -65,6 +67,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
             {/* GraphiQL */}
             <Route path="/graphiql" element={<GraphiQL />} />
+
+            {/* Mail */}
+            <Route path="/mail">
+              <Route path="sink" element={<MailSink />} />
+              <Route path="preview" element={<MailPreview />} />
+            </Route>
 
             {/* Config */}
             <Route path="/config" element={<Config />} />

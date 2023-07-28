@@ -9,7 +9,11 @@ export async function runMigrations() {
   await setupTables(db)
   await setupViews(db)
 
+  // span type and brief
   await migrate000(db)
+
+  // initial mail table
+  await migrate001(db)
 
   //
 }
@@ -25,6 +29,27 @@ async function migrate000(db: Database<sqlite3.Database, sqlite3.Statement>) {
     BEGIN TRANSACTION;
       ALTER TABLE span ADD COLUMN type TEXT(255) DEFAULT NULL;
       ALTER TABLE span ADD COLUMN brief TEXT(255) DEFAULT NULL;
+      PRAGMA user_version = ${user_version + 1};
+    COMMIT;
+  `
+  await db.exec(sql)
+}
+
+async function migrate001(db: Database<sqlite3.Database, sqlite3.Statement>) {
+  const user_version = (await db.get(`PRAGMA user_version;`))['user_version']
+  if (user_version !== 1) {
+    return
+  }
+
+  // NOTE: PRAGMA user_version does not support prepared statement variables
+  const sql = `
+    BEGIN TRANSACTION;
+      CREATE TABLE IF NOT EXISTS mail (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        data JSON,
+        envelope JSON,
+        created_at INTEGER DEFAULT (strftime('%s', 'now'))
+      );
       PRAGMA user_version = ${user_version + 1};
     COMMIT;
   `

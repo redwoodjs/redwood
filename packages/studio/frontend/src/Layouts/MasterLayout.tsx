@@ -15,6 +15,8 @@ import {
   ExclamationTriangleIcon,
   ClockIcon,
   MapIcon,
+  InboxIcon,
+  EnvelopeIcon,
 } from '@heroicons/react/24/outline'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet, NavLink } from 'react-router-dom'
@@ -37,6 +39,11 @@ const monitorNavigation = [
 
 const apiNavigation = [
   { name: 'GraphiQL Playground', to: '/graphiql', icon: ViewColumnsIcon },
+]
+
+const mailNavigation = [
+  { name: 'Mail Sink', to: '/mail/sink', icon: InboxIcon },
+  { name: 'Template Preview', to: '/mail/preview', icon: EnvelopeIcon },
 ]
 
 const miscNavigation = [
@@ -116,6 +123,26 @@ function SidebarContent() {
         </div>
         <ul>
           {apiNavigation.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.to}
+              className="group flex items-center rounded-md px-2 py-2 text-sm font-medium [&.active]:bg-sinopia text-slate-100 hover:bg-persimmon"
+            >
+              <item.icon
+                className="mr-3 h-6 w-6 flex-shrink-0 text-slate-100"
+                aria-hidden="true"
+              />
+              {item.name}
+            </NavLink>
+          ))}
+        </ul>
+      </li>
+      <li>
+        <div className="text-xs font-semibold leading-6 text-gray-400">
+          Mail
+        </div>
+        <ul>
+          {mailNavigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.to}

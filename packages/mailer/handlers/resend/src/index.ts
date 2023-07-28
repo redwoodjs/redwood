@@ -2,8 +2,11 @@ import { Resend } from 'resend'
 import type { CreateEmailOptions } from 'resend/build/src/emails/interfaces'
 
 import { MailHandler } from '@redwoodjs/mailer-core'
-import type { CompleteSendOptions, MailTemplate } from '@redwoodjs/mailer-core'
-// TODO: Use just /renderer by providing an export in the package.json?
+import type {
+  CompleteSendOptions,
+  MailResult,
+  MailTemplate,
+} from '@redwoodjs/mailer-core'
 import { MailRenderer } from '@redwoodjs/mailer-core/dist/renderer'
 
 export interface HandlerConfig {
@@ -26,36 +29,26 @@ export class ResendMailHandler extends MailHandler {
     template: MailTemplate,
     generalOptions: CompleteSendOptions,
     handlerOptions?: HandlerOptions
-  ): Promise<void> {
-    const content = MailRenderer.render(template, generalOptions.format)
+  ): Promise<MailResult> {
+    const { text, html } = MailRenderer.render(template, generalOptions.format)
 
-    let resendOptions: CreateEmailOptions
-    if (generalOptions.format === 'html') {
-      resendOptions = {
-        to: generalOptions.to,
-        cc: generalOptions.cc,
-        bcc: generalOptions.bcc,
-        subject: generalOptions.subject,
-        from: generalOptions.from,
-        html: content,
-        headers: generalOptions.headers,
-        tags: handlerOptions?.tags,
-      }
-    } else {
-      resendOptions = {
-        to: generalOptions.to,
-        cc: generalOptions.cc,
-        bcc: generalOptions.bcc,
-        subject: generalOptions.subject,
-        from: generalOptions.from,
-        text: content,
-        headers: generalOptions.headers,
-        tags: handlerOptions?.tags,
-      }
+    // @ts-expect-error - Fix the "at least one of these must be provided" error
+    const resendOptions: CreateEmailOptions = {
+      to: generalOptions.to,
+      cc: generalOptions.cc,
+      bcc: generalOptions.bcc,
+      subject: generalOptions.subject,
+      from: generalOptions.from,
+      html,
+      text,
+      headers: generalOptions.headers,
+      tags: handlerOptions?.tags,
     }
 
     const result = await this.resend.emails.send(resendOptions)
-    console.log(result)
+    return {
+      messageID: result.id,
+    }
   }
 
   internal() {
