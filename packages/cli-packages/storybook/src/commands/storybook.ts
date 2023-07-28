@@ -1,7 +1,8 @@
 import terminalLink from 'terminal-link'
 import type { Argv } from 'yargs'
 
-import c from '../lib/colors'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { StorybookYargsOptions } from '../types'
 
 export const command = 'storybook'
@@ -54,22 +55,6 @@ export function builder(
       default: defaultOptions.smokeTest,
     })
 
-    .check((argv) => {
-      if (argv.build && argv.smokeTest) {
-        throw new Error('Can not provide both "--build" and "--smoke-test"')
-      }
-
-      if (argv.build && argv.open) {
-        console.warn(
-          c.warning(
-            'Warning: --open option has no effect when running Storybook build'
-          )
-        )
-      }
-
-      return true
-    })
-
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -82,6 +67,16 @@ export async function handler(options: StorybookYargsOptions): Promise<void> {
   // NOTE: We should provide some visual output before the import to increase
   // the perceived performance of the command as there will be delay while we
   // load the handler.
+  recordTelemetryAttributes({
+    command: 'storybook',
+    build: options.build,
+    ci: options.ci,
+    open: options.open,
+    smokeTest: options.smokeTest,
+  })
+  // @ts-expect-error - Custom workaround for storybook telemetry
+  process.emit('shutdown-telemetry')
+
   const { handler: storybookHandler } = await import('./storybookHandler.js')
   await storybookHandler(options)
 }

@@ -84,7 +84,7 @@ export const buildCommands = ({ sides }) => {
       task: async () => {
         // Dynamically import this function
         // because its dependencies are only installed when `rw setup deploy serverless` is run
-        const { nftPack } = (await import('./packing/nft.js')).default
+        const { nftPack } = await import('./packing/nft.js')
 
         await nftPack()
       },
@@ -130,7 +130,7 @@ const loadDotEnvForStage = (dotEnvPath) => {
 
 export const handler = async (yargs) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'serverless'].join(' '),
+    command: 'deploy serverless',
     sides: JSON.stringify(yargs.sides),
     verbose: yargs.verbose,
     packOnly: yargs.packOnly,

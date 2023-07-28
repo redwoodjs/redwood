@@ -49,12 +49,13 @@ export default UserProfile
 `;
 
 exports[`creates a multi word component story 1`] = `
-"// When you've added props to your component,
-// pass Storybook's \`args\` through this story to control it from the addons panel:
+"// Pass props to your component by passing an \`args\` object to your story
 //
 // \`\`\`jsx
-// export const generated = (args) => {
-//   return <UserProfile {...args} />
+// export const Primary = {
+//  args: {
+//    propName: propValue
+//  }
 // }
 // \`\`\`
 //
@@ -62,14 +63,9 @@ exports[`creates a multi word component story 1`] = `
 
 import UserProfile from './UserProfile'
 
-export const generated = () => {
-  return <UserProfile />
-}
+export default { component: UserProfile }
 
-export default {
-  title: 'Components/UserProfile',
-  component: UserProfile,
-}
+export const Primary = {}
 "
 `;
 
@@ -106,12 +102,13 @@ export default User
 `;
 
 exports[`creates a single word component story 1`] = `
-"// When you've added props to your component,
-// pass Storybook's \`args\` through this story to control it from the addons panel:
+"// Pass props to your component by passing an \`args\` object to your story
 //
 // \`\`\`jsx
-// export const generated = (args) => {
-//   return <User {...args} />
+// export const Primary = {
+//  args: {
+//    propName: propValue
+//  }
 // }
 // \`\`\`
 //
@@ -119,14 +116,9 @@ exports[`creates a single word component story 1`] = `
 
 import User from './User'
 
-export const generated = () => {
-  return <User />
-}
+export default { component: User }
 
-export default {
-  title: 'Components/User',
-  component: User,
-}
+export const Primary = {}
 "
 `;
 

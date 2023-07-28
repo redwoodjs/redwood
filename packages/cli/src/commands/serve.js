@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import chalk from 'chalk'
-import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
+
+import { webServerHandler, webSsrServerHandler } from './serveWebHandler'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
@@ -18,31 +18,24 @@ function hasExperimentalServerFile() {
   return fs.existsSync(serverFilePath)
 }
 
-export async function builder(yargs) {
-  const redwoodProjectPaths = getPaths()
-  const redwoodProjectConfig = getConfig()
-
+export const builder = async (yargs) => {
   yargs
     .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      description: 'Run both api and web servers. Uses the web port and host',
+      description: 'Run both api and web servers',
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port,
+            default: getConfig().web?.port || 8910,
             type: 'number',
             alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
           },
           socket: { type: 'string' },
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
@@ -50,29 +43,27 @@ export async function builder(yargs) {
 
         // Run the experimental server file, if it exists, with web side also
         if (hasExperimentalServerFile()) {
-          console.log(
-            [
-              separator,
-              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-              separator,
-              'Using the experimental API server file at api/dist/server.js',
-              separator,
-            ].join('\n')
+          const { bothExperimentalServerFileHandler } = await import(
+            './serveBothHandler.js'
           )
-          await execa(
-            'yarn',
-            ['node', path.join('dist', 'server.js'), '--enable-web'],
-            {
-              cwd: redwoodProjectPaths.api.base,
-              stdio: 'inherit',
-              shell: true,
-            }
-          )
-          return
+          await bothExperimentalServerFileHandler()
+        } else if (getConfig().experimental?.rsc?.enabled) {
+          const { bothRscServerHandler } = await import('./serveBothHandler.js')
+          await bothRscServerHandler(argv)
+        } else if (getConfig().experimental?.streamingSsr?.enabled) {
+          const { bothSsrServerHandler } = await import('./serveBothHandler.js')
+          await bothSsrServerHandler(argv)
+        } else {
+          // Wanted to use the new web-server package here, but can't because
+          // of backwards compatibility reasons. With `bothServerHandler` both
+          // the web side and the api side run on the same server with the same
+          // port. If we use a separate fe server and api server we can't run
+          // them on the same port, and so we lose backwards compatibility.
+          // TODO: Use @redwoodjs/web-server when we're ok with breaking
+          // backwards compatibility.
+          const { bothServerHandler } = await import('./serveBothHandler.js')
+          await bothServerHandler(argv)
         }
-
-        const { bothServerHandler } = await import('./serveHandler.js')
-        await bothServerHandler(argv)
       },
     })
     .command({
@@ -81,13 +72,9 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.api.port,
+            default: getConfig().api?.port || 8911,
             type: 'number',
             alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.api.host,
-            type: 'string',
           },
           socket: { type: 'string' },
           apiRootPath: {
@@ -100,7 +87,7 @@ export async function builder(yargs) {
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
@@ -109,25 +96,14 @@ export async function builder(yargs) {
 
         // Run the experimental server file, if it exists, api side only
         if (hasExperimentalServerFile()) {
-          console.log(
-            [
-              separator,
-              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-              separator,
-              'Using the experimental API server file at api/dist/server.js',
-              separator,
-            ].join('\n')
+          const { apiExperimentalServerFileHandler } = await import(
+            './serveApiHandler.js'
           )
-          await execa('yarn', ['node', path.join('dist', 'server.js')], {
-            cwd: redwoodProjectPaths.api.base,
-            stdio: 'inherit',
-            shell: true,
-          })
-          return
+          await apiExperimentalServerFileHandler()
+        } else {
+          const { apiServerHandler } = await import('./serveApiHandler.js')
+          await apiServerHandler(argv)
         }
-
-        const { apiServerHandler } = await import('./serveHandler.js')
-        await apiServerHandler(argv)
       },
     })
     .command({
@@ -136,13 +112,9 @@ export async function builder(yargs) {
       builder: (yargs) =>
         yargs.options({
           port: {
-            default: redwoodProjectConfig.web.port,
+            default: getConfig().web?.port || 8910,
             type: 'number',
             alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
           },
           socket: { type: 'string' },
           apiHost: {
@@ -153,24 +125,31 @@ export async function builder(yargs) {
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
-          command,
+          command: 'serve',
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
           apiHost: argv.apiHost,
         })
 
-        const { webServerHandler } = await import('./serveHandler.js')
-        await webServerHandler(argv)
+        if (getConfig().experimental?.streamingSsr?.enabled) {
+          await webSsrServerHandler()
+        } else {
+          await webServerHandler(argv)
+        }
       },
     })
     .middleware((argv) => {
+      recordTelemetryAttributes({
+        command: 'serve',
+      })
+
       // Make sure the relevant side has been built, before serving
       const positionalArgs = argv._
 
       if (
         positionalArgs.includes('web') &&
-        !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html')
+        !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
       ) {
         console.error(
           c.error(
@@ -182,7 +161,7 @@ export async function builder(yargs) {
 
       if (
         positionalArgs.includes('api') &&
-        !fs.existsSync(path.join(redwoodProjectPaths.api.dist))
+        !fs.existsSync(path.join(getPaths().api.dist))
       ) {
         console.error(
           c.error(
@@ -195,8 +174,8 @@ export async function builder(yargs) {
       if (
         // serve both
         positionalArgs.length === 1 &&
-        (!fs.existsSync(path.join(redwoodProjectPaths.api.dist)) ||
-          !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html'))
+        (!fs.existsSync(path.join(getPaths().api.dist)) ||
+          !fs.existsSync(path.join(getPaths().web.dist), 'index.html'))
       ) {
         console.error(
           c.error(
@@ -218,10 +197,6 @@ export async function builder(yargs) {
       )}`
     )
 }
-
-const separator = chalk.hex('#ff845e')(
-  '------------------------------------------------------------------'
-)
 
 // We'll clean this up later, but for now note that this function is
 // duplicated between this package and @redwoodjs/fastify

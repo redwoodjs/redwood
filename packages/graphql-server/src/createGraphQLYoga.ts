@@ -16,7 +16,6 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
-  useRedwoodRealtime,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
@@ -47,6 +46,7 @@ export const createGraphQLYoga = ({
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   realtime,
+  openTelemetryOptions,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
@@ -136,7 +136,9 @@ export const createGraphQLYoga = ({
     plugins.push(...redwoodDirectivePlugins)
 
     // Custom Redwood OpenTelemetry plugin
-    plugins.push(useRedwoodOpenTelemetry())
+    if (openTelemetryOptions !== undefined) {
+      plugins.push(useRedwoodOpenTelemetry(openTelemetryOptions))
+    }
 
     // Secure the GraphQL server
     plugins.push(useArmor(logger, armorConfig))
@@ -157,10 +159,6 @@ export const createGraphQLYoga = ({
     plugins.push(
       useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
-
-    if (realtime) {
-      plugins.push(useRedwoodRealtime(realtime))
-    }
 
     // App-defined plugins
     if (extraPlugins && extraPlugins.length > 0) {

@@ -37,7 +37,7 @@ export default theme
 
 export async function handler({ force, install }) {
   recordTelemetryAttributes({
-    command: ['setup', 'ui', 'chakra-ui'].join(' '),
+    command: 'setup ui chakra-ui',
     force,
     install,
   })

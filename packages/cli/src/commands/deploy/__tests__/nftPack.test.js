@@ -4,7 +4,7 @@ import path from 'path'
 import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 
-import nftPacker from '../packing/nft'
+import * as nftPacker from '../packing/nft'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,

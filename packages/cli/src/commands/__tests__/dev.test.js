@@ -76,11 +76,15 @@ describe('yarn rw dev', () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
-        host: 'localhost',
       },
       api: {
         port: 8911,
         debugPort: 18911,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
       },
     })
 
@@ -101,7 +105,46 @@ describe('yarn rw dev', () => {
     )
 
     expect(apiCommand.command).toMatchInlineSnapshot(
-      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --host '::' --debug-port 18911 | rw-log-formatter""`
+      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
+    )
+
+    expect(generateCommand.command).toEqual('yarn rw-gen-watch')
+  })
+
+  it('Should run api and FE dev server, when streaming experimental flag enabled', async () => {
+    getConfig.mockReturnValue({
+      web: {
+        port: 8910,
+      },
+      api: {
+        port: 8911,
+        debugPort: 18911,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: true, // <-- enable SSR/Streaming
+        },
+      },
+    })
+
+    await handler({
+      side: ['api', 'web'],
+    })
+
+    expect(generatePrismaClient).toHaveBeenCalledTimes(1)
+    const concurrentlyArgs = concurrently.mock.lastCall[0]
+
+    const webCommand = find(concurrentlyArgs, { name: 'web' })
+    const apiCommand = find(concurrentlyArgs, { name: 'api' })
+    const generateCommand = find(concurrentlyArgs, { name: 'gen' })
+
+    // Uses absolute path, so not doing a snapshot
+    expect(webCommand.command).toContain(
+      'yarn cross-env NODE_ENV=development rw-dev-fe'
+    )
+
+    expect(apiCommand.command).toMatchInlineSnapshot(
+      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
     )
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
@@ -111,11 +154,15 @@ describe('yarn rw dev', () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
-        host: 'localhost',
       },
       api: {
         port: 8911,
         debugPort: 505050,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
       },
     })
 
@@ -129,7 +176,7 @@ describe('yarn rw dev', () => {
     const apiCommand = find(concurrentlyArgs, { name: 'api' })
 
     expect(apiCommand.command).toContain(
-      "yarn rw-api-server-watch --port 8911 --host '::' --debug-port 90909090"
+      'yarn rw-api-server-watch --port 8911 --debug-port 90909090'
     )
   })
 
@@ -137,11 +184,15 @@ describe('yarn rw dev', () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
-        host: 'localhost',
       },
       api: {
         port: 8911,
         debugPort: false,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
       },
     })
 
@@ -160,11 +211,15 @@ describe('yarn rw dev', () => {
     getConfig.mockReturnValue({
       web: {
         port: 8910,
-        host: 'localhost',
         bundler: 'vite', // <-- enable vite mode
       },
       api: {
         port: 8911,
+      },
+      experimental: {
+        streamingSsr: {
+          enabled: false,
+        },
       },
     })
 

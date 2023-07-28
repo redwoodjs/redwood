@@ -7,7 +7,7 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../lib'
-import { apiServerHandler } from '../serveHandler'
+import { apiServerHandler } from '../serveApiHandler'
 
 export const command = 'flightcontrol <side>'
 export const alias = 'fc'
@@ -46,7 +46,7 @@ export const builder = (yargs) => {
 
 export const handler = async ({ side, serve, prisma, dm: dataMigrate }) => {
   recordTelemetryAttributes({
-    command: ['deploy', 'flightcontrol'].join(' '),
+    command: 'deploy flightcontrol',
     side,
     prisma,
     dataMigrate,

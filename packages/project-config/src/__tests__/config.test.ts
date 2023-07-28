@@ -55,6 +55,12 @@ describe('getConfig', () => {
             "apiSdk": undefined,
             "enabled": false,
           },
+          "rsc": {
+            "enabled": false,
+          },
+          "streamingSsr": {
+            "enabled": false,
+          },
           "studio": {
             "graphiql": {
               "authImpersonation": {

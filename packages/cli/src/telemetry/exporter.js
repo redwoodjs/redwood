@@ -15,28 +15,30 @@ export class CustomFileExporter {
   #storageFileName
 
   /**
-   * @type fs.WriteStream
+   * @type string
    * @private
    */
-  #storageFileStream
+  #storageFilePath
+
+  /**
+   * @type boolean
+   * @private
+   */
+  #isShutdown = false
 
   constructor() {
     this.#storageFileName = `${Date.now()}.json`
 
     // Ensure the path exists
-    const storageFilePath = path.join(
+    this.#storageFilePath = path.join(
       getPaths().generated.base,
       'telemetry',
       this.#storageFileName
     )
-    fs.ensureDirSync(path.dirname(storageFilePath))
+    fs.ensureDirSync(path.dirname(this.#storageFilePath))
 
-    // Open the file for writing, open a JSON array
-    this.#storageFileStream = fs.createWriteStream(storageFilePath, {
-      flags: 'w',
-      autoClose: false,
-    })
-    this.#storageFileStream.write('[')
+    // Create the file and open a JSON array
+    fs.writeFileSync(this.#storageFilePath, '[')
   }
 
   /**
@@ -47,20 +49,26 @@ export class CustomFileExporter {
     for (let i = 0; i < spans.length; i++) {
       const span = spans[i]
       delete span['_spanProcessor'] // This is a circular reference and will cause issues with JSON.stringify
-      this.#storageFileStream.write(JSON.stringify(span, undefined, 2))
-      if (i < spans.length - 1) {
-        this.#storageFileStream.write(',')
-      }
+      fs.appendFileSync(
+        this.#storageFilePath,
+        JSON.stringify(span, undefined, 2)
+      )
+      fs.appendFileSync(this.#storageFilePath, ',')
     }
     resultCallback({ code: 0 })
   }
 
   /** Stops the exporter. */
   shutdown() {
-    // Close the JSON array and then close the file
-    if (this.#storageFileStream.writable) {
-      this.#storageFileStream.write(']')
-      this.#storageFileStream.close()
+    // Close the JSON array
+    if (!this.#isShutdown) {
+      // Remove the trailing comma
+      fs.truncateSync(
+        this.#storageFilePath,
+        fs.statSync(this.#storageFilePath).size - 1
+      )
+      fs.appendFileSync(this.#storageFilePath, ']')
+      this.#isShutdown = true
     }
   }
 

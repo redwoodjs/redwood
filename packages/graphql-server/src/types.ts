@@ -7,6 +7,7 @@ import type { Plugin } from 'graphql-yoga'
 
 import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import { CorsConfig } from '@redwoodjs/api'
+import type { RedwoodRealtimeOptions } from '@redwoodjs/realtime'
 
 import { DirectiveGlobImports } from 'src/directives/makeDirectives'
 
@@ -15,7 +16,6 @@ import type {
   DirectivePluginOptions,
 } from './plugins/useRedwoodDirective'
 import { LoggerConfig } from './plugins/useRedwoodLogger'
-import type { RedwoodRealtimeOptions } from './plugins/useRedwoodRealtime'
 
 export type Resolver = (...args: unknown[]) => unknown
 export type Services = {
@@ -73,6 +73,23 @@ export interface RedwoodGraphQLContext {
   currentUser?: ThenArg<ReturnType<GetCurrentUser>> | AuthContextPayload | null
 
   [index: string]: unknown
+}
+
+export interface RedwoodOpenTelemetryConfig {
+  /**
+   * @description Enables the creation of a span for each resolver execution.
+   */
+  resolvers: boolean
+
+  /**
+   * @description Includes the execution result in the span attributes.
+   */
+  variables: boolean
+
+  /**
+   * @description Includes the variables in the span attributes.
+   */
+  result: boolean
 }
 
 /**
@@ -211,9 +228,14 @@ export type GraphQLYogaOptions = {
   /**
    * @description Configure RedwoodRealtime plugin with subscriptions and live queries
    *
-   * Only supported in a swerver deploy and not allowed with GraphQLHandler config
+   * Only supported in a server deploy and not allowed with GraphQLHandler config
    */
   realtime?: RedwoodRealtimeOptions
+
+  /**
+   * @description Configure OpenTelemetry plugin behaviour
+   */
+  openTelemetryOptions?: RedwoodOpenTelemetryConfig
 }
 
 /**

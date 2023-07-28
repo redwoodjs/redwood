@@ -5,10 +5,19 @@ import { transform as svgrTransform } from '@svgr/core'
 import type { API, FileInfo, StringLiteral } from 'jscodeshift'
 import pascalcase from 'pascalcase'
 
+import { getPaths } from '@redwoodjs/project-config'
+
+/**
+ * @param svgFilePath Full path to the existing svg file
+ * @param outputPath Full path to the output file
+ * @param componentName Name of the React component to generate inside the output file
+ * @param typescript Whether to generate TypeScript code
+ */
 async function convertSvgToReactComponent(
   svgFilePath: string,
   outputPath: string,
-  componentName: string
+  componentName: string,
+  typescript: boolean
 ) {
   const svgContents = await fs.readFile(svgFilePath, 'utf-8')
 
@@ -17,6 +26,7 @@ async function convertSvgToReactComponent(
     {
       jsxRuntime: 'automatic',
       plugins: ['@svgr/plugin-jsx'],
+      typescript,
     },
     {
       componentName: componentName,
@@ -25,16 +35,16 @@ async function convertSvgToReactComponent(
 
   await fs.writeFile(outputPath, jsCode)
 
+  console.log()
   console.log(`SVG converted to React component: ${outputPath}`)
 }
 
 export default async function transform(file: FileInfo, api: API) {
   const j = api.jscodeshift
-
   const root = j(file.source)
 
-  // Do this lazily
-  const { getPaths } = await import('@redwoodjs/project-config')
+  // If the input file is TypeScript, we'll generate TypeScript SVG components
+  const isTS = file.path.endsWith('.tsx')
 
   // Find all import declarations with "*.svg" import
   const svgImports = root.find(j.ImportDeclaration).filter((path) => {
@@ -46,6 +56,7 @@ export default async function transform(file: FileInfo, api: API) {
     filePath: string
     importSourcePath: StringLiteral
   }> = []
+
   // Process each import declaration
   svgImports.forEach((importDeclaration) => {
     const importSpecifiers = importDeclaration.node.specifiers
@@ -99,10 +110,10 @@ export default async function transform(file: FileInfo, api: API) {
   if (svgsToConvert.length > 0) {
     // if there are any svgs used as components, or render props, convert the svg to a react component
     await Promise.all(
-      svgsToConvert.map(async ({ filePath, importSourcePath }) => {
+      svgsToConvert.map(async (svg) => {
         const svgFileNameWithoutExtension = path.basename(
-          filePath,
-          path.extname(filePath)
+          svg.filePath,
+          path.extname(svg.filePath)
         )
 
         const componentName = pascalcase(svgFileNameWithoutExtension)
@@ -111,15 +122,20 @@ export default async function transform(file: FileInfo, api: API) {
 
         // The absolute path to the new file
         const outputPath = path.join(
-          path.dirname(filePath),
-          `${newFileName}.jsx`
+          path.dirname(svg.filePath),
+          `${newFileName}.${isTS ? 'tsx' : 'jsx'}`
         )
 
         try {
-          await convertSvgToReactComponent(filePath, outputPath, componentName)
+          await convertSvgToReactComponent(
+            svg.filePath,
+            outputPath,
+            componentName,
+            isTS
+          )
         } catch (error: any) {
           console.error(
-            `Error converting ${filePath} to React component: ${error.message}`
+            `Error converting ${svg.filePath} to React component: ${error.message}`
           )
 
           // Don't proceed if SVGr fails
@@ -129,8 +145,8 @@ export default async function transform(file: FileInfo, api: API) {
         // If SVGr is successful, change the import path
         // '../../bazinga.svg' -> '../../BazingaSVG'
         // Use extname, incase ext casing does not match
-        importSourcePath.value = importSourcePath.value.replace(
-          `${svgFileNameWithoutExtension}${path.extname(filePath)}`,
+        svg.importSourcePath.value = svg.importSourcePath.value.replace(
+          `${svgFileNameWithoutExtension}${path.extname(svg.filePath)}`,
           newFileName
         )
       })

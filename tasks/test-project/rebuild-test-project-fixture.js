@@ -457,7 +457,7 @@ async function runCommand() {
         if (
           e instanceof ExecaError &&
           !e.stderr &&
-          e.stdout.includes('14 problems (14 errors, 0 warnings)')
+          e.stdout.includes('15 problems (15 errors, 0 warnings)')
         ) {
           // This is unfortunate, but linting is expected to fail.
           // This is the expected error message, so we just fall through
@@ -478,7 +478,11 @@ async function runCommand() {
     task: async () => {
       // @TODO: This only works on UNIX, we should use path.join everywhere
       // remove all .gitignore
-      await rimraf(`${OUTPUT_PROJECT_PATH}/.redwood`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/.redwood/**/*`, {
+        glob: {
+          ignore: `${OUTPUT_PROJECT_PATH}/.redwood/README.md`,
+        },
+      })
       await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/api/db/dev.db-journal`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/api/dist`)

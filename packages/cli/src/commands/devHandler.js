@@ -2,7 +2,6 @@ import fs from 'fs'
 import { argv } from 'process'
 
 import concurrently from 'concurrently'
-import fg from 'fast-glob'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { shutdownPort } from '@redwoodjs/internal/dist/dev'
@@ -11,44 +10,11 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths } from '../lib'
 import c from '../lib/colors'
+import { exitWithError } from '../lib/exit'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 import { getFreePort } from '../lib/ports'
 
 const defaultApiDebugPort = 18911
-
-// @TODO Remove as of Redwood 7.0.0
-const jsDeprecationNotice = () => {
-  if (process.env.REDWOOD_DISABLE_JS_DEPRECATION_NOTICE) {
-    return
-  }
-
-  // There may be actual legitimate JS-only files on the web side, so don't
-  // search ALL files, just the main ones like App, Routes, pages and components
-  const matches = fg.sync(
-    ['App.js', 'Routes.js', 'components/**/*.js', 'pages/**/*.js'],
-    {
-      cwd: getPaths().web.src,
-      ignore: [
-        '**/.*.js',
-        '**/*.fixtures.js',
-        '**/*.mock.js',
-        '**/*.routeHooks.js',
-        '**/*.test.js',
-        '**/*.spec.js',
-      ],
-    }
-  )
-
-  if (matches.length) {
-    console.warn(
-      c.warning(
-        `DEPRECATION NOTICE: File extensions for JS files containing JSX must be named \`.jsx\`:\n\n  ${matches.join(
-          '\n  '
-        )}\n\nSupport for \`.js\` files containing JSX will be dropped in Redwood 7.0.0.\nThere is a codemod available to update these extensions for you:\n\n  npx @redwoodjs/codemods convert-js-to-jsx\n\n* Hide this notice by setting the ENV variable REDWOOD_DISABLE_JS_DEPRECATION_NOTICE=1`
-      )
-    )
-  }
-}
 
 export const handler = async ({
   side = ['api', 'web'],
@@ -60,18 +26,15 @@ export const handler = async ({
   recordTelemetryAttributes({
     command: 'dev',
     side: JSON.stringify(side),
-    // forward, // TODO: Should we record this?
     generate,
     watchNodeModules,
-    apiDebugPort,
   })
 
-  const redwoodProjectPaths = getPaths()
-  const redwoodProjectConfig = getConfig()
+  const rwjsPaths = getPaths()
 
   // Starting values of ports from config (redwood.toml)
-  let apiPreferredPort = parseInt(redwoodProjectConfig.api.port)
-  let webPreferredPort = parseInt(redwoodProjectConfig.web.port)
+  let apiPreferredPort = parseInt(getConfig().api.port)
+  let webPreferredPort = parseInt(getConfig().web.port)
 
   // Assume we can have the ports we want
   let apiAvailablePort = apiPreferredPort
@@ -83,8 +46,9 @@ export const handler = async ({
   if (side.includes('api')) {
     apiAvailablePort = await getFreePort(apiPreferredPort)
     if (apiAvailablePort === -1) {
-      console.error(`Error could not determine a free port for the api server`)
-      process.exit(1)
+      exitWithError(undefined, {
+        message: `Could not determine a free port for the api server`,
+      })
     }
     apiPortChangeNeeded = apiAvailablePort !== apiPreferredPort
   }
@@ -103,8 +67,9 @@ export const handler = async ({
       apiAvailablePort,
     ])
     if (webAvailablePort === -1) {
-      console.error(`Error could not determine a free port for the web server`)
-      process.exit(1)
+      exitWithError(undefined, {
+        message: `Could not determine a free port for the web server`,
+      })
     }
     webPortChangeNeeded = webAvailablePort !== webPreferredPort
   }
@@ -118,11 +83,10 @@ export const handler = async ({
     message += webPortChangeNeeded
       ? `  - Web to use port ${webAvailablePort} instead of your currently configured ${webPreferredPort}\n`
       : ``
-    console.error(message)
-    console.error(
-      `Cannot run the development server until your configured ports are changed or become available.`
-    )
-    process.exit(1)
+    message += `\nCannot run the development server until your configured ports are changed or become available.`
+    exitWithError(undefined, {
+      message,
+    })
   }
 
   if (side.includes('api')) {
@@ -130,7 +94,7 @@ export const handler = async ({
       await generatePrismaClient({
         verbose: false,
         force: false,
-        schema: redwoodProjectPaths.api.dbSchema,
+        schema: rwjsPaths.api.dbSchema,
       })
     } catch (e) {
       errorTelemetry(
@@ -151,9 +115,6 @@ export const handler = async ({
   }
 
   if (side.includes('web')) {
-    // @TODO Remove as of Redwood 7.0.0
-    jsDeprecationNotice()
-
     try {
       await shutdownPort(webAvailablePort)
     } catch (e) {
@@ -176,7 +137,7 @@ export const handler = async ({
       return `--debug-port ${defaultApiDebugPort}`
     }
 
-    const apiDebugPortInToml = redwoodProjectConfig.api.debugPort
+    const apiDebugPortInToml = getConfig().api.debugPort
     if (apiDebugPortInToml) {
       return `--debug-port ${apiDebugPortInToml}`
     }
@@ -187,48 +148,46 @@ export const handler = async ({
 
   const redwoodConfigPath = getConfigPath()
 
-  const webCommand =
-    redwoodProjectConfig.web.bundler !== 'webpack' // @NOTE: can't use enums, not TS
-      ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
-      : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
-          watchNodeModules ? '1' : ''
-        } webpack serve --config "${webpackDevConfig}" ${forward}`
+  const streamingSsrEnabled = getConfig().experimental.streamingSsr?.enabled
 
-  const apiCommand = [
-    'yarn',
-    'cross-env',
-    'NODE_ENV=development',
-    'NODE_OPTIONS=--enable-source-maps',
-    'yarn',
-    'nodemon',
-    '--quiet',
-    `--watch "${redwoodConfigPath}"`,
-    '--exec',
-    `"${[
-      'yarn',
-      'rw-api-server-watch',
-      `--port ${apiAvailablePort}`,
-      `--host '::'`,
-      getApiDebugFlag(),
-      '|',
-      'rw-log-formatter',
-    ].join(' ')}"`,
-  ].join(' ')
+  // @TODO (Streaming) Lot of temporary feature flags for started dev server.
+  // Written this way to make it easier to read
+
+  // 1. default: Vite (SPA)
+  let webCommand = `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
+
+  // 2. Vite with SSR
+  if (streamingSsrEnabled) {
+    webCommand = `yarn cross-env NODE_ENV=development rw-dev-fe ${forward}`
+  }
+
+  // 3. Webpack (SPA): we will remove this override after v7
+  if (getConfig().web.bundler === 'webpack') {
+    if (streamingSsrEnabled) {
+      throw new Error(
+        'Webpack does not support SSR. Please switch your bundler to Vite in redwood.toml first'
+      )
+    } else {
+      webCommand = `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
+        watchNodeModules ? '1' : ''
+      } webpack serve --config "${webpackDevConfig}" ${forward}`
+    }
+  }
 
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
-      command: apiCommand,
+      command: `yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "${redwoodConfigPath}" --exec "yarn rw-api-server-watch --port ${apiAvailablePort} ${getApiDebugFlag()} | rw-log-formatter"`,
       prefixColor: 'cyan',
-      runWhen: () => fs.existsSync(redwoodProjectPaths.api.src),
+      runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },
     web: {
       name: 'web',
       command: webCommand,
       prefixColor: 'blue',
-      cwd: redwoodProjectPaths.web.base,
-      runWhen: () => fs.existsSync(redwoodProjectPaths.web.src),
+      cwd: rwjsPaths.web.base,
+      runWhen: () => fs.existsSync(rwjsPaths.web.src),
     },
     gen: {
       name: 'gen',
@@ -259,8 +218,7 @@ export const handler = async ({
         process.argv,
         `Error concurrently starting sides: ${e.message}`
       )
-      console.error(c.error(e.message))
-      process.exit(1)
+      exitWithError(e)
     }
   })
 }
