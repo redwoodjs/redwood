@@ -6,7 +6,7 @@ import { act, render, waitFor } from '@testing-library/react'
 expect.extend({ toHaveClass, toHaveStyle })
 
 import { navigate, Route, Router, routes } from '../'
-import { Link, NavLink, useMatch } from '../links'
+import { NavLink, useMatch, Link } from '../links'
 import { LocationProvider } from '../location'
 import { flattenSearchParams, RouteParams } from '../util'
 

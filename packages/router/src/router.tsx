@@ -1,4 +1,4 @@
-import React, { memo, ReactElement, ReactNode, useMemo } from 'react'
+import React, { ReactNode, ReactElement, useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
@@ -248,9 +248,9 @@ const WrappedPage = memo(
 )
 
 export {
+  Router,
+  Route,
+  namedRoutes as routes,
   isValidRoute as isRoute,
   PageType,
-  Route,
-  Router,
-  namedRoutes as routes,
 }

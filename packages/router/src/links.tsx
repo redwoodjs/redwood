@@ -190,4 +190,4 @@ const Redirect = ({ to, options }: RedirectProps) => {
   return null
 }
 
-export { Link, NavLink, Redirect, useMatch }
+export { Link, NavLink, useMatch, Redirect }

@@ -308,7 +308,6 @@ export const RouteParams = {
  * given args object. Any extra params not used in the path will be appended
  * as key=value pairs in the search part.
  *
- *
  * Examples:
  *
  *   replaceParams('/tags/{tag}', { tag: 'code', extra: 'foo' })
