@@ -16,7 +16,7 @@ and
 ## Best Practices
 Because assets in this folder are bypassing the javascript module system, **this folder should be used sparingly** for assets such as favicons, robots.txt, manifests, libraries incompatible with Vite, etc.
 
-In general, it's best to import files directly into a template, page, or component. This allows Vite to include that file in the bundle when small enough, or to copy it over to the dist folder with a hash/
+In general, it's best to import files directly into a template, page, or component. This allows Vite to include that file in the bundle when small enough, or to copy it over to the `dist` folder with a hash.
 
 ### Example Asset Import with Vite
 Instead of handling our logo image as a static file per the example above, we can do the following:
