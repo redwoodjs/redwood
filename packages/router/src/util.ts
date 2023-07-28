@@ -299,9 +299,8 @@ export function validatePath(path: string, routeName: string) {
   }
 }
 
-
 export const RouteParams = {
-  LITERAL: Symbol('RouteParams.LITERAL')
+  LITERAL: Symbol('RouteParams.LITERAL'),
 }
 
 /**

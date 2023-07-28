@@ -6,7 +6,6 @@ import { act, render, waitFor } from '@testing-library/react'
 expect.extend({ toHaveClass, toHaveStyle })
 
 import { navigate, Route, Router, routes } from '../'
-
 import { Link, NavLink, useMatch } from '../links'
 import { LocationProvider } from '../location'
 import { flattenSearchParams, RouteParams } from '../util'
@@ -373,7 +372,7 @@ describe('useMatch', () => {
       const matchParameterPath = useMatch(
         routes.home({
           dynamic: RouteParams.LITERAL,
-          path: RouteParams.LITERAL
+          path: RouteParams.LITERAL,
         })
       )
       const matchPartialParameterPath = useMatch(
@@ -397,7 +396,9 @@ describe('useMatch', () => {
           {matchPartialParameterPath.match
             ? 'Partial Parameter Path true Match'
             : null}
-          {matchWrongPartialParameterPath.match ? null : 'Wrong Partial Parameter Path false Match'}
+          {matchWrongPartialParameterPath.match
+            ? null
+            : 'Wrong Partial Parameter Path false Match'}
         </>
       )
     }

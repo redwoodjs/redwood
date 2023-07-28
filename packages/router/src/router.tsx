@@ -249,6 +249,8 @@ const WrappedPage = memo(
 
 export {
   isValidRoute as isRoute,
-  PageType, Route, Router, namedRoutes as routes
+  PageType,
+  Route,
+  Router,
+  namedRoutes as routes,
 }
-

@@ -3,7 +3,8 @@
 // latter of which has closely inspired some of this code).
 
 export {
-  PageLoadingContextProvider, usePageLoadingContext
+  PageLoadingContextProvider,
+  usePageLoadingContext,
 } from './PageLoadingContext'
 export { back, navigate } from './history'
 export { Link, NavLink, Redirect, useMatch } from './links'
@@ -33,7 +34,7 @@ export { getRouteRegexAndParams, matchPath, parseSearch } from './util'
 // Keep this in index.ts so it can be extended with declaration merging
 export interface AvailableRoutes {
   [key: string]: (
-    args?: Record<string | number, string | number | boolean | Symbol>
+    args?: Record<string | number, string | number | boolean | symbol>
   ) => string
 }
 
