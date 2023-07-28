@@ -3,9 +3,7 @@ import React, { useCallback } from 'react'
 import { Redirect } from './links'
 import { routes } from './router'
 import { useRouterState } from './router-context'
-
-// We reassign the type like this, because AvailableRoutes is generated in the user's project
-type GeneratedRoutesMap = Record<string, () => string>
+import type { GeneratedRoutesMap } from './util'
 
 interface AuthenticatedRouteProps {
   children: React.ReactNode
@@ -50,6 +48,7 @@ export function AuthenticatedRoute(props: AuthenticatedRouteProps) {
         globalThis.location.pathname +
         encodeURIComponent(globalThis.location.search)
 
+      // We reassign the type like this, because AvailableRoutes is generated in the user's project
       if (!(routes as GeneratedRoutesMap)[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
