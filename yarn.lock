@@ -7984,7 +7984,7 @@ __metadata:
     msw: 1.2.3
     ts-toolbelt: 9.6.0
     typescript: 5.1.6
-    whatwg-fetch: 3.6.2
+    whatwg-fetch: 3.6.17
   languageName: unknown
   linkType: soft
 
@@ -31759,10 +31759,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"whatwg-fetch@npm:3.6.2":
-  version: 3.6.2
-  resolution: "whatwg-fetch@npm:3.6.2"
-  checksum: cc10f6893fe71839250b6e2fa9bc293bcf0ca5b93129712a7d1097fb7528b3ff617eb065098dc972e74d1455378e514aa34c0901ded41584be16508db63477c8
+"whatwg-fetch@npm:3.6.17":
+  version: 3.6.17
+  resolution: "whatwg-fetch@npm:3.6.17"
+  checksum: eec71f436f02cae5577b4af220e19727eb1d1c63726dc0968e97201f53d81cb53614052765d4be4d2da4f291d18cd213c6db2c9dd12a7ada5cc553f838f09524
   languageName: node
   linkType: hard
 
