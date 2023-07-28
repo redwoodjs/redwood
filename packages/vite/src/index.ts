@@ -8,7 +8,8 @@ import { normalizePath } from 'vite'
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { handleJsAsJsx } from './vite-plugin-jsx-loader'
+import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
+import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
@@ -260,6 +261,12 @@ export default function redwoodPluginVite(): PluginOption[] {
     },
     // -----------------
     handleJsAsJsx(),
+    // Remove the splash-page from the bundle.
+    removeFromBundle([
+      {
+        id: /@redwoodjs\/router\/dist\/splash-page/,
+      },
+    ]),
     react({
       babel: {
         ...getWebSideDefaultBabelConfig({
