@@ -111,7 +111,6 @@ export interface Config {
       enabled: boolean
     }
   }
-  cli: { ignoreScanDirs: string[] }
 }
 
 export interface CLIPlugin {
@@ -190,9 +189,6 @@ const DEFAULT_CONFIG: Config = {
     rsc: {
       enabled: false,
     },
-  },
-  cli: {
-    ignoreScanDirs: ['node_modules'],
   },
 }
 
