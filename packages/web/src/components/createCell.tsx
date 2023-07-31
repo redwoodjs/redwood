@@ -122,7 +122,7 @@ export type CellSuccessProps<
  */
 export type DataObject = { [key: string]: unknown }
 
-type BeforeQueryHook<
+export type BeforeQueryHook<
   CellProps extends Record<string, unknown>,
   CellVariables extends Record<string, unknown>
 > = (props: CellProps) => {
