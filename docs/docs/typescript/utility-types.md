@@ -21,7 +21,7 @@ import type { BeforeQueryHook } from "@redwoodjs/web"
 export const beforeQuery: BeforeQueryHook = (props) => {
 
   return {
-    props,
+    variables: props,
   }
 }
 ```
