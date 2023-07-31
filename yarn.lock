@@ -6819,7 +6819,7 @@ __metadata:
     "@types/memjs": 1
     "@types/pascalcase": 1.0.1
     "@types/split2": 4.2.0
-    "@whatwg-node/fetch": 0.9.7
+    "@whatwg-node/fetch": 0.9.9
     core-js: 3.31.1
     humanize-string: 2.1.0
     jest: 29.6.1
@@ -7442,7 +7442,7 @@ __metadata:
     "@types/prettier": 2.7.3
     "@types/yargs": 17.0.24
     "@vscode/ripgrep": 1.15.5
-    "@whatwg-node/fetch": 0.9.7
+    "@whatwg-node/fetch": 0.9.9
     cheerio: 1.0.0-rc.12
     core-js: 3.31.1
     deepmerge: 4.3.1
@@ -7661,7 +7661,7 @@ __metadata:
     "@types/jsonwebtoken": 9.0.2
     "@types/lodash": 4.14.195
     "@types/uuid": 9.0.2
-    "@whatwg-node/fetch": 0.9.7
+    "@whatwg-node/fetch": 0.9.9
     aws-lambda: 1.0.7
     core-js: 3.31.1
     graphql: 16.7.1
@@ -7746,7 +7746,7 @@ __metadata:
     "@redwoodjs/structure": 6.0.2
     "@redwoodjs/web": 6.0.2
     "@types/mime-types": 2.1.1
-    "@whatwg-node/fetch": 0.9.7
+    "@whatwg-node/fetch": 0.9.9
     babel-plugin-ignore-html-and-css-imports: 0.1.0
     babel-plugin-tester: 11.0.4
     cheerio: 1.0.0-rc.12
@@ -7940,7 +7940,7 @@ __metadata:
     "@types/envinfo": 7.8.1
     "@types/uuid": 9.0.2
     "@types/yargs": 17.0.24
-    "@whatwg-node/fetch": 0.9.7
+    "@whatwg-node/fetch": 0.9.9
     ci-info: 3.8.0
     core-js: 3.31.1
     envinfo: 7.9.0
@@ -11408,13 +11408,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.7, @whatwg-node/fetch@npm:^0.9.0, @whatwg-node/fetch@npm:^0.9.6":
-  version: 0.9.7
-  resolution: "@whatwg-node/fetch@npm:0.9.7"
+"@whatwg-node/fetch@npm:0.9.9, @whatwg-node/fetch@npm:^0.9.0, @whatwg-node/fetch@npm:^0.9.6":
+  version: 0.9.9
+  resolution: "@whatwg-node/fetch@npm:0.9.9"
   dependencies:
-    "@whatwg-node/node-fetch": ^0.4.6
+    "@whatwg-node/node-fetch": ^0.4.8
     urlpattern-polyfill: ^9.0.0
-  checksum: 6bc286375be4855078608a4e0af69a8f09bb923f563b7f438ef277118b966282dbef727d180c1dab106d360ec193d9e6ab25139013880bc2380884ab3b2b54d7
+  checksum: c628a85ba2e6665ba4601be1bb12126a7656f2d76fe8e8d9664c120b2c780b39b9f38cb49cf2adcd9eb9420f0a0c5de82537cafc0379ad0474c5a6b28099391e
   languageName: node
   linkType: hard
 
@@ -11444,16 +11444,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/node-fetch@npm:^0.4.6":
-  version: 0.4.6
-  resolution: "@whatwg-node/node-fetch@npm:0.4.6"
+"@whatwg-node/node-fetch@npm:^0.4.8":
+  version: 0.4.11
+  resolution: "@whatwg-node/node-fetch@npm:0.4.11"
   dependencies:
     "@whatwg-node/events": ^0.1.0
     busboy: ^1.6.0
     fast-querystring: ^1.1.1
     fast-url-parser: ^1.1.3
     tslib: ^2.3.1
-  checksum: 4a3e140fab7712c9af9cdcd65c48fc6fb06830b2e0f764aa475a6a8c302c58086bd68c535b8bd012dc4344902c05e56e2f2f82a623ebfb517aebdac1fca080a7
+  checksum: 2393bb295cbe90d69059634d52cb736fdac2966c973751d900f34380ca766ee836fa51c33c3687ede5ed6e44dddf35f07491660f5022f0455de4f897d127220e
   languageName: node
   linkType: hard
 
