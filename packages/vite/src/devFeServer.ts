@@ -1,21 +1,14 @@
 // TODO (STREAMING) Merge with runFeServer so we only have one file
 
-import path from 'path'
-
-import React from 'react'
-
 import express from 'express'
-import { renderToPipeableStream } from 'react-dom/server'
 import { createServer as createViteServer } from 'vite'
 
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
-// @NOTE (STREAMING): We can't directly import from web at the moment
-// The dist imports will go away once we can do ESM with exports field
-import { ServerHtmlProvider } from '@redwoodjs/web/dist/components/ServerInject'
 
+import { reactRenderToStream } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
 import { ensureProcessDirWeb, stripQueryStringAndHashFromPath } from './utils'
 
@@ -57,6 +50,8 @@ async function createServer() {
   app.use('*', async (req, res, next) => {
     const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
     globalThis.__REDWOOD__HELMET_CONTEXT = {}
+
+    res.setHeader('content-type', 'text/html; charset=utf-8')
 
     try {
       const routes = getProjectRoutes()
@@ -115,48 +110,15 @@ async function createServer() {
       //    required, and provides efficient invalidation similar to HMR.
       const { ServerEntry } = await vite.ssrLoadModule(rwPaths.web.entryServer)
 
-      // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
-      // worry about it in dev but..... it causes a flash of unstyled content.
-      // For now I'm just injecting index css here
-      // Looks at collectStyles in packages/vite/src/fully-react/find-styles.ts
-      const FIXME_HardcodedIndexCss = ['index.css']
-
-      const assetMap = JSON.stringify({
-        css: FIXME_HardcodedIndexCss,
-        meta: metaTags,
-      })
-
-      const bootstrapModules = [
-        path.join(__dirname, '../inject', 'reactRefresh.js'),
-      ]
-
       const pageWithJs = currentRoute?.renderMode !== 'html'
 
-      if (pageWithJs) {
-        bootstrapModules.push(rwPaths.web.entryClient)
-      }
-
-      const { pipe } = renderToPipeableStream(
-        React.createElement(
-          ServerHtmlProvider,
-          {},
-          ServerEntry({
-            url: currentPathName,
-            css: FIXME_HardcodedIndexCss,
-            meta: metaTags,
-          })
-        ),
-        {
-          bootstrapScriptContent: pageWithJs
-            ? `window.__assetMap = function() { return ${assetMap} }`
-            : undefined,
-          bootstrapModules,
-          onShellReady() {
-            res.setHeader('content-type', 'text/html; charset=utf-8')
-            pipe(res)
-          },
-        }
-      )
+      reactRenderToStream({
+        ServerEntry,
+        currentPathName,
+        metaTags,
+        includeJs: pageWithJs,
+        res,
+      })
     } catch (e) {
       // TODO (STREAMING) Is this what we want to do?
       // send back a SPA page

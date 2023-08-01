@@ -211,7 +211,6 @@ export async function runFeServer() {
 
       const pageWithJs = currentRoute.renderMode !== 'html'
       // @NOTE have to add slash so subpaths still pick up the right file
-      // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
       const bootstrapModules = pageWithJs
         ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
         : undefined
@@ -219,7 +218,6 @@ export async function runFeServer() {
       const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
 
       const { pipe, abort } = renderToPipeableStream(
-        // we should use the same shape as Remix or Next for the meta object
         ServerEntry({
           url: currentPathName,
           css: indexEntry.css,
