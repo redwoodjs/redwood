@@ -593,7 +593,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.22.9, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.21.3, @babel/core@npm:^7.22.5, @babel/core@npm:^7.22.9, @babel/core@npm:^7.7.5":
+"@babel/core@npm:7.22.9, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.21.3, @babel/core@npm:^7.22.9, @babel/core@npm:^7.7.5":
   version: 7.22.9
   resolution: "@babel/core@npm:7.22.9"
   dependencies:
@@ -8015,7 +8015,7 @@ __metadata:
     "@types/express": 4
     "@types/react": 18.2.14
     "@types/yargs-parser": 21.0.0
-    "@vitejs/plugin-react": 4.0.3
+    "@vitejs/plugin-react": 4.0.4
     acorn-loose: 8.3.0
     buffer: 6.0.3
     core-js: 3.31.1
@@ -10998,17 +10998,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:4.0.3":
-  version: 4.0.3
-  resolution: "@vitejs/plugin-react@npm:4.0.3"
+"@vitejs/plugin-react@npm:4.0.4":
+  version: 4.0.4
+  resolution: "@vitejs/plugin-react@npm:4.0.4"
   dependencies:
-    "@babel/core": ^7.22.5
+    "@babel/core": ^7.22.9
     "@babel/plugin-transform-react-jsx-self": ^7.22.5
     "@babel/plugin-transform-react-jsx-source": ^7.22.5
     react-refresh: ^0.14.0
   peerDependencies:
     vite: ^4.2.0
-  checksum: 3361a7725216ecb36ad9f84159964eb8918f7f6d7aa7559fed985a8d82fbb045f19f9a69ec92b950b865c822138fd7ca09aa0231186db1fe3d014e6fcc126064
+  checksum: ca687dfe5e1b29822194cbfdde5cc75fe329dbee107489ab35e5e75911eca1cf5d38d3fe52886d50bf5249975948a8f4098c5fa23652afb7275d5aa79a5300b7
   languageName: node
   linkType: hard
 
