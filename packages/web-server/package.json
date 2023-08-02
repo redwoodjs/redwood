@@ -28,7 +28,7 @@
     "@redwoodjs/project-config": "6.0.2",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
-    "fast-glob": "3.2.12",
+    "fast-glob": "3.3.1",
     "fastify": "4.21.0",
     "yargs-parser": "21.1.1"
   },

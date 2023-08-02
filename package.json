@@ -76,7 +76,7 @@
     "cypress-wait-until": "1.7.2",
     "dependency-cruiser": "13.0.4",
     "eslint": "8.45.0",
-    "fast-glob": "3.2.12",
+    "fast-glob": "3.3.1",
     "fs-extra": "11.1.1",
     "jest": "29.6.1",
     "jest-runner-tsd": "5.0.0",

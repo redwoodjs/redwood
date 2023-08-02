@@ -38,7 +38,7 @@
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
     "core-js": "3.31.1",
-    "fast-glob": "3.2.12",
+    "fast-glob": "3.3.1",
     "fast-json-parse": "1.0.3",
     "fastify": "4.21.0",
     "fastify-raw-body": "4.2.1",
