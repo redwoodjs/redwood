@@ -9,8 +9,6 @@ import {
 import { PageType } from './router'
 import { isPrivateNode, isSetNode } from './Set'
 
-import { AvailableRoutes } from './'
-
 /** Create a React Context with the given name. */
 export function createNamedContext<T>(name: string, defaultValue?: T) {
   const Ctx = React.createContext<T | undefined>(defaultValue)
@@ -445,6 +443,14 @@ interface AnayzeRoutesOptions {
 
 type WhileLoadingPage = () => ReactElement | null
 
+// Not using AvailableRoutes because the type is generated in the user's project
+// We can't index it correctly in the framework
+export type GeneratedRoutesMap = {
+  [key: string]: (
+    args?: Record<string | number, string | number | boolean>
+  ) => string
+}
+
 type RoutePath = string
 interface AnalyzedRoute {
   path: RoutePath
@@ -462,7 +468,7 @@ export function analyzeRoutes(
   { currentPathName, userParamTypes }: AnayzeRoutesOptions
 ) {
   const pathRouteMap: Record<RoutePath, AnalyzedRoute> = {}
-  const namedRoutesMap: AvailableRoutes = {}
+  const namedRoutesMap: GeneratedRoutesMap = {}
   let hasHomeRoute = false
   let NotFoundPage: PageType | undefined
   let activeRoutePath: string | undefined
@@ -478,7 +484,7 @@ export function analyzeRoutes(
 
   // Track the number of sets found.
   // Because Sets are virtually rendered we can use this setId as a key to properly manage re-rendering
-  // When a some uses the same wrapper Component for different Sets
+  // When using the same wrapper Component for different Sets
   // Example:
   //   <Router>
   //   <Set wrap={SetContextProvider}>

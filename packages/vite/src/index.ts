@@ -61,7 +61,9 @@ export default function redwoodPluginVite(): PluginOption[] {
           })
 
           Object.entries(process.env).forEach(([envName, value]) => {
-            newHtml = newHtml.replaceAll(`%${envName}%`, value || '')
+            if (envName.startsWith('REDWOOD_ENV_')) {
+              newHtml = newHtml.replaceAll(`%${envName}%`, value || '')
+            }
           })
 
           return newHtml

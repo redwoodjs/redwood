@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
@@ -29,11 +29,11 @@
     "@babel/runtime-corejs3": "7.22.6",
     "@babel/traverse": "7.22.8",
     "@iarna/toml": "2.2.5",
-    "@redwoodjs/project-config": "6.0.1",
+    "@redwoodjs/project-config": "6.0.2",
     "@svgr/core": "8.0.0",
     "@svgr/plugin-jsx": "8.0.1",
     "@vscode/ripgrep": "1.15.5",
-    "@whatwg-node/fetch": "0.9.7",
+    "@whatwg-node/fetch": "0.9.9",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.31.1",
     "deepmerge": "4.3.1",
