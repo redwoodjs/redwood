@@ -7270,7 +7270,7 @@ __metadata:
     chalk: 4.1.2
     chokidar: 3.5.3
     core-js: 3.31.1
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     fast-json-parse: 1.0.3
     fastify: 4.21.0
     fastify-raw-body: 4.2.1
@@ -7825,7 +7825,7 @@ __metadata:
     chalk: 4.1.2
     esbuild: 0.18.16
     execa: 5.1.1
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     jest: 29.6.1
     storybook: 7.2.0
     terminal-link: 2.1.1
@@ -7873,7 +7873,7 @@ __metadata:
     enquirer: 2.3.6
     envinfo: 7.9.0
     execa: 5.1.1
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     fs-extra: 11.1.1
     humanize-string: 2.1.0
     jest: 29.6.1
@@ -7930,7 +7930,7 @@ __metadata:
     core-js: 3.31.1
     deepmerge: 4.3.1
     execa: 5.1.1
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     fs-extra: 11.1.1
     graphql: 16.7.1
     jest: 29.6.1
@@ -7979,7 +7979,7 @@ __metadata:
     css-minimizer-webpack-plugin: 5.0.1
     dotenv-webpack: 8.0.1
     esbuild: 0.18.16
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     file-loader: 6.2.0
     graphql: 16.7.1
     graphql-tag: 2.12.6
@@ -8060,7 +8060,7 @@ __metadata:
     "@typescript-eslint/utils": 5.61.0
     esbuild: 0.18.16
     eslint: 8.45.0
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     glob: 10.3.1
     typescript: 5.1.6
   languageName: unknown
@@ -8080,7 +8080,7 @@ __metadata:
     "@types/qs": 6.9.7
     ansi-colors: 4.1.3
     esbuild: 0.18.16
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     fastify: 4.21.0
     fastify-raw-body: 4.2.1
     lodash: 4.17.21
@@ -8195,7 +8195,7 @@ __metadata:
     core-js: 3.31.1
     deepmerge: 4.3.1
     esbuild: 0.18.16
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     fs-extra: 11.1.1
     graphql: 16.7.1
     graphql-tag: 2.12.6
@@ -8251,7 +8251,7 @@ __metadata:
     "@iarna/toml": 2.2.5
     deepmerge: 4.3.1
     esbuild: 0.18.16
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     jest: 29.6.1
     rimraf: 5.0.1
     string-env-interpolation: 1.0.1
@@ -8346,7 +8346,7 @@ __metadata:
     deepmerge: 4.3.1
     dotenv-defaults: 5.0.2
     enquirer: 2.3.6
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     graphql: 16.7.1
     jest: 29.6.1
     lazy-get-decorator: 2.2.1
@@ -8460,7 +8460,7 @@ __metadata:
     "@types/webpack-env": 1.18.1
     babel-jest: 29.6.1
     core-js: 3.31.1
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     jest: 29.6.1
     jest-environment-jsdom: 29.6.1
     jest-watch-typeahead: 2.2.2
@@ -8531,7 +8531,7 @@ __metadata:
     chalk: 4.1.2
     dotenv-defaults: 5.0.2
     esbuild: 0.18.16
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     fastify: 4.21.0
     typescript: 5.1.6
     yargs-parser: 21.1.1
@@ -18106,19 +18106,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:3.2.12":
-  version: 3.2.12
-  resolution: "fast-glob@npm:3.2.12"
-  dependencies:
-    "@nodelib/fs.stat": ^2.0.2
-    "@nodelib/fs.walk": ^1.2.3
-    glob-parent: ^5.1.2
-    merge2: ^1.3.0
-    micromatch: ^4.0.4
-  checksum: 08604fb8ef6442ce74068bef3c3104382bb1f5ab28cf75e4ee904662778b60ad620e1405e692b7edea598ef445f5d387827a965ba034e1892bf54b1dfde97f26
-  languageName: node
-  linkType: hard
-
 "fast-glob@npm:3.2.7":
   version: 3.2.7
   resolution: "fast-glob@npm:3.2.7"
@@ -18132,16 +18119,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "fast-glob@npm:3.3.0"
+"fast-glob@npm:3.3.1, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.0":
+  version: 3.3.1
+  resolution: "fast-glob@npm:3.3.1"
   dependencies:
     "@nodelib/fs.stat": ^2.0.2
     "@nodelib/fs.walk": ^1.2.3
     glob-parent: ^5.1.2
     merge2: ^1.3.0
     micromatch: ^4.0.4
-  checksum: 4700063a2d7c9aae178f575648580bee1fc3f02ab3f358236d77811f52332bc10a398e75c6d5ecde61216996f3308247b37d70e2ee605a0748abe147f01b8f64
+  checksum: b68431128fb6ce4b804c5f9622628426d990b66c75b21c0d16e3d80e2d1398bf33f7e1724e66a2e3f299285dcf5b8d745b122d0304e7dd66f5231081f33ec67c
   languageName: node
   linkType: hard
 
@@ -28515,7 +28502,7 @@ __metadata:
     cypress-wait-until: 1.7.2
     dependency-cruiser: 13.0.4
     eslint: 8.45.0
-    fast-glob: 3.2.12
+    fast-glob: 3.3.1
     fs-extra: 11.1.1
     jest: 29.6.1
     jest-runner-tsd: 5.0.0

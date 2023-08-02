@@ -38,7 +38,7 @@
     "core-js": "3.31.1",
     "deepmerge": "4.3.1",
     "execa": "5.1.1",
-    "fast-glob": "3.2.12",
+    "fast-glob": "3.3.1",
     "graphql": "16.7.1",
     "jest": "29.6.1",
     "jscodeshift": "0.15.0",
