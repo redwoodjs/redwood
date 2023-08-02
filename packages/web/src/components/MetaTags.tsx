@@ -2,7 +2,7 @@ import { Head as HelmetHead } from '../index'
 
 // Ideally we wouldn't include this for non experiment builds
 // But.... not worth the effort to remove it from bundle atm
-import PortalHead from './Head'
+import PortalHead from './PortalHead'
 
 type RobotsParams =
   | 'noindex'

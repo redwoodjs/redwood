@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom'
 
 import { useServerInsertedHTML } from './ServerInject'
 
-const Head: React.FC<React.PropsWithChildren> = ({ children }) => {
+const PortalHead: React.FC<React.PropsWithChildren> = ({ children }) => {
   useServerInsertedHTML(() => {
     return children
   })
@@ -15,4 +15,4 @@ const Head: React.FC<React.PropsWithChildren> = ({ children }) => {
   }
 }
 
-export default Head
+export default PortalHead
