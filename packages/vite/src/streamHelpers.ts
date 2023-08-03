@@ -96,14 +96,14 @@ function createServerInjectionStream({
       if (split.length > 1) {
         const [beforeClosingHead, afterClosingHead] = split
 
-        const TEMP_STUFF_TO_INJECT = renderToString(
+        const elementsInjectedToHead = renderToString(
           React.createElement(ServerInjectedHtml)
         )
 
         const outputBuffer = Buffer.from(
           [
             beforeClosingHead,
-            TEMP_STUFF_TO_INJECT,
+            elementsInjectedToHead,
             '</head>',
             afterClosingHead,
           ].join('')
