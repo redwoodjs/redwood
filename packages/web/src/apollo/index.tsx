@@ -5,6 +5,7 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
 
@@ -30,13 +31,15 @@ import {
 } from '../components/FetchConfigProvider'
 import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
+import { SSELink } from './sseLink'
+
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
 export type RedwoodApolloLinkName =
   | 'withToken'
   | 'authMiddleware'
   | 'updateDataApolloLink'
-  | 'httpLink'
+  | 'terminatingLink'
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
@@ -50,7 +53,10 @@ export type RedwoodApolloLinks = [
   RedwoodApolloLink<'withToken'>,
   RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'updateDataApolloLink'>,
-  RedwoodApolloLink<'httpLink', apolloClient.HttpLink>
+  RedwoodApolloLink<
+    'terminatingLink',
+    apolloClient.ApolloLink | apolloClient.HttpLink
+  >
 ]
 
 export type RedwoodApolloLinkFactory = (
@@ -188,12 +194,28 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
   }
 
+  const url = `${uri}`
+
+  console.debug(`[RW] SSE URL: ${url}`)
+
+  const terminatingLink = apolloClient.split(
+    ({ query }) => {
+      const definition = getMainDefinition(query)
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      )
+    },
+    new SSELink({ url, headers }),
+    httpLink
+  )
+
   // The order here is important. The last link *must* be a terminating link like HttpLink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
-    { name: 'httpLink', link: httpLink },
+    { name: 'terminatingLink', link: terminatingLink },
   ]
 
   let link = redwoodApolloLink
@@ -203,6 +225,9 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   if (typeof link === 'function') {
     link = link(redwoodApolloLinks)
   }
+
+  console.debug(`[RW] SSE URL: ${url}`)
+  console.debug(`[RW] Apollo Link:`, link)
 
   const client = new ApolloClient({
     // Default options for every Cell. Better to specify them here than in `beforeQuery` where it's too easy to overwrite them.

@@ -73,10 +73,15 @@ export async function redwoodFastifyGraphQLServer(
           reply.header(name, value)
         }
 
+        fastify.log.debug('Request', req.headers, req.body)
+        fastify.log.debug('response', response.status, response.body)
+
         reply.status(response.status)
         reply.send(response.body)
 
-        return reply
+        // fastify.log.debug('Reply', reply.headers, reply.body)
+
+        return await reply
       },
     })
 
