@@ -147,7 +147,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
     acc[route.path] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath].file
+        ? clientBuildManifest[route.relativeFilePath]?.file
         : null,
       matchRegexString: route.matchRegexString,
       // @NOTE this is the path definition, not the actual path
