@@ -6,20 +6,64 @@ import { DocumentNode, Kind, ObjectTypeDefinitionNode, visit } from 'graphql'
 import { rootSchema } from '@redwoodjs/graphql-server'
 import { getPaths } from '@redwoodjs/project-config'
 
+import { isServerFileSetup, isRealtimeSetup } from './project'
+
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
 
 export const DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE =
   'Please check that the requireAuth roles is a string or an array of strings.'
+
+export const RESERVED_TYPES = [
+  'Int',
+  'Float',
+  'Boolean',
+  'String',
+  'DateTime',
+  'ID',
+  'uid',
+  // 'Subscription',
+  'as',
+  // 'Query',
+  // 'Mutation',
+  'Point',
+  'PointList',
+  'Polygon',
+  'MultiPolygon',
+  //'Aggregate', // (as a suffix of any identifier name)
+]
+
 export function validateSchemaForDirectives(
   schemaDocumentNode: DocumentNode,
-  typesToCheck: string[] = ['Query', 'Mutation', 'Subscription']
+  typesToCheck: string[] = ['Query', 'Mutation']
 ) {
   const validationOutput: string[] = []
   const directiveRoleValidationOutput: Record<string, any> = []
 
+  if (isServerFileSetup() && isRealtimeSetup()) {
+    typesToCheck.push('Subscription')
+  }
+
   visit(schemaDocumentNode, {
     ObjectTypeDefinition(typeNode) {
+      if (
+        RESERVED_TYPES.includes(typeNode.name.value) &&
+        typeNode.kind === Kind.OBJECT_TYPE_DEFINITION
+      ) {
+        console.warn(
+          `⚠ The type '${typeNode.name.value}' is a reserved GraphQL type and should be renamed.`
+        )
+      }
+
+      if (
+        typesToCheck.includes(typeNode.name.value) &&
+        typeNode.kind !== Kind.OBJECT_TYPE_DEFINITION
+      ) {
+        console.warn(
+          `⚠ The type '${typeNode.name.value}' is a reserved GraphQL type and should be renamed.`
+        )
+      }
+
       if (typesToCheck.includes(typeNode.name.value)) {
         for (const field of typeNode.fields ||
           ([] as ObjectTypeDefinitionNode[])) {
