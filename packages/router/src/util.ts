@@ -122,7 +122,7 @@ type SupportedRouterParamTypes = keyof typeof coreParamTypes
  *  => { match: true, params: {} }
  */
 export function matchPath(
-  route: string,
+  routeDefinition: string,
   pathname: string,
   {
     userParamTypes,
@@ -138,10 +138,11 @@ export function matchPath(
   // Get the names and the transform types for the given route.
   const allParamTypes = { ...coreParamTypes, ...userParamTypes }
 
-  const { matchRegex, routeParams } = getRouteRegexAndParams(route, {
-    matchSubPaths,
-    allParamTypes,
-  })
+  const { matchRegex, routeParams: routeParamsDefinition } =
+    getRouteRegexAndParams(routeDefinition, {
+      matchSubPaths,
+      allParamTypes,
+    })
 
   // Does the `pathname` match the route?
   const matches = [...pathname.matchAll(matchRegex)]
@@ -151,10 +152,12 @@ export function matchPath(
   }
   // Map extracted values to their param name, casting the value if needed
   const providedParams = matches[0].slice(1)
-  if (routeParams.length > 0) {
+
+  // @NOTE: refers to definiton e.g. '/page/{id}', not the actual params
+  if (routeParamsDefinition.length > 0) {
     const params = providedParams.reduce<Record<string, unknown>>(
       (acc, value, index) => {
-        const [name, transformName] = routeParams[index]
+        const [name, transformName] = routeParamsDefinition[index]
         const typeInfo =
           allParamTypes[transformName as SupportedRouterParamTypes]
 

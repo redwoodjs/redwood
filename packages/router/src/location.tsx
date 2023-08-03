@@ -11,24 +11,32 @@ export interface LocationContextType {
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
+interface Location {
+  pathname: string
+  search?: string
+  hash?: string
+}
 interface LocationProviderProps {
-  location?: {
-    pathname: string
-    search?: string
-    hash?: string
-  }
+  location?: Location
   trailingSlashes?: TrailingSlashesTypes
   children?: React.ReactNode
 }
 
-class LocationProvider extends React.Component<LocationProviderProps> {
+interface LocationProviderState {
+  context: Location
+}
+
+class LocationProvider extends React.Component<
+  LocationProviderProps,
+  LocationProviderState
+> {
   // When prerendering, there might be more than one level of location
   // providers. Use the values from the one above.
   static contextType = LocationContext
   declare context: React.ContextType<typeof LocationContext>
   HISTORY_LISTENER_ID: string | undefined = undefined
 
-  state = {
+  state: LocationProviderState = {
     context: this.getContext(),
   }
 
@@ -81,8 +89,18 @@ class LocationProvider extends React.Component<LocationProviderProps> {
   }
 
   componentDidMount() {
+    // @MARK: do we need to do this?
+    globalThis?.scrollTo(0, 0)
+
     this.HISTORY_LISTENER_ID = gHistory.listen(() => {
-      this.setState(() => ({ context: this.getContext() }))
+      const context = this.getContext()
+      this.setState((lastState) => {
+        if (context.pathname !== lastState.context.pathname) {
+          globalThis?.scrollTo(0, 0)
+        }
+
+        return { context }
+      })
     })
   }
 
