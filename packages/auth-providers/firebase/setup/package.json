@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-firebase-setup",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.6",
-    "@redwoodjs/cli-helpers": "6.0.2",
+    "@redwoodjs/cli-helpers": "6.0.3",
     "core-js": "3.31.1"
   },
   "devDependencies": {
