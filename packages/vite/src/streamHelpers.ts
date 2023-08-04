@@ -54,10 +54,6 @@ export function reactRenderToStream({
 
   // This ensures an isolated state for each request
   const { injectionState, injectToPage } = createInjector()
-  console.log(
-    `👉 \n ~ file: streamHelpers.ts:57 ~ injectionState:`,
-    injectionState
-  )
 
   // This is effectively a transformer stream
   const intermediateStream = createServerInjectionStream({
