@@ -1,56 +1,58 @@
-import React, {
-  Fragment,
-  PropsWithChildren,
-  ReactNode,
-  useContext,
-} from 'react'
+import React, { Fragment, ReactNode, useContext } from 'react'
 
 /**
  *
  * Inspired by Next's useServerInsertedHTML, originally designed for CSS-in-JS
  * for now it seems the only way to inject html with streaming is to use a context
  *
+ * We use this for <head> tags, and for apollo cache hydration
+ *
  * Until https://github.com/reactjs/rfcs/pull/219 makes it into react
  *
  */
 
-type RenderCallback = () => ReactNode
-
-const insertCallbacks: Set<RenderCallback> = new Set([])
+export type RenderCallback = () => ReactNode
 
 export const ServerHtmlContext = React.createContext<
   ((things: RenderCallback) => void) | null
 >(null)
 
-const injectToHead = (renderCallback: RenderCallback) => {
-  insertCallbacks.add(renderCallback)
-}
+/**
+ *
+ *  Use this factory, once per request.
+ *  This is to ensure that injectionState is isolated to the request
+ *  and not shared between requests.
+ */
+export const createInjector = () => {
+  const injectionState: Set<RenderCallback> = new Set([])
 
-// @MARK: I don't know why Next don't do this also?
-// My understanding: put the inject function in a context so that
-// ServerInjectedHTML component rerenders, even though the state isn't inside the context
-export const ServerHtmlProvider: React.FC<PropsWithChildren> = ({
-  children,
-}) => {
-  return (
-    <ServerHtmlContext.Provider value={injectToHead}>
-      {children}
-    </ServerHtmlContext.Provider>
-  )
-}
-
-export const ServerInjectedHtml = () => {
-  const serverInsertedHtml = []
-  for (const callback of insertCallbacks) {
-    serverInsertedHtml.push(callback())
-
-    // Remove it from the set so its not called again
-    insertCallbacks.delete(callback)
+  const injectToPage = (renderCallback: RenderCallback) => {
+    injectionState.add(renderCallback)
   }
 
-  // @MARK: using i as key here might be problematic, no?
+  return { injectToPage, injectionState }
+}
+
+// @NOTE do not instatiate the provider value here, so that we can ensure
+// context isolation. This is done in streamHelpers currently,
+// using the createInjector factory, once per request
+export const ServerHtmlProvider = ServerHtmlContext.Provider
+
+export const ServerInjectedHtml = ({
+  injectionState,
+}: {
+  injectionState: Set<RenderCallback>
+}) => {
+  const serverInsertedHtml = []
+  for (const callback of injectionState) {
+    serverInsertedHtml.push(callback())
+
+    // Remove it from the set so its not rendered again
+    injectionState.delete(callback)
+  }
+
   return serverInsertedHtml.map((html, i) => {
-    return <Fragment key={i}>{html}</Fragment>
+    return <Fragment key={`rwjs-server-injected-${i}`}>{html}</Fragment>
   })
 }
 

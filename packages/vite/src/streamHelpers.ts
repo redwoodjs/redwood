@@ -11,6 +11,8 @@ import type { TagDescriptor } from '@redwoodjs/web'
 import {
   ServerHtmlProvider,
   ServerInjectedHtml,
+  createInjector,
+  RenderCallback,
 } from '@redwoodjs/web/dist/components/ServerInject'
 
 interface RenderToStreamArgs {
@@ -50,17 +52,29 @@ export function reactRenderToStream({
     meta: metaTags,
   })
 
+  // This ensures an isolated state for each request
+  const { injectionState, injectToPage } = createInjector()
+  console.log(`👉 \n ~ file: streamHelpers.ts:57 ~ injectToPage:`, injectToPage)
+  console.log(
+    `👉 \n ~ file: streamHelpers.ts:57 ~ injectionState:`,
+    injectionState
+  )
+
+  // This is effectively a transformer stream
   const intermediateStream = createServerInjectionStream({
     outputStream: res,
     onFinal: () => {
       res.end()
     },
+    injectionState,
   })
 
   const { pipe } = renderToPipeableStream(
     React.createElement(
       ServerHtmlProvider,
-      {},
+      {
+        value: injectToPage,
+      },
       ServerEntry({
         url: currentPathName,
         css: FIXME_HardcodedIndexCss,
@@ -83,9 +97,11 @@ export function reactRenderToStream({
 function createServerInjectionStream({
   outputStream,
   onFinal,
+  injectionState,
 }: {
   outputStream: Writable
   onFinal: () => void
+  injectionState: Set<RenderCallback>
 }) {
   return new Writable({
     write(chunk, encoding, next) {
@@ -97,7 +113,9 @@ function createServerInjectionStream({
         const [beforeClosingHead, afterClosingHead] = split
 
         const elementsInjectedToHead = renderToString(
-          React.createElement(ServerInjectedHtml)
+          React.createElement(ServerInjectedHtml, {
+            injectionState,
+          })
         )
 
         const outputBuffer = Buffer.from(
@@ -118,10 +136,12 @@ function createServerInjectionStream({
     },
     final() {
       // Before finishing, make sure we flush anything else that has been added to the queue
-      // Because of the implementation, its safe to call this multiple times (I think!)
+      // Because of the implementation in ServerRenderHtml, its safe to call this multiple times (I think!)
       // This is really for the data fetching usecase, where the promise is resolved after <head> is closed
       const elementsAtTheEnd = renderToString(
-        React.createElement(ServerInjectedHtml)
+        React.createElement(ServerInjectedHtml, {
+          injectionState,
+        })
       )
 
       outputStream.write(elementsAtTheEnd)
