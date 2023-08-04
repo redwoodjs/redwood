@@ -117,6 +117,14 @@ function createServerInjectionStream({
       next()
     },
     final() {
+      // Before finishing, make sure we flush anything else that has been added to the queue
+      // Because of the implementation, its safe to call this multiple times (I think!)
+      // This is really for the data fetching usecase, where the promise is resolved after <head> is closed
+      const elementsAtTheEnd = renderToString(
+        React.createElement(ServerInjectedHtml)
+      )
+
+      outputStream.write(elementsAtTheEnd)
       onFinal()
     },
   })
