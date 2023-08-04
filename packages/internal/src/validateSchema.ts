@@ -33,7 +33,7 @@ export const RESERVED_TYPES = [
   //'Aggregate', // (as a suffix of any identifier name)
 ]
 
-export function validateSchemaForDirectives(
+export function validateSchema(
   schemaDocumentNode: DocumentNode,
   typesToCheck: string[] = ['Query', 'Mutation']
 ) {
@@ -68,6 +68,7 @@ export function validateSchemaForDirectives(
       }
     },
     ObjectTypeDefinition(typeNode) {
+      console.debug('ObjectTypeDefinition', typeNode.name.value)
       // Warn that a type definition in the SDL is using a reserved GraphQL type
       if (RESERVED_TYPES.includes(typeNode.name.value)) {
         reservedNameValidationOutput.push({
@@ -201,5 +202,5 @@ export const loadAndValidateSdls = async () => {
     projectDocumentNodes,
   ])
 
-  validateSchemaForDirectives(mergedDocumentNode)
+  validateSchema(mergedDocumentNode)
 }
