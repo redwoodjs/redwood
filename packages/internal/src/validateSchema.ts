@@ -38,32 +38,43 @@ export function validateSchemaForDirectives(
   typesToCheck: string[] = ['Query', 'Mutation']
 ) {
   const validationOutput: string[] = []
+  const reservedNameValidationOutput: Record<string, any> = []
   const directiveRoleValidationOutput: Record<string, any> = []
 
+  // Is Subscriptions are enabled with Redwood Realtime, then enforce a rule
+  // that a Subscription type needs to have a authentication directive applied,
+  // just as Query and Mutation requires
   if (isServerFileSetup() && isRealtimeSetup()) {
     typesToCheck.push('Subscription')
   }
 
   visit(schemaDocumentNode, {
+    InterfaceTypeDefinition(typeNode) {
+      // Warn that an interface definition in the SDL is using a reserved GraphQL type
+      if (RESERVED_TYPES.includes(typeNode.name.value)) {
+        reservedNameValidationOutput.push({
+          objectType: 'interface',
+          name: typeNode.name.value,
+        })
+      }
+    },
+    InputObjectTypeDefinition(typeNode) {
+      // Warn that an input definition in the SDL is using a reserved GraphQL type
+      if (RESERVED_TYPES.includes(typeNode.name.value)) {
+        reservedNameValidationOutput.push({
+          objectType: 'input type',
+          name: typeNode.name.value,
+        })
+      }
+    },
     ObjectTypeDefinition(typeNode) {
-      if (
-        RESERVED_TYPES.includes(typeNode.name.value) &&
-        typeNode.kind === Kind.OBJECT_TYPE_DEFINITION
-      ) {
-        console.warn(
-          `⚠ The type '${typeNode.name.value}' is a reserved GraphQL type and should be renamed.`
-        )
+      // Warn that a type definition in the SDL is using a reserved GraphQL type
+      if (RESERVED_TYPES.includes(typeNode.name.value)) {
+        reservedNameValidationOutput.push({
+          objectType: 'type',
+          name: typeNode.name.value,
+        })
       }
-
-      if (
-        typesToCheck.includes(typeNode.name.value) &&
-        typeNode.kind !== Kind.OBJECT_TYPE_DEFINITION
-      ) {
-        console.warn(
-          `⚠ The type '${typeNode.name.value}' is a reserved GraphQL type and should be renamed.`
-        )
-      }
-
       if (typesToCheck.includes(typeNode.name.value)) {
         for (const field of typeNode.fields ||
           ([] as ObjectTypeDefinitionNode[])) {
@@ -145,6 +156,15 @@ export function validateSchemaForDirectives(
         '\n'
       )} \n\nFor example: @requireAuth(roles: "admin") or @requireAuth(roles: ["admin", "editor"])`
     )
+  }
+
+  if (reservedNameValidationOutput.length > 0) {
+    const reservedNameMsg = reservedNameValidationOutput.map(
+      (output: Record<string, any>) => {
+        return `The ${output.objectType} named '${output.name}' is a reserved GraphQL name.\nPlease rename it to something more specific, like: Application${output.name}.\n`
+      }
+    )
+    throw new TypeError(reservedNameMsg.join('\n'))
   }
 }
 
