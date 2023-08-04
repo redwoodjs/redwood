@@ -221,6 +221,8 @@ interface WrappedPageProps {
  */
 const WrappedPage = memo(
   ({ wrappers, routeLoaderElement, setProps }: WrappedPageProps) => {
+    // @NOTE: don't mutate the wrappers array, it causes full page re-renders
+    // Instead just create a new array with the AuthenticatedRoute wrapper
     let wrappersWithAuthMaybe = wrappers
     if (setProps.private) {
       if (!setProps.unauthenticated) {
