@@ -234,7 +234,7 @@ const WrappedPage = memo(
       wrappersWithAuthMaybe = [AuthenticatedRoute, ...wrappers]
     }
 
-    if (wrappers.length > 0) {
+    if (wrappersWithAuthMaybe.length > 0) {
       // If wrappers exist e.g. [a,b,c] -> <a><b><c><routeLoader></c></b></a> and returns a single ReactNode
       // Wrap AuthenticatedRoute this way, because if we mutate the wrappers array itself
       // it causes full rerenders of the page
