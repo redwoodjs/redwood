@@ -212,7 +212,10 @@ export async function runFeServer() {
       const pageWithJs = currentRoute.renderMode !== 'html'
       // @NOTE have to add slash so subpaths still pick up the right file
       const bootstrapModules = pageWithJs
-        ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
+        ? [
+            '/' + indexEntry.file,
+            currentRoute.bundle && '/' + currentRoute.bundle,
+          ].filter(Boolean)
         : undefined
 
       const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
