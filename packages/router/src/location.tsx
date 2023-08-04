@@ -89,9 +89,6 @@ class LocationProvider extends React.Component<
   }
 
   componentDidMount() {
-    // @MARK: do we need to do this?
-    globalThis?.scrollTo(0, 0)
-
     this.HISTORY_LISTENER_ID = gHistory.listen(() => {
       const context = this.getContext()
       this.setState((lastState) => {

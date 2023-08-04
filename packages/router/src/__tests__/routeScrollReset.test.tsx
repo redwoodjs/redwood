@@ -44,8 +44,7 @@ describe('Router scroll reset', () => {
 
     await screen.getByText('Page 2')
 
-    // Once for first render, once for navigation
-    expect(globalThis.scrollTo).toHaveBeenCalledTimes(2)
+    expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
   })
 
   it('resets on location/path and queryChange change', async () => {
@@ -60,8 +59,7 @@ describe('Router scroll reset', () => {
 
     await screen.getByText('Page 2')
 
-    // Once for first render, once for navigation
-    expect(globalThis.scrollTo).toHaveBeenCalledTimes(2)
+    expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
   })
 
   it('does NOT reset on query params (search) change on the same page', async () => {
@@ -77,8 +75,7 @@ describe('Router scroll reset', () => {
 
     await screen.getByText('Page 1')
 
-    // Once only for first render
-    expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
+    expect(globalThis.scrollTo).not.toHaveBeenCalled()
   })
 
   it('does NOT reset on hash change', async () => {
@@ -91,7 +88,6 @@ describe('Router scroll reset', () => {
 
     await screen.getByText('Page 1')
 
-    // Once only for first render
-    expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
+    expect(globalThis.scrollTo).not.toHaveBeenCalled()
   })
 })
