@@ -1,6 +1,6 @@
 {
   "name": "create-redwood-app",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,7 +25,7 @@
     "@opentelemetry/resources": "1.15.0",
     "@opentelemetry/sdk-trace-node": "1.15.0",
     "@opentelemetry/semantic-conventions": "1.15.0",
-    "@redwoodjs/tui": "6.0.2",
+    "@redwoodjs/tui": "6.0.3",
     "chalk": "4.1.2",
     "check-node-version": "4.2.1",
     "ci-info": "3.8.0",
