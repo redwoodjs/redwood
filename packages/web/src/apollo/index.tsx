@@ -5,6 +5,7 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { RetryLink } from '@apollo/client/link/retry'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
@@ -194,11 +195,9 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
   }
 
-  const url = `${uri}`
-
-  console.debug(`[RW] SSE URL: ${url}`)
-
-  const terminatingLink = apolloClient.split(
+  // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
+  // is subscription it needs to use the SSELink (server sent events link).
+  const terminatingLink = new RetryLink().split(
     ({ query }) => {
       const definition = getMainDefinition(query)
       return (
@@ -206,11 +205,11 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
         definition.operation === 'subscription'
       )
     },
-    new SSELink({ url, headers }),
+    new SSELink({ url: uri, headers }),
     httpLink
   )
 
-  // The order here is important. The last link *must* be a terminating link like HttpLink.
+  // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
@@ -225,9 +224,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   if (typeof link === 'function') {
     link = link(redwoodApolloLinks)
   }
-
-  console.debug(`[RW] SSE URL: ${url}`)
-  console.debug(`[RW] Apollo Link:`, link)
 
   const client = new ApolloClient({
     // Default options for every Cell. Better to specify them here than in `beforeQuery` where it's too easy to overwrite them.

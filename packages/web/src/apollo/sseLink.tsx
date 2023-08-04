@@ -7,6 +7,9 @@ import {
 import { print } from 'graphql'
 import { createClient, ClientOptions, Client } from 'graphql-sse'
 
+/**
+ * GraphQL over Server-Sent Events (SSE) spec link for Apollo Client
+ */
 export class SSELink extends ApolloLink {
   private client: Client
 
@@ -20,7 +23,6 @@ export class SSELink extends ApolloLink {
   }
 
   public request(operation: Operation): Observable<FetchResult> {
-    console.debug('SSELink request', operation)
     return new Observable((sink) => {
       return this.client.subscribe<FetchResult>(
         { ...operation, query: print(operation.query) },
