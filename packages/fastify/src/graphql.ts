@@ -76,7 +76,7 @@ export async function redwoodFastifyGraphQLServer(
         reply.status(response.status)
         reply.send(response.body)
 
-        return await reply
+        return reply
       },
     })
 
