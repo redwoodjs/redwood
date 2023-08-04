@@ -452,13 +452,14 @@ export type GeneratedRoutesMap = {
 }
 
 type RoutePath = string
+export type Wrappers = Array<(props: any) => ReactNode>
 interface AnalyzedRoute {
   path: RoutePath
   name: string | null
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
-  wrappers: ReactNode[]
+  wrappers: Wrappers
   setProps: Record<any, any>
   setId: number
 }
@@ -476,7 +477,7 @@ export function analyzeRoutes(
   interface RecurseParams {
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
-    wrappersFromSet?: ReactNode[]
+    wrappersFromSet?: Wrappers
     // we don't know, or care about, what props users are passing down
     propsFromSet?: Record<string, unknown>
     setId?: number
