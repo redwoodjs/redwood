@@ -18,8 +18,6 @@ afterAll(() => {
 })
 
 const validateSdlFile = async (document: DocumentNode) => {
-  // The output of the above function doesn't give us the documents directly
-
   validateSchema(document)
 }
 
