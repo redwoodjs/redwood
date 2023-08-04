@@ -1575,7 +1575,7 @@ describe('Unauthorized redirect error messages', () => {
     )
   })
 
-  test.only('Private set redirecting to page that needs parameters', async () => {
+  test('Private set redirecting to page that needs parameters', async () => {
     const TestRouter = ({ authenticated }: { authenticated?: boolean }) => (
       <Router useAuth={mockUseAuth({ isAuthenticated: authenticated })}>
         <Route path="/" page={HomePage} name="home" />
