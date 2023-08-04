@@ -71,16 +71,8 @@ export type CellFailureProps<TVariables extends OperationVariables = any> = {
   updating?: boolean
 }
 
-// aka guarantee that all properties in T exist
-// This is necessary for Cells, because if it doesn't exist it'll go to Empty or Failure
-type Guaranteed<T> = {
-  [K in keyof T]-?: NonNullable<T[K]>
-}
-
 /**
  * Use this type, if you are forwarding on the data from your Cell's Success component
- * Because Cells automatically checks for "empty", or "errors" - if you receive the data type in your
- * Success component, it means the data is guaranteed (and non-optional)
  *
  * @params TData = Type of data based on your graphql query. This can be imported from 'types/graphql'
  * @example
@@ -88,10 +80,8 @@ type Guaranteed<T> = {
  *
  * const { post } = CellSuccessData<FindPosts>
  *
- * post.id // post is non optional, so no need to do post?.id
- *
  */
-export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
+export type CellSuccessData<TData = any> = Omit<TData, '__typename'>
 
 /**
  * @MARK not sure about this partial, but we need to do this for tests and storybook.
