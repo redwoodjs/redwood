@@ -15,11 +15,7 @@ export class SSELink extends ApolloLink {
 
   constructor(options: ClientOptions) {
     super()
-    this.client = createClient({
-      ...options,
-      singleConnection: undefined,
-      onMessage: console.log,
-    })
+    this.client = createClient(options)
   }
 
   public request(operation: Operation): Observable<FetchResult> {

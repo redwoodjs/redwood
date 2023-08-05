@@ -60,7 +60,7 @@ export async function redwoodFastifyGraphQLServer(
 
     fastify.route({
       url: yoga.graphqlEndpoint,
-      method: ['GET', 'POST', 'OPTIONS'],
+      method: ['GET', 'POST', 'OPTIONS', 'PUT'],
       handler: async (req, reply) => {
         const response = await yoga.handleNodeRequest(req, {
           req,
