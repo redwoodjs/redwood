@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -44,9 +44,9 @@
     "@graphql-codegen/typescript-operations": "3.0.4",
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-codegen/typescript-resolvers": "3.2.1",
-    "@redwoodjs/graphql-server": "6.0.2",
-    "@redwoodjs/project-config": "6.0.2",
-    "@redwoodjs/router": "6.0.2",
+    "@redwoodjs/graphql-server": "6.0.3",
+    "@redwoodjs/project-config": "6.0.3",
+    "@redwoodjs/router": "6.0.3",
     "@sdl-codegen/node": "0.0.10",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-polyfill-corejs3": "0.8.3",

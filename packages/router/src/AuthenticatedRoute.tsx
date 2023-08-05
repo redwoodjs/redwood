@@ -12,8 +12,9 @@ interface AuthenticatedRouteProps {
   whileLoadingAuth?: () => React.ReactElement | null
   private?: boolean
 }
-
-export function AuthenticatedRoute(props: AuthenticatedRouteProps) {
+export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (
+  props
+) => {
   const {
     private: isPrivate,
     unauthenticated,
