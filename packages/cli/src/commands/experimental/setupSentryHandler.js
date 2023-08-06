@@ -34,7 +34,7 @@ export const handler = async ({ force }) => {
     addWebPackages(['@sentry/react@7', '@sentry/tracing@7']),
     addEnvVarTask(
       'SENTRY_DSN',
-      'https://XXXXXXX@XXXXXXX.ingest.sentry.io/XXXXXXX',
+      '',
       'https://docs.sentry.io/product/sentry-basics/dsn-explainer/'
     ),
     {
