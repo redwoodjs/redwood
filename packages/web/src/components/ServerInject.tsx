@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode, useContext } from 'react'
+import React, { Fragment, ReactNode, useContext, useId } from 'react'
 
 /**
  *
@@ -51,8 +51,12 @@ export const ServerInjectedHtml = ({
     injectionState.delete(callback)
   }
 
+  const fragmentId = useId()
+
   return serverInsertedHtml.map((html, i) => {
-    return <Fragment key={`rwjs-server-injected-${i}`}>{html}</Fragment>
+    return (
+      <Fragment key={`rw-server-inserted-${fragmentId}-${i}`}>{html}</Fragment>
+    )
   })
 }
 

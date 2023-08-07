@@ -18,11 +18,10 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
+import { registerFwGlobals } from './streaming/registerGlobals'
+import { loadAndRunRouteHooks } from './streaming/triggerRouteHooks'
 import { RWRouteManifest } from './types'
 import { stripQueryStringAndHashFromPath } from './utils'
-
-globalThis.RWJS_ENV = {}
 
 /**
  * TODO (STREAMING)
@@ -49,6 +48,8 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
+
+  registerFwGlobals()
 
   // TODO When https://github.com/tc39/proposal-import-attributes and
   // https://github.com/microsoft/TypeScript/issues/53656 have both landed we

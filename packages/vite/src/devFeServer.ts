@@ -8,18 +8,18 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { reactRenderToStream } from './streamHelpers'
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
+import { registerFwGlobals } from './streaming/registerGlobals'
+import { reactRenderToStream } from './streaming/streamHelpers'
+import { loadAndRunRouteHooks } from './streaming/triggerRouteHooks'
 import { ensureProcessDirWeb, stripQueryStringAndHashFromPath } from './utils'
-
-// These values are defined in the vite.config.ts
-globalThis.RWJS_ENV = {}
 
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
 async function createServer() {
   ensureProcessDirWeb()
+
+  registerFwGlobals()
 
   const app = express()
   const rwPaths = getPaths()
