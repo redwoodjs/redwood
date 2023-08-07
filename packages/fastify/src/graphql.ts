@@ -58,9 +58,11 @@ export async function redwoodFastifyGraphQLServer(
       getAsyncStoreInstance().run(new Map<string, GlobalContext>(), done)
     })
 
+    // Would add PUT if need to support GraphQL SSE single connection mode
+    // with the graphql-yoga plugin-graphql-sse plugin and /stream endpoint
     fastify.route({
       url: yoga.graphqlEndpoint,
-      method: ['GET', 'POST', 'OPTIONS', 'PUT'],
+      method: ['GET', 'POST', 'OPTIONS'],
       handler: async (req, reply) => {
         const response = await yoga.handleNodeRequest(req, {
           req,
