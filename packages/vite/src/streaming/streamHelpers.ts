@@ -1,5 +1,5 @@
+import path from 'node:path'
 import { Writable } from 'node:stream'
-import path from 'path'
 
 import React from 'react'
 
