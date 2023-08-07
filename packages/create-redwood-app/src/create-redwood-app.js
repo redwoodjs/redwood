@@ -560,14 +560,51 @@ async function handleYarnInstallPreference(yarnInstallFlag) {
  *  - TODO - Add a list of what this function does
  */
 async function createRedwoodApp() {
+
+  // Redwood logo
+  const redwoodConeLogo = `                   *
+                ***********
+            *******************
+              ***************
+        *******    *******    *******
+    **************        *************
+      *************       *************
+        ******    *******    ******
+    ****        *************        ****
+  *****      *****************      *****
+        ******   ***********   ******
+    *************   *****   *************
+    **************       **************
+      ***********           ***********
+      ****      ***********      ****
+              *****************
+                ***********
+                    *****
+  `
+  const redwoodTextLogo = `                        RW                                       RW
+  RWRWRW.                RW                                       RW  RW. .WRWRW.
+  RW   RW  .RWRW.   .RWRWRW RW   RWR   RW .RWRWR.  .RWRWR.   .RWRWRW  RW. RWR
+  RWRWR   .RW__RW! RW'   RW  RW RW RW RW  RW   RW! RW   RW! RW'   RW  RW.    RWR.
+  RW  RWR .RW      RWR  .RW  RWRW  RWRW   RW   RW! RW   RW! RWR  .RW  RW. R    RW
+  RW    RW. 'RWR'   'RWR RW   RW    RW     'RWR'    'RWR'    'RWR RW  RW.  RWRW
+                                                                    RWRW.
+  `
+
   // Introductory message
+  const consoleWidth = 80
+  const textLength = 31
+  const logoOffset = 19
+  const textIndent = (consoleWidth - textLength)/2
   tui.drawText(
     [
-      `${RedwoodStyling.redwood('-'.repeat(66))}`,
-      `${' '.repeat(16)}🌲⚡️ ${RedwoodStyling.header(
-        'Welcome to RedwoodJS!'
-      )} ⚡️🌲`,
-      `${RedwoodStyling.redwood('-'.repeat(66))}`,
+      `${RedwoodStyling.redwood('-'.repeat(consoleWidth))}`,
+      `${' '.repeat(textIndent)}🌲⚡️ ${RedwoodStyling.header('Welcome to RedwoodJS!')} ⚡️🌲`,
+      `${' '.repeat(consoleWidth)}`,
+      `${' '.repeat(logoOffset + 1)}${RedwoodStyling.redwood(redwoodConeLogo
+        .split('\n')
+        .join(`\n${' '.repeat(logoOffset)}`))}`,
+      `${RedwoodStyling.textlogo(redwoodTextLogo)}`,
+      `${RedwoodStyling.redwood('-'.repeat(consoleWidth))}`,
     ].join('\n')
   )
 

@@ -19,6 +19,7 @@ export const RedwoodStyling = {
   header: chalk.bold.underline.hex('#e8e8e8'),
   cmd: chalk.hex('#808080'),
   redwood: chalk.hex('#ff845e'),
+  textlogo: chalk.bold.hex('#e8e8e8'),
   love: chalk.redBright,
 
   green: chalk.green,
