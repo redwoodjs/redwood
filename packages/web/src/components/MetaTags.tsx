@@ -86,7 +86,6 @@ export const MetaTags = (props: MetaTagsProps) => {
   let Head: typeof HelmetHead | typeof PortalHead = HelmetHead
 
   if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
-    console.log('xxxxx using portal head')
     Head = PortalHead
   }
 

@@ -8,6 +8,11 @@ declare global {
   var __REDWOOD__APP_TITLE: string
   var __REDWOOD__APOLLO_STATE: NormalizedCacheObject
 
+  var __REDWOOD__ASSET_MAP: {
+    css?: string[]
+    meta?: TagDescriptor[]
+  }
+
   // Provided by Vite.config, or Webpack in the user's project
   var RWJS_ENV: {
     RWJS_API_GRAPHQL_URL: string

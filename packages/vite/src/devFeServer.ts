@@ -8,7 +8,7 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { registerFwGlobals } from './streaming/registerGlobals'
+// import { registerFwGlobals } from './streaming/registerGlobals'
 import { reactRenderToStream } from './streaming/streamHelpers'
 import { loadAndRunRouteHooks } from './streaming/triggerRouteHooks'
 import { ensureProcessDirWeb, stripQueryStringAndHashFromPath } from './utils'
@@ -16,10 +16,13 @@ import { ensureProcessDirWeb, stripQueryStringAndHashFromPath } from './utils'
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
+// @ts-expect-error bazinga
+globalThis.RWJS_ENV = {}
+
 async function createServer() {
   ensureProcessDirWeb()
 
-  registerFwGlobals()
+  // registerFwGlobals()
 
   const app = express()
   const rwPaths = getPaths()
@@ -50,8 +53,6 @@ async function createServer() {
   app.use('*', async (req, res, next) => {
     const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
     globalThis.__REDWOOD__HELMET_CONTEXT = {}
-
-    res.setHeader('content-type', 'text/html; charset=utf-8')
 
     try {
       const routes = getProjectRoutes()
@@ -111,6 +112,8 @@ async function createServer() {
       const { ServerEntry } = await vite.ssrLoadModule(rwPaths.web.entryServer)
 
       const pageWithJs = currentRoute?.renderMode !== 'html'
+
+      res.setHeader('content-type', 'text/html; charset=utf-8')
 
       reactRenderToStream({
         ServerEntry,

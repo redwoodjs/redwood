@@ -69,3 +69,14 @@ export function useServerInsertedHTML(callback: () => React.ReactNode): void {
     addInsertedServerHTMLCallback(callback)
   }
 }
+
+// @TODO use this in streamHelpers final block
+export const AppendToHead = ({ tagsToAppend }: { tagsToAppend: string }) => {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `document?.head.append(${tagsToAppend})`,
+      }}
+    />
+  )
+}

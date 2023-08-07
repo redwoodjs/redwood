@@ -112,6 +112,6 @@ export const loadAndRunRouteHooks = async ({
     }
   } catch (e) {
     console.error(`Error loading route hooks in ${routeHookPath}}`)
-    throw new Error(e as any)
+    throw e
   }
 }

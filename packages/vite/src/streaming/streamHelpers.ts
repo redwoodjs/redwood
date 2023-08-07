@@ -33,7 +33,7 @@ export function reactRenderToStream({
   const rwPaths = getPaths()
 
   const bootstrapModules = [
-    path.join(__dirname, '../inject', 'reactRefresh.js'),
+    path.join(__dirname, '../../inject', 'reactRefresh.js'),
   ]
 
   if (includeJs) {
@@ -78,7 +78,7 @@ export function reactRenderToStream({
     ),
     {
       bootstrapScriptContent: includeJs
-        ? `window.__assetMap = function() { return ${assetMap} }`
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
         : undefined,
       bootstrapModules,
       onShellReady() {
