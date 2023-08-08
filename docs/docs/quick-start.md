@@ -102,7 +102,19 @@ Mockup, build, and verify your React components, even in complete isolation from
 yarn rw storybook
 ```
 
-Before you start, see if the CLI's `setup ui` command has your favorite styling library:
+:::tip You'll need a stories file first
+
+You'll need a `*.stories.{tsx,jsx}` file for Storybook to start up properly.
+The Redwood CLI makes that easy though.
+Try generating a [Cell](./cells), Redwood's data fetching abstraction, for that `Post` model we made earlier:
+
+```
+yarn rw g cell posts
+```
+
+:::
+
+Next, see if the CLI's `setup ui` command has your favorite styling library:
 
 ```
 yarn rw setup ui --help
