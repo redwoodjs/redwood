@@ -144,7 +144,7 @@ That's it for the backend.
   - `App.{jsx,tsx}` the bootstrapping code to get our Redwood app up and running.
   - `entry.client.{jsx,tsx}` is the standard React starting point for our app.
   - `index.css` is a good starting place for custom CSS, but there are many options (we like [TailwindCSS](https://tailwindcss.com/) which, believe it or not, may not require you to write any custom CSS for the life of your app!)
-  - `index.html` is what's first sent to a visitor's browser. Fetches `entry.client.{jsx,tsx}`.
+  - `index.html` is what's first sent to a visitor's browser. It fetches `entry.client.{jsx,tsx}`.
   - `Routes.{jsx,tsx}` the route definitions for our app which map a URL to a _Page_.
 
 We'll dip in and out of these directories and files (and create some new ones) as we work through the tutorial.
