@@ -37,7 +37,7 @@ Your browser should automatically open to [http://localhost:8910](http://localho
 
 Redwood wouldn't be a full-stack framework without a database. It all starts with the schema. Open the [`schema.prisma`](api/db/schema.prisma) file in `api/db` and replace the `UserExample` model with the following `Post` model:
 
-```
+```prisma
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
@@ -105,7 +105,7 @@ Redwood fully integrates Jest with both the front- and back-ends, and makes it e
 yarn rw test
 ```
 
-To make the integration even more seamless, Redwood augments Jest with database [scenarios](https://redwoodjs.com/docs/testing.md#scenarios)  and [GraphQL mocking](https://redwoodjs.com/docs/testing.md#mocking-graphql-calls).
+To make the integration even more seamless, Redwood augments Jest with database [scenarios](https://redwoodjs.com/docs/testing#scenarios)  and [GraphQL mocking](https://redwoodjs.com/docs/testing#mocking-graphql-calls).
 
 ## Ship it
 
