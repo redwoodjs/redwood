@@ -68,7 +68,6 @@ export function validateSchema(
       }
     },
     ObjectTypeDefinition(typeNode) {
-      console.debug('ObjectTypeDefinition', typeNode.name.value)
       // Warn that a type definition in the SDL is using a reserved GraphQL type
       if (RESERVED_TYPES.includes(typeNode.name.value)) {
         reservedNameValidationOutput.push({
