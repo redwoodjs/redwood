@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@typescript-eslint/utils": "5.61.0",
-    "eslint": "8.45.0"
+    "eslint": "8.46.0"
   },
   "devDependencies": {
     "@types/eslint": "8",
