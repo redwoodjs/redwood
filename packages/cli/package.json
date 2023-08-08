@@ -45,6 +45,7 @@
     "@redwoodjs/project-config": "6.0.3",
     "@redwoodjs/structure": "6.0.3",
     "@redwoodjs/telemetry": "6.0.3",
+    "@storybook/react": "7.2.0",
     "@types/secure-random-password": "0.2.1",
     "boxen": "5.1.2",
     "camelcase": "6.3.0",
