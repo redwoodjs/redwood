@@ -5,7 +5,6 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { RetryLink } from '@apollo/client/link/retry'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
@@ -20,7 +19,7 @@ const {
   useQuery,
   useMutation,
   useSubscription,
-  setLogVerbosity: apolloSetLogVerbosity,
+  // setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
 import { UseAuth, useNoAuth } from '@redwoodjs/auth'
@@ -98,7 +97,7 @@ export type GraphQLClientConfigProp = Omit<
    * ```js
    * const link = (redwoodApolloLinks) => {
    *   const consoleLink = new ApolloLink((operation, forward) => {
-   *     console.log(operation.operationName)
+   *     console.info(operation.operationName)
    *     return forward(operation)
    *   })
    *
@@ -123,7 +122,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 }> = ({ config, children, useAuth = useNoAuth, logLevel }) => {
   // Should they run into it, this helps users with the "Cannot render cell; GraphQL success but data is null" error.
   // See https://github.com/redwoodjs/redwood/issues/2473.
-  apolloSetLogVerbosity(logLevel)
+  // apolloSetLogVerbosity(logLevel)
+  console.info('>>>>> logLevel', logLevel)
 
   // Here we're using Apollo Link to customize Apollo Client's data flow.
   // Although we're sending conventional HTTP-based requests and could just pass `uri` instead of `link`,
@@ -194,18 +194,22 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   if (globalThis.RWJS_EXP_STREAMING_SSR) {
     httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
   }
+  console.info('>>>>> httpLink', httpLink)
 
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
   // is subscription it needs to use the SSELink (server sent events link).
-  const terminatingLink = new RetryLink().split(
+  const terminatingLink = apolloClient.split(
     ({ query }) => {
       const definition = getMainDefinition(query)
+      console.info('>>> query', query)
+      console.info('>>> definition', definition)
+
       return (
         definition.kind === 'OperationDefinition' &&
         definition.operation === 'subscription'
       )
     },
-    new SSELink({ url: uri, headers }),
+    new SSELink({ url: uri, headers }, authProviderType, getToken()),
     httpLink
   )
 
