@@ -12,12 +12,6 @@ Please rename it to something more specific, like: ApplicationFloat.
 "
 `;
 
-exports[`SDL with no reserved names used because uses a reserved name as an input 2`] = `
-"The input type named 'Float' is a reserved GraphQL name.
-Please rename it to something more specific, like: ApplicationFloat.
-"
-`;
-
 exports[`SDL with no reserved names used because uses a reserved name as an interface 1`] = `
 "The interface named 'Float' is a reserved GraphQL name.
 Please rename it to something more specific, like: ApplicationFloat.
