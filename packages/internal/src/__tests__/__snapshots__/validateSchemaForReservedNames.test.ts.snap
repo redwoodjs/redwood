@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SDL with no reserved names used SDL is invalid because uses a reserved name as a type 1`] = `
+"The type named 'Float' is a reserved GraphQL name.
+Please rename it to something more specific, like: ApplicationFloat.
+"
+`;
+
+exports[`SDL with no reserved names used because uses a reserved name as an input 1`] = `
+"The input type named 'Float' is a reserved GraphQL name.
+Please rename it to something more specific, like: ApplicationFloat.
+"
+`;
+
+exports[`SDL with no reserved names used because uses a reserved name as an interface 1`] = `
+"The interface named 'Float' is a reserved GraphQL name.
+Please rename it to something more specific, like: ApplicationFloat.
+"
+`;
