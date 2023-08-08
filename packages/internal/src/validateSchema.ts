@@ -14,6 +14,13 @@ export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
 export const DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE =
   'Please check that the requireAuth roles is a string or an array of strings.'
 
+/**
+ * These are names that are commonly used in GraphQL schemas as scalars
+ * and would cause a conflict if used as a type name.
+ *
+ * Note: Query, Mutation, and Subscription are not included here because
+ * they are checked for separately.
+ */
 export const RESERVED_TYPES = [
   'Int',
   'Float',
@@ -22,15 +29,7 @@ export const RESERVED_TYPES = [
   'DateTime',
   'ID',
   'uid',
-  // 'Subscription',
   'as',
-  // 'Query',
-  // 'Mutation',
-  'Point',
-  'PointList',
-  'Polygon',
-  'MultiPolygon',
-  //'Aggregate', // (as a suffix of any identifier name)
 ]
 
 export function validateSchema(
