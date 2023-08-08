@@ -85,7 +85,7 @@ That's because you need a `*.stories.{tsx,jsx}` file.
 The Redwood CLI makes getting one easy enough—try generating a [Cell](https://redwoodjs.com/docs/cells), Redwood's data-fetching abstraction:
 
 ```
-yarn rw g cell examplePosts
+yarn rw generate cell examplePosts
 ```
 
 The Storybook server should hot reload and now you'll have four stories to work with.
