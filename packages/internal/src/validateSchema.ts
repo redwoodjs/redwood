@@ -6,6 +6,8 @@ import { DocumentNode, Kind, ObjectTypeDefinitionNode, visit } from 'graphql'
 import { rootSchema } from '@redwoodjs/graphql-server'
 import { getPaths } from '@redwoodjs/project-config'
 
+import { isServerFileSetup, isRealtimeSetup } from './project'
+
 export const DIRECTIVE_REQUIRED_ERROR_MESSAGE =
   'You must specify one of @requireAuth, @skipAuth or a custom directive'
 
@@ -13,10 +15,17 @@ export const DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE =
   'Please check that the requireAuth roles is a string or an array of strings.'
 export function validateSchemaForDirectives(
   schemaDocumentNode: DocumentNode,
-  typesToCheck: string[] = ['Query', 'Mutation', 'Subscription']
+  typesToCheck: string[] = ['Query', 'Mutation']
 ) {
   const validationOutput: string[] = []
   const directiveRoleValidationOutput: Record<string, any> = []
+
+  // Is Subscriptions are enabled with Redwood Realtime, then enforce a rule
+  // that a Subscription type needs to have a authentication directive applied,
+  // just as Query and Mutation requires
+  if (isServerFileSetup() && isRealtimeSetup()) {
+    typesToCheck.push('Subscription')
+  }
 
   visit(schemaDocumentNode, {
     ObjectTypeDefinition(typeNode) {
