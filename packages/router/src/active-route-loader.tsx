@@ -65,8 +65,6 @@ export const ActiveRouteLoader = ({
       return
     }
 
-    globalThis?.scrollTo(0, 0)
-
     if (announcementRef.current) {
       announcementRef.current.innerText = getAnnouncement()
     }
