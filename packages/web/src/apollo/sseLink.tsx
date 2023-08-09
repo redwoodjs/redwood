@@ -1,3 +1,4 @@
+import type { HttpOptions } from '@apollo/client'
 import {
   ApolloLink,
   Operation,
@@ -8,9 +9,8 @@ import { print } from 'graphql'
 import { createClient, ClientOptions, Client } from 'graphql-sse'
 interface SSELinkOptions extends Partial<ClientOptions> {
   url: string
-  authProviderType: string
-  tokenFn: Promise<null | string>
-  httpLinkCredentials?: string | undefined
+  auth: { authProviderType: string; tokenFn: Promise<null | string> }
+  httpLinkConfig?: HttpOptions
   headers?: Record<string, string>
 }
 
@@ -69,24 +69,28 @@ export class SSELink extends ApolloLink {
   constructor(options: SSELinkOptions) {
     super()
 
+    const { url, auth, headers, httpLinkConfig } = options
+    const { credentials, referrer, referrerPolicy } =
+      httpLinkConfig?.headers || {}
+
     this.client = createClient({
-      url: options.url,
+      url,
       headers: async () => {
-        const token = await options.tokenFn
+        const token = await auth.tokenFn
 
         // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
         if (!token) {
-          return { ...options.headers }
+          return { ...headers }
         }
         return {
           Authorization: `Bearer ${token}`,
-          'auth-provider': options.authProviderType,
-          ...options.headers,
+          'auth-provider': auth.authProviderType,
+          ...headers,
         }
       },
-      credentials: mapCredentialsHeader(options.httpLinkCredentials),
-      referrer: options.headers?.referrer,
-      referrerPolicy: mapReferrerPolicyHeader(options.headers?.referrerPolicy),
+      credentials: mapCredentialsHeader(credentials),
+      referrer,
+      referrerPolicy: mapReferrerPolicyHeader(referrerPolicy),
     })
   }
 
