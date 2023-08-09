@@ -6,6 +6,29 @@ import {
 } from '@apollo/client/core'
 import { print } from 'graphql'
 import { createClient, ClientOptions, Client } from 'graphql-sse'
+interface SSELinkOptions extends Partial<ClientOptions> {
+  url: string
+  authProviderType: string
+  tokenFn: Promise<null | string>
+  httpLinkCredentials?: string | undefined
+  headers?: Record<string, string>
+}
+
+const mapCredentials = (
+  httpLinkCredentials?: string
+): 'omit' | 'same-origin' | 'include' | undefined => {
+  if (!httpLinkCredentials) {
+    return undefined
+  }
+  switch (httpLinkCredentials) {
+    case 'omit':
+    case 'same-origin':
+    case 'include':
+      return httpLinkCredentials
+    default:
+      return undefined
+  }
+}
 
 /**
  * GraphQL over Server-Sent Events (SSE) spec link for Apollo Client
@@ -13,31 +36,29 @@ import { createClient, ClientOptions, Client } from 'graphql-sse'
 export class SSELink extends ApolloLink {
   private client: Client
 
-  constructor(
-    options: ClientOptions,
-    authProviderType: string,
-    tokenFn: Promise<null | string>
-  ) {
-    console.info('>>>>> SSELink options')
-
+  constructor(options: SSELinkOptions) {
     super()
 
     this.client = createClient({
       url: options.url,
-      headers: async () =>
-        Promise.resolve({
-          Authorization: `Bearer ${await tokenFn.then((token) => token)}`,
-          'auth-provider': authProviderType,
+      headers: async () => {
+        const token = await options.tokenFn
+
+        // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
+        if (!token) {
+          return { ...options.headers }
+        }
+        return {
+          Authorization: `Bearer ${token}`,
+          'auth-provider': options.authProviderType,
           ...options.headers,
-        }),
-      retryAttempts: 0,
-      credentials: 'include',
+        }
+      },
+      credentials: mapCredentials(options.httpLinkCredentials),
     })
   }
 
   public request(operation: Operation): Observable<FetchResult> {
-    console.info('>>>>> SSELink operation')
-
     return new Observable((sink) => {
       return this.client.subscribe<FetchResult>(
         { ...operation, query: print(operation.query) },
