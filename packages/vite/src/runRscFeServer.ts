@@ -15,9 +15,8 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { registerFwGlobals } from './streaming/registerGlobals'
 import { renderRSC, setClientEntries } from './waku-lib/rsc-handler-worker'
-
-globalThis.RWJS_ENV = {}
 
 /**
  * TODO (STREAMING)
@@ -44,6 +43,8 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
+
+  registerFwGlobals()
 
   await setClientEntries('load')
 
