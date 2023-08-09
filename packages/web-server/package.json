@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web-server",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "description": "Redwood's server for the Web side",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
     "test:watch": "echo \"No tests yet\""
   },
   "dependencies": {
-    "@redwoodjs/project-config": "6.0.3",
+    "@redwoodjs/project-config": "6.0.4",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
     "fast-glob": "3.3.1",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/yargs-parser": "21.0.0",
-    "esbuild": "0.18.16",
+    "esbuild": "0.18.19",
     "typescript": "5.1.6"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli-storybook",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -24,9 +24,9 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/cli-helpers": "6.0.3",
-    "@redwoodjs/project-config": "6.0.3",
-    "@redwoodjs/telemetry": "6.0.3",
+    "@redwoodjs/cli-helpers": "6.0.4",
+    "@redwoodjs/project-config": "6.0.4",
+    "@redwoodjs/telemetry": "6.0.4",
     "@storybook/addon-a11y": "7.2.0",
     "@storybook/addon-docs": "7.2.0",
     "@storybook/addon-essentials": "7.2.0",
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/yargs": "17.0.24",
-    "esbuild": "0.18.16",
+    "esbuild": "0.18.19",
     "fast-glob": "3.3.1",
     "jest": "29.6.1",
     "typescript": "5.1.6"

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -38,7 +38,7 @@
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.0",
     "pascalcase": "1.0.0",
-    "pino": "8.14.1",
+    "pino": "8.15.0",
     "title-case": "3.0.3"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/forms",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -25,7 +25,7 @@
     "@babel/runtime-corejs3": "7.22.6",
     "core-js": "3.31.1",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.45.2"
+    "react-hook-form": "7.45.4"
   },
   "devDependencies": {
     "@babel/cli": "7.22.9",
