@@ -92,7 +92,10 @@ class LocationProvider extends React.Component<
     this.HISTORY_LISTENER_ID = gHistory.listen(() => {
       const context = this.getContext()
       this.setState((lastState) => {
-        if (context.pathname !== lastState.context.pathname) {
+        if (
+          context.pathname !== lastState.context.pathname ||
+          context.search !== lastState.context.search
+        ) {
           globalThis?.scrollTo(0, 0)
         }
 

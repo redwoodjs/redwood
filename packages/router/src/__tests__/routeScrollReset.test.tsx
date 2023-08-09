@@ -62,7 +62,7 @@ describe('Router scroll reset', () => {
     expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
   })
 
-  it('does NOT reset on query params (search) change on the same page', async () => {
+  it('resets scroll on query params (search) change on the same page', async () => {
     act(() =>
       // We're staying on page 1, but changing the query params
       navigate(
@@ -75,7 +75,7 @@ describe('Router scroll reset', () => {
 
     await screen.getByText('Page 1')
 
-    expect(globalThis.scrollTo).not.toHaveBeenCalled()
+    expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
   })
 
   it('does NOT reset on hash change', async () => {
