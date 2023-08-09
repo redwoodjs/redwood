@@ -97,7 +97,7 @@ export type GraphQLClientConfigProp = Omit<
    * ```js
    * const link = (redwoodApolloLinks) => {
    *   const consoleLink = new ApolloLink((operation, forward) => {
-   *     console.info(operation.operationName)
+   *     console.log(operation.operationName)
    *     return forward(operation)
    *   })
    *
@@ -208,7 +208,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     new SSELink({
       url: uri,
       auth: { authProviderType, tokenFn: getToken() },
-      // httpLinkCredentials: httpLinkConfig?.credentials,
       httpLinkConfig,
       headers,
     }),
