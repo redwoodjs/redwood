@@ -297,22 +297,6 @@ async function runCommand() {
 
   await tuiTask({
     step: 1,
-    title: 'Temporary (v6): Add storybook and vite canary to web dependencies',
-    content:
-      'Adding storybook and @redwoodjs/vite@6.0.0-canary.450\n' +
-      '  ⏱  This could take a while...',
-    task: () => {
-      return exec(
-        'yarn',
-        ['workspace web add -D storybook @redwoodjs/vite@6.0.0-canary.450'],
-        getExecaOptions(OUTPUT_PROJECT_PATH)
-      )
-    },
-    skip: skipStep(startStep, 1),
-  })
-
-  await tuiTask({
-    step: 2,
     title: '[link] Building Redwood framework',
     content: 'yarn build:clean && yarn build',
     task: async () => {
@@ -322,11 +306,11 @@ async function runCommand() {
         getExecaOptions(RW_FRAMEWORKPATH)
       )
     },
-    skip: skipStep(startStep, 2),
+    skip: skipStep(startStep, 1),
   })
 
   await tuiTask({
-    step: 3,
+    step: 2,
     title: '[link] Adding framework dependencies to project',
     content: 'Adding framework dependencies to project...',
     task: () => {
@@ -336,21 +320,21 @@ async function runCommand() {
         'pipe' // TODO: Remove this when everything is using @rwjs/tui
       )
     },
-    skip: skipStep(startStep, 3),
+    skip: skipStep(startStep, 2),
   })
 
   await tuiTask({
-    step: 4,
+    step: 3,
     title: 'Installing node_modules',
     content: 'yarn install',
     task: () => {
       return exec('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
     },
-    skip: skipStep(startStep, 4),
+    skip: skipStep(startStep, 3),
   })
 
   await tuiTask({
-    step: 5,
+    step: 4,
     title: 'Updating ports in redwood.toml...',
     task: () => {
       // We do this, to make it easier to run multiple test projects in parallel
@@ -373,11 +357,11 @@ async function runCommand() {
 
       fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
     },
-    skip: skipStep(startStep, 5),
+    skip: skipStep(startStep, 4),
   })
 
   await tuiTask({
-    step: 6,
+    step: 5,
     title: '[link] Copying framework packages to project',
     task: () => {
       return copyFrameworkPackages(
@@ -386,12 +370,12 @@ async function runCommand() {
         'pipe'
       )
     },
-    skip: skipStep(startStep, 6),
+    skip: skipStep(startStep, 5),
   })
 
   // Note that we undo this at the end
   await tuiTask({
-    step: 7,
+    step: 6,
     title: '[link] Add rwfw project:copy postinstall',
     task: () => {
       return updatePkgJsonScripts({
@@ -401,14 +385,25 @@ async function runCommand() {
         },
       })
     },
+    skip: skipStep(startStep, 6),
+  })
+
+  await tuiTask({
+    step: 7,
+    title: 'Apply web codemods',
+    task: () => {
+      return webTasks(OUTPUT_PROJECT_PATH, {
+        linkWithLatestFwBuild: true,
+      })
+    },
     skip: skipStep(startStep, 7),
   })
 
   await tuiTask({
     step: 8,
-    title: 'Apply web codemods',
+    title: 'Apply api codemods',
     task: () => {
-      return webTasks(OUTPUT_PROJECT_PATH, {
+      return apiTasks(OUTPUT_PROJECT_PATH, {
         linkWithLatestFwBuild: true,
       })
     },
@@ -417,17 +412,6 @@ async function runCommand() {
 
   await tuiTask({
     step: 9,
-    title: 'Apply api codemods',
-    task: () => {
-      return apiTasks(OUTPUT_PROJECT_PATH, {
-        linkWithLatestFwBuild: true,
-      })
-    },
-    skip: skipStep(startStep, 9),
-  })
-
-  await tuiTask({
-    step: 10,
     title: 'Running prisma migrate reset',
     task: () => {
       return exec(
@@ -436,11 +420,11 @@ async function runCommand() {
         getExecaOptions(OUTPUT_PROJECT_PATH)
       )
     },
-    skip: skipStep(startStep, 10),
+    skip: skipStep(startStep, 9),
   })
 
   await tuiTask({
-    step: 11,
+    step: 10,
     title: 'Lint --fix all the things',
     task: async () => {
       try {
@@ -469,11 +453,11 @@ async function runCommand() {
         }
       }
     },
-    skip: skipStep(startStep, 11),
+    skip: skipStep(startStep, 10),
   })
 
   await tuiTask({
-    step: 12,
+    step: 11,
     title: 'Replace and Cleanup Fixture',
     task: async () => {
       // @TODO: This only works on UNIX, we should use path.join everywhere
@@ -507,11 +491,11 @@ async function runCommand() {
       // then removes new Project temp directory
       await copyProject()
     },
-    skip: skipStep(startStep, 12),
+    skip: skipStep(startStep, 11),
   })
 
   await tuiTask({
-    step: 13,
+    step: 12,
     title: 'All done!',
     task: () => {
       console.log('-'.repeat(30))
