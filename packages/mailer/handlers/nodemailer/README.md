@@ -1,4 +1,4 @@
-# Mailer - Providers - Nodemailer
+# Mailer - Providers - Studio
 
 **WIP**: This package is still a work in progress.
 

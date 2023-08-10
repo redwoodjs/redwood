@@ -1,57 +1,53 @@
-import { v4 as uuidv4 } from 'uuid'
-
-import { MailHandler } from '@redwoodjs/mailer-core'
-import type {
-  CompleteSendOptions,
+import {
+  MailSendOptionsComplete,
+  AbstractMailHandler,
+  MailUtilities,
+  MailRenderedContent,
   MailResult,
-  MailTemplate,
+  HandlerUtilities,
 } from '@redwoodjs/mailer-core'
-import { MailRenderer } from '@redwoodjs/mailer-core/dist/renderer'
 
-export interface HandlerConfig {}
+export type InMemoryMail = {
+  renderedText: MailRenderedContent['text']
+  renderedHTML: MailRenderedContent['html']
+  handlerOptions?: unknown
+  rendererOptions?: unknown
+} & Omit<MailSendOptionsComplete, 'text' | 'html'>
 
-export interface HandlerOptions {}
+export class InMemoryMailHandler extends AbstractMailHandler {
+  public inbox: InMemoryMail[]
 
-type InMemoryMail = {
-  template: MailTemplate
-  generalOptions: CompleteSendOptions
-  handlerOptions?: HandlerOptions
-  content: ReturnType<(typeof MailRenderer)['render']>
-}
-
-export class InMemoryMailHandler extends MailHandler {
-  private inbox: InMemoryMail[]
-
-  constructor(private config?: HandlerConfig) {
+  constructor() {
     super()
-
     this.inbox = []
   }
 
   send(
-    template: MailTemplate,
-    generalOptions: CompleteSendOptions,
-    handlerOptions?: HandlerOptions
-  ): MailResult {
-    // NOTE: 'options.format' should be defined because the Mailer class will default it
-    const content = MailRenderer.render(template, generalOptions.format)
-
+    renderedContent: MailRenderedContent,
+    sendOptions: MailSendOptionsComplete,
+    handlerOptions?: never,
+    utilities?: MailUtilities & HandlerUtilities
+  ): MailResult | Promise<MailResult> {
     this.inbox.push({
-      template,
-      generalOptions,
+      ...sendOptions,
+      renderedText: renderedContent.text,
+      renderedHTML: renderedContent.html,
       handlerOptions,
-      content,
+      rendererOptions: utilities?.rendererOptions,
     })
 
     return {
-      messageID: `${uuidv4()}@in.memory.example.com`,
+      messageID: `in-memory-${this.inbox.length}`,
     }
   }
 
-  internal() {
+  internal(): Record<string, unknown> {
     return {
-      config: this.config,
       inbox: this.inbox,
     }
+  }
+
+  clearInbox() {
+    this.inbox = []
   }
 }

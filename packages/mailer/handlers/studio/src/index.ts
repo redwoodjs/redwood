@@ -1,13 +1,13 @@
-import { MailHandler } from '@redwoodjs/mailer-core'
+import { AbstractMailHandler } from '@redwoodjs/mailer-core'
 import type {
-  CompleteSendOptions,
+  MailRenderedContent,
   MailResult,
-  MailTemplate,
+  MailSendOptionsComplete,
 } from '@redwoodjs/mailer-core'
 import { NodemailerMailHandler } from '@redwoodjs/mailer-handler-nodemailer'
 import type { HandlerOptions } from '@redwoodjs/mailer-handler-nodemailer'
 
-export class StudioMailHandler extends MailHandler {
+export class StudioMailHandler extends AbstractMailHandler {
   private nodemailerHandler: NodemailerMailHandler
 
   constructor() {
@@ -23,11 +23,15 @@ export class StudioMailHandler extends MailHandler {
   }
 
   async send(
-    template: MailTemplate,
-    generalOptions: CompleteSendOptions,
+    renderedContent: MailRenderedContent,
+    sendOptions: MailSendOptionsComplete,
     handlerOptions?: HandlerOptions
   ): Promise<MailResult> {
-    return this.nodemailerHandler.send(template, generalOptions, handlerOptions)
+    return this.nodemailerHandler.send(
+      renderedContent,
+      sendOptions,
+      handlerOptions
+    )
   }
 
   internal() {

@@ -4,14 +4,12 @@ import * as esbuild from 'esbuild'
 import fg from 'fast-glob'
 
 // Get source files
-const sourceFiles = fg.sync(['./src/**/*.ts'], {
-  ignore: ['**/*.test.ts'],
-})
+const sourceFiles = fg.sync(['./api/**/*.ts'])
 
 // Build general source files
 const result = await esbuild.build({
   entryPoints: sourceFiles,
-  outdir: 'dist',
+  outdir: 'dist/api',
 
   format: 'cjs',
   platform: 'node',

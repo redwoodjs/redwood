@@ -1,19 +1,23 @@
 import type {
-  MailTemplate,
-  CompleteSendOptions,
+  MailSendOptionsComplete,
   MailResult,
-  MailHandlerUtilities,
+  MailUtilities,
+  MailRenderedContent,
 } from './types'
 
-export abstract class MailHandler {
+export type HandlerUtilities = {
+  rendererOptions?: unknown
+}
+
+export abstract class AbstractMailHandler {
   // Send a mail
   abstract send(
-    template: MailTemplate,
-    generalOptions: CompleteSendOptions,
+    renderedContent: MailRenderedContent,
+    sendOptions: MailSendOptionsComplete,
     handlerOptions?: unknown,
-    utilities?: MailHandlerUtilities
+    utilities?: MailUtilities & HandlerUtilities
   ): Promise<MailResult> | MailResult
 
-  // Provide access to provider specific properties
+  // Provide access to handler specific properties
   abstract internal(): Record<string, unknown>
 }

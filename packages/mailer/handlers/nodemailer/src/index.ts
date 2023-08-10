@@ -1,13 +1,12 @@
 import nodemailer from 'nodemailer'
 import type SMTPTransport from 'nodemailer/lib/smtp-transport'
 
-import { MailHandler } from '@redwoodjs/mailer-core'
+import { AbstractMailHandler } from '@redwoodjs/mailer-core'
 import type {
-  CompleteSendOptions,
+  MailRenderedContent,
   MailResult,
-  MailTemplate,
+  MailSendOptionsComplete,
 } from '@redwoodjs/mailer-core'
-import { MailRenderer } from '@redwoodjs/mailer-core/dist/renderer'
 
 export type HandlerConfig = {
   transport: SMTPTransport | SMTPTransport.Options | string
@@ -16,7 +15,7 @@ export type HandlerConfig = {
 
 export type HandlerOptions = nodemailer.SendMailOptions
 
-export class NodemailerMailHandler extends MailHandler {
+export class NodemailerMailHandler extends AbstractMailHandler {
   protected transporter: nodemailer.Transporter
 
   constructor(protected config: HandlerConfig) {
@@ -30,23 +29,21 @@ export class NodemailerMailHandler extends MailHandler {
 
   // TODO: Ensure that handlerOptions are merged with generalOptions where appropriate
   async send(
-    template: MailTemplate,
-    generalOptions: CompleteSendOptions,
+    renderedContent: MailRenderedContent,
+    sendOptions: MailSendOptionsComplete,
     handlerOptions?: HandlerOptions
   ): Promise<MailResult> {
-    const { text, html } = MailRenderer.render(template, generalOptions.format)
-
     const result = await this.transporter.sendMail({
-      to: generalOptions.to,
-      cc: generalOptions.cc,
-      bcc: generalOptions.bcc,
-      from: generalOptions.from,
-      replyTo: generalOptions.replyTo,
-      subject: generalOptions.subject,
-      headers: generalOptions.headers,
-      text,
-      html,
-      attachments: generalOptions.attachments,
+      to: sendOptions.to,
+      cc: sendOptions.cc,
+      bcc: sendOptions.bcc,
+      from: sendOptions.from,
+      replyTo: sendOptions.replyTo,
+      subject: sendOptions.subject,
+      headers: sendOptions.headers,
+      text: renderedContent.text,
+      html: renderedContent.html,
+      attachments: sendOptions.attachments,
       ...handlerOptions,
     })
 

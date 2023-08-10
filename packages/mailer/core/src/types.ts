@@ -1,50 +1,103 @@
 import type { Logger } from '@redwoodjs/api/logger'
 
-import type { MailHandler } from './handler'
+import type { AbstractMailHandler } from './handler'
+import type { AbstractMailRenderer } from './renderer'
 
-export type MailHandlers = Record<string, MailHandler>
+export type MailRenderedContent = {
+  html: string
+  text: string
+}
 
-export type MailerRenderFormat = 'text' | 'html' | 'both'
+export type MailHandlers = Record<string, AbstractMailHandler>
+export type MailRenderers = Record<string, AbstractMailRenderer>
 
-// Basically one of or both of text and html
-export type MailerRenderResult =
+export type MailRendererOptions<TRenderOutputFormats> = {
+  outputFormat?: TRenderOutputFormats
+  [key: string]: unknown
+}
+
+// Basically one of or both of text  and html
+export type MailRenderResult =
   | { text: string; html?: string }
   | { text?: string; html: string }
   | { text: string; html: string }
 
-export interface MailerConfig<THandlers, TDefault> {
-  logger?: Logger
-
-  defaultHandler: TDefault
-  defaultFrom: string
-  defaultRenderFormat?: MailerRenderFormat
-
-  isDev?: boolean | ((...args: any[]) => boolean)
-  devHandler?: keyof THandlers
-
-  isTest?: boolean | ((...args: any[]) => boolean)
-  testHandler?: keyof THandlers
-
-  // TODO:
-  // - retry count
-  // - fallback provider(s)
-  // - audit trail feature?
-  // - additional defaults (e.g. headers)
+export type DefaultHandlerOptions<THandlers extends MailHandlers> = {
+  [K in keyof THandlers]?: Parameters<THandlers[K]['send']>[2]
 }
 
-export interface MailerSendOptions<THandlers, U extends keyof THandlers> {
-  handler?: U | keyof THandlers
+export type DefaultRendererOptions<TRenderers extends MailRenderers> = {
+  [K in keyof TRenderers]?: Parameters<TRenderers[K]['render']>[1]
+}
 
-  to: string | string[]
-  cc?: string | string[]
-  bcc?: string | string[]
+export type DefaultSendOptions = {
+  attachments: MailAttachment[]
+  bcc: string[]
+  cc: string[]
+  from: string
+  headers: Record<string, string>
+  replyTo: string
+}
 
-  from?: string
-  replyTo?: string
+export type MailHandlersOptions<
+  THandlers extends MailHandlers,
+  TDefaultHandler
+> = {
+  handlers: THandlers
+  default: TDefaultHandler | keyof THandlers
+  options: DefaultHandlerOptions<THandlers>
+}
+
+export type MailRenderersOptions<
+  TRenderers extends MailRenderers,
+  TDefaultRenderer
+> = {
+  renderers: TRenderers
+  default: TDefaultRenderer | keyof TRenderers
+  options: DefaultRendererOptions<TRenderers>
+}
+
+export interface MailerConfig<
+  THandlers extends MailHandlers,
+  TDefaultHandler extends keyof THandlers,
+  TRenderers extends MailRenderers,
+  TDefaultRenderer extends keyof TRenderers,
+  TTestHandler extends keyof THandlers,
+  TDevelopmentHandler extends keyof THandlers
+> {
+  handling: MailHandlersOptions<THandlers, TDefaultHandler>
+  rendering: MailRenderersOptions<TRenderers, TDefaultRenderer>
+
+  defaults?: Partial<DefaultSendOptions>
+
+  isDevelopment?: boolean | ((...args: any[]) => boolean)
+  developmentHandler?: TDevelopmentHandler
+
+  isTest?: boolean | ((...args: any[]) => boolean)
+  testHandler?: TTestHandler
+
+  logger?: Logger
+}
+
+export type MailAddress = string | { name?: string; address: string }
+
+export interface MailSendOptions<
+  THandlers,
+  THandler extends keyof THandlers,
+  TRenderers,
+  TRenderer extends keyof TRenderers
+> {
+  renderer?: TRenderer | keyof TRenderers
+  handler?: THandler | keyof THandlers
+
+  to: MailAddress | MailAddress[]
+  cc?: MailAddress | MailAddress[]
+  bcc?: MailAddress | MailAddress[]
+
+  from?: MailAddress
+  replyTo?: MailAddress
 
   subject: string
-
-  format?: MailerRenderFormat
 
   headers?: Record<string, string>
 
@@ -58,7 +111,10 @@ export type MailAttachment = {
 }
 
 // This is easier to work with inside providers whereas SendOptions is better for parameters to user facing functions
-export type CompleteSendOptions = {
+export type MailSendOptionsComplete = {
+  renderer: string | number | symbol
+  handler: string | number | symbol
+
   to: string[]
   cc: string[]
   bcc: string[]
@@ -67,8 +123,6 @@ export type CompleteSendOptions = {
   replyTo?: string
 
   subject: string
-
-  format: MailerRenderFormat
 
   headers: Record<string, string>
 
@@ -80,12 +134,6 @@ export type MailResult = {
   handlerInformation?: unknown
 }
 
-export type MailHandlerUtilities = {
+export type MailUtilities = {
   logger?: Logger | Console
 }
-
-// Derived from the react-email render utility
-export type MailTemplate = React.ReactElement<
-  any,
-  string | React.JSXElementConstructor<any>
->

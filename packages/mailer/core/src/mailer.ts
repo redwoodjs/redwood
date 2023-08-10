@@ -2,188 +2,302 @@ import type { Logger } from '@redwoodjs/api/logger'
 
 import type {
   MailerConfig,
-  MailerSendOptions,
-  MailTemplate,
+  MailSendOptions,
   MailHandlers,
+  MailRenderers,
+  DefaultSendOptions,
 } from './types'
+import { convertAddress, convertAddresses } from './utils'
 
 export class Mailer<
   THandlers extends MailHandlers,
-  TDefault extends keyof THandlers
+  TDefaultHandler extends keyof THandlers,
+  TRenderers extends MailRenderers,
+  TDefaultRenderer extends keyof TRenderers,
+  TTestHandler extends keyof THandlers,
+  TDevelopmentHandler extends keyof THandlers
 > {
   protected logger: Logger | typeof console
 
+  public mode: 'testing' | 'development' | 'production' = 'development'
+  public handlers: THandlers
+  public renderers: TRenderers
+
+  private defaults: Omit<DefaultSendOptions, 'from' | 'replyTo'> & {
+    from?: string
+    replyTo?: string
+  } = {
+    attachments: [],
+    bcc: [],
+    cc: [],
+    from: undefined,
+    headers: {},
+    replyTo: undefined,
+  }
+
   constructor(
-    public handlers: THandlers,
-    private config: MailerConfig<THandlers, TDefault>
+    private config: MailerConfig<
+      THandlers,
+      TDefaultHandler,
+      TRenderers,
+      TDefaultRenderer,
+      TTestHandler,
+      TDevelopmentHandler
+    >
   ) {
+    // Config
+    this.handlers = this.config.handling.handlers
+    this.renderers = this.config.rendering.renderers
+
     // Logger
-    if (this.config.logger !== undefined) {
-      this.logger = this.config.logger.child({ module: 'mailer' })
-    } else {
-      this.logger = console
+    this.logger = this.config.logger
+      ? this.config.logger.child({ module: 'mailer' })
+      : console
+
+    // Construct defaults from config
+    if (this.config.defaults !== undefined) {
+      if (this.config.defaults.attachments !== undefined) {
+        this.defaults.attachments = this.config.defaults.attachments
+      }
+      if (this.config.defaults.bcc !== undefined) {
+        this.defaults.bcc = convertAddresses(
+          Array.isArray(this.config.defaults.bcc)
+            ? this.config.defaults.bcc
+            : [this.config.defaults.bcc]
+        )
+      }
+      if (this.config.defaults.cc !== undefined) {
+        this.defaults.cc = convertAddresses(
+          Array.isArray(this.config.defaults.cc)
+            ? this.config.defaults.cc
+            : [this.config.defaults.cc]
+        )
+      }
+      if (this.config.defaults.replyTo !== undefined) {
+        this.defaults.replyTo = convertAddress(this.config.defaults.replyTo)
+      }
+      if (this.config.defaults.from !== undefined) {
+        this.defaults.from = convertAddress(this.config.defaults.from)
+      }
+      if (this.config.defaults.headers !== undefined) {
+        this.defaults.headers = this.config.defaults.headers
+      }
     }
 
+    // Validate default handlers
+    if (this.config.handling.default === undefined) {
+      this.logger.warn(
+        'No default handler configured, this will prevent mail from being sent when no handler is explicitly specified'
+      )
+    } else if (this.handlers[this.config.handling.default] === undefined) {
+      throw new Error(
+        `The specified default handler '${this.config.handling.default.toString()}' is not defined`
+      )
+    }
+    if (this.config.testHandler === undefined) {
+      this.logger.warn(
+        'No test handler configured, this will prevent mail from being sent in test mode'
+      )
+    } else if (this.handlers[this.config.testHandler] === undefined) {
+      throw new Error(
+        `The specified test handler '${this.config.testHandler.toString()}' is not defined`
+      )
+    }
+    if (this.config.developmentHandler === undefined) {
+      this.logger.warn(
+        'No dev handler configured, this will prevent mail from being sent in development mode'
+      )
+    } else if (this.handlers[this.config.developmentHandler] === undefined) {
+      throw new Error(
+        `The specified dev handler '${this.config.developmentHandler.toString()}' is not defined`
+      )
+    }
+
+    // Initial logging
+    this.mode = this.isTest()
+      ? 'testing'
+      : this.isDevelopment()
+      ? 'development'
+      : 'production'
     this.logger.debug(
       {
-        handlers: this.handlers,
-        config: this.config,
+        config: {
+          testHandler: this.config.testHandler,
+          developmentHandler: this.config.developmentHandler,
+          defaultHandler: this.config.handling.default,
+          defaults: this.config.defaults,
+        },
+        // handlers: Object.keys(this.handlers),
       },
-      'Mailer created'
+      `Mailer initialized in ${this.mode} mode`
     )
   }
 
-  formatAddress(address: string, name?: string) {
-    return name ? `${name} <${address}>` : address
-  }
-
-  // TODO: Ensure this is correct and robust
-  private isDev() {
-    if (this.config.isDev === undefined) {
+  private isDevelopment() {
+    if (this.config.isDevelopment === undefined) {
+      // TODO: Ensure this is a sensible default
       return process.env.NODE_ENV !== 'production'
-    } else if (typeof this.config.isDev === 'boolean') {
-      return this.config.isDev
-    } else {
-      return this.config.isDev()
     }
+    if (typeof this.config.isDevelopment === 'boolean') {
+      return this.config.isDevelopment
+    }
+    if (typeof this.config.isDevelopment === 'function') {
+      return this.config.isDevelopment()
+    }
+    throw new Error('Invalid isDev configuration')
   }
 
-  // TODO: Ensure this is correct and robust
   private isTest() {
     if (this.config.isTest === undefined) {
+      // TODO: Ensure this is a sensible default
       return process.env.NODE_ENV === 'test'
-    } else if (typeof this.config.isTest === 'boolean') {
+    }
+    if (typeof this.config.isTest === 'boolean') {
       return this.config.isTest
-    } else {
+    }
+    if (typeof this.config.isTest === 'function') {
       return this.config.isTest()
     }
+    throw new Error('Invalid isTest configuration')
   }
 
-  async send<U extends keyof THandlers = TDefault>(
-    template: MailTemplate,
-    generalOptions: MailerSendOptions<THandlers, U>,
-    handlerOptions?: Parameters<THandlers[U]['send']>[2]
+  getTestHandler() {
+    const handlerKey = this.config.testHandler
+    if (handlerKey === undefined) {
+      return undefined
+    }
+    return this.handlers[handlerKey]
+  }
+
+  getDevelopmentHandler() {
+    const handlerKey = this.config.developmentHandler
+    if (handlerKey === undefined) {
+      return undefined
+    }
+    return this.handlers[handlerKey]
+  }
+
+  async send<
+    THandler extends keyof THandlers = TDefaultHandler,
+    TRenderer extends keyof TRenderers = TDefaultRenderer
+  >(
+    template: Parameters<TRenderers[TRenderer]['render']>[0],
+    sendOptions: MailSendOptions<THandlers, THandler, TRenderers, TRenderer>,
+    handlerOptions?: Parameters<THandlers[THandler]['send']>[2],
+    rendererOptions?: Parameters<TRenderers[TRenderer]['render']>[1]
   ) {
-    const handlerKey = generalOptions.handler ?? this.config.defaultHandler
-    const handler = this.handlers[handlerKey]
-
+    const handlerKey = sendOptions.handler ?? this.config.handling.default
+    if (handlerKey === undefined) {
+      throw new Error('No handler specified and no default handler configured')
+    }
+    let handler = this.handlers[handlerKey]
+    if (this.mode === 'testing') {
+      if (this.config.testHandler === undefined) {
+        return {}
+      }
+      handler = this.handlers[this.config.testHandler]
+    }
+    if (this.mode === 'development') {
+      if (this.config.developmentHandler === undefined) {
+        return {}
+      }
+      handler = this.handlers[this.config.developmentHandler]
+    }
     if (handler === undefined) {
-      throw new Error(`No provider found for ${handlerKey.toString()}`)
+      throw new Error(`No handler found to match '${handlerKey.toString()}'`)
     }
 
-    const to = Array.isArray(generalOptions.to)
-      ? generalOptions.to
-      : [generalOptions.to]
-    const cc =
-      generalOptions.cc === undefined
-        ? []
-        : Array.isArray(generalOptions.cc)
-        ? generalOptions.cc
-        : [generalOptions.cc]
-    const bcc =
-      generalOptions.bcc === undefined
-        ? []
-        : Array.isArray(generalOptions.bcc)
-        ? generalOptions.bcc
-        : [generalOptions.bcc]
-
-    const from = generalOptions.from ?? this.config.defaultFrom
-    const replyTo = generalOptions.replyTo
-    const subject = generalOptions.subject
-    const headers = generalOptions.headers ?? {}
-    const attachments = generalOptions.attachments ?? []
-    const format =
-      generalOptions.format ?? this.config.defaultRenderFormat ?? 'both'
-
-    const generalOptionsComplete = {
-      to,
-      cc,
-      bcc,
-      from,
-      replyTo,
-      format,
-      subject,
-      headers,
-      attachments,
-    }
-
-    // If we're testing send the mail with the test handler
-    if (this.isTest()) {
-      const testHandlerKey = this.config.testHandler
-      if (testHandlerKey === undefined) {
-        this.logger.warn('No test handler configured, not sending mail!')
-        return {}
-      }
-      const testHandler = this.handlers[testHandlerKey]
-      if (testHandler === undefined) {
-        throw new Error(`No provider found for ${testHandlerKey.toString()}`)
-      }
-
-      this.logger.debug(
-        {
-          ...generalOptionsComplete,
-          attributes: undefined,
-        },
-        `Sending mail with test handler '${testHandlerKey.toString()}'`
-      )
-      return await testHandler.send(
-        template,
-        generalOptionsComplete,
-        handlerOptions,
-        {
-          logger: this.logger,
-        }
-      )
-    }
-
-    // If we're in development send the mail with the dev handler
-    if (this.isDev()) {
-      const devHandlerKey = this.config.devHandler
-      if (devHandlerKey === undefined) {
-        this.logger.warn('No dev handler configured, not sending mail!')
-        return {}
-      }
-      const devHandler = this.handlers[devHandlerKey]
-      if (devHandler === undefined) {
-        throw new Error(`No provider found for ${devHandlerKey.toString()}`)
-      }
-
-      this.logger.debug(
-        {
-          ...generalOptionsComplete,
-          attributes: undefined,
-        },
-        `Sending mail with dev handler '${devHandlerKey.toString()}'`
-      )
-      return await devHandler.send(
-        template,
-        generalOptionsComplete,
-        handlerOptions,
-        {
-          logger: this.logger,
-        }
-      )
-    }
-
-    // Send the mail with the production handler
-    this.logger.debug(
-      {
-        ...generalOptionsComplete,
-        attributes: undefined,
-      },
-      'Sending mail '
+    const to = convertAddresses(
+      Array.isArray(sendOptions.to) ? sendOptions.to : [sendOptions.to]
     )
-    const result = await handler.send(
+    if (to.length === 0) {
+      throw new Error('No to address specified')
+    }
+
+    const cc =
+      sendOptions.cc === undefined
+        ? this.defaults.cc
+        : convertAddresses(
+            Array.isArray(sendOptions.cc) ? sendOptions.cc : [sendOptions.cc]
+          )
+
+    const bcc =
+      sendOptions.bcc === undefined
+        ? this.defaults.bcc
+        : convertAddresses(
+            Array.isArray(sendOptions.bcc) ? sendOptions.bcc : [sendOptions.bcc]
+          )
+
+    const from =
+      sendOptions.from === undefined
+        ? this.defaults.from
+        : convertAddress(sendOptions.from)
+    if (from === undefined) {
+      throw new Error('No from address specified and no default configured')
+    }
+
+    const replyTo =
+      sendOptions.replyTo === undefined
+        ? this.defaults.replyTo
+        : convertAddress(sendOptions.replyTo)
+
+    const subject = sendOptions.subject
+    if (subject === undefined) {
+      throw new Error('No subject specified')
+    }
+
+    const headers = sendOptions.headers ?? this.defaults.headers
+    const attachments = sendOptions.attachments ?? this.defaults.attachments
+
+    // Render the mail using the renderer
+    const chosenRendererKey =
+      sendOptions.renderer ?? this.config.rendering.default
+    if (chosenRendererKey === undefined) {
+      throw new Error(
+        'No renderer specified and no default renderer configured'
+      )
+    }
+    const chosenRenderer = this.renderers[chosenRendererKey]
+    if (chosenRenderer === undefined) {
+      throw new Error(
+        `No renderer found to match '${chosenRendererKey.toString()}'`
+      )
+    }
+
+    const defaultedRendererOptions = {
+      ...this.config.rendering.options?.[chosenRendererKey],
+      ...rendererOptions,
+    }
+    const renderedContent = chosenRenderer.render(
       template,
-      generalOptionsComplete,
-      handlerOptions,
+      defaultedRendererOptions,
       {
         logger: this.logger,
       }
     )
 
+    // Send the mail using the handler
+    const result = await handler.send(
+      renderedContent,
+      {
+        renderer: chosenRendererKey,
+        handler: handlerKey,
+        to,
+        cc,
+        bcc,
+        from,
+        replyTo,
+        subject,
+        headers,
+        attachments,
+      },
+      handlerOptions,
+      {
+        logger: this.logger,
+        rendererOptions: defaultedRendererOptions,
+      }
+    )
     this.logger.debug({ result }, 'Mail sent')
-
     return result
   }
 }

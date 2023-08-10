@@ -6,7 +6,8 @@
     "packages/auth-providers/*/*",
     "packages/cli-packages/*",
     "packages/mailer/core",
-    "packages/mailer/handlers/*"
+    "packages/mailer/handlers/*",
+    "packages/mailer/renderers/*"
   ],
   "scripts": {
     "build": "lerna run build",
