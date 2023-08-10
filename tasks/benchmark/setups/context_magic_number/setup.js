@@ -33,5 +33,17 @@ function main() {
     path.join('.', 'templates', 'benchmarks.ts'),
     path.join(benchmarkServicePath, 'benchmarks.ts')
   )
+
+  // Copy over the function
+  const benchmarkFunctionPath = path.join(
+    REDWOOD_PROJECT_DIRECTORY,
+    'api',
+    'src',
+    'functions'
+  )
+  fs.copyFileSync(
+    path.join('.', 'templates', 'func.ts'),
+    path.join(benchmarkFunctionPath, 'func.ts')
+  )
 }
 main()
