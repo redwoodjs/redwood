@@ -15,8 +15,6 @@ import type {
 } from 'graphql'
 import { merge, omitBy } from 'lodash'
 
-import { getConfig } from '@redwoodjs/project-config'
-
 import type { RedwoodDirective } from './plugins/useRedwoodDirective'
 import * as rootGqlSchema from './rootSchema'
 import type { RedwoodSubscription } from './subscriptions/makeSubscriptions'
@@ -104,22 +102,11 @@ const mapFieldsToService = ({
           context: unknown,
           info: unknown
         ) => {
-          // In serverless deploys like Netilfy and Vercel, the redwood.toml file may not be present,
-          // so we need to try-catch the attempt here to read it
-          let experimentalOpenTelemetryEnabled = false
-
-          try {
-            experimentalOpenTelemetryEnabled =
-              getConfig().experimental.opentelemetry.enabled
-          } catch (e) {
-            // Swallow the error for now
-          }
-
           const captureResolvers =
             // @ts-expect-error context is unknown
             context && context['OPEN_TELEMETRY_GRAPHQL'] !== undefined
 
-          if (experimentalOpenTelemetryEnabled && captureResolvers) {
+          if (captureResolvers) {
             return wrapWithOpenTelemetry(
               services[name],
               args,
