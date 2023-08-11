@@ -55,7 +55,7 @@
     "@babel/runtime-corejs3": "7.22.6",
     "@faker-js/faker": "8.0.2",
     "@npmcli/arborist": "6.2.10",
-    "@playwright/test": "1.35.1",
+    "@playwright/test": "1.37.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
