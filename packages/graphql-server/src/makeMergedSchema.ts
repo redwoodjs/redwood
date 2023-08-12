@@ -83,84 +83,46 @@ const mapFieldsToService = ({
     ) => any
   }
   services: Services
-}) => {
-  const keys = Object.keys(fields)
-  const mapped = unmappedResolvers ?? {}
-  for (let i = 0; i < keys.length; i++) {
-    const name = keys[i]
-
+}) =>
+  Object.keys(fields).reduce((resolvers, name) => {
     // Does the function already exist in the resolvers from the schema definition?
-    if (mapped?.[name]) {
-      continue
+    if (resolvers?.[name]) {
+      return resolvers
     }
 
     // Does a function exist in the service?
     if (services?.[name]) {
-      mapped[name] = async (
-        root: unknown,
-        args: unknown,
-        context: unknown,
-        info: unknown
-      ) => {
-        const captureResolvers =
-          // @ts-expect-error context is unknown
-          context && context['OPEN_TELEMETRY_GRAPHQL'] !== undefined
+      return {
+        ...resolvers,
+        // Map the arguments from GraphQL to an ordinary function a service would
+        // expect.
+        [name]: async (
+          root: unknown,
+          args: unknown,
+          context: unknown,
+          info: unknown
+        ) => {
+          const captureResolvers =
+            // @ts-expect-error context is unknown
+            context && context['OPEN_TELEMETRY_GRAPHQL'] !== undefined
 
-        if (captureResolvers) {
-          return wrapWithOpenTelemetry(
-            services[name],
-            args,
-            root,
-            context,
-            info,
-            name
-          )
-        }
-        return services[name](args, { root, context, info })
+          if (captureResolvers) {
+            return wrapWithOpenTelemetry(
+              services[name],
+              args,
+              root,
+              context,
+              info,
+              name
+            )
+          }
+          return services[name](args, { root, context, info })
+        },
       }
     }
-  }
-  return mapped
-}
-// Object.keys(fields).reduce((resolvers, name) => {
-//   // Does the function already exist in the resolvers from the schema definition?
-//   if (resolvers?.[name]) {
-//     return resolvers
-//   }
 
-//   // Does a function exist in the service?
-//   if (services?.[name]) {
-//     return {
-//       ...resolvers,
-//       // Map the arguments from GraphQL to an ordinary function a service would
-//       // expect.
-//       [name]: async (
-//         root: unknown,
-//         args: unknown,
-//         context: unknown,
-//         info: unknown
-//       ) => {
-//         const captureResolvers =
-//           // @ts-expect-error context is unknown
-//           context && context['OPEN_TELEMETRY_GRAPHQL'] !== undefined
-
-//         if (captureResolvers) {
-//           return wrapWithOpenTelemetry(
-//             services[name],
-//             args,
-//             root,
-//             context,
-//             info,
-//             name
-//           )
-//         }
-//         return services[name](args, { root, context, info })
-//       },
-//     }
-//   }
-
-//   return resolvers
-// }, unmappedResolvers)
+    return resolvers
+  }, unmappedResolvers)
 /**
  *
  * @param types on Union type: i.e for union Media =  Book | Movie, parameter = [Book, Movie]
@@ -232,121 +194,62 @@ const mergeResolversWithServices = ({
     ...Object.keys(services).map((name) => services[name])
   )
 
-  const schemaTypeMapKeys = Object.keys(schema.getTypeMap())
-
   // Get a list of types that have fields.
   // TODO: Figure out if this would interfere with other types: Interface types, etc.`
-  const typesWithFields: GraphQLTypeWithFields[] = []
-  for (let i = 0; i < schemaTypeMapKeys.length; i++) {
-    const name = schemaTypeMapKeys[i]
-    const type = schema.getType(name)
-    if (
-      !name.startsWith('_') &&
-      typeof (type as GraphQLTypeWithFields).getFields !== 'undefined'
-    ) {
-      if (type !== undefined && type !== null) {
-        typesWithFields.push(type as GraphQLTypeWithFields)
-      }
-    }
-  }
-
-  // const typesWithFields = schemaTypeMapKeys
-  //   .filter((name) => !name.startsWith('_'))
-  //   .filter(
-  //     (name) =>
-  //       typeof (schema.getType(name) as GraphQLTypeWithFields).getFields !==
-  //       'undefined'
-  //   )
-  //   .map((name) => {
-  //     return schema.getType(name)
-  //   })
-  //   .filter(
-  //     (type): type is GraphQLTypeWithFields =>
-  //       type !== undefined && type !== null
-  //   )
+  const typesWithFields = Object.keys(schema.getTypeMap())
+    .filter((name) => !name.startsWith('_'))
+    .filter(
+      (name) =>
+        typeof (schema.getType(name) as GraphQLTypeWithFields).getFields !==
+        'undefined'
+    )
+    .map((name) => {
+      return schema.getType(name)
+    })
+    .filter(
+      (type): type is GraphQLTypeWithFields =>
+        type !== undefined && type !== null
+    )
   // gets union types, which does not have fields but has types. i.e union Media = Book | Movie
-  const unionTypes: GraphQLUnionType[] = []
-  for (let i = 0; i < schemaTypeMapKeys.length; i++) {
-    const name = schemaTypeMapKeys[i]
-    const type = schema.getType(name)
-    if (typeof (type as GraphQLUnionType).getTypes !== 'undefined') {
-      if (type !== undefined && type !== null) {
-        unionTypes.push(type as GraphQLUnionType)
-      }
-    }
-  }
-  // const unionTypes = schemaTypeMapKeys
-  //   .filter(
-  //     (name) =>
-  //       typeof (schema.getType(name) as GraphQLUnionType).getTypes !==
-  //       'undefined'
-  //   )
-  //   .map((name) => {
-  //     return schema.getType(name)
-  //   })
-  //   .filter(
-  //     (type): type is GraphQLUnionType => type !== undefined && type !== null
-  //   )
+  const unionTypes = Object.keys(schema.getTypeMap())
+    .filter(
+      (name) =>
+        typeof (schema.getType(name) as GraphQLUnionType).getTypes !==
+        'undefined'
+    )
+    .map((name) => {
+      return schema.getType(name)
+    })
+    .filter(
+      (type): type is GraphQLUnionType => type !== undefined && type !== null
+    )
 
-  const mappedResolvers: Record<
-    string,
-    ReturnType<typeof mapFieldsToService>
-  > = {}
-  for (let i = 0; i < typesWithFields.length; i++) {
-    const type = typesWithFields[i]
+  const mappedResolvers = typesWithFields.reduce((acc, type) => {
+    // Services export Query and Mutation field resolvers as named exports,
+    // but other GraphQLObjectTypes are exported as an object that are named
+    // after the type.
+    // Example: export const MyType = { field: () => {} }
     let servicesForType = mergedServices
-    if (
-      type.name !== 'Query' &&
-      type.name !== 'Mutation' &&
-      type.name !== 'Subscription'
-    ) {
+    if (!['Query', 'Mutation', 'Subscription'].includes(type.name)) {
       servicesForType = mergedServices?.[type.name]
     }
-    // if (!['Query', 'Mutation', 'Subscription'].includes(type.name)) {
-    //   servicesForType = mergedServices?.[type.name]
-    // }
 
-    mappedResolvers[type.name] = mapFieldsToService({
-      fields: type.getFields(),
-      resolvers: resolvers?.[type.name],
-      services: servicesForType,
-    })
-  }
-  // const mappedResolvers = typesWithFields.reduce((acc, type) => {
-  //   // Services export Query and Mutation field resolvers as named exports,
-  //   // but other GraphQLObjectTypes are exported as an object that are named
-  //   // after the type.
-  //   // Example: export const MyType = { field: () => {} }
-  //   let servicesForType = mergedServices
-  //   if (!['Query', 'Mutation', 'Subscription'].includes(type.name)) {
-  //     servicesForType = mergedServices?.[type.name]
-  //   }
+    return {
+      ...acc,
+      [type.name]: mapFieldsToService({
+        fields: type.getFields(),
+        resolvers: resolvers?.[type.name],
+        services: servicesForType,
+      }),
+    }
+  }, {})
 
-  //   return {
-  //     ...acc,
-  //     [type.name]: mapFieldsToService({
-  //       fields: type.getFields(),
-  //       resolvers: resolvers?.[type.name],
-  //       services: servicesForType,
-  //     }),
-  //   }
-  // }, {})
-
-  const mappedUnionResolvers: Record<
-    string,
-    ReturnType<typeof resolveUnionType>
-  > = {}
-  for (let i = 0; i < unionTypes.length; i++) {
-    const type = unionTypes[i]
-    mappedUnionResolvers[type.name] = resolveUnionType(type.getTypes())
-  }
-
-  // const mappedUnionResolvers = unionTypes.reduce((acc, type) => {
-  //   return {
-  //     ...acc,
-  //     [type.name]: resolveUnionType(type.getTypes()),
-  //   }
-  // }, {})
+  const mappedUnionResolvers = unionTypes.reduce((acc, type) => {
+    return {
+      ...acc,
+      [type.name]: resolveUnionType(type.getTypes()),
+    }
+  }, {})
 
   return omitBy(
     {
@@ -432,18 +335,12 @@ const mergeResolversWithSubscriptions = ({
   if (subscriptions && subscriptions.length > 0) {
     const subscriptionResolvers = { Subscription: {} } as IResolvers
 
-    for (let i = 0; i < subscriptions.length; i++) {
+    subscriptions?.forEach((subscription) => {
       subscriptionResolvers['Subscription'] = {
         ...subscriptionResolvers['Subscription'],
-        ...subscriptions[i].resolvers,
+        ...subscription.resolvers,
       }
-    }
-    // subscriptions?.forEach((subscription) => {
-    //   subscriptionResolvers['Subscription'] = {
-    //     ...subscriptionResolvers['Subscription'],
-    //     ...subscription.resolvers,
-    //   }
-    // })
+    })
 
     return addResolversToSchema({
       schema,
