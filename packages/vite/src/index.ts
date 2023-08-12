@@ -12,7 +12,8 @@ import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'
 import removeFromBundle from './plugins/vite-plugin-remove-from-bundle'
 
 /**
- * Pre-configured vite plugin, with required config for Redwood apps.
+ * Preconfigured vite plugin, with required config for Redwood apps.
+ *
  */
 export default function redwoodPluginVite(): PluginOption[] {
   const rwPaths = getPaths()
@@ -139,10 +140,6 @@ export default function redwoodPluginVite(): PluginOption[] {
               RWJS_API_URL: rwConfig.web.apiUrl,
               __REDWOOD__APP_TITLE:
                 rwConfig.web.title || path.basename(rwPaths.base),
-              RWJS_EXP_STREAMING_SSR:
-                rwConfig.experimental.streamingSsr &&
-                rwConfig.experimental.streamingSsr.enabled,
-              RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
             },
             RWJS_DEBUG_ENV: {
               RWJS_SRC_ROOT: rwPaths.web.src,
@@ -240,10 +237,9 @@ export default function redwoodPluginVite(): PluginOption[] {
             manifest: !env.ssrBuild ? 'build-manifest.json' : undefined,
             sourcemap: !env.ssrBuild && rwConfig.web.sourceMap, // Note that this can be boolean or 'inline'
           },
+          // To produce a cjs bundle for SSR
           legacy: {
-            buildSsrCjsExternalHeuristics: rwConfig.experimental?.rsc?.enabled
-              ? false
-              : env.ssrBuild,
+            buildSsrCjsExternalHeuristics: env.ssrBuild,
           },
           optimizeDeps: {
             esbuildOptions: {

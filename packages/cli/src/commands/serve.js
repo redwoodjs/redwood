@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
+import chalk from 'chalk'
+import execa from 'execa'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
-
-import { webServerHandler, webSsrServerHandler } from './serveWebHandler'
 
 export const command = 'serve [side]'
 export const description = 'Run server for api or web in production'
@@ -43,27 +43,36 @@ export const builder = async (yargs) => {
 
         // Run the experimental server file, if it exists, with web side also
         if (hasExperimentalServerFile()) {
-          const { bothExperimentalServerFileHandler } = await import(
-            './serveBothHandler.js'
+          console.log(
+            [
+              separator,
+              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+              separator,
+              'Using the experimental API server file at api/dist/server.js',
+              separator,
+            ].join('\n')
           )
-          await bothExperimentalServerFileHandler()
-        } else if (getConfig().experimental?.rsc?.enabled) {
-          const { bothRscServerHandler } = await import('./serveBothHandler.js')
-          await bothRscServerHandler(argv)
-        } else if (getConfig().experimental?.streamingSsr?.enabled) {
-          const { bothSsrServerHandler } = await import('./serveBothHandler.js')
-          await bothSsrServerHandler(argv)
-        } else {
-          // Wanted to use the new web-server package here, but can't because
-          // of backwards compatibility reasons. With `bothServerHandler` both
-          // the web side and the api side run on the same server with the same
-          // port. If we use a separate fe server and api server we can't run
-          // them on the same port, and so we lose backwards compatibility.
-          // TODO: Use @redwoodjs/web-server when we're ok with breaking
-          // backwards compatibility.
-          const { bothServerHandler } = await import('./serveBothHandler.js')
-          await bothServerHandler(argv)
+          await execa(
+            'yarn',
+            ['node', path.join('dist', 'server.js'), '--enable-web'],
+            {
+              cwd: getPaths().api.base,
+              stdio: 'inherit',
+              shell: true,
+            }
+          )
+          return
         }
+
+        // Wanted to use the new web-server package here, but can't because
+        // of backwards compatibility reasons. With `bothServerHandler` both
+        // the web side and the api side run on the same server with the same
+        // port. If we use a separate fe server and api server we can't run
+        // them on the same port, and so we lose backwards compatibility.
+        // TODO: Use @redwoodjs/web-server when we're ok with breaking
+        // backwards compatibility.
+        const { bothServerHandler } = await import('./serveHandler.js')
+        await bothServerHandler(argv)
       },
     })
     .command({
@@ -96,14 +105,25 @@ export const builder = async (yargs) => {
 
         // Run the experimental server file, if it exists, api side only
         if (hasExperimentalServerFile()) {
-          const { apiExperimentalServerFileHandler } = await import(
-            './serveApiHandler.js'
+          console.log(
+            [
+              separator,
+              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
+              separator,
+              'Using the experimental API server file at api/dist/server.js',
+              separator,
+            ].join('\n')
           )
-          await apiExperimentalServerFileHandler()
-        } else {
-          const { apiServerHandler } = await import('./serveApiHandler.js')
-          await apiServerHandler(argv)
+          await execa('yarn', ['node', path.join('dist', 'server.js')], {
+            cwd: getPaths().api.base,
+            stdio: 'inherit',
+            shell: true,
+          })
+          return
         }
+
+        const { apiServerHandler } = await import('./serveHandler.js')
+        await apiServerHandler(argv)
       },
     })
     .command({
@@ -132,11 +152,23 @@ export const builder = async (yargs) => {
           apiHost: argv.apiHost,
         })
 
-        if (getConfig().experimental?.streamingSsr?.enabled) {
-          await webSsrServerHandler()
-        } else {
-          await webServerHandler(argv)
-        }
+        await execa(
+          'yarn',
+          [
+            'rw-web-server',
+            '--port',
+            argv.port,
+            '--socket',
+            argv.socket,
+            '--api-host',
+            argv.apiHost,
+          ],
+          {
+            cwd: getPaths().base,
+            stdio: 'inherit',
+            shell: true,
+          }
+        )
       },
     })
     .middleware((argv) => {
@@ -197,6 +229,10 @@ export const builder = async (yargs) => {
       )}`
     )
 }
+
+const separator = chalk.hex('#ff845e')(
+  '------------------------------------------------------------------'
+)
 
 // We'll clean this up later, but for now note that this function is
 // duplicated between this package and @redwoodjs/fastify

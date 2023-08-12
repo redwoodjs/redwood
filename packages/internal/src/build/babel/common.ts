@@ -6,8 +6,6 @@ import { parseConfigFileTextToJson } from 'typescript'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getWebSideBabelPlugins } from './web'
-
 const pkgJson = require('../../../package.json')
 
 export interface RegisterHookOptions {
@@ -68,28 +66,6 @@ export const getCommonPlugins = () => {
     // (https://babeljs.io/docs/en/babel-plugin-proposal-private-methods#loose)
     ['@babel/plugin-transform-private-methods', { loose: true }],
     ['@babel/plugin-transform-private-property-in-object', { loose: true }],
-  ]
-}
-
-// TODO (STREAMING) double check this, think about it more carefully please!
-// It's related to yarn workspaces to be or not to be
-export const getRouteHookBabelPlugins = () => {
-  return [
-    ...getWebSideBabelPlugins({
-      forVite: true,
-    }),
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias: {
-          'api/src': './src',
-        },
-        root: [getPaths().api.base],
-        cwd: 'packagejson',
-        loglevel: 'silent', // to silence the unnecessary warnings
-      },
-      'rwjs-api-module-resolver',
-    ],
   ]
 }
 

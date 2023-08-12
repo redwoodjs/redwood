@@ -31,7 +31,7 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest",
+    "test": "jest src",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
@@ -59,14 +59,14 @@
     "jest-runner-tsd": "5.0.0",
     "nodemon": "2.0.22",
     "prop-types": "15.8.1",
-    "react": "18.3.0-canary-035a41c4e-20230704",
-    "react-dom": "18.3.0-canary-035a41c4e-20230704",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "typescript": "5.1.6"
   },
   "peerDependencies": {
     "prop-types": "15.8.1",
-    "react": "18.3.0-canary-035a41c4e-20230704",
-    "react-dom": "18.3.0-canary-035a41c4e-20230704"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

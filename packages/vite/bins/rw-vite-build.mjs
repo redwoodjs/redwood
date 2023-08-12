@@ -3,14 +3,12 @@ import fs from 'node:fs'
 import yargsParser from 'yargs-parser'
 
 import { buildWeb } from '@redwoodjs/internal/dist/build/web.js'
-import { getConfig, getPaths } from '@redwoodjs/project-config'
-import { buildFeServer } from '@redwoodjs/vite/buildFeServer'
+import projectConfig from '@redwoodjs/project-config'
 
-const rwPaths = getPaths()
+const rwPaths = projectConfig.getPaths()
 
-const { webDir, verbose } = yargsParser(process.argv.slice(2), {
+const { webDir } = yargsParser(process.argv.slice(2), {
   string: ['webDir'],
-  boolean: ['verbose'],
 })
 
 if (!webDir) {
@@ -41,18 +39,15 @@ const buildWebSide = async (webDir) => {
     throw new Error('Could not locate your web/vite.config.{js,ts} file')
   }
 
+  // @NOTE: necessary for keeping the cwd correct for postcss/tailwind
+  process.chdir(webDir)
   process.env.NODE_ENV = 'production'
 
-  if (getConfig().experimental?.streamingSsr?.enabled) {
-    // Webdir checks handled in the rwjs/vite package in new build system
-    await buildFeServer({ verbose, webDir })
-  } else {
-    // Ensure cwd to be web: required for postcss/tailwind to work correctly
-    process.chdir(webDir)
-    // Right now, the buildWeb function looks up the config file from project-config
-    // In the future, if we have multiple web spaces we could pass in the cwd here
-    buildWeb({ verbose })
-  }
+  // Right now, the buildWeb function looks up the config file from project-config
+  // In the future, if we have multiple web spaces we could pass in the cwd here
+  buildWeb({
+    verbose: true,
+  })
 }
 
 buildWebSide(webDir)

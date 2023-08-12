@@ -114,17 +114,14 @@ export const handler = async ({
           // it could affect other things that run in parallel while building.
           // We don't have any parallel tasks right now, but someone might add
           // one in the future as a performance optimization.
-          await execa(
-            `yarn rw-vite-build --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
-            {
-              stdio: verbose ? 'inherit' : 'pipe',
-              shell: true,
-              // `cwd` is needed for yarn to find the rw-vite-build binary
-              // It won't change process.cwd for anything else here, in this
-              // process
-              cwd: rwjsPaths.web.base,
-            }
-          )
+          await execa(`yarn rw-vite-build --webDir="${rwjsPaths.web.base}"`, {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+            // This is needed for yarn to find the rw-vite-build binary
+            // It won't change process.cwd for anything else here, in this
+            // process
+            cwd: rwjsPaths.web.base,
+          })
         } else {
           await execa(
             `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(

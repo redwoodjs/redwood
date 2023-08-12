@@ -7,7 +7,7 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { getConfig } from '@redwoodjs/project-config'
 
 import { getPaths } from '../../lib'
-import { apiServerHandler } from '../serveApiHandler'
+import { apiServerHandler } from '../serveHandler'
 
 export const command = 'flightcontrol <side>'
 export const alias = 'fc'

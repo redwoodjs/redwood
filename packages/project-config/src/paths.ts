@@ -39,18 +39,11 @@ export interface WebPaths {
   webpack: string
   viteConfig: string | null // because vite is opt-in only
   entryClient: string | null
-  entryServer: string | null
-  entries: string | null
   postcss: string
   storybookConfig: string
   storybookPreviewConfig: string
   storybookManagerConfig: string
   dist: string
-  distServer: string
-  distEntryServer: string
-  distRouteHooks: string
-  distServerEntries: string
-  routeManifest: string
   types: string
 }
 
@@ -108,8 +101,6 @@ const PATH_WEB_DIR_CONFIG = 'web/config'
 const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
-const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
-const PATH_WEB_DIR_ENTRIES = 'web/src/entries' // .js,.ts
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
@@ -117,11 +108,6 @@ const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
 
 const PATH_WEB_DIR_DIST = 'web/dist'
-const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
-const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
-const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
-const PATH_WEB_DIR_DIST_SERVER_ENTRIES = 'web/dist/server/entries.js'
-const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
 
 /**
  * The Redwood config file is used as an anchor for the base directory of a project.
@@ -226,18 +212,8 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
         PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
-      distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
-      distEntryServer: path.join(
-        BASE_DIR,
-        PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER
-      ),
-      distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
-      distServerEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRIES),
-      routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
-      entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),
-      entries: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRIES)),
     },
   }
 
@@ -246,32 +222,6 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
 
   getPathsCache.set(BASE_DIR, paths)
   return paths
-}
-
-/**
- * Returns the route hook for the supplied page path.
- * Note that the page name doesn't have to match
- *
- * @param pagePath
- * @returns string
- */
-export const getRouteHookForPage = (pagePath: string | undefined | null) => {
-  if (!pagePath) {
-    return null
-  }
-
-  // We just use fg, so if they make typos in the routeHook file name,
-  // it's all good, we'll still find it
-  return fg
-    .sync('*.routeHooks.{js,ts,tsx,jsx}', {
-      absolute: true,
-      cwd: path.dirname(pagePath), // the page's folder
-    })
-    .at(0)
-}
-
-export const getAppRouteHook = () => {
-  return resolveFile(path.join(getPaths().web.src, 'App.routeHooks'))
 }
 
 /**

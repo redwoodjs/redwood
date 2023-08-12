@@ -3,16 +3,14 @@
 // making it fine for embedding inside this project.
 
 // Stacktracey requires buffer, which Vite does not polyfill by default
-if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || require('buffer').Buffer
-}
+window.Buffer = window.Buffer || require('buffer').Buffer
 
 import { useState } from 'react'
 
 import StackTracey from 'stacktracey'
 
 // RWJS_SRC_ROOT is defined and defaulted in webpack to the base path
-const srcRoot = globalThis.RWJS_DEBUG_ENV?.RWJS_SRC_ROOT || ''
+const srcRoot = RWJS_DEBUG_ENV?.RWJS_SRC_ROOT || ''
 
 let appRoot: string
 
