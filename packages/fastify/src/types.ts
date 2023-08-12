@@ -3,6 +3,7 @@ import type { FastifyInstance } from 'fastify'
 export interface RedwoodFastifyAPIOptions {
   redwood?: {
     apiRootPath?: string
+    ignoredFunctions?: string[]
   }
 }
 

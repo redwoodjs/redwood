@@ -32,6 +32,12 @@ export const builder = async (yargs) => {
             alias: 'p',
           },
           socket: { type: 'string' },
+          graphqlServer: {
+            alias: 'graphql-server',
+            type: 'boolean',
+            default: true,
+            desc: 'Serve graphql via a persistent server rather than a serverless function',
+          },
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
@@ -39,6 +45,7 @@ export const builder = async (yargs) => {
           port: argv.port,
           host: argv.host,
           socket: argv.socket,
+          graphqlServer: argv.graphqlServer,
         })
 
         // Run the experimental server file, if it exists, with web side also
@@ -84,6 +91,12 @@ export const builder = async (yargs) => {
             desc: 'Root path where your api functions are served',
             coerce: coerceRootPath,
           },
+          graphqlServer: {
+            alias: 'graphql-server',
+            type: 'boolean',
+            default: true,
+            desc: 'Serve graphql via a persistent server rather than a serverless function',
+          },
         }),
       handler: async (argv) => {
         recordTelemetryAttributes({
@@ -92,6 +105,7 @@ export const builder = async (yargs) => {
           host: argv.host,
           socket: argv.socket,
           apiRootPath: argv.apiRootPath,
+          graphqlServer: argv.graphqlServer,
         })
 
         // Run the experimental server file, if it exists, api side only

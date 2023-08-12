@@ -38,7 +38,9 @@ export async function redwoodFastifyAPI(
   const apiRootPath = opts.redwood?.apiRootPath || '/'
   fastify.all(`${apiRootPath}:routeName`, lambdaRequestHandler)
   fastify.all(`${apiRootPath}:routeName/*`, lambdaRequestHandler)
-  await loadFunctionsFromDist()
+  await loadFunctionsFromDist({
+    ignoredFunctions: opts.redwood?.ignoredFunctions ?? [],
+  })
 
   done()
 }

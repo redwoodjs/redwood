@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
@@ -8,6 +9,7 @@ import {
   createFastifyInstance,
   redwoodFastifyAPI,
   redwoodFastifyWeb,
+  redwoodFastifyGraphQLServer,
 } from '@redwoodjs/fastify'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
@@ -101,7 +103,7 @@ export const bothSsrServerHandler = async (argv) => {
 }
 
 export const bothServerHandler = async (options) => {
-  const { port, socket } = options
+  const { port, socket, graphqlServer } = options
   const tsServer = Date.now()
 
   console.log(chalk.italic.dim('Starting API and Web Servers...'))
@@ -120,10 +122,34 @@ export const bothServerHandler = async (options) => {
 
   const apiRootPath = coerceRootPath(getConfig().web.apiUrl)
 
+  // Check for the graphql function and it's exported options
+  const ignoredFunctions = []
+  const graphqlFunctionPath = path.join(
+    getPaths().api.dist,
+    'functions',
+    'graphql.js'
+  )
+  if (graphqlServer && fs.existsSync(graphqlFunctionPath)) {
+    const { __redwoodGraphqlOptionsExtract } = await import(graphqlFunctionPath)
+    if (__redwoodGraphqlOptionsExtract !== undefined) {
+      ignoredFunctions.push('graphql')
+
+      // Register the graphql server
+      await fastify.register(redwoodFastifyGraphQLServer, {
+        ...__redwoodGraphqlOptionsExtract,
+        // TODO: This doesn't fill me with confidence
+        graphiQLEndpoint:
+          apiRootPath +
+          (__redwoodGraphqlOptionsExtract.graphiQLEndpoint ?? 'graphql'),
+      })
+    }
+  }
+
   await fastify.register(redwoodFastifyAPI, {
     redwood: {
       ...options,
       apiRootPath,
+      ignoredFunctions,
     },
   })
 
