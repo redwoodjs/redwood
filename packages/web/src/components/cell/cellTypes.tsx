@@ -75,7 +75,7 @@ type OmitTypename<T> = Omit<T, '__typename'>
 
 type PropertyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
 
-type ConditionallyGuaranteed<T> = PropertyCount<OmitTypename<T>> extends 1
+type ConditionallyGuaranteed<T extends object> = PropertyCount<T> extends 1
   ? Guaranteed<T>
   : T
 
@@ -93,8 +93,8 @@ type ConditionallyGuaranteed<T> = PropertyCount<OmitTypename<T>> extends 1
  * post.id // post is non optional, so no need to do post?.id
  *
  */
-export type CellSuccessData<TData = any> = OmitTypename<
-  ConditionallyGuaranteed<TData>
+export type CellSuccessData<TData = any> = ConditionallyGuaranteed<
+  OmitTypename<TData>
 >
 
 /**
