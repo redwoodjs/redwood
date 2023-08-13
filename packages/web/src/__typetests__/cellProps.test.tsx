@@ -2,13 +2,9 @@
 import React from 'react'
 
 import gql from 'graphql-tag'
-import { expectAssignable, expectType } from 'tsd-lite'
+import { expectAssignable } from 'tsd-lite'
 
-import type {
-  CellProps,
-  CellSuccessData,
-  CellSuccessProps,
-} from '@redwoodjs/web'
+import type { CellProps, CellSuccessProps } from '@redwoodjs/web'
 
 type ExampleQueryVariables = {
   category: string
@@ -193,21 +189,5 @@ describe('CellProps mapper type', () => {
         customProp: 55,
       })
     })
-  })
-})
-
-describe('CellSuccessData', () => {
-  it('omits __typename', () => {
-    const value: CellSuccessData<{ foo: string; __typename: 'Foo' }> = {
-      foo: '',
-    }
-
-    expectType<{ foo: string }>(value)
-  })
-
-  it('removes null and undefined from properties', () => {
-    const value: CellSuccessData<{ foo?: string | null }> = { foo: '' }
-
-    expectType<{ foo: string }>(value)
   })
 })
