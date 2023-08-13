@@ -73,9 +73,9 @@ type Guaranteed<T> = {
 
 type OmitTypename<T> = Omit<T, '__typename'>
 
-type PropertyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
+type KeyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
 
-type ConditionallyGuaranteed<T extends object> = PropertyCount<T> extends 1
+type ConditionallyGuaranteed<T extends object> = KeyCount<T> extends 1
   ? Guaranteed<T>
   : T
 
