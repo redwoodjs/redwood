@@ -71,8 +71,6 @@ type Guaranteed<T> = {
   [K in keyof T]-?: NonNullable<T[K]>
 }
 
-type OmitTypename<T> = Omit<T, '__typename'>
-
 type KeyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
 
 type ConditionallyGuaranteed<T extends object> = KeyCount<T> extends 1
@@ -94,7 +92,7 @@ type ConditionallyGuaranteed<T extends object> = KeyCount<T> extends 1
  *
  */
 export type CellSuccessData<TData = any> = ConditionallyGuaranteed<
-  OmitTypename<TData>
+  Omit<TData, '__typename'>
 >
 
 /**
