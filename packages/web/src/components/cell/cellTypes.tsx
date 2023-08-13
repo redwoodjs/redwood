@@ -8,7 +8,7 @@ import type {
   UseBackgroundQueryResult,
 } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
-import type { A } from 'ts-toolbelt'
+import type { A, L, O, U } from 'ts-toolbelt'
 
 /**
  *
@@ -70,6 +70,11 @@ export type CellFailureProps<TVariables extends OperationVariables = any> = {
 type Guaranteed<T> = {
   [K in keyof T]-?: NonNullable<T[K]>
 }
+
+type OmitTypename<T> = Omit<T, '__typename'>
+
+type PropertyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
+
 /**
  * Use this type, if you are forwarding on the data from your Cell's Success component
  * Because Cells automatically checks for "empty", or "errors" - if you receive the data type in your
@@ -84,8 +89,12 @@ type Guaranteed<T> = {
  * post.id // post is non optional, so no need to do post?.id
  *
  */
+export type CellSuccessData<TData = any> = PropertyCount<
+  OmitTypename<TData>
+> extends 1
+  ? OmitTypename<Guaranteed<TData>>
+  : OmitTypename<TData>
 
-export type CellSuccessData<TData = any> = Omit<Guaranteed<TData>, '__typename'>
 /**
  * @MARK not sure about this partial, but we need to do this for tests and storybook.
  *
