@@ -75,6 +75,10 @@ type OmitTypename<T> = Omit<T, '__typename'>
 
 type PropertyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
 
+type ConditionallyGuaranteed<T> = PropertyCount<OmitTypename<T>> extends 1
+  ? Guaranteed<T>
+  : T
+
 /**
  * Use this type, if you are forwarding on the data from your Cell's Success component
  * Because Cells automatically checks for "empty", or "errors" - if you receive the data type in your
@@ -89,11 +93,9 @@ type PropertyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
  * post.id // post is non optional, so no need to do post?.id
  *
  */
-export type CellSuccessData<TData = any> = PropertyCount<
-  OmitTypename<TData>
-> extends 1
-  ? OmitTypename<Guaranteed<TData>>
-  : OmitTypename<TData>
+export type CellSuccessData<TData = any> = OmitTypename<
+  ConditionallyGuaranteed<TData>
+>
 
 /**
  * @MARK not sure about this partial, but we need to do this for tests and storybook.
