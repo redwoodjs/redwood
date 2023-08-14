@@ -1,55 +1,45 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { createPortal } from 'react-dom'
 
 import { useServerInsertedHTML } from './ServerInject'
 
-function addDataAttributeMarker(children: React.ReactNode) {
+function addDataAttributeMarker(
+  children: React.ReactNode,
+  marker = 'data-rwjs-head'
+) {
   return React.Children.toArray(children).map((child, i) => {
     return React.cloneElement(child as React.ReactElement, {
-      'data-rwjs-head': true,
-      key: 'data-rwjs-head-' + i,
+      [marker]: true,
+      key: `${marker}-` + i,
     })
   })
 }
 
 const PortalHead: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const findableChildren = addDataAttributeMarker(children)
+  const isServerRendering = typeof window === 'undefined'
 
   useServerInsertedHTML(() => {
     // Add "data-rwjs-head" attribute to anything inside <PortalHead>,
     // This is then later moved to the <head> in the final block of the transform stream (see streamHelpers.ts)
-    return findableChildren
+    return addDataAttributeMarker(children)
   })
 
-  const [shouldPortal, setShouldPortal] = React.useState(
-    // This default state is important, effectively:
-    // On Hard render (before stream end): false, on Soft render: true
-    // Remember multiple PortalHeads maybe rendered, and may be rendered by client-side routing
-    document.readyState === 'complete'
+  // shouldPortal is always false on hard render. Because we use a ref,
+  // the value change is not detected by React and the component is not re-rendered (intentionally)
+  // On a soft render, the value is always true. This is all to prevent double rendering of the head elements.
+  // There is an edgecase: if you change the children inside <PortalHead> after a hard render, it will not be reflected.
+  // Workaround: don't change children, render a new portal head: x ? <PH>aaa</PH> : <PH>bbb</PH>
+  const shouldPortal = React.useRef(
+    isServerRendering ? false : document.readyState === 'complete'
   )
 
-  useEffect(() => {
-    const handler = (_e: Event) => {
-      // This event fires for "interactive" and "complete"
-      // Once streaming is complete, allow client side portal rendering
-      if (document.readyState === 'complete') {
-        setShouldPortal(true)
-      }
-    }
-
-    document.addEventListener('readystatechange', handler)
-
-    return () => {
-      document.removeEventListener('readystatechange', handler)
-    }
-  }, [])
-
-  if (typeof window === 'undefined') {
-    // Don't do anything on the server, handled by above callback
+  if (isServerRendering) {
+    // Don't do anything on the server, handled by useServerInsertedHTML
     return null
   } else {
-    return shouldPortal ? createPortal(findableChildren, document.head) : null
+    // On hard render, don't do anything on the client. On soft render, portal to <head>
+    return shouldPortal.current ? createPortal(children, document.head) : null
   }
 }
 

@@ -138,7 +138,7 @@ function createServerInjectionStream({
 
       // This will find all the elements added by PortalHead during a server render, and move them into <head>
       outputStream.write(
-        "<script>document.querySelectorAll('body [data-rwjs-head]').forEach((el)=>{document.head.appendChild(el);});</script>"
+        "<script>document.querySelectorAll('body [data-rwjs-head]').forEach((el)=>{el.removeAttribute('data-rwjs-head');document.head.appendChild(el);});</script>"
       )
 
       outputStream.end()
