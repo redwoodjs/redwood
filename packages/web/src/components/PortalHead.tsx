@@ -28,8 +28,11 @@ const PortalHead: React.FC<React.PropsWithChildren> = ({ children }) => {
   // shouldPortal is always false on hard render. Because we use a ref,
   // the value change is not detected by React and the component is not re-rendered (intentionally)
   // On a soft render, the value is always true. This is all to prevent double rendering of the head elements.
+
+  // @TODO
   // There is an edgecase: if you change the children inside <PortalHead> after a hard render, it will not be reflected.
   // Workaround: don't change children, render a new portal head: x ? <PH>aaa</PH> : <PH>bbb</PH>
+  // we may want to look at using a callback ref: https://shrtm.nu/gMx
   const shouldPortal = React.useRef(
     isServerRendering ? false : document.readyState === 'complete'
   )
