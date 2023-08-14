@@ -1,3 +1,11 @@
+/***
+ *
+ * This is a lift and shift of the original ApolloProvider
+ * but with suspense specific bits. Look for @MARK to find bits I've changed
+ *
+ * Done this way, to avoid making changes breaking on main.
+ */
+
 import type {
   ApolloCache,
   ApolloClientOptions,
@@ -11,7 +19,6 @@ import {
   NextSSRInMemoryCache,
   useSuspenseQuery,
 } from '@apollo/experimental-nextjs-app-support/ssr'
-import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
 
 // Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
@@ -197,10 +204,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // A terminating link. Apollo Client uses this to send GraphQL operations to a server over HTTP.
   // See https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link.
-  let httpLink = new HttpLink({ uri, ...httpLinkConfig })
-  if (globalThis.RWJS_EXP_STREAMING_SSR) {
-    httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
-  }
+  const httpLink = new HttpLink({ uri, ...httpLinkConfig })
 
   // The order here is important. The last link *must* be a terminating link like HttpLink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
@@ -226,12 +230,14 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   function makeClient() {
     const httpLink = new HttpLink({
+      // @MARK: we have to construct the absoltue url for SSR
       uri: getGraphqlUrl(),
       // you can disable result caching here if you want to
       // (this does not work if you are rendering your page with `export const dynamic = "force-static"`)
       fetchOptions: { cache: 'no-store' },
     })
 
+    // @MARK use special Apollo client
     return new NextSSRApolloClient({
       link: httpLink,
       ...rest,
@@ -279,6 +285,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
   const { cacheConfig, ...config } = graphQLClientConfig ?? {}
 
+  // @MARK we need this special cache
   const cache = new NextSSRInMemoryCache(cacheConfig).restore(
     globalThis?.__REDWOOD__APOLLO_STATE ?? {}
   )
@@ -292,6 +299,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
         logLevel={logLevel}
       >
         <GraphQLHooksProvider
+          // @MARK 👇 swapped useQuery for useSuspense query here
           useQuery={useSuspenseQuery}
           useMutation={useMutation}
           useSubscription={useSubscription}
