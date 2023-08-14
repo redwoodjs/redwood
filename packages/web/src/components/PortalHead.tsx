@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { createPortal } from 'react-dom'
 
@@ -22,16 +22,34 @@ const PortalHead: React.FC<React.PropsWithChildren> = ({ children }) => {
     return findableChildren
   })
 
+  const [shouldPortal, setShouldPortal] = React.useState(
+    // This default state is important, effectively:
+    // On Hard render (before stream end): false, on Soft render: true
+    // Remember multiple PortalHeads maybe rendered, and may be rendered by client-side routing
+    document.readyState === 'complete'
+  )
+
+  useEffect(() => {
+    const handler = (_e: Event) => {
+      // This event fires for "interactive" and "complete"
+      // Once streaming is complete, allow client side portal rendering
+      if (document.readyState === 'complete') {
+        setShouldPortal(true)
+      }
+    }
+
+    document.addEventListener('readystatechange', handler)
+
+    return () => {
+      document.removeEventListener('readystatechange', handler)
+    }
+  }, [])
+
   if (typeof window === 'undefined') {
     // Don't do anything on the server, handled by above callback
     return null
   } else {
-    //@TODO HALP These get rendered twice even with the same key, after the React bundle loads
-    // but we can't remove this because neeeded for client side nav/render
-    // Portals must work differently to standard react diffing.
-
-    // Logic needs to be something like: if (clientSideRouting) { return createPortal } else { return null }
-    return createPortal(findableChildren, document.head)
+    return shouldPortal ? createPortal(findableChildren, document.head) : null
   }
 }
 
