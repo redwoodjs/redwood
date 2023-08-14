@@ -158,6 +158,18 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   const { headers, uri } = useFetchConfig()
 
+  const getGraphqlUrl = () => {
+    // @NOTE: This comes from packages/vite/src/streaming/registerGlobals.ts
+    // this needs to be an absolute url, as relative urls cannot be used in SSR
+    // @TODO (STREAMING): Should this be a new config value in Redwood.toml?
+    // How do we know what the absolute url is in production?
+    // Possible solution: https://www.apollographql.com/docs/react/api/link/apollo-link-schema/
+
+    return typeof window === 'undefined'
+      ? RWJS_ENV.RWJS_EXP_SSR_GRAPHQL_ENDPOINT
+      : uri
+  }
+
   const authMiddleware = new ApolloLink((operation, forward) => {
     const { token } = operation.getContext()
 
@@ -214,27 +226,14 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   function makeClient() {
     const httpLink = new HttpLink({
-      // this needs to be an absolute url, as relative urls cannot be used in SSR
-      uri:
-        typeof window === 'undefined' ? 'http://localhost:8911/graphql' : uri,
+      uri: getGraphqlUrl(),
       // you can disable result caching here if you want to
       // (this does not work if you are rendering your page with `export const dynamic = "force-static"`)
       fetchOptions: { cache: 'no-store' },
     })
 
     return new NextSSRApolloClient({
-      link:
-        typeof window === 'undefined'
-          ? ApolloLink.from([
-              // // in a SSR environment, if you use multipart features like
-              // // @defer, you need to decide how to handle these.
-              // // This strips all interfaces with a `@defer` directive from your queries.
-              // new SSRMultipartLink({
-              //   stripDefer: true,
-              // }),
-              httpLink,
-            ])
-          : httpLink,
+      link: httpLink,
       ...rest,
     })
   }

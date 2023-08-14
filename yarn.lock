@@ -162,7 +162,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/experimental-nextjs-app-support@npm:^0.4.1":
+"@apollo/experimental-nextjs-app-support@npm:0.4.1":
   version: 0.4.1
   resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.1"
   dependencies:
@@ -8559,7 +8559,7 @@ __metadata:
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
     "@apollo/client": 3.7.17
-    "@apollo/experimental-nextjs-app-support": ^0.4.1
+    "@apollo/experimental-nextjs-app-support": 0.4.1
     "@babel/cli": 7.22.9
     "@babel/core": 7.22.9
     "@babel/runtime-corejs3": 7.22.6

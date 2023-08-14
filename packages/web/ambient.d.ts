@@ -23,6 +23,8 @@ declare global {
 
     __REDWOOD__APP_TITLE: string
     __REDWOOD__APOLLO_STATE: NormalizedCacheObject
+
+    RWJS_EXP_SSR_GRAPHQL_ENDPOINT: string
   }
 
   var RWJS_DEBUG_ENV: {

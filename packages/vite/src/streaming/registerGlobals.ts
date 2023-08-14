@@ -25,6 +25,19 @@ export const registerFwGlobals = () => {
       rwConfig.experimental.streamingSsr &&
       rwConfig.experimental.streamingSsr.enabled,
     RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
+    RWJS_EXP_SSR_GRAPHQL_ENDPOINT: (() => {
+      const apiPath =
+        rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql'
+
+      // If its an absolute url, use as is
+      if (/^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(apiPath)) {
+        return apiPath
+      } else {
+        return (
+          'http://' + rwConfig.api.host + ':' + rwConfig.api.port + '/graphql'
+        )
+      }
+    })(),
   }
 
   globalThis.RWJS_DEBUG_ENV = {
