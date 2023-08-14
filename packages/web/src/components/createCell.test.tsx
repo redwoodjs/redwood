@@ -9,6 +9,12 @@ import { createCell } from './createCell'
 import { GraphQLHooksProvider } from './GraphQLHooksProvider'
 
 describe('createCell', () => {
+  beforeAll(() => {
+    globalThis.RWJS_ENV = {
+      RWJS_EXP_STREAMING_SSR: false,
+    }
+  })
+
   test('Renders a static Success component', async () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
