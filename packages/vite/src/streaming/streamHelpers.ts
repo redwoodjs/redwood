@@ -58,9 +58,6 @@ export function reactRenderToStream({
   // This is effectively a transformer stream
   const intermediateStream = createServerInjectionStream({
     outputStream: res,
-    onFinal: () => {
-      res.end()
-    },
     injectionState,
   })
 
@@ -91,11 +88,9 @@ export function reactRenderToStream({
 }
 function createServerInjectionStream({
   outputStream,
-  onFinal,
   injectionState,
 }: {
   outputStream: Writable
-  onFinal: () => void
   injectionState: Set<RenderCallback>
 }) {
   return new Writable({
@@ -140,7 +135,13 @@ function createServerInjectionStream({
       )
 
       outputStream.write(elementsAtTheEnd)
-      onFinal()
+
+      // This will find all the elements added by PortalHead during a server render, and move them into <head>
+      outputStream.write(
+        "<script>document.querySelectorAll('body [data-rwjs-head]').forEach((el)=>{document.head.appendChild(el);});</script>"
+      )
+
+      outputStream.end()
     },
   })
 }
