@@ -60,7 +60,7 @@ describe('createCell', () => {
     screen.getByText(/^42$/)
   })
 
-  test.only('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
+  test('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { users { name } posts { title } }',
