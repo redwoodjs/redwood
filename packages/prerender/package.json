@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/prerender",
-  "version": "6.0.5",
+  "version": "6.0.6",
   "description": "RedwoodJS prerender",
   "repository": {
     "type": "git",
@@ -25,16 +25,16 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.6",
-    "@redwoodjs/auth": "6.0.5",
-    "@redwoodjs/internal": "6.0.5",
-    "@redwoodjs/project-config": "6.0.5",
-    "@redwoodjs/router": "6.0.5",
-    "@redwoodjs/structure": "6.0.5",
-    "@redwoodjs/web": "6.0.5",
-    "@whatwg-node/fetch": "0.9.7",
+    "@redwoodjs/auth": "6.0.6",
+    "@redwoodjs/internal": "6.0.6",
+    "@redwoodjs/project-config": "6.0.6",
+    "@redwoodjs/router": "6.0.6",
+    "@redwoodjs/structure": "6.0.6",
+    "@redwoodjs/web": "6.0.6",
+    "@whatwg-node/fetch": "0.9.9",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
-    "core-js": "3.31.1",
+    "core-js": "3.32.0",
     "graphql": "16.7.1",
     "mime-types": "2.1.35"
   },
@@ -47,8 +47,8 @@
     "typescript": "5.1.6"
   },
   "peerDependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.0-canary-035a41c4e-20230704",
+    "react-dom": "18.3.0-canary-035a41c4e-20230704"
   },
   "externals": {
     "react": "react",

@@ -37,6 +37,7 @@ export const getWebSideBabelPlugins = (
             forJest ? rwjsPaths.web.src : './src',
           // adds the paths from [ts|js]config.json to the module resolver
           ...getPathsFromConfig(tsConfigs.web),
+          $api: rwjsPaths.api.base,
         },
         root: [rwjsPaths.web.base],
         cwd: 'packagejson',

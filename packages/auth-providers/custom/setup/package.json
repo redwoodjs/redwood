@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-custom-setup",
-  "version": "6.0.5",
+  "version": "6.0.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.6",
-    "@redwoodjs/cli-helpers": "6.0.5",
-    "core-js": "3.31.1"
+    "@redwoodjs/cli-helpers": "6.0.6",
+    "core-js": "3.32.0"
   },
   "devDependencies": {
     "@babel/cli": "7.22.9",

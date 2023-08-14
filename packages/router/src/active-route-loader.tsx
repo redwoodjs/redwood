@@ -14,6 +14,9 @@ interface Props {
 
 let isPrerendered = false
 
+// TODO (STREAMING)
+// SSR and streaming changes how we mount the React app (we render the whole page, including head and body)
+// This logic is no longer valid and needs to be rethought
 if (typeof window !== 'undefined') {
   const redwoodAppElement = document.getElementById('redwood-app')
 
@@ -48,7 +51,9 @@ export const ActiveRouteLoader = ({
   const announcementRef = useRef<HTMLDivElement>(null)
 
   const usePrerenderLoader =
-    globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad)
+    // Prerendering doesn't work with Streaming/SSR yet. So we disable it.
+    !globalThis.RWJS_EXP_STREAMING_SSR &&
+    (globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad))
 
   const LazyRouteComponent = usePrerenderLoader
     ? spec.prerenderLoader(spec.name).default

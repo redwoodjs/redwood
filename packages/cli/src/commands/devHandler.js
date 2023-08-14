@@ -148,12 +148,31 @@ export const handler = async ({
 
   const redwoodConfigPath = getConfigPath()
 
-  const webCommand =
-    getConfig().web.bundler !== 'webpack' // @NOTE: can't use enums, not TS
-      ? `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
-      : `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
-          watchNodeModules ? '1' : ''
-        } webpack serve --config "${webpackDevConfig}" ${forward}`
+  const streamingSsrEnabled = getConfig().experimental.streamingSsr?.enabled
+
+  // @TODO (Streaming) Lot of temporary feature flags for started dev server.
+  // Written this way to make it easier to read
+
+  // 1. default: Vite (SPA)
+  let webCommand = `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
+
+  // 2. Vite with SSR
+  if (streamingSsrEnabled) {
+    webCommand = `yarn cross-env NODE_ENV=development rw-dev-fe ${forward}`
+  }
+
+  // 3. Webpack (SPA): we will remove this override after v7
+  if (getConfig().web.bundler === 'webpack') {
+    if (streamingSsrEnabled) {
+      throw new Error(
+        'Webpack does not support SSR. Please switch your bundler to Vite in redwood.toml first'
+      )
+    } else {
+      webCommand = `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
+        watchNodeModules ? '1' : ''
+      } webpack serve --config "${webpackDevConfig}" ${forward}`
+    }
+  }
 
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
