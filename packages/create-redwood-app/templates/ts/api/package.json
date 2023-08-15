@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "@prisma/client": "*",
     "@redwoodjs/api": "6.0.6",
     "@redwoodjs/graphql-server": "6.0.6"
   }
