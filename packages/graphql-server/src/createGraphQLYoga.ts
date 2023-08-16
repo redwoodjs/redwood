@@ -196,21 +196,6 @@ export const createGraphQLYoga = ({
     // so can process any data added to results and extensions
     plugins.push(useRedwoodLogger(loggerConfig))
 
-    logger.debug(
-      {
-        healthCheckId,
-        allowedOperations,
-        defaultAllowedOperations,
-        allowIntrospection,
-        defaultError,
-        disableIntrospection,
-        disableGraphQL,
-        allowGraphiQL,
-        graphiql,
-        graphiQLEndpoint,
-      },
-      'GraphiQL and Introspection Config'
-    )
     const yoga = createYoga({
       id: healthCheckId,
       landingPage: isDevEnv,
