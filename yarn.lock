@@ -162,6 +162,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@apollo/experimental-nextjs-app-support@npm:0.4.1":
+  version: 0.4.1
+  resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.1"
+  dependencies:
+    superjson: ^1.12.2
+    ts-invariant: ^0.10.3
+  peerDependencies:
+    "@apollo/client": ">=3.8.0-rc || ^3.8.0"
+    next: ^13.4.1
+    react: ^18
+  checksum: 5b342c8b38d5af83b5d735d5a8542911b2892c304000266330ee49e23b15bc12dbefc09b788e4aff484f37389acceed3d5e28e91a226d5e7ffb2a12100164c92
+  languageName: node
+  linkType: hard
+
 "@apollo/protobufjs@npm:1.2.7":
   version: 1.2.7
   resolution: "@apollo/protobufjs@npm:1.2.7"
