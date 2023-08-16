@@ -3,6 +3,8 @@ import type {
   FastifyInstance,
   HTTPMethods,
   HookHandlerDoneFunction,
+  FastifyReply,
+  FastifyRequest,
 } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
 import type { Plugin } from 'graphql-yoga'
@@ -69,26 +71,35 @@ export async function redwoodFastifyGraphQLServer(
 
     const { yoga } = createGraphQLYoga(options)
 
-    fastify.route({
-      url: `${yoga.graphqlEndpoint}/*`,
-      method,
-      handler: async (req, reply) => {
-        const response = await yoga.handleNodeRequest(req, {
-          req,
-          reply,
-          event: transformToRedwoodGraphQLContextEvent(req),
-          requestContext: {},
-        })
+    const graphQLYogaHandler = async (
+      req: FastifyRequest,
+      reply: FastifyReply
+    ) => {
+      const response = await yoga.handleNodeRequest(req, {
+        req,
+        reply,
+        event: transformToRedwoodGraphQLContextEvent(req),
+        requestContext: {},
+      })
 
-        for (const [name, value] of response.headers) {
-          reply.header(name, value)
-        }
+      for (const [name, value] of response.headers) {
+        reply.header(name, value)
+      }
 
-        reply.status(response.status)
-        reply.send(response.body)
+      reply.status(response.status)
+      reply.send(response.body)
 
-        return reply
-      },
+      return reply
+    }
+
+    const routePaths = ['', '/health', '/readiness', '/event']
+
+    routePaths.forEach((routePath) => {
+      fastify.route({
+        url: `${yoga.graphqlEndpoint}${routePath}`,
+        method,
+        handler: async (req, reply) => await graphQLYogaHandler(req, reply),
+      })
     })
 
     fastify.ready(() => {
