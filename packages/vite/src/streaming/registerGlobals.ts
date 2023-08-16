@@ -33,13 +33,13 @@ export const registerFwGlobals = () => {
       if (/^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(apiPath)) {
         return apiPath
       } else {
+        const proxiedApiUrl =
+          'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
+
         if (
           process.env.NODE_ENV === 'production' &&
           !process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT?.length
         ) {
-          const proxiedApiUrl =
-            'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
-
           console.log('------------------ WARNING ! -------------------------')
           console.warn()
           console.warn()
@@ -61,7 +61,9 @@ export const registerFwGlobals = () => {
           return proxiedApiUrl
         }
 
-        return process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string
+        return (
+          proxiedApiUrl || (process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string)
+        )
       }
     })(),
   }
