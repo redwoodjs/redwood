@@ -24,15 +24,25 @@ interface RenderToStreamArgs {
   res: Writable
 }
 
-export function reactRenderToStream({
-  ServerEntry,
-  currentPathName,
-  metaTags,
-  cssLinks,
-  isProd,
-  jsBundles = [],
-  res,
-}: RenderToStreamArgs) {
+interface StreamOptions {
+  waitForAllReady?: boolean
+}
+
+export function reactRenderToStream(
+  renderOptions: RenderToStreamArgs,
+  streamOptions: StreamOptions
+) {
+  const { waitForAllReady = false } = streamOptions
+  const {
+    ServerEntry,
+    currentPathName,
+    metaTags,
+    cssLinks,
+    isProd,
+    jsBundles = [],
+    res,
+  } = renderOptions
+
   if (!isProd) {
     // For development, we need to inject the react-refresh runtime
     jsBundles.push(path.join(__dirname, '../../inject', 'reactRefresh.js'))
@@ -74,7 +84,15 @@ export function reactRenderToStream({
       onShellReady() {
         // Pass the react "input" stream to the injection stream
         // This intermediate stream will interweave the injected html into the react stream's <head>
-        pipe(intermediateStream)
+
+        if (!waitForAllReady) {
+          pipe(intermediateStream)
+        }
+      },
+      onAllReady() {
+        if (waitForAllReady) {
+          pipe(intermediateStream)
+        }
       },
     }
   )

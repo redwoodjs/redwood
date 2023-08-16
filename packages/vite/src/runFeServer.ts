@@ -10,7 +10,6 @@ import path from 'path'
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-import isbot from 'isbot'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
@@ -36,9 +35,6 @@ loadDotEnv({
   multiline: true,
 })
 //------------------------------------------------
-
-const checkUaForSeoCrawler = isbot.spawn()
-checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
 
 export async function runFeServer() {
   const app = express()
@@ -104,17 +100,16 @@ export async function runFeServer() {
   const collectedCss = indexEntry.css || []
   const clientEntry = '/' + indexEntry.file
 
-  const x = Object.values(routeManifest).map(async (route) => {
-    console.log(`Attaching handler for ${route.name}`)
-    const routeHandler = await createReactStreamingHandler(
+  for (const route of Object.values(routeManifest)) {
+    const routeHandler = await createReactStreamingHandler({
       route,
-      clientEntry,
-      collectedCss
-    )
+      clientEntryPath: clientEntry,
+      cssLinks: collectedCss,
+    })
 
-    // if it is a 404
+    // if it is a 404, register it at the end somehow.
     if (!route.matchRegexString) {
-      return
+      continue
     }
 
     const expressPathDef = route.hasParams
@@ -122,9 +117,7 @@ export async function runFeServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, routeHandler)
-  })
-
-  await Promise.all(x)
+  }
 
   app.listen(rwConfig.web.port)
   console.log(

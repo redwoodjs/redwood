@@ -62,18 +62,19 @@ async function createServer() {
   // Look at collectStyles in packages/vite/src/fully-react/find-styles.ts
   const FIXME_HardcodedIndexCss = ['index.css']
 
-  const x = routes.map(async (route) => {
-    console.log(`Attaching handler for ${route.name}`)
+  for (const route of routes) {
     const routeHandler = await createReactStreamingHandler(
-      route,
-      rwPaths.web.entryClient as string,
-      FIXME_HardcodedIndexCss,
+      {
+        route,
+        clientEntryPath: rwPaths.web.entryClient as string,
+        cssLinks: FIXME_HardcodedIndexCss,
+      },
       vite
     )
 
-    // if it is a 404
+    // @TODO if it is a 404, hand over to 404 handler
     if (!route.matchRegexString) {
-      return
+      continue
     }
 
     const expressPathDef = route.hasParams
@@ -81,9 +82,7 @@ async function createServer() {
       : route.pathDefinition
 
     app.get(expressPathDef, routeHandler)
-  })
-
-  await Promise.all(x)
+  }
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
