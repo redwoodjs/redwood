@@ -12,6 +12,7 @@ declare global {
     RWJS_API_URL: string
     RWJS_EXP_STREAMING_SSR: boolean
     RWJS_EXP_RSC: boolean
+    RWJS_EXP_SSR_GRAPHQL_ENDPOINT: string
 
     __REDWOOD__APP_TITLE: string
   }
