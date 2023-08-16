@@ -21,14 +21,24 @@ async function createServer() {
   const app = express()
   const rwPaths = getPaths()
 
+  // ~~~ Dev time validations ~~~~
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
   // and this file should always exist. So the error message needs to change
   // (or be removed perhaps)
+  if (!rwPaths.web.entryServer || !rwPaths.web.entryClient) {
+    throw new Error(
+      'Vite entry points not found. Please check that your project has ' +
+        'an entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in ' +
+        'the web/src directory.'
+    )
+  }
+
   if (!rwPaths.web.viteConfig) {
     throw new Error(
       'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`'
     )
   }
+  // ~~~~ Dev time validations ~~~~
 
   // Create Vite server in middleware mode and configure the app type as
   // 'custom', disabling Vite's own HTML serving logic so parent server
@@ -56,6 +66,7 @@ async function createServer() {
     console.log(`Attaching handler for ${route.name}`)
     const routeHandler = await createReactStreamingHandler(
       route,
+      rwPaths.web.entryClient as string,
       FIXME_HardcodedIndexCss,
       vite
     )

@@ -80,7 +80,7 @@ export async function runFeServer() {
 
   // 👉 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
-  app.use('/assets', express.static(rwPaths.web.dist + '/assets'))
+  app.use('/', express.static(rwPaths.web.dist, { index: false }))
 
   // 👉 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
@@ -102,10 +102,15 @@ export async function runFeServer() {
   )
 
   const collectedCss = indexEntry.css || []
+  const clientEntry = '/' + indexEntry.file
 
   const x = Object.values(routeManifest).map(async (route) => {
     console.log(`Attaching handler for ${route.name}`)
-    const routeHandler = await createReactStreamingHandler(route, collectedCss)
+    const routeHandler = await createReactStreamingHandler(
+      route,
+      clientEntry,
+      collectedCss
+    )
 
     // if it is a 404
     if (!route.matchRegexString) {

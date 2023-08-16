@@ -5,7 +5,6 @@ import React from 'react'
 
 import { renderToPipeableStream, renderToString } from 'react-dom/server'
 
-import { getPaths } from '@redwoodjs/project-config'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
@@ -20,8 +19,8 @@ interface RenderToStreamArgs {
   currentPathName: string
   metaTags: TagDescriptor[]
   cssLinks: string[]
-  includeJs: boolean
   isProd: boolean
+  jsBundles?: string[]
   res: Writable
 }
 
@@ -30,19 +29,13 @@ export function reactRenderToStream({
   currentPathName,
   metaTags,
   cssLinks,
-  includeJs,
   isProd,
+  jsBundles = [],
   res,
 }: RenderToStreamArgs) {
-  const rwPaths = getPaths()
-
-  const bootstrapModules = isProd
-    ? []
-    : [path.join(__dirname, '../../inject', 'reactRefresh.js')]
-
-  if (includeJs) {
-    // type casting: guaranteed to have entryClient by this stage, because checks run earlier
-    bootstrapModules.push(rwPaths.web.entryClient as string)
+  if (!isProd) {
+    // For development, we need to inject the react-refresh runtime
+    jsBundles.push(path.join(__dirname, '../../inject', 'reactRefresh.js'))
   }
 
   const assetMap = JSON.stringify({
@@ -72,10 +65,12 @@ export function reactRenderToStream({
       })
     ),
     {
-      bootstrapScriptContent: includeJs
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
-        : undefined,
-      bootstrapModules,
+      bootstrapScriptContent:
+        // Only insert assetMap if clientside JS will be loaded
+        jsBundles.length > 0
+          ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
+          : undefined,
+      bootstrapModules: jsBundles,
       onShellReady() {
         // Pass the react "input" stream to the injection stream
         // This intermediate stream will interweave the injected html into the react stream's <head>

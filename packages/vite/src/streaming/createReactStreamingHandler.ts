@@ -13,7 +13,8 @@ import { reactRenderToStream } from './streamHelpers'
 import { loadAndRunRouteHooks } from './triggerRouteHooks'
 
 export const createReactStreamingHandler = async (
-  { redirect, routeHooks }: RWRouteManifestItem,
+  { redirect, routeHooks, bundle }: RWRouteManifestItem,
+  clientEntryPath: string,
   cssLinks: string[], // this is different between prod and dev, so we pass it in
   viteDevServer?: ViteDevServer
 ) => {
@@ -24,16 +25,8 @@ export const createReactStreamingHandler = async (
   let entryServerImport: any
 
   if (viteDevServer) {
-    if (!rwPaths.web.entryServer || !rwPaths.web.entryClient) {
-      throw new Error(
-        'Vite entry points not found. Please check that your project has ' +
-          'an entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in ' +
-          'the web/src directory.'
-      )
-    }
-
     entryServerImport = await viteDevServer.ssrLoadModule(
-      rwPaths.web.entryServer
+      rwPaths.web.entryServer as string // already validated in dev server
     )
   } else {
     entryServerImport = await import(rwPaths.web.distEntryServer)
@@ -70,13 +63,18 @@ export const createReactStreamingHandler = async (
 
     metaTags = routeHookOutput.meta
 
+    const jsBundles = [
+      clientEntryPath, // @NOTE: must have slash in front
+      bundle && '/' + bundle,
+    ].filter(Boolean) as string[]
+
     reactRenderToStream({
       ServerEntry,
       currentPathName,
       metaTags,
       cssLinks,
-      includeJs: true,
       isProd,
+      jsBundles,
       res,
     })
   }
