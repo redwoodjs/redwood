@@ -35,24 +35,33 @@ export const registerFwGlobals = () => {
       } else {
         if (
           process.env.NODE_ENV === 'production' &&
-          rwConfig.api.host.includes('localhost')
+          !process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT?.length
         ) {
+          const proxiedApiUrl =
+            'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
+
           console.log('------------------ WARNING ! -------------------------')
           console.warn()
           console.warn()
 
           console.warn(
-            `Your api host is ${rwConfig.api.host}. Localhost is unlikely to work in production`
+            `You haven't configured your API absolute url. Localhost is unlikely to work in production`
           )
 
+          console.warn(`Using ${proxiedApiUrl}`)
           console.warn()
+
+          console.warn(
+            'You can override this for by setting RWJS_EXP_SSR_GRAPHQL_ENDPOINT in your environment vars'
+          )
           console.warn()
 
           console.log('------------------ WARNING ! -------------------------')
+
+          return proxiedApiUrl
         }
-        // @TODO (Streaming): Temporarily give it the web server's proxy.
-        // I need to think about how best to address this.
-        return 'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
+
+        return process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string
       }
     })(),
   }
