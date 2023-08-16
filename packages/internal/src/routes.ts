@@ -67,18 +67,23 @@ export function warningForDuplicateRoutes() {
   return message.trimEnd()
 }
 
-export interface RouteSpec {
-  name: string
-  path: string
-  hasParams: boolean
+export interface RWRouteManifestItem {
+  name: string // <-- AnalyzedRoute.name, RouteSpec.name
+  pathDefinition: string // <-- AnalyzedRoute.path, RouteSpec.path
+  matchRegexString: string | null // xAR, RouteSpec.matchRegexString
+  routeHooks: string | null // xAR, RouteSpec.routeHooks BUT in RouteSpec its the src path, here its the dist path
+  bundle: string | null // xAR, xRS
+  hasParams: boolean // xAR, RouteSpec.hasParams
+  redirect: { to: string; permanent: boolean } | null // xAR (not same type), RouteSpec.redirect
+  renderMode: 'html' | 'stream' // x, RouteSpec.renderMode
+  // Probably want isNotFound here, so we can attach a separate 404 handler
+}
+
+export interface RouteSpec extends RWRouteManifestItem {
   id: string
   isNotFound: boolean
   filePath: string | undefined
   relativeFilePath: string | undefined
-  routeHooks: string | undefined | null
-  matchRegexString: string | null
-  redirect: { to: string; permanent: boolean } | null
-  renderMode: 'stream' | 'html'
 }
 
 export const getProjectRoutes = (): RouteSpec[] => {
@@ -92,7 +97,7 @@ export const getProjectRoutes = (): RouteSpec[] => {
 
     return {
       name: route.isNotFound ? 'NotFoundPage' : route.name,
-      path: route.isNotFound ? 'notfound' : route.path,
+      pathDefinition: route.isNotFound ? 'notfound' : route.path,
       hasParams: route.hasParameters,
       id: route.id,
       isNotFound: route.isNotFound,

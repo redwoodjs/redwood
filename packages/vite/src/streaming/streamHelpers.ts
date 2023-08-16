@@ -19,7 +19,9 @@ interface RenderToStreamArgs {
   ServerEntry: any
   currentPathName: string
   metaTags: TagDescriptor[]
+  cssLinks: string[]
   includeJs: boolean
+  isProd: boolean
   res: Writable
 }
 
@@ -27,28 +29,24 @@ export function reactRenderToStream({
   ServerEntry,
   currentPathName,
   metaTags,
+  cssLinks,
   includeJs,
+  isProd,
   res,
 }: RenderToStreamArgs) {
   const rwPaths = getPaths()
 
-  const bootstrapModules = [
-    path.join(__dirname, '../../inject', 'reactRefresh.js'),
-  ]
+  const bootstrapModules = isProd
+    ? []
+    : [path.join(__dirname, '../../inject', 'reactRefresh.js')]
 
   if (includeJs) {
     // type casting: guaranteed to have entryClient by this stage, because checks run earlier
     bootstrapModules.push(rwPaths.web.entryClient as string)
   }
 
-  // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
-  // worry about it in dev but..... it causes a flash of unstyled content.
-  // For now I'm just injecting index css here
-  // Looks at collectStyles in packages/vite/src/fully-react/find-styles.ts
-  const FIXME_HardcodedIndexCss = ['index.css']
-
   const assetMap = JSON.stringify({
-    css: FIXME_HardcodedIndexCss,
+    css: cssLinks,
     meta: metaTags,
   })
 
@@ -69,7 +67,7 @@ export function reactRenderToStream({
       },
       ServerEntry({
         url: currentPathName,
-        css: FIXME_HardcodedIndexCss,
+        css: cssLinks,
         meta: metaTags,
       })
     ),
@@ -86,6 +84,7 @@ export function reactRenderToStream({
     }
   )
 }
+
 function createServerInjectionStream({
   outputStream,
   injectionState,

@@ -144,7 +144,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
   const routesList = getProjectRoutes()
 
   const routeManifest = routesList.reduce<RWRouteManifest>((acc, route) => {
-    acc[route.path] = {
+    acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
         ? clientBuildManifest[route.relativeFilePath]?.file
@@ -152,7 +152,7 @@ export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
       matchRegexString: route.matchRegexString,
       // @NOTE this is the path definition, not the actual path
       // E.g. /blog/post/{id:Int}
-      pathDefinition: route.path,
+      pathDefinition: route.pathDefinition,
       hasParams: route.hasParams,
       routeHooks: FIXME_constructRouteHookPath(route.routeHooks),
       redirect: route.redirect
