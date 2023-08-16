@@ -33,9 +33,26 @@ export const registerFwGlobals = () => {
       if (/^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(apiPath)) {
         return apiPath
       } else {
-        return (
-          'http://' + rwConfig.api.host + ':' + rwConfig.api.port + '/graphql'
-        )
+        if (
+          process.env.NODE_ENV === 'production' &&
+          rwConfig.api.host.includes('localhost')
+        ) {
+          console.log('------------------ WARNING ! -------------------------')
+          console.warn()
+          console.warn()
+
+          console.warn(
+            `Your api host is ${rwConfig.api.host}. Localhost is unlikely to work in production`
+          )
+
+          console.warn()
+          console.warn()
+
+          console.log('------------------ WARNING ! -------------------------')
+        }
+        // @TODO (Streaming): Temporarily give it the web server's proxy.
+        // I need to think about how best to address this.
+        return 'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
       }
     })(),
   }
