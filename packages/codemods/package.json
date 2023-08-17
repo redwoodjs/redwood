@@ -40,7 +40,7 @@
     "execa": "5.1.1",
     "fast-glob": "3.3.1",
     "graphql": "16.7.1",
-    "jest": "29.6.1",
+    "jest": "29.6.2",
     "jscodeshift": "0.15.0",
     "pascalcase": "1.0.0",
     "prettier": "2.8.8",
