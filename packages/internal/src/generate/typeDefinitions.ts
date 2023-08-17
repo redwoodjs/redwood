@@ -204,8 +204,8 @@ export const generateTypeDefGlobalContext = () => {
 function generateStubStorybookTypes() {
   const stubStorybookTypesFileContent = `\
 declare module '@storybook/react' {
-  export type Meta<T> = any
-  export type StoryObj<T> = any
+  export type Meta<T = any> = any
+  export type StoryObj<T = any> = any
 }
 `
 
