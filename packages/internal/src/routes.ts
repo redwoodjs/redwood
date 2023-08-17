@@ -68,14 +68,14 @@ export function warningForDuplicateRoutes() {
 }
 
 export interface RWRouteManifestItem {
-  name: string // <-- AnalyzedRoute.name, RouteSpec.name
-  pathDefinition: string // <-- AnalyzedRoute.path, RouteSpec.path
-  matchRegexString: string | null // xAR, RouteSpec.matchRegexString
-  routeHooks: string | null // xAR, RouteSpec.routeHooks BUT in RouteSpec its the src path, here its the dist path
-  bundle: string | null // xAR, xRS
-  hasParams: boolean // xAR, RouteSpec.hasParams
-  redirect: { to: string; permanent: boolean } | null // xAR (not same type), RouteSpec.redirect
-  renderMode: 'html' | 'stream' // x, RouteSpec.renderMode
+  name: string
+  pathDefinition: string
+  matchRegexString: string | null
+  routeHooks: string | null
+  bundle: string | null
+  hasParams: boolean
+  redirect: { to: string; permanent: boolean } | null
+  renderMode: 'html' | 'stream'
   // Probably want isNotFound here, so we can attach a separate 404 handler
 }
 
