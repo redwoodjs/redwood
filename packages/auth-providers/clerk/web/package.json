@@ -22,13 +22,13 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.6",
+    "@babel/runtime-corejs3": "7.22.10",
     "@redwoodjs/auth": "6.0.6",
     "core-js": "3.32.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.9",
-    "@babel/core": "7.22.9",
+    "@babel/cli": "7.22.10",
+    "@babel/core": "7.22.10",
     "@clerk/clerk-react": "4.22.0",
     "@clerk/types": "3.46.1",
     "@types/react": "18.2.14",

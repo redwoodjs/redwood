@@ -22,12 +22,12 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/cli": "7.22.9",
-    "@babel/core": "7.22.9",
-    "@babel/parser": "7.22.7",
-    "@babel/plugin-transform-typescript": "7.22.9",
-    "@babel/runtime-corejs3": "7.22.6",
-    "@babel/traverse": "7.22.8",
+    "@babel/cli": "7.22.10",
+    "@babel/core": "7.22.10",
+    "@babel/parser": "7.22.10",
+    "@babel/plugin-transform-typescript": "7.22.10",
+    "@babel/runtime-corejs3": "7.22.10",
+    "@babel/traverse": "7.22.10",
     "@iarna/toml": "2.2.5",
     "@redwoodjs/project-config": "6.0.6",
     "@svgr/core": "8.0.0",

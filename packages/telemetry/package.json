@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.6",
+    "@babel/runtime-corejs3": "7.22.10",
     "@redwoodjs/project-config": "6.0.6",
     "@redwoodjs/structure": "6.0.6",
     "@whatwg-node/fetch": "0.9.9",
@@ -38,8 +38,8 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.9",
-    "@babel/core": "7.22.9",
+    "@babel/cli": "7.22.10",
+    "@babel/core": "7.22.10",
     "@types/envinfo": "7.8.1",
     "@types/uuid": "9.0.2",
     "@types/yargs": "17.0.24",

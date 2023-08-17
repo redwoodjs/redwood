@@ -22,7 +22,7 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.22.6",
+    "@babel/runtime-corejs3": "7.22.10",
     "base64url": "3.0.1",
     "core-js": "3.32.0",
     "crypto-js": "4.1.1",
@@ -30,8 +30,8 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.22.9",
-    "@babel/core": "7.22.9",
+    "@babel/cli": "7.22.10",
+    "@babel/core": "7.22.10",
     "@redwoodjs/api": "6.0.6",
     "@simplewebauthn/server": "7.3.1",
     "@types/crypto-js": "4.1.1",
