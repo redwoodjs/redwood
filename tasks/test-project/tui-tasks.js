@@ -768,6 +768,27 @@ export default DoublePage`
       title: 'Add Prerender to Routes',
       task: () => addPrerender(),
     },
+    {
+      title: 'Add context tests',
+      task: () => {
+        const templatePath = path.join(
+          __dirname,
+          'templates',
+          'api',
+          'context.test.ts.template'
+        )
+        const projectPath = path.join(
+          OUTPUT_PATH,
+          'api',
+          'src',
+          '__tests__',
+          'context.test.ts'
+        )
+
+        fs.mkdirSync(path.dirname(projectPath), { recursive: true })
+        fs.writeFileSync(projectPath, fs.readFileSync(templatePath))
+      },
+    },
   ]
   // ],
   // TODO: Figure out what to do with this. It's from Listr, but TUI doesn't

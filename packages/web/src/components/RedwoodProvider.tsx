@@ -18,12 +18,9 @@ export const RedwoodProvider = ({
     }
     return ''
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // TODO (STREAMING) need to disable helmet here, because it clashes with meta
-  // routeHooks but can still leave helmet provider to make it easy to migrate
-  // to new setup
-  // TODO (STREAMING) Figure out how the Helmet stuff can live along side
-  // streaming while streaming is still experimental
+
+  // @TODO (STREAMING): We can remove Helmet, HelmetProvider
+  // Once we've migrated to using the new PortalHead component
   return (
     <HelmetProvider context={globalThis.__REDWOOD__HELMET_CONTEXT}>
       <Helmet titleTemplate={template()} defaultTitle={appTitle}>

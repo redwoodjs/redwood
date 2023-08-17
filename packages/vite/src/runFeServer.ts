@@ -1,5 +1,5 @@
 // TODO (STREAMING) Move this to a new package called @redwoodjs/fe-server (goes
-// well in naming with with @redwoodjs/api-server)
+// well in naming with @redwoodjs/api-server)
 // Only things used during dev can be in @redwoodjs/vite. Everything else has
 // to go in fe-server
 
@@ -18,11 +18,10 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
+import { registerFwGlobals } from './streaming/registerGlobals'
+import { loadAndRunRouteHooks } from './streaming/triggerRouteHooks'
 import { RWRouteManifest } from './types'
 import { stripQueryStringAndHashFromPath } from './utils'
-
-globalThis.RWJS_ENV = {}
 
 /**
  * TODO (STREAMING)
@@ -49,6 +48,8 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
+
+  registerFwGlobals()
 
   // TODO When https://github.com/tc39/proposal-import-attributes and
   // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
@@ -211,15 +212,16 @@ export async function runFeServer() {
 
       const pageWithJs = currentRoute.renderMode !== 'html'
       // @NOTE have to add slash so subpaths still pick up the right file
-      // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
       const bootstrapModules = pageWithJs
-        ? ['/' + indexEntry.file, '/' + currentRoute.bundle]
+        ? ([
+            '/' + indexEntry.file,
+            currentRoute.bundle && '/' + currentRoute.bundle,
+          ].filter(Boolean) as string[])
         : undefined
 
       const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
 
       const { pipe, abort } = renderToPipeableStream(
-        // we should use the same shape as Remix or Next for the meta object
         ServerEntry({
           url: currentPathName,
           css: indexEntry.css,

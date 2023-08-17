@@ -1,8 +1,6 @@
 // TODO (STREAMING) Merge with runFeServer so we only have one file
-import path from 'path'
 
 import express from 'express'
-import { renderToPipeableStream } from 'react-dom/server'
 import { createServer as createViteServer } from 'vite'
 
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
@@ -10,29 +8,18 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
-import { stripQueryStringAndHashFromPath } from './utils'
-
-// These values are defined in the vite.config.ts
-globalThis.RWJS_ENV = {}
+import { registerFwGlobals } from './streaming/registerGlobals'
+import { reactRenderToStream } from './streaming/streamHelpers'
+import { loadAndRunRouteHooks } from './streaming/triggerRouteHooks'
+import { ensureProcessDirWeb, stripQueryStringAndHashFromPath } from './utils'
 
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
 
 async function createServer() {
-  // Check CWD: make sure its the web/ directory
-  // Without this Postcss can misbehave, and its hard to trace why.
-  if (process.cwd() !== getPaths().web.base) {
-    console.error('⚠️  Warning: CWD is ', process.cwd())
-    console.warn('~'.repeat(50))
-    console.warn(
-      'The FE dev server cwd must be web/. Please use `yarn rw dev` or start the server from the web/ directory.'
-    )
-    console.log(`Changing cwd to ${getPaths().web.base}....`)
-    console.log()
+  ensureProcessDirWeb()
 
-    process.chdir(getPaths().web.base)
-  }
+  registerFwGlobals()
 
   const app = express()
   const rwPaths = getPaths()
@@ -62,6 +49,7 @@ async function createServer() {
 
   app.use('*', async (req, res, next) => {
     const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
+    globalThis.__REDWOOD__HELMET_CONTEXT = {}
 
     try {
       const routes = getProjectRoutes()
@@ -120,46 +108,17 @@ async function createServer() {
       //    required, and provides efficient invalidation similar to HMR.
       const { ServerEntry } = await vite.ssrLoadModule(rwPaths.web.entryServer)
 
-      // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
-      // worry about it in dev but..... it causes a flash of unstyled content.
-      // For now I'm just injecting index css here
-      // We believe we saw a fix for this somewhere in the Waku sources. Maybe
-      // it was called something like "Capture Css". And it's also mentioned
-      // in the Vite issues on GitHub
-      const FIXME_HardcodedIndexCss = ['index.css']
-
-      const assetMap = JSON.stringify({
-        css: FIXME_HardcodedIndexCss,
-        meta: metaTags,
-      })
-
-      const bootstrapModules = [
-        path.join(__dirname, '../inject', 'reactRefresh.js'),
-      ]
-
       const pageWithJs = currentRoute?.renderMode !== 'html'
 
-      if (pageWithJs) {
-        bootstrapModules.push(rwPaths.web.entryClient)
-      }
+      res.setHeader('content-type', 'text/html; charset=utf-8')
 
-      const { pipe } = renderToPipeableStream(
-        ServerEntry({
-          url: currentPathName,
-          css: FIXME_HardcodedIndexCss,
-          meta: metaTags,
-        }),
-        {
-          bootstrapScriptContent: pageWithJs
-            ? `window.__assetMap = function() { return ${assetMap} }`
-            : undefined,
-          bootstrapModules,
-          onShellReady() {
-            res.setHeader('content-type', 'text/html; charset=utf-8')
-            pipe(res)
-          },
-        }
-      )
+      reactRenderToStream({
+        ServerEntry,
+        currentPathName,
+        metaTags,
+        includeJs: pageWithJs,
+        res,
+      })
     } catch (e) {
       // TODO (STREAMING) Is this what we want to do?
       // send back a SPA page

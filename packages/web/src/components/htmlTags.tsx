@@ -1,11 +1,13 @@
 import { Fragment } from 'react'
 /** CSS is a specialised metatag */
-export const Css = ({ css = [] }: { css: string[] }) => {
+export const Css = ({ css }: { css: string[] }) => {
+  const cssLinks = css || window?.__REDWOOD__ASSET_MAP?.css || []
+
   return (
     <>
-      {css.map((cssLinks, index) => {
+      {cssLinks.map((cssLink, index) => {
         return (
-          <link rel="stylesheet" key={`css-${index}`} href={`/${cssLinks}`} />
+          <link rel="stylesheet" key={`css-${index}`} href={`/${cssLink}`} />
         )
       })}
     </>
@@ -77,10 +79,12 @@ interface MetaProps {
   tags: TagDescriptor[] | undefined
 }
 
-export const Meta = ({ tags = [] }: MetaProps) => {
+export const Meta = ({ tags }: MetaProps) => {
+  const metaTags = tags || window?.__REDWOOD__ASSET_MAP?.meta || []
+
   return (
     <>
-      {tags.map((tag, index) => {
+      {metaTags.map((tag, index) => {
         if (!tag) {
           return null
         }

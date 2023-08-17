@@ -133,7 +133,7 @@ export const getWebSideBabelPresets = (options: Flags) => {
     return []
   }
 
-  let reactPresetConfig = undefined
+  let reactPresetConfig: babel.PluginItem = { runtime: 'automatic' }
 
   // This is a special case, where @babel/preset-react needs config
   // And using extends doesn't work
