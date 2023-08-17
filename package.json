@@ -66,7 +66,7 @@
     "@types/jscodeshift": "0.11.6",
     "@types/ncp": "2.0.5",
     "@types/prompts": "2.4.4",
-    "all-contributors-cli": "6.26.0",
+    "all-contributors-cli": "6.26.1",
     "babel-jest": "29.6.2",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-remove-code": "0.0.6",

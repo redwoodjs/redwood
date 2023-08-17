@@ -12198,9 +12198,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"all-contributors-cli@npm:6.26.0":
-  version: 6.26.0
-  resolution: "all-contributors-cli@npm:6.26.0"
+"all-contributors-cli@npm:6.26.1":
+  version: 6.26.1
+  resolution: "all-contributors-cli@npm:6.26.1"
   dependencies:
     "@babel/runtime": ^7.7.6
     async: ^3.1.0
@@ -12218,7 +12218,7 @@ __metadata:
       optional: true
   bin:
     all-contributors: dist/cli.js
-  checksum: f66e68017f9b91c6bbf6c5f45c585909ff7e97f434c42a2f48028d25f4e1e1ad6f81426d5ff4669535c69d406ea2eb49df0461e54242701bc716149e4f34eb6b
+  checksum: da33f175aabbf95596e4b06f1582720cf05b2e2ceb363df85b104b7cb072b050d2f3f3adbb0af91142c61ddb10fcaa4d194f32f64551a467e665b2c2dcb3e561
   languageName: node
   linkType: hard
 
@@ -28342,7 +28342,7 @@ __metadata:
     "@types/jscodeshift": 0.11.6
     "@types/ncp": 2.0.5
     "@types/prompts": 2.4.4
-    all-contributors-cli: 6.26.0
+    all-contributors-cli: 6.26.1
     babel-jest: 29.6.2
     babel-plugin-auto-import: 1.1.0
     babel-plugin-remove-code: 0.0.6
