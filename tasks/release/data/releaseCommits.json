@@ -1,0 +1,2615 @@
+{
+  "commits": [
+    {
+      "line": "< 48a3d755412a81ab53f6f1a09635910b294be25a chore(deps): bump word-wrap from 1.2.3 to 1.2.4 (#8933)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 48a3d755412a81ab53f6f1a09635910b294be25a chore(deps): bump word-wrap from 1.2.3 to 1.2.4 (#8933)",
+      "hash": "48a3d755412a81ab53f6f1a09635910b294be25a",
+      "message": "chore(deps): bump word-wrap from 1.2.3 to 1.2.4 (#8933)",
+      "pr": "8933"
+    },
+    {
+      "line": "< 64a5d5746a837a95f8cb9a89437421935e455784 chore(deps): update babel monorepo to v7.22.10 (#9016)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 64a5d5746a837a95f8cb9a89437421935e455784 chore(deps): update babel monorepo to v7.22.10 (#9016)",
+      "hash": "64a5d5746a837a95f8cb9a89437421935e455784",
+      "message": "chore(deps): update babel monorepo to v7.22.10 (#9016)",
+      "pr": "9016"
+    },
+    {
+      "line": "< 15da49c12986900e2bc1cfe1bab2bd334f242936 manually bump web-server version",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 15da49c12986900e2bc1cfe1bab2bd334f242936 manually bump web-server version",
+      "hash": "15da49c12986900e2bc1cfe1bab2bd334f242936",
+      "message": "manually bump web-server version"
+    },
+    {
+      "line": "< bf90f5028e43afc973e6672f2626949677d77425 Merge branch 'recovered-release-6.0.7' into release/minor/v6.1.0",
+      "ref": "release/minor/v6.1.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< bf90f5028e43afc973e6672f2626949677d77425 Merge branch 'recovered-release-6.0.7' into release/minor/v6.1.0\u001b[22m",
+      "hash": "bf90f5028e43afc973e6672f2626949677d77425",
+      "message": "Merge branch 'recovered-release-6.0.7' into release/minor/v6.1.0"
+    },
+    {
+      "line": "< dba68414031de10ed120b288d950bbc694de1b47 fix(deps): update prisma monorepo to v5.1.1 (#9019)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< dba68414031de10ed120b288d950bbc694de1b47 fix(deps): update prisma monorepo to v5.1.1 (#9019)",
+      "hash": "dba68414031de10ed120b288d950bbc694de1b47",
+      "message": "fix(deps): update prisma monorepo to v5.1.1 (#9019)",
+      "pr": "9019"
+    },
+    {
+      "line": "< c81bcfa65f57a3fe9c65fe3eb73e07dd6bea3188 fix(deps): update dependency core-js to v3.32.0 (#9030)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c81bcfa65f57a3fe9c65fe3eb73e07dd6bea3188 fix(deps): update dependency core-js to v3.32.0 (#9030)",
+      "hash": "c81bcfa65f57a3fe9c65fe3eb73e07dd6bea3188",
+      "message": "fix(deps): update dependency core-js to v3.32.0 (#9030)",
+      "pr": "9030"
+    },
+    {
+      "line": "< 3d4ee7751a638d5ca8fbd8f9197ea6c878ab3c67 Revert v7.0.0 and RSC changes",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 3d4ee7751a638d5ca8fbd8f9197ea6c878ab3c67 Revert v7.0.0 and RSC changes",
+      "hash": "3d4ee7751a638d5ca8fbd8f9197ea6c878ab3c67",
+      "message": "Revert v7.0.0 and RSC changes"
+    },
+    {
+      "line": "< a2fcc1618a70a77570943e4bc85d29ea055ab507 chore(deps): update dependency @playwright/test to v1.37.0 (#9028)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< a2fcc1618a70a77570943e4bc85d29ea055ab507 chore(deps): update dependency @playwright/test to v1.37.0 (#9028)",
+      "hash": "a2fcc1618a70a77570943e4bc85d29ea055ab507",
+      "message": "chore(deps): update dependency @playwright/test to v1.37.0 (#9028)",
+      "pr": "9028"
+    },
+    {
+      "line": "< a1e6e0883d467360461b73ec54baea3ed68ce9ad Merge branch 'release/patch/v6.0.6'",
+      "ref": "release/minor/v6.1.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< a1e6e0883d467360461b73ec54baea3ed68ce9ad Merge branch 'release/patch/v6.0.6'\u001b[22m",
+      "hash": "a1e6e0883d467360461b73ec54baea3ed68ce9ad",
+      "message": "Merge branch 'release/patch/v6.0.6'"
+    },
+    {
+      "line": "< 3f71162946c30685ce1d2d7d469138d28d3ea6ca Remove `.only` from `createCell` test (#9031)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 3f71162946c30685ce1d2d7d469138d28d3ea6ca Remove `.only` from `createCell` test (#9031)",
+      "hash": "3f71162946c30685ce1d2d7d469138d28d3ea6ca",
+      "message": "Remove `.only` from `createCell` test (#9031)",
+      "pr": "9031"
+    },
+    {
+      "line": "< 01346f9955725b6d14362f6bb6aee43a366179c9 fix(graphql-server): Improve GraphQL API performance by not accessing project config in makeMergedSchema (#9032)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< 01346f9955725b6d14362f6bb6aee43a366179c9 fix(graphql-server): Improve GraphQL API performance by not accessing project config in makeMergedSchema (#9032)\u001b[39m\u001b[22m",
+      "hash": "01346f9955725b6d14362f6bb6aee43a366179c9",
+      "message": "fix(graphql-server): Improve GraphQL API performance by not accessing project config in makeMergedSchema (#9032)",
+      "pr": "9032"
+    },
+    {
+      "line": "< 0effb2dff30f2aa55a8d6ee5f51d4fbf9b2c9b05 Update package.json",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 0effb2dff30f2aa55a8d6ee5f51d4fbf9b2c9b05 Update package.json\u001b[39m\u001b[22m",
+      "hash": "0effb2dff30f2aa55a8d6ee5f51d4fbf9b2c9b05",
+      "message": "Update package.json"
+    },
+    {
+      "line": "< 4fdb9bc3f9a9610b587ac4552425a45b9105ead6 Merge branch 'release/patch/v6.0.5'",
+      "ref": "release/minor/v6.1.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< 4fdb9bc3f9a9610b587ac4552425a45b9105ead6 Merge branch 'release/patch/v6.0.5'\u001b[22m",
+      "hash": "4fdb9bc3f9a9610b587ac4552425a45b9105ead6",
+      "message": "Merge branch 'release/patch/v6.0.5'"
+    },
+    {
+      "line": "< 2ce3189ae4f43473455d4802e0f23b14d1ce8546 Fix context in directive tests (#9025)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< 2ce3189ae4f43473455d4802e0f23b14d1ce8546 Fix context in directive tests (#9025)\u001b[39m\u001b[22m",
+      "hash": "2ce3189ae4f43473455d4802e0f23b14d1ce8546",
+      "message": "Fix context in directive tests (#9025)",
+      "pr": "9025"
+    },
+    {
+      "line": "< 58a242192174e6bd2e72ccd2269f66d02ad7a401 feat(streaming-ssr): Fix build and server html injection (#8978)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 58a242192174e6bd2e72ccd2269f66d02ad7a401 feat(streaming-ssr): Fix build and server html injection (#8978)",
+      "hash": "58a242192174e6bd2e72ccd2269f66d02ad7a401",
+      "message": "feat(streaming-ssr): Fix build and server html injection (#8978)",
+      "pr": "8978"
+    },
+    {
+      "line": "< 8dc8e80f23cd71620b6bd2ae382382972ed92a7c fix(router): Do not reset scroll on query & hash changes (#9004)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< 8dc8e80f23cd71620b6bd2ae382382972ed92a7c fix(router): Do not reset scroll on query & hash changes (#9004)\u001b[39m\u001b[22m",
+      "hash": "8dc8e80f23cd71620b6bd2ae382382972ed92a7c",
+      "message": "fix(router): Do not reset scroll on query & hash changes (#9004)",
+      "pr": "9004"
+    },
+    {
+      "line": "< 0e252242e485f1e25f5cd3e901f5bca8645ff760 fix(deps): update dependency pino to v8.15.0 (#9023)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 0e252242e485f1e25f5cd3e901f5bca8645ff760 fix(deps): update dependency pino to v8.15.0 (#9023)",
+      "hash": "0e252242e485f1e25f5cd3e901f5bca8645ff760",
+      "message": "fix(deps): update dependency pino to v8.15.0 (#9023)",
+      "pr": "9023"
+    },
+    {
+      "line": "< c630f3a5176735f7b3c99486f5d776dd5d160d59 fix(deps): update dependency eslint to v8.46.0 (#9022)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c630f3a5176735f7b3c99486f5d776dd5d160d59 fix(deps): update dependency eslint to v8.46.0 (#9022)",
+      "hash": "c630f3a5176735f7b3c99486f5d776dd5d160d59",
+      "message": "fix(deps): update dependency eslint to v8.46.0 (#9022)",
+      "pr": "9022"
+    },
+    {
+      "line": "< c4e37af2ebd85999b6103d5a1ed969f76f760ce0 fix(deps): update dependency react-hook-form to v7.45.4 (#9017)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c4e37af2ebd85999b6103d5a1ed969f76f760ce0 fix(deps): update dependency react-hook-form to v7.45.4 (#9017)",
+      "hash": "c4e37af2ebd85999b6103d5a1ed969f76f760ce0",
+      "message": "fix(deps): update dependency react-hook-form to v7.45.4 (#9017)",
+      "pr": "9017"
+    },
+    {
+      "line": "< 260d42a98f79ca39d9a4e0f69cee19b93a11d544 chore(docs): reversion docs to include recent changes",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 260d42a98f79ca39d9a4e0f69cee19b93a11d544 chore(docs): reversion docs to include recent changes",
+      "hash": "260d42a98f79ca39d9a4e0f69cee19b93a11d544",
+      "message": "chore(docs): reversion docs to include recent changes"
+    },
+    {
+      "line": "< b1151ac63802e68ac16526e8bfd6217bedea0980 fix(deps): update dependency vite to v4.4.9 (#9018)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b1151ac63802e68ac16526e8bfd6217bedea0980 fix(deps): update dependency vite to v4.4.9 (#9018)",
+      "hash": "b1151ac63802e68ac16526e8bfd6217bedea0980",
+      "message": "fix(deps): update dependency vite to v4.4.9 (#9018)",
+      "pr": "9018"
+    },
+    {
+      "line": "< cdce32c4e41731e2a8bf3e102366ea530c1cc947 Merge branch 'release/patch/v6.0.4'",
+      "ref": "release/minor/v6.1.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< cdce32c4e41731e2a8bf3e102366ea530c1cc947 Merge branch 'release/patch/v6.0.4'\u001b[22m",
+      "hash": "cdce32c4e41731e2a8bf3e102366ea530c1cc947",
+      "message": "Merge branch 'release/patch/v6.0.4'"
+    },
+    {
+      "line": "< bd2bd971984fdd6a0a0204e5c82ca895f8d0b788 fix(docs): update quick start to fix Storybook start up (#9014)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< bd2bd971984fdd6a0a0204e5c82ca895f8d0b788 fix(docs): update quick start to fix Storybook start up (#9014)\u001b[39m\u001b[22m",
+      "hash": "bd2bd971984fdd6a0a0204e5c82ca895f8d0b788",
+      "message": "fix(docs): update quick start to fix Storybook start up (#9014)",
+      "pr": "9014"
+    },
+    {
+      "line": "< 0167be7754ab49024f7be2a18ad02807f21221dc fix: Improve GraphQL Schema Validation to allow Subscription types when not using Realtime and ensure schema does not use reserved names (#9005)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< 0167be7754ab49024f7be2a18ad02807f21221dc fix: Improve GraphQL Schema Validation to allow Subscription types when not using Realtime and ensure schema does not use reserved names (#9005)\u001b[39m\u001b[22m",
+      "hash": "0167be7754ab49024f7be2a18ad02807f21221dc",
+      "message": "fix: Improve GraphQL Schema Validation to allow Subscription types when not using Realtime and ensure schema does not use reserved names (#9005)",
+      "pr": "9005"
+    },
+    {
+      "line": "< 2631a069f470f94ea5a6ce199ace27cda24b4db4 Docs: Explain the entry.client.{jsx,tsx} file (#8987)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 2631a069f470f94ea5a6ce199ace27cda24b4db4 Docs: Explain the entry.client.{jsx,tsx} file (#8987)",
+      "hash": "2631a069f470f94ea5a6ce199ace27cda24b4db4",
+      "message": "Docs: Explain the entry.client.{jsx,tsx} file (#8987)",
+      "pr": "8987"
+    },
+    {
+      "line": "< 8e21a282e7d0c96ce11419220107f9185a2a7703 chore(deps): update dependency esbuild to v0.18.19 (#8983)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8e21a282e7d0c96ce11419220107f9185a2a7703 chore(deps): update dependency esbuild to v0.18.19 (#8983)",
+      "hash": "8e21a282e7d0c96ce11419220107f9185a2a7703",
+      "message": "chore(deps): update dependency esbuild to v0.18.19 (#8983)",
+      "pr": "8983"
+    },
+    {
+      "line": "< 5a07e63fd6b2d6ba72b24fa455d1d71b1c88eaaf chore(deps): update dependency nx-cloud to v16.2.0 (#8985)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 5a07e63fd6b2d6ba72b24fa455d1d71b1c88eaaf chore(deps): update dependency nx-cloud to v16.2.0 (#8985)",
+      "hash": "5a07e63fd6b2d6ba72b24fa455d1d71b1c88eaaf",
+      "message": "chore(deps): update dependency nx-cloud to v16.2.0 (#8985)",
+      "pr": "8985"
+    },
+    {
+      "line": "< ac8f2d952fe5a159bae152406defbcec566eb91e Merge branch 'release/patch/v6.0.3'",
+      "ref": "release/minor/v6.1.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< ac8f2d952fe5a159bae152406defbcec566eb91e Merge branch 'release/patch/v6.0.3'\u001b[22m",
+      "hash": "ac8f2d952fe5a159bae152406defbcec566eb91e",
+      "message": "Merge branch 'release/patch/v6.0.3'"
+    },
+    {
+      "line": "< cb860440786c2e283d2932980e33fbeb5289388b docs(fonts): Update @font-face recommendation (#8986)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< cb860440786c2e283d2932980e33fbeb5289388b docs(fonts): Update @font-face recommendation (#8986)",
+      "hash": "cb860440786c2e283d2932980e33fbeb5289388b",
+      "message": "docs(fonts): Update @font-face recommendation (#8986)",
+      "pr": "8986"
+    },
+    {
+      "line": "< f3cde6464d3844f64bc4a7ff6ea2dc4e7e5802bf Docs: remove useless code in code snippet (#8990)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f3cde6464d3844f64bc4a7ff6ea2dc4e7e5802bf Docs: remove useless code in code snippet (#8990)",
+      "hash": "f3cde6464d3844f64bc4a7ff6ea2dc4e7e5802bf",
+      "message": "Docs: remove useless code in code snippet (#8990)",
+      "pr": "8990"
+    },
+    {
+      "line": "< 0ca221cb0312d07388c798fe75bc1a1d101bb786 fix(router): Prevent rerendering authenticated routes on hash change (#9007)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< 0ca221cb0312d07388c798fe75bc1a1d101bb786 fix(router): Prevent rerendering authenticated routes on hash change (#9007)\u001b[39m\u001b[22m",
+      "hash": "0ca221cb0312d07388c798fe75bc1a1d101bb786",
+      "message": "fix(router): Prevent rerendering authenticated routes on hash change (#9007)",
+      "pr": "9007"
+    },
+    {
+      "line": "< f1011c990ea452ea04443800bd31c3071b6a1b13 fix(deps): update dependency vite to v4.4.8 (#9003)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f1011c990ea452ea04443800bd31c3071b6a1b13 fix(deps): update dependency vite to v4.4.8 (#9003)",
+      "hash": "f1011c990ea452ea04443800bd31c3071b6a1b13",
+      "message": "fix(deps): update dependency vite to v4.4.8 (#9003)",
+      "pr": "9003"
+    },
+    {
+      "line": "< 72aba822fa4c1cc9b70c4553a7d0ceddabddd805 fix(deps): update dependency fast-glob to v3.3.1 (#8997)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 72aba822fa4c1cc9b70c4553a7d0ceddabddd805 fix(deps): update dependency fast-glob to v3.3.1 (#8997)",
+      "hash": "72aba822fa4c1cc9b70c4553a7d0ceddabddd805",
+      "message": "fix(deps): update dependency fast-glob to v3.3.1 (#8997)",
+      "pr": "8997"
+    },
+    {
+      "line": "< 10e0383238c9128574be8314df82325659ecd53e fix(deps): update storybook monorepo to v7.2.0 (#9002)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 10e0383238c9128574be8314df82325659ecd53e fix(deps): update storybook monorepo to v7.2.0 (#9002)",
+      "hash": "10e0383238c9128574be8314df82325659ecd53e",
+      "message": "fix(deps): update storybook monorepo to v7.2.0 (#9002)",
+      "pr": "9002"
+    },
+    {
+      "line": "< a90e9e5f296f76b034c2ce358f869cd8f433560c fix(deps): update prisma monorepo to v5.1.0 (#9001)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< a90e9e5f296f76b034c2ce358f869cd8f433560c fix(deps): update prisma monorepo to v5.1.0 (#9001)",
+      "hash": "a90e9e5f296f76b034c2ce358f869cd8f433560c",
+      "message": "fix(deps): update prisma monorepo to v5.1.0 (#9001)",
+      "pr": "9001"
+    },
+    {
+      "line": "< fadf121288cab7f1d35a09462a5fadeb8758212b fix(deps): update dependency fastify to v4.21.0 (#8998)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< fadf121288cab7f1d35a09462a5fadeb8758212b fix(deps): update dependency fastify to v4.21.0 (#8998)",
+      "hash": "fadf121288cab7f1d35a09462a5fadeb8758212b",
+      "message": "fix(deps): update dependency fastify to v4.21.0 (#8998)",
+      "pr": "8998"
+    },
+    {
+      "line": "< fd98e4076380575ab5fa40df0323b33cf5ecc9cd fix(deps): update dependency @vitejs/plugin-react to v4.0.4 (#8999)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< fd98e4076380575ab5fa40df0323b33cf5ecc9cd fix(deps): update dependency @vitejs/plugin-react to v4.0.4 (#8999)",
+      "hash": "fd98e4076380575ab5fa40df0323b33cf5ecc9cd",
+      "message": "fix(deps): update dependency @vitejs/plugin-react to v4.0.4 (#8999)",
+      "pr": "8999"
+    },
+    {
+      "line": "< b08bc724ee75708efa823de0e03631e6830239e3 fix(deps): update dependency @whatwg-node/fetch to v0.9.9 (#8942)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b08bc724ee75708efa823de0e03631e6830239e3 fix(deps): update dependency @whatwg-node/fetch to v0.9.9 (#8942)",
+      "hash": "b08bc724ee75708efa823de0e03631e6830239e3",
+      "message": "fix(deps): update dependency @whatwg-node/fetch to v0.9.9 (#8942)",
+      "pr": "8942"
+    },
+    {
+      "line": "< 3b824f64434c23861027609e18cf5c4063c66d66 Merge branch 'release/patch/v6.0.2'",
+      "ref": "release/minor/v6.1.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< 3b824f64434c23861027609e18cf5c4063c66d66 Merge branch 'release/patch/v6.0.2'\u001b[22m",
+      "hash": "3b824f64434c23861027609e18cf5c4063c66d66",
+      "message": "Merge branch 'release/patch/v6.0.2'"
+    },
+    {
+      "line": "< 10f7f43740169a4f05aa9b9f4317aed799e7743a Make sure env var name starts with REDWOOD_ENV_ (#8993)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< 10f7f43740169a4f05aa9b9f4317aed799e7743a Make sure env var name starts with REDWOOD_ENV_ (#8993)\u001b[39m\u001b[22m",
+      "hash": "10f7f43740169a4f05aa9b9f4317aed799e7743a",
+      "message": "Make sure env var name starts with REDWOOD_ENV_ (#8993)",
+      "pr": "8993"
+    },
+    {
+      "line": "< 0b72f4f56f640b184242da3a74d5e4ff678d0230 fix(realtime): add misisng `@` in setup command",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< 0b72f4f56f640b184242da3a74d5e4ff678d0230 fix(realtime): add misisng `@` in setup command\u001b[39m\u001b[22m",
+      "hash": "0b72f4f56f640b184242da3a74d5e4ff678d0230",
+      "message": "fix(realtime): add misisng `@` in setup command"
+    },
+    {
+      "line": "< 18e131e62b9749083ef4a6509004a078283139f4 Remove the indexed type reference on AvailableRoutes (#8918)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< 18e131e62b9749083ef4a6509004a078283139f4 Remove the indexed type reference on AvailableRoutes (#8918)\u001b[39m\u001b[22m",
+      "hash": "18e131e62b9749083ef4a6509004a078283139f4",
+      "message": "Remove the indexed type reference on AvailableRoutes (#8918)",
+      "pr": "8918"
+    },
+    {
+      "line": "< cb31df936b88858eae6c4c4b7d0e7e5ef68f0212 feat(vite): add plugin to remove modules from the bundle (#8973)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< cb31df936b88858eae6c4c4b7d0e7e5ef68f0212 feat(vite): add plugin to remove modules from the bundle (#8973)",
+      "hash": "cb31df936b88858eae6c4c4b7d0e7e5ef68f0212",
+      "message": "feat(vite): add plugin to remove modules from the bundle (#8973)",
+      "pr": "8973"
+    },
+    {
+      "line": "< 98dbfaa611038495461a69d3668c14bb98f6cdea fix(deps): update dependency whatwg-fetch to v3.6.17 (#8943)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 98dbfaa611038495461a69d3668c14bb98f6cdea fix(deps): update dependency whatwg-fetch to v3.6.17 (#8943)",
+      "hash": "98dbfaa611038495461a69d3668c14bb98f6cdea",
+      "message": "fix(deps): update dependency whatwg-fetch to v3.6.17 (#8943)",
+      "pr": "8943"
+    },
+    {
+      "line": "< 35c85c6fcfc3a6fa47e5a9b74c083142f0e0fdb1 Merge branch 'release/patch/v6.0.1'",
+      "ref": "release/minor/v6.1.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< 35c85c6fcfc3a6fa47e5a9b74c083142f0e0fdb1 Merge branch 'release/patch/v6.0.1'\u001b[22m",
+      "hash": "35c85c6fcfc3a6fa47e5a9b74c083142f0e0fdb1",
+      "message": "Merge branch 'release/patch/v6.0.1'"
+    },
+    {
+      "line": "< ca7ca311ef300ed77beda62b24d0bcac50e153ae fix(crwa): use JSDoc in JS template for vite config (#8982)",
+      "ref": "v6.0.7",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;159;254;2m< ca7ca311ef300ed77beda62b24d0bcac50e153ae fix(crwa): use JSDoc in JS template for vite config (#8982)\u001b[39m\u001b[22m",
+      "hash": "ca7ca311ef300ed77beda62b24d0bcac50e153ae",
+      "message": "fix(crwa): use JSDoc in JS template for vite config (#8982)",
+      "pr": "8982"
+    },
+    {
+      "line": "< 43bbc2737d081742084dca94a89bdbe7958960ca chore(docs): compress v5 docs into v5.x",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 43bbc2737d081742084dca94a89bdbe7958960ca chore(docs): compress v5 docs into v5.x",
+      "hash": "43bbc2737d081742084dca94a89bdbe7958960ca",
+      "message": "chore(docs): compress v5 docs into v5.x"
+    },
+    {
+      "line": "< 360108e5e9aa549bbc2034bbe39cdada07256041 Merge branch 'release/major/v6.0.0'",
+      "ref": "release/minor/v6.1.0",
+      "type": "chore",
+      "pretty": "\u001b[2m< 360108e5e9aa549bbc2034bbe39cdada07256041 Merge branch 'release/major/v6.0.0'\u001b[22m",
+      "hash": "360108e5e9aa549bbc2034bbe39cdada07256041",
+      "message": "Merge branch 'release/major/v6.0.0'"
+    },
+    {
+      "line": "< 76c523751bc77cf730efba73566a468cb83cfa07 docs: Update file structure (#8959)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 76c523751bc77cf730efba73566a468cb83cfa07 docs: Update file structure (#8959)\u001b[39m\u001b[22m",
+      "hash": "76c523751bc77cf730efba73566a468cb83cfa07",
+      "message": "docs: Update file structure (#8959)",
+      "pr": "8959"
+    },
+    {
+      "line": "< 2142ca5431458e30cfe138072bbc6460554ea3be fix(cli): Prevent unwanted SIGINT error message from storybook (#8977)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 2142ca5431458e30cfe138072bbc6460554ea3be fix(cli): Prevent unwanted SIGINT error message from storybook (#8977)\u001b[39m\u001b[22m",
+      "hash": "2142ca5431458e30cfe138072bbc6460554ea3be",
+      "message": "fix(cli): Prevent unwanted SIGINT error message from storybook (#8977)",
+      "pr": "8977"
+    },
+    {
+      "line": "< 627c5bc48006834d69db3a228283b979350a418d Webpack: Use resolve-url-loader to handle absolute paths in css url() (#8980)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 627c5bc48006834d69db3a228283b979350a418d Webpack: Use resolve-url-loader to handle absolute paths in css url() (#8980)\u001b[39m\u001b[22m",
+      "hash": "627c5bc48006834d69db3a228283b979350a418d",
+      "message": "Webpack: Use resolve-url-loader to handle absolute paths in css url() (#8980)",
+      "pr": "8980"
+    },
+    {
+      "line": "< 2add568286e6cad3ead50c9edc4d7e4a03771825 RSC: Use experimental node loader (#8979)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 2add568286e6cad3ead50c9edc4d7e4a03771825 RSC: Use experimental node loader (#8979)",
+      "hash": "2add568286e6cad3ead50c9edc4d7e4a03771825",
+      "message": "RSC: Use experimental node loader (#8979)",
+      "pr": "8979"
+    },
+    {
+      "line": "< 257919ec3bcd1e1ce3ff8c3a5c334dcac8d6cec5 fix(firebase): improve error handling (#8976)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 257919ec3bcd1e1ce3ff8c3a5c334dcac8d6cec5 fix(firebase): improve error handling (#8976)\u001b[39m\u001b[22m",
+      "hash": "257919ec3bcd1e1ce3ff8c3a5c334dcac8d6cec5",
+      "message": "fix(firebase): improve error handling (#8976)",
+      "pr": "8976"
+    },
+    {
+      "line": "< 63dd9f8ba26f5e74840355372b53c5c95cdd9dbc chore(deps): update dependency firebase to v10 (#8972)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 63dd9f8ba26f5e74840355372b53c5c95cdd9dbc chore(deps): update dependency firebase to v10 (#8972)\u001b[39m\u001b[22m",
+      "hash": "63dd9f8ba26f5e74840355372b53c5c95cdd9dbc",
+      "message": "chore(deps): update dependency firebase to v10 (#8972)",
+      "pr": "8972"
+    },
+    {
+      "line": "< caf27850e5b3818444f87d2f2bda45fea0e731ea Update flightcontrol.md (#8970)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< caf27850e5b3818444f87d2f2bda45fea0e731ea Update flightcontrol.md (#8970)\u001b[39m\u001b[22m",
+      "hash": "caf27850e5b3818444f87d2f2bda45fea0e731ea",
+      "message": "Update flightcontrol.md (#8970)",
+      "pr": "8970"
+    },
+    {
+      "line": "< 7c0ba844f095229b90b97815e3a17dbbe6ffabba fix(deps): update dependency firebase-admin to v11.10.1 (#8969)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 7c0ba844f095229b90b97815e3a17dbbe6ffabba fix(deps): update dependency firebase-admin to v11.10.1 (#8969)\u001b[39m\u001b[22m",
+      "hash": "7c0ba844f095229b90b97815e3a17dbbe6ffabba",
+      "message": "fix(deps): update dependency firebase-admin to v11.10.1 (#8969)",
+      "pr": "8969"
+    },
+    {
+      "line": "< 3a7233aaab7a38080970009750cab7ec1f85bd21 fix(supertokens): improve setup and fix lint errors (#8971)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 3a7233aaab7a38080970009750cab7ec1f85bd21 fix(supertokens): improve setup and fix lint errors (#8971)\u001b[39m\u001b[22m",
+      "hash": "3a7233aaab7a38080970009750cab7ec1f85bd21",
+      "message": "fix(supertokens): improve setup and fix lint errors (#8971)",
+      "pr": "8971"
+    },
+    {
+      "line": "< e8ab555d4e66d8e6802b998f238d7060bcff2a8b Update SuperTokens dependencies (#8957)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< e8ab555d4e66d8e6802b998f238d7060bcff2a8b Update SuperTokens dependencies (#8957)\u001b[39m\u001b[22m",
+      "hash": "e8ab555d4e66d8e6802b998f238d7060bcff2a8b",
+      "message": "Update SuperTokens dependencies (#8957)",
+      "pr": "8957"
+    },
+    {
+      "line": "< 93f213d40f508f6288b20ce88818847e8925e364 CRWA: Prompt for installation dir (#8955)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 93f213d40f508f6288b20ce88818847e8925e364 CRWA: Prompt for installation dir (#8955)\u001b[39m\u001b[22m",
+      "hash": "93f213d40f508f6288b20ce88818847e8925e364",
+      "message": "CRWA: Prompt for installation dir (#8955)",
+      "pr": "8955"
+    },
+    {
+      "line": "< fc29c9c503894261d550afa814043992810414f0 fix(deps): update dependency vite to v4.4.7 (#8967)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< fc29c9c503894261d550afa814043992810414f0 fix(deps): update dependency vite to v4.4.7 (#8967)\u001b[39m\u001b[22m",
+      "hash": "fc29c9c503894261d550afa814043992810414f0",
+      "message": "fix(deps): update dependency vite to v4.4.7 (#8967)",
+      "pr": "8967"
+    },
+    {
+      "line": "< 8eaa2fc5abde34ce17093d3d6b02eceea7c33d2a fix(deps): update dependency msw to v1.2.3 (#8966)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 8eaa2fc5abde34ce17093d3d6b02eceea7c33d2a fix(deps): update dependency msw to v1.2.3 (#8966)\u001b[39m\u001b[22m",
+      "hash": "8eaa2fc5abde34ce17093d3d6b02eceea7c33d2a",
+      "message": "fix(deps): update dependency msw to v1.2.3 (#8966)",
+      "pr": "8966"
+    },
+    {
+      "line": "< 535a39a7438961676d4de935f759d283576306ae fix(deps): update storybook monorepo to v7.1.1 (#8968)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 535a39a7438961676d4de935f759d283576306ae fix(deps): update storybook monorepo to v7.1.1 (#8968)\u001b[39m\u001b[22m",
+      "hash": "535a39a7438961676d4de935f759d283576306ae",
+      "message": "fix(deps): update storybook monorepo to v7.1.1 (#8968)",
+      "pr": "8968"
+    },
+    {
+      "line": "< 9ac5ab271776b42c9e4ceed403345fa00d2feb1b RSC: Fix noExternal rule for server build (#8961)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 9ac5ab271776b42c9e4ceed403345fa00d2feb1b RSC: Fix noExternal rule for server build (#8961)",
+      "hash": "9ac5ab271776b42c9e4ceed403345fa00d2feb1b",
+      "message": "RSC: Fix noExternal rule for server build (#8961)",
+      "pr": "8961"
+    },
+    {
+      "line": "< 9a552c6472afe934b67ac08151397b07833be04c chore(deps): update dependency lerna to v7.1.4 (#8964)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 9a552c6472afe934b67ac08151397b07833be04c chore(deps): update dependency lerna to v7.1.4 (#8964)\u001b[39m\u001b[22m",
+      "hash": "9a552c6472afe934b67ac08151397b07833be04c",
+      "message": "chore(deps): update dependency lerna to v7.1.4 (#8964)",
+      "pr": "8964"
+    },
+    {
+      "line": "< 513404e3a74b2e6129e3f86ad09b469fecee74be chore(deps): update dependency postcss to v8.4.27 (#8965)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 513404e3a74b2e6129e3f86ad09b469fecee74be chore(deps): update dependency postcss to v8.4.27 (#8965)\u001b[39m\u001b[22m",
+      "hash": "513404e3a74b2e6129e3f86ad09b469fecee74be",
+      "message": "chore(deps): update dependency postcss to v8.4.27 (#8965)",
+      "pr": "8965"
+    },
+    {
+      "line": "< a8463a4a62940ef61a64ffd4393fca9f8a92a03f chore(deps): update dependency esbuild to v0.18.16 (#8963)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< a8463a4a62940ef61a64ffd4393fca9f8a92a03f chore(deps): update dependency esbuild to v0.18.16 (#8963)\u001b[39m\u001b[22m",
+      "hash": "a8463a4a62940ef61a64ffd4393fca9f8a92a03f",
+      "message": "chore(deps): update dependency esbuild to v0.18.16 (#8963)",
+      "pr": "8963"
+    },
+    {
+      "line": "< 2e4880660af7f3fb4c65dc95679c3473101ba750 CRWA: Move git init to include yarn.lock (#8956)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 2e4880660af7f3fb4c65dc95679c3473101ba750 CRWA: Move git init to include yarn.lock (#8956)\u001b[39m\u001b[22m",
+      "hash": "2e4880660af7f3fb4c65dc95679c3473101ba750",
+      "message": "CRWA: Move git init to include yarn.lock (#8956)",
+      "pr": "8956"
+    },
+    {
+      "line": "< fa5baa64eb4bedfa090c0019cd095aec6098aef3 docs: Change ref to webpack -> vite. Update url (#8960)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< fa5baa64eb4bedfa090c0019cd095aec6098aef3 docs: Change ref to webpack -> vite. Update url (#8960)\u001b[39m\u001b[22m",
+      "hash": "fa5baa64eb4bedfa090c0019cd095aec6098aef3",
+      "message": "docs: Change ref to webpack -> vite. Update url (#8960)",
+      "pr": "8960"
+    },
+    {
+      "line": "< 4db450b9af5026300d8ca08a73faa106e615efb0 Update Tailwind setup. Show extensions to install (#8954)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 4db450b9af5026300d8ca08a73faa106e615efb0 Update Tailwind setup. Show extensions to install (#8954)\u001b[39m\u001b[22m",
+      "hash": "4db450b9af5026300d8ca08a73faa106e615efb0",
+      "message": "Update Tailwind setup. Show extensions to install (#8954)",
+      "pr": "8954"
+    },
+    {
+      "line": "< f24016a8411d025f6918544ea3683e1a84a13f52 Refactor cli serve command (#8958)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f24016a8411d025f6918544ea3683e1a84a13f52 Refactor cli serve command (#8958)",
+      "hash": "f24016a8411d025f6918544ea3683e1a84a13f52",
+      "message": "Refactor cli serve command (#8958)",
+      "pr": "8958"
+    },
+    {
+      "line": "< fc079454d282609e14edaccc7b7bc64d59a63ec8 web-server: Print localhost instead of 0.0.0.0 (#8952)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< fc079454d282609e14edaccc7b7bc64d59a63ec8 web-server: Print localhost instead of 0.0.0.0 (#8952)",
+      "hash": "fc079454d282609e14edaccc7b7bc64d59a63ec8",
+      "message": "web-server: Print localhost instead of 0.0.0.0 (#8952)",
+      "pr": "8952"
+    },
+    {
+      "line": "< a2775f50f5e2ca4e0c81a4638ad0d0d6b39ece2a fix(deps): update dependency babel-plugin-polyfill-corejs3 to v0.8.3 (#8951)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< a2775f50f5e2ca4e0c81a4638ad0d0d6b39ece2a fix(deps): update dependency babel-plugin-polyfill-corejs3 to v0.8.3 (#8951)\u001b[39m\u001b[22m",
+      "hash": "a2775f50f5e2ca4e0c81a4638ad0d0d6b39ece2a",
+      "message": "fix(deps): update dependency babel-plugin-polyfill-corejs3 to v0.8.3 (#8951)",
+      "pr": "8951"
+    },
+    {
+      "line": "< b0aea3200b5e66a53e33272d48abe6d2d9496310 fix(rw serve): conditionally import `@redwoodjs/realtime` (#8950)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< b0aea3200b5e66a53e33272d48abe6d2d9496310 fix(rw serve): conditionally import `@redwoodjs/realtime` (#8950)\u001b[39m\u001b[22m",
+      "hash": "b0aea3200b5e66a53e33272d48abe6d2d9496310",
+      "message": "fix(rw serve): conditionally import `@redwoodjs/realtime` (#8950)",
+      "pr": "8950"
+    },
+    {
+      "line": "< 6007b82b2b9fa7b8da9e0c6265a5b34bdb7e8bd8 fix(deps): update dependency vite to v4.4.6 (#8946)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 6007b82b2b9fa7b8da9e0c6265a5b34bdb7e8bd8 fix(deps): update dependency vite to v4.4.6 (#8946)\u001b[39m\u001b[22m",
+      "hash": "6007b82b2b9fa7b8da9e0c6265a5b34bdb7e8bd8",
+      "message": "fix(deps): update dependency vite to v4.4.6 (#8946)",
+      "pr": "8946"
+    },
+    {
+      "line": "< c5b051d5a6832e2426b5ef284d85b3d346e379e2 fix(realtime): add realtime as devDep to graphql-server",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< c5b051d5a6832e2426b5ef284d85b3d346e379e2 fix(realtime): add realtime as devDep to graphql-server\u001b[39m\u001b[22m",
+      "hash": "c5b051d5a6832e2426b5ef284d85b3d346e379e2",
+      "message": "fix(realtime): add realtime as devDep to graphql-server"
+    },
+    {
+      "line": "< b18e1aa3f2cd0c2b8e3e01d08c2aa2b67fe2d228 chore: fix yarn constraints and update yarn.lock",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b18e1aa3f2cd0c2b8e3e01d08c2aa2b67fe2d228 chore: fix yarn constraints and update yarn.lock",
+      "hash": "b18e1aa3f2cd0c2b8e3e01d08c2aa2b67fe2d228",
+      "message": "chore: fix yarn constraints and update yarn.lock"
+    },
+    {
+      "line": "< 7d1a3f59923ef539402af6f68357ec36f8555d2f @redwoodjs/web-server (#8916)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 7d1a3f59923ef539402af6f68357ec36f8555d2f @redwoodjs/web-server (#8916)",
+      "hash": "7d1a3f59923ef539402af6f68357ec36f8555d2f",
+      "message": "@redwoodjs/web-server (#8916)",
+      "pr": "8916"
+    },
+    {
+      "line": "< c96e1fdfd369392378bc09d1a7f6d5b27689db86 fix(v6): Refactor Redwood Realtime as a new redwoodjs/realtime package to better handle dependencies  (#8878)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< c96e1fdfd369392378bc09d1a7f6d5b27689db86 fix(v6): Refactor Redwood Realtime as a new redwoodjs/realtime package to better handle dependencies  (#8878)\u001b[39m\u001b[22m",
+      "hash": "c96e1fdfd369392378bc09d1a7f6d5b27689db86",
+      "message": "fix(v6): Refactor Redwood Realtime as a new redwoodjs/realtime package to better handle dependencies  (#8878)",
+      "pr": "8878"
+    },
+    {
+      "line": "< 6f33914e06f7fb6d0866495bdbadb09fd3d367cb @rwjs/vite: Pin acorn-loose version (#8944)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 6f33914e06f7fb6d0866495bdbadb09fd3d367cb @rwjs/vite: Pin acorn-loose version (#8944)",
+      "hash": "6f33914e06f7fb6d0866495bdbadb09fd3d367cb",
+      "message": "@rwjs/vite: Pin acorn-loose version (#8944)",
+      "pr": "8944"
+    },
+    {
+      "line": "< bdacb10c13aad19d5981cc0ba11ca412059792b0 fix(cli): Escape telemetry in exec command (#8947)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< bdacb10c13aad19d5981cc0ba11ca412059792b0 fix(cli): Escape telemetry in exec command (#8947)\u001b[39m\u001b[22m",
+      "hash": "bdacb10c13aad19d5981cc0ba11ca412059792b0",
+      "message": "fix(cli): Escape telemetry in exec command (#8947)",
+      "pr": "8947"
+    },
+    {
+      "line": "< e9413654f60f3b40c65bf7c759cd0b8be99978ca RSC: react-server condition. Poisoned imports (#8948)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< e9413654f60f3b40c65bf7c759cd0b8be99978ca RSC: react-server condition. Poisoned imports (#8948)",
+      "hash": "e9413654f60f3b40c65bf7c759cd0b8be99978ca",
+      "message": "RSC: react-server condition. Poisoned imports (#8948)",
+      "pr": "8948"
+    },
+    {
+      "line": "< 3588ec06a9009cf2ffc864370eec7f3130fff9e1 RSC fix typo in example code (#8949)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 3588ec06a9009cf2ffc864370eec7f3130fff9e1 RSC fix typo in example code (#8949)",
+      "hash": "3588ec06a9009cf2ffc864370eec7f3130fff9e1",
+      "message": "RSC fix typo in example code (#8949)",
+      "pr": "8949"
+    },
+    {
+      "line": "< 9db9666ef8f135beab54c96c56d103237351215e chore(deps): update dependency esbuild to v0.18.15 (#8945)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 9db9666ef8f135beab54c96c56d103237351215e chore(deps): update dependency esbuild to v0.18.15 (#8945)\u001b[39m\u001b[22m",
+      "hash": "9db9666ef8f135beab54c96c56d103237351215e",
+      "message": "chore(deps): update dependency esbuild to v0.18.15 (#8945)",
+      "pr": "8945"
+    },
+    {
+      "line": "< d14432b0f35806547f0ecb7f11cfbd966da929ba chore(cli-storybook): Add telemetry (#8803)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< d14432b0f35806547f0ecb7f11cfbd966da929ba chore(cli-storybook): Add telemetry (#8803)\u001b[39m\u001b[22m",
+      "hash": "d14432b0f35806547f0ecb7f11cfbd966da929ba",
+      "message": "chore(cli-storybook): Add telemetry (#8803)",
+      "pr": "8803"
+    },
+    {
+      "line": "< f5f15e61b9c53c22acb976d4084d47b6b4da59b5 serve web: Fix socket support (#8936)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f5f15e61b9c53c22acb976d4084d47b6b4da59b5 serve web: Fix socket support (#8936)\u001b[39m\u001b[22m",
+      "hash": "f5f15e61b9c53c22acb976d4084d47b6b4da59b5",
+      "message": "serve web: Fix socket support (#8936)",
+      "pr": "8936"
+    },
+    {
+      "line": "< 4d47e793cfe6e5868e5bf6e03633f3c78b90d83a chore(deps): update dependency esbuild to v0.18.14 (#8939)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 4d47e793cfe6e5868e5bf6e03633f3c78b90d83a chore(deps): update dependency esbuild to v0.18.14 (#8939)\u001b[39m\u001b[22m",
+      "hash": "4d47e793cfe6e5868e5bf6e03633f3c78b90d83a",
+      "message": "chore(deps): update dependency esbuild to v0.18.14 (#8939)",
+      "pr": "8939"
+    },
+    {
+      "line": "< 495d698ce47945f14c4e36ac22e0219cdff01178 fix(deps): update dependency webpack to v5.88.2 (#8940)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 495d698ce47945f14c4e36ac22e0219cdff01178 fix(deps): update dependency webpack to v5.88.2 (#8940)\u001b[39m\u001b[22m",
+      "hash": "495d698ce47945f14c4e36ac22e0219cdff01178",
+      "message": "fix(deps): update dependency webpack to v5.88.2 (#8940)",
+      "pr": "8940"
+    },
+    {
+      "line": "< bb35f9c5fb1bbd43100eb0eb584ca640dcde438b fix(deps): update dependency fastify-raw-body to v4.2.1 (#8937)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< bb35f9c5fb1bbd43100eb0eb584ca640dcde438b fix(deps): update dependency fastify-raw-body to v4.2.1 (#8937)\u001b[39m\u001b[22m",
+      "hash": "bb35f9c5fb1bbd43100eb0eb584ca640dcde438b",
+      "message": "fix(deps): update dependency fastify-raw-body to v4.2.1 (#8937)",
+      "pr": "8937"
+    },
+    {
+      "line": "< f2a000e07a8e7cc8dccdd7c316c9ab4a1d589986 fix(deps): update storybook monorepo to v7.1.0 (#8941)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f2a000e07a8e7cc8dccdd7c316c9ab4a1d589986 fix(deps): update storybook monorepo to v7.1.0 (#8941)\u001b[39m\u001b[22m",
+      "hash": "f2a000e07a8e7cc8dccdd7c316c9ab4a1d589986",
+      "message": "fix(deps): update storybook monorepo to v7.1.0 (#8941)",
+      "pr": "8941"
+    },
+    {
+      "line": "< f6acf929e2c147749ac79b135c7455c1c6882d10 chore(v6): change to React automatic runtime (#8926)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f6acf929e2c147749ac79b135c7455c1c6882d10 chore(v6): change to React automatic runtime (#8926)\u001b[39m\u001b[22m",
+      "hash": "f6acf929e2c147749ac79b135c7455c1c6882d10",
+      "message": "chore(v6): change to React automatic runtime (#8926)",
+      "pr": "8926"
+    },
+    {
+      "line": "< d472e28fd151aeaef097f38944ffee0cdde9723a fix(graphql-server): Allow correct context behaviour in testing (#8925)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< d472e28fd151aeaef097f38944ffee0cdde9723a fix(graphql-server): Allow correct context behaviour in testing (#8925)\u001b[39m\u001b[22m",
+      "hash": "d472e28fd151aeaef097f38944ffee0cdde9723a",
+      "message": "fix(graphql-server): Allow correct context behaviour in testing (#8925)",
+      "pr": "8925"
+    },
+    {
+      "line": "< 04fc76cd03a50d3e491bb50ef312aa276f56f97b Expose environment variables also on import.meta.env (#8928)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 04fc76cd03a50d3e491bb50ef312aa276f56f97b Expose environment variables also on import.meta.env (#8928)\u001b[39m\u001b[22m",
+      "hash": "04fc76cd03a50d3e491bb50ef312aa276f56f97b",
+      "message": "Expose environment variables also on import.meta.env (#8928)",
+      "pr": "8928"
+    },
+    {
+      "line": "< 7f4dbca54513e851d52467af778232c7a31b4d76 Update svgr codemod to output TS for tsx inputs (#8935)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 7f4dbca54513e851d52467af778232c7a31b4d76 Update svgr codemod to output TS for tsx inputs (#8935)\u001b[39m\u001b[22m",
+      "hash": "7f4dbca54513e851d52467af778232c7a31b4d76",
+      "message": "Update svgr codemod to output TS for tsx inputs (#8935)",
+      "pr": "8935"
+    },
+    {
+      "line": "< 29a38f68572bb32644d9eaa1c581c7038594b17d Remove warning message about jsx in js files (#8930)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 29a38f68572bb32644d9eaa1c581c7038594b17d Remove warning message about jsx in js files (#8930)\u001b[39m\u001b[22m",
+      "hash": "29a38f68572bb32644d9eaa1c581c7038594b17d",
+      "message": "Remove warning message about jsx in js files (#8930)",
+      "pr": "8930"
+    },
+    {
+      "line": "< 19082e35a2e8056b8aae491117125757df893395 fix(deps): update dependency fastify to v4.20.0 (#8927)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 19082e35a2e8056b8aae491117125757df893395 fix(deps): update dependency fastify to v4.20.0 (#8927)\u001b[39m\u001b[22m",
+      "hash": "19082e35a2e8056b8aae491117125757df893395",
+      "message": "fix(deps): update dependency fastify to v4.20.0 (#8927)",
+      "pr": "8927"
+    },
+    {
+      "line": "< ec7241877f907a5a24421b0b4a0910682c019db7 Vite plugin to replace env vars in index.html (#8929)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< ec7241877f907a5a24421b0b4a0910682c019db7 Vite plugin to replace env vars in index.html (#8929)\u001b[39m\u001b[22m",
+      "hash": "ec7241877f907a5a24421b0b4a0910682c019db7",
+      "message": "Vite plugin to replace env vars in index.html (#8929)",
+      "pr": "8929"
+    },
+    {
+      "line": "< 068387b667796f55a68568b741e89d1a3547fcd3 chore(v6): add codemod changing `global` to `globalThis` (#8924)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 068387b667796f55a68568b741e89d1a3547fcd3 chore(v6): add codemod changing `global` to `globalThis` (#8924)\u001b[39m\u001b[22m",
+      "hash": "068387b667796f55a68568b741e89d1a3547fcd3",
+      "message": "chore(v6): add codemod changing `global` to `globalThis` (#8924)",
+      "pr": "8924"
+    },
+    {
+      "line": "< abf229bc166ea05c0f3e6dca1836fa477192e55d fix(ssr): Get experimental ssr setup working properly (#8922)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< abf229bc166ea05c0f3e6dca1836fa477192e55d fix(ssr): Get experimental ssr setup working properly (#8922)",
+      "hash": "abf229bc166ea05c0f3e6dca1836fa477192e55d",
+      "message": "fix(ssr): Get experimental ssr setup working properly (#8922)",
+      "pr": "8922"
+    },
+    {
+      "line": "< b13caec19946cfd2eb24aa9df8a83f847565f9ee fix(deps): update dependency babel-loader to v9.1.3 (#8910)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< b13caec19946cfd2eb24aa9df8a83f847565f9ee fix(deps): update dependency babel-loader to v9.1.3 (#8910)\u001b[39m\u001b[22m",
+      "hash": "b13caec19946cfd2eb24aa9df8a83f847565f9ee",
+      "message": "fix(deps): update dependency babel-loader to v9.1.3 (#8910)",
+      "pr": "8910"
+    },
+    {
+      "line": "< 39f2dda24735313638fada217db0a9dc7cadab4b fix(deps): update dependency vite to v4.4.4 (#8911)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 39f2dda24735313638fada217db0a9dc7cadab4b fix(deps): update dependency vite to v4.4.4 (#8911)\u001b[39m\u001b[22m",
+      "hash": "39f2dda24735313638fada217db0a9dc7cadab4b",
+      "message": "fix(deps): update dependency vite to v4.4.4 (#8911)",
+      "pr": "8911"
+    },
+    {
+      "line": "< 08e6c9d8332fcff8f20506a68ca8c7e3b83e4cfd fix(deps): update dependency eslint to v8.45.0 (#8914)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 08e6c9d8332fcff8f20506a68ca8c7e3b83e4cfd fix(deps): update dependency eslint to v8.45.0 (#8914)\u001b[39m\u001b[22m",
+      "hash": "08e6c9d8332fcff8f20506a68ca8c7e3b83e4cfd",
+      "message": "fix(deps): update dependency eslint to v8.45.0 (#8914)",
+      "pr": "8914"
+    },
+    {
+      "line": "< 262eb6713fdcbdb38bf6d92db33e224fb1762b1b fix(deps): update dependency react-hook-form to v7.45.2 (#8923)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 262eb6713fdcbdb38bf6d92db33e224fb1762b1b fix(deps): update dependency react-hook-form to v7.45.2 (#8923)\u001b[39m\u001b[22m",
+      "hash": "262eb6713fdcbdb38bf6d92db33e224fb1762b1b",
+      "message": "fix(deps): update dependency react-hook-form to v7.45.2 (#8923)",
+      "pr": "8923"
+    },
+    {
+      "line": "< 98ee545f24718bef4c3b25b65b1025cdc155907d fix(deps): update opentelemetry-js monorepo (#8903)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 98ee545f24718bef4c3b25b65b1025cdc155907d fix(deps): update opentelemetry-js monorepo (#8903)\u001b[39m\u001b[22m",
+      "hash": "98ee545f24718bef4c3b25b65b1025cdc155907d",
+      "message": "fix(deps): update opentelemetry-js monorepo (#8903)",
+      "pr": "8903"
+    },
+    {
+      "line": "< 7257e3e758b0bfe5779e63ec2a5d9e4444851dfb fix(deps): update dependency @vitejs/plugin-react to v4.0.3 (#8881)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 7257e3e758b0bfe5779e63ec2a5d9e4444851dfb fix(deps): update dependency @vitejs/plugin-react to v4.0.3 (#8881)\u001b[39m\u001b[22m",
+      "hash": "7257e3e758b0bfe5779e63ec2a5d9e4444851dfb",
+      "message": "fix(deps): update dependency @vitejs/plugin-react to v4.0.3 (#8881)",
+      "pr": "8881"
+    },
+    {
+      "line": "< f2c99479a7cd8d53ab40ad04483d675a4a38b15a Update name reference in Redwood Docs (#8904)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f2c99479a7cd8d53ab40ad04483d675a4a38b15a Update name reference in Redwood Docs (#8904)\u001b[39m\u001b[22m",
+      "hash": "f2c99479a7cd8d53ab40ad04483d675a4a38b15a",
+      "message": "Update name reference in Redwood Docs (#8904)",
+      "pr": "8904"
+    },
+    {
+      "line": "< b11bd72adf2b946a2652525a20e83b1a4a965d46 RSC fix: setup description (#8906)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b11bd72adf2b946a2652525a20e83b1a4a965d46 RSC fix: setup description (#8906)",
+      "hash": "b11bd72adf2b946a2652525a20e83b1a4a965d46",
+      "message": "RSC fix: setup description (#8906)",
+      "pr": "8906"
+    },
+    {
+      "line": "< fcd7c39304b5d587ac1eb7a68c322e977115b030 RSC: Add css files to the example (#8905)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< fcd7c39304b5d587ac1eb7a68c322e977115b030 RSC: Add css files to the example (#8905)",
+      "hash": "fcd7c39304b5d587ac1eb7a68c322e977115b030",
+      "message": "RSC: Add css files to the example (#8905)",
+      "pr": "8905"
+    },
+    {
+      "line": "< 2a92ac3f64fd10e0ea87b8d0dbeda0b11263a274 CRWA: --yes (#8870)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 2a92ac3f64fd10e0ea87b8d0dbeda0b11263a274 CRWA: --yes (#8870)\u001b[39m\u001b[22m",
+      "hash": "2a92ac3f64fd10e0ea87b8d0dbeda0b11263a274",
+      "message": "CRWA: --yes (#8870)",
+      "pr": "8870"
+    },
+    {
+      "line": "< 9c967cc3b06d0e05298e3d19716b2fca2f143151 chore(deps): update dependency esbuild to v0.18.12 (#8899)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 9c967cc3b06d0e05298e3d19716b2fca2f143151 chore(deps): update dependency esbuild to v0.18.12 (#8899)\u001b[39m\u001b[22m",
+      "hash": "9c967cc3b06d0e05298e3d19716b2fca2f143151",
+      "message": "chore(deps): update dependency esbuild to v0.18.12 (#8899)",
+      "pr": "8899"
+    },
+    {
+      "line": "< 57fc61a6c71ed7bcbb78bbc599b82a9e671fdfd6 fix(deps): update storybook monorepo to v7.0.27 (#8901)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 57fc61a6c71ed7bcbb78bbc599b82a9e671fdfd6 fix(deps): update storybook monorepo to v7.0.27 (#8901)\u001b[39m\u001b[22m",
+      "hash": "57fc61a6c71ed7bcbb78bbc599b82a9e671fdfd6",
+      "message": "fix(deps): update storybook monorepo to v7.0.27 (#8901)",
+      "pr": "8901"
+    },
+    {
+      "line": "< d00fe2e24d09d43c75c1fcfcd1fe30e4ce503a44 chore(deps): update dependency @clerk/clerk-react to v4.22.0 (#8902)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< d00fe2e24d09d43c75c1fcfcd1fe30e4ce503a44 chore(deps): update dependency @clerk/clerk-react to v4.22.0 (#8902)\u001b[39m\u001b[22m",
+      "hash": "d00fe2e24d09d43c75c1fcfcd1fe30e4ce503a44",
+      "message": "chore(deps): update dependency @clerk/clerk-react to v4.22.0 (#8902)",
+      "pr": "8902"
+    },
+    {
+      "line": "< e486cf748d541054850fa129cdd309013e53ff86 docs(services): fix numericality validation example (#8892)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< e486cf748d541054850fa129cdd309013e53ff86 docs(services): fix numericality validation example (#8892)\u001b[39m\u001b[22m",
+      "hash": "e486cf748d541054850fa129cdd309013e53ff86",
+      "message": "docs(services): fix numericality validation example (#8892)",
+      "pr": "8892"
+    },
+    {
+      "line": "< edd83db42dee96bad90826c4f32dd83f878a33b3 docs: update ArticleQuery type in routing-params.md (#8895)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< edd83db42dee96bad90826c4f32dd83f878a33b3 docs: update ArticleQuery type in routing-params.md (#8895)\u001b[39m\u001b[22m",
+      "hash": "edd83db42dee96bad90826c4f32dd83f878a33b3",
+      "message": "docs: update ArticleQuery type in routing-params.md (#8895)",
+      "pr": "8895"
+    },
+    {
+      "line": "< 97f1f10cef9df3c1c83c43a458df686a230a3a2a Update intermission.md including a caution block to let the reader know not to look for a Typescript version (#8885)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 97f1f10cef9df3c1c83c43a458df686a230a3a2a Update intermission.md including a caution block to let the reader know not to look for a Typescript version (#8885)\u001b[39m\u001b[22m",
+      "hash": "97f1f10cef9df3c1c83c43a458df686a230a3a2a",
+      "message": "Update intermission.md including a caution block to let the reader know not to look for a Typescript version (#8885)",
+      "pr": "8885"
+    },
+    {
+      "line": "< 1c2e936b57e56a41d1031f6d6ed99ec72950acfa Proofreading updates to the CRWA docs (#8898)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 1c2e936b57e56a41d1031f6d6ed99ec72950acfa Proofreading updates to the CRWA docs (#8898)\u001b[39m\u001b[22m",
+      "hash": "1c2e936b57e56a41d1031f6d6ed99ec72950acfa",
+      "message": "Proofreading updates to the CRWA docs (#8898)",
+      "pr": "8898"
+    },
+    {
+      "line": "< 37692a4d85eb231c3be4b5459408f0d4480d363d RSC build without user config (#8896)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 37692a4d85eb231c3be4b5459408f0d4480d363d RSC build without user config (#8896)",
+      "hash": "37692a4d85eb231c3be4b5459408f0d4480d363d",
+      "message": "RSC build without user config (#8896)",
+      "pr": "8896"
+    },
+    {
+      "line": "< 921c9cb3127b10cb050b3b9ae144d326f4a7f20c RSC: Use rw serve (#8897)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 921c9cb3127b10cb050b3b9ae144d326f4a7f20c RSC: Use rw serve (#8897)",
+      "hash": "921c9cb3127b10cb050b3b9ae144d326f4a7f20c",
+      "message": "RSC: Use rw serve (#8897)",
+      "pr": "8897"
+    },
+    {
+      "line": "< f1d0dcb81c6149fa0dbd74ed64e5d2c569b4b205 RSC: Build using rw build (#8893)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f1d0dcb81c6149fa0dbd74ed64e5d2c569b4b205 RSC: Build using rw build (#8893)",
+      "hash": "f1d0dcb81c6149fa0dbd74ed64e5d2c569b4b205",
+      "message": "RSC: Build using rw build (#8893)",
+      "pr": "8893"
+    },
+    {
+      "line": "< c44a260751e344e6c1735aa9704b8903f9d7fa81 RSC: Fix experimental setup (#8894)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c44a260751e344e6c1735aa9704b8903f9d7fa81 RSC: Fix experimental setup (#8894)",
+      "hash": "c44a260751e344e6c1735aa9704b8903f9d7fa81",
+      "message": "RSC: Fix experimental setup (#8894)",
+      "pr": "8894"
+    },
+    {
+      "line": "< fb0d689068857743cb3ca312cad35c1848b82182 fix(deps): update dependency vite to v4.4.3 (#8842)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< fb0d689068857743cb3ca312cad35c1848b82182 fix(deps): update dependency vite to v4.4.3 (#8842)\u001b[39m\u001b[22m",
+      "hash": "fb0d689068857743cb3ca312cad35c1848b82182",
+      "message": "fix(deps): update dependency vite to v4.4.3 (#8842)",
+      "pr": "8842"
+    },
+    {
+      "line": "< 6f58a34e84c773d0b7acf3534600b85a677f79f1 fix(deps): update jest monorepo (#8843)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 6f58a34e84c773d0b7acf3534600b85a677f79f1 fix(deps): update jest monorepo (#8843)\u001b[39m\u001b[22m",
+      "hash": "6f58a34e84c773d0b7acf3534600b85a677f79f1",
+      "message": "fix(deps): update jest monorepo (#8843)",
+      "pr": "8843"
+    },
+    {
+      "line": "< 6512ca9e498ee103d951312b23c2280ec817606d fix(deps): update prisma monorepo to v5 (major) (#8891)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 6512ca9e498ee103d951312b23c2280ec817606d fix(deps): update prisma monorepo to v5 (major) (#8891)\u001b[39m\u001b[22m",
+      "hash": "6512ca9e498ee103d951312b23c2280ec817606d",
+      "message": "fix(deps): update prisma monorepo to v5 (major) (#8891)",
+      "pr": "8891"
+    },
+    {
+      "line": "< de8ac90eb6e956a7b32453b66d3334884fb5bb3c chore(deps): update dependency typescript to v5.1.6 (#8759)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< de8ac90eb6e956a7b32453b66d3334884fb5bb3c chore(deps): update dependency typescript to v5.1.6 (#8759)\u001b[39m\u001b[22m",
+      "hash": "de8ac90eb6e956a7b32453b66d3334884fb5bb3c",
+      "message": "chore(deps): update dependency typescript to v5.1.6 (#8759)",
+      "pr": "8759"
+    },
+    {
+      "line": "< b0ae4b2a7dc45134314461bc4d397da20ce4e711 fix(deps): update dependency @apollo/client to v3.7.17 (#8880)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< b0ae4b2a7dc45134314461bc4d397da20ce4e711 fix(deps): update dependency @apollo/client to v3.7.17 (#8880)\u001b[39m\u001b[22m",
+      "hash": "b0ae4b2a7dc45134314461bc4d397da20ce4e711",
+      "message": "fix(deps): update dependency @apollo/client to v3.7.17 (#8880)",
+      "pr": "8880"
+    },
+    {
+      "line": "< 1507a18488636a8e1db64593659cad93432185b6 chore(deps): update dependency postcss to v8.4.25 (#8850)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 1507a18488636a8e1db64593659cad93432185b6 chore(deps): update dependency postcss to v8.4.25 (#8850)\u001b[39m\u001b[22m",
+      "hash": "1507a18488636a8e1db64593659cad93432185b6",
+      "message": "chore(deps): update dependency postcss to v8.4.25 (#8850)",
+      "pr": "8850"
+    },
+    {
+      "line": "< 9a76e97392e63ef3e607698fcaec0ea3407e4da5 chore(deps): update dependency @types/testing-library__jest-dom to v5.14.8 (#8848)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 9a76e97392e63ef3e607698fcaec0ea3407e4da5 chore(deps): update dependency @types/testing-library__jest-dom to v5.14.8 (#8848)\u001b[39m\u001b[22m",
+      "hash": "9a76e97392e63ef3e607698fcaec0ea3407e4da5",
+      "message": "chore(deps): update dependency @types/testing-library__jest-dom to v5.14.8 (#8848)",
+      "pr": "8848"
+    },
+    {
+      "line": "< a3a479668ad2d68261dc5218fa4626675192b5b7 chore(deps): update babel monorepo to v7.22.9 (#8890)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< a3a479668ad2d68261dc5218fa4626675192b5b7 chore(deps): update babel monorepo to v7.22.9 (#8890)\u001b[39m\u001b[22m",
+      "hash": "a3a479668ad2d68261dc5218fa4626675192b5b7",
+      "message": "chore(deps): update babel monorepo to v7.22.9 (#8890)",
+      "pr": "8890"
+    },
+    {
+      "line": "< 5310c208177b4bb87baf5234834130a32a28113a chore(deps): bump semver from 6.3.0 to 6.3.1 in /packages/studio/frontend (#8883)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 5310c208177b4bb87baf5234834130a32a28113a chore(deps): bump semver from 6.3.0 to 6.3.1 in /packages/studio/frontend (#8883)\u001b[39m\u001b[22m",
+      "hash": "5310c208177b4bb87baf5234834130a32a28113a",
+      "message": "chore(deps): bump semver from 6.3.0 to 6.3.1 in /packages/studio/frontend (#8883)",
+      "pr": "8883"
+    },
+    {
+      "line": "< db271db22e5bd423c3a88d98938c05aeb373b992 RSC: Include entries.ts in paths (#8888)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< db271db22e5bd423c3a88d98938c05aeb373b992 RSC: Include entries.ts in paths (#8888)",
+      "hash": "db271db22e5bd423c3a88d98938c05aeb373b992",
+      "message": "RSC: Include entries.ts in paths (#8888)",
+      "pr": "8888"
+    },
+    {
+      "line": "< 8610d58e1207779dfe561b96f7625b20d2a8f400 RSC: Initial css support (#8887)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8610d58e1207779dfe561b96f7625b20d2a8f400 RSC: Initial css support (#8887)",
+      "hash": "8610d58e1207779dfe561b96f7625b20d2a8f400",
+      "message": "RSC: Initial css support (#8887)",
+      "pr": "8887"
+    },
+    {
+      "line": "< f5fc2e2e696d791536bd14d386efff99fe121ecd RSC: Use exported defineEntries() (#8886)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f5fc2e2e696d791536bd14d386efff99fe121ecd RSC: Use exported defineEntries() (#8886)",
+      "hash": "f5fc2e2e696d791536bd14d386efff99fe121ecd",
+      "message": "RSC: Use exported defineEntries() (#8886)",
+      "pr": "8886"
+    },
+    {
+      "line": "< c1e62c29d1f706edbabee2abbcf96f8dad744373 Include standard vite config in RSC build (#8882)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c1e62c29d1f706edbabee2abbcf96f8dad744373 Include standard vite config in RSC build (#8882)",
+      "hash": "c1e62c29d1f706edbabee2abbcf96f8dad744373",
+      "message": "Include standard vite config in RSC build (#8882)",
+      "pr": "8882"
+    },
+    {
+      "line": "< d706d6bb8cee93bf39a3ca6f01d3bd9a1832ce74 chore(ci): move canary publishing script to file (#8877)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< d706d6bb8cee93bf39a3ca6f01d3bd9a1832ce74 chore(ci): move canary publishing script to file (#8877)",
+      "hash": "d706d6bb8cee93bf39a3ca6f01d3bd9a1832ce74",
+      "message": "chore(ci): move canary publishing script to file (#8877)",
+      "pr": "8877"
+    },
+    {
+      "line": "< b99e5234a067166bda05a8c6d7d0592cc09aba58 CRWA use RW v5.4.3 (#8869)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b99e5234a067166bda05a8c6d7d0592cc09aba58 CRWA use RW v5.4.3 (#8869)",
+      "hash": "b99e5234a067166bda05a8c6d7d0592cc09aba58",
+      "message": "CRWA use RW v5.4.3 (#8869)",
+      "pr": "8869"
+    },
+    {
+      "line": "< 433281514de2574d83ed2a945c01a154857627df GH Action: Increase commit count based version by one (#8868)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 433281514de2574d83ed2a945c01a154857627df GH Action: Increase commit count based version by one (#8868)",
+      "hash": "433281514de2574d83ed2a945c01a154857627df",
+      "message": "GH Action: Increase commit count based version by one (#8868)",
+      "pr": "8868"
+    },
+    {
+      "line": "< 203dff985a1b245c2df4f75e9bec5399a448aa56 Don't git push. Remove debug logs (#8867)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 203dff985a1b245c2df4f75e9bec5399a448aa56 Don't git push. Remove debug logs (#8867)",
+      "hash": "203dff985a1b245c2df4f75e9bec5399a448aa56",
+      "message": "Don't git push. Remove debug logs (#8867)",
+      "pr": "8867"
+    },
+    {
+      "line": "< 1f0c97743a05dc4a96d1bc8b91c98ee5c2896063 GH Action: Set git config (#8866)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 1f0c97743a05dc4a96d1bc8b91c98ee5c2896063 GH Action: Set git config (#8866)",
+      "hash": "1f0c97743a05dc4a96d1bc8b91c98ee5c2896063",
+      "message": "GH Action: Set git config (#8866)",
+      "pr": "8866"
+    },
+    {
+      "line": "< e2fa04aa82c612c0a796d2a4daec05c9eddb6270 push CRWA package version changes (#8865)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< e2fa04aa82c612c0a796d2a4daec05c9eddb6270 push CRWA package version changes (#8865)",
+      "hash": "e2fa04aa82c612c0a796d2a4daec05c9eddb6270",
+      "message": "push CRWA package version changes (#8865)",
+      "pr": "8865"
+    },
+    {
+      "line": "< ad438a3deef2b8cbee99862e794f36476074b050 gh actions: Explain the publish dryrun command (#8864)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< ad438a3deef2b8cbee99862e794f36476074b050 gh actions: Explain the publish dryrun command (#8864)",
+      "hash": "ad438a3deef2b8cbee99862e794f36476074b050",
+      "message": "gh actions: Explain the publish dryrun command (#8864)",
+      "pr": "8864"
+    },
+    {
+      "line": "< b02db272bce63ab383765482ff08f0954dd3dffd CRWA: Manually update rw package versions to v6 canary (#8863)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b02db272bce63ab383765482ff08f0954dd3dffd CRWA: Manually update rw package versions to v6 canary (#8863)",
+      "hash": "b02db272bce63ab383765482ff08f0954dd3dffd",
+      "message": "CRWA: Manually update rw package versions to v6 canary (#8863)",
+      "pr": "8863"
+    },
+    {
+      "line": "< 96c012016599535b0b676ead59b9ee504ea52e9e chore(gh-actions) Dry-run publish to get next canary version (#8862)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 96c012016599535b0b676ead59b9ee504ea52e9e chore(gh-actions) Dry-run publish to get next canary version (#8862)",
+      "hash": "96c012016599535b0b676ead59b9ee504ea52e9e",
+      "message": "chore(gh-actions) Dry-run publish to get next canary version (#8862)",
+      "pr": "8862"
+    },
+    {
+      "line": "< 486226dc97bad1970ab453bf0793990ed23672bd chore(renovate): improve config to reduce noise (#8859)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 486226dc97bad1970ab453bf0793990ed23672bd chore(renovate): improve config to reduce noise (#8859)",
+      "hash": "486226dc97bad1970ab453bf0793990ed23672bd",
+      "message": "chore(renovate): improve config to reduce noise (#8859)",
+      "pr": "8859"
+    },
+    {
+      "line": "< ae60d6b3326365e3c00d0d34c23a93e0b6a83583 fix(docs): use correct relative links",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< ae60d6b3326365e3c00d0d34c23a93e0b6a83583 fix(docs): use correct relative links\u001b[39m\u001b[22m",
+      "hash": "ae60d6b3326365e3c00d0d34c23a93e0b6a83583",
+      "message": "fix(docs): use correct relative links"
+    },
+    {
+      "line": "< 2d1a9828e09225c74242ee758eff65e805b3fe1f chore(renovate): audit `renovate.json` (#8856)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 2d1a9828e09225c74242ee758eff65e805b3fe1f chore(renovate): audit `renovate.json` (#8856)\u001b[39m\u001b[22m",
+      "hash": "2d1a9828e09225c74242ee758eff65e805b3fe1f",
+      "message": "chore(renovate): audit `renovate.json` (#8856)",
+      "pr": "8856"
+    },
+    {
+      "line": "< 46420463a3f54f24d542d763d6b6ecc54d90063b fix(v6, serverless): use named exports instead of default (#8857)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 46420463a3f54f24d542d763d6b6ecc54d90063b fix(v6, serverless): use named exports instead of default (#8857)\u001b[39m\u001b[22m",
+      "hash": "46420463a3f54f24d542d763d6b6ecc54d90063b",
+      "message": "fix(v6, serverless): use named exports instead of default (#8857)",
+      "pr": "8857"
+    },
+    {
+      "line": "< ed9c85cec19dd5c8a250305a430908f300c61447 rw upgrade: Update package versions from template package.json (#8855)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< ed9c85cec19dd5c8a250305a430908f300c61447 rw upgrade: Update package versions from template package.json (#8855)\u001b[39m\u001b[22m",
+      "hash": "ed9c85cec19dd5c8a250305a430908f300c61447",
+      "message": "rw upgrade: Update package versions from template package.json (#8855)",
+      "pr": "8855"
+    },
+    {
+      "line": "< 8831c0f666f66055544d4495fcdc106041bf4e9e yarn rw upgrade: Not < v1 anymore (#8853)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 8831c0f666f66055544d4495fcdc106041bf4e9e yarn rw upgrade: Not < v1 anymore (#8853)\u001b[39m\u001b[22m",
+      "hash": "8831c0f666f66055544d4495fcdc106041bf4e9e",
+      "message": "yarn rw upgrade: Not < v1 anymore (#8853)",
+      "pr": "8853"
+    },
+    {
+      "line": "< 8917ad6ab5eaea40f6a79b478e28df4b9c43182f Update entry.client and disable vite legacy mode (#8851)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8917ad6ab5eaea40f6a79b478e28df4b9c43182f Update entry.client and disable vite legacy mode (#8851)",
+      "hash": "8917ad6ab5eaea40f6a79b478e28df4b9c43182f",
+      "message": "Update entry.client and disable vite legacy mode (#8851)",
+      "pr": "8851"
+    },
+    {
+      "line": "< 0b150ebf719bbc2572ac048b1e7973e7643c208e fix(deps): update dependency @vitejs/plugin-react to v4.0.2 (#8840)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 0b150ebf719bbc2572ac048b1e7973e7643c208e fix(deps): update dependency @vitejs/plugin-react to v4.0.2 (#8840)\u001b[39m\u001b[22m",
+      "hash": "0b150ebf719bbc2572ac048b1e7973e7643c208e",
+      "message": "fix(deps): update dependency @vitejs/plugin-react to v4.0.2 (#8840)",
+      "pr": "8840"
+    },
+    {
+      "line": "< c7a5b138c43e888b49a20ddddfbf3bbc2ab2c00d experimental feature flag for rsc (#8837)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c7a5b138c43e888b49a20ddddfbf3bbc2ab2c00d experimental feature flag for rsc (#8837)",
+      "hash": "c7a5b138c43e888b49a20ddddfbf3bbc2ab2c00d",
+      "message": "experimental feature flag for rsc (#8837)",
+      "pr": "8837"
+    },
+    {
+      "line": "< d4888a993e68632bdb32dbf5876a2cf8b89644d1 fix(deps): update dependency core-js to v3.31.1 (#8841)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< d4888a993e68632bdb32dbf5876a2cf8b89644d1 fix(deps): update dependency core-js to v3.31.1 (#8841)\u001b[39m\u001b[22m",
+      "hash": "d4888a993e68632bdb32dbf5876a2cf8b89644d1",
+      "message": "fix(deps): update dependency core-js to v3.31.1 (#8841)",
+      "pr": "8841"
+    },
+    {
+      "line": "< f50940ce65ede8b3267eb0e087f9d7c23124050b fix(deps): update storybook monorepo to v7.0.26 (#8846)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f50940ce65ede8b3267eb0e087f9d7c23124050b fix(deps): update storybook monorepo to v7.0.26 (#8846)\u001b[39m\u001b[22m",
+      "hash": "f50940ce65ede8b3267eb0e087f9d7c23124050b",
+      "message": "fix(deps): update storybook monorepo to v7.0.26 (#8846)",
+      "pr": "8846"
+    },
+    {
+      "line": "< b874ef310accb25c2ed894accf9d5146a4891e92 chore(deps): update babel monorepo (#8833)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< b874ef310accb25c2ed894accf9d5146a4891e92 chore(deps): update babel monorepo (#8833)\u001b[39m\u001b[22m",
+      "hash": "b874ef310accb25c2ed894accf9d5146a4891e92",
+      "message": "chore(deps): update babel monorepo (#8833)",
+      "pr": "8833"
+    },
+    {
+      "line": "< 0b7c659a4d82e2e22f1b2a0d5339665ba7af891a chore: update docs action to handle push event",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 0b7c659a4d82e2e22f1b2a0d5339665ba7af891a chore: update docs action to handle push event\u001b[39m\u001b[22m",
+      "hash": "0b7c659a4d82e2e22f1b2a0d5339665ba7af891a",
+      "message": "chore: update docs action to handle push event"
+    },
+    {
+      "line": "< 1a78c0aa71582e6663cc634f18759fdf1da341d0 Additional Messaging for Compatibility Checking for Create Redwood App (#8673)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 1a78c0aa71582e6663cc634f18759fdf1da341d0 Additional Messaging for Compatibility Checking for Create Redwood App (#8673)\u001b[39m\u001b[22m",
+      "hash": "1a78c0aa71582e6663cc634f18759fdf1da341d0",
+      "message": "Additional Messaging for Compatibility Checking for Create Redwood App (#8673)",
+      "pr": "8673"
+    },
+    {
+      "line": "< 059176f5acdabad7539330b95e09e4e101573378 chore: fix invalid key in ci.yml file",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 059176f5acdabad7539330b95e09e4e101573378 chore: fix invalid key in ci.yml file\u001b[39m\u001b[22m",
+      "hash": "059176f5acdabad7539330b95e09e4e101573378",
+      "message": "chore: fix invalid key in ci.yml file"
+    },
+    {
+      "line": "< f898724dbb2a1ef0a8bd4c0913896fd74a3336e9 chore: try running CI on pushes to next and release branches (#8844)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f898724dbb2a1ef0a8bd4c0913896fd74a3336e9 chore: try running CI on pushes to next and release branches (#8844)\u001b[39m\u001b[22m",
+      "hash": "f898724dbb2a1ef0a8bd4c0913896fd74a3336e9",
+      "message": "chore: try running CI on pushes to next and release branches (#8844)",
+      "pr": "8844"
+    },
+    {
+      "line": "< 387f27eceaf6c94b45de1ef44f49d54e119d6e1e chore(deps): update yarn to v3.6.1 (#8799)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 387f27eceaf6c94b45de1ef44f49d54e119d6e1e chore(deps): update yarn to v3.6.1 (#8799)\u001b[39m\u001b[22m",
+      "hash": "387f27eceaf6c94b45de1ef44f49d54e119d6e1e",
+      "message": "chore(deps): update yarn to v3.6.1 (#8799)",
+      "pr": "8799"
+    },
+    {
+      "line": "< c37023a1af35f4b68b38d0df28fdd8922fdb7afb Added documentation for the Create Redwood App (#8777)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< c37023a1af35f4b68b38d0df28fdd8922fdb7afb Added documentation for the Create Redwood App (#8777)\u001b[39m\u001b[22m",
+      "hash": "c37023a1af35f4b68b38d0df28fdd8922fdb7afb",
+      "message": "Added documentation for the Create Redwood App (#8777)",
+      "pr": "8777"
+    },
+    {
+      "line": "< 9b55d0e9face34567b30ad91d989ef7222923cba Modified contributing docs for the Create Redwood App (#8778)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 9b55d0e9face34567b30ad91d989ef7222923cba Modified contributing docs for the Create Redwood App (#8778)\u001b[39m\u001b[22m",
+      "hash": "9b55d0e9face34567b30ad91d989ef7222923cba",
+      "message": "Modified contributing docs for the Create Redwood App (#8778)",
+      "pr": "8778"
+    },
+    {
+      "line": "< 056f3b6533dd030504c2c78dfe45e2653cbb8244 chore(deps): update dependency nx to v16.4.1 (#8784)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 056f3b6533dd030504c2c78dfe45e2653cbb8244 chore(deps): update dependency nx to v16.4.1 (#8784)",
+      "hash": "056f3b6533dd030504c2c78dfe45e2653cbb8244",
+      "message": "chore(deps): update dependency nx to v16.4.1 (#8784)",
+      "pr": "8784"
+    },
+    {
+      "line": "< 63d22e1e442ceac5e91f8f8a4647076ce3c9f78f fix(deps): update typescript-eslint monorepo to v5.61.0 (#8822)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 63d22e1e442ceac5e91f8f8a4647076ce3c9f78f fix(deps): update typescript-eslint monorepo to v5.61.0 (#8822)\u001b[39m\u001b[22m",
+      "hash": "63d22e1e442ceac5e91f8f8a4647076ce3c9f78f",
+      "message": "fix(deps): update typescript-eslint monorepo to v5.61.0 (#8822)",
+      "pr": "8822"
+    },
+    {
+      "line": "< ea364a32abd2fda0985e932ae75c0f59a0e08c4f fix(deps): update dependency @clerk/clerk-sdk-node to v4.10.15 (#8785)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< ea364a32abd2fda0985e932ae75c0f59a0e08c4f fix(deps): update dependency @clerk/clerk-sdk-node to v4.10.15 (#8785)\u001b[39m\u001b[22m",
+      "hash": "ea364a32abd2fda0985e932ae75c0f59a0e08c4f",
+      "message": "fix(deps): update dependency @clerk/clerk-sdk-node to v4.10.15 (#8785)",
+      "pr": "8785"
+    },
+    {
+      "line": "< f5d1a1a1f77afafb252031c07f5405b998004f20 feature(#8676): added usernameMatch criteria to login methods to match signup (#8686)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f5d1a1a1f77afafb252031c07f5405b998004f20 feature(#8676): added usernameMatch criteria to login methods to match signup (#8686)\u001b[39m\u001b[22m",
+      "hash": "f5d1a1a1f77afafb252031c07f5405b998004f20",
+      "message": "feature(#8676): added usernameMatch criteria to login methods to match signup (#8686)",
+      "pr": "8676"
+    },
+    {
+      "line": "< a9ef9b6785fb11262e17d0acdf611b9ba4626437 chore(deps): update dependency @tsd/typescript to v5.1.6 (#8781)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< a9ef9b6785fb11262e17d0acdf611b9ba4626437 chore(deps): update dependency @tsd/typescript to v5.1.6 (#8781)\u001b[39m\u001b[22m",
+      "hash": "a9ef9b6785fb11262e17d0acdf611b9ba4626437",
+      "message": "chore(deps): update dependency @tsd/typescript to v5.1.6 (#8781)",
+      "pr": "8781"
+    },
+    {
+      "line": "< ddc3f3d333fb250d911b6e24d18cb750a8671009 Updated Storybook Template files to for CSF 3 (#8788)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< ddc3f3d333fb250d911b6e24d18cb750a8671009 Updated Storybook Template files to for CSF 3 (#8788)\u001b[39m\u001b[22m",
+      "hash": "ddc3f3d333fb250d911b6e24d18cb750a8671009",
+      "message": "Updated Storybook Template files to for CSF 3 (#8788)",
+      "pr": "8788"
+    },
+    {
+      "line": "< 0850c1965b06e0a95832528ba76571a209aae71a Oauth How-to: Adds note about not exposing accessToken via SDL (#8839)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 0850c1965b06e0a95832528ba76571a209aae71a Oauth How-to: Adds note about not exposing accessToken via SDL (#8839)\u001b[39m\u001b[22m",
+      "hash": "0850c1965b06e0a95832528ba76571a209aae71a",
+      "message": "Oauth How-to: Adds note about not exposing accessToken via SDL (#8839)",
+      "pr": "8839"
+    },
+    {
+      "line": "< f22dfbeda624dfb80ce54fde59329f155f29f2e9 React Server Components (RSC) (#8451)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f22dfbeda624dfb80ce54fde59329f155f29f2e9 React Server Components (RSC) (#8451)",
+      "hash": "f22dfbeda624dfb80ce54fde59329f155f29f2e9",
+      "message": "React Server Components (RSC) (#8451)",
+      "pr": "8451"
+    },
+    {
+      "line": "< bca98c615c962dc63891e6aab687099f475dce92 cli(fix): Stop storybook command installing early (#8828)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< bca98c615c962dc63891e6aab687099f475dce92 cli(fix): Stop storybook command installing early (#8828)\u001b[39m\u001b[22m",
+      "hash": "bca98c615c962dc63891e6aab687099f475dce92",
+      "message": "cli(fix): Stop storybook command installing early (#8828)",
+      "pr": "8828"
+    },
+    {
+      "line": "< 1368550bcfe74e1466b52218cdbb6cb8d11bb911 fix: Fixes and simplifies the Countdown subscription example for Realtime (#8838)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 1368550bcfe74e1466b52218cdbb6cb8d11bb911 fix: Fixes and simplifies the Countdown subscription example for Realtime (#8838)\u001b[39m\u001b[22m",
+      "hash": "1368550bcfe74e1466b52218cdbb6cb8d11bb911",
+      "message": "fix: Fixes and simplifies the Countdown subscription example for Realtime (#8838)",
+      "pr": "8838"
+    },
+    {
+      "line": "< 42f5c044395521afc3bd7a3fb1831f726ef0713e chore: use renamed babel plugin packages (#8832)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 42f5c044395521afc3bd7a3fb1831f726ef0713e chore: use renamed babel plugin packages (#8832)\u001b[39m\u001b[22m",
+      "hash": "42f5c044395521afc3bd7a3fb1831f726ef0713e",
+      "message": "chore: use renamed babel plugin packages (#8832)",
+      "pr": "8832"
+    },
+    {
+      "line": "< d68a3efcbcc2572273223d579854cf21435994b9 Fix babel devDeps in internal (#8831)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< d68a3efcbcc2572273223d579854cf21435994b9 Fix babel devDeps in internal (#8831)\u001b[39m\u001b[22m",
+      "hash": "d68a3efcbcc2572273223d579854cf21435994b9",
+      "message": "Fix babel devDeps in internal (#8831)",
+      "pr": "8831"
+    },
+    {
+      "line": "< dc3064e4fc9742e5358caa90c2c42a23e3678b29 Add babel plugin to internal deps (#8830)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< dc3064e4fc9742e5358caa90c2c42a23e3678b29 Add babel plugin to internal deps (#8830)\u001b[39m\u001b[22m",
+      "hash": "dc3064e4fc9742e5358caa90c2c42a23e3678b29",
+      "message": "Add babel plugin to internal deps (#8830)",
+      "pr": "8830"
+    },
+    {
+      "line": "< 06541ccb1a5ee8bfb698496f97a4714e14b22593 fix(deploy): add hack for netlify deploy with realtime changes (#8829)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 06541ccb1a5ee8bfb698496f97a4714e14b22593 fix(deploy): add hack for netlify deploy with realtime changes (#8829)\u001b[39m\u001b[22m",
+      "hash": "06541ccb1a5ee8bfb698496f97a4714e14b22593",
+      "message": "fix(deploy): add hack for netlify deploy with realtime changes (#8829)",
+      "pr": "8829"
+    },
+    {
+      "line": "< 7a6aea7fed966bcb5deab8b473cf0dfcc36a6547 Use \"import type\" for all types (#8827)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 7a6aea7fed966bcb5deab8b473cf0dfcc36a6547 Use \"import type\" for all types (#8827)",
+      "hash": "7a6aea7fed966bcb5deab8b473cf0dfcc36a6547",
+      "message": "Use \"import type\" for all types (#8827)",
+      "pr": "8827"
+    },
+    {
+      "line": "< d261819262158179a22d57c7a3c78695c9ef7d0a React 18.3.0-canary-035a41c4e-20230704 (#8826)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< d261819262158179a22d57c7a3c78695c9ef7d0a React 18.3.0-canary-035a41c4e-20230704 (#8826)",
+      "hash": "d261819262158179a22d57c7a3c78695c9ef7d0a",
+      "message": "React 18.3.0-canary-035a41c4e-20230704 (#8826)",
+      "pr": "8826"
+    },
+    {
+      "line": "< 84639d254b968fcf7674e4e851b3ba423be7e2e8 fix(deps): update dependency fastify to v4.19.2 (#8820)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 84639d254b968fcf7674e4e851b3ba423be7e2e8 fix(deps): update dependency fastify to v4.19.2 (#8820)\u001b[39m\u001b[22m",
+      "hash": "84639d254b968fcf7674e4e851b3ba423be7e2e8",
+      "message": "fix(deps): update dependency fastify to v4.19.2 (#8820)",
+      "pr": "8820"
+    },
+    {
+      "line": "< 54194d6bd3da985c9fcc383c17db4628085e306b chore(deps): update dependency esbuild to v0.18.11 (#8819)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 54194d6bd3da985c9fcc383c17db4628085e306b chore(deps): update dependency esbuild to v0.18.11 (#8819)\u001b[39m\u001b[22m",
+      "hash": "54194d6bd3da985c9fcc383c17db4628085e306b",
+      "message": "chore(deps): update dependency esbuild to v0.18.11 (#8819)",
+      "pr": "8819"
+    },
+    {
+      "line": "< 875ad731452ec3e2b5e5ae61f604ace3006f24eb fix(cli): Revert change to prisma error message (#8825)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 875ad731452ec3e2b5e5ae61f604ace3006f24eb fix(cli): Revert change to prisma error message (#8825)\u001b[39m\u001b[22m",
+      "hash": "875ad731452ec3e2b5e5ae61f604ace3006f24eb",
+      "message": "fix(cli): Revert change to prisma error message (#8825)",
+      "pr": "8825"
+    },
+    {
+      "line": "< a4e21e9b0499d10f7955915ec8807c0e7214d874 fix(cli): Telemetry improvements (#8798)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< a4e21e9b0499d10f7955915ec8807c0e7214d874 fix(cli): Telemetry improvements (#8798)\u001b[39m\u001b[22m",
+      "hash": "a4e21e9b0499d10f7955915ec8807c0e7214d874",
+      "message": "fix(cli): Telemetry improvements (#8798)",
+      "pr": "8798"
+    },
+    {
+      "line": "< 5ebb76cb46e9e02f7e8713c41e5630acf49e632c feat(cli): Add README to .redwood (#8790)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 5ebb76cb46e9e02f7e8713c41e5630acf49e632c feat(cli): Add README to .redwood (#8790)\u001b[39m\u001b[22m",
+      "hash": "5ebb76cb46e9e02f7e8713c41e5630acf49e632c",
+      "message": "feat(cli): Add README to .redwood (#8790)",
+      "pr": "8790"
+    },
+    {
+      "line": "< 5acc2eb0f62058782fd2fc3d6bf6a0b6bbdcf35d fix(deps): update dependency @vscode/ripgrep to v1.15.5 (#8787)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 5acc2eb0f62058782fd2fc3d6bf6a0b6bbdcf35d fix(deps): update dependency @vscode/ripgrep to v1.15.5 (#8787)\u001b[39m\u001b[22m",
+      "hash": "5acc2eb0f62058782fd2fc3d6bf6a0b6bbdcf35d",
+      "message": "fix(deps): update dependency @vscode/ripgrep to v1.15.5 (#8787)",
+      "pr": "8787"
+    },
+    {
+      "line": "< 7e94c3fdf0ec4d1f61757b532146a1b3662a13a1 fix(deps): update dependency @tremor/react to v3.4.1 (#8786)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 7e94c3fdf0ec4d1f61757b532146a1b3662a13a1 fix(deps): update dependency @tremor/react to v3.4.1 (#8786)\u001b[39m\u001b[22m",
+      "hash": "7e94c3fdf0ec4d1f61757b532146a1b3662a13a1",
+      "message": "fix(deps): update dependency @tremor/react to v3.4.1 (#8786)",
+      "pr": "8786"
+    },
+    {
+      "line": "< 8b85ad6b3f58855a5b5081cdeef679d7d29f9106 ViteBuildManifest and note about import-attributes (#8818)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8b85ad6b3f58855a5b5081cdeef679d7d29f9106 ViteBuildManifest and note about import-attributes (#8818)",
+      "hash": "8b85ad6b3f58855a5b5081cdeef679d7d29f9106",
+      "message": "ViteBuildManifest and note about import-attributes (#8818)",
+      "pr": "8818"
+    },
+    {
+      "line": "< a471d26723d5a02b2c681e890dad54438f56c499 feat: Support Authentication in Realtime Subscriptions (#8815)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< a471d26723d5a02b2c681e890dad54438f56c499 feat: Support Authentication in Realtime Subscriptions (#8815)\u001b[39m\u001b[22m",
+      "hash": "a471d26723d5a02b2c681e890dad54438f56c499",
+      "message": "feat: Support Authentication in Realtime Subscriptions (#8815)",
+      "pr": "8815"
+    },
+    {
+      "line": "< 589e87ac61bcc1debd7eeb14a0a94de793e0e893 chore(fw): Adds super:clean command (#8749)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 589e87ac61bcc1debd7eeb14a0a94de793e0e893 chore(fw): Adds super:clean command (#8749)",
+      "hash": "589e87ac61bcc1debd7eeb14a0a94de793e0e893",
+      "message": "chore(fw): Adds super:clean command (#8749)",
+      "pr": "8749"
+    },
+    {
+      "line": "< be08e835e285d258710f357884205b84fb8c088b feat: Configure In-Memory or Redis-backed GraphQL Live Query and Subscriptions (#8791)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< be08e835e285d258710f357884205b84fb8c088b feat: Configure In-Memory or Redis-backed GraphQL Live Query and Subscriptions (#8791)\u001b[39m\u001b[22m",
+      "hash": "be08e835e285d258710f357884205b84fb8c088b",
+      "message": "feat: Configure In-Memory or Redis-backed GraphQL Live Query and Subscriptions (#8791)",
+      "pr": "8791"
+    },
+    {
+      "line": "< 089f80508ddf5fe3d03ac250008becb319416472 Rudimentary CSS check in our smoke tests (#8812)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 089f80508ddf5fe3d03ac250008becb319416472 Rudimentary CSS check in our smoke tests (#8812)",
+      "hash": "089f80508ddf5fe3d03ac250008becb319416472",
+      "message": "Rudimentary CSS check in our smoke tests (#8812)",
+      "pr": "8812"
+    },
+    {
+      "line": "< 4c51caec60fb84c54d5580944ff8fcfb30d9229a Streaming SSR: Fix build, serve and dev (#8811)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 4c51caec60fb84c54d5580944ff8fcfb30d9229a Streaming SSR: Fix build, serve and dev (#8811)",
+      "hash": "4c51caec60fb84c54d5580944ff8fcfb30d9229a",
+      "message": "Streaming SSR: Fix build, serve and dev (#8811)",
+      "pr": "8811"
+    },
+    {
+      "line": "< 6da5aaebc614f39374f528daaa27d078ec4c02a2 Add files needed for React Streaming SSR (#8810)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 6da5aaebc614f39374f528daaa27d078ec4c02a2 Add files needed for React Streaming SSR (#8810)",
+      "hash": "6da5aaebc614f39374f528daaa27d078ec4c02a2",
+      "message": "Add files needed for React Streaming SSR (#8810)",
+      "pr": "8810"
+    },
+    {
+      "line": "< fd14fd5a31610c73bbeb2e6e2cd789b81a0bfa38 fix(cli): Prevent multiple update available messages (#8809)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< fd14fd5a31610c73bbeb2e6e2cd789b81a0bfa38 fix(cli): Prevent multiple update available messages (#8809)\u001b[39m\u001b[22m",
+      "hash": "fd14fd5a31610c73bbeb2e6e2cd789b81a0bfa38",
+      "message": "fix(cli): Prevent multiple update available messages (#8809)",
+      "pr": "8809"
+    },
+    {
+      "line": "< 7cc5564e3b08715f3ea08a478265ac478ccec49f entry.server and entry.client (#8808)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 7cc5564e3b08715f3ea08a478265ac478ccec49f entry.server and entry.client (#8808)",
+      "hash": "7cc5564e3b08715f3ea08a478265ac478ccec49f",
+      "message": "entry.server and entry.client (#8808)",
+      "pr": "8808"
+    },
+    {
+      "line": "< 8b2a56601e92eab104505ced96f7c30fd442f7e7 Use existing rw-vite-build bin for SSR as well (#8806)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8b2a56601e92eab104505ced96f7c30fd442f7e7 Use existing rw-vite-build bin for SSR as well (#8806)",
+      "hash": "8b2a56601e92eab104505ced96f7c30fd442f7e7",
+      "message": "Use existing rw-vite-build bin for SSR as well (#8806)",
+      "pr": "8806"
+    },
+    {
+      "line": "< 7c1029d95dce9be8270de1e5f202505d98a4be58 \"Cleaning web\" is only needed for Webpack (#8807)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 7c1029d95dce9be8270de1e5f202505d98a4be58 \"Cleaning web\" is only needed for Webpack (#8807)\u001b[39m\u001b[22m",
+      "hash": "7c1029d95dce9be8270de1e5f202505d98a4be58",
+      "message": "\"Cleaning web\" is only needed for Webpack (#8807)",
+      "pr": "8807"
+    },
+    {
+      "line": "< e7d53610bcd0b7e207e4e5ae55e211f57270cf2a Disable prerender when streamingSsr is enabled (#8775)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< e7d53610bcd0b7e207e4e5ae55e211f57270cf2a Disable prerender when streamingSsr is enabled (#8775)",
+      "hash": "e7d53610bcd0b7e207e4e5ae55e211f57270cf2a",
+      "message": "Disable prerender when streamingSsr is enabled (#8775)",
+      "pr": "8775"
+    },
+    {
+      "line": "< f9912af72e0b6625826cb626bb7c3d6c29ba6d53 structure: Update lru-cache to v7 to minimize project:copy issues (#8805)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f9912af72e0b6625826cb626bb7c3d6c29ba6d53 structure: Update lru-cache to v7 to minimize project:copy issues (#8805)\u001b[39m\u001b[22m",
+      "hash": "f9912af72e0b6625826cb626bb7c3d6c29ba6d53",
+      "message": "structure: Update lru-cache to v7 to minimize project:copy issues (#8805)",
+      "pr": "8805"
+    },
+    {
+      "line": "< 75bcabd8ee9c859c8a1a07ee506941787a05bf3c fix(deps): update dependency fastify to v4.19.0 (#8802)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 75bcabd8ee9c859c8a1a07ee506941787a05bf3c fix(deps): update dependency fastify to v4.19.0 (#8802)\u001b[39m\u001b[22m",
+      "hash": "75bcabd8ee9c859c8a1a07ee506941787a05bf3c",
+      "message": "fix(deps): update dependency fastify to v4.19.0 (#8802)",
+      "pr": "8802"
+    },
+    {
+      "line": "< 15704f6730f94e8cf5740297ba2ed2fee332c1e1 fix(deps): update prisma monorepo to v4.16.2 (#8800)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 15704f6730f94e8cf5740297ba2ed2fee332c1e1 fix(deps): update prisma monorepo to v4.16.2 (#8800)\u001b[39m\u001b[22m",
+      "hash": "15704f6730f94e8cf5740297ba2ed2fee332c1e1",
+      "message": "fix(deps): update prisma monorepo to v4.16.2 (#8800)",
+      "pr": "8800"
+    },
+    {
+      "line": "< 482c57223141f1a81c24b4dc66721cbf75d05038 fix(docs): remove the section on configuring Storybook's manager (#8801)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 482c57223141f1a81c24b4dc66721cbf75d05038 fix(docs): remove the section on configuring Storybook's manager (#8801)\u001b[39m\u001b[22m",
+      "hash": "482c57223141f1a81c24b4dc66721cbf75d05038",
+      "message": "fix(docs): remove the section on configuring Storybook's manager (#8801)",
+      "pr": "8801"
+    },
+    {
+      "line": "< 9fb4c210404b23380a2215353777f7e11e3ac727 set cwd when calling rw-vite-build (#8795)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 9fb4c210404b23380a2215353777f7e11e3ac727 set cwd when calling rw-vite-build (#8795)\u001b[39m\u001b[22m",
+      "hash": "9fb4c210404b23380a2215353777f7e11e3ac727",
+      "message": "set cwd when calling rw-vite-build (#8795)",
+      "pr": "8795"
+    },
+    {
+      "line": "< fb745f0dc2f8b1c2d5854bc3a9c1bf8db2d43fff eslint unsupported-route-components: Minor tweaks (#8797)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< fb745f0dc2f8b1c2d5854bc3a9c1bf8db2d43fff eslint unsupported-route-components: Minor tweaks (#8797)\u001b[39m\u001b[22m",
+      "hash": "fb745f0dc2f8b1c2d5854bc3a9c1bf8db2d43fff",
+      "message": "eslint unsupported-route-components: Minor tweaks (#8797)",
+      "pr": "8797"
+    },
+    {
+      "line": "< d61db65680e9ef7d333aa7b8cd4679b5faeabcc0 Updates oauth how-to for typos, adds versioned docs for 5.x, 4.x, 3.x (#8793)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< d61db65680e9ef7d333aa7b8cd4679b5faeabcc0 Updates oauth how-to for typos, adds versioned docs for 5.x, 4.x, 3.x (#8793)\u001b[39m\u001b[22m",
+      "hash": "d61db65680e9ef7d333aa7b8cd4679b5faeabcc0",
+      "message": "Updates oauth how-to for typos, adds versioned docs for 5.x, 4.x, 3.x (#8793)",
+      "pr": "8793"
+    },
+    {
+      "line": "< cf41df38645a0f38eed9f29dbdaed01b3a1e1832 fix(graphql-server): Conditionally enable OTel plugin and OTel plugin updates (#8782)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< cf41df38645a0f38eed9f29dbdaed01b3a1e1832 fix(graphql-server): Conditionally enable OTel plugin and OTel plugin updates (#8782)\u001b[39m\u001b[22m",
+      "hash": "cf41df38645a0f38eed9f29dbdaed01b3a1e1832",
+      "message": "fix(graphql-server): Conditionally enable OTel plugin and OTel plugin updates (#8782)",
+      "pr": "8782"
+    },
+    {
+      "line": "< e19107126d5c9a6ad8995aa0235c161b93b10384 vite utils.ts: fix source format (#8796)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< e19107126d5c9a6ad8995aa0235c161b93b10384 vite utils.ts: fix source format (#8796)",
+      "hash": "e19107126d5c9a6ad8995aa0235c161b93b10384",
+      "message": "vite utils.ts: fix source format (#8796)",
+      "pr": "8796"
+    },
+    {
+      "line": "< dff92106b9063bba2a8d1fc505573e986df5318f Only enable new eslint rule for the Routes file (#8794)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< dff92106b9063bba2a8d1fc505573e986df5318f Only enable new eslint rule for the Routes file (#8794)\u001b[39m\u001b[22m",
+      "hash": "dff92106b9063bba2a8d1fc505573e986df5318f",
+      "message": "Only enable new eslint rule for the Routes file (#8794)",
+      "pr": "8794"
+    },
+    {
+      "line": "< 2557bf8d8d338fb752e145c7c5452a1849c7fcc3 Server Rendering & Streaming (#8561)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 2557bf8d8d338fb752e145c7c5452a1849c7fcc3 Server Rendering & Streaming (#8561)",
+      "hash": "2557bf8d8d338fb752e145c7c5452a1849c7fcc3",
+      "message": "Server Rendering & Streaming (#8561)",
+      "pr": "8561"
+    },
+    {
+      "line": "< 8a7e81b012129844ff2f7506e9317777b12e2043 chore(deps): update dependency @clerk/types to v3.46.1 (#8780)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 8a7e81b012129844ff2f7506e9317777b12e2043 chore(deps): update dependency @clerk/types to v3.46.1 (#8780)\u001b[39m\u001b[22m",
+      "hash": "8a7e81b012129844ff2f7506e9317777b12e2043",
+      "message": "chore(deps): update dependency @clerk/types to v3.46.1 (#8780)",
+      "pr": "8780"
+    },
+    {
+      "line": "< 739a958beec8b6d70b7ff02b8a2088b33acaccda chore(deps): update dependency glob to v10.3.1 (#8783)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 739a958beec8b6d70b7ff02b8a2088b33acaccda chore(deps): update dependency glob to v10.3.1 (#8783)\u001b[39m\u001b[22m",
+      "hash": "739a958beec8b6d70b7ff02b8a2088b33acaccda",
+      "message": "chore(deps): update dependency glob to v10.3.1 (#8783)",
+      "pr": "8783"
+    },
+    {
+      "line": "< a5f51185698fb5c129f676574ff395ae3afef886 chore: RedwoodJS GraphQL subscription templates now use Dynamic Topic IDs (#8766)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< a5f51185698fb5c129f676574ff395ae3afef886 chore: RedwoodJS GraphQL subscription templates now use Dynamic Topic IDs (#8766)\u001b[39m\u001b[22m",
+      "hash": "a5f51185698fb5c129f676574ff395ae3afef886",
+      "message": "chore: RedwoodJS GraphQL subscription templates now use Dynamic Topic IDs (#8766)",
+      "pr": "8766"
+    },
+    {
+      "line": "< af342124a0c1ac720951c8c8c86f62a6ab00b452 change router rule to error in eslint config (#8779)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< af342124a0c1ac720951c8c8c86f62a6ab00b452 change router rule to error in eslint config (#8779)\u001b[39m\u001b[22m",
+      "hash": "af342124a0c1ac720951c8c8c86f62a6ab00b452",
+      "message": "change router rule to error in eslint config (#8779)",
+      "pr": "8779"
+    },
+    {
+      "line": "< 89cdba8278493ebfd4652f630090143e1a6c56c6 chore: Update graphql-server to Yoga v4 and latest subscriptions (#8753)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 89cdba8278493ebfd4652f630090143e1a6c56c6 chore: Update graphql-server to Yoga v4 and latest subscriptions (#8753)\u001b[39m\u001b[22m",
+      "hash": "89cdba8278493ebfd4652f630090143e1a6c56c6",
+      "message": "chore: Update graphql-server to Yoga v4 and latest subscriptions (#8753)",
+      "pr": "8753"
+    },
+    {
+      "line": "< 403141481971cebbf3a7576d43b232f54eba9a4a make unsupported route components rule error for v6 (#8776)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 403141481971cebbf3a7576d43b232f54eba9a4a make unsupported route components rule error for v6 (#8776)\u001b[39m\u001b[22m",
+      "hash": "403141481971cebbf3a7576d43b232f54eba9a4a",
+      "message": "make unsupported route components rule error for v6 (#8776)",
+      "pr": "8776"
+    },
+    {
+      "line": "< f00ddf94684e7162c4cbcff25218a46376af596f eslint rule to add types to service functions (#8599)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< f00ddf94684e7162c4cbcff25218a46376af596f eslint rule to add types to service functions (#8599)\u001b[39m\u001b[22m",
+      "hash": "f00ddf94684e7162c4cbcff25218a46376af596f",
+      "message": "eslint rule to add types to service functions (#8599)",
+      "pr": "8599"
+    },
+    {
+      "line": "< a683321af2ceaa3a1eec789a09c26283c2be7c2c fix(type defs): log type-def generation errors at the end (#8448)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< a683321af2ceaa3a1eec789a09c26283c2be7c2c fix(type defs): log type-def generation errors at the end (#8448)\u001b[39m\u001b[22m",
+      "hash": "a683321af2ceaa3a1eec789a09c26283c2be7c2c",
+      "message": "fix(type defs): log type-def generation errors at the end (#8448)",
+      "pr": "8448"
+    },
+    {
+      "line": "< 3aa3cfc4daea4253b1b61c578e623bd1d28c5c3d eslint rule: unsupported-route-components (#8774)",
+      "ref": "v6.0.0",
+      "type": "commit",
+      "pretty": "\u001b[2m\u001b[38;2;111;53;40m< 3aa3cfc4daea4253b1b61c578e623bd1d28c5c3d eslint rule: unsupported-route-components (#8774)\u001b[39m\u001b[22m",
+      "hash": "3aa3cfc4daea4253b1b61c578e623bd1d28c5c3d",
+      "message": "eslint rule: unsupported-route-components (#8774)",
+      "pr": "8774"
+    },
+    {
+      "line": "< 565f62000b327df732b7b7040a1419852225a7d9 React Streaming and SSR feature flag (#8764)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 565f62000b327df732b7b7040a1419852225a7d9 React Streaming and SSR feature flag (#8764)",
+      "hash": "565f62000b327df732b7b7040a1419852225a7d9",
+      "message": "React Streaming and SSR feature flag (#8764)",
+      "pr": "8764"
+    }
+  ],
+  "tagsToColors": {
+    "v6.0.7": "#9ffe02",
+    "v6.0.0": "#6f3528"
+  },
+  "releaseCommits": [
+    {
+      "line": "< 48a3d755412a81ab53f6f1a09635910b294be25a chore(deps): bump word-wrap from 1.2.3 to 1.2.4 (#8933)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 48a3d755412a81ab53f6f1a09635910b294be25a chore(deps): bump word-wrap from 1.2.3 to 1.2.4 (#8933)",
+      "hash": "48a3d755412a81ab53f6f1a09635910b294be25a",
+      "message": "chore(deps): bump word-wrap from 1.2.3 to 1.2.4 (#8933)",
+      "pr": "8933"
+    },
+    {
+      "line": "< 64a5d5746a837a95f8cb9a89437421935e455784 chore(deps): update babel monorepo to v7.22.10 (#9016)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 64a5d5746a837a95f8cb9a89437421935e455784 chore(deps): update babel monorepo to v7.22.10 (#9016)",
+      "hash": "64a5d5746a837a95f8cb9a89437421935e455784",
+      "message": "chore(deps): update babel monorepo to v7.22.10 (#9016)",
+      "pr": "9016"
+    },
+    {
+      "line": "< 15da49c12986900e2bc1cfe1bab2bd334f242936 manually bump web-server version",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 15da49c12986900e2bc1cfe1bab2bd334f242936 manually bump web-server version",
+      "hash": "15da49c12986900e2bc1cfe1bab2bd334f242936",
+      "message": "manually bump web-server version"
+    },
+    {
+      "line": "< dba68414031de10ed120b288d950bbc694de1b47 fix(deps): update prisma monorepo to v5.1.1 (#9019)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< dba68414031de10ed120b288d950bbc694de1b47 fix(deps): update prisma monorepo to v5.1.1 (#9019)",
+      "hash": "dba68414031de10ed120b288d950bbc694de1b47",
+      "message": "fix(deps): update prisma monorepo to v5.1.1 (#9019)",
+      "pr": "9019"
+    },
+    {
+      "line": "< c81bcfa65f57a3fe9c65fe3eb73e07dd6bea3188 fix(deps): update dependency core-js to v3.32.0 (#9030)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c81bcfa65f57a3fe9c65fe3eb73e07dd6bea3188 fix(deps): update dependency core-js to v3.32.0 (#9030)",
+      "hash": "c81bcfa65f57a3fe9c65fe3eb73e07dd6bea3188",
+      "message": "fix(deps): update dependency core-js to v3.32.0 (#9030)",
+      "pr": "9030"
+    },
+    {
+      "line": "< 3d4ee7751a638d5ca8fbd8f9197ea6c878ab3c67 Revert v7.0.0 and RSC changes",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 3d4ee7751a638d5ca8fbd8f9197ea6c878ab3c67 Revert v7.0.0 and RSC changes",
+      "hash": "3d4ee7751a638d5ca8fbd8f9197ea6c878ab3c67",
+      "message": "Revert v7.0.0 and RSC changes"
+    },
+    {
+      "line": "< a2fcc1618a70a77570943e4bc85d29ea055ab507 chore(deps): update dependency @playwright/test to v1.37.0 (#9028)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< a2fcc1618a70a77570943e4bc85d29ea055ab507 chore(deps): update dependency @playwright/test to v1.37.0 (#9028)",
+      "hash": "a2fcc1618a70a77570943e4bc85d29ea055ab507",
+      "message": "chore(deps): update dependency @playwright/test to v1.37.0 (#9028)",
+      "pr": "9028"
+    },
+    {
+      "line": "< 3f71162946c30685ce1d2d7d469138d28d3ea6ca Remove `.only` from `createCell` test (#9031)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 3f71162946c30685ce1d2d7d469138d28d3ea6ca Remove `.only` from `createCell` test (#9031)",
+      "hash": "3f71162946c30685ce1d2d7d469138d28d3ea6ca",
+      "message": "Remove `.only` from `createCell` test (#9031)",
+      "pr": "9031"
+    },
+    {
+      "line": "< 58a242192174e6bd2e72ccd2269f66d02ad7a401 feat(streaming-ssr): Fix build and server html injection (#8978)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 58a242192174e6bd2e72ccd2269f66d02ad7a401 feat(streaming-ssr): Fix build and server html injection (#8978)",
+      "hash": "58a242192174e6bd2e72ccd2269f66d02ad7a401",
+      "message": "feat(streaming-ssr): Fix build and server html injection (#8978)",
+      "pr": "8978"
+    },
+    {
+      "line": "< 0e252242e485f1e25f5cd3e901f5bca8645ff760 fix(deps): update dependency pino to v8.15.0 (#9023)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 0e252242e485f1e25f5cd3e901f5bca8645ff760 fix(deps): update dependency pino to v8.15.0 (#9023)",
+      "hash": "0e252242e485f1e25f5cd3e901f5bca8645ff760",
+      "message": "fix(deps): update dependency pino to v8.15.0 (#9023)",
+      "pr": "9023"
+    },
+    {
+      "line": "< c630f3a5176735f7b3c99486f5d776dd5d160d59 fix(deps): update dependency eslint to v8.46.0 (#9022)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c630f3a5176735f7b3c99486f5d776dd5d160d59 fix(deps): update dependency eslint to v8.46.0 (#9022)",
+      "hash": "c630f3a5176735f7b3c99486f5d776dd5d160d59",
+      "message": "fix(deps): update dependency eslint to v8.46.0 (#9022)",
+      "pr": "9022"
+    },
+    {
+      "line": "< c4e37af2ebd85999b6103d5a1ed969f76f760ce0 fix(deps): update dependency react-hook-form to v7.45.4 (#9017)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c4e37af2ebd85999b6103d5a1ed969f76f760ce0 fix(deps): update dependency react-hook-form to v7.45.4 (#9017)",
+      "hash": "c4e37af2ebd85999b6103d5a1ed969f76f760ce0",
+      "message": "fix(deps): update dependency react-hook-form to v7.45.4 (#9017)",
+      "pr": "9017"
+    },
+    {
+      "line": "< 260d42a98f79ca39d9a4e0f69cee19b93a11d544 chore(docs): reversion docs to include recent changes",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 260d42a98f79ca39d9a4e0f69cee19b93a11d544 chore(docs): reversion docs to include recent changes",
+      "hash": "260d42a98f79ca39d9a4e0f69cee19b93a11d544",
+      "message": "chore(docs): reversion docs to include recent changes"
+    },
+    {
+      "line": "< b1151ac63802e68ac16526e8bfd6217bedea0980 fix(deps): update dependency vite to v4.4.9 (#9018)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b1151ac63802e68ac16526e8bfd6217bedea0980 fix(deps): update dependency vite to v4.4.9 (#9018)",
+      "hash": "b1151ac63802e68ac16526e8bfd6217bedea0980",
+      "message": "fix(deps): update dependency vite to v4.4.9 (#9018)",
+      "pr": "9018"
+    },
+    {
+      "line": "< 2631a069f470f94ea5a6ce199ace27cda24b4db4 Docs: Explain the entry.client.{jsx,tsx} file (#8987)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 2631a069f470f94ea5a6ce199ace27cda24b4db4 Docs: Explain the entry.client.{jsx,tsx} file (#8987)",
+      "hash": "2631a069f470f94ea5a6ce199ace27cda24b4db4",
+      "message": "Docs: Explain the entry.client.{jsx,tsx} file (#8987)",
+      "pr": "8987"
+    },
+    {
+      "line": "< 8e21a282e7d0c96ce11419220107f9185a2a7703 chore(deps): update dependency esbuild to v0.18.19 (#8983)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8e21a282e7d0c96ce11419220107f9185a2a7703 chore(deps): update dependency esbuild to v0.18.19 (#8983)",
+      "hash": "8e21a282e7d0c96ce11419220107f9185a2a7703",
+      "message": "chore(deps): update dependency esbuild to v0.18.19 (#8983)",
+      "pr": "8983"
+    },
+    {
+      "line": "< 5a07e63fd6b2d6ba72b24fa455d1d71b1c88eaaf chore(deps): update dependency nx-cloud to v16.2.0 (#8985)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 5a07e63fd6b2d6ba72b24fa455d1d71b1c88eaaf chore(deps): update dependency nx-cloud to v16.2.0 (#8985)",
+      "hash": "5a07e63fd6b2d6ba72b24fa455d1d71b1c88eaaf",
+      "message": "chore(deps): update dependency nx-cloud to v16.2.0 (#8985)",
+      "pr": "8985"
+    },
+    {
+      "line": "< cb860440786c2e283d2932980e33fbeb5289388b docs(fonts): Update @font-face recommendation (#8986)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< cb860440786c2e283d2932980e33fbeb5289388b docs(fonts): Update @font-face recommendation (#8986)",
+      "hash": "cb860440786c2e283d2932980e33fbeb5289388b",
+      "message": "docs(fonts): Update @font-face recommendation (#8986)",
+      "pr": "8986"
+    },
+    {
+      "line": "< f3cde6464d3844f64bc4a7ff6ea2dc4e7e5802bf Docs: remove useless code in code snippet (#8990)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f3cde6464d3844f64bc4a7ff6ea2dc4e7e5802bf Docs: remove useless code in code snippet (#8990)",
+      "hash": "f3cde6464d3844f64bc4a7ff6ea2dc4e7e5802bf",
+      "message": "Docs: remove useless code in code snippet (#8990)",
+      "pr": "8990"
+    },
+    {
+      "line": "< f1011c990ea452ea04443800bd31c3071b6a1b13 fix(deps): update dependency vite to v4.4.8 (#9003)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f1011c990ea452ea04443800bd31c3071b6a1b13 fix(deps): update dependency vite to v4.4.8 (#9003)",
+      "hash": "f1011c990ea452ea04443800bd31c3071b6a1b13",
+      "message": "fix(deps): update dependency vite to v4.4.8 (#9003)",
+      "pr": "9003"
+    },
+    {
+      "line": "< 72aba822fa4c1cc9b70c4553a7d0ceddabddd805 fix(deps): update dependency fast-glob to v3.3.1 (#8997)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 72aba822fa4c1cc9b70c4553a7d0ceddabddd805 fix(deps): update dependency fast-glob to v3.3.1 (#8997)",
+      "hash": "72aba822fa4c1cc9b70c4553a7d0ceddabddd805",
+      "message": "fix(deps): update dependency fast-glob to v3.3.1 (#8997)",
+      "pr": "8997"
+    },
+    {
+      "line": "< 10e0383238c9128574be8314df82325659ecd53e fix(deps): update storybook monorepo to v7.2.0 (#9002)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 10e0383238c9128574be8314df82325659ecd53e fix(deps): update storybook monorepo to v7.2.0 (#9002)",
+      "hash": "10e0383238c9128574be8314df82325659ecd53e",
+      "message": "fix(deps): update storybook monorepo to v7.2.0 (#9002)",
+      "pr": "9002"
+    },
+    {
+      "line": "< a90e9e5f296f76b034c2ce358f869cd8f433560c fix(deps): update prisma monorepo to v5.1.0 (#9001)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< a90e9e5f296f76b034c2ce358f869cd8f433560c fix(deps): update prisma monorepo to v5.1.0 (#9001)",
+      "hash": "a90e9e5f296f76b034c2ce358f869cd8f433560c",
+      "message": "fix(deps): update prisma monorepo to v5.1.0 (#9001)",
+      "pr": "9001"
+    },
+    {
+      "line": "< fadf121288cab7f1d35a09462a5fadeb8758212b fix(deps): update dependency fastify to v4.21.0 (#8998)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< fadf121288cab7f1d35a09462a5fadeb8758212b fix(deps): update dependency fastify to v4.21.0 (#8998)",
+      "hash": "fadf121288cab7f1d35a09462a5fadeb8758212b",
+      "message": "fix(deps): update dependency fastify to v4.21.0 (#8998)",
+      "pr": "8998"
+    },
+    {
+      "line": "< fd98e4076380575ab5fa40df0323b33cf5ecc9cd fix(deps): update dependency @vitejs/plugin-react to v4.0.4 (#8999)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< fd98e4076380575ab5fa40df0323b33cf5ecc9cd fix(deps): update dependency @vitejs/plugin-react to v4.0.4 (#8999)",
+      "hash": "fd98e4076380575ab5fa40df0323b33cf5ecc9cd",
+      "message": "fix(deps): update dependency @vitejs/plugin-react to v4.0.4 (#8999)",
+      "pr": "8999"
+    },
+    {
+      "line": "< b08bc724ee75708efa823de0e03631e6830239e3 fix(deps): update dependency @whatwg-node/fetch to v0.9.9 (#8942)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b08bc724ee75708efa823de0e03631e6830239e3 fix(deps): update dependency @whatwg-node/fetch to v0.9.9 (#8942)",
+      "hash": "b08bc724ee75708efa823de0e03631e6830239e3",
+      "message": "fix(deps): update dependency @whatwg-node/fetch to v0.9.9 (#8942)",
+      "pr": "8942"
+    },
+    {
+      "line": "< cb31df936b88858eae6c4c4b7d0e7e5ef68f0212 feat(vite): add plugin to remove modules from the bundle (#8973)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< cb31df936b88858eae6c4c4b7d0e7e5ef68f0212 feat(vite): add plugin to remove modules from the bundle (#8973)",
+      "hash": "cb31df936b88858eae6c4c4b7d0e7e5ef68f0212",
+      "message": "feat(vite): add plugin to remove modules from the bundle (#8973)",
+      "pr": "8973"
+    },
+    {
+      "line": "< 98dbfaa611038495461a69d3668c14bb98f6cdea fix(deps): update dependency whatwg-fetch to v3.6.17 (#8943)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 98dbfaa611038495461a69d3668c14bb98f6cdea fix(deps): update dependency whatwg-fetch to v3.6.17 (#8943)",
+      "hash": "98dbfaa611038495461a69d3668c14bb98f6cdea",
+      "message": "fix(deps): update dependency whatwg-fetch to v3.6.17 (#8943)",
+      "pr": "8943"
+    },
+    {
+      "line": "< 43bbc2737d081742084dca94a89bdbe7958960ca chore(docs): compress v5 docs into v5.x",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 43bbc2737d081742084dca94a89bdbe7958960ca chore(docs): compress v5 docs into v5.x",
+      "hash": "43bbc2737d081742084dca94a89bdbe7958960ca",
+      "message": "chore(docs): compress v5 docs into v5.x"
+    },
+    {
+      "line": "< 2add568286e6cad3ead50c9edc4d7e4a03771825 RSC: Use experimental node loader (#8979)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 2add568286e6cad3ead50c9edc4d7e4a03771825 RSC: Use experimental node loader (#8979)",
+      "hash": "2add568286e6cad3ead50c9edc4d7e4a03771825",
+      "message": "RSC: Use experimental node loader (#8979)",
+      "pr": "8979"
+    },
+    {
+      "line": "< 9ac5ab271776b42c9e4ceed403345fa00d2feb1b RSC: Fix noExternal rule for server build (#8961)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 9ac5ab271776b42c9e4ceed403345fa00d2feb1b RSC: Fix noExternal rule for server build (#8961)",
+      "hash": "9ac5ab271776b42c9e4ceed403345fa00d2feb1b",
+      "message": "RSC: Fix noExternal rule for server build (#8961)",
+      "pr": "8961"
+    },
+    {
+      "line": "< f24016a8411d025f6918544ea3683e1a84a13f52 Refactor cli serve command (#8958)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f24016a8411d025f6918544ea3683e1a84a13f52 Refactor cli serve command (#8958)",
+      "hash": "f24016a8411d025f6918544ea3683e1a84a13f52",
+      "message": "Refactor cli serve command (#8958)",
+      "pr": "8958"
+    },
+    {
+      "line": "< fc079454d282609e14edaccc7b7bc64d59a63ec8 web-server: Print localhost instead of 0.0.0.0 (#8952)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< fc079454d282609e14edaccc7b7bc64d59a63ec8 web-server: Print localhost instead of 0.0.0.0 (#8952)",
+      "hash": "fc079454d282609e14edaccc7b7bc64d59a63ec8",
+      "message": "web-server: Print localhost instead of 0.0.0.0 (#8952)",
+      "pr": "8952"
+    },
+    {
+      "line": "< b18e1aa3f2cd0c2b8e3e01d08c2aa2b67fe2d228 chore: fix yarn constraints and update yarn.lock",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b18e1aa3f2cd0c2b8e3e01d08c2aa2b67fe2d228 chore: fix yarn constraints and update yarn.lock",
+      "hash": "b18e1aa3f2cd0c2b8e3e01d08c2aa2b67fe2d228",
+      "message": "chore: fix yarn constraints and update yarn.lock"
+    },
+    {
+      "line": "< 7d1a3f59923ef539402af6f68357ec36f8555d2f @redwoodjs/web-server (#8916)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 7d1a3f59923ef539402af6f68357ec36f8555d2f @redwoodjs/web-server (#8916)",
+      "hash": "7d1a3f59923ef539402af6f68357ec36f8555d2f",
+      "message": "@redwoodjs/web-server (#8916)",
+      "pr": "8916"
+    },
+    {
+      "line": "< 6f33914e06f7fb6d0866495bdbadb09fd3d367cb @rwjs/vite: Pin acorn-loose version (#8944)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 6f33914e06f7fb6d0866495bdbadb09fd3d367cb @rwjs/vite: Pin acorn-loose version (#8944)",
+      "hash": "6f33914e06f7fb6d0866495bdbadb09fd3d367cb",
+      "message": "@rwjs/vite: Pin acorn-loose version (#8944)",
+      "pr": "8944"
+    },
+    {
+      "line": "< e9413654f60f3b40c65bf7c759cd0b8be99978ca RSC: react-server condition. Poisoned imports (#8948)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< e9413654f60f3b40c65bf7c759cd0b8be99978ca RSC: react-server condition. Poisoned imports (#8948)",
+      "hash": "e9413654f60f3b40c65bf7c759cd0b8be99978ca",
+      "message": "RSC: react-server condition. Poisoned imports (#8948)",
+      "pr": "8948"
+    },
+    {
+      "line": "< 3588ec06a9009cf2ffc864370eec7f3130fff9e1 RSC fix typo in example code (#8949)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 3588ec06a9009cf2ffc864370eec7f3130fff9e1 RSC fix typo in example code (#8949)",
+      "hash": "3588ec06a9009cf2ffc864370eec7f3130fff9e1",
+      "message": "RSC fix typo in example code (#8949)",
+      "pr": "8949"
+    },
+    {
+      "line": "< abf229bc166ea05c0f3e6dca1836fa477192e55d fix(ssr): Get experimental ssr setup working properly (#8922)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< abf229bc166ea05c0f3e6dca1836fa477192e55d fix(ssr): Get experimental ssr setup working properly (#8922)",
+      "hash": "abf229bc166ea05c0f3e6dca1836fa477192e55d",
+      "message": "fix(ssr): Get experimental ssr setup working properly (#8922)",
+      "pr": "8922"
+    },
+    {
+      "line": "< b11bd72adf2b946a2652525a20e83b1a4a965d46 RSC fix: setup description (#8906)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b11bd72adf2b946a2652525a20e83b1a4a965d46 RSC fix: setup description (#8906)",
+      "hash": "b11bd72adf2b946a2652525a20e83b1a4a965d46",
+      "message": "RSC fix: setup description (#8906)",
+      "pr": "8906"
+    },
+    {
+      "line": "< fcd7c39304b5d587ac1eb7a68c322e977115b030 RSC: Add css files to the example (#8905)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< fcd7c39304b5d587ac1eb7a68c322e977115b030 RSC: Add css files to the example (#8905)",
+      "hash": "fcd7c39304b5d587ac1eb7a68c322e977115b030",
+      "message": "RSC: Add css files to the example (#8905)",
+      "pr": "8905"
+    },
+    {
+      "line": "< 37692a4d85eb231c3be4b5459408f0d4480d363d RSC build without user config (#8896)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 37692a4d85eb231c3be4b5459408f0d4480d363d RSC build without user config (#8896)",
+      "hash": "37692a4d85eb231c3be4b5459408f0d4480d363d",
+      "message": "RSC build without user config (#8896)",
+      "pr": "8896"
+    },
+    {
+      "line": "< 921c9cb3127b10cb050b3b9ae144d326f4a7f20c RSC: Use rw serve (#8897)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 921c9cb3127b10cb050b3b9ae144d326f4a7f20c RSC: Use rw serve (#8897)",
+      "hash": "921c9cb3127b10cb050b3b9ae144d326f4a7f20c",
+      "message": "RSC: Use rw serve (#8897)",
+      "pr": "8897"
+    },
+    {
+      "line": "< f1d0dcb81c6149fa0dbd74ed64e5d2c569b4b205 RSC: Build using rw build (#8893)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f1d0dcb81c6149fa0dbd74ed64e5d2c569b4b205 RSC: Build using rw build (#8893)",
+      "hash": "f1d0dcb81c6149fa0dbd74ed64e5d2c569b4b205",
+      "message": "RSC: Build using rw build (#8893)",
+      "pr": "8893"
+    },
+    {
+      "line": "< c44a260751e344e6c1735aa9704b8903f9d7fa81 RSC: Fix experimental setup (#8894)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c44a260751e344e6c1735aa9704b8903f9d7fa81 RSC: Fix experimental setup (#8894)",
+      "hash": "c44a260751e344e6c1735aa9704b8903f9d7fa81",
+      "message": "RSC: Fix experimental setup (#8894)",
+      "pr": "8894"
+    },
+    {
+      "line": "< db271db22e5bd423c3a88d98938c05aeb373b992 RSC: Include entries.ts in paths (#8888)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< db271db22e5bd423c3a88d98938c05aeb373b992 RSC: Include entries.ts in paths (#8888)",
+      "hash": "db271db22e5bd423c3a88d98938c05aeb373b992",
+      "message": "RSC: Include entries.ts in paths (#8888)",
+      "pr": "8888"
+    },
+    {
+      "line": "< 8610d58e1207779dfe561b96f7625b20d2a8f400 RSC: Initial css support (#8887)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8610d58e1207779dfe561b96f7625b20d2a8f400 RSC: Initial css support (#8887)",
+      "hash": "8610d58e1207779dfe561b96f7625b20d2a8f400",
+      "message": "RSC: Initial css support (#8887)",
+      "pr": "8887"
+    },
+    {
+      "line": "< f5fc2e2e696d791536bd14d386efff99fe121ecd RSC: Use exported defineEntries() (#8886)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f5fc2e2e696d791536bd14d386efff99fe121ecd RSC: Use exported defineEntries() (#8886)",
+      "hash": "f5fc2e2e696d791536bd14d386efff99fe121ecd",
+      "message": "RSC: Use exported defineEntries() (#8886)",
+      "pr": "8886"
+    },
+    {
+      "line": "< c1e62c29d1f706edbabee2abbcf96f8dad744373 Include standard vite config in RSC build (#8882)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c1e62c29d1f706edbabee2abbcf96f8dad744373 Include standard vite config in RSC build (#8882)",
+      "hash": "c1e62c29d1f706edbabee2abbcf96f8dad744373",
+      "message": "Include standard vite config in RSC build (#8882)",
+      "pr": "8882"
+    },
+    {
+      "line": "< d706d6bb8cee93bf39a3ca6f01d3bd9a1832ce74 chore(ci): move canary publishing script to file (#8877)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< d706d6bb8cee93bf39a3ca6f01d3bd9a1832ce74 chore(ci): move canary publishing script to file (#8877)",
+      "hash": "d706d6bb8cee93bf39a3ca6f01d3bd9a1832ce74",
+      "message": "chore(ci): move canary publishing script to file (#8877)",
+      "pr": "8877"
+    },
+    {
+      "line": "< b99e5234a067166bda05a8c6d7d0592cc09aba58 CRWA use RW v5.4.3 (#8869)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b99e5234a067166bda05a8c6d7d0592cc09aba58 CRWA use RW v5.4.3 (#8869)",
+      "hash": "b99e5234a067166bda05a8c6d7d0592cc09aba58",
+      "message": "CRWA use RW v5.4.3 (#8869)",
+      "pr": "8869"
+    },
+    {
+      "line": "< 433281514de2574d83ed2a945c01a154857627df GH Action: Increase commit count based version by one (#8868)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 433281514de2574d83ed2a945c01a154857627df GH Action: Increase commit count based version by one (#8868)",
+      "hash": "433281514de2574d83ed2a945c01a154857627df",
+      "message": "GH Action: Increase commit count based version by one (#8868)",
+      "pr": "8868"
+    },
+    {
+      "line": "< 203dff985a1b245c2df4f75e9bec5399a448aa56 Don't git push. Remove debug logs (#8867)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 203dff985a1b245c2df4f75e9bec5399a448aa56 Don't git push. Remove debug logs (#8867)",
+      "hash": "203dff985a1b245c2df4f75e9bec5399a448aa56",
+      "message": "Don't git push. Remove debug logs (#8867)",
+      "pr": "8867"
+    },
+    {
+      "line": "< 1f0c97743a05dc4a96d1bc8b91c98ee5c2896063 GH Action: Set git config (#8866)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 1f0c97743a05dc4a96d1bc8b91c98ee5c2896063 GH Action: Set git config (#8866)",
+      "hash": "1f0c97743a05dc4a96d1bc8b91c98ee5c2896063",
+      "message": "GH Action: Set git config (#8866)",
+      "pr": "8866"
+    },
+    {
+      "line": "< e2fa04aa82c612c0a796d2a4daec05c9eddb6270 push CRWA package version changes (#8865)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< e2fa04aa82c612c0a796d2a4daec05c9eddb6270 push CRWA package version changes (#8865)",
+      "hash": "e2fa04aa82c612c0a796d2a4daec05c9eddb6270",
+      "message": "push CRWA package version changes (#8865)",
+      "pr": "8865"
+    },
+    {
+      "line": "< ad438a3deef2b8cbee99862e794f36476074b050 gh actions: Explain the publish dryrun command (#8864)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< ad438a3deef2b8cbee99862e794f36476074b050 gh actions: Explain the publish dryrun command (#8864)",
+      "hash": "ad438a3deef2b8cbee99862e794f36476074b050",
+      "message": "gh actions: Explain the publish dryrun command (#8864)",
+      "pr": "8864"
+    },
+    {
+      "line": "< b02db272bce63ab383765482ff08f0954dd3dffd CRWA: Manually update rw package versions to v6 canary (#8863)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< b02db272bce63ab383765482ff08f0954dd3dffd CRWA: Manually update rw package versions to v6 canary (#8863)",
+      "hash": "b02db272bce63ab383765482ff08f0954dd3dffd",
+      "message": "CRWA: Manually update rw package versions to v6 canary (#8863)",
+      "pr": "8863"
+    },
+    {
+      "line": "< 96c012016599535b0b676ead59b9ee504ea52e9e chore(gh-actions) Dry-run publish to get next canary version (#8862)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 96c012016599535b0b676ead59b9ee504ea52e9e chore(gh-actions) Dry-run publish to get next canary version (#8862)",
+      "hash": "96c012016599535b0b676ead59b9ee504ea52e9e",
+      "message": "chore(gh-actions) Dry-run publish to get next canary version (#8862)",
+      "pr": "8862"
+    },
+    {
+      "line": "< 486226dc97bad1970ab453bf0793990ed23672bd chore(renovate): improve config to reduce noise (#8859)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 486226dc97bad1970ab453bf0793990ed23672bd chore(renovate): improve config to reduce noise (#8859)",
+      "hash": "486226dc97bad1970ab453bf0793990ed23672bd",
+      "message": "chore(renovate): improve config to reduce noise (#8859)",
+      "pr": "8859"
+    },
+    {
+      "line": "< 8917ad6ab5eaea40f6a79b478e28df4b9c43182f Update entry.client and disable vite legacy mode (#8851)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8917ad6ab5eaea40f6a79b478e28df4b9c43182f Update entry.client and disable vite legacy mode (#8851)",
+      "hash": "8917ad6ab5eaea40f6a79b478e28df4b9c43182f",
+      "message": "Update entry.client and disable vite legacy mode (#8851)",
+      "pr": "8851"
+    },
+    {
+      "line": "< c7a5b138c43e888b49a20ddddfbf3bbc2ab2c00d experimental feature flag for rsc (#8837)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< c7a5b138c43e888b49a20ddddfbf3bbc2ab2c00d experimental feature flag for rsc (#8837)",
+      "hash": "c7a5b138c43e888b49a20ddddfbf3bbc2ab2c00d",
+      "message": "experimental feature flag for rsc (#8837)",
+      "pr": "8837"
+    },
+    {
+      "line": "< 056f3b6533dd030504c2c78dfe45e2653cbb8244 chore(deps): update dependency nx to v16.4.1 (#8784)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 056f3b6533dd030504c2c78dfe45e2653cbb8244 chore(deps): update dependency nx to v16.4.1 (#8784)",
+      "hash": "056f3b6533dd030504c2c78dfe45e2653cbb8244",
+      "message": "chore(deps): update dependency nx to v16.4.1 (#8784)",
+      "pr": "8784"
+    },
+    {
+      "line": "< f22dfbeda624dfb80ce54fde59329f155f29f2e9 React Server Components (RSC) (#8451)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< f22dfbeda624dfb80ce54fde59329f155f29f2e9 React Server Components (RSC) (#8451)",
+      "hash": "f22dfbeda624dfb80ce54fde59329f155f29f2e9",
+      "message": "React Server Components (RSC) (#8451)",
+      "pr": "8451"
+    },
+    {
+      "line": "< 7a6aea7fed966bcb5deab8b473cf0dfcc36a6547 Use \"import type\" for all types (#8827)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 7a6aea7fed966bcb5deab8b473cf0dfcc36a6547 Use \"import type\" for all types (#8827)",
+      "hash": "7a6aea7fed966bcb5deab8b473cf0dfcc36a6547",
+      "message": "Use \"import type\" for all types (#8827)",
+      "pr": "8827"
+    },
+    {
+      "line": "< d261819262158179a22d57c7a3c78695c9ef7d0a React 18.3.0-canary-035a41c4e-20230704 (#8826)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< d261819262158179a22d57c7a3c78695c9ef7d0a React 18.3.0-canary-035a41c4e-20230704 (#8826)",
+      "hash": "d261819262158179a22d57c7a3c78695c9ef7d0a",
+      "message": "React 18.3.0-canary-035a41c4e-20230704 (#8826)",
+      "pr": "8826"
+    },
+    {
+      "line": "< 8b85ad6b3f58855a5b5081cdeef679d7d29f9106 ViteBuildManifest and note about import-attributes (#8818)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8b85ad6b3f58855a5b5081cdeef679d7d29f9106 ViteBuildManifest and note about import-attributes (#8818)",
+      "hash": "8b85ad6b3f58855a5b5081cdeef679d7d29f9106",
+      "message": "ViteBuildManifest and note about import-attributes (#8818)",
+      "pr": "8818"
+    },
+    {
+      "line": "< 589e87ac61bcc1debd7eeb14a0a94de793e0e893 chore(fw): Adds super:clean command (#8749)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 589e87ac61bcc1debd7eeb14a0a94de793e0e893 chore(fw): Adds super:clean command (#8749)",
+      "hash": "589e87ac61bcc1debd7eeb14a0a94de793e0e893",
+      "message": "chore(fw): Adds super:clean command (#8749)",
+      "pr": "8749"
+    },
+    {
+      "line": "< 089f80508ddf5fe3d03ac250008becb319416472 Rudimentary CSS check in our smoke tests (#8812)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 089f80508ddf5fe3d03ac250008becb319416472 Rudimentary CSS check in our smoke tests (#8812)",
+      "hash": "089f80508ddf5fe3d03ac250008becb319416472",
+      "message": "Rudimentary CSS check in our smoke tests (#8812)",
+      "pr": "8812"
+    },
+    {
+      "line": "< 4c51caec60fb84c54d5580944ff8fcfb30d9229a Streaming SSR: Fix build, serve and dev (#8811)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 4c51caec60fb84c54d5580944ff8fcfb30d9229a Streaming SSR: Fix build, serve and dev (#8811)",
+      "hash": "4c51caec60fb84c54d5580944ff8fcfb30d9229a",
+      "message": "Streaming SSR: Fix build, serve and dev (#8811)",
+      "pr": "8811"
+    },
+    {
+      "line": "< 6da5aaebc614f39374f528daaa27d078ec4c02a2 Add files needed for React Streaming SSR (#8810)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 6da5aaebc614f39374f528daaa27d078ec4c02a2 Add files needed for React Streaming SSR (#8810)",
+      "hash": "6da5aaebc614f39374f528daaa27d078ec4c02a2",
+      "message": "Add files needed for React Streaming SSR (#8810)",
+      "pr": "8810"
+    },
+    {
+      "line": "< 7cc5564e3b08715f3ea08a478265ac478ccec49f entry.server and entry.client (#8808)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 7cc5564e3b08715f3ea08a478265ac478ccec49f entry.server and entry.client (#8808)",
+      "hash": "7cc5564e3b08715f3ea08a478265ac478ccec49f",
+      "message": "entry.server and entry.client (#8808)",
+      "pr": "8808"
+    },
+    {
+      "line": "< 8b2a56601e92eab104505ced96f7c30fd442f7e7 Use existing rw-vite-build bin for SSR as well (#8806)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 8b2a56601e92eab104505ced96f7c30fd442f7e7 Use existing rw-vite-build bin for SSR as well (#8806)",
+      "hash": "8b2a56601e92eab104505ced96f7c30fd442f7e7",
+      "message": "Use existing rw-vite-build bin for SSR as well (#8806)",
+      "pr": "8806"
+    },
+    {
+      "line": "< e7d53610bcd0b7e207e4e5ae55e211f57270cf2a Disable prerender when streamingSsr is enabled (#8775)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< e7d53610bcd0b7e207e4e5ae55e211f57270cf2a Disable prerender when streamingSsr is enabled (#8775)",
+      "hash": "e7d53610bcd0b7e207e4e5ae55e211f57270cf2a",
+      "message": "Disable prerender when streamingSsr is enabled (#8775)",
+      "pr": "8775"
+    },
+    {
+      "line": "< e19107126d5c9a6ad8995aa0235c161b93b10384 vite utils.ts: fix source format (#8796)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< e19107126d5c9a6ad8995aa0235c161b93b10384 vite utils.ts: fix source format (#8796)",
+      "hash": "e19107126d5c9a6ad8995aa0235c161b93b10384",
+      "message": "vite utils.ts: fix source format (#8796)",
+      "pr": "8796"
+    },
+    {
+      "line": "< 2557bf8d8d338fb752e145c7c5452a1849c7fcc3 Server Rendering & Streaming (#8561)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 2557bf8d8d338fb752e145c7c5452a1849c7fcc3 Server Rendering & Streaming (#8561)",
+      "hash": "2557bf8d8d338fb752e145c7c5452a1849c7fcc3",
+      "message": "Server Rendering & Streaming (#8561)",
+      "pr": "8561"
+    },
+    {
+      "line": "< 565f62000b327df732b7b7040a1419852225a7d9 React Streaming and SSR feature flag (#8764)",
+      "ref": "release/minor/v6.1.0",
+      "type": "commit",
+      "pretty": "< 565f62000b327df732b7b7040a1419852225a7d9 React Streaming and SSR feature flag (#8764)",
+      "hash": "565f62000b327df732b7b7040a1419852225a7d9",
+      "message": "React Streaming and SSR feature flag (#8764)",
+      "pr": "8764"
+    }
+  ],
+  "noReleaseCommits": 76
+}
