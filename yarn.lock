@@ -532,19 +532,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/msal-browser@npm:2.37.1":
-  version: 2.37.1
-  resolution: "@azure/msal-browser@npm:2.37.1"
+"@azure/msal-browser@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@azure/msal-browser@npm:2.38.1"
   dependencies:
-    "@azure/msal-common": 13.1.0
-  checksum: 8471c114aa85c2a0136163e191101a13543e13ef9c45c77176027dac3ed745465ba2ce5986237182df6b1ba8f1914af23cf5fcf70d9ced10f7529fe1f6125522
+    "@azure/msal-common": 13.2.1
+  checksum: 0504294c3866e7af72cab8bca41ffba5999bffb659be16ed3aecb23353fa4a70303f9731c6bc50f2b3666333687ff525debc3ac3811228529c8bba2dda6a157a
   languageName: node
   linkType: hard
 
-"@azure/msal-common@npm:13.1.0":
-  version: 13.1.0
-  resolution: "@azure/msal-common@npm:13.1.0"
-  checksum: c01846e9a5b30e123d1c9a40005d153d6ca76009c0e78cabf2bbdab322aa05687f7bf74d8f72ae32e6fedd9524d2aa763f5a709375e258c608bd6753dc76122c
+"@azure/msal-common@npm:13.2.1":
+  version: 13.2.1
+  resolution: "@azure/msal-common@npm:13.2.1"
+  checksum: 9c7b9b1518ca96971cdedaf4ca12d8094088766f577c4838756d68c15d6150e4db5284b741485ff4c816aabd3d4fb360a9e1fa7301b1f3b9ddd4b2a86a3f5970
   languageName: node
   linkType: hard
 
@@ -7416,7 +7416,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-azure-active-directory-web@workspace:packages/auth-providers/azureActiveDirectory/web"
   dependencies:
-    "@azure/msal-browser": 2.37.1
+    "@azure/msal-browser": 2.38.1
     "@babel/cli": 7.22.10
     "@babel/core": 7.22.10
     "@babel/runtime-corejs3": 7.22.10
@@ -7428,7 +7428,7 @@ __metadata:
     react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.6
   peerDependencies:
-    "@azure/msal-browser": 2.37.1
+    "@azure/msal-browser": 2.38.1
   languageName: unknown
   linkType: soft
 
