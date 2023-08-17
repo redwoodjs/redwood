@@ -89,12 +89,14 @@ async function createServer() {
   return await app.listen(port)
 }
 
-createServer()
+let devApp = createServer()
 
-// process.stdin.on('data', async (data) => {
-//   const str = data.toString().trim().toLowerCase()
-//   if (str === 'rs' || str === 'restart') {
-//     ;(await devApp).close()
-//     devApp = createServer()
-//   }
-// })
+process.stdin.on('data', async (data) => {
+  const str = data.toString().trim().toLowerCase()
+  if (str === 'rs' || str === 'restart') {
+    console.log('Restarting dev web server.....')
+    ;(await devApp).close(() => {
+      devApp = createServer()
+    })
+  }
+})
