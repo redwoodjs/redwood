@@ -33,20 +33,25 @@ export const createReactStreamingHandler = async (
 
   let entryServerImport: any
 
-  if (viteDevServer) {
-    entryServerImport = await viteDevServer.ssrLoadModule(
-      rwPaths.web.entryServer as string // already validated in dev server
-    )
-  } else {
+  if (isProd) {
     entryServerImport = await import(rwPaths.web.distEntryServer)
   }
-
-  const ServerEntry = entryServerImport.ServerEntry || entryServerImport.default
 
   return async (req: Request, res: Response) => {
     if (redirect) {
       res.redirect(redirect.to)
     }
+
+    // Do this inside the handler for **dev-only**.
+    // This makes sure that changes to entry-server are picked up on refresh
+    if (!isProd) {
+      entryServerImport = await viteDevServer.ssrLoadModule(
+        rwPaths.web.entryServer as string // already validated in dev server
+      )
+    }
+
+    const ServerEntry =
+      entryServerImport.ServerEntry || entryServerImport.default
 
     const currentPathName = req.path
 
