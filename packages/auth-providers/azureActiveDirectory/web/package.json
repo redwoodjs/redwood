@@ -27,7 +27,7 @@
     "core-js": "3.32.0"
   },
   "devDependencies": {
-    "@azure/msal-browser": "2.37.1",
+    "@azure/msal-browser": "2.38.1",
     "@babel/cli": "7.22.10",
     "@babel/core": "7.22.10",
     "@types/netlify-identity-widget": "1.9.3",
@@ -37,7 +37,7 @@
     "typescript": "5.1.6"
   },
   "peerDependencies": {
-    "@azure/msal-browser": "2.37.1"
+    "@azure/msal-browser": "2.38.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
