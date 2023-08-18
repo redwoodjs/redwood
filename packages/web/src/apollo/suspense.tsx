@@ -167,7 +167,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     // @MARK use special Apollo client
     return new NextSSRApolloClient({
       link: createFinalLink({
-        userPassedLink,
+        userConfiguredLink: userPassedLink,
         defaultLinks: redwoodApolloLinks,
       }),
       ...otherConfig,

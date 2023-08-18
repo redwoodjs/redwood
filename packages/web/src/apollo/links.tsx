@@ -74,17 +74,17 @@ export function createTokenLink(getToken: () => Promise<string | null>) {
 }
 
 export function createFinalLink({
-  userPassedLink,
+  userConfiguredLink,
   defaultLinks,
 }: {
-  userPassedLink?: ApolloLink | RedwoodApolloLinkFactory
+  userConfiguredLink?: ApolloLink | RedwoodApolloLinkFactory
   defaultLinks: RedwoodApolloLinks
 }): ApolloLink {
-  if (userPassedLink) {
-    if (typeof userPassedLink === 'function') {
-      return userPassedLink(defaultLinks)
+  if (userConfiguredLink) {
+    if (typeof userConfiguredLink === 'function') {
+      return userConfiguredLink(defaultLinks)
     } else {
-      return userPassedLink
+      return userConfiguredLink
     }
   }
 
