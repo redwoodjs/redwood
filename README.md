@@ -838,6 +838,34 @@ And there you have it.
       <td align="center" valign="top" width="20%"><a href="https://github.com/aslaker"><img src="https://avatars.githubusercontent.com/u/51129804?v=4" width="100px;" alt=""/><br /><sub><b>aslaker</b></sub></a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/zach-withcoherence"><img src="https://avatars.githubusercontent.com/u/86851918?v=4" width="100px;" alt=""/><br /><sub><b>zach-withcoherence</b></sub></a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/tuxcommunity"><img src="https://avatars.githubusercontent.com/u/74874193?v=4" width="100px;" alt=""/><br /><sub><b>tuxcommunity</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/ted2810"><img src="https://avatars.githubusercontent.com/u/1466111?v=4" width="100px;" alt=""/><br /><sub><b>Ted</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://daltoncraven.com/"><img src="https://avatars.githubusercontent.com/u/7117993?v=4" width="100px;" alt=""/><br /><sub><b>Dalton Craven</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/drikusroor"><img src="https://avatars.githubusercontent.com/u/8208970?v=4" width="100px;" alt=""/><br /><sub><b>Drikus Roor</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://dev.to/@ekafyi"><img src="https://avatars.githubusercontent.com/u/6597211?v=4" width="100px;" alt=""/><br /><sub><b>Eka</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://www.linkedin.com/in/modupe-daniel/"><img src="https://avatars.githubusercontent.com/u/69601432?v=4" width="100px;" alt=""/><br /><sub><b>ModupeD</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/nkshah2"><img src="https://avatars.githubusercontent.com/u/18233774?v=4" width="100px;" alt=""/><br /><sub><b>Nemi Shah</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://githubcampus.expert/roeeyn/"><img src="https://avatars.githubusercontent.com/u/13385000?v=4" width="100px;" alt=""/><br /><sub><b>Rodrigo Medina</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://kingsmendv.com/"><img src="https://avatars.githubusercontent.com/u/13755626?v=4" width="100px;" alt=""/><br /><sub><b>Russell Anthony</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jgal1"><img src="https://avatars.githubusercontent.com/u/108492038?v=4" width="100px;" alt=""/><br /><sub><b>Jason Daniel</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/rayhatfield"><img src="https://avatars.githubusercontent.com/u/1164081?v=4" width="100px;" alt=""/><br /><sub><b>ray hatfield</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://learninpublic.org/"><img src="https://avatars.githubusercontent.com/u/6764957?v=4" width="100px;" alt=""/><br /><sub><b>swyx.io</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/BWizard06"><img src="https://avatars.githubusercontent.com/u/89217401?v=4" width="100px;" alt=""/><br /><sub><b>BWizard06</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Bigood"><img src="https://avatars.githubusercontent.com/u/11982534?v=4" width="100px;" alt=""/><br /><sub><b>Bigood</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/c-ciobanu"><img src="https://avatars.githubusercontent.com/u/33382714?v=4" width="100px;" alt=""/><br /><sub><b>Cristi Ciobanu</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/gilliardmacedo"><img src="https://avatars.githubusercontent.com/u/26877564?v=4" width="100px;" alt=""/><br /><sub><b>Gilliard Macedo</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/ravenberg"><img src="https://avatars.githubusercontent.com/u/8441153?v=4" width="100px;" alt=""/><br /><sub><b>Lee Ravenberg</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://mooncreativelab.com/"><img src="https://avatars.githubusercontent.com/u/196089?v=4" width="100px;" alt=""/><br /><sub><b>Matthew Phillips</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/rapzo"><img src="https://avatars.githubusercontent.com/u/147788?v=4" width="100px;" alt=""/><br /><sub><b>Rui Lima</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/chousheng"><img src="https://avatars.githubusercontent.com/u/38355699?v=4" width="100px;" alt=""/><br /><sub><b>Sheng Chou</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/yahhuh"><img src="https://avatars.githubusercontent.com/u/132234369?v=4" width="100px;" alt=""/><br /><sub><b>yahhuh</b></sub></a></td>
     </tr>
   </tbody>
 </table>
