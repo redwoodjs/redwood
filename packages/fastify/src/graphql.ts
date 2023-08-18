@@ -63,7 +63,7 @@ export async function redwoodFastifyGraphQLServer(
       originalExtraPlugins.push(useRedwoodRealtime(options.realtime))
       options.extraPlugins = originalExtraPlugins
 
-      // uses for SSE single connection mode with the `/graphql/event` endpoint
+      // uses for SSE single connection mode with the `/graphql/stream` endpoint
       if (options.realtime.subscriptions) {
         method.push('PUT')
       }
@@ -92,7 +92,7 @@ export async function redwoodFastifyGraphQLServer(
       return reply
     }
 
-    const routePaths = ['', '/health', '/readiness', '/event']
+    const routePaths = ['', '/health', '/readiness', '/stream']
 
     routePaths.forEach((routePath) => {
       fastify.route({
