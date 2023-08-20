@@ -271,7 +271,6 @@ const getSetValueAsFn = (
   required: boolean,
   isId: boolean
 ) => {
-
   const typeObj = SET_VALUE_AS_FUNCTIONS[type]
   if (typeObj === undefined) {
     throw Error(`Type ${type} is unsupported.`)
@@ -283,19 +282,6 @@ const getSetValueAsFn = (
       break
     case 'undefined':
       fn = typeObj['emptyAsUndefined']
-      if (
-        type === 'valueAsNumber' &&
-        emptyAs === 'undefined' &&
-        !required &&
-        !isId
-      ) {
-        console.log(
-          '==========================> FOUND getSetValueAsFn CASE ======================='
-        )
-        console.log('emptyAs', emptyAs)
-        console.log('type', type)
-        console.log('fn', fn)
-      }
       break
     case 0:
       fn = typeObj['emptyAsZero']
@@ -409,14 +395,12 @@ const setCoercion = (
     valueAs = 'valueAsString'
   }
 
-
-
-    validation.setValueAs = getSetValueAsFn(
-      valueAs, // type
-      emptyAs, // emptyAs
-      validation.required !== undefined && validation.required !== false, // required
-      /Id$/.test(name || '') // isId
-    )
+  validation.setValueAs = getSetValueAsFn(
+    valueAs, // type
+    emptyAs, // emptyAs
+    validation.required !== undefined && validation.required !== false, // required
+    /Id$/.test(name || '') // isId
+  )
 }
 
 export type UseRegisterProps<
@@ -453,12 +437,15 @@ const useRegister = <
   emptyAs?: EmptyAsValue
 ) => {
   const { register } = useFormContext()
+  const { name } = props
+  if (!name)
+    throw Error('name field must be provided')
 
   const validation = props.validation || { required: false }
 
   setCoercion(validation, {
     type: props.type,
-    name: props.name,
+    name,
     emptyAs,
   })
 
@@ -467,7 +454,7 @@ const useRegister = <
     onBlur: handleBlur,
     onChange: handleChange,
     ...rest
-  } = register(props.name, validation)
+  } = register(name, validation)
 
   const onBlur: React.FocusEventHandler<Element> = (event) => {
     handleBlur(event)

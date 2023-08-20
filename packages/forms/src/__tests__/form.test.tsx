@@ -1,10 +1,6 @@
 import React from 'react'
 
-import {
-  toHaveFocus,
-  toHaveClass,
-  toBeInTheDocument,
-} from '@testing-library/jest-dom/matchers'
+import '@testing-library/jest-dom/jest-globals'
 import {
   screen,
   render,
@@ -13,7 +9,6 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-//expect.extend({ toHaveFocus, toHaveClass, toBeInTheDocument })
 
 import {
   Form,
@@ -896,4 +891,19 @@ describe('Form', () => {
       expect.anything() // event that triggered the onSubmit call
     )
   })
+
+   it('should throw an intelligable error if the name prop is missing', async () => {
+     const mockFn = jest.fn()
+
+     const testRender = () => render(
+       <Form onSubmit={mockFn}>
+         {/* @ts-ignore: missing name prop, part of test */}
+         <TextField />
+         <Submit>Save</Submit>
+       </Form>
+     )
+
+     expect(testRender).toThrow('name field must be provided')
+   })
+
 })
