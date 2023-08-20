@@ -1,6 +1,10 @@
 import React from 'react'
 
-import '@testing-library/jest-dom/jest-globals'
+import {
+  toHaveFocus,
+  toHaveClass,
+  toBeInTheDocument,
+} from '@testing-library/jest-dom/matchers'
 import {
   screen,
   render,
@@ -9,6 +13,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+expect.extend({ toHaveFocus, toHaveClass, toBeInTheDocument })
 
 import {
   Form,
