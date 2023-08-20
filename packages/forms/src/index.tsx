@@ -438,7 +438,9 @@ const useRegister = <
 ) => {
   const { register } = useFormContext()
   const { name } = props
-  if (!name) throw Error('name field must be provided')
+  if (!name) {
+    throw Error('name field must be provided')
+  }
 
   const validation = props.validation || { required: false }
 

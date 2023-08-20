@@ -908,7 +908,7 @@ describe('Form', () => {
     const testRender = () =>
       render(
         <Form onSubmit={mockFn}>
-          {/* @ts-ignore: missing name prop, part of test */}
+          {/* @ts-expect-error - Testing a JS scenario */}
           <TextField />
           <Submit>Save</Submit>
         </Form>
