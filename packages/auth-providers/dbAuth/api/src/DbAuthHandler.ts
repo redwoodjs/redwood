@@ -225,11 +225,11 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   cors?: CorsConfig
 }
 
-interface SignupHandlerOptions {
+export interface SignupHandlerOptions {
   username: string
   hashedPassword: string
   salt: string
-  userAttributes?: Record<string, string>
+  userAttributes?: Record<string, any>
 }
 
 export type AuthMethodNames =
