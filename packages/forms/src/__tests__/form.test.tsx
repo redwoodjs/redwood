@@ -550,7 +550,12 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
-        <SelectField name="selectFieldAsNumber" defaultValue="" emptyAs={'undefined'} validation={{valueAsNumber: true}}>
+        <SelectField
+          name="selectFieldAsNumber"
+          defaultValue=""
+          emptyAs={'undefined'}
+          validation={{ valueAsNumber: true }}
+        >
           <option value={''}>No option selected</option>
           <option value={1}>Option 1</option>
           <option value={2}>Option 2</option>
@@ -897,18 +902,18 @@ describe('Form', () => {
     )
   })
 
-   it('should throw an intelligable error if the name prop is missing', async () => {
-     const mockFn = jest.fn()
+  it('should throw an intelligable error if the name prop is missing', async () => {
+    const mockFn = jest.fn()
 
-     const testRender = () => render(
-       <Form onSubmit={mockFn}>
-         {/* @ts-ignore: missing name prop, part of test */}
-         <TextField />
-         <Submit>Save</Submit>
-       </Form>
-     )
+    const testRender = () =>
+      render(
+        <Form onSubmit={mockFn}>
+          {/* @ts-ignore: missing name prop, part of test */}
+          <TextField />
+          <Submit>Save</Submit>
+        </Form>
+      )
 
-     expect(testRender).toThrow('name field must be provided')
-   })
-
+    expect(testRender).toThrow('name field must be provided')
+  })
 })
