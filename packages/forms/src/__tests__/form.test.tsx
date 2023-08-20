@@ -550,6 +550,12 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <SelectField name="selectFieldAsNumber" defaultValue="" emptyAs={'undefined'} validation={{valueAsNumber: true}}>
+          <option value={''}>No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -572,6 +578,7 @@ describe('Form', () => {
         numberField: undefined,
         dateField: undefined,
         selectField: undefined,
+        selectFieldAsNumber: undefined,
         jsonField: undefined,
         fieldId: undefined,
       },
