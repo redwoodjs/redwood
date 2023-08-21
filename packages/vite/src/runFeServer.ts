@@ -10,18 +10,13 @@ import path from 'path'
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-import isbot from 'isbot'
-import { renderToPipeableStream } from 'react-dom/server'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-import { matchPath } from '@redwoodjs/router'
-import type { TagDescriptor } from '@redwoodjs/web'
 
+import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
 import { registerFwGlobals } from './streaming/registerGlobals'
-import { loadAndRunRouteHooks } from './streaming/triggerRouteHooks'
 import { RWRouteManifest } from './types'
-import { stripQueryStringAndHashFromPath } from './utils'
 
 /**
  * TODO (STREAMING)
@@ -40,9 +35,6 @@ loadDotEnv({
   multiline: true,
 })
 //------------------------------------------------
-
-const checkUaForSeoCrawler = isbot.spawn()
-checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
 
 export async function runFeServer() {
   const app = express()
@@ -84,7 +76,7 @@ export async function runFeServer() {
 
   // 👉 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
-  app.use('/assets', express.static(rwPaths.web.dist + '/assets'))
+  app.use('/', express.static(rwPaths.web.dist, { index: false }))
 
   // 👉 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
@@ -105,168 +97,27 @@ export async function runFeServer() {
     })
   )
 
-  // 👉 3. Handle all other requests with the server entry
-  // This is where we match the url to the correct route, and render it
-  // We also call the relevant routeHooks here
-  app.use('*', async (req, res) => {
-    const currentPathName = stripQueryStringAndHashFromPath(req.originalUrl)
+  const collectedCss = indexEntry.css || []
+  const clientEntry = '/' + indexEntry.file
 
-    try {
-      const { ServerEntry } = await import(rwPaths.web.distEntryServer)
+  for (const route of Object.values(routeManifest)) {
+    const routeHandler = await createReactStreamingHandler({
+      route,
+      clientEntryPath: clientEntry,
+      cssLinks: collectedCss,
+    })
 
-      // TODO (STREAMING) should we generate individual express Routes for each Route?
-      // This would make handling 404s and favicons / public assets etc. easier
-      const currentRoute = Object.values(routeManifest).find((route) => {
-        if (!route.matchRegexString) {
-          // This is the 404/NotFoundPage case
-          return false
-        }
-
-        const matches = [
-          ...currentPathName.matchAll(new RegExp(route.matchRegexString, 'g')),
-        ]
-        return matches.length > 0
-      })
-
-      // Doesn't match any of the defined Routes
-      // Render 404 page, and send back 404 status
-      if (!currentRoute) {
-        // TODO (STREAMING) should we CONST it?
-        const fourOhFourRoute = routeManifest['notfound']
-
-        if (!fourOhFourRoute) {
-          return res.sendStatus(404)
-        }
-
-        const assetMap = JSON.stringify({ css: indexEntry.css })
-
-        const { pipe } = renderToPipeableStream(
-          ServerEntry({
-            url: currentPathName,
-            routeContext: null,
-            css: indexEntry.css,
-          }),
-          {
-            bootstrapScriptContent: `window.__assetMap = function() { return ${assetMap} }`,
-            // @NOTE have to add slash so subpaths still pick up the right file
-            // Vite is currently producing modules not scripts: https://vitejs.dev/config/build-options.html#build-target
-            bootstrapModules: [
-              '/' + indexEntry.file,
-              '/' + fourOhFourRoute.bundle,
-            ],
-            onShellReady() {
-              res.setHeader('content-type', 'text/html')
-              res.status(404)
-              pipe(res)
-            },
-          }
-        )
-
-        return
-      }
-
-      let metaTags: TagDescriptor[] = []
-
-      if (currentRoute?.redirect) {
-        // TODO (STREAMING) deal with permanent/temp
-        // Short-circuit, and return a 301 or 302
-        return res.redirect(currentRoute.redirect.to)
-      }
-
-      if (currentRoute) {
-        // TODO (STREAMING) hardcoded JS file, watchout if we switch to ESM!
-        const appRouteHooksPath = path.join(
-          rwPaths.web.distRouteHooks,
-          'App.routeHooks.js'
-        )
-
-        let appRouteHooksExists = false
-        try {
-          appRouteHooksExists = (await fs.stat(appRouteHooksPath)).isFile()
-        } catch {
-          // noop
-        }
-
-        // Make sure we access the dist routeHooks!
-        const routeHookPaths = [
-          appRouteHooksExists ? appRouteHooksPath : null,
-          currentRoute.routeHooks
-            ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
-            : null,
-        ]
-
-        const parsedParams = currentRoute.hasParams
-          ? matchPath(currentRoute.pathDefinition, currentPathName).params
-          : undefined
-
-        const routeHookOutput = await loadAndRunRouteHooks({
-          paths: routeHookPaths,
-          reqMeta: {
-            req,
-            parsedParams,
-          },
-        })
-
-        metaTags = routeHookOutput.meta
-      }
-
-      const pageWithJs = currentRoute.renderMode !== 'html'
-      // @NOTE have to add slash so subpaths still pick up the right file
-      const bootstrapModules = pageWithJs
-        ? ([
-            '/' + indexEntry.file,
-            currentRoute.bundle && '/' + currentRoute.bundle,
-          ].filter(Boolean) as string[])
-        : undefined
-
-      const isSeoCrawler = checkUaForSeoCrawler(req.get('user-agent'))
-
-      const { pipe, abort } = renderToPipeableStream(
-        ServerEntry({
-          url: currentPathName,
-          css: indexEntry.css,
-          meta: metaTags,
-        }),
-        {
-          bootstrapScriptContent: pageWithJs
-            ? `window.__assetMap = function() { return ${JSON.stringify({
-                css: indexEntry.css,
-                meta: metaTags,
-              })} }`
-            : undefined,
-          bootstrapModules,
-          onShellReady() {
-            if (!isSeoCrawler) {
-              res.setHeader('content-type', 'text/html; charset=utf-8')
-              pipe(res)
-            }
-          },
-          onAllReady() {
-            if (isSeoCrawler) {
-              res.setHeader('content-type', 'text/html; charset=utf-8')
-              pipe(res)
-            }
-          },
-          onError(error) {
-            console.error(error)
-          },
-        }
-      )
-
-      // TODO (STREAMING) make the timeout configurable
-      setTimeout(() => {
-        abort()
-      }, 10_000)
-    } catch (e) {
-      console.error(e)
-
-      // streaming no longer requires us to send back a blank page
-      // React will automatically switch to client rendering on error
-      return res.sendStatus(500)
+    // if it is a 404, register it at the end somehow.
+    if (!route.matchRegexString) {
+      continue
     }
 
-    return
-  })
+    const expressPathDef = route.hasParams
+      ? route.matchRegexString
+      : route.pathDefinition
+
+    app.get(expressPathDef, routeHandler)
+  }
 
   app.listen(rwConfig.web.port)
   console.log(
