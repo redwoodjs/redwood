@@ -1,4 +1,4 @@
-import { OperationVariables } from '@apollo/client'
+import { OperationVariables, UseSuspenseQueryResult } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 
 type DefaultUseQueryType = <
@@ -24,14 +24,25 @@ type DefaultUseSubscriptionType = <
   subscription: DocumentNode,
   options?: GraphQLSubscriptionHookOptions<TData, TVariables>
 ) => SubscriptionOperationResult<TData, TVariables>
+
+type DefaultUseSuspenseType = <
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
+  query: DocumentNode,
+  options?: GraphQLQueryHookOptions<TData, TVariables>
+) => UseSuspenseQueryResult<TData, TVariables>
+
 export interface GraphQLHooks<
   TuseQuery = DefaultUseQueryType,
   TuseMutation = DefaultUseMutationType,
-  TuseSubscription = DefaultUseSubscriptionType
+  TuseSubscription = DefaultUseSubscriptionType,
+  TuseSuspenseQuery = DefaultUseSuspenseType
 > {
   useQuery: TuseQuery
   useMutation: TuseMutation
   useSubscription: TuseSubscription
+  useSuspenseQuery: TuseSuspenseQuery
 }
 
 export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
@@ -50,13 +61,24 @@ export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
       'You must register a useSubscription hook via the `GraphQLHooksProvider`'
     )
   },
+  useSuspenseQuery: () => {
+    throw new Error(
+      'You must register a useSuspenseQuery hook via the `GraphQLHooksProvider`.'
+    )
+  },
 })
 
 interface GraphQlHooksProviderProps<
   TuseQuery = DefaultUseQueryType,
   TuseMutation = DefaultUseMutationType,
-  TuseSubscription = DefaultUseSubscriptionType
-> extends GraphQLHooks<TuseQuery, TuseMutation, TuseSubscription> {
+  TuseSubscription = DefaultUseSubscriptionType,
+  TuseSuspenseQuery = DefaultUseSuspenseType
+> extends GraphQLHooks<
+    TuseQuery,
+    TuseMutation,
+    TuseSubscription,
+    TuseSuspenseQuery
+  > {
   children: React.ReactNode
 }
 
@@ -74,6 +96,7 @@ export const GraphQLHooksProvider = <
   useQuery,
   useMutation,
   useSubscription,
+  useSuspenseQuery,
   children,
 }: GraphQlHooksProviderProps<TuseQuery, TuseMutation>) => {
   return (
@@ -82,6 +105,7 @@ export const GraphQLHooksProvider = <
         useQuery,
         useMutation,
         useSubscription,
+        useSuspenseQuery,
       }}
     >
       {children}
@@ -123,6 +147,19 @@ export function useSubscription<
   options?: GraphQLSubscriptionHookOptions<TData, TVariables>
 ): SubscriptionOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useSubscription<
+    TData,
+    TVariables
+  >(query, options)
+}
+
+export function useSuspenseQuery<
+  TData = any,
+  TVariables extends OperationVariables = GraphQLOperationVariables
+>(
+  query: DocumentNode,
+  options?: GraphQLQueryHookOptions<TData, TVariables>
+): UseSuspenseQueryResult<TData, TVariables> {
+  return React.useContext(GraphQLHooksContext).useSuspenseQuery<
     TData,
     TVariables
   >(query, options)

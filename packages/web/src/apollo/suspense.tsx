@@ -3,7 +3,7 @@
  * This is a lift and shift of the original ApolloProvider
  * but with suspense specific bits. Look for @MARK to find bits I've changed
  *
- * Done this way, to avoid making changes breaking on main.
+ * Done this way, to avoid making changes breaking on main. This will not remain a separate provider in the future.
  */
 
 import type {
@@ -18,6 +18,7 @@ import {
   setLogVerbosity as apolloSetLogVerbosity,
   useMutation,
   useSubscription,
+  useQuery,
 } from '@apollo/client'
 import {
   ApolloNextAppProvider,
@@ -211,6 +212,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   logLevel = 'debug',
   children,
 }) => {
+  // @TODO (STREAMING): Revisit this comment below to make sure I didn't break auth...
   // Since Apollo Client gets re-instantiated on auth changes,
   // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
   const { cacheConfig, ...config } = graphQLClientConfig ?? {}
@@ -229,8 +231,8 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
         logLevel={logLevel}
       >
         <GraphQLHooksProvider
-          // @MARK 👇 swapped useQuery for useSuspense query here
-          useQuery={useSuspenseQuery}
+          useQuery={useQuery}
+          useSuspenseQuery={useSuspenseQuery} // <-- @MARK note that useSuspenseQuery must come from the experimental nextjs package
           useMutation={useMutation}
           useSubscription={useSubscription}
         >

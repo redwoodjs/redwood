@@ -1,6 +1,6 @@
 import { ComponentProps, JSXElementConstructor, Suspense } from 'react'
 
-import { OperationVariables } from '@apollo/client'
+import { OperationVariables, UseSuspenseQueryResult } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
@@ -11,7 +11,7 @@ import { useCellCacheContext } from './CellCacheContext'
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
 import { CellErrorBoundary } from './CellErrorBoundary'
-import { useQuery } from './GraphQLHooksProvider'
+import { useQuery, useSuspenseQuery } from './GraphQLHooksProvider'
 
 /**
  *
@@ -273,15 +273,26 @@ export function createCell<
     const options = beforeQuery(variables as CellProps)
     const query = typeof QUERY === 'function' ? QUERY(options) : QUERY
 
-    // queryRest includes `variables: { ... }`, with any variables returned
-    // from beforeQuery
-    let {
-      // eslint-disable-next-line prefer-const
-      error,
-      loading,
-      data,
-      ...queryResult
-    } = useQuery(query, options)
+    const useQueryHook = RWJS_ENV.RWJS_EXP_STREAMING_SSR
+      ? useSuspenseQuery
+      : useQuery
+
+    let error = null
+    let loading = false
+    let data = null
+    let queryResult = null
+
+    const hookOutput = useQueryHook(query, options)
+
+    // This terrible stuff is here, because useSuspenseQuery
+    // doesnt give us loading or error. It's handled by the Suspense fallback and ErrorBoundary
+    // And you can't conditionally call a hook inside the if statement :/
+    if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+      ;({ data, ...queryResult } = hookOutput as UseSuspenseQueryResult)
+    } else {
+      ;({ data, loading, error, ...queryResult } =
+        hookOutput as QueryOperationResult) // because we know it's not useSuspenseQuery
+    }
 
     if (globalThis.__REDWOOD__PRERENDERING) {
       // __REDWOOD__PRERENDERING will always either be set, or not set. So
