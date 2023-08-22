@@ -4,4 +4,4 @@ import Database from "./DatabaseSVG"
 import Desktop from "./DesktopComputerSVG"
 import DeviceMobile from "./DeviceMobileSVG"
 
-export { CurrencyYen, CursorClick, Database, Desktop, DeviceMobile }
+export { CurrencyYen, CursorClick, Database as DBIcon, Desktop, DeviceMobile as Mobile}
