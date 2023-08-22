@@ -5,6 +5,8 @@ import type { DocumentNode } from 'graphql'
  * @NOTE
  * The types QueryOperationResult, MutationOperationResult, SubscriptionOperationResult, and SuspenseQueryOperationResult
  * are overridden in packages/web/src/apollo/typeOverride.ts. This was originally so that you could bring your own gql client.
+ *
+ * The default (empty) types are defined in packages/web/src/global.web-auto-imports.ts
  */
 
 type DefaultUseQueryType = <
