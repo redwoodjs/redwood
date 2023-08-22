@@ -1,5 +1,11 @@
-import { OperationVariables, UseSuspenseQueryResult } from '@apollo/client'
+import type { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
+
+/**
+ * @NOTE
+ * The types QueryOperationResult, MutationOperationResult, SubscriptionOperationResult, and SuspenseQueryOperationResult
+ * are overridden in packages/web/src/apollo/typeOverride.ts. This was originally so that you could bring your own gql client.
+ */
 
 type DefaultUseQueryType = <
   TData = any,
@@ -31,7 +37,7 @@ type DefaultUseSuspenseType = <
 >(
   query: DocumentNode,
   options?: GraphQLQueryHookOptions<TData, TVariables>
-) => UseSuspenseQueryResult<TData, TVariables>
+) => SuspenseQueryOperationResult<TData, TVariables>
 
 export interface GraphQLHooks<
   TuseQuery = DefaultUseQueryType,
@@ -158,7 +164,7 @@ export function useSuspenseQuery<
 >(
   query: DocumentNode,
   options?: GraphQLQueryHookOptions<TData, TVariables>
-): UseSuspenseQueryResult<TData, TVariables> {
+): SuspenseQueryOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useSuspenseQuery<
     TData,
     TVariables
