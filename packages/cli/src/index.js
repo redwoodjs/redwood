@@ -26,6 +26,7 @@ import * as lintCommand from './commands/lint'
 import * as prerenderCommand from './commands/prerender'
 import * as prismaCommand from './commands/prisma'
 import * as recordCommand from './commands/record'
+import * as rwxCommand from './commands/rwx'
 import * as serveCommand from './commands/serve'
 import * as setupCommand from './commands/setup'
 import * as testCommand from './commands/test'
@@ -206,6 +207,7 @@ async function runYargs() {
     .command(prerenderCommand)
     .command(prismaCommand)
     .command(recordCommand)
+    .command(rwxCommand)
     .command(serveCommand)
     .command(setupCommand)
     .command(testCommand)

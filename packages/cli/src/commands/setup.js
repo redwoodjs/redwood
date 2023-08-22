@@ -7,26 +7,6 @@ export const description = 'Initialize project config and install packages'
 
 export const builder = (yargs) =>
   yargs
-    .command({
-      command: '* <npm package>',
-      description: 'Execute a setup script from an NPM package',
-      builder: (yargs) => {
-        yargs
-          .positional('npm package', {
-            description: 'The NPM package to install and run',
-            type: 'string',
-          })
-          .option('force', {
-            type: 'boolean',
-            alias: 'f',
-            default: false,
-          })
-      },
-      handler: async (argv) => {
-        const { handler: setupHandler } = await import('./setupHandler.js')
-        await setupHandler(argv)
-      },
-    })
     .commandDir('./setup', {
       recurse: true,
       // @NOTE This regex will ignore all commands nested more than two
