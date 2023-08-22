@@ -81,14 +81,8 @@ export default async function transform(file: FileInfo, api: API) {
         }
 
         // Find the JSX elements that use the default import specifier
+        // or if they've been exported
         const svgsUsedAsComponent = root.findJSXElements(importName)
-
-        svgsUsedAsComponent.forEach(() => {
-          svgsToConvert.push({
-            filePath: pathToSvgFile,
-            importSourcePath: importDeclaration.node.source as StringLiteral, // imports are all strings in this case
-          })
-        })
 
         const svgsUsedAsRenderProp = root.find(j.JSXExpressionContainer, {
           expression: {
@@ -97,7 +91,20 @@ export default async function transform(file: FileInfo, api: API) {
           },
         })
 
-        svgsUsedAsRenderProp.forEach(() => {
+        const svgsReexported = root.find(j.ExportSpecifier, {
+          local: {
+            name: importName,
+          },
+        })
+
+        // Concat all of them, and loop over once
+        const selectedSvgs = [
+          ...svgsReexported.paths(),
+          ...svgsUsedAsComponent.paths(),
+          ...svgsUsedAsRenderProp.paths(),
+        ]
+
+        selectedSvgs.forEach(() => {
           svgsToConvert.push({
             filePath: pathToSvgFile,
             importSourcePath: importDeclaration.node.source as StringLiteral, // imports are all strings in this case
