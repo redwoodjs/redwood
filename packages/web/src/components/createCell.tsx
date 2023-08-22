@@ -1,4 +1,4 @@
-import { ComponentProps, JSXElementConstructor } from 'react'
+import { ComponentProps, JSXElementConstructor, Suspense } from 'react'
 
 import { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
@@ -10,6 +10,7 @@ import { useCellCacheContext } from './CellCacheContext'
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
+import { CellErrorBoundary } from './CellErrorBoundary'
 import { useQuery } from './GraphQLHooksProvider'
 
 /**
@@ -395,5 +396,40 @@ export function createCell<
 
   NamedCell.displayName = displayName
 
-  return (props: CellProps) => <NamedCell {...props} />
+  return (props: CellProps) => {
+    if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+      /** @TODO (STREAMING): Want to review full Cell lifecycle with Dom and Kris
+       *
+       * There's complexity here that I'm 70% sure I'm not capturing
+       * See notes below about queryResult. How can we refactor createCell so that it's available?
+       * Keep in mind we may need the ability to switch between useQuery and useSuspenseQuery
+       *
+       */
+
+      const FailureComponent = (fprops: any) => {
+        if (!Failure) {
+          return (
+            <>
+              <h2>Cell rendering failure. No Error component supplied. </h2>
+              <pre>{fprops.error}</pre>
+            </>
+          )
+        }
+
+        // @TODO (STREAMING) query-result not available here, because it comes from inside NamedCell
+        // How do we pass refetch, etc. in?
+        return <Failure {...fprops} />
+      }
+
+      return (
+        <CellErrorBoundary fallback={FailureComponent}>
+          <Suspense fallback={<Loading {...props} />}>
+            <NamedCell {...props} />
+          </Suspense>
+        </CellErrorBoundary>
+      )
+    }
+
+    return <NamedCell {...props} />
+  }
 }

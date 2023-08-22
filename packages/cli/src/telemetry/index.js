@@ -7,6 +7,7 @@ import {
   SimpleSpanProcessor,
   SamplingDecision,
 } from '@opentelemetry/sdk-trace-node'
+import { hideBin } from 'yargs/helpers'
 
 import { spawnBackgroundProcess } from '../lib/background'
 
@@ -66,7 +67,30 @@ export async function startTelemetry() {
     traceProvider.addSpanProcessor(traceProcessor)
     traceProvider.register()
 
-    // Ensure to shutdown telemetry when the process exits
+    // Without any listeners for these signals, nodejs will terminate the process and will not
+    // trigger the exit event when doing so. This means our process.on('exit') handler will not run.
+    // We add a listner which either calls process.exit or if some other handler has been added,
+    // then we leave it to that handler to handle the signal.
+    // See https://nodejs.org/dist/latest/docs/api/process.html#signal-events for more info on the
+    // behaviour of nodejs for various signals.
+    const cleanArgv = hideBin(process.argv)
+    if (!cleanArgv.includes('sb') && !cleanArgv.includes('storybook')) {
+      for (const signal of ['SIGTERM', 'SIGINT', 'SIGHUP']) {
+        process.on(signal, () => {
+          if (process.listenerCount(signal) === 1) {
+            console.log(`Received ${signal} signal, exiting...`)
+            process.exit()
+          }
+        })
+      }
+    } else {
+      process.on('shutdown-telemetry', () => {
+        shutdownTelemetry()
+      })
+    }
+
+    // Ensure to shutdown telemetry when the process exits so that we can be sure that all spans
+    // are ended and all data is flushed to the exporter.
     process.on('exit', () => {
       shutdownTelemetry()
     })

@@ -39,6 +39,9 @@ export const buildRscFeServer = async ({
     // configFile: viteConfigPath,
     root: webSrc,
     plugins: [react(), rscIndexPlugin()],
+    resolve: {
+      conditions: ['react-server'],
+    },
     build: {
       outDir: webDist,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
@@ -215,7 +218,7 @@ export const buildRscFeServer = async ({
 
   // This is all a no-op for now
   const routeManifest = routesList.reduce<RWRouteManifest>((acc, route) => {
-    acc[route.path] = {
+    acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
         ? clientBuildManifest[route.relativeFilePath].file
@@ -223,7 +226,7 @@ export const buildRscFeServer = async ({
       matchRegexString: route.matchRegexString,
       // NOTE this is the path definition, not the actual path
       // E.g. /blog/post/{id:Int}
-      pathDefinition: route.path,
+      pathDefinition: route.pathDefinition,
       hasParams: route.hasParams,
       routeHooks: null,
       redirect: route.redirect

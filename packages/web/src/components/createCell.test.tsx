@@ -9,6 +9,12 @@ import { createCell } from './createCell'
 import { GraphQLHooksProvider } from './GraphQLHooksProvider'
 
 describe('createCell', () => {
+  beforeAll(() => {
+    globalThis.RWJS_ENV = {
+      RWJS_EXP_STREAMING_SSR: false,
+    }
+  })
+
   test('Renders a static Success component', async () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
@@ -54,7 +60,7 @@ describe('createCell', () => {
     screen.getByText(/^42$/)
   })
 
-  test.only('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
+  test('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { users { name } posts { title } }',

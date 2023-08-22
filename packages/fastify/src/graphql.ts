@@ -1,6 +1,7 @@
 import fastifyUrlData from '@fastify/url-data'
 import type { FastifyInstance, HookHandlerDoneFunction } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
+import type { Plugin } from 'graphql-yoga'
 
 import type {
   GraphQLYogaOptions,
@@ -35,6 +36,20 @@ export async function redwoodFastifyGraphQLServer(
   await fastify.register(fastifyRawBody)
 
   try {
+    // Here we can add any plugins that we want to use with GraphQL Yoga Server
+    // that we do not want to add the the GraphQLHandler in the graphql-server
+    // graphql function.
+    //
+    // These would be plugins that need a server instance such as Redwood Realtime
+    if (options.realtime) {
+      const { useRedwoodRealtime } = await import('@redwoodjs/realtime')
+
+      const originalExtraPlugins: Array<Plugin<any>> =
+        options.extraPlugins || []
+      originalExtraPlugins.push(useRedwoodRealtime(options.realtime))
+      options.extraPlugins = originalExtraPlugins
+    }
+
     const { yoga } = createGraphQLYoga(options)
 
     // TODO: This should be refactored to only be defined once and it might not live here

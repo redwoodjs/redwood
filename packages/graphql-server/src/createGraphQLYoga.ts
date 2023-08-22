@@ -16,7 +16,6 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
-  useRedwoodRealtime,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
@@ -160,10 +159,6 @@ export const createGraphQLYoga = ({
     plugins.push(
       useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
-
-    if (realtime) {
-      plugins.push(useRedwoodRealtime(realtime))
-    }
 
     // App-defined plugins
     if (extraPlugins && extraPlugins.length > 0) {

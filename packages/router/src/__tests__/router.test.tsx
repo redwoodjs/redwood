@@ -36,7 +36,7 @@ import {
   Route,
   Private,
   Redirect,
-  routes,
+  routes as generatedRoutes,
   Link,
   navigate,
   back,
@@ -45,7 +45,7 @@ import {
 import { useLocation } from '../location'
 import { useParams } from '../params'
 import { Set } from '../Set'
-import { Spec } from '../util'
+import type { Spec, GeneratedRoutesMap } from '../util'
 
 /** running into intermittent test timeout behavior in https://github.com/redwoodjs/redwood/pull/4992
  attempting to work around by bumping the default timeout of 5000 */
@@ -59,8 +59,15 @@ type UnknownAuthContextInterface = AuthContextInterface<
   unknown,
   unknown,
   unknown,
+  unknown,
+  unknown,
+  unknown,
+  unknown,
   unknown
 >
+
+// The types are generated in the user's project
+const routes = generatedRoutes as GeneratedRoutesMap
 
 function createDummyAuthContextValues(
   partial: Partial<UnknownAuthContextInterface>
