@@ -36,7 +36,7 @@ export class Mailer<
   }
 
   constructor(
-    private config: MailerConfig<
+    public config: MailerConfig<
       THandlers,
       TDefaultHandler,
       TRenderers,
@@ -176,6 +176,9 @@ export class Mailer<
     }
     return this.handlers[handlerKey]
   }
+
+  // TODO: Add a renderAndSend method that combines the render and send methods
+  // TODO: Refactor the send method to not invoke the renderer directly
 
   async send<
     THandler extends keyof THandlers = TDefaultHandler,

@@ -1,16 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { gql, useQuery } from '@apollo/client'
 import { DocumentDuplicateIcon as DocumentDuplicateIconSolid } from '@heroicons/react/20/solid'
 import {
-  ArrowPathIcon,
-  CodeBracketIcon,
-  ComputerDesktopIcon,
-  DevicePhoneMobileIcon,
-  DeviceTabletIcon,
-  DocumentChartBarIcon,
   DocumentDuplicateIcon as DocumentDuplicationIconOutline,
-  DocumentTextIcon,
   MagnifyingGlassIcon,
   PaperClipIcon,
   TableCellsIcon,
@@ -29,14 +22,9 @@ import {
   TableHeaderCell,
   Badge,
   Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Select,
-  SelectItem,
 } from '@tremor/react'
 
+import MailRenderer from '../../Components/Mail/MailRenderer'
 import { LIST_POLLING_INTERVAL } from '../../util/polling'
 
 const QUERY_GET_ALL_MAILS = gql`
@@ -50,58 +38,22 @@ const QUERY_GET_ALL_MAILS = gql`
   }
 `
 
-const PREVIEW_DIMENSIONS = [
-  {
-    label: 'Desktop',
-    width: null,
-    height: null,
-    icon: ComputerDesktopIcon,
-  },
-  {
-    label: 'iPhone 12 Pro',
-    width: 390,
-    height: 844,
-    icon: DevicePhoneMobileIcon,
-  },
-  {
-    label: 'Pixel 5',
-    width: 393,
-    height: 851,
-    icon: DevicePhoneMobileIcon,
-  },
-  {
-    label: 'iPad Air',
-    width: 820,
-    height: 1180,
-    icon: DeviceTabletIcon,
-  },
-  {
-    label: 'Surface Pro 7',
-    width: 912,
-    height: 1368,
-    icon: DeviceTabletIcon,
-  },
-]
+function downloadAttachment(attachment: any) {
+  if (attachment.content?.type !== 'Buffer') {
+    prompt('Attachment content is not a buffer, cannot download')
+    return
+  }
+
+  const base64Content = Buffer.from(attachment.content.data).toString('base64')
+  const link = document.createElement('a')
+  link.href = `data:${attachment.contentType};base64,${base64Content}`
+  link.download = attachment.filename
+  link.click()
+}
 
 function MailSink() {
-  const iframeRef = useRef<HTMLIFrameElement>(null)
-
   const [selectedMailID, setSelectedMailID] = useState<string | null>(null)
   const [selectedMail, setSelectedMail] = useState<any | undefined>()
-  const [selectedMailPreprocessedHTML, setSelectedMailPreprocessedHTML] =
-    useState<string | undefined>()
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0)
-
-  const [selectedPreviewDimensionLabel, setSelectedPreviewDimensionLabel] =
-    useState<string>(PREVIEW_DIMENSIONS[0].label)
-  const [selectedPreviewWidth, setSelectedPreviewWidth] = useState<
-    number | null
-  >(PREVIEW_DIMENSIONS[0].width)
-  const [selectedPreviewHeight, setSelectedPreviewHeight] = useState<
-    number | null
-  >(PREVIEW_DIMENSIONS[0].height)
-
-  const [isPreviewHorizontal, setIsPreviewHorizontal] = useState(false)
 
   const getAllMailsQuery = useQuery(QUERY_GET_ALL_MAILS, {
     pollInterval: LIST_POLLING_INTERVAL,
@@ -110,37 +62,12 @@ function MailSink() {
   const mails = useMemo(() => {
     return getAllMailsQuery.data?.mails ?? []
   }, [getAllMailsQuery.data?.mails])
+
   useEffect(() => {
     if (selectedMailID) {
       setSelectedMail(mails.find((mail: any) => mail.id === selectedMailID))
     }
   }, [selectedMailID, mails])
-
-  useEffect(() => {
-    const selectedPreviewDimension = PREVIEW_DIMENSIONS.find(
-      (entry) => entry.label === selectedPreviewDimensionLabel
-    )
-    const width = selectedPreviewDimension?.width ?? null
-    const height = selectedPreviewDimension?.height ?? null
-    setSelectedPreviewWidth(isPreviewHorizontal ? height : width)
-    setSelectedPreviewHeight(isPreviewHorizontal ? width : height)
-  }, [selectedPreviewDimensionLabel, isPreviewHorizontal])
-
-  useEffect(() => {
-    if (selectedMail?.data?.html === undefined) {
-      return
-    }
-
-    // Introduce tags to:
-    // - Open links in new tab
-    // - Disable scripts
-    const withHeadItemsInserted = selectedMail.data.html.replace(
-      '</head>',
-      "<base target='_blank'><meta http-equiv='Content-Security-Policy' content=\"script-src 'none'\"></head>"
-    )
-
-    setSelectedMailPreprocessedHTML(withHeadItemsInserted)
-  }, [selectedMail])
 
   return (
     <div className="p-6 h-full">
@@ -291,8 +218,8 @@ function MailSink() {
           )}
         </Table>
       </Card>
-      <Card className="mt-6">
-        {selectedMailID === null ? (
+      {selectedMailID === null ? (
+        <Card className="mt-6">
           <Flex
             justifyContent="center"
             alignItems="center"
@@ -301,99 +228,82 @@ function MailSink() {
             <MagnifyingGlassIcon className="h-5 w-5" />
             <Text className="text-center">Select a mail above to inspect</Text>
           </Flex>
-        ) : (
-          <TabGroup
-            index={selectedTabIndex}
-            onIndexChange={setSelectedTabIndex}
-          >
-            <Flex alignItems="center" className="space-x-2">
-              <TabList className="flex-1">
-                <Tab icon={DocumentChartBarIcon}>HTML</Tab>
-                <Tab icon={DocumentTextIcon}>Text</Tab>
-                <Tab icon={TableCellsIcon}>Metadata</Tab>
-                <Tab icon={PaperClipIcon}>Attachments</Tab>
-                <Tab icon={CodeBracketIcon}>Raw Data</Tab>
-              </TabList>
-              <div className="flex justify-end space-x-2">
-                <Select
-                  value={selectedPreviewDimensionLabel}
-                  onValueChange={setSelectedPreviewDimensionLabel}
-                >
-                  {PREVIEW_DIMENSIONS.map((entry) => (
-                    <SelectItem
-                      key={entry.label}
-                      value={entry.label}
-                      icon={entry.icon}
-                    >
-                      {entry.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-                <Button
-                  variant="secondary"
-                  onClick={() => setIsPreviewHorizontal(!isPreviewHorizontal)}
-                >
-                  <ArrowPathIcon
-                    className={`h-5 w-5 ${
-                      isPreviewHorizontal ? '' : 'rotate-90'
-                    }`}
-                  />
-                </Button>
+        </Card>
+      ) : (
+        <MailRenderer
+          html={selectedMail?.data?.html}
+          text={selectedMail?.data?.text}
+          additionalTabHeaders={
+            <>
+              <Tab icon={TableCellsIcon}>Metadata</Tab>
+              <Tab icon={PaperClipIcon}>Attachments</Tab>
+            </>
+          }
+          additionalTabPanels={[
+            <Flex
+              className="mt-2 gap-y-4"
+              flexDirection="col"
+              justifyContent="start"
+              key="_metadataPanelTab"
+            >
+              <div className="overflow-auto w-full">
+                <pre>
+                  {JSON.stringify(
+                    {
+                      ...selectedMail?.data,
+                      html: undefined,
+                      text: undefined,
+                      textAsHtml: undefined,
+                      attachments: undefined,
+                      envelope: selectedMail?.envelope,
+                    },
+                    undefined,
+                    2
+                  )}
+                </pre>
               </div>
-            </Flex>
-            <TabPanels>
-              <TabPanel className="flex justify-center">
-                <iframe
-                  hidden={selectedTabIndex !== 0}
-                  ref={iframeRef}
-                  className={'border border-gray-600'}
-                  width={selectedPreviewWidth?.toString() ?? '100%'}
-                  height={selectedPreviewHeight?.toString() ?? '100%'}
-                  srcDoc={selectedMailPreprocessedHTML}
-                  sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin"
-                  // @ts-expect-error Does this propertly not exist? I thought it was a thing
-                  csp="script-src 'none'"
-                />
-              </TabPanel>
-              <TabPanel>
-                <Flex className="mt-2 overflow-auto">
-                  <pre>{selectedMail?.data.text}</pre>
-                </Flex>
-              </TabPanel>
-              <TabPanel>
-                <Flex className="mt-2">
-                  <pre>metadata</pre>
-                </Flex>
-              </TabPanel>
-              <TabPanel>
-                <Flex className="mt-2">
-                  <pre>
-                    {JSON.stringify(
-                      selectedMail?.data.attachments,
-                      undefined,
-                      2
-                    )}
-                  </pre>
-                </Flex>
-              </TabPanel>
-              <TabPanel>
-                <Flex className="mt-2 overflow-auto">
-                  <pre>
-                    {JSON.stringify(
-                      {
-                        data: selectedMail?.data,
-                        envelope: selectedMail?.envelope,
-                      },
-                      undefined,
-                      2
-                    )}
-                  </pre>
-                </Flex>
-              </TabPanel>
-            </TabPanels>
-          </TabGroup>
-        )}
-      </Card>
+            </Flex>,
+            <Flex
+              className="mt-2 overflow-auto w-full"
+              flexDirection="col"
+              justifyContent="start"
+              key="_attachmentsPanelTab"
+            >
+              {(selectedMail?.data.attachments.length ?? 0) === 0 ? (
+                <Text className="text-start w-full mt-2">No attachments</Text>
+              ) : (
+                <Table className="w-full">
+                  <TableHead>
+                    <TableRow>
+                      <TableHeaderCell>Filename</TableHeaderCell>
+                      <TableHeaderCell>Content Type</TableHeaderCell>
+                      <TableHeaderCell>Download Link</TableHeaderCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {selectedMail?.data.attachments.map((attachment: any) => (
+                      <TableRow key={attachment.checksum}>
+                        <TableCell>{attachment.filename}</TableCell>
+                        <TableCell>{attachment.contentType}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="light"
+                            onClick={() => {
+                              downloadAttachment(attachment)
+                            }}
+                          >
+                            Download
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </Flex>,
+          ]}
+        />
+      )}
     </div>
   )
 }

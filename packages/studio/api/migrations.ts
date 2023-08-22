@@ -41,7 +41,7 @@ async function migrate001(db: Database<sqlite3.Database, sqlite3.Statement>) {
     return
   }
 
-  // NOTE: PRAGMA user_version does not support prepared statement variables
+  // NOTE: PRAGMA user_version does not support variables
   const sql = `
     BEGIN TRANSACTION;
       CREATE TABLE IF NOT EXISTS mail (
@@ -60,12 +60,13 @@ async function migrate001(db: Database<sqlite3.Database, sqlite3.Statement>) {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         mail_template_id INTEGER NOT NULL,
         name TEXT NOT NULL UNIQUE,
-        propsTemplate TEXT,
+        props_template TEXT,
         updated_at INTEGER DEFAULT (strftime('%s', 'now'))
       );
       CREATE TABLE IF NOT EXISTS mail_renderer (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT UNIQUE NOT NULL,
+        is_default INTEGER DEFAULT 0,
         updated_at INTEGER DEFAULT (strftime('%s', 'now'))
       );
       PRAGMA user_version = ${user_version + 1};

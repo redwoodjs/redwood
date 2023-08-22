@@ -15,13 +15,10 @@ import { seriesTypeBarList, modelsAccessedList } from '../services/lists'
 import {
   mails,
   truncate as truncateMails,
-  templateFiles as mailTemplateFiles,
-  templateFileExports as mailTemplateFileExports,
-  templateComponentProps as mailTemplateProps,
-  renderTemplate as mailRenderTemplate,
   getMailRenderers as mailRenderers,
   getMailTemplates as mailTemplates,
   getMailComponents as mailComponents,
+  getRenderedMail as mailRenderedMail,
 } from '../services/mail'
 import { prismaQuerySpans } from '../services/prismaSpans'
 import { retypeSpans, truncateSpans } from '../services/span'
@@ -173,27 +170,29 @@ export const setupYoga = (fastify: FastifyInstance) => {
         envelope: JSON
         created_at: Int
       }
-      type MailTemplateRender {
-        html: String
-        text: String
-        error: String
-      }
       type MailTemplate {
         id: Int!
         name: String!
         path: String!
+        updatedAt: Int!
       }
       type MailRenderer {
         id: Int!
         name: String!
-        updated_at: Int!
+        isDefault: Boolean!
+        updatedAt: Int!
       }
       type MailTemplateComponent {
         id: Int!
-        mail_template_id: Int!
+        mailTemplateId: Int!
         name: String!
         propsTemplate: String
-        updated_at: Int!
+        updatedAt: Int!
+      }
+      type RenderedMail {
+        html: String
+        text: String
+        error: String
       }
 
       type Query {
@@ -228,18 +227,14 @@ export const setupYoga = (fastify: FastifyInstance) => {
 
         # Mail
         mails: [Mail]
-        mailTemplateFiles: [MailTemplate]
-        mailTemplateFileExports(templatePath: String!): [String]
-        mailTemplateProps(templatePath: String!, exportName: String!): JSON
-        mailRenderTemplate(
-          templatePath: String!
-          exportName: String!
-          jsonData: String
-        ): MailTemplateRender
-
         mailTemplates: [MailTemplate]
         mailRenderers: [MailRenderer]
-        mailComponents(templateId: Int!): [MailTemplateComponent]
+        mailComponents: [MailTemplateComponent]
+        mailRenderedMail(
+          componentId: Int!
+          rendererId: Int!
+          propsJSON: String
+        ): RenderedMail
       }
 
       type Mutation {
@@ -278,14 +273,10 @@ export const setupYoga = (fastify: FastifyInstance) => {
         spanTreeMapData,
         // Mail
         mails,
-        mailTemplateFiles,
-        mailTemplateFileExports,
-        mailTemplateProps,
-        mailRenderTemplate,
-
         mailTemplates,
         mailRenderers,
         mailComponents,
+        mailRenderedMail,
       },
       Span: {
         descendantSpans: async (span, _args, _ctx) => {
