@@ -17,7 +17,7 @@
  * - https://yarnpkg.com/advanced/rulebook#packages-should-only-ever-require-what-they-formally-list-in-their-dependencies
  * - https://yarnpkg.com/advanced/rulebook#modules-shouldnt-hardcode-node_modules-paths-to-access-other-modules
  */
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
 // You can think about the argument we're passing to `createRequire` as being kinda like setting the `cwd`:
 //

@@ -3,8 +3,8 @@
 // Only things used during dev can be in @redwoodjs/vite. Everything else has
 // to go in fe-server
 
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'

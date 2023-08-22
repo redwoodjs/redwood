@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import { context } from '@opentelemetry/api'
 import { suppressTracing } from '@opentelemetry/core'

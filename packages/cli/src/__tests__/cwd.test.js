@@ -1,5 +1,5 @@
-import { spawnSync } from 'child_process'
-import path from 'path'
+import { spawnSync } from 'node:child_process'
+import path from 'node:path'
 
 describe('The CLI sets `cwd` correctly', () => {
   describe('--cwd', () => {

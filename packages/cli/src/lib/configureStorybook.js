@@ -1,5 +1,5 @@
-import path from 'path'
-import util from 'util'
+import path from 'node:path'
+import util from 'node:util'
 
 import fse from 'fs-extra'
 import prettier from 'prettier'

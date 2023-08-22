@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import execa from 'execa'
 import { Listr } from 'listr2'

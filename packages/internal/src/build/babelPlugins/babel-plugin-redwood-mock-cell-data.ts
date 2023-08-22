@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 // TODO: Figure out why Wallaby doesn't work with a normal import.
 import type { PluginObj, types } from '@babel/core'

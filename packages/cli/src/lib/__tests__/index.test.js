@@ -1,6 +1,6 @@
 global.__dirname = __dirname
 jest.mock('@redwoodjs/project-config', () => {
-  const path = require('path')
+  const path = require('node:path')
   return {
     ...jest.requireActual('@redwoodjs/project-config'),
     getPaths: () => {
@@ -15,8 +15,8 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import * as index from '../index'
 

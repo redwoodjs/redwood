@@ -1,4 +1,4 @@
-import { basename } from 'path'
+import { basename } from 'node:path'
 
 import { parse as parseGraphQL } from 'graphql/language/parser'
 import * as tsm from 'ts-morph'

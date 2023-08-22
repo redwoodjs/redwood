@@ -1,4 +1,4 @@
-import * as child_process from 'child_process'
+import * as child_process from 'node:child_process'
 
 export type SpawnOut = { stderr: string; stdout: string; code: number | null }
 

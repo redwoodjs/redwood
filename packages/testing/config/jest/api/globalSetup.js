@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('node:fs')
+const path = require('node:path')
 
 const { getPaths } = require('@redwoodjs/project-config')
 
@@ -12,7 +12,7 @@ const rwjsPaths = getPaths()
 
 module.exports = async function () {
   if (process.env.SKIP_DB_PUSH !== '1') {
-    const process = require('process')
+    const process = require('node:process')
     // Load dotenvs
     require('dotenv-defaults/config')
 

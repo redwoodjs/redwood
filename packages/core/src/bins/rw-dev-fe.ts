@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
 const requireFromRwVite = createRequire(
   require.resolve('@redwoodjs/vite/package.json')

@@ -1,7 +1,7 @@
-import { spawn } from 'child_process'
-import type { SpawnOptions } from 'child_process'
-import os from 'os'
-import path from 'path'
+import { spawn } from 'node:child_process'
+import type { SpawnOptions } from 'node:child_process'
+import os from 'node:os'
+import path from 'node:path'
 
 import { getPaths } from '@redwoodjs/project-config'
 

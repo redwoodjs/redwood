@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 
 import fg from 'fast-glob'
 import { readFileSync } from 'fs-extra'

@@ -2,7 +2,7 @@ globalThis.__dirname = __dirname
 // Load shared mocks
 import '../../../../lib/test'
 
-import path from 'path'
+import path from 'node:path'
 
 import yargs from 'yargs'
 

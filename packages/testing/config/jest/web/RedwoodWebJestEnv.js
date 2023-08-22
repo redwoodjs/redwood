@@ -6,7 +6,7 @@ module.exports = class RedwoodWebJestEnv extends TestEnvironment {
   async setup() {
     await super.setup()
     if (typeof this.global.TextEncoder === 'undefined') {
-      const { TextEncoder, TextDecoder } = require('util')
+      const { TextEncoder, TextDecoder } = require('node:util')
       this.global.TextEncoder = TextEncoder
       this.global.TextDecoder = TextDecoder
     }

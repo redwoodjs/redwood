@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'

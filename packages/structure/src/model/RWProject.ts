@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 
 import type { DMMF } from '@prisma/generator-helper'
 import { getDMMF } from '@prisma/internals'

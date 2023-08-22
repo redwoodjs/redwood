@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import {
   DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE,

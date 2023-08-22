@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 const BASE_PATH = path.resolve(__dirname, '../../src/__tests__/fixtures')
 

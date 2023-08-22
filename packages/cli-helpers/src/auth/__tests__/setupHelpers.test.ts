@@ -9,7 +9,7 @@ jest.mock('@redwoodjs/telemetry', () => {
 })
 
 jest.mock('../../lib/paths', () => {
-  const path = require('path')
+  const path = require('node:path')
   const __dirname = path.resolve()
 
   return {
@@ -36,8 +36,8 @@ jest.mock('execa', () => {})
 jest.mock('listr2')
 jest.mock('prompts', () => jest.fn(() => ({ answer: true })))
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { Listr } from 'listr2'
 import prompts from 'prompts'

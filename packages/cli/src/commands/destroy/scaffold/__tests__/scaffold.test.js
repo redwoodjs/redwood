@@ -1,7 +1,7 @@
 globalThis.__dirname = __dirname
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import '../../../../lib/test'
 
@@ -24,7 +24,7 @@ jest.mock('../../../../lib', () => {
 })
 
 jest.mock('../../../../lib/schemaHelpers', () => {
-  const path = require('path')
+  const path = require('node:path')
   return {
     ...jest.requireActual('../../../../lib/schemaHelpers'),
     getSchema: () =>

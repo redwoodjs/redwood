@@ -50,7 +50,7 @@ jest.mock('../../commands/upgrade', () => {
   }
 })
 
-import path from 'path'
+import path from 'node:path'
 
 import concurrently from 'concurrently'
 import execa from 'execa'

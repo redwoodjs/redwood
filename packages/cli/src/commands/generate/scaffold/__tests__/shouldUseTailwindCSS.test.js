@@ -1,6 +1,6 @@
 globalThis.__dirname = __dirname
 
-import fs from 'fs'
+import fs from 'node:fs'
 
 import '../../../../lib/test'
 import { shouldUseTailwindCSS } from '../scaffold'

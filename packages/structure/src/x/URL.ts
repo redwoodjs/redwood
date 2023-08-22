@@ -1,4 +1,4 @@
-import { isAbsolute, join, normalize, sep as path_sep } from 'path'
+import { isAbsolute, join, normalize, sep as path_sep } from 'node:path'
 
 /**
  * Creates a file:// URL

@@ -1,5 +1,5 @@
-import fs from 'fs'
-import { argv } from 'process'
+import fs from 'node:fs'
+import { argv } from 'node:process'
 
 import concurrently from 'concurrently'
 

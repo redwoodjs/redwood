@@ -1,4 +1,4 @@
-import { basename, resolve } from 'path'
+import { basename, resolve } from 'node:path'
 
 import { DefaultHost } from '../../hosts'
 import { URL_file } from '../../x/URL'

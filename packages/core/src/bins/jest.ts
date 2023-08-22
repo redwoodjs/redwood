@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
 const requireFromJest = createRequire(require.resolve('jest/package.json'))
 

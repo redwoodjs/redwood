@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import fastifyStatic from '@fastify/static'
 import { FastifyInstance } from 'fastify'

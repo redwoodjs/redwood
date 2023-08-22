@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadTypedefs } from '@graphql-tools/load'

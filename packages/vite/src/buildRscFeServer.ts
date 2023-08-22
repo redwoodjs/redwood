@@ -1,5 +1,5 @@
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'

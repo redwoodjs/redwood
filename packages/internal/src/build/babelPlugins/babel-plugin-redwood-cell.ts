@@ -1,4 +1,4 @@
-import { parse } from 'path'
+import { parse } from 'node:path'
 
 import type { PluginObj, types } from '@babel/core'
 

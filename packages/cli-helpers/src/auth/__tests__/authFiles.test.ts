@@ -4,7 +4,7 @@ let mockIsTypeScriptProject = true
 globalThis.__dirname = __dirname
 
 jest.mock('../../lib/paths', () => {
-  const path = require('path')
+  const path = require('node:path')
 
   return {
     ...jest.requireActual('../../lib/paths'),
@@ -26,7 +26,7 @@ jest.mock('../../lib/project', () => ({
   isTypeScriptProject: () => mockIsTypeScriptProject,
 }))
 
-import path from 'path'
+import path from 'node:path'
 
 import { getPaths } from '../../lib/paths'
 import { apiSideFiles, generateUniqueFileNames } from '../authFiles'

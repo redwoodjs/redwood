@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 
 import * as dotenv from 'dotenv-defaults'
 import { existsSync, readFileSync } from 'fs-extra'

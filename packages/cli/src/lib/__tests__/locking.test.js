@@ -13,8 +13,8 @@ jest.mock('@redwoodjs/project-config', () => {
 })
 jest.mock('fs')
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { setLock, unsetLock, isLockSet, clearLocks } from '../locking'
 

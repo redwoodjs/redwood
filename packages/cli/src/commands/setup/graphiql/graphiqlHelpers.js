@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import { getPaths } from '../../../lib'
 import { isTypeScriptProject } from '../../../lib/project'

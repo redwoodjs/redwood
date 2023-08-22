@@ -1,6 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-import repl from 'repl'
+import fs from 'node:fs'
+import path from 'node:path'
+import repl from 'node:repl'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'

@@ -2,8 +2,8 @@ global.__dirname = __dirname
 
 jest.mock('fs')
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 // Load mocks
 import '../../../../lib/test'

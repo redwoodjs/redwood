@@ -1,8 +1,8 @@
 // Automock fs using ../..../__mocks__/fs
 jest.mock('fs')
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { getPaths } from '../../../../lib'
 import { updateApiURLTask } from '../helpers'

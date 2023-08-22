@@ -1,7 +1,7 @@
-import { execSync } from 'child_process'
-import fs from 'fs'
-import https from 'https'
-import path from 'path'
+import { execSync } from 'node:child_process'
+import fs from 'node:fs'
+import https from 'node:https'
+import path from 'node:path'
 
 import * as babel from '@babel/core'
 import boxen from 'boxen'

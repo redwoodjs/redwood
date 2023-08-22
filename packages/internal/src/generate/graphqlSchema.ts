@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 import { codegen } from '@graphql-codegen/core'
 import type { Types as CodegenTypes } from '@graphql-codegen/plugin-helpers'

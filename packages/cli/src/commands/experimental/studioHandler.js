@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 import { getConfigPath } from '@redwoodjs/project-config'
 

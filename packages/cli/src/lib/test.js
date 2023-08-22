@@ -8,8 +8,8 @@
 //   expect('some output').toEqual(loadComponentFixture('component', 'filename.js'))
 // })
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import './mockTelemetry'
 
@@ -22,7 +22,7 @@ jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
 })
 
 jest.mock('@redwoodjs/project-config', () => {
-  const path = require('path')
+  const path = require('node:path')
   return {
     ...jest.requireActual('@redwoodjs/project-config'),
     getPaths: () => {

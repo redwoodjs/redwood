@@ -29,7 +29,7 @@ const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
   __setMockFiles: (files: Record<string, string>) => void
 }
 
-import fs from 'fs'
+import fs from 'node:fs'
 
 import { extraTask } from '../setupHandler'
 

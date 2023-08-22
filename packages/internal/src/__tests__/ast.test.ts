@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import {
   getGqlQueries,
@@ -9,7 +9,7 @@ import {
 } from '../ast'
 
 jest.mock('@redwoodjs/project-config', () => {
-  const path = require('path')
+  const path = require('node:path')
   const baseFixturePath = path.join(__dirname, 'fixtures')
   return {
     getPaths: () => ({

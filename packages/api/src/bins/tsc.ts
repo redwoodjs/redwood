@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
 const requireFromTypeScript = createRequire(
   require.resolve('typescript/package.json')

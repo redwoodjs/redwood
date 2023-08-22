@@ -19,7 +19,7 @@ jest.mock('@redwoodjs/telemetry', () => {
 })
 
 jest.mock('../../lib/paths', () => {
-  const path = require('path')
+  const path = require('node:path')
   const actualPaths = jest.requireActual('../../lib/paths')
   const basedir = '/mock/setup/path'
   const app = mockIsTypeScriptProject ? 'App.tsx' : 'App.jsx'
@@ -63,8 +63,8 @@ const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
   readdirSync: () => string[]
 }
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { getPaths } from '../../lib/paths'
 import {

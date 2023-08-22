@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import opentelemetry from '@opentelemetry/api'

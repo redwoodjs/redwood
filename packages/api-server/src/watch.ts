@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { fork } from 'child_process'
-import type { ChildProcess } from 'child_process'
-import fs from 'fs'
-import path from 'path'
+import { fork } from 'node:child_process'
+import type { ChildProcess } from 'node:child_process'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import c from 'ansi-colors'
 import chalk from 'chalk'

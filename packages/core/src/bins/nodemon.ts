@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
 const requireFromNodemon = createRequire(
   require.resolve('nodemon/package.json')

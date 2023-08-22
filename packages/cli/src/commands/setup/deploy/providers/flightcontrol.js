@@ -1,7 +1,7 @@
 // import terminalLink from 'terminal-link'
-import fs from 'fs'
-import { EOL } from 'os'
-import path from 'path'
+import fs from 'node:fs'
+import { EOL } from 'node:os'
+import path from 'node:path'
 
 import { getSchema, getConfig } from '@prisma/internals'
 import { Listr } from 'listr2'

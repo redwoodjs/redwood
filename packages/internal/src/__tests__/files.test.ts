@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,

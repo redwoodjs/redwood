@@ -1,7 +1,7 @@
 // helper used in Dev and Build commands
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { runCommandTask, getPaths } from '../lib'
 

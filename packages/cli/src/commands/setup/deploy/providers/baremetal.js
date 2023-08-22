@@ -1,5 +1,5 @@
 // import terminalLink from 'terminal-link'
-import path from 'path'
+import path from 'node:path'
 
 import { Listr } from 'listr2'
 

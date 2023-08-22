@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import { open } from 'sqlite'
 import type { Database } from 'sqlite'

@@ -1,4 +1,4 @@
-import * as nodejsPath from 'path'
+import * as nodejsPath from 'node:path'
 
 import type { PluginObj, types } from '@babel/core'
 

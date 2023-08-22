@@ -1,4 +1,4 @@
-import { resolve, join } from 'path'
+import { resolve, join } from 'node:path'
 
 import { process_env_findInFile, process_env_findAll } from '../process_env'
 

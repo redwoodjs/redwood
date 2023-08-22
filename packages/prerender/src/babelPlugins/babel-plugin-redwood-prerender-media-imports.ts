@@ -1,4 +1,4 @@
-import { extname, basename, join, relative, dirname } from 'path'
+import { extname, basename, join, relative, dirname } from 'node:path'
 
 import type { PluginObj, types, NodePath } from '@babel/core'
 import type { ManifestChunk as ViteManifestChunk } from 'vite'

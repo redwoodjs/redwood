@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
 // We do not install storybook by default, so we need to check if it is
 // installed before we try to run it.

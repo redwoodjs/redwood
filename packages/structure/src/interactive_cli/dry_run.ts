@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 
 import { outputFileSync } from 'fs-extra'
 import proxyquire from 'proxyquire'

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
 const requireFromCrossEnv = createRequire(
   require.resolve('cross-env/package.json')

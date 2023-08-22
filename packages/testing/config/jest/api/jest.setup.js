@@ -33,7 +33,7 @@ const isIdenticalArray = (a, b) => {
 
 const configureTeardown = async () => {
   const { getDMMF } = require('@prisma/internals')
-  const fs = require('fs')
+  const fs = require('node:fs')
 
   // @NOTE prisma utils are available in cli lib/schemaHelpers
   // But avoid importing them, to prevent memory leaks in jest
@@ -58,7 +58,7 @@ let quoteStyle
 // determine what kind of quotes are needed around table names in raw SQL
 const getQuoteStyle = async () => {
   const { getConfig: getPrismaConfig } = require('@prisma/internals')
-  const fs = require('fs')
+  const fs = require('node:fs')
 
   if (!quoteStyle) {
     const config = await getPrismaConfig({
@@ -98,7 +98,7 @@ const buildScenario =
     }
 
     return it(testName, async () => {
-      const path = require('path')
+      const path = require('node:path')
       const testFileDir = path.parse(testPath)
       // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
       const testFileNameParts = testFileDir.name.split('.')
@@ -134,7 +134,7 @@ const buildScenario =
   }
 
 const teardown = async () => {
-  const fs = require('fs')
+  const fs = require('node:fs')
 
   const quoteStyle = await getQuoteStyle()
 

@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import c from 'ansi-colors'
 import type { Handler } from 'aws-lambda'

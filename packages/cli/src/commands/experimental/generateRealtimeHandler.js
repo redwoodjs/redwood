@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 import camelcase from 'camelcase'
 import { Listr } from 'listr2'

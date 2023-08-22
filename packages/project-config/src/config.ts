@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 import toml from '@iarna/toml'
 import merge from 'deepmerge'

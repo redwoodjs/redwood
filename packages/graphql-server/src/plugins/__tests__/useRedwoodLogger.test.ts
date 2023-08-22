@@ -1,6 +1,6 @@
-import { existsSync, readFileSync, statSync } from 'fs'
-import os from 'os'
-import { join } from 'path'
+import { existsSync, readFileSync, statSync } from 'node:fs'
+import os from 'node:os'
+import { join } from 'node:path'
 
 import { useEngine } from '@envelop/core'
 import { createTestkit } from '@envelop/testing'

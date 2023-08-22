@@ -1,6 +1,6 @@
 global.__dirname = __dirname
 jest.mock('@redwoodjs/project-config', () => {
-  const path = require('path')
+  const path = require('node:path')
   return {
     ...jest.requireActual('@redwoodjs/project-config'),
     getPaths: () => {

@@ -1,4 +1,4 @@
-import { basename } from 'path'
+import { basename } from 'node:path'
 
 import * as tsm from 'ts-morph'
 import { Location, Range } from 'vscode-languageserver-types'

@@ -4,7 +4,7 @@
 
 // Stacktracey requires buffer, which Vite does not polyfill by default
 if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || require('buffer').Buffer
+  window.Buffer = window.Buffer || require('node:buffer').Buffer
 }
 
 import { useState } from 'react'
