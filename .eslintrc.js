@@ -40,6 +40,12 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['**/*'],
+      rules: {
+        'unicorn/prefer-node-protocol': 'error',
+      },
+    },
+    {
       files: ['packages/structure/src/**'],
       rules: {
         '@typescript-eslint/no-this-alias': 'off',
