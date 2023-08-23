@@ -1,0 +1,48 @@
+{
+  "name": "@redwoodjs/cli-data-migrate",
+  "version": "6.0.7",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/cli-packages/storybook"
+  },
+  "license": "MIT",
+  "bin": {
+    "up": "./dist/bin.js"
+  },
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn node ./build.mjs && yarn build:types",
+    "build:types": "tsc --build --verbose",
+    "prepack": "NODE_ENV=production yarn build:js",
+    "test": "yarn test:unit && yarn test:dist",
+    "test:unit": "yarn jest src",
+    "test:dist": "yarn jest ./dist.test.ts"
+  },
+  "dependencies": {
+    "@redwoodjs/babel-config": "6.0.7",
+    "@redwoodjs/project-config": "6.0.7",
+    "@redwoodjs/telemetry": "6.0.7",
+    "chalk": "4.1.2",
+    "execa": "5.1.1",
+    "fs-extra": "11.1.1",
+    "listr2": "6.6.0",
+    "terminal-link": "2.1.1",
+    "yargs": "17.7.2"
+  },
+  "devDependencies": {
+    "@prisma/client": "5.1.1",
+    "@types/fs-extra": "11.0.1",
+    "@types/yargs": "17.0.24",
+    "esbuild": "0.18.19",
+    "fast-glob": "3.3.1",
+    "jest": "29.6.2",
+    "memfs": "4.2.1",
+    "typescript": "5.1.6"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}
