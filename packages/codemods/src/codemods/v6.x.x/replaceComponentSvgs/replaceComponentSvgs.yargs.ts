@@ -13,12 +13,14 @@ export const description =
 
 export const handler = () => {
   task('Replace Component Svgs', async ({ setOutput }: TaskInnerAPI) => {
+    const targetPaths = fg.sync('**/*.{js,jsx,tsx}', {
+      cwd: getPaths().web.src,
+      absolute: true,
+    })
+
     await runTransform({
       transformPath: path.join(__dirname, 'replaceComponentSvgs.js'),
-      targetPaths: fg.sync('**/*.{js,jsx,tsx}', {
-        cwd: getPaths().web.src,
-        absolute: true,
-      }),
+      targetPaths,
     })
 
     setOutput('All done! Run `yarn rw lint --fix` to prettify your code')
