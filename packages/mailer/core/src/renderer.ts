@@ -5,6 +5,7 @@ import type {
 } from './types'
 
 export abstract class AbstractMailRenderer {
+  // Render a template
   abstract render(
     template: unknown,
     options: MailRendererOptions<unknown>,

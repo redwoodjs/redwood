@@ -4,15 +4,16 @@ import {
   MailUtilities,
   MailRenderedContent,
   MailResult,
-  HandlerUtilities,
 } from '@redwoodjs/mailer-core'
 
 export type InMemoryMail = {
-  renderedText: MailRenderedContent['text']
-  renderedHTML: MailRenderedContent['html']
+  textContent: MailRenderedContent['text']
+  htmlContent: MailRenderedContent['html']
+  handler?: string | number | symbol
   handlerOptions?: unknown
+  renderer?: string | number | symbol
   rendererOptions?: unknown
-} & Omit<MailSendOptionsComplete, 'text' | 'html'>
+} & MailSendOptionsComplete
 
 export class InMemoryMailHandler extends AbstractMailHandler {
   public inbox: InMemoryMail[]
@@ -23,16 +24,18 @@ export class InMemoryMailHandler extends AbstractMailHandler {
   }
 
   send(
-    renderedContent: MailRenderedContent,
+    content: MailRenderedContent,
     sendOptions: MailSendOptionsComplete,
-    handlerOptions?: never,
-    utilities?: MailUtilities & HandlerUtilities
+    _handlerOptions?: never,
+    utilities?: MailUtilities
   ): MailResult | Promise<MailResult> {
     this.inbox.push({
       ...sendOptions,
-      renderedText: renderedContent.text,
-      renderedHTML: renderedContent.html,
-      handlerOptions,
+      textContent: content.text,
+      htmlContent: content.html,
+      handler: utilities?.handler,
+      handlerOptions: utilities?.handlerOptions,
+      renderer: utilities?.renderer,
       rendererOptions: utilities?.rendererOptions,
     })
 

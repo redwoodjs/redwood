@@ -2,12 +2,15 @@ import type { Logger } from '@redwoodjs/api/logger'
 
 import type {
   MailerConfig,
-  MailSendOptions,
+  MailSendWithoutRenderingOptions,
   MailHandlers,
   MailRenderers,
-  DefaultSendOptions,
+  MailSendOptions,
+  MailerDefaults,
+  MailerMode,
+  MailResult,
 } from './types'
-import { convertAddress, convertAddresses } from './utils'
+import { constructCompleteSendOptions, extractDefaults } from './utils'
 
 export class Mailer<
   THandlers extends MailHandlers,
@@ -19,21 +22,10 @@ export class Mailer<
 > {
   protected logger: Logger | typeof console
 
-  public mode: 'testing' | 'development' | 'production' = 'development'
+  public mode: MailerMode = 'development'
+  public defaults: MailerDefaults
   public handlers: THandlers
   public renderers: TRenderers
-
-  private defaults: Omit<DefaultSendOptions, 'from' | 'replyTo'> & {
-    from?: string
-    replyTo?: string
-  } = {
-    attachments: [],
-    bcc: [],
-    cc: [],
-    from: undefined,
-    headers: {},
-    replyTo: undefined,
-  }
 
   constructor(
     public config: MailerConfig<
@@ -45,140 +37,86 @@ export class Mailer<
       TDevelopmentHandler
     >
   ) {
-    // Config
-    this.handlers = this.config.handling.handlers
-    this.renderers = this.config.rendering.renderers
-
     // Logger
     this.logger = this.config.logger
       ? this.config.logger.child({ module: 'mailer' })
       : console
 
-    // Construct defaults from config
-    if (this.config.defaults !== undefined) {
-      if (this.config.defaults.attachments !== undefined) {
-        this.defaults.attachments = this.config.defaults.attachments
+    // Mode
+    this.mode = this.isTest()
+      ? 'test'
+      : this.isDevelopment()
+      ? 'development'
+      : 'production'
+
+    // Config
+    this.handlers = this.config.handling.handlers
+    this.renderers = this.config.rendering.renderers
+
+    // Extract defaults from config
+    this.defaults = extractDefaults(this.config.defaults ?? {})
+
+    // Validate handlers for test and development modes
+    const testHandlerKey = this.config.test?.handler
+    if (testHandlerKey === undefined) {
+      // TODO: Attempt to use a default in-memory handler if the required package is installed
+      //       otherwise default to null and log a warning
+      this.config.test = {
+        ...this.config.test,
+        handler: null,
       }
-      if (this.config.defaults.bcc !== undefined) {
-        this.defaults.bcc = convertAddresses(
-          Array.isArray(this.config.defaults.bcc)
-            ? this.config.defaults.bcc
-            : [this.config.defaults.bcc]
+    } else if (testHandlerKey === null) {
+      this.logger.warn(
+        'The test handler is null, this will prevent mail from being processed in test mode'
+      )
+    } else {
+      if (this.handlers[testHandlerKey] === undefined) {
+        throw new Error(
+          `The specified test handler '${testHandlerKey.toString()}' is not defined`
         )
       }
-      if (this.config.defaults.cc !== undefined) {
-        this.defaults.cc = convertAddresses(
-          Array.isArray(this.config.defaults.cc)
-            ? this.config.defaults.cc
-            : [this.config.defaults.cc]
+    }
+    const developmentHandlerKey = this.config.development?.handler
+    if (developmentHandlerKey === undefined) {
+      // TODO: Attempt to use a default studio handler if the required package is installed
+      //       otherwise default to null and log a warning
+      this.config.development = {
+        ...this.config.development,
+        handler: null,
+      }
+    } else if (developmentHandlerKey === null) {
+      this.logger.warn(
+        'The development handler is null, this will prevent mail from being processed in development mode'
+      )
+    } else {
+      if (this.handlers[developmentHandlerKey] === undefined) {
+        throw new Error(
+          `The specified development handler '${developmentHandlerKey.toString()}' is not defined`
         )
-      }
-      if (this.config.defaults.replyTo !== undefined) {
-        this.defaults.replyTo = convertAddress(this.config.defaults.replyTo)
-      }
-      if (this.config.defaults.from !== undefined) {
-        this.defaults.from = convertAddress(this.config.defaults.from)
-      }
-      if (this.config.defaults.headers !== undefined) {
-        this.defaults.headers = this.config.defaults.headers
       }
     }
 
-    // Validate default handlers
-    if (this.config.handling.default === undefined) {
-      this.logger.warn(
-        'No default handler configured, this will prevent mail from being sent when no handler is explicitly specified'
-      )
-    } else if (this.handlers[this.config.handling.default] === undefined) {
+    // Validate default handler and renderer
+    const defaultHandlerKey = this.config.handling.default
+    if (defaultHandlerKey === undefined) {
+      throw new Error('No default handler configured')
+    } else if (this.handlers[defaultHandlerKey] === undefined) {
       throw new Error(
-        `The specified default handler '${this.config.handling.default.toString()}' is not defined`
+        `The specified default handler '${defaultHandlerKey.toString()}' is not defined`
       )
     }
-    if (this.config.testHandler === undefined) {
-      this.logger.warn(
-        'No test handler configured, this will prevent mail from being sent in test mode'
-      )
-    } else if (this.handlers[this.config.testHandler] === undefined) {
+    const defaultRendererKey = this.config.rendering.default
+    if (defaultRendererKey === undefined) {
+      throw new Error('No default renderer configured')
+    } else if (this.renderers[defaultRendererKey] === undefined) {
       throw new Error(
-        `The specified test handler '${this.config.testHandler.toString()}' is not defined`
-      )
-    }
-    if (this.config.developmentHandler === undefined) {
-      this.logger.warn(
-        'No dev handler configured, this will prevent mail from being sent in development mode'
-      )
-    } else if (this.handlers[this.config.developmentHandler] === undefined) {
-      throw new Error(
-        `The specified dev handler '${this.config.developmentHandler.toString()}' is not defined`
+        `The specified default renderer '${defaultRendererKey.toString()}' is not defined`
       )
     }
 
     // Initial logging
-    this.mode = this.isTest()
-      ? 'testing'
-      : this.isDevelopment()
-      ? 'development'
-      : 'production'
-    this.logger.debug(
-      {
-        config: {
-          testHandler: this.config.testHandler,
-          developmentHandler: this.config.developmentHandler,
-          defaultHandler: this.config.handling.default,
-          defaults: this.config.defaults,
-        },
-        // handlers: Object.keys(this.handlers),
-      },
-      `Mailer initialized in ${this.mode} mode`
-    )
+    this.logger.debug({}, `Mailer initialized in ${this.mode} mode`)
   }
-
-  private isDevelopment() {
-    if (this.config.isDevelopment === undefined) {
-      // TODO: Ensure this is a sensible default
-      return process.env.NODE_ENV !== 'production'
-    }
-    if (typeof this.config.isDevelopment === 'boolean') {
-      return this.config.isDevelopment
-    }
-    if (typeof this.config.isDevelopment === 'function') {
-      return this.config.isDevelopment()
-    }
-    throw new Error('Invalid isDev configuration')
-  }
-
-  private isTest() {
-    if (this.config.isTest === undefined) {
-      // TODO: Ensure this is a sensible default
-      return process.env.NODE_ENV === 'test'
-    }
-    if (typeof this.config.isTest === 'boolean') {
-      return this.config.isTest
-    }
-    if (typeof this.config.isTest === 'function') {
-      return this.config.isTest()
-    }
-    throw new Error('Invalid isTest configuration')
-  }
-
-  getTestHandler() {
-    const handlerKey = this.config.testHandler
-    if (handlerKey === undefined) {
-      return undefined
-    }
-    return this.handlers[handlerKey]
-  }
-
-  getDevelopmentHandler() {
-    const handlerKey = this.config.developmentHandler
-    if (handlerKey === undefined) {
-      return undefined
-    }
-    return this.handlers[handlerKey]
-  }
-
-  // TODO: Add a renderAndSend method that combines the render and send methods
-  // TODO: Refactor the send method to not invoke the renderer directly
 
   async send<
     THandler extends keyof THandlers = TDefaultHandler,
@@ -188,119 +126,216 @@ export class Mailer<
     sendOptions: MailSendOptions<THandlers, THandler, TRenderers, TRenderer>,
     handlerOptions?: Parameters<THandlers[THandler]['send']>[2],
     rendererOptions?: Parameters<TRenderers[TRenderer]['render']>[1]
-  ) {
-    const handlerKey = sendOptions.handler ?? this.config.handling.default
+  ): Promise<MailResult> {
+    const handlerKeyForProduction =
+      sendOptions.handler ?? this.config.handling.default
+
+    let handlerKey: keyof THandlers | null | undefined = null
+    switch (this.mode) {
+      case 'test':
+        handlerKey = this.config.test?.handler
+        break
+      case 'development':
+        handlerKey = this.config.development?.handler
+        break
+      case 'production':
+        handlerKey = handlerKeyForProduction
+        break
+      default:
+        throw new Error(`Invalid mode '${this.mode}'`)
+    }
+
+    if (handlerKey === null) {
+      // Handler is null, which indicates a no-op
+      return {}
+    }
     if (handlerKey === undefined) {
       throw new Error('No handler specified and no default handler configured')
     }
-    let handler = this.handlers[handlerKey]
-    if (this.mode === 'testing') {
-      if (this.config.testHandler === undefined) {
-        return {}
-      }
-      handler = this.handlers[this.config.testHandler]
-    }
-    if (this.mode === 'development') {
-      if (this.config.developmentHandler === undefined) {
-        return {}
-      }
-      handler = this.handlers[this.config.developmentHandler]
-    }
+    const handler = this.handlers[handlerKey]
     if (handler === undefined) {
       throw new Error(`No handler found to match '${handlerKey.toString()}'`)
     }
 
-    const to = convertAddresses(
-      Array.isArray(sendOptions.to) ? sendOptions.to : [sendOptions.to]
+    const completedSendOptions = constructCompleteSendOptions(
+      sendOptions,
+      this.defaults
     )
-    if (to.length === 0) {
-      throw new Error('No to address specified')
-    }
 
-    const cc =
-      sendOptions.cc === undefined
-        ? this.defaults.cc
-        : convertAddresses(
-            Array.isArray(sendOptions.cc) ? sendOptions.cc : [sendOptions.cc]
-          )
-
-    const bcc =
-      sendOptions.bcc === undefined
-        ? this.defaults.bcc
-        : convertAddresses(
-            Array.isArray(sendOptions.bcc) ? sendOptions.bcc : [sendOptions.bcc]
-          )
-
-    const from =
-      sendOptions.from === undefined
-        ? this.defaults.from
-        : convertAddress(sendOptions.from)
-    if (from === undefined) {
-      throw new Error('No from address specified and no default configured')
-    }
-
-    const replyTo =
-      sendOptions.replyTo === undefined
-        ? this.defaults.replyTo
-        : convertAddress(sendOptions.replyTo)
-
-    const subject = sendOptions.subject
-    if (subject === undefined) {
-      throw new Error('No subject specified')
-    }
-
-    const headers = sendOptions.headers ?? this.defaults.headers
-    const attachments = sendOptions.attachments ?? this.defaults.attachments
-
-    // Render the mail using the renderer
-    const chosenRendererKey =
-      sendOptions.renderer ?? this.config.rendering.default
-    if (chosenRendererKey === undefined) {
+    const rendererKey = sendOptions.renderer ?? this.getDefaultRendererKey()
+    if (rendererKey === undefined) {
       throw new Error(
         'No renderer specified and no default renderer configured'
       )
     }
-    const chosenRenderer = this.renderers[chosenRendererKey]
-    if (chosenRenderer === undefined) {
-      throw new Error(
-        `No renderer found to match '${chosenRendererKey.toString()}'`
-      )
+    const renderer = this.renderers[rendererKey]
+    if (renderer === undefined) {
+      throw new Error(`No renderer found to match '${rendererKey.toString()}'`)
     }
 
     const defaultedRendererOptions = {
-      ...this.config.rendering.options?.[chosenRendererKey],
+      ...this.config.rendering.options?.[rendererKey],
       ...rendererOptions,
     }
-    const renderedContent = chosenRenderer.render(
+    const renderedContent = renderer.render(
       template,
       defaultedRendererOptions,
       {
         logger: this.logger,
-      }
-    )
-
-    // Send the mail using the handler
-    const result = await handler.send(
-      renderedContent,
-      {
-        renderer: chosenRendererKey,
-        handler: handlerKey,
-        to,
-        cc,
-        bcc,
-        from,
-        replyTo,
-        subject,
-        headers,
-        attachments,
-      },
-      handlerOptions,
-      {
-        logger: this.logger,
+        mode: this.mode,
+        renderer: rendererKey,
         rendererOptions: defaultedRendererOptions,
       }
     )
-    this.logger.debug({ result }, 'Mail sent')
+
+    const defaultedHandlerOptions = {
+      ...this.config.handling.options?.[handlerKeyForProduction],
+      ...handlerOptions,
+    }
+    const result = await handler.send(
+      renderedContent,
+      completedSendOptions,
+      defaultedHandlerOptions,
+      {
+        logger: this.logger,
+        mode: this.mode,
+        handler: handlerKeyForProduction,
+        handlerOptions: defaultedHandlerOptions,
+        renderer: rendererKey,
+        rendererOptions: defaultedRendererOptions,
+      }
+    )
+
     return result
+  }
+
+  async sendWithoutRendering<
+    THandler extends keyof THandlers = TDefaultHandler
+  >(
+    content: Parameters<THandlers[THandler]['send']>[0],
+    sendOptions: MailSendWithoutRenderingOptions<THandlers, THandler>,
+    handlerOptions?: Parameters<THandlers[THandler]['send']>[2]
+  ): Promise<MailResult> {
+    const handlerKeyForProduction =
+      sendOptions.handler ?? this.config.handling.default
+
+    let handlerKey: keyof THandlers | null | undefined = null
+    switch (this.mode) {
+      case 'test':
+        handlerKey = this.config.test?.handler
+        break
+      case 'development':
+        handlerKey = this.config.development?.handler
+        break
+      case 'production':
+        handlerKey = handlerKeyForProduction
+        break
+      default:
+        throw new Error(`Invalid mode '${this.mode}'`)
+    }
+
+    if (handlerKey === null) {
+      // Handler is null, which indicates a no-op
+      return {}
+    }
+    if (handlerKey === undefined) {
+      throw new Error('No handler specified and no default handler configured')
+    }
+    const handler = this.handlers[handlerKey]
+    if (handler === undefined) {
+      throw new Error(`No handler found to match '${handlerKey.toString()}'`)
+    }
+
+    const completedSendOptions = constructCompleteSendOptions(
+      sendOptions,
+      this.defaults
+    )
+
+    const defaultedHandlerOptions = {
+      ...this.config.handling.options?.[handlerKeyForProduction],
+      ...handlerOptions,
+    }
+    const result = await handler.send(
+      content,
+      completedSendOptions,
+      defaultedHandlerOptions,
+      {
+        logger: this.logger,
+        mode: this.mode,
+        handler: handlerKeyForProduction,
+        handlerOptions: defaultedHandlerOptions,
+      }
+    )
+
+    return result
+  }
+
+  private isDevelopment() {
+    if (this.config.development?.when === undefined) {
+      // TODO: Ensure this is a sensible default
+      return process.env.NODE_ENV !== 'production'
+    }
+    if (typeof this.config.development?.when === 'boolean') {
+      return this.config.development?.when
+    }
+    if (typeof this.config.development?.when === 'function') {
+      return this.config.development?.when()
+    }
+    throw new Error("Invalid 'when' configuration for development mode")
+  }
+
+  private isTest() {
+    if (this.config.test?.when === undefined) {
+      // TODO: Ensure this is a sensible default
+      return process.env.NODE_ENV === 'test'
+    }
+    if (typeof this.config.test?.when === 'boolean') {
+      return this.config.test?.when
+    }
+    if (typeof this.config.test?.when === 'function') {
+      return this.config.test?.when()
+    }
+    throw new Error("Invalid 'when' configuration for test mode")
+  }
+
+  getTestHandler() {
+    const handlerKey = this.config.test?.handler
+    if (handlerKey === undefined || handlerKey === null) {
+      return handlerKey
+    }
+    return this.handlers[handlerKey]
+  }
+
+  getDevelopmentHandler() {
+    const handlerKey = this.config.development?.handler
+    if (handlerKey === undefined || handlerKey === null) {
+      return handlerKey
+    }
+    return this.handlers[handlerKey]
+  }
+
+  getDefaultProductionHandler() {
+    return this.handlers[this.config.handling.default]
+  }
+
+  getDefaultHandler(mode: MailerMode = this.mode) {
+    if (mode === 'test') {
+      return this.getTestHandler()
+    }
+    if (mode === 'development') {
+      return this.getDevelopmentHandler()
+    }
+    if (mode === 'production') {
+      return this.getDefaultProductionHandler()
+    }
+    throw new Error(`Invalid mode '${mode}'`)
+  }
+
+  getDefaultRenderer() {
+    return this.renderers[this.config.rendering.default]
+  }
+
+  protected getDefaultRendererKey() {
+    return this.config.rendering.default
   }
 }

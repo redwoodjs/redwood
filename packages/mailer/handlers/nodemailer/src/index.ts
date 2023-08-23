@@ -27,7 +27,7 @@ export class NodemailerMailHandler extends AbstractMailHandler {
     )
   }
 
-  // TODO: Ensure that handlerOptions are merged with generalOptions where appropriate
+  // TODO: This would mean handlerOptions take precedence over sendOptions
   async send(
     renderedContent: MailRenderedContent,
     sendOptions: MailSendOptionsComplete,

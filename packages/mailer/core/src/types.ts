@@ -3,6 +3,9 @@ import type { Logger } from '@redwoodjs/api/logger'
 import type { AbstractMailHandler } from './handler'
 import type { AbstractMailRenderer } from './renderer'
 
+// TODO: Some properties we have marked as unknown or similar are actually expected to be spreadable
+//       so we should probably attempt narrow the type to ensure that remains possible
+
 export type MailRenderedContent = {
   html: string
   text: string
@@ -15,12 +18,6 @@ export type MailRendererOptions<TRenderOutputFormats> = {
   outputFormat?: TRenderOutputFormats
   [key: string]: unknown
 }
-
-// Basically one of or both of text  and html
-export type MailRenderResult =
-  | { text: string; html?: string }
-  | { text?: string; html: string }
-  | { text: string; html: string }
 
 export type DefaultHandlerOptions<THandlers extends MailHandlers> = {
   [K in keyof THandlers]?: Parameters<THandlers[K]['send']>[2]
@@ -57,6 +54,14 @@ export type MailRenderersOptions<
   options: DefaultRendererOptions<TRenderers>
 }
 
+export interface ModeHandlerOptions<
+  THandlers extends MailHandlers,
+  TModeHandler extends keyof THandlers
+> {
+  handler?: TModeHandler | null
+  when?: boolean | ((...args: any[]) => boolean)
+}
+
 export interface MailerConfig<
   THandlers extends MailHandlers,
   TDefaultHandler extends keyof THandlers,
@@ -66,28 +71,25 @@ export interface MailerConfig<
   TDevelopmentHandler extends keyof THandlers
 > {
   handling: MailHandlersOptions<THandlers, TDefaultHandler>
+
+  // TODO: Allow rendering to be completely optional?
   rendering: MailRenderersOptions<TRenderers, TDefaultRenderer>
 
   defaults?: Partial<DefaultSendOptions>
 
-  isDevelopment?: boolean | ((...args: any[]) => boolean)
-  developmentHandler?: TDevelopmentHandler
+  development?: ModeHandlerOptions<THandlers, TDevelopmentHandler>
 
-  isTest?: boolean | ((...args: any[]) => boolean)
-  testHandler?: TTestHandler
+  test?: ModeHandlerOptions<THandlers, TTestHandler>
 
   logger?: Logger
 }
 
 export type MailAddress = string | { name?: string; address: string }
 
-export interface MailSendOptions<
+export interface MailSendWithoutRenderingOptions<
   THandlers,
-  THandler extends keyof THandlers,
-  TRenderers,
-  TRenderer extends keyof TRenderers
+  THandler extends keyof THandlers
 > {
-  renderer?: TRenderer | keyof TRenderers
   handler?: THandler | keyof THandlers
 
   to: MailAddress | MailAddress[]
@@ -104,17 +106,22 @@ export interface MailSendOptions<
   attachments?: MailAttachment[]
 }
 
+export interface MailSendOptions<
+  THandlers,
+  THandler extends keyof THandlers,
+  TRenderers,
+  TRenderer extends keyof TRenderers
+> extends MailSendWithoutRenderingOptions<THandlers, THandler> {
+  renderer?: TRenderer | keyof TRenderers
+}
+
 export type MailAttachment = {
   filename?: string
   path?: string
   content?: string | Buffer
 }
 
-// This is easier to work with inside providers whereas SendOptions is better for parameters to user facing functions
 export type MailSendOptionsComplete = {
-  renderer: string | number | symbol
-  handler: string | number | symbol
-
   to: string[]
   cc: string[]
   bcc: string[]
@@ -136,4 +143,16 @@ export type MailResult = {
 
 export type MailUtilities = {
   logger?: Logger | Console
+  mode?: MailerMode
+  handler?: string | number | symbol
+  handlerOptions?: unknown
+  renderer?: string | number | symbol
+  rendererOptions?: unknown
 }
+
+export type MailerDefaults = Omit<DefaultSendOptions, 'from' | 'replyTo'> & {
+  from?: string
+  replyTo?: string
+}
+
+export type MailerMode = 'test' | 'development' | 'production'
