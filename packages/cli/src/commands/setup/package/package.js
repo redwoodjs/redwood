@@ -2,7 +2,7 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-export const command = 'rwx <npm-package>'
+export const command = 'package <npm-package>'
 export const description = 'Execute functionality from an NPM package'
 
 export const builder = (yargs) => {
@@ -34,9 +34,9 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: 'rwx',
+    command: 'setup package',
   })
 
-  const { handler } = await import('./rwxHandler.js')
+  const { handler } = await import('./packageHandler.js')
   return handler(options)
 }
