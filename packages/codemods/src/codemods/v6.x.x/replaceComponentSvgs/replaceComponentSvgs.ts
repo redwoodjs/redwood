@@ -110,9 +110,11 @@ export default async function transform(file: FileInfo, api: API) {
       }
 
       // Find the JSX elements that use the default import specifier
-      // or if they've been exported
+      // e,g, <MySvg />
       const svgsUsedAsComponent = root.findJSXElements(svgName)
 
+      // Used as a render prop
+      // <Component icon={MySvg} />
       const svgsUsedAsRenderProp = root.find(j.JSXExpressionContainer, {
         expression: {
           type: 'Identifier',
@@ -120,9 +122,8 @@ export default async function transform(file: FileInfo, api: API) {
         },
       })
 
-      // All the svgs either:
-      // a) exported from another file e.g. export { default as X } from './X.svg'
-      // b) imported from another file e.g. import { X } from './X.svg', then exported export { X }
+      // a) exported from another file e.g. export { default as MySvg } from './X.svg'
+      // b) imported from another file e.g. import MySvg from './X.svg', then exported export { MySvg }
       const svgsReexported = root.find(j.ExportSpecifier).filter((path) => {
         return (
           path.value.local?.name === svgName ||
