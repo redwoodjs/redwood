@@ -49,7 +49,18 @@ export default async function transform(file: FileInfo, api: API) {
   // Find all import declarations with "*.svg" import
   const svgImports = root.find(j.ImportDeclaration).filter((path) => {
     const importPath = path.node.source.value as string
-    return importPath.includes('.svg')
+    return importPath.endsWith('.svg')
+  })
+
+  // This is if you directly export from svg:
+  // e.g. export { default as X } from './X.svg'
+  const svgNamedExports = root.find(j.ExportNamedDeclaration).filter((path) => {
+    const source = path.value.source
+    return Boolean(
+      source &&
+        typeof source.value === 'string' &&
+        source.value.endsWith('.svg')
+    )
   })
 
   const svgsToConvert: Array<{
@@ -57,60 +68,81 @@ export default async function transform(file: FileInfo, api: API) {
     importSourcePath: StringLiteral
   }> = []
 
+  const importOrExportStatementsWithSvg = [
+    ...svgImports.paths(),
+    ...svgNamedExports.paths(),
+  ]
   // Process each import declaration
-  svgImports.forEach((importDeclaration) => {
-    const importSpecifiers = importDeclaration.node.specifiers
+  importOrExportStatementsWithSvg.forEach((declaration) => {
+    const specifiers = declaration.node.specifiers
 
     // Process each import specifier
-    importSpecifiers?.forEach((importSpecifier) => {
-      if (importSpecifier.type === 'ImportDefaultSpecifier') {
-        if (!importSpecifier.local) {
+    specifiers?.forEach((specifier) => {
+      // The name of the improted SVG, assigned based on whether you are
+      // importing or exporting directly
+      let svgName = ''
+
+      if (specifier.type === 'ExportSpecifier') {
+        svgName = specifier.exported.name
+      } else if (specifier.type === 'ImportDefaultSpecifier') {
+        if (!specifier.local) {
           // Un-freaking-likely, skip if it happens
           return
         }
 
-        const importName = importSpecifier.local.name
-
-        const importPath = importDeclaration.node.source.value as string
-        const currentFolder = path.dirname(file.path)
-
-        let pathToSvgFile = path.resolve(currentFolder, importPath)
-
-        if (importPath.startsWith('src/')) {
-          pathToSvgFile = importPath.replace('src/', getPaths().web.src + '/')
-        }
-
-        // Find the JSX elements that use the default import specifier
-        // or if they've been exported
-        const svgsUsedAsComponent = root.findJSXElements(importName)
-
-        const svgsUsedAsRenderProp = root.find(j.JSXExpressionContainer, {
-          expression: {
-            type: 'Identifier',
-            name: importName,
-          },
-        })
-
-        const svgsReexported = root.find(j.ExportSpecifier, {
-          local: {
-            name: importName,
-          },
-        })
-
-        // Concat all of them, and loop over once
-        const selectedSvgs = [
-          ...svgsReexported.paths(),
-          ...svgsUsedAsComponent.paths(),
-          ...svgsUsedAsRenderProp.paths(),
-        ]
-
-        selectedSvgs.forEach(() => {
-          svgsToConvert.push({
-            filePath: pathToSvgFile,
-            importSourcePath: importDeclaration.node.source as StringLiteral, // imports are all strings in this case
-          })
-        })
+        svgName = specifier.local.name
       }
+
+      const sourcePath = declaration.node.source?.value as string
+
+      if (!sourcePath) {
+        // Note sure how this is possible.... but TS tells me to do this
+        // I guess because most export statements don't have a source?
+        return
+      }
+
+      const currentFolder = path.dirname(file.path)
+
+      let pathToSvgFile = path.resolve(currentFolder, sourcePath)
+
+      if (sourcePath.startsWith('src/')) {
+        pathToSvgFile = sourcePath.replace('src/', getPaths().web.src + '/')
+      }
+
+      // Find the JSX elements that use the default import specifier
+      // or if they've been exported
+      const svgsUsedAsComponent = root.findJSXElements(svgName)
+
+      const svgsUsedAsRenderProp = root.find(j.JSXExpressionContainer, {
+        expression: {
+          type: 'Identifier',
+          name: svgName,
+        },
+      })
+
+      // All the svgs either:
+      // a) exported from another file e.g. export { default as X } from './X.svg'
+      // b) imported from another file e.g. import { X } from './X.svg', then exported export { X }
+      const svgsReexported = root.find(j.ExportSpecifier).filter((path) => {
+        return (
+          path.value.local?.name === svgName ||
+          path.value.exported.name === svgName
+        )
+      })
+
+      // Concat all of them, and loop over once
+      const selectedSvgs = [
+        ...svgsUsedAsComponent.paths(),
+        ...svgsUsedAsRenderProp.paths(),
+        ...svgsReexported.paths(),
+      ]
+
+      selectedSvgs.forEach(() => {
+        svgsToConvert.push({
+          filePath: pathToSvgFile,
+          importSourcePath: declaration.node.source as StringLiteral, // imports are all strings in this case
+        })
+      })
     })
   })
 
