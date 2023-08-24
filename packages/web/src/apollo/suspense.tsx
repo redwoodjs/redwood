@@ -220,12 +220,6 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
     globalThis?.__REDWOOD__APOLLO_STATE ?? {}
   )
 
-  let useQueryHookSwap = useQuery
-
-  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
-    useQueryHookSwap = useSuspenseQuery as unknown as typeof useQuery
-  }
-
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
@@ -235,10 +229,10 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
         logLevel={logLevel}
       >
         <GraphQLHooksProvider
-          // @MARK 👇 swapped useQuery for useSuspenseQuery here
-          // Note: For Apollo Client 3.8.1 compatibility, I removed
-          // useSuspenseQuery and reverted to useQuery
-          useQuery={useQueryHookSwap}
+          // @MARK 👇 swapped useQuery for useSuspense query here
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          useQuery={useSuspenseQuery}
           useMutation={useMutation}
           useSubscription={useSubscription}
         >
