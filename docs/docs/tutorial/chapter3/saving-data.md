@@ -1300,45 +1300,6 @@ That's a lot of references to `email` so let's break them down:
 
 So when `createContact` is called it will first validate the inputs and only if no errors are thrown will it continue to actually create the record in the database.
 
-Right now we won't even be able to test our validation on the server because we're already checking that the input is formatted like an email address with the `validation` prop in `<TextField>`. Let's temporarily remove it so that the bad data will be sent up to the server:
-
-<Tabs groupId="js-ts">
-<TabItem value="js" label="JavaScript">
-
-```diff title="web/src/pages/ContactPage/ContactPage.js"
- <TextField
-   name="email"
-   validation={{
-     required: true,
--    pattern: {
--      value: /^[^@]+@[^.]+\..+$/,
--      message: 'Please enter a valid email address',
--    },
-   }}
-   errorClassName="error"
- />
-```
-
-</TabItem>
-<TabItem value="ts" label="TypeScript">
-
-```diff title="web/src/pages/ContactPage/ContactPage.tsx"
- <TextField
-   name="email"
-   validation={{
-     required: true,
--    pattern: {
--      value: /^[^@]+@[^.]+\..+$/,
--      message: 'Please enter a valid email address',
--    },
-   }}
-   errorClassName="error"
- />
-```
-
-</TabItem>
-</Tabs>
-
 Remember when we said that `<Form>` had one more trick up its sleeve? Here it comes!
 
 Add a `<FormError>` component, passing the `error` constant we got from `useMutation` and a little bit of styling to `wrapperStyle` (don't forget the `import`). We'll also pass `error` to `<Form>` so it can setup a context:
@@ -1535,7 +1496,7 @@ export default ContactPage
 </TabItem>
 </Tabs>
 
-Now submit a message with an invalid email address:
+Now submit a message with an invalid email address that can fool the client side validator (`rob cameron @ redwood.com`):
 
 ![Email error from the server side](https://user-images.githubusercontent.com/300/158897801-8a3f7ae8-6e67-4fc0-b828-3095c264507e.png)
 
@@ -1794,12 +1755,6 @@ const [create, { loading, error }] = useMutation<
 
 </TabItem>
 </Tabs>
-
-:::caution
-
-You can put the email validation back into the `<TextField>` now, but you should leave the server validation in place, just in case.
-
-:::
 
 Here's the entire page:
 
