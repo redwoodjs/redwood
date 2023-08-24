@@ -9,7 +9,7 @@ import { print } from 'graphql'
 import { createClient, ClientOptions, Client } from 'graphql-sse'
 interface SSELinkOptions extends Partial<ClientOptions> {
   url: string
-  auth: { authProviderType: string; tokenFn: Promise<null | string> }
+  auth: { authProviderType: string; tokenFn: () => Promise<null | string> }
   httpLinkConfig?: HttpOptions
   headers?: Record<string, string>
 }
@@ -76,7 +76,7 @@ export class SSELink extends ApolloLink {
     this.client = createClient({
       url,
       headers: async () => {
-        const token = await auth.tokenFn
+        const token = await auth.tokenFn()
 
         // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
         if (!token) {

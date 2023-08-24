@@ -207,7 +207,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     },
     new SSELink({
       url: uri,
-      auth: { authProviderType, tokenFn: getToken() },
+      auth: { authProviderType, tokenFn: getToken },
       httpLinkConfig,
       headers,
     }),
