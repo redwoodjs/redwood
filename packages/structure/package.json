@@ -39,7 +39,7 @@
     "core-js": "3.32.0",
     "deepmerge": "4.3.1",
     "dotenv-defaults": "5.0.2",
-    "enquirer": "2.3.6",
+    "enquirer": "2.4.1",
     "fast-glob": "3.3.1",
     "graphql": "16.7.1",
     "lazy-get-decorator": "2.2.1",

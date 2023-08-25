@@ -7922,7 +7922,7 @@ __metadata:
     crypto-js: 4.1.1
     decamelize: 5.0.1
     dotenv-defaults: 5.0.2
-    enquirer: 2.3.6
+    enquirer: 2.4.1
     envinfo: 7.9.0
     execa: 5.1.1
     fast-glob: 3.3.1
@@ -8398,7 +8398,7 @@ __metadata:
     core-js: 3.32.0
     deepmerge: 4.3.1
     dotenv-defaults: 5.0.2
-    enquirer: 2.3.6
+    enquirer: 2.4.1
     fast-glob: 3.3.1
     graphql: 16.7.1
     jest: 29.6.2
@@ -8530,7 +8530,7 @@ __metadata:
   dependencies:
     boxen: 5.1.2
     chalk: 4.1.2
-    enquirer: 2.3.6
+    enquirer: 2.4.1
     esbuild: 0.18.19
     jest: 29.6.2
     stdout-update: 1.6.8
@@ -16967,7 +16967,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enquirer@npm:2.3.6, enquirer@npm:^2.3.6, enquirer@npm:~2.3.6":
+"enquirer@npm:2.4.1, enquirer@npm:^2.3.6":
+  version: 2.4.1
+  resolution: "enquirer@npm:2.4.1"
+  dependencies:
+    ansi-colors: ^4.1.1
+    strip-ansi: ^6.0.1
+  checksum: 43850479d7a51d36a9c924b518dcdc6373b5a8ae3401097d336b7b7e258324749d0ad37a1fcaa5706f04799baa05585cd7af19ebdf7667673e7694435fcea918
+  languageName: node
+  linkType: hard
+
+"enquirer@npm:~2.3.6":
   version: 2.3.6
   resolution: "enquirer@npm:2.3.6"
   dependencies:

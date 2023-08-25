@@ -57,7 +57,7 @@
     "crypto-js": "4.1.1",
     "decamelize": "5.0.1",
     "dotenv-defaults": "5.0.2",
-    "enquirer": "2.3.6",
+    "enquirer": "2.4.1",
     "envinfo": "7.9.0",
     "execa": "5.1.1",
     "fast-glob": "3.3.1",
