@@ -42,7 +42,7 @@ export type MailHandlersOptions<
 > = {
   handlers: THandlers
   default: TDefaultHandler | keyof THandlers
-  options: DefaultHandlerOptions<THandlers>
+  options?: DefaultHandlerOptions<THandlers>
 }
 
 export type MailRenderersOptions<
@@ -51,7 +51,7 @@ export type MailRenderersOptions<
 > = {
   renderers: TRenderers
   default: TDefaultRenderer | keyof TRenderers
-  options: DefaultRendererOptions<TRenderers>
+  options?: DefaultRendererOptions<TRenderers>
 }
 
 export interface ModeHandlerOptions<
