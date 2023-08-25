@@ -1,6 +1,6 @@
 {
-  "name": "studio-web",
   "private": true,
+  "name": "@redwoodjs/studio-web",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
