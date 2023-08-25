@@ -4,6 +4,7 @@ import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import { parseDatamodel } from '@redwoodjs/record'
 
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
@@ -66,7 +67,6 @@ export const handler = async ({ force, ...args }) => {
       {
         title: 'Parsing datamodel, generating api/src/models/index.js...',
         task: async () => {
-          const { parseDatamodel } = await import('@redwoodjs/record')
           await parseDatamodel()
         },
       },
