@@ -230,6 +230,8 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
       >
         <GraphQLHooksProvider
           // @MARK 👇 swapped useQuery for useSuspense query here
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
           useQuery={useSuspenseQuery}
           useMutation={useMutation}
           useSubscription={useSubscription}
