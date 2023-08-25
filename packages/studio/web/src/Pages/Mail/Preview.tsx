@@ -97,14 +97,14 @@ function MailPreview() {
   useEffect(() => {
     if (renderers.length === 1) {
       setSelectedRendererId(renderers[0].id)
-    } else {
+    } else if (selectedRendererId < 1) {
       // Get the default renderer
       const defaultRenderer = renderers.find((r) => r.isDefault)
       if (defaultRenderer) {
         setSelectedRendererId(defaultRenderer.id)
       }
     }
-  }, [renderers])
+  }, [renderers, selectedRendererId])
 
   useEffect(() => {
     if (selectedTemplateId > 0) {
@@ -231,14 +231,15 @@ function MailPreview() {
             {/* TODO: Add renderer options modal? */}
           </Col>
           {selectedComponentId > 0 &&
-            components.find((c) => c.id === selectedComponentId) && (
+            components.find((c) => c.id === selectedComponentId)
+              ?.propsTemplate && (
               <Col numColSpan={1} numColSpanSm={3} numColSpanLg={3}>
                 <Title>Props</Title>
                 <textarea
                   className="w-full h-24"
                   placeholder={
                     components.find((c) => c.id === selectedComponentId)
-                      ?.propsTemplate ?? ''
+                      ?.propsTemplate
                   }
                   onChange={(e) => setPropsJSON(e.target.value)}
                 />

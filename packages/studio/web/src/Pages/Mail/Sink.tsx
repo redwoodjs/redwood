@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer'
+
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { gql, useQuery } from '@apollo/client'

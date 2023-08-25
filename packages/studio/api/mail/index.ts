@@ -27,8 +27,6 @@ export function startServer() {
     authOptional: true,
     hideSTARTTLS: true,
     onData(stream, session, callback) {
-      // NOTE: _session is what contains the envelope
-      console.log('Received mail')
       simpleMailParser(stream, {}, async (err, mail) => {
         if (err) {
           console.error('Error parsing mail:')
@@ -54,40 +52,48 @@ export async function stopServer() {
 }
 
 export function registerMailRelatedWatchers() {
-  const mailerFilePath = path.join(getPaths().api.dist, 'lib', 'mailer.js')
-  const mailerWatcher = chokidar.watch(mailerFilePath, {
+  // NOTE: So we clear the dist directory on each build so for now I'm just going to
+  //       watch the dist directory and when it changes I'll reload the mailer and
+  //       mail templates. I would bet this is not ideal in terms of performance.
+
+  const distWatcher = chokidar.watch('**/*.*', {
+    cwd: getPaths().api.dist,
+    ignoreInitial: true,
     usePolling: true,
     interval: 500,
   })
   process.on('SIGINT', async () => {
-    await mailerWatcher.close()
+    await distWatcher.close()
   })
 
-  const listenOnEventsForMailer = ['ready', 'add', 'change']
-  for (let i = 0; i < listenOnEventsForMailer.length; i++) {
-    mailerWatcher.on(listenOnEventsForMailer[i], async () => {
-      await updateMailRenderers(mailerFilePath)
+  // I had to turn on polling to get the watcher to work so now I'm not sure this
+  // debounce is necessary - especially since the debounce is shorter than the poll
+  // interval. I'm going to leave it for now.
+  let debounceTimer: NodeJS.Timeout | undefined = undefined
+  const listenOnEventsForDist = ['ready', 'add', 'change']
+  for (let i = 0; i < listenOnEventsForDist.length; i++) {
+    distWatcher.on(listenOnEventsForDist[i], async () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer)
+      }
+      debounceTimer = setTimeout(async () => {
+        await updateMailAnalysis()
+      }, 250)
     })
   }
+}
 
-  // FIXME: This fires N times for N files in the mail directory
-  const mailTemplateDirPath = path.join(getPaths().api.dist, 'mail')
-  const mailTemplatewatcher = chokidar.watch(
-    path.join(mailTemplateDirPath, '**/*.js'),
-    {
-      usePolling: true,
-      interval: 500,
-    }
-  )
-  process.on('SIGINT', async () => {
-    await mailTemplatewatcher.close()
-  })
-
-  const listenOnEventsForMailTemplate = ['ready', 'add', 'change']
-  for (let i = 0; i < listenOnEventsForMailTemplate.length; i++) {
-    mailTemplatewatcher.on(listenOnEventsForMailTemplate[i], async () => {
-      await updateMailTemplates()
-    })
+async function updateMailAnalysis() {
+  console.log('Reanalysing mailer and mail templates...')
+  try {
+    await updateMailRenderers()
+    await updateMailTemplates()
+  } catch (error) {
+    console.error('Error updating mailer and mail templates:')
+    console.error(error)
+    console.error(
+      'You may need to rebuild your redwood app or restart the studio'
+    )
   }
 }
 
@@ -133,23 +139,61 @@ export async function updateMailTemplates() {
   for (let i = 0; i < srcFiles.length; i++) {
     const nameWithExt = path.basename(srcFiles[i])
     const name = nameWithExt.substring(0, nameWithExt.lastIndexOf('.'))
-    await db.get(
-      `INSERT OR IGNORE INTO mail_template (name, path, updated_at) VALUES (?, ?, ?);`,
-      [name, srcFiles[i], Date.now()]
+
+    const existingTemplate = await db.get(
+      `SELECT id FROM mail_template WHERE path = ?;`,
+      srcFiles[i]
     )
-    const templateId = (
-      await db.get(`SELECT id FROM mail_template WHERE path = ?;`, srcFiles[i])
-    )['id']
+    if (existingTemplate) {
+      // Update the values
+      await db.run(
+        `UPDATE mail_template SET name = ?, updated_at = ? WHERE id = ?;`,
+        [name, Date.now(), existingTemplate.id]
+      )
+    } else {
+      // Insert the values
+      await db.run(
+        `INSERT INTO mail_template (name, path, updated_at) VALUES (?, ?, ?);`,
+        [name, srcFiles[i], Date.now()]
+      )
+    }
+
+    const templateId =
+      existingTemplate?.id ??
+      (
+        await db.get(
+          `SELECT id FROM mail_template WHERE path = ?;`,
+          srcFiles[i]
+        )
+      )?.id
 
     // Get the components from the AST of the src file
     const components = getMailTemplateComponents(srcFiles[i])
 
     // Insert the components
     for (let j = 0; j < components.length; j++) {
-      await db.run(
-        `INSERT OR REPLACE INTO mail_template_component (mail_template_id, name, props_template) VALUES (?, ?, ?);`,
-        [templateId, components[j].name, components[j].propsTemplate]
+      const existingComponent = await db.get(
+        `SELECT id FROM mail_template_component WHERE mail_template_id = ? AND name = ?;`,
+        [templateId, components[j].name]
       )
+      if (existingComponent) {
+        // Update the values
+        await db.run(
+          `UPDATE mail_template_component SET props_template = ?, updated_at = ? WHERE id = ?;`,
+          [components[j].propsTemplate, Date.now(), existingComponent.id]
+        )
+      } else {
+        // Insert the values
+        await db.run(
+          `INSERT INTO mail_template_component (mail_template_id, name, props_template, updated_at) VALUES (?, ?, ?, ?);`,
+          [
+            templateId,
+            components[j].name,
+            components[j].propsTemplate,
+            Date.now(),
+          ]
+        )
+      }
     }
 
     // Delete any components that are no longer in the src file
@@ -160,6 +204,7 @@ export async function updateMailTemplates() {
       [templateId, ...components.map((c) => c.name)]
     )
   }
+  console.log(` - Analysed ${srcFiles.length} mail templates`)
 
   // Delete any mail template components that no longer have a corresponding mail template
   await db.run(
@@ -168,7 +213,6 @@ export async function updateMailTemplates() {
 }
 
 function getMailTemplateComponents(templateFilePath: string) {
-  console.log('getMailTemplateComponents', templateFilePath)
   const ast = swc.parseFileSync(templateFilePath, {
     syntax: templateFilePath.endsWith('.js') ? 'ecmascript' : 'typescript',
     tsx: templateFilePath.endsWith('.tsx') || templateFilePath.endsWith('.jsx'),
@@ -181,10 +225,28 @@ function getMailTemplateComponents(templateFilePath: string) {
     return node.type === 'ExportDeclaration'
   })
   for (let i = 0; i < exportedComponents.length; i++) {
-    // TODO: Extract the "props_template" from the AST
+    let propsTemplate = null
+    const hasParams = exportedComponents[i].declaration.params.length > 0
+    if (hasParams) {
+      propsTemplate = 'Provide your props here as JSON'
+      try {
+        const param = exportedComponents[i].declaration.params[0]
+        switch (param.pat.type) {
+          case 'ObjectPattern':
+            propsTemplate = `{${param.pat.properties
+              .map((p: any) => {
+                return `\n  "${p.key.value}": ?`
+              })
+              .join(',')}\n}`
+            break
+        }
+      } catch (_error) {
+        // Ignore for now
+      }
+    }
     components.push({
       name: exportedComponents[i].declaration?.identifier?.value ?? 'Unknown',
-      propsTemplate: '{}',
+      propsTemplate,
     })
   }
 
@@ -195,8 +257,10 @@ function getMailTemplateComponents(templateFilePath: string) {
   return components
 }
 
-export async function updateMailRenderers(mailerFilePath: string) {
+export async function updateMailRenderers() {
   try {
+    const mailerFilePath = path.join(getPaths().api.dist, 'lib', 'mailer.js')
+
     // This is not particularly memory efficient, it'll grow each time the mailer is reloaded
     // I do not currently believe there is a way to invalidate the module load cache
     const suffix = `studio_${Date.now()}`
@@ -216,16 +280,28 @@ export async function updateMailRenderers(mailerFilePath: string) {
       `
     await db.run(deleteSql, renderers)
 
-    // Insert any renderers that are not already in the mailer
-    const insertSql = `
-        INSERT OR IGNORE INTO mail_renderer (name, is_default, updated_at) VALUES (?, ?, ?);
-      `
     for (let i = 0; i < renderers.length; i++) {
-      await db.run(insertSql, [
-        renderers[i],
-        renderers[i] === defaultRenderer ? 1 : 0,
-        Date.now(),
-      ])
+      const existingRenderer = await db.get(
+        `SELECT id FROM mail_renderer WHERE name = ?;`,
+        renderers[i]
+      )
+      if (existingRenderer) {
+        // Update the values
+        await db.run(
+          `UPDATE mail_renderer SET is_default = ?, updated_at = ? WHERE id = ?;`,
+          [
+            renderers[i] === defaultRenderer ? 1 : 0,
+            Date.now(),
+            existingRenderer.id,
+          ]
+        )
+      } else {
+        // Insert the values
+        await db.run(
+          `INSERT INTO mail_renderer (name, is_default, updated_at) VALUES (?, ?, ?);`,
+          [renderers[i], renderers[i] === defaultRenderer ? 1 : 0, Date.now()]
+        )
+      }
     }
   } catch (error) {
     console.error('Error reloading mailer:')

@@ -123,7 +123,7 @@ export async function getRenderedMail(
     const props = propsJSON ? JSON.parse(propsJSON) : {}
     const renderResult = await mailer.renderers[renderer.name].render(
       Component(props),
-      {}
+      {} // TODO: We need a way for the user to specify the render options
     )
 
     return {
