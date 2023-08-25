@@ -1,13 +1,3 @@
-# Mailer - Providers - Studio
+# Mailer - Renderer - React Email
 
 **WIP**: This package is still a work in progress.
-
-## Dependency graphs
-
-### src
-
-![src](./dependencyGraph.src.svg)
-
-### dist
-
-![dist](./dependencyGraph.dist.svg)
