@@ -7,9 +7,9 @@ import execa from 'execa'
 import { handler } from '../packageHandler'
 
 jest.mock('@redwoodjs/project-config', () => {
-  const path = require('path')
   return {
     getPaths: () => {
+      const path = require('path')
       return {
         base: path.join('mocked', 'project'),
       }

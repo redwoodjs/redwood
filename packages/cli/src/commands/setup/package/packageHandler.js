@@ -161,34 +161,44 @@ export async function handler({ npmPackage, force, options }) {
     console.log(
       `The latest version compatible with your project is ${latestCompatibleVersion}.`
     )
-    const prompt = new Select({
-      name: 'versionDecision',
-      message: 'What would you like to do?',
-      choices: [
-        {
-          name: 'useLatestCompatibleVersion',
-          message: `Use the latest compatible version of ${latestCompatibleVersion}`,
-        },
-        {
-          name: 'usePreferredVersion',
-          message: `Continue anyway with version ${preferredVersion}`,
-        },
-        {
-          name: 'cancel',
-          message: 'Cancel',
-        },
-      ],
-    })
-    const promptResult = await prompt.run()
-    if (promptResult === 'cancel') {
+
+    try {
+      const prompt = new Select({
+        name: 'versionDecision',
+        message: 'What would you like to do?',
+        choices: [
+          {
+            name: 'useLatestCompatibleVersion',
+            message: `Use the latest compatible version of ${latestCompatibleVersion}`,
+          },
+          {
+            name: 'usePreferredVersion',
+            message: `Continue anyway with version ${preferredVersion}`,
+          },
+          {
+            name: 'cancel',
+            message: 'Cancel',
+          },
+        ],
+      })
+      const promptResult = await prompt.run()
+      if (promptResult === 'cancel') {
+        // TODO: Confirm that this is the right exit code in this case?
+        process.exitCode = 1
+        return
+      }
+      if (promptResult === 'useLatestCompatibleVersion') {
+        versionToUse = latestCompatibleVersion
+      } else {
+        versionToUse = preferredVersion
+      }
+    } catch (error) {
+      // SIGINT seems to throw a "" error so we'll attempt to ignore that
+      if (error) {
+        throw error
+      }
       // TODO: Confirm that this is the right exit code in this case?
-      process.exitCode = 1
-      return
-    }
-    if (promptResult === 'useLatestCompatibleVersion') {
-      versionToUse = latestCompatibleVersion
-    } else {
-      versionToUse = preferredVersion
+      process.exit(1)
     }
   }
 
@@ -201,7 +211,7 @@ async function showExperimentalWarning(version, force) {
     return
   }
 
-  if (semver.gte(version, '1.0.0')) {
+  if (semver.parse(version) === null || semver.gte(version, '1.0.0')) {
     return
   }
 
@@ -212,24 +222,33 @@ async function showExperimentalWarning(version, force) {
     return
   }
 
-  const prompt = new Select({
-    name: 'continue',
-    message:
-      'This package is under version 1.0.0 and so should be considered experimental. Continue anyway?',
-    choices: [
-      {
-        name: 'no',
-        message: 'No',
-      },
-      {
-        name: 'yes',
-        message: 'Yes',
-      },
-    ],
-  })
-  const promptResult = await prompt.run()
-  if (promptResult === 'no') {
-    process.exit()
+  try {
+    const prompt = new Select({
+      name: 'continue',
+      message:
+        'This package is under version 1.0.0 and so should be considered experimental. Continue anyway?',
+      choices: [
+        {
+          name: 'no',
+          message: 'No',
+        },
+        {
+          name: 'yes',
+          message: 'Yes',
+        },
+      ],
+    })
+    const promptResult = await prompt.run()
+    if (promptResult === 'no') {
+      process.exit()
+    }
+  } catch (error) {
+    // SIGINT seems to throw a "" error so we'll attempt to ignore that
+    if (error) {
+      throw error
+    }
+    // TODO: Confirm that this is the right exit code in this case?
+    process.exit(1)
   }
 }
 
