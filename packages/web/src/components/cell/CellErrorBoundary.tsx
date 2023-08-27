@@ -5,7 +5,7 @@ import type { CellFailureProps } from './cellTypes'
 type CellErrorBoundaryProps = {
   // Note that the fallback has to be an FC, not a Node
   // because the error comes from this component's state
-  fallback: React.FC<CellFailureProps>
+  fallback?: React.FC<CellFailureProps>
   children: React.ReactNode
 }
 
@@ -33,15 +33,18 @@ export class CellErrorBoundary extends React.Component<
   }
 
   render() {
+    // The fallback is constructed with all the props required, except error and errorCode
+    // in createSusepndingCell.tsx
     const { fallback: Fallback } = this.props
-    if (this.state.hasError) {
+
+    // @TODO what happens when no Fallback supplied??
+    if (this.state.hasError && Fallback) {
       return (
         <Fallback
           error={this.state.error}
           errorCode={
             this.state.error?.graphQLErrors?.[0]?.extensions?.['code'] as string
           }
-          // @TODO (STREAMING) query-result not available here
         />
       )
     }

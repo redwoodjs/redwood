@@ -1,6 +1,12 @@
 import { ComponentProps, JSXElementConstructor } from 'react'
 
-import { OperationVariables } from '@apollo/client'
+import type {
+  ApolloClient,
+  NetworkStatus,
+  OperationVariables,
+  QueryReference,
+  UseBackgroundQueryResult,
+} from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 
@@ -46,15 +52,11 @@ export type CellProps<
 >
 
 export type CellLoadingProps<TVariables extends OperationVariables = any> = {
-  queryResult?: Partial<
-    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
-  >
+  queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
 }
 
 export type CellFailureProps<TVariables extends OperationVariables = any> = {
-  queryResult?: Partial<
-    Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
-  >
+  queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
   error?: QueryOperationResult['error'] | Error // for tests and storybook
 
   /**
@@ -95,9 +97,7 @@ export type CellSuccessProps<
   TData = any,
   TVariables extends OperationVariables = any
 > = {
-  queryResult?: Partial<
-    Omit<QueryOperationResult<TData, TVariables>, 'loading' | 'error' | 'data'>
-  >
+  queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
   updating?: boolean
 } & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
 
@@ -178,4 +178,28 @@ export interface CreateCellProps<CellProps, CellVariables> {
    * What to call the Cell. Defaults to the filename.
    */
   displayName?: string
+}
+
+export type SuperSuccessProps = React.PropsWithChildren<
+  Record<string, unknown>
+> & {
+  RWJS_cellQueryRef: QueryReference<DataObject> // from useBackgroundQuery
+  suspenseQueryResult: SuspenseCellQueryResult
+  userProps: Record<string, any> // we don't really care about the types here, we are just forwarding on
+}
+
+export type NonSuspenseCellQueryResult<
+  TVariables extends OperationVariables = any
+> = Partial<
+  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
+>
+
+// We call this queryResult in createCell, sadly a very overloaded term
+// This is just the extra things returned from useXQuery hooks
+export interface SuspenseCellQueryResult extends UseBackgroundQueryResult {
+  client: ApolloClient<any>
+  // previousData?: any,
+  // observable: ObservableQuery<TData, TVariables>,
+  networkStatus: NetworkStatus
+  called: boolean // not available in useBackgroundQuery I think
 }
