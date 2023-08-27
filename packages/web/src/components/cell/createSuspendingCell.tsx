@@ -3,10 +3,8 @@ import { Suspense } from 'react'
 // @TODO(STREAMING): We are directly importing from Apollo here
 // because useBgQuery, and useReadQuery are Apollo 3.8+ specific
 import { NetworkStatus, QueryReference, useApolloClient } from '@apollo/client'
-import {
-  useBackgroundQuery,
-  useReadQuery,
-} from '@apollo/experimental-nextjs-app-support/ssr'
+
+import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
 
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
@@ -24,7 +22,7 @@ import { isDataEmpty } from './isCellEmpty'
  * Creates a Cell ~~ with Apollo Client only ~~
  * using the hooks useBackgroundQuery and useReadQuery
  */
-export function createCell<
+export function createSuspendingCell<
   CellProps extends Record<string, unknown>,
   CellVariables extends Record<string, unknown>
 >({
@@ -51,6 +49,11 @@ export function createCell<
 }: CreateCellProps<CellProps, CellVariables>): React.FC<CellProps> {
   function SuperSuccess(props: SuperSuccessProps) {
     const { RWJS_cellQueryRef, suspenseQueryResult, userProps } = props
+
+    console.log('xxxxx definitely in super successssss!')
+    console.log('xxxxx definitely in super successssss!')
+    console.log('xxxxx definitely in super successssss!')
+    console.log('xxxxx definitely in super successssss!')
 
     const { data, networkStatus } = useReadQuery<DataObject>(RWJS_cellQueryRef)
     const afterQueryData = afterQuery(data as DataObject)

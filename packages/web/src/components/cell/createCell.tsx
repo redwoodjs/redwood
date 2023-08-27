@@ -6,12 +6,18 @@ import { useQuery } from '../GraphQLHooksProvider'
 
 import { useCellCacheContext } from './CellCacheContext'
 import { CreateCellProps } from './cellTypes'
+import { createSuspendingCell } from './createSuspendingCell'
 import { isDataEmpty } from './isCellEmpty'
+
+// 👇 Note how we switch which cell factory to use!
+export const createCell = RWJS_ENV.RWJS_EXP_STREAMING_SSR
+  ? createSuspendingCell
+  : createNonSuspendingCell
 
 /**
  * Creates a Cell out of a GraphQL query and components that track to its lifecycle.
  */
-export function createCell<
+function createNonSuspendingCell<
   CellProps extends Record<string, unknown>,
   CellVariables extends Record<string, unknown>
 >({
