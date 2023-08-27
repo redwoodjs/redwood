@@ -24,7 +24,7 @@ import { isDataEmpty } from './isCellEmpty'
  * Creates a Cell ~~ with Apollo Client only ~~
  * using the hooks useBackgroundQuery and useReadQuery
  */
-export function createSuspendingCell<
+export function createCell<
   CellProps extends Record<string, unknown>,
   CellVariables extends Record<string, unknown>
 >({
