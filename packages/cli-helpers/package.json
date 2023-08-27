@@ -33,7 +33,7 @@
     "listr2": "6.6.0",
     "lodash": "4.17.21",
     "pascalcase": "1.0.0",
-    "prettier": "2.8.8",
+    "prettier": "3.0.2",
     "prompts": "2.4.2",
     "terminal-link": "2.1.1"
   },
