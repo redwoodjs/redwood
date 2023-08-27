@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { CellFailureProps } from './createCell'
+import type { CellFailureProps } from './cellTypes'
 
 type CellErrorBoundaryProps = {
   // Note that the fallback has to be an FC, not a Node
