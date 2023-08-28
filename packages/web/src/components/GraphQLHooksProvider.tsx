@@ -1,6 +1,5 @@
 import type {
   OperationVariables,
-  SuspenseQueryHookOptions,
   useBackgroundQuery as apolloUseBackgroundQuery,
   useReadQuery as apolloUseReadQuery,
 } from '@apollo/client'
@@ -12,6 +11,8 @@ import type { DocumentNode } from 'graphql'
  * are overridden in packages/web/src/apollo/typeOverride.ts. This was originally so that you could bring your own gql client.
  *
  * The default (empty) types are defined in packages/web/src/global.web-auto-imports.ts
+ *
+ * Do not import types for hooks directly from Apollo here, unless it is an Apollo specific hook.
  */
 
 type DefaultUseQueryType = <
@@ -87,13 +88,13 @@ export const GraphQLHooksContext = React.createContext<GraphQLHooks>({
   //  These are apollo specific hooks!
   useBackgroundQuery: () => {
     throw new Error(
-      'You must register a useBackgroundQuery hook via the `GraphQLHooksProvider`. Make sure you are importing the correct Apollo provider in App.tsx'
+      'You must register a useBackgroundQuery hook via the `GraphQLHooksProvider`.'
     )
   },
 
   useReadQuery: () => {
     throw new Error(
-      'You must register a useReadQuery hook via the `GraphQLHooksProvider`. Make sure you are importing the correct Apollo provider in App.tsx'
+      'You must register a useReadQuery hook via the `GraphQLHooksProvider`.'
     )
   },
 })
@@ -191,7 +192,7 @@ export function useSuspenseQuery<
   TVariables extends OperationVariables = GraphQLOperationVariables
 >(
   query: DocumentNode,
-  options?: SuspenseQueryHookOptions<TData, TVariables>
+  options?: GraphQLSuspenseQueryHookOptions<TData, TVariables>
 ): SuspenseQueryOperationResult<TData, TVariables> {
   return React.useContext(GraphQLHooksContext).useSuspenseQuery<
     TData,
