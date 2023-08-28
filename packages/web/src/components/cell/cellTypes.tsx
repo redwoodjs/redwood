@@ -98,9 +98,7 @@ export type CellSuccessProps<
   TData = any,
   TVariables extends OperationVariables = any
 > = {
-  queryResult?:
-    | NonSuspenseCellQueryResult<TVariables>
-    | SuspenseCellQueryResult<TData, TVariables>
+  queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
   updating?: boolean
 } & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
 
@@ -208,7 +206,7 @@ export interface SuspenseCellQueryResult<
   observable: ObservableQuery<TData, TVariables>
   networkStatus: NetworkStatus
   // Stuff not here:
-  called: boolean // not available in useBackgroundQuery I think
+  called: boolean // can we assume if we have a queryRef its called?
   // previousData?: any,
   // startPolling
   // stopPolling
