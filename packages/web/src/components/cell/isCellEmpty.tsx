@@ -1,4 +1,4 @@
-import { DataObject } from './cellTypes';
+import { DataObject } from './cellTypes'
 
 /**
  * The default `isEmpty` implementation. Checks if any of the field is `null` or an empty array.
@@ -39,10 +39,10 @@ import { DataObject } from './cellTypes';
  * ```
  */
 function isFieldEmptyArray(field: unknown) {
-  return Array.isArray(field) && field.length === 0;
+  return Array.isArray(field) && field.length === 0
 }
 export function isDataEmpty(data: DataObject) {
   return Object.values(data).every((fieldValue) => {
-    return fieldValue === null || isFieldEmptyArray(fieldValue);
-  });
+    return fieldValue === null || isFieldEmptyArray(fieldValue)
+  })
 }
