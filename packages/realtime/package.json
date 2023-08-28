@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/realtime",
-  "version": "6.0.1",
+  "version": "6.0.7",
   "repository": {
     "type": "git",
     "url": "https://github.com/redwoodjs/redwood.git",
@@ -26,6 +26,7 @@
     "@envelop/live-query": "6.0.0",
     "@graphql-tools/schema": "10.0.0",
     "@graphql-tools/utils": "10.0.1",
+    "@graphql-yoga/plugin-graphql-sse": "2.0.4",
     "@graphql-yoga/redis-event-target": "2.0.0",
     "@graphql-yoga/subscription": "4.0.0",
     "@n1ru4l/graphql-live-query": "0.10.0",
@@ -37,8 +38,8 @@
     "@envelop/core": "4.0.0",
     "@envelop/testing": "6.0.0",
     "@envelop/types": "4.0.0",
-    "esbuild": "0.18.16",
-    "jest": "29.6.1",
+    "esbuild": "0.18.19",
+    "jest": "29.6.2",
     "nodemon": "2.0.22",
     "typescript": "5.1.6"
   },

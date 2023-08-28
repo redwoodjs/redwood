@@ -239,12 +239,6 @@ export const schema = gql`
     message: String!
   }
 
-  input UpdateContactInput {
-    name: String
-    email: String
-    message: String
-  }
-
   // highlight-start
   type Mutation {
     createContact(input: CreateContactInput!): Contact! @skipAuth

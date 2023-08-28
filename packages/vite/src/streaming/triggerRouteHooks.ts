@@ -80,39 +80,38 @@ export const loadAndRunRouteHooks = async ({
   }
 
   let currentRouteHooks: RouteHooks
-
+  let rhOutput: RouteHookOutput = defaultRouteHookOutput
   // Pull out the first path
   // Remember shift will mutate the array
   const routeHookPath = paths.shift()
 
-  if (!routeHookPath) {
-    return defaultRouteHookOutput
-  } else {
-    try {
+  try {
+    // Sometimes the appRouteHook is null, so we can skip it
+    if (routeHookPath) {
       currentRouteHooks = await loadModule(routeHookPath)
 
       // Step 2, run the route hooks
-      const rhOutput = await triggerRouteHooks({
+      rhOutput = await triggerRouteHooks({
         routeHooks: currentRouteHooks,
         req: reqMeta.req,
         parsedParams: reqMeta.parsedParams,
         previousOutput,
       })
-
-      if (paths.length > 0) {
-        // Step 3, recursively call this function
-        return loadAndRunRouteHooks({
-          paths,
-          reqMeta,
-          previousOutput: rhOutput,
-          viteDevServer,
-        })
-      } else {
-        return rhOutput
-      }
-    } catch (e) {
-      console.error(`Error loading route hooks in ${routeHookPath}}`)
-      throw new Error(e as any)
     }
+
+    if (paths.length > 0) {
+      // Step 3, recursively call this function
+      return loadAndRunRouteHooks({
+        paths,
+        reqMeta,
+        previousOutput: rhOutput,
+        viteDevServer,
+      })
+    } else {
+      return rhOutput
+    }
+  } catch (e) {
+    console.error(`Error loading route hooks in ${routeHookPath}}`)
+    throw e
   }
 }
