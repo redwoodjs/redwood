@@ -114,9 +114,6 @@ export const findRouteHooksSrc = (cwd: string = getPaths().web.src) => {
   })
 }
 
-// export const findPrerenderedHtml = (cwd = getPaths().web.dist) =>
-//   fg.sync('**/*.html', { cwd, ignore: ['200.html', '404.html'] })
-
 export const isCellFile = (p: string) => {
   const { dir, name } = path.parse(p)
 
