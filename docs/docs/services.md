@@ -640,7 +640,7 @@ You could just write your own function and throw whatever you like, without usin
 
 ### validateWith()
 
-The same behavior as `validateWithSync()` but works with Promises. Remember to the `await` the validation.
+The same behavior as `validateWithSync()` but works with Promises. Remember to `await` the validation.
 
 ```jsx
 await validateWith(async () => {
