@@ -3,6 +3,7 @@ import { ComponentProps, JSXElementConstructor } from 'react'
 import type {
   ApolloClient,
   NetworkStatus,
+  ObservableQuery,
   OperationVariables,
   QueryReference,
   UseBackgroundQueryResult,
@@ -97,7 +98,9 @@ export type CellSuccessProps<
   TData = any,
   TVariables extends OperationVariables = any
 > = {
-  queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
+  queryResult?:
+    | NonSuspenseCellQueryResult<TVariables>
+    | SuspenseCellQueryResult<TData, TVariables>
   updating?: boolean
 } & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
 
@@ -184,7 +187,7 @@ export type SuperSuccessProps = React.PropsWithChildren<
   Record<string, unknown>
 > & {
   queryRef: QueryReference<DataObject> // from useBackgroundQuery
-  suspenseQueryResult: SuspenseCellQueryResult
+  suspenseQueryResult: SuspenseCellQueryResult<DataObject, any>
   userProps: Record<string, any> // we don't really care about the types here, we are just forwarding on
 }
 
@@ -196,14 +199,17 @@ export type NonSuspenseCellQueryResult<
 
 // We call this queryResult in createCell, sadly a very overloaded term
 // This is just the extra things returned from useXQuery hooks
-export interface SuspenseCellQueryResult extends UseBackgroundQueryResult {
+export interface SuspenseCellQueryResult<
+  TData = any,
+  TVariables extends OperationVariables = any
+> extends UseBackgroundQueryResult {
   client: ApolloClient<any>
   // fetchMore & refetch  come from UseBackgroundQueryResult
+  observable: ObservableQuery<TData, TVariables>
   networkStatus: NetworkStatus
   // Stuff not here:
   called: boolean // not available in useBackgroundQuery I think
   // previousData?: any,
-  // observable: ObservableQuery<TData, TVariables>,
   // startPolling
   // stopPolling
   // subscribeToMore

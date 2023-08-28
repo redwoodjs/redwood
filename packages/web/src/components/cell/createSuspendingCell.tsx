@@ -1,8 +1,7 @@
 import { Suspense } from 'react'
 
-// @TODO(STREAMING): We are directly importing from Apollo here
-// because useBgQuery, and useReadQuery are Apollo 3.8+ specific
-import { NetworkStatus, QueryReference, useApolloClient } from '@apollo/client'
+import { QueryReference, useApolloClient } from '@apollo/client'
+import type { InternalQueryReference } from '@apollo/client/react/cache/QueryReference'
 
 import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
 
@@ -93,15 +92,22 @@ export function createSuspendingCell<
     const query = typeof QUERY === 'function' ? QUERY(options) : QUERY
     const [queryRef, other] = useBackgroundQuery(query, options)
 
+    // @TODO Waiting for feedback from Apollo team
+    const symbolToAccessQueryRef = Object.getOwnPropertySymbols(queryRef)[0]
+    // @ts-expect-error I know what Im doing
+    const __dangerouslyAccessInternalReference = queryRef[
+      symbolToAccessQueryRef
+    ] as InternalQueryReference
+
     const client = useApolloClient()
 
     const suspenseQueryResult: SuspenseCellQueryResult = {
       client,
       ...other,
       called: !!queryRef,
-      // @TODO This is not correct
-      // @MARK set this to loading here, gets over-ridden in SuperSuccess
-      networkStatus: NetworkStatus.loading,
+      networkStatus:
+        __dangerouslyAccessInternalReference?.result?.networkStatus,
+      observable: __dangerouslyAccessInternalReference?.observable,
     }
 
     // @TODO(STREAMING) removed prerender handling here
@@ -117,7 +123,9 @@ export function createSuspendingCell<
 
     return (
       <CellErrorBoundary fallback={FailureComponent}>
-        <Suspense fallback={<Loading {...props} />}>
+        <Suspense
+          fallback={<Loading {...props} queryResult={suspenseQueryResult} />}
+        >
           <SuperSuccess
             userProps={props}
             queryRef={queryRef as QueryReference<DataObject>}
