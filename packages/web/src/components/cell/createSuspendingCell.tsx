@@ -11,56 +11,59 @@ import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
  */
 import { CellErrorBoundary } from './CellErrorBoundary'
 import {
-  SuspenseCellQueryResult,
   CreateCellProps,
   DataObject,
   SuperSuccessProps,
+  SuspenseCellQueryResult,
 } from './cellTypes'
 import { isDataEmpty } from './isCellEmpty'
 
+type AnyObj = Record<string, unknown>
 /**
  * Creates a Cell ~~ with Apollo Client only ~~
  * using the hooks useBackgroundQuery and useReadQuery
+ *
  */
 export function createSuspendingCell<
-  CellProps extends Record<string, unknown>,
-  CellVariables extends Record<string, unknown>
->({
-  QUERY,
-  beforeQuery = (props) => ({
-    // By default, we assume that the props are the gql-variables.
-    variables: props as unknown as CellVariables,
-    /**
-     * We're duplicating these props here due to a suspected bug in Apollo Client v3.5.4
-     * (it doesn't seem to be respecting `defaultOptions` in `RedwoodApolloProvider`.)
-     *
-     * @see {@link https://github.com/apollographql/apollo-client/issues/9105}
-     */
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-  }),
-  afterQuery = (data) => ({ ...data }),
-  isEmpty = isDataEmpty,
-  Loading = () => <>Loading...</>,
-  Failure,
-  Empty,
-  Success,
-  displayName = 'Cell',
-}: CreateCellProps<CellProps, CellVariables>): React.FC<CellProps> {
+  CellProps extends AnyObj,
+  CellVariables extends AnyObj
+>(
+  createCellProps: CreateCellProps<AnyObj, CellVariables> // 👈 AnyObj, because using CellProps causes a TS error
+): React.FC<CellProps> {
+  const {
+    QUERY,
+    beforeQuery = (props) => ({
+      // By default, we assume that the props are the gql-variables.
+      variables: props as unknown as CellVariables,
+      /**
+       * We're duplicating these props here due to a suspected bug in Apollo Client v3.5.4
+       * (it doesn't seem to be respecting `defaultOptions` in `RedwoodApolloProvider`.)
+       *
+       * @see {@link https://github.com/apollographql/apollo-client/issues/9105}
+       */
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
+    }),
+    afterQuery = (data) => ({ ...data }),
+    isEmpty = isDataEmpty,
+    Loading = () => <>Loading...</>,
+    Failure,
+    Empty,
+    Success,
+    displayName = 'Cell',
+  } = createCellProps
   function SuperSuccess(props: SuperSuccessProps) {
-    const { RWJS_cellQueryRef, suspenseQueryResult, userProps } = props
-    const { data, networkStatus } = useReadQuery<DataObject>(RWJS_cellQueryRef)
+    const { queryRef, suspenseQueryResult, userProps } = props
+    const { data, networkStatus } = useReadQuery<DataObject>(queryRef)
     const afterQueryData = afterQuery(data as DataObject)
 
-    const queryResultWithNetworkStatus = {
+    const queryResultWithNetworkStatus: SuspenseCellQueryResult = {
       ...suspenseQueryResult,
       networkStatus,
     }
 
     if (isEmpty(data, { isDataEmpty }) && Empty) {
       return (
-        // @TODO HELP!
-        // @ts-expect-error HELP, cant make queryResult type work
         <Empty
           {...userProps}
           {...afterQueryData}
@@ -70,8 +73,6 @@ export function createSuspendingCell<
     }
 
     return (
-      // @TODO HELP!
-      // @ts-expect-error HELP, cant make queryResult type work
       <Success
         {...afterQueryData}
         {...userProps}
@@ -98,6 +99,7 @@ export function createSuspendingCell<
       client,
       ...other,
       called: !!queryRef,
+      // @TODO This is not correct
       // @MARK set this to loading here, gets over-ridden in SuperSuccess
       networkStatus: NetworkStatus.loading,
     }
@@ -107,12 +109,7 @@ export function createSuspendingCell<
 
     const FailureComponent = (fprops: any) => {
       if (!Failure) {
-        return (
-          <>
-            <h2>Cell rendering failure. No Error component supplied. </h2>
-            <pre>{fprops.error}</pre>
-          </>
-        )
+        throw fprops.error
       }
 
       return <Failure {...fprops} queryResult={suspenseQueryResult} />
@@ -123,7 +120,7 @@ export function createSuspendingCell<
         <Suspense fallback={<Loading {...props} />}>
           <SuperSuccess
             userProps={props}
-            RWJS_cellQueryRef={queryRef as QueryReference<DataObject>}
+            queryRef={queryRef as QueryReference<DataObject>}
             suspenseQueryResult={suspenseQueryResult}
           />
         </Suspense>

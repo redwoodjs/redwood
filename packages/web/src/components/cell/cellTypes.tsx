@@ -183,7 +183,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
 export type SuperSuccessProps = React.PropsWithChildren<
   Record<string, unknown>
 > & {
-  RWJS_cellQueryRef: QueryReference<DataObject> // from useBackgroundQuery
+  queryRef: QueryReference<DataObject> // from useBackgroundQuery
   suspenseQueryResult: SuspenseCellQueryResult
   userProps: Record<string, any> // we don't really care about the types here, we are just forwarding on
 }
@@ -198,8 +198,14 @@ export type NonSuspenseCellQueryResult<
 // This is just the extra things returned from useXQuery hooks
 export interface SuspenseCellQueryResult extends UseBackgroundQueryResult {
   client: ApolloClient<any>
+  // fetchMore & refetch  come from UseBackgroundQueryResult
+  networkStatus: NetworkStatus
+  // Stuff not here:
+  called: boolean // not available in useBackgroundQuery I think
   // previousData?: any,
   // observable: ObservableQuery<TData, TVariables>,
-  networkStatus: NetworkStatus
-  called: boolean // not available in useBackgroundQuery I think
+  // startPolling
+  // stopPolling
+  // subscribeToMore
+  // updateQuery
 }
