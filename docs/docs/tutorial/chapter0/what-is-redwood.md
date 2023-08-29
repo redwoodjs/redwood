@@ -149,7 +149,7 @@ model Testimonial {
 }
 ```
 
-Prisma has a couple command line tools that take changes to this file and turn them into [SQL DDLcommands which are executed against your database to update its structure to match.
+Prisma has a couple command line tools that take changes to this file and turn them into [SQL DDL commands](https://www.sqlshack.com/sql-ddl-getting-started-with-sql-ddl-commands-in-sql-server/) which are executed against your database to update its structure to match.
 
 Redwood abstracts the concept of GraphQL resolver into a "service." You will generally start with one service function per GraphQL query/mutation. For example, going back to our testimonials example, you would have a service function named `testimonials()` that returns the data for the GraphQL query named `testimonials`. That function uses Prisma to query the database:
 
@@ -183,7 +183,7 @@ Any definitions listed in the `type Query` section are expected to have a servic
 
 ## Generators
 
-Let's take a look at an often overlooked tool in many frameworks' kit: the command line tools. Redwood has focused extensively on these, and one the most powerful are the generators. These are used to create files, setup integrations, execute scripts, start the dev server, and more.
+Let's take a look at an often overlooked tool in many frameworks' kit: the command line tools. Redwood has focused extensively on these, and one of the most powerful are the "generators." These are used to create files, setup integrations, execute scripts, start the dev server, and more.
 
 A huge timesaver is generating layouts, pages and cells. There isn't much boilerplate in Redwood's files, but it's still nice to have them built out for, even going so far as creating tests for the bare functionality (more on tests in a minute).
 
@@ -194,6 +194,8 @@ They also provide easy access to dev tools like Graphiql (for executing GraphQL 
 ![image](https://github.com/redwoodjs/redwood/assets/300/11f7553e-26a5-4a8f-b618-b9464828cafa)
 
 Redwood has setup commands for UI libraries like [Tailwind](https://tailwindcss.com/) and [Mantine](https://mantine.dev/), and even provides access to experimental new features, making it easy to enable and disable them on the fly.
+
+There's even an interactive console that lets you, for example, execute Prisma queries to fetch data from the database. This comes in handy when you want to double check that your query is fetching the data you think it is, without dropping a bunch of `console.log()` statements in your code and reloading the browser.
 
 ## Jest
 
@@ -209,7 +211,7 @@ You can write Jest tests in both the front- and backend of your app.
 
 While Jest can test your code, [Storybook](https://storybook.js.org/) can be used to catalog and test your UI. They call themselves a "frontend workshop for building UI components in isolation" and we couldn't agree more. Build your components separate from your app, even having props be dynamic while viewing their effects.
 
-Redwood adds data mocking for Storybook so that you can display components that would normally be populated with data from GraphQL, but without even needing a server running.
+Redwood adds data mocking for Storybook so that you can display components that would normally be populated with data from GraphQL, but without needing a server running.
 
 ![image](https://github.com/redwoodjs/redwood/assets/300/2753a292-01d4-41b9-9975-edc1f8c1c3ac)
 
