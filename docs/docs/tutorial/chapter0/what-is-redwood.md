@@ -76,8 +76,8 @@ So, any time React is about to render a cell, the following lifecycle occurs:
 1. The `Loading` component is displayed
 2. A `useQuery()` hook is fired, using the exported `QUERY`
 3. Assuming the data returns successfully, the `Success` component is rendered with one of the props being the data returned from `useQuery()`
-4. If something went wrong, `Failure` is rendered
-5. If the query returned `null` or an empty array, the `Empty` component is rendered
+
+As an alternative to step 3, if something went wrong then `Failure` is rendered. If the query returned `null` or an empty array, the `Empty` component is rendered. If you don't export either of those then `Success` will be rendered and it would be up to you to show the error or empty state through conditional code.
 
 Going back to our testimonals hypothetical, a cell to fetch and display them may look something like:
 
@@ -94,7 +94,7 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Failure = ({ error }) => <div>An error occured!</div>
+export const Failure = ({ error }) => <div>An error occured! {error.message}</div>
 
 export const Success = ({ testimonials }) => {
   return (
