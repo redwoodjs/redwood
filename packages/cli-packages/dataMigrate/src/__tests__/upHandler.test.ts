@@ -33,6 +33,26 @@ jest.mock(
 )
 
 jest.mock(
+  `\\redwood-app\\api\\dist\\lib\\db.js`,
+  () => {
+    return {
+      db: {
+        rW_DataMigration: {
+          create(dataMigration) {
+            mockDataMigrations.current.push(dataMigration)
+          },
+          findMany() {
+            return mockDataMigrations.current
+          },
+        },
+        $disconnect: () => {},
+      },
+    }
+  },
+  { virtual: true }
+)
+
+jest.mock(
   '/redwood-app/api/db/dataMigrations/20230822075442-wip.ts',
   () => {
     return { default: () => {} }
