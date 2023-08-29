@@ -8,8 +8,10 @@ import type { CheerioAPI } from 'cheerio'
 import { load as loadHtml } from 'cheerio'
 import ReactDOMServer from 'react-dom/server'
 
-import { registerApiSideBabelHook } from '@redwoodjs/internal/dist/build/babel/api'
-import { registerWebSideBabelHook } from '@redwoodjs/internal/dist/build/babel/web'
+import {
+  registerApiSideBabelHook,
+  registerWebSideBabelHook,
+} from '@redwoodjs/babel-config'
 import { getConfig, getPaths, ensurePosixPath } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import { matchPath } from '@redwoodjs/router/dist/util'

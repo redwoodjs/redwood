@@ -1,8 +1,8 @@
 import path from 'path'
 
+import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
-import { prebuildWebFile } from '../build/babel/web'
 import { prebuildWebFiles, cleanWebBuild } from '../build/web'
 import { findWebFiles } from '../files'
 

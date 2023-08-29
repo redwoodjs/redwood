@@ -5,8 +5,10 @@ import type { PluginBuild } from 'esbuild'
 import { build as esbuildBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
-import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
+import {
+  getRouteHookBabelPlugins,
+  transformWithBabel,
+} from '@redwoodjs/babel-config'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'

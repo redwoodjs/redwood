@@ -3,10 +3,9 @@ import path from 'path'
 
 import { removeSync } from 'fs-extra'
 
+import type { Flags } from '@redwoodjs/babel-config'
+import { prebuildWebFile } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
-
-import type { Flags } from './babel/web'
-import { prebuildWebFile } from './babel/web'
 
 // @MARK
 // This whole file is currently only used in testing
