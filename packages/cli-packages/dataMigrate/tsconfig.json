@@ -4,13 +4,11 @@
     "baseUrl": ".",
     "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["src"],
   "references": [
     { "path": "../../babel-config" },
-    { "path": "../../cli-helpers" },
-    { "path": "../../project-config" },
-    { "path": "../../telemetry" },
+    { "path": "../../project-config" }
   ]
 }
