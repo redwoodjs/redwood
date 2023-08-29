@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-
+import type { useReadQuery, useBackgroundQuery } from '@apollo/client'
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
@@ -9,8 +9,6 @@ import '@testing-library/jest-dom/extend-expect'
 import { GraphQLHooksProvider } from '../GraphQLHooksProvider'
 
 import { createSuspendingCell } from './createSuspendingCell'
-
-import type { useReadQuery, useBackgroundQuery } from '@apollo/client'
 
 type ReadQueryHook = typeof useReadQuery
 type BgQueryHook = typeof useBackgroundQuery
