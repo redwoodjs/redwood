@@ -63,6 +63,16 @@ jest.mock(
 )
 
 jest.mock(
+  '\\redwood-app\\api\\db\\dataMigrations\\20230822075442-wip.ts',
+  () => {
+    return { default: () => {} }
+  },
+  {
+    virtual: true,
+  }
+)
+
+jest.mock(
   '/redwood-app/api/db/dataMigrations/20230822075443-wip.ts',
   () => {
     return {
@@ -77,7 +87,31 @@ jest.mock(
 )
 
 jest.mock(
+  '\\redwood-app\\api\\db\\dataMigrations\\20230822075443-wip.ts',
+  () => {
+    return {
+      default: () => {
+        throw new Error('oops')
+      },
+    }
+  },
+  {
+    virtual: true,
+  }
+)
+
+jest.mock(
   '/redwood-app/api/db/dataMigrations/20230822075444-wip.ts',
+  () => {
+    return { default: () => {} }
+  },
+  {
+    virtual: true,
+  }
+)
+
+jest.mock(
+  '\\redwood-app\\api\\db\\dataMigrations\\20230822075444-wip.ts',
   () => {
     return { default: () => {} }
   },
