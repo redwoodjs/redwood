@@ -75,7 +75,7 @@ export interface MailerConfig<
   // TODO: Allow rendering to be completely optional?
   rendering: MailRenderersOptions<TRenderers, TDefaultRenderer>
 
-  defaults?: Partial<DefaultSendOptions>
+  defaults?: Partial<Omit<MailBasicSendOptions, 'to' | 'subject'>>
 
   development?: ModeHandlerOptions<THandlers, TDevelopmentHandler>
 
@@ -86,12 +86,7 @@ export interface MailerConfig<
 
 export type MailAddress = string | { name?: string; address: string }
 
-export interface MailSendWithoutRenderingOptions<
-  THandlers,
-  THandler extends keyof THandlers
-> {
-  handler?: THandler | keyof THandlers
-
+export interface MailBasicSendOptions {
   to: MailAddress | MailAddress[]
   cc?: MailAddress | MailAddress[]
   bcc?: MailAddress | MailAddress[]
@@ -104,6 +99,13 @@ export interface MailSendWithoutRenderingOptions<
   headers?: Record<string, string>
 
   attachments?: MailAttachment[]
+}
+
+export interface MailSendWithoutRenderingOptions<
+  THandlers,
+  THandler extends keyof THandlers
+> extends MailBasicSendOptions {
+  handler?: THandler | keyof THandlers
 }
 
 export interface MailSendOptions<

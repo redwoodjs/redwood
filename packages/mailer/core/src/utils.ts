@@ -1,5 +1,5 @@
+import type { Mailer } from './mailer'
 import type {
-  DefaultSendOptions,
   MailAddress,
   MailSendOptions,
   MailSendWithoutRenderingOptions,
@@ -26,7 +26,7 @@ export function convertAddresses(addresses: MailAddress[]): string[] {
 }
 
 export function extractDefaults(
-  defaults: Partial<DefaultSendOptions>
+  defaults: NonNullable<ConstructorParameters<typeof Mailer>[0]['defaults']>
 ): MailerDefaults {
   const extractedDefaults: MailerDefaults = {
     attachments: defaults.attachments ?? [],
