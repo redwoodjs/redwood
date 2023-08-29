@@ -84,9 +84,11 @@ export function constructCompleteSendOptions(
     throw new Error('Missing subject')
   }
 
-  sendOptionsComplete.to = convertAddresses(
-    Array.isArray(sendOptions.to) ? sendOptions.to : [sendOptions.to]
-  )
+  if (sendOptions.to !== undefined) {
+    sendOptionsComplete.to = convertAddresses(
+      Array.isArray(sendOptions.to) ? sendOptions.to : [sendOptions.to]
+    )
+  }
   if (sendOptionsComplete.to.length === 0) {
     throw new Error('Missing to address')
   }
