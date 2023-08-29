@@ -65,6 +65,9 @@ export class Mailer<
         ...this.config.test,
         handler: null,
       }
+      this.logger.warn(
+        'The test handler is null, this will prevent mail from being processed in test mode'
+      )
     } else if (testHandlerKey === null) {
       this.logger.warn(
         'The test handler is null, this will prevent mail from being processed in test mode'
@@ -84,6 +87,9 @@ export class Mailer<
         ...this.config.development,
         handler: null,
       }
+      this.logger.warn(
+        'The development handler is null, this will prevent mail from being processed in development mode'
+      )
     } else if (developmentHandlerKey === null) {
       this.logger.warn(
         'The development handler is null, this will prevent mail from being processed in development mode'
@@ -270,7 +276,7 @@ export class Mailer<
     return result
   }
 
-  private isDevelopment() {
+  protected isDevelopment() {
     if (this.config.development?.when === undefined) {
       // TODO: Ensure this is a sensible default
       return process.env.NODE_ENV !== 'production'
@@ -284,7 +290,7 @@ export class Mailer<
     throw new Error("Invalid 'when' configuration for development mode")
   }
 
-  private isTest() {
+  protected isTest() {
     if (this.config.test?.when === undefined) {
       // TODO: Ensure this is a sensible default
       return process.env.NODE_ENV === 'test'
