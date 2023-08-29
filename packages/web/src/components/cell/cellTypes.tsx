@@ -206,17 +206,20 @@ export interface SuspenseCellQueryResult<
   // not supplied in Error and Failure
   // because it's implicit in these components, but the one edgecase is showing a different loader when refetching
   networkStatus?: NetworkStatus
+  called: boolean // can we assume if we have a queryRef its called?
 
   // Stuff not here:
-  called: boolean // can we assume if we have a queryRef its called?
   // observable: ObservableQuery<TData, TVariables>
-  // previousData?: any,
+  // previousData?: TData,  May not be relevant anymore.
 
-  // POLLING: Apollo team have said they are not ready to expose Polling yet
-  // startPolling
-  // stopPolling
+  // ObservableQueryFields 👇
+  //  subscribeToMore ~ returned from useSuspenseQuery. What would users use this for?
+  //  updateQuery
+  //  refetch
+  //  reobserve
+  //  variables <~ variables passed to the query. Startup club have reported using this, but why?
+  //  fetchMore
+  //  startPolling <~ Apollo team are not ready to expose Polling yet
+  //  stopPolling
   // ~~~
-
-  // subscribeToMore ~ returned from useSuspenseQuery. What would users use this for?
-  // updateQuery
 }
