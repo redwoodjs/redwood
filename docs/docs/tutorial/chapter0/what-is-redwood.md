@@ -61,7 +61,7 @@ So browsing to `/` will load the `HomePage` page (component) which itself is jus
 
 Redwood uses GraphQL as the glue between the front- and backends: whenever you want data from the server/database, you're going to retrieve it via GraphQL. Now, we could have just given you raw access to some a GraphQL library and let you make those calls yourself. We use [Apollo Client](https://www.apollographql.com/apollo-client) on the frontend and Apollo provides hooks like `[useQuery()](https://www.apollographql.com/tutorials/lift-off-part1/10-the-usequery-hook)` and `[useMutation()](https://www.apollographql.com/tutorials/lift-off-part4/08-the-usemutation-hook)` to retrieve and set data, respectively. But Redwood has a much deeper integration.
 
-What if you could have a component that was not only responsible for its own display *but even its own data retrieval*? Meaning everything that component needed in order to display itself, it could all be self-contained. That includes the code to display while the data is loading, or if something goes wrong. These kinds of uber-components Redwood calls "cells."
+What if you could have a component that was not only responsible for its own display *but even its own data retrieval*? Meaning everything that component needed in order to display itself could all be self-contained. That includes the code to display while the data is loading, or if something goes wrong. These kinds of uber-components are real, and Redwood calls "cells."
 
 #### Cells
 
