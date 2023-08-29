@@ -99,9 +99,9 @@ export const Failure = ({ error }) => <div>An error occured! {error.message}</di
 export const Success = ({ testimonials }) => {
   return (
     <ul>
-      testimonials.map((test) => {
-        <li>{test.quote} — {test.author}</li>
-      })
+      {testimonials.map((test) => {
+        <li key={test.id}>{test.quote} — {test.author}</li>
+      })}
     </ul>
   )
 }
