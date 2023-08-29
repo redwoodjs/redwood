@@ -2,7 +2,7 @@ globalThis.__dirname = __dirname
 
 import '../../../../lib/mockTelemetry'
 
-jest.mock('@redwoodjs/internal/dist/build/babel/api', () => {
+jest.mock('@redwoodjs/babel-config', () => {
   return {
     registerApiSideBabelHook: () => null,
   }
