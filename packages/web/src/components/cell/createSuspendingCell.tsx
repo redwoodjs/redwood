@@ -116,8 +116,6 @@ export function createSuspendingCell<
         },
       }
 
-      // @TODO: Need to make sure refetch will reset the error boundary, when refetch is called
-      // otherwise the error will never go away
       return (
         <Failure
           error={error}
