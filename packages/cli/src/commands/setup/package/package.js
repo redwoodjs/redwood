@@ -18,6 +18,7 @@ export const builder = (yargs) => {
       description:
         'Force the use of a potentially incompatible version of the package',
       type: 'boolean',
+      alias: 'f',
     })
     .option('options', {
       default: [],
