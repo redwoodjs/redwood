@@ -1,14 +1,13 @@
 import { Suspense } from 'react'
 
 import { QueryReference, useApolloClient } from '@apollo/client'
-import type { InternalQueryReference } from '@apollo/client/react/cache/QueryReference'
 
 import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
 
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
-import { CellErrorBoundary } from './CellErrorBoundary'
+import { CellErrorBoundary, FallbackProps } from './CellErrorBoundary'
 import {
   CreateCellProps,
   DataObject,
@@ -92,37 +91,44 @@ export function createSuspendingCell<
     const query = typeof QUERY === 'function' ? QUERY(options) : QUERY
     const [queryRef, other] = useBackgroundQuery(query, options)
 
-    // @TODO Waiting for feedback from Apollo team
-    const symbolToAccessQueryRef = Object.getOwnPropertySymbols(queryRef)[0]
-    // @ts-expect-error I know what Im doing
-    const __dangerouslyAccessInternalReference = queryRef[
-      symbolToAccessQueryRef
-    ] as InternalQueryReference
-
     const client = useApolloClient()
 
     const suspenseQueryResult: SuspenseCellQueryResult = {
       client,
       ...other,
       called: !!queryRef,
-      networkStatus:
-        __dangerouslyAccessInternalReference?.result?.networkStatus,
-      observable: __dangerouslyAccessInternalReference?.observable,
     }
 
     // @TODO(STREAMING) removed prerender handling here
     // Until we decide how/if we do prerendering
 
-    const FailureComponent = (fprops: any) => {
+    const FailureComponent = ({ error, resetErrorBoundary }: FallbackProps) => {
       if (!Failure) {
-        throw fprops.error
+        // So that it bubbles up to the nearest error boundary
+        throw error
       }
 
-      return <Failure {...fprops} queryResult={suspenseQueryResult} />
+      const queryResultWithErrorReset = {
+        ...suspenseQueryResult,
+        refetch: () => {
+          resetErrorBoundary()
+          return suspenseQueryResult.refetch?.()
+        },
+      }
+
+      // @TODO: Need to make sure refetch will reset the error boundary, when refetch is called
+      // otherwise the error will never go away
+      return (
+        <Failure
+          error={error}
+          errorCode={error?.graphQLErrors?.[0]?.extensions?.['code'] as string}
+          queryResult={queryResultWithErrorReset}
+        />
+      )
     }
 
     return (
-      <CellErrorBoundary fallback={FailureComponent}>
+      <CellErrorBoundary renderFallback={FailureComponent}>
         <Suspense
           fallback={<Loading {...props} queryResult={suspenseQueryResult} />}
         >

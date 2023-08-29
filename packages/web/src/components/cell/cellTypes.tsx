@@ -3,7 +3,6 @@ import { ComponentProps, JSXElementConstructor } from 'react'
 import type {
   ApolloClient,
   NetworkStatus,
-  ObservableQuery,
   OperationVariables,
   QueryReference,
   UseBackgroundQueryResult,
@@ -198,18 +197,26 @@ export type NonSuspenseCellQueryResult<
 // We call this queryResult in createCell, sadly a very overloaded term
 // This is just the extra things returned from useXQuery hooks
 export interface SuspenseCellQueryResult<
-  TData = any,
-  TVariables extends OperationVariables = any
+  _TData = any,
+  _TVariables extends OperationVariables = any
 > extends UseBackgroundQueryResult {
   client: ApolloClient<any>
   // fetchMore & refetch  come from UseBackgroundQueryResult
-  observable: ObservableQuery<TData, TVariables>
-  networkStatus: NetworkStatus
+
+  // not supplied in Error and Failure
+  // because it's implicit in these components, but the one edgecase is showing a different loader when refetching
+  networkStatus?: NetworkStatus
+
   // Stuff not here:
   called: boolean // can we assume if we have a queryRef its called?
+  // observable: ObservableQuery<TData, TVariables>
   // previousData?: any,
+
+  // POLLING: Apollo team have said they are not ready to expose Polling yet
   // startPolling
   // stopPolling
-  // subscribeToMore
+  // ~~~
+
+  // subscribeToMore ~ returned from useSuspenseQuery. What would users use this for?
   // updateQuery
 }
