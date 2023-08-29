@@ -18,7 +18,7 @@
   "scripts": {
     "build": "yarn node ./build.mjs && yarn build:types",
     "build:types": "tsc --build --verbose",
-    "prepack": "NODE_ENV=production yarn build:js",
+    "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "yarn test:unit && yarn test:dist",
     "test:unit": "yarn jest src",
     "test:dist": "yarn jest ./dist.test.ts"
