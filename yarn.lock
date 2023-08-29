@@ -7864,31 +7864,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/babel-config@npm:0.0.1":
-  version: 0.0.1
-  resolution: "@redwoodjs/babel-config@npm:0.0.1"
-  dependencies:
-    "@babel/core": 7.22.10
-    "@babel/plugin-transform-class-properties": 7.22.5
-    "@babel/plugin-transform-private-methods": 7.22.5
-    "@babel/plugin-transform-private-property-in-object": 7.22.5
-    "@babel/plugin-transform-runtime": 7.22.10
-    "@babel/preset-env": 7.22.10
-    "@babel/preset-react": 7.22.5
-    "@babel/preset-typescript": 7.22.5
-    "@babel/register": 7.22.5
-    "@babel/runtime-corejs3": 7.22.10
-    "@redwoodjs/project-config": 6.0.7
-    "@redwoodjs/structure": 6.0.7
-    babel-plugin-auto-import: 1.1.0
-    babel-plugin-graphql-tag: 3.3.0
-    babel-plugin-module-resolver: 5.0.0
-    core-js: 3.32.0
-    fast-glob: 3.3.1
-  checksum: ae1250523289a72d0cf2105213846597e76471543a9be80155eb7adc444377729e4e370638a10f4b3e9a0074c12217c2f79ba4e5696e3229725c568a64739772
-  languageName: node
-  linkType: hard
-
 "@redwoodjs/cli-data-migrate@workspace:packages/cli-packages/dataMigrate":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-data-migrate@workspace:packages/cli-packages/dataMigrate"
@@ -8146,7 +8121,6 @@ __metadata:
     "@babel/core": 7.22.10
     "@babel/eslint-parser": 7.22.10
     "@babel/eslint-plugin": 7.22.10
-    "@redwoodjs/babel-config": 0.0.1
     "@redwoodjs/eslint-plugin": 6.0.7
     "@redwoodjs/internal": 6.0.7
     "@redwoodjs/project-config": 6.0.7
