@@ -1,4 +1,5 @@
-import React, { Children, isValidElement, ReactElement, ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
+import React, { Children, isValidElement } from 'react'
 
 import {
   isNotFoundRoute,
@@ -6,7 +7,7 @@ import {
   isStandardRoute,
   isValidRoute,
 } from './route-validators'
-import { PageType } from './router'
+import type { PageType } from './router'
 import { isPrivateNode, isSetNode } from './Set'
 
 /** Create a React Context with the given name. */

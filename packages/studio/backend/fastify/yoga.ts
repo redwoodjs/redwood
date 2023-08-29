@@ -1,6 +1,6 @@
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import type { FastifyRequest, FastifyReply } from 'fastify'
-import { YogaServerInstance } from 'graphql-yoga'
+import type { YogaServerInstance } from 'graphql-yoga'
 
 export default async function routes(
   fastify: FastifyInstance,

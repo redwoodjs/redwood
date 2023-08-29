@@ -1,15 +1,13 @@
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadSchema } from '@graphql-tools/load'
-import {
+import type {
   DocumentNode,
   FieldNode,
   InlineFragmentNode,
   OperationDefinitionNode,
   OperationTypeNode,
-  parse,
-  print,
-  visit,
 } from 'graphql'
+import { parse, print, visit } from 'graphql'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
 import { getPaths } from '@redwoodjs/project-config'

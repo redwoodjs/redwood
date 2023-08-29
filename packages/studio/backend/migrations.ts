@@ -1,5 +1,5 @@
 import type { Database } from 'sqlite'
-import sqlite3 from 'sqlite3'
+import type sqlite3 from 'sqlite3'
 
 import { getDatabase } from './database'
 

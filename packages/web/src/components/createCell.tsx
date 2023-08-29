@@ -1,6 +1,7 @@
-import { ComponentProps, JSXElementConstructor, Suspense } from 'react'
+import type { ComponentProps, JSXElementConstructor } from 'react'
+import { Suspense } from 'react'
 
-import { OperationVariables } from '@apollo/client'
+import type { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 import type { A } from 'ts-toolbelt'
 

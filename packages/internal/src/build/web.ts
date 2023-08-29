@@ -5,7 +5,8 @@ import { removeSync } from 'fs-extra'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { prebuildWebFile, Flags } from './babel/web'
+import type { Flags } from './babel/web'
+import { prebuildWebFile } from './babel/web'
 
 // @MARK
 // This whole file is currently only used in testing

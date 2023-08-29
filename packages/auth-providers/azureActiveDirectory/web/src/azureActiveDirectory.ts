@@ -1,12 +1,13 @@
-import {
+import type {
   EndSessionRequest,
   PublicClientApplication as AzureActiveDirectoryClient,
   RedirectRequest,
   SilentRequest,
-  InteractionRequiredAuthError,
 } from '@azure/msal-browser'
+import { InteractionRequiredAuthError } from '@azure/msal-browser'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication } from '@redwoodjs/auth'
 
 export function createAuth(
   azureActiveDirectoryClient: AzureActiveDirectoryClient,

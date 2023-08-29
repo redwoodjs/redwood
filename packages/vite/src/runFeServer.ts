@@ -16,7 +16,7 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
 import { registerFwGlobals } from './streaming/registerGlobals'
-import { RWRouteManifest } from './types'
+import type { RWRouteManifest } from './types'
 
 /**
  * TODO (STREAMING)

@@ -7,9 +7,9 @@ import type { PluginItem } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import type { RegisterHookOptions } from './common'
 import {
   registerBabel,
-  RegisterHookOptions,
   CORE_JS_VERSION,
   RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,

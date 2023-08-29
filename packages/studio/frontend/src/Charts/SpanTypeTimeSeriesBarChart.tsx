@@ -1,15 +1,8 @@
 import React, { useState } from 'react'
 
 import { useQuery, gql } from '@apollo/client'
-import {
-  Color,
-  Card,
-  Select,
-  SelectItem,
-  Flex,
-  BarChart,
-  Title,
-} from '@tremor/react'
+import type { Color } from '@tremor/react'
+import { Card, Select, SelectItem, Flex, BarChart, Title } from '@tremor/react'
 
 import LoadingSpinner from '../Components/LoadingSpinner'
 import ErrorPanel from '../Components/Panels/ErrorPanel'

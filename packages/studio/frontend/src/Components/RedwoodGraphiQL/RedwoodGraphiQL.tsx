@@ -2,19 +2,13 @@ import 'json-bigint-patch'
 import React, { useMemo, useState } from 'react'
 
 import { useExplorerPlugin } from '@graphiql/plugin-explorer'
-import { Fetcher, FetcherOpts, FetcherParams } from '@graphiql/toolkit'
-import {
-  LoadFromUrlOptions,
-  SubscriptionProtocol,
-  UrlLoader,
-} from '@graphql-tools/url-loader'
-import {
-  GraphiQL,
-  GraphiQLInterface,
-  GraphiQLProps,
-  GraphiQLProvider,
-} from 'graphiql'
-import { DocumentNode, Kind, parse } from 'graphql'
+import type { Fetcher, FetcherOpts, FetcherParams } from '@graphiql/toolkit'
+import type { LoadFromUrlOptions } from '@graphql-tools/url-loader'
+import { SubscriptionProtocol, UrlLoader } from '@graphql-tools/url-loader'
+import type { GraphiQLProps } from 'graphiql'
+import { GraphiQL, GraphiQLInterface, GraphiQLProvider } from 'graphiql'
+import type { DocumentNode } from 'graphql'
+import { Kind, parse } from 'graphql'
 import { useUrlSearchParams } from 'use-url-search-params'
 
 import 'graphiql/graphiql.css'

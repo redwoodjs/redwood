@@ -1,14 +1,15 @@
+import type { InitializeParams } from 'vscode-languageserver'
 import {
   createConnection,
-  InitializeParams,
   ProposedFeatures,
   TextDocuments,
   TextDocumentSyncKind,
 } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import { CodeAction } from 'vscode-languageserver-types'
+import type { CodeAction } from 'vscode-languageserver-types'
 
-import { HostWithDocumentsStore, IDEInfo } from '../ide'
+import type { IDEInfo } from '../ide'
+import { HostWithDocumentsStore } from '../ide'
 import { RWProject } from '../model'
 import { lazy, memo } from '../x/decorators'
 import { URL_toFile } from '../x/URL'

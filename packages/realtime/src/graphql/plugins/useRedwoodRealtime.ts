@@ -9,7 +9,8 @@ import type { PubSub } from '@graphql-yoga/subscription'
 import { createPubSub } from '@graphql-yoga/subscription'
 import { GraphQLLiveDirective } from '@n1ru4l/graphql-live-query'
 import { InMemoryLiveQueryStore } from '@n1ru4l/in-memory-live-query-store'
-import { execute as defaultExecute, print } from 'graphql'
+import type { execute as defaultExecute } from 'graphql'
+import { print } from 'graphql'
 
 /**
  * We want SubscriptionsGlobs type to be an object with this shape:

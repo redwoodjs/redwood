@@ -1,6 +1,7 @@
-import { Listr, ListrTask } from 'listr2'
+import type { ListrTask } from 'listr2'
+import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
-import yargs from 'yargs'
+import type yargs from 'yargs'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -11,11 +12,11 @@ import {
   installPackages,
 } from '../lib/installHelpers'
 
+import type { AuthGeneratorCtx } from './authTasks'
 import {
   addAuthConfigToGqlApi,
   addConfigToRoutes,
   addConfigToWebApp,
-  AuthGeneratorCtx,
   setAuthSetupMode,
   createWebAuth,
   generateAuthApiFiles,
