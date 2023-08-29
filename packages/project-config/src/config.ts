@@ -174,6 +174,9 @@ const DEFAULT_CONFIG: Config = {
         {
           package: '@redwoodjs/cli-storybook',
         },
+        {
+          package: '@redwoodjs/cli-data-migrate',
+        },
       ],
     },
     useSDLCodeGenForGraphQLTypes: false,

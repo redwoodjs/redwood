@@ -29,6 +29,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.22.10",
     "@redwoodjs/auth": "6.1.0",
+    "@redwoodjs/babel-config": "6.1.0",
     "@redwoodjs/graphql-server": "6.1.0",
     "@redwoodjs/internal": "6.1.0",
     "@redwoodjs/project-config": "6.1.0",

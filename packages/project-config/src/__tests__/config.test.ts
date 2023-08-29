@@ -49,6 +49,9 @@ describe('getConfig', () => {
               {
                 "package": "@redwoodjs/cli-storybook",
               },
+              {
+                "package": "@redwoodjs/cli-data-migrate",
+              },
             ],
           },
           "opentelemetry": {

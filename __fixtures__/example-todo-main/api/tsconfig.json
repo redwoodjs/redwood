@@ -22,11 +22,11 @@
       "../node_modules/@types",
       "./node_modules/@types"
     ],
-    "types": ["jest"],
+    "types": ["jest"]
   },
   "include": [
     "src",
     "../.redwood/types/includes/all-*",
-    "../.redwood/types/includes/api-*",
+    "../.redwood/types/includes/api-*"
   ]
 }
