@@ -27,8 +27,4 @@ const author = {
   fullName: 'Story User',
 }
 
-export const Primary: Story = {
-  render: () => {
-    return <Author author={author} />
-  }
-}
+export const Primary: Story = {}
