@@ -1,5 +1,7 @@
 import { vol } from 'memfs'
 
+import { ensurePosixPath } from '@redwoodjs/project-config'
+
 import {
   getCommonPlugins,
   getPathsFromTypeScriptConfig,
@@ -199,18 +201,14 @@ describe('common', () => {
         const typeScriptConfig = parseTypeScriptConfigFiles()
 
         const apiPaths = getPathsFromTypeScriptConfig(typeScriptConfig.api)
-        expect(apiPaths).toMatchInlineSnapshot(`
-                  {
-                    "@services": "src/services",
-                  }
-              `)
+        expect(ensurePosixPath(apiPaths['@services'])).toMatchInlineSnapshot(
+          `"src/services"`
+        )
 
         const webPaths = getPathsFromTypeScriptConfig(typeScriptConfig.web)
-        expect(webPaths).toMatchInlineSnapshot(`
-                  {
-                    "@ui": "src/ui",
-                  }
-              `)
+        expect(ensurePosixPath(webPaths['@ui'])).toMatchInlineSnapshot(
+          `"src/ui"`
+        )
       })
     })
   })

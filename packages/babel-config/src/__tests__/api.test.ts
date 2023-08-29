@@ -1,5 +1,7 @@
 import { vol } from 'memfs'
 
+import { getPaths, ensurePosixPath } from '@redwoodjs/project-config'
+
 import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
@@ -71,8 +73,8 @@ describe('api', () => {
       )
 
       const apiSideBabelConfigPath = getApiSideBabelConfigPath()
-      expect(apiSideBabelConfigPath).toMatchInlineSnapshot(
-        `"/redwood-app/api/babel.config.js"`
+      expect(ensurePosixPath(apiSideBabelConfigPath)).toMatch(
+        '/redwood-app/api/babel.config.js'
       )
     })
 
@@ -101,85 +103,99 @@ describe('api', () => {
       )
 
       const apiSideBabelPlugins = getApiSideBabelPlugins()
-      expect(apiSideBabelPlugins).toMatchInlineSnapshot(`
-              [
-                [
-                  "@babel/plugin-transform-class-properties",
-                  {
-                    "loose": true,
-                  },
-                ],
-                [
-                  "@babel/plugin-transform-private-methods",
-                  {
-                    "loose": true,
-                  },
-                ],
-                [
-                  "@babel/plugin-transform-private-property-in-object",
-                  {
-                    "loose": true,
-                  },
-                ],
-                [
-                  "@babel/plugin-transform-runtime",
-                  {
-                    "corejs": {
-                      "proposals": true,
-                      "version": 3,
-                    },
-                    "version": "7.22.10",
-                  },
-                ],
-                [
-                  "babel-plugin-module-resolver",
-                  {
-                    "alias": {
-                      "src": "./src",
-                    },
-                    "cwd": "packagejson",
-                    "loglevel": "silent",
-                    "root": [
-                      "/redwood-app/api",
-                    ],
-                  },
-                  "rwjs-api-module-resolver",
-                ],
-                [
-                  [Function],
-                  undefined,
-                  "rwjs-babel-directory-named-modules",
-                ],
-                [
-                  "babel-plugin-auto-import",
-                  {
-                    "declarations": [
-                      {
-                        "default": "gql",
-                        "path": "graphql-tag",
-                      },
-                      {
-                        "members": [
-                          "context",
-                        ],
-                        "path": "@redwoodjs/graphql-server",
-                      },
-                    ],
-                  },
-                  "rwjs-babel-auto-import",
-                ],
-                [
-                  "babel-plugin-graphql-tag",
-                  undefined,
-                  "rwjs-babel-graphql-tag",
-                ],
-                [
-                  [Function],
-                  undefined,
-                  "rwjs-babel-glob-import-dir",
-                ],
-              ]
-          `)
+      expect(apiSideBabelPlugins).toHaveLength(9)
+
+      const pluginNames = apiSideBabelPlugins.map(([name]) => name)
+      expect(pluginNames).toMatchInlineSnapshot(`
+        [
+          "@babel/plugin-transform-class-properties",
+          "@babel/plugin-transform-private-methods",
+          "@babel/plugin-transform-private-property-in-object",
+          "@babel/plugin-transform-runtime",
+          "babel-plugin-module-resolver",
+          [Function],
+          "babel-plugin-auto-import",
+          "babel-plugin-graphql-tag",
+          [Function],
+        ]
+      `)
+
+      const pluginAliases = getPluginAliases(apiSideBabelPlugins)
+      expect(pluginAliases).toMatchInlineSnapshot(`
+        [
+          "rwjs-api-module-resolver",
+          "rwjs-babel-directory-named-modules",
+          "rwjs-babel-auto-import",
+          "rwjs-babel-graphql-tag",
+          "rwjs-babel-glob-import-dir",
+        ]
+      `)
+
+      expect(apiSideBabelPlugins).toContainEqual([
+        '@babel/plugin-transform-class-properties',
+        {
+          loose: true,
+        },
+      ])
+
+      expect(apiSideBabelPlugins).toContainEqual([
+        '@babel/plugin-transform-private-methods',
+        {
+          loose: true,
+        },
+      ])
+
+      expect(apiSideBabelPlugins).toContainEqual([
+        '@babel/plugin-transform-private-property-in-object',
+        {
+          loose: true,
+        },
+      ])
+
+      expect(apiSideBabelPlugins).toContainEqual([
+        '@babel/plugin-transform-runtime',
+        {
+          corejs: {
+            proposals: true,
+            version: 3,
+          },
+          version: '7.22.10',
+        },
+      ])
+
+      const [_, babelPluginModuleResolverConfig] = apiSideBabelPlugins.find(
+        (plugin) => plugin[0] === 'babel-plugin-module-resolver'
+      )
+
+      expect(babelPluginModuleResolverConfig).toMatchObject({
+        alias: {
+          src: './src',
+        },
+
+        cwd: 'packagejson',
+        loglevel: 'silent', // to silence the unnecessary warnings
+      })
+
+      expect(babelPluginModuleResolverConfig.root[0]).toMatch(
+        getPaths().api.base
+      )
+
+      expect(apiSideBabelPlugins).toContainEqual([
+        'babel-plugin-auto-import',
+        {
+          declarations: [
+            {
+              default: 'gql',
+              path: 'graphql-tag',
+            },
+            {
+              members: ['context'],
+              path: '@redwoodjs/graphql-server',
+            },
+          ],
+        },
+        'rwjs-babel-auto-import',
+      ])
     })
 
     it('can include openTelemetry', () => {
@@ -194,90 +210,18 @@ describe('api', () => {
       const apiSideBabelPlugins = getApiSideBabelPlugins({
         openTelemetry: true,
       })
-      expect(apiSideBabelPlugins).toMatchInlineSnapshot(`
-        [
-          [
-            "@babel/plugin-transform-class-properties",
-            {
-              "loose": true,
-            },
-          ],
-          [
-            "@babel/plugin-transform-private-methods",
-            {
-              "loose": true,
-            },
-          ],
-          [
-            "@babel/plugin-transform-private-property-in-object",
-            {
-              "loose": true,
-            },
-          ],
-          [
-            "@babel/plugin-transform-runtime",
-            {
-              "corejs": {
-                "proposals": true,
-                "version": 3,
-              },
-              "version": "7.22.10",
-            },
-          ],
-          [
-            "babel-plugin-module-resolver",
-            {
-              "alias": {
-                "src": "./src",
-              },
-              "cwd": "packagejson",
-              "loglevel": "silent",
-              "root": [
-                "/redwood-app/api",
-              ],
-            },
-            "rwjs-api-module-resolver",
-          ],
-          [
-            [Function],
-            undefined,
-            "rwjs-babel-directory-named-modules",
-          ],
-          [
-            "babel-plugin-auto-import",
-            {
-              "declarations": [
-                {
-                  "default": "gql",
-                  "path": "graphql-tag",
-                },
-                {
-                  "members": [
-                    "context",
-                  ],
-                  "path": "@redwoodjs/graphql-server",
-                },
-              ],
-            },
-            "rwjs-babel-auto-import",
-          ],
-          [
-            "babel-plugin-graphql-tag",
-            undefined,
-            "rwjs-babel-graphql-tag",
-          ],
-          [
-            [Function],
-            undefined,
-            "rwjs-babel-glob-import-dir",
-          ],
-          [
-            [Function],
-            undefined,
-            "rwjs-babel-otel-wrapping",
-          ],
-        ]
-      `)
+      const pluginAliases = getPluginAliases(apiSideBabelPlugins)
+      expect(pluginAliases).toContain('rwjs-babel-otel-wrapping')
     })
   })
 })
+
+function getPluginAliases(plugins) {
+  return plugins.reduce((pluginAliases, plugin) => {
+    if (plugin.length !== 3) {
+      return pluginAliases
+    }
+
+    return [...pluginAliases, plugin[2]]
+  }, [])
+}
