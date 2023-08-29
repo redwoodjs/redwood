@@ -12,6 +12,7 @@ Now that the elevator pitch is out of the way, what does that actually *mean*? A
 * Storybook
 * vite
 * Babel
+* Typescript
 
 What do we mean when we say a "full-stack web application?" We're talking about your classic web app: a UI that's visible in the browser (the frontend), backed by a server and database (the backend). Until React Server Components came along (more on those later) React had no idea a server and/or database existed: it was up to you to somehow get data into your app. Maybe this was done with a `fetch()` or in a build step which would pre-bake some of the data needed right into your components. However the data got there, it wasn't an ideal solution.
 
@@ -107,6 +108,8 @@ export const Success = ({ testimonials }) => {
 ```
 
 (In this case we don't export `Empty` so that if there aren't any, that section of the final page won't render anything, not even indicating to the user that something is missing.)
+
+If you ever create additional clients for your server (a mobile app, perhaps) you'll be giving yourself a huge advantage by using GraphQL from the start.
 
 #### Apollo Cache
 
@@ -211,6 +214,14 @@ Redwood adds data mocking for Storybook so that you can display components that 
 ![image](https://github.com/redwoodjs/redwood/assets/300/2753a292-01d4-41b9-9975-edc1f8c1c3ac)
 
 Storybook is strictly a frontend codebase concern.
+
+## vite, Babel and Typescript
+
+Notice at no point above did we say "and then we need to write configuration for this package..." Redwood has done all of that for you. We're sure you won't miss spending hours or days trying to add and configure a package in your application. You can eject from our default configs, and add custom code if needed, but most apps will never need to do this: everything Just Works.
+
+We use vite as our bundler, packaging up the frontend code and automatically code splitting on pages.
+
+The entire framework is typed and so you can autocomplete all the things in your IDE.
 
 ## Coming Soon
 
