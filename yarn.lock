@@ -7815,6 +7815,7 @@ __metadata:
   resolution: "@redwoodjs/babel-config@workspace:packages/babel-config"
   dependencies:
     "@babel/core": 7.22.11
+    "@babel/parser": 7.22.13
     "@babel/plugin-transform-class-properties": 7.22.5
     "@babel/plugin-transform-private-methods": 7.22.5
     "@babel/plugin-transform-private-property-in-object": 7.22.11
@@ -7824,9 +7825,11 @@ __metadata:
     "@babel/preset-typescript": 7.22.11
     "@babel/register": 7.22.5
     "@babel/runtime-corejs3": 7.22.11
+    "@babel/traverse": 7.22.11
     "@redwoodjs/project-config": 6.0.7
     "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.20.1
+    "@types/babel__traverse": 7.20.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
     babel-plugin-module-resolver: 5.0.0
@@ -10398,7 +10401,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7.0.6":
+"@types/babel__traverse@npm:*, @types/babel__traverse@npm:7.20.1, @types/babel__traverse@npm:^7.0.6":
   version: 7.20.1
   resolution: "@types/babel__traverse@npm:7.20.1"
   dependencies:
