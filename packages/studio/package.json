@@ -38,7 +38,7 @@
     "fast-json-parse": "1.0.3",
     "fastify": "4.21.0",
     "fastify-raw-body": "4.2.1",
-    "graphql": "16.7.1",
+    "graphql": "16.8.0",
     "graphql-scalars": "1.22.2",
     "graphql-yoga": "3.9.1",
     "jsonwebtoken": "9.0.0",
