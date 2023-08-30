@@ -1,10 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 
-import type { PluginObj, types } from '@babel/core'
-import { parse as babelParse } from '@babel/parser'
+import type {
+  PluginObj,
+  types,
+  parse as babelParse,
+  traverse,
+} from '@babel/core'
 import type { ParserPlugin } from '@babel/parser'
-import traverse from '@babel/traverse'
 import fg from 'fast-glob'
 import { parse as graphqlParse } from 'graphql'
 
