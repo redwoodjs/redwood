@@ -43,6 +43,7 @@ const Routes = () => {
         <Route path="/signup" page={SignupPage} name="signup" />
         <Private unauthenticated="login">
           <Route path="/dashboard" page={DashboardPage} name="dashboard" />
+          <Route path="/products/{sku}" page={ProductsPage} name="products" />
         </Private>
       </Set>
 
@@ -54,6 +55,12 @@ const Routes = () => {
 ```
 
 You can probably get a sense of how all of this works without ever having seen a Redwood route before! Some routes can be marked as `<Private>` and will not be accessible without being logged in. Others can be wrapped in a "layout" (again, just a React component) to provide common styling shared between pages in your app.
+
+#### Prerender
+
+If you have content on your page that can be purely static (like public facing marketing-focused pages) you can simply add the `prerender` attribute to your route and that page will be completely rendered (no matter how deeply nested the internal components go) into an HTML page. This page loads instantly, but still contains the JS needed to include React. Once React loads, the page is rehydrated and becomes interactive.
+
+You can also prerender pages that contain variables pulled from the URL, like the `/products/{sku}` route above. Redwood will [iterate](../../prerender.md#dynamic-routes--route-hooks) through all available skus and generate a page for each
 
 ### Authentication
 
@@ -69,7 +76,7 @@ Redwood uses GraphQL as the glue between the front- and backends: whenever you w
 
 What if you could have a component that was not only responsible for its own display *but even its own data retrieval*? Meaning everything that component needed in order to display itself could all be self-contained. That includes the code to display while the data is loading, or if something goes wrong. These kinds of uber-components are real, and Redwood calls "cells."
 
-#### Cells
+### Cells
 
 A cell is still just a React component (also called a [single file component](https://www.swyx.io/react-sfcs-here)), it just happens to follow a couple of conventions that make it work as described above:
 
@@ -117,7 +124,9 @@ export const Success = ({ testimonials }) => {
 
 If you ever create additional clients for your server (a mobile app, perhaps) you'll be giving yourself a huge advantage by using GraphQL from the start.
 
-#### Apollo Cache
+Oh, and prerendering also works with cells! At build time, Redwood will start up the GraphQL server and make requests, just as if a user was access the pages, rendering the result to plain HTML, ready to be loaded instantly by the browser.
+
+### Apollo Cache
 
 The Apollo Client library also intelligently caches the results of that `QUERY` above, and so if the user browses away and returns to the homepage, the `Success` component is now rendered *immediately* from the cache! Simultaneously, the query is made to the server again to see if any data has changed since the cache was populated. If so, the new data is merged into the cache and the component will re-render to show any new testimonials since the last time it was viewed.
 
@@ -126,6 +135,10 @@ So, you get performance benefits of an instant display of cached data, but with 
 You can also directly manipulate the cache to add or remove entries, or even use it for [state management](https://www.apollographql.com/docs/react/local-state/local-state-management/).
 
 If you're familiar with GraphQL then you know that on the backend you define the structure of data that GraphQL queries will return with "resolvers." But GraphQL itself doesn't know anything about talking to databases. How does the raw data in the database make it into those resolvers? That's where our next package comes in.
+
+### Accessibility
+
+Redwood includes a couple of components to [aid screen readers](https://redwoodjs.com/docs/accessibility) in properly navigating your app. The `<RouteAnnouncement>` component tells a screen reader to read something aloud, even though it isn't visible in the browser. And the `<RouteFocus>` tells a reader to skip verbose navigation options at the top of a page and get to the content.
 
 ## The Backend
 
@@ -238,7 +251,6 @@ The entire framework is ([strictly](https://redwoodjs.com/docs/typescript/strict
 ## Deployment
 
 Redwood's job doesn't end until your application is deployed to the world! That's why we include deploy commands and config to get your app running on the most popular hosts (whether they are serverless or traditional server infrastructure) including:
-
 
 * [AWS](https://aws.amazon.com/)
 * [Vercel](https://vercel.com/)
