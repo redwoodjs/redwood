@@ -1,5 +1,5 @@
 // TODO (STREAMING) Move this to a new package called @redwoodjs/fe-server (goes
-// well in naming with with @redwoodjs/api-server)
+// well in naming with @redwoodjs/api-server)
 // Only things used during dev can be in @redwoodjs/vite. Everything else has
 // to go in fe-server
 
@@ -15,9 +15,8 @@ import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { registerFwGlobals } from './streaming/registerGlobals'
 import { renderRSC, setClientEntries } from './waku-lib/rsc-handler-worker'
-
-globalThis.RWJS_ENV = {}
 
 /**
  * TODO (STREAMING)
@@ -45,6 +44,8 @@ export async function runFeServer() {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
 
+  registerFwGlobals()
+
   await setClientEntries('load')
 
   // TODO When https://github.com/tc39/proposal-import-attributes and
@@ -66,7 +67,10 @@ export async function runFeServer() {
   // const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
 
   // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(getPaths().web.dist, 'build-manifest.json')
+  const manifestPath = path.join(
+    getPaths().web.dist,
+    'client-build-manifest.json'
+  )
   const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
   const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
 

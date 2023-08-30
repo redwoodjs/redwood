@@ -1,6 +1,7 @@
+import fs from 'node:fs'
 import path from 'node:path'
 
-import execa from 'execa'
+import execa, { ExecaError } from 'execa'
 
 import { getPaths } from '@redwoodjs/project-config'
 // Allow import of untyped package
@@ -19,6 +20,27 @@ export async function handler({
   port,
   smokeTest,
 }: StorybookYargsOptions) {
+  // We add a stub file to type generation because users don't have Storybook
+  // installed when they first start a project. We need to remove the file once
+  // they install Storybook so that the real types come through.
+  fs.rmSync(
+    path.join(getPaths().generated.types.includes, 'web-storybook.d.ts'),
+    { force: true }
+  )
+
+  // Check for conflicting options
+  if (build && smokeTest) {
+    throw new Error('Can not provide both "--build" and "--smoke-test"')
+  }
+
+  if (build && open) {
+    console.warn(
+      c.warning(
+        'Warning: --open option has no effect when running Storybook build'
+      )
+    )
+  }
+
   const cwd = getPaths().web.base
   const staticAssetsFolder = path.join(cwd, 'public')
   const execaOptions: Partial<execa.Options> = {
@@ -72,8 +94,10 @@ export async function handler({
   try {
     await execa.command(command, execaOptions)
   } catch (e) {
-    console.log(c.error((e as Error).message))
-    errorTelemetry(process.argv, (e as Error).message)
-    process.exit(1)
+    if ((e as ExecaError).signal !== 'SIGINT') {
+      console.log(c.error((e as Error).message))
+      errorTelemetry(process.argv, (e as Error).message)
+    }
+    process.exit((e as ExecaError).exitCode ?? 1)
   }
 }

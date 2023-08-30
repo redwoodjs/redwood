@@ -11,7 +11,7 @@ We thought a lot about what the developer experience should be for route-based p
 :::info How's Prerendering different from SSR/SSG/SWR/ISSG/...?
 As Danny said in his [Prerender demo](https://www.youtube.com/watch?v=iorKyMlASZc&t=2844s) at our Community Meetup, the thing all of these have in common is that they render your markup in a Node.js context to produce HTML. The difference is when (build or runtime) and how often.
 
-Redwood currently supports prerendering at _build_ time. So before your deploy your web side, Redwood will render your pages into HTML, and once the JavaScript has been loaded on the browser, the page becomes dynamic.
+Redwood currently supports prerendering at _build_ time. So before you deploy your web side, Redwood will render your pages into HTML, and once the JavaScript has been loaded on the browser, the page becomes dynamic.
 :::
 
 <!-- [This comment](https://community.redwoodjs.com/t/prerender-proposal/849/12) on our Community forum. -->

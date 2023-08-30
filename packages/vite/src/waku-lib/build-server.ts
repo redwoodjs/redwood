@@ -33,15 +33,32 @@ export async function serverBuild(
     // ...configFileConfig,
     root: rwPaths.web.base,
     ssr: {
-      noExternal: ['..'],
+      // Externalize everything except files that have 'use client' in them
+      // (this includes packages in node_modules that you use that have
+      // 'use client' in them)
+      // Files included in `noExternal` are files we want Vite to analyze
+      noExternal: Object.values(clientEntryFiles),
+      // TODO (RSC) This is the original code from waku. I think we can simplify it as above
+      // The code below will for most basic cases just be `[ '..' ]`, which we
+      // believe to be overly broad
+      // noExternal: Object.values(clientEntryFiles).map((fname) => {
+      //   return path
+      //     .relative(path.join(rwPaths.base, 'node_modules'), fname)
+      //     .split('/')[0]
+      // }),
     },
     plugins: [react()],
+    resolve: {
+      conditions: ['react-server'],
+    },
     build: {
       ssr: true,
+      ssrEmitAssets: true,
       // TODO (RSC) Change output dir to just dist. We should be "server
       // first". Client components are the "special case" and should be output
       // to dist/client
       outDir: rwPaths.web.distServer,
+      manifest: 'server-build-manifest.json',
       rollupOptions: {
         input,
         output: {

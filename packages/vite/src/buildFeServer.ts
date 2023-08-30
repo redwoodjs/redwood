@@ -4,26 +4,35 @@ import path from 'path'
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
-import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
+import {
+  getRouteHookBabelPlugins,
+  transformWithBabel,
+} from '@redwoodjs/babel-config'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
-import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
+import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { buildRscFeServer } from './buildRscFeServer'
 import { RWRouteManifest } from './types'
+import { ensureProcessDirWeb } from './utils'
 
-interface BuildOptions {
+export interface BuildOptions {
   verbose?: boolean
+  webDir?: string
 }
 
-export const buildFeServer = async ({ verbose }: BuildOptions) => {
-  const rwPaths = getPaths()
-  const viteConfig = rwPaths.web.viteConfig
+export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
+  ensureProcessDirWeb(webDir)
 
-  if (!viteConfig) {
+  const rwPaths = getPaths()
+  const rwConfig = getConfig()
+  const viteConfigPath = rwPaths.web.viteConfig
+
+  if (!viteConfigPath) {
     throw new Error(
-      'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`'
+      'Vite config not found. You need to setup your project with Vite ' +
+        'using `yarn rw setup vite`'
     )
   }
 
@@ -35,17 +44,34 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
     )
   }
 
+  if (rwConfig.experimental?.rsc?.enabled) {
+    if (!rwPaths.web.entries) {
+      throw new Error('RSC entries file not found')
+    }
+
+    return await buildRscFeServer({
+      viteConfigPath,
+      webSrc: rwPaths.web.src,
+      webHtml: rwPaths.web.html,
+      entries: rwPaths.web.entries,
+      webDist: rwPaths.web.dist,
+      webDistServer: rwPaths.web.distServer,
+      webDistEntries: rwPaths.web.distServerEntries,
+      webRouteManifest: rwPaths.web.routeManifest,
+    })
+  }
+
   // Step 1A: Generate the client bundle
   await buildWeb({ verbose })
 
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
   // so we can switch to a regular import
   // @NOTE: Using dynamic import, because vite is still opt-in
-  const { build } = await import('vite')
+  const { build: viteBuild } = await import('vite')
 
   // Step 1B: Generate the server output
-  await build({
-    configFile: viteConfig,
+  await viteBuild({
+    configFile: viteConfigPath,
     build: {
       // Because we configure the root to be web/src, we need to go up one level
       outDir: rwPaths.web.distServer,
@@ -120,15 +146,15 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   const routesList = getProjectRoutes()
 
   const routeManifest = routesList.reduce<RWRouteManifest>((acc, route) => {
-    acc[route.path] = {
+    acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath].file
+        ? clientBuildManifest[route.relativeFilePath]?.file
         : null,
       matchRegexString: route.matchRegexString,
       // @NOTE this is the path definition, not the actual path
       // E.g. /blog/post/{id:Int}
-      pathDefinition: route.path,
+      pathDefinition: route.pathDefinition,
       hasParams: route.hasParams,
       routeHooks: FIXME_constructRouteHookPath(route.routeHooks),
       redirect: route.redirect

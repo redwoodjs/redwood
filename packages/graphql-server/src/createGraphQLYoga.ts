@@ -16,7 +16,6 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
-  useRedwoodRealtime,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
@@ -150,20 +149,14 @@ export const createGraphQLYoga = ({
       OperationTypeNode.MUTATION,
     ]
 
-    // now allow subscriptions if using them (unless you override)
+    // allow subscriptions if using them (unless you override)
     if (realtime?.subscriptions?.subscriptions) {
       defaultAllowedOperations.push(OperationTypeNode.SUBSCRIPTION)
-    } else {
-      logger.info('Subscriptions are disabled.')
     }
 
     plugins.push(
       useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
     )
-
-    if (realtime) {
-      plugins.push(useRedwoodRealtime(realtime))
-    }
 
     // App-defined plugins
     if (extraPlugins && extraPlugins.length > 0) {
@@ -203,21 +196,6 @@ export const createGraphQLYoga = ({
     // so can process any data added to results and extensions
     plugins.push(useRedwoodLogger(loggerConfig))
 
-    logger.debug(
-      {
-        healthCheckId,
-        allowedOperations,
-        defaultAllowedOperations,
-        allowIntrospection,
-        defaultError,
-        disableIntrospection,
-        disableGraphQL,
-        allowGraphiQL,
-        graphiql,
-        graphiQLEndpoint,
-      },
-      'GraphiQL and Introspection Config'
-    )
     const yoga = createYoga({
       id: healthCheckId,
       landingPage: isDevEnv,

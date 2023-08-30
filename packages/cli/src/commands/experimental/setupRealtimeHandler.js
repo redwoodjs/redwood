@@ -15,6 +15,10 @@ import { isTypeScriptProject } from '../../lib/project'
 import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRealtime'
 import { printTaskEpilogue, isServerFileSetup } from './util'
 
+const { version } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, '../../../package.json'), 'utf-8')
+)
+
 export async function handler({ force, includeExamples, verbose }) {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
@@ -46,7 +50,7 @@ export async function handler({ force, includeExamples, verbose }) {
           isServerFileSetup()
         },
       },
-      addApiPackages(['ioredis']),
+      addApiPackages(['ioredis@^5', `@redwoodjs/realtime@${version}`]),
       {
         title: 'Adding the realtime api lib ...',
         task: () => {

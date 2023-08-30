@@ -11,7 +11,7 @@ import { createServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { defineEntries } from '../waku-server'
+import { defineEntries } from '../entries'
 // import type { unstable_GetCustomModules } from '../waku-server'
 
 import { configFileConfig, resolveConfig } from './config'
@@ -152,12 +152,8 @@ const vitePromise = createServer({
       parentPort.postMessage(mesg)
     }),
   ],
-  ssr: {
-    // FIXME Without this, "use client" directive in waku/router/client
-    // is ignored, and some errors occur.
-    // Unless we fix this, RSC-capable packages aren't supported.
-    // This also seems to cause problems with pnpm.
-    noExternal: ['waku'],
+  resolve: {
+    conditions: ['react-server'],
   },
   appType: 'custom',
 })
@@ -211,8 +207,7 @@ const getEntriesFile = async (
     )
   }
 
-  // TODO: Don't hardcode the name of the entries file
-  return path.join(rwPaths.web.distServer, 'entries.js') // path.join(config.root, config.framework.entriesJs)
+  return rwPaths.web.distServerEntries
 }
 
 const getFunctionComponent = async (
