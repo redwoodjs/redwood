@@ -23,7 +23,8 @@ module.exports = {
   ignorePatterns: [
     'dist',
     'fixtures',
-    'packages/internal/src/build/babelPlugins/__tests__/__fixtures__/**/*',
+    'packages/babel-config/src/plugins/__tests__/__fixtures__/**/*',
+    'packages/babel-config/src/__tests__/__fixtures__/**/*',
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',

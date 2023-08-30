@@ -9,14 +9,13 @@ import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 
 import chalk from 'chalk'
+import { default as enquirer } from 'enquirer'
 
+const rootDir = fileURLToPath(new URL('../', import.meta.url))
 const DEPENDENCY_CRUISER_CONFIG_FILE = '.dependency-cruiser.mjs'
+const globalConfigPath = path.join(rootDir, DEPENDENCY_CRUISER_CONFIG_FILE)
 
-const globalConfigPath = fileURLToPath(
-  new URL(`../${DEPENDENCY_CRUISER_CONFIG_FILE}`, import.meta.url)
-)
-
-function main() {
+async function main() {
   const { positionals, values } = parseArgs({
     allowPositionals: true,
     options: {
@@ -28,12 +27,33 @@ function main() {
     },
   })
 
-  const [targetDir] = positionals
+  let [targetDir] = positionals
+
+  const packages = execSync('yarn workspaces list --json', {
+    encoding: 'utf-8',
+  })
+    .trim()
+    .split('\n')
+    .map(JSON.parse)
+    .filter(({ name }) => name)
+    .flatMap(({ location }) => {
+      const srcPath = path.join(rootDir, location, 'src')
+      const distPath = path.join(rootDir, location, 'dist')
+      return [srcPath, distPath]
+    })
 
   if (!targetDir) {
-    process.exitCode = 1
-    console.error('Error: No target directory specified')
-    return
+    const res = await enquirer.prompt({
+      type: 'select',
+      name: 'targetDir',
+      message: 'Choose a target directory',
+      // Unfortunately we exceed the terminal's height with all our packages
+      // and enquirer doesn't handle it too well.
+      // But showing choices gives users an idea of how it works.
+      choices: [...packages.slice(0, 10), '...'],
+    })
+
+    targetDir = res.targetDir
   }
 
   const { dir: packageDir, base } = path.parse(targetDir)

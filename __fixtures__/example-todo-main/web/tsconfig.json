@@ -24,11 +24,11 @@
     "types": [
       "jest"
     ],
-    "jsx": "preserve",
+    "jsx": "preserve"
   },
   "include": [
     "src",
     "../.redwood/types/includes/all-*",
-    "../.redwood/types/includes/web-*",
+    "../.redwood/types/includes/web-*"
   ]
 }
