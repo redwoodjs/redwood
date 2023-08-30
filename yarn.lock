@@ -7834,7 +7834,7 @@ __metadata:
     core-js: 3.32.0
     esbuild: 0.18.19
     fast-glob: 3.3.1
-    graphql: 16.7.1
+    graphql: 16.8.0
     jest: 29.6.4
     typescript: 5.1.6
   languageName: unknown
@@ -19770,13 +19770,6 @@ __metadata:
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
   checksum: 147471c0c2da15567b0f49f6f8e62d92761c4bee6a953152b1ecfa0041a56bd100b3975218680a35cfe30fdbaf0e9d9fbd764f4d63ec4c217afac27ce9c0bf5d
-  languageName: node
-  linkType: hard
-
-"graphql@npm:16.7.1":
-  version: 16.7.1
-  resolution: "graphql@npm:16.7.1"
-  checksum: 0b4e83382bf3cb9c82ddf61a51aab382c4de50c34025173285c580135fe8646aa281c264fcf0c2214ae92ea925742d86999fe5e2ad842b6f3b54a9ffb0b299d2
   languageName: node
   linkType: hard
 

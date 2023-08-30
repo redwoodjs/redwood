@@ -37,7 +37,7 @@
     "babel-plugin-module-resolver": "5.0.0",
     "core-js": "3.32.0",
     "fast-glob": "3.3.1",
-    "graphql": "16.7.1"
+    "graphql": "16.8.0"
   },
   "devDependencies": {
     "@types/babel-plugin-tester": "9.0.5",
