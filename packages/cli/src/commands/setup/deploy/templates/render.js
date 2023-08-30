@@ -5,12 +5,9 @@ import { getPaths } from '../../../../lib'
 export const PROJECT_NAME = path.basename(getPaths().base)
 
 export const RENDER_YAML = (database) => {
-  // sqlite requires api to be plan of starter
-  // if database starts with "file:./" lets 
-  // assume it's sqlite
   let apiPlan = 'free'
   let databaseIsSqlite = database.startsWith('file:')
-  if(databaseIsSqlite) apiPlan = 'starter'
+  if(databaseIsSqlite) { apiPlan = 'starter' }
   return `#####
 # Documentation
 # Redwood: https://render.com/docs/deploy-redwood
