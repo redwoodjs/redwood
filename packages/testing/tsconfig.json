@@ -14,7 +14,7 @@
   ],
   "references": [
     { "path": "../router" },
-    { "path": "../internal" },
+    { "path": "../babel-config" },
     { "path": "../project-config" },
     { "path": "../web" },
     { "path": "../auth" },
