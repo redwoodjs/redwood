@@ -232,9 +232,11 @@ export const schema = gql`
 `
 ```
 
-The `testimonials` query is marked with the GraphQL directive `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonail` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
+The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonail` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
 
-#### Authentication
+Redwood's backend GraphQL server is powered by [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server) and so you have access to everything that makes Yoga secure and performant: rate and depth limiting, logging, directives, and a ton more.
+
+#### Auth
 
 If a user is logged in, they will be available in any of your services in the `context` object, available everywhere, all the time:
 
