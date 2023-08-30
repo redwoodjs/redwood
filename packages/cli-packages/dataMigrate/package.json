@@ -37,7 +37,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@prisma/client": "5.1.1",
+    "@prisma/client": "5.2.0",
     "@types/fs-extra": "11.0.1",
     "@types/yargs": "17.0.24",
     "esbuild": "0.18.19",
