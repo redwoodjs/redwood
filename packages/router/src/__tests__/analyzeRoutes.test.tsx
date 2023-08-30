@@ -251,7 +251,21 @@ describe('AnalyzeRoutes: with homePage and Children', () => {
 
     expect(Object.keys(pathRouteMap).length).toBe(12)
 
-    // @TODO finish writing the expectations
+    // Make sure  the Wraps aren't remounted between Routes in the same Set
+    // Set ids should be the same between Routes in the same Set, preventing remounting
+    const setIdForEventsRoutes =
+      pathRouteMap['/{org}/events/{eventCode}/edit'].setId
+
+    const otherRoutesInSet = [
+      '/{org}/events/{eventCode}/players',
+      '/{org}/events/{eventCode}/analytics',
+      '/{org}/events/{eventCode}/scores',
+      '/{org}/events/{eventCode}/tweets',
+    ]
+
+    otherRoutesInSet.forEach((route) => {
+      expect(pathRouteMap[route].setId).toEqual(setIdForEventsRoutes)
+    })
   })
 
   test('Handles Private', () => {
