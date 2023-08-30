@@ -2,6 +2,7 @@ import type { Plugin } from '@envelop/core'
 import { useLiveQuery } from '@envelop/live-query'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { astFromDirective } from '@graphql-tools/utils'
+import { useGraphQLSSE } from '@graphql-yoga/plugin-graphql-sse'
 import { createRedisEventTarget } from '@graphql-yoga/redis-event-target'
 import type { CreateRedisEventTargetArgs } from '@graphql-yoga/redis-event-target'
 import type { PubSub } from '@graphql-yoga/subscription'
@@ -222,6 +223,9 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
     onPluginInit({ addPlugin }) {
       if (liveQueriesEnabled) {
         addPlugin(liveQueryPlugin)
+      }
+      if (subscriptionsEnabled) {
+        addPlugin(useGraphQLSSE() as Plugin<object>)
       }
     },
     onContextBuilding() {

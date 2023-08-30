@@ -173,7 +173,7 @@ This lists a single server, in the `production` environment, providing the hostn
 * `branch` - [optional] The branch to deploy (defaults to `main`)
 * `keepReleases` - [optional] The number of previous releases to keep on the server, including the one currently being served (defaults to 5)
 
-The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` file, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
+The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` mannually or by running `ssh-copy-id user@server.com` from your local machine, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
 
 #### Using Environment Variables in `deploy.toml`
 

@@ -54,6 +54,7 @@ export const generateTypeDefs = async () => {
       ...generateTypeDefGlobalContext(),
       ...generateTypeDefScenarios(),
       ...generateTypeDefTestMocks(),
+      ...generateStubStorybookTypes(),
       ...gqlApiTypeDefFiles,
       ...gqlWebTypeDefFiles,
     ],
@@ -198,4 +199,38 @@ export const generateTypeDefGlobImports = () => {
 
 export const generateTypeDefGlobalContext = () => {
   return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
+}
+
+function generateStubStorybookTypes() {
+  const stubStorybookTypesFileContent = `\
+declare module '@storybook/react' {
+  export type Meta<T = any> = any
+  export type StoryObj<T = any> = any
+}
+`
+
+  const redwoodProjectPaths = getPaths()
+
+  const packageJson = JSON.parse(
+    fs.readFileSync(
+      path.join(redwoodProjectPaths.base, 'package.json'),
+      'utf-8'
+    )
+  )
+
+  const hasCliStorybook = Object.keys(packageJson['devDependencies']).includes(
+    '@redwoodjs/cli-storybook'
+  )
+
+  if (hasCliStorybook) {
+    return []
+  }
+
+  const stubStorybookTypesFilePath = path.join(
+    redwoodProjectPaths.generated.types.includes,
+    'web-storybook.d.ts'
+  )
+  fs.writeFileSync(stubStorybookTypesFilePath, stubStorybookTypesFileContent)
+
+  return [stubStorybookTypesFilePath]
 }
