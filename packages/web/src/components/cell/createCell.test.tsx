@@ -5,8 +5,9 @@
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
+import { GraphQLHooksProvider } from '../GraphQLHooksProvider'
+
 import { createCell } from './createCell'
-import { GraphQLHooksProvider } from './GraphQLHooksProvider'
 
 describe('createCell', () => {
   beforeAll(() => {
