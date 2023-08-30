@@ -29,7 +29,7 @@
   "dependencies": {
     "boxen": "5.1.2",
     "chalk": "4.1.2",
-    "enquirer": "2.3.6",
+    "enquirer": "2.4.1",
     "stdout-update": "1.6.8"
   },
   "devDependencies": {
