@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 import type { ConfigEnv, UserConfig, PluginOption } from 'vite'
 import { normalizePath } from 'vite'
 
-import { getWebSideDefaultBabelConfig } from '@redwoodjs/internal/dist/build/babel/web'
+import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import handleJsAsJsx from './plugins/vite-plugin-jsx-loader'

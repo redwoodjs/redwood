@@ -19,6 +19,9 @@ const {
   useQuery,
   useMutation,
   useSubscription,
+  useBackgroundQuery,
+  useReadQuery,
+  useSuspenseQuery,
   setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
@@ -314,6 +317,9 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
           useQuery={useQuery}
           useMutation={useMutation}
           useSubscription={useSubscription}
+          useBackgroundQuery={useBackgroundQuery}
+          useReadQuery={useReadQuery}
+          useSuspenseQuery={useSuspenseQuery}
         >
           {children}
         </GraphQLHooksProvider>
