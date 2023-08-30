@@ -170,6 +170,8 @@ model Testimonial {
 
 Prisma has a couple command line tools that take changes to this file and turn them into [SQL DDL commands](https://www.sqlshack.com/sql-ddl-getting-started-with-sql-ddl-commands-in-sql-server/) which are executed against your database to update its structure to match.
 
+#### GraphQL
+
 Redwood abstracts the concept of GraphQL resolver into a "service." You will generally start with one service function per GraphQL query/mutation. For example, going back to our testimonials example, you would have a service function named `testimonials()` that returns the data for the GraphQL query named `testimonials`. That function uses Prisma to query the database:
 
 ```js
@@ -180,11 +182,11 @@ export const testimonials = () => {
 }
 ```
 
-How does GraphQL know to go here for its `testimonials` resolver? Redwood introduces an "sdl" file, which contains the mapping from GraphQL to the world of services:
+How does GraphQL know to go here for its `testimonials` resolver? Redwood introduces an "SDL" file, which contains the mapping from GraphQL to the world of services:
 
 ```js
 export const schema = gql`
-  type User {
+  type Testimonial {
     id: Int!
     author: String!
     quote: String!
@@ -199,6 +201,57 @@ export const schema = gql`
 ```
 
 Any definitions listed in the `type Query` section are expected to have a service function with the same name: `testimonials` -> `testimonials()`
+
+### Security
+
+Redwood is secure-by-default: no GraphQL request will be fulfilled if made by an unauthenticated user. You can choose to allow access to certain query/mutations to the public, but you'll have to enable that manually for each option. Consider a more complete Testimonials SDL file:
+
+```js
+export const schema = gql`
+  type Testimonial {
+    id: Int!
+    author: String!
+    quote: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+  }
+
+  type CreateTestimonialInput {
+    author: String!
+    quote: String!
+  }
+
+  type Query {
+    testimonials: [Testimonial!] @skipAuth
+  }
+
+  type Mutation {
+    createTestimonal($input: CreateTestimonialInput!): Testimonial! @requireAuth
+    deleteTestimonal($id: Int!): Testimonial! @requireAuth
+  }
+`
+```
+
+The `testimonials` query is marked with the GraphQL directive `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonail` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
+
+#### Authentication
+
+If a user is logged in, they will be available in any of your services in the `context` object, available everywhere, all the time:
+
+```js
+import { db } from 'src/lib/db'
+import { AuthenticationError } from '@redwoodjs/graphql-server'
+
+export const createTestimonial = ({ data }) => {
+  if (context.currentUser.roles.includes('admin')) {
+    return db.testimonial.create({ data })
+  } else {
+    throw new AuthenticationError("You are not authorized to create testimonials")
+  }
+}
+```
+
+So `@requireAuth` and `@skipAuth` provide a gate around entire GraphQL queries for authenticated users, but once inside you can be more fine-grained based on who the user actually is.
 
 ## Generators
 
