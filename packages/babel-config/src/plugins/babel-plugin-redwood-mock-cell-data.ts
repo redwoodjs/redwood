@@ -1,10 +1,12 @@
+import fs from 'fs'
 import path from 'path'
 
-// TODO: Figure out why Wallaby doesn't work with a normal import.
 import type { PluginObj, types } from '@babel/core'
-
-import { getBaseDirFromFile } from '@redwoodjs/project-config'
-import { getProject, URL_file } from '@redwoodjs/structure'
+import { parse as babelParse, ParserPlugin } from '@babel/parser'
+import traverse from '@babel/traverse'
+import chalk from 'chalk'
+import fg from 'fast-glob'
+import { parse as graphqlParse } from 'graphql'
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []
@@ -49,7 +51,6 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         // 4. The Cell has a operation name for the QUERY export.
 
         const d = p.node.declaration
-        const filename = state.file.opts.filename
 
         let mockFunction
 
@@ -107,32 +108,41 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         }
 
         // Find the model of the Cell that is in the same directory.
-        const dir = URL_file(path.dirname(state.file.opts.filename))
-        const project = getProject(getBaseDirFromFile(filename))
-        const cell = project.cells.find((path: { uri: string }) => {
-          return path.uri.startsWith(dir)
+        const dirname = path.dirname(state.file.opts.filename)
+        const cellName = path.basename(dirname)
+
+        const [cellPath] = fg.sync(`${cellName}.{js,jsx,ts,tsx}`, {
+          cwd: dirname,
+          absolute: true,
+          ignore: ['node_modules'],
         })
 
-        if (!cell || !cell?.filePath) {
+        if (!cellPath) {
           return
         }
 
-        if (!cell.queryOperationName) {
+        const cellMetadata = getCellMetadata(cellPath)
+
+        if (cellMetadata.hasDefaultExport || !cellMetadata.hasQueryExport) {
           return
         }
 
         // mockGraphQLQuery(<operationName>, <mockFunction>)
         const mockGraphQLCall = t.callExpression(
           t.identifier('mockGraphQLQuery'),
-          [t.stringLiteral(cell.queryOperationName), mockFunction]
+          [t.stringLiteral(cellMetadata.operationName), mockFunction]
         )
 
         // Delete original "export const standard"
         nodesToRemove = [...nodesToRemove, p]
 
+        const exportsAfterQuery = cellMetadata.namedExports.find(
+          ({ name }) => name === 'afterQuery'
+        )
+
         // + import { afterQuery } from './${cellFileName}'
         // + export const standard = () => afterQuery(...)
-        if (cell.exportedSymbols.has('afterQuery')) {
+        if (exportsAfterQuery) {
           const importAfterQuery = t.importDeclaration(
             [
               t.importSpecifier(
@@ -140,7 +150,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 t.identifier('afterQuery')
               ),
             ],
-            t.stringLiteral(`./${path.basename(cell.filePath)}`)
+            t.stringLiteral(`./${path.basename(cellPath)}`)
           )
 
           nodesToInsert = [
@@ -165,4 +175,111 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
       },
     },
   }
+}
+
+export const getCellMetadata = (p: string) => {
+  const ast = getCellAst(p)
+
+  let hasDefaultExport = false
+  const namedExports: NamedExports[] = []
+  let operation
+
+  traverse(ast, {
+    ExportDefaultDeclaration() {
+      hasDefaultExport = true
+      return
+    },
+    ExportNamedDeclaration(path) {
+      // Re-exports from other modules
+      // Eg: export { a, b } from './module'
+      const specifiers = path.node?.specifiers
+
+      if (specifiers.length) {
+        for (const s of specifiers) {
+          const id = s.exported as types.Identifier
+          namedExports.push({
+            name: id.name,
+            type: 're-export',
+          })
+        }
+        return
+      }
+
+      const declaration = path.node.declaration
+
+      if (!declaration) {
+        return
+      }
+
+      if (declaration.type === 'VariableDeclaration') {
+        const id = declaration.declarations[0].id as types.Identifier
+
+        namedExports.push({
+          name: id.name as string,
+          type: 'variable',
+        })
+      } else if (declaration.type === 'FunctionDeclaration') {
+        namedExports.push({
+          name: declaration?.id?.name as string,
+          type: 'function',
+        })
+      } else if (declaration.type === 'ClassDeclaration') {
+        namedExports.push({
+          name: declaration?.id?.name,
+          type: 'class',
+        })
+      }
+    },
+    TaggedTemplateExpression(path) {
+      // @ts-expect-error wip
+      if (path.parent?.id?.name !== 'QUERY') {
+        return
+      }
+
+      operation = path.node.quasi.quasis[0].value.raw
+    },
+  })
+
+  const hasQueryExport =
+    namedExports.findIndex((v) => v.name === 'QUERY') !== -1
+
+  let operationName = ''
+
+  if (operation) {
+    const document = graphqlParse(operation)
+
+    for (const definition of document.definitions) {
+      if (definition.kind === 'OperationDefinition' && definition.name?.value) {
+        operationName = definition.name.value
+      }
+    }
+  }
+
+  return {
+    hasDefaultExport,
+    namedExports,
+    hasQueryExport,
+    operationName,
+  }
+}
+
+function getCellAst(filePath: string): types.Node {
+  const code = fs.readFileSync(filePath, 'utf-8')
+  const plugins = ['typescript', 'jsx'].filter(Boolean) as ParserPlugin[]
+
+  try {
+    return babelParse(code, {
+      sourceType: 'module',
+      plugins,
+    })
+  } catch (e: any) {
+    console.error(chalk.red(`Error parsing: ${filePath}`))
+    console.error(e)
+    throw new Error(e?.message) // we throw, so typescript doesn't complain about returning
+  }
+}
+
+interface NamedExports {
+  name: string
+  type: 're-export' | 'variable' | 'function' | 'class'
 }
