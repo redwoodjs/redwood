@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`configureGraphiQLPlayground when in development should configure the GraphiQL Playground when allowGraphiQL is not provided 1`] = `
+{
+  "defaultQuery": "query Redwood {
+    redwood {
+    version
+    }
+  }",
+  "headerEditorEnabled": true,
+  "headers": undefined,
+  "title": "Redwood GraphQL Playground",
+}
+`;
+
+exports[`configureGraphiQLPlayground when in development should configure the GraphiQL Playground when allowGraphiQL is null 1`] = `
+{
+  "defaultQuery": "query Redwood {
+    redwood {
+    version
+    }
+  }",
+  "headerEditorEnabled": true,
+  "headers": undefined,
+  "title": "Redwood GraphQL Playground",
+}
+`;
+
+exports[`configureGraphiQLPlayground when in development should configure the GraphiQL Playground when allowGraphiQL is true 1`] = `
+{
+  "defaultQuery": "query Redwood {
+    redwood {
+    version
+    }
+  }",
+  "headerEditorEnabled": true,
+  "headers": undefined,
+  "title": "Redwood GraphQL Playground",
+}
+`;
+
+exports[`configureGraphiQLPlayground when in development should configure the GraphiQL Playground when allowGraphiQL is undefined 1`] = `
+{
+  "defaultQuery": "query Redwood {
+    redwood {
+    version
+    }
+  }",
+  "headerEditorEnabled": true,
+  "headers": undefined,
+  "title": "Redwood GraphQL Playground",
+}
+`;
+
+exports[`configureGraphiQLPlayground when not in development environment should configure the GraphiQL Playground when allowGraphiQL is true 1`] = `
+{
+  "defaultQuery": "query Redwood {
+    redwood {
+    version
+    }
+  }",
+  "headerEditorEnabled": true,
+  "headers": undefined,
+  "title": "Redwood GraphQL Playground",
+}
+`;
