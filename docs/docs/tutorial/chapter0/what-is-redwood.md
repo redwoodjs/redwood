@@ -60,7 +60,9 @@ You can probably get a sense of how all of this works without ever having seen a
 
 If you have content on your page that can be purely static (like public facing marketing-focused pages) you can simply add the `prerender` attribute to your route and that page will be completely rendered (no matter how deeply nested the internal components go) into an HTML page. This page loads instantly, but still contains the JS needed to include React. Once React loads, the page is rehydrated and becomes interactive.
 
-You can also prerender pages that contain variables pulled from the URL, like the `/products/{sku}` route above. Redwood will [iterate](../../prerender.md#dynamic-routes--route-hooks) through all available skus and generate a page for each
+You can also prerender pages that contain variables pulled from the URL, like the `/products/{sku}` route above. Redwood will [iterate](../../prerender.md#dynamic-routes--route-hooks) through all available skus and generate a page for each.
+
+This is Redwood's version of static site generation, aka SSG.
 
 ### Authentication
 
