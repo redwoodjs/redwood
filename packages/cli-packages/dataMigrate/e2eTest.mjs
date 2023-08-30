@@ -118,8 +118,6 @@ await execa.command('yarn rw g data-migration test', {
   stdio: 'inherit',
 })
 
-await execa.command('yarn rw data-migrate up', {
-  stdio: 'inherit',
-})
+await execa.command(command)
 
 // check that up worked...
