@@ -2,7 +2,7 @@
 
 *What follows is a high-level description of Redwood and how it works. If you want to get right to the meat and potatoes of building someting, skip ahead to [Chapter 1](../chapter1/prerequisites.md).*
 
-Redwood is a React framework with lots pre-installed packages and configuration that makes it easy to build full-stack web applications.
+Redwood is a React framework with lots of pre-installed packages and configuration that makes it easy to build full-stack web applications.
 
 Now that the elevator pitch is out of the way, what does that actually *mean*? At its core, Redwood is React plus a bunch of stuff that makes your life as a developer easier. Some of that stuff includes:
 
@@ -18,11 +18,11 @@ What do we mean when we say a "full-stack web application?" We're talking about 
 
 One of the core principals behind Redwood was that getting data from the backend should be as simple as possible, going so far as to create conventions around it so that retrieving data for display in a component was as easy as adding a couple of lines of code directly into the component itself. Oh and while we're at it, Redwood will automatically show a loading message while waiting for the data, a different state if there's an error, and even a separate message if the data returned from the server is empty (the classic "blank slate").
 
-## How a Readwood App Works
+## How a Redwood App Works
 
 A Redwood app is actually two apps: a frontend (that's the React part) and a backend, which is your server and talks to a database and other third party systems. Your app is technically a monorepo with two top-level directories: `web` containing the frontend code and `api` containing the backend.
 
-You can start them both with a single command: `yarn rw dev`
+You can start them both with a single command: `yarn redwood dev`
 
 ## The Frontend
 
@@ -59,13 +59,13 @@ You can probably get a sense of how all of this works without ever having seen a
 
 The `<Private>` route limits access to users that are authenticated, but how do they authenticate? Redwood includes integrations to many popular third party authentication hosts (including [Auth0](https://auth0.com/), [Supabase](https://supabase.com/docs/guides/auth) and [Clerk](https://clerk.com/)). You can also [host your own auth](https://redwoodjs.com/docs/auth/dbauth), or write your own [custom authentication](https://redwoodjs.com/docs/auth/custom) option. If going self-hosted, we include login, signup, and reset password pages, as well as the option to include TouchID/FaceID and third party biometric readers!
 
-Once authenticated, how do you what a user is allowed to do or not? Redwood includes helpers for [role-based access control](https://redwoodjs.com/docs/how-to/role-based-access-control-rbac) that integrates on both the front- and backend.
+Once authenticated, how do you know what a user is allowed to do or not do? Redwood includes helpers for [role-based access control](https://redwoodjs.com/docs/how-to/role-based-access-control-rbac) that integrates on both the front- and backend.
 
 The homepage is accessible *without* being logged in, browsing to `/` will load the `HomePage` page (component) which itself is just composed of more React components, nothing special there. But, what if the homepage, say, displayed some testimonials from the database? Ahh, now things are getting interesting. Here's where Redwood's handpicked selection of technologies start to take the spotlight.
 
 ### GraphQL
 
-Redwood uses GraphQL as the glue between the front- and backends: whenever you want data from the server/database, you're going to retrieve it via GraphQL. Now, we could have just given you raw access to some a GraphQL library and let you make those calls yourself. We use [Apollo Client](https://www.apollographql.com/apollo-client) on the frontend and Apollo provides hooks like `[useQuery()](https://www.apollographql.com/tutorials/lift-off-part1/10-the-usequery-hook)` and `[useMutation()](https://www.apollographql.com/tutorials/lift-off-part4/08-the-usemutation-hook)` to retrieve and set data, respectively. But Redwood has a much deeper integration.
+Redwood uses GraphQL as the glue between the front- and backends: whenever you want data from the server/database, you're going to retrieve it via GraphQL. Now, we could have just given you raw access to some GraphQL library and let you make those calls yourself. We use [Apollo Client](https://www.apollographql.com/apollo-client) on the frontend and Apollo provides hooks like [useQuery()](https://www.apollographql.com/tutorials/lift-off-part1/10-the-usequery-hook) and [useMutation()](https://www.apollographql.com/tutorials/lift-off-part4/08-the-usemutation-hook) to retrieve and set data, respectively. But Redwood has a much deeper integration.
 
 What if you could have a component that was not only responsible for its own display *but even its own data retrieval*? Meaning everything that component needed in order to display itself could all be self-contained. That includes the code to display while the data is loading, or if something goes wrong. These kinds of uber-components are real, and Redwood calls "cells."
 
@@ -211,7 +211,7 @@ Redwood includes several Jest helpers and matchers, allowing you to mock out Gra
 
 * [Scenarios](../../testing#scenarios) accept a simple JSON object and pre-populate your database with just that data so it's in a known state that you can test against.
 * [Mock Service Worker](../../testing#mock-service-worker) allow you to simulate the response from API calls, including GraphQL
-* [mockCurrentUser()] is a helper that allows you to stub out the user that's logged in on either the `web` or `api` codebase, without having to worry about actually passing them through your auth provider
+* `mockCurrentUser()` is a helper that allows you to stub out the user that's logged in on either the `web` or `api` codebase, without having to worry about actually passing them through your auth provider
 
 ![image](https://github.com/redwoodjs/redwood/assets/300/614d9867-9765-474f-8b8b-c9217f3f7dcf)
 
@@ -219,7 +219,7 @@ You can write Jest tests in both the front- and backend of your app.
 
 ## Storybook
 
-While Jest can test your code, [Storybook](https://storybook.js.org/) can be used to catalog and test your UI. They call themselves a "frontend workshop for building UI components in isolation" and we couldn't agree more. Build your components separate from your app, even having props be dynamic while viewing their effects.
+While Jest can test your code, [Storybook](https://storybook.js.org/) can be used to catalog and test your UI. They call themselves a "frontend workshop for building UI components in isolation" and we couldn't agree more. Build your components separate from your app, even having props be dynamic while viewing their effects. All you have to do is run `yarn redwood storybook`.
 
 Redwood adds data mocking for Storybook so that you can display components that would normally be populated with data from GraphQL, but without needing a server running.
 
@@ -229,22 +229,25 @@ Storybook is strictly a frontend codebase concern.
 
 ## vite, Babel and Typescript
 
-Notice at no point above did we say "and then we need to write configuration for this package..." Redwood has done all of that for you. We're sure you won't miss spending hours or days trying to add and configure a package in your application. You can eject from our default configs, and add custom code if needed, but most apps will never need to do this: everything Just Works.
+Notice at no point above did we say "and then we need to write configuration for this package..." Redwood has done all of that for you and will continue to do that with every release of a new version. We're sure you won't miss spending hours or days trying to add and configure a package in your application. You can eject from our default configs, and add custom code if needed, but most apps will never need to do this: everything Just Works.
 
 We use vite as our bundler, packaging up the frontend code and automatically code splitting on pages. It also serves the frontend (the `web` directory). The backend (the `api` directory) is compiled by Babel and served with [Fastify](https://fastify.dev/).
 
-The entire framework is typed and so you can autocomplete all the things in your IDE.
+The entire framework is ([strictly](https://redwoodjs.com/docs/typescript/strict-mode)) typed so you can autocomplete all the things in your IDE.
 
 ## Deployment
 
 Redwood's job doesn't end until your application is deployed to the world! That's why we include deploy commands and config to get your app running on the most popular hosts (whether they are serverless or traditional server infrastructure) including:
 
-* [Netlify](https://www.netlify.com/)
-* [Render](https://render.com/)
-* [Vercel](https://vercel.com/)
-* [Flightcontrol](https://www.flightcontrol.dev/)
+
 * [AWS](https://aws.amazon.com/)
+* [Vercel](https://vercel.com/)
 * [Google Cloud](https://cloud.google.com/)
+* [Azure](https://azure.microsoft.com/en-us/)
+* [Render](https://render.com/)
+* [Flightcontrol](https://www.flightcontrol.dev/)
+* [Netlify](https://www.netlify.com/)
+* anywhere [Docker](https://www.docker.com) is accepted
 
 You can even deploy to your own server via SSH commands (we call that our [Baremetal](../../deploy/baremetal.md) deploy).
 
@@ -252,20 +255,21 @@ You can even deploy to your own server via SSH commands (we call that our [Barem
 
 Redwood is still in active development, and we're working on some [features](https://community.redwoodjs.com/c/experimental-features/25) that are on the cutting edge of the React ecosystem:
 
-* [React Server Components](https://community.redwoodjs.com/t/react-server-components-rsc/5081)
+* [React Server Components](https://community.redwoodjs.com/t/react-server-components-rsc/5081) and a new transparent, non-GraphQL API
 * [SSR/Streaming](https://community.redwoodjs.com/t/render-modes-ssr-streaming-experimental/4858)
 * [Realtime and GraphQL Subscriptions](https://community.redwoodjs.com/t/redwoodjs-realtime/5002)
 * [Redwood Studio](https://community.redwoodjs.com/t/redwood-studio-experimental/4771) for getting runtime insights into your project
-* [Mailers](https://github.com/redwoodjs/redwood/pull/9058)
-* Access to the [Fastify server file](https://community.redwoodjs.com/t/fastify-server-file-experimental/4851)
+* [Mailer](https://github.com/redwoodjs/redwood/pull/9058)
+
+These are just a few highlights from our current [Bighorn Epoch](https://tom.preston-werner.com/2023/05/30/redwoods-next-epoch-all-in-on-rsc). You can see the full list and follow along via our Roadmap project board at [www.redwoodjs.com/roadmap](https://redwoodjs.com/roadmap).
 
 ## Backing
 
-Redwood was created by Tom Preston-Werner, cofounder of GitHub and projects like Semantic Versioning, TOML, Jekyll, and many more. Tom believes that Javascript applications, specifically full-stack JS applications, are the future of the web, and Redwood has his full support.
+Redwood was created by Tom Preston-Werner, cofounder of GitHub and projects like Semantic Versioning, TOML, Jekyll, and many more. Tom believes that JavaScript applications, specifically full-stack JS applications, are the future of the web, and Redwood has his full support.
 
 ## Updates
 
-Redwood is constantly being updated and sticks strictly to semantic versioning requirements. You can be sure that there won't be any sudden, breaking changes without a major version revision. Redwood is famous for its [copious release notes](https://community.redwoodjs.com/t/redwood-3-0-0-is-now-available/3989), and if code changes need to be made to your app, we make every effort to include a codemod script that will make the changes for you.
+Redwood is constantly being updated and sticks strictly to semantic versioning requirements. You can be sure that there won't be any sudden, breaking changes without a major version revision. Redwood is famous for its [copious release notes](https://community.redwoodjs.com/t/redwood-3-0-0-is-now-available/3989) and comprehensive upgrade guides, and if code changes need to be made to your app, we make every effort to include a codemod script that will make the changes for you.
 
 ## Community
 
