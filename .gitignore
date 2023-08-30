@@ -24,3 +24,4 @@ blog-test-project/*
 
 # For esbuild.
 **/meta.json
+**/meta.*.json

@@ -1,5 +1,5 @@
 // api/src/services/auctions/auctions.ts
-import type { LiveQueryStorageMechanism } from '@redwoodjs/graphql-server'
+import type { LiveQueryStorageMechanism } from '@redwoodjs/realtime'
 
 import { logger } from 'src/lib/logger'
 
