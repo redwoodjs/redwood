@@ -7870,11 +7870,13 @@ __metadata:
   dependencies:
     "@prisma/client": 5.1.1
     "@redwoodjs/babel-config": 6.0.7
+    "@redwoodjs/cli-helpers": 6.0.7
     "@redwoodjs/project-config": 6.0.7
     "@redwoodjs/telemetry": 6.0.7
     "@types/fs-extra": 11.0.1
     "@types/yargs": 17.0.24
     chalk: 4.1.2
+    dotenv-defaults: 5.0.2
     esbuild: 0.18.19
     execa: 5.1.1
     fast-glob: 3.3.1
