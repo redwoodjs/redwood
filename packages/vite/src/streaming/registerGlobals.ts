@@ -25,6 +25,47 @@ export const registerFwGlobals = () => {
       rwConfig.experimental.streamingSsr &&
       rwConfig.experimental.streamingSsr.enabled,
     RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
+    RWJS_EXP_SSR_GRAPHQL_ENDPOINT: (() => {
+      const apiPath =
+        rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql'
+
+      // If its an absolute url, use as is
+      if (/^[a-zA-Z][a-zA-Z\d+\-.]*?:/.test(apiPath)) {
+        return apiPath
+      } else {
+        const proxiedApiUrl =
+          'http://' + rwConfig.web.host + ':' + rwConfig.web.port + apiPath
+
+        if (
+          process.env.NODE_ENV === 'production' &&
+          !process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT?.length
+        ) {
+          console.log('------------------ WARNING ! -------------------------')
+          console.warn()
+          console.warn()
+
+          console.warn(
+            `You haven't configured your API absolute url. Localhost is unlikely to work in production`
+          )
+
+          console.warn(`Using ${proxiedApiUrl}`)
+          console.warn()
+
+          console.warn(
+            'You can override this for by setting RWJS_EXP_SSR_GRAPHQL_ENDPOINT in your environment vars'
+          )
+          console.warn()
+
+          console.log('------------------ WARNING ! -------------------------')
+
+          return proxiedApiUrl
+        }
+
+        return (
+          proxiedApiUrl || (process.env.RWJS_EXP_SSR_GRAPHQL_ENDPOINT as string)
+        )
+      }
+    })(),
   }
 
   globalThis.RWJS_DEBUG_ENV = {

@@ -230,10 +230,13 @@ export const setupYoga = (fastify: FastifyInstance) => {
     },
   })
 
-  const yoga = createYoga<{
-    req: FastifyRequest
-    reply: FastifyReply
-  }>({
+  const yoga = createYoga<
+    {
+      req: FastifyRequest
+      reply: FastifyReply
+    },
+    Record<string, unknown>
+  >({
     schema,
     logging: {
       debug: (...args) => args.forEach((arg) => fastify.log.debug(arg)),

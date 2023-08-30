@@ -22,4 +22,12 @@ describe('replaceComponentSvgs', () => {
       removeWhitespace: true, // needed for matching
     })
   })
+
+  it('Deals with when SVGs are rexported', async () => {
+    await matchFolderTransform('replaceComponentSvgs', 'reExported', {
+      useJsCodeshift: true,
+      targetPathsGlob: '**/*.{js,jsx,tsx}',
+      removeWhitespace: true, // needed for matching
+    })
+  })
 })
