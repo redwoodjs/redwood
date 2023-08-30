@@ -7,7 +7,9 @@ export const PROJECT_NAME = path.basename(getPaths().base)
 export const RENDER_YAML = (database) => {
   let apiPlan = 'free'
   let databaseIsSqlite = database.startsWith('file:')
-  if(databaseIsSqlite) { apiPlan = 'starter' }
+  if(databaseIsSqlite) {
+    apiPlan = 'starter'
+  }
   return `#####
 # Documentation
 # Redwood: https://render.com/docs/deploy-redwood
