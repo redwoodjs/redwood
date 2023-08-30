@@ -5,7 +5,6 @@ import type { PluginObj, types } from '@babel/core'
 import { parse as babelParse } from '@babel/parser'
 import type { ParserPlugin } from '@babel/parser'
 import traverse from '@babel/traverse'
-import chalk from 'chalk'
 import fg from 'fast-glob'
 import { parse as graphqlParse } from 'graphql'
 
@@ -273,7 +272,7 @@ function getCellAst(filePath: string): types.Node {
       plugins,
     })
   } catch (e: any) {
-    console.error(chalk.red(`Error parsing: ${filePath}`))
+    console.error(`Error parsing: ${filePath}`)
     console.error(e)
     throw new Error(e?.message) // we throw, so typescript doesn't complain about returning
   }
