@@ -137,13 +137,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         // Delete original "export const standard"
         nodesToRemove = [...nodesToRemove, p]
 
-        const exportsAfterQuery = cellMetadata.namedExports.find(
-          ({ name }) => name === 'afterQuery'
-        )
-
         // + import { afterQuery } from './${cellFileName}'
         // + export const standard = () => afterQuery(...)
-        if (exportsAfterQuery) {
+        if (cellMetadata.hasAfterQueryExport) {
           const importAfterQuery = t.importDeclaration(
             [
               t.importSpecifier(
@@ -241,8 +237,10 @@ export const getCellMetadata = (p: string) => {
     },
   })
 
-  const hasQueryExport =
-    namedExports.findIndex((v) => v.name === 'QUERY') !== -1
+  const hasQueryExport = namedExports.find(({ name }) => name === 'QUERY')
+  const hasAfterQueryExport = namedExports.find(
+    ({ name }) => name === 'afterQuery'
+  )
 
   let operationName = ''
 
@@ -260,6 +258,7 @@ export const getCellMetadata = (p: string) => {
     hasDefaultExport,
     namedExports,
     hasQueryExport,
+    hasAfterQueryExport,
     operationName,
   }
 }
