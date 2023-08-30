@@ -55,7 +55,13 @@ const Routes = () => {
 
 You can probably get a sense of how all of this works without ever having seen a Redwood route before! Some routes can be marked as `<Private>` and will not be accessible without being logged in. Others can be wrapped in a "layout" (again, just a React component) to provide common styling shared between pages in your app.
 
-So browsing to `/` will load the `HomePage` page (component) which itself is just composed of more React components, nothing special there. But, what if the homepage displayed some testimonials from the database? Ahh, now things are getting interesting. Here's where Redwood's handpicked selection of technologies start to take the spotlight.
+### Authentication
+
+The `<Private>` route limits access to users that are authenticated, but how do they authenticate? Redwood includes integrations to many popular third party authentication hosts (including [Auth0](https://auth0.com/), [Supabase](https://supabase.com/docs/guides/auth) and [Clerk](https://clerk.com/)). You can also [host your own auth](https://redwoodjs.com/docs/auth/dbauth), or write your own [custom authentication](https://redwoodjs.com/docs/auth/custom) option. If going self-hosted, we include login, signup, and reset password pages, as well as the option to include TouchID/FaceID and third party biometric readers!
+
+Once authenticated, how do you what a user is allowed to do or not? Redwood includes helpers for [role-based access control](https://redwoodjs.com/docs/how-to/role-based-access-control-rbac) that integrates on both the front- and backend.
+
+The homepage is accessible *without* being logged in, browsing to `/` will load the `HomePage` page (component) which itself is just composed of more React components, nothing special there. But, what if the homepage, say, displayed some testimonials from the database? Ahh, now things are getting interesting. Here's where Redwood's handpicked selection of technologies start to take the spotlight.
 
 ### GraphQL
 
@@ -203,6 +209,10 @@ Being able to develop a full-stack application this easily is great, but how do 
 
 Redwood includes several Jest helpers and matchers, allowing you to mock out GraphQL requests, database data, logged in users, and more.
 
+* [Scenarios](../../testing#scenarios) accept a simple JSON object and pre-populate your database with just that data so it's in a known state that you can test against.
+* [Mock Service Worker](../../testing#mock-service-worker) allow you to simulate the response from API calls, including GraphQL
+* [mockCurrentUser()] is a helper that allows you to stub out the user that's logged in on either the `web` or `api` codebase, without having to worry about actually passing them through your auth provider
+
 ![image](https://github.com/redwoodjs/redwood/assets/300/614d9867-9765-474f-8b8b-c9217f3f7dcf)
 
 You can write Jest tests in both the front- and backend of your app.
@@ -221,18 +231,33 @@ Storybook is strictly a frontend codebase concern.
 
 Notice at no point above did we say "and then we need to write configuration for this package..." Redwood has done all of that for you. We're sure you won't miss spending hours or days trying to add and configure a package in your application. You can eject from our default configs, and add custom code if needed, but most apps will never need to do this: everything Just Works.
 
-We use vite as our bundler, packaging up the frontend code and automatically code splitting on pages.
+We use vite as our bundler, packaging up the frontend code and automatically code splitting on pages. It also serves the frontend (the `web` directory). The backend (the `api` directory) is compiled by Babel and served with [Fastify](https://fastify.dev/).
 
 The entire framework is typed and so you can autocomplete all the things in your IDE.
 
+## Deployment
+
+Redwood's job doesn't end until your application is deployed to the world! That's why we include deploy commands and config to get your app running on the most popular hosts (whether they are serverless or traditional server infrastructure) including:
+
+* [Netlify](https://www.netlify.com/)
+* [Render](https://render.com/)
+* [Vercel](https://vercel.com/)
+* [Flightcontrol](https://www.flightcontrol.dev/)
+* [AWS](https://aws.amazon.com/)
+* [Google Cloud](https://cloud.google.com/)
+
+You can even deploy to your own server via SSH commands (we call that our [Baremetal](../../deploy/baremetal.md) deploy).
+
 ## Coming Soon
 
-Redwood is still in active development, and we're working on some features that are on the cutting edge of the React ecosystem:
+Redwood is still in active development, and we're working on some [features](https://community.redwoodjs.com/c/experimental-features/25) that are on the cutting edge of the React ecosystem:
 
-* React Server Components
-* Suspense and Streaming
-* GraphQL Realtime and Subscriptions
-* Fastify
+* [React Server Components](https://community.redwoodjs.com/t/react-server-components-rsc/5081)
+* [SSR/Streaming](https://community.redwoodjs.com/t/render-modes-ssr-streaming-experimental/4858)
+* [Realtime and GraphQL Subscriptions](https://community.redwoodjs.com/t/redwoodjs-realtime/5002)
+* [Redwood Studio](https://community.redwoodjs.com/t/redwood-studio-experimental/4771) for getting runtime insights into your project
+* [Mailers](https://github.com/redwoodjs/redwood/pull/9058)
+* Access to the [Fastify server file](https://community.redwoodjs.com/t/fastify-server-file-experimental/4851)
 
 ## Backing
 
