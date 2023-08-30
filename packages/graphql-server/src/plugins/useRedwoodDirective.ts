@@ -11,7 +11,7 @@ import {
 } from 'graphql'
 import { Plugin } from 'graphql-yoga'
 
-import { GlobalContext } from '../index'
+import type { GlobalContext } from '../index'
 
 export interface DirectiveParams<
   FieldType = any,

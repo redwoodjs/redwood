@@ -3,10 +3,20 @@ import React, { useCallback } from 'react'
 import { Redirect } from './links'
 import { routes } from './router'
 import { useRouterState } from './router-context'
+import type { GeneratedRoutesMap } from './util'
 
-export function AuthenticatedRoute(props: any) {
+interface AuthenticatedRouteProps {
+  children: React.ReactNode
+  roles?: string | string[]
+  unauthenticated?: keyof GeneratedRoutesMap
+  whileLoadingAuth?: () => React.ReactElement | null
+  private?: boolean
+}
+export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (
+  props
+) => {
   const {
-    private: privateSet,
+    private: isPrivate,
     unauthenticated,
     roles,
     whileLoadingAuth,
@@ -24,7 +34,7 @@ export function AuthenticatedRoute(props: any) {
   }, [isAuthenticated, roles, hasRole])
 
   // Make sure `wrappers` is always an array with at least one wrapper component
-  if (privateSet && unauthorized()) {
+  if (isPrivate && unauthorized()) {
     if (!unauthenticated) {
       throw new Error(
         'Private Sets need to specify what route to redirect unauthorized ' +
@@ -39,14 +49,15 @@ export function AuthenticatedRoute(props: any) {
         globalThis.location.pathname +
         encodeURIComponent(globalThis.location.search)
 
-      if (!routes[unauthenticated]) {
+      // We reassign the type like this, because AvailableRoutes is generated in the user's project
+      if (!(routes as GeneratedRoutesMap)[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
 
       let unauthenticatedPath
 
       try {
-        unauthenticatedPath = routes[unauthenticated]()
+        unauthenticatedPath = (routes as GeneratedRoutesMap)[unauthenticated]()
       } catch (e) {
         if (
           e instanceof Error &&

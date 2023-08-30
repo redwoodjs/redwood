@@ -4,8 +4,10 @@ import path from 'path'
 import { build as esbuildBuild, PluginBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { getRouteHookBabelPlugins } from '@redwoodjs/internal'
-import { transformWithBabel } from '@redwoodjs/internal/dist/build/babel/api'
+import {
+  getRouteHookBabelPlugins,
+  transformWithBabel,
+} from '@redwoodjs/babel-config'
 import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
@@ -13,12 +15,16 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { buildRscFeServer } from './buildRscFeServer'
 import { RWRouteManifest } from './types'
+import { ensureProcessDirWeb } from './utils'
 
 export interface BuildOptions {
   verbose?: boolean
+  webDir?: string
 }
 
-export const buildFeServer = async ({ verbose }: BuildOptions) => {
+export const buildFeServer = async ({ verbose, webDir }: BuildOptions = {}) => {
+  ensureProcessDirWeb(webDir)
+
   const rwPaths = getPaths()
   const rwConfig = getConfig()
   const viteConfigPath = rwPaths.web.viteConfig
@@ -140,15 +146,15 @@ export const buildFeServer = async ({ verbose }: BuildOptions) => {
   const routesList = getProjectRoutes()
 
   const routeManifest = routesList.reduce<RWRouteManifest>((acc, route) => {
-    acc[route.path] = {
+    acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath].file
+        ? clientBuildManifest[route.relativeFilePath]?.file
         : null,
       matchRegexString: route.matchRegexString,
       // @NOTE this is the path definition, not the actual path
       // E.g. /blog/post/{id:Int}
-      pathDefinition: route.path,
+      pathDefinition: route.pathDefinition,
       hasParams: route.hasParams,
       routeHooks: FIXME_constructRouteHookPath(route.routeHooks),
       redirect: route.redirect

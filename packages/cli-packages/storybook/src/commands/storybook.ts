@@ -74,6 +74,8 @@ export async function handler(options: StorybookYargsOptions): Promise<void> {
     open: options.open,
     smokeTest: options.smokeTest,
   })
+  // @ts-expect-error - Custom workaround for storybook telemetry
+  process.emit('shutdown-telemetry')
 
   const { handler: storybookHandler } = await import('./storybookHandler.js')
   await storybookHandler(options)
