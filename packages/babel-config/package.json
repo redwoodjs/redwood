@@ -40,7 +40,7 @@
     "graphql": "16.8.0"
   },
   "devDependencies": {
-    "@types/babel-plugin-tester": "9.0.5",
+    "@babel/parser": "7.22.13",
     "@types/babel__core": "7.20.1",
     "babel-plugin-tester": "11.0.4",
     "esbuild": "0.18.19",

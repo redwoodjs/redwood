@@ -7815,6 +7815,7 @@ __metadata:
   resolution: "@redwoodjs/babel-config@workspace:packages/babel-config"
   dependencies:
     "@babel/core": 7.22.11
+    "@babel/parser": 7.22.13
     "@babel/plugin-transform-class-properties": 7.22.5
     "@babel/plugin-transform-private-methods": 7.22.5
     "@babel/plugin-transform-private-property-in-object": 7.22.11
@@ -7825,7 +7826,6 @@ __metadata:
     "@babel/register": 7.22.5
     "@babel/runtime-corejs3": 7.22.11
     "@redwoodjs/project-config": 6.0.7
-    "@types/babel-plugin-tester": 9.0.5
     "@types/babel__core": 7.20.1
     babel-plugin-auto-import: 1.1.0
     babel-plugin-graphql-tag: 3.3.0
@@ -10330,16 +10330,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel-plugin-tester@npm:9.0.5":
-  version: 9.0.5
-  resolution: "@types/babel-plugin-tester@npm:9.0.5"
-  dependencies:
-    "@types/babel__core": "*"
-    "@types/prettier": "*"
-  checksum: 716bd9e5e7996c13ff2f1d15c5b47d59ce925ab617f4b218cc8c627257af71ebfe62eec058a66c380a59030f56ad838e2930cd9ab39c6a95e334642d8ca504ec
-  languageName: node
-  linkType: hard
-
 "@types/babel-template@npm:*":
   version: 6.25.2
   resolution: "@types/babel-template@npm:6.25.2"
@@ -10366,7 +10356,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:*, @types/babel__core@npm:7.20.1, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
+"@types/babel__core@npm:7.20.1, @types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
   version: 7.20.1
   resolution: "@types/babel__core@npm:7.20.1"
   dependencies:
@@ -11033,7 +11023,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:*, @types/prettier@npm:2.7.3":
+"@types/prettier@npm:2.7.3":
   version: 2.7.3
   resolution: "@types/prettier@npm:2.7.3"
   checksum: 0960b5c1115bb25e979009d0b44c42cf3d792accf24085e4bfce15aef5794ea042e04e70c2139a2c3387f781f18c89b5706f000ddb089e9a4a2ccb7536a2c5f0
