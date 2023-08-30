@@ -111,9 +111,14 @@ function getFilesInDir(dir: string) {
 }
 
 export async function updateMailTemplates() {
-  const distFiles = getFilesInDir(
-    path.join(getPaths().api.dist, 'mail')
-  ).filter((file) => file.endsWith('.js'))
+  const mailTemplateDistDir = path.join(getPaths().api.dist, 'mail')
+  if (!fs.existsSync(mailTemplateDistDir)) {
+    return
+  }
+
+  const distFiles = getFilesInDir(mailTemplateDistDir).filter((file) =>
+    file.endsWith('.js')
+  )
   const srcFiles = getFilesInDir(path.join(getPaths().api.src, 'mail')).filter(
     // The src file must have a corresponding dist file
     (file) => {
@@ -260,6 +265,9 @@ function getMailTemplateComponents(templateFilePath: string) {
 export async function updateMailRenderers() {
   try {
     const mailerFilePath = path.join(getPaths().api.dist, 'lib', 'mailer.js')
+    if (!fs.existsSync(mailerFilePath)) {
+      return
+    }
 
     // This is not particularly memory efficient, it'll grow each time the mailer is reloaded
     // I do not currently believe there is a way to invalidate the module load cache
