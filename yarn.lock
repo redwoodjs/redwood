@@ -7828,7 +7828,7 @@ __metadata:
     "@testing-library/react": 14.0.0
     core-js: 3.32.0
     jest: 29.6.2
-    msw: 1.2.3
+    msw: 1.2.5
     react: 18.3.0-canary-035a41c4e-20230704
     typescript: 5.1.6
   languageName: unknown
@@ -8550,7 +8550,7 @@ __metadata:
     jest: 29.6.2
     jest-environment-jsdom: 29.6.2
     jest-watch-typeahead: 2.2.2
-    msw: 1.2.3
+    msw: 1.2.5
     ts-toolbelt: 9.6.0
     typescript: 5.1.6
     whatwg-fetch: 3.6.17
@@ -14367,16 +14367,6 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: 3787bd65ecd98ab3a1acc3b4f71d006268a675875e49ee6ea75fb54ba73d268b97544368358c18c42445e408e076ae8ad5cec8fbad36942a2c7ac654883dc61e
-  languageName: node
-  linkType: hard
-
-"chalk@npm:4.1.1":
-  version: 4.1.1
-  resolution: "chalk@npm:4.1.1"
-  dependencies:
-    ansi-styles: ^4.1.0
-    supports-color: ^7.1.0
-  checksum: 3866c8b96eca56b5ff4e1e9a243b65e4f77694a486a2cc49316d54af9dae463d2c52bd99b9f0b7a924b87faf3a16dd6ed12d3a7442ac385b608f285e54696c18
   languageName: node
   linkType: hard
 
@@ -24361,16 +24351,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:1.2.3":
-  version: 1.2.3
-  resolution: "msw@npm:1.2.3"
+"msw@npm:1.2.5":
+  version: 1.2.5
+  resolution: "msw@npm:1.2.5"
   dependencies:
     "@mswjs/cookies": ^0.2.2
     "@mswjs/interceptors": ^0.17.5
     "@open-draft/until": ^1.0.3
     "@types/cookie": ^0.4.1
     "@types/js-levenshtein": ^1.1.1
-    chalk: 4.1.1
+    chalk: ^4.1.1
     chokidar: ^3.4.2
     cookie: ^0.4.2
     graphql: ^15.0.0 || ^16.0.0
@@ -24391,7 +24381,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: d6b1988f2db92b09942ea8f6f362e4f1b308bc6ffb0ead387899c49d9191e7a14d505fcef85f854f577bd8c7682a087cb5308f50fec9721cc51c3e650cf73867
+  checksum: e93a3f273ab0b5e7f9fdb1b6a2f96c4d131e2b570ac15f7bbf55ea6e173a660bd4cafbee91fe403a25cb07f42a910a71a8ccbb03ff9253eb5247130afc640f1d
   languageName: node
   linkType: hard
 
@@ -28627,7 +28617,7 @@ __metadata:
     lerna: 7.1.4
     listr2: 6.6.0
     make-dir-cli: 3.0.0
-    msw: 1.2.3
+    msw: 1.2.5
     ncp: 2.0.0
     nodemon: 2.0.22
     npm-packlist: 7.0.4
