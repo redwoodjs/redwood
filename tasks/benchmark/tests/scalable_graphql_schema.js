@@ -15,6 +15,8 @@ export const options = {
   },
 }
 
+// NOTE: Please ensure this is consistent with the number of models in the
+//       setup script.
 const modelCount = 1024
 
 export default function () {

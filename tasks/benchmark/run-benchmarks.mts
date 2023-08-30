@@ -37,6 +37,9 @@ const args = yargs(hideBin(process.argv))
   .help()
   .parseSync()
 
+console.log(args)
+process.exit(0)
+
 const REDWOODJS_FRAMEWORK_PATH = path.join(__dirname, '..', '..')
 const REDWOOD_PROJECT_DIRECTORY =
   args._?.[0]?.toString() ??
@@ -201,8 +204,7 @@ async function main() {
           stdio: 'inherit'
         })
 
-        // Collect the results
-        // TODO: Collect the results
+        // TODO: Consider collecting the results into some summary output?
       } catch (_error) {
         console.warn('The k6 test failed')
       }
