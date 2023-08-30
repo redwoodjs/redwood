@@ -7929,6 +7929,7 @@ __metadata:
     "@types/fs-extra": 11.0.1
     "@types/yargs": 17.0.24
     chalk: 4.1.2
+    dotenv-defaults: 5.0.2
     esbuild: 0.18.19
     execa: 5.1.1
     fast-glob: 3.3.1
