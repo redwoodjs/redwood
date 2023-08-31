@@ -29,7 +29,7 @@ describe('configureGraphQLIntrospection', () => {
       expect(disableIntrospection).toBe(true)
     })
 
-    it('should disable GraphQL Introspection  when allowIntrospection is not provided', () => {
+    it('should disable GraphQL Introspection when allowIntrospection is not provided', () => {
       const { disableIntrospection } = configureGraphQLIntrospection({})
 
       expect(disableIntrospection).toBe(true)
@@ -43,8 +43,9 @@ describe('configureGraphQLIntrospection', () => {
       expect(disableIntrospection).toBe(true)
     })
 
-    it('should disable GraphQL Introspection  when allowIntrospection is null', () => {
+    it('should disable GraphQL Introspection when allowIntrospection is null', () => {
       const { disableIntrospection } = configureGraphQLIntrospection({
+        // @ts-expect-error - We don't explicitly allow null, but we will cover it in the tests anyway
         allowIntrospection: null,
       })
 
@@ -96,6 +97,7 @@ describe('configureGraphQLIntrospection', () => {
 
     it('should not disable GraphQL Introspection when allowIntrospection is null', () => {
       const { disableIntrospection } = configureGraphQLIntrospection({
+        // @ts-expect-error - We don't explicitly allow null, but we will cover it in the tests anyway
         allowIntrospection: null,
       })
 

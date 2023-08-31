@@ -13,6 +13,12 @@ describe('configureGraphiQLPlayground', () => {
       expect(process.env.NODE_ENV).toBe('test')
     })
 
+    it('should return false when no config is provided', () => {
+      const result = configureGraphiQLPlayground({})
+
+      expect(result).toBe(false)
+    })
+
     it('should configure the GraphiQL Playground when allowGraphiQL is true', () => {
       const result = configureGraphiQLPlayground({
         allowGraphiQL: true,
@@ -51,6 +57,7 @@ describe('configureGraphiQLPlayground', () => {
 
     it('should return false when allowGraphiQL is null', () => {
       const result = configureGraphiQLPlayground({
+        // @ts-expect-error - We don't explicitly allow null, but we will cover it in the tests anyway
         allowGraphiQL: null,
         generateGraphiQLHeader: jest.fn(),
       })
@@ -69,6 +76,13 @@ describe('configureGraphiQLPlayground', () => {
     afterAll(() => {
       process.env.NODE_ENV = curNodeEnv
       expect(process.env.NODE_ENV).toBe('test')
+    })
+
+    it('should configure the GraphiQL Playground when no config is provided', () => {
+      const result = configureGraphiQLPlayground({})
+
+      expect(result).not.toBe(false)
+      expect(result).toMatchSnapshot()
     })
 
     it('should configure the GraphiQL Playground when allowGraphiQL is true', () => {
@@ -111,6 +125,7 @@ describe('configureGraphiQLPlayground', () => {
 
     it('should configure the GraphiQL Playground when allowGraphiQL is null', () => {
       const result = configureGraphiQLPlayground({
+        // @ts-expect-error - We don't explicitly allow null, but we will cover it in the tests anyway
         allowGraphiQL: null,
         generateGraphiQLHeader: jest.fn(),
       })
