@@ -44,7 +44,7 @@ export function createSuspendingCell<
     }),
     afterQuery = (data) => ({ ...data }),
     isEmpty = isDataEmpty,
-    Loading = () => <>Loading...</>,
+    Loading,
     Failure,
     Empty,
     Success,
@@ -125,17 +125,35 @@ export function createSuspendingCell<
       )
     }
 
+    const wrapInSuspenseIfLoadingPresent = (
+      superSuccessElement: React.ReactNode,
+      LoadingComponent: typeof Loading
+    ) => {
+      if (!LoadingComponent) {
+        return superSuccessElement
+      }
+
+      return (
+        <Suspense
+          fallback={
+            <LoadingComponent {...props} queryResult={suspenseQueryResult} />
+          }
+        >
+          {superSuccessElement}
+        </Suspense>
+      )
+    }
+
     return (
       <CellErrorBoundary renderFallback={FailureComponent}>
-        <Suspense
-          fallback={<Loading {...props} queryResult={suspenseQueryResult} />}
-        >
+        {wrapInSuspenseIfLoadingPresent(
           <SuperSuccess
             userProps={props}
             queryRef={queryRef as QueryReference<DataObject>}
             suspenseQueryResult={suspenseQueryResult}
-          />
-        </Suspense>
+          />,
+          Loading
+        )}
       </CellErrorBoundary>
     )
   }
