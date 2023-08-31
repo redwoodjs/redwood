@@ -12,7 +12,7 @@ export default async function routes(
         req: FastifyRequest
         reply: FastifyReply
       },
-      {}
+      Record<string, unknown>
     >
   }
 ) {
