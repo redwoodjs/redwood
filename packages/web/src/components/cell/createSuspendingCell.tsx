@@ -126,11 +126,11 @@ export function createSuspendingCell<
     }
 
     const wrapInSuspenseIfLoadingPresent = (
-      superSuccessElement: React.ReactNode,
+      suspendingSuccessElement: React.ReactNode,
       LoadingComponent: typeof Loading
     ) => {
       if (!LoadingComponent) {
-        return superSuccessElement
+        return suspendingSuccessElement
       }
 
       return (
@@ -139,7 +139,7 @@ export function createSuspendingCell<
             <LoadingComponent {...props} queryResult={suspenseQueryResult} />
           }
         >
-          {superSuccessElement}
+          {suspendingSuccessElement}
         </Suspense>
       )
     }
