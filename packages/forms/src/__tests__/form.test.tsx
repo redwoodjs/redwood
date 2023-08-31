@@ -896,7 +896,7 @@ describe('Form', () => {
     )
   })
 
-  it('should throw an intelligable error if the name prop is missing', async () => {
+  it('should throw an intelligible error if the name prop is missing', async () => {
     const mockFn = jest.fn()
 
     const testRender = () =>
@@ -908,6 +908,6 @@ describe('Form', () => {
         </Form>
       )
 
-    expect(testRender).toThrow('name field must be provided')
+    expect(testRender).toThrow('`name` prop must be provided')
   })
 })
