@@ -5,6 +5,7 @@ import type {
 } from '@apollo/client'
 import * as apolloClient from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { getMainDefinition } from '@apollo/client/utilities'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer'
 
@@ -18,6 +19,9 @@ const {
   useQuery,
   useMutation,
   useSubscription,
+  useBackgroundQuery,
+  useReadQuery,
+  useSuspenseQuery,
   setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
@@ -30,13 +34,15 @@ import {
 } from '../components/FetchConfigProvider'
 import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
 
+import { SSELink } from './sseLink'
+
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
 export type RedwoodApolloLinkName =
   | 'withToken'
   | 'authMiddleware'
   | 'updateDataApolloLink'
-  | 'httpLink'
+  | 'terminatingLink'
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
@@ -50,7 +56,10 @@ export type RedwoodApolloLinks = [
   RedwoodApolloLink<'withToken'>,
   RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'updateDataApolloLink'>,
-  RedwoodApolloLink<'httpLink', apolloClient.HttpLink>
+  RedwoodApolloLink<
+    'terminatingLink',
+    apolloClient.ApolloLink | apolloClient.HttpLink
+  >
 ]
 
 export type RedwoodApolloLinkFactory = (
@@ -188,12 +197,32 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
   }
 
-  // The order here is important. The last link *must* be a terminating link like HttpLink.
+  // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
+  // is subscription it needs to use the SSELink (server sent events link).
+  const terminatingLink = apolloClient.split(
+    ({ query }) => {
+      const definition = getMainDefinition(query)
+
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      )
+    },
+    new SSELink({
+      url: uri,
+      auth: { authProviderType, tokenFn: getToken },
+      httpLinkConfig,
+      headers,
+    }),
+    httpLink
+  )
+
+  // The order here is important. The last link *must* be a terminating link like HttpLink or SSELink.
   const redwoodApolloLinks: RedwoodApolloLinks = [
     { name: 'withToken', link: withToken },
     { name: 'authMiddleware', link: authMiddleware },
     { name: 'updateDataApolloLink', link: updateDataApolloLink },
-    { name: 'httpLink', link: httpLink },
+    { name: 'terminatingLink', link: terminatingLink },
   ]
 
   let link = redwoodApolloLink
@@ -288,6 +317,9 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
           useQuery={useQuery}
           useMutation={useMutation}
           useSubscription={useSubscription}
+          useBackgroundQuery={useBackgroundQuery}
+          useReadQuery={useReadQuery}
+          useSuspenseQuery={useSuspenseQuery}
         >
           {children}
         </GraphQLHooksProvider>

@@ -5,7 +5,6 @@ import React from 'react'
 
 import { renderToPipeableStream, renderToString } from 'react-dom/server'
 
-import { getPaths } from '@redwoodjs/project-config'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import {
@@ -19,36 +18,38 @@ interface RenderToStreamArgs {
   ServerEntry: any
   currentPathName: string
   metaTags: TagDescriptor[]
-  includeJs: boolean
+  cssLinks: string[]
+  isProd: boolean
+  jsBundles?: string[]
   res: Writable
 }
 
-export function reactRenderToStream({
-  ServerEntry,
-  currentPathName,
-  metaTags,
-  includeJs,
-  res,
-}: RenderToStreamArgs) {
-  const rwPaths = getPaths()
+interface StreamOptions {
+  waitForAllReady?: boolean
+}
 
-  const bootstrapModules = [
-    path.join(__dirname, '../../inject', 'reactRefresh.js'),
-  ]
+export function reactRenderToStream(
+  renderOptions: RenderToStreamArgs,
+  streamOptions: StreamOptions
+) {
+  const { waitForAllReady = false } = streamOptions
+  const {
+    ServerEntry,
+    currentPathName,
+    metaTags,
+    cssLinks,
+    isProd,
+    jsBundles = [],
+    res,
+  } = renderOptions
 
-  if (includeJs) {
-    // type casting: guaranteed to have entryClient by this stage, because checks run earlier
-    bootstrapModules.push(rwPaths.web.entryClient as string)
+  if (!isProd) {
+    // For development, we need to inject the react-refresh runtime
+    jsBundles.push(path.join(__dirname, '../../inject', 'reactRefresh.js'))
   }
 
-  // TODO (STREAMING) CSS is handled by Vite in dev mode, we don't need to
-  // worry about it in dev but..... it causes a flash of unstyled content.
-  // For now I'm just injecting index css here
-  // Looks at collectStyles in packages/vite/src/fully-react/find-styles.ts
-  const FIXME_HardcodedIndexCss = ['index.css']
-
   const assetMap = JSON.stringify({
-    css: FIXME_HardcodedIndexCss,
+    css: cssLinks,
     meta: metaTags,
   })
 
@@ -58,9 +59,6 @@ export function reactRenderToStream({
   // This is effectively a transformer stream
   const intermediateStream = createServerInjectionStream({
     outputStream: res,
-    onFinal: () => {
-      res.end()
-    },
     injectionState,
   })
 
@@ -72,30 +70,39 @@ export function reactRenderToStream({
       },
       ServerEntry({
         url: currentPathName,
-        css: FIXME_HardcodedIndexCss,
+        css: cssLinks,
         meta: metaTags,
       })
     ),
     {
-      bootstrapScriptContent: includeJs
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
-        : undefined,
-      bootstrapModules,
+      bootstrapScriptContent:
+        // Only insert assetMap if clientside JS will be loaded
+        jsBundles.length > 0
+          ? `window.__REDWOOD__ASSET_MAP = ${assetMap}`
+          : undefined,
+      bootstrapModules: jsBundles,
       onShellReady() {
         // Pass the react "input" stream to the injection stream
         // This intermediate stream will interweave the injected html into the react stream's <head>
-        pipe(intermediateStream)
+
+        if (!waitForAllReady) {
+          pipe(intermediateStream)
+        }
+      },
+      onAllReady() {
+        if (waitForAllReady) {
+          pipe(intermediateStream)
+        }
       },
     }
   )
 }
+
 function createServerInjectionStream({
   outputStream,
-  onFinal,
   injectionState,
 }: {
   outputStream: Writable
-  onFinal: () => void
   injectionState: Set<RenderCallback>
 }) {
   return new Writable({
@@ -140,7 +147,13 @@ function createServerInjectionStream({
       )
 
       outputStream.write(elementsAtTheEnd)
-      onFinal()
+
+      // This will find all the elements added by PortalHead during a server render, and move them into <head>
+      outputStream.write(
+        "<script>document.querySelectorAll('body [data-rwjs-head]').forEach((el)=>{el.removeAttribute('data-rwjs-head');document.head.appendChild(el);});</script>"
+      )
+
+      outputStream.end()
     },
   })
 }

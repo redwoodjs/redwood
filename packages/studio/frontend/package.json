@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@apollo/client": "3.7.17",
+    "@apollo/client": "3.8.1",
     "@graphiql/plugin-explorer": "0.1.22",
     "@graphiql/toolkit": "0.8.4",
     "@headlessui/react": "1.7.15",
@@ -22,7 +22,7 @@
     "@tailwindcss/forms": "0.5.3",
     "@tremor/react": "3.4.1",
     "graphiql": "2.4.7",
-    "graphql": "16.7.1",
+    "graphql": "16.8.0",
     "graphql-scalars": "1.22.2",
     "json-bigint-patch": "0.0.8",
     "pretty-ms": "7.0.1",

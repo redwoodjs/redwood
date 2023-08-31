@@ -640,10 +640,10 @@ You could just write your own function and throw whatever you like, without usin
 
 ### validateWith()
 
-The same behavior as `validateWithSync()` but works with Promises.
+The same behavior as `validateWithSync()` but works with Promises. Remember to `await` the validation.
 
 ```jsx
-validateWith(async () => {
+await validateWith(async () => {
   if (await db.products.count() >= 100) {
     throw "There can only be a maximum of 100 products in your store"
   }
