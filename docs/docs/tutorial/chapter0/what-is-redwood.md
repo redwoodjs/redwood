@@ -1,6 +1,6 @@
 # What is Redwood?
 
-*What follows is a high-level description of Redwood and how it works. If you want to get right to the meat and potatoes of building someting, skip ahead to [Chapter 1](../chapter1/prerequisites.md).*
+*What follows is a high-level description of Redwood and how it works. If you want to get right to the meat and potatoes of building something, skip ahead to [Chapter 1](../chapter1/prerequisites.md).*
 
 Redwood is a React framework with lots of pre-installed packages and configuration that makes it easy to build full-stack web applications.
 
