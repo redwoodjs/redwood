@@ -1,11 +1,6 @@
 import React from 'react'
 
 import {
-  toHaveFocus,
-  toHaveClass,
-  toBeInTheDocument,
-} from '@testing-library/jest-dom/matchers'
-import {
   screen,
   render,
   cleanup,
@@ -13,7 +8,6 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-expect.extend({ toHaveFocus, toHaveClass, toBeInTheDocument })
 
 import {
   Form,
@@ -111,7 +105,7 @@ describe('Form', () => {
   const TestComponentWithRef = () => {
     const inputEl = React.useRef<HTMLInputElement>(null)
     React.useEffect(() => {
-      inputEl.current && inputEl.current.focus()
+      inputEl.current?.focus()
     })
     return (
       <Form>
@@ -200,9 +194,9 @@ describe('Form', () => {
 
   it('lets users pass custom coercion functions', async () => {
     const mockFn = jest.fn()
-    const coercionFunctionNumber = (value) =>
+    const coercionFunctionNumber = (value: string) =>
       parseInt(value.replace('_', ''), 10)
-    const coercionFunctionText = (value) => value.replace('_', '-')
+    const coercionFunctionText = (value: string) => value.replace('_', '-')
 
     render(
       <Form onSubmit={mockFn}>
