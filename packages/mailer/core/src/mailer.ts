@@ -121,7 +121,23 @@ export class Mailer<
     }
 
     // Initial logging
-    this.logger.debug({}, `Mailer initialized in ${this.mode} mode`)
+    let defaultsNotice = ''
+    if (this.mode === 'production') {
+      defaultsNotice = `, is using the '${defaultRendererKey.toString()}' renderer by default and the '${defaultHandlerKey.toString()}' handler by default`
+    } else {
+      const modeHandlerKey =
+        this.mode === 'test' ? testHandlerKey : developmentHandlerKey
+      const handlerNotice =
+        modeHandlerKey != null
+          ? `is using the '${modeHandlerKey.toString()}' handler for all mail`
+          : 'is not sending mail to any handler'
+
+      defaultsNotice = `, is using the '${defaultRendererKey.toString()}' renderer by default and ${handlerNotice}`
+    }
+    this.logger.debug(
+      {},
+      `Mailer initialized in ${this.mode} mode${defaultsNotice}`
+    )
   }
 
   async send<
