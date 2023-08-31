@@ -180,7 +180,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
   displayName?: string
 }
 
-export type SuperSuccessProps = React.PropsWithChildren<
+export type SuspendingSuccessProps = React.PropsWithChildren<
   Record<string, unknown>
 > & {
   queryRef: QueryReference<DataObject> // from useBackgroundQuery

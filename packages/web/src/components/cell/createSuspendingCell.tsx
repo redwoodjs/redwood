@@ -11,7 +11,7 @@ import { CellErrorBoundary, FallbackProps } from './CellErrorBoundary'
 import {
   CreateCellProps,
   DataObject,
-  SuperSuccessProps,
+  SuspendingSuccessProps,
   SuspenseCellQueryResult,
 } from './cellTypes'
 import { isDataEmpty } from './isCellEmpty'
@@ -50,7 +50,7 @@ export function createSuspendingCell<
     Success,
     displayName = 'Cell',
   } = createCellProps
-  function SuperSuccess(props: SuperSuccessProps) {
+  function SuspendingSuccess(props: SuspendingSuccessProps) {
     const { queryRef, suspenseQueryResult, userProps } = props
     const { data, networkStatus } = useReadQuery<DataObject>(queryRef)
     const afterQueryData = afterQuery(data as DataObject)
@@ -79,7 +79,7 @@ export function createSuspendingCell<
     )
   }
 
-  SuperSuccess.displayName = displayName
+  SuspendingSuccess.displayName = displayName
 
   // @NOTE: Note that we are returning a HoC here!
   return (props: CellProps) => {
@@ -147,7 +147,7 @@ export function createSuspendingCell<
     return (
       <CellErrorBoundary renderFallback={FailureComponent}>
         {wrapInSuspenseIfLoadingPresent(
-          <SuperSuccess
+          <SuspendingSuccess
             userProps={props}
             queryRef={queryRef as QueryReference<DataObject>}
             suspenseQueryResult={suspenseQueryResult}
