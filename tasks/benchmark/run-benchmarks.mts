@@ -27,7 +27,6 @@ const args = yargs(hideBin(process.argv))
   .option('setup', { default: [], type: 'array', alias: 's' })
   .option('test', { default: [], type: 'array', alias: 't' })
   .option('clean-up', { default: true, type: 'boolean' })
-  .option('verbose-git', { default: false, type: 'boolean' })
   .scriptName('run-benchmarks')
   .example('run-benchmarks', 'Run all the benchmarks')
   .example(
@@ -36,9 +35,6 @@ const args = yargs(hideBin(process.argv))
   )
   .help()
   .parseSync()
-
-console.log(args)
-process.exit(0)
 
 const REDWOODJS_FRAMEWORK_PATH = path.join(__dirname, '..', '..')
 const REDWOOD_PROJECT_DIRECTORY =
@@ -155,15 +151,6 @@ async function main() {
     console.log(`\nCleaning up the project state...`)
     await $`git reset --hard`
     await $`git clean -fd`
-
-    // await execa('git', ['reset', '--hard'], {
-    //   cwd: REDWOOD_PROJECT_DIRECTORY,
-    //   stdio: args.verboseGit ? 'inherit' : 'ignore',
-    // })
-    // await execa('git', ['clean', '-fd'], {
-    //   cwd: REDWOOD_PROJECT_DIRECTORY,
-    //   stdio: args.verboseGit ? 'inherit' : 'ignore',
-    // })
 
     // Run the setup
     console.log(`\nRunning setup: ${setup}\n`)
