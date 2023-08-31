@@ -5,7 +5,6 @@ import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { getPaths } from '@redwoodjs/project-config'
-import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
 
@@ -59,7 +58,6 @@ export async function handler() {
   } catch (e) {
     process.exitCode = 1
     console.error(c.error((e as Error).message))
-    errorTelemetry(process.argv, (e as Error).message)
   }
 }
 
