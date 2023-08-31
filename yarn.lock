@@ -169,17 +169,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/experimental-nextjs-app-support@npm:0.4.1":
-  version: 0.4.1
-  resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.1"
+"@apollo/experimental-nextjs-app-support@npm:0.4.2":
+  version: 0.4.2
+  resolution: "@apollo/experimental-nextjs-app-support@npm:0.4.2"
   dependencies:
+    server-only: ^0.0.1
     superjson: ^1.12.2
     ts-invariant: ^0.10.3
   peerDependencies:
     "@apollo/client": ">=3.8.0-rc || ^3.8.0"
     next: ^13.4.1
     react: ^18
-  checksum: 5b342c8b38d5af83b5d735d5a8542911b2892c304000266330ee49e23b15bc12dbefc09b788e4aff484f37389acceed3d5e28e91a226d5e7ffb2a12100164c92
+  checksum: 854d2cc2db9a60d8f7072bf2f476b3524875e8674f7f3acb581f00ae1319508fb0d2b52d1e151d9ea37946ae46595e924bd568b9e1aa628c99473ae6a1978cf4
   languageName: node
   linkType: hard
 
@@ -9363,7 +9364,7 @@ __metadata:
   resolution: "@redwoodjs/web@workspace:packages/web"
   dependencies:
     "@apollo/client": 3.8.1
-    "@apollo/experimental-nextjs-app-support": 0.4.1
+    "@apollo/experimental-nextjs-app-support": 0.4.2
     "@babel/cli": 7.22.10
     "@babel/core": 7.22.11
     "@babel/runtime-corejs3": 7.22.11
@@ -31990,6 +31991,13 @@ __metadata:
     parseurl: ~1.3.3
     send: 0.18.0
   checksum: fa9f0e21a540a28f301258dfe1e57bb4f81cd460d28f0e973860477dd4acef946a1f41748b5bd41c73b621bea2029569c935faa38578fd34cd42a9b4947088ba
+  languageName: node
+  linkType: hard
+
+"server-only@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "server-only@npm:0.0.1"
+  checksum: 4704f0ef85da0be981af6d4ed8e739d39bcfd265b9c246a684060acda5642d0fdc6daffc2308e71e2682c5f508090978802eae0a77623c9b90a49f9ae68048d6
   languageName: node
   linkType: hard
 
