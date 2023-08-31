@@ -91,6 +91,7 @@ describe('paths', () => {
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
+          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
@@ -329,6 +330,7 @@ describe('paths', () => {
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
+          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
@@ -614,6 +616,7 @@ describe('paths', () => {
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
+          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
@@ -857,6 +860,7 @@ describe('paths', () => {
           dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
+          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),

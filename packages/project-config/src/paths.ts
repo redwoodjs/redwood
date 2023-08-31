@@ -22,6 +22,7 @@ export interface NodeTargetPaths {
   dist: string
   types: string
   models: string
+  mail: string
 }
 
 export interface WebPaths {
@@ -182,6 +183,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dist: path.join(BASE_DIR, 'api/dist'),
       types: path.join(BASE_DIR, 'api/types'),
       models: path.join(BASE_DIR, PATH_API_DIR_MODELS),
+      mail: path.join(BASE_DIR, PATH_API_DIR_SRC, 'mail'),
     },
 
     web: {

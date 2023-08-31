@@ -22,7 +22,14 @@ export const getApiSideBabelPresets = (
   { presetEnv } = { presetEnv: false }
 ) => {
   return [
-    '@babel/preset-typescript',
+    [
+      '@babel/preset-typescript',
+      {
+        isTSX: true,
+        allExtensions: true,
+      },
+      'rwjs-babel-preset-typescript',
+    ],
     // Preset-env is required when we are not doing the transpilation with esbuild
     presetEnv && [
       '@babel/preset-env',
