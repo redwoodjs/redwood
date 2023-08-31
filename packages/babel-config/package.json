@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@babel/core": "7.22.11",
+    "@babel/parser": "7.22.13",
     "@babel/plugin-transform-class-properties": "7.22.5",
     "@babel/plugin-transform-private-methods": "7.22.5",
     "@babel/plugin-transform-private-property-in-object": "7.22.11",
@@ -31,6 +32,7 @@
     "@babel/preset-typescript": "7.22.11",
     "@babel/register": "7.22.5",
     "@babel/runtime-corejs3": "7.22.11",
+    "@babel/traverse": "7.22.11",
     "@redwoodjs/project-config": "6.0.7",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
@@ -40,7 +42,7 @@
     "graphql": "16.8.0"
   },
   "devDependencies": {
-    "@babel/parser": "7.22.13",
+    "@types/babel-plugin-tester": "9.0.5",
     "@types/babel__core": "7.20.1",
     "babel-plugin-tester": "11.0.4",
     "esbuild": "0.18.19",
