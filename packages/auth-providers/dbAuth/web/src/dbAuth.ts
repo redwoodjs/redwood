@@ -2,7 +2,7 @@ import { createAuthentication, CurrentUser } from '@redwoodjs/auth'
 
 import { WebAuthnClientType } from './webAuthn'
 
-export interface LoginAttributes {
+export interface BaseAuthAttributes {
   username: string
   password: string
 }
@@ -12,7 +12,7 @@ export interface ResetPasswordAttributes {
   password: string
 }
 
-export type SignupAttributes = Record<string, unknown> & LoginAttributes
+export type AuthAttributes = Record<string, unknown> & BaseAuthAttributes
 
 const TOKEN_CACHE_TIME = 5000
 
@@ -105,12 +105,12 @@ export function createDbAuthClient({
     return cachedToken
   }
 
-  const login = async ({ username, password }: LoginAttributes) => {
+  const login = async (attributes: AuthAttributes) => {
     const response = await resetAndFetch(getApiDbAuthUrl(), {
       credentials,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password, method: 'login' }),
+      body: JSON.stringify({ ...attributes, method: 'login' }),
     })
 
     return response.json()
@@ -137,7 +137,7 @@ export function createDbAuthClient({
     return response.json()
   }
 
-  const signup = async (attributes: SignupAttributes) => {
+  const signup = async (attributes: AuthAttributes) => {
     const response = await resetAndFetch(getApiDbAuthUrl(), {
       credentials,
       method: 'POST',

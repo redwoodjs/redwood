@@ -103,7 +103,7 @@ interface LoginFlowOptions<TUser = Record<string | number, any>> {
    * in, containing at least an `id` field (whatever named field was provided
    * for `authFields.id`). For example: `return { id: user.id }`
    */
-  handler: (user: TUser) => any
+  handler: (user: TUser,attributes?: Record<string, string>) => any
   /**
    * Object containing error strings
    */
@@ -231,6 +231,7 @@ interface SignupHandlerOptions {
   salt: string
   userAttributes?: Record<string, string>
 }
+
 
 export type AuthMethodNames =
   | 'forgotPassword'
@@ -572,10 +573,11 @@ export class DbAuthHandler<
           `Login flow is not enabled`
       )
     }
-    const { username, password } = this.params
+    const { username, password, ...userAttributes } = this.params
     const dbUser = await this._verifyUser(username, password)
     const handlerUser = await (this.options.login as LoginFlowOptions).handler(
-      dbUser
+      dbUser,
+      userAttributes
     )
 
     if (
