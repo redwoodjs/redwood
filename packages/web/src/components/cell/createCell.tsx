@@ -5,7 +5,7 @@ import { getOperationName } from '../../graphql'
 import { useQuery } from '../GraphQLHooksProvider'
 
 import { useCellCacheContext } from './CellCacheContext'
-import { CreateCellProps } from './cellTypes'
+import type { CreateCellProps } from './cellTypes'
 import { createSuspendingCell } from './createSuspendingCell'
 import { isDataEmpty } from './isCellEmpty'
 
