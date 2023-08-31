@@ -186,11 +186,11 @@ export default function redwoodPluginVite(): PluginOption[] {
           server: {
             open: rwConfig.browser.open,
             port: rwConfig.web.port,
-            host: rwConfig.web.host,
+            host: true, // Listen to all hosts
             proxy: {
               [rwConfig.web.apiUrl]: {
                 target: `http://${rwConfig.api.host}:${rwConfig.api.port}`,
-                changeOrigin: true,
+                changeOrigin: false,
                 // Remove the `.redwood/functions` part, but leave the `/graphql`
                 rewrite: (path) => path.replace(rwConfig.web.apiUrl, ''),
                 configure: (proxy) => {
