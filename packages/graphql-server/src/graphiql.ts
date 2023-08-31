@@ -21,12 +21,6 @@ export const configureGraphiQLPlayground = ({
       ? false
       : !allowGraphiQL
 
-  console.log('isDevEnv', isDevEnv)
-
-  console.log('allowGraphiQL', allowGraphiQL)
-
-  console.log('disableGraphQL', disableGraphQL)
-
   return !disableGraphQL
     ? {
         title: 'Redwood GraphQL Playground',
