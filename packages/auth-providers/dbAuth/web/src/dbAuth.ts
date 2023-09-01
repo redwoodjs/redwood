@@ -95,6 +95,9 @@ export function createDbAuthClient({
           cachedToken = tokenText.length === 0 ? null : tokenText
           return cachedToken
         })
+        .catch(() => {
+          return null
+        })
         .finally(() => {
           getTokenPromise = null
         })
