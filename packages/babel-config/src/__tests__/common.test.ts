@@ -212,7 +212,7 @@ describe('common', () => {
       })
     })
 
-    it.only('handles invalid JSON', () => {
+    it('handles invalid JSON', () => {
       const apiTSConfig =
         '{"compilerOptions": {"noEmit": true,"allowJs": true,"esModuleInterop": true,"target": "esnext","module": "esnext","moduleResolution": "node","baseUrl": "./","rootDirs": ["./src","../.redwood/types/mirror/api/src"],"paths": {"src/*": ["./src/*","../.redwood/types/mirror/api/src/*"],"types/*": ["./types/*", "../types/*"],"@redwoodjs/testing": ["../node_modules/@redwoodjs/testing/api"]},"typeRoots": ["../node_modules/@types","./node_modules/@types"],"types": ["jest"],},"include": ["src","../.redwood/types/includes/all-*","../.redwood/types/includes/api-*","../types"]}'
       const webTSConfig =
@@ -231,10 +231,7 @@ describe('common', () => {
         redwoodProjectPath
       )
 
-      const typeScriptConfig = parseTypeScriptConfigFiles()
-      expect('abc').toBe('def')
-      // expect(typeScriptConfig.api).toMatchObject(JSON.parse(apiTSConfig))
-      // expect(typeScriptConfig.web).toMatchObject(JSON.parse(webTSConfig))
+      expect(parseTypeScriptConfigFiles).not.toThrow()
     })
   })
 })
