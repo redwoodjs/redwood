@@ -53,7 +53,7 @@
     "@babel/plugin-transform-private-methods": "7.22.5",
     "@babel/plugin-transform-private-property-in-object": "7.22.11",
     "@babel/plugin-transform-runtime": "7.22.10",
-    "@babel/preset-env": "7.22.10",
+    "@babel/preset-env": "7.22.14",
     "@babel/preset-react": "7.22.5",
     "@babel/preset-typescript": "7.22.11",
     "@babel/runtime-corejs3": "7.22.11",
