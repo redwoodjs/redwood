@@ -6,6 +6,8 @@ import { Plugin, useReadinessCheck, createYoga } from 'graphql-yoga'
 
 import { mapRwCorsOptionsToYoga } from './cors'
 import { makeDirectivesForPlugin } from './directives/makeDirectives'
+import { configureGraphiQLPlayground } from './graphiql'
+import { configureGraphQLIntrospection } from './introspection'
 import { makeMergedSchema } from './makeMergedSchema'
 import {
   useArmor,
@@ -52,6 +54,8 @@ export const createGraphQLYoga = ({
   let redwoodDirectivePlugins = [] as Plugin[]
   const logger = loggerConfig.logger
 
+  const isDevEnv = process.env.NODE_ENV === 'development'
+
   try {
     // @NOTE: Directives are optional
     const projectDirectives = makeDirectivesForPlugin(directives)
@@ -94,31 +98,9 @@ export const createGraphQLYoga = ({
     // so the order here matters
     const plugins: Array<Plugin<any>> = []
 
-    const isDevEnv = process.env.NODE_ENV === 'development'
-    const disableIntrospection =
-      (allowIntrospection === null && !isDevEnv) || allowIntrospection === false
-    const disableGraphQL =
-      (allowGraphiQL === null && !isDevEnv) || allowGraphiQL === false
-
-    const defaultQuery = `query Redwood {
-    redwood {
-    version
-    }
-  }`
-
-    // TODO: Once Studio is not experimental, can remove these generateGraphiQLHeaders
-    const authHeader = `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiql-headers on how to auto generate auth headers"}`
-
-    const graphiql = !disableGraphQL
-      ? {
-          title: 'Redwood GraphQL Playground',
-          headers: generateGraphiQLHeader
-            ? generateGraphiQLHeader()
-            : authHeader,
-          defaultQuery,
-          headerEditorEnabled: true,
-        }
-      : false
+    const { disableIntrospection } = configureGraphQLIntrospection({
+      allowIntrospection,
+    })
 
     if (disableIntrospection) {
       plugins.push(useDisableIntrospection())
@@ -225,7 +207,10 @@ export const createGraphQLYoga = ({
       logging: logger,
       healthCheckEndpoint: graphiQLEndpoint + '/health',
       graphqlEndpoint: graphiQLEndpoint,
-      graphiql,
+      graphiql: configureGraphiQLPlayground({
+        allowGraphiQL,
+        generateGraphiQLHeader,
+      }),
       cors: (request: Request) => {
         const requestOrigin = request.headers.get('origin')
         return mapRwCorsOptionsToYoga(cors, requestOrigin)
