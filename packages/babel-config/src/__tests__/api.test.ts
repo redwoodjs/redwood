@@ -28,7 +28,14 @@ describe('api', () => {
       const apiSideBabelPresets = getApiSideBabelPresets()
       expect(apiSideBabelPresets).toMatchInlineSnapshot(`
         [
-          "@babel/preset-typescript",
+          [
+            "@babel/preset-typescript",
+            {
+              "allExtensions": true,
+              "isTSX": true,
+            },
+            "rwjs-babel-preset-typescript",
+          ],
         ]
       `)
     })
@@ -37,7 +44,14 @@ describe('api', () => {
       const apiSideBabelPresets = getApiSideBabelPresets({ presetEnv: true })
       expect(apiSideBabelPresets).toMatchInlineSnapshot(`
         [
-          "@babel/preset-typescript",
+          [
+            "@babel/preset-typescript",
+            {
+              "allExtensions": true,
+              "isTSX": true,
+            },
+            "rwjs-babel-preset-typescript",
+          ],
           [
             "@babel/preset-env",
             {
