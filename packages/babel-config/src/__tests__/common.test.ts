@@ -211,5 +211,27 @@ describe('common', () => {
         )
       })
     })
+
+    it('handles invalid JSON', () => {
+      const apiTSConfig =
+        '{"compilerOptions": {"noEmit": true,"allowJs": true,"esModuleInterop": true,"target": "esnext","module": "esnext","moduleResolution": "node","baseUrl": "./","rootDirs": ["./src","../.redwood/types/mirror/api/src"],"paths": {"src/*": ["./src/*","../.redwood/types/mirror/api/src/*"],"types/*": ["./types/*", "../types/*"],"@redwoodjs/testing": ["../node_modules/@redwoodjs/testing/api"]},"typeRoots": ["../node_modules/@types","./node_modules/@types"],"types": ["jest"],},"include": ["src","../.redwood/types/includes/all-*","../.redwood/types/includes/api-*","../types"]}'
+      const webTSConfig =
+        '{"compilerOptions": {"noEmit": true,"allowJs": true,"esModuleInterop": true,"target": "esnext","module": "esnext","moduleResolution": "node","baseUrl": "./","rootDirs": ["./src","../.redwood/types/mirror/web/src","../api/src","../.redwood/types/mirror/api/src"],"paths": {"src/*": ["./src/*","../.redwood/types/mirror/web/src/*","../api/src/*","../.redwood/types/mirror/api/src/*"],"$api/*": [ "../api/*" ],"types/*": ["./types/*", "../types/*"],"@redwoodjs/testing": ["../node_modules/@redwoodjs/testing/web"]},"typeRoots": ["../node_modules/@types", "./node_modules/@types"],"types": ["jest", "@testing-library/jest-dom"],"jsx": "preserve",},"include": ["src","../.redwood/types/includes/all-*","../.redwood/types/includes/web-*","../types","./types"]}'
+
+      vol.fromNestedJSON(
+        {
+          'redwood.toml': '',
+          api: {
+            'tsconfig.json': apiTSConfig,
+          },
+          web: {
+            'tsconfig.json': webTSConfig,
+          },
+        },
+        redwoodProjectPath
+      )
+
+      expect(parseTypeScriptConfigFiles).not.toThrow()
+    })
   })
 })
