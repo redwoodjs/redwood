@@ -33,7 +33,7 @@ services:
     destination: replace_with_api_url/*
   - type: rewrite
     source: /*
-    destination: /index.html
+    destination: /200.html
 
 - name: ${PROJECT_NAME}-api
   type: web
