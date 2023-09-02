@@ -119,10 +119,25 @@ export async function runFeServer() {
     app.get(expressPathDef, routeHandler)
   }
 
-  app.listen(rwConfig.web.port)
-  console.log(
-    `Started production FE server on http://localhost:${rwConfig.web.port}`
+  const server = app.listen(
+    rwConfig.web.port,
+    process.env.NODE_ENV === 'production' ? '0.0.0.0' : '::'
   )
+
+  server.on('listening', () => {
+    let addressDetails = ''
+    const address = server.address()
+
+    if (typeof address === 'string') {
+      addressDetails = `(${address})`
+    } else if (address && typeof address === 'object') {
+      addressDetails = `(${address.address}:${address.port})`
+    }
+
+    console.log(
+      `Started production FE server on http://localhost:${rwConfig.web.port} ${addressDetails}`
+    )
+  })
 }
 
 runFeServer()
