@@ -131,11 +131,9 @@ export const createGraphQLYoga = ({
       OperationTypeNode.MUTATION,
     ]
 
-    // now allow subscriptions if using them (unless you override)
+    // allow subscriptions if using them (unless you override)
     if (realtime?.subscriptions?.subscriptions) {
       defaultAllowedOperations.push(OperationTypeNode.SUBSCRIPTION)
-    } else {
-      logger.info('Subscriptions are disabled.')
     }
 
     plugins.push(
@@ -188,9 +186,7 @@ export const createGraphQLYoga = ({
         allowIntrospection,
         defaultError,
         disableIntrospection,
-        disableGraphQL,
         allowGraphiQL,
-        graphiql,
         graphiQLEndpoint,
       },
       'GraphiQL and Introspection Config'
