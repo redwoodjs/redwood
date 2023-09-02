@@ -38,7 +38,7 @@ import {
 type SetCookieHeader = { 'set-cookie': string }
 type CsrfTokenHeader = { 'csrf-token': string }
 
-interface SignupFlowOptions {
+interface SignupFlowOptions<TUserAttributes = Record<string, unknown>> {
   /**
    * Allow users to sign up. Defaults to true.
    * Needs to be explicitly set to false to disable the flow
@@ -52,7 +52,7 @@ interface SignupFlowOptions {
    * were included in the object given to the `signUp()` function you got
    * from `useAuth()`
    */
-  handler: (signupHandlerOptions: SignupHandlerOptions) => any
+  handler: (signupHandlerOptions: SignupHandlerOptions<TUserAttributes>) => any
 
   /**
    * Validate the user-supplied password with whatever logic you want. Return
@@ -158,7 +158,10 @@ interface WebAuthnFlowOptions {
   }
 }
 
-export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
+export interface DbAuthHandlerOptions<
+  TUser = Record<string | number, any>,
+  TUserAttributes = Record<string, unknown>
+> {
   /**
    * Provide prisma db client
    */
@@ -212,7 +215,7 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   /**
    * Object containing login options
    */
-  signup: SignupFlowOptions | { enabled: false }
+  signup: SignupFlowOptions<TUserAttributes> | { enabled: false }
 
   /**
    * Object containing WebAuthn options
@@ -225,11 +228,11 @@ export interface DbAuthHandlerOptions<TUser = Record<string | number, any>> {
   cors?: CorsConfig
 }
 
-export interface SignupHandlerOptions {
+export interface SignupHandlerOptions<TUserAttributes> {
   username: string
   hashedPassword: string
   salt: string
-  userAttributes?: Record<string, any>
+  userAttributes?: TUserAttributes
 }
 
 export type AuthMethodNames =
@@ -259,11 +262,12 @@ interface DbAuthSession<TIdType> {
 
 export class DbAuthHandler<
   TUser extends Record<string | number, any>,
-  TIdType = any
+  TIdType = any,
+  TUserAttributes = Record<string, unknown>
 > {
   event: APIGatewayProxyEvent
   context: LambdaContext
-  options: DbAuthHandlerOptions<TUser>
+  options: DbAuthHandlerOptions<TUser, TUserAttributes>
   cookie: string | undefined
   params: Params
   db: PrismaClient
@@ -345,7 +349,7 @@ export class DbAuthHandler<
   constructor(
     event: APIGatewayProxyEvent,
     context: LambdaContext,
-    options: DbAuthHandlerOptions<TUser>
+    options: DbAuthHandlerOptions<TUser, TUserAttributes>
   ) {
     this.event = event
     this.context = context
