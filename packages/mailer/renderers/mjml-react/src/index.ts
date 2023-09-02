@@ -1,12 +1,12 @@
 import { renderToMjml } from '@faire/mjml-react/utils/renderToMjml'
 import mjml2html from 'mjml'
 
-import {
+import type {
   MailRenderedContent,
   MailUtilities,
-  AbstractMailRenderer,
   MailRendererOptions,
 } from '@redwoodjs/mailer-core'
+import { AbstractMailRenderer } from '@redwoodjs/mailer-core'
 
 export type SupportedOutputFormats = 'html'
 export type RendererOptions = MailRendererOptions<SupportedOutputFormats> &
