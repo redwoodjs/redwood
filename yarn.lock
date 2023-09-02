@@ -2984,9 +2984,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/static@npm:6.10.2":
-  version: 6.10.2
-  resolution: "@fastify/static@npm:6.10.2"
+"@fastify/static@npm:6.11.0":
+  version: 6.11.0
+  resolution: "@fastify/static@npm:6.11.0"
   dependencies:
     "@fastify/accept-negotiator": ^1.0.0
     "@fastify/send": ^2.0.0
@@ -2995,7 +2995,7 @@ __metadata:
     glob: ^8.0.1
     p-limit: ^3.1.0
     readable-stream: ^4.0.0
-  checksum: 7f493bb6d470087f2ac2c81c229e97e27ee5feef2cc8aced133aa0260c26bba850fb0524af602b284be1d560edde9d60c24541309a9b16352cc346cb3232981d
+  checksum: 36630d1c6717741c4492101a8c6739a8ff367c7cf466d37e86b33806d978edb711ab94a68cd1266ddf876dfff349834f291ffc9181c4816e50be38a136700308
   languageName: node
   linkType: hard
 
@@ -7719,7 +7719,7 @@ __metadata:
     "@babel/core": 7.22.11
     "@babel/runtime-corejs3": 7.22.11
     "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.10.2
+    "@fastify/static": 6.11.0
     "@fastify/url-data": 5.3.1
     "@redwoodjs/project-config": 6.0.7
     "@types/aws-lambda": 8.10.119
@@ -8576,7 +8576,7 @@ __metadata:
   resolution: "@redwoodjs/fastify@workspace:packages/fastify"
   dependencies:
     "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.10.2
+    "@fastify/static": 6.11.0
     "@fastify/url-data": 5.3.1
     "@redwoodjs/graphql-server": 6.0.7
     "@redwoodjs/project-config": 6.0.7
@@ -8948,7 +8948,7 @@ __metadata:
     "@babel/core": 7.22.11
     "@babel/runtime-corejs3": 7.22.11
     "@fastify/http-proxy": 9.2.1
-    "@fastify/static": 6.10.2
+    "@fastify/static": 6.11.0
     "@fastify/url-data": 5.3.1
     "@graphiql/plugin-explorer": 0.1.22
     "@graphiql/toolkit": 0.8.4
