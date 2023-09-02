@@ -23,6 +23,9 @@ module.exports = {
       RWJS_API_GRAPHQL_URL: '/',
       __REDWOOD__APP_TITLE: 'Redwood App',
     },
+    RWJS_DEBUG_ENV: {
+      RWJS_SRC_ROOT: rwjsPaths.web.src,
+    },
   },
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
