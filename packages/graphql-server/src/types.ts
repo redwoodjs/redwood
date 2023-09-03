@@ -244,3 +244,8 @@ export type GraphQLYogaOptions = {
  * Note: RedwoodRealtime is not supported
  */
 export type GraphQLHandlerOptions = Omit<GraphQLYogaOptions, 'realtime'>
+
+export type GraphiQLOptions = Pick<
+  GraphQLYogaOptions,
+  'allowGraphiQL' | 'generateGraphiQLHeader'
+>
