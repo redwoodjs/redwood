@@ -30,9 +30,6 @@ export const getApiSideBabelPresets = (
       },
       'rwjs-babel-preset-typescript',
     ],
-    // Needed to support `/** @jsxImportSource custom-jsx-library */`
-    // comments in JSX files
-    ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }],
     // Preset-env is required when we are not doing the transpilation with esbuild
     presetEnv && [
       '@babel/preset-env',
@@ -80,6 +77,9 @@ export const getApiSideBabelPlugins = (
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
+    // Needed to support `/** @jsxImportSource custom-jsx-library */`
+    // comments in JSX files
+    ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }],
     ['@babel/plugin-transform-runtime', BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS],
     [
       'babel-plugin-module-resolver',
