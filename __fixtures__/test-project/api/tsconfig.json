@@ -24,7 +24,8 @@
       "../node_modules/@types",
       "./node_modules/@types"
     ],
-    "types": ["jest"]
+    "types": ["jest"],
+    "jsx": "react-jsx"
   },
   "include": [
     "src",
