@@ -1,5 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 
+import { type HttpOptions } from '@apollo/client'
+
 import { AuthContextInterface, CurrentUser } from '../AuthContext'
 import type { AuthImplementation } from '../AuthImplementation'
 
@@ -18,8 +20,13 @@ import { useSignUp } from './useSignUp'
 import { useToken } from './useToken'
 import { useValidateResetToken } from './useValidateResetToken'
 
+export interface AuthProviderConfig {
+  fetchConfig?: HttpOptions
+}
+
 export interface AuthProviderProps {
   skipFetchCurrentUser?: boolean
+  config?: AuthProviderConfig
   children: ReactNode
 }
 
@@ -80,6 +87,7 @@ export function createAuthProvider<
   const AuthProvider = ({
     children,
     skipFetchCurrentUser,
+    config,
   }: AuthProviderProps) => {
     // const [hasRestoredState, setHasRestoredState] = useState(false)
 
@@ -96,7 +104,7 @@ export function createAuthProvider<
     const getCurrentUser = customProviderHooks?.useCurrentUser
       ? customProviderHooks.useCurrentUser
       : // eslint-disable-next-line react-hooks/rules-of-hooks
-        useCurrentUser(authImplementation)
+        useCurrentUser(authImplementation, config)
 
     const reauthenticate = useReauthenticate(
       authImplementation,
