@@ -77,6 +77,9 @@ export const getApiSideBabelPlugins = (
 
   const plugins: TransformOptions['plugins'] = [
     ...getCommonPlugins(),
+    // Needed to support `/** @jsxImportSource custom-jsx-library */`
+    // comments in JSX files
+    ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }],
     ['@babel/plugin-transform-runtime', BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS],
     [
       'babel-plugin-module-resolver',
