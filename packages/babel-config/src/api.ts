@@ -30,6 +30,9 @@ export const getApiSideBabelPresets = (
       },
       'rwjs-babel-preset-typescript',
     ],
+    // Needed to support `/** @jsxImportSource custom-jsx-library */`
+    // comments in JSX files
+    ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }],
     // Preset-env is required when we are not doing the transpilation with esbuild
     presetEnv && [
       '@babel/preset-env',
