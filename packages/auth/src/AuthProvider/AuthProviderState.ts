@@ -1,4 +1,4 @@
-import { CurrentUser } from '../AuthContext'
+import type { CurrentUser } from '../AuthContext'
 
 export type AuthProviderState<TUser, TClient = unknown> = {
   loading: boolean

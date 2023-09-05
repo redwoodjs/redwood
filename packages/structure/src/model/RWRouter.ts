@@ -1,7 +1,6 @@
 import * as tsm from 'ts-morph'
+import type { CodeAction, CodeLens } from 'vscode-languageserver-types'
 import {
-  CodeAction,
-  CodeLens,
   Command,
   DiagnosticSeverity,
   Position,
@@ -9,18 +8,19 @@ import {
 } from 'vscode-languageserver-types'
 
 import { RWError } from '../errors'
-import { CodeLensX, FileNode } from '../ide'
+import type { CodeLensX } from '../ide'
+import { FileNode } from '../ide'
 import { iter } from '../x/Array'
 import { lazy, memo } from '../x/decorators'
 import { URL_file } from '../x/URL'
+import type { ExtendedDiagnostic } from '../x/vscode-languageserver-types'
 import {
   err,
-  ExtendedDiagnostic,
   LocationLike_toLocation,
   Location_fromNode,
 } from '../x/vscode-languageserver-types'
 
-import { RWProject } from './RWProject'
+import type { RWProject } from './RWProject'
 import { RWRoute } from './RWRoute'
 
 /**

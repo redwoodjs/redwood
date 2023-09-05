@@ -1,11 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
+import type { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
 import { resolveFile } from '@redwoodjs/project-config'
 
-import { ExistingFiles, transformTSToJS, writeFilesTask } from '../lib'
+import type { ExistingFiles } from '../lib'
+import { transformTSToJS, writeFilesTask } from '../lib'
 import { colors } from '../lib/colors'
 import { getPaths } from '../lib/paths'
 import {

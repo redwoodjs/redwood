@@ -5,10 +5,10 @@ import react from '@vitejs/plugin-react'
 import { build as viteBuild } from 'vite'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { RouteSpec } from '@redwoodjs/internal/dist/routes'
+import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 
 import { rscBuild } from './rscBuild'
-import { RWRouteManifest } from './types'
+import type { RWRouteManifest } from './types'
 import { serverBuild } from './waku-lib/build-server'
 import { rscIndexPlugin } from './waku-lib/vite-plugin-rsc'
 

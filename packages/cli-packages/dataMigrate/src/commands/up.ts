@@ -3,7 +3,7 @@ import type { Argv } from 'yargs'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { DataMigrateUpOptions } from '../types'
+import type { DataMigrateUpOptions } from '../types'
 
 export const command = 'up'
 export const description =

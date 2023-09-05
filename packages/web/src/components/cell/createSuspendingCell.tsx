@@ -1,14 +1,16 @@
 import { Suspense } from 'react'
 
-import { QueryReference, useApolloClient } from '@apollo/client'
+import type { QueryReference } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 
 import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
 
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
-import { CellErrorBoundary, FallbackProps } from './CellErrorBoundary'
-import {
+import type { FallbackProps } from './CellErrorBoundary'
+import { CellErrorBoundary } from './CellErrorBoundary'
+import type {
   CreateCellProps,
   DataObject,
   SuspendingSuccessProps,
