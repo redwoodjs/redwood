@@ -124,6 +124,8 @@ function TraceListComponent({ traces }: { traces: any[] }) {
   )
 }
 
+const bigIntMin = (...args: bigint[]) => args.reduce((m, e) => (e < m ? e : m))
+
 export default function TraceList() {
   const [{ tracesFilter: searchFilter }] = useContext(SearchFilterContext)
 
@@ -134,10 +136,8 @@ export default function TraceList() {
     },
   })
 
-  const sortedTraces = data?.rows?.sort((a: any, b: any) => {
-    const bigIntMin = (...args: bigint[]) =>
-      args.reduce((m, e) => (e < m ? e : m))
-
+  const traces: any[] = data?.rows !== undefined ? [...data.rows] : []
+  traces.sort((a: any, b: any) => {
     const aStart = bigIntMin(...a.spans.map((span: any) => span.startNano))
     const bStart = bigIntMin(...b.spans.map((span: any) => span.startNano))
     return aStart > bStart ? -1 : bStart > aStart ? 1 : 0
@@ -150,7 +150,7 @@ export default function TraceList() {
         <div className="sm:flex-auto">
           <div className="text-base font-semibold leading-6 text-slate-100 px-4 pt-2 pb-2 bg-rich-black rounded-md flex justify-between">
             <div>OpenTelemetry Traces</div>
-            <div>{data?.rows?.length && `(${data.rows.length})`}</div>
+            <div>{traces.length && `(${traces.length})`}</div>
           </div>
         </div>
       </div>
@@ -164,7 +164,7 @@ export default function TraceList() {
             <LoadingSpinner />
           </div>
         ) : (
-          <TraceListComponent traces={sortedTraces} />
+          <TraceListComponent traces={traces} />
         )}
       </div>
     </div>

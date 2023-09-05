@@ -33,6 +33,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
+    '@typescript-eslint/consistent-type-imports': 'error',
   },
   env: {
     // We use the most modern environment available. Then we rely on Babel to

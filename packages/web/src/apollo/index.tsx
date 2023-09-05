@@ -25,7 +25,8 @@ const {
   setLogVerbosity: apolloSetLogVerbosity,
 } = apolloClient
 
-import { UseAuth, useNoAuth } from '@redwoodjs/auth'
+import type { UseAuth } from '@redwoodjs/auth'
+import { useNoAuth } from '@redwoodjs/auth'
 import './typeOverride'
 
 import {
