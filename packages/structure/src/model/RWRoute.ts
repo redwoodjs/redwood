@@ -1,10 +1,12 @@
 import { basename } from 'path'
 
 import * as tsm from 'ts-morph'
-import { Location, Range } from 'vscode-languageserver-types'
+import type { Location } from 'vscode-languageserver-types'
+import { Range } from 'vscode-languageserver-types'
 
 import { RWError } from '../errors'
-import { BaseNode, Decoration, Definition, DocumentLinkX, HoverX } from '../ide'
+import type { Decoration, Definition, DocumentLinkX, HoverX } from '../ide'
+import { BaseNode } from '../ide'
 import { validateRoutePath } from '../util'
 import { lazy } from '../x/decorators'
 import {
@@ -17,7 +19,7 @@ import {
   Range_fromNode,
 } from '../x/vscode-languageserver-types'
 
-import { RWRouter } from './RWRouter'
+import type { RWRouter } from './RWRouter'
 import { advanced_path_parser } from './util/advanced_path_parser'
 
 export class RWRoute extends BaseNode {

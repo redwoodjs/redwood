@@ -1,7 +1,8 @@
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import { loadTypedefs } from '@graphql-tools/load'
 import { mergeTypeDefs } from '@graphql-tools/merge'
-import { DocumentNode, Kind, ObjectTypeDefinitionNode, visit } from 'graphql'
+import type { DocumentNode, ObjectTypeDefinitionNode } from 'graphql'
+import { Kind, visit } from 'graphql'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
 import { getPaths } from '@redwoodjs/project-config'

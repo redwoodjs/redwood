@@ -5,7 +5,7 @@ import type { FastifyInstance, FastifyServerOptions } from 'fastify'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
-import { FastifySideConfigFn, FastifySideConfigFnOptions } from './types'
+import type { FastifySideConfigFn, FastifySideConfigFnOptions } from './types'
 
 export const DEFAULT_REDWOOD_FASTIFY_CONFIG: FastifyServerOptions = {
   requestTimeout: 15_000,

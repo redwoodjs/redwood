@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 
 import withApiProxy from '../plugins/withApiProxy'
 

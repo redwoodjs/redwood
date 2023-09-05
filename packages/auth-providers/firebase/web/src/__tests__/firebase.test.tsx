@@ -1,10 +1,12 @@
 import { renderHook, act } from '@testing-library/react'
 import type FirebaseAuthNamespace from 'firebase/auth'
-import { User, OperationType, OAuthProvider, Auth } from 'firebase/auth'
+import type { User, OAuthProvider, Auth } from 'firebase/auth'
+import { OperationType } from 'firebase/auth'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth, FirebaseClient } from '../firebase'
+import type { FirebaseClient } from '../firebase'
+import { createAuth } from '../firebase'
 
 const user: User = {
   uid: 'unique_user_id',

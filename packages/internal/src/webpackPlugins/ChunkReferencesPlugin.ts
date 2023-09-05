@@ -1,4 +1,4 @@
-import { Compiler, Chunk } from 'webpack'
+import type { Compiler, Chunk } from 'webpack'
 
 export class ChunkReferencesPlugin {
   static defaultOptions = {

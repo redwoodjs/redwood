@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { types } from '@babel/core'
+import type { types } from '@babel/core'
 import type { PluginObj } from '@babel/core'
 import { parse as babelParse } from '@babel/parser'
 import type { ParserPlugin } from '@babel/parser'

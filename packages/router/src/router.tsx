@@ -1,4 +1,5 @@
-import React, { ReactNode, ReactElement, useMemo, memo } from 'react'
+import type { ReactNode, ReactElement } from 'react'
+import React, { useMemo, memo } from 'react'
 
 import { ActiveRouteLoader } from './active-route-loader'
 import { AuthenticatedRoute } from './AuthenticatedRoute'
@@ -6,17 +7,14 @@ import { Redirect } from './links'
 import { LocationProvider, useLocation } from './location'
 import { PageLoadingContextProvider } from './PageLoadingContext'
 import { ParamsProvider } from './params'
-import {
-  isValidRoute,
+import type {
   NotFoundRouteProps,
-  PageType,
   RedirectRouteProps,
   RenderMode,
 } from './route-validators'
-import {
-  RouterContextProvider,
-  RouterContextProviderProps,
-} from './router-context'
+import { isValidRoute, PageType } from './route-validators'
+import type { RouterContextProviderProps } from './router-context'
+import { RouterContextProvider } from './router-context'
 import { SplashPage } from './splash-page'
 import {
   analyzeRoutes,
@@ -24,10 +22,9 @@ import {
   normalizePage,
   parseSearch,
   replaceParams,
-  TrailingSlashesTypes,
   validatePath,
 } from './util'
-import type { Wrappers } from './util'
+import type { Wrappers, TrailingSlashesTypes } from './util'
 
 import type { AvailableRoutes } from './index'
 

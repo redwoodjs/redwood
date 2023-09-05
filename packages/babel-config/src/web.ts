@@ -6,11 +6,11 @@ import type { TransformOptions } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import type { RegisterHookOptions } from './common'
 import {
   CORE_JS_VERSION,
   getCommonPlugins,
   registerBabel,
-  RegisterHookOptions,
   parseTypeScriptConfigFiles,
   getPathsFromTypeScriptConfig,
 } from './common'
