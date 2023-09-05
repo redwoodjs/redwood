@@ -1,12 +1,9 @@
-import { Plugin } from 'graphql-yoga'
+import type { Plugin } from 'graphql-yoga'
 
-import {
-  AuthContextPayload,
-  getAuthenticationContext,
-  Decoder,
-} from '@redwoodjs/api'
+import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
+import { getAuthenticationContext } from '@redwoodjs/api'
 
-import { RedwoodGraphQLContext, GraphQLHandlerOptions } from '../types'
+import type { RedwoodGraphQLContext, GraphQLHandlerOptions } from '../types'
 
 /**
  * Envelop plugin for injecting the current user into the GraphQL Context,

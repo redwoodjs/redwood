@@ -1,7 +1,7 @@
 // TODO (RSC) Take ownership of this file and move it out ouf the waku-lib folder
 // import fs from 'node:fs'
 import path from 'node:path'
-import { Writable } from 'node:stream'
+import type { Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
@@ -11,7 +11,7 @@ import { createServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { defineEntries } from '../entries'
+import type { defineEntries } from '../entries'
 // import type { unstable_GetCustomModules } from '../waku-server'
 
 import { configFileConfig, resolveConfig } from './config'

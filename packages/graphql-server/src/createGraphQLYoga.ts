@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
-import { GraphQLSchema, OperationTypeNode } from 'graphql'
-import { Plugin, useReadinessCheck, createYoga } from 'graphql-yoga'
+import type { GraphQLSchema } from 'graphql'
+import { OperationTypeNode } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
+import { useReadinessCheck, createYoga } from 'graphql-yoga'
 
 import { mapRwCorsOptionsToYoga } from './cors'
 import { makeDirectivesForPlugin } from './directives/makeDirectives'

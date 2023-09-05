@@ -1,4 +1,4 @@
-import { TagDescriptor } from './components/htmlTags'
+import type { TagDescriptor } from './components/htmlTags'
 
 export type RouteHookOutput = {
   meta: TagDescriptor[]

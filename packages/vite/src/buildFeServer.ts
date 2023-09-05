@@ -1,7 +1,8 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-import { build as esbuildBuild, PluginBuild } from 'esbuild'
+import type { PluginBuild } from 'esbuild'
+import { build as esbuildBuild } from 'esbuild'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import {
@@ -14,7 +15,7 @@ import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { buildRscFeServer } from './buildRscFeServer'
-import { RWRouteManifest } from './types'
+import type { RWRouteManifest } from './types'
 import { ensureProcessDirWeb } from './utils'
 
 export interface BuildOptions {

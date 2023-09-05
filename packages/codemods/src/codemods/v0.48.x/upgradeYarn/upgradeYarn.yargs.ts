@@ -1,5 +1,5 @@
 import task from 'tasuku'
-import { TaskInnerAPI } from 'tasuku'
+import type { TaskInnerAPI } from 'tasuku'
 
 import upgradeYarn from './upgradeYarn'
 

@@ -2,11 +2,11 @@ import path from 'path'
 
 import type { PluginObj, types } from '@babel/core'
 
+import type { PagesDependency } from '@redwoodjs/project-config'
 import {
   importStatementPath,
   processPagesDir,
   getPaths,
-  PagesDependency,
   ensurePosixPath,
 } from '@redwoodjs/project-config'
 

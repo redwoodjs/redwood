@@ -1,10 +1,10 @@
-import {
+import type {
   MailSendOptionsComplete,
-  AbstractMailHandler,
   MailUtilities,
   MailRenderedContent,
   MailResult,
 } from '@redwoodjs/mailer-core'
+import { AbstractMailHandler } from '@redwoodjs/mailer-core'
 
 export type InMemoryMail = {
   textContent: MailRenderedContent['text']

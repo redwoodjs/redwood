@@ -1,6 +1,6 @@
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 
-import { HttpServerParams } from './server'
+import type { HttpServerParams } from './server'
 
 export interface WebServerArgs extends Omit<HttpServerParams, 'fastify'> {
   apiHost?: string

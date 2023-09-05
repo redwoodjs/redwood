@@ -3,7 +3,7 @@ import path from 'path'
 
 import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 
-import { Args } from './setup'
+import type { Args } from './setup'
 
 const { version } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')

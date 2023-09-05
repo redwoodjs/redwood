@@ -1,11 +1,11 @@
 import { render as reactEmailRender } from '@react-email/render'
 
-import {
+import type {
   MailRenderedContent,
   MailUtilities,
-  AbstractMailRenderer,
   MailRendererOptions,
 } from '@redwoodjs/mailer-core'
+import { AbstractMailRenderer } from '@redwoodjs/mailer-core'
 
 export type SupportedOutputFormats = 'both' | 'html' | 'text'
 export type RendererOptions = MailRendererOptions<SupportedOutputFormats> &
