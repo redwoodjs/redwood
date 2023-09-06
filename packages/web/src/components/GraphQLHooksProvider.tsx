@@ -1,4 +1,4 @@
-import { OperationVariables } from '@apollo/client'
+import type { OperationVariables } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
 
 type DefaultUseQueryType = <
