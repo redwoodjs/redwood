@@ -183,16 +183,6 @@ const globalTasks = () =>
         },
       },
       {
-        title: 'Temporary (v6): add storybook to web dependencies',
-        task: (_ctx, task) => {
-          task.output = 'Adding storybook to web dependencies...'
-          return execa.command(
-            'yarn workspace web add -D storybook',
-            getExecaOptions(OUTPUT_PROJECT_PATH)
-          )
-        },
-      },
-      {
         title: '[link] Building Redwood framework',
         task: async () => {
           try {

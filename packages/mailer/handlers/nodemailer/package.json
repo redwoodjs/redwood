@@ -1,0 +1,37 @@
+{
+  "name": "@redwoodjs/mailer-handler-nodemailer",
+  "version": "6.0.7",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/mailer/handlers/nodemailer"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn node ./build.mjs && yarn build:types",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/dist/"
+    ]
+  },
+  "dependencies": {
+    "@redwoodjs/mailer-core": "6.0.7",
+    "nodemailer": "6.9.4"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "6",
+    "esbuild": "0.19.2",
+    "fast-glob": "3.3.1",
+    "typescript": "5.1.6"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

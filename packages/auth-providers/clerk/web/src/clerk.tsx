@@ -1,4 +1,4 @@
-import {
+import type {
   SignInProps,
   SignUpProps,
   SignOutCallback,
@@ -7,7 +7,8 @@ import {
   SignOutOptions,
 } from '@clerk/types'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication } from '@redwoodjs/auth'
 
 type Clerk = ClerkClient | undefined | null
 

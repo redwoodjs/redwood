@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 
-import { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation'
 
-import { AuthProviderState } from './AuthProviderState'
-import { useCurrentUser } from './useCurrentUser'
+import type { AuthProviderState } from './AuthProviderState'
+import type { useCurrentUser } from './useCurrentUser'
 import { useToken } from './useToken'
 
 const notAuthenticatedState = {

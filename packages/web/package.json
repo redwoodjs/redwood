@@ -48,7 +48,7 @@
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.4.1",
+    "@apollo/experimental-nextjs-app-support": "0.4.2",
     "@babel/cli": "7.22.10",
     "@babel/core": "7.22.11",
     "@testing-library/jest-dom": "5.16.5",

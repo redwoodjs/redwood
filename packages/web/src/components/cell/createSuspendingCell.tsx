@@ -1,17 +1,19 @@
 import { Suspense } from 'react'
 
-import { QueryReference, useApolloClient } from '@apollo/client'
+import type { QueryReference } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 
 import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
 
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
-import { CellErrorBoundary, FallbackProps } from './CellErrorBoundary'
-import {
+import type { FallbackProps } from './CellErrorBoundary'
+import { CellErrorBoundary } from './CellErrorBoundary'
+import type {
   CreateCellProps,
   DataObject,
-  SuperSuccessProps,
+  SuspendingSuccessProps,
   SuspenseCellQueryResult,
 } from './cellTypes'
 import { isDataEmpty } from './isCellEmpty'
@@ -44,13 +46,13 @@ export function createSuspendingCell<
     }),
     afterQuery = (data) => ({ ...data }),
     isEmpty = isDataEmpty,
-    Loading = () => <>Loading...</>,
+    Loading,
     Failure,
     Empty,
     Success,
     displayName = 'Cell',
   } = createCellProps
-  function SuperSuccess(props: SuperSuccessProps) {
+  function SuspendingSuccess(props: SuspendingSuccessProps) {
     const { queryRef, suspenseQueryResult, userProps } = props
     const { data, networkStatus } = useReadQuery<DataObject>(queryRef)
     const afterQueryData = afterQuery(data as DataObject)
@@ -79,7 +81,7 @@ export function createSuspendingCell<
     )
   }
 
-  SuperSuccess.displayName = displayName
+  SuspendingSuccess.displayName = displayName
 
   // @NOTE: Note that we are returning a HoC here!
   return (props: CellProps) => {
@@ -125,17 +127,35 @@ export function createSuspendingCell<
       )
     }
 
+    const wrapInSuspenseIfLoadingPresent = (
+      suspendingSuccessElement: React.ReactNode,
+      LoadingComponent: typeof Loading
+    ) => {
+      if (!LoadingComponent) {
+        return suspendingSuccessElement
+      }
+
+      return (
+        <Suspense
+          fallback={
+            <LoadingComponent {...props} queryResult={suspenseQueryResult} />
+          }
+        >
+          {suspendingSuccessElement}
+        </Suspense>
+      )
+    }
+
     return (
       <CellErrorBoundary renderFallback={FailureComponent}>
-        <Suspense
-          fallback={<Loading {...props} queryResult={suspenseQueryResult} />}
-        >
-          <SuperSuccess
+        {wrapInSuspenseIfLoadingPresent(
+          <SuspendingSuccess
             userProps={props}
             queryRef={queryRef as QueryReference<DataObject>}
             suspenseQueryResult={suspenseQueryResult}
-          />
-        </Suspense>
+          />,
+          Loading
+        )}
       </CellErrorBoundary>
     )
   }
