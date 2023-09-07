@@ -121,6 +121,12 @@ export const getWebSideOverrides = (
         require('./plugins/babel-plugin-redwood-mock-cell-data').default,
       ],
     },
+    {
+      test: /.+Fragment.(js|tsx|jsx)$/,
+      plugins: [
+        require('./plugins/babel-plugin-redwood-fragment-registration').default,
+      ],
+    },
   ].filter(Boolean)
 
   return overrides as TransformOptions[]
