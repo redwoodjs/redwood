@@ -3,22 +3,24 @@ import { join } from 'path'
 import * as dotenv from 'dotenv-defaults'
 import { existsSync, readFileSync } from 'fs-extra'
 import { pickBy } from 'lodash'
-import * as tsm from 'ts-morph'
-import { DiagnosticSeverity, Location, Range } from 'vscode-languageserver'
+import type * as tsm from 'ts-morph'
+import type { Location } from 'vscode-languageserver'
+import { DiagnosticSeverity, Range } from 'vscode-languageserver'
 
-import { BaseNode, CodeLensX, Definition, HoverX, Reference } from '../ide'
+import type { CodeLensX, Definition, HoverX, Reference } from '../ide'
+import { BaseNode } from '../ide'
 import { lazy } from '../x/decorators'
 import { prisma_parseEnvExpressionsInFile } from '../x/prisma'
 import { URL_file } from '../x/URL'
 import { Command_open } from '../x/vscode'
+import type { ExtendedDiagnostic } from '../x/vscode-languageserver-types'
 import {
-  ExtendedDiagnostic,
   ExtendedDiagnostic_is,
   LocationLike_toHashLink,
   LocationLike_toLocation,
 } from '../x/vscode-languageserver-types'
 
-import { RWProject } from './RWProject'
+import type { RWProject } from './RWProject'
 import { process_env_findAll } from './util/process_env'
 
 type EnvVarMap = Record<string, string>

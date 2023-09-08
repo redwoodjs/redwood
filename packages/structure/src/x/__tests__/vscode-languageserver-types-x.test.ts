@@ -4,8 +4,8 @@ import {
   Range,
 } from 'vscode-languageserver-types'
 
+import type { ExtendedDiagnostic } from '../vscode-languageserver-types'
 import {
-  ExtendedDiagnostic,
   ExtendedDiagnostic_format,
   Position_compare,
   Position_fromOffset,

@@ -1,8 +1,9 @@
 import { renderHook, act } from '@testing-library/react'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createDbAuthClient, DbAuthClientArgs, createAuth } from '../dbAuth'
+import type { DbAuthClientArgs } from '../dbAuth'
+import { createDbAuthClient, createAuth } from '../dbAuth'
 
 globalThis.RWJS_API_URL = '/.redwood/functions'
 globalThis.RWJS_API_GRAPHQL_URL = '/.redwood/functions/graphql'

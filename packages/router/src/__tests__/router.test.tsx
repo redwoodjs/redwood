@@ -29,7 +29,7 @@ import {
 } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 
-import { AuthContextInterface } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth'
 
 import {
   Router,

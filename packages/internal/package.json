@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@babel/parser": "7.22.14",
+    "@babel/plugin-transform-react-jsx": "7.22.15",
     "@babel/plugin-transform-typescript": "7.22.11",
     "@babel/runtime-corejs3": "7.22.11",
     "@babel/traverse": "7.22.11",
@@ -46,7 +47,7 @@
     "@redwoodjs/router": "6.0.7",
     "@sdl-codegen/node": "0.0.10",
     "chalk": "4.1.2",
-    "core-js": "3.32.0",
+    "core-js": "3.32.2",
     "deepmerge": "4.3.1",
     "esbuild": "0.19.2",
     "fast-glob": "3.3.1",
