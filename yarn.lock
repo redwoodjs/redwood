@@ -7839,7 +7839,7 @@ __metadata:
     fast-glob: 3.3.1
     fast-json-parse: 1.0.3
     fastify: 4.22.2
-    fastify-raw-body: 4.2.1
+    fastify-raw-body: 4.2.2
     jest: 29.6.4
     lodash: 4.17.21
     pretty-bytes: 5.6.0
@@ -8689,7 +8689,7 @@ __metadata:
     esbuild: 0.18.19
     fast-glob: 3.3.1
     fastify: 4.22.2
-    fastify-raw-body: 4.2.1
+    fastify-raw-body: 4.2.2
     lodash: 4.17.21
     qs: 6.11.2
     typescript: 5.1.6
@@ -9089,7 +9089,7 @@ __metadata:
     dotenv: 16.3.1
     fast-json-parse: 1.0.3
     fastify: 4.22.2
-    fastify-raw-body: 4.2.1
+    fastify-raw-body: 4.2.2
     graphiql: 2.4.7
     graphql: 16.8.0
     graphql-scalars: 1.22.2
@@ -19742,14 +19742,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-raw-body@npm:4.2.1":
-  version: 4.2.1
-  resolution: "fastify-raw-body@npm:4.2.1"
+"fastify-raw-body@npm:4.2.2":
+  version: 4.2.2
+  resolution: "fastify-raw-body@npm:4.2.2"
   dependencies:
     fastify-plugin: ^4.0.0
     raw-body: ^2.5.1
     secure-json-parse: ^2.4.0
-  checksum: 6ef7aaa5be1be14e7d69ff5b7975cf0630cd9565587b33e66e1534bd4bd73283d806742bc8bc2a3bcf181539456c03090925c79e53662ee56206d771e3f6b733
+  checksum: c9b1dc02598df3d96b8c364b5dcd24c4a6c87bf1f1bd94d93a020354647c53c8dab959dd05967bf3c73ea63dab613890815a5ec14360a2aefdd2e03f3c8e14ae
   languageName: node
   linkType: hard
 
