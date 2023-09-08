@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@fastify/http-proxy": "9.2.1",
-    "@fastify/static": "6.10.2",
+    "@fastify/static": "6.11.0",
     "@fastify/url-data": "5.3.1",
     "@redwoodjs/graphql-server": "6.2.0",
     "@redwoodjs/project-config": "6.2.0",
