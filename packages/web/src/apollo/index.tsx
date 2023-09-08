@@ -40,6 +40,8 @@ import { SSELink } from './sseLink'
 
 export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
 
+export { fragmentRegistry }
+
 export type RedwoodApolloLinkName =
   | 'withToken'
   | 'authMiddleware'
