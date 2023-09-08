@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql'
+import type { GraphQLError } from 'graphql'
 
 export interface ServerParseError extends Error {
   response: Response

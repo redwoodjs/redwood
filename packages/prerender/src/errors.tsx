@@ -1,4 +1,5 @@
-import { DocumentNode, print } from 'graphql'
+import type { DocumentNode } from 'graphql'
+import { print } from 'graphql'
 
 export class PrerenderGqlError {
   message: string

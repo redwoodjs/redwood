@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'fs-extra'
-import { Location, Range } from 'vscode-languageserver'
+import type { Location } from 'vscode-languageserver'
+import { Range } from 'vscode-languageserver'
 
 import { URL_file, URL_toFile } from './URL'
 import { Position_fromOffsetOrFail } from './vscode-languageserver-types'
