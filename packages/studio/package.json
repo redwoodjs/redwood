@@ -53,7 +53,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@apollo/client": "3.8.1",
+    "@apollo/client": "3.8.3",
     "@babel/cli": "7.22.10",
     "@babel/core": "7.22.11",
     "@graphiql/plugin-explorer": "0.1.22",
